@@ -22,9 +22,12 @@
 'use strict';
 
 import React from 'React';
+import { Provider } from 'react-redux';
 import Dimensions from 'Dimensions';
 
-import View from 'View';
+import App from 'App';
+import { configureStore } from 'Store';
+import { serverURL } from 'Config';
 
 function Bootstrap(): React.Component {
 
@@ -33,17 +36,33 @@ function Bootstrap(): React.Component {
 	class Root extends React.Component {
 		constructor() {
 			super();
+			this.state = {
+				isLoading: true,
+				store: configureStore(() => this.setState({isLoading: false})),
+			};
 		}
 
 		render() {
+			if (this.state.isLoading) {
+				return null;
+			}
 			const { height, width } = Dimensions.get('window');
 			return (
-				<View>
+				<Provider store={this.state.store}>
+					<App />
+				</Provider>
 			);
 		}
 	}
 
 	return Root;
 }
+
+global.LOG = (...args) => {
+	console.log('/------------------------------\\');
+	console.log(...args);
+	console.log('\\------------------------------/');
+	return args[args.length - 1];
+};
 
 module.exports = Bootstrap;
