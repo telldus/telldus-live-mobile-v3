@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
-import StatusBarIOS from 'StatusBarIOS';
+import StatusBar from 'StatusBar';
 import TabBarIOS from 'TabBarIOS';
 import TabBarItemIOS from 'TabBarItemIOS';
 import Navigator from 'Navigator';
