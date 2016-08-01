@@ -1,0 +1,41 @@
+PODS:
+  - React/Core (0.30.0)
+  - React/RCTActionSheet (0.30.0):
+    - React/Core
+  - React/RCTImage (0.30.0):
+    - React/Core
+    - React/RCTNetwork
+  - React/RCTLinkingIOS (0.30.0):
+    - React/Core
+  - React/RCTNetwork (0.30.0):
+    - React/Core
+  - React/RCTPushNotification (0.30.0):
+    - React/Core
+  - React/RCTText (0.30.0):
+    - React/Core
+  - React/RCTVibration (0.30.0):
+    - React/Core
+  - React/RCTWebSocket (0.30.0):
+    - React/Core
+
+DEPENDENCIES:
+  - React/Core (from `../node_modules/react-native`)
+  - React/RCTActionSheet (from `../node_modules/react-native`)
+  - React/RCTImage (from `../node_modules/react-native`)
+  - React/RCTLinkingIOS (from `../node_modules/react-native`)
+  - React/RCTNetwork (from `../node_modules/react-native`)
+  - React/RCTPushNotification (from `../node_modules/react-native`)
+  - React/RCTText (from `../node_modules/react-native`)
+  - React/RCTVibration (from `../node_modules/react-native`)
+  - React/RCTWebSocket (from `../node_modules/react-native`)
+
+EXTERNAL SOURCES:
+  React:
+    :path: ../node_modules/react-native
+
+SPEC CHECKSUMS:
+  React: ed499ad8bb72560821a80fefa59e15a18f3ec75c
+
+PODFILE CHECKSUM: ca674d91312ab4af7deca435cf0976e4078d370b
+
+COCOAPODS: 1.0.1
