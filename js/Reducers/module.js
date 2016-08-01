@@ -24,11 +24,15 @@
 import { combineReducers } from 'redux';
 
 import Devices from './Devices';
+import Gateways from './Gateways';
 import Navigation from './Navigation';
+import Sensors from './Sensors';
 import User from './User';
 
 module.exports = combineReducers({
 	devices: Devices,
+	gateways: Gateways,
 	navigation: Navigation,
+	sensors: Sensors,
 	user: User
 });

@@ -24,15 +24,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, Text, View } from 'BaseComponents';
+import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
 import StatusBarIOS from 'StatusBarIOS';
 import TabBarIOS from 'TabBarIOS';
 import TabBarItemIOS from 'TabBarItemIOS';
 import Navigator from 'Navigator';
-import ListView from 'ListView';
 import { switchTab, logoutFromTelldus } from 'Actions';
 
-import type {Tab, Day} from '../reducers/navigation';
+import type { Tab } from '../reducers/navigation';
 
 class TabsView extends View {
 
@@ -44,10 +43,6 @@ class TabsView extends View {
 
 	constructor(props) {
 		super(props);
-		var devicesDataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		this.state = {
-			devices: devicesDataSource.cloneWithRows(this.props.devices),
-		};
 	}
 
 	onTabSelect(tab: Tab) {
@@ -101,9 +96,13 @@ class TabsView extends View {
 				selectedIcon={require('./img/devices-active-icon.png')}>
 				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
 					<Content>
-						<ListView
-							dataSource={this.state.devices}
-							renderRow={(rowData) => <Text>{rowData.name}</Text>}
+						<List
+							dataArray={this.props.devices}
+							renderRow={(item) =>
+								<ListItem>
+									<Text>{item.name}</Text>
+								</ListItem>
+							}
 						/>
 					</Content>
 				</Container>
@@ -116,9 +115,14 @@ class TabsView extends View {
 				selectedIcon={require('./img/sensors-active-icon.png')}>
 				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
 					<Content>
-						<Text>
-							Sensors
-						</Text>
+						<List
+							dataArray={this.props.sensors}
+							renderRow={(item) =>
+								<ListItem>
+									<Text>{item.name}</Text>
+								</ListItem>
+							}
+						/>
 					</Content>
 				</Container>
 			</TabBarItemIOS>
@@ -146,9 +150,14 @@ class TabsView extends View {
 				selectedIcon={require('./img/locations-active-icon.png')}>
 				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
 					<Content>
-						<Text>
-							Locations
-						</Text>
+						<List
+							dataArray={this.props.gateways}
+							renderRow={(item) =>
+								<ListItem>
+									<Text>{item.name}</Text>
+								</ListItem>
+							}
+						/>
 					</Content>
 				</Container>
 			</TabBarItemIOS>
@@ -162,6 +171,8 @@ function select(store) {
 	return {
 		tab: store.navigation.tab,
 		devices: store.devices.devices,
+		gateways: store.gateways.gateways,
+		sensors: store.sensors.sensors,
 		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};
 }

@@ -22,11 +22,15 @@
 'use strict';
 
 import DeviceActions from './Devices';
+import GatewayActions from './Gateways';
 import LoginActions from './Login';
 import NavigationActions from './Navigation';
+import SensorActions from './Sensors';
 
 module.exports = {
 	...DeviceActions,
+	...GatewayActions,
 	...LoginActions,
 	...NavigationActions,
+	...SensorActions,
 };

@@ -19,19 +19,29 @@
 
 'use strict';
 
-export type Action =
-	  { type: 'LOGGED_IN' }
-	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
-	| { type: 'RECEIVED_USER_PROFILE', userProfile: Object }
-	| { type: 'RECEIVED_DEVICES', userProfile: Object }
-	| { type: 'RECEIVED_GATEWAYS', userProfile: Object }
-	| { type: 'RECEIVED_SENSORS', userProfile: Object }
-	| { type: 'LOGGED_OUT' }
-	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
-	| { type: 'ERROR', message: Object }
-	;
+import type { Action } from '../actions/types';
 
-export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
-export type GetState = () => Object;
-export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
-export type PromiseAction = Promise<Action>;
+export type State = {
+	sensors: ?object
+};
+
+const initialState = {
+	sensors: {}
+};
+
+function sensors(state: State = initialState, action: Action): State {
+	if (action.type === 'RECEIVED_SENSORS') {
+		return {
+			...state,
+			sensors: action.sensors.sensor,
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...initialState
+		};
+	}
+	return state;
+}
+
+module.exports = sensors;

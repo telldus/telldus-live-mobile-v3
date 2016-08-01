@@ -19,19 +19,29 @@
 
 'use strict';
 
-export type Action =
-	  { type: 'LOGGED_IN' }
-	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
-	| { type: 'RECEIVED_USER_PROFILE', userProfile: Object }
-	| { type: 'RECEIVED_DEVICES', userProfile: Object }
-	| { type: 'RECEIVED_GATEWAYS', userProfile: Object }
-	| { type: 'RECEIVED_SENSORS', userProfile: Object }
-	| { type: 'LOGGED_OUT' }
-	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
-	| { type: 'ERROR', message: Object }
-	;
+import type { Action } from '../actions/types';
 
-export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
-export type GetState = () => Object;
-export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
-export type PromiseAction = Promise<Action>;
+export type State = {
+	gateways: ?object
+};
+
+const initialState = {
+	gateways: {}
+};
+
+function gateways(state: State = initialState, action: Action): State {
+	if (action.type === 'RECEIVED_GATEWAYS') {
+		return {
+			...state,
+			gateways: action.gateways.client,
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...initialState
+		};
+	}
+	return state;
+}
+
+module.exports = gateways;
