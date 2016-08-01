@@ -29,6 +29,7 @@ import StatusBarIOS from 'StatusBarIOS';
 import TabBarIOS from 'TabBarIOS';
 import TabBarItemIOS from 'TabBarItemIOS';
 import Navigator from 'Navigator';
+import ListView from 'ListView';
 import { switchTab, logoutFromTelldus } from 'Actions';
 
 import type {Tab, Day} from '../reducers/navigation';
@@ -37,18 +38,16 @@ class TabsView extends View {
 
 	props: {
 		tab: Tab;
-		day: Day;
 		onTabSelect: (tab: Tab) => void;
 		navigator: Navigator;
 	};
 
 	constructor(props) {
 		super(props);
-		this.handleDayChange = this.handleDayChange.bind(this);
-	}
-
-	componentDidMount() {
-//	StatusBarIOS && StatusBarIOS.setStyle('light-content');
+		var devicesDataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+		this.state = {
+			devices: devicesDataSource.cloneWithRows(this.props.devices),
+		};
 	}
 
 	onTabSelect(tab: Tab) {
@@ -102,9 +101,10 @@ class TabsView extends View {
 				selectedIcon={require('./img/devices-active-icon.png')}>
 				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
 					<Content>
-						<Text>
-							Devices
-						</Text>
+						<ListView
+							dataSource={this.state.devices}
+							renderRow={(rowData) => <Text>{rowData.name}</Text>}
+						/>
 					</Content>
 				</Container>
 			</TabBarItemIOS>
@@ -156,15 +156,12 @@ class TabsView extends View {
 		);
 	}
 
-	handleDayChange(day) {
-		this.setState({selectedDay: day});
-	}
-
 }
 
 function select(store) {
 	return {
 		tab: store.navigation.tab,
+		devices: store.devices.devices,
 		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};
 }

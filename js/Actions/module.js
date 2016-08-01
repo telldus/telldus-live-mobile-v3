@@ -21,10 +21,12 @@
 
 'use strict';
 
+import DeviceActions from './Devices';
 import LoginActions from './Login';
 import NavigationActions from './Navigation';
 
 module.exports = {
+	...DeviceActions,
 	...LoginActions,
 	...NavigationActions,
 };

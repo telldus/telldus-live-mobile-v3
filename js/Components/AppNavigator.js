@@ -21,7 +21,7 @@
 
 import React from 'React';
 import { connect } from 'react-redux';
-import { switchTab, getUserProfile } from 'Actions';
+import { switchTab, getUserProfile, getDevices } from 'Actions';
 
 import { Button, Container, Content, Header, Text, Title, View } from 'BaseComponents';
 import Platform from 'Platform';
@@ -50,6 +50,7 @@ class AppNavigator extends View {
 	componentDidMount() {
 		StatusBar && StatusBar.setBarStyle('light-content');
 		this.props.dispatch(getUserProfile(this.props.accessToken));
+		this.props.dispatch(getDevices(this.props.accessToken));
 	}
 
 	_updateSpecificOrientation(specificOrientation) {

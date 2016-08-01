@@ -15,20 +15,33 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Reducers
  */
 
 'use strict';
 
-import { combineReducers } from 'redux';
+import type { Action } from '../actions/types';
 
-import Devices from './Devices';
-import Navigation from './Navigation';
-import User from './User';
+export type State = {
+	devices: ?object
+};
 
-module.exports = combineReducers({
-	devices: Devices,
-	navigation: Navigation,
-	user: User
-});
+const initialState = {
+	devices: {}
+};
+
+function devices(state: State = initialState, action: Action): State {
+	if (action.type === 'RECEIVED_DEVICES') {
+		return {
+			...state,
+			devices: action.devices.device,
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...initialState
+		};
+	}
+	return state;
+}
+
+module.exports = devices;
