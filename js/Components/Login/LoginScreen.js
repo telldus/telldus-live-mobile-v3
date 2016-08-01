@@ -47,7 +47,7 @@ class LoginScreen extends View {
 	}
 
 	componentDidMount() {
-		StatusBar && StatusBar.setBarStyle('default');
+		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('default');
 		if (Platform.OS !== 'android') {
 			Orientation.lockToPortrait();
 		}

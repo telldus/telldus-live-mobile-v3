@@ -48,7 +48,7 @@ class AppNavigator extends View {
 	}
 
 	componentDidMount() {
-		StatusBar && StatusBar.setBarStyle('light-content');
+		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
 		this.props.dispatch(getUserProfile(this.props.accessToken));
 		this.props.dispatch(getDevices(this.props.accessToken));
 		this.props.dispatch(getGateways(this.props.accessToken));
