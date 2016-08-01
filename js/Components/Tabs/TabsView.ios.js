@@ -29,6 +29,7 @@ import StatusBarIOS from 'StatusBarIOS';
 import TabBarIOS from 'TabBarIOS';
 import TabBarItemIOS from 'TabBarItemIOS';
 import Navigator from 'Navigator';
+import DevicesTab from './DevicesTab';
 import { switchTab, logoutFromTelldus } from 'Actions';
 
 import type { Tab } from '../reducers/navigation';
@@ -94,18 +95,7 @@ class TabsView extends View {
 				onPress={this.onTabSelect.bind(this, 'devicesTab')}
 				icon={require('./img/devices-inactive-icon.png')}
 				selectedIcon={require('./img/devices-active-icon.png')}>
-				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
-					<Content>
-						<List
-							dataArray={this.props.devices}
-							renderRow={(item) =>
-								<ListItem>
-									<Text>{item.name}</Text>
-								</ListItem>
-							}
-						/>
-					</Content>
-				</Container>
+				<DevicesTab navigator={this.props.navigator} />
 			</TabBarItemIOS>
 			<TabBarItemIOS
 				title="Sensors"

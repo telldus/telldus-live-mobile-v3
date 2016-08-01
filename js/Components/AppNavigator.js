@@ -21,7 +21,7 @@
 
 import React from 'React';
 import { connect } from 'react-redux';
-import { switchTab, getUserProfile, getDevices, getGateways, getSensors } from 'Actions';
+import { switchTab, getUserProfile, getGateways, getSensors, getDevices } from 'Actions';
 
 import { Button, Container, Content, Header, Text, Title, View } from 'BaseComponents';
 import Platform from 'Platform';
@@ -108,7 +108,7 @@ class AppNavigator extends View {
 				</Header>
 				<TabsView navigator={navigator} />
 			</View>
-		);
+		)
 	}
 };
 

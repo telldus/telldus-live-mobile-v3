@@ -16,6 +16,7 @@
     "moment": "~2.14.1",
     "react": "~15.2.1",
     "react-native": "0.30.0",
+    "react-native-android-kit": "^1.1.2",
     "react-native-awesome-button": "^1.6.0",
     "react-native-checkbox": "~1.0.8",
     "react-native-device-info": "^0.9.3",
