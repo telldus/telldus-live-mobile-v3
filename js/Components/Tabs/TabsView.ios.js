@@ -66,8 +66,8 @@ class TabsView extends View {
 				title="Dashboard"
 				selected={this.props.tab === 'dashboardTab'}
 				onPress={this.onTabSelect.bind(this, 'dashboardTab')}
-				icon={require('./img/notifications-icon.png')}
-				selectedIcon={require('./img/notifications-icon.png')}>
+				icon={require('./img/dashboard-inactive-icon.png')}
+				selectedIcon={require('./img/dashboard-active-icon.png')}>
 				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
 					<Content>
 						<Text>
@@ -98,8 +98,8 @@ class TabsView extends View {
 				title="Devices"
 				selected={this.props.tab === 'devicesTab'}
 				onPress={this.onTabSelect.bind(this, 'devicesTab')}
-				icon={require('./img/notifications-icon.png')}
-				selectedIcon={require('./img/notifications-icon.png')}>
+				icon={require('./img/devices-inactive-icon.png')}
+				selectedIcon={require('./img/devices-active-icon.png')}>
 				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
 					<Content>
 						<Text>
@@ -112,8 +112,8 @@ class TabsView extends View {
 				title="Sensors"
 				selected={this.props.tab === 'sensorsTab'}
 				onPress={this.onTabSelect.bind(this, 'sensorsTab')}
-				icon={require('./img/notifications-icon.png')}
-				selectedIcon={require('./img/notifications-icon.png')}>
+				icon={require('./img/sensors-inactive-icon.png')}
+				selectedIcon={require('./img/sensors-active-icon.png')}>
 				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
 					<Content>
 						<Text>
@@ -127,8 +127,8 @@ class TabsView extends View {
 				selected={this.props.tab === 'schedulerTab'}
 				onPress={this.onTabSelect.bind(this, 'schedulerTab')}
 				badge={this.props.notificationsBadge || null}
-				icon={require('./img/notifications-icon.png')}
-				selectedIcon={require('./img/notifications-icon.png')}>
+				icon={require('./img/scheduler-inactive-icon.png')}
+				selectedIcon={require('./img/scheduler-active-icon.png')}>
 				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
 					<Content>
 						<Text>
@@ -142,8 +142,8 @@ class TabsView extends View {
 				selected={this.props.tab === 'locationsTab'}
 				onPress={this.onTabSelect.bind(this, 'locationsTab')}
 				badge={this.props.notificationsBadge || null}
-				icon={require('./img/notifications-icon.png')}
-				selectedIcon={require('./img/notifications-icon.png')}>
+				icon={require('./img/locations-inactive-icon.png')}
+				selectedIcon={require('./img/locations-active-icon.png')}>
 				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
 					<Content>
 						<Text>
