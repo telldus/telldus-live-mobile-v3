@@ -22,24 +22,36 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
-import { getDevices, logoutFromTelldus } from 'Actions';
+import { Container, Content, Button, Text, View } from 'BaseComponents';
+import Gravatar from 'react-native-avatar-gravatar';
 
 import type { Tab } from '../reducers/navigation';
 
-class DashboardTab extends View {
+class UserDetailView extends View {
 
 	render() {
+		console.log(this.props, this.state);
 		return (
 			<Container style={{ padding: 10 }}>
 				<Content>
 					<Text>
-						Hello,
-						Hej,
-						สวัสดี,
-						Здравствуйте,
-						你好
+						Name: {this.props.user.firstname} {this.props.user.lastname}
 					</Text>
+					<View style = {{ paddingBottom: 10 }} />
+					<Text>Email: { this.props.user.email}</Text>
+					<View style = {{ paddingBottom: 10 }} />
+					<Gravatar
+						emailAddress = {this.props.user.email}
+						size = { 100 }
+						mask = "circle"
+					/>
+					<View style = {{ paddingBottom: 10 }} />
+					<Button
+						name = "sign-out"
+						backgroundColor = { this.getTheme().btnPrimaryBg }
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress = { () => this.props.dispatch(logoutFromTelldus()) }
+					>Logout</Button>
 				</Content>
 			</Container>
 		);
@@ -47,10 +59,4 @@ class DashboardTab extends View {
 
 }
 
-function select(store) {
-	return {
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
-	};
-}
-
-module.exports = connect(select)(DashboardTab);
+module.exports = connect()(UserDetailView);

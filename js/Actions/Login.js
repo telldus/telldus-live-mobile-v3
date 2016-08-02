@@ -44,8 +44,7 @@ async function loginToTelldus(publicKey, privateKey, username, password): Promis
 				})
 			}
 		)
-		.then((response) => response.text())
-		.then((text) => JSON.parse(text))
+		.then((response) => response.json())
 		.then((responseData) => {
 			if (responseData.error) {
 				throw responseData;
