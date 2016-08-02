@@ -31,8 +31,9 @@ export default {
 	brandSidebar: "#252932",
 	iconFamily: 'Ionicons',
 
-	inverseTextColor: "#fff",
-	textColor: "#000",
+	inverseTextColor: "#ffffff",
+	fadedInverseTextColor: "#C3D1E6",
+	textColor: "#000000",
 
 	subtitleColor: "#8e8e93",
 

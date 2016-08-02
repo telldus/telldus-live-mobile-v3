@@ -24,13 +24,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Container, Content, Button, Header, List, ListItem, Text, Title, View } from 'BaseComponents';
 import StatusBar from 'StatusBar';
+import StyleSheet from 'StyleSheet';
 import TabBarIOS from 'TabBarIOS';
 import TabBarItemIOS from 'TabBarItemIOS';
 import Navigator from 'Navigator';
+import NavigatorIOS from 'NavigatorIOS';
+import Theme from 'Theme';
+
+import DashboardTab from './DashboardTab';
 import DevicesTab from './DevicesTab';
-import { switchTab, logoutFromTelldus } from 'Actions';
+import GatewaysTab from './GatewaysTab';
+import SchedulerTab from './SchedulerTab';
+import SensorsTab from './SensorsTab';
+import { switchTab } from 'Actions';
 
 import type { Tab } from '../reducers/navigation';
 
@@ -54,116 +62,113 @@ class TabsView extends View {
 
 	render() {
 		return (
-			<TabBarIOS
-				tintColor={this.getTheme().brandPrimary}
-			>
-			<TabBarItemIOS
-				title="Dashboard"
-				selected={this.props.tab === 'dashboardTab'}
-				onPress={this.onTabSelect.bind(this, 'dashboardTab')}
-				icon={require('./img/dashboard-inactive-icon.png')}
-				selectedIcon={require('./img/dashboard-active-icon.png')}>
-				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
-					<Content>
-						<Text>
-							Hello,
-							Hej,
-							สวัสดี,
-							Здравствуйте,
-							你好
-						</Text>
-						<View style = {{ paddingBottom: 10 }} />
-						<Text>
-							Name: {this.props.userProfile.firstname} {this.props.userProfile.lastname}
-						</Text>
-						<Text>
-							Email: {this.props.userProfile.email}
-						</Text>
-						<View style = {{ paddingBottom: 10 }} />
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ () => this.props.dispatch(logoutFromTelldus()) }
-						>Logout</Button>
-					</Content>
-				</Container>
-			</TabBarItemIOS>
-			<TabBarItemIOS
-				title="Devices"
-				selected={this.props.tab === 'devicesTab'}
-				onPress={this.onTabSelect.bind(this, 'devicesTab')}
-				icon={require('./img/devices-inactive-icon.png')}
-				selectedIcon={require('./img/devices-active-icon.png')}>
-				<DevicesTab navigator={this.props.navigator} />
-			</TabBarItemIOS>
-			<TabBarItemIOS
-				title="Sensors"
-				selected={this.props.tab === 'sensorsTab'}
-				onPress={this.onTabSelect.bind(this, 'sensorsTab')}
-				icon={require('./img/sensors-inactive-icon.png')}
-				selectedIcon={require('./img/sensors-active-icon.png')}>
-				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
-					<Content>
-						<List
-							dataArray={this.props.sensors}
-							renderRow={(item) =>
-								<ListItem>
-									<Text>{item.name}</Text>
-								</ListItem>
-							}
-						/>
-					</Content>
-				</Container>
-			</TabBarItemIOS>
-			<TabBarItemIOS
-				title="Scheduler"
-				selected={this.props.tab === 'schedulerTab'}
-				onPress={this.onTabSelect.bind(this, 'schedulerTab')}
-				badge={this.props.notificationsBadge || null}
-				icon={require('./img/scheduler-inactive-icon.png')}
-				selectedIcon={require('./img/scheduler-active-icon.png')}>
-				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
-					<Content>
-						<Text>
-							Scheduler
-						</Text>
-					</Content>
-				</Container>
-			</TabBarItemIOS>
-			<TabBarItemIOS
-				title="Locations"
-				selected={this.props.tab === 'locationsTab'}
-				onPress={this.onTabSelect.bind(this, 'locationsTab')}
-				badge={this.props.notificationsBadge || null}
-				icon={require('./img/locations-inactive-icon.png')}
-				selectedIcon={require('./img/locations-active-icon.png')}>
-				<Container navigator={this.props.navigator} style={{ padding: 10 }}>
-					<Content>
-						<List
-							dataArray={this.props.gateways}
-							renderRow={(item) =>
-								<ListItem>
-									<Text>{item.name}</Text>
-								</ListItem>
-							}
-						/>
-					</Content>
-				</Container>
-			</TabBarItemIOS>
-			</TabBarIOS>
+			<View>
+				<TabBarIOS
+					tintColor={this.getTheme().brandPrimary}
+				>
+				<TabBarItemIOS
+					title="Dashboard"
+					selected={this.props.tab === 'dashboardTab'}
+					onPress={this.onTabSelect.bind(this, 'dashboardTab')}
+					icon={require('./img/dashboard-inactive-icon.png')}
+					selectedIcon={require('./img/dashboard-active-icon.png')}>
+					<NavigatorIOS
+						style = { styles.container }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Telldus Live!',
+							component: DashboardTab,
+						}}
+					/>
+				</TabBarItemIOS>
+				<TabBarItemIOS
+					title="Devices"
+					selected={this.props.tab === 'devicesTab'}
+					onPress={this.onTabSelect.bind(this, 'devicesTab')}
+					icon={require('./img/devices-inactive-icon.png')}
+					selectedIcon={require('./img/devices-active-icon.png')}>
+					<NavigatorIOS
+						style = { styles.container }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Devices',
+							component: DevicesTab,
+						}}
+					/>
+				</TabBarItemIOS>
+				<TabBarItemIOS
+					title="Sensors"
+					selected={this.props.tab === 'sensorsTab'}
+					onPress={this.onTabSelect.bind(this, 'sensorsTab')}
+					icon={require('./img/sensors-inactive-icon.png')}
+					selectedIcon={require('./img/sensors-active-icon.png')}>
+					<NavigatorIOS
+						style = { styles.container }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Sensors',
+							component: SensorsTab,
+						}}
+					/>
+				</TabBarItemIOS>
+				<TabBarItemIOS
+					title="Scheduler"
+					selected={this.props.tab === 'schedulerTab'}
+					onPress={this.onTabSelect.bind(this, 'schedulerTab')}
+					badge={this.props.notificationsBadge || null}
+					icon={require('./img/scheduler-inactive-icon.png')}
+					selectedIcon={require('./img/scheduler-active-icon.png')}>
+					<NavigatorIOS
+						style = { styles.container }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Scheduler',
+							component: SchedulerTab,
+						}}
+					/>
+				</TabBarItemIOS>
+				<TabBarItemIOS
+					title="Gateways"
+					selected={this.props.tab === 'gatewaysTab'}
+					onPress={this.onTabSelect.bind(this, 'gatewaysTab')}
+					badge={this.props.notificationsBadge || null}
+					icon={require('./img/gateways-inactive-icon.png')}
+					selectedIcon={require('./img/gateways-active-icon.png')}>
+					<NavigatorIOS
+						style = { styles.container }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Gateways',
+							component: GatewaysTab,
+						}}
+					/>
+				</TabBarItemIOS>
+				</TabBarIOS>
+			</View>
 		);
 	}
 
 }
 
+var styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+});
+
 function select(store) {
 	return {
 		tab: store.navigation.tab,
-		devices: store.devices.devices,
-		gateways: store.gateways.gateways,
-		sensors: store.sensors.sensors,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};
 }
 

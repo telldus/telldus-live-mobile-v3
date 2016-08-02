@@ -23,7 +23,7 @@ import React from 'React';
 import { connect } from 'react-redux';
 import { switchTab, getUserProfile, getGateways, getSensors, getDevices } from 'Actions';
 
-import { Button, Container, Content, Header, Text, Title, View } from 'BaseComponents';
+import { Button, Container, Content, Text, Title, View } from 'BaseComponents';
 import Platform from 'Platform';
 import BackAndroid from 'BackAndroid';
 import TabsView from 'TabsView';
@@ -64,23 +64,8 @@ class AppNavigator extends View {
 	render() {
 		if (Platform.OS === 'android' || this.state.specificOrientation == 'PORTRAIT' || this.state.specificOrientation == 'UNKNOWN') {
 			return (
-				<Navigator
-					ref="navigator"
-					configureScene={(route) => {
-						if (Platform.OS === 'android') {
-							return Navigator.SceneConfigs.FloatFromBottomAndroid;
-						}
-						// TODO: Proper scene support
-	//					if (route.shareSettings || route.friend) {
-	//						return Navigator.SceneConfigs.FloatFromRight;
-	//					} else {
-	//						return Navigator.SceneConfigs.FloatFromBottom;
-	//					}
-					}}
-					initialRoute={{}}
-					renderScene={this.renderScene}
-				/>
-			);
+				<TabsView />
+			)
 		}
 		return (
 			<View style={{
@@ -96,29 +81,7 @@ class AppNavigator extends View {
 			</View>
 		)
 	}
-
-	renderScene(route, navigator) {
-//		if (route.notices) {
-//			return <COMPONENT navigator={navigator} />;
-//		}
-		return (
-			<View>
-				<Header style>
-					<Title>Telldus Live!</Title>
-				</Header>
-				<TabsView navigator={navigator} />
-			</View>
-		)
-	}
 };
-
-var styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		flexDirection: 'column',
-		backgroundColor: "#666666"
-	}
-});
 
 function select(store) {
 	return {

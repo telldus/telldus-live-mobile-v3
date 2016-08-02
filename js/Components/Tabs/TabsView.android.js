@@ -28,8 +28,9 @@ import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComp
 import {TabLayoutAndroid, TabAndroid} from "react-native-android-kit";
 import Navigator from 'Navigator';
 import DevicesTab from './DevicesTab';
+import Theme from 'Theme';
 import { switchTab, logoutFromTelldus } from 'Actions';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ToolbarAndroid } from 'react-native';
 import type { Tab } from '../reducers/navigation';
 
 class TabsView extends View {
@@ -53,59 +54,52 @@ class TabsView extends View {
 	render() {
 		return (
 			<View style={{flex:1}}>
-				<TabLayoutAndroid scrollable={true}>
-					<TabAndroid text='Dashboard'>
+				<ToolbarAndroid
+					style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
+					titleColor = { Theme.Core.inverseTextColor }
+					navIcon = { require('./img/dashboard-active-icon.png') }
+					title = "Telldus Live!"
+					actions = {[{ title: 'Settings', icon: require('image!ic_launcher'), show: 'never'}]}
+					onActionSelected = { this.onActionSelected }
+				/>
+				<TabLayoutAndroid
+					style = {{ height: 48 }}
+					scrollable = {true}
+					backgroundColor = { Theme.Core.brandPrimary }
+					indicatorTabColor = { Theme.Core.inverseTextColor }
+				>
+					<TabAndroid text = "Dashboard" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
 						<Text>
-							Hello,
-							Hej,
-							สวัสดี,
-							Здравствуйте,
-							你好
+							Dashboard
 						</Text>
-						<View style = {{ paddingBottom: 10 }} />
-						<Text>
-							Name: {this.props.userProfile.firstname} {this.props.userProfile.lastname}
-						</Text>
-						<Text>
-							Email: {this.props.userProfile.email}
-						</Text>
-						<View style = {{ paddingBottom: 10 }} />
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ () => this.props.dispatch(logoutFromTelldus()) }
-						>Logout</Button>
 					</TabAndroid>
-					<TabAndroid text='Devices'>
+					<TabAndroid text = "Devices" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
 						<DevicesTab />
 					</TabAndroid>
-					<TabAndroid text='Sensors'>
-						<List
-							dataArray={this.props.sensors}
-							renderRow={(item) =>
-								<ListItem>
-									<Text>{item.name}</Text>
-								</ListItem>
-							}
-						/>
+					<TabAndroid text = "Sensors" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
+						<Text>
+							Sensors
+						</Text>
 					</TabAndroid>
-					<TabAndroid text='Scheduler'>
-						<List
-							dataArray={this.props.gateways}
-							renderRow={(item) =>
-								<ListItem>
-									<Text>{item.name}</Text>
-								</ListItem>
-							}
-						/>
+					<TabAndroid text = "Scheduler" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
+						<Text>
+							Scheduler
+						</Text>
 					</TabAndroid>
-					<TabAndroid text='Locations'>
-						<DevicesTab />
+					<TabAndroid text = "Locations" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
+						<Text>
+							Locations
+						</Text>
 					</TabAndroid>
 				</TabLayoutAndroid>
 			</View>
 		);
+	}
+
+	onActionSelected (position) {
+		if (position === 0) { // index of 'Settings'
+			console.log("Settings pressed");
+		}
 	}
 
 }
