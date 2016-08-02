@@ -25,6 +25,8 @@ import { connect } from 'react-redux';
 import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
 import { getGateways } from 'Actions';
 
+import GatewayDetailView from '../DetailViews/GatewayDetailView'
+
 import type { Tab } from '../reducers/navigation';
 
 class GatewaysTab extends View {
@@ -37,7 +39,12 @@ class GatewaysTab extends View {
 						dataArray={this.props.gateways}
 						renderRow={(item) =>
 							<ListItem>
-								<Text>{item.name}</Text>
+								<Button
+									name = "sign-out"
+									backgroundColor = { this.getTheme().btnPrimaryBg }
+									style = {{ padding: 6, minWidth: 100 }}
+									onPress={ () => this.props.navigator.push({ component: GatewayDetailView, title: item.name , passProps: { gateway: item } }) }
+								>{item.name}</Button>
 							</ListItem>
 						}
 					/>

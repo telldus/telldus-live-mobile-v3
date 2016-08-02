@@ -22,32 +22,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
-import { getSensors } from 'Actions';
-
-import SensorDetailView from '../DetailViews/SensorDetailView'
+import { Container, Content, Button, Text, View } from 'BaseComponents';
 
 import type { Tab } from '../reducers/navigation';
 
-class SensorsTab extends View {
+class GatewayDetailView extends View {
 
 	render() {
 		return (
 			<Container style={{ padding: 10 }}>
 				<Content>
-					<List
-						dataArray={this.props.sensors}
-						renderRow={(item) =>
-							<ListItem>
-								<Button
-									name = "sign-out"
-									backgroundColor = { this.getTheme().btnPrimaryBg }
-									style = {{ padding: 6, minWidth: 100 }}
-									onPress={ () => this.props.navigator.push({ component: SensorDetailView, title: item.name , passProps: { sensor: item } }) }
-								>{item.name}</Button>
-							</ListItem>
-						}
-					/>
+					<Text>Type: { this.props.gateway.type}</Text>
+					<Text>Version: { this.props.gateway.version}</Text>
+					<Text>IP: { this.props.gateway.ip}</Text>
+					<Text>Online: { this.props.gateway.online ? 'Yes' : 'No' }</Text>
 				</Content>
 			</Container>
 		);
@@ -55,10 +43,4 @@ class SensorsTab extends View {
 
 }
 
-function select(store) {
-	return {
-		sensors: store.sensors.sensors,
-	};
-}
-
-module.exports = connect(select)(SensorsTab);
+module.exports = connect()(GatewayDetailView);

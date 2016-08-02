@@ -25,6 +25,8 @@ import { connect } from 'react-redux';
 import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
 
+import DeviceDetailView from '../DetailViews/DeviceDetailView'
+
 import type { Tab } from '../reducers/navigation';
 
 class DevicesTab extends View {
@@ -37,7 +39,12 @@ class DevicesTab extends View {
 						dataArray={this.props.devices}
 						renderRow={(item) =>
 							<ListItem>
-								<Text>{item.name}</Text>
+								<Button
+									name = "sign-out"
+									backgroundColor = { this.getTheme().btnPrimaryBg }
+									style = {{ padding: 6, minWidth: 100 }}
+									onPress={ () => this.props.navigator.push({ component: DeviceDetailView, title: item.name , passProps: { device: item } }) }
+								>{item.name}</Button>
 							</ListItem>
 						}
 					/>

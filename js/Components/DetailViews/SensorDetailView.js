@@ -22,32 +22,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
-import { getSensors } from 'Actions';
-
-import SensorDetailView from '../DetailViews/SensorDetailView'
+import { Container, Content, Button, Text, View } from 'BaseComponents';
 
 import type { Tab } from '../reducers/navigation';
 
-class SensorsTab extends View {
+class SensorDetailView extends View {
 
 	render() {
 		return (
 			<Container style={{ padding: 10 }}>
 				<Content>
-					<List
-						dataArray={this.props.sensors}
-						renderRow={(item) =>
-							<ListItem>
-								<Button
-									name = "sign-out"
-									backgroundColor = { this.getTheme().btnPrimaryBg }
-									style = {{ padding: 6, minWidth: 100 }}
-									onPress={ () => this.props.navigator.push({ component: SensorDetailView, title: item.name , passProps: { sensor: item } }) }
-								>{item.name}</Button>
-							</ListItem>
-						}
-					/>
+					<Text>Gateway: { this.props.sensor.clientName}</Text>
+					<Text>Battery: { this.props.sensor.battery}</Text>
+					<Text>Last Updated: { this.props.sensor.lastUpdated}</Text>
+					<Text>Model: { this.props.sensor.model}</Text>
+					<Text>Ignored: { this.props.sensor.ignored}</Text>
+					<Text>Sensor Id: { this.props.sensor.sensorId}</Text>
+					<Text>Protocol: { this.props.sensor.protocol}</Text>
 				</Content>
 			</Container>
 		);
@@ -55,10 +46,4 @@ class SensorsTab extends View {
 
 }
 
-function select(store) {
-	return {
-		sensors: store.sensors.sensors,
-	};
-}
-
-module.exports = connect(select)(SensorsTab);
+module.exports = connect()(SensorDetailView);
