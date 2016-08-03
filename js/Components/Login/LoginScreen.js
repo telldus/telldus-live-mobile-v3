@@ -48,6 +48,10 @@ class LoginScreen extends View {
 
 	componentDidMount() {
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('default');
+		if (Platform.OS === 'android' && StatusBar) {
+			StatusBar.setTranslucent(true);
+			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
+		}
 		if (Platform.OS !== 'android') {
 			Orientation.lockToPortrait();
 		}

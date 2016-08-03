@@ -24,11 +24,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
-import {TabLayoutAndroid, TabAndroid} from "react-native-android-kit";
+import { Container, Content, Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
+import { TabLayoutAndroid, TabAndroid } from "react-native-android-kit";
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Navigator from 'Navigator';
 import Theme from 'Theme';
+import Gravatar from 'react-native-avatar-gravatar';
 
 import DashboardTab from './DashboardTab';
 import DevicesTab from './DevicesTab';
@@ -37,7 +39,7 @@ import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
 
 import { switchTab, logoutFromTelldus } from 'Actions';
-import { StyleSheet, ToolbarAndroid } from 'react-native';
+import { StyleSheet } from 'react-native';
 import type { Tab } from '../reducers/navigation';
 
 class TabsView extends View {
@@ -61,8 +63,18 @@ class TabsView extends View {
 
 	navigationView() {
 		return (
-			<View style={{flex: 1, backgroundColor: '#fff', paddingTop: 120 }}>
-				<List>
+			<View style = {{ flex: 1, backgroundColor: this.getTheme().btnPrimaryBg }}>
+				<View style = {{ height: 80, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 10 }}>
+					<Gravatar
+						emailAddress = {this.props.userProfile.email}
+						size = { 60 }
+						mask = "circle"
+					/>
+					<Text>
+						{this.props.userProfile.firstname} {this.props.userProfile.lastname}
+					</Text>
+				</View>
+				<List style = {{ flex: 1, backgroundColor: '#fff' }}>
 					<ListItem>
 						<Button
 							name = "sign-out"
@@ -103,6 +115,14 @@ class TabsView extends View {
 							onPress={ this.onTabSelect.bind(this, 'gatewaysTab') }
 						>Gateways</Button>
 					</ListItem>
+					<ListItem>
+						<Button
+							name = "sign-out"
+							backgroundColor = { this.getTheme().btnPrimaryBg }
+							style = {{ padding: 6, minWidth: 100 }}
+							onPress = { () => this.props.dispatch(logoutFromTelldus()) }
+						>Logout</Button>
+					</ListItem>
 				</List>
 			</View>
 		)
@@ -127,19 +147,26 @@ class TabsView extends View {
 	render() {
 		return (
 			<DrawerLayoutAndroid
-				ref="drawer"
-				drawerWidth={300}
-				drawerPosition={DrawerLayoutAndroid.positions.Left}
-				renderNavigationView={() => this.navigationView()}
+				ref = "drawer"
+				drawerWidth = { 280 }
+				drawerPosition = { DrawerLayoutAndroid.positions.Left }
+				renderNavigationView = { () => this.navigationView() }
 			>
-				<View style={{flex:1}}>
-					<ToolbarAndroid
+				<View style = {{ flex:1 }} >
+					<View style = {{
+						height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+						backgroundColor: Theme.Core.brandPrimary }}
+					/>
+					<Icon.ToolbarAndroid
 						style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
 						titleColor = { Theme.Core.inverseTextColor }
-						navIcon = { require('./img/dashboard-active-icon.png') }
+						navIconName = "bars"
+						overflowIconName = "ellipsis-v"
+						iconColor = { Theme.Core.inverseTextColor }
 						title = "Telldus Live!"
 						actions = {[{ title: 'Settings', icon: require('image!ic_launcher'), show: 'never'}]}
 						onActionSelected = { this.onActionSelected }
+						onIconClicked = { () => this.refs.drawer.openDrawer() }
 					/>
 					<View key={this.props.tab}>
 						{this.renderContent()}

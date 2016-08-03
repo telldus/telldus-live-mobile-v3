@@ -1,6 +1,8 @@
 rootProject.name = 'TelldusLiveApp'
 
 include ':app'
+include ':react-native-extra-dimensions-android'
+project(':react-native-extra-dimensions-android').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-extra-dimensions-android/android')
 include ':react-native-android-kit'
 project(':react-native-android-kit').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-kit/android')
 include ':react-native-orientation'
