@@ -26,9 +26,16 @@ import { connect } from 'react-redux';
 
 import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
 import {TabLayoutAndroid, TabAndroid} from "react-native-android-kit";
+import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import Navigator from 'Navigator';
-import DevicesTab from './DevicesTab';
 import Theme from 'Theme';
+
+import DashboardTab from './DashboardTab';
+import DevicesTab from './DevicesTab';
+import GatewaysTab from './GatewaysTab';
+import SchedulerTab from './SchedulerTab';
+import SensorsTab from './SensorsTab';
+
 import { switchTab, logoutFromTelldus } from 'Actions';
 import { StyleSheet, ToolbarAndroid } from 'react-native';
 import type { Tab } from '../reducers/navigation';
@@ -46,53 +53,99 @@ class TabsView extends View {
 	}
 
 	onTabSelect(tab: Tab) {
+		this.refs.drawer.closeDrawer();
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
 		}
 	}
 
+	navigationView() {
+		return (
+			<View style={{flex: 1, backgroundColor: '#fff', paddingTop: 120 }}>
+				<List>
+					<ListItem>
+						<Button
+							name = "sign-out"
+							backgroundColor = { this.getTheme().btnPrimaryBg }
+							style = {{ padding: 6, minWidth: 100 }}
+							onPress={ this.onTabSelect.bind(this, 'dashboardTab') }
+						>Dashboard</Button>
+					</ListItem>
+					<ListItem>
+						<Button
+							name = "sign-out"
+							backgroundColor = { this.getTheme().btnPrimaryBg }
+							style = {{ padding: 6, minWidth: 100 }}
+							onPress={ this.onTabSelect.bind(this, 'devicesTab') }
+						>Devices</Button>
+					</ListItem>
+					<ListItem>
+						<Button
+							name = "sign-out"
+							backgroundColor = { this.getTheme().btnPrimaryBg }
+							style = {{ padding: 6, minWidth: 100 }}
+							onPress={ this.onTabSelect.bind(this, 'sensorsTab') }
+						>Sensors</Button>
+					</ListItem>
+					<ListItem>
+						<Button
+							name = "sign-out"
+							backgroundColor = { this.getTheme().btnPrimaryBg }
+							style = {{ padding: 6, minWidth: 100 }}
+							onPress={ this.onTabSelect.bind(this, 'schedulerTab') }
+						>Scheduler</Button>
+					</ListItem>
+					<ListItem>
+						<Button
+							name = "sign-out"
+							backgroundColor = { this.getTheme().btnPrimaryBg }
+							style = {{ padding: 6, minWidth: 100 }}
+							onPress={ this.onTabSelect.bind(this, 'gatewaysTab') }
+						>Gateways</Button>
+					</ListItem>
+				</List>
+			</View>
+		)
+	}
+
+	renderContent() {
+		switch (this.props.tab) {
+			case 'dashboardTab':
+				return <DashboardTab />
+			case 'devicesTab':
+				return <DevicesTab />
+			case 'sensorsTab':
+				return <SensorsTab />
+			case 'schedulerTab':
+				return <SchedulerTab />
+			case 'gatewaysTab':
+				return <GatewaysTab />
+			}
+		return <DashboardTab />
+	}
+
 	render() {
 		return (
-			<View style={{flex:1}}>
-				<ToolbarAndroid
-					style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
-					titleColor = { Theme.Core.inverseTextColor }
-					navIcon = { require('./img/dashboard-active-icon.png') }
-					title = "Telldus Live!"
-					actions = {[{ title: 'Settings', icon: require('image!ic_launcher'), show: 'never'}]}
-					onActionSelected = { this.onActionSelected }
-				/>
-				<TabLayoutAndroid
-					style = {{ height: 48 }}
-					scrollable = {true}
-					backgroundColor = { Theme.Core.brandPrimary }
-					indicatorTabColor = { Theme.Core.inverseTextColor }
-				>
-					<TabAndroid text = "Dashboard" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
-						<Text>
-							Dashboard
-						</Text>
-					</TabAndroid>
-					<TabAndroid text = "Devices" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
-						<DevicesTab />
-					</TabAndroid>
-					<TabAndroid text = "Sensors" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
-						<Text>
-							Sensors
-						</Text>
-					</TabAndroid>
-					<TabAndroid text = "Scheduler" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
-						<Text>
-							Scheduler
-						</Text>
-					</TabAndroid>
-					<TabAndroid text = "Locations" textColor = { Theme.Core.fadedInverseTextColor } selectedTextColor = { Theme.Core.inverseTextColor }>
-						<Text>
-							Locations
-						</Text>
-					</TabAndroid>
-				</TabLayoutAndroid>
-			</View>
+			<DrawerLayoutAndroid
+				ref="drawer"
+				drawerWidth={300}
+				drawerPosition={DrawerLayoutAndroid.positions.Left}
+				renderNavigationView={() => this.navigationView()}
+			>
+				<View style={{flex:1}}>
+					<ToolbarAndroid
+						style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
+						titleColor = { Theme.Core.inverseTextColor }
+						navIcon = { require('./img/dashboard-active-icon.png') }
+						title = "Telldus Live!"
+						actions = {[{ title: 'Settings', icon: require('image!ic_launcher'), show: 'never'}]}
+						onActionSelected = { this.onActionSelected }
+					/>
+					<View key={this.props.tab}>
+						{this.renderContent()}
+					</View>
+				</View>
+			</DrawerLayoutAndroid>
 		);
 	}
 
