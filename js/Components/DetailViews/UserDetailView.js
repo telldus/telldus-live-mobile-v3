@@ -24,13 +24,13 @@ import { connect } from 'react-redux';
 
 import { Container, Content, Button, Text, View } from 'BaseComponents';
 import Gravatar from 'react-native-avatar-gravatar';
+import { logoutFromTelldus } from 'Actions';
 
 import type { Tab } from '../reducers/navigation';
 
 class UserDetailView extends View {
 
 	render() {
-		console.log(this.props, this.state);
 		return (
 			<Container style={{ padding: 10 }}>
 				<Content>

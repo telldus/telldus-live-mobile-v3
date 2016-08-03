@@ -23,7 +23,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
-import { getDevices, logoutFromTelldus } from 'Actions';
+import { getDevices } from 'Actions';
 
 import type { Tab } from '../reducers/navigation';
 
