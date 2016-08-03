@@ -22,11 +22,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, Text, View } from 'BaseComponents';
-import Gravatar from 'react-native-avatar-gravatar';
-import { logoutFromTelldus } from 'Actions';
+import {
+	Container,
+	Content,
+	Button,
+	Gravatar,
+	Text,
+	View
+} from 'BaseComponents';
 
-import type { Tab } from '../reducers/navigation';
+import { logoutFromTelldus } from 'Actions';
 
 class UserDetailView extends View {
 

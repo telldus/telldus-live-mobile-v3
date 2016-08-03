@@ -51,6 +51,16 @@ import ProgressBar from './ProgressBar';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import ScrollableTabView from './Tabs';
 
+import {
+	Dimensions,
+	NavigatorIOS,
+	PixelRatio,
+	StatusBar,
+	StyleSheet,
+	TabBarIOS
+} from 'react-native';
+
+import Gravatar from 'react-native-avatar-gravatar';
 
 module.exports = {
 	Header: Header,
@@ -83,5 +93,13 @@ module.exports = {
 	CheckBox: CheckBox,
 	Radio: Radio,
 	ProgressBar: ProgressBar,
-	Tabs : ScrollableTabView
+	Tabs: ScrollableTabView,
+
+	Dimensions: Dimensions,
+	NavigatorIOS: NavigatorIOS,
+	PixelRatio: PixelRatio,
+	StatusBar: StatusBar,
+	StyleSheet: StyleSheet,
+	TabBarIOS: TabBarIOS,
+	Gravatar: Gravatar
 };

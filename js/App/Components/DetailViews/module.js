@@ -16,41 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule App
+ * @providesModule DetailViews
  */
 
 'use strict';
 
-import React from 'react';
-import { connect } from 'react-redux';
+import DeviceDetailView from './DeviceDetailView';
+import GatewayDetailView from './GatewayDetailView';
+import SensorDetailView from './SensorDetailView';
+import UserDetailView from './UserDetailView';
 
-import { View } from 'BaseComponents';
-
-import {
-	loadConfig,
-	loginToTelldus
-} from 'Actions';
-
-import {
-	LoginScreen,
-	AppNavigator
-} from 'Components';
-
-class App extends React.Component {
-
-	render() {
-		if (!this.props.accessToken) {
-			return <LoginScreen />;
-		}
-		return <AppNavigator />;
-	}
-
+module.exports = {
+	Device: DeviceDetailView,
+	Gateway: GatewayDetailView,
+	Sensor: SensorDetailView,
+	User: UserDetailView,
 };
-
-function select(store) {
-	return {
-		accessToken: store.user.accessToken,
-	};
-}
-
-module.exports = connect(select)(App);

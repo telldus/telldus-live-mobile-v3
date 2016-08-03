@@ -23,11 +23,12 @@
 
 import React from 'React';
 import { Provider } from 'react-redux';
-import Dimensions from 'Dimensions';
+
+import { Dimensions } from 'BaseComponents';
 
 import App from 'App';
-import { configureStore } from 'Store';
 import { serverURL } from 'Config';
+import { configureStore } from 'Store';
 
 function Bootstrap(): React.Component {
 

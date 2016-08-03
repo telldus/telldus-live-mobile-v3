@@ -24,25 +24,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, Header, Icon, List, ListItem, Text, Title, View } from 'BaseComponents';
-import StatusBar from 'StatusBar';
-import StyleSheet from 'StyleSheet';
-import TabBarIOS from 'TabBarIOS';
-import TabBarItemIOS from 'TabBarItemIOS';
-import Navigator from 'Navigator';
-import NavigatorIOS from 'NavigatorIOS';
-import Theme from 'Theme';
-import PixelRatio from 'PixelRatio';
+import {
+	Icon,
+	NavigatorIOS,
+	PixelRatio,
+	StatusBar,
+	StyleSheet,
+	TabBarIOS,
+	Text,
+	View
+} from 'BaseComponents';
 
-import DashboardTab from './DashboardTab';
-import DevicesTab from './DevicesTab';
-import GatewaysTab from './GatewaysTab';
-import SchedulerTab from './SchedulerTab';
-import SensorsTab from './SensorsTab';
-import UserDetailView from '../DetailViews/UserDetailView';
 import { switchTab } from 'Actions';
+import DetailViews from 'DetailViews';
+import TabViews from 'TabViews';
+import Theme from 'Theme';
 
-import type { Tab } from '../reducers/navigation';
 
 class TabsView extends View {
 
@@ -70,9 +67,8 @@ class TabsView extends View {
 			return false;
 		}
 		return (
-			<View>
 				<TabBarIOS tintColor = { this.getTheme().brandPrimary } >
-					<TabBarItemIOS
+					<TabBarIOS.Item
 						title = "Dashboard"
 						selected = { this.props.tab === 'dashboardTab' }
 						onPress = { this.onTabSelect.bind(this, 'dashboardTab') }
@@ -87,13 +83,13 @@ class TabsView extends View {
 							titleTextColor = { Theme.Core.inverseTextColor }
 							initialRoute = {{
 								title: 'Telldus Live!',
-								component: DashboardTab,
+								component: TabViews.Dashboard,
 								rightButtonIcon: this.state.userIcon,
 								onRightButtonPress: this._openUserDetailView.bind(this)
 							}}
 						/>
-					</TabBarItemIOS>
-					<TabBarItemIOS
+					</TabBarIOS.Item>
+					<TabBarIOS.Item
 						title = "Devices"
 						selected = { this.props.tab === 'devicesTab' }
 						onPress = { this.onTabSelect.bind(this, 'devicesTab') }
@@ -107,11 +103,11 @@ class TabsView extends View {
 							titleTextColor = { Theme.Core.inverseTextColor }
 							initialRoute = {{
 								title: 'Devices',
-								component: DevicesTab,
+								component: TabViews.Devices,
 							}}
 						/>
-					</TabBarItemIOS>
-					<TabBarItemIOS
+					</TabBarIOS.Item>
+					<TabBarIOS.Item
 						title="Sensors"
 						selected={this.props.tab === 'sensorsTab'}
 						onPress={this.onTabSelect.bind(this, 'sensorsTab')}
@@ -124,11 +120,11 @@ class TabsView extends View {
 							titleTextColor = { Theme.Core.inverseTextColor }
 							initialRoute = {{
 								title: 'Sensors',
-								component: SensorsTab,
+								component: TabViews.Sensors,
 							}}
 						/>
-					</TabBarItemIOS>
-					<TabBarItemIOS
+					</TabBarIOS.Item>
+					<TabBarIOS.Item
 						title="Scheduler"
 						selected={this.props.tab === 'schedulerTab'}
 						onPress={this.onTabSelect.bind(this, 'schedulerTab')}
@@ -142,11 +138,11 @@ class TabsView extends View {
 							titleTextColor = { Theme.Core.inverseTextColor }
 							initialRoute = {{
 								title: 'Scheduler',
-								component: SchedulerTab,
+								component: TabViews.Scheduler,
 							}}
 						/>
-					</TabBarItemIOS>
-					<TabBarItemIOS
+					</TabBarIOS.Item>
+					<TabBarIOS.Item
 						title="Gateways"
 						selected={this.props.tab === 'gatewaysTab'}
 						onPress={this.onTabSelect.bind(this, 'gatewaysTab')}
@@ -160,18 +156,17 @@ class TabsView extends View {
 							titleTextColor = { Theme.Core.inverseTextColor }
 							initialRoute = {{
 								title: 'Gateways',
-								component: GatewaysTab,
+								component: TabViews.Gateways,
 							}}
 						/>
-					</TabBarItemIOS>
+					</TabBarIOS.Item>
 				</TabBarIOS>
-			</View>
 		);
 	}
 
 	_openUserDetailView () {
 		this.refs.dashboardNavigator.push({
-			component: UserDetailView,
+			component: DetailViews.User,
 			title: 'User Profile',
 			passProps: { user: this.props.userProfile }
 		});
