@@ -23,8 +23,10 @@
 
 import AppNavigator from './AppNavigator';
 import LoginScreen from './Login/LoginScreen';
+import Push from './Push'
 
 module.exports = {
 	AppNavigator: AppNavigator,
 	LoginScreen: LoginScreen,
+	Push: Push
 };

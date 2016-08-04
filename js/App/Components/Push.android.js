@@ -15,22 +15,43 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Push
  */
 
-package com.telldusliveapp;
+'use strict';
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import React from 'react';
+import FCM from 'react-native-fcm';
 
-public class SplashActivity extends AppCompatActivity {
+class Push extends React.Component {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		Intent intent = new Intent(this, MainActivity.class);
-		startActivity(intent);
-		finish();
+	constructor() {
+		super()
+		//FCM.requestPermissions();
+		FCM.getFCMToken().then(token => {
+			console.log("Push Token", token)
+			// store fcm token in your server
+		});
+		this.notificationUnsubscribe = FCM.on('notification', (notif) => {
+			if (notif.message) {
+				console.log('Received push notification: ' + notif.message);
+			}
+		});
+		this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
+			console.log("Push Refresh Token", token)
+		});
 	}
-}
+
+	destructor() {
+		this.refreshUnsubscribe();
+		this.notificationUnsubscribe();
+	}
+
+	render() {
+		return null;
+	}
+
+};
+
+module.exports = Push;

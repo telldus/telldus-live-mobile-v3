@@ -16,46 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule App
+ * @providesModule Push
  */
 
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
-
-import {
-	loadConfig,
-	loginToTelldus
-} from 'Actions';
-
-import {
-	LoginScreen,
-	AppNavigator,
-	Push
-} from 'Components';
-
-class App extends React.Component {
-
-	componentDidMount() {
-		var push = new Push();
-	}
-
-	render() {
-		if (!this.props.accessToken) {
-			return <LoginScreen />;
-		}
-		return <AppNavigator />;
-	}
+class Push extends React.Component {
 
 };
 
-function select(store) {
-	return {
-		accessToken: store.user.accessToken,
-	};
-}
-
-module.exports = connect(select)(App);
+module.exports = Push;

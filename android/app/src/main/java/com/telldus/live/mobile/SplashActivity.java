@@ -15,47 +15,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule App
  */
 
-'use strict';
+package com.telldus.live.mobile;
 
-import React from 'react';
-import { connect } from 'react-redux';
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import { View } from 'BaseComponents';
+public class SplashActivity extends AppCompatActivity {
 
-import {
-	loadConfig,
-	loginToTelldus
-} from 'Actions';
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-import {
-	LoginScreen,
-	AppNavigator,
-	Push
-} from 'Components';
-
-class App extends React.Component {
-
-	componentDidMount() {
-		var push = new Push();
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+		finish();
 	}
-
-	render() {
-		if (!this.props.accessToken) {
-			return <LoginScreen />;
-		}
-		return <AppNavigator />;
-	}
-
-};
-
-function select(store) {
-	return {
-		accessToken: store.user.accessToken,
-	};
 }
-
-module.exports = connect(select)(App);
