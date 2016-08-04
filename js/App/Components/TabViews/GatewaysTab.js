@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, List, ListItem, Text, View } from 'BaseComponents';
 import { getGateways } from 'Actions';
 
 import GatewayDetailView from '../DetailViews/GatewayDetailView'
@@ -33,23 +33,19 @@ class GatewaysTab extends View {
 
 	render() {
 		return (
-			<Container style={{ padding: 10 }}>
-				<Content>
-					<List
-						dataArray={this.props.gateways}
-						renderRow={(item) =>
-							<ListItem>
-								<Button
-									name = "sign-out"
-									backgroundColor = { this.getTheme().btnPrimaryBg }
-									style = {{ padding: 6, minWidth: 100 }}
-									onPress={ () => this.props.navigator.push({ component: GatewayDetailView, title: item.name , passProps: { gateway: item } }) }
-								>{item.name}</Button>
-							</ListItem>
-						}
-					/>
-				</Content>
-			</Container>
+			<List
+				dataArray={this.props.gateways}
+				renderRow={(item) =>
+					<ListItem>
+						<Button
+							name = "sign-out"
+							backgroundColor = { this.getTheme().btnPrimaryBg }
+							style = {{ padding: 6, minWidth: 100 }}
+							onPress={ () => this.props.navigator.push({ component: GatewayDetailView, title: item.name , passProps: { gateway: item } }) }
+						>{item.name}</Button>
+					</ListItem>
+				}
+			/>
 		);
 	}
 

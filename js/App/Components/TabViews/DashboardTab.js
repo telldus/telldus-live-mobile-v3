@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Content, Button, List, ListItem, Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
 
 import type { Tab } from '../reducers/navigation';
@@ -31,17 +31,27 @@ class DashboardTab extends View {
 
 	render() {
 		return (
-			<Container style={{ padding: 10 }}>
-				<Content>
-					<Text>
-						Hello,
-						Hej,
-						สวัสดี,
-						Здравствуйте,
-						你好
-					</Text>
-				</Content>
-			</Container>
+			<View>
+				<Text>
+					1
+				</Text>
+				<Text>
+					2
+				</Text>
+				<Text>
+					3
+				</Text>
+				<Text>
+					4
+				</Text>
+				<Text>
+					Hello,
+					Hej,
+					สวัสดี,
+					Здравствуйте,
+					你好
+				</Text>
+			</View>
 		);
 	}
 

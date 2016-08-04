@@ -24,6 +24,7 @@ import { View, ListView } from 'react-native';
 import Base from './Base';
 import computeProps from './computeProps';
 import _ from 'lodash';
+var GiftedListView = require('react-native-gifted-listview');
 
 export default class ListComponent extends Base {
 
@@ -74,6 +75,17 @@ export default class ListComponent extends Base {
 			const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 			var dataSource = ds.cloneWithRows(this.props.dataArray);
 			return (
+				<GiftedListView {...this.prepareRootProps()}
+					rowView = { this.props.renderRow }
+					onFetch = { this._onFetch }
+					firstLoader = { true }
+					pagination = { false }
+					refreshable = { true }
+					withSections = { true }
+					refreshableTintColor="blue"
+				/>
+			)
+			return (
 				<ListView {...this.prepareRootProps()}
 					enableEmptySections={true}
 					dataSource={dataSource}
@@ -86,5 +98,18 @@ export default class ListComponent extends Base {
 					{this.renderChildren()}
 				</View>
 			);
+	}
+
+	_onFetch(page = 1, callback, options) {
+		setTimeout(() => {
+			var rows = ['row '+((page - 1) * 3 + 1), 'row '+((page - 1) * 3 + 2), 'row '+((page - 1) * 3 + 3)];
+			if (page === 3) {
+				callback(rows, {
+					allLoaded: true, // the end of the list is reached
+				});
+			} else {
+				callback(rows);
+			}
+		}, 1000); // simulating network fetching
 	}
 }

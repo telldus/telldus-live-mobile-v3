@@ -24,6 +24,7 @@
     "react-native-easy-grid": "0.1.6",
     "react-native-extra-dimensions-android": "git+https://github.com/BelinChung/react-native-extra-dimensions-android.git",
     "react-native-fcm": "^1.0.16",
+    "react-native-gifted-listview": "0.0.15",
     "react-native-google-analytics": "^1.3.2",
     "react-native-kenburns-view": "^1.0.0",
     "react-native-keyboard-aware-scroll-view": "0.1.2",

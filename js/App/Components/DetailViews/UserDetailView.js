@@ -37,28 +37,26 @@ class UserDetailView extends View {
 
 	render() {
 		return (
-			<Container style={{ padding: 10 }}>
-				<Content>
-					<Text>
-						Name: {this.props.user.firstname} {this.props.user.lastname}
-					</Text>
-					<View style = {{ paddingBottom: 10 }} />
-					<Text>Email: { this.props.user.email}</Text>
-					<View style = {{ paddingBottom: 10 }} />
-					<Gravatar
-						emailAddress = {this.props.user.email}
-						size = { 100 }
-						mask = "circle"
-					/>
-					<View style = {{ paddingBottom: 10 }} />
-					<Button
-						name = "sign-out"
-						backgroundColor = { this.getTheme().btnPrimaryBg }
-						style = {{ padding: 6, minWidth: 100 }}
-						onPress = { () => this.props.dispatch(logoutFromTelldus()) }
-					>Logout</Button>
-				</Content>
-			</Container>
+			<View>
+				<Text>
+					Name: {this.props.user.firstname} {this.props.user.lastname}
+				</Text>
+				<View style = {{ paddingBottom: 10 }} />
+				<Text>Email: { this.props.user.email}</Text>
+				<View style = {{ paddingBottom: 10 }} />
+				<Gravatar
+					emailAddress = {this.props.user.email}
+					size = { 100 }
+					mask = "circle"
+				/>
+				<View style = {{ paddingBottom: 10 }} />
+				<Button
+					name = "sign-out"
+					backgroundColor = { this.getTheme().btnPrimaryBg }
+					style = {{ padding: 6, minWidth: 100 }}
+					onPress = { () => this.props.dispatch(logoutFromTelldus()) }
+				>Logout</Button>
+			</View>
 		);
 	}
 

@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import View from 'View';
 import Base from './Base';
 import computeProps from './computeProps';
 
@@ -44,7 +44,10 @@ export default class Content extends Base {
 		const contentContainerStyle = this.props.contentContainerStyle || {};
 		contentContainerStyle.padding = (this.props.padder) ? this.getTheme().contentPadding : 0;
 		return(
-			<KeyboardAwareScrollView resetScrollToCoords={{x:0,y:0}} {...this.prepareRootProps()} contentContainerStyle={contentContainerStyle}>{this.props.children}</KeyboardAwareScrollView>
+			<View {...this.prepareRootProps()} contentContainerStyle={contentContainerStyle}>{this.props.children}</View>
 		);
+//		return(
+//			<KeyboardAwareScrollView resetScrollToCoords={{x:0,y:0}} {...this.prepareRootProps()} contentContainerStyle={contentContainerStyle}>{this.props.children}</KeyboardAwareScrollView>
+//		);
 	}
 }

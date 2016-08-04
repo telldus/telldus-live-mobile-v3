@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, List, ListItem, Text, View } from 'BaseComponents';
 import { getSensors } from 'Actions';
 
 import SensorDetailView from '../DetailViews/SensorDetailView'
@@ -33,23 +33,19 @@ class SensorsTab extends View {
 
 	render() {
 		return (
-			<Container style={{ padding: 10 }}>
-				<Content>
-					<List
-						dataArray={this.props.sensors}
-						renderRow={(item) =>
-							<ListItem>
-								<Button
-									name = "sign-out"
-									backgroundColor = { this.getTheme().btnPrimaryBg }
-									style = {{ padding: 6, minWidth: 100 }}
-									onPress={ () => this.props.navigator.push({ component: SensorDetailView, title: item.name , passProps: { sensor: item } }) }
-								>{item.name}</Button>
-							</ListItem>
-						}
-					/>
-				</Content>
-			</Container>
+			<List
+				dataArray={this.props.sensors}
+				renderRow={(item) =>
+					<ListItem>
+						<Button
+							name = "sign-out"
+							backgroundColor = { this.getTheme().btnPrimaryBg }
+							style = {{ padding: 6, minWidth: 100 }}
+							onPress={ () => this.props.navigator.push({ component: SensorDetailView, title: item.name , passProps: { sensor: item } }) }
+						>{item.name}</Button>
+					</ListItem>
+				}
+			/>
 		);
 	}
 

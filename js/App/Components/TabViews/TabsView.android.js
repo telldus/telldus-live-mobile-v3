@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
 import { TabLayoutAndroid, TabAndroid } from "react-native-android-kit";
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';

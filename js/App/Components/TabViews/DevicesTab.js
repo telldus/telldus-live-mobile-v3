@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, List, ListItem, Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
 
 import DeviceDetailView from '../DetailViews/DeviceDetailView'
@@ -33,23 +33,19 @@ class DevicesTab extends View {
 
 	render() {
 		return (
-			<Container style={{ padding: 10 }}>
-				<Content>
-					<List
-						dataArray={this.props.devices}
-						renderRow={(item) =>
-							<ListItem>
-								<Button
-									name = "sign-out"
-									backgroundColor = { this.getTheme().btnPrimaryBg }
-									style = {{ padding: 6, minWidth: 100 }}
-									onPress={ () => this.props.navigator.push({ component: DeviceDetailView, title: item.name , passProps: { device: item } }) }
-								>{item.name}</Button>
-							</ListItem>
-						}
-					/>
-				</Content>
-			</Container>
+			<List
+				dataArray={this.props.devices}
+				renderRow={(item) =>
+					<ListItem>
+						<Button
+							name = "sign-out"
+							backgroundColor = { this.getTheme().btnPrimaryBg }
+							style = {{ padding: 6, minWidth: 100 }}
+							onPress={ () => this.props.navigator.push({ component: DeviceDetailView, title: item.name , passProps: { device: item } }) }
+						>{item.name}</Button>
+					</ListItem>
+				}
+			/>
 		);
 	}
 

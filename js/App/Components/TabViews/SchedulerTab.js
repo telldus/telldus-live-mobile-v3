@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, List, ListItem, Text, View } from 'BaseComponents';
 //import { getDevices } from 'Actions';
 
 import type { Tab } from '../reducers/navigation';
@@ -31,13 +31,9 @@ class SchedulerTab extends View {
 
 	render() {
 		return (
-			<Container style={{ padding: 10 }}>
-				<Content>
-					<Text>
-						Scheduler
-					</Text>
-				</Content>
-			</Container>
+			<Text>
+				Scheduler
+			</Text>
 		);
 	}
 

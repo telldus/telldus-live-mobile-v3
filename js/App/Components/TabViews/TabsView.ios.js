@@ -40,7 +40,6 @@ import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
 import Theme from 'Theme';
 
-
 class TabsView extends View {
 
 	props: {
@@ -67,100 +66,105 @@ class TabsView extends View {
 			return false;
 		}
 		return (
-				<TabBarIOS tintColor = { this.getTheme().brandPrimary } >
-					<TabBarIOS.Item
-						title = "Dashboard"
-						selected = { this.props.tab === 'dashboardTab' }
-						onPress = { this.onTabSelect.bind(this, 'dashboardTab') }
-						icon = { require('./img/dashboard-inactive-icon.png') }
-						selectedIcon = { require('./img/dashboard-active-icon.png')}
-					>
-						<NavigatorIOS
-							ref = "dashboardNavigator"
-							style = { styles.container }
-							barTintColor = { Theme.Core.brandPrimary }
-							tintColor = { Theme.Core.inverseTextColor }
-							titleTextColor = { Theme.Core.inverseTextColor }
-							initialRoute = {{
-								title: 'Telldus Live!',
-								component: TabViews.Dashboard,
-								rightButtonIcon: this.state.userIcon,
-								onRightButtonPress: this._openUserDetailView.bind(this)
-							}}
-						/>
-					</TabBarIOS.Item>
-					<TabBarIOS.Item
-						title = "Devices"
-						selected = { this.props.tab === 'devicesTab' }
-						onPress = { this.onTabSelect.bind(this, 'devicesTab') }
-						icon = { require('./img/devices-inactive-icon.png') }
-						selectedIcon = {require('./img/devices-active-icon.png') }
-					>
-						<NavigatorIOS
-							style = { styles.container }
-							barTintColor = { Theme.Core.brandPrimary }
-							tintColor = { Theme.Core.inverseTextColor }
-							titleTextColor = { Theme.Core.inverseTextColor }
-							initialRoute = {{
-								title: 'Devices',
-								component: TabViews.Devices,
-							}}
-						/>
-					</TabBarIOS.Item>
-					<TabBarIOS.Item
-						title="Sensors"
-						selected={this.props.tab === 'sensorsTab'}
-						onPress={this.onTabSelect.bind(this, 'sensorsTab')}
-						icon={require('./img/sensors-inactive-icon.png')}
-						selectedIcon={require('./img/sensors-active-icon.png')}>
-						<NavigatorIOS
-							style = { styles.container }
-							barTintColor = { Theme.Core.brandPrimary }
-							tintColor = { Theme.Core.inverseTextColor }
-							titleTextColor = { Theme.Core.inverseTextColor }
-							initialRoute = {{
-								title: 'Sensors',
-								component: TabViews.Sensors,
-							}}
-						/>
-					</TabBarIOS.Item>
-					<TabBarIOS.Item
-						title="Scheduler"
-						selected={this.props.tab === 'schedulerTab'}
-						onPress={this.onTabSelect.bind(this, 'schedulerTab')}
-						badge={this.props.notificationsBadge || null}
-						icon={require('./img/scheduler-inactive-icon.png')}
-						selectedIcon={require('./img/scheduler-active-icon.png')}>
-						<NavigatorIOS
-							style = { styles.container }
-							barTintColor = { Theme.Core.brandPrimary }
-							tintColor = { Theme.Core.inverseTextColor }
-							titleTextColor = { Theme.Core.inverseTextColor }
-							initialRoute = {{
-								title: 'Scheduler',
-								component: TabViews.Scheduler,
-							}}
-						/>
-					</TabBarIOS.Item>
-					<TabBarIOS.Item
-						title="Gateways"
-						selected={this.props.tab === 'gatewaysTab'}
-						onPress={this.onTabSelect.bind(this, 'gatewaysTab')}
-						badge={this.props.notificationsBadge || null}
-						icon={require('./img/gateways-inactive-icon.png')}
-						selectedIcon={require('./img/gateways-active-icon.png')}>
-						<NavigatorIOS
-							style = { styles.container }
-							barTintColor = { Theme.Core.brandPrimary }
-							tintColor = { Theme.Core.inverseTextColor }
-							titleTextColor = { Theme.Core.inverseTextColor }
-							initialRoute = {{
-								title: 'Gateways',
-								component: TabViews.Gateways,
-							}}
-						/>
-					</TabBarIOS.Item>
-				</TabBarIOS>
+			<TabBarIOS tintColor = { this.getTheme().brandPrimary } >
+				<TabBarIOS.Item
+					title = "Dashboard"
+					selected = { this.props.tab === 'dashboardTab' }
+					onPress = { this.onTabSelect.bind(this, 'dashboardTab') }
+					icon = { require('./img/dashboard-inactive-icon.png') }
+					selectedIcon = { require('./img/dashboard-active-icon.png')}
+				>
+					<NavigatorIOS
+						ref = "dashboardNavigator"
+						translucent = { false }
+						style = { styles.container }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Telldus Live!',
+							component: TabViews.Dashboard,
+							rightButtonIcon: this.state.userIcon,
+							onRightButtonPress: this._openUserDetailView.bind(this)
+						}}
+					/>
+				</TabBarIOS.Item>
+				<TabBarIOS.Item
+					title = "Devices"
+					selected = { this.props.tab === 'devicesTab' }
+					onPress = { this.onTabSelect.bind(this, 'devicesTab') }
+					icon = { require('./img/devices-inactive-icon.png') }
+					selectedIcon = {require('./img/devices-active-icon.png') }
+				>
+					<NavigatorIOS
+						translucent = { false }
+						style = { styles.container }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Devices',
+							component: TabViews.Devices,
+						}}
+					/>
+				</TabBarIOS.Item>
+				<TabBarIOS.Item
+					title="Sensors"
+					selected={this.props.tab === 'sensorsTab'}
+					onPress={this.onTabSelect.bind(this, 'sensorsTab')}
+					icon={require('./img/sensors-inactive-icon.png')}
+					selectedIcon={require('./img/sensors-active-icon.png')}>
+					<NavigatorIOS
+						style = { styles.container }
+						translucent = { false }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Sensors',
+							component: TabViews.Sensors,
+						}}
+					/>
+				</TabBarIOS.Item>
+				<TabBarIOS.Item
+					title="Scheduler"
+					selected={this.props.tab === 'schedulerTab'}
+					onPress={this.onTabSelect.bind(this, 'schedulerTab')}
+					badge={this.props.notificationsBadge || null}
+					icon={require('./img/scheduler-inactive-icon.png')}
+					selectedIcon={require('./img/scheduler-active-icon.png')}>
+					<NavigatorIOS
+						style = { styles.container }
+						translucent = { false }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Scheduler',
+							component: TabViews.Scheduler,
+						}}
+					/>
+				</TabBarIOS.Item>
+				<TabBarIOS.Item
+					title="Gateways"
+					selected={this.props.tab === 'gatewaysTab'}
+					onPress={this.onTabSelect.bind(this, 'gatewaysTab')}
+					badge={this.props.notificationsBadge || null}
+					icon={require('./img/gateways-inactive-icon.png')}
+					selectedIcon={require('./img/gateways-active-icon.png')}>
+					<NavigatorIOS
+						style = { styles.container }
+						translucent = { false }
+						barTintColor = { Theme.Core.brandPrimary }
+						tintColor = { Theme.Core.inverseTextColor }
+						titleTextColor = { Theme.Core.inverseTextColor }
+						initialRoute = {{
+							title: 'Gateways',
+							component: TabViews.Gateways,
+						}}
+					/>
+				</TabBarIOS.Item>
+			</TabBarIOS>
 		);
 	}
 
@@ -177,7 +181,7 @@ class TabsView extends View {
 var styles = StyleSheet.create({
 	container: {
 		flex: 1,
-	},
+	}
 });
 
 function select(store) {
