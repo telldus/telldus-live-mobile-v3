@@ -41,7 +41,7 @@ export default class ListItemComponent extends Base {
 			 return {
 				 listItem: {
 					 borderBottomWidth: this.getTheme().borderWidth,
-					 marginLeft: 15,
+					 marginLeft: 0,
 					 padding:  this.inputPresent() ? 0 : this.getTheme().listItemPadding,
 					 paddingLeft: 2,
 					 //borderRadius: 1,

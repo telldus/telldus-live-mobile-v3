@@ -76,11 +76,6 @@ class TabsView extends View {
 				>
 					<NavigatorIOS
 						ref = "dashboardNavigator"
-						translucent = { false }
-						style = { styles.container }
-						barTintColor = { Theme.Core.brandPrimary }
-						tintColor = { Theme.Core.inverseTextColor }
-						titleTextColor = { Theme.Core.inverseTextColor }
 						initialRoute = {{
 							title: 'Telldus Live!',
 							component: TabViews.Dashboard,
@@ -97,11 +92,6 @@ class TabsView extends View {
 					selectedIcon = {require('./img/devices-active-icon.png') }
 				>
 					<NavigatorIOS
-						translucent = { false }
-						style = { styles.container }
-						barTintColor = { Theme.Core.brandPrimary }
-						tintColor = { Theme.Core.inverseTextColor }
-						titleTextColor = { Theme.Core.inverseTextColor }
 						initialRoute = {{
 							title: 'Devices',
 							component: TabViews.Devices,
@@ -115,11 +105,6 @@ class TabsView extends View {
 					icon={require('./img/sensors-inactive-icon.png')}
 					selectedIcon={require('./img/sensors-active-icon.png')}>
 					<NavigatorIOS
-						style = { styles.container }
-						translucent = { false }
-						barTintColor = { Theme.Core.brandPrimary }
-						tintColor = { Theme.Core.inverseTextColor }
-						titleTextColor = { Theme.Core.inverseTextColor }
 						initialRoute = {{
 							title: 'Sensors',
 							component: TabViews.Sensors,
@@ -134,11 +119,6 @@ class TabsView extends View {
 					icon={require('./img/scheduler-inactive-icon.png')}
 					selectedIcon={require('./img/scheduler-active-icon.png')}>
 					<NavigatorIOS
-						style = { styles.container }
-						translucent = { false }
-						barTintColor = { Theme.Core.brandPrimary }
-						tintColor = { Theme.Core.inverseTextColor }
-						titleTextColor = { Theme.Core.inverseTextColor }
 						initialRoute = {{
 							title: 'Scheduler',
 							component: TabViews.Scheduler,
@@ -153,11 +133,6 @@ class TabsView extends View {
 					icon={require('./img/gateways-inactive-icon.png')}
 					selectedIcon={require('./img/gateways-active-icon.png')}>
 					<NavigatorIOS
-						style = { styles.container }
-						translucent = { false }
-						barTintColor = { Theme.Core.brandPrimary }
-						tintColor = { Theme.Core.inverseTextColor }
-						titleTextColor = { Theme.Core.inverseTextColor }
 						initialRoute = {{
 							title: 'Gateways',
 							component: TabViews.Gateways,

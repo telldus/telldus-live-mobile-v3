@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
 import { getGateways } from 'Actions';
 
 import GatewayDetailView from '../DetailViews/GatewayDetailView'
@@ -30,30 +30,44 @@ import GatewayDetailView from '../DetailViews/GatewayDetailView'
 import type { Tab } from '../reducers/navigation';
 
 class GatewaysTab extends View {
-
 	render() {
 		return (
 			<List
-				dataArray={this.props.gateways}
-				renderRow={(item) =>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ () => this.props.navigator.push({ component: GatewayDetailView, title: item.name , passProps: { gateway: item } }) }
-						>{item.name}</Button>
+				renderRow = { (item) =>
+					<ListItem iconRight>
+						<Text>{item.name}</Text>
+						<Icon
+							name="arrow-right"
+							onPress={ () => this.props.navigator.push({
+								component: GatewayDetailView,
+								title: item.name,
+								passProps: { gateway: item }
+							})}
+						></Icon>
 					</ListItem>
 				}
+				onFetch = { (page = 1, callback, options) => {
+					if (options.firstLoad || this.props.gateways.length === 0) {
+						callback(this.props.gateways, { allLoaded: true });
+					}
+					this.props.dispatch(getGateways(this.props.accessToken))
+					.then(() => {
+							callback(store.getState().gateways.gateways, { allLoaded: true });
+						}
+					)
+					.catch(function (e) {
+						callback(this.props.gateways, { allLoaded: true });
+					}.bind(this));
+				}}
 			/>
 		);
 	}
-
 }
 
 function select(store) {
 	return {
 		gateways: store.gateways.gateways,
+		accessToken: store.user.accessToken,
 	};
 }
 

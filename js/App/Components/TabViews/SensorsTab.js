@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
 import { getSensors } from 'Actions';
 
 import SensorDetailView from '../DetailViews/SensorDetailView'
@@ -30,30 +30,44 @@ import SensorDetailView from '../DetailViews/SensorDetailView'
 import type { Tab } from '../reducers/navigation';
 
 class SensorsTab extends View {
-
 	render() {
 		return (
 			<List
-				dataArray={this.props.sensors}
-				renderRow={(item) =>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ () => this.props.navigator.push({ component: SensorDetailView, title: item.name , passProps: { sensor: item } }) }
-						>{item.name}</Button>
+				renderRow = { (item) =>
+					<ListItem iconRight>
+						<Text>{item.name}</Text>
+						<Icon
+							name="arrow-right"
+							onPress={ () => this.props.navigator.push({
+								component: SensorDetailView,
+								title: item.name,
+								passProps: { sensor: item }
+							})}
+						></Icon>
 					</ListItem>
 				}
+				onFetch = { (page = 1, callback, options) => {
+					if (options.firstLoad || this.props.sensors.length === 0) {
+						callback(this.props.sensors, { allLoaded: true });
+					}
+					this.props.dispatch(getSensors(this.props.accessToken))
+					.then(() => {
+							callback(store.getState().sensors.sensors, { allLoaded: true });
+						}
+					)
+					.catch(function (e) {
+						callback(this.props.sensors, { allLoaded: true });
+					}.bind(this));
+				}}
 			/>
 		);
 	}
-
 }
 
 function select(store) {
 	return {
 		sensors: store.sensors.sensors,
+		accessToken: store.user.accessToken
 	};
 }
 

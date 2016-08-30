@@ -50,10 +50,10 @@ import Spinner from './Spinner';
 import ProgressBar from './ProgressBar';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import ScrollableTabView from './Tabs';
+import NavigatorIOS from './NavigatorIOS'
 
 import {
 	Dimensions,
-	NavigatorIOS,
 	PixelRatio,
 	StatusBar,
 	StyleSheet,

@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
 
 import DeviceDetailView from '../DetailViews/DeviceDetailView'
@@ -30,30 +30,44 @@ import DeviceDetailView from '../DetailViews/DeviceDetailView'
 import type { Tab } from '../reducers/navigation';
 
 class DevicesTab extends View {
-
 	render() {
 		return (
 			<List
-				dataArray={this.props.devices}
-				renderRow={(item) =>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ () => this.props.navigator.push({ component: DeviceDetailView, title: item.name , passProps: { device: item } }) }
-						>{item.name}</Button>
+				renderRow = { (item) =>
+					<ListItem iconRight>
+						<Text>{item.name}</Text>
+						<Icon
+							name="arrow-right"
+							onPress={ () => this.props.navigator.push({
+								component: DeviceDetailView,
+								title: item.name,
+								passProps: { device: item }
+							})}
+						></Icon>
 					</ListItem>
 				}
+				onFetch = { (page = 1, callback, options) => {
+					if (options.firstLoad || this.props.devices.length === 0) {
+						callback(this.props.devices, { allLoaded: true });
+					}
+					this.props.dispatch(getDevices(this.props.accessToken))
+					.then(() => {
+							callback(store.getState().devices.devices, { allLoaded: true });
+						}
+					)
+					.catch(function (e) {
+						callback(this.props.devices, { allLoaded: true });
+					}.bind(this));
+				}}
 			/>
 		);
 	}
-
 }
 
 function select(store) {
 	return {
 		devices: store.devices.devices,
+		accessToken: store.user.accessToken,
 	};
 }
 
