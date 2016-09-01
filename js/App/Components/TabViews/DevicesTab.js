@@ -65,7 +65,7 @@ const dataSource = new ListDataSource({
 
 function select(store) {
 	return {
-		dataSource: dataSource.cloneWithRows(store.devices.devices),
+		dataSource: dataSource.cloneWithRows(store.devices ? store.devices.devices : {}),
 		devices: store.devices.devices,
 		accessToken: store.user.accessToken,
 	};

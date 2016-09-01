@@ -74,7 +74,7 @@ class TabsView extends View {
 						{this.props.userProfile.firstname} {this.props.userProfile.lastname}
 					</Text>
 				</View>
-				<List style = {{ flex: 1, backgroundColor: '#fff' }}>
+				<View style = {{ flex: 1, backgroundColor: '#fff' }}>
 					<ListItem>
 						<Button
 							name = "sign-out"
@@ -123,7 +123,7 @@ class TabsView extends View {
 							onPress = { () => this.props.dispatch(logoutFromTelldus()) }
 						>Logout</Button>
 					</ListItem>
-				</List>
+				</View>
 			</View>
 		)
 	}
