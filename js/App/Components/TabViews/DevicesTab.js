@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
 
 import DeviceDetailView from '../DetailViews/DeviceDetailView'
@@ -33,6 +33,10 @@ class DevicesTab extends View {
 	render() {
 		return (
 			<List
+				dataSource = { this.props.dataSource }
+				onRefresh = { () =>
+					this.props.dispatch(getDevices(this.props.accessToken))
+				}
 				renderRow = { (item) =>
 					<ListItem iconRight>
 						<Text>{item.name}</Text>
@@ -46,26 +50,22 @@ class DevicesTab extends View {
 						></Icon>
 					</ListItem>
 				}
-				onFetch = { (page = 1, callback, options) => {
-					if (options.firstLoad || this.props.devices.length === 0) {
-						callback(this.props.devices, { allLoaded: true });
-					}
-					this.props.dispatch(getDevices(this.props.accessToken))
-					.then(() => {
-							callback(store.getState().devices.devices, { allLoaded: true });
-						}
-					)
-					.catch(function (e) {
-						callback(this.props.devices, { allLoaded: true });
-					}.bind(this));
-				}}
 			/>
 		);
 	}
 }
 
+DevicesTab.propTypes = {
+	dataSource: React.PropTypes.object,
+};
+
+const dataSource = new ListDataSource({
+	rowHasChanged: (r1, r2) => r1 !== r2,
+});
+
 function select(store) {
 	return {
+		dataSource: dataSource.cloneWithRows(store.devices.devices),
 		devices: store.devices.devices,
 		accessToken: store.user.accessToken,
 	};

@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
+import { Button, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getSensors } from 'Actions';
 
 import SensorDetailView from '../DetailViews/SensorDetailView'
@@ -33,6 +33,10 @@ class SensorsTab extends View {
 	render() {
 		return (
 			<List
+				dataSource = { this.props.dataSource }
+				onRefresh = { () =>
+					this.props.dispatch(getSensors(this.props.accessToken))
+				}
 				renderRow = { (item) =>
 					<ListItem iconRight>
 						<Text>{item.name}</Text>
@@ -46,26 +50,22 @@ class SensorsTab extends View {
 						></Icon>
 					</ListItem>
 				}
-				onFetch = { (page = 1, callback, options) => {
-					if (options.firstLoad || this.props.sensors.length === 0) {
-						callback(this.props.sensors, { allLoaded: true });
-					}
-					this.props.dispatch(getSensors(this.props.accessToken))
-					.then(() => {
-							callback(store.getState().sensors.sensors, { allLoaded: true });
-						}
-					)
-					.catch(function (e) {
-						callback(this.props.sensors, { allLoaded: true });
-					}.bind(this));
-				}}
 			/>
 		);
 	}
 }
 
+SensorsTab.propTypes = {
+	dataSource: React.PropTypes.object,
+};
+
+const dataSource = new ListDataSource({
+	rowHasChanged: (r1, r2) => r1 !== r2,
+});
+
 function select(store) {
 	return {
+		dataSource: dataSource.cloneWithRows(store.sensors.sensors),
 		sensors: store.sensors.sensors,
 		accessToken: store.user.accessToken
 	};

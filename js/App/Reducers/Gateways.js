@@ -21,27 +21,63 @@
 
 import type { Action } from '../actions/types';
 
-export type State = {
-	gateways: ?object
+export type State = ?object;
+
+const initialState = [];
+const gatewayInitialState = {
+	id: null,
+	name: null,
+	websocketAddress: {
+		address: null,
+		instance: null,
+		port: null
+	}
 };
 
-const initialState = {
-	gateways: {}
-};
-
-function gateways(state: State = initialState, action: Action): State {
-	if (action.type === 'RECEIVED_GATEWAYS') {
-		return {
-			...state,
-			gateways: action.gateways.client,
-		};
+function gateway(state: State = gatewayInitialState, action: Action): State {
+	switch (action.type) {
+		case 'RECEIVED_GATEWAYS':
+			return {...gatewayInitialState, ...state};
+		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
+			if (state.id !== action.gatewayId) {
+				return state;
+			}
+			if (action.gatewayWebsocketAddress == null) {
+				var newState = {
+					websocketAddress: {
+						address: null,
+						instance: null,
+						port: null
+					}
+				};
+				return {...state, ...newState};
+			}
+			return Object.assign({}, state, {
+				websocketAddress: action.gatewayWebsocketAddress
+			});
+		case 'LOGGED_OUT':
+			return gatewayInitialState;
+		default:
+			return state;
 	}
-	if (action.type === 'LOGGED_OUT') {
-		return {
-			...initialState
-		};
-	}
-	return state;
 }
 
-module.exports = gateways;
+function gateways(state: State = initialState, action: Action): State {
+	var gatewaysMap = Object.create(null);
+	switch (action.type) {
+		case 'RECEIVED_GATEWAYS':
+			return action.gateways.client.map(gatewayState =>
+				gateway(gatewayState, action)
+			);
+		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
+			return state.map(gatewayState =>
+				gateway(gatewayState, action)
+			);
+		case 'LOGGED_OUT':
+			return initialState;
+		default:
+			return state;
+	}
+}
+
+export default gateways;

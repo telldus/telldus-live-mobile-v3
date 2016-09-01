@@ -20,7 +20,7 @@
     "react-native-avatar-gravatar": "0.0.4",
     "react-native-awesome-button": "^1.6.0",
     "react-native-checkbox": "~1.0.15",
-    "react-native-device-info": "^0.9.4",
+    "react-native-device-info": "^0.9.5",
     "react-native-easy-grid": "0.1.6",
     "react-native-extra-dimensions-android": "git+https://github.com/BelinChung/react-native-extra-dimensions-android.git",
     "react-native-fcm": "^1.0.16",

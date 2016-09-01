@@ -57,7 +57,8 @@ import {
 	PixelRatio,
 	StatusBar,
 	StyleSheet,
-	TabBarIOS
+	TabBarIOS,
+	ListView
 } from 'react-native';
 
 import Gravatar from 'react-native-avatar-gravatar';
@@ -101,5 +102,6 @@ module.exports = {
 	StatusBar: StatusBar,
 	StyleSheet: StyleSheet,
 	TabBarIOS: TabBarIOS,
-	Gravatar: Gravatar
+	Gravatar: Gravatar,
+	ListDataSource: ListView.DataSource
 };

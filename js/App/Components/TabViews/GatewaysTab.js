@@ -22,8 +22,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
-import { getGateways } from 'Actions';
+import { Button, Icon, List, ListDataSource, ListItem, PropTypes, Text, View } from 'BaseComponents';
+import { getGateways, getWebsocketAddress } from 'Actions';
 
 import GatewayDetailView from '../DetailViews/GatewayDetailView'
 
@@ -33,9 +33,17 @@ class GatewaysTab extends View {
 	render() {
 		return (
 			<List
+				dataSource = { this.props.dataSource }
+				onRefresh = { () =>
+					this.props.dispatch(getGateways(this.props.accessToken)).then((action, store) => {
+						action.gateways.client.forEach((gateway) => {
+							this.props.dispatch(getWebsocketAddress(this.props.accessToken, gateway.id));
+						});
+					})
+				}
 				renderRow = { (item) =>
 					<ListItem iconRight>
-						<Text>{item.name}</Text>
+						<Text>{item.name} ({item.websocketAddress.address})</Text>
 						<Icon
 							name="arrow-right"
 							onPress={ () => this.props.navigator.push({
@@ -46,27 +54,23 @@ class GatewaysTab extends View {
 						></Icon>
 					</ListItem>
 				}
-				onFetch = { (page = 1, callback, options) => {
-					if (options.firstLoad || this.props.gateways.length === 0) {
-						callback(this.props.gateways, { allLoaded: true });
-					}
-					this.props.dispatch(getGateways(this.props.accessToken))
-					.then(() => {
-							callback(store.getState().gateways.gateways, { allLoaded: true });
-						}
-					)
-					.catch(function (e) {
-						callback(this.props.gateways, { allLoaded: true });
-					}.bind(this));
-				}}
 			/>
 		);
 	}
 }
 
+GatewaysTab.propTypes = {
+	dataSource: React.PropTypes.object,
+};
+
+const dataSource = new ListDataSource({
+	rowHasChanged: (r1, r2) => r1 !== r2,
+});
+
 function select(store) {
 	return {
-		gateways: store.gateways.gateways,
+		dataSource: dataSource.cloneWithRows(store.gateways),
+		gateways: store.gateways,
 		accessToken: store.user.accessToken,
 	};
 }

@@ -23,12 +23,9 @@ import type { Action } from './types';
 import { apiServer } from 'Config';
 
 async function getGateways(accessToken): Promise<Action> {
-
 	return new Promise((resolve, reject) => {
-		var httpMethod = 'POST',
-			url = apiServer + '/oauth2/clients/list';
 		fetch(
-			url,
+			`${apiServer}/oauth2/clients/list`,
 			{
 				method: 'GET',
 				headers: {
@@ -59,4 +56,37 @@ async function getGateways(accessToken): Promise<Action> {
 
 }
 
-module.exports = { getGateways };
+async function getWebsocketAddress(accessToken, gatewayId = null): Promise<Action> {
+	return new Promise((resolve, reject) => {
+		fetch(
+			`${apiServer}/oauth2/client/serverAddress?id=${gatewayId}`,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Bearer ' + accessToken.access_token
+				}
+			}
+		)
+		.then((response) => response.text())
+		.then((text) => JSON.parse(text))
+		.then((responseData) => {
+			if (responseData.error) {
+				throw responseData;
+			}
+			resolve( {
+				type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+				gatewayId: gatewayId,
+				gatewayWebsocketAddress: responseData.address ? responseData : null
+			});
+		})
+		.catch(function (e) {
+			reject({
+				type: 'ERROR',
+				message: e
+			});
+		});
+	});
+
+}
+
+module.exports = { getGateways, getWebsocketAddress };

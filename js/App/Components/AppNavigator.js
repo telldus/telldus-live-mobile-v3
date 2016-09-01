@@ -21,7 +21,7 @@
 
 import React from 'React';
 import { connect } from 'react-redux';
-import { switchTab, getUserProfile, getGateways, getSensors, getDevices } from 'Actions';
+import { switchTab, getUserProfile, getGateways, getSensors, getDevices, getWebsocketAddress } from 'Actions';
 
 import { Button, Container, Content, Text, Title, View } from 'BaseComponents';
 import Platform from 'Platform';
@@ -55,7 +55,11 @@ class AppNavigator extends View {
 		}
 		this.props.dispatch(getUserProfile(this.props.accessToken));
 		this.props.dispatch(getDevices(this.props.accessToken));
-		this.props.dispatch(getGateways(this.props.accessToken));
+		this.props.dispatch(getGateways(this.props.accessToken)).then((action, store) => {
+			action.gateways.client.forEach((gateway) => {
+				this.props.dispatch(getWebsocketAddress(this.props.accessToken, gateway.id));
+			});
+		});
 		this.props.dispatch(getSensors(this.props.accessToken));
 	}
 
