@@ -34,9 +34,8 @@ class ListComponent extends React.Component {
 	_onRefresh() {
 		this.setState({ refreshing: true });
 		if (this.props.onRefresh) {
-			this.props.onRefresh().then(() => {
-				this.setState({ refreshing: false });
-			});
+			this.props.onRefresh();
+			this.setState({ refreshing: false });
 		} else {
 			setTimeout(() => {
 				this.setState({ refreshing: false });

@@ -19,11 +19,20 @@
 
 'use strict';
 
-import type { Action } from './types';
+import { connect } from 'react-redux';
+import type { Action, ThunkAction } from './types';
 import { apiServer } from 'Config';
+import uuid from 'uuid';
 
-async function getGateways(accessToken): Promise<Action> {
-	return new Promise((resolve, reject) => {
+function updateGateways(gateways) {
+	return {
+		type: 'RECEIVED_GATEWAYS',
+		gateways: gateways
+	}
+}
+
+function getGateways(accessToken): ThunkAction {
+	return dispatch => {
 		fetch(
 			`${apiServer}/oauth2/clients/list`,
 			{
@@ -41,9 +50,49 @@ async function getGateways(accessToken): Promise<Action> {
 			if (responseData.error) {
 				throw responseData;
 			}
-			resolve( {
-				type: 'RECEIVED_GATEWAYS',
-				gateways: responseData
+			const sessionId = uuid.v4();
+			dispatch(authenticateSession(accessToken, sessionId))
+			.then((authenticateSessionResponse) => {
+				if (authenticateSessionResponse.data.status && authenticateSessionResponse.data.status == 'success') {
+					responseData.client.forEach((gateway) => {
+						dispatch(getWebsocketAddress(accessToken, gateway.id, sessionId));
+					});
+				}
+				return dispatch(updateGateways(responseData));
+			});
+		})
+		.catch(function (e) {
+			return {
+				type: 'ERROR',
+				message: e
+			};
+		});
+	};
+
+}
+
+async function authenticateSession(accessToken, sessionId): Promise<Action> {
+	return new Promise((resolve, reject) => {
+		fetch(
+			`${apiServer}/oauth2/user/authenticateSession?session=${sessionId}`,
+			{
+				method: 'GET',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer ' + accessToken.access_token
+				}
+			}
+		)
+		.then((response) => response.text())
+		.then((text) => JSON.parse(text))
+		.then((responseData) => {
+			if (responseData.error) {
+				throw responseData;
+			}
+			resolve({
+				type: 'RECEIVED_AUTHENTICATE_SESSION_RESPONSE',
+				data: responseData
 			});
 		})
 		.catch(function (e) {
@@ -56,7 +105,7 @@ async function getGateways(accessToken): Promise<Action> {
 
 }
 
-async function getWebsocketAddress(accessToken, gatewayId = null): Promise<Action> {
+async function getWebsocketAddress(accessToken, gatewayId, sessionId): Promise<Action> {
 	return new Promise((resolve, reject) => {
 		fetch(
 			`${apiServer}/oauth2/client/serverAddress?id=${gatewayId}`,
@@ -76,7 +125,8 @@ async function getWebsocketAddress(accessToken, gatewayId = null): Promise<Actio
 			resolve( {
 				type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
 				gatewayId: gatewayId,
-				gatewayWebsocketAddress: responseData.address ? responseData : null
+				gatewayWebsocketAddress: responseData.address ? responseData : {},
+				sessionId: sessionId
 			});
 		})
 		.catch(function (e) {
@@ -89,4 +139,6 @@ async function getWebsocketAddress(accessToken, gatewayId = null): Promise<Actio
 
 }
 
-module.exports = { getGateways, getWebsocketAddress };
+module.exports = { updateGateways, getGateways };
+
+

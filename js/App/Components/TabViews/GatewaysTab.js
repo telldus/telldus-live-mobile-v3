@@ -35,11 +35,7 @@ class GatewaysTab extends View {
 			<List
 				dataSource = { this.props.dataSource }
 				onRefresh = { () =>
-					this.props.dispatch(getGateways(this.props.accessToken)).then((action, store) => {
-						action.gateways.client.forEach((gateway) => {
-							this.props.dispatch(getWebsocketAddress(this.props.accessToken, gateway.id));
-						});
-					})
+					this.props.dispatch(getGateways(this.props.accessToken))
 				}
 				renderRow = { (item) =>
 					<ListItem iconRight>

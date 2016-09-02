@@ -19,7 +19,7 @@
 
 'use strict';
 
-import React from 'React';
+import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
 import { switchTab, getUserProfile, getGateways, getSensors, getDevices, getWebsocketAddress } from 'Actions';
 
@@ -55,11 +55,7 @@ class AppNavigator extends View {
 		}
 		this.props.dispatch(getUserProfile(this.props.accessToken));
 		this.props.dispatch(getDevices(this.props.accessToken));
-		this.props.dispatch(getGateways(this.props.accessToken)).then((action, store) => {
-			action.gateways.client.forEach((gateway) => {
-				this.props.dispatch(getWebsocketAddress(this.props.accessToken, gateway.id));
-			});
-		});
+		this.props.dispatch(getGateways(this.props.accessToken));
 		this.props.dispatch(getSensors(this.props.accessToken));
 	}
 
@@ -91,12 +87,16 @@ class AppNavigator extends View {
 	}
 };
 
-function select(store) {
+AppNavigator.propTypes = {
+	dispatch: PropTypes.func.isRequired
+}
+
+function mapStateToProps(state, ownProps) {
 	return {
-		tab: store.navigation.tab,
-		accessToken: store.user.accessToken,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
+		tab: state.navigation.tab,
+		accessToken: state.user.accessToken,
+		userProfile: state.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};
 }
 
-module.exports = connect(select)(AppNavigator);
+module.exports = connect(mapStateToProps)(AppNavigator);
