@@ -23,7 +23,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
-import { getDevices } from 'Actions';
+import { getDevices, deviceSetState } from 'Actions';
 
 import DeviceDetailView from '../DetailViews/DeviceDetailView'
 
@@ -40,6 +40,16 @@ class DevicesTab extends View {
 				renderRow = { (item) =>
 					<ListItem iconRight>
 						<Text>{item.name}</Text>
+						<Button
+							name = { 'toggle-on' }
+							style = {{ padding: 6 }}
+							onPress={ () => this.props.dispatch(deviceSetState(this.props.accessToken, item.id, 1)) }
+						>On</Button>
+						<Button
+							name = { 'toggle-off' }
+							style = {{ padding: 6 }}
+							onPress={ () => this.props.dispatch(deviceSetState(this.props.accessToken, item.id, 2)) }
+						>Off</Button>
 						<Icon
 							name="arrow-right"
 							onPress={ () => this.props.navigator.push({

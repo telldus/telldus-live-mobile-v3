@@ -67,9 +67,13 @@ export default function (store) {
 								message = msg.data;
 								title += ` ${msg.data}`;
 							}
-							console.groupCollapsed(title);
-							console.log(message);
-							console.groupEnd();
+							try {
+								console.groupCollapsed(title);
+								console.log(message);
+								console.groupEnd();
+							} catch (e) {
+								console.log(message);
+							}
 						};
 						websocketConnections[gatewayId].onerror = (e) => {
 							console.log(`[${gatewayId}] Websocket Error: ${e.message}`);
