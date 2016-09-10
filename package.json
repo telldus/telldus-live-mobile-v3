@@ -34,6 +34,7 @@
     "react-native-scrollable-tab-view": "^0.5.5",
     "react-native-swipeout": "git+https://github.com/dancormier/react-native-swipeout.git",
     "react-native-vector-icons": "2.1.x",
+    "react-native-watch-connectivity": "^0.1.4",
     "react-redux": "~4.4.5",
     "react-timer-mixin": "~0.13.3",
     "redux": "~3.5.2",

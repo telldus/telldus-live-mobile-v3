@@ -22,8 +22,18 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		2CA4B17EBA1545A09EF0F8A1 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7509D5D3BD3E400DABF9D771 /* libc++.tbd */; };
 		34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */; };
+		4DB651D71D846AAD002D99D0 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DB651D51D846AAD002D99D0 /* Interface.storyboard */; };
+		4DB651D91D846AAD002D99D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4DB651D81D846AAD002D99D0 /* Assets.xcassets */; };
+		4DB651E01D846AAD002D99D0 /* TelldusLiveAppWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4DB651DF1D846AAD002D99D0 /* TelldusLiveAppWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4DB651E71D846AAD002D99D0 /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB651E61D846AAD002D99D0 /* InterfaceController.swift */; };
+		4DB651E91D846AAD002D99D0 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB651E81D846AAD002D99D0 /* ExtensionDelegate.swift */; };
+		4DB651EB1D846AAD002D99D0 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB651EA1D846AAD002D99D0 /* NotificationController.swift */; };
+		4DB651ED1D846AAD002D99D0 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB651EC1D846AAD002D99D0 /* ComplicationController.swift */; };
+		4DB651EF1D846AAD002D99D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4DB651EE1D846AAD002D99D0 /* Assets.xcassets */; };
+		4DB651F31D846AAD002D99D0 /* TelldusLiveAppWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 4DB651D31D846AAD002D99D0 /* TelldusLiveAppWatch.app */; };
 		54C20368F2D9CDAA47470D62 /* libPods-TelldusLiveApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D31141703145D524C66CDA /* libPods-TelldusLiveApp.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		9A99A3EAE5E2400ABF617F65 /* libRNWatch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3779A8FC2DB347C699716B17 /* libRNWatch.a */; };
 		A796F25C81DE46E0A81A31B8 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D76CC4AAED4E2F94ADAE4F /* libRNDeviceInfo.a */; };
 		CAAD62D4956A49EA96EC30FA /* libRCTOrientation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 598B9ECEAE4E41CCAF3F07D3 /* libRCTOrientation.a */; };
 		D2986F407B4048AC96288B60 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 150121A613CD46DD95BDC072 /* FontAwesome.ttf */; };
@@ -95,6 +105,27 @@
 			remoteGlobalIDString = DA5891D81BA9A9FC002B4DB2;
 			remoteInfo = RNDeviceInfo;
 		};
+		4DB651CF1D846899002D99D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EC616FDBB6C649AE9DE0C055 /* RNWatch.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNWatch;
+		};
+		4DB651E11D846AAD002D99D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4DB651DE1D846AAD002D99D0;
+			remoteInfo = "TelldusLiveAppWatch Extension";
+		};
+		4DB651F11D846AAD002D99D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4DB651D21D846AAD002D99D0;
+			remoteInfo = TelldusLiveAppWatch;
+		};
 		4DC2DFFF1D48B782005DDEBD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 68822640B42549F2A32DDB65 /* RNVectorIcons.xcodeproj */;
@@ -132,6 +163,31 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4DB651F71D846AAD002D99D0 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4DB651E01D846AAD002D99D0 /* TelldusLiveAppWatch Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DB651FB1D846AAD002D99D0 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				4DB651F31D846AAD002D99D0 /* TelldusLiveAppWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0086BC6EFAEE43BCA495CA67 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -153,6 +209,19 @@
 		150121A613CD46DD95BDC072 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		25A65B32BEBD4964AC8D3213 /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
 		32D76CC4AAED4E2F94ADAE4F /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
+		3779A8FC2DB347C699716B17 /* libRNWatch.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNWatch.a; sourceTree = "<group>"; };
+		4DB651D31D846AAD002D99D0 /* TelldusLiveAppWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TelldusLiveAppWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DB651D61D846AAD002D99D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		4DB651D81D846AAD002D99D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4DB651DA1D846AAD002D99D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4DB651DF1D846AAD002D99D0 /* TelldusLiveAppWatch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TelldusLiveAppWatch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DB651E51D846AAD002D99D0 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		4DB651E61D846AAD002D99D0 /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		4DB651E81D846AAD002D99D0 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		4DB651EA1D846AAD002D99D0 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		4DB651EC1D846AAD002D99D0 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		4DB651EE1D846AAD002D99D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4DB651F01D846AAD002D99D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		598B9ECEAE4E41CCAF3F07D3 /* libRCTOrientation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTOrientation.a; sourceTree = "<group>"; };
 		6172A29841DB4E5DB58F5502 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		68822640B42549F2A32DDB65 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -165,6 +234,7 @@
 		8F879DC36B0D4B44A5DA4B67 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		BAA3347B7F7E4B8F57E7A5CC /* Pods-TelldusLiveApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.release.xcconfig"; sourceTree = "<group>"; };
 		DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
+		EC616FDBB6C649AE9DE0C055 /* RNWatch.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNWatch.xcodeproj; path = "../node_modules/react-native-watch-connectivity/RNWatch.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +259,14 @@
 				34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */,
 				A796F25C81DE46E0A81A31B8 /* libRNDeviceInfo.a in Frameworks */,
 				CAAD62D4956A49EA96EC30FA /* libRCTOrientation.a in Frameworks */,
+				9A99A3EAE5E2400ABF617F65 /* libRNWatch.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DB651DC1D846AAD002D99D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +368,46 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4DB651BB1D846899002D99D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4DB651D01D846899002D99D0 /* libRNWatch.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4DB651D41D846AAD002D99D0 /* TelldusLiveAppWatch */ = {
+			isa = PBXGroup;
+			children = (
+				4DB651D51D846AAD002D99D0 /* Interface.storyboard */,
+				4DB651D81D846AAD002D99D0 /* Assets.xcassets */,
+				4DB651DA1D846AAD002D99D0 /* Info.plist */,
+			);
+			path = TelldusLiveAppWatch;
+			sourceTree = "<group>";
+		};
+		4DB651E31D846AAD002D99D0 /* TelldusLiveAppWatch Extension */ = {
+			isa = PBXGroup;
+			children = (
+				4DB651E61D846AAD002D99D0 /* InterfaceController.swift */,
+				4DB651E81D846AAD002D99D0 /* ExtensionDelegate.swift */,
+				4DB651EA1D846AAD002D99D0 /* NotificationController.swift */,
+				4DB651EC1D846AAD002D99D0 /* ComplicationController.swift */,
+				4DB651EE1D846AAD002D99D0 /* Assets.xcassets */,
+				4DB651F01D846AAD002D99D0 /* Info.plist */,
+				4DB651E41D846AAD002D99D0 /* Supporting Files */,
+			);
+			path = "TelldusLiveAppWatch Extension";
+			sourceTree = "<group>";
+		};
+		4DB651E41D846AAD002D99D0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4DB651E51D846AAD002D99D0 /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		4DC2DFEB1D48B782005DDEBD /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -339,6 +457,7 @@
 				68822640B42549F2A32DDB65 /* RNVectorIcons.xcodeproj */,
 				25A65B32BEBD4964AC8D3213 /* RNDeviceInfo.xcodeproj */,
 				782E9B56DE244FAA94B95591 /* RCTOrientation.xcodeproj */,
+				EC616FDBB6C649AE9DE0C055 /* RNWatch.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -356,6 +475,8 @@
 			children = (
 				13B07FAE1A68108700A75B9A /* TelldusLiveApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				4DB651D41D846AAD002D99D0 /* TelldusLiveAppWatch */,
+				4DB651E31D846AAD002D99D0 /* TelldusLiveAppWatch Extension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				B8360490057545809C95F039 /* Frameworks */,
 				3BE371960CF7F0CA7BB39661 /* Pods */,
@@ -369,6 +490,8 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */,
+				4DB651D31D846AAD002D99D0 /* TelldusLiveAppWatch.app */,
+				4DB651DF1D846AAD002D99D0 /* TelldusLiveAppWatch Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -405,15 +528,51 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				194BBDEC52B9268A5F4BFD02 /* [CP] Embed Pods Frameworks */,
 				13C06D118EF102AF0552880E /* [CP] Copy Pods Resources */,
+				4DB651FB1D846AAD002D99D0 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4DB651F21D846AAD002D99D0 /* PBXTargetDependency */,
 			);
 			name = TelldusLiveApp;
 			productName = "Hello World";
 			productReference = 13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		4DB651D21D846AAD002D99D0 /* TelldusLiveAppWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4DB651F81D846AAD002D99D0 /* Build configuration list for PBXNativeTarget "TelldusLiveAppWatch" */;
+			buildPhases = (
+				4DB651D11D846AAD002D99D0 /* Resources */,
+				4DB651F71D846AAD002D99D0 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4DB651E21D846AAD002D99D0 /* PBXTargetDependency */,
+			);
+			name = TelldusLiveAppWatch;
+			productName = TelldusLiveAppWatch;
+			productReference = 4DB651D31D846AAD002D99D0 /* TelldusLiveAppWatch.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		4DB651DE1D846AAD002D99D0 /* TelldusLiveAppWatch Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4DB651F41D846AAD002D99D0 /* Build configuration list for PBXNativeTarget "TelldusLiveAppWatch Extension" */;
+			buildPhases = (
+				4DB651DB1D846AAD002D99D0 /* Sources */,
+				4DB651DC1D846AAD002D99D0 /* Frameworks */,
+				4DB651DD1D846AAD002D99D0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TelldusLiveAppWatch Extension";
+			productName = "TelldusLiveAppWatch Extension";
+			productReference = 4DB651DF1D846AAD002D99D0 /* TelldusLiveAppWatch Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -421,12 +580,21 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0800;
 				LastUpgradeCheck = 800;
 				ORGANIZATIONNAME = "Telldus Technologies AB";
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = CVXXC339E6;
 						DevelopmentTeamName = "Mark Andrews";
+					};
+					4DB651D21D846AAD002D99D0 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+					4DB651DE1D846AAD002D99D0 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -498,10 +666,16 @@
 					ProductGroup = 4DC2DFEB1D48B782005DDEBD /* Products */;
 					ProjectRef = 68822640B42549F2A32DDB65 /* RNVectorIcons.xcodeproj */;
 				},
+				{
+					ProductGroup = 4DB651BB1D846899002D99D0 /* Products */;
+					ProjectRef = EC616FDBB6C649AE9DE0C055 /* RNWatch.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* TelldusLiveApp */,
+				4DB651D21D846AAD002D99D0 /* TelldusLiveAppWatch */,
+				4DB651DE1D846AAD002D99D0 /* TelldusLiveAppWatch Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -570,6 +744,13 @@
 			remoteRef = 4D54D2141D49FE680067EF32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		4DB651D01D846899002D99D0 /* libRNWatch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNWatch.a;
+			remoteRef = 4DB651CF1D846899002D99D0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		4DC2E0001D48B782005DDEBD /* libRNVectorIcons.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -615,6 +796,23 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				D2986F407B4048AC96288B60 /* FontAwesome.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DB651D11D846AAD002D99D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4DB651D91D846AAD002D99D0 /* Assets.xcassets in Resources */,
+				4DB651D71D846AAD002D99D0 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DB651DD1D846AAD002D99D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4DB651EF1D846AAD002D99D0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,7 +890,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4DB651DB1D846AAD002D99D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4DB651EB1D846AAD002D99D0 /* NotificationController.swift in Sources */,
+				4DB651ED1D846AAD002D99D0 /* ComplicationController.swift in Sources */,
+				4DB651E91D846AAD002D99D0 /* ExtensionDelegate.swift in Sources */,
+				4DB651E71D846AAD002D99D0 /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4DB651E21D846AAD002D99D0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4DB651DE1D846AAD002D99D0 /* TelldusLiveAppWatch Extension */;
+			targetProxy = 4DB651E11D846AAD002D99D0 /* PBXContainerItemProxy */;
+		};
+		4DB651F21D846AAD002D99D0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4DB651D21D846AAD002D99D0 /* TelldusLiveAppWatch */;
+			targetProxy = 4DB651F11D846AAD002D99D0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		13B07FB11A68108700A75B9A /* LaunchScreen.xib */ = {
@@ -702,6 +924,14 @@
 			);
 			name = LaunchScreen.xib;
 			path = TelldusLiveApp;
+			sourceTree = "<group>";
+		};
+		4DB651D51D846AAD002D99D0 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4DB651D61D846AAD002D99D0 /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -725,12 +955,15 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
+					"$(SRCROOT)/../node_modules/react-native-watch-connectivity",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
@@ -764,12 +997,15 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
+					"$(SRCROOT)/../node_modules/react-native-watch-connectivity",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
@@ -783,6 +1019,100 @@
 				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta;
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4DB651F51D846AAD002D99D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = "TelldusLiveAppWatch Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Debug;
+		};
+		4DB651F61D846AAD002D99D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				INFOPLIST_FILE = "TelldusLiveAppWatch Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Release;
+		};
+		4DB651F91D846AAD002D99D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				IBSC_MODULE = TelldusLiveAppWatch_Extension;
+				INFOPLIST_FILE = TelldusLiveAppWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
+			};
+			name = Debug;
+		};
+		4DB651FA1D846AAD002D99D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				IBSC_MODULE = TelldusLiveAppWatch_Extension;
+				INFOPLIST_FILE = TelldusLiveAppWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Release;
 		};
@@ -834,6 +1164,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
+					"$(SRCROOT)/../node_modules/react-native-watch-connectivity",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -883,6 +1214,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
+					"$(SRCROOT)/../node_modules/react-native-watch-connectivity",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -899,6 +1231,24 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4DB651F41D846AAD002D99D0 /* Build configuration list for PBXNativeTarget "TelldusLiveAppWatch Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4DB651F51D846AAD002D99D0 /* Debug */,
+				4DB651F61D846AAD002D99D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4DB651F81D846AAD002D99D0 /* Build configuration list for PBXNativeTarget "TelldusLiveAppWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4DB651F91D846AAD002D99D0 /* Debug */,
+				4DB651FA1D846AAD002D99D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
