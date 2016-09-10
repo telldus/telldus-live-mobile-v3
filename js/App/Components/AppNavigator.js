@@ -53,10 +53,10 @@ class AppNavigator extends View {
 			StatusBar.setTranslucent(true);
 			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
 		}
-		this.props.dispatch(getUserProfile(this.props.accessToken));
-		this.props.dispatch(getDevices(this.props.accessToken));
-		this.props.dispatch(getGateways(this.props.accessToken));
-		this.props.dispatch(getSensors(this.props.accessToken));
+		this.props.dispatch(getUserProfile());
+		this.props.dispatch(getDevices());
+		this.props.dispatch(getGateways());
+		this.props.dispatch(getSensors());
 	}
 
 	_updateSpecificOrientation(specificOrientation) {

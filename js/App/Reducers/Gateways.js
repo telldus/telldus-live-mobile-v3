@@ -39,10 +39,11 @@ function gateway(state: State = gatewayInitialState, action: Action): State {
 		case 'RECEIVED_GATEWAYS':
 			return {...gatewayInitialState, ...state};
 		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
-			if (state.id !== action.gatewayId) {
+			const payload = action.payload;
+			if (state.id !== payload.gatewayId) {
 				return state;
 			}
-			if (action.gatewayWebsocketAddress == null) {
+			if (payload.address == null) {
 				var newState = {
 					websocketAddress: {
 						address: null,
@@ -53,7 +54,11 @@ function gateway(state: State = gatewayInitialState, action: Action): State {
 				return {...state, ...newState};
 			}
 			return Object.assign({}, state, {
-				websocketAddress: action.gatewayWebsocketAddress
+				websocketAddress: {
+					address: payload.address,
+					instance: payload.instance,
+					port: payload.port
+				}
 			});
 		case 'LOGGED_OUT':
 			return gatewayInitialState;
@@ -66,7 +71,7 @@ function gateways(state: State = initialState, action: Action): State {
 	var gatewaysMap = Object.create(null);
 	switch (action.type) {
 		case 'RECEIVED_GATEWAYS':
-			return action.gateways.client.map(gatewayState =>
+			return action.payload.client.map(gatewayState =>
 				gateway(gatewayState, action)
 			);
 		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':

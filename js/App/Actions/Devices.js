@@ -19,78 +19,30 @@
 
 'use strict';
 
-import type { Action } from './types';
-import { apiServer } from 'Config';
+import type { ThunkAction } from './types';
 
-async function getDevices(accessToken): Promise<Action> {
-
-	return new Promise((resolve, reject) => {
-		var httpMethod = 'POST',
-			url = apiServer + '/oauth2/devices/list';
-		fetch(
-			url,
-			{
-				method: 'GET',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + accessToken.access_token
-				}
+function getDevices(): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: '/devices/list',
+			requestParams: {
+				method: 'GET'
 			}
-		)
-		.then((response) => response.text())
-		.then((text) => JSON.parse(text))
-		.then((responseData) => {
-			if (responseData.error) {
-				throw responseData;
-			}
-			resolve( {
-				type: 'RECEIVED_DEVICES',
-				devices: responseData
-			});
-		})
-		.catch(function (e) {
-			reject({
-				type: 'ERROR',
-				message: e
-			});
-		});
-	});
-
+		};
+		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_DEVICES', payload: payload });
+	};
 }
 
-async function deviceSetState(accessToken, deviceId, state, stateValue = null): Promise<Action> {
-	return new Promise((resolve, reject) => {
-		fetch(
-			`${apiServer}/oauth2/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
-			{
-				method: 'GET',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + accessToken.access_token
-				}
+function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
+			requestParams: {
+				method: 'GET'
 			}
-		)
-		.then((response) => response.text())
-		.then((text) => JSON.parse(text))
-		.then((responseData) => {
-			if (responseData.error) {
-				throw responseData;
-			}
-			console.log(responseData);
-			resolve( {
-				type: 'DEVICE_SET_STATE'
-			});
-		})
-		.catch(function (e) {
-			reject({
-				type: 'ERROR',
-				message: e
-			});
-		});
-	});
-
+		};
+		return dispatch({ type: 'LIVE_API_CALL', returnType: 'DEVICE_SET_STATE', payload: payload });
+	};
 }
 
 module.exports = { getDevices, deviceSetState };

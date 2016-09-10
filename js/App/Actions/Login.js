@@ -19,16 +19,15 @@
 
 'use strict';
 
-import type { Action } from './types';
+import type { Action, ThunkAction } from './types';
 import { apiServer } from 'Config';
+import { publicKey, privateKey } from 'Config';
 
-async function loginToTelldus(publicKey, privateKey, username, password): Promise<Action> {
+async function loginToTelldus(username, password): Promise<Action> {
 
 	return new Promise((resolve, reject) => {
-		var httpMethod = 'POST',
-			url = apiServer + '/oauth2/accessToken';
 		fetch(
-			url,
+			`${apiServer}/oauth2/accessToken`,
 			{
 				method: 'POST',
 				headers: {
@@ -64,45 +63,26 @@ async function loginToTelldus(publicKey, privateKey, username, password): Promis
 
 }
 
-async function getUserProfile(accessToken): Promise<Action> {
+function updateAccessToken(accessToken): Action {
+	return {
+		type: 'RECEIVED_ACCESS_TOKEN',
+		accessToken: accessToken
+	};
+}
 
-	return new Promise((resolve, reject) => {
-		var httpMethod = 'POST',
-			url = apiServer + '/oauth2/user/profile';
-		fetch(
-			url,
-			{
-				method: 'GET',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + accessToken.access_token
-				}
+function getUserProfile(): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: '/user/profile',
+			requestParams: {
+				method: 'GET'
 			}
-		)
-		.then((response) => response.text())
-		.then((text) => JSON.parse(text))
-		.then((responseData) => {
-			if (responseData.error) {
-				throw responseData;
-			}
-			resolve( {
-				type: 'RECEIVED_USER_PROFILE',
-				userProfile: responseData
-			});
-		})
-		.catch(function (e) {
-			reject({
-				type: 'ERROR',
-				message: e
-			});
-		});
-	});
-
+		};
+		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_USER_PROFILE', payload: payload });
+	};
 }
 
 function logoutFromTelldus(): ThunkAction {
-
 	return (dispatch) => {
 		return dispatch({
 			type: 'LOGGED_OUT',
@@ -111,4 +91,4 @@ function logoutFromTelldus(): ThunkAction {
 
 }
 
-module.exports = {loginToTelldus, logoutFromTelldus, getUserProfile};
+module.exports = {loginToTelldus, logoutFromTelldus, getUserProfile, updateAccessToken};

@@ -138,7 +138,7 @@ class LoginScreen extends View {
 		this.setState({ isLoading: true });
 		try {
 			await Promise.race([
-				dispatch(loginToTelldus(publicKey, privateKey, this.refs.loginForm.getValue().username, this.refs.loginForm.getValue().password)),
+				dispatch(loginToTelldus(this.refs.loginForm.getValue().username, this.refs.loginForm.getValue().password)),
 				timeout(15000),
 			]);
 		} catch (e) {

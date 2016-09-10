@@ -35,7 +35,7 @@ class DevicesTab extends View {
 			<List
 				dataSource = { this.props.dataSource }
 				onRefresh = { () =>
-					this.props.dispatch(getDevices(this.props.accessToken))
+					this.props.dispatch(getDevices())
 				}
 				renderRow = { (item) =>
 					<ListItem iconRight>
@@ -43,12 +43,12 @@ class DevicesTab extends View {
 						<Button
 							name = { 'toggle-on' }
 							style = {{ padding: 6 }}
-							onPress={ () => this.props.dispatch(deviceSetState(this.props.accessToken, item.id, 1)) }
+							onPress={ () => this.props.dispatch(deviceSetState(item.id, 1)) }
 						>On</Button>
 						<Button
 							name = { 'toggle-off' }
 							style = {{ padding: 6 }}
-							onPress={ () => this.props.dispatch(deviceSetState(this.props.accessToken, item.id, 2)) }
+							onPress={ () => this.props.dispatch(deviceSetState(item.id, 2)) }
 						>Off</Button>
 						<Icon
 							name="arrow-right"
@@ -76,8 +76,7 @@ const dataSource = new ListDataSource({
 function select(store) {
 	return {
 		dataSource: dataSource.cloneWithRows(store.devices ? store.devices.devices : {}),
-		devices: store.devices.devices,
-		accessToken: store.user.accessToken,
+		devices: store.devices.devices
 	};
 }
 

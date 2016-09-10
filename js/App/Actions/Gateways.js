@@ -19,126 +19,72 @@
 
 'use strict';
 
-import { connect } from 'react-redux';
-import type { Action, ThunkAction } from './types';
-import { apiServer } from 'Config';
+import type { ThunkAction } from './types';
 import uuid from 'uuid';
 
-function updateGateways(gateways) {
-	return {
-		type: 'RECEIVED_GATEWAYS',
-		gateways: gateways
-	}
-}
-
-function getGateways(accessToken): ThunkAction {
-	return dispatch => {
-		fetch(
-			`${apiServer}/oauth2/clients/list`,
-			{
-				method: 'GET',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + accessToken.access_token
-				}
+function getGateways(): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: '/clients/list',
+			requestParams: {
+				method: 'GET'
 			}
-		)
-		.then((response) => response.text())
-		.then((text) => JSON.parse(text))
-		.then((responseData) => {
-			if (responseData.error) {
-				throw responseData;
+		};
+		return dispatch({
+			type: 'LIVE_API_CALL',
+			returnType: 'RECEIVED_GATEWAYS',
+			payload: payload,
+			callback: (responseData) => {
+				const sessionId = uuid.v4();
+				dispatch(authenticateSession(sessionId, responseData));
 			}
-			const sessionId = uuid.v4();
-			dispatch(authenticateSession(accessToken, sessionId))
-			.then((authenticateSessionResponse) => {
-				if (authenticateSessionResponse.data.status && authenticateSessionResponse.data.status == 'success') {
-					responseData.client.forEach((gateway) => {
-						dispatch(getWebsocketAddress(accessToken, gateway.id, sessionId));
-					});
-				}
-				return dispatch(updateGateways(responseData));
-			});
-		})
-		.catch(function (e) {
-			return {
-				type: 'ERROR',
-				message: e
-			};
 		});
 	};
-
 }
 
-async function authenticateSession(accessToken, sessionId): Promise<Action> {
-	return new Promise((resolve, reject) => {
-		fetch(
-			`${apiServer}/oauth2/user/authenticateSession?session=${sessionId}`,
-			{
-				method: 'GET',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + accessToken.access_token
+function authenticateSession(sessionId, responseData): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/user/authenticateSession?session=${sessionId}`,
+			requestParams: {
+				method: 'GET'
+			}
+		};
+		dispatch({
+			type: 'LIVE_API_CALL',
+			returnType: 'RECEIVED_AUTHENTICATE_SESSION_RESPONSE',
+			payload: payload,
+			callback: (authenticateSessionResponse) => {
+				if (authenticateSessionResponse.status && authenticateSessionResponse.status == 'success') {
+					responseData.client.forEach((gateway) => {
+						dispatch(getWebsocketAddress(gateway.id, sessionId));
+					});
 				}
 			}
-		)
-		.then((response) => response.text())
-		.then((text) => JSON.parse(text))
-		.then((responseData) => {
-			if (responseData.error) {
-				throw responseData;
-			}
-			resolve({
-				type: 'RECEIVED_AUTHENTICATE_SESSION_RESPONSE',
-				data: responseData
-			});
-		})
-		.catch(function (e) {
-			reject({
-				type: 'ERROR',
-				message: e
-			});
 		});
-	});
-
+	};
 }
 
-async function getWebsocketAddress(accessToken, gatewayId, sessionId): Promise<Action> {
-	return new Promise((resolve, reject) => {
-		fetch(
-			`${apiServer}/oauth2/client/serverAddress?id=${gatewayId}`,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Bearer ' + accessToken.access_token
-				}
+function getWebsocketAddress(gatewayId, sessionId): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/client/serverAddress?id=${gatewayId}`,
+			requestParams: {
+				method: 'GET'
 			}
-		)
-		.then((response) => response.text())
-		.then((text) => JSON.parse(text))
-		.then((responseData) => {
-			if (responseData.error) {
-				throw responseData;
-			}
-			resolve( {
-				type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+		};
+		return dispatch({
+			type: 'LIVE_API_CALL',
+			returnType: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+			payload: payload,
+			returnPayload: {
 				gatewayId: gatewayId,
-				gatewayWebsocketAddress: responseData.address ? responseData : {},
 				sessionId: sessionId
-			});
-		})
-		.catch(function (e) {
-			reject({
-				type: 'ERROR',
-				message: e
-			});
+			}
 		});
-	});
-
+	};
 }
 
-module.exports = { updateGateways, getGateways };
+module.exports = { getGateways };
 
 

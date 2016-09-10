@@ -35,7 +35,7 @@ class GatewaysTab extends View {
 			<List
 				dataSource = { this.props.dataSource }
 				onRefresh = { () =>
-					this.props.dispatch(getGateways(this.props.accessToken))
+					this.props.dispatch(getGateways())
 				}
 				renderRow = { (item) =>
 					<ListItem iconRight>
@@ -66,8 +66,7 @@ const dataSource = new ListDataSource({
 function select(store) {
 	return {
 		dataSource: dataSource.cloneWithRows(store.gateways || {}),
-		gateways: store.gateways,
-		accessToken: store.user.accessToken,
+		gateways: store.gateways
 	};
 }
 

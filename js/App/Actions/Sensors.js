@@ -19,44 +19,18 @@
 
 'use strict';
 
-import type { Action } from './types';
-import { apiServer } from 'Config';
+import type { ThunkAction } from './types';
 
-async function getSensors(accessToken): Promise<Action> {
-
-	return new Promise((resolve, reject) => {
-		var httpMethod = 'POST',
-			url = apiServer + '/oauth2/sensors/list';
-		fetch(
-			url,
-			{
-				method: 'GET',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + accessToken.access_token
-				}
+function getSensors(): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: '/sensors/list',
+			requestParams: {
+				method: 'GET'
 			}
-		)
-		.then((response) => response.text())
-		.then((text) => JSON.parse(text))
-		.then((responseData) => {
-			if (responseData.error) {
-				throw responseData;
-			}
-			resolve( {
-				type: 'RECEIVED_SENSORS',
-				sensors: responseData
-			});
-		})
-		.catch(function (e) {
-			reject({
-				type: 'ERROR',
-				message: e
-			});
-		});
-	});
-
+		};
+		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_SENSORS', payload: payload });
+	};
 }
 
 module.exports = { getSensors };

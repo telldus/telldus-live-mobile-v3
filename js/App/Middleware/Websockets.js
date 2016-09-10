@@ -33,11 +33,11 @@ export default function (store) {
 		try {
 			switch(action.type) {
 				case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
-					const websocketAddress = action.gatewayWebsocketAddress;
-					const gatewayId = action.gatewayId;
-					const sessionId = action.sessionId;
-					if (websocketAddress.address && websocketAddress.port) {
-						const websocketUrl = `ws://${websocketAddress.address}:${websocketAddress.port}/websocket`;
+					const payload = action.payload;
+					const gatewayId = payload.gatewayId;
+					const sessionId = payload.sessionId;
+					if (payload.address && payload.port) {
+						const websocketUrl = `ws://${payload.address}:${payload.port}/websocket`;
 						websocketConnections[gatewayId] = new WebSocket(websocketUrl);
 						websocketConnections[gatewayId].onopen = () => {
 							store.dispatch(authoriseWebsocket(gatewayId, sessionId))
@@ -46,12 +46,22 @@ export default function (store) {
 								store.dispatch(addWebsocketFilter(gatewayId, 'device', 'removed'));
 								store.dispatch(addWebsocketFilter(gatewayId, 'device', 'failSetStae'));
 								store.dispatch(addWebsocketFilter(gatewayId, 'device', 'setState'));
+
 								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'added'));
 								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'removed'));
 								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'setName'));
 								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'setPower'));
 								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'value'));
+
 								store.dispatch(addWebsocketFilter(gatewayId, 'onkyo', 'event'));
+
+								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'removeNodeFromNetwork'));
+								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'removeNodeFromNetworkStartTimeout'));
+								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'addNodeToNetwork'));
+								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'addNodeToNetworkStartTimeout'));
+								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'interviewDone'));
+								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'nodeInfo'));
+
 							});
 						};
 						websocketConnections[gatewayId].onmessage = (msg) => {
@@ -89,6 +99,12 @@ export default function (store) {
 					if (websocketConnections[action.gatewayId]) {
 						websocketConnections[action.gatewayId].send(action.message);
 					}
+					break;
+				case 'LOGGED_OUT':
+					websocketConnections.forEach((websocketConnection) => {
+						websocketConnection.close();
+					});
+					break;
 			default:
 			}
 		} catch(e) {

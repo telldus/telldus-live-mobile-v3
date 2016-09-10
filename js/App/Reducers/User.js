@@ -46,7 +46,7 @@ function user(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_USER_PROFILE') {
 		return {
 			...state,
-			userProfile: action.userProfile,
+			userProfile: action.payload,
 		};
 	}
 	return state;

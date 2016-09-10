@@ -35,7 +35,7 @@ class SensorsTab extends View {
 			<List
 				dataSource = { this.props.dataSource }
 				onRefresh = { () =>
-					this.props.dispatch(getSensors(this.props.accessToken))
+					this.props.dispatch(getSensors())
 				}
 				renderRow = { (item) =>
 					<ListItem iconRight>
@@ -66,8 +66,7 @@ const dataSource = new ListDataSource({
 function select(store) {
 	return {
 		dataSource: dataSource.cloneWithRows(store.sensors ? store.sensors.sensors : {}),
-		sensors: store.sensors.sensors,
-		accessToken: store.user.accessToken
+		sensors: store.sensors.sensors
 	};
 }
 

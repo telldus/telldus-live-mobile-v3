@@ -33,7 +33,7 @@ function devices(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_DEVICES') {
 		return {
 			...state,
-			devices: action.devices.device,
+			devices: action.payload.device,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {

@@ -22,7 +22,9 @@
 'use strict';
 
 import WebsocketMiddleware from './Websockets'
+import LiveApiMiddleware from './LiveApi'
 
 module.exports = {
+	LiveApiMiddleware: LiveApiMiddleware,
 	WebsocketMiddleware: WebsocketMiddleware
 };

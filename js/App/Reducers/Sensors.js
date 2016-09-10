@@ -33,7 +33,7 @@ function sensors(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_SENSORS') {
 		return {
 			...state,
-			sensors: action.sensors.sensor,
+			sensors: action.payload.sensor,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {

@@ -24,7 +24,7 @@ import thunk from 'redux-thunk';
 import promise from './Promise';
 import array from './Array';
 import analytics from './Analytics';
-import { WebsocketMiddleware } from 'Middleware';
+import { LiveApiMiddleware, WebsocketMiddleware } from 'Middleware';
 import reducers from 'Reducers';
 import createLogger from 'redux-logger';
 import { persistStore, autoRehydrate } from 'redux-persist';
@@ -38,7 +38,7 @@ var logger = createLogger({
 	duration: true,
 });
 
-var createTheStore = applyMiddleware(thunk, promise, array, WebsocketMiddleware, analytics, logger)(createStore);
+var createTheStore = applyMiddleware(thunk, promise, array, LiveApiMiddleware, WebsocketMiddleware, analytics, logger)(createStore);
 
 function configureStore(onComplete: ?() => void) {
 	const store = autoRehydrate()(createTheStore)(reducers);
