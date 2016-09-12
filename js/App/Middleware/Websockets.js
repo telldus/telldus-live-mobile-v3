@@ -22,6 +22,7 @@
 var websocketConnections = [];
 
 import { authoriseWebsocket, addWebsocketFilter } from 'Actions';
+import * as watch from 'react-native-watch-connectivity'
 
 const formatTime = (time) => `${pad(time.getHours(), 2)}:${pad(time.getMinutes(), 2)}:${pad(time.getSeconds(), 2)}.${pad(time.getMilliseconds(), 3)}`;
 const repeat = (str, times) => (new Array(times + 1)).join(str);
@@ -76,6 +77,19 @@ export default function (store) {
 							} catch (e) {
 								message = msg.data;
 								title += ` ${msg.data}`;
+							}
+
+							try {
+								const timestamp = new Date().getTime()
+								watch.sendMessage({text: `Websocket Message @${timestamp}`, timestamp: timestamp}, (err, replyMessage) => {
+									if (!err) {
+										console.log("Received reply from watch", replyMessage)
+									} else {
+										console.log('Error sending message to watch', err)
+									}
+								});
+							} catch (e) {
+								console.log('ERROR! sending message to watch', e)
 							}
 							try {
 								console.groupCollapsed(title);

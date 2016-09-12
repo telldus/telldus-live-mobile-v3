@@ -590,10 +590,12 @@
 					};
 					4DB651D21D846AAD002D99D0 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = CVXXC339E6;
 						ProvisioningStyle = Automatic;
 					};
 					4DB651DE1D846AAD002D99D0 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = CVXXC339E6;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -1031,6 +1033,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = CVXXC339E6;
 				INFOPLIST_FILE = "TelldusLiveAppWatch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta.watchkitapp.watchkitextension;
@@ -1055,6 +1058,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = CVXXC339E6;
 				INFOPLIST_FILE = "TelldusLiveAppWatch Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta.watchkitapp.watchkitextension;
@@ -1078,6 +1082,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = CVXXC339E6;
 				IBSC_MODULE = TelldusLiveAppWatch_Extension;
 				INFOPLIST_FILE = TelldusLiveAppWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta.watchkitapp;
@@ -1103,6 +1108,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = CVXXC339E6;
 				IBSC_MODULE = TelldusLiveAppWatch_Extension;
 				INFOPLIST_FILE = TelldusLiveAppWatch/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta.watchkitapp;
