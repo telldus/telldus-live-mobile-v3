@@ -24,7 +24,7 @@ import type { ThunkAction } from './types';
 function getSensors(): ThunkAction {
 	return (dispatch) => {
 		const payload = {
-			url: '/sensors/list',
+			url: '/sensors/list?includeValues=1',
 			requestParams: {
 				method: 'GET'
 			}

@@ -33,9 +33,13 @@ const initialState = {
 
 function user(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_ACCESS_TOKEN') {
+		var accessToken = action.accessToken;
+		if (state.accessToken) {
+			accessToken.refresh_token = state.accessToken.refresh_token
+		}
 		return {
 			...state,
-			accessToken: action.accessToken,
+			accessToken: accessToken,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {

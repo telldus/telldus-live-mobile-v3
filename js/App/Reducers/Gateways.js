@@ -37,6 +37,7 @@ const gatewayInitialState = {
 function gateway(state: State = gatewayInitialState, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_GATEWAYS':
+			state.id = parseInt(state.id);
 			return {...gatewayInitialState, ...state};
 		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
 			const payload = action.payload;

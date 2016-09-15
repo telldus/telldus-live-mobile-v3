@@ -65,7 +65,7 @@ const dataSource = new ListDataSource({
 
 function select(store) {
 	return {
-		dataSource: dataSource.cloneWithRows(store.gateways || {}),
+		dataSource: dataSource.cloneWithRows(store.gateways || []),
 		gateways: store.gateways
 	};
 }

@@ -21,20 +21,70 @@
 
 import type { Action } from '../actions/types';
 
-export type State = {
-	sensors: ?object
-};
+export type State = ?object;
 
-const initialState = {
-	sensors: {}
-};
+const initialState = [];
+const sensorInitialState = {};
+
+function sensor(state: State = sensorInitialState, action: Action): State {
+	switch (action.type) {
+		case 'RECEIVED_SENSORS':
+			var newSensor = {
+				battery: state.battery,
+				clientId: parseInt(state.client),
+				editable: Boolean(state.editable),
+				id: parseInt(state.id),
+				ignored: Boolean(state.ignored),
+				keepHistory: Boolean(state.keepHistory),
+				lastUpdated: state.lastUpdated,
+				model: state.model,
+				name: state.name,
+				protocol: state.protocol,
+				sensorId: parseInt(state.sensorId),
+			};
+			if (state.temp) {
+				newSensor['temperature'] = state.temp
+			}
+			if (state.humidity) {
+				newSensor['humidity'] = state.humidity
+			}
+			if (state.rainRate) {
+				newSensor['rainRate'] = state.rainRate
+			}
+			if (state.rainTotal) {
+				newSensor['rainTotal'] = state.rainTotal
+			}
+			if (state.uv) {
+				newSensor['uv'] = state.uv
+			}
+			if (state.watt) {
+				newSensor['watt'] = state.watt
+			}
+			if (state.luminance) {
+				newSensor['luminance'] = state.luminance
+			}
+			if (state.windAvg) {
+				newSensor['windAverage'] = state.windAvg
+			}
+			if (state.windGust) {
+				newSensor['windGust'] = state.windGust
+			}
+			if (state.windDir) {
+				newSensor['windDirection'] = state.windDir
+			}
+			return newSensor;
+		case 'LOGGED_OUT':
+			return sensorInitialState;
+		default:
+			return state;
+	}
+}
 
 function sensors(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_SENSORS') {
-		return {
-			...state,
-			sensors: action.payload.sensor,
-		};
+		return action.payload.sensor.map(sensorState =>
+			sensor(sensorState, action)
+		);
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return {

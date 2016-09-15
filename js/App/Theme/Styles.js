@@ -17,34 +17,40 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
+import Color from 'color';
+import { StyleSheet } from 'react-native';
 
-import React from 'react';
-import { Text } from 'react-native';
-import Base from './Base';
-import computeProps from './computeProps';
-
-export default class TextComponent extends Base {
-
-	prepareRootProps() {
-
-		var type = {
-			color: this.getContextForegroundColor(),
-			backgroundColor: 'transparent',
-			fontSize: this.getTheme().fontSizeBase,
-		}
-
-		var defaultProps = {
-			style: type
-		}
-
-		return computeProps(this.props, defaultProps);
-
+export default StyleSheet.create({
+	sectionHeader: {
+		backgroundColor: '#FAFAFA',
+		height: 26,
+		borderBottomWidth: 1,
+		borderBottomColor: '#EEEEEE',
+		flexDirection: 'column',
+		justifyContent: 'center'
+	},
+	sectionHeaderText: {
+		color: '#999999',
+		fontSize: 14,
+		marginLeft: 16
+	},
+	rowFront: {
+		backgroundColor: '#FFFFFF',
+		borderBottomColor: '#EEEEEE',
+		borderBottomWidth: 1,
+        flexDirection: 'column',
+		height: 72,
+		justifyContent: 'center'
+	},
+	rowBack: {
+		alignItems: 'center',
+		backgroundColor: '#DDD',
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+	},
+	rowBackButton: {
+		height: 72,
+		width: 72
 	}
-	render() {
-		return(
-			<Text {...this.prepareRootProps()}>{this.props.children}</Text>
-		);
-	}
-
-}
+});

@@ -71,7 +71,7 @@ export default {
 
 	buttonPadding: 6,
 
-	borderRadiusBase: (Platform.OS === 'ios' ) ? 5 : 2,
+	borderRadiusBase: 2,
 
 	get borderRadiusLarge () {
 		return this.fontSizeBase* 3.8;
@@ -138,7 +138,7 @@ export default {
 		return this.inverseTextColor;
 	},
 
-	borderWidth: 1,
+	borderWidth: 0,
 	iconMargin: 7,
 
 	get inputColor () {

@@ -84,12 +84,10 @@ export default function (store) {
 								watch.sendMessage({text: `Websocket Message @${timestamp}`, timestamp: timestamp}, (err, replyMessage) => {
 									if (!err) {
 										console.log("Received reply from watch", replyMessage)
-									} else {
-										console.log('Error sending message to watch', err)
 									}
 								});
 							} catch (e) {
-								console.log('ERROR! sending message to watch', e)
+
 							}
 							try {
 								console.groupCollapsed(title);

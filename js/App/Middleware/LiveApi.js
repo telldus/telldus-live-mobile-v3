@@ -120,7 +120,6 @@ async function call(store, url, requestParams): Promise<Action> {
 			resolve(responseData);
 		})
 		.catch(function (e) {
-			console.log(e);
 			reject(e);
 		});
 	});

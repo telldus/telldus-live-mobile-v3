@@ -27,11 +27,6 @@ import { connect } from 'react-redux';
 import { View } from 'BaseComponents';
 
 import {
-	loadConfig,
-	loginToTelldus
-} from 'Actions';
-
-import {
 	LoginScreen,
 	AppNavigator,
 	Push
