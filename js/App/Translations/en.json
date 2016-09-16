@@ -1,0 +1,10 @@
+{
+	pages: {
+		'dashboard': 'Dashboard',
+		'devices': 'Devices',
+		'gateways': 'Gateways',
+		'scheduler': 'Scheduler',
+		'sensors': 'Sensors',
+		'profile': 'User Profile'
+	}
+}

@@ -21,10 +21,10 @@
 
 'use strict';
 
-import En from './En'
-import Sv from './Sv'
+import en from './en.json'
+import sv from './sv.json'
 
 module.exports = {
-	en: En,
-	sv: Sv
+	en: en,
+	sv: sv
 }
