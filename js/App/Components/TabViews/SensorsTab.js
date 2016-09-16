@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Container, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { Button, Container, I18n, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getSensors } from 'Actions';
 
 import SensorDetailView from '../DetailViews/SensorDetailView'
