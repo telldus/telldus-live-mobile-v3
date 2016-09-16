@@ -1,8 +1,8 @@
 {
-	'pages.dashboard': 'Dashboard',
-	'pages.devices': 'Devices',
-	'pages.gateways': 'Gateways',
-	'pages.scheduler': 'Scheduler',
-	'pages.sensors': 'Sensors',
-	'pages.profile': 'User Profile'
+	"pages.dashboard": "Dashboard",
+	"pages.devices": "Devices",
+	"pages.gateways": "Gateways",
+	"pages.scheduler": "Scheduler",
+	"pages.sensors": "Sensors",
+	"pages.profile": "User Profile"
 }
