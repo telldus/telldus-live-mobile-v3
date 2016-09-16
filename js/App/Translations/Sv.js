@@ -20,10 +20,12 @@
 'use strict';
 
 module.exports = {
-	'Dashboard': 'Dashboard',
-	'Devices': 'Enheter',
-	'Gateways': 'Gateways',
-	'Scheduler': 'Schemaläggare',
-	'Sensors': 'Sensorer',
-	'User Profile': 'Profil'
+	pages: {
+		'dashboard': 'Dashboard',
+		'devices': 'Enheter',
+		'gateways': 'Gateways',
+		'scheduler': 'Schemaläggare',
+		'sensors': 'Sensorer',
+		'profile': 'Profil'
+	}
 }

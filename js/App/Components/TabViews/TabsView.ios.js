@@ -69,7 +69,7 @@ class TabsView extends View {
 		return (
 			<TabBarIOS tintColor = { this.getTheme().brandPrimary } >
 				<TabBarIOS.Item
-					title = {I18n.t('Dashboard')}
+					title = {I18n.t('pages.dashboard')}
 					selected = { this.props.tab === 'dashboardTab' }
 					onPress = { this.onTabSelect.bind(this, 'dashboardTab') }
 					icon = { require('./img/dashboard-inactive-icon.png') }
@@ -86,7 +86,7 @@ class TabsView extends View {
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
-					title = {I18n.t('Devices')}
+					title = {I18n.t('pages.devices')}
 					selected = { this.props.tab === 'devicesTab' }
 					onPress = { this.onTabSelect.bind(this, 'devicesTab') }
 					icon = { require('./img/devices-inactive-icon.png') }
@@ -94,26 +94,26 @@ class TabsView extends View {
 				>
 					<NavigatorIOS
 						initialRoute = {{
-							title: I18n.t('Devices'),
+							title: I18n.t('pages.devices'),
 							component: TabViews.Devices,
 						}}
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
-					title = {I18n.t('Sensors')}
+					title = {I18n.t('pages.sensors')}
 					selected = {this.props.tab === 'sensorsTab'}
 					onPress = {this.onTabSelect.bind(this, 'sensorsTab')}
 					icon = {require('./img/sensors-inactive-icon.png')}
 					selectedIcon = {require('./img/sensors-active-icon.png')}>
 					<NavigatorIOS
 						initialRoute = {{
-							title: I18n.t('Sensors'),
+							title: I18n.t('pages.sensors'),
 							component: TabViews.Sensors,
 						}}
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
-					title={I18n.t('Scheduler')}
+					title={I18n.t('pages.scheduler')}
 					selected={this.props.tab === 'schedulerTab'}
 					onPress={this.onTabSelect.bind(this, 'schedulerTab')}
 					badge={this.props.notificationsBadge || null}
@@ -127,7 +127,7 @@ class TabsView extends View {
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
-					title={I18n.t('Gateways')}
+					title={I18n.t('pages.gateways')}
 					selected={this.props.tab === 'gatewaysTab'}
 					onPress={this.onTabSelect.bind(this, 'gatewaysTab')}
 					badge={this.props.notificationsBadge || null}
@@ -135,7 +135,7 @@ class TabsView extends View {
 					selectedIcon={require('./img/gateways-active-icon.png')}>
 					<NavigatorIOS
 						initialRoute = {{
-							title: I18n.t('Gateways'),
+							title: I18n.t('pages.gateways'),
 							component: TabViews.Gateways,
 						}}
 					/>
@@ -147,7 +147,7 @@ class TabsView extends View {
 	_openUserDetailView () {
 		this.refs.dashboardNavigator.push({
 			component: DetailViews.User,
-			title: I18n.t('User Profile'),
+			title: I18n.t('pages.profile'),
 			passProps: { user: this.props.userProfile }
 		});
 	}

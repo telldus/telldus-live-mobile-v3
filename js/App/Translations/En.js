@@ -20,10 +20,12 @@
 'use strict';
 
 module.exports = {
-	'Dashboard': 'Dashboard',
-	'Devices': 'Devices',
-	'Gateways': 'Gateways',
-	'Scheduler': 'Scheduler',
-	'Sensors': 'Sensors',
-	'User Profile': 'User Profile'
+	pages: {
+		'dashboard': 'Dashboard',
+		'devices': 'Devices',
+		'gateways': 'Gateways',
+		'scheduler': 'Scheduler',
+		'sensors': 'Sensors',
+		'profile': 'User Profile'
+	}
 }
