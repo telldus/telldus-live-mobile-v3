@@ -21,12 +21,10 @@
 
 'use strict';
 
-import { unflatten } from 'flat'
-
 import en from './en.json'
 import sv from './sv.json'
 
 module.exports = {
-	en: unflatten(en),
-	sv: unflatten(sv)
+	en: en,
+	sv: sv
 }

@@ -1,8 +1,10 @@
 {
-	"pages.dashboard": "Dashboard",
-	"pages.devices": "Enheter",
-	"pages.gateways": "Gateways",
-	"pages.scheduler": "Schemaläggare",
-	"pages.sensors": "Sensorer",
-	"pages.profile": "Profil"
+	"pages": {
+		"dashboard": "Dashboard",
+		"devices": "Enheter",
+		"gateways": "Gateways",
+		"scheduler": "Schemaläggare",
+		"sensors": "Sensorer",
+		"profile": "Profil"
+	}
 }
