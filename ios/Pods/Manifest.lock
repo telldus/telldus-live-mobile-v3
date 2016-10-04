@@ -1,23 +1,21 @@
 PODS:
-  - React/Core (0.33.0):
-    - React/CSSLayout
-  - React/CSSLayout (0.33.0)
-  - React/RCTActionSheet (0.33.0):
+  - React/Core (0.34.1)
+  - React/RCTActionSheet (0.34.1):
     - React/Core
-  - React/RCTImage (0.33.0):
+  - React/RCTImage (0.34.1):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.33.0):
+  - React/RCTLinkingIOS (0.34.1):
     - React/Core
-  - React/RCTNetwork (0.33.0):
+  - React/RCTNetwork (0.34.1):
     - React/Core
-  - React/RCTPushNotification (0.33.0):
+  - React/RCTPushNotification (0.34.1):
     - React/Core
-  - React/RCTText (0.33.0):
+  - React/RCTText (0.34.1):
     - React/Core
-  - React/RCTVibration (0.33.0):
+  - React/RCTVibration (0.34.1):
     - React/Core
-  - React/RCTWebSocket (0.33.0):
+  - React/RCTWebSocket (0.34.1):
     - React/Core
 
 DEPENDENCIES:
@@ -36,7 +34,7 @@ EXTERNAL SOURCES:
     :path: ../node_modules/react-native
 
 SPEC CHECKSUMS:
-  React: 46edc166689ba71b0b6cf11e64dbdb258d177089
+  React: fc15d22bec0ec10fe15c12749fbefdac37ddc541
 
 PODFILE CHECKSUM: ca674d91312ab4af7deca435cf0976e4078d370b
 
