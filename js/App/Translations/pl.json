@@ -1,0 +1,10 @@
+{
+	"pages": {
+		"dashboard": "Dashboard",
+		"devices": "Urządzenia",
+		"gateways": "",
+		"scheduler": "Harmonogram",
+		"sensors": "Czujniki",
+		"profile": ""
+	}
+}

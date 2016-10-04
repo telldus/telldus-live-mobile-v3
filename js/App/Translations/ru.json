@@ -1,0 +1,10 @@
+{
+	"pages": {
+		"dashboard": "панель приборов",
+		"devices": "приборы",
+		"gateways": "",
+		"scheduler": "планировщик",
+		"sensors": "датчиков",
+		"profile": ""
+	}
+}

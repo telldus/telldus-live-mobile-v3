@@ -1,0 +1,10 @@
+{
+	"pages": {
+		"dashboard": "",
+		"devices": "หน่วย",
+		"gateways": "",
+		"scheduler": "",
+		"sensors": "เซ็นเซอร์",
+		"profile": ""
+	}
+}
