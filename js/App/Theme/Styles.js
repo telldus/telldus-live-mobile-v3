@@ -19,6 +19,7 @@
 
 import Color from 'color';
 import { StyleSheet } from 'react-native';
+import Core from './Core'
 
 export default StyleSheet.create({
 	sectionHeader: {
@@ -30,16 +31,17 @@ export default StyleSheet.create({
 		justifyContent: 'center'
 	},
 	sectionHeaderText: {
-		color: '#999999',
+		color: Core.brandPrimary,
 		fontSize: 14,
-		marginLeft: 16
+		marginLeft: 16,
+		fontWeight: '500'
 	},
 	rowFront: {
 		backgroundColor: '#FFFFFF',
 		borderBottomColor: '#EEEEEE',
 		borderBottomWidth: 1,
-        flexDirection: 'column',
-		height: 72,
+		flexDirection: 'column',
+		height: 60,
 		justifyContent: 'center'
 	},
 	rowBack: {
@@ -50,7 +52,14 @@ export default StyleSheet.create({
 		justifyContent: 'flex-end',
 	},
 	rowBackButton: {
-		height: 72,
-		width: 72
+		height: 60,
+		width: 60
+	},
+	sensorValue: {
+		width: 88,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingRight: 12
 	}
 });

@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Container, I18n, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { Button, Container, I18n, Icon, Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getSensors } from 'Actions';
 
 import SensorDetailView from '../DetailViews/SensorDetailView'
@@ -32,6 +32,8 @@ import type { Tab } from '../reducers/navigation';
 import format from 'date-format';
 import Theme from 'Theme';
 
+import { FormattedNumber } from 'react-intl-native';
+
 class SensorsTab extends View {
 	render() {
 		return (
@@ -40,7 +42,7 @@ class SensorsTab extends View {
 				renderHiddenRow = {this._renderHiddenRow.bind(this)}
 				renderRow = {this._renderRow.bind(this)}
 				renderSectionHeader = {this._renderSectionHeader.bind(this)}
-				rightOpenValue = {-72}
+				rightOpenValue = {-60}
 				onRefresh = {() =>
 					this.props.dispatch(getSensors())
 				}
@@ -61,7 +63,7 @@ class SensorsTab extends View {
 		return (
 			<View style = { Theme.Styles.sectionHeader }>
 				<Text style = { Theme.Styles.sectionHeaderText }>
-					{gateway.name}
+					{(gateway && gateway.name) ? gateway.name : ''}
 				</Text>
 			</View>
 		)
@@ -69,26 +71,107 @@ class SensorsTab extends View {
 
 	_renderRow(item) {
 		const minutesAgo =  Math.round(((Date.now() / 1000) - item.lastUpdated) / 60);
-		return (
-			<ListItem style = { Theme.Styles.rowFront }>
-				<Container style = {{ marginLeft: 16 }}>
-					<Text style = {{
-						color: Theme.Core.brandPrimary,
-						fontSize: 16,
-						opacity: item.name !== '' ? 1 : 0.5
-					}}>
-						{item.name !== '' ? item.name : '(no name)'}
-					</Text>
-					<Text style = {{
-						color: minutesAgo < 1440 ? '#999999' : '#990000',
-						fontSize: 12,
-						opacity: minutesAgo < 1440 ? 1 : 0.5
-					}}>
-						{this._formatLastUpdated(minutesAgo, item.lastUpdated)}
-					</Text>
-				</Container>
-			</ListItem>
-		)
+		try {
+			return (
+				<ListItem style = { Theme.Styles.rowFront }>
+					<Container style = {{ marginLeft: 16, flexDirection: 'row'}}>
+						<View>
+							<Text style = {{
+								color: 'rgba(0,0,0,0.87)',
+								fontSize: 16,
+								opacity: item.name ? 1 : 0.5,
+								marginBottom: 2
+							}}>
+								{item.name ? item.name : '(no name)'}
+							</Text>
+							<Text style = {{
+								color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
+								fontSize: 12,
+								opacity: minutesAgo < 1440 ? 1 : 0.5
+							}}>
+								{this._formatLastUpdated(minutesAgo, item.lastUpdated)}
+							</Text>
+						</View>
+						{ item.humidity ? (
+							<View style={Theme.Styles.sensorValue}>
+								<Image source={require('./img/sensorIcons/Humidity.png')} />
+								<FormattedNumber value = {item.humidity / 100} formatStyle = 'percent' />
+							</View>
+						) : null }
+
+						{ item.temperature ? (
+							<View style={Theme.Styles.sensorValue}>
+								<Image source={require('./img/sensorIcons/Temperature.png')} />
+								<Text>
+									<FormattedNumber value = {item.temperature} maximumFractionDigits = {1} />
+									{String.fromCharCode(176) + 'C'}
+								</Text>
+							</View>
+						) : null }
+
+						{ item.rainRate || item.rainTotal ? (
+							<View style={Theme.Styles.sensorValue}>
+								<Image source={require('./img/sensorIcons/Rain.png')} />
+								<Text>
+									<FormattedNumber value = {item.rainRate} maximumFractionDigits = {0} />
+									{'mm/h\n'}
+									<FormattedNumber value = {item.rainTotal} maximumFractionDigits = {0} />
+									{'mm'}
+								</Text>
+							</View>
+						) : null }
+
+						{ item.windGust ? (
+							<View style={Theme.Styles.sensorValue}>
+								<Image source={require('./img/sensorIcons/Wind.png')} />
+								<Text>
+									<FormattedNumber value = {item.windAverage} maximumFractionDigits = {1} />
+									{'m/s\n'}
+									<FormattedNumber value = {item.windGust} maximumFractionDigits = {1} />
+									{'m/s*\n'}
+									{this._windDirection(item.windDirection)}
+								</Text>
+							</View>
+						) : null }
+
+						{ item.uv ? (
+							<View style={Theme.Styles.sensorValue}>
+								<Image source={require('./img/sensorIcons/UV.png')} />
+								<FormattedNumber value = {item.uv} maximumFractionDigits = {0} />
+							</View>
+						) : null }
+
+						{ item.watt ? (
+							<View style={Theme.Styles.sensorValue}>
+								<Image source={require('./img/sensorIcons/Watt.png')} />
+								<Text>
+									<FormattedNumber value = {item.watt} maximumFractionDigits = {1} />
+									{'W'}
+								</Text>
+							</View>
+						) : null }
+
+						{ item.luminance ? (
+							<View style={Theme.Styles.sensorValue}>
+								<Image source={require('./img/sensorIcons/Luminance.png')} />
+								<Text>
+									<FormattedNumber value = {item.luminance} maximumFractionDigits = {0} />
+									{'lx'}
+								</Text>
+							</View>
+						) : null }
+					</Container>
+				</ListItem>
+			)
+		} catch(e) {
+			console.log(e);
+			return ( <View /> )
+		}
+	}
+
+	_windDirection(value) {
+		const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
+		return directions[Math.floor(value / 22.5)]
 	}
 
 	_formatLastUpdated(minutes, lastUpdated) {
@@ -128,11 +211,11 @@ const dataSource = new ListDataSource({
 	sectionHeaderHasChanged : (s1, s2) => s1 !== s2
 });
 
-function _parseDataIntoItemsAndSectionIds(data) {
+function _parseDataIntoItemsAndSectionIds(sensors, gateways) {
 	var items = {};
 	var sectionIds = [];
-	if (data) {
-		data.map((item) => {
+	if (sensors) {
+		sensors.map((item) => {
 			var sectionId = item.clientId ? item.clientId : '';
 			if (sectionIds.indexOf(sectionId) === -1) {
 				sectionIds.push(sectionId);
@@ -141,11 +224,26 @@ function _parseDataIntoItemsAndSectionIds(data) {
 			items[sectionId].push(item);
 		});
 	}
+	sectionIds.sort((a,b) => {
+		try {
+			const gatewayA = gateways.find((gateway) => gateway.id === a);
+			const gatewayB = gateways.find((gateway) => gateway.id === b);
+			if (gatewayA.name < gatewayB.name) {
+				return -1;
+			}
+			if (gatewayA.name > gatewayB.name) {
+				return 1;
+			}
+			return 0;
+		} catch (e) {
+			return 0;
+		}
+	});
 	return {items, sectionIds};
 }
 
 function select(store) {
-	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.sensors || [])
+	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.sensors || [], store.gateways || [])
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
 		gateways: store.gateways

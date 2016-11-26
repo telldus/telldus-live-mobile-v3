@@ -25,16 +25,39 @@ export type State = {
 	devices: ?object
 };
 
-const initialState = {
-	devices: {}
-};
+const initialState = [];
+const deviceInitialState = {};
+
+function device(state: State = deviceInitialState, action: Action): State {
+	switch (action.type) {
+		case 'RECEIVED_DEVICES':
+			var newDevice = {
+				clientId: parseInt(state.client),
+				editable: Boolean(state.editable),
+				id: parseInt(state.id),
+				state: parseInt(state.state),
+				stateValue: parseInt(state.stateValue),
+				online: Boolean(state.online),
+				ignored: Boolean(state.ignored),
+				methods: Boolean(state.methods),
+				type: state.type,
+				name: state.name,
+				protocol: state.protocol,
+				clientDeviceId: parseInt(state.clientDeviceId),
+			};
+			return newDevice;
+		case 'LOGGED_OUT':
+			return deviceInitialState;
+		default:
+			return state;
+	}
+}
 
 function devices(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_DEVICES') {
-		return {
-			...state,
-			devices: action.payload.device,
-		};
+		return action.payload.device.map(deviceState =>
+			device(deviceState, action)
+		);
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return {

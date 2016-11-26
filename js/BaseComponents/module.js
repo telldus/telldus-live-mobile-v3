@@ -59,7 +59,8 @@ import {
 	StatusBar,
 	StyleSheet,
 	TabBarIOS,
-	ListView
+	ListView,
+	Image
 } from 'react-native';
 
 import Gravatar from 'react-native-avatar-gravatar';
@@ -105,5 +106,6 @@ module.exports = {
 	TabBarIOS: TabBarIOS,
 	Gravatar: Gravatar,
 	ListDataSource: ListView.DataSource,
+	Image: Image,
 	I18n: I18n
 };

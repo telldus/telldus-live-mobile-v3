@@ -29,6 +29,8 @@ import { Dimensions } from 'BaseComponents';
 import App from 'App';
 import { serverURL } from 'Config';
 import { configureStore } from 'Store';
+import { IntlProvider } from 'react-intl';
+
 
 function Bootstrap(): React.Component {
 
@@ -50,7 +52,9 @@ function Bootstrap(): React.Component {
 			const { height, width } = Dimensions.get('window');
 			return (
 				<Provider store={this.state.store}>
-					<App />
+					<IntlProvider locale="en">
+						<App />
+					</IntlProvider>
 				</Provider>
 			);
 		}

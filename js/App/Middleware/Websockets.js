@@ -21,7 +21,7 @@
 
 var websocketConnections = [];
 
-import { authoriseWebsocket, addWebsocketFilter } from 'Actions';
+import { authoriseWebsocket, addWebsocketFilter, processWebSocketMessage, processWebsocketMessageForSensor } from 'Actions';
 import * as watch from 'react-native-watch-connectivity'
 
 const formatTime = (time) => `${pad(time.getHours(), 2)}:${pad(time.getMinutes(), 2)}:${pad(time.getSeconds(), 2)}.${pad(time.getMilliseconds(), 3)}`;
@@ -79,7 +79,22 @@ export default function (store) {
 								title += ` ${msg.data}`;
 							}
 
-							try {
+							if(message.module && message.action) {
+								switch(message.module) {
+									case 'device':
+
+									break;
+									case 'sensor':
+										store.dispatch(processWebsocketMessageForSensor(message.action, message.data));
+									break;
+									case 'zwave':
+
+									break;
+								default:
+								}
+							}
+
+							/*try {
 								const timestamp = new Date().getTime()
 								watch.sendMessage({text: `Websocket Message @${timestamp}`, timestamp: timestamp}, (err, replyMessage) => {
 									if (!err) {
@@ -88,7 +103,7 @@ export default function (store) {
 								});
 							} catch (e) {
 
-							}
+							}*/
 							try {
 								console.groupCollapsed(title);
 								console.log(message);

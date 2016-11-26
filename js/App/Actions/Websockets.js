@@ -19,7 +19,7 @@
 
 'use strict';
 
-import type { Action } from './types';
+import type { Action, ThunkAction } from './types';
 
 async function authoriseWebsocket(gatewayId, sessionId): Promise<Action> {
 	return new Promise((resolve, reject) => {

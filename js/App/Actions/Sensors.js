@@ -33,4 +33,17 @@ function getSensors(): ThunkAction {
 	};
 }
 
-module.exports = { getSensors };
+function processWebsocketMessageForSensor(action, data): Action {
+	switch(action) {
+		case 'value':
+			return {
+				type: 'SENSOR_UPDATE_VALUE',
+				payload: data
+			};
+		break;
+	default:
+	}
+	return true;
+}
+
+module.exports = { getSensors, processWebsocketMessageForSensor };

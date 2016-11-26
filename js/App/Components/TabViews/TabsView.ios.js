@@ -121,7 +121,7 @@ class TabsView extends View {
 					selectedIcon={require('./img/scheduler-active-icon.png')}>
 					<NavigatorIOS
 						initialRoute = {{
-							title: I18n.t('Scheduler'),
+							title: I18n.t('pages.scheduler'),
 							component: TabViews.Scheduler,
 						}}
 					/>
