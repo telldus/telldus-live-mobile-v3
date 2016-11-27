@@ -74,93 +74,91 @@ class SensorsTab extends View {
 		try {
 			return (
 				<ListItem style = { Theme.Styles.rowFront }>
-					<Container style = {{ marginLeft: 16, flexDirection: 'row'}}>
-						<View>
-							<Text style = {{
-								color: 'rgba(0,0,0,0.87)',
-								fontSize: 16,
-								opacity: item.name ? 1 : 0.5,
-								marginBottom: 2
-							}}>
-								{item.name ? item.name : '(no name)'}
-							</Text>
-							<Text style = {{
-								color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
-								fontSize: 12,
-								opacity: minutesAgo < 1440 ? 1 : 0.5
-							}}>
-								{this._formatLastUpdated(minutesAgo, item.lastUpdated)}
+					<View>
+						<Text style = {{
+							color: 'rgba(0,0,0,0.87)',
+							fontSize: 16,
+							opacity: item.name ? 1 : 0.5,
+							marginBottom: 2
+						}}>
+							{item.name ? item.name : '(no name)'}
+						</Text>
+						<Text style = {{
+							color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
+							fontSize: 12,
+							opacity: minutesAgo < 1440 ? 1 : 0.5
+						}}>
+							{this._formatLastUpdated(minutesAgo, item.lastUpdated)}
+						</Text>
+					</View>
+					{ item.humidity ? (
+						<View style={Theme.Styles.sensorValue}>
+							<Image source={require('./img/sensorIcons/Humidity.png')} />
+							<FormattedNumber value = {item.humidity / 100} formatStyle = 'percent' />
+						</View>
+					) : null }
+
+					{ item.temperature ? (
+						<View style={Theme.Styles.sensorValue}>
+							<Image source={require('./img/sensorIcons/Temperature.png')} />
+							<Text>
+								<FormattedNumber value = {item.temperature} maximumFractionDigits = {1} />
+								{String.fromCharCode(176) + 'C'}
 							</Text>
 						</View>
-						{ item.humidity ? (
-							<View style={Theme.Styles.sensorValue}>
-								<Image source={require('./img/sensorIcons/Humidity.png')} />
-								<FormattedNumber value = {item.humidity / 100} formatStyle = 'percent' />
-							</View>
-						) : null }
+					) : null }
 
-						{ item.temperature ? (
-							<View style={Theme.Styles.sensorValue}>
-								<Image source={require('./img/sensorIcons/Temperature.png')} />
-								<Text>
-									<FormattedNumber value = {item.temperature} maximumFractionDigits = {1} />
-									{String.fromCharCode(176) + 'C'}
-								</Text>
-							</View>
-						) : null }
+					{ item.rainRate || item.rainTotal ? (
+						<View style={Theme.Styles.sensorValue}>
+							<Image source={require('./img/sensorIcons/Rain.png')} />
+							<Text>
+								<FormattedNumber value = {item.rainRate} maximumFractionDigits = {0} />
+								{'mm/h\n'}
+								<FormattedNumber value = {item.rainTotal} maximumFractionDigits = {0} />
+								{'mm'}
+							</Text>
+						</View>
+					) : null }
 
-						{ item.rainRate || item.rainTotal ? (
-							<View style={Theme.Styles.sensorValue}>
-								<Image source={require('./img/sensorIcons/Rain.png')} />
-								<Text>
-									<FormattedNumber value = {item.rainRate} maximumFractionDigits = {0} />
-									{'mm/h\n'}
-									<FormattedNumber value = {item.rainTotal} maximumFractionDigits = {0} />
-									{'mm'}
-								</Text>
-							</View>
-						) : null }
+					{ item.windGust ? (
+						<View style={Theme.Styles.sensorValue}>
+							<Image source={require('./img/sensorIcons/Wind.png')} />
+							<Text>
+								<FormattedNumber value = {item.windAverage} maximumFractionDigits = {1} />
+								{'m/s\n'}
+								<FormattedNumber value = {item.windGust} maximumFractionDigits = {1} />
+								{'m/s*\n'}
+								{this._windDirection(item.windDirection)}
+							</Text>
+						</View>
+					) : null }
 
-						{ item.windGust ? (
-							<View style={Theme.Styles.sensorValue}>
-								<Image source={require('./img/sensorIcons/Wind.png')} />
-								<Text>
-									<FormattedNumber value = {item.windAverage} maximumFractionDigits = {1} />
-									{'m/s\n'}
-									<FormattedNumber value = {item.windGust} maximumFractionDigits = {1} />
-									{'m/s*\n'}
-									{this._windDirection(item.windDirection)}
-								</Text>
-							</View>
-						) : null }
+					{ item.uv ? (
+						<View style={Theme.Styles.sensorValue}>
+							<Image source={require('./img/sensorIcons/UV.png')} />
+							<FormattedNumber value = {item.uv} maximumFractionDigits = {0} />
+						</View>
+					) : null }
 
-						{ item.uv ? (
-							<View style={Theme.Styles.sensorValue}>
-								<Image source={require('./img/sensorIcons/UV.png')} />
-								<FormattedNumber value = {item.uv} maximumFractionDigits = {0} />
-							</View>
-						) : null }
+					{ item.watt ? (
+						<View style={Theme.Styles.sensorValue}>
+							<Image source={require('./img/sensorIcons/Watt.png')} />
+							<Text>
+								<FormattedNumber value = {item.watt} maximumFractionDigits = {1} />
+								{'W'}
+							</Text>
+						</View>
+					) : null }
 
-						{ item.watt ? (
-							<View style={Theme.Styles.sensorValue}>
-								<Image source={require('./img/sensorIcons/Watt.png')} />
-								<Text>
-									<FormattedNumber value = {item.watt} maximumFractionDigits = {1} />
-									{'W'}
-								</Text>
-							</View>
-						) : null }
-
-						{ item.luminance ? (
-							<View style={Theme.Styles.sensorValue}>
-								<Image source={require('./img/sensorIcons/Luminance.png')} />
-								<Text>
-									<FormattedNumber value = {item.luminance} maximumFractionDigits = {0} />
-									{'lx'}
-								</Text>
-							</View>
-						) : null }
-					</Container>
+					{ item.luminance ? (
+						<View style={Theme.Styles.sensorValue}>
+							<Image source={require('./img/sensorIcons/Luminance.png')} />
+							<Text>
+								<FormattedNumber value = {item.luminance} maximumFractionDigits = {0} />
+								{'lx'}
+							</Text>
+						</View>
+					) : null }
 				</ListItem>
 			)
 		} catch(e) {

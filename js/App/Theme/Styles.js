@@ -21,6 +21,8 @@ import Color from 'color';
 import { StyleSheet } from 'react-native';
 import Core from './Core'
 
+const listItemHeight = 56;
+
 export default StyleSheet.create({
 	sectionHeader: {
 		backgroundColor: '#FAFAFA',
@@ -40,9 +42,11 @@ export default StyleSheet.create({
 		backgroundColor: '#FFFFFF',
 		borderBottomColor: '#EEEEEE',
 		borderBottomWidth: 1,
-		flexDirection: 'column',
-		height: 60,
-		justifyContent: 'center'
+		flexDirection: 'row',
+		height: listItemHeight,
+		justifyContent: 'flex-start',
+		paddingLeft: 16,
+		alignItems: 'center',
 	},
 	rowBack: {
 		alignItems: 'center',
@@ -52,8 +56,8 @@ export default StyleSheet.create({
 		justifyContent: 'flex-end',
 	},
 	rowBackButton: {
-		height: 60,
-		width: 60
+		height: listItemHeight,
+		width: listItemHeight
 	},
 	sensorValue: {
 		width: 88,
@@ -61,5 +65,9 @@ export default StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		paddingRight: 12
+	},
+	listItemAvatar: {
+		width: 32,
+		marginRight: 24,
 	}
 });

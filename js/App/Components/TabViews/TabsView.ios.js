@@ -72,8 +72,8 @@ class TabsView extends View {
 					title = {I18n.t('pages.dashboard')}
 					selected = { this.props.tab === 'dashboardTab' }
 					onPress = { this.onTabSelect.bind(this, 'dashboardTab') }
-					icon = { require('./img/dashboard-inactive-icon.png') }
-					selectedIcon = { require('./img/dashboard-active-icon.png')}
+					icon = { require('./img/tabIcons/dashboard-inactive.png') }
+					selectedIcon = { require('./img/tabIcons/dashboard-active.png')}
 				>
 					<NavigatorIOS
 						ref = "dashboardNavigator"
@@ -89,8 +89,8 @@ class TabsView extends View {
 					title = {I18n.t('pages.devices')}
 					selected = { this.props.tab === 'devicesTab' }
 					onPress = { this.onTabSelect.bind(this, 'devicesTab') }
-					icon = { require('./img/devices-inactive-icon.png') }
-					selectedIcon = {require('./img/devices-active-icon.png') }
+					icon = { require('./img/tabIcons/devices-inactive.png') }
+					selectedIcon = {require('./img/tabIcons/devices-active.png') }
 				>
 					<NavigatorIOS
 						initialRoute = {{
@@ -103,8 +103,8 @@ class TabsView extends View {
 					title = {I18n.t('pages.sensors')}
 					selected = {this.props.tab === 'sensorsTab'}
 					onPress = {this.onTabSelect.bind(this, 'sensorsTab')}
-					icon = {require('./img/sensors-inactive-icon.png')}
-					selectedIcon = {require('./img/sensors-active-icon.png')}>
+					icon = {require('./img/tabIcons/sensors-inactive.png')}
+					selectedIcon = {require('./img/tabIcons/sensors-active.png')}>
 					<NavigatorIOS
 						initialRoute = {{
 							title: I18n.t('pages.sensors'),
@@ -117,8 +117,8 @@ class TabsView extends View {
 					selected={this.props.tab === 'schedulerTab'}
 					onPress={this.onTabSelect.bind(this, 'schedulerTab')}
 					badge={this.props.notificationsBadge || null}
-					icon={require('./img/scheduler-inactive-icon.png')}
-					selectedIcon={require('./img/scheduler-active-icon.png')}>
+					icon={require('./img/tabIcons/scheduler-inactive.png')}
+					selectedIcon={require('./img/tabIcons/scheduler-active.png')}>
 					<NavigatorIOS
 						initialRoute = {{
 							title: I18n.t('pages.scheduler'),
@@ -131,8 +131,8 @@ class TabsView extends View {
 					selected={this.props.tab === 'gatewaysTab'}
 					onPress={this.onTabSelect.bind(this, 'gatewaysTab')}
 					badge={this.props.notificationsBadge || null}
-					icon={require('./img/gateways-inactive-icon.png')}
-					selectedIcon={require('./img/gateways-active-icon.png')}>
+					icon={require('./img/tabIcons/gateways-inactive.png')}
+					selectedIcon={require('./img/tabIcons/gateways-active.png')}>
 					<NavigatorIOS
 						initialRoute = {{
 							title: I18n.t('pages.gateways'),

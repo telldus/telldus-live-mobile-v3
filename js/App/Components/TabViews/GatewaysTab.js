@@ -22,33 +22,48 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Icon, List, ListDataSource, ListItem, PropTypes, Text, View } from 'BaseComponents';
+import { Container, Button, Image, List, ListDataSource, ListItem, PropTypes, Text, View } from 'BaseComponents';
 import { getGateways, getWebsocketAddress } from 'Actions';
 
 import GatewayDetailView from '../DetailViews/GatewayDetailView'
+import Theme from 'Theme';
+
+import GatewayIcons from 'GatewayIcons'
 
 import type { Tab } from '../reducers/navigation';
 
 class GatewaysTab extends View {
+
+	_renderRow(item) {
+		try {
+			return (
+				<ListItem style = { Theme.Styles.rowFront }>
+					<View style = { Theme.Styles.listItemAvatar }>
+						<Image source = { GatewayIcons.get(item.type) } />
+					</View>
+					<Text style = {{
+						color: 'rgba(0,0,0,0.87)',
+						fontSize: 16,
+						opacity: item.name ? 1 : 0.5,
+						marginBottom: 2
+					}}>
+						{item.name ? item.name : '(no name)'} ({item.online})
+					</Text>
+				</ListItem>
+			)
+		} catch(e) {
+			console.log(e);
+			return ( <View /> )
+		}
+	}
+f
 	render() {
 		return (
 			<List
-				dataSource = { this.props.dataSource }
-				onRefresh = { () =>
+				dataSource = {this.props.dataSource}
+				renderRow = {this._renderRow.bind(this)}
+				onRefresh = {() =>
 					this.props.dispatch(getGateways())
-				}
-				renderRow = { (item) =>
-					<ListItem iconRight>
-						<Text>{item.name} ({item.websocketAddress.address})</Text>
-						<Icon
-							name="arrow-right"
-							onPress={ () => this.props.navigator.push({
-								component: GatewayDetailView,
-								title: item.name,
-								passProps: { gateway: item }
-							})}
-						></Icon>
-					</ListItem>
 				}
 			/>
 		);
