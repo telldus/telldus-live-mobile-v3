@@ -1,6 +1,6 @@
 {
   "name": "React",
-  "version": "0.37.0",
+  "version": "0.39.1",
   "summary": "A framework for building native apps using React",
   "description": "React Native apps are built using the React JS\nframework, and render directly to native UIKit\nelements using a fully asynchronous architecture.\nThere is no browser and no HTML. We have picked what\nwe think is the best set of features from these and\nother technologies to build what we hope to become\nthe best product development framework available,\nwith an emphasis on iteration speed, developer\ndelight, continuity of technology, and absolutely\nbeautiful and fast products with no compromises in\nquality or capability.",
   "homepage": "http://facebook.github.io/react-native/",
@@ -8,13 +8,17 @@
   "authors": "Facebook",
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.37.0"
+    "tag": "v0.39.1"
   },
   "default_subspecs": "Core",
   "requires_arc": true,
   "platforms": {
-    "ios": "7.0"
+    "ios": "8.0"
   },
+  "pod_target_xcconfig": {
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++14"
+  },
+  "header_dir": "React",
   "preserve_paths": [
     "cli.js",
     "Libraries/**/*.js",
@@ -29,16 +33,23 @@
   "subspecs": [
     {
       "name": "Core",
+      "dependencies": {
+        "React/CSSLayout": [
+
+        ]
+      },
       "source_files": "React/**/*.{c,h,m,mm,S}",
       "exclude_files": [
         "**/__tests__/*",
-        "IntegrationTests/*"
+        "IntegrationTests/* ReactCommon/CSSLayout/*"
       ],
       "frameworks": "JavaScriptCore",
-      "libraries": "stdc++",
-      "pod_target_xcconfig": {
-        "CLANG_CXX_LANGUAGE_STANDARD": "c++14"
-      }
+      "libraries": "stdc++"
+    },
+    {
+      "name": "CSSLayout",
+      "source_files": "ReactCommon/CSSLayout/**/*.{c,h}",
+      "header_dir": "CSSLayout"
     },
     {
       "name": "ART",
@@ -77,7 +88,7 @@
 
         ]
       },
-      "source_files": "Libraries/NativeAnimation/{Nodes/*,*}.{h,m}"
+      "source_files": "Libraries/NativeAnimation/{Drivers/*,Nodes/*,*}.{h,m}"
     },
     {
       "name": "RCTCameraRoll",
@@ -182,8 +193,7 @@
 
         ]
       },
-      "source_files": "Libraries/LinkingIOS/*.{h,m}",
-      "preserve_paths": "Libraries/LinkingIOS/*.js"
+      "source_files": "Libraries/LinkingIOS/*.{h,m}"
     },
     {
       "name": "RCTTest",

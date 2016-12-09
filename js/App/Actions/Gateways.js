@@ -20,7 +20,7 @@
 'use strict';
 
 import type { ThunkAction } from './types';
-import uuid from 'uuid';
+import uuid from 'react-native-uuid';
 
 function getGateways(): ThunkAction {
 	return (dispatch) => {

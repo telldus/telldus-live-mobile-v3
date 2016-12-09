@@ -7,25 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
-		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
-		00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302C01ABCB91800DB3ED1 /* libRCTImage.a */; };
-		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
-		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
-		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
-		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
-		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
+		00C302E51ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
+		00C302E71ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
+		00C302E81ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302C01ABCB91800DB3ED1 /* libRCTImage.a */; };
+		00C302E91ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
+		00C302EA1ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
+		133E29F31AD74F7200F7D852 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
+		139105C61AF99C1200B5F7CC /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
+		139FDEF61B0652A700C62182 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		146834051AC3E58100842450 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		2CA4B17EBA1545A09EF0F8A1 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7509D5D3BD3E400DABF9D771 /* libc++.tbd */; };
 		34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */; };
-		54C20368F2D9CDAA47470D62 /* libPods-TelldusLiveApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D31141703145D524C66CDA /* libPods-TelldusLiveApp.a */; };
-		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		832341BD1AAA6AB300B99B32 /* ReferenceProxy in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		9A99A3EAE5E2400ABF617F65 /* libRNWatch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3779A8FC2DB347C699716B17 /* libRNWatch.a */; };
 		A796F25C81DE46E0A81A31B8 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D76CC4AAED4E2F94ADAE4F /* libRNDeviceInfo.a */; };
+		A82BF122AD15C2C14EE4D3FB /* libPods-TelldusLiveApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA4D39871BCF4347F56AEA1A /* libPods-TelldusLiveApp.a */; };
 		CAAD62D4956A49EA96EC30FA /* libRCTOrientation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 598B9ECEAE4E41CCAF3F07D3 /* libRCTOrientation.a */; };
 		D2986F407B4048AC96288B60 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 150121A613CD46DD95BDC072 /* FontAwesome.ttf */; };
 		DE55F6A4367141759FB059C6 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0086BC6EFAEE43BCA495CA67 /* libz.tbd */; };
@@ -226,15 +226,15 @@
 		3779A8FC2DB347C699716B17 /* libRNWatch.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNWatch.a; sourceTree = "<group>"; };
 		598B9ECEAE4E41CCAF3F07D3 /* libRCTOrientation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTOrientation.a; sourceTree = "<group>"; };
 		6172A29841DB4E5DB58F5502 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
+		663288BA2E6A8256629D5DF0 /* Pods-TelldusLiveApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.release.xcconfig"; sourceTree = "<group>"; };
 		68822640B42549F2A32DDB65 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
-		69D31141703145D524C66CDA /* libPods-TelldusLiveApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TelldusLiveApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7509D5D3BD3E400DABF9D771 /* libc++.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		782E9B56DE244FAA94B95591 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTOrientation.xcodeproj; path = "../node_modules/react-native-orientation/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
-		7FD7585FD129D90097D71BEE /* Pods-TelldusLiveApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.debug.xcconfig"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8F879DC36B0D4B44A5DA4B67 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
-		BAA3347B7F7E4B8F57E7A5CC /* Pods-TelldusLiveApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.release.xcconfig"; sourceTree = "<group>"; };
+		BA4D39871BCF4347F56AEA1A /* libPods-TelldusLiveApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TelldusLiveApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1B51172BFEBE39920149D9A /* Pods-TelldusLiveApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.debug.xcconfig"; sourceTree = "<group>"; };
 		DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		EC616FDBB6C649AE9DE0C055 /* RNWatch.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNWatch.xcodeproj; path = "../node_modules/react-native-watch-connectivity/RNWatch.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -244,24 +244,24 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				146834051AC3E58100842450 /* libReact.a in Frameworks */,
-				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
-				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
-				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
-				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
-				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
-				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
-				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
-				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
-				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+				146834051AC3E58100842450 /* ReferenceProxy in Frameworks */,
+				00C302E51ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */,
+				00C302E71ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */,
+				00C302E81ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */,
+				133E29F31AD74F7200F7D852 /* ReferenceProxy in Frameworks */,
+				00C302E91ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */,
+				139105C61AF99C1200B5F7CC /* ReferenceProxy in Frameworks */,
+				832341BD1AAA6AB300B99B32 /* ReferenceProxy in Frameworks */,
+				00C302EA1ABCBA2D00DB3ED1 /* ReferenceProxy in Frameworks */,
+				139FDEF61B0652A700C62182 /* ReferenceProxy in Frameworks */,
 				F175F1F3C04742309CC9508B /* libBVLinearGradient.a in Frameworks */,
 				2CA4B17EBA1545A09EF0F8A1 /* libc++.tbd in Frameworks */,
 				DE55F6A4367141759FB059C6 /* libz.tbd in Frameworks */,
-				54C20368F2D9CDAA47470D62 /* libPods-TelldusLiveApp.a in Frameworks */,
 				34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */,
 				A796F25C81DE46E0A81A31B8 /* libRNDeviceInfo.a in Frameworks */,
 				CAAD62D4956A49EA96EC30FA /* libRCTOrientation.a in Frameworks */,
 				9A99A3EAE5E2400ABF617F65 /* libRNWatch.a in Frameworks */,
+				A82BF122AD15C2C14EE4D3FB /* libPods-TelldusLiveApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,15 +351,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3BE371960CF7F0CA7BB39661 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				7FD7585FD129D90097D71BEE /* Pods-TelldusLiveApp.debug.xcconfig */,
-				BAA3347B7F7E4B8F57E7A5CC /* Pods-TelldusLiveApp.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		4D54D2061D49FE680067EF32 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -447,8 +438,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				B8360490057545809C95F039 /* Frameworks */,
-				3BE371960CF7F0CA7BB39661 /* Pods */,
 				978DD6CDC2824ACE99408D92 /* Resources */,
+				FFF30CED29D160CC115379C2 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -475,9 +466,18 @@
 			children = (
 				7509D5D3BD3E400DABF9D771 /* libc++.tbd */,
 				0086BC6EFAEE43BCA495CA67 /* libz.tbd */,
-				69D31141703145D524C66CDA /* libPods-TelldusLiveApp.a */,
+				BA4D39871BCF4347F56AEA1A /* libPods-TelldusLiveApp.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FFF30CED29D160CC115379C2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D1B51172BFEBE39920149D9A /* Pods-TelldusLiveApp.debug.xcconfig */,
+				663288BA2E6A8256629D5DF0 /* Pods-TelldusLiveApp.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -487,14 +487,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "TelldusLiveApp" */;
 			buildPhases = (
-				A0216914A1DAD92CB3E67056 /* [CP] Check Pods Manifest.lock */,
+				07D791F6592A745FCEF00B54 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				194BBDEC52B9268A5F4BFD02 /* [CP] Embed Pods Frameworks */,
-				13C06D118EF102AF0552880E /* [CP] Copy Pods Resources */,
 				4DB651FB1D846AAD002D99D0 /* Embed Watch Content */,
+				1773B6E1542718F6754A19B7 /* [CP] Embed Pods Frameworks */,
+				960096765C702CFA0D0F2F92 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -786,22 +786,22 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/packager/react-native-xcode.sh";
 		};
-		13C06D118EF102AF0552880E /* [CP] Copy Pods Resources */ = {
+		07D791F6592A745FCEF00B54 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp-resources.sh\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		194BBDEC52B9268A5F4BFD02 /* [CP] Embed Pods Frameworks */ = {
+		1773B6E1542718F6754A19B7 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -816,19 +816,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A0216914A1DAD92CB3E67056 /* [CP] Check Pods Manifest.lock */ = {
+		960096765C702CFA0D0F2F92 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "[CP] Check Pods Manifest.lock";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -860,7 +860,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7FD7585FD129D90097D71BEE /* Pods-TelldusLiveApp.debug.xcconfig */;
+			baseConfigurationReference = D1B51172BFEBE39920149D9A /* Pods-TelldusLiveApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEAD_CODE_STRIPPING = NO;
@@ -903,7 +903,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BAA3347B7F7E4B8F57E7A5CC /* Pods-TelldusLiveApp.release.xcconfig */;
+			baseConfigurationReference = 663288BA2E6A8256629D5DF0 /* Pods-TelldusLiveApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				HEADER_SEARCH_PATHS = (
