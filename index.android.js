@@ -21,5 +21,6 @@
 
 import { AppRegistry } from 'react-native';
 import Bootstrap from 'Bootstrap';
+import Intl from 'intl';
 
 AppRegistry.registerComponent('TelldusLiveApp', Bootstrap);
