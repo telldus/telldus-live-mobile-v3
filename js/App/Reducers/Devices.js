@@ -21,9 +21,7 @@
 
 import type { Action } from '../actions/types';
 
-export type State = {
-	devices: ?object
-};
+export type State = ?object;
 
 const initialState = [];
 const deviceInitialState = {};
