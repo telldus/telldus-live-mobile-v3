@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { apiServer, publicKey, privateKey } from 'Config';
-import { updateAccessToken } from 'Actions';
+import { updateAccessToken, logoutFromTelldus } from 'Actions';
 
 export default function (store) {
 	return next => action => {
@@ -41,8 +41,10 @@ export default function (store) {
 				});
 			})
 			.catch(function (e) {
-				console.log(e);
-				return e;
+				if (e.type && e.type == 'LIVE_API_FATAL_ERROR') {
+					return next({ type: 'LOGGED_OUT', payload: e.payload || {} });
+				}
+				return next(e);
 			});
 		} else {
 			return next(action);
@@ -52,13 +54,6 @@ export default function (store) {
 
 async function call(store, url, requestParams): Promise<Action> {
 	var accessToken = store.getState().user.accessToken;
-	const authParams = {
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-			'Authorization': 'Bearer ' + accessToken.access_token
-		}
-	};
 	var params = Object.assign({}, requestParams, {
 		headers: {
 			'Accept': 'application/json',
@@ -72,55 +67,70 @@ async function call(store, url, requestParams): Promise<Action> {
 		.then((text) => JSON.parse(text))
 		.then((responseData) => {
 			if (responseData.error) {
-				switch (responseData.error) {
-					case 'expired_token':
-						fetch(
-							`${apiServer}/oauth2/accessToken`,
-							{
-								method: 'POST',
-								headers: {
-									'Accept': 'application/json',
-									'Content-Type': 'application/json',
-								},
-								body: JSON.stringify({
-									'client_id': publicKey,
-									'client_secret': privateKey,
-									'grant_type': 'refresh_token',
-									'refresh_token': accessToken.refresh_token
-								})
+				if (responseData.error === 'invalid_token' || responseData.error === 'expired_token') {
+					// Token has expired, so we'll try to get a new one.
+					fetch(
+						`${apiServer}/oauth2/accessToken`,
+						{
+							method: 'POST',
+							headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify({
+								'client_id': publicKey,
+								'client_secret': privateKey,
+								'grant_type': 'refresh_token',
+								'refresh_token': accessToken.refresh_token
+							})
+						}
+					)
+					.then((response) => response.json())
+					.then((responseData) => {
+						if (responseData.error) {
+							// We couldn't get a new access token with the refresh_token, so we logout the user.
+							reject({ type: 'LIVE_API_FATAL_ERROR', payload: responseData });
+						}
+						store.dispatch(updateAccessToken(responseData));
+						var params = Object.assign({}, requestParams, {
+							headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json',
+								'Authorization': 'Bearer ' + responseData.access_token
 							}
-						)
-						.then((response) => response.json())
+						});
+						fetch(`${apiServer}/oauth2${url}`, params)
+						.then((response) => response.text())
+						.then((text) => JSON.parse(text))
 						.then((responseData) => {
 							if (responseData.error) {
-								throw responseData;
+								// It's unlikely we will get here for token issues, but it's an error so we'll reject the call.
+								reject({ type: 'LIVE_API_CALL_ERROR', debug_code: 0x005, payload: responseData });
 							}
-							store.dispatch(updateAccessToken(responseData));
-							var params = Object.assign({}, requestParams, {
-								headers: {
-									'Accept': 'application/json',
-									'Content-Type': 'application/json',
-									'Authorization': 'Bearer ' + responseData.access_token
-								}
-							});
-							fetch(`${apiServer}/oauth2${url}`, params)
-							.then((response) => response.text())
-							.then((text) => JSON.parse(text))
-							.then((responseData) => {
-								if (responseData.error) {
-									throw responseData;
-								}
-								resolve(responseData);
-							});
+							// All is well after the token was refreshed and the API call was retried, so return the data from the API.
+							resolve(responseData);
 						})
-					default:
-						throw responseData;
+						.catch(function (e) {
+							// Something went wrong on the transport side of things with the retried API call.
+							reject({ type: 'LIVE_API_CALL_ERROR', debug_code: 0x004, payload: e });
+						});
+					})
+					.catch(function (e) {
+						// Something went wrong on the transport side of things with the refresh token call.
+						reject({ type: 'LIVE_API_CALL_ERROR', debug_code: 0x003, payload: e });
+					});
+				} else {
+					// Some error from API call.
+					reject({ type: 'LIVE_API_CALL_ERROR', debug_code: 0x002, payload: responseData });
 				}
+			} else {
+				// All is well, so return the data from the API.
+				resolve(responseData);
 			}
-			resolve(responseData);
 		})
 		.catch(function (e) {
-			reject(e);
+			// Something went wrong on the transport side of things with the API call.
+			reject({ type: 'LIVE_API_CALL_ERROR', debug_code: 0x001, payload: e });
 		});
 	});
 

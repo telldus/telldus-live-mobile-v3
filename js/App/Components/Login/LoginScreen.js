@@ -134,31 +134,20 @@ class LoginScreen extends View {
 	}
 
 	async logIn() {
-		const { dispatch, onLoggedIn } = this.props;
+		const { dispatch } = this.props;
 		this.setState({ isLoading: true });
-		try {
-			await Promise.race([
-				dispatch(loginToTelldus(this.refs.loginForm.getValue().username, this.refs.loginForm.getValue().password)),
-				timeout(15000),
-			]);
-		} catch (e) {
-			const message = e.message || e;
-			if (message !== 'Timed out' && message !== 'Canceled by user') {
-				alert(message);
-			}
-			return;
-		} finally {
-			this._isMounted && this.setState({ isLoading: false });
-		}
 
-		onLoggedIn && onLoggedIn();
+		await new Promise((resolve, reject) => {
+			loginToTelldus(this.refs.loginForm.getValue().username, this.refs.loginForm.getValue().password)
+				.then(function(response) { resolve(response) })
+				.catch(function(e) { reject(new Error('Failed login')) });
+			setTimeout(() => reject(new Error('Timed out')), 3000);
+		})
+		.then(function(response) { dispatch(response); })
+		.catch(function(e) { console.log(e); });
+
+		this._isMounted && this.setState({ isLoading: false });
 	}
-}
-
-async function timeout(ms: number): Promise {
-	return new Promise((resolve, reject) => {
-		setTimeout(() => reject(new Error('Timed out')), ms);
-	});
 }
 
 var styles = StyleSheet.create({
