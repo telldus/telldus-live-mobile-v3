@@ -66,12 +66,12 @@ class AppNavigator extends View {
 	}
 
 	render() {
-		if (Platform.OS === 'android' || this.state.specificOrientation == 'PORTRAIT' || this.state.specificOrientation == 'UNKNOWN') {
+		//if (Platform.OS === 'android' || this.state.specificOrientation == 'PORTRAIT' || this.state.specificOrientation == 'UNKNOWN') {
 			return (
 				<TabsView />
 			)
-		}
-		return (
+		//}
+		/*return (
 			<View style={{
 				flex: 1,
 				flexDirection: 'column',
@@ -83,7 +83,7 @@ class AppNavigator extends View {
 					This will be a dashboard view!
 				</Text>
 			</View>
-		)
+		)*/
 	}
 };
 
