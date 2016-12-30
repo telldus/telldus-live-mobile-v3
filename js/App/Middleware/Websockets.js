@@ -19,124 +19,169 @@
 
 'use strict';
 
-var websocketConnections = [];
-
-import { authoriseWebsocket, addWebsocketFilter, processWebSocketMessage, processWebsocketMessageForSensor } from 'Actions';
-import * as watch from 'react-native-watch-connectivity'
+import uuid from 'react-native-uuid';
+import { AppState } from 'react-native';
+import { authoriseWebsocket, addWebsocketFilter, getGateways, processWebSocketMessage, processWebsocketMessageForSensor } from 'Actions';
 
 const formatTime = (time) => `${pad(time.getHours(), 2)}:${pad(time.getMinutes(), 2)}:${pad(time.getSeconds(), 2)}.${pad(time.getMilliseconds(), 3)}`;
 const repeat = (str, times) => (new Array(times + 1)).join(str);
 const pad = (num, maxLength) => repeat(`0`, maxLength - num.toString().length) + num;
 
+var websocketConnections = [];
+var websocketList = [];
+var sessionId = '';
+
 export default function (store) {
 	return next => action => {
-		const result = next(action);
 		try {
 			switch(action.type) {
+				case 'WEBSOCKET_WATCHDOG':
+					sessionId = action.payload;
+					websocketList.forEach((websocket, gatewayId) => {
+						if (AppState.currentState != 'active') {
+							if (websocketConnections[gatewayId] && websocketConnections[gatewayId].websocket) {
+								websocketConnections[gatewayId].websocket.close();
+							}
+						} else {
+							if (websocketConnections[gatewayId]) {
+								if (websocketConnections[gatewayId].url !== websocket.url) {
+									websocketConnections[gatewayId].websocket.close();
+								}
+							} else {
+								websocketConnections[gatewayId] = {
+									url: websocket.url,
+									websocket: new WebSocket(websocket.url)
+								}
+
+								websocketConnections[gatewayId].websocket.onopen = () => {
+									const formattedTime = formatTime(new Date());
+									const message = `websocket_opened @ ${formattedTime} (gateway ${gatewayId})`;
+									try {
+										console.groupCollapsed(message);
+										console.groupEnd();
+									} catch (e) {
+										console.log(message);
+									}
+									store.dispatch(authoriseWebsocket(gatewayId, sessionId))
+									.then((action) => {
+										store.dispatch(addWebsocketFilter(gatewayId, 'device', 'added'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'device', 'removed'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'device', 'failSetStae'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'device', 'setState'));
+
+										store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'added'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'removed'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'setName'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'setPower'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'value'));
+
+										store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'removeNodeFromNetwork'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'removeNodeFromNetworkStartTimeout'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'addNodeToNetwork'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'addNodeToNetworkStartTimeout'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'interviewDone'));
+										store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'nodeInfo'));
+									})
+									.catch((e) => {
+										console.log(e);
+									});
+								};
+
+								websocketConnections[gatewayId].websocket.onmessage = (msg) => {
+									const formattedTime = formatTime(new Date());
+									var title = `websocket_message @ ${formattedTime} (from gateway ${gatewayId})`;
+									var message = '';
+									try {
+										message = JSON.parse(msg.data);
+										if (message.module && message.action) {
+											title += ` ${message.module}:${message.action}`;
+										}
+									} catch (e) {
+										message = msg.data;
+										title += ` ${msg.data}`;
+									}
+
+									if(message.module && message.action) {
+										switch(message.module) {
+											case 'device':
+
+											break;
+											case 'sensor':
+												store.dispatch(processWebsocketMessageForSensor(message.action, message.data));
+											break;
+											case 'zwave':
+
+											break;
+										default:
+										}
+									}
+									try {
+										console.groupCollapsed(title);
+										console.log(message);
+										console.groupEnd();
+									} catch (e) {
+										console.log(message);
+									}
+								};
+
+								websocketConnections[gatewayId].websocket.onerror = (e) => {
+									const formattedTime = formatTime(new Date());
+									const message = `websocket_error @ ${formattedTime} (gateway ${gatewayId})`;
+									try {
+										console.groupCollapsed(message);
+										console.log(e)
+										console.groupEnd();
+									} catch (e) {
+										console.log(message, e);
+									}
+								};
+
+								websocketConnections[gatewayId].websocket.onclose = () => {
+									const formattedTime = formatTime(new Date());
+									const message = `websocket_closed @ ${formattedTime} (gateway ${gatewayId})`;
+									try {
+										console.groupCollapsed(message);
+										console.groupEnd();
+									} catch (e) {
+										console.log(message);
+									}
+									delete websocketConnections[gatewayId];
+								}
+							}
+						}
+					});
+					break;
 				case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
 					const payload = action.payload;
 					const gatewayId = payload.gatewayId;
-					const sessionId = payload.sessionId;
 					if (payload.address && payload.port) {
 						const websocketUrl = `ws://${payload.address}:${payload.port}/websocket`;
-						websocketConnections[gatewayId] = new WebSocket(websocketUrl);
-						websocketConnections[gatewayId].onopen = () => {
-							store.dispatch(authoriseWebsocket(gatewayId, sessionId))
-							.then((action) => {
-								store.dispatch(addWebsocketFilter(gatewayId, 'device', 'added'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'device', 'removed'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'device', 'failSetStae'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'device', 'setState'));
-
-								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'added'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'removed'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'setName'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'setPower'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'sensor', 'value'));
-
-								store.dispatch(addWebsocketFilter(gatewayId, 'onkyo', 'event'));
-
-								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'removeNodeFromNetwork'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'removeNodeFromNetworkStartTimeout'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'addNodeToNetwork'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'addNodeToNetworkStartTimeout'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'interviewDone'));
-								store.dispatch(addWebsocketFilter(gatewayId, 'zwave', 'nodeInfo'));
-
-							});
-						};
-						websocketConnections[gatewayId].onmessage = (msg) => {
-							const formattedTime = formatTime(new Date());
-							var title = `websocket_message @ ${formattedTime} (from gateway ${gatewayId})`;
-							var message = '';
-							try {
-								message = JSON.parse(msg.data);
-								if (message.module && message.action) {
-									title += ` ${message.module}:${message.action}`;
-								}
-							} catch (e) {
-								message = msg.data;
-								title += ` ${msg.data}`;
+						if (!websocketList[gatewayId]) {
+							websocketList[gatewayId] = {
+								url: ''
 							}
-
-							if(message.module && message.action) {
-								switch(message.module) {
-									case 'device':
-
-									break;
-									case 'sensor':
-										store.dispatch(processWebsocketMessageForSensor(message.action, message.data));
-									break;
-									case 'zwave':
-
-									break;
-								default:
-								}
-							}
-
-							/*try {
-								const timestamp = new Date().getTime()
-								watch.sendMessage({text: `Websocket Message @${timestamp}`, timestamp: timestamp}, (err, replyMessage) => {
-									if (!err) {
-										console.log("Received reply from watch", replyMessage)
-									}
-								});
-							} catch (e) {
-
-							}*/
-							try {
-								console.groupCollapsed(title);
-								console.log(message);
-								console.groupEnd();
-							} catch (e) {
-								console.log(message);
-							}
-						};
-						websocketConnections[gatewayId].onerror = (e) => {
-							console.log(`[${gatewayId}] Websocket Error: ${e.message}`);
-						};
-						websocketConnections[gatewayId].onclose = (e) => {
-							delete websocketConnections[gatewayId];
 						}
-					} else {
-						delete websocketConnections[gatewayId];
+						websocketList[gatewayId].url = websocketUrl;
 					}
 					break;
 				case 'SEND_WEBSOCKET_MESSAGE':
-					if (websocketConnections[action.gatewayId]) {
-						websocketConnections[action.gatewayId].send(action.message);
+					if (websocketConnections[action.gatewayId] && websocketConnections[action.gatewayId].websocket) {
+						websocketConnections[action.gatewayId].websocket.send(action.message);
 					}
 					break;
 				case 'LOGGED_OUT':
 					websocketConnections.forEach((websocketConnection) => {
-						websocketConnection.close();
+						if (websocketConnection.websocket) {
+							websocketConnection.websocket.close();
+						}
 					});
 					break;
-			default:
+				default:
+
 			}
 		} catch(e) {
 			console.log(e);
 		}
-		return result;
+		return next(action);
 	};
 }

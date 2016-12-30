@@ -24,9 +24,11 @@
 import AppNavigator from './AppNavigator';
 import LoginScreen from './Login/LoginScreen';
 import Push from './Push'
+import WebsocketManager from './WebsocketManager'
 
 module.exports = {
 	AppNavigator: AppNavigator,
 	LoginScreen: LoginScreen,
-	Push: Push
+	Push: Push,
+	WebsocketManager: WebsocketManager
 };

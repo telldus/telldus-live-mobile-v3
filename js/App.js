@@ -29,6 +29,7 @@ import { View } from 'BaseComponents';
 import {
 	LoginScreen,
 	AppNavigator,
+	WebsocketManager,
 	Push
 } from 'Components';
 
@@ -42,7 +43,12 @@ class App extends React.Component {
 		if (!this.props.accessToken) {
 			return <LoginScreen />;
 		}
-		return <AppNavigator />;
+		return (
+			<View>
+				<WebsocketManager />
+				<AppNavigator />
+			</View>
+		);
 	}
 
 };

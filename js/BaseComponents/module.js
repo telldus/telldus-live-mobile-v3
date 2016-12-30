@@ -54,6 +54,7 @@ import NavigatorIOS from './NavigatorIOS'
 import I18n from './I18n'
 
 import {
+	AppState,
 	Dimensions,
 	PixelRatio,
 	StatusBar,
@@ -98,6 +99,7 @@ module.exports = {
 	ProgressBar: ProgressBar,
 	Tabs: ScrollableTabView,
 
+	AppState: AppState,
 	Dimensions: Dimensions,
 	NavigatorIOS: NavigatorIOS,
 	PixelRatio: PixelRatio,

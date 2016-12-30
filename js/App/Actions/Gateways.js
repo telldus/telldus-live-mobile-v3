@@ -20,7 +20,6 @@
 'use strict';
 
 import type { ThunkAction } from './types';
-import uuid from 'react-native-uuid';
 
 function getGateways(): ThunkAction {
 	return (dispatch) => {
@@ -35,37 +34,15 @@ function getGateways(): ThunkAction {
 			returnType: 'RECEIVED_GATEWAYS',
 			payload: payload,
 			callback: (responseData) => {
-				const sessionId = uuid.v4();
-				dispatch(authenticateSession(sessionId, responseData));
+				responseData.client.forEach((gateway) => {
+					dispatch(getWebsocketAddress(gateway.id));
+				});
 			}
 		});
 	};
 }
 
-function authenticateSession(sessionId, responseData): ThunkAction {
-	return (dispatch) => {
-		const payload = {
-			url: `/user/authenticateSession?session=${sessionId}`,
-			requestParams: {
-				method: 'GET'
-			}
-		};
-		dispatch({
-			type: 'LIVE_API_CALL',
-			returnType: 'RECEIVED_AUTHENTICATE_SESSION_RESPONSE',
-			payload: payload,
-			callback: (authenticateSessionResponse) => {
-				if (authenticateSessionResponse.status && authenticateSessionResponse.status == 'success') {
-					responseData.client.forEach((gateway) => {
-						dispatch(getWebsocketAddress(gateway.id, sessionId));
-					});
-				}
-			}
-		});
-	};
-}
-
-function getWebsocketAddress(gatewayId, sessionId): ThunkAction {
+function getWebsocketAddress(gatewayId): ThunkAction {
 	return (dispatch) => {
 		const payload = {
 			url: `/client/serverAddress?id=${gatewayId}`,
@@ -78,8 +55,7 @@ function getWebsocketAddress(gatewayId, sessionId): ThunkAction {
 			returnType: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
 			payload: payload,
 			returnPayload: {
-				gatewayId: gatewayId,
-				sessionId: sessionId
+				gatewayId: gatewayId
 			}
 		});
 	};
