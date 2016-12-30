@@ -69,5 +69,13 @@ export default StyleSheet.create({
 	listItemAvatar: {
 		width: 32,
 		marginRight: 24,
+	},
+	dashboardItem: {
+		backgroundColor: '#ff9090',
+		flexDirection: 'row',
+		height: 100,
+		width: 100,
+		justifyContent: 'flex-start',
+		alignItems: 'center',
 	}
 });

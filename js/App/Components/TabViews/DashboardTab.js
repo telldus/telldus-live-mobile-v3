@@ -22,43 +22,88 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Content, Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Container, Content, Button, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
+
+import Theme from 'Theme';
 
 import type { Tab } from '../reducers/navigation';
 
 class DashboardTab extends View {
 
 	render() {
-		return (
-			<View>
-				<Text>
-					1
-				</Text>
-				<Text>
-					2
-				</Text>
-				<Text>
-					3
-				</Text>
-				<Text>
-					4
-				</Text>
-				<Text>
-					Hello,
-					Hej,
-					สวัสดี,
-					Здравствуйте,
-					你好
-				</Text>
-			</View>
-		);
+		try {
+			return (
+				<List
+					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
+					dataSource = {this.props.dataSource}
+					renderRow = {this._renderItem.bind(this)}
+				/>
+			);
+		} catch(e) {
+			console.log(e);
+			return ( <View /> )
+		}
+	}
+
+	_renderItem(item, sectionID, rowID, itemIndex, itemID) {
+		const minutesAgo =  Math.round(((Date.now() / 1000) - item.lastUpdated) / 60);
+		try {
+			return (
+				<ListItem style = { Theme.Styles.dashboardItem }>
+					<Container style = {{ marginLeft: 16, flexDirection: 'row'}}>
+						<View>
+							<Text style = {{
+								color: 'rgba(0,0,0,0.87)',
+								fontSize: 16,
+								opacity: item.name ? 1 : 0.5,
+								marginBottom: 2
+							}}>
+								({item.objectType ? item.objectType.charAt(0) : '?'}) {item.name ? item.name : '(no name)'}
+							</Text>
+						</View>
+					</Container>
+				</ListItem>
+			)
+		} catch(e) {
+			console.log(e);
+			return ( <View /> )
+		}
 	}
 
 }
 
+DashboardTab.propTypes = {
+	dataSource: React.PropTypes.object,
+};
+
+const dataSource = new ListDataSource({
+	rowHasChanged: (r1, r2) => r1 !== r2,
+});
+
+function _parseDataIntoItems(devices, sensors) {
+	var items = [];
+	if (devices && devices.map) {
+		devices.map((item) => {
+			item.objectType = 'device';
+			items.push(item);
+
+		});
+	}
+	if (sensors && sensors.map) {
+		sensors.map((item) => {
+			item.objectType = 'sensor';
+			items.push(item);
+		});
+	}
+	return items;
+}
+
 function select(store) {
+	var items = _parseDataIntoItems( store.devices || [], store.sensors || [] );
 	return {
+		dataSource: dataSource.cloneWithRows(items),
+		gateways: store.gateways,
 		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};
 }
