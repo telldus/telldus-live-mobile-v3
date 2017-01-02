@@ -46,7 +46,7 @@ class UserDetailView extends View {
 				<View style = {{ paddingBottom: 10 }} />
 				<Gravatar
 					emailAddress = {this.props.user.email}
-					size = { 100 }
+					size = { 32 }
 					mask = "circle"
 				/>
 				<View style = {{ paddingBottom: 10 }} />

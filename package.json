@@ -8,6 +8,7 @@
   "dependencies": {
     "art": "~0.10.1",
     "babel-preset-react-native": "^1.9.1",
+    "blueimp-md5": "^2.6.0",
     "color": "~1.0.3",
     "crc32": "~0.2.2",
     "date-format": "0.0.2",
@@ -23,7 +24,6 @@
     "react-intl-native": "^2.1.0",
     "react-native": "^0.39.2",
     "react-native-android-kit": "git+https://github.com/aybadb/react-native-android-kit.git",
-    "react-native-avatar-gravatar": "0.0.4",
     "react-native-awesome-button": "^1.6.0",
     "react-native-checkbox": "~1.1.0",
     "react-native-device-info": "^0.9.7",

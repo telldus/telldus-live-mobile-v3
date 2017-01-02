@@ -52,6 +52,7 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import ScrollableTabView from './Tabs';
 import NavigatorIOS from './NavigatorIOS'
 import I18n from './I18n'
+import Gravatar from './Gravatar';
 
 import {
 	AppState,
@@ -64,7 +65,6 @@ import {
 	Image
 } from 'react-native';
 
-import Gravatar from 'react-native-avatar-gravatar';
 
 module.exports = {
 	Header: Header,
