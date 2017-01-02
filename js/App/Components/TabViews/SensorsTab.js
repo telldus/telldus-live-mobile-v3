@@ -112,23 +112,19 @@ class SensorsTab extends View {
 						<View style={Theme.Styles.sensorValue}>
 							<Image source={require('./img/sensorIcons/Rain.png')} />
 							<Text>
-								<FormattedNumber value = {item.rainRate} maximumFractionDigits = {0} />
-								{'mm/h\n'}
-								<FormattedNumber value = {item.rainTotal} maximumFractionDigits = {0} />
-								{'mm'}
+								{ item.rainRate && ( <Text><FormattedNumber value = {item.rainRate} maximumFractionDigits = {0} /> {'mm/h\n'} </Text> ) }
+								{ item.rainTotal && ( <Text><FormattedNumber value = {item.rainTotal} maximumFractionDigits = {0} /> {'mm'} </Text> ) }
 							</Text>
 						</View>
 					) : null }
 
-					{ item.windGust ? (
+					{ item.windGust || item.windAverage || item.windDirection ? (
 						<View style={Theme.Styles.sensorValue}>
 							<Image source={require('./img/sensorIcons/Wind.png')} />
 							<Text>
-								<FormattedNumber value = {item.windAverage} maximumFractionDigits = {1} />
-								{'m/s\n'}
-								<FormattedNumber value = {item.windGust} maximumFractionDigits = {1} />
-								{'m/s*\n'}
-								{this._windDirection(item.windDirection)}
+								{ item.windAverage && ( <Text><FormattedNumber value = {item.windAverage} maximumFractionDigits = {1} /> {'m/s\n'} </Text> ) }
+								{ item.windGust && ( <Text><FormattedNumber value = {item.windGust} maximumFractionDigits = {1} /> {'m/s*\n'} </Text> ) }
+								{ item.windDirection && ( <Text>{this._windDirection(item.windDirection)}</Text> ) }
 							</Text>
 						</View>
 					) : null }
