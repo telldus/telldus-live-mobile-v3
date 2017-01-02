@@ -21,7 +21,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { apiServer, publicKey, privateKey } from 'Config';
+import { apiServer, publicKey, privateKey, refreshToken } from 'Config';
 import { updateAccessToken, logoutFromTelldus } from 'Actions';
 
 export default function (store) {
@@ -54,6 +54,12 @@ export default function (store) {
 
 async function call(store, url, requestParams): Promise<Action> {
 	var accessToken = store.getState().user.accessToken;
+	if (refreshToken) {
+		accessToken = {
+			access_token: 'blahblah',
+			refresh_token: refreshToken
+		}
+	}
 	var params = Object.assign({}, requestParams, {
 		headers: {
 			'Accept': 'application/json',
