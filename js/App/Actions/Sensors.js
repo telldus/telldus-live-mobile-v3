@@ -43,7 +43,10 @@ function processWebsocketMessageForSensor(action, data): Action {
 		break;
 	default:
 	}
-	return true;
+	return {
+		type: 'SENSOR_WEBSOCKET_UNHANDLED',
+		payload: data
+	};
 }
 
 module.exports = { getSensors, processWebsocketMessageForSensor };
