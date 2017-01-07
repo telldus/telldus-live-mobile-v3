@@ -73,8 +73,6 @@ export default StyleSheet.create({
 	dashboardItem: {
 		backgroundColor: '#ff9090',
 		flexDirection: 'row',
-		height: 100,
-		width: 100,
 		justifyContent: 'flex-start',
 		alignItems: 'center',
 	}

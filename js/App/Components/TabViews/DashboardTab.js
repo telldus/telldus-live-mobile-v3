@@ -22,22 +22,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { Container, Content, Dimensions, Button, List, ListItem, Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
 
 import Theme from 'Theme';
 
 import type { Tab } from '../reducers/navigation';
 
+var flattenStyle = require('flattenStyle');
+
 class DashboardTab extends View {
+
+	constructor() {
+		super();
+	}
 
 	render() {
 		try {
 			return (
 				<List
 					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
-					dataSource = {this.props.dataSource}
-					renderRow = {this._renderItem.bind(this)}
+					dataArray = {this.props.dataSource}
+					renderRow = {this._renderRow}
 				/>
 			);
 		} catch(e) {
@@ -46,11 +52,18 @@ class DashboardTab extends View {
 		}
 	}
 
-	_renderItem(item, sectionID, rowID, itemIndex, itemID) {
+	_renderRow(item, secId, rowId, rowMap, tileWidth) {
 		const minutesAgo =  Math.round(((Date.now() / 1000) - item.lastUpdated) / 60);
 		try {
 			return (
-				<ListItem style = { Theme.Styles.dashboardItem }>
+				<ListItem style = {{
+					backgroundColor: '#ff9090',
+					flexDirection: 'row',
+					justifyContent: 'flex-start',
+					alignItems: 'center',
+					width: tileWidth > 50 ? tileWidth : 100,
+					height: tileWidth > 50 ? tileWidth : 100
+				}}>
 					<Container style = {{ marginLeft: 16, flexDirection: 'row'}}>
 						<View>
 							<Text style = {{
@@ -59,7 +72,7 @@ class DashboardTab extends View {
 								opacity: item.name ? 1 : 0.5,
 								marginBottom: 2
 							}}>
-								({item.objectType ? item.objectType.charAt(0) : '?'}) {item.name ? item.name : '(no name)'}
+								({item.objectType ? item.objectType.charAt(0) : '?'}) ({tileWidth}) {item.name ? item.name : '(no name)'}
 							</Text>
 						</View>
 					</Container>
@@ -72,14 +85,6 @@ class DashboardTab extends View {
 	}
 
 }
-
-DashboardTab.propTypes = {
-	dataSource: React.PropTypes.object,
-};
-
-const dataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-});
 
 function _parseDataIntoItems(devices, sensors) {
 	var items = [];
@@ -100,9 +105,8 @@ function _parseDataIntoItems(devices, sensors) {
 }
 
 function select(store) {
-	var items = _parseDataIntoItems( store.devices || [], store.sensors || [] );
 	return {
-		dataSource: dataSource.cloneWithRows(items),
+		dataSource: _parseDataIntoItems( store.devices || [], store.sensors || [] ),
 		gateways: store.gateways,
 		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};

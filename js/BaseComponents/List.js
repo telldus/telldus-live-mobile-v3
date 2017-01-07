@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { ListView, RefreshControl } from 'react-native';
+import { ListView, RefreshControl, View } from 'react-native';
 import SwipeRow from './SwipeRow';
 
 class ListComponent extends React.Component {
@@ -29,8 +29,13 @@ class ListComponent extends React.Component {
 		super(props);
 		this._rows = {};
 		this.openCellId = null;
+		const _ds = this.props.dataArray
+			? new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(this.props.dataArray)
+			: undefined;
 		this.state = {
 			refreshing: false,
+			tileWidth: undefined,
+			dataSource: _ds,
 		};
 	}
 
@@ -89,8 +94,8 @@ class ListComponent extends React.Component {
 		this.props.listViewRef && this.props.listViewRef(ref);
 	}
 
-	renderRow(rowData, secId, rowId, rowMap) {
-		const Component = this.props.renderRow(rowData, secId, rowId, rowMap);
+	renderRow(rowData, secId, rowId, highlightRow) {
+		const Component = this.props.renderRow(rowData, secId, rowId, highlightRow, this.state.tileWidth);
 		if (!this.props.renderHiddenRow) {
 			return React.cloneElement(
 				Component,
@@ -130,21 +135,68 @@ class ListComponent extends React.Component {
 		}
 	}
 
-	render() {
-		return (
-			<ListView
-				{...this.props}
-				refreshControl={
-					<RefreshControl
-						refreshing={this.state.refreshing}
-						onRefresh={this._onRefresh.bind(this)}
-						enableEmptySections={true}
-					/>
+	_onLayout2(event) {
+		try {
+			const listWidth = event.nativeEvent.layout.width;
+			const isPortrait = true;
+			var baseTileSize = listWidth > (isPortrait ? 600 : 800) ? 150 : 100;
+			if (listWidth > 0) {
+				var numberOfTiles = Math.floor(listWidth /baseTileSize);
+				var tileSize = listWidth / numberOfTiles;
+				if (numberOfTiles == 0) {
+					tileSize = baseTileSize;
 				}
-				ref={ c => this.setRefs(c) }
-				onScroll={ e => this.onScroll(e) }
-				renderRow={(rowData, secId, rowId) => this.renderRow(rowData, secId, rowId, this._rows)}
-			/>
+				this.state.tileWidth = Math.floor(tileSize);
+				//this.state.tileLabelHeight = Math.floor(tileSize * 0.25);
+			}
+		} catch (e) {
+
+		}
+	}
+
+	_onLayout = (event) => {
+		const listWidth = event.nativeEvent.layout.width;
+		const isPortrait = true;
+		var baseTileSize = listWidth > (isPortrait ? 600 : 800) ? 150 : 100;
+		if (listWidth > 0) {
+			var numberOfTiles = Math.floor(listWidth /baseTileSize);
+			var tileSize = listWidth / numberOfTiles;
+			if (numberOfTiles == 0) {
+				tileSize = baseTileSize;
+			}
+			this.state.tileWidth = Math.floor(tileSize);
+			this.setState({ tileWidth: Math.floor(tileSize) });
+		}
+
+		if (this.props.dataArray) {
+			this.setState({
+				dataSource: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+					.cloneWithRows(this.props.dataArray)
+			});
+		}
+	}
+
+	render() {
+		var newProps = Object.assign({}, this.props);
+		if (this.props.dataArray) {
+			newProps.dataSource = this.state.dataSource;
+		}
+		return (
+			<View onLayout={this._onLayout}>
+				<ListView
+					{...newProps}
+					refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshing}
+							onRefresh={this._onRefresh.bind(this)}
+							enableEmptySections={true}
+						/>
+					}
+					ref={ c => this.setRefs(c) }
+					onScroll={ e => this.onScroll(e) }
+					renderRow={this.renderRow.bind(this)}
+				/>
+			</View>
 		)
 	}
 
