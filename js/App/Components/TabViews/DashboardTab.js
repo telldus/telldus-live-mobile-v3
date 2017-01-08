@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Dimensions, Button, List, ListItem, Text, View } from 'BaseComponents';
+import { Container, Content, Dimensions, Button, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
 
 import Theme from 'Theme';
@@ -33,18 +33,48 @@ var flattenStyle = require('flattenStyle');
 
 class DashboardTab extends View {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
+		this.state = {
+			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(this.props.dataArray)
+		}
+	}
+
+	_onLayout = (event) => {
+		const listWidth = event.nativeEvent.layout.width;
+		const isPortrait = true;
+		var baseTileSize = listWidth > (isPortrait ? 600 : 800) ? 150 : 100;
+		if (listWidth > 0) {
+			var numberOfTiles = Math.floor(listWidth /baseTileSize);
+			var tileSize = listWidth / numberOfTiles;
+			if (numberOfTiles == 0) {
+				tileSize = baseTileSize;
+			}
+			const tileWidth = Math.floor(tileSize);
+			var data = this.props.dataArray;
+
+			data.map((item) => {
+				item.tileWidth = tileWidth;
+			});
+
+			this.setState({
+				dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+					.cloneWithRows(data)
+			});
+		}
+
 	}
 
 	render() {
 		try {
 			return (
-				<List
-					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
-					dataArray = {this.props.dataSource}
-					renderRow = {this._renderRow}
-				/>
+				<View onLayout={this._onLayout}>
+					<List
+						contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
+						dataSource = {this.state.dataSource}
+						renderRow = {this._renderRow}
+					/>
+				</View>
 			);
 		} catch(e) {
 			console.log(e);
@@ -52,8 +82,8 @@ class DashboardTab extends View {
 		}
 	}
 
-	_renderRow(item, secId, rowId, rowMap, tileWidth) {
-		const minutesAgo =  Math.round(((Date.now() / 1000) - item.lastUpdated) / 60);
+	_renderRow(item, secId, rowId, rowMap) {
+		const minutesAgo =  Math.round(((Date.now() / 1000) - item.childObject.lastUpdated) / 60);
 		try {
 			return (
 				<ListItem style = {{
@@ -61,18 +91,18 @@ class DashboardTab extends View {
 					flexDirection: 'row',
 					justifyContent: 'flex-start',
 					alignItems: 'center',
-					width: tileWidth > 50 ? tileWidth : 100,
-					height: tileWidth > 50 ? tileWidth : 100
+					width: item.tileWidth > 50 ? item.tileWidth : 100,
+					height: item.tileWidth > 50 ? item.tileWidth : 100
 				}}>
 					<Container style = {{ marginLeft: 16, flexDirection: 'row'}}>
 						<View>
 							<Text style = {{
 								color: 'rgba(0,0,0,0.87)',
 								fontSize: 16,
-								opacity: item.name ? 1 : 0.5,
+								opacity: item.childObject.name ? 1 : 0.5,
 								marginBottom: 2
 							}}>
-								({item.objectType ? item.objectType.charAt(0) : '?'}) ({tileWidth}) {item.name ? item.name : '(no name)'}
+								({item.objectType ? item.objectType.charAt(0) : '?'}) ({item.tileWidth}) {item.childObject.name ? item.childObject.name : '(no name)'}
 							</Text>
 						</View>
 					</Container>
@@ -90,15 +120,23 @@ function _parseDataIntoItems(devices, sensors) {
 	var items = [];
 	if (devices && devices.map) {
 		devices.map((item) => {
-			item.objectType = 'device';
-			items.push(item);
+			var dashboardItem = {
+				objectType: 'device',
+				childObject: item,
+				tileWidth: 50
+			}
+			items.push(dashboardItem);
 
 		});
 	}
 	if (sensors && sensors.map) {
 		sensors.map((item) => {
-			item.objectType = 'sensor';
-			items.push(item);
+			var dashboardItem = {
+				objectType: 'sensor',
+				childObject: item,
+				tileWidth: 50
+			}
+			items.push(dashboardItem);
 		});
 	}
 	return items;
@@ -106,7 +144,7 @@ function _parseDataIntoItems(devices, sensors) {
 
 function select(store) {
 	return {
-		dataSource: _parseDataIntoItems( store.devices || [], store.sensors || [] ),
+		dataArray: _parseDataIntoItems( store.devices || [], store.sensors || [] ),
 		gateways: store.gateways,
 		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};
