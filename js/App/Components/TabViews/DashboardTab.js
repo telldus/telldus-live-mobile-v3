@@ -25,6 +25,8 @@ import { connect } from 'react-redux';
 import { Container, Content, Dimensions, Button, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
 
+import { DeviceDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
+
 import Theme from 'Theme';
 
 import type { Tab } from '../reducers/navigation';
@@ -41,9 +43,9 @@ class DashboardTab extends View {
 	}
 
 	_onLayout = (event) => {
-		const listWidth = event.nativeEvent.layout.width;
+		const listWidth = event.nativeEvent.layout.width - 8;
 		const isPortrait = true;
-		var baseTileSize = listWidth > (isPortrait ? 600 : 800) ? 150 : 100;
+		var baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
 		if (listWidth > 0) {
 			var numberOfTiles = Math.floor(listWidth /baseTileSize);
 			var tileSize = listWidth / numberOfTiles;
@@ -52,66 +54,55 @@ class DashboardTab extends View {
 			}
 			const tileWidth = Math.floor(tileSize);
 			var data = this.props.dataArray;
-
 			data.map((item) => {
 				item.tileWidth = tileWidth;
 			});
-
 			this.setState({
-				dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
-					.cloneWithRows(data)
+				dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data)
 			});
 		}
 
 	}
 
 	render() {
-		try {
-			return (
-				<View onLayout={this._onLayout}>
-					<List
-						contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
-						dataSource = {this.state.dataSource}
-						renderRow = {this._renderRow}
-					/>
-				</View>
-			);
-		} catch(e) {
-			console.log(e);
-			return ( <View /> )
-		}
+		return (
+			<View onLayout={this._onLayout}>
+				<List
+					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
+					dataSource = {this.state.dataSource}
+					renderRow = {this._renderRow}
+					pageSize = {100}
+				/>
+			</View>
+		);
 	}
 
 	_renderRow(item, secId, rowId, rowMap) {
 		const minutesAgo =  Math.round(((Date.now() / 1000) - item.childObject.lastUpdated) / 60);
-		try {
-			return (
-				<ListItem style = {{
-					backgroundColor: '#ff9090',
-					flexDirection: 'row',
-					justifyContent: 'flex-start',
-					alignItems: 'center',
-					width: item.tileWidth > 50 ? item.tileWidth : 100,
-					height: item.tileWidth > 50 ? item.tileWidth : 100
-				}}>
-					<Container style = {{ marginLeft: 16, flexDirection: 'row'}}>
-						<View>
-							<Text style = {{
-								color: 'rgba(0,0,0,0.87)',
-								fontSize: 16,
-								opacity: item.childObject.name ? 1 : 0.5,
-								marginBottom: 2
-							}}>
-								({item.objectType ? item.objectType.charAt(0) : '?'}) ({item.tileWidth}) {item.childObject.name ? item.childObject.name : '(no name)'}
-							</Text>
-						</View>
-					</Container>
-				</ListItem>
-			)
-		} catch(e) {
-			console.log(e);
-			return ( <View /> )
+		if (item.tileWidth > 75) {
+			let tileMargin = 8;
+			let tileStyle = {
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				alignItems: 'center',
+				width: item.tileWidth - tileMargin,
+				height: item.tileWidth - tileMargin,
+				marginTop: tileMargin,
+				marginLeft: tileMargin,
+				borderRadius: 2
+			}
+			if (item.objectType == 'sensor') {
+				return (
+					<SensorDashboardTile style={tileStyle} item={item} />
+				)
+			}
+			if (item.objectType == 'device') {
+				return (
+					<DeviceDashboardTile style={tileStyle} item={item} />
+				)
+			}
 		}
+		return <View />;
 	}
 
 }
@@ -123,7 +114,7 @@ function _parseDataIntoItems(devices, sensors) {
 			var dashboardItem = {
 				objectType: 'device',
 				childObject: item,
-				tileWidth: 50
+				tileWidth: 0
 			}
 			items.push(dashboardItem);
 
@@ -134,7 +125,7 @@ function _parseDataIntoItems(devices, sensors) {
 			var dashboardItem = {
 				objectType: 'sensor',
 				childObject: item,
-				tileWidth: 50
+				tileWidth: 0
 			}
 			items.push(dashboardItem);
 		});
