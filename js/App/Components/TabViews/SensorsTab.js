@@ -33,6 +33,7 @@ import format from 'date-format';
 import Theme from 'Theme';
 
 class SensorsTab extends View {
+
 	render() {
 		return (
 			<List

@@ -27,10 +27,6 @@ import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 
 class SensorDashboardTile extends View {
 
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		const item = this.props.item;
 		const tileWidth = item.tileWidth - 8;
