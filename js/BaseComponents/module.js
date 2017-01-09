@@ -28,6 +28,7 @@ import Container from './Container';
 import Content from './Content';
 import Button from './Button';
 import Text from './Text';
+import FormattedNumber from './FormattedNumber';
 import Switch from './Switch';
 import Picker from './Picker';
 import List from './List';
@@ -73,6 +74,7 @@ module.exports = {
 	Container: Container,
 	Content: Content,
 	Button: Button,
+	FormattedNumber: FormattedNumber,
 	Text: Text,
 	Switch: Switch,
 	Picker: Picker,

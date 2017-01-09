@@ -20,9 +20,10 @@
 'use strict';
 
 import React from 'react';
-import { Image, Text, View } from 'BaseComponents';
+import { FormattedNumber, Image, Text, View } from 'BaseComponents';
 
 import Theme from 'Theme';
+import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 
 class SensorDashboardTile extends View {
 
@@ -35,28 +36,84 @@ class SensorDashboardTile extends View {
 		const tileWidth = item.tileWidth - 8;
 		const tileTitleHeight = Math.floor(tileWidth / 4);
 		const tileDetailsHeight = tileWidth - tileTitleHeight;
+
+		var slideList = [];
+		if (item.childObject.humidity) {
+			slideList.push({
+				key: 'humidity',
+				icon: require('../img/sensorIcons/HumidityLarge.png'),
+				text: <FormattedNumber value = {item.childObject.humidity / 100} formatStyle = 'percent' />
+			});
+		}
+		if (item.childObject.temperature) {
+			slideList.push({
+				key: 'temperature',
+				icon: require('../img/sensorIcons/TemperatureLarge.png'),
+				text: <FormattedNumber value = {item.childObject.temperature} maximumFractionDigits = {0} suffix = {String.fromCharCode(176) + 'c'}/>
+			});
+		}
+		if (item.childObject.rainRate || item.childObject.rainTotal) {
+			slideList.push({
+				key: 'rain',
+				icon: require('../img/sensorIcons/RainLarge.png'),
+				text: (item.childObject.rainRate && <FormattedNumber value = {item.childObject.rainRate} maximumFractionDigits = {0} suffix = {'mm/h\n'} /> )
+						(item.childObject.rainTotal && <FormattedNumber value = {item.childObject.rainTotal} maximumFractionDigits = {0} suffix = {'mm'} /> )
+			});
+		}
+		if (item.childObject.windGust || item.childObject.windAverage || item.childObject.windDirection) {
+			slideList.push({
+				key: 'wind',
+				icon: require('../img/sensorIcons/WindLarge.png'),
+				text: 'foo'
+			});
+		}
+		if (item.childObject.uv) {
+			slideList.push({
+				key: 'uv',
+				icon: require('../img/sensorIcons/UVLarge.png'),
+				text: <FormattedNumber value = {item.childObject.uv} maximumFractionDigits = {0} />
+			});
+		}
+		if (item.childObject.watt) {
+			slideList.push({
+				key: 'watt',
+				icon: require('../img/sensorIcons/WattLarge.png'),
+				text: <FormattedNumber value = {item.childObject.watt} maximumFractionDigits = {1} suffix = {' W'}/>
+			});
+		}
+		if (item.childObject.luminance) {
+			slideList.push({
+				key: 'luminance',
+				icon: require('../img/sensorIcons/LuminanceLarge.png'),
+				text: <FormattedNumber value = {item.childObject.luminance} maximumFractionDigits = {0} suffix = {'lx'}/>
+			});
+		}
+		const slides = slideList.map((item) =>
+			<SensorDashboardTileSlide key = {item.key} icon = {item.icon} text={item.text} tileWidth={tileWidth} />
+		);
+
 		return (
 			<Image
-				style={[this.props.style, {
+				style = {[this.props.style, {
 					flexDirection: 'column',
 					width: tileWidth,
 					height: tileWidth,
 					backgroundColor: Theme.Core.brandPrimary
 				}]}
-				source={require('../img/TileBackground.png')}
+				source = {require('../img/TileBackground.png')}
 			>
-				<View style={{
+				<View style = {{
 					width: tileWidth,
 					height: tileDetailsHeight
-				}}></View>
-				<View style={{
+				}}>{slides}</View>
+				<View style = {{
 					width: tileWidth,
 					height: tileTitleHeight,
 					justifyContent: 'center'
 				}}>
 					<Text
-					ellipsizeMode="middle"
-					numberOfLines={1}
+					ellipsizeMode = "middle"
+					numberOfLines = {1}
 					style = {{
 						width: tileWidth,
 						color: 'rgba(255,255,255,1)',
@@ -70,6 +127,11 @@ class SensorDashboardTile extends View {
 				</View>
 			</Image>
 		)
+	}
+
+	_windDirection(value) {
+		const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
+		return directions[Math.floor(value / 22.5)]
 	}
 
 }

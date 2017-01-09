@@ -66,6 +66,14 @@ export default StyleSheet.create({
 		alignItems: 'center',
 		paddingRight: 12
 	},
+	sensorTileItem: {
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
+		flexDirection: 'row',
+	},
 	listItemAvatar: {
 		width: 32,
 		marginRight: 24,

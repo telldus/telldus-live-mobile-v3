@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Container, I18n, Icon, Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { Button, Container, FormattedNumber, I18n, Icon, Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getSensors } from 'Actions';
 
 import SensorDetailView from '../DetailViews/SensorDetailView'
@@ -31,8 +31,6 @@ import type { Tab } from '../reducers/navigation';
 
 import format from 'date-format';
 import Theme from 'Theme';
-
-import { FormattedNumber } from 'react-intl-native';
 
 class SensorsTab extends View {
 	render() {
