@@ -34,7 +34,7 @@ import java.util.List;
 
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
-import fr.ayoubdev.rnak.RNAKPackage;
+import fr.aybadb.rnak.RNAKPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
