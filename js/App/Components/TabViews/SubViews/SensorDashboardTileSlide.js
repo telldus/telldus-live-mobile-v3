@@ -42,7 +42,9 @@ class SensorDashboardTileSlide extends View {
 					alignItems: 'center'
 				}}>
 					<Text style={{color: "#ffffff", fontSize: Math.floor(this.props.tileWidth / 5)}}>
-						{this.props.text}
+						{this.props.text && this.props.text}
+						{this.props.text2 && this.props.text2}
+						{this.props.text3 && this.props.text3}
 					</Text>
 				</View>
 			</View>

@@ -52,15 +52,17 @@ class SensorDashboardTile extends View {
 			slideList.push({
 				key: 'rain',
 				icon: require('../img/sensorIcons/RainLarge.png'),
-				text: (item.childObject.rainRate && <FormattedNumber value = {item.childObject.rainRate} maximumFractionDigits = {0} suffix = {'mm/h\n'} /> )
-						(item.childObject.rainTotal && <FormattedNumber value = {item.childObject.rainTotal} maximumFractionDigits = {0} suffix = {'mm'} /> )
+				text: (item.childObject.rainRate && <FormattedNumber value = {item.childObject.rainRate} maximumFractionDigits = {0} suffix = {'mm/h\n'} /> ),
+				text2: (item.childObject.rainTotal && <FormattedNumber value = {item.childObject.rainTotal} maximumFractionDigits = {0} suffix = {'mm'} /> )
 			});
 		}
 		if (item.childObject.windGust || item.childObject.windAverage || item.childObject.windDirection) {
 			slideList.push({
 				key: 'wind',
 				icon: require('../img/sensorIcons/WindLarge.png'),
-				text: 'foo'
+				text: (item.childObject.windAverage && <FormattedNumber value = {item.childObject.windAverage} maximumFractionDigits = {1} suffix = {'m/s\n'} /> ),
+				text2: (item.childObject.windGust && <FormattedNumber value = {item.childObject.windGust} maximumFractionDigits = {1} suffix = {'m/s*\n'} /> ),
+				text3: (item.childObject.windDirection && <Text>{ this._windDirection(item.childObject.windDirection) }</Text> )
 			});
 		}
 		if (item.childObject.uv) {
