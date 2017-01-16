@@ -89,19 +89,39 @@ export default function (store) {
 
 								websocketConnections[gatewayId].websocket.onmessage = (msg) => {
 									const formattedTime = formatTime(new Date());
-									var title = `websocket_message @ ${formattedTime} (from gateway ${gatewayId})`;
+									const title_prefix = `websocket_message @ ${formattedTime} (from gateway ${gatewayId})`;
+									var title = '';
 									var message = '';
 									try {
 										message = JSON.parse(msg.data);
-										if (message.module && message.action) {
-											title += ` ${message.module}:${message.action}`;
-										}
 									} catch (e) {
 										message = msg.data;
-										title += ` ${msg.data}`;
+										title = ` ${msg.data}`;
+									}
+
+									if(message == 'validconnection') {
+										message = {
+											module: 'websocket_connection',
+											action: 'connected'
+										}
+										title = ` ${message.module}:${message.action}`;
+									} else if(message == 'nothere') {
+										message = {
+											module: 'websocket_connection',
+											action: 'wrong_server'
+										}
+										title = ` ${message.module}:${message.action}`;
+									} else if(message == 'error') {
+										message = {
+											module: 'websocket_connection',
+											action: 'unknown_error'
+										}
+										title = ` ${message.module}:${message.action}`;
 									}
 
 									if(message.module && message.action) {
+										title = ` ${message.module}:${message.action}`;
+
 										switch(message.module) {
 											case 'device':
 
@@ -116,7 +136,7 @@ export default function (store) {
 										}
 									}
 									try {
-										console.groupCollapsed(title);
+										console.groupCollapsed(title_prefix + title);
 										console.log(message);
 										console.groupEnd();
 									} catch (e) {
