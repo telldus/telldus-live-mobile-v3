@@ -164,7 +164,7 @@ class TabsView extends View {
 						overflowIconName = "ellipsis-v"
 						iconColor = { Theme.Core.inverseTextColor }
 						title = "Telldus Live!"
-						actions = {[{ title: 'Settings', icon: require('image!ic_launcher'), show: 'never'}]}
+						actions = {[{ title: 'Settings', show: 'never'}]}
 						onActionSelected = { this.onActionSelected }
 						onIconClicked = { () => this.refs.drawer.openDrawer() }
 					/>
