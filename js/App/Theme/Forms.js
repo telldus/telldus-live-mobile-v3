@@ -73,6 +73,14 @@ var stylesheet = Object.freeze({
 		marginBottom: 2,
 		color: ERROR_COLOR
 	},
+	textboxView: {
+    	normal: {
+    	},
+    	error: {
+    	},
+    	notEditable: {
+   	 	}
+  	},
 	textbox: {
 		normal: {
 			color: INPUT_COLOR,
