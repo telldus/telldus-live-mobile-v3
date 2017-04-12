@@ -4,7 +4,12 @@ Internal dev repo for Telldus
 
 ## Install
 
+All commands are assumed to be ran from project root.
+
 ### General
+
+- install [nodejs >= 6](https://nodejs.org/en/) and `npm i`
+
 
 ### iOS
 
