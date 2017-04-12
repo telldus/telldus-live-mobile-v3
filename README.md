@@ -4,6 +4,16 @@ Internal dev repo for Telldus
 
 ## Install
 
+### General
+
+### iOS
+
+- install cacao pods cli: `brew install Caskroom/cask/cocoapods-app`
+- install cacao pod deps: `cd ios && pod install`
+- install Xcode via [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
+
+### Android
+
 ## Development
 
 ## Run
