@@ -25,6 +25,13 @@ All commands are assumed to be ran from project root.
 
 - environment vars?
 
+### iOS
+
+- `npm run ios`
+
+### Android
+
+
 ## Split dependencies
 
 `dependencies` are dependencies require on production like servers, `devDependencies` are deps needed during development and the build process. All the client side libs should therefore reside in `devDependencies`.
