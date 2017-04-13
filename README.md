@@ -13,7 +13,9 @@ All commands are assumed to be ran from project root.
 
 ### General
 
-- install [nodejs >= 6](https://nodejs.org/en/) and `npm i`
+- install [nodejs >= 6](https://nodejs.org/en/)
+- install local deps: `npm i`
+- install global deps: `npm install -g react-native-cli`
 
 
 ### iOS
