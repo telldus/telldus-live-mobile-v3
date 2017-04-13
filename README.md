@@ -59,7 +59,7 @@ module.exports = {
 
 ### iOS
 
-- `npm run ios`
+- `react-native run-ios`
 
 ### Android
 
