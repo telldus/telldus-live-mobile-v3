@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 
 import { Button, Container, FormattedNumber, I18n, Icon, Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getSensors } from 'Actions';
-
+import { TouchableHighlight } from 'react-native';
 import SensorDetailView from '../DetailViews/SensorDetailView'
 
 import type { Tab } from '../reducers/navigation';
@@ -41,7 +41,7 @@ class SensorsTab extends View {
 				renderHiddenRow = {this._renderHiddenRow.bind(this)}
 				renderRow = {this._renderRow.bind(this)}
 				renderSectionHeader = {this._renderSectionHeader.bind(this)}
-				rightOpenValue = {-60}
+				rightOpenValue = {-40}
 				onRefresh = {() =>
 					this.props.dispatch(getSensors())
 				}
@@ -52,7 +52,11 @@ class SensorsTab extends View {
 	_renderHiddenRow(data) {
 		return (
 			<View style={Theme.Styles.rowBack}>
-				<Text style={Theme.Styles.rowBackButton}>Dashboard</Text>
+				{/*<Text style={Theme.Styles.rowBackButton}>Dashboard</Text>*/}
+				{/*<Icon.Button name="star" backgroundColor="#3b5998" />*/}
+				<TouchableHighlight style={Theme.Styles.rowBackButton}>
+					<Icon name="star" size={26} color="yellow"/>
+				</TouchableHighlight>
 			</View>
 		)
 	}
@@ -93,7 +97,9 @@ class SensorsTab extends View {
 					{ item.humidity ? (
 						<View style={Theme.Styles.sensorValue}>
 							<Image source={require('./img/sensorIcons/Humidity.png')} />
-							<FormattedNumber value = {item.humidity / 100} formatStyle = 'percent' />
+							<Text>
+								<FormattedNumber value = {item.humidity / 100} formatStyle = 'percent' />
+							</Text>
 						</View>
 					) : null }
 

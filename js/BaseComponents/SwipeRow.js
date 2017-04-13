@@ -16,6 +16,7 @@ import {
 const DIRECTIONAL_DISTANCE_CHANGE_THRESHOLD = 2;
 const PREVIEW_OPEN_DELAY = 700;
 const PREVIEW_CLOSE_DELAY = 300;
+const SLIDE_DELAY = 300;
 
 /**
  * Row that is generally used in a SwipeListView.
@@ -60,6 +61,13 @@ class SwipeRow extends Component {
 		);
 	}
 
+	getSlideAnimation(toValue, delay) {
+		return Animated.timing(
+			this.state.translateX,
+			{ duration: this.props.slideDuration, toValue, delay }
+		);
+	}
+
 	onContentLayout(e) {
 		this.setState({
 			dimensionsSet: !this.props.recalculateHiddenLayout,
@@ -67,14 +75,18 @@ class SwipeRow extends Component {
 			hiddenWidth: e.nativeEvent.layout.width,
 		});
 
-		if (this.props.preview && !this.ranPreview) {
-			this.ranPreview = true;
-			let previewOpenValue = this.props.previewOpenValue || this.props.rightOpenValue * 0.5;
-			this.getPreviewAnimation(previewOpenValue, PREVIEW_OPEN_DELAY)
-			.start( _ => {
-				this.getPreviewAnimation(0, PREVIEW_CLOSE_DELAY).start();
-			});
-		}
+		// Disable preview animation
+		// if (this.props.preview && !this.ranPreview) {
+		// 	this.ranPreview = true;
+		// 	let previewOpenValue = this.props.previewOpenValue || this.props.rightOpenValue * 0.5;
+		// 	this.getPreviewAnimation(previewOpenValue, PREVIEW_OPEN_DELAY)
+		// 	.start( _ => {
+		// 		this.getPreviewAnimation(0, PREVIEW_CLOSE_DELAY).start();
+		// 	});
+		// }
+
+		let slideOpenValue = this.props.editMode ? this.props.rightOpenValue : 0;
+		this.getSlideAnimation(slideOpenValue, SLIDE_DELAY).start();
 	}
 
 	onRowPress() {
@@ -342,7 +354,10 @@ SwipeRow.propTypes = {
 	 * TranslateX value for the slide out preview animation
 	 * Default: 0.5 * props.rightOpenValue
 	 */
-	previewOpenValue: PropTypes.number
+	previewOpenValue: PropTypes.number,
+
+	editMode: PropTypes.bool,
+	slideDuration: PropTypes.number
 };
 
 SwipeRow.defaultProps = {
@@ -353,7 +368,9 @@ SwipeRow.defaultProps = {
 	disableRightSwipe: false,
 	recalculateHiddenLayout: false,
 	preview: false,
-	previewDuration: 300
+	previewDuration: 300,
+	editMode: false,
+	slideDuration: 300,
 };
 
 export default SwipeRow;

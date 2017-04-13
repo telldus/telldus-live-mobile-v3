@@ -54,6 +54,7 @@ class TabsView extends View {
 
 	componentDidMount() {
 		Icon.getImageSource('user', 22, 'white').then((source) => this.setState({ userIcon: source }));
+		Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
 	}
 
 	onTabSelect(tab: Tab) {
@@ -63,7 +64,7 @@ class TabsView extends View {
 	}
 
 	render() {
-		if (!this.state || !this.state.userIcon) {
+		if (!this.state || !this.state.userIcon || !this.state.starIcon) {
 			return false;
 		}
 		return (
@@ -109,6 +110,8 @@ class TabsView extends View {
 						initialRoute = {{
 							title: I18n.t('pages.sensors'),
 							component: TabViews.Sensors,
+							rightButtonIcon: this.state.starIcon
+
 						}}
 					/>
 				</TabBarIOS.Item>
