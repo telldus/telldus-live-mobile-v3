@@ -22,6 +22,7 @@ import { StyleSheet } from 'react-native';
 import Core from './Core'
 
 const listItemHeight = 56;
+const listItemWidth = 30;
 
 export default StyleSheet.create({
 	sectionHeader: {
@@ -57,12 +58,14 @@ export default StyleSheet.create({
 	},
 	rowBackButton: {
 		height: listItemHeight,
-		width: listItemHeight
+		width: listItemWidth,
+		// flex: 1,
+		justifyContent: 'center',
 	},
 	sensorValue: {
 		width: 88,
 		flexDirection: 'row',
-		justifyContent: 'space-between',
+		justifyContent: 'space-around',
 		alignItems: 'center',
 		paddingRight: 12
 	},

@@ -35,6 +35,8 @@ import StyleSheet from 'StyleSheet';
 import StatusBar from 'StatusBar';
 import Theme from 'Theme';
 
+import {stylesheet} from 'tcomb-form-native/lib/stylesheets/bootstrap';
+
 var Form = Forms.form.Form;
 var LoginDetails = Forms.struct({
 	username: Forms.String,

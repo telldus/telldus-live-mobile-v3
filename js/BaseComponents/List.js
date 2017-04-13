@@ -123,6 +123,7 @@ class ListComponent extends React.Component {
 					preview={this.props.previewFirstRow && rowId === firstRowId}
 					previewDuration={this.props.previewDuration}
 					previewOpenValue={this.props.previewOpenValue}
+					editMode={this.props.editMode}
 				>
 					{this.props.renderHiddenRow(rowData, secId, rowId, this._rows)}
 					{this.props.renderRow(rowData, secId, rowId, this._rows)}
@@ -226,8 +227,9 @@ ListComponent.propTypes = {
 	 * TranslateX value for the slide out preview animation
 	 * Default: 0.5 * props.rightOpenValue
 	 */
-	previewOpenValue: React.PropTypes.number
+	previewOpenValue: React.PropTypes.number,
 
+	editMode: React.PropTypes.bool,
 }
 
 ListComponent.defaultProps = {
@@ -239,7 +241,8 @@ ListComponent.defaultProps = {
 	disableLeftSwipe: false,
 	disableRightSwipe: true,
 	recalculateHiddenLayout: false,
-	previewFirstRow: false
+	previewFirstRow: false,
+	editMode: false,
 }
 
 export default ListComponent;

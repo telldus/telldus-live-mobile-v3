@@ -21,6 +21,9 @@
 
 'use strict';
 
+import 'intl';
+import 'intl/locale-data/jsonp/en';
+
 import React from 'React';
 import { Provider } from 'react-redux';
 
