@@ -93,7 +93,9 @@ class SensorsTab extends View {
 					{ item.humidity ? (
 						<View style={Theme.Styles.sensorValue}>
 							<Image source={require('./img/sensorIcons/Humidity.png')} />
-							<FormattedNumber value = {item.humidity / 100} formatStyle = 'percent' />
+							<Text>
+								<FormattedNumber value = {item.humidity / 100} formatStyle = 'percent' />
+							</Text>
 						</View>
 					) : null }
 
