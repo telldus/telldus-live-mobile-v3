@@ -62,7 +62,7 @@ export default StyleSheet.create({
 	sensorValue: {
 		width: 88,
 		flexDirection: 'row',
-		justifyContent: 'space-between',
+		justifyContent: 'space-around',
 		alignItems: 'center',
 		paddingRight: 12
 	},
