@@ -42,6 +42,7 @@ class SensorsTab extends View {
 				renderRow = {this._renderRow.bind(this)}
 				renderSectionHeader = {this._renderSectionHeader.bind(this)}
 				rightOpenValue = {-40}
+				editMode = {this.props.editMode}
 				onRefresh = {() =>
 					this.props.dispatch(getSensors())
 				}
@@ -245,7 +246,8 @@ function select(store) {
 	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.sensors || [], store.gateways || [])
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
-		gateways: store.gateways
+		gateways: store.gateways,
+		editMode: store.tabs.editModeSensorsTab,
 	};
 }
 
