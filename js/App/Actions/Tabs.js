@@ -15,26 +15,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Actions
  */
 
 'use strict';
 
-import DeviceActions from './Devices';
-import GatewayActions from './Gateways';
-import LoginActions from './Login';
-import NavigationActions from './Navigation';
-import SensorActions from './Sensors';
-import WebsocketActions from './Websockets';
-import TabActions from './Tabs';
+import type { Action } from './types';
+
+type Tab = 'devicesTab' | 'sensorsTab';
 
 module.exports = {
-	...DeviceActions,
-	...GatewayActions,
-	...LoginActions,
-	...NavigationActions,
-	...SensorActions,
-	...WebsocketActions,
-	...TabActions
+	toggleEditMode: (tab: Tab): Action => ({
+		type: 'TOGGLE_EDIT_MODE',
+		tab,
+	}),
 };
+
