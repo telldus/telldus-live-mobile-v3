@@ -69,6 +69,7 @@ class SwipeRow extends Component {
 	}
 
 	onContentLayout(e) {
+
 		this.setState({
 			dimensionsSet: !this.props.recalculateHiddenLayout,
 			hiddenHeight: e.nativeEvent.layout.height,
@@ -85,8 +86,7 @@ class SwipeRow extends Component {
 		// 	});
 		// }
 
-		let slideOpenValue = this.props.editMode ? this.props.rightOpenValue : 0;
-		this.getSlideAnimation(slideOpenValue, SLIDE_DELAY).start();
+
 	}
 
 	onRowPress() {
@@ -227,6 +227,9 @@ class SwipeRow extends Component {
 	renderRowContent() {
 		// We do this annoying if statement for performance.
 		// We don't want the onLayout func to run after it runs once.
+		this.state.dimensionsSet = this.state.dimensionsSet &&
+			(this.state.translateX === 0 && this.state.editMode === false) &&
+			(this.state.translateX !== 0 && this.state.editMode === true);
 		if (this.state.dimensionsSet) {
 			return (
 				<Animated.View
@@ -241,6 +244,9 @@ class SwipeRow extends Component {
 				</Animated.View>
 			);
 		} else {
+			let slideOpenValue = this.props.editMode ? this.props.rightOpenValue : 0;
+			this.getSlideAnimation(slideOpenValue, SLIDE_DELAY).start();
+			
 			return (
 				<Animated.View
 					{...this._panResponder.panHandlers}
@@ -357,7 +363,7 @@ SwipeRow.propTypes = {
 	previewOpenValue: PropTypes.number,
 
 	editMode: PropTypes.bool,
-	slideDuration: PropTypes.number
+	slideDuration: PropTypes.number,
 };
 
 SwipeRow.defaultProps = {
