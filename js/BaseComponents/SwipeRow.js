@@ -45,13 +45,13 @@ class SwipeRow extends Component {
 	}
 
 	componentWillMount() {
-		this._panResponder = PanResponder.create({
-			onMoveShouldSetPanResponder: (e, gs) => this.handleOnMoveShouldSetPanResponder(e, gs),
-			onPanResponderMove: (e, gs) => this.handlePanResponderMove(e, gs),
-			onPanResponderRelease: (e, gs) => this.handlePanResponderEnd(e, gs),
-			onPanResponderTerminate: (e, gs) => this.handlePanResponderEnd(e, gs),
-			onShouldBlockNativeResponder: _ => false,
-		});
+		// this._panResponder = PanResponder.create({
+		// 	onMoveShouldSetPanResponder: (e, gs) => this.handleOnMoveShouldSetPanResponder(e, gs),
+		// 	onPanResponderMove: (e, gs) => this.handlePanResponderMove(e, gs),
+		// 	onPanResponderRelease: (e, gs) => this.handlePanResponderEnd(e, gs),
+		// 	onPanResponderTerminate: (e, gs) => this.handlePanResponderEnd(e, gs),
+		// 	onShouldBlockNativeResponder: _ => false,
+		// });
 	}
 
 	getPreviewAnimation(toValue, delay) {
@@ -233,7 +233,6 @@ class SwipeRow extends Component {
 		if (this.state.dimensionsSet) {
 			return (
 				<Animated.View
-					{...this._panResponder.panHandlers}
 					style={{
 						transform: [
 							{translateX: this.state.translateX}
@@ -249,7 +248,6 @@ class SwipeRow extends Component {
 			
 			return (
 				<Animated.View
-					{...this._panResponder.panHandlers}
 					onLayout={ (e) => this.onContentLayout(e) }
 					style={{
 						transform: [
