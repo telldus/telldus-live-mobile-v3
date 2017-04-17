@@ -23,8 +23,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Container, FormattedNumber, I18n, Icon, Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
-import { getSensors } from 'Actions';
-import { TouchableHighlight } from 'react-native';
+import { getSensors, addToDashboard, removeFromDashboard } from 'Actions';
+import { TouchableOpacity } from 'react-native';
 import SensorDetailView from '../DetailViews/SensorDetailView'
 
 import type { Tab } from '../reducers/navigation';
@@ -50,14 +50,26 @@ class SensorsTab extends View {
 		);
 	}
 
+	onStarSelected(item) {
+		if (item.inDashboard) {
+			this.props.removeFromDashboard(item.id);
+		} else {
+			this.props.addToDashboard(item.id);
+		}
+	}
+
 	_renderHiddenRow(data) {
+		let inDashboard = (data.inDashboard === true);
+
 		return (
 			<View style={Theme.Styles.rowBack}>
 				{/*<Text style={Theme.Styles.rowBackButton}>Dashboard</Text>*/}
 				{/*<Icon.Button name="star" backgroundColor="#3b5998" />*/}
-				<TouchableHighlight style={Theme.Styles.rowBackButton}>
-					<Icon name="star" size={26} color="yellow"/>
-				</TouchableHighlight>
+				<TouchableOpacity
+					style={Theme.Styles.rowBackButton}
+					onPress={this.onStarSelected.bind(this, data)} >
+					<Icon name="star" size={26} color={inDashboard ? "yellow" : "white"}/>
+				</TouchableOpacity>
 			</View>
 		)
 	}
@@ -211,9 +223,10 @@ const dataSource = new ListDataSource({
 	sectionHeaderHasChanged : (s1, s2) => s1 !== s2
 });
 
-function _parseDataIntoItemsAndSectionIds(sensors, gateways) {
+function _parseDataIntoItemsAndSectionIds(sensors, gateways, dashboard) {
 	var items = {};
 	var sectionIds = [];
+
 	if (sensors) {
 		sensors.map((item) => {
 			var sectionId = item.clientId ? item.clientId : '';
@@ -221,9 +234,17 @@ function _parseDataIntoItemsAndSectionIds(sensors, gateways) {
 				sectionIds.push(sectionId);
 				items[sectionId] = [];
 			}
+
+			if (dashboard.sensors.indexOf(item.id) >= 0) {
+				item.inDashboard = true;
+			} else {
+				item.inDashboard = false;
+			}
+
 			items[sectionId].push(item);
 		});
 	}
+
 	sectionIds.sort((a,b) => {
 		try {
 			const gatewayA = gateways.find((gateway) => gateway.id === a);
@@ -243,7 +264,7 @@ function _parseDataIntoItemsAndSectionIds(sensors, gateways) {
 }
 
 function select(store) {
-	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.sensors || [], store.gateways || [])
+	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.sensors || [], store.gateways || [], store.dashboard)
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
 		gateways: store.gateways,
@@ -251,4 +272,12 @@ function select(store) {
 	};
 }
 
-module.exports = connect(select)(SensorsTab);
+function actions(dispatch) {
+	return {
+		addToDashboard: (id) => dispatch(addToDashboard('sensor', id)),
+		removeFromDashboard: (id) => dispatch(removeFromDashboard('sensor', id)),
+		dispatch
+	};
+}
+
+module.exports = connect(select, actions)(SensorsTab);
