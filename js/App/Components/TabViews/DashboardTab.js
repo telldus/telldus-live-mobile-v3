@@ -34,11 +34,10 @@ import type { Tab } from '../reducers/navigation';
 var flattenStyle = require('flattenStyle');
 
 class DashboardTab extends View {
-
 	constructor(props) {
 		super(props);
 		this.state = {
-			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(this.props.dataArray)
+			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(this.props.dataArray),
 		}
 	}
 
@@ -61,7 +60,6 @@ class DashboardTab extends View {
 				dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data)
 			});
 		}
-
 	}
 
 	render() {
@@ -107,21 +105,45 @@ class DashboardTab extends View {
 
 }
 
-function _parseDataIntoItems(devices, sensors) {
+function _parseDataIntoItems(devices, sensors, dashboard) {
 	var items = [];
-	if (devices && devices.map) {
-		devices.map((item) => {
+	// if (devices && devices.map) {
+	// 	devices.map((item) => {
+			// var dashboardItem = {
+			// 	objectType: 'device',
+			// 	childObject: item,
+			// 	tileWidth: 0
+			// }
+			// items.push(dashboardItem);
+
+	// 	});
+	// }
+	// if (sensors && sensors.map) {
+	// 	sensors.map((item) => {
+	// 		var dashboardItem = {
+	// 			objectType: 'sensor',
+	// 			childObject: item,
+	// 			tileWidth: 0
+	// 		}
+	// 		items.push(dashboardItem);
+	// 	});
+	// }
+
+	if (devices && devices.filter) {
+		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
+		devicesInDashboard.map((item) => {
 			var dashboardItem = {
 				objectType: 'device',
 				childObject: item,
 				tileWidth: 0
 			}
 			items.push(dashboardItem);
-
 		});
 	}
-	if (sensors && sensors.map) {
-		sensors.map((item) => {
+
+	if (sensors && sensors.filter) {
+		let sensorsInDashboard = sensors.filter(item => dashboard.sensors.indexOf(item.id) >= 0);
+		sensorsInDashboard.map((item) => {
 			var dashboardItem = {
 				objectType: 'sensor',
 				childObject: item,
@@ -135,7 +157,7 @@ function _parseDataIntoItems(devices, sensors) {
 
 function select(store) {
 	return {
-		dataArray: _parseDataIntoItems( store.devices || [], store.sensors || [] ),
+		dataArray: _parseDataIntoItems( store.devices || [], store.sensors || [] , store.dashboard),
 		gateways: store.gateways,
 		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};
