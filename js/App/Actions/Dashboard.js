@@ -15,28 +15,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Actions
  */
 
 'use strict';
 
-import DeviceActions from './Devices';
-import GatewayActions from './Gateways';
-import LoginActions from './Login';
-import NavigationActions from './Navigation';
-import SensorActions from './Sensors';
-import WebsocketActions from './Websockets';
-import TabActions from './Tabs';
-import DashboardActions from './Dashboard';
+import type { Action } from './types';
+
+type Kind = 'device' | 'sensor';
 
 module.exports = {
-	...DeviceActions,
-	...GatewayActions,
-	...LoginActions,
-	...NavigationActions,
-	...SensorActions,
-	...WebsocketActions,
-	...TabActions,
-	...DashboardActions,
+	addToDashboard: (kind: Kind, id: Number): Action => ({
+		type: 'ADD_TO_DASHBOARD',
+		kind,
+        id
+	}),
+	removeFromDashboard : (kind : Kind, id: Number) : Action => ({
+		type: 'REMOVE_FROM_DASHBOARD',
+		kind,
+		id
+	}),
 };
+
