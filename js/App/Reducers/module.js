@@ -29,6 +29,7 @@ import Navigation from './Navigation';
 import Sensors from './Sensors';
 import User from './User';
 import Tabs from './Tabs';
+import Dashboard from './Dashboard';
 
 module.exports = combineReducers({
 	devices: Devices,
@@ -37,4 +38,5 @@ module.exports = combineReducers({
 	sensors: Sensors,
 	user: User,
 	tabs: Tabs,
+	dashboard: Dashboard,
 });
