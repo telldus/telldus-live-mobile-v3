@@ -28,25 +28,15 @@ import {
 	I18n,
 	Icon,
 	NavigatorIOS,
-	PixelRatio,
-	StatusBar,
-	StyleSheet,
 	TabBarIOS,
-	Text,
 	View
 } from 'BaseComponents';
 
 import { switchTab, toggleEditMode } from 'Actions';
 import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
-import Theme from 'Theme';
 
 class TabsView extends View {
-
-	props: {
-		tab: Tab;
-		onTabSelect: (tab: Tab) => void;
-	};
 
 	constructor(props) {
 		super(props);
@@ -57,7 +47,7 @@ class TabsView extends View {
 		Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
 	}
 
-	onTabSelect(tab: Tab) {
+	onTabSelect(tab) {
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
 		}
@@ -97,6 +87,8 @@ class TabsView extends View {
 						initialRoute = {{
 							title: I18n.t('pages.devices'),
 							component: TabViews.Devices,
+							rightButtonIcon: this.state.starIcon,
+							onRightButtonPress: this._toggleDevicesTabEditMode.bind(this)
 						}}
 					/>
 				</TabBarIOS.Item>
@@ -158,23 +150,23 @@ class TabsView extends View {
 	_toggleSensorTabEditMode() {
 		this.props.onToggleEditMode('sensorsTab');
 	}
-}
 
-var styles = StyleSheet.create({
-	container: {
-		flex: 1,
+	_toggleDevicesTabEditMode() {
+		this.props.onToggleEditMode('devicesTab');
 	}
-});
+}
 
 function select(store) {
 	return {
 		tab: store.navigation.tab,
 		userIcon: false,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""},
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
+		store: store,
 	};
 }
 
 function actions(dispatch) {
+
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
 		onToggleEditMode : (tab) => dispatch(toggleEditMode(tab)),
