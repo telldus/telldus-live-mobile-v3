@@ -23,12 +23,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Container, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
-import { getDevices, deviceSetState } from 'Actions';
-
-import DeviceDetailView from '../DetailViews/DeviceDetailView'
+import { getDevices, deviceSetState, addToDashboard, removeFromDashboard } from 'Actions';
+import { TouchableOpacity } from 'react-native';
+import DeviceDetailView from '../DetailViews/DeviceDetailView';
 import Theme from 'Theme';
-
-import type { Tab } from '../reducers/navigation';
 
 class DevicesTab extends View {
 	render() {
@@ -38,72 +36,88 @@ class DevicesTab extends View {
 				renderHiddenRow = {this._renderHiddenRow.bind(this)}
 				renderRow = {this._renderRow.bind(this)}
 				renderSectionHeader = {this._renderSectionHeader.bind(this)}
-				rightOpenValue = {-60}
+				rightOpenValue = {-40}
+				editMode = {this.props.editMode}
 				onRefresh = {() =>
 					this.props.dispatch(getDevices())
 				}
 			/>
 		);
 	}
+
+	onStarSelected(item) {
+		if (item.inDashboard) {
+			this.props.removeFromDashboard(item.id);
+		} else {
+			this.props.addToDashboard(item.id);
+		}
+	}
+
 	_renderHiddenRow(data) {
+		let inDashboard = (data.inDashboard === true);
+
 		return (
 			<View style={Theme.Styles.rowBack}>
-				<Text style={Theme.Styles.rowBackButton}>Dashboard</Text>
+				<TouchableOpacity
+					style={Theme.Styles.rowBackButton}
+					onPress={this.onStarSelected.bind(this, data)} >
+					<Icon name="star" size={26} color={inDashboard ? 'yellow' : 'white'}/>
+				</TouchableOpacity>
 			</View>
-		)
+		);
 	}
 
 	_renderSectionHeader(sectionData, sectionId) {
-		const gateway = this.props.gateways.find((gateway) => gateway.id === sectionId);
+		const gateway = this.props.gateways.find((g) => g.id === sectionId);
 		return (
 			<View style = { Theme.Styles.sectionHeader }>
 				<Text style = { Theme.Styles.sectionHeaderText }>
 					{(gateway && gateway.name) ? gateway.name : ''}
 				</Text>
 			</View>
-		)
+		);
 	}
 
 	_renderRow(item) {
-		const minutesAgo =  Math.round(((Date.now() / 1000) - item.lastUpdated) / 60);
 		try {
 			return (
 				<ListItem style = { Theme.Styles.rowFront }>
-					<Container style = {{ marginLeft: 16, flexDirection: 'row'}}>
-						<View>
-							<Text style = {{
-								color: 'rgba(0,0,0,0.87)',
-								fontSize: 16,
-								opacity: item.name ? 1 : 0.5,
-								marginBottom: 2
-							}}>
-								{item.name ? item.name : '(no name)'}
-							</Text>
+					<Container style = {{ marginLeft: 4, flexDirection: 'row'}}>
 							<Button
 								name = { 'toggle-on' }
-								style = {{ padding: 6 }}
+								style = {{ padding: 6}}
+								color = {'blue'}
+								size = {30}
+								backgroundColor = {'transparent'}
 								onPress={ () => this.props.dispatch(deviceSetState(item.id, 1)) }
-							>On</Button>
-							<Button
-								name = { 'toggle-off' }
-								style = {{ padding: 6 }}
-								onPress={ () => this.props.dispatch(deviceSetState(item.id, 2)) }
-							>Off</Button>
-							<Icon
-								name="arrow-right"
-								onPress={ () => this.props.navigator.push({
-									component: DeviceDetailView,
-									title: item.name,
-									passProps: { device: item }
-								})}
-							></Icon>
-						</View>
+							/>
+							<View style={{flex:10, justifyContent: 'center', }}>
+								<Text style = {{
+									marginLeft: 8,
+									color: 'rgba(0,0,0,0.87)',
+									fontSize: 16,
+									opacity: item.name ? 1 : 0.5,
+									textAlignVertical: 'center',
+								}}>
+									{item.name ? item.name : '(no name)'}
+								</Text>
+							</View>
+							<View style={{flex:1, justifyContent: 'center', alignItems:'center'}}>
+								<Icon
+									name="arrow-right"
+									onPress={ () => this.props.navigator.push({
+										component: DeviceDetailView,
+										title: item.name,
+										passProps: { device: item }
+									})}
+								/>
+							</View>
 					</Container>
 				</ListItem>
-			)
+			);
 		} catch(e) {
 			console.log(e);
-			return ( <View /> )
+			return ( <View /> );
 		}
 	}
 }
@@ -117,7 +131,7 @@ const dataSource = new ListDataSource({
 	sectionHeaderHasChanged : (s1, s2) => s1 !== s2
 });
 
-function _parseDataIntoItemsAndSectionIds(devices, gateways) {
+function _parseDataIntoItemsAndSectionIds(devices, gateways, dashboard) {
 	var items = {};
 	var sectionIds = [];
 	if (devices) {
@@ -127,6 +141,13 @@ function _parseDataIntoItemsAndSectionIds(devices, gateways) {
 				sectionIds.push(sectionId);
 				items[sectionId] = [];
 			}
+
+			if (dashboard.devices.indexOf(item.id) >= 0) {
+				item.inDashboard = true;
+			} else {
+				item.inDashboard = false;
+			}
+
 			items[sectionId].push(item);
 		});
 	}
@@ -149,11 +170,20 @@ function _parseDataIntoItemsAndSectionIds(devices, gateways) {
 }
 
 function select(store) {
-	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.devices || [], store.gateways || [])
+	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.devices || [], store.gateways || [], store.dashboard);
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
-		gateways: store.gateways
+		gateways: store.gateways,
+		editMode: store.tabs.editModeDevicesTab,
 	};
 }
 
-module.exports = connect(select)(DevicesTab);
+function actions(dispatch) {
+	return {
+		addToDashboard: (id) => dispatch(addToDashboard('device', id)),
+		removeFromDashboard: (id) => dispatch(removeFromDashboard('device', id)),
+		dispatch
+	};
+}
+
+module.exports = connect(select, actions)(DevicesTab);
