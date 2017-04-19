@@ -36,7 +36,7 @@ import {
 	View
 } from 'BaseComponents';
 
-import { switchTab } from 'Actions';
+import { switchTab, toggleEditMode } from 'Actions';
 import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
 import Theme from 'Theme';
@@ -110,8 +110,8 @@ class TabsView extends View {
 						initialRoute = {{
 							title: I18n.t('pages.sensors'),
 							component: TabViews.Sensors,
-							rightButtonIcon: this.state.starIcon
-
+							rightButtonIcon: this.state.starIcon,
+							onRightButtonPress: this._toggleSensorTabEditMode.bind(this)
 						}}
 					/>
 				</TabBarIOS.Item>
@@ -155,6 +155,9 @@ class TabsView extends View {
 		});
 	}
 
+	_toggleSensorTabEditMode() {
+		this.props.onToggleEditMode('sensorsTab');
+	}
 }
 
 var styles = StyleSheet.create({
@@ -167,13 +170,14 @@ function select(store) {
 	return {
 		tab: store.navigation.tab,
 		userIcon: false,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""},
 	};
 }
 
 function actions(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
+		onToggleEditMode : (tab) => dispatch(toggleEditMode(tab)),
 		dispatch
 	};
 }

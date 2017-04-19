@@ -20,36 +20,19 @@
 'use strict';
 
 import React from 'react';
-import { Image, Text, View } from 'BaseComponents';
+import { View, Text } from 'BaseComponents';
 
 import Theme from 'Theme';
 
-class SensorDashboardTileSlide extends View {
-
+module.exports = class ListHeader extends View {
 	render() {
+		const gateway = this.props.gateways.find(_gateway => _gateway.id === this.props.sectionId);
 		return (
-			<View style={Theme.Styles.sensorTileItem}>
-				<View style={{
-					flex: 4,
-					justifyContent: 'center',
-					alignItems: 'center'
-				}}>
-					<Image source={this.props.icon} />
-				</View>
-				<View style={{
-					flex: 5,
-					justifyContent: 'center',
-					alignItems: 'center'
-				}}>
-					<Text style={{color: '#ffffff', fontSize: Math.floor(this.props.tileWidth / 5)}}>
-						{this.props.text && this.props.text}
-						{this.props.text2 && this.props.text2}
-						{this.props.text3 && this.props.text3}
-					</Text>
-				</View>
+			<View style = { Theme.Styles.sectionHeader }>
+				<Text style = { Theme.Styles.sectionHeaderText }>
+					{(gateway && gateway.name) ? gateway.name : ''}
+				</Text>
 			</View>
 		);
-	}
-}
-
-module.exports = SensorDashboardTileSlide;
+    }
+};
