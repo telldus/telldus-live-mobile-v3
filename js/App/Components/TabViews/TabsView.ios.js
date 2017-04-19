@@ -37,12 +37,6 @@ import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
 
 class TabsView extends View {
-
-	props: {
-		tab: Tab;
-		onTabSelect: (tab: Tab) => void;
-	};
-
 	constructor(props) {
 		super(props);
 	}
@@ -52,7 +46,7 @@ class TabsView extends View {
 		Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
 	}
 
-	onTabSelect(tab: Tab) {
+	onTabSelect(tab) {
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
 		}
