@@ -64,6 +64,14 @@ module.exports = {
 
 - `react-native run-ios`
 
+### Note:
+
+To make development quick React Native comes with a Launch Packager which is run when you do `react-native run-ios`. This keeps some internal state and allows for hot code swapping and debugging inside the app (`cmd + D`). However, the packager keeps internal state which might go stale without you knowing. The only way to find out is to make a clean build:
+
+- in the app: `cmd + shift + H`, long click on App, delete App
+- quit the Launch Packager (runs in own window, so close window should do the trick)
+- `react-native run-ios` to trigger a fresh build
+
 ### Android
 
 - `react-native run-android`
