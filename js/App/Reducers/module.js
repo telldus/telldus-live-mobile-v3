@@ -28,11 +28,15 @@ import Gateways from './Gateways';
 import Navigation from './Navigation';
 import Sensors from './Sensors';
 import User from './User';
+import Tabs from './Tabs';
+import Dashboard from './Dashboard';
 
 module.exports = combineReducers({
 	devices: Devices,
 	gateways: Gateways,
 	navigation: Navigation,
 	sensors: Sensors,
-	user: User
+	user: User,
+	tabs: Tabs,
+	dashboard: Dashboard,
 });
