@@ -25,6 +25,6 @@ import React from 'react';
 
 class Push extends React.Component {
 
-}
+};
 
 module.exports = Push;

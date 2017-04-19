@@ -28,21 +28,21 @@ export default class TextComponent extends Base {
 
 	prepareRootProps() {
 
-		let type = {
+		var type = {
 			color: this.getContextForegroundColor(),
 			backgroundColor: 'transparent',
 			fontSize: this.getTheme().fontSizeBase,
-		};
+		}
 
-		let defaultProps = {
+		var defaultProps = {
 			style: type
-		};
+		}
 
 		return computeProps(this.props, defaultProps);
 
 	}
 	render() {
-		return (
+		return(
 			<Text {...this.prepareRootProps()}>{this.props.children}</Text>
 		);
 	}

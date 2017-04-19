@@ -31,10 +31,10 @@ export default class SwitchComponent extends Base {
 			switch: {
 
 			}
-		};
+		}
 	}
 	prepareRootProps() {
-		let defaultProps = {
+		var defaultProps = {
 			style: this.getInitialStyle().switch
 		};
 
@@ -42,7 +42,7 @@ export default class SwitchComponent extends Base {
 	}
 
 	render() {
-		return (
+		return(
 			<Switch {...this.prepareRootProps()}/>
 		);
 	}

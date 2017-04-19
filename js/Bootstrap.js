@@ -27,7 +27,10 @@ import 'intl/locale-data/jsonp/en';
 import React from 'React';
 import { Provider } from 'react-redux';
 
+import { Dimensions } from 'BaseComponents';
+
 import App from 'App';
+import { serverURL } from 'Config';
 import { configureStore } from 'Store';
 import { IntlProvider } from 'react-intl';
 
@@ -53,6 +56,7 @@ function Bootstrap(): React.Component {
 			if (this.state.isLoading) {
 				return null;
 			}
+			const { height, width } = Dimensions.get('window');
 			return (
 				<Provider store={this.state.store}>
 					<IntlProvider locale="en">

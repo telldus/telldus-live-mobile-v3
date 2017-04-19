@@ -28,10 +28,10 @@ import { googleAnalyticsId } from 'Config';
 function track(action: Action): void {
 
 	let clientId = DeviceInfo.getUniqueID();
-	let ga = new Analytics(googleAnalyticsId, clientId, 1, DeviceInfo.getUserAgent());
+	var ga = new Analytics(googleAnalyticsId, clientId, 1, DeviceInfo.getUserAgent());
 
-	if (action.type === 'SWITCH_TAB') {
-		let screenView = new GAHits.ScreenView(
+	if(action.type == 'SWITCH_TAB') {
+		var screenView = new GAHits.ScreenView(
 			'Telldus Live! app',
 			action.tab,
 			DeviceInfo.getVersion(),
@@ -39,7 +39,7 @@ function track(action: Action): void {
 		);
 		ga.send(screenView);
 	} else {
-		let gaEvent = new GAHits.Event('Action', action.type);
+		var gaEvent = new GAHits.Event('Action', action.type);
 		ga.send(gaEvent);
 	}
 }

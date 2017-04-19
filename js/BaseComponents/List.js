@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { ListView, RefreshControl } from 'react-native';
+import { ListView, RefreshControl, View } from 'react-native';
 import SwipeRow from './SwipeRow';
 
 class ListComponent extends React.Component {
@@ -97,7 +97,7 @@ class ListComponent extends React.Component {
 				Component,
 				{
 					...Component.props,
-					ref: row => (this._rows[`${secId}${rowId}`] = row),
+					ref: row => this._rows[`${secId}${rowId}`] = row,
 					onRowOpen: _ => this.onRowOpen(secId, rowId, this._rows),
 					onRowClose: _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows),
 					onRowPress: _ => this.onRowPress(`${secId}${rowId}`),
@@ -108,7 +108,7 @@ class ListComponent extends React.Component {
 			const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
 			return (
 				<SwipeRow
-					ref={row => (this._rows[`${secId}${rowId}`] = row)}
+					ref={row => this._rows[`${secId}${rowId}`] = row}
 					onRowOpen={ _ => this.onRowOpen(secId, rowId, this._rows) }
 					onRowClose={ _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows) }
 					onRowPress={ _ => this.onRowPress(`${secId}${rowId}`) }
@@ -147,7 +147,7 @@ class ListComponent extends React.Component {
 				onScroll={ e => this.onScroll(e) }
 				renderRow={this.renderRow.bind(this)}
 			/>
-		);
+		)
 	}
 
 }
@@ -230,7 +230,7 @@ ListComponent.propTypes = {
 	previewOpenValue: React.PropTypes.number,
 
 	editMode: React.PropTypes.bool,
-};
+}
 
 ListComponent.defaultProps = {
 	onRefresh: null,
@@ -243,6 +243,6 @@ ListComponent.defaultProps = {
 	recalculateHiddenLayout: false,
 	previewFirstRow: false,
 	editMode: false,
-};
+}
 
 export default ListComponent;

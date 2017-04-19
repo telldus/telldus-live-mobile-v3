@@ -17,8 +17,9 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import Color from 'color';
 import { StyleSheet } from 'react-native';
-import Core from './Core';
+import Core from './Core'
 
 const listItemHeight = 56;
 const listItemWidth = 30;

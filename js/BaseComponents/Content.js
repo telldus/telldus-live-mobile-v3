@@ -28,14 +28,14 @@ export default class Content extends Base {
 
 	prepareRootProps() {
 
-		let type = {
+		var type = {
 			backgroundColor: 'transparent',
 			flex: 1
-		};
+		}
 
-		let defaultProps = {
+		var defaultProps = {
 			style: type
-		};
+		}
 
 		return computeProps(this.props, defaultProps);
 	}
@@ -43,7 +43,7 @@ export default class Content extends Base {
 	render() {
 		const contentContainerStyle = this.props.contentContainerStyle || {};
 		contentContainerStyle.padding = (this.props.padder) ? this.getTheme().contentPadding : 0;
-		return (
+		return(
 			<View {...this.prepareRootProps()} contentContainerStyle={contentContainerStyle}>{this.props.children}</View>
 		);
 //		return(

@@ -22,10 +22,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
-import { getGateways } from 'Actions';
+import { Container, Button, Image, List, ListDataSource, ListItem, PropTypes, Text, View } from 'BaseComponents';
+import { getGateways, getWebsocketAddress } from 'Actions';
+
+import GatewayDetailView from '../DetailViews/GatewayDetailView'
 import Theme from 'Theme';
-import GatewayIcons from 'GatewayIcons';
+
+import GatewayIcons from 'GatewayIcons'
+
+import type { Tab } from '../reducers/navigation';
 
 class GatewaysTab extends View {
 
@@ -45,10 +50,10 @@ class GatewaysTab extends View {
 						{item.name ? item.name : '(no name)'} ({item.online})
 					</Text>
 				</ListItem>
-			);
-		} catch (e) {
+			)
+		} catch(e) {
 			console.log(e);
-			return ( <View /> );
+			return ( <View /> )
 		}
 	}
 f

@@ -19,17 +19,17 @@
 
 'use strict';
 
-let LABEL_COLOR = '#ffffff';
-let INPUT_COLOR = '#ffffff';
-let ERROR_COLOR = '#a94442';
-let HELP_COLOR = '#999999';
-let BORDER_COLOR = '#cccccc';
-let DISABLED_COLOR = '#777777';
-let DISABLED_BACKGROUND_COLOR = '#eeeeee';
-let FONT_SIZE = 12;
-let FONT_WEIGHT = '500';
+var LABEL_COLOR = '#ffffff';
+var INPUT_COLOR = '#ffffff';
+var ERROR_COLOR = '#a94442';
+var HELP_COLOR = '#999999';
+var BORDER_COLOR = '#cccccc';
+var DISABLED_COLOR = '#777777';
+var DISABLED_BACKGROUND_COLOR = '#eeeeee';
+var FONT_SIZE = 12;
+var FONT_WEIGHT = '500';
 
-let stylesheet = Object.freeze({
+var stylesheet = Object.freeze({
 	fieldset: {},
 	// the style applied to the container of all inputs
 	formGroup: {
@@ -74,10 +74,13 @@ let stylesheet = Object.freeze({
 		color: ERROR_COLOR
 	},
 	textboxView: {
-		normal: {},
-		error: {},
-		notEditable: {}
-	},
+    	normal: {
+    	},
+    	error: {
+    	},
+    	notEditable: {
+   	 	}
+  	},
 	textbox: {
 		normal: {
 			color: INPUT_COLOR,

@@ -35,23 +35,23 @@ export default class ThumbnailComponent extends Base {
 				height: 30,
 				resizeMode: this.props.contain ? 'contain' : undefined
 			}
-		};
+		}
 	}
 
 	prepareRootProps() {
-		let thumbnailStyle = {};
-		if (this.props.circular) {
+		var thumbnailStyle = {};
+		if(this.props.circular) {
 			thumbnailStyle.width = this.props.size;
 			thumbnailStyle.height = this.props.size;
-			thumbnailStyle.borderRadius = this.props.size / 2;
+			thumbnailStyle.borderRadius = this.props.size/2;
 		}
-		else if (this.props.square) {
+		else if(this.props.square) {
 			thumbnailStyle.width = this.props.size;
 			thumbnailStyle.height = this.props.size;
 			thumbnailStyle.borderRadius = 0;
 		}
 
-		let defaultProps = {
+		var defaultProps = {
 			style: _.merge(this.getInitialStyle().thumbnail, thumbnailStyle)
 		};
 
@@ -59,7 +59,7 @@ export default class ThumbnailComponent extends Base {
 	}
 
 	render() {
-		return (
+		return(
 			<Image {...this.prepareRootProps()}/>
 		);
 	}

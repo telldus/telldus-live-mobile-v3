@@ -22,7 +22,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Text, View } from 'BaseComponents';
+import { Container, Content, Button, Text, View } from 'BaseComponents';
+
+import type { Tab } from '../reducers/navigation';
 
 class GatewayDetailView extends View {
 
