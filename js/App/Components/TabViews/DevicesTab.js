@@ -23,6 +23,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Container, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { DeviceRow } from 'TabViews/SubViews';
+
 import { getDevices, deviceSetState, addToDashboard, removeFromDashboard } from 'Actions';
 import { TouchableOpacity } from 'react-native';
 import DeviceDetailView from '../DetailViews/DeviceDetailView';
@@ -33,8 +35,8 @@ class DevicesTab extends View {
 		return (
 			<List
 				dataSource = {this.props.dataSource}
-				renderHiddenRow = {this._renderHiddenRow.bind(this)}
-				renderRow = {this._renderRow.bind(this)}
+				renderHiddenRow = { this._renderHiddenRow.bind(this) }
+				renderRow = { props => (<DeviceRow {...{ ...props, ...this.props }}/>) }
 				renderSectionHeader = {this._renderSectionHeader.bind(this)}
 				rightOpenValue = {-40}
 				editMode = {this.props.editMode}
@@ -131,9 +133,10 @@ const dataSource = new ListDataSource({
 	sectionHeaderHasChanged : (s1, s2) => s1 !== s2
 });
 
-function _parseDataIntoItemsAndSectionIds(devices, gateways, dashboard) {
-	var items = {};
-	var sectionIds = [];
+function parseDataIntoItemsAndSections(devices, gateways, dashboard) {
+	const items = {};
+	const sectionIds = [];
+
 	if (devices) {
 		devices.map((item) => {
 			var sectionId = item.clientId ? item.clientId : '';
@@ -170,7 +173,7 @@ function _parseDataIntoItemsAndSectionIds(devices, gateways, dashboard) {
 }
 
 function select(store) {
-	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.devices || [], store.gateways || [], store.dashboard);
+	var {items, sectionIds} = parseDataIntoItemsAndSections(store.devices || [], store.gateways || [], store.dashboard);
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
 		gateways: store.gateways,
