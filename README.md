@@ -17,7 +17,6 @@ All commands are assumed to be ran from project root.
 - install local deps: `npm i`
 - install global deps: `npm install -g react-native-cli`
 
-
 ### iOS
 
 - install cacao pods cli: `brew install Caskroom/cask/cocoapods-app`
@@ -25,6 +24,8 @@ All commands are assumed to be ran from project root.
 - install Xcode via [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
 
 ### Android
+
+- setup Android development environment via this [React Native Official](https://facebook.github.io/react-native/releases/0.23/docs/android-setup.html)
 
 ## Development
 
@@ -65,6 +66,7 @@ module.exports = {
 
 ### Android
 
+- `react-native run-android`
 
 ## Split dependencies
 
