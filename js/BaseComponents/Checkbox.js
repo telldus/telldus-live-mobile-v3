@@ -22,7 +22,7 @@
 import React from 'react';
 import { View, Platform } from 'react-native';
 import Base from './Base';
-import Icon from "./Icon";
+import Icon from './Icon';
 
 export default class CheckBox extends Base {
 
@@ -39,13 +39,13 @@ export default class CheckBox extends Base {
 				borderColor: this.getTheme().checkboxBgColor,
 				backgroundColor: this.props.checked ? this.getTheme().checkboxBgColor : 'transparent'
 			}
-		}
+		};
 	}
 
 	render() {
-		return(
+		return (
 			<View style={this.getInitialStyle().checkbox}>
-				<Icon name={(Platform.OS === 'ios') ? "ios-checkmark-outline" : "md-checkmark"} style={{color:  this.props.checked ?  this.getTheme().checkboxTickColor : "transparent", lineHeight: (Platform.OS === 'ios') ? this.getTheme().checkboxSize/0.93 : this.getTheme().checkboxSize-5, marginTop: (Platform.OS==='ios') ? undefined : 1, fontSize: (Platform.OS === 'ios') ? this.getTheme().checkboxSize/0.8 : this.getTheme().checkboxSize/1.2}} />
+				<Icon name={(Platform.OS === 'ios') ? 'ios-checkmark-outline' : 'md-checkmark'} style={{color:  this.props.checked ?  this.getTheme().checkboxTickColor : 'transparent', lineHeight: (Platform.OS === 'ios') ? this.getTheme().checkboxSize / 0.93 : this.getTheme().checkboxSize - 5, marginTop: (Platform.OS === 'ios') ? undefined : 1, fontSize: (Platform.OS === 'ios') ? this.getTheme().checkboxSize / 0.8 : this.getTheme().checkboxSize / 1.2}} />
 			</View>
 		);
 	}

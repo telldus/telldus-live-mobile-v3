@@ -19,15 +19,16 @@
 
 'use strict';
 
-import React, { PropTypes } from 'React';
-import { connect } from 'react-redux';
-import { View } from 'BaseComponents';
+import React from 'React';
 import uuid from 'react-native-uuid';
+
+import type { Action } from './types';
 
 class WebsocketManager extends React.Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
+
 		this.state = {
 			session: {
 				id: '',
@@ -47,10 +48,10 @@ class WebsocketManager extends React.Component {
 	_checkWebSocketConnections() {
 		this._checkSessionId()
 		.then(() => {
-			store.dispatch({
+			this.props.dispatch({
 				type: 'WEBSOCKET_WATCHDOG',
 				payload: this.state.session.id
-			})
+			});
 		})
 		.catch((e) => {
 			console.log(e);
@@ -59,14 +60,14 @@ class WebsocketManager extends React.Component {
 
 	async _checkSessionId(): Promise<Action> {
 		return new Promise((resolve, reject) => {
-			if (this.state.session.authenticationRequested == true) {
-				reject("Session authentication already requested!");
+			if (this.state.session.authenticationRequested === true) {
+				reject('Session authentication already requested!');
 			} else {
-				if (this.state.session.id == '') {
+				if (this.state.session.id === '') {
 					this.state.session.id = uuid.v4();
 				}
-				if (this.state.session.authenticated == true) {
-					resolve()
+				if (this.state.session.authenticated === true) {
+					resolve();
 				} else {
 					this.state.session.authenticationRequested = true;
 					const payload = {
@@ -75,18 +76,18 @@ class WebsocketManager extends React.Component {
 							method: 'GET'
 						}
 					};
-					store.dispatch({
+					this.props.dispatch({
 						type: 'LIVE_API_CALL',
 						returnType: 'RECEIVED_AUTHENTICATE_SESSION_RESPONSE',
 						payload: payload,
 						callback: (authenticateSessionResponse) => {
 							this.state.session.authenticationRequested = false;
-							if (authenticateSessionResponse.status && authenticateSessionResponse.status == 'success') {
+							if (authenticateSessionResponse.status && authenticateSessionResponse.status === 'success') {
 								this.state.session.authenticated = true;
 								resolve();
 							} else {
 								this.state.session.authenticated = false;
-								reject("Session failed to authenticate!");
+								reject('Session failed to authenticate!');
 							}
 						}
 					});
@@ -99,6 +100,6 @@ class WebsocketManager extends React.Component {
 		return null;
 	}
 
-};
+}
 
 module.exports = WebsocketManager;

@@ -23,7 +23,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { List, ListDataSource, View } from 'BaseComponents';
-
 import { DeviceDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
 class DashboardTab extends View {

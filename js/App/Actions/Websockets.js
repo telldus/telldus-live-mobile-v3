@@ -19,7 +19,7 @@
 
 'use strict';
 
-import type { Action, ThunkAction } from './types';
+import type { Action } from './types';
 
 async function authoriseWebsocket(gatewayId, sessionId): Promise<Action> {
 	return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ async function authoriseWebsocket(gatewayId, sessionId): Promise<Action> {
 				gatewayId: gatewayId,
 				message: `{"module":"auth","action":"auth","data":{"sessionid":"${sessionId}","clientId":"${gatewayId}"}}`
 			});
-		} catch(e) {
+		} catch (e) {
 			reject({
 				type: 'ERROR',
 				message: e
@@ -47,7 +47,7 @@ async function addWebsocketFilter(gatewayId, module, action): Promise<Action> {
 				gatewayId: gatewayId,
 				message: `{"module":"filter","action":"accept","data":{"module":"${module}","action":"${action}"}}`
 			});
-		} catch(e) {
+		} catch (e) {
 			reject({
 				type: 'ERROR',
 				message: e
