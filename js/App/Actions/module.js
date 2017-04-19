@@ -27,6 +27,8 @@ import LoginActions from './Login';
 import NavigationActions from './Navigation';
 import SensorActions from './Sensors';
 import WebsocketActions from './Websockets';
+import TabActions from './Tabs';
+import DashboardActions from './Dashboard';
 
 module.exports = {
 	...DeviceActions,
@@ -35,4 +37,6 @@ module.exports = {
 	...NavigationActions,
 	...SensorActions,
 	...WebsocketActions,
+	...TabActions,
+	...DashboardActions,
 };

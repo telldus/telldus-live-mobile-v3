@@ -2,29 +2,30 @@
     package="com.telldus.live.mobile"
     android:versionCode="1"
     android:versionName="1.0">
+
 	<permission
 		android:name="com.telldus.live.mobile.permission.C2D_MESSAGE"
 		android:protectionLevel="signature" />
-	<uses-permission android:name="com.telldus.live.mobile.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.telldus.live.mobile.permission.C2D_MESSAGE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
-  <uses-sdk
-		android:minSdkVersion="16"
-		android:targetSdkVersion="23" />
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="24" />
 
-	<application
-		android:name=".MainApplication"
-		android:allowBackup="true"
-		android:label="@string/app_name"
-		android:icon="@mipmap/ic_launcher"
-		android:theme="@style/AppTheme">
-		<service android:name="com.evollu.react.fcm.MessagingService">
-			<intent-filter>
+    <application
+      android:name=".MainApplication"
+      android:allowBackup="true"
+      android:label="@string/app_name"
+      android:icon="@mipmap/ic_launcher"
+      android:theme="@style/AppTheme">
+	    <service android:name="com.evollu.react.fcm.MessagingService">
+		    <intent-filter>
 				<action android:name="com.google.firebase.MESSAGING_EVENT"/>
 			</intent-filter>
 		</service>
@@ -34,23 +35,22 @@
 			</intent-filter>
 		</service>
 
-		<activity
-			android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
 			android:launchMode="singleTop"
-			android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-			android:label="@string/app_name"
-		>
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-			<intent-filter>
+			android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
+            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
 				<action android:name="fcm.ACTION.HELLO" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
-		</activity>
-		<activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-	</application>
-
+      </activity>
+      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+    </application>
 
 </manifest>

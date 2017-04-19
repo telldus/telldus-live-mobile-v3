@@ -6,16 +6,13 @@ import React, {
 } from 'react';
 import {
 	Animated,
-	PanResponder,
-	Platform,
 	StyleSheet,
 	TouchableOpacity,
 	View
 } from 'react-native';
 
 const DIRECTIONAL_DISTANCE_CHANGE_THRESHOLD = 2;
-const PREVIEW_OPEN_DELAY = 700;
-const PREVIEW_CLOSE_DELAY = 300;
+const SLIDE_DELAY = 300;
 
 /**
  * Row that is generally used in a SwipeListView.
@@ -43,20 +40,17 @@ class SwipeRow extends Component {
 		};
 	}
 
-	componentWillMount() {
-		this._panResponder = PanResponder.create({
-			onMoveShouldSetPanResponder: (e, gs) => this.handleOnMoveShouldSetPanResponder(e, gs),
-			onPanResponderMove: (e, gs) => this.handlePanResponderMove(e, gs),
-			onPanResponderRelease: (e, gs) => this.handlePanResponderEnd(e, gs),
-			onPanResponderTerminate: (e, gs) => this.handlePanResponderEnd(e, gs),
-			onShouldBlockNativeResponder: _ => false,
-		});
-	}
-
 	getPreviewAnimation(toValue, delay) {
 		return Animated.timing(
 			this.state.translateX,
 			{ duration: this.props.previewDuration, toValue, delay }
+		);
+	}
+
+	getSlideAnimation(toValue, delay) {
+		return Animated.timing(
+			this.state.translateX,
+			{ duration: this.props.slideDuration, toValue, delay }
 		);
 	}
 
@@ -67,14 +61,15 @@ class SwipeRow extends Component {
 			hiddenWidth: e.nativeEvent.layout.width,
 		});
 
-		if (this.props.preview && !this.ranPreview) {
-			this.ranPreview = true;
-			let previewOpenValue = this.props.previewOpenValue || this.props.rightOpenValue * 0.5;
-			this.getPreviewAnimation(previewOpenValue, PREVIEW_OPEN_DELAY)
-			.start( _ => {
-				this.getPreviewAnimation(0, PREVIEW_CLOSE_DELAY).start();
-			});
-		}
+		// Disable preview animation
+		// if (this.props.preview && !this.ranPreview) {
+		// 	this.ranPreview = true;
+		// 	let previewOpenValue = this.props.previewOpenValue || this.props.rightOpenValue * 0.5;
+		// 	this.getPreviewAnimation(previewOpenValue, PREVIEW_OPEN_DELAY)
+		// 	.start( _ => {
+		// 		this.getPreviewAnimation(0, PREVIEW_CLOSE_DELAY).start();
+		// 	});
+		// }
 	}
 
 	onRowPress() {
@@ -149,7 +144,7 @@ class SwipeRow extends Component {
 			// trying to open left
 			if (this.state.translateX._value < this.props.rightOpenValue / 2) {
 				// we're more than halfway
-				toValue = this.props.rightOpenValue
+				toValue = this.props.rightOpenValue;
 			}
 		}
 
@@ -191,7 +186,7 @@ class SwipeRow extends Component {
 			const newOnPress = _ => {
 				this.onRowPress();
 				onPress();
-			}
+			};
 			return React.cloneElement(
 				this.props.children[1],
 				{
@@ -208,17 +203,25 @@ class SwipeRow extends Component {
 			>
 				{this.props.children[1]}
 			</TouchableOpacity>
-		)
+		);
 
 	}
 
 	renderRowContent() {
 		// We do this annoying if statement for performance.
 		// We don't want the onLayout func to run after it runs once.
-		if (this.state.dimensionsSet) {
+
+		// Only run animation when dimensions are not set (component is not mounted) or row's position is not match with editMode
+		const runAnimation = !this.state.dimensionsSet ||
+			!(this.state.translateX === 0 && this.props.editMode === false) ||
+			!(this.state.translateX !== 0 && this.props.editMode === true);
+
+		if (runAnimation) {
+			let slideOpenValue = this.props.editMode ? this.props.rightOpenValue : 0;
+			this.getSlideAnimation(slideOpenValue, SLIDE_DELAY).start();
 			return (
 				<Animated.View
-					{...this._panResponder.panHandlers}
+					onLayout={ (e) => this.onContentLayout(e) }
 					style={{
 						transform: [
 							{translateX: this.state.translateX}
@@ -231,8 +234,6 @@ class SwipeRow extends Component {
 		} else {
 			return (
 				<Animated.View
-					{...this._panResponder.panHandlers}
-					onLayout={ (e) => this.onContentLayout(e) }
 					style={{
 						transform: [
 							{translateX: this.state.translateX}
@@ -342,7 +343,10 @@ SwipeRow.propTypes = {
 	 * TranslateX value for the slide out preview animation
 	 * Default: 0.5 * props.rightOpenValue
 	 */
-	previewOpenValue: PropTypes.number
+	previewOpenValue: PropTypes.number,
+
+	editMode: PropTypes.bool,
+	slideDuration: PropTypes.number,
 };
 
 SwipeRow.defaultProps = {
@@ -353,7 +357,9 @@ SwipeRow.defaultProps = {
 	disableRightSwipe: false,
 	recalculateHiddenLayout: false,
 	preview: false,
-	previewDuration: 300
+	previewDuration: 300,
+	editMode: false,
+	slideDuration: 300,
 };
 
 export default SwipeRow;

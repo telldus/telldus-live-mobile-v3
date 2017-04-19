@@ -36,34 +36,29 @@ import {
 	View
 } from 'BaseComponents';
 
-import { switchTab } from 'Actions';
+import { switchTab, toggleEditMode } from 'Actions';
 import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
 import Theme from 'Theme';
 
 class TabsView extends View {
-
-	props: {
-		tab: Tab;
-		onTabSelect: (tab: Tab) => void;
-	};
-
 	constructor(props) {
 		super(props);
 	}
 
 	componentDidMount() {
 		Icon.getImageSource('user', 22, 'white').then((source) => this.setState({ userIcon: source }));
+		Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
 	}
 
-	onTabSelect(tab: Tab) {
+	onTabSelect(tab) {
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
 		}
 	}
 
 	render() {
-		if (!this.state || !this.state.userIcon) {
+		if (!this.state || !this.state.userIcon || !this.state.starIcon) {
 			return false;
 		}
 		return (
@@ -109,6 +104,8 @@ class TabsView extends View {
 						initialRoute = {{
 							title: I18n.t('pages.sensors'),
 							component: TabViews.Sensors,
+							rightButtonIcon: this.state.starIcon,
+							onRightButtonPress: this._toggleSensorTabEditMode.bind(this)
 						}}
 					/>
 				</TabBarIOS.Item>
@@ -152,6 +149,9 @@ class TabsView extends View {
 		});
 	}
 
+	_toggleSensorTabEditMode() {
+		this.props.onToggleEditMode('sensorsTab');
+	}
 }
 
 var styles = StyleSheet.create({
@@ -164,13 +164,14 @@ function select(store) {
 	return {
 		tab: store.navigation.tab,
 		userIcon: false,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""},
 	};
 }
 
 function actions(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
+		onToggleEditMode : (tab) => dispatch(toggleEditMode(tab)),
 		dispatch
 	};
 }
