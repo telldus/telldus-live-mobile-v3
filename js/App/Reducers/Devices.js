@@ -19,14 +19,10 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
-
-export type State = ?object;
-
 const initialState = [];
 const deviceInitialState = {};
 
-function device(state: State = deviceInitialState, action: Action): State {
+function device(state = deviceInitialState, action) {
 	switch (action.type) {
 		case 'RECEIVED_DEVICES':
 			var newDevice = {
@@ -51,7 +47,7 @@ function device(state: State = deviceInitialState, action: Action): State {
 	}
 }
 
-function devices(state: State = initialState, action: Action): State {
+function devices(state = initialState, action) {
 	if (action.type === 'RECEIVED_DEVICES') {
 		return action.payload.device.map(deviceState =>
 			device(deviceState, action)
@@ -62,6 +58,19 @@ function devices(state: State = initialState, action: Action): State {
 			...initialState
 		};
 	}
+
+	if (action.type === 'SET_DEVICE_STATE') {
+		const devicesState = state.map(deviceState => {
+			if (deviceState.id === action.deviceId) {
+				deviceState.state = action.state;
+			}
+			return deviceState;
+
+		});
+
+		return devicesState;
+	}
+
 	return state;
 }
 
