@@ -22,12 +22,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Container, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
-import { DeviceRow } from 'TabViews/SubViews';
+import { List, ListDataSource, Text, View } from 'BaseComponents';
+import { DeviceRow, DeviceRowHidden } from 'TabViews/SubViews';
 
-import { getDevices, deviceSetState, addToDashboard, removeFromDashboard } from 'Actions';
-import { TouchableOpacity } from 'react-native';
-import DeviceDetailView from '../DetailViews/DeviceDetailView';
+import { getDevices, addToDashboard, removeFromDashboard } from 'Actions';
 import Theme from 'Theme';
 
 class DevicesTab extends View {
@@ -35,7 +33,7 @@ class DevicesTab extends View {
 		return (
 			<List
 				dataSource = {this.props.dataSource}
-				renderHiddenRow = { this._renderHiddenRow.bind(this) }
+				renderHiddenRow = { props => (<DeviceRowHidden {...{ ...props, ...this.props }}/>)  }
 				renderRow = { props => (<DeviceRow {...{ ...props, ...this.props }}/>) }
 				renderSectionHeader = {this._renderSectionHeader.bind(this)}
 				rightOpenValue = {-40}
@@ -44,28 +42,6 @@ class DevicesTab extends View {
 					this.props.dispatch(getDevices())
 				}
 			/>
-		);
-	}
-
-	onStarSelected(item) {
-		if (item.inDashboard) {
-			this.props.removeFromDashboard(item.id);
-		} else {
-			this.props.addToDashboard(item.id);
-		}
-	}
-
-	_renderHiddenRow(data) {
-		let inDashboard = (data.inDashboard === true);
-
-		return (
-			<View style={Theme.Styles.rowBack}>
-				<TouchableOpacity
-					style={Theme.Styles.rowBackButton}
-					onPress={this.onStarSelected.bind(this, data)} >
-					<Icon name="star" size={26} color={inDashboard ? 'yellow' : 'white'}/>
-				</TouchableOpacity>
-			</View>
 		);
 	}
 
@@ -78,49 +54,6 @@ class DevicesTab extends View {
 				</Text>
 			</View>
 		);
-	}
-
-	_renderRow(item) {
-		try {
-			return (
-				<ListItem style = { Theme.Styles.rowFront }>
-					<Container style = {{ marginLeft: 4, flexDirection: 'row'}}>
-							<Button
-								name = { 'toggle-on' }
-								style = {{ padding: 6}}
-								color = {'blue'}
-								size = {30}
-								backgroundColor = {'transparent'}
-								onPress={ () => this.props.dispatch(deviceSetState(item.id, 1)) }
-							/>
-							<View style={{flex:10, justifyContent: 'center', }}>
-								<Text style = {{
-									marginLeft: 8,
-									color: 'rgba(0,0,0,0.87)',
-									fontSize: 16,
-									opacity: item.name ? 1 : 0.5,
-									textAlignVertical: 'center',
-								}}>
-									{item.name ? item.name : '(no name)'}
-								</Text>
-							</View>
-							<View style={{flex:1, justifyContent: 'center', alignItems:'center'}}>
-								<Icon
-									name="arrow-right"
-									onPress={ () => this.props.navigator.push({
-										component: DeviceDetailView,
-										title: item.name,
-										passProps: { device: item }
-									})}
-								/>
-							</View>
-					</Container>
-				</ListItem>
-			);
-		} catch(e) {
-			console.log(e);
-			return ( <View /> );
-		}
 	}
 }
 
