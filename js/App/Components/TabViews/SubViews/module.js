@@ -22,15 +22,21 @@
 'use strict';
 
 import DeviceDashboardTile from './DeviceDashboardTile';
-import DeviceRow from './DeviceRow';
-import DeviceRowHidden from './DeviceRowHidden';
+import ListHeader from './ListHeader';
 import SensorDashboardTile from './SensorDashboardTile';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
+import DeviceRow from './DeviceRow';
+import DeviceRowHidden from './DeviceRowHidden';
+import SensorRow from './SensorRow';
+import SensorRowHidden from './SensorRowHidden';
 
 module.exports = {
 	DeviceRow: DeviceRow,
 	DeviceRowHidden: DeviceRowHidden,
 	DeviceDashboardTile: DeviceDashboardTile,
+	ListHeader: ListHeader,
 	SensorDashboardTile: SensorDashboardTile,
-	SensorDashboardTileSlide: SensorDashboardTileSlide
+	SensorDashboardTileSlide: SensorDashboardTileSlide,
+	SensorRow: SensorRow,
+	SensorRowHidden: SensorRowHidden,
 };

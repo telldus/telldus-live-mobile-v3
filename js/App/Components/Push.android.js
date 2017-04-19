@@ -27,10 +27,10 @@ import FCM from 'react-native-fcm';
 class Push extends React.Component {
 
 	constructor() {
-		super()
+		super();
 		//FCM.requestPermissions();
 		FCM.getFCMToken().then(token => {
-			console.log("Push Token", token)
+			console.log('Push Token', token);
 			// store fcm token in your server
 		});
 		this.notificationUnsubscribe = FCM.on('notification', (notif) => {
@@ -39,7 +39,7 @@ class Push extends React.Component {
 			}
 		});
 		this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
-			console.log("Push Refresh Token", token)
+			console.log('Push Refresh Token', token);
 		});
 	}
 
@@ -52,6 +52,6 @@ class Push extends React.Component {
 		return null;
 	}
 
-};
+}
 
 module.exports = Push;

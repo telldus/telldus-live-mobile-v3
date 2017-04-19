@@ -48,7 +48,7 @@ class DeviceDashboardTile extends View {
 				<View style={{
 					width: tileWidth,
 					height: tileDetailsHeight
-				}}></View>
+				}} />
 				<View style={{
 					width: tileWidth,
 					height: tileTitleHeight,
@@ -69,7 +69,7 @@ class DeviceDashboardTile extends View {
 					</Text>
 				</View>
 			</Image>
-		)
+		);
 	}
 
 }

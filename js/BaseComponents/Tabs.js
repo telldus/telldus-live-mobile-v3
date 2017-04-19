@@ -31,12 +31,12 @@ export default class TabComponent extends Base {
 			tab: {
 				flex: 1
 			}
-		}
+		};
 	}
 
 	prepareRootProps() {
 
-		var defaultProps = {
+		let defaultProps = {
 			style: this.getInitialStyle().tab
 		};
 
@@ -45,10 +45,10 @@ export default class TabComponent extends Base {
 	}
 
 	render() {
-		return(
-		  <ScrollableTabView {...this.prepareRootProps()} >
-			  {this.props.children}
-		  </ScrollableTabView>
+		return (
+			<ScrollableTabView {...this.prepareRootProps()} >
+				{this.props.children}
+			</ScrollableTabView>
 		);
 	}
 

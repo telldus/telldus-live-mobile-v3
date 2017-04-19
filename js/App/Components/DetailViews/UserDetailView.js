@@ -23,8 +23,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-	Container,
-	Content,
 	Button,
 	Gravatar,
 	Text,

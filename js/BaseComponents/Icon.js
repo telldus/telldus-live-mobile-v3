@@ -19,7 +19,6 @@
 
 'use strict';
 
-import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class IconComponent extends Icon {

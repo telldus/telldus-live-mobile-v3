@@ -47,11 +47,11 @@ export default class Base extends Component {
 	}
 
 	getContextForegroundColor() {
-		return this.context.foregroundColor
+		return this.context.foregroundColor;
 	}
 
 	getTheme() {
-		return this.props.theme ? this.props.theme : this.context.theme || Theme.Core
+		return this.props.theme ? this.props.theme : this.context.theme || Theme.Core;
 	}
 
 }
