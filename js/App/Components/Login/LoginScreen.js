@@ -26,19 +26,17 @@ import Dimensions from 'Dimensions';
 import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
 
-import { Button, Container, Content, H1, Icon, Text, View } from 'BaseComponents';
-import { getAccessToken, loginToTelldus, switchTab } from 'Actions';
-import { apiServer, publicKey, privateKey, testUsername, testPassword } from 'Config';
+import { Button, H1, View } from 'BaseComponents';
+import { loginToTelldus } from 'Actions';
+import { apiServer, testUsername, testPassword } from 'Config';
 
 import Image from 'Image';
 import StyleSheet from 'StyleSheet';
 import StatusBar from 'StatusBar';
 import Theme from 'Theme';
 
-import {stylesheet} from 'tcomb-form-native/lib/stylesheets/bootstrap';
-
-var Form = Forms.form.Form;
-var LoginDetails = Forms.struct({
+let Form = Forms.form.Form;
+let LoginDetails = Forms.struct({
 	username: Forms.String,
 	password: Forms.String,
 });
@@ -89,13 +87,13 @@ class LoginScreen extends View {
 					<View style = {{
 						minWidth: 425,
 						padding: 10,
-						backgroundColor: "#00000099",
+						backgroundColor: '#00000099',
 						flexDirection: 'column',
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
 						<View style = {{ height:20 }} />
-						<H1 style = {{ marginBottom: 20, color: "#fff" }}>
+						<H1 style = {{ marginBottom: 20, color: '#fff' }}>
 							Login
 						</H1>
 						<Form
@@ -109,20 +107,20 @@ class LoginScreen extends View {
 									username: {
 										autoCapitalize: 'none',
 										autoCorrect: false,
-										placeholderTextColor: "#ffffff80"
+										placeholderTextColor: '#ffffff80'
 									},
 									password: {
 										secureTextEntry: true,
 										autoCapitalize: 'none',
 										autoCorrect: false,
-										placeholderTextColor: "#ffffff80"
+										placeholderTextColor: '#ffffff80'
 									}
 								}
 							}}
 						/>
 						<View style = {{ height:20 }} />
 						<Button
-							name = { apiServer == 'https://api.telldus.com' ? 'lock' : 'exclamation-circle' }
+							name = { apiServer === 'https://api.telldus.com' ? 'lock' : 'exclamation-circle' }
 							backgroundColor = { this.getTheme().btnPrimaryBg }
 							style = {{ padding: 6, minWidth: 100 }}
 							onPress={ () => this.logIn() }
@@ -132,7 +130,7 @@ class LoginScreen extends View {
 					<View style = {{  }} />
 				</View>
 			</View>
-		)
+		);
 	}
 
 	async logIn() {
@@ -141,8 +139,8 @@ class LoginScreen extends View {
 
 		await new Promise((resolve, reject) => {
 			loginToTelldus(this.refs.loginForm.getValue().username, this.refs.loginForm.getValue().password)
-				.then(function(response) { resolve(response) })
-				.catch(function(e) { reject(new Error('Failed login')) });
+				.then(function(response) { resolve(response); })
+				.catch(function(e) { reject(new Error('Failed login')); });
 			setTimeout(() => reject(new Error('Timed out')), 3000);
 		})
 		.then(function(response) { dispatch(response); })
@@ -152,7 +150,7 @@ class LoginScreen extends View {
 	}
 }
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
 	backgroundImage: {
 		flex: 1,
 		backgroundColor: 'transparent',

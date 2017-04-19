@@ -19,29 +19,31 @@
 
 'use strict';
 
-import React from 'react';
-import { connect } from 'react-redux';
 import { apiServer, publicKey, privateKey, refreshToken } from 'Config';
-import { updateAccessToken, logoutFromTelldus } from 'Actions';
+import { updateAccessToken } from 'Actions';
+
+import type { Action } from './types';
 
 export default function (store) {
 	return next => action => {
-		if (action.type == 'LIVE_API_CALL') {
+		if (action.type === 'LIVE_API_CALL') {
 			call(store, action.payload.url, action.payload.requestParams)
 			.then((response) => {
-				if(action.callback) {
-					var callbackResponse = action.callback.call(callbackResponse, response);
+				let _response;
+				if (action.callback) {
+					// TODO: nothing happens with callbackResponse
+					let callbackResponse = action.callback.call(callbackResponse, response);
 				}
-				if(action.returnPayload) {
-					var response = Object.assign({}, response, action.returnPayload);
+				if (action.returnPayload) {
+					_response = Object.assign({}, response, action.returnPayload);
 				}
 				return next({
 					type: action.returnType,
-					payload: response
+					payload: _response
 				});
 			})
 			.catch(function (e) {
-				if (e.type && e.type == 'LIVE_API_FATAL_ERROR') {
+				if (e.type && e.type === 'LIVE_API_FATAL_ERROR') {
 					return next({ type: 'LOGGED_OUT', payload: e.payload || {} });
 				}
 				return next(e);
@@ -49,18 +51,18 @@ export default function (store) {
 		} else {
 			return next(action);
 		}
-	}
+	};
 }
 
 async function call(store, url, requestParams): Promise<Action> {
-	var accessToken = store.getState().user.accessToken;
+	let accessToken = store.getState().user.accessToken;
 	if (refreshToken) {
 		accessToken = {
 			access_token: 'blahblah',
 			refresh_token: refreshToken
-		}
+		};
 	}
-	var params = Object.assign({}, requestParams, {
+	let params = Object.assign({}, requestParams, {
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
@@ -68,6 +70,7 @@ async function call(store, url, requestParams): Promise<Action> {
 		}
 	});
 	return new Promise((resolve, reject) => {
+		// TODO: resolve callback hell
 		fetch( `${apiServer}/oauth2${url}`, params)
 		.then((response) => response.text())
 		.then((text) => JSON.parse(text))
@@ -92,29 +95,29 @@ async function call(store, url, requestParams): Promise<Action> {
 						}
 					)
 					.then((response) => response.json())
-					.then((responseData) => {
-						if (responseData.error) {
+					.then((_responseData) => {
+						if (_responseData.error) {
 							// We couldn't get a new access token with the refresh_token, so we logout the user.
-							reject({ type: 'LIVE_API_FATAL_ERROR', payload: responseData });
+							reject({ type: 'LIVE_API_FATAL_ERROR', payload: _responseData });
 						}
-						store.dispatch(updateAccessToken(responseData));
-						var params = Object.assign({}, requestParams, {
+						store.dispatch(updateAccessToken(_responseData));
+						let _params = Object.assign({}, requestParams, {
 							headers: {
 								'Accept': 'application/json',
 								'Content-Type': 'application/json',
-								'Authorization': 'Bearer ' + responseData.access_token
+								'Authorization': 'Bearer ' + _responseData.access_token
 							}
 						});
-						fetch(`${apiServer}/oauth2${url}`, params)
+						fetch(`${apiServer}/oauth2${url}`, _params)
 						.then((response) => response.text())
 						.then((text) => JSON.parse(text))
-						.then((responseData) => {
-							if (responseData.error) {
+						.then((__responseData) => {
+							if (__responseData.error) {
 								// It's unlikely we will get here for token issues, but it's an error so we'll reject the call.
-								reject({ type: 'LIVE_API_CALL_ERROR', debug_code: 0x005, payload: responseData });
+								reject({ type: 'LIVE_API_CALL_ERROR', debug_code: 0x005, payload: __responseData });
 							}
 							// All is well after the token was refreshed and the API call was retried, so return the data from the API.
-							resolve(responseData);
+							resolve(__responseData);
 						})
 						.catch(function (e) {
 							// Something went wrong on the transport side of things with the retried API call.

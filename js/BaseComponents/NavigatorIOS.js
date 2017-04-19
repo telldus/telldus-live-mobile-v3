@@ -19,7 +19,6 @@
 
 'use strict';
 
-import React from 'react';
 import { NavigatorIOS } from 'react-native';
 import Theme from 'Theme';
 
@@ -34,6 +33,6 @@ NavigatorIOSComponent.defaultProps = {
 	style: {
 		flex: 1
 	}
-}
+};
 
 export default NavigatorIOSComponent;

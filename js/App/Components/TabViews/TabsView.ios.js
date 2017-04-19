@@ -37,7 +37,6 @@ import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
 
 class TabsView extends View {
-
 	constructor(props) {
 		super(props);
 	}
@@ -160,8 +159,7 @@ function select(store) {
 	return {
 		tab: store.navigation.tab,
 		userIcon: false,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
-		store: store,
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''}
 	};
 }
 

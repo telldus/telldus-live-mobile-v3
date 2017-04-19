@@ -19,29 +19,30 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
-import DeviceInfo from 'react-native-device-info';
+import React from 'react';
+import { View, Icon } from 'BaseComponents';
+import { TouchableOpacity } from 'react-native';
 
-import { Analytics, Hits as GAHits } from 'react-native-google-analytics';
-import { googleAnalyticsId } from 'Config';
+import Theme from 'Theme';
 
-function track(action: Action): void {
-
-	let clientId = DeviceInfo.getUniqueID();
-	let ga = new Analytics(googleAnalyticsId, clientId, 1, DeviceInfo.getUserAgent());
-
-	if (action.type === 'SWITCH_TAB') {
-		let screenView = new GAHits.ScreenView(
-			'Telldus Live! app',
-			action.tab,
-			DeviceInfo.getVersion(),
-			DeviceInfo.getBundleId()
+module.exports = class SensorRow extends View {
+	render() {
+		return (
+			<View style={Theme.Styles.rowBack}>
+				<TouchableOpacity
+					style={Theme.Styles.rowBackButton}
+					onPress={this.onStarSelected.bind(this, this.props)} >
+					<Icon name="star" size={26} color={this.props.inDashboard ? 'yellow' : 'white'}/>
+				</TouchableOpacity>
+			</View>
 		);
-		ga.send(screenView);
-	} else {
-		let gaEvent = new GAHits.Event('Action', action.type);
-		ga.send(gaEvent);
-	}
-}
+    }
 
-module.exports = track;
+	onStarSelected(item) {
+		if (item.inDashboard) {
+			this.props.removeFromDashboard(item.id);
+		} else {
+			this.props.addToDashboard(item.id);
+		}
+	}
+};

@@ -19,29 +19,20 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
-import DeviceInfo from 'react-native-device-info';
+import React from 'react';
+import { View, Text } from 'BaseComponents';
 
-import { Analytics, Hits as GAHits } from 'react-native-google-analytics';
-import { googleAnalyticsId } from 'Config';
+import Theme from 'Theme';
 
-function track(action: Action): void {
-
-	let clientId = DeviceInfo.getUniqueID();
-	let ga = new Analytics(googleAnalyticsId, clientId, 1, DeviceInfo.getUserAgent());
-
-	if (action.type === 'SWITCH_TAB') {
-		let screenView = new GAHits.ScreenView(
-			'Telldus Live! app',
-			action.tab,
-			DeviceInfo.getVersion(),
-			DeviceInfo.getBundleId()
+module.exports = class ListHeader extends View {
+	render() {
+		const gateway = this.props.gateways.find(_gateway => _gateway.id === this.props.sectionId);
+		return (
+			<View style = { Theme.Styles.sectionHeader }>
+				<Text style = { Theme.Styles.sectionHeaderText }>
+					{(gateway && gateway.name) ? gateway.name : ''}
+				</Text>
+			</View>
 		);
-		ga.send(screenView);
-	} else {
-		let gaEvent = new GAHits.Event('Action', action.type);
-		ga.send(gaEvent);
-	}
-}
-
-module.exports = track;
+    }
+};

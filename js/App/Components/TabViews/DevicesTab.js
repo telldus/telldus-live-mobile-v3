@@ -55,6 +55,7 @@ class DevicesTab extends View {
 			</View>
 		);
 	}
+
 }
 
 DevicesTab.propTypes = {
@@ -72,7 +73,7 @@ function parseDataIntoItemsAndSections(devices, gateways, dashboard) {
 
 	if (devices) {
 		devices.map((item) => {
-			var sectionId = item.clientId ? item.clientId : '';
+			let sectionId = item.clientId ? item.clientId : '';
 			if (sectionIds.indexOf(sectionId) === -1) {
 				sectionIds.push(sectionId);
 				items[sectionId] = [];
@@ -106,7 +107,7 @@ function parseDataIntoItemsAndSections(devices, gateways, dashboard) {
 }
 
 function select(store) {
-	var {items, sectionIds} = parseDataIntoItemsAndSections(store.devices || [], store.gateways || [], store.dashboard);
+	const {items, sectionIds} = parseDataIntoItemsAndSections(store.devices || [], store.gateways || [], store.dashboard);
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
 		gateways: store.gateways,

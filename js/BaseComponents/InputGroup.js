@@ -71,61 +71,61 @@ export default class InputGroup extends Base {
 				borderWidth: this.getTheme().borderWidth,
 				borderRadius: 30
 			}
-		}
+		};
 	}
 
 	prepareRootProps() {
 
-		var type = {
-			paddingLeft:  (this.props.borderType === 'rounded' && !this.props.children.type == Icon) ? 15 :
-			(this.props.children.type == Icon ) ? this.getTheme().inputPaddingLeftIcon : 5
-		}
+		let type = {
+			paddingLeft:  (this.props.borderType === 'rounded' && !this.props.children.type === Icon) ? 15 :
+			(this.props.children.type === Icon ) ? this.getTheme().inputPaddingLeftIcon : 5
+		};
 
-		var defaultStyle = (this.props.borderType === 'regular') ? this.getInitialStyle().bordered : (this.props.borderType === 'rounded') ? this.getInitialStyle().rounded : this.getInitialStyle().underline;
+		let defaultStyle = (this.props.borderType === 'regular') ? this.getInitialStyle().bordered : (this.props.borderType === 'rounded') ? this.getInitialStyle().rounded : this.getInitialStyle().underline;
 
 		type = _.merge(type, defaultStyle);
 
-		var  addedProps = _.merge(this.getInitialStyle().textInput, type);
+		let  addedProps = _.merge(this.getInitialStyle().textInput, type);
 
-		var defaultProps = {
+		let defaultProps = {
 			style: addedProps,
 			key: 'inpGroup'
-		}
+		};
 
 		return computeProps(this.props, defaultProps);
 	}
 
 	getIconProps(icon) {
 
-		var defaultStyle = {
+		let defaultStyle = {
 			fontSize: (this.props.toolbar || this.props.atoolbar) ? this.getTheme().toolbarIconSize : 27,
 			alignSelf: 'center',
 			lineHeight: (this.props.toolbar || this.props.atoolbar) ? 24 : undefined,
 			paddingRight: 5,
 			marginLeft: (this.props.toolbar || this.props.atoolbar) ? 5 : undefined
-		}
+		};
 
-		var defaultProps = {
+		let defaultProps = {
 			style: defaultStyle,
 			key: 'icon'
-		}
+		};
 
 		return computeProps(icon.props, defaultProps);
 	}
 	getButtonProps(button) {
 
-		var defaultStyle = {
+		let defaultStyle = {
 			alignSelf: 'center',
 			paddingRight: 5,
 			marginLeft: (this.props.toolbar || this.props.atoolbar) ? 5 : undefined,
 			height: 30
-		}
+		};
 
-		var defaultProps = {
+		let defaultProps = {
 			style: defaultStyle,
 			key: 'button',
 			inputButton: true
-		}
+		};
 
 		return computeProps(button.props, defaultProps);
 	}
@@ -133,43 +133,43 @@ export default class InputGroup extends Base {
 
 	renderChildren() {
 
-		var inputProps = {};
-		var newChildren = [];
-		var childrenArray = React.Children.toArray(this.props.children);
+		let inputProps = {};
+		let newChildren = [];
+		let childrenArray = React.Children.toArray(this.props.children);
 
-		var iconElement = [];
+		let iconElement = [];
 		iconElement = _.remove(childrenArray, function(item) {
-				if(item.type == Icon) {
+				if (item.type === Icon) {
 						return true;
 				}
 		});
 
-		var buttonElement = [];
+		let buttonElement = [];
 
 		buttonElement = _.remove(childrenArray, function(item) {
-			if(item.type == Button) {
+			if (item.type === Button) {
 				return true;
 			}
 		});
 
-		var inp =  _.find(childrenArray, function(item) {
-			if(item && item.type == Input) {
+		let inp =  _.find(childrenArray, function(item) {
+			if (item && item.type === Input) {
 				return true;
 			}
 		});
 
-		if(inp)
-		inputProps = computeProps(this.props, inp.props);
+		if (inp)
+		{inputProps = computeProps(this.props, inp.props);}
 		else
-		inputProps = this.props;
+		{inputProps = this.props;}
 
-		if(Array.isArray(this.props.children)) {
+		if (Array.isArray(this.props.children)) {
 
-			if(this.props.iconRight) {
-				newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
+			if (this.props.iconRight) {
+				newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
 				newChildren.push(React.cloneElement(iconElement[0],this.getIconProps(iconElement[0])));
 			}
-			else if(buttonElement.length>0) {
+			else if (buttonElement.length > 0) {
 				newChildren.push(React.cloneElement(
 					iconElement[0],
 					{
@@ -177,7 +177,7 @@ export default class InputGroup extends Base {
 						key: 'icon0'
 					}
 				));
-				newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
+				newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
 				newChildren.push(React.cloneElement(
 					buttonElement[0],
 					{
@@ -195,7 +195,7 @@ export default class InputGroup extends Base {
 							key: 'icon0'
 						}
 					));
-					newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
+					newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
 					newChildren.push(React.cloneElement(
 						iconElement[1],
 						{
@@ -205,13 +205,13 @@ export default class InputGroup extends Base {
 					));
 				} else {
 					newChildren.push(React.cloneElement(iconElement[0], this.getIconProps(iconElement[0])));
-					newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
+					newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
 				}
 			}
 		}
 
 		else {
-			newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
+			newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
 		}
 
 		return newChildren;
