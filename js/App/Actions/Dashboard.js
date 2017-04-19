@@ -19,37 +19,20 @@
 
 'use strict';
 
-import React from 'react';
-import { Image, Text, View } from 'BaseComponents';
+import type { Action } from './types';
 
-import Theme from 'Theme';
+type Kind = 'device' | 'sensor';
 
-class SensorDashboardTileSlide extends View {
+module.exports = {
+	addToDashboard: (kind: Kind, id: Number): Action => ({
+		type: 'ADD_TO_DASHBOARD',
+		kind,
+        id
+	}),
+	removeFromDashboard : (kind : Kind, id: Number) : Action => ({
+		type: 'REMOVE_FROM_DASHBOARD',
+		kind,
+		id
+	}),
+};
 
-	render() {
-		return (
-			<View style={Theme.Styles.sensorTileItem}>
-				<View style={{
-					flex: 4,
-					justifyContent: 'center',
-					alignItems: 'center'
-				}}>
-					<Image source={this.props.icon} />
-				</View>
-				<View style={{
-					flex: 5,
-					justifyContent: 'center',
-					alignItems: 'center'
-				}}>
-					<Text style={{color: '#ffffff', fontSize: Math.floor(this.props.tileWidth / 5)}}>
-						{this.props.text && this.props.text}
-						{this.props.text2 && this.props.text2}
-						{this.props.text3 && this.props.text3}
-					</Text>
-				</View>
-			</View>
-		);
-	}
-}
-
-module.exports = SensorDashboardTileSlide;
