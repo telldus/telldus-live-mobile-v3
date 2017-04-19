@@ -28,13 +28,18 @@ import {
 	I18n,
 	Icon,
 	NavigatorIOS,
+	PixelRatio,
+	StatusBar,
+	StyleSheet,
 	TabBarIOS,
+	Text,
 	View
 } from 'BaseComponents';
 
 import { switchTab, toggleEditMode } from 'Actions';
 import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
+import Theme from 'Theme';
 
 class TabsView extends View {
 	constructor(props) {
@@ -149,11 +154,17 @@ class TabsView extends View {
 	}
 }
 
+var styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	}
+});
+
 function select(store) {
 	return {
 		tab: store.navigation.tab,
 		userIcon: false,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""},
 	};
 }
 

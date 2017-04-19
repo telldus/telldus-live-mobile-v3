@@ -22,8 +22,8 @@
 import type { Action } from '../actions/types';
 
 export type State = {
-	accessToken: ?Object,
-	userProfile: ?Object
+	accessToken: ?object,
+	userProfile: ?object
 };
 
 const initialState = {
@@ -33,9 +33,9 @@ const initialState = {
 
 function user(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_ACCESS_TOKEN') {
-		let accessToken = action.accessToken;
+		var accessToken = action.accessToken;
 		if (state.accessToken) {
-			accessToken.refresh_token = state.accessToken.refresh_token;
+			accessToken.refresh_token = state.accessToken.refresh_token
 		}
 		return {
 			...state,

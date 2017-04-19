@@ -34,13 +34,15 @@ const initialState: State = {
 function dashboard(state: State = initialState, action : Action): State {
     if (action.type === 'ADD_TO_DASHBOARD') {
         if (action.kind === 'sensor') {
-            if (state.sensors.indexOf(action.id) >= 0) {return state;}
+            if (state.sensors.indexOf(action.id) >= 0) return state;
+
             return {
                 ...state,
                 sensors: [...state.sensors, action.id],
             };
         } else if (action.kind === 'device') {
-            if (state.devices.indexOf(action.id) >= 0) {return state;}
+            if (state.devices.indexOf(action.id) >= 0) return state;
+
             return {
                 ...state,
                 devices: [...state.devices, action.id],

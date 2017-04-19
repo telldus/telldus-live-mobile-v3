@@ -24,7 +24,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Icon, ListItem, Text, View } from 'BaseComponents';
+import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
+import { TabLayoutAndroid, TabAndroid } from "react-native-android-kit";
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Navigator from 'Navigator';
@@ -38,6 +39,7 @@ import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
 
 import { switchTab, logoutFromTelldus } from 'Actions';
+import { StyleSheet } from 'react-native';
 import type { Tab } from '../reducers/navigation';
 
 class TabsView extends View {
@@ -123,23 +125,23 @@ class TabsView extends View {
 					</ListItem>
 				</View>
 			</View>
-		);
+		)
 	}
 
 	renderContent() {
 		switch (this.props.tab) {
 			case 'dashboardTab':
-				return <DashboardTab />;
+				return <DashboardTab />
 			case 'devicesTab':
-				return <DevicesTab />;
+				return <DevicesTab />
 			case 'sensorsTab':
-				return <SensorsTab />;
+				return <SensorsTab />
 			case 'schedulerTab':
-				return <SchedulerTab />;
+				return <SchedulerTab />
 			case 'gatewaysTab':
-				return <GatewaysTab />;
+				return <GatewaysTab />
 			}
-		return <DashboardTab />;
+		return <DashboardTab />
 	}
 
 	render() {
@@ -176,7 +178,7 @@ class TabsView extends View {
 
 	onActionSelected (position) {
 		if (position === 0) { // index of 'Settings'
-			console.log('Settings pressed');
+			console.log("Settings pressed");
 		}
 	}
 
@@ -188,7 +190,7 @@ function select(store) {
 		devices: store.devices.devices,
 		gateways: store.gateways.gateways,
 		sensors: store.sensors.sensors,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''}
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};
 }
 

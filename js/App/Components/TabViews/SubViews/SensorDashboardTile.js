@@ -33,12 +33,12 @@ class SensorDashboardTile extends View {
 		const tileTitleHeight = Math.floor(tileWidth / 4);
 		const tileDetailsHeight = tileWidth - tileTitleHeight;
 
-		let slideList = [];
+		var slideList = [];
 		if (item.childObject.humidity) {
 			slideList.push({
 				key: 'humidity',
 				icon: require('../img/sensorIcons/HumidityLarge.png'),
-				text: <FormattedNumber value = {item.childObject.humidity / 100} formatStyle = "percent" />
+				text: <FormattedNumber value = {item.childObject.humidity / 100} formatStyle = 'percent' />
 			});
 		}
 		if (item.childObject.temperature) {
@@ -86,8 +86,8 @@ class SensorDashboardTile extends View {
 				text: <FormattedNumber value = {item.childObject.luminance} maximumFractionDigits = {0} suffix = {'lx'}/>
 			});
 		}
-		const slides = slideList.map(_item =>
-			<SensorDashboardTileSlide key = {_item.key} icon = {_item.icon} text={_item.text} tileWidth={tileWidth} />
+		const slides = slideList.map((item) =>
+			<SensorDashboardTileSlide key = {item.key} icon = {item.icon} text={item.text} tileWidth={tileWidth} />
 		);
 
 		return (
@@ -124,12 +124,12 @@ class SensorDashboardTile extends View {
 					</Text>
 				</View>
 			</Image>
-		);
+		)
 	}
 
 	_windDirection(value) {
 		const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-		return directions[Math.floor(value / 22.5)];
+		return directions[Math.floor(value / 22.5)]
 	}
 
 }

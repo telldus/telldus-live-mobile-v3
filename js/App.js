@@ -30,11 +30,13 @@ import {
 	LoginScreen,
 	AppNavigator,
 	WebsocketManager,
+	Push
 } from 'Components';
 
 class App extends React.Component {
 
 	componentDidMount() {
+		var push = new Push();
 	}
 
 	render() {
@@ -43,13 +45,13 @@ class App extends React.Component {
 		}
 		return (
 			<View>
-				<WebsocketManager { ...this.props } />
+				<WebsocketManager />
 				<AppNavigator />
 			</View>
 		);
 	}
 
-}
+};
 
 function select(store) {
 	return {

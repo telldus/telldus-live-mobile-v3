@@ -22,7 +22,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Text, View } from 'BaseComponents';
+import { Button, List, ListItem, Text, View } from 'BaseComponents';
+//import { getDevices } from 'Actions';
+
+import type { Tab } from '../reducers/navigation';
 
 class SchedulerTab extends View {
 

@@ -21,11 +21,14 @@
 
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
-import { getUserProfile, getGateways, getSensors, getDevices } from 'Actions';
+import { switchTab, getUserProfile, getGateways, getSensors, getDevices, getWebsocketAddress } from 'Actions';
 
-import { View } from 'BaseComponents';
+import { Button, Container, Content, Text, Title, View } from 'BaseComponents';
 import Platform from 'Platform';
+import BackAndroid from 'BackAndroid';
 import TabsView from 'TabsView';
+import Navigator from 'Navigator';
+import StyleSheet from 'StyleSheet';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 
@@ -66,7 +69,7 @@ class AppNavigator extends View {
 		//if (Platform.OS === 'android' || this.state.specificOrientation == 'PORTRAIT' || this.state.specificOrientation == 'UNKNOWN') {
 			return (
 				<TabsView />
-			);
+			)
 		//}
 		/*return (
 			<View style={{
@@ -82,17 +85,17 @@ class AppNavigator extends View {
 			</View>
 		)*/
 	}
-}
+};
 
 AppNavigator.propTypes = {
 	dispatch: PropTypes.func.isRequired
-};
+}
 
 function mapStateToProps(state, ownProps) {
 	return {
 		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
-		userProfile: state.user.userProfile || {firstname: '', lastname: '', email: ''}
+		userProfile: state.user.userProfile || {firstname: '', lastname: '', email: ""}
 	};
 }
 

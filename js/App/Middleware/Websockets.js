@@ -19,25 +19,26 @@
 
 'use strict';
 
+import uuid from 'react-native-uuid';
 import { AppState } from 'react-native';
-import { authoriseWebsocket, addWebsocketFilter, processWebsocketMessageForSensor } from 'Actions';
+import { authoriseWebsocket, addWebsocketFilter, getGateways, processWebSocketMessage, processWebsocketMessageForSensor } from 'Actions';
 
 const formatTime = (time) => `${pad(time.getHours(), 2)}:${pad(time.getMinutes(), 2)}:${pad(time.getSeconds(), 2)}.${pad(time.getMilliseconds(), 3)}`;
 const repeat = (str, times) => (new Array(times + 1)).join(str);
-const pad = (num, maxLength) => repeat('0', maxLength - num.toString().length) + num;
+const pad = (num, maxLength) => repeat(`0`, maxLength - num.toString().length) + num;
 
-let websocketConnections = [];
-let websocketList = [];
-let sessionId = '';
+var websocketConnections = [];
+var websocketList = [];
+var sessionId = '';
 
 export default function (store) {
 	return next => action => {
 		try {
-			switch (action.type) {
+			switch(action.type) {
 				case 'WEBSOCKET_WATCHDOG':
 					sessionId = action.payload;
 					websocketList.forEach((websocket, gatewayId) => {
-						if (AppState.currentState !== 'active') {
+						if (AppState.currentState != 'active') {
 							if (websocketConnections[gatewayId] && websocketConnections[gatewayId].websocket) {
 								websocketConnections[gatewayId].websocket.close();
 							}
@@ -50,7 +51,7 @@ export default function (store) {
 								websocketConnections[gatewayId] = {
 									url: websocket.url,
 									websocket: new WebSocket(websocket.url)
-								};
+								}
 
 								websocketConnections[gatewayId].websocket.onopen = () => {
 									const formattedTime = formatTime(new Date());
@@ -62,7 +63,7 @@ export default function (store) {
 										console.log(message);
 									}
 									store.dispatch(authoriseWebsocket(gatewayId, sessionId))
-									.then(() => {
+									.then((action) => {
 										store.dispatch(addWebsocketFilter(gatewayId, 'device', 'added'));
 										store.dispatch(addWebsocketFilter(gatewayId, 'device', 'removed'));
 										store.dispatch(addWebsocketFilter(gatewayId, 'device', 'failSetStae'));
@@ -89,8 +90,8 @@ export default function (store) {
 								websocketConnections[gatewayId].websocket.onmessage = (msg) => {
 									const formattedTime = formatTime(new Date());
 									const title_prefix = `websocket_message @ ${formattedTime} (from gateway ${gatewayId})`;
-									let title = '';
-									let message = '';
+									var title = '';
+									var message = '';
 									try {
 										message = JSON.parse(msg.data);
 									} catch (e) {
@@ -98,30 +99,30 @@ export default function (store) {
 										title = ` ${msg.data}`;
 									}
 
-									if (message === 'validconnection') {
+									if(message == 'validconnection') {
 										message = {
 											module: 'websocket_connection',
 											action: 'connected'
-										};
+										}
 										title = ` ${message.module}:${message.action}`;
-									} else if (message === 'nothere') {
+									} else if(message == 'nothere') {
 										message = {
 											module: 'websocket_connection',
 											action: 'wrong_server'
-										};
+										}
 										title = ` ${message.module}:${message.action}`;
-									} else if (message === 'error') {
+									} else if(message == 'error') {
 										message = {
 											module: 'websocket_connection',
 											action: 'unknown_error'
-										};
+										}
 										title = ` ${message.module}:${message.action}`;
 									}
 
-									if (message.module && message.action) {
+									if(message.module && message.action) {
 										title = ` ${message.module}:${message.action}`;
 
-										switch (message.module) {
+										switch(message.module) {
 											case 'device':
 
 											break;
@@ -148,10 +149,10 @@ export default function (store) {
 									const message = `websocket_error @ ${formattedTime} (gateway ${gatewayId})`;
 									try {
 										console.groupCollapsed(message);
-										console.log(e);
+										console.log(e)
 										console.groupEnd();
-									} catch (error) {
-										console.log(message, error);
+									} catch (e) {
+										console.log(message, e);
 									}
 								};
 
@@ -165,7 +166,7 @@ export default function (store) {
 										console.log(message);
 									}
 									delete websocketConnections[gatewayId];
-								};
+								}
 							}
 						}
 					});
@@ -178,7 +179,7 @@ export default function (store) {
 						if (!websocketList[gatewayId]) {
 							websocketList[gatewayId] = {
 								url: ''
-							};
+							}
 						}
 						websocketList[gatewayId].url = websocketUrl;
 					}
@@ -198,7 +199,7 @@ export default function (store) {
 				default:
 
 			}
-		} catch (e) {
+		} catch(e) {
 			console.log(e);
 		}
 		return next(action);

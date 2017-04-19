@@ -19,11 +19,12 @@
 
 'use strict';
 
-import I18n from 'react-native-i18n';
-import Translations from 'Translations';
-import Config from 'Config';
+import React from 'react';
+import I18n from 'react-native-i18n'
+import Translations from 'Translations'
+import Config from 'Config'
 
-I18n.fallbacks = true;
+I18n.fallbacks = true
 I18n.translations = Translations;
 if (Config.forceLocale){
 	I18n.defaultLocale = Config.forceLocale;
