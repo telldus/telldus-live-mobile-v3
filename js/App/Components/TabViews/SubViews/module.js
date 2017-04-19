@@ -21,11 +21,13 @@
 
 'use strict';
 
-import DeviceDashboardTile from './DeviceDashboardTile'
-import SensorDashboardTile from './SensorDashboardTile'
-import SensorDashboardTileSlide from './SensorDashboardTileSlide'
+import DeviceDashboardTile from './DeviceDashboardTile';
+import DeviceRow from './DeviceRow';
+import SensorDashboardTile from './SensorDashboardTile';
+import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 
 module.exports = {
+	DeviceRow: DeviceRow,
 	DeviceDashboardTile: DeviceDashboardTile,
 	SensorDashboardTile: SensorDashboardTile,
 	SensorDashboardTileSlide: SensorDashboardTileSlide
