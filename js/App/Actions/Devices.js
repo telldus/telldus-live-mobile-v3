@@ -45,4 +45,9 @@ function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
 	};
 }
 
-module.exports = { getDevices, deviceSetState };
+// Only use this function for testing purpose, set device's state without calling api
+function deviceSetStatePseudo(deviceId, state) {
+	return { type: 'SET_DEVICE_STATE', deviceId, state};
+}
+
+module.exports = { getDevices, deviceSetState, deviceSetStatePseudo };
