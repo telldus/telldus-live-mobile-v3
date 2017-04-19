@@ -25,10 +25,8 @@ import { connect } from 'react-redux';
 import { Button, Container, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getDevices, deviceSetState } from 'Actions';
 
-import DeviceDetailView from '../DetailViews/DeviceDetailView'
+import DeviceDetailView from '../DetailViews/DeviceDetailView';
 import Theme from 'Theme';
-
-import type { Tab } from '../reducers/navigation';
 
 class DevicesTab extends View {
 	render() {
@@ -50,22 +48,21 @@ class DevicesTab extends View {
 			<View style={Theme.Styles.rowBack}>
 				<Text style={Theme.Styles.rowBackButton}>Dashboard</Text>
 			</View>
-		)
+		);
 	}
 
 	_renderSectionHeader(sectionData, sectionId) {
-		const gateway = this.props.gateways.find((gateway) => gateway.id === sectionId);
+		const gateway = this.props.gateways.find(_gateway => _gateway.id === sectionId);
 		return (
 			<View style = { Theme.Styles.sectionHeader }>
 				<Text style = { Theme.Styles.sectionHeaderText }>
 					{(gateway && gateway.name) ? gateway.name : ''}
 				</Text>
 			</View>
-		)
+		);
 	}
 
 	_renderRow(item) {
-		const minutesAgo =  Math.round(((Date.now() / 1000) - item.lastUpdated) / 60);
 		try {
 			return (
 				<ListItem style = { Theme.Styles.rowFront }>
@@ -96,14 +93,14 @@ class DevicesTab extends View {
 									title: item.name,
 									passProps: { device: item }
 								})}
-							></Icon>
+							/>
 						</View>
 					</Container>
 				</ListItem>
-			)
-		} catch(e) {
+			);
+		} catch (e) {
 			console.log(e);
-			return ( <View /> )
+			return ( <View /> );
 		}
 	}
 }
@@ -118,11 +115,11 @@ const dataSource = new ListDataSource({
 });
 
 function _parseDataIntoItemsAndSectionIds(devices, gateways) {
-	var items = {};
-	var sectionIds = [];
+	let items = {};
+	let sectionIds = [];
 	if (devices) {
 		devices.map((item) => {
-			var sectionId = item.clientId ? item.clientId : '';
+			let sectionId = item.clientId ? item.clientId : '';
 			if (sectionIds.indexOf(sectionId) === -1) {
 				sectionIds.push(sectionId);
 				items[sectionId] = [];
@@ -149,7 +146,7 @@ function _parseDataIntoItemsAndSectionIds(devices, gateways) {
 }
 
 function select(store) {
-	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.devices || [], store.gateways || [])
+	let {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.devices || [], store.gateways || []);
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
 		gateways: store.gateways

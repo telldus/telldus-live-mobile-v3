@@ -19,6 +19,7 @@
 
 'use strict';
 
+import type { Action } from './types';
 import type { ThunkAction } from './types';
 
 function getSensors(): ThunkAction {
@@ -34,13 +35,12 @@ function getSensors(): ThunkAction {
 }
 
 function processWebsocketMessageForSensor(action, data): Action {
-	switch(action) {
+	switch (action) {
 		case 'value':
 			return {
 				type: 'SENSOR_UPDATE_VALUE',
 				payload: data
 			};
-		break;
 	default:
 	}
 	return {
