@@ -26,6 +26,23 @@ All commands are assumed to be ran from project root.
 ### Android
 
 - setup Android development environment via this [React Native Official](https://facebook.github.io/react-native/releases/0.23/docs/android-setup.html)
+- install with Android Studio, or use `sdkmanager`:
+  - `brew install android-sdk` -> `brew install Caskroom/cask/android-sdk`
+  - `export ANDROID_HOME=/usr/local/opt/android-sdk` -> `export ANDROID_HOME=/usr/local/share/android-sdk`
+  - After adding the `export` ^ to your `~/.bash_profile`, use `source ~/.bash_profile` to load it
+  - Android SDK Manager is no longer available as a separate GIU (`android`). Instead you use CLI tool `sdkmanager`.
+  - `sdkmanager` might warn that `~/.android/repositories.cfg` could not be loaded. `touch ~/.android/repositories.cfg` to create it
+  - to show all Android deps you can install, use `sdkmanager --list --verbose`
+  - we currently run Android version 24, which you need to install Android deps for:
+  `sdkmanager "build-tools;24.0.1" "platforms;android-24" "system-images;android-24;google_apis;x86_64" "system-images;android-24;google_apis;x86" --verbose` (includes Google Support Library and Play Services)
+  - but certain deps need Android version 23, therefore you also need to run:
+  `sdkmanager "build-tools;23.0.1" "platforms;android-23" "system-images;android-23;google_apis;x86_64" "system-images;android-23;google_apis;x86" --verbose`
+  - we need some general Android deps:
+  `sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" --verbose`
+- you need a `android/app/google-services.json` file
+  *TODO:* figure out how to add one for local testing
+- to run the app on your device, check out [React Native: Running On Device](https://facebook.github.io/react-native/releases/0.23/docs/running-on-device-android.html#content). when it's connected, and you can see it show up when you run `adb devices`, run `react-native run-android` to launch the app on your phone
+
 
 ## Development
 
