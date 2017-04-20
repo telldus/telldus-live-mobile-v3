@@ -28,6 +28,8 @@ import { DeviceRow, DeviceRowHidden } from 'TabViews/SubViews';
 import { getDevices, addToDashboard, removeFromDashboard } from 'Actions';
 import Theme from 'Theme';
 
+import type { Tab } from '../reducers/navigation';
+
 class DevicesTab extends View {
 	render() {
 		return (

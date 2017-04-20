@@ -35,7 +35,7 @@ export default class CardComponent extends Base {
 				borderColor: this.getTheme().listBorderColor,
 				flexWrap: 'wrap',
 				borderBottomWidth: 0,
-				backgroundColor: this.props.transparent ? 'transparent' : this.getTheme().cardDefaultBg,
+				backgroundColor: this.props.transparent? 'transparent' : this.getTheme().cardDefaultBg,
 				shadowColor: this.props.transparent ? undefined : '#000',
 				shadowOffset: this.props.transparent ? undefined : {width: 0, height: 2},
 				shadowOpacity: this.props.transparent ? undefined : 0.1,
@@ -46,12 +46,12 @@ export default class CardComponent extends Base {
 				marginRight: 8,
 				marginBottom: 4,
 			}
-		};
+		}
 	}
 
 	prepareRootProps() {
 
-		let defaultProps = {
+		var defaultProps = {
 			style: this.getInitialStyle().card
 		};
 
@@ -60,7 +60,7 @@ export default class CardComponent extends Base {
 	}
 
 	renderChildren() {
-		let childrenArray = React.Children.map(this.props.children, (child) => {
+		var childrenArray = React.Children.map(this.props.children, (child) => {
 			return child;
 		});
 
@@ -68,7 +68,7 @@ export default class CardComponent extends Base {
 	}
 
 	render() {
-		return (
+		return(
 			<View {...this.prepareRootProps()} >
 				{this.renderChildren()}
 			</View>

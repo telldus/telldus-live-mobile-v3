@@ -164,7 +164,6 @@ function select(store) {
 }
 
 function actions(dispatch) {
-
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
 		onToggleEditMode : (tab) => dispatch(toggleEditMode(tab)),

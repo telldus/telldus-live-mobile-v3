@@ -23,12 +23,12 @@ import React from 'react';
 import { View } from 'react-native';
 import Base from './Base';
 import computeProps from './computeProps';
-import Text from './Text';
+import Text from "./Text";
 
 export default class BadgeComponent extends Base {
 
 	prepareRootProps() {
-		let type = {
+		var type = {
 			backgroundColor: this.props.primary ? this.getTheme().brandPrimary : this.props.success ? this.getTheme().brandSuccess :
 			this.props.info ? this.getTheme().brandInfo : this.props.warning ? this.getTheme().brandWarning :
 			this.props.danger ? this.getTheme().brandDanger : this.getTheme().badgeBg,
@@ -37,19 +37,19 @@ export default class BadgeComponent extends Base {
 			borderRadius: 13,
 			width: 27,
 			height: 27
-		};
-		let defaultProps = {
+		}
+		var defaultProps = {
 			style: type
-		};
+		}
 		return computeProps(this.props, defaultProps);
 	}
 
 	render() {
-		return (
+		return(
 			<View {...this.prepareRootProps()}>
 				<Text style={{  color: (this.props.textStyle && this.props.textStyle.color) ? this.props.textStyle.color : this.getTheme().badgeColor,
 								fontSize: this.getTheme().fontSizeBase,
-								lineHeight: this.getTheme().lineHeight - 2,
+								lineHeight: this.getTheme().lineHeight-2,
 								textAlign: 'center'}}>{this.props.children}
 				</Text>
 			</View>

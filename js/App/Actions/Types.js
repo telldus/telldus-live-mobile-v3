@@ -20,7 +20,7 @@
 'use strict';
 
 export type Action =
-	{ type: 'LOGGED_IN' }
+	  { type: 'LOGGED_IN' }
 	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
 	| { type: 'RECEIVED_USER_PROFILE', userProfile: Object }
 	| { type: 'RECEIVED_DEVICES', devices: Object }
