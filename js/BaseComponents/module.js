@@ -49,10 +49,10 @@ import Card from './Card';
 import Badge from './Badge';
 import Spinner from './Spinner';
 import ProgressBar from './ProgressBar';
-import { Col, Row, Grid } from 'react-native-easy-grid';
+import { Col, Row, Grid } from "react-native-easy-grid";
 import ScrollableTabView from './Tabs';
-import NavigatorIOS from './NavigatorIOS';
-import I18n from './I18n';
+import NavigatorIOS from './NavigatorIOS'
+import I18n from './I18n'
 import Gravatar from './Gravatar';
 
 import {

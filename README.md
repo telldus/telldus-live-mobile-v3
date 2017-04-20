@@ -17,7 +17,6 @@ All commands are assumed to be ran from project root.
 - install local deps: `npm i`
 - install global deps: `npm install -g react-native-cli`
 
-
 ### iOS
 
 - install cacao pods cli: `brew install Caskroom/cask/cocoapods-app`
@@ -25,6 +24,8 @@ All commands are assumed to be ran from project root.
 - install Xcode via [Mac App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
 
 ### Android
+
+- setup Android development environment via this [React Native Official](https://facebook.github.io/react-native/releases/0.23/docs/android-setup.html)
 
 ## Development
 
@@ -63,8 +64,17 @@ module.exports = {
 
 - `react-native run-ios`
 
+### Note:
+
+To make development quick React Native comes with a Launch Packager which is run when you do `react-native run-ios`. This keeps some internal state and allows for hot code swapping and debugging inside the app (`cmd + D`). However, the packager keeps internal state which might go stale without you knowing. The only way to find out is to make a clean build:
+
+- in the app: `cmd + shift + H`, long click on App, delete App
+- quit the Launch Packager (runs in own window, so close window should do the trick)
+- `react-native run-ios` to trigger a fresh build
+
 ### Android
 
+- `react-native run-android`
 
 ## Split dependencies
 

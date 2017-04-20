@@ -26,8 +26,8 @@ import Base from './Base';
 export default class ContainerComponent extends Base {
 
 	render() {
-		return (
-			<View { ...this.props } />
+		return(
+			<View { ...this.props }></View>
 		);
 	}
 }
