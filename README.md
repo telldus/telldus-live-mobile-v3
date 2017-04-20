@@ -42,7 +42,7 @@ All commands are assumed to be ran from project root.
 - you need a `android/app/google-services.json` file
   *TODO:* figure out how to add one for local testing
 - to run the app on your device, check out [React Native: Running On Device](https://facebook.github.io/react-native/releases/0.23/docs/running-on-device-android.html#content). when it's connected, and you can see it show up when you run `adb devices`, run `react-native run-android` to launch the app on your phone
-
+- to check out logs, use `adb logcat`
 
 ## Development
 
