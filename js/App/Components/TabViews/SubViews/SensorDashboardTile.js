@@ -20,25 +20,25 @@
 'use strict';
 
 import React from 'react';
-import { FormattedNumber, Image, Text, View } from 'BaseComponents';
+import { FormattedNumber, Text, View } from 'BaseComponents';
 
-import Theme from 'Theme';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
+import DashboardShadowTile  from './DashboardShadowTile';
 
 class SensorDashboardTile extends View {
+	constructor(props) {
+		super(props);
+		this.getSlideList = this.getSlideList.bind(this);
+	}
 
-	render() {
-		const item = this.props.item;
-		const tileWidth = item.tileWidth - 8;
-		const tileTitleHeight = Math.floor(tileWidth / 4);
-		const tileDetailsHeight = tileWidth - tileTitleHeight;
+	getSlideList(item) {
+		let slideList = [];
 
-		var slideList = [];
 		if (item.childObject.humidity) {
 			slideList.push({
 				key: 'humidity',
 				icon: require('../img/sensorIcons/HumidityLarge.png'),
-				text: <FormattedNumber value = {item.childObject.humidity / 100} formatStyle = 'percent' />
+				text: <FormattedNumber value = {item.childObject.humidity / 100} formatStyle = "percent" />
 			});
 		}
 		if (item.childObject.temperature) {
@@ -86,11 +86,53 @@ class SensorDashboardTile extends View {
 				text: <FormattedNumber value = {item.childObject.luminance} maximumFractionDigits = {0} suffix = {'lx'}/>
 			});
 		}
-		const slides = slideList.map((item) =>
-			<SensorDashboardTileSlide key = {item.key} icon = {item.icon} text={item.text} tileWidth={tileWidth} />
+
+		return slideList;
+	}
+
+	render() {
+		const item = this.props.item;
+		const tileWidth = item.tileWidth - 8;
+
+		const slideList = this.getSlideList(item);
+
+		const slides = slideList.map((data) =>
+			<SensorDashboardTileSlide key = {data.key} icon = {data.icon} text={data.text} tileWidth={tileWidth} />
 		);
+		const firstSlide = slides[0];
 
 		return (
+			<DashboardShadowTile
+				item={item}
+				style={	[this.props.style,{
+					width: tileWidth,
+					height: tileWidth
+				}]}>
+				<View style={{flexDirection: 'row', flex:30}}>
+					{firstSlide}
+				</View>
+				<View style={{
+					flex:13,
+					backgroundColor: item.childObject.state === 0 ? '#bfbfbf' : '#e56e18',
+					justifyContent: 'center'}}>
+					<Text
+						ellipsizeMode="middle"
+						numberOfLines={1}
+						style = {{
+							padding : 5,
+							color: 'white',
+							fontSize:  Math.floor(tileWidth / 8),
+							opacity: item.childObject.name ? 1 : 0.7,
+							textAlign: 'center',
+							textAlignVertical: 'center',
+						}}>
+						{item.childObject.name ? item.childObject.name : '(no name)'}
+					</Text>
+				</View>
+			</DashboardShadowTile>
+		);
+
+		/* return (
 			<Image
 				style = {[this.props.style, {
 					flexDirection: 'column',
@@ -124,12 +166,12 @@ class SensorDashboardTile extends View {
 					</Text>
 				</View>
 			</Image>
-		)
+		) */
 	}
 
 	_windDirection(value) {
 		const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-		return directions[Math.floor(value / 22.5)]
+		return directions[Math.floor(value / 22.5)];
 	}
 
 }
