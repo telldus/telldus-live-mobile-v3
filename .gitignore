@@ -6,7 +6,7 @@ android-*.keystore
 
 # VSCode ignores
 #
-./vscode
+.vscode/
 
 # OSX
 #
