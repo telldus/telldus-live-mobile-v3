@@ -40,7 +40,7 @@ All commands are assumed to be ran from project root.
   `sdkmanager "build-tools;23.0.1" "platforms;android-23" "system-images;android-23;google_apis;x86_64" "system-images;android-23;google_apis;x86" --verbose`
   - we need some general Android deps:
   `sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" --verbose`
-- you need a `android/app/google-services.json` file, otherwise the app won't run **TODO: figure out how to add one for local testing**
+- you need a `android/app/google-services.json` file, see [instructions](#google-services.json)
 - to run the app on your device, check out [React Native: Running On Device](https://facebook.github.io/react-native/releases/0.23/docs/running-on-device-android.html#content). When your (virtual) device is connected, you can see it show up when you run `adb devices`. run `react-native run-android` to launch the app on your phone
 - use `adb logcat` to look at the Android log file
 - when the app launches on your (virtual) device, it will send you to the Settings screen for "Apps that can draw over other apps". Enable this for the Telldus app and launch the app again from your app drawer.
@@ -108,3 +108,74 @@ To make development quick React Native comes with a Launch Packager which is run
 ## Naming convention branches, commits and pull requests
 
 ## Logging
+
+### `google-services.json`
+
+You need a `android/app/google-services.json` file, otherwise the app won't run. Because this file contains production keys and secrets, it is not included in this repository. However, you can add a placeholder yourself. Create `android/app/google-services.json` and add this json content:
+
+```
+{
+  "project_info": {
+    "project_id": "this-is-a-sample",
+    "project_number": "999999999999",
+    "name": "AdMob Samples",
+    "firebase_url": "https://this-is-a-sample-do-not-use.firebaseio.com",
+    "storage_bucket": "this-is-a-sample-do-not-use.storage.firebase.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999999999999:android:0000000000000000",
+        "client_id": "android:com.telldus.live.mobile",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.telldus.live.mobile",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "this-is-a-sample-do-not-use.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.telldus.live.mobile",
+            "certificate_hash": "0000000000000000000000000000000000000000"
+          }
+        },
+        {
+          "client_id": "this-is-a-sample-do-not-use.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "000000000000000000000000000000000000000"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 2,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 2,
+          "test_banner_ad_unit_id": "ca-app-pub-3940256099942544/6300978111",
+          "test_interstitial_ad_unit_id": "ca-app-pub-3940256099942544/1033173712"
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}
+```
