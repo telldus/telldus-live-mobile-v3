@@ -22,52 +22,68 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Dimensions, Button, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { List, ListDataSource, View } from 'BaseComponents';
 import { getDevices } from 'Actions';
 
 import { DeviceDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
-import Theme from 'Theme';
-
 import type { Tab } from '../reducers/navigation';
-
-var flattenStyle = require('flattenStyle');
 
 class DashboardTab extends View {
 	constructor(props) {
 		super(props);
 		this.state = {
+			listWidth: 0,
 			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(this.props.dataArray),
-		}
+		};
+
+		this._onLayout = this._onLayout.bind(this);
+		this._calculateItemDimensions = this._calculateItemDimensions.bind(this);
 	}
 
 	_onLayout = (event) => {
 		const listWidth = event.nativeEvent.layout.width - 8;
+		const data = this._calculateItemDimensions(listWidth);
+		this.setState({
+			listWidth,
+			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data)
+		});
+	}
+
+	_calculateItemDimensions = (listWidth) => {
 		const isPortrait = true;
-		var baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
+		const baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
 		if (listWidth > 0) {
-			var numberOfTiles = Math.floor(listWidth /baseTileSize);
-			var tileSize = listWidth / numberOfTiles;
-			if (numberOfTiles == 0) {
+			const numberOfTiles = Math.floor(listWidth / baseTileSize);
+			const tileSize = listWidth / numberOfTiles;
+			if (numberOfTiles === 0) {
 				tileSize = baseTileSize;
 			}
 			const tileWidth = Math.floor(tileSize);
-			var data = this.props.dataArray;
+			const data = this.props.dataArray;
 			data.map((item) => {
 				item.tileWidth = tileWidth;
 			});
-			this.setState({
-				dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data)
-			});
+
+			return data;
 		}
+
+		return null;
 	}
 
 	render() {
+		let dataSource;
+		const data = this._calculateItemDimensions();
+		if (data) {
+			dataSource = new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data);
+		}
+		dataSource = dataSource ? dataSource : this.state.dataSource;
+
 		return (
 			<View onLayout={this._onLayout}>
 				<List
 					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
-					dataSource = {this.state.dataSource}
+					dataSource = {dataSource}
 					renderRow = {this._renderRow}
 					pageSize = {100}
 				/>
@@ -76,7 +92,6 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(item, secId, rowId, rowMap) {
-		const minutesAgo =  Math.round(((Date.now() / 1000) - item.childObject.lastUpdated) / 60);
 		if (item.tileWidth > 75) {
 			let tileMargin = 8;
 			let tileStyle = {
@@ -88,16 +103,15 @@ class DashboardTab extends View {
 				marginTop: tileMargin,
 				marginLeft: tileMargin,
 				borderRadius: 2
-			}
-			if (item.objectType == 'sensor') {
+			};
+			if (item.objectType === 'sensor') {
 				return (
 					<SensorDashboardTile style={tileStyle} item={item} />
-				)
-			}
-			if (item.objectType == 'device') {
+				);
+			} else if (item.objectType === 'device') {
 				return (
 					<DeviceDashboardTile style={tileStyle} item={item} />
-				)
+				);
 			}
 		}
 		return <View />;
@@ -106,7 +120,7 @@ class DashboardTab extends View {
 }
 
 function _parseDataIntoItems(devices, sensors, dashboard) {
-	var items = [];
+	const items = [];
 	// if (devices && devices.map) {
 	// 	devices.map((item) => {
 			// var dashboardItem = {
@@ -132,11 +146,11 @@ function _parseDataIntoItems(devices, sensors, dashboard) {
 	if (devices && devices.filter) {
 		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
 		devicesInDashboard.map((item) => {
-			var dashboardItem = {
+			const dashboardItem = {
 				objectType: 'device',
 				childObject: item,
 				tileWidth: 0
-			}
+			};
 			items.push(dashboardItem);
 		});
 	}
@@ -144,11 +158,11 @@ function _parseDataIntoItems(devices, sensors, dashboard) {
 	if (sensors && sensors.filter) {
 		let sensorsInDashboard = sensors.filter(item => dashboard.sensors.indexOf(item.id) >= 0);
 		sensorsInDashboard.map((item) => {
-			var dashboardItem = {
+			const dashboardItem = {
 				objectType: 'sensor',
 				childObject: item,
 				tileWidth: 0
-			}
+			};
 			items.push(dashboardItem);
 		});
 	}
@@ -159,7 +173,7 @@ function select(store) {
 	return {
 		dataArray: _parseDataIntoItems( store.devices || [], store.sensors || [] , store.dashboard),
 		gateways: store.gateways,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''}
 	};
 }
 
