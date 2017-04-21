@@ -20,12 +20,11 @@
 'use strict';
 
 import React from 'react';
-import { Image, Text, View } from 'BaseComponents';
-
-import Theme from 'Theme';
+import { Text, View } from 'BaseComponents';
+import { TouchableOpacity } from 'react-native';
+import DashboardShadowTile  from './DashboardShadowTile';
 
 class DeviceDashboardTile extends View {
-
 	constructor(props) {
 		super(props);
 	}
@@ -33,45 +32,79 @@ class DeviceDashboardTile extends View {
 	render() {
 		const item = this.props.item;
 		const tileWidth = item.tileWidth - 8;
-		const tileTitleHeight = Math.floor(tileWidth / 4);
-		const tileDetailsHeight = tileWidth - tileTitleHeight;
+
 		return (
-			<Image
-				style={[this.props.style, {
-					flexDirection: 'column',
+			<DashboardShadowTile
+				item={item}
+				style={	[this.props.style,{
 					width: tileWidth,
-					height: tileWidth,
-					backgroundColor: Theme.Core.brandSecondary
-				}]}
-				source={require('../img/TileBackground.png')}
-			>
-				<View style={{
-					width: tileWidth,
-					height: tileDetailsHeight
-				}}></View>
-				<View style={{
-					width: tileWidth,
-					height: tileTitleHeight,
-					justifyContent: 'center'
-				}}>
-					<Text
-					ellipsizeMode="middle"
-					numberOfLines={1}
-					style = {{
-						width: tileWidth,
-						color: 'rgba(255,255,255,1)',
-						fontSize:  Math.floor(tileWidth / 8),
-						opacity: item.childObject.name ? 1 : 0.7,
-						marginBottom: 2,
-						textAlign: 'center'
+					height: tileWidth
+				}]}>
+				<View style={{flexDirection: 'row', flex:30}}>
+					<View style={{
+						flex:1,
+						backgroundColor: item.childObject.state === 0 ? 'white' : '#eeeeee',
+						alignItems:'stretch'
 					}}>
+						<TouchableOpacity
+							onPress={() => console.log('off')}
+							style={{flex:1, justifyContent: 'center'}} >
+							<Text
+								ellipsizeMode="middle"
+								numberOfLines={1}
+								style = {{
+									color: item.childObject.state === 0 ? 'red' : '#a0a0a0',
+									fontSize:  Math.floor(tileWidth / 8),
+									textAlign: 'center',
+									textAlignVertical: 'center',
+								}}
+							>
+								{'Off'}
+							</Text>
+						</TouchableOpacity>
+					</View>
+					<View style={{
+						flex:1,
+						backgroundColor: item.childObject.state === 0 ? '#eeeeee' : 'white',
+					}}>
+						<TouchableOpacity
+							onPress={() => console.log('off')}
+							style={{flex:1, justifyContent: 'center'}} >
+							<Text
+								ellipsizeMode="middle"
+								numberOfLines={1}
+								style = {{
+									color: item.childObject.state === 0 ? '#a0a0a0' : 'green',
+									fontSize:  Math.floor(tileWidth / 8),
+									textAlign: 'center',
+									textAlignVertical: 'center',
+								}}>
+								{'On'}
+							</Text>
+						</TouchableOpacity>
+					</View>
+				</View>
+				<View style={{
+					flex:13,
+					backgroundColor: item.childObject.state === 0 ? '#bfbfbf' : '#e56e18',
+					justifyContent: 'center'}}>
+					<Text
+						ellipsizeMode="middle"
+						numberOfLines={1}
+						style = {{
+							padding : 5,
+							color: 'white',
+							fontSize:  Math.floor(tileWidth / 8),
+							opacity: item.childObject.name ? 1 : 0.7,
+							textAlign: 'center',
+							textAlignVertical: 'center',
+						}}>
 						{item.childObject.name ? item.childObject.name : '(no name)'}
 					</Text>
 				</View>
-			</Image>
-		)
+			</DashboardShadowTile>
+		);
 	}
-
 }
 
 module.exports = DeviceDashboardTile;
