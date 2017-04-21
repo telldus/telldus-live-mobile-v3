@@ -74,7 +74,6 @@ module.exports = {
  - `testUsername`: string - Used as a default username at login
  - `testPassword`: string - Used as a default passwod at login
 
-
 ## Run
 
 - environment vars?
@@ -94,6 +93,14 @@ To make development quick React Native comes with a Launch Packager which is run
 ### Android
 
 - `react-native run-android`
+
+### Debugging
+
+React Native comes with pretty cool development tools.
+
+You can access the developer menu by shaking your device or by selecting "Shake Gesture" inside the Hardware menu in the iOS Simulator. You can also use the `Command ⌘ + D` keyboard shortcut when your app is running in the iPhone Simulator, or `Command ⌘ + M` when running in an Android emulator.
+
+[More info](https://facebook.github.io/react-native/docs/debugging.html)
 
 ## Split dependencies
 
