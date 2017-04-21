@@ -44,6 +44,9 @@ import localConfig from '../config.local.js';
  * testPassword: string - Used as a default passwod at login
  */
 
-var config = Object.assign({}, localConfig);
+const config = Object.assign({
+    authenticationTimeOut: 5 * 1000, // 5 secs
+    telldusLiveWebAuthenticationUrl: 'https://live.telldus.com/',
+}, localConfig);
 
 module.exports = config;
