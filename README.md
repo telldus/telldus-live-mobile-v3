@@ -40,7 +40,7 @@ All commands are assumed to be ran from project root.
   `sdkmanager "build-tools;23.0.1" "platforms;android-23" "system-images;android-23;google_apis;x86_64" "system-images;android-23;google_apis;x86" --verbose`
   - we need some general Android deps:
   `sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" --verbose`
-- you need a `android/app/google-services.json` file, see [instructions](#google-services.json)
+- you need a `android/app/google-services.json` file, see [instructions](#google-servicesjson)
 - to run the app on your device, check out [React Native: Running On Device](https://facebook.github.io/react-native/releases/0.23/docs/running-on-device-android.html#content). When your (virtual) device is connected, you can see it show up when you run `adb devices`. run `react-native run-android` to launch the app on your phone
 - use `adb logcat` to look at the Android log file
 - when the app launches on your (virtual) device, it will send you to the Settings screen for "Apps that can draw over other apps". Enable this for the Telldus app and launch the app again from your app drawer.
