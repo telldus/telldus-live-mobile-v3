@@ -25,12 +25,13 @@ All commands are assumed to be ran from project root.
 
 ### Android
 
-- setup Android development environment via this [React Native Official](https://facebook.github.io/react-native/releases/0.23/docs/android-setup.html)
-- install with Android Studio, or use `sdkmanager`:
-  - `brew install android-sdk` -> `brew install Caskroom/cask/android-sdk`
-  - `export ANDROID_HOME=/usr/local/opt/android-sdk` -> `export ANDROID_HOME=/usr/local/share/android-sdk`
-  - After adding the `export` ^ to your `~/.bash_profile`, use `source ~/.bash_profile` to load it
-  - Android SDK Manager is no longer available as a separate GIU (`android`). Instead you use CLI tool `sdkmanager`.
+- find all the instructions you need for setting up your Android development environment on [React Native Official - Android Setup](https://facebook.github.io/react-native/releases/0.23/docs/android-setup.html)
+- **install dependencies with Android Studio**:
+  - Android SDK Manager is no longer available as a separate GUI (run `android`), but integrated in [Android Studio](https://developer.android.com/studio/install.html). Install it, go through default setup. When you get to chose your project (new, use existing, etc.), choose `Configure` -> `SDK Manager` on the bottom. This pretty much looks like the old GUI, only now it's split over 3 tabs. Use `Show Package Details` checkbox in the bottom, to expand the dependencies.
+  - When you run the app, the `react-native` will use the `ANDROID_HOME` environment variable to find the SDK. So, if you install with Android Studio, use `export ANDROID_HOME=/Users/elbow/Library/Android/sdk` (add it to your `~/.bash_profile`).
+- **install dependencies via the command-line** with [`sdkmanager`](https://developer.android.com/studio/command-line/sdkmanager.html). The instructions for `sdkmanager` on the official React Native page are somewhat outdated:
+  - download it with `brew install Caskroom/cask/android-sdk` (instead of `brew install android-sdk`)
+  - brew now uses a different path to store packages, use `export ANDROID_HOME=/usr/local/share/android-sdk` (instead of `export ANDROID_HOME=/usr/local/opt/android-sdk`)
   - `sdkmanager` might warn that `~/.android/repositories.cfg` could not be loaded. `touch ~/.android/repositories.cfg` to create it
   - to show all Android deps you can install, use `sdkmanager --list --verbose`
   - we currently run Android version 24, which you need to install Android deps for:
@@ -39,11 +40,11 @@ All commands are assumed to be ran from project root.
   `sdkmanager "build-tools;23.0.1" "platforms;android-23" "system-images;android-23;google_apis;x86_64" "system-images;android-23;google_apis;x86" --verbose`
   - we need some general Android deps:
   `sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" --verbose`
-- you need a `android/app/google-services.json` file
-  *TODO:* figure out how to add one for local testing
-- to run the app on your device, check out [React Native: Running On Device](https://facebook.github.io/react-native/releases/0.23/docs/running-on-device-android.html#content). when it's connected, and you can see it show up when you run `adb devices`, run `react-native run-android` to launch the app on your phone
+- you need a `android/app/google-services.json` file, otherwise the app won't run **TODO: figure out how to add one for local testing**
+- to run the app on your device, check out [React Native: Running On Device](https://facebook.github.io/react-native/releases/0.23/docs/running-on-device-android.html#content). When your (virtual) device is connected, you can see it show up when you run `adb devices`. run `react-native run-android` to launch the app on your phone
+- use `adb logcat` to look at the Android log file
 - when the app launches on your (virtual) device, it will send you to the Settings screen for "Apps that can draw over other apps". Enable this for the Telldus app and launch the app again from your app drawer.
-- to check out logs, use `adb logcat`
+
 
 ## Development
 
