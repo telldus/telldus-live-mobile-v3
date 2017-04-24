@@ -24,11 +24,46 @@ import { FormattedNumber, Text, View } from 'BaseComponents';
 
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile  from './DashboardShadowTile';
+import { TouchableOpacity } from 'react-native';
 
 class SensorDashboardTile extends View {
 	constructor(props) {
 		super(props);
 		this.getSlideList = this.getSlideList.bind(this);
+		this.changeDisplayType  = this.changeDisplayType.bind(this);
+	}
+
+	changeDisplayType() {
+		let item = this.props.item;
+		let allDisplayType = [];
+
+		if (item.childObject.humidity) {
+			allDisplayType.push('humidity');
+		}
+		if (item.childObject.luminance) {
+			allDisplayType.push('luminance');
+		}
+		if (item.childObject.rainRate || item.childObject.rainTotal) {
+			allDisplayType.push('rain');
+		}
+		if (item.childObject.temperature) {
+			allDisplayType.push('temperature');
+		}
+		if (item.childObject.uv) {
+			allDisplayType.push('uv');
+		}
+		if (item.childObject.watt) {
+			allDisplayType.push('watt');
+		}
+		if (item.childObject.windGust || item.childObject.windAverage || item.childObject.windDirection) {
+			allDisplayType.push('wind');
+		}
+
+		let currentIdx = allDisplayType.indexOf(item.displayType);
+		currentIdx = currentIdx < 0 ? 0 : currentIdx;
+		let nextIdx = currentIdx < allDisplayType.length - 1 ? currentIdx + 1 : 0;
+
+		this.props.onSensorSelected(item.childObject, allDisplayType[nextIdx]);
 	}
 
 	getSlideList(item) {
@@ -37,21 +72,21 @@ class SensorDashboardTile extends View {
 		if (item.childObject.humidity) {
 			slideList.push({
 				key: 'humidity',
-				icon: require('../img/sensorIcons/HumidityLarge.png'),
+				icon: require('../img/sensorIcons/HumidityLargeGray.png'),
 				text: <FormattedNumber value = {item.childObject.humidity / 100} formatStyle = "percent" />
 			});
 		}
 		if (item.childObject.temperature) {
 			slideList.push({
 				key: 'temperature',
-				icon: require('../img/sensorIcons/TemperatureLarge.png'),
+				icon: require('../img/sensorIcons/TemperatureLargeGray.png'),
 				text: <FormattedNumber value = {item.childObject.temperature} maximumFractionDigits = {0} suffix = {String.fromCharCode(176) + 'c'}/>
 			});
 		}
 		if (item.childObject.rainRate || item.childObject.rainTotal) {
 			slideList.push({
 				key: 'rain',
-				icon: require('../img/sensorIcons/RainLarge.png'),
+				icon: require('../img/sensorIcons/RainLargeGray.png'),
 				text: (item.childObject.rainRate && <FormattedNumber value = {item.childObject.rainRate} maximumFractionDigits = {0} suffix = {'mm/h\n'} /> ),
 				text2: (item.childObject.rainTotal && <FormattedNumber value = {item.childObject.rainTotal} maximumFractionDigits = {0} suffix = {'mm'} /> )
 			});
@@ -59,7 +94,7 @@ class SensorDashboardTile extends View {
 		if (item.childObject.windGust || item.childObject.windAverage || item.childObject.windDirection) {
 			slideList.push({
 				key: 'wind',
-				icon: require('../img/sensorIcons/WindLarge.png'),
+				icon: require('../img/sensorIcons/WindLargeGray.png'),
 				text: (item.childObject.windAverage && <FormattedNumber value = {item.childObject.windAverage} maximumFractionDigits = {1} suffix = {'m/s\n'} /> ),
 				text2: (item.childObject.windGust && <FormattedNumber value = {item.childObject.windGust} maximumFractionDigits = {1} suffix = {'m/s*\n'} /> ),
 				text3: (item.childObject.windDirection && <Text>{ this._windDirection(item.childObject.windDirection) }</Text> )
@@ -68,21 +103,21 @@ class SensorDashboardTile extends View {
 		if (item.childObject.uv) {
 			slideList.push({
 				key: 'uv',
-				icon: require('../img/sensorIcons/UVLarge.png'),
+				icon: require('../img/sensorIcons/UVLargeGray.png'),
 				text: <FormattedNumber value = {item.childObject.uv} maximumFractionDigits = {0} />
 			});
 		}
 		if (item.childObject.watt) {
 			slideList.push({
 				key: 'watt',
-				icon: require('../img/sensorIcons/WattLarge.png'),
+				icon: require('../img/sensorIcons/WattLargeGray.png'),
 				text: <FormattedNumber value = {item.childObject.watt} maximumFractionDigits = {1} suffix = {' W'}/>
 			});
 		}
 		if (item.childObject.luminance) {
 			slideList.push({
 				key: 'luminance',
-				icon: require('../img/sensorIcons/LuminanceLarge.png'),
+				icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
 				text: <FormattedNumber value = {item.childObject.luminance} maximumFractionDigits = {0} suffix = {'lx'}/>
 			});
 		}
@@ -99,7 +134,16 @@ class SensorDashboardTile extends View {
 		const slides = slideList.map((data) =>
 			<SensorDashboardTileSlide key = {data.key} icon = {data.icon} text={data.text} tileWidth={tileWidth} />
 		);
-		const firstSlide = slides[0];
+
+		let selectedSlideIndex = 0;
+		if (item.displayType !== 'default') {
+			for (let i = 0; i < slideList.length; ++i) {
+				if (slideList[i].key === item.displayType) {
+					selectedSlideIndex = i;
+					break;
+				}
+			}
+		}
 
 		return (
 			<DashboardShadowTile
@@ -108,8 +152,9 @@ class SensorDashboardTile extends View {
 					width: tileWidth,
 					height: tileWidth
 				}]}>
+				<TouchableOpacity onPress={this.changeDisplayType} style={{flex:1, justifyContent: 'center'}}>
 				<View style={{flexDirection: 'row', flex:30}}>
-					{firstSlide}
+					{slides[selectedSlideIndex]}
 				</View>
 				<View style={{
 					flex:13,
@@ -129,44 +174,9 @@ class SensorDashboardTile extends View {
 						{item.childObject.name ? item.childObject.name : '(no name)'}
 					</Text>
 				</View>
+				</TouchableOpacity>
 			</DashboardShadowTile>
 		);
-
-		/* return (
-			<Image
-				style = {[this.props.style, {
-					flexDirection: 'column',
-					width: tileWidth,
-					height: tileWidth,
-					backgroundColor: Theme.Core.brandPrimary
-				}]}
-				source = {require('../img/TileBackground.png')}
-			>
-				<View style = {{
-					width: tileWidth,
-					height: tileDetailsHeight
-				}}>{slides}</View>
-				<View style = {{
-					width: tileWidth,
-					height: tileTitleHeight,
-					justifyContent: 'center'
-				}}>
-					<Text
-					ellipsizeMode = "middle"
-					numberOfLines = {1}
-					style = {{
-						width: tileWidth,
-						color: 'rgba(255,255,255,1)',
-						fontSize:  Math.floor(tileWidth / 8),
-						opacity: item.childObject.name ? 1 : 0.7,
-						marginBottom: 2,
-						textAlign: 'center'
-					}}>
-						{item.childObject.name ? item.childObject.name : '(no name)'}
-					</Text>
-				</View>
-			</Image>
-		) */
 	}
 
 	_windDirection(value) {
