@@ -66,10 +66,12 @@ function parseDataIntoRowsAndSections(sensors, gateways, dashboard) {
 				items[sectionId] = [];
 			}
 
-			if (dashboard.sensors.indexOf(item.id) >= 0) {
-				item.inDashboard = true;
-			} else {
-				item.inDashboard = false;
+			item.inDashboard = false;
+			for (let i = 0; i < dashboard.sensors.length; ++i) {
+				if (dashboard.sensors[i].id === item.id) {
+					item.inDashboard = true;
+					break;
+				}
 			}
 
 			items[sectionId].push(item);
