@@ -16,18 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 'use strict';
 
 import React from 'react';
 import { connect } from 'react-redux';
 
 import { List, ListDataSource, View } from 'BaseComponents';
-import { getDevices } from 'Actions';
+import { changeSensorDisplayType } from 'Actions';
 
 import { DeviceDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
-
-import type { Tab } from '../reducers/navigation';
 
 class DashboardTab extends View {
 	constructor(props) {
@@ -73,7 +70,7 @@ class DashboardTab extends View {
 
 	render() {
 		let dataSource;
-		const data = this._calculateItemDimensions();
+		const data = this._calculateItemDimensions(this.state.listWidth);
 		if (data) {
 			dataSource = new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data);
 		}
@@ -84,7 +81,7 @@ class DashboardTab extends View {
 				<List
 					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
 					dataSource = {dataSource}
-					renderRow = {this._renderRow}
+					renderRow = {this._renderRow.bind(this)}
 					pageSize = {100}
 				/>
 			</View>
@@ -106,7 +103,7 @@ class DashboardTab extends View {
 			};
 			if (item.objectType === 'sensor') {
 				return (
-					<SensorDashboardTile style={tileStyle} item={item} />
+					<SensorDashboardTile style={tileStyle} item={item} onSensorSelected={this.props.changeSensorDisplayType}/>
 				);
 			} else if (item.objectType === 'device') {
 				return (
@@ -121,27 +118,6 @@ class DashboardTab extends View {
 
 function _parseDataIntoItems(devices, sensors, dashboard) {
 	const items = [];
-	// if (devices && devices.map) {
-	// 	devices.map((item) => {
-			// var dashboardItem = {
-			// 	objectType: 'device',
-			// 	childObject: item,
-			// 	tileWidth: 0
-			// }
-			// items.push(dashboardItem);
-
-	// 	});
-	// }
-	// if (sensors && sensors.map) {
-	// 	sensors.map((item) => {
-	// 		var dashboardItem = {
-	// 			objectType: 'sensor',
-	// 			childObject: item,
-	// 			tileWidth: 0
-	// 		}
-	// 		items.push(dashboardItem);
-	// 	});
-	// }
 
 	if (devices && devices.filter) {
 		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
@@ -156,12 +132,28 @@ function _parseDataIntoItems(devices, sensors, dashboard) {
 	}
 
 	if (sensors && sensors.filter) {
-		let sensorsInDashboard = sensors.filter(item => dashboard.sensors.indexOf(item.id) >= 0);
+		let sensorsInDashboard = sensors.filter(item => {
+			for (let i = 0; i < dashboard.sensors.length; ++i) {
+				if (dashboard.sensors[i].id === item.id) {
+					return true;
+				}
+			}
+			return false;
+		});
+
 		sensorsInDashboard.map((item) => {
+			let displayType = 'default';
+			for (let i = 0; i < dashboard.sensors.length; ++i) {
+				if (dashboard.sensors[i].id === item.id) {
+					displayType = dashboard.sensors[i].displayType;
+					break;
+				}
+			}
 			const dashboardItem = {
 				objectType: 'sensor',
 				childObject: item,
-				tileWidth: 0
+				tileWidth: 0,
+				displayType
 			};
 			items.push(dashboardItem);
 		});
@@ -177,4 +169,11 @@ function select(store) {
 	};
 }
 
-module.exports = connect(select)(DashboardTab);
+function actions(dispatch) {
+	return {
+		changeSensorDisplayType: (item, displayType) => dispatch(changeSensorDisplayType(item.id, displayType)),
+		dispatch
+	};
+}
+
+module.exports = connect(select, actions)(DashboardTab);
