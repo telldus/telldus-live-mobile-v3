@@ -31,7 +31,8 @@ module.exports = class DashboardShadowTile extends View {
 					shadowColor: '#000000',
 					shadowOffset: {width: 0, height: 0},
 					shadowRadius: 3,
-					shadowOpacity: 1.0
+					shadowOpacity: 1.0,
+					elevation: 10
             }]}>
                 <View style={{
 					flex:1,
