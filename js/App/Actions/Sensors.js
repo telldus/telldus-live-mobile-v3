@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
-import type { ThunkAction } from './types';
+import type { Action, ThunkAction } from './types';
 
 function getSensors(): ThunkAction {
 	return (dispatch) => {
@@ -33,16 +34,16 @@ function getSensors(): ThunkAction {
 	};
 }
 
-function processWebsocketMessageForSensor(action, data): Action {
-	switch(action) {
+function processWebsocketMessageForSensor(action : Action, data : Object): Action {
+	switch (action) {
 		case 'value':
 			return {
 				type: 'SENSOR_UPDATE_VALUE',
 				payload: data
 			};
-		break;
-	default:
+		default:
 	}
+
 	return {
 		type: 'SENSOR_WEBSOCKET_UNHANDLED',
 		payload: data
