@@ -76,6 +76,7 @@ export default StyleSheet.create({
 		left: 0,
 		right: 0,
 		flexDirection: 'row',
+		backgroundColor: 'white'
 	},
 	listItemAvatar: {
 		width: 32,
