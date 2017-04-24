@@ -24,7 +24,7 @@ import type { Action } from '../actions/types';
 
 type State = {
 	devices: Array<Number>,
-    sensors: Array<Number>,
+    sensors: Array<Object>
 };
 
 const initialState: State = {
