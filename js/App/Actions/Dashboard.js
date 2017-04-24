@@ -34,5 +34,10 @@ module.exports = {
 		kind,
 		id
 	}),
+	changeSensorDisplayType : (id: Number, displayType: String) : Action => ({
+		type: 'CHANGE_SENSOR_DISPLAY_TYPE',
+		id,
+		displayType
+	})
 };
 

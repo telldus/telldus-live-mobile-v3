@@ -20,7 +20,7 @@
 'use strict';
 
 export type Action =
-	  { type: 'LOGGED_IN' }
+	{ type: 'LOGGED_IN' }
 	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
 	| { type: 'RECEIVED_USER_PROFILE', userProfile: Object }
 	| { type: 'RECEIVED_DEVICES', devices: Object }
@@ -31,6 +31,7 @@ export type Action =
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: Number}
 	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: Number}
+	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id:Number, displayType: String }
 	| { type: 'ERROR', message: Object }
 	;
 
