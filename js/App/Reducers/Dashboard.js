@@ -17,6 +17,7 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
 'use strict';
 
 import type { Action } from '../actions/types';
@@ -34,14 +35,21 @@ const initialState: State = {
 function dashboard(state: State = initialState, action : Action): State {
     if (action.type === 'ADD_TO_DASHBOARD') {
         if (action.kind === 'sensor') {
-            if (state.sensors.indexOf(action.id) >= 0) return state;
+            if (state.sensors.filter((item) => item.id === action.id).length > 0) {
+                return state;
+            }
 
             return {
                 ...state,
-                sensors: [...state.sensors, action.id],
+                sensors: [
+                    ...state.sensors,
+                    {
+                        'id':action.id
+                    }
+                ]
             };
         } else if (action.kind === 'device') {
-            if (state.devices.indexOf(action.id) >= 0) return state;
+            if (state.devices.indexOf(action.id) >= 0) { return state; }
 
             return {
                 ...state,
@@ -52,7 +60,7 @@ function dashboard(state: State = initialState, action : Action): State {
         if (action.kind === 'sensor') {
             return {
                 ...state,
-                sensors: state.sensors.filter(id => id !== action.id)
+                sensors: state.sensors.filter((item) => item.id !== action.id)
             };
         } else if (action.kind === 'device') {
             return {
@@ -60,6 +68,17 @@ function dashboard(state: State = initialState, action : Action): State {
                 devices: state.devices.filter(id => id !== action.id)
             };
         }
+    } else if (action.type === 'CHANGE_SENSOR_DISPLAY_TYPE') {
+        return {
+            ...state,
+            sensors:
+                state.sensors.map(item => {
+                    if (item.id === action.id) {
+                        item.displayType = action.displayType;
+                    }
+                    return item;
+                })
+        };
     }
 
     return state;
