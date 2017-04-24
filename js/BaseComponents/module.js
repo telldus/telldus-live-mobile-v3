@@ -26,6 +26,7 @@ import Footer from './Footer';
 import Title from './Title';
 import Container from './Container';
 import Content from './Content';
+import BackgroundImage from './BackgroundImage';
 import Button from './Button';
 import Text from './Text';
 import FormattedNumber from './FormattedNumber';
@@ -73,7 +74,8 @@ module.exports = {
 	Title: Title,
 	Container: Container,
 	Content: Content,
-	Button: Button,
+    BackgroundImage: BackgroundImage,
+    Button: Button,
 	FormattedNumber: FormattedNumber,
 	Text: Text,
 	Switch: Switch,
