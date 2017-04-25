@@ -20,8 +20,9 @@
 'use strict';
 
 import React from 'react';
-import { Container, Button, ListItem, Text, View, Icon } from 'BaseComponents';
+import { Container, ListItem, Text, View, Icon } from 'BaseComponents';
 import DeviceDetailView from './../../DetailViews/DeviceDetailView';
+import SwitchButton from './SwitchButton';
 
 import { deviceSetStatePseudo } from 'Actions';
 
@@ -32,16 +33,10 @@ module.exports = class DeviceRow extends View {
         try {
 			return (
 				<ListItem style = { Theme.Styles.rowFront }>
-					<Container style = {{ marginLeft: 4, flexDirection: 'row'}}>
-						<Button
-							name = { this.props.state === 0 ? 'toggle-off' : 'toggle-on' }
-							style = {{ padding: 6}}
-							color = { this.props.state === 0 ? 'gray' : 'blue'}
-							size = {30}
-							backgroundColor = {'transparent'}
-							onPress={this.onToggleSelected.bind(this, this.props)}
-						/>
-						<View style={{flex:10, justifyContent: 'center', }}>
+					<Container style = {{ marginLeft: 2, flexDirection: 'row', alignItems:'stretch'}}>
+						<SwitchButton
+							item={this.props} style={{flex:7, height:32}} />
+						<View style={{flex:20, justifyContent: 'center', }}>
 							<Text style = {{
 								marginLeft: 8,
 								color: 'rgba(0,0,0,0.87)',
@@ -52,9 +47,11 @@ module.exports = class DeviceRow extends View {
 								{this.props.name ? this.props.name : '(no name)'}
 							</Text>
 						</View>
-						<View style={{flex:1, justifyContent: 'center', alignItems:'center'}}>
+						<View style={{flex:2, justifyContent: 'center', alignItems:'center', marginRight:8}}>
 							<Icon
-								name="arrow-right"
+								name="gear"
+								size={26}
+								color="#bbbbbb"
 								onPress={ () => this.props.navigator.push({
 									component: DeviceDetailView,
 									title: this.props.name,
@@ -65,7 +62,7 @@ module.exports = class DeviceRow extends View {
 					</Container>
 				</ListItem>
 			);
-		} catch(e) {
+		} catch (e) {
 			console.log(e);
 			return ( <View /> );
 		}
