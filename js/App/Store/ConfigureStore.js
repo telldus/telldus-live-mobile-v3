@@ -30,15 +30,15 @@ import createLogger from 'redux-logger';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
 
-var isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
+let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
-var logger = createLogger({
+let logger = createLogger({
 	predicate: (getState, action) => isDebuggingInChrome,
 	collapsed: true,
 	duration: true,
 });
 
-var createTheStore = applyMiddleware(thunk, promise, array, LiveApiMiddleware, WebsocketMiddleware, analytics, logger)(createStore);
+let createTheStore = applyMiddleware(thunk, promise, array, LiveApiMiddleware, WebsocketMiddleware, analytics, logger)(createStore);
 
 function configureStore(onComplete: ?() => void) {
 	const store = autoRehydrate()(createTheStore)(reducers);

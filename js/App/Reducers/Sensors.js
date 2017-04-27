@@ -21,7 +21,7 @@
 
 import type { Action } from '../actions/types';
 
-export type State = ?object;
+export type State = ?Object;
 
 const initialState = [];
 const sensorInitialState = {};
@@ -29,48 +29,48 @@ const sensorInitialState = {};
 function sensor(state: State = sensorInitialState, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_SENSORS':
-			var newSensor = {
+			const newSensor = {
 				battery: state.battery,
-				clientId: parseInt(state.client),
+				clientId: parseInt(state.client, 10),
 				editable: Boolean(state.editable),
-				id: parseInt(state.id),
+				id: parseInt(state.id, 10),
 				ignored: Boolean(state.ignored),
 				keepHistory: Boolean(state.keepHistory),
 				lastUpdated: state.lastUpdated,
 				model: state.model,
 				name: state.name,
 				protocol: state.protocol,
-				sensorId: parseInt(state.sensorId),
+				sensorId: parseInt(state.sensorId, 10),
 			};
 			if (state.temp) {
-				newSensor['temperature'] = state.temp
+				newSensor['temperature'] = state.temp;
 			}
 			if (state.humidity) {
-				newSensor['humidity'] = state.humidity
+				newSensor['humidity'] = state.humidity;
 			}
 			if (state.rrate) {
-				newSensor['rainRate'] = state.rrate
+				newSensor['rainRate'] = state.rrate;
 			}
 			if (state.rtot) {
-				newSensor['rainTotal'] = state.rtot
+				newSensor['rainTotal'] = state.rtot;
 			}
 			if (state.uv) {
-				newSensor['uv'] = state.uv
+				newSensor['uv'] = state.uv;
 			}
 			if (state.watt) {
-				newSensor['watt'] = state.watt
+				newSensor['watt'] = state.watt;
 			}
 			if (state.lum) {
-				newSensor['luminance'] = state.lum
+				newSensor['luminance'] = state.lum;
 			}
 			if (state.wavg) {
-				newSensor['windAverage'] = state.wavg
+				newSensor['windAverage'] = state.wavg;
 			}
 			if (state.wgust) {
-				newSensor['windGust'] = state.wgust
+				newSensor['windGust'] = state.wgust;
 			}
 			if (state.wdir) {
-				newSensor['windDirection'] = state.wdir
+				newSensor['windDirection'] = state.wdir;
 			}
 			return newSensor;
 		case 'LOGGED_OUT':
@@ -94,33 +94,33 @@ function sensors(state: State = initialState, action: Action): State {
 	if (action.type === 'SENSOR_UPDATE_VALUE') {
 		return state.map(sensorState => {
 			if (sensorState.id === action.payload.sensorId) {
-				var sensor = { ...sensorState };
-				sensor.lastUpdated = parseInt(action.payload.time);
-				sensor.battery = action.payload.battery;
+				const _sensor = { ...sensorState };
+				_sensor.lastUpdated = parseInt(action.payload.time, 10);
+				_sensor.battery = action.payload.battery;
 				action.payload.data.map(sensorData => {
-					if (sensorData.type == 1) {
-						sensor['temperature'] = sensorData.value;
-					} else if (sensorData.type == 2) {
-						sensor['humidity'] = sensorData.value;
-					} else if (sensorData.type == 4) {
-						sensor['rainRate'] = sensorData.value;
-					} else if (sensorData.type == 8) {
-						sensor['rainTotal'] = sensorData.value;
-					} else if (sensorData.type == 32) {
-						sensor['windAverage'] = sensorData.value;
-					} else if (sensorData.type == 64) {
-						sensor['windGust'] = sensorData.value;
-					} else if (sensorData.type == 16) {
-						sensor['windDirection'] = sensorData.value;
-					} else if (sensorData.type == 128) {
-						sensor['uv'] = sensorData.value;
-					} else if (sensorData.type == 256 && sensorData.scale == 2) {
-						sensor['watt'] = sensorData.value;
-					} else if (sensorData.type == 512) {
-						sensor['luminance'] = sensorData.value;
+					if (sensorData.type === 1) {
+						_sensor['temperature'] = sensorData.value;
+					} else if (sensorData.type === 2) {
+						_sensor['humidity'] = sensorData.value;
+					} else if (sensorData.type === 4) {
+						_sensor['rainRate'] = sensorData.value;
+					} else if (sensorData.type === 8) {
+						_sensor['rainTotal'] = sensorData.value;
+					} else if (sensorData.type === 32) {
+						_sensor['windAverage'] = sensorData.value;
+					} else if (sensorData.type === 64) {
+						_sensor['windGust'] = sensorData.value;
+					} else if (sensorData.type === 16) {
+						_sensor['windDirection'] = sensorData.value;
+					} else if (sensorData.type === 128) {
+						_sensor['uv'] = sensorData.value;
+					} else if (sensorData.type === 256 && sensorData.scale === 2) {
+						_sensor['watt'] = sensorData.value;
+					} else if (sensorData.type === 512) {
+						_sensor['luminance'] = sensorData.value;
 					}
 				});
-				return sensor;
+				return _sensor;
 			} else {
 				return sensorState;
 			}

@@ -110,7 +110,7 @@ class SwipeRow extends Component {
 
 			if (this.swipeInitialX === null) {
 				// set tranlateX value when user started swiping
-				this.swipeInitialX = this.state.translateX._value
+				this.swipeInitialX = this.state.translateX._value;
 			}
 			this.horizontalSwipeGestureBegan = true;
 

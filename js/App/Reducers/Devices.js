@@ -21,7 +21,7 @@
 
 import type { Action } from '../actions/types';
 
-export type State = ?object;
+export type State = ?Object;
 
 const initialState = [];
 const deviceInitialState = {};
@@ -29,21 +29,20 @@ const deviceInitialState = {};
 function device(state: State = deviceInitialState, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_DEVICES':
-			var newDevice = {
-				clientId: parseInt(state.client),
+			return {
+				clientId: parseInt(state.client, 10),
 				editable: Boolean(state.editable),
-				id: parseInt(state.id),
-				state: parseInt(state.state),
-				stateValue: parseInt(state.stateValue),
+				id: parseInt(state.id, 10),
+				state: parseInt(state.state, 10),
+				stateValue: parseInt(state.stateValue, 10),
 				online: Boolean(state.online),
 				ignored: Boolean(state.ignored),
 				methods: Boolean(state.methods),
 				type: state.type,
 				name: state.name,
 				protocol: state.protocol,
-				clientDeviceId: parseInt(state.clientDeviceId),
+				clientDeviceId: parseInt(state.clientDeviceId, 10),
 			};
-			return newDevice;
 		case 'LOGGED_OUT':
 			return deviceInitialState;
 		default:
