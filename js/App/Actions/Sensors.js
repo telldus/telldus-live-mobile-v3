@@ -21,6 +21,8 @@
 
 import type { ThunkAction } from './types';
 
+import type { Action } from './types';
+
 function getSensors(): ThunkAction {
 	return (dispatch) => {
 		const payload = {
@@ -34,13 +36,12 @@ function getSensors(): ThunkAction {
 }
 
 function processWebsocketMessageForSensor(action, data): Action {
-	switch(action) {
+	switch (action) {
 		case 'value':
 			return {
 				type: 'SENSOR_UPDATE_VALUE',
 				payload: data
 			};
-		break;
 	default:
 	}
 	return {

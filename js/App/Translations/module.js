@@ -21,15 +21,15 @@
 
 'use strict';
 
-import cs from './cs.json'
-import en from './en.json'
-import fr from './fr.json'
-import nb from './nb.json'
-import nl from './nl.json'
-import pl from './pl.json'
-import ru from './ru.json'
-import sv from './sv.json'
-import th from './th.json'
+import cs from './cs.json';
+import en from './en.json';
+import fr from './fr.json';
+import nb from './nb.json';
+import nl from './nl.json';
+import pl from './pl.json';
+import ru from './ru.json';
+import sv from './sv.json';
+import th from './th.json';
 
 module.exports = {
 	cs: cs,
@@ -41,4 +41,4 @@ module.exports = {
 	ru: ru,
 	sv: sv,
 	th: th
-}
+};
