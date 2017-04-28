@@ -116,7 +116,30 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 
 ## Logging
 
-### `google-services.json`
+## Redux
+
+This app uses [Redux](http://redux.js.org/) to manage its state. Redux is opinionated framework that works with pure functions, great for scaling applications that have to manage a lot of state (which is why it is a good fit for this app). It's basic components are:
+
+- Action (see `js/App/Actions`): an event, with a type and optional payload, that is much like a trigger for a change that you want to happen
+- Reducer (see `js/App/Reducers`): takes existing state and an Action, and returns a new state (never alters existing state)
+- Redux store (see `js/App/Store/ConfigureStore.js`): 1) holds the current state and is initiated with a reducer. It provides a `dispatch` function which allows you to pass an Action to it. You can also `subscribe` to any changes.
+- Action creator (see `js/App/Actions`): a function that dispatches one or more Actions, synchronously or asynchonously.
+- Redux Middleware (see `js/App/Middleware`): plugings that allow for different types of Action creators, e.g. ThunkActions which can dispatch Actions asynchronously
+- Selector (located with component): parses state into appropriate chunks for a React component (should rather be located with the relevant Reducer, because they work on the same data)
+- `connect`: function that binds the Redux store to a React component passing two functions:
+  - `mapStateToProps`: a function that uses Selectors to filter relevant props from the state
+  - `mapDispatchToProps`: a function that exposes relevant Action creators in the props
+
+For more info, from the man himself @dan_ambramov: https://github.com/reactjs/react-redux/blob/master/docs/api.md
+
+### Learn Redux
+
+Redux by itself is conceptually interesting but it starts flying when it's coupled with React. These two courses should do the trick to get you up to speed with Redux in React:
+- [Part 1: Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) (30 free videos)
+- [Part 2: Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux) (27 free videos)
+
+
+## `google-services.json`
 
 You need a `android/app/google-services.json` file, otherwise the app won't run. Because this file contains production keys and secrets, it is not included in this repository. However, you can add a placeholder yourself. Create `android/app/google-services.json` and add this json content:
 
