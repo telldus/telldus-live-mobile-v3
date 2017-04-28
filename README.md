@@ -124,7 +124,7 @@ This app uses [Redux](http://redux.js.org/) to manage its state. Redux is opinio
 - Reducer (see `js/App/Reducers`): takes existing state and an Action, and returns a new state (never alters existing state)
 - Redux store (see `js/App/Store/ConfigureStore.js`): 1) holds the current state and is initiated with a reducer. It provides a `dispatch` function which allows you to pass an Action to it. You can also `subscribe` to any changes.
 - Action creator (see `js/App/Actions`): a function that dispatches one or more Actions, synchronously or asynchonously.
-- Redux Middleware (see `js/App/Middleware`): plugings that allow for different types of Action creators, e.g. ThunkActions which can dispatch Actions asynchronously
+- Redux Middleware (see `js/App/Middleware`): plugins that allow for different types of Action creators, e.g. ThunkActions which can dispatch Actions asynchronously. In the Telldus App there is Middleware for the REST API (`js/App/Middleware/LiveApi`) and the Socket API (`js/App/Middleware/WebSockets`)
 - Selector (located with component): parses state into appropriate chunks for a React component (should rather be located with the relevant Reducer, because they work on the same data)
 - `connect`: function that binds the Redux store to a React component passing two functions:
   - `mapStateToProps`: a function that uses Selectors to filter relevant props from the state
