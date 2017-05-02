@@ -47,7 +47,7 @@ class WebsocketManager extends React.Component {
 	_checkWebSocketConnections() {
 		this._checkSessionId()
 		.then(() => {
-			this.props.store.dispatch({
+			this.props.dispatch({
 				type: 'WEBSOCKET_WATCHDOG',
 				payload: this.state.session.id
 			});
@@ -75,7 +75,7 @@ class WebsocketManager extends React.Component {
 							method: 'GET'
 						}
 					};
-					this.props.store.dispatch({
+					this.props.dispatch({
 						type: 'LIVE_API_CALL',
 						returnType: 'RECEIVED_AUTHENTICATE_SESSION_RESPONSE',
 						payload: payload,
