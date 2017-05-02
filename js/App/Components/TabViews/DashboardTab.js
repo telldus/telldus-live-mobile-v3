@@ -56,6 +56,8 @@ class DashboardTab extends View {
 	}
 
 	render() {
+		// add to List props: enableEmptySections={true}, to surpress warning
+
 		return (
 			<View onLayout={this._onLayout}>
 				<List
