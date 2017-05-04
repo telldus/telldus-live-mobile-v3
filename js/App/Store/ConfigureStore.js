@@ -24,7 +24,6 @@ import thunk from 'redux-thunk';
 import promise from './Promise';
 import array from './Array';
 import analytics from './Analytics';
-import { LiveApiMiddleware, WebsocketMiddleware } from 'Middleware';
 import reducers from 'Reducers';
 import createLogger from 'redux-logger';
 import { persistStore, autoRehydrate } from 'redux-persist';
@@ -38,15 +37,16 @@ let logger = createLogger({
 	duration: true,
 });
 
-let createTheStore = applyMiddleware(thunk, promise, array, LiveApiMiddleware, WebsocketMiddleware, analytics, logger)(createStore);
+let createTheStore = applyMiddleware(thunk, promise, array, analytics, logger)(createStore);
 
-function configureStore(onComplete: ?() => void) {
+let _store;
+export function configureStore(onComplete: ?() => void) {
 	const store = autoRehydrate()(createTheStore)(reducers);
 	persistStore(store, {storage: AsyncStorage}, onComplete);
 	if (isDebuggingInChrome) {
 		window.store = store;
 	}
+	_store = store; // TODO: fix this ugly stuff
 	return store;
 }
-
-module.exports = configureStore;
+export function getStore() { return _store; }

@@ -97,6 +97,7 @@ class DashboardTab extends View {
 
 }
 
+// TODO: move this to a Reducer
 function _parseDataIntoItems(devices, sensors, dashboard) {
 	let items = [];
 	// if (devices && devices.map) {
@@ -120,7 +121,6 @@ function _parseDataIntoItems(devices, sensors, dashboard) {
 	// 		items.push(dashboardItem);
 	// 	});
 	// }
-
 	if (devices && devices.filter) {
 		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
 		devicesInDashboard.map((item) => {

@@ -21,27 +21,43 @@
 
 import type { ThunkAction } from './types';
 
+import LiveApi from '../Lib/LiveApi';
+
 function getDevices(): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = {
 			url: '/devices/list',
 			requestParams: {
 				method: 'GET'
 			}
 		};
-		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_DEVICES', payload: payload });
+		return LiveApi(payload).then(response => dispatch({
+			type: 'RECEIVED_DEVICES',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
 	};
 }
 
 function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = {
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
 			requestParams: {
 				method: 'GET'
 			}
 		};
-		return dispatch({ type: 'LIVE_API_CALL', returnType: 'DEVICE_SET_STATE', payload: payload });
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_SET_STATE',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
 	};
 }
 
