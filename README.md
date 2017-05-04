@@ -137,6 +137,15 @@ Redux by itself is conceptually interesting but it starts flying when it's coupl
 - [Part 1: Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) (30 free videos)
 - [Part 2: Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux) (27 free videos)
 
+## Backend
+
+The app communicates with the REST LiveApi (see `js/App/Lib/LiveApi`) for:
+- authentication (logging in)
+- getting lists of devices, sensors, etc.
+- sending commands to devices (e.g. `device/turnOn`, `device/turnOff`)
+- setting up a WebSocket session
+
+Once the WebSocket (see `js/App/Lib/WebSockets`) session has been setup, it registers which messages the app is interested in, e.g. updates on a type of sensor. When that sensor has a new value, it pushes it over the WebSocket connection to the app.
 
 ## `google-services.json`
 
