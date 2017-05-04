@@ -23,8 +23,8 @@ import type { ThunkAction } from './types';
 
 import LiveApi from '../Lib/LiveApi';
 
-function getDevices(): ThunkAction {
-	return (dispatch, getState) => {
+export function getDevices(): ThunkAction {
+	return (dispatch) => {
 		const payload = {
 			url: '/devices/list',
 			requestParams: {
@@ -42,8 +42,8 @@ function getDevices(): ThunkAction {
 	};
 }
 
-function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
-	return (dispatch, getState) => {
+export function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
+	return (dispatch) => {
 		const payload = {
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
 			requestParams: {
@@ -61,4 +61,21 @@ function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
 	};
 }
 
-module.exports = { getDevices, deviceSetState };
+export function turnOn(deviceId): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/device/turnOn?id=${deviceId}`,
+			requestParams: {
+				method: 'GET'
+			}
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_TURN_ON',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+	};
+}
