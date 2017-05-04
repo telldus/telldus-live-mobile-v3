@@ -33,6 +33,8 @@ import DashboardShadowTile from './DashboardShadowTile';
 import BellDashboardTile from './BellDashboardTile';
 import NavigationalDashboardTile from './NavigationalDashboardTile';
 import DimmerDashboardTile from './DimmerDashboardTile';
+import DimmingPopup from './DimmingPopup';
+import DimmerProgressBar from './DimmerProgressBar';
 
 module.exports = {
 	DeviceRow: DeviceRow,
@@ -46,5 +48,7 @@ module.exports = {
 	DashboardShadowTile: DashboardShadowTile,
 	BellDashboardTile: BellDashboardTile,
 	NavigationalDashboardTile: NavigationalDashboardTile,
-	DimmerDashboardTile: DimmerDashboardTile
+	DimmerDashboardTile: DimmerDashboardTile,
+    DimmingPopup: DimmingPopup,
+    DimmerProgressBar: DimmerProgressBar
 };
