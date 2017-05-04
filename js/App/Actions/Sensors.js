@@ -23,15 +23,24 @@ import type { ThunkAction } from './types';
 
 import type { Action } from './types';
 
+import LiveApi from '../Lib/LiveApi';
+
 function getSensors(): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = {
 			url: '/sensors/list?includeValues=1',
 			requestParams: {
 				method: 'GET'
 			}
 		};
-		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_SENSORS', payload: payload });
+		return LiveApi(payload).then(response => dispatch({
+			type: 'RECEIVED_SENSORS',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
 	};
 }
 

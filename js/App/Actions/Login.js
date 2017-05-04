@@ -23,6 +23,9 @@ import type { Action, ThunkAction } from './types';
 import { apiServer } from 'Config';
 import { publicKey, privateKey } from 'Config';
 
+import LiveApi from '../Lib/LiveApi';
+import { closeAllConnections } from '../Lib/Socket';
+
 async function loginToTelldus(username, password): Promise<Action> {
 
 	return new Promise((resolve, reject) => {
@@ -71,18 +74,27 @@ function updateAccessToken(accessToken): Action {
 }
 
 function getUserProfile(): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = {
 			url: '/user/profile',
 			requestParams: {
 				method: 'GET'
 			}
 		};
-		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_USER_PROFILE', payload: payload });
+		return LiveApi(payload).then(response => dispatch({
+			type: 'RECEIVED_USER_PROFILE',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+
 	};
 }
 
 function logoutFromTelldus(): ThunkAction {
+	closeAllConnections();
 	return (dispatch) => {
 		return dispatch({
 			type: 'LOGGED_OUT',

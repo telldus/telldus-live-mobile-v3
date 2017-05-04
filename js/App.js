@@ -24,30 +24,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
-
 import {
 	LoginScreen,
 	AppNavigator,
-	WebsocketManager,
 } from 'Components';
 
 class App extends React.Component {
-	componentDidMount() {
-	}
-
 	render() {
 		if (!this.props.accessToken) {
 			return <LoginScreen />;
 		}
 		return (
-			<View>
-				<WebsocketManager {...this.props} />
-				<AppNavigator />
-			</View>
+			<AppNavigator {...this.props}/>
 		);
 	}
-
 }
 
 function select(store) {
