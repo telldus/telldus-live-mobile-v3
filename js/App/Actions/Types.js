@@ -20,7 +20,7 @@
 'use strict';
 
 export type Action =
-	{ type: 'LOGGED_IN' }
+      { type: 'LOGGED_IN' }
 	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
 	| { type: 'RECEIVED_USER_PROFILE', userProfile: Object }
 	| { type: 'RECEIVED_DEVICES', devices: Object }
@@ -32,6 +32,9 @@ export type Action =
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: Number}
 	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: Number}
 	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id:Number, displayType: String }
+	| { type: 'SHOW_DIMMER_POPUP'}
+	| { type: 'HIDE_DIMMER_POPUP'}
+	| { type: 'SET_DIMMER_VALUE', value: Number}
 	| { type: 'ERROR', message: Object }
 	;
 
