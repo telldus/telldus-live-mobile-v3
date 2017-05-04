@@ -15,30 +15,41 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Actions
  */
 
 'use strict';
 
-import DeviceActions from './Devices';
-import GatewayActions from './Gateways';
-import LoginActions from './Login';
-import NavigationActions from './Navigation';
-import SensorActions from './Sensors';
-import WebsocketActions from './Websockets';
-import TabActions from './Tabs';
-import DashboardActions from './Dashboard';
-import DimmerActions from './Dimmer';
+import type { Action } from '../actions/types';
 
-module.exports = {
-	...DeviceActions,
-	...GatewayActions,
-	...LoginActions,
-	...NavigationActions,
-	...SensorActions,
-	...WebsocketActions,
-	...TabActions,
-	...DashboardActions,
-	...DimmerActions
+type State = {
+    show: Boolean,
+    value: Number
 };
+
+const initialState: State = {
+    show: false,
+    value: 0
+};
+
+function dimmer(state: State = initialState, action: Action): State {
+	if (action.type === 'SHOW_DIMMER_POPUP') {
+        return {
+            ...state,
+            show: true
+        };
+    } else if (action.type === 'HIDE_DIMMER_POPUP') {
+        return {
+            ...state,
+            show: false
+        };
+	} else if (action.type === 'SET_DIMMER_VALUE') {
+        return {
+            ...state,
+            value: action.value
+        };
+    }
+
+	return state;
+}
+
+module.exports = dimmer;
