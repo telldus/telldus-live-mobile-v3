@@ -22,8 +22,10 @@
 import type { Action } from './types';
 
 module.exports = {
-    showDimmerPopup: () : Action => ({
-        type: 'SHOW_DIMMER_POPUP'
+    showDimmerPopup: (name: String, value: Number) : Action => ({
+        type: 'SHOW_DIMMER_POPUP',
+        name,
+        value
     }),
     hideDimmerPopup: () : Action => ({
         type: 'HIDE_DIMMER_POPUP'

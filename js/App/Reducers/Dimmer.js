@@ -23,19 +23,23 @@ import type { Action } from '../actions/types';
 
 type State = {
     show: Boolean,
-    value: Number
+    value: Number,
+    name: String
 };
 
 const initialState: State = {
     show: false,
-    value: 0
+    value: 0,
+    name: 'N/A'
 };
 
 function dimmer(state: State = initialState, action: Action): State {
 	if (action.type === 'SHOW_DIMMER_POPUP') {
         return {
             ...state,
-            show: true
+            show: true,
+            name: action.name,
+            value: action.value
         };
     } else if (action.type === 'HIDE_DIMMER_POPUP') {
         return {
