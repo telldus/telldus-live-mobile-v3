@@ -32,7 +32,7 @@ export type Action =
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: Number}
 	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: Number}
 	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id:Number, displayType: String }
-	| { type: 'SHOW_DIMMER_POPUP'}
+	| { type: 'SHOW_DIMMER_POPUP', name:String, value:Number}
 	| { type: 'HIDE_DIMMER_POPUP'}
 	| { type: 'SET_DIMMER_VALUE', value: Number}
 	| { type: 'ERROR', message: Object }
