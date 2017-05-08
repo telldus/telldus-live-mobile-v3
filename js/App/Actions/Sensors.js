@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Actions/Sensors
  */
 
 'use strict';
