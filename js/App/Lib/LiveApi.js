@@ -15,12 +15,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule LiveApi
  */
 
 'use strict';
 
 import { apiServer, publicKey, privateKey } from 'Config';
-import { updateAccessToken } from '../Actions/Login';
+import { updateAccessToken } from 'Actions/Login';
 
 import type { Action } from './types';
 

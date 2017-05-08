@@ -23,11 +23,11 @@
 
 import { v4 } from 'react-native-uuid';
 import { addConnection, removeConnection, sendMessage } from '../Lib/Socket';
-import { processWebsocketMessageForSensor } from '../Actions/Sensors';
+import { processWebsocketMessageForSensor } from 'Actions/Sensors';
 
 import formatTime from '../Lib/formatTime';
 
-import LiveApi from '../Lib/LiveApi';
+import LiveApi from 'LiveApi';
 
 // TODO: move sessionId to store
 const sessionId = v4();

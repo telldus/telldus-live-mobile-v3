@@ -23,7 +23,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Container, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
-import { getDevices, deviceSetState } from '../../Actions/Devices';
+import { getDevices, deviceSetState } from 'Actions/Devices';
 
 import DeviceDetailView from '../DetailViews/DeviceDetailView';
 import Theme from 'Theme';

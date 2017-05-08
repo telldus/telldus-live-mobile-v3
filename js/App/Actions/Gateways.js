@@ -22,9 +22,9 @@
 'use strict';
 
 import type { ThunkAction } from './types';
-import { setupGatewayConnection } from '../Actions/Websockets';
+import { setupGatewayConnection } from 'Actions/Websockets';
 
-import LiveApi from '../Lib/LiveApi';
+import LiveApi from 'LiveApi';
 
 function getGateways(): ThunkAction {
 	return (dispatch, getState) => {
