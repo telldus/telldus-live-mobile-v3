@@ -19,7 +19,7 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions/Types';
 import DeviceInfo from 'react-native-device-info';
 
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics';

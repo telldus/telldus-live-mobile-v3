@@ -23,7 +23,7 @@
 
 import type { ThunkAction } from './types';
 
-import LiveApi from '../Lib/LiveApi';
+import LiveApi from 'LiveApi';
 
 export function getDevices(): ThunkAction {
 	return (dispatch) => {

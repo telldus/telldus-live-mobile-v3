@@ -25,7 +25,7 @@ import type { Action, ThunkAction } from './types';
 import { apiServer } from 'Config';
 import { publicKey, privateKey } from 'Config';
 
-import LiveApi from '../Lib/LiveApi';
+import LiveApi from 'LiveApi';
 import { closeAllConnections } from '../Lib/Socket';
 
 async function loginToTelldus(username, password): Promise<Action> {

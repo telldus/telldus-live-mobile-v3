@@ -22,8 +22,8 @@
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
 import { getUserProfile, getGateways, getSensors } from 'Actions';
-import { getDevices } from '../Actions/Devices';
-import { authenticateSession } from '../Actions/Websockets';
+import { getDevices } from 'Actions/Devices';
+import { authenticateSession } from 'Actions/Websockets';
 
 import { View } from 'BaseComponents';
 import Platform from 'Platform';
