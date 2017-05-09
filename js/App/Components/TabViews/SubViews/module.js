@@ -33,7 +33,7 @@ import DashboardShadowTile from './DashboardShadowTile';
 import BellDashboardTile from './BellDashboardTile';
 import NavigationalDashboardTile from './NavigationalDashboardTile';
 import DimmerDashboardTile from './DimmerDashboardTile';
-import DimmingPopup from './DimmingPopup';
+import DimmerPopup from './DimmerPopup';
 import DimmerProgressBar from './DimmerProgressBar';
 
 module.exports = {
@@ -49,6 +49,6 @@ module.exports = {
 	BellDashboardTile: BellDashboardTile,
 	NavigationalDashboardTile: NavigationalDashboardTile,
 	DimmerDashboardTile: DimmerDashboardTile,
-    DimmingPopup: DimmingPopup,
+    DimmerPopup: DimmerPopup,
     DimmerProgressBar: DimmerProgressBar
 };
