@@ -32,6 +32,7 @@ import SensorRowHidden from './SensorRowHidden';
 import DashboardShadowTile from './DashboardShadowTile';
 import BellDashboardTile from './BellDashboardTile';
 import NavigationalDashboardTile from './NavigationalDashboardTile';
+import DimmerDashboardTile from './DimmerDashboardTile';
 
 module.exports = {
 	DeviceRow: DeviceRow,
@@ -44,5 +45,6 @@ module.exports = {
 	SensorRowHidden: SensorRowHidden,
 	DashboardShadowTile: DashboardShadowTile,
 	BellDashboardTile: BellDashboardTile,
-	NavigationalDashboardTile: NavigationalDashboardTile
+	NavigationalDashboardTile: NavigationalDashboardTile,
+	DimmerDashboardTile: DimmerDashboardTile
 };
