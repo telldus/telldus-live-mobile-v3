@@ -134,7 +134,8 @@ class DashboardTab extends View {
 			} else if (item.objectType === 'device') {
 				const deviceId = item.childObject.id;
 				let dashboardTile = null;
-
+				// -- This code is for testing.
+				// -- TODO: Determine the type of dashboardTile based on deviceId
 				if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
 					if (deviceId === 1594308 || deviceId === 1594539 || deviceId === 1594552 || deviceId === 1594307) {
 						dashboardTile = <ToggleDashboardTile style={tileStyle} item={item} />;
@@ -153,6 +154,7 @@ class DashboardTab extends View {
 						dashboardTile = <NavigationalDashboardTile style={tileStyle} item={item} />;
 					}
 				}
+				//
 
 				return (dashboardTile);
 			}
