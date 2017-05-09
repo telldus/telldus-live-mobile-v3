@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 import { List, ListDataSource, View } from 'BaseComponents';
 import { changeSensorDisplayType } from 'Actions';
 
-import { DeviceDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
+import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, DeviceDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
 class DashboardTab extends View {
 	constructor(props) {
@@ -36,6 +36,13 @@ class DashboardTab extends View {
 
 		this._onLayout = this._onLayout.bind(this);
 		this._calculateItemDimensions = this._calculateItemDimensions.bind(this);
+		this.setScrollEnabled = this.setScrollEnabled.bind(this);
+	}
+
+	setScrollEnabled(enable) {
+		if (this.refs.list && this.refs.list.setScrollEnabled) {
+			this.refs.list.setScrollEnabled(enable);
+		}
 	}
 
 	_onLayout = (event) => {
@@ -79,6 +86,7 @@ class DashboardTab extends View {
 		return (
 			<View onLayout={this._onLayout}>
 				<List
+					ref="list"
 					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
 					dataSource = {dataSource}
 					renderRow = {this._renderRow.bind(this)}
@@ -107,7 +115,16 @@ class DashboardTab extends View {
 				);
 			} else if (item.objectType === 'device') {
 				return (
-					<DeviceDashboardTile style={tileStyle} item={item} />
+					// <DeviceDashboardTile style={tileStyle} item={item} />
+					// <BellDashboardTile style={tileStyle} item={item} />
+					// <NavigationalDashboardTile style={tileStyle} item={item} />
+					<DimmerDashboardTile
+						style={tileStyle}
+						item={item}
+						setScrollEnabled={this.setScrollEnabled}
+						onSlidingStart={this.props.onSlidingStart}
+						onSlidingComplete={this.props.onSlidingComplete}
+						onValueChange={this.props.onValueChange} />
 				);
 			}
 		}
