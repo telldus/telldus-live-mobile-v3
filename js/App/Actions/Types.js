@@ -28,6 +28,7 @@ export type Action =
 	| { type: 'RECEIVED_DEVICES', devices: Object }
 	| { type: 'RECEIVED_GATEWAYS', gateways: Object }
 	| { type: 'RECEIVED_SENSORS', sensors: Object }
+	| { type: 'RECEIVED_JOBS', jobs: Object }
 	| { type: 'LOGGED_OUT' }
 	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }

@@ -27,6 +27,7 @@ import SensorDashboardTile from './SensorDashboardTile';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import SensorRow from './SensorRow';
 import SensorRowHidden from './SensorRowHidden';
+import JobRow from './JobRow';
 
 module.exports = {
 	DeviceDashboardTile: DeviceDashboardTile,
@@ -35,4 +36,5 @@ module.exports = {
 	SensorDashboardTileSlide: SensorDashboardTileSlide,
 	SensorRow: SensorRow,
 	SensorRowHidden: SensorRowHidden,
+	JobRow: JobRow
 };
