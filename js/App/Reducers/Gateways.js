@@ -61,8 +61,6 @@ function gateway(state: State = gatewayInitialState, action: Action): State {
 					port: payload.port
 				}
 			});
-		case 'LOGGED_OUT':
-			return gatewayInitialState;
 		default:
 			return state;
 	}
