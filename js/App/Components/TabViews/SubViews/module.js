@@ -21,7 +21,7 @@
 
 'use strict';
 
-import DeviceDashboardTile from './DeviceDashboardTile';
+import ToggleDashboardTile from './ToggleDashboardTile';
 import ListHeader from './ListHeader';
 import SensorDashboardTile from './SensorDashboardTile';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
@@ -39,7 +39,7 @@ import DimmerProgressBar from './DimmerProgressBar';
 module.exports = {
 	DeviceRow: DeviceRow,
 	DeviceRowHidden: DeviceRowHidden,
-	DeviceDashboardTile: DeviceDashboardTile,
+	ToggleDashboardTile: ToggleDashboardTile,
 	ListHeader: ListHeader,
 	SensorDashboardTile: SensorDashboardTile,
 	SensorDashboardTileSlide: SensorDashboardTileSlide,
