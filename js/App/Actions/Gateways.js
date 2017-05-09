@@ -15,52 +15,63 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Actions/Gateways
  */
 
 'use strict';
 
 import type { ThunkAction } from './types';
+import { setupGatewayConnection } from 'Actions/Websockets';
+
+import LiveApi from 'LiveApi';
 
 function getGateways(): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = {
 			url: '/clients/list',
 			requestParams: {
 				method: 'GET'
 			}
 		};
-		return dispatch({
-			type: 'LIVE_API_CALL',
-			returnType: 'RECEIVED_GATEWAYS',
-			payload: payload,
-			callback: (responseData) => {
-				responseData.client.forEach((gateway) => {
-					dispatch(getWebsocketAddress(gateway.id));
-				});
-			}
+		return LiveApi(payload).then(response => {
+			dispatch({
+				type: 'RECEIVED_GATEWAYS',
+				payload: {
+					...payload,
+					...response,
+				}
+			});
+			response.client.forEach(gateway => {
+				dispatch(getWebsocketAddress(gateway.id));
+			});
 		});
 	};
 }
 
 function getWebsocketAddress(gatewayId): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = {
 			url: `/client/serverAddress?id=${gatewayId}`,
 			requestParams: {
 				method: 'GET'
 			}
 		};
-		return dispatch({
-			type: 'LIVE_API_CALL',
-			returnType: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
-			payload: payload,
-			returnPayload: {
-				gatewayId: gatewayId
+		return LiveApi(payload).then(response => {
+			dispatch({
+				type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+				payload: {
+					...payload,
+					...response,
+				}
+			});
+			const { address, port } = response;
+			if (address && port) {
+				const websocketUrl = `ws://${address}:${port}/websocket`;
+				dispatch(setupGatewayConnection(gatewayId, websocketUrl));
 			}
 		});
 	};
 }
 
 module.exports = { getGateways };
-
-

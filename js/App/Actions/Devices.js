@@ -15,13 +15,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Actions/Devices
  */
 
 'use strict';
 
 import type { ThunkAction } from './types';
 
-function getDevices(): ThunkAction {
+import LiveApi from 'LiveApi';
+
+export function getDevices(): ThunkAction {
 	return (dispatch) => {
 		const payload = {
 			url: '/devices/list',
@@ -29,11 +33,18 @@ function getDevices(): ThunkAction {
 				method: 'GET'
 			}
 		};
-		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_DEVICES', payload: payload });
+		return LiveApi(payload).then(response => dispatch({
+			type: 'RECEIVED_DEVICES',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
 	};
 }
 
-function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
+export function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
 	return (dispatch) => {
 		const payload = {
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
@@ -41,8 +52,32 @@ function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
 				method: 'GET'
 			}
 		};
-		return dispatch({ type: 'LIVE_API_CALL', returnType: 'DEVICE_SET_STATE', payload: payload });
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_SET_STATE',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
 	};
 }
 
-module.exports = { getDevices, deviceSetState };
+export function turnOn(deviceId): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/device/turnOn?id=${deviceId}`,
+			requestParams: {
+				method: 'GET'
+			}
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_TURN_ON',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+	};
+}

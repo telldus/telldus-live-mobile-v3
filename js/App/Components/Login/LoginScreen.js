@@ -103,8 +103,8 @@ class LoginForm extends View {
 		.catch(e => {
 			const message = e.message === 'timeout' ? 'Timed out, try again?' : e.message.error_description;
 			this.setState({ notificationText: message });
-		})
-		.finally(() => this.setState({ isLoading: false }));
+			this.setState({ isLoading: false });
+		});
 	}
 }
 

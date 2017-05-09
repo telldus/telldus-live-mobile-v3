@@ -54,10 +54,10 @@ const dataSource = new ListDataSource({
 	sectionHeaderHasChanged : (s1, s2) => s1 !== s2
 });
 
+// TODO: move this to a Reducer
 function parseDataIntoRowsAndSections(sensors, gateways, dashboard) {
 	const items = {};
 	const sectionIds = [];
-
 	if (sensors) {
 		sensors.map((item) => {
 			const sectionId = item.clientId ? item.clientId : '';

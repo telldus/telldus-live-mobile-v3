@@ -21,7 +21,9 @@
 
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
-import { getUserProfile, getGateways, getSensors, getDevices } from 'Actions';
+import { getUserProfile, getGateways, getSensors } from 'Actions';
+import { getDevices } from 'Actions/Devices';
+import { authenticateSession } from 'Actions/Websockets';
 
 import { View } from 'BaseComponents';
 import Platform from 'Platform';
@@ -50,6 +52,8 @@ class AppNavigator extends View {
 			StatusBar.setTranslucent(true);
 			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
 		}
+
+		this.props.dispatch(authenticateSession());
 		this.props.dispatch(getUserProfile());
 		this.props.dispatch(getDevices());
 		this.props.dispatch(getGateways());
