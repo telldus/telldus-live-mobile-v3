@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 import { List, ListDataSource, View } from 'BaseComponents';
 import { changeSensorDisplayType, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions';
 
-import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, DeviceDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
+import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
 class DashboardTab extends View {
 	constructor(props) {
@@ -132,19 +132,29 @@ class DashboardTab extends View {
 					<SensorDashboardTile style={tileStyle} item={item} onSensorSelected={this.props.changeSensorDisplayType}/>
 				);
 			} else if (item.objectType === 'device') {
-				return (
-					// <DeviceDashboardTile style={tileStyle} item={item} />
-					// <BellDashboardTile style={tileStyle} item={item} />
-					// <NavigationalDashboardTile style={tileStyle} item={item} />
-					<DimmerDashboardTile
-						style={tileStyle}
-						item={item}
-						value={4}
-						setScrollEnabled={this.setScrollEnabled}
-						onSlidingStart={this.onSlidingStart}
-						onSlidingComplete={this.onSlidingComplete}
-						onValueChange={this.onValueChange} />
-				);
+				const deviceId = item.childObject.id;
+				let dashboardTile = null;
+
+				if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
+					if (deviceId === 1594308 || deviceId === 1594539 || deviceId === 1594552 || deviceId === 1594307) {
+						dashboardTile = <ToggleDashboardTile style={tileStyle} item={item} />;
+					} else if (deviceId === 1644324) {
+						dashboardTile = <DimmerDashboardTile
+							style={tileStyle}
+							item={item}
+							value={4}
+							setScrollEnabled={this.setScrollEnabled}
+							onSlidingStart={this.onSlidingStart}
+							onSlidingComplete={this.onSlidingComplete}
+							onValueChange={this.onValueChange} />;
+					} else if (deviceId === 1643432) {
+						dashboardTile = <BellDashboardTile style={tileStyle} item={item} />;
+					} else if (deviceId === 1643434 || deviceId === 1643435 || deviceId === 1643433) {
+						dashboardTile = <NavigationalDashboardTile style={tileStyle} item={item} />;
+					}
+				}
+
+				return (dashboardTile);
 			}
 		}
 		return <View />;
