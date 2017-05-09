@@ -20,36 +20,20 @@
 'use strict';
 
 import React, { Component } from 'react';
-import {
-    Animated,
-    Easing,
-    View,
-    Text
-} from 'react-native';
+import { Animated, Easing, View, Text, StyleSheet } from 'react-native';
 
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
 const BAR_WIDTH_ZERO_POSITION = INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
 
 class DimmerProgressBar extends Component {
-    static defaultProps = {
-        animated: true,
-        borderRadius: 4,
-        borderWidth: 1,
-        color: 'rgba(0, 122, 255, 1)',
-        height: 6,
-        indeterminate: false,
-        progress: 0,
-        width: 150
-    };
-
     constructor(props) {
         super(props);
         const progress = Math.min(Math.max(props.progress, 0), 1);
         this.state = {
           progress: new Animated.Value(props.indeterminate ? INDETERMINATE_WIDTH_FACTOR : progress),
           animationValue: new Animated.Value(BAR_WIDTH_ZERO_POSITION),
-          containerWidth:0,
-          containerHeight:0
+          containerWidth: 0,
+          containerHeight: 0
         };
     }
 
@@ -90,8 +74,8 @@ class DimmerProgressBar extends Component {
     layoutView(x) {
         let {width, height} = x.nativeEvent.layout;
         this.setState({
-            containerWidth:width,
-            containerHeight:height
+            containerWidth: width,
+            containerHeight: height
         });
     }
 
@@ -108,17 +92,7 @@ class DimmerProgressBar extends Component {
     }
 
     render() {
-        const {
-            borderColor,
-            borderRadius,
-            borderWidth,
-            color,
-            height,
-            style,
-            unfilledColor,
-            width,
-            ...restProps
-        } = this.props;
+        const { borderColor, borderRadius, borderWidth, color, height, style, unfilledColor, width, ...restProps } = this.props;
 
         const innerWidth = width - (borderWidth * 2);
         const containerStyle = {
@@ -166,18 +140,11 @@ class DimmerProgressBar extends Component {
                 style={[containerStyle, style]}
                 {...restProps}>
                 <Animated.View style={progressStyle} />
-                <View
-                    style={{
-                        position:'absolute',
+                <View style={[styles.textContainer, {
                         width:this.state.containerWidth,
-                        height:this.state.containerHeight,
-                        justifyContent:'center',
-                        alignItems:'center'}}>
+                        height:this.state.containerHeight}]}>
                     <Text ellipsizeMode="middle"
-                        style={{color:'#1a355b',
-                            backgroundColor:'transparent',
-                            textAlign: 'center',
-                            textAlignVertical: 'center'}}>
+                        style={styles.text}>
                         {progressText}
                     </Text>
                 </View>
@@ -185,6 +152,20 @@ class DimmerProgressBar extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    textContainer: {
+        position:'absolute',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    text: {
+        color:'#1a355b',
+        backgroundColor:'transparent',
+        textAlign: 'center',
+        textAlignVertical: 'center'
+    }
+});
 
 DimmerProgressBar.propTypes = {
     animated: React.PropTypes.bool,
@@ -200,4 +181,14 @@ DimmerProgressBar.propTypes = {
     width: React.PropTypes.number,
 };
 
+DimmerProgressBar.defaultProps = {
+    animated: true,
+    borderRadius: 4,
+    borderWidth: 1,
+    color: 'rgba(0, 122, 255, 1)',
+    height: 6,
+    indeterminate: false,
+    progress: 0,
+    width: 150
+};
 module.exports = DimmerProgressBar;
