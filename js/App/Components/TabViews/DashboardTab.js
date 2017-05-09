@@ -26,33 +26,49 @@ import { List, ListDataSource, View } from 'BaseComponents';
 
 import { DeviceDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
+import { parseDashboardForListView } from '../../Reducers/Dashboard';
+
+
+// TODO: this view renders before the sensor and device data is retrieved
+//       that might not be a problem, but we should know why
+//       - store.devices and store.sensors are empty objects (not even arrays)
+//       - store.dashboard is populated
+//       better solution would be to render the old sensor/device data but
+//       to indicate also it is old data
+
 class DashboardTab extends View {
 	constructor(props) {
 		super(props);
 		this.state = {
-			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(this.props.dataArray),
+			dataSource: new ListDataSource({
+				rowHasChanged: (r1, r2) => r1 !== r2,
+			}).cloneWithRows(this.props.dataArray),
 		};
 	}
+
+	componentWillReceiveProps(nextProps) {
+		// TODO: write a better comparison function
+		if (nextProps.dataArray === this.props.dataArray) {
+			return;
+		}
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRows(nextProps.dataArray),
+		});
+    }
 
 	_onLayout = (event) => {
 		const listWidth = event.nativeEvent.layout.width - 8;
 		const isPortrait = true;
-		let baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
-		if (listWidth > 0) {
-			let numberOfTiles = Math.floor(listWidth / baseTileSize);
-			let tileSize = listWidth / numberOfTiles;
-			if (numberOfTiles === 0) {
-				tileSize = baseTileSize;
-			}
-			const tileWidth = Math.floor(tileSize);
-			let data = this.props.dataArray;
-			data.map((item) => {
-				item.tileWidth = tileWidth;
-			});
-			this.setState({
-				dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data)
-			});
+		if (listWidth <= 0) {
+			return;
 		}
+		const baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
+		const tilesPerRow = Math.floor(listWidth / baseTileSize);
+		const tileWidth = tilesPerRow === 0 ? baseTileSize : Math.floor(listWidth / tilesPerRow);
+
+		this.setState({
+			tileWidth,
+		});
 	}
 
 	render() {
@@ -63,15 +79,16 @@ class DashboardTab extends View {
 				<List
 					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
 					dataSource = {this.state.dataSource}
-					renderRow = {this._renderRow}
+					renderRow = {this._renderRow(this.state.tileWidth)}
 					pageSize = {100}
 				/>
 			</View>
 		);
 	}
 
-	_renderRow(item, secId, rowId, rowMap) {
-		if (item.tileWidth > 75) {
+	_renderRow(tileWidth) {
+		return (item, secId, rowId, rowMap) => {
+			item.tileWidth = tileWidth;
 			let tileMargin = 8;
 			let tileStyle = {
 				flexDirection: 'row',
@@ -93,65 +110,14 @@ class DashboardTab extends View {
 					<DeviceDashboardTile style={tileStyle} item={item} />
 				);
 			}
-		}
-		return <View />;
+			return <View />;
+		};
 	}
-
 }
 
-// TODO: move this to a Reducer
-function _parseDataIntoItems(devices, sensors, dashboard) {
-	let items = [];
-	// if (devices && devices.map) {
-	// 	devices.map((item) => {
-			// var dashboardItem = {
-			// 	objectType: 'device',
-			// 	childObject: item,
-			// 	tileWidth: 0
-			// }
-			// items.push(dashboardItem);
-
-	// 	});
-	// }
-	// if (sensors && sensors.map) {
-	// 	sensors.map((item) => {
-	// 		var dashboardItem = {
-	// 			objectType: 'sensor',
-	// 			childObject: item,
-	// 			tileWidth: 0
-	// 		}
-	// 		items.push(dashboardItem);
-	// 	});
-	// }
-	if (devices && devices.filter) {
-		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
-		devicesInDashboard.map((item) => {
-			let dashboardItem = {
-				objectType: 'device',
-				childObject: item,
-				tileWidth: 0
-			};
-			items.push(dashboardItem);
-		});
-	}
-
-	if (sensors && sensors.filter) {
-		let sensorsInDashboard = sensors.filter(item => dashboard.sensors.indexOf(item.id) >= 0);
-		sensorsInDashboard.map((item) => {
-			let dashboardItem = {
-				objectType: 'sensor',
-				childObject: item,
-				tileWidth: 0
-			};
-			items.push(dashboardItem);
-		});
-	}
-	return items;
-}
-
-function select(store) {
+function select(store, props) {
 	return {
-		dataArray: _parseDataIntoItems( store.devices || [], store.sensors || [] , store.dashboard),
+		dataArray: parseDashboardForListView(store),
 		gateways: store.gateways,
 		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''}
 	};
