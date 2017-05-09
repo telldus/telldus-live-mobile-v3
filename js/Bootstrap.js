@@ -28,9 +28,8 @@ import React from 'React';
 import { Provider } from 'react-redux';
 
 import App from 'App';
-import { configureStore } from 'Store';
+import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
-
 
 function Bootstrap(): React.Component {
 
