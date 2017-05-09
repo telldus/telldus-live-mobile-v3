@@ -22,7 +22,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { List, ListDataSource, View } from 'BaseComponents';
-import { changeSensorDisplayType } from 'Actions';
+import { changeSensorDisplayType, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions';
 
 import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, DeviceDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
@@ -37,6 +37,10 @@ class DashboardTab extends View {
 		this._onLayout = this._onLayout.bind(this);
 		this._calculateItemDimensions = this._calculateItemDimensions.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
+		this.onSlidingStart = this.onSlidingStart.bind(this);
+		this.onSlidingComplete = this.onSlidingComplete.bind(this);
+		this.onValueChange = this.onValueChange.bind(this);
+
 	}
 
 	setScrollEnabled(enable) {
@@ -44,6 +48,20 @@ class DashboardTab extends View {
 			this.refs.list.setScrollEnabled(enable);
 		}
 	}
+
+	onSlidingStart(name:String, value:Number) {
+		this.props.dispatch(showDimmerPopup(name, value));
+	}
+
+	onSlidingComplete() {
+		console.log('onSlidingComplete');
+		this.props.dispatch(hideDimmerPopup());
+	}
+
+	onValueChange(value) {
+		this.props.dispatch(setDimmerValue(value));
+	}
+
 
 	_onLayout = (event) => {
 		const listWidth = event.nativeEvent.layout.width - 8;
@@ -121,10 +139,11 @@ class DashboardTab extends View {
 					<DimmerDashboardTile
 						style={tileStyle}
 						item={item}
+						value={4}
 						setScrollEnabled={this.setScrollEnabled}
-						onSlidingStart={this.props.onSlidingStart}
-						onSlidingComplete={this.props.onSlidingComplete}
-						onValueChange={this.props.onValueChange} />
+						onSlidingStart={this.onSlidingStart}
+						onSlidingComplete={this.onSlidingComplete}
+						onValueChange={this.onValueChange} />
 				);
 			}
 		}

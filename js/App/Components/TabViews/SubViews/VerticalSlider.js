@@ -30,11 +30,11 @@ class VerticalSlider extends View {
         this.state = {
             containerWidth: 0,
             containerHeight: 0,
-            value: new Animated.Value(0),
+            value: new Animated.Value(this.props.value),
             minimumValue: 0,
             maximumValue: 100,
             step: 1,
-            displayedValue:0,
+            displayedValue:this.props.value,
         };
 	}
 
@@ -48,12 +48,6 @@ class VerticalSlider extends View {
             onPanResponderTerminationRequest: this.handlePanResponderRequestEnd,
             onPanResponderTerminate: this.handlePanResponderEnd,
         });
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const newValue = nextProps.value;
-        this.setCurrentValue(newValue);
-        this.onValueChange(this.state.value.__getValue());
     }
 
     handleStartShouldSetPanResponder = (e: Object, /*gestureState: Object*/): boolean => {
@@ -197,7 +191,7 @@ const styles = StyleSheet.create({
 VerticalSlider.propTypes = {
 	setScrollEnabled: PropTypes.func,
     thumbHeight: PropTypes.number,
-    value: PropTypes.value,
+    value: PropTypes.number,
     onSlidingStart: PropTypes.func,
     onSlidingComplete: PropTypes.func,
     onValueChange: PropTypes.func
