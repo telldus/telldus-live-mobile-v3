@@ -27,7 +27,7 @@ import * as ANIMATION_DEFINITIONS from 'react-native-animatable/definitions';
 
 initializeRegistryWithDefinitions(ANIMATION_DEFINITIONS);
 
-class DimmingPopup extends Component {
+class DimmerPopup extends Component {
     static defaultProps = {
         animationIn: 'slideInDown',
         animationInTiming: 300,
@@ -142,7 +142,7 @@ class DimmingPopup extends Component {
     }
 }
 
-DimmingPopup.propTypes = {
+DimmerPopup.propTypes = {
     animationIn: PropTypes.string,
     animationInTiming: PropTypes.number,
     animationOut: PropTypes.string,
@@ -154,4 +154,4 @@ DimmingPopup.propTypes = {
     name: PropTypes.string.isRequired
 };
 
-module.exports = DimmingPopup;
+module.exports = DimmerPopup;
