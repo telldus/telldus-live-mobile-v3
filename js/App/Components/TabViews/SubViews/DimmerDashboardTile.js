@@ -118,7 +118,12 @@ class DimmerDashboardTile extends View {
                             left: this.state.bodyWidth / 2 - this.state.bodyWidth / 10,
                             bottom:0,
                         }]}
+                        item={this.props.item.childObject}
+                        value={this.props.value}
                         setScrollEnabled={this.props.setScrollEnabled}
+                        onSlidingStart={this.props.onSlidingStart}
+                        onSlidingComplete={this.props.onSlidingComplete}
+                        onValueChange={this.props.onValueChange}
                     />
 				</View>
                 <Title item={item} tileWidth={tileWidth} />
