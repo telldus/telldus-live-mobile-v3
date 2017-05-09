@@ -21,12 +21,14 @@
 
 import type { Action } from 'Actions/Types';
 
+import isArray from 'lodash/isArray';
+
 export type State = ?Object;
 
 const initialState = [];
 const sensorInitialState = {};
 
-function sensor(state: State = sensorInitialState, action: Action): State {
+function sensorReducer(state: State = sensorInitialState, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_SENSORS':
 			const newSensor = {
@@ -80,10 +82,10 @@ function sensor(state: State = sensorInitialState, action: Action): State {
 	}
 }
 
-function sensors(state: State = initialState, action: Action): State {
+export default function sensorsReducer(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_SENSORS') {
 		return action.payload.sensor.map(sensorState =>
-			sensor(sensorState, action)
+			sensorReducer(sensorState, action)
 		);
 	}
 	if (action.type === 'LOGGED_OUT') {
@@ -129,4 +131,46 @@ function sensors(state: State = initialState, action: Action): State {
 	return state;
 }
 
-module.exports = sensors;
+// TODO: clean up this function
+export function parseSensorsForListView({ sensors, gateways, dashboard }) {
+	const sections = {};
+	const sectionIds = [];
+	if (!isArray(sensors)) {
+		return { sections, sectionIds };
+	}
+
+	sensors.map(sensor => {
+		const sectionId = sensor.clientId ? sensor.clientId : '';
+		if (sectionIds.indexOf(sectionId) === -1) {
+			sectionIds.push(sectionId);
+			sections[sectionId] = [];
+		}
+
+		if (dashboard.sensors.indexOf(sensor.id) >= 0) {
+			sensor.inDashboard = true;
+		} else {
+			sensor.inDashboard = false;
+		}
+
+		sections[sectionId].push(sensor);
+	});
+
+	const gatewayNameLookUp = gateways.reduce(function(acc, gateway) {
+		acc[gateway.id] = gateway.name;
+		return acc;
+	}, {});
+
+	sectionIds.sort((a,b) => {
+		const gatewayA = gatewayNameLookUp[a];
+		const gatewayB = gatewayNameLookUp[b];
+
+		if (gatewayA < gatewayB) {
+			return -1;
+		}
+		if (gatewayA > gatewayB) {
+			return 1;
+		}
+		return 0;
+	});
+	return { sections, sectionIds };
+}

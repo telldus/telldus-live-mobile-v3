@@ -19,6 +19,7 @@
 
 'use strict';
 
+import isArray from 'lodash/isArray';
 import type { Action } from 'Actions/Types';
 
 type State = {
@@ -31,7 +32,7 @@ const initialState: State = {
     sensors: [],
 };
 
-function dashboard(state: State = initialState, action : Action): State {
+export default function dashboardReducer(state: State = initialState, action : Action): State {
     if (action.type === 'ADD_TO_DASHBOARD') {
         if (action.kind === 'sensor') {
             if (state.sensors.indexOf(action.id) >= 0) {return state;}
@@ -60,9 +61,34 @@ function dashboard(state: State = initialState, action : Action): State {
                 devices: state.devices.filter(id => id !== action.id)
             };
         }
-    }
+	}
 
     return state;
 }
 
-module.exports = dashboard;
+export function parseDashboardForListView({ devices, sensors, dashboard }) {
+	const items = [];
+    dashboard = dashboard || {};
+	if (isArray(devices) && dashboard.devices) {
+		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
+		devicesInDashboard.map((item) => {
+			let dashboardItem = {
+				objectType: 'device',
+				childObject: item,
+			};
+			items.push(dashboardItem);
+		});
+	}
+
+	if (isArray(sensors) && dashboard.sensors) {
+		let sensorsInDashboard = sensors.filter(item => dashboard.sensors.indexOf(item.id) >= 0);
+		sensorsInDashboard.map((item) => {
+			let dashboardItem = {
+				objectType: 'sensor',
+				childObject: item,
+			};
+			items.push(dashboardItem);
+		});
+	}
+	return items;
+}
