@@ -75,6 +75,7 @@ export default function dashboardReducer(state: State = initialState, action : A
                 state.sensors.map(item => {
                     if (item.id === action.id) {
                         item.displayType = action.displayType;
+                        console.log('***** item', item)
                     }
                     return item;
                 })
