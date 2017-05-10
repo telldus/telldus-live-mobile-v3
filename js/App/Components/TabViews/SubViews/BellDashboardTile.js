@@ -41,7 +41,7 @@ class BellDashboardTile extends View {
 					height: tileWidth
 				}]}>
                 <TouchableOpacity
-                    onPress={() => console.log('bell selected')}
+                    onPress={this.props.onBell}
                     style={styles.container}>
                     <View style={styles.body}>
                         <Icon name="bell" size={44} color="orange" />

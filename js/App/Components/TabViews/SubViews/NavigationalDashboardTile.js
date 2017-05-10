@@ -24,33 +24,55 @@ import { Text, View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile  from './DashboardShadowTile';
 
+const UpButton = ({isInState, onPress}) => (
+    <TouchableOpacity
+        style={styles.navigationButton}
+        onPress={onPress}>
+        <Icon name="caret-up" size={42}
+            style={{
+                color: isInState === 'UP' ? '#1a355b' : '#eeeeee'
+            }}
+        />
+    </TouchableOpacity>
+);
+
+const DownButton = ({isInState, onPress}) => (
+    <TouchableOpacity
+        style={styles.navigationButton}
+        onPress={onPress}>
+        <Icon name="caret-down" size={42}
+            style={{
+                color: isInState === 'DOWN' ? '#1a355b' : '#eeeeee'
+            }}
+        />
+    </TouchableOpacity>
+);
+
+const StopButton = ({isInState, onPress}) => (
+    <TouchableOpacity
+        style={styles.navigationButton}
+        onPress={onPress}>
+        <Icon name="stop" size={30}
+            style={{
+                color: isInState === 'STOP' ? '#1a355b' : '#eeeeee'
+            }}
+        />
+    </TouchableOpacity>
+);
+
 class NavigationalDashboardTile extends View {
 	constructor(props) {
 		super(props);
-
-        this.onUpButtonSelected = this.onUpButtonSelected.bind(this);
-        this.onDownButtonSelected = this.onDownButtonSelected.bind(this);
-        this.onStopButtonSelected = this.onStopButtonSelected.bind(this);
 	}
-
-    onUpButtonSelected() {
-        console.log('onUpButtonSelected');
-        // TODO: Implement the logic for selecting 'Up' button
-    }
-
-    onDownButtonSelected() {
-        console.log('onDownButtonSelected');
-        // TODO: Implement the logic for selecting 'Down' button
-    }
-
-    onStopButtonSelected() {
-        console.log('onStopButtonSelected');
-        // TODO: Implement the logic for selecting 'Stop' button
-    }
 
 	render() {
 		const item = this.props.item;
+        const isInState = item.childObject.isInState;
 		const tileWidth = item.tileWidth - 8;
+        const { UP, DOWN, STOP } = item.childObject.supportedMethods;
+        const upButton = UP ? <UpButton isInState={isInState} onPress={this.props.onUp} /> : null;
+        const downButton = DOWN ? <DownButton isInState={isInState} onPress={this.props.onDown} /> : null;
+        const stopButton = STOP ? <StopButton isInState={isInState} onPress={this.props.onStop} /> : null;
 
 		return (
 			<DashboardShadowTile
@@ -60,21 +82,9 @@ class NavigationalDashboardTile extends View {
 					height: tileWidth
 				}]}>
 				<View style={styles.body}>
-                    <TouchableOpacity
-                        style={styles.navigationButton}
-                        onPress={this.onUpButtonSelected}>
-                        <Icon name="caret-up" size={42} style={{color:'#1a355b'}}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.navigationButton}
-                        onPress={this.onDownButtonSelected}>
-                        <Icon name="caret-down" size={42} style={{color:'#1a355b'}}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.navigationButton}
-                        onPress={this.onStopButtonSelected}>
-                        <Icon name="stop" size={26} style={{color:'#1a355b'}}/>
-                    </TouchableOpacity>
+                    { upButton }
+                    { downButton }
+                    { stopButton }
 				</View>
 				<View style={styles.title}>
 					<Text
