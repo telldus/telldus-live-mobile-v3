@@ -21,8 +21,60 @@
 
 import React from 'react';
 import { Text, View } from 'BaseComponents';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile  from './DashboardShadowTile';
+
+const OffButton = ({isInState, tileWidth, onPress}) => (
+	<View style={[styles.buttonContainer,{
+			backgroundColor: isInState === 'TURNOFF' ? 'white' : '#eeeeee'}]}>
+		<TouchableOpacity
+			onPress={onPress}
+			style={styles.button} >
+			<Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style = {[styles.buttonText,{
+					color: isInState === 'TURNOFF' ? 'red' : '#a0a0a0',
+					fontSize:  Math.floor(tileWidth / 8)
+				}]}>
+				{'Off'}
+			</Text>
+		</TouchableOpacity>
+	</View>
+);
+
+const OnButton = ({isInState, tileWidth, onPress}) => (
+	<View style={[styles.buttonContainer,{
+			backgroundColor: isInState === 'TURNON' ? 'white' : '#eeeeee'}]}>
+		<TouchableOpacity
+			onPress={onPress}
+			style={styles.button} >
+			<Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style = {[styles.buttonText,{
+					color: isInState === 'TURNON' ? 'green' : '#a0a0a0',
+					fontSize:  Math.floor(tileWidth / 8)}]}>
+				{'On'}
+			</Text>
+		</TouchableOpacity>
+	</View>
+);
+
+const Title = ({isInState, name, tileWidth}) => (
+	<View style={[styles.titleContainer,{
+		backgroundColor: isInState === 'TURNOFF' ? '#bfbfbf' : '#e56e18'}]}>
+		<Text
+			ellipsizeMode="middle"
+			numberOfLines={1}
+			style = {[styles.titleText,{
+				fontSize:  Math.floor(tileWidth / 8),
+				opacity: name ? 1 : 0.7
+			}]}>
+			{name ? name : '(no name)'}
+			</Text>
+		</View>
+);
 
 class ToggleDashboardTile extends View {
 	constructor(props) {
@@ -30,81 +82,53 @@ class ToggleDashboardTile extends View {
 	}
 
 	render() {
-		const item = this.props.item;
-		const tileWidth = item.tileWidth - 8;
+		const tileWidth = this.props.item.tileWidth - 8;
+		const isInState = this.props.item.childObject.isInState;
+		const name = this.props.item.childObject.name;
 
+		const { TURNON, TURNOFF } = this.props.item.childObject.supportedMethods;
+        const turnOnButton = TURNON ? <OnButton isInState={isInState} onPress={this.props.onTurnOn} tileWidth={tileWidth} /> : null;
+        const turnOffButton = TURNOFF ? <OffButton isInState={isInState} onPress={this.props.onTurnOff} tileWidth={tileWidth} /> : null;
 		return (
 			<DashboardShadowTile
-				item={item}
+				item={this.props.item}
 				style={	[this.props.style,{
 					width: tileWidth,
 					height: tileWidth
 				}]}>
 				<View style={{flexDirection: 'row', flex:30}}>
-					<View style={{
-						flex:1,
-						backgroundColor: item.childObject.state === 0 ? 'white' : '#eeeeee',
-						alignItems:'stretch'
-					}}>
-						<TouchableOpacity
-							onPress={() => console.log('off')}
-							style={{flex:1, justifyContent: 'center'}} >
-							<Text
-								ellipsizeMode="middle"
-								numberOfLines={1}
-								style = {{
-									color: item.childObject.state === 0 ? 'red' : '#a0a0a0',
-									fontSize:  Math.floor(tileWidth / 8),
-									textAlign: 'center',
-									textAlignVertical: 'center',
-								}}
-							>
-								{'Off'}
-							</Text>
-						</TouchableOpacity>
-					</View>
-					<View style={{
-						flex:1,
-						backgroundColor: item.childObject.state === 0 ? '#eeeeee' : 'white',
-					}}>
-						<TouchableOpacity
-							onPress={() => console.log('off')}
-							style={{flex:1, justifyContent: 'center'}} >
-							<Text
-								ellipsizeMode="middle"
-								numberOfLines={1}
-								style = {{
-									color: item.childObject.state === 0 ? '#a0a0a0' : 'green',
-									fontSize:  Math.floor(tileWidth / 8),
-									textAlign: 'center',
-									textAlignVertical: 'center',
-								}}>
-								{'On'}
-							</Text>
-						</TouchableOpacity>
-					</View>
+					{ turnOffButton }
+					{ turnOnButton }
 				</View>
-				<View style={{
-					flex:13,
-					backgroundColor: item.childObject.state === 0 ? '#bfbfbf' : '#e56e18',
-					justifyContent: 'center'}}>
-					<Text
-						ellipsizeMode="middle"
-						numberOfLines={1}
-						style = {{
-							padding : 5,
-							color: 'white',
-							fontSize:  Math.floor(tileWidth / 8),
-							opacity: item.childObject.name ? 1 : 0.7,
-							textAlign: 'center',
-							textAlignVertical: 'center',
-						}}>
-						{item.childObject.name ? item.childObject.name : '(no name)'}
-					</Text>
-				</View>
+				<Title item={isInState} tileWidth={tileWidth} name={name} />
 			</DashboardShadowTile>
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+	buttonContainer: {
+		flex:1,
+		alignItems:'stretch'
+	},
+	button: {
+		flex:1,
+		justifyContent: 'center'
+	},
+	buttonText: {
+		textAlign: 'center',
+		textAlignVertical: 'center'
+	},
+	titleContainer: {
+		flex:13,
+		justifyContent: 'center'
+	},
+	titleText: {
+		padding : 5,
+		color: 'white',
+		textAlign: 'center',
+		textAlignVertical: 'center'
+	}
+});
 
 module.exports = ToggleDashboardTile;

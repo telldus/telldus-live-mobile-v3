@@ -17,7 +17,6 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @flow
 'use strict';
 
 import isArray from 'lodash/isArray';
@@ -36,9 +35,9 @@ const initialState: State = {
 export default function dashboardReducer(state: State = initialState, action : Action): State {
     if (action.type === 'ADD_TO_DASHBOARD') {
         if (action.kind === 'sensor') {
-            if (state.sensors.indexOf(action.id) >= 0) {
-				return state;
-			}
+            if (state.sensors.filter((item) => item.id === action.id).length > 0) {
+                return state;
+            }
 
             return {
                 ...state,
@@ -50,9 +49,7 @@ export default function dashboardReducer(state: State = initialState, action : A
                 ]
             };
         } else if (action.kind === 'device') {
-            if (state.devices.indexOf(action.id) >= 0) {
-				return state;
-			}
+            if (state.devices.indexOf(action.id) >= 0) { return state; }
 
             return {
                 ...state,
@@ -102,11 +99,28 @@ export function parseDashboardForListView({ devices, sensors, dashboard }) {
 	}
 
 	if (isArray(sensors) && dashboard.sensors) {
-		let sensorsInDashboard = sensors.filter(item => dashboard.sensors.indexOf(item.id) >= 0);
+		let sensorsInDashboard = sensors.filter(item => {
+            for (let i = 0; i < dashboard.sensors.length; ++i) {
+				if (dashboard.sensors[i].id === item.id) {
+					return true;
+				}
+			}
+			return false;
+        });
+
 		sensorsInDashboard.map((item) => {
-			let dashboardItem = {
+			let displayType = 'default';
+			for (let i = 0; i < dashboard.sensors.length; ++i) {
+				if (dashboard.sensors[i].id === item.id) {
+					displayType = dashboard.sensors[i].displayType;
+					break;
+				}
+			}
+			const dashboardItem = {
 				objectType: 'sensor',
 				childObject: item,
+				tileWidth: 0,
+				displayType
 			};
 			items.push(dashboardItem);
 		});

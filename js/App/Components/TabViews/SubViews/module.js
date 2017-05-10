@@ -54,11 +54,11 @@ module.exports = {
 	BellDashboardTile: BellDashboardTile,
 	NavigationalDashboardTile: NavigationalDashboardTile,
 	DimmerDashboardTile: DimmerDashboardTile,
+    DimmerPopup: DimmerPopup,
+    DimmerProgressBar: DimmerProgressBar,
 	ToggleButton: ToggleButton,
 	BellButton: BellButton,
 	NavigationalButton : NavigationalButton,
 	DimmingButton: DimmingButton,
-	DimmerPopup: DimmerPopup,
-	DimmerProgressBar: DimmerProgressBar,
 	JobRow: JobRow,
 };

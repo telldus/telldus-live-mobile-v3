@@ -18,11 +18,10 @@
  *
  * @providesModule Actions/Sensors
  */
-// @flow
 
 'use strict';
 
-import type { Action, ThunkAction } from './types';
+import type { ThunkAction, Action } from './types';
 
 import LiveApi from 'LiveApi';
 
@@ -52,7 +51,7 @@ function processWebsocketMessageForSensor(action, data): Action {
 				type: 'SENSOR_UPDATE_VALUE',
 				payload: data
 			};
-	default:
+		default:
 	}
 
 	return {
