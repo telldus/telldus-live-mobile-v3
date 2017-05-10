@@ -22,6 +22,7 @@
 'use strict';
 
 import localConfig from '../config.local.js';
+import Constants from './Constants.js';
 
 /**
  * Create a file in the root of the project called 'config.local.js'
@@ -47,6 +48,6 @@ import localConfig from '../config.local.js';
 const config = Object.assign({
     authenticationTimeOut: 5 * 1000, // 5 secs
     telldusLiveWebAuthenticationUrl: 'https://live.telldus.com/',
-}, localConfig);
+}, localConfig, Constants);
 
 module.exports = config;

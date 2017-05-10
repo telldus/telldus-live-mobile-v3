@@ -30,6 +30,7 @@ import WebsocketActions from './Websockets';
 import TabActions from './Tabs';
 import DashboardActions from './Dashboard';
 import DimmerActions from './Dimmer';
+import JobActions from './Jobs';
 
 module.exports = {
 	...DeviceActions,
@@ -40,5 +41,6 @@ module.exports = {
 	...WebsocketActions,
 	...TabActions,
 	...DashboardActions,
-	...DimmerActions
+	...DimmerActions,
+	...JobActions,
 };

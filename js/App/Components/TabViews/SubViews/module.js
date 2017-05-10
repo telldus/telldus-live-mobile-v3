@@ -22,7 +22,6 @@
 'use strict';
 
 import ToggleDashboardTile from './ToggleDashboardTile';
-import ListHeader from './ListHeader';
 import SensorDashboardTile from './SensorDashboardTile';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DeviceRow from './DeviceRow';
@@ -35,6 +34,12 @@ import NavigationalDashboardTile from './NavigationalDashboardTile';
 import DimmerDashboardTile from './DimmerDashboardTile';
 import DimmerPopup from './DimmerPopup';
 import DimmerProgressBar from './DimmerProgressBar';
+import ListHeader from './ListHeader';
+import ToggleButton from './ToggleButton';
+import BellButton from './BellButton';
+import NavigationalButton from './NavigationalButton';
+import DimmingButton from './DimmingButton';
+import JobRow from './JobRow';
 
 module.exports = {
 	DeviceRow: DeviceRow,
@@ -49,6 +54,11 @@ module.exports = {
 	BellDashboardTile: BellDashboardTile,
 	NavigationalDashboardTile: NavigationalDashboardTile,
 	DimmerDashboardTile: DimmerDashboardTile,
-    DimmerPopup: DimmerPopup,
-    DimmerProgressBar: DimmerProgressBar
+	ToggleButton: ToggleButton,
+	BellButton: BellButton,
+	NavigationalButton : NavigationalButton,
+	DimmingButton: DimmingButton,
+	DimmerPopup: DimmerPopup,
+	DimmerProgressBar: DimmerProgressBar,
+	JobRow: JobRow,
 };

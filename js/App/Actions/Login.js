@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Actions/Login
  */
 
 'use strict';
@@ -22,6 +24,9 @@
 import type { Action, ThunkAction } from './types';
 import { apiServer } from 'Config';
 import { publicKey, privateKey } from 'Config';
+
+import LiveApi from 'LiveApi';
+import { closeAllConnections } from '../Lib/Socket';
 
 async function loginToTelldus(username, password): Promise<Action> {
 
@@ -71,18 +76,27 @@ function updateAccessToken(accessToken): Action {
 }
 
 function getUserProfile(): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = {
 			url: '/user/profile',
 			requestParams: {
 				method: 'GET'
 			}
 		};
-		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_USER_PROFILE', payload: payload });
+		return LiveApi(payload).then(response => dispatch({
+			type: 'RECEIVED_USER_PROFILE',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+
 	};
 }
 
 function logoutFromTelldus(): ThunkAction {
+	closeAllConnections();
 	return (dispatch) => {
 		return dispatch({
 			type: 'LOGGED_OUT',

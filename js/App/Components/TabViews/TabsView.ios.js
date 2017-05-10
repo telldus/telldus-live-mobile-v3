@@ -159,7 +159,7 @@ function select(store) {
 	return {
 		tab: store.navigation.tab,
 		userIcon: false,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''}
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
 	};
 }
 

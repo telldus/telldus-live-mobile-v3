@@ -16,15 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Middleware
+ * @providesModule Constants
  */
 
-'use strict';
-
-import WebsocketMiddleware from './Websockets'
-import LiveApiMiddleware from './LiveApi'
-
-module.exports = {
-	LiveApiMiddleware: LiveApiMiddleware,
-	WebsocketMiddleware: WebsocketMiddleware
+export default {
+    supportedMethods: 951,
+    methods: {
+        1: 'TURNON',
+        2: 'TURNOFF',
+        4: 'BELL',
+        8: 'TOGGLE',
+        16: 'DIM',
+        32: 'LEARN',
+        64: 'EXECUTE',
+        128: 'UP',
+        256: 'DOWN',
+        512: 'STOP',
+        1024: 'RGBW',
+        2048: 'THERMOSTAT',
+    },
 };

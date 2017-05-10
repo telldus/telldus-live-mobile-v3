@@ -20,43 +20,81 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { Container, ListItem, Text, View, Icon } from 'BaseComponents';
-import DeviceDetailView from './../../DetailViews/DeviceDetailView';
-import SwitchButton from './SwitchButton';
+import ToggleButton from './ToggleButton';
+import BellButton from './BellButton';
+import NavigationalButton from './NavigationalButton';
+import DimmingButton from './DimmingButton';
 
-import { deviceSetStatePseudo } from 'Actions';
-
+import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
+import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
+import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
 
-module.exports = class DeviceRow extends View {
+class DeviceRow extends View {
 	render() {
+		let button = null;
+		const {
+			TURNON,
+			TURNOFF,
+			BELL,
+			DIM,
+			UP,
+			DOWN,
+			STOP,
+		} = this.props.supportedMethods;
+
+		if (BELL) {
+			button = <BellButton
+				item={this.props}
+				onBell={this.props.onBell(this.props.id)}
+			/>;
+		} else if (UP || DOWN || STOP) {
+			button = <NavigationalButton
+				item={this.props}
+				onDown={this.props.onDown(this.props.id)}
+				onUp={this.props.onUp(this.props.id)}
+				onStop={this.props.onStop(this.props.id)}
+			/>;
+		} else if (DIM) {
+			button = <DimmingButton
+				item={this.props}
+				onTurnOn={this.props.onTurnOn(this.props.id)}
+				onTurnOff={this.props.onTurnOff(this.props.id)}
+				onDim={this.props.onDim(this.props.id)}
+				onDimmerSlide={this.props.onDimmerSlide(this.props.id)}
+				setScrollEnabled={this.props.setScrollEnabled}
+			/>;
+		} else if (TURNON || TURNOFF) {
+			button = <ToggleButton
+				onTurnOn={this.props.onTurnOn(this.props.id)}
+				onTurnOff={this.props.onTurnOff(this.props.id)}
+				item={this.props}
+			/>;
+		} else {
+			button = <View style={{flex:7}}/>;
+		}
+
         try {
 			return (
 				<ListItem style = { Theme.Styles.rowFront }>
-					<Container style = {{ marginLeft: 2, flexDirection: 'row', alignItems:'stretch'}}>
-						<SwitchButton
-							item={this.props} style={{flex:7, height:32}} />
-						<View style={{flex:20, justifyContent: 'center', }}>
-							<Text style = {{
-								marginLeft: 8,
-								color: 'rgba(0,0,0,0.87)',
-								fontSize: 16,
-								opacity: this.props.name ? 1 : 0.5,
-								textAlignVertical: 'center',
-							}}>
+					<Container style = {styles.container}>
+						{button}
+						<View style={styles.name}>
+							<Text style = {[styles.text,{
+								opacity: this.props.name ? 1 : 0.5
+							}]}>
 								{this.props.name ? this.props.name : '(no name)'}
 							</Text>
 						</View>
-						<View style={{flex:2, justifyContent: 'center', alignItems:'center', marginRight:8}}>
+						<View style={styles.gear}>
 							<Icon
 								name="gear"
 								size={26}
 								color="#bbbbbb"
-								onPress={ () => this.props.navigator.push({
-									component: DeviceDetailView,
-									title: this.props.name,
-									passProps: { device: this }
-								})}
+								onPress={ () => this.props.onSettingsSelected(this.props.id) }
 							/>
 						</View>
 					</Container>
@@ -67,8 +105,43 @@ module.exports = class DeviceRow extends View {
 			return ( <View /> );
 		}
     }
+}
 
-    onToggleSelected(item) {
-        this.props.dispatch(deviceSetStatePseudo(item.id, item.state === 1 ? 0 : 1));
-    }
-};
+const styles = StyleSheet.create({
+    container: {
+		marginLeft: 2,
+		flexDirection: 'row',
+		alignItems:'stretch'
+    },
+	name: {
+		flex:20,
+		justifyContent: 'center'
+	},
+	text: {
+		marginLeft: 8,
+		color: 'rgba(0,0,0,0.87)',
+		fontSize: 16,
+		textAlignVertical: 'center',
+	},
+	gear: {
+		flex:2,
+		justifyContent: 'center',
+		alignItems:'center',
+		marginRight:8
+	}
+});
+
+function actions(dispatch) {
+	return {
+		onTurnOn: id => () => dispatch(turnOn(id)),
+		onTurnOff: id => () => dispatch(turnOff(id)),
+		onBell: id => () => dispatch(bell(id)),
+		onDown: id => () => dispatch(down(id)),
+		onUp: id => () => dispatch(up(id)),
+		onStop: id => () => dispatch(stop(id)),
+		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
+		onDim: id => value => dispatch(updateDimmerValue(id, value)),
+	};
+}
+
+module.exports = connect(() => ({}), actions)(DeviceRow);

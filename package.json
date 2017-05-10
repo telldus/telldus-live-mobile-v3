@@ -19,11 +19,12 @@
     "lil-uri": "^0.2.1",
     "lodash": "~4.17.3",
     "moment": "~2.17.1",
+    "moment-timezone": "^0.5.13",
     "react": "~15.4.1",
     "react-intl": "^2.2.2",
     "react-native": "^0.39.2",
-    "react-native-avatar-gravatar": "0.0.4",
     "react-native-android-kit": "git+https://github.com/aybadb/react-native-android-kit.git",
+    "react-native-avatar-gravatar": "0.0.4",
     "react-native-awesome-button": "~1.6.0",
     "react-native-checkbox": "~1.1.0",
     "react-native-device-info": "^0.9.7",
@@ -37,6 +38,7 @@
     "react-native-layout-provider": "^1.1.0",
     "react-native-linear-gradient": "~1.6.2",
     "react-native-listitem": "^1.0.5",
+    "react-native-modal": "^2.3.2",
     "react-native-orientation": "^1.17.0",
     "react-native-scrollable-tab-view": "^0.7.0",
     "react-native-swipe-list-view": "^0.3.2",
@@ -50,7 +52,8 @@
     "redux-logger": "~2.7.4",
     "redux-persist": "~4.0.1",
     "redux-thunk": "~2.1.0",
-    "reselect": "~2.5.4"
+    "reselect": "~2.5.4",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
