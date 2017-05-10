@@ -39,12 +39,12 @@ export default class Footer extends Base {
 				height: this.getTheme().footerHeight,
 				backgroundColor: this.getTheme().footerDefaultBg
 			}
-		}
+		};
 	}
 
 	prepareRootProps() {
 
-		var defaultProps = {
+		let defaultProps = {
 			style: this.getInitialStyle().navbar
 		};
 
@@ -54,7 +54,7 @@ export default class Footer extends Base {
 
 	render() {
 
-		return(
+		return (
 			<View {...this.prepareRootProps()}>
 				{ !Array.isArray(this.props.children) &&
 				<View >

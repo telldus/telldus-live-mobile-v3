@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Reducers/Devices
  */
 
 'use strict';
@@ -22,24 +24,43 @@
 const initialState = [];
 const deviceInitialState = {};
 
-function device(state = deviceInitialState, action) {
+import getPowerParts from '../Lib/getPowerParts';
+
+import { methods } from '../../Config.js';
+
+function getSupportedMethods(methodsAggregate: Number): Array {
+	const methodNumbers = getPowerParts(methodsAggregate);
+	const methodHashmap = methodNumbers.reduce((memo, methodNumber) => {
+		memo[methods[methodNumber]] = true;
+		return memo;
+	}, {});
+	return methodHashmap;
+}
+
+function getDeviceStateMethod(deviceStateNumber: number): String {
+	return methods[parseInt(deviceStateNumber, 10)];
+}
+
+function reduceDevice(state = deviceInitialState, action) {
 	switch (action.type) {
 		case 'RECEIVED_DEVICES':
-			const newDevice = {
+			// TODO: nothing seems to be reduced here?
+			return {
 				clientId: parseInt(state.client, 10),
-				editable: Boolean(state.editable),
 				id: parseInt(state.id, 10),
-				state: parseInt(state.state, 10),
-				stateValue: parseInt(state.stateValue, 10),
-				online: Boolean(state.online),
-				ignored: Boolean(state.ignored),
-				methods: Boolean(state.methods),
 				type: state.type,
 				name: state.name,
-				protocol: state.protocol,
-				clientDeviceId: parseInt(state.clientDeviceId, 10),
+				isInState: getDeviceStateMethod(state.state),
+				supportedMethods: getSupportedMethods(state.methods),
+				value: state.statevalue,
+				// clientDeviceId: parseInt(state.clientDeviceId, 10),
+				// editable: Boolean(state.editable),
+				// state: parseInt(state.state, 10),
+				// online: Boolean(state.online),
+				// ignored: Boolean(state.ignored),
+				// methods: state.methods,
+				// protocol: state.protocol,
 			};
-			return newDevice;
 		case 'LOGGED_OUT':
 			return deviceInitialState;
 		default:
@@ -47,10 +68,10 @@ function device(state = deviceInitialState, action) {
 	}
 }
 
-function devices(state = initialState, action) {
+export default function reduceDevices(state = initialState, action) {
 	if (action.type === 'RECEIVED_DEVICES') {
 		return action.payload.device.map(deviceState =>
-			device(deviceState, action)
+			reduceDevice(deviceState, action)
 		);
 	}
 	if (action.type === 'LOGGED_OUT') {
@@ -59,13 +80,63 @@ function devices(state = initialState, action) {
 		};
 	}
 
-	if (action.type === 'SET_DEVICE_STATE') {
+	if (action.type === 'DEVICE_SET_STATE') {
 		const devicesState = state.map(deviceState => {
-			if (deviceState.id === action.deviceId) {
-				deviceState.state = action.state;
+			if (deviceState.id !== action.deviceId) {
+				return deviceState;
 			}
-			return deviceState;
+			const newDeviceState = {
+				...deviceState,
+				isInState: getDeviceStateMethod(action.method),
+				value: action.value,
+			};
+			return newDeviceState;
+		});
 
+		return devicesState;
+	}
+
+	if (action.type === 'DEVICE_TURN_ON') {
+		const devicesState = state.map(deviceState => {
+			if (deviceState.id !== action.deviceId) {
+				return deviceState;
+			}
+			const newDeviceState = {
+				...deviceState,
+				isInState: 'TURNON',
+			};
+			return newDeviceState;
+		});
+
+		return devicesState;
+	}
+
+	if (action.type === 'DEVICE_DIM') {
+		const devicesState = state.map(deviceState => {
+			if (deviceState.id !== action.deviceId) {
+				return deviceState;
+			}
+			const newDeviceState = {
+				...deviceState,
+				isInState: 'DIM',
+			};
+			return newDeviceState;
+		});
+
+		return devicesState;
+	}
+
+	if (action.type === 'SET_DIMMER_VALUE') {
+		const devicesState = state.map(deviceState => {
+			if (deviceState.id !== action.deviceId) {
+				return deviceState;
+			}
+			const newDeviceState = {
+				...deviceState,
+				value: action.value,
+				isInState: 'DIM', // otherwise DimmerButton will render with state TURNOFF
+			};
+			return newDeviceState;
 		});
 
 		return devicesState;
@@ -74,4 +145,41 @@ function devices(state = initialState, action) {
 	return state;
 }
 
-module.exports = devices;
+export function parseDevicesForListView(devices = [], gateways = [], dashboard = {}) {
+	const items = {};
+	const sectionIds = [];
+
+	if (devices) {
+		devices.map((item) => {
+			let sectionId = item.clientId ? item.clientId : '';
+			if (sectionIds.indexOf(sectionId) === -1) {
+				sectionIds.push(sectionId);
+				items[sectionId] = [];
+			}
+
+			if (dashboard.devices.indexOf(item.id) >= 0) {
+				item.inDashboard = true;
+			} else {
+				item.inDashboard = false;
+			}
+
+			items[sectionId].push(item);
+		});
+	}
+	sectionIds.sort((a,b) => {
+		try {
+			const gatewayA = gateways.find((gateway) => gateway.id === a);
+			const gatewayB = gateways.find((gateway) => gateway.id === b);
+			if (gatewayA.name < gatewayB.name) {
+				return -1;
+			}
+			if (gatewayA.name > gatewayB.name) {
+				return 1;
+			}
+			return 0;
+		} catch (e) {
+			return 0;
+		}
+	});
+	return {items, sectionIds};
+}

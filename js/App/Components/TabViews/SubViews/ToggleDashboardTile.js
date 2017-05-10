@@ -24,7 +24,7 @@ import { Text, View } from 'BaseComponents';
 import { TouchableOpacity } from 'react-native';
 import DashboardShadowTile  from './DashboardShadowTile';
 
-class DeviceDashboardTile extends View {
+class ToggleDashboardTile extends View {
 	constructor(props) {
 		super(props);
 	}
@@ -107,4 +107,4 @@ class DeviceDashboardTile extends View {
 	}
 }
 
-module.exports = DeviceDashboardTile;
+module.exports = ToggleDashboardTile;

@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Actions/Sensors
  */
 // @flow
 
@@ -22,26 +24,35 @@
 
 import type { Action, ThunkAction } from './types';
 
+import LiveApi from 'LiveApi';
+
 function getSensors(): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = {
 			url: '/sensors/list?includeValues=1',
 			requestParams: {
 				method: 'GET'
 			}
 		};
-		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_SENSORS', payload: payload });
+		return LiveApi(payload).then(response => dispatch({
+			type: 'RECEIVED_SENSORS',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
 	};
 }
 
-function processWebsocketMessageForSensor(action : Action, data : Object): Action {
+function processWebsocketMessageForSensor(action, data): Action {
 	switch (action) {
 		case 'value':
 			return {
 				type: 'SENSOR_UPDATE_VALUE',
 				payload: data
 			};
-		default:
+	default:
 	}
 
 	return {

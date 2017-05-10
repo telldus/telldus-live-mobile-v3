@@ -21,7 +21,9 @@
 
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
-import { getUserProfile, getGateways, getSensors, getDevices } from 'Actions';
+import { getUserProfile, getGateways, getSensors, getJobs } from 'Actions';
+import { getDevices } from 'Actions/Devices';
+import { authenticateSession } from 'Actions/Websockets';
 
 import { View } from 'BaseComponents';
 import Platform from 'Platform';
@@ -37,7 +39,7 @@ class AppNavigator extends View {
 		if (Platform.OS !== 'android') {
 			const init = Orientation.getInitialOrientation();
 			this.state = {
-				specificOrientation: init,
+				specificOrientation: init
 			};
 			Orientation.unlockAllOrientations();
 			this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
@@ -51,10 +53,13 @@ class AppNavigator extends View {
 			StatusBar.setTranslucent(true);
 			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
 		}
+
+		this.props.dispatch(authenticateSession());
 		this.props.dispatch(getUserProfile());
 		this.props.dispatch(getDevices());
 		this.props.dispatch(getGateways());
 		this.props.dispatch(getSensors());
+		this.props.dispatch(getJobs());
 	}
 
 	_updateSpecificOrientation(specificOrientation) {
@@ -67,7 +72,11 @@ class AppNavigator extends View {
 		return (
 			<View>
 				<TabsView />
-				<DimmerPopup isVisible={this.props.dimmer.show} name={this.props.dimmer.name} value={this.props.dimmer.value / 100} />
+				<DimmerPopup
+					isVisible={this.props.dimmer.show}
+					name={this.props.dimmer.name}
+					value={this.props.dimmer.value / 255}
+				/>
 			</View>
 		);
 	}

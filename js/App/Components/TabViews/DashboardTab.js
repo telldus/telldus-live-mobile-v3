@@ -22,9 +22,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { List, ListDataSource, View } from 'BaseComponents';
-import { changeSensorDisplayType, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions';
+
+import { changeSensorDisplayType } from 'Actions';
+import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
+import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
+
+import { parseDashboardForListView } from '../../Reducers/Dashboard';
 
 import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
+
+// TODO: this view renders before the sensor and device data is retrieved
+//       that might not be a problem, but we should know why
+//       - store.devices and store.sensors are empty objects (not even arrays)
+//       - store.dashboard is populated
+//       better solution would be to render the old sensor/device data but
+//       to indicate also it is old data
 
 class DashboardTab extends View {
 	constructor(props) {
@@ -35,7 +47,6 @@ class DashboardTab extends View {
 		};
 
 		this._onLayout = this._onLayout.bind(this);
-		this._calculateItemDimensions = this._calculateItemDimensions.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
@@ -63,59 +74,50 @@ class DashboardTab extends View {
 	}
 
 
+	componentWillReceiveProps(nextProps) {
+		// TODO: write a better comparison function
+		if (nextProps.dataArray === this.props.dataArray) {
+			return;
+		}
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRows(nextProps.dataArray),
+		});
+    }
+
 	_onLayout = (event) => {
 		const listWidth = event.nativeEvent.layout.width - 8;
-		const data = this._calculateItemDimensions(listWidth);
+		const isPortrait = true;
+		if (listWidth <= 0) {
+			return;
+		}
+		const baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
+		const tilesPerRow = Math.floor(listWidth / baseTileSize);
+		const tileWidth = tilesPerRow === 0 ? baseTileSize : Math.floor(listWidth / tilesPerRow);
+
 		this.setState({
-			listWidth,
-			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data)
+			tileWidth,
 		});
 	}
 
-	_calculateItemDimensions = (listWidth) => {
-		const isPortrait = true;
-		const baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
-		if (listWidth > 0) {
-			const numberOfTiles = Math.floor(listWidth / baseTileSize);
-			const tileSize = listWidth / numberOfTiles;
-			if (numberOfTiles === 0) {
-				tileSize = baseTileSize;
-			}
-			const tileWidth = Math.floor(tileSize);
-			const data = this.props.dataArray;
-			data.map((item) => {
-				item.tileWidth = tileWidth;
-			});
-
-			return data;
-		}
-
-		return null;
-	}
-
 	render() {
-		let dataSource;
-		const data = this._calculateItemDimensions(this.state.listWidth);
-		if (data) {
-			dataSource = new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data);
-		}
-		dataSource = dataSource ? dataSource : this.state.dataSource;
+		// add to List props: enableEmptySections={true}, to surpress warning
 
 		return (
 			<View onLayout={this._onLayout}>
 				<List
 					ref="list"
 					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
-					dataSource = {dataSource}
-					renderRow = {this._renderRow.bind(this)}
+					dataSource = {this.state.dataSource}
+					renderRow = {this._renderRow(this.state.tileWidth)}
 					pageSize = {100}
 				/>
 			</View>
 		);
 	}
 
-	_renderRow(item, secId, rowId, rowMap) {
-		if (item.tileWidth > 75) {
+	_renderRow(tileWidth) {
+		return (item, secId, rowId, rowMap) => {
+			item.tileWidth = tileWidth;
 			let tileMargin = 8;
 			let tileStyle = {
 				flexDirection: 'row',
@@ -133,7 +135,8 @@ class DashboardTab extends View {
 				);
 			} else if (item.objectType === 'device') {
 				const deviceId = item.childObject.id;
-				let dashboardTile = null;
+				let dashboardTile = <View />;
+
 				// -- This code is for testing.
 				// -- TODO: Determine the type of dashboardTile based on deviceId
 				if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
@@ -154,71 +157,40 @@ class DashboardTab extends View {
 						dashboardTile = <NavigationalDashboardTile style={tileStyle} item={item} />;
 					}
 				}
-				//
 
 				return (dashboardTile);
 			}
-		}
-		return <View />;
+		};
 	}
-
 }
 
-function _parseDataIntoItems(devices, sensors, dashboard) {
-	const items = [];
-
-	if (devices && devices.filter) {
-		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
-		devicesInDashboard.map((item) => {
-			const dashboardItem = {
-				objectType: 'device',
-				childObject: item,
-				tileWidth: 0
-			};
-			items.push(dashboardItem);
-		});
-	}
-
-	if (sensors && sensors.filter) {
-		let sensorsInDashboard = sensors.filter(item => {
-			for (let i = 0; i < dashboard.sensors.length; ++i) {
-				if (dashboard.sensors[i].id === item.id) {
-					return true;
-				}
-			}
-			return false;
-		});
-
-		sensorsInDashboard.map((item) => {
-			let displayType = 'default';
-			for (let i = 0; i < dashboard.sensors.length; ++i) {
-				if (dashboard.sensors[i].id === item.id) {
-					displayType = dashboard.sensors[i].displayType;
-					break;
-				}
-			}
-			const dashboardItem = {
-				objectType: 'sensor',
-				childObject: item,
-				tileWidth: 0,
-				displayType
-			};
-			items.push(dashboardItem);
-		});
-	}
-	return items;
-}
-
-function select(store) {
+function select(store, props) {
 	return {
-		dataArray: _parseDataIntoItems( store.devices || [], store.sensors || [] , store.dashboard),
+		dataArray: parseDashboardForListView(store),
 		gateways: store.gateways,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''}
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
 	};
 }
 
 function actions(dispatch) {
 	return {
+		changeSensorDisplayType: (item, displayType) => dispatch(changeSensorDisplayType(item.id, displayType)),
+		dispatch
+	};
+}
+
+module.exports = connect(select, actions)(DashboardTab);
+
+function actions(dispatch) {
+	return {
+		onTurnOn: id => () => dispatch(turnOn(id)),
+		onTurnOff: id => () => dispatch(turnOff(id)),
+		onBell: id => () => dispatch(bell(id)),
+		onDown: id => () => dispatch(down(id)),
+		onUp: id => () => dispatch(up(id)),
+		onStop: id => () => dispatch(stop(id)),
+		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
+		onDim: id => value => dispatch(updateDimmerValue(id, value)),
 		changeSensorDisplayType: (item, displayType) => dispatch(changeSensorDisplayType(item.id, displayType)),
 		dispatch
 	};
