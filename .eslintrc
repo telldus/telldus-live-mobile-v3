@@ -89,15 +89,15 @@
     "block-scoped-var": 0,           // treat var statements as if they were block scoped (off by default)
     "complexity": 0,                 // specify the maximum cyclomatic complexity allowed in a program (off by default)
     "consistent-return": 0,          // require return statements to either always or never specify values
-    "curly": 1,                      // specify curly brace conventions for all control statements
-    "default-case": 0,               // require default case in switch statements (off by default)
-    "dot-notation": 0,               // encourages use of dot notation whenever possible
-    "eqeqeq": 1,                     // require the use of === and !==
+    "curly": 2,                      // specify curly brace conventions for all control statements
+    "default-case": 2,               // require default case in switch statements (off by default)
+    "dot-notation": 1,               // encourages use of dot notation whenever possible
+    "eqeqeq": 2,                     // require the use of === and !==
     "guard-for-in": 0,               // make sure for-in loops have an if statement (off by default)
-    "no-alert": 0,                   // disallow the use of alert, confirm, and prompt
+    "no-alert": 2,                   // disallow the use of alert, confirm, and prompt
     "no-caller": 1,                  // disallow use of arguments.caller or arguments.callee
     "no-div-regex": 1,               // disallow division operators explicitly at beginning of regular expression (off by default)
-    "no-else-return": 0,             // disallow else after a return in an if (off by default)
+    "no-else-return": 2,             // disallow else after a return in an if (off by default)
     "no-eq-null": 0,                 // disallow comparisons to null without a type-checking operator (off by default)
     "no-eval": 1,                    // disallow use of eval()
     "no-extend-native": 1,           // disallow adding to native types
@@ -135,7 +135,7 @@
   // Strict Mode
   // These rules relate to using strict mode.
 
-    // "strict": [2, "global"],         // require or disallow the "use strict" pragma in the global scope (off by default in the node environment)
+  // "strict": [2, "global"],         // require or disallow the "use strict" pragma in the global scope (off by default in the node environment)
 
   // Variables
   // These rules have to do with variable declarations.
@@ -148,7 +148,10 @@
     "no-undef": 2,                   // disallow use of undeclared variables unless mentioned in a /*global */ block.
     "no-undefined": 0,               // disallow use of undefined variable (off by default)
     "no-undef-init": 1,              // disallow use of undefined when initializing variables
-    "no-unused-vars": [1, {"vars": "all", "args": "none"}], // disallow declaration of variables that are not used in the code
+    "no-unused-vars": [1, {
+      "vars": "all",
+      "args": "none"
+    }],                              // disallow declaration of variables that are not used in the code
     "no-use-before-define": 0,       // disallow use of variables before they are defined
     "no-var": 1,                     // disallow use of variables before they are defined
 
@@ -204,7 +207,10 @@
     "space-in-brackets": 0,          // require or disallow spaces inside brackets (off by default)
     "space-in-parens": 0,            // require or disallow spaces inside parentheses (off by default)
     "space-infix-ops": 1,            // require spaces around operators
-    "space-unary-ops": [1, { "words": true, "nonwords": false }], // require or disallow spaces before/after unary operators (words on by default, nonwords off by default)
+    "space-unary-ops": [1, {
+      "words": true,
+      "nonwords": false
+    }],                              // require or disallow spaces before/after unary operators (words on by default, nonwords off by default)
     "max-nested-callbacks": 0,       // specify the maximum depth callbacks can be nested (off by default)
     "one-var": 0,                    // allow just one var statement per function (off by default)
     "wrap-regex": 0,                 // require regex literals to be wrapped in parentheses (off by default)

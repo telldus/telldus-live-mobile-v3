@@ -26,11 +26,11 @@ import {PanResponder, Animated, StyleSheet } from 'react-native';
 function getSliderLabel(value) {
 	if (value === 100) {
 		return 'On';
-	} else if (value === 0) {
-		return 'Off';
-	} else {
-		return value;
 	}
+	if (value === 0) {
+		return 'Off';
+	}
+	return value;
 }
 
 class VerticalSlider extends View {
@@ -137,12 +137,11 @@ class VerticalSlider extends View {
                 Math.min(this.state.maximumValue,
                 this.state.minimumValue + Math.round(ratio * (this.state.maximumValue - this.state.minimumValue) / this.state.step) * this.state.step)
             );
-		} else {
-			return Math.max(this.state.minimumValue,
-                Math.min(this.state.maximumValue,
-                    ratio * (this.state.maximumValue - this.state.minimumValue) + this.state.minimumValue)
-            );
 		}
+		return Math.max(this.state.minimumValue,
+            Math.min(this.state.maximumValue,
+                ratio * (this.state.maximumValue - this.state.minimumValue) + this.state.minimumValue)
+        );
 	}
 
 	layoutView(x) {

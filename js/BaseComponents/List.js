@@ -106,32 +106,31 @@ class ListComponent extends React.Component {
 					setScrollEnabled: enable => this.setScrollEnabled(enable)
 				}
 			);
-		} else {
-			const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
-			return (
-				<SwipeRow
-					ref={row => (this._rows[`${secId}${rowId}`] = row)}
-					onRowOpen={ _ => this.onRowOpen(secId, rowId, this._rows) }
-					onRowClose={ _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows) }
-					onRowPress={ _ => this.onRowPress(`${secId}${rowId}`) }
-					setScrollEnabled={ (enable) => this.setScrollEnabled(enable) }
-					leftOpenValue={this.props.leftOpenValue}
-					rightOpenValue={this.props.rightOpenValue}
-					closeOnRowPress={this.props.closeOnRowPress}
-					disableLeftSwipe={this.props.disableLeftSwipe}
-					disableRightSwipe={this.props.disableRightSwipe}
-					recalculateHiddenLayout={this.props.recalculateHiddenLayout}
-					style={this.props.swipeRowStyle}
-					preview={this.props.previewFirstRow && rowId === firstRowId}
-					previewDuration={this.props.previewDuration}
-					previewOpenValue={this.props.previewOpenValue}
-					editMode={this.props.editMode}
-				>
-					{this.props.renderHiddenRow(rowData, secId, rowId, this._rows)}
-					{this.props.renderRow(rowData, secId, rowId, this._rows)}
-				</SwipeRow>
-			);
 		}
+		const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
+		return (
+			<SwipeRow
+				ref={row => (this._rows[`${secId}${rowId}`] = row)}
+				onRowOpen={ _ => this.onRowOpen(secId, rowId, this._rows) }
+				onRowClose={ _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows) }
+				onRowPress={ _ => this.onRowPress(`${secId}${rowId}`) }
+				setScrollEnabled={ (enable) => this.setScrollEnabled(enable) }
+				leftOpenValue={this.props.leftOpenValue}
+				rightOpenValue={this.props.rightOpenValue}
+				closeOnRowPress={this.props.closeOnRowPress}
+				disableLeftSwipe={this.props.disableLeftSwipe}
+				disableRightSwipe={this.props.disableRightSwipe}
+				recalculateHiddenLayout={this.props.recalculateHiddenLayout}
+				style={this.props.swipeRowStyle}
+				preview={this.props.previewFirstRow && rowId === firstRowId}
+				previewDuration={this.props.previewDuration}
+				previewOpenValue={this.props.previewOpenValue}
+				editMode={this.props.editMode}
+			>
+				{this.props.renderHiddenRow(rowData, secId, rowId, this._rows)}
+				{this.props.renderRow(rowData, secId, rowId, this._rows)}
+			</SwipeRow>
+		);
 	}
 
 	render() {

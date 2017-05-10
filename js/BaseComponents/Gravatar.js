@@ -45,6 +45,7 @@ class Gravatar extends React.Component {
 			break;
 		case 'square':
 			break;
+		default:
 		}
 
 		return {...size, ...border};
