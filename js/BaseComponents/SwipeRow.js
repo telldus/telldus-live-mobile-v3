@@ -76,10 +76,8 @@ class SwipeRow extends Component {
 	onRowPress() {
 		if (this.props.onRowPress) {
 			this.props.onRowPress();
-		} else {
-			if (this.props.closeOnRowPress) {
-				this.closeRow();
-			}
+		} else if (this.props.closeOnRowPress) {
+			this.closeRow();
 		}
 	}
 
@@ -117,11 +115,11 @@ class SwipeRow extends Component {
 
 			let newDX = this.swipeInitialX + dx;
 			if (this.props.disableLeftSwipe && newDX < 0) {
- newDX = 0;
-}
+				newDX = 0;
+			}
 			if (this.props.disableRightSwipe && newDX > 0) {
- newDX = 0;
-}
+				newDX = 0;
+			}
 
 			this.setState({
 				translateX: new Animated.Value(newDX)
@@ -145,12 +143,10 @@ class SwipeRow extends Component {
 				// we're more than halfway
 				toValue = this.props.leftOpenValue;
 			}
-		} else {
 			// trying to open left
-			if (this.state.translateX._value < this.props.rightOpenValue / 2) {
-				// we're more than halfway
-				toValue = this.props.rightOpenValue;
-			}
+		} else if (this.state.translateX._value < this.props.rightOpenValue / 2) {
+			// we're more than halfway
+			toValue = this.props.rightOpenValue;
 		}
 
 		this.manuallySwipeRow(toValue);

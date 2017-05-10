@@ -30,8 +30,8 @@ export default class RoundedCornerShadowView extends Base {
 			flexDirection: 'row',
 			borderRadius: 7,
 			overflow: 'hidden',
-            justifyContent: 'center',
-            alignItems: 'stretch'
+			justifyContent: 'center',
+			alignItems: 'stretch'
 		};
 
 		if (this.props.style) {
@@ -61,5 +61,5 @@ export default class RoundedCornerShadowView extends Base {
                 </View>
             </View>
 		);
-    }
+	}
 }

@@ -36,7 +36,7 @@ import { parseDevicesForListView } from 'Reducers/Devices';
 import Theme from 'Theme';
 
 class DevicesTab extends View {
-    constructor(props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			deviceId: -1,
@@ -118,8 +118,8 @@ class DevicesTab extends View {
 	getType(deviceId) {
 		const filteredItem = this.props.devices.find(item => item.id === deviceId);
 		if (!filteredItem) {
-            return null;
-        }
+			return null;
+		}
 
 		const supportedMethods = filteredItem.supportedMethods;
 		return getDeviceType(supportedMethods);
@@ -127,12 +127,12 @@ class DevicesTab extends View {
 }
 
 DevicesTab.propTypes = {
-    dataSource: React.PropTypes.object,
+	dataSource: React.PropTypes.object,
 };
 
 const dataSource = new ListDataSource({
-    rowHasChanged: (r1, r2) => r1 !== r2,
-    sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+	rowHasChanged: (r1, r2) => r1 !== r2,
+	sectionHeaderHasChanged: (s1, s2) => s1 !== s2
 });
 
 function select(store) {

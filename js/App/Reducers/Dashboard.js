@@ -28,67 +28,67 @@ type State = {
 };
 
 const initialState: State = {
-    devices: [],
-    sensors: [],
+	devices: [],
+	sensors: [],
 };
 
 export default function dashboardReducer(state: State = initialState, action : Action): State {
-    if (action.type === 'ADD_TO_DASHBOARD') {
-        if (action.kind === 'sensor') {
-            if (state.sensors.filter((item) => item.id === action.id).length > 0) {
-                return state;
-            }
+	if (action.type === 'ADD_TO_DASHBOARD') {
+		if (action.kind === 'sensor') {
+			if (state.sensors.filter((item) => item.id === action.id).length > 0) {
+				return state;
+			}
 
-            return {
-                ...state,
-                sensors: [
-                    ...state.sensors,
-                    {
-                        'id': action.id
-                    }
-                ]
-            };
-        } else if (action.kind === 'device') {
-            if (state.devices.indexOf(action.id) >= 0) {
-                return state;
-            }
+			return {
+				...state,
+				sensors: [
+					...state.sensors,
+					{
+						'id': action.id
+					}
+				]
+			};
+		} else if (action.kind === 'device') {
+			if (state.devices.indexOf(action.id) >= 0) {
+				return state;
+			}
 
-            return {
-                ...state,
-                devices: [...state.devices, action.id],
-            };
-        }
+			return {
+				...state,
+				devices: [...state.devices, action.id],
+			};
+		}
 	} else if (action.type === 'REMOVE_FROM_DASHBOARD') {
-        if (action.kind === 'sensor') {
-            return {
-                ...state,
-                sensors: state.sensors.filter((item) => item.id !== action.id)
-            };
-        } else if (action.kind === 'device') {
-            return {
-                ...state,
-                devices: state.devices.filter(id => id !== action.id)
-            };
-        }
-    } else if (action.type === 'CHANGE_SENSOR_DISPLAY_TYPE') {
-        return {
-            ...state,
-            sensors:
+		if (action.kind === 'sensor') {
+			return {
+				...state,
+				sensors: state.sensors.filter((item) => item.id !== action.id)
+			};
+		} else if (action.kind === 'device') {
+			return {
+				...state,
+				devices: state.devices.filter(id => id !== action.id)
+			};
+		}
+	} else if (action.type === 'CHANGE_SENSOR_DISPLAY_TYPE') {
+		return {
+			...state,
+			sensors:
                 state.sensors.map(item => {
-                    if (item.id === action.id) {
-                        item.displayType = action.displayType;
-                    }
-                    return item;
-                })
-        };
-    }
+	if (item.id === action.id) {
+		item.displayType = action.displayType;
+	}
+	return item;
+})
+		};
+	}
 
-    return state;
+	return state;
 }
 
 export function parseDashboardForListView({ devices, sensors, dashboard }) {
 	const items = [];
-    dashboard = dashboard || {};
+	dashboard = dashboard || {};
 	if (isArray(devices) && dashboard.devices) {
 		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
 		devicesInDashboard.map((item) => {
@@ -102,13 +102,13 @@ export function parseDashboardForListView({ devices, sensors, dashboard }) {
 
 	if (isArray(sensors) && dashboard.sensors) {
 		let sensorsInDashboard = sensors.filter(item => {
-            for (let i = 0; i < dashboard.sensors.length; ++i) {
+			for (let i = 0; i < dashboard.sensors.length; ++i) {
 				if (dashboard.sensors[i].id === item.id) {
 					return true;
 				}
 			}
 			return false;
-        });
+		});
 
 		sensorsInDashboard.map((item) => {
 			let displayType = 'default';

@@ -34,5 +34,5 @@ module.exports = class ListHeader extends View {
 				</Text>
 			</View>
 		);
-    }
+	}
 };

@@ -34,10 +34,10 @@ module.exports = function(incomingProps, defaultProps) {
 
 	// console.log(defaultProps, incomingProps);
 	if (incomingProps)		{
-_.merge(computedProps, defaultProps, incomingProps);
-}	else		{
-computedProps = defaultProps;
-}
+		_.merge(computedProps, defaultProps, incomingProps);
+	}	else		{
+		computedProps = defaultProps;
+	}
 	// Pass the merged Style Object instead
 	if (incomingPropsStyle) {
 
@@ -52,12 +52,10 @@ computedProps = defaultProps;
 				}
 			});
 
-		}		else {
-			if (typeof incomingPropsStyle === 'number') {
-				computedPropsStyle = ReactNativePropRegistry.getByID(incomingPropsStyle);
-			} else {
-				computedPropsStyle = incomingPropsStyle;
-			}
+		}		else if (typeof incomingPropsStyle === 'number') {
+			computedPropsStyle = ReactNativePropRegistry.getByID(incomingPropsStyle);
+		} else {
+			computedPropsStyle = incomingPropsStyle;
 		}
 
 		_.merge(computedProps.style, defaultProps.style, computedPropsStyle);

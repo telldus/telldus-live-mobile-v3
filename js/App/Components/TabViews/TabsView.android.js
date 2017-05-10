@@ -114,17 +114,17 @@ class TabsView extends View {
 
 	renderContent() {
 		switch (this.props.tab) {
-			case 'dashboardTab':
-				return <DashboardTab />;
-			case 'devicesTab':
-				return <DevicesTab />;
-			case 'sensorsTab':
-				return <SensorsTab />;
-			case 'schedulerTab':
-				return <SchedulerTab />;
-			case 'gatewaysTab':
-				return <GatewaysTab />;
-			}
+		case 'dashboardTab':
+			return <DashboardTab />;
+		case 'devicesTab':
+			return <DevicesTab />;
+		case 'sensorsTab':
+			return <SensorsTab />;
+		case 'schedulerTab':
+			return <SchedulerTab />;
+		case 'gatewaysTab':
+			return <GatewaysTab />;
+		}
 		return <DashboardTab />;
 	}
 

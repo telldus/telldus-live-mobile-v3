@@ -26,42 +26,42 @@ import computeProps from './computeProps';
 
 export default class PickerComponent extends Base {
 
-    getInitialStyle() {
-        return {
-            picker: {
+	getInitialStyle() {
+		return {
+			picker: {
                 // alignItems: 'flex-end'
-            },
-            pickerItem: {
+			},
+			pickerItem: {
 
-            }
-        };
-    }
-    prepareRootProps() {
+			}
+		};
+	}
+	prepareRootProps() {
 
-        let defaultProps = {
-            style: this.getInitialStyle().picker,
-            itemStyle: this.getInitialStyle().pickerItem
-        };
+		let defaultProps = {
+			style: this.getInitialStyle().picker,
+			itemStyle: this.getInitialStyle().pickerItem
+		};
 
-        return computeProps(this.props, defaultProps);
+		return computeProps(this.props, defaultProps);
 
-    }
+	}
 
-    render() {
-        return (
+	render() {
+		return (
             <Picker {...this.prepareRootProps()}>
                 {this.props.children}
             </Picker>
-        );
-    }
+		);
+	}
 
 }
 
 PickerComponent.Item = React.createClass({
 
-    render: function() {
-        return (
+	render: function() {
+		return (
           <Picker.Item {...this.props()}/>
-          );
-    }
+		);
+	}
 });

@@ -28,103 +28,103 @@ import * as ANIMATION_DEFINITIONS from 'react-native-animatable/definitions';
 initializeRegistryWithDefinitions(ANIMATION_DEFINITIONS);
 
 class DimmerPopup extends Component {
-    static defaultProps = {
-        animationIn: 'slideInDown',
-        animationInTiming: 300,
-        animationOut: 'slideOutUp',
-        animationOutTiming: 300,
-        isVisible: false,
-        hideOnBack: true,
-        value: 1
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            isVisible: false,
-            deviceWidth: Dimensions.get('window').width,
-            deviceHeight: Dimensions.get('window').height
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (!this.state.isVisible && nextProps.isVisible) {
-            this.setState({ isVisible: true });
-        }
-    }
-
-    componentWillMount() {
-        if (this.props.isVisible) {
-            this.setState({ isVisible: true });
-        }
-    }
-
-    componentDidMount() {
-        if (this.state.isVisible) {
-            this.open();
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        // On modal open request, we slide the view up and fade in the backdrop
-        if (this.state.isVisible && !prevState.isVisible) {
-            this.open();
-        // On modal close request, we slide the view down and fade out the backdrop
-        } else if (!this.props.isVisible && prevProps.isVisible) {
-            this.close();
-        }
-    }
-
-    open() {
-        this.contentRef[this.props.animationIn](this.props.animationInTiming);
-    }
-
-    close = async () => {
-        this.contentRef[this.props.animationOut](this.props.animationOutTiming).then(() => {
-            this.setState({ isVisible: false });
-        });
-    }
-
-    closeOnBack() {
-        if (this.props.hideOnBack) {
-            this.close();
-        }
-
-        this.props.onBackButtonPress();
-    }
-
-    handleLayout(event) {
-        // Here we update the device dimensions in the state if the layout changed (triggering a render)
-        const deviceWidth = Dimensions.get('window').width;
-        const deviceHeight = Dimensions.get('window').height;
-        if (deviceWidth !== this.state.deviceWidth || deviceHeight !== this.state.deviceHeight) {
-            this.setState({ deviceWidth, deviceHeight });
-        }
-    }
-
-	setRefs(ref) {
-        this.contentRef = ref;
+	static defaultProps = {
+		animationIn: 'slideInDown',
+		animationInTiming: 300,
+		animationOut: 'slideOutUp',
+		animationOutTiming: 300,
+		isVisible: false,
+		hideOnBack: true,
+		value: 1
 	}
 
-    render() {
-        const { deviceWidth } = this.state;
+	constructor(props) {
+		super(props);
+		this.state = {
+			isVisible: false,
+			deviceWidth: Dimensions.get('window').width,
+			deviceHeight: Dimensions.get('window').height
+		};
+	}
 
-        if (this.state.isVisible) {
-            return (
+	componentWillReceiveProps(nextProps) {
+		if (!this.state.isVisible && nextProps.isVisible) {
+			this.setState({ isVisible: true });
+		}
+	}
+
+	componentWillMount() {
+		if (this.props.isVisible) {
+			this.setState({ isVisible: true });
+		}
+	}
+
+	componentDidMount() {
+		if (this.state.isVisible) {
+			this.open();
+		}
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+        // On modal open request, we slide the view up and fade in the backdrop
+		if (this.state.isVisible && !prevState.isVisible) {
+			this.open();
+        // On modal close request, we slide the view down and fade out the backdrop
+		} else if (!this.props.isVisible && prevProps.isVisible) {
+			this.close();
+		}
+	}
+
+	open() {
+		this.contentRef[this.props.animationIn](this.props.animationInTiming);
+	}
+
+	close = async () => {
+		this.contentRef[this.props.animationOut](this.props.animationOutTiming).then(() => {
+			this.setState({ isVisible: false });
+		});
+	}
+
+	closeOnBack() {
+		if (this.props.hideOnBack) {
+			this.close();
+		}
+
+		this.props.onBackButtonPress();
+	}
+
+	handleLayout(event) {
+        // Here we update the device dimensions in the state if the layout changed (triggering a render)
+		const deviceWidth = Dimensions.get('window').width;
+		const deviceHeight = Dimensions.get('window').height;
+		if (deviceWidth !== this.state.deviceWidth || deviceHeight !== this.state.deviceHeight) {
+			this.setState({ deviceWidth, deviceHeight });
+		}
+	}
+
+	setRefs(ref) {
+		this.contentRef = ref;
+	}
+
+	render() {
+		const { deviceWidth } = this.state;
+
+		if (this.state.isVisible) {
+			return (
                 <View
                     onLayout={this.handleLayout.bind(this)}
                     ref={c => this.setRefs(c)}
                     style={{
-                        marginTop: 22,
-                        marginHorizontal: 8,
-                        position: 'absolute',
-                        width: deviceWidth - 16,
-                        height: 56,
-                        backgroundColor: 'white',
-                        borderRadius: 7,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
+	marginTop: 22,
+	marginHorizontal: 8,
+	position: 'absolute',
+	width: deviceWidth - 16,
+	height: 56,
+	backgroundColor: 'white',
+	borderRadius: 7,
+	alignItems: 'center',
+	justifyContent: 'center'
+}}>
                     <Text ellipsizeMode="middle"
                         style={{color: '#1a355b'}}>
                         {this.props.name}
@@ -135,23 +135,23 @@ class DimmerPopup extends Component {
                         width={deviceWidth - 32}
                         style={{alignItems: 'center', justifyContent: 'center'}} />
                 </View>
-            );
-        } else {
-            return null;
-        }
-    }
+			);
+		} else {
+			return null;
+		}
+	}
 }
 
 DimmerPopup.propTypes = {
-    animationIn: PropTypes.string,
-    animationInTiming: PropTypes.number,
-    animationOut: PropTypes.string,
-    animationOutTiming: PropTypes.number,
-    value: PropTypes.number.isRequired,
-    isVisible: PropTypes.bool.isRequired,
-    hideOnBack: PropTypes.bool,
-    style: PropTypes.array,
-    name: PropTypes.string.isRequired
+	animationIn: PropTypes.string,
+	animationInTiming: PropTypes.number,
+	animationOut: PropTypes.string,
+	animationOutTiming: PropTypes.number,
+	value: PropTypes.number.isRequired,
+	isVisible: PropTypes.bool.isRequired,
+	hideOnBack: PropTypes.bool,
+	style: PropTypes.array,
+	name: PropTypes.string.isRequired
 };
 
 module.exports = DimmerPopup;

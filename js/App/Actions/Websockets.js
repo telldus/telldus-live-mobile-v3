@@ -42,11 +42,11 @@ export const authenticateSession = () => (dispatch, getState) => {
 	};
 	return LiveApi(payload).then(response => dispatch({
 		type: 'RECEIVED_AUTHENTICATE_SESSION_RESPONSE',
-			payload: {
-				...payload,
-				...response,
-			}
+		payload: {
+			...payload,
+			...response,
 		}
+	}
 	));
 };
 
@@ -118,13 +118,13 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
 			title = ` ${message.module}:${message.action}`;
 
 			switch (message.module) {
-				case 'device':
-					dispatch(processWebsocketMessageForDevice(message.action, message.data));
+			case 'device':
+				dispatch(processWebsocketMessageForDevice(message.action, message.data));
 				break;
-				case 'sensor':
-					dispatch(processWebsocketMessageForSensor(message.action, message.data));
+			case 'sensor':
+				dispatch(processWebsocketMessageForSensor(message.action, message.data));
 				break;
-				case 'zwave':
+			case 'zwave':
 
 				break;
 			default:

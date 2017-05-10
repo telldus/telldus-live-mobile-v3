@@ -25,8 +25,8 @@ import { TouchableOpacity } from 'react-native';
 
 module.exports = class SwitchButton extends View {
 	render() {
-        console.log('SwitchButton props:');
-        console.log(this.props.item.state);
+		console.log('SwitchButton props:');
+		console.log(this.props.item.state);
 		return (
 			<View
 				style={[this.props.style, {
@@ -35,20 +35,20 @@ module.exports = class SwitchButton extends View {
 					shadowOffset: {width: 0, height: 0},
 					shadowRadius: 1,
 					shadowOpacity: 1.0,
-                    backgroundColor: 'red',
-                    elevation: 5
-            }]}>
+					backgroundColor: 'red',
+					elevation: 5
+				}]}>
                 <View style={{
-					flex: 1,
-					flexDirection: 'row',
-					borderRadius: 7,
-					overflow: 'hidden'
-				}}>
+	flex: 1,
+	flexDirection: 'row',
+	borderRadius: 7,
+	overflow: 'hidden'
+}}>
                     <View style={{
-                        flex: 1,
-                        backgroundColor: this.props.item.state === 0 ? '#fafafa' : '#eeeeee',
-                        alignItems: 'stretch'
-                    }}>
+	flex: 1,
+	backgroundColor: this.props.item.state === 0 ? '#fafafa' : '#eeeeee',
+	alignItems: 'stretch'
+}}>
                         <TouchableOpacity
 							onPress={() => console.log('off')}
 							style={{flex: 1, justifyContent: 'center'}} >
@@ -56,20 +56,20 @@ module.exports = class SwitchButton extends View {
                                 ellipsizeMode="middle"
                                 numberOfLines={1}
                                 style = {{
-                                    color: this.props.item.state === 0 ? 'red' : '#a2a2a2',
-                                    fontSize: Math.floor(100 / 8),
-                                    textAlign: 'center',
-                                    textAlignVertical: 'center',
-                            }}>
+	color: this.props.item.state === 0 ? 'red' : '#a2a2a2',
+	fontSize: Math.floor(100 / 8),
+	textAlign: 'center',
+	textAlignVertical: 'center',
+}}>
                                 {'Off'}
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{
-                        flex: 1,
-                        backgroundColor: this.props.item.state === 1 ? '#fafafa' : '#eeeeee',
-                        alignItems: 'stretch'
-                    }}>
+	flex: 1,
+	backgroundColor: this.props.item.state === 1 ? '#fafafa' : '#eeeeee',
+	alignItems: 'stretch'
+}}>
                         <TouchableOpacity
 							onPress={() => console.log('off')}
 							style={{flex: 1, justifyContent: 'center'}} >
@@ -77,11 +77,11 @@ module.exports = class SwitchButton extends View {
                                 ellipsizeMode="middle"
                                 numberOfLines={1}
                                 style = {{
-                                    color: this.props.item.state === 1 ? 'green' : '#a2a2a2',
-                                    fontSize: Math.floor(100 / 8),
-                                    textAlign: 'center',
-                                    textAlignVertical: 'center',
-                            }}>
+	color: this.props.item.state === 1 ? 'green' : '#a2a2a2',
+	fontSize: Math.floor(100 / 8),
+	textAlign: 'center',
+	textAlignVertical: 'center',
+}}>
                                 {'On'}
                             </Text>
                         </TouchableOpacity>
@@ -89,5 +89,5 @@ module.exports = class SwitchButton extends View {
                 </View>
             </View>
 		);
-    }
+	}
 };

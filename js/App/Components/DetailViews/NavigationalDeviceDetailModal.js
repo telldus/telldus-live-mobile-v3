@@ -50,11 +50,11 @@ const NavigationalButton = ({device, onUp, onDown, onStop}) => (
 
 const LearnButton = ({onLearn}) => (
     <RoundedCornerShadowView style={{
-        height: 36,
-        marginHorizontal: 8,
-        marginVertical: 8,
-        justifyContent: 'center',
-        alignItems: 'center'}}>
+	height: 36,
+	marginHorizontal: 8,
+	marginVertical: 8,
+	justifyContent: 'center',
+	alignItems: 'center'}}>
         <TouchableOpacity onPress={onLearn}>
             <Text style={{fontSize: 16, color: 'orange'}}>
                 {'Learn'}
@@ -65,51 +65,51 @@ const LearnButton = ({onLearn}) => (
 
 class NavigationalDeviceDetailModal extends View {
 
-    constructor(props) {
+	constructor(props) {
 		super(props);
 
-        this.onUp = this.onUp.bind(this);
-        this.onDown = this.onDown.bind(this);
-        this.onStop = this.onStop.bind(this);
-        this.onLearn = this.onLearn.bind(this);
+		this.onUp = this.onUp.bind(this);
+		this.onDown = this.onDown.bind(this);
+		this.onStop = this.onStop.bind(this);
+		this.onLearn = this.onLearn.bind(this);
 	}
 
-    onUp() {
-        this.props.onUp(this.props.deviceId);
-    }
+	onUp() {
+		this.props.onUp(this.props.deviceId);
+	}
 
-    onDown() {
-        this.props.onDown(this.props.deviceId);
-    }
+	onDown() {
+		this.props.onDown(this.props.deviceId);
+	}
 
-    onStop() {
-        this.props.onStop(this.props.deviceId);
-    }
+	onStop() {
+		this.props.onStop(this.props.deviceId);
+	}
 
-    onLearn() {
-        this.props.onLearn(this.props.deviceId);
-    }
+	onLearn() {
+		this.props.onLearn(this.props.deviceId);
+	}
 
 	render() {
-        let hasNavigationButtons = true;
-        let hasLearnButton = true;
-        let navigationButtons = null;
-        let learnButton = null;
+		let hasNavigationButtons = true;
+		let hasLearnButton = true;
+		let navigationButtons = null;
+		let learnButton = null;
 
-        const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
-        if (device) {
-            const { UP, DOWN, STOP, LEARN } = device.supportedMethods;
-            hasNavigationButtons = UP || DOWN || STOP;
-            hasLearnButton = LEARN;
-        }
+		const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
+		if (device) {
+			const { UP, DOWN, STOP, LEARN } = device.supportedMethods;
+			hasNavigationButtons = UP || DOWN || STOP;
+			hasLearnButton = LEARN;
+		}
 
-        if (hasNavigationButtons) {
-            navigationButtons = <NavigationalButton device={device} onUp={this.onUp} onDown={this.onDown} onLearn={this.onLearn} />;
-        }
+		if (hasNavigationButtons) {
+			navigationButtons = <NavigationalButton device={device} onUp={this.onUp} onDown={this.onDown} onLearn={this.onLearn} />;
+		}
 
-        if (hasLearnButton) {
-            learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
-        }
+		if (hasLearnButton) {
+			learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
+		}
 
 		return (
             <DeviceDetailModal
@@ -126,26 +126,26 @@ class NavigationalDeviceDetailModal extends View {
 
 NavigationalDeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
-    deviceId: React.PropTypes.number.isRequired
+	deviceId: React.PropTypes.number.isRequired
 };
 
 const styles = StyleSheet.create({
-  navigationButton: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
-  }
+	navigationButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	}
 });
 
 function select(store) {
-    return { store };
+	return { store };
 }
 
 function actions(dispatch) {
 	return {
 		onUp: (id) => dispatch(up(id)),
 		onDown: (id) => dispatch(down(id)),
-        onStop: (id) => dispatch(stop(id)),
+		onStop: (id) => dispatch(stop(id)),
 		onLearn: (id) => dispatch(learn(id))
 	};
 }

@@ -26,30 +26,30 @@ import ScrollableTabView from 'react-native-scrollable-tab-view';
 
 export default class TabComponent extends Base {
 
-    getInitialStyle() {
-        return {
-            tab: {
-                flex: 1
-            }
-        };
-    }
+	getInitialStyle() {
+		return {
+			tab: {
+				flex: 1
+			}
+		};
+	}
 
-    prepareRootProps() {
+	prepareRootProps() {
 
-        let defaultProps = {
-            style: this.getInitialStyle().tab
-        };
+		let defaultProps = {
+			style: this.getInitialStyle().tab
+		};
 
-        return computeProps(this.props, defaultProps);
+		return computeProps(this.props, defaultProps);
 
-    }
+	}
 
-    render() {
-        return (
+	render() {
+		return (
           <ScrollableTabView {...this.prepareRootProps()} >
               {this.props.children}
           </ScrollableTabView>
-        );
-    }
+		);
+	}
 
 }

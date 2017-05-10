@@ -32,24 +32,24 @@ const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
     <RoundedCornerShadowView style={styles.toggleContainer}>
         <TouchableOpacity
             style={[styles.toggleButton, {
-                backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
-            }]}
+	backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
+}]}
             onPress={onTurnOff}>
             <Text style={{
-                fontSize: 16,
-                color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e'}}>
+	fontSize: 16,
+	color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e'}}>
                 {'Off'}
             </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
             style={[styles.toggleButton, {
-                backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee',
-            }]}
+	backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee',
+}]}
             onPress={onTurnOn}>
             <Text style={{
-                fontSize: 16,
-                color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e'}}>
+	fontSize: 16,
+	color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e'}}>
                 {'On'}
             </Text>
         </TouchableOpacity>
@@ -58,11 +58,11 @@ const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
 
 const LearnButton = ({device, onLearn}) => (
     <RoundedCornerShadowView style={{
-        height: 36,
-        marginHorizontal: 8,
-        marginVertical: 8,
-        justifyContent: 'center',
-        alignItems: 'center'}}>
+	height: 36,
+	marginHorizontal: 8,
+	marginVertical: 8,
+	justifyContent: 'center',
+	alignItems: 'center'}}>
         <TouchableOpacity onPress={onLearn}>
             <Text style={{fontSize: 16, color: 'orange'}}>
                 {'Learn'}
@@ -73,46 +73,46 @@ const LearnButton = ({device, onLearn}) => (
 
 class ToggleDeviceDetailModal extends View {
 
-    constructor(props) {
+	constructor(props) {
 		super(props);
 
-        this.onTurnOn = this.onTurnOn.bind(this);
-        this.onTurnOff = this.onTurnOff.bind(this);
-        this.onLearn = this.onLearn.bind(this);
+		this.onTurnOn = this.onTurnOn.bind(this);
+		this.onTurnOff = this.onTurnOff.bind(this);
+		this.onLearn = this.onLearn.bind(this);
 	}
 
-    onTurnOn() {
-        this.props.onTurnOn(this.props.deviceId);
-    }
+	onTurnOn() {
+		this.props.onTurnOn(this.props.deviceId);
+	}
 
-    onTurnOff() {
-        this.props.onTurnOff(this.props.deviceId);
-    }
+	onTurnOff() {
+		this.props.onTurnOff(this.props.deviceId);
+	}
 
-    onLearn() {
-        this.props.onLearn(this.props.deviceId);
-    }
+	onLearn() {
+		this.props.onLearn(this.props.deviceId);
+	}
 
 	render() {
-        let hasToggleButton = false;
-        let hasLearnButton = false;
-        let toggleButton = null;
-        let learnButton = null;
+		let hasToggleButton = false;
+		let hasLearnButton = false;
+		let toggleButton = null;
+		let learnButton = null;
 
-        const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
-        if (device) {
-            const { TURNON, TURNOFF, LEARN } = device.supportedMethods;
-            hasToggleButton = TURNON || TURNOFF;
-            hasLearnButton = LEARN;
-        }
+		const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
+		if (device) {
+			const { TURNON, TURNOFF, LEARN } = device.supportedMethods;
+			hasToggleButton = TURNON || TURNOFF;
+			hasLearnButton = LEARN;
+		}
 
-        if (hasToggleButton) {
-            toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} />;
-        }
+		if (hasToggleButton) {
+			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} />;
+		}
 
-        if (hasLearnButton) {
-            learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
-        }
+		if (hasLearnButton) {
+			learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
+		}
 
 		return (
             <DeviceDetailModal
@@ -129,25 +129,25 @@ class ToggleDeviceDetailModal extends View {
 
 ToggleDeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
-    deviceId: React.PropTypes.number.isRequired
+	deviceId: React.PropTypes.number.isRequired
 };
 
 const styles = StyleSheet.create({
-    toggleContainer: {
-        flexDirection: 'row',
-        height: 36,
-        marginHorizontal: 8,
-        marginVertical: 16
-    },
-    toggleButton: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
+	toggleContainer: {
+		flexDirection: 'row',
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 16
+	},
+	toggleButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	}
 });
 
 function select(store) {
-    return { store };
+	return { store };
 }
 
 function actions(dispatch) {

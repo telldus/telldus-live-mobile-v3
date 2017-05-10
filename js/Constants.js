@@ -20,19 +20,19 @@
  */
 
 export default {
-    supportedMethods: 951,
-    methods: {
-        1: 'TURNON',
-        2: 'TURNOFF',
-        4: 'BELL',
-        8: 'TOGGLE',
-        16: 'DIM',
-        32: 'LEARN',
-        64: 'EXECUTE',
-        128: 'UP',
-        256: 'DOWN',
-        512: 'STOP',
-        1024: 'RGBW',
-        2048: 'THERMOSTAT',
-    },
+	supportedMethods: 951,
+	methods: {
+		1: 'TURNON',
+		2: 'TURNOFF',
+		4: 'BELL',
+		8: 'TOGGLE',
+		16: 'DIM',
+		32: 'LEARN',
+		64: 'EXECUTE',
+		128: 'UP',
+		256: 'DOWN',
+		512: 'STOP',
+		1024: 'RGBW',
+		2048: 'THERMOSTAT',
+	},
 };

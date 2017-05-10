@@ -53,7 +53,7 @@ class GatewaysTab extends View {
 			return ( <View /> );
 		}
 	}
-f
+	f
 	render() {
 		return (
 			<List
