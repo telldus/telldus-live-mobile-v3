@@ -24,11 +24,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Icon, ListItem, Text, View } from 'BaseComponents';
+import { Button, Icon, Text, View, Image } from 'BaseComponents';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Theme from 'Theme';
-import Gravatar from 'react-native-avatar-gravatar';
 
 import DashboardTab from './DashboardTab';
 import DevicesTab from './DevicesTab';
@@ -56,66 +55,58 @@ class TabsView extends View {
 
 	navigationView() {
 		return (
-			<View style = {{ flex: 1, backgroundColor: this.getTheme().btnPrimaryBg }}>
-				<View style = {{ height: 80, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 10 }}>
-					<Gravatar
-						emailAddress = {this.props.userProfile.email}
-						size = { 60 }
-						mask = "circle"
-					/>
-					<Text>
+			<View style = {{ flex: 1, backgroundColor: this.getTheme().btnSecondaryBg }}>
+				<View style = {{ height: 60, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), marginBottom:ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 5, backgroundColor: this.getTheme().btnSecondaryBg,flexDirection:'row'}}>
+					<Image style={{width:50,height:50}}
+						source={require('./img/telldus.png')}
+						resizeMode={'contain'} />
+					<Text style={{flex:1,color:'#e26901', fontSize:24,textAlignVertical:'bottom', marginLeft:20}}>
 						{this.props.userProfile.firstname} {this.props.userProfile.lastname}
 					</Text>
 				</View>
-				<View style = {{ flex: 1, backgroundColor: '#fff' }}>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'dashboardTab') }
-						>Dashboard</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'devicesTab') }
-						>Devices</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'sensorsTab') }
-						>Sensors</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'schedulerTab') }
-						>Scheduler</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'gatewaysTab') }
-						>Gateways</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress = { () => this.props.dispatch(logoutFromTelldus()) }
-						>Logout</Button>
-					</ListItem>
+				<View style = {{ flex: 1, backgroundColor: this.getTheme().btnSecondaryBg }}>
+					<Button name = "dashboard"
+						backgroundColor = { this.getTheme().btnSecondaryBg }
+						size={26}
+						style = {{ padding: 6, minWidth: 100}}
+						onPress={ this.onTabSelect.bind(this, 'dashboardTab')}>
+						<Text style={{color:'white', fontSize:18}}>Dashboard</Text>
+					</Button>
+					<Button name = "toggle-on"
+						backgroundColor = { this.getTheme().btnSecondaryBg }
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress={ this.onTabSelect.bind(this, 'devicesTab') }>
+						<Text style={{color:'white', fontSize:18}}>Devices</Text>
+					</Button>
+					<Button name = "wifi"
+						backgroundColor = { this.getTheme().btnSecondaryBg }
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress={ this.onTabSelect.bind(this, 'sensorsTab') }>
+						<Text style={{color:'white', fontSize:18}}>Sensors</Text>
+					</Button>
+					<Button name = "clock-o"
+						backgroundColor = { this.getTheme().btnSecondaryBg }
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress={ this.onTabSelect.bind(this, 'schedulerTab') }>
+						<Text style={{color:'white', fontSize:18}}>Scheduler</Text>
+					</Button>
+					<Button name = "home"
+						backgroundColor = { this.getTheme().btnSecondaryBg }
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress={ this.onTabSelect.bind(this, 'gatewaysTab') }>
+						<Text style={{color:'white', fontSize:18}}>Connected Locations</Text>
+					</Button>
+					<Button name = "sign-out"
+						backgroundColor = { this.getTheme().btnSecondaryBg }
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress = { () => this.props.dispatch(logoutFromTelldus()) }>
+						<Text style={{color:'white', fontSize:18}}>Logout</Text>
+					</Button>
 				</View>
 			</View>
 		);
