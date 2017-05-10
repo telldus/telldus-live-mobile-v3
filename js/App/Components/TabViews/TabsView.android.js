@@ -124,8 +124,9 @@ class TabsView extends View {
 			return <SchedulerTab />;
 		case 'gatewaysTab':
 			return <GatewaysTab />;
+		default:
+			return <DashboardTab />;
 		}
-		return <DashboardTab />;
 	}
 
 	render() {

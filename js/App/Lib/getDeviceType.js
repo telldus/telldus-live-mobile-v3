@@ -30,13 +30,15 @@ export default function getDeviceType(supportedMethods) {
 
 	if (BELL) {
 		return 'BELL';
-	} else if (UP || DOWN || STOP) {
-		return 'NAVIGATIONAL';
-	} else if (DIM) {
-		return 'DIMMER';
-	} else if (TURNON || TURNOFF) {
-		return 'TOGGLE';
-	} else {
-		return 'UNSUPPORTED';
 	}
+	if (UP || DOWN || STOP) {
+		return 'NAVIGATIONAL';
+	}
+	if (DIM) {
+		return 'DIMMER';
+	}
+	if (TURNON || TURNOFF) {
+		return 'TOGGLE';
+	}
+	return 'UNSUPPORTED';
 }

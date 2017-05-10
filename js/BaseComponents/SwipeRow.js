@@ -232,19 +232,18 @@ class SwipeRow extends Component {
 					{this.renderVisibleContent()}
 				</Animated.View>
 			);
-		} else {
-			return (
-				<Animated.View
-					style={{
-						transform: [
-							{translateX: this.state.translateX}
-						]
-					}}
-				>
-					{this.renderVisibleContent()}
-				</Animated.View>
-			);
 		}
+		return (
+			<Animated.View
+				style={{
+					transform: [
+						{translateX: this.state.translateX}
+					]
+				}}
+			>
+				{this.renderVisibleContent()}
+			</Animated.View>
+		);
 	}
 
 	render() {
