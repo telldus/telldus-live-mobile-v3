@@ -24,6 +24,7 @@ import { Platform } from 'react-native';
 export default {
 	brandPrimary : '#1b365d',
 	brandSecondary : '#e26901',
+	brandTertiary: '#202020',
 	brandInfo: '#5bc0de',
 	brandSuccess: '#5cb85c',
 	brandDanger: '#d9534f',
@@ -109,6 +110,9 @@ export default {
 	},
 	get btnPrimaryBg () {
 		return this.brandSecondary;
+	},
+	get btnSecondaryBg() {
+		return this.brandTertiary;
 	},
 	get btnPrimaryColor () {
 		return this.inverseTextColor;
