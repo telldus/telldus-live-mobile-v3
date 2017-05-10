@@ -31,6 +31,8 @@ import { parseDashboardForListView } from '../../Reducers/Dashboard';
 
 import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
+import getDeviceType from '../../Lib/getDeviceType';
+
 // TODO: this view renders before the sensor and device data is retrieved
 //       that might not be a problem, but we should know why
 //       - store.devices and store.sensors are empty objects (not even arrays)
@@ -82,7 +84,7 @@ class DashboardTab extends View {
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRows(nextProps.dataArray),
 		});
-    }
+	}
 
 	_onLayout = (event) => {
 		const listWidth = event.nativeEvent.layout.width - 8;
@@ -136,31 +138,50 @@ class DashboardTab extends View {
 			} else if (item.objectType === 'device') {
 				const deviceId = item.childObject.id;
 				let dashboardTile = <View />;
+				const deviceType = this.getType(item);
 
-				// -- This code is for testing.
-				// -- TODO: Determine the type of dashboardTile based on deviceId
-				if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
-					if (deviceId === 1594308 || deviceId === 1594539 || deviceId === 1594552 || deviceId === 1594307) {
-						dashboardTile = <ToggleDashboardTile style={tileStyle} item={item} />;
-					} else if (deviceId === 1644324) {
-						dashboardTile = <DimmerDashboardTile
-							style={tileStyle}
-							item={item}
-							value={4}
-							setScrollEnabled={this.setScrollEnabled}
-							onSlidingStart={this.onSlidingStart}
-							onSlidingComplete={this.onSlidingComplete}
-							onValueChange={this.onValueChange} />;
-					} else if (deviceId === 1643432) {
-						dashboardTile = <BellDashboardTile style={tileStyle} item={item} />;
-					} else if (deviceId === 1643434 || deviceId === 1643435 || deviceId === 1643433) {
-						dashboardTile = <NavigationalDashboardTile style={tileStyle} item={item} />;
-					}
+				if (deviceType === 'TOGGLE') {
+					dashboardTile = <ToggleDashboardTile
+						style={tileStyle}
+						item={item}
+						onTurnOn={this.props.onTurnOn(deviceId)}
+						onTurnOff={this.props.onTurnOff(deviceId)}
+					/>;
+				} else if (deviceType === 'DIMMER') {
+					dashboardTile = <DimmerDashboardTile
+						style={tileStyle}
+						item={item}
+						onTurnOn={this.props.onTurnOn(deviceId)}
+						onTurnOff={this.props.onTurnOff(deviceId)}
+						setScrollEnabled={this.setScrollEnabled}
+						onDim={this.props.onDim(deviceId)}
+						onDimmerSlide={this.props.onDimmerSlide(deviceId)}
+					/>;
+
+				} else if (deviceType === 'BELL') {
+					dashboardTile = <BellDashboardTile
+						style={tileStyle}
+						item={item}
+						onBell={this.props.onBell(deviceId)}
+					/>;
+
+				} else if (deviceType === 'NAVIGATIONAL') {
+					dashboardTile = <NavigationalDashboardTile
+						style={tileStyle}
+						item={item}
+						onUp={this.props.onUp(deviceId)}
+						onDown={this.props.onDown(deviceId)}
+						onStop={this.props.onStop(deviceId)}
+					/>;
 				}
-
-				return (dashboardTile);
+				return dashboardTile;
 			}
 		};
+	}
+
+	getType(item) {
+		const supportedMethods = item.childObject.supportedMethods;
+		return getDeviceType(supportedMethods);
 	}
 }
 
@@ -171,15 +192,6 @@ function select(store, props) {
 		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
 	};
 }
-
-function actions(dispatch) {
-	return {
-		changeSensorDisplayType: (item, displayType) => dispatch(changeSensorDisplayType(item.id, displayType)),
-		dispatch
-	};
-}
-
-module.exports = connect(select, actions)(DashboardTab);
 
 function actions(dispatch) {
 	return {
