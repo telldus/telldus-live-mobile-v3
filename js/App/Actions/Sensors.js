@@ -21,9 +21,7 @@
 
 'use strict';
 
-import type { ThunkAction } from './types';
-
-import type { Action } from './types';
+import type { ThunkAction, Action } from './types';
 
 import LiveApi from 'LiveApi';
 
@@ -53,8 +51,9 @@ function processWebsocketMessageForSensor(action, data): Action {
 				type: 'SENSOR_UPDATE_VALUE',
 				payload: data
 			};
-	default:
+		default:
 	}
+
 	return {
 		type: 'SENSOR_WEBSOCKET_UNHANDLED',
 		payload: data

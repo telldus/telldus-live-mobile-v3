@@ -56,7 +56,6 @@ const dataSource = new ListDataSource({
 	sectionHeaderHasChanged : (s1, s2) => s1 !== s2
 });
 
-
 function select(store) {
 	const { sections, sectionIds } = parseSensorsForListView(store);
 	return {

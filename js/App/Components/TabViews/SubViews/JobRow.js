@@ -23,7 +23,7 @@ import React from 'react';
 import { ListItem, Text} from 'BaseComponents';
 import Theme from 'Theme';
 
-const SensorRow = props => {
+export default props => {
     const methodName = {
         1 : 'On',
         2 : 'Off',
@@ -70,5 +70,3 @@ const SensorRow = props => {
         </ListItem>
     );
 };
-
-module.exports = SensorRow;
