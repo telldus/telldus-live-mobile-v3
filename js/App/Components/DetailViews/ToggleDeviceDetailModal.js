@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 
 import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import  DeviceDetailModal from './DeviceDetailModal';
+import DeviceDetailModal from './DeviceDetailModal';
 
 import { turnOn, turnOff, learn} from 'Actions/Devices';
 

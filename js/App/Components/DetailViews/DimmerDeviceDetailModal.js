@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 
 import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity, Slider } from 'react-native';
-import  DeviceDetailModal from './DeviceDetailModal';
+import DeviceDetailModal from './DeviceDetailModal';
 
 import { turnOn, turnOff, learn} from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';

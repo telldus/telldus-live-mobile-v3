@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import { Container, Text, View, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { addToDashboard, removeFromDashboard } from 'Actions';
-import  Modal from 'react-native-modal';
+import Modal from 'react-native-modal';
 
 class DeviceDetailModal extends View {
 
@@ -53,7 +53,7 @@ class DeviceDetailModal extends View {
 
         let addToDashboardView = null;
         if (inDashboard === true) {
-            addToDashboardView =  (
+            addToDashboardView = (
                 <View style={styles.textGuide}>
                     <Text style={styles.textDeviceShownOnTheDashboard}>
                         {'Device is shown on the dashboard'}
@@ -64,7 +64,7 @@ class DeviceDetailModal extends View {
                 </View>
             );
         } else {
-            addToDashboardView =  (
+            addToDashboardView = (
                 <View style={styles.textGuide}>
                     <Text style={styles.textDeviceShownOnTheDashboard}>
                         {'Tap to show device on dashboard'}

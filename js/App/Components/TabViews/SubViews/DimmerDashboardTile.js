@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import DashboardShadowTile  from './DashboardShadowTile';
+import DashboardShadowTile from './DashboardShadowTile';
 import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
 import VerticalSlider from './VerticalSlider';
 

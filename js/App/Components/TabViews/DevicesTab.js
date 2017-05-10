@@ -71,7 +71,7 @@ class DevicesTab extends View {
 				<List
 					ref = "list"
 					dataSource = {this.props.dataSource}
-					renderHiddenRow = { props => (<DeviceRowHidden {...{ ...props, ...this.props }}/>)  }
+					renderHiddenRow = { props => (<DeviceRowHidden {...{ ...props, ...this.props }}/>) }
 					renderRow = { props => (
 						<DeviceRow {...{ ...props, ...this.props }}
 							onSettingsSelected={this.openDeviceDetail}

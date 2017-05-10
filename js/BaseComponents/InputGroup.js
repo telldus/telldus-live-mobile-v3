@@ -85,7 +85,7 @@ export default class InputGroup extends Base {
 
 		type = _.merge(type, defaultStyle);
 
-		let  addedProps = _.merge(this.getInitialStyle().textInput, type);
+		let addedProps = _.merge(this.getInitialStyle().textInput, type);
 
 		let defaultProps = {
 			style: addedProps,
@@ -152,7 +152,7 @@ export default class InputGroup extends Base {
 			}
 		});
 
-		let inp =  _.find(childrenArray, function(item) {
+		let inp = _.find(childrenArray, function(item) {
 			if (item && item.type === Input) {
 				return true;
 			}

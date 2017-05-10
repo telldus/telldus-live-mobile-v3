@@ -22,7 +22,7 @@
 import React from 'react';
 import { Text, View } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
-import DashboardShadowTile  from './DashboardShadowTile';
+import DashboardShadowTile from './DashboardShadowTile';
 
 class GenericDashboardTile extends View {
 	constructor(props) {
