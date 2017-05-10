@@ -168,7 +168,7 @@ inputProps = this.props;
 
 			if (this.props.iconRight) {
 				newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
-				newChildren.push(React.cloneElement(iconElement[0],this.getIconProps(iconElement[0])));
+				newChildren.push(React.cloneElement(iconElement[0], this.getIconProps(iconElement[0])));
 			}			else if (buttonElement.length > 0) {
 				newChildren.push(React.cloneElement(
 					iconElement[0],

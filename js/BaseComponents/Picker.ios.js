@@ -70,7 +70,7 @@ export default class PickerComponent extends Base {
     }
 
     getSelected() {
-        const selected = _.find(this.props.children,(o) => {
+        const selected = _.find(this.props.children, (o) => {
             return o.props.value === this.props.selectedValue;
          });
         console.log('title', );

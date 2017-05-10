@@ -25,7 +25,7 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
 const OffButton = ({isInState, tileWidth, onPress}) => (
-	<View style={[styles.buttonContainer,{
+	<View style={[styles.buttonContainer, {
 			backgroundColor: isInState === 'TURNOFF' ? 'white' : '#eeeeee'}]}>
 		<TouchableOpacity
 			onPress={onPress}
@@ -33,7 +33,7 @@ const OffButton = ({isInState, tileWidth, onPress}) => (
 			<Text
 				ellipsizeMode="middle"
 				numberOfLines={1}
-				style = {[styles.buttonText,{
+				style = {[styles.buttonText, {
 					color: isInState === 'TURNOFF' ? 'red' : '#a0a0a0',
 					fontSize:  Math.floor(tileWidth / 8)
 				}]}>
@@ -44,7 +44,7 @@ const OffButton = ({isInState, tileWidth, onPress}) => (
 );
 
 const OnButton = ({isInState, tileWidth, onPress}) => (
-	<View style={[styles.buttonContainer,{
+	<View style={[styles.buttonContainer, {
 			backgroundColor: isInState === 'TURNON' ? 'white' : '#eeeeee'}]}>
 		<TouchableOpacity
 			onPress={onPress}
@@ -52,7 +52,7 @@ const OnButton = ({isInState, tileWidth, onPress}) => (
 			<Text
 				ellipsizeMode="middle"
 				numberOfLines={1}
-				style = {[styles.buttonText,{
+				style = {[styles.buttonText, {
 					color: isInState === 'TURNON' ? 'green' : '#a0a0a0',
 					fontSize:  Math.floor(tileWidth / 8)}]}>
 				{'On'}
@@ -62,12 +62,12 @@ const OnButton = ({isInState, tileWidth, onPress}) => (
 );
 
 const Title = ({isInState, name, tileWidth}) => (
-	<View style={[styles.titleContainer,{
+	<View style={[styles.titleContainer, {
 		backgroundColor: isInState === 'TURNOFF' ? '#bfbfbf' : '#e56e18'}]}>
 		<Text
 			ellipsizeMode="middle"
 			numberOfLines={1}
-			style = {[styles.titleText,{
+			style = {[styles.titleText, {
 				fontSize:  Math.floor(tileWidth / 8),
 				opacity: name ? 1 : 0.7
 			}]}>
@@ -92,7 +92,7 @@ class ToggleDashboardTile extends View {
 		return (
 			<DashboardShadowTile
 				item={this.props.item}
-				style={	[this.props.style,{
+				style={	[this.props.style, {
 					width: tileWidth,
 					height: tileWidth
 				}]}>

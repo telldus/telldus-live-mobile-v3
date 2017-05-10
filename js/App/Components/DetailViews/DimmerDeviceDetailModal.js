@@ -32,7 +32,7 @@ import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
     <RoundedCornerShadowView style={styles.toggleContainer}>
         <TouchableOpacity
-            style={[styles.toggleButton,{
+            style={[styles.toggleButton, {
                 backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
             }]}
             onPress={onTurnOff}>
@@ -44,7 +44,7 @@ const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
         </TouchableOpacity>
 
         <TouchableOpacity
-            style={[styles.toggleButton,{
+            style={[styles.toggleButton, {
                 backgroundColor: device.isInState !== 'TURNOFF' ? 'white' : '#eeeeee',
             }]}
             onPress={onTurnOn}>

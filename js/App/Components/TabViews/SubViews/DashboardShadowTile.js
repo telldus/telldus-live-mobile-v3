@@ -26,7 +26,7 @@ module.exports = class DashboardShadowTile extends View {
 	render() {
 		return (
 			<View
-				style={[this.props.style,{
+				style={[this.props.style, {
 					borderRadius: 7,
 					shadowColor: '#000000',
 					shadowOffset: {width: 0, height: 0},

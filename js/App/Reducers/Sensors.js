@@ -162,7 +162,7 @@ export function parseSensorsForListView({ sensors, gateways, dashboard }) {
 		return acc;
 	}, {});
 
-	sectionIds.sort((a,b) => {
+	sectionIds.sort((a, b) => {
 		const gatewayA = gatewayNameLookUp[a];
 		const gatewayB = gatewayNameLookUp[b];
 

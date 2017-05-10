@@ -48,7 +48,7 @@ export default class RoundedCornerShadowView extends Base {
 		return (
 			<View
 				onLayout={this.props.onLayout}
-				style={[this.props.style,{
+				style={[this.props.style, {
 					borderRadius: 7,
 					shadowColor: '#000000',
 					shadowOffset: {width: 0, height: 0},

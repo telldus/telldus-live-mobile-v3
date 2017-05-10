@@ -29,7 +29,7 @@ module.exports = class SwitchButton extends View {
         console.log(this.props.item.state);
 		return (
 			<View
-				style={[this.props.style,{
+				style={[this.props.style, {
 					borderRadius: 7,
 					shadowColor: '#000000',
 					shadowOffset: {width: 0, height: 0},
