@@ -4,6 +4,10 @@ config.local.js
 google-services.json
 android-*.keystore
 
+# VSCode ignores
+#
+.vscode/
+
 # OSX
 #
 .DS_Store

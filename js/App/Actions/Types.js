@@ -32,9 +32,11 @@ export type Action =
 	| { type: 'LOGGED_OUT' }
 	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
+
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: Number}
 	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: Number}
 
+    | { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id:Number, displayType: String }
 	| { type: 'SHOW_DIMMER_POPUP', name:String, value:Number}
 	| { type: 'HIDE_DIMMER_POPUP'}
     | { type: 'SET_DIMMER_VALUE', value: Number}

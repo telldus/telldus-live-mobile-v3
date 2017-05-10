@@ -25,7 +25,7 @@ import { TouchableOpacity } from 'react-native';
 
 import Theme from 'Theme';
 
-module.exports = class SensorRow extends View {
+export default class SensorRowHidden extends View {
 	render() {
 		return (
 			<View style={Theme.Styles.rowBack}>
@@ -45,4 +45,4 @@ module.exports = class SensorRow extends View {
 			this.props.addToDashboard(item.id);
 		}
 	}
-};
+}
