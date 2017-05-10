@@ -15,32 +15,42 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Actions
  */
 
 'use strict';
 
-import DeviceActions from './Devices';
-import GatewayActions from './Gateways';
-import LoginActions from './Login';
-import NavigationActions from './Navigation';
-import SensorActions from './Sensors';
-import WebsocketActions from './Websockets';
-import TabActions from './Tabs';
-import DashboardActions from './Dashboard';
-import DimmerActions from './Dimmer';
-import JobActions from './Jobs';
+import React from 'react';
+import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 
-module.exports = {
-	...DeviceActions,
-	...GatewayActions,
-	...LoginActions,
-	...NavigationActions,
-	...SensorActions,
-	...WebsocketActions,
-	...TabActions,
-	...DashboardActions,
-	...DimmerActions,
-	...JobActions,
-};
+class BellButton extends View {
+	render() {
+		return (
+            <RoundedCornerShadowView
+				style={styles.container}
+			>
+				<TouchableOpacity
+					onPress={this.props.onBell}
+				>
+					<Icon
+						name="bell"
+						size={22}
+						color="orange"
+						onClick={this.handleClick}
+					/>
+				</TouchableOpacity>
+            </RoundedCornerShadowView>
+		);
+    }
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex:7,
+        height:32,
+        justifyContent:'center',
+        alignItems:'center'
+    }
+});
+
+module.exports = BellButton;

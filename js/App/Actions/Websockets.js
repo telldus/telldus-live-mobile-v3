@@ -23,7 +23,9 @@
 
 import { v4 } from 'react-native-uuid';
 import { addConnection, removeConnection, sendMessage } from '../Lib/Socket';
+
 import { processWebsocketMessageForSensor } from 'Actions/Sensors';
+import { processWebsocketMessageForDevice } from 'Actions/Devices';
 
 import formatTime from '../Lib/formatTime';
 
@@ -117,7 +119,7 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
 
 			switch (message.module) {
 				case 'device':
-
+					dispatch(processWebsocketMessageForDevice(message.action, message.data));
 				break;
 				case 'sensor':
 					dispatch(processWebsocketMessageForSensor(message.action, message.data));

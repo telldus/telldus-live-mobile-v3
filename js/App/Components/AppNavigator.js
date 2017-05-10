@@ -30,6 +30,7 @@ import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
+import { DimmerPopup } from 'TabViews/SubViews';
 
 class AppNavigator extends View {
 
@@ -38,7 +39,7 @@ class AppNavigator extends View {
 		if (Platform.OS !== 'android') {
 			const init = Orientation.getInitialOrientation();
 			this.state = {
-				specificOrientation: init,
+				specificOrientation: init
 			};
 			Orientation.unlockAllOrientations();
 			this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
@@ -68,24 +69,16 @@ class AppNavigator extends View {
 	}
 
 	render() {
-		//if (Platform.OS === 'android' || this.state.specificOrientation == 'PORTRAIT' || this.state.specificOrientation == 'UNKNOWN') {
-			return (
+		return (
+			<View>
 				<TabsView />
-			);
-		//}
-		/*return (
-			<View style={{
-				flex: 1,
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-				backgroundColor: "#ffffff"
-			}}>
-				<Text>
-					This will be a dashboard view!
-				</Text>
+				<DimmerPopup
+					isVisible={this.props.dimmer.show}
+					name={this.props.dimmer.name}
+					value={this.props.dimmer.value / 255}
+				/>
 			</View>
-		)*/
+		);
 	}
 }
 
@@ -97,7 +90,8 @@ function mapStateToProps(state, ownProps) {
 	return {
 		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
-		userProfile: state.user.userProfile || {firstname: '', lastname: '', email: ''}
+		userProfile: state.user.userProfile || {firstname: '', lastname: '', email: ''},
+		dimmer: state.dimmer
 	};
 }
 

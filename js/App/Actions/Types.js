@@ -34,6 +34,12 @@ export type Action =
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: Number}
 	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: Number}
+
+	| { type: 'SHOW_DIMMER_POPUP', name:String, value:Number}
+	| { type: 'HIDE_DIMMER_POPUP'}
+    | { type: 'SET_DIMMER_VALUE', value: Number}
+    | { type: 'DEVICE_SET_STATE', payload: Object}
+
 	| { type: 'ERROR', message: Object }
 	;
 

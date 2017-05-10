@@ -55,6 +55,7 @@ class SwipeRow extends Component {
 	}
 
 	onContentLayout(e) {
+
 		this.setState({
 			dimensionsSet: !this.props.recalculateHiddenLayout,
 			hiddenHeight: e.nativeEvent.layout.height,

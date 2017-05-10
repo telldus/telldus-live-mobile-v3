@@ -9,6 +9,8 @@
  * A webconnection is connected directly to the server where the TellStick is connected to.
  */
 
+ import formatTime from './formatTime';
+
 // TODO: figure out whether we want to listen for appState to close the connection
 // https://facebook.github.io/react-native/docs/appstate.html
 // import { AppState } from 'react-native';
@@ -55,11 +57,15 @@ export function removeConnection(gatewayId) {
 }
 
 export function sendMessage(gatewayId, message) {
-	if (websocketConnections[gatewayId] && websocketConnections[gatewayId].websocket) {
-		websocketConnections[gatewayId].websocket.send(message);
-	} else {
-		console.log('cannot send websocket message');
+	if (!websocketConnections[gatewayId] || !websocketConnections[gatewayId].websocket) {
+		return console.error('cannot send websocket message');
 	}
+	const formattedTime = formatTime(new Date());
+	const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
+	console.groupCollapsed(title_prefix);
+	console.log(message);
+	console.groupEnd();
+	websocketConnections[gatewayId].websocket.send(message);
 }
 
 export function closeAllConnections() {
