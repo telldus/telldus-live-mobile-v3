@@ -171,7 +171,7 @@ class DashboardTab extends View {
 						onSlidingComplete={this.onSlidingComplete}
 						onValueChange={this.onValueChange} />;
 				} else if (deviceType === 'BELL') {
-					dashboardTile = <BellDashboardTile style={tileStyle} item={item} />;
+					dashboardTile = <BellDashboardTile style={tileStyle} item={item} onBell={this.props.onBell(deviceId)} />;
 				} else if (deviceType === 'NAVIGATIONAL') {
 					dashboardTile = <NavigationalDashboardTile style={tileStyle} item={item} />;
 				}
@@ -200,6 +200,7 @@ function actions(dispatch) {
 	return {
 		onTurnOn: id => () => dispatch(turnOn(id)),
 		onTurnOff: id => () => dispatch(turnOff(id)),
+		onBell: id => () => dispatch(bell(id)),
 		changeSensorDisplayType: (item, displayType) => dispatch(changeSensorDisplayType(item.id, displayType)),
 		dispatch
 	};
