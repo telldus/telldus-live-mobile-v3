@@ -23,37 +23,37 @@ import React from 'react';
 import { Icon, View, RoundedCornerShadowView } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-const UpButton = ({item, onPress}) => (
+const UpButton = ({supportedMethod, onPress}) => (
     <TouchableOpacity
         style={styles.navigationButton}
         onPress={onPress}>
         <Icon name="caret-up" size={30}
             style={{
-                color: item.isInState === 'UP' ? '#1a355b' : '#eeeeee'
+                color: supportedMethod ? '#1a355b' : '#eeeeee'
             }}
         />
     </TouchableOpacity>
 );
 
-const DownButton = ({item, onPress}) => (
+const DownButton = ({supportedMethod, onPress}) => (
     <TouchableOpacity
         style={styles.navigationButton}
         onPress={onPress}>
         <Icon name="caret-down" size={30}
             style={{
-                color: item.isInState === 'DOWN' ? '#1a355b' : '#eeeeee'
+                color: supportedMethod ? '#1a355b' : '#eeeeee'
             }}
         />
     </TouchableOpacity>
 );
 
-const StopButton = ({item, onPress}) => (
+const StopButton = ({supportedMethod, onPress}) => (
     <TouchableOpacity
         style={styles.navigationButton}
         onPress={onPress}>
         <Icon name="stop" size={20}
             style={{
-                color: item.isInState === 'STOP' ? '#1a355b' : '#eeeeee'
+                color: supportedMethod ? '#1a355b' : '#eeeeee'
             }}
         />
     </TouchableOpacity>
@@ -65,16 +65,14 @@ class NavigationalButton extends View {
     }
 
     render() {
+        const noop = function() {};
         const { UP, DOWN, STOP } = this.props.item.supportedMethods;
-        const upButton = UP ? <UpButton item={this.props.item} onPress={this.props.onUp} /> : null;
-        const downButton = DOWN ? <DownButton item={this.props.item} onPress={this.props.onDown} /> : null;
-        const stopButton = STOP ? <StopButton item={this.props.item} onPress={this.props.onStop} /> : null;
 
         return (
             <RoundedCornerShadowView style={styles.container}>
-                { upButton }
-                { downButton }
-                { stopButton }
+                <UpButton item={this.props.item} supportedMethod={UP} onPress={UP ? this.props.onUp : noop} />
+                <DownButton item={this.props.item} supportedMethod={DOWN} onPress={DOWN ? this.props.onDown : noop} />
+                <StopButton item={this.props.item} supportedMethod={STOP} onPress={STOP ? this.props.onStop : noop} />
             </RoundedCornerShadowView>
         );
     }
