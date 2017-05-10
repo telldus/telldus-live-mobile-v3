@@ -37,6 +37,7 @@
     "react-native-layout-provider": "^1.1.0",
     "react-native-linear-gradient": "~1.6.2",
     "react-native-listitem": "^1.0.5",
+    "react-native-modal": "^2.3.2",
     "react-native-orientation": "^1.17.0",
     "react-native-scrollable-tab-view": "^0.7.0",
     "react-native-swipe-list-view": "^0.3.2",

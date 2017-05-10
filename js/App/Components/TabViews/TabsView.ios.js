@@ -86,6 +86,8 @@ class TabsView extends View {
 						initialRoute = {{
 							title: I18n.t('pages.devices'),
 							component: TabViews.Devices,
+							rightButtonIcon: this.state.starIcon,
+							onRightButtonPress: this._toggleDevicesTabEditMode.bind(this)
 						}}
 					/>
 				</TabBarIOS.Item>
@@ -146,6 +148,10 @@ class TabsView extends View {
 
 	_toggleSensorTabEditMode() {
 		this.props.onToggleEditMode('sensorsTab');
+	}
+
+	_toggleDevicesTabEditMode() {
+		this.props.onToggleEditMode('devicesTab');
 	}
 }
 

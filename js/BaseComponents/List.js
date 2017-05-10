@@ -47,7 +47,9 @@ class ListComponent extends React.Component {
 	}
 
 	setScrollEnabled(enable) {
-		this._listView.setNativeProps({scrollEnabled: enable});
+		if (this._listView) {
+			this._listView.setNativeProps({scrollEnabled: enable});
+		}
 	}
 
 	safeCloseOpenRow() {

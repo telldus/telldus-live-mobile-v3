@@ -147,6 +147,89 @@ The app communicates with the REST LiveApi (see `js/App/Lib/LiveApi`) for:
 
 Once the WebSocket (see `js/App/Lib/WebSockets`) session has been setup, it registers which messages the app is interested in, e.g. updates on a type of sensor. When that sensor has a new value, it pushes it over the WebSocket connection to the app.
 
+### Data structure
+
+All devices have one or more 'methods' which indicate what a device can do. These are the current methods:
+```
+TURNON  = 1        #: Device flag for devices supporting the on method.
+TURNOFF = 2        #: Device flag for devices supporting the off method.
+BELL = 4           #: Device flag for devices supporting the bell method.
+TOGGLE = 8         #: Device flag for devices supporting the toggle method.
+DIM = 16           #: Device flag for devices supporting the dim method.
+LEARN = 32         #: Device flag for devices supporting the learn method.
+EXECUTE = 64       #: Device flag for devices supporting the execute method.
+UP = 128           #: Device flag for devices supporting the up method.
+DOWN = 256         #: Device flag for devices supporting the down method.
+STOP = 512         #: Device flag for devices supporting the stop method.
+RGBW = 1024        #: Device flag for devices supporting the rgbw method.
+THERMOSTAT = 2048  #: Device flag for devices supporting thermostat methods.
+```
+
+The following methods aren't in use in the moment: `TOGGLE`, `EXECUTE`, `RGBW`, `THERMOSTAT`
+
+You can add up these methods to a single digit that denotes a group of methods, e.g. `3 = 1 + 2 = TURNON, TURNOFF`.
+Currently, the app supports `951 = 1 + 2 + 4 + 16 + 32 + 128 + 256 + 512`.
+
+When for example, `devices/list` is called, we can provide `supportedMethods`. If this parameter is not set, in the response `methods` and `state` will always report `0` for each device.
+
+### Socket messages
+
+Listening for device setState, you get these kind of messages.
+```
+// device turned off
+{
+    "module": "device", // <-- device, sensor
+    "action": "setState", // <-- the type of message
+    "data": {
+        "deviceId": 1594308,
+        "battery": 254,
+        "method": 2, // <-- refers to methods defined under [Data Structure](#data-structure)
+        "value": "" // <-- relevant data for this method, **always a string**!
+    }
+}
+```
+
+For example:
+```
+// device turned on
+{
+    "action": "setState",
+    "module": "device",
+    "data": {
+        "battery": 254,
+        "deviceId": 1594308,
+        "method": 1, // <-- turnOn
+        "value": ""
+    }
+}
+
+// device turned off
+{
+    "action": "setState",
+    "module": "device",
+    "data": {
+        "battery": 254,
+        "deviceId": 1594308,
+        "method": 2, // <-- turnOff
+        "value": ""
+    }
+}
+
+// device scaled to level 240 (of 255) (ie. 90%)
+{
+    "action": "setState",
+    "module": "device",
+    "data": {
+        "battery": 254,
+        "deviceId": 1594308,
+        "method": 16, // <-- dim
+        "value": "240" // <-- dim level, **string**: 240 of 255 = ie. 90%)
+    }
+}
+
+// etc
+```
+
 ## `google-services.json`
 
 You need a `android/app/google-services.json` file, otherwise the app won't run. Because this file contains production keys and secrets, it is not included in this repository. However, you can add a placeholder yourself. Create `android/app/google-services.json` and add this json content:

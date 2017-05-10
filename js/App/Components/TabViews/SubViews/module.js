@@ -25,16 +25,32 @@ import DeviceDashboardTile from './DeviceDashboardTile';
 import ListHeader from './ListHeader';
 import SensorDashboardTile from './SensorDashboardTile';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
+import DeviceRow from './DeviceRow';
+import DeviceRowHidden from './DeviceRowHidden';
 import SensorRow from './SensorRow';
 import SensorRowHidden from './SensorRowHidden';
+import ToggleButton from './ToggleButton';
+import BellButton from './BellButton';
+import NavigationalButton from './NavigationalButton';
+import DimmingButton from './DimmingButton';
+import DimmerPopup from './DimmerPopup';
+import DimmerProgressBar from './DimmerProgressBar';
 import JobRow from './JobRow';
 
 module.exports = {
+	DeviceRow: DeviceRow,
+	DeviceRowHidden: DeviceRowHidden,
 	DeviceDashboardTile: DeviceDashboardTile,
 	ListHeader: ListHeader,
 	SensorDashboardTile: SensorDashboardTile,
 	SensorDashboardTileSlide: SensorDashboardTileSlide,
 	SensorRow: SensorRow,
 	SensorRowHidden: SensorRowHidden,
-	JobRow: JobRow
+	ToggleButton: ToggleButton,
+	BellButton: BellButton,
+	NavigationalButton : NavigationalButton,
+	DimmingButton: DimmingButton,
+	DimmerPopup: DimmerPopup,
+	DimmerProgressBar: DimmerProgressBar,
+	JobRow: JobRow,
 };

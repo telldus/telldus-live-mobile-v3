@@ -16,31 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions
+ * @providesModule Constants
  */
 
-'use strict';
-
-import DeviceActions from './Devices';
-import GatewayActions from './Gateways';
-import LoginActions from './Login';
-import NavigationActions from './Navigation';
-import SensorActions from './Sensors';
-import WebsocketActions from './Websockets';
-import TabActions from './Tabs';
-import DashboardActions from './Dashboard';
-import DimmerActions from './Dimmer';
-import JobActions from './Jobs';
-
-module.exports = {
-	...DeviceActions,
-	...GatewayActions,
-	...LoginActions,
-	...NavigationActions,
-	...SensorActions,
-	...WebsocketActions,
-	...TabActions,
-	...DashboardActions,
-	...DimmerActions,
-	...JobActions,
+export default {
+    supportedMethods: 951,
+    methods: {
+        1: 'TURNON',
+        2: 'TURNOFF',
+        4: 'BELL',
+        8: 'TOGGLE',
+        16: 'DIM',
+        32: 'LEARN',
+        64: 'EXECUTE',
+        128: 'UP',
+        256: 'DOWN',
+        512: 'STOP',
+        1024: 'RGBW',
+        2048: 'THERMOSTAT',
+    },
 };

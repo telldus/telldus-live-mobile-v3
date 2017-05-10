@@ -27,7 +27,6 @@ import { connect } from 'react-redux';
 import { Button, Icon, ListItem, Text, View } from 'BaseComponents';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import Navigator from 'Navigator';
 import Theme from 'Theme';
 import Gravatar from 'react-native-avatar-gravatar';
 
@@ -37,22 +36,18 @@ import GatewaysTab from './GatewaysTab';
 import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
 
-import { switchTab, logoutFromTelldus } from 'Actions';
-import type { Tab } from '../reducers/navigation';
+import { switchTab, toggleEditMode, logoutFromTelldus } from 'Actions';
 
 class TabsView extends View {
-
-	props: {
-		tab: Tab;
-		onTabSelect: (tab: Tab) => void;
-		navigator: Navigator;
-	};
-
 	constructor(props) {
 		super(props);
 	}
 
-	onTabSelect(tab: Tab) {
+	componentDidMount() {
+		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
+	}
+
+	onTabSelect(tab) {
 		this.refs.drawer.closeDrawer();
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
@@ -143,6 +138,10 @@ class TabsView extends View {
 	}
 
 	render() {
+		if (!this.state || !this.state.starIcon) {
+			return false;
+		}
+
 		return (
 			<DrawerLayoutAndroid
 				ref = "drawer"
@@ -155,17 +154,34 @@ class TabsView extends View {
 						height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
 						backgroundColor: Theme.Core.brandPrimary }}
 					/>
-					<Icon.ToolbarAndroid
-						style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
-						titleColor = { Theme.Core.inverseTextColor }
-						navIconName = "bars"
-						overflowIconName = "ellipsis-v"
-						iconColor = { Theme.Core.inverseTextColor }
-						title = "Telldus Live!"
-						actions = {[{ title: 'Settings', icon: require('image!ic_launcher'), show: 'never'}]}
-						onActionSelected = { this.onActionSelected }
-						onIconClicked = { () => this.refs.drawer.openDrawer() }
-					/>
+					{
+						this.props.tab === 'devicesTab' || this.props.tab === 'sensorsTab' ?
+						(
+							<Icon.ToolbarAndroid
+								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
+								titleColor = { Theme.Core.inverseTextColor }
+								navIconName = "bars"
+								overflowIconName = "star"
+								iconColor = { Theme.Core.inverseTextColor }
+								title = "Telldus Live!"
+								actions = {[{ title: 'Settings', icon: this.state.starIcon, show: 'always'}]}
+								onActionSelected = { this._toggleEditMode.bind(this) }
+								onIconClicked = { () => this.refs.drawer.openDrawer() }
+							/>
+						) :
+						(
+							<Icon.ToolbarAndroid
+								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
+								titleColor = { Theme.Core.inverseTextColor }
+								navIconName = "bars"
+								overflowIconName = "star"
+								iconColor = { Theme.Core.inverseTextColor }
+								title = "Telldus Live!"
+								onIconClicked = { () => this.refs.drawer.openDrawer() }
+							/>
+						)
+					}
+
 					<View key={this.props.tab}>
 						{this.renderContent()}
 					</View>
@@ -174,12 +190,9 @@ class TabsView extends View {
 		);
 	}
 
-	onActionSelected (position) {
-		if (position === 0) { // index of 'Settings'
-			console.log('Settings pressed');
-		}
+	_toggleEditMode(position) {
+		this.props.onToggleEditMode(this.props.tab);
 	}
-
 }
 
 function select(store) {
@@ -195,6 +208,7 @@ function select(store) {
 function actions(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
+		onToggleEditMode : (tab) => dispatch(toggleEditMode(tab)),
 		dispatch
 	};
 }

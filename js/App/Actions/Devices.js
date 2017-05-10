@@ -21,14 +21,23 @@
 
 'use strict';
 
-import type { ThunkAction } from './types';
+import type { Action, ThunkAction } from './types';
 
 import LiveApi from 'LiveApi';
+import { supportedMethods } from 'Config';
+
+import { format } from 'url';
 
 export function getDevices(): ThunkAction {
 	return (dispatch) => {
+		const url = format({
+			pathname: '/devices/list',
+			query: {
+				supportedMethods,
+			},
+		});
 		const payload = {
-			url: '/devices/list',
+			url,
 			requestParams: {
 				method: 'GET'
 			}
@@ -42,6 +51,21 @@ export function getDevices(): ThunkAction {
 			}
 		));
 	};
+}
+
+export function processWebsocketMessageForDevice(action, data): Action {
+	switch (action) {
+		case 'setState':
+			return {
+				...data,
+				type: 'DEVICE_SET_STATE',
+			};
+		default:
+			return {
+				type: 'DEVICE_WEBSOCKET_UNHANDLED',
+				payload: data
+			};
+	}
 }
 
 export function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
@@ -73,6 +97,120 @@ export function turnOn(deviceId): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'DEVICE_TURN_ON',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+	};
+}
+
+export function turnOff(deviceId): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/device/turnOff?id=${deviceId}`,
+			requestParams: {
+				method: 'GET'
+			}
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_TURN_OFF',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+	};
+}
+
+export function bell(deviceId): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/device/bell?id=${deviceId}`,
+			requestParams: {
+				method: 'GET'
+			}
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_BELL',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+	};
+}
+
+export function up(deviceId): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/device/up?id=${deviceId}`,
+			requestParams: {
+				method: 'GET'
+			}
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_UP',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+	};
+}
+
+export function down(deviceId): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/device/down?id=${deviceId}`,
+			requestParams: {
+				method: 'GET'
+			}
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_DOWN',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+	};
+}
+
+export function stop(deviceId): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/device/stop?id=${deviceId}`,
+			requestParams: {
+				method: 'GET'
+			}
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_STOP',
+				payload: {
+					...payload,
+					...response,
+				}
+			}
+		));
+	};
+}
+
+export function learn(deviceId): ThunkAction {
+	return (dispatch) => {
+		const payload = {
+			url: `/device/learn?id=${deviceId}`,
+			requestParams: {
+				method: 'GET'
+			}
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_LEARN',
 				payload: {
 					...payload,
 					...response,

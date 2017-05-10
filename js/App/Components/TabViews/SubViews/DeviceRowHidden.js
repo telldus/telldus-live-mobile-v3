@@ -15,32 +15,34 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Actions
  */
 
 'use strict';
 
-import DeviceActions from './Devices';
-import GatewayActions from './Gateways';
-import LoginActions from './Login';
-import NavigationActions from './Navigation';
-import SensorActions from './Sensors';
-import WebsocketActions from './Websockets';
-import TabActions from './Tabs';
-import DashboardActions from './Dashboard';
-import DimmerActions from './Dimmer';
-import JobActions from './Jobs';
+import React from 'react';
+import { View, Icon } from 'BaseComponents';
+import { TouchableOpacity } from 'react-native';
 
-module.exports = {
-	...DeviceActions,
-	...GatewayActions,
-	...LoginActions,
-	...NavigationActions,
-	...SensorActions,
-	...WebsocketActions,
-	...TabActions,
-	...DashboardActions,
-	...DimmerActions,
-	...JobActions,
+import Theme from 'Theme';
+
+module.exports = class DeviceRowHidden extends View {
+	render() {
+		return (
+			<View style={Theme.Styles.rowBack}>
+				<TouchableOpacity
+					style={Theme.Styles.rowBackButton}
+					onPress={this.onStarSelected.bind(this, this.props)} >
+					<Icon name="star" size={26} color={this.props.inDashboard ? 'yellow' : 'white'}/>
+				</TouchableOpacity>
+			</View>
+		);
+    }
+
+	onStarSelected(item) {
+		if (item.inDashboard) {
+			this.props.removeFromDashboard(item.id);
+		} else {
+			this.props.addToDashboard(item.id);
+		}
+	}
 };
