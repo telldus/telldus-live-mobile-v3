@@ -26,6 +26,8 @@ import { changeSensorDisplayType, showDimmerPopup, hideDimmerPopup, setDimmerVal
 
 import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
+import getDeviceType from '../../Lib/getDeviceType';
+
 class DashboardTab extends View {
 	constructor(props) {
 		super(props);
@@ -115,6 +117,8 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(item, secId, rowId, rowMap) {
+		console.log('ITEM');
+		console.log(item);
 		if (item.tileWidth > 75) {
 			let tileMargin = 8;
 			let tileStyle = {
@@ -133,10 +137,10 @@ class DashboardTab extends View {
 				);
 			} else if (item.objectType === 'device') {
 				const deviceId = item.childObject.id;
-				let dashboardTile = null;
+				let dashboardTile = <View />;
 				// -- This code is for testing.
 				// -- TODO: Determine the type of dashboardTile based on deviceId
-				if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
+				/*if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
 					if (deviceId === 1594308 || deviceId === 1594539 || deviceId === 1594552 || deviceId === 1594307) {
 						dashboardTile = <ToggleDashboardTile style={tileStyle} item={item} />;
 					} else if (deviceId === 1644324) {
@@ -153,15 +157,40 @@ class DashboardTab extends View {
 					} else if (deviceId === 1643434 || deviceId === 1643435 || deviceId === 1643433) {
 						dashboardTile = <NavigationalDashboardTile style={tileStyle} item={item} />;
 					}
-				}
+				}*/
 				//
+				const deviceType = this.getType(deviceId);
 
-				return (dashboardTile);
+				if (deviceType === 'TOGGLE') {
+					dashboardTile = <ToggleDashboardTile style={tileStyle} item={item} />;
+				} else if (deviceType === 'DIMMER') {
+					dashboardTile = <DimmerDashboardTile
+						style={tileStyle}
+						item={item}
+						value={4}
+						setScrollEnabled={this.setScrollEnabled}
+						onSlidingStart={this.onSlidingStart}
+						onSlidingComplete={this.onSlidingComplete}
+						onValueChange={this.onValueChange} />;
+				} else if (deviceType === 'BELL') {
+					dashboardTile = <BellDashboardTile style={tileStyle} item={item} />;
+				} else if (deviceType === 'NAVIGATIONAL') {
+					dashboardTile = <NavigationalDashboardTile style={tileStyle} item={item} />;
+				}
+
+				return dashboardTile;
 			}
 		}
 		return <View />;
 	}
 
+	getType(deviceId) {
+		const filteredItem = this.props.devices.find(item => item.id === deviceId);
+		if (!filteredItem) { return null; }
+
+		const supportedMethods = filteredItem.supportedMethods;
+		return getDeviceType(supportedMethods);
+	}
 }
 
 function _parseDataIntoItems(devices, sensors, dashboard) {
@@ -213,7 +242,8 @@ function select(store) {
 	return {
 		dataArray: _parseDataIntoItems( store.devices || [], store.sensors || [] , store.dashboard),
 		gateways: store.gateways,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''}
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
+		devices: store.devices
 	};
 }
 
