@@ -62,9 +62,13 @@ export function sendMessage(gatewayId, message) {
 	}
 	const formattedTime = formatTime(new Date());
 	const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
-	console.groupCollapsed(title_prefix);
-	console.log(message);
-	console.groupEnd();
+    try {
+        console.groupCollapsed(title_prefix);
+        console.log(message);
+        console.groupEnd();
+    } catch (e) {
+        console.log(message);
+    }
 	websocketConnections[gatewayId].websocket.send(message);
 }
 
