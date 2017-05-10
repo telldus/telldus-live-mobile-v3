@@ -28,7 +28,7 @@ export default class Title extends Base {
 
 	render() {
 		return (
-			<View><Text style={{color: this.getTheme().toolbarTextColor , fontSize: this.getTheme().titleFontSize, fontFamily: this.getTheme().btnFontFamily, fontWeight: (Platform.OS === 'ios') ? '500' : undefined, alignSelf: (Platform.OS === 'ios' ) ? 'center' : 'flex-start'}}>{this.props.children}</Text></View>
+			<View><Text style={{color: this.getTheme().toolbarTextColor, fontSize: this.getTheme().titleFontSize, fontFamily: this.getTheme().btnFontFamily, fontWeight: (Platform.OS === 'ios') ? '500' : undefined, alignSelf: (Platform.OS === 'ios' ) ? 'center' : 'flex-start'}}>{this.props.children}</Text></View>
 		);
 	}
 }

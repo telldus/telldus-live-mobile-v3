@@ -30,7 +30,7 @@ import VerticalSlider from './VerticalSlider';
 import throttle from 'lodash/throttle';
 
 const OffButton = ({item, enabled, onPress}) => (
-    <View style={[styles.buttonContainer,{
+    <View style={[styles.buttonContainer, {
         backgroundColor: item.isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
         <TouchableOpacity
 			onPress={ enabled ? onPress : null}
@@ -38,7 +38,7 @@ const OffButton = ({item, enabled, onPress}) => (
             <Text
                 ellipsizeMode="middle"
                 numberOfLines={1}
-                style = {[styles.buttonText,{
+                style = {[styles.buttonText, {
                     color: item.isInState === 'TURNOFF' && enabled ? 'red' : '#a2a2a2'}]}>
                 {'Off'}
             </Text>
@@ -47,7 +47,7 @@ const OffButton = ({item, enabled, onPress}) => (
 );
 
 const OnButton = ({item, enabled, onPress}) => (
-    <View style={[styles.buttonContainer,{
+    <View style={[styles.buttonContainer, {
         backgroundColor: item.isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
         <TouchableOpacity
 			onPress={ enabled ? onPress : null }
@@ -55,7 +55,7 @@ const OnButton = ({item, enabled, onPress}) => (
             <Text
                 ellipsizeMode="middle"
                 numberOfLines={1}
-                style = {[styles.buttonText,{
+                style = {[styles.buttonText, {
                     color: item.isInState !== 'TURNOFF' && enabled ? 'green' : '#a2a2a2'}]}>
                 {'On'}
             </Text>

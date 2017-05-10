@@ -166,7 +166,7 @@ export function parseDevicesForListView(devices = [], gateways = [], dashboard =
 			items[sectionId].push(item);
 		});
 	}
-	sectionIds.sort((a,b) => {
+	sectionIds.sort((a, b) => {
 		try {
 			const gatewayA = gateways.find((gateway) => gateway.id === a);
 			const gatewayB = gateways.find((gateway) => gateway.id === b);

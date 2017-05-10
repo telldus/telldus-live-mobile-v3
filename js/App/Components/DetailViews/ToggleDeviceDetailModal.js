@@ -31,7 +31,7 @@ import { turnOn, turnOff, learn} from 'Actions/Devices';
 const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
     <RoundedCornerShadowView style={styles.toggleContainer}>
         <TouchableOpacity
-            style={[styles.toggleButton,{
+            style={[styles.toggleButton, {
                 backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
             }]}
             onPress={onTurnOff}>
@@ -43,7 +43,7 @@ const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
         </TouchableOpacity>
 
         <TouchableOpacity
-            style={[styles.toggleButton,{
+            style={[styles.toggleButton, {
                 backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee',
             }]}
             onPress={onTurnOn}>

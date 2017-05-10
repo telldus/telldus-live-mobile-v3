@@ -83,7 +83,7 @@ class DeviceRow extends View {
 					<Container style = {styles.container}>
 						{button}
 						<View style={styles.name}>
-							<Text style = {[styles.text,{
+							<Text style = {[styles.text, {
 								opacity: this.props.name ? 1 : 0.5
 							}]}>
 								{this.props.name ? this.props.name : '(no name)'}

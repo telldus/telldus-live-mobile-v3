@@ -24,7 +24,7 @@ import { Text, View, RoundedCornerShadowView } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
 const OffButton = ({item, onPress}) => (
-    <View style={[styles.buttonContainer,{
+    <View style={[styles.buttonContainer, {
         backgroundColor: item.isInState === 'TURNOFF' ? '#fafafa' : '#eeeeee'}]}>
         <TouchableOpacity
 			onPress={onPress}
@@ -32,7 +32,7 @@ const OffButton = ({item, onPress}) => (
             <Text
                 ellipsizeMode="middle"
                 numberOfLines={1}
-                style = {[styles.buttonText,{
+                style = {[styles.buttonText, {
                     color: item.isInState === 'TURNOFF' ? 'red' : '#a2a2a2'}]}>
                 {'Off'}
             </Text>
@@ -41,7 +41,7 @@ const OffButton = ({item, onPress}) => (
 );
 
 const OnButton = ({item, onPress}) => (
-    <View style={[styles.buttonContainer,{
+    <View style={[styles.buttonContainer, {
         backgroundColor: item.isInState === 'TURNON' ? '#fafafa' : '#eeeeee'}]}>
         <TouchableOpacity
 			onPress={onPress}
@@ -49,7 +49,7 @@ const OnButton = ({item, onPress}) => (
             <Text
                 ellipsizeMode="middle"
                 numberOfLines={1}
-                style = {[styles.buttonText,{
+                style = {[styles.buttonText, {
                     color: item.isInState === 'TURNON' ? 'green' : '#a2a2a2'}]}>
                 {'On'}
             </Text>

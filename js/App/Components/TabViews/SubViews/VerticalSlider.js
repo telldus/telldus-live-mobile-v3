@@ -167,7 +167,7 @@ class VerticalSlider extends View {
 		return (
             <View style={[this.props.style]}
                 onLayout={this.layoutView.bind(this)}>
-                <Animated.View style={[styles.thumb,{
+                <Animated.View style={[styles.thumb, {
                     width:this.state.containerWidth,
                     height:thumbHeight,
                     transform: [{ translateY: thumbBottom}]
@@ -176,7 +176,7 @@ class VerticalSlider extends View {
                     <Text
                         ellipsizeMode="middle"
                         numberOfLines={1}
-                        style = {[styles.thumbText,{fontSize: this.props.fontSize}]}>
+                        style = {[styles.thumbText, {fontSize: this.props.fontSize}]}>
                         {this.state.displayedValue}
                     </Text>
                 </Animated.View>

@@ -56,11 +56,11 @@ class TabsView extends View {
 	navigationView() {
 		return (
 			<View style = {{ flex: 1, backgroundColor: this.getTheme().btnSecondaryBg }}>
-				<View style = {{ height: 60, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), marginBottom:ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 5, backgroundColor: this.getTheme().btnSecondaryBg,flexDirection:'row'}}>
-					<Image style={{width:50,height:50}}
+				<View style = {{ height: 60, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), marginBottom:ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 5, backgroundColor: this.getTheme().btnSecondaryBg, flexDirection:'row'}}>
+					<Image style={{width:50, height:50}}
 						source={require('./img/telldus.png')}
 						resizeMode={'contain'} />
-					<Text style={{flex:1,color:'#e26901', fontSize:24,textAlignVertical:'bottom', marginLeft:20}}>
+					<Text style={{flex:1, color:'#e26901', fontSize:24, textAlignVertical:'bottom', marginLeft:20}}>
 						{this.props.userProfile.firstname} {this.props.userProfile.lastname}
 					</Text>
 				</View>

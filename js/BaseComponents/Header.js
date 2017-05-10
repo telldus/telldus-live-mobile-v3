@@ -116,14 +116,14 @@ export default class HeaderComponent extends Base {
             if (this.props.searchBar) {
                 if (Platform.OS === 'ios') {
                     newChildren.push(<View key="search" style={{flex: 1, alignSelf: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -7}}>
-                                        {React.cloneElement(input[0],{style: this.getInitialStyle().iosToolbarSearch, toolbar : true, key : 'inp'})}
+                                        {React.cloneElement(input[0], {style: this.getInitialStyle().iosToolbarSearch, toolbar : true, key : 'inp'})}
                                     </View>);
                     newChildren.push(<View key="searchBtn" style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row', marginRight: -14}}>
                                         {React.cloneElement(buttons[0], {color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton})}
                                     </View>);
                 } else {
-                    newChildren.push(<View key="search" style={{flex: 1,alignSelf: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -8, marginRight: -8}}>
-                                        {React.cloneElement(input[0],{style: this.getInitialStyle().androidToolbarSearch, atoolbar : true})}
+                    newChildren.push(<View key="search" style={{flex: 1, alignSelf: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -8, marginRight: -8}}>
+                                        {React.cloneElement(input[0], {style: this.getInitialStyle().androidToolbarSearch, atoolbar : true})}
                                     </View>);
                 }
             } else {
@@ -132,7 +132,7 @@ export default class HeaderComponent extends Base {
                                         {React.cloneElement(buttons[0], {color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton})}
                                     </View>);
                     newChildren.push(<View key="title" style={{flex: 3, alignSelf: 'center', justifyContent: 'space-between'}}>
-                                        {[title[0],subtitle[0]]}
+                                        {[title[0], subtitle[0]]}
                                     </View>);
                     for (let i = 1; i < buttons.length; i++) {
                         newChildren.push(<View key={'btn' + (i + 1)} style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginRight: -14}}>
