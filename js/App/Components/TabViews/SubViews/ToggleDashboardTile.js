@@ -22,7 +22,7 @@
 import React from 'react';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import DashboardShadowTile  from './DashboardShadowTile';
+import DashboardShadowTile from './DashboardShadowTile';
 
 const OffButton = ({isInState, tileWidth, onPress}) => (
 	<View style={[styles.buttonContainer,{

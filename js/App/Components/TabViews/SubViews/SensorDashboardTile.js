@@ -23,14 +23,14 @@ import React from 'react';
 import { FormattedNumber, Text, View } from 'BaseComponents';
 
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
-import DashboardShadowTile  from './DashboardShadowTile';
+import DashboardShadowTile from './DashboardShadowTile';
 import { TouchableOpacity } from 'react-native';
 
 class SensorDashboardTile extends View {
 	constructor(props) {
 		super(props);
 		this.getSlideList = this.getSlideList.bind(this);
-		this.changeDisplayType  = this.changeDisplayType.bind(this);
+		this.changeDisplayType = this.changeDisplayType.bind(this);
 	}
 
 	changeDisplayType() {

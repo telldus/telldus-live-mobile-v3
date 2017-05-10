@@ -55,7 +55,7 @@ export default {
 		return this.fontSizeBase * 1.4;
 	},
 	get btnTextSize () {
-		return  this.fontSizeBase * 1.1;
+		return this.fontSizeBase * 1.1;
 	},
 	get btnTextSizeLarge () {
 		return this.fontSizeBase * 1.5;

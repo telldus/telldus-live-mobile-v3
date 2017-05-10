@@ -43,7 +43,7 @@ export default class SpinnerComponent extends Base {
 
 	render() {
 		return (
-			<ActivityIndicator {...this.prepareRootProps()}  color={this.props.color ? this.props.color : this.props.inverse ?
+			<ActivityIndicator {...this.prepareRootProps()} color={this.props.color ? this.props.color : this.props.inverse ?
 																this.getTheme().inverseSpinnerColor :
 																this.getTheme().defaultSpinnerColor}
 																size={this.props.size ? this.props.size : 'large' } />

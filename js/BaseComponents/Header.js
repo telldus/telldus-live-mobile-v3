@@ -80,7 +80,7 @@ export default class HeaderComponent extends Base {
     renderChildren() {
         if (!Array.isArray(this.props.children)) {
             return this.props.children;
-        }        else if (Array.isArray(this.props.children)) {
+        } else if (Array.isArray(this.props.children)) {
             let newChildren = [];
             let childrenArray = React.Children.toArray(this.props.children);
 
@@ -126,7 +126,7 @@ export default class HeaderComponent extends Base {
                                         {React.cloneElement(input[0],{style: this.getInitialStyle().androidToolbarSearch, atoolbar : true})}
                                     </View>);
                 }
-            }            else {
+            } else {
                 if (Platform.OS === 'ios') {
                     newChildren.push(<View key="btn1" style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -14}}>
                                         {React.cloneElement(buttons[0], {color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton})}

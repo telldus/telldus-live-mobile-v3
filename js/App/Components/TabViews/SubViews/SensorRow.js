@@ -99,7 +99,7 @@ const SensorLuminance = ({ luminance }) => (
 );
 
 const SensorRow = props => {
-    const minutesAgo =  Math.round(((Date.now() / 1000) - props.lastUpdated) / 60);
+    const minutesAgo = Math.round(((Date.now() / 1000) - props.lastUpdated) / 60);
     return (
         <ListItem style = { Theme.Styles.rowFront }>
             <View>

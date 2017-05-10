@@ -22,7 +22,7 @@
 import React from 'react';
 import { Text, View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import DashboardShadowTile  from './DashboardShadowTile';
+import DashboardShadowTile from './DashboardShadowTile';
 
 class BellDashboardTile extends View {
 	constructor(props) {
