@@ -44,8 +44,7 @@ export default class ThumbnailComponent extends Base {
 			thumbnailStyle.width = this.props.size;
 			thumbnailStyle.height = this.props.size;
 			thumbnailStyle.borderRadius = this.props.size / 2;
-		}
-		else if (this.props.square) {
+		}		else if (this.props.square) {
 			thumbnailStyle.width = this.props.size;
 			thumbnailStyle.height = this.props.size;
 			thumbnailStyle.borderRadius = 0;

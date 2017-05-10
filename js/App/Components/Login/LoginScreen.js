@@ -99,7 +99,7 @@ class LoginForm extends View {
 				.catch(reject);
 			setTimeout(() => reject(new Error('timeout')), authenticationTimeOut);
 		})
-		.then(response => { console.log(response); this.props.dispatch(response); })
+		.then(response => this.props.dispatch(response))
 		.catch(e => {
 			const message = e.message === 'timeout' ? 'Timed out, try again?' : e.message.error_description;
 			this.setState({ notificationText: message });

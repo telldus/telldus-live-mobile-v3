@@ -49,4 +49,6 @@ export function configureStore(onComplete: ?() => void) {
 	_store = store; // TODO: fix this ugly stuff
 	return store;
 }
-export function getStore() { return _store; }
+export function getStore() {
+	return _store;
+}

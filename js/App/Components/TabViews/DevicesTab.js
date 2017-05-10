@@ -117,7 +117,9 @@ class DevicesTab extends View {
 
 	getType(deviceId) {
 		const filteredItem = this.props.devices.find(item => item.id === deviceId);
-		if (!filteredItem) { return null; }
+		if (!filteredItem) {
+            return null;
+        }
 
 		const supportedMethods = filteredItem.supportedMethods;
 		return getDeviceType(supportedMethods);

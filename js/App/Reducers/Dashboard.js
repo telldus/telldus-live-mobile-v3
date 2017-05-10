@@ -49,7 +49,9 @@ export default function dashboardReducer(state: State = initialState, action : A
                 ]
             };
         } else if (action.kind === 'device') {
-            if (state.devices.indexOf(action.id) >= 0) { return state; }
+            if (state.devices.indexOf(action.id) >= 0) {
+                return state;
+            }
 
             return {
                 ...state,
@@ -75,7 +77,6 @@ export default function dashboardReducer(state: State = initialState, action : A
                 state.sensors.map(item => {
                     if (item.id === action.id) {
                         item.displayType = action.displayType;
-                        console.log('***** item', item)
                     }
                     return item;
                 })

@@ -41,7 +41,6 @@ import { getStore } from '../Store/ConfigureStore';
 
 export default ({ url, requestParams }) => {
 	return new Promise((resolve, reject) => {
-		console.log('***** url', url)
 		return doApiCall(url, requestParams).then(response => {
 			if (!response) {
 				return reject(new Error('unexpected error: response empty', {
@@ -57,7 +56,6 @@ export default ({ url, requestParams }) => {
 
 async function doApiCall(url, requestParams): Action {
 	let response = await callEndPoint(url, requestParams);
-	console.log('***** response', response)
 	if (!response.error) {
 		// All is well, so return the data from the API.
 		return response;

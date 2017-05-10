@@ -47,7 +47,6 @@ export default class RoundedCornerShadowView extends Base {
 
 		return (
 			<View
-				onClick={this.handleClick}
 				onLayout={this.props.onLayout}
 				style={[this.props.style,{
 					borderRadius: 7,
@@ -63,7 +62,4 @@ export default class RoundedCornerShadowView extends Base {
             </View>
 		);
     }
-	handleClick() {
-		console.log('***** 1', 1)
-	}
 }

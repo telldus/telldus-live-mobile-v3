@@ -80,22 +80,30 @@ export default class PickerComponent extends Base {
     render() {
         return (
         <View>
-            <Button transparent onPress={() => {this._setModalVisible(true);}}>{this.state.current}</Button>
+            <Button transparent onPress={() => {
+this._setModalVisible(true);
+}}>{this.state.current}</Button>
             <Modal animationType="slide"
                 transparent={false}
                 visible={this.state.modalVisible}
-                onRequestClose={() => {this._setModalVisible(false);}}
+                onRequestClose={() => {
+this._setModalVisible(false);
+}}
                 >
                 <Container>
                     <Header >
-                        <Button transparent onPress={() => {this._setModalVisible(false);}}>Back</Button>
+                        <Button transparent onPress={() => {
+this._setModalVisible(false);
+}}>Back</Button>
                         <Title>{this.props.iosHeader}</Title>
                         <Button transparent textStyle={{color: 'transparent'}}>Back</Button>
                     </Header>
                     <Content>
                         <List dataArray={this.props.children}
                             renderRow={(child) =>
-                                <ListItem style={{paddingVertical: 10}} iconRight button onPress={() => {this._setModalVisible(false); this.props.onValueChange(child.props.value); this.setState({current: child.props.label});}} >
+                                <ListItem style={{paddingVertical: 10}} iconRight button onPress={() => {
+this._setModalVisible(false); this.props.onValueChange(child.props.value); this.setState({current: child.props.label});
+}} >
                                     <Text>{child.props.label}</Text>
                                     {(child.props.value === this.props.selectedValue) ?
                                         (<Icon name="ios-checkmark-outline" />)
