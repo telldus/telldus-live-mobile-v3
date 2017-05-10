@@ -136,8 +136,6 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(item, secId, rowId, rowMap) {
-		console.log('ITEM');
-		console.log(item);
 		if (item.tileWidth > 75) {
 			let tileMargin = 8;
 			let tileStyle = {
@@ -171,9 +169,17 @@ class DashboardTab extends View {
 						onSlidingComplete={this.onSlidingComplete}
 						onValueChange={this.onValueChange} />;
 				} else if (deviceType === 'BELL') {
-					dashboardTile = <BellDashboardTile style={tileStyle} item={item} onBell={this.props.onBell(deviceId)} />;
+					dashboardTile = <BellDashboardTile
+						style={tileStyle}
+						item={item}
+						onBell={this.props.onBell(deviceId)} />;
 				} else if (deviceType === 'NAVIGATIONAL') {
-					dashboardTile = <NavigationalDashboardTile style={tileStyle} item={item} />;
+					dashboardTile = <NavigationalDashboardTile
+						style={tileStyle}
+						item={item}
+						onUp={this.props.onUp(deviceId)}
+						onDown={this.props.onDown(deviceId)}
+						onStop={this.props.onStop(deviceId)} />;
 				}
 
 				return dashboardTile;
@@ -201,6 +207,9 @@ function actions(dispatch) {
 		onTurnOn: id => () => dispatch(turnOn(id)),
 		onTurnOff: id => () => dispatch(turnOff(id)),
 		onBell: id => () => dispatch(bell(id)),
+		onDown: id => () => dispatch(down(id)),
+		onUp: id => () => dispatch(up(id)),
+		onStop: id => () => dispatch(stop(id)),
 		changeSensorDisplayType: (item, displayType) => dispatch(changeSensorDisplayType(item.id, displayType)),
 		dispatch
 	};
