@@ -20,73 +20,116 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile  from './DashboardShadowTile';
+import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
 import VerticalSlider from './VerticalSlider';
 
-const Title = ({ item, tileWidth }) => (
+import throttle from 'lodash/throttle';
+
+const Title = ({ isInState, name, tileWidth }) => (
     <View style={[styles.title, {
-		backgroundColor: item.childObject.state === 0 ? '#bfbfbf' : '#e56e18'}]}>
+		backgroundColor: isInState === 'TURNOFF' ? '#bfbfbf' : '#e56e18'}]}>
 		<Text
 			ellipsizeMode="middle"
 			numberOfLines={1}
 			style = {[styles.name, {
 				fontSize:  Math.floor(tileWidth / 8),
-				opacity: item.childObject.name ? 1 : 0.7,
+				opacity: name ? 1 : 0.7,
 			}]}>
-			{item.childObject.name ? item.childObject.name : '(no name)'}
+			{name ? name : '(no name)'}
 		</Text>
 	</View>
 );
 
-const GenericButton = ({ item, tileWidth, text, activeBgColor, deactiveBgColor, activeTextColor, deactiveTextColor, onPress}) => (
+const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
     <View style={{
 		flex:1,
-		backgroundColor: item.childObject.state === 0 ? activeBgColor : deactiveBgColor,
+		backgroundColor: isInState === 'TURNOFF' && enabled ? 'white' : '#eeeeee'
 	}}>
 		<TouchableOpacity
-			onPress={onPress}
+			onPress={ enabled ? onPress : null}
 			style={styles.button} >
 			<Text
 				ellipsizeMode="middle"
 				numberOfLines={1}
 				style = {[styles.buttonText, {
-					color: item.childObject.state === 0 ? activeTextColor : deactiveTextColor,
+					color: isInState === 'TURNOFF' ? 'red' : '#a0a0a0',
 					fontSize:  Math.floor(tileWidth / 8)
 				}]}>
-				{text}
+				{'Off'}
 			</Text>
 		</TouchableOpacity>
 	</View>
 );
 
-const OffButton = ({ item, tileWidth, onPress}) => (
-    <GenericButton item={item} tileWidth={tileWidth} onPress={onPress} text="Off" activeBgColor="white" deactiveBgColor="#eeeeee" activeTextColor="red" deactiveTextColor="#a0a0a0" />
+const OnButton = ({ isInState, enabled, tileWidth, onPress }) => (
+    <View style={{
+		flex:1,
+		backgroundColor: isInState !== 'TURNOFF' && enabled ? 'white' : '#eeeeee'
+	}}>
+		<TouchableOpacity
+			onPress={ enabled ? onPress : null}
+			style={styles.button} >
+			<Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style = {[styles.buttonText, {
+					color: isInState !== 'TURNOFF' ? 'green' : '#a0a0a0',
+					fontSize:  Math.floor(tileWidth / 8)
+				}]}>
+				{'On'}
+			</Text>
+		</TouchableOpacity>
+	</View>
 );
 
-const OnButton = ({ item, tileWidth, onPress}) => (
-    <GenericButton item={item} tileWidth={tileWidth} onPress={onPress} text="On" activeBgColor="#eeeeee" deactiveBgColor="white" activeTextColor="#a0a0a0" deactiveTextColor="green" />
-);
+function getDimmerValue(value, isInState) {
+    let newValue = value || 0;
+    if (isInState === 'TURNON') {
+        return 255;
+    }
+    if (isInState === 'TURNOFF') {
+        return 0;
+    }
+
+    newValue = parseInt(newValue, 10);
+    return newValue;
+}
+
+function toDimmerValue(sliderValue) {
+    return Math.round(sliderValue * 255 / 100.0);
+}
+
+function toSliderValue(dimmerValue) {
+    return Math.round(dimmerValue * 100.0 / 255);
+}
 
 class DimmerDashboardTile extends View {
 	constructor(props) {
 		super(props);
+        const value = getDimmerValue(this.props.item.childObject.value, this.props.item.isInState);
         this.parentScrollEnabled = true;
         this.state = {
             bodyWidth: 0,
-            bodyHeight: 0
+            bodyHeight: 0,
+            value
         };
+
+        this.onValueChangeThrottled = throttle(this.props.onDimmerSlide, 200, {
+            trailing: true,
+        });
 	}
 
-    onOnButtonSelected() {
-        console.log('onOnButtonSelected');
-        // TODO: Implement the logic for selecting 'On' button
-    }
-
-    onOffButtonSelected() {
-        console.log('onOffButtonSelected');
-        // TODO: Implement the logic for selecting 'Off' button
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.item.childObject.value === this.props.item.childObject.value && nextProps.item.childObject.isInState === this.props.item.childObject.isInState) {
+            return;
+        }
+        const dimmerValue = getDimmerValue(nextProps.item.childObject.value, nextProps.item.childObject.isInState);
+        this.setState({value:dimmerValue});
     }
 
     layoutView(x) {
@@ -97,11 +140,44 @@ class DimmerDashboardTile extends View {
         });
     }
 
+    onValueChange(sliderValue) {
+        this.onValueChangeThrottled(toDimmerValue(sliderValue));
+    }
+
+    onSlidingStart(name:String, sliderValue:Number) {
+		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
+	}
+
+	onSlidingComplete(sliderValue:Number) {
+        this.props.onDim(toDimmerValue(sliderValue));
+		this.props.hideDimmerPopup();
+	}
+
 	render() {
 		const item = this.props.item;
+        const isInState = item.childObject.isInState;
+        const name = item.childObject.name;
 		const tileWidth = item.tileWidth - 8;
-
-		return (
+        const { TURNON, TURNOFF, DIM } = item.childObject.supportedMethods;
+        const turnOnButton = <OnButton isInState={isInState} enabled={TURNON} tileWidth={tileWidth} onPress={this.props.onTurnOn} />;
+        const turnOffButton = <OffButton isInState={isInState} enabled={TURNOFF} tileWidth={tileWidth} onPress={this.props.onTurnOff} />;
+		const slider = DIM ?
+            <VerticalSlider
+                style={[styles.slider, {
+                    width: this.state.bodyWidth / 5,
+                    height: this.state.bodyHeight,
+                    left: this.state.bodyWidth / 2 - this.state.bodyWidth / 10,
+                    bottom:0,
+                }]}
+                item={this.props.item.childObject}
+                value={toSliderValue(this.state.value)}
+                setScrollEnabled={this.props.setScrollEnabled}
+                onSlidingStart={this.onSlidingStart.bind(this)}
+                onSlidingComplete={this.onSlidingComplete.bind(this)}
+                onValueChange={this.onValueChange.bind(this)}
+            /> :
+            null;
+        return (
 			<DashboardShadowTile
 				item={item}
 				style={	[this.props.style,{
@@ -109,24 +185,11 @@ class DimmerDashboardTile extends View {
 					height: tileWidth
 				}]}>
 				<View style={styles.body} onLayout={this.layoutView.bind(this)}>
-                    <OffButton item={item} tileWidth={tileWidth} onPress={this.onOffButtonSelected} />
-                    <OnButton item={item} tileWidth={tileWidth} onPress={this.onOnButtonSelected} />
-                    <VerticalSlider
-                        style={[styles.slider, {
-                            width: this.state.bodyWidth / 5,
-                            height: this.state.bodyHeight,
-                            left: this.state.bodyWidth / 2 - this.state.bodyWidth / 10,
-                            bottom:0,
-                        }]}
-                        item={this.props.item.childObject}
-                        value={this.props.value}
-                        setScrollEnabled={this.props.setScrollEnabled}
-                        onSlidingStart={this.props.onSlidingStart}
-                        onSlidingComplete={this.props.onSlidingComplete}
-                        onValueChange={this.props.onValueChange}
-                    />
+                    { turnOffButton }
+                    { turnOnButton }
+                    { slider }
 				</View>
-                <Title item={item} tileWidth={tileWidth} />
+                <Title isInState={isInState} tileWidth={tileWidth} name={name} tileWidth={tileWidth} />
 			</DashboardShadowTile>
 		);
 	}
@@ -184,4 +247,15 @@ const styles = StyleSheet.create({
     }
 });
 
-module.exports = DimmerDashboardTile;
+function actions(dispatch) {
+	return {
+		showDimmerPopup: (name:String, value:Number) => {
+			dispatch(showDimmerPopup(name, value));
+		},
+		hideDimmerPopup: () => {
+			dispatch(hideDimmerPopup());
+		},
+	};
+}
+
+module.exports = connect(() => ({}), actions)(DimmerDashboardTile);

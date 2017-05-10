@@ -22,8 +22,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { List, ListDataSource, View } from 'BaseComponents';
-import { changeSensorDisplayType, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions';
+import { changeSensorDisplayType } from 'Actions';
 import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
+import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
@@ -47,9 +48,6 @@ class DashboardTab extends View {
 		this._onLayout = this._onLayout.bind(this);
 		this._calculateItemDimensions = this._calculateItemDimensions.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
-		this.onSlidingStart = this.onSlidingStart.bind(this);
-		this.onSlidingComplete = this.onSlidingComplete.bind(this);
-		this.onValueChange = this.onValueChange.bind(this);
 
 	}
 
@@ -68,20 +66,6 @@ class DashboardTab extends View {
 			dataSource: this.state.dataSource.cloneWithRows(nextProps.dataArray),
 		});
     }
-
-	onSlidingStart(name:String, value:Number) {
-		this.props.dispatch(showDimmerPopup(name, value));
-	}
-
-	onSlidingComplete() {
-		console.log('onSlidingComplete');
-		this.props.dispatch(hideDimmerPopup());
-	}
-
-	onValueChange(value) {
-		this.props.dispatch(setDimmerValue(value));
-	}
-
 
 	_onLayout = (event) => {
 		const listWidth = event.nativeEvent.layout.width - 8;
@@ -163,11 +147,12 @@ class DashboardTab extends View {
 					dashboardTile = <DimmerDashboardTile
 						style={tileStyle}
 						item={item}
-						value={4}
+						onTurnOn={this.props.onTurnOn(deviceId)}
+						onTurnOff={this.props.onTurnOff(deviceId)}
 						setScrollEnabled={this.setScrollEnabled}
-						onSlidingStart={this.onSlidingStart}
-						onSlidingComplete={this.onSlidingComplete}
-						onValueChange={this.onValueChange} />;
+						onDim={this.props.onDim(deviceId)}
+						onDimmerSlide={this.props.onDimmerSlide(deviceId)}
+						/>;
 				} else if (deviceType === 'BELL') {
 					dashboardTile = <BellDashboardTile
 						style={tileStyle}
@@ -210,6 +195,8 @@ function actions(dispatch) {
 		onDown: id => () => dispatch(down(id)),
 		onUp: id => () => dispatch(up(id)),
 		onStop: id => () => dispatch(stop(id)),
+		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
+		onDim: id => value => dispatch(updateDimmerValue(id, value)),
 		changeSensorDisplayType: (item, displayType) => dispatch(changeSensorDisplayType(item.id, displayType)),
 		dispatch
 	};
