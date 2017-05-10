@@ -146,10 +146,12 @@ export function parseSensorsForListView({ sensors, gateways, dashboard }) {
 			sections[sectionId] = [];
 		}
 
-		if (dashboard.sensors.indexOf(sensor.id) >= 0) {
-			sensor.inDashboard = true;
-		} else {
-			sensor.inDashboard = false;
+		sensor.inDashboard = false;
+		for (let i = 0; i < dashboard.sensors.length; ++i) {
+			if (dashboard.sensors[i].id === sensor.id) {
+				sensor.inDashboard = true;
+				break;
+			}
 		}
 
 		sections[sectionId].push(sensor);
