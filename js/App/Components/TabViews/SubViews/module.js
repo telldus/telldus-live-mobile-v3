@@ -30,6 +30,7 @@ import SensorRow from './SensorRow';
 import SensorRowHidden from './SensorRowHidden';
 import DashboardShadowTile from './DashboardShadowTile';
 import BellDashboardTile from './BellDashboardTile';
+import GenericDashboardTile from './GenericDashboardTile';
 import NavigationalDashboardTile from './NavigationalDashboardTile';
 import DimmerDashboardTile from './DimmerDashboardTile';
 import DimmerPopup from './DimmerPopup';
@@ -52,6 +53,7 @@ module.exports = {
 	SensorRowHidden: SensorRowHidden,
 	DashboardShadowTile: DashboardShadowTile,
 	BellDashboardTile: BellDashboardTile,
+	GenericDashboardTile: GenericDashboardTile,
 	NavigationalDashboardTile: NavigationalDashboardTile,
 	DimmerDashboardTile: DimmerDashboardTile,
     DimmerPopup: DimmerPopup,

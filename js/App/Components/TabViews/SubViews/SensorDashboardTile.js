@@ -35,6 +35,7 @@ class SensorDashboardTile extends View {
 
 	changeDisplayType() {
 		let item = this.props.item;
+		// TODO: move allDisplayType to Reducer
 		let allDisplayType = [];
 
 		if (item.childObject.humidity) {
@@ -63,7 +64,7 @@ class SensorDashboardTile extends View {
 		currentIdx = currentIdx < 0 ? 0 : currentIdx;
 		let nextIdx = currentIdx < allDisplayType.length - 1 ? currentIdx + 1 : 0;
 
-		this.props.onSensorSelected(item.childObject, allDisplayType[nextIdx]);
+		this.props.onChangeSensorDisplayType(allDisplayType[nextIdx]);
 	}
 
 	getSlideList(item) {

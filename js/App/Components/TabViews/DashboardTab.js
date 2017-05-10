@@ -21,7 +21,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { List, ListDataSource, View } from 'BaseComponents';
+import { Text, List, ListDataSource, View } from 'BaseComponents';
 
 import { changeSensorDisplayType } from 'Actions';
 import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
@@ -29,7 +29,7 @@ import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } f
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 
-import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
+import { GenericDashboardTile, DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
 
@@ -119,6 +119,10 @@ class DashboardTab extends View {
 
 	_renderRow(tileWidth) {
 		return (item, secId, rowId, rowMap) => {
+			if (item.objectType !== 'sensor' && item.objectType !== 'device') {
+				return <Text>unknown device or sensor</Text>;
+			}
+
 			item.tileWidth = tileWidth;
 			let tileMargin = 8;
 			let tileStyle = {
@@ -131,51 +135,62 @@ class DashboardTab extends View {
 				marginLeft: tileMargin,
 				borderRadius: 2
 			};
+
+			const itemId = item.childObject.id;
+
 			if (item.objectType === 'sensor') {
-				return (
-					<SensorDashboardTile style={tileStyle} item={item} onSensorSelected={this.props.changeSensorDisplayType}/>
-				);
-			} else if (item.objectType === 'device') {
-				const deviceId = item.childObject.id;
-				let dashboardTile = <View />;
-				const deviceType = this.getType(item);
-
-				if (deviceType === 'TOGGLE') {
-					dashboardTile = <ToggleDashboardTile
-						style={tileStyle}
-						item={item}
-						onTurnOn={this.props.onTurnOn(deviceId)}
-						onTurnOff={this.props.onTurnOff(deviceId)}
-					/>;
-				} else if (deviceType === 'DIMMER') {
-					dashboardTile = <DimmerDashboardTile
-						style={tileStyle}
-						item={item}
-						onTurnOn={this.props.onTurnOn(deviceId)}
-						onTurnOff={this.props.onTurnOff(deviceId)}
-						setScrollEnabled={this.setScrollEnabled}
-						onDim={this.props.onDim(deviceId)}
-						onDimmerSlide={this.props.onDimmerSlide(deviceId)}
-					/>;
-
-				} else if (deviceType === 'BELL') {
-					dashboardTile = <BellDashboardTile
-						style={tileStyle}
-						item={item}
-						onBell={this.props.onBell(deviceId)}
-					/>;
-
-				} else if (deviceType === 'NAVIGATIONAL') {
-					dashboardTile = <NavigationalDashboardTile
-						style={tileStyle}
-						item={item}
-						onUp={this.props.onUp(deviceId)}
-						onDown={this.props.onDown(deviceId)}
-						onStop={this.props.onStop(deviceId)}
-					/>;
-				}
-				return dashboardTile;
+				return <SensorDashboardTile
+					style={tileStyle}
+					item={item}
+					onChangeSensorDisplayType={this.props.changeSensorDisplayType(itemId)}
+				/>;
 			}
+
+			const deviceType = this.getType(item);
+
+			if (deviceType === 'TOGGLE') {
+				return <ToggleDashboardTile
+					style={tileStyle}
+					item={item}
+					onTurnOn={this.props.onTurnOn(itemId)}
+					onTurnOff={this.props.onTurnOff(itemId)}
+				/>;
+			}
+
+			if (deviceType === 'DIMMER') {
+				return <DimmerDashboardTile
+					style={tileStyle}
+					item={item}
+					onTurnOn={this.props.onTurnOn(itemId)}
+					onTurnOff={this.props.onTurnOff(itemId)}
+					setScrollEnabled={this.setScrollEnabled}
+					onDim={this.props.onDim(itemId)}
+					onDimmerSlide={this.props.onDimmerSlide(itemId)}
+				/>;
+			}
+
+			if (deviceType === 'BELL') {
+				return <BellDashboardTile
+					style={tileStyle}
+					item={item}
+					onBell={this.props.onBell(itemId)}
+				/>;
+			}
+
+			if (deviceType === 'NAVIGATIONAL') {
+				return <NavigationalDashboardTile
+					style={tileStyle}
+					item={item}
+					onUp={this.props.onUp(itemId)}
+					onDown={this.props.onDown(itemId)}
+					onStop={this.props.onStop(itemId)}
+				/>;
+			}
+
+			return <GenericDashboardTile
+				style={tileStyle}
+				item={item}
+			/>;
 		};
 	}
 
@@ -203,7 +218,7 @@ function actions(dispatch) {
 		onStop: id => () => dispatch(stop(id)),
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
 		onDim: id => value => dispatch(updateDimmerValue(id, value)),
-		changeSensorDisplayType: (item, displayType) => dispatch(changeSensorDisplayType(item.id, displayType)),
+		changeSensorDisplayType: id => displayType => dispatch(changeSensorDisplayType(id, displayType)),
 		dispatch
 	};
 }
