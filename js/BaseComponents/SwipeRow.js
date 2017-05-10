@@ -116,8 +116,12 @@ class SwipeRow extends Component {
 			this.horizontalSwipeGestureBegan = true;
 
 			let newDX = this.swipeInitialX + dx;
-			if (this.props.disableLeftSwipe  && newDX < 0) { newDX = 0; }
-			if (this.props.disableRightSwipe && newDX > 0) { newDX = 0; }
+			if (this.props.disableLeftSwipe  && newDX < 0) {
+ newDX = 0;
+}
+			if (this.props.disableRightSwipe && newDX > 0) {
+ newDX = 0;
+}
 
 			this.setState({
 				translateX: new Animated.Value(newDX)

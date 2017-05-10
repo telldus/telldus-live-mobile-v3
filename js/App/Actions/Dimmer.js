@@ -25,7 +25,6 @@ import type { Action, ThunkAction } from './types';
 
 import LiveApi from '../Lib/LiveApi';
 
-import throttle from 'lodash/throttle';
 import { format } from 'url';
 
 export const showDimmerPopup = (name: String, value: Number): Action => ({

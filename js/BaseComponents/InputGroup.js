@@ -158,18 +158,18 @@ export default class InputGroup extends Base {
 			}
 		});
 
-		if (inp)
-		{inputProps = computeProps(this.props, inp.props);}
-		else
-		{inputProps = this.props;}
+		if (inp)		{
+inputProps = computeProps(this.props, inp.props);
+}		else		{
+inputProps = this.props;
+}
 
 		if (Array.isArray(this.props.children)) {
 
 			if (this.props.iconRight) {
 				newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
 				newChildren.push(React.cloneElement(iconElement[0],this.getIconProps(iconElement[0])));
-			}
-			else if (buttonElement.length > 0) {
+			}			else if (buttonElement.length > 0) {
 				newChildren.push(React.cloneElement(
 					iconElement[0],
 					{
@@ -185,8 +185,7 @@ export default class InputGroup extends Base {
 						key: 'button1'
 					}
 				));
-			}
-			else {
+			}			else {
 				if (iconElement.length > 1) {
 					newChildren.push(React.cloneElement(
 						iconElement[0],
@@ -208,9 +207,7 @@ export default class InputGroup extends Base {
 					newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
 				}
 			}
-		}
-
-		else {
+		}		else {
 			newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
 		}
 

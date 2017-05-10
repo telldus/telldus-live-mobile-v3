@@ -87,7 +87,9 @@ class DimmerProgressBar extends Component {
             easing: Easing.linear,
             isInteraction: false,
         }).start((endState) => {
-            if (endState.finished) {this.animate();}
+            if (endState.finished) {
+                this.animate();
+            }
         });
     }
 

@@ -110,8 +110,9 @@ export default class CardItemComponent extends Base {
 	thumbnailPresent() {
 		let thumbnailComponentPresent = false;
 		React.Children.forEach(this.props.children, function (child) {
-			if (child.type === Thumbnail)
-				{thumbnailComponentPresent = true;}
+			if (child.type === Thumbnail) {
+				thumbnailComponentPresent = true;
+			}
 		});
 
 		return thumbnailComponentPresent;
@@ -120,8 +121,9 @@ export default class CardItemComponent extends Base {
 	imagePresent() {
 		let imagePresent = false;
 		React.Children.forEach(this.props.children, function (child) {
-			if (child.type === Image)
-				{imagePresent = true;}
+			if (child.type === Image) {
+				imagePresent = true;
+			}
 		});
 
 		return imagePresent;
@@ -130,8 +132,9 @@ export default class CardItemComponent extends Base {
 	iconPresent() {
 		let iconComponentPresent = false;
 		React.Children.forEach(this.props.children, function (child) {
-			if (child.type === Icon)
-				{iconComponentPresent = true;}
+			if (child.type === Icon)				{
+iconComponentPresent = true;
+}
 		});
 
 		return iconComponentPresent;
@@ -140,8 +143,9 @@ export default class CardItemComponent extends Base {
 	buttonPresent() {
 		let buttonComponentPresent = false;
 		React.Children.forEach(this.props.children, function (child) {
-			if (child.type === Button)
-				{buttonComponentPresent = true;}
+			if (child.type === Button)				{
+buttonComponentPresent = true;
+}
 		});
 
 		return buttonComponentPresent;
@@ -162,8 +166,9 @@ export default class CardItemComponent extends Base {
 		let notePresent = false;
 
 		React.Children.forEach(this.props.children, function (child) {
-			if (child.type === Text && child.props.note)
-				{notePresent = true;}
+			if (child.type === Text && child.props.note)				{
+notePresent = true;
+}
 		});
 
 		return notePresent;
@@ -173,8 +178,9 @@ export default class CardItemComponent extends Base {
 		let squareThumbs = false;
 		if (this.thumbnailPresent()) {
 			React.Children.forEach(this.props.children, function (child) {
-				if (child.props.square)
-					{squareThumbs = true;}
+				if (child.props.square)					{
+squareThumbs = true;
+}
 			});
 		}
 
@@ -188,53 +194,44 @@ export default class CardItemComponent extends Base {
 				resizeMode: 'stretch',
 				style: this.getInitialStyle().fullImage
 			};
-		}
-		else if (child.type === Button) {
+		}		else if (child.type === Button) {
 			defaultProps = {
 				small: true,
 				style: this.getInitialStyle().itemButton
 			};
-		}
-		else if (child.type === Text) {
+		}		else if (child.type === Text) {
 			if ((this.props.header) || (this.props.footer)) {
 				defaultProps = {
 					style: this.getInitialStyle().dividerItemText
 				};
-			}
-			else {
+			}			else {
 				if (child.props.note && this.thumbnailPresent()) {
 					defaultProps = {
 						style: this.getInitialStyle().itemSubNote
 					};
-				}
-				else if (child.props.note) {
+				}				else if (child.props.note) {
 					defaultProps = {
 						style: this.getInitialStyle().itemNote
 					};
-				}
-				else {
+				}				else {
 					defaultProps = {
 						style: this.getInitialStyle().itemText
 					};
 				}
 			}
-		}
-		else if (child.type === Icon) {
+		}		else if (child.type === Icon) {
 			defaultProps = {
 				style: this.getInitialStyle().itemIcon
 			};
-		}
-		else if (child.type === Thumbnail) {
+		}		else if (child.type === Thumbnail) {
 			defaultProps = {
 				style: this.getInitialStyle().thumbnail
 			};
-		}
-		else if (child.type === Image ) {
+		}		else if (child.type === Image ) {
 			defaultProps = {
 				style: this.getInitialStyle().fullImage
 			};
-		}
-		else {
+		}		else {
 			defaultProps = {
 				foregroundColor: this.getContextForegroundColor()
 			};
@@ -251,9 +248,7 @@ export default class CardItemComponent extends Base {
 			defaultProps = {
 				style: this.getInitialStyle().listItemDivider
 			};
-		}
-
-		else {
+		}		else {
 			defaultProps = {
 				style: this.getInitialStyle().listItem
 			};
@@ -272,8 +267,7 @@ export default class CardItemComponent extends Base {
 			newChildren = React.Children.map(this.props.children, (child, i) => {
 				return React.cloneElement(child, {...this.getChildProps(child), key: i});
 			});
-		}
-		else {
+		}		else {
 			newChildren = [];
 			if (!Array.isArray(this.props.children)) {
 				newChildren.push(
@@ -281,8 +275,7 @@ export default class CardItemComponent extends Base {
 						{React.cloneElement(this.props.children, this.getChildProps(this.props.children))}
 					</View>
 				);
-			}
-			else {
+			}			else {
 
 				let childrenArray = React.Children.toArray(this.props.children);
 				newChildren.push(React.cloneElement(childrenArray[0], this.getChildProps(childrenArray[0])));

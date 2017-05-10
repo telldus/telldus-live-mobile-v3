@@ -33,10 +33,11 @@ module.exports = function(incomingProps, defaultProps) {
 	delete incomingProps.style;
 
 	// console.log(defaultProps, incomingProps);
-	if (incomingProps)
-		{_.merge(computedProps, defaultProps, incomingProps);}
-	else
-		{computedProps = defaultProps;}
+	if (incomingProps)		{
+_.merge(computedProps, defaultProps, incomingProps);
+}	else		{
+computedProps = defaultProps;
+}
 	// Pass the merged Style Object instead
 	if (incomingPropsStyle) {
 
@@ -51,8 +52,7 @@ module.exports = function(incomingProps, defaultProps) {
 				}
 			});
 
-		}
-		else {
+		}		else {
 			if (typeof incomingPropsStyle === 'number') {
 				computedPropsStyle = ReactNativePropRegistry.getByID(incomingPropsStyle);
 			} else {
