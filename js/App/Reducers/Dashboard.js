@@ -44,7 +44,7 @@ export default function dashboardReducer(state: State = initialState, action : A
                 sensors: [
                     ...state.sensors,
                     {
-                        'id':action.id
+                        'id': action.id
                     }
                 ]
             };

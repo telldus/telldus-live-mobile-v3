@@ -36,7 +36,7 @@ const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
             }]}
             onPress={onTurnOff}>
             <Text style={{
-                fontSize:16,
+                fontSize: 16,
                 color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e'}}>
                 {'Off'}
             </Text>
@@ -48,7 +48,7 @@ const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
             }]}
             onPress={onTurnOn}>
             <Text style={{
-                fontSize:16,
+                fontSize: 16,
                 color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e'}}>
                 {'On'}
             </Text>
@@ -58,13 +58,13 @@ const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
 
 const LearnButton = ({device, onLearn}) => (
     <RoundedCornerShadowView style={{
-        height:36,
-        marginHorizontal:8,
-        marginVertical:8,
-        justifyContent:'center',
-        alignItems:'center'}}>
+        height: 36,
+        marginHorizontal: 8,
+        marginVertical: 8,
+        justifyContent: 'center',
+        alignItems: 'center'}}>
         <TouchableOpacity onPress={onLearn}>
-            <Text style={{fontSize:16, color:'orange'}}>
+            <Text style={{fontSize: 16, color: 'orange'}}>
                 {'Learn'}
             </Text>
         </TouchableOpacity>
@@ -133,16 +133,16 @@ ToggleDeviceDetailModal.propTypes = {
 };
 
 const styles = StyleSheet.create({
-    toggleContainer : {
-        flexDirection:'row',
-        height:36,
-        marginHorizontal:8,
-        marginVertical:16
+    toggleContainer: {
+        flexDirection: 'row',
+        height: 36,
+        marginHorizontal: 8,
+        marginVertical: 16
     },
     toggleButton: {
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center'
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

@@ -51,7 +51,7 @@ class BellDashboardTile extends View {
                             ellipsizeMode="middle"
                             numberOfLines={1}
                             style = {[styles.name, {
-                                fontSize:  Math.floor(tileWidth / 8),
+                                fontSize: Math.floor(tileWidth / 8),
                                 opacity: item.childObject.name ? 1 : 0.7,
                             }]}>
                             {item.childObject.name ? item.childObject.name : '(no name)'}
@@ -65,23 +65,23 @@ class BellDashboardTile extends View {
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
-        justifyContent:'center'
+        flex: 1,
+        justifyContent: 'center'
     },
 	body: {
-        flex:30,
+        flex: 30,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems:'center',
-        backgroundColor:'white'
+        alignItems: 'center',
+        backgroundColor: 'white'
     },
     title: {
-		flex:13,
+		flex: 13,
 		backgroundColor: '#e56e18',
 		justifyContent: 'center'
     },
 	name: {
-        padding : 5,
+        padding: 5,
 		color: 'white',
 		textAlign: 'center',
 		textAlignVertical: 'center'

@@ -32,7 +32,7 @@ class DeviceDetailModal extends View {
     constructor(props) {
 		super(props);
 		this.state = {
-			isVisible:this.props.isVisible
+			isVisible: this.props.isVisible
 		};
 
         this.onStarButtonSelected = this.onStarButtonSelected.bind(this);
@@ -78,12 +78,12 @@ class DeviceDetailModal extends View {
                 <Container style={styles.container}>
                     <View style={styles.header}>
                         <Icon name="wifi" size={26} color="white" style={{
-                            flex:1, marginLeft:8
+                            flex: 1, marginLeft: 8
                             }}/>
                         <Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
                             {device.name}
                         </Text>
-                        <Icon name="close" size={26} color="white" style={{flex:1}} onPress={this.props.onCloseSelected} />
+                        <Icon name="close" size={26} color="white" style={{flex: 1}} onPress={this.props.onCloseSelected} />
                     </View>
                     <View style={styles.body}>
                         <Text style={styles.textLocation}>
@@ -94,7 +94,7 @@ class DeviceDetailModal extends View {
                             onPress={() => this.onStarButtonSelected(inDashboard)}
 							style={styles.bottom} >
                             <Icon name="star" size={18} color="orange"
-                                style={{opacity:inDashboard ? 1.0 : 0.6}} />
+                                style={{opacity: inDashboard ? 1.0 : 0.6}} />
                             {addToDashboardView}
                         </TouchableOpacity>
                     </View>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
       margin: 10
   },
   header: {
-      height:46,
+      height: 46,
       backgroundColor: '#1a355b',
       flexDirection: 'row',
       justifyContent: 'center',
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: 18,
       fontWeight: 'bold',
-      flex:8
+      flex: 8
   },
   body: {
       flex: 10
@@ -142,21 +142,21 @@ const styles = StyleSheet.create({
       marginLeft: 8
   },
   textGuide: {
-      marginLeft:8
+      marginLeft: 8
   },
   textDeviceShownOnTheDashboard: {
-    color:'#1a355b',
-    fontSize:13
+    color: '#1a355b',
+    fontSize: 13
   },
   textTapToRemove: {
-    color:'#1a355b',
-    fontSize:10
+    color: '#1a355b',
+    fontSize: 10
   },
   bottom: {
-      height:36,
-      flexDirection:'row',
-      alignItems:'center',
-      marginLeft:8
+      height: 36,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginLeft: 8
   }
 });
 

@@ -40,7 +40,7 @@ export default class InputGroup extends Base {
 				alignItems: 'center'
 			},
 			outerBorder: {
-				position:'relative',
+				position: 'relative',
 				borderColor: 'white',
 				borderWidth: this.getTheme().borderWidth,
 				borderTopWidth: 0,
@@ -54,7 +54,7 @@ export default class InputGroup extends Base {
 				borderColor: '#fff'
 			},
 			underline: {
-				position:'relative',
+				position: 'relative',
 				borderWidth: this.getTheme().borderWidth,
 				borderTopWidth: 0,
 				borderRightWidth: 0,
@@ -62,12 +62,12 @@ export default class InputGroup extends Base {
 			},
 
 			bordered: {
-				position:'relative',
+				position: 'relative',
 				borderWidth: this.getTheme().borderWidth
 			},
 
 			rounded: {
-				position:'relative',
+				position: 'relative',
 				borderWidth: this.getTheme().borderWidth,
 				borderRadius: 30
 			}
@@ -77,7 +77,7 @@ export default class InputGroup extends Base {
 	prepareRootProps() {
 
 		let type = {
-			paddingLeft:  (this.props.borderType === 'rounded' && !this.props.children.type === Icon) ? 15 :
+			paddingLeft: (this.props.borderType === 'rounded' && !this.props.children.type === Icon) ? 15 :
 			(this.props.children.type === Icon ) ? this.getTheme().inputPaddingLeftIcon : 5
 		};
 

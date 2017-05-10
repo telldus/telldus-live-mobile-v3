@@ -92,8 +92,8 @@ class DimmingButton extends View {
         const value = getDimmerValue(this.props.item.value, this.props.item.isInState);
         this.parentScrollEnabled = true;
         this.state = {
-            buttonWidth:0,
-            buttonHeight:0,
+            buttonWidth: 0,
+            buttonHeight: 0,
             value
         };
 
@@ -107,14 +107,14 @@ class DimmingButton extends View {
             return;
         }
         const dimmerValue = getDimmerValue(nextProps.item.value, nextProps.item.isInState);
-        this.setState({value:dimmerValue});
+        this.setState({value: dimmerValue});
     }
 
     layoutView(x) {
         let {width, height} = x.nativeEvent.layout;
         this.setState({
-            buttonWidth:width,
-            buttonHeight:height
+            buttonWidth: width,
+            buttonHeight: height
         });
     }
 
@@ -142,7 +142,7 @@ class DimmingButton extends View {
                     width: this.state.buttonWidth / 5,
                     height: this.state.buttonHeight,
                     left: this.state.buttonWidth / 2 - this.state.buttonWidth / 10,
-                    bottom:0,
+                    bottom: 0,
                 }]}
                 thumbHeight={9}
                 fontSize={7}
@@ -169,22 +169,22 @@ class DimmingButton extends View {
 
 const styles = StyleSheet.create({
     container: {
-        flex:7,
-        width:88,
-        height:32,
-        justifyContent:'center',
-        alignItems:'center'
+        flex: 7,
+        width: 88,
+        height: 32,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     buttonContainer: {
-        flex:1,
-        alignItems:'stretch'
+        flex: 1,
+        alignItems: 'stretch'
     },
     button: {
-        flex:1,
+        flex: 1,
         justifyContent: 'center'
     },
     buttonText: {
-        fontSize:  12,
+        fontSize: 12,
         textAlign: 'center',
         textAlignVertical: 'center'
     },

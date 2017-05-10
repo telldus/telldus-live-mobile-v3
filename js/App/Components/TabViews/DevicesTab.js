@@ -39,8 +39,8 @@ class DevicesTab extends View {
     constructor(props) {
 		super(props);
 		this.state = {
-			deviceId:-1,
-			dimmer:false
+			deviceId: -1,
+			dimmer: false
 		};
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
@@ -67,7 +67,7 @@ class DevicesTab extends View {
 		}
 
 		return (
-			<View style={{flex:1}}>
+			<View style={{flex: 1}}>
 				<List
 					ref = "list"
 					dataSource = {this.props.dataSource}
@@ -91,11 +91,11 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(id) {
-		this.setState({deviceId:id});
+		this.setState({deviceId: id});
 	}
 
 	onCloseSelected() {
-		this.setState({deviceId:-1});
+		this.setState({deviceId: -1});
 	}
 
 	setScrollEnabled(enable) {
@@ -132,7 +132,7 @@ DevicesTab.propTypes = {
 
 const dataSource = new ListDataSource({
     rowHasChanged: (r1, r2) => r1 !== r2,
-    sectionHeaderHasChanged : (s1, s2) => s1 !== s2
+    sectionHeaderHasChanged: (s1, s2) => s1 !== s2
 });
 
 function select(store) {

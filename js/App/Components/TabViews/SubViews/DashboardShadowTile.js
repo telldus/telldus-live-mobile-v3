@@ -35,7 +35,7 @@ module.exports = class DashboardShadowTile extends View {
 					elevation: 10
             }]}>
                 <View style={{
-					flex:1,
+					flex: 1,
 					flexDirection: 'column',
 					borderRadius: 7,
 					overflow: 'hidden'

@@ -26,7 +26,7 @@ import Base from './Base';
 export default class RoundedCornerShadowView extends Base {
 	render() {
 		let style = {
-			flex:1,
+			flex: 1,
 			flexDirection: 'row',
 			borderRadius: 7,
 			overflow: 'hidden',
@@ -54,7 +54,7 @@ export default class RoundedCornerShadowView extends Base {
 					shadowOffset: {width: 0, height: 0},
 					shadowRadius: shadowRadius,
 					shadowOpacity: 1.0,
-					elevation:2
+					elevation: 2
 				}]}>
                 <View style={style}>
                     {this.props.children}

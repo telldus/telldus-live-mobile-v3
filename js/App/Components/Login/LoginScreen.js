@@ -78,15 +78,15 @@ class LoginForm extends View {
 					autoCorrect = {false}
 					placeholderTextColor = "#ffffff80"
 				/>
-				<View style = {{ height:20 }} />
+				<View style = {{ height: 20 }} />
 				<Button
 					name="lock"
 					style={styles.formSubmit}
 					onPress={ () => this.formSubmit(this.state.username, this.state.password) }
 				>{ this.state.isLoading ? 'Logging in...' : 'Login' }</Button>
-				<View style = {{ height:40 }} />
+				<View style = {{ height: 40 }} />
 				<Text style={{ color: '#bbb' }} onPress={() => Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err)) }>Forget your password? Need an account?</Text>
-				<View style = {{ height:10 }} />
+				<View style = {{ height: 10 }} />
 			</View>
 		);
 	}

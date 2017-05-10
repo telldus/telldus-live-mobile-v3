@@ -104,7 +104,7 @@ class DimmerProgressBar extends Component {
             borderRadius,
             overflow: 'hidden',
             backgroundColor: unfilledColor,
-            justifyContent:'center', alignItems:'center'
+            justifyContent: 'center', alignItems: 'center'
         };
 
         const progressStyle = {
@@ -143,8 +143,8 @@ class DimmerProgressBar extends Component {
                 {...restProps}>
                 <Animated.View style={progressStyle} />
                 <View style={[styles.textContainer, {
-                        width:this.state.containerWidth,
-                        height:this.state.containerHeight}]}>
+                        width: this.state.containerWidth,
+                        height: this.state.containerHeight}]}>
                     <Text ellipsizeMode="middle"
                         style={styles.text}>
                         {progressText}
@@ -157,13 +157,13 @@ class DimmerProgressBar extends Component {
 
 const styles = StyleSheet.create({
     textContainer: {
-        position:'absolute',
-        justifyContent:'center',
-        alignItems:'center'
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     text: {
-        color:'#1a355b',
-        backgroundColor:'transparent',
+        color: '#1a355b',
+        backgroundColor: 'transparent',
         textAlign: 'center',
         textAlignVertical: 'center'
     }

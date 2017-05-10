@@ -80,15 +80,15 @@ class NavigationalButton extends View {
 
 const styles = StyleSheet.create({
     container: {
-        flex:7,
-        height:32,
-        justifyContent:'center',
-        alignItems:'center'
+        flex: 7,
+        height: 32,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     navigationButton: {
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center'
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

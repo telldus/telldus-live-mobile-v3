@@ -29,7 +29,7 @@ import DeviceDetailModal from './DeviceDetailModal';
 import { bell, learn} from 'Actions/Devices';
 
 const BellButton = ({onBell}) => (
-    <RoundedCornerShadowView style={{height:36, marginHorizontal:8, marginVertical:16, justifyContent:'center', alignItems:'center'}}>
+    <RoundedCornerShadowView style={{height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center'}}>
         <Icon
 			name="bell"
 			size={26}
@@ -41,13 +41,13 @@ const BellButton = ({onBell}) => (
 
 const LearnButton = ({onLearn}) => (
     <RoundedCornerShadowView style={{
-        height:36,
-        marginHorizontal:8,
-        marginVertical:8,
-        justifyContent:'center',
-        alignItems:'center'}}>
+        height: 36,
+        marginHorizontal: 8,
+        marginVertical: 8,
+        justifyContent: 'center',
+        alignItems: 'center'}}>
         <TouchableOpacity onPress={onLearn}>
-            <Text style={{fontSize:16, color:'orange'}}>
+            <Text style={{fontSize: 16, color: 'orange'}}>
                 {'Learn'}
             </Text>
         </TouchableOpacity>
