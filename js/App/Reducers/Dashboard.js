@@ -99,11 +99,28 @@ export function parseDashboardForListView({ devices, sensors, dashboard }) {
 	}
 
 	if (isArray(sensors) && dashboard.sensors) {
-		let sensorsInDashboard = sensors.filter(item => dashboard.sensors.indexOf(item.id) >= 0);
+		let sensorsInDashboard = sensors.filter(item => {
+            for (let i = 0; i < dashboard.sensors.length; ++i) {
+				if (dashboard.sensors[i].id === item.id) {
+					return true;
+				}
+			}
+			return false;
+        });
+
 		sensorsInDashboard.map((item) => {
-			let dashboardItem = {
+			let displayType = 'default';
+			for (let i = 0; i < dashboard.sensors.length; ++i) {
+				if (dashboard.sensors[i].id === item.id) {
+					displayType = dashboard.sensors[i].displayType;
+					break;
+				}
+			}
+			const dashboardItem = {
 				objectType: 'sensor',
 				childObject: item,
+				tileWidth: 0,
+				displayType
 			};
 			items.push(dashboardItem);
 		});
