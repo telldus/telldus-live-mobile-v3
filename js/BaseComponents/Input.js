@@ -36,13 +36,13 @@ export default class Input extends Base {
 				fontSize: this.getTheme().inputFontSize,
 				lineHeight: this.getTheme().inputLineHeight
 			}
-		}
+		};
 	}
 
 	prepareRootProps() {
-		var defaultProps = {
+		let defaultProps = {
 			style: this.getInitialStyle().input
-		}
+		};
 
 		return computeProps(this.props, defaultProps);
 	}
@@ -50,7 +50,7 @@ export default class Input extends Base {
 
 		return (
 			<View style={{ flex: 1}}>
-				<TextInput {...this.prepareRootProps()} placeholderTextColor={ this.props.placeholderTextColor ? this.props.placeholderTextColor : this.getTheme().inputColorPlaceholder } underlineColorAndroid='rgba(0,0,0,0)' />
+				<TextInput {...this.prepareRootProps()} placeholderTextColor={ this.props.placeholderTextColor ? this.props.placeholderTextColor : this.getTheme().inputColorPlaceholder } underlineColorAndroid="rgba(0,0,0,0)" />
 			</View>
 		);
 	}

@@ -15,24 +15,57 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Actions/Dimmer
  */
 
 'use strict';
 
-import type { Action } from './types';
+import type { Action, ThunkAction } from './types';
 
-module.exports = {
-    showDimmerPopup: (name: String, value: Number) : Action => ({
-        type: 'SHOW_DIMMER_POPUP',
-        name,
-        value
-    }),
-    hideDimmerPopup: () : Action => ({
-        type: 'HIDE_DIMMER_POPUP'
-    }),
-    setDimmerValue: (value: Number) : Action => ({
-        type: 'SET_DIMMER_VALUE',
-        value
-    })
+import LiveApi from '../Lib/LiveApi';
+
+import throttle from 'lodash/throttle';
+import { format } from 'url';
+
+export const showDimmerPopup = (name: String, value: Number): Action => ({
+	type: 'SHOW_DIMMER_POPUP',
+	name,
+	value
+});
+
+export const hideDimmerPopup = (): Action => ({
+	type: 'HIDE_DIMMER_POPUP'
+});
+
+export const setDimmerValue = (id: Number, value: Number): ThunkAction => (dispatch) => {
+	dispatch({
+		type: 'SET_DIMMER_VALUE',
+		deviceId: id,
+		value,
+	});
 };
 
+export const updateDimmerValue = (id: Number, level: Number): ThunkAction => dispatch => {
+	const url = format({
+		pathname: '/device/dim',
+		query: {
+			id,
+			level,
+		},
+	});
+	const payload = {
+		url,
+		requestParams: {
+			method: 'GET'
+		}
+	};
+	return LiveApi(payload).then(response => dispatch({
+		type: 'DEVICE_DIM',
+		deviceId: id,
+		payload: {
+			...payload,
+			...response,
+		}
+	}));
+};

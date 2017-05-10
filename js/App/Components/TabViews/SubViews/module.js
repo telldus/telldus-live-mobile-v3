@@ -21,7 +21,7 @@
 
 'use strict';
 
-import ToggleDashboardTile from './ToggleDashboardTile';
+import DeviceDashboardTile from './DeviceDashboardTile';
 import ListHeader from './ListHeader';
 import SensorDashboardTile from './SensorDashboardTile';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
@@ -29,26 +29,38 @@ import DeviceRow from './DeviceRow';
 import DeviceRowHidden from './DeviceRowHidden';
 import SensorRow from './SensorRow';
 import SensorRowHidden from './SensorRowHidden';
+import ToggleButton from './ToggleButton';
+import BellButton from './BellButton';
+import NavigationalButton from './NavigationalButton';
+import DimmingButton from './DimmingButton';
+import DimmerPopup from './DimmerPopup';
+import DimmerProgressBar from './DimmerProgressBar';
+import JobRow from './JobRow';
+import ToggleDashboardTile from './ToggleDashboardTile';
 import DashboardShadowTile from './DashboardShadowTile';
 import BellDashboardTile from './BellDashboardTile';
 import NavigationalDashboardTile from './NavigationalDashboardTile';
 import DimmerDashboardTile from './DimmerDashboardTile';
-import DimmerPopup from './DimmerPopup';
-import DimmerProgressBar from './DimmerProgressBar';
 
 module.exports = {
 	DeviceRow: DeviceRow,
 	DeviceRowHidden: DeviceRowHidden,
-	ToggleDashboardTile: ToggleDashboardTile,
+	DeviceDashboardTile: DeviceDashboardTile,
+    ToggleDashboardTile: ToggleDashboardTile,
 	ListHeader: ListHeader,
 	SensorDashboardTile: SensorDashboardTile,
 	SensorDashboardTileSlide: SensorDashboardTileSlide,
 	SensorRow: SensorRow,
 	SensorRowHidden: SensorRowHidden,
-	DashboardShadowTile: DashboardShadowTile,
-	BellDashboardTile: BellDashboardTile,
-	NavigationalDashboardTile: NavigationalDashboardTile,
-	DimmerDashboardTile: DimmerDashboardTile,
-    DimmerPopup: DimmerPopup,
-    DimmerProgressBar: DimmerProgressBar
+	ToggleButton: ToggleButton,
+	BellButton: BellButton,
+	NavigationalButton : NavigationalButton,
+	DimmingButton: DimmingButton,
+	DimmerPopup: DimmerPopup,
+	DimmerProgressBar: DimmerProgressBar,
+	JobRow: JobRow,
+    DashboardShadowTile: DashboardShadowTile,
+    BellDashboardTile: BellDashboardTile,
+    NavigationalDashboardTile: NavigationalDashboardTile,
+    DimmerDashboardTile: DimmerDashboardTile
 };

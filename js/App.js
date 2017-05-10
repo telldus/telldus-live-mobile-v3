@@ -24,34 +24,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
-
 import {
 	LoginScreen,
 	AppNavigator,
-	WebsocketManager,
-	Push
 } from 'Components';
 
 class App extends React.Component {
-
-	componentDidMount() {
-		var push = new Push();
-	}
-
 	render() {
 		if (!this.props.accessToken) {
 			return <LoginScreen />;
 		}
 		return (
-			<View>
-				<WebsocketManager />
-				<AppNavigator />
-			</View>
+			<AppNavigator {...this.props}/>
 		);
 	}
-
-};
+}
 
 function select(store) {
 	return {

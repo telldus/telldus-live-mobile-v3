@@ -80,7 +80,7 @@ export default class CardItemComponent extends Base {
 				alignSelf: 'stretch',
 				height: this.ifShowCase() ? 120 : 300
 			}
-		}
+		};
 	}
 	getRightStyle() {
 		return {
@@ -104,53 +104,53 @@ export default class CardItemComponent extends Base {
 				justifyContent: 'flex-start',
 				backgroundColor: 'transparent'
 			}
-		}
+		};
 	}
 
 	thumbnailPresent() {
-		var thumbnailComponentPresent = false;
+		let thumbnailComponentPresent = false;
 		React.Children.forEach(this.props.children, function (child) {
-			if(child.type == Thumbnail)
-				thumbnailComponentPresent = true;
-		})
+			if (child.type === Thumbnail)
+				{thumbnailComponentPresent = true;}
+		});
 
 		return thumbnailComponentPresent;
 	}
 
 	imagePresent() {
-		var imagePresent = false;
+		let imagePresent = false;
 		React.Children.forEach(this.props.children, function (child) {
-			if(child.type == Image)
-				imagePresent = true;
-		})
+			if (child.type === Image)
+				{imagePresent = true;}
+		});
 
 		return imagePresent;
 	}
 
 	iconPresent() {
-		var iconComponentPresent = false;
+		let iconComponentPresent = false;
 		React.Children.forEach(this.props.children, function (child) {
-			if(child.type == Icon)
-				iconComponentPresent = true;
-		})
+			if (child.type === Icon)
+				{iconComponentPresent = true;}
+		});
 
 		return iconComponentPresent;
 	}
 
 	buttonPresent() {
-		var buttonComponentPresent = false;
+		let buttonComponentPresent = false;
 		React.Children.forEach(this.props.children, function (child) {
-			if(child.type == Button)
-				buttonComponentPresent = true;
-		})
+			if (child.type === Button)
+				{buttonComponentPresent = true;}
+		});
 
 		return buttonComponentPresent;
 	}
 
 	ifShowCase() {
-		var ifShowCase = false;
+		let ifShowCase = false;
 
-		if(this.props.cardBody) {
+		if (this.props.cardBody) {
 			ifShowCase = true;
 		}
 
@@ -159,22 +159,22 @@ export default class CardItemComponent extends Base {
 	}
 
 	notePresent() {
-		var notePresent = false;
+		let notePresent = false;
 
 		React.Children.forEach(this.props.children, function (child) {
-			if(child.type == Text && child.props.note)
-				notePresent = true;
+			if (child.type === Text && child.props.note)
+				{notePresent = true;}
 		});
 
 		return notePresent;
 	}
 
 	squareThumbs() {
-		var squareThumbs = false;
+		let squareThumbs = false;
 		if (this.thumbnailPresent()) {
 			React.Children.forEach(this.props.children, function (child) {
-				if(child.props.square)
-					squareThumbs = true;
+				if (child.props.square)
+					{squareThumbs = true;}
 			});
 		}
 
@@ -182,71 +182,71 @@ export default class CardItemComponent extends Base {
 	}
 
 	getChildProps(child) {
-		var defaultProps = {};
-		if(child.type == Image && !Array.isArray(this.props.children)) {
+		let defaultProps = {};
+		if (child.type === Image && !Array.isArray(this.props.children)) {
 			defaultProps = {
 				resizeMode: 'stretch',
 				style: this.getInitialStyle().fullImage
-			}
+			};
 		}
-		else if(child.type == Button) {
+		else if (child.type === Button) {
 			defaultProps = {
 				small: true,
 				style: this.getInitialStyle().itemButton
-			}
+			};
 		}
-		else if(child.type == Text) {
+		else if (child.type === Text) {
 			if ((this.props.header) || (this.props.footer)) {
 				defaultProps = {
 					style: this.getInitialStyle().dividerItemText
-				}
+				};
 			}
 			else {
-				if(child.props.note && this.thumbnailPresent()) {
+				if (child.props.note && this.thumbnailPresent()) {
 					defaultProps = {
 						style: this.getInitialStyle().itemSubNote
-					}
+					};
 				}
-				else if(child.props.note) {
+				else if (child.props.note) {
 					defaultProps = {
 						style: this.getInitialStyle().itemNote
-					}
+					};
 				}
 				else {
 					defaultProps = {
 						style: this.getInitialStyle().itemText
-					}
+					};
 				}
 			}
 		}
-		else if(child.type == Icon) {
+		else if (child.type === Icon) {
 			defaultProps = {
 				style: this.getInitialStyle().itemIcon
-			}
+			};
 		}
-		else if(child.type == Thumbnail) {
+		else if (child.type === Thumbnail) {
 			defaultProps = {
 				style: this.getInitialStyle().thumbnail
-			}
+			};
 		}
-		else if(child.type == Image ) {
+		else if (child.type === Image ) {
 			defaultProps = {
 				style: this.getInitialStyle().fullImage
-			}
+			};
 		}
 		else {
 			defaultProps = {
 				foregroundColor: this.getContextForegroundColor()
-			}
+			};
 		}
 
 		return computeProps(child.props, defaultProps);
 	}
 
 	prepareRootProps() {
-		var defaultProps = {};
+		let defaultProps = {};
 
-		if((this.props.header) || (this.props.footer)) {
+		if ((this.props.header) || (this.props.footer)) {
 
 			defaultProps = {
 				style: this.getInitialStyle().listItemDivider
@@ -266,28 +266,28 @@ export default class CardItemComponent extends Base {
 
 
 	renderChildren() {
-		var newChildren = [];
+		let newChildren = [];
 
-		if(!this.thumbnailPresent() && !this.iconPresent()) {
+		if (!this.thumbnailPresent() && !this.iconPresent()) {
 			newChildren = React.Children.map(this.props.children, (child, i) => {
 				return React.cloneElement(child, {...this.getChildProps(child), key: i});
 			});
 		}
 		else {
 			newChildren = [];
-			if(!Array.isArray(this.props.children)) {
+			if (!Array.isArray(this.props.children)) {
 				newChildren.push(
-					<View key='cardItem' style={{justifyContent: 'flex-start'}}>
+					<View key="cardItem" style={{justifyContent: 'flex-start'}}>
 						{React.cloneElement(this.props.children, this.getChildProps(this.props.children))}
 					</View>
 				);
 			}
 			else {
 
-				var childrenArray = React.Children.toArray(this.props.children);
+				let childrenArray = React.Children.toArray(this.props.children);
 				newChildren.push(React.cloneElement(childrenArray[0], this.getChildProps(childrenArray[0])));
 				newChildren.push(
-					<View key='cardItem' style={ this.notePresent() ? this.getRightStyle().right : this.squareThumbs() ? this.getRightStyle().right3 : this.getRightStyle().right2 }>
+					<View key="cardItem" style={ this.notePresent() ? this.getRightStyle().right : this.squareThumbs() ? this.getRightStyle().right3 : this.getRightStyle().right2 }>
 						{childrenArray.slice(1).map((child, i) => {
 							return React.cloneElement(child, {...this.getChildProps(child), key: i});
 						})}
@@ -301,7 +301,7 @@ export default class CardItemComponent extends Base {
 
 
 	render() {
-		return(
+		return (
 			<View {...this.prepareRootProps()} >
 				{this.renderChildren()}
 			</View>
