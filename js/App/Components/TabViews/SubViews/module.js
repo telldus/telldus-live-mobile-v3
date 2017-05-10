@@ -21,7 +21,6 @@
 
 'use strict';
 
-import DeviceDashboardTile from './DeviceDashboardTile';
 import ListHeader from './ListHeader';
 import SensorDashboardTile from './SensorDashboardTile';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
@@ -45,7 +44,6 @@ import DimmerDashboardTile from './DimmerDashboardTile';
 module.exports = {
 	DeviceRow: DeviceRow,
 	DeviceRowHidden: DeviceRowHidden,
-	DeviceDashboardTile: DeviceDashboardTile,
     ToggleDashboardTile: ToggleDashboardTile,
 	ListHeader: ListHeader,
 	SensorDashboardTile: SensorDashboardTile,
