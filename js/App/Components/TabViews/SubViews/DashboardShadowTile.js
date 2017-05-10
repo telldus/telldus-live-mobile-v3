@@ -33,16 +33,16 @@ module.exports = class DashboardShadowTile extends View {
 					shadowRadius: 3,
 					shadowOpacity: 1.0,
 					elevation: 10
-            }]}>
+				}]}>
                 <View style={{
-					flex: 1,
-					flexDirection: 'column',
-					borderRadius: 7,
-					overflow: 'hidden'
-				}}>
+	flex: 1,
+	flexDirection: 'column',
+	borderRadius: 7,
+	overflow: 'hidden'
+}}>
                     {this.props.children}
                 </View>
             </View>
 		);
-    }
+	}
 };

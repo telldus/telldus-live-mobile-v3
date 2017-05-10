@@ -29,31 +29,31 @@ import Modal from 'react-native-modal';
 
 class DeviceDetailModal extends View {
 
-    constructor(props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			isVisible: this.props.isVisible
 		};
 
-        this.onStarButtonSelected = this.onStarButtonSelected.bind(this);
+		this.onStarButtonSelected = this.onStarButtonSelected.bind(this);
 	}
 
-    onStarButtonSelected(inDashboard) {
-        if (inDashboard === true) {
-            this.props.onRemoveFromDashboard(this.props.deviceId);
-        } else {
-            this.props.onAddToDashboard(this.props.deviceId);
-        }
-    }
+	onStarButtonSelected(inDashboard) {
+		if (inDashboard === true) {
+			this.props.onRemoveFromDashboard(this.props.deviceId);
+		} else {
+			this.props.onAddToDashboard(this.props.deviceId);
+		}
+	}
 
 	render() {
-        let device = this.props.store.devices.find(item => item.id === this.props.deviceId);
-        let gateway = this.props.store.gateways.find(item => item.id === device.clientId);
-        let inDashboard = this.props.store.dashboard.devices.indexOf(this.props.deviceId) >= 0 ? true : false;
+		let device = this.props.store.devices.find(item => item.id === this.props.deviceId);
+		let gateway = this.props.store.gateways.find(item => item.id === device.clientId);
+		let inDashboard = this.props.store.dashboard.devices.indexOf(this.props.deviceId) >= 0 ? true : false;
 
-        let addToDashboardView = null;
-        if (inDashboard === true) {
-            addToDashboardView = (
+		let addToDashboardView = null;
+		if (inDashboard === true) {
+			addToDashboardView = (
                 <View style={styles.textGuide}>
                     <Text style={styles.textDeviceShownOnTheDashboard}>
                         {'Device is shown on the dashboard'}
@@ -63,23 +63,23 @@ class DeviceDetailModal extends View {
                     </Text>
                 </View>
             );
-        } else {
-            addToDashboardView = (
+		} else {
+			addToDashboardView = (
                 <View style={styles.textGuide}>
                     <Text style={styles.textDeviceShownOnTheDashboard}>
                         {'Tap to show device on dashboard'}
                     </Text>
                 </View>
             );
-        }
+		}
 
 		return (
             <Modal isVisible={this.state.isVisible}>
                 <Container style={styles.container}>
                     <View style={styles.header}>
                         <Icon name="wifi" size={26} color="white" style={{
-                            flex: 1, marginLeft: 8
-                            }}/>
+	flex: 1, marginLeft: 8
+}}/>
                         <Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
                             {device.name}
                         </Text>
@@ -107,62 +107,62 @@ class DeviceDetailModal extends View {
 
 DeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
-    onAddToDashboard: React.PropTypes.func.isRequired,
-    onRemoveFromDashboard: React.PropTypes.func.isRequired,
-    deviceId: React.PropTypes.number.isRequired
+	onAddToDashboard: React.PropTypes.func.isRequired,
+	onRemoveFromDashboard: React.PropTypes.func.isRequired,
+	deviceId: React.PropTypes.number.isRequired
 };
 
 const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      backgroundColor: 'white',
-      margin: 10
-  },
-  header: {
-      height: 46,
-      backgroundColor: '#1a355b',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center'
-  },
-  textHeaderTitle: {
-      marginLeft: 8,
-      color: 'white',
-      fontSize: 18,
-      fontWeight: 'bold',
-      flex: 8
-  },
-  body: {
-      flex: 10
-  },
-  textLocation: {
-      color: '#1a355b',
-      fontSize: 14,
-      marginTop: 12,
-      marginLeft: 8
-  },
-  textGuide: {
-      marginLeft: 8
-  },
-  textDeviceShownOnTheDashboard: {
-    color: '#1a355b',
-    fontSize: 13
-  },
-  textTapToRemove: {
-    color: '#1a355b',
-    fontSize: 10
-  },
-  bottom: {
-      height: 36,
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginLeft: 8
-  }
+	container: {
+		flex: 1,
+		backgroundColor: 'white',
+		margin: 10
+	},
+	header: {
+		height: 46,
+		backgroundColor: '#1a355b',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	textHeaderTitle: {
+		marginLeft: 8,
+		color: 'white',
+		fontSize: 18,
+		fontWeight: 'bold',
+		flex: 8
+	},
+	body: {
+		flex: 10
+	},
+	textLocation: {
+		color: '#1a355b',
+		fontSize: 14,
+		marginTop: 12,
+		marginLeft: 8
+	},
+	textGuide: {
+		marginLeft: 8
+	},
+	textDeviceShownOnTheDashboard: {
+		color: '#1a355b',
+		fontSize: 13
+	},
+	textTapToRemove: {
+		color: '#1a355b',
+		fontSize: 10
+	},
+	bottom: {
+		height: 36,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginLeft: 8
+	}
 });
 
 function select(store) {
 	return {
-        store
+		store
 	};
 }
 

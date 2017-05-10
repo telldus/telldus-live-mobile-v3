@@ -36,7 +36,7 @@ module.exports = class DeviceRowHidden extends View {
 				</TouchableOpacity>
 			</View>
 		);
-    }
+	}
 
 	onStarSelected(item) {
 		if (item.inDashboard) {

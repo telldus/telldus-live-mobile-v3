@@ -35,23 +35,23 @@ function getSensors(): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'RECEIVED_SENSORS',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }
 
 function processWebsocketMessageForSensor(action, data): Action {
 	switch (action) {
-		case 'value':
-			return {
-				type: 'SENSOR_UPDATE_VALUE',
-				payload: data
-			};
-		default:
+	case 'value':
+		return {
+			type: 'SENSOR_UPDATE_VALUE',
+			payload: data
+		};
+	default:
 	}
 
 	return {

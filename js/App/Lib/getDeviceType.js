@@ -18,7 +18,7 @@
  */
 
 export default function getDeviceType(supportedMethods) {
-    const {
+	const {
 		TURNON,
 		TURNOFF,
 		BELL,
@@ -29,13 +29,13 @@ export default function getDeviceType(supportedMethods) {
 	} = supportedMethods;
 
 	if (BELL) {
-        return 'BELL';
+		return 'BELL';
 	} else if (UP || DOWN || STOP) {
-        return 'NAVIGATIONAL';
+		return 'NAVIGATIONAL';
 	} else if (DIM) {
-        return 'DIMMER';
+		return 'DIMMER';
 	} else if (TURNON || TURNOFF) {
-        return 'TOGGLE';
+		return 'TOGGLE';
 	} else {
 		return 'UNSUPPORTED';
 	}

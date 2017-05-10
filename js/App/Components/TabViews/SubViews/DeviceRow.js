@@ -77,7 +77,7 @@ class DeviceRow extends View {
 			button = <View style={{flex: 7}}/>;
 		}
 
-        try {
+		try {
 			return (
 				<ListItem style = { Theme.Styles.rowFront }>
 					<Container style = {styles.container}>
@@ -104,15 +104,15 @@ class DeviceRow extends View {
 			console.log(e);
 			return ( <View /> );
 		}
-    }
+	}
 }
 
 const styles = StyleSheet.create({
-    container: {
+	container: {
 		marginLeft: 2,
 		flexDirection: 'row',
 		alignItems: 'stretch'
-    },
+	},
 	name: {
 		flex: 20,
 		justifyContent: 'center'

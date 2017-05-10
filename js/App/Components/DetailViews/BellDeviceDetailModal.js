@@ -41,11 +41,11 @@ const BellButton = ({onBell}) => (
 
 const LearnButton = ({onLearn}) => (
     <RoundedCornerShadowView style={{
-        height: 36,
-        marginHorizontal: 8,
-        marginVertical: 8,
-        justifyContent: 'center',
-        alignItems: 'center'}}>
+	height: 36,
+	marginHorizontal: 8,
+	marginVertical: 8,
+	justifyContent: 'center',
+	alignItems: 'center'}}>
         <TouchableOpacity onPress={onLearn}>
             <Text style={{fontSize: 16, color: 'orange'}}>
                 {'Learn'}
@@ -56,35 +56,35 @@ const LearnButton = ({onLearn}) => (
 
 class BellDeviceDetailModal extends View {
 
-    constructor(props) {
+	constructor(props) {
 		super(props);
-        this.onBell = this.onBell.bind(this);
+		this.onBell = this.onBell.bind(this);
 	}
 
-    onBell() {
-        this.props.onBell(this.props.deviceId);
-    }
+	onBell() {
+		this.props.onBell(this.props.deviceId);
+	}
 
 	render() {
-        let hasLearnButton = false;
-        let hasBellButton = false;
-        let bellButton = null;
-        let learnButton = null;
+		let hasLearnButton = false;
+		let hasBellButton = false;
+		let bellButton = null;
+		let learnButton = null;
 
-        const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
-        if (device) {
-            const { BELL, LEARN } = device.supportedMethods;
-            hasBellButton = BELL;
-            hasLearnButton = LEARN;
-        }
+		const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
+		if (device) {
+			const { BELL, LEARN } = device.supportedMethods;
+			hasBellButton = BELL;
+			hasLearnButton = LEARN;
+		}
 
-        if (hasBellButton) {
-            bellButton = <BellButton onBell={this.onBell} />;
-        }
+		if (hasBellButton) {
+			bellButton = <BellButton onBell={this.onBell} />;
+		}
 
-        if (hasLearnButton) {
-            learnButton = <LearnButton onLearn={this.onLearn} />;
-        }
+		if (hasLearnButton) {
+			learnButton = <LearnButton onLearn={this.onLearn} />;
+		}
 
 		return (
             <DeviceDetailModal
@@ -100,11 +100,11 @@ class BellDeviceDetailModal extends View {
 
 BellDeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
-    deviceId: React.PropTypes.number.isRequired
+	deviceId: React.PropTypes.number.isRequired
 };
 
 function select(store) {
-    return { store };
+	return { store };
 }
 
 function actions(dispatch) {

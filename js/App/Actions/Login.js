@@ -85,11 +85,11 @@ function getUserProfile(): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'RECEIVED_USER_PROFILE',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 
 	};

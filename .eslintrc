@@ -156,6 +156,7 @@
   // These rules are specific to JavaScript running on Node.js.
 
     "handle-callback-err": 1,        // enforces error handling in callbacks (off by default) (on by default in the node environment)
+    "indent": ["error", "tab"],      // enforce consistent indentation
     "no-mixed-requires": 1,          // disallow mixing regular variable and require declarations (off by default) (on by default in the node environment)
     "no-new-require": 1,             // disallow use of new operator with the require function (off by default) (on by default in the node environment)
     "no-path-concat": 1,             // disallow string concatenation with __dirname and __filename (off by default) (on by default in the node environment)
@@ -169,7 +170,7 @@
     "key-spacing": ["error", {
       "beforeColon": false,
       "afterColon": true
-    }],                              // enforce consistent spacing between keys and values in object literal properties (key-spacing)
+    }],                              // enforce consistent spacing between keys and values in object literal properties
     "comma-spacing": ["error", {
       "before": false,
       "after": true
@@ -185,8 +186,8 @@
     "new-parens": 1,                 // disallow the omission of parentheses when invoking a constructor with no arguments
     "no-nested-ternary": 0,          // disallow nested ternary expressions (off by default)
     "no-array-constructor": 1,       // disallow use of the Array constructor
-    "no-lonely-if": 0,               // disallow if as the only statement in an else block (off by default)
-    "no-new-object": 1,              // disallow use of the Object constructor
+    "no-lonely-if": 1,               // disallow if as the only statement in an else block (off by default)
+    "no-new-object": 2,              // disallow use of the Object constructor
     "no-spaced-func": 1,             // disallow space between function identifier and application
     "no-ternary": 0,                 // disallow the use of ternary operators (off by default)
     "no-trailing-spaces": 1,         // disallow trailing whitespace at the end of lines
@@ -194,9 +195,12 @@
     "no-mixed-spaces-and-tabs": 2,   // disallow mixed spaces and tabs for indentation
     "quotes": [1, "single", "avoid-escape"],         // specify whether double or single quotes should be used
     "quote-props": 0,                // require quotes around object literal property names (off by default)
-    "semi": 1,                       // require or disallow use of semicolons instead of ASI
+    "semi": 2,                       // require or disallow use of semicolons instead of ASI
     "sort-vars": 0,                  // sort variables within the same declaration block (off by default)
-    "keyword-spacing": 1,            // require a space after certain keywords (off by default)
+    "keyword-spacing": ["error", {
+      "before": true,
+      "after": true
+    }],                              // require a space after certain keywords (off by default)
     "space-in-brackets": 0,          // require or disallow spaces inside brackets (off by default)
     "space-in-parens": 0,            // require or disallow spaces inside parentheses (off by default)
     "space-infix-ops": 1,            // require spaces around operators

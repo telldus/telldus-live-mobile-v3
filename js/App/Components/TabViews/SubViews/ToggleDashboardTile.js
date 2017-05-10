@@ -26,7 +26,7 @@ import DashboardShadowTile from './DashboardShadowTile';
 
 const OffButton = ({isInState, tileWidth, onPress}) => (
 	<View style={[styles.buttonContainer, {
-			backgroundColor: isInState === 'TURNOFF' ? 'white' : '#eeeeee'}]}>
+		backgroundColor: isInState === 'TURNOFF' ? 'white' : '#eeeeee'}]}>
 		<TouchableOpacity
 			onPress={onPress}
 			style={styles.button} >
@@ -45,7 +45,7 @@ const OffButton = ({isInState, tileWidth, onPress}) => (
 
 const OnButton = ({isInState, tileWidth, onPress}) => (
 	<View style={[styles.buttonContainer, {
-			backgroundColor: isInState === 'TURNON' ? 'white' : '#eeeeee'}]}>
+		backgroundColor: isInState === 'TURNON' ? 'white' : '#eeeeee'}]}>
 		<TouchableOpacity
 			onPress={onPress}
 			style={styles.button} >
@@ -87,8 +87,8 @@ class ToggleDashboardTile extends View {
 		const name = this.props.item.childObject.name;
 
 		const { TURNON, TURNOFF } = this.props.item.childObject.supportedMethods;
-        const turnOnButton = TURNON ? <OnButton isInState={isInState} onPress={this.props.onTurnOn} tileWidth={tileWidth} /> : null;
-        const turnOffButton = TURNOFF ? <OffButton isInState={isInState} onPress={this.props.onTurnOff} tileWidth={tileWidth} /> : null;
+		const turnOnButton = TURNON ? <OnButton isInState={isInState} onPress={this.props.onTurnOn} tileWidth={tileWidth} /> : null;
+		const turnOffButton = TURNOFF ? <OffButton isInState={isInState} onPress={this.props.onTurnOff} tileWidth={tileWidth} /> : null;
 		return (
 			<DashboardShadowTile
 				item={this.props.item}

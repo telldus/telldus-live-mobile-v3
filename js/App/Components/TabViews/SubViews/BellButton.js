@@ -41,16 +41,16 @@ class BellButton extends View {
 				</TouchableOpacity>
             </RoundedCornerShadowView>
 		);
-    }
+	}
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 7,
-        height: 32,
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
+	container: {
+		flex: 7,
+		height: 32,
+		justifyContent: 'center',
+		alignItems: 'center'
+	}
 });
 
 module.exports = BellButton;

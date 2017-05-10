@@ -31,7 +31,7 @@ import throttle from 'lodash/throttle';
 
 const OffButton = ({item, enabled, onPress}) => (
     <View style={[styles.buttonContainer, {
-        backgroundColor: item.isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
+	backgroundColor: item.isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
         <TouchableOpacity
 			onPress={ enabled ? onPress : null}
 			style={styles.button} >
@@ -39,7 +39,7 @@ const OffButton = ({item, enabled, onPress}) => (
                 ellipsizeMode="middle"
                 numberOfLines={1}
                 style = {[styles.buttonText, {
-                    color: item.isInState === 'TURNOFF' && enabled ? 'red' : '#a2a2a2'}]}>
+	color: item.isInState === 'TURNOFF' && enabled ? 'red' : '#a2a2a2'}]}>
                 {'Off'}
             </Text>
         </TouchableOpacity>
@@ -48,7 +48,7 @@ const OffButton = ({item, enabled, onPress}) => (
 
 const OnButton = ({item, enabled, onPress}) => (
     <View style={[styles.buttonContainer, {
-        backgroundColor: item.isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
+	backgroundColor: item.isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
         <TouchableOpacity
 			onPress={ enabled ? onPress : null }
 			style={styles.button} >
@@ -56,7 +56,7 @@ const OnButton = ({item, enabled, onPress}) => (
                 ellipsizeMode="middle"
                 numberOfLines={1}
                 style = {[styles.buttonText, {
-                    color: item.isInState !== 'TURNOFF' && enabled ? 'green' : '#a2a2a2'}]}>
+	color: item.isInState !== 'TURNOFF' && enabled ? 'green' : '#a2a2a2'}]}>
                 {'On'}
             </Text>
         </TouchableOpacity>
@@ -65,85 +65,85 @@ const OnButton = ({item, enabled, onPress}) => (
 
 
 function getDimmerValue(value, isInState) {
-    let newValue = value || 0;
-    if (isInState === 'TURNON') {
-        return 255;
-    }
-    if (isInState === 'TURNOFF') {
-        return 0;
-    }
+	let newValue = value || 0;
+	if (isInState === 'TURNON') {
+		return 255;
+	}
+	if (isInState === 'TURNOFF') {
+		return 0;
+	}
 
-    newValue = parseInt(newValue, 10);
-    return newValue;
+	newValue = parseInt(newValue, 10);
+	return newValue;
 }
 
 function toDimmerValue(sliderValue) {
-    return Math.round(sliderValue * 255 / 100.0);
+	return Math.round(sliderValue * 255 / 100.0);
 }
 
 function toSliderValue(dimmerValue) {
-    return Math.round(dimmerValue * 100.0 / 255);
+	return Math.round(dimmerValue * 100.0 / 255);
 }
 
 class DimmingButton extends View {
-    constructor(props) {
+	constructor(props) {
 		super(props);
 
-        const value = getDimmerValue(this.props.item.value, this.props.item.isInState);
-        this.parentScrollEnabled = true;
-        this.state = {
-            buttonWidth: 0,
-            buttonHeight: 0,
-            value
-        };
+		const value = getDimmerValue(this.props.item.value, this.props.item.isInState);
+		this.parentScrollEnabled = true;
+		this.state = {
+			buttonWidth: 0,
+			buttonHeight: 0,
+			value
+		};
 
-        this.onValueChangeThrottled = throttle(this.props.onDimmerSlide, 200, {
-            trailing: true,
-        });
+		this.onValueChangeThrottled = throttle(this.props.onDimmerSlide, 200, {
+			trailing: true,
+		});
 	}
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.item.value === this.props.item.value && nextProps.item.isInState === this.props.item.isInState) {
-            return;
-        }
-        const dimmerValue = getDimmerValue(nextProps.item.value, nextProps.item.isInState);
-        this.setState({value: dimmerValue});
-    }
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.item.value === this.props.item.value && nextProps.item.isInState === this.props.item.isInState) {
+			return;
+		}
+		const dimmerValue = getDimmerValue(nextProps.item.value, nextProps.item.isInState);
+		this.setState({value: dimmerValue});
+	}
 
-    layoutView(x) {
-        let {width, height} = x.nativeEvent.layout;
-        this.setState({
-            buttonWidth: width,
-            buttonHeight: height
-        });
-    }
+	layoutView(x) {
+		let {width, height} = x.nativeEvent.layout;
+		this.setState({
+			buttonWidth: width,
+			buttonHeight: height
+		});
+	}
 
-    onValueChange(sliderValue) {
-        this.onValueChangeThrottled(toDimmerValue(sliderValue));
-    }
+	onValueChange(sliderValue) {
+		this.onValueChangeThrottled(toDimmerValue(sliderValue));
+	}
 
-    onSlidingStart(name:String, sliderValue:Number) {
+	onSlidingStart(name:String, sliderValue:Number) {
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
 	onSlidingComplete(sliderValue:Number) {
-        this.props.onDim(toDimmerValue(sliderValue));
+		this.props.onDim(toDimmerValue(sliderValue));
 		this.props.hideDimmerPopup();
 	}
 
 	render() {
-        const { TURNON, TURNOFF, DIM } = this.props.item.supportedMethods;
+		const { TURNON, TURNOFF, DIM } = this.props.item.supportedMethods;
 
-        const turnOnButton = <OnButton item={this.props.item} enabled={TURNON} onPress={this.props.onTurnOn} />;
-        const turnOffButton = <OffButton item={this.props.item} enabled={TURNOFF} onPress={this.props.onTurnOff} />;
-        const slider = DIM ?
+		const turnOnButton = <OnButton item={this.props.item} enabled={TURNON} onPress={this.props.onTurnOn} />;
+		const turnOffButton = <OffButton item={this.props.item} enabled={TURNOFF} onPress={this.props.onTurnOff} />;
+		const slider = DIM ?
             <VerticalSlider
                 style={[styles.slider, {
-                    width: this.state.buttonWidth / 5,
-                    height: this.state.buttonHeight,
-                    left: this.state.buttonWidth / 2 - this.state.buttonWidth / 10,
-                    bottom: 0,
-                }]}
+	width: this.state.buttonWidth / 5,
+	height: this.state.buttonHeight,
+	left: this.state.buttonWidth / 2 - this.state.buttonWidth / 10,
+	bottom: 0,
+}]}
                 thumbHeight={9}
                 fontSize={7}
                 item={this.props.item}
@@ -164,34 +164,34 @@ class DimmingButton extends View {
                 { slider }
             </RoundedCornerShadowView>
 		);
-    }
+	}
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 7,
-        width: 88,
-        height: 32,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    buttonContainer: {
-        flex: 1,
-        alignItems: 'stretch'
-    },
-    button: {
-        flex: 1,
-        justifyContent: 'center'
-    },
-    buttonText: {
-        fontSize: 12,
-        textAlign: 'center',
-        textAlignVertical: 'center'
-    },
-    slider: {
-        flex: 1,
-        position: 'absolute',
-    },
+	container: {
+		flex: 7,
+		width: 88,
+		height: 32,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	buttonContainer: {
+		flex: 1,
+		alignItems: 'stretch'
+	},
+	button: {
+		flex: 1,
+		justifyContent: 'center'
+	},
+	buttonText: {
+		fontSize: 12,
+		textAlign: 'center',
+		textAlignVertical: 'center'
+	},
+	slider: {
+		flex: 1,
+		position: 'absolute',
+	},
 });
 
 function actions(dispatch) {

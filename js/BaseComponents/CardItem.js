@@ -133,8 +133,8 @@ export default class CardItemComponent extends Base {
 		let iconComponentPresent = false;
 		React.Children.forEach(this.props.children, function (child) {
 			if (child.type === Icon)				{
-iconComponentPresent = true;
-}
+				iconComponentPresent = true;
+			}
 		});
 
 		return iconComponentPresent;
@@ -144,8 +144,8 @@ iconComponentPresent = true;
 		let buttonComponentPresent = false;
 		React.Children.forEach(this.props.children, function (child) {
 			if (child.type === Button)				{
-buttonComponentPresent = true;
-}
+				buttonComponentPresent = true;
+			}
 		});
 
 		return buttonComponentPresent;
@@ -167,8 +167,8 @@ buttonComponentPresent = true;
 
 		React.Children.forEach(this.props.children, function (child) {
 			if (child.type === Text && child.props.note)				{
-notePresent = true;
-}
+				notePresent = true;
+			}
 		});
 
 		return notePresent;
@@ -179,8 +179,8 @@ notePresent = true;
 		if (this.thumbnailPresent()) {
 			React.Children.forEach(this.props.children, function (child) {
 				if (child.props.square)					{
-squareThumbs = true;
-}
+					squareThumbs = true;
+				}
 			});
 		}
 
@@ -204,20 +204,18 @@ squareThumbs = true;
 				defaultProps = {
 					style: this.getInitialStyle().dividerItemText
 				};
-			}			else {
-				if (child.props.note && this.thumbnailPresent()) {
-					defaultProps = {
-						style: this.getInitialStyle().itemSubNote
-					};
-				}				else if (child.props.note) {
-					defaultProps = {
-						style: this.getInitialStyle().itemNote
-					};
-				}				else {
-					defaultProps = {
-						style: this.getInitialStyle().itemText
-					};
-				}
+			}			else if (child.props.note && this.thumbnailPresent()) {
+				defaultProps = {
+					style: this.getInitialStyle().itemSubNote
+				};
+			}				else if (child.props.note) {
+				defaultProps = {
+					style: this.getInitialStyle().itemNote
+				};
+			}				else {
+				defaultProps = {
+					style: this.getInitialStyle().itemText
+				};
 			}
 		}		else if (child.type === Icon) {
 			defaultProps = {

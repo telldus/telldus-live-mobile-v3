@@ -36,7 +36,7 @@ export default class SensorRowHidden extends View {
 				</TouchableOpacity>
 			</View>
 		);
-    }
+	}
 
 	onStarSelected(item) {
 		if (item.inDashboard) {

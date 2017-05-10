@@ -29,7 +29,7 @@ module.exports = {
 	addToDashboard: (kind: Kind, id: Number): Action => ({
 		type: 'ADD_TO_DASHBOARD',
 		kind,
-        id
+		id
 	}),
 	removeFromDashboard: (kind : Kind, id: Number) : Action => ({
 		type: 'REMOVE_FROM_DASHBOARD',

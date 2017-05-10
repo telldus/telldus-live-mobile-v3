@@ -30,55 +30,55 @@ const sensorInitialState = {};
 
 function sensorReducer(state: State = sensorInitialState, action: Action): State {
 	switch (action.type) {
-		case 'RECEIVED_SENSORS':
-			const newSensor = {
-				battery: state.battery,
-				clientId: parseInt(state.client, 10),
-				editable: Boolean(state.editable),
-				id: parseInt(state.id, 10),
-				ignored: Boolean(state.ignored),
-				keepHistory: Boolean(state.keepHistory),
-				lastUpdated: state.lastUpdated,
-				model: state.model,
-				name: state.name,
-				protocol: state.protocol,
-				sensorId: parseInt(state.sensorId, 10),
-			};
-			if (state.temp) {
-				newSensor['temperature'] = state.temp;
-			}
-			if (state.humidity) {
-				newSensor['humidity'] = state.humidity;
-			}
-			if (state.rrate) {
-				newSensor['rainRate'] = state.rrate;
-			}
-			if (state.rtot) {
-				newSensor['rainTotal'] = state.rtot;
-			}
-			if (state.uv) {
-				newSensor['uv'] = state.uv;
-			}
-			if (state.watt) {
-				newSensor['watt'] = state.watt;
-			}
-			if (state.lum) {
-				newSensor['luminance'] = state.lum;
-			}
-			if (state.wavg) {
-				newSensor['windAverage'] = state.wavg;
-			}
-			if (state.wgust) {
-				newSensor['windGust'] = state.wgust;
-			}
-			if (state.wdir) {
-				newSensor['windDirection'] = state.wdir;
-			}
-			return newSensor;
-		case 'LOGGED_OUT':
-			return sensorInitialState;
-		default:
-			return state;
+	case 'RECEIVED_SENSORS':
+		const newSensor = {
+			battery: state.battery,
+			clientId: parseInt(state.client, 10),
+			editable: Boolean(state.editable),
+			id: parseInt(state.id, 10),
+			ignored: Boolean(state.ignored),
+			keepHistory: Boolean(state.keepHistory),
+			lastUpdated: state.lastUpdated,
+			model: state.model,
+			name: state.name,
+			protocol: state.protocol,
+			sensorId: parseInt(state.sensorId, 10),
+		};
+		if (state.temp) {
+			newSensor['temperature'] = state.temp;
+		}
+		if (state.humidity) {
+			newSensor['humidity'] = state.humidity;
+		}
+		if (state.rrate) {
+			newSensor['rainRate'] = state.rrate;
+		}
+		if (state.rtot) {
+			newSensor['rainTotal'] = state.rtot;
+		}
+		if (state.uv) {
+			newSensor['uv'] = state.uv;
+		}
+		if (state.watt) {
+			newSensor['watt'] = state.watt;
+		}
+		if (state.lum) {
+			newSensor['luminance'] = state.lum;
+		}
+		if (state.wavg) {
+			newSensor['windAverage'] = state.wavg;
+		}
+		if (state.wgust) {
+			newSensor['windGust'] = state.wgust;
+		}
+		if (state.wdir) {
+			newSensor['windDirection'] = state.wdir;
+		}
+		return newSensor;
+	case 'LOGGED_OUT':
+		return sensorInitialState;
+	default:
+		return state;
 	}
 }
 

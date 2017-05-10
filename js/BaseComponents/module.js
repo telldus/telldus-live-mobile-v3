@@ -19,7 +19,7 @@
  * @providesModule BaseComponents
  */
 
- 'use strict';
+'use strict';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -75,8 +75,8 @@ module.exports = {
 	Title: Title,
 	Container: Container,
 	Content: Content,
-    BackgroundImage: BackgroundImage,
-    Button: Button,
+	BackgroundImage: BackgroundImage,
+	Button: Button,
 	FormattedNumber: FormattedNumber,
 	Text: Text,
 	Switch: Switch,

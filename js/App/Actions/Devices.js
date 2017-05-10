@@ -44,27 +44,27 @@ export function getDevices(): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'RECEIVED_DEVICES',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }
 
 export function processWebsocketMessageForDevice(action, data): Action {
 	switch (action) {
-		case 'setState':
-			return {
-				...data,
-				type: 'DEVICE_SET_STATE',
-			};
-		default:
-			return {
-				type: 'DEVICE_WEBSOCKET_UNHANDLED',
-				payload: data
-			};
+	case 'setState':
+		return {
+			...data,
+			type: 'DEVICE_SET_STATE',
+		};
+	default:
+		return {
+			type: 'DEVICE_WEBSOCKET_UNHANDLED',
+			payload: data
+		};
 	}
 }
 
@@ -78,11 +78,11 @@ export function deviceSetState(deviceId, state, stateValue = null): ThunkAction 
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'DEVICE_SET_STATE',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }
@@ -97,11 +97,11 @@ export function turnOn(deviceId): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'DEVICE_TURN_ON',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }
@@ -116,11 +116,11 @@ export function turnOff(deviceId): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'DEVICE_TURN_OFF',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }
@@ -135,11 +135,11 @@ export function bell(deviceId): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'DEVICE_BELL',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }
@@ -154,11 +154,11 @@ export function up(deviceId): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'DEVICE_UP',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }
@@ -173,11 +173,11 @@ export function down(deviceId): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'DEVICE_DOWN',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }
@@ -192,11 +192,11 @@ export function stop(deviceId): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'DEVICE_STOP',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }
@@ -211,11 +211,11 @@ export function learn(deviceId): ThunkAction {
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'DEVICE_LEARN',
-				payload: {
-					...payload,
-					...response,
-				}
+			payload: {
+				...payload,
+				...response,
 			}
+		}
 		));
 	};
 }

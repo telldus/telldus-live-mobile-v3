@@ -36,50 +36,50 @@ const gatewayInitialState = {
 
 function gateway(state: State = gatewayInitialState, action: Action): State {
 	switch (action.type) {
-		case 'RECEIVED_GATEWAYS':
-			state.id = parseInt(state.id, 10);
-			return {...gatewayInitialState, ...state};
-		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
-			const payload = action.payload;
-			if (state.id !== payload.gatewayId) {
-				return state;
-			}
-			if (payload.address === null) {
-				let newState = {
-					websocketAddress: {
-						address: null,
-						instance: null,
-						port: null
-					}
-				};
-				return {...state, ...newState};
-			}
-			return Object.assign({}, state, {
-				websocketAddress: {
-					address: payload.address,
-					instance: payload.instance,
-					port: payload.port
-				}
-			});
-		default:
+	case 'RECEIVED_GATEWAYS':
+		state.id = parseInt(state.id, 10);
+		return {...gatewayInitialState, ...state};
+	case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
+		const payload = action.payload;
+		if (state.id !== payload.gatewayId) {
 			return state;
+		}
+		if (payload.address === null) {
+			let newState = {
+				websocketAddress: {
+					address: null,
+					instance: null,
+					port: null
+				}
+			};
+			return {...state, ...newState};
+		}
+		return Object.assign({}, state, {
+			websocketAddress: {
+				address: payload.address,
+				instance: payload.instance,
+				port: payload.port
+			}
+		});
+	default:
+		return state;
 	}
 }
 
 function gateways(state: State = initialState, action: Action): State {
 	switch (action.type) {
-		case 'RECEIVED_GATEWAYS':
-			return action.payload.client.map(gatewayState =>
+	case 'RECEIVED_GATEWAYS':
+		return action.payload.client.map(gatewayState =>
 				gateway(gatewayState, action)
 			);
-		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
-			return state.map(gatewayState =>
+	case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
+		return state.map(gatewayState =>
 				gateway(gatewayState, action)
 			);
-		case 'LOGGED_OUT':
-			return initialState;
-		default:
-			return state;
+	case 'LOGGED_OUT':
+		return initialState;
+	default:
+		return state;
 	}
 }
 

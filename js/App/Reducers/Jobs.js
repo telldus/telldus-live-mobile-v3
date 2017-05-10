@@ -36,27 +36,27 @@ const jobInitialState = {};
 
 function reduceJob(state: State = jobInitialState, action: Action): State {
 	switch (action.type) {
-		case 'RECEIVED_JOBS':
-			let newJob = {
-                id: parseInt(state.id, 10),
-                deviceId: parseInt(state.deviceId, 10),
-                method: parseInt(state.method, 10),
-                methodValue: parseInt(state.methodValue, 10),
-                nextRunTime: parseInt(state.nextRunTime, 10),
-                type: state.type,
-                hour: parseInt(state.hour, 10),
-                minute: parseInt(state.minute, 10),
-                offset: parseInt(state.offset, 0),
-                randomInterval: parseInt(state.randomInterval, 10),
-                retries: parseInt(state.retries, 10),
-                retryInterval: parseInt(state.retryInterval, 10),
-                reps: parseInt(state.reps, 10),
-                active: Boolean(state.active),
-                weekdays: state.weekdays.split(',').map(day => parseInt(day, 10))
-			};
-			return newJob;
-		default:
-			return state;
+	case 'RECEIVED_JOBS':
+		let newJob = {
+			id: parseInt(state.id, 10),
+			deviceId: parseInt(state.deviceId, 10),
+			method: parseInt(state.method, 10),
+			methodValue: parseInt(state.methodValue, 10),
+			nextRunTime: parseInt(state.nextRunTime, 10),
+			type: state.type,
+			hour: parseInt(state.hour, 10),
+			minute: parseInt(state.minute, 10),
+			offset: parseInt(state.offset, 0),
+			randomInterval: parseInt(state.randomInterval, 10),
+			retries: parseInt(state.retries, 10),
+			retryInterval: parseInt(state.retryInterval, 10),
+			reps: parseInt(state.reps, 10),
+			active: Boolean(state.active),
+			weekdays: state.weekdays.split(',').map(day => parseInt(day, 10))
+		};
+		return newJob;
+	default:
+		return state;
 	}
 }
 

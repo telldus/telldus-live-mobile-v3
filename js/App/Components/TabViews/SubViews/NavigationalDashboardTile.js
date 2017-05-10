@@ -30,8 +30,8 @@ const UpButton = ({isInState, onPress}) => (
         onPress={onPress}>
         <Icon name="caret-up" size={42}
             style={{
-                color: isInState === 'UP' ? '#1a355b' : '#eeeeee'
-            }}
+	color: isInState === 'UP' ? '#1a355b' : '#eeeeee'
+}}
         />
     </TouchableOpacity>
 );
@@ -42,8 +42,8 @@ const DownButton = ({isInState, onPress}) => (
         onPress={onPress}>
         <Icon name="caret-down" size={42}
             style={{
-                color: isInState === 'DOWN' ? '#1a355b' : '#eeeeee'
-            }}
+	color: isInState === 'DOWN' ? '#1a355b' : '#eeeeee'
+}}
         />
     </TouchableOpacity>
 );
@@ -54,8 +54,8 @@ const StopButton = ({isInState, onPress}) => (
         onPress={onPress}>
         <Icon name="stop" size={30}
             style={{
-                color: isInState === 'STOP' ? '#1a355b' : '#eeeeee'
-            }}
+	color: isInState === 'STOP' ? '#1a355b' : '#eeeeee'
+}}
         />
     </TouchableOpacity>
 );
@@ -67,12 +67,12 @@ class NavigationalDashboardTile extends View {
 
 	render() {
 		const item = this.props.item;
-        const isInState = item.childObject.isInState;
+		const isInState = item.childObject.isInState;
 		const tileWidth = item.tileWidth - 8;
-        const { UP, DOWN, STOP } = item.childObject.supportedMethods;
-        const upButton = UP ? <UpButton isInState={isInState} onPress={this.props.onUp} /> : null;
-        const downButton = DOWN ? <DownButton isInState={isInState} onPress={this.props.onDown} /> : null;
-        const stopButton = STOP ? <StopButton isInState={isInState} onPress={this.props.onStop} /> : null;
+		const { UP, DOWN, STOP } = item.childObject.supportedMethods;
+		const upButton = UP ? <UpButton isInState={isInState} onPress={this.props.onUp} /> : null;
+		const downButton = DOWN ? <DownButton isInState={isInState} onPress={this.props.onDown} /> : null;
+		const stopButton = STOP ? <StopButton isInState={isInState} onPress={this.props.onStop} /> : null;
 
 		return (
 			<DashboardShadowTile
@@ -91,9 +91,9 @@ class NavigationalDashboardTile extends View {
 						ellipsizeMode="middle"
 						numberOfLines={1}
 						style = {[styles.name, {
-                            fontSize: Math.floor(tileWidth / 8),
-                            opacity: item.childObject.name ? 1 : 0.7,
-                    }]}>
+							fontSize: Math.floor(tileWidth / 8),
+							opacity: item.childObject.name ? 1 : 0.7,
+						}]}>
 						{item.childObject.name ? item.childObject.name : '(no name)'}
 					</Text>
 				</View>
@@ -103,23 +103,23 @@ class NavigationalDashboardTile extends View {
 }
 
 const styles = StyleSheet.create({
-    body: {
-        flex: 30,
-        flexDirection: 'row',
-        backgroundColor: 'white'
-    },
-    title: {
+	body: {
+		flex: 30,
+		flexDirection: 'row',
+		backgroundColor: 'white'
+	},
+	title: {
 		flex: 13,
 		backgroundColor: '#e56e18',
 		justifyContent: 'center'
-    },
-    navigationButton: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    name: {
-        padding: 5,
+	},
+	navigationButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	name: {
+		padding: 5,
 		color: 'white',
 		textAlign: 'center',
 		textAlignVertical: 'center'
