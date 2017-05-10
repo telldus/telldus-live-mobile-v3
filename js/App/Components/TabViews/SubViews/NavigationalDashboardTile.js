@@ -91,7 +91,7 @@ class NavigationalDashboardTile extends View {
 						ellipsizeMode="middle"
 						numberOfLines={1}
 						style = {[styles.name, {
-                            fontSize:  Math.floor(tileWidth / 8),
+                            fontSize: Math.floor(tileWidth / 8),
                             opacity: item.childObject.name ? 1 : 0.7,
                     }]}>
 						{item.childObject.name ? item.childObject.name : '(no name)'}
@@ -104,22 +104,22 @@ class NavigationalDashboardTile extends View {
 
 const styles = StyleSheet.create({
     body: {
-        flex:30,
+        flex: 30,
         flexDirection: 'row',
-        backgroundColor:'white'
+        backgroundColor: 'white'
     },
     title: {
-		flex:13,
+		flex: 13,
 		backgroundColor: '#e56e18',
 		justifyContent: 'center'
     },
     navigationButton: {
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center'
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     name: {
-        padding : 5,
+        padding: 5,
 		color: 'white',
 		textAlign: 'center',
 		textAlignVertical: 'center'

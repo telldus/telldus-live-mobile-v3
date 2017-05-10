@@ -35,7 +35,7 @@ const OffButton = ({isInState, tileWidth, onPress}) => (
 				numberOfLines={1}
 				style = {[styles.buttonText, {
 					color: isInState === 'TURNOFF' ? 'red' : '#a0a0a0',
-					fontSize:  Math.floor(tileWidth / 8)
+					fontSize: Math.floor(tileWidth / 8)
 				}]}>
 				{'Off'}
 			</Text>
@@ -54,7 +54,7 @@ const OnButton = ({isInState, tileWidth, onPress}) => (
 				numberOfLines={1}
 				style = {[styles.buttonText, {
 					color: isInState === 'TURNON' ? 'green' : '#a0a0a0',
-					fontSize:  Math.floor(tileWidth / 8)}]}>
+					fontSize: Math.floor(tileWidth / 8)}]}>
 				{'On'}
 			</Text>
 		</TouchableOpacity>
@@ -68,7 +68,7 @@ const Title = ({isInState, name, tileWidth}) => (
 			ellipsizeMode="middle"
 			numberOfLines={1}
 			style = {[styles.titleText, {
-				fontSize:  Math.floor(tileWidth / 8),
+				fontSize: Math.floor(tileWidth / 8),
 				opacity: name ? 1 : 0.7
 			}]}>
 			{name ? name : '(no name)'}
@@ -96,7 +96,7 @@ class ToggleDashboardTile extends View {
 					width: tileWidth,
 					height: tileWidth
 				}]}>
-				<View style={{flexDirection: 'row', flex:30}}>
+				<View style={{flexDirection: 'row', flex: 30}}>
 					{ turnOffButton }
 					{ turnOnButton }
 				</View>
@@ -108,11 +108,11 @@ class ToggleDashboardTile extends View {
 
 const styles = StyleSheet.create({
 	buttonContainer: {
-		flex:1,
-		alignItems:'stretch'
+		flex: 1,
+		alignItems: 'stretch'
 	},
 	button: {
-		flex:1,
+		flex: 1,
 		justifyContent: 'center'
 	},
 	buttonText: {
@@ -120,11 +120,11 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center'
 	},
 	titleContainer: {
-		flex:13,
+		flex: 13,
 		justifyContent: 'center'
 	},
 	titleText: {
-		padding : 5,
+		padding: 5,
 		color: 'white',
 		textAlign: 'center',
 		textAlignVertical: 'center'

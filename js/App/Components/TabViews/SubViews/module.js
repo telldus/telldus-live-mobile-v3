@@ -60,7 +60,7 @@ module.exports = {
     DimmerProgressBar: DimmerProgressBar,
 	ToggleButton: ToggleButton,
 	BellButton: BellButton,
-	NavigationalButton : NavigationalButton,
+	NavigationalButton: NavigationalButton,
 	DimmingButton: DimmingButton,
 	JobRow: JobRow,
 };

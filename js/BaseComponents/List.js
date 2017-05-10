@@ -148,7 +148,7 @@ class ListComponent extends React.Component {
 				ref={ c => this.setRefs(c) }
 				onScroll={ e => this.onScroll(e) }
 				renderRow={this.renderRow.bind(this)}
-				contentInset={{bottom:64}}
+				contentInset={{bottom: 64}}
 			/>
 		);
 	}

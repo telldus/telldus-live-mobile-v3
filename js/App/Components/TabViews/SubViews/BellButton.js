@@ -46,10 +46,10 @@ class BellButton extends View {
 
 const styles = StyleSheet.create({
     container: {
-        flex:7,
-        height:32,
-        justifyContent:'center',
-        alignItems:'center'
+        flex: 7,
+        height: 32,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
 

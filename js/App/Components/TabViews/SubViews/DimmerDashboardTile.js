@@ -37,7 +37,7 @@ const Title = ({ isInState, name, tileWidth }) => (
 			ellipsizeMode="middle"
 			numberOfLines={1}
 			style = {[styles.name, {
-				fontSize:  Math.floor(tileWidth / 8),
+				fontSize: Math.floor(tileWidth / 8),
 				opacity: name ? 1 : 0.7,
 			}]}>
 			{name ? name : '(no name)'}
@@ -47,7 +47,7 @@ const Title = ({ isInState, name, tileWidth }) => (
 
 const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
     <View style={{
-		flex:1,
+		flex: 1,
 		backgroundColor: isInState === 'TURNOFF' && enabled ? 'white' : '#eeeeee'
 	}}>
 		<TouchableOpacity
@@ -58,7 +58,7 @@ const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
 				numberOfLines={1}
 				style = {[styles.buttonText, {
 					color: isInState === 'TURNOFF' ? 'red' : '#a0a0a0',
-					fontSize:  Math.floor(tileWidth / 8)
+					fontSize: Math.floor(tileWidth / 8)
 				}]}>
 				{'Off'}
 			</Text>
@@ -68,7 +68,7 @@ const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
 
 const OnButton = ({ isInState, enabled, tileWidth, onPress }) => (
     <View style={{
-		flex:1,
+		flex: 1,
 		backgroundColor: isInState !== 'TURNOFF' && enabled ? 'white' : '#eeeeee'
 	}}>
 		<TouchableOpacity
@@ -79,7 +79,7 @@ const OnButton = ({ isInState, enabled, tileWidth, onPress }) => (
 				numberOfLines={1}
 				style = {[styles.buttonText, {
 					color: isInState !== 'TURNOFF' ? 'green' : '#a0a0a0',
-					fontSize:  Math.floor(tileWidth / 8)
+					fontSize: Math.floor(tileWidth / 8)
 				}]}>
 				{'On'}
 			</Text>
@@ -129,14 +129,14 @@ class DimmerDashboardTile extends View {
             return;
         }
         const dimmerValue = getDimmerValue(nextProps.item.childObject.value, nextProps.item.childObject.isInState);
-        this.setState({value:dimmerValue});
+        this.setState({value: dimmerValue});
     }
 
     layoutView(x) {
         let {width, height} = x.nativeEvent.layout;
         this.setState({
-            bodyWidth:width,
-            bodyHeight:height
+            bodyWidth: width,
+            bodyHeight: height
         });
     }
 
@@ -167,7 +167,7 @@ class DimmerDashboardTile extends View {
                     width: this.state.bodyWidth / 5,
                     height: this.state.bodyHeight,
                     left: this.state.bodyWidth / 2 - this.state.bodyWidth / 10,
-                    bottom:0,
+                    bottom: 0,
                 }]}
                 item={this.props.item.childObject}
                 value={toSliderValue(this.state.value)}
@@ -197,25 +197,25 @@ class DimmerDashboardTile extends View {
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
-        justifyContent:'center'
+        flex: 1,
+        justifyContent: 'center'
     },
 	body: {
-        flex:30,
+        flex: 30,
         flexDirection: 'row'
     },
     title: {
-		flex:13,
+		flex: 13,
 		justifyContent: 'center'
     },
 	name: {
-        padding : 5,
+        padding: 5,
 		color: 'white',
 		textAlign: 'center',
 		textAlignVertical: 'center'
 	},
     button: {
-        flex:1,
+        flex: 1,
         justifyContent: 'center'
     },
     buttonText: {
@@ -227,21 +227,21 @@ const styles = StyleSheet.create({
         position: 'absolute',
     },
     thumb: {
-        flex:1,
+        flex: 1,
         borderRadius: 7,
-        borderWidth:1,
-        borderColor:'gray',
-        elevation:2,
-        position:'absolute',
-        bottom:0,
-        width:30,
-        height:12,
+        borderWidth: 1,
+        borderColor: 'gray',
+        elevation: 2,
+        position: 'absolute',
+        bottom: 0,
+        width: 30,
+        height: 12,
         justifyContent: 'center',
-        backgroundColor:'white'
+        backgroundColor: 'white'
     },
     thumbText: {
         color: '#a2a2a2',
-        fontSize:  10,
+        fontSize: 10,
         textAlign: 'center',
         textAlignVertical: 'center'
     }

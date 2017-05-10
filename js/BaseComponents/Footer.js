@@ -72,7 +72,7 @@ export default class Footer extends Base {
 				</View>}
 
 				{ Array.isArray(this.props.children) &&
-				<View style={{flex:1, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row'}}>
+				<View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row'}}>
 					{this.props.children[2]}
 				</View>}
 			</View>

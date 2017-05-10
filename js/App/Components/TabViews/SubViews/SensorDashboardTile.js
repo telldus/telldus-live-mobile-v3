@@ -153,21 +153,21 @@ class SensorDashboardTile extends View {
 					width: tileWidth,
 					height: tileWidth
 				}]}>
-				<TouchableOpacity onPress={this.changeDisplayType} style={{flex:1, justifyContent: 'center'}}>
-				<View style={{flexDirection: 'row', flex:30}}>
+				<TouchableOpacity onPress={this.changeDisplayType} style={{flex: 1, justifyContent: 'center'}}>
+				<View style={{flexDirection: 'row', flex: 30}}>
 					{slides[selectedSlideIndex]}
 				</View>
 				<View style={{
-					flex:13,
+					flex: 13,
 					backgroundColor: item.childObject.state === 0 ? '#bfbfbf' : '#e56e18',
 					justifyContent: 'center'}}>
 					<Text
 						ellipsizeMode="middle"
 						numberOfLines={1}
 						style = {{
-							padding : 5,
+							padding: 5,
 							color: 'white',
-							fontSize:  Math.floor(tileWidth / 8),
+							fontSize: Math.floor(tileWidth / 8),
 							opacity: item.childObject.name ? 1 : 0.7,
 							textAlign: 'center',
 							textAlignVertical: 'center',

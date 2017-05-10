@@ -51,7 +51,7 @@ export default class CardItemComponent extends Base {
 			},
 			itemText: {
 				fontSize: this.ifShowCase() ? 14 : 15,
-				marginTop:  this.ifShowCase() ? 10 : 0,
+				marginTop: this.ifShowCase() ? 10 : 0,
 				color: this.getContextForegroundColor()
 			},
 			dividerItemText: {
@@ -84,12 +84,12 @@ export default class CardItemComponent extends Base {
 	}
 	getRightStyle() {
 		return {
-			right : {
+			right: {
 				flex: 1,
 				paddingLeft: 10,
 				backgroundColor: 'transparent'
 			},
-			right2 : {
+			right2: {
 				flex: 1,
 				flexDirection: 'row',
 				paddingLeft: 10,
@@ -97,7 +97,7 @@ export default class CardItemComponent extends Base {
 				justifyContent: 'space-between',
 				backgroundColor: 'transparent'
 			},
-			right3 : {
+			right3: {
 				flex: 1,
 				flexDirection: 'column',
 				paddingLeft: 10,

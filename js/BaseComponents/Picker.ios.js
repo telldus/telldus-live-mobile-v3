@@ -39,7 +39,7 @@ export default class PickerComponent extends Base {
     constructor(props) {
         super(props);
         this.state = {
-            modalVisible : false,
+            modalVisible: false,
             current: this.getSelected().props.label
         };
     }

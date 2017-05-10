@@ -78,21 +78,21 @@ class ToggleButton extends View {
 
 const styles = StyleSheet.create({
     container: {
-        flex:7,
-        height:32,
-        justifyContent:'center',
-        alignItems:'center'
+        flex: 7,
+        height: 32,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     buttonContainer: {
-        flex:1,
-        alignItems:'stretch'
+        flex: 1,
+        alignItems: 'stretch'
     },
     button: {
-        flex:1,
+        flex: 1,
         justifyContent: 'center'
     },
     buttonText: {
-        fontSize:  12,
+        fontSize: 12,
         textAlign: 'center',
         textAlignVertical: 'center'
     }

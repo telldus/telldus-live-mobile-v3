@@ -31,12 +31,12 @@ module.exports = {
 		kind,
         id
 	}),
-	removeFromDashboard : (kind : Kind, id: Number) : Action => ({
+	removeFromDashboard: (kind : Kind, id: Number) : Action => ({
 		type: 'REMOVE_FROM_DASHBOARD',
 		kind,
 		id
 	}),
-	changeSensorDisplayType : (id: Number, displayType: String) : Action => ({
+	changeSensorDisplayType: (id: Number, displayType: String) : Action => ({
 		type: 'CHANGE_SENSOR_DISPLAY_TYPE',
 		id,
 		displayType

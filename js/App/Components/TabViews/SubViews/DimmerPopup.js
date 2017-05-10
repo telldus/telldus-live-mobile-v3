@@ -35,7 +35,7 @@ class DimmerPopup extends Component {
         animationOutTiming: 300,
         isVisible: false,
         hideOnBack: true,
-        value:1
+        value: 1
     }
 
     constructor(props) {
@@ -115,25 +115,25 @@ class DimmerPopup extends Component {
                     onLayout={this.handleLayout.bind(this)}
                     ref={c => this.setRefs(c)}
                     style={{
-                        marginTop:22,
+                        marginTop: 22,
                         marginHorizontal: 8,
-                        position:'absolute',
-                        width:deviceWidth - 16,
-                        height:56,
-                        backgroundColor:'white',
+                        position: 'absolute',
+                        width: deviceWidth - 16,
+                        height: 56,
+                        backgroundColor: 'white',
                         borderRadius: 7,
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
                     <Text ellipsizeMode="middle"
-                        style={{color:'#1a355b'}}>
+                        style={{color: '#1a355b'}}>
                         {this.props.name}
                     </Text>
                     <DimmerProgressBar
                         progress={this.props.value}
                         height={16}
                         width={deviceWidth - 32}
-                        style={{alignItems:'center', justifyContent:'center'}} />
+                        style={{alignItems: 'center', justifyContent: 'center'}} />
                 </View>
             );
         } else {

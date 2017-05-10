@@ -74,7 +74,7 @@ class DeviceRow extends View {
 				item={this.props}
 			/>;
 		} else {
-			button = <View style={{flex:7}}/>;
+			button = <View style={{flex: 7}}/>;
 		}
 
         try {
@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
     container: {
 		marginLeft: 2,
 		flexDirection: 'row',
-		alignItems:'stretch'
+		alignItems: 'stretch'
     },
 	name: {
-		flex:20,
+		flex: 20,
 		justifyContent: 'center'
 	},
 	text: {
@@ -124,10 +124,10 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center',
 	},
 	gear: {
-		flex:2,
+		flex: 2,
 		justifyContent: 'center',
-		alignItems:'center',
-		marginRight:8
+		alignItems: 'center',
+		marginRight: 8
 	}
 });
 

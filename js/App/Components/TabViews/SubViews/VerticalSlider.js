@@ -44,7 +44,7 @@ class VerticalSlider extends View {
             minimumValue: 0,
             maximumValue: 100,
             step: 1,
-            displayedValue:getSliderLabel(this.props.value)
+            displayedValue: getSliderLabel(this.props.value)
         };
 	}
 
@@ -148,13 +148,13 @@ class VerticalSlider extends View {
     layoutView(x) {
         let {width, height} = x.nativeEvent.layout;
         this.setState({
-            containerWidth:width,
-            containerHeight:height
+            containerWidth: width,
+            containerHeight: height
         });
     }
 
     onValueChange(val) {
-        this.setState({displayedValue:getSliderLabel(val)});
+        this.setState({displayedValue: getSliderLabel(val)});
     }
 
 	render() {
@@ -168,8 +168,8 @@ class VerticalSlider extends View {
             <View style={[this.props.style]}
                 onLayout={this.layoutView.bind(this)}>
                 <Animated.View style={[styles.thumb, {
-                    width:this.state.containerWidth,
-                    height:thumbHeight,
+                    width: this.state.containerWidth,
+                    height: thumbHeight,
                     transform: [{ translateY: thumbBottom}]
                     }]}
                     {...this.panResponder.panHandlers}>
@@ -187,15 +187,15 @@ class VerticalSlider extends View {
 
 const styles = StyleSheet.create({
     thumb: {
-        flex:1,
-        position:'absolute',
-        bottom:0,
+        flex: 1,
+        position: 'absolute',
+        bottom: 0,
         justifyContent: 'center',
         borderRadius: 7,
-        borderWidth:1,
-        borderColor:'gray',
-        elevation:2,
-        backgroundColor:'white',
+        borderWidth: 1,
+        borderColor: 'gray',
+        elevation: 2,
+        backgroundColor: 'white',
     },
     thumbText: {
         color: '#a2a2a2',

@@ -29,7 +29,7 @@ import DeviceDetailModal from './DeviceDetailModal';
 import { up, down, stop, learn} from 'Actions/Devices';
 
 const NavigationalButton = ({device, onUp, onDown, onStop}) => (
-    <RoundedCornerShadowView style={{flexDirection:'row', height:36, marginHorizontal:8, marginVertical:16, justifyContent:'center', alignItems:'center'}}>
+    <RoundedCornerShadowView style={{flexDirection: 'row', height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center'}}>
         <TouchableOpacity
             style={styles.navigationButton}
             onPress={onUp}>
@@ -50,13 +50,13 @@ const NavigationalButton = ({device, onUp, onDown, onStop}) => (
 
 const LearnButton = ({onLearn}) => (
     <RoundedCornerShadowView style={{
-        height:36,
-        marginHorizontal:8,
-        marginVertical:8,
-        justifyContent:'center',
-        alignItems:'center'}}>
+        height: 36,
+        marginHorizontal: 8,
+        marginVertical: 8,
+        justifyContent: 'center',
+        alignItems: 'center'}}>
         <TouchableOpacity onPress={onLearn}>
-            <Text style={{fontSize:16, color:'orange'}}>
+            <Text style={{fontSize: 16, color: 'orange'}}>
                 {'Learn'}
             </Text>
         </TouchableOpacity>
@@ -131,9 +131,9 @@ NavigationalDeviceDetailModal.propTypes = {
 
 const styles = StyleSheet.create({
   navigationButton: {
-      flex:1,
-      justifyContent:'center',
-      alignItems:'center'
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
   }
 });
 

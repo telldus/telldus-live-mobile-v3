@@ -22,8 +22,8 @@ import Color from 'color';
 import { Platform } from 'react-native';
 
 export default {
-	brandPrimary : '#1b365d',
-	brandSecondary : '#e26901',
+	brandPrimary: '#1b365d',
+	brandSecondary: '#e26901',
 	brandTertiary: '#202020',
 	brandInfo: '#5bc0de',
 	brandSuccess: '#5cb85c',
