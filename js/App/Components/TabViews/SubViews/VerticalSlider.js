@@ -23,6 +23,16 @@ import React, { PropTypes } from 'react';
 import { Text, View } from 'BaseComponents';
 import {PanResponder, Animated, StyleSheet } from 'react-native';
 
+function getSliderLabel(value) {
+    if (value === 100) {
+        return 'On';
+    } else if (value === 0) {
+        return 'Off';
+    } else {
+        return value;
+    }
+}
+
 class VerticalSlider extends View {
     constructor(props) {
 		super(props);
@@ -34,7 +44,7 @@ class VerticalSlider extends View {
             minimumValue: 0,
             maximumValue: 100,
             step: 1,
-            displayedValue:this.props.value,
+            displayedValue:getSliderLabel(this.props.value)
         };
 	}
 
@@ -48,6 +58,12 @@ class VerticalSlider extends View {
             onPanResponderTerminationRequest: this.handlePanResponderRequestEnd,
             onPanResponderTerminate: this.handlePanResponderEnd,
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const newValue = nextProps.value;
+        this.setCurrentValue(newValue);
+        this.onValueChange(this.state.value.__getValue());
     }
 
     handleStartShouldSetPanResponder = (e: Object, /*gestureState: Object*/): boolean => {
@@ -94,7 +110,7 @@ class VerticalSlider extends View {
         this.setCurrentValue(this.getValue(gestureState));
 
         if (this.props.onSlidingComplete) {
-            this.props.onSlidingComplete();
+            this.props.onSlidingComplete(this.state.value.__getValue());
         }
     }
 
@@ -138,7 +154,7 @@ class VerticalSlider extends View {
     }
 
     onValueChange(val) {
-        this.setState({displayedValue:val});
+        this.setState({displayedValue:getSliderLabel(val)});
     }
 
 	render() {

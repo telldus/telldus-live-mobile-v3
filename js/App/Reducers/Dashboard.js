@@ -17,10 +17,10 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @flow
 'use strict';
 
-import type { Action } from '../actions/types';
+import isArray from 'lodash/isArray';
+import type { Action } from 'Actions/Types';
 
 type State = {
 	devices: Array<Number>,
@@ -32,7 +32,7 @@ const initialState: State = {
     sensors: [],
 };
 
-function dashboard(state: State = initialState, action : Action): State {
+export default function dashboardReducer(state: State = initialState, action : Action): State {
     if (action.type === 'ADD_TO_DASHBOARD') {
         if (action.kind === 'sensor') {
             if (state.sensors.filter((item) => item.id === action.id).length > 0) {
@@ -84,4 +84,29 @@ function dashboard(state: State = initialState, action : Action): State {
     return state;
 }
 
-module.exports = dashboard;
+export function parseDashboardForListView({ devices, sensors, dashboard }) {
+	const items = [];
+    dashboard = dashboard || {};
+	if (isArray(devices) && dashboard.devices) {
+		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
+		devicesInDashboard.map((item) => {
+			let dashboardItem = {
+				objectType: 'device',
+				childObject: item,
+			};
+			items.push(dashboardItem);
+		});
+	}
+
+	if (isArray(sensors) && dashboard.sensors) {
+		let sensorsInDashboard = sensors.filter(item => dashboard.sensors.indexOf(item.id) >= 0);
+		sensorsInDashboard.map((item) => {
+			let dashboardItem = {
+				objectType: 'sensor',
+				childObject: item,
+			};
+			items.push(dashboardItem);
+		});
+	}
+	return items;
+}

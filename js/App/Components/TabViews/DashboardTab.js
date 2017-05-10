@@ -27,6 +27,15 @@ import { changeSensorDisplayType, showDimmerPopup, hideDimmerPopup, setDimmerVal
 import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
+import { parseDashboardForListView } from '../../Reducers/Dashboard';
+
+
+// TODO: this view renders before the sensor and device data is retrieved
+//       that might not be a problem, but we should know why
+//       - store.devices and store.sensors are empty objects (not even arrays)
+//       - store.dashboard is populated
+//       better solution would be to render the old sensor/device data but
+//       to indicate also it is old data
 
 class DashboardTab extends View {
 	constructor(props) {
@@ -50,6 +59,16 @@ class DashboardTab extends View {
 			this.refs.list.setScrollEnabled(enable);
 		}
 	}
+
+	componentWillReceiveProps(nextProps) {
+		// TODO: write a better comparison function
+		if (nextProps.dataArray === this.props.dataArray) {
+			return;
+		}
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRows(nextProps.dataArray),
+		});
+    }
 
 	onSlidingStart(name:String, value:Number) {
 		this.props.dispatch(showDimmerPopup(name, value));
@@ -96,20 +115,15 @@ class DashboardTab extends View {
 	}
 
 	render() {
-		let dataSource;
-		const data = this._calculateItemDimensions(this.state.listWidth);
-		if (data) {
-			dataSource = new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(data);
-		}
-		dataSource = dataSource ? dataSource : this.state.dataSource;
+		// add to List props: enableEmptySections={true}, to surpress warning
 
 		return (
 			<View onLayout={this._onLayout}>
 				<List
 					ref="list"
 					contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}
-					dataSource = {dataSource}
-					renderRow = {this._renderRow.bind(this)}
+					dataSource = {this.state.dataSource}
+					renderRow = {this._renderRow(this.state.tileWidth)}
 					pageSize = {100}
 				/>
 			</View>
@@ -193,54 +207,9 @@ class DashboardTab extends View {
 	}
 }
 
-function _parseDataIntoItems(devices, sensors, dashboard) {
-	const items = [];
-
-	if (devices && devices.filter) {
-		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
-		devicesInDashboard.map((item) => {
-			const dashboardItem = {
-				objectType: 'device',
-				childObject: item,
-				tileWidth: 0
-			};
-			items.push(dashboardItem);
-		});
-	}
-
-	if (sensors && sensors.filter) {
-		let sensorsInDashboard = sensors.filter(item => {
-			for (let i = 0; i < dashboard.sensors.length; ++i) {
-				if (dashboard.sensors[i].id === item.id) {
-					return true;
-				}
-			}
-			return false;
-		});
-
-		sensorsInDashboard.map((item) => {
-			let displayType = 'default';
-			for (let i = 0; i < dashboard.sensors.length; ++i) {
-				if (dashboard.sensors[i].id === item.id) {
-					displayType = dashboard.sensors[i].displayType;
-					break;
-				}
-			}
-			const dashboardItem = {
-				objectType: 'sensor',
-				childObject: item,
-				tileWidth: 0,
-				displayType
-			};
-			items.push(dashboardItem);
-		});
-	}
-	return items;
-}
-
-function select(store) {
+function select(store, props) {
 	return {
-		dataArray: _parseDataIntoItems( store.devices || [], store.sensors || [] , store.dashboard),
+		dataArray: parseDashboardForListView(store),
 		gateways: store.gateways,
 		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
 		devices: store.devices

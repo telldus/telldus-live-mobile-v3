@@ -34,5 +34,5 @@ const gatewayIcons = new Map()
 const gatewayUnknown = require('./GatewayUnknown.png');
 
 module.exports = {
-	get: (gatewayType) => { return gatewayIcons.get(gatewayType) || gatewayUnknown }
-}
+	get: (gatewayType) => { return gatewayIcons.get(gatewayType) || gatewayUnknown; }
+};

@@ -30,6 +30,7 @@
     "document": false,
     "escape": false,
     "exports": false,
+    "fetch": false,
     "global": false,
     "jest": false,
     "pit": false,
@@ -46,6 +47,7 @@
     "setTimeout": false,
     "window": false,
     "FormData": true,
+    "WebSocket": false,
     "XMLHttpRequest": false,
 
     // Flow "known-globals" annotations:
