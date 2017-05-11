@@ -42,7 +42,7 @@ class TabsView extends View {
 	}
 
 	componentDidMount() {
-		Icon.getImageSource('user', 22, 'white').then((source) => this.setState({ userIcon: source }));
+		Icon.getImageSource('gear', 22, 'white').then((source) => this.setState({ settingIcon: source }));
 		Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
 	}
 
@@ -53,7 +53,7 @@ class TabsView extends View {
 	}
 
 	render() {
-		if (!this.state || !this.state.userIcon || !this.state.starIcon) {
+		if (!this.state || !this.state.settingIcon || !this.state.starIcon) {
 			return false;
 		}
 		return (
@@ -70,8 +70,7 @@ class TabsView extends View {
 						initialRoute = {{
 							title: 'Telldus Live!',
 							component: TabViews.Dashboard,
-							rightButtonIcon: this.state.userIcon,
-							onRightButtonPress: this._openUserDetailView.bind(this),
+							rightButtonIcon: this.state.settingIcon,
 						}}
 					/>
 				</TabBarIOS.Item>

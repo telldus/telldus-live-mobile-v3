@@ -149,7 +149,7 @@ export function parseDevicesForListView(devices = [], gateways = [], dashboard =
 	const items = {};
 	const sectionIds = [];
 
-	if (devices) {
+	if (devices && devices.map) {
 		devices.map((item) => {
 			let sectionId = item.clientId ? item.clientId : '';
 			if (sectionIds.indexOf(sectionId) === -1) {
