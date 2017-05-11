@@ -189,7 +189,7 @@ class DimmerDashboardTile extends View {
                     { turnOnButton }
                     { slider }
 				</View>
-                <Title isInState={isInState} tileWidth={tileWidth} name={name} tileWidth={tileWidth} />
+                <Title isInState={isInState} name={name} tileWidth={tileWidth} />
 			</DashboardShadowTile>
 		);
 	}
