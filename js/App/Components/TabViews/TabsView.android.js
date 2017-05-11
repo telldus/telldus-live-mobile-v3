@@ -34,12 +34,16 @@ import DevicesTab from './DevicesTab';
 import GatewaysTab from './GatewaysTab';
 import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
+import { SettingsDetailModal } from 'DetailViews';
 
-import { switchTab, toggleEditMode, logoutFromTelldus } from 'Actions';
+import { switchTab, toggleEditMode } from 'Actions';
 
 class TabsView extends View {
 	constructor(props) {
 		super(props);
+		this.state = {
+			settings: false,
+		};
 	}
 
 	componentDidMount() {
@@ -51,6 +55,14 @@ class TabsView extends View {
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
 		}
+	}
+
+	onOpenSetting() {
+		this.setState({ settings: true });
+	}
+
+	onCloseSetting() {
+		this.setState({ settings: false });
 	}
 
 	navigationView() {
@@ -100,12 +112,12 @@ class TabsView extends View {
 						onPress={this.onTabSelect.bind(this, 'gatewaysTab')}>
 						<Text style={{ color: 'white', fontSize: 18 }}>Connected Locations</Text>
 					</Button>
-					<Button name = "sign-out"
+					<Button name = "gear"
 						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
-						onPress = {() => this.props.dispatch(logoutFromTelldus())}>
-						<Text style={{ color: 'white', fontSize: 18 }}>Logout</Text>
+						onPress = {this.onOpenSetting.bind(this)}>
+						<Text style={{ color: 'white', fontSize: 18 }}>Settings</Text>
 					</Button>
 				</View>
 			</View>
@@ -176,6 +188,11 @@ class TabsView extends View {
 
 					<View key={this.props.tab}>
 						{this.renderContent()}
+						{
+							this.state.settings ?
+								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting.bind(this)} /> :
+								null
+						}
 					</View>
 				</View>
 			</DrawerLayoutAndroid>

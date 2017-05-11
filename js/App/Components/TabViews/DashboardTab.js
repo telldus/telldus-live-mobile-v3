@@ -22,7 +22,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Text, List, ListDataSource, View } from 'BaseComponents';
-
+import Platform from 'Platform';
 import { changeSensorDisplayType } from 'Actions';
 import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
@@ -30,6 +30,7 @@ import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } f
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 
 import { GenericDashboardTile, DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
+import { SettingsDetailModal } from 'DetailViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
 
@@ -46,6 +47,7 @@ class DashboardTab extends View {
 		this.state = {
 			listWidth: 0,
 			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(this.props.dataArray),
+			settings: false,
 		};
 
 		this._onLayout = this._onLayout.bind(this);
@@ -75,6 +77,13 @@ class DashboardTab extends View {
 		this.props.dispatch(setDimmerValue(value));
 	}
 
+	componentDidMount() {
+		if (Platform.OS === 'ios') {
+			const route = this.props.navigator.navigationContext.currentRoute;
+			route.onRightButtonPress = this.onOpenSetting.bind(this);
+			this.props.navigator.replace(route);
+		}
+	}
 
 	componentWillReceiveProps(nextProps) {
 		// TODO: write a better comparison function
@@ -101,6 +110,14 @@ class DashboardTab extends View {
 		});
 	}
 
+	onOpenSetting() {
+		this.setState({ settings: true });
+	}
+
+	onCloseSetting() {
+		this.setState({ settings: false });
+	}
+
 	render() {
 		// add to List props: enableEmptySections={true}, to surpress warning
 
@@ -113,6 +130,11 @@ class DashboardTab extends View {
 					renderRow = {this._renderRow(this.state.tileWidth)}
 					pageSize = {100}
 				/>
+				{
+					this.state.settings ?
+						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting.bind(this)} /> :
+						null
+				}
 			</View>
 		);
 	}

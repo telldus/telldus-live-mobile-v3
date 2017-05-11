@@ -31,6 +31,7 @@ import ToggleDeviceDetailModal from './ToggleDeviceDetailModal';
 import BellDeviceDetailModal from './BellDeviceDetailModal';
 import DimmerDeviceDetailModal from './DimmerDeviceDetailModal';
 import NavigationalDeviceDetailModal from './NavigationalDeviceDetailModal';
+import SettingsDetailModal from './SettingsDetailModal';
 
 module.exports = {
 	Device: DeviceDetailView,
@@ -42,4 +43,5 @@ module.exports = {
 	BellDeviceDetailModal,
 	DimmerDeviceDetailModal,
 	NavigationalDeviceDetailModal,
+	SettingsDetailModal,
 };
