@@ -43,16 +43,16 @@ function getDeviceStateMethod(deviceStateNumber: number): String {
 
 function reduceDevice(state = deviceInitialState, action) {
 	switch (action.type) {
-	case 'RECEIVED_DEVICES':
+		case 'RECEIVED_DEVICES':
 			// TODO: nothing seems to be reduced here?
-		return {
-			clientId: parseInt(state.client, 10),
-			id: parseInt(state.id, 10),
-			type: state.type,
-			name: state.name,
-			isInState: getDeviceStateMethod(state.state),
-			supportedMethods: getSupportedMethods(state.methods),
-			value: state.statevalue,
+			return {
+				clientId: parseInt(state.client, 10),
+				id: parseInt(state.id, 10),
+				type: state.type,
+				name: state.name,
+				isInState: getDeviceStateMethod(state.state),
+				supportedMethods: getSupportedMethods(state.methods),
+				value: state.statevalue,
 				// clientDeviceId: parseInt(state.clientDeviceId, 10),
 				// editable: Boolean(state.editable),
 				// state: parseInt(state.state, 10),
@@ -60,11 +60,11 @@ function reduceDevice(state = deviceInitialState, action) {
 				// ignored: Boolean(state.ignored),
 				// methods: state.methods,
 				// protocol: state.protocol,
-		};
-	case 'LOGGED_OUT':
-		return deviceInitialState;
-	default:
-		return state;
+			};
+		case 'LOGGED_OUT':
+			return deviceInitialState;
+		default:
+			return state;
 	}
 }
 

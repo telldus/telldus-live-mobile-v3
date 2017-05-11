@@ -118,16 +118,16 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
 			title = ` ${message.module}:${message.action}`;
 
 			switch (message.module) {
-			case 'device':
-				dispatch(processWebsocketMessageForDevice(message.action, message.data));
-				break;
-			case 'sensor':
-				dispatch(processWebsocketMessageForSensor(message.action, message.data));
-				break;
-			case 'zwave':
+				case 'device':
+					dispatch(processWebsocketMessageForDevice(message.action, message.data));
+					break;
+				case 'sensor':
+					dispatch(processWebsocketMessageForSensor(message.action, message.data));
+					break;
+				case 'zwave':
 
-				break;
-			default:
+					break;
+				default:
 			}
 		}
 		try {

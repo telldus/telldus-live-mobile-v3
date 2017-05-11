@@ -37,15 +37,15 @@ class Gravatar extends React.Component {
 		let border = {};
 
 		switch (this.props.mask) {
-		case 'circle':
-			border = {borderRadius: size.width / 2};
-			break;
-		case 'rounded':
-			border = {borderRadius: size.width / 20};
-			break;
-		case 'square':
-			break;
-		default:
+			case 'circle':
+				border = {borderRadius: size.width / 2};
+				break;
+			case 'rounded':
+				border = {borderRadius: size.width / 20};
+				break;
+			case 'square':
+				break;
+			default:
 		}
 
 		return {...size, ...border};

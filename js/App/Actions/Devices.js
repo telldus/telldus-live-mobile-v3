@@ -55,16 +55,16 @@ export function getDevices(): ThunkAction {
 
 export function processWebsocketMessageForDevice(action, data): Action {
 	switch (action) {
-	case 'setState':
-		return {
-			...data,
-			type: 'DEVICE_SET_STATE',
-		};
-	default:
-		return {
-			type: 'DEVICE_WEBSOCKET_UNHANDLED',
-			payload: data
-		};
+		case 'setState':
+			return {
+				...data,
+				type: 'DEVICE_SET_STATE',
+			};
+		default:
+			return {
+				type: 'DEVICE_WEBSOCKET_UNHANDLED',
+				payload: data
+			};
 	}
 }
 
