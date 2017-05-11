@@ -89,13 +89,12 @@ export function parseJobsForListView(jobs = [], gateways = [], devices = []) {
 		[device.id]: device,
 	}), {});
 
-	let items = range(0, 7).reduce((memo, day) => ({
+	const todayInWeek = parseInt(moment().format('d'), 10);
+	const sectionIds = range(0, 8);
+	let items = sectionIds.reduce((memo, day) => ({
 		...memo,
 		[day]: [],
 	}), {});
-
-	const todayInWeek = parseInt(moment().format('d'), 10);
-	const sectionIds = range(0, 7).map(day => (todayInWeek + day) % 7);
 
 	jobs.forEach(job => {
 		// offset
@@ -126,13 +125,16 @@ export function parseJobsForListView(jobs = [], gateways = [], devices = []) {
 		const now = moment().tz(timezone);
 		job.weekdays.forEach(day => {
 			if (day !== todayInWeek) {
-				return items[day % 7].push(job); // 7 % 7 = 0
+				const relativeDay = (7 + day - todayInWeek) % 7; // 7 % 7 = 0
+				return items[relativeDay].push(job);
 			}
 
 			const nowInMinutes = now.hours() * 60 + now.minutes();
 			const jobInMinutes = parseInt(job.effectiveHour, 10) * 60 + parseInt(job.effectiveMinute, 10);
 			if (jobInMinutes >= nowInMinutes) {
-				items[day % 7].push(job); // 7 % 7 = 0
+				items[0].push(job); // today
+			} else {
+				items[7].push(job); // today, next week
 			}
 		});
 	});

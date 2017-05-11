@@ -47,15 +47,19 @@ class SchedulerTab extends View {
 
 	renderSectionHeader(sectionData, sectionId) {
 		const todayInWeek = parseInt(moment().format('d'), 10);
+		const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
 
 		let sectionName;
-		if (sectionId === todayInWeek) {
+		if (sectionId === 0) {
 			sectionName = 'Today';
-		} else if (sectionId === (todayInWeek + 1) % 7) {
+		} else if (sectionId === 1) {
 			sectionName = 'Tomorrow';
+		} else if (sectionId === 7) {
+			sectionName = `Next ${daysInWeek[todayInWeek]}`;
 		} else {
-			sectionName = daysInWeek[sectionId];
+			sectionName = daysInWeek[absoluteDayInWeek];
 		}
+
 		return (
 			<View style = {Theme.Styles.sectionHeader}>
 				<Text style = {Theme.Styles.sectionHeaderText}>
