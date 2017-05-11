@@ -53,7 +53,8 @@ export default StyleSheet.create({
 		backgroundColor: '#DDD',
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
+		justifyContent: 'flex-start',
+		paddingLeft: 8,
 	},
 	rowBackButton: {
 		height: listItemHeight,
