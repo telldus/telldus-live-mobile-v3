@@ -138,7 +138,7 @@ export default class InputGroup extends Base {
 		let childrenArray = React.Children.toArray(this.props.children);
 
 		let iconElement = [];
-		iconElement = _.remove(childrenArray, function(item) {
+		iconElement = _.remove(childrenArray, (item) => {
 			if (item.type === Icon) {
 				return true;
 			}
@@ -146,13 +146,13 @@ export default class InputGroup extends Base {
 
 		let buttonElement = [];
 
-		buttonElement = _.remove(childrenArray, function(item) {
+		buttonElement = _.remove(childrenArray, (item) => {
 			if (item.type === Button) {
 				return true;
 			}
 		});
 
-		let inp = _.find(childrenArray, function(item) {
+		let inp = _.find(childrenArray, (item) => {
 			if (item && item.type === Input) {
 				return true;
 			}

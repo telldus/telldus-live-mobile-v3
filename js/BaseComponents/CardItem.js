@@ -109,7 +109,7 @@ export default class CardItemComponent extends Base {
 
 	thumbnailPresent() {
 		let thumbnailComponentPresent = false;
-		React.Children.forEach(this.props.children, function (child) {
+		React.Children.forEach(this.props.children, (child) => {
 			if (child.type === Thumbnail) {
 				thumbnailComponentPresent = true;
 			}
@@ -120,7 +120,7 @@ export default class CardItemComponent extends Base {
 
 	imagePresent() {
 		let imagePresent = false;
-		React.Children.forEach(this.props.children, function (child) {
+		React.Children.forEach(this.props.children, (child) => {
 			if (child.type === Image) {
 				imagePresent = true;
 			}
@@ -131,7 +131,7 @@ export default class CardItemComponent extends Base {
 
 	iconPresent() {
 		let iconComponentPresent = false;
-		React.Children.forEach(this.props.children, function (child) {
+		React.Children.forEach(this.props.children, (child) => {
 			if (child.type === Icon)				{
 				iconComponentPresent = true;
 			}
@@ -142,7 +142,7 @@ export default class CardItemComponent extends Base {
 
 	buttonPresent() {
 		let buttonComponentPresent = false;
-		React.Children.forEach(this.props.children, function (child) {
+		React.Children.forEach(this.props.children, (child) => {
 			if (child.type === Button)				{
 				buttonComponentPresent = true;
 			}
@@ -165,7 +165,7 @@ export default class CardItemComponent extends Base {
 	notePresent() {
 		let notePresent = false;
 
-		React.Children.forEach(this.props.children, function (child) {
+		React.Children.forEach(this.props.children, (child) => {
 			if (child.type === Text && child.props.note)				{
 				notePresent = true;
 			}
@@ -177,7 +177,7 @@ export default class CardItemComponent extends Base {
 	squareThumbs() {
 		let squareThumbs = false;
 		if (this.thumbnailPresent()) {
-			React.Children.forEach(this.props.children, function (child) {
+			React.Children.forEach(this.props.children, (child) => {
 				if (child.props.square)					{
 					squareThumbs = true;
 				}

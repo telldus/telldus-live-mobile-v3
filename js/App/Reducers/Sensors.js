@@ -156,7 +156,7 @@ export function parseSensorsForListView({ sensors, gateways, dashboard }) {
 		sections[sectionId].push(sensor);
 	});
 
-	const gatewayNameLookUp = gateways.reduce(function(acc, gateway) {
+	const gatewayNameLookUp = gateways.reduce((acc, gateway) => {
 		acc[gateway.id] = gateway.name;
 		return acc;
 	}, {});

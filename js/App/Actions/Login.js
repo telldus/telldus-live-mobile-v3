@@ -58,7 +58,7 @@ async function loginToTelldus(username, password): Promise<Action> {
 				accessToken: responseData,
 			});
 		})
-		.catch(function (e) {
+		.catch((e) => {
 			reject({
 				type: 'ERROR',
 				message: e,

@@ -85,28 +85,28 @@ export default class HeaderComponent extends Base {
 			let childrenArray = React.Children.toArray(this.props.children);
 
 			let buttons = [];
-			buttons = _.remove(childrenArray, function(item) {
+			buttons = _.remove(childrenArray, (item) => {
 				if (item.type === Button) {
 					return true;
 				}
 			});
 
 			let title = [];
-			title = _.remove(childrenArray, function(item) {
+			title = _.remove(childrenArray, (item) => {
 				if (item.type === Title) {
 					return true;
 				}
 			});
 
 			let subtitle = [];
-			subtitle = _.remove(childrenArray, function(item) {
+			subtitle = _.remove(childrenArray, (item) => {
 				if (item.type === Subtitle) {
 					return true;
 				}
 			});
 
 			let input = [];
-			input = _.remove(childrenArray, function(item) {
+			input = _.remove(childrenArray, (item) => {
 				if (item.type === InputGroup) {
 					return true;
 				}
