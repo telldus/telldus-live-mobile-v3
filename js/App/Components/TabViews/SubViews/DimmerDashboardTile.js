@@ -46,10 +46,9 @@ const Title = ({ isInState, name, tileWidth }) => (
 );
 
 const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
-    <View style={{
-	flex: 1,
+    <View style={[styles.turnOffButtonContainer, {
 	backgroundColor: isInState === 'TURNOFF' && enabled ? 'white' : '#eeeeee',
-}}>
+}]}>
 		<TouchableOpacity
 			onPress={enabled ? onPress : null}
 			style={styles.button} >
@@ -67,10 +66,9 @@ const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
 );
 
 const OnButton = ({ isInState, enabled, tileWidth, onPress }) => (
-    <View style={{
-	flex: 1,
+    <View style={[styles.turnOnButtonContainer, {
 	backgroundColor: isInState !== 'TURNOFF' && enabled ? 'white' : '#eeeeee',
-}}>
+}]}>
 		<TouchableOpacity
 			onPress={enabled ? onPress : null}
 			style={styles.button} >
@@ -207,6 +205,8 @@ const styles = StyleSheet.create({
 	title: {
 		flex: 13,
 		justifyContent: 'center',
+		borderBottomLeftRadius: 7,
+		borderBottomRightRadius: 7,
 	},
 	name: {
 		padding: 5,
@@ -244,6 +244,16 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 		textAlign: 'center',
 		textAlignVertical: 'center',
+	},
+	turnOffButtonContainer: {
+		flex: 1,
+		alignItems: 'stretch',
+		borderTopLeftRadius: 7,
+	},
+	turnOnButtonContainer: {
+		flex: 1,
+		alignItems: 'stretch',
+		borderTopRightRadius: 7,
 	},
 });
 

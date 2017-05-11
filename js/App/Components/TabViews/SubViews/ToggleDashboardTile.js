@@ -25,7 +25,7 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
 const OffButton = ({ isInState, tileWidth, onPress }) => (
-	<View style={[styles.buttonContainer, {
+	<View style={[styles.turnOffButtonContainer, {
 		backgroundColor: isInState === 'TURNOFF' ? 'white' : '#eeeeee' }]}>
 		<TouchableOpacity
 			onPress={onPress}
@@ -44,7 +44,7 @@ const OffButton = ({ isInState, tileWidth, onPress }) => (
 );
 
 const OnButton = ({ isInState, tileWidth, onPress }) => (
-	<View style={[styles.buttonContainer, {
+	<View style={[styles.turnOnButtonContainer, {
 		backgroundColor: isInState === 'TURNON' ? 'white' : '#eeeeee' }]}>
 		<TouchableOpacity
 			onPress={onPress}
@@ -107,10 +107,26 @@ class ToggleDashboardTile extends View {
 }
 
 const styles = StyleSheet.create({
-	buttonContainer: {
+	turnOffButtonContainer: {
 		flex: 1,
 		alignItems: 'stretch',
+		borderTopLeftRadius: 7,
 	},
+	turnOnButtonContainer: {
+		flex: 1,
+		alignItems: 'stretch',
+		borderTopRightRadius: 7,
+	},
+	// turnOffButton: {
+	// 	flex: 1,
+	// 	justifyContent: 'center',
+	// 	borderTopLeftRadius:7,
+	// },
+	// turnOnButton: {
+	// 	flex: 1,
+	// 	justifyContent: 'center',
+	// 	borderTopRightRadius:7,
+	// },
 	button: {
 		flex: 1,
 		justifyContent: 'center',
@@ -122,6 +138,8 @@ const styles = StyleSheet.create({
 	titleContainer: {
 		flex: 13,
 		justifyContent: 'center',
+		borderBottomLeftRadius: 7,
+		borderBottomRightRadius: 7,
 	},
 	titleText: {
 		padding: 5,

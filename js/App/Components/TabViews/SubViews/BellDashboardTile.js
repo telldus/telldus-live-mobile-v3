@@ -74,11 +74,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: 'white',
+		borderTopLeftRadius: 7,
+		borderTopRightRadius: 7,
 	},
 	title: {
 		flex: 13,
 		backgroundColor: '#e56e18',
 		justifyContent: 'center',
+		borderBottomLeftRadius: 7,
+		borderBottomRightRadius: 7,
 	},
 	name: {
 		padding: 5,
