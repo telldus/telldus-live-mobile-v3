@@ -50,7 +50,7 @@ export default class Input extends Base {
 
 		return (
 			<View style={{ flex: 1}}>
-				<TextInput {...this.prepareRootProps()} placeholderTextColor={ this.props.placeholderTextColor ? this.props.placeholderTextColor : this.getTheme().inputColorPlaceholder } underlineColorAndroid="rgba(0,0,0,0)" />
+				<TextInput {...this.prepareRootProps()} placeholderTextColor={this.props.placeholderTextColor ? this.props.placeholderTextColor : this.getTheme().inputColorPlaceholder} underlineColorAndroid="rgba(0,0,0,0)" />
 			</View>
 		);
 	}

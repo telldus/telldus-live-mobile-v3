@@ -36,7 +36,7 @@ class BellDashboardTile extends View {
 		return (
 			<DashboardShadowTile
 				item={item}
-				style={	[this.props.style, {
+				style={[this.props.style, {
 					width: tileWidth,
 					height: tileWidth,
 				}]}>

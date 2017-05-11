@@ -79,7 +79,7 @@ class DeviceRow extends View {
 
 		try {
 			return (
-				<ListItem style = { Theme.Styles.rowFront }>
+				<ListItem style = {Theme.Styles.rowFront}>
 					<Container style = {styles.container}>
 						{button}
 						<View style={styles.name}>
@@ -94,7 +94,7 @@ class DeviceRow extends View {
 								name="gear"
 								size={26}
 								color="#bbbbbb"
-								onPress={ () => this.props.onSettingsSelected(this.props.id) }
+								onPress={() => this.props.onSettingsSelected(this.props.id)}
 							/>
 						</View>
 					</Container>

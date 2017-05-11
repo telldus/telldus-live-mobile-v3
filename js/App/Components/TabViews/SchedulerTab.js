@@ -38,7 +38,7 @@ class SchedulerTab extends View {
 		return (
 			<List
 				dataSource = {this.props.dataSource}
-				renderRow = { props => (<JobRow {...{ ...props, ...this.props }} />)}
+				renderRow = {props => (<JobRow {...{ ...props, ...this.props }} />)}
 				renderSectionHeader = {this.renderSectionHeader.bind(this)}
 				onRefresh = {() => this.props.dispatch(getJobs())}
 			/>
@@ -57,8 +57,8 @@ class SchedulerTab extends View {
 			sectionName = daysInWeek[sectionId];
 		}
 		return (
-			<View style = { Theme.Styles.sectionHeader }>
-				<Text style = { Theme.Styles.sectionHeaderText }>
+			<View style = {Theme.Styles.sectionHeader}>
+				<Text style = {Theme.Styles.sectionHeaderText}>
 					{sectionName}
 				</Text>
 			</View>

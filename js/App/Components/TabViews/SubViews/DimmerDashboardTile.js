@@ -51,7 +51,7 @@ const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
 	backgroundColor: isInState === 'TURNOFF' && enabled ? 'white' : '#eeeeee',
 }}>
 		<TouchableOpacity
-			onPress={ enabled ? onPress : null}
+			onPress={enabled ? onPress : null}
 			style={styles.button} >
 			<Text
 				ellipsizeMode="middle"
@@ -72,7 +72,7 @@ const OnButton = ({ isInState, enabled, tileWidth, onPress }) => (
 	backgroundColor: isInState !== 'TURNOFF' && enabled ? 'white' : '#eeeeee',
 }}>
 		<TouchableOpacity
-			onPress={ enabled ? onPress : null}
+			onPress={enabled ? onPress : null}
 			style={styles.button} >
 			<Text
 				ellipsizeMode="middle"
@@ -180,7 +180,7 @@ class DimmerDashboardTile extends View {
 		return (
 			<DashboardShadowTile
 				item={item}
-				style={	[this.props.style, {
+				style={[this.props.style, {
 					width: tileWidth,
 					height: tileWidth,
 				}]}>

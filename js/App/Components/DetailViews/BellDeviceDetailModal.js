@@ -34,7 +34,7 @@ const BellButton = ({onBell}) => (
 			name="bell"
 			size={26}
 			color="orange"
-			onPress={ onBell }
+			onPress={onBell}
 		/>
     </RoundedCornerShadowView>
 );

@@ -27,7 +27,7 @@ export default class ContainerComponent extends Base {
 
 	render() {
 		return (
-			<View { ...this.props } />
+			<View {...this.props} />
 		);
 	}
 }

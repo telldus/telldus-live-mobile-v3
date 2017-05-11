@@ -33,7 +33,7 @@ const OffButton = ({item, enabled, onPress}) => (
     <View style={[styles.buttonContainer, {
 	backgroundColor: item.isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
         <TouchableOpacity
-			onPress={ enabled ? onPress : null}
+			onPress={enabled ? onPress : null}
 			style={styles.button} >
             <Text
                 ellipsizeMode="middle"
@@ -50,7 +50,7 @@ const OnButton = ({item, enabled, onPress}) => (
     <View style={[styles.buttonContainer, {
 	backgroundColor: item.isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
         <TouchableOpacity
-			onPress={ enabled ? onPress : null }
+			onPress={enabled ? onPress : null}
 			style={styles.button} >
             <Text
                 ellipsizeMode="middle"
