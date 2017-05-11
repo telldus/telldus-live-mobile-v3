@@ -52,7 +52,7 @@ function reduceJob(state: State = jobInitialState, action: Action): State {
 				retryInterval: parseInt(state.retryInterval, 10),
 				reps: parseInt(state.reps, 10),
 				active: Boolean(state.active),
-				weekdays: state.weekdays.split(',').map(day => parseInt(day, 10))
+				weekdays: state.weekdays.split(',').map(day => parseInt(day, 10)),
 			};
 			return newJob;
 		default:
@@ -157,6 +157,6 @@ export function parseJobsForListView(jobs = [], gateways = [], devices = []) {
 	const filteredSectionIds = filter(sectionIds, sectionId => items[sectionId].length);
 	return {
 		items,
-		sectionIds: filteredSectionIds
+		sectionIds: filteredSectionIds,
 	};
 }

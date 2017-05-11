@@ -42,7 +42,7 @@ class GatewaysTab extends View {
 						color: 'rgba(0,0,0,0.87)',
 						fontSize: 16,
 						opacity: item.name ? 1 : 0.5,
-						marginBottom: 2
+						marginBottom: 2,
 					}}>
 						{item.name ? item.name : '(no name)'} ({item.online})
 					</Text>
@@ -78,7 +78,7 @@ const dataSource = new ListDataSource({
 function select(store) {
 	return {
 		dataSource: dataSource.cloneWithRows(store.gateways || []),
-		gateways: store.gateways
+		gateways: store.gateways,
 	};
 }
 

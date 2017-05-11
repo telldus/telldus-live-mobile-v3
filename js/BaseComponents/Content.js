@@ -30,11 +30,11 @@ export default class Content extends Base {
 
 		let type = {
 			backgroundColor: 'transparent',
-			flex: 1
+			flex: 1,
 		};
 
 		let defaultProps = {
-			style: type
+			style: type,
 		};
 
 		return computeProps(this.props, defaultProps);

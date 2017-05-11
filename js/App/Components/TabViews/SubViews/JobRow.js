@@ -32,7 +32,7 @@ export default props => {
 		32: 'Learn',
 		128: 'Up',
 		256: 'Down',
-		512: 'Stop'
+		512: 'Stop',
 	};
 	let devices = props.devices.filter(item => item.id === props.deviceId);
 	let device = null;
@@ -48,7 +48,7 @@ export default props => {
                 <Text style={{
 	flex: 4,
 	color: 'orange',
-	fontSize: 16
+	fontSize: 16,
 }}>
                     {props.effectiveHour + ':' + props.effectiveMinute }
                 </Text>
@@ -56,14 +56,14 @@ export default props => {
 	flex: 20,
 	color: '#1a355c',
 	fontSize: 16,
-	paddingLeft: 6
+	paddingLeft: 6,
 }}>
                     {device.name}
                 </Text>
                 <Text style={{
 	flex: 4,
 	color: '#1a355c',
-	fontSize: 16
+	fontSize: 16,
 }}>
                     {methodName[props.method]}
                 </Text>

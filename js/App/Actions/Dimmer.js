@@ -30,11 +30,11 @@ import { format } from 'url';
 export const showDimmerPopup = (name: String, value: Number): Action => ({
 	type: 'SHOW_DIMMER_POPUP',
 	name,
-	value
+	value,
 });
 
 export const hideDimmerPopup = (): Action => ({
-	type: 'HIDE_DIMMER_POPUP'
+	type: 'HIDE_DIMMER_POPUP',
 });
 
 export const setDimmerValue = (id: Number, value: Number): ThunkAction => (dispatch) => {
@@ -56,8 +56,8 @@ export const updateDimmerValue = (id: Number, level: Number): ThunkAction => dis
 	const payload = {
 		url,
 		requestParams: {
-			method: 'GET'
-		}
+			method: 'GET',
+		},
 	};
 	return LiveApi(payload).then(response => dispatch({
 		type: 'DEVICE_DIM',
@@ -65,6 +65,6 @@ export const updateDimmerValue = (id: Number, level: Number): ThunkAction => dis
 		payload: {
 			...payload,
 			...response,
-		}
+		},
 	}));
 };

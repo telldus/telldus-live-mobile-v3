@@ -74,14 +74,14 @@ class SensorDashboardTile extends View {
 			slideList.push({
 				key: 'humidity',
 				icon: require('../img/sensorIcons/HumidityLargeGray.png'),
-				text: <FormattedNumber value = {item.childObject.humidity / 100} formatStyle = "percent" />
+				text: <FormattedNumber value = {item.childObject.humidity / 100} formatStyle = "percent" />,
 			});
 		}
 		if (item.childObject.temperature) {
 			slideList.push({
 				key: 'temperature',
 				icon: require('../img/sensorIcons/TemperatureLargeGray.png'),
-				text: <FormattedNumber value = {item.childObject.temperature} maximumFractionDigits = {0} suffix = {String.fromCharCode(176) + 'c'}/>
+				text: <FormattedNumber value = {item.childObject.temperature} maximumFractionDigits = {0} suffix = {String.fromCharCode(176) + 'c'}/>,
 			});
 		}
 		if (item.childObject.rainRate || item.childObject.rainTotal) {
@@ -89,7 +89,7 @@ class SensorDashboardTile extends View {
 				key: 'rain',
 				icon: require('../img/sensorIcons/RainLargeGray.png'),
 				text: (item.childObject.rainRate && <FormattedNumber value = {item.childObject.rainRate} maximumFractionDigits = {0} suffix = {'mm/h\n'} /> ),
-				text2: (item.childObject.rainTotal && <FormattedNumber value = {item.childObject.rainTotal} maximumFractionDigits = {0} suffix = {'mm'} /> )
+				text2: (item.childObject.rainTotal && <FormattedNumber value = {item.childObject.rainTotal} maximumFractionDigits = {0} suffix = {'mm'} /> ),
 			});
 		}
 		if (item.childObject.windGust || item.childObject.windAverage || item.childObject.windDirection) {
@@ -98,28 +98,28 @@ class SensorDashboardTile extends View {
 				icon: require('../img/sensorIcons/WindLargeGray.png'),
 				text: (item.childObject.windAverage && <FormattedNumber value = {item.childObject.windAverage} maximumFractionDigits = {1} suffix = {'m/s\n'} /> ),
 				text2: (item.childObject.windGust && <FormattedNumber value = {item.childObject.windGust} maximumFractionDigits = {1} suffix = {'m/s*\n'} /> ),
-				text3: (item.childObject.windDirection && <Text>{ this._windDirection(item.childObject.windDirection) }</Text> )
+				text3: (item.childObject.windDirection && <Text>{ this._windDirection(item.childObject.windDirection) }</Text> ),
 			});
 		}
 		if (item.childObject.uv) {
 			slideList.push({
 				key: 'uv',
 				icon: require('../img/sensorIcons/UVLargeGray.png'),
-				text: <FormattedNumber value = {item.childObject.uv} maximumFractionDigits = {0} />
+				text: <FormattedNumber value = {item.childObject.uv} maximumFractionDigits = {0} />,
 			});
 		}
 		if (item.childObject.watt) {
 			slideList.push({
 				key: 'watt',
 				icon: require('../img/sensorIcons/WattLargeGray.png'),
-				text: <FormattedNumber value = {item.childObject.watt} maximumFractionDigits = {1} suffix = {' W'}/>
+				text: <FormattedNumber value = {item.childObject.watt} maximumFractionDigits = {1} suffix = {' W'}/>,
 			});
 		}
 		if (item.childObject.luminance) {
 			slideList.push({
 				key: 'luminance',
 				icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
-				text: <FormattedNumber value = {item.childObject.luminance} maximumFractionDigits = {0} suffix = {'lx'}/>
+				text: <FormattedNumber value = {item.childObject.luminance} maximumFractionDigits = {0} suffix = {'lx'}/>,
 			});
 		}
 
@@ -151,7 +151,7 @@ class SensorDashboardTile extends View {
 				item={item}
 				style={	[this.props.style, {
 					width: tileWidth,
-					height: tileWidth
+					height: tileWidth,
 				}]}>
 				<TouchableOpacity onPress={this.changeDisplayType} style={{flex: 1, justifyContent: 'center'}}>
 				<View style={{flexDirection: 'row', flex: 30}}>

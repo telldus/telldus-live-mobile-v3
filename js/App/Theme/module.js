@@ -28,5 +28,5 @@ import Styles from './Styles';
 module.exports = {
 	Core: Core,
 	Forms: Forms,
-	Styles: Styles
+	Styles: Styles,
 };

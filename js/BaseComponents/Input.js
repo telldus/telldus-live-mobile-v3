@@ -34,14 +34,14 @@ export default class Input extends Base {
 				paddingLeft: 5,
 				paddingRight: 5,
 				fontSize: this.getTheme().inputFontSize,
-				lineHeight: this.getTheme().inputLineHeight
-			}
+				lineHeight: this.getTheme().inputLineHeight,
+			},
 		};
 	}
 
 	prepareRootProps() {
 		let defaultProps = {
-			style: this.getInitialStyle().input
+			style: this.getInitialStyle().input,
 		};
 
 		return computeProps(this.props, defaultProps);

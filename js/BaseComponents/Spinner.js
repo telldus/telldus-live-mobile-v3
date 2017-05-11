@@ -29,11 +29,11 @@ export default class SpinnerComponent extends Base {
 	prepareRootProps() {
 
 		let type = {
-			height: 80
+			height: 80,
 		};
 
 		let defaultProps = {
-			style: type
+			style: type,
 		};
 
 		return computeProps(this.props, defaultProps);

@@ -39,7 +39,7 @@ export default class CardItemComponent extends Base {
 				backgroundColor: this.getTheme().listBg,
 				justifyContent: (this.buttonPresent()) ? 'space-between' : 'flex-start',
 				flexDirection: (this.thumbnailPresent() || this.iconPresent() || (this.notePresent() && this.ifShowCase())) ? 'row' : 'column',
-				borderColor: this.getTheme().listBorderColor
+				borderColor: this.getTheme().listBorderColor,
 			},
 			listItemDivider: {
 				borderBottomWidth: this.getTheme().borderWidth,
@@ -47,39 +47,39 @@ export default class CardItemComponent extends Base {
 				backgroundColor: this.getTheme().listDividerBg,
 				justifyContent: (this.buttonPresent()) ? 'space-between' : 'flex-start',
 				flexDirection: 'row',
-				borderColor: this.getTheme().listBorderColor
+				borderColor: this.getTheme().listBorderColor,
 			},
 			itemText: {
 				fontSize: this.ifShowCase() ? 14 : 15,
 				marginTop: this.ifShowCase() ? 10 : 0,
-				color: this.getContextForegroundColor()
+				color: this.getContextForegroundColor(),
 			},
 			dividerItemText: {
 				fontSize: 16,
 				fontWeight: '500',
-				color: this.getContextForegroundColor()
+				color: this.getContextForegroundColor(),
 			},
 			itemIcon: {
 				fontSize: this.getTheme().iconFontSize,
-				color: this.getContextForegroundColor()
+				color: this.getContextForegroundColor(),
 			},
 			itemNote: {
 				fontSize: 15,
 				color: this.getTheme().listNoteColor,
 				fontWeight: '100',
-				flex: 1
+				flex: 1,
 			},
 			itemSubNote: {
 				fontSize: 15,
-				color: '#999'
+				color: '#999',
 			},
 			thumbnail: {
-				alignSelf: 'center'
+				alignSelf: 'center',
 			},
 			fullImage: {
 				alignSelf: 'stretch',
-				height: this.ifShowCase() ? 120 : 300
-			}
+				height: this.ifShowCase() ? 120 : 300,
+			},
 		};
 	}
 	getRightStyle() {
@@ -87,7 +87,7 @@ export default class CardItemComponent extends Base {
 			right: {
 				flex: 1,
 				paddingLeft: 10,
-				backgroundColor: 'transparent'
+				backgroundColor: 'transparent',
 			},
 			right2: {
 				flex: 1,
@@ -95,15 +95,15 @@ export default class CardItemComponent extends Base {
 				paddingLeft: 10,
 				alignItems: 'center',
 				justifyContent: 'space-between',
-				backgroundColor: 'transparent'
+				backgroundColor: 'transparent',
 			},
 			right3: {
 				flex: 1,
 				flexDirection: 'column',
 				paddingLeft: 10,
 				justifyContent: 'flex-start',
-				backgroundColor: 'transparent'
-			}
+				backgroundColor: 'transparent',
+			},
 		};
 	}
 
@@ -192,46 +192,46 @@ export default class CardItemComponent extends Base {
 		if (child.type === Image && !Array.isArray(this.props.children)) {
 			defaultProps = {
 				resizeMode: 'stretch',
-				style: this.getInitialStyle().fullImage
+				style: this.getInitialStyle().fullImage,
 			};
 		}		else if (child.type === Button) {
 			defaultProps = {
 				small: true,
-				style: this.getInitialStyle().itemButton
+				style: this.getInitialStyle().itemButton,
 			};
 		}		else if (child.type === Text) {
 			if ((this.props.header) || (this.props.footer)) {
 				defaultProps = {
-					style: this.getInitialStyle().dividerItemText
+					style: this.getInitialStyle().dividerItemText,
 				};
 			}			else if (child.props.note && this.thumbnailPresent()) {
 				defaultProps = {
-					style: this.getInitialStyle().itemSubNote
+					style: this.getInitialStyle().itemSubNote,
 				};
 			}				else if (child.props.note) {
 				defaultProps = {
-					style: this.getInitialStyle().itemNote
+					style: this.getInitialStyle().itemNote,
 				};
 			}				else {
 				defaultProps = {
-					style: this.getInitialStyle().itemText
+					style: this.getInitialStyle().itemText,
 				};
 			}
 		}		else if (child.type === Icon) {
 			defaultProps = {
-				style: this.getInitialStyle().itemIcon
+				style: this.getInitialStyle().itemIcon,
 			};
 		}		else if (child.type === Thumbnail) {
 			defaultProps = {
-				style: this.getInitialStyle().thumbnail
+				style: this.getInitialStyle().thumbnail,
 			};
 		}		else if (child.type === Image ) {
 			defaultProps = {
-				style: this.getInitialStyle().fullImage
+				style: this.getInitialStyle().fullImage,
 			};
 		}		else {
 			defaultProps = {
-				foregroundColor: this.getContextForegroundColor()
+				foregroundColor: this.getContextForegroundColor(),
 			};
 		}
 
@@ -244,11 +244,11 @@ export default class CardItemComponent extends Base {
 		if ((this.props.header) || (this.props.footer)) {
 
 			defaultProps = {
-				style: this.getInitialStyle().listItemDivider
+				style: this.getInitialStyle().listItemDivider,
 			};
 		}		else {
 			defaultProps = {
-				style: this.getInitialStyle().listItem
+				style: this.getInitialStyle().listItem,
 			};
 		}
 

@@ -193,7 +193,7 @@ function select(store) {
 		devices: store.devices.devices,
 		gateways: store.gateways.gateways,
 		sensors: store.sensors.sensors,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''}
+		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
 	};
 }
 
@@ -201,7 +201,7 @@ function actions(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
 		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
-		dispatch
+		dispatch,
 	};
 }
 

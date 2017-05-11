@@ -107,14 +107,14 @@ const SensorRow = props => {
 	color: 'rgba(0,0,0,0.87)',
 	fontSize: 16,
 	opacity: props.name ? 1 : 0.5,
-	marginBottom: 2
+	marginBottom: 2,
 }}>
                     {props.name ? props.name : '(no name)'}
                 </Text>
                 <Text style = {{
 	color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
 	fontSize: 12,
-	opacity: minutesAgo < 1440 ? 1 : 0.5
+	opacity: minutesAgo < 1440 ? 1 : 0.5,
 }}>
                     {formatLastUpdated(minutesAgo, props.lastUpdated)}
                 </Text>

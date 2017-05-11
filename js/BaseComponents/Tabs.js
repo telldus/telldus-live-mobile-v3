@@ -29,15 +29,15 @@ export default class TabComponent extends Base {
 	getInitialStyle() {
 		return {
 			tab: {
-				flex: 1
-			}
+				flex: 1,
+			},
 		};
 	}
 
 	prepareRootProps() {
 
 		let defaultProps = {
-			style: this.getInitialStyle().tab
+			style: this.getInitialStyle().tab,
 		};
 
 		return computeProps(this.props, defaultProps);

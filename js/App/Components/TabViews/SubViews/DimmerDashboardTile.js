@@ -48,7 +48,7 @@ const Title = ({ isInState, name, tileWidth }) => (
 const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
     <View style={{
 	flex: 1,
-	backgroundColor: isInState === 'TURNOFF' && enabled ? 'white' : '#eeeeee'
+	backgroundColor: isInState === 'TURNOFF' && enabled ? 'white' : '#eeeeee',
 }}>
 		<TouchableOpacity
 			onPress={ enabled ? onPress : null}
@@ -58,7 +58,7 @@ const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
 				numberOfLines={1}
 				style = {[styles.buttonText, {
 					color: isInState === 'TURNOFF' ? 'red' : '#a0a0a0',
-					fontSize: Math.floor(tileWidth / 8)
+					fontSize: Math.floor(tileWidth / 8),
 				}]}>
 				{'Off'}
 			</Text>
@@ -69,7 +69,7 @@ const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
 const OnButton = ({ isInState, enabled, tileWidth, onPress }) => (
     <View style={{
 	flex: 1,
-	backgroundColor: isInState !== 'TURNOFF' && enabled ? 'white' : '#eeeeee'
+	backgroundColor: isInState !== 'TURNOFF' && enabled ? 'white' : '#eeeeee',
 }}>
 		<TouchableOpacity
 			onPress={ enabled ? onPress : null}
@@ -79,7 +79,7 @@ const OnButton = ({ isInState, enabled, tileWidth, onPress }) => (
 				numberOfLines={1}
 				style = {[styles.buttonText, {
 					color: isInState !== 'TURNOFF' ? 'green' : '#a0a0a0',
-					fontSize: Math.floor(tileWidth / 8)
+					fontSize: Math.floor(tileWidth / 8),
 				}]}>
 				{'On'}
 			</Text>
@@ -116,7 +116,7 @@ class DimmerDashboardTile extends View {
 		this.state = {
 			bodyWidth: 0,
 			bodyHeight: 0,
-			value
+			value,
 		};
 
 		this.onValueChangeThrottled = throttle(this.props.onDimmerSlide, 200, {
@@ -136,7 +136,7 @@ class DimmerDashboardTile extends View {
 		let {width, height} = x.nativeEvent.layout;
 		this.setState({
 			bodyWidth: width,
-			bodyHeight: height
+			bodyHeight: height,
 		});
 	}
 
@@ -182,7 +182,7 @@ class DimmerDashboardTile extends View {
 				item={item}
 				style={	[this.props.style, {
 					width: tileWidth,
-					height: tileWidth
+					height: tileWidth,
 				}]}>
 				<View style={styles.body} onLayout={this.layoutView.bind(this)}>
                     { turnOffButton }
@@ -198,25 +198,25 @@ class DimmerDashboardTile extends View {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	body: {
 		flex: 30,
-		flexDirection: 'row'
+		flexDirection: 'row',
 	},
 	title: {
 		flex: 13,
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	name: {
 		padding: 5,
 		color: 'white',
 		textAlign: 'center',
-		textAlignVertical: 'center'
+		textAlignVertical: 'center',
 	},
 	button: {
 		flex: 1,
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	buttonText: {
 		textAlign: 'center',
@@ -237,14 +237,14 @@ const styles = StyleSheet.create({
 		width: 30,
 		height: 12,
 		justifyContent: 'center',
-		backgroundColor: 'white'
+		backgroundColor: 'white',
 	},
 	thumbText: {
 		color: '#a2a2a2',
 		fontSize: 10,
 		textAlign: 'center',
-		textAlignVertical: 'center'
-	}
+		textAlignVertical: 'center',
+	},
 });
 
 function actions(dispatch) {

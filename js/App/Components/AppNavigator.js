@@ -39,7 +39,7 @@ class AppNavigator extends View {
 		if (Platform.OS !== 'android') {
 			const init = Orientation.getInitialOrientation();
 			this.state = {
-				specificOrientation: init
+				specificOrientation: init,
 			};
 			Orientation.unlockAllOrientations();
 			this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
@@ -83,7 +83,7 @@ class AppNavigator extends View {
 }
 
 AppNavigator.propTypes = {
-	dispatch: PropTypes.func.isRequired
+	dispatch: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -91,7 +91,7 @@ function mapStateToProps(state, ownProps) {
 		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
 		userProfile: state.user.userProfile || {firstname: '', lastname: '', email: ''},
-		dimmer: state.dimmer
+		dimmer: state.dimmer,
 	};
 }
 

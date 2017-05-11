@@ -32,7 +32,7 @@ function navigation(state: State = initialState, action: Action): State {
 	if (action.type === 'SWITCH_TAB') {
 		return {
 			...state,
-			tab: action.tab
+			tab: action.tab,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {

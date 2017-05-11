@@ -81,7 +81,7 @@ class DimmerDeviceDetailModal extends View {
 		const dimmerValue = this.getDimmerValue(device);
 
 		this.state = {
-			dimmerValue
+			dimmerValue,
 		};
 		this.sliding = false;
 		this.onTurnOn = this.onTurnOn.bind(this);
@@ -188,19 +188,19 @@ const styles = StyleSheet.create({
 		color: '#1a355b',
 		fontSize: 14,
 		marginTop: 12,
-		marginLeft: 8
+		marginLeft: 8,
 	},
 	toggleContainer: {
 		flexDirection: 'row',
 		height: 36,
 		marginHorizontal: 8,
-		marginVertical: 16
+		marginVertical: 16,
 	},
 	toggleButton: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center'
-	}
+		alignItems: 'center',
+	},
 });
 
 function select(store) {
@@ -213,7 +213,7 @@ function actions(dispatch) {
 		onTurnOff: (id) => dispatch(turnOff(id)),
 		onLearn: (id) => dispatch(learn(id)),
 		onDimmerSlide: (id, value) => dispatch(setDimmerValue(id, value)),
-		onDim: (id, value) => dispatch(updateDimmerValue(id, value))
+		onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
 	};
 }
 

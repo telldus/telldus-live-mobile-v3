@@ -36,10 +36,10 @@ export default class BadgeComponent extends Base {
 			alignSelf: 'flex-start',
 			borderRadius: 13,
 			width: 27,
-			height: 27
+			height: 27,
 		};
 		let defaultProps = {
-			style: type
+			style: type,
 		};
 		return computeProps(this.props, defaultProps);
 	}

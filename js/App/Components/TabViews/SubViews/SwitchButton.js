@@ -36,18 +36,18 @@ module.exports = class SwitchButton extends View {
 					shadowRadius: 1,
 					shadowOpacity: 1.0,
 					backgroundColor: 'red',
-					elevation: 5
+					elevation: 5,
 				}]}>
                 <View style={{
 	flex: 1,
 	flexDirection: 'row',
 	borderRadius: 7,
-	overflow: 'hidden'
+	overflow: 'hidden',
 }}>
                     <View style={{
 	flex: 1,
 	backgroundColor: this.props.item.state === 0 ? '#fafafa' : '#eeeeee',
-	alignItems: 'stretch'
+	alignItems: 'stretch',
 }}>
                         <TouchableOpacity
 							onPress={() => console.log('off')}
@@ -68,7 +68,7 @@ module.exports = class SwitchButton extends View {
                     <View style={{
 	flex: 1,
 	backgroundColor: this.props.item.state === 1 ? '#fafafa' : '#eeeeee',
-	alignItems: 'stretch'
+	alignItems: 'stretch',
 }}>
                         <TouchableOpacity
 							onPress={() => console.log('off')}

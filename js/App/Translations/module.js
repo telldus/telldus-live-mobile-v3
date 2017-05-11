@@ -40,5 +40,5 @@ module.exports = {
 	pl: pl,
 	ru: ru,
 	sv: sv,
-	th: th
+	th: th,
 };

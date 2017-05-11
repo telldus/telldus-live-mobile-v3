@@ -40,7 +40,7 @@ class DevicesTab extends View {
 		super(props);
 		this.state = {
 			deviceId: -1,
-			dimmer: false
+			dimmer: false,
 		};
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
@@ -132,7 +132,7 @@ DevicesTab.propTypes = {
 
 const dataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,
-	sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+	sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 });
 
 function select(store) {
@@ -141,7 +141,7 @@ function select(store) {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
 		gateways: store.gateways,
 		editMode: store.tabs.editModeDevicesTab,
-		devices: store.devices
+		devices: store.devices,
 	};
 }
 
@@ -149,7 +149,7 @@ function actions(dispatch) {
 	return {
 		addToDashboard: (id) => dispatch(addToDashboard('device', id)),
 		removeFromDashboard: (id) => dispatch(removeFromDashboard('device', id)),
-		dispatch
+		dispatch,
 	};
 }
 

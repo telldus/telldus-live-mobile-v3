@@ -90,7 +90,7 @@ export default function sensorsReducer(state: State = initialState, action: Acti
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return {
-			...initialState
+			...initialState,
 		};
 	}
 	if (action.type === 'SENSOR_UPDATE_VALUE') {

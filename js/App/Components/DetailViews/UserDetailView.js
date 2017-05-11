@@ -26,7 +26,7 @@ import {
 	Button,
 	Gravatar,
 	Text,
-	View
+	View,
 } from 'BaseComponents';
 
 import { logoutFromTelldus } from 'Actions';

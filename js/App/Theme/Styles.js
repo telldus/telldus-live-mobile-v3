@@ -30,13 +30,13 @@ export default StyleSheet.create({
 		borderBottomWidth: 1,
 		borderBottomColor: '#EEEEEE',
 		flexDirection: 'column',
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	sectionHeaderText: {
 		color: Core.brandPrimary,
 		fontSize: 14,
 		marginLeft: 16,
-		fontWeight: '500'
+		fontWeight: '500',
 	},
 	rowFront: {
 		backgroundColor: '#FFFFFF',
@@ -66,7 +66,7 @@ export default StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		paddingRight: 12
+		paddingRight: 12,
 	},
 	sensorTileItem: {
 		position: 'absolute',
@@ -75,7 +75,7 @@ export default StyleSheet.create({
 		left: 0,
 		right: 0,
 		flexDirection: 'row',
-		backgroundColor: 'white'
+		backgroundColor: 'white',
 	},
 	listItemAvatar: {
 		width: 32,
@@ -86,5 +86,5 @@ export default StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
 		alignItems: 'center',
-	}
+	},
 });

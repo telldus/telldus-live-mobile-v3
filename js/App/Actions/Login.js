@@ -44,8 +44,8 @@ async function loginToTelldus(username, password): Promise<Action> {
 					'client_secret': privateKey,
 					'grant_type': 'password',
 					'username': username,
-					'password': password
-				})
+					'password': password,
+				}),
 			}
 		)
 		.then((response) => response.json())
@@ -55,13 +55,13 @@ async function loginToTelldus(username, password): Promise<Action> {
 			}
 			resolve( {
 				type: 'RECEIVED_ACCESS_TOKEN',
-				accessToken: responseData
+				accessToken: responseData,
 			});
 		})
 		.catch(function (e) {
 			reject({
 				type: 'ERROR',
-				message: e
+				message: e,
 			});
 		});
 	});
@@ -71,7 +71,7 @@ async function loginToTelldus(username, password): Promise<Action> {
 function updateAccessToken(accessToken): Action {
 	return {
 		type: 'RECEIVED_ACCESS_TOKEN',
-		accessToken: accessToken
+		accessToken: accessToken,
 	};
 }
 
@@ -80,15 +80,15 @@ function getUserProfile(): ThunkAction {
 		const payload = {
 			url: '/user/profile',
 			requestParams: {
-				method: 'GET'
-			}
+				method: 'GET',
+			},
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'RECEIVED_USER_PROFILE',
 			payload: {
 				...payload,
 				...response,
-			}
+			},
 		}
 		));
 

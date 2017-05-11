@@ -37,15 +37,15 @@ export default class Footer extends Base {
 				alignItems: 'center',
 				justifyContent: (!Array.isArray(this.props.children)) ? 'center' : 'space-between',
 				height: this.getTheme().footerHeight,
-				backgroundColor: this.getTheme().footerDefaultBg
-			}
+				backgroundColor: this.getTheme().footerDefaultBg,
+			},
 		};
 	}
 
 	prepareRootProps() {
 
 		let defaultProps = {
-			style: this.getInitialStyle().navbar
+			style: this.getInitialStyle().navbar,
 		};
 
 		return computeProps(this.props, defaultProps);

@@ -44,9 +44,9 @@ export default function dashboardReducer(state: State = initialState, action : A
 				sensors: [
 					...state.sensors,
 					{
-						'id': action.id
-					}
-				]
+						'id': action.id,
+					},
+				],
 			};
 		} else if (action.kind === 'device') {
 			if (state.devices.indexOf(action.id) >= 0) {
@@ -62,12 +62,12 @@ export default function dashboardReducer(state: State = initialState, action : A
 		if (action.kind === 'sensor') {
 			return {
 				...state,
-				sensors: state.sensors.filter((item) => item.id !== action.id)
+				sensors: state.sensors.filter((item) => item.id !== action.id),
 			};
 		} else if (action.kind === 'device') {
 			return {
 				...state,
-				devices: state.devices.filter(id => id !== action.id)
+				devices: state.devices.filter(id => id !== action.id),
 			};
 		}
 	} else if (action.type === 'CHANGE_SENSOR_DISPLAY_TYPE') {
@@ -79,7 +79,7 @@ export default function dashboardReducer(state: State = initialState, action : A
 		item.displayType = action.displayType;
 	}
 	return item;
-})
+}),
 		};
 	}
 
@@ -122,7 +122,7 @@ export function parseDashboardForListView({ devices, sensors, dashboard }) {
 				objectType: 'sensor',
 				childObject: item,
 				tileWidth: 0,
-				displayType
+				displayType,
 			};
 			items.push(dashboardItem);
 		});

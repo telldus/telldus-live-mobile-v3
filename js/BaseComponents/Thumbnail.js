@@ -33,8 +33,8 @@ export default class ThumbnailComponent extends Base {
 				borderRadius: 15,
 				width: 30,
 				height: 30,
-				resizeMode: this.props.contain ? 'contain' : undefined
-			}
+				resizeMode: this.props.contain ? 'contain' : undefined,
+			},
 		};
 	}
 
@@ -51,7 +51,7 @@ export default class ThumbnailComponent extends Base {
 		}
 
 		let defaultProps = {
-			style: _.merge(this.getInitialStyle().thumbnail, thumbnailStyle)
+			style: _.merge(this.getInitialStyle().thumbnail, thumbnailStyle),
 		};
 
 		return computeProps(this.props, defaultProps);

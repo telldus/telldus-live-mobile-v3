@@ -30,11 +30,11 @@ export default class H1Component extends Base {
 
 		let type = {
 			color: this.getTheme().textColor,
-			fontSize: this.getTheme().fontSizeH1
+			fontSize: this.getTheme().fontSizeH1,
 		};
 
 		let defaultProps = {
-			style: type
+			style: type,
 		};
 
 		return computeProps(this.props, defaultProps);

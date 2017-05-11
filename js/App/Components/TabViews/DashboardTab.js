@@ -133,7 +133,7 @@ class DashboardTab extends View {
 				height: item.tileWidth - tileMargin,
 				marginTop: tileMargin,
 				marginLeft: tileMargin,
-				borderRadius: 2
+				borderRadius: 2,
 			};
 
 			const itemId = item.childObject.id;
@@ -219,7 +219,7 @@ function actions(dispatch) {
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
 		onDim: id => value => dispatch(updateDimmerValue(id, value)),
 		changeSensorDisplayType: id => displayType => dispatch(changeSensorDisplayType(id, displayType)),
-		dispatch
+		dispatch,
 	};
 }
 

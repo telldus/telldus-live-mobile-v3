@@ -30,11 +30,11 @@ export default class H2Component extends Base {
 
 		let type = {
 			color: this.getTheme().textColor,
-			fontSize: this.getTheme().fontSizeH2
+			fontSize: this.getTheme().fontSizeH2,
 		};
 
 		let defaultProps = {
-			style: type
+			style: type,
 		};
 
 		return computeProps(this.props, defaultProps);

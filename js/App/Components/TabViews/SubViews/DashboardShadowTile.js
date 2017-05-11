@@ -32,13 +32,13 @@ module.exports = class DashboardShadowTile extends View {
 					shadowOffset: {width: 0, height: 0},
 					shadowRadius: 3,
 					shadowOpacity: 1.0,
-					elevation: 10
+					elevation: 10,
 				}]}>
                 <View style={{
 	flex: 1,
 	flexDirection: 'column',
 	borderRadius: 7,
-	overflow: 'hidden'
+	overflow: 'hidden',
 }}>
                     {this.props.children}
                 </View>

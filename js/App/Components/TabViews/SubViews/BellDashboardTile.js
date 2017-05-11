@@ -38,7 +38,7 @@ class BellDashboardTile extends View {
 				item={item}
 				style={	[this.props.style, {
 					width: tileWidth,
-					height: tileWidth
+					height: tileWidth,
 				}]}>
                 <TouchableOpacity
                     onPress={this.props.onBell}
@@ -66,26 +66,26 @@ class BellDashboardTile extends View {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	body: {
 		flex: 30,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'white'
+		backgroundColor: 'white',
 	},
 	title: {
 		flex: 13,
 		backgroundColor: '#e56e18',
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	name: {
 		padding: 5,
 		color: 'white',
 		textAlign: 'center',
-		textAlignVertical: 'center'
-	}
+		textAlignVertical: 'center',
+	},
 });
 
 module.exports = BellDashboardTile;

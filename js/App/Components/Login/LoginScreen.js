@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
 function select(store) {
 	return {
 		tab: store.navigation.tab,
-		accessToken: store.user.accessToken
+		accessToken: store.user.accessToken,
 	};
 }
 module.exports = connect(select)(LoginScreen);

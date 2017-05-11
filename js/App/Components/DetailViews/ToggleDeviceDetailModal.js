@@ -129,7 +129,7 @@ class ToggleDeviceDetailModal extends View {
 
 ToggleDeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
-	deviceId: React.PropTypes.number.isRequired
+	deviceId: React.PropTypes.number.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -137,13 +137,13 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		height: 36,
 		marginHorizontal: 8,
-		marginVertical: 16
+		marginVertical: 16,
 	},
 	toggleButton: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center'
-	}
+		alignItems: 'center',
+	},
 });
 
 function select(store) {
@@ -154,7 +154,7 @@ function actions(dispatch) {
 	return {
 		onTurnOn: (id) => dispatch(turnOn(id)),
 		onTurnOff: (id) => dispatch(turnOff(id)),
-		onLearn: (id) => dispatch(learn(id))
+		onLearn: (id) => dispatch(learn(id)),
 	};
 }
 

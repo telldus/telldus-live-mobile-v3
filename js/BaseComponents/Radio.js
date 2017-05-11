@@ -28,7 +28,7 @@ export default class Radio extends Base {
 
 	getInitialStyle() {
 		return {
-			radio: {}
+			radio: {},
 		};
 	}
 

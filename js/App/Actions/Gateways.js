@@ -38,7 +38,7 @@ function getGateways(): ThunkAction {
 		const payload = {
 			url,
 			requestParams: {
-				method: 'GET'
+				method: 'GET',
 			},
 		};
 		return LiveApi(payload).then(response => {
@@ -47,7 +47,7 @@ function getGateways(): ThunkAction {
 				payload: {
 					...payload,
 					...response,
-				}
+				},
 			});
 			response.client.forEach(gateway => {
 				dispatch(getWebsocketAddress(gateway.id));
@@ -61,8 +61,8 @@ function getWebsocketAddress(gatewayId): ThunkAction {
 		const payload = {
 			url: `/client/serverAddress?id=${gatewayId}`,
 			requestParams: {
-				method: 'GET'
-			}
+				method: 'GET',
+			},
 		};
 		return LiveApi(payload).then(response => {
 			dispatch({
@@ -70,7 +70,7 @@ function getWebsocketAddress(gatewayId): ThunkAction {
 				payload: {
 					...payload,
 					...response,
-				}
+				},
 			});
 			const { address, port } = response;
 			if (address && port) {

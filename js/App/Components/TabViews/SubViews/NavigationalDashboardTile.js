@@ -30,7 +30,7 @@ const UpButton = ({isInState, onPress}) => (
         onPress={onPress}>
         <Icon name="caret-up" size={42}
             style={{
-	color: isInState === 'UP' ? '#1a355b' : '#eeeeee'
+	color: isInState === 'UP' ? '#1a355b' : '#eeeeee',
 }}
         />
     </TouchableOpacity>
@@ -42,7 +42,7 @@ const DownButton = ({isInState, onPress}) => (
         onPress={onPress}>
         <Icon name="caret-down" size={42}
             style={{
-	color: isInState === 'DOWN' ? '#1a355b' : '#eeeeee'
+	color: isInState === 'DOWN' ? '#1a355b' : '#eeeeee',
 }}
         />
     </TouchableOpacity>
@@ -54,7 +54,7 @@ const StopButton = ({isInState, onPress}) => (
         onPress={onPress}>
         <Icon name="stop" size={30}
             style={{
-	color: isInState === 'STOP' ? '#1a355b' : '#eeeeee'
+	color: isInState === 'STOP' ? '#1a355b' : '#eeeeee',
 }}
         />
     </TouchableOpacity>
@@ -79,7 +79,7 @@ class NavigationalDashboardTile extends View {
 				item={item}
 				style={	[this.props.style, {
 					width: tileWidth,
-					height: tileWidth
+					height: tileWidth,
 				}]}>
 				<View style={styles.body}>
                     { upButton }
@@ -106,24 +106,24 @@ const styles = StyleSheet.create({
 	body: {
 		flex: 30,
 		flexDirection: 'row',
-		backgroundColor: 'white'
+		backgroundColor: 'white',
 	},
 	title: {
 		flex: 13,
 		backgroundColor: '#e56e18',
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	navigationButton: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	name: {
 		padding: 5,
 		color: 'white',
 		textAlign: 'center',
-		textAlignVertical: 'center'
-	}
+		textAlignVertical: 'center',
+	},
 });
 
 module.exports = NavigationalDashboardTile;

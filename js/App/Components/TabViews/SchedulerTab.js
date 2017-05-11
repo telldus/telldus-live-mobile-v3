@@ -67,19 +67,19 @@ class SchedulerTab extends View {
 }
 
 SchedulerTab.propTypes = {
-	dataSource: React.PropTypes.object
+	dataSource: React.PropTypes.object,
 };
 
 const dataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,
-	sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+	sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 });
 
 function select(store) {
 	let { items, sectionIds } = parseJobsForListView(store.jobs, store.gateways, store.devices);
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
-		devices: store.devices
+		devices: store.devices,
 	};
 }
 

@@ -37,15 +37,15 @@ export const authenticateSession = () => (dispatch, getState) => {
 	const payload = {
 		url: `/user/authenticateSession?session=${sessionId}`,
 		requestParams: {
-			method: 'GET'
-		}
+			method: 'GET',
+		},
 	};
 	return LiveApi(payload).then(response => dispatch({
 		type: 'RECEIVED_AUTHENTICATE_SESSION_RESPONSE',
 		payload: {
 			...payload,
 			...response,
-		}
+		},
 	}
 	));
 };
@@ -97,19 +97,19 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
 		if (message === 'validconnection') {
 			message = {
 				module: 'websocket_connection',
-				action: 'connected'
+				action: 'connected',
 			};
 			title = ` ${message.module}:${message.action}`;
 		} else if (message === 'nothere') {
 			message = {
 				module: 'websocket_connection',
-				action: 'wrong_server'
+				action: 'wrong_server',
 			};
 			title = ` ${message.module}:${message.action}`;
 		} else if (message === 'error') {
 			message = {
 				module: 'websocket_connection',
-				action: 'unknown_error'
+				action: 'unknown_error',
 			};
 			title = ` ${message.module}:${message.action}`;
 		}

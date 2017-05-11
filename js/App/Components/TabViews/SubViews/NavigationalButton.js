@@ -29,7 +29,7 @@ const UpButton = ({supportedMethod, onPress}) => (
         onPress={onPress}>
         <Icon name="caret-up" size={30}
             style={{
-	color: supportedMethod ? '#1a355b' : '#eeeeee'
+	color: supportedMethod ? '#1a355b' : '#eeeeee',
 }}
         />
     </TouchableOpacity>
@@ -41,7 +41,7 @@ const DownButton = ({supportedMethod, onPress}) => (
         onPress={onPress}>
         <Icon name="caret-down" size={30}
             style={{
-	color: supportedMethod ? '#1a355b' : '#eeeeee'
+	color: supportedMethod ? '#1a355b' : '#eeeeee',
 }}
         />
     </TouchableOpacity>
@@ -53,7 +53,7 @@ const StopButton = ({supportedMethod, onPress}) => (
         onPress={onPress}>
         <Icon name="stop" size={20}
             style={{
-	color: supportedMethod ? '#1a355b' : '#eeeeee'
+	color: supportedMethod ? '#1a355b' : '#eeeeee',
 }}
         />
     </TouchableOpacity>
@@ -83,13 +83,13 @@ const styles = StyleSheet.create({
 		flex: 7,
 		height: 32,
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	navigationButton: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center'
-	}
+		alignItems: 'center',
+	},
 });
 
 module.exports = NavigationalButton;

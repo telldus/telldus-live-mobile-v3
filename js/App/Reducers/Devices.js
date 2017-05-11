@@ -76,7 +76,7 @@ export default function reduceDevices(state = initialState, action) {
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return {
-			...initialState
+			...initialState,
 		};
 	}
 
