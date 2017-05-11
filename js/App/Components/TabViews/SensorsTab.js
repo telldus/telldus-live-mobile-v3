@@ -37,7 +37,7 @@ class SensorsTab extends View {
 				renderHiddenRow = {props => (<SensorRowHidden {...{ ...props, ...this.props }}/>)}
 				renderRow = {props => (<SensorRow {...props}/>)}
 				renderSectionHeader = {(sectionData, sectionId) => (<ListHeader sectionData={sectionData} sectionId={sectionId} gateways={this.props.gateways}/>)}
-				rightOpenValue = {-40}
+				leftOpenValue = {40}
 				editMode = {this.props.editMode}
 				onRefresh = {() =>
 					this.props.dispatch(getSensors())

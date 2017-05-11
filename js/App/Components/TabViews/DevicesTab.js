@@ -79,7 +79,7 @@ class DevicesTab extends View {
 						/>
 					)}
 					renderSectionHeader = {this._renderSectionHeader.bind(this)}
-					rightOpenValue = {-40}
+					leftOpenValue = {40}
 					editMode = {this.props.editMode}
 					onRefresh = {() =>
 						this.props.dispatch(getDevices())

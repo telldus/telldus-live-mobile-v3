@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 const DIRECTIONAL_DISTANCE_CHANGE_THRESHOLD = 2;
-const SLIDE_DELAY = 300;
 
 /**
  * Row that is generally used in a SwipeListView.
@@ -209,40 +208,19 @@ class SwipeRow extends Component {
 	}
 
 	renderRowContent() {
-		// We do this annoying if statement for performance.
-		// We don't want the onLayout func to run after it runs once.
+		const slideOpenValue = this.props.editMode ? this.props.leftOpenValue : 0;
 
-		// Only run animation when dimensions are not set (component is not mounted) or row's position is not match with editMode
-		const runAnimation = !this.state.dimensionsSet ||
-			!(this.state.translateX === 0 && this.props.editMode === false) ||
-			!(this.state.translateX !== 0 && this.props.editMode === true);
-
-		if (runAnimation) {
-			let slideOpenValue = this.props.editMode ? this.props.rightOpenValue : 0;
-			this.getSlideAnimation(slideOpenValue, SLIDE_DELAY).start();
-			return (
-				<Animated.View
-					onLayout={(e) => this.onContentLayout(e)}
-					style={{
-						transform: [
-							{ translateX: this.state.translateX },
-						],
-					}}
-				>
-					{this.renderVisibleContent()}
-				</Animated.View>
-			);
-		}
 		return (
-			<Animated.View
+			<View
+				onLayout={(e) => this.onContentLayout(e)}
 				style={{
 					transform: [
-						{ translateX: this.state.translateX },
+						{ translateX: slideOpenValue },
 					],
 				}}
 			>
 				{this.renderVisibleContent()}
-			</Animated.View>
+			</View>
 		);
 	}
 
