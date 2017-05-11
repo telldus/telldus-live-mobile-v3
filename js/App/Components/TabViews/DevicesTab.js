@@ -71,8 +71,8 @@ class DevicesTab extends View {
 				<List
 					ref = "list"
 					dataSource = {this.props.dataSource}
-					renderHiddenRow = { props => (<DeviceRowHidden {...{ ...props, ...this.props }}/>) }
-					renderRow = { props => (
+					renderHiddenRow = {props => (<DeviceRowHidden {...{ ...props, ...this.props }}/>)}
+					renderRow = {props => (
 						<DeviceRow {...{ ...props, ...this.props }}
 							onSettingsSelected={this.openDeviceDetail}
 							setScrollEnabled={this.setScrollEnabled}
@@ -107,8 +107,8 @@ class DevicesTab extends View {
 	_renderSectionHeader(sectionData, sectionId) {
 		const gateway = this.props.gateways.find((g) => g.id === sectionId);
 		return (
-			<View style = { Theme.Styles.sectionHeader }>
-				<Text style = { Theme.Styles.sectionHeaderText }>
+			<View style = {Theme.Styles.sectionHeader}>
+				<Text style = {Theme.Styles.sectionHeaderText}>
 					{(gateway && gateway.name) ? gateway.name : ''}
 				</Text>
 			</View>

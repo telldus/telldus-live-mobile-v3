@@ -27,8 +27,7 @@ export default class ViewComponent extends Base {
 
 	render() {
 		return (
-			<View style = {{ padding: (this.props.padder) ? this.getTheme().contentPadding : 0, flex: 1 }} { ...this.props } />
+			<View style = {{ padding: (this.props.padder) ? this.getTheme().contentPadding : 0, flex: 1 }} {...this.props} />
 		);
 	}
 }
-

@@ -111,10 +111,10 @@ class ListComponent extends React.Component {
 		return (
 			<SwipeRow
 				ref={row => (this._rows[`${secId}${rowId}`] = row)}
-				onRowOpen={ _ => this.onRowOpen(secId, rowId, this._rows) }
-				onRowClose={ _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows) }
-				onRowPress={ _ => this.onRowPress(`${secId}${rowId}`) }
-				setScrollEnabled={ (enable) => this.setScrollEnabled(enable) }
+				onRowOpen={_ => this.onRowOpen(secId, rowId, this._rows)}
+				onRowClose={_ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows)}
+				onRowPress={_ => this.onRowPress(`${secId}${rowId}`)}
+				setScrollEnabled={(enable) => this.setScrollEnabled(enable)}
 				leftOpenValue={this.props.leftOpenValue}
 				rightOpenValue={this.props.rightOpenValue}
 				closeOnRowPress={this.props.closeOnRowPress}
@@ -144,8 +144,8 @@ class ListComponent extends React.Component {
 						enableEmptySections={true}
 					/>
 				}
-				ref={ c => this.setRefs(c) }
-				onScroll={ e => this.onScroll(e) }
+				ref={c => this.setRefs(c)}
+				onScroll={e => this.onScroll(e)}
 				renderRow={this.renderRow.bind(this)}
 				contentInset={{bottom: 64}}
 			/>

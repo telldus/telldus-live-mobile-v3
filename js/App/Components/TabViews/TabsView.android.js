@@ -66,45 +66,45 @@ class TabsView extends View {
 				</View>
 				<View style = {{ flex: 1, backgroundColor: this.getTheme().btnSecondaryBg }}>
 					<Button name = "dashboard"
-						backgroundColor = { this.getTheme().btnSecondaryBg }
+						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100}}
-						onPress={ this.onTabSelect.bind(this, 'dashboardTab')}>
+						onPress={this.onTabSelect.bind(this, 'dashboardTab')}>
 						<Text style={{color: 'white', fontSize: 18}}>Dashboard</Text>
 					</Button>
 					<Button name = "toggle-on"
-						backgroundColor = { this.getTheme().btnSecondaryBg }
+						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
-						onPress={ this.onTabSelect.bind(this, 'devicesTab') }>
+						onPress={this.onTabSelect.bind(this, 'devicesTab')}>
 						<Text style={{color: 'white', fontSize: 18}}>Devices</Text>
 					</Button>
 					<Button name = "wifi"
-						backgroundColor = { this.getTheme().btnSecondaryBg }
+						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
-						onPress={ this.onTabSelect.bind(this, 'sensorsTab') }>
+						onPress={this.onTabSelect.bind(this, 'sensorsTab')}>
 						<Text style={{color: 'white', fontSize: 18}}>Sensors</Text>
 					</Button>
 					<Button name = "clock-o"
-						backgroundColor = { this.getTheme().btnSecondaryBg }
+						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
-						onPress={ this.onTabSelect.bind(this, 'schedulerTab') }>
+						onPress={this.onTabSelect.bind(this, 'schedulerTab')}>
 						<Text style={{color: 'white', fontSize: 18}}>Scheduler</Text>
 					</Button>
 					<Button name = "home"
-						backgroundColor = { this.getTheme().btnSecondaryBg }
+						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
-						onPress={ this.onTabSelect.bind(this, 'gatewaysTab') }>
+						onPress={this.onTabSelect.bind(this, 'gatewaysTab')}>
 						<Text style={{color: 'white', fontSize: 18}}>Connected Locations</Text>
 					</Button>
 					<Button name = "sign-out"
-						backgroundColor = { this.getTheme().btnSecondaryBg }
+						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
-						onPress = { () => this.props.dispatch(logoutFromTelldus()) }>
+						onPress = {() => this.props.dispatch(logoutFromTelldus())}>
 						<Text style={{color: 'white', fontSize: 18}}>Logout</Text>
 					</Button>
 				</View>
@@ -137,9 +137,9 @@ class TabsView extends View {
 		return (
 			<DrawerLayoutAndroid
 				ref = "drawer"
-				drawerWidth = { 280 }
-				drawerPosition = { DrawerLayoutAndroid.positions.Left }
-				renderNavigationView = { () => this.navigationView() }
+				drawerWidth = {280}
+				drawerPosition = {DrawerLayoutAndroid.positions.Left}
+				renderNavigationView = {() => this.navigationView()}
 			>
 				<View style = {{ flex: 1 }} >
 					<View style = {{
@@ -151,25 +151,25 @@ class TabsView extends View {
 						(
 							<Icon.ToolbarAndroid
 								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
-								titleColor = { Theme.Core.inverseTextColor }
+								titleColor = {Theme.Core.inverseTextColor}
 								navIconName = "bars"
 								overflowIconName = "star"
-								iconColor = { Theme.Core.inverseTextColor }
+								iconColor = {Theme.Core.inverseTextColor}
 								title = "Telldus Live!"
 								actions = {[{ title: 'Settings', icon: this.state.starIcon, show: 'always'}]}
-								onActionSelected = { this._toggleEditMode.bind(this) }
-								onIconClicked = { () => this.refs.drawer.openDrawer() }
+								onActionSelected = {this._toggleEditMode.bind(this)}
+								onIconClicked = {() => this.refs.drawer.openDrawer()}
 							/>
 						) :
 						(
 							<Icon.ToolbarAndroid
 								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
-								titleColor = { Theme.Core.inverseTextColor }
+								titleColor = {Theme.Core.inverseTextColor}
 								navIconName = "bars"
 								overflowIconName = "star"
-								iconColor = { Theme.Core.inverseTextColor }
+								iconColor = {Theme.Core.inverseTextColor}
 								title = "Telldus Live!"
-								onIconClicked = { () => this.refs.drawer.openDrawer() }
+								onIconClicked = {() => this.refs.drawer.openDrawer()}
 							/>
 						)
 					}

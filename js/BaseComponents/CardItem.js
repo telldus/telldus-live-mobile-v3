@@ -278,7 +278,7 @@ export default class CardItemComponent extends Base {
 				let childrenArray = React.Children.toArray(this.props.children);
 				newChildren.push(React.cloneElement(childrenArray[0], this.getChildProps(childrenArray[0])));
 				newChildren.push(
-					<View key="cardItem" style={ this.notePresent() ? this.getRightStyle().right : this.squareThumbs() ? this.getRightStyle().right3 : this.getRightStyle().right2 }>
+					<View key="cardItem" style={this.notePresent() ? this.getRightStyle().right : this.squareThumbs() ? this.getRightStyle().right3 : this.getRightStyle().right2}>
 						{childrenArray.slice(1).map((child, i) => {
 							return React.cloneElement(child, {...this.getChildProps(child), key: i});
 						})}

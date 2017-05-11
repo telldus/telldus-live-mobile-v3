@@ -200,7 +200,7 @@ class SwipeRow extends Component {
 		return (
 			<TouchableOpacity
 				activeOpacity={1}
-				onPress={ _ => this.onRowPress() }
+				onPress={_ => this.onRowPress()}
 			>
 				{this.props.children[1]}
 			</TouchableOpacity>
@@ -222,7 +222,7 @@ class SwipeRow extends Component {
 			this.getSlideAnimation(slideOpenValue, SLIDE_DELAY).start();
 			return (
 				<Animated.View
-					onLayout={ (e) => this.onContentLayout(e) }
+					onLayout={(e) => this.onContentLayout(e)}
 					style={{
 						transform: [
 							{translateX: this.state.translateX},

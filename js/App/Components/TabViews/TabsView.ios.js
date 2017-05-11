@@ -57,13 +57,13 @@ class TabsView extends View {
 			return false;
 		}
 		return (
-			<TabBarIOS tintColor = { this.getTheme().brandPrimary } >
+			<TabBarIOS tintColor = {this.getTheme().brandPrimary} >
 				<TabBarIOS.Item
 					title = {I18n.t('pages.dashboard')}
-					selected = { this.props.tab === 'dashboardTab' }
-					onPress = { this.onTabSelect.bind(this, 'dashboardTab') }
-					icon = { require('./img/tabIcons/dashboard-inactive.png') }
-					selectedIcon = { require('./img/tabIcons/dashboard-active.png')}
+					selected = {this.props.tab === 'dashboardTab'}
+					onPress = {this.onTabSelect.bind(this, 'dashboardTab')}
+					icon = {require('./img/tabIcons/dashboard-inactive.png')}
+					selectedIcon = {require('./img/tabIcons/dashboard-active.png')}
 				>
 					<NavigatorIOS
 						ref = "dashboardNavigator"
@@ -77,10 +77,10 @@ class TabsView extends View {
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
 					title = {I18n.t('pages.devices')}
-					selected = { this.props.tab === 'devicesTab' }
-					onPress = { this.onTabSelect.bind(this, 'devicesTab') }
-					icon = { require('./img/tabIcons/devices-inactive.png') }
-					selectedIcon = {require('./img/tabIcons/devices-active.png') }
+					selected = {this.props.tab === 'devicesTab'}
+					onPress = {this.onTabSelect.bind(this, 'devicesTab')}
+					icon = {require('./img/tabIcons/devices-inactive.png')}
+					selectedIcon = {require('./img/tabIcons/devices-active.png')}
 				>
 					<NavigatorIOS
 						initialRoute = {{

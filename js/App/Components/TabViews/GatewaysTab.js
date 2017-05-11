@@ -34,9 +34,9 @@ class GatewaysTab extends View {
 	_renderRow(item) {
 		try {
 			return (
-				<ListItem style = { Theme.Styles.rowFront }>
-					<View style = { Theme.Styles.listItemAvatar }>
-						<Image source = { GatewayIcons.get(item.type) } />
+				<ListItem style = {Theme.Styles.rowFront}>
+					<View style = {Theme.Styles.listItemAvatar}>
+						<Image source = {GatewayIcons.get(item.type)} />
 					</View>
 					<Text style = {{
 						color: 'rgba(0,0,0,0.87)',

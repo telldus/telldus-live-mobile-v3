@@ -82,10 +82,10 @@ class LoginForm extends View {
 				<Button
 					name="lock"
 					style={styles.formSubmit}
-					onPress={ () => this.formSubmit(this.state.username, this.state.password) }
+					onPress={() => this.formSubmit(this.state.username, this.state.password)}
 				>{ this.state.isLoading ? 'Logging in...' : 'Login' }</Button>
 				<View style = {{ height: 40 }} />
-				<Text style={{ color: '#bbb' }} onPress={() => Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err)) }>Forget your password? Need an account?</Text>
+				<Text style={{ color: '#bbb' }} onPress={() => Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err))}>Forget your password? Need an account?</Text>
 				<View style = {{ height: 10 }} />
 			</View>
 		);
@@ -128,7 +128,7 @@ class LoginScreen extends View {
 
 	render() {
 		return (
-			<BackgroundImage source = { require('./img/home5.jpg') }>
+			<BackgroundImage source = {require('./img/home5.jpg')}>
 				<KeyboardAvoidingView behavior="position">
 					<View style = {{
 						flexDirection: 'column',
@@ -136,7 +136,7 @@ class LoginScreen extends View {
 						alignItems: 'center',
 					}}>
 						<Image
-							source = { require('./img/telldusLogoBlack.png') }
+							source = {require('./img/telldusLogoBlack.png')}
 							style = {{ marginTop: 100, marginBottom: 100 }}
 						/>
 						<LoginForm {...this.props} />
