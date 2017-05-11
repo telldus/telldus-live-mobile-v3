@@ -193,6 +193,7 @@
     "eol-last": 1,                   // enforce newline at the end of file, with no multiple empty lines
     "func-names": 0,                 // require function expressions to have a name (off by default)
     "func-style": 0,                 // enforces use of function declarations or expressions (off by default)
+    "max-nested-callbacks": 0,       // specify the maximum depth callbacks can be nested (off by default)
     "new-cap": 0,                    // require a capital letter for constructors
     "new-parens": 1,                 // disallow the omission of parentheses when invoking a constructor with no arguments
     "no-nested-ternary": 0,          // disallow nested ternary expressions (off by default)
@@ -220,7 +221,7 @@
       "words": true,
       "nonwords": false
     }],                              // require or disallow spaces before/after unary operators (words on by default, nonwords off by default)
-    "max-nested-callbacks": 0,       // specify the maximum depth callbacks can be nested (off by default)
+    "template-curly-spacing": 2,     // Enforce Usage of Spacing in Template Strings
     "one-var": 0,                    // allow just one var statement per function (off by default)
     "wrap-regex": 0,                 // require regex literals to be wrapped in parentheses (off by default)
 
