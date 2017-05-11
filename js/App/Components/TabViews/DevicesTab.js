@@ -67,7 +67,7 @@ class DevicesTab extends View {
 		}
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={{ flex: 1 }}>
 				<List
 					ref = "list"
 					dataSource = {this.props.dataSource}
@@ -91,11 +91,11 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(id) {
-		this.setState({deviceId: id});
+		this.setState({ deviceId: id });
 	}
 
 	onCloseSelected() {
-		this.setState({deviceId: -1});
+		this.setState({ deviceId: -1 });
 	}
 
 	setScrollEnabled(enable) {
@@ -136,7 +136,7 @@ const dataSource = new ListDataSource({
 });
 
 function select(store) {
-	const {items, sectionIds} = parseDevicesForListView(store.devices, store.gateways, store.dashboard);
+	const { items, sectionIds } = parseDevicesForListView(store.devices, store.gateways, store.dashboard);
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
 		gateways: store.gateways,

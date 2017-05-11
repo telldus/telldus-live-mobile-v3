@@ -26,10 +26,10 @@ import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity, Slider } from 'react-native';
 import DeviceDetailModal from './DeviceDetailModal';
 
-import { turnOn, turnOff, learn} from 'Actions/Devices';
+import { turnOn, turnOff, learn } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 
-const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
+const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
     <RoundedCornerShadowView style={styles.toggleContainer}>
         <TouchableOpacity
             style={[styles.toggleButton, {
@@ -38,7 +38,7 @@ const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
             onPress={onTurnOff}>
             <Text style={{
 	fontSize: 16,
-	color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e'}}>
+	color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
                 {'Off'}
             </Text>
         </TouchableOpacity>
@@ -50,22 +50,22 @@ const ToggleButton = ({device, onTurnOn, onTurnOff}) => (
             onPress={onTurnOn}>
             <Text style={{
 	fontSize: 16,
-	color: device.isInState !== 'TURNOFF' ? '#2c7e38' : '#9e9e9e'}}>
+	color: device.isInState !== 'TURNOFF' ? '#2c7e38' : '#9e9e9e' }}>
                 {'On'}
             </Text>
         </TouchableOpacity>
     </RoundedCornerShadowView>
 );
 
-const LearnButton = ({device, onLearn}) => (
+const LearnButton = ({ device, onLearn }) => (
     <RoundedCornerShadowView style={{
 	height: 36,
 	marginHorizontal: 8,
 	marginVertical: 8,
 	justifyContent: 'center',
-	alignItems: 'center'}}>
+	alignItems: 'center' }}>
         <TouchableOpacity onPress={onLearn}>
-            <Text style={{fontSize: 16, color: 'orange'}}>
+            <Text style={{ fontSize: 16, color: 'orange' }}>
                 {'Learn'}
             </Text>
         </TouchableOpacity>
@@ -116,7 +116,7 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	onValueChange(value) {
-		this.setState({dimmerValue: value});
+		this.setState({ dimmerValue: value });
 		this.sliding = true;
 	}
 
@@ -156,7 +156,7 @@ class DimmerDeviceDetailModal extends View {
 
 		if (hasSlider) {
 			slider = <Slider minimumValue={0} maximumValue={100} step={1} value={sliderValue}
-                    style={{marginHorizontal: 8, marginVertical: 8}}
+                    style={{ marginHorizontal: 8, marginVertical: 8 }}
                     onValueChange={this.onValueChange}
                     onSlidingComplete={this.onSlidingComplete}/>;
 		}

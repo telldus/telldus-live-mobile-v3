@@ -24,7 +24,7 @@ import { Text, View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
-const UpButton = ({isInState, onPress}) => (
+const UpButton = ({ isInState, onPress }) => (
     <TouchableOpacity
         style={styles.navigationButton}
         onPress={onPress}>
@@ -36,7 +36,7 @@ const UpButton = ({isInState, onPress}) => (
     </TouchableOpacity>
 );
 
-const DownButton = ({isInState, onPress}) => (
+const DownButton = ({ isInState, onPress }) => (
     <TouchableOpacity
         style={styles.navigationButton}
         onPress={onPress}>
@@ -48,7 +48,7 @@ const DownButton = ({isInState, onPress}) => (
     </TouchableOpacity>
 );
 
-const StopButton = ({isInState, onPress}) => (
+const StopButton = ({ isInState, onPress }) => (
     <TouchableOpacity
         style={styles.navigationButton}
         onPress={onPress}>

@@ -72,7 +72,7 @@ class DimmerProgressBar extends Component {
 	}
 
 	layoutView(x) {
-		let {width, height} = x.nativeEvent.layout;
+		let { width, height } = x.nativeEvent.layout;
 		this.setState({
 			containerWidth: width,
 			containerHeight: height,
@@ -144,7 +144,7 @@ class DimmerProgressBar extends Component {
                 <Animated.View style={progressStyle} />
                 <View style={[styles.textContainer, {
 	width: this.state.containerWidth,
-	height: this.state.containerHeight}]}>
+	height: this.state.containerHeight }]}>
                     <Text ellipsizeMode="middle"
                         style={styles.text}>
                         {progressText}

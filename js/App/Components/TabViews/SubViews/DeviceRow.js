@@ -74,7 +74,7 @@ class DeviceRow extends View {
 				item={this.props}
 			/>;
 		} else {
-			button = <View style={{flex: 7}}/>;
+			button = <View style={{ flex: 7 }}/>;
 		}
 
 		try {

@@ -56,11 +56,11 @@ class TabsView extends View {
 	navigationView() {
 		return (
 			<View style = {{ flex: 1, backgroundColor: this.getTheme().btnSecondaryBg }}>
-				<View style = {{ height: 60, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 5, backgroundColor: this.getTheme().btnSecondaryBg, flexDirection: 'row'}}>
-					<Image style={{width: 50, height: 50}}
+				<View style = {{ height: 60, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 5, backgroundColor: this.getTheme().btnSecondaryBg, flexDirection: 'row' }}>
+					<Image style={{ width: 50, height: 50 }}
 						source={require('./img/telldus.png')}
 						resizeMode={'contain'} />
-					<Text style={{flex: 1, color: '#e26901', fontSize: 24, textAlignVertical: 'bottom', marginLeft: 20}}>
+					<Text style={{ flex: 1, color: '#e26901', fontSize: 24, textAlignVertical: 'bottom', marginLeft: 20 }}>
 						{this.props.userProfile.firstname} {this.props.userProfile.lastname}
 					</Text>
 				</View>
@@ -68,44 +68,44 @@ class TabsView extends View {
 					<Button name = "dashboard"
 						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
-						style = {{ padding: 6, minWidth: 100}}
+						style = {{ padding: 6, minWidth: 100 }}
 						onPress={this.onTabSelect.bind(this, 'dashboardTab')}>
-						<Text style={{color: 'white', fontSize: 18}}>Dashboard</Text>
+						<Text style={{ color: 'white', fontSize: 18 }}>Dashboard</Text>
 					</Button>
 					<Button name = "toggle-on"
 						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
 						onPress={this.onTabSelect.bind(this, 'devicesTab')}>
-						<Text style={{color: 'white', fontSize: 18}}>Devices</Text>
+						<Text style={{ color: 'white', fontSize: 18 }}>Devices</Text>
 					</Button>
 					<Button name = "wifi"
 						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
 						onPress={this.onTabSelect.bind(this, 'sensorsTab')}>
-						<Text style={{color: 'white', fontSize: 18}}>Sensors</Text>
+						<Text style={{ color: 'white', fontSize: 18 }}>Sensors</Text>
 					</Button>
 					<Button name = "clock-o"
 						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
 						onPress={this.onTabSelect.bind(this, 'schedulerTab')}>
-						<Text style={{color: 'white', fontSize: 18}}>Scheduler</Text>
+						<Text style={{ color: 'white', fontSize: 18 }}>Scheduler</Text>
 					</Button>
 					<Button name = "home"
 						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
 						onPress={this.onTabSelect.bind(this, 'gatewaysTab')}>
-						<Text style={{color: 'white', fontSize: 18}}>Connected Locations</Text>
+						<Text style={{ color: 'white', fontSize: 18 }}>Connected Locations</Text>
 					</Button>
 					<Button name = "sign-out"
 						backgroundColor = {this.getTheme().btnSecondaryBg}
 						size={26}
 						style = {{ padding: 6, minWidth: 100 }}
 						onPress = {() => this.props.dispatch(logoutFromTelldus())}>
-						<Text style={{color: 'white', fontSize: 18}}>Logout</Text>
+						<Text style={{ color: 'white', fontSize: 18 }}>Logout</Text>
 					</Button>
 				</View>
 			</View>
@@ -156,7 +156,7 @@ class TabsView extends View {
 								overflowIconName = "star"
 								iconColor = {Theme.Core.inverseTextColor}
 								title = "Telldus Live!"
-								actions = {[{ title: 'Settings', icon: this.state.starIcon, show: 'always'}]}
+								actions = {[{ title: 'Settings', icon: this.state.starIcon, show: 'always' }]}
 								onActionSelected = {this._toggleEditMode.bind(this)}
 								onIconClicked = {() => this.refs.drawer.openDrawer()}
 							/>
@@ -193,7 +193,7 @@ function select(store) {
 		devices: store.devices.devices,
 		gateways: store.gateways.gateways,
 		sensors: store.sensors.sensors,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
+		userProfile: store.user.userProfile || { firstname: '', lastname: '', email: '' },
 	};
 }
 

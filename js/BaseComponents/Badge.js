@@ -50,7 +50,7 @@ export default class BadgeComponent extends Base {
 				<Text style={{ color: (this.props.textStyle && this.props.textStyle.color) ? this.props.textStyle.color : this.getTheme().badgeColor,
 					fontSize: this.getTheme().fontSizeBase,
 					lineHeight: this.getTheme().lineHeight - 2,
-					textAlign: 'center'}}>{this.props.children}
+					textAlign: 'center' }}>{this.props.children}
 				</Text>
 			</View>
 		);

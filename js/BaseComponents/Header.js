@@ -42,7 +42,7 @@ export default class HeaderComponent extends Base {
 				paddingHorizontal: 15,
 				paddingTop: (Platform.OS === 'ios' ) ? 15 : 0,
 				shadowColor: '#000',
-				shadowOffset: {width: 0, height: 2},
+				shadowOffset: { width: 0, height: 2 },
 				shadowOpacity: 0.1,
 				shadowRadius: 1.5,
 				height: this.getTheme().toolbarHeight,
@@ -115,39 +115,39 @@ export default class HeaderComponent extends Base {
 
 			if (this.props.searchBar) {
 				if (Platform.OS === 'ios') {
-					newChildren.push(<View key="search" style={{flex: 1, alignSelf: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -7}}>
-                                        {React.cloneElement(input[0], {style: this.getInitialStyle().iosToolbarSearch, toolbar: true, key: 'inp'})}
+					newChildren.push(<View key="search" style={{ flex: 1, alignSelf: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -7 }}>
+                                        {React.cloneElement(input[0], { style: this.getInitialStyle().iosToolbarSearch, toolbar: true, key: 'inp' })}
                                     </View>);
-					newChildren.push(<View key="searchBtn" style={{alignItems: 'center', justifyContent: 'center', flexDirection: 'row', marginRight: -14}}>
-                                        {React.cloneElement(buttons[0], {color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton})}
+					newChildren.push(<View key="searchBtn" style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row', marginRight: -14 }}>
+                                        {React.cloneElement(buttons[0], { color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton })}
                                     </View>);
 				} else {
-					newChildren.push(<View key="search" style={{flex: 1, alignSelf: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -8, marginRight: -8}}>
-                                        {React.cloneElement(input[0], {style: this.getInitialStyle().androidToolbarSearch, atoolbar: true})}
+					newChildren.push(<View key="search" style={{ flex: 1, alignSelf: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -8, marginRight: -8 }}>
+                                        {React.cloneElement(input[0], { style: this.getInitialStyle().androidToolbarSearch, atoolbar: true })}
                                     </View>);
 				}
 			} else if (Platform.OS === 'ios') {
-				newChildren.push(<View key="btn1" style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -14}}>
-                                        {React.cloneElement(buttons[0], {color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton})}
+				newChildren.push(<View key="btn1" style={{ alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -14 }}>
+                                        {React.cloneElement(buttons[0], { color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton })}
                                     </View>);
-				newChildren.push(<View key="title" style={{flex: 3, alignSelf: 'center', justifyContent: 'space-between'}}>
+				newChildren.push(<View key="title" style={{ flex: 3, alignSelf: 'center', justifyContent: 'space-between' }}>
                                         {[title[0], subtitle[0]]}
                                     </View>);
 				for (let i = 1; i < buttons.length; i++) {
-					newChildren.push(<View key={'btn' + (i + 1)} style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginRight: -14}}>
-                                            {React.cloneElement(buttons[i], {color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton})}
+					newChildren.push(<View key={'btn' + (i + 1)} style={{ alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginRight: -14 }}>
+                                            {React.cloneElement(buttons[i], { color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton })}
                                         </View>);
 				}
 			} else {
-				newChildren.push(<View key="btn1" style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -10, marginRight: 12}}>
-                                        {React.cloneElement(buttons[0], {style: this.getInitialStyle().toolbarButton, header: true, textStyle: {color: this.getTheme().toolbarTextColor}})}
+				newChildren.push(<View key="btn1" style={{ alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginLeft: -10, marginRight: 12 }}>
+                                        {React.cloneElement(buttons[0], { style: this.getInitialStyle().toolbarButton, header: true, textStyle: { color: this.getTheme().toolbarTextColor } })}
                                     </View>);
-				newChildren.push(<View key="title" style={{flex: 3, alignSelf: 'stretch', justifyContent: 'center'}}>
+				newChildren.push(<View key="title" style={{ flex: 3, alignSelf: 'stretch', justifyContent: 'center' }}>
                                         {[title[0]]}
                                     </View>);
 				for (let i = 1; i < buttons.length; i++) {
-					newChildren.push(<View key={'btn' + (i + 1)} style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginRight: -7}}>
-                                            {React.cloneElement(buttons[i], {style: this.getInitialStyle().toolbarButton, header: true, textStyle: {color: this.getTheme().toolbarTextColor}})}
+					newChildren.push(<View key={'btn' + (i + 1)} style={{ alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginRight: -7 }}>
+                                            {React.cloneElement(buttons[i], { style: this.getInitialStyle().toolbarButton, header: true, textStyle: { color: this.getTheme().toolbarTextColor } })}
                                         </View>);
 
 				}

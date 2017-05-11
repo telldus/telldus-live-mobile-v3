@@ -26,37 +26,37 @@ import { RoundedCornerShadowView, Icon, View, Text } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import DeviceDetailModal from './DeviceDetailModal';
 
-import { up, down, stop, learn} from 'Actions/Devices';
+import { up, down, stop, learn } from 'Actions/Devices';
 
-const NavigationalButton = ({device, onUp, onDown, onStop}) => (
-    <RoundedCornerShadowView style={{flexDirection: 'row', height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center'}}>
+const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
+    <RoundedCornerShadowView style={{ flexDirection: 'row', height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center' }}>
         <TouchableOpacity
             style={styles.navigationButton}
             onPress={onUp}>
-            <Icon name="caret-up" size={30} style={{color: '#1a355b'}}/>
+            <Icon name="caret-up" size={30} style={{ color: '#1a355b' }}/>
         </TouchableOpacity>
         <TouchableOpacity
             style={styles.navigationButton}
             onPress={onDown}>
-        <Icon name="caret-down" size={30} style={{color: '#1a355b'}}/>
+        <Icon name="caret-down" size={30} style={{ color: '#1a355b' }}/>
         </TouchableOpacity>
         <TouchableOpacity
             style={styles.navigationButton}
             onPress={onStop}>
-            <Icon name="stop" size={20} style={{color: '#1a355b'}}/>
+            <Icon name="stop" size={20} style={{ color: '#1a355b' }}/>
         </TouchableOpacity>
     </RoundedCornerShadowView>
 );
 
-const LearnButton = ({onLearn}) => (
+const LearnButton = ({ onLearn }) => (
     <RoundedCornerShadowView style={{
 	height: 36,
 	marginHorizontal: 8,
 	marginVertical: 8,
 	justifyContent: 'center',
-	alignItems: 'center'}}>
+	alignItems: 'center' }}>
         <TouchableOpacity onPress={onLearn}>
-            <Text style={{fontSize: 16, color: 'orange'}}>
+            <Text style={{ fontSize: 16, color: 'orange' }}>
                 {'Learn'}
             </Text>
         </TouchableOpacity>

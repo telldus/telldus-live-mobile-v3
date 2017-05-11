@@ -225,7 +225,7 @@ class SwipeRow extends Component {
 					onLayout={(e) => this.onContentLayout(e)}
 					style={{
 						transform: [
-							{translateX: this.state.translateX},
+							{ translateX: this.state.translateX },
 						],
 					}}
 				>
@@ -237,7 +237,7 @@ class SwipeRow extends Component {
 			<Animated.View
 				style={{
 					transform: [
-						{translateX: this.state.translateX},
+						{ translateX: this.state.translateX },
 					],
 				}}
 			>

@@ -48,7 +48,7 @@ class ListComponent extends React.Component {
 
 	setScrollEnabled(enable) {
 		if (this._listView) {
-			this._listView.setNativeProps({scrollEnabled: enable});
+			this._listView.setNativeProps({ scrollEnabled: enable });
 		}
 	}
 
@@ -147,7 +147,7 @@ class ListComponent extends React.Component {
 				ref={c => this.setRefs(c)}
 				onScroll={e => this.onScroll(e)}
 				renderRow={this.renderRow.bind(this)}
-				contentInset={{bottom: 64}}
+				contentInset={{ bottom: 64 }}
 			/>
 		);
 	}

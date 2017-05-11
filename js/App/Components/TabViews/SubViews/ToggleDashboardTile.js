@@ -24,9 +24,9 @@ import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
-const OffButton = ({isInState, tileWidth, onPress}) => (
+const OffButton = ({ isInState, tileWidth, onPress }) => (
 	<View style={[styles.buttonContainer, {
-		backgroundColor: isInState === 'TURNOFF' ? 'white' : '#eeeeee'}]}>
+		backgroundColor: isInState === 'TURNOFF' ? 'white' : '#eeeeee' }]}>
 		<TouchableOpacity
 			onPress={onPress}
 			style={styles.button} >
@@ -43,9 +43,9 @@ const OffButton = ({isInState, tileWidth, onPress}) => (
 	</View>
 );
 
-const OnButton = ({isInState, tileWidth, onPress}) => (
+const OnButton = ({ isInState, tileWidth, onPress }) => (
 	<View style={[styles.buttonContainer, {
-		backgroundColor: isInState === 'TURNON' ? 'white' : '#eeeeee'}]}>
+		backgroundColor: isInState === 'TURNON' ? 'white' : '#eeeeee' }]}>
 		<TouchableOpacity
 			onPress={onPress}
 			style={styles.button} >
@@ -54,16 +54,16 @@ const OnButton = ({isInState, tileWidth, onPress}) => (
 				numberOfLines={1}
 				style = {[styles.buttonText, {
 					color: isInState === 'TURNON' ? 'green' : '#a0a0a0',
-					fontSize: Math.floor(tileWidth / 8)}]}>
+					fontSize: Math.floor(tileWidth / 8) }]}>
 				{'On'}
 			</Text>
 		</TouchableOpacity>
 	</View>
 );
 
-const Title = ({isInState, name, tileWidth}) => (
+const Title = ({ isInState, name, tileWidth }) => (
 	<View style={[styles.titleContainer, {
-		backgroundColor: isInState === 'TURNOFF' ? '#bfbfbf' : '#e56e18'}]}>
+		backgroundColor: isInState === 'TURNOFF' ? '#bfbfbf' : '#e56e18' }]}>
 		<Text
 			ellipsizeMode="middle"
 			numberOfLines={1}
@@ -96,7 +96,7 @@ class ToggleDashboardTile extends View {
 					width: tileWidth,
 					height: tileWidth,
 				}]}>
-				<View style={{flexDirection: 'row', flex: 30}}>
+				<View style={{ flexDirection: 'row', flex: 30 }}>
 					{ turnOffButton }
 					{ turnOnButton }
 				</View>

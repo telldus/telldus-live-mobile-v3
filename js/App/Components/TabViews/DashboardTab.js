@@ -204,7 +204,7 @@ function select(store, props) {
 	return {
 		dataArray: parseDashboardForListView(store),
 		gateways: store.gateways,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ''},
+		userProfile: store.user.userProfile || { firstname: '', lastname: '', email: '' },
 	};
 }
 

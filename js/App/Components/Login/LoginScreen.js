@@ -61,7 +61,7 @@ class LoginForm extends View {
 				) : null }
 				<TextInput
 					style={styles.formField}
-					onChangeText={username => this.setState({username, notificationText: false })}
+					onChangeText={username => this.setState({ username, notificationText: false })}
 					value={this.state.username}
 					placeholder="Username"
 					autoCapitalize = "none"
@@ -70,7 +70,7 @@ class LoginForm extends View {
 				/>
 				<TextInput
 					style={styles.formField}
-					onChangeText={password => this.setState({password, notificationText: false })}
+					onChangeText={password => this.setState({ password, notificationText: false })}
 					placeholder="Password"
 					value={this.state.password}
 					secureTextEntry={true}

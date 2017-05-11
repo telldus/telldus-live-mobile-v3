@@ -37,7 +37,7 @@ export default class CardComponent extends Base {
 				borderBottomWidth: 0,
 				backgroundColor: this.props.transparent ? 'transparent' : this.getTheme().cardDefaultBg,
 				shadowColor: this.props.transparent ? undefined : '#000',
-				shadowOffset: this.props.transparent ? undefined : {width: 0, height: 2},
+				shadowOffset: this.props.transparent ? undefined : { width: 0, height: 2 },
 				shadowOpacity: this.props.transparent ? undefined : 0.1,
 				shadowRadius: this.props.transparent ? undefined : 1.5,
 				elevation: this.props.transparent ? undefined : 2,

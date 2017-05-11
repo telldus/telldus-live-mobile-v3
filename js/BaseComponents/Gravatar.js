@@ -33,22 +33,22 @@ const GRAVATAR_URI = 'https://www.gravatar.com/avatar/';
 class Gravatar extends React.Component {
 
 	_calculateStyle() {
-		const size = {width: this.props.size, height: this.props.size};
+		const size = { width: this.props.size, height: this.props.size };
 		let border = {};
 
 		switch (this.props.mask) {
 			case 'circle':
-				border = {borderRadius: size.width / 2};
+				border = { borderRadius: size.width / 2 };
 				break;
 			case 'rounded':
-				border = {borderRadius: size.width / 20};
+				border = { borderRadius: size.width / 20 };
 				break;
 			case 'square':
 				break;
 			default:
 		}
 
-		return {...size, ...border};
+		return { ...size, ...border };
 	}
 
 	render() {
@@ -56,7 +56,7 @@ class Gravatar extends React.Component {
 		const style = this._calculateStyle();
 		return (
             <View style={[styles.overlay]}>
-                <Image source={{uri}} style={[styles.image, style]} />
+                <Image source={{ uri }} style={[styles.image, style]} />
             </View>
 		);
 	}
