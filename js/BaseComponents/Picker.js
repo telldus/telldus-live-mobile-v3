@@ -59,7 +59,7 @@ export default class PickerComponent extends Base {
 
 PickerComponent.Item = React.createClass({
 
-	render: function() {
+	render: function () {
 		return (
           <Picker.Item {...this.props()}/>
 		);

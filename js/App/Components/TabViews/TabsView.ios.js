@@ -138,7 +138,7 @@ class TabsView extends View {
 		);
 	}
 
-	_openUserDetailView () {
+	_openUserDetailView() {
 		this.refs.dashboardNavigator.push({
 			component: DetailViews.User,
 			title: I18n.t('pages.profile'),
