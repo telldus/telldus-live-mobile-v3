@@ -17,7 +17,7 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.telldus.live.mobile;
+package com.telldus.live.react;
 
 import com.facebook.react.ReactActivity;
 

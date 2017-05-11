@@ -87,7 +87,7 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "com.telldus.live.mobile"
+        applicationId "com.telldus.live.react"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
@@ -98,10 +98,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file(MYAPP_RELEASE_STORE_FILE)
-            storePassword MYAPP_RELEASE_STORE_PASSWORD
-            keyAlias MYAPP_RELEASE_KEY_ALIAS
-            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            storeFile file(TELLDUS_REACT_NATIVE_LOCAL_RELEASE_STORE_FILE)
+            storePassword TELLDUS_REACT_NATIVE_LOCAL_RELEASE_STORE_PASSWORD
+            keyAlias TELLDUS_REACT_NATIVE_LOCAL_RELEASE_KEY_ALIAS
+            keyPassword TELLDUS_REACT_NATIVE_LOCAL_RELEASE_KEY_PASSWORD
         }
     }
     splits {
