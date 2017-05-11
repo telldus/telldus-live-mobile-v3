@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Base from './Base';
 
 export default class RoundedCornerShadowView extends Base {
@@ -34,15 +34,20 @@ export default class RoundedCornerShadowView extends Base {
 			alignItems: 'stretch',
 		};
 
-		if (this.props.style) {
-			style.flexDirection = this.props.style.flexDirection ? this.props.style.flexDirection : 'row';
-			style.justifyContent = this.props.style.justifyContent ? this.props.style.justifyContent : 'center';
-			style.alignItems = this.props.style.alignItems ? this.props.style.alignItems : 'stretch';
+		let propsStyle = this.props.style;
+		if (Number.isInteger(propsStyle)) {
+			propsStyle = StyleSheet.flatten(propsStyle);
+		}
+
+		if (propsStyle) {
+			style.flexDirection = propsStyle.flexDirection ? propsStyle.flexDirection : 'row';
+			style.justifyContent = propsStyle.justifyContent ? propsStyle.justifyContent : 'center';
+			style.alignItems = propsStyle.alignItems ? propsStyle.alignItems : 'stretch';
 		}
 
 		let shadowRadius = 1;
-		if (this.props.style && this.props.style.shadowRadius) {
-			shadowRadius = this.props.style.shadowRadius;
+		if (propsStyle && propsStyle.shadowRadius) {
+			shadowRadius = propsStyle.shadowRadius;
 		}
 
 		return (
