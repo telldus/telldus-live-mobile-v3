@@ -26,7 +26,6 @@ All commands are assumed to be ran from project root.
 ### Android
 
 - find all the instructions you need for setting up your Android development environment on [React Native Official - Android Setup](https://facebook.github.io/react-native/releases/0.23/docs/android-setup.html)
-- find all the instructions for generating signed APK on [Generating Signed APK](https://facebook.github.io/react-native/docs/signed-apk-android.html)
 - **install dependencies with Android Studio**:
   - Android SDK Manager is no longer available as a separate GUI (run `android`), but integrated in [Android Studio](https://developer.android.com/studio/install.html). Install it, go through default setup. When you get to chose your project (new, use existing, etc.), choose `Configure` -> `SDK Manager` on the bottom. This pretty much looks like the old GUI, only now it's split over 3 tabs. Use `Show Package Details` checkbox in the bottom, to expand the dependencies.
   - When you run the app, the `react-native` will use the `ANDROID_HOME` environment variable to find the SDK. So, if you install with Android Studio, use `export ANDROID_HOME=/Users/elbow/Library/Android/sdk` (add it to your `~/.bash_profile`).
@@ -45,8 +44,7 @@ All commands are assumed to be ran from project root.
 - to run the app on your device, check out [React Native: Running On Device](https://facebook.github.io/react-native/releases/0.23/docs/running-on-device-android.html#content). When your (virtual) device is connected, you can see it show up when you run `adb devices`. run `react-native run-android` to launch the app on your phone
 - use `adb logcat` to look at the Android log file
 - when the app launches on your (virtual) device, it will send you to the Settings screen for "Apps that can draw over other apps". Enable this for the Telldus app and launch the app again from your app drawer.
-
-
+ 
 ## Development
 
 ### Local config
@@ -102,6 +100,13 @@ React Native comes with pretty cool development tools.
 You can access the developer menu by shaking your device or by selecting "Shake Gesture" inside the Hardware menu in the iOS Simulator. You can also use the `Command ⌘ + D` keyboard shortcut when your app is running in the iPhone Simulator, or `Command ⌘ + M` when running in an Android emulator.
 
 [More info](https://facebook.github.io/react-native/docs/debugging.html)
+
+## Releasing
+
+### Android
+
+- find all the instructions for generating signed APK on [Generating Signed APK](https://facebook.github.io/react-native/docs/signed-apk-android.html)
+  - NOTE: You need to use `react-native run-android --configuration=release` instead of `react-native run-android --variant=release`, see [SO](http://stackoverflow.com/questions/41263330/error-running-react-native-run-android-variant-release-task-installreleasede)
 
 ## Split dependencies
 
