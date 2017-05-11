@@ -24,7 +24,7 @@ import { FormattedNumber, Text, View } from 'BaseComponents';
 
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 
 class SensorDashboardTile extends View {
 	constructor(props) {
@@ -153,28 +153,26 @@ class SensorDashboardTile extends View {
 					width: tileWidth,
 					height: tileWidth,
 				}]}>
-				<TouchableOpacity onPress={this.changeDisplayType} style={{ flex: 1, justifyContent: 'center' }}>
-				<View style={{ flexDirection: 'row', flex: 30 }}>
+				<TouchableOpacity
+					onPress={this.changeDisplayType}
+					activeOpacity={0.8}
+					style={styles.container}>
+					<View
+						style={styles.body}>
 					{slides[selectedSlideIndex]}
-				</View>
-				<View style={{
-					flex: 13,
-					backgroundColor: item.childObject.state === 0 ? '#bfbfbf' : '#e56e18',
-					justifyContent: 'center' }}>
-					<Text
-						ellipsizeMode="middle"
-						numberOfLines={1}
-						style = {{
-							padding: 5,
-							color: 'white',
-							fontSize: Math.floor(tileWidth / 8),
-							opacity: item.childObject.name ? 1 : 0.7,
-							textAlign: 'center',
-							textAlignVertical: 'center',
-						}}>
-						{item.childObject.name ? item.childObject.name : '(no name)'}
-					</Text>
-				</View>
+					</View>
+					<View style={[styles.titleContainer, {
+						backgroundColor: item.childObject.state === 0 ? '#bfbfbf' : '#e56e18' }]}>
+						<Text
+							ellipsizeMode="middle"
+							numberOfLines={1}
+							style = {[styles.titleText, {
+								fontSize: Math.floor(tileWidth / 8),
+								opacity: item.childObject.name ? 1 : 0.7,
+							}]}>
+							{item.childObject.name ? item.childObject.name : '(no name)'}
+						</Text>
+					</View>
 				</TouchableOpacity>
 			</DashboardShadowTile>
 		);
@@ -184,7 +182,30 @@ class SensorDashboardTile extends View {
 		const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
 		return directions[Math.floor(value / 22.5)];
 	}
-
 }
 
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	body: {
+		flex: 30,
+		flexDirection: 'row',
+		borderTopLeftRadius: 7,
+		borderTopRightRadius: 7,
+	},
+	titleContainer: {
+		flex: 13,
+		justifyContent: 'center',
+		borderBottomLeftRadius: 7,
+		borderBottomRightRadius: 7,
+	},
+	titleText: {
+		padding: 5,
+		color: 'white',
+		textAlign: 'center',
+		textAlignVertical: 'center',
+	},
+});
 module.exports = SensorDashboardTile;
