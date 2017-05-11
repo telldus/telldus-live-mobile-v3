@@ -23,13 +23,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Text, RoundedCornerShadowView, View, Icon } from 'BaseComponents';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import DeviceDetailModal from './DeviceDetailModal';
 
 import { bell, learn } from 'Actions/Devices';
 
 const BellButton = ({ onBell }) => (
-    <RoundedCornerShadowView style={{ height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center' }}>
+    <RoundedCornerShadowView style={styles.bell}>
         <Icon
 			name="bell"
 			size={26}
@@ -40,14 +40,9 @@ const BellButton = ({ onBell }) => (
 );
 
 const LearnButton = ({ onLearn }) => (
-    <RoundedCornerShadowView style={{
-	height: 36,
-	marginHorizontal: 8,
-	marginVertical: 8,
-	justifyContent: 'center',
-	alignItems: 'center' }}>
-        <TouchableOpacity onPress={onLearn}>
-            <Text style={{ fontSize: 16, color: 'orange' }}>
+    <RoundedCornerShadowView style={styles.learnContainer}>
+        <TouchableOpacity onPress={onLearn} style={styles.learnButton}>
+            <Text style={styles.learnText}>
                 {'Learn'}
             </Text>
         </TouchableOpacity>
@@ -102,6 +97,32 @@ BellDeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
 	deviceId: React.PropTypes.number.isRequired,
 };
+
+const styles = StyleSheet.create({
+	bell: {
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 16,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnContainer: {
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 8,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnText: {
+		fontSize: 16,
+		color: 'orange',
+	},
+});
 
 function select(store) {
 	return { store };
