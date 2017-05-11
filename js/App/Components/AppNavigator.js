@@ -90,7 +90,7 @@ function mapStateToProps(state, ownProps) {
 	return {
 		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
-		userProfile: state.user.userProfile || {firstname: '', lastname: '', email: ''},
+		userProfile: state.user.userProfile || { firstname: '', lastname: '', email: '' },
 		dimmer: state.dimmer,
 	};
 }

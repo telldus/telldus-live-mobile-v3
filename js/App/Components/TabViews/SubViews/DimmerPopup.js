@@ -128,14 +128,14 @@ class DimmerPopup extends Component {
 					justifyContent: 'center',
 				}}>
 				<Text ellipsizeMode="middle"
-					style={{color: '#1a355b'}}>
+					style={{ color: '#1a355b' }}>
 					{this.props.name}
 				</Text>
 				<DimmerProgressBar
 					progress={this.props.value}
 					height={16}
 					width={deviceWidth - 32}
-					style={{alignItems: 'center', justifyContent: 'center'}}
+					style={{ alignItems: 'center', justifyContent: 'center' }}
 				/>
 			</View>
 		);

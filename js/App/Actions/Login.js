@@ -105,4 +105,4 @@ function logoutFromTelldus(): ThunkAction {
 
 }
 
-module.exports = {loginToTelldus, logoutFromTelldus, getUserProfile, updateAccessToken};
+module.exports = { loginToTelldus, logoutFromTelldus, getUserProfile, updateAccessToken };

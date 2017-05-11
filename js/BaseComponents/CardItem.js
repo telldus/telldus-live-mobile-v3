@@ -263,13 +263,13 @@ export default class CardItemComponent extends Base {
 
 		if (!this.thumbnailPresent() && !this.iconPresent()) {
 			newChildren = React.Children.map(this.props.children, (child, i) => {
-				return React.cloneElement(child, {...this.getChildProps(child), key: i});
+				return React.cloneElement(child, { ...this.getChildProps(child), key: i });
 			});
 		}		else {
 			newChildren = [];
 			if (!Array.isArray(this.props.children)) {
 				newChildren.push(
-					<View key="cardItem" style={{justifyContent: 'flex-start'}}>
+					<View key="cardItem" style={{ justifyContent: 'flex-start' }}>
 						{React.cloneElement(this.props.children, this.getChildProps(this.props.children))}
 					</View>
 				);
@@ -280,7 +280,7 @@ export default class CardItemComponent extends Base {
 				newChildren.push(
 					<View key="cardItem" style={this.notePresent() ? this.getRightStyle().right : this.squareThumbs() ? this.getRightStyle().right3 : this.getRightStyle().right2}>
 						{childrenArray.slice(1).map((child, i) => {
-							return React.cloneElement(child, {...this.getChildProps(child), key: i});
+							return React.cloneElement(child, { ...this.getChildProps(child), key: i });
 						})}
 					</View>
 				);

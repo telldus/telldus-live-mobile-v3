@@ -55,7 +55,7 @@ export default class PickerComponent extends Base {
 		};
 	}
 	_setModalVisible(visible) {
-		this.setState({modalVisible: visible});
+		this.setState({ modalVisible: visible });
 	}
 
 	prepareRootProps() {
@@ -96,19 +96,19 @@ export default class PickerComponent extends Base {
 	this._setModalVisible(false);
 }}>Back</Button>
                         <Title>{this.props.iosHeader}</Title>
-                        <Button transparent textStyle={{color: 'transparent'}}>Back</Button>
+                        <Button transparent textStyle={{ color: 'transparent' }}>Back</Button>
                     </Header>
                     <Content>
                         <List dataArray={this.props.children}
                             renderRow={(child) =>
-                                <ListItem style={{paddingVertical: 10}} iconRight button onPress={() => {
-	this._setModalVisible(false); this.props.onValueChange(child.props.value); this.setState({current: child.props.label});
+                                <ListItem style={{ paddingVertical: 10 }} iconRight button onPress={() => {
+	this._setModalVisible(false); this.props.onValueChange(child.props.value); this.setState({ current: child.props.label });
 }} >
                                     <Text>{child.props.label}</Text>
                                     {(child.props.value === this.props.selectedValue) ?
                                         (<Icon name="ios-checkmark-outline" />)
                                         :
-                                        (<Icon name="ios-checkmark-outline" style={{color: 'transparent'}} />)
+                                        (<Icon name="ios-checkmark-outline" style={{ color: 'transparent' }} />)
                                     }
 
                                 </ListItem>

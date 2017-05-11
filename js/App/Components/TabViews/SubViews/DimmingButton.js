@@ -29,9 +29,9 @@ import VerticalSlider from './VerticalSlider';
 
 import throttle from 'lodash/throttle';
 
-const OffButton = ({item, enabled, onPress}) => (
+const OffButton = ({ item, enabled, onPress }) => (
     <View style={[styles.buttonContainer, {
-	backgroundColor: item.isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
+	backgroundColor: item.isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
         <TouchableOpacity
 			onPress={enabled ? onPress : null}
 			style={styles.button} >
@@ -39,16 +39,16 @@ const OffButton = ({item, enabled, onPress}) => (
                 ellipsizeMode="middle"
                 numberOfLines={1}
                 style = {[styles.buttonText, {
-	color: item.isInState === 'TURNOFF' && enabled ? 'red' : '#a2a2a2'}]}>
+	color: item.isInState === 'TURNOFF' && enabled ? 'red' : '#a2a2a2' }]}>
                 {'Off'}
             </Text>
         </TouchableOpacity>
     </View>
 );
 
-const OnButton = ({item, enabled, onPress}) => (
+const OnButton = ({ item, enabled, onPress }) => (
     <View style={[styles.buttonContainer, {
-	backgroundColor: item.isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee'}]}>
+	backgroundColor: item.isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
         <TouchableOpacity
 			onPress={enabled ? onPress : null}
 			style={styles.button} >
@@ -56,7 +56,7 @@ const OnButton = ({item, enabled, onPress}) => (
                 ellipsizeMode="middle"
                 numberOfLines={1}
                 style = {[styles.buttonText, {
-	color: item.isInState !== 'TURNOFF' && enabled ? 'green' : '#a2a2a2'}]}>
+	color: item.isInState !== 'TURNOFF' && enabled ? 'green' : '#a2a2a2' }]}>
                 {'On'}
             </Text>
         </TouchableOpacity>
@@ -107,11 +107,11 @@ class DimmingButton extends View {
 			return;
 		}
 		const dimmerValue = getDimmerValue(nextProps.item.value, nextProps.item.isInState);
-		this.setState({value: dimmerValue});
+		this.setState({ value: dimmerValue });
 	}
 
 	layoutView(x) {
-		let {width, height} = x.nativeEvent.layout;
+		let { width, height } = x.nativeEvent.layout;
 		this.setState({
 			buttonWidth: width,
 			buttonHeight: height,

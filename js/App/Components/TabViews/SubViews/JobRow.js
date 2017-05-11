@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { ListItem, Text} from 'BaseComponents';
+import { ListItem, Text } from 'BaseComponents';
 import Theme from 'Theme';
 
 export default props => {

@@ -42,7 +42,7 @@ let createTheStore = applyMiddleware(thunk, promise, array, analytics, logger)(c
 let _store;
 export function configureStore(onComplete: ?() => void) {
 	const store = autoRehydrate()(createTheStore)(reducers);
-	persistStore(store, {storage: AsyncStorage}, onComplete);
+	persistStore(store, { storage: AsyncStorage }, onComplete);
 	if (isDebuggingInChrome) {
 		window.store = store;
 	}

@@ -181,5 +181,5 @@ export function parseDevicesForListView(devices = [], gateways = [], dashboard =
 			return 0;
 		}
 	});
-	return {items, sectionIds};
+	return { items, sectionIds };
 }

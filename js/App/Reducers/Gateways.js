@@ -38,7 +38,7 @@ function gateway(state: State = gatewayInitialState, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_GATEWAYS':
 			state.id = parseInt(state.id, 10);
-			return {...gatewayInitialState, ...state};
+			return { ...gatewayInitialState, ...state };
 		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
 			const payload = action.payload;
 			if (state.id !== payload.gatewayId) {
@@ -52,7 +52,7 @@ function gateway(state: State = gatewayInitialState, action: Action): State {
 						port: null,
 					},
 				};
-				return {...state, ...newState};
+				return { ...state, ...newState };
 			}
 			return Object.assign({}, state, {
 				websocketAddress: {

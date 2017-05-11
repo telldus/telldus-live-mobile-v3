@@ -32,7 +32,7 @@ import throttle from 'lodash/throttle';
 
 const Title = ({ isInState, name, tileWidth }) => (
     <View style={[styles.title, {
-	backgroundColor: isInState === 'TURNOFF' ? '#bfbfbf' : '#e56e18'}]}>
+	backgroundColor: isInState === 'TURNOFF' ? '#bfbfbf' : '#e56e18' }]}>
 		<Text
 			ellipsizeMode="middle"
 			numberOfLines={1}
@@ -129,11 +129,11 @@ class DimmerDashboardTile extends View {
 			return;
 		}
 		const dimmerValue = getDimmerValue(nextProps.item.childObject.value, nextProps.item.childObject.isInState);
-		this.setState({value: dimmerValue});
+		this.setState({ value: dimmerValue });
 	}
 
 	layoutView(x) {
-		let {width, height} = x.nativeEvent.layout;
+		let { width, height } = x.nativeEvent.layout;
 		this.setState({
 			bodyWidth: width,
 			bodyHeight: height,

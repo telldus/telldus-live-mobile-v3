@@ -29,7 +29,7 @@ module.exports = class DashboardShadowTile extends View {
 				style={[this.props.style, {
 					borderRadius: 7,
 					shadowColor: '#000000',
-					shadowOffset: {width: 0, height: 0},
+					shadowOffset: { width: 0, height: 0 },
 					shadowRadius: 3,
 					shadowOpacity: 1.0,
 					elevation: 10,

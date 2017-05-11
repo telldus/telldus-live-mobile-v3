@@ -45,7 +45,7 @@ function Bootstrap(): React.Component {
 		}
 
 		_configureStoreCompleted() {
-			this.setState({isLoading: false});
+			this.setState({ isLoading: false });
 		}
 
 		render() {

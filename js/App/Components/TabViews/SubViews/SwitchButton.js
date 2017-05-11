@@ -32,7 +32,7 @@ module.exports = class SwitchButton extends View {
 				style={[this.props.style, {
 					borderRadius: 7,
 					shadowColor: '#000000',
-					shadowOffset: {width: 0, height: 0},
+					shadowOffset: { width: 0, height: 0 },
 					shadowRadius: 1,
 					shadowOpacity: 1.0,
 					backgroundColor: 'red',
@@ -51,7 +51,7 @@ module.exports = class SwitchButton extends View {
 }}>
                         <TouchableOpacity
 							onPress={() => console.log('off')}
-							style={{flex: 1, justifyContent: 'center'}} >
+							style={{ flex: 1, justifyContent: 'center' }} >
                             <Text
                                 ellipsizeMode="middle"
                                 numberOfLines={1}
@@ -72,7 +72,7 @@ module.exports = class SwitchButton extends View {
 }}>
                         <TouchableOpacity
 							onPress={() => console.log('off')}
-							style={{flex: 1, justifyContent: 'center'}} >
+							style={{ flex: 1, justifyContent: 'center' }} >
                             <Text
                                 ellipsizeMode="middle"
                                 numberOfLines={1}

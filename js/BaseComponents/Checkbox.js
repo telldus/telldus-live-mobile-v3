@@ -45,7 +45,7 @@ export default class CheckBox extends Base {
 	render() {
 		return (
 			<View style={this.getInitialStyle().checkbox}>
-				<Icon name={(Platform.OS === 'ios') ? 'ios-checkmark-outline' : 'md-checkmark'} style={{color: this.props.checked ? this.getTheme().checkboxTickColor : 'transparent', lineHeight: (Platform.OS === 'ios') ? this.getTheme().checkboxSize / 0.93 : this.getTheme().checkboxSize - 5, marginTop: (Platform.OS === 'ios') ? undefined : 1, fontSize: (Platform.OS === 'ios') ? this.getTheme().checkboxSize / 0.8 : this.getTheme().checkboxSize / 1.2}} />
+				<Icon name={(Platform.OS === 'ios') ? 'ios-checkmark-outline' : 'md-checkmark'} style={{ color: this.props.checked ? this.getTheme().checkboxTickColor : 'transparent', lineHeight: (Platform.OS === 'ios') ? this.getTheme().checkboxSize / 0.93 : this.getTheme().checkboxSize - 5, marginTop: (Platform.OS === 'ios') ? undefined : 1, fontSize: (Platform.OS === 'ios') ? this.getTheme().checkboxSize / 0.8 : this.getTheme().checkboxSize / 1.2 }} />
 			</View>
 		);
 	}

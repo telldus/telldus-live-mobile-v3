@@ -83,7 +83,7 @@ class DeviceDetailModal extends View {
                         <Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
                             {device.name}
                         </Text>
-                        <Icon name="close" size={26} color="white" style={{flex: 1}} onPress={this.props.onCloseSelected} />
+                        <Icon name="close" size={26} color="white" style={{ flex: 1 }} onPress={this.props.onCloseSelected} />
                     </View>
                     <View style={styles.body}>
                         <Text style={styles.textLocation}>
@@ -94,7 +94,7 @@ class DeviceDetailModal extends View {
                             onPress={() => this.onStarButtonSelected(inDashboard)}
 							style={styles.bottom} >
                             <Icon name="star" size={18} color="orange"
-                                style={{opacity: inDashboard ? 1.0 : 0.6}} />
+                                style={{ opacity: inDashboard ? 1.0 : 0.6 }} />
                             {addToDashboardView}
                         </TouchableOpacity>
                     </View>

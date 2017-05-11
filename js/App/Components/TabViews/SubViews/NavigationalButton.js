@@ -23,7 +23,7 @@ import React from 'react';
 import { Icon, View, RoundedCornerShadowView } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-const UpButton = ({supportedMethod, onPress}) => (
+const UpButton = ({ supportedMethod, onPress }) => (
     <TouchableOpacity
         style={styles.navigationButton}
         onPress={onPress}>
@@ -35,7 +35,7 @@ const UpButton = ({supportedMethod, onPress}) => (
     </TouchableOpacity>
 );
 
-const DownButton = ({supportedMethod, onPress}) => (
+const DownButton = ({ supportedMethod, onPress }) => (
     <TouchableOpacity
         style={styles.navigationButton}
         onPress={onPress}>
@@ -47,7 +47,7 @@ const DownButton = ({supportedMethod, onPress}) => (
     </TouchableOpacity>
 );
 
-const StopButton = ({supportedMethod, onPress}) => (
+const StopButton = ({ supportedMethod, onPress }) => (
     <TouchableOpacity
         style={styles.navigationButton}
         onPress={onPress}>

@@ -21,7 +21,7 @@
 
 import React, { PropTypes } from 'react';
 import { Text, View } from 'BaseComponents';
-import {PanResponder, Animated, StyleSheet } from 'react-native';
+import { PanResponder, Animated, StyleSheet } from 'react-native';
 
 function getSliderLabel(value) {
 	if (value === 100) {
@@ -145,7 +145,7 @@ class VerticalSlider extends View {
 	}
 
 	layoutView(x) {
-		let {width, height} = x.nativeEvent.layout;
+		let { width, height } = x.nativeEvent.layout;
 		this.setState({
 			containerWidth: width,
 			containerHeight: height,
@@ -153,11 +153,11 @@ class VerticalSlider extends View {
 	}
 
 	onValueChange(val) {
-		this.setState({displayedValue: getSliderLabel(val)});
+		this.setState({ displayedValue: getSliderLabel(val) });
 	}
 
 	render() {
-		const {minimumValue, maximumValue, value, containerHeight} = this.state;
+		const { minimumValue, maximumValue, value, containerHeight } = this.state;
 		const { thumbHeight } = this.props;
 		const thumbBottom = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
@@ -169,13 +169,13 @@ class VerticalSlider extends View {
                 <Animated.View style={[styles.thumb, {
 	width: this.state.containerWidth,
 	height: thumbHeight,
-	transform: [{ translateY: thumbBottom}],
+	transform: [{ translateY: thumbBottom }],
 }]}
                     {...this.panResponder.panHandlers}>
                     <Text
                         ellipsizeMode="middle"
                         numberOfLines={1}
-                        style = {[styles.thumbText, {fontSize: this.props.fontSize}]}>
+                        style = {[styles.thumbText, { fontSize: this.props.fontSize }]}>
                         {this.state.displayedValue}
                     </Text>
                 </Animated.View>
