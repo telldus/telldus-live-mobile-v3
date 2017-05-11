@@ -25,7 +25,7 @@ import SwipeRow from './SwipeRow';
 
 class ListComponent extends React.Component {
 
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this._rows = {};
 		this.openCellId = null;

@@ -37,7 +37,7 @@ export default class Textarea extends Base {
 			},
 		};
 	}
-	getBorderStyle(){
+	getBorderStyle() {
 		return {
 			underline: {
 				borderTopWidth: 0,

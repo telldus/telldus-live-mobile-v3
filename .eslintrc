@@ -222,9 +222,10 @@
       "before": true,
       "after": true
     }],                              // require a space after certain keywords (off by default)
+    "space-before-blocks": 2,        // Require Or Disallow Space Before Blocks
     "space-in-brackets": 0,          // require or disallow spaces inside brackets (off by default)
     "space-in-parens": 0,            // require or disallow spaces inside parentheses (off by default)
-    "space-infix-ops": 1,            // require spaces around operators
+    "space-infix-ops": 2,            // require spaces around operators
     "space-unary-ops": [1, {
       "words": true,
       "nonwords": false
