@@ -86,7 +86,7 @@ async function callEndPoint(url, requestParams) {
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
-			'Authorization': 'Bearer ' + accessToken.access_token,
+			'Authorization': `Bearer ${accessToken.access_token}`,
 		},
 	});
 

@@ -167,7 +167,7 @@ class DimmerDeviceDetailModal extends View {
                 onCloseSelected={this.props.onCloseSelected}
                 deviceId={this.props.deviceId}>
                 <Text style={styles.textDimmingLevel}>
-                    {'Dimming level: ' + sliderValue + '%'}
+                    {`Dimming level: ${sliderValue}%`}
                 </Text>
                 {slider}
                 {toggleButton}

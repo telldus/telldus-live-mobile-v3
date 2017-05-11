@@ -50,7 +50,7 @@ export default props => {
 	color: 'orange',
 	fontSize: 16,
 }}>
-                    {props.effectiveHour + ':' + props.effectiveMinute }
+                    {`${props.effectiveHour}:${props.effectiveMinute}`}
                 </Text>
                 <Text style={{
 	flex: 20,

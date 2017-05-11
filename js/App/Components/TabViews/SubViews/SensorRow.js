@@ -40,7 +40,7 @@ const SensorTemperature = ({ temperature }) => (
         <Image source={require('../img/sensorIcons/Temperature.png')} />
         <Text>
             <FormattedNumber value = {temperature} maximumFractionDigits = {1} />
-            {String.fromCharCode(176) + 'C'}
+            {`${String.fromCharCode(176)}C`}
         </Text>
     </View>
 );
