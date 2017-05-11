@@ -28,7 +28,7 @@ export type State = {
 
 const initialState = {
 	accessToken: false,
-	userProfile: false
+	userProfile: false,
 };
 
 function user(state: State = initialState, action: Action): State {
@@ -44,7 +44,7 @@ function user(state: State = initialState, action: Action): State {
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return {
-			...initialState
+			...initialState,
 		};
 	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {

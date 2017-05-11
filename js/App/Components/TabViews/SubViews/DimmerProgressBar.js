@@ -33,7 +33,7 @@ class DimmerProgressBar extends Component {
 			progress: new Animated.Value(props.indeterminate ? INDETERMINATE_WIDTH_FACTOR : progress),
 			animationValue: new Animated.Value(BAR_WIDTH_ZERO_POSITION),
 			containerWidth: 0,
-			containerHeight: 0
+			containerHeight: 0,
 		};
 	}
 
@@ -75,7 +75,7 @@ class DimmerProgressBar extends Component {
 		let {width, height} = x.nativeEvent.layout;
 		this.setState({
 			containerWidth: width,
-			containerHeight: height
+			containerHeight: height,
 		});
 	}
 
@@ -104,7 +104,7 @@ class DimmerProgressBar extends Component {
 			borderRadius,
 			overflow: 'hidden',
 			backgroundColor: unfilledColor,
-			justifyContent: 'center', alignItems: 'center'
+			justifyContent: 'center', alignItems: 'center',
 		};
 
 		const progressStyle = {
@@ -159,14 +159,14 @@ const styles = StyleSheet.create({
 	textContainer: {
 		position: 'absolute',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	text: {
 		color: '#1a355b',
 		backgroundColor: 'transparent',
 		textAlign: 'center',
-		textAlignVertical: 'center'
-	}
+		textAlignVertical: 'center',
+	},
 });
 
 DimmerProgressBar.propTypes = {
@@ -191,6 +191,6 @@ DimmerProgressBar.defaultProps = {
 	height: 6,
 	indeterminate: false,
 	progress: 0,
-	width: 150
+	width: 150,
 };
 module.exports = DimmerProgressBar;

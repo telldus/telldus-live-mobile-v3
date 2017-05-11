@@ -126,15 +126,15 @@ class NavigationalDeviceDetailModal extends View {
 
 NavigationalDeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
-	deviceId: React.PropTypes.number.isRequired
+	deviceId: React.PropTypes.number.isRequired,
 };
 
 const styles = StyleSheet.create({
 	navigationButton: {
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center'
-	}
+		alignItems: 'center',
+	},
 });
 
 function select(store) {
@@ -146,7 +146,7 @@ function actions(dispatch) {
 		onUp: (id) => dispatch(up(id)),
 		onDown: (id) => dispatch(down(id)),
 		onStop: (id) => dispatch(stop(id)),
-		onLearn: (id) => dispatch(learn(id))
+		onLearn: (id) => dispatch(learn(id)),
 	};
 }
 

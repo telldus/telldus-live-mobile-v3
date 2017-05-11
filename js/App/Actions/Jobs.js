@@ -28,8 +28,8 @@ function getJobs(): ThunkAction {
 		const payload = {
 			url: '/scheduler/jobList',
 			requestParams: {
-				method: 'GET'
-			}
+				method: 'GET',
+			},
 		};
 		return LiveApi(payload).then(response => {
 			dispatch({
@@ -37,7 +37,7 @@ function getJobs(): ThunkAction {
 				payload: {
 					...payload,
 					...response,
-				}
+				},
 			});
 		});
 	};

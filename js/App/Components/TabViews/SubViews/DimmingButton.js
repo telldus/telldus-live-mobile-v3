@@ -94,7 +94,7 @@ class DimmingButton extends View {
 		this.state = {
 			buttonWidth: 0,
 			buttonHeight: 0,
-			value
+			value,
 		};
 
 		this.onValueChangeThrottled = throttle(this.props.onDimmerSlide, 200, {
@@ -114,7 +114,7 @@ class DimmingButton extends View {
 		let {width, height} = x.nativeEvent.layout;
 		this.setState({
 			buttonWidth: width,
-			buttonHeight: height
+			buttonHeight: height,
 		});
 	}
 
@@ -173,20 +173,20 @@ const styles = StyleSheet.create({
 		width: 88,
 		height: 32,
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	buttonContainer: {
 		flex: 1,
-		alignItems: 'stretch'
+		alignItems: 'stretch',
 	},
 	button: {
 		flex: 1,
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	buttonText: {
 		fontSize: 12,
 		textAlign: 'center',
-		textAlignVertical: 'center'
+		textAlignVertical: 'center',
 	},
 	slider: {
 		flex: 1,

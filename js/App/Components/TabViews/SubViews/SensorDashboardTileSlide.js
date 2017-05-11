@@ -32,14 +32,14 @@ class SensorDashboardTileSlide extends View {
 				<View style={{
 					flex: 4,
 					justifyContent: 'center',
-					alignItems: 'center'
+					alignItems: 'center',
 				}}>
 					<Image source={this.props.icon}/>
 				</View>
 				<View style={{
 					flex: 5,
 					justifyContent: 'center',
-					alignItems: 'center'
+					alignItems: 'center',
 				}}>
 					<Text style={{color: '#00255e', fontSize: Math.floor(this.props.tileWidth / 5)}}>
 						{this.props.text && this.props.text}

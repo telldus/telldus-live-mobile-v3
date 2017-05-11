@@ -32,7 +32,7 @@ class DeviceDetailModal extends View {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isVisible: this.props.isVisible
+			isVisible: this.props.isVisible,
 		};
 
 		this.onStarButtonSelected = this.onStarButtonSelected.bind(this);
@@ -78,7 +78,7 @@ class DeviceDetailModal extends View {
                 <Container style={styles.container}>
                     <View style={styles.header}>
                         <Icon name="wifi" size={26} color="white" style={{
-	flex: 1, marginLeft: 8
+	flex: 1, marginLeft: 8,
 }}/>
                         <Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
                             {device.name}
@@ -109,60 +109,60 @@ DeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
 	onAddToDashboard: React.PropTypes.func.isRequired,
 	onRemoveFromDashboard: React.PropTypes.func.isRequired,
-	deviceId: React.PropTypes.number.isRequired
+	deviceId: React.PropTypes.number.isRequired,
 };
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: 'white',
-		margin: 10
+		margin: 10,
 	},
 	header: {
 		height: 46,
 		backgroundColor: '#1a355b',
 		flexDirection: 'row',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	textHeaderTitle: {
 		marginLeft: 8,
 		color: 'white',
 		fontSize: 18,
 		fontWeight: 'bold',
-		flex: 8
+		flex: 8,
 	},
 	body: {
-		flex: 10
+		flex: 10,
 	},
 	textLocation: {
 		color: '#1a355b',
 		fontSize: 14,
 		marginTop: 12,
-		marginLeft: 8
+		marginLeft: 8,
 	},
 	textGuide: {
-		marginLeft: 8
+		marginLeft: 8,
 	},
 	textDeviceShownOnTheDashboard: {
 		color: '#1a355b',
-		fontSize: 13
+		fontSize: 13,
 	},
 	textTapToRemove: {
 		color: '#1a355b',
-		fontSize: 10
+		fontSize: 10,
 	},
 	bottom: {
 		height: 36,
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginLeft: 8
-	}
+		marginLeft: 8,
+	},
 });
 
 function select(store) {
 	return {
-		store
+		store,
 	};
 }
 
@@ -170,7 +170,7 @@ function actions(dispatch) {
 	return {
 		onAddToDashboard: (id) => dispatch(addToDashboard('device', id)),
 		onRemoveFromDashboard: (id) => dispatch(removeFromDashboard('device', id)),
-		dispatch
+		dispatch,
 	};
 }
 

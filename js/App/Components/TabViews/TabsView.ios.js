@@ -29,7 +29,7 @@ import {
 	Icon,
 	NavigatorIOS,
 	TabBarIOS,
-	View
+	View,
 } from 'BaseComponents';
 
 import { switchTab, toggleEditMode } from 'Actions';
@@ -71,7 +71,7 @@ class TabsView extends View {
 							title: 'Telldus Live!',
 							component: TabViews.Dashboard,
 							rightButtonIcon: this.state.userIcon,
-							onRightButtonPress: this._openUserDetailView.bind(this)
+							onRightButtonPress: this._openUserDetailView.bind(this),
 						}}
 					/>
 				</TabBarIOS.Item>
@@ -87,7 +87,7 @@ class TabsView extends View {
 							title: I18n.t('pages.devices'),
 							component: TabViews.Devices,
 							rightButtonIcon: this.state.starIcon,
-							onRightButtonPress: this._toggleDevicesTabEditMode.bind(this)
+							onRightButtonPress: this._toggleDevicesTabEditMode.bind(this),
 						}}
 					/>
 				</TabBarIOS.Item>
@@ -102,7 +102,7 @@ class TabsView extends View {
 							title: I18n.t('pages.sensors'),
 							component: TabViews.Sensors,
 							rightButtonIcon: this.state.starIcon,
-							onRightButtonPress: this._toggleSensorTabEditMode.bind(this)
+							onRightButtonPress: this._toggleSensorTabEditMode.bind(this),
 						}}
 					/>
 				</TabBarIOS.Item>
@@ -142,7 +142,7 @@ class TabsView extends View {
 		this.refs.dashboardNavigator.push({
 			component: DetailViews.User,
 			title: I18n.t('pages.profile'),
-			passProps: { user: this.props.userProfile }
+			passProps: { user: this.props.userProfile },
 		});
 	}
 
@@ -167,7 +167,7 @@ function actions(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
 		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
-		dispatch
+		dispatch,
 	};
 }
 

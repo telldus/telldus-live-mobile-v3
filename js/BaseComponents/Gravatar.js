@@ -23,7 +23,7 @@ import React from 'react';
 import {
     StyleSheet,
     View,
-    Image
+    Image,
 } from 'react-native';
 
 import md5 from 'blueimp-md5';
@@ -66,12 +66,12 @@ Gravatar.propTypes = {
 	...View.PropTypes,
 	emailAddress: React.PropTypes.string.isRequired,
 	size: React.PropTypes.number.isRequired,
-	mask: React.PropTypes.oneOf(['circle', 'square', 'rounded'])
+	mask: React.PropTypes.oneOf(['circle', 'square', 'rounded']),
 };
 
 Gravatar.defaultProps = {
 	size: 600,
-	mask: 'circle'
+	mask: 'circle',
 };
 
 const styles = StyleSheet.create({

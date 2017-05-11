@@ -30,15 +30,15 @@ function getSensors(): ThunkAction {
 		const payload = {
 			url: '/sensors/list?includeValues=1',
 			requestParams: {
-				method: 'GET'
-			}
+				method: 'GET',
+			},
 		};
 		return LiveApi(payload).then(response => dispatch({
 			type: 'RECEIVED_SENSORS',
 			payload: {
 				...payload,
 				...response,
-			}
+			},
 		}
 		));
 	};
@@ -49,14 +49,14 @@ function processWebsocketMessageForSensor(action, data): Action {
 		case 'value':
 			return {
 				type: 'SENSOR_UPDATE_VALUE',
-				payload: data
+				payload: data,
 			};
 		default:
 	}
 
 	return {
 		type: 'SENSOR_WEBSOCKET_UNHANDLED',
-		payload: data
+		payload: data,
 	};
 }
 

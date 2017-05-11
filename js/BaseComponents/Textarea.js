@@ -33,8 +33,8 @@ export default class Textarea extends Base {
 				color: this.getTheme().textColor,
 				paddingLeft: 5,
 				paddingRight: 5,
-				fontSize: 18
-			}
+				fontSize: 18,
+			},
 		};
 	}
 	getBorderStyle(){
@@ -43,24 +43,24 @@ export default class Textarea extends Base {
 				borderTopWidth: 0,
 				borderRightWidth: 0,
 				borderLeftWidth: 0,
-				marginTop: 5
+				marginTop: 5,
 			},
 
 			bordered: {
-				marginTop: 5
+				marginTop: 5,
 			},
 
 			rounded: {
 				borderRadius: 30,
-				marginTop: 5
-			}
+				marginTop: 5,
+			},
 		};
 	}
 
 	prepareRootProps() {
 
 		let defaultProps = {
-			style: this.getInitialStyle().input
+			style: this.getInitialStyle().input,
 		};
 
 		return computeProps(this.props, defaultProps);

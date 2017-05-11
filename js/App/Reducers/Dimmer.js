@@ -30,7 +30,7 @@ type State = {
 const initialState: State = {
 	show: false,
 	value: 0,
-	name: 'N/A'
+	name: 'N/A',
 };
 
 function dimmer(state: State = initialState, action: Action): State {
@@ -39,12 +39,12 @@ function dimmer(state: State = initialState, action: Action): State {
 			...state,
 			show: true,
 			name: action.name,
-			value: action.value
+			value: action.value,
 		};
 	} else if (action.type === 'HIDE_DIMMER_POPUP') {
 		return {
 			...state,
-			show: false
+			show: false,
 		};
 	} else if (action.type === 'SET_DIMMER_VALUE') {
 		return {

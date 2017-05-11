@@ -100,7 +100,7 @@ class BellDeviceDetailModal extends View {
 
 BellDeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
-	deviceId: React.PropTypes.number.isRequired
+	deviceId: React.PropTypes.number.isRequired,
 };
 
 function select(store) {
@@ -110,7 +110,7 @@ function select(store) {
 function actions(dispatch) {
 	return {
 		onBell: (id) => dispatch(bell(id)),
-		onLearn: (id) => dispatch(learn(id))
+		onLearn: (id) => dispatch(learn(id)),
 	};
 }
 

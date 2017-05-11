@@ -35,7 +35,7 @@ export default class TextComponent extends Base {
 		};
 
 		let defaultProps = {
-			style: type
+			style: type,
 		};
 
 		return computeProps(this.props, defaultProps);

@@ -35,7 +35,7 @@ const OffButton = ({isInState, tileWidth, onPress}) => (
 				numberOfLines={1}
 				style = {[styles.buttonText, {
 					color: isInState === 'TURNOFF' ? 'red' : '#a0a0a0',
-					fontSize: Math.floor(tileWidth / 8)
+					fontSize: Math.floor(tileWidth / 8),
 				}]}>
 				{'Off'}
 			</Text>
@@ -69,7 +69,7 @@ const Title = ({isInState, name, tileWidth}) => (
 			numberOfLines={1}
 			style = {[styles.titleText, {
 				fontSize: Math.floor(tileWidth / 8),
-				opacity: name ? 1 : 0.7
+				opacity: name ? 1 : 0.7,
 			}]}>
 			{name ? name : '(no name)'}
 			</Text>
@@ -94,7 +94,7 @@ class ToggleDashboardTile extends View {
 				item={this.props.item}
 				style={	[this.props.style, {
 					width: tileWidth,
-					height: tileWidth
+					height: tileWidth,
 				}]}>
 				<View style={{flexDirection: 'row', flex: 30}}>
 					{ turnOffButton }
@@ -109,26 +109,26 @@ class ToggleDashboardTile extends View {
 const styles = StyleSheet.create({
 	buttonContainer: {
 		flex: 1,
-		alignItems: 'stretch'
+		alignItems: 'stretch',
 	},
 	button: {
 		flex: 1,
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	buttonText: {
 		textAlign: 'center',
-		textAlignVertical: 'center'
+		textAlignVertical: 'center',
 	},
 	titleContainer: {
 		flex: 13,
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	titleText: {
 		padding: 5,
 		color: 'white',
 		textAlign: 'center',
-		textAlignVertical: 'center'
-	}
+		textAlignVertical: 'center',
+	},
 });
 
 module.exports = ToggleDashboardTile;

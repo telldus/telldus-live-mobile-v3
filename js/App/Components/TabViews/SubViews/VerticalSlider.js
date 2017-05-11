@@ -44,7 +44,7 @@ class VerticalSlider extends View {
 			minimumValue: 0,
 			maximumValue: 100,
 			step: 1,
-			displayedValue: getSliderLabel(this.props.value)
+			displayedValue: getSliderLabel(this.props.value),
 		};
 	}
 
@@ -148,7 +148,7 @@ class VerticalSlider extends View {
 		let {width, height} = x.nativeEvent.layout;
 		this.setState({
 			containerWidth: width,
-			containerHeight: height
+			containerHeight: height,
 		});
 	}
 
@@ -161,7 +161,7 @@ class VerticalSlider extends View {
 		const { thumbHeight } = this.props;
 		const thumbBottom = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
-			outputRange: [0, thumbHeight - containerHeight]
+			outputRange: [0, thumbHeight - containerHeight],
 		});
 		return (
             <View style={[this.props.style]}
@@ -169,7 +169,7 @@ class VerticalSlider extends View {
                 <Animated.View style={[styles.thumb, {
 	width: this.state.containerWidth,
 	height: thumbHeight,
-	transform: [{ translateY: thumbBottom}]
+	transform: [{ translateY: thumbBottom}],
 }]}
                     {...this.panResponder.panHandlers}>
                     <Text
@@ -199,8 +199,8 @@ const styles = StyleSheet.create({
 	thumbText: {
 		color: '#a2a2a2',
 		textAlign: 'center',
-		textAlignVertical: 'center'
-	}
+		textAlignVertical: 'center',
+	},
 });
 
 VerticalSlider.propTypes = {
@@ -209,13 +209,13 @@ VerticalSlider.propTypes = {
 	value: PropTypes.number,
 	onSlidingStart: PropTypes.func,
 	onSlidingComplete: PropTypes.func,
-	onValueChange: PropTypes.func
+	onValueChange: PropTypes.func,
 };
 
 VerticalSlider.defaultProps = {
 	thumbHeight: 12,
 	fontSize: 10,
-	value: 0
+	value: 0,
 };
 
 module.exports = VerticalSlider;

@@ -186,5 +186,5 @@ export default {
 	inverseSpinnerColor: '#1A191B',
 
 	defaultProgressColor: '#E4202D',
-	inverseProgressColor: '#1A191B'
+	inverseProgressColor: '#1A191B',
 };

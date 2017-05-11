@@ -63,7 +63,7 @@ export function addConnection(gatewayId, websocketUrl) {
 	}
 	websocketConnections[gatewayId] = {
 		url: websocketUrl,
-		websocket: new WebSocket(websocketUrl)
+		websocket: new WebSocket(websocketUrl),
 	};
 	return websocketConnections[gatewayId].websocket;
 }

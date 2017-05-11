@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
 		flex: 7,
 		height: 32,
 		justifyContent: 'center',
-		alignItems: 'center'
-	}
+		alignItems: 'center',
+	},
 });
 
 module.exports = BellButton;

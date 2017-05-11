@@ -30,7 +30,7 @@ class ListComponent extends React.Component {
 		this._rows = {};
 		this.openCellId = null;
 		this.state = {
-			refreshing: false
+			refreshing: false,
 		};
 	}
 
@@ -103,7 +103,7 @@ class ListComponent extends React.Component {
 					onRowOpen: _ => this.onRowOpen(secId, rowId, this._rows),
 					onRowClose: _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows),
 					onRowPress: _ => this.onRowPress(`${secId}${rowId}`),
-					setScrollEnabled: enable => this.setScrollEnabled(enable)
+					setScrollEnabled: enable => this.setScrollEnabled(enable),
 				}
 			);
 		}

@@ -33,14 +33,14 @@ export default class PickerComponent extends Base {
 			},
 			pickerItem: {
 
-			}
+			},
 		};
 	}
 	prepareRootProps() {
 
 		let defaultProps = {
 			style: this.getInitialStyle().picker,
-			itemStyle: this.getInitialStyle().pickerItem
+			itemStyle: this.getInitialStyle().pickerItem,
 		};
 
 		return computeProps(this.props, defaultProps);
@@ -63,5 +63,5 @@ PickerComponent.Item = React.createClass({
 		return (
           <Picker.Item {...this.props()}/>
 		);
-	}
+	},
 });

@@ -37,8 +37,8 @@ export default class CheckBox extends Base {
 				paddingLeft: (Platform.OS === 'ios') ? 5 : 2,
 				paddingBottom: (Platform.OS === 'ios') ? 0 : 5,
 				borderColor: this.getTheme().checkboxBgColor,
-				backgroundColor: this.props.checked ? this.getTheme().checkboxBgColor : 'transparent'
-			}
+				backgroundColor: this.props.checked ? this.getTheme().checkboxBgColor : 'transparent',
+			},
 		};
 	}
 

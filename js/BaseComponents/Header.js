@@ -46,32 +46,32 @@ export default class HeaderComponent extends Base {
 				shadowOpacity: 0.1,
 				shadowRadius: 1.5,
 				height: this.getTheme().toolbarHeight,
-				elevation: 3
+				elevation: 3,
 			},
 			iosToolbarSearch: {
 				backgroundColor: this.getTheme().toolbarInputColor,
 				borderRadius: this.props.rounded ? 25 : 2,
 				height: 30,
 				borderColor: 'transparent',
-				flex: 1
+				flex: 1,
 			},
 			androidToolbarSearch: {
 				backgroundColor: '#fff',
 				borderRadius: 2,
 				borderColor: 'transparent',
 				elevation: 2,
-				flex: 1
+				flex: 1,
 			},
 			toolbarButton: {
-				paddingHorizontal: 15
-			}
+				paddingHorizontal: 15,
+			},
 		};
 	}
 
 	prepareRootProps() {
 
 		let defaultProps = {
-			style: this.getInitialStyle().navbar
+			style: this.getInitialStyle().navbar,
 		};
 
 		return computeProps(this.props, defaultProps);

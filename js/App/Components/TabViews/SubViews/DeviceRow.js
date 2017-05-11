@@ -84,7 +84,7 @@ class DeviceRow extends View {
 						{button}
 						<View style={styles.name}>
 							<Text style = {[styles.text, {
-								opacity: this.props.name ? 1 : 0.5
+								opacity: this.props.name ? 1 : 0.5,
 							}]}>
 								{this.props.name ? this.props.name : '(no name)'}
 							</Text>
@@ -111,11 +111,11 @@ const styles = StyleSheet.create({
 	container: {
 		marginLeft: 2,
 		flexDirection: 'row',
-		alignItems: 'stretch'
+		alignItems: 'stretch',
 	},
 	name: {
 		flex: 20,
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	text: {
 		marginLeft: 8,
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
 		flex: 2,
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginRight: 8
-	}
+		marginRight: 8,
+	},
 });
 
 function actions(dispatch) {

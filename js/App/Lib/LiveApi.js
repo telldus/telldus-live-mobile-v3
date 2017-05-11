@@ -86,8 +86,8 @@ async function callEndPoint(url, requestParams) {
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
-			'Authorization': 'Bearer ' + accessToken.access_token
-		}
+			'Authorization': 'Bearer ' + accessToken.access_token,
+		},
 	});
 
 	let response = await fetch(`${apiServer}/oauth2${url}`, params);
@@ -112,7 +112,7 @@ async function refreshAccessToken(url, requestParams) {
 			'client_secret': privateKey,
 			'grant_type': 'refresh_token',
 			'refresh_token': accessToken.refresh_token,
-		})
+		}),
 	})
 	.then(response => response.json())
 	.then(response => {

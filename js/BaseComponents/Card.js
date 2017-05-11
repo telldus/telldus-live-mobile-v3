@@ -45,14 +45,14 @@ export default class CardComponent extends Base {
 				marginLeft: 8,
 				marginRight: 8,
 				marginBottom: 4,
-			}
+			},
 		};
 	}
 
 	prepareRootProps() {
 
 		let defaultProps = {
-			style: this.getInitialStyle().card
+			style: this.getInitialStyle().card,
 		};
 
 		return computeProps(this.props, defaultProps);

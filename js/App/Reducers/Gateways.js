@@ -30,8 +30,8 @@ const gatewayInitialState = {
 	websocketAddress: {
 		address: null,
 		instance: null,
-		port: null
-	}
+		port: null,
+	},
 };
 
 function gateway(state: State = gatewayInitialState, action: Action): State {
@@ -49,8 +49,8 @@ function gateway(state: State = gatewayInitialState, action: Action): State {
 					websocketAddress: {
 						address: null,
 						instance: null,
-						port: null
-					}
+						port: null,
+					},
 				};
 				return {...state, ...newState};
 			}
@@ -58,8 +58,8 @@ function gateway(state: State = gatewayInitialState, action: Action): State {
 				websocketAddress: {
 					address: payload.address,
 					instance: payload.instance,
-					port: payload.port
-				}
+					port: payload.port,
+				},
 			});
 		default:
 			return state;

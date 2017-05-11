@@ -35,7 +35,7 @@ class DimmerPopup extends Component {
 		animationOutTiming: 300,
 		isVisible: false,
 		hideOnBack: true,
-		value: 1
+		value: 1,
 	}
 
 	constructor(props) {
@@ -43,7 +43,7 @@ class DimmerPopup extends Component {
 		this.state = {
 			isVisible: false,
 			deviceWidth: Dimensions.get('window').width,
-			deviceHeight: Dimensions.get('window').height
+			deviceHeight: Dimensions.get('window').height,
 		};
 	}
 
@@ -125,7 +125,7 @@ class DimmerPopup extends Component {
 					backgroundColor: 'white',
 					borderRadius: 7,
 					alignItems: 'center',
-					justifyContent: 'center'
+					justifyContent: 'center',
 				}}>
 				<Text ellipsizeMode="middle"
 					style={{color: '#1a355b'}}>
@@ -151,7 +151,7 @@ DimmerPopup.propTypes = {
 	isVisible: PropTypes.bool.isRequired,
 	hideOnBack: PropTypes.bool,
 	style: PropTypes.array,
-	name: PropTypes.string.isRequired
+	name: PropTypes.string.isRequired,
 };
 
 module.exports = DimmerPopup;

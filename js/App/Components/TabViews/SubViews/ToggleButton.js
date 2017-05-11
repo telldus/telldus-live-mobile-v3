@@ -81,21 +81,21 @@ const styles = StyleSheet.create({
 		flex: 7,
 		height: 32,
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	buttonContainer: {
 		flex: 1,
-		alignItems: 'stretch'
+		alignItems: 'stretch',
 	},
 	button: {
 		flex: 1,
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	buttonText: {
 		fontSize: 12,
 		textAlign: 'center',
-		textAlignVertical: 'center'
-	}
+		textAlignVertical: 'center',
+	},
 });
 
 module.exports = ToggleButton;

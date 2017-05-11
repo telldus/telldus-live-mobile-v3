@@ -65,7 +65,7 @@ import {
 	StyleSheet,
 	TabBarIOS,
 	ListView,
-	Image
+	Image,
 } from 'react-native';
 
 
@@ -115,5 +115,5 @@ module.exports = {
 	Gravatar: Gravatar,
 	ListDataSource: ListView.DataSource,
 	Image: Image,
-	I18n: I18n
+	I18n: I18n,
 };

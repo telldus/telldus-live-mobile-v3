@@ -8,7 +8,7 @@ import {
 	Animated,
 	StyleSheet,
 	TouchableOpacity,
-	View
+	View,
 } from 'react-native';
 
 const DIRECTIONAL_DISTANCE_CHANGE_THRESHOLD = 2;
@@ -36,7 +36,7 @@ class SwipeRow extends Component {
 			dimensionsSet: false,
 			hiddenHeight: 0,
 			hiddenWidth: 0,
-			translateX: new Animated.Value(0)
+			translateX: new Animated.Value(0),
 		};
 	}
 
@@ -122,7 +122,7 @@ class SwipeRow extends Component {
 			}
 
 			this.setState({
-				translateX: new Animated.Value(newDX)
+				translateX: new Animated.Value(newDX),
 			});
 
 		}
@@ -164,7 +164,7 @@ class SwipeRow extends Component {
 			{
 				toValue,
 				friction: this.props.friction,
-				tension: this.props.tension
+				tension: this.props.tension,
 			}
 		).start();
 
@@ -192,7 +192,7 @@ class SwipeRow extends Component {
 				this.props.children[1],
 				{
 					...this.props.children[1].props,
-					onPress: newOnPress
+					onPress: newOnPress,
 				}
 			);
 		}
@@ -225,8 +225,8 @@ class SwipeRow extends Component {
 					onLayout={ (e) => this.onContentLayout(e) }
 					style={{
 						transform: [
-							{translateX: this.state.translateX}
-						]
+							{translateX: this.state.translateX},
+						],
 					}}
 				>
 					{this.renderVisibleContent()}
@@ -237,8 +237,8 @@ class SwipeRow extends Component {
 			<Animated.View
 				style={{
 					transform: [
-						{translateX: this.state.translateX}
-					]
+						{translateX: this.state.translateX},
+					],
 				}}
 			>
 				{this.renderVisibleContent()}
@@ -254,7 +254,7 @@ class SwipeRow extends Component {
 					{
 						height: this.state.hiddenHeight,
 						width: this.state.hiddenWidth,
-					}
+					},
 				]}>
 					{this.props.children[0]}
 				</View>

@@ -31,7 +31,7 @@ export default class RoundedCornerShadowView extends Base {
 			borderRadius: 7,
 			overflow: 'hidden',
 			justifyContent: 'center',
-			alignItems: 'stretch'
+			alignItems: 'stretch',
 		};
 
 		if (this.props.style) {
@@ -54,7 +54,7 @@ export default class RoundedCornerShadowView extends Base {
 					shadowOffset: {width: 0, height: 0},
 					shadowRadius: shadowRadius,
 					shadowOpacity: 1.0,
-					elevation: 2
+					elevation: 2,
 				}]}>
                 <View style={style}>
                     {this.props.children}

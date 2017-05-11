@@ -37,7 +37,7 @@ export default class InputGroup extends Base {
 				flexDirection: 'row',
 				borderColor: this.getTheme().inputBorderColor,
 				paddingRight: 5,
-				alignItems: 'center'
+				alignItems: 'center',
 			},
 			outerBorder: {
 				position: 'relative',
@@ -45,32 +45,32 @@ export default class InputGroup extends Base {
 				borderWidth: this.getTheme().borderWidth,
 				borderTopWidth: 0,
 				borderRightWidth: 0,
-				borderLeftWidth: 0
+				borderLeftWidth: 0,
 			},
 			darkborder: {
-				borderColor: '#000'
+				borderColor: '#000',
 			},
 			lightborder: {
-				borderColor: '#fff'
+				borderColor: '#fff',
 			},
 			underline: {
 				position: 'relative',
 				borderWidth: this.getTheme().borderWidth,
 				borderTopWidth: 0,
 				borderRightWidth: 0,
-				borderLeftWidth: 0
+				borderLeftWidth: 0,
 			},
 
 			bordered: {
 				position: 'relative',
-				borderWidth: this.getTheme().borderWidth
+				borderWidth: this.getTheme().borderWidth,
 			},
 
 			rounded: {
 				position: 'relative',
 				borderWidth: this.getTheme().borderWidth,
-				borderRadius: 30
-			}
+				borderRadius: 30,
+			},
 		};
 	}
 
@@ -78,7 +78,7 @@ export default class InputGroup extends Base {
 
 		let type = {
 			paddingLeft: (this.props.borderType === 'rounded' && !this.props.children.type === Icon) ? 15 :
-			(this.props.children.type === Icon ) ? this.getTheme().inputPaddingLeftIcon : 5
+			(this.props.children.type === Icon ) ? this.getTheme().inputPaddingLeftIcon : 5,
 		};
 
 		let defaultStyle = (this.props.borderType === 'regular') ? this.getInitialStyle().bordered : (this.props.borderType === 'rounded') ? this.getInitialStyle().rounded : this.getInitialStyle().underline;
@@ -89,7 +89,7 @@ export default class InputGroup extends Base {
 
 		let defaultProps = {
 			style: addedProps,
-			key: 'inpGroup'
+			key: 'inpGroup',
 		};
 
 		return computeProps(this.props, defaultProps);
@@ -102,12 +102,12 @@ export default class InputGroup extends Base {
 			alignSelf: 'center',
 			lineHeight: (this.props.toolbar || this.props.atoolbar) ? 24 : undefined,
 			paddingRight: 5,
-			marginLeft: (this.props.toolbar || this.props.atoolbar) ? 5 : undefined
+			marginLeft: (this.props.toolbar || this.props.atoolbar) ? 5 : undefined,
 		};
 
 		let defaultProps = {
 			style: defaultStyle,
-			key: 'icon'
+			key: 'icon',
 		};
 
 		return computeProps(icon.props, defaultProps);
@@ -118,13 +118,13 @@ export default class InputGroup extends Base {
 			alignSelf: 'center',
 			paddingRight: 5,
 			marginLeft: (this.props.toolbar || this.props.atoolbar) ? 5 : undefined,
-			height: 30
+			height: 30,
 		};
 
 		let defaultProps = {
 			style: defaultStyle,
 			key: 'button',
-			inputButton: true
+			inputButton: true,
 		};
 
 		return computeProps(button.props, defaultProps);
@@ -174,7 +174,7 @@ export default class InputGroup extends Base {
 					iconElement[0],
 					{
 						...this.getIconProps(iconElement[0]),
-						key: 'icon0'
+						key: 'icon0',
 					}
 				));
 				newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
@@ -182,7 +182,7 @@ export default class InputGroup extends Base {
 					buttonElement[0],
 					{
 						...this.getButtonProps(buttonElement[0]),
-						key: 'button1'
+						key: 'button1',
 					}
 				));
 			}			else if (iconElement.length > 1) {
@@ -190,7 +190,7 @@ export default class InputGroup extends Base {
 						iconElement[0],
 					{
 						...this.getIconProps(iconElement[0]),
-						key: 'icon0'
+						key: 'icon0',
 					}
 					));
 				newChildren.push(<Input key="inp" {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
@@ -198,7 +198,7 @@ export default class InputGroup extends Base {
 						iconElement[1],
 					{
 						...this.getIconProps(iconElement[1]),
-						key: 'icon1'
+						key: 'icon1',
 					}
 					));
 			} else {

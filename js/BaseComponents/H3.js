@@ -30,11 +30,11 @@ export default class H3Component extends Base {
 
 		let type = {
 			color: this.getTheme().textColor,
-			fontSize: this.getTheme().fontSizeH3
+			fontSize: this.getTheme().fontSizeH3,
 		};
 
 		let defaultProps = {
-			style: type
+			style: type,
 		};
 
 		return computeProps(this.props, defaultProps);

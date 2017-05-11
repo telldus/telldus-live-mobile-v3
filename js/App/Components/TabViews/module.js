@@ -32,5 +32,5 @@ module.exports = {
 	Devices: DevicesTab,
 	Gateways: GatewaysTab,
 	Scheduler: SchedulerTab,
-	Sensors: SensorsTab
+	Sensors: SensorsTab,
 };

@@ -40,7 +40,7 @@ export default class PickerComponent extends Base {
 		super(props);
 		this.state = {
 			modalVisible: false,
-			current: this.getSelected().props.label
+			current: this.getSelected().props.label,
 		};
 	}
 
@@ -51,7 +51,7 @@ export default class PickerComponent extends Base {
 			},
 			pickerItem: {
 
-			}
+			},
 		};
 	}
 	_setModalVisible(visible) {
@@ -62,7 +62,7 @@ export default class PickerComponent extends Base {
 
 		let defaultProps = {
 			style: this.getInitialStyle().picker,
-			itemStyle: this.getInitialStyle().pickerItem
+			itemStyle: this.getInitialStyle().pickerItem,
 		};
 
 		return computeProps(this.props, defaultProps);
@@ -128,5 +128,5 @@ PickerComponent.Item = React.createClass({
 		return (
           <Picker.Item {...this.props()}/>
 		);
-	}
+	},
 });
