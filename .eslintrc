@@ -159,7 +159,9 @@
   // These rules are specific to JavaScript running on Node.js.
 
     "handle-callback-err": 1,        // enforces error handling in callbacks (off by default) (on by default in the node environment)
-    "indent": ["error", "tab"],      // enforce consistent indentation
+    "indent": ["error", "tab", {
+      "SwitchCase": 1
+    }],                              // enforce consistent indentation
     "no-mixed-requires": 1,          // disallow mixing regular variable and require declarations (off by default) (on by default in the node environment)
     "no-new-require": 1,             // disallow use of new operator with the require function (off by default) (on by default in the node environment)
     "no-path-concat": 1,             // disallow string concatenation with __dirname and __filename (off by default) (on by default in the node environment)

@@ -46,12 +46,12 @@ function getSensors(): ThunkAction {
 
 function processWebsocketMessageForSensor(action, data): Action {
 	switch (action) {
-	case 'value':
-		return {
-			type: 'SENSOR_UPDATE_VALUE',
-			payload: data
-		};
-	default:
+		case 'value':
+			return {
+				type: 'SENSOR_UPDATE_VALUE',
+				payload: data
+			};
+		default:
 	}
 
 	return {
