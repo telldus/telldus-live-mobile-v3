@@ -45,28 +45,28 @@ export default {
 	inputFontSize: 15,
 	inputLineHeight: 24,
 
-	get fontSizeH1 () {
+	get fontSizeH1() {
 		return this.fontSizeBase * 1.8;
 	},
-	get fontSizeH2 () {
+	get fontSizeH2() {
 		return this.fontSizeBase * 1.6;
 	},
-	get fontSizeH3 () {
+	get fontSizeH3() {
 		return this.fontSizeBase * 1.4;
 	},
-	get btnTextSize () {
+	get btnTextSize() {
 		return this.fontSizeBase * 1.1;
 	},
-	get btnTextSizeLarge () {
+	get btnTextSizeLarge() {
 		return this.fontSizeBase * 1.5;
 	},
-	get btnTextSizeSmall () {
+	get btnTextSizeSmall() {
 		return this.fontSizeBase * 0.8;
 	},
-	get iconSizeLarge () {
+	get iconSizeLarge() {
 		return this.iconFontSize * 1.5;
 	},
-	get iconSizeSmall () {
+	get iconSizeSmall() {
 		return this.iconFontSize * 0.6;
 	},
 
@@ -74,13 +74,13 @@ export default {
 
 	borderRadiusBase: 2,
 
-	get borderRadiusLarge () {
+	get borderRadiusLarge() {
 		return this.fontSizeBase * 3.8;
 	},
 
 	footerHeight: 55,
 	toolbarHeight: (Platform.OS === 'ios' ) ? 64 : 56,
-	get toolbarDefaultBg () {
+	get toolbarDefaultBg() {
 		return this.brandPrimary;
 	},
 	toolbarInverseBg: '#222',
@@ -108,54 +108,54 @@ export default {
 	get darkenHeader() {
 		return Color(this.tabBgColor).darken(0.03).hexString();
 	},
-	get btnPrimaryBg () {
+	get btnPrimaryBg() {
 		return this.brandSecondary;
 	},
 	get btnSecondaryBg() {
 		return this.brandTertiary;
 	},
-	get btnPrimaryColor () {
+	get btnPrimaryColor() {
 		return this.inverseTextColor;
 	},
-	get btnSuccessBg () {
+	get btnSuccessBg() {
 		return this.brandSuccess;
 	},
-	get btnSuccessColor () {
+	get btnSuccessColor() {
 		return this.inverseTextColor;
 	},
-	get btnDangerBg () {
+	get btnDangerBg() {
 		return this.brandDanger;
 	},
-	get btnDangerColor () {
+	get btnDangerColor() {
 		return this.inverseTextColor;
 	},
-	get btnInfoBg () {
+	get btnInfoBg() {
 		return this.brandInfo;
 	},
-	get btnInfoColor () {
+	get btnInfoColor() {
 		return this.inverseTextColor;
 	},
-	get btnWarningBg () {
+	get btnWarningBg() {
 		return this.brandWarning;
 	},
-	get btnWarningColor () {
+	get btnWarningColor() {
 		return this.inverseTextColor;
 	},
 
 	borderWidth: 0,
 	iconMargin: 7,
 
-	get inputColor () {
+	get inputColor() {
 		return this.textColor;
 	},
-	get inputColorPlaceholder () {
+	get inputColorPlaceholder() {
 		return '#575757';
 	},
 	inputBorderColor: '#D9D5DC',
 	inputHeightBase: 40,
 	inputGroupMarginBottom: 10,
 	inputPaddingLeft: 5,
-	get inputPaddingLeftIcon () {
+	get inputPaddingLeftIcon() {
 		return this.inputPaddingLeft * 8;
 	},
 

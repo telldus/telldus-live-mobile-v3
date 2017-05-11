@@ -65,7 +65,7 @@ class NavigationalButton extends View {
 	}
 
 	render() {
-		const noop = function() {};
+		const noop = function () {};
 		const { UP, DOWN, STOP } = this.props.item.supportedMethods;
 
 		return (

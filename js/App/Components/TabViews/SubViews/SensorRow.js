@@ -129,7 +129,7 @@ const SensorRow = props => {
         </ListItem>
 	);
 
-	function formatLastUpdated (minutes, lastUpdated) {
+	function formatLastUpdated(minutes, lastUpdated) {
 		if (minutes === 0) {
 			return 'Just now';
 		}

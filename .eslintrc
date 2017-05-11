@@ -214,6 +214,10 @@
     "quote-props": 0,                // require quotes around object literal property names (off by default)
     "semi": 2,                       // require or disallow use of semicolons instead of ASI
     "sort-vars": 0,                  // sort variables within the same declaration block (off by default)
+    "space-before-function-paren": ['warn', {
+      "anonymous": "always",
+      "named": "never"
+    }],                              // Require or disallow a space before function parenthesis
     "keyword-spacing": ["error", {
       "before": true,
       "after": true

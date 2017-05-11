@@ -43,7 +43,7 @@ class LoginForm extends View {
 		this.state = this.state || {};
 	}
 
-	render () {
+	render() {
 		return (
 			<View style = {{
 				backgroundColor: '#00000099',
