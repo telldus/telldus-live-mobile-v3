@@ -87,7 +87,7 @@ class DeviceDetailModal extends View {
                     </View>
                     <View style={styles.body}>
                         <Text style={styles.textLocation}>
-                            {'Location: ' + gateway.name}
+                            {`Location: ${gateway.name}`}
                         </Text>
                         {this.props.children}
                         <TouchableOpacity

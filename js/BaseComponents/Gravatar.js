@@ -52,7 +52,7 @@ class Gravatar extends React.Component {
 	}
 
 	render() {
-		const uri = GRAVATAR_URI + md5(this.props.emailAddress) + '?d=mm&s=' + this.props.size * 2;
+		const uri = `${GRAVATAR_URI + md5(this.props.emailAddress)}?d=mm&s=${this.props.size * 2}`;
 		const style = this._calculateStyle();
 		return (
             <View style={[styles.overlay]}>

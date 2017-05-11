@@ -133,7 +133,7 @@ class DimmerProgressBar extends Component {
 		} else if (this.props.progress === 1) {
 			progressText = 'On';
 		} else {
-			progressText = Math.round(this.props.progress * 100) + '%';
+			progressText = `${Math.round(this.props.progress * 100)}%`;
 		}
 
 		return (

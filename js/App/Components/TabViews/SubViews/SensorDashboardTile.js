@@ -81,7 +81,7 @@ class SensorDashboardTile extends View {
 			slideList.push({
 				key: 'temperature',
 				icon: require('../img/sensorIcons/TemperatureLargeGray.png'),
-				text: <FormattedNumber value = {item.childObject.temperature} maximumFractionDigits = {0} suffix = {String.fromCharCode(176) + 'c'}/>,
+				text: <FormattedNumber value = {item.childObject.temperature} maximumFractionDigits = {0} suffix = {`${String.fromCharCode(176) }c`}/>,
 			});
 		}
 		if (item.childObject.rainRate || item.childObject.rainTotal) {

@@ -134,7 +134,7 @@ export default class HeaderComponent extends Base {
                                         {[title[0], subtitle[0]]}
                                     </View>);
 				for (let i = 1; i < buttons.length; i++) {
-					newChildren.push(<View key={'btn' + (i + 1)} style={{ alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginRight: -14 }}>
+					newChildren.push(<View key={`btn${i + 1}`} style={{ alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginRight: -14 }}>
                                             {React.cloneElement(buttons[i], { color: this.getTheme().iosToolbarBtnColor, style: this.getInitialStyle().toolbarButton })}
                                         </View>);
 				}
@@ -146,7 +146,7 @@ export default class HeaderComponent extends Base {
                                         {[title[0]]}
                                     </View>);
 				for (let i = 1; i < buttons.length; i++) {
-					newChildren.push(<View key={'btn' + (i + 1)} style={{ alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginRight: -7 }}>
+					newChildren.push(<View key={`btn${i + 1}`} style={{ alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginRight: -7 }}>
                                             {React.cloneElement(buttons[i], { style: this.getInitialStyle().toolbarButton, header: true, textStyle: { color: this.getTheme().toolbarTextColor } })}
                                         </View>);
 

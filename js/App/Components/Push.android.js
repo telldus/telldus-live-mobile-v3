@@ -35,7 +35,7 @@ class Push extends React.Component {
 		});
 		this.notificationUnsubscribe = FCM.on('notification', (notif) => {
 			if (notif.message) {
-				console.log('Received push notification: ' + notif.message);
+				console.log(`Received push notification: ${notif.message}`);
 			}
 		});
 		this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
