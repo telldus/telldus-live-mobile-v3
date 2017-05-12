@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import EventEmitter from 'EventEmitter';
 
 import {
 	I18n,
@@ -39,6 +40,7 @@ import TabViews from 'TabViews';
 class TabsView extends View {
 	constructor(props) {
 		super(props);
+		this.eventEmitter = new EventEmitter();
 	}
 
 	componentDidMount() {
@@ -71,6 +73,12 @@ class TabsView extends View {
 							title: 'Telldus Live!',
 							component: TabViews.Dashboard,
 							rightButtonIcon: this.state.settingIcon,
+							passProps: {
+								events: this.eventEmitter,
+							},
+							onRightButtonPress: () => {
+								this.eventEmitter.emit('onSetting');
+							},
 						}}
 					/>
 				</TabBarIOS.Item>

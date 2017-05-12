@@ -20,44 +20,41 @@
 'use strict';
 
 import React from 'react';
-import { Text, View, Icon } from 'BaseComponents';
+import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
-const UpButton = ({ isInState, onPress }) => (
-    <TouchableOpacity
-        style={styles.navigationButton}
-        onPress={onPress}>
-        <Icon name="caret-up" size={42}
-            style={{
-	color: isInState === 'UP' ? '#1a355b' : '#eeeeee',
-}}
-        />
-    </TouchableOpacity>
+const UpButton = ({ isEnabled, onPress }) => (
+	<TouchableOpacity
+		style={styles.navigationButton}
+		onPress={onPress}>
+		<Icon name="caret-up"
+			size={42}
+			style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
+		/>
+	</TouchableOpacity>
 );
 
-const DownButton = ({ isInState, onPress }) => (
-    <TouchableOpacity
-        style={styles.navigationButton}
-        onPress={onPress}>
-        <Icon name="caret-down" size={42}
-            style={{
-	color: isInState === 'DOWN' ? '#1a355b' : '#eeeeee',
-}}
-        />
-    </TouchableOpacity>
+const DownButton = ({ isEnabled, onPress }) => (
+	<TouchableOpacity
+		style={styles.navigationButton}
+		onPress={onPress}>
+		<Icon name="caret-down"
+			size={42}
+			style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
+		/>
+	</TouchableOpacity>
 );
 
-const StopButton = ({ isInState, onPress }) => (
-    <TouchableOpacity
-        style={styles.navigationButton}
-        onPress={onPress}>
-        <Icon name="stop" size={30}
-            style={{
-	color: isInState === 'STOP' ? '#1a355b' : '#eeeeee',
-}}
-        />
-    </TouchableOpacity>
+const StopButton = ({ isEnabled, onPress }) => (
+	<TouchableOpacity
+		style={styles.navigationButton}
+		onPress={onPress}>
+		<Icon name="stop"
+			size={30}
+			style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
+		/>
+	</TouchableOpacity>
 );
 
 class NavigationalDashboardTile extends View {
@@ -67,35 +64,27 @@ class NavigationalDashboardTile extends View {
 
 	render() {
 		const item = this.props.item;
-		const isInState = item.childObject.isInState;
+		const name = item.childObject.name;
 		const tileWidth = item.tileWidth - 8;
 		const { UP, DOWN, STOP } = item.childObject.supportedMethods;
-		const upButton = UP ? <UpButton isInState={isInState} onPress={this.props.onUp} /> : null;
-		const downButton = DOWN ? <DownButton isInState={isInState} onPress={this.props.onDown} /> : null;
-		const stopButton = STOP ? <StopButton isInState={isInState} onPress={this.props.onStop} /> : null;
+		const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp} /> : null;
+		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown} /> : null;
+		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop} /> : null;
 
 		return (
 			<DashboardShadowTile
 				item={item}
+				isEnabled={true}
+				name={name}
+				tileWidth={tileWidth}
 				style={[this.props.style, {
 					width: tileWidth,
 					height: tileWidth,
 				}]}>
 				<View style={styles.body}>
-                    { upButton }
-                    { downButton }
-                    { stopButton }
-				</View>
-				<View style={styles.title}>
-					<Text
-						ellipsizeMode="middle"
-						numberOfLines={1}
-						style = {[styles.name, {
-							fontSize: Math.floor(tileWidth / 8),
-							opacity: item.childObject.name ? 1 : 0.7,
-						}]}>
-						{item.childObject.name ? item.childObject.name : '(no name)'}
-					</Text>
+					{ upButton }
+					{ downButton }
+					{ stopButton }
 				</View>
 			</DashboardShadowTile>
 		);
@@ -110,23 +99,16 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 7,
 		borderTopRightRadius: 7,
 	},
-	title: {
-		flex: 13,
-		backgroundColor: '#e56e18',
-		justifyContent: 'center',
-		borderBottomLeftRadius: 7,
-		borderBottomRightRadius: 7,
-	},
 	navigationButton: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	name: {
-		padding: 5,
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
+	buttonEnabled: {
+		color: '#1a355b',
+	},
+	buttonDisabled: {
+		color: '#eeeeee',
 	},
 });
 
