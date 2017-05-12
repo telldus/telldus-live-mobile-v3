@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { Text, View, Icon } from 'BaseComponents';
+import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
@@ -36,6 +36,9 @@ class BellDashboardTile extends View {
 		return (
 			<DashboardShadowTile
 				item={item}
+				isEnabled={true}
+				name={item.childObject.name}
+				tileWidth={tileWidth}
 				style={[this.props.style, {
 					width: tileWidth,
 					height: tileWidth,
@@ -46,17 +49,6 @@ class BellDashboardTile extends View {
                     <View style={styles.body}>
                         <Icon name="bell" size={44} color="orange" />
                     </View>
-                    <View style={styles.title}>
-                        <Text
-                            ellipsizeMode="middle"
-                            numberOfLines={1}
-                            style = {[styles.name, {
-	fontSize: Math.floor(tileWidth / 8),
-	opacity: item.childObject.name ? 1 : 0.7,
-}]}>
-                            {item.childObject.name ? item.childObject.name : '(no name)'}
-                        </Text>
-                    </View>
                 </TouchableOpacity>
 			</DashboardShadowTile>
 		);
@@ -65,30 +57,17 @@ class BellDashboardTile extends View {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		flex: 30,
 		justifyContent: 'center',
 	},
 	body: {
-		flex: 30,
+		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: 'white',
 		borderTopLeftRadius: 7,
 		borderTopRightRadius: 7,
-	},
-	title: {
-		flex: 13,
-		backgroundColor: '#e56e18',
-		justifyContent: 'center',
-		borderBottomLeftRadius: 7,
-		borderBottomRightRadius: 7,
-	},
-	name: {
-		padding: 5,
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
 	},
 });
 
