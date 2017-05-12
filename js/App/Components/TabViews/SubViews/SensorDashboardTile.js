@@ -145,7 +145,7 @@ class SensorDashboardTile extends View {
 				}
 			}
 		}
-
+		const canPress = slides.length > 1;
 		return (
 			<DashboardShadowTile
 				item={item}
@@ -157,8 +157,8 @@ class SensorDashboardTile extends View {
 					height: tileWidth,
 				}]}>
 				<TouchableOpacity
-					onPress={this.changeDisplayType}
-					activeOpacity={0.8}
+					onPress={canPress ? this.changeDisplayType : null}
+					activeOpacity={canPress ? 0.8 : 1}
 					style={styles.container}>
 					<View style={styles.body}>
 						{slides[selectedSlideIndex]}
