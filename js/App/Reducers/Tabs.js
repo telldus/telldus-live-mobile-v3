@@ -19,7 +19,7 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions/Types';
 
 type State = {
 	editModeSensorsTab: Boolean,
@@ -27,25 +27,25 @@ type State = {
 };
 
 const initialState: State = {
-    editModeSensorsTab: false,
-    editModeDevicesTab: false,
+	editModeSensorsTab: false,
+	editModeDevicesTab: false,
 };
 
 function toggleEditMode(state: State = initialState, action: Action): State {
 	if (action.type === 'TOGGLE_EDIT_MODE') {
-        if (action.tab === 'sensorsTab') {
-            const newEditModeSensorsTab = !state.editModeSensorsTab;
-            return {
-                ...state,
-                editModeSensorsTab: newEditModeSensorsTab,
-            };
-        } else if (action.tab === 'devicesTab') {
-            const newEditModeDevicesTab = !state.editModeDevicesTab;
-            return {
-                ...state,
-                editModeDevicesTab: newEditModeDevicesTab,
-            };
-        }
+		if (action.tab === 'sensorsTab') {
+			const newEditModeSensorsTab = !state.editModeSensorsTab;
+			return {
+				...state,
+				editModeSensorsTab: newEditModeSensorsTab,
+			};
+		} else if (action.tab === 'devicesTab') {
+			const newEditModeDevicesTab = !state.editModeDevicesTab;
+			return {
+				...state,
+				editModeDevicesTab: newEditModeDevicesTab,
+			};
+		}
 	}
 
 	return state;

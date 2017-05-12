@@ -40,7 +40,7 @@ const SensorTemperature = ({ temperature }) => (
         <Image source={require('../img/sensorIcons/Temperature.png')} />
         <Text>
             <FormattedNumber value = {temperature} maximumFractionDigits = {1} />
-            {String.fromCharCode(176) + 'C'}
+            {`${String.fromCharCode(176)}C`}
         </Text>
     </View>
 );
@@ -56,10 +56,10 @@ const SensorRain = ({ rainRate, rainTotal }) => (
 );
 
 const SensorWind = ({ windAverage, windGust, windDirection }) => {
-    const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-    const getWindDirection = value => directions[Math.floor(value / 22.5)];
+	const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
+	const getWindDirection = value => directions[Math.floor(value / 22.5)];
 
-    return (
+	return (
         <View style={Theme.Styles.sensorValue}>
         <Image source={require('../img/sensorIcons/Wind.png')} />
             <Text>
@@ -68,7 +68,7 @@ const SensorWind = ({ windAverage, windGust, windDirection }) => {
                 { windDirection && ( <Text>{getWindDirection(windDirection)}</Text> ) }
             </Text>
         </View>
-    );
+	);
 };
 
 const SensorUV = ({ uv }) => (
@@ -99,23 +99,23 @@ const SensorLuminance = ({ luminance }) => (
 );
 
 const SensorRow = props => {
-    const minutesAgo =  Math.round(((Date.now() / 1000) - props.lastUpdated) / 60);
-    return (
-        <ListItem style = { Theme.Styles.rowFront }>
+	const minutesAgo = Math.round(((Date.now() / 1000) - props.lastUpdated) / 60);
+	return (
+        <ListItem style = {Theme.Styles.rowFront}>
             <View>
                 <Text style = {{
-                    color: 'rgba(0,0,0,0.87)',
-                    fontSize: 16,
-                    opacity: props.name ? 1 : 0.5,
-                    marginBottom: 2
-                }}>
+	color: 'rgba(0,0,0,0.87)',
+	fontSize: 16,
+	opacity: props.name ? 1 : 0.5,
+	marginBottom: 2,
+}}>
                     {props.name ? props.name : '(no name)'}
                 </Text>
                 <Text style = {{
-                    color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
-                    fontSize: 12,
-                    opacity: minutesAgo < 1440 ? 1 : 0.5
-                }}>
+	color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
+	fontSize: 12,
+	opacity: minutesAgo < 1440 ? 1 : 0.5,
+}}>
                     {formatLastUpdated(minutesAgo, props.lastUpdated)}
                 </Text>
             </View>
@@ -127,34 +127,34 @@ const SensorRow = props => {
             { props.watt ? <SensorWatt {...props} /> : null }
             { props.luminance ? <SensorLuminance {...props} /> : null }
         </ListItem>
-    );
+	);
 
-    function formatLastUpdated (minutes, lastUpdated) {
-        if (minutes === 0) {
-            return 'Just now';
-        }
-        if (minutes === 1) {
-            return '1 minute ago';
-        }
-        if (minutes < 60) {
-            return `${minutes} minutes ago`;
-        }
-        const hours = Math.round(minutes / 60);
-        if (hours === 1) {
-            return '1 hour ago';
-        }
-        if (hours < 24) {
-            return `${hours} hours ago`;
-        }
-        const days = Math.round(minutes / 60 / 24);
-        if (days === 1) {
-            return '1 day ago';
-        }
-        if (days <= 7) {
-            return `${days} days ago`;
-        }
-        return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
-    }
+	function formatLastUpdated(minutes, lastUpdated) {
+		if (minutes === 0) {
+			return 'Just now';
+		}
+		if (minutes === 1) {
+			return '1 minute ago';
+		}
+		if (minutes < 60) {
+			return `${minutes} minutes ago`;
+		}
+		const hours = Math.round(minutes / 60);
+		if (hours === 1) {
+			return '1 hour ago';
+		}
+		if (hours < 24) {
+			return `${hours} hours ago`;
+		}
+		const days = Math.round(minutes / 60 / 24);
+		if (days === 1) {
+			return '1 day ago';
+		}
+		if (days <= 7) {
+			return `${days} days ago`;
+		}
+		return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
+	}
 };
 
 module.exports = SensorRow;

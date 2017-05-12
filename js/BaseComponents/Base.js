@@ -26,32 +26,32 @@ export default class Base extends Component {
 
 	static contextTypes = {
 		theme: React.PropTypes.object,
-		foregroundColor: React.PropTypes.string
+		foregroundColor: React.PropTypes.string,
 	}
 
 	static propTypes = {
 		theme: React.PropTypes.object,
-		foregroundColor: React.PropTypes.string
+		foregroundColor: React.PropTypes.string,
 	}
 
 	static childContextTypes = {
 		theme: React.PropTypes.object,
-		foregroundColor: React.PropTypes.string
+		foregroundColor: React.PropTypes.string,
 	}
 
 	getChildContext() {
 		return {
-				theme: this.props.theme ? this.props.theme : this.getTheme(),
-				foregroundColor: this.props.foregroundColor ? this.props.foregroundColor : this.getTheme().textColor
-			};
+			theme: this.props.theme ? this.props.theme : this.getTheme(),
+			foregroundColor: this.props.foregroundColor ? this.props.foregroundColor : this.getTheme().textColor,
+		};
 	}
 
 	getContextForegroundColor() {
-		return this.context.foregroundColor
+		return this.context.foregroundColor;
 	}
 
 	getTheme() {
-		return this.props.theme ? this.props.theme : this.context.theme || Theme.Core
+		return this.props.theme ? this.props.theme : this.context.theme || Theme.Core;
 	}
 
 }

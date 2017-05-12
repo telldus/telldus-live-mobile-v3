@@ -19,23 +19,23 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions/Types';
 
 export type State = {
-	accessToken: ?object,
-	userProfile: ?object
+	accessToken: ?Object,
+	userProfile: ?Object
 };
 
 const initialState = {
 	accessToken: false,
-	userProfile: false
+	userProfile: false,
 };
 
 function user(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_ACCESS_TOKEN') {
-		var accessToken = action.accessToken;
+		let accessToken = action.accessToken;
 		if (state.accessToken) {
-			accessToken.refresh_token = state.accessToken.refresh_token
+			accessToken.refresh_token = state.accessToken.refresh_token;
 		}
 		return {
 			...state,
@@ -44,7 +44,7 @@ function user(state: State = initialState, action: Action): State {
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return {
-			...initialState
+			...initialState,
 		};
 	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {

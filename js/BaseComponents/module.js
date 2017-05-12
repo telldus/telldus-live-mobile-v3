@@ -19,13 +19,14 @@
  * @providesModule BaseComponents
  */
 
- 'use strict';
+'use strict';
 
 import Header from './Header';
 import Footer from './Footer';
 import Title from './Title';
 import Container from './Container';
 import Content from './Content';
+import BackgroundImage from './BackgroundImage';
 import Button from './Button';
 import Text from './Text';
 import FormattedNumber from './FormattedNumber';
@@ -38,6 +39,7 @@ import H1 from './H1';
 import H2 from './H2';
 import H3 from './H3';
 import View from './View';
+import RoundedCornerShadowView from './RoundedCornerShadowView';
 import Input from './Input';
 import Textarea from './Textarea';
 import InputGroup from './InputGroup';
@@ -49,10 +51,10 @@ import Card from './Card';
 import Badge from './Badge';
 import Spinner from './Spinner';
 import ProgressBar from './ProgressBar';
-import { Col, Row, Grid } from "react-native-easy-grid";
+import { Col, Row, Grid } from 'react-native-easy-grid';
 import ScrollableTabView from './Tabs';
-import NavigatorIOS from './NavigatorIOS'
-import I18n from './I18n'
+import NavigatorIOS from './NavigatorIOS';
+import I18n from './I18n';
 import Gravatar from './Gravatar';
 
 import {
@@ -63,7 +65,7 @@ import {
 	StyleSheet,
 	TabBarIOS,
 	ListView,
-	Image
+	Image,
 } from 'react-native';
 
 
@@ -73,6 +75,7 @@ module.exports = {
 	Title: Title,
 	Container: Container,
 	Content: Content,
+	BackgroundImage: BackgroundImage,
 	Button: Button,
 	FormattedNumber: FormattedNumber,
 	Text: Text,
@@ -85,6 +88,7 @@ module.exports = {
 	H2: H2,
 	H3: H3,
 	View: View,
+	RoundedCornerShadowView: RoundedCornerShadowView,
 	Row: Row,
 	Col: Col,
 	Grid: Grid,
@@ -111,5 +115,5 @@ module.exports = {
 	Gravatar: Gravatar,
 	ListDataSource: ListView.DataSource,
 	Image: Image,
-	I18n: I18n
+	I18n: I18n,
 };

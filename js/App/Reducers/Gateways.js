@@ -19,9 +19,9 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions/Types';
 
-export type State = ?object;
+export type State = ?Object;
 
 const initialState = [];
 const gatewayInitialState = {
@@ -30,46 +30,43 @@ const gatewayInitialState = {
 	websocketAddress: {
 		address: null,
 		instance: null,
-		port: null
-	}
+		port: null,
+	},
 };
 
 function gateway(state: State = gatewayInitialState, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_GATEWAYS':
-			state.id = parseInt(state.id);
-			return {...gatewayInitialState, ...state};
+			state.id = parseInt(state.id, 10);
+			return { ...gatewayInitialState, ...state };
 		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
 			const payload = action.payload;
 			if (state.id !== payload.gatewayId) {
 				return state;
 			}
-			if (payload.address == null) {
-				var newState = {
+			if (payload.address === null) {
+				let newState = {
 					websocketAddress: {
 						address: null,
 						instance: null,
-						port: null
-					}
+						port: null,
+					},
 				};
-				return {...state, ...newState};
+				return { ...state, ...newState };
 			}
 			return Object.assign({}, state, {
 				websocketAddress: {
 					address: payload.address,
 					instance: payload.instance,
-					port: payload.port
-				}
+					port: payload.port,
+				},
 			});
-		case 'LOGGED_OUT':
-			return gatewayInitialState;
 		default:
 			return state;
 	}
 }
 
 function gateways(state: State = initialState, action: Action): State {
-	var gatewaysMap = Object.create(null);
 	switch (action.type) {
 		case 'RECEIVED_GATEWAYS':
 			return action.payload.client.map(gatewayState =>

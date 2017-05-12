@@ -23,12 +23,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-	Container,
-	Content,
 	Button,
 	Gravatar,
 	Text,
-	View
+	View,
 } from 'BaseComponents';
 
 import { logoutFromTelldus } from 'Actions';
@@ -46,15 +44,15 @@ class UserDetailView extends View {
 				<View style = {{ paddingBottom: 10 }} />
 				<Gravatar
 					emailAddress = {this.props.user.email}
-					size = { 32 }
+					size = {32}
 					mask = "circle"
 				/>
 				<View style = {{ paddingBottom: 10 }} />
 				<Button
 					name = "sign-out"
-					backgroundColor = { this.getTheme().btnPrimaryBg }
+					backgroundColor = {this.getTheme().btnPrimaryBg}
 					style = {{ padding: 6, minWidth: 100 }}
-					onPress = { () => this.props.dispatch(logoutFromTelldus()) }
+					onPress = {() => this.props.dispatch(logoutFromTelldus())}
 				>Logout</Button>
 			</View>
 		);

@@ -28,13 +28,13 @@ export default class SpinnerComponent extends Base {
 
 	prepareRootProps() {
 
-		var type = {
-			height: 80
-		}
+		let type = {
+			height: 80,
+		};
 
-		var defaultProps = {
-			style: type
-		}
+		let defaultProps = {
+			style: type,
+		};
 
 		return computeProps(this.props, defaultProps);
 
@@ -42,11 +42,11 @@ export default class SpinnerComponent extends Base {
 
 
 	render() {
-		return(
-			<ActivityIndicator {...this.prepareRootProps()}  color={this.props.color ? this.props.color : this.props.inverse ?
+		return (
+			<ActivityIndicator {...this.prepareRootProps()} color={this.props.color ? this.props.color : this.props.inverse ?
 																this.getTheme().inverseSpinnerColor :
 																this.getTheme().defaultSpinnerColor}
-																size={this.props.size ? this.props.size : "large" } />
+																size={this.props.size ? this.props.size : 'large'} />
 		);
 	}
 

@@ -34,23 +34,23 @@ export default class Input extends Base {
 				paddingLeft: 5,
 				paddingRight: 5,
 				fontSize: this.getTheme().inputFontSize,
-				lineHeight: this.getTheme().inputLineHeight
-			}
-		}
+				lineHeight: this.getTheme().inputLineHeight,
+			},
+		};
 	}
 
 	prepareRootProps() {
-		var defaultProps = {
-			style: this.getInitialStyle().input
-		}
+		let defaultProps = {
+			style: this.getInitialStyle().input,
+		};
 
 		return computeProps(this.props, defaultProps);
 	}
 	render() {
 
 		return (
-			<View style={{ flex: 1}}>
-				<TextInput {...this.prepareRootProps()} placeholderTextColor={ this.props.placeholderTextColor ? this.props.placeholderTextColor : this.getTheme().inputColorPlaceholder } underlineColorAndroid='rgba(0,0,0,0)' />
+			<View style={{ flex: 1 }}>
+				<TextInput {...this.prepareRootProps()} placeholderTextColor={this.props.placeholderTextColor ? this.props.placeholderTextColor : this.getTheme().inputColorPlaceholder} underlineColorAndroid="rgba(0,0,0,0)" />
 			</View>
 		);
 	}

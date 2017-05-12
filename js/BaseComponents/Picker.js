@@ -29,18 +29,18 @@ export default class PickerComponent extends Base {
 	getInitialStyle() {
 		return {
 			picker: {
-				// alignItems: 'flex-end'
+                // alignItems: 'flex-end'
 			},
 			pickerItem: {
 
-			}
-		}
+			},
+		};
 	}
 	prepareRootProps() {
 
-		var defaultProps = {
+		let defaultProps = {
 			style: this.getInitialStyle().picker,
-			itemStyle: this.getInitialStyle().pickerItem
+			itemStyle: this.getInitialStyle().pickerItem,
 		};
 
 		return computeProps(this.props, defaultProps);
@@ -48,10 +48,10 @@ export default class PickerComponent extends Base {
 	}
 
 	render() {
-		return(
-			<Picker {...this.prepareRootProps()}>
-				{this.props.children}
-			</Picker>
+		return (
+            <Picker {...this.prepareRootProps()}>
+                {this.props.children}
+            </Picker>
 		);
 	}
 
@@ -59,9 +59,9 @@ export default class PickerComponent extends Base {
 
 PickerComponent.Item = React.createClass({
 
-	render: function() {
-		return(
-		  <Picker.Item {...this.props()}/>
-		  );
-	}
+	render: function () {
+		return (
+          <Picker.Item {...this.props()}/>
+		);
+	},
 });

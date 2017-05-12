@@ -22,89 +22,107 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Container, Icon, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
-import { getDevices, deviceSetState } from 'Actions';
+import { List, ListDataSource, Text, View } from 'BaseComponents';
+import { DeviceRow, DeviceRowHidden } from 'TabViews/SubViews';
+import { DeviceDetailModal, ToggleDeviceDetailModal, BellDeviceDetailModal, DimmerDeviceDetailModal, NavigationalDeviceDetailModal } from 'DetailViews';
 
-import DeviceDetailView from '../DetailViews/DeviceDetailView'
+import { addToDashboard, removeFromDashboard } from 'Actions';
+import { getDevices } from 'Actions/Devices';
+
+import getDeviceType from '../../Lib/getDeviceType';
+
+import { parseDevicesForListView } from 'Reducers/Devices';
+
 import Theme from 'Theme';
 
-import type { Tab } from '../reducers/navigation';
-
 class DevicesTab extends View {
+	constructor(props) {
+		super(props);
+		this.state = {
+			deviceId: -1,
+			dimmer: false,
+		};
+		this.openDeviceDetail = this.openDeviceDetail.bind(this);
+		this.setScrollEnabled = this.setScrollEnabled.bind(this);
+	}
+
 	render() {
+
+		let deviceDetail = null;
+
+		if (this.state.deviceId && Number.isInteger(this.state.deviceId) && this.state.deviceId > 0) {
+			const deviceType = this.getType(this.state.deviceId);
+
+			if (deviceType === 'TOGGLE') {
+				deviceDetail = <ToggleDeviceDetailModal isVisible={true} deviceId={this.state.deviceId} onCloseSelected={this.onCloseSelected.bind(this)}/>;
+			} else if (deviceType === 'DIMMER') {
+				deviceDetail = <DimmerDeviceDetailModal isVisible={true} deviceId={this.state.deviceId} onCloseSelected={this.onCloseSelected.bind(this)}/>;
+			} else if (deviceType === 'BELL') {
+				deviceDetail = <BellDeviceDetailModal isVisible={true} deviceId={this.state.deviceId} onCloseSelected={this.onCloseSelected.bind(this)}/>;
+			} else if (deviceType === 'NAVIGATIONAL') {
+				deviceDetail = <NavigationalDeviceDetailModal isVisible={true} deviceId={this.state.deviceId} onCloseSelected={this.onCloseSelected.bind(this)}/>;
+			} else {
+				deviceDetail = <DeviceDetailModal isVisible={true} deviceId={this.state.deviceId} onCloseSelected={this.onCloseSelected.bind(this)}/>;
+			}
+		}
+
 		return (
-			<List
-				dataSource = {this.props.dataSource}
-				renderHiddenRow = {this._renderHiddenRow.bind(this)}
-				renderRow = {this._renderRow.bind(this)}
-				renderSectionHeader = {this._renderSectionHeader.bind(this)}
-				rightOpenValue = {-60}
-				onRefresh = {() =>
-					this.props.dispatch(getDevices())
-				}
-			/>
+			<View style={{ flex: 1 }}>
+				<List
+					ref = "list"
+					dataSource = {this.props.dataSource}
+					renderHiddenRow = {props => (<DeviceRowHidden {...{ ...props, ...this.props }}/>)}
+					renderRow = {props => (
+						<DeviceRow {...{ ...props, ...this.props }}
+							onSettingsSelected={this.openDeviceDetail}
+							setScrollEnabled={this.setScrollEnabled}
+						/>
+					)}
+					renderSectionHeader = {this._renderSectionHeader.bind(this)}
+					leftOpenValue = {40}
+					editMode = {this.props.editMode}
+					onRefresh = {() =>
+						this.props.dispatch(getDevices())
+					}
+				/>
+				{deviceDetail}
+			</View>
 		);
 	}
-	_renderHiddenRow(data) {
-		return (
-			<View style={Theme.Styles.rowBack}>
-				<Text style={Theme.Styles.rowBackButton}>Dashboard</Text>
-			</View>
-		)
+
+	openDeviceDetail(id) {
+		this.setState({ deviceId: id });
+	}
+
+	onCloseSelected() {
+		this.setState({ deviceId: -1 });
+	}
+
+	setScrollEnabled(enable) {
+		if (this.refs.list && this.refs.list.setScrollEnabled) {
+			this.refs.list.setScrollEnabled(enable);
+		}
 	}
 
 	_renderSectionHeader(sectionData, sectionId) {
-		const gateway = this.props.gateways.find((gateway) => gateway.id === sectionId);
+		const gateway = this.props.gateways.find((g) => g.id === sectionId);
 		return (
-			<View style = { Theme.Styles.sectionHeader }>
-				<Text style = { Theme.Styles.sectionHeaderText }>
+			<View style = {Theme.Styles.sectionHeader}>
+				<Text style = {Theme.Styles.sectionHeaderText}>
 					{(gateway && gateway.name) ? gateway.name : ''}
 				</Text>
 			</View>
-		)
+		);
 	}
 
-	_renderRow(item) {
-		const minutesAgo =  Math.round(((Date.now() / 1000) - item.lastUpdated) / 60);
-		try {
-			return (
-				<ListItem style = { Theme.Styles.rowFront }>
-					<Container style = {{ marginLeft: 16, flexDirection: 'row'}}>
-						<View>
-							<Text style = {{
-								color: 'rgba(0,0,0,0.87)',
-								fontSize: 16,
-								opacity: item.name ? 1 : 0.5,
-								marginBottom: 2
-							}}>
-								{item.name ? item.name : '(no name)'}
-							</Text>
-							<Button
-								name = { 'toggle-on' }
-								style = {{ padding: 6 }}
-								onPress={ () => this.props.dispatch(deviceSetState(item.id, 1)) }
-							>On</Button>
-							<Button
-								name = { 'toggle-off' }
-								style = {{ padding: 6 }}
-								onPress={ () => this.props.dispatch(deviceSetState(item.id, 2)) }
-							>Off</Button>
-							<Icon
-								name="arrow-right"
-								onPress={ () => this.props.navigator.push({
-									component: DeviceDetailView,
-									title: item.name,
-									passProps: { device: item }
-								})}
-							></Icon>
-						</View>
-					</Container>
-				</ListItem>
-			)
-		} catch(e) {
-			console.log(e);
-			return ( <View /> )
+	getType(deviceId) {
+		const filteredItem = this.props.devices.find(item => item.id === deviceId);
+		if (!filteredItem) {
+			return null;
 		}
+
+		const supportedMethods = filteredItem.supportedMethods;
+		return getDeviceType(supportedMethods);
 	}
 }
 
@@ -114,46 +132,25 @@ DevicesTab.propTypes = {
 
 const dataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,
-	sectionHeaderHasChanged : (s1, s2) => s1 !== s2
+	sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 });
 
-function _parseDataIntoItemsAndSectionIds(devices, gateways) {
-	var items = {};
-	var sectionIds = [];
-	if (devices) {
-		devices.map((item) => {
-			var sectionId = item.clientId ? item.clientId : '';
-			if (sectionIds.indexOf(sectionId) === -1) {
-				sectionIds.push(sectionId);
-				items[sectionId] = [];
-			}
-			items[sectionId].push(item);
-		});
-	}
-	sectionIds.sort((a,b) => {
-		try {
-			const gatewayA = gateways.find((gateway) => gateway.id === a);
-			const gatewayB = gateways.find((gateway) => gateway.id === b);
-			if (gatewayA.name < gatewayB.name) {
-				return -1;
-			}
-			if (gatewayA.name > gatewayB.name) {
-				return 1;
-			}
-			return 0;
-		} catch (e) {
-			return 0;
-		}
-	});
-	return {items, sectionIds};
-}
-
 function select(store) {
-	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.devices || [], store.gateways || [])
+	const { items, sectionIds } = parseDevicesForListView(store.devices, store.gateways, store.dashboard);
 	return {
 		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
-		gateways: store.gateways
+		gateways: store.gateways,
+		editMode: store.tabs.editModeDevicesTab,
+		devices: store.devices,
 	};
 }
 
-module.exports = connect(select)(DevicesTab);
+function actions(dispatch) {
+	return {
+		addToDashboard: (id) => dispatch(addToDashboard('device', id)),
+		removeFromDashboard: (id) => dispatch(removeFromDashboard('device', id)),
+		dispatch,
+	};
+}
+
+module.exports = connect(select, actions)(DevicesTab);

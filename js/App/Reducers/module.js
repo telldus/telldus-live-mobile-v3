@@ -30,6 +30,8 @@ import Sensors from './Sensors';
 import User from './User';
 import Tabs from './Tabs';
 import Dashboard from './Dashboard';
+import Dimmer from './Dimmer';
+import Jobs from './Jobs';
 
 module.exports = combineReducers({
 	devices: Devices,
@@ -39,4 +41,6 @@ module.exports = combineReducers({
 	user: User,
 	tabs: Tabs,
 	dashboard: Dashboard,
+	dimmer: Dimmer,
+	jobs: Jobs,
 });

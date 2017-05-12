@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Actions/Login
  */
 
 'use strict';
@@ -22,6 +24,9 @@
 import type { Action, ThunkAction } from './types';
 import { apiServer } from 'Config';
 import { publicKey, privateKey } from 'Config';
+
+import LiveApi from 'LiveApi';
+import { closeAllConnections } from '../Lib/Socket';
 
 async function loginToTelldus(username, password): Promise<Action> {
 
@@ -39,8 +44,8 @@ async function loginToTelldus(username, password): Promise<Action> {
 					'client_secret': privateKey,
 					'grant_type': 'password',
 					'username': username,
-					'password': password
-				})
+					'password': password,
+				}),
 			}
 		)
 		.then((response) => response.json())
@@ -50,13 +55,13 @@ async function loginToTelldus(username, password): Promise<Action> {
 			}
 			resolve( {
 				type: 'RECEIVED_ACCESS_TOKEN',
-				accessToken: responseData
+				accessToken: responseData,
 			});
 		})
-		.catch(function (e) {
+		.catch((e) => {
 			reject({
 				type: 'ERROR',
-				message: e
+				message: e,
 			});
 		});
 	});
@@ -66,23 +71,32 @@ async function loginToTelldus(username, password): Promise<Action> {
 function updateAccessToken(accessToken): Action {
 	return {
 		type: 'RECEIVED_ACCESS_TOKEN',
-		accessToken: accessToken
+		accessToken: accessToken,
 	};
 }
 
 function getUserProfile(): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = {
 			url: '/user/profile',
 			requestParams: {
-				method: 'GET'
-			}
+				method: 'GET',
+			},
 		};
-		return dispatch({ type: 'LIVE_API_CALL', returnType: 'RECEIVED_USER_PROFILE', payload: payload });
+		return LiveApi(payload).then(response => dispatch({
+			type: 'RECEIVED_USER_PROFILE',
+			payload: {
+				...payload,
+				...response,
+			},
+		}
+		));
+
 	};
 }
 
 function logoutFromTelldus(): ThunkAction {
+	closeAllConnections();
 	return (dispatch) => {
 		return dispatch({
 			type: 'LOGGED_OUT',
@@ -91,4 +105,4 @@ function logoutFromTelldus(): ThunkAction {
 
 }
 
-module.exports = {loginToTelldus, logoutFromTelldus, getUserProfile, updateAccessToken};
+module.exports = { loginToTelldus, logoutFromTelldus, getUserProfile, updateAccessToken };

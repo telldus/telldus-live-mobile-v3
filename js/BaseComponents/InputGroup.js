@@ -37,95 +37,95 @@ export default class InputGroup extends Base {
 				flexDirection: 'row',
 				borderColor: this.getTheme().inputBorderColor,
 				paddingRight: 5,
-				alignItems: 'center'
+				alignItems: 'center',
 			},
 			outerBorder: {
-				position:'relative',
+				position: 'relative',
 				borderColor: 'white',
 				borderWidth: this.getTheme().borderWidth,
 				borderTopWidth: 0,
 				borderRightWidth: 0,
-				borderLeftWidth: 0
+				borderLeftWidth: 0,
 			},
 			darkborder: {
-				borderColor: '#000'
+				borderColor: '#000',
 			},
 			lightborder: {
-				borderColor: '#fff'
+				borderColor: '#fff',
 			},
 			underline: {
-				position:'relative',
+				position: 'relative',
 				borderWidth: this.getTheme().borderWidth,
 				borderTopWidth: 0,
 				borderRightWidth: 0,
-				borderLeftWidth: 0
+				borderLeftWidth: 0,
 			},
 
 			bordered: {
-				position:'relative',
-				borderWidth: this.getTheme().borderWidth
+				position: 'relative',
+				borderWidth: this.getTheme().borderWidth,
 			},
 
 			rounded: {
-				position:'relative',
+				position: 'relative',
 				borderWidth: this.getTheme().borderWidth,
-				borderRadius: 30
-			}
-		}
+				borderRadius: 30,
+			},
+		};
 	}
 
 	prepareRootProps() {
 
-		var type = {
-			paddingLeft:  (this.props.borderType === 'rounded' && !this.props.children.type == Icon) ? 15 :
-			(this.props.children.type == Icon ) ? this.getTheme().inputPaddingLeftIcon : 5
-		}
+		let type = {
+			paddingLeft: (this.props.borderType === 'rounded' && !this.props.children.type === Icon) ? 15 :
+			(this.props.children.type === Icon ) ? this.getTheme().inputPaddingLeftIcon : 5,
+		};
 
-		var defaultStyle = (this.props.borderType === 'regular') ? this.getInitialStyle().bordered : (this.props.borderType === 'rounded') ? this.getInitialStyle().rounded : this.getInitialStyle().underline;
+		let defaultStyle = (this.props.borderType === 'regular') ? this.getInitialStyle().bordered : (this.props.borderType === 'rounded') ? this.getInitialStyle().rounded : this.getInitialStyle().underline;
 
 		type = _.merge(type, defaultStyle);
 
-		var  addedProps = _.merge(this.getInitialStyle().textInput, type);
+		let addedProps = _.merge(this.getInitialStyle().textInput, type);
 
-		var defaultProps = {
+		let defaultProps = {
 			style: addedProps,
-			key: 'inpGroup'
-		}
+			key: 'inpGroup',
+		};
 
 		return computeProps(this.props, defaultProps);
 	}
 
 	getIconProps(icon) {
 
-		var defaultStyle = {
+		let defaultStyle = {
 			fontSize: (this.props.toolbar || this.props.atoolbar) ? this.getTheme().toolbarIconSize : 27,
 			alignSelf: 'center',
 			lineHeight: (this.props.toolbar || this.props.atoolbar) ? 24 : undefined,
 			paddingRight: 5,
-			marginLeft: (this.props.toolbar || this.props.atoolbar) ? 5 : undefined
-		}
+			marginLeft: (this.props.toolbar || this.props.atoolbar) ? 5 : undefined,
+		};
 
-		var defaultProps = {
+		let defaultProps = {
 			style: defaultStyle,
-			key: 'icon'
-		}
+			key: 'icon',
+		};
 
 		return computeProps(icon.props, defaultProps);
 	}
 	getButtonProps(button) {
 
-		var defaultStyle = {
+		let defaultStyle = {
 			alignSelf: 'center',
 			paddingRight: 5,
 			marginLeft: (this.props.toolbar || this.props.atoolbar) ? 5 : undefined,
-			height: 30
-		}
+			height: 30,
+		};
 
-		var defaultProps = {
+		let defaultProps = {
 			style: defaultStyle,
 			key: 'button',
-			inputButton: true
-		}
+			inputButton: true,
+		};
 
 		return computeProps(button.props, defaultProps);
 	}
@@ -133,85 +133,80 @@ export default class InputGroup extends Base {
 
 	renderChildren() {
 
-		var inputProps = {};
-		var newChildren = [];
-		var childrenArray = React.Children.toArray(this.props.children);
+		let inputProps = {};
+		let newChildren = [];
+		let childrenArray = React.Children.toArray(this.props.children);
 
-		var iconElement = [];
-		iconElement = _.remove(childrenArray, function(item) {
-				if(item.type == Icon) {
-						return true;
-				}
-		});
-
-		var buttonElement = [];
-
-		buttonElement = _.remove(childrenArray, function(item) {
-			if(item.type == Button) {
+		let iconElement = [];
+		iconElement = _.remove(childrenArray, (item) => {
+			if (item.type === Icon) {
 				return true;
 			}
 		});
 
-		var inp =  _.find(childrenArray, function(item) {
-			if(item && item.type == Input) {
+		let buttonElement = [];
+
+		buttonElement = _.remove(childrenArray, (item) => {
+			if (item.type === Button) {
 				return true;
 			}
 		});
 
-		if(inp)
-		inputProps = computeProps(this.props, inp.props);
-		else
-		inputProps = this.props;
-
-		if(Array.isArray(this.props.children)) {
-
-			if(this.props.iconRight) {
-				newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
-				newChildren.push(React.cloneElement(iconElement[0],this.getIconProps(iconElement[0])));
+		let inp = _.find(childrenArray, (item) => {
+			if (item && item.type === Input) {
+				return true;
 			}
-			else if(buttonElement.length>0) {
+		});
+
+		if (inp)		{
+			inputProps = computeProps(this.props, inp.props);
+		}		else		{
+			inputProps = this.props;
+		}
+
+		if (Array.isArray(this.props.children)) {
+
+			if (this.props.iconRight) {
+				newChildren.push(<Input key="inp" {...inputProps} style={{ height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined }}/>);
+				newChildren.push(React.cloneElement(iconElement[0], this.getIconProps(iconElement[0])));
+			}			else if (buttonElement.length > 0) {
 				newChildren.push(React.cloneElement(
 					iconElement[0],
 					{
 						...this.getIconProps(iconElement[0]),
-						key: 'icon0'
+						key: 'icon0',
 					}
 				));
-				newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
+				newChildren.push(<Input key="inp" {...inputProps} style={{ height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined }}/>);
 				newChildren.push(React.cloneElement(
 					buttonElement[0],
 					{
 						...this.getButtonProps(buttonElement[0]),
-						key: 'button1'
+						key: 'button1',
 					}
 				));
-			}
-			else {
-				if (iconElement.length > 1) {
-					newChildren.push(React.cloneElement(
+			}			else if (iconElement.length > 1) {
+				newChildren.push(React.cloneElement(
 						iconElement[0],
-						{
-							...this.getIconProps(iconElement[0]),
-							key: 'icon0'
-						}
+					{
+						...this.getIconProps(iconElement[0]),
+						key: 'icon0',
+					}
 					));
-					newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
-					newChildren.push(React.cloneElement(
+				newChildren.push(<Input key="inp" {...inputProps} style={{ height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined }}/>);
+				newChildren.push(React.cloneElement(
 						iconElement[1],
-						{
-							...this.getIconProps(iconElement[1]),
-							key: 'icon1'
-						}
+					{
+						...this.getIconProps(iconElement[1]),
+						key: 'icon1',
+					}
 					));
-				} else {
-					newChildren.push(React.cloneElement(iconElement[0], this.getIconProps(iconElement[0])));
-					newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
-				}
+			} else {
+				newChildren.push(React.cloneElement(iconElement[0], this.getIconProps(iconElement[0])));
+				newChildren.push(<Input key="inp" {...inputProps} style={{ height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined }}/>);
 			}
-		}
-
-		else {
-			newChildren.push(<Input key='inp' {...inputProps} style={{height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined}}/>);
+		}		else {
+			newChildren.push(<Input key="inp" {...inputProps} style={{ height: this.props.toolbar ? 30 : undefined, fontSize: this.props.toolbar ? 15 : undefined }}/>);
 		}
 
 		return newChildren;

@@ -2,11 +2,19 @@
 #
 config.local.js
 google-services.json
-android-*.keystore
+*.keystore
+
+# VSCode ignores
+#
+.vscode/
 
 # OSX
 #
 .DS_Store
+
+# Android
+android/app/src/main/assets/index.android.bundle
+android/app/src/main/assets/index.android.bundle.meta
 
 # Xcode
 #

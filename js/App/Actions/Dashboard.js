@@ -15,6 +15,8 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Actions/Dashboard
  */
 
 'use strict';
@@ -27,12 +29,16 @@ module.exports = {
 	addToDashboard: (kind: Kind, id: Number): Action => ({
 		type: 'ADD_TO_DASHBOARD',
 		kind,
-        id
+		id,
 	}),
-	removeFromDashboard : (kind : Kind, id: Number) : Action => ({
+	removeFromDashboard: (kind : Kind, id: Number) : Action => ({
 		type: 'REMOVE_FROM_DASHBOARD',
 		kind,
-		id
+		id,
+	}),
+	changeSensorDisplayType: (id: Number, displayType: String) : Action => ({
+		type: 'CHANGE_SENSOR_DISPLAY_TYPE',
+		id,
+		displayType,
 	}),
 };
-

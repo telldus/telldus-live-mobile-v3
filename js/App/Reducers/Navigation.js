@@ -19,7 +19,7 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions/Types';
 export type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab';
 
 type State = {
@@ -32,7 +32,7 @@ function navigation(state: State = initialState, action: Action): State {
 	if (action.type === 'SWITCH_TAB') {
 		return {
 			...state,
-			tab: action.tab
+			tab: action.tab,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {

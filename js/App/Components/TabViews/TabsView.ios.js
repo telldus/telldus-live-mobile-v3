@@ -23,31 +23,28 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import EventEmitter from 'EventEmitter';
 
 import {
 	I18n,
 	Icon,
 	NavigatorIOS,
-	PixelRatio,
-	StatusBar,
-	StyleSheet,
 	TabBarIOS,
-	Text,
-	View
+	View,
 } from 'BaseComponents';
 
 import { switchTab, toggleEditMode } from 'Actions';
 import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
-import Theme from 'Theme';
 
 class TabsView extends View {
 	constructor(props) {
 		super(props);
+		this.eventEmitter = new EventEmitter();
 	}
 
 	componentDidMount() {
-		Icon.getImageSource('user', 22, 'white').then((source) => this.setState({ userIcon: source }));
+		Icon.getImageSource('gear', 22, 'white').then((source) => this.setState({ settingIcon: source }));
 		Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
 	}
 
@@ -58,39 +55,46 @@ class TabsView extends View {
 	}
 
 	render() {
-		if (!this.state || !this.state.userIcon || !this.state.starIcon) {
+		if (!this.state || !this.state.settingIcon || !this.state.starIcon) {
 			return false;
 		}
 		return (
-			<TabBarIOS tintColor = { this.getTheme().brandPrimary } >
+			<TabBarIOS tintColor = {this.getTheme().brandPrimary} >
 				<TabBarIOS.Item
 					title = {I18n.t('pages.dashboard')}
-					selected = { this.props.tab === 'dashboardTab' }
-					onPress = { this.onTabSelect.bind(this, 'dashboardTab') }
-					icon = { require('./img/tabIcons/dashboard-inactive.png') }
-					selectedIcon = { require('./img/tabIcons/dashboard-active.png')}
+					selected = {this.props.tab === 'dashboardTab'}
+					onPress = {this.onTabSelect.bind(this, 'dashboardTab')}
+					icon = {require('./img/tabIcons/dashboard-inactive.png')}
+					selectedIcon = {require('./img/tabIcons/dashboard-active.png')}
 				>
 					<NavigatorIOS
 						ref = "dashboardNavigator"
 						initialRoute = {{
 							title: 'Telldus Live!',
 							component: TabViews.Dashboard,
-							rightButtonIcon: this.state.userIcon,
-							onRightButtonPress: this._openUserDetailView.bind(this)
+							rightButtonIcon: this.state.settingIcon,
+							passProps: {
+								events: this.eventEmitter,
+							},
+							onRightButtonPress: () => {
+								this.eventEmitter.emit('onSetting');
+							},
 						}}
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
 					title = {I18n.t('pages.devices')}
-					selected = { this.props.tab === 'devicesTab' }
-					onPress = { this.onTabSelect.bind(this, 'devicesTab') }
-					icon = { require('./img/tabIcons/devices-inactive.png') }
-					selectedIcon = {require('./img/tabIcons/devices-active.png') }
+					selected = {this.props.tab === 'devicesTab'}
+					onPress = {this.onTabSelect.bind(this, 'devicesTab')}
+					icon = {require('./img/tabIcons/devices-inactive.png')}
+					selectedIcon = {require('./img/tabIcons/devices-active.png')}
 				>
 					<NavigatorIOS
 						initialRoute = {{
 							title: I18n.t('pages.devices'),
 							component: TabViews.Devices,
+							rightButtonIcon: this.state.starIcon,
+							onRightButtonPress: this._toggleDevicesTabEditMode.bind(this),
 						}}
 					/>
 				</TabBarIOS.Item>
@@ -105,7 +109,7 @@ class TabsView extends View {
 							title: I18n.t('pages.sensors'),
 							component: TabViews.Sensors,
 							rightButtonIcon: this.state.starIcon,
-							onRightButtonPress: this._toggleSensorTabEditMode.bind(this)
+							onRightButtonPress: this._toggleSensorTabEditMode.bind(this),
 						}}
 					/>
 				</TabBarIOS.Item>
@@ -141,38 +145,36 @@ class TabsView extends View {
 		);
 	}
 
-	_openUserDetailView () {
+	_openUserDetailView() {
 		this.refs.dashboardNavigator.push({
 			component: DetailViews.User,
 			title: I18n.t('pages.profile'),
-			passProps: { user: this.props.userProfile }
+			passProps: { user: this.props.userProfile },
 		});
 	}
 
 	_toggleSensorTabEditMode() {
 		this.props.onToggleEditMode('sensorsTab');
 	}
-}
 
-var styles = StyleSheet.create({
-	container: {
-		flex: 1,
+	_toggleDevicesTabEditMode() {
+		this.props.onToggleEditMode('devicesTab');
 	}
-});
+}
 
 function select(store) {
 	return {
 		tab: store.navigation.tab,
 		userIcon: false,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""},
+		userProfile: store.user.userProfile || { firstname: '', lastname: '', email: '' },
 	};
 }
 
 function actions(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
-		onToggleEditMode : (tab) => dispatch(toggleEditMode(tab)),
-		dispatch
+		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+		dispatch,
 	};
 }
 

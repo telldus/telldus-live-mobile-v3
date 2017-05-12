@@ -22,26 +22,68 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, List, ListItem, Text, View } from 'BaseComponents';
-//import { getDevices } from 'Actions';
+import { List, ListDataSource, View, Text } from 'BaseComponents';
+import { JobRow } from 'TabViews/SubViews';
+import { getJobs } from 'Actions';
+import Theme from 'Theme';
 
-import type { Tab } from '../reducers/navigation';
+import moment from 'moment-timezone';
+
+import { parseJobsForListView } from 'Reducers/Jobs';
+
+const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 class SchedulerTab extends View {
-
 	render() {
 		return (
-			<Text>
-				Scheduler
-			</Text>
+			<List
+				dataSource = {this.props.dataSource}
+				renderRow = {props => (<JobRow {...{ ...props, ...this.props }} />)}
+				renderSectionHeader = {this.renderSectionHeader.bind(this)}
+				onRefresh = {() => this.props.dispatch(getJobs())}
+			/>
 		);
 	}
 
+	renderSectionHeader(sectionData, sectionId) {
+		const todayInWeek = parseInt(moment().format('d'), 10);
+		const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
+
+		let sectionName;
+		if (sectionId === 0) {
+			sectionName = 'Today';
+		} else if (sectionId === 1) {
+			sectionName = 'Tomorrow';
+		} else if (sectionId === 7) {
+			sectionName = `Next ${daysInWeek[todayInWeek]}`;
+		} else {
+			sectionName = daysInWeek[absoluteDayInWeek];
+		}
+
+		return (
+			<View style = {Theme.Styles.sectionHeader}>
+				<Text style = {Theme.Styles.sectionHeaderText}>
+					{sectionName}
+				</Text>
+			</View>
+		);
+	}
 }
 
+SchedulerTab.propTypes = {
+	dataSource: React.PropTypes.object,
+};
+
+const dataSource = new ListDataSource({
+	rowHasChanged: (r1, r2) => r1 !== r2,
+	sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+});
+
 function select(store) {
+	let { items, sectionIds } = parseJobsForListView(store.jobs, store.gateways, store.devices);
 	return {
-//		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
+		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
+		devices: store.devices,
 	};
 }
 

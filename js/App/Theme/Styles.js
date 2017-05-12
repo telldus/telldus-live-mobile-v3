@@ -17,9 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import Color from 'color';
 import { StyleSheet } from 'react-native';
-import Core from './Core'
+import Core from './Core';
 
 const listItemHeight = 56;
 const listItemWidth = 30;
@@ -31,13 +30,13 @@ export default StyleSheet.create({
 		borderBottomWidth: 1,
 		borderBottomColor: '#EEEEEE',
 		flexDirection: 'column',
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	sectionHeaderText: {
 		color: Core.brandPrimary,
 		fontSize: 14,
 		marginLeft: 16,
-		fontWeight: '500'
+		fontWeight: '500',
 	},
 	rowFront: {
 		backgroundColor: '#FFFFFF',
@@ -54,7 +53,8 @@ export default StyleSheet.create({
 		backgroundColor: '#DDD',
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'flex-end',
+		justifyContent: 'flex-start',
+		paddingLeft: 8,
 	},
 	rowBackButton: {
 		height: listItemHeight,
@@ -67,7 +67,7 @@ export default StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
-		paddingRight: 12
+		paddingRight: 12,
 	},
 	sensorTileItem: {
 		position: 'absolute',
@@ -76,6 +76,9 @@ export default StyleSheet.create({
 		left: 0,
 		right: 0,
 		flexDirection: 'row',
+		backgroundColor: 'white',
+		borderTopLeftRadius: 7,
+		borderTopRightRadius: 7,
 	},
 	listItemAvatar: {
 		width: 32,
@@ -86,5 +89,5 @@ export default StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
 		alignItems: 'center',
-	}
+	},
 });

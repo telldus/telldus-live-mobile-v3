@@ -33,33 +33,32 @@ export default class ThumbnailComponent extends Base {
 				borderRadius: 15,
 				width: 30,
 				height: 30,
-				resizeMode: this.props.contain ? 'contain' : undefined
-			}
-		}
+				resizeMode: this.props.contain ? 'contain' : undefined,
+			},
+		};
 	}
 
 	prepareRootProps() {
-		var thumbnailStyle = {};
-		if(this.props.circular) {
+		let thumbnailStyle = {};
+		if (this.props.circular) {
 			thumbnailStyle.width = this.props.size;
 			thumbnailStyle.height = this.props.size;
-			thumbnailStyle.borderRadius = this.props.size/2;
-		}
-		else if(this.props.square) {
+			thumbnailStyle.borderRadius = this.props.size / 2;
+		}		else if (this.props.square) {
 			thumbnailStyle.width = this.props.size;
 			thumbnailStyle.height = this.props.size;
 			thumbnailStyle.borderRadius = 0;
 		}
 
-		var defaultProps = {
-			style: _.merge(this.getInitialStyle().thumbnail, thumbnailStyle)
+		let defaultProps = {
+			style: _.merge(this.getInitialStyle().thumbnail, thumbnailStyle),
 		};
 
 		return computeProps(this.props, defaultProps);
 	}
 
 	render() {
-		return(
+		return (
 			<Image {...this.prepareRootProps()}/>
 		);
 	}

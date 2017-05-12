@@ -28,19 +28,19 @@ export default class H1Component extends Base {
 
 	prepareRootProps() {
 
-		var type = {
+		let type = {
 			color: this.getTheme().textColor,
-			fontSize: this.getTheme().fontSizeH1
-		}
+			fontSize: this.getTheme().fontSizeH1,
+		};
 
-		var defaultProps = {
-			style: type
-		}
+		let defaultProps = {
+			style: type,
+		};
 
 		return computeProps(this.props, defaultProps);
 	}
 	render() {
-		return(
+		return (
 			<Text {...this.prepareRootProps()}>{this.props.children}</Text>
 		);
 	}

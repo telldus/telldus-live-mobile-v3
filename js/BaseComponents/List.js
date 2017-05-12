@@ -20,17 +20,17 @@
 'use strict';
 
 import React from 'react';
-import { ListView, RefreshControl, View } from 'react-native';
+import { ListView, RefreshControl } from 'react-native';
 import SwipeRow from './SwipeRow';
 
 class ListComponent extends React.Component {
 
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this._rows = {};
 		this.openCellId = null;
 		this.state = {
-			refreshing: false
+			refreshing: false,
 		};
 	}
 
@@ -47,7 +47,9 @@ class ListComponent extends React.Component {
 	}
 
 	setScrollEnabled(enable) {
-		this._listView.setNativeProps({scrollEnabled: enable});
+		if (this._listView) {
+			this._listView.setNativeProps({ scrollEnabled: enable });
+		}
 	}
 
 	safeCloseOpenRow() {
@@ -97,39 +99,38 @@ class ListComponent extends React.Component {
 				Component,
 				{
 					...Component.props,
-					ref: row => this._rows[`${secId}${rowId}`] = row,
+					ref: row => (this._rows[`${secId}${rowId}`] = row),
 					onRowOpen: _ => this.onRowOpen(secId, rowId, this._rows),
 					onRowClose: _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows),
 					onRowPress: _ => this.onRowPress(`${secId}${rowId}`),
-					setScrollEnabled: enable => this.setScrollEnabled(enable)
+					setScrollEnabled: enable => this.setScrollEnabled(enable),
 				}
 			);
-		} else {
-			const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
-			return (
-				<SwipeRow
-					ref={row => this._rows[`${secId}${rowId}`] = row}
-					onRowOpen={ _ => this.onRowOpen(secId, rowId, this._rows) }
-					onRowClose={ _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows) }
-					onRowPress={ _ => this.onRowPress(`${secId}${rowId}`) }
-					setScrollEnabled={ (enable) => this.setScrollEnabled(enable) }
-					leftOpenValue={this.props.leftOpenValue}
-					rightOpenValue={this.props.rightOpenValue}
-					closeOnRowPress={this.props.closeOnRowPress}
-					disableLeftSwipe={this.props.disableLeftSwipe}
-					disableRightSwipe={this.props.disableRightSwipe}
-					recalculateHiddenLayout={this.props.recalculateHiddenLayout}
-					style={this.props.swipeRowStyle}
-					preview={this.props.previewFirstRow && rowId === firstRowId}
-					previewDuration={this.props.previewDuration}
-					previewOpenValue={this.props.previewOpenValue}
-					editMode={this.props.editMode}
-				>
-					{this.props.renderHiddenRow(rowData, secId, rowId, this._rows)}
-					{this.props.renderRow(rowData, secId, rowId, this._rows)}
-				</SwipeRow>
-			);
 		}
+		const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
+		return (
+			<SwipeRow
+				ref={row => (this._rows[`${secId}${rowId}`] = row)}
+				onRowOpen={_ => this.onRowOpen(secId, rowId, this._rows)}
+				onRowClose={_ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows)}
+				onRowPress={_ => this.onRowPress(`${secId}${rowId}`)}
+				setScrollEnabled={(enable) => this.setScrollEnabled(enable)}
+				leftOpenValue={this.props.leftOpenValue}
+				rightOpenValue={this.props.rightOpenValue}
+				closeOnRowPress={this.props.closeOnRowPress}
+				disableLeftSwipe={this.props.disableLeftSwipe}
+				disableRightSwipe={this.props.disableRightSwipe}
+				recalculateHiddenLayout={this.props.recalculateHiddenLayout}
+				style={this.props.swipeRowStyle}
+				preview={this.props.previewFirstRow && rowId === firstRowId}
+				previewDuration={this.props.previewDuration}
+				previewOpenValue={this.props.previewOpenValue}
+				editMode={this.props.editMode}
+			>
+				{this.props.renderHiddenRow(rowData, secId, rowId, this._rows)}
+				{this.props.renderRow(rowData, secId, rowId, this._rows)}
+			</SwipeRow>
+		);
 	}
 
 	render() {
@@ -143,11 +144,12 @@ class ListComponent extends React.Component {
 						enableEmptySections={true}
 					/>
 				}
-				ref={ c => this.setRefs(c) }
-				onScroll={ e => this.onScroll(e) }
+				ref={c => this.setRefs(c)}
+				onScroll={e => this.onScroll(e)}
 				renderRow={this.renderRow.bind(this)}
+				contentInset={{ bottom: 64 }}
 			/>
-		)
+		);
 	}
 
 }
@@ -230,7 +232,7 @@ ListComponent.propTypes = {
 	previewOpenValue: React.PropTypes.number,
 
 	editMode: React.PropTypes.bool,
-}
+};
 
 ListComponent.defaultProps = {
 	onRefresh: null,
@@ -243,6 +245,6 @@ ListComponent.defaultProps = {
 	recalculateHiddenLayout: false,
 	previewFirstRow: false,
 	editMode: false,
-}
+};
 
 export default ListComponent;

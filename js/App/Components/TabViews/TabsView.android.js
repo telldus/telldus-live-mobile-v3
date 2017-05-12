@@ -24,164 +24,184 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
-import { TabLayoutAndroid, TabAndroid } from "react-native-android-kit";
+import { Button, Icon, Text, View, Image } from 'BaseComponents';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import Navigator from 'Navigator';
 import Theme from 'Theme';
-import Gravatar from 'react-native-avatar-gravatar';
 
 import DashboardTab from './DashboardTab';
 import DevicesTab from './DevicesTab';
 import GatewaysTab from './GatewaysTab';
 import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
+import { SettingsDetailModal } from 'DetailViews';
 
-import { switchTab, logoutFromTelldus } from 'Actions';
-import { StyleSheet } from 'react-native';
-import type { Tab } from '../reducers/navigation';
+import { switchTab, toggleEditMode } from 'Actions';
 
 class TabsView extends View {
-
-	props: {
-		tab: Tab;
-		onTabSelect: (tab: Tab) => void;
-		navigator: Navigator;
-	};
-
 	constructor(props) {
 		super(props);
+		this.state = {
+			settings: false,
+		};
 	}
 
-	onTabSelect(tab: Tab) {
+	componentDidMount() {
+		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
+	}
+
+	onTabSelect(tab) {
 		this.refs.drawer.closeDrawer();
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
 		}
 	}
 
+	onOpenSetting() {
+		this.setState({ settings: true });
+	}
+
+	onCloseSetting() {
+		this.setState({ settings: false });
+	}
+
 	navigationView() {
 		return (
-			<View style = {{ flex: 1, backgroundColor: this.getTheme().btnPrimaryBg }}>
-				<View style = {{ height: 80, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 10 }}>
-					<Gravatar
-						emailAddress = {this.props.userProfile.email}
-						size = { 60 }
-						mask = "circle"
-					/>
-					<Text>
+			<View style = {{ flex: 1, backgroundColor: this.getTheme().btnSecondaryBg }}>
+				<View style = {{ height: 60, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 5, backgroundColor: this.getTheme().btnSecondaryBg, flexDirection: 'row' }}>
+					<Image style={{ width: 50, height: 50 }}
+						source={require('./img/telldus.png')}
+						resizeMode={'contain'} />
+					<Text style={{ flex: 1, color: '#e26901', fontSize: 24, textAlignVertical: 'bottom', marginLeft: 20 }}>
 						{this.props.userProfile.firstname} {this.props.userProfile.lastname}
 					</Text>
 				</View>
-				<View style = {{ flex: 1, backgroundColor: '#fff' }}>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'dashboardTab') }
-						>Dashboard</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'devicesTab') }
-						>Devices</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'sensorsTab') }
-						>Sensors</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'schedulerTab') }
-						>Scheduler</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'gatewaysTab') }
-						>Gateways</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress = { () => this.props.dispatch(logoutFromTelldus()) }
-						>Logout</Button>
-					</ListItem>
+				<View style = {{ flex: 1, backgroundColor: this.getTheme().btnSecondaryBg }}>
+					<Button name = "dashboard"
+						backgroundColor = {this.getTheme().btnSecondaryBg}
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress={this.onTabSelect.bind(this, 'dashboardTab')}>
+						<Text style={{ color: 'white', fontSize: 18 }}>Dashboard</Text>
+					</Button>
+					<Button name = "toggle-on"
+						backgroundColor = {this.getTheme().btnSecondaryBg}
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress={this.onTabSelect.bind(this, 'devicesTab')}>
+						<Text style={{ color: 'white', fontSize: 18 }}>Devices</Text>
+					</Button>
+					<Button name = "wifi"
+						backgroundColor = {this.getTheme().btnSecondaryBg}
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress={this.onTabSelect.bind(this, 'sensorsTab')}>
+						<Text style={{ color: 'white', fontSize: 18 }}>Sensors</Text>
+					</Button>
+					<Button name = "clock-o"
+						backgroundColor = {this.getTheme().btnSecondaryBg}
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress={this.onTabSelect.bind(this, 'schedulerTab')}>
+						<Text style={{ color: 'white', fontSize: 18 }}>Scheduler</Text>
+					</Button>
+					<Button name = "home"
+						backgroundColor = {this.getTheme().btnSecondaryBg}
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress={this.onTabSelect.bind(this, 'gatewaysTab')}>
+						<Text style={{ color: 'white', fontSize: 18 }}>Connected Locations</Text>
+					</Button>
+					<Button name = "gear"
+						backgroundColor = {this.getTheme().btnSecondaryBg}
+						size={26}
+						style = {{ padding: 6, minWidth: 100 }}
+						onPress = {this.onOpenSetting.bind(this)}>
+						<Text style={{ color: 'white', fontSize: 18 }}>Settings</Text>
+					</Button>
 				</View>
 			</View>
-		)
+		);
 	}
 
 	renderContent() {
 		switch (this.props.tab) {
 			case 'dashboardTab':
-				return <DashboardTab />
+				return <DashboardTab />;
 			case 'devicesTab':
-				return <DevicesTab />
+				return <DevicesTab />;
 			case 'sensorsTab':
-				return <SensorsTab />
+				return <SensorsTab />;
 			case 'schedulerTab':
-				return <SchedulerTab />
+				return <SchedulerTab />;
 			case 'gatewaysTab':
-				return <GatewaysTab />
-			}
-		return <DashboardTab />
+				return <GatewaysTab />;
+			default:
+				return <DashboardTab />;
+		}
 	}
 
 	render() {
+		if (!this.state || !this.state.starIcon) {
+			return false;
+		}
+
 		return (
 			<DrawerLayoutAndroid
 				ref = "drawer"
-				drawerWidth = { 280 }
-				drawerPosition = { DrawerLayoutAndroid.positions.Left }
-				renderNavigationView = { () => this.navigationView() }
+				drawerWidth = {280}
+				drawerPosition = {DrawerLayoutAndroid.positions.Left}
+				renderNavigationView = {() => this.navigationView()}
 			>
-				<View style = {{ flex:1 }} >
+				<View style = {{ flex: 1 }} >
 					<View style = {{
 						height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
 						backgroundColor: Theme.Core.brandPrimary }}
 					/>
-					<Icon.ToolbarAndroid
-						style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
-						titleColor = { Theme.Core.inverseTextColor }
-						navIconName = "bars"
-						overflowIconName = "ellipsis-v"
-						iconColor = { Theme.Core.inverseTextColor }
-						title = "Telldus Live!"
-						actions = {[{ title: 'Settings', icon: require('image!ic_launcher'), show: 'never'}]}
-						onActionSelected = { this.onActionSelected }
-						onIconClicked = { () => this.refs.drawer.openDrawer() }
-					/>
+					{
+						this.props.tab === 'devicesTab' || this.props.tab === 'sensorsTab' ?
+						(
+							<Icon.ToolbarAndroid
+								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
+								titleColor = {Theme.Core.inverseTextColor}
+								navIconName = "bars"
+								overflowIconName = "star"
+								iconColor = {Theme.Core.inverseTextColor}
+								title = "Telldus Live!"
+								actions = {[{ title: 'Settings', icon: this.state.starIcon, show: 'always' }]}
+								onActionSelected = {this._toggleEditMode.bind(this)}
+								onIconClicked = {() => this.refs.drawer.openDrawer()}
+							/>
+						) :
+						(
+							<Icon.ToolbarAndroid
+								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
+								titleColor = {Theme.Core.inverseTextColor}
+								navIconName = "bars"
+								overflowIconName = "star"
+								iconColor = {Theme.Core.inverseTextColor}
+								title = "Telldus Live!"
+								onIconClicked = {() => this.refs.drawer.openDrawer()}
+							/>
+						)
+					}
+
 					<View key={this.props.tab}>
 						{this.renderContent()}
+						{
+							this.state.settings ?
+								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting.bind(this)} /> :
+								null
+						}
 					</View>
 				</View>
 			</DrawerLayoutAndroid>
 		);
 	}
 
-	onActionSelected (position) {
-		if (position === 0) { // index of 'Settings'
-			console.log("Settings pressed");
-		}
+	_toggleEditMode(position) {
+		this.props.onToggleEditMode(this.props.tab);
 	}
-
 }
 
 function select(store) {
@@ -190,14 +210,15 @@ function select(store) {
 		devices: store.devices.devices,
 		gateways: store.gateways.gateways,
 		sensors: store.sensors.sensors,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
+		userProfile: store.user.userProfile || { firstname: '', lastname: '', email: '' },
 	};
 }
 
 function actions(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
-		dispatch
+		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+		dispatch,
 	};
 }
 

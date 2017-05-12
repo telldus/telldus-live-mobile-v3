@@ -26,9 +26,22 @@ import GatewayDetailView from './GatewayDetailView';
 import SensorDetailView from './SensorDetailView';
 import UserDetailView from './UserDetailView';
 
+import DeviceDetailModal from './DeviceDetailModal';
+import ToggleDeviceDetailModal from './ToggleDeviceDetailModal';
+import BellDeviceDetailModal from './BellDeviceDetailModal';
+import DimmerDeviceDetailModal from './DimmerDeviceDetailModal';
+import NavigationalDeviceDetailModal from './NavigationalDeviceDetailModal';
+import SettingsDetailModal from './SettingsDetailModal';
+
 module.exports = {
 	Device: DeviceDetailView,
 	Gateway: GatewayDetailView,
 	Sensor: SensorDetailView,
 	User: UserDetailView,
+	DeviceDetailModal,
+	ToggleDeviceDetailModal,
+	BellDeviceDetailModal,
+	DimmerDeviceDetailModal,
+	NavigationalDeviceDetailModal,
+	SettingsDetailModal,
 };

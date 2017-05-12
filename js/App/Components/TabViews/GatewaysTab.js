@@ -22,41 +22,38 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Button, Image, List, ListDataSource, ListItem, PropTypes, Text, View } from 'BaseComponents';
-import { getGateways, getWebsocketAddress } from 'Actions';
+import { Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { getGateways } from 'Actions';
 
-import GatewayDetailView from '../DetailViews/GatewayDetailView'
 import Theme from 'Theme';
 
-import GatewayIcons from 'GatewayIcons'
-
-import type { Tab } from '../reducers/navigation';
+import GatewayIcons from 'GatewayIcons';
 
 class GatewaysTab extends View {
 
 	_renderRow(item) {
 		try {
 			return (
-				<ListItem style = { Theme.Styles.rowFront }>
-					<View style = { Theme.Styles.listItemAvatar }>
-						<Image source = { GatewayIcons.get(item.type) } />
+				<ListItem style = {Theme.Styles.rowFront}>
+					<View style = {Theme.Styles.listItemAvatar}>
+						<Image source = {GatewayIcons.get(item.type)} />
 					</View>
 					<Text style = {{
 						color: 'rgba(0,0,0,0.87)',
 						fontSize: 16,
 						opacity: item.name ? 1 : 0.5,
-						marginBottom: 2
+						marginBottom: 2,
 					}}>
 						{item.name ? item.name : '(no name)'} ({item.online})
 					</Text>
 				</ListItem>
-			)
-		} catch(e) {
+			);
+		} catch (e) {
 			console.log(e);
-			return ( <View /> )
+			return ( <View /> );
 		}
 	}
-f
+	f
 	render() {
 		return (
 			<List
@@ -81,7 +78,7 @@ const dataSource = new ListDataSource({
 function select(store) {
 	return {
 		dataSource: dataSource.cloneWithRows(store.gateways || []),
-		gateways: store.gateways
+		gateways: store.gateways,
 	};
 }
 

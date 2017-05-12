@@ -8,11 +8,10 @@ import {
 	Animated,
 	StyleSheet,
 	TouchableOpacity,
-	View
+	View,
 } from 'react-native';
 
 const DIRECTIONAL_DISTANCE_CHANGE_THRESHOLD = 2;
-const SLIDE_DELAY = 300;
 
 /**
  * Row that is generally used in a SwipeListView.
@@ -36,7 +35,7 @@ class SwipeRow extends Component {
 			dimensionsSet: false,
 			hiddenHeight: 0,
 			hiddenWidth: 0,
-			translateX: new Animated.Value(0)
+			translateX: new Animated.Value(0),
 		};
 	}
 
@@ -55,6 +54,7 @@ class SwipeRow extends Component {
 	}
 
 	onContentLayout(e) {
+
 		this.setState({
 			dimensionsSet: !this.props.recalculateHiddenLayout,
 			hiddenHeight: e.nativeEvent.layout.height,
@@ -75,10 +75,8 @@ class SwipeRow extends Component {
 	onRowPress() {
 		if (this.props.onRowPress) {
 			this.props.onRowPress();
-		} else {
-			if (this.props.closeOnRowPress) {
-				this.closeRow();
-			}
+		} else if (this.props.closeOnRowPress) {
+			this.closeRow();
 		}
 	}
 
@@ -110,16 +108,20 @@ class SwipeRow extends Component {
 
 			if (this.swipeInitialX === null) {
 				// set tranlateX value when user started swiping
-				this.swipeInitialX = this.state.translateX._value
+				this.swipeInitialX = this.state.translateX._value;
 			}
 			this.horizontalSwipeGestureBegan = true;
 
 			let newDX = this.swipeInitialX + dx;
-			if (this.props.disableLeftSwipe  && newDX < 0) { newDX = 0; }
-			if (this.props.disableRightSwipe && newDX > 0) { newDX = 0; }
+			if (this.props.disableLeftSwipe && newDX < 0) {
+				newDX = 0;
+			}
+			if (this.props.disableRightSwipe && newDX > 0) {
+				newDX = 0;
+			}
 
 			this.setState({
-				translateX: new Animated.Value(newDX)
+				translateX: new Animated.Value(newDX),
 			});
 
 		}
@@ -140,12 +142,10 @@ class SwipeRow extends Component {
 				// we're more than halfway
 				toValue = this.props.leftOpenValue;
 			}
-		} else {
 			// trying to open left
-			if (this.state.translateX._value < this.props.rightOpenValue / 2) {
-				// we're more than halfway
-				toValue = this.props.rightOpenValue;
-			}
+		} else if (this.state.translateX._value < this.props.rightOpenValue / 2) {
+			// we're more than halfway
+			toValue = this.props.rightOpenValue;
 		}
 
 		this.manuallySwipeRow(toValue);
@@ -163,7 +163,7 @@ class SwipeRow extends Component {
 			{
 				toValue,
 				friction: this.props.friction,
-				tension: this.props.tension
+				tension: this.props.tension,
 			}
 		).start();
 
@@ -191,7 +191,7 @@ class SwipeRow extends Component {
 				this.props.children[1],
 				{
 					...this.props.children[1].props,
-					onPress: newOnPress
+					onPress: newOnPress,
 				}
 			);
 		}
@@ -199,7 +199,7 @@ class SwipeRow extends Component {
 		return (
 			<TouchableOpacity
 				activeOpacity={1}
-				onPress={ _ => this.onRowPress() }
+				onPress={_ => this.onRowPress()}
 			>
 				{this.props.children[1]}
 			</TouchableOpacity>
@@ -208,42 +208,20 @@ class SwipeRow extends Component {
 	}
 
 	renderRowContent() {
-		// We do this annoying if statement for performance.
-		// We don't want the onLayout func to run after it runs once.
+		const slideOpenValue = this.props.editMode ? this.props.leftOpenValue : 0;
 
-		// Only run animation when dimensions are not set (component is not mounted) or row's position is not match with editMode
-		const runAnimation = !this.state.dimensionsSet ||
-			!(this.state.translateX === 0 && this.props.editMode === false) ||
-			!(this.state.translateX !== 0 && this.props.editMode === true);
-
-		if (runAnimation) {
-			let slideOpenValue = this.props.editMode ? this.props.rightOpenValue : 0;
-			this.getSlideAnimation(slideOpenValue, SLIDE_DELAY).start();
-			return (
-				<Animated.View
-					onLayout={ (e) => this.onContentLayout(e) }
-					style={{
-						transform: [
-							{translateX: this.state.translateX}
-						]
-					}}
-				>
-					{this.renderVisibleContent()}
-				</Animated.View>
-			);
-		} else {
-			return (
-				<Animated.View
-					style={{
-						transform: [
-							{translateX: this.state.translateX}
-						]
-					}}
-				>
-					{this.renderVisibleContent()}
-				</Animated.View>
-			);
-		}
+		return (
+			<View
+				onLayout={(e) => this.onContentLayout(e)}
+				style={{
+					transform: [
+						{ translateX: slideOpenValue },
+					],
+				}}
+			>
+				{this.renderVisibleContent()}
+			</View>
+		);
 	}
 
 	render() {
@@ -254,7 +232,7 @@ class SwipeRow extends Component {
 					{
 						height: this.state.hiddenHeight,
 						width: this.state.hiddenWidth,
-					}
+					},
 				]}>
 					{this.props.children[0]}
 				</View>
