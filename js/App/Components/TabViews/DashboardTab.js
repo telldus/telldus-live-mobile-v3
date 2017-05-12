@@ -20,7 +20,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
+import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View } from 'BaseComponents';
 import Platform from 'Platform';
 import { changeSensorDisplayType } from 'Actions';
@@ -33,6 +33,7 @@ import { GenericDashboardTile, DimmerDashboardTile, NavigationalDashboardTile, B
 import { SettingsDetailModal } from 'DetailViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
+import reactMixin from 'react-mixin';
 
 // TODO: this view renders before the sensor and device data is retrieved
 //       that might not be a problem, but we should know why
@@ -42,6 +43,7 @@ import getDeviceType from '../../Lib/getDeviceType';
 //       to indicate also it is old data
 
 class DashboardTab extends View {
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -55,6 +57,8 @@ class DashboardTab extends View {
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
+		this.onOpenSetting = this.onOpenSetting.bind(this);
+		this.mixins = [Subscribable.Mixin];
 
 	}
 
@@ -79,9 +83,7 @@ class DashboardTab extends View {
 
 	componentDidMount() {
 		if (Platform.OS === 'ios') {
-			const route = this.props.navigator.navigationContext.currentRoute;
-			route.onRightButtonPress = this.onOpenSetting.bind(this);
-			this.props.navigator.replace(route);
+			this.addListenerOn(this.props.events, 'onSetting', this.onOpenSetting);
 		}
 	}
 
@@ -244,5 +246,7 @@ function actions(dispatch) {
 		dispatch,
 	};
 }
+
+reactMixin(DashboardTab.prototype, Subscribable.Mixin);
 
 module.exports = connect(select, actions)(DashboardTab);

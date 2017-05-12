@@ -94,6 +94,10 @@ export default function sensorsReducer(state: State = initialState, action: Acti
 		};
 	}
 	if (action.type === 'SENSOR_UPDATE_VALUE') {
+		if (!state || !state.map) {
+			return state;
+		}
+
 		return state.map(sensorState => {
 			if (sensorState.id !== action.payload.sensorId) {
 				return sensorState;
@@ -137,24 +141,25 @@ export function parseSensorsForListView({ sensors, gateways, dashboard }) {
 	if (!isArray(sensors)) {
 		return { sections, sectionIds };
 	}
-
-	sensors.map(sensor => {
-		const sectionId = sensor.clientId ? sensor.clientId : '';
-		if (sectionIds.indexOf(sectionId) === -1) {
-			sectionIds.push(sectionId);
-			sections[sectionId] = [];
-		}
-
-		sensor.inDashboard = false;
-		for (let i = 0; i < dashboard.sensors.length; ++i) {
-			if (dashboard.sensors[i].id === sensor.id) {
-				sensor.inDashboard = true;
-				break;
+	if (sensors && sensors.map) {
+		sensors.map(sensor => {
+			const sectionId = sensor.clientId ? sensor.clientId : '';
+			if (sectionIds.indexOf(sectionId) === -1) {
+				sectionIds.push(sectionId);
+				sections[sectionId] = [];
 			}
-		}
 
-		sections[sectionId].push(sensor);
-	});
+			sensor.inDashboard = false;
+			for (let i = 0; i < dashboard.sensors.length; ++i) {
+				if (dashboard.sensors[i].id === sensor.id) {
+					sensor.inDashboard = true;
+					break;
+				}
+			}
+
+			sections[sectionId].push(sensor);
+		});
+	}
 
 	const gatewayNameLookUp = gateways.reduce((acc, gateway) => {
 		acc[gateway.id] = gateway.name;

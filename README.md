@@ -106,7 +106,10 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 ### Android
 
 - find all the instructions for generating signed APK on [Generating Signed APK](https://facebook.github.io/react-native/docs/signed-apk-android.html)
-  - NOTE: You need to use `react-native run-android --configuration=release` instead of `react-native run-android --variant=release`, see [SO](http://stackoverflow.com/questions/41263330/error-running-react-native-run-android-variant-release-task-installreleasede)
+  - Use `react-native run-android --configuration=release` instead of `react-native run-android --variant=release`, see [SO](http://stackoverflow.com/questions/41263330/error-running-react-native-run-android-variant-release-task-installreleasede)
+  - to make an .apk: `cd android && ./gradlew assembleRelease`
+  - install .apk: `adb install android/app/build/outputs/apk/app-release.apk`
+  - uninstall previous .apk: `adb uninstall com.telldus.live.react`
 
 ## Split dependencies
 

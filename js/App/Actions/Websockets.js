@@ -22,7 +22,7 @@
 'use strict';
 
 import { v4 } from 'react-native-uuid';
-import { addConnection, removeConnection, sendMessage } from '../Lib/Socket';
+import { addConnection, sendMessage } from '../Lib/Socket';
 
 import { processWebsocketMessageForSensor } from 'Actions/Sensors';
 import { processWebsocketMessageForDevice } from 'Actions/Devices';
@@ -160,7 +160,6 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
 		} catch (e) {
 			console.log(message);
 		}
-		removeConnection(gatewayId);
 	};
 };
 

@@ -29,6 +29,7 @@
  */
 
 import formatTime from './formatTime';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 // TODO: figure out whether we want to listen for appState to close the connection
 // https://facebook.github.io/react-native/docs/appstate.html
@@ -63,16 +64,9 @@ export function addConnection(gatewayId, websocketUrl) {
 	}
 	websocketConnections[gatewayId] = {
 		url: websocketUrl,
-		websocket: new WebSocket(websocketUrl),
+		websocket: new ReconnectingWebSocket(websocketUrl),
 	};
 	return websocketConnections[gatewayId].websocket;
-}
-
-export function removeConnection(gatewayId) {
-	if (websocketConnections[gatewayId] && websocketConnections[gatewayId].websocket) {
-		websocketConnections[gatewayId].websocket.close();
-	}
-	delete websocketConnections[gatewayId];
 }
 
 export function sendMessage(gatewayId, message) {

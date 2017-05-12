@@ -149,6 +149,9 @@ class SensorDashboardTile extends View {
 		return (
 			<DashboardShadowTile
 				item={item}
+				isEnabled={item.childObject.state !== 0}
+				name={item.childObject.name}
+				tileWidth={tileWidth}
 				style={[this.props.style, {
 					width: tileWidth,
 					height: tileWidth,
@@ -157,21 +160,8 @@ class SensorDashboardTile extends View {
 					onPress={this.changeDisplayType}
 					activeOpacity={0.8}
 					style={styles.container}>
-					<View
-						style={styles.body}>
-					{slides[selectedSlideIndex]}
-					</View>
-					<View style={[styles.titleContainer, {
-						backgroundColor: item.childObject.state === 0 ? '#bfbfbf' : '#e56e18' }]}>
-						<Text
-							ellipsizeMode="middle"
-							numberOfLines={1}
-							style = {[styles.titleText, {
-								fontSize: Math.floor(tileWidth / 8),
-								opacity: item.childObject.name ? 1 : 0.7,
-							}]}>
-							{item.childObject.name ? item.childObject.name : '(no name)'}
-						</Text>
+					<View style={styles.body}>
+						{slides[selectedSlideIndex]}
 					</View>
 				</TouchableOpacity>
 			</DashboardShadowTile>
@@ -186,7 +176,7 @@ class SensorDashboardTile extends View {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		flex: 30,
 		justifyContent: 'center',
 	},
 	body: {
@@ -194,18 +184,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		borderTopLeftRadius: 7,
 		borderTopRightRadius: 7,
-	},
-	titleContainer: {
-		flex: 13,
-		justifyContent: 'center',
-		borderBottomLeftRadius: 7,
-		borderBottomRightRadius: 7,
-	},
-	titleText: {
-		padding: 5,
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
 	},
 });
 module.exports = SensorDashboardTile;
