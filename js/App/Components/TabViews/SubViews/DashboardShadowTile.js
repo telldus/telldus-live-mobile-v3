@@ -20,11 +20,27 @@
 'use strict';
 
 import React from 'react';
-import { View } from 'BaseComponents';
+import { View, Text } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
+
+const Title = ({ isEnabled, name, tileWidth }) => (
+	<View style={[styles.title, isEnabled ? styles.titleEnabled : styles.titleDisabled]}>
+		<Text
+			ellipsizeMode="middle"
+			numberOfLines={1}
+			style = {[styles.name, {
+				fontSize: Math.floor(tileWidth / 8),
+				opacity: name ? 1 : 0.7,
+			}]}>
+			{name ? name : '(no name)'}
+		</Text>
+	</View>
+);
 
 module.exports = class DashboardShadowTile extends View {
 	render() {
 		return (
+			// Because of the limitation of react-native so we need 2 nested views to create an rounded corner view with shadow
 			<View
 				style={[this.props.style, {
 					borderRadius: 7,
@@ -34,15 +50,37 @@ module.exports = class DashboardShadowTile extends View {
 					shadowOpacity: 1.0,
 					elevation: 3,
 				}]}>
-                <View style={{
-	flex: 1,
-	flexDirection: 'column',
-	borderRadius: 7,
-	overflow: 'hidden',
-}}>
-                    {this.props.children}
-                </View>
-            </View>
+				<View style={{
+					flex: 1,
+					flexDirection: 'column',
+					borderRadius: 7,
+					overflow: 'hidden',
+				}}>
+					{this.props.children}
+					<Title {...this.props} />
+				</View>
+			</View>
 		);
 	}
 };
+
+const styles = StyleSheet.create({
+	name: {
+		padding: 5,
+		color: 'white',
+		textAlign: 'center',
+		textAlignVertical: 'center',
+	},
+	title: {
+		flex: 13,
+		justifyContent: 'center',
+		borderBottomLeftRadius: 7,
+		borderBottomRightRadius: 7,
+	},
+	titleEnabled: {
+		backgroundColor: '#e56e18',
+	},
+	titleDisabled: {
+		backgroundColor: '#bfbfbf',
+	},
+});

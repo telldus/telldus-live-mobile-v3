@@ -20,8 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { Text, View } from 'BaseComponents';
-import { StyleSheet } from 'react-native';
+import { View } from 'BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 
 class GenericDashboardTile extends View {
@@ -36,52 +35,18 @@ class GenericDashboardTile extends View {
 		return (
 			<DashboardShadowTile
 				item={item}
+				isEnabled={true}
+				name={item.childObject.name}
+				tileWidth={tileWidth}
 				style={[this.props.style, {
 					width: tileWidth,
 					height: tileWidth,
-				}]}>
-                <View
-                    style={styles.container}>
-                    <View style={styles.title}>
-                        <Text
-                            ellipsizeMode="middle"
-                            numberOfLines={1}
-                            style = {[styles.name, {
-	fontSize: Math.floor(tileWidth / 8),
-	opacity: item.childObject.name ? 1 : 0.7,
-}]}>
-                            {item.childObject.name ? item.childObject.name : '(no name)'}
-                        </Text>
-                    </View>
-                </View>
+				}]}
+			>
+				<View style={{ flex: 30 }} />
 			</DashboardShadowTile>
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-	},
-	body: {
-		flex: 30,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'white',
-	},
-	title: {
-		flex: 13,
-		backgroundColor: '#e56e18',
-		justifyContent: 'center',
-	},
-	name: {
-		padding: 5,
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-});
 
 module.exports = GenericDashboardTile;

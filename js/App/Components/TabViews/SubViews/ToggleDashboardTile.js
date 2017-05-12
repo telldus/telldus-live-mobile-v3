@@ -25,18 +25,15 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
 const OffButton = ({ isInState, tileWidth, onPress }) => (
-	<View style={[styles.turnOffButtonContainer, {
-		backgroundColor: isInState === 'TURNOFF' ? 'white' : '#eeeeee' }]}>
+	<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
 		<TouchableOpacity
 			onPress={onPress}
 			style={styles.button} >
 			<Text
 				ellipsizeMode="middle"
 				numberOfLines={1}
-				style = {[styles.buttonText, {
-					color: isInState === 'TURNOFF' ? 'red' : '#a0a0a0',
-					fontSize: Math.floor(tileWidth / 8),
-				}]}>
+				style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
+					{ fontSize: Math.floor(tileWidth / 8) }]}>
 				{'Off'}
 			</Text>
 		</TouchableOpacity>
@@ -44,36 +41,19 @@ const OffButton = ({ isInState, tileWidth, onPress }) => (
 );
 
 const OnButton = ({ isInState, tileWidth, onPress }) => (
-	<View style={[styles.turnOnButtonContainer, {
-		backgroundColor: isInState === 'TURNON' ? 'white' : '#eeeeee' }]}>
+	<View style={[styles.turnOnButtonContainer, isInState === 'TURNON' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
 		<TouchableOpacity
 			onPress={onPress}
 			style={styles.button} >
 			<Text
 				ellipsizeMode="middle"
 				numberOfLines={1}
-				style = {[styles.buttonText, {
-					color: isInState === 'TURNON' ? 'green' : '#a0a0a0',
-					fontSize: Math.floor(tileWidth / 8) }]}>
+				style = {[styles.buttonText, isInState === 'TURNON' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
+					{ fontSize: Math.floor(tileWidth / 8) }]}>
 				{'On'}
 			</Text>
 		</TouchableOpacity>
 	</View>
-);
-
-const Title = ({ isInState, name, tileWidth }) => (
-	<View style={[styles.titleContainer, {
-		backgroundColor: isInState === 'TURNOFF' ? '#bfbfbf' : '#e56e18' }]}>
-		<Text
-			ellipsizeMode="middle"
-			numberOfLines={1}
-			style = {[styles.titleText, {
-				fontSize: Math.floor(tileWidth / 8),
-				opacity: name ? 1 : 0.7,
-			}]}>
-			{name ? name : '(no name)'}
-			</Text>
-		</View>
 );
 
 class ToggleDashboardTile extends View {
@@ -92,6 +72,9 @@ class ToggleDashboardTile extends View {
 		return (
 			<DashboardShadowTile
 				item={this.props.item}
+				isEnabled={isInState === 'TURNON'}
+				name={name}
+				tileWidth={tileWidth}
 				style={[this.props.style, {
 					width: tileWidth,
 					height: tileWidth,
@@ -100,7 +83,6 @@ class ToggleDashboardTile extends View {
 					{ turnOffButton }
 					{ turnOnButton }
 				</View>
-				<Title item={isInState} tileWidth={tileWidth} name={name} />
 			</DashboardShadowTile>
 		);
 	}
@@ -117,16 +99,6 @@ const styles = StyleSheet.create({
 		alignItems: 'stretch',
 		borderTopRightRadius: 7,
 	},
-	// turnOffButton: {
-	// 	flex: 1,
-	// 	justifyContent: 'center',
-	// 	borderTopLeftRadius:7,
-	// },
-	// turnOnButton: {
-	// 	flex: 1,
-	// 	justifyContent: 'center',
-	// 	borderTopRightRadius:7,
-	// },
 	button: {
 		flex: 1,
 		justifyContent: 'center',
@@ -135,17 +107,23 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		textAlignVertical: 'center',
 	},
-	titleContainer: {
-		flex: 13,
-		justifyContent: 'center',
-		borderBottomLeftRadius: 7,
-		borderBottomRightRadius: 7,
+	buttonBackgroundEnabled: {
+		backgroundColor: 'white',
 	},
-	titleText: {
-		padding: 5,
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
+	buttonBackgroundDisabled: {
+		backgroundColor: '#eeeeee',
+	},
+	buttonOnEnabled: {
+		color: 'green',
+	},
+	buttonOnDisabled: {
+		color: '#a0a0a0',
+	},
+	buttonOffEnabled: {
+		color: 'red',
+	},
+	buttonOffDisabled: {
+		color: '#a0a0a0',
 	},
 });
 
