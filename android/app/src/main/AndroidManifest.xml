@@ -1,12 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.telldus.live.react"
-    android:versionCode="1"
-    android:versionName="1.0">
+    package="com.telldus.live.mobile.test"
+    android:versionCode="30000"
+    android:versionName="3.0.0">
 
 	<permission
-		android:name="com.telldus.live.react.permission.C2D_MESSAGE"
+		android:name="com.telldus.live.mobile.test.permission.C2D_MESSAGE"
 		android:protectionLevel="signature" />
-    <uses-permission android:name="com.telldus.live.react.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.telldus.live.mobile.test.permission.C2D_MESSAGE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
