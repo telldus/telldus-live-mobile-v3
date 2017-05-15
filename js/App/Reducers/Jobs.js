@@ -97,10 +97,15 @@ export function parseJobsForListView(jobs = [], gateways = [], devices = []) {
 	}), {});
 
 	jobs.forEach(job => {
-		// offset
 		let tempDay;
 		const device = devicesById[job.deviceId];
+		if (!device) {
+			return;
+		}
 		const gateway = gatewaysById[device.clientId];
+		if (!gateway) {
+			return;
+		}
 		const { timezone } = gateway;
 
 		if (job.type === 'sunrise') {
