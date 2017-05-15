@@ -87,11 +87,11 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "com.telldus.live.react"
+        applicationId "com.telldus.live.mobile.test"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 30000
+        versionName "3.0.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
