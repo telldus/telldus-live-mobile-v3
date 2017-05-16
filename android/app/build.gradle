@@ -98,10 +98,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file(TELLDUS_REACT_NATIVE_LOCAL_RELEASE_STORE_FILE)
-            storePassword TELLDUS_REACT_NATIVE_LOCAL_RELEASE_STORE_PASSWORD
-            keyAlias TELLDUS_REACT_NATIVE_LOCAL_RELEASE_KEY_ALIAS
-            keyPassword TELLDUS_REACT_NATIVE_LOCAL_RELEASE_KEY_PASSWORD
+            storeFile file(TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE)
+            storePassword TELLDUS_REACT_NATIVE_LOCAL_STORE_PASSWORD
+            keyAlias TELLDUS_REACT_NATIVE_LOCAL_KEY_ALIAS
+            keyPassword TELLDUS_REACT_NATIVE_LOCAL_KEY_PASSWORD
         }
     }
     splits {

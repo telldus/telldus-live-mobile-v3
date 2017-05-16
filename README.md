@@ -44,7 +44,7 @@ All commands are assumed to be ran from project root.
 - to run the app on your device, check out [React Native: Running On Device](https://facebook.github.io/react-native/releases/0.23/docs/running-on-device-android.html#content). When your (virtual) device is connected, you can see it show up when you run `adb devices`. run `react-native run-android` to launch the app on your phone
 - use `adb logcat` to look at the Android log file
 - when the app launches on your (virtual) device, it will send you to the Settings screen for "Apps that can draw over other apps". Enable this for the Telldus app and launch the app again from your app drawer.
- 
+
 ## Development
 
 ### Local config
@@ -256,10 +256,10 @@ You need a `android/app/google-services.json` file, otherwise the app won't run.
     {
       "client_info": {
         "mobilesdk_app_id": "1:999999999999:android:0000000000000000",
-        "client_id": "android:com.telldus.live.mobile",
+        "client_id": "android:com.telldus.live.mobile.test",
         "client_type": 1,
         "android_client_info": {
-          "package_name": "com.telldus.live.mobile",
+          "package_name": "com.telldus.live.mobile.test",
           "certificate_hash": []
         }
       },
@@ -268,7 +268,7 @@ You need a `android/app/google-services.json` file, otherwise the app won't run.
           "client_id": "this-is-a-sample-do-not-use.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.telldus.live.mobile",
+            "package_name": "com.telldus.live.mobile.test",
             "certificate_hash": "0000000000000000000000000000000000000000"
           }
         },
