@@ -19,6 +19,7 @@
 'use strict';
 
 import React from 'react';
+import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View } from 'BaseComponents';
@@ -46,7 +47,11 @@ class DashboardTab extends View {
 
 	constructor(props) {
 		super(props);
+		const { width } = Dimensions.get('window');
+		const tileWidth = this.calculateTileWidth(width);
+
 		this.state = {
+			tileWidth,
 			listWidth: 0,
 			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(this.props.dataArray),
 			settings: false,
@@ -59,7 +64,6 @@ class DashboardTab extends View {
 		this.onValueChange = this.onValueChange.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
 		this.mixins = [Subscribable.Mixin];
-
 	}
 
 	setScrollEnabled(enable) {
@@ -98,18 +102,24 @@ class DashboardTab extends View {
 	}
 
 	_onLayout = (event) => {
-		const listWidth = event.nativeEvent.layout.width - 8;
-		const isPortrait = true;
+		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width);
+		if (tileWidth !== this.state.tileWidth) {
+			this.setState({
+				tileWidth,
+			});
+		}
+	}
+
+	calculateTileWidth(_listWidth) {
+		const listWidth = _listWidth - 8;
+		const isPortrait = true; // okay...
 		if (listWidth <= 0) {
 			return;
 		}
 		const baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
 		const tilesPerRow = Math.floor(listWidth / baseTileSize);
 		const tileWidth = tilesPerRow === 0 ? baseTileSize : Math.floor(listWidth / tilesPerRow);
-
-		this.setState({
-			tileWidth,
-		});
+		return tileWidth;
 	}
 
 	onOpenSetting() {
@@ -122,7 +132,6 @@ class DashboardTab extends View {
 
 	render() {
 		// add to List props: enableEmptySections={true}, to surpress warning
-
 		return (
 			<View onLayout={this._onLayout}>
 				<List
