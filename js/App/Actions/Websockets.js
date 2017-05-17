@@ -65,7 +65,7 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
 
 		addWebsocketFilter(gatewayId, 'device', 'added');
 		addWebsocketFilter(gatewayId, 'device', 'removed');
-		addWebsocketFilter(gatewayId, 'device', 'failSetStae');
+		addWebsocketFilter(gatewayId, 'device', 'failSetState');
 		addWebsocketFilter(gatewayId, 'device', 'setState');
 
 		addWebsocketFilter(gatewayId, 'sensor', 'added');
