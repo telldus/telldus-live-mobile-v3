@@ -63,6 +63,7 @@ class LoginForm extends View {
 					style={styles.formField}
 					onChangeText={username => this.setState({ username, notificationText: false })}
 					placeholder="Username"
+					keyboardType="email-address"
 					autoCapitalize = "none"
 					autoCorrect = {false}
 					placeholderTextColor = "#ffffff80"
