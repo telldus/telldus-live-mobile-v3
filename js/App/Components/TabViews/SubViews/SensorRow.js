@@ -19,8 +19,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import { FormattedNumber, Image, ListItem, Text, View } from 'BaseComponents';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import format from 'date-format';
 import Theme from 'Theme';
@@ -98,38 +99,69 @@ const SensorLuminance = ({ luminance }) => (
     </View>
 );
 
-const SensorRow = props => {
-	const minutesAgo = Math.round(((Date.now() / 1000) - props.lastUpdated) / 60);
-	return (
-        <ListItem style = {Theme.Styles.rowFront}>
-            <View>
-                <Text style = {{
-	color: 'rgba(0,0,0,0.87)',
-	fontSize: 16,
-	opacity: props.name ? 1 : 0.5,
-	marginBottom: 2,
-}}>
-                    {props.name ? props.name : '(no name)'}
-                </Text>
-                <Text style = {{
-	color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
-	fontSize: 12,
-	opacity: minutesAgo < 1440 ? 1 : 0.5,
-}}>
-                    {formatLastUpdated(minutesAgo, props.lastUpdated)}
-                </Text>
-            </View>
-            { props.humidity ? <SensorHumidity {...props} /> : null }
-            { props.temperature ? <SensorTemperature {...props} /> : null }
-            { props.rainRate || props.rainTotal ? <SensorRain {...props} /> : null }
-            { props.windGust || props.windAverage || props.windDirection ? <SensorWind {...props} /> : null }
-            { props.uv ? <SensorUV {...props} /> : null }
-            { props.watt ? <SensorWatt {...props} /> : null }
-            { props.luminance ? <SensorLuminance {...props} /> : null }
-        </ListItem>
-	);
+class SensorRow extends Component {
+	constructor(props) {
+		super(props);
+		this.width = 0;
+	}
 
-	function formatLastUpdated(minutes, lastUpdated) {
+	render() {
+		const minutesAgo = Math.round(((Date.now() / 1000) - this.props.lastUpdated) / 60);
+		let sensors = [];
+
+		if (this.props.humidity) {
+			sensors.push(<SensorHumidity {...this.props} key={`${this.props.id}humidity`}/>);
+		}
+		if (this.props.temperature) {
+			sensors.push(<SensorTemperature {...this.props} key={`${this.props.id}temperature`}/>);
+		}
+		if (this.props.rainRate || this.props.rainTotal) {
+			sensors.push(<SensorRain {...this.props} key={`${this.props.id}rain`}/>);
+		}
+		if (this.props.windGust || this.props.windAverage || this.props.windDirection) {
+			sensors.push(<SensorWind {...this.props} key={`${this.props.id}wind`}/>);
+		}
+		if (this.props.uv) {
+			sensors.push(<SensorUV {...this.props} key={`${this.props.id}uv`}/>);
+		}
+		if (this.props.watt) {
+			sensors.push(<SensorWatt {...this.props} key={`${this.props.id}watt`}/>);
+		}
+		if (this.props.luminance) {
+			sensors.push(<SensorLuminance {...this.props} key={`${this.props.id}luminance`}/>);
+		}
+
+		return (
+            <ListItem
+                style = {Theme.Styles.rowFront}
+                onLayout={this.onLayout.bind(this)} >
+                <View>
+                    <Text style = {[styles.name, { opacity: this.props.name ? 1 : 0.5 }]}
+                        ellipsizeMode="middle"
+                        numberOfLines={1}>
+                        {this.props.name ? this.props.name : '(no name)'}
+                    </Text>
+                    <Text style = {[styles.time, {
+	color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
+	opacity: minutesAgo < 1440 ? 1 : 0.5 }]}>
+                        {this.formatLastUpdated(minutesAgo, this.props.lastUpdated)}
+                    </Text>
+                </View>
+                { sensors.length * 88 < this.width / 2.0 ?
+                sensors :
+                (<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true} directionalLockEnabled={true} >
+                {sensors}
+            </ScrollView>)
+                }
+            </ListItem>
+		);
+	}
+
+	onLayout(event) {
+		this.width = event.nativeEvent.layout.width;
+	}
+
+	formatLastUpdated(minutes, lastUpdated) {
 		if (minutes === 0) {
 			return 'Just now';
 		}
@@ -155,6 +187,20 @@ const SensorRow = props => {
 		}
 		return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
 	}
-};
+}
+
+const styles = StyleSheet.create({
+	name: {
+		color: 'rgba(0,0,0,0.87)',
+		fontSize: 16,
+		marginBottom: 2,
+	},
+	time: {
+		fontSize: 12,
+	},
+	scrollView: {
+		alignSelf: 'stretch',
+	},
+});
 
 module.exports = SensorRow;
