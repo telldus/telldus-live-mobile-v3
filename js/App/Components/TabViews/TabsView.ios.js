@@ -41,11 +41,20 @@ class TabsView extends View {
 	constructor(props) {
 		super(props);
 		this.eventEmitter = new EventEmitter();
+		this.onTabSelect = this.onTabSelect.bind(this);
 	}
 
 	componentDidMount() {
 		Icon.getImageSource('gear', 22, 'white').then((source) => this.setState({ settingIcon: source }));
 		Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
+
+		if (this.props.dashboard.devices.length > 0 || this.props.dashboard.sensors.length > 0) {
+			if (this.props.tab !== 'dashboardTab') {
+				this.onTabSelect('dashboardTab');
+			}
+		} else {
+			this.onTabSelect('devicesTab');
+		}
 	}
 
 	onTabSelect(tab) {
@@ -167,6 +176,7 @@ function select(store) {
 		tab: store.navigation.tab,
 		userIcon: false,
 		userProfile: store.user.userProfile || { firstname: '', lastname: '', email: '' },
+		dashboard: store.dashboard,
 	};
 }
 
