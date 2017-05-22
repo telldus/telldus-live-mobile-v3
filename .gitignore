@@ -1,7 +1,6 @@
 # App ignores
 #
 config.local.js
-google-services.json
 *.keystore
 
 # VSCode ignores
