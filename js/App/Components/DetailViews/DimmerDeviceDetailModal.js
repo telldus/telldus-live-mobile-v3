@@ -24,56 +24,54 @@ import { connect } from 'react-redux';
 
 import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity, Slider } from 'react-native';
-import DeviceDetailModal from './DeviceDetailModal';
 
 import { turnOn, turnOff, learn } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
-    <RoundedCornerShadowView style={styles.toggleContainer}>
-        <TouchableOpacity
-            style={[styles.toggleButton, {
-	backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
-}]}
-            onPress={onTurnOff}>
-            <Text style={{
-	fontSize: 16,
-	color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
-                {'Off'}
-            </Text>
-        </TouchableOpacity>
+	<RoundedCornerShadowView style={styles.toggleContainer}>
+		<TouchableOpacity
+			style={[styles.toggleButton, {
+				backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
+			}]}
+			onPress={onTurnOff}>
+			<Text style={{
+				fontSize: 16,
+				color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
+				{'Off'}
+			</Text>
+		</TouchableOpacity>
 
-        <TouchableOpacity
-            style={[styles.toggleButton, {
-	backgroundColor: device.isInState !== 'TURNOFF' ? 'white' : '#eeeeee',
-}]}
-            onPress={onTurnOn}>
-            <Text style={{
-	fontSize: 16,
-	color: device.isInState !== 'TURNOFF' ? '#2c7e38' : '#9e9e9e' }}>
-                {'On'}
-            </Text>
-        </TouchableOpacity>
-    </RoundedCornerShadowView>
+		<TouchableOpacity
+			style={[styles.toggleButton, {
+				backgroundColor: device.isInState !== 'TURNOFF' ? 'white' : '#eeeeee',
+			}]}
+			onPress={onTurnOn}>
+			<Text style={{
+				fontSize: 16,
+				color: device.isInState !== 'TURNOFF' ? '#2c7e38' : '#9e9e9e' }}>
+				{'On'}
+			</Text>
+		</TouchableOpacity>
+	</RoundedCornerShadowView>
 );
 
 const LearnButton = ({ device, onLearn }) => (
-    <RoundedCornerShadowView style={styles.learnContainer}>
-        <TouchableOpacity onPress={onLearn} style={styles.learnButton}>
-            <Text style={styles.learnText}>
-                {'Learn'}
-            </Text>
-        </TouchableOpacity>
-    </RoundedCornerShadowView>
+	<RoundedCornerShadowView style={styles.learnContainer}>
+		<TouchableOpacity onPress={onLearn} style={styles.learnButton}>
+			<Text style={styles.learnText}>
+				{'Learn'}
+			</Text>
+		</TouchableOpacity>
+	</RoundedCornerShadowView>
 );
 
 class DimmerDeviceDetailModal extends View {
 
 	constructor(props) {
 		super(props);
-		const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
 
-		const dimmerValue = this.getDimmerValue(device);
+		const dimmerValue = this.getDimmerValue(this.props.device);
 
 		this.state = {
 			dimmerValue,
@@ -99,86 +97,76 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	onTurnOn() {
-		this.props.onTurnOn(this.props.deviceId);
+		this.props.onTurnOn(this.props.device.id);
 	}
 
 	onTurnOff() {
-		this.props.onTurnOff(this.props.deviceId);
+		this.props.onTurnOff(this.props.device.id);
 	}
 
 	onLearn() {
-		this.props.onLearn(this.props.deviceId);
+		this.props.onLearn(this.props.device.id);
 	}
 
 	onValueChange(value) {
+		console.log('***** value', value);
 		this.setState({ dimmerValue: value });
 		this.sliding = true;
 	}
 
 	onSlidingComplete(value) {
-		this.props.onDim(this.props.deviceId, 255 * value / 100.0);
+		this.props.onDim(this.props.device.id, 255 * value / 100.0);
 		this.sliding = false;
 	}
 
-    // TODO: Fix a bug which make slider's value is being changed after sliding complete
+	// TODO: Fix a bug which make slider's value is being changed after sliding complete
 	render() {
-		const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
-
-		let hasToggleButton = false;
-		let hasLearnButton = false;
-		let hasSlider = false;
+		const { device } = this.props;
+		const { TURNON, TURNOFF, LEARN, DIM } = device.supportedMethods;
 
 		let toggleButton = null;
 		let learnButton = null;
 		let slider = null;
 
 		const sliderValue = this.sliding ? this.state.dimmerValue : this.getDimmerValue(device);
-
-		if (device) {
-			const { TURNON, TURNOFF, LEARN, DIM } = device.supportedMethods;
-			hasToggleButton = TURNON || TURNOFF;
-			hasLearnButton = LEARN;
-			hasSlider = DIM;
-		}
-
-		if (hasToggleButton) {
+		console.log('***** sliderValue', sliderValue);
+		if (TURNON || TURNOFF) {
 			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} />;
 		}
 
-		if (hasLearnButton) {
+		if (LEARN) {
 			learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
 		}
 
-		if (hasSlider) {
+		if (DIM) {
 			slider = <Slider minimumValue={0} maximumValue={100} step={1} value={sliderValue}
-                    style={{ marginHorizontal: 8, marginVertical: 8 }}
-                    onValueChange={this.onValueChange}
-                    onSlidingComplete={this.onSlidingComplete}/>;
+				style={{ marginHorizontal: 8, marginVertical: 8 }}
+				onValueChange={this.onValueChange}
+				onSlidingComplete={this.onSlidingComplete}/>;
 		}
 
 		return (
-            <DeviceDetailModal
-                isVisible={this.props.isVisible}
-                onCloseSelected={this.props.onCloseSelected}
-                deviceId={this.props.deviceId}>
-                <Text style={styles.textDimmingLevel}>
-                    {`Dimming level: ${sliderValue}%`}
-                </Text>
-                {slider}
-                {toggleButton}
-                {learnButton}
-            </DeviceDetailModal>
+			<View style={styles.container}>
+				<Text style={styles.textDimmingLevel}>
+					{`Dimming level: ${sliderValue}%`}
+				</Text>
+				{slider}
+				{toggleButton}
+				{learnButton}
+			</View>
 		);
 	}
 
 }
 
 DimmerDeviceDetailModal.propTypes = {
-	onCloseSelected: React.PropTypes.func.isRequired,
-	deviceId: React.PropTypes.number.isRequired,
+	device: React.PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 0,
+	},
 	textDimmingLevel: {
 		color: '#1a355b',
 		fontSize: 14,
@@ -214,11 +202,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-function select(store) {
+function mapStateToProps(store) {
 	return { store };
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		onTurnOn: (id) => dispatch(turnOn(id)),
 		onTurnOff: (id) => dispatch(turnOff(id)),
@@ -228,4 +216,4 @@ function actions(dispatch) {
 	};
 }
 
-module.exports = connect(select, actions)(DimmerDeviceDetailModal);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerDeviceDetailModal);

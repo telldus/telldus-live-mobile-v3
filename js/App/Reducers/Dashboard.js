@@ -19,113 +19,132 @@
 
 'use strict';
 
-import isArray from 'lodash/isArray';
-import type { Action } from 'Actions/Types';
+import { combineReducers } from 'redux';
+import { REHYDRATE } from 'redux-persist/constants';
 
-type State = {
-	devices: Array<Number>,
-    sensors: Array<Object>
-};
+import includes from 'lodash/includes';
+import omit from 'lodash/omit';
 
-const initialState: State = {
-	devices: [],
-	sensors: [],
-};
+const allIds = kind => (state = [], action) => {
+	if (action.type === REHYDRATE) {
+		if (action.payload.dashboard && action.payload.dashboard.deviceIds && kind === 'device') {
+			console.log('rehydrating dashboard.deviceIds');
+			return [
+				...state,
+				...action.payload.dashboard.deviceIds,
+			];
+		}
+		if (action.payload.dashboard && action.payload.dashboard.sensorIds && kind === 'sensor') {
+			console.log('rehydrating dashboard.sensorIds');
+			return [
+				...state,
+				...action.payload.dashboard.sensorIds,
+			];
+		}
+		return [ ...state ];
+	}
+	if (action.kind !== kind) {
+		return state;
+	}
 
-export default function dashboardReducer(state: State = initialState, action : Action): State {
-	if (action.type === 'ADD_TO_DASHBOARD') {
-		if (action.kind === 'sensor') {
-			if (state.sensors.filter((item) => item.id === action.id).length > 0) {
+	switch (action.type) {
+		case 'ADD_TO_DASHBOARD':
+			if (includes(state, action.id)) {
 				return state;
 			}
+			return [
+				...state,
+				action.id,
+			];
+		case 'REMOVE_FROM_DASHBOARD':
+			return state.filter(id => id !== action.id);
+		default:
+			return state;
+	}
+};
 
+const byId = kind => (state = {}, action) => {
+	if (action.type === REHYDRATE) {
+		if (action.payload.dashboard && action.payload.dashboard.devicesById
+			&& kind === 'device') {
+			console.log('rehydrating dashboard.devicesById');
 			return {
 				...state,
-				sensors: [
-					...state.sensors,
-					{
-						'id': action.id,
-					},
-				],
-			};
-		} else if (action.kind === 'device') {
-			if (state.devices.indexOf(action.id) >= 0) {
-				return state;
-			}
-
-			return {
-				...state,
-				devices: [...state.devices, action.id],
+				...action.payload.dashboard.devicesById,
 			};
 		}
-	} else if (action.type === 'REMOVE_FROM_DASHBOARD') {
-		if (action.kind === 'sensor') {
+		if (action.payload.dashboard && action.payload.dashboard.sensorsById
+			&& kind === 'sensor') {
+			console.log('rehydrating dashboard.sensorsById');
 			return {
 				...state,
-				sensors: state.sensors.filter((item) => item.id !== action.id),
-			};
-		} else if (action.kind === 'device') {
-			return {
-				...state,
-				devices: state.devices.filter(id => id !== action.id),
+				...action.payload.dashboard.sensorsById,
 			};
 		}
-	} else if (action.type === 'CHANGE_SENSOR_DISPLAY_TYPE') {
+		return { ...state };
+	}
+	if (action.kind !== kind) {
+		return state;
+	}
+
+	switch (action.type) {
+		case 'ADD_TO_DASHBOARD':
+			return {
+				...state,
+				[action.id]: true,
+			};
+		case 'REMOVE_FROM_DASHBOARD':
+			return omit(state, action.id);
+		default:
+			return state;
+	}
+};
+
+const sensorDisplayTypeById = (state = {}, action) => {
+	if (action.type === REHYDRATE) {
+		if (action.payload.dashboard && action.payload.dashboard.sensorDisplayTypeById) {
+			console.log('rehydrating dashboard.sensorDisplayTypeById');
+			return {
+				...state,
+				...action.payload.dashboard.sensorDisplayTypeById,
+			};
+		}
+		return { ...state };
+	}
+	switch (action.type) {
+		case 'CHANGE_SENSOR_DISPLAY_TYPE':
+			return {
+				...state,
+				[action.id]: action.displayType,
+			};
+		case 'REMOVE_FROM_DASHBOARD': // leave setting in, in case user adds sensor back again
+		default:
+			return state;
+	}
+};
+
+export default combineReducers({
+	devicesById: byId('device'),
+	deviceIds: allIds('device'),
+	sensorsById: byId('sensor'),
+	sensorIds: allIds('sensor'),
+	sensorDisplayTypeById,
+});
+
+export function parseDashboardForListView(dashboard = {}, devices = {}, sensors = {}) {
+	const deviceItems = dashboard.deviceIds.map(deviceId => {
 		return {
-			...state,
-			sensors:
-                state.sensors.map(item => {
-	if (item.id === action.id) {
-		item.displayType = action.displayType;
-	}
-	return item;
-}),
+			objectType: 'device',
+			childObject: devices.byId[deviceId],
 		};
-	}
+	});
 
-	return state;
-}
+	const sensorItems = dashboard.sensorIds.map(sensorId => {
+		return {
+			objectType: 'sensor',
+			childObject: sensors.byId[sensorId],
+		};
+	});
 
-export function parseDashboardForListView({ devices, sensors, dashboard }) {
-	const items = [];
-	dashboard = dashboard || {};
-	if (isArray(devices) && dashboard.devices) {
-		let devicesInDashboard = devices.filter(item => dashboard.devices.indexOf(item.id) >= 0);
-		devicesInDashboard.map((item) => {
-			let dashboardItem = {
-				objectType: 'device',
-				childObject: item,
-			};
-			items.push(dashboardItem);
-		});
-	}
-
-	if (isArray(sensors) && dashboard.sensors) {
-		let sensorsInDashboard = sensors.filter(item => {
-			for (let i = 0; i < dashboard.sensors.length; ++i) {
-				if (dashboard.sensors[i].id === item.id) {
-					return true;
-				}
-			}
-			return false;
-		});
-
-		sensorsInDashboard.map((item) => {
-			let displayType = 'default';
-			for (let i = 0; i < dashboard.sensors.length; ++i) {
-				if (dashboard.sensors[i].id === item.id) {
-					displayType = dashboard.sensors[i].displayType;
-					break;
-				}
-			}
-			const dashboardItem = {
-				objectType: 'sensor',
-				childObject: item,
-				tileWidth: 0,
-				displayType,
-			};
-			items.push(dashboardItem);
-		});
-	}
-	return items;
+	return [...deviceItems, ...sensorItems];
 }

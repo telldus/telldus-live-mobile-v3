@@ -139,13 +139,13 @@ const styles = StyleSheet.create({
 	},
 });
 
-function select(store) {
+function mapStateToProps(store) {
 	return {
 		store,
 	};
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		onSubmitPushToken: () => console.log('TODO: Implement onSubmitPushToken'),
 		onLogout: () => dispatch(logoutFromTelldus()),
@@ -153,4 +153,4 @@ function actions(dispatch) {
 	};
 }
 
-module.exports = connect(select, actions)(SettingsDetailModal);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(SettingsDetailModal);

@@ -20,29 +20,49 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { addToDashboard, removeFromDashboard } from 'Actions';
+
 import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity } from 'react-native';
 
 import Theme from 'Theme';
 
-export default class SensorRowHidden extends View {
+class SensorRowHidden extends View {
+	constructor(props) {
+		super(props);
+		this.onStarSelected = this.onStarSelected.bind(this);
+	}
+
 	render() {
+		const { isInDashboard } = this.props.sensor;
 		return (
 			<View style={Theme.Styles.rowBack}>
 				<TouchableOpacity
 					style={Theme.Styles.rowBackButton}
-					onPress={this.onStarSelected.bind(this, this.props)} >
-					<Icon name="star" size={26} color={this.props.inDashboard ? 'yellow' : 'white'}/>
+					onPress={this.onStarSelected} >
+					<Icon name="star" size={26} color={isInDashboard ? 'yellow' : 'white'}/>
 				</TouchableOpacity>
 			</View>
 		);
 	}
 
-	onStarSelected(item) {
-		if (item.inDashboard) {
-			this.props.removeFromDashboard(item.id);
+	onStarSelected() {
+		const { id, isInDashboard } = this.props.sensor;
+		if (isInDashboard) {
+			this.props.removeFromDashboard(id);
 		} else {
-			this.props.addToDashboard(item.id);
+			this.props.addToDashboard(id);
 		}
 	}
 }
+
+function mapDispatchToProps(dispatch) {
+	return {
+		addToDashboard: id => dispatch(addToDashboard('sensor', id)),
+		removeFromDashboard: id => dispatch(removeFromDashboard('sensor', id)),
+	};
+}
+
+export default connect(null, mapDispatchToProps)(SensorRowHidden);

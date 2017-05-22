@@ -24,29 +24,28 @@ import { connect } from 'react-redux';
 
 import { Text, RoundedCornerShadowView, View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import DeviceDetailModal from './DeviceDetailModal';
 
 import { bell, learn } from 'Actions/Devices';
 
 const BellButton = ({ onBell }) => (
-    <RoundedCornerShadowView style={styles.bell}>
-        <Icon
+	<RoundedCornerShadowView style={styles.bell}>
+		<Icon
 			name="bell"
 			size={26}
 			color="orange"
 			onPress={onBell}
 		/>
-    </RoundedCornerShadowView>
+	</RoundedCornerShadowView>
 );
 
 const LearnButton = ({ onLearn }) => (
-    <RoundedCornerShadowView style={styles.learnContainer}>
-        <TouchableOpacity onPress={onLearn} style={styles.learnButton}>
-            <Text style={styles.learnText}>
-                {'Learn'}
-            </Text>
-        </TouchableOpacity>
-    </RoundedCornerShadowView>
+	<RoundedCornerShadowView style={styles.learnContainer}>
+		<TouchableOpacity onPress={onLearn} style={styles.learnButton}>
+			<Text style={styles.learnText}>
+				{'Learn'}
+			</Text>
+		</TouchableOpacity>
+	</RoundedCornerShadowView>
 );
 
 class BellDeviceDetailModal extends View {
@@ -57,48 +56,41 @@ class BellDeviceDetailModal extends View {
 	}
 
 	onBell() {
-		this.props.onBell(this.props.deviceId);
+		this.props.onBell(this.props.device.id);
 	}
 
 	render() {
-		let hasLearnButton = false;
-		let hasBellButton = false;
+		const { device } = this.props;
+		const { BELL, LEARN } = device.supportedMethods;
+
 		let bellButton = null;
 		let learnButton = null;
 
-		const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
-		if (device) {
-			const { BELL, LEARN } = device.supportedMethods;
-			hasBellButton = BELL;
-			hasLearnButton = LEARN;
-		}
-
-		if (hasBellButton) {
+		if (BELL) {
 			bellButton = <BellButton onBell={this.onBell} />;
 		}
 
-		if (hasLearnButton) {
+		if (LEARN) {
 			learnButton = <LearnButton onLearn={this.onLearn} />;
 		}
 
 		return (
-            <DeviceDetailModal
-                isVisible={this.props.isVisible}
-                onCloseSelected={this.props.onCloseSelected}
-                deviceId={this.props.deviceId}>
-                {bellButton}
-                {learnButton}
-            </DeviceDetailModal>
+			<View style={styles.container}>
+				{bellButton}
+				{learnButton}
+			</View>
 		);
 	}
 }
 
 BellDeviceDetailModal.propTypes = {
-	onCloseSelected: React.PropTypes.func.isRequired,
-	deviceId: React.PropTypes.number.isRequired,
+	device: React.PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 0,
+	},
 	bell: {
 		height: 36,
 		marginHorizontal: 8,
@@ -124,15 +116,15 @@ const styles = StyleSheet.create({
 	},
 });
 
-function select(store) {
+function mapStateToProps(store) {
 	return { store };
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		onBell: (id) => dispatch(bell(id)),
 		onLearn: (id) => dispatch(learn(id)),
 	};
 }
 
-module.exports = connect(select, actions)(BellDeviceDetailModal);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(BellDeviceDetailModal);

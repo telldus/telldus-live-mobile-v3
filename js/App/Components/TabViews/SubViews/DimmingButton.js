@@ -29,38 +29,38 @@ import VerticalSlider from './VerticalSlider';
 
 import throttle from 'lodash/throttle';
 
-const OffButton = ({ item, enabled, onPress }) => (
-    <View style={[styles.buttonContainer, {
-	backgroundColor: item.isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
-        <TouchableOpacity
+const OffButton = ({ isInState, enabled, onPress }) => (
+	<View style={[styles.buttonContainer, {
+		backgroundColor: isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
+		<TouchableOpacity
 			onPress={enabled ? onPress : null}
 			style={styles.button} >
-            <Text
-                ellipsizeMode="middle"
-                numberOfLines={1}
-                style = {[styles.buttonText, {
-	color: item.isInState === 'TURNOFF' && enabled ? 'red' : '#a2a2a2' }]}>
-                {'Off'}
-            </Text>
-        </TouchableOpacity>
-    </View>
+			<Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style = {[styles.buttonText, {
+					color: isInState === 'TURNOFF' && enabled ? 'red' : '#a2a2a2' }]}>
+				{'Off'}
+			</Text>
+		</TouchableOpacity>
+	</View>
 );
 
-const OnButton = ({ item, enabled, onPress }) => (
-    <View style={[styles.buttonContainer, {
-	backgroundColor: item.isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
-        <TouchableOpacity
+const OnButton = ({ isInState, enabled, onPress }) => (
+	<View style={[styles.buttonContainer, {
+		backgroundColor: isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
+		<TouchableOpacity
 			onPress={enabled ? onPress : null}
 			style={styles.button} >
-            <Text
-                ellipsizeMode="middle"
-                numberOfLines={1}
-                style = {[styles.buttonText, {
-	color: item.isInState !== 'TURNOFF' && enabled ? 'green' : '#a2a2a2' }]}>
-                {'On'}
-            </Text>
-        </TouchableOpacity>
-    </View>
+			<Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style = {[styles.buttonText, {
+					color: isInState !== 'TURNOFF' && enabled ? 'green' : '#a2a2a2' }]}>
+				{'On'}
+			</Text>
+		</TouchableOpacity>
+	</View>
 );
 
 
@@ -89,7 +89,7 @@ class DimmingButton extends View {
 	constructor(props) {
 		super(props);
 
-		const value = getDimmerValue(this.props.item.value, this.props.item.isInState);
+		const value = getDimmerValue(this.props.device.value, this.props.device.isInState);
 		this.parentScrollEnabled = true;
 		this.state = {
 			buttonWidth: 0,
@@ -103,10 +103,10 @@ class DimmingButton extends View {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.item.value === this.props.item.value && nextProps.item.isInState === this.props.item.isInState) {
+		if (nextProps.device.value === this.props.device.value && nextProps.device.isInState === this.props.device.isInState) {
 			return;
 		}
-		const dimmerValue = getDimmerValue(nextProps.item.value, nextProps.item.isInState);
+		const dimmerValue = getDimmerValue(nextProps.device.value, nextProps.device.isInState);
 		this.setState({ value: dimmerValue });
 	}
 
@@ -132,37 +132,38 @@ class DimmingButton extends View {
 	}
 
 	render() {
-		const { TURNON, TURNOFF, DIM } = this.props.item.supportedMethods;
+		const { device } = this.props;
+		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
 
-		const turnOnButton = <OnButton item={this.props.item} enabled={TURNON} onPress={this.props.onTurnOn} />;
-		const turnOffButton = <OffButton item={this.props.item} enabled={TURNOFF} onPress={this.props.onTurnOff} />;
+		const turnOnButton = <OnButton isInState={device.isInState} enabled={TURNON} onPress={this.props.onTurnOn} />;
+		const turnOffButton = <OffButton isInState={device.isInState} enabled={TURNOFF} onPress={this.props.onTurnOff} />;
 		const slider = DIM ?
-            <VerticalSlider
-                style={[styles.slider, {
-	width: this.state.buttonWidth / 5,
-	height: this.state.buttonHeight,
-	left: this.state.buttonWidth / 2 - this.state.buttonWidth / 10,
-	bottom: 0,
-}]}
-                thumbHeight={9}
-                fontSize={7}
-                item={this.props.item}
-                value={toSliderValue(this.state.value)}
-                setScrollEnabled={this.props.setScrollEnabled}
-                onSlidingStart={this.onSlidingStart.bind(this)}
-                onSlidingComplete={this.onSlidingComplete.bind(this)}
-                onValueChange={this.onValueChange.bind(this)}
-            /> :
-            null;
+			<VerticalSlider
+				style={[styles.slider, {
+					width: this.state.buttonWidth / 5,
+					height: this.state.buttonHeight,
+					left: this.state.buttonWidth / 2 - this.state.buttonWidth / 10,
+					bottom: 0,
+				}]}
+				thumbHeight={9}
+				fontSize={7}
+				item={device}
+				value={toSliderValue(this.state.value)}
+				setScrollEnabled={this.props.setScrollEnabled}
+				onSlidingStart={this.onSlidingStart.bind(this)}
+				onSlidingComplete={this.onSlidingComplete.bind(this)}
+				onValueChange={this.onValueChange.bind(this)}
+			/> :
+			null;
 
 		return (
-            <RoundedCornerShadowView
-                onLayout={this.layoutView.bind(this)}
-                style={styles.container}>
-                { turnOffButton }
-                { turnOnButton }
-                { slider }
-            </RoundedCornerShadowView>
+			<RoundedCornerShadowView
+				onLayout={this.layoutView.bind(this)}
+				style={styles.container}>
+				{ turnOffButton }
+				{ turnOnButton }
+				{ slider }
+			</RoundedCornerShadowView>
 		);
 	}
 }
@@ -194,7 +195,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		showDimmerPopup: (name:String, value:Number) => {
 			dispatch(showDimmerPopup(name, value));
@@ -205,4 +206,4 @@ function actions(dispatch) {
 	};
 }
 
-module.exports = connect(() => ({}), actions)(DimmingButton);
+module.exports = connect(null, mapDispatchToProps)(DimmingButton);

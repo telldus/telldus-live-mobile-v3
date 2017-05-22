@@ -23,38 +23,38 @@ import React from 'react';
 import { Text, View, RoundedCornerShadowView } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
-const OffButton = ({ item, onPress }) => (
-    <View style={[styles.buttonContainer, {
-	backgroundColor: item.isInState === 'TURNOFF' ? '#fafafa' : '#eeeeee' }]}>
-        <TouchableOpacity
+const OffButton = ({ isInState, onPress }) => (
+	<View style={[styles.buttonContainer, {
+		backgroundColor: isInState === 'TURNOFF' ? '#fafafa' : '#eeeeee' }]}>
+		<TouchableOpacity
 			onPress={onPress}
 			style={styles.button} >
-            <Text
-                ellipsizeMode="middle"
-                numberOfLines={1}
-                style = {[styles.buttonText, {
-	color: item.isInState === 'TURNOFF' ? 'red' : '#a2a2a2' }]}>
-                {'Off'}
-            </Text>
-        </TouchableOpacity>
-    </View>
+			<Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style = {[styles.buttonText, {
+					color: isInState === 'TURNOFF' ? 'red' : '#a2a2a2' }]}>
+				{'Off'}
+			</Text>
+		</TouchableOpacity>
+	</View>
 );
 
-const OnButton = ({ item, onPress }) => (
-    <View style={[styles.buttonContainer, {
-	backgroundColor: item.isInState === 'TURNON' ? '#fafafa' : '#eeeeee' }]}>
-        <TouchableOpacity
+const OnButton = ({ isInState, onPress }) => (
+	<View style={[styles.buttonContainer, {
+		backgroundColor: isInState === 'TURNON' ? '#fafafa' : '#eeeeee' }]}>
+		<TouchableOpacity
 			onPress={onPress}
 			style={styles.button} >
-            <Text
-                ellipsizeMode="middle"
-                numberOfLines={1}
-                style = {[styles.buttonText, {
-	color: item.isInState === 'TURNON' ? 'green' : '#a2a2a2' }]}>
-                {'On'}
-            </Text>
-        </TouchableOpacity>
-    </View>
+			<Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style = {[styles.buttonText, {
+					color: isInState === 'TURNON' ? 'green' : '#a2a2a2' }]}>
+				{'On'}
+			</Text>
+		</TouchableOpacity>
+	</View>
 );
 
 class ToggleButton extends View {
@@ -63,15 +63,15 @@ class ToggleButton extends View {
 	}
 
 	render() {
-		const { TURNON, TURNOFF } = this.props.item.supportedMethods;
-		const turnOnButton = TURNON ? <OnButton item={this.props.item} onPress={this.props.onTurnOn} /> : null;
-		const turnOffButton = TURNOFF ? <OffButton item={this.props.item} onPress={this.props.onTurnOff} /> : null;
+		const { TURNON, TURNOFF } = this.props.device.supportedMethods;
+		const turnOnButton = TURNON ? <OnButton isInState={this.props.device.isInState} onPress={this.props.onTurnOn} /> : null;
+		const turnOffButton = TURNOFF ? <OffButton isInState={this.props.device.isInState} onPress={this.props.onTurnOff} /> : null;
 
 		return (
-            <RoundedCornerShadowView style={styles.container}>
-                { turnOffButton }
-                { turnOnButton }
-            </RoundedCornerShadowView>
+			<RoundedCornerShadowView style={styles.container}>
+				{ turnOffButton }
+				{ turnOnButton }
+			</RoundedCornerShadowView>
 		);
 	}
 }

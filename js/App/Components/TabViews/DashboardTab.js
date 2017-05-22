@@ -19,16 +19,17 @@
 'use strict';
 
 import React from 'react';
+import { createSelector } from 'reselect';
 import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View } from 'BaseComponents';
 import Platform from 'Platform';
-import { changeSensorDisplayType } from 'Actions';
 import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
+import { getUserProfile } from '../../Reducers/User';
 
 import { GenericDashboardTile, DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 import { SettingsDetailModal } from 'DetailViews';
@@ -43,6 +44,9 @@ import reactMixin from 'react-mixin';
 //       better solution would be to render the old sensor/device data but
 //       to indicate also it is old data
 
+const tileMargin = 8;
+const listMargin = 8;
+
 class DashboardTab extends View {
 
 	constructor(props) {
@@ -53,7 +57,9 @@ class DashboardTab extends View {
 		this.state = {
 			tileWidth,
 			listWidth: 0,
-			dataSource: new ListDataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }).cloneWithRows(this.props.dataArray),
+			dataSource: new ListDataSource({
+				rowHasChanged: this.rowHasChanged,
+			}).cloneWithRows(this.props.rows),
 			settings: false,
 		};
 
@@ -64,6 +70,10 @@ class DashboardTab extends View {
 		this.onValueChange = this.onValueChange.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
 		this.mixins = [Subscribable.Mixin];
+	}
+
+	rowHasChanged(r1, r2) {
+		return r1.childObject !== r2.childObject;
 	}
 
 	setScrollEnabled(enable) {
@@ -92,12 +102,8 @@ class DashboardTab extends View {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		// TODO: write a better comparison function
-		if (nextProps.dataArray === this.props.dataArray) {
-			return;
-		}
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(nextProps.dataArray),
+			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
 		});
 	}
 
@@ -110,8 +116,8 @@ class DashboardTab extends View {
 		}
 	}
 
-	calculateTileWidth(_listWidth) {
-		const listWidth = _listWidth - 8;
+	calculateTileWidth(listWidth) {
+		listWidth -= listMargin;
 		const isPortrait = true; // okay...
 		if (listWidth <= 0) {
 			return;
@@ -151,40 +157,40 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(tileWidth) {
-		return (item, secId, rowId, rowMap) => {
-			if (item.objectType !== 'sensor' && item.objectType !== 'device') {
+		tileWidth -= tileMargin;
+		return (row, secId, rowId, rowMap) => {
+			if (row.objectType !== 'sensor' && row.objectType !== 'device') {
 				return <Text>unknown device or sensor</Text>;
 			}
 
-			item.tileWidth = tileWidth;
-			let tileMargin = 8;
 			let tileStyle = {
 				flexDirection: 'row',
 				justifyContent: 'flex-start',
 				alignItems: 'center',
-				width: item.tileWidth - tileMargin,
-				height: item.tileWidth - tileMargin,
+				width: tileWidth - tileMargin,
+				height: tileWidth - tileMargin,
 				marginTop: tileMargin,
 				marginLeft: tileMargin,
 				borderRadius: 2,
 			};
 
-			const itemId = item.childObject.id;
+			const itemId = row.childObject.id;
 
-			if (item.objectType === 'sensor') {
+			if (row.objectType === 'sensor') {
 				return <SensorDashboardTile
 					style={tileStyle}
-					item={item}
-					onChangeSensorDisplayType={this.props.changeSensorDisplayType(itemId)}
+					tileWidth={tileWidth}
+					item={row.childObject}
 				/>;
 			}
 
-			const deviceType = this.getType(item);
+			const deviceType = getDeviceType(row.childObject.supportedMethods);
 
 			if (deviceType === 'TOGGLE') {
 				return <ToggleDashboardTile
+					item={row.childObject}
+					tileWidth={tileWidth}
 					style={tileStyle}
-					item={item}
 					onTurnOn={this.props.onTurnOn(itemId)}
 					onTurnOff={this.props.onTurnOff(itemId)}
 				/>;
@@ -192,8 +198,9 @@ class DashboardTab extends View {
 
 			if (deviceType === 'DIMMER') {
 				return <DimmerDashboardTile
+					item={row.childObject}
+					tileWidth={tileWidth}
 					style={tileStyle}
-					item={item}
 					onTurnOn={this.props.onTurnOn(itemId)}
 					onTurnOff={this.props.onTurnOff(itemId)}
 					setScrollEnabled={this.setScrollEnabled}
@@ -204,16 +211,18 @@ class DashboardTab extends View {
 
 			if (deviceType === 'BELL') {
 				return <BellDashboardTile
+					item={row.childObject}
+					tileWidth={tileWidth}
 					style={tileStyle}
-					item={item}
 					onBell={this.props.onBell(itemId)}
 				/>;
 			}
 
 			if (deviceType === 'NAVIGATIONAL') {
 				return <NavigationalDashboardTile
+					item={row.childObject}
+					tileWidth={tileWidth}
 					style={tileStyle}
-					item={item}
 					onUp={this.props.onUp(itemId)}
 					onDown={this.props.onDown(itemId)}
 					onStop={this.props.onStop(itemId)}
@@ -221,27 +230,37 @@ class DashboardTab extends View {
 			}
 
 			return <GenericDashboardTile
+				item={row.childObject}
+				tileWidth={tileWidth}
 				style={tileStyle}
-				item={item}
 			/>;
 		};
 	}
-
-	getType(item) {
-		const supportedMethods = item.childObject.supportedMethods;
-		return getDeviceType(supportedMethods);
-	}
 }
 
-function select(store, props) {
+
+DashboardTab.propTypes = {
+	rows: React.PropTypes.array,
+};
+
+const getRows = createSelector(
+	[
+		({ dashboard }) => dashboard,
+		({ devices }) => devices,
+		({ sensors }) => sensors,
+	],
+	(dashboard, devices, sensors) => parseDashboardForListView(dashboard, devices, sensors)
+);
+
+function mapStateToProps(state, props) {
 	return {
-		dataArray: parseDashboardForListView(store),
-		gateways: store.gateways,
-		userProfile: store.user.userProfile || { firstname: '', lastname: '', email: '' },
+		rows: getRows(state),
+		gateways: state.gateways,
+		userProfile: getUserProfile(state),
 	};
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		onTurnOn: id => () => dispatch(turnOn(id)),
 		onTurnOff: id => () => dispatch(turnOff(id)),
@@ -251,11 +270,10 @@ function actions(dispatch) {
 		onStop: id => () => dispatch(stop(id)),
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
 		onDim: id => value => dispatch(updateDimmerValue(id, value)),
-		changeSensorDisplayType: id => displayType => dispatch(changeSensorDisplayType(id, displayType)),
 		dispatch,
 	};
 }
 
 reactMixin(DashboardTab.prototype, Subscribable.Mixin);
 
-module.exports = connect(select, actions)(DashboardTab);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(DashboardTab);

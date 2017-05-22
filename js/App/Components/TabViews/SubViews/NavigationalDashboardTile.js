@@ -63,10 +63,9 @@ class NavigationalDashboardTile extends View {
 	}
 
 	render() {
-		const item = this.props.item;
-		const name = item.childObject.name;
-		const tileWidth = item.tileWidth - 8;
-		const { UP, DOWN, STOP } = item.childObject.supportedMethods;
+		const { item, tileWidth } = this.props;
+		const { name, supportedMethods } = item;
+		const { UP, DOWN, STOP } = supportedMethods;
 		const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp} /> : null;
 		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown} /> : null;
 		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop} /> : null;

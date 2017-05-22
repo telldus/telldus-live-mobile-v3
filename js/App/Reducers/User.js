@@ -21,6 +21,8 @@
 
 import type { Action } from 'Actions/Types';
 
+import { createSelector } from 'reselect';
+
 export type State = {
 	accessToken: ?Object,
 	userProfile: ?Object
@@ -31,7 +33,7 @@ const initialState = {
 	userProfile: false,
 };
 
-function user(state: State = initialState, action: Action): State {
+export default function reduceUser(state: State = initialState, action: Action): State {
 	if (action.type === 'RECEIVED_ACCESS_TOKEN') {
 		let accessToken = action.accessToken;
 		if (state.accessToken) {
@@ -56,4 +58,7 @@ function user(state: State = initialState, action: Action): State {
 	return state;
 }
 
-module.exports = user;
+export const getUserProfile = createSelector(
+	[ ({ user }) => user.userProfile ],
+	(userProfile) => userProfile || { firstname: '', lastname: '', email: '' },
+);

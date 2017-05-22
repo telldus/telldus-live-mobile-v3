@@ -35,7 +35,7 @@ import NavigationalDashboardTile from './NavigationalDashboardTile';
 import DimmerDashboardTile from './DimmerDashboardTile';
 import DimmerPopup from './DimmerPopup';
 import DimmerProgressBar from './DimmerProgressBar';
-import ListHeader from './ListHeader';
+import DeviceHeader from './DeviceHeader';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
@@ -46,7 +46,7 @@ module.exports = {
 	DeviceRow: DeviceRow,
 	DeviceRowHidden: DeviceRowHidden,
 	ToggleDashboardTile: ToggleDashboardTile,
-	ListHeader: ListHeader,
+	DeviceHeader: DeviceHeader,
 	SensorDashboardTile: SensorDashboardTile,
 	SensorDashboardTileSlide: SensorDashboardTileSlide,
 	SensorRow: SensorRow,

@@ -67,6 +67,7 @@ function getWebsocketAddress(gatewayId): ThunkAction {
 		return LiveApi(payload).then(response => {
 			dispatch({
 				type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+				gatewayId,
 				payload: {
 					...payload,
 					...response,

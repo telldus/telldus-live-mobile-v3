@@ -21,44 +21,52 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getGateways } from 'Actions';
+
+import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
 import Theme from 'Theme';
 
 import GatewayIcons from 'GatewayIcons';
 
 class GatewaysTab extends View {
+	constructor(props) {
+		super(props);
 
-	_renderRow(item) {
-		try {
-			return (
-				<ListItem style = {Theme.Styles.rowFront}>
-					<View style = {Theme.Styles.listItemAvatar}>
-						<Image source = {GatewayIcons.get(item.type)} />
-					</View>
-					<Text style = {{
-						color: 'rgba(0,0,0,0.87)',
-						fontSize: 16,
-						opacity: item.name ? 1 : 0.5,
-						marginBottom: 2,
-					}}>
-						{item.name ? item.name : '(no name)'} ({item.online})
-					</Text>
-				</ListItem>
-			);
-		} catch (e) {
-			console.log(e);
-			return ( <View /> );
-		}
+		this.state = {
+			dataSource: new ListDataSource({
+				rowHasChanged: (r1, r2) => r1 !== r2,
+			}).cloneWithRows(this.props.rows),
+			settings: false,
+		};
+
+		this.renderRow.bind(this);
 	}
-	f
+	renderRow(item) {
+		return (
+			<ListItem style = {Theme.Styles.rowFront}>
+				<View style = {Theme.Styles.listItemAvatar}>
+					<Image source = {GatewayIcons.get(item.type)} />
+				</View>
+				<Text style = {{
+					color: 'rgba(0,0,0,0.87)',
+					fontSize: 16,
+					opacity: item.name ? 1 : 0.5,
+					marginBottom: 2,
+				}}>
+					{item.name ? item.name : '(no name)'} ({item.online})
+				</Text>
+			</ListItem>
+		);
+	}
 	render() {
 		return (
 			<List
-				dataSource = {this.props.dataSource}
-				renderRow = {this._renderRow.bind(this)}
+				dataSource = {this.state.dataSource}
+				renderRow = {this.renderRow}
 				onRefresh = {() =>
 					this.props.dispatch(getGateways())
 				}
@@ -67,19 +75,17 @@ class GatewaysTab extends View {
 	}
 }
 
-GatewaysTab.propTypes = {
-	dataSource: React.PropTypes.object,
-};
+const getRows = createSelector(
+	[
+		({ gateways }) => gateways,
+	],
+	(gateways) => parseGatewaysForListView(gateways)
+);
 
-const dataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-});
-
-function select(store) {
+function mapStateToProps(state, props) {
 	return {
-		dataSource: dataSource.cloneWithRows(store.gateways || []),
-		gateways: store.gateways,
+		rows: getRows(state),
 	};
 }
 
-module.exports = connect(select)(GatewaysTab);
+module.exports = connect(mapStateToProps)(GatewaysTab);

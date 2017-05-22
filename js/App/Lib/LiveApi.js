@@ -26,6 +26,7 @@ import { updateAccessToken } from 'Actions/Login';
 
 import type { Action } from './types';
 
+// TODO: fix this pattern, pass store via component tree
 import { getStore } from '../Store/ConfigureStore';
 
 /*
