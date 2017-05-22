@@ -147,7 +147,7 @@ class SensorRow extends Component {
                         {this.formatLastUpdated(minutesAgo, this.props.lastUpdated)}
                     </Text>
                 </View>
-                { sensors.length * 88 < this.width / 2.0 ?
+                { sensors.length * 88 < Math.max(this.width / 2.0, 176) ?
                 sensors :
                 (<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true} directionalLockEnabled={true} >
                 {sensors}
