@@ -92,6 +92,8 @@ class DevicesTab extends View {
 				deviceDetail = <BellDeviceDetailModal device={device} />;
 			} else if (deviceType === 'NAVIGATIONAL') {
 				deviceDetail = <NavigationalDeviceDetailModal device={device} />;
+			} else {
+				deviceDetail = <View style={{ height: 0 }} />;
 			}
 		}
 		return (
