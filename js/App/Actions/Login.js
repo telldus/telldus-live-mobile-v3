@@ -61,7 +61,10 @@ async function loginToTelldus(username, password): Promise<Action> {
 		.catch((e) => {
 			reject({
 				type: 'ERROR',
-				message: e,
+				message: {
+					...e,
+					error_description: !e.error_description && e.message === 'Network request failed' ? 'Network request failed. Check your internet connection' : e.error_description,
+				},
 			});
 		});
 	});
