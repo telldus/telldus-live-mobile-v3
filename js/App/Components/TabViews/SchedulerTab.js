@@ -21,6 +21,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { List, ListDataSource, View, Text } from 'BaseComponents';
 import { JobRow } from 'TabViews/SubViews';
@@ -34,18 +35,52 @@ import { parseJobsForListView } from 'Reducers/Jobs';
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 class SchedulerTab extends View {
+	constructor(props) {
+		super(props);
+
+		const { sections, sectionIds } = this.props.rowsAndSections;
+
+		this.state = {
+			dataSource: new ListDataSource({
+				rowHasChanged: this.rowHasChanged,
+				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+			}).cloneWithRowsAndSections(sections, sectionIds),
+		};
+	}
+
+	componentWillReceiveProps(nextProps) {
+		const { sections, sectionIds } = nextProps.rowsAndSections;
+
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+		});
+	}
+
+	rowHasChanged(r1, r2) {
+		if (r1 === r2) {
+			return false;
+		}
+		return (
+			r1.effectiveHour !== r2.effectiveHour ||
+			r1.effectiveMinute !== r2.effectiveMinute ||
+			r1.method !== r2.method ||
+			r1.deviceId !== r2.deviceId
+		);
+	}
+
 	render() {
 		return (
 			<List
-				dataSource = {this.props.dataSource}
-				renderRow = {props => (<JobRow {...{ ...props, ...this.props }} />)}
-				renderSectionHeader = {this.renderSectionHeader.bind(this)}
+				dataSource = {this.state.dataSource}
+				renderRow = {this.renderRow}
+				renderSectionHeader = {this.renderSectionHeader}
 				onRefresh = {() => this.props.dispatch(getJobs())}
 			/>
 		);
 	}
 
 	renderSectionHeader(sectionData, sectionId) {
+		// TODO: move to own Component
 		const todayInWeek = parseInt(moment().format('d'), 10);
 		const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
 
@@ -68,23 +103,38 @@ class SchedulerTab extends View {
 			</View>
 		);
 	}
+
+	renderRow(props) {
+		return (
+			<JobRow {...props} />
+		);
+	}
 }
 
 SchedulerTab.propTypes = {
-	dataSource: React.PropTypes.object,
+	rowsAndSections: React.PropTypes.object,
 };
 
-const dataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-	sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-});
+const getRowsAndSections = createSelector(
+	[
+		({ jobs }) => jobs,
+		({ gateways }) => gateways,
+		({ devices }) => devices,
+	],
+	(jobs, gateways, devices) => {
+		const { sections, sectionIds } = parseJobsForListView(jobs, gateways, devices);
+		return {
+			sections,
+			sectionIds,
+		};
+	}
+);
 
-function select(store) {
-	let { items, sectionIds } = parseJobsForListView(store.jobs, store.gateways, store.devices);
+function mapStateToProps(store) {
 	return {
-		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
+		rowsAndSections: getRowsAndSections(store),
 		devices: store.devices,
 	};
 }
 
-module.exports = connect(select)(SchedulerTab);
+module.exports = connect(mapStateToProps)(SchedulerTab);

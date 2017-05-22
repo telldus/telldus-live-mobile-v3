@@ -32,6 +32,8 @@ import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews/SubViews';
 
+import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
+
 class AppNavigator extends View {
 
 	constructor() {
@@ -90,7 +92,7 @@ function mapStateToProps(state, ownProps) {
 	return {
 		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
-		userProfile: state.user.userProfile || { firstname: '', lastname: '', email: '' },
+		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
 	};
 }

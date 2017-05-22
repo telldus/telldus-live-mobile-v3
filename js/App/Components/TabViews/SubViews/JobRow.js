@@ -34,39 +34,35 @@ export default props => {
 		256: 'Down',
 		512: 'Stop',
 	};
-	let devices = props.devices.filter(item => item.id === props.deviceId);
-	let device = null;
-
-	if (devices && devices.length > 0) {
-		device = devices[0];
-	} else {
+	const { device } = props;
+	if (!device) {
 		return null;
 	}
 
 	return (
-        <ListItem style = {Theme.Styles.rowFront}>
-                <Text style={{
-	flex: 4,
-	color: 'orange',
-	fontSize: 16,
-}}>
-                    {`${props.effectiveHour}:${props.effectiveMinute}`}
-                </Text>
-                <Text style={{
-	flex: 20,
-	color: '#1a355c',
-	fontSize: 16,
-	paddingLeft: 6,
-}}>
-                    {device.name}
-                </Text>
-                <Text style={{
-	flex: 4,
-	color: '#1a355c',
-	fontSize: 16,
-}}>
-                    {methodName[props.method]}
-                </Text>
-        </ListItem>
+		<ListItem style = {Theme.Styles.rowFront}>
+			<Text style={{
+				flex: 4,
+				color: 'orange',
+				fontSize: 16,
+			}}>
+				{`${props.effectiveHour}:${props.effectiveMinute}`}
+			</Text>
+			<Text style={{
+				flex: 20,
+				color: '#1a355c',
+				fontSize: 16,
+				paddingLeft: 6,
+			}}>
+				{device.name}
+			</Text>
+			<Text style={{
+				flex: 4,
+				color: '#1a355c',
+				fontSize: 16,
+			}}>
+				{methodName[props.method]}
+			</Text>
+		</ListItem>
 	);
 };

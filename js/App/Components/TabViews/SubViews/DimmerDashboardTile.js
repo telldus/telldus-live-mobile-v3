@@ -86,24 +86,26 @@ function toSliderValue(dimmerValue) {
 class DimmerDashboardTile extends View {
 	constructor(props) {
 		super(props);
-		const value = getDimmerValue(this.props.item.childObject.value, this.props.item.isInState);
+		const { item, onDimmerSlide } = this.props;
+		const { value, isInState } = item;
 		this.parentScrollEnabled = true;
 		this.state = {
 			bodyWidth: 0,
 			bodyHeight: 0,
-			value,
+			value: getDimmerValue(value, isInState),
 		};
 
-		this.onValueChangeThrottled = throttle(this.props.onDimmerSlide, 200, {
+		this.onValueChangeThrottled = throttle(onDimmerSlide, 200, {
 			trailing: true,
 		});
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.item.childObject.value === this.props.item.childObject.value && nextProps.item.childObject.isInState === this.props.item.childObject.isInState) {
+		const { value, isInState } = nextProps.item;
+		if (value === this.props.item.value && isInState === this.props.item.isInState) {
 			return;
 		}
-		const dimmerValue = getDimmerValue(nextProps.item.childObject.value, nextProps.item.childObject.isInState);
+		const dimmerValue = getDimmerValue(value, isInState);
 		this.setState({ value: dimmerValue });
 	}
 
@@ -129,11 +131,9 @@ class DimmerDashboardTile extends View {
 	}
 
 	render() {
-		const item = this.props.item;
-		const isInState = item.childObject.isInState;
-		const name = item.childObject.name;
-		const tileWidth = item.tileWidth - 8;
-		const { TURNON, TURNOFF, DIM } = item.childObject.supportedMethods;
+		const { item, tileWidth } = this.props;
+		const { name, isInState, supportedMethods } = item;
+		const { TURNON, TURNOFF, DIM } = supportedMethods;
 		const turnOnButton = <OnButton isInState={isInState} enabled={TURNON} tileWidth={tileWidth} onPress={this.props.onTurnOn} />;
 		const turnOffButton = <OffButton isInState={isInState} enabled={TURNOFF} tileWidth={tileWidth} onPress={this.props.onTurnOff} />;
 		const slider = DIM ?
@@ -144,7 +144,7 @@ class DimmerDashboardTile extends View {
 					left: this.state.bodyWidth / 2 - this.state.bodyWidth / 10,
 					bottom: 0,
 				}]}
-				item={this.props.item.childObject}
+				item={item}
 				value={toSliderValue(this.state.value)}
 				setScrollEnabled={this.props.setScrollEnabled}
 				onSlidingStart={this.onSlidingStart.bind(this)}
@@ -154,7 +154,6 @@ class DimmerDashboardTile extends View {
 			null;
 		return (
 			<DashboardShadowTile
-				item={item}
 				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
 				name={name}
 				tileWidth={tileWidth}
@@ -223,7 +222,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		showDimmerPopup: (name:String, value:Number) => {
 			dispatch(showDimmerPopup(name, value));
@@ -234,4 +233,4 @@ function actions(dispatch) {
 	};
 }
 
-module.exports = connect(() => ({}), actions)(DimmerDashboardTile);
+module.exports = connect(null, mapDispatchToProps)(DimmerDashboardTile);

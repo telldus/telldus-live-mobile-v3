@@ -38,6 +38,7 @@ import SensorsTab from './SensorsTab';
 import { SettingsDetailModal } from 'DetailViews';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
+import { getUserProfile } from '../../Reducers/User';
 import { switchTab, toggleEditMode } from 'Actions';
 
 const TabHeader = ({ fontSize, ...props }) => {
@@ -76,21 +77,15 @@ const SettingsButton = ({ onPress }) => (
 	</TouchableOpacity>
 );
 
-const NavigationView = ({ props, onOpenSetting }) => {
-	let gateways = [];
-
-	if (props.store.gateways) {
-		props.store.gateways.forEach((item, index) => {
-			gateways.push(<Gateway name={item.name} key={index} />);
-		});
-	}
-
+const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
 	return (
 		<View style = {{ flex: 1, backgroundColor: 'rgba(26,53,92,255)' }}>
-			<NavigationHeader firstName={props.userProfile.firstname} lastName={props.userProfile.lastname} />
+			<NavigationHeader firstName={userProfile.firstname} lastName={userProfile.lastname} />
 			<View style = {{ flex: 1, backgroundColor: 'white' }}>
 				<ConnectedLocations />
-				{gateways}
+				{gateways.allIds.map((id, index) => {
+					return (<Gateway name={gateways.byId[id].name} key={index} />);
+				})}
 				<SettingsButton onPress={onOpenSetting} />
 			</View>
 		</View>
@@ -134,8 +129,7 @@ class TabsView extends View {
 
 	componentDidMount() {
 		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
-
-		if (this.props.dashboard.devices.length > 0 || this.props.dashboard.sensors.length > 0) {
+		if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
 			if (this.props.tab !== 'dashboardTab') {
 				this.onRequestChangeTab(0);
 			}
@@ -182,7 +176,12 @@ class TabsView extends View {
 	}
 
 	renderNavigationView() {
-		return <NavigationView props={this.props} theme={this.getTheme()} onOpenSetting={this.onOpenSetting}/>;
+		return <NavigationView
+			gateways={this.props.gateways}
+			userProfile={this.props.userProfile}
+			theme={this.getTheme()}
+			onOpenSetting={this.onOpenSetting}
+		/>;
 	}
 
 	render() {
@@ -311,16 +310,17 @@ const styles = StyleSheet.create({
 	},
 });
 
-function select(store) {
+function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
-		userProfile: store.user.userProfile || { firstname: '', lastname: '', email: '' },
+		userProfile: getUserProfile(store),
 		dashboard: store.dashboard,
+		gateways: store.gateways,
 		store,
 	};
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
 		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
@@ -328,4 +328,4 @@ function actions(dispatch) {
 	};
 }
 
-module.exports = connect(select, actions)(TabsView);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);

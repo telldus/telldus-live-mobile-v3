@@ -54,7 +54,7 @@
     "redux-logger": "~2.7.4",
     "redux-persist": "~4.0.1",
     "redux-thunk": "~2.1.0",
-    "reselect": "~2.5.4",
+    "reselect": "^2.5.4",
     "url": "^0.11.0"
   },
   "devDependencies": {

@@ -36,7 +36,6 @@ class BellButton extends View {
 						name="bell"
 						size={22}
 						color="orange"
-						onClick={this.handleClick}
 					/>
 				</TouchableOpacity>
             </RoundedCornerShadowView>

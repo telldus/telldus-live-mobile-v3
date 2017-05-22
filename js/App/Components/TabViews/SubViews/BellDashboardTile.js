@@ -30,14 +30,13 @@ class BellDashboardTile extends View {
 	}
 
 	render() {
-		const item = this.props.item;
-		const tileWidth = item.tileWidth - 8;
+		const { item, tileWidth } = this.props;
 
 		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
-				name={item.childObject.name}
+				name={item.name}
 				tileWidth={tileWidth}
 				style={[this.props.style, {
 					width: tileWidth,

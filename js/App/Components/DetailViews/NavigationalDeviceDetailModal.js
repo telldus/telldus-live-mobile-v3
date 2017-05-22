@@ -24,38 +24,37 @@ import { connect } from 'react-redux';
 
 import { RoundedCornerShadowView, Icon, View, Text } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import DeviceDetailModal from './DeviceDetailModal';
 
 import { up, down, stop, learn } from 'Actions/Devices';
 
 const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
-    <RoundedCornerShadowView style={{ flexDirection: 'row', height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity
-            style={styles.navigationButton}
-            onPress={onUp}>
-            <Icon name="caret-up" size={30} style={{ color: '#1a355b' }}/>
-        </TouchableOpacity>
-        <TouchableOpacity
-            style={styles.navigationButton}
-            onPress={onDown}>
-        <Icon name="caret-down" size={30} style={{ color: '#1a355b' }}/>
-        </TouchableOpacity>
-        <TouchableOpacity
-            style={styles.navigationButton}
-            onPress={onStop}>
-            <Icon name="stop" size={20} style={{ color: '#1a355b' }}/>
-        </TouchableOpacity>
-    </RoundedCornerShadowView>
+	<RoundedCornerShadowView style={{ flexDirection: 'row', height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center' }}>
+		<TouchableOpacity
+			style={styles.navigationButton}
+			onPress={onUp}>
+			<Icon name="caret-up" size={30} style={{ color: '#1a355b' }}/>
+		</TouchableOpacity>
+		<TouchableOpacity
+			style={styles.navigationButton}
+			onPress={onDown}>
+		<Icon name="caret-down" size={30} style={{ color: '#1a355b' }}/>
+		</TouchableOpacity>
+		<TouchableOpacity
+			style={styles.navigationButton}
+			onPress={onStop}>
+			<Icon name="stop" size={20} style={{ color: '#1a355b' }}/>
+		</TouchableOpacity>
+	</RoundedCornerShadowView>
 );
 
 const LearnButton = ({ onLearn }) => (
-    <RoundedCornerShadowView style={styles.learnContainer}>
-        <TouchableOpacity onPress={onLearn} style={styles.learnButton}>
-            <Text style={styles.learnText}>
-                {'Learn'}
-            </Text>
-        </TouchableOpacity>
-    </RoundedCornerShadowView>
+	<RoundedCornerShadowView style={styles.learnContainer}>
+		<TouchableOpacity onPress={onLearn} style={styles.learnButton}>
+			<Text style={styles.learnText}>
+				{'Learn'}
+			</Text>
+		</TouchableOpacity>
+	</RoundedCornerShadowView>
 );
 
 class NavigationalDeviceDetailModal extends View {
@@ -70,61 +69,54 @@ class NavigationalDeviceDetailModal extends View {
 	}
 
 	onUp() {
-		this.props.onUp(this.props.deviceId);
+		this.props.onUp(this.props.device.id);
 	}
 
 	onDown() {
-		this.props.onDown(this.props.deviceId);
+		this.props.onDown(this.props.device.id);
 	}
 
 	onStop() {
-		this.props.onStop(this.props.deviceId);
+		this.props.onStop(this.props.device.id);
 	}
 
 	onLearn() {
-		this.props.onLearn(this.props.deviceId);
+		this.props.onLearn(this.props.device.id);
 	}
 
 	render() {
-		let hasNavigationButtons = true;
-		let hasLearnButton = true;
+		const { device } = this.props;
+		const { UP, DOWN, STOP, LEARN } = device.supportedMethods;
+
 		let navigationButtons = null;
 		let learnButton = null;
 
-		const device = this.props.store.devices.find(item => item.id === this.props.deviceId);
-		if (device) {
-			const { UP, DOWN, STOP, LEARN } = device.supportedMethods;
-			hasNavigationButtons = UP || DOWN || STOP;
-			hasLearnButton = LEARN;
-		}
-
-		if (hasNavigationButtons) {
+		if (UP || DOWN || STOP) {
 			navigationButtons = <NavigationalButton device={device} onUp={this.onUp} onDown={this.onDown} onLearn={this.onLearn} />;
 		}
 
-		if (hasLearnButton) {
+		if (LEARN) {
 			learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
 		}
 
 		return (
-            <DeviceDetailModal
-                isVisible={this.props.isVisible}
-                onCloseSelected={this.props.onCloseSelected}
-                deviceId={this.props.deviceId}>
-                {navigationButtons}
-                {learnButton}
-            </DeviceDetailModal>
+			<View style={styles.container}>
+				{navigationButtons}
+				{learnButton}
+			</View>
 		);
 	}
 
 }
 
 NavigationalDeviceDetailModal.propTypes = {
-	onCloseSelected: React.PropTypes.func.isRequired,
-	deviceId: React.PropTypes.number.isRequired,
+	device: React.PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 0,
+	},
 	navigationButton: {
 		flex: 1,
 		justifyContent: 'center',
@@ -148,11 +140,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-function select(store) {
+function mapStateToProps(store) {
 	return { store };
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		onUp: (id) => dispatch(up(id)),
 		onDown: (id) => dispatch(down(id)),
@@ -161,4 +153,4 @@ function actions(dispatch) {
 	};
 }
 
-module.exports = connect(select, actions)(NavigationalDeviceDetailModal);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(NavigationalDeviceDetailModal);

@@ -40,10 +40,10 @@ class App extends React.Component {
 	}
 }
 
-function select(store) {
+function mapStateToProps(store) {
 	return {
 		accessToken: store.user.accessToken,
 	};
 }
 
-module.exports = connect(select)(App);
+module.exports = connect(mapStateToProps)(App);

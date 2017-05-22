@@ -24,15 +24,12 @@ import { View, Text } from 'BaseComponents';
 
 import Theme from 'Theme';
 
-module.exports = class ListHeader extends View {
-	render() {
-		const gateway = this.props.gateways.find(_gateway => _gateway.id === this.props.sectionId);
-		return (
-			<View style = {Theme.Styles.sectionHeader}>
-				<Text style = {Theme.Styles.sectionHeaderText}>
-					{(gateway && gateway.name) ? gateway.name : ''}
-				</Text>
-			</View>
-		);
-	}
+export default ({ gateway }) => {
+	return (
+		<View style = {Theme.Styles.sectionHeader}>
+			<Text style = {Theme.Styles.sectionHeaderText}>
+				{(gateway && gateway.name) ? gateway.name : ''}
+			</Text>
+		</View>
+	);
 };

@@ -77,9 +77,10 @@ class VerticalSlider extends View {
 	}
 
 	handlePanResponderGrant = (/*e: Object, gestureState: Object*/) => {
+		const { item, onSlidingStart } = this.props;
 		this.previousBottom = this.getThumbBottom(this.state.value.__getValue());
-		if (this.props.onSlidingStart) {
-			this.props.onSlidingStart(this.props.item.name, this.state.value.__getValue());
+		if (onSlidingStart) {
+			onSlidingStart(item.name, this.state.value.__getValue());
 		}
 	}
 
