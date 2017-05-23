@@ -114,7 +114,7 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	onSlidingComplete(value) {
-		this.props.onDim(this.props.deviceId, 255 * value / 100.0);
+		this.props.onDim(this.props.device.id, 255 * value / 100.0);
 	}
 
 	componentWillReceiveProps(nextProps) {
