@@ -129,6 +129,7 @@ class TabsView extends View {
 
 	componentDidMount() {
 		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
+
 		if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
 			if (this.props.tab !== 'dashboardTab') {
 				this.onRequestChangeTab(0);

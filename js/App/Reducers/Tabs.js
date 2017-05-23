@@ -46,6 +46,12 @@ function toggleEditMode(state: State = initialState, action: Action): State {
 				editModeDevicesTab: newEditModeDevicesTab,
 			};
 		}
+	} else if (action.type === 'APP_START') {
+		return {
+			...state,
+			editModeDevicesTab: false,
+			editModeSensorsTab: false,
+		};
 	}
 
 	return state;

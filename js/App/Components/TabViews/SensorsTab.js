@@ -27,6 +27,7 @@ import { List, ListDataSource, View } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews/SubViews';
 
 import { getSensors } from 'Actions';
+import { toggleEditMode } from 'Actions';
 
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 
@@ -52,6 +53,10 @@ class SensorsTab extends View {
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
 		});
+
+		if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
+			this.props.dispatch(toggleEditMode('sensorsTab'));
+		}
 	}
 
 	rowHasChanged(r1, r2) {
@@ -128,6 +133,7 @@ function mapStateToProps(store) {
 		rowsAndSections: getRowsAndSections(store),
 		gatewaysById: store.gateways.byId,
 		editMode: store.tabs.editModeSensorsTab,
+		tab: store.navigation.tab,
 	};
 }
 

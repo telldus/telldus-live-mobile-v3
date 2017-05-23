@@ -21,7 +21,7 @@
 
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
-import { getUserProfile, getGateways, getSensors, getJobs } from 'Actions';
+import { getUserProfile, getGateways, getSensors, getJobs, appStart } from 'Actions';
 import { getDevices } from 'Actions/Devices';
 import { authenticateSession } from 'Actions/Websockets';
 
@@ -47,6 +47,11 @@ class AppNavigator extends View {
 			this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
 			Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
 		}
+
+	}
+
+	componentWillMount() {
+		this.props.dispatch(appStart());
 	}
 
 	componentDidMount() {

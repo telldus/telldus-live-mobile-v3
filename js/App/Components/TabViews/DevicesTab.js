@@ -28,6 +28,7 @@ import { DeviceRow, DeviceRowHidden } from 'TabViews/SubViews';
 import { DeviceDetailModal, ToggleDeviceDetailModal, BellDeviceDetailModal, DimmerDeviceDetailModal, NavigationalDeviceDetailModal } from 'DetailViews';
 
 import { getDevices } from 'Actions/Devices';
+import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
 
@@ -63,6 +64,10 @@ class DevicesTab extends View {
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
 		});
+
+		if (nextProps.tab !== 'devicesTab' && nextProps.editMode === true) {
+			this.props.dispatch(toggleEditMode('devicesTab'));
+		}
 	}
 
 	rowHasChanged(r1, r2) {
@@ -198,6 +203,7 @@ function mapStateToProps(state) {
 		gatewaysById: state.gateways.byId,
 		editMode: state.tabs.editModeDevicesTab,
 		devices: state.devices,
+		tab: state.navigation.tab,
 	};
 }
 
