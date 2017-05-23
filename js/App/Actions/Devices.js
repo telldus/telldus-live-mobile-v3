@@ -34,6 +34,7 @@ export function getDevices(): ThunkAction {
 			pathname: '/devices/list',
 			query: {
 				supportedMethods,
+				includeIgnored: 1,
 			},
 		});
 		const payload = {

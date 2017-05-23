@@ -53,6 +53,7 @@ function reduceDevice(state = {}, action) {
 				type: state.type,
 				name: state.name,
 				value: state.statevalue,
+				ignored: Boolean(state.ignored),
 
 				// clientDeviceId: parseInt(state.clientDeviceId, 10),
 				// editable: Boolean(state.editable),
@@ -163,7 +164,10 @@ const allIds = (state = [], action) => {
 	}
 	if (action.type === 'RECEIVED_DEVICES') {
 		// overwrites entire state
-		return action.payload.device.map(deviceState => deviceState.id);
+		// exclude ignored devices
+		return action.payload.device
+			.filter(deviceState => !deviceState.ignored)
+			.map(deviceState => deviceState.id);
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return [];
