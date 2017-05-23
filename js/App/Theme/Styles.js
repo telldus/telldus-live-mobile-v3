@@ -44,7 +44,7 @@ export default StyleSheet.create({
 		borderBottomWidth: 1,
 		flexDirection: 'row',
 		height: listItemHeight,
-		justifyContent: 'flex-start',
+		justifyContent: 'space-between',
 		paddingLeft: 16,
 		alignItems: 'center',
 	},
