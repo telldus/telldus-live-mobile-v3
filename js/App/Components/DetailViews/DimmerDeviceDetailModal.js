@@ -23,7 +23,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
-import { StyleSheet, TouchableOpacity, Slider } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import Slider from 'react-native-slider';
 
 import { turnOn, turnOff, learn } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
@@ -118,7 +119,7 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const device = { nextProps };
+		const device = nextProps.device;
 		const dimmerValue = this.getDimmerValue(device);
 		if (this.currentDimmerValue !== dimmerValue) {
 			this.setState({ temporaryDimmerValue: dimmerValue });
@@ -145,8 +146,13 @@ class DimmerDeviceDetailModal extends View {
 		if (DIM) {
 			slider = <Slider minimumValue={0} maximumValue={100} step={1} value={this.currentDimmerValue}
 				style={{ marginHorizontal: 8, marginVertical: 8 }}
+				minimumTrackTintColor="rgba(0,150,136,255)"
+				maximumTrackTintColor="rgba(219,219,219,255)"
+				thumbTintColor="rgba(0,150,136,255)"
+				trackStyle={styles.trackStyle}
 				onValueChange={this.onValueChange}
-				onSlidingComplete={this.onSlidingComplete}/>;
+				onSlidingComplete={this.onSlidingComplete}
+				animateTransitions={true}/>;
 		}
 
 		return (
@@ -203,6 +209,9 @@ const styles = StyleSheet.create({
 	learnText: {
 		fontSize: 16,
 		color: 'orange',
+	},
+	trackStyle: {
+		marginTop: -4, // fix track thumb alignment bug : https://github.com/jeanregisser/react-native-slider/issues/54
 	},
 });
 

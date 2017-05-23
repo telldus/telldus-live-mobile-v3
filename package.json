@@ -42,6 +42,7 @@
     "react-native-modal": "^2.3.2",
     "react-native-orientation": "^1.17.0",
     "react-native-scrollable-tab-view": "^0.7.0",
+    "react-native-slider": "^0.9.1",
     "react-native-swipe-list-view": "^0.3.2",
     "react-native-swipeout": "git+https://github.com/dancormier/react-native-swipeout.git",
     "react-native-uuid": "^1.4.9",
