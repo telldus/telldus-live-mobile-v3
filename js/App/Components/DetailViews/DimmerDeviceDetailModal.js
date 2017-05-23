@@ -74,9 +74,10 @@ class DimmerDeviceDetailModal extends View {
 		const dimmerValue = this.getDimmerValue(this.props.device);
 
 		this.state = {
-			dimmerValue,
+			temporaryDimmerValue: dimmerValue,
 		};
-		this.sliding = false;
+
+		this.currentDimmerValue = dimmerValue;
 		this.onTurnOn = this.onTurnOn.bind(this);
 		this.onTurnOff = this.onTurnOff.bind(this);
 		this.onLearn = this.onLearn.bind(this);
@@ -109,17 +110,22 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	onValueChange(value) {
-		console.log('***** value', value);
-		this.setState({ dimmerValue: value });
-		this.sliding = true;
+		this.setState({ temporaryDimmerValue: value });
 	}
 
 	onSlidingComplete(value) {
-		this.props.onDim(this.props.device.id, 255 * value / 100.0);
-		this.sliding = false;
+		this.props.onDim(this.props.deviceId, 255 * value / 100.0);
 	}
 
-	// TODO: Fix a bug which make slider's value is being changed after sliding complete
+	componentWillReceiveProps(nextProps) {
+		const device = { nextProps };
+		const dimmerValue = this.getDimmerValue(device);
+		if (this.currentDimmerValue !== dimmerValue) {
+			this.setState({ temporaryDimmerValue: dimmerValue });
+			this.currentDimmerValue = dimmerValue;
+		}
+	}
+
 	render() {
 		const { device } = this.props;
 		const { TURNON, TURNOFF, LEARN, DIM } = device.supportedMethods;
@@ -128,8 +134,6 @@ class DimmerDeviceDetailModal extends View {
 		let learnButton = null;
 		let slider = null;
 
-		const sliderValue = this.sliding ? this.state.dimmerValue : this.getDimmerValue(device);
-		console.log('***** sliderValue', sliderValue);
 		if (TURNON || TURNOFF) {
 			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} />;
 		}
@@ -139,7 +143,7 @@ class DimmerDeviceDetailModal extends View {
 		}
 
 		if (DIM) {
-			slider = <Slider minimumValue={0} maximumValue={100} step={1} value={sliderValue}
+			slider = <Slider minimumValue={0} maximumValue={100} step={1} value={this.currentDimmerValue}
 				style={{ marginHorizontal: 8, marginVertical: 8 }}
 				onValueChange={this.onValueChange}
 				onSlidingComplete={this.onSlidingComplete}/>;
@@ -148,7 +152,7 @@ class DimmerDeviceDetailModal extends View {
 		return (
 			<View style={styles.container}>
 				<Text style={styles.textDimmingLevel}>
-					{`Dimming level: ${sliderValue}%`}
+					{`Dimming level: ${this.state.temporaryDimmerValue}%`}
 				</Text>
 				{slider}
 				{toggleButton}

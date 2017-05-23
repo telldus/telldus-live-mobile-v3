@@ -22,43 +22,37 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Text, View } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { View } from 'BaseComponents';
+import { StyleSheet, Animated } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
 import VerticalSlider from './VerticalSlider';
 
 import throttle from 'lodash/throttle';
 
-const OffButton = ({ isInState, enabled, tileWidth, onPress }) => (
+const PseudoOffButton = ({ isInState, enabled, tileWidth, fadeAnim }) => (
 	<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' && enabled ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled]}>
-		<TouchableOpacity
-			onPress={enabled ? onPress : null}
-			style={styles.button} >
-			<Text
-				ellipsizeMode="middle"
-				numberOfLines={1}
-				style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
-					{ fontSize: Math.floor(tileWidth / 8) }]}>
-				{'Off'}
-			</Text>
-		</TouchableOpacity>
+		<Animated.Text
+			ellipsizeMode="middle"
+			numberOfLines={1}
+			style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
+				{ fontSize: Math.floor(tileWidth / 8),
+					opacity: fadeAnim }]}>
+			{'Off'}
+		</Animated.Text>
 	</View>
 );
 
-const OnButton = ({ isInState, enabled, tileWidth, onPress }) => (
+const PseudoOnButton = ({ isInState, enabled, tileWidth, fadeAnim }) => (
 	<View style={[styles.turnOnButtonContainer, isInState !== 'TURNOFF' && enabled ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled]}>
-		<TouchableOpacity
-			onPress={enabled ? onPress : null}
-			style={styles.button} >
-			<Text
-				ellipsizeMode="middle"
-				numberOfLines={1}
-				style = {[styles.buttonText, isInState !== 'TURNOFF' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
-					{ fontSize: Math.floor(tileWidth / 8) }]}>
-				{'On'}
-			</Text>
-		</TouchableOpacity>
+		<Animated.Text
+			ellipsizeMode="middle"
+			numberOfLines={1}
+			style = {[styles.buttonText, isInState !== 'TURNOFF' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
+				{ fontSize: Math.floor(tileWidth / 8),
+					opacity: fadeAnim }]}>
+			{'On'}
+		</Animated.Text>
 	</View>
 );
 
@@ -93,11 +87,22 @@ class DimmerDashboardTile extends View {
 			bodyWidth: 0,
 			bodyHeight: 0,
 			value: getDimmerValue(value, isInState),
+			offButtonFadeAnim: new Animated.Value(1),
+			onButtonFadeAnim: new Animated.Value(1),
 		};
 
 		this.onValueChangeThrottled = throttle(onDimmerSlide, 200, {
 			trailing: true,
 		});
+
+		this.onTurnOffButtonStart = this.onTurnOffButtonStart.bind(this);
+		this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
+		this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
+		this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
+		this.layoutView = this.layoutView.bind(this);
+		this.onSlidingStart = this.onSlidingStart.bind(this);
+		this.onSlidingComplete = this.onSlidingComplete.bind(this);
+		this.onValueChange = this.onValueChange.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -130,26 +135,53 @@ class DimmerDashboardTile extends View {
 		this.props.hideDimmerPopup();
 	}
 
+	onTurnOffButtonStart() {
+		Animated.timing(this.state.offButtonFadeAnim, { toValue: 0.5, duration: 100 }).start();
+	}
+
+	onTurnOffButtonEnd() {
+		Animated.timing(this.state.offButtonFadeAnim, { toValue: 1, duration: 100 }).start();
+	}
+
+	onTurnOnButtonStart() {
+		Animated.timing(this.state.onButtonFadeAnim, { toValue: 0.5, duration: 100 }).start();
+	}
+
+	onTurnOnButtonEnd() {
+		Animated.timing(this.state.onButtonFadeAnim, { toValue: 1, duration: 100 }).start();
+	}
+
 	render() {
 		const { item, tileWidth } = this.props;
 		const { name, isInState, supportedMethods } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
-		const turnOnButton = <OnButton isInState={isInState} enabled={TURNON} tileWidth={tileWidth} onPress={this.props.onTurnOn} />;
-		const turnOffButton = <OffButton isInState={isInState} enabled={TURNOFF} tileWidth={tileWidth} onPress={this.props.onTurnOff} />;
+		//const isInState = item.childObject.isInState;
+		//const name = item.childObject.name;
+		//const tileWidth = item.tileWidth - 8;
+		//const { TURNON, TURNOFF, DIM } = item.childObject.supportedMethods;
+		const turnOnButton = <PseudoOnButton isInState={isInState} enabled={TURNON} tileWidth={tileWidth} fadeAnim={this.state.onButtonFadeAnim}/>;
+		const turnOffButton = <PseudoOffButton isInState={isInState} enabled={TURNOFF} tileWidth={tileWidth} fadeAnim={this.state.offButtonFadeAnim}/>;
 		const slider = DIM ?
 			<VerticalSlider
 				style={[styles.slider, {
-					width: this.state.bodyWidth / 5,
+					width: this.state.bodyWidth,
 					height: this.state.bodyHeight,
-					left: this.state.bodyWidth / 2 - this.state.bodyWidth / 10,
+					left: 0,
 					bottom: 0,
 				}]}
+				thumbWidth={this.state.bodyWidth / 5}
 				item={item}
 				value={toSliderValue(this.state.value)}
 				setScrollEnabled={this.props.setScrollEnabled}
-				onSlidingStart={this.onSlidingStart.bind(this)}
-				onSlidingComplete={this.onSlidingComplete.bind(this)}
-				onValueChange={this.onValueChange.bind(this)}
+				onSlidingStart={this.onSlidingStart}
+				onSlidingComplete={this.onSlidingComplete}
+				onValueChange={this.onValueChange}
+				onLeftStart={this.onTurnOffButtonStart}
+				onLeftEnd={this.onTurnOffButtonEnd}
+				onRightStart={this.onTurnOnButtonStart}
+				onRightEnd={this.onTurnOnButtonEnd}
+				onLeft={this.props.onTurnOff}
+				onRight={this.props.onTurnOn}
 			/> :
 			null;
 		return (
@@ -161,7 +193,7 @@ class DimmerDashboardTile extends View {
 					width: tileWidth,
 					height: tileWidth,
 				}]}>
-				<View style={styles.body} onLayout={this.layoutView.bind(this)}>
+				<View style={styles.body} onLayout={this.layoutView}>
 					{ turnOffButton }
 					{ turnOnButton }
 					{ slider }
@@ -196,11 +228,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'stretch',
 		borderTopLeftRadius: 7,
+		justifyContent: 'center',
 	},
 	turnOnButtonContainer: {
 		flex: 1,
 		alignItems: 'stretch',
 		borderTopRightRadius: 7,
+		justifyContent: 'center',
 	},
 	buttonBackgroundEnabled: {
 		backgroundColor: 'white',

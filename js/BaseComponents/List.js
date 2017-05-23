@@ -31,6 +31,7 @@ class ListComponent extends React.Component {
 		this.openCellId = null;
 		this.state = {
 			refreshing: false,
+			scrollEnabled: true,
 		};
 	}
 
@@ -49,6 +50,7 @@ class ListComponent extends React.Component {
 	setScrollEnabled(enable) {
 		if (this._listView) {
 			this._listView.setNativeProps({ scrollEnabled: enable });
+			this.setState({ scrollEnabled: enable });
 		}
 	}
 
@@ -142,6 +144,7 @@ class ListComponent extends React.Component {
 						refreshing={this.state.refreshing}
 						onRefresh={this._onRefresh.bind(this)}
 						enableEmptySections={true}
+						enabled={this.state.scrollEnabled}
 					/>
 				}
 				ref={c => this.setRefs(c)}

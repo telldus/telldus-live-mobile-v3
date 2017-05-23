@@ -22,45 +22,39 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Text, View, RoundedCornerShadowView } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { View, RoundedCornerShadowView } from 'BaseComponents';
+import { Animated, StyleSheet } from 'react-native';
 import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
 import VerticalSlider from './VerticalSlider';
 
 import throttle from 'lodash/throttle';
 
-const OffButton = ({ isInState, enabled, onPress }) => (
-	<View style={[styles.buttonContainer, {
-		backgroundColor: isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
-		<TouchableOpacity
-			onPress={enabled ? onPress : null}
-			style={styles.button} >
-			<Text
-				ellipsizeMode="middle"
-				numberOfLines={1}
-				style = {[styles.buttonText, {
-					color: isInState === 'TURNOFF' && enabled ? 'red' : '#a2a2a2' }]}>
-				{'Off'}
-			</Text>
-		</TouchableOpacity>
-	</View>
+const PseudoOffButton = ({ isInState, enabled, fadeAnim }) => (
+    <View style={[styles.buttonContainer, {
+	backgroundColor: isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
+        <Animated.Text
+            ellipsizeMode="middle"
+            numberOfLines={1}
+			style = {[styles.buttonText, {
+				color: isInState === 'TURNOFF' && enabled ? 'red' : '#a2a2a2',
+				opacity: fadeAnim }]}>
+            {'Off'}
+        </Animated.Text>
+    </View>
 );
 
-const OnButton = ({ isInState, enabled, onPress }) => (
-	<View style={[styles.buttonContainer, {
-		backgroundColor: isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
-		<TouchableOpacity
-			onPress={enabled ? onPress : null}
-			style={styles.button} >
-			<Text
-				ellipsizeMode="middle"
-				numberOfLines={1}
-				style = {[styles.buttonText, {
-					color: isInState !== 'TURNOFF' && enabled ? 'green' : '#a2a2a2' }]}>
-				{'On'}
-			</Text>
-		</TouchableOpacity>
-	</View>
+const PseudoOnButton = ({ isInState, enabled, fadeAnim }) => (
+    <View style={[styles.buttonContainer, {
+	backgroundColor: isInState !== 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
+        <Animated.Text
+            ellipsizeMode="middle"
+            numberOfLines={1}
+			style = {[styles.buttonText, {
+				color: isInState !== 'TURNOFF' && enabled ? 'green' : '#a2a2a2',
+				opacity: fadeAnim }]}>
+            {'On'}
+        </Animated.Text>
+    </View>
 );
 
 
@@ -95,11 +89,22 @@ class DimmingButton extends View {
 			buttonWidth: 0,
 			buttonHeight: 0,
 			value,
+			offButtonFadeAnim: new Animated.Value(1),
+			onButtonFadeAnim: new Animated.Value(1),
 		};
 
 		this.onValueChangeThrottled = throttle(this.props.onDimmerSlide, 200, {
 			trailing: true,
 		});
+
+		this.onTurnOffButtonStart = this.onTurnOffButtonStart.bind(this);
+		this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
+		this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
+		this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
+		this.layoutView = this.layoutView.bind(this);
+		this.onSlidingStart = this.onSlidingStart.bind(this);
+		this.onSlidingComplete = this.onSlidingComplete.bind(this);
+		this.onValueChange = this.onValueChange.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -131,39 +136,64 @@ class DimmingButton extends View {
 		this.props.hideDimmerPopup();
 	}
 
+	onTurnOffButtonStart() {
+		Animated.timing(this.state.offButtonFadeAnim, { toValue: 0.5, duration: 100 }).start();
+	}
+
+	onTurnOffButtonEnd() {
+		Animated.timing(this.state.offButtonFadeAnim, { toValue: 1, duration: 100 }).start();
+	}
+
+	onTurnOnButtonStart() {
+		Animated.timing(this.state.onButtonFadeAnim, { toValue: 0.5, duration: 100 }).start();
+	}
+
+	onTurnOnButtonEnd() {
+		Animated.timing(this.state.onButtonFadeAnim, { toValue: 1, duration: 100 }).start();
+	}
+
 	render() {
+		//const { TURNON, TURNOFF, DIM } = this.props.item.supportedMethods;
+		//const isInState = this.props.item.isInState;
 		const { device } = this.props;
 		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
-
-		const turnOnButton = <OnButton isInState={device.isInState} enabled={TURNON} onPress={this.props.onTurnOn} />;
-		const turnOffButton = <OffButton isInState={device.isInState} enabled={TURNOFF} onPress={this.props.onTurnOff} />;
+		const turnOnButton = <PseudoOnButton isInState={device.isInState} enabled={TURNON} fadeAnim={this.state.onButtonFadeAnim} />;
+		const turnOffButton = <PseudoOffButton isInState={device.isInState} enabled={TURNOFF} fadeAnim={this.state.offButtonFadeAnim} />;
 		const slider = DIM ?
-			<VerticalSlider
+            <VerticalSlider
 				style={[styles.slider, {
-					width: this.state.buttonWidth / 5,
+					width: this.state.buttonWidth,
 					height: this.state.buttonHeight,
-					left: this.state.buttonWidth / 2 - this.state.buttonWidth / 10,
+					left: 0,
 					bottom: 0,
 				}]}
-				thumbHeight={9}
-				fontSize={7}
-				item={device}
-				value={toSliderValue(this.state.value)}
-				setScrollEnabled={this.props.setScrollEnabled}
-				onSlidingStart={this.onSlidingStart.bind(this)}
-				onSlidingComplete={this.onSlidingComplete.bind(this)}
-				onValueChange={this.onValueChange.bind(this)}
-			/> :
-			null;
+				thumbWidth={this.state.buttonWidth / 5}
+                thumbHeight={9}
+                fontSize={7}
+                item={device}
+                value={toSliderValue(this.state.value)}
+				sensitive={4}
+                setScrollEnabled={this.props.setScrollEnabled}
+                onSlidingStart={this.onSlidingStart}
+                onSlidingComplete={this.onSlidingComplete}
+                onValueChange={this.onValueChange}
+				onLeftStart={this.onTurnOffButtonStart}
+				onLeftEnd={this.onTurnOffButtonEnd}
+				onRightStart={this.onTurnOnButtonStart}
+				onRightEnd={this.onTurnOnButtonEnd}
+				onLeft={this.props.onTurnOff}
+				onRight={this.props.onTurnOn}
+            /> :
+            null;
 
 		return (
-			<RoundedCornerShadowView
-				onLayout={this.layoutView.bind(this)}
-				style={styles.container}>
-				{ turnOffButton }
-				{ turnOnButton }
-				{ slider }
-			</RoundedCornerShadowView>
+            <RoundedCornerShadowView
+                onLayout={this.layoutView}
+                style={styles.container}>
+                { turnOffButton }
+                { turnOnButton }
+                { slider }
+            </RoundedCornerShadowView>
 		);
 	}
 }
@@ -174,14 +204,11 @@ const styles = StyleSheet.create({
 		width: 88,
 		height: 32,
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'stretch',
 	},
 	buttonContainer: {
 		flex: 1,
 		alignItems: 'stretch',
-	},
-	button: {
-		flex: 1,
 		justifyContent: 'center',
 	},
 	buttonText: {
