@@ -49,7 +49,7 @@ function dimmer(state: State = initialState, action: Action): State {
 	} else if (action.type === 'SET_DIMMER_VALUE') {
 		return {
 			...state,
-			value: action.value,
+			value: action.payload.value,
 		};
 	}
 

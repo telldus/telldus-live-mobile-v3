@@ -26,7 +26,6 @@ import { combineReducers } from 'redux';
 
 export type State = ?Object;
 
-// TODO: reducing of single item happens both in byId and reduceSensor. resolve to only reduceSensor
 function reduceSensor(state = {}, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_SENSORS':
@@ -46,8 +45,6 @@ function reduceSensor(state = {}, action: Action): State {
 			};
 
 			// properties originated on client
-			// newSensor.isInDashboard = state.isInDashboard; // TODO: uncomment as soon as reduceSensor correctly reduces
-
 			if (state.temp) {
 				newSensor.temperature = state.temp;
 			}
@@ -79,12 +76,104 @@ function reduceSensor(state = {}, action: Action): State {
 				newSensor.windDirection = state.wdir;
 			}
 			return newSensor;
+
+		case 'SENSOR_UPDATE_VALUE':
+			const newState = {};
+
+			newState.lastUpdated = parseInt(action.payload.time, 10);
+			newState.battery = action.payload.battery;
+			action.payload.data.forEach(sensorData => {
+				if (sensorData.type === 1) {
+					newState.temperature = sensorData.value;
+				} else if (sensorData.type === 2) {
+					newState.humidity = sensorData.value;
+				} else if (sensorData.type === 4) {
+					newState.rainRate = sensorData.value;
+				} else if (sensorData.type === 8) {
+					newState.rainTotal = sensorData.value;
+				} else if (sensorData.type === 32) {
+					newState.windAverage = sensorData.value;
+				} else if (sensorData.type === 64) {
+					newState.windGust = sensorData.value;
+				} else if (sensorData.type === 16) {
+					newState.windDirection = sensorData.value;
+				} else if (sensorData.type === 128) {
+					newState.uv = sensorData.value;
+				} else if (sensorData.type === 256 && sensorData.scale === 2) {
+					newState.watt = sensorData.value;
+				} else if (sensorData.type === 512) {
+					newState.luminance = sensorData.value;
+				}
+			});
+			return {
+				...state,
+				...newState,
+			};
+
+		case 'ADD_TO_DASHBOARD':
+			return {
+				...state,
+				isInDashboard: true,
+			};
+
+		case 'REMOVE_FROM_DASHBOARD':
+			return {
+				...state,
+				isInDashboard: false,
+			};
+
+
 		case 'LOGGED_OUT':
 			return {};
 		default:
 			return state;
 	}
 }
+
+const byId = (state = {}, action: Action): State => {
+	if (action.type === REHYDRATE) {
+		if (action.payload.sensors && action.payload.sensors.byId) {
+			console.log('rehydrating sensors.byId');
+			return {
+				...state,
+				...action.payload.sensors.byId,
+			};
+		}
+		return { ...state };
+	}
+	if (action.type === 'RECEIVED_SENSORS') {
+		return action.payload.sensor.reduce((acc, sensorState) => {
+			acc[sensorState.id] = {
+				...state[sensorState.id],
+				...reduceSensor(sensorState, action),
+			};
+			return acc;
+		}, {});
+	}
+	if (action.type === 'SENSOR_UPDATE_VALUE') {
+		return {
+			...state,
+			[action.payload.id]: reduceSensor(state[action.payload.id], action),
+		};
+	}
+	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === 'sensor') {
+		return {
+			...state,
+			[action.id]: reduceSensor(state[action.id], action),
+		};
+	}
+	if (action.type === 'REMOVE_FROM_DASHBOARD' && action.kind === 'sensor') {
+		return {
+			...state,
+			[action.id]: reduceSensor(state[action.id], action),
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {};
+	}
+
+	return state;
+};
 
 const allIds = (state = [], action: Action): State => {
 	if (action.type === REHYDRATE) {
@@ -104,88 +193,6 @@ const allIds = (state = [], action: Action): State => {
 	if (action.type === 'LOGGED_OUT') {
 		return [];
 	}
-	return state;
-};
-
-const byId = (state = {}, action: Action): State => {
-	if (action.type === REHYDRATE) {
-		if (action.payload.sensors && action.payload.sensors.byId) {
-			console.log('rehydrating sensors.byId');
-			return {
-				...state,
-				...action.payload.sensors.byId,
-			};
-		}
-		return { ...state };
-	}
-	if (action.type === 'RECEIVED_SENSORS') {
-		// overwrites entire state
-		return action.payload.sensor.reduce((acc, sensorState) => {
-			acc[sensorState.id] = {
-				...state[sensorState.id],
-				...reduceSensor(sensorState, action),
-			};
-			return acc;
-		}, {});
-	}
-	if (action.type === 'LOGGED_OUT') {
-		return {};
-	}
-	if (action.type === 'SENSOR_UPDATE_VALUE') {
-		const sensor = { ...state[action.payload.id] };
-
-		// TODO: move this to reduceSensor()
-		sensor.lastUpdated = parseInt(action.payload.time, 10);
-		sensor.battery = action.payload.battery;
-		action.payload.data.map(sensorData => {
-			if (sensorData.type === 1) {
-				sensor.temperature = sensorData.value;
-			} else if (sensorData.type === 2) {
-				sensor.humidity = sensorData.value;
-			} else if (sensorData.type === 4) {
-				sensor.rainRate = sensorData.value;
-			} else if (sensorData.type === 8) {
-				sensor.rainTotal = sensorData.value;
-			} else if (sensorData.type === 32) {
-				sensor.windAverage = sensorData.value;
-			} else if (sensorData.type === 64) {
-				sensor.windGust = sensorData.value;
-			} else if (sensorData.type === 16) {
-				sensor.windDirection = sensorData.value;
-			} else if (sensorData.type === 128) {
-				sensor.uv = sensorData.value;
-			} else if (sensorData.type === 256 && sensorData.scale === 2) {
-				sensor.watt = sensorData.value;
-			} else if (sensorData.type === 512) {
-				sensor.luminance = sensorData.value;
-			}
-		});
-
-		return {
-			...state,
-			[action.payload.id]: sensor,
-		};
-	}
-
-	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === 'sensor') {
-		return {
-			...state,
-			[action.id]: {
-				...state[action.id],
-				isInDashboard: true,
-			},
-		};
-	}
-	if (action.type === 'REMOVE_FROM_DASHBOARD' && action.kind === 'sensor') {
-		return {
-			...state,
-			[action.id]: {
-				...state[action.id],
-				isInDashboard: false,
-			},
-		};
-	}
-
 	return state;
 };
 

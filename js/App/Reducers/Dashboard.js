@@ -43,24 +43,20 @@ const allIds = kind => (state = [], action) => {
 		}
 		return [ ...state ];
 	}
-	if (action.kind !== kind) {
-		return state;
+	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === kind) {
+		if (includes(state, action.id)) {
+			return state;
+		}
+		return [
+			...state,
+			action.id,
+		];
+	}
+	if (action.type === 'REMOVE_FROM_DASHBOARD' && action.kind === kind) {
+		return state.filter(id => id !== action.id);
 	}
 
-	switch (action.type) {
-		case 'ADD_TO_DASHBOARD':
-			if (includes(state, action.id)) {
-				return state;
-			}
-			return [
-				...state,
-				action.id,
-			];
-		case 'REMOVE_FROM_DASHBOARD':
-			return state.filter(id => id !== action.id);
-		default:
-			return state;
-	}
+	return state;
 };
 
 const byId = kind => (state = {}, action) => {
@@ -83,21 +79,17 @@ const byId = kind => (state = {}, action) => {
 		}
 		return { ...state };
 	}
-	if (action.kind !== kind) {
-		return state;
+	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === kind) {
+		return {
+			...state,
+			[action.id]: true,
+		};
+	}
+	if (action.type === 'REMOVE_FROM_DASHBOARD' && action.kind === kind) {
+		return omit(state, action.id);
 	}
 
-	switch (action.type) {
-		case 'ADD_TO_DASHBOARD':
-			return {
-				...state,
-				[action.id]: true,
-			};
-		case 'REMOVE_FROM_DASHBOARD':
-			return omit(state, action.id);
-		default:
-			return state;
-	}
+	return state;
 };
 
 const sensorDisplayTypeById = (state = {}, action) => {
