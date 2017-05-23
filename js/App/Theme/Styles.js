@@ -50,7 +50,7 @@ export default StyleSheet.create({
 	},
 	rowBack: {
 		alignItems: 'center',
-		backgroundColor: '#DDD',
+		backgroundColor: '#F3F3F3',
 		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'flex-start',

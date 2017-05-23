@@ -23,7 +23,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { View, Icon } from 'BaseComponents';
-import { TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
 
@@ -42,7 +42,7 @@ class DeviceRowHidden extends View {
 				<TouchableOpacity
 					style={Theme.Styles.rowBackButton}
 					onPress={this.onStarSelected} >
-					<Icon name="star" size={26} color={isInDashboard ? 'yellow' : 'white'}/>
+					<Icon name="star" size={26} style={isInDashboard ? styles.enabled : styles.disabled}/>
 				</TouchableOpacity>
 			</View>
 		);
@@ -64,5 +64,14 @@ function mapDispatchToProps(dispatch) {
 		removeFromDashboard: id => dispatch(removeFromDashboard('device', id)),
 	};
 }
+
+const styles = StyleSheet.create({
+	enabled: {
+		color: 'rgba(226, 105, 0, 255)',
+	},
+	disabled: {
+		color: 'rgba(241, 217, 196, 255)',
+	},
+});
 
 export default connect(null, mapDispatchToProps)(DeviceRowHidden);
