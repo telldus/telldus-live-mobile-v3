@@ -66,6 +66,39 @@ function reduceGateway(state: State = gatewayInitialState, action: Action): Stat
 	}
 }
 
+function byId(state = {}, action: Action): State {
+	if (action.type === REHYDRATE) {
+		if (action.payload.gateways && action.payload.gateways.byId) {
+			console.log('rehydrating gateways.byId');
+			return {
+				...state,
+				...action.payload.gateways.byId,
+			};
+		}
+		return { ...state };
+	}
+	switch (action.type) {
+		case 'RECEIVED_GATEWAYS':
+			return action.payload.client.reduce((acc, gateway) => {
+				acc[gateway.id] = {
+					...state[gateway.id],
+					...reduceGateway(gateway, action),
+				};
+				return acc;
+			}, {});
+		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
+			const { gatewayId } = action;
+			return {
+				...state,
+				[gatewayId]: reduceGateway(state[gatewayId], action),
+			};
+		case 'LOGGED_OUT':
+			return {};
+		default:
+			return state;
+	}
+}
+
 function allIds(state = [], action: Action): State {
 	if (action.type === REHYDRATE) {
 		if (action.payload.gateways && action.payload.gateways.allIds) {
@@ -83,37 +116,6 @@ function allIds(state = [], action: Action): State {
 			return action.payload.client.map(gateway => gateway.id);
 		case 'LOGGED_OUT':
 			return [];
-		default:
-			return state;
-	}
-}
-
-function byId(state = {}, action: Action): State {
-	if (action.type === REHYDRATE) {
-		if (action.payload.gateways && action.payload.gateways.byId) {
-			console.log('rehydrating gateways.byId');
-			return {
-				...state,
-				...action.payload.gateways.byId,
-			};
-		}
-		return { ...state };
-	}
-	switch (action.type) {
-		case 'RECEIVED_GATEWAYS':
-			// overwrites entire state
-			return action.payload.client.reduce((acc, gateway) => {
-				acc[gateway.id] = reduceGateway(gateway, action);
-				return acc;
-			}, {});
-		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
-			const { gatewayId } = action;
-			return {
-				...state,
-				[gatewayId]: reduceGateway(state[gatewayId], action),
-			};
-		case 'LOGGED_OUT':
-			return {};
 		default:
 			return state;
 	}

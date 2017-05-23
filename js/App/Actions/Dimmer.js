@@ -40,8 +40,10 @@ export const hideDimmerPopup = (): Action => ({
 export const setDimmerValue = (id: Number, value: Number): ThunkAction => (dispatch) => {
 	dispatch({
 		type: 'SET_DIMMER_VALUE',
-		deviceId: id,
-		value,
+		payload: {
+			deviceId: id,
+			value,
+		},
 	});
 };
 
