@@ -77,6 +77,9 @@ export default function reduceJobs(state: State = initialState, action: Action):
 			reduceJob(jobState, action)
 		);
 	}
+	if (action.type === 'LOGGED_OUT') {
+		return [];
+	}
 
 	return state;
 }

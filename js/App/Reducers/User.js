@@ -44,15 +44,15 @@ export default function reduceUser(state: State = initialState, action: Action):
 			accessToken: accessToken,
 		};
 	}
-	if (action.type === 'LOGGED_OUT') {
-		return {
-			...initialState,
-		};
-	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {
 		return {
 			...state,
 			userProfile: action.payload,
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...initialState,
 		};
 	}
 	return state;

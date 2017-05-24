@@ -122,9 +122,6 @@ function reduceSensor(state = {}, action: Action): State {
 				isInDashboard: false,
 			};
 
-
-		case 'LOGGED_OUT':
-			return {};
 		default:
 			return state;
 	}
