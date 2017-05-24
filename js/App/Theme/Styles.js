@@ -48,6 +48,16 @@ export default StyleSheet.create({
 		paddingLeft: 16,
 		alignItems: 'center',
 	},
+	gatewayRowFront: {
+		backgroundColor: '#FFFFFF',
+		borderBottomColor: '#EEEEEE',
+		borderBottomWidth: 1,
+		flexDirection: 'row',
+		height: listItemHeight,
+		justifyContent: 'flex-start',
+		paddingLeft: 16,
+		alignItems: 'center',
+	},
 	rowBack: {
 		alignItems: 'center',
 		backgroundColor: '#F3F3F3',
