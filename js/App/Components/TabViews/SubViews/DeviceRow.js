@@ -78,7 +78,6 @@ class DeviceRow extends View {
 				onTurnOn={this.props.onTurnOn(device.id)}
 				onTurnOff={this.props.onTurnOff(device.id)}
 				device={device}
-				enabled={false}
 			/>;
 		}
 

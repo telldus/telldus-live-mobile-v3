@@ -229,7 +229,6 @@ class DashboardTab extends View {
 				style={tileStyle}
 				item={row.childObject}
 				tileWidth={tileWidth}
-				enabled={false}
 				onTurnOn={this.props.onTurnOn(itemId)}
 				onTurnOff={this.props.onTurnOff(itemId)}
 			/>;
