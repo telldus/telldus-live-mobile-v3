@@ -87,21 +87,21 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "com.telldus.live.mobile"
+        applicationId "com.telldus.live.mobile.test"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
+        versionCode 30200
+        versionName "3.2.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
     }
     signingConfigs {
         release {
-            storeFile file(MYAPP_RELEASE_STORE_FILE)
-            storePassword MYAPP_RELEASE_STORE_PASSWORD
-            keyAlias MYAPP_RELEASE_KEY_ALIAS
-            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            storeFile file(TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE)
+            storePassword TELLDUS_REACT_NATIVE_LOCAL_STORE_PASSWORD
+            keyAlias TELLDUS_REACT_NATIVE_LOCAL_KEY_ALIAS
+            keyPassword TELLDUS_REACT_NATIVE_LOCAL_KEY_PASSWORD
         }
     }
     splits {

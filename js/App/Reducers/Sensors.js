@@ -20,30 +20,31 @@
 'use strict';
 
 import type { Action } from 'Actions/Types';
+import { REHYDRATE } from 'redux-persist/constants';
 
-import isArray from 'lodash/isArray';
+import { combineReducers } from 'redux';
 
 export type State = ?Object;
 
-const initialState = [];
-const sensorInitialState = {};
-
-function sensorReducer(state: State = sensorInitialState, action: Action): State {
+function reduceSensor(state = {}, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_SENSORS':
+			// properties originated from server
 			const newSensor = {
+				id: parseInt(state.id, 10), // unique id
+				sensorId: parseInt(state.sensorId, 10), // TODO: is this ever used?
 				battery: state.battery,
 				clientId: parseInt(state.client, 10),
 				editable: Boolean(state.editable),
-				id: parseInt(state.id, 10),
 				ignored: Boolean(state.ignored),
 				keepHistory: Boolean(state.keepHistory),
 				lastUpdated: state.lastUpdated,
 				model: state.model,
 				name: state.name,
 				protocol: state.protocol,
-				sensorId: parseInt(state.sensorId, 10),
 			};
+
+			// properties originated on client
 			if (state.temp) {
 				newSensor.temperature = state.temp;
 			}
@@ -75,100 +76,147 @@ function sensorReducer(state: State = sensorInitialState, action: Action): State
 				newSensor.windDirection = state.wdir;
 			}
 			return newSensor;
-		case 'LOGGED_OUT':
-			return sensorInitialState;
+
+		case 'SENSOR_UPDATE_VALUE':
+			const newState = {};
+
+			newState.lastUpdated = parseInt(action.payload.time, 10);
+			newState.battery = action.payload.battery;
+			action.payload.data.forEach(sensorData => {
+				if (sensorData.type === 1) {
+					newState.temperature = sensorData.value;
+				} else if (sensorData.type === 2) {
+					newState.humidity = sensorData.value;
+				} else if (sensorData.type === 4) {
+					newState.rainRate = sensorData.value;
+				} else if (sensorData.type === 8) {
+					newState.rainTotal = sensorData.value;
+				} else if (sensorData.type === 32) {
+					newState.windAverage = sensorData.value;
+				} else if (sensorData.type === 64) {
+					newState.windGust = sensorData.value;
+				} else if (sensorData.type === 16) {
+					newState.windDirection = sensorData.value;
+				} else if (sensorData.type === 128) {
+					newState.uv = sensorData.value;
+				} else if (sensorData.type === 256 && sensorData.scale === 2) {
+					newState.watt = sensorData.value;
+				} else if (sensorData.type === 512) {
+					newState.luminance = sensorData.value;
+				}
+			});
+			return {
+				...state,
+				...newState,
+			};
+
+		case 'ADD_TO_DASHBOARD':
+			return {
+				...state,
+				isInDashboard: true,
+			};
+
+		case 'REMOVE_FROM_DASHBOARD':
+			return {
+				...state,
+				isInDashboard: false,
+			};
+
 		default:
 			return state;
 	}
 }
 
-export default function sensorsReducer(state: State = initialState, action: Action): State {
-	if (action.type === 'RECEIVED_SENSORS') {
-		return action.payload.sensor.map(sensorState =>
-			sensorReducer(sensorState, action)
-		);
+const byId = (state = {}, action: Action): State => {
+	if (action.type === REHYDRATE) {
+		if (action.payload.sensors && action.payload.sensors.byId) {
+			console.log('rehydrating sensors.byId');
+			return {
+				...state,
+				...action.payload.sensors.byId,
+			};
+		}
+		return { ...state };
 	}
-	if (action.type === 'LOGGED_OUT') {
-		return {
-			...initialState,
-		};
+	if (action.type === 'RECEIVED_SENSORS') {
+		return action.payload.sensor.reduce((acc, sensorState) => {
+			acc[sensorState.id] = {
+				...state[sensorState.id],
+				...reduceSensor(sensorState, action),
+			};
+			return acc;
+		}, {});
 	}
 	if (action.type === 'SENSOR_UPDATE_VALUE') {
-		if (!state || !state.map) {
-			return state;
-		}
+		return {
+			...state,
+			[action.payload.id]: reduceSensor(state[action.payload.id], action),
+		};
+	}
+	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === 'sensor') {
+		return {
+			...state,
+			[action.id]: reduceSensor(state[action.id], action),
+		};
+	}
+	if (action.type === 'REMOVE_FROM_DASHBOARD' && action.kind === 'sensor') {
+		return {
+			...state,
+			[action.id]: reduceSensor(state[action.id], action),
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {};
+	}
 
-		return state.map(sensorState => {
-			if (sensorState.id !== action.payload.sensorId) {
-				return sensorState;
-			}
-			const _sensor = { ...sensorState };
-			_sensor.lastUpdated = parseInt(action.payload.time, 10);
-			_sensor.battery = action.payload.battery;
-			action.payload.data.map(sensorData => {
-				if (sensorData.type === 1) {
-					_sensor.temperature = sensorData.value;
-				} else if (sensorData.type === 2) {
-					_sensor.humidity = sensorData.value;
-				} else if (sensorData.type === 4) {
-					_sensor.rainRate = sensorData.value;
-				} else if (sensorData.type === 8) {
-					_sensor.rainTotal = sensorData.value;
-				} else if (sensorData.type === 32) {
-					_sensor.windAverage = sensorData.value;
-				} else if (sensorData.type === 64) {
-					_sensor.windGust = sensorData.value;
-				} else if (sensorData.type === 16) {
-					_sensor.windDirection = sensorData.value;
-				} else if (sensorData.type === 128) {
-					_sensor.uv = sensorData.value;
-				} else if (sensorData.type === 256 && sensorData.scale === 2) {
-					_sensor.watt = sensorData.value;
-				} else if (sensorData.type === 512) {
-					_sensor.luminance = sensorData.value;
-				}
-			});
-			return _sensor;
-		});
+	return state;
+};
+
+const allIds = (state = [], action: Action): State => {
+	if (action.type === REHYDRATE) {
+		if (action.payload.sensors && action.payload.sensors.allIds) {
+			console.log('rehydrating sensors.allIds');
+			return [
+				...state,
+				...action.payload.sensors.allIds,
+			];
+		}
+		return [ ...state ];
+	}
+	if (action.type === 'RECEIVED_SENSORS') {
+		// overwrites entire state
+		return action.payload.sensor.map(sensorState => sensorState.id);
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return [];
 	}
 	return state;
-}
+};
 
-// TODO: clean up this function
-export function parseSensorsForListView({ sensors, gateways, dashboard }) {
-	const sections = {};
-	const sectionIds = [];
-	if (!isArray(sensors)) {
-		return { sections, sectionIds };
-	}
-	if (sensors && sensors.map) {
-		sensors.map(sensor => {
-			const sectionId = sensor.clientId ? sensor.clientId : '';
-			if (sectionIds.indexOf(sectionId) === -1) {
-				sectionIds.push(sectionId);
-				sections[sectionId] = [];
-			}
+export default combineReducers({
+	allIds,
+	byId,
+});
 
-			sensor.inDashboard = false;
-			for (let i = 0; i < dashboard.sensors.length; ++i) {
-				if (dashboard.sensors[i].id === sensor.id) {
-					sensor.inDashboard = true;
-					break;
-				}
-			}
-
-			sections[sectionId].push(sensor);
-		});
-	}
-
-	const gatewayNameLookUp = gateways.reduce((acc, gateway) => {
-		acc[gateway.id] = gateway.name;
+export function parseSensorsForListView(sensors = {}, gateways = {}, editMode = false) {
+	const sections = sensors.allIds.reduce((acc, sensorId) => {
+		acc[sensors.byId[sensorId].clientId] = [];
 		return acc;
 	}, {});
+	const sectionIds = Object.keys(sections).map(id => parseInt(id, 10));
+
+	sensors.allIds.forEach(sensorId => {
+		const sensor = sensors.byId[sensorId];
+		sections[sensor.clientId].push({
+			sensor,
+			editMode,
+		});
+	});
 
 	sectionIds.sort((a, b) => {
-		const gatewayA = gatewayNameLookUp[a];
-		const gatewayB = gatewayNameLookUp[b];
+		// might be that sensors get rendered before gateways are fetched
+		const gatewayA = gateways.byId[a] ? gateways.byId[a].name : a;
+		const gatewayB = gateways.byId[b] ? gateways.byId[b].name : b;
 
 		if (gatewayA < gatewayB) {
 			return -1;

@@ -36,7 +36,7 @@ export default class BackgroundImage extends Component {
 }
 
 BackgroundImage.propTypes = {
-	source: React.PropTypes.object,
+	source: React.PropTypes.number,
 	children: React.PropTypes.object,
 	style: React.PropTypes.object,
 };

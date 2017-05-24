@@ -19,40 +19,41 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import { FormattedNumber, Image, ListItem, Text, View } from 'BaseComponents';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import format from 'date-format';
 import Theme from 'Theme';
 
 const SensorHumidity = ({ humidity }) => (
-    <View style={Theme.Styles.sensorValue}>
-    <Image source={require('../img/sensorIcons/Humidity.png')} />
-    <Text>
-    <FormattedNumber value = {humidity / 100} formatStyle = "percent" />
-    </Text>
-    </View>
+	<View style={Theme.Styles.sensorValue}>
+	<Image source={require('../img/sensorIcons/Humidity.png')} />
+	<Text>
+	<FormattedNumber value = {humidity / 100} formatStyle = "percent" />
+	</Text>
+	</View>
 );
 
 
 const SensorTemperature = ({ temperature }) => (
-    <View style={Theme.Styles.sensorValue}>
-        <Image source={require('../img/sensorIcons/Temperature.png')} />
-        <Text>
-            <FormattedNumber value = {temperature} maximumFractionDigits = {1} />
-            {`${String.fromCharCode(176)}C`}
-        </Text>
-    </View>
+	<View style={Theme.Styles.sensorValue}>
+		<Image source={require('../img/sensorIcons/Temperature.png')} />
+		<Text>
+			<FormattedNumber value = {temperature} maximumFractionDigits = {1} />
+			{`${String.fromCharCode(176)}C`}
+		</Text>
+	</View>
 );
 
 const SensorRain = ({ rainRate, rainTotal }) => (
-    <View style={Theme.Styles.sensorValue}>
-        <Image source={require('../img/sensorIcons/Rain.png')} />
-        <Text>
-            { rainRate && ( <Text><FormattedNumber value = {rainRate} maximumFractionDigits = {0} /> {'mm/h\n'} </Text> ) }
-            { rainTotal && ( <Text><FormattedNumber value = {rainTotal} maximumFractionDigits = {0} /> {'mm'} </Text> ) }
-        </Text>
-    </View>
+	<View style={Theme.Styles.sensorValue}>
+		<Image source={require('../img/sensorIcons/Rain.png')} />
+		<Text>
+			{ rainRate && ( <Text><FormattedNumber value = {rainRate} maximumFractionDigits = {0} /> {'mm/h\n'} </Text> ) }
+			{ rainTotal && ( <Text><FormattedNumber value = {rainTotal} maximumFractionDigits = {0} /> {'mm'} </Text> ) }
+		</Text>
+	</View>
 );
 
 const SensorWind = ({ windAverage, windGust, windDirection }) => {
@@ -60,76 +61,122 @@ const SensorWind = ({ windAverage, windGust, windDirection }) => {
 	const getWindDirection = value => directions[Math.floor(value / 22.5)];
 
 	return (
-        <View style={Theme.Styles.sensorValue}>
-        <Image source={require('../img/sensorIcons/Wind.png')} />
-            <Text>
-                { windAverage && ( <Text><FormattedNumber value = {windAverage} maximumFractionDigits = {1} /> {'m/s\n'} </Text> ) }
-                { windGust && ( <Text><FormattedNumber value = {windGust} maximumFractionDigits = {1} /> {'m/s*\n'} </Text> ) }
-                { windDirection && ( <Text>{getWindDirection(windDirection)}</Text> ) }
-            </Text>
-        </View>
+		<View style={Theme.Styles.sensorValue}>
+		<Image source={require('../img/sensorIcons/Wind.png')} />
+			<Text>
+				{ windAverage && ( <Text><FormattedNumber value = {windAverage} maximumFractionDigits = {1} /> {'m/s\n'} </Text> ) }
+				{ windGust && ( <Text><FormattedNumber value = {windGust} maximumFractionDigits = {1} /> {'m/s*\n'} </Text> ) }
+				{ windDirection && ( <Text>{getWindDirection(windDirection)}</Text> ) }
+			</Text>
+		</View>
 	);
 };
 
 const SensorUV = ({ uv }) => (
-    <View style={Theme.Styles.sensorValue}>
-        <Image source={require('../img/sensorIcons/UV.png')} />
-        <FormattedNumber value = {uv} maximumFractionDigits = {0} />
-    </View>
+	<View style={Theme.Styles.sensorValue}>
+		<Image source={require('../img/sensorIcons/UV.png')} />
+		<FormattedNumber value = {uv} maximumFractionDigits = {0} />
+	</View>
 );
 
 const SensorWatt = ({ watt }) => (
-    <View style={Theme.Styles.sensorValue}>
-        <Image source={require('../img/sensorIcons/Watt.png')} />
-        <Text>
-            <FormattedNumber value = {watt} maximumFractionDigits = {1} />
-            {'W'}
-        </Text>
-    </View>
+	<View style={Theme.Styles.sensorValue}>
+		<Image source={require('../img/sensorIcons/Watt.png')} />
+		<Text>
+			<FormattedNumber value = {watt} maximumFractionDigits = {1} />
+			{'W'}
+		</Text>
+	</View>
 );
 
 const SensorLuminance = ({ luminance }) => (
-    <View style={Theme.Styles.sensorValue}>
-        <Image source={require('../img/sensorIcons/Luminance.png')} />
-        <Text>
-            <FormattedNumber value = {luminance} maximumFractionDigits = {0} />
-            {'lx'}
-        </Text>
-    </View>
+	<View style={Theme.Styles.sensorValue}>
+		<Image source={require('../img/sensorIcons/Luminance.png')} />
+		<Text>
+			<FormattedNumber value = {luminance} maximumFractionDigits = {0} />
+			{'lx'}
+		</Text>
+	</View>
 );
 
-const SensorRow = props => {
-	const minutesAgo = Math.round(((Date.now() / 1000) - props.lastUpdated) / 60);
-	return (
-        <ListItem style = {Theme.Styles.rowFront}>
-            <View>
-                <Text style = {{
-	color: 'rgba(0,0,0,0.87)',
-	fontSize: 16,
-	opacity: props.name ? 1 : 0.5,
-	marginBottom: 2,
-}}>
-                    {props.name ? props.name : '(no name)'}
-                </Text>
-                <Text style = {{
-	color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
-	fontSize: 12,
-	opacity: minutesAgo < 1440 ? 1 : 0.5,
-}}>
-                    {formatLastUpdated(minutesAgo, props.lastUpdated)}
-                </Text>
-            </View>
-            { props.humidity ? <SensorHumidity {...props} /> : null }
-            { props.temperature ? <SensorTemperature {...props} /> : null }
-            { props.rainRate || props.rainTotal ? <SensorRain {...props} /> : null }
-            { props.windGust || props.windAverage || props.windDirection ? <SensorWind {...props} /> : null }
-            { props.uv ? <SensorUV {...props} /> : null }
-            { props.watt ? <SensorWatt {...props} /> : null }
-            { props.luminance ? <SensorLuminance {...props} /> : null }
-        </ListItem>
-	);
+class SensorRow extends Component {
+	constructor(props) {
+		super(props);
+		this.width = 0;
+	}
 
-	function formatLastUpdated(minutes, lastUpdated) {
+	render() {
+		const { sensor } = this.props;
+		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
+		let sensors = [];
+
+		const {
+			id,
+			humidity,
+			temperature,
+			rainRate,
+			rainTotal,
+			windGust,
+			windAverage,
+			windDirection,
+			uv,
+			watt,
+			luminance,
+		} = sensor;
+
+		if (humidity) {
+			sensors.push(<SensorHumidity {...{ humidity }} key={`${id}humidity`}/>);
+		}
+		if (temperature) {
+			sensors.push(<SensorTemperature {...{ temperature }} key={`${id}temperature`}/>);
+		}
+		if (rainRate || rainTotal) {
+			sensors.push(<SensorRain {...{ rainRate, rainTotal }} key={`${id}rain`}/>);
+		}
+		if (windGust || windAverage || windDirection) {
+			sensors.push(<SensorWind {...{ windGust, windAverage, windDirection }} key={`${id}wind`}/>);
+		}
+		if (uv) {
+			sensors.push(<SensorUV {...{ uv }} key={`${id}uv`}/>);
+		}
+		if (watt) {
+			sensors.push(<SensorWatt {...{ watt }} key={`${id}watt`}/>);
+		}
+		if (luminance) {
+			sensors.push(<SensorLuminance {...{ luminance }} key={`${id}luminance`}/>);
+		}
+
+		return (
+			<ListItem
+				style = {Theme.Styles.rowFront}
+				onLayout={this.onLayout.bind(this)} >
+				<View>
+					<Text style = {[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
+						ellipsizeMode="middle"
+						numberOfLines={1}>
+						{sensor.name ? sensor.name : '(no name)'}
+					</Text>
+					<Text style = {[styles.time, {
+						color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
+						opacity: minutesAgo < 1440 ? 1 : 0.5 }]}>
+						{this.formatLastUpdated(minutesAgo, sensor.lastUpdated)}
+					</Text>
+				</View>
+				{ sensors.length * 88 < Math.max(this.width / 2.0, 177) ?
+					sensors :
+					(<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true} directionalLockEnabled={true} >
+						{sensors}
+					</ScrollView>)
+				}
+			</ListItem>
+		);
+	}
+
+	onLayout(event) {
+		this.width = event.nativeEvent.layout.width;
+	}
+
+	formatLastUpdated(minutes, lastUpdated) {
 		if (minutes === 0) {
 			return 'Just now';
 		}
@@ -155,6 +202,20 @@ const SensorRow = props => {
 		}
 		return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
 	}
-};
+}
+
+const styles = StyleSheet.create({
+	name: {
+		color: 'rgba(0,0,0,0.87)',
+		fontSize: 16,
+		marginBottom: 2,
+	},
+	time: {
+		fontSize: 12,
+	},
+	scrollView: {
+		alignSelf: 'stretch',
+	},
+});
 
 module.exports = SensorRow;

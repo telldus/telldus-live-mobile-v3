@@ -43,6 +43,8 @@ export type Action =
     | { type: 'DEVICE_SET_STATE', payload: Object}
 
 	| { type: 'ERROR', message: Object }
+
+	| { type: 'APP_START' }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

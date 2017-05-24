@@ -36,6 +36,7 @@ import Theme from 'Theme';
 class DeviceRow extends View {
 	render() {
 		let button = null;
+		const { device } = this.props;
 		const {
 			TURNON,
 			TURNOFF,
@@ -44,66 +45,64 @@ class DeviceRow extends View {
 			UP,
 			DOWN,
 			STOP,
-		} = this.props.supportedMethods;
+		} = device.supportedMethods;
 
 		if (BELL) {
 			button = <BellButton
-				item={this.props}
-				onBell={this.props.onBell(this.props.id)}
+				onBell={this.props.onBell(device.id)}
 			/>;
 		} else if (UP || DOWN || STOP) {
 			button = <NavigationalButton
-				item={this.props}
-				onDown={this.props.onDown(this.props.id)}
-				onUp={this.props.onUp(this.props.id)}
-				onStop={this.props.onStop(this.props.id)}
+				device={device}
+				onDown={this.props.onDown(device.id)}
+				onUp={this.props.onUp(device.id)}
+				onStop={this.props.onStop(device.id)}
 			/>;
 		} else if (DIM) {
 			button = <DimmingButton
-				item={this.props}
-				onTurnOn={this.props.onTurnOn(this.props.id)}
-				onTurnOff={this.props.onTurnOff(this.props.id)}
-				onDim={this.props.onDim(this.props.id)}
-				onDimmerSlide={this.props.onDimmerSlide(this.props.id)}
+				device={device}
+				onTurnOn={this.props.onTurnOn(device.id)}
+				onTurnOff={this.props.onTurnOff(device.id)}
+				onDim={this.props.onDim(device.id)}
+				onDimmerSlide={this.props.onDimmerSlide(device.id)}
 				setScrollEnabled={this.props.setScrollEnabled}
 			/>;
 		} else if (TURNON || TURNOFF) {
 			button = <ToggleButton
-				onTurnOn={this.props.onTurnOn(this.props.id)}
-				onTurnOff={this.props.onTurnOff(this.props.id)}
-				item={this.props}
+				onTurnOn={this.props.onTurnOn(device.id)}
+				onTurnOff={this.props.onTurnOff(device.id)}
+				device={device}
 			/>;
 		} else {
-			button = <View style={{ flex: 7 }}/>;
+			button = <ToggleButton
+				onTurnOn={this.props.onTurnOn(device.id)}
+				onTurnOff={this.props.onTurnOff(device.id)}
+				device={device}
+			/>;
 		}
 
-		try {
-			return (
-				<ListItem style = {Theme.Styles.rowFront}>
-					<Container style = {styles.container}>
-						{button}
-						<View style={styles.name}>
-							<Text style = {[styles.text, {
-								opacity: this.props.name ? 1 : 0.5,
-							}]}>
-								{this.props.name ? this.props.name : '(no name)'}
-							</Text>
-						</View>
-						<View style={styles.gear}>
-							<Icon
-								name="gear"
-								size={26}
-								color="#bbbbbb"
-								onPress={() => this.props.onSettingsSelected(this.props.id)}
-							/>
-						</View>
-					</Container>
-				</ListItem>
-			);
-		} catch (e) {
-			console.log(e);
-			return ( <View /> );
-		}
+		return (
+			<ListItem style = {Theme.Styles.rowFront}>
+				<Container style = {styles.container}>
+					{button}
+					<View style={styles.name}>
+						<Text style = {[styles.text, {
+							opacity: device.name ? 1 : 0.5,
+						}]}>
+							{device.name ? device.name : '(no name)'}
+						</Text>
+					</View>
+					<View style={styles.gear}>
+						<Icon
+							name="gear"
+							size={26}
+							color="#bbbbbb"
+							onPress={() => this.props.onSettingsSelected(device.id)}
+						/>
+					</View>
+				</Container>
+			</ListItem>
+		);
 	}
 }
 
@@ -131,7 +130,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		onTurnOn: id => () => dispatch(turnOn(id)),
 		onTurnOff: id => () => dispatch(turnOff(id)),
@@ -144,4 +143,4 @@ function actions(dispatch) {
 	};
 }
 
-module.exports = connect(() => ({}), actions)(DeviceRow);
+module.exports = connect(null, mapDispatchToProps)(DeviceRow);

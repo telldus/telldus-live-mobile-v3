@@ -37,15 +37,26 @@ import { switchTab, toggleEditMode } from 'Actions';
 import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
 
+import { getUserProfile } from '../../Reducers/User';
+
 class TabsView extends View {
 	constructor(props) {
 		super(props);
 		this.eventEmitter = new EventEmitter();
+		this.onTabSelect = this.onTabSelect.bind(this);
 	}
 
 	componentDidMount() {
 		Icon.getImageSource('gear', 22, 'white').then((source) => this.setState({ settingIcon: source }));
 		Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
+
+		if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
+			if (this.props.tab !== 'dashboardTab') {
+				this.onTabSelect('dashboardTab');
+			}
+		} else {
+			this.onTabSelect('devicesTab');
+		}
 	}
 
 	onTabSelect(tab) {
@@ -162,15 +173,16 @@ class TabsView extends View {
 	}
 }
 
-function select(store) {
+function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
 		userIcon: false,
-		userProfile: store.user.userProfile || { firstname: '', lastname: '', email: '' },
+		userProfile: getUserProfile(store),
+		dashboard: store.dashboard,
 	};
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
 		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
@@ -178,4 +190,4 @@ function actions(dispatch) {
 	};
 }
 
-module.exports = connect(select, actions)(TabsView);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);

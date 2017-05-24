@@ -21,22 +21,62 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { List, ListDataSource, View } from 'BaseComponents';
-import { ListHeader, SensorRow, SensorRowHidden } from 'TabViews/SubViews';
+import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews/SubViews';
 
-import { getSensors, addToDashboard, removeFromDashboard } from 'Actions';
+import { getSensors } from 'Actions';
+import { toggleEditMode } from 'Actions';
 
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 
 class SensorsTab extends View {
+	constructor(props) {
+		super(props);
+
+		const { sections, sectionIds } = this.props.rowsAndSections;
+
+		this.state = {
+			dataSource: new ListDataSource({
+				rowHasChanged: this.rowHasChanged,
+				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+			}).cloneWithRowsAndSections(sections, sectionIds),
+		};
+
+		this.renderSectionHeader = this.renderSectionHeader.bind(this);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		const { sections, sectionIds } = nextProps.rowsAndSections;
+
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+		});
+
+		if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
+			this.props.dispatch(toggleEditMode('sensorsTab'));
+		}
+	}
+
+	rowHasChanged(r1, r2) {
+		if (r1 === r2) {
+			return false;
+		}
+		return (
+			r1.sensor !== r2.sensor ||
+			r1.inDashboard !== r2.inDashboard ||
+			r1.editMode !== r2.editMode
+		);
+	}
+
 	render() {
 		return (
 			<List
-				dataSource = {this.props.dataSource}
-				renderHiddenRow = {props => (<SensorRowHidden {...{ ...props, ...this.props }}/>)}
-				renderRow = {props => (<SensorRow {...props}/>)}
-				renderSectionHeader = {(sectionData, sectionId) => (<ListHeader sectionData={sectionData} sectionId={sectionId} gateways={this.props.gateways}/>)}
+				dataSource = {this.state.dataSource}
+				renderRow = {this.renderRow}
+				renderHiddenRow = {this.renderHiddenRow}
+				renderSectionHeader = {this.renderSectionHeader}
 				leftOpenValue = {40}
 				editMode = {this.props.editMode}
 				onRefresh = {() =>
@@ -45,32 +85,62 @@ class SensorsTab extends View {
 			/>
 		);
 	}
+
+	renderSectionHeader(sectionData, sectionId) {
+		return (
+			<DeviceHeader
+				sectionData={sectionData}
+				sectionId={sectionId}
+				gateway={this.props.gatewaysById[sectionId]}
+			/>
+		);
+	}
+
+	renderRow(row) {
+		return (
+			<SensorRow {...row}/>
+		);
+	}
+
+	renderHiddenRow(row) {
+		return (
+			<SensorRowHidden {...row}/>
+		);
+	}
 }
 
 SensorsTab.propTypes = {
-	dataSource: React.PropTypes.object,
+	rowsAndSections: React.PropTypes.object,
 };
 
-const dataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-	sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-});
+const getRowsAndSections = createSelector(
+	[
+		({ sensors }) => sensors,
+		({ gateways }) => gateways,
+		({ tabs }) => tabs.editModeSensorsTab,
+	],
+	(sensors, gateways, editMode) => {
+		const { sections, sectionIds } = parseSensorsForListView(sensors, gateways, editMode);
+		return {
+			sections,
+			sectionIds,
+		};
+	}
+);
 
-function select(store) {
-	const { sections, sectionIds } = parseSensorsForListView(store);
+function mapStateToProps(store) {
 	return {
-		dataSource: dataSource.cloneWithRowsAndSections(sections, sectionIds),
-		gateways: store.gateways,
+		rowsAndSections: getRowsAndSections(store),
+		gatewaysById: store.gateways.byId,
 		editMode: store.tabs.editModeSensorsTab,
+		tab: store.navigation.tab,
 	};
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
-		addToDashboard: (id) => dispatch(addToDashboard('sensor', id)),
-		removeFromDashboard: (id) => dispatch(removeFromDashboard('sensor', id)),
 		dispatch,
 	};
 }
 
-module.exports = connect(select, actions)(SensorsTab);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(SensorsTab);

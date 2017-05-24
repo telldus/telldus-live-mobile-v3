@@ -31,6 +31,7 @@ import TabActions from './Tabs';
 import DashboardActions from './Dashboard';
 import DimmerActions from './Dimmer';
 import JobActions from './Jobs';
+import AppStateActions from './AppState';
 
 module.exports = {
 	...DeviceActions,
@@ -43,4 +44,5 @@ module.exports = {
 	...DashboardActions,
 	...DimmerActions,
 	...JobActions,
+	...AppStateActions,
 };

@@ -21,7 +21,7 @@
 
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
-import { getUserProfile, getGateways, getSensors, getJobs } from 'Actions';
+import { getUserProfile, getGateways, getSensors, getJobs, appStart } from 'Actions';
 import { getDevices } from 'Actions/Devices';
 import { authenticateSession } from 'Actions/Websockets';
 
@@ -31,6 +31,8 @@ import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews/SubViews';
+
+import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
 class AppNavigator extends View {
 
@@ -45,6 +47,11 @@ class AppNavigator extends View {
 			this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
 			Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
 		}
+
+	}
+
+	componentWillMount() {
+		this.props.dispatch(appStart());
 	}
 
 	componentDidMount() {
@@ -90,7 +97,7 @@ function mapStateToProps(state, ownProps) {
 	return {
 		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
-		userProfile: state.user.userProfile || { firstname: '', lastname: '', email: '' },
+		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
 	};
 }

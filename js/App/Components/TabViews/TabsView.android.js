@@ -22,38 +22,140 @@
 'use strict';
 
 import React from 'react';
+import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Button, Icon, Text, View, Image } from 'BaseComponents';
+import { Text, View, Icon, Image } from 'BaseComponents';
+
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Theme from 'Theme';
 
 import DashboardTab from './DashboardTab';
 import DevicesTab from './DevicesTab';
-import GatewaysTab from './GatewaysTab';
 import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
 import { SettingsDetailModal } from 'DetailViews';
+import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
+import { getUserProfile } from '../../Reducers/User';
 import { switchTab, toggleEditMode } from 'Actions';
+
+const TabHeader = ({ fontSize, ...props }) => {
+	return <TabBar {...props} style={{ backgroundColor: Theme.Core.brandPrimary }} labelStyle={{ fontSize }} />;
+};
+
+const Gateway = ({ name, online, websocketOnline }) => {
+	let locationSrc;
+	if (!online) {
+		locationSrc = require('./img/tabIcons/location-red.png');
+	} else if (!websocketOnline) {
+		locationSrc = require('./img/tabIcons/location-orange.png');
+	} else {
+		locationSrc = require('./img/tabIcons/location-green.png');
+	}
+	return (
+		<View style={styles.gatewayContainer}>
+			<Image style={styles.gatewayIcon} source={locationSrc} />
+			<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
+		</View>
+	);
+};
+
+const NavigationHeader = ({ firstName, lastName }) => (
+	<View style = {styles.navigationHeader}>
+		<Image style={styles.navigationHeaderImage}
+			source={require('./img/telldus.png')}
+			resizeMode={'contain'} />
+		<Text style={styles.navigationHeaderText}>
+			{firstName} {lastName}
+		</Text>
+	</View>
+);
+
+const ConnectedLocations = () => (
+	<View style={styles.navigationTitle}>
+		<Image source={require('./img/tabIcons/router.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
+		<Text style={styles.navigationTextTitle}>Connected Locations</Text>
+	</View>
+);
+
+const SettingsButton = ({ onPress }) => (
+	<TouchableOpacity onPress={onPress} style={styles.navigationTitle}>
+		<Image source={require('./img/tabIcons/gear.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
+		<Text style={styles.navigationTextTitle}>Settings</Text>
+	</TouchableOpacity>
+);
+
+const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
+	return (
+		<View style = {{ flex: 1, backgroundColor: 'rgba(26,53,92,255)' }}>
+			<NavigationHeader firstName={userProfile.firstname} lastName={userProfile.lastname} />
+			<View style = {{ flex: 1, backgroundColor: 'white' }}>
+				<ConnectedLocations />
+				{gateways.allIds.map((id, index) => {
+					return (<Gateway {...gateways.byId[id]} key={index} />);
+				})}
+				<SettingsButton onPress={onOpenSetting} />
+			</View>
+		</View>
+	);
+};
 
 class TabsView extends View {
 	constructor(props) {
 		super(props);
+
 		this.state = {
 			settings: false,
+			index: 0,
+			routes: [
+				{ key: '1', title: 'Dashboard' },
+				{ key: '2', title: 'Devices' },
+				{ key: '3', title: 'Sensors' },
+				{ key: '4', title: 'Scheduler' },
+			],
 		};
+
+		this.deviceWidth = Dimensions.get('window').width;
+		this.deviceHeight = Dimensions.get('window').height;
+
+		this.renderScene = SceneMap({
+			'1': () => <DashboardTab />,
+			'2': () => <DevicesTab />,
+			'3': () => <SensorsTab />,
+			'4': () => <SchedulerTab />,
+		});
+
+		this.renderHeader = this.renderHeader.bind(this);
+		this.renderContent = this.renderContent.bind(this);
+		this.renderNavigationView = this.renderNavigationView.bind(this);
+		this.onOpenSetting = this.onOpenSetting.bind(this);
+		this.onCloseSetting = this.onCloseSetting.bind(this);
+		this.onTabSelect = this.onTabSelect.bind(this);
+		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
+		this.toggleEditMode = this.toggleEditMode.bind(this);
 	}
 
 	componentDidMount() {
 		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
+
+		if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
+			if (this.props.tab !== 'dashboardTab') {
+				this.onRequestChangeTab(0);
+			}
+		} else {
+			this.onRequestChangeTab(1);
+		}
 	}
 
 	onTabSelect(tab) {
-		this.refs.drawer.closeDrawer();
+
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
+			if (this.refs.drawer) {
+				this.refs.drawer.closeDrawer();
+			}
 		}
 	}
 
@@ -65,80 +167,32 @@ class TabsView extends View {
 		this.setState({ settings: false });
 	}
 
-	navigationView() {
-		return (
-			<View style = {{ flex: 1, backgroundColor: this.getTheme().btnSecondaryBg }}>
-				<View style = {{ height: 60, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 5, backgroundColor: this.getTheme().btnSecondaryBg, flexDirection: 'row' }}>
-					<Image style={{ width: 50, height: 50 }}
-						source={require('./img/telldus.png')}
-						resizeMode={'contain'} />
-					<Text style={{ flex: 1, color: '#e26901', fontSize: 24, textAlignVertical: 'bottom', marginLeft: 20 }}>
-						{this.props.userProfile.firstname} {this.props.userProfile.lastname}
-					</Text>
-				</View>
-				<View style = {{ flex: 1, backgroundColor: this.getTheme().btnSecondaryBg }}>
-					<Button name = "dashboard"
-						backgroundColor = {this.getTheme().btnSecondaryBg}
-						size={26}
-						style = {{ padding: 6, minWidth: 100 }}
-						onPress={this.onTabSelect.bind(this, 'dashboardTab')}>
-						<Text style={{ color: 'white', fontSize: 18 }}>Dashboard</Text>
-					</Button>
-					<Button name = "toggle-on"
-						backgroundColor = {this.getTheme().btnSecondaryBg}
-						size={26}
-						style = {{ padding: 6, minWidth: 100 }}
-						onPress={this.onTabSelect.bind(this, 'devicesTab')}>
-						<Text style={{ color: 'white', fontSize: 18 }}>Devices</Text>
-					</Button>
-					<Button name = "wifi"
-						backgroundColor = {this.getTheme().btnSecondaryBg}
-						size={26}
-						style = {{ padding: 6, minWidth: 100 }}
-						onPress={this.onTabSelect.bind(this, 'sensorsTab')}>
-						<Text style={{ color: 'white', fontSize: 18 }}>Sensors</Text>
-					</Button>
-					<Button name = "clock-o"
-						backgroundColor = {this.getTheme().btnSecondaryBg}
-						size={26}
-						style = {{ padding: 6, minWidth: 100 }}
-						onPress={this.onTabSelect.bind(this, 'schedulerTab')}>
-						<Text style={{ color: 'white', fontSize: 18 }}>Scheduler</Text>
-					</Button>
-					<Button name = "home"
-						backgroundColor = {this.getTheme().btnSecondaryBg}
-						size={26}
-						style = {{ padding: 6, minWidth: 100 }}
-						onPress={this.onTabSelect.bind(this, 'gatewaysTab')}>
-						<Text style={{ color: 'white', fontSize: 18 }}>Connected Locations</Text>
-					</Button>
-					<Button name = "gear"
-						backgroundColor = {this.getTheme().btnSecondaryBg}
-						size={26}
-						style = {{ padding: 6, minWidth: 100 }}
-						onPress = {this.onOpenSetting.bind(this)}>
-						<Text style={{ color: 'white', fontSize: 18 }}>Settings</Text>
-					</Button>
-				</View>
-			</View>
-		);
+	onRequestChangeTab(index) {
+		this.setState({ index });
+		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
+		this.onTabSelect(tabNames[index]);
+	}
+
+	renderHeader(props) {
+		return <TabHeader {...props} fontSize={this.deviceWidth / 35} />;
 	}
 
 	renderContent() {
-		switch (this.props.tab) {
-			case 'dashboardTab':
-				return <DashboardTab />;
-			case 'devicesTab':
-				return <DevicesTab />;
-			case 'sensorsTab':
-				return <SensorsTab />;
-			case 'schedulerTab':
-				return <SchedulerTab />;
-			case 'gatewaysTab':
-				return <GatewaysTab />;
-			default:
-				return <DashboardTab />;
-		}
+		return <TabViewAnimated style={{ flex: 1 }}
+			navigationState={this.state}
+			renderScene = {this.renderScene}
+			renderHeader = {this.renderHeader}
+			onRequestChangeTab = {this.onRequestChangeTab}
+			/>;
+	}
+
+	renderNavigationView() {
+		return <NavigationView
+			gateways={this.props.gateways}
+			userProfile={this.props.userProfile}
+			theme={this.getTheme()}
+			onOpenSetting={this.onOpenSetting}
+		/>;
 	}
 
 	render() {
@@ -146,12 +200,13 @@ class TabsView extends View {
 			return false;
 		}
 
+		// TODO: Refactor: Split this code to smaller components
 		return (
 			<DrawerLayoutAndroid
 				ref = "drawer"
-				drawerWidth = {280}
+				drawerWidth = {250}
 				drawerPosition = {DrawerLayoutAndroid.positions.Left}
-				renderNavigationView = {() => this.navigationView()}
+				renderNavigationView = {this.renderNavigationView}
 			>
 				<View style = {{ flex: 1 }} >
 					<View style = {{
@@ -169,7 +224,7 @@ class TabsView extends View {
 								iconColor = {Theme.Core.inverseTextColor}
 								title = "Telldus Live!"
 								actions = {[{ title: 'Settings', icon: this.state.starIcon, show: 'always' }]}
-								onActionSelected = {this._toggleEditMode.bind(this)}
+								onActionSelected = {this.toggleEditMode}
 								onIconClicked = {() => this.refs.drawer.openDrawer()}
 							/>
 						) :
@@ -186,11 +241,11 @@ class TabsView extends View {
 						)
 					}
 
-					<View key={this.props.tab}>
+					<View>
 						{this.renderContent()}
 						{
 							this.state.settings ?
-								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting.bind(this)} /> :
+								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting} /> :
 								null
 						}
 					</View>
@@ -199,22 +254,84 @@ class TabsView extends View {
 		);
 	}
 
-	_toggleEditMode(position) {
+	toggleEditMode(position) {
 		this.props.onToggleEditMode(this.props.tab);
 	}
 }
 
-function select(store) {
+const styles = StyleSheet.create({
+	navigationHeader: {
+		height: 60,
+		marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+		marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+		padding: 5,
+		flexDirection: 'row',
+	},
+	navigationHeaderImage: {
+		width: 46,
+		height: 46,
+	},
+	navigationHeaderText: {
+		flex: 1,
+		color: '#e26901',
+		fontSize: 24,
+		textAlignVertical: 'center',
+		marginLeft: 20,
+	},
+	navigationTitle: {
+		flexDirection: 'row',
+		height: 30,
+		marginLeft: 10,
+		marginTop: 20,
+		marginBottom: 10,
+	},
+	navigationTextTitle: {
+		color: 'rgba(26,53,92,255)',
+		fontSize: 18,
+		marginLeft: 10,
+	},
+	navigationTitleImage: {
+		width: 28,
+		height: 28,
+	},
+	settingsButton: {
+		padding: 6,
+		minWidth: 100,
+	},
+	settingsText: {
+		color: 'white',
+		fontSize: 18,
+	},
+	gatewayContainer: {
+		marginLeft: 10,
+		height: 20,
+		flexDirection: 'row',
+		marginTop: 10,
+		marginBottom: 10,
+	},
+	gateway: {
+		fontSize: 14,
+		color: 'rgba(110,110,110,255)',
+		marginLeft: 10,
+		maxWidth: 220,
+	},
+	gatewayIcon: {
+		width: 20,
+		height: 20,
+	},
+});
+
+function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
-		devices: store.devices.devices,
-		gateways: store.gateways.gateways,
-		sensors: store.sensors.sensors,
-		userProfile: store.user.userProfile || { firstname: '', lastname: '', email: '' },
+		userProfile: getUserProfile(store),
+		dashboard: store.dashboard,
+		gateways: store.gateways,
+		store,
 	};
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
 		onTabSelect: (tab) => dispatch(switchTab(tab)),
 		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
@@ -222,4 +339,4 @@ function actions(dispatch) {
 	};
 }
 
-module.exports = connect(select, actions)(TabsView);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);

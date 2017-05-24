@@ -41,15 +41,22 @@ function dimmer(state: State = initialState, action: Action): State {
 			name: action.name,
 			value: action.value,
 		};
-	} else if (action.type === 'HIDE_DIMMER_POPUP') {
+	}
+	if (action.type === 'HIDE_DIMMER_POPUP') {
 		return {
 			...state,
 			show: false,
 		};
-	} else if (action.type === 'SET_DIMMER_VALUE') {
+	}
+	if (action.type === 'SET_DIMMER_VALUE') {
 		return {
 			...state,
-			value: action.value,
+			value: action.payload.value,
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...initialState,
 		};
 	}
 

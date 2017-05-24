@@ -46,6 +46,9 @@ class VerticalSlider extends View {
 			step: 1,
 			displayedValue: getSliderLabel(this.props.value),
 		};
+		this.activeSlider = false;
+
+		this.layoutView = this.layoutView.bind(this);
 	}
 
 	componentWillMount() {
@@ -55,15 +58,15 @@ class VerticalSlider extends View {
 			onPanResponderGrant: this.handlePanResponderGrant,
 			onPanResponderMove: this.handlePanResponderMove,
 			onPanResponderRelease: this.handlePanResponderEnd,
-			onPanResponderTerminationRequest: this.handlePanResponderRequestEnd,
+			onPanResponderTerminationRequest: this.handlePanResponderEnd,
 			onPanResponderTerminate: this.handlePanResponderEnd,
 		});
 	}
 
 	componentWillReceiveProps(nextProps) {
 		const newValue = nextProps.value;
-		this.setCurrentValue(newValue);
-		this.onValueChange(this.state.value.__getValue());
+		this.setCurrentValueAnimate(newValue);
+		this.onValueChange(newValue);
 	}
 
 	handleStartShouldSetPanResponder = (e: Object, /*gestureState: Object*/): boolean => {
@@ -76,42 +79,92 @@ class VerticalSlider extends View {
 		return false;
 	}
 
-	handlePanResponderGrant = (/*e: Object, gestureState: Object*/) => {
-		this.previousBottom = this.getThumbBottom(this.state.value.__getValue());
-		if (this.props.onSlidingStart) {
-			this.props.onSlidingStart(this.props.item.name, this.state.value.__getValue());
+	handlePanResponderGrant = (e: Object, gestureState: Object) => {
+		this.longPressTimeout = setTimeout(this.startSliding, 500);
+
+		if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
+			this.props.onLeftStart();
+			this.pressOnLeft = true;
+			this.pressOnRight = false;
+		} else {
+			this.props.onRightStart();
+			this.pressOnLeft = false;
+			this.pressOnRight = true;
 		}
+	}
+
+	startSliding = () => {
+		const { item, onLeftEnd, onRightEnd, onSlidingStart } = this.props;
+		this.previousBottom = this.getThumbBottom(this.state.value.__getValue());
+		if (onSlidingStart) {
+			onSlidingStart(item.name, this.state.value.__getValue());
+		}
+		this.activeSlider = true;
+
+		onLeftEnd();
+		onRightEnd();
 	}
 
 	handlePanResponderMove = (e: Object, gestureState: Object) => {
-		if (this.parentScrollEnabled) {
-			// disable scrolling on the listView parent
-			this.parentScrollEnabled = false;
-			this.props.setScrollEnabled && this.props.setScrollEnabled(false);
+		if (this.activeSlider) {
+			if (this.parentScrollEnabled) {
+				// disable scrolling on the listView parent
+				this.parentScrollEnabled = false;
+				this.props.setScrollEnabled && this.props.setScrollEnabled(false);
+			}
+
+			this.setCurrentValue(this.getValue(gestureState));
+
+			if (this.props.onValueChange) {
+				this.props.onValueChange(this.state.value.__getValue());
+			}
+
+			// update the progress text
+			this.onValueChange(this.state.value.__getValue());
+		} else {
+
 		}
 
-		this.setCurrentValue(this.getValue(gestureState));
-
-		if (this.props.onValueChange) {
-			this.props.onValueChange(this.state.value.__getValue());
-		}
-
-        // update the progress text
-		this.onValueChange(this.state.value.__getValue());
+		clearTimeout(this.longPressTimeout);
 	}
 
 	handlePanResponderEnd = (e: Object, gestureState: Object) => {
-        // re-enable scrolling on listView parent
-		if (!this.parentScrollEnabled) {
-			this.parentScrollEnabled = true;
-			this.props.setScrollEnabled && this.props.setScrollEnabled(true);
+		if (this.activeSlider) {
+			// re-enable scrolling on listView parent
+			if (!this.parentScrollEnabled) {
+				this.parentScrollEnabled = true;
+				this.props.setScrollEnabled && this.props.setScrollEnabled(true);
+			}
+
+			this.setCurrentValue(this.getValue(gestureState));
+
+			if (this.props.onSlidingComplete) {
+				this.props.onSlidingComplete(this.state.value.__getValue());
+			}
+		} else if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
+			if (this.pressOnLeft) {
+				this.props.onLeft();
+			}
+
+		} else if (this.pressOnRight) {
+			this.props.onRight();
+		}
+		this.pressOnLeft = this.pressOnRight = false;
+		this.props.onLeftEnd();
+		this.props.onRightEnd();
+		this.activeSlider = false;
+		clearTimeout(this.longPressTimeout);
+	}
+
+	handlePanResponderTerminate = (e: Object, gestureState: Object) => {
+		if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
+			this.props.onLeftEnd();
+		} else {
+			this.props.onRightEnd();
 		}
 
-		this.setCurrentValue(this.getValue(gestureState));
-
-		if (this.props.onSlidingComplete) {
-			this.props.onSlidingComplete(this.state.value.__getValue());
-		}
+		this.activeSlider = false;
+		clearTimeout(this.longPressTimeout);
 	}
 
 	getThumbBottom(value) {
@@ -127,9 +180,13 @@ class VerticalSlider extends View {
 		this.state.value.setValue(value);
 	}
 
+	setCurrentValueAnimate(value) {
+		Animated.timing(this.state.value, { toValue: value, duration: 250 }).start();
+	}
+
 	getValue(gestureState) {
 		const length = this.state.containerHeight - this.props.thumbHeight;
-		const thumbBottom = this.previousBottom - gestureState.dy;
+		const thumbBottom = this.previousBottom - gestureState.dy / this.props.sensitive;
 		const ratio = thumbBottom / length;
 
 		if (this.state.step) {
@@ -158,20 +215,22 @@ class VerticalSlider extends View {
 
 	render() {
 		const { minimumValue, maximumValue, value, containerHeight } = this.state;
-		const { thumbHeight } = this.props;
+		const { thumbWidth, thumbHeight } = this.props;
 		const thumbBottom = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, thumbHeight - containerHeight],
 		});
+
 		return (
             <View style={[this.props.style]}
-                onLayout={this.layoutView.bind(this)}>
+                onLayout={this.layoutView} {...this.panResponder.panHandlers}>
                 <Animated.View style={[styles.thumb, {
-	width: this.state.containerWidth,
+	width: thumbWidth,
 	height: thumbHeight,
+	left: (this.state.containerWidth - thumbWidth) / 2,
 	transform: [{ translateY: thumbBottom }],
 }]}
-                    {...this.panResponder.panHandlers}>
+                    >
                     <Text
                         ellipsizeMode="middle"
                         numberOfLines={1}
@@ -206,15 +265,25 @@ const styles = StyleSheet.create({
 VerticalSlider.propTypes = {
 	setScrollEnabled: PropTypes.func,
 	thumbHeight: PropTypes.number,
+	thumbWidth: PropTypes.number,
+	sensitive: PropTypes.number,
 	value: PropTypes.number,
 	onSlidingStart: PropTypes.func,
 	onSlidingComplete: PropTypes.func,
 	onValueChange: PropTypes.func,
+	onLeftStart: PropTypes.func,
+	onLeftEnd: PropTypes.func,
+	onLeft: PropTypes.func,
+	onRightStart: PropTypes.func,
+	onRightEnd: PropTypes.func,
+	onRight: PropTypes.func,
 };
 
 VerticalSlider.defaultProps = {
 	thumbHeight: 12,
+	thumbWidth: 36,
 	fontSize: 10,
+	sensitive: 1,
 	value: 0,
 };
 

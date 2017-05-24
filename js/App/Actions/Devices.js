@@ -34,6 +34,7 @@ export function getDevices(): ThunkAction {
 			pathname: '/devices/list',
 			query: {
 				supportedMethods,
+				includeIgnored: 1,
 			},
 		});
 		const payload = {
@@ -57,8 +58,8 @@ export function processWebsocketMessageForDevice(action, data): Action {
 	switch (action) {
 		case 'setState':
 			return {
-				...data,
 				type: 'DEVICE_SET_STATE',
+				payload: data,
 			};
 		default:
 			return {

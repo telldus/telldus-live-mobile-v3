@@ -62,8 +62,8 @@ class LoginForm extends View {
 				<TextInput
 					style={styles.formField}
 					onChangeText={username => this.setState({ username, notificationText: false })}
-					value={this.state.username}
 					placeholder="Username"
+					keyboardType="email-address"
 					autoCapitalize = "none"
 					autoCorrect = {false}
 					placeholderTextColor = "#ffffff80"
@@ -72,7 +72,6 @@ class LoginForm extends View {
 					style={styles.formField}
 					onChangeText={password => this.setState({ password, notificationText: false })}
 					placeholder="Password"
-					value={this.state.password}
 					secureTextEntry={true}
 					autoCapitalize = "none"
 					autoCorrect = {false}
@@ -167,9 +166,9 @@ const styles = StyleSheet.create({
 		height: 35,
 		padding: 7,
 		marginTop: 10,
-		marginLeft: 100,
-		marginRight: 100,
-		minWidth: 150,
+		marginLeft: 50,
+		marginRight: 50,
+		minWidth: 200,
 		borderColor: '#ccc',
 		borderWidth: 1,
 		borderRadius: 3,
@@ -186,10 +185,10 @@ const styles = StyleSheet.create({
 	},
 });
 
-function select(store) {
+function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
 		accessToken: store.user.accessToken,
 	};
 }
-module.exports = connect(select)(LoginScreen);
+module.exports = connect(mapStateToProps)(LoginScreen);

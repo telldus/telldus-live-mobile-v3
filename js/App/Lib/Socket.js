@@ -28,69 +28,102 @@
  * A webconnection is connected directly to the server where the TellStick is connected to.
  */
 
-import formatTime from './formatTime';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+
+// Websocket wrapper around ReconnectingWebSocket
+//
+// TelldusWebsocket can be closed and reopened without the callee having
+// to reassign event listeners.
+// This allows us to close the connection when the app goes to the background and
+// open the connection again when it goes to the front easily.
 
 // TODO: figure out whether we want to listen for appState to close the connection
 // https://facebook.github.io/react-native/docs/appstate.html
-// import { AppState } from 'react-native';
-// AppState.addEventListener('change', (appState) => {
-// 	console.log('***** AppState state changed', appState)
-// 	if (appState === 'active') {
-// 		Object.keys(websocketConnections).forEach(gatewayId => {
-// 			const websocketConnection = websocketConnections[gatewayId];
-// 			if (websocketConnection.websocket) {
-// 				console.log('reopening websocket');
-// 				websocketConnection.websocket.open();
-// 			}
-// 		});
-// 	}
-// 	if (appState === 'inactive' || appState === 'background') {
-// 		Object.keys(websocketConnections).forEach(gatewayId => {
-// 			const websocketConnection = websocketConnections[gatewayId];
-// 			if (websocketConnection.websocket) {
-// 				console.log('closing websocket');
-// 				websocketConnection.websocket.close();
-// 			}
-// 		});
-// 	}
-// });
+import { AppState } from 'react-native';
 
-let websocketConnections = {};
+export default class TelldusWebsocket {
+	constructor(gatewayId, websocketUrl) {
+		this.gatewayId = gatewayId;
+		this.websocketUrl = websocketUrl;
 
-export function addConnection(gatewayId, websocketUrl) {
-	if (websocketConnections[gatewayId] && websocketConnections[gatewayId].websocket) {
-		websocketConnections[gatewayId].websocket.close();
+		this.open();
+		this._listenForAppStateChange();
 	}
-	websocketConnections[gatewayId] = {
-		url: websocketUrl,
-		websocket: new ReconnectingWebSocket(websocketUrl),
-	};
-	return websocketConnections[gatewayId].websocket;
-}
 
-export function sendMessage(gatewayId, message) {
-	if (!websocketConnections[gatewayId] || !websocketConnections[gatewayId].websocket) {
-		return console.error('cannot send websocket message');
-	}
-	const formattedTime = formatTime(new Date());
-	const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
-	try {
-		console.groupCollapsed(title_prefix);
-		console.log(message);
-		console.groupEnd();
-	} catch (e) {
-		console.log(message);
-	}
-	websocketConnections[gatewayId].websocket.send(message);
-}
-
-export function closeAllConnections() {
-	Object.keys(websocketConnections).forEach(_gatewayId => {
-		const websocketConnection = websocketConnections[_gatewayId];
-		if (websocketConnection.websocket) {
-			websocketConnection.websocket.close();
+	open() {
+		if (this.websocket && this.websocket.readyState === this.websocket.OPEN) {
+			return console.log('socket already open');
 		}
-		delete websocketConnections[_gatewayId];
-	});
+		if (this.websocket && this.websocket.readyState === this.websocket.OPENING) {
+			return console.log('socket already opening');
+		}
+
+		this.websocket = new ReconnectingWebSocket(this.websocketUrl);
+
+		// bind any listeners on TelldusWebsocket to this.socket
+		this._addListeners();
+
+		// expose websocket.send as this.send
+		this.send = this.websocket.send;
+
+		this._onAppStateChange = this._onAppStateChange.bind(this);
+	}
+
+	close() {
+		if (!this.websocket) {
+			return console.error('there is no websocket to close');
+		}
+		if (this.websocket.readyState === this.websocket.CLOSE) {
+			return console.log('socket already closed');
+		}
+		if (this.websocket.readyState === this.websocket.CLOSING) {
+			return console.log('socket already closing');
+		}
+
+		this.websocket.close(null, null, {
+			keepClosed: true,
+			// fastClose: true,
+		});
+	}
+
+	// reconnect to a different websocket url
+	setUrl(url) {
+		this.websocketUrl = url;
+		this.close();
+		this.open();
+	}
+
+	destroy() {
+		this.close();
+		AppState.removeEventListener('change', this._onAppStateChange);
+		delete this.websocket;
+	}
+
+	_addListeners() {
+		this._addListener('onopen');
+		this._addListener('onmessage');
+		this._addListener('onerror');
+		this._addListener('onclose');
+	}
+
+	_addListener(eventType) {
+		const noop = event => console.log('nooping', event);
+		this.websocket[eventType] = event => {
+			const fn = this[eventType] || noop;
+			fn(event);
+		};
+	}
+
+	_listenForAppStateChange() {
+		AppState.addEventListener('change', this._onAppStateChange);
+	}
+
+	_onAppStateChange(appState) {
+		if (appState === 'active') {
+			this.open();
+		}
+		if (appState === 'background') {
+			this.close();
+		}
+	}
 }

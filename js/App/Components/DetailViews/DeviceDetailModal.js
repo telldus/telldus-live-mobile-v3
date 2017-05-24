@@ -38,68 +38,68 @@ class DeviceDetailModal extends View {
 		this.onStarButtonSelected = this.onStarButtonSelected.bind(this);
 	}
 
-	onStarButtonSelected(inDashboard) {
-		if (inDashboard === true) {
-			this.props.onRemoveFromDashboard(this.props.deviceId);
+	onStarButtonSelected() {
+		if (this.props.inDashboard) {
+			this.props.onRemoveFromDashboard(this.props.device.id);
 		} else {
-			this.props.onAddToDashboard(this.props.deviceId);
+			this.props.onAddToDashboard(this.props.device.id);
 		}
 	}
 
 	render() {
-		let device = this.props.store.devices.find(item => item.id === this.props.deviceId);
-		let gateway = this.props.store.gateways.find(item => item.id === device.clientId);
-		let inDashboard = this.props.store.dashboard.devices.indexOf(this.props.deviceId) >= 0 ? true : false;
+		const { device, inDashboard, gateway, children } = this.props;
+
+		// TODO: move these functions, either to Reducer or Connect
 
 		let addToDashboardView = null;
 		if (inDashboard === true) {
 			addToDashboardView = (
-                <View style={styles.textGuide}>
-                    <Text style={styles.textDeviceShownOnTheDashboard}>
-                        {'Device is shown on the dashboard'}
-                    </Text>
-                    <Text style={styles.textTapToRemove}>
-                        {'Tap to remove'}
-                    </Text>
-                </View>
-            );
+				<View style={styles.textGuide}>
+					<Text style={styles.textDeviceShownOnTheDashboard}>
+						{'Device is shown on the dashboard'}
+					</Text>
+					<Text style={styles.textTapToRemove}>
+						{'Tap to remove'}
+					</Text>
+				</View>
+			);
 		} else {
 			addToDashboardView = (
-                <View style={styles.textGuide}>
-                    <Text style={styles.textDeviceShownOnTheDashboard}>
-                        {'Tap to show device on dashboard'}
-                    </Text>
-                </View>
-            );
+				<View style={styles.textGuide}>
+					<Text style={styles.textDeviceShownOnTheDashboard}>
+						{'Tap to show device on dashboard'}
+					</Text>
+				</View>
+			);
 		}
 
 		return (
-            <Modal isVisible={this.state.isVisible}>
-                <Container style={styles.container}>
-                    <View style={styles.header}>
-                        <Icon name="wifi" size={26} color="white" style={{
-	flex: 1, marginLeft: 8,
-}}/>
-                        <Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
-                            {device.name}
-                        </Text>
-                        <Icon name="close" size={26} color="white" style={{ flex: 1 }} onPress={this.props.onCloseSelected} />
-                    </View>
-                    <View style={styles.body}>
-                        <Text style={styles.textLocation}>
-                            {`Location: ${gateway.name}`}
-                        </Text>
-                        {this.props.children}
-                        <TouchableOpacity
-                            onPress={() => this.onStarButtonSelected(inDashboard)}
+			<Modal isVisible={this.state.isVisible}>
+				<Container style={styles.container}>
+					<View style={styles.header}>
+						<Icon name="wifi" size={26} color="white" style={{
+							flex: 1, marginLeft: 8,
+						}}/>
+						<Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
+							{device.name}
+						</Text>
+						<Icon name="close" size={26} color="white" style={{ flex: 1 }} onPress={this.props.onCloseSelected} />
+					</View>
+					<View style={styles.body}>
+						<Text style={styles.textLocation}>
+							{`Location: ${gateway.name}`}
+						</Text>
+						{children}
+						<TouchableOpacity
+							onPress={this.onStarButtonSelected}
 							style={styles.bottom} >
-                            <Icon name="star" size={18} color="orange"
-                                style={{ opacity: inDashboard ? 1.0 : 0.6 }} />
-                            {addToDashboardView}
-                        </TouchableOpacity>
-                    </View>
-                </Container>
-            </Modal>
+							<Icon name="star" size={18} color="orange"
+								style={{ opacity: inDashboard ? 1.0 : 0.6 }} />
+							{addToDashboardView}
+						</TouchableOpacity>
+					</View>
+				</Container>
+			</Modal>
 		);
 	}
 
@@ -109,7 +109,7 @@ DeviceDetailModal.propTypes = {
 	onCloseSelected: React.PropTypes.func.isRequired,
 	onAddToDashboard: React.PropTypes.func.isRequired,
 	onRemoveFromDashboard: React.PropTypes.func.isRequired,
-	deviceId: React.PropTypes.number.isRequired,
+	device: React.PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -160,18 +160,19 @@ const styles = StyleSheet.create({
 	},
 });
 
-function select(store) {
+function mapStateToProps(state, props) {
 	return {
-		store,
+		inDashboard: !!state.dashboard.devicesById[props.device.id],
+		gateway: state.gateways.byId[props.device.clientId],
 	};
 }
 
-function actions(dispatch) {
+function mapDispatchToProps(dispatch) {
 	return {
-		onAddToDashboard: (id) => dispatch(addToDashboard('device', id)),
-		onRemoveFromDashboard: (id) => dispatch(removeFromDashboard('device', id)),
+		onAddToDashboard: id => dispatch(addToDashboard('device', id)),
+		onRemoveFromDashboard: id => dispatch(removeFromDashboard('device', id)),
 		dispatch,
 	};
 }
 
-module.exports = connect(select, actions)(DeviceDetailModal);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(DeviceDetailModal);

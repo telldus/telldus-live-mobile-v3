@@ -22,6 +22,7 @@
 'use strict';
 
 import type { Action } from '../actions/types';
+import { REHYDRATE } from 'redux-persist/constants';
 
 import moment from 'moment-timezone';
 
@@ -61,46 +62,53 @@ function reduceJob(state: State = jobInitialState, action: Action): State {
 }
 
 export default function reduceJobs(state: State = initialState, action: Action): State {
+	if (action.type === REHYDRATE) {
+		console.log('rehydrating jobs');
+		if (action.payload.jobs) {
+			return [
+				...state,
+				...action.payload.jobs,
+			];
+		}
+		return [ ...state ];
+	}
 	if (action.type === 'RECEIVED_JOBS') {
 		return action.payload.job.map(jobState =>
 			reduceJob(jobState, action)
 		);
 	}
+	if (action.type === 'LOGGED_OUT') {
+		return [];
+	}
 
 	return state;
 }
 
-export function parseJobsForListView(jobs = [], gateways = [], devices = []) {
+export function parseJobsForListView(jobs = [], gateways = {}, devices = {}) {
 	if (!jobs || !jobs.length) {
 		return {
-			items: {},
+			sections: {},
 			sectionIds: [],
 		};
 	}
 
-	// TODO: move lookup to its reducer
-	const gatewaysById = gateways.reduce((memo, gateway) => ({
-		...memo,
-		[gateway.id]: gateway,
-	}), {});
-	// TODO: move lookup to its reducer
-	const devicesById = devices.reduce((memo, device) => ({
-		...memo,
-		[device.id]: device,
-	}), {});
-
 	const todayInWeek = parseInt(moment().format('d'), 10);
 	const sectionIds = range(0, 8);
-	let items = sectionIds.reduce((memo, day) => ({
+	let sections = sectionIds.reduce((memo, day) => ({
 		...memo,
 		[day]: [],
 	}), {});
 
 	jobs.forEach(job => {
-		// offset
 		let tempDay;
-		const device = devicesById[job.deviceId];
-		const gateway = gatewaysById[device.clientId];
+		const device = devices.byId[job.deviceId];
+		if (!device) {
+			return;
+		}
+		const gateway = gateways.byId[device.clientId];
+		if (!gateway) {
+			return;
+		}
 		const { timezone } = gateway;
 
 		if (job.type === 'sunrise') {
@@ -121,25 +129,27 @@ export function parseJobsForListView(jobs = [], gateways = [], devices = []) {
 
 		job.effectiveHour = tempDay.format('HH');
 		job.effectiveMinute = tempDay.format('mm');
+		job.device = device;
+		job.gateway = gateway;
 
 		const now = moment().tz(timezone);
 		job.weekdays.forEach(day => {
 			if (day !== todayInWeek) {
 				const relativeDay = (7 + day - todayInWeek) % 7; // 7 % 7 = 0
-				return items[relativeDay].push(job);
+				return sections[relativeDay].push(job);
 			}
 
 			const nowInMinutes = now.hours() * 60 + now.minutes();
 			const jobInMinutes = parseInt(job.effectiveHour, 10) * 60 + parseInt(job.effectiveMinute, 10);
 			if (jobInMinutes >= nowInMinutes) {
-				items[0].push(job); // today
+				sections[0].push(job); // today
 			} else {
-				items[7].push(job); // today, next week
+				sections[7].push(job); // today, next week
 			}
 		});
 	});
 
-	items = mapValues(items, _jobs => {
+	sections = mapValues(sections, _jobs => {
 		_jobs.sort((a, b) => {
 			const totalA = parseInt(a.effectiveHour, 10) * 60 + parseInt(a.effectiveMinute, 10);
 			const totalB = parseInt(b.effectiveHour, 10) * 60 + parseInt(b.effectiveMinute, 10);
@@ -156,9 +166,9 @@ export function parseJobsForListView(jobs = [], gateways = [], devices = []) {
 		return _jobs;
 	});
 
-	const filteredSectionIds = filter(sectionIds, sectionId => items[sectionId].length);
+	const filteredSectionIds = filter(sectionIds, sectionId => sections[sectionId].length);
 	return {
-		items,
+		sections,
 		sectionIds: filteredSectionIds,
 	};
 }

@@ -7,7 +7,6 @@ import React, {
 import {
 	Animated,
 	StyleSheet,
-	TouchableOpacity,
 	View,
 } from 'react-native';
 
@@ -73,6 +72,7 @@ class SwipeRow extends Component {
 	}
 
 	onRowPress() {
+		console.log('onRowPress');
 		if (this.props.onRowPress) {
 			this.props.onRowPress();
 		} else if (this.props.closeOnRowPress) {
@@ -197,14 +197,10 @@ class SwipeRow extends Component {
 		}
 
 		return (
-			<TouchableOpacity
-				activeOpacity={1}
-				onPress={_ => this.onRowPress()}
-			>
+			<View>
 				{this.props.children[1]}
-			</TouchableOpacity>
+			</View>
 		);
-
 	}
 
 	renderRowContent() {

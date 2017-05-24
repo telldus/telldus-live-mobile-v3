@@ -1,6 +1,6 @@
 {
   "name": "TelldusLiveApp",
-  "version": "3.0.0",
+  "version": "3.2.0",
   "private": true,
   "scripts": {
     "lint": "eslint js",
@@ -42,6 +42,7 @@
     "react-native-modal": "^2.3.2",
     "react-native-orientation": "^1.17.0",
     "react-native-scrollable-tab-view": "^0.7.0",
+    "react-native-slider": "^0.9.1",
     "react-native-swipe-list-view": "^0.3.2",
     "react-native-swipeout": "git+https://github.com/dancormier/react-native-swipeout.git",
     "react-native-uuid": "^1.4.9",
@@ -54,7 +55,7 @@
     "redux-logger": "~2.7.4",
     "redux-persist": "~4.0.1",
     "redux-thunk": "~2.1.0",
-    "reselect": "~2.5.4",
+    "reselect": "^2.5.4",
     "url": "^0.11.0"
   },
   "devDependencies": {
@@ -66,7 +67,8 @@
     "eslint": "~3.12.2",
     "eslint-plugin-react": "^6.10.3",
     "flow-bin": "^0.35.0",
-    "react-mixin": "^3.0.5"
+    "react-mixin": "^3.0.5",
+    "react-native-tab-view": "0.0.65"
   },
   "engines": {
     "node": ">=5.0",

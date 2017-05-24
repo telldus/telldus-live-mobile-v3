@@ -47,6 +47,18 @@ function toggleEditMode(state: State = initialState, action: Action): State {
 			};
 		}
 	}
+	if (action.type === 'APP_START') {
+		return {
+			...state,
+			editModeDevicesTab: false,
+			editModeSensorsTab: false,
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...initialState,
+		};
+	}
 
 	return state;
 }
