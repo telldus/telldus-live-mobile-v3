@@ -26,7 +26,7 @@ import { apiServer } from 'Config';
 import { publicKey, privateKey } from 'Config';
 
 import LiveApi from 'LiveApi';
-import { closeAllConnections } from '../Lib/Socket';
+import { closeAllConnections } from 'Actions/Websockets';
 
 async function loginToTelldus(username, password): Promise<Action> {
 

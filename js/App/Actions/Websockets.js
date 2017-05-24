@@ -22,7 +22,7 @@
 'use strict';
 
 import { v4 } from 'react-native-uuid';
-import { addConnection, sendMessage } from '../Lib/Socket';
+import TelldusWebsocket from '../Lib/Socket';
 
 import { processWebsocketMessageForSensor } from 'Actions/Sensors';
 import { processWebsocketMessageForDevice } from 'Actions/Devices';
@@ -31,7 +31,12 @@ import formatTime from '../Lib/formatTime';
 
 import LiveApi from 'LiveApi';
 
-// TODO: move sessionId to store
+// TODO: expose websocket lib via Provider component, so that it is bound and so that we have access to store
+
+// TODO: move connection lookup to redux state
+const websocketConnections = {};
+
+// TODO: move sessionId to redux state
 const sessionId = v4();
 export const authenticateSession = () => (dispatch, getState) => {
 	const payload = {
@@ -51,7 +56,12 @@ export const authenticateSession = () => (dispatch, getState) => {
 };
 
 export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
-	const websocket = addConnection(gatewayId, websocketUrl);
+	const websocket = new TelldusWebsocket(gatewayId, websocketUrl);
+	websocketConnections[gatewayId] = {
+		url: websocketUrl,
+		websocket: websocket,
+	};
+
 	websocket.onopen = () => {
 		const formattedTime = formatTime(new Date());
 		const message = `websocket_opened @ ${formattedTime} (gateway ${gatewayId})`;
@@ -169,4 +179,33 @@ function authoriseWebsocket(gatewayId) {
 
 function addWebsocketFilter(gatewayId, module, action) {
 	sendMessage(gatewayId, `{"module":"filter","action":"accept","data":{"module":"${module}","action":"${action}"}}`);
+}
+
+function sendMessage(gatewayId, message) {
+	if (!websocketConnections[gatewayId] || !websocketConnections[gatewayId].websocket) {
+		return console.error('trying to send message for unknown gateway', {
+			gatewayId,
+			message,
+		});
+	}
+	const formattedTime = formatTime(new Date());
+	const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
+	try {
+		console.groupCollapsed(title_prefix);
+		console.log(message);
+		console.groupEnd();
+	} catch (e) {
+		console.log(message);
+	}
+	websocketConnections[gatewayId].websocket.send(message);
+}
+
+export function closeAllConnections() {
+	Object.keys(websocketConnections).forEach(_gatewayId => {
+		const websocketConnection = websocketConnections[_gatewayId];
+		if (websocketConnection.websocket) {
+			websocketConnection.websocket.destroy();
+		}
+		delete websocketConnections[_gatewayId];
+	});
 }
