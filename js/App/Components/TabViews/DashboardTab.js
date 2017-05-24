@@ -31,7 +31,7 @@ import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } f
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
 
-import { GenericDashboardTile, DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
+import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, ToggleDashboardTile, SensorDashboardTile } from 'TabViews/SubViews';
 import { SettingsDetailModal } from 'DetailViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
@@ -232,10 +232,13 @@ class DashboardTab extends View {
 				/>;
 			}
 
-			return <GenericDashboardTile
+			return <ToggleDashboardTile
+				style={tileStyle}
 				item={row.childObject}
 				tileWidth={tileWidth}
-				style={tileStyle}
+				enabled={false}
+				onTurnOn={this.props.onTurnOn(itemId)}
+				onTurnOff={this.props.onTurnOff(itemId)}
 			/>;
 		};
 	}
