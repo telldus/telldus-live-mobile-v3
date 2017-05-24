@@ -29,6 +29,7 @@ export type State = ?Object;
 const gatewayInitialState = {
 	id: null,
 	name: null,
+	websocketOnline: false,
 	websocketAddress: {
 		address: null,
 		instance: null,
@@ -39,8 +40,12 @@ const gatewayInitialState = {
 function reduceGateway(state: State = gatewayInitialState, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_GATEWAYS':
-			state.id = parseInt(state.id, 10);
-			return { ...gatewayInitialState, ...state };
+			return {
+				...gatewayInitialState,
+				...state,
+				id: parseInt(state.id, 10),
+				online: Boolean(state.online),
+			};
 		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
 			const { payload } = action;
 			if (payload.address === null) {
@@ -60,6 +65,16 @@ function reduceGateway(state: State = gatewayInitialState, action: Action): Stat
 					instance: payload.instance,
 					port: payload.port,
 				},
+			};
+		case 'GATEWAY_WEBSOCKET_OPEN':
+			return {
+				...state,
+				websocketOnline: true,
+			};
+		case 'GATEWAY_WEBSOCKET_CLOSED':
+			return {
+				...state,
+				websocketOnline: false,
 			};
 		default:
 			return state;
@@ -87,6 +102,8 @@ function byId(state = {}, action: Action): State {
 				return acc;
 			}, {});
 		case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
+		case 'GATEWAY_WEBSOCKET_OPEN':
+		case 'GATEWAY_WEBSOCKET_CLOSED':
 			const { gatewayId } = action;
 			return {
 				...state,

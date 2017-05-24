@@ -90,6 +90,11 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
 		addWebsocketFilter(gatewayId, 'zwave', 'addNodeToNetworkStartTimeout');
 		addWebsocketFilter(gatewayId, 'zwave', 'interviewDone');
 		addWebsocketFilter(gatewayId, 'zwave', 'nodeInfo');
+
+		dispatch({
+			type: 'GATEWAY_WEBSOCKET_OPEN',
+			gatewayId,
+		});
 	};
 
 	websocket.onmessage = (msg) => {
@@ -170,6 +175,11 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
 		} catch (e) {
 			console.log(message);
 		}
+
+		dispatch({
+			type: 'GATEWAY_WEBSOCKET_CLOSED',
+			gatewayId,
+		});
 	};
 };
 

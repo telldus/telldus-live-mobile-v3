@@ -45,12 +45,22 @@ const TabHeader = ({ fontSize, ...props }) => {
 	return <TabBar {...props} style={{ backgroundColor: Theme.Core.brandPrimary }} labelStyle={{ fontSize }} />;
 };
 
-const Gateway = ({ name, status }) => (
-	<View style={styles.gatewayContainer}>
-		<Image style={styles.gatewayIcon} source={require('./img/tabIcons/location.png')} />
-		<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
-	</View>
-);
+const Gateway = ({ name, online, websocketOnline }) => {
+	let locationSrc;
+	if (!online) {
+		locationSrc = require('./img/tabIcons/location-red.png');
+	} else if (!websocketOnline) {
+		locationSrc = require('./img/tabIcons/location-orange.png');
+	} else {
+		locationSrc = require('./img/tabIcons/location-green.png');
+	}
+	return (
+		<View style={styles.gatewayContainer}>
+			<Image style={styles.gatewayIcon} source={locationSrc} />
+			<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
+		</View>
+	);
+};
 
 const NavigationHeader = ({ firstName, lastName }) => (
 	<View style = {styles.navigationHeader}>
@@ -84,7 +94,7 @@ const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
 			<View style = {{ flex: 1, backgroundColor: 'white' }}>
 				<ConnectedLocations />
 				{gateways.allIds.map((id, index) => {
-					return (<Gateway name={gateways.byId[id].name} key={index} />);
+					return (<Gateway {...gateways.byId[id]} key={index} />);
 				})}
 				<SettingsButton onPress={onOpenSetting} />
 			</View>
