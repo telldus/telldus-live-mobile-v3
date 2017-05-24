@@ -55,7 +55,9 @@ const allIds = kind => (state = [], action) => {
 	if (action.type === 'REMOVE_FROM_DASHBOARD' && action.kind === kind) {
 		return state.filter(id => id !== action.id);
 	}
-
+	if (action.type === 'LOGGED_OUT') {
+		return [];
+	}
 	return state;
 };
 
@@ -88,6 +90,9 @@ const byId = kind => (state = {}, action) => {
 	if (action.type === 'REMOVE_FROM_DASHBOARD' && action.kind === kind) {
 		return omit(state, action.id);
 	}
+	if (action.type === 'LOGGED_OUT') {
+		return {};
+	}
 
 	return state;
 };
@@ -110,6 +115,8 @@ const sensorDisplayTypeById = (state = {}, action) => {
 				[action.id]: action.displayType,
 			};
 		case 'REMOVE_FROM_DASHBOARD': // leave setting in, in case user adds sensor back again
+		case 'LOGGED_OUT':
+			return {};
 		default:
 			return state;
 	}

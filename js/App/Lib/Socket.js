@@ -56,7 +56,9 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 // 	}
 // });
 
+// TODO: expose websocket lib via Provider component, so that it is bound and so that we have access to store
 let websocketConnections = {};
+// TODO: connection lookup ^ to redux state
 
 export function addConnection(gatewayId, websocketUrl) {
 	if (websocketConnections[gatewayId] && websocketConnections[gatewayId].websocket) {
@@ -71,7 +73,7 @@ export function addConnection(gatewayId, websocketUrl) {
 
 export function sendMessage(gatewayId, message) {
 	if (!websocketConnections[gatewayId] || !websocketConnections[gatewayId].websocket) {
-		return console.error('cannot send websocket message');
+		return;
 	}
 	const formattedTime = formatTime(new Date());
 	const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
@@ -89,7 +91,10 @@ export function closeAllConnections() {
 	Object.keys(websocketConnections).forEach(_gatewayId => {
 		const websocketConnection = websocketConnections[_gatewayId];
 		if (websocketConnection.websocket) {
-			websocketConnection.websocket.close();
+			websocketConnection.websocket.close(null, null, {
+				keepClosed: true,
+				fastClose: true,
+			});
 		}
 		delete websocketConnections[_gatewayId];
 	});

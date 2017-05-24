@@ -95,9 +95,6 @@ function reduceDevice(state = {}, action) {
 				isInDashboard: false,
 			};
 
-		case 'LOGGED_OUT':
-			return {};
-
 		default:
 			return state;
 	}
@@ -146,6 +143,9 @@ function byId(state = {}, action) {
 			...state,
 			[action.id]: reduceDevice(state[action.id], action),
 		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {};
 	}
 
 	return state;
