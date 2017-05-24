@@ -30,34 +30,51 @@ import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
 import Theme from 'Theme';
 
-import GatewayIcons from 'GatewayIcons';
-
 class GatewaysTab extends View {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			dataSource: new ListDataSource({
-				rowHasChanged: (r1, r2) => r1 !== r2,
+				rowHasChanged: this.rowHasChanged,
 			}).cloneWithRows(this.props.rows),
 			settings: false,
 		};
 
 		this.renderRow.bind(this);
 	}
-	renderRow(item) {
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
+		});
+	}
+
+	rowHasChanged(r1, r2) {
+		return r1 !== r2;
+	}
+
+	renderRow({ name, online, websocketOnline }) {
+		let locationSrc;
+		if (!online) {
+			locationSrc = require('./img/tabIcons/location-red.png');
+		} else if (!websocketOnline) {
+			locationSrc = require('./img/tabIcons/location-orange.png');
+		} else {
+			locationSrc = require('./img/tabIcons/location-green.png');
+		}
 		return (
 			<ListItem style = {Theme.Styles.gatewayRowFront}>
 				<View style = {Theme.Styles.listItemAvatar}>
-					<Image source = {GatewayIcons.get(item.type)} />
+					<Image source = {locationSrc} />
 				</View>
 				<Text style = {{
 					color: 'rgba(0,0,0,0.87)',
 					fontSize: 16,
-					opacity: item.name ? 1 : 0.5,
+					opacity: name ? 1 : 0.5,
 					marginBottom: 2,
 				}}>
-					{item.name ? item.name : '(no name)'} ({item.online})
+					{name ? name : '(no name)'} ({online})
 				</Text>
 			</ListItem>
 		);
