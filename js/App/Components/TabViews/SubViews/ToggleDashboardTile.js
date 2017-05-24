@@ -68,8 +68,8 @@ class ToggleDashboardTile extends View {
 		const { name, isInState, supportedMethods } = item;
 		const enabled = this.props.enabled;
 		const { TURNON, TURNOFF } = supportedMethods;
-		const turnOnButton = TURNON || enabled === false ? <OnButton isInState={isInState} onPress={this.props.onTurnOn} tileWidth={tileWidth} enabled={enabled} tileWidth={tileWidth} /> : null;
-		const turnOffButton = TURNOFF || enabled === false ? <OffButton isInState={isInState} onPress={this.props.onTurnOff} tileWidth={tileWidth} enabled={enabled} tileWidth={tileWidth} /> : null;
+		const turnOnButton = TURNON || enabled === false ? <OnButton isInState={isInState} onPress={this.props.onTurnOn} tileWidth={tileWidth} enabled={enabled} /> : null;
+		const turnOffButton = TURNOFF || enabled === false ? <OffButton isInState={isInState} onPress={this.props.onTurnOff} tileWidth={tileWidth} enabled={enabled} /> : null;
 
 		let style = this.props.style;
 		style.width = tileWidth;
