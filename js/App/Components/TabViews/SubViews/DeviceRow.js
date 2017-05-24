@@ -74,7 +74,12 @@ class DeviceRow extends View {
 				device={device}
 			/>;
 		} else {
-			button = <View style={{ flex: 7 }}/>;
+			button = <ToggleButton
+				onTurnOn={this.props.onTurnOn(device.id)}
+				onTurnOff={this.props.onTurnOff(device.id)}
+				device={device}
+				enabled={false}
+			/>;
 		}
 
 		return (

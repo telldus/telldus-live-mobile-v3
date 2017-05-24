@@ -155,10 +155,6 @@ class DimmerDashboardTile extends View {
 		const { item, tileWidth } = this.props;
 		const { name, isInState, supportedMethods } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
-		//const isInState = item.childObject.isInState;
-		//const name = item.childObject.name;
-		//const tileWidth = item.tileWidth - 8;
-		//const { TURNON, TURNOFF, DIM } = item.childObject.supportedMethods;
 		const turnOnButton = <PseudoOnButton isInState={isInState} enabled={TURNON} tileWidth={tileWidth} fadeAnim={this.state.onButtonFadeAnim}/>;
 		const turnOffButton = <PseudoOffButton isInState={isInState} enabled={TURNOFF} tileWidth={tileWidth} fadeAnim={this.state.offButtonFadeAnim}/>;
 		const slider = DIM ?

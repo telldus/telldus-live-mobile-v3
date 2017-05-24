@@ -37,19 +37,12 @@ const Title = ({ isEnabled, name, tileWidth }) => (
 	</View>
 );
 
-module.exports = class DashboardShadowTile extends View {
+class DashboardShadowTile extends View {
 	render() {
 		return (
 			// Because of the limitation of react-native so we need 2 nested views to create an rounded corner view with shadow
 			<View
-				style={[this.props.style, {
-					borderRadius: 7,
-					shadowColor: '#000000',
-					shadowOffset: { width: 0, height: 0 },
-					shadowRadius: 3,
-					shadowOpacity: 1.0,
-					elevation: 3,
-				}]}>
+				style={[this.props.style, (this.props.hasShadow ? styles.shadow : styles.noShadow)]}>
 				<View style={{
 					flex: 1,
 					flexDirection: 'column',
@@ -62,7 +55,7 @@ module.exports = class DashboardShadowTile extends View {
 			</View>
 		);
 	}
-};
+}
 
 const styles = StyleSheet.create({
 	name: {
@@ -83,4 +76,33 @@ const styles = StyleSheet.create({
 	titleDisabled: {
 		backgroundColor: '#bfbfbf',
 	},
+	shadow: {
+		borderRadius: 7,
+		shadowColor: '#000000',
+		shadowOffset: { width: 0, height: 0 },
+		shadowRadius: 3,
+		shadowOpacity: 1.0,
+		elevation: 3,
+	},
+	noShadow: {
+		borderRadius: 7,
+		shadowColor: '#000000',
+		shadowOffset: { width: 0, height: 0 },
+		shadowRadius: 0,
+		shadowOpacity: 1.0,
+		elevation: 0,
+	},
 });
+
+DashboardShadowTile.propTypes = {
+	hasShadow: React.PropTypes.bool,
+	isEnabled: React.PropTypes.bool,
+	name: React.PropTypes.string,
+	tileWidth: React.PropTypes.number,
+};
+
+DashboardShadowTile.defaultProps = {
+	hasShadow: true,
+};
+
+module.exports = DashboardShadowTile;
