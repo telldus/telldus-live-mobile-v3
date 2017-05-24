@@ -47,7 +47,7 @@ class GatewaysTab extends View {
 	}
 	renderRow(item) {
 		return (
-			<ListItem style = {Theme.Styles.rowFront}>
+			<ListItem style = {Theme.Styles.gatewayRowFront}>
 				<View style = {Theme.Styles.listItemAvatar}>
 					<Image source = {GatewayIcons.get(item.type)} />
 				</View>
