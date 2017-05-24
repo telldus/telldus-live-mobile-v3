@@ -34,11 +34,13 @@ export default props => {
 		256: 'Down',
 		512: 'Stop',
 	};
-	const { device } = props;
+
+	const { device, methodValue } = props;
 	if (!device) {
 		return null;
 	}
-
+	const method = methodName[props.method];
+	const value = method === 'Dim' ? `${Math.round(methodValue / 255.0 * 100)}%` : method;
 	return (
 		<ListItem style = {Theme.Styles.rowFront}>
 			<Text style={{
@@ -61,7 +63,7 @@ export default props => {
 				color: '#1a355c',
 				fontSize: 16,
 			}}>
-				{methodName[props.method]}
+				{value}
 			</Text>
 		</ListItem>
 	);
