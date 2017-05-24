@@ -103,6 +103,16 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 
 ## Releasing
 
+### General
+
+- we use semver (major.minor.path) and the Android version is derived from that (`3.2.10` => `30210`)
+- when releasing a new app, always update the version
+- until this is automated with a release script, change the version in the following places:
+  - `package.json`: `version` (semver)
+  - `android/app/build.gradle`: `versionCode` (Android) and `versionName` (semver)
+  - `android/app/src/main/AndroidManifest.xml`: `versionCode` (Android) and `versionName` (semver)
+  - `js/App/Components/DetailViews/SettingsDetailModal.js`: `'You are using version <semver> of Telldus Live! mobile.'`
+
 ### Android
 
 - find all the instructions for generating signed APK on [Generating Signed APK](https://facebook.github.io/react-native/docs/signed-apk-android.html)
