@@ -37,13 +37,6 @@ import { SettingsDetailModal } from 'DetailViews';
 import getDeviceType from '../../Lib/getDeviceType';
 import reactMixin from 'react-mixin';
 
-// TODO: this view renders before the sensor and device data is retrieved
-//       that might not be a problem, but we should know why
-//       - store.devices and store.sensors are empty objects (not even arrays)
-//       - store.dashboard is populated
-//       better solution would be to render the old sensor/device data but
-//       to indicate also it is old data
-
 const tileMargin = 8;
 const listMargin = 8;
 
