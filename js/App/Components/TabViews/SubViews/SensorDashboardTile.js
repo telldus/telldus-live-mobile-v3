@@ -60,7 +60,7 @@ class SensorDashboardTile extends View {
 			slideList.push({
 				key: 'temperature',
 				icon: require('../img/sensorIcons/TemperatureLargeGray.png'),
-				text: <FormattedNumber value = {item.temperature} maximumFractionDigits = {0} suffix = {`${String.fromCharCode(176)}c`}/>,
+				text: <FormattedNumber value = {item.temperature} maximumFractionDigits = {1} suffix = {`${String.fromCharCode(176)}C`}/>,
 			});
 		}
 		if (item.rainRate || item.rainTotal) {
@@ -98,7 +98,7 @@ class SensorDashboardTile extends View {
 			slideList.push({
 				key: 'luminance',
 				icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
-				text: <FormattedNumber value = {item.luminance} maximumFractionDigits = {0} suffix = {'lx'}/>,
+				text: <FormattedNumber value = {item.luminance} maximumFractionDigits = {0} suffix = {'lx'} useGrouping = {false} />,
 			});
 		}
 
