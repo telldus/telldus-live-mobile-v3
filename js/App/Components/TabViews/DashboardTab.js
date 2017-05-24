@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View } from 'BaseComponents';
 import Platform from 'Platform';
-import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
+import { turnOn, turnOff, bell, down, up, stop, getDevices } from 'Actions/Devices';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
@@ -146,6 +146,9 @@ class DashboardTab extends View {
 					dataSource = {this.state.dataSource}
 					renderRow = {this._renderRow(this.state.tileWidth)}
 					pageSize = {100}
+					onRefresh = {() =>
+						this.props.dispatch(getDevices())
+					}
 				/>
 				{
 					this.state.settings ?
