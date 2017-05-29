@@ -22,38 +22,72 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { RoundedCornerShadowView, Text, View, Icon } from 'BaseComponents';
+import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
 
 import { turnOn, turnOff, learn } from 'Actions/Devices';
 
-const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
-	<RoundedCornerShadowView style={styles.toggleContainer}>
-		<TouchableOpacity
-			style={[styles.toggleButton, {
-  backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
-}]}
-			onPress={onTurnOff}>
-			<Text style={{
-  fontSize: 16,
-  color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
-				{'Off'}
-			</Text>
-		</TouchableOpacity>
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
-		<TouchableOpacity
-			style={[styles.toggleButton, {
-  backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee',
-}]}
-			onPress={onTurnOn}>
-			<Text style={{
-  fontSize: 16,
-  color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e' }}>
-				{'On'}
-			</Text>
-		</TouchableOpacity>
+const ToggleButton = ({ device, onTurnOn, onTurnOff, request, fadeAnim }) => {
+	let blinking = function () {
+		Animated.sequence([
+			Animated.timing(fadeAnim, {
+				toValue: 1,
+				duration: 500,
+			}),
+			Animated.timing(fadeAnim, {
+				toValue: 0,
+				duration: 500,
+			}),
+		]).start(event => {
+			if (event.finished) {
+				blinking();
+			}
+		});
+	};
+
+	if (request === 'on-request' || request === 'off-request') {
+		blinking();
+	}
+
+	return (
+		<RoundedCornerShadowView style={styles.toggleContainer}>
+			<TouchableOpacity
+				style={[styles.toggleButton, {
+					backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
+				}]}
+				onPress={onTurnOff}>
+				<Text style={{
+					fontSize: 16,
+					color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
+					{'Off'}
+				</Text>
+			</TouchableOpacity>
+
+			<TouchableOpacity
+				style={[styles.toggleButton, {
+					backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee',
+				}]}
+				onPress={onTurnOn}>
+				<Text style={{
+					fontSize: 16,
+					color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e' }}>
+					{'On'}
+				</Text>
+			</TouchableOpacity>
+			{
+				request === 'off-request' ?
+				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.leftCircle, { opacity: fadeAnim }]} />
+				:
+				request === 'on-request' ?
+				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.rightCircle, { opacity: fadeAnim }]} />
+				:
+				null
+			}
 	</RoundedCornerShadowView>
-);
+	);
+};
 
 const LearnButton = ({ device, onLearn }) => (
 	<RoundedCornerShadowView style={styles.learnContainer}>
@@ -67,21 +101,31 @@ const LearnButton = ({ device, onLearn }) => (
 
 class ToggleDeviceDetailModal extends View {
 
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
+		this.state = {
+			fadeAnim: new Animated.Value(0),
+			request: 'none',
+		};
 
     this.onTurnOn = this.onTurnOn.bind(this);
     this.onTurnOff = this.onTurnOff.bind(this);
     this.onLearn = this.onLearn.bind(this);
   }
 
-  onTurnOn() {
-    this.props.onTurnOn(this.props.device.id);
-  }
+	componentWillReceiveProps(nextProps) {
+		this.setState({ request: 'none' });
+	}
 
-  onTurnOff() {
-    this.props.onTurnOff(this.props.device.id);
-  }
+	onTurnOn() {
+		this.setState({ request: 'on-request' });
+		this.props.onTurnOn(this.props.device.id);
+	}
+
+	onTurnOff() {
+		this.setState({ request: 'off-request' });
+		this.props.onTurnOff(this.props.device.id);
+	}
 
   onLearn() {
     this.props.onLearn(this.props.device.id);
@@ -94,9 +138,9 @@ class ToggleDeviceDetailModal extends View {
     let toggleButton = null;
     let learnButton = null;
 
-    if (TURNON || TURNOFF) {
-      toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} />;
-    }
+		if (TURNON || TURNOFF) {
+			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} request={this.state.request} fadeAnim={this.state.fadeAnim} />;
+		}
 
     if (LEARN) {
       learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
@@ -117,36 +161,46 @@ ToggleDeviceDetailModal.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 0,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    height: 36,
-    marginHorizontal: 8,
-    marginVertical: 16,
-  },
-  toggleButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnContainer: {
-    height: 36,
-    marginHorizontal: 8,
-    marginVertical: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnText: {
-    fontSize: 16,
-    color: 'orange',
-  },
+	container: {
+		flex: 0,
+	},
+	toggleContainer: {
+		flexDirection: 'row',
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 16,
+	},
+	toggleButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnContainer: {
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 8,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnText: {
+		fontSize: 16,
+		color: 'orange',
+	},
+	leftCircle: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
+	},
+	rightCircle: {
+		position: 'absolute',
+		top: 3,
+		right: 3,
+	},
 });
 
 function mapStateToProps(store) {
