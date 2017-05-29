@@ -20,60 +20,141 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Text, View } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, Icon } from 'BaseComponents';
+import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
-const OffButton = ({ isInState, tileWidth, enabled, onPress }) => (
-	<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
-		<TouchableOpacity
-			disabled={!enabled}
-			onPress={onPress}
-			style={styles.button} >
-			<Text
-				ellipsizeMode="middle"
-				numberOfLines={1}
-				style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
-					{ fontSize: Math.floor(tileWidth / 8) }]}>
-				{'Off'}
-			</Text>
-		</TouchableOpacity>
-	</View>
-);
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
-const OnButton = ({ isInState, tileWidth, enabled, onPress }) => (
-	<View style={[styles.turnOnButtonContainer, isInState === 'TURNON' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
-		<TouchableOpacity
-			disabled={!enabled}
-			onPress={onPress}
-			style={styles.button} >
-			<Text
-				ellipsizeMode="middle"
-				numberOfLines={1}
-				style = {[styles.buttonText, isInState === 'TURNON' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
+const OffButton = ({ isInState, tileWidth, enabled, onPress, request, fadeAnim }) => {
+	let blinking = function () {
+		Animated.sequence([
+			Animated.timing(fadeAnim, {
+				toValue: 1,
+				duration: 500,
+			}),
+			Animated.timing(fadeAnim, {
+				toValue: 0,
+				duration: 500,
+			}),
+		]).start(event => {
+			if (event.finished) {
+				blinking();
+			}
+		});
+	};
+
+	if (request === 'off-request') {
+		blinking();
+	}
+	return (
+		<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
+			<TouchableOpacity
+				disabled={!enabled}
+				onPress={onPress}
+				style={styles.button} >
+				<Text
+					ellipsizeMode="middle"
+					numberOfLines={1}
+					style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
 					{ fontSize: Math.floor(tileWidth / 8) }]}>
-				{'On'}
-			</Text>
-		</TouchableOpacity>
-	</View>
-);
+					{'Off'}
+				</Text>
+			</TouchableOpacity>
+			{
+				request === 'off-request' ?
+				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.leftCircle, { opacity: fadeAnim }]} />
+				:
+				null
+			}
+		</View>
+	);
+};
+
+const OnButton = ({ isInState, tileWidth, enabled, onPress, request, fadeAnim }) => {
+	let blinking = function () {
+		Animated.sequence([
+			Animated.timing(fadeAnim, {
+				toValue: 1,
+				duration: 500,
+			}),
+			Animated.timing(fadeAnim, {
+				toValue: 0,
+				duration: 500,
+			}),
+		]).start(event => {
+			if (event.finished) {
+				blinking();
+			}
+		});
+	};
+
+	if (request === 'on-request') {
+		blinking();
+	}
+
+	return (
+		<View style={[styles.turnOnButtonContainer, isInState === 'TURNON' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
+			<TouchableOpacity
+				disabled={!enabled}
+				onPress={onPress}
+				style={styles.button} >
+				<Text
+					ellipsizeMode="middle"
+					numberOfLines={1}
+					style = {[styles.buttonText, isInState === 'TURNON' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
+						{ fontSize: Math.floor(tileWidth / 8) }]}>
+					{'On'}
+				</Text>
+			</TouchableOpacity>
+			{
+				request === 'on-request' ?
+				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.rightCircle, { opacity: fadeAnim }]} />
+				:
+				null
+			}
+		</View>
+	);
+};
 
 class ToggleDashboardTile extends View {
-  constructor(props) {
-    super(props);
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			fadeAnimLeft: new Animated.Value(0),
+			fadeAnimRight: new Animated.Value(0),
+			request: 'none',
+		};
+
+		this.onTurnOn = this.onTurnOn.bind(this);
+		this.onTurnOff = this.onTurnOff.bind(this);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({ request: 'none' });
+	}
+
+	onTurnOn() {
+		this.setState({ request: 'on-request' });
+		this.props.onTurnOn();
+	}
+
+	onTurnOff() {
+		this.setState({ request: 'off-request' });
+		this.props.onTurnOff();
+	}
 
   render() {
     const { item, tileWidth } = this.props;
     const { name, isInState, supportedMethods } = item;
     const { TURNON, TURNOFF } = supportedMethods;
 
-    const turnOnButton = <OnButton isInState={isInState} onPress={this.props.onTurnOn} tileWidth={tileWidth} enabled={!!TURNON} />;
-    const turnOffButton = <OffButton isInState={isInState} onPress={this.props.onTurnOff} tileWidth={tileWidth} enabled={!!TURNOFF} />;
+		const turnOnButton = <OnButton isInState={isInState} onPress={this.onTurnOn} tileWidth={tileWidth} enabled={!!TURNON} request={this.state.request} fadeAnim={this.state.fadeAnimRight}/>;
+		const turnOffButton = <OffButton isInState={isInState} onPress={this.onTurnOff} tileWidth={tileWidth} enabled={!!TURNOFF} request={this.state.request} fadeAnim={this.state.fadeAnimLeft} />;
 
-    const style = this.props.style;
-    style.width = tileWidth;
-    style.height = tileWidth;
+		let style = { ...this.props.style };
+		style.width = tileWidth;
+		style.height = tileWidth;
 
     return (
 			<DashboardShadowTile
@@ -93,42 +174,52 @@ class ToggleDashboardTile extends View {
 }
 
 const styles = StyleSheet.create({
-  turnOffButtonContainer: {
-    flex: 1,
-    alignItems: 'stretch',
-    borderTopLeftRadius: 7,
-  },
-  turnOnButtonContainer: {
-    flex: 1,
-    alignItems: 'stretch',
-    borderTopRightRadius: 7,
-  },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  buttonText: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-  },
-  buttonBackgroundEnabled: {
-    backgroundColor: 'white',
-  },
-  buttonBackgroundDisabled: {
-    backgroundColor: '#eeeeee',
-  },
-  buttonOnEnabled: {
-    color: 'green',
-  },
-  buttonOnDisabled: {
-    color: '#a0a0a0',
-  },
-  buttonOffEnabled: {
-    color: 'red',
-  },
-  buttonOffDisabled: {
-    color: '#a0a0a0',
-  },
+	turnOffButtonContainer: {
+		flex: 1,
+		alignItems: 'stretch',
+		borderTopLeftRadius: 7,
+	},
+	turnOnButtonContainer: {
+		flex: 1,
+		alignItems: 'stretch',
+		borderTopRightRadius: 7,
+	},
+	button: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	buttonText: {
+		textAlign: 'center',
+		textAlignVertical: 'center',
+	},
+	buttonBackgroundEnabled: {
+		backgroundColor: 'white',
+	},
+	buttonBackgroundDisabled: {
+		backgroundColor: '#eeeeee',
+	},
+	buttonOnEnabled: {
+		color: 'green',
+	},
+	buttonOnDisabled: {
+		color: '#a0a0a0',
+	},
+	buttonOffEnabled: {
+		color: 'red',
+	},
+	buttonOffDisabled: {
+		color: '#a0a0a0',
+	},
+	leftCircle: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
+	},
+	rightCircle: {
+		position: 'absolute',
+		top: 3,
+		right: 3,
+	},
 });
 
 ToggleDashboardTile.propTypes = {
