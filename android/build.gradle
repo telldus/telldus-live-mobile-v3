@@ -22,3 +22,15 @@ allprojects {
         }
     }
 }
+
+allprojects {
+     configurations.all {
+       resolutionStrategy {
+         eachDependency { DependencyResolveDetails details ->
+           if (details.requested.group == 'com.facebook.react' && details.requested.name == 'react-native') {
+             details.useVersion "0.39.2" // Your real React Native version here
+           }
+         }
+       }
+     }
+  }
