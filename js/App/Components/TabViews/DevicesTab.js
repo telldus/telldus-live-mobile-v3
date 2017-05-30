@@ -56,6 +56,7 @@ class DevicesTab extends View {
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
 		this.renderHiddenRow = this.renderHiddenRow.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -111,9 +112,7 @@ class DevicesTab extends View {
 					renderSectionHeader = {this.renderSectionHeader}
 					leftOpenValue = {40}
 					editMode = {this.props.editMode}
-					onRefresh = {() =>
-						this.props.dispatch(getDevices())
-					}
+					onRefresh = {this.onRefresh}
 				/>
 				{deviceDetail ? (
 					<DeviceDetailModal
@@ -165,6 +164,10 @@ class DevicesTab extends View {
 				</Text>
 			</View>
 		);
+	}
+
+	onRefresh() {
+		this.props.dispatch(getDevices());
 	}
 
 	getType(deviceId) {

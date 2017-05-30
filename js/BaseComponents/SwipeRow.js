@@ -36,6 +36,9 @@ class SwipeRow extends Component {
 			hiddenWidth: 0,
 			translateX: new Animated.Value(0),
 		};
+
+		this.onContentLayout = this.onContentLayout.bind(this);
+		this.onRowPress = this.onRowPress.bind(this);
 	}
 
 	getPreviewAnimation(toValue, delay) {
@@ -72,7 +75,6 @@ class SwipeRow extends Component {
 	}
 
 	onRowPress() {
-		console.log('onRowPress');
 		if (this.props.onRowPress) {
 			this.props.onRowPress();
 		} else if (this.props.closeOnRowPress) {
@@ -208,7 +210,7 @@ class SwipeRow extends Component {
 
 		return (
 			<View
-				onLayout={(e) => this.onContentLayout(e)}
+				onLayout={this.onContentLayout}
 				style={{
 					transform: [
 						{ translateX: slideOpenValue },

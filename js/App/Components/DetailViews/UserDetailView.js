@@ -32,6 +32,11 @@ import {
 import { logoutFromTelldus } from 'Actions';
 
 class UserDetailView extends View {
+	constructor(props) {
+		super(props);
+
+		this.logoutFromTelldus = this.logoutFromTelldus.bind(this);
+	}
 
 	render() {
 		return (
@@ -52,12 +57,15 @@ class UserDetailView extends View {
 					name = "sign-out"
 					backgroundColor = {this.getTheme().btnPrimaryBg}
 					style = {{ padding: 6, minWidth: 100 }}
-					onPress = {() => this.props.dispatch(logoutFromTelldus())}
+					onPress = {this.logoutFromTelldus}
 				>Logout</Button>
 			</View>
 		);
 	}
 
+	logoutFromTelldus() {
+		this.props.dispatch(logoutFromTelldus());
+	}
 }
 
 module.exports = connect()(UserDetailView);

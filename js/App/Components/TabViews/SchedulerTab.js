@@ -46,6 +46,10 @@ class SchedulerTab extends View {
 				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 			}).cloneWithRowsAndSections(sections, sectionIds),
 		};
+
+		this.renderRow = this.renderRow.bind(this);
+		this.renderSectionHeader = this.renderSectionHeader.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -54,6 +58,10 @@ class SchedulerTab extends View {
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
 		});
+	}
+
+	onRefresh() {
+		this.props.dispatch(getJobs());
 	}
 
 	rowHasChanged(r1, r2) {
@@ -74,7 +82,7 @@ class SchedulerTab extends View {
 				dataSource = {this.state.dataSource}
 				renderRow = {this.renderRow}
 				renderSectionHeader = {this.renderSectionHeader}
-				onRefresh = {() => this.props.dispatch(getJobs())}
+				onRefresh = {this.onRefresh}
 			/>
 		);
 	}

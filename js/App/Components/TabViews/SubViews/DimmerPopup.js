@@ -45,6 +45,9 @@ class DimmerPopup extends Component {
 			deviceWidth: Dimensions.get('window').width,
 			deviceHeight: Dimensions.get('window').height,
 		};
+
+		this.handleLayout = this.handleLayout.bind(this);
+		this.setRefs = this.setRefs.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -114,8 +117,8 @@ class DimmerPopup extends Component {
 		}
 		return (
 			<View
-				onLayout={this.handleLayout.bind(this)}
-				ref={c => this.setRefs(c)}
+				onLayout={this.handleLayout}
+				ref={this.setRefs}
 				style={{
 					marginTop: 22,
 					marginHorizontal: 8,

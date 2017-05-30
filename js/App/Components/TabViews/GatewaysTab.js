@@ -41,7 +41,8 @@ class GatewaysTab extends View {
 			settings: false,
 		};
 
-		this.renderRow.bind(this);
+		this.renderRow = this.renderRow.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -52,6 +53,10 @@ class GatewaysTab extends View {
 
 	rowHasChanged(r1, r2) {
 		return r1 !== r2;
+	}
+
+	onRefresh() {
+		this.props.dispatch(getGateways());
 	}
 
 	renderRow({ name, online, websocketOnline }) {
@@ -84,9 +89,7 @@ class GatewaysTab extends View {
 			<List
 				dataSource = {this.state.dataSource}
 				renderRow = {this.renderRow}
-				onRefresh = {() =>
-					this.props.dispatch(getGateways())
-				}
+				onRefresh = {this.onRefresh}
 			/>
 		);
 	}

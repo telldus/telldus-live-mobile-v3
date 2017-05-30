@@ -33,9 +33,15 @@ class ListComponent extends React.Component {
 			refreshing: false,
 			scrollEnabled: true,
 		};
+
+		this.onRefresh = this.onRefresh.bind(this);
+		this.onScroll = this.onScroll.bind(this);
+		this.renderRow = this.renderRow.bind(this);
+		this.setRefs = this.setRefs.bind(this);
+		this.setScrollEnabled = this.setScrollEnabled.bind(this);
 	}
 
-	_onRefresh() {
+	onRefresh() {
 		this.setState({ refreshing: true });
 		if (this.props.onRefresh) {
 			this.props.onRefresh();
@@ -112,11 +118,11 @@ class ListComponent extends React.Component {
 		const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
 		return (
 			<SwipeRow
-				ref={row => (this._rows[`${secId}${rowId}`] = row)}
-				onRowOpen={_ => this.onRowOpen(secId, rowId, this._rows)}
-				onRowClose={_ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows)}
-				onRowPress={_ => this.onRowPress(`${secId}${rowId}`)}
-				setScrollEnabled={(enable) => this.setScrollEnabled(enable)}
+				ref={row => (this._rows[`${secId}${rowId}`] = row)} // eslint-disable-line react/jsx-no-bind
+				onRowOpen={_ => this.onRowOpen(secId, rowId, this._rows)} // eslint-disable-line react/jsx-no-bind
+				onRowClose={_ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows)} // eslint-disable-line react/jsx-no-bind
+				onRowPress={_ => this.onRowPress(`${secId}${rowId}`)} // eslint-disable-line react/jsx-no-bind
+				setScrollEnabled={this.setScrollEnabled}
 				leftOpenValue={this.props.leftOpenValue}
 				rightOpenValue={this.props.rightOpenValue}
 				closeOnRowPress={this.props.closeOnRowPress}
@@ -142,14 +148,14 @@ class ListComponent extends React.Component {
 				refreshControl={
 					<RefreshControl
 						refreshing={this.state.refreshing}
-						onRefresh={this._onRefresh.bind(this)}
+						onRefresh={this.onRefresh}
 						enableEmptySections={true}
 						enabled={this.state.scrollEnabled}
 					/>
 				}
-				ref={c => this.setRefs(c)}
-				onScroll={e => this.onScroll(e)}
-				renderRow={this.renderRow.bind(this)}
+				ref={this.setRefs}
+				onScroll={this.onScroll}
+				renderRow={this.renderRow}
 				contentInset={{ bottom: 64 }}
 			/>
 		);

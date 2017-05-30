@@ -45,6 +45,8 @@ class SensorsTab extends View {
 		};
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
+		this.renderRow = this.renderRow.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -57,6 +59,10 @@ class SensorsTab extends View {
 		if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
 			this.props.dispatch(toggleEditMode('sensorsTab'));
 		}
+	}
+
+	onRefresh() {
+		this.props.dispatch(getSensors());
 	}
 
 	rowHasChanged(r1, r2) {
@@ -79,9 +85,7 @@ class SensorsTab extends View {
 				renderSectionHeader = {this.renderSectionHeader}
 				leftOpenValue = {40}
 				editMode = {this.props.editMode}
-				onRefresh = {() =>
-					this.props.dispatch(getSensors())
-				}
+				onRefresh = {this.onRefresh}
 			/>
 		);
 	}
