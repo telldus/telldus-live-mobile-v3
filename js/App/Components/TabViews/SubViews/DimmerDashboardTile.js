@@ -22,7 +22,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
+import { View, Icon } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
@@ -30,31 +30,91 @@ import VerticalSlider from './VerticalSlider';
 
 import throttle from 'lodash/throttle';
 
-const PseudoOffButton = ({ isInState, enabled, tileWidth, fadeAnim }) => (
-	<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' && enabled ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled]}>
-		<Animated.Text
-			ellipsizeMode="middle"
-			numberOfLines={1}
-			style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
-  { fontSize: Math.floor(tileWidth / 8),
-    opacity: fadeAnim }]}>
-			{'Off'}
-		</Animated.Text>
-	</View>
-);
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
-const PseudoOnButton = ({ isInState, enabled, tileWidth, fadeAnim }) => (
-	<View style={[styles.turnOnButtonContainer, isInState !== 'TURNOFF' && enabled ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled]}>
-		<Animated.Text
-			ellipsizeMode="middle"
-			numberOfLines={1}
-			style = {[styles.buttonText, isInState !== 'TURNOFF' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
-  { fontSize: Math.floor(tileWidth / 8),
-    opacity: fadeAnim }]}>
-			{'On'}
-		</Animated.Text>
-	</View>
-);
+const PseudoOffButton = ({ isInState, enabled, tileWidth, request, buttonFadeAnim, circleFadeAnim }) => {
+	let blinking = function () {
+		Animated.sequence([
+			Animated.timing(circleFadeAnim, {
+				toValue: 1,
+				duration: 500,
+			}),
+			Animated.timing(circleFadeAnim, {
+				toValue: 0,
+				duration: 500,
+			}),
+		]).start(event => {
+			if (event.finished) {
+				blinking();
+			}
+		});
+	};
+
+	if (request === 'off-request') {
+		blinking();
+	}
+
+	return (
+		<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' && enabled ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled]}>
+			<Animated.Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
+					{ fontSize: Math.floor(tileWidth / 8),
+						opacity: buttonFadeAnim }]}>
+				{'Off'}
+			</Animated.Text>
+			{
+				request === 'off-request' ?
+				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.leftCircle, { opacity: circleFadeAnim }]} />
+				:
+				null
+			}
+		</View>
+	);
+};
+
+const PseudoOnButton = ({ isInState, enabled, tileWidth, request, buttonFadeAnim, circleFadeAnim }) => {
+	let blinking = function () {
+		Animated.sequence([
+			Animated.timing(circleFadeAnim, {
+				toValue: 1,
+				duration: 500,
+			}),
+			Animated.timing(circleFadeAnim, {
+				toValue: 0,
+				duration: 500,
+			}),
+		]).start(event => {
+			if (event.finished) {
+				blinking();
+			}
+		});
+	};
+
+	if (request === 'on-request') {
+		blinking();
+	}
+
+	return (
+		<View style={[styles.turnOnButtonContainer, isInState !== 'TURNOFF' && enabled ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled]}>
+			<Animated.Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style = {[styles.buttonText, isInState !== 'TURNOFF' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
+					{ fontSize: Math.floor(tileWidth / 8),
+						opacity: buttonFadeAnim }]}>
+				{'On'}
+			</Animated.Text>
+			{
+				request === 'on-request' ?
+				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.rightCircle, { opacity: circleFadeAnim }]} />
+				:
+				null
+			}
+		</View>
+	);
+};
 
 function getDimmerValue(value, isInState) {
   let newValue = value || 0;
@@ -78,41 +138,47 @@ function toSliderValue(dimmerValue) {
 }
 
 class DimmerDashboardTile extends View {
-  constructor(props) {
-    super(props);
-    const { item, onDimmerSlide } = this.props;
-    const { value, isInState } = item;
-    this.parentScrollEnabled = true;
-    this.state = {
-      bodyWidth: 0,
-      bodyHeight: 0,
-      value: getDimmerValue(value, isInState),
-      offButtonFadeAnim: new Animated.Value(1),
-      onButtonFadeAnim: new Animated.Value(1),
-    };
+	constructor(props) {
+		super(props);
+		const { item, onDimmerSlide } = this.props;
+		const { value, isInState } = item;
+		this.parentScrollEnabled = true;
+		this.state = {
+			bodyWidth: 0,
+			bodyHeight: 0,
+			value: getDimmerValue(value, isInState),
+			offButtonFadeAnim: new Animated.Value(1),
+			onButtonFadeAnim: new Animated.Value(1),
+			fadeAnimLeft: new Animated.Value(0),
+			fadeAnimRight: new Animated.Value(0),
+			request: 'none',
+		};
 
     this.onValueChangeThrottled = throttle(onDimmerSlide, 200, {
       trailing: true,
     });
 
-    this.onTurnOffButtonStart = this.onTurnOffButtonStart.bind(this);
-    this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
-    this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
-    this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
-    this.layoutView = this.layoutView.bind(this);
-    this.onSlidingStart = this.onSlidingStart.bind(this);
-    this.onSlidingComplete = this.onSlidingComplete.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
-  }
+		this.onTurnOffButtonStart = this.onTurnOffButtonStart.bind(this);
+		this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
+		this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
+		this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
+		this.onTurnOn = this.onTurnOn.bind(this);
+		this.onTurnOff = this.onTurnOff.bind(this);
+		this.layoutView = this.layoutView.bind(this);
+		this.onSlidingStart = this.onSlidingStart.bind(this);
+		this.onSlidingComplete = this.onSlidingComplete.bind(this);
+		this.onValueChange = this.onValueChange.bind(this);
+	}
 
-  componentWillReceiveProps(nextProps) {
-    const { value, isInState } = nextProps.item;
-    if (value === this.props.item.value && isInState === this.props.item.isInState) {
-      return;
-    }
-    const dimmerValue = getDimmerValue(value, isInState);
-    this.setState({ value: dimmerValue });
-  }
+	componentWillReceiveProps(nextProps) {
+		const { value, isInState } = nextProps.item;
+		if (value === this.props.item.value && isInState === this.props.item.isInState) {
+			this.setState({ request: 'none' });
+			return;
+		}
+		const dimmerValue = getDimmerValue(value, isInState);
+		this.setState({ value: dimmerValue, request: 'none' });
+	}
 
   layoutView(x) {
     let { width, height } = x.nativeEvent.layout;
@@ -151,13 +217,23 @@ class DimmerDashboardTile extends View {
     Animated.timing(this.state.onButtonFadeAnim, { toValue: 1, duration: 100 }).start();
   }
 
-  render() {
-    const { item, tileWidth } = this.props;
-    const { name, isInState, supportedMethods } = item;
-    const { TURNON, TURNOFF, DIM } = supportedMethods;
-    const turnOnButton = <PseudoOnButton isInState={isInState} enabled={!!TURNON} tileWidth={tileWidth} fadeAnim={this.state.onButtonFadeAnim}/>;
-    const turnOffButton = <PseudoOffButton isInState={isInState} enabled={!!TURNOFF} tileWidth={tileWidth} fadeAnim={this.state.offButtonFadeAnim}/>;
-    const slider = DIM ?
+	onTurnOn() {
+		this.setState({ request: 'on-request' });
+		this.props.onTurnOn();
+	}
+
+	onTurnOff() {
+		this.setState({ request: 'off-request' });
+		this.props.onTurnOff();
+	}
+
+	render() {
+		const { item, tileWidth } = this.props;
+		const { name, isInState, supportedMethods } = item;
+		const { TURNON, TURNOFF, DIM } = supportedMethods;
+		const turnOnButton = <PseudoOnButton isInState={isInState} enabled={!!TURNON} tileWidth={tileWidth} request={this.state.request} buttonFadeAnim={this.state.onButtonFadeAnim} circleFadeAnim={this.state.fadeAnimRight}/>;
+		const turnOffButton = <PseudoOffButton isInState={isInState} enabled={!!TURNOFF} tileWidth={tileWidth} request={this.state.request} buttonFadeAnim={this.state.offButtonFadeAnim} circleFadeAnim={this.state.fadeAnimLeft} />;
+		const slider = DIM ?
 			<VerticalSlider
 				style={[styles.slider, {
   width: this.state.bodyWidth,
@@ -176,8 +252,8 @@ class DimmerDashboardTile extends View {
 				onLeftEnd={this.onTurnOffButtonEnd}
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
-				onLeft={this.props.onTurnOff}
-				onRight={this.props.onTurnOn}
+				onLeft={this.onTurnOff}
+				onRight={this.onTurnOn}
 			/> :
 			null;
     return (
@@ -200,56 +276,66 @@ class DimmerDashboardTile extends View {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  body: {
-    flex: 30,
-    flexDirection: 'row',
-  },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  buttonText: {
-    textAlign: 'center',
-    textAlignVertical: 'center',
-  },
-  slider: {
-    flex: 1,
-    position: 'absolute',
-  },
-  turnOffButtonContainer: {
-    flex: 1,
-    alignItems: 'stretch',
-    borderTopLeftRadius: 7,
-    justifyContent: 'center',
-  },
-  turnOnButtonContainer: {
-    flex: 1,
-    alignItems: 'stretch',
-    borderTopRightRadius: 7,
-    justifyContent: 'center',
-  },
-  buttonBackgroundEnabled: {
-    backgroundColor: 'white',
-  },
-  buttonBackgroundDisabled: {
-    backgroundColor: '#eeeeee',
-  },
-  buttonOnEnabled: {
-    color: 'green',
-  },
-  buttonOnDisabled: {
-    color: '#a0a0a0',
-  },
-  buttonOffEnabled: {
-    color: 'red',
-  },
-  buttonOffDisabled: {
-    color: '#a0a0a0',
-  },
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	body: {
+		flex: 30,
+		flexDirection: 'row',
+	},
+	button: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	buttonText: {
+		textAlign: 'center',
+		textAlignVertical: 'center',
+	},
+	slider: {
+		flex: 1,
+		position: 'absolute',
+	},
+	turnOffButtonContainer: {
+		flex: 1,
+		alignItems: 'stretch',
+		borderTopLeftRadius: 7,
+		justifyContent: 'center',
+	},
+	turnOnButtonContainer: {
+		flex: 1,
+		alignItems: 'stretch',
+		borderTopRightRadius: 7,
+		justifyContent: 'center',
+	},
+	buttonBackgroundEnabled: {
+		backgroundColor: 'white',
+	},
+	buttonBackgroundDisabled: {
+		backgroundColor: '#eeeeee',
+	},
+	buttonOnEnabled: {
+		color: 'green',
+	},
+	buttonOnDisabled: {
+		color: '#a0a0a0',
+	},
+	buttonOffEnabled: {
+		color: 'red',
+	},
+	buttonOffDisabled: {
+		color: '#a0a0a0',
+	},
+	leftCircle: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
+	},
+	rightCircle: {
+		position: 'absolute',
+		top: 3,
+		right: 3,
+	},
 });
 
 function mapDispatchToProps(dispatch) {
