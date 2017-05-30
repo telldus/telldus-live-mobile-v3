@@ -79,7 +79,7 @@ class GatewaysTab extends View {
 					opacity: name ? 1 : 0.5,
 					marginBottom: 2,
 				}}>
-					{name ? name : '(no name)'} ({online})
+					{name ? name : '(no name)'}
 				</Text>
 			</ListItem>
 		);
