@@ -21,7 +21,7 @@
 
 import React, { PropTypes } from 'react';
 import { Text, View } from 'BaseComponents';
-import { PanResponder, Animated, StyleSheet } from 'react-native';
+import { PanResponder, Animated, StyleSheet, Vibration, Platform } from 'react-native';
 
 function getSliderLabel(value) {
 	if (value === 100) {
@@ -107,6 +107,11 @@ class VerticalSlider extends View {
 		}
 		onLeftEnd();
 		onRightEnd();
+		this.pressOnLeft = this.pressOnRight = false;
+
+		if (Platform.OS === 'android') {
+			Vibration.vibrate([0, 25]);
+		}
 	}
 
 	handlePanResponderMove = (e: Object, gestureState: Object) => {
@@ -120,11 +125,7 @@ class VerticalSlider extends View {
 
 			// update the progress text
 			this.onValueChange(this.state.value.__getValue());
-		} else {
-
 		}
-
-		clearTimeout(this.longPressTimeout);
 	}
 
 	handlePanResponderEnd = (e: Object, gestureState: Object) => {
