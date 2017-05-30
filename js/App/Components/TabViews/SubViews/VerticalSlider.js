@@ -100,18 +100,17 @@ class VerticalSlider extends View {
 			onSlidingStart(item.name, this.state.value.__getValue());
 		}
 		this.activeSlider = true;
-
+			if (this.parentScrollEnabled) {
+				// disable scrolling on the listView parent
+				this.parentScrollEnabled = false;
+				this.props.setScrollEnabled && this.props.setScrollEnabled(false);
+			}
 		onLeftEnd();
 		onRightEnd();
 	}
 
 	handlePanResponderMove = (e: Object, gestureState: Object) => {
 		if (this.activeSlider) {
-			if (this.parentScrollEnabled) {
-				// disable scrolling on the listView parent
-				this.parentScrollEnabled = false;
-				this.props.setScrollEnabled && this.props.setScrollEnabled(false);
-			}
 
 			this.setCurrentValue(this.getValue(gestureState));
 
