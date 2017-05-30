@@ -22,40 +22,66 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { RoundedCornerShadowView, Text, View, Icon } from 'BaseComponents';
+import { StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import Slider from 'react-native-slider';
 
 import { turnOn, turnOff, learn } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 
-const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
-	<RoundedCornerShadowView style={styles.toggleContainer}>
-		<TouchableOpacity
-			style={[styles.toggleButton, {
-  backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
-}]}
-			onPress={onTurnOff}>
-			<Text style={{
-  fontSize: 16,
-  color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
-				{'Off'}
-			</Text>
-		</TouchableOpacity>
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
-		<TouchableOpacity
-			style={[styles.toggleButton, {
-  backgroundColor: device.isInState !== 'TURNOFF' ? 'white' : '#eeeeee',
-}]}
-			onPress={onTurnOn}>
-			<Text style={{
-  fontSize: 16,
-  color: device.isInState !== 'TURNOFF' ? '#2c7e38' : '#9e9e9e' }}>
-				{'On'}
-			</Text>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
-);
+const ToggleButton = ({ device, onTurnOn, onTurnOff, request, fadeAnim }) => {
+	let blinking = function () {
+		Animated.sequence([
+			Animated.timing(fadeAnim, {
+				toValue: 1,
+				duration: 500,
+			}),
+			Animated.timing(fadeAnim, {
+				toValue: 0,
+				duration: 500,
+			}),
+		]).start(event => {
+			if (event.finished) {
+				blinking();
+			}
+		});
+	};
+
+	if (request === 'on-request' || request === 'off-request') {
+		blinking();
+	}
+
+	return (
+		<RoundedCornerShadowView style={styles.toggleContainer}>
+			<TouchableOpacity
+				style={[styles.toggleButton, device.isInState === 'TURNOFF' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled]}
+				onPress={onTurnOff}>
+				<Text style={[device.isInState === 'TURNOFF' ? styles.offTextEnabled : styles.offTextDisabled]}>
+					{'Off'}
+				</Text>
+			</TouchableOpacity>
+
+			<TouchableOpacity
+				style={[styles.toggleButton, device.isInState !== 'TURNOFF' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled]}
+				onPress={onTurnOn}>
+				<Text style={[device.isInState !== 'TURNOFF' ? styles.onTextEnabled : styles.onTextDisabled]}>
+					{'On'}
+				</Text>
+			</TouchableOpacity>
+			{
+				request === 'off-request' ?
+				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.leftCircle, { opacity: fadeAnim }]} />
+				:
+				request === 'on-request' ?
+				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.rightCircle, { opacity: fadeAnim }]} />
+				:
+				null
+			}
+		</RoundedCornerShadowView>
+	);
+};
 
 const LearnButton = ({ device, onLearn }) => (
 	<RoundedCornerShadowView style={styles.learnContainer}>
@@ -69,82 +95,88 @@ const LearnButton = ({ device, onLearn }) => (
 
 class DimmerDeviceDetailModal extends View {
 
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    const dimmerValue = this.getDimmerValue(this.props.device);
+		const dimmerValue = this.getDimmerValue(this.props.device);
 
-    this.state = {
-      temporaryDimmerValue: dimmerValue,
-    };
+		this.state = {
+			temporaryDimmerValue: dimmerValue,
+			fadeAnim: new Animated.Value(0),
+			request: 'none',
+		};
 
-    this.currentDimmerValue = dimmerValue;
-    this.onTurnOn = this.onTurnOn.bind(this);
-    this.onTurnOff = this.onTurnOff.bind(this);
-    this.onLearn = this.onLearn.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
-    this.onSlidingComplete = this.onSlidingComplete.bind(this);
-  }
+		this.currentDimmerValue = dimmerValue;
+		this.onTurnOn = this.onTurnOn.bind(this);
+		this.onTurnOff = this.onTurnOff.bind(this);
+		this.onLearn = this.onLearn.bind(this);
+		this.onValueChange = this.onValueChange.bind(this);
+		this.onSlidingComplete = this.onSlidingComplete.bind(this);
+	}
 
-  getDimmerValue(device) {
-    if (device !== null && device.value !== null) {
-      if (device.isInState === 'TURNON') {
-        return 100;
-      } else if (device.isInState === 'TURNOFF') {
-        return 0;
-      } else if (device.isInState === 'DIM') {
-        return Math.round(device.value * 100.0 / 255);
-      }
-    }
-  }
+	getDimmerValue(device) {
+		if (device !== null && device.value !== null) {
+			if (device.isInState === 'TURNON') {
+				return 100;
+			} else if (device.isInState === 'TURNOFF') {
+				return 0;
+			} else if (device.isInState === 'DIM') {
+				return Math.round(device.value * 100.0 / 255);
+			}
+		}
+	}
 
-  onTurnOn() {
-    this.props.onTurnOn(this.props.device.id);
-  }
+	onTurnOn() {
+		this.setState({ request: 'on-request' });
+		this.props.onTurnOn(this.props.device.id);
+	}
 
-  onTurnOff() {
-    this.props.onTurnOff(this.props.device.id);
-  }
+	onTurnOff() {
+		this.setState({ request: 'off-request' });
+		this.props.onTurnOff(this.props.device.id);
+	}
 
-  onLearn() {
-    this.props.onLearn(this.props.device.id);
-  }
+	onLearn() {
+		this.props.onLearn(this.props.device.id);
+	}
 
-  onValueChange(value) {
-    this.setState({ temporaryDimmerValue: value });
-  }
+	onValueChange(value) {
+		this.setState({ temporaryDimmerValue: value });
+	}
 
-  onSlidingComplete(value) {
-    this.props.onDim(this.props.device.id, 255 * value / 100.0);
-  }
+	onSlidingComplete(value) {
+		this.props.onDim(this.props.device.id, 255 * value / 100.0);
+	}
 
-  componentWillReceiveProps(nextProps) {
-    const device = nextProps.device;
-    const dimmerValue = this.getDimmerValue(device);
-    if (this.currentDimmerValue !== dimmerValue) {
-      this.setState({ temporaryDimmerValue: dimmerValue });
-      this.currentDimmerValue = dimmerValue;
-    }
-  }
+	componentWillReceiveProps(nextProps) {
+		const device = nextProps.device;
+		const dimmerValue = this.getDimmerValue(device);
+		if (this.currentDimmerValue !== dimmerValue) {
+			this.setState({ temporaryDimmerValue: dimmerValue });
+			this.currentDimmerValue = dimmerValue;
+		}
 
-  render() {
-    const { device } = this.props;
-    const { TURNON, TURNOFF, LEARN, DIM } = device.supportedMethods;
+		this.setState({ request: 'none' });
+	}
 
-    let toggleButton = null;
-    let learnButton = null;
-    let slider = null;
+	render() {
+		const { device } = this.props;
+		const { TURNON, TURNOFF, LEARN, DIM } = device.supportedMethods;
 
-    if (TURNON || TURNOFF) {
-      toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} />;
-    }
+		let toggleButton = null;
+		let learnButton = null;
+		let slider = null;
 
-    if (LEARN) {
-      learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
-    }
+		if (TURNON || TURNOFF) {
+			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} request={this.state.request} fadeAnim={this.state.fadeAnim} />;
+		}
 
-    if (DIM) {
-      slider = <Slider minimumValue={0} maximumValue={100} step={1} value={this.currentDimmerValue}
+		if (LEARN) {
+			learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
+		}
+
+		if (DIM) {
+			slider = <Slider minimumValue={0} maximumValue={100} step={1} value={this.currentDimmerValue}
 				style={{ marginHorizontal: 8, marginVertical: 8 }}
 				minimumTrackTintColor="rgba(0,150,136,255)"
 				maximumTrackTintColor="rgba(219,219,219,255)"
@@ -174,45 +206,79 @@ DimmerDeviceDetailModal.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 0,
-  },
-  textDimmingLevel: {
-    color: '#1a355b',
-    fontSize: 14,
-    marginTop: 12,
-    marginLeft: 8,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    height: 36,
-    marginHorizontal: 8,
-    marginVertical: 16,
-  },
-  toggleButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnContainer: {
-    height: 36,
-    marginHorizontal: 8,
-    marginVertical: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnText: {
-    fontSize: 16,
-    color: 'orange',
-  },
-  trackStyle: {
-    marginTop: -4, // fix track thumb alignment bug : https://github.com/jeanregisser/react-native-slider/issues/54
-  },
+	container: {
+		flex: 0,
+	},
+	textDimmingLevel: {
+		color: '#1a355b',
+		fontSize: 14,
+		marginTop: 12,
+		marginLeft: 8,
+	},
+	toggleContainer: {
+		flexDirection: 'row',
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 16,
+	},
+	toggleButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnContainer: {
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 8,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnText: {
+		fontSize: 16,
+		color: 'orange',
+	},
+	trackStyle: {
+		marginTop: -4, // fix track thumb alignment bug : https://github.com/jeanregisser/react-native-slider/issues/54
+	},
+	buttonBackgroundEnabled: {
+		backgroundColor: 'white',
+	},
+	buttonBackgroundDisabled: {
+		backgroundColor: '#eeeeee',
+	},
+	offTextEnabled: {
+		fontSize: 16,
+		color: 'red',
+	},
+	offTextDisabled: {
+		fontSize: 16,
+		color: '#9e9e9e',
+	},
+	onTextEnabled: {
+		fontSize: 16,
+		color: '#2c7e38',
+	},
+	onTextDisabled: {
+		fontSize: 16,
+		color: '#9e9e9e',
+	},
+	leftCircle: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
+		backgroundColor: 'transparent',
+	},
+	rightCircle: {
+		position: 'absolute',
+		top: 3,
+		right: 3,
+		backgroundColor: 'transparent',
+	},
 });
 
 function mapStateToProps(store) {
