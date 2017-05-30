@@ -73,7 +73,7 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 	},
 	sensorValue: {
-		width: 88,
+		width: 108,
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'center',
