@@ -42,19 +42,33 @@ export default class PickerComponent extends Base {
 			modalVisible: false,
 			current: this.getSelected().props.label,
 		};
+
+		this.openModal = this.openModal.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+		this.setModalVisible = this.setModalVisible.bind(this);
+		this.renderRow = this.renderRow.bind(this);
 	}
 
 	getInitialStyle() {
 		return {
 			picker: {
-                // alignItems: 'flex-end'
+				// alignItems: 'flex-end'
 			},
 			pickerItem: {
 
 			},
 		};
 	}
-	_setModalVisible(visible) {
+
+	openModal() {
+		this.setModalVisible(true);
+	}
+
+	closeModal() {
+		this.setModalVisible(false);
+	}
+
+	setModalVisible(visible) {
 		this.setState({ modalVisible: visible });
 	}
 
@@ -77,56 +91,56 @@ export default class PickerComponent extends Base {
 		return selected;
 	}
 
+	renderRow(child) {
+		return (
+			<ListItem style={{ paddingVertical: 10 }}
+				iconRight button
+				onPress={() => { // eslint-disable-line react/jsx-no-bind
+					this._setModalVisible(false);
+					this.props.onValueChange(child.props.value);
+					this.setState({ current: child.props.label });
+				}} >
+				<Text>{child.props.label}</Text>
+				{(child.props.value === this.props.selectedValue) ?
+					(<Icon name="ios-checkmark-outline" />)
+					:
+					(<Icon name="ios-checkmark-outline" style={{ color: 'transparent' }} />)
+				}
+			</ListItem>
+		);
+	}
+
 	render() {
 		return (
-        <View>
-            <Button transparent onPress={() => {
-	this._setModalVisible(true);
-}}>{this.state.current}</Button>
-            <Modal animationType="slide"
-                transparent={false}
-                visible={this.state.modalVisible}
-                onRequestClose={() => {
-	this._setModalVisible(false);
-}}
-                >
-                <Container>
-                    <Header >
-                        <Button transparent onPress={() => {
-	this._setModalVisible(false);
-}}>Back</Button>
-                        <Title>{this.props.iosHeader}</Title>
-                        <Button transparent textStyle={{ color: 'transparent' }}>Back</Button>
-                    </Header>
-                    <Content>
-                        <List dataArray={this.props.children}
-                            renderRow={(child) =>
-                                <ListItem style={{ paddingVertical: 10 }} iconRight button onPress={() => {
-	this._setModalVisible(false); this.props.onValueChange(child.props.value); this.setState({ current: child.props.label });
-}} >
-                                    <Text>{child.props.label}</Text>
-                                    {(child.props.value === this.props.selectedValue) ?
-                                        (<Icon name="ios-checkmark-outline" />)
-                                        :
-                                        (<Icon name="ios-checkmark-outline" style={{ color: 'transparent' }} />)
-                                    }
-
-                                </ListItem>
-                            } />
-                    </Content>
-                </Container>
-            </Modal>
-        </View>
+		<View>
+			<Button transparent onPress={this.openModal}>{this.state.current}</Button>
+			<Modal animationType="slide"
+				transparent={false}
+				visible={this.state.modalVisible}
+				onRequestClose={this.onRequestClose}
+				>
+				<Container>
+					<Header >
+						<Button transparent onPress={this.closeModal}>Back</Button>
+						<Title>{this.props.iosHeader}</Title>
+						<Button transparent textStyle={{ color: 'transparent' }}>Back</Button>
+					</Header>
+					<Content>
+						<List dataArray={this.props.children}
+							renderRow={this.renderRow} />
+					</Content>
+				</Container>
+			</Modal>
+		</View>
 		);
 	}
 
 }
 
 PickerComponent.Item = React.createClass({
-
 	render: function () {
 		return (
-          <Picker.Item {...this.props()}/>
+			<Picker.Item {...this.props()}/>
 		);
 	},
 });

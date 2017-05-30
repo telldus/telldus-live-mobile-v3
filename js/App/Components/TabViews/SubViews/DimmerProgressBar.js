@@ -35,6 +35,8 @@ class DimmerProgressBar extends Component {
 			containerWidth: 0,
 			containerHeight: 0,
 		};
+
+		this.layoutView = this.layoutView.bind(this);
 	}
 
 	componentDidMount() {
@@ -138,7 +140,7 @@ class DimmerProgressBar extends Component {
 
 		return (
             <View
-                onLayout={this.layoutView.bind(this)}
+                onLayout={this.layoutView}
                 style={[containerStyle, style]}
                 {...restProps}>
                 <Animated.View style={progressStyle} />

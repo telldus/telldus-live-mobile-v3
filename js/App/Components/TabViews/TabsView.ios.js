@@ -44,6 +44,13 @@ class TabsView extends View {
 		super(props);
 		this.eventEmitter = new EventEmitter();
 		this.onTabSelect = this.onTabSelect.bind(this);
+		this.onDashboardTabSelect = this.onDashboardTabSelect.bind(this);
+		this.onDevicesTabSelect = this.onDevicesTabSelect.bind(this);
+		this.onSensorsTabSelect = this.onSensorsTabSelect.bind(this);
+		this.onSchedulerTabSelect = this.onSchedulerTabSelect.bind(this);
+		this.onGatewaysTabSelect = this.onGatewaysTabSelect.bind(this);
+		this.toggleSensorTabEditMode = this.toggleSensorTabEditMode.bind(this);
+		this.toggleDevicesTabEditMode = this.toggleDevicesTabEditMode.bind(this);
 	}
 
 	componentDidMount() {
@@ -57,6 +64,26 @@ class TabsView extends View {
 		} else {
 			this.onTabSelect('devicesTab');
 		}
+	}
+
+	onDashboardTabSelect() {
+		this.onTabSelect('dashboardTab');
+	}
+
+	onDevicesTabSelect() {
+		this.onTabSelect('devicesTab');
+	}
+
+	onSensorsTabSelect() {
+		this.onTabSelect('sensorsTab');
+	}
+
+	onSchedulerTabSelect() {
+		this.onTabSelect('schedulerTab');
+	}
+
+	onGatewaysTabSelect() {
+		this.onTabSelect('gatewaysTab');
 	}
 
 	onTabSelect(tab) {
@@ -74,7 +101,7 @@ class TabsView extends View {
 				<TabBarIOS.Item
 					title = {I18n.t('pages.dashboard')}
 					selected = {this.props.tab === 'dashboardTab'}
-					onPress = {this.onTabSelect.bind(this, 'dashboardTab')}
+					onPress = {this.onDashboardTabSelect}
 					icon = {require('./img/tabIcons/dashboard-inactive.png')}
 					selectedIcon = {require('./img/tabIcons/dashboard-active.png')}
 				>
@@ -96,7 +123,7 @@ class TabsView extends View {
 				<TabBarIOS.Item
 					title = {I18n.t('pages.devices')}
 					selected = {this.props.tab === 'devicesTab'}
-					onPress = {this.onTabSelect.bind(this, 'devicesTab')}
+					onPress = {this.onDevicesTabSelect}
 					icon = {require('./img/tabIcons/devices-inactive.png')}
 					selectedIcon = {require('./img/tabIcons/devices-active.png')}
 				>
@@ -105,14 +132,14 @@ class TabsView extends View {
 							title: I18n.t('pages.devices'),
 							component: TabViews.Devices,
 							rightButtonIcon: this.state.starIcon,
-							onRightButtonPress: this._toggleDevicesTabEditMode.bind(this),
+							onRightButtonPress: this.toggleDevicesTabEditMode,
 						}}
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
 					title = {I18n.t('pages.sensors')}
 					selected = {this.props.tab === 'sensorsTab'}
-					onPress = {this.onTabSelect.bind(this, 'sensorsTab')}
+					onPress = {this.onSensorsTabSelect}
 					icon = {require('./img/tabIcons/sensors-inactive.png')}
 					selectedIcon = {require('./img/tabIcons/sensors-active.png')}>
 					<NavigatorIOS
@@ -120,14 +147,14 @@ class TabsView extends View {
 							title: I18n.t('pages.sensors'),
 							component: TabViews.Sensors,
 							rightButtonIcon: this.state.starIcon,
-							onRightButtonPress: this._toggleSensorTabEditMode.bind(this),
+							onRightButtonPress: this.toggleSensorTabEditMode,
 						}}
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
 					title={I18n.t('pages.scheduler')}
 					selected={this.props.tab === 'schedulerTab'}
-					onPress={this.onTabSelect.bind(this, 'schedulerTab')}
+					onPress={this.onSchedulerTabSelect}
 					badge={this.props.notificationsBadge || null}
 					icon={require('./img/tabIcons/scheduler-inactive.png')}
 					selectedIcon={require('./img/tabIcons/scheduler-active.png')}>
@@ -141,7 +168,7 @@ class TabsView extends View {
 				<TabBarIOS.Item
 					title={I18n.t('pages.gateways')}
 					selected={this.props.tab === 'gatewaysTab'}
-					onPress={this.onTabSelect.bind(this, 'gatewaysTab')}
+					onPress={this.onGatewaysTabSelect}
 					badge={this.props.notificationsBadge || null}
 					icon={require('./img/tabIcons/gateways-inactive.png')}
 					selectedIcon={require('./img/tabIcons/gateways-active.png')}>
@@ -164,11 +191,11 @@ class TabsView extends View {
 		});
 	}
 
-	_toggleSensorTabEditMode() {
+	toggleSensorTabEditMode() {
 		this.props.onToggleEditMode('sensorsTab');
 	}
 
-	_toggleDevicesTabEditMode() {
+	toggleDevicesTabEditMode() {
 		this.props.onToggleEditMode('devicesTab');
 	}
 }

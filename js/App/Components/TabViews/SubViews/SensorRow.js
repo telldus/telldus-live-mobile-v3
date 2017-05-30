@@ -103,6 +103,8 @@ class SensorRow extends Component {
 	constructor(props) {
 		super(props);
 		this.width = 0;
+
+		this.onLayout = this.onLayout.bind(this);
 	}
 
 	render() {
@@ -149,7 +151,7 @@ class SensorRow extends Component {
 		return (
 			<ListItem
 				style = {Theme.Styles.rowFront}
-				onLayout={this.onLayout.bind(this)} >
+				onLayout={this.onLayout} >
 				<View>
 					<Text style = {[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
 						ellipsizeMode="middle"

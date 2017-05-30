@@ -135,6 +135,7 @@ class TabsView extends View {
 		this.onTabSelect = this.onTabSelect.bind(this);
 		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
 		this.toggleEditMode = this.toggleEditMode.bind(this);
+		this.openDrawer = this.openDrawer.bind(this);
 	}
 
 	componentDidMount() {
@@ -171,6 +172,10 @@ class TabsView extends View {
 		this.setState({ index });
 		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
 		this.onTabSelect(tabNames[index]);
+	}
+
+	openDrawer() {
+		this.refs.drawer.openDrawer();
 	}
 
 	renderHeader(props) {
@@ -225,7 +230,7 @@ class TabsView extends View {
 								title = "Telldus Live!"
 								actions = {[{ title: 'Settings', icon: this.state.starIcon, show: 'always' }]}
 								onActionSelected = {this.toggleEditMode}
-								onIconClicked = {() => this.refs.drawer.openDrawer()}
+								onIconClicked = {this.openDrawer}
 							/>
 						) :
 						(
@@ -236,7 +241,7 @@ class TabsView extends View {
 								overflowIconName = "star"
 								iconColor = {Theme.Core.inverseTextColor}
 								title = "Telldus Live!"
-								onIconClicked = {() => this.refs.drawer.openDrawer()}
+								onIconClicked = {this.openDrawer}
 							/>
 						)
 					}

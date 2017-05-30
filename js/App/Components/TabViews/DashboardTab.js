@@ -62,6 +62,8 @@ class DashboardTab extends View {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
+		this.onCloseSetting = this.onCloseSetting.bind(this);
 		this.mixins = [Subscribable.Mixin];
 	}
 
@@ -86,6 +88,10 @@ class DashboardTab extends View {
 
 	onValueChange(value) {
 		this.props.dispatch(setDimmerValue(value));
+	}
+
+	onRefresh() {
+		this.props.dispatch(getDevices());
 	}
 
 	componentDidMount() {
@@ -139,13 +145,11 @@ class DashboardTab extends View {
 					dataSource = {this.state.dataSource}
 					renderRow = {this._renderRow(this.state.tileWidth)}
 					pageSize = {100}
-					onRefresh = {() =>
-						this.props.dispatch(getDevices())
-					}
+					onRefresh = {this.onRefresh}
 				/>
 				{
 					this.state.settings ?
-						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting.bind(this)} /> :
+						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting} /> :
 						null
 				}
 			</View>

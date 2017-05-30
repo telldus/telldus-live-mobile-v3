@@ -41,6 +41,11 @@ class LoginForm extends View {
 		super(props);
 
 		this.state = this.state || {};
+
+		this.onChangeUsername = this.onChangeUsername.bind(this);
+		this.onChangePassword = this.onChangePassword.bind(this);
+		this.onForgotPassword = this.onForgotPassword.bind(this);
+		this.onFormSubmit = this.onFormSubmit.bind(this);
 	}
 
 	render() {
@@ -61,7 +66,7 @@ class LoginForm extends View {
 				) : null }
 				<TextInput
 					style={styles.formField}
-					onChangeText={username => this.setState({ username, notificationText: false })}
+					onChangeText={this.onChangeUsername}
 					placeholder="Username"
 					keyboardType="email-address"
 					autoCapitalize = "none"
@@ -70,7 +75,7 @@ class LoginForm extends View {
 				/>
 				<TextInput
 					style={styles.formField}
-					onChangeText={password => this.setState({ password, notificationText: false })}
+					onChangeText={this.onChangePassword}
 					placeholder="Password"
 					secureTextEntry={true}
 					autoCapitalize = "none"
@@ -81,10 +86,10 @@ class LoginForm extends View {
 				<Button
 					name="lock"
 					style={styles.formSubmit}
-					onPress={() => this.formSubmit(this.state.username, this.state.password)}
+					onPress={this.onFormSubmit}
 				>{ this.state.isLoading ? 'Logging in...' : 'Login' }</Button>
 				<View style = {{ height: 40 }} />
-				<Text style={{ color: '#bbb' }} onPress={() => Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err))}>Forget your password? Need an account?</Text>
+				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forget your password? Need an account?</Text>
 				<View style = {{ height: 10 }} />
 			</View>
 		);
@@ -104,6 +109,22 @@ class LoginForm extends View {
 			this.setState({ notificationText: message });
 			this.setState({ isLoading: false });
 		});
+	}
+
+	onChangeUsername(username) {
+		this.setState({ username, notificationText: false });
+	}
+
+	onChangePassword(password) {
+		this.setState({ password, notificationText: false });
+	}
+
+	onFormSubmit() {
+		this.formSubmit(this.state.username, this.state.password);
+	}
+
+	onForgotPassword() {
+		Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err));
 	}
 }
 

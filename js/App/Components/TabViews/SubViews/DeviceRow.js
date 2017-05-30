@@ -34,6 +34,11 @@ import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
 
 class DeviceRow extends View {
+	constructor(props) {
+		super(props);
+
+		this.onSettingsSelected = this.onSettingsSelected.bind(this);
+	}
 	render() {
 		let button = null;
 		const { device } = this.props;
@@ -97,12 +102,16 @@ class DeviceRow extends View {
 							name="gear"
 							size={26}
 							color="#bbbbbb"
-							onPress={() => this.props.onSettingsSelected(device.id)}
+							onPress={this.onSettingsSelected}
 						/>
 					</View>
 				</Container>
 			</ListItem>
 		);
+	}
+
+	onSettingsSelected() {
+		this.props.onSettingsSelected(this.props.device.id);
 	}
 }
 

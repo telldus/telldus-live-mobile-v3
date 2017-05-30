@@ -102,7 +102,6 @@ class DeviceDetailModal extends View {
 			</Modal>
 		);
 	}
-
 }
 
 DeviceDetailModal.propTypes = {
