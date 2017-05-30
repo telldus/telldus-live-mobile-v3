@@ -61,7 +61,6 @@ class DimmerProgressBar extends Component {
 			const progress = (props.indeterminate
                 ? INDETERMINATE_WIDTH_FACTOR
                 : Math.min(Math.max(props.progress, 0), 1));
-
 			if (props.animated) {
 				Animated.spring(this.state.progress, {
 					toValue: progress,
@@ -96,6 +95,8 @@ class DimmerProgressBar extends Component {
 	}
 
 	render() {
+		this.state.progress._value = Math.max(0.0001, this.state.progress._value); // fix a bug in android : https://github.com/facebook/react-native/issues/6278
+
 		const { borderColor, borderRadius, borderWidth, color, height, style, unfilledColor, width, ...restProps } = this.props;
 
 		const innerWidth = width - (borderWidth * 2);
