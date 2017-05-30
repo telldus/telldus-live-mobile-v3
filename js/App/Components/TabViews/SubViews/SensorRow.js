@@ -164,7 +164,7 @@ class SensorRow extends Component {
 						{this.formatLastUpdated(minutesAgo, sensor.lastUpdated)}
 					</Text>
 				</View>
-				{ sensors.length * 88 < Math.max(this.width / 2.0, 177) ?
+				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ?
 					sensors :
 					(<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true} directionalLockEnabled={true} >
 						{sensors}
@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
 	},
 	scrollView: {
 		alignSelf: 'stretch',
+		minWidth: 216,
 	},
 });
 
