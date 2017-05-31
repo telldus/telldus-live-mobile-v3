@@ -37,8 +37,6 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 // This allows us to close the connection when the app goes to the background and
 // open the connection again when it goes to the front easily.
 
-// TODO: figure out whether we want to listen for appState to close the connection
-// https://facebook.github.io/react-native/docs/appstate.html
 import { AppState } from 'react-native';
 
 export default class TelldusWebsocket {
@@ -60,10 +58,10 @@ export default class TelldusWebsocket {
 
     this.websocket = new ReconnectingWebSocket(this.websocketUrl);
 
-		// bind any listeners on TelldusWebsocket to this.socket
+    // bind any listeners on TelldusWebsocket to this.socket
     this._addListeners();
 
-		// expose websocket.send as this.send
+    // expose websocket.send as this.send
     this.send = this.websocket.send;
 
     this._onAppStateChange = this._onAppStateChange.bind(this);
@@ -82,11 +80,11 @@ export default class TelldusWebsocket {
 
     this.websocket.close(null, null, {
       keepClosed: true,
-			// fastClose: true,
+      // fastClose: true,
     });
   }
 
-	// reconnect to a different websocket url
+  // reconnect to a different websocket url
   setUrl(url) {
     this.websocketUrl = url;
     this.close();
@@ -94,8 +92,14 @@ export default class TelldusWebsocket {
   }
 
   destroy() {
-    this.close();
+    // make sure no event listeners are fired
+    this.websocket.onopen = null;
+    this.websocket.onmessage = null;
+    this.websocket.onerror = null;
+    this.websocket.onclose = null;
     AppState.removeEventListener('change', this._onAppStateChange);
+
+    this.close();
     delete this.websocket;
   }
 
@@ -120,9 +124,11 @@ export default class TelldusWebsocket {
 
   _onAppStateChange(appState) {
     if (appState === 'active') {
+      console.log('app is active, reopening socket connection');
       this.open();
     }
     if (appState === 'background') {
+      console.log('app in background, closing socket connection');
       this.close();
     }
   }

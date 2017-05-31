@@ -36,60 +36,218 @@ import LiveApi from 'LiveApi';
 // TODO: move connection lookup to redux state
 const websocketConnections = {};
 
-// TODO: move sessionId to redux state
-const sessionId = v4();
-export const authenticateSession = () => (dispatch, getState) => {
+/*
+ * Ensures that our sessionId is registered at the LiveApi. When a new socket connection is established
+ * in `setupGatewayConnection`, the sessionId is used to auhenticate.
+ *
+ * When a sessionId is successfully registered, the LiveApi returns a ttl (time to live) which is an
+ * expiry date (timestamp in seconds UTC). Whenever the sessionId expires, `authenticateSession`
+ * automatically registers a new sessionId.
+ *
+ * `authenticateSession` returns a promise. It resolves to the authenticated sessionId, which is also
+ * stored in the redux state.
+ */
+export const authenticateSession = (() => {
+  // immediately executing function to create closure for promise management
+  let promise;
+  let resolving = false;
+
+  return () => (dispatch, getState) => {
+    const {
+      websockets: { session: { ttl, sessionId } },
+    } = getState();
+    const now = new Date();
+
+    if (ttl > now) {
+      // session still valid, not creating new one
+      return new Promise.resolve(sessionId);
+    }
+
+    if (resolving) {
+      // already authenticating, return the promise
+      return promise;
+    }
+
+    // authenticate, set promise and return it
+    const newSessionId = v4();
+    const payload = {
+      url: `/user/authenticateSession?session=${newSessionId}`,
+      requestParams: {
+        method: 'GET',
+      },
+    };
+
+    resolving = true;
+    promise = LiveApi(payload);
+    return promise
+  .then(response => dispatch({
+    type: 'SESSION_ID_AUTHENTICATED',
+    payload: {
+      sessionId: newSessionId,
+      ttl: response.ttl,
+    },
+  }))
+  .then(() => {
+    resolving = false;
+    return newSessionId;
+  });
+  };
+})();
+
+/*
+ * Sets up socket connections to known gateways.
+ * Makes sure that the session is authenticated before connecting.
+ */
+export const connectToGateways = () => (dispatch, getState) => {
+  const {
+    gateways: { allIds, byId },
+  } = getState();
+
+  allIds.forEach(gatewayId => {
+    const { websocketAddress } = byId[gatewayId] || {};
+    const { address, port } = websocketAddress || {};
+    if (!address || !port) {
+      return console.error('cannot connect to gateway because address or port is missing', {
+        gatewayId,
+        address,
+        port,
+      });
+    }
+
+    authenticateSession()(dispatch, getState).then(() => {
+      setupGatewayConnection(gatewayId, address, port)(dispatch, getState);
+    });
+  });
+};
+
+/*
+ * Retrieves the socket address for a gateway.
+ * If it receives an address that is different than the one that is in the state,
+ * or different than the one we are connected to, it updates the state and creates
+ * a new socket connection.
+ */
+export const getWebsocketAddress = gatewayId => (dispatch, getState) => {
   const payload = {
-    url: `/user/authenticateSession?session=${sessionId}`,
+    url: `/client/serverAddress?id=${gatewayId}`,
     requestParams: {
       method: 'GET',
     },
   };
-  return LiveApi(payload).then(response => dispatch({
-    type: 'RECEIVED_AUTHENTICATE_SESSION_RESPONSE',
-    payload: {
-      ...payload,
-      ...response,
-    },
-  }
-	));
+  return LiveApi(payload).then(response => {
+    const {
+      gateways: { byId: { [gatewayId]: gateway } },
+    } = getState();
+    const { websocketAddress } = gateway || {};
+    const { address, port } = response;
+    if (!address || !port) {
+      return console.error('received illegal gateway socket address', {
+        gatewayId,
+        response,
+      });
+    }
+
+    const websocketConnection = websocketConnections[gatewayId] || {};
+    if (
+      address === websocketAddress.address &&
+      address === websocketConnection.address &&
+      port === websocketAddress.port &&
+      port === websocketConnection.port
+    ) {
+      return console.log('websocket address has not changed, ignoring');
+    }
+
+    console.log('received new websocket address, reconnecting');
+
+    dispatch({
+      type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+      gatewayId,
+      payload: {
+        ...payload,
+        ...response,
+      },
+    });
+
+    authenticateSession()(dispatch, getState).then(() => {
+      setupGatewayConnection(gatewayId, address, port)(dispatch, getState);
+    });
+  });
 };
 
-export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
+export const destroyAllConnections = () => {
+  Object.keys(websocketConnections).forEach(destroyConnection);
+};
+
+const destroyConnection = gatewayId => {
+  const websocketConnection = websocketConnections[gatewayId];
+  if (!websocketConnection) {
+    return;
+  }
+  if (websocketConnection.websocket) {
+    websocketConnection.websocket.destroy();
+  }
+  delete websocketConnections[gatewayId];
+};
+
+/*
+ * Sets up a websocket connection for a gateway
+ * It makes sure that any existing socket connection for this gateway is destroyed first.
+ * When the connection is setup, it:
+ * - registers event listeners
+ * - registers the sessionId
+ * - registers listeners for devices and sensors that call Action Creators
+ *
+ * When the connection is closed it automatically tries to reopen the connection.
+ *
+ * When the server indicates that it is not the right server to connect to, it
+ * calls `getWebsocketAddress`, so that a new connection for the a new address
+ * is set up.
+ */
+const setupGatewayConnection = (gatewayId, address, port) => (dispatch, getState) => {
+  destroyConnection(gatewayId);
+  const websocketUrl = `ws://${address}:${port}/websocket`;
+  console.log('opening socket connection to', websocketUrl);
   const websocket = new TelldusWebsocket(gatewayId, websocketUrl);
   websocketConnections[gatewayId] = {
     url: websocketUrl,
     websocket: websocket,
+    address,
+    port,
   };
 
   websocket.onopen = () => {
     const formattedTime = formatTime(new Date());
     const message = `websocket_opened @ ${formattedTime} (gateway ${gatewayId})`;
+
     try {
       console.groupCollapsed(message);
       console.groupEnd();
     } catch (e) {
       console.log(message);
     }
-    authoriseWebsocket(gatewayId);
 
-    addWebsocketFilter(gatewayId, 'device', 'added');
-    addWebsocketFilter(gatewayId, 'device', 'removed');
-    addWebsocketFilter(gatewayId, 'device', 'failSetState');
-    addWebsocketFilter(gatewayId, 'device', 'setState');
+    const {
+      websockets: { session: { id: sessionId } },
+    } = getState();
 
-    addWebsocketFilter(gatewayId, 'sensor', 'added');
-    addWebsocketFilter(gatewayId, 'sensor', 'removed');
-    addWebsocketFilter(gatewayId, 'sensor', 'setName');
-    addWebsocketFilter(gatewayId, 'sensor', 'setPower');
-    addWebsocketFilter(gatewayId, 'sensor', 'value');
+    authoriseWebsocket(sessionId);
 
-    addWebsocketFilter(gatewayId, 'zwave', 'removeNodeFromNetwork');
-    addWebsocketFilter(gatewayId, 'zwave', 'removeNodeFromNetworkStartTimeout');
-    addWebsocketFilter(gatewayId, 'zwave', 'addNodeToNetwork');
-    addWebsocketFilter(gatewayId, 'zwave', 'addNodeToNetworkStartTimeout');
-    addWebsocketFilter(gatewayId, 'zwave', 'interviewDone');
-    addWebsocketFilter(gatewayId, 'zwave', 'nodeInfo');
+    addWebsocketFilter('device', 'added');
+    addWebsocketFilter('device', 'removed');
+    addWebsocketFilter('device', 'failSetState');
+    addWebsocketFilter('device', 'setState');
+
+    addWebsocketFilter('sensor', 'added');
+    addWebsocketFilter('sensor', 'removed');
+    addWebsocketFilter('sensor', 'setName');
+    addWebsocketFilter('sensor', 'setPower');
+    addWebsocketFilter('sensor', 'value');
+
+    addWebsocketFilter('zwave', 'removeNodeFromNetwork');
+    addWebsocketFilter('zwave', 'removeNodeFromNetworkStartTimeout');
+    addWebsocketFilter('zwave', 'addNodeToNetwork');
+    addWebsocketFilter('zwave', 'addNodeToNetworkStartTimeout');
+    addWebsocketFilter('zwave', 'interviewDone');
+    addWebsocketFilter('zwave', 'nodeInfo');
 
     dispatch({
       type: 'GATEWAY_WEBSOCKET_OPEN',
@@ -133,6 +291,11 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
       title = ` ${message.module}:${message.action}`;
 
       switch (message.module) {
+        case 'websocket_connection':
+          if (message.action === 'wrong_server') {
+            dispatch(getWebsocketAddress(gatewayId));
+          }
+          break;
         case 'device':
           dispatch(processWebsocketMessageForDevice(message.action, message.data));
           break;
@@ -181,41 +344,25 @@ export const setupGatewayConnection = (gatewayId, websocketUrl) => dispatch => {
       gatewayId,
     });
   };
-};
 
-function authoriseWebsocket(gatewayId) {
-  sendMessage(gatewayId, `{"module":"auth","action":"auth","data":{"sessionid":"${sessionId}","clientId":"${gatewayId}"}}`);
-}
-
-function addWebsocketFilter(gatewayId, module, action) {
-  sendMessage(gatewayId, `{"module":"filter","action":"accept","data":{"module":"${module}","action":"${action}"}}`);
-}
-
-function sendMessage(gatewayId, message) {
-  if (!websocketConnections[gatewayId] || !websocketConnections[gatewayId].websocket) {
-    return console.error('trying to send message for unknown gateway', {
-      gatewayId,
-      message,
-    });
+  function authoriseWebsocket(sessionId) {
+    sendMessage(`{"module":"auth","action":"auth","data":{"sessionid":"${sessionId}","clientId":"${gatewayId}"}}`);
   }
-  const formattedTime = formatTime(new Date());
-  const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
-  try {
-    console.groupCollapsed(title_prefix);
-    console.log(message);
-    console.groupEnd();
-  } catch (e) {
-    console.log(message);
-  }
-  websocketConnections[gatewayId].websocket.send(message);
-}
 
-export function closeAllConnections() {
-  Object.keys(websocketConnections).forEach(_gatewayId => {
-    const websocketConnection = websocketConnections[_gatewayId];
-    if (websocketConnection.websocket) {
-      websocketConnection.websocket.destroy();
+  function addWebsocketFilter(module, action) {
+    sendMessage(`{"module":"filter","action":"accept","data":{"module":"${module}","action":"${action}"}}`);
+  }
+
+  function sendMessage(message) {
+    const formattedTime = formatTime(new Date());
+    const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
+    try {
+      console.groupCollapsed(title_prefix);
+      console.log(message);
+      console.groupEnd();
+    } catch (e) {
+      console.log(message);
     }
-    delete websocketConnections[_gatewayId];
-  });
-}
+    websocket.send(message);
+  }
+};

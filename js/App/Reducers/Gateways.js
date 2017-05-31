@@ -29,22 +29,23 @@ export type State = ?Object;
 const gatewayInitialState = {
   id: null,
   name: null,
-  websocketOnline: false,
   websocketAddress: {
     address: null,
     instance: null,
     port: null,
   },
+  websocketOnline: false,
 };
 
-function reduceGateway(state: State = gatewayInitialState, action: Action): State {
+function reduceGateway(state: State = {}, action: Action): State {
   switch (action.type) {
     case 'RECEIVED_GATEWAYS':
       return {
         ...gatewayInitialState,
         ...state,
-        id: parseInt(state.id, 10),
-        online: Boolean(state.online),
+        ...action.payload,
+        id: parseInt(action.payload.id, 10),
+        online: Boolean(action.payload.online),
       };
     case 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS':
       const { payload } = action;
@@ -96,8 +97,10 @@ function byId(state = {}, action: Action): State {
     case 'RECEIVED_GATEWAYS':
       return action.payload.client.reduce((acc, gateway) => {
         acc[gateway.id] = {
-          ...state[gateway.id],
-          ...reduceGateway(gateway, action),
+          ...reduceGateway(state[gateway.id], {
+            type: action.type,
+            payload: gateway,
+          }),
         };
         return acc;
       }, {});

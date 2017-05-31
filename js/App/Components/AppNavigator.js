@@ -21,9 +21,9 @@
 
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
-import { getUserProfile, getGateways, getSensors, getJobs, appStart } from 'Actions';
+import { getGateways, getSensors, getJobs, getUserProfile, appStart, appState, syncLiveApiOnForeground } from 'Actions';
+import { authenticateSession, connectToGateways } from 'Actions/Websockets';
 import { getDevices } from 'Actions/Devices';
-import { authenticateSession } from 'Actions/Websockets';
 
 import { View } from 'BaseComponents';
 import Platform from 'Platform';
@@ -47,11 +47,11 @@ class AppNavigator extends View {
       this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
       Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
     }
-
   }
 
   componentWillMount() {
     this.props.dispatch(appStart());
+    this.props.dispatch(appState());
   }
 
   componentDidMount() {
@@ -61,8 +61,11 @@ class AppNavigator extends View {
       StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
     }
 
-    this.props.dispatch(authenticateSession());
     this.props.dispatch(getUserProfile());
+    this.props.dispatch(authenticateSession());
+    this.props.dispatch(connectToGateways());
+    this.props.dispatch(syncLiveApiOnForeground());
+
     this.props.dispatch(getDevices());
     this.props.dispatch(getGateways());
     this.props.dispatch(getSensors());

@@ -93,6 +93,10 @@ To make development quick React Native comes with a Launch Packager which is run
 
 - `react-native run-android`
 
+**Known issues:**
+
+- when using Geny motion it is possible the app starts crashing unexpectedly after having run for a minute or two. When running `adb logcat`, this crash occurs because part of the app gets wrongfully garbage collected. It always seems to have something to do with `OkHttp` which is the low level HTTP lib RN uses. The log often contains other system warnings and errors about its connection status, so it's very likely a GenyMotion/VMWare issue. The only thing that has been proven to work is to restart your computer (which likely resets an underlying service, maybe VMWare).
+
 ### Debugging
 
 React Native comes with pretty cool development tools.

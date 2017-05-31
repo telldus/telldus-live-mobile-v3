@@ -15,36 +15,39 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Actions
  */
 
 'use strict';
 
-import DeviceActions from './Devices';
-import GatewayActions from './Gateways';
-import LoginActions from './Login';
-import NavigationActions from './Navigation';
-import SensorActions from './Sensors';
-import WebsocketActions from './Websockets';
-import LiveApiActions from './LiveApi';
-import TabActions from './Tabs';
-import DashboardActions from './Dashboard';
-import DimmerActions from './Dimmer';
-import JobActions from './Jobs';
-import AppStateActions from './AppState';
+import type { Action } from 'Actions/Types';
+import { REHYDRATE } from 'redux-persist/constants';
 
-module.exports = {
-  ...DeviceActions,
-  ...GatewayActions,
-  ...LoginActions,
-  ...NavigationActions,
-  ...SensorActions,
-  ...LiveApiActions,
-  ...WebsocketActions,
-  ...TabActions,
-  ...DashboardActions,
-  ...DimmerActions,
-  ...JobActions,
-  ...AppStateActions,
+const initialState = {
+  sensors: false,
+  jobs: false,
+  gateways: false,
 };
+function reduceRefetchLiveApi(state = initialState, action: Action) {
+  if (action.type === REHYDRATE) {
+    return {
+      ...initialState,
+    };
+  }
+  if (action.type === 'APP_FOREGROUND') {
+    return {
+      ...initialState,
+    };
+  }
+  if (action.type === 'LIVEAPI_REFETCH') {
+    return {
+      ...state,
+      [action.endpoint]: true,
+    };
+  }
+  if (action.type === 'LOGGED_OUT') {
+    return {};
+  }
+  return state;
+}
+
+module.exports = reduceRefetchLiveApi;

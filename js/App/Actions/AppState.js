@@ -21,10 +21,26 @@
 
 'use strict';
 
-import type { Action } from './types';
+import type { Action, ThunkAction } from './types';
+
+import { AppState } from 'react-native';
 
 module.exports = {
   appStart: (): Action => ({
     type: 'APP_START',
   }),
+  appState: (): ThunkAction => dispatch => {
+    AppState.addEventListener('change', appState => {
+      if (appState === 'active') {
+        return dispatch({
+          type: 'APP_FOREGROUND',
+        });
+      }
+      if (appState === 'background') {
+        return dispatch({
+          type: 'APP_BACKGROUND',
+        });
+      }
+    });
+  },
 };

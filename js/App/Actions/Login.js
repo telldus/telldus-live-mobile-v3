@@ -26,8 +26,9 @@ import { apiServer } from 'Config';
 import { publicKey, privateKey } from 'Config';
 
 import LiveApi from 'LiveApi';
-import { closeAllConnections } from 'Actions/Websockets';
+import { destroyAllConnections } from 'Actions/Websockets';
 
+// TODO: rewrite into proper ThunkAction that does its own dispatching
 async function loginToTelldus(username, password): Promise<Action> {
 
   return new Promise((resolve, reject) => {
@@ -99,7 +100,7 @@ function getUserProfile(): ThunkAction {
 }
 
 function logoutFromTelldus(): ThunkAction {
-  closeAllConnections();
+  destroyAllConnections();
   return (dispatch) => {
     return dispatch({
       type: 'LOGGED_OUT',

@@ -74,10 +74,11 @@ export default function reduceJobs(state: State = initialState, action: Action):
   }
   if (action.type === 'RECEIVED_JOBS') {
     return action.payload.job
-			.filter(jobState => jobState.active)
-			.map(jobState =>
-				reduceJob(jobState, action)
-			);
+      .filter(jobState => jobState.active)
+      .map(jobState =>
+        // TODO: pass in received state as action.payload (see gateways reducer)
+        reduceJob(jobState, action)
+      );
   }
   if (action.type === 'LOGGED_OUT') {
     return [];

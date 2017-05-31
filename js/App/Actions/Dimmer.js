@@ -23,7 +23,7 @@
 
 import type { Action, ThunkAction } from './types';
 
-import LiveApi from '../Lib/LiveApi';
+import LiveApi from 'LiveApi';
 
 import { format } from 'url';
 

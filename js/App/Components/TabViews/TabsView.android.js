@@ -39,7 +39,7 @@ import { SettingsDetailModal } from 'DetailViews';
 import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
 import { getUserProfile } from '../../Reducers/User';
-import { switchTab, toggleEditMode } from 'Actions';
+import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
 
 const TabHeader = ({ fontSize, ...props }) => {
   return <TabBar {...props} style={{ backgroundColor: Theme.Core.brandPrimary }} labelStyle={{ fontSize }} />;
@@ -176,6 +176,7 @@ class TabsView extends View {
 
   openDrawer() {
     this.refs.drawer.openDrawer();
+    this.props.syncGateways();
   }
 
   renderHeader(props) {
@@ -338,7 +339,11 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onTabSelect: (tab) => dispatch(switchTab(tab)),
+    syncGateways: () => dispatch(syncWithServer('gatewaysTab')),
+    onTabSelect: (tab) => {
+      dispatch(syncWithServer(tab));
+      dispatch(switchTab(tab));
+    },
     onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
     dispatch,
   };
