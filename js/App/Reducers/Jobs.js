@@ -52,7 +52,7 @@ function reduceJob(state: State = jobInitialState, action: Action): State {
 				retries: parseInt(state.retries, 10),
 				retryInterval: parseInt(state.retryInterval, 10),
 				reps: parseInt(state.reps, 10),
-				active: Boolean(state.active),
+				active: !!state.active,
 				weekdays: state.weekdays.split(',').map(day => parseInt(day, 10)),
 			};
 			return newJob;
@@ -73,9 +73,11 @@ export default function reduceJobs(state: State = initialState, action: Action):
 		return [ ...state ];
 	}
 	if (action.type === 'RECEIVED_JOBS') {
-		return action.payload.job.map(jobState =>
-			reduceJob(jobState, action)
-		);
+		return action.payload.job
+			.filter(jobState => jobState.active)
+			.map(jobState =>
+				reduceJob(jobState, action)
+			);
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return [];
