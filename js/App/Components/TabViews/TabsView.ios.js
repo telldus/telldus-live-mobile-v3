@@ -33,7 +33,7 @@ import {
 	View,
 } from 'BaseComponents';
 
-import { switchTab, toggleEditMode } from 'Actions';
+import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
 import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
 
@@ -211,7 +211,10 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onTabSelect: (tab) => dispatch(switchTab(tab)),
+    onTabSelect: (tab) => {
+      dispatch(syncWithServer(tab));
+      dispatch(switchTab(tab));
+    },
     onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
     dispatch,
   };

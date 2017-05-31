@@ -32,6 +32,8 @@ import Tabs from './Tabs';
 import Dashboard from './Dashboard';
 import Dimmer from './Dimmer';
 import Jobs from './Jobs';
+import LiveApi from './LiveApi';
+import Websockets from './Websockets';
 
 module.exports = combineReducers({
   devices: Devices,
@@ -43,4 +45,6 @@ module.exports = combineReducers({
   dashboard: Dashboard,
   dimmer: Dimmer,
   jobs: Jobs,
+  liveApi: LiveApi,
+  websockets: Websockets,
 });

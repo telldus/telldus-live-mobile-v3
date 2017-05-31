@@ -29,7 +29,7 @@ export type State = ?Object;
 function reduceSensor(state = {}, action: Action): State {
   switch (action.type) {
     case 'RECEIVED_SENSORS':
-			// properties originated from server
+      // properties originated from server
       const newSensor = {
         id: parseInt(state.id, 10), // unique id
         sensorId: parseInt(state.sensorId, 10), // TODO: is this ever used?
@@ -44,7 +44,7 @@ function reduceSensor(state = {}, action: Action): State {
         protocol: state.protocol,
       };
 
-			// properties originated on client
+      // properties originated on client
       if (state.temp) {
         newSensor.temperature = state.temp;
       }
@@ -142,6 +142,7 @@ const byId = (state = {}, action: Action): State => {
     return action.payload.sensor.reduce((acc, sensorState) => {
       acc[sensorState.id] = {
         ...state[sensorState.id],
+        // TODO: pass in received state as action.payload (see gateways reducer)
         ...reduceSensor(sensorState, action),
       };
       return acc;
@@ -184,7 +185,7 @@ const allIds = (state = [], action: Action): State => {
     return [ ...state ];
   }
   if (action.type === 'RECEIVED_SENSORS') {
-		// overwrites entire state
+    // overwrites entire state
     return action.payload.sensor.map(sensorState => sensorState.id);
   }
   if (action.type === 'LOGGED_OUT') {
@@ -214,7 +215,7 @@ export function parseSensorsForListView(sensors = {}, gateways = {}, editMode = 
   });
 
   sectionIds.sort((a, b) => {
-		// might be that sensors get rendered before gateways are fetched
+    // might be that sensors get rendered before gateways are fetched
     const gatewayA = gateways.byId[a] ? gateways.byId[a].name : a;
     const gatewayB = gateways.byId[b] ? gateways.byId[b].name : b;
 

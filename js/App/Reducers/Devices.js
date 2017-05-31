@@ -45,9 +45,9 @@ function getDeviceStateMethod(deviceStateNumber: number): String {
 function reduceDevice(state = {}, action) {
   switch (action.type) {
     case 'RECEIVED_DEVICES':
-			// TODO: nothing seems to be reduced here?
+    // TODO: nothing seems to be reduced here?
       return {
-				// properties originated from server
+      // properties originated from server
         clientId: parseInt(state.client, 10),
         id: parseInt(state.id, 10),
         type: state.type,
@@ -55,16 +55,16 @@ function reduceDevice(state = {}, action) {
         value: state.statevalue,
         ignored: Boolean(state.ignored),
 
-				// clientDeviceId: parseInt(state.clientDeviceId, 10),
-				// editable: Boolean(state.editable),
-				// state: parseInt(state.state, 10),
-				// online: Boolean(state.online),
-				// ignored: Boolean(state.ignored),
-				// methods: state.methods,
-				// protocol: state.protocol,
+        // clientDeviceId: parseInt(state.clientDeviceId, 10),
+        // editable: Boolean(state.editable),
+        // state: parseInt(state.state, 10),
+        // online: Boolean(state.online),
+        // ignored: Boolean(state.ignored),
+        // methods: state.methods,
+        // protocol: state.protocol,
 
-				// properties originated on client
-				// isInDashboard: state.isInDashboard, // TODO: uncomment as soon as reduceDevice correctly reduces
+        // properties originated on client
+        // isInDashboard: state.isInDashboard, // TODO: uncomment as soon as reduceDevice correctly reduces
         isInState: getDeviceStateMethod(state.state),
         supportedMethods: getSupportedMethods(state.methods),
       };
@@ -115,6 +115,7 @@ function byId(state = {}, action) {
     return action.payload.device.reduce((acc, deviceState) => {
       acc[deviceState.id] = {
         ...state[deviceState.id],
+        // TODO: pass in received state as action.payload (see gateways reducer)
         ...reduceDevice(deviceState, action),
       };
       return acc;
@@ -163,11 +164,11 @@ const allIds = (state = [], action) => {
     return [ ...state ];
   }
   if (action.type === 'RECEIVED_DEVICES') {
-		// overwrites entire state
-		// exclude ignored devices
+    // overwrites entire state
+    // exclude ignored devices
     return action.payload.device
-			.filter(deviceState => !deviceState.ignored)
-			.map(deviceState => deviceState.id);
+      .filter(deviceState => !deviceState.ignored)
+      .map(deviceState => deviceState.id);
   }
   if (action.type === 'LOGGED_OUT') {
     return [];
@@ -197,7 +198,7 @@ export function parseDevicesForListView(devices = {}, gateways = {}, editMode = 
   });
 
   sectionIds.sort((a, b) => {
-		// might be that devices get rendered before gateways are fetched
+    // might be that devices get rendered before gateways are fetched
     const gatewayA = gateways.byId[a] ? gateways.byId[a].name : a;
     const gatewayB = gateways.byId[b] ? gateways.byId[b].name : b;
 

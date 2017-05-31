@@ -22,7 +22,7 @@
 'use strict';
 
 import type { ThunkAction } from './types';
-import { setupGatewayConnection } from 'Actions/Websockets';
+import { getWebsocketAddress } from 'Actions/Websockets';
 
 import LiveApi from 'LiveApi';
 import { format } from 'url';
@@ -52,32 +52,6 @@ function getGateways(): ThunkAction {
       response.client.forEach(gateway => {
         dispatch(getWebsocketAddress(gateway.id));
       });
-    });
-  };
-}
-
-function getWebsocketAddress(gatewayId): ThunkAction {
-  return (dispatch, getState) => {
-    const payload = {
-      url: `/client/serverAddress?id=${gatewayId}`,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => {
-      dispatch({
-        type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
-        gatewayId,
-        payload: {
-          ...payload,
-          ...response,
-        },
-      });
-      const { address, port } = response;
-      if (address && port) {
-        const websocketUrl = `ws://${address}:${port}/websocket`;
-        dispatch(setupGatewayConnection(gatewayId, websocketUrl));
-      }
     });
   };
 }
