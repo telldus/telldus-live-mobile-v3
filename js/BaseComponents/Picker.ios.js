@@ -36,70 +36,70 @@ import Title from './Title';
 import _ from 'lodash';
 
 export default class PickerComponent extends Base {
-	constructor(props) {
-		super(props);
-		this.state = {
-			modalVisible: false,
-			current: this.getSelected().props.label,
-		};
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: false,
+      current: this.getSelected().props.label,
+    };
 
-		this.openModal = this.openModal.bind(this);
-		this.closeModal = this.closeModal.bind(this);
-		this.setModalVisible = this.setModalVisible.bind(this);
-		this.renderRow = this.renderRow.bind(this);
-	}
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.setModalVisible = this.setModalVisible.bind(this);
+    this.renderRow = this.renderRow.bind(this);
+  }
 
-	getInitialStyle() {
-		return {
-			picker: {
+  getInitialStyle() {
+    return {
+      picker: {
 				// alignItems: 'flex-end'
-			},
-			pickerItem: {
+      },
+      pickerItem: {
 
-			},
-		};
-	}
+      },
+    };
+  }
 
-	openModal() {
-		this.setModalVisible(true);
-	}
+  openModal() {
+    this.setModalVisible(true);
+  }
 
-	closeModal() {
-		this.setModalVisible(false);
-	}
+  closeModal() {
+    this.setModalVisible(false);
+  }
 
-	setModalVisible(visible) {
-		this.setState({ modalVisible: visible });
-	}
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
 
-	prepareRootProps() {
+  prepareRootProps() {
 
-		let defaultProps = {
-			style: this.getInitialStyle().picker,
-			itemStyle: this.getInitialStyle().pickerItem,
-		};
+    let defaultProps = {
+      style: this.getInitialStyle().picker,
+      itemStyle: this.getInitialStyle().pickerItem,
+    };
 
-		return computeProps(this.props, defaultProps);
+    return computeProps(this.props, defaultProps);
 
-	}
+  }
 
-	getSelected() {
-		const selected = _.find(this.props.children, (o) => {
-			return o.props.value === this.props.selectedValue;
-		});
-		console.log('title', );
-		return selected;
-	}
+  getSelected() {
+    const selected = _.find(this.props.children, (o) => {
+      return o.props.value === this.props.selectedValue;
+    });
+    console.log('title', );
+    return selected;
+  }
 
-	renderRow(child) {
-		return (
+  renderRow(child) {
+    return (
 			<ListItem style={{ paddingVertical: 10 }}
 				iconRight button
 				onPress={() => { // eslint-disable-line react/jsx-no-bind
-					this._setModalVisible(false);
-					this.props.onValueChange(child.props.value);
-					this.setState({ current: child.props.label });
-				}} >
+  this._setModalVisible(false);
+  this.props.onValueChange(child.props.value);
+  this.setState({ current: child.props.label });
+}} >
 				<Text>{child.props.label}</Text>
 				{(child.props.value === this.props.selectedValue) ?
 					(<Icon name="ios-checkmark-outline" />)
@@ -107,11 +107,11 @@ export default class PickerComponent extends Base {
 					(<Icon name="ios-checkmark-outline" style={{ color: 'transparent' }} />)
 				}
 			</ListItem>
-		);
-	}
+    );
+  }
 
-	render() {
-		return (
+  render() {
+    return (
 		<View>
 			<Button transparent onPress={this.openModal}>{this.state.current}</Button>
 			<Modal animationType="slide"
@@ -132,15 +132,15 @@ export default class PickerComponent extends Base {
 				</Container>
 			</Modal>
 		</View>
-		);
-	}
+    );
+  }
 
 }
 
 PickerComponent.Item = React.createClass({
-	render: function () {
-		return (
+  render: function () {
+    return (
 			<Picker.Item {...this.props()}/>
-		);
-	},
+    );
+  },
 });

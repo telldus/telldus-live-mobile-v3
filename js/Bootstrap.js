@@ -33,43 +33,43 @@ import { IntlProvider } from 'react-intl';
 
 function Bootstrap(): React.Component {
 
-	console.disableYellowBox = true;
+  console.disableYellowBox = true;
 
-	class Root extends React.Component {
-		constructor() {
-			super();
-			this.state = {
-				isLoading: true,
-				store: configureStore(this._configureStoreCompleted.bind(this)),
-			};
-		}
+  class Root extends React.Component {
+    constructor() {
+      super();
+      this.state = {
+        isLoading: true,
+        store: configureStore(this._configureStoreCompleted.bind(this)),
+      };
+    }
 
-		_configureStoreCompleted() {
-			this.setState({ isLoading: false });
-		}
+    _configureStoreCompleted() {
+      this.setState({ isLoading: false });
+    }
 
-		render() {
-			if (this.state.isLoading) {
-				return null;
-			}
-			return (
+    render() {
+      if (this.state.isLoading) {
+        return null;
+      }
+      return (
 				<Provider store={this.state.store}>
 					<IntlProvider locale="en">
 						<App />
 					</IntlProvider>
 				</Provider>
-			);
-		}
+      );
+    }
 	}
 
-	return Root;
+  return Root;
 }
 
 global.LOG = (...args) => {
-	console.log('/------------------------------\\');
-	console.log(...args);
-	console.log('\\------------------------------/');
-	return args[args.length - 1];
+  console.log('/------------------------------\\');
+  console.log(...args);
+  console.log('\\------------------------------/');
+  return args[args.length - 1];
 };
 
 module.exports = Bootstrap;

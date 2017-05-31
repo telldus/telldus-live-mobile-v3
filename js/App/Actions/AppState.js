@@ -24,7 +24,7 @@
 import type { Action } from './types';
 
 module.exports = {
-	appStart: (): Action => ({
-		type: 'APP_START',
-	}),
+  appStart: (): Action => ({
+    type: 'APP_START',
+  }),
 };

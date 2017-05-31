@@ -32,25 +32,25 @@ import { AsyncStorage } from 'react-native';
 let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
 let logger = createLogger({
-	predicate: (getState, action) => isDebuggingInChrome,
-	collapsed: true,
-	duration: true,
+  predicate: (getState, action) => isDebuggingInChrome,
+  collapsed: true,
+  duration: true,
 });
 
 let createTheStore = applyMiddleware(thunk, promise, array, analytics, logger)(createStore);
 
 let _store;
 export function configureStore(onComplete: ?() => void) {
-	const store = autoRehydrate()(createTheStore)(reducers);
-	persistStore(store, { storage: AsyncStorage }, onComplete);
-	if (isDebuggingInChrome) {
-		window.store = store;
-	}
-	_store = store; // TODO: fix this ugly stuff
-	return store;
+  const store = autoRehydrate()(createTheStore)(reducers);
+  persistStore(store, { storage: AsyncStorage }, onComplete);
+  if (isDebuggingInChrome) {
+    window.store = store;
+  }
+  _store = store; // TODO: fix this ugly stuff
+  return store;
 }
 
 // TODO: should not be needed, remove when LiveApi gets store via component tree
 export function getStore() {
-	return _store;
+  return _store;
 }

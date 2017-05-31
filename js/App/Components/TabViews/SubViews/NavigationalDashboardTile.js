@@ -58,57 +58,57 @@ const StopButton = ({ isEnabled, onPress }) => (
 );
 
 class NavigationalDashboardTile extends View {
-	constructor(props) {
-		super(props);
-	}
+  constructor(props) {
+    super(props);
+  }
 
-	render() {
-		const { item, tileWidth } = this.props;
-		const { name, supportedMethods } = item;
-		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp} /> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown} /> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop} /> : null;
+  render() {
+    const { item, tileWidth } = this.props;
+    const { name, supportedMethods } = item;
+    const { UP, DOWN, STOP } = supportedMethods;
+    const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp} /> : null;
+    const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown} /> : null;
+    const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop} /> : null;
 
-		return (
+    return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
 				name={name}
 				tileWidth={tileWidth}
 				style={[this.props.style, {
-					width: tileWidth,
-					height: tileWidth,
-				}]}>
+  width: tileWidth,
+  height: tileWidth,
+}]}>
 				<View style={styles.body}>
 					{ upButton }
 					{ downButton }
 					{ stopButton }
 				</View>
 			</DashboardShadowTile>
-		);
-	}
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	body: {
-		flex: 30,
-		flexDirection: 'row',
-		backgroundColor: 'white',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
-	},
-	navigationButton: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	buttonEnabled: {
-		color: '#1a355b',
-	},
-	buttonDisabled: {
-		color: '#eeeeee',
-	},
+  body: {
+    flex: 30,
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 7,
+    borderTopRightRadius: 7,
+  },
+  navigationButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonEnabled: {
+    color: '#1a355b',
+  },
+  buttonDisabled: {
+    color: '#eeeeee',
+  },
 });
 
 module.exports = NavigationalDashboardTile;

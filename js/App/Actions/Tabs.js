@@ -26,8 +26,8 @@ import type { Action } from './types';
 type Tab = 'devicesTab' | 'sensorsTab';
 
 module.exports = {
-	toggleEditMode: (tab: Tab): Action => ({
-		type: 'TOGGLE_EDIT_MODE',
-		tab,
-	}),
+  toggleEditMode: (tab: Tab): Action => ({
+    type: 'TOGGLE_EDIT_MODE',
+    tab,
+  }),
 };

@@ -28,9 +28,9 @@ import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
 
 module.exports = {
-	Dashboard: DashboardTab,
-	Devices: DevicesTab,
-	Gateways: GatewaysTab,
-	Scheduler: SchedulerTab,
-	Sensors: SensorsTab,
+  Dashboard: DashboardTab,
+  Devices: DevicesTab,
+  Gateways: GatewaysTab,
+  Scheduler: SchedulerTab,
+  Sensors: SensorsTab,
 };

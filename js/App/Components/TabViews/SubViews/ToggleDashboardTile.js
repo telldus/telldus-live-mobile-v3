@@ -59,23 +59,23 @@ const OnButton = ({ isInState, tileWidth, enabled, onPress }) => (
 );
 
 class ToggleDashboardTile extends View {
-	constructor(props) {
-		super(props);
-	}
+  constructor(props) {
+    super(props);
+  }
 
-	render() {
-		const { item, tileWidth } = this.props;
-		const { name, isInState, supportedMethods } = item;
-		const { TURNON, TURNOFF } = supportedMethods;
+  render() {
+    const { item, tileWidth } = this.props;
+    const { name, isInState, supportedMethods } = item;
+    const { TURNON, TURNOFF } = supportedMethods;
 
-		const turnOnButton = <OnButton isInState={isInState} onPress={this.props.onTurnOn} tileWidth={tileWidth} enabled={!!TURNON} />;
-		const turnOffButton = <OffButton isInState={isInState} onPress={this.props.onTurnOff} tileWidth={tileWidth} enabled={!!TURNOFF} />;
+    const turnOnButton = <OnButton isInState={isInState} onPress={this.props.onTurnOn} tileWidth={tileWidth} enabled={!!TURNON} />;
+    const turnOffButton = <OffButton isInState={isInState} onPress={this.props.onTurnOff} tileWidth={tileWidth} enabled={!!TURNOFF} />;
 
-		const style = this.props.style;
-		style.width = tileWidth;
-		style.height = tileWidth;
+    const style = this.props.style;
+    style.width = tileWidth;
+    style.height = tileWidth;
 
-		return (
+    return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={isInState === 'TURNON'}
@@ -88,54 +88,54 @@ class ToggleDashboardTile extends View {
 					{ turnOnButton }
 				</View>
 			</DashboardShadowTile>
-		);
-	}
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	turnOffButtonContainer: {
-		flex: 1,
-		alignItems: 'stretch',
-		borderTopLeftRadius: 7,
-	},
-	turnOnButtonContainer: {
-		flex: 1,
-		alignItems: 'stretch',
-		borderTopRightRadius: 7,
-	},
-	button: {
-		flex: 1,
-		justifyContent: 'center',
-	},
-	buttonText: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	buttonBackgroundEnabled: {
-		backgroundColor: 'white',
-	},
-	buttonBackgroundDisabled: {
-		backgroundColor: '#eeeeee',
-	},
-	buttonOnEnabled: {
-		color: 'green',
-	},
-	buttonOnDisabled: {
-		color: '#a0a0a0',
-	},
-	buttonOffEnabled: {
-		color: 'red',
-	},
-	buttonOffDisabled: {
-		color: '#a0a0a0',
-	},
+  turnOffButtonContainer: {
+    flex: 1,
+    alignItems: 'stretch',
+    borderTopLeftRadius: 7,
+  },
+  turnOnButtonContainer: {
+    flex: 1,
+    alignItems: 'stretch',
+    borderTopRightRadius: 7,
+  },
+  button: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  buttonText: {
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  buttonBackgroundEnabled: {
+    backgroundColor: 'white',
+  },
+  buttonBackgroundDisabled: {
+    backgroundColor: '#eeeeee',
+  },
+  buttonOnEnabled: {
+    color: 'green',
+  },
+  buttonOnDisabled: {
+    color: '#a0a0a0',
+  },
+  buttonOffEnabled: {
+    color: 'red',
+  },
+  buttonOffDisabled: {
+    color: '#a0a0a0',
+  },
 });
 
 ToggleDashboardTile.propTypes = {
-	onTurnOn: PropTypes.func,
-	onTurnOff: PropTypes.func,
-	item: PropTypes.object,
-	enabled: PropTypes.bool,
+  onTurnOn: PropTypes.func,
+  onTurnOff: PropTypes.func,
+  item: PropTypes.object,
+  enabled: PropTypes.bool,
 };
 
 module.exports = ToggleDashboardTile;

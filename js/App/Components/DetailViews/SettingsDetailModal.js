@@ -42,8 +42,8 @@ const Button = ({ text, onPress, width }) => (
     <TouchableOpacity
         onPress={onPress}
 		style={[styles.button, {
-			width: width,
-		}]}>
+  width: width,
+}]}>
         <Text style={styles.buttonText}>
             {text}
         </Text>
@@ -52,15 +52,15 @@ const Button = ({ text, onPress, width }) => (
 
 class SettingsDetailModal extends View {
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			isVisible: this.props.isVisible,
-		};
-	}
+  constructor(props) {
+    super(props);
+    this.state = {
+      isVisible: this.props.isVisible,
+    };
+  }
 
-	render() {
-		return (
+  render() {
+    return (
             <Modal isVisible={this.state.isVisible}>
                 <Container style={styles.container}>
                     <Header onPress={this.props.onClose} />
@@ -73,84 +73,84 @@ class SettingsDetailModal extends View {
                     </View>
                 </Container>
             </Modal>
-		);
-	}
+    );
+  }
 
 }
 
 SettingsDetailModal.propTypes = {
-	onClose: React.PropTypes.func.isRequired,
-	onSubmitPushToken: React.PropTypes.func.isRequired,
-	onLogout: React.PropTypes.func.isRequired,
+  onClose: React.PropTypes.func.isRequired,
+  onSubmitPushToken: React.PropTypes.func.isRequired,
+  onLogout: React.PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: 'white',
-		margin: 10,
-	},
-	header: {
-		height: 46,
-		backgroundColor: '#1a355b',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	textHeaderTitle: {
-		marginLeft: 8,
-		color: 'white',
-		fontSize: 18,
-		fontWeight: 'bold',
-		flex: 8,
-	},
-	body: {
-		flex: 10,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	button: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#1a355b',
-		height: 40,
-		marginVertical: 10,
-	},
-	buttonText: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		color: 'white',
-		fontSize: 14,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	versionInfo: {
-		color: '#1a355b',
-		fontSize: 14,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		width: 200,
-		height: 45,
-		marginVertical: 20,
-	},
-	gear: {
-		flex: 1,
-		marginLeft: 8,
-	},
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    margin: 10,
+  },
+  header: {
+    height: 46,
+    backgroundColor: '#1a355b',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textHeaderTitle: {
+    marginLeft: 8,
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    flex: 8,
+  },
+  body: {
+    flex: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1a355b',
+    height: 40,
+    marginVertical: 10,
+  },
+  buttonText: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  versionInfo: {
+    color: '#1a355b',
+    fontSize: 14,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    width: 200,
+    height: 45,
+    marginVertical: 20,
+  },
+  gear: {
+    flex: 1,
+    marginLeft: 8,
+  },
 });
 
 function mapStateToProps(store) {
-	return {
-		store,
-	};
+  return {
+    store,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-	return {
-		onSubmitPushToken: () => console.log('TODO: Implement onSubmitPushToken'),
-		onLogout: () => dispatch(logoutFromTelldus()),
-		dispatch,
-	};
+  return {
+    onSubmitPushToken: () => console.log('TODO: Implement onSubmitPushToken'),
+    onLogout: () => dispatch(logoutFromTelldus()),
+    dispatch,
+  };
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(SettingsDetailModal);

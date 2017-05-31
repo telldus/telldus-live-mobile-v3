@@ -26,19 +26,19 @@ import type { Action } from './types';
 type Kind = 'device' | 'sensor';
 
 module.exports = {
-	addToDashboard: (kind: Kind, id: Number): Action => ({
-		type: 'ADD_TO_DASHBOARD',
-		kind,
-		id,
-	}),
-	removeFromDashboard: (kind : Kind, id: Number) : Action => ({
-		type: 'REMOVE_FROM_DASHBOARD',
-		kind,
-		id,
-	}),
-	changeSensorDisplayType: (id: Number, displayType: String) : Action => ({
-		type: 'CHANGE_SENSOR_DISPLAY_TYPE',
-		id,
-		displayType,
-	}),
+  addToDashboard: (kind: Kind, id: Number): Action => ({
+    type: 'ADD_TO_DASHBOARD',
+    kind,
+    id,
+  }),
+  removeFromDashboard: (kind : Kind, id: Number) : Action => ({
+    type: 'REMOVE_FROM_DASHBOARD',
+    kind,
+    id,
+  }),
+  changeSensorDisplayType: (id: Number, displayType: String) : Action => ({
+    type: 'CHANGE_SENSOR_DISPLAY_TYPE',
+    id,
+    displayType,
+  }),
 };

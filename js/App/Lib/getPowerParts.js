@@ -24,16 +24,16 @@
  * etc.
  */
 function getBiggestPower(num) {
-	return Math.floor(Math.log(num) / Math.log(2));
+  return Math.floor(Math.log(num) / Math.log(2));
 }
 
 export default function getParts(num, memo = []) {
-	const biggestPower = getBiggestPower(num);
-	const biggestPart = Math.pow(2, biggestPower);
-	const remainder = num - biggestPart;
-	const newMemo = [...memo, biggestPart];
-	if (remainder < 1) {
-		return newMemo;
-	}
-	return getParts(remainder, newMemo);
+  const biggestPower = getBiggestPower(num);
+  const biggestPart = Math.pow(2, biggestPower);
+  const remainder = num - biggestPart;
+  const newMemo = [...memo, biggestPart];
+  if (remainder < 1) {
+    return newMemo;
+  }
+  return getParts(remainder, newMemo);
 }

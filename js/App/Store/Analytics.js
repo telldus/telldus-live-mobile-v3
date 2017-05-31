@@ -22,6 +22,6 @@
 import track from './Track';
 
 module.exports = store => next => action => {
-	track(action);
-	return next(action);
+  track(action);
+  return next(action);
 };

@@ -25,23 +25,23 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
 class BellDashboardTile extends View {
-	constructor(props) {
-		super(props);
-	}
+  constructor(props) {
+    super(props);
+  }
 
-	render() {
-		const { item, tileWidth } = this.props;
+  render() {
+    const { item, tileWidth } = this.props;
 
-		return (
+    return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
 				name={item.name}
 				tileWidth={tileWidth}
 				style={[this.props.style, {
-					width: tileWidth,
-					height: tileWidth,
-				}]}>
+  width: tileWidth,
+  height: tileWidth,
+}]}>
                 <TouchableOpacity
                     onPress={this.props.onBell}
                     style={styles.container}>
@@ -50,24 +50,24 @@ class BellDashboardTile extends View {
                     </View>
                 </TouchableOpacity>
 			</DashboardShadowTile>
-		);
-	}
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 30,
-		justifyContent: 'center',
-	},
-	body: {
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'white',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
-	},
+  container: {
+    flex: 30,
+    justifyContent: 'center',
+  },
+  body: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 7,
+    borderTopRightRadius: 7,
+  },
 });
 
 module.exports = BellDashboardTile;

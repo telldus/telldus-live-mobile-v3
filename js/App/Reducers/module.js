@@ -34,13 +34,13 @@ import Dimmer from './Dimmer';
 import Jobs from './Jobs';
 
 module.exports = combineReducers({
-	devices: Devices,
-	gateways: Gateways,
-	navigation: Navigation,
-	sensors: Sensors,
-	user: User,
-	tabs: Tabs,
-	dashboard: Dashboard,
-	dimmer: Dimmer,
-	jobs: Jobs,
+  devices: Devices,
+  gateways: Gateways,
+  navigation: Navigation,
+  sensors: Sensors,
+  user: User,
+  tabs: Tabs,
+  dashboard: Dashboard,
+  dimmer: Dimmer,
+  jobs: Jobs,
 });

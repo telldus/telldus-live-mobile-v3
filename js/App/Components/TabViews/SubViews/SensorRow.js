@@ -57,10 +57,10 @@ const SensorRain = ({ rainRate, rainTotal }) => (
 );
 
 const SensorWind = ({ windAverage, windGust, windDirection }) => {
-	const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-	const getWindDirection = value => directions[Math.floor(value / 22.5)];
+  const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
+  const getWindDirection = value => directions[Math.floor(value / 22.5)];
 
-	return (
+  return (
 		<View style={Theme.Styles.sensorValue}>
 		<Image source={require('../img/sensorIcons/Wind.png')} />
 			<Text>
@@ -69,7 +69,7 @@ const SensorWind = ({ windAverage, windGust, windDirection }) => {
 				{ windDirection && ( <Text>{getWindDirection(windDirection)}</Text> ) }
 			</Text>
 		</View>
-	);
+  );
 };
 
 const SensorUV = ({ uv }) => (
@@ -100,19 +100,19 @@ const SensorLuminance = ({ luminance }) => (
 );
 
 class SensorRow extends Component {
-	constructor(props) {
-		super(props);
-		this.width = 0;
+  constructor(props) {
+    super(props);
+    this.width = 0;
 
-		this.onLayout = this.onLayout.bind(this);
-	}
+    this.onLayout = this.onLayout.bind(this);
+  }
 
-	render() {
-		const { sensor } = this.props;
-		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
-		let sensors = [];
+  render() {
+    const { sensor } = this.props;
+    const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
+    let sensors = [];
 
-		const {
+    const {
 			id,
 			humidity,
 			temperature,
@@ -126,29 +126,29 @@ class SensorRow extends Component {
 			luminance,
 		} = sensor;
 
-		if (humidity) {
-			sensors.push(<SensorHumidity {...{ humidity }} key={`${id}humidity`}/>);
-		}
-		if (temperature) {
-			sensors.push(<SensorTemperature {...{ temperature }} key={`${id}temperature`}/>);
-		}
-		if (rainRate || rainTotal) {
-			sensors.push(<SensorRain {...{ rainRate, rainTotal }} key={`${id}rain`}/>);
-		}
-		if (windGust || windAverage || windDirection) {
-			sensors.push(<SensorWind {...{ windGust, windAverage, windDirection }} key={`${id}wind`}/>);
-		}
-		if (uv) {
-			sensors.push(<SensorUV {...{ uv }} key={`${id}uv`}/>);
-		}
-		if (watt) {
-			sensors.push(<SensorWatt {...{ watt }} key={`${id}watt`}/>);
-		}
-		if (luminance) {
-			sensors.push(<SensorLuminance {...{ luminance }} key={`${id}luminance`}/>);
-		}
+    if (humidity) {
+      sensors.push(<SensorHumidity {...{ humidity }} key={`${id}humidity`}/>);
+    }
+    if (temperature) {
+      sensors.push(<SensorTemperature {...{ temperature }} key={`${id}temperature`}/>);
+    }
+    if (rainRate || rainTotal) {
+      sensors.push(<SensorRain {...{ rainRate, rainTotal }} key={`${id}rain`}/>);
+    }
+    if (windGust || windAverage || windDirection) {
+      sensors.push(<SensorWind {...{ windGust, windAverage, windDirection }} key={`${id}wind`}/>);
+    }
+    if (uv) {
+      sensors.push(<SensorUV {...{ uv }} key={`${id}uv`}/>);
+    }
+    if (watt) {
+      sensors.push(<SensorWatt {...{ watt }} key={`${id}watt`}/>);
+    }
+    if (luminance) {
+      sensors.push(<SensorLuminance {...{ luminance }} key={`${id}luminance`}/>);
+    }
 
-		return (
+    return (
 			<ListItem
 				style = {Theme.Styles.rowFront}
 				onLayout={this.onLayout} >
@@ -159,8 +159,8 @@ class SensorRow extends Component {
 						{sensor.name ? sensor.name : '(no name)'}
 					</Text>
 					<Text style = {[styles.time, {
-						color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
-						opacity: minutesAgo < 1440 ? 1 : 0.5 }]}>
+  color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
+  opacity: minutesAgo < 1440 ? 1 : 0.5 }]}>
 						{this.formatLastUpdated(minutesAgo, sensor.lastUpdated)}
 					</Text>
 				</View>
@@ -171,54 +171,54 @@ class SensorRow extends Component {
 					</ScrollView>)
 				}
 			</ListItem>
-		);
-	}
+    );
+  }
 
-	onLayout(event) {
-		this.width = event.nativeEvent.layout.width;
-	}
+  onLayout(event) {
+    this.width = event.nativeEvent.layout.width;
+  }
 
-	formatLastUpdated(minutes, lastUpdated) {
-		if (minutes === 0) {
-			return 'Just now';
-		}
-		if (minutes === 1) {
-			return '1 minute ago';
-		}
-		if (minutes < 60) {
-			return `${minutes} minutes ago`;
-		}
-		const hours = Math.round(minutes / 60);
-		if (hours === 1) {
-			return '1 hour ago';
-		}
-		if (hours < 24) {
-			return `${hours} hours ago`;
-		}
-		const days = Math.round(minutes / 60 / 24);
-		if (days === 1) {
-			return '1 day ago';
-		}
-		if (days <= 7) {
-			return `${days} days ago`;
-		}
-		return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
-	}
+  formatLastUpdated(minutes, lastUpdated) {
+    if (minutes === 0) {
+      return 'Just now';
+    }
+    if (minutes === 1) {
+      return '1 minute ago';
+    }
+    if (minutes < 60) {
+      return `${minutes} minutes ago`;
+    }
+    const hours = Math.round(minutes / 60);
+    if (hours === 1) {
+      return '1 hour ago';
+    }
+    if (hours < 24) {
+      return `${hours} hours ago`;
+    }
+    const days = Math.round(minutes / 60 / 24);
+    if (days === 1) {
+      return '1 day ago';
+    }
+    if (days <= 7) {
+      return `${days} days ago`;
+    }
+    return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
+  }
 }
 
 const styles = StyleSheet.create({
-	name: {
-		color: 'rgba(0,0,0,0.87)',
-		fontSize: 16,
-		marginBottom: 2,
-	},
-	time: {
-		fontSize: 12,
-	},
-	scrollView: {
-		alignSelf: 'stretch',
-		minWidth: 216,
-	},
+  name: {
+    color: 'rgba(0,0,0,0.87)',
+    fontSize: 16,
+    marginBottom: 2,
+  },
+  time: {
+    fontSize: 12,
+  },
+  scrollView: {
+    alignSelf: 'stretch',
+    minWidth: 216,
+  },
 });
 
 module.exports = SensorRow;

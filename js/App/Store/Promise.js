@@ -20,8 +20,8 @@
 'use strict';
 
 function warn(error) {
-	console.warn(error.message || error);
-	throw error; // To let the caller handle the rejection
+  console.warn(error.message || error);
+  throw error; // To let the caller handle the rejection
 }
 
 module.exports = store => next => action =>

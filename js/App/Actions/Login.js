@@ -30,81 +30,81 @@ import { closeAllConnections } from 'Actions/Websockets';
 
 async function loginToTelldus(username, password): Promise<Action> {
 
-	return new Promise((resolve, reject) => {
-		fetch(
+  return new Promise((resolve, reject) => {
+    fetch(
 			`${apiServer}/oauth2/accessToken`,
-			{
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					'client_id': publicKey,
-					'client_secret': privateKey,
-					'grant_type': 'password',
-					'username': username,
-					'password': password,
-				}),
-			}
+      {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          'client_id': publicKey,
+          'client_secret': privateKey,
+          'grant_type': 'password',
+          'username': username,
+          'password': password,
+        }),
+      }
 		)
 		.then((response) => response.json())
 		.then((responseData) => {
-			if (responseData.error) {
-				throw responseData;
-			}
-			resolve( {
-				type: 'RECEIVED_ACCESS_TOKEN',
-				accessToken: responseData,
-			});
-		})
+  if (responseData.error) {
+    throw responseData;
+  }
+  resolve( {
+    type: 'RECEIVED_ACCESS_TOKEN',
+    accessToken: responseData,
+  });
+})
 		.catch((e) => {
-			reject({
-				type: 'ERROR',
-				message: {
-					...e,
-					error_description: !e.error_description && e.message === 'Network request failed' ? 'Network request failed. Check your internet connection' : e.error_description,
-				},
-			});
-		});
-	});
+  reject({
+    type: 'ERROR',
+    message: {
+      ...e,
+      error_description: !e.error_description && e.message === 'Network request failed' ? 'Network request failed. Check your internet connection' : e.error_description,
+    },
+  });
+});
+  });
 
 }
 
 function updateAccessToken(accessToken): Action {
-	return {
-		type: 'RECEIVED_ACCESS_TOKEN',
-		accessToken: accessToken,
-	};
+  return {
+    type: 'RECEIVED_ACCESS_TOKEN',
+    accessToken: accessToken,
+  };
 }
 
 function getUserProfile(): ThunkAction {
-	return (dispatch, getState) => {
-		const payload = {
-			url: '/user/profile',
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'RECEIVED_USER_PROFILE',
-			payload: {
-				...payload,
-				...response,
-			},
-		}
+  return (dispatch, getState) => {
+    const payload = {
+      url: '/user/profile',
+      requestParams: {
+        method: 'GET',
+      },
+    };
+    return LiveApi(payload).then(response => dispatch({
+      type: 'RECEIVED_USER_PROFILE',
+      payload: {
+        ...payload,
+        ...response,
+      },
+    }
 		));
 
-	};
+  };
 }
 
 function logoutFromTelldus(): ThunkAction {
-	closeAllConnections();
-	return (dispatch) => {
-		return dispatch({
-			type: 'LOGGED_OUT',
-		});
-	};
+  closeAllConnections();
+  return (dispatch) => {
+    return dispatch({
+      type: 'LOGGED_OUT',
+    });
+  };
 
 }
 

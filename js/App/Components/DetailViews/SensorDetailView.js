@@ -26,8 +26,8 @@ import { Container, Content, Text, View } from 'BaseComponents';
 
 class SensorDetailView extends View {
 
-	render() {
-		return (
+  render() {
+    return (
 			<Container style={{ padding: 10 }}>
 				<Content>
 					<Text>Gateway: { this.props.sensor.clientName}</Text>
@@ -39,8 +39,8 @@ class SensorDetailView extends View {
 					<Text>Protocol: { this.props.sensor.protocol}</Text>
 				</Content>
 			</Container>
-		);
-	}
+    );
+  }
 
 }
 
