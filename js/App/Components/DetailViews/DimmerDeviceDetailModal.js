@@ -281,10 +281,6 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(store) {
-  return { store };
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     onTurnOn: (id) => dispatch(turnOn(id)),
@@ -295,4 +291,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerDeviceDetailModal);
+module.exports = connect(null, mapDispatchToProps)(DimmerDeviceDetailModal);
