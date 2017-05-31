@@ -81,6 +81,7 @@ const byId = kind => (state = {}, action) => {
     }
     return { ...state };
   }
+
   if (action.type === 'ADD_TO_DASHBOARD' && action.kind === kind) {
     return {
       ...state,
@@ -108,6 +109,7 @@ const sensorDisplayTypeById = (state = {}, action) => {
     }
     return { ...state };
   }
+
   switch (action.type) {
     case 'CHANGE_SENSOR_DISPLAY_TYPE':
       return {

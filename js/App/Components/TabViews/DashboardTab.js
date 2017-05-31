@@ -27,6 +27,7 @@ import { Text, List, ListDataSource, View } from 'BaseComponents';
 import Platform from 'Platform';
 import { turnOn, turnOff, bell, down, up, stop, getDevices } from 'Actions/Devices';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
+import { changeSensorDisplayType } from 'Actions/Dashboard';
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
@@ -56,15 +57,36 @@ class DashboardTab extends View {
       settings: false,
     };
 
+    this.tab = 'dashboardTab';
+
     this._onLayout = this._onLayout.bind(this);
     this.setScrollEnabled = this.setScrollEnabled.bind(this);
     this.onSlidingStart = this.onSlidingStart.bind(this);
     this.onSlidingComplete = this.onSlidingComplete.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
     this.onOpenSetting = this.onOpenSetting.bind(this);
+    this.startSensorTimer = this.startSensorTimer.bind(this);
+    this.stopSensorTimer = this.stopSensorTimer.bind(this);
+    this.changeDisplayType = this.changeDisplayType.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.onCloseSetting = this.onCloseSetting.bind(this);
     this.mixins = [Subscribable.Mixin];
+  }
+
+  startSensorTimer() {
+    this.timer = setInterval(() => {
+      this.props.onChangeDisplayType();
+    }, 5000);
+  }
+
+  stopSensorTimer() {
+    clearInterval(this.timer);
+  }
+
+  changeDisplayType() {
+    this.stopSensorTimer();
+    this.props.onChangeDisplayType();
+    this.startSensorTimer();
   }
 
   rowHasChanged(r1, r2) {
@@ -98,12 +120,26 @@ class DashboardTab extends View {
     if (Platform.OS === 'ios') {
       this.addListenerOn(this.props.events, 'onSetting', this.onOpenSetting);
     }
+
+    this.startSensorTimer();
+  }
+
+  componentWillUnmount() {
+    this.stopSensorTimer();
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
     });
+
+    if (nextProps.tab !== 'dashboardTab') {
+      this.stopSensorTimer();
+      this.tab = nextProps.tab;
+    } else if (nextProps.tab === 'dashboardTab' && this.tab !== 'dashboardTab') {
+      this.startSensorTimer();
+      this.tab = 'dashboardTab';
+    }
   }
 
   _onLayout = (event) => {
@@ -181,6 +217,7 @@ class DashboardTab extends View {
 					style={tileStyle}
 					tileWidth={tileWidth}
 					item={row.childObject}
+					onPress={this.changeDisplayType}
 				/>;
       }
 
@@ -259,6 +296,7 @@ function mapStateToProps(state, props) {
     rows: getRows(state),
     gateways: state.gateways,
     userProfile: getUserProfile(state),
+    tab: state.navigation.tab,
   };
 }
 
@@ -272,6 +310,7 @@ function mapDispatchToProps(dispatch) {
     onStop: id => () => dispatch(stop(id)),
     onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
     onDim: id => value => dispatch(updateDimmerValue(id, value)),
+    onChangeDisplayType: () => dispatch(changeSensorDisplayType()),
     dispatch,
   };
 }
