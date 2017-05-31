@@ -24,58 +24,58 @@ import { View, StyleSheet } from 'react-native';
 import Base from './Base';
 
 class RoundedCornerShadowView extends Base {
-	render() {
-		let propsStyle = this.props.style;
-		if (Number.isInteger(propsStyle)) {
-			propsStyle = StyleSheet.flatten(propsStyle);
-		}
+  render() {
+    let propsStyle = this.props.style;
+    if (Number.isInteger(propsStyle)) {
+      propsStyle = StyleSheet.flatten(propsStyle);
+    }
 
-		return (
+    return (
 			<View
 				onLayout={this.props.onLayout}
 				style={[this.props.style, (this.props.hasShadow ? styles.shadow : styles.noShadow)]}>
 				<View style={[styles.container, {
-					flexDirection: propsStyle.flexDirection ? propsStyle.flexDirection : 'row',
-					justifyContent: propsStyle.justifyContent ? propsStyle.justifyContent : 'center',
-					alignItems: propsStyle.alignItems ? propsStyle.alignItems : 'stretch',
-				}]}>
+  flexDirection: propsStyle.flexDirection ? propsStyle.flexDirection : 'row',
+  justifyContent: propsStyle.justifyContent ? propsStyle.justifyContent : 'center',
+  alignItems: propsStyle.alignItems ? propsStyle.alignItems : 'stretch',
+}]}>
                     {this.props.children}
                 </View>
             </View>
-		);
-	}
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	shadow: {
-		borderRadius: 7,
-		shadowColor: '#000000',
-		shadowOffset: { width: 0, height: 0 },
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
-	},
-	noShadow: {
-		borderRadius: 7,
-		shadowColor: '#000000',
-		shadowOffset: { width: 0, height: 0 },
-		shadowRadius: 0,
-		shadowOpacity: 1.0,
-		elevation: 0,
-	},
-	container: {
-		flex: 1,
-		borderRadius: 7,
-		overflow: 'hidden',
-	},
+  shadow: {
+    borderRadius: 7,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 1,
+    shadowOpacity: 1.0,
+    elevation: 2,
+  },
+  noShadow: {
+    borderRadius: 7,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 0,
+    shadowOpacity: 1.0,
+    elevation: 0,
+  },
+  container: {
+    flex: 1,
+    borderRadius: 7,
+    overflow: 'hidden',
+  },
 });
 
 RoundedCornerShadowView.propTypes = {
-	hasShadow: React.PropTypes.bool,
+  hasShadow: React.PropTypes.bool,
 };
 
 RoundedCornerShadowView.defaultProps = {
-	hasShadow: true,
+  hasShadow: true,
 };
 
 module.exports = RoundedCornerShadowView;

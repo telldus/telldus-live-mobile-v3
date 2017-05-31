@@ -24,212 +24,212 @@ import { Text, View } from 'BaseComponents';
 import { PanResponder, Animated, StyleSheet, Vibration, Platform } from 'react-native';
 
 function getSliderLabel(value) {
-	if (value === 100) {
-		return 'On';
-	}
-	if (value === 0) {
-		return 'Off';
-	}
-	return value;
+  if (value === 100) {
+    return 'On';
+  }
+  if (value === 0) {
+    return 'Off';
+  }
+  return value;
 }
 
 class VerticalSlider extends View {
-	constructor(props) {
-		super(props);
-		this.parentScrollEnabled = true;
-		this.state = {
-			containerWidth: 0,
-			containerHeight: 0,
-			value: new Animated.Value(this.props.value),
-			minimumValue: 0,
-			maximumValue: 100,
-			step: 1,
-			displayedValue: getSliderLabel(this.props.value),
-		};
-		this.activeSlider = false;
+  constructor(props) {
+    super(props);
+    this.parentScrollEnabled = true;
+    this.state = {
+      containerWidth: 0,
+      containerHeight: 0,
+      value: new Animated.Value(this.props.value),
+      minimumValue: 0,
+      maximumValue: 100,
+      step: 1,
+      displayedValue: getSliderLabel(this.props.value),
+    };
+    this.activeSlider = false;
 
-		this.layoutView = this.layoutView.bind(this);
-	}
+    this.layoutView = this.layoutView.bind(this);
+  }
 
-	componentWillMount() {
-		this.panResponder = PanResponder.create({
-			onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
-			onMoveShouldSetPanResponder: this.handleMoveShouldSetPanResponder,
-			onPanResponderGrant: this.handlePanResponderGrant,
-			onPanResponderMove: this.handlePanResponderMove,
-			onPanResponderRelease: this.handlePanResponderEnd,
-			onPanResponderTerminationRequest: this.handlePanResponderEnd,
-			onPanResponderTerminate: this.handlePanResponderEnd,
-		});
-	}
+  componentWillMount() {
+    this.panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
+      onMoveShouldSetPanResponder: this.handleMoveShouldSetPanResponder,
+      onPanResponderGrant: this.handlePanResponderGrant,
+      onPanResponderMove: this.handlePanResponderMove,
+      onPanResponderRelease: this.handlePanResponderEnd,
+      onPanResponderTerminationRequest: this.handlePanResponderEnd,
+      onPanResponderTerminate: this.handlePanResponderEnd,
+    });
+  }
 
-	componentWillReceiveProps(nextProps) {
-		const newValue = nextProps.value;
-		this.setCurrentValueAnimate(newValue);
-		this.onValueChange(newValue);
-	}
+  componentWillReceiveProps(nextProps) {
+    const newValue = nextProps.value;
+    this.setCurrentValueAnimate(newValue);
+    this.onValueChange(newValue);
+  }
 
-	handleStartShouldSetPanResponder = (e: Object, /*gestureState: Object*/): boolean => {
+  handleStartShouldSetPanResponder = (e: Object, /*gestureState: Object*/): boolean => {
         // Should we become active when the user presses down on the thumb?
-		return true;
-	}
+    return true;
+  }
 
-	handleMoveShouldSetPanResponder = (/*e: Object, gestureState: Object*/): boolean => {
+  handleMoveShouldSetPanResponder = (/*e: Object, gestureState: Object*/): boolean => {
         // Should we become active when the user moves a touch over the thumb?
-		return false;
-	}
+    return false;
+  }
 
-	handlePanResponderGrant = (e: Object, gestureState: Object) => {
-		this.longPressTimeout = setTimeout(this.startSliding, 500);
+  handlePanResponderGrant = (e: Object, gestureState: Object) => {
+    this.longPressTimeout = setTimeout(this.startSliding, 500);
 
-		if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
-			this.props.onLeftStart();
-			this.pressOnLeft = true;
-			this.pressOnRight = false;
-		} else {
-			this.props.onRightStart();
-			this.pressOnLeft = false;
-			this.pressOnRight = true;
-		}
-	}
+    if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
+      this.props.onLeftStart();
+      this.pressOnLeft = true;
+      this.pressOnRight = false;
+    } else {
+      this.props.onRightStart();
+      this.pressOnLeft = false;
+      this.pressOnRight = true;
+    }
+  }
 
-	startSliding = () => {
-		const { item, onLeftEnd, onRightEnd, onSlidingStart } = this.props;
-		this.previousBottom = this.getThumbBottom(this.state.value.__getValue());
-		if (onSlidingStart) {
-			onSlidingStart(item.name, this.state.value.__getValue());
-		}
-		this.activeSlider = true;
-		if (this.parentScrollEnabled) {
+  startSliding = () => {
+    const { item, onLeftEnd, onRightEnd, onSlidingStart } = this.props;
+    this.previousBottom = this.getThumbBottom(this.state.value.__getValue());
+    if (onSlidingStart) {
+      onSlidingStart(item.name, this.state.value.__getValue());
+    }
+    this.activeSlider = true;
+    if (this.parentScrollEnabled) {
 			// disable scrolling on the listView parent
-			this.parentScrollEnabled = false;
-			this.props.setScrollEnabled && this.props.setScrollEnabled(false);
-		}
-		onLeftEnd();
-		onRightEnd();
-		this.pressOnLeft = this.pressOnRight = false;
+      this.parentScrollEnabled = false;
+      this.props.setScrollEnabled && this.props.setScrollEnabled(false);
+    }
+    onLeftEnd();
+    onRightEnd();
+    this.pressOnLeft = this.pressOnRight = false;
 
-		if (Platform.OS === 'android') {
-			Vibration.vibrate([0, 25]);
-		}
-	}
+    if (Platform.OS === 'android') {
+      Vibration.vibrate([0, 25]);
+    }
+  }
 
-	handlePanResponderMove = (e: Object, gestureState: Object) => {
-		if (this.activeSlider) {
+  handlePanResponderMove = (e: Object, gestureState: Object) => {
+    if (this.activeSlider) {
 
-			this.setCurrentValue(this.getValue(gestureState));
+      this.setCurrentValue(this.getValue(gestureState));
 
-			if (this.props.onValueChange) {
-				this.props.onValueChange(this.state.value.__getValue());
-			}
+      if (this.props.onValueChange) {
+        this.props.onValueChange(this.state.value.__getValue());
+      }
 
 			// update the progress text
-			this.onValueChange(this.state.value.__getValue());
-		}
-	}
+      this.onValueChange(this.state.value.__getValue());
+    }
+  }
 
-	handlePanResponderEnd = (e: Object, gestureState: Object) => {
-		if (this.activeSlider) {
+  handlePanResponderEnd = (e: Object, gestureState: Object) => {
+    if (this.activeSlider) {
 			// re-enable scrolling on listView parent
-			if (!this.parentScrollEnabled) {
-				this.parentScrollEnabled = true;
-				this.props.setScrollEnabled && this.props.setScrollEnabled(true);
-			}
+      if (!this.parentScrollEnabled) {
+        this.parentScrollEnabled = true;
+        this.props.setScrollEnabled && this.props.setScrollEnabled(true);
+      }
 
-			this.setCurrentValue(this.getValue(gestureState));
+      this.setCurrentValue(this.getValue(gestureState));
 
-			if (this.props.onSlidingComplete) {
-				this.props.onSlidingComplete(this.state.value.__getValue());
-			}
-		} else if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
-			if (this.pressOnLeft) {
-				this.props.onLeft();
-			}
+      if (this.props.onSlidingComplete) {
+        this.props.onSlidingComplete(this.state.value.__getValue());
+      }
+    } else if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
+      if (this.pressOnLeft) {
+        this.props.onLeft();
+      }
 
-		} else if (this.pressOnRight) {
-			this.props.onRight();
-		}
-		this.pressOnLeft = this.pressOnRight = false;
-		this.props.onLeftEnd();
-		this.props.onRightEnd();
-		this.activeSlider = false;
-		clearTimeout(this.longPressTimeout);
-	}
+    } else if (this.pressOnRight) {
+      this.props.onRight();
+    }
+    this.pressOnLeft = this.pressOnRight = false;
+    this.props.onLeftEnd();
+    this.props.onRightEnd();
+    this.activeSlider = false;
+    clearTimeout(this.longPressTimeout);
+  }
 
-	handlePanResponderTerminate = (e: Object, gestureState: Object) => {
-		if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
-			this.props.onLeftEnd();
-		} else {
-			this.props.onRightEnd();
-		}
+  handlePanResponderTerminate = (e: Object, gestureState: Object) => {
+    if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
+      this.props.onLeftEnd();
+    } else {
+      this.props.onRightEnd();
+    }
 
-		this.activeSlider = false;
-		clearTimeout(this.longPressTimeout);
-	}
+    this.activeSlider = false;
+    clearTimeout(this.longPressTimeout);
+  }
 
-	getThumbBottom(value) {
-		const ratio = this.getRatio(value);
-		return ratio * (this.state.containerHeight - this.props.thumbHeight);
-	}
+  getThumbBottom(value) {
+    const ratio = this.getRatio(value);
+    return ratio * (this.state.containerHeight - this.props.thumbHeight);
+  }
 
-	getRatio(value) {
-		return (value - this.state.minimumValue) / (this.state.maximumValue - this.state.minimumValue);
-	}
+  getRatio(value) {
+    return (value - this.state.minimumValue) / (this.state.maximumValue - this.state.minimumValue);
+  }
 
-	setCurrentValue(value) {
-		this.state.value.setValue(value);
-	}
+  setCurrentValue(value) {
+    this.state.value.setValue(value);
+  }
 
-	setCurrentValueAnimate(value) {
-		Animated.timing(this.state.value, { toValue: value, duration: 250 }).start();
-	}
+  setCurrentValueAnimate(value) {
+    Animated.timing(this.state.value, { toValue: value, duration: 250 }).start();
+  }
 
-	getValue(gestureState) {
-		const length = this.state.containerHeight - this.props.thumbHeight;
-		const thumbBottom = this.previousBottom - gestureState.dy / this.props.sensitive;
-		const ratio = thumbBottom / length;
+  getValue(gestureState) {
+    const length = this.state.containerHeight - this.props.thumbHeight;
+    const thumbBottom = this.previousBottom - gestureState.dy / this.props.sensitive;
+    const ratio = thumbBottom / length;
 
-		if (this.state.step) {
-			return Math.max(this.state.minimumValue,
+    if (this.state.step) {
+      return Math.max(this.state.minimumValue,
                 Math.min(this.state.maximumValue,
                 this.state.minimumValue + Math.round(ratio * (this.state.maximumValue - this.state.minimumValue) / this.state.step) * this.state.step)
             );
-		}
-		return Math.max(this.state.minimumValue,
+    }
+    return Math.max(this.state.minimumValue,
             Math.min(this.state.maximumValue,
                 ratio * (this.state.maximumValue - this.state.minimumValue) + this.state.minimumValue)
         );
-	}
+  }
 
-	layoutView(x) {
-		let { width, height } = x.nativeEvent.layout;
-		this.setState({
-			containerWidth: width,
-			containerHeight: height,
-		});
-	}
+  layoutView(x) {
+    let { width, height } = x.nativeEvent.layout;
+    this.setState({
+      containerWidth: width,
+      containerHeight: height,
+    });
+  }
 
-	onValueChange(val) {
-		this.setState({ displayedValue: getSliderLabel(val) });
-	}
+  onValueChange(val) {
+    this.setState({ displayedValue: getSliderLabel(val) });
+  }
 
-	render() {
-		const { minimumValue, maximumValue, value, containerHeight } = this.state;
-		const { thumbWidth, thumbHeight } = this.props;
-		const thumbBottom = value.interpolate({
-			inputRange: [minimumValue, maximumValue],
-			outputRange: [0, thumbHeight - containerHeight],
-		});
+  render() {
+    const { minimumValue, maximumValue, value, containerHeight } = this.state;
+    const { thumbWidth, thumbHeight } = this.props;
+    const thumbBottom = value.interpolate({
+      inputRange: [minimumValue, maximumValue],
+      outputRange: [0, thumbHeight - containerHeight],
+    });
 
-		return (
+    return (
             <View style={[this.props.style]}
                 onLayout={this.layoutView} {...this.panResponder.panHandlers}>
                 <Animated.View style={[styles.thumb, {
-	width: thumbWidth,
-	height: thumbHeight,
-	left: (this.state.containerWidth - thumbWidth) / 2,
-	transform: [{ translateY: thumbBottom }],
-}]}
+                  width: thumbWidth,
+                  height: thumbHeight,
+                  left: (this.state.containerWidth - thumbWidth) / 2,
+                  transform: [{ translateY: thumbBottom }],
+                }]}
                     >
                     <Text
                         ellipsizeMode="middle"
@@ -239,52 +239,52 @@ class VerticalSlider extends View {
                     </Text>
                 </Animated.View>
             </View>
-		);
-	}
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-	thumb: {
-		flex: 1,
-		position: 'absolute',
-		bottom: 0,
-		justifyContent: 'center',
-		borderRadius: 7,
-		borderWidth: 1,
-		borderColor: 'gray',
-		elevation: 2,
-		backgroundColor: 'white',
-	},
-	thumbText: {
-		color: '#a2a2a2',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
+  thumb: {
+    flex: 1,
+    position: 'absolute',
+    bottom: 0,
+    justifyContent: 'center',
+    borderRadius: 7,
+    borderWidth: 1,
+    borderColor: 'gray',
+    elevation: 2,
+    backgroundColor: 'white',
+  },
+  thumbText: {
+    color: '#a2a2a2',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
 });
 
 VerticalSlider.propTypes = {
-	setScrollEnabled: PropTypes.func,
-	thumbHeight: PropTypes.number,
-	thumbWidth: PropTypes.number,
-	sensitive: PropTypes.number,
-	value: PropTypes.number,
-	onSlidingStart: PropTypes.func,
-	onSlidingComplete: PropTypes.func,
-	onValueChange: PropTypes.func,
-	onLeftStart: PropTypes.func,
-	onLeftEnd: PropTypes.func,
-	onLeft: PropTypes.func,
-	onRightStart: PropTypes.func,
-	onRightEnd: PropTypes.func,
-	onRight: PropTypes.func,
+  setScrollEnabled: PropTypes.func,
+  thumbHeight: PropTypes.number,
+  thumbWidth: PropTypes.number,
+  sensitive: PropTypes.number,
+  value: PropTypes.number,
+  onSlidingStart: PropTypes.func,
+  onSlidingComplete: PropTypes.func,
+  onValueChange: PropTypes.func,
+  onLeftStart: PropTypes.func,
+  onLeftEnd: PropTypes.func,
+  onLeft: PropTypes.func,
+  onRightStart: PropTypes.func,
+  onRightEnd: PropTypes.func,
+  onRight: PropTypes.func,
 };
 
 VerticalSlider.defaultProps = {
-	thumbHeight: 12,
-	thumbWidth: 36,
-	fontSize: 10,
-	sensitive: 1,
-	value: 0,
+  thumbHeight: 12,
+  thumbWidth: 36,
+  fontSize: 10,
+  sensitive: 1,
+  value: 0,
 };
 
 module.exports = VerticalSlider;

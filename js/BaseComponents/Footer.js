@@ -26,35 +26,35 @@ import computeProps from './computeProps';
 
 export default class Footer extends Base {
 
-	getInitialStyle() {
-		return {
-			navbar: {
-				shadowColor: '#000',
-				shadowOffset: { width: 0, height: 2 },
-				shadowOpacity: 0.1,
-				shadowRadius: 1.5,
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: (!Array.isArray(this.props.children)) ? 'center' : 'space-between',
-				height: this.getTheme().footerHeight,
-				backgroundColor: this.getTheme().footerDefaultBg,
-			},
-		};
-	}
+  getInitialStyle() {
+    return {
+      navbar: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 1.5,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: (!Array.isArray(this.props.children)) ? 'center' : 'space-between',
+        height: this.getTheme().footerHeight,
+        backgroundColor: this.getTheme().footerDefaultBg,
+      },
+    };
+  }
 
-	prepareRootProps() {
+  prepareRootProps() {
 
-		let defaultProps = {
-			style: this.getInitialStyle().navbar,
-		};
+    let defaultProps = {
+      style: this.getInitialStyle().navbar,
+    };
 
-		return computeProps(this.props, defaultProps);
+    return computeProps(this.props, defaultProps);
 
-	}
+  }
 
-	render() {
+  render() {
 
-		return (
+    return (
 			<View {...this.prepareRootProps()}>
 				{ !Array.isArray(this.props.children) &&
 				<View >
@@ -76,6 +76,6 @@ export default class Footer extends Base {
 					{this.props.children[2]}
 				</View>}
 			</View>
-		);
-	}
+    );
+  }
 }

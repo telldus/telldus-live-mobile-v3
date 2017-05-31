@@ -26,13 +26,13 @@ class NavigatorIOSComponent extends NavigatorIOS {
 }
 
 NavigatorIOSComponent.defaultProps = {
-	translucent: false,
-	barTintColor: Theme.Core.brandPrimary,
-	tintColor: Theme.Core.inverseTextColor,
-	titleTextColor: Theme.Core.inverseTextColor,
-	style: {
-		flex: 1,
-	},
+  translucent: false,
+  barTintColor: Theme.Core.brandPrimary,
+  tintColor: Theme.Core.inverseTextColor,
+  titleTextColor: Theme.Core.inverseTextColor,
+  style: {
+    flex: 1,
+  },
 };
 
 export default NavigatorIOSComponent;

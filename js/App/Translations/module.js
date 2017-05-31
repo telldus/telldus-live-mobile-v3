@@ -32,13 +32,13 @@ import sv from './sv.json';
 import th from './th.json';
 
 module.exports = {
-	cs: cs,
-	en: en,
-	fr: fr,
-	nb: nb,
-	nl: nl,
-	pl: pl,
-	ru: ru,
-	sv: sv,
-	th: th,
+  cs: cs,
+  en: en,
+  fr: fr,
+  nb: nb,
+  nl: nl,
+  pl: pl,
+  ru: ru,
+  sv: sv,
+  th: th,
 };

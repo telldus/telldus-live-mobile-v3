@@ -169,7 +169,7 @@
   // These rules are specific to JavaScript running on Node.js.
 
     "handle-callback-err": 1,        // enforces error handling in callbacks (off by default) (on by default in the node environment)
-    "indent": ["error", "tab", {
+    "indent": ["error", 2, {
       "SwitchCase": 1
     }],                              // enforce consistent indentation
     "no-mixed-requires": 1,          // disallow mixing regular variable and require declarations (off by default) (on by default in the node environment)

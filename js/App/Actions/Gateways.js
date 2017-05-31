@@ -28,58 +28,58 @@ import LiveApi from 'LiveApi';
 import { format } from 'url';
 
 function getGateways(): ThunkAction {
-	return (dispatch, getState) => {
-		const url = format({
-			pathname: '/clients/list',
-			query: {
-				extras: 'timezone,suntime',
-			},
-		});
-		const payload = {
-			url,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => {
-			dispatch({
-				type: 'RECEIVED_GATEWAYS',
-				payload: {
-					...payload,
-					...response,
-				},
-			});
-			response.client.forEach(gateway => {
-				dispatch(getWebsocketAddress(gateway.id));
-			});
-		});
-	};
+  return (dispatch, getState) => {
+    const url = format({
+      pathname: '/clients/list',
+      query: {
+        extras: 'timezone,suntime',
+      },
+    });
+    const payload = {
+      url,
+      requestParams: {
+        method: 'GET',
+      },
+    };
+    return LiveApi(payload).then(response => {
+      dispatch({
+        type: 'RECEIVED_GATEWAYS',
+        payload: {
+          ...payload,
+          ...response,
+        },
+      });
+      response.client.forEach(gateway => {
+        dispatch(getWebsocketAddress(gateway.id));
+      });
+    });
+  };
 }
 
 function getWebsocketAddress(gatewayId): ThunkAction {
-	return (dispatch, getState) => {
-		const payload = {
-			url: `/client/serverAddress?id=${gatewayId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => {
-			dispatch({
-				type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
-				gatewayId,
-				payload: {
-					...payload,
-					...response,
-				},
-			});
-			const { address, port } = response;
-			if (address && port) {
-				const websocketUrl = `ws://${address}:${port}/websocket`;
-				dispatch(setupGatewayConnection(gatewayId, websocketUrl));
-			}
-		});
-	};
+  return (dispatch, getState) => {
+    const payload = {
+      url: `/client/serverAddress?id=${gatewayId}`,
+      requestParams: {
+        method: 'GET',
+      },
+    };
+    return LiveApi(payload).then(response => {
+      dispatch({
+        type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+        gatewayId,
+        payload: {
+          ...payload,
+          ...response,
+        },
+      });
+      const { address, port } = response;
+      if (address && port) {
+        const websocketUrl = `ws://${address}:${port}/websocket`;
+        dispatch(setupGatewayConnection(gatewayId, websocketUrl));
+      }
+    });
+  };
 }
 
 module.exports = { getGateways };

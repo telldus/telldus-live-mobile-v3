@@ -29,80 +29,80 @@ const Title = ({ isEnabled, name, tileWidth }) => (
 			ellipsizeMode="middle"
 			numberOfLines={1}
 			style = {[styles.name, {
-				fontSize: Math.floor(tileWidth / 8),
-				opacity: name ? 1 : 0.7,
-			}]}>
+  fontSize: Math.floor(tileWidth / 8),
+  opacity: name ? 1 : 0.7,
+}]}>
 			{name ? name : '(no name)'}
 		</Text>
 	</View>
 );
 
 class DashboardShadowTile extends View {
-	render() {
-		return (
+  render() {
+    return (
 			// Because of the limitation of react-native so we need 2 nested views to create an rounded corner view with shadow
 			<View
 				style={[this.props.style, (this.props.hasShadow ? styles.shadow : styles.noShadow)]}>
 				<View style={{
-					flex: 1,
-					flexDirection: 'column',
-					borderRadius: 7,
-					overflow: 'hidden',
-				}}>
+  flex: 1,
+  flexDirection: 'column',
+  borderRadius: 7,
+  overflow: 'hidden',
+}}>
 					{this.props.children}
 					<Title {...this.props} />
 				</View>
 			</View>
 		);
-	}
+  }
 }
 
 const styles = StyleSheet.create({
-	name: {
-		padding: 5,
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	title: {
-		flex: 13,
-		justifyContent: 'center',
-		borderBottomLeftRadius: 7,
-		borderBottomRightRadius: 7,
-	},
-	titleEnabled: {
-		backgroundColor: '#e56e18',
-	},
-	titleDisabled: {
-		backgroundColor: '#bfbfbf',
-	},
-	shadow: {
-		borderRadius: 7,
-		shadowColor: '#000000',
-		shadowOffset: { width: 0, height: 0 },
-		shadowRadius: 3,
-		shadowOpacity: 1.0,
-		elevation: 3,
-	},
-	noShadow: {
-		borderRadius: 7,
-		shadowColor: '#000000',
-		shadowOffset: { width: 0, height: 0 },
-		shadowRadius: 0,
-		shadowOpacity: 1.0,
-		elevation: 0,
-	},
+  name: {
+    padding: 5,
+    color: 'white',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
+  title: {
+    flex: 13,
+    justifyContent: 'center',
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
+  },
+  titleEnabled: {
+    backgroundColor: '#e56e18',
+  },
+  titleDisabled: {
+    backgroundColor: '#bfbfbf',
+  },
+  shadow: {
+    borderRadius: 7,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 3,
+    shadowOpacity: 1.0,
+    elevation: 3,
+  },
+  noShadow: {
+    borderRadius: 7,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 0,
+    shadowOpacity: 1.0,
+    elevation: 0,
+  },
 });
 
 DashboardShadowTile.propTypes = {
-	hasShadow: React.PropTypes.bool,
-	isEnabled: React.PropTypes.bool,
-	name: React.PropTypes.string,
-	tileWidth: React.PropTypes.number,
+  hasShadow: React.PropTypes.bool,
+  isEnabled: React.PropTypes.bool,
+  name: React.PropTypes.string,
+  tileWidth: React.PropTypes.number,
 };
 
 DashboardShadowTile.defaultProps = {
-	hasShadow: true,
+  hasShadow: true,
 };
 
 module.exports = DashboardShadowTile;

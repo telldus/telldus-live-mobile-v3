@@ -24,23 +24,23 @@ import type { ThunkAction } from './types';
 import LiveApi from 'LiveApi';
 
 function getJobs(): ThunkAction {
-	return (dispatch, getState) => {
-		const payload = {
-			url: '/scheduler/jobList',
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => {
-			dispatch({
-				type: 'RECEIVED_JOBS',
-				payload: {
-					...payload,
-					...response,
-				},
-			});
-		});
-	};
+  return (dispatch, getState) => {
+    const payload = {
+      url: '/scheduler/jobList',
+      requestParams: {
+        method: 'GET',
+      },
+    };
+    return LiveApi(payload).then(response => {
+      dispatch({
+        type: 'RECEIVED_JOBS',
+        payload: {
+          ...payload,
+          ...response,
+        },
+      });
+    });
+  };
 }
 
 module.exports = { getJobs };
