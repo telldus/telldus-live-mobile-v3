@@ -21,7 +21,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { changeSensorDisplayType } from 'Actions';
 
 import { FormattedNumber, Text, View } from 'BaseComponents';
 
@@ -32,18 +31,12 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 class SensorDashboardTile extends View {
   constructor(props) {
     super(props);
+
+    this.state = {
+      currentDisplayType: 'default',
+    };
+
     this.getSlideList = this.getSlideList.bind(this);
-    this.changeDisplayType = this.changeDisplayType.bind(this);
-  }
-
-  changeDisplayType() {
-    const { currentDisplayType, supportedDisplayTypes } = this.props;
-
-    let currentIdx = supportedDisplayTypes.indexOf(currentDisplayType);
-    currentIdx = currentIdx < 0 ? 0 : currentIdx;
-    let nextIdx = currentIdx < supportedDisplayTypes.length - 1 ? currentIdx + 1 : 0;
-
-    this.props.changeSensorDisplayType(supportedDisplayTypes[nextIdx]);
   }
 
   getSlideList(item) {
@@ -106,7 +99,8 @@ class SensorDashboardTile extends View {
   }
 
   render() {
-    const { item, currentDisplayType, tileWidth } = this.props;
+    const { item, tileWidth } = this.props;
+    const displayType = this.props.displayType;
 
     const slideList = this.getSlideList(item);
 
@@ -115,15 +109,15 @@ class SensorDashboardTile extends View {
 		);
 
     let selectedSlideIndex = 0;
-    if (currentDisplayType !== 'default') {
+    if (displayType !== 'default') {
       for (let i = 0; i < slideList.length; ++i) {
-        if (slideList[i].key === currentDisplayType) {
+        if (slideList[i].key === displayType) {
           selectedSlideIndex = i;
           break;
         }
       }
     }
-    const canPress = slides.length > 1;
+
     return (
 			<DashboardShadowTile
 				item={item}
@@ -135,8 +129,8 @@ class SensorDashboardTile extends View {
   height: tileWidth,
 }]}>
 				<TouchableOpacity
-					onPress={canPress ? this.changeDisplayType : null}
-					activeOpacity={canPress ? 0.8 : 1}
+					onPress={this.props.onPress}
+					activeOpacity={1}
 					style={styles.container}>
 					<View style={styles.body}>
 						{slides[selectedSlideIndex]}
@@ -165,44 +159,10 @@ const styles = StyleSheet.create({
   },
 });
 
-function getSupportedDisplayTypes(item) {
-  const displayTypes = [];
-
-  if (item.humidity) {
-    displayTypes.push('humidity');
-  }
-  if (item.luminance) {
-    displayTypes.push('luminance');
-  }
-  if (item.rainRate || item.rainTotal) {
-    displayTypes.push('rain');
-  }
-  if (item.temperature) {
-    displayTypes.push('temperature');
-  }
-  if (item.uv) {
-    displayTypes.push('uv');
-  }
-  if (item.watt) {
-    displayTypes.push('watt');
-  }
-  if (item.windGust || item.windAverage || item.windDirection) {
-    displayTypes.push('wind');
-  }
-  return displayTypes;
-}
-
 function mapStateToProps(state, { item }) {
   return {
-    currentDisplayType: state.dashboard.sensorDisplayTypeById[item.id],
-    supportedDisplayTypes: getSupportedDisplayTypes(item),
+    displayType: state.dashboard.sensorDisplayTypeById[item.id],
   };
 }
 
-function mapDispatchToProps(dispatch, { item }) {
-  return {
-    changeSensorDisplayType: displayType => dispatch(changeSensorDisplayType(item.id, displayType)),
-  };
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SensorDashboardTile);
+module.exports = connect(mapStateToProps)(SensorDashboardTile);

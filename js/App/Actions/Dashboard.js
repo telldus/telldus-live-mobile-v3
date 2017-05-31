@@ -21,24 +21,76 @@
 
 'use strict';
 
-import type { Action } from './types';
+import type { Action, ThunkAction } from './types';
 
 type Kind = 'device' | 'sensor';
 
+function getSupportedDisplayTypes(item) {
+  const displayTypes = [];
+
+  if (item.humidity) {
+    displayTypes.push('humidity');
+  }
+  if (item.luminance) {
+    displayTypes.push('luminance');
+  }
+  if (item.rainRate || item.rainTotal) {
+    displayTypes.push('rain');
+  }
+  if (item.temperature) {
+    displayTypes.push('temperature');
+  }
+  if (item.uv) {
+    displayTypes.push('uv');
+  }
+  if (item.watt) {
+    displayTypes.push('watt');
+  }
+  if (item.windGust || item.windAverage || item.windDirection) {
+    displayTypes.push('wind');
+  }
+  return displayTypes;
+}
+
+const addToDashboard = (kind: Kind, id: Number): Action => ({
+  type: 'ADD_TO_DASHBOARD',
+  kind,
+  id,
+});
+
+const removeFromDashboard = (kind : Kind, id: Number) : Action => ({
+  type: 'REMOVE_FROM_DASHBOARD',
+  kind,
+  id,
+});
+
+const changeSensorDisplayType = () : ThunkAction => (dispatch, getState) => {
+  const { sensors, dashboard } = getState();
+  const { sensorIds, sensorDisplayTypeById } = dashboard;
+
+  sensorIds.forEach(sensorId => {
+    const sensor = sensors.byId[sensorId];
+    const supportedDisplayTypes = getSupportedDisplayTypes(sensor);
+
+    const currentDisplayType = sensorDisplayTypeById[sensorId];
+    const currentIndex = currentDisplayType
+      ? supportedDisplayTypes.indexOf(currentDisplayType)
+      : 0;
+
+    const nextIndex = currentIndex < supportedDisplayTypes.length - 1 ? currentIndex + 1 : 0;
+    const nextDisplayType = supportedDisplayTypes[nextIndex];
+    if (nextDisplayType !== currentDisplayType) {
+      dispatch({
+        type: 'CHANGE_SENSOR_DISPLAY_TYPE',
+        id: sensorId,
+        displayType: nextDisplayType,
+      });
+    }
+  });
+};
+
 module.exports = {
-  addToDashboard: (kind: Kind, id: Number): Action => ({
-    type: 'ADD_TO_DASHBOARD',
-    kind,
-    id,
-  }),
-  removeFromDashboard: (kind : Kind, id: Number) : Action => ({
-    type: 'REMOVE_FROM_DASHBOARD',
-    kind,
-    id,
-  }),
-  changeSensorDisplayType: (id: Number, displayType: String) : Action => ({
-    type: 'CHANGE_SENSOR_DISPLAY_TYPE',
-    id,
-    displayType,
-  }),
+  addToDashboard,
+  removeFromDashboard,
+  changeSensorDisplayType,
 };
