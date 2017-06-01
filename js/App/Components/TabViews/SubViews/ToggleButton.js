@@ -20,182 +20,50 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Text, View, RoundedCornerShadowView, Icon } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
-
-const AnimatedIcon = Animated.createAnimatedComponent(Icon);
-
-const OffButton = ({ isInState, enabled, onPress, request, fadeAnim }) => {
-	let blinking = function () {
-		Animated.sequence([
-			Animated.timing(fadeAnim, {
-				toValue: 1,
-				duration: 500,
-			}),
-			Animated.timing(fadeAnim, {
-				toValue: 0,
-				duration: 500,
-			}),
-		]).start(event => {
-			if (event.finished) {
-				blinking();
-			}
-		});
-	};
-
-	if (request === 'off-request') {
-		blinking();
-	}
-
-	return (
-		<View style={[styles.turnOffButtonContainer, { backgroundColor: isInState === 'TURNOFF' ? '#fafafa' : '#eeeeee' }]}>
-			<TouchableOpacity
-				disabled={!enabled}
-				onPress={onPress}
-				style={styles.button} >
-				<Text
-					ellipsizeMode="middle"
-					numberOfLines={1}
-					style = {[styles.buttonText, { color: isInState === 'TURNOFF' ? 'red' : '#a2a2a2' }]}>
-					{'Off'}
-				</Text>
-			</TouchableOpacity>
-			{
-				request === 'off-request' ?
-				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.leftCircle, { opacity: fadeAnim }]} />
-				:
-				null
-			}
-		</View>
-	);
-};
-
-const OnButton = ({ isInState, enabled, onPress, request, fadeAnim }) => {
-	let blinking = function () {
-		Animated.sequence([
-			Animated.timing(fadeAnim, {
-				toValue: 1,
-				duration: 500,
-			}),
-			Animated.timing(fadeAnim, {
-				toValue: 0,
-				duration: 500,
-			}),
-		]).start(event => {
-			if (event.finished) {
-				blinking();
-			}
-		});
-	};
-
-	if (request === 'on-request') {
-		blinking();
-	}
-
-	return (
-		<View style={[styles.turnOnButtonContainer, { backgroundColor: isInState === 'TURNON' ? '#fafafa' : '#eeeeee' }]}>
-			<TouchableOpacity
-				disabled={!enabled}
-				onPress={onPress}
-				style={styles.button} >
-				<Text
-					ellipsizeMode="middle"
-					numberOfLines={1}
-					style = {[styles.buttonText, { color: isInState === 'TURNON' ? 'green' : '#a2a2a2' }]}>
-					{'On'}
-				</Text>
-			</TouchableOpacity>
-			{
-				request === 'on-request' ?
-				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.rightCircle, { opacity: fadeAnim }]} />
-				:
-				null
-			}
-		</View>
-	);
-};
+import { View, RoundedCornerShadowView } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
+import OnButton from './OnButton';
+import OffButton from './OffButton';
 
 class ToggleButton extends View {
-	constructor(props) {
-		super(props);
-		this.state = {
-			fadeAnimLeft: new Animated.Value(0),
-			fadeAnimRight: new Animated.Value(0),
-			request: 'none',
-		};
+  constructor(props) {
+    super(props);
 
-		this.onTurnOn = this.onTurnOn.bind(this);
-		this.onTurnOff = this.onTurnOff.bind(this);
-	}
+    this.onTurnOn = this.onTurnOn.bind(this);
+    this.onTurnOff = this.onTurnOff.bind(this);
+  }
 
-	componentWillReceiveProps(nextProps) {
-		this.setState({ request: 'none' });
-	}
+  onTurnOn() {
+    this.props.onTurnOn();
+  }
 
-	onTurnOn() {
-		this.setState({ request: 'on-request' });
-		this.props.onTurnOn();
-	}
-
-	onTurnOff() {
-		this.setState({ request: 'off-request' });
-		this.props.onTurnOff();
-	}
+  onTurnOff() {
+    this.props.onTurnOff();
+  }
 
   render() {
     const { TURNON, TURNOFF } = this.props.device.supportedMethods;
     const isInState = this.props.device.isInState;
 
-		const turnOnButton = <OnButton isInState={isInState} enabled={!!TURNON} onPress={this.onTurnOn} request={this.state.request} fadeAnim={this.state.fadeAnimRight}/>;
-		const turnOffButton = <OffButton isInState={isInState} enabled={!!TURNOFF} onPress={this.onTurnOff} request={this.state.request} fadeAnim={this.state.fadeAnimLeft} />;
+    const onButton = <OnButton isInState={isInState} enabled={!!TURNON} onPress={this.onTurnOn} />;
+    const offButton = <OffButton isInState={isInState} enabled={!!TURNOFF} onPress={this.onTurnOff} />;
 
     return (
-            <RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
-                { turnOffButton }
-                { turnOnButton }
-            </RoundedCornerShadowView>
+      <RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
+        { offButton }
+        { onButton }
+      </RoundedCornerShadowView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 7,
-		height: 32,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	turnOffButtonContainer: {
-		flex: 1,
-		alignItems: 'stretch',
-		borderTopLeftRadius: 7,
-		borderBottomLeftRadius: 7,
-	},
-	turnOnButtonContainer: {
-		flex: 1,
-		alignItems: 'stretch',
-		borderTopRightRadius: 7,
-		borderBottomRightRadius: 7,
-	},
-	button: {
-		flex: 1,
-		justifyContent: 'center',
-	},
-	buttonText: {
-		fontSize: 12,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	leftCircle: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
-	},
-	rightCircle: {
-		position: 'absolute',
-		top: 3,
-		right: 3,
-	},
+  container: {
+    flex: 7,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 ToggleButton.propTypes = {
@@ -208,4 +76,5 @@ ToggleButton.propTypes = {
 ToggleButton.defaultProps = {
   enabled: true,
 };
+
 module.exports = ToggleButton;
