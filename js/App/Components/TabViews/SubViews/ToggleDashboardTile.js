@@ -20,137 +20,35 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Text, View, Icon } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { View } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
-
-const AnimatedIcon = Animated.createAnimatedComponent(Icon);
-
-const OffButton = ({ isInState, tileWidth, enabled, onPress, request, fadeAnim }) => {
-	let blinking = function () {
-		Animated.sequence([
-			Animated.timing(fadeAnim, {
-				toValue: 1,
-				duration: 500,
-			}),
-			Animated.timing(fadeAnim, {
-				toValue: 0,
-				duration: 500,
-			}),
-		]).start(event => {
-			if (event.finished) {
-				blinking();
-			}
-		});
-	};
-
-	if (request === 'off-request') {
-		blinking();
-	}
-	return (
-		<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
-			<TouchableOpacity
-				disabled={!enabled}
-				onPress={onPress}
-				style={styles.button} >
-				<Text
-					ellipsizeMode="middle"
-					numberOfLines={1}
-					style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
-					{ fontSize: Math.floor(tileWidth / 8) }]}>
-					{'Off'}
-				</Text>
-			</TouchableOpacity>
-			{
-				request === 'off-request' ?
-				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.leftCircle, { opacity: fadeAnim }]} />
-				:
-				null
-			}
-		</View>
-	);
-};
-
-const OnButton = ({ isInState, tileWidth, enabled, onPress, request, fadeAnim }) => {
-	let blinking = function () {
-		Animated.sequence([
-			Animated.timing(fadeAnim, {
-				toValue: 1,
-				duration: 500,
-			}),
-			Animated.timing(fadeAnim, {
-				toValue: 0,
-				duration: 500,
-			}),
-		]).start(event => {
-			if (event.finished) {
-				blinking();
-			}
-		});
-	};
-
-	if (request === 'on-request') {
-		blinking();
-	}
-
-	return (
-		<View style={[styles.turnOnButtonContainer, isInState === 'TURNON' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
-			<TouchableOpacity
-				disabled={!enabled}
-				onPress={onPress}
-				style={styles.button} >
-				<Text
-					ellipsizeMode="middle"
-					numberOfLines={1}
-					style = {[styles.buttonText, isInState === 'TURNON' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
-						{ fontSize: Math.floor(tileWidth / 8) }]}>
-					{'On'}
-				</Text>
-			</TouchableOpacity>
-			{
-				request === 'on-request' ?
-				<AnimatedIcon name="circle" size={10} color="orange" style={[styles.rightCircle, { opacity: fadeAnim }]} />
-				:
-				null
-			}
-		</View>
-	);
-};
+import OffButton from './OffButton';
+import OnButton from './OnButton';
 
 class ToggleDashboardTile extends View {
-	constructor(props) {
-		super(props);
-		this.state = {
-			fadeAnimLeft: new Animated.Value(0),
-			fadeAnimRight: new Animated.Value(0),
-			request: 'none',
-		};
+  constructor(props) {
+    super(props);
 
-		this.onTurnOn = this.onTurnOn.bind(this);
-		this.onTurnOff = this.onTurnOff.bind(this);
-	}
+    this.onTurnOn = this.onTurnOn.bind(this);
+    this.onTurnOff = this.onTurnOff.bind(this);
+  }
 
-	componentWillReceiveProps(nextProps) {
-		this.setState({ request: 'none' });
-	}
+  onTurnOn() {
+    this.props.onTurnOn();
+  }
 
-	onTurnOn() {
-		this.setState({ request: 'on-request' });
-		this.props.onTurnOn();
-	}
-
-	onTurnOff() {
-		this.setState({ request: 'off-request' });
-		this.props.onTurnOff();
-	}
+  onTurnOff() {
+    this.props.onTurnOff();
+  }
 
   render() {
     const { item, tileWidth } = this.props;
     const { name, isInState, supportedMethods } = item;
     const { TURNON, TURNOFF } = supportedMethods;
 
-		const turnOnButton = <OnButton isInState={isInState} onPress={this.onTurnOn} tileWidth={tileWidth} enabled={!!TURNON} request={this.state.request} fadeAnim={this.state.fadeAnimRight}/>;
-		const turnOffButton = <OffButton isInState={isInState} onPress={this.onTurnOff} tileWidth={tileWidth} enabled={!!TURNOFF} request={this.state.request} fadeAnim={this.state.fadeAnimLeft} />;
+    const onButton = <OnButton isInState={isInState} onPress={this.onTurnOff} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNON} style={styles.turnOnButtonContainer} />;
+    const offButton = <OffButton isInState={isInState} onPress={this.onTurnOff} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNOFF} style={styles.turnOffButtonContainer} />;
 
 		let style = { ...this.props.style };
 		style.width = tileWidth;
@@ -165,8 +63,8 @@ class ToggleDashboardTile extends View {
 				hasShadow={!!TURNON || !!TURNOFF}
 				style={style}>
 				<View style={{ flexDirection: 'row', flex: 30 }}>
-					{ turnOffButton }
-					{ turnOnButton }
+					{ offButton }
+					{ onButton }
 				</View>
 			</DashboardShadowTile>
     );
