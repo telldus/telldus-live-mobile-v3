@@ -26,13 +26,13 @@ import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { OnButton, OffButton } from 'TabViews/SubViews';
 
-import { turnOn, turnOff, learn } from 'Actions/Devices';
+import { turnOn, turnOff, learn, requestTurnOn, requestTurnOff } from 'Actions/Devices';
 
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => {
   return (
     <RoundedCornerShadowView style={styles.toggleContainer}>
-      <OffButton isInState={device.isInState} fontSize={16} onPress={onTurnOff} style={styles.turnOff} />
-      <OnButton isInState={device.isInState} fontSize={16} onPress={onTurnOn} style={styles.turnOn} />
+      <OffButton isInState={device.isInState} fontSize={16} onPress={onTurnOff} style={styles.turnOff} methodRequested={device.methodRequested} />
+      <OnButton isInState={device.isInState} fontSize={16} onPress={onTurnOn} style={styles.turnOn} methodRequested={device.methodRequested} />
     </RoundedCornerShadowView>
   );
 };
@@ -59,10 +59,12 @@ class ToggleDeviceDetailModal extends View {
 
   onTurnOn() {
     this.props.onTurnOn(this.props.device.id);
+    this.props.requestTurnOn(this.props.device.id);
   }
 
   onTurnOff() {
     this.props.onTurnOff(this.props.device.id);
+    this.props.requestTurnOff(this.props.device.id);
   }
 
   onLearn() {
@@ -143,6 +145,8 @@ function mapDispatchToProps(dispatch) {
     onTurnOn: (id) => dispatch(turnOn(id)),
     onTurnOff: (id) => dispatch(turnOff(id)),
     onLearn: (id) => dispatch(learn(id)),
+    requestTurnOn: (id) => dispatch(requestTurnOn(id)),
+    requestTurnOff: (id) => dispatch(requestTurnOff(id)),
   };
 }
 
