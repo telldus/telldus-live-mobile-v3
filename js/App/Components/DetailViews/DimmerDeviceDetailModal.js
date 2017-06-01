@@ -33,8 +33,8 @@ import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => {
   return (
 		<RoundedCornerShadowView style={styles.toggleContainer}>
-      <OffButton isInState={device.isInState} fontSize={16} onPress={onTurnOff} />
-      <OnButton isInState={device.isInState} fontSize={16} onPress={onTurnOn} />
+      <OffButton isInState={device.isInState} fontSize={16} onPress={onTurnOff} style={styles.turnOff} />
+      <OnButton isInState={device.isInState} fontSize={16} onPress={onTurnOn} style={styles.turnOn} />
 		</RoundedCornerShadowView>
 	);
 };
@@ -172,6 +172,18 @@ const styles = StyleSheet.create({
     height: 36,
     marginHorizontal: 8,
     marginVertical: 16,
+  },
+  turnOff: {
+    flex: 1,
+    alignItems: 'stretch',
+    borderTopLeftRadius: 7,
+    borderBottomLeftRadius: 7,
+  },
+  turnOn: {
+    flex: 1,
+    alignItems: 'stretch',
+    borderTopRightRadius: 7,
+    borderBottomRightRadius: 7,
   },
   learnContainer: {
     height: 36,

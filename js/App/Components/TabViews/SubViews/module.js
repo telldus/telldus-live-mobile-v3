@@ -41,6 +41,8 @@ import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmingButton from './DimmingButton';
 import JobRow from './JobRow';
+import OffButton from './OffButton';
+import OnButton from './OnButton';
 
 module.exports = {
   DeviceRow: DeviceRow,
@@ -63,4 +65,6 @@ module.exports = {
   NavigationalButton: NavigationalButton,
   DimmingButton: DimmingButton,
   JobRow: JobRow,
+  OffButton: OffButton,
+  OnButton: OnButton,
 };

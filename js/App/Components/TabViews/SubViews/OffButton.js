@@ -32,7 +32,7 @@ class OffButton extends View {
     let { isInState, enabled, onPress, fontSize } = this.props;
 
     return (
-      <View style={[styles.container, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>
+      <View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>
         <TouchableOpacity disabled={!enabled} onPress={onPress} style={styles.button} >
           <Text ellipsizeMode="middle" numberOfLines={1}
             style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}>
@@ -45,12 +45,6 @@ class OffButton extends View {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'stretch',
-    borderTopLeftRadius: 7,
-    borderBottomLeftRadius: 7,
-  },
   enabled: {
     backgroundColor: '#fafafa',
   },

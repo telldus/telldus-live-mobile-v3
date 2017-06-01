@@ -45,8 +45,8 @@ class ToggleButton extends View {
     const { TURNON, TURNOFF } = this.props.device.supportedMethods;
     const isInState = this.props.device.isInState;
 
-    const onButton = <OnButton isInState={isInState} enabled={!!TURNON} onPress={this.onTurnOn} />;
-    const offButton = <OffButton isInState={isInState} enabled={!!TURNOFF} onPress={this.onTurnOff} />;
+    const onButton = <OnButton isInState={isInState} enabled={!!TURNON} onPress={this.onTurnOn} style={styles.turnOn} />;
+    const offButton = <OffButton isInState={isInState} enabled={!!TURNOFF} onPress={this.onTurnOff} style={styles.turnOff} />;
 
     return (
       <RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
@@ -63,6 +63,18 @@ const styles = StyleSheet.create({
     height: 32,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  turnOff: {
+    flex: 1,
+    alignItems: 'stretch',
+    borderTopLeftRadius: 7,
+    borderBottomLeftRadius: 7,
+  },
+  turnOn: {
+    flex: 1,
+    alignItems: 'stretch',
+    borderTopRightRadius: 7,
+    borderBottomRightRadius: 7,
   },
 });
 
