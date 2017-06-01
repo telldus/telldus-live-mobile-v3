@@ -47,6 +47,9 @@ export type Action =
     | { type: 'APP_START' }
     | { type: 'APP_FOREGROUND' }
     | { type: 'APP_BACKGROUND' }
+
+    | { type: 'REQUEST_TURNON', id:Number }
+    | { type: 'REQUEST_TURNOFF', id:Number }
     ;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
