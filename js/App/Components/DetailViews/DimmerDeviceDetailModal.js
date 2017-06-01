@@ -27,17 +27,15 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import Slider from 'react-native-slider';
 import { OnButton, OffButton } from 'TabViews/SubViews';
 
-import { turnOn, turnOff, learn } from 'Actions/Devices';
+import { turnOn, turnOff, learn, requestTurnOn, requestTurnOff } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 
-const ToggleButton = ({ device, onTurnOn, onTurnOff }) => {
-  return (
+const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 		<RoundedCornerShadowView style={styles.toggleContainer}>
-      <OffButton isInState={device.isInState} fontSize={16} onPress={onTurnOff} style={styles.turnOff} />
-      <OnButton isInState={device.isInState} fontSize={16} onPress={onTurnOn} style={styles.turnOn} />
+      <OffButton isInState={device.isInState} fontSize={16} onPress={onTurnOff} style={styles.turnOff} methodRequested={device.methodRequested} />
+      <OnButton isInState={device.isInState} fontSize={16} onPress={onTurnOn} style={styles.turnOn} methodRequested={device.methodRequested} />
 		</RoundedCornerShadowView>
-	);
-};
+);
 
 const LearnButton = ({ device, onLearn }) => (
 	<RoundedCornerShadowView style={styles.learnContainer}>
@@ -82,10 +80,12 @@ class DimmerDeviceDetailModal extends View {
 
   onTurnOn() {
     this.props.onTurnOn(this.props.device.id);
+    this.props.requestTurnOn(this.props.device.id);
   }
 
   onTurnOff() {
     this.props.onTurnOff(this.props.device.id);
+    this.props.requestTurnOff(this.props.device.id);
   }
 
   onLearn() {
@@ -213,6 +213,8 @@ function mapDispatchToProps(dispatch) {
     onLearn: (id) => dispatch(learn(id)),
     onDimmerSlide: (id, value) => dispatch(setDimmerValue(id, value)),
     onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
+    requestTurnOn: (id) => dispatch(requestTurnOn(id)),
+    requestTurnOff: (id) => dispatch(requestTurnOff(id)),
   };
 }
 
