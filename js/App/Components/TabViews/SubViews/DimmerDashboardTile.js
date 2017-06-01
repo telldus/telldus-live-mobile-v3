@@ -72,8 +72,6 @@ class DimmerDashboardTile extends View {
     this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
     this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
     this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
-    this.onTurnOn = this.onTurnOn.bind(this);
-    this.onTurnOff = this.onTurnOff.bind(this);
     this.layoutView = this.layoutView.bind(this);
     this.onSlidingStart = this.onSlidingStart.bind(this);
     this.onSlidingComplete = this.onSlidingComplete.bind(this);
@@ -124,21 +122,13 @@ class DimmerDashboardTile extends View {
     this.refs.onButton.fadeIn();
   }
 
-  onTurnOn() {
-    this.props.onTurnOn();
-  }
-
-  onTurnOff() {
-    this.props.onTurnOff();
-  }
-
   render() {
     const { item, tileWidth } = this.props;
-    const { name, isInState, supportedMethods } = item;
+    const { name, isInState, supportedMethods, methodRequested } = item;
     const { TURNON, TURNOFF, DIM } = supportedMethods;
 
-    const onButton = <PseudoOnButton ref={'onButton'} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} />;
-    const offButton = <PseudoOffButton ref={'offButton'} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} />;
+    const onButton = <PseudoOnButton ref={'onButton'} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
+    const offButton = <PseudoOffButton ref={'offButton'} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
     const slider = DIM ?
 			<VerticalSlider
 				style={[styles.slider, { width: this.state.bodyWidth, height: this.state.bodyHeight, left: 0, bottom: 0 }]}
@@ -153,8 +143,8 @@ class DimmerDashboardTile extends View {
 				onLeftEnd={this.onTurnOffButtonEnd}
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
-				onLeft={this.onTurnOff}
-				onRight={this.onTurnOn}
+				onLeft={this.props.onTurnOff}
+				onRight={this.props.onTurnOn}
 			/> :
 			null;
     return (

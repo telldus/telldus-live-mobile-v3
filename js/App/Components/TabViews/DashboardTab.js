@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View } from 'BaseComponents';
 import Platform from 'Platform';
-import { turnOn, turnOff, bell, down, up, stop, getDevices } from 'Actions/Devices';
+import { turnOn, turnOff, bell, down, up, stop, getDevices, requestTurnOn, requestTurnOff } from 'Actions/Devices';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { changeSensorDisplayType } from 'Actions/Dashboard';
 
@@ -70,6 +70,8 @@ class DashboardTab extends View {
     this.changeDisplayType = this.changeDisplayType.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.onCloseSetting = this.onCloseSetting.bind(this);
+    this.onTurnOn = this.onTurnOn.bind(this);
+    this.onTurnOff = this.onTurnOff.bind(this);
     this.mixins = [Subscribable.Mixin];
   }
 
@@ -87,6 +89,16 @@ class DashboardTab extends View {
     this.stopSensorTimer();
     this.props.onChangeDisplayType();
     this.startSensorTimer();
+  }
+
+  onTurnOn = id => () => {
+    this.props.onTurnOn(id);
+    this.props.requestTurnOn(id);
+  }
+
+  onTurnOff = id => () => {
+    this.props.onTurnOff(id);
+    this.props.requestTurnOff(id);
   }
 
   rowHasChanged(r1, r2) {
@@ -228,8 +240,8 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
-					onTurnOn={this.props.onTurnOn(itemId)}
-					onTurnOff={this.props.onTurnOff(itemId)}
+					onTurnOn={this.onTurnOn(itemId)}
+					onTurnOff={this.onTurnOff(itemId)}
 				/>;
       }
 
@@ -238,8 +250,8 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
-					onTurnOn={this.props.onTurnOn(itemId)}
-					onTurnOff={this.props.onTurnOff(itemId)}
+					onTurnOn={this.onTurnOn(itemId)}
+					onTurnOff={this.onTurnOff(itemId)}
 					setScrollEnabled={this.setScrollEnabled}
 					onDim={this.props.onDim(itemId)}
 					onDimmerSlide={this.props.onDimmerSlide(itemId)}
@@ -270,8 +282,8 @@ class DashboardTab extends View {
 				style={tileStyle}
 				item={row.childObject}
 				tileWidth={tileWidth}
-				onTurnOn={this.props.onTurnOn(itemId)}
-				onTurnOff={this.props.onTurnOff(itemId)}
+				onTurnOn={this.onTurnOn(itemId)}
+				onTurnOff={this.onTurnOff(itemId)}
 			/>;
     };
   }
@@ -302,8 +314,8 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onTurnOn: id => () => dispatch(turnOn(id)),
-    onTurnOff: id => () => dispatch(turnOff(id)),
+    onTurnOn: id => dispatch(turnOn(id)),
+    onTurnOff: id => dispatch(turnOff(id)),
     onBell: id => () => dispatch(bell(id)),
     onDown: id => () => dispatch(down(id)),
     onUp: id => () => dispatch(up(id)),
@@ -311,6 +323,8 @@ function mapDispatchToProps(dispatch) {
     onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
     onDim: id => value => dispatch(updateDimmerValue(id, value)),
     onChangeDisplayType: () => dispatch(changeSensorDisplayType()),
+    requestTurnOn: id => dispatch(requestTurnOn(id)),
+    requestTurnOff: id => dispatch(requestTurnOff(id)),
     dispatch,
   };
 }
