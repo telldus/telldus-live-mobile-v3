@@ -36,7 +36,7 @@ class OnButton extends View {
       <View style={[this.props.style, isInState !== 'TURNOFF' ? styles.enabled : styles.disabled]}>
         <TouchableOpacity disabled={!enabled} onPress={onPress} style={styles.button} >
           <Text ellipsizeMode="middle" numberOfLines={1}
-            style = {[styles.buttonText, isInState !== 'TURNOFF' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}>
+            style = {[styles.buttonText, isInState !== 'TURNOFF' || methodRequested === 'TURNON' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}>
             {'On'}
           </Text>
         </TouchableOpacity>

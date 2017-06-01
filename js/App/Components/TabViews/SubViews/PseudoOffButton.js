@@ -40,7 +40,7 @@ class PseudoOffButton extends View {
     return (
       <View style={[style, isInState === 'TURNOFF' && enabled ? styles.enabled : styles.disabled]}>
         <Animated.Text ellipsizeMode="middle" numberOfLines={1}
-				style = {[isInState === 'TURNOFF' && enabled ? styles.textEnabled : styles.textDisabled, { opacity: this.state.fadeAnim, fontSize: fontSize ? fontSize : 12 }]}>
+				style = {[(isInState === 'TURNOFF' || methodRequested === 'TURNOFF') && enabled ? styles.textEnabled : styles.textDisabled, { opacity: this.state.fadeAnim, fontSize: fontSize ? fontSize : 12 }]}>
 				{'Off'}
         </Animated.Text>
         {
