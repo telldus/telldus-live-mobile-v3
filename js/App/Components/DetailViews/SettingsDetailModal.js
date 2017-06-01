@@ -66,7 +66,7 @@ class SettingsDetailModal extends View {
                     <Header onPress={this.props.onClose} />
                     <View style={styles.body}>
                         <Text style={styles.versionInfo}>
-                            {'You are using version 3.2.0 of Telldus Live! mobile.'}
+                            {'You are using version 3.3.0 of Telldus Live! mobile.'}
                         </Text>
                         <Button text={'Submit Push Token'} onPress={this.props.onSubmitPushToken} width={200} />
                         <Button text={'Logout'} onPress={this.props.onLogout} width={100} />
