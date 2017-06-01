@@ -22,6 +22,7 @@
 import React, { PropTypes } from 'react';
 import { View } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
+import Dot from './Dot';
 
 class PseudoOnButton extends View {
   constructor(props) {
@@ -34,7 +35,7 @@ class PseudoOnButton extends View {
   }
 
   render() {
-    let { isInState, enabled, fontSize, style } = this.props;
+    let { isInState, enabled, fontSize, style, methodRequested } = this.props;
 
     return (
       <View style={[style, isInState !== 'TURNOFF' && enabled ? styles.enabled : styles.disabled]}>
@@ -42,6 +43,11 @@ class PseudoOnButton extends View {
 				style = {[isInState !== 'TURNOFF' && enabled ? styles.textEnabled : styles.textDisabled, { opacity: this.state.fadeAnim, fontSize: fontSize ? fontSize : 12 }]}>
 				{'On'}
         </Animated.Text>
+        {
+          methodRequested === 'TURNON' ?
+          <Dot style={styles.dot} />
+          : null
+        }
       </View>
     );
   }
@@ -72,12 +78,18 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     color: '#a2a2a2',
   },
+  dot: {
+    position: 'absolute',
+    top: 3,
+    right: 3,
+  },
 });
 
 PseudoOnButton.propTypes = {
   isInState: PropTypes.string,
   enabled: PropTypes.bool,
   fontSize: PropTypes.number,
+  methodRequested: PropTypes.string,
 };
 
 PseudoOnButton.defaultProps = {

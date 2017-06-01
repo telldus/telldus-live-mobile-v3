@@ -22,6 +22,7 @@
 import React, { PropTypes } from 'react';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+import Dot from './Dot';
 
 class OnButton extends View {
   constructor(props) {
@@ -29,7 +30,7 @@ class OnButton extends View {
   }
 
   render() {
-    let { isInState, enabled, onPress, fontSize } = this.props;
+    let { isInState, enabled, onPress, fontSize, methodRequested } = this.props;
 
     return (
       <View style={[this.props.style, isInState !== 'TURNOFF' ? styles.enabled : styles.disabled]}>
@@ -39,6 +40,11 @@ class OnButton extends View {
             {'On'}
           </Text>
         </TouchableOpacity>
+        {
+          methodRequested === 'TURNON' ?
+          <Dot style={styles.dot} />
+          : null
+        }
       </View>
     );
   }
@@ -65,6 +71,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
   },
+  dot: {
+    position: 'absolute',
+    top: 3,
+    right: 3,
+  },
 });
 
 OnButton.propTypes = {
@@ -72,6 +83,7 @@ OnButton.propTypes = {
   enabled: PropTypes.bool,
   onPress: PropTypes.func,
   fontSize: PropTypes.number,
+  methodRequested: PropTypes.string,
 };
 
 OnButton.defaultProps = {

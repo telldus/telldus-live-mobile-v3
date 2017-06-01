@@ -63,7 +63,7 @@ class Dot extends View {
       }),
     ]).start(event => {
       if (event.finished && this.blinking) {
-        this.blinking();
+        this.blink();
       }
     });
   }
