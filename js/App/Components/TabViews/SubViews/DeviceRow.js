@@ -28,7 +28,7 @@ import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmingButton from './DimmingButton';
 
-import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
+import { turnOn, turnOff, bell, down, up, stop, requestTurnOn, requestTurnOff } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
@@ -38,7 +38,22 @@ class DeviceRow extends View {
     super(props);
 
     this.onSettingsSelected = this.onSettingsSelected.bind(this);
+    this.onTurnOn = this.onTurnOn.bind(this);
+    this.onTurnOff = this.onTurnOff.bind(this);
   }
+
+  onTurnOn = id => () => {
+    console.log('onTurnOn');
+    this.props.onTurnOn(id);
+    this.props.requestTurnOn(id);
+  }
+
+  onTurnOff = id => () => {
+    console.log('onTurnOff');
+    this.props.onTurnOff(id);
+    this.props.requestTurnOff(id);
+  }
+
   render() {
     let button = null;
     const { device } = this.props;
@@ -66,22 +81,22 @@ class DeviceRow extends View {
     } else if (DIM) {
       button = <DimmingButton
 				device={device}
-				onTurnOn={this.props.onTurnOn(device.id)}
-				onTurnOff={this.props.onTurnOff(device.id)}
+				onTurnOn={this.onTurnOn(device.id)}
+				onTurnOff={this.onTurnOff(device.id)}
 				onDim={this.props.onDim(device.id)}
 				onDimmerSlide={this.props.onDimmerSlide(device.id)}
 				setScrollEnabled={this.props.setScrollEnabled}
 			/>;
     } else if (TURNON || TURNOFF) {
       button = <ToggleButton
-				onTurnOn={this.props.onTurnOn(device.id)}
-				onTurnOff={this.props.onTurnOff(device.id)}
+				onTurnOn={this.onTurnOn(device.id)}
+				onTurnOff={this.onTurnOff(device.id)}
 				device={device}
 			/>;
     } else {
       button = <ToggleButton
-				onTurnOn={this.props.onTurnOn(device.id)}
-				onTurnOff={this.props.onTurnOff(device.id)}
+				onTurnOn={this.onTurnOn(device.id)}
+				onTurnOff={this.onTurnOff(device.id)}
 				device={device}
 			/>;
     }
@@ -141,14 +156,16 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onTurnOn: id => () => dispatch(turnOn(id)),
-    onTurnOff: id => () => dispatch(turnOff(id)),
+    onTurnOn: id => dispatch(turnOn(id)),
+    onTurnOff: id => dispatch(turnOff(id)),
     onBell: id => () => dispatch(bell(id)),
     onDown: id => () => dispatch(down(id)),
     onUp: id => () => dispatch(up(id)),
     onStop: id => () => dispatch(stop(id)),
     onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
     onDim: id => value => dispatch(updateDimmerValue(id, value)),
+    requestTurnOn: id => dispatch(requestTurnOn(id)),
+    requestTurnOff: id => dispatch(requestTurnOff(id)),
   };
 }
 

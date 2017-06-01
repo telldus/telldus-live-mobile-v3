@@ -132,8 +132,8 @@ class DimmingButton extends View {
   render() {
     const { device } = this.props;
     const { TURNON, TURNOFF, DIM } = device.supportedMethods;
-    const onButton = <PseudoOnButton ref={'onButton'} style={styles.turnOn} isInState={device.isInState} enabled={!!TURNON} />;
-    const offButton = <PseudoOffButton ref={'offButton'} style={styles.turnOff} isInState={device.isInState} enabled={!!TURNOFF} />;
+    const onButton = <PseudoOnButton ref={'onButton'} style={styles.turnOn} isInState={device.isInState} enabled={!!TURNON} methodRequested={device.methodRequested} />;
+    const offButton = <PseudoOffButton ref={'offButton'} style={styles.turnOff} isInState={device.isInState} enabled={!!TURNOFF} methodRequested={device.methodRequested} />;
     const slider = DIM ?
       <VerticalSlider
         style={[styles.slider, { width: this.state.buttonWidth, height: this.state.buttonHeight, left: 0, bottom: 0 }]}
