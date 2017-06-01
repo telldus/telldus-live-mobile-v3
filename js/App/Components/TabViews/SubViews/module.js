@@ -43,6 +43,8 @@ import DimmingButton from './DimmingButton';
 import JobRow from './JobRow';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
+import PseudoOffButton from './PseudoOffButton';
+import PseudoOnButton from './PseudoOnButton';
 
 module.exports = {
   DeviceRow: DeviceRow,
@@ -67,4 +69,6 @@ module.exports = {
   JobRow: JobRow,
   OffButton: OffButton,
   OnButton: OnButton,
+  PseudoOffButton: PseudoOffButton,
+  PseudoOnButton: PseudoOnButton,
 };
