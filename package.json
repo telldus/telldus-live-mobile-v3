@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "eslint js",
     "lint_autofix": "eslint js --fix",
-    "flow": "node_modules/.bin/flow"
+    "flow": "node_modules/.bin/flow",
+    "postinstall": "rm -f node_modules/intl/.babelrc"
   },
   "dependencies": {
     "blueimp-md5": "^2.6.0",
