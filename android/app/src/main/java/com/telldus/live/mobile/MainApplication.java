@@ -35,14 +35,13 @@ import java.util.List;
 
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
-import fr.aybadb.rnak.RNAKPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
 	private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
 		@Override
-		protected boolean getUseDeveloperSupport() {
+		public boolean getUseDeveloperSupport() {
 			return BuildConfig.DEBUG;
 		}
 
@@ -53,8 +52,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
-				new FIRMessagingPackage(),
-				new RNAKPackage()
+				new FIRMessagingPackage()
 			);
 		}
 	};
