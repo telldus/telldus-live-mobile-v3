@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "286988598962",
+    "firebase_url": "https://nitecotest-cdeb7.firebaseio.com",
+    "project_id": "nitecotest-cdeb7",
+    "storage_bucket": "nitecotest-cdeb7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286988598962:android:c3fa29fd35b7c867",
+        "android_client_info": {
+          "package_name": "com.telldus.live.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "286988598962-qhr3g7h87m1ogu5vd8c5jbutbdmjdgbc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBk4-8PTsYgHL_wO7H_U-KUDDhc6sOl210"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
