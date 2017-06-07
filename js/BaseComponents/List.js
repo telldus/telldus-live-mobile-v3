@@ -143,21 +143,22 @@ class ListComponent extends React.Component {
 
   render() {
     return (
-			<ListView
-				{...this.props}
-				refreshControl={
-					<RefreshControl
-						refreshing={this.state.refreshing}
-						onRefresh={this.onRefresh}
-						enableEmptySections={true}
-						enabled={this.state.scrollEnabled}
-					/>
-				}
-				ref={this.setRefs}
-				onScroll={this.onScroll}
-				renderRow={this.renderRow}
-				contentInset={{ bottom: 64 }}
-			/>
+      <ListView
+        {...this.props}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh}
+            enableEmptySections={true}
+            enabled={this.state.scrollEnabled}
+          />
+        }
+        ref={this.setRefs}
+        onScroll={this.onScroll}
+        renderRow={this.renderRow}
+        contentInset={{ bottom: 64 }}
+        enableEmptySections={true}
+      />
     );
   }
 
