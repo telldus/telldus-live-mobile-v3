@@ -31,7 +31,7 @@
     "react-native-modal": "^2.3.2",
     "react-native-orientation": "git+https://github.com/yamill/react-native-orientation.git",
     "react-native-scrollable-tab-view": "^0.7.0",
-    "react-native-slider": "^0.9.1",
+    "react-native-slider": "~0.10.0",
     "react-native-tab-view": "0.0.66",
     "react-native-uuid": "^1.4.9",
     "react-native-vector-icons": "4.0.x",

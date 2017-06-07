@@ -149,7 +149,6 @@ class DimmerDeviceDetailModal extends View {
 				minimumTrackTintColor="rgba(0,150,136,255)"
 				maximumTrackTintColor="rgba(219,219,219,255)"
 				thumbTintColor="rgba(0,150,136,255)"
-				trackStyle={styles.trackStyle}
 				onValueChange={this.onValueChange}
 				onSlidingComplete={this.onSlidingComplete}
 				animateTransitions={true}/>;
@@ -209,9 +208,6 @@ const styles = StyleSheet.create({
   learnText: {
     fontSize: 16,
     color: 'orange',
-  },
-  trackStyle: {
-    marginTop: -4, // fix track thumb alignment bug : https://github.com/jeanregisser/react-native-slider/issues/54
   },
 });
 
