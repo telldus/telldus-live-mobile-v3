@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import { RoundedCornerShadowView, Icon, View, Text } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { up, down, stop, learn } from 'Actions/Devices';
+import { up, down, stop, learn } from 'Actions_Devices';
 
 const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
 	<RoundedCornerShadowView style={{ flexDirection: 'row', height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center' }}>

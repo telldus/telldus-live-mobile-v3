@@ -22,7 +22,7 @@
 'use strict';
 
 import { apiServer, publicKey, privateKey } from 'Config';
-import { updateAccessToken } from 'Actions/Login';
+import { updateAccessToken } from 'Actions_Login';
 
 import type { Action } from './types';
 

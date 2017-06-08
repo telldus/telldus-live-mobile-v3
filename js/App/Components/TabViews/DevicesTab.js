@@ -24,15 +24,15 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { List, ListDataSource, Text, View } from 'BaseComponents';
-import { DeviceRow, DeviceRowHidden } from 'TabViews/SubViews';
+import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
 import { DeviceDetailModal, ToggleDeviceDetailModal, BellDeviceDetailModal, DimmerDeviceDetailModal, NavigationalDeviceDetailModal } from 'DetailViews';
 
-import { getDevices } from 'Actions/Devices';
+import { getDevices } from 'Actions_Devices';
 import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
 
-import { parseDevicesForListView } from 'Reducers/Devices';
+import { parseDevicesForListView } from 'Reducers_Devices';
 
 import Theme from 'Theme';
 

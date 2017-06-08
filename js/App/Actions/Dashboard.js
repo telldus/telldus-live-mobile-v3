@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/Dashboard
+ * @providesModule Actions_Dashboard
  */
 
 'use strict';
@@ -25,8 +25,8 @@ import type { Action, ThunkAction } from './types';
 
 type Kind = 'device' | 'sensor';
 
-function getSupportedDisplayTypes(item) {
-  const displayTypes = [];
+function getSupportedDisplayTypes(item: Object): Array<String> {
+  let displayTypes = [];
 
   if (item.humidity) {
     displayTypes.push('humidity');

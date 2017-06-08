@@ -19,7 +19,7 @@
 
 'use strict';
 
-import type { Action } from 'Actions/Types';
+import type { Action } from 'Actions_Types';
 import { REHYDRATE } from 'redux-persist/constants';
 
 import { combineReducers } from 'redux';

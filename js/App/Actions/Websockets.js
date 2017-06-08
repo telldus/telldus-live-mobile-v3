@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/Websockets
+ * @providesModule Actions_Websockets
  */
 
 'use strict';
@@ -24,8 +24,8 @@
 import { v4 } from 'react-native-uuid';
 import TelldusWebsocket from '../Lib/Socket';
 
-import { processWebsocketMessageForSensor } from 'Actions/Sensors';
-import { processWebsocketMessageForDevice } from 'Actions/Devices';
+import { processWebsocketMessageForSensor } from 'Actions_Sensors';
+import { processWebsocketMessageForDevice } from 'Actions_Devices';
 
 import formatTime from '../Lib/formatTime';
 

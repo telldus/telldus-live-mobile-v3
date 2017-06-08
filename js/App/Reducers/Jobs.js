@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Reducers/Jobs
+ * @providesModule Reducers_Jobs
  */
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions_Types';
 import { REHYDRATE } from 'redux-persist/constants';
 
 import moment from 'moment-timezone';

@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import { Text, RoundedCornerShadowView, View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
-import { bell, learn } from 'Actions/Devices';
+import { bell, learn } from 'Actions_Devices';
 
 const BellButton = ({ onBell }) => (
 	<RoundedCornerShadowView style={styles.bell}>

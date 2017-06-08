@@ -26,8 +26,8 @@ import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Slider from 'react-native-slider';
 
-import { turnOn, turnOff, learn } from 'Actions/Devices';
-import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
+import { turnOn, turnOff, learn } from 'Actions_Devices';
+import { setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
 
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>

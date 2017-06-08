@@ -28,8 +28,8 @@ import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmingButton from './DimmingButton';
 
-import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
-import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
+import { turnOn, turnOff, bell, down, up, stop } from 'Actions_Devices';
+import { setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
 

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/Devices
+ * @providesModule Actions_Devices
  */
 
 'use strict';
@@ -54,7 +54,7 @@ export function getDevices(): ThunkAction {
   };
 }
 
-export function processWebsocketMessageForDevice(action, data): Action {
+export function processWebsocketMessageForDevice(action:String, data:Object): Action {
   switch (action) {
     case 'setState':
       return {
@@ -69,7 +69,7 @@ export function processWebsocketMessageForDevice(action, data): Action {
   }
 }
 
-export function deviceSetState(deviceId, state, stateValue = null): ThunkAction {
+export function deviceSetState(deviceId: Number, state:Number, stateValue:Number = null): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
@@ -88,7 +88,7 @@ export function deviceSetState(deviceId, state, stateValue = null): ThunkAction 
   };
 }
 
-export function turnOn(deviceId): ThunkAction {
+export function turnOn(deviceId: Number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/turnOn?id=${deviceId}`,
@@ -107,7 +107,7 @@ export function turnOn(deviceId): ThunkAction {
   };
 }
 
-export function turnOff(deviceId): ThunkAction {
+export function turnOff(deviceId: Number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/turnOff?id=${deviceId}`,
@@ -126,7 +126,7 @@ export function turnOff(deviceId): ThunkAction {
   };
 }
 
-export function bell(deviceId): ThunkAction {
+export function bell(deviceId: Number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/bell?id=${deviceId}`,
@@ -145,7 +145,7 @@ export function bell(deviceId): ThunkAction {
   };
 }
 
-export function up(deviceId): ThunkAction {
+export function up(deviceId: Number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/up?id=${deviceId}`,
@@ -164,7 +164,7 @@ export function up(deviceId): ThunkAction {
   };
 }
 
-export function down(deviceId): ThunkAction {
+export function down(deviceId: Number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/down?id=${deviceId}`,
@@ -183,7 +183,7 @@ export function down(deviceId): ThunkAction {
   };
 }
 
-export function stop(deviceId): ThunkAction {
+export function stop(deviceId: Number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/stop?id=${deviceId}`,
@@ -202,7 +202,7 @@ export function stop(deviceId): ThunkAction {
   };
 }
 
-export function learn(deviceId): ThunkAction {
+export function learn(deviceId: Number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/learn?id=${deviceId}`,
