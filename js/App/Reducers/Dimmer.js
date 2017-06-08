@@ -19,7 +19,7 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions_Types';
 
 type State = {
 	show: Boolean,

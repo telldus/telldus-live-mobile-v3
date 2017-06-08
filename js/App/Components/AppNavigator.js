@@ -22,15 +22,15 @@
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
 import { getGateways, getSensors, getJobs, getUserProfile, appStart, appState, syncLiveApiOnForeground } from 'Actions';
-import { authenticateSession, connectToGateways } from 'Actions/Websockets';
-import { getDevices } from 'Actions/Devices';
+import { authenticateSession, connectToGateways } from 'Actions_Websockets';
+import { getDevices } from 'Actions_Devices';
 
 import { View } from 'BaseComponents';
 import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
-import { DimmerPopup } from 'TabViews/SubViews';
+import { DimmerPopup } from 'TabViews_SubViews';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 

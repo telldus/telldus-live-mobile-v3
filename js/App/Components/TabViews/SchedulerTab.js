@@ -24,13 +24,13 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { List, ListDataSource, View, Text } from 'BaseComponents';
-import { JobRow } from 'TabViews/SubViews';
+import { JobRow } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 import Theme from 'Theme';
 
 import moment from 'moment-timezone';
 
-import { parseJobsForListView } from 'Reducers/Jobs';
+import { parseJobsForListView } from 'Reducers_Jobs';
 
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 

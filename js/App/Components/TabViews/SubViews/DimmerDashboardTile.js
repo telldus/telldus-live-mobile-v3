@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import { View } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
-import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
+import { showDimmerPopup, hideDimmerPopup } from 'Actions_Dimmer';
 import VerticalSlider from './VerticalSlider';
 
 import throttle from 'lodash/throttle';

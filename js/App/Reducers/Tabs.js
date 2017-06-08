@@ -19,7 +19,7 @@
 
 'use strict';
 
-import type { Action } from 'Actions/Types';
+import type { Action } from 'Actions_Types';
 
 type State = {
 	editModeSensorsTab: Boolean,

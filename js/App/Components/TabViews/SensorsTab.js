@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { List, ListDataSource, View } from 'BaseComponents';
-import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews/SubViews';
+import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
 import { toggleEditMode } from 'Actions';

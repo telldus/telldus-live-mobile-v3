@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
-import { turnOn, turnOff, learn } from 'Actions/Devices';
+import { turnOn, turnOff, learn } from 'Actions_Devices';
 
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
