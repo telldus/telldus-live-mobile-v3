@@ -19,6 +19,8 @@
  * @providesModule Actions_Tabs
  */
 
+// @flow
+
 'use strict';
 
 import type { Action } from './types';

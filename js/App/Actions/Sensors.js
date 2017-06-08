@@ -19,6 +19,8 @@
  * @providesModule Actions_Sensors
  */
 
+// @flow
+
 'use strict';
 
 import type { ThunkAction, Action } from './types';
@@ -44,7 +46,7 @@ function getSensors(): ThunkAction {
   };
 }
 
-function processWebsocketMessageForSensor(action, data): Action {
+function processWebsocketMessageForSensor(action: string, data: Object): Action {
   switch (action) {
     case 'value':
       return {

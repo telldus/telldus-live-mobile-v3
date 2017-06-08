@@ -19,6 +19,8 @@
  * @providesModule Actions_LiveApi
  */
 
+// @flow
+
 'use strict';
 
 import type { ThunkAction } from './types';
@@ -43,7 +45,7 @@ function syncLiveApiOnForeground(): ThunkAction {
 }
 
 // NOTE: Devices are retrieved upon syncLiveApiOnForeground and via socket messages
-function syncWithServer(nextTab): ThunkAction {
+function syncWithServer(nextTab: string): ThunkAction {
   return (dispatch, getState) => {
     const { liveApi } = getState();
     if (nextTab === 'sensorsTab' && !liveApi.sensors) {

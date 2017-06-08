@@ -19,6 +19,8 @@
  * @providesModule Actions_Navigation
  */
 
+// @flow
+
 'use strict';
 
 import type { Action } from './types';

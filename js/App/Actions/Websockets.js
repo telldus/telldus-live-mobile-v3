@@ -19,7 +19,11 @@
  * @providesModule Actions_Websockets
  */
 
+// @flow
+
 'use strict';
+
+import type { Dispatch, GetState, ThunkAction } from './types';
 
 import { v4 } from 'react-native-uuid';
 import TelldusWebsocket from '../Lib/Socket';
@@ -47,12 +51,12 @@ const websocketConnections = {};
  * `authenticateSession` returns a promise. It resolves to the authenticated sessionId, which is also
  * stored in the redux state.
  */
-export const authenticateSession = (() => {
+export const authenticateSession : () => ThunkAction = (() => {
   // immediately executing function to create closure for promise management
   let promise;
   let resolving = false;
 
-  return () => (dispatch, getState) => {
+  return () => (dispatch: Dispatch, getState: GetState) => {
     const {
       websockets: { session: { ttl, sessionId } },
     } = getState();
@@ -98,7 +102,7 @@ export const authenticateSession = (() => {
  * Sets up socket connections to known gateways.
  * Makes sure that the session is authenticated before connecting.
  */
-export const connectToGateways = () => (dispatch, getState) => {
+export const connectToGateways = () => (dispatch: Dispatch, getState: GetState ) => {
   const {
     gateways: { allIds, byId },
   } = getState();
@@ -126,7 +130,7 @@ export const connectToGateways = () => (dispatch, getState) => {
  * or different than the one we are connected to, it updates the state and creates
  * a new socket connection.
  */
-export const getWebsocketAddress = gatewayId => (dispatch, getState) => {
+export const getWebsocketAddress = (gatewayId: number) => (dispatch: Dispatch, getState: GetState) => {
   const payload = {
     url: `/client/serverAddress?id=${gatewayId}`,
     requestParams: {
@@ -146,7 +150,7 @@ export const getWebsocketAddress = gatewayId => (dispatch, getState) => {
       });
     }
 
-    const websocketConnection = websocketConnections[gatewayId] || {};
+    const websocketConnection:Object = websocketConnections[gatewayId] || {};
     if (
       address === websocketAddress.address &&
       address === websocketConnection.address &&

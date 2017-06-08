@@ -19,13 +19,15 @@
  * @providesModule Actions_Dashboard
  */
 
+// @flow
+
 'use strict';
 
 import type { Action, ThunkAction } from './types';
 
 type Kind = 'device' | 'sensor';
 
-function getSupportedDisplayTypes(item: Object): Array<String> {
+function getSupportedDisplayTypes(item: Object): Array<string> {
   let displayTypes = [];
 
   if (item.humidity) {
@@ -52,13 +54,13 @@ function getSupportedDisplayTypes(item: Object): Array<String> {
   return displayTypes;
 }
 
-const addToDashboard = (kind: Kind, id: Number): Action => ({
+const addToDashboard = (kind: Kind, id: number): Action => ({
   type: 'ADD_TO_DASHBOARD',
   kind,
   id,
 });
 
-const removeFromDashboard = (kind : Kind, id: Number) : Action => ({
+const removeFromDashboard = (kind : Kind, id: number) : Action => ({
   type: 'REMOVE_FROM_DASHBOARD',
   kind,
   id,
