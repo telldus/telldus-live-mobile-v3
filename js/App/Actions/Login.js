@@ -19,6 +19,8 @@
  * @providesModule Actions_Login
  */
 
+// @flow
+
 'use strict';
 
 import type { Action, ThunkAction } from './types';
@@ -29,7 +31,7 @@ import LiveApi from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
 // TODO: rewrite into proper ThunkAction that does its own dispatching
-async function loginToTelldus(username, password): Promise<Action> {
+async function loginToTelldus(username:string, password:string): Promise<Action> {
 
   return new Promise((resolve, reject) => {
     fetch(
@@ -72,7 +74,7 @@ async function loginToTelldus(username, password): Promise<Action> {
 
 }
 
-function updateAccessToken(accessToken): Action {
+function updateAccessToken(accessToken:string): Action {
   return {
     type: 'RECEIVED_ACCESS_TOKEN',
     accessToken: accessToken,

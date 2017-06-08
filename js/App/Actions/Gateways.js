@@ -19,6 +19,8 @@
  * @providesModule Actions_Gateways
  */
 
+// @flow
+
 'use strict';
 
 import type { ThunkAction } from './types';

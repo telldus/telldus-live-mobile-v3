@@ -19,6 +19,8 @@
  * @providesModule Actions_Dimmer
  */
 
+// @flow
+
 'use strict';
 
 import type { Action, ThunkAction } from './types';
@@ -27,7 +29,7 @@ import LiveApi from 'LiveApi';
 
 import { format } from 'url';
 
-export const showDimmerPopup = (name: String, value: Number): Action => ({
+export const showDimmerPopup = (name: string, value: number): Action => ({
   type: 'SHOW_DIMMER_POPUP',
   name,
   value,
@@ -37,7 +39,7 @@ export const hideDimmerPopup = (): Action => ({
   type: 'HIDE_DIMMER_POPUP',
 });
 
-export const setDimmerValue = (id: Number, value: Number): ThunkAction => (dispatch) => {
+export const setDimmerValue = (id: number, value: number): ThunkAction => (dispatch) => {
   dispatch({
     type: 'SET_DIMMER_VALUE',
     payload: {
@@ -47,7 +49,7 @@ export const setDimmerValue = (id: Number, value: Number): ThunkAction => (dispa
   });
 };
 
-export const updateDimmerValue = (id: Number, level: Number): ThunkAction => dispatch => {
+export const updateDimmerValue = (id: number, level: number): ThunkAction => dispatch => {
   const url = format({
     pathname: '/device/dim',
     query: {
