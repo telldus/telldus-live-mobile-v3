@@ -51,7 +51,7 @@ const websocketConnections = {};
  * `authenticateSession` returns a promise. It resolves to the authenticated sessionId, which is also
  * stored in the redux state.
  */
-const authenticateSession : () => ThunkAction = (() => {
+export const authenticateSession : () => ThunkAction = (() => {
   // immediately executing function to create closure for promise management
   let promise;
   let resolving = false;
@@ -102,7 +102,7 @@ const authenticateSession : () => ThunkAction = (() => {
  * Sets up socket connections to known gateways.
  * Makes sure that the session is authenticated before connecting.
  */
-const connectToGateways = () => (dispatch: Dispatch, getState: GetState ) => {
+export const connectToGateways = () => (dispatch: Dispatch, getState: GetState ) => {
   const {
     gateways: { allIds, byId },
   } = getState();
@@ -130,7 +130,7 @@ const connectToGateways = () => (dispatch: Dispatch, getState: GetState ) => {
  * or different than the one we are connected to, it updates the state and creates
  * a new socket connection.
  */
-const getWebsocketAddress = (gatewayId: number) => (dispatch: Dispatch, getState: GetState) => {
+export const getWebsocketAddress = (gatewayId: number) => (dispatch: Dispatch, getState: GetState) => {
   const payload = {
     url: `/client/serverAddress?id=${gatewayId}`,
     requestParams: {
@@ -177,7 +177,7 @@ const getWebsocketAddress = (gatewayId: number) => (dispatch: Dispatch, getState
   });
 };
 
-const destroyAllConnections = () => {
+export const destroyAllConnections = () => {
   Object.keys(websocketConnections).forEach(destroyConnection);
 };
 
@@ -369,11 +369,4 @@ const setupGatewayConnection = (gatewayId, address, port) => (dispatch, getState
     }
     websocket.send(message);
   }
-};
-
-module.exports = {
-  authenticateSession,
-  connectToGateways,
-  getWebsocketAddress,
-  destroyAllConnections,
 };

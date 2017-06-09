@@ -74,7 +74,7 @@ async function loginToTelldus(username:string, password:string): Promise<Action>
 
 }
 
-function updateAccessToken(accessToken:string): Action {
+function updateAccessToken(accessToken:Object): Action {
   return {
     type: 'RECEIVED_ACCESS_TOKEN',
     accessToken: accessToken,
