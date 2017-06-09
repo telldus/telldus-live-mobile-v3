@@ -29,17 +29,17 @@ import LiveApi from 'LiveApi';
 
 import { format } from 'url';
 
-export const showDimmerPopup = (name: string, value: number): Action => ({
+const showDimmerPopup = (name: string, value: number): Action => ({
   type: 'SHOW_DIMMER_POPUP',
   name,
   value,
 });
 
-export const hideDimmerPopup = (): Action => ({
+const hideDimmerPopup = (): Action => ({
   type: 'HIDE_DIMMER_POPUP',
 });
 
-export const setDimmerValue = (id: number, value: number): ThunkAction => (dispatch) => {
+const setDimmerValue = (id: number, value: number): ThunkAction => (dispatch) => {
   dispatch({
     type: 'SET_DIMMER_VALUE',
     payload: {
@@ -49,7 +49,7 @@ export const setDimmerValue = (id: number, value: number): ThunkAction => (dispa
   });
 };
 
-export const updateDimmerValue = (id: number, level: number): ThunkAction => dispatch => {
+const updateDimmerValue = (id: number, level: number): ThunkAction => dispatch => {
   const url = format({
     pathname: '/device/dim',
     query: {
@@ -72,3 +72,11 @@ export const updateDimmerValue = (id: number, level: number): ThunkAction => dis
     },
   }));
 };
+
+module.exports = {
+  showDimmerPopup,
+  hideDimmerPopup,
+  setDimmerValue,
+  updateDimmerValue,
+};
+

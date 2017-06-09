@@ -30,7 +30,7 @@ import { supportedMethods } from 'Config';
 
 import { format } from 'url';
 
-export function getDevices(): ThunkAction {
+function getDevices(): ThunkAction {
   return (dispatch) => {
     const url = format({
       pathname: '/devices/list',
@@ -56,7 +56,7 @@ export function getDevices(): ThunkAction {
   };
 }
 
-export function processWebsocketMessageForDevice(action:string, data:Object): Action {
+function processWebsocketMessageForDevice(action:string, data:Object): Action {
   switch (action) {
     case 'setState':
       return {
@@ -71,7 +71,7 @@ export function processWebsocketMessageForDevice(action:string, data:Object): Ac
   }
 }
 
-export function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
+function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
   return (dispatch) => {
     const payload = { //$FlowFixMe
       url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
@@ -90,7 +90,7 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
   };
 }
 
-export function turnOn(deviceId: number): ThunkAction {
+function turnOn(deviceId: number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/turnOn?id=${deviceId}`,
@@ -109,7 +109,7 @@ export function turnOn(deviceId: number): ThunkAction {
   };
 }
 
-export function turnOff(deviceId: number): ThunkAction {
+function turnOff(deviceId: number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/turnOff?id=${deviceId}`,
@@ -128,7 +128,7 @@ export function turnOff(deviceId: number): ThunkAction {
   };
 }
 
-export function bell(deviceId: number): ThunkAction {
+function bell(deviceId: number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/bell?id=${deviceId}`,
@@ -147,7 +147,7 @@ export function bell(deviceId: number): ThunkAction {
   };
 }
 
-export function up(deviceId: number): ThunkAction {
+function up(deviceId: number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/up?id=${deviceId}`,
@@ -166,7 +166,7 @@ export function up(deviceId: number): ThunkAction {
   };
 }
 
-export function down(deviceId: number): ThunkAction {
+function down(deviceId: number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/down?id=${deviceId}`,
@@ -185,7 +185,7 @@ export function down(deviceId: number): ThunkAction {
   };
 }
 
-export function stop(deviceId: number): ThunkAction {
+function stop(deviceId: number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/stop?id=${deviceId}`,
@@ -204,7 +204,7 @@ export function stop(deviceId: number): ThunkAction {
   };
 }
 
-export function learn(deviceId: number): ThunkAction {
+function learn(deviceId: number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/learn?id=${deviceId}`,
@@ -222,3 +222,16 @@ export function learn(deviceId: number): ThunkAction {
 		));
   };
 }
+
+module.exports = {
+  getDevices,
+  processWebsocketMessageForDevice,
+  deviceSetState,
+  turnOn,
+  turnOff,
+  bell,
+  up,
+  down,
+  stop,
+  learn,
+};

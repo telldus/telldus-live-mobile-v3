@@ -33,6 +33,8 @@ import { getSensors } from 'Actions_Sensors';
 
 import { AppState } from 'react-native';
 
+type Tab = 'sensorsTab' | 'schedulerTab' | 'gatewaysTab';
+
 function syncLiveApiOnForeground(): ThunkAction {
   return dispatch => {
     AppState.addEventListener('change', appState => {
@@ -45,7 +47,7 @@ function syncLiveApiOnForeground(): ThunkAction {
 }
 
 // NOTE: Devices are retrieved upon syncLiveApiOnForeground and via socket messages
-function syncWithServer(nextTab: string): ThunkAction {
+function syncWithServer(nextTab: Tab): ThunkAction {
   return (dispatch, getState) => {
     const { liveApi } = getState();
     if (nextTab === 'sensorsTab' && !liveApi.sensors) {

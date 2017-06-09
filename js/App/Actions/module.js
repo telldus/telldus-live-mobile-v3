@@ -19,6 +19,8 @@
  * @providesModule Actions
  */
 
+// @flow
+
 'use strict';
 
 import DeviceActions from './Devices';
