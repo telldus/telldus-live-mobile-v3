@@ -51,7 +51,7 @@ const websocketConnections = {};
  * `authenticateSession` returns a promise. It resolves to the authenticated sessionId, which is also
  * stored in the redux state.
  */
-export const authenticateSession : () => ThunkAction = (() => {
+const authenticateSession : () => ThunkAction = (() => {
   // immediately executing function to create closure for promise management
   let promise;
   let resolving = false;
@@ -102,7 +102,7 @@ export const authenticateSession : () => ThunkAction = (() => {
  * Sets up socket connections to known gateways.
  * Makes sure that the session is authenticated before connecting.
  */
-export const connectToGateways = () => (dispatch: Dispatch, getState: GetState ) => {
+const connectToGateways = () => (dispatch: Dispatch, getState: GetState ) => {
   const {
     gateways: { allIds, byId },
   } = getState();
@@ -130,7 +130,7 @@ export const connectToGateways = () => (dispatch: Dispatch, getState: GetState )
  * or different than the one we are connected to, it updates the state and creates
  * a new socket connection.
  */
-export const getWebsocketAddress = (gatewayId: number) => (dispatch: Dispatch, getState: GetState) => {
+const getWebsocketAddress = (gatewayId: number) => (dispatch: Dispatch, getState: GetState) => {
   const payload = {
     url: `/client/serverAddress?id=${gatewayId}`,
     requestParams: {
@@ -177,7 +177,7 @@ export const getWebsocketAddress = (gatewayId: number) => (dispatch: Dispatch, g
   });
 };
 
-export const destroyAllConnections = () => {
+const destroyAllConnections = () => {
   Object.keys(websocketConnections).forEach(destroyConnection);
 };
 
@@ -349,15 +349,15 @@ const setupGatewayConnection = (gatewayId, address, port) => (dispatch, getState
     });
   };
 
-  function authoriseWebsocket(sessionId) {
+  function authoriseWebsocket(sessionId:string) {
     sendMessage(`{"module":"auth","action":"auth","data":{"sessionid":"${sessionId}","clientId":"${gatewayId}"}}`);
   }
 
-  function addWebsocketFilter(module, action) {
+  function addWebsocketFilter(module:string, action:string) {
     sendMessage(`{"module":"filter","action":"accept","data":{"module":"${module}","action":"${action}"}}`);
   }
 
-  function sendMessage(message) {
+  function sendMessage(message:string) {
     const formattedTime = formatTime(new Date());
     const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
     try {
@@ -369,4 +369,11 @@ const setupGatewayConnection = (gatewayId, address, port) => (dispatch, getState
     }
     websocket.send(message);
   }
+};
+
+module.exports = {
+  authenticateSession,
+  connectToGateways,
+  getWebsocketAddress,
+  destroyAllConnections,
 };
