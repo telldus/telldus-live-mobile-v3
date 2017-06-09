@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import type { Action } from 'Actions_Types';
@@ -29,7 +31,7 @@ const initialState = {
   },
 };
 
-export default function reduceWebsockets(state = { ...initialState }, action: Action) {
+export default function reduceWebsockets(state: Object = { ...initialState }, action: Object) {
   if (action.type === REHYDRATE && action.payload.websockets) {
     return {
       ...state,

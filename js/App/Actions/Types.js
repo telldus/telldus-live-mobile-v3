@@ -21,11 +21,9 @@
 // @flow
 'use strict';
 
-import { REHYDRATE } from 'redux-persist/constants';
-
 export type Action =
       { type: 'LOGGED_IN' }
-    | { type: 'RECEIVED_ACCESS_TOKEN', accessToken: string }
+    | { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
     | { type: 'RECEIVED_USER_PROFILE', payload: Object }
     | { type: 'RECEIVED_DEVICES', payload: Object }
     | { type: 'RECEIVED_GATEWAYS', payload: Object }
@@ -59,7 +57,6 @@ export type Action =
 
     | { type: 'SENSOR_UPDATE_VALUE', payload: Object }
     | { type: 'SENSOR_WEBSOCKET_UNHANDLED', payload: Object }
-    | { type: REHYDRATE, payload: Object }
     | { type: 'SESSION_ID_AUTHENTICATED', payload: Object }
     | { type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS', gatewayId: number, payload: Object }
     | { type: 'GATEWAY_WEBSOCKET_OPEN', gatewayId: number }

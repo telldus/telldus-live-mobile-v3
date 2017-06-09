@@ -19,6 +19,8 @@
  * @providesModule Reducers_Jobs
  */
 
+// @flow
+
 'use strict';
 
 import type { Action } from 'Actions_Types';
@@ -35,7 +37,7 @@ export type State = ?Object;
 const initialState = [];
 const jobInitialState = {};
 
-function reduceJob(state: State = jobInitialState, action: Action): State {
+function reduceJob(state: Object = jobInitialState, action: Action): State {
   switch (action.type) {
     case 'RECEIVED_JOBS':
       let newJob = {
@@ -61,7 +63,7 @@ function reduceJob(state: State = jobInitialState, action: Action): State {
   }
 }
 
-export default function reduceJobs(state: State = initialState, action: Action): State {
+export default function reduceJobs(state: Array<Object> = initialState, action: Object): Array<Object> {
   if (action.type === REHYDRATE) {
     console.log('rehydrating jobs');
     if (action.payload.jobs) {
@@ -87,7 +89,7 @@ export default function reduceJobs(state: State = initialState, action: Action):
   return state;
 }
 
-export function parseJobsForListView(jobs = [], gateways = {}, devices = {}) {
+export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}): State {
   if (!jobs || !jobs.length) {
     return {
       sections: {},
