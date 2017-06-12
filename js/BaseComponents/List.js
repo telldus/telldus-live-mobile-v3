@@ -17,15 +17,160 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
 import { ListView, RefreshControl } from 'react-native';
 import SwipeRow from './SwipeRow';
 
-class ListComponent extends React.Component {
+type Props = {
+  onRefresh: ?(() => void),
+	/**
+	 * How to render a row. Should return a valid React Element.
+	 */
+  renderRow: (Object, number, number, Object) => Object,
+	/**
+	 * How to render a hidden row (renders behind the row). Should return a valid React Element.
+	 * This is required unless renderRow is passing a SwipeRow.
+	 */
+  renderHiddenRow: (Object, number, number, Object) => Object,
+	/**
+	 * TranslateX value for opening the row to the left (positive number)
+	 */
+  leftOpenValue: number,
+	/**
+	 * TranslateX value for opening the row to the right (negative number)
+	 */
+  rightOpenValue: number,
+	/**
+	 * Should open rows be closed when the listView begins scrolling
+	 */
+  closeOnScroll: boolean,
+	/**
+	 * Should open rows be closed when a row is pressed
+	 */
+  closeOnRowPress: boolean,
+	/**
+	 * Disable ability to swipe rows left
+	 */
+  disableLeftSwipe: boolean,
+	/**
+	 * Disable ability to swipe rows right
+	 */
+  disableRightSwipe: boolean,
+	/**
+	 * Enable hidden row onLayout calculations to run always.
+	 *
+	 * By default, hidden row size calculations are only done on the first onLayout event
+	 * for performance reasons.
+	 * Passing ```true``` here will cause calculations to run on every onLayout event.
+	 * You may want to do this if your rows' sizes can change.
+	 * One case is a SwipeListView with rows of different heights and an options to delete rows.
+	 */
+  recalculateHiddenLayout: boolean,
+	/**
+	 * Called when a swipe row is animating open
+	 */
+  onRowOpen: (number, number, Object) => void,
+	/**
+	 * Called when a swipe row is animating closed
+	 */
+  onRowClose: (number, number, Object) => void,
+	/**
+	 * Styles for the parent wrapper View of the SwipeRow
+	 */
+  swipeRowStyle: Object,
+	/**
+	 * Called when the ListView ref is set and passes a ref to the ListView
+	 * e.g. listViewRef={ ref => this._swipeListViewRef = ref }
+	 */
+  listViewRef: (Object) => void,
+	/**
+	 * Should the first SwipeRow do a slide out preview to show that the list is swipeable
+	 */
+  previewFirstRow: boolean,
+	/**
+	 * Duration of the slide out preview animation
+	 */
+  previewDuration: number,
+	/**
+	 * TranslateX value for the slide out preview animation
+	 * Default: 0.5 * props.rightOpenValue
+	 */
+  previewOpenValue: number,
 
-  constructor(props) {
+  editMode: boolean,
+
+  dataSource: Object,
+
+  onScroll: (Object) => void,
+};
+
+type DefaultProps = {
+  onRefresh: ?(() => void),
+	/**
+	 * TranslateX value for opening the row to the left (positive number)
+	 */
+  leftOpenValue: number,
+	/**
+	 * TranslateX value for opening the row to the right (negative number)
+	 */
+  rightOpenValue: number,
+	/**
+	 * Should open rows be closed when the listView begins scrolling
+	 */
+  closeOnScroll: boolean,
+	/**
+	 * Should open rows be closed when a row is pressed
+	 */
+  closeOnRowPress: boolean,
+	/**
+	 * Disable ability to swipe rows left
+	 */
+  disableLeftSwipe: boolean,
+	/**
+	 * Disable ability to swipe rows right
+	 */
+  disableRightSwipe: boolean,
+	/**
+	 * Enable hidden row onLayout calculations to run always.
+	 *
+	 * By default, hidden row size calculations are only done on the first onLayout event
+	 * for performance reasons.
+	 * Passing ```true``` here will cause calculations to run on every onLayout event.
+	 * You may want to do this if your rows' sizes can change.
+	 * One case is a SwipeListView with rows of different heights and an options to delete rows.
+	 */
+  recalculateHiddenLayout: boolean,
+	/**
+	 * Should the first SwipeRow do a slide out preview to show that the list is swipeable
+	 */
+  previewFirstRow: boolean,
+
+  editMode: boolean,
+};
+
+type State = {
+  refreshing: boolean,
+  scrollEnabled: boolean,
+};
+
+class ListComponent extends React.Component {
+  props: Props;
+  static defaultProps: DefaultProps;
+  state: State;
+  _rows: Object;
+  openCellId: ?string;
+  _listView: Object;
+  onRefresh: () => void;
+  setScrollEnabled: (boolean) => void;
+  onScroll: (Object) => void;
+  setRefs: (Object) => void;
+  renderRow: (Object, number, number, Object) => Object;
+
+  constructor(props: Props) {
     super(props);
     this._rows = {};
     this.openCellId = null;
@@ -53,7 +198,7 @@ class ListComponent extends React.Component {
     }
   }
 
-  setScrollEnabled(enable) {
+  setScrollEnabled(enable: boolean) {
     if (this._listView) {
       this._listView.setNativeProps({ scrollEnabled: enable });
       this.setState({ scrollEnabled: enable });
@@ -67,7 +212,7 @@ class ListComponent extends React.Component {
     }
   }
 
-  onRowOpen(secId, rowId, rowMap) {
+  onRowOpen(secId: number, rowId: number, rowMap: Object) {
     const cellIdentifier = `${secId}${rowId}`;
     if (this.openCellId && this.openCellId !== cellIdentifier) {
       this.safeCloseOpenRow();
@@ -76,7 +221,7 @@ class ListComponent extends React.Component {
     this.props.onRowOpen && this.props.onRowOpen(secId, rowId, rowMap);
   }
 
-  onRowPress(id) {
+  onRowPress(id: string) {
     if (this.openCellId) {
       if (this.props.closeOnRowPress) {
         this.safeCloseOpenRow();
@@ -85,7 +230,7 @@ class ListComponent extends React.Component {
     }
   }
 
-  onScroll(e) {
+  onScroll(e: Object) {
     if (this.openCellId) {
       if (this.props.closeOnScroll) {
         this.safeCloseOpenRow();
@@ -95,12 +240,12 @@ class ListComponent extends React.Component {
     this.props.onScroll && this.props.onScroll(e);
   }
 
-  setRefs(ref) {
+  setRefs(ref: Object) {
     this._listView = ref;
     this.props.listViewRef && this.props.listViewRef(ref);
   }
 
-  renderRow(rowData, secId, rowId, highlightRow) {
+  renderRow(rowData: Object, secId: number, rowId: number, highlightRow: Object) : Object {
     const Component = this.props.renderRow(rowData, secId, rowId, highlightRow);
     if (!this.props.renderHiddenRow) {
       return React.cloneElement(
@@ -162,86 +307,6 @@ class ListComponent extends React.Component {
   }
 
 }
-
-ListComponent.propTypes = {
-
-  onRefresh: React.PropTypes.func,
-	/**
-	 * How to render a row. Should return a valid React Element.
-	 */
-  renderRow: React.PropTypes.func.isRequired,
-	/**
-	 * How to render a hidden row (renders behind the row). Should return a valid React Element.
-	 * This is required unless renderRow is passing a SwipeRow.
-	 */
-  renderHiddenRow: React.PropTypes.func,
-	/**
-	 * TranslateX value for opening the row to the left (positive number)
-	 */
-  leftOpenValue: React.PropTypes.number,
-	/**
-	 * TranslateX value for opening the row to the right (negative number)
-	 */
-  rightOpenValue: React.PropTypes.number,
-	/**
-	 * Should open rows be closed when the listView begins scrolling
-	 */
-  closeOnScroll: React.PropTypes.bool,
-	/**
-	 * Should open rows be closed when a row is pressed
-	 */
-  closeOnRowPress: React.PropTypes.bool,
-	/**
-	 * Disable ability to swipe rows left
-	 */
-  disableLeftSwipe: React.PropTypes.bool,
-	/**
-	 * Disable ability to swipe rows right
-	 */
-  disableRightSwipe: React.PropTypes.bool,
-	/**
-	 * Enable hidden row onLayout calculations to run always.
-	 *
-	 * By default, hidden row size calculations are only done on the first onLayout event
-	 * for performance reasons.
-	 * Passing ```true``` here will cause calculations to run on every onLayout event.
-	 * You may want to do this if your rows' sizes can change.
-	 * One case is a SwipeListView with rows of different heights and an options to delete rows.
-	 */
-  recalculateHiddenLayout: React.PropTypes.bool,
-	/**
-	 * Called when a swipe row is animating open
-	 */
-  onRowOpen: React.PropTypes.func,
-	/**
-	 * Called when a swipe row is animating closed
-	 */
-  onRowClose: React.PropTypes.func,
-	/**
-	 * Styles for the parent wrapper View of the SwipeRow
-	 */
-  swipeRowStyle: React.PropTypes.object,
-	/**
-	 * Called when the ListView ref is set and passes a ref to the ListView
-	 * e.g. listViewRef={ ref => this._swipeListViewRef = ref }
-	 */
-  listViewRef: React.PropTypes.func,
-	/**
-	 * Should the first SwipeRow do a slide out preview to show that the list is swipeable
-	 */
-  previewFirstRow: React.PropTypes.bool,
-	/**
-	 * Duration of the slide out preview animation
-	 */
-  previewDuration: React.PropTypes.number,
-	/**
-	 * TranslateX value for the slide out preview animation
-	 * Default: 0.5 * props.rightOpenValue
-	 */
-  previewOpenValue: React.PropTypes.number,
-
-  editMode: React.PropTypes.bool,
-};
 
 ListComponent.defaultProps = {
   onRefresh: null,
