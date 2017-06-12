@@ -24,7 +24,22 @@ import { connect } from 'react-redux';
 
 import { Container, Content, Text, View } from 'BaseComponents';
 
+type Sensor = {
+	clientName: string,
+	battery: number,
+	lastUpdated: number,
+	model: string,
+	ignored: boolean,
+	sensorId: string,
+	protocol: string,
+};
+
+type Props = {
+	sensor: Sensor,
+};
+
 class SensorDetailView extends View {
+  props: Props;
 
   render() {
     return (

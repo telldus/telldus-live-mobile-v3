@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -26,6 +28,17 @@ import { Container, Text, View, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
+
+type Props = {
+  isVisible: boolean,
+  onClose: () => void,
+  onLogout: () => void,
+  onSubmitPushToken: () => void,
+};
+
+type State = {
+  isVisible: boolean,
+};
 
 const Header = ({ onPress }) => (
     <View style={styles.header}>
@@ -51,6 +64,8 @@ const Button = ({ text, onPress, width }) => (
 );
 
 class SettingsDetailModal extends View {
+  props: Props;
+  state: State;
 
   constructor(props) {
     super(props);
@@ -77,12 +92,6 @@ class SettingsDetailModal extends View {
   }
 
 }
-
-SettingsDetailModal.propTypes = {
-  onClose: React.PropTypes.func.isRequired,
-  onSubmitPushToken: React.PropTypes.func.isRequired,
-  onLogout: React.PropTypes.func.isRequired,
-};
 
 const styles = StyleSheet.create({
   container: {
