@@ -17,11 +17,13 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 import React, { PropTypes } from 'react';
 import { Text } from 'react-native';
 import * as Intl from 'react-intl';
 
-const FormattedNumberComponent = props => {
+const FormattedNumberComponent = (props : Object) => {
   const style = props.style;
 
   const formatOptions = {
