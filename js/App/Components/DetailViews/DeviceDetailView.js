@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -24,7 +26,21 @@ import { connect } from 'react-redux';
 
 import { Container, Content, Text, View } from 'BaseComponents';
 
+type Device = {
+	clientName: string,
+	state: string,
+	statevalue: string,
+	methods: Object,
+	ignored: boolean,
+	type: string,
+};
+
+type Props = {
+	device: Device,
+};
+
 class DeviceDetailView extends View {
+  props: Props;
 
   render() {
     return (

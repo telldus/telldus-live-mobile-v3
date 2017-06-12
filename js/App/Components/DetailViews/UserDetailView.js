@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -31,8 +33,16 @@ import {
 
 import { logoutFromTelldus } from 'Actions';
 
+type Props = {
+	user: Object,
+	dispatch: Function,
+};
+
 class UserDetailView extends View {
-  constructor(props) {
+  props: Props;
+  logoutFromTelldus: () => void;
+
+  constructor(props: Props) {
     super(props);
 
     this.logoutFromTelldus = this.logoutFromTelldus.bind(this);

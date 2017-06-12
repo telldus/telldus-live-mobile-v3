@@ -27,28 +27,27 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import { turnOn, turnOff, learn } from 'Actions_Devices';
 
+type Props = {
+  device: Object,
+  onTurnOn: (number) => void,
+  onTurnOff: (number) => void,
+  onLearn: (number) => void,
+};
+
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
 		<TouchableOpacity
-			style={[styles.toggleButton, {
-  backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
-}]}
+			style={[styles.toggleButton, { backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee' }]}
 			onPress={onTurnOff}>
-			<Text style={{
-  fontSize: 16,
-  color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
+			<Text style={{ fontSize: 16, color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
 				{'Off'}
 			</Text>
 		</TouchableOpacity>
 
 		<TouchableOpacity
-			style={[styles.toggleButton, {
-  backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee',
-}]}
+			style={[styles.toggleButton, { backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee' }]}
 			onPress={onTurnOn}>
-			<Text style={{
-  fontSize: 16,
-  color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e' }}>
+			<Text style={{ fontSize: 16, color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e' }}>
 				{'On'}
 			</Text>
 		</TouchableOpacity>
@@ -66,8 +65,12 @@ const LearnButton = ({ device, onLearn }) => (
 );
 
 class ToggleDeviceDetailModal extends View {
+  props: Props;
+  onTurnOn: () => void;
+  onTurnOff: () => void;
+  onLearn: () => void;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.onTurnOn = this.onTurnOn.bind(this);
@@ -111,10 +114,6 @@ class ToggleDeviceDetailModal extends View {
   }
 
 }
-
-ToggleDeviceDetailModal.propTypes = {
-  device: React.PropTypes.object.isRequired,
-};
 
 const styles = StyleSheet.create({
   container: {
