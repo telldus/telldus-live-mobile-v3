@@ -17,13 +17,21 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
 import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
+type Props = {
+  onBell: () => void,
+};
+
 class BellButton extends View {
+  props: Props;
+
   render() {
     return (
             <RoundedCornerShadowView

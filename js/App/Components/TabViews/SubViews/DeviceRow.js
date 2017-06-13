@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -33,8 +35,25 @@ import { setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
 
+type Props = {
+  onBell: (number) => void,
+  onDown: (number) => void,
+  onUp: (number) => void,
+  onStop: (number) => void,
+  onDimmerSlide: (number) => void,
+  onDim: (number) => void,
+  onTurnOn: (number) => void,
+  onTurnOff: (number) => void,
+  onSettingsSelected: (number) => void,
+  device: Object,
+  setScrollEnabled: boolean,
+};
+
 class DeviceRow extends View {
-  constructor(props) {
+  props: Props;
+  onSettingsSelected: (number) => void;
+
+  constructor(props: Props) {
     super(props);
 
     this.onSettingsSelected = this.onSettingsSelected.bind(this);
