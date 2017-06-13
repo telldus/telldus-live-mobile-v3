@@ -17,12 +17,22 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React, { PropTypes } from 'react';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
+
+type Props = {
+  item: Object,
+  style: Object,
+  tileWidth: number,
+  onTurnOff: number => void,
+  onTurnOn: number => void,
+};
 
 const OffButton = ({ isInState, tileWidth, enabled, onPress }) => (
 	<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
@@ -59,7 +69,9 @@ const OnButton = ({ isInState, tileWidth, enabled, onPress }) => (
 );
 
 class ToggleDashboardTile extends View {
-  constructor(props) {
+  props: Props;
+
+  constructor(props: Props) {
     super(props);
   }
 

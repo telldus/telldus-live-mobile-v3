@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -24,7 +26,11 @@ import { View, Text } from 'BaseComponents';
 
 import Theme from 'Theme';
 
-export default ({ gateway }) => {
+type Props = {
+	gateway:Object,
+};
+
+export default ({ gateway } : Props ) => {
   return (
 		<View style = {Theme.Styles.sectionHeader}>
 			<Text style = {Theme.Styles.sectionHeaderText}>

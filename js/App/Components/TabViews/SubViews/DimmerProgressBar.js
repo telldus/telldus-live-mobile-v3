@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React, { Component } from 'react';
@@ -25,8 +27,45 @@ import { Animated, Easing, View, Text, StyleSheet } from 'react-native';
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
 const BAR_WIDTH_ZERO_POSITION = INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
 
+type Props = {
+  progress: number,
+  indeterminate: boolean,
+  animated: boolean,
+  borderColor?: string,
+  borderRadius: number,
+  borderWidth: number,
+  color: string,
+  height: number,
+  style: Object,
+  unfilledColor?: string,
+  width: number,
+};
+
+type DefaultProps = {
+  animated: boolean,
+  borderRadius: number,
+  borderWidth: number,
+  color: string,
+  height: number,
+  indeterminate: boolean,
+  progress: number,
+  width: number,
+};
+
+type State = {
+  progress: Object,
+  animationValue: Object,
+  containerWidth: number,
+  containerHeight: number,
+};
+
 class DimmerProgressBar extends Component {
-  constructor(props) {
+  props: Props;
+  static defaultProps : DefaultProps;
+  state: State;
+  layoutView: Object => void;
+
+  constructor(props: Props) {
     super(props);
     const progress = Math.min(Math.max(props.progress, 0), 1);
     this.state = {
@@ -45,7 +84,7 @@ class DimmerProgressBar extends Component {
     }
   }
 
-  componentWillReceiveProps(props) {
+  componentWillReceiveProps(props: Props) {
     if (props.indeterminate !== this.props.indeterminate) {
       if (props.indeterminate) {
         this.animate();
@@ -72,7 +111,7 @@ class DimmerProgressBar extends Component {
     }
   }
 
-  layoutView(x) {
+  layoutView(x: Object) {
     let { width, height } = x.nativeEvent.layout;
     this.setState({
       containerWidth: width,
@@ -171,20 +210,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
   },
 });
-
-DimmerProgressBar.propTypes = {
-  animated: React.PropTypes.bool,
-  borderColor: React.PropTypes.string,
-  borderRadius: React.PropTypes.number,
-  borderWidth: React.PropTypes.number,
-  children: React.PropTypes.node,
-  color: React.PropTypes.string,
-  height: React.PropTypes.number,
-  indeterminate: React.PropTypes.bool,
-  progress: React.PropTypes.number,
-  unfilledColor: React.PropTypes.string,
-  width: React.PropTypes.number,
-};
 
 DimmerProgressBar.defaultProps = {
   animated: true,

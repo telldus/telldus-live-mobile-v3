@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React, { Component } from 'react';
@@ -25,6 +27,10 @@ import { ScrollView, StyleSheet } from 'react-native';
 
 import format from 'date-format';
 import Theme from 'Theme';
+
+type Props = {
+  sensor: Object,
+};
 
 const SensorHumidity = ({ humidity }) => (
 	<View style={Theme.Styles.sensorValue}>
@@ -100,7 +106,11 @@ const SensorLuminance = ({ luminance }) => (
 );
 
 class SensorRow extends Component {
-  constructor(props) {
+  props: Props;
+  onLayout: (Object) => void;
+  width: number;
+
+  constructor(props: Props) {
     super(props);
     this.width = 0;
 
@@ -174,11 +184,11 @@ class SensorRow extends Component {
     );
   }
 
-  onLayout(event) {
+  onLayout(event: Object) {
     this.width = event.nativeEvent.layout.width;
   }
 
-  formatLastUpdated(minutes, lastUpdated) {
+  formatLastUpdated(minutes: number, lastUpdated:number): string {
     if (minutes === 0) {
       return 'Just now';
     }

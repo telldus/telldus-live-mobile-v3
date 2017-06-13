@@ -17,9 +17,11 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Dimensions, Text } from 'react-native';
 import DimmerProgressBar from './DimmerProgressBar';
 import { View, initializeRegistryWithDefinitions } from 'react-native-animatable';
@@ -27,18 +29,43 @@ import * as ANIMATION_DEFINITIONS from 'react-native-animatable/definitions';
 
 initializeRegistryWithDefinitions(ANIMATION_DEFINITIONS);
 
-class DimmerPopup extends Component {
-  static defaultProps = {
-    animationIn: 'slideInDown',
-    animationInTiming: 300,
-    animationOut: 'slideOutUp',
-    animationOutTiming: 300,
-    isVisible: false,
-    hideOnBack: true,
-    value: 1,
-  }
+type Props = {
+  animationIn: string,
+  animationInTiming: number,
+  animationOut: string,
+  animationOutTiming: number,
+  value: number,
+  isVisible: boolean,
+  hideOnBack: boolean,
+  style: Object,
+  name: string,
+  onBackButtonPress: () => void;
+};
 
-  constructor(props) {
+type State = {
+  isVisible: boolean,
+  deviceWidth: number,
+  deviceHeight: number,
+};
+
+type DefaultProps = {
+  animationIn: string,
+  animationInTiming: number,
+  animationOut: string,
+  animationOutTiming: number,
+  value: number,
+  isVisible: boolean,
+};
+
+class DimmerPopup extends Component {
+  props: Props;
+  state: State;
+  static defaultProps : DefaultProps;
+  handleLayout : Object => void;
+  setRefs: Object => void;
+  contentRef: Object;
+
+  constructor(props: Props) {
     super(props);
     this.state = {
       isVisible: false,
@@ -50,7 +77,7 @@ class DimmerPopup extends Component {
     this.setRefs = this.setRefs.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (!this.state.isVisible && nextProps.isVisible) {
       this.setState({ isVisible: true });
     }
@@ -68,7 +95,7 @@ class DimmerPopup extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: Props, prevState:State) {
 		// On modal open request, we slide the view up and fade in the backdrop
     if (this.state.isVisible && !prevState.isVisible) {
       this.open();
@@ -96,7 +123,7 @@ class DimmerPopup extends Component {
     this.props.onBackButtonPress();
   }
 
-  handleLayout(event) {
+  handleLayout(event:Object) {
 		// Here we update the device dimensions in the state if the layout changed (triggering a render)
     const deviceWidth = Dimensions.get('window').width;
     const deviceHeight = Dimensions.get('window').height;
@@ -105,7 +132,7 @@ class DimmerPopup extends Component {
     }
   }
 
-  setRefs(ref) {
+  setRefs(ref:Object) {
     this.contentRef = ref;
   }
 
@@ -145,16 +172,14 @@ class DimmerPopup extends Component {
   }
 }
 
-DimmerPopup.propTypes = {
-  animationIn: PropTypes.string,
-  animationInTiming: PropTypes.number,
-  animationOut: PropTypes.string,
-  animationOutTiming: PropTypes.number,
-  value: PropTypes.number.isRequired,
-  isVisible: PropTypes.bool.isRequired,
-  hideOnBack: PropTypes.bool,
-  style: PropTypes.array,
-  name: PropTypes.string.isRequired,
+DimmerPopup.defaultProps = {
+  animationIn: 'slideInDown',
+  animationInTiming: 300,
+  animationOut: 'slideOutUp',
+  animationOutTiming: 300,
+  isVisible: false,
+  hideOnBack: true,
+  value: 1,
 };
 
 module.exports = DimmerPopup;

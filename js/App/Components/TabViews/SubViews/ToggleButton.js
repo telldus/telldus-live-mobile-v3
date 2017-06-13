@@ -17,11 +17,19 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React, { PropTypes } from 'react';
 import { Text, View, RoundedCornerShadowView } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+
+type Props = {
+  device: Object,
+  onTurnOff: number => void,
+  onTurnOn: number => void,
+};
 
 const OffButton = ({ isInState, enabled, onPress }) => (
     <View style={[styles.turnOffButtonContainer, {
@@ -58,7 +66,9 @@ const OnButton = ({ isInState, enabled, onPress }) => (
 );
 
 class ToggleButton extends View {
-  constructor(props) {
+  props: Props;
+
+  constructor(props: Props) {
     super(props);
   }
 
