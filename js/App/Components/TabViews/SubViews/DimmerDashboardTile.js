@@ -35,13 +35,13 @@ import throttle from 'lodash/throttle';
 type Props = {
   item: Object,
   tileWidth: number,
-  onDimmerSlide: (number) => void,
-  showDimmerPopup: (string, number) => void,
+  onDimmerSlide: number => void,
+  showDimmerPopup: (name:string, sliderValue:number) => void,
   hideDimmerPopup: () => void,
-  onDim: (number) => void,
-  onTurnOn: (number) => void,
-  onTurnOff: (number) => void,
-  onDim: (number) => void,
+  onDim: number => void,
+  onTurnOn: number => void,
+  onTurnOff: number => void,
+  onDim: number => void,
   setScrollEnabled: boolean,
   style: Object,
 };
@@ -105,15 +105,15 @@ class DimmerDashboardTile extends View {
   props: Props;
   state: State;
   parentScrollEnabled: boolean;
-  onValueChangeThrottled: (number) => void;
+  onValueChangeThrottled: number => void;
   onTurnOffButtonStart: () => void;
   onTurnOffButtonEnd: () => void;
   onTurnOnButtonStart: () => void;
   onTurnOnButtonEnd: () => void;
-  layoutView: (Object) => void;
-  onSlidingStart: (string, number) => void;
-  onSlidingComplete: (number) => void;
-  onValueChange: (number) => void;
+  layoutView: Object => void;
+  onSlidingStart: (name:string, sliderValue:number) => void;
+  onSlidingComplete: number => void;
+  onValueChange: number => void;
 
   constructor(props: Props) {
     super(props);

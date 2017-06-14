@@ -45,7 +45,7 @@ type State = {
 class SensorDashboardTile extends View {
   props: Props;
   state: State;
-  getSlideList : (Object) => Array<Object>;
+  getSlideList : Object => Array<Object>;
 
   constructor(props: Props) {
     super(props);
