@@ -28,6 +28,8 @@
  * A webconnection is connected directly to the server where the TellStick is connected to.
  */
 
+// @flow
+
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
 // Websocket wrapper around ReconnectingWebSocket
@@ -40,7 +42,17 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 import { AppState } from 'react-native';
 
 export default class TelldusWebsocket {
-  constructor(gatewayId, websocketUrl) {
+  gatewayId: string;
+  websocketUrl: string;
+  websocket: Object;
+  send: Object;
+  _onAppStateChange : string => void;
+  onmessage: Function;
+  onerror: Function;
+  onclose: Function;
+  onopen: Function;
+
+  constructor(gatewayId:string, websocketUrl:string) {
     this.gatewayId = gatewayId;
     this.websocketUrl = websocketUrl;
 
@@ -85,7 +97,7 @@ export default class TelldusWebsocket {
   }
 
   // reconnect to a different websocket url
-  setUrl(url) {
+  setUrl(url: string) {
     this.websocketUrl = url;
     this.close();
     this.open();
@@ -93,10 +105,10 @@ export default class TelldusWebsocket {
 
   destroy() {
     // make sure no event listeners are fired
-    this.websocket.onopen = null;
-    this.websocket.onmessage = null;
-    this.websocket.onerror = null;
-    this.websocket.onclose = null;
+    delete this.websocket.onopen;
+    delete this.websocket.onmessage;
+    delete this.websocket.onerror;
+    delete this.websocket.onclose;
     AppState.removeEventListener('change', this._onAppStateChange);
 
     this.close();
@@ -110,9 +122,10 @@ export default class TelldusWebsocket {
     this._addListener('onclose');
   }
 
-  _addListener(eventType) {
+  _addListener(eventType:string) {
     const noop = event => console.log('nooping', event);
     this.websocket[eventType] = event => {
+      // $FlowFixMe
       const fn = this[eventType] || noop;
       fn(event);
     };

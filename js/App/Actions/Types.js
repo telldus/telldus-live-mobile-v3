@@ -58,9 +58,9 @@ export type Action =
     | { type: 'SENSOR_UPDATE_VALUE', payload: Object }
     | { type: 'SENSOR_WEBSOCKET_UNHANDLED', payload: Object }
     | { type: 'SESSION_ID_AUTHENTICATED', payload: Object }
-    | { type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS', gatewayId: number, payload: Object }
-    | { type: 'GATEWAY_WEBSOCKET_OPEN', gatewayId: number }
-    | { type: 'GATEWAY_WEBSOCKET_CLOSED', gatewayId: number }
+    | { type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS', gatewayId: string, payload: Object }
+    | { type: 'GATEWAY_WEBSOCKET_OPEN', gatewayId: string }
+    | { type: 'GATEWAY_WEBSOCKET_CLOSED', gatewayId: string }
     | { type: 'APP_START' }
     | { type: 'APP_FOREGROUND' }
     | { type: 'APP_BACKGROUND' }
