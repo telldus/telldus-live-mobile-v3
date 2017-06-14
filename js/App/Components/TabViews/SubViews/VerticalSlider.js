@@ -25,6 +25,16 @@ import React from 'react';
 import { Text, View } from 'BaseComponents';
 import { PanResponder, Animated, StyleSheet, Vibration, Platform } from 'react-native';
 
+function getSliderLabel(value:number):string {
+  if (value === 100) {
+    return 'On';
+  }
+  if (value === 0) {
+    return 'Off';
+  }
+  return value.toString();
+}
+
 type Props = {
   setScrollEnabled: boolean => void,
   thumbHeight: number,
@@ -54,16 +64,6 @@ type State = {
   step: number,
   displayedValue: string,
 };
-
-function getSliderLabel(value:number):string {
-  if (value === 100) {
-    return 'On';
-  }
-  if (value === 0) {
-    return 'Off';
-  }
-  return value.toString();
-}
 
 class VerticalSlider extends View {
   props: Props;
