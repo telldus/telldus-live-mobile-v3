@@ -17,7 +17,9 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-export default function getDeviceType(supportedMethods) {
+// @flow
+
+export default function getDeviceType(supportedMethods:Object) : string {
   const {
 		TURNON,
 		TURNOFF,

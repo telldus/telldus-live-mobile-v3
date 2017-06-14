@@ -130,7 +130,7 @@ export const connectToGateways = () => (dispatch: Dispatch, getState: GetState )
  * or different than the one we are connected to, it updates the state and creates
  * a new socket connection.
  */
-export const getWebsocketAddress = (gatewayId: number) => (dispatch: Dispatch, getState: GetState) => {
+export const getWebsocketAddress = (gatewayId: string) => (dispatch: Dispatch, getState: GetState) => {
   const payload = {
     url: `/client/serverAddress?id=${gatewayId}`,
     requestParams: {
@@ -206,7 +206,7 @@ const destroyConnection = gatewayId => {
  * calls `getWebsocketAddress`, so that a new connection for the a new address
  * is set up.
  */
-const setupGatewayConnection = (gatewayId, address, port) => (dispatch, getState) => {
+const setupGatewayConnection = (gatewayId:string, address:string, port:string) => (dispatch, getState) => {
   destroyConnection(gatewayId);
   const websocketUrl = `ws://${address}:${port}/websocket`;
   console.log('opening socket connection to', websocketUrl);
@@ -367,6 +367,7 @@ const setupGatewayConnection = (gatewayId, address, port) => (dispatch, getState
     } catch (e) {
       console.log(message);
     }
+    // $FlowFixMe
     websocket.send(message);
   }
 };
