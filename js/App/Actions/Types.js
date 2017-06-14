@@ -22,32 +22,32 @@
 'use strict';
 
 export type Action =
-      { type: 'LOGGED_IN' }
-    | { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
-    | { type: 'RECEIVED_USER_PROFILE', userProfile: Object }
-    | { type: 'RECEIVED_DEVICES', devices: Object }
-    | { type: 'RECEIVED_GATEWAYS', gateways: Object }
-    | { type: 'RECEIVED_SENSORS', sensors: Object }
-    | { type: 'RECEIVED_JOBS', jobs: Object }
-    | { type: 'LOGGED_OUT' }
-    | { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
-    | { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
+	{ type: 'LOGGED_IN' }
+	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
+	| { type: 'RECEIVED_USER_PROFILE', userProfile: Object }
+	| { type: 'RECEIVED_DEVICES', devices: Object }
+	| { type: 'RECEIVED_GATEWAYS', gateways: Object }
+	| { type: 'RECEIVED_SENSORS', sensors: Object }
+	| { type: 'RECEIVED_JOBS', jobs: Object }
+	| { type: 'LOGGED_OUT' }
+	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
+	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 
-    | { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: Number }
-    | { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: Number }
+	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: Number }
+	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: Number }
 
-    | { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id:Number, displayType: String }
-    | { type: 'SHOW_DIMMER_POPUP', name:String, value:Number }
-    | { type: 'HIDE_DIMMER_POPUP'}
-    | { type: 'SET_DIMMER_VALUE', value: Number }
-    | { type: 'DEVICE_SET_STATE', payload: Object }
+	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id: Number, displayType: String }
+	| { type: 'SHOW_DIMMER_POPUP', name: String, value: Number }
+	| { type: 'HIDE_DIMMER_POPUP' }
+	| { type: 'SET_DIMMER_VALUE', value: Number }
+	| { type: 'DEVICE_SET_STATE', payload: Object }
 
-    | { type: 'ERROR', message: Object }
+	| { type: 'ERROR', message: Object }
 
-    | { type: 'APP_START' }
-    | { type: 'APP_FOREGROUND' }
-    | { type: 'APP_BACKGROUND' }
-    ;
+	| { type: 'APP_START' }
+	| { type: 'APP_FOREGROUND' }
+	| { type: 'APP_BACKGROUND' }
+	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
 export type GetState = () => Object;

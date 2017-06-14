@@ -25,11 +25,11 @@ import { View, Text } from 'BaseComponents';
 import Theme from 'Theme';
 
 export default ({ gateway }) => {
-  return (
-		<View style = {Theme.Styles.sectionHeader}>
-			<Text style = {Theme.Styles.sectionHeaderText}>
+	return (
+		<View style={Theme.Styles.sectionHeader}>
+			<Text style={Theme.Styles.sectionHeaderText}>
 				{(gateway && gateway.name) ? gateway.name : ''}
 			</Text>
 		</View>
-  );
+	);
 };

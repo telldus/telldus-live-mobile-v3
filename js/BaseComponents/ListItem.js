@@ -25,10 +25,13 @@ import Base from './Base';
 
 export default class ListItemComponent extends Base {
 
-  render() {
-    return (
-			<View style = {{ padding: (this.props.padder) ? this.getTheme().contentPadding : 0, flex: 1 }} {...this.props} />
-    );
-  }
+	render() {
+		return (
+			<View style={{
+				padding: (this.props.padder) ? this.getTheme().contentPadding : 0,
+				flex: 1,
+			}} {...this.props} />
+		);
+	}
 }
 

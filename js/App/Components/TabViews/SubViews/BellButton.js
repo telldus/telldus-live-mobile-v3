@@ -24,9 +24,9 @@ import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
 class BellButton extends View {
-  render() {
-    return (
-            <RoundedCornerShadowView
+	render() {
+		return (
+			<RoundedCornerShadowView
 				style={styles.container}
 			>
 				<TouchableOpacity
@@ -38,18 +38,18 @@ class BellButton extends View {
 						color="orange"
 					/>
 				</TouchableOpacity>
-            </RoundedCornerShadowView>
-    );
-  }
+			</RoundedCornerShadowView>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 7,
-    height: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+	container: {
+		flex: 7,
+		height: 32,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 });
 
 module.exports = BellButton;

@@ -28,39 +28,39 @@ type State = {
 };
 
 const initialState: State = {
-  show: false,
-  value: 0,
-  name: 'N/A',
+	show: false,
+	value: 0,
+	name: 'N/A',
 };
 
 function dimmer(state: State = initialState, action: Action): State {
-  if (action.type === 'SHOW_DIMMER_POPUP') {
-    return {
-      ...state,
-      show: true,
-      name: action.name,
-      value: action.value,
-    };
-  }
-  if (action.type === 'HIDE_DIMMER_POPUP') {
-    return {
-      ...state,
-      show: false,
-    };
-  }
-  if (action.type === 'SET_DIMMER_VALUE') {
-    return {
-      ...state,
-      value: action.payload.value,
-    };
-  }
-  if (action.type === 'LOGGED_OUT') {
-    return {
-      ...initialState,
-    };
-  }
+	if (action.type === 'SHOW_DIMMER_POPUP') {
+		return {
+			...state,
+			show: true,
+			name: action.name,
+			value: action.value,
+		};
+	}
+	if (action.type === 'HIDE_DIMMER_POPUP') {
+		return {
+			...state,
+			show: false,
+		};
+	}
+	if (action.type === 'SET_DIMMER_VALUE') {
+		return {
+			...state,
+			value: action.payload.value,
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...initialState,
+		};
+	}
 
-  return state;
+	return state;
 }
 
 module.exports = dimmer;

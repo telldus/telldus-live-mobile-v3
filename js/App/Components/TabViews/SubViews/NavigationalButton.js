@@ -28,9 +28,9 @@ const UpButton = ({ supportedMethod, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="caret-up" size={30}
-			style={{
-  color: supportedMethod ? '#1a355b' : '#eeeeee',
-}}
+		      style={{
+			      color: supportedMethod ? '#1a355b' : '#eeeeee',
+		      }}
 		/>
 	</TouchableOpacity>
 );
@@ -40,9 +40,9 @@ const DownButton = ({ supportedMethod, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="caret-down" size={30}
-			style={{
-  color: supportedMethod ? '#1a355b' : '#eeeeee',
-}}
+		      style={{
+			      color: supportedMethod ? '#1a355b' : '#eeeeee',
+		      }}
 		/>
 	</TouchableOpacity>
 );
@@ -52,40 +52,41 @@ const StopButton = ({ supportedMethod, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="stop" size={20}
-			style={{
-  color: supportedMethod ? '#1a355b' : '#eeeeee',
-}}
+		      style={{
+			      color: supportedMethod ? '#1a355b' : '#eeeeee',
+		      }}
 		/>
 	</TouchableOpacity>
 );
 
 class NavigationalButton extends View {
-  render() {
-    const noop = function () {};
-    const { UP, DOWN, STOP } = this.props.device.supportedMethods;
+	render() {
+		const noop = function () {
+		};
+		const { UP, DOWN, STOP } = this.props.device.supportedMethods;
 
-    return (
+		return (
 			<RoundedCornerShadowView style={styles.container}>
-				<UpButton supportedMethod={UP} onPress={UP ? this.props.onUp : noop} />
-				<DownButton supportedMethod={DOWN} onPress={DOWN ? this.props.onDown : noop} />
-				<StopButton supportedMethod={STOP} onPress={STOP ? this.props.onStop : noop} />
+				<UpButton supportedMethod={UP} onPress={UP ? this.props.onUp : noop}/>
+				<DownButton supportedMethod={DOWN} onPress={DOWN ? this.props.onDown : noop}/>
+				<StopButton supportedMethod={STOP} onPress={STOP ? this.props.onStop : noop}/>
 			</RoundedCornerShadowView>
-    );
-  }
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 7,
-    height: 32,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  navigationButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+	container: {
+		flex: 7,
+		height: 32,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	navigationButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 });
 
 module.exports = NavigationalButton;

@@ -23,36 +23,36 @@ import type { Action } from 'Actions/Types';
 import { REHYDRATE } from 'redux-persist/constants';
 
 const initialState = {
-  session: {
-    id: undefined,
-    ttl: undefined,
-  },
+	session: {
+		id: undefined,
+		ttl: undefined,
+	},
 };
 
 export default function reduceWebsockets(state = { ...initialState }, action: Action) {
-  if (action.type === REHYDRATE && action.payload.websockets) {
-    return {
-      ...state,
-      session: {
-        ...action.payload.websockets.session,
-        ttl: new Date(action.payload.websockets.session.ttl), // cast to Date
-      },
-    };
-  }
-  if (action.type === 'SESSION_ID_AUTHENTICATED') {
-    const { sessionId, ttl } = action.payload;
-    return {
-      ...state,
-      session: {
-        id: sessionId,
-        ttl: new Date(ttl * 1000),
-      },
-    };
-  }
-  if (action.type === 'LOGGED_OUT') {
-    return {
-      ...initialState,
-    };
-  }
-  return state;
+	if (action.type === REHYDRATE && action.payload.websockets) {
+		return {
+			...state,
+			session: {
+				...action.payload.websockets.session,
+				ttl: new Date(action.payload.websockets.session.ttl), // cast to Date
+			},
+		};
+	}
+	if (action.type === 'SESSION_ID_AUTHENTICATED') {
+		const { sessionId, ttl } = action.payload;
+		return {
+			...state,
+			session: {
+				id: sessionId,
+				ttl: new Date(ttl * 1000),
+			},
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...initialState,
+		};
+	}
+	return state;
 }
