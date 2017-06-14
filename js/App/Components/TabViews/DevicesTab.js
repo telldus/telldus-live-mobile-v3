@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -36,8 +38,36 @@ import { parseDevicesForListView } from 'Reducers_Devices';
 
 import Theme from 'Theme';
 
+// @flow
+
+type Props = {
+  rowsAndSections: Object,
+  gatewaysById: Object,
+  editMode: boolean,
+  devices: Object,
+  tab: string,
+  dispatch: Function,
+};
+
+type State = {
+  dataSource: Object,
+  deviceId: number,
+  dimmer: boolean,
+};
+
 class DevicesTab extends View {
-  constructor(props) {
+  props: Props;
+  state: State;
+
+  onCloseSelected : () => void;
+  openDeviceDetail: number => void;
+  setScrollEnabled: boolean => void;
+  renderSectionHeader: (sectionData:Object, sectionId:number) => Object;
+  renderRow: Object => Object;
+  renderHiddenRow: Object => Object;
+  onRefresh: () => void;
+
+  constructor(props: Props) {
     super(props);
 
     const { sections, sectionIds } = this.props.rowsAndSections;

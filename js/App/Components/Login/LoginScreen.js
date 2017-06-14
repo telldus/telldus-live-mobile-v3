@@ -53,8 +53,8 @@ class LoginForm extends View {
   props: Props;
   state: State;
 
-  onChangeUsername: (string) => void;
-  onChangePassword: (string) => void;
+  onChangeUsername: (username:string) => void;
+  onChangePassword: (password:string) => void;
   onForgotPassword: () => void;
   onFormSubmit: () => void;
 

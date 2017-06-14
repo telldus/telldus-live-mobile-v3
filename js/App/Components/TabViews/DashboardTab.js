@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -38,15 +41,55 @@ import { SettingsDetailModal } from 'DetailViews';
 import getDeviceType from '../../Lib/getDeviceType';
 import reactMixin from 'react-mixin';
 
+type Props = {
+  rows: Array<Object>,
+  gateways: Object,
+  userProfile: Object,
+  tab: string,
+  onChangeDisplayType: () => void,
+  dispatch: Function,
+  onTurnOn: number => void,
+  onTurnOff: number => void,
+  onDim: number => void,
+  onDimmerSlide: number => void,
+  onBell: number => void,
+  onUp: number => void,
+  onDown: number => void,
+  onStop: number => void,
+  events: Object,
+};
+
+type State = {
+  tileWidth: number,
+  listWidth: number,
+  dataSource: Object,
+  settings: boolean,
+};
+
 const tileMargin = 8;
 const listMargin = 8;
 
 class DashboardTab extends View {
+  props: Props;
+  state: State;
 
-  constructor(props) {
+  tab: string;
+  _onLayout: Object => void;
+  setScrollEnabled: boolean => void;
+  onSlidingStart: (name:string, value:number) => void;
+  onSlidingComplete: () => void;
+  onValueChange: number => void;
+  onOpenSetting: () => void;
+  startSensorTimer: () => void;
+  stopSensorTimer: () => void;
+  changeDisplayType: () => void;
+  onRefresh: () => void;
+  onCloseSetting: () => void;
+
+  constructor(props: Props) {
     super(props);
     const { width } = Dimensions.get('window');
-    const tileWidth = this.calculateTileWidth(width);
+    const tileWidth: number = this.calculateTileWidth(width);
 
     this.state = {
       tileWidth,
@@ -99,7 +142,7 @@ class DashboardTab extends View {
     }
   }
 
-  onSlidingStart(name:String, value:Number) {
+  onSlidingStart(name:string, value:number) {
     this.props.dispatch(showDimmerPopup(name, value));
   }
 
@@ -109,7 +152,7 @@ class DashboardTab extends View {
   }
 
   onValueChange(value) {
-    this.props.dispatch(setDimmerValue(value));
+    this.props.dispatch(setDimmerValue(value, 0));
   }
 
   onRefresh() {
@@ -151,11 +194,11 @@ class DashboardTab extends View {
     }
   }
 
-  calculateTileWidth(listWidth) {
+  calculateTileWidth(listWidth: number) : number {
     listWidth -= listMargin;
     const isPortrait = true; // okay...
     if (listWidth <= 0) {
-      return;
+      return 0;
     }
     const baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
     const tilesPerRow = Math.floor(listWidth / baseTileSize);

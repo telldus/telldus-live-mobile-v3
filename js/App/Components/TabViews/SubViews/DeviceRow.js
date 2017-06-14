@@ -51,7 +51,7 @@ type Props = {
 
 class DeviceRow extends View {
   props: Props;
-  onSettingsSelected: (number) => void;
+  onSettingsSelected: number => void;
 
   constructor(props: Props) {
     super(props);
