@@ -22,7 +22,7 @@
 import React, { PropTypes } from 'react';
 import { View } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
-import Dot from './Dot';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 class PseudoOffButton extends View {
   constructor(props) {
@@ -45,7 +45,7 @@ class PseudoOffButton extends View {
         </Animated.Text>
         {
           methodRequested === 'TURNOFF' ?
-          <Dot style={styles.dot} />
+          <ButtonLoadingIndicator style={styles.dot} />
           : null
         }
       </View>

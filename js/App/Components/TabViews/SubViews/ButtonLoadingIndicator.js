@@ -25,7 +25,7 @@ import { View, Animated } from 'react-native';
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
-class Dot extends View {
+class ButtonLoadingIndicator extends View {
   constructor(props) {
     super(props);
     this.state = {
@@ -69,8 +69,8 @@ class Dot extends View {
   }
 }
 
-Dot.propTypes = {
+ButtonLoadingIndicator.propTypes = {
   style: PropTypes.any,
 };
 
-module.exports = Dot;
+module.exports = ButtonLoadingIndicator;

@@ -22,7 +22,7 @@
 import React, { PropTypes } from 'react';
 import { View } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
-import Dot from './Dot';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 class PseudoOnButton extends View {
   constructor(props) {
@@ -45,7 +45,7 @@ class PseudoOnButton extends View {
         </Animated.Text>
         {
           methodRequested === 'TURNON' ?
-          <Dot style={styles.dot} />
+          <ButtonLoadingIndicator style={styles.dot} />
           : null
         }
       </View>

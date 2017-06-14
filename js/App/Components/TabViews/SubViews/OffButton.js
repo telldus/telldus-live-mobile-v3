@@ -22,7 +22,7 @@
 import React, { PropTypes } from 'react';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import Dot from './Dot';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 class OffButton extends View {
   constructor(props) {
@@ -42,7 +42,7 @@ class OffButton extends View {
         </TouchableOpacity>
         {
           methodRequested === 'TURNOFF' ?
-          <Dot style={styles.dot} />
+          <ButtonLoadingIndicator style={styles.dot} />
           : null
         }
       </View>

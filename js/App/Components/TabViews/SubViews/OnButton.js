@@ -22,7 +22,7 @@
 import React, { PropTypes } from 'react';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import Dot from './Dot';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 class OnButton extends View {
   constructor(props) {
@@ -42,7 +42,7 @@ class OnButton extends View {
         </TouchableOpacity>
         {
           methodRequested === 'TURNON' ?
-          <Dot style={styles.dot} />
+          <ButtonLoadingIndicator style={styles.dot} />
           : null
         }
       </View>
