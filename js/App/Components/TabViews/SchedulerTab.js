@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -32,10 +34,27 @@ import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
 
+type Props = {
+  rowsAndSections: Object,
+  devices: Object,
+  dispatch: Function,
+};
+
+type State = {
+  dataSource: Object,
+};
+
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 class SchedulerTab extends View {
-  constructor(props) {
+  props: Props;
+  state: State;
+
+  renderRow: Object => Object;
+  renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+  onRefresh: () => void;
+
+  constructor(props: Props) {
     super(props);
 
     const { sections, sectionIds } = this.props.rowsAndSections;

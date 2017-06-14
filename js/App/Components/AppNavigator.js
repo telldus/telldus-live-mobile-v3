@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React, { PropTypes } from 'React';
@@ -34,8 +36,23 @@ import { DimmerPopup } from 'TabViews_SubViews';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
-class AppNavigator extends View {
+type Props = {
+  dimmer: Object,
+  tab: string,
+  accessToken: Object,
+  userProfile: Object,
+  dispatch: Function,
+};
 
+type State = {
+  specificOrientation: Object,
+}
+
+class AppNavigator extends View {
+  props: Props;
+  state: State;
+
+  _updateSpecificOrientation: Object => void;
   constructor() {
     super();
     if (Platform.OS !== 'android') {
