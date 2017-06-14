@@ -31,10 +31,10 @@ import { up, down, stop, learn } from 'Actions_Devices';
 
 type Props = {
   device: Object,
-  onUp: (number) => void,
-  onDown: (number) => void,
-  onStop: (number) => void,
-  onLearn: (number) => void,
+  onUp: number => void,
+  onDown: number => void,
+  onStop: number => void,
+  onLearn: number => void,
 };
 
 const NavigationalButton = ({ device, onUp, onDown, onStop }) => (

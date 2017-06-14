@@ -31,8 +31,8 @@ import { bell, learn } from 'Actions_Devices';
 
 type Props = {
   device: Object,
-  onBell: (number) => void,
-  onLearn: (number) => void,
+  onBell: number => void,
+  onLearn: number => void,
 };
 
 const BellButton = ({ onBell }) => (
@@ -58,7 +58,7 @@ const LearnButton = ({ onLearn }) => (
 
 class BellDeviceDetailModal extends View {
   props: Props;
-  onBell : (number) => void;
+  onBell : number => void;
 
   constructor(props: Props) {
     super(props);

@@ -29,9 +29,9 @@ import { turnOn, turnOff, learn } from 'Actions_Devices';
 
 type Props = {
   device: Object,
-  onTurnOn: (number) => void,
-  onTurnOff: (number) => void,
-  onLearn: (number) => void,
+  onTurnOn: number => void,
+  onTurnOff: number => void,
+  onLearn: number => void,
 };
 
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (

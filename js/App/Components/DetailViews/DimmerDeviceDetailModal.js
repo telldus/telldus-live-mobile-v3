@@ -33,10 +33,10 @@ import { setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
 
 type Props = {
   device: Object,
-  onTurnOff: (number) => void,
-  onTurnOn: (number) => void,
-  onLearn: (number) => void,
-  onDim: (number) => void,
+  onTurnOff: number => void,
+  onTurnOn: number => void,
+  onLearn: number => void,
+  onDim: number => void,
 };
 
 type State = {
@@ -80,8 +80,8 @@ class DimmerDeviceDetailModal extends View {
   onTurnOn: () => void;
   onTurnOff: () => void;
   onLearn: () => void;
-  onValueChange: (number) => void;
-  onSlidingComplete: (number) => void;
+  onValueChange: number => void;
+  onSlidingComplete: number => void;
 
   constructor(props: Props) {
     super(props);

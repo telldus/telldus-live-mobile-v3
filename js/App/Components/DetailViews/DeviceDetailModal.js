@@ -35,8 +35,8 @@ type Props = {
   inDashboard: boolean,
   gateway: Object,
   children: Object,
-  onRemoveFromDashboard: (number) => void,
-  onAddToDashboard: (number) => void,
+  onRemoveFromDashboard: number => void,
+  onAddToDashboard: number => void,
   onCloseSelected: () => void,
 };
 
