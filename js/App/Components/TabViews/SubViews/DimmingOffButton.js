@@ -24,7 +24,7 @@ import { View } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
-class PseudoOffButton extends View {
+class DimmingOffButton extends View {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,15 +85,15 @@ const styles = StyleSheet.create({
   },
 });
 
-PseudoOffButton.propTypes = {
+DimmingOffButton.propTypes = {
   isInState: PropTypes.string,
   enabled: PropTypes.bool,
   fontSize: PropTypes.number,
   methodRequested: PropTypes.string,
 };
 
-PseudoOffButton.defaultProps = {
+DimmingOffButton.defaultProps = {
   enabled: true,
 };
 
-module.exports = PseudoOffButton;
+module.exports = DimmingOffButton;

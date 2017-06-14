@@ -27,8 +27,8 @@ import { StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
 import VerticalSlider from './VerticalSlider';
-import PseudoOffButton from './PseudoOffButton';
-import PseudoOnButton from './PseudoOnButton';
+import DimmingOffButton from './DimmingOffButton';
+import DimmingOnButton from './DimmingOnButton';
 import throttle from 'lodash/throttle';
 
 function getDimmerValue(value, isInState) {
@@ -127,8 +127,8 @@ class DimmerDashboardTile extends View {
     const { name, isInState, supportedMethods, methodRequested } = item;
     const { TURNON, TURNOFF, DIM } = supportedMethods;
 
-    const onButton = <PseudoOnButton ref={'onButton'} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
-    const offButton = <PseudoOffButton ref={'offButton'} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
+    const onButton = <DimmingOnButton ref={'onButton'} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
+    const offButton = <DimmingOffButton ref={'offButton'} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
     const slider = DIM ?
 			<VerticalSlider
 				style={[styles.slider, { width: this.state.bodyWidth, height: this.state.bodyHeight, left: 0, bottom: 0 }]}
