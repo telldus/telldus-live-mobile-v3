@@ -22,6 +22,7 @@
 'use strict';
 
 var PushNotification = require('react-native-push-notification');
+import { pushSenderID } from '../../Config';
 
 const Push = {
   configure : () => {
@@ -39,7 +40,7 @@ const Push = {
     },
 
     //GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
-    senderID: "",
+    senderID: pushSenderID,
 
     // Should the initial notification be popped automatically
     // default: true

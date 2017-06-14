@@ -32,8 +32,18 @@ import {
 
 class App extends React.Component {
 
-  componentWillMount() {
-    Push.configure();
+  componentDidMount() {
+    this.pushConf();
+  }
+
+  componentDidUpdate() {
+    this.pushConf();
+  }
+
+  pushConf() {
+    if (this.props.accessToken) {
+      Push.configure();
+    }
   }
 
   render() {
