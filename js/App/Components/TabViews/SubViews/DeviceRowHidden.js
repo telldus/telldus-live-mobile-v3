@@ -33,8 +33,8 @@ import Theme from 'Theme';
 
 type Props = {
   device: Object,
-  removeFromDashboard: (number) => void,
-  addToDashboard: (number) => void,
+  removeFromDashboard: number => void,
+  addToDashboard: number => void,
 };
 
 class DeviceRowHidden extends View {

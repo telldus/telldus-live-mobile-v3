@@ -34,7 +34,7 @@ import throttle from 'lodash/throttle';
 type Props = {
   device: Object,
   onDimmerSlide: number => void,
-  showDimmerPopup: (string, number) => void,
+  showDimmerPopup: (name:string, sliderValue:number) => void,
   hideDimmerPopup: () => void,
   onDim: number => void,
   setScrollEnabled: boolean,
@@ -109,7 +109,7 @@ class DimmingButton extends View {
   onTurnOnButtonStart: () => void;
   onTurnOnButtonEnd: () => void;
   layoutView: Object => void;
-  onSlidingStart: (string, number) => void;
+  onSlidingStart: (name:string, sliderValue:number) => void;
   onSlidingComplete: number => void;
   onValueChange: number => void;
   onTurnOffButtonEnd: () => void;
