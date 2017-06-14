@@ -27,9 +27,15 @@ import { connect } from 'react-redux';
 import {
 	LoginScreen,
 	AppNavigator,
+  Push
 } from 'Components';
 
 class App extends React.Component {
+
+  componentWillMount() {
+    Push.configure();
+  }
+
   render() {
     if (!this.props.accessToken) {
       return <LoginScreen />;
