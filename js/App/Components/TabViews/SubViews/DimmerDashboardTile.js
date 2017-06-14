@@ -32,28 +32,6 @@ import VerticalSlider from './VerticalSlider';
 
 import throttle from 'lodash/throttle';
 
-type Props = {
-  item: Object,
-  tileWidth: number,
-  onDimmerSlide: number => void,
-  showDimmerPopup: (name:string, sliderValue:number) => void,
-  hideDimmerPopup: () => void,
-  onDim: number => void,
-  onTurnOn: number => void,
-  onTurnOff: number => void,
-  onDim: number => void,
-  setScrollEnabled: boolean,
-  style: Object,
-};
-
-type State = {
-  bodyWidth: number,
-  bodyHeight: number,
-  value: number,
-  offButtonFadeAnim: Object,
-  onButtonFadeAnim: Object,
-};
-
 const PseudoOffButton = ({ isInState, enabled, tileWidth, fadeAnim }) => (
 	<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' && enabled ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled]}>
 		<Animated.Text
@@ -100,6 +78,28 @@ function toDimmerValue(sliderValue) {
 function toSliderValue(dimmerValue) {
   return Math.round(dimmerValue * 100.0 / 255);
 }
+
+type Props = {
+  item: Object,
+  tileWidth: number,
+  onDimmerSlide: number => void,
+  showDimmerPopup: (name:string, sliderValue:number) => void,
+  hideDimmerPopup: () => void,
+  onDim: number => void,
+  onTurnOn: number => void,
+  onTurnOff: number => void,
+  onDim: number => void,
+  setScrollEnabled: boolean,
+  style: Object,
+};
+
+type State = {
+  bodyWidth: number,
+  bodyHeight: number,
+  value: number,
+  offButtonFadeAnim: Object,
+  onButtonFadeAnim: Object,
+};
 
 class DimmerDashboardTile extends View {
   props: Props;

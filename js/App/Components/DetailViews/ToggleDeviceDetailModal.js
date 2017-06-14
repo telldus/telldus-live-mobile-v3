@@ -27,13 +27,6 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import { turnOn, turnOff, learn } from 'Actions_Devices';
 
-type Props = {
-  device: Object,
-  onTurnOn: number => void,
-  onTurnOff: number => void,
-  onLearn: number => void,
-};
-
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
 		<TouchableOpacity
@@ -63,6 +56,13 @@ const LearnButton = ({ device, onLearn }) => (
 		</TouchableOpacity>
 	</RoundedCornerShadowView>
 );
+
+type Props = {
+  device: Object,
+  onTurnOn: number => void,
+  onTurnOff: number => void,
+  onLearn: number => void,
+};
 
 class ToggleDeviceDetailModal extends View {
   props: Props;

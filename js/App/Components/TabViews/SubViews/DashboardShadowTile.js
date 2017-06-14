@@ -25,12 +25,6 @@ import React from 'react';
 import { View, Text } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 
-type Props = {
-  hasShadow: boolean,
-  style: Object,
-  children: Object,
-};
-
 const Title = ({ isEnabled, name, tileWidth }) => (
 	<View style={[styles.title, isEnabled ? styles.titleEnabled : styles.titleDisabled]}>
 		<Text
@@ -44,6 +38,12 @@ const Title = ({ isEnabled, name, tileWidth }) => (
 		</Text>
 	</View>
 );
+
+type Props = {
+  hasShadow: boolean,
+  style: Object,
+  children: Object,
+};
 
 class DashboardShadowTile extends View {
   props: Props;

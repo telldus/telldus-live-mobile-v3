@@ -24,15 +24,6 @@ import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
-type Props = {
-	item: Object,
-	tileWidth: number,
-	onUp: number => void,
-	onDown: number => void,
-	onStop: number => void,
-	style: Object,
-};
-
 const UpButton = ({ isEnabled, onPress }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
@@ -65,6 +56,15 @@ const StopButton = ({ isEnabled, onPress }) => (
 		/>
 	</TouchableOpacity>
 );
+
+type Props = {
+	item: Object,
+	tileWidth: number,
+	onUp: number => void,
+	onDown: number => void,
+	onStop: number => void,
+	style: Object,
+};
 
 class NavigationalDashboardTile extends View {
   props: Props;

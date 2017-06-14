@@ -25,12 +25,6 @@ import React, { PropTypes } from 'react';
 import { Text, View, RoundedCornerShadowView } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
-type Props = {
-  device: Object,
-  onTurnOff: number => void,
-  onTurnOn: number => void,
-};
-
 const OffButton = ({ isInState, enabled, onPress }) => (
     <View style={[styles.turnOffButtonContainer, {
       backgroundColor: isInState === 'TURNOFF' ? '#fafafa' : '#eeeeee' }]}>
@@ -64,6 +58,12 @@ const OnButton = ({ isInState, enabled, onPress }) => (
         </TouchableOpacity>
     </View>
 );
+
+type Props = {
+  device: Object,
+  onTurnOff: number => void,
+  onTurnOn: number => void,
+};
 
 class ToggleButton extends View {
   props: Props;

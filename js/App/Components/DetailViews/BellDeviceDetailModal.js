@@ -29,12 +29,6 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import { bell, learn } from 'Actions_Devices';
 
-type Props = {
-  device: Object,
-  onBell: number => void,
-  onLearn: number => void,
-};
-
 const BellButton = ({ onBell }) => (
 	<RoundedCornerShadowView style={styles.bell}>
 		<Icon
@@ -55,6 +49,12 @@ const LearnButton = ({ onLearn }) => (
 		</TouchableOpacity>
 	</RoundedCornerShadowView>
 );
+
+type Props = {
+  device: Object,
+  onBell: number => void,
+  onLearn: number => void,
+};
 
 class BellDeviceDetailModal extends View {
   props: Props;

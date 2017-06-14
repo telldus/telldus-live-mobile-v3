@@ -26,14 +26,6 @@ import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
-type Props = {
-  item: Object,
-  style: Object,
-  tileWidth: number,
-  onTurnOff: number => void,
-  onTurnOn: number => void,
-};
-
 const OffButton = ({ isInState, tileWidth, enabled, onPress }) => (
 	<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
 		<TouchableOpacity
@@ -67,6 +59,14 @@ const OnButton = ({ isInState, tileWidth, enabled, onPress }) => (
 		</TouchableOpacity>
 	</View>
 );
+
+type Props = {
+  item: Object,
+  style: Object,
+  tileWidth: number,
+  onTurnOff: number => void,
+  onTurnOn: number => void,
+};
 
 class ToggleDashboardTile extends View {
   props: Props;
