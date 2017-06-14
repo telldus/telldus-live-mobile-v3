@@ -31,25 +31,6 @@ import VerticalSlider from './VerticalSlider';
 
 import throttle from 'lodash/throttle';
 
-type Props = {
-  device: Object,
-  onDimmerSlide: number => void,
-  showDimmerPopup: (name:string, sliderValue:number) => void,
-  hideDimmerPopup: () => void,
-  onDim: number => void,
-  setScrollEnabled: boolean,
-  onTurnOff: () => void,
-  onTurnOn: () => void,
-};
-
-type State = {
-  buttonWidth: number,
-  buttonHeight: number,
-  value: number,
-  offButtonFadeAnim: Object,
-  onButtonFadeAnim: Object,
-};
-
 const PseudoOffButton = ({ isInState, enabled, fadeAnim }) => (
     <View style={[styles.buttonContainer, {
       backgroundColor: isInState === 'TURNOFF' && enabled ? '#fafafa' : '#eeeeee' }]}>
@@ -99,6 +80,25 @@ function toDimmerValue(sliderValue: number): number {
 function toSliderValue(dimmerValue: number): number {
   return Math.round(dimmerValue * 100.0 / 255);
 }
+
+type Props = {
+  device: Object,
+  onDimmerSlide: number => void,
+  showDimmerPopup: (name:string, sliderValue:number) => void,
+  hideDimmerPopup: () => void,
+  onDim: number => void,
+  setScrollEnabled: boolean,
+  onTurnOff: () => void,
+  onTurnOn: () => void,
+};
+
+type State = {
+  buttonWidth: number,
+  buttonHeight: number,
+  value: number,
+  offButtonFadeAnim: Object,
+  onButtonFadeAnim: Object,
+};
 
 class DimmingButton extends View {
   props: Props;

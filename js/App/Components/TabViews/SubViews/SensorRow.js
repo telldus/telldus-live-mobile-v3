@@ -28,10 +28,6 @@ import { ScrollView, StyleSheet } from 'react-native';
 import format from 'date-format';
 import Theme from 'Theme';
 
-type Props = {
-  sensor: Object,
-};
-
 const SensorHumidity = ({ humidity }) => (
 	<View style={Theme.Styles.sensorValue}>
 	<Image source={require('../img/sensorIcons/Humidity.png')} />
@@ -104,6 +100,10 @@ const SensorLuminance = ({ luminance }) => (
 		</Text>
 	</View>
 );
+
+type Props = {
+  sensor: Object,
+};
 
 class SensorRow extends Component {
   props: Props;

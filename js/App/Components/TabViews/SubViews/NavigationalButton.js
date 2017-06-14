@@ -25,13 +25,6 @@ import React from 'react';
 import { Icon, View, RoundedCornerShadowView } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-type Props = {
-	device: Object,
-	onUp: number => void,
-	onDown: number => void,
-	onStop: number => void,
-};
-
 const UpButton = ({ supportedMethod, onPress }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
@@ -67,6 +60,13 @@ const StopButton = ({ supportedMethod, onPress }) => (
 		/>
 	</TouchableOpacity>
 );
+
+type Props = {
+	device: Object,
+	onUp: number => void,
+	onDown: number => void,
+	onStop: number => void,
+};
 
 class NavigationalButton extends View {
   props: Props;

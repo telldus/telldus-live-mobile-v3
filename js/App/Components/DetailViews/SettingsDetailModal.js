@@ -29,17 +29,6 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
 
-type Props = {
-  isVisible: boolean,
-  onClose: () => void,
-  onLogout: () => void,
-  onSubmitPushToken: () => void,
-};
-
-type State = {
-  isVisible: boolean,
-};
-
 const Header = ({ onPress }) => (
     <View style={styles.header}>
         <Icon name="gear" size={26} color="white"
@@ -62,6 +51,17 @@ const Button = ({ text, onPress, width }) => (
         </Text>
     </TouchableOpacity>
 );
+
+type Props = {
+  isVisible: boolean,
+  onClose: () => void,
+  onLogout: () => void,
+  onSubmitPushToken: () => void,
+};
+
+type State = {
+  isVisible: boolean,
+};
 
 class SettingsDetailModal extends View {
   props: Props;

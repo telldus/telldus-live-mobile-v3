@@ -43,23 +43,6 @@ import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
 
-type Props = {
-  dashboard: Object,
-  tab: string,
-  userProfile: Object,
-  gateways: Object,
-  syncGateways: () => void,
-  onTabSelect: string => void,
-  onToggleEditMode: string => void,
-  dispatch: Function,
-};
-
-type State = {
-  settings: boolean,
-  index: number,
-  routes: Array<Object>,
-};
-
 const TabHeader = ({ fontSize, ...props }) => {
   return <TabBar {...props} style={{ backgroundColor: Theme.Core.brandPrimary }} labelStyle={{ fontSize }} />;
 };
@@ -119,6 +102,23 @@ const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
 			</View>
 		</View>
   );
+};
+
+type Props = {
+  dashboard: Object,
+  tab: string,
+  userProfile: Object,
+  gateways: Object,
+  syncGateways: () => void,
+  onTabSelect: string => void,
+  onToggleEditMode: string => void,
+  dispatch: Function,
+};
+
+type State = {
+  settings: boolean,
+  index: number,
+  routes: Array<Object>,
 };
 
 class TabsView extends View {
