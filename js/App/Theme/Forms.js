@@ -19,8 +19,6 @@
 
 'use strict';
 
-import { Platform } from 'react-native';
-
 var LABEL_COLOR = '#ffffff';
 var INPUT_COLOR = '#ffffff';
 var ERROR_COLOR = '#a94442';
@@ -75,22 +73,13 @@ var stylesheet = Object.freeze({
 		marginBottom: 2,
 		color: ERROR_COLOR
 	},
-	textboxView: {
-		normal: {
-		},
-		error: {
-		},
-		notEditable: {
-		}
-	},
 	textbox: {
 		normal: {
 			color: INPUT_COLOR,
 			fontSize: FONT_SIZE,
 			height: 36,
+			padding: 6,
 			minWidth: 150,
-			paddingVertical: (Platform.OS === 'ios') ? 7 : 0,
-			paddingHorizontal: 7,
 			borderRadius: 4,
 			borderColor: BORDER_COLOR,
 			borderWidth: 1,
@@ -101,9 +90,8 @@ var stylesheet = Object.freeze({
 			color: INPUT_COLOR,
 			fontSize: FONT_SIZE,
 			height: 36,
+			padding: 6,
 			minWidth: 150,
-			paddingVertical: (Platform.OS === 'ios') ? 7 : 0,
-			paddingHorizontal: 7,
 			borderRadius: 4,
 			borderColor: ERROR_COLOR,
 			borderWidth: 1,
@@ -113,9 +101,8 @@ var stylesheet = Object.freeze({
 		notEditable: {
 			fontSize: FONT_SIZE,
 			height: 36,
+			padding: 6,
 			minWidth: 150,
-			paddingVertical: (Platform.OS === 'ios') ? 7 : 0,
-			paddingHorizontal: 7,
 			borderRadius: 4,
 			borderColor: BORDER_COLOR,
 			borderWidth: 1,
@@ -133,40 +120,14 @@ var stylesheet = Object.freeze({
 			marginBottom: 4
 		}
 	},
-	pickerContainer: {
-		normal: {
-			marginBottom: 4,
-			borderRadius: 4,
-			borderColor: BORDER_COLOR,
-			borderWidth: 1
-		},
-		error: {
-			borderColor: ERROR_COLOR
-		},
-		open: {
-			// Alter styles when select container is open
-		}
-	},
 	select: {
-		normal: Platform.select({
-			android: {
-				paddingLeft: 7,
-				color: INPUT_COLOR
-			},
-			ios: {
-
-			}
-		}),
+		normal: {
+			marginBottom: 4
+		},
 		// the style applied when a validation error occours
-		error: Platform.select({
-			android: {
-				paddingLeft: 7,
-				color: ERROR_COLOR
-			},
-			ios: {
-
-			}
-		})
+		error: {
+			marginBottom: 4
+		}
 	},
 	pickerTouchable: {
 		normal: {
@@ -178,10 +139,6 @@ var stylesheet = Object.freeze({
 			height: 44,
 			flexDirection: 'row',
 			alignItems: 'center'
-		},
-		active: {
-			borderBottomWidth: 1,
-			borderColor: BORDER_COLOR
 		}
 	},
 	pickerValue: {

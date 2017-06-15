@@ -1,28 +1,24 @@
 PODS:
-  - React/Core (0.42.3):
-    - React/cxxreact
-    - Yoga (= 0.42.3.React)
-  - React/cxxreact (0.42.3):
-    - React/jschelpers
-  - React/jschelpers (0.42.3)
-  - React/RCTActionSheet (0.42.3):
+  - React/Core (0.39.1):
+    - React/CSSLayout
+  - React/CSSLayout (0.39.1)
+  - React/RCTActionSheet (0.39.1):
     - React/Core
-  - React/RCTImage (0.42.3):
+  - React/RCTImage (0.39.1):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.42.3):
+  - React/RCTLinkingIOS (0.39.1):
     - React/Core
-  - React/RCTNetwork (0.42.3):
+  - React/RCTNetwork (0.39.1):
     - React/Core
-  - React/RCTPushNotification (0.42.3):
+  - React/RCTPushNotification (0.39.1):
     - React/Core
-  - React/RCTText (0.42.3):
+  - React/RCTText (0.39.1):
     - React/Core
-  - React/RCTVibration (0.42.3):
+  - React/RCTVibration (0.39.1):
     - React/Core
-  - React/RCTWebSocket (0.42.3):
+  - React/RCTWebSocket (0.39.1):
     - React/Core
-  - Yoga (0.42.3.React)
 
 DEPENDENCIES:
   - React/Core (from `../node_modules/react-native`)
@@ -34,18 +30,14 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
-  - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
   React:
     :path: ../node_modules/react-native
-  Yoga:
-    :path: ../node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
-  React: 35e039680feacd0563677d49ba410112d2748559
-  Yoga: 86ce777665c8259b94ef8dbea76b84634237f4ea
+  React: a3e8869a7557496b9c9b40103cbba8f9450dd275
 
-PODFILE CHECKSUM: 3479fd49b3e4641552256f085d21f540549218e3
+PODFILE CHECKSUM: ca674d91312ab4af7deca435cf0976e4078d370b
 
-COCOAPODS: 1.2.1.beta.1
+COCOAPODS: 1.2.0.beta.1
