@@ -27,20 +27,10 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { bell } from 'Actions/Devices';
 
 class BellButton extends View {
-  constructor(props) {
-    super(props);
-    this.onBell = this.onBell.bind(this);
-  }
-
-  onBell() {
-    console.log('onBell');
-    this.props.onBell(this.props.id);
-  }
-
   render() {
     return (
       <RoundedCornerShadowView style={this.props.style}>
-				<TouchableOpacity onPress={this.onBell} style={styles.bell}>
+				<TouchableOpacity onPress={this.props.onBell(this.props.id)} style={styles.bell}>
 					<Icon name="bell" size={22} color="orange" />
 				</TouchableOpacity>
       </RoundedCornerShadowView>
@@ -49,12 +39,6 @@ class BellButton extends View {
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 7,
-  //   height: 32,
-  //   justifyContent: 'center',
-  //   alignItems: 'stretch',
-  // },
   bell: {
     flex: 1,
     justifyContent: 'center',
@@ -64,7 +48,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onBell: id => dispatch(bell(id)),
+    onBell: id => () => dispatch(bell(id)),
   };
 }
 
