@@ -32,7 +32,7 @@ const UpButton = ({ supportedMethod, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="caret-up" size={30}
-			style={{ color: supportedMethod ? '#1a355b' : '#eeeeee' }}
+			style={supportedMethod ? styles.enabled : styles.disabled}
 		/>
 	</TouchableOpacity>
 );
@@ -42,7 +42,7 @@ const DownButton = ({ supportedMethod, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="caret-down" size={30}
-			style={{ color: supportedMethod ? '#1a355b' : '#eeeeee' }}
+			style={supportedMethod ? styles.enabled : styles.disabled}
 		/>
 	</TouchableOpacity>
 );
@@ -52,7 +52,7 @@ const StopButton = ({ supportedMethod, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="stop" size={20}
-			style={{ color: supportedMethod ? '#1a355b' : '#eeeeee' }}
+			style={supportedMethod ? styles.enabled : styles.disabled}
 		/>
 	</TouchableOpacity>
 );
@@ -74,16 +74,16 @@ class NavigationalButton extends View {
 }
 
 const styles = StyleSheet.create({
-  // container: {
-    // flex: 7,
-    // height: 32,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-  // },
   navigationButton: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  enabled: {
+    color: '#1a355b',
+  },
+  disabled: {
+    color: '#eeeeee',
   },
 });
 
