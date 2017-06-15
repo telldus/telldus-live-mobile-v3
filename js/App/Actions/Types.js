@@ -24,6 +24,7 @@
 export type Action =
       { type: 'LOGGED_IN' }
     | { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
+    | { type: 'RECEIVED_PUSH_TOKEN', pushToken: String }
     | { type: 'RECEIVED_USER_PROFILE', userProfile: Object }
     | { type: 'RECEIVED_DEVICES', devices: Object }
     | { type: 'RECEIVED_GATEWAYS', gateways: Object }

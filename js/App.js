@@ -42,7 +42,7 @@ class App extends React.Component {
 
   pushConf() {
     if (this.props.accessToken) {
-      Push.configure();
+      Push.configure(this.props);
     }
   }
 
@@ -59,6 +59,7 @@ class App extends React.Component {
 function mapStateToProps(store) {
   return {
     accessToken: store.user.accessToken,
+    pushToken: store.user.pushToken
   };
 }
 

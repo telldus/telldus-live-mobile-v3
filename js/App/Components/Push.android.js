@@ -25,13 +25,15 @@ var PushNotification = require('react-native-push-notification');
 import { pushSenderID } from '../../Config';
 
 const Push = {
-  configure : () => {
+  configure : (store) => {
     PushNotification.configure({
 
     //Called when Token is generated
-    onRegister: function(token) {
-        console.log( 'TOKEN:', token );
-        // store fcm token in the server
+    onRegister: function(data) {
+      if((!store.pushToken) || (store.pushToken != data.token)) {
+        store.dispatch({type: 'RECEIVED_PUSH_TOKEN', pushToken: data.token});
+      }
+      // store fcm token in the server
     },
 
     //Called when a remote or local notification is opened or received

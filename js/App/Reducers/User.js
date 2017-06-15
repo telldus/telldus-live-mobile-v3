@@ -31,6 +31,7 @@ export type State = {
 const initialState = {
   accessToken: false,
   userProfile: false,
+  pushToken: false
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -42,6 +43,12 @@ export default function reduceUser(state: State = initialState, action: Action):
     return {
       ...state,
       accessToken: accessToken,
+    };
+  }
+  if (action.type === 'RECEIVED_PUSH_TOKEN') {
+    return {
+      ...state,
+      pushToken: action.pushToken,
     };
   }
   if (action.type === 'RECEIVED_USER_PROFILE') {
