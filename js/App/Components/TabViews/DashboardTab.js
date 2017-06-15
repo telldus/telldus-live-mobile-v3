@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View } from 'BaseComponents';
 import Platform from 'Platform';
-import { down, up, stop, getDevices } from 'Actions/Devices';
+import { getDevices } from 'Actions/Devices';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { changeSensorDisplayType } from 'Actions/Dashboard';
 
@@ -254,9 +254,6 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
-					onUp={this.props.onUp(itemId)}
-					onDown={this.props.onDown(itemId)}
-					onStop={this.props.onStop(itemId)}
 				/>;
       }
 
@@ -294,9 +291,6 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onDown: id => () => dispatch(down(id)),
-    onUp: id => () => dispatch(up(id)),
-    onStop: id => () => dispatch(stop(id)),
     onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
     onDim: id => value => dispatch(updateDimmerValue(id, value)),
     onChangeDisplayType: () => dispatch(changeSensorDisplayType()),

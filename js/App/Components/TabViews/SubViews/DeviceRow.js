@@ -28,7 +28,6 @@ import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmingButton from './DimmingButton';
 
-import { down, up, stop } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
@@ -56,12 +55,7 @@ class DeviceRow extends View {
     if (BELL) {
       button = <BellButton id={device.id} style={styles.bell} />;
     } else if (UP || DOWN || STOP) {
-      button = <NavigationalButton
-				device={device}
-				onDown={this.props.onDown(device.id)}
-				onUp={this.props.onUp(device.id)}
-				onStop={this.props.onStop(device.id)}
-			/>;
+      button = <NavigationalButton device={device} style={styles.navigation} />;
     } else if (DIM) {
       button = <DimmingButton
 				device={device}
@@ -80,9 +74,7 @@ class DeviceRow extends View {
 				<Container style = {styles.container}>
 					{button}
 					<View style={styles.name}>
-						<Text style = {[styles.text, {
-  opacity: device.name ? 1 : 0.5,
-}]}>
+						<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
 							{device.name ? device.name : '(no name)'}
 						</Text>
 					</View>
@@ -132,13 +124,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
   },
+  navigation: {
+    flex: 7,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    onDown: id => () => dispatch(down(id)),
-    onUp: id => () => dispatch(up(id)),
-    onStop: id => () => dispatch(stop(id)),
     onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
     onDim: id => value => dispatch(updateDimmerValue(id, value)),
   };

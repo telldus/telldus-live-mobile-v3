@@ -20,57 +20,13 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 
-import { RoundedCornerShadowView, Icon, View } from 'BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { View } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
 
-import { up, down, stop } from 'Actions/Devices';
-
-import { LearnButton } from 'TabViews/SubViews';
-
-const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
-	<RoundedCornerShadowView style={{ flexDirection: 'row', height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center' }}>
-		<TouchableOpacity
-			style={styles.navigationButton}
-			onPress={onUp}>
-			<Icon name="caret-up" size={30} style={{ color: '#1a355b' }}/>
-		</TouchableOpacity>
-		<TouchableOpacity
-			style={styles.navigationButton}
-			onPress={onDown}>
-		<Icon name="caret-down" size={30} style={{ color: '#1a355b' }}/>
-		</TouchableOpacity>
-		<TouchableOpacity
-			style={styles.navigationButton}
-			onPress={onStop}>
-			<Icon name="stop" size={20} style={{ color: '#1a355b' }}/>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
-);
+import { LearnButton, NavigationalButton } from 'TabViews/SubViews';
 
 class NavigationalDeviceDetailModal extends View {
-
-  constructor(props) {
-    super(props);
-
-    this.onUp = this.onUp.bind(this);
-    this.onDown = this.onDown.bind(this);
-    this.onStop = this.onStop.bind(this);
-  }
-
-  onUp() {
-    this.props.onUp(this.props.device.id);
-  }
-
-  onDown() {
-    this.props.onDown(this.props.device.id);
-  }
-
-  onStop() {
-    this.props.onStop(this.props.device.id);
-  }
-
   render() {
     const { device } = this.props;
     const { UP, DOWN, STOP, LEARN } = device.supportedMethods;
@@ -79,7 +35,7 @@ class NavigationalDeviceDetailModal extends View {
     let learnButton = null;
 
     if (UP || DOWN || STOP) {
-      navigationButtons = <NavigationalButton device={device} onUp={this.onUp} onDown={this.onDown} onLearn={this.onLearn} />;
+      navigationButtons = <NavigationalButton device={device} style={styles.navigation} />;
     }
 
     if (LEARN) {
@@ -93,7 +49,6 @@ class NavigationalDeviceDetailModal extends View {
 			</View>
     );
   }
-
 }
 
 NavigationalDeviceDetailModal.propTypes = {
@@ -104,8 +59,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 0,
   },
-  navigationButton: {
-    flex: 1,
+  navigation: {
+    flexDirection: 'row',
+    height: 36,
+    marginHorizontal: 8,
+    marginVertical: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -118,16 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapStateToProps(store) {
-  return { store };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    onUp: (id) => dispatch(up(id)),
-    onDown: (id) => dispatch(down(id)),
-    onStop: (id) => dispatch(stop(id)),
-  };
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(NavigationalDeviceDetailModal);
+module.exports = NavigationalDeviceDetailModal;
