@@ -24,5 +24,5 @@
 import configureStore from './ConfigureStore';
 
 module.exports = {
-	configureStore
+  configureStore,
 };

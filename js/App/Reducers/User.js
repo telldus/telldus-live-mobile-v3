@@ -19,41 +19,46 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions/Types';
+
+import { createSelector } from 'reselect';
 
 export type State = {
-	accessToken: ?object,
-	userProfile: ?object
+	accessToken: ?Object,
+	userProfile: ?Object
 };
 
 const initialState = {
-	accessToken: false,
-	userProfile: false
+  accessToken: false,
+  userProfile: false,
 };
 
-function user(state: State = initialState, action: Action): State {
-	if (action.type === 'RECEIVED_ACCESS_TOKEN') {
-		var accessToken = action.accessToken;
-		if (state.accessToken) {
-			accessToken.refresh_token = state.accessToken.refresh_token
-		}
-		return {
-			...state,
-			accessToken: accessToken,
-		};
-	}
-	if (action.type === 'LOGGED_OUT') {
-		return {
-			...initialState
-		};
-	}
-	if (action.type === 'RECEIVED_USER_PROFILE') {
-		return {
-			...state,
-			userProfile: action.payload,
-		};
-	}
-	return state;
+export default function reduceUser(state: State = initialState, action: Action): State {
+  if (action.type === 'RECEIVED_ACCESS_TOKEN') {
+    let accessToken = action.accessToken;
+    if (state.accessToken) {
+      accessToken.refresh_token = state.accessToken.refresh_token;
+    }
+    return {
+      ...state,
+      accessToken: accessToken,
+    };
+  }
+  if (action.type === 'RECEIVED_USER_PROFILE') {
+    return {
+      ...state,
+      userProfile: action.payload,
+    };
+  }
+  if (action.type === 'LOGGED_OUT') {
+    return {
+      ...initialState,
+    };
+  }
+  return state;
 }
 
-module.exports = user;
+export const getUserProfile = createSelector(
+	[ ({ user }) => user.userProfile ],
+	(userProfile) => userProfile || { firstname: '', lastname: '', email: '' },
+);

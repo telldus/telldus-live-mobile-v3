@@ -19,7 +19,7 @@
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions/Types';
 import DeviceInfo from 'react-native-device-info';
 
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics';
@@ -27,21 +27,21 @@ import { googleAnalyticsId } from 'Config';
 
 function track(action: Action): void {
 
-	let clientId = DeviceInfo.getUniqueID();
-	var ga = new Analytics(googleAnalyticsId, clientId, 1, DeviceInfo.getUserAgent());
+  let clientId = DeviceInfo.getUniqueID();
+  let ga = new Analytics(googleAnalyticsId, clientId, 1, DeviceInfo.getUserAgent());
 
-	if(action.type == 'SWITCH_TAB') {
-		var screenView = new GAHits.ScreenView(
+  if (action.type === 'SWITCH_TAB') {
+    let screenView = new GAHits.ScreenView(
 			'Telldus Live! app',
 			action.tab,
 			DeviceInfo.getVersion(),
 			DeviceInfo.getBundleId()
 		);
-		ga.send(screenView);
-	} else {
-		var gaEvent = new GAHits.Event('Action', action.type);
-		ga.send(gaEvent);
-	}
+    ga.send(screenView);
+  } else {
+    let gaEvent = new GAHits.Event('Action', action.type);
+    ga.send(gaEvent);
+  }
 }
 
 module.exports = track;

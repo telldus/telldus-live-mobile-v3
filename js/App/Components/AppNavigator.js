@@ -21,82 +21,88 @@
 
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
-import { switchTab, getUserProfile, getGateways, getSensors, getDevices, getWebsocketAddress } from 'Actions';
+import { getGateways, getSensors, getJobs, getUserProfile, appStart, appState, syncLiveApiOnForeground } from 'Actions';
+import { authenticateSession, connectToGateways } from 'Actions/Websockets';
+import { getDevices } from 'Actions/Devices';
 
-import { Button, Container, Content, Text, Title, View } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import Platform from 'Platform';
-import BackAndroid from 'BackAndroid';
 import TabsView from 'TabsView';
-import Navigator from 'Navigator';
-import StyleSheet from 'StyleSheet';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
+import { DimmerPopup } from 'TabViews/SubViews';
+
+import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
 class AppNavigator extends View {
 
-	constructor() {
-		super();
-		if (Platform.OS !== 'android') {
-			const init = Orientation.getInitialOrientation();
-			this.state = {
-				specificOrientation: init,
-			};
-			Orientation.unlockAllOrientations();
-			this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
-			Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
-		}
-	}
+  constructor() {
+    super();
+    if (Platform.OS !== 'android') {
+      const init = Orientation.getInitialOrientation();
+      this.state = {
+        specificOrientation: init,
+      };
+      Orientation.unlockAllOrientations();
+      this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
+      Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
+    }
+  }
 
-	componentDidMount() {
-		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
-		if (Platform.OS === 'android' && StatusBar) {
-			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
-		}
-		this.props.dispatch(getUserProfile());
-		this.props.dispatch(getDevices());
-		this.props.dispatch(getGateways());
-		this.props.dispatch(getSensors());
-	}
+  componentWillMount() {
+    this.props.dispatch(appStart());
+    this.props.dispatch(appState());
+  }
 
-	_updateSpecificOrientation(specificOrientation) {
-		if (Platform.OS !== 'android') {
-			this.setState({ specificOrientation });
-		}
-	}
+  componentDidMount() {
+    Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
+    if (Platform.OS === 'android' && StatusBar) {
+      StatusBar.setTranslucent(true);
+      StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
+    }
 
-	render() {
-		//if (Platform.OS === 'android' || this.state.specificOrientation == 'PORTRAIT' || this.state.specificOrientation == 'UNKNOWN') {
-			return (
+    this.props.dispatch(getUserProfile());
+    this.props.dispatch(authenticateSession());
+    this.props.dispatch(connectToGateways());
+    this.props.dispatch(syncLiveApiOnForeground());
+
+    this.props.dispatch(getDevices());
+    this.props.dispatch(getGateways());
+    this.props.dispatch(getSensors());
+    this.props.dispatch(getJobs());
+  }
+
+  _updateSpecificOrientation(specificOrientation) {
+    if (Platform.OS !== 'android') {
+      this.setState({ specificOrientation });
+    }
+  }
+
+  render() {
+    return (
+			<View>
 				<TabsView />
-			)
-		//}
-		/*return (
-			<View style={{
-				flex: 1,
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-				backgroundColor: "#ffffff"
-			}}>
-				<Text>
-					This will be a dashboard view!
-				</Text>
+				<DimmerPopup
+					isVisible={this.props.dimmer.show}
+					name={this.props.dimmer.name}
+					value={this.props.dimmer.value / 255}
+				/>
 			</View>
-		)*/
-	}
-};
-
-AppNavigator.propTypes = {
-	dispatch: PropTypes.func.isRequired
+    );
+  }
 }
 
+AppNavigator.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
 function mapStateToProps(state, ownProps) {
-	return {
-		tab: state.navigation.tab,
-		accessToken: state.user.accessToken,
-		userProfile: state.user.userProfile || {firstname: '', lastname: '', email: ""}
-	};
+  return {
+    tab: state.navigation.tab,
+    accessToken: state.user.accessToken,
+    userProfile: getUserProfileSelector(state),
+    dimmer: state.dimmer,
+  };
 }
 
 module.exports = connect(mapStateToProps)(AppNavigator);

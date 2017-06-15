@@ -22,14 +22,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, Text, View } from 'BaseComponents';
-
-import type { Tab } from '../reducers/navigation';
+import { Container, Content, Text, View } from 'BaseComponents';
 
 class GatewayDetailView extends View {
 
-	render() {
-		return (
+  render() {
+    return (
 			<Container style={{ padding: 10 }}>
 				<Content>
 					<Text>Type: { this.props.gateway.type}</Text>
@@ -38,8 +36,8 @@ class GatewayDetailView extends View {
 					<Text>Online: { this.props.gateway.online ? 'Yes' : 'No' }</Text>
 				</Content>
 			</Container>
-		);
-	}
+    );
+  }
 
 }
 

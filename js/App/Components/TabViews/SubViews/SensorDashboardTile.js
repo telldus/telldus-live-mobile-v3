@@ -20,118 +20,149 @@
 'use strict';
 
 import React from 'react';
-import { FormattedNumber, Image, Text, View } from 'BaseComponents';
+import { connect } from 'react-redux';
 
-import Theme from 'Theme';
+import { FormattedNumber, Text, View } from 'BaseComponents';
+
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
+import DashboardShadowTile from './DashboardShadowTile';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 
 class SensorDashboardTile extends View {
+  constructor(props) {
+    super(props);
 
-	render() {
-		const item = this.props.item;
-		const tileWidth = item.tileWidth - 8;
-		const tileTitleHeight = Math.floor(tileWidth / 4);
-		const tileDetailsHeight = tileWidth - tileTitleHeight;
+    this.state = {
+      currentDisplayType: 'default',
+    };
 
-		var slideList = [];
-		if (item.childObject.humidity) {
-			slideList.push({
-				key: 'humidity',
-				icon: require('../img/sensorIcons/HumidityLarge.png'),
-				text: <FormattedNumber value = {item.childObject.humidity / 100} formatStyle = 'percent' />
-			});
-		}
-		if (item.childObject.temperature) {
-			slideList.push({
-				key: 'temperature',
-				icon: require('../img/sensorIcons/TemperatureLarge.png'),
-				text: <FormattedNumber value = {item.childObject.temperature} maximumFractionDigits = {0} suffix = {String.fromCharCode(176) + 'c'}/>
-			});
-		}
-		if (item.childObject.rainRate || item.childObject.rainTotal) {
-			slideList.push({
-				key: 'rain',
-				icon: require('../img/sensorIcons/RainLarge.png'),
-				text: (item.childObject.rainRate && <FormattedNumber value = {item.childObject.rainRate} maximumFractionDigits = {0} suffix = {'mm/h\n'} /> ),
-				text2: (item.childObject.rainTotal && <FormattedNumber value = {item.childObject.rainTotal} maximumFractionDigits = {0} suffix = {'mm'} /> )
-			});
-		}
-		if (item.childObject.windGust || item.childObject.windAverage || item.childObject.windDirection) {
-			slideList.push({
-				key: 'wind',
-				icon: require('../img/sensorIcons/WindLarge.png'),
-				text: (item.childObject.windAverage && <FormattedNumber value = {item.childObject.windAverage} maximumFractionDigits = {1} suffix = {'m/s\n'} /> ),
-				text2: (item.childObject.windGust && <FormattedNumber value = {item.childObject.windGust} maximumFractionDigits = {1} suffix = {'m/s*\n'} /> ),
-				text3: (item.childObject.windDirection && <Text>{ this._windDirection(item.childObject.windDirection) }</Text> )
-			});
-		}
-		if (item.childObject.uv) {
-			slideList.push({
-				key: 'uv',
-				icon: require('../img/sensorIcons/UVLarge.png'),
-				text: <FormattedNumber value = {item.childObject.uv} maximumFractionDigits = {0} />
-			});
-		}
-		if (item.childObject.watt) {
-			slideList.push({
-				key: 'watt',
-				icon: require('../img/sensorIcons/WattLarge.png'),
-				text: <FormattedNumber value = {item.childObject.watt} maximumFractionDigits = {1} suffix = {' W'}/>
-			});
-		}
-		if (item.childObject.luminance) {
-			slideList.push({
-				key: 'luminance',
-				icon: require('../img/sensorIcons/LuminanceLarge.png'),
-				text: <FormattedNumber value = {item.childObject.luminance} maximumFractionDigits = {0} suffix = {'lx'}/>
-			});
-		}
-		const slides = slideList.map((item) =>
-			<SensorDashboardTileSlide key = {item.key} icon = {item.icon} text={item.text} tileWidth={tileWidth} />
+    this.getSlideList = this.getSlideList.bind(this);
+  }
+
+  getSlideList(item) {
+    let slideList = [];
+
+    if (item.humidity) {
+      slideList.push({
+        key: 'humidity',
+        icon: require('../img/sensorIcons/HumidityLargeGray.png'),
+        text: <FormattedNumber value = {item.humidity / 100} formatStyle = "percent" />,
+      });
+    }
+    if (item.temperature) {
+      slideList.push({
+        key: 'temperature',
+        icon: require('../img/sensorIcons/TemperatureLargeGray.png'),
+        text: <FormattedNumber value = {item.temperature} maximumFractionDigits = {1} suffix = {`${String.fromCharCode(176)}C`}/>,
+      });
+    }
+    if (item.rainRate || item.rainTotal) {
+      slideList.push({
+        key: 'rain',
+        icon: require('../img/sensorIcons/RainLargeGray.png'),
+        text: (item.rainRate && <FormattedNumber value = {item.rainRate} maximumFractionDigits = {0} suffix = {'mm/h\n'} /> ),
+        text2: (item.rainTotal && <FormattedNumber value = {item.rainTotal} maximumFractionDigits = {0} suffix = {'mm'} /> ),
+      });
+    }
+    if (item.windGust || item.windAverage || item.windDirection) {
+      slideList.push({
+        key: 'wind',
+        icon: require('../img/sensorIcons/WindLargeGray.png'),
+        text: (item.windAverage && <FormattedNumber value = {item.windAverage} maximumFractionDigits = {1} suffix = {'m/s\n'} /> ),
+        text2: (item.windGust && <FormattedNumber value = {item.windGust} maximumFractionDigits = {1} suffix = {'m/s*\n'} /> ),
+        text3: (item.windDirection && <Text>{ this._windDirection(item.windDirection) }</Text> ),
+      });
+    }
+    if (item.uv) {
+      slideList.push({
+        key: 'uv',
+        icon: require('../img/sensorIcons/UVLargeGray.png'),
+        text: <FormattedNumber value = {item.uv} maximumFractionDigits = {0} />,
+      });
+    }
+    if (item.watt) {
+      slideList.push({
+        key: 'watt',
+        icon: require('../img/sensorIcons/WattLargeGray.png'),
+        text: <FormattedNumber value = {item.watt} maximumFractionDigits = {1} suffix = {' W'}/>,
+      });
+    }
+    if (item.luminance) {
+      slideList.push({
+        key: 'luminance',
+        icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
+        text: <FormattedNumber value = {item.luminance} maximumFractionDigits = {0} suffix = {'lx'} useGrouping = {false} />,
+      });
+    }
+
+    return slideList;
+  }
+
+  render() {
+    const { item, tileWidth } = this.props;
+    const displayType = this.props.displayType;
+
+    const slideList = this.getSlideList(item);
+
+    const slides = slideList.map((data) =>
+			<SensorDashboardTileSlide key = {data.key} icon = {data.icon} text={data.text} tileWidth={tileWidth} />
 		);
 
-		return (
-			<Image
-				style = {[this.props.style, {
-					flexDirection: 'column',
-					width: tileWidth,
-					height: tileWidth,
-					backgroundColor: Theme.Core.brandPrimary
-				}]}
-				source = {require('../img/TileBackground.png')}
-			>
-				<View style = {{
-					width: tileWidth,
-					height: tileDetailsHeight
-				}}>{slides}</View>
-				<View style = {{
-					width: tileWidth,
-					height: tileTitleHeight,
-					justifyContent: 'center'
-				}}>
-					<Text
-					ellipsizeMode = "middle"
-					numberOfLines = {1}
-					style = {{
-						width: tileWidth,
-						color: 'rgba(255,255,255,1)',
-						fontSize:  Math.floor(tileWidth / 8),
-						opacity: item.childObject.name ? 1 : 0.7,
-						marginBottom: 2,
-						textAlign: 'center'
-					}}>
-						{item.childObject.name ? item.childObject.name : '(no name)'}
-					</Text>
-				</View>
-			</Image>
-		)
-	}
+    let selectedSlideIndex = 0;
+    if (displayType !== 'default') {
+      for (let i = 0; i < slideList.length; ++i) {
+        if (slideList[i].key === displayType) {
+          selectedSlideIndex = i;
+          break;
+        }
+      }
+    }
 
-	_windDirection(value) {
-		const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-		return directions[Math.floor(value / 22.5)]
-	}
+    return (
+			<DashboardShadowTile
+				item={item}
+				isEnabled={item.state !== 0}
+				name={item.name}
+				tileWidth={tileWidth}
+				style={[this.props.style, {
+  width: tileWidth,
+  height: tileWidth,
+}]}>
+				<TouchableOpacity
+					onPress={this.props.onPress}
+					activeOpacity={1}
+					style={styles.container}>
+					<View style={styles.body}>
+						{slides[selectedSlideIndex]}
+					</View>
+				</TouchableOpacity>
+			</DashboardShadowTile>
+    );
+  }
 
+  _windDirection(value) {
+    const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
+    return directions[Math.floor(value / 22.5)];
+  }
 }
 
-module.exports = SensorDashboardTile;
+const styles = StyleSheet.create({
+  container: {
+    flex: 30,
+    justifyContent: 'center',
+  },
+  body: {
+    flex: 30,
+    flexDirection: 'row',
+    borderTopLeftRadius: 7,
+    borderTopRightRadius: 7,
+  },
+});
+
+function mapStateToProps(state, { item }) {
+  return {
+    displayType: state.dashboard.sensorDisplayTypeById[item.id],
+  };
+}
+
+module.exports = connect(mapStateToProps)(SensorDashboardTile);

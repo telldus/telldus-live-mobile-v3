@@ -26,53 +26,53 @@ import computeProps from './computeProps';
 
 export default class CardComponent extends Base {
 
-	getInitialStyle() {
-		return {
-			card: {
-				flex: 1,
-				borderWidth: this.getTheme().borderWidth,
-				borderRadius: this.getTheme().borderRadiusBase,
-				borderColor: this.getTheme().listBorderColor,
-				flexWrap: 'wrap',
-				borderBottomWidth: 0,
-				backgroundColor: this.props.transparent? 'transparent' : this.getTheme().cardDefaultBg,
-				shadowColor: this.props.transparent ? undefined : '#000',
-				shadowOffset: this.props.transparent ? undefined : {width: 0, height: 2},
-				shadowOpacity: this.props.transparent ? undefined : 0.1,
-				shadowRadius: this.props.transparent ? undefined : 1.5,
-				elevation: this.props.transparent ? undefined : 2,
-				marginTop: 4,
-				marginLeft: 8,
-				marginRight: 8,
-				marginBottom: 4,
-			}
-		}
-	}
+  getInitialStyle() {
+    return {
+      card: {
+        flex: 1,
+        borderWidth: this.getTheme().borderWidth,
+        borderRadius: this.getTheme().borderRadiusBase,
+        borderColor: this.getTheme().listBorderColor,
+        flexWrap: 'wrap',
+        borderBottomWidth: 0,
+        backgroundColor: this.props.transparent ? 'transparent' : this.getTheme().cardDefaultBg,
+        shadowColor: this.props.transparent ? undefined : '#000',
+        shadowOffset: this.props.transparent ? undefined : { width: 0, height: 2 },
+        shadowOpacity: this.props.transparent ? undefined : 0.1,
+        shadowRadius: this.props.transparent ? undefined : 1.5,
+        elevation: this.props.transparent ? undefined : 2,
+        marginTop: 4,
+        marginLeft: 8,
+        marginRight: 8,
+        marginBottom: 4,
+      },
+    };
+  }
 
-	prepareRootProps() {
+  prepareRootProps() {
 
-		var defaultProps = {
-			style: this.getInitialStyle().card
-		};
+    let defaultProps = {
+      style: this.getInitialStyle().card,
+    };
 
-		return computeProps(this.props, defaultProps);
+    return computeProps(this.props, defaultProps);
 
-	}
+  }
 
-	renderChildren() {
-		var childrenArray = React.Children.map(this.props.children, (child) => {
-			return child;
-		});
+  renderChildren() {
+    let childrenArray = React.Children.map(this.props.children, (child) => {
+      return child;
+    });
 
-		return childrenArray;
-	}
+    return childrenArray;
+  }
 
-	render() {
-		return(
+  render() {
+    return (
 			<View {...this.prepareRootProps()} >
 				{this.renderChildren()}
 			</View>
-		);
-	}
+    );
+  }
 
 }

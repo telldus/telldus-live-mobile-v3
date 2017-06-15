@@ -24,34 +24,34 @@ import Theme from 'Theme';
 
 export default class Base extends Component {
 
-	static contextTypes = {
-		theme: React.PropTypes.object,
-		foregroundColor: React.PropTypes.string
-	}
+  static contextTypes = {
+    theme: React.PropTypes.object,
+    foregroundColor: React.PropTypes.string,
+  }
 
-	static propTypes = {
-		theme: React.PropTypes.object,
-		foregroundColor: React.PropTypes.string
-	}
+  static propTypes = {
+    theme: React.PropTypes.object,
+    foregroundColor: React.PropTypes.string,
+  }
 
-	static childContextTypes = {
-		theme: React.PropTypes.object,
-		foregroundColor: React.PropTypes.string
-	}
+  static childContextTypes = {
+    theme: React.PropTypes.object,
+    foregroundColor: React.PropTypes.string,
+  }
 
-	getChildContext() {
-		return {
-				theme: this.props.theme ? this.props.theme : this.getTheme(),
-				foregroundColor: this.props.foregroundColor ? this.props.foregroundColor : this.getTheme().textColor
-			};
-	}
+  getChildContext() {
+    return {
+      theme: this.props.theme ? this.props.theme : this.getTheme(),
+      foregroundColor: this.props.foregroundColor ? this.props.foregroundColor : this.getTheme().textColor,
+    };
+  }
 
-	getContextForegroundColor() {
-		return this.context.foregroundColor
-	}
+  getContextForegroundColor() {
+    return this.context.foregroundColor;
+  }
 
-	getTheme() {
-		return this.props.theme ? this.props.theme : this.context.theme || Theme.Core
-	}
+  getTheme() {
+    return this.props.theme ? this.props.theme : this.context.theme || Theme.Core;
+  }
 
 }

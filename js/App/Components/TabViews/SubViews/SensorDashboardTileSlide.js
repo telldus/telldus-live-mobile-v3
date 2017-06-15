@@ -26,31 +26,30 @@ import Theme from 'Theme';
 
 class SensorDashboardTileSlide extends View {
 
-	render() {
-		return (
+  render() {
+    return (
 			<View style={Theme.Styles.sensorTileItem}>
 				<View style={{
-					flex: 4,
-					justifyContent: 'center',
-					alignItems: 'center'
-				}}>
-					<Image source={this.props.icon} />
+  flex: 4,
+  justifyContent: 'center',
+  alignItems: 'center',
+}}>
+					<Image source={this.props.icon}/>
 				</View>
 				<View style={{
-					flex: 5,
-					justifyContent: 'center',
-					alignItems: 'center'
-				}}>
-					<Text style={{color: "#ffffff", fontSize: Math.floor(this.props.tileWidth / 5)}}>
+  flex: 5,
+  justifyContent: 'center',
+  alignItems: 'center',
+}}>
+					<Text style={{ color: '#00255e', fontSize: Math.floor(this.props.tileWidth / 8) }}>
 						{this.props.text && this.props.text}
 						{this.props.text2 && this.props.text2}
 						{this.props.text3 && this.props.text3}
 					</Text>
 				</View>
 			</View>
-		)
-	}
-
+    );
+  }
 }
 
 module.exports = SensorDashboardTileSlide;

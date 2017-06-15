@@ -22,183 +22,331 @@
 'use strict';
 
 import React from 'react';
+import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Button, Icon, List, ListItem, Text, View } from 'BaseComponents';
-import { TabLayoutAndroid, TabAndroid } from "react-native-android-kit";
+import { Text, View, Icon, Image } from 'BaseComponents';
+
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import Navigator from 'Navigator';
 import Theme from 'Theme';
-import Gravatar from 'react-native-avatar-gravatar';
 
 import DashboardTab from './DashboardTab';
 import DevicesTab from './DevicesTab';
-import GatewaysTab from './GatewaysTab';
 import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
+import { SettingsDetailModal } from 'DetailViews';
+import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
-import { switchTab, logoutFromTelldus } from 'Actions';
-import { StyleSheet } from 'react-native';
-import type { Tab } from '../reducers/navigation';
+import { getUserProfile } from '../../Reducers/User';
+import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
+
+const TabHeader = ({ fontSize, ...props }) => {
+  return <TabBar {...props} style={{ backgroundColor: Theme.Core.brandPrimary }} labelStyle={{ fontSize }} />;
+};
+
+const Gateway = ({ name, online, websocketOnline }) => {
+  let locationSrc;
+  if (!online) {
+    locationSrc = require('./img/tabIcons/location-red.png');
+  } else if (!websocketOnline) {
+    locationSrc = require('./img/tabIcons/location-orange.png');
+  } else {
+    locationSrc = require('./img/tabIcons/location-green.png');
+  }
+  return (
+		<View style={styles.gatewayContainer}>
+			<Image style={styles.gatewayIcon} source={locationSrc} />
+			<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
+		</View>
+  );
+};
+
+const NavigationHeader = ({ firstName, lastName }) => (
+	<View style = {styles.navigationHeader}>
+		<Image style={styles.navigationHeaderImage}
+			source={require('./img/telldus.png')}
+			resizeMode={'contain'} />
+		<Text style={styles.navigationHeaderText}>
+			{firstName} {lastName}
+		</Text>
+	</View>
+);
+
+const ConnectedLocations = () => (
+	<View style={styles.navigationTitle}>
+		<Image source={require('./img/tabIcons/router.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
+		<Text style={styles.navigationTextTitle}>Connected Locations</Text>
+	</View>
+);
+
+const SettingsButton = ({ onPress }) => (
+	<TouchableOpacity onPress={onPress} style={styles.navigationTitle}>
+		<Image source={require('./img/tabIcons/gear.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
+		<Text style={styles.navigationTextTitle}>Settings</Text>
+	</TouchableOpacity>
+);
+
+const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
+  return (
+		<View style = {{ flex: 1, backgroundColor: 'rgba(26,53,92,255)' }}>
+			<NavigationHeader firstName={userProfile.firstname} lastName={userProfile.lastname} />
+			<View style = {{ flex: 1, backgroundColor: 'white' }}>
+				<ConnectedLocations />
+				{gateways.allIds.map((id, index) => {
+  return (<Gateway {...gateways.byId[id]} key={index} />);
+})}
+				<SettingsButton onPress={onOpenSetting} />
+			</View>
+		</View>
+  );
+};
 
 class TabsView extends View {
+  constructor(props) {
+    super(props);
 
-	props: {
-		tab: Tab;
-		onTabSelect: (tab: Tab) => void;
-		navigator: Navigator;
-	};
+    this.state = {
+      settings: false,
+      index: 0,
+      routes: [
+				{ key: '1', title: 'Dashboard' },
+				{ key: '2', title: 'Devices' },
+				{ key: '3', title: 'Sensors' },
+				{ key: '4', title: 'Scheduler' },
+      ],
+    };
 
-	constructor(props) {
-		super(props);
-	}
+    this.deviceWidth = Dimensions.get('window').width;
+    this.deviceHeight = Dimensions.get('window').height;
 
-	onTabSelect(tab: Tab) {
-		this.refs.drawer.closeDrawer();
-		if (this.props.tab !== tab) {
-			this.props.onTabSelect(tab);
-		}
-	}
+    this.renderScene = SceneMap({
+      '1': () => <DashboardTab />,
+      '2': () => <DevicesTab />,
+      '3': () => <SensorsTab />,
+      '4': () => <SchedulerTab />,
+    });
 
-	navigationView() {
-		return (
-			<View style = {{ flex: 1, backgroundColor: this.getTheme().btnPrimaryBg }}>
-				<View style = {{ height: 80, marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'), padding: 10 }}>
-					<Gravatar
-						emailAddress = {this.props.userProfile.email}
-						size = { 60 }
-						mask = "circle"
-					/>
-					<Text>
-						{this.props.userProfile.firstname} {this.props.userProfile.lastname}
-					</Text>
-				</View>
-				<View style = {{ flex: 1, backgroundColor: '#fff' }}>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'dashboardTab') }
-						>Dashboard</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'devicesTab') }
-						>Devices</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'sensorsTab') }
-						>Sensors</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'schedulerTab') }
-						>Scheduler</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ this.onTabSelect.bind(this, 'gatewaysTab') }
-						>Gateways</Button>
-					</ListItem>
-					<ListItem>
-						<Button
-							name = "sign-out"
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress = { () => this.props.dispatch(logoutFromTelldus()) }
-						>Logout</Button>
-					</ListItem>
-				</View>
-			</View>
-		)
-	}
+    this.renderHeader = this.renderHeader.bind(this);
+    this.renderContent = this.renderContent.bind(this);
+    this.renderNavigationView = this.renderNavigationView.bind(this);
+    this.onOpenSetting = this.onOpenSetting.bind(this);
+    this.onCloseSetting = this.onCloseSetting.bind(this);
+    this.onTabSelect = this.onTabSelect.bind(this);
+    this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
+    this.toggleEditMode = this.toggleEditMode.bind(this);
+    this.openDrawer = this.openDrawer.bind(this);
+  }
 
-	renderContent() {
-		switch (this.props.tab) {
-			case 'dashboardTab':
-				return <DashboardTab />
-			case 'devicesTab':
-				return <DevicesTab />
-			case 'sensorsTab':
-				return <SensorsTab />
-			case 'schedulerTab':
-				return <SchedulerTab />
-			case 'gatewaysTab':
-				return <GatewaysTab />
-			}
-		return <DashboardTab />
-	}
+  componentDidMount() {
+    Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
 
-	render() {
-		return (
+    if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
+      if (this.props.tab !== 'dashboardTab') {
+        this.onRequestChangeTab(0);
+      }
+    } else {
+      this.onRequestChangeTab(1);
+    }
+  }
+
+  onTabSelect(tab) {
+
+    if (this.props.tab !== tab) {
+      this.props.onTabSelect(tab);
+      if (this.refs.drawer) {
+        this.refs.drawer.closeDrawer();
+      }
+    }
+  }
+
+  onOpenSetting() {
+    this.setState({ settings: true });
+  }
+
+  onCloseSetting() {
+    this.setState({ settings: false });
+  }
+
+  onRequestChangeTab(index) {
+    this.setState({ index });
+    const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
+    this.onTabSelect(tabNames[index]);
+  }
+
+  openDrawer() {
+    this.refs.drawer.openDrawer();
+    this.props.syncGateways();
+  }
+
+  renderHeader(props) {
+    return <TabHeader {...props} fontSize={this.deviceWidth / 35} />;
+  }
+
+  renderContent() {
+    return <TabViewAnimated style={{ flex: 1 }}
+			navigationState={this.state}
+			renderScene = {this.renderScene}
+			renderHeader = {this.renderHeader}
+			onRequestChangeTab = {this.onRequestChangeTab}
+			/>;
+  }
+
+  renderNavigationView() {
+    return <NavigationView
+			gateways={this.props.gateways}
+			userProfile={this.props.userProfile}
+			theme={this.getTheme()}
+			onOpenSetting={this.onOpenSetting}
+		/>;
+  }
+
+  render() {
+    if (!this.state || !this.state.starIcon) {
+      return false;
+    }
+
+		// TODO: Refactor: Split this code to smaller components
+    return (
 			<DrawerLayoutAndroid
 				ref = "drawer"
-				drawerWidth = { 280 }
-				drawerPosition = { DrawerLayoutAndroid.positions.Left }
-				renderNavigationView = { () => this.navigationView() }
+				drawerWidth = {250}
+				drawerPosition = {DrawerLayoutAndroid.positions.Left}
+				renderNavigationView = {this.renderNavigationView}
 			>
-				<View style = {{ flex:1 }} >
+				<View style = {{ flex: 1 }} >
 					<View style = {{
-						height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-						backgroundColor: Theme.Core.brandPrimary }}
+  height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+  backgroundColor: Theme.Core.brandPrimary }}
 					/>
-					<Icon.ToolbarAndroid
-						style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
-						titleColor = { Theme.Core.inverseTextColor }
-						navIconName = "bars"
-						overflowIconName = "ellipsis-v"
-						iconColor = { Theme.Core.inverseTextColor }
-						title = "Telldus Live!"
-						actions = {[{ title: 'Settings', icon: require('image!ic_launcher'), show: 'never'}]}
-						onActionSelected = { this.onActionSelected }
-						onIconClicked = { () => this.refs.drawer.openDrawer() }
-					/>
-					<View key={this.props.tab}>
+					{
+						this.props.tab === 'devicesTab' || this.props.tab === 'sensorsTab' ?
+						(
+							<Icon.ToolbarAndroid
+								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
+								titleColor = {Theme.Core.inverseTextColor}
+								navIconName = "bars"
+								overflowIconName = "star"
+								iconColor = {Theme.Core.inverseTextColor}
+								title = "Telldus Live!"
+								actions = {[{ title: 'Settings', icon: this.state.starIcon, show: 'always' }]}
+								onActionSelected = {this.toggleEditMode}
+								onIconClicked = {this.openDrawer}
+							/>
+						) :
+						(
+							<Icon.ToolbarAndroid
+								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
+								titleColor = {Theme.Core.inverseTextColor}
+								navIconName = "bars"
+								overflowIconName = "star"
+								iconColor = {Theme.Core.inverseTextColor}
+								title = "Telldus Live!"
+								onIconClicked = {this.openDrawer}
+							/>
+						)
+					}
+
+					<View>
 						{this.renderContent()}
+						{
+							this.state.settings ?
+								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting} /> :
+								null
+						}
 					</View>
 				</View>
 			</DrawerLayoutAndroid>
-		);
-	}
+    );
+  }
 
-	onActionSelected (position) {
-		if (position === 0) { // index of 'Settings'
-			console.log("Settings pressed");
-		}
-	}
-
+  toggleEditMode(position) {
+    this.props.onToggleEditMode(this.props.tab);
+  }
 }
 
-function select(store) {
-	return {
-		tab: store.navigation.tab,
-		devices: store.devices.devices,
-		gateways: store.gateways.gateways,
-		sensors: store.sensors.sensors,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
-	};
+const styles = StyleSheet.create({
+  navigationHeader: {
+    height: 60,
+    marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+    marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+    padding: 5,
+    flexDirection: 'row',
+  },
+  navigationHeaderImage: {
+    width: 46,
+    height: 46,
+  },
+  navigationHeaderText: {
+    flex: 1,
+    color: '#e26901',
+    fontSize: 24,
+    textAlignVertical: 'center',
+    marginLeft: 20,
+  },
+  navigationTitle: {
+    flexDirection: 'row',
+    height: 30,
+    marginLeft: 10,
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  navigationTextTitle: {
+    color: 'rgba(26,53,92,255)',
+    fontSize: 18,
+    marginLeft: 10,
+  },
+  navigationTitleImage: {
+    width: 28,
+    height: 28,
+  },
+  settingsButton: {
+    padding: 6,
+    minWidth: 100,
+  },
+  settingsText: {
+    color: 'white',
+    fontSize: 18,
+  },
+  gatewayContainer: {
+    marginLeft: 10,
+    height: 20,
+    flexDirection: 'row',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  gateway: {
+    fontSize: 14,
+    color: 'rgba(110,110,110,255)',
+    marginLeft: 10,
+    maxWidth: 220,
+  },
+  gatewayIcon: {
+    width: 20,
+    height: 20,
+  },
+});
+
+function mapStateToProps(store) {
+  return {
+    tab: store.navigation.tab,
+    userProfile: getUserProfile(store),
+    dashboard: store.dashboard,
+    gateways: store.gateways,
+    store,
+  };
 }
 
-function actions(dispatch) {
-	return {
-		onTabSelect: (tab) => dispatch(switchTab(tab)),
-		dispatch
-	};
+function mapDispatchToProps(dispatch) {
+  return {
+    syncGateways: () => dispatch(syncWithServer('gatewaysTab')),
+    onTabSelect: (tab) => {
+      dispatch(syncWithServer(tab));
+      dispatch(switchTab(tab));
+    },
+    onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+    dispatch,
+  };
 }
 
-module.exports = connect(select, actions)(TabsView);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);

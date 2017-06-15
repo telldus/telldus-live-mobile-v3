@@ -21,149 +21,195 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Forms from 'tcomb-form-native';
 import Dimensions from 'Dimensions';
 import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
 
-import { Button, Container, Content, H1, Icon, Text, View } from 'BaseComponents';
-import { getAccessToken, loginToTelldus, switchTab } from 'Actions';
-import { apiServer, publicKey, privateKey, testUsername, testPassword } from 'Config';
+import { TextInput, Linking, KeyboardAvoidingView } from 'react-native';
+
+import { BackgroundImage, Button, H1, Text, View } from 'BaseComponents';
+import { loginToTelldus } from 'Actions';
+import { authenticationTimeOut, telldusLiveWebAuthenticationUrl } from 'Config';
 
 import Image from 'Image';
 import StyleSheet from 'StyleSheet';
 import StatusBar from 'StatusBar';
 import Theme from 'Theme';
 
-var Form = Forms.form.Form;
-var LoginDetails = Forms.struct({
-	username: Forms.String,
-	password: Forms.String,
+class LoginForm extends View {
+  constructor(props) {
+    super(props);
+
+    this.state = this.state || {};
+
+    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onForgotPassword = this.onForgotPassword.bind(this);
+    this.onFormSubmit = this.onFormSubmit.bind(this);
+  }
+
+  render() {
+    return (
+			<View style = {{
+  backgroundColor: '#00000099',
+  width: Dimensions.get('window').width,
+  padding: 10,
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+}}>
+				<H1 style={{ margin: 20, color: '#fff', textAlign: 'center' }}>
+					Login
+				</H1>
+				{ this.state.notificationText ? (
+					<Text style={styles.notification}>{this.state.notificationText}</Text>
+				) : null }
+				<TextInput
+					style={styles.formField}
+					onChangeText={this.onChangeUsername}
+					placeholder="Username"
+					keyboardType="email-address"
+					autoCapitalize = "none"
+					autoCorrect = {false}
+					placeholderTextColor = "#ffffff80"
+				/>
+				<TextInput
+					style={styles.formField}
+					onChangeText={this.onChangePassword}
+					placeholder="Password"
+					secureTextEntry={true}
+					autoCapitalize = "none"
+					autoCorrect = {false}
+					placeholderTextColor = "#ffffff80"
+				/>
+				<View style = {{ height: 20 }} />
+				<Button
+					name="lock"
+					style={styles.formSubmit}
+					onPress={this.onFormSubmit}
+				>{ this.state.isLoading ? 'Logging in...' : 'Login' }</Button>
+				<View style = {{ height: 40 }} />
+				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forget your password? Need an account?</Text>
+				<View style = {{ height: 10 }} />
+			</View>
+    );
+  }
+
+  async formSubmit(username, password) {
+    this.setState({ isLoading: true });
+    await new Promise((resolve, reject) => {
+      loginToTelldus(username, password)
+				.then(response => resolve(response))
+				.catch(reject);
+      setTimeout(() => reject(new Error('timeout')), authenticationTimeOut);
+    })
+		.then(response => this.props.dispatch(response))
+		.catch(e => {
+  const message = e.message === 'timeout' ? 'Timed out, try again?' : e.message.error_description;
+  this.setState({ notificationText: message });
+  this.setState({ isLoading: false });
 });
+  }
+
+  onChangeUsername(username) {
+    this.setState({ username, notificationText: false });
+  }
+
+  onChangePassword(password) {
+    this.setState({ password, notificationText: false });
+  }
+
+  onFormSubmit() {
+    this.formSubmit(this.state.username, this.state.password);
+  }
+
+  onForgotPassword() {
+    Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err));
+  }
+}
 
 class LoginScreen extends View {
-	constructor(props) {
-		super(props);
-	}
+  componentDidMount() {
+    Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('default');
+    if (Platform.OS === 'android' && StatusBar) {
+      StatusBar.setTranslucent(true);
+      StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
+    }
+    if (Platform.OS !== 'android') {
+      Orientation.lockToPortrait();
+    }
+  }
 
-	componentDidMount() {
-		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('default');
-		if (Platform.OS === 'android' && StatusBar) {
-			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
-		}
-		if (Platform.OS !== 'android') {
-			Orientation.lockToPortrait();
-		}
-	}
+  componentWillUnmount() {
+    if (Platform.OS !== 'android') {
+      Orientation.unlockAllOrientations();
+    }
+  }
 
-	componentWillUnmount() {
-		if (Platform.OS !== 'android') {
-			Orientation.unlockAllOrientations();
-		}
-	}
-
-	render() {
-		return (
-			<View>
-				<Image
-					style = { styles.backgroundImage }
-					source = { require('./img/home5.jpg') }
-				/>
-				<View style = {{
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					width: Dimensions.get('window').width,
-					height: Dimensions.get('window').height,
-					flexDirection: 'column',
-					justifyContent: 'space-around',
-					alignItems: 'center',
-					paddingTop: 20
-				}}>
-					<Image
-						source = { require('./img/telldusLogoBlack.png') }
-					/>
+  render() {
+    return (
+			<BackgroundImage source = {require('./img/home5.jpg')}>
+				<KeyboardAvoidingView behavior="position">
 					<View style = {{
-						minWidth: 425,
-						padding: 10,
-						backgroundColor: "#00000099",
-						flexDirection: 'column',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}>
-						<View style = {{ height:20 }} />
-						<H1 style = {{ marginBottom: 20, color: "#fff" }}>
-							Login
-						</H1>
-						<Form
-							ref="loginForm"
-							type={ LoginDetails }
-							value={{ username: testUsername, password: testPassword }}
-							options={{
-								auto: 'placeholders',
-								stylesheet: Theme.Forms,
-								fields: {
-									username: {
-										autoCapitalize: 'none',
-										autoCorrect: false,
-										placeholderTextColor: "#ffffff80"
-									},
-									password: {
-										secureTextEntry: true,
-										autoCapitalize: 'none',
-										autoCorrect: false,
-										placeholderTextColor: "#ffffff80"
-									}
-								}
-							}}
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+}}>
+						<Image
+							source = {require('./img/telldusLogoBlack.png')}
+							style = {{ marginTop: 100, marginBottom: 100 }}
 						/>
-						<View style = {{ height:20 }} />
-						<Button
-							name = { apiServer == 'https://api.telldus.com' ? 'lock' : 'exclamation-circle' }
-							backgroundColor = { this.getTheme().btnPrimaryBg }
-							style = {{ padding: 6, minWidth: 100 }}
-							onPress={ () => this.logIn() }
-						>Login</Button>
-						<View style = {{ height:20 }} />
+						<LoginForm {...this.props} />
 					</View>
-					<View style = {{  }} />
-				</View>
-			</View>
-		)
-	}
-
-	async logIn() {
-		const { dispatch } = this.props;
-		this.setState({ isLoading: true });
-
-		await new Promise((resolve, reject) => {
-			loginToTelldus(this.refs.loginForm.getValue().username, this.refs.loginForm.getValue().password)
-				.then(function(response) { resolve(response) })
-				.catch(function(e) { reject(new Error('Failed login')) });
-			setTimeout(() => reject(new Error('Timed out')), 3000);
-		})
-		.then(function(response) { dispatch(response); })
-		.catch(function(e) { console.log(e); });
-
-		this._isMounted && this.setState({ isLoading: false });
-	}
+				</KeyboardAvoidingView>
+			</BackgroundImage>
+    );
+  }
 }
 
-var styles = StyleSheet.create({
-	backgroundImage: {
-		flex: 1,
-		backgroundColor: 'transparent',
-		width: undefined,
-		height: undefined
+const styles = StyleSheet.create({
+  notification: {
+    padding: 7,
+    marginTop: 10,
+    marginLeft: 100,
+    marginRight: 100,
 
-	}
+    borderColor: '#f00',
+    borderWidth: 1,
+    borderRadius: 3,
+
+    fontSize: 13,
+    color: '#fdd',
+    textAlign: 'center',
+    backgroundColor: '#ff000033',
+  },
+  formField: {
+    height: 35,
+    padding: 7,
+    marginTop: 10,
+    marginLeft: 50,
+    marginRight: 50,
+    minWidth: 200,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 3,
+
+    fontSize: 13,
+    color: '#eee',
+    textAlign: 'center',
+  },
+  formSubmit: {
+    padding: 6,
+    minWidth: 100,
+
+    backgroundColor: Theme.Core.btnPrimaryBg,
+  },
 });
 
-function select(store) {
-	return {
-		tab: store.navigation.tab,
-		accessToken: store.user.accessToken
-	};
+function mapStateToProps(store) {
+  return {
+    tab: store.navigation.tab,
+    accessToken: store.user.accessToken,
+  };
 }
-module.exports = connect(select)(LoginScreen);
+module.exports = connect(mapStateToProps)(LoginScreen);

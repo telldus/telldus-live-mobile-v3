@@ -23,156 +23,201 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import EventEmitter from 'EventEmitter';
 
 import {
 	I18n,
 	Icon,
 	NavigatorIOS,
-	PixelRatio,
-	StatusBar,
-	StyleSheet,
 	TabBarIOS,
-	Text,
-	View
+	View,
 } from 'BaseComponents';
 
-import { switchTab } from 'Actions';
+import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
 import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
-import Theme from 'Theme';
+
+import { getUserProfile } from '../../Reducers/User';
 
 class TabsView extends View {
+  constructor(props) {
+    super(props);
+    this.eventEmitter = new EventEmitter();
+    this.onTabSelect = this.onTabSelect.bind(this);
+    this.onDashboardTabSelect = this.onDashboardTabSelect.bind(this);
+    this.onDevicesTabSelect = this.onDevicesTabSelect.bind(this);
+    this.onSensorsTabSelect = this.onSensorsTabSelect.bind(this);
+    this.onSchedulerTabSelect = this.onSchedulerTabSelect.bind(this);
+    this.onGatewaysTabSelect = this.onGatewaysTabSelect.bind(this);
+    this.toggleSensorTabEditMode = this.toggleSensorTabEditMode.bind(this);
+    this.toggleDevicesTabEditMode = this.toggleDevicesTabEditMode.bind(this);
+  }
 
-	props: {
-		tab: Tab;
-		onTabSelect: (tab: Tab) => void;
-	};
+  componentDidMount() {
+    Icon.getImageSource('gear', 22, 'white').then((source) => this.setState({ settingIcon: source }));
+    Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
 
-	constructor(props) {
-		super(props);
-	}
+    if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
+      if (this.props.tab !== 'dashboardTab') {
+        this.onTabSelect('dashboardTab');
+      }
+    } else {
+      this.onTabSelect('devicesTab');
+    }
+  }
 
-	componentDidMount() {
-		Icon.getImageSource('user', 22, 'white').then((source) => this.setState({ userIcon: source }));
-	}
+  onDashboardTabSelect() {
+    this.onTabSelect('dashboardTab');
+  }
 
-	onTabSelect(tab: Tab) {
-		if (this.props.tab !== tab) {
-			this.props.onTabSelect(tab);
-		}
-	}
+  onDevicesTabSelect() {
+    this.onTabSelect('devicesTab');
+  }
 
-	render() {
-		if (!this.state || !this.state.userIcon) {
-			return false;
-		}
-		return (
-			<TabBarIOS tintColor = { this.getTheme().brandPrimary } >
+  onSensorsTabSelect() {
+    this.onTabSelect('sensorsTab');
+  }
+
+  onSchedulerTabSelect() {
+    this.onTabSelect('schedulerTab');
+  }
+
+  onGatewaysTabSelect() {
+    this.onTabSelect('gatewaysTab');
+  }
+
+  onTabSelect(tab) {
+    if (this.props.tab !== tab) {
+      this.props.onTabSelect(tab);
+    }
+  }
+
+  render() {
+    if (!this.state || !this.state.settingIcon || !this.state.starIcon) {
+      return false;
+    }
+    return (
+			<TabBarIOS tintColor = {this.getTheme().brandPrimary} >
 				<TabBarIOS.Item
 					title = {I18n.t('pages.dashboard')}
-					selected = { this.props.tab === 'dashboardTab' }
-					onPress = { this.onTabSelect.bind(this, 'dashboardTab') }
-					icon = { require('./img/tabIcons/dashboard-inactive.png') }
-					selectedIcon = { require('./img/tabIcons/dashboard-active.png')}
+					selected = {this.props.tab === 'dashboardTab'}
+					onPress = {this.onDashboardTabSelect}
+					icon = {require('./img/tabIcons/dashboard-inactive.png')}
+					selectedIcon = {require('./img/tabIcons/dashboard-active.png')}
 				>
 					<NavigatorIOS
 						ref = "dashboardNavigator"
 						initialRoute = {{
-							title: 'Telldus Live!',
-							component: TabViews.Dashboard,
-							rightButtonIcon: this.state.userIcon,
-							onRightButtonPress: this._openUserDetailView.bind(this)
-						}}
+  title: 'Telldus Live!',
+  component: TabViews.Dashboard,
+  rightButtonIcon: this.state.settingIcon,
+  passProps: {
+    events: this.eventEmitter,
+  },
+  onRightButtonPress: () => {
+    this.eventEmitter.emit('onSetting');
+  },
+}}
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
 					title = {I18n.t('pages.devices')}
-					selected = { this.props.tab === 'devicesTab' }
-					onPress = { this.onTabSelect.bind(this, 'devicesTab') }
-					icon = { require('./img/tabIcons/devices-inactive.png') }
-					selectedIcon = {require('./img/tabIcons/devices-active.png') }
+					selected = {this.props.tab === 'devicesTab'}
+					onPress = {this.onDevicesTabSelect}
+					icon = {require('./img/tabIcons/devices-inactive.png')}
+					selectedIcon = {require('./img/tabIcons/devices-active.png')}
 				>
 					<NavigatorIOS
 						initialRoute = {{
-							title: I18n.t('pages.devices'),
-							component: TabViews.Devices,
-						}}
+  title: I18n.t('pages.devices'),
+  component: TabViews.Devices,
+  rightButtonIcon: this.state.starIcon,
+  onRightButtonPress: this.toggleDevicesTabEditMode,
+}}
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
 					title = {I18n.t('pages.sensors')}
 					selected = {this.props.tab === 'sensorsTab'}
-					onPress = {this.onTabSelect.bind(this, 'sensorsTab')}
+					onPress = {this.onSensorsTabSelect}
 					icon = {require('./img/tabIcons/sensors-inactive.png')}
 					selectedIcon = {require('./img/tabIcons/sensors-active.png')}>
 					<NavigatorIOS
 						initialRoute = {{
-							title: I18n.t('pages.sensors'),
-							component: TabViews.Sensors,
-						}}
+  title: I18n.t('pages.sensors'),
+  component: TabViews.Sensors,
+  rightButtonIcon: this.state.starIcon,
+  onRightButtonPress: this.toggleSensorTabEditMode,
+}}
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
 					title={I18n.t('pages.scheduler')}
 					selected={this.props.tab === 'schedulerTab'}
-					onPress={this.onTabSelect.bind(this, 'schedulerTab')}
+					onPress={this.onSchedulerTabSelect}
 					badge={this.props.notificationsBadge || null}
 					icon={require('./img/tabIcons/scheduler-inactive.png')}
 					selectedIcon={require('./img/tabIcons/scheduler-active.png')}>
 					<NavigatorIOS
 						initialRoute = {{
-							title: I18n.t('pages.scheduler'),
-							component: TabViews.Scheduler,
-						}}
+  title: I18n.t('pages.scheduler'),
+  component: TabViews.Scheduler,
+}}
 					/>
 				</TabBarIOS.Item>
 				<TabBarIOS.Item
 					title={I18n.t('pages.gateways')}
 					selected={this.props.tab === 'gatewaysTab'}
-					onPress={this.onTabSelect.bind(this, 'gatewaysTab')}
+					onPress={this.onGatewaysTabSelect}
 					badge={this.props.notificationsBadge || null}
 					icon={require('./img/tabIcons/gateways-inactive.png')}
 					selectedIcon={require('./img/tabIcons/gateways-active.png')}>
 					<NavigatorIOS
 						initialRoute = {{
-							title: I18n.t('pages.gateways'),
-							component: TabViews.Gateways,
-						}}
+  title: I18n.t('pages.gateways'),
+  component: TabViews.Gateways,
+}}
 					/>
 				</TabBarIOS.Item>
 			</TabBarIOS>
-		);
-	}
+    );
+  }
 
-	_openUserDetailView () {
-		this.refs.dashboardNavigator.push({
-			component: DetailViews.User,
-			title: I18n.t('pages.profile'),
-			passProps: { user: this.props.userProfile }
-		});
-	}
+  _openUserDetailView() {
+    this.refs.dashboardNavigator.push({
+      component: DetailViews.User,
+      title: I18n.t('pages.profile'),
+      passProps: { user: this.props.userProfile },
+    });
+  }
 
+  toggleSensorTabEditMode() {
+    this.props.onToggleEditMode('sensorsTab');
+  }
+
+  toggleDevicesTabEditMode() {
+    this.props.onToggleEditMode('devicesTab');
+  }
 }
 
-var styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	}
-});
-
-function select(store) {
-	return {
-		tab: store.navigation.tab,
-		userIcon: false,
-		userProfile: store.user.userProfile || {firstname: '', lastname: '', email: ""}
-	};
+function mapStateToProps(store) {
+  return {
+    tab: store.navigation.tab,
+    userIcon: false,
+    userProfile: getUserProfile(store),
+    dashboard: store.dashboard,
+  };
 }
 
-function actions(dispatch) {
-	return {
-		onTabSelect: (tab) => dispatch(switchTab(tab)),
-		dispatch
-	};
+function mapDispatchToProps(dispatch) {
+  return {
+    onTabSelect: (tab) => {
+      dispatch(syncWithServer(tab));
+      dispatch(switchTab(tab));
+    },
+    onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+    dispatch,
+  };
 }
 
-module.exports = connect(select, actions)(TabsView);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);

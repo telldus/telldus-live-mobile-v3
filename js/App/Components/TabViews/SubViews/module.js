@@ -21,12 +21,46 @@
 
 'use strict';
 
-import DeviceDashboardTile from './DeviceDashboardTile'
-import SensorDashboardTile from './SensorDashboardTile'
-import SensorDashboardTileSlide from './SensorDashboardTileSlide'
+import ToggleDashboardTile from './ToggleDashboardTile';
+import SensorDashboardTile from './SensorDashboardTile';
+import SensorDashboardTileSlide from './SensorDashboardTileSlide';
+import DeviceRow from './DeviceRow';
+import DeviceRowHidden from './DeviceRowHidden';
+import SensorRow from './SensorRow';
+import SensorRowHidden from './SensorRowHidden';
+import DashboardShadowTile from './DashboardShadowTile';
+import BellDashboardTile from './BellDashboardTile';
+import GenericDashboardTile from './GenericDashboardTile';
+import NavigationalDashboardTile from './NavigationalDashboardTile';
+import DimmerDashboardTile from './DimmerDashboardTile';
+import DimmerPopup from './DimmerPopup';
+import DimmerProgressBar from './DimmerProgressBar';
+import DeviceHeader from './DeviceHeader';
+import ToggleButton from './ToggleButton';
+import BellButton from './BellButton';
+import NavigationalButton from './NavigationalButton';
+import DimmingButton from './DimmingButton';
+import JobRow from './JobRow';
 
 module.exports = {
-	DeviceDashboardTile: DeviceDashboardTile,
-	SensorDashboardTile: SensorDashboardTile,
-	SensorDashboardTileSlide: SensorDashboardTileSlide
+  DeviceRow: DeviceRow,
+  DeviceRowHidden: DeviceRowHidden,
+  ToggleDashboardTile: ToggleDashboardTile,
+  DeviceHeader: DeviceHeader,
+  SensorDashboardTile: SensorDashboardTile,
+  SensorDashboardTileSlide: SensorDashboardTileSlide,
+  SensorRow: SensorRow,
+  SensorRowHidden: SensorRowHidden,
+  DashboardShadowTile: DashboardShadowTile,
+  BellDashboardTile: BellDashboardTile,
+  GenericDashboardTile: GenericDashboardTile,
+  NavigationalDashboardTile: NavigationalDashboardTile,
+  DimmerDashboardTile: DimmerDashboardTile,
+  DimmerPopup: DimmerPopup,
+  DimmerProgressBar: DimmerProgressBar,
+  ToggleButton: ToggleButton,
+  BellButton: BellButton,
+  NavigationalButton: NavigationalButton,
+  DimmingButton: DimmingButton,
+  JobRow: JobRow,
 };

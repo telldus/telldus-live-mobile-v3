@@ -22,14 +22,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, Text, View } from 'BaseComponents';
-
-import type { Tab } from '../reducers/navigation';
+import { Container, Content, Text, View } from 'BaseComponents';
 
 class DeviceDetailView extends View {
 
-	render() {
-		return (
+  render() {
+    return (
 			<Container style={{ padding: 10 }}>
 				<Content>
 					<Text>Gateway: { this.props.device.clientName}</Text>
@@ -40,8 +38,8 @@ class DeviceDetailView extends View {
 					<Text>Type: { this.props.device.type}</Text>
 				</Content>
 			</Container>
-		);
-	}
+    );
+  }
 
 }
 

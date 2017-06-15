@@ -26,24 +26,24 @@ import computeProps from './computeProps';
 
 export default class SwitchComponent extends Base {
 
-	getInitialStyle() {
-		return {
-			switch: {
+  getInitialStyle() {
+    return {
+      switch: {
 
-			}
-		}
-	}
-	prepareRootProps() {
-		var defaultProps = {
-			style: this.getInitialStyle().switch
-		};
+      },
+    };
+  }
+  prepareRootProps() {
+    let defaultProps = {
+      style: this.getInitialStyle().switch,
+    };
 
-		return computeProps(this.props, defaultProps);
-	}
+    return computeProps(this.props, defaultProps);
+  }
 
-	render() {
-		return(
+  render() {
+    return (
 			<Switch {...this.prepareRootProps()}/>
-		);
-	}
+    );
+  }
 }

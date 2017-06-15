@@ -22,14 +22,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Content, Button, Text, View } from 'BaseComponents';
-
-import type { Tab } from '../reducers/navigation';
+import { Container, Content, Text, View } from 'BaseComponents';
 
 class SensorDetailView extends View {
 
-	render() {
-		return (
+  render() {
+    return (
 			<Container style={{ padding: 10 }}>
 				<Content>
 					<Text>Gateway: { this.props.sensor.clientName}</Text>
@@ -41,8 +39,8 @@ class SensorDetailView extends View {
 					<Text>Protocol: { this.props.sensor.protocol}</Text>
 				</Content>
 			</Container>
-		);
-	}
+    );
+  }
 
 }
 

@@ -21,226 +21,130 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
-import { Button, Container, FormattedNumber, I18n, Icon, Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { List, ListDataSource, View } from 'BaseComponents';
+import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews/SubViews';
+
 import { getSensors } from 'Actions';
+import { toggleEditMode } from 'Actions';
 
-import SensorDetailView from '../DetailViews/SensorDetailView'
-
-import type { Tab } from '../reducers/navigation';
-
-import format from 'date-format';
-import Theme from 'Theme';
+import { parseSensorsForListView } from '../../Reducers/Sensors';
 
 class SensorsTab extends View {
+  constructor(props) {
+    super(props);
 
-	render() {
-		return (
+    const { sections, sectionIds } = this.props.rowsAndSections;
+
+    this.state = {
+      dataSource: new ListDataSource({
+        rowHasChanged: this.rowHasChanged,
+        sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+      }).cloneWithRowsAndSections(sections, sectionIds),
+    };
+
+    this.renderSectionHeader = this.renderSectionHeader.bind(this);
+    this.renderRow = this.renderRow.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { sections, sectionIds } = nextProps.rowsAndSections;
+
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+    });
+
+    if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
+      this.props.dispatch(toggleEditMode('sensorsTab'));
+    }
+  }
+
+  onRefresh() {
+    this.props.dispatch(getSensors());
+  }
+
+  rowHasChanged(r1, r2) {
+    if (r1 === r2) {
+      return false;
+    }
+    return (
+			r1.sensor !== r2.sensor ||
+			r1.inDashboard !== r2.inDashboard ||
+			r1.editMode !== r2.editMode
+    );
+  }
+
+  render() {
+    return (
 			<List
-				dataSource = {this.props.dataSource}
-				renderHiddenRow = {this._renderHiddenRow.bind(this)}
-				renderRow = {this._renderRow.bind(this)}
-				renderSectionHeader = {this._renderSectionHeader.bind(this)}
-				rightOpenValue = {-60}
-				onRefresh = {() =>
-					this.props.dispatch(getSensors())
-				}
+				dataSource = {this.state.dataSource}
+				renderRow = {this.renderRow}
+				renderHiddenRow = {this.renderHiddenRow}
+				renderSectionHeader = {this.renderSectionHeader}
+				leftOpenValue = {40}
+				editMode = {this.props.editMode}
+				onRefresh = {this.onRefresh}
 			/>
-		);
-	}
+    );
+  }
 
-	_renderHiddenRow(data) {
-		return (
-			<View style={Theme.Styles.rowBack}>
-				<Text style={Theme.Styles.rowBackButton}>Dashboard</Text>
-			</View>
-		)
-	}
+  renderSectionHeader(sectionData, sectionId) {
+    return (
+			<DeviceHeader
+				sectionData={sectionData}
+				sectionId={sectionId}
+				gateway={this.props.gatewaysById[sectionId]}
+			/>
+    );
+  }
 
-	_renderSectionHeader(sectionData, sectionId) {
-		const gateway = this.props.gateways.find((gateway) => gateway.id === sectionId);
-		return (
-			<View style = { Theme.Styles.sectionHeader }>
-				<Text style = { Theme.Styles.sectionHeaderText }>
-					{(gateway && gateway.name) ? gateway.name : ''}
-				</Text>
-			</View>
-		)
-	}
+  renderRow(row) {
+    return (
+			<SensorRow {...row}/>
+    );
+  }
 
-	_renderRow(item) {
-		const minutesAgo =  Math.round(((Date.now() / 1000) - item.lastUpdated) / 60);
-		try {
-			return (
-				<ListItem style = { Theme.Styles.rowFront }>
-					<View>
-						<Text style = {{
-							color: 'rgba(0,0,0,0.87)',
-							fontSize: 16,
-							opacity: item.name ? 1 : 0.5,
-							marginBottom: 2
-						}}>
-							{item.name ? item.name : '(no name)'}
-						</Text>
-						<Text style = {{
-							color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
-							fontSize: 12,
-							opacity: minutesAgo < 1440 ? 1 : 0.5
-						}}>
-							{this._formatLastUpdated(minutesAgo, item.lastUpdated)}
-						</Text>
-					</View>
-					{ item.humidity ? (
-						<View style={Theme.Styles.sensorValue}>
-							<Image source={require('./img/sensorIcons/Humidity.png')} />
-							<FormattedNumber value = {item.humidity / 100} formatStyle = 'percent' />
-						</View>
-					) : null }
-
-					{ item.temperature ? (
-						<View style={Theme.Styles.sensorValue}>
-							<Image source={require('./img/sensorIcons/Temperature.png')} />
-							<Text>
-								<FormattedNumber value = {item.temperature} maximumFractionDigits = {1} />
-								{String.fromCharCode(176) + 'C'}
-							</Text>
-						</View>
-					) : null }
-
-					{ item.rainRate || item.rainTotal ? (
-						<View style={Theme.Styles.sensorValue}>
-							<Image source={require('./img/sensorIcons/Rain.png')} />
-							<Text>
-								{ item.rainRate && ( <Text><FormattedNumber value = {item.rainRate} maximumFractionDigits = {0} /> {'mm/h\n'} </Text> ) }
-								{ item.rainTotal && ( <Text><FormattedNumber value = {item.rainTotal} maximumFractionDigits = {0} /> {'mm'} </Text> ) }
-							</Text>
-						</View>
-					) : null }
-
-					{ item.windGust || item.windAverage || item.windDirection ? (
-						<View style={Theme.Styles.sensorValue}>
-							<Image source={require('./img/sensorIcons/Wind.png')} />
-							<Text>
-								{ item.windAverage && ( <Text><FormattedNumber value = {item.windAverage} maximumFractionDigits = {1} /> {'m/s\n'} </Text> ) }
-								{ item.windGust && ( <Text><FormattedNumber value = {item.windGust} maximumFractionDigits = {1} /> {'m/s*\n'} </Text> ) }
-								{ item.windDirection && ( <Text>{this._windDirection(item.windDirection)}</Text> ) }
-							</Text>
-						</View>
-					) : null }
-
-					{ item.uv ? (
-						<View style={Theme.Styles.sensorValue}>
-							<Image source={require('./img/sensorIcons/UV.png')} />
-							<FormattedNumber value = {item.uv} maximumFractionDigits = {0} />
-						</View>
-					) : null }
-
-					{ item.watt ? (
-						<View style={Theme.Styles.sensorValue}>
-							<Image source={require('./img/sensorIcons/Watt.png')} />
-							<Text>
-								<FormattedNumber value = {item.watt} maximumFractionDigits = {1} />
-								{'W'}
-							</Text>
-						</View>
-					) : null }
-
-					{ item.luminance ? (
-						<View style={Theme.Styles.sensorValue}>
-							<Image source={require('./img/sensorIcons/Luminance.png')} />
-							<Text>
-								<FormattedNumber value = {item.luminance} maximumFractionDigits = {0} />
-								{'lx'}
-							</Text>
-						</View>
-					) : null }
-				</ListItem>
-			)
-		} catch(e) {
-			console.log(e);
-			return ( <View /> )
-		}
-	}
-
-	_windDirection(value) {
-		const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-		return directions[Math.floor(value / 22.5)]
-	}
-
-	_formatLastUpdated(minutes, lastUpdated) {
-		if (minutes === 0) {
-			return 'Just now';
-		}
-		if (minutes === 1) {
-			return '1 minute ago';
-		}
-		if (minutes < 60) {
-			return `${minutes} minutes ago`;
-		}
-		var hours = Math.round(minutes / 60);
-		if (hours === 1) {
-			return '1 hour ago';
-		}
-		if (hours < 24) {
-			return `${hours} hours ago`;
-		}
-		var days = Math.round(minutes / 60 / 24);
-		if (days == 1) {
-			return '1 day ago';
-		}
-		if (days <= 7) {
-			return `${days} days ago`;
-		}
-		return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
-	}
+  renderHiddenRow(row) {
+    return (
+			<SensorRowHidden {...row}/>
+    );
+  }
 }
 
 SensorsTab.propTypes = {
-	dataSource: React.PropTypes.object,
+  rowsAndSections: React.PropTypes.object,
 };
 
-const dataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-	sectionHeaderHasChanged : (s1, s2) => s1 !== s2
-});
+const getRowsAndSections = createSelector(
+  [
+    ({ sensors }) => sensors,
+    ({ gateways }) => gateways,
+    ({ tabs }) => tabs.editModeSensorsTab,
+  ],
+	(sensors, gateways, editMode) => {
+  const { sections, sectionIds } = parseSensorsForListView(sensors, gateways, editMode);
+  return {
+    sections,
+    sectionIds,
+  };
+}
+);
 
-function _parseDataIntoItemsAndSectionIds(sensors, gateways) {
-	var items = {};
-	var sectionIds = [];
-	if (sensors) {
-		sensors.map((item) => {
-			var sectionId = item.clientId ? item.clientId : '';
-			if (sectionIds.indexOf(sectionId) === -1) {
-				sectionIds.push(sectionId);
-				items[sectionId] = [];
-			}
-			items[sectionId].push(item);
-		});
-	}
-	sectionIds.sort((a,b) => {
-		try {
-			const gatewayA = gateways.find((gateway) => gateway.id === a);
-			const gatewayB = gateways.find((gateway) => gateway.id === b);
-			if (gatewayA.name < gatewayB.name) {
-				return -1;
-			}
-			if (gatewayA.name > gatewayB.name) {
-				return 1;
-			}
-			return 0;
-		} catch (e) {
-			return 0;
-		}
-	});
-	return {items, sectionIds};
+function mapStateToProps(store) {
+  return {
+    rowsAndSections: getRowsAndSections(store),
+    gatewaysById: store.gateways.byId,
+    editMode: store.tabs.editModeSensorsTab,
+    tab: store.navigation.tab,
+  };
 }
 
-function select(store) {
-	var {items, sectionIds} = _parseDataIntoItemsAndSectionIds(store.sensors || [], store.gateways || [])
-	return {
-		dataSource: dataSource.cloneWithRowsAndSections(items, sectionIds),
-		gateways: store.gateways
-	};
+function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+  };
 }
 
-module.exports = connect(select)(SensorsTab);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(SensorsTab);
