@@ -26,6 +26,7 @@ import { View } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
+import { turnOn, turnOff, requestTurnOn, requestTurnOff } from 'Actions/Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmingOffButton from './DimmingOffButton';
 import DimmingOnButton from './DimmingOnButton';
@@ -72,6 +73,8 @@ class DimmerDashboardTile extends View {
     this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
     this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
     this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
+    this.onTurnOn = this.onTurnOn.bind(this);
+    this.onTurnOff = this.onTurnOff.bind(this);
     this.layoutView = this.layoutView.bind(this);
     this.onSlidingStart = this.onSlidingStart.bind(this);
     this.onSlidingComplete = this.onSlidingComplete.bind(this);
@@ -122,6 +125,16 @@ class DimmerDashboardTile extends View {
     this.refs.onButton.fadeIn();
   }
 
+  onTurnOn() {
+    this.props.onTurnOn(this.props.item.id);
+    this.props.requestTurnOn(this.props.item.id);
+  }
+
+  onTurnOff() {
+    this.props.onTurnOff(this.props.item.id);
+    this.props.requestTurnOff(this.props.item.id);
+  }
+
   render() {
     const { item, tileWidth } = this.props;
     const { name, isInState, supportedMethods, methodRequested } = item;
@@ -143,8 +156,8 @@ class DimmerDashboardTile extends View {
 				onLeftEnd={this.onTurnOffButtonEnd}
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
-				onLeft={this.props.onTurnOff}
-				onRight={this.props.onTurnOn}
+				onLeft={this.onTurnOff}
+				onRight={this.onTurnOn}
 			/> :
 			null;
     return (
@@ -198,6 +211,10 @@ function mapDispatchToProps(dispatch) {
     hideDimmerPopup: () => {
       dispatch(hideDimmerPopup());
     },
+    onTurnOn: id => dispatch(turnOn(id)),
+    onTurnOff: id => dispatch(turnOff(id)),
+    requestTurnOn: id => dispatch(requestTurnOn(id)),
+    requestTurnOff: id => dispatch(requestTurnOff(id)),
   };
 }
 

@@ -27,13 +27,13 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import Slider from 'react-native-slider';
 import { OnButton, OffButton } from 'TabViews/SubViews';
 
-import { turnOn, turnOff, learn, requestTurnOn, requestTurnOff } from 'Actions/Devices';
+import { learn } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 
-const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
+const ToggleButton = ({ device }) => (
 		<RoundedCornerShadowView style={styles.toggleContainer}>
-      <OffButton isInState={device.isInState} fontSize={16} onPress={onTurnOff} style={styles.turnOff} methodRequested={device.methodRequested} />
-      <OnButton isInState={device.isInState} fontSize={16} onPress={onTurnOn} style={styles.turnOn} methodRequested={device.methodRequested} />
+      <OffButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} />
+      <OnButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} />
 		</RoundedCornerShadowView>
 );
 
@@ -59,8 +59,6 @@ class DimmerDeviceDetailModal extends View {
     };
 
     this.currentDimmerValue = dimmerValue;
-    this.onTurnOn = this.onTurnOn.bind(this);
-    this.onTurnOff = this.onTurnOff.bind(this);
     this.onLearn = this.onLearn.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
     this.onSlidingComplete = this.onSlidingComplete.bind(this);
@@ -76,16 +74,6 @@ class DimmerDeviceDetailModal extends View {
         return Math.round(device.value * 100.0 / 255);
       }
     }
-  }
-
-  onTurnOn() {
-    this.props.onTurnOn(this.props.device.id);
-    this.props.requestTurnOn(this.props.device.id);
-  }
-
-  onTurnOff() {
-    this.props.onTurnOff(this.props.device.id);
-    this.props.requestTurnOff(this.props.device.id);
   }
 
   onLearn() {
@@ -208,13 +196,9 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onTurnOn: (id) => dispatch(turnOn(id)),
-    onTurnOff: (id) => dispatch(turnOff(id)),
     onLearn: (id) => dispatch(learn(id)),
     onDimmerSlide: (id, value) => dispatch(setDimmerValue(id, value)),
     onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
-    requestTurnOn: (id) => dispatch(requestTurnOn(id)),
-    requestTurnOff: (id) => dispatch(requestTurnOff(id)),
   };
 }
 

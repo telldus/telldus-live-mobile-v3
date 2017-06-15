@@ -20,21 +20,29 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+import { turnOff, requestTurnOff } from 'Actions/Devices';
 
 class OffButton extends View {
   constructor(props) {
     super(props);
+    this.onPress = this.onPress.bind(this);
+  }
+
+  onPress() {
+    this.props.onTurnOff(this.props.id);
+    this.props.requestTurnOff(this.props.id);
   }
 
   render() {
-    let { isInState, enabled, onPress, fontSize, methodRequested } = this.props;
+    let { isInState, enabled, fontSize, methodRequested } = this.props;
 
     return (
       <View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>
-        <TouchableOpacity disabled={!enabled} onPress={onPress} style={styles.button} >
+        <TouchableOpacity disabled={!enabled} onPress={this.onPress} style={styles.button} >
           <Text ellipsizeMode="middle" numberOfLines={1}
             style = {[styles.buttonText, isInState === 'TURNOFF' || methodRequested === 'TURNOFF' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}>
             {'Off'}
@@ -79,9 +87,9 @@ const styles = StyleSheet.create({
 });
 
 OffButton.propTypes = {
+  id: PropTypes.number,
   isInState: PropTypes.string,
   enabled: PropTypes.bool,
-  onPress: PropTypes.func,
   fontSize: PropTypes.number,
   methodRequested: PropTypes.string,
 };
@@ -90,4 +98,11 @@ OffButton.defaultProps = {
   enabled: true,
 };
 
-module.exports = OffButton;
+function mapDispatchToProps(dispatch) {
+  return {
+    onTurnOff: id => dispatch(turnOff(id)),
+    requestTurnOff: id => dispatch(requestTurnOff(id)),
+  };
+}
+
+module.exports = connect(null, mapDispatchToProps)(OffButton);

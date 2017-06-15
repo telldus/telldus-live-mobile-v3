@@ -26,27 +26,12 @@ import OnButton from './OnButton';
 import OffButton from './OffButton';
 
 class ToggleButton extends View {
-  constructor(props) {
-    super(props);
-
-    this.onTurnOn = this.onTurnOn.bind(this);
-    this.onTurnOff = this.onTurnOff.bind(this);
-  }
-
-  onTurnOn() {
-    this.props.onTurnOn();
-  }
-
-  onTurnOff() {
-    this.props.onTurnOff();
-  }
-
   render() {
     const { TURNON, TURNOFF } = this.props.device.supportedMethods;
-    const { isInState, methodRequested } = this.props.device;
+    const { id, isInState, methodRequested } = this.props.device;
 
-    const onButton = <OnButton isInState={isInState} enabled={!!TURNON} onPress={this.onTurnOn} style={styles.turnOn} methodRequested={methodRequested} />;
-    const offButton = <OffButton isInState={isInState} enabled={!!TURNOFF} onPress={this.onTurnOff} style={styles.turnOff} methodRequested={methodRequested} />;
+    const onButton = <OnButton id={id} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} methodRequested={methodRequested} />;
+    const offButton = <OffButton id={id} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} />;
 
     return (
       <RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
@@ -79,8 +64,6 @@ const styles = StyleSheet.create({
 });
 
 ToggleButton.propTypes = {
-  onTurnOn: PropTypes.any,
-  onTurnOff: PropTypes.any,
   device: PropTypes.object,
   enabled: PropTypes.bool,
 };

@@ -25,6 +25,7 @@ import { connect } from 'react-redux';
 import { View, RoundedCornerShadowView } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
+import { turnOn, turnOff, requestTurnOn, requestTurnOff } from 'Actions/Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmingOffButton from './DimmingOffButton';
 import DimmingOnButton from './DimmingOnButton';
@@ -122,11 +123,13 @@ class DimmingButton extends View {
   }
 
   onTurnOn() {
-    this.props.onTurnOn();
+    this.props.onTurnOn(this.props.device.id);
+    this.props.requestTurnOn(this.props.device.id);
   }
 
   onTurnOff() {
-    this.props.onTurnOff();
+    this.props.onTurnOff(this.props.device.id);
+    this.props.requestTurnOff(this.props.device.id);
   }
 
   render() {
@@ -156,13 +159,13 @@ class DimmingButton extends View {
       null;
 
     return (
-            <RoundedCornerShadowView
-                onLayout={this.layoutView}
-                style={styles.container}>
-                { offButton }
-                { onButton }
-                { slider }
-            </RoundedCornerShadowView>
+      <RoundedCornerShadowView
+          onLayout={this.layoutView}
+          style={styles.container}>
+          { offButton }
+          { onButton }
+          { slider }
+      </RoundedCornerShadowView>
     );
   }
 }
@@ -203,6 +206,10 @@ function mapDispatchToProps(dispatch) {
     hideDimmerPopup: () => {
       dispatch(hideDimmerPopup());
     },
+    onTurnOn: id => dispatch(turnOn(id)),
+    onTurnOff: id => dispatch(turnOff(id)),
+    requestTurnOn: id => dispatch(requestTurnOn(id)),
+    requestTurnOff: id => dispatch(requestTurnOff(id)),
   };
 }
 

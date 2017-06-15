@@ -27,17 +27,13 @@ import OffButton from './OffButton';
 import OnButton from './OnButton';
 
 class ToggleDashboardTile extends View {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { item, tileWidth } = this.props;
-    const { name, isInState, supportedMethods, methodRequested } = item;
+    const { id, name, isInState, supportedMethods, methodRequested } = item;
     const { TURNON, TURNOFF } = supportedMethods;
 
-    const onButton = <OnButton isInState={isInState} onPress={this.props.onTurnOn} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} />;
-    const offButton = <OffButton isInState={isInState} onPress={this.props.onTurnOff} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} />;
+    const onButton = <OnButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} />;
+    const offButton = <OffButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} />;
 
 		let style = { ...this.props.style };
 		style.width = tileWidth;
@@ -110,8 +106,6 @@ const styles = StyleSheet.create({
 });
 
 ToggleDashboardTile.propTypes = {
-  onTurnOn: PropTypes.func,
-  onTurnOff: PropTypes.func,
   item: PropTypes.object,
   enabled: PropTypes.bool,
 };
