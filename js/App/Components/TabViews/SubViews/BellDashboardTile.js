@@ -28,15 +28,6 @@ import DashboardShadowTile from './DashboardShadowTile';
 import { bell } from 'Actions/Devices';
 
 class BellDashboardTile extends View {
-  constructor(props) {
-    super(props);
-    this.onBell = this.onBell.bind(this);
-  }
-
-  onBell() {
-    this.props.onBell(this.props.item.id);
-  }
-
   render() {
     const { item, tileWidth } = this.props;
 
@@ -48,11 +39,11 @@ class BellDashboardTile extends View {
 				tileWidth={tileWidth}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
           <TouchableOpacity
-              onPress={this.onBell}
-              style={styles.container}>
-              <View style={styles.body}>
-                  <Icon name="bell" size={44} color="orange" />
-              </View>
+            onPress={this.props.onBell(this.props.item.id)}
+            style={styles.container}>
+            <View style={styles.body}>
+              <Icon name="bell" size={44} color="orange" />
+            </View>
           </TouchableOpacity>
 			</DashboardShadowTile>
     );
@@ -77,7 +68,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onBell: id => dispatch(bell(id)),
+    onBell: id => () => dispatch(bell(id)),
   };
 }
 
