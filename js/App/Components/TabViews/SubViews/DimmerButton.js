@@ -52,7 +52,7 @@ function toSliderValue(dimmerValue) {
   return Math.round(dimmerValue * 100.0 / 255);
 }
 
-class DimmingButton extends View {
+class DimmerButton extends View {
   constructor(props) {
     super(props);
 
@@ -213,4 +213,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-module.exports = connect(null, mapDispatchToProps)(DimmingButton);
+module.exports = connect(null, mapDispatchToProps)(DimmerButton);

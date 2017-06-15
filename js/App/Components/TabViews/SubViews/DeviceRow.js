@@ -26,7 +26,7 @@ import { Container, ListItem, Text, View, Icon } from 'BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
-import DimmingButton from './DimmingButton';
+import DimmerButton from './DimmerButton';
 
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { StyleSheet } from 'react-native';
@@ -57,7 +57,7 @@ class DeviceRow extends View {
     } else if (UP || DOWN || STOP) {
       button = <NavigationalButton device={device} style={styles.navigation} />;
     } else if (DIM) {
-      button = <DimmingButton
+      button = <DimmerButton
 				device={device}
 				onDim={this.props.onDim(device.id)}
 				onDimmerSlide={this.props.onDimmerSlide(device.id)}
