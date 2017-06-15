@@ -20,7 +20,6 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { Container, ListItem, Text, View, Icon } from 'BaseComponents';
 import ToggleButton from './ToggleButton';
@@ -28,7 +27,6 @@ import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
 
-import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
 
@@ -59,8 +57,6 @@ class DeviceRow extends View {
     } else if (DIM) {
       button = <DimmerButton
 				device={device}
-				onDim={this.props.onDim(device.id)}
-				onDimmerSlide={this.props.onDimmerSlide(device.id)}
 				setScrollEnabled={this.props.setScrollEnabled}
 			/>;
     } else if (TURNON || TURNOFF) {
@@ -132,11 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-    onDim: id => value => dispatch(updateDimmerValue(id, value)),
-  };
-}
-
-module.exports = connect(null, mapDispatchToProps)(DeviceRow);
+module.exports = DeviceRow;

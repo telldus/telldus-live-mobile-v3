@@ -26,7 +26,6 @@ import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View } from 'BaseComponents';
 import Platform from 'Platform';
 import { getDevices } from 'Actions/Devices';
-import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { changeSensorDisplayType } from 'Actions/Dashboard';
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
@@ -61,9 +60,6 @@ class DashboardTab extends View {
 
     this._onLayout = this._onLayout.bind(this);
     this.setScrollEnabled = this.setScrollEnabled.bind(this);
-    this.onSlidingStart = this.onSlidingStart.bind(this);
-    this.onSlidingComplete = this.onSlidingComplete.bind(this);
-    this.onValueChange = this.onValueChange.bind(this);
     this.onOpenSetting = this.onOpenSetting.bind(this);
     this.startSensorTimer = this.startSensorTimer.bind(this);
     this.stopSensorTimer = this.stopSensorTimer.bind(this);
@@ -97,18 +93,6 @@ class DashboardTab extends View {
     if (this.refs.list && this.refs.list.setScrollEnabled) {
       this.refs.list.setScrollEnabled(enable);
     }
-  }
-
-  onSlidingStart(name:String, value:Number) {
-    this.props.dispatch(showDimmerPopup(name, value));
-  }
-
-  onSlidingComplete() {
-    this.props.dispatch(hideDimmerPopup());
-  }
-
-  onValueChange(value) {
-    this.props.dispatch(setDimmerValue(value));
   }
 
   onRefresh() {
@@ -209,8 +193,6 @@ class DashboardTab extends View {
         borderRadius: 2,
       };
 
-      const itemId = row.childObject.id;
-
       if (row.objectType === 'sensor') {
         return <SensorDashboardTile
 					style={tileStyle}
@@ -236,8 +218,6 @@ class DashboardTab extends View {
 					tileWidth={tileWidth}
 					style={tileStyle}
 					setScrollEnabled={this.setScrollEnabled}
-					onDim={this.props.onDim(itemId)}
-					onDimmerSlide={this.props.onDimmerSlide(itemId)}
 				/>;
       }
 
@@ -291,8 +271,6 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-    onDim: id => value => dispatch(updateDimmerValue(id, value)),
     onChangeDisplayType: () => dispatch(changeSensorDisplayType()),
     dispatch,
   };
