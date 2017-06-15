@@ -26,22 +26,23 @@ import computeProps from './computeProps';
 
 export default class H1Component extends Base {
 
-  prepareRootProps() {
+	prepareRootProps() {
 
-    let type = {
-      color: this.getTheme().textColor,
-      fontSize: this.getTheme().fontSizeH1,
-    };
+		let type = {
+			color: this.getTheme().textColor,
+			fontSize: this.getTheme().fontSizeH1,
+		};
 
-    let defaultProps = {
-      style: type,
-    };
+		let defaultProps = {
+			style: type,
+		};
 
-    return computeProps(this.props, defaultProps);
-  }
-  render() {
-    return (
+		return computeProps(this.props, defaultProps);
+	}
+
+	render() {
+		return (
 			<Text {...this.prepareRootProps()}>{this.props.children}</Text>
-    );
-  }
+		);
+	}
 }

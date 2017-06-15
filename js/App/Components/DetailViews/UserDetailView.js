@@ -32,40 +32,43 @@ import {
 import { logoutFromTelldus } from 'Actions';
 
 class UserDetailView extends View {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    this.logoutFromTelldus = this.logoutFromTelldus.bind(this);
-  }
+		this.logoutFromTelldus = this.logoutFromTelldus.bind(this);
+	}
 
-  render() {
-    return (
+	render() {
+		return (
 			<View>
 				<Text>
 					Name: {this.props.user.firstname} {this.props.user.lastname}
 				</Text>
-				<View style = {{ paddingBottom: 10 }} />
+				<View style={{ paddingBottom: 10 }}/>
 				<Text>Email: { this.props.user.email}</Text>
-				<View style = {{ paddingBottom: 10 }} />
+				<View style={{ paddingBottom: 10 }}/>
 				<Gravatar
-					emailAddress = {this.props.user.email}
-					size = {32}
-					mask = "circle"
+					emailAddress={this.props.user.email}
+					size={32}
+					mask="circle"
 				/>
-				<View style = {{ paddingBottom: 10 }} />
+				<View style={{ paddingBottom: 10 }}/>
 				<Button
-					name = "sign-out"
-					backgroundColor = {this.getTheme().btnPrimaryBg}
-					style = {{ padding: 6, minWidth: 100 }}
-					onPress = {this.logoutFromTelldus}
+					name="sign-out"
+					backgroundColor={this.getTheme().btnPrimaryBg}
+					style={{
+						padding: 6,
+						minWidth: 100,
+					}}
+					onPress={this.logoutFromTelldus}
 				>Logout</Button>
 			</View>
-    );
-  }
+		);
+	}
 
-  logoutFromTelldus() {
-    this.props.dispatch(logoutFromTelldus());
-  }
+	logoutFromTelldus() {
+		this.props.dispatch(logoutFromTelldus());
+	}
 }
 
 module.exports = connect()(UserDetailView);

@@ -27,39 +27,39 @@ import _ from 'lodash';
 
 export default class ThumbnailComponent extends Base {
 
-  getInitialStyle() {
-    return {
-      thumbnail: {
-        borderRadius: 15,
-        width: 30,
-        height: 30,
-        resizeMode: this.props.contain ? 'contain' : undefined,
-      },
-    };
-  }
+	getInitialStyle() {
+		return {
+			thumbnail: {
+				borderRadius: 15,
+				width: 30,
+				height: 30,
+				resizeMode: this.props.contain ? 'contain' : undefined,
+			},
+		};
+	}
 
-  prepareRootProps() {
-    let thumbnailStyle = {};
-    if (this.props.circular) {
-      thumbnailStyle.width = this.props.size;
-      thumbnailStyle.height = this.props.size;
-      thumbnailStyle.borderRadius = this.props.size / 2;
-    }		else if (this.props.square) {
-      thumbnailStyle.width = this.props.size;
-      thumbnailStyle.height = this.props.size;
-      thumbnailStyle.borderRadius = 0;
-    }
+	prepareRootProps() {
+		let thumbnailStyle = {};
+		if (this.props.circular) {
+			thumbnailStyle.width = this.props.size;
+			thumbnailStyle.height = this.props.size;
+			thumbnailStyle.borderRadius = this.props.size / 2;
+		} else if (this.props.square) {
+			thumbnailStyle.width = this.props.size;
+			thumbnailStyle.height = this.props.size;
+			thumbnailStyle.borderRadius = 0;
+		}
 
-    let defaultProps = {
-      style: _.merge(this.getInitialStyle().thumbnail, thumbnailStyle),
-    };
+		let defaultProps = {
+			style: _.merge(this.getInitialStyle().thumbnail, thumbnailStyle),
+		};
 
-    return computeProps(this.props, defaultProps);
-  }
+		return computeProps(this.props, defaultProps);
+	}
 
-  render() {
-    return (
+	render() {
+		return (
 			<Image {...this.prepareRootProps()}/>
-    );
-  }
+		);
+	}
 }

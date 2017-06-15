@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
-* @providesModule Actions/AppState
+ * @providesModule Actions/AppState
  */
 
 'use strict';
@@ -26,21 +26,21 @@ import type { Action, ThunkAction } from './types';
 import { AppState } from 'react-native';
 
 module.exports = {
-  appStart: (): Action => ({
-    type: 'APP_START',
-  }),
-  appState: (): ThunkAction => dispatch => {
-    AppState.addEventListener('change', appState => {
-      if (appState === 'active') {
-        return dispatch({
-          type: 'APP_FOREGROUND',
-        });
-      }
-      if (appState === 'background') {
-        return dispatch({
-          type: 'APP_BACKGROUND',
-        });
-      }
-    });
-  },
+	appStart: (): Action => ({
+		type: 'APP_START',
+	}),
+	appState: (): ThunkAction => dispatch => {
+		AppState.addEventListener('change', appState => {
+			if (appState === 'active') {
+				return dispatch({
+					type: 'APP_FOREGROUND',
+				});
+			}
+			if (appState === 'background') {
+				return dispatch({
+					type: 'APP_BACKGROUND',
+				});
+			}
+		});
+	},
 };

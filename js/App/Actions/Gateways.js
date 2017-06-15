@@ -28,32 +28,32 @@ import LiveApi from 'LiveApi';
 import { format } from 'url';
 
 function getGateways(): ThunkAction {
-  return (dispatch, getState) => {
-    const url = format({
-      pathname: '/clients/list',
-      query: {
-        extras: 'timezone,suntime',
-      },
-    });
-    const payload = {
-      url,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => {
-      dispatch({
-        type: 'RECEIVED_GATEWAYS',
-        payload: {
-          ...payload,
-          ...response,
-        },
-      });
-      response.client.forEach(gateway => {
-        dispatch(getWebsocketAddress(gateway.id));
-      });
-    });
-  };
+	return (dispatch, getState) => {
+		const url = format({
+			pathname: '/clients/list',
+			query: {
+				extras: 'timezone,suntime',
+			},
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+			dispatch({
+				type: 'RECEIVED_GATEWAYS',
+				payload: {
+					...payload,
+					...response,
+				},
+			});
+			response.client.forEach(gateway => {
+				dispatch(getWebsocketAddress(gateway.id));
+			});
+		});
+	};
 }
 
 module.exports = { getGateways };

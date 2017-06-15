@@ -23,7 +23,6 @@
 
 import type { ThunkAction } from './types';
 
-
 import { getGateways } from './Gateways';
 import { getJobs } from './Jobs';
 import { getDevices } from 'Actions/Devices';
@@ -32,45 +31,45 @@ import { getSensors } from 'Actions/Sensors';
 import { AppState } from 'react-native';
 
 function syncLiveApiOnForeground(): ThunkAction {
-  return dispatch => {
-    AppState.addEventListener('change', appState => {
-      if (appState === 'active') {
-        console.log('app active, fetching devices');
-        dispatch(getDevices());
-      }
-    });
-  };
+	return dispatch => {
+		AppState.addEventListener('change', appState => {
+			if (appState === 'active') {
+				console.log('app active, fetching devices');
+				dispatch(getDevices());
+			}
+		});
+	};
 }
 
 // NOTE: Devices are retrieved upon syncLiveApiOnForeground and via socket messages
 function syncWithServer(nextTab): ThunkAction {
-  return (dispatch, getState) => {
-    const { liveApi } = getState();
-    if (nextTab === 'sensorsTab' && !liveApi.sensors) {
-      dispatch({
-        type: 'LIVEAPI_REFETCH',
-        endpoint: 'sensors',
-      });
-      return dispatch(getSensors());
-    }
-    if (nextTab === 'schedulerTab' && !liveApi.jobs) {
-      dispatch({
-        type: 'LIVEAPI_REFETCH',
-        endpoint: 'jobs',
-      });
-      return dispatch(getJobs());
-    }
-    if (nextTab === 'gatewaysTab' && !liveApi.gateways) {
-      dispatch({
-        type: 'LIVEAPI_REFETCH',
-        endpoint: 'gateways',
-      });
-      return dispatch(getGateways());
-    }
-  };
+	return (dispatch, getState) => {
+		const { liveApi } = getState();
+		if (nextTab === 'sensorsTab' && !liveApi.sensors) {
+			dispatch({
+				type: 'LIVEAPI_REFETCH',
+				endpoint: 'sensors',
+			});
+			return dispatch(getSensors());
+		}
+		if (nextTab === 'schedulerTab' && !liveApi.jobs) {
+			dispatch({
+				type: 'LIVEAPI_REFETCH',
+				endpoint: 'jobs',
+			});
+			return dispatch(getJobs());
+		}
+		if (nextTab === 'gatewaysTab' && !liveApi.gateways) {
+			dispatch({
+				type: 'LIVEAPI_REFETCH',
+				endpoint: 'gateways',
+			});
+			return dispatch(getGateways());
+		}
+	};
 }
 
 module.exports = {
-  syncLiveApiOnForeground,
-  syncWithServer,
+	syncLiveApiOnForeground,
+	syncWithServer,
 };

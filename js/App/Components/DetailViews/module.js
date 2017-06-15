@@ -34,14 +34,14 @@ import NavigationalDeviceDetailModal from './NavigationalDeviceDetailModal';
 import SettingsDetailModal from './SettingsDetailModal';
 
 module.exports = {
-  Device: DeviceDetailView,
-  Gateway: GatewayDetailView,
-  Sensor: SensorDetailView,
-  User: UserDetailView,
-  DeviceDetailModal,
-  ToggleDeviceDetailModal,
-  BellDeviceDetailModal,
-  DimmerDeviceDetailModal,
-  NavigationalDeviceDetailModal,
-  SettingsDetailModal,
+	Device: DeviceDetailView,
+	Gateway: GatewayDetailView,
+	Sensor: SensorDetailView,
+	User: UserDetailView,
+	DeviceDetailModal,
+	ToggleDeviceDetailModal,
+	BellDeviceDetailModal,
+	DimmerDeviceDetailModal,
+	NavigationalDeviceDetailModal,
+	SettingsDetailModal,
 };
