@@ -43,8 +43,8 @@ import DimmerButton from './DimmerButton';
 import JobRow from './JobRow';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
-import DimmingOffButton from './DimmingOffButton';
-import DimmingOnButton from './DimmingOnButton';
+import DimmerOffButton from './DimmerOffButton';
+import DimmerOnButton from './DimmerOnButton';
 import LearnButton from './LearnButton';
 
 module.exports = {
@@ -70,7 +70,7 @@ module.exports = {
   JobRow: JobRow,
   OffButton: OffButton,
   OnButton: OnButton,
-  DimmingOffButton: DimmingOffButton,
-  DimmingOnButton: DimmingOnButton,
+  DimmerOffButton: DimmerOffButton,
+  DimmerOnButton: DimmerOnButton,
   LearnButton: LearnButton,
 };

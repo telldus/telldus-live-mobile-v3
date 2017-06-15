@@ -24,7 +24,7 @@ import { View } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
-class DimmingOnButton extends View {
+class DimmerOffButton extends View {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,13 +38,13 @@ class DimmingOnButton extends View {
     let { isInState, enabled, fontSize, style, methodRequested } = this.props;
 
     return (
-      <View style={[style, isInState !== 'TURNOFF' && enabled ? styles.enabled : styles.disabled]}>
+      <View style={[style, isInState === 'TURNOFF' && enabled ? styles.enabled : styles.disabled]}>
         <Animated.Text ellipsizeMode="middle" numberOfLines={1}
-				style = {[(isInState !== 'TURNOFF' || methodRequested === 'TURNON') && enabled ? styles.textEnabled : styles.textDisabled, { opacity: this.state.fadeAnim, fontSize: fontSize ? fontSize : 12 }]}>
-				{'On'}
+				style = {[(isInState === 'TURNOFF' || methodRequested === 'TURNOFF') && enabled ? styles.textEnabled : styles.textDisabled, { opacity: this.state.fadeAnim, fontSize: fontSize ? fontSize : 12 }]}>
+				{'Off'}
         </Animated.Text>
         {
-          methodRequested === 'TURNON' ?
+          methodRequested === 'TURNOFF' ?
           <ButtonLoadingIndicator style={styles.dot} />
           : null
         }
@@ -71,29 +71,29 @@ const styles = StyleSheet.create({
   textEnabled: {
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: 'green',
+    color: 'red',
   },
   textDisabled: {
     textAlign: 'center',
     textAlignVertical: 'center',
-    color: '#a2a2a2',
+    color: '#a0a0a0',
   },
   dot: {
     position: 'absolute',
     top: 3,
-    right: 3,
+    left: 3,
   },
 });
 
-DimmingOnButton.propTypes = {
+DimmerOffButton.propTypes = {
   isInState: PropTypes.string,
   enabled: PropTypes.bool,
   fontSize: PropTypes.number,
   methodRequested: PropTypes.string,
 };
 
-DimmingOnButton.defaultProps = {
+DimmerOffButton.defaultProps = {
   enabled: true,
 };
 
-module.exports = DimmingOnButton;
+module.exports = DimmerOffButton;
