@@ -28,7 +28,7 @@ import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmingButton from './DimmingButton';
 
-import { turnOn, turnOff, bell, down, up, stop, requestTurnOn, requestTurnOff } from 'Actions/Devices';
+import { down, up, stop } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
@@ -54,9 +54,7 @@ class DeviceRow extends View {
 		} = device.supportedMethods;
 
     if (BELL) {
-      button = <BellButton
-				onBell={this.props.onBell(device.id)}
-			/>;
+      button = <BellButton id={device.id} style={styles.bell} />;
     } else if (UP || DOWN || STOP) {
       button = <NavigationalButton
 				device={device}
@@ -128,11 +126,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 8,
   },
+  bell: {
+    flex: 7,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    onBell: id => () => dispatch(bell(id)),
     onDown: id => () => dispatch(down(id)),
     onUp: id => () => dispatch(up(id)),
     onStop: id => () => dispatch(stop(id)),

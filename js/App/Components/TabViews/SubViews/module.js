@@ -45,6 +45,7 @@ import OffButton from './OffButton';
 import OnButton from './OnButton';
 import DimmingOffButton from './DimmingOffButton';
 import DimmingOnButton from './DimmingOnButton';
+import LearnButton from './LearnButton';
 
 module.exports = {
   DeviceRow: DeviceRow,
@@ -71,4 +72,5 @@ module.exports = {
   OnButton: OnButton,
   DimmingOffButton: DimmingOffButton,
   DimmingOnButton: DimmingOnButton,
+  LearnButton: LearnButton,
 };

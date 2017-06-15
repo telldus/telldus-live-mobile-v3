@@ -27,6 +27,8 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { up, down, stop, learn } from 'Actions/Devices';
 
+import { LearnButton } from 'TabViews/SubViews';
+
 const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
 	<RoundedCornerShadowView style={{ flexDirection: 'row', height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center' }}>
 		<TouchableOpacity
@@ -47,16 +49,6 @@ const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
 	</RoundedCornerShadowView>
 );
 
-const LearnButton = ({ onLearn }) => (
-	<RoundedCornerShadowView style={styles.learnContainer}>
-		<TouchableOpacity onPress={onLearn} style={styles.learnButton}>
-			<Text style={styles.learnText}>
-				{'Learn'}
-			</Text>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
-);
-
 class NavigationalDeviceDetailModal extends View {
 
   constructor(props) {
@@ -65,7 +57,6 @@ class NavigationalDeviceDetailModal extends View {
     this.onUp = this.onUp.bind(this);
     this.onDown = this.onDown.bind(this);
     this.onStop = this.onStop.bind(this);
-    this.onLearn = this.onLearn.bind(this);
   }
 
   onUp() {
@@ -80,10 +71,6 @@ class NavigationalDeviceDetailModal extends View {
     this.props.onStop(this.props.device.id);
   }
 
-  onLearn() {
-    this.props.onLearn(this.props.device.id);
-  }
-
   render() {
     const { device } = this.props;
     const { UP, DOWN, STOP, LEARN } = device.supportedMethods;
@@ -96,7 +83,7 @@ class NavigationalDeviceDetailModal extends View {
     }
 
     if (LEARN) {
-      learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
+      learnButton = <LearnButton id={device.id} style={styles.learn} />;
     }
 
     return (
@@ -122,21 +109,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  learnContainer: {
+  learn: {
     height: 36,
     marginHorizontal: 8,
     marginVertical: 8,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  learnButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnText: {
-    fontSize: 16,
-    color: 'orange',
   },
 });
 
@@ -149,7 +127,6 @@ function mapDispatchToProps(dispatch) {
     onUp: (id) => dispatch(up(id)),
     onDown: (id) => dispatch(down(id)),
     onStop: (id) => dispatch(stop(id)),
-    onLearn: (id) => dispatch(learn(id)),
   };
 }
 

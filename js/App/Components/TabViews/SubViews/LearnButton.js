@@ -22,63 +22,49 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Icon } from 'BaseComponents';
+import { View, RoundedCornerShadowView, Text } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import DashboardShadowTile from './DashboardShadowTile';
-import { bell } from 'Actions/Devices';
+import { learn } from 'Actions/Devices';
 
-class BellDashboardTile extends View {
+class LearnButton extends View {
   constructor(props) {
     super(props);
-    this.onBell = this.onBell.bind(this);
+    this.onLearn = this.onLearn.bind(this);
   }
 
-  onBell() {
-    this.props.onBell(this.props.item.id);
+  onLearn() {
+    this.props.onLearn(this.props.id);
   }
 
   render() {
-    const { item, tileWidth } = this.props;
-
     return (
-			<DashboardShadowTile
-				item={item}
-				isEnabled={true}
-				name={item.name}
-				tileWidth={tileWidth}
-				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
-          <TouchableOpacity
-              onPress={this.onBell}
-              style={styles.container}>
-              <View style={styles.body}>
-                  <Icon name="bell" size={44} color="orange" />
-              </View>
-          </TouchableOpacity>
-			</DashboardShadowTile>
+      <RoundedCornerShadowView style={this.props.style}>
+        <TouchableOpacity onPress={this.onLearn} style={styles.learn}>
+          <Text style={styles.text}>
+            {'Learn'}
+          </Text>
+        </TouchableOpacity>
+      </RoundedCornerShadowView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 30,
-    justifyContent: 'center',
-  },
-  body: {
+  learn: {
     flex: 1,
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
-    borderTopLeftRadius: 7,
-    borderTopRightRadius: 7,
+  },
+  text: {
+    fontSize: 16,
+    color: 'orange',
   },
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    onBell: id => dispatch(bell(id)),
+    onLearn: id => dispatch(learn(id)),
   };
 }
 
-module.exports = connect(null, mapDispatchToProps)(BellDashboardTile);
+module.exports = connect(null, mapDispatchToProps)(LearnButton);

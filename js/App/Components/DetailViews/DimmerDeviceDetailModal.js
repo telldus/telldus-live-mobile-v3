@@ -23,11 +23,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Slider from 'react-native-slider';
-import { OnButton, OffButton } from 'TabViews/SubViews';
+import { OnButton, OffButton, LearnButton } from 'TabViews/SubViews';
 
-import { learn } from 'Actions/Devices';
 import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 
 const ToggleButton = ({ device }) => (
@@ -35,16 +34,6 @@ const ToggleButton = ({ device }) => (
       <OffButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} />
       <OnButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} />
 		</RoundedCornerShadowView>
-);
-
-const LearnButton = ({ device, onLearn }) => (
-	<RoundedCornerShadowView style={styles.learnContainer}>
-		<TouchableOpacity onPress={onLearn} style={styles.learnButton}>
-			<Text style={styles.learnText}>
-				{'Learn'}
-			</Text>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
 );
 
 class DimmerDeviceDetailModal extends View {
@@ -59,7 +48,6 @@ class DimmerDeviceDetailModal extends View {
     };
 
     this.currentDimmerValue = dimmerValue;
-    this.onLearn = this.onLearn.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
     this.onSlidingComplete = this.onSlidingComplete.bind(this);
   }
@@ -74,10 +62,6 @@ class DimmerDeviceDetailModal extends View {
         return Math.round(device.value * 100.0 / 255);
       }
     }
-  }
-
-  onLearn() {
-    this.props.onLearn(this.props.device.id);
   }
 
   onValueChange(value) {
@@ -112,7 +96,7 @@ class DimmerDeviceDetailModal extends View {
     }
 
     if (LEARN) {
-      learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
+      learnButton = <LearnButton id={device} style={styles.learn} />;
     }
 
     if (DIM) {
@@ -173,21 +157,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 7,
     borderBottomRightRadius: 7,
   },
-  learnContainer: {
+  learn: {
     height: 36,
     marginHorizontal: 8,
     marginVertical: 8,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  learnButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnText: {
-    fontSize: 16,
-    color: 'orange',
   },
   trackStyle: {
     marginTop: -4, // fix track thumb alignment bug : https://github.com/jeanregisser/react-native-slider/issues/54
@@ -196,7 +171,6 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onLearn: (id) => dispatch(learn(id)),
     onDimmerSlide: (id, value) => dispatch(setDimmerValue(id, value)),
     onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
   };

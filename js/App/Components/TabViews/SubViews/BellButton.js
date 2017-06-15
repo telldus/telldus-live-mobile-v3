@@ -20,36 +20,52 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+import { bell } from 'Actions/Devices';
 
 class BellButton extends View {
+  constructor(props) {
+    super(props);
+    this.onBell = this.onBell.bind(this);
+  }
+
+  onBell() {
+    console.log('onBell');
+    this.props.onBell(this.props.id);
+  }
+
   render() {
     return (
-            <RoundedCornerShadowView
-				style={styles.container}
-			>
-				<TouchableOpacity
-					onPress={this.props.onBell}
-				>
-					<Icon
-						name="bell"
-						size={22}
-						color="orange"
-					/>
+      <RoundedCornerShadowView style={this.props.style}>
+				<TouchableOpacity onPress={this.onBell} style={styles.bell}>
+					<Icon name="bell" size={22} color="orange" />
 				</TouchableOpacity>
-            </RoundedCornerShadowView>
+      </RoundedCornerShadowView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 7,
-    height: 32,
+  // container: {
+  //   flex: 7,
+  //   height: 32,
+  //   justifyContent: 'center',
+  //   alignItems: 'stretch',
+  // },
+  bell: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
 });
 
-module.exports = BellButton;
+function mapDispatchToProps(dispatch) {
+  return {
+    onBell: id => dispatch(bell(id)),
+  };
+}
+
+module.exports = connect(null, mapDispatchToProps)(BellButton);
