@@ -22,10 +22,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { RoundedCornerShadowView, Icon, View, Text } from 'BaseComponents';
+import { RoundedCornerShadowView, Icon, View } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { up, down, stop, learn } from 'Actions/Devices';
+import { up, down, stop } from 'Actions/Devices';
 
 import { LearnButton } from 'TabViews/SubViews';
 
