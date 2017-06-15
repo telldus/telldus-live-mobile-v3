@@ -27,19 +27,10 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { learn } from 'Actions/Devices';
 
 class LearnButton extends View {
-  constructor(props) {
-    super(props);
-    this.onLearn = this.onLearn.bind(this);
-  }
-
-  onLearn() {
-    this.props.onLearn(this.props.id);
-  }
-
   render() {
     return (
       <RoundedCornerShadowView style={this.props.style}>
-        <TouchableOpacity onPress={this.onLearn} style={styles.learn}>
+        <TouchableOpacity onPress={this.props.onLearn(this.props.id)} style={styles.learn}>
           <Text style={styles.text}>
             {'Learn'}
           </Text>
@@ -63,7 +54,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onLearn: id => dispatch(learn(id)),
+    onLearn: id => () => dispatch(learn(id)),
   };
 }
 
