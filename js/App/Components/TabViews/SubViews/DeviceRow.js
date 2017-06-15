@@ -38,20 +38,6 @@ class DeviceRow extends View {
     super(props);
 
     this.onSettingsSelected = this.onSettingsSelected.bind(this);
-    this.onTurnOn = this.onTurnOn.bind(this);
-    this.onTurnOff = this.onTurnOff.bind(this);
-  }
-
-  onTurnOn = id => () => {
-    console.log('onTurnOn');
-    this.props.onTurnOn(id);
-    this.props.requestTurnOn(id);
-  }
-
-  onTurnOff = id => () => {
-    console.log('onTurnOff');
-    this.props.onTurnOff(id);
-    this.props.requestTurnOff(id);
   }
 
   render() {
@@ -81,24 +67,14 @@ class DeviceRow extends View {
     } else if (DIM) {
       button = <DimmingButton
 				device={device}
-				onTurnOn={this.onTurnOn(device.id)}
-				onTurnOff={this.onTurnOff(device.id)}
 				onDim={this.props.onDim(device.id)}
 				onDimmerSlide={this.props.onDimmerSlide(device.id)}
 				setScrollEnabled={this.props.setScrollEnabled}
 			/>;
     } else if (TURNON || TURNOFF) {
-      button = <ToggleButton
-				onTurnOn={this.onTurnOn(device.id)}
-				onTurnOff={this.onTurnOff(device.id)}
-				device={device}
-			/>;
+      button = <ToggleButton device={device}/>;
     } else {
-      button = <ToggleButton
-				onTurnOn={this.onTurnOn(device.id)}
-				onTurnOff={this.onTurnOff(device.id)}
-				device={device}
-			/>;
+      button = <ToggleButton device={device}/>;
     }
 
     return (
@@ -156,16 +132,12 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onTurnOn: id => dispatch(turnOn(id)),
-    onTurnOff: id => dispatch(turnOff(id)),
     onBell: id => () => dispatch(bell(id)),
     onDown: id => () => dispatch(down(id)),
     onUp: id => () => dispatch(up(id)),
     onStop: id => () => dispatch(stop(id)),
     onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
     onDim: id => value => dispatch(updateDimmerValue(id, value)),
-    requestTurnOn: id => dispatch(requestTurnOn(id)),
-    requestTurnOff: id => dispatch(requestTurnOff(id)),
   };
 }
 
