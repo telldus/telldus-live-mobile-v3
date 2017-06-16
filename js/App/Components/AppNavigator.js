@@ -49,10 +49,10 @@ type State = {
 }
 
 class AppNavigator extends View {
-  props: Props;
-  state: State;
+	props: Props;
+	state: State;
 
-  _updateSpecificOrientation: Object => void;
+	_updateSpecificOrientation: Object => void;
 	constructor() {
 		super();
 		if (Platform.OS !== 'android') {

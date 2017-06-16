@@ -33,7 +33,7 @@ type Props = {
 };
 
 export default class SpinnerComponent extends Base {
-  props: Props;
+	props: Props;
 
 	prepareRootProps() {
 

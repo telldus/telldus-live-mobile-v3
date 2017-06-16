@@ -30,7 +30,7 @@ type Props = {
 };
 
 export default class ViewComponent extends Base {
-  props: Props;
+	props: Props;
 
 	render() {
 		return (

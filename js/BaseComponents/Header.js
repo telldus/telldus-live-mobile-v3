@@ -39,7 +39,7 @@ type Props = {
 };
 
 export default class HeaderComponent extends Base {
-  props: Props;
+	props: Props;
 
 	getInitialStyle() {
 		return {

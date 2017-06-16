@@ -44,8 +44,8 @@ type DefaultProps = {
 };
 
 class Gravatar extends React.Component {
-  props: Props;
-  static defaultProps: DefaultProps;
+	props: Props;
+	static defaultProps: DefaultProps;
 
 	_calculateStyle() {
 		const size = {

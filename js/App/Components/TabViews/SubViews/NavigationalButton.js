@@ -69,7 +69,7 @@ type Props = {
 };
 
 class NavigationalButton extends View {
-  props: Props;
+	props: Props;
 
 	render() {
 		const noop = function () {

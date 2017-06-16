@@ -35,7 +35,7 @@ type Props = {
 };
 
 export default class ThumbnailComponent extends Base {
-  props: Props;
+	props: Props;
 
 	getInitialStyle() {
 		return {

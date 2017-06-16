@@ -31,7 +31,7 @@ type Props = {
 };
 
 export default class Input extends Base {
-  props: Props;
+	props: Props;
 
 	getInitialStyle() {
 		return {

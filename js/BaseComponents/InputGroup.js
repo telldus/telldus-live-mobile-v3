@@ -31,11 +31,11 @@ import Input from './Input';
 import _ from 'lodash';
 
 type Props = {
-  borderType: 'rounded' | 'regular',
-  children: Object,
-  toolbar: ?Object,
-  atoolbar: ?Object,
-  iconRight: ?Object,
+	borderType: 'rounded' | 'regular',
+	children: Object,
+	toolbar: ?Object,
+	atoolbar: ?Object,
+	iconRight: ?Object,
 };
 
 export default class InputGroup extends Base {

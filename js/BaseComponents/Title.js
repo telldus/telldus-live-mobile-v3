@@ -31,7 +31,7 @@ type Props = {
 };
 
 export default class Title extends Base {
-  props: Props;
+	props: Props;
 
 	render() {
 		return (

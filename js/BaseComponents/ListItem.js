@@ -30,7 +30,7 @@ type Props = {
 };
 
 export default class ListItemComponent extends Base {
-  props: Props;
+	props: Props;
 
 	render() {
 		return (
@@ -41,4 +41,3 @@ export default class ListItemComponent extends Base {
 		);
 	}
 }
-

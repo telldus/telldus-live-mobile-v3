@@ -31,7 +31,7 @@ type Props = {
 };
 
 export default class TextComponent extends Base {
-  props: Props;
+	props: Props;
 
 	prepareRootProps() {
 

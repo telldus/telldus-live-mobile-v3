@@ -31,7 +31,7 @@ type Props = {
 };
 
 export default class H1Component extends Base {
-  props: Props;
+	props: Props;
 
 	prepareRootProps() {
 

@@ -31,7 +31,7 @@ type Props = {
 };
 
 export default class CheckBox extends Base {
-  props: Props;
+	props: Props;
 
 	getInitialStyle() {
 		return {

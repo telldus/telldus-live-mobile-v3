@@ -30,7 +30,7 @@ type Props = {
 };
 
 class BellButton extends View {
-  props: Props;
+	props: Props;
 
 	render() {
 		return (

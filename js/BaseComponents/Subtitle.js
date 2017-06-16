@@ -30,7 +30,7 @@ type Props = {
 };
 
 export default class Subtitle extends Base {
-  props: Props;
+	props: Props;
 
 	render() {
 		return (

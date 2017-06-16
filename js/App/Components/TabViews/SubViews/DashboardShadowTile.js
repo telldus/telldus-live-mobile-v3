@@ -48,7 +48,7 @@ type Props = {
 };
 
 class DashboardShadowTile extends View {
-  props: Props;
+	props: Props;
 
 	render() {
 		return (

@@ -38,7 +38,7 @@ type Props = {
 };
 
 export default class BadgeComponent extends Base {
-  props: Props;
+	props: Props;
 
 	prepareRootProps() {
 		let type = {
