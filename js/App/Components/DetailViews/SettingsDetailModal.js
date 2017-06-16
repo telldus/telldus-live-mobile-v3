@@ -26,6 +26,10 @@ import { Container, Text, View, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
+var DeviceInfo = require('react-native-device-info');
+
+import { pushServiceId } from '../../../Config';
+import { registerPushToken } from 'Actions/User';
 
 const Header = ({ onPress }) => (
     <View style={styles.header}>
@@ -40,15 +44,21 @@ const Header = ({ onPress }) => (
 
 const Button = ({ text, onPress, width }) => (
     <TouchableOpacity
-        onPress={onPress}
-		style={[styles.button, {
-  width: width,
-}]}>
-        <Text style={styles.buttonText}>
-            {text}
-        </Text>
+      onPress={onPress}
+		  style={[styles.button, {
+      width: width,
+      }]}>
+      <Text style={styles.buttonText}>
+        {text}
+      </Text>
     </TouchableOpacity>
 );
+
+const StatusView = () => (
+    <Text style={styles.statusText}>
+    You have subscribed for telldus notification.
+    </Text>
+)
 
 class SettingsDetailModal extends View {
 
@@ -68,7 +78,11 @@ class SettingsDetailModal extends View {
                         <Text style={styles.versionInfo}>
                             {'You are using version 3.3.0 of Telldus Live! mobile.'}
                         </Text>
-                        <Button text={'Submit Push Token'} onPress={this.props.onSubmitPushToken} width={200} />
+                        {this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
+                        <Button text={'Submit Push Token'} onPress={() => {this.props.onSubmitPushToken(this.props.store.user.pushToken)}} width={200} />
+                        :
+                        <StatusView/>
+                        }
                         <Button text={'Logout'} onPress={this.props.onLogout} width={100} />
                     </View>
                 </Container>
@@ -124,6 +138,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textAlignVertical: 'center',
   },
+  statusText: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#1a355b',
+    fontSize: 14,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  },
   versionInfo: {
     color: '#1a355b',
     fontSize: 14,
@@ -147,7 +169,7 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSubmitPushToken: () => console.log('TODO: Implement onSubmitPushToken'),
+    onSubmitPushToken: (token) => {dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));},
     onLogout: () => dispatch(logoutFromTelldus()),
     dispatch,
   };

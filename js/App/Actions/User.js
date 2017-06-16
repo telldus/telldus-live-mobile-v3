@@ -46,12 +46,16 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 			method: 'GET',
 		},
 	};
-	return LiveApi(payload).then(response => {console.log('test response',response); dispatch({
-		type: 'PUSH_TOKEN_REGISTERED',
-		token: token,
-		payload: {
-			...payload,
-			...response,
-		},
-	})});
+	return LiveApi(payload).then(response => {
+		if((!response.error) && (response.status == 'success')) {
+			dispatch({
+				type: 'PUSH_TOKEN_REGISTERED',
+				token: token,
+				payload: {
+					...payload,
+					...response,
+				},
+			});
+		} 
+	});
 };
