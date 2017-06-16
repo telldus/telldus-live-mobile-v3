@@ -49,6 +49,7 @@
     "react-native-uuid": "^1.4.9",
     "react-native-vector-icons": "3.0.x",
     "react-native-watch-connectivity": "^0.1.5",
+    "react-navigation": "^1.0.0-beta.11",
     "react-redux": "~5.0.1",
     "react-timer-mixin": "~0.13.3",
     "reconnecting-websocket": "^3.0.3",
