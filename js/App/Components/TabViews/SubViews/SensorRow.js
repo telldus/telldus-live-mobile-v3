@@ -162,7 +162,7 @@ class SensorRow extends Component {
 			<ListItem
 				style={Theme.Styles.rowFront}
 				onLayout={this.onLayout}>
-				<View>
+				<View style={styles.container}>
 					<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
 					      ellipsizeMode="middle"
 					      numberOfLines={1}>
@@ -220,6 +220,9 @@ class SensorRow extends Component {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		backgroundColor: 'transparent',
+	},
 	name: {
 		color: 'rgba(0,0,0,0.87)',
 		fontSize: 16,
