@@ -166,9 +166,11 @@ class SensorRow extends Component {
 				</View>
 				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ?
 					sensors :
-					(<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true} directionalLockEnabled={true} >
-						{sensors}
-					</ScrollView>)
+          (<View style={styles.scrollView}>
+            <ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true} directionalLockEnabled={true} >
+              {sensors}
+            </ScrollView>
+          </View>)
 				}
 			</ListItem>
     );
@@ -207,6 +209,9 @@ class SensorRow extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   name: {
     color: 'rgba(0,0,0,0.87)',
     fontSize: 16,
@@ -217,7 +222,8 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     alignSelf: 'stretch',
-    minWidth: 216,
+    maxWidth: 216,
+    flexDirection: 'row',
   },
 });
 
