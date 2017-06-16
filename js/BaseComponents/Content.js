@@ -26,28 +26,29 @@ import computeProps from './computeProps';
 
 export default class Content extends Base {
 
-  prepareRootProps() {
+	prepareRootProps() {
 
-    let type = {
-      backgroundColor: 'transparent',
-      flex: 1,
-    };
+		let type = {
+			backgroundColor: 'transparent',
+			flex: 1,
+		};
 
-    let defaultProps = {
-      style: type,
-    };
+		let defaultProps = {
+			style: type,
+		};
 
-    return computeProps(this.props, defaultProps);
-  }
+		return computeProps(this.props, defaultProps);
+	}
 
-  render() {
-    const contentContainerStyle = this.props.contentContainerStyle || {};
-    contentContainerStyle.padding = (this.props.padder) ? this.getTheme().contentPadding : 0;
-    return (
-			<View {...this.prepareRootProps()} contentContainerStyle={contentContainerStyle}>{this.props.children}</View>
-    );
-//		return(
-//			<KeyboardAwareScrollView resetScrollToCoords={{x:0,y:0}} {...this.prepareRootProps()} contentContainerStyle={contentContainerStyle}>{this.props.children}</KeyboardAwareScrollView>
-//		);
-  }
+	render() {
+		const contentContainerStyle = this.props.contentContainerStyle || {};
+		contentContainerStyle.padding = (this.props.padder) ? this.getTheme().contentPadding : 0;
+		return (
+			<View {...this.prepareRootProps()}
+			      contentContainerStyle={contentContainerStyle}>{this.props.children}</View>
+		);
+		//		return(
+		//			<KeyboardAwareScrollView resetScrollToCoords={{x:0,y:0}} {...this.prepareRootProps()}
+		// contentContainerStyle={contentContainerStyle}>{this.props.children}</KeyboardAwareScrollView> );
+	}
 }

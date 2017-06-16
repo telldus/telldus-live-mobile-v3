@@ -7,7 +7,7 @@
 
   "env": {
     "es6": true,
-    "jasmine": true,
+    "jasmine": true
   },
 
   "plugins": [
@@ -169,7 +169,7 @@
   // These rules are specific to JavaScript running on Node.js.
 
     "handle-callback-err": 1,        // enforces error handling in callbacks (off by default) (on by default in the node environment)
-    "indent": ["error", 2, {
+    "indent": ["error", "tab", {
       "SwitchCase": 1
     }],                              // enforce consistent indentation
     "no-mixed-requires": 1,          // disallow mixing regular variable and require declarations (off by default) (on by default in the node environment)
@@ -208,13 +208,14 @@
     "no-ternary": 0,                 // disallow the use of ternary operators (off by default)
     "no-trailing-spaces": 1,         // disallow trailing whitespace at the end of lines
     "no-underscore-dangle": 0,       // disallow dangling underscores in identifiers
-    "no-mixed-spaces-and-tabs": 2,   // disallow mixed spaces and tabs for indentation
+    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],   // disallow mixed spaces and tabs for indentation
     "object-curly-spacing": ["error", "always"], // enforce consistent spacing inside braces
     "quotes": [1, "single", "avoid-escape"],         // specify whether double or single quotes should be used
     "quote-props": 0,                // require quotes around object literal property names (off by default)
     "semi": 2,                       // require or disallow use of semicolons instead of ASI
     "sort-vars": 0,                  // sort variables within the same declaration block (off by default)
-    "space-before-function-paren": ['warn', {
+    "space-before-function-paren": [
+      "warn", {
       "anonymous": "always",
       "named": "never"
     }],                              // Require or disallow a space before function parenthesis

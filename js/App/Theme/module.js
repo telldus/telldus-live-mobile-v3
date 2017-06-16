@@ -26,7 +26,7 @@ import Forms from './Forms';
 import Styles from './Styles';
 
 module.exports = {
-  Core: Core,
-  Forms: Forms,
-  Styles: Styles,
+	Core: Core,
+	Forms: Forms,
+	Styles: Styles,
 };
