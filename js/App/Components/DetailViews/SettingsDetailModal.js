@@ -29,7 +29,7 @@ import Modal from 'react-native-modal';
 var DeviceInfo = require('react-native-device-info');
 
 import { pushServiceId } from '../../../Config';
-import { registerPushToken } from 'Actions/User';
+import { registerPushToken, unregisterPushToken } from 'Actions/User';
 
 const Header = ({ onPress }) => (
     <View style={styles.header}>
@@ -83,7 +83,7 @@ class SettingsDetailModal extends View {
                         :
                         <StatusView/>
                         }
-                        <Button text={'Logout'} onPress={this.props.onLogout} width={100} />
+                        <Button text={'Logout'} onPress={() => {this.props.onLogout(this.props.store.user.pushToken)}} width={100} />
                     </View>
                 </Container>
             </Modal>
@@ -170,7 +170,9 @@ function mapStateToProps(store) {
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitPushToken: (token) => {dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));},
-    onLogout: () => dispatch(logoutFromTelldus()),
+    onLogout: (token) => {
+      dispatch(unregisterPushToken(token)).then(() => dispatch(logoutFromTelldus()));
+    },
     dispatch,
   };
 }

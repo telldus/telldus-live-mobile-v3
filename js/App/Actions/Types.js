@@ -31,6 +31,7 @@ export type Action =
     | { type: 'RECEIVED_SENSORS', sensors: Object }
     | { type: 'RECEIVED_JOBS', jobs: Object }
     | { type: 'PUSH_TOKEN_REGISTERED',token: String, payload: Object }
+    | { type: 'PUSH_TOKEN_UNREGISTERED',token: String, payload: Object }
     | { type: 'LOGGED_OUT' }
     | { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
     | { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }

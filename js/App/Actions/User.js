@@ -59,3 +59,30 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 		} 
 	});
 };
+
+export const unregisterPushToken = (token: String): ThunkAction => dispatch => {
+	const url = format({
+		pathname: '/user/unregisterPushToken',
+		query: {
+			token
+		},
+	});
+	const payload = {
+		url,
+		requestParams: {
+			method: 'GET',
+		},
+	};
+	return LiveApi(payload).then(response => {
+		if((!response.error) && (response.status == 'success')) {
+			dispatch({
+				type: 'PUSH_TOKEN_UNREGISTERED',
+				token: token,
+				payload: {
+					...payload,
+					...response,
+				},
+			});
+		} 
+	});
+};
