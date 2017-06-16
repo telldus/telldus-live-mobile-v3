@@ -32,9 +32,12 @@ type Props = {
 export default class ViewComponent extends Base {
   props: Props;
 
-  render() {
-    return (
-			<View style = {{ padding: (this.props.padder) ? this.getTheme().contentPadding : 0, flex: 1 }} {...this.props} />
-    );
-  }
+	render() {
+		return (
+			<View style={{
+				padding: (this.props.padder) ? this.getTheme().contentPadding : 0,
+				flex: 1,
+			}} {...this.props} />
+		);
+	}
 }

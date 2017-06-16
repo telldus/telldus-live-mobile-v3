@@ -57,80 +57,80 @@ type Props = {
 };
 
 class BellDeviceDetailModal extends View {
-  props: Props;
-  onBell : number => void;
+	props: Props;
+	onBell : number => void;
 
-  constructor(props: Props) {
-    super(props);
-    this.onBell = this.onBell.bind(this);
-  }
+	constructor(props: Props) {
+		super(props);
+		this.onBell = this.onBell.bind(this);
+	}
 
-  onBell() {
-    this.props.onBell(this.props.device.id);
-  }
+	onBell() {
+		this.props.onBell(this.props.device.id);
+	}
 
-  render() {
-    const { device } = this.props;
-    const { BELL, LEARN } = device.supportedMethods;
+	render() {
+		const { device } = this.props;
+		const { BELL, LEARN } = device.supportedMethods;
 
-    let bellButton = null;
-    let learnButton = null;
+		let bellButton = null;
+		let learnButton = null;
 
-    if (BELL) {
-      bellButton = <BellButton onBell={this.onBell} />;
-    }
+		if (BELL) {
+			bellButton = <BellButton onBell={this.onBell}/>;
+		}
 
-    if (LEARN) {
-      learnButton = <LearnButton onLearn={this.onLearn} />;
-    }
+		if (LEARN) {
+			learnButton = <LearnButton onLearn={this.onLearn}/>;
+		}
 
-    return (
+		return (
 			<View style={styles.container}>
 				{bellButton}
 				{learnButton}
 			</View>
-    );
-  }
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 0,
-  },
-  bell: {
-    height: 36,
-    marginHorizontal: 8,
-    marginVertical: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnContainer: {
-    height: 36,
-    marginHorizontal: 8,
-    marginVertical: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnText: {
-    fontSize: 16,
-    color: 'orange',
-  },
+	container: {
+		flex: 0,
+	},
+	bell: {
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 16,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnContainer: {
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 8,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnText: {
+		fontSize: 16,
+		color: 'orange',
+	},
 });
 
 function mapStateToProps(store) {
-  return { store };
+	return { store };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    onBell: (id) => dispatch(bell(id)),
-    onLearn: (id) => dispatch(learn(id)),
-  };
+	return {
+		onBell: (id) => dispatch(bell(id)),
+		onLearn: (id) => dispatch(learn(id)),
+	};
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(BellDeviceDetailModal);

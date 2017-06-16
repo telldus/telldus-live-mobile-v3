@@ -30,17 +30,27 @@ import { turnOn, turnOff, learn } from 'Actions_Devices';
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
 		<TouchableOpacity
-			style={[styles.toggleButton, { backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee' }]}
+			style={[
+				styles.toggleButton, {
+					backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
+				},
+			]}
 			onPress={onTurnOff}>
 			<Text style={{ fontSize: 16, color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
+			}}>
 				{'Off'}
 			</Text>
 		</TouchableOpacity>
 
 		<TouchableOpacity
-			style={[styles.toggleButton, { backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee' }]}
+			style={[
+				styles.toggleButton, {
+					backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee',
+				},
+			]}
 			onPress={onTurnOn}>
 			<Text style={{ fontSize: 16, color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e' }}>
+			}}>
 				{'On'}
 			</Text>
 		</TouchableOpacity>
@@ -65,99 +75,99 @@ type Props = {
 };
 
 class ToggleDeviceDetailModal extends View {
-  props: Props;
-  onTurnOn: () => void;
-  onTurnOff: () => void;
-  onLearn: () => void;
+	props: Props;
+	onTurnOn: () => void;
+	onTurnOff: () => void;
+	onLearn: () => void;
 
-  constructor(props: Props) {
-    super(props);
+	constructor(props: Props) {
+		super(props);
 
-    this.onTurnOn = this.onTurnOn.bind(this);
-    this.onTurnOff = this.onTurnOff.bind(this);
-    this.onLearn = this.onLearn.bind(this);
-  }
+		this.onTurnOn = this.onTurnOn.bind(this);
+		this.onTurnOff = this.onTurnOff.bind(this);
+		this.onLearn = this.onLearn.bind(this);
+	}
 
-  onTurnOn() {
-    this.props.onTurnOn(this.props.device.id);
-  }
+	onTurnOn() {
+		this.props.onTurnOn(this.props.device.id);
+	}
 
-  onTurnOff() {
-    this.props.onTurnOff(this.props.device.id);
-  }
+	onTurnOff() {
+		this.props.onTurnOff(this.props.device.id);
+	}
 
-  onLearn() {
-    this.props.onLearn(this.props.device.id);
-  }
+	onLearn() {
+		this.props.onLearn(this.props.device.id);
+	}
 
-  render() {
-    const { device } = this.props;
-    const { TURNON, TURNOFF, LEARN } = device.supportedMethods;
+	render() {
+		const { device } = this.props;
+		const { TURNON, TURNOFF, LEARN } = device.supportedMethods;
 
-    let toggleButton = null;
-    let learnButton = null;
+		let toggleButton = null;
+		let learnButton = null;
 
-    if (TURNON || TURNOFF) {
-      toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} />;
-    }
+		if (TURNON || TURNOFF) {
+			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff}/>;
+		}
 
-    if (LEARN) {
-      learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
-    }
+		if (LEARN) {
+			learnButton = <LearnButton device={device} onLearn={this.onLearn}/>;
+		}
 
-    return (
+		return (
 			<View style={styles.container}>
 				{toggleButton}
 				{learnButton}
 			</View>
-    );
-  }
+		);
+	}
 
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 0,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    height: 36,
-    marginHorizontal: 8,
-    marginVertical: 16,
-  },
-  toggleButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnContainer: {
-    height: 36,
-    marginHorizontal: 8,
-    marginVertical: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnText: {
-    fontSize: 16,
-    color: 'orange',
-  },
+	container: {
+		flex: 0,
+	},
+	toggleContainer: {
+		flexDirection: 'row',
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 16,
+	},
+	toggleButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnContainer: {
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 8,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnText: {
+		fontSize: 16,
+		color: 'orange',
+	},
 });
 
 function mapStateToProps(store) {
-  return { store };
+	return { store };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    onTurnOn: (id) => dispatch(turnOn(id)),
-    onTurnOff: (id) => dispatch(turnOff(id)),
-    onLearn: (id) => dispatch(learn(id)),
-  };
+	return {
+		onTurnOn: (id) => dispatch(turnOn(id)),
+		onTurnOff: (id) => dispatch(turnOff(id)),
+		onLearn: (id) => dispatch(learn(id)),
+	};
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(ToggleDeviceDetailModal);

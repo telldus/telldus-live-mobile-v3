@@ -41,86 +41,103 @@ import { getStore } from '../Store/ConfigureStore';
  */
 
 export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
-  return new Promise((resolve, reject) => {
-    return doApiCall(url, requestParams).then(response => {
-      if (!response) {
-        return reject(new Error('unexpected error: response empty', {
-          response,
-        }));
-      }
-      resolve(response);
-    }).catch(error => {
-      reject(error);
-    });
-  });
+	return new Promise((resolve, reject) => {
+		return doApiCall(url, requestParams).then(response => {
+			if (!response) {
+				return reject(new Error('unexpected error: response empty', {
+					response,
+				}));
+			}
+			resolve(response);
+		}).catch(error => {
+			reject(error);
+		});
+	});
 };
 
 async function doApiCall(url, requestParams) {
-  let response = await callEndPoint(url, requestParams);
-  if (!response.error) {
+	let response = await callEndPoint(url, requestParams);
+	if (!response.error) {
 		// All is well, so return the data from the API.
-    return response;
-  }
-  if (response.error !== 'invalid_token' && response.error !== 'expired_token') {
+		return response;
+	}
+	if (response.error !== 'invalid_token' && response.error !== 'expired_token') {
 		// An error from the API we cannot recover from
-    throw new Error(response.error, { url, requestParams, response });
-  }
+		throw new Error(
+			response.error,
+			{
+				url,
+				requestParams,
+				response,
+			}
+		);
+	}
 
-  response = await refreshAccessToken(url, requestParams); // Token has expired, so we'll try to get a new one.
+	response = await refreshAccessToken(url, requestParams); // Token has expired, so we'll try to get a new one.
 
-  response = await callEndPoint(url, requestParams); // retry api call
-  if (!response.error) {
+	response = await callEndPoint(url, requestParams); // retry api call
+	if (!response.error) {
 		// All is well, so return the data from the API.
-    return response;
-  }
+		return response;
+	}
 
-  throw new Error(response.error, { url, requestParams, response });
+	throw new Error(
+		response.error,
+		{
+			url,
+			requestParams,
+			response,
+		}
+	);
 }
 
 async function callEndPoint(url, requestParams) {
-  const accessToken = getStore().getState().user.accessToken;
-  if (!accessToken) {
-    throw new Error('LiveApi: need accessToken');
-  }
+	const accessToken = getStore().getState().user.accessToken;
+	if (!accessToken) {
+		throw new Error('LiveApi: need accessToken');
+	}
 
-  const params = Object.assign({}, requestParams, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken.access_token}`,
-    },
-  });
+	const params = Object.assign({}, requestParams, {
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			'Authorization': `Bearer ${accessToken.access_token}`,
+		},
+	});
 
-  let response = await fetch(`${apiServer}/oauth2${url}`, params);
-  response = await response.text();
-  return JSON.parse(response);
+	let response = await fetch(`${apiServer}/oauth2${url}`, params);
+	response = await response.text();
+	return JSON.parse(response);
 }
 
 // create new token with refresh token
 async function refreshAccessToken(url, requestParams) {
-  const store = getStore();
-  const accessToken = store.getState().user.accessToken;
-  const { dispatch } = store;
+	const store = getStore();
+	const accessToken = store.getState().user.accessToken;
+	const { dispatch } = store;
 
-  return fetch(`${apiServer}/oauth2/accessToken`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      'client_id': publicKey,
-      'client_secret': privateKey,
-      'grant_type': 'refresh_token',
-      'refresh_token': accessToken.refresh_token,
-    }),
-  })
-	.then(response => response.json())
-	.then(response => {
-  if (response.error) {
-			// We couldn't get a new access token with the refresh_token, so we logout the user.
-    return dispatch({ type: 'LOGGED_OUT', payload: response });
-  }
-  dispatch(updateAccessToken(response));
-});
+	return fetch(`${apiServer}/oauth2/accessToken`, {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			'client_id': publicKey,
+			'client_secret': privateKey,
+			'grant_type': 'refresh_token',
+			'refresh_token': accessToken.refresh_token,
+		}),
+	})
+		.then(response => response.json())
+		.then(response => {
+			if (response.error) {
+				// We couldn't get a new access token with the refresh_token, so we logout the user.
+				return dispatch({
+					type: 'LOGGED_OUT',
+					payload: response,
+				});
+			}
+			dispatch(updateAccessToken(response));
+		});
 }

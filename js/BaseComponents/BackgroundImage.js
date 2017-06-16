@@ -31,16 +31,20 @@ type Props = {
 };
 
 export default class BackgroundImage extends Component {
-  props : Props;
+	props : Props;
 
-  render() {
-    const { source, children, style, ...props } = this.props;
-    return (
+	render() {
+		const { source, children, style, ...props } = this.props;
+		return (
 			<Image source={source}
-			style={{ flex: 1, width: null, height: null, ...style }}
-			{...props}>
-			{ children }
+			       style={{
+				       flex: 1,
+				       width: null,
+				       height: null, ...style,
+			       }}
+			       {...props}>
+				{ children }
 			</Image>
-    );
-  }
+		);
+	}
 }

@@ -43,87 +43,88 @@ type State = {
 };
 
 class GatewaysTab extends View {
-  props: Props;
-  state: State;
+	props: Props;
+	state: State;
 
-  renderRow: ({name: string, online: boolean, websocketOnline: boolean}) => Object;
-  onRefresh: () => void;
+	renderRow: ({name: string, online: boolean, websocketOnline: boolean}) => Object;
+	onRefresh: () => void;
 
-  constructor(props: Props) {
-    super(props);
+	constructor(props: Props) {
+		super(props);
 
-    this.state = {
-      dataSource: new ListDataSource({
-        rowHasChanged: this.rowHasChanged,
-      }).cloneWithRows(this.props.rows),
-      settings: false,
-    };
+		this.state = {
+			dataSource: new ListDataSource({
+				rowHasChanged: this.rowHasChanged,
+			}).cloneWithRows(this.props.rows),
+			settings: false,
+		};
 
-    this.renderRow = this.renderRow.bind(this);
-    this.onRefresh = this.onRefresh.bind(this);
-  }
+		this.renderRow = this.renderRow.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
+	}
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
-    });
-  }
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
+		});
+	}
 
-  rowHasChanged(r1, r2) {
-    return r1 !== r2;
-  }
+	rowHasChanged(r1, r2) {
+		return r1 !== r2;
+	}
 
-  onRefresh() {
-    this.props.dispatch(getGateways());
-  }
+	onRefresh() {
+		this.props.dispatch(getGateways());
+	}
 
-  renderRow({ name, online, websocketOnline }) {
-    let locationSrc;
-    if (!online) {
-      locationSrc = require('./img/tabIcons/location-red.png');
-    } else if (!websocketOnline) {
-      locationSrc = require('./img/tabIcons/location-orange.png');
-    } else {
-      locationSrc = require('./img/tabIcons/location-green.png');
-    }
-    return (
-			<ListItem style = {Theme.Styles.gatewayRowFront}>
-				<View style = {Theme.Styles.listItemAvatar}>
-					<Image source = {locationSrc} />
+	renderRow({ name, online, websocketOnline }) {
+		let locationSrc;
+		if (!online) {
+			locationSrc = require('./img/tabIcons/location-red.png');
+		} else if (!websocketOnline) {
+			locationSrc = require('./img/tabIcons/location-orange.png');
+		} else {
+			locationSrc = require('./img/tabIcons/location-green.png');
+		}
+		return (
+			<ListItem style={Theme.Styles.gatewayRowFront}>
+				<View style={Theme.Styles.listItemAvatar}>
+					<Image source={locationSrc}/>
 				</View>
-				<Text style = {{
-  color: 'rgba(0,0,0,0.87)',
-  fontSize: 16,
-  opacity: name ? 1 : 0.5,
-  marginBottom: 2,
-}}>
+				<Text style={{
+					color: 'rgba(0,0,0,0.87)',
+					fontSize: 16,
+					opacity: name ? 1 : 0.5,
+					marginBottom: 2,
+				}}>
 					{name ? name : '(no name)'}
 				</Text>
 			</ListItem>
-    );
-  }
-  render() {
-    return (
+		);
+	}
+
+	render() {
+		return (
 			<List
-				dataSource = {this.state.dataSource}
-				renderRow = {this.renderRow}
-				onRefresh = {this.onRefresh}
+				dataSource={this.state.dataSource}
+				renderRow={this.renderRow}
+				onRefresh={this.onRefresh}
 			/>
-    );
-  }
+		);
+	}
 }
 
 const getRows = createSelector(
-  [
-    ({ gateways }) => gateways,
-  ],
+	[
+		({ gateways }) => gateways,
+	],
 	(gateways) => parseGatewaysForListView(gateways)
 );
 
 function mapStateToProps(state, props) {
-  return {
-    rows: getRows(state),
-  };
+	return {
+		rows: getRows(state),
+	};
 }
 
 module.exports = connect(mapStateToProps)(GatewaysTab);

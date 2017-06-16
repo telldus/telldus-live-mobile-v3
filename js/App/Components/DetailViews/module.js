@@ -29,10 +29,10 @@ import NavigationalDeviceDetailModal from './NavigationalDeviceDetailModal';
 import SettingsDetailModal from './SettingsDetailModal';
 
 module.exports = {
-  DeviceDetailModal,
-  ToggleDeviceDetailModal,
-  BellDeviceDetailModal,
-  DimmerDeviceDetailModal,
-  NavigationalDeviceDetailModal,
-  SettingsDetailModal,
+	DeviceDetailModal,
+	ToggleDeviceDetailModal,
+	BellDeviceDetailModal,
+	DimmerDeviceDetailModal,
+	NavigationalDeviceDetailModal,
+	SettingsDetailModal,
 };

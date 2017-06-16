@@ -46,126 +46,126 @@ type State = {
 };
 
 class SensorsTab extends View {
-  props: Props;
-  state: State;
+	props: Props;
+	state: State;
 
-  renderSectionHeader: (sectionData: Object, sectionId:number) => Object;
-  renderRow: Object => Object;
-  onRefresh: Object => void;
+	renderSectionHeader: (sectionData: Object, sectionId:number) => Object;
+	renderRow: Object => Object;
+	onRefresh: Object => void;
 
-  constructor(props: Props) {
-    super(props);
+	constructor(props: Props) {
+		super(props);
 
-    const { sections, sectionIds } = this.props.rowsAndSections;
+		const { sections, sectionIds } = this.props.rowsAndSections;
 
-    this.state = {
-      dataSource: new ListDataSource({
-        rowHasChanged: this.rowHasChanged,
-        sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-      }).cloneWithRowsAndSections(sections, sectionIds),
-    };
+		this.state = {
+			dataSource: new ListDataSource({
+				rowHasChanged: this.rowHasChanged,
+				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+			}).cloneWithRowsAndSections(sections, sectionIds),
+		};
 
-    this.renderSectionHeader = this.renderSectionHeader.bind(this);
-    this.renderRow = this.renderRow.bind(this);
-    this.onRefresh = this.onRefresh.bind(this);
-  }
+		this.renderSectionHeader = this.renderSectionHeader.bind(this);
+		this.renderRow = this.renderRow.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
+	}
 
-  componentWillReceiveProps(nextProps) {
-    const { sections, sectionIds } = nextProps.rowsAndSections;
+	componentWillReceiveProps(nextProps) {
+		const { sections, sectionIds } = nextProps.rowsAndSections;
 
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
-    });
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+		});
 
-    if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
-      this.props.dispatch(toggleEditMode('sensorsTab'));
-    }
-  }
+		if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
+			this.props.dispatch(toggleEditMode('sensorsTab'));
+		}
+	}
 
-  onRefresh() {
-    this.props.dispatch(getSensors());
-  }
+	onRefresh() {
+		this.props.dispatch(getSensors());
+	}
 
-  rowHasChanged(r1, r2) {
-    if (r1 === r2) {
-      return false;
-    }
-    return (
+	rowHasChanged(r1, r2) {
+		if (r1 === r2) {
+			return false;
+		}
+		return (
 			r1.sensor !== r2.sensor ||
 			r1.inDashboard !== r2.inDashboard ||
 			r1.editMode !== r2.editMode
-    );
-  }
+		);
+	}
 
-  render() {
-    return (
+	render() {
+		return (
 			<List
-				dataSource = {this.state.dataSource}
-				renderRow = {this.renderRow}
-				renderHiddenRow = {this.renderHiddenRow}
-				renderSectionHeader = {this.renderSectionHeader}
-				leftOpenValue = {40}
-				editMode = {this.props.editMode}
-				onRefresh = {this.onRefresh}
+				dataSource={this.state.dataSource}
+				renderRow={this.renderRow}
+				renderHiddenRow={this.renderHiddenRow}
+				renderSectionHeader={this.renderSectionHeader}
+				leftOpenValue={40}
+				editMode={this.props.editMode}
+				onRefresh={this.onRefresh}
 			/>
-    );
-  }
+		);
+	}
 
-  renderSectionHeader(sectionData, sectionId) {
-    return (
+	renderSectionHeader(sectionData, sectionId) {
+		return (
 			<DeviceHeader
 				sectionData={sectionData}
 				sectionId={sectionId}
 				gateway={this.props.gatewaysById[sectionId]}
 			/>
-    );
-  }
+		);
+	}
 
-  renderRow(row) {
-    return (
+	renderRow(row) {
+		return (
 			<SensorRow {...row}/>
-    );
-  }
+		);
+	}
 
-  renderHiddenRow(row) {
-    return (
+	renderHiddenRow(row) {
+		return (
 			<SensorRowHidden {...row}/>
-    );
-  }
+		);
+	}
 }
 
 SensorsTab.propTypes = {
-  rowsAndSections: React.PropTypes.object,
+	rowsAndSections: React.PropTypes.object,
 };
 
 const getRowsAndSections = createSelector(
-  [
-    ({ sensors }) => sensors,
-    ({ gateways }) => gateways,
-    ({ tabs }) => tabs.editModeSensorsTab,
-  ],
+	[
+		({ sensors }) => sensors,
+		({ gateways }) => gateways,
+		({ tabs }) => tabs.editModeSensorsTab,
+	],
 	(sensors, gateways, editMode) => {
-  const { sections, sectionIds } = parseSensorsForListView(sensors, gateways, editMode);
-  return {
-    sections,
-    sectionIds,
-  };
-}
+		const { sections, sectionIds } = parseSensorsForListView(sensors, gateways, editMode);
+		return {
+			sections,
+			sectionIds,
+		};
+	}
 );
 
 function mapStateToProps(store) {
-  return {
-    rowsAndSections: getRowsAndSections(store),
-    gatewaysById: store.gateways.byId,
-    editMode: store.tabs.editModeSensorsTab,
-    tab: store.navigation.tab,
-  };
+	return {
+		rowsAndSections: getRowsAndSections(store),
+		gatewaysById: store.gateways.byId,
+		editMode: store.tabs.editModeSensorsTab,
+		tab: store.navigation.tab,
+	};
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
+	return {
+		dispatch,
+	};
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(SensorsTab);

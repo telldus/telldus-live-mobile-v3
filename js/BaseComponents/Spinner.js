@@ -35,28 +35,27 @@ type Props = {
 export default class SpinnerComponent extends Base {
   props: Props;
 
-  prepareRootProps() {
+	prepareRootProps() {
 
-    let type = {
-      height: 80,
-    };
+		let type = {
+			height: 80,
+		};
 
-    let defaultProps = {
-      style: type,
-    };
+		let defaultProps = {
+			style: type,
+		};
 
-    return computeProps(this.props, defaultProps);
+		return computeProps(this.props, defaultProps);
 
-  }
+	}
 
-
-  render() {
-    return (
-			<ActivityIndicator {...this.prepareRootProps()} color={this.props.color ? this.props.color : this.props.inverse ?
-																this.getTheme().inverseSpinnerColor :
-																this.getTheme().defaultSpinnerColor}
-																size={this.props.size ? this.props.size : 'large'} />
-    );
-  }
+	render() {
+		return (
+			<ActivityIndicator {...this.prepareRootProps()}
+			                   color={this.props.color ? this.props.color : this.props.inverse
+				                   ? this.getTheme().inverseSpinnerColor : this.getTheme().defaultSpinnerColor}
+			                   size={this.props.size ? this.props.size : 'large'}/>
+		);
+	}
 
 }

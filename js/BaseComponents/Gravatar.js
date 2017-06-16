@@ -23,9 +23,9 @@
 
 import React from 'react';
 import {
-    StyleSheet,
-    View,
-    Image,
+	StyleSheet,
+	View,
+	Image,
 } from 'react-native';
 
 import md5 from 'blueimp-md5';
@@ -47,56 +47,59 @@ class Gravatar extends React.Component {
   props: Props;
   static defaultProps: DefaultProps;
 
-  _calculateStyle() {
-    const size = { width: this.props.size, height: this.props.size };
-    let border = {};
+	_calculateStyle() {
+		const size = {
+			width: this.props.size,
+			height: this.props.size,
+		};
+		let border = {};
 
-    switch (this.props.mask) {
-      case 'circle':
-        border = { borderRadius: size.width / 2 };
-        break;
-      case 'rounded':
-        border = { borderRadius: size.width / 20 };
-        break;
-      case 'square':
-        break;
-      default:
-    }
+		switch (this.props.mask) {
+			case 'circle':
+				border = { borderRadius: size.width / 2 };
+				break;
+			case 'rounded':
+				border = { borderRadius: size.width / 20 };
+				break;
+			case 'square':
+				break;
+			default:
+		}
 
-    return { ...size, ...border };
-  }
+		return { ...size, ...border };
+	}
 
-  render() {
-    const uri = `${GRAVATAR_URI + md5(this.props.emailAddress)}?d=mm&s=${this.props.size * 2}`;
-    const style = this._calculateStyle();
-    return (
-            <View style={[styles.overlay]}>
-                <Image source={{ uri }} style={[styles.image, style]} />
-            </View>
-    );
-  }
+	render() {
+		const uri = `${GRAVATAR_URI + md5(this.props.emailAddress)}?d=mm&s=${this.props.size * 2}`;
+		const style = this._calculateStyle();
+		return (
+			<View style={[styles.overlay]}>
+				<Image source={{ uri }} style={[styles.image, style]}/>
+			</View>
+		);
+	}
 }
 
 Gravatar.propTypes = {
-  ...View.PropTypes,
-  emailAddress: React.PropTypes.string.isRequired,
-  size: React.PropTypes.number.isRequired,
-  mask: React.PropTypes.oneOf(['circle', 'square', 'rounded']),
+	...View.PropTypes,
+	emailAddress: React.PropTypes.string.isRequired,
+	size: React.PropTypes.number.isRequired,
+	mask: React.PropTypes.oneOf(['circle', 'square', 'rounded']),
 };
 
 Gravatar.defaultProps = {
-  size: 600,
-  mask: 'circle',
+	size: 600,
+	mask: 'circle',
 };
 
 const styles = StyleSheet.create({
-  overlay: {
-    overflow: 'hidden',
-  },
+	overlay: {
+		overflow: 'hidden',
+	},
 
-  image: {
-    flexGrow: 1,
-  },
+	image: {
+		flexGrow: 1,
+	},
 });
 
 export default Gravatar;

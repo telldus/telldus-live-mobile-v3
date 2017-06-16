@@ -29,8 +29,8 @@ const UpButton = ({ isEnabled, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="caret-up"
-			size={42}
-			style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
+		      size={42}
+		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
 		/>
 	</TouchableOpacity>
 );
@@ -40,8 +40,8 @@ const DownButton = ({ isEnabled, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="caret-down"
-			size={42}
-			style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
+		      size={42}
+		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
 		/>
 	</TouchableOpacity>
 );
@@ -51,8 +51,8 @@ const StopButton = ({ isEnabled, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="stop"
-			size={30}
-			style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
+		      size={30}
+		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
 		/>
 	</TouchableOpacity>
 );
@@ -67,56 +67,61 @@ type Props = {
 };
 
 class NavigationalDashboardTile extends View {
-  props: Props;
+	props: Props;
 
-  constructor(props: Props) {
-    super(props);
-  }
+	constructor(props: Props) {
+		super(props);
+	}
 
-  render() {
-    const { item, tileWidth } = this.props;
-    const { name, supportedMethods } = item;
-    const { UP, DOWN, STOP } = supportedMethods;
-    const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp} /> : null;
-    const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown} /> : null;
-    const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop} /> : null;
+	render() {
+		const { item, tileWidth } = this.props;
+		const { name, supportedMethods } = item;
+		const { UP, DOWN, STOP } = supportedMethods;
+		const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp}/> : null;
+		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown}/> : null;
+		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop}/> : null;
 
-    return (
+		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
 				name={name}
 				tileWidth={tileWidth}
-				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
+				style={[
+					this.props.style, {
+						width: tileWidth,
+						height: tileWidth,
+					},
+				]}>
 				<View style={styles.body}>
 					{ upButton }
 					{ downButton }
 					{ stopButton }
 				</View>
 			</DashboardShadowTile>
-    );
-  }
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  body: {
-    flex: 30,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderTopLeftRadius: 7,
-    borderTopRightRadius: 7,
-  },
-  navigationButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonEnabled: {
-    color: '#1a355b',
-  },
-  buttonDisabled: {
-    color: '#eeeeee',
-  },
+	body: {
+		flex: 30,
+		flexDirection: 'row',
+		backgroundColor: 'white',
+		borderTopLeftRadius: 7,
+		borderTopRightRadius: 7,
+	},
+	navigationButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	buttonEnabled: {
+		color: '#1a355b',
+	},
+	buttonDisabled: {
+		color: '#eeeeee',
+	},
 });
 
 module.exports = NavigationalDashboardTile;

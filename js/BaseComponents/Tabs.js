@@ -33,30 +33,30 @@ type Props = {
 export default class TabComponent extends Base {
   props: Props;
 
-  getInitialStyle() {
-    return {
-      tab: {
-        flex: 1,
-      },
-    };
-  }
+	getInitialStyle() {
+		return {
+			tab: {
+				flex: 1,
+			},
+		};
+	}
 
-  prepareRootProps() {
+	prepareRootProps() {
 
-    let defaultProps = {
-      style: this.getInitialStyle().tab,
-    };
+		let defaultProps = {
+			style: this.getInitialStyle().tab,
+		};
 
-    return computeProps(this.props, defaultProps);
+		return computeProps(this.props, defaultProps);
 
-  }
+	}
 
-  render() {
-    return (
-          <ScrollableTabView {...this.prepareRootProps()} >
-              {this.props.children}
-          </ScrollableTabView>
-    );
-  }
+	render() {
+		return (
+			<ScrollableTabView {...this.prepareRootProps()} >
+				{this.props.children}
+			</ScrollableTabView>
+		);
+	}
 
 }

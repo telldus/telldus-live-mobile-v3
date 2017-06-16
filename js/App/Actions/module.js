@@ -34,13 +34,13 @@ import JobActions from './Jobs';
 import AppStateActions from './AppState';
 
 module.exports = {
-  ...GatewayActions,
-  ...LoginActions,
-  ...NavigationActions,
-  ...SensorActions,
-  ...LiveApiActions,
-  ...TabActions,
-  ...DashboardActions,
-  ...JobActions,
-  ...AppStateActions,
+	...GatewayActions,
+	...LoginActions,
+	...NavigationActions,
+	...SensorActions,
+	...LiveApiActions,
+	...TabActions,
+	...DashboardActions,
+	...JobActions,
+	...AppStateActions,
 };

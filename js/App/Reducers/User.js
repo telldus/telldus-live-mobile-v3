@@ -31,36 +31,40 @@ export type State = {
 };
 
 const initialState = {
-  accessToken: false,
-  userProfile: false,
+	accessToken: false,
+	userProfile: false,
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
-  if (action.type === 'RECEIVED_ACCESS_TOKEN') {
-    let accessToken = action.accessToken;
-    if (state.accessToken) {
-      accessToken.refresh_token = state.accessToken.refresh_token;
-    }
-    return {
-      ...state,
-      accessToken: accessToken,
-    };
-  }
-  if (action.type === 'RECEIVED_USER_PROFILE') {
-    return {
-      ...state,
-      userProfile: action.payload,
-    };
-  }
-  if (action.type === 'LOGGED_OUT') {
-    return {
-      ...initialState,
-    };
-  }
-  return state;
+	if (action.type === 'RECEIVED_ACCESS_TOKEN') {
+		let accessToken = action.accessToken;
+		if (state.accessToken) {
+			accessToken.refresh_token = state.accessToken.refresh_token;
+		}
+		return {
+			...state,
+			accessToken: accessToken,
+		};
+	}
+	if (action.type === 'RECEIVED_USER_PROFILE') {
+		return {
+			...state,
+			userProfile: action.payload,
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...initialState,
+		};
+	}
+	return state;
 }
 
 export const getUserProfile = createSelector(
-	[ ({ user }) => user.userProfile ],
-	(userProfile) => userProfile || { firstname: '', lastname: '', email: '' },
+	[({ user }) => user.userProfile],
+	(userProfile) => userProfile || {
+		firstname: '',
+		lastname: '',
+		email: '',
+	},
 );

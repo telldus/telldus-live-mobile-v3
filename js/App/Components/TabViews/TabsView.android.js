@@ -44,31 +44,31 @@ import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
 
 const TabHeader = ({ fontSize, ...props }) => {
-  return <TabBar {...props} style={{ backgroundColor: Theme.Core.brandPrimary }} labelStyle={{ fontSize }} />;
+	return <TabBar {...props} style={{ backgroundColor: Theme.Core.brandPrimary }} labelStyle={{ fontSize }}/>;
 };
 
 const Gateway = ({ name, online, websocketOnline }) => {
-  let locationSrc;
-  if (!online) {
-    locationSrc = require('./img/tabIcons/location-red.png');
-  } else if (!websocketOnline) {
-    locationSrc = require('./img/tabIcons/location-orange.png');
-  } else {
-    locationSrc = require('./img/tabIcons/location-green.png');
-  }
-  return (
+	let locationSrc;
+	if (!online) {
+		locationSrc = require('./img/tabIcons/location-red.png');
+	} else if (!websocketOnline) {
+		locationSrc = require('./img/tabIcons/location-orange.png');
+	} else {
+		locationSrc = require('./img/tabIcons/location-green.png');
+	}
+	return (
 		<View style={styles.gatewayContainer}>
-			<Image style={styles.gatewayIcon} source={locationSrc} />
+			<Image style={styles.gatewayIcon} source={locationSrc}/>
 			<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
 		</View>
-  );
+	);
 };
 
 const NavigationHeader = ({ firstName, lastName }) => (
-	<View style = {styles.navigationHeader}>
+	<View style={styles.navigationHeader}>
 		<Image style={styles.navigationHeaderImage}
-			source={require('./img/telldus.png')}
-			resizeMode={'contain'} />
+		       source={require('./img/telldus.png')}
+		       resizeMode={'contain'}/>
 		<Text style={styles.navigationHeaderText}>
 			{firstName} {lastName}
 		</Text>
@@ -77,7 +77,8 @@ const NavigationHeader = ({ firstName, lastName }) => (
 
 const ConnectedLocations = () => (
 	<View style={styles.navigationTitle}>
-		<Image source={require('./img/tabIcons/router.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
+		<Image source={require('./img/tabIcons/router.png')} resizeMode={'contain'}
+		       style={styles.navigationTitleImage}/>
 		<Text style={styles.navigationTextTitle}>Connected Locations</Text>
 	</View>
 );
@@ -90,194 +91,223 @@ const SettingsButton = ({ onPress }) => (
 );
 
 const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
-  return (
-		<View style = {{ flex: 1, backgroundColor: 'rgba(26,53,92,255)' }}>
-			<NavigationHeader firstName={userProfile.firstname} lastName={userProfile.lastname} />
-			<View style = {{ flex: 1, backgroundColor: 'white' }}>
+	return (
+		<View style={{
+			flex: 1,
+			backgroundColor: 'rgba(26,53,92,255)',
+		}}>
+			<NavigationHeader firstName={userProfile.firstname} lastName={userProfile.lastname}/>
+			<View style={{
+				flex: 1,
+				backgroundColor: 'white',
+			}}>
 				<ConnectedLocations />
 				{gateways.allIds.map((id, index) => {
-  return (<Gateway {...gateways.byId[id]} key={index} />);
-})}
-				<SettingsButton onPress={onOpenSetting} />
+					return (<Gateway {...gateways.byId[id]} key={index}/>);
+				})}
+				<SettingsButton onPress={onOpenSetting}/>
 			</View>
 		</View>
-  );
+	);
 };
 
 type Props = {
-  dashboard: Object,
-  tab: string,
-  userProfile: Object,
-  gateways: Object,
-  syncGateways: () => void,
-  onTabSelect: string => void,
-  onToggleEditMode: string => void,
-  dispatch: Function,
+	dashboard: Object,
+	tab: string,
+	userProfile: Object,
+	gateways: Object,
+	syncGateways: () => void,
+	onTabSelect: string => void,
+	onToggleEditMode: string => void,
+	dispatch: Function,
 };
 
 type State = {
-  settings: boolean,
-  index: number,
-  routes: Array<Object>,
+	settings: boolean,
+	index: number,
+	routes: Array<Object>,
 };
 
 class TabsView extends View {
-  props: Props;
-  state: State;
+	props: Props;
+	state: State;
 
-  deviceWidth: number;
-  deviceHeight: number;
-  renderScene: Object;
-  renderHeader: Object => Object;
-  renderContent: () => Object;
-  renderNavigationView: () => Object;
-  onOpenSetting: () => void;
-  onCloseSetting: () => void;
-  onTabSelect: string => void;
-  onRequestChangeTab: number => void;
-  toggleEditMode: number => void;
-  openDrawer: () => void;
+	deviceWidth: number;
+	deviceHeight: number;
+	renderScene: Object;
+	renderHeader: Object => Object;
+	renderContent: () => Object;
+	renderNavigationView: () => Object;
+	onOpenSetting: () => void;
+	onCloseSetting: () => void;
+	onTabSelect: string => void;
+	onRequestChangeTab: number => void;
+	toggleEditMode: number => void;
+	openDrawer: () => void;
 
-  constructor(props: Props) {
-    super(props);
+	constructor(props: Props) {
+		super(props);
 
-    this.state = {
-      settings: false,
-      index: 0,
-      routes: [
-				{ key: '1', title: 'Dashboard' },
-				{ key: '2', title: 'Devices' },
-				{ key: '3', title: 'Sensors' },
-				{ key: '4', title: 'Scheduler' },
-      ],
-    };
+		this.state = {
+			settings: false,
+			index: 0,
+			routes: [
+				{
+					key: '1',
+					title: 'Dashboard',
+				},
+				{
+					key: '2',
+					title: 'Devices',
+				},
+				{
+					key: '3',
+					title: 'Sensors',
+				},
+				{
+					key: '4',
+					title: 'Scheduler',
+				},
+			],
+		};
 
-    this.deviceWidth = Dimensions.get('window').width;
-    this.deviceHeight = Dimensions.get('window').height;
+		this.deviceWidth = Dimensions.get('window').width;
+		this.deviceHeight = Dimensions.get('window').height;
 
-    this.renderScene = SceneMap({
-      '1': () => <DashboardTab />,
-      '2': () => <DevicesTab />,
-      '3': () => <SensorsTab />,
-      '4': () => <SchedulerTab />,
-    });
+		this.renderScene = SceneMap({
+			'1': () => <DashboardTab />,
+			'2': () => <DevicesTab />,
+			'3': () => <SensorsTab />,
+			'4': () => <SchedulerTab />,
+		});
 
-    this.renderHeader = this.renderHeader.bind(this);
-    this.renderContent = this.renderContent.bind(this);
-    this.renderNavigationView = this.renderNavigationView.bind(this);
-    this.onOpenSetting = this.onOpenSetting.bind(this);
-    this.onCloseSetting = this.onCloseSetting.bind(this);
-    this.onTabSelect = this.onTabSelect.bind(this);
-    this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
-    this.toggleEditMode = this.toggleEditMode.bind(this);
-    this.openDrawer = this.openDrawer.bind(this);
-  }
+		this.renderHeader = this.renderHeader.bind(this);
+		this.renderContent = this.renderContent.bind(this);
+		this.renderNavigationView = this.renderNavigationView.bind(this);
+		this.onOpenSetting = this.onOpenSetting.bind(this);
+		this.onCloseSetting = this.onCloseSetting.bind(this);
+		this.onTabSelect = this.onTabSelect.bind(this);
+		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
+		this.toggleEditMode = this.toggleEditMode.bind(this);
+		this.openDrawer = this.openDrawer.bind(this);
+	}
 
-  componentDidMount() {
-    Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
+	componentDidMount() {
+		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
 
-    if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
-      if (this.props.tab !== 'dashboardTab') {
-        this.onRequestChangeTab(0);
-      }
-    } else {
-      this.onRequestChangeTab(1);
-    }
-  }
+		if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
+			if (this.props.tab !== 'dashboardTab') {
+				this.onRequestChangeTab(0);
+			}
+		} else {
+			this.onRequestChangeTab(1);
+		}
+	}
 
-  onTabSelect(tab) {
+	onTabSelect(tab) {
 
-    if (this.props.tab !== tab) {
-      this.props.onTabSelect(tab);
-      if (this.refs.drawer) {
-        this.refs.drawer.closeDrawer();
-      }
-    }
-  }
+		if (this.props.tab !== tab) {
+			this.props.onTabSelect(tab);
+			if (this.refs.drawer) {
+				this.refs.drawer.closeDrawer();
+			}
+		}
+	}
 
-  onOpenSetting() {
-    this.setState({ settings: true });
-  }
+	onOpenSetting() {
+		this.setState({ settings: true });
+	}
 
-  onCloseSetting() {
-    this.setState({ settings: false });
-  }
+	onCloseSetting() {
+		this.setState({ settings: false });
+	}
 
-  onRequestChangeTab(index) {
-    this.setState({ index });
-    const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
-    this.onTabSelect(tabNames[index]);
-  }
+	onRequestChangeTab(index) {
+		this.setState({ index });
+		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
+		this.onTabSelect(tabNames[index]);
+	}
 
-  openDrawer() {
-    this.refs.drawer.openDrawer();
-    this.props.syncGateways();
-  }
+	openDrawer() {
+		this.refs.drawer.openDrawer();
+		this.props.syncGateways();
+	}
 
-  renderHeader(props) {
-    return <TabHeader {...props} fontSize={this.deviceWidth / 35} />;
-  }
+	renderHeader(props) {
+		return <TabHeader {...props} fontSize={this.deviceWidth / 35}/>;
+	}
 
-  renderContent() {
-    return <TabViewAnimated style={{ flex: 1 }}
-			navigationState={this.state}
-			renderScene = {this.renderScene}
-			renderHeader = {this.renderHeader}
-			onRequestChangeTab = {this.onRequestChangeTab}
-			/>;
-  }
+	renderContent() {
+		return <TabViewAnimated style={{ flex: 1 }}
+		                        navigationState={this.state}
+		                        renderScene={this.renderScene}
+		                        renderHeader={this.renderHeader}
+		                        onRequestChangeTab={this.onRequestChangeTab}
+		/>;
+	}
 
-  renderNavigationView() {
-    return <NavigationView
+	renderNavigationView() {
+		return <NavigationView
 			gateways={this.props.gateways}
 			userProfile={this.props.userProfile}
 			theme={this.getTheme()}
 			onOpenSetting={this.onOpenSetting}
 		/>;
-  }
+	}
 
-  render() {
-    if (!this.state || !this.state.starIcon) {
-      return false;
-    }
+	render() {
+		if (!this.state || !this.state.starIcon) {
+			return false;
+		}
 
 		// TODO: Refactor: Split this code to smaller components
-    return (
+		return (
 			<DrawerLayoutAndroid
-				ref = "drawer"
-				drawerWidth = {250}
-				drawerPosition = {DrawerLayoutAndroid.positions.Left}
-				renderNavigationView = {this.renderNavigationView}
+				ref="drawer"
+				drawerWidth={250}
+				drawerPosition={DrawerLayoutAndroid.positions.Left}
+				renderNavigationView={this.renderNavigationView}
 			>
-				<View style = {{ flex: 1 }} >
-					<View style = {{
-  height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-  backgroundColor: Theme.Core.brandPrimary }}
+				<View style={{ flex: 1 }}>
+					<View style={{
+						height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+						backgroundColor: Theme.Core.brandPrimary,
+					}}
 					/>
 					{
-						this.props.tab === 'devicesTab' || this.props.tab === 'sensorsTab' ?
-						(
+						this.props.tab === 'devicesTab' || this.props.tab === 'sensorsTab' ? (
 							<Icon.ToolbarAndroid
-								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
-								titleColor = {Theme.Core.inverseTextColor}
-								navIconName = "bars"
-								overflowIconName = "star"
-								iconColor = {Theme.Core.inverseTextColor}
-								title = "Telldus Live!"
-								actions = {[{ title: 'Settings', icon: this.state.starIcon, show: 'always' }]}
-								onActionSelected = {this.toggleEditMode}
-								onIconClicked = {this.openDrawer}
+								style={{
+									height: 56,
+									backgroundColor: Theme.Core.brandPrimary,
+								}}
+								titleColor={Theme.Core.inverseTextColor}
+								navIconName="bars"
+								overflowIconName="star"
+								iconColor={Theme.Core.inverseTextColor}
+								title="Telldus Live!"
+								actions={[
+									{
+										title: 'Settings',
+										icon: this.state.starIcon,
+										show: 'always',
+									},
+								]}
+								onActionSelected={this.toggleEditMode}
+								onIconClicked={this.openDrawer}
 							/>
-						) :
-						(
+						) : (
 							<Icon.ToolbarAndroid
-								style = {{ height: 56, backgroundColor: Theme.Core.brandPrimary }}
-								titleColor = {Theme.Core.inverseTextColor}
-								navIconName = "bars"
-								overflowIconName = "star"
-								iconColor = {Theme.Core.inverseTextColor}
-								title = "Telldus Live!"
-								onIconClicked = {this.openDrawer}
+								style={{
+									height: 56,
+									backgroundColor: Theme.Core.brandPrimary,
+								}}
+								titleColor={Theme.Core.inverseTextColor}
+								navIconName="bars"
+								overflowIconName="star"
+								iconColor={Theme.Core.inverseTextColor}
+								title="Telldus Live!"
+								onIconClicked={this.openDrawer}
 							/>
 						)
 					}
@@ -285,103 +315,102 @@ class TabsView extends View {
 					<View>
 						{this.renderContent()}
 						{
-							this.state.settings ?
-								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting} /> :
-								null
+							this.state.settings ? <SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
+								: null
 						}
 					</View>
 				</View>
 			</DrawerLayoutAndroid>
-    );
-  }
+		);
+	}
 
-  toggleEditMode(position) {
-    this.props.onToggleEditMode(this.props.tab);
-  }
+	toggleEditMode(position) {
+		this.props.onToggleEditMode(this.props.tab);
+	}
 }
 
 const styles = StyleSheet.create({
-  navigationHeader: {
-    height: 60,
-    marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-    marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-    padding: 5,
-    flexDirection: 'row',
-  },
-  navigationHeaderImage: {
-    width: 46,
-    height: 46,
-  },
-  navigationHeaderText: {
-    flex: 1,
-    color: '#e26901',
-    fontSize: 24,
-    textAlignVertical: 'center',
-    marginLeft: 20,
-  },
-  navigationTitle: {
-    flexDirection: 'row',
-    height: 30,
-    marginLeft: 10,
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  navigationTextTitle: {
-    color: 'rgba(26,53,92,255)',
-    fontSize: 18,
-    marginLeft: 10,
-  },
-  navigationTitleImage: {
-    width: 28,
-    height: 28,
-  },
-  settingsButton: {
-    padding: 6,
-    minWidth: 100,
-  },
-  settingsText: {
-    color: 'white',
-    fontSize: 18,
-  },
-  gatewayContainer: {
-    marginLeft: 10,
-    height: 20,
-    flexDirection: 'row',
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  gateway: {
-    fontSize: 14,
-    color: 'rgba(110,110,110,255)',
-    marginLeft: 10,
-    maxWidth: 220,
-  },
-  gatewayIcon: {
-    width: 20,
-    height: 20,
-  },
+	navigationHeader: {
+		height: 60,
+		marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+		marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+		padding: 5,
+		flexDirection: 'row',
+	},
+	navigationHeaderImage: {
+		width: 46,
+		height: 46,
+	},
+	navigationHeaderText: {
+		flex: 1,
+		color: '#e26901',
+		fontSize: 24,
+		textAlignVertical: 'center',
+		marginLeft: 20,
+	},
+	navigationTitle: {
+		flexDirection: 'row',
+		height: 30,
+		marginLeft: 10,
+		marginTop: 20,
+		marginBottom: 10,
+	},
+	navigationTextTitle: {
+		color: 'rgba(26,53,92,255)',
+		fontSize: 18,
+		marginLeft: 10,
+	},
+	navigationTitleImage: {
+		width: 28,
+		height: 28,
+	},
+	settingsButton: {
+		padding: 6,
+		minWidth: 100,
+	},
+	settingsText: {
+		color: 'white',
+		fontSize: 18,
+	},
+	gatewayContainer: {
+		marginLeft: 10,
+		height: 20,
+		flexDirection: 'row',
+		marginTop: 10,
+		marginBottom: 10,
+	},
+	gateway: {
+		fontSize: 14,
+		color: 'rgba(110,110,110,255)',
+		marginLeft: 10,
+		maxWidth: 220,
+	},
+	gatewayIcon: {
+		width: 20,
+		height: 20,
+	},
 });
 
 function mapStateToProps(store) {
-  return {
-    tab: store.navigation.tab,
-    userProfile: getUserProfile(store),
-    dashboard: store.dashboard,
-    gateways: store.gateways,
-    store,
-  };
+	return {
+		tab: store.navigation.tab,
+		userProfile: getUserProfile(store),
+		dashboard: store.dashboard,
+		gateways: store.gateways,
+		store,
+	};
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    syncGateways: () => dispatch(syncWithServer('gatewaysTab')),
-    onTabSelect: (tab) => {
-      dispatch(syncWithServer(tab));
-      dispatch(switchTab(tab));
-    },
-    onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
-    dispatch,
-  };
+	return {
+		syncGateways: () => dispatch(syncWithServer('gatewaysTab')),
+		onTabSelect: (tab) => {
+			dispatch(syncWithServer(tab));
+			dispatch(switchTab(tab));
+		},
+		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+		dispatch,
+	};
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);

@@ -33,25 +33,26 @@ type Props = {
 export default class TextComponent extends Base {
   props: Props;
 
-  prepareRootProps() {
+	prepareRootProps() {
 
-    let type = {
-      color: this.getContextForegroundColor(),
-      backgroundColor: 'transparent',
-      fontSize: this.getTheme().fontSizeBase,
-    };
+		let type = {
+			color: this.getContextForegroundColor(),
+			backgroundColor: 'transparent',
+			fontSize: this.getTheme().fontSizeBase,
+		};
 
-    let defaultProps = {
-      style: type,
-    };
+		let defaultProps = {
+			style: type,
+		};
 
-    return computeProps(this.props, defaultProps);
+		return computeProps(this.props, defaultProps);
 
-  }
-  render() {
-    return (
+	}
+
+	render() {
+		return (
 			<Text {...this.prepareRootProps()}>{this.props.children}</Text>
-    );
-  }
+		);
+	}
 
 }

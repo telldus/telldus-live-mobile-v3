@@ -28,8 +28,8 @@ import Config from 'Config';
 I18n.fallbacks = true;
 I18n.translations = Translations;
 if (Config.forceLocale) {
-  I18n.defaultLocale = Config.forceLocale;
-  I18n.locale = Config.forceLocale;
+	I18n.defaultLocale = Config.forceLocale;
+	I18n.locale = Config.forceLocale;
 }
 
 module.exports = I18n;

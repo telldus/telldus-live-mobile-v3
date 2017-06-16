@@ -25,33 +25,33 @@ import type { Action } from 'Actions_Types';
 import { REHYDRATE } from 'redux-persist/constants';
 
 const initialState = {
-  sensors: false,
-  jobs: false,
-  gateways: false,
+	sensors: false,
+	jobs: false,
+	gateways: false,
 };
 
 
 function reduceRefetchLiveApi(state: Object = initialState, action: Action): Object {
-  if (action.type === REHYDRATE) {
-    return {
-      ...initialState,
-    };
-  }
-  if (action.type === 'APP_FOREGROUND') {
-    return {
-      ...initialState,
-    };
-  }
-  if (action.type === 'LIVEAPI_REFETCH') {
-    return {
-      ...state,
-      [action.endpoint]: true,
-    };
-  }
-  if (action.type === 'LOGGED_OUT') {
-    return {};
-  }
-  return state;
+	if (action.type === REHYDRATE) {
+		return {
+			...initialState,
+		};
+	}
+	if (action.type === 'APP_FOREGROUND') {
+		return {
+			...initialState,
+		};
+	}
+	if (action.type === 'LIVEAPI_REFETCH') {
+		return {
+			...state,
+			[action.endpoint]: true,
+		};
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return {};
+	}
+	return state;
 }
 
 module.exports = reduceRefetchLiveApi;

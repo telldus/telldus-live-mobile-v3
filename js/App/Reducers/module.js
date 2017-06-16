@@ -38,15 +38,15 @@ import LiveApi from './LiveApi';
 import Websockets from './Websockets';
 
 module.exports = combineReducers({
-  devices: Devices,
-  gateways: Gateways,
-  navigation: Navigation,
-  sensors: Sensors,
-  user: User,
-  tabs: Tabs,
-  dashboard: Dashboard,
-  dimmer: Dimmer,
-  jobs: Jobs,
-  liveApi: LiveApi,
-  websockets: Websockets,
+	devices: Devices,
+	gateways: Gateways,
+	navigation: Navigation,
+	sensors: Sensors,
+	user: User,
+	tabs: Tabs,
+	dashboard: Dashboard,
+	dimmer: Dimmer,
+	jobs: Jobs,
+	liveApi: LiveApi,
+	websockets: Websockets,
 });

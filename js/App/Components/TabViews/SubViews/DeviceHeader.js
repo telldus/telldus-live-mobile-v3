@@ -31,11 +31,11 @@ type Props = {
 };
 
 export default ({ gateway } : Props ) => {
-  return (
-		<View style = {Theme.Styles.sectionHeader}>
-			<Text style = {Theme.Styles.sectionHeaderText}>
+	return (
+		<View style={Theme.Styles.sectionHeader}>
+			<Text style={Theme.Styles.sectionHeaderText}>
 				{(gateway && gateway.name) ? gateway.name : ''}
 			</Text>
 		</View>
-  );
+	);
 };

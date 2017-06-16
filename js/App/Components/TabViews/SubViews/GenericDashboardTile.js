@@ -30,24 +30,29 @@ type Props = {
 };
 
 class GenericDashboardTile extends View {
-  constructor(props: Props) {
-    super(props);
-  }
+	constructor(props: Props) {
+		super(props);
+	}
 
-  render() {
-    const { item, tileWidth } = this.props;
+	render() {
+		const { item, tileWidth } = this.props;
 
-    return (
+		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
 				name={item.name}
 				tileWidth={tileWidth}
-				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
-				<View style={{ flex: 30 }} />
+				style={[
+					this.props.style, {
+						width: tileWidth,
+						height: tileWidth,
+					},
+				]}>
+				<View style={{ flex: 30 }}/>
 			</DashboardShadowTile>
-    );
-  }
+		);
+	}
 }
 
 module.exports = GenericDashboardTile;

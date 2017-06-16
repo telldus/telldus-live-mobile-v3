@@ -50,18 +50,19 @@ type Props = {
 };
 
 class DeviceRow extends View {
-  props: Props;
-  onSettingsSelected: number => void;
+	props: Props;
+	onSettingsSelected: number => void;
 
-  constructor(props: Props) {
-    super(props);
+	constructor(props: Props) {
+		super(props);
 
-    this.onSettingsSelected = this.onSettingsSelected.bind(this);
-  }
-  render() {
-    let button = null;
-    const { device } = this.props;
-    const {
+		this.onSettingsSelected = this.onSettingsSelected.bind(this);
+	}
+
+	render() {
+		let button = null;
+		const { device } = this.props;
+		const {
 			TURNON,
 			TURNOFF,
 			BELL,
@@ -71,19 +72,19 @@ class DeviceRow extends View {
 			STOP,
 		} = device.supportedMethods;
 
-    if (BELL) {
-      button = <BellButton
+		if (BELL) {
+			button = <BellButton
 				onBell={this.props.onBell(device.id)}
 			/>;
-    } else if (UP || DOWN || STOP) {
-      button = <NavigationalButton
+		} else if (UP || DOWN || STOP) {
+			button = <NavigationalButton
 				device={device}
 				onDown={this.props.onDown(device.id)}
 				onUp={this.props.onUp(device.id)}
 				onStop={this.props.onStop(device.id)}
 			/>;
-    } else if (DIM) {
-      button = <DimmingButton
+		} else if (DIM) {
+			button = <DimmingButton
 				device={device}
 				onTurnOn={this.props.onTurnOn(device.id)}
 				onTurnOff={this.props.onTurnOff(device.id)}
@@ -91,28 +92,30 @@ class DeviceRow extends View {
 				onDimmerSlide={this.props.onDimmerSlide(device.id)}
 				setScrollEnabled={this.props.setScrollEnabled}
 			/>;
-    } else if (TURNON || TURNOFF) {
-      button = <ToggleButton
+		} else if (TURNON || TURNOFF) {
+			button = <ToggleButton
 				onTurnOn={this.props.onTurnOn(device.id)}
 				onTurnOff={this.props.onTurnOff(device.id)}
 				device={device}
 			/>;
-    } else {
-      button = <ToggleButton
+		} else {
+			button = <ToggleButton
 				onTurnOn={this.props.onTurnOn(device.id)}
 				onTurnOff={this.props.onTurnOff(device.id)}
 				device={device}
 			/>;
-    }
+		}
 
-    return (
-			<ListItem style = {Theme.Styles.rowFront}>
-				<Container style = {styles.container}>
+		return (
+			<ListItem style={Theme.Styles.rowFront}>
+				<Container style={styles.container}>
 					{button}
 					<View style={styles.name}>
-						<Text style = {[styles.text, {
-  opacity: device.name ? 1 : 0.5,
-}]}>
+						<Text style={[
+							styles.text, {
+								opacity: device.name ? 1 : 0.5,
+							},
+						]}>
 							{device.name ? device.name : '(no name)'}
 						</Text>
 					</View>
@@ -126,49 +129,49 @@ class DeviceRow extends View {
 					</View>
 				</Container>
 			</ListItem>
-    );
-  }
+		);
+	}
 
-  onSettingsSelected() {
-    this.props.onSettingsSelected(this.props.device.id);
-  }
+	onSettingsSelected() {
+		this.props.onSettingsSelected(this.props.device.id);
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginLeft: 2,
-    flexDirection: 'row',
-    alignItems: 'stretch',
-  },
-  name: {
-    flex: 20,
-    justifyContent: 'center',
-  },
-  text: {
-    marginLeft: 8,
-    color: 'rgba(0,0,0,0.87)',
-    fontSize: 16,
-    textAlignVertical: 'center',
-  },
-  gear: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 8,
-  },
+	container: {
+		marginLeft: 2,
+		flexDirection: 'row',
+		alignItems: 'stretch',
+	},
+	name: {
+		flex: 20,
+		justifyContent: 'center',
+	},
+	text: {
+		marginLeft: 8,
+		color: 'rgba(0,0,0,0.87)',
+		fontSize: 16,
+		textAlignVertical: 'center',
+	},
+	gear: {
+		flex: 2,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginRight: 8,
+	},
 });
 
 function mapDispatchToProps(dispatch) {
-  return {
-    onTurnOn: id => () => dispatch(turnOn(id)),
-    onTurnOff: id => () => dispatch(turnOff(id)),
-    onBell: id => () => dispatch(bell(id)),
-    onDown: id => () => dispatch(down(id)),
-    onUp: id => () => dispatch(up(id)),
-    onStop: id => () => dispatch(stop(id)),
-    onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-    onDim: id => value => dispatch(updateDimmerValue(id, value)),
-  };
+	return {
+		onTurnOn: id => () => dispatch(turnOn(id)),
+		onTurnOff: id => () => dispatch(turnOff(id)),
+		onBell: id => () => dispatch(bell(id)),
+		onDown: id => () => dispatch(down(id)),
+		onUp: id => () => dispatch(up(id)),
+		onStop: id => () => dispatch(stop(id)),
+		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
+		onDim: id => value => dispatch(updateDimmerValue(id, value)),
+	};
 }
 
 module.exports = connect(null, mapDispatchToProps)(DeviceRow);

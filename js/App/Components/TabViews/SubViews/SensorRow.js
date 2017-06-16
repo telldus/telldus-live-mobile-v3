@@ -30,19 +30,18 @@ import Theme from 'Theme';
 
 const SensorHumidity = ({ humidity }) => (
 	<View style={Theme.Styles.sensorValue}>
-	<Image source={require('../img/sensorIcons/Humidity.png')} />
-	<Text>
-	<FormattedNumber value = {humidity / 100} formatStyle = "percent" />
-	</Text>
+		<Image source={require('../img/sensorIcons/Humidity.png')}/>
+		<Text>
+			<FormattedNumber value={humidity / 100} formatStyle="percent"/>
+		</Text>
 	</View>
 );
 
-
 const SensorTemperature = ({ temperature }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Temperature.png')} />
+		<Image source={require('../img/sensorIcons/Temperature.png')}/>
 		<Text>
-			<FormattedNumber value = {temperature} maximumFractionDigits = {1} />
+			<FormattedNumber value={temperature} maximumFractionDigits={1}/>
 			{`${String.fromCharCode(176)}C`}
 		</Text>
 	</View>
@@ -50,42 +49,46 @@ const SensorTemperature = ({ temperature }) => (
 
 const SensorRain = ({ rainRate, rainTotal }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Rain.png')} />
+		<Image source={require('../img/sensorIcons/Rain.png')}/>
 		<Text>
-			{ rainRate && ( <Text><FormattedNumber value = {rainRate} maximumFractionDigits = {0} /> {'mm/h\n'} </Text> ) }
-			{ rainTotal && ( <Text><FormattedNumber value = {rainTotal} maximumFractionDigits = {0} /> {'mm'} </Text> ) }
+			{ rainRate && ( <Text><FormattedNumber value={rainRate} maximumFractionDigits={0}/> {'mm/h\n'} </Text> ) }
+			{ rainTotal && ( <Text><FormattedNumber value={rainTotal} maximumFractionDigits={0}/> {'mm'} </Text> ) }
 		</Text>
 	</View>
 );
 
 const SensorWind = ({ windAverage, windGust, windDirection }) => {
-  const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
-  const getWindDirection = value => directions[Math.floor(value / 22.5)];
+	const directions = [
+		'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
+	];
+	const getWindDirection = value => directions[Math.floor(value / 22.5)];
 
-  return (
+	return (
 		<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Wind.png')} />
+			<Image source={require('../img/sensorIcons/Wind.png')}/>
 			<Text>
-				{ windAverage && ( <Text><FormattedNumber value = {windAverage} maximumFractionDigits = {1} /> {'m/s\n'} </Text> ) }
-				{ windGust && ( <Text><FormattedNumber value = {windGust} maximumFractionDigits = {1} /> {'m/s*\n'} </Text> ) }
+				{ windAverage && (
+					<Text><FormattedNumber value={windAverage} maximumFractionDigits={1}/> {'m/s\n'} </Text> ) }
+				{ windGust && (
+					<Text><FormattedNumber value={windGust} maximumFractionDigits={1}/> {'m/s*\n'} </Text> ) }
 				{ windDirection && ( <Text>{getWindDirection(windDirection)}</Text> ) }
 			</Text>
 		</View>
-  );
+	);
 };
 
 const SensorUV = ({ uv }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/UV.png')} />
-		<FormattedNumber value = {uv} maximumFractionDigits = {0} />
+		<Image source={require('../img/sensorIcons/UV.png')}/>
+		<FormattedNumber value={uv} maximumFractionDigits={0}/>
 	</View>
 );
 
 const SensorWatt = ({ watt }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Watt.png')} />
+		<Image source={require('../img/sensorIcons/Watt.png')}/>
 		<Text>
-			<FormattedNumber value = {watt} maximumFractionDigits = {1} />
+			<FormattedNumber value={watt} maximumFractionDigits={1}/>
 			{'W'}
 		</Text>
 	</View>
@@ -93,9 +96,9 @@ const SensorWatt = ({ watt }) => (
 
 const SensorLuminance = ({ luminance }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Luminance.png')} />
+		<Image source={require('../img/sensorIcons/Luminance.png')}/>
 		<Text>
-			<FormattedNumber value = {luminance} maximumFractionDigits = {0} />
+			<FormattedNumber value={luminance} maximumFractionDigits={0}/>
 			{'lx'}
 		</Text>
 	</View>
@@ -106,23 +109,23 @@ type Props = {
 };
 
 class SensorRow extends Component {
-  props: Props;
-  onLayout: Object => void;
-  width: number;
+	props: Props;
+	onLayout: Object => void;
+	width: number;
 
-  constructor(props: Props) {
-    super(props);
-    this.width = 0;
+	constructor(props: Props) {
+		super(props);
+		this.width = 0;
 
-    this.onLayout = this.onLayout.bind(this);
-  }
+		this.onLayout = this.onLayout.bind(this);
+	}
 
-  render() {
-    const { sensor } = this.props;
-    const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
-    let sensors = [];
+	render() {
+		const { sensor } = this.props;
+		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
+		let sensors = [];
 
-    const {
+		const {
 			id,
 			humidity,
 			temperature,
@@ -136,99 +139,109 @@ class SensorRow extends Component {
 			luminance,
 		} = sensor;
 
-    if (humidity) {
-      sensors.push(<SensorHumidity {...{ humidity }} key={`${id}humidity`}/>);
-    }
-    if (temperature) {
-      sensors.push(<SensorTemperature {...{ temperature }} key={`${id}temperature`}/>);
-    }
-    if (rainRate || rainTotal) {
-      sensors.push(<SensorRain {...{ rainRate, rainTotal }} key={`${id}rain`}/>);
-    }
-    if (windGust || windAverage || windDirection) {
-      sensors.push(<SensorWind {...{ windGust, windAverage, windDirection }} key={`${id}wind`}/>);
-    }
-    if (uv) {
-      sensors.push(<SensorUV {...{ uv }} key={`${id}uv`}/>);
-    }
-    if (watt) {
-      sensors.push(<SensorWatt {...{ watt }} key={`${id}watt`}/>);
-    }
-    if (luminance) {
-      sensors.push(<SensorLuminance {...{ luminance }} key={`${id}luminance`}/>);
-    }
+		if (humidity) {
+			sensors.push(<SensorHumidity {...{ humidity }} key={`${id}humidity`}/>);
+		}
+		if (temperature) {
+			sensors.push(<SensorTemperature {...{ temperature }} key={`${id}temperature`}/>);
+		}
+		if (rainRate || rainTotal) {
+			sensors.push(<SensorRain {...{
+				rainRate,
+				rainTotal,
+			}} key={`${id}rain`}/>);
+		}
+		if (windGust || windAverage || windDirection) {
+			sensors.push(<SensorWind {...{
+				windGust,
+				windAverage,
+				windDirection,
+			}} key={`${id}wind`}/>);
+		}
+		if (uv) {
+			sensors.push(<SensorUV {...{ uv }} key={`${id}uv`}/>);
+		}
+		if (watt) {
+			sensors.push(<SensorWatt {...{ watt }} key={`${id}watt`}/>);
+		}
+		if (luminance) {
+			sensors.push(<SensorLuminance {...{ luminance }} key={`${id}luminance`}/>);
+		}
 
-    return (
+		return (
 			<ListItem
-				style = {Theme.Styles.rowFront}
-				onLayout={this.onLayout} >
+				style={Theme.Styles.rowFront}
+				onLayout={this.onLayout}>
 				<View>
-					<Text style = {[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
-						ellipsizeMode="middle"
-						numberOfLines={1}>
+					<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
+					      ellipsizeMode="middle"
+					      numberOfLines={1}>
 						{sensor.name ? sensor.name : '(no name)'}
 					</Text>
-					<Text style = {[styles.time, {
-  color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
-  opacity: minutesAgo < 1440 ? 1 : 0.5 }]}>
+					<Text style={[
+						styles.time, {
+							color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
+							opacity: minutesAgo < 1440 ? 1 : 0.5,
+						},
+					]}>
 						{this.formatLastUpdated(minutesAgo, sensor.lastUpdated)}
 					</Text>
 				</View>
-				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ?
-					sensors :
-					(<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true} directionalLockEnabled={true} >
+				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ? sensors : (
+					<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true}
+					            directionalLockEnabled={true}>
 						{sensors}
 					</ScrollView>)
 				}
 			</ListItem>
-    );
-  }
+		);
+	}
 
-  onLayout(event: Object) {
-    this.width = event.nativeEvent.layout.width;
-  }
+	onLayout(event: Object) {
+		this.width = event.nativeEvent.layout.width;
+	}
 
-  formatLastUpdated(minutes: number, lastUpdated:number): string {
-    if (minutes === 0) {
-      return 'Just now';
-    }
-    if (minutes === 1) {
-      return '1 minute ago';
-    }
-    if (minutes < 60) {
-      return `${minutes} minutes ago`;
-    }
-    const hours = Math.round(minutes / 60);
-    if (hours === 1) {
-      return '1 hour ago';
-    }
-    if (hours < 24) {
-      return `${hours} hours ago`;
-    }
-    const days = Math.round(minutes / 60 / 24);
-    if (days === 1) {
-      return '1 day ago';
-    }
-    if (days <= 7) {
-      return `${days} days ago`;
-    }
-    return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
-  }
+	formatLastUpdated(minutes: number, lastUpdated:number): string {
+		if (minutes === 0) {
+			return 'Just now';
+		}
+		if (minutes === 1) {
+			return '1 minute ago';
+		}
+		if (minutes < 60) {
+			return `${minutes} minutes ago`;
+		}
+		const hours = Math.round(minutes / 60);
+		if (hours === 1) {
+			return '1 hour ago';
+		}
+		if (hours < 24) {
+			return `${hours} hours ago`;
+		}
+		const days = Math.round(minutes / 60 / 24);
+		if (days === 1) {
+			return '1 day ago';
+		}
+		if (days <= 7) {
+			return `${days} days ago`;
+		}
+		return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
+	}
 }
 
 const styles = StyleSheet.create({
-  name: {
-    color: 'rgba(0,0,0,0.87)',
-    fontSize: 16,
-    marginBottom: 2,
-  },
-  time: {
-    fontSize: 12,
-  },
-  scrollView: {
-    alignSelf: 'stretch',
-    minWidth: 216,
-  },
+	name: {
+		color: 'rgba(0,0,0,0.87)',
+		fontSize: 16,
+		marginBottom: 2,
+	},
+	time: {
+		fontSize: 12,
+	},
+	scrollView: {
+		alignSelf: 'stretch',
+		minWidth: 216,
+	},
 });
 
 module.exports = SensorRow;

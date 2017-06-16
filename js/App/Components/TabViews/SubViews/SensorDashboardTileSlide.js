@@ -35,24 +35,27 @@ type Props = {
 };
 
 class SensorDashboardTileSlide extends View {
-  props: Props;
+	props: Props;
 
-  render() {
-    return (
+	render() {
+		return (
 			<View style={Theme.Styles.sensorTileItem}>
 				<View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
 					<Image source={this.props.icon}/>
 				</View>
 				<View style={{ flex: 5, justifyContent: 'center', alignItems: 'center' }}>
-					<Text style={{ color: '#00255e', fontSize: Math.floor(this.props.tileWidth / 8) }}>
+					<Text style={{
+						color: '#00255e',
+						fontSize: Math.floor(this.props.tileWidth / 8),
+					}}>
 						{this.props.text && this.props.text}
 						{this.props.text2 && this.props.text2}
 						{this.props.text3 && this.props.text3}
 					</Text>
 				</View>
 			</View>
-    );
-  }
+		);
+	}
 }
 
 module.exports = SensorDashboardTileSlide;

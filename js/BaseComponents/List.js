@@ -26,40 +26,40 @@ import { ListView, RefreshControl } from 'react-native';
 import SwipeRow from './SwipeRow';
 
 type Props = {
-  onRefresh: ?(() => void),
+	onRefresh: ?(() => void),
 	/**
 	 * How to render a row. Should return a valid React Element.
 	 */
-  renderRow: (Object, number, number, Object) => Object,
+	renderRow: (Object, number, number, Object) => Object,
 	/**
 	 * How to render a hidden row (renders behind the row). Should return a valid React Element.
 	 * This is required unless renderRow is passing a SwipeRow.
 	 */
-  renderHiddenRow: (Object, number, number, Object) => Object,
+	renderHiddenRow: (Object, number, number, Object) => Object,
 	/**
 	 * TranslateX value for opening the row to the left (positive number)
 	 */
-  leftOpenValue: number,
+	leftOpenValue: number,
 	/**
 	 * TranslateX value for opening the row to the right (negative number)
 	 */
-  rightOpenValue: number,
+	rightOpenValue: number,
 	/**
 	 * Should open rows be closed when the listView begins scrolling
 	 */
-  closeOnScroll: boolean,
+	closeOnScroll: boolean,
 	/**
 	 * Should open rows be closed when a row is pressed
 	 */
-  closeOnRowPress: boolean,
+	closeOnRowPress: boolean,
 	/**
 	 * Disable ability to swipe rows left
 	 */
-  disableLeftSwipe: boolean,
+	disableLeftSwipe: boolean,
 	/**
 	 * Disable ability to swipe rows right
 	 */
-  disableRightSwipe: boolean,
+	disableRightSwipe: boolean,
 	/**
 	 * Enable hidden row onLayout calculations to run always.
 	 *
@@ -69,71 +69,71 @@ type Props = {
 	 * You may want to do this if your rows' sizes can change.
 	 * One case is a SwipeListView with rows of different heights and an options to delete rows.
 	 */
-  recalculateHiddenLayout: boolean,
+	recalculateHiddenLayout: boolean,
 	/**
 	 * Called when a swipe row is animating open
 	 */
-  onRowOpen: (number, number, Object) => void,
+	onRowOpen: (number, number, Object) => void,
 	/**
 	 * Called when a swipe row is animating closed
 	 */
-  onRowClose: (number, number, Object) => void,
+	onRowClose: (number, number, Object) => void,
 	/**
 	 * Styles for the parent wrapper View of the SwipeRow
 	 */
-  swipeRowStyle: Object,
+	swipeRowStyle: Object,
 	/**
 	 * Called when the ListView ref is set and passes a ref to the ListView
 	 * e.g. listViewRef={ ref => this._swipeListViewRef = ref }
 	 */
-  listViewRef: (Object) => void,
+	listViewRef: (Object) => void,
 	/**
 	 * Should the first SwipeRow do a slide out preview to show that the list is swipeable
 	 */
-  previewFirstRow: boolean,
+	previewFirstRow: boolean,
 	/**
 	 * Duration of the slide out preview animation
 	 */
-  previewDuration: number,
+	previewDuration: number,
 	/**
 	 * TranslateX value for the slide out preview animation
 	 * Default: 0.5 * props.rightOpenValue
 	 */
-  previewOpenValue: number,
+	previewOpenValue: number,
 
-  editMode: boolean,
+	editMode: boolean,
 
-  dataSource: Object,
+	dataSource: Object,
 
-  onScroll: (Object) => void,
+	onScroll: (Object) => void,
 };
 
 type DefaultProps = {
-  onRefresh: ?(() => void),
+	onRefresh: ?(() => void),
 	/**
 	 * TranslateX value for opening the row to the left (positive number)
 	 */
-  leftOpenValue: number,
+	leftOpenValue: number,
 	/**
 	 * TranslateX value for opening the row to the right (negative number)
 	 */
-  rightOpenValue: number,
+	rightOpenValue: number,
 	/**
 	 * Should open rows be closed when the listView begins scrolling
 	 */
-  closeOnScroll: boolean,
+	closeOnScroll: boolean,
 	/**
 	 * Should open rows be closed when a row is pressed
 	 */
-  closeOnRowPress: boolean,
+	closeOnRowPress: boolean,
 	/**
 	 * Disable ability to swipe rows left
 	 */
-  disableLeftSwipe: boolean,
+	disableLeftSwipe: boolean,
 	/**
 	 * Disable ability to swipe rows right
 	 */
-  disableRightSwipe: boolean,
+	disableRightSwipe: boolean,
 	/**
 	 * Enable hidden row onLayout calculations to run always.
 	 *
@@ -143,129 +143,133 @@ type DefaultProps = {
 	 * You may want to do this if your rows' sizes can change.
 	 * One case is a SwipeListView with rows of different heights and an options to delete rows.
 	 */
-  recalculateHiddenLayout: boolean,
+	recalculateHiddenLayout: boolean,
 	/**
 	 * Should the first SwipeRow do a slide out preview to show that the list is swipeable
 	 */
-  previewFirstRow: boolean,
+	previewFirstRow: boolean,
 
-  editMode: boolean,
+	editMode: boolean,
 };
 
 type State = {
-  refreshing: boolean,
-  scrollEnabled: boolean,
+	refreshing: boolean,
+	scrollEnabled: boolean,
 };
 
 class ListComponent extends React.Component {
-  props: Props;
-  static defaultProps: DefaultProps;
-  state: State;
-  _rows: Object;
-  openCellId: ?string;
-  _listView: Object;
-  onRefresh: () => void;
-  setScrollEnabled: (boolean) => void;
-  onScroll: (Object) => void;
-  setRefs: (Object) => void;
-  renderRow: (Object, number, number, Object) => Object;
+	props: Props;
+	static defaultProps: DefaultProps;
+	state: State;
+	_rows: Object;
+	openCellId: ?string;
+	_listView: Object;
+	onRefresh: () => void;
+	setScrollEnabled: (boolean) => void;
+	onScroll: (Object) => void;
+	setRefs: (Object) => void;
+	renderRow: (Object, number, number, Object) => Object;
 
-  constructor(props: Props) {
-    super(props);
-    this._rows = {};
-    this.openCellId = null;
-    this.state = {
-      refreshing: false,
-      scrollEnabled: true,
-    };
+	constructor(props: Props) {
+		super(props);
+		this._rows = {};
+		this.openCellId = null;
+		this.state = {
+			refreshing: false,
+			scrollEnabled: true,
+		};
 
-    this.onRefresh = this.onRefresh.bind(this);
-    this.onScroll = this.onScroll.bind(this);
-    this.renderRow = this.renderRow.bind(this);
-    this.setRefs = this.setRefs.bind(this);
-    this.setScrollEnabled = this.setScrollEnabled.bind(this);
-  }
+		this.onRefresh = this.onRefresh.bind(this);
+		this.onScroll = this.onScroll.bind(this);
+		this.renderRow = this.renderRow.bind(this);
+		this.setRefs = this.setRefs.bind(this);
+		this.setScrollEnabled = this.setScrollEnabled.bind(this);
+	}
 
-  onRefresh() {
-    this.setState({ refreshing: true });
-    if (this.props.onRefresh) {
-      this.props.onRefresh();
-      this.setState({ refreshing: false });
-    } else {
-      setTimeout(() => {
-        this.setState({ refreshing: false });
-      }, 1000);
-    }
-  }
+	onRefresh() {
+		this.setState({ refreshing: true });
+		if (this.props.onRefresh) {
+			this.props.onRefresh();
+			this.setState({ refreshing: false });
+		} else {
+			setTimeout(() => {
+				this.setState({ refreshing: false });
+			}, 1000);
+		}
+	}
 
-  setScrollEnabled(enable: boolean) {
-    if (this._listView) {
-      this._listView.setNativeProps({ scrollEnabled: enable });
-      this.setState({ scrollEnabled: enable });
-    }
-  }
+	setScrollEnabled(enable: boolean) {
+		if (this._listView) {
+			this._listView.setNativeProps({ scrollEnabled: enable });
+			this.setState({ scrollEnabled: enable });
+		}
+	}
 
-  safeCloseOpenRow() {
+	safeCloseOpenRow() {
 		// if the openCellId is stale due to deleting a row this could be undefined
-    if (this._rows[this.openCellId]) {
-      this._rows[this.openCellId].closeRow();
-    }
-  }
+		if (this._rows[this.openCellId]) {
+			this._rows[this.openCellId].closeRow();
+		}
+	}
 
-  onRowOpen(secId: number, rowId: number, rowMap: Object) {
-    const cellIdentifier = `${secId}${rowId}`;
-    if (this.openCellId && this.openCellId !== cellIdentifier) {
-      this.safeCloseOpenRow();
-    }
-    this.openCellId = cellIdentifier;
-    this.props.onRowOpen && this.props.onRowOpen(secId, rowId, rowMap);
-  }
+	onRowOpen(secId: number, rowId: number, rowMap: Object) {
+		const cellIdentifier = `${secId}${rowId}`;
+		if (this.openCellId && this.openCellId !== cellIdentifier) {
+			this.safeCloseOpenRow();
+		}
+		this.openCellId = cellIdentifier;
+		this.props.onRowOpen && this.props.onRowOpen(secId, rowId, rowMap);
+	}
 
-  onRowPress(id: string) {
-    if (this.openCellId) {
-      if (this.props.closeOnRowPress) {
-        this.safeCloseOpenRow();
-        this.openCellId = null;
-      }
-    }
-  }
+	onRowPress(id: string) {
+		if (this.openCellId) {
+			if (this.props.closeOnRowPress) {
+				this.safeCloseOpenRow();
+				this.openCellId = null;
+			}
+		}
+	}
 
-  onScroll(e: Object) {
-    if (this.openCellId) {
-      if (this.props.closeOnScroll) {
-        this.safeCloseOpenRow();
-        this.openCellId = null;
-      }
-    }
-    this.props.onScroll && this.props.onScroll(e);
-  }
+	onScroll(e: Object) {
+		if (this.openCellId) {
+			if (this.props.closeOnScroll) {
+				this.safeCloseOpenRow();
+				this.openCellId = null;
+			}
+		}
+		this.props.onScroll && this.props.onScroll(e);
+	}
 
-  setRefs(ref: Object) {
-    this._listView = ref;
-    this.props.listViewRef && this.props.listViewRef(ref);
-  }
+	setRefs(ref: Object) {
+		this._listView = ref;
+		this.props.listViewRef && this.props.listViewRef(ref);
+	}
 
-  renderRow(rowData: Object, secId: number, rowId: number, highlightRow: Object) : Object {
-    const Component = this.props.renderRow(rowData, secId, rowId, highlightRow);
-    if (!this.props.renderHiddenRow) {
-      return React.cloneElement(
+	renderRow(rowData: Object, secId: number, rowId: number, highlightRow: Object) : Object {
+		const Component = this.props.renderRow(rowData, secId, rowId, highlightRow);
+		if (!this.props.renderHiddenRow) {
+			return React.cloneElement(
 				Component,
-        {
-          ...Component.props,
-          ref: row => (this._rows[`${secId}${rowId}`] = row),
-          onRowOpen: _ => this.onRowOpen(secId, rowId, this._rows),
-          onRowClose: _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows),
-          onRowPress: _ => this.onRowPress(`${secId}${rowId}`),
-          setScrollEnabled: enable => this.setScrollEnabled(enable),
-        }
+				{
+					...Component.props,
+					ref: row => (this._rows[`${secId}${rowId}`] = row),
+					onRowOpen: _ => this.onRowOpen(secId, rowId, this._rows),
+					onRowClose: _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows),
+					onRowPress: _ => this.onRowPress(`${secId}${rowId}`),
+					setScrollEnabled: enable => this.setScrollEnabled(enable),
+				}
 			);
-    }
-    const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
-    return (
+		}
+		const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
+		return (
 			<SwipeRow
 				ref={row => (this._rows[`${secId}${rowId}`] = row)} // eslint-disable-line react/jsx-no-bind
 				onRowOpen={_ => this.onRowOpen(secId, rowId, this._rows)} // eslint-disable-line react/jsx-no-bind
-				onRowClose={_ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows)} // eslint-disable-line react/jsx-no-bind
+				onRowClose={_ => this.props.onRowClose && this.props.onRowClose( // eslint-disable-line react/jsx-no-bind
+					secId,
+					rowId,
+					this._rows
+				)}
 				onRowPress={_ => this.onRowPress(`${secId}${rowId}`)} // eslint-disable-line react/jsx-no-bind
 				setScrollEnabled={this.setScrollEnabled}
 				leftOpenValue={this.props.leftOpenValue}
@@ -283,11 +287,11 @@ class ListComponent extends React.Component {
 				{this.props.renderHiddenRow(rowData, secId, rowId, this._rows)}
 				{this.props.renderRow(rowData, secId, rowId, this._rows)}
 			</SwipeRow>
-    );
-  }
+		);
+	}
 
-  render() {
-    return (
+	render() {
+		return (
 			<ListView
 				{...this.props}
 				refreshControl={
@@ -303,22 +307,22 @@ class ListComponent extends React.Component {
 				renderRow={this.renderRow}
 				contentInset={{ bottom: 64 }}
 			/>
-    );
-  }
+		);
+	}
 
 }
 
 ListComponent.defaultProps = {
-  onRefresh: null,
-  leftOpenValue: 0,
-  rightOpenValue: 0,
-  closeOnScroll: true,
-  closeOnRowPress: true,
-  disableLeftSwipe: false,
-  disableRightSwipe: true,
-  recalculateHiddenLayout: false,
-  previewFirstRow: false,
-  editMode: false,
+	onRefresh: null,
+	leftOpenValue: 0,
+	rightOpenValue: 0,
+	closeOnScroll: true,
+	closeOnRowPress: true,
+	disableLeftSwipe: false,
+	disableRightSwipe: true,
+	recalculateHiddenLayout: false,
+	previewFirstRow: false,
+	editMode: false,
 };
 
 export default ListComponent;

@@ -28,8 +28,8 @@ import type { Action } from './types';
 type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab';
 
 module.exports = {
-  switchTab: (tab: Tab): Action => ({
-    type: 'SWITCH_TAB',
-    tab,
-  }),
+	switchTab: (tab: Tab): Action => ({
+		type: 'SWITCH_TAB',
+		tab,
+	}),
 };

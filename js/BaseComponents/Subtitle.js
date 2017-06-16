@@ -32,9 +32,13 @@ type Props = {
 export default class Subtitle extends Base {
   props: Props;
 
-  render() {
-    return (
-			<View><Text style={{ color: this.getTheme().subtitleColor, fontSize: this.getTheme().subTitleFontSize, alignSelf: (Platform.OS === 'ios' ) ? 'center' : 'flex-start' }}>{this.props.children}</Text></View>
-    );
-  }
+	render() {
+		return (
+			<View><Text style={{
+				color: this.getTheme().subtitleColor,
+				fontSize: this.getTheme().subTitleFontSize,
+				alignSelf: (Platform.OS === 'ios' ) ? 'center' : 'flex-start',
+			}}>{this.props.children}</Text></View>
+		);
+	}
 }

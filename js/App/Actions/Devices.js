@@ -31,194 +31,185 @@ import { supportedMethods } from 'Config';
 import { format } from 'url';
 
 export function getDevices(): ThunkAction {
-  return (dispatch) => {
-    const url = format({
-      pathname: '/devices/list',
-      query: {
-        supportedMethods,
-        includeIgnored: 1,
-      },
-    });
-    const payload = {
-      url,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => dispatch({
-      type: 'RECEIVED_DEVICES',
-      payload: {
-        ...payload,
-        ...response,
-      },
-    }
-		));
-  };
+	return (dispatch) => {
+		const url = format({
+			pathname: '/devices/list',
+			query: {
+				supportedMethods,
+				includeIgnored: 1,
+			},
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'RECEIVED_DEVICES',
+			payload: {
+				...payload,
+				...response,
+			},
+		}));
+	};
 }
 
 export function processWebsocketMessageForDevice(action:string, data:Object): Action {
-  switch (action) {
-    case 'setState':
-      return {
-        type: 'DEVICE_SET_STATE',
-        payload: data,
-      };
-    default:
-      return {
-        type: 'DEVICE_WEBSOCKET_UNHANDLED',
-        payload: data,
-      };
-  }
+	switch (action) {
+		case 'setState':
+			return {
+				type: 'DEVICE_SET_STATE',
+				payload: data,
+			};
+		default:
+			return {
+				type: 'DEVICE_WEBSOCKET_UNHANDLED',
+				payload: data,
+			};
+	}
 }
 
 export function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
-  return (dispatch) => {
-    const payload = { //$FlowFixMe
-      url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => dispatch({
-      type: 'DEVICE_SET_STATE',
-      payload: {
-        ...payload,
-        ...response,
-      },
-    }
-		));
-  };
+	return (dispatch) => {
+		const payload = { //$FlowFixMe
+			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_SET_STATE',
+			payload: {
+				...payload,
+				...response,
+			},
+		}));
+	};
 }
 
 export function turnOn(deviceId: number): ThunkAction {
-  return (dispatch) => {
-    const payload = {
-      url: `/device/turnOn?id=${deviceId}`,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => dispatch({
-      type: 'DEVICE_TURN_ON',
-      payload: {
-        ...payload,
-        ...response,
-      },
-    }
-		));
-  };
+	return (dispatch) => {
+		const payload = {
+			url: `/device/turnOn?id=${deviceId}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_TURN_ON',
+			payload: {
+				...payload,
+				...response,
+			},
+		}));
+	};
 }
 
 export function turnOff(deviceId: number): ThunkAction {
-  return (dispatch) => {
-    const payload = {
-      url: `/device/turnOff?id=${deviceId}`,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => dispatch({
-      type: 'DEVICE_TURN_OFF',
-      payload: {
-        ...payload,
-        ...response,
-      },
-    }
-		));
-  };
+	return (dispatch) => {
+		const payload = {
+			url: `/device/turnOff?id=${deviceId}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_TURN_OFF',
+			payload: {
+				...payload,
+				...response,
+			},
+		}));
+	};
 }
 
 export function bell(deviceId: number): ThunkAction {
-  return (dispatch) => {
-    const payload = {
-      url: `/device/bell?id=${deviceId}`,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => dispatch({
-      type: 'DEVICE_BELL',
-      payload: {
-        ...payload,
-        ...response,
-      },
-    }
-		));
-  };
+	return (dispatch) => {
+		const payload = {
+			url: `/device/bell?id=${deviceId}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_BELL',
+			payload: {
+				...payload,
+				...response,
+			},
+		}));
+	};
 }
 
 export function up(deviceId: number): ThunkAction {
-  return (dispatch) => {
-    const payload = {
-      url: `/device/up?id=${deviceId}`,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => dispatch({
-      type: 'DEVICE_UP',
-      payload: {
-        ...payload,
-        ...response,
-      },
-    }
-		));
-  };
+	return (dispatch) => {
+		const payload = {
+			url: `/device/up?id=${deviceId}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_UP',
+			payload: {
+				...payload,
+				...response,
+			},
+		}));
+	};
 }
 
 export function down(deviceId: number): ThunkAction {
-  return (dispatch) => {
-    const payload = {
-      url: `/device/down?id=${deviceId}`,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => dispatch({
-      type: 'DEVICE_DOWN',
-      payload: {
-        ...payload,
-        ...response,
-      },
-    }
-		));
-  };
+	return (dispatch) => {
+		const payload = {
+			url: `/device/down?id=${deviceId}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_DOWN',
+			payload: {
+				...payload,
+				...response,
+			},
+		}));
+	};
 }
 
 export function stop(deviceId: number): ThunkAction {
-  return (dispatch) => {
-    const payload = {
-      url: `/device/stop?id=${deviceId}`,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => dispatch({
-      type: 'DEVICE_STOP',
-      payload: {
-        ...payload,
-        ...response,
-      },
-    }
-		));
-  };
+	return (dispatch) => {
+		const payload = {
+			url: `/device/stop?id=${deviceId}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_STOP',
+			payload: {
+				...payload,
+				...response,
+			},
+		}));
+	};
 }
 
 export function learn(deviceId: number): ThunkAction {
-  return (dispatch) => {
-    const payload = {
-      url: `/device/learn?id=${deviceId}`,
-      requestParams: {
-        method: 'GET',
-      },
-    };
-    return LiveApi(payload).then(response => dispatch({
-      type: 'DEVICE_LEARN',
-      payload: {
-        ...payload,
-        ...response,
-      },
-    }
-		));
-  };
+	return (dispatch) => {
+		const payload = {
+			url: `/device/learn?id=${deviceId}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => dispatch({
+			type: 'DEVICE_LEARN',
+			payload: {
+				...payload,
+				...response,
+			},
+		}));
+	};
 }

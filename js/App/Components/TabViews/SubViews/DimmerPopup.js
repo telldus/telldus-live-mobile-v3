@@ -58,128 +58,134 @@ type DefaultProps = {
 };
 
 class DimmerPopup extends Component {
-  props: Props;
-  state: State;
-  static defaultProps : DefaultProps;
-  handleLayout : Object => void;
-  setRefs: Object => void;
-  contentRef: Object;
+	props: Props;
+	state: State;
+	static defaultProps : DefaultProps;
+	handleLayout : Object => void;
+	setRefs: Object => void;
+	contentRef: Object;
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      isVisible: false,
-      deviceWidth: Dimensions.get('window').width,
-      deviceHeight: Dimensions.get('window').height,
-    };
+	constructor(props: Props) {
+		super(props);
+		this.state = {
+			isVisible: false,
+			deviceWidth: Dimensions.get('window').width,
+			deviceHeight: Dimensions.get('window').height,
+		};
 
-    this.handleLayout = this.handleLayout.bind(this);
-    this.setRefs = this.setRefs.bind(this);
-  }
+		this.handleLayout = this.handleLayout.bind(this);
+		this.setRefs = this.setRefs.bind(this);
+	}
 
-  componentWillReceiveProps(nextProps: Props) {
-    if (!this.state.isVisible && nextProps.isVisible) {
-      this.setState({ isVisible: true });
-    }
-  }
+	componentWillReceiveProps(nextProps: Props) {
+		if (!this.state.isVisible && nextProps.isVisible) {
+			this.setState({ isVisible: true });
+		}
+	}
 
-  componentWillMount() {
-    if (this.props.isVisible) {
-      this.setState({ isVisible: true });
-    }
-  }
+	componentWillMount() {
+		if (this.props.isVisible) {
+			this.setState({ isVisible: true });
+		}
+	}
 
-  componentDidMount() {
-    if (this.state.isVisible) {
-      this.open();
-    }
-  }
+	componentDidMount() {
+		if (this.state.isVisible) {
+			this.open();
+		}
+	}
 
-  componentDidUpdate(prevProps: Props, prevState:State) {
+	componentDidUpdate(prevProps: Props, prevState:State) {
 		// On modal open request, we slide the view up and fade in the backdrop
-    if (this.state.isVisible && !prevState.isVisible) {
-      this.open();
-		// On modal close request, we slide the view down and fade out the backdrop
-    } else if (!this.props.isVisible && prevProps.isVisible) {
-      this.close();
-    }
-  }
+		if (this.state.isVisible && !prevState.isVisible) {
+			this.open();
+			// On modal close request, we slide the view down and fade out the backdrop
+		} else if (!this.props.isVisible && prevProps.isVisible) {
+			this.close();
+		}
+	}
 
-  open() {
-    this.contentRef[this.props.animationIn](this.props.animationInTiming);
-  }
+	open() {
+		this.contentRef[this.props.animationIn](this.props.animationInTiming);
+	}
 
-  close = async () => {
-    this.contentRef[this.props.animationOut](this.props.animationOutTiming).then(() => {
-      this.setState({ isVisible: false });
-    });
-  }
+	close = async () => {
+		this.contentRef[this.props.animationOut](this.props.animationOutTiming).then(() => {
+			this.setState({ isVisible: false });
+		});
+	};
 
-  closeOnBack() {
-    if (this.props.hideOnBack) {
-      this.close();
-    }
+	closeOnBack() {
+		if (this.props.hideOnBack) {
+			this.close();
+		}
 
-    this.props.onBackButtonPress();
-  }
+		this.props.onBackButtonPress();
+	}
 
-  handleLayout(event:Object) {
+	handleLayout(event:Object) {
 		// Here we update the device dimensions in the state if the layout changed (triggering a render)
-    const deviceWidth = Dimensions.get('window').width;
-    const deviceHeight = Dimensions.get('window').height;
-    if (deviceWidth !== this.state.deviceWidth || deviceHeight !== this.state.deviceHeight) {
-      this.setState({ deviceWidth, deviceHeight });
-    }
-  }
+		const deviceWidth = Dimensions.get('window').width;
+		const deviceHeight = Dimensions.get('window').height;
+		if (deviceWidth !== this.state.deviceWidth || deviceHeight !== this.state.deviceHeight) {
+			this.setState({
+				deviceWidth,
+				deviceHeight,
+			});
+		}
+	}
 
-  setRefs(ref:Object) {
-    this.contentRef = ref;
-  }
+	setRefs(ref:Object) {
+		this.contentRef = ref;
+	}
 
-  render() {
-    const { deviceWidth } = this.state;
+	render() {
+		const { deviceWidth } = this.state;
 
-    if (!this.state.isVisible) {
-      return null;
-    }
-    return (
+		if (!this.state.isVisible) {
+			return null;
+		}
+		return (
 			<View
 				onLayout={this.handleLayout}
 				ref={this.setRefs}
 				style={{
-  marginTop: 22,
-  marginHorizontal: 8,
-  position: 'absolute',
-  width: deviceWidth - 16,
-  height: 56,
-  backgroundColor: 'white',
-  borderRadius: 7,
-  alignItems: 'center',
-  justifyContent: 'center',
-}}>
+					marginTop: 22,
+					marginHorizontal: 8,
+					position: 'absolute',
+					width: deviceWidth - 16,
+					height: 56,
+					backgroundColor: 'white',
+					borderRadius: 7,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}>
 				<Text ellipsizeMode="middle"
-					style={{ color: '#1a355b' }}>
+				      style={{ color: '#1a355b' }}>
 					{this.props.name}
 				</Text>
 				<DimmerProgressBar
 					progress={this.props.value}
 					height={16}
 					width={deviceWidth - 32}
-					style={{ alignItems: 'center', justifyContent: 'center' }}
+					style={{
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
 				/>
 			</View>
-    );
-  }
+		);
+	}
 }
 
 DimmerPopup.defaultProps = {
-  animationIn: 'slideInDown',
-  animationInTiming: 300,
-  animationOut: 'slideOutUp',
-  animationOutTiming: 300,
-  isVisible: false,
-  hideOnBack: true,
-  value: 1,
+	animationIn: 'slideInDown',
+	animationInTiming: 300,
+	animationOut: 'slideOutUp',
+	animationOutTiming: 300,
+	isVisible: false,
+	hideOnBack: true,
+	value: 1,
 };
 
 module.exports = DimmerPopup;

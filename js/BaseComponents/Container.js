@@ -27,10 +27,10 @@ import Base from './Base';
 
 export default class ContainerComponent extends Base {
 
-  render() {
-    return (
+	render() {
+		return (
 			<View {...this.props} />
-    );
-  }
+		);
+	}
 }
 

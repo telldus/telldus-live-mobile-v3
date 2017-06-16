@@ -38,51 +38,51 @@ type Props = {
 };
 
 class DeviceRowHidden extends View {
-  props: Props;
-  onStarSelected : () => void;
+	props: Props;
+	onStarSelected : () => void;
 
-  constructor(props: Props) {
-    super(props);
-    this.onStarSelected = this.onStarSelected.bind(this);
-  }
+	constructor(props: Props) {
+		super(props);
+		this.onStarSelected = this.onStarSelected.bind(this);
+	}
 
-  render() {
-    const { isInDashboard } = this.props.device;
-    return (
+	render() {
+		const { isInDashboard } = this.props.device;
+		return (
 			<View style={Theme.Styles.rowBack}>
 				<TouchableOpacity
 					style={Theme.Styles.rowBackButton}
-					onPress={this.onStarSelected} >
+					onPress={this.onStarSelected}>
 					<Icon name="star" size={26} style={isInDashboard ? styles.enabled : styles.disabled}/>
 				</TouchableOpacity>
 			</View>
-    );
-  }
+		);
+	}
 
-  onStarSelected() {
-    const { id, isInDashboard } = this.props.device;
-    if (isInDashboard) {
-      this.props.removeFromDashboard(id);
-    } else {
-      this.props.addToDashboard(id);
-    }
-  }
+	onStarSelected() {
+		const { id, isInDashboard } = this.props.device;
+		if (isInDashboard) {
+			this.props.removeFromDashboard(id);
+		} else {
+			this.props.addToDashboard(id);
+		}
+	}
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    addToDashboard: id => dispatch(addToDashboard('device', id)),
-    removeFromDashboard: id => dispatch(removeFromDashboard('device', id)),
-  };
+	return {
+		addToDashboard: id => dispatch(addToDashboard('device', id)),
+		removeFromDashboard: id => dispatch(removeFromDashboard('device', id)),
+	};
 }
 
 const styles = StyleSheet.create({
-  enabled: {
-    color: 'rgba(226, 105, 0, 255)',
-  },
-  disabled: {
-    color: 'rgba(241, 217, 196, 255)',
-  },
+	enabled: {
+		color: 'rgba(226, 105, 0, 255)',
+	},
+	disabled: {
+		color: 'rgba(241, 217, 196, 255)',
+	},
 });
 
 export default connect(null, mapDispatchToProps)(DeviceRowHidden);

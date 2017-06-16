@@ -28,31 +28,31 @@ import FCM from 'react-native-fcm';
 
 class Push extends React.Component {
 
-  constructor() {
-    super();
+	constructor() {
+		super();
 		//FCM.requestPermissions();
-    FCM.getFCMToken().then(token => {
-      console.log('Push Token', token);
+		FCM.getFCMToken().then(token => {
+			console.log('Push Token', token);
 			// store fcm token in your server
-    });
-    this.notificationUnsubscribe = FCM.on('notification', (notif) => {
-      if (notif.message) {
-        console.log(`Received push notification: ${notif.message}`);
-      }
-    });
-    this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
-      console.log('Push Refresh Token', token);
-    });
-  }
+		});
+		this.notificationUnsubscribe = FCM.on('notification', (notif) => {
+			if (notif.message) {
+				console.log(`Received push notification: ${notif.message}`);
+			}
+		});
+		this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
+			console.log('Push Refresh Token', token);
+		});
+	}
 
-  destructor() {
-    this.refreshUnsubscribe();
-    this.notificationUnsubscribe();
-  }
+	destructor() {
+		this.refreshUnsubscribe();
+		this.notificationUnsubscribe();
+	}
 
-  render() {
-    return null;
-  }
+	render() {
+		return null;
+	}
 
 }
 

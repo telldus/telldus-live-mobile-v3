@@ -47,121 +47,121 @@ type State = {
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 class SchedulerTab extends View {
-  props: Props;
-  state: State;
+	props: Props;
+	state: State;
 
-  renderRow: Object => Object;
-  renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
-  onRefresh: () => void;
+	renderRow: Object => Object;
+	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	onRefresh: () => void;
 
-  constructor(props: Props) {
-    super(props);
+	constructor(props: Props) {
+		super(props);
 
-    const { sections, sectionIds } = this.props.rowsAndSections;
+		const { sections, sectionIds } = this.props.rowsAndSections;
 
-    this.state = {
-      dataSource: new ListDataSource({
-        rowHasChanged: this.rowHasChanged,
-        sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-      }).cloneWithRowsAndSections(sections, sectionIds),
-    };
+		this.state = {
+			dataSource: new ListDataSource({
+				rowHasChanged: this.rowHasChanged,
+				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+			}).cloneWithRowsAndSections(sections, sectionIds),
+		};
 
-    this.renderRow = this.renderRow.bind(this);
-    this.renderSectionHeader = this.renderSectionHeader.bind(this);
-    this.onRefresh = this.onRefresh.bind(this);
-  }
+		this.renderRow = this.renderRow.bind(this);
+		this.renderSectionHeader = this.renderSectionHeader.bind(this);
+		this.onRefresh = this.onRefresh.bind(this);
+	}
 
-  componentWillReceiveProps(nextProps) {
-    const { sections, sectionIds } = nextProps.rowsAndSections;
+	componentWillReceiveProps(nextProps) {
+		const { sections, sectionIds } = nextProps.rowsAndSections;
 
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
-    });
-  }
+		this.setState({
+			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+		});
+	}
 
-  onRefresh() {
-    this.props.dispatch(getJobs());
-  }
+	onRefresh() {
+		this.props.dispatch(getJobs());
+	}
 
-  rowHasChanged(r1, r2) {
-    if (r1 === r2) {
-      return false;
-    }
-    return (
+	rowHasChanged(r1, r2) {
+		if (r1 === r2) {
+			return false;
+		}
+		return (
 			r1.effectiveHour !== r2.effectiveHour ||
 			r1.effectiveMinute !== r2.effectiveMinute ||
 			r1.method !== r2.method ||
 			r1.deviceId !== r2.deviceId
-    );
-  }
+		);
+	}
 
-  render() {
-    return (
+	render() {
+		return (
 			<List
-				dataSource = {this.state.dataSource}
-				renderRow = {this.renderRow}
-				renderSectionHeader = {this.renderSectionHeader}
-				onRefresh = {this.onRefresh}
+				dataSource={this.state.dataSource}
+				renderRow={this.renderRow}
+				renderSectionHeader={this.renderSectionHeader}
+				onRefresh={this.onRefresh}
 			/>
-    );
-  }
+		);
+	}
 
-  renderSectionHeader(sectionData, sectionId) {
+	renderSectionHeader(sectionData, sectionId) {
 		// TODO: move to own Component
-    const todayInWeek = parseInt(moment().format('d'), 10);
-    const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
+		const todayInWeek = parseInt(moment().format('d'), 10);
+		const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
 
-    let sectionName;
-    if (sectionId === 0) {
-      sectionName = 'Today';
-    } else if (sectionId === 1) {
-      sectionName = 'Tomorrow';
-    } else if (sectionId === 7) {
-      sectionName = `Next ${daysInWeek[todayInWeek]}`;
-    } else {
-      sectionName = daysInWeek[absoluteDayInWeek];
-    }
+		let sectionName;
+		if (sectionId === 0) {
+			sectionName = 'Today';
+		} else if (sectionId === 1) {
+			sectionName = 'Tomorrow';
+		} else if (sectionId === 7) {
+			sectionName = `Next ${daysInWeek[todayInWeek]}`;
+		} else {
+			sectionName = daysInWeek[absoluteDayInWeek];
+		}
 
-    return (
-			<View style = {Theme.Styles.sectionHeader}>
-				<Text style = {Theme.Styles.sectionHeaderText}>
+		return (
+			<View style={Theme.Styles.sectionHeader}>
+				<Text style={Theme.Styles.sectionHeaderText}>
 					{sectionName}
 				</Text>
 			</View>
-    );
-  }
+		);
+	}
 
-  renderRow(props) {
-    return (
+	renderRow(props) {
+		return (
 			<JobRow {...props} />
-    );
-  }
+		);
+	}
 }
 
 SchedulerTab.propTypes = {
-  rowsAndSections: React.PropTypes.object,
+	rowsAndSections: React.PropTypes.object,
 };
 
 const getRowsAndSections = createSelector(
-  [
-    ({ jobs }) => jobs,
-    ({ gateways }) => gateways,
-    ({ devices }) => devices,
-  ],
+	[
+		({ jobs }) => jobs,
+		({ gateways }) => gateways,
+		({ devices }) => devices,
+	],
 	(jobs, gateways, devices) => {
-  const { sections, sectionIds } = parseJobsForListView(jobs, gateways, devices);
-  return {
-    sections,
-    sectionIds,
-  };
-}
+		const { sections, sectionIds } = parseJobsForListView(jobs, gateways, devices);
+		return {
+			sections,
+			sectionIds,
+		};
+	}
 );
 
 function mapStateToProps(store) {
-  return {
-    rowsAndSections: getRowsAndSections(store),
-    devices: store.devices,
-  };
+	return {
+		rowsAndSections: getRowsAndSections(store),
+		devices: store.devices,
+	};
 }
 
 module.exports = connect(mapStateToProps)(SchedulerTab);

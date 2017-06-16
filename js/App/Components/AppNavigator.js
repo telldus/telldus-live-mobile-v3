@@ -53,50 +53,50 @@ class AppNavigator extends View {
   state: State;
 
   _updateSpecificOrientation: Object => void;
-  constructor() {
-    super();
-    if (Platform.OS !== 'android') {
-      const init = Orientation.getInitialOrientation();
-      this.state = {
-        specificOrientation: init,
-      };
-      Orientation.unlockAllOrientations();
-      this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
-      Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
-    }
-  }
+	constructor() {
+		super();
+		if (Platform.OS !== 'android') {
+			const init = Orientation.getInitialOrientation();
+			this.state = {
+				specificOrientation: init,
+			};
+			Orientation.unlockAllOrientations();
+			this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
+			Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
+		}
+	}
 
-  componentWillMount() {
-    this.props.dispatch(appStart());
-    this.props.dispatch(appState());
-  }
+	componentWillMount() {
+		this.props.dispatch(appStart());
+		this.props.dispatch(appState());
+	}
 
-  componentDidMount() {
-    Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
-    if (Platform.OS === 'android' && StatusBar) {
-      StatusBar.setTranslucent(true);
-      StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
-    }
+	componentDidMount() {
+		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
+		if (Platform.OS === 'android' && StatusBar) {
+			StatusBar.setTranslucent(true);
+			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
+		}
 
-    this.props.dispatch(getUserProfile());
-    this.props.dispatch(authenticateSession());
-    this.props.dispatch(connectToGateways());
-    this.props.dispatch(syncLiveApiOnForeground());
+		this.props.dispatch(getUserProfile());
+		this.props.dispatch(authenticateSession());
+		this.props.dispatch(connectToGateways());
+		this.props.dispatch(syncLiveApiOnForeground());
 
-    this.props.dispatch(getDevices());
-    this.props.dispatch(getGateways());
-    this.props.dispatch(getSensors());
-    this.props.dispatch(getJobs());
-  }
+		this.props.dispatch(getDevices());
+		this.props.dispatch(getGateways());
+		this.props.dispatch(getSensors());
+		this.props.dispatch(getJobs());
+	}
 
-  _updateSpecificOrientation(specificOrientation) {
-    if (Platform.OS !== 'android') {
-      this.setState({ specificOrientation });
-    }
-  }
+	_updateSpecificOrientation(specificOrientation) {
+		if (Platform.OS !== 'android') {
+			this.setState({ specificOrientation });
+		}
+	}
 
-  render() {
-    return (
+	render() {
+		return (
 			<View>
 				<TabsView />
 				<DimmerPopup
@@ -105,21 +105,21 @@ class AppNavigator extends View {
 					value={this.props.dimmer.value / 255}
 				/>
 			</View>
-    );
-  }
+		);
+	}
 }
 
 AppNavigator.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+	dispatch: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
-  return {
-    tab: state.navigation.tab,
-    accessToken: state.user.accessToken,
-    userProfile: getUserProfileSelector(state),
-    dimmer: state.dimmer,
-  };
+	return {
+		tab: state.navigation.tab,
+		accessToken: state.user.accessToken,
+		userProfile: getUserProfileSelector(state),
+		dimmer: state.dimmer,
+	};
 }
 
 module.exports = connect(mapStateToProps)(AppNavigator);

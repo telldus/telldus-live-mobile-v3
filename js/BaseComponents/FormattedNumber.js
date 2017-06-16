@@ -24,44 +24,44 @@ import { Text } from 'react-native';
 import * as Intl from 'react-intl';
 
 const FormattedNumberComponent = (props : Object) => {
-  const style = props.style;
+	const style = props.style;
 
-  const formatOptions = {
-    localeMatcher: props.localeMatcher,
-    style: props.formatStyle,
-    currency: props.currency,
-    currencyDisplay: props.currencyDisplay,
-    useGrouping: props.useGrouping,
-    minimumIntegerDigits: props.minimumIntegerDigits,
-    minimumFractionDigits: props.minimumFractionDigits,
-    maximumFractionDigits: props.maximumFractionDigits,
-    minimumSignificantDigits: props.minimumSignificantDigits,
-    maximumSignificantDigits: props.maximumSignificantDigits,
-    value: props.value,
-  };
+	const formatOptions = {
+		localeMatcher: props.localeMatcher,
+		style: props.formatStyle,
+		currency: props.currency,
+		currencyDisplay: props.currencyDisplay,
+		useGrouping: props.useGrouping,
+		minimumIntegerDigits: props.minimumIntegerDigits,
+		minimumFractionDigits: props.minimumFractionDigits,
+		maximumFractionDigits: props.maximumFractionDigits,
+		minimumSignificantDigits: props.minimumSignificantDigits,
+		maximumSignificantDigits: props.maximumSignificantDigits,
+		value: props.value,
+	};
 
-  return (
+	return (
 		<Intl.FormattedNumber {...formatOptions}>
 			{localized => <Text style={style}>{props.prefix}{localized}{props.suffix}</Text>}
 		</Intl.FormattedNumber>
-  );
+	);
 };
 
 FormattedNumberComponent.propTypes = {
-  style: PropTypes.any,
-  localeMatcher: PropTypes.any,
-  formatStyle: PropTypes.any,
-  currency: PropTypes.any,
-  currencyDisplay: PropTypes.any,
-  useGrouping: PropTypes.any,
-  minimumIntegerDigits: PropTypes.any,
-  minimumFractionDigits: PropTypes.any,
-  maximumFractionDigits: PropTypes.any,
-  minimumSignificantDigits: PropTypes.any,
-  maximumSignificantDigits: PropTypes.any,
-  value: PropTypes.any,
-  prefix: PropTypes.any,
-  suffix: PropTypes.any,
+	style: PropTypes.any,
+	localeMatcher: PropTypes.any,
+	formatStyle: PropTypes.any,
+	currency: PropTypes.any,
+	currencyDisplay: PropTypes.any,
+	useGrouping: PropTypes.any,
+	minimumIntegerDigits: PropTypes.any,
+	minimumFractionDigits: PropTypes.any,
+	maximumFractionDigits: PropTypes.any,
+	minimumSignificantDigits: PropTypes.any,
+	maximumSignificantDigits: PropTypes.any,
+	value: PropTypes.any,
+	prefix: PropTypes.any,
+	suffix: PropTypes.any,
 };
 
 export default FormattedNumberComponent;

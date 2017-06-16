@@ -50,36 +50,40 @@ type State = {
 };
 
 class LoginForm extends View {
-  props: Props;
-  state: State;
+	props: Props;
+	state: State;
 
-  onChangeUsername: (username:string) => void;
-  onChangePassword: (password:string) => void;
-  onForgotPassword: () => void;
-  onFormSubmit: () => void;
+	onChangeUsername: (username:string) => void;
+	onChangePassword: (password:string) => void;
+	onForgotPassword: () => void;
+	onFormSubmit: () => void;
 
-  constructor(props: Props) {
-    super(props);
+	constructor(props: Props) {
+		super(props);
 
-    this.state = this.state || {};
+		this.state = this.state || {};
 
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-    this.onForgotPassword = this.onForgotPassword.bind(this);
-    this.onFormSubmit = this.onFormSubmit.bind(this);
-  }
+		this.onChangeUsername = this.onChangeUsername.bind(this);
+		this.onChangePassword = this.onChangePassword.bind(this);
+		this.onForgotPassword = this.onForgotPassword.bind(this);
+		this.onFormSubmit = this.onFormSubmit.bind(this);
+	}
 
-  render() {
-    return (
-			<View style = {{
-  backgroundColor: '#00000099',
-  width: Dimensions.get('window').width,
-  padding: 10,
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-}}>
-				<H1 style={{ margin: 20, color: '#fff', textAlign: 'center' }}>
+	render() {
+		return (
+			<View style={{
+				backgroundColor: '#00000099',
+				width: Dimensions.get('window').width,
+				padding: 10,
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}>
+				<H1 style={{
+					margin: 20,
+					color: '#fff',
+					textAlign: 'center',
+				}}>
 					Login
 				</H1>
 				{ this.state.notificationText ? (
@@ -90,147 +94,157 @@ class LoginForm extends View {
 					onChangeText={this.onChangeUsername}
 					placeholder="Username"
 					keyboardType="email-address"
-					autoCapitalize = "none"
-					autoCorrect = {false}
-					placeholderTextColor = "#ffffff80"
+					autoCapitalize="none"
+					autoCorrect={false}
+					placeholderTextColor="#ffffff80"
 				/>
 				<TextInput
 					style={styles.formField}
 					onChangeText={this.onChangePassword}
 					placeholder="Password"
 					secureTextEntry={true}
-					autoCapitalize = "none"
-					autoCorrect = {false}
-					placeholderTextColor = "#ffffff80"
+					autoCapitalize="none"
+					autoCorrect={false}
+					placeholderTextColor="#ffffff80"
 				/>
-				<View style = {{ height: 20 }} />
+				<View style={{ height: 20 }}/>
 				<Button
 					name="lock"
 					style={styles.formSubmit}
 					onPress={this.onFormSubmit}
 				>{ this.state.isLoading ? 'Logging in...' : 'Login' }</Button>
-				<View style = {{ height: 40 }} />
-				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forget your password? Need an account?</Text>
-				<View style = {{ height: 10 }} />
+				<View style={{ height: 40 }}/>
+				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forget your password? Need an
+				                                                                account?</Text>
+				<View style={{ height: 10 }}/>
 			</View>
-    );
-  }
+		);
+	}
 
-  async formSubmit(username, password) {
-    this.setState({ isLoading: true });
-    await new Promise((resolve, reject) => {
-      loginToTelldus(username, password)
+	async formSubmit(username, password) {
+		this.setState({ isLoading: true });
+		await new Promise((resolve, reject) => {
+			loginToTelldus(username, password)
 				.then(response => resolve(response))
 				.catch(reject);
-      setTimeout(() => reject(new Error('timeout')), authenticationTimeOut);
-    })
-		.then(response => this.props.dispatch(response))
-		.catch(e => {
-  const message = e.message === 'timeout' ? 'Timed out, try again?' : e.message.error_description;
-  this.setState({ notificationText: message });
-  this.setState({ isLoading: false });
-});
-  }
+			setTimeout(() => reject(new Error('timeout')), authenticationTimeOut);
+		})
+			.then(response => this.props.dispatch(response))
+			.catch(e => {
+				const message = e.message === 'timeout' ? 'Timed out, try again?' : e.message.error_description;
+				this.setState({ notificationText: message });
+				this.setState({ isLoading: false });
+			});
+	}
 
-  onChangeUsername(username) {
-    this.setState({ username, notificationText: false });
-  }
+	onChangeUsername(username) {
+		this.setState({
+			username,
+			notificationText: false,
+		});
+	}
 
-  onChangePassword(password) {
-    this.setState({ password, notificationText: false });
-  }
+	onChangePassword(password) {
+		this.setState({
+			password,
+			notificationText: false,
+		});
+	}
 
-  onFormSubmit() {
-    this.formSubmit(this.state.username, this.state.password);
-  }
+	onFormSubmit() {
+		this.formSubmit(this.state.username, this.state.password);
+	}
 
-  onForgotPassword() {
-    Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err));
-  }
+	onForgotPassword() {
+		Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err));
+	}
 }
 
 class LoginScreen extends View {
-  componentDidMount() {
-    Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('default');
-    if (Platform.OS === 'android' && StatusBar) {
-      StatusBar.setTranslucent(true);
-      StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
-    }
-    if (Platform.OS !== 'android') {
-      Orientation.lockToPortrait();
-    }
-  }
+	componentDidMount() {
+		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('default');
+		if (Platform.OS === 'android' && StatusBar) {
+			StatusBar.setTranslucent(true);
+			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
+		}
+		if (Platform.OS !== 'android') {
+			Orientation.lockToPortrait();
+		}
+	}
 
-  componentWillUnmount() {
-    if (Platform.OS !== 'android') {
-      Orientation.unlockAllOrientations();
-    }
-  }
+	componentWillUnmount() {
+		if (Platform.OS !== 'android') {
+			Orientation.unlockAllOrientations();
+		}
+	}
 
-  render() {
-    return (
-			<BackgroundImage source = {require('./img/home5.jpg')}>
+	render() {
+		return (
+			<BackgroundImage source={require('./img/home5.jpg')}>
 				<KeyboardAvoidingView behavior="position">
-					<View style = {{
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-}}>
+					<View style={{
+						flexDirection: 'column',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
 						<Image
-							source = {require('./img/telldusLogoBlack.png')}
-							style = {{ marginTop: 100, marginBottom: 100 }}
+							source={require('./img/telldusLogoBlack.png')}
+							style={{
+								marginTop: 100,
+								marginBottom: 100,
+							}}
 						/>
 						<LoginForm {...this.props} />
 					</View>
 				</KeyboardAvoidingView>
 			</BackgroundImage>
-    );
-  }
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  notification: {
-    padding: 7,
-    marginTop: 10,
-    marginLeft: 100,
-    marginRight: 100,
+	notification: {
+		padding: 7,
+		marginTop: 10,
+		marginLeft: 100,
+		marginRight: 100,
 
-    borderColor: '#f00',
-    borderWidth: 1,
-    borderRadius: 3,
+		borderColor: '#f00',
+		borderWidth: 1,
+		borderRadius: 3,
 
-    fontSize: 13,
-    color: '#fdd',
-    textAlign: 'center',
-    backgroundColor: '#ff000033',
-  },
-  formField: {
-    height: 35,
-    padding: 7,
-    marginTop: 10,
-    marginLeft: 50,
-    marginRight: 50,
-    minWidth: 200,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 3,
+		fontSize: 13,
+		color: '#fdd',
+		textAlign: 'center',
+		backgroundColor: '#ff000033',
+	},
+	formField: {
+		height: 35,
+		padding: 7,
+		marginTop: 10,
+		marginLeft: 50,
+		marginRight: 50,
+		minWidth: 200,
+		borderColor: '#ccc',
+		borderWidth: 1,
+		borderRadius: 3,
 
-    fontSize: 13,
-    color: '#eee',
-    textAlign: 'center',
-  },
-  formSubmit: {
-    padding: 6,
-    minWidth: 100,
+		fontSize: 13,
+		color: '#eee',
+		textAlign: 'center',
+	},
+	formSubmit: {
+		padding: 6,
+		minWidth: 100,
 
-    backgroundColor: Theme.Core.btnPrimaryBg,
-  },
+		backgroundColor: Theme.Core.btnPrimaryBg,
+	},
 });
 
 function mapStateToProps(store) {
-  return {
-    tab: store.navigation.tab,
-    accessToken: store.user.accessToken,
-  };
+	return {
+		tab: store.navigation.tab,
+		accessToken: store.user.accessToken,
+	};
 }
 module.exports = connect(mapStateToProps)(LoginScreen);

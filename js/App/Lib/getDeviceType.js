@@ -20,7 +20,7 @@
 // @flow
 
 export default function getDeviceType(supportedMethods:Object) : string {
-  const {
+	const {
 		TURNON,
 		TURNOFF,
 		BELL,
@@ -30,17 +30,17 @@ export default function getDeviceType(supportedMethods:Object) : string {
 		STOP,
 	} = supportedMethods;
 
-  if (BELL) {
-    return 'BELL';
-  }
-  if (UP || DOWN || STOP) {
-    return 'NAVIGATIONAL';
-  }
-  if (DIM) {
-    return 'DIMMER';
-  }
-  if (TURNON || TURNOFF) {
-    return 'TOGGLE';
-  }
-  return 'UNSUPPORTED';
+	if (BELL) {
+		return 'BELL';
+	}
+	if (UP || DOWN || STOP) {
+		return 'NAVIGATIONAL';
+	}
+	if (DIM) {
+		return 'DIMMER';
+	}
+	if (TURNON || TURNOFF) {
+		return 'TOGGLE';
+	}
+	return 'UNSUPPORTED';
 }

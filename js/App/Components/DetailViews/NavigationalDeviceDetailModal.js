@@ -30,7 +30,14 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { up, down, stop, learn } from 'Actions_Devices';
 
 const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
-	<RoundedCornerShadowView style={{ flexDirection: 'row', height: 36, marginHorizontal: 8, marginVertical: 16, justifyContent: 'center', alignItems: 'center' }}>
+	<RoundedCornerShadowView style={{
+		flexDirection: 'row',
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 16,
+		justifyContent: 'center',
+		alignItems: 'center',
+	}}>
 		<TouchableOpacity
 			style={styles.navigationButton}
 			onPress={onUp}>
@@ -39,7 +46,7 @@ const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
 		<TouchableOpacity
 			style={styles.navigationButton}
 			onPress={onDown}>
-		<Icon name="caret-down" size={30} style={{ color: '#1a355b' }}/>
+			<Icon name="caret-down" size={30} style={{ color: '#1a355b' }}/>
 		</TouchableOpacity>
 		<TouchableOpacity
 			style={styles.navigationButton}
@@ -68,104 +75,105 @@ type Props = {
 };
 
 class NavigationalDeviceDetailModal extends View {
-  props: Props;
-  onUp: () => void;
-  onDown: () => void;
-  onStop: () => void;
-  onLearn: () => void;
+	props: Props;
+	onUp: () => void;
+	onDown: () => void;
+	onStop: () => void;
+	onLearn: () => void;
 
-  constructor(props: Props) {
-    super(props);
+	constructor(props: Props) {
+		super(props);
 
-    this.onUp = this.onUp.bind(this);
-    this.onDown = this.onDown.bind(this);
-    this.onStop = this.onStop.bind(this);
-    this.onLearn = this.onLearn.bind(this);
-  }
+		this.onUp = this.onUp.bind(this);
+		this.onDown = this.onDown.bind(this);
+		this.onStop = this.onStop.bind(this);
+		this.onLearn = this.onLearn.bind(this);
+	}
 
-  onUp() {
-    this.props.onUp(this.props.device.id);
-  }
+	onUp() {
+		this.props.onUp(this.props.device.id);
+	}
 
-  onDown() {
-    this.props.onDown(this.props.device.id);
-  }
+	onDown() {
+		this.props.onDown(this.props.device.id);
+	}
 
-  onStop() {
-    this.props.onStop(this.props.device.id);
-  }
+	onStop() {
+		this.props.onStop(this.props.device.id);
+	}
 
-  onLearn() {
-    this.props.onLearn(this.props.device.id);
-  }
+	onLearn() {
+		this.props.onLearn(this.props.device.id);
+	}
 
-  render() {
-    const { device } = this.props;
-    const { UP, DOWN, STOP, LEARN } = device.supportedMethods;
+	render() {
+		const { device } = this.props;
+		const { UP, DOWN, STOP, LEARN } = device.supportedMethods;
 
-    let navigationButtons = null;
-    let learnButton = null;
+		let navigationButtons = null;
+		let learnButton = null;
 
-    if (UP || DOWN || STOP) {
-      navigationButtons = <NavigationalButton device={device} onUp={this.onUp} onDown={this.onDown} onLearn={this.onLearn} />;
-    }
+		if (UP || DOWN || STOP) {
+			navigationButtons = <NavigationalButton device={device} onUp={this.onUp} onDown={this.onDown}
+			                                        onLearn={this.onLearn}/>;
+		}
 
-    if (LEARN) {
-      learnButton = <LearnButton device={device} onLearn={this.onLearn} />;
-    }
+		if (LEARN) {
+			learnButton = <LearnButton device={device} onLearn={this.onLearn}/>;
+		}
 
-    return (
+		return (
 			<View style={styles.container}>
 				{navigationButtons}
 				{learnButton}
 			</View>
-    );
-  }
+		);
+	}
 
 }
 
 NavigationalDeviceDetailModal.propTypes = {
-  device: React.PropTypes.object.isRequired,
+	device: React.PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 0,
-  },
-  navigationButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnContainer: {
-    height: 36,
-    marginHorizontal: 8,
-    marginVertical: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnButton: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  learnText: {
-    fontSize: 16,
-    color: 'orange',
-  },
+	container: {
+		flex: 0,
+	},
+	navigationButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnContainer: {
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 8,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnButton: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	learnText: {
+		fontSize: 16,
+		color: 'orange',
+	},
 });
 
 function mapStateToProps(store) {
-  return { store };
+	return { store };
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    onUp: (id) => dispatch(up(id)),
-    onDown: (id) => dispatch(down(id)),
-    onStop: (id) => dispatch(stop(id)),
-    onLearn: (id) => dispatch(learn(id)),
-  };
+	return {
+		onUp: (id) => dispatch(up(id)),
+		onDown: (id) => dispatch(down(id)),
+		onStop: (id) => dispatch(stop(id)),
+		onLearn: (id) => dispatch(learn(id)),
+	};
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(NavigationalDeviceDetailModal);

@@ -30,20 +30,20 @@ import {
 } from 'Components';
 
 class App extends React.Component {
-  render() {
-    if (!this.props.accessToken) {
-      return <LoginScreen />;
-    }
-    return (
+	render() {
+		if (!this.props.accessToken) {
+			return <LoginScreen />;
+		}
+		return (
 			<AppNavigator {...this.props}/>
-    );
-  }
+		);
+	}
 }
 
 function mapStateToProps(store) {
-  return {
-    accessToken: store.user.accessToken,
-  };
+	return {
+		accessToken: store.user.accessToken,
+	};
 }
 
 module.exports = connect(mapStateToProps)(App);

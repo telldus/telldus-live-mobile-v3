@@ -34,51 +34,53 @@ type Props = {
 };
 
 class BellDashboardTile extends View {
-  props: Props;
+	props: Props;
 
-  constructor(props: Props) {
-    super(props);
-  }
+	constructor(props: Props) {
+		super(props);
+	}
 
-  render() {
-    const { item, tileWidth } = this.props;
+	render() {
+		const { item, tileWidth } = this.props;
 
-    return (
+		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
 				name={item.name}
 				tileWidth={tileWidth}
-				style={[this.props.style, {
-  width: tileWidth,
-  height: tileWidth,
-}]}>
-                <TouchableOpacity
-                    onPress={this.props.onBell}
-                    style={styles.container}>
-                    <View style={styles.body}>
-                        <Icon name="bell" size={44} color="orange" />
-                    </View>
-                </TouchableOpacity>
+				style={[
+					this.props.style, {
+						width: tileWidth,
+						height: tileWidth,
+					},
+				]}>
+				<TouchableOpacity
+					onPress={this.props.onBell}
+					style={styles.container}>
+					<View style={styles.body}>
+						<Icon name="bell" size={44} color="orange"/>
+					</View>
+				</TouchableOpacity>
 			</DashboardShadowTile>
-    );
-  }
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 30,
-    justifyContent: 'center',
-  },
-  body: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderTopLeftRadius: 7,
-    borderTopRightRadius: 7,
-  },
+	container: {
+		flex: 30,
+		justifyContent: 'center',
+	},
+	body: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'white',
+		borderTopLeftRadius: 7,
+		borderTopRightRadius: 7,
+	},
 });
 
 module.exports = BellDashboardTile;
