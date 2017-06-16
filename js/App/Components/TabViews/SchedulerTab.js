@@ -32,9 +32,19 @@ import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers/Jobs';
 
+//import AddSchedule from 'TabViews/SubViews/AddSchedule';
+import { Image } from 'react-native';
+import { syncWithServer, switchTab } from 'Actions';
+
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 class SchedulerTab extends View {
+
+	static navigationOptions = {
+		title: 'Scheduler',
+		tabBarIcon: () => <Image source={require('./img/tabIcons/scheduler-inactive.png')}/>,
+	};
+
 	constructor(props) {
 		super(props);
 
@@ -45,6 +55,34 @@ class SchedulerTab extends View {
 				rowHasChanged: this.rowHasChanged,
 				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 			}).cloneWithRowsAndSections(sections, sectionIds),
+		};
+
+		this.styles = {
+			addButton: {
+				backgroundColor: '#e26901',
+				borderRadius: 50,
+				position: 'absolute',
+				height: 50,
+				width: 50,
+				bottom: 125,
+				right: 15,
+				shadowColor: '#000',
+				shadowOpacity: 0.5,
+				shadowRadius: 2,
+				shadowOffset: {
+					height: 2,
+					width: 0,
+				},
+			},
+			addButtonText: {
+				backgroundColor: 'transparent',
+				color: '#fff',
+				fontSize: 42,
+				lineHeight: 47,
+				width: 50,
+				height: 50,
+				textAlign: 'center',
+			},
 		};
 
 		this.renderRow = this.renderRow.bind(this);
@@ -59,6 +97,10 @@ class SchedulerTab extends View {
 			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
 		});
 	}
+
+	componentDidMount() {
+		this.props.onTabSelect('schedulerTab');
+	};
 
 	onRefresh() {
 		this.props.dispatch(getJobs());
@@ -76,14 +118,27 @@ class SchedulerTab extends View {
 		);
 	}
 
+	handleAddingSchedule = () => {
+		//this.props.navigator.push({
+		//	title: 'Telldus',
+		//	component: AddSchedule.Action,
+		//	navigationBarHidden: false,
+		//});
+	};
+
 	render() {
 		return (
-			<List
-				dataSource={this.state.dataSource}
-				renderRow={this.renderRow}
-				renderSectionHeader={this.renderSectionHeader}
-				onRefresh={this.onRefresh}
-			/>
+			<View>
+				<List
+					dataSource={this.state.dataSource}
+					renderRow={this.renderRow}
+					renderSectionHeader={this.renderSectionHeader}
+					onRefresh={this.onRefresh}
+				/>
+				<View style={this.styles.addButton}>
+					<Text style={this.styles.addButtonText} onPress={this.handleAddingSchedule}>+</Text>
+				</View>
+			</View>
 		);
 	}
 
@@ -145,4 +200,14 @@ function mapStateToProps(store) {
 	};
 }
 
-module.exports = connect(mapStateToProps)(SchedulerTab);
+function mapDispatchToProps(dispatch) {
+	return {
+		onTabSelect: (tab) => {
+			dispatch(syncWithServer(tab));
+			dispatch(switchTab(tab));
+		},
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);

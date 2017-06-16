@@ -28,8 +28,6 @@ import EventEmitter from 'EventEmitter';
 import {
 	I18n,
 	Icon,
-	NavigatorIOS,
-	TabBarIOS,
 	View,
 } from 'BaseComponents';
 
@@ -38,6 +36,7 @@ import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
 
 import { getUserProfile } from '../../Reducers/User';
+import { TabNavigator } from 'react-navigation';
 
 class TabsView extends View {
 	constructor(props) {
@@ -93,93 +92,8 @@ class TabsView extends View {
 	}
 
 	render() {
-		if (!this.state || !this.state.settingIcon || !this.state.starIcon) {
-			return false;
-		}
 		return (
-			<TabBarIOS tintColor={this.getTheme().brandPrimary}>
-				<TabBarIOS.Item
-					title={I18n.t('pages.dashboard')}
-					selected={this.props.tab === 'dashboardTab'}
-					onPress={this.onDashboardTabSelect}
-					icon={require('./img/tabIcons/dashboard-inactive.png')}
-					selectedIcon={require('./img/tabIcons/dashboard-active.png')}
-				>
-					<NavigatorIOS
-						ref="dashboardNavigator"
-						initialRoute={{
-							title: 'Telldus Live!',
-							component: TabViews.Dashboard,
-							rightButtonIcon: this.state.settingIcon,
-							passProps: {
-								events: this.eventEmitter,
-							},
-							onRightButtonPress: () => {
-								this.eventEmitter.emit('onSetting');
-							},
-						}}
-					/>
-				</TabBarIOS.Item>
-				<TabBarIOS.Item
-					title={I18n.t('pages.devices')}
-					selected={this.props.tab === 'devicesTab'}
-					onPress={this.onDevicesTabSelect}
-					icon={require('./img/tabIcons/devices-inactive.png')}
-					selectedIcon={require('./img/tabIcons/devices-active.png')}
-				>
-					<NavigatorIOS
-						initialRoute={{
-							title: I18n.t('pages.devices'),
-							component: TabViews.Devices,
-							rightButtonIcon: this.state.starIcon,
-							onRightButtonPress: this.toggleDevicesTabEditMode,
-						}}
-					/>
-				</TabBarIOS.Item>
-				<TabBarIOS.Item
-					title={I18n.t('pages.sensors')}
-					selected={this.props.tab === 'sensorsTab'}
-					onPress={this.onSensorsTabSelect}
-					icon={require('./img/tabIcons/sensors-inactive.png')}
-					selectedIcon={require('./img/tabIcons/sensors-active.png')}>
-					<NavigatorIOS
-						initialRoute={{
-							title: I18n.t('pages.sensors'),
-							component: TabViews.Sensors,
-							rightButtonIcon: this.state.starIcon,
-							onRightButtonPress: this.toggleSensorTabEditMode,
-						}}
-					/>
-				</TabBarIOS.Item>
-				<TabBarIOS.Item
-					title={I18n.t('pages.scheduler')}
-					selected={this.props.tab === 'schedulerTab'}
-					onPress={this.onSchedulerTabSelect}
-					badge={this.props.notificationsBadge || null}
-					icon={require('./img/tabIcons/scheduler-inactive.png')}
-					selectedIcon={require('./img/tabIcons/scheduler-active.png')}>
-					<NavigatorIOS
-						initialRoute={{
-							title: I18n.t('pages.scheduler'),
-							component: TabViews.Scheduler,
-						}}
-					/>
-				</TabBarIOS.Item>
-				<TabBarIOS.Item
-					title={I18n.t('pages.gateways')}
-					selected={this.props.tab === 'gatewaysTab'}
-					onPress={this.onGatewaysTabSelect}
-					badge={this.props.notificationsBadge || null}
-					icon={require('./img/tabIcons/gateways-inactive.png')}
-					selectedIcon={require('./img/tabIcons/gateways-active.png')}>
-					<NavigatorIOS
-						initialRoute={{
-							title: I18n.t('pages.gateways'),
-							component: TabViews.Gateways,
-						}}
-					/>
-				</TabBarIOS.Item>
-			</TabBarIOS>
+			<Tabs/>
 		);
 	}
 
@@ -221,3 +135,28 @@ function mapDispatchToProps(dispatch) {
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);
+
+export const Tabs = TabNavigator(
+	{
+		Dashboard: {
+			screen: TabViews.Dashboard,
+		},
+		Devices: {
+			screen: TabViews.Devices,
+		},
+		Sensors: {
+			screen: TabViews.Sensors,
+		},
+		Scheduler: {
+			screen: TabViews.Scheduler,
+		},
+		Gateways: {
+			screen: TabViews.Gateways,
+		},
+	},
+	{
+		tabBarOptions: {
+			activeTintColor: '#e91e63',
+		},
+	}
+);

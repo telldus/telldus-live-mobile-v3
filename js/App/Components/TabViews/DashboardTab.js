@@ -20,7 +20,7 @@
 
 import React from 'react';
 import { createSelector } from 'reselect';
-import { Dimensions } from 'react-native';
+import { Dimensions, Image } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View } from 'BaseComponents';
@@ -48,6 +48,11 @@ const tileMargin = 8;
 const listMargin = 8;
 
 class DashboardTab extends View {
+
+	static navigationOptions = {
+		title: 'Dashboard',
+		tabBarIcon: () => <Image source={require('./img/tabIcons/dashboard-inactive.png')}/>,
+	};
 
 	constructor(props) {
 		super(props);
@@ -124,7 +129,7 @@ class DashboardTab extends View {
 
 	componentDidMount() {
 		if (Platform.OS === 'ios') {
-			this.addListenerOn(this.props.events, 'onSetting', this.onOpenSetting);
+			//this.addListenerOn(this.props.events, 'onSetting', this.onOpenSetting);
 		}
 
 		this.startSensorTimer();
@@ -181,6 +186,7 @@ class DashboardTab extends View {
 		// add to List props: enableEmptySections={true}, to surpress warning
 		return (
 			<View onLayout={this._onLayout}>
+				<Text>111</Text>
 				<List
 					ref="list"
 					contentContainerStyle={{
