@@ -21,8 +21,10 @@
 
 'use strict';
 
+var DeviceInfo = require('react-native-device-info');
 var PushNotification = require('react-native-push-notification');
-import { pushSenderID } from '../../Config';
+import { pushSenderId, pushServiceId } from '../../Config';
+import { registerPushToken } from 'Actions/User';
 
 const Push = {
   configure : (store) => {
@@ -31,9 +33,10 @@ const Push = {
     //Called when Token is generated
     onRegister: function(data) {
       if((!store.pushToken) || (store.pushToken != data.token)) {
+        // stores fcm token in the server
+        store.dispatch(registerPushToken(data.token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
         store.dispatch({type: 'RECEIVED_PUSH_TOKEN', pushToken: data.token});
       }
-      // store fcm token in the server
     },
 
     //Called when a remote or local notification is opened or received
@@ -42,7 +45,7 @@ const Push = {
     },
 
     //GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
-    senderID: pushSenderID,
+    senderID: pushSenderId,
 
     // Should the initial notification be popped automatically
     // default: true
