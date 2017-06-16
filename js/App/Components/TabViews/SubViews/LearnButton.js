@@ -22,40 +22,40 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
+import { View, RoundedCornerShadowView, Text } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { bell } from 'Actions_Devices';
+import { learn } from 'Actions_Devices';
 
-type Props = {
-  onBell: () => void,
-  style: Object,
-  id: number,
-};
-
-class BellButton extends View {
+class LearnButton extends View {
   render() {
     return (
       <RoundedCornerShadowView style={this.props.style}>
-				<TouchableOpacity onPress={this.props.onBell(this.props.id)} style={styles.bell}>
-					<Icon name="bell" size={22} color="orange" />
-				</TouchableOpacity>
+        <TouchableOpacity onPress={this.props.onLearn(this.props.id)} style={styles.learn}>
+          <Text style={styles.text}>
+            {'Learn'}
+          </Text>
+        </TouchableOpacity>
       </RoundedCornerShadowView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  bell: {
+  learn: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  text: {
+    fontSize: 16,
+    color: 'orange',
   },
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    onBell: id => () => dispatch(bell(id)),
+    onLearn: id => () => dispatch(learn(id)),
   };
 }
 
-module.exports = connect(null, mapDispatchToProps)(BellButton);
+module.exports = connect(null, mapDispatchToProps)(LearnButton);

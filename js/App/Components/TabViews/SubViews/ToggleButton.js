@@ -20,60 +20,30 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Text, View, RoundedCornerShadowView } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { View, RoundedCornerShadowView } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
+import OnButton from './OnButton';
+import OffButton from './OffButton';
 
-const OffButton = ({ isInState, enabled, onPress }) => (
-    <View style={[styles.turnOffButtonContainer, {
-      backgroundColor: isInState === 'TURNOFF' ? '#fafafa' : '#eeeeee' }]}>
-        <TouchableOpacity
-			disabled={!enabled}
-			onPress={onPress}
-			style={styles.button} >
-            <Text
-                ellipsizeMode="middle"
-				numberOfLines={1}
-				style = {[styles.buttonText, { color: isInState === 'TURNOFF' ? 'red' : '#a2a2a2' }]}>
-                {'Off'}
-            </Text>
-        </TouchableOpacity>
-    </View>
-);
-
-const OnButton = ({ isInState, enabled, onPress }) => (
-    <View style={[styles.turnOnButtonContainer, {
-      backgroundColor: isInState === 'TURNON' ? '#fafafa' : '#eeeeee' }]}>
-        <TouchableOpacity
-			disabled={!enabled}
-			onPress={onPress}
-			style={styles.button} >
-            <Text
-                ellipsizeMode="middle"
-                numberOfLines={1}
-                style = {[styles.buttonText, { color: isInState === 'TURNON' ? 'green' : '#a2a2a2' }]}>
-                {'On'}
-            </Text>
-        </TouchableOpacity>
-    </View>
-);
+type Props = {
+  device: Object,
+};
 
 class ToggleButton extends View {
-  constructor(props) {
-    super(props);
-  }
+  props: Props;
 
   render() {
     const { TURNON, TURNOFF } = this.props.device.supportedMethods;
-    const isInState = this.props.device.isInState;
+    const { id, isInState, methodRequested } = this.props.device;
 
-    const turnOnButton = <OnButton isInState={isInState} enabled={!!TURNON} onPress={this.props.onTurnOn} />;
-    const turnOffButton = <OffButton isInState={isInState} enabled={!!TURNOFF} onPress={this.props.onTurnOff} />;
+    const onButton = <OnButton id={id} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} methodRequested={methodRequested} />;
+    const offButton = <OffButton id={id} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} />;
 
     return (
-            <RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
-                { turnOffButton }
-                { turnOnButton }
-            </RoundedCornerShadowView>
+      <RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
+        { offButton }
+        { onButton }
+      </RoundedCornerShadowView>
     );
   }
 }
@@ -85,32 +55,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  turnOffButtonContainer: {
+  turnOff: {
     flex: 1,
     alignItems: 'stretch',
     borderTopLeftRadius: 7,
     borderBottomLeftRadius: 7,
   },
-  turnOnButtonContainer: {
+  turnOn: {
     flex: 1,
     alignItems: 'stretch',
     borderTopRightRadius: 7,
     borderBottomRightRadius: 7,
   },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 12,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-  },
 });
 
 ToggleButton.propTypes = {
-  onTurnOn: PropTypes.func,
-  onTurnOff: PropTypes.func,
   device: PropTypes.object,
   enabled: PropTypes.bool,
 };
@@ -118,4 +77,5 @@ ToggleButton.propTypes = {
 ToggleButton.defaultProps = {
   enabled: true,
 };
+
 module.exports = ToggleButton;

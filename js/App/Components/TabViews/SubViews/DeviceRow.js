@@ -20,18 +20,21 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { Container, ListItem, Text, View, Icon } from 'BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
-import DimmingButton from './DimmingButton';
+import DimmerButton from './DimmerButton';
 
-import { turnOn, turnOff, bell, down, up, stop } from 'Actions/Devices';
-import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
+
+type Props = {
+  device: Object,
+  setScrollEnabled: boolean => void,
+  onSettingsSelected: number => void,
+};
 
 class DeviceRow extends View {
   constructor(props) {
@@ -39,6 +42,7 @@ class DeviceRow extends View {
 
     this.onSettingsSelected = this.onSettingsSelected.bind(this);
   }
+
   render() {
     let button = null;
     const { device } = this.props;
@@ -53,37 +57,18 @@ class DeviceRow extends View {
 		} = device.supportedMethods;
 
     if (BELL) {
-      button = <BellButton
-				onBell={this.props.onBell(device.id)}
-			/>;
+      button = <BellButton id={device.id} style={styles.bell} />;
     } else if (UP || DOWN || STOP) {
-      button = <NavigationalButton
-				device={device}
-				onDown={this.props.onDown(device.id)}
-				onUp={this.props.onUp(device.id)}
-				onStop={this.props.onStop(device.id)}
-			/>;
+      button = <NavigationalButton device={device} style={styles.navigation} />;
     } else if (DIM) {
-      button = <DimmingButton
+      button = <DimmerButton
 				device={device}
-				onTurnOn={this.props.onTurnOn(device.id)}
-				onTurnOff={this.props.onTurnOff(device.id)}
-				onDim={this.props.onDim(device.id)}
-				onDimmerSlide={this.props.onDimmerSlide(device.id)}
 				setScrollEnabled={this.props.setScrollEnabled}
 			/>;
     } else if (TURNON || TURNOFF) {
-      button = <ToggleButton
-				onTurnOn={this.props.onTurnOn(device.id)}
-				onTurnOff={this.props.onTurnOff(device.id)}
-				device={device}
-			/>;
+      button = <ToggleButton device={device}/>;
     } else {
-      button = <ToggleButton
-				onTurnOn={this.props.onTurnOn(device.id)}
-				onTurnOff={this.props.onTurnOff(device.id)}
-				device={device}
-			/>;
+      button = <ToggleButton device={device}/>;
     }
 
     return (
@@ -91,9 +76,7 @@ class DeviceRow extends View {
 				<Container style = {styles.container}>
 					{button}
 					<View style={styles.name}>
-						<Text style = {[styles.text, {
-  opacity: device.name ? 1 : 0.5,
-}]}>
+						<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
 							{device.name ? device.name : '(no name)'}
 						</Text>
 					</View>
@@ -137,19 +120,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 8,
   },
+  bell: {
+    flex: 7,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+  navigation: {
+    flex: 7,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onTurnOn: id => () => dispatch(turnOn(id)),
-    onTurnOff: id => () => dispatch(turnOff(id)),
-    onBell: id => () => dispatch(bell(id)),
-    onDown: id => () => dispatch(down(id)),
-    onUp: id => () => dispatch(up(id)),
-    onStop: id => () => dispatch(stop(id)),
-    onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-    onDim: id => value => dispatch(updateDimmerValue(id, value)),
-  };
-}
-
-module.exports = connect(null, mapDispatchToProps)(DeviceRow);
+module.exports = DeviceRow;

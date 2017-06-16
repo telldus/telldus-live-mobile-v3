@@ -126,7 +126,21 @@ export function turnOff(deviceId): ThunkAction {
   };
 }
 
-export function bell(deviceId): ThunkAction {
+export function requestTurnOn(deviceId: number): Action {
+  return {
+    type: 'REQUEST_TURNON',
+    payload: { deviceId },
+  };
+}
+
+export function requestTurnOff(deviceId: number): Action {
+  return {
+    type: 'REQUEST_TURNOFF',
+    payload: { deviceId },
+  };
+}
+
+export function bell(deviceId: number): ThunkAction {
   return (dispatch) => {
     const payload = {
       url: `/device/bell?id=${deviceId}`,

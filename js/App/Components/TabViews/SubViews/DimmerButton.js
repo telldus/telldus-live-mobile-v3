@@ -22,9 +22,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
+import { View, RoundedCornerShadowView } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
-import DashboardShadowTile from './DashboardShadowTile';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
 import { turnOn, turnOff, requestTurnOn, requestTurnOff } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
@@ -32,7 +31,7 @@ import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import throttle from 'lodash/throttle';
 
-function getDimmerValue(value, isInState) {
+function getDimmerValue(value: number, isInState: string): number {
   let newValue = value || 0;
   if (isInState === 'TURNON') {
     return 255;
@@ -54,32 +53,28 @@ function toSliderValue(dimmerValue) {
 }
 
 type Props = {
-  item: Object,
-  tileWidth: number,
-  onDimmerSlide: number => void,
+  device: Object,
+  onDimmerSlide: string => number => void,
   showDimmerPopup: (name:string, sliderValue:number) => void,
   hideDimmerPopup: () => void,
-  onDim: (id:string, value:number) => void,
+  onDim: string => number => void,
+  setScrollEnabled: boolean,
   onTurnOn: number => void,
   onTurnOff: number => void,
-  onDim: number => void,
-  setScrollEnabled: boolean,
-  style: Object,
   requestTurnOn: number => void,
   requestTurnOff: number => void,
 };
 
 type State = {
-  bodyWidth: number,
-  bodyHeight: number,
+  buttonWidth: number,
+  buttonHeight: number,
   value: number,
 };
 
-class DimmerDashboardTile extends View {
+class DimmerButton extends View {
   props: Props;
   state: State;
   parentScrollEnabled: boolean;
-  onValueChangeThrottled: number => void;
   onTurnOffButtonStart: () => void;
   onTurnOffButtonEnd: () => void;
   onTurnOff: () => void;
@@ -93,16 +88,16 @@ class DimmerDashboardTile extends View {
 
   constructor(props: Props) {
     super(props);
-    const { item, onDimmerSlide } = this.props;
-    const { value, isInState } = item;
+
+    const value = getDimmerValue(this.props.device.value, this.props.device.isInState);
     this.parentScrollEnabled = true;
     this.state = {
-      bodyWidth: 0,
-      bodyHeight: 0,
-      value: getDimmerValue(value, isInState),
+      buttonWidth: 0,
+      buttonHeight: 0,
+      value,
     };
 
-    this.onValueChangeThrottled = throttle(onDimmerSlide(item.id), 200, {
+    this.onValueChangeThrottled = throttle(this.props.onDimmerSlide(this.props.device.id), 200, {
       trailing: true,
     });
 
@@ -119,17 +114,15 @@ class DimmerDashboardTile extends View {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { value, isInState } = nextProps.item;
-
-    const dimmerValue = getDimmerValue(value, isInState);
+    const dimmerValue = getDimmerValue(nextProps.device.value, nextProps.device.isInState);
     this.setState({ value: dimmerValue });
   }
 
   layoutView(x) {
     let { width, height } = x.nativeEvent.layout;
     this.setState({
-      bodyWidth: width,
-      bodyHeight: height,
+      buttonWidth: width,
+      buttonHeight: height,
     });
   }
 
@@ -142,7 +135,7 @@ class DimmerDashboardTile extends View {
   }
 
   onSlidingComplete(sliderValue:number) {
-    this.props.onDim(this.props.item.id, toDimmerValue(sliderValue));
+    this.props.onDim(this.props.device.id, toDimmerValue(sliderValue));
     this.props.hideDimmerPopup();
   }
 
@@ -163,64 +156,60 @@ class DimmerDashboardTile extends View {
   }
 
   onTurnOn() {
-    this.props.onTurnOn(this.props.item.id);
-    this.props.requestTurnOn(this.props.item.id);
+    this.props.onTurnOn(this.props.device.id);
+    this.props.requestTurnOn(this.props.device.id);
   }
 
   onTurnOff() {
-    this.props.onTurnOff(this.props.item.id);
-    this.props.requestTurnOff(this.props.item.id);
+    this.props.onTurnOff(this.props.device.id);
+    this.props.requestTurnOff(this.props.device.id);
   }
 
   render() {
-    const { item, tileWidth } = this.props;
-    const { name, isInState, supportedMethods, methodRequested } = item;
-    const { TURNON, TURNOFF, DIM } = supportedMethods;
-
-    const onButton = <DimmerOnButton ref={'onButton'} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
-    const offButton = <DimmerOffButton ref={'offButton'} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
+    const { device } = this.props;
+    const { TURNON, TURNOFF, DIM } = device.supportedMethods;
+    const onButton = <DimmerOnButton ref={'onButton'} style={styles.turnOn} isInState={device.isInState} enabled={!!TURNON} methodRequested={device.methodRequested} />;
+    const offButton = <DimmerOffButton ref={'offButton'} style={styles.turnOff} isInState={device.isInState} enabled={!!TURNOFF} methodRequested={device.methodRequested} />;
     const slider = DIM ?
-			<VerticalSlider
-				style={[styles.slider, { width: this.state.bodyWidth, height: this.state.bodyHeight, left: 0, bottom: 0 }]}
-				thumbWidth={this.state.bodyWidth / 5}
-				item={item}
-				value={toSliderValue(this.state.value)}
-				setScrollEnabled={this.props.setScrollEnabled}
-				onSlidingStart={this.onSlidingStart}
-				onSlidingComplete={this.onSlidingComplete}
-				onValueChange={this.onValueChange}
+      <VerticalSlider
+        style={[styles.slider, { width: this.state.buttonWidth, height: this.state.buttonHeight, left: 0, bottom: 0 }]}
+        thumbWidth={this.state.buttonWidth / 5}
+        thumbHeight={9}
+        fontSize={7}
+        item={device}
+        value={toSliderValue(this.state.value)}
+        sensitive={4}
+        setScrollEnabled={this.props.setScrollEnabled}
+        onSlidingStart={this.onSlidingStart}
+        onSlidingComplete={this.onSlidingComplete}
+        onValueChange={this.onValueChange}
 				onLeftStart={this.onTurnOffButtonStart}
 				onLeftEnd={this.onTurnOffButtonEnd}
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
 				onLeft={this.onTurnOff}
-				onRight={this.onTurnOn}
-			/> :
-			null;
+				onRight={this.onTurnOn}/> :
+      null;
+
     return (
-			<DashboardShadowTile
-				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
-				name={name}
-				tileWidth={tileWidth}
-				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
-				<View style={styles.body} onLayout={this.layoutView}>
-					{ offButton }
-					{ onButton }
-					{ slider }
-				</View>
-			</DashboardShadowTile>
+      <RoundedCornerShadowView
+          onLayout={this.layoutView}
+          style={styles.container}>
+          { offButton }
+          { onButton }
+          { slider }
+      </RoundedCornerShadowView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 7,
+    width: 88,
+    height: 32,
     justifyContent: 'center',
-  },
-  body: {
-    flex: 30,
-    flexDirection: 'row',
+    alignItems: 'stretch',
   },
   slider: {
     flex: 1,
@@ -231,12 +220,14 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
     borderTopLeftRadius: 7,
+    borderBottomLeftRadius: 7,
   },
   turnOn: {
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
     borderTopRightRadius: 7,
+    borderBottomRightRadius: 7,
   },
 });
 
@@ -257,4 +248,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-module.exports = connect(null, mapDispatchToProps)(DimmerDashboardTile);
+module.exports = connect(null, mapDispatchToProps)(DimmerButton);

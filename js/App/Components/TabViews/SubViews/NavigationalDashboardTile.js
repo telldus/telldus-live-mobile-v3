@@ -20,9 +20,13 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
+
+import { down, up, stop } from 'Actions_Devices';
 
 const UpButton = ({ isEnabled, onPress }) => (
 	<TouchableOpacity
@@ -57,18 +61,25 @@ const StopButton = ({ isEnabled, onPress }) => (
 	</TouchableOpacity>
 );
 
+type Props = {
+	item: Object,
+	tileWidth: number,
+	onUp: number => () => void,
+	onDown: number => () => void,
+	onStop: number => () => void,
+	style: Object,
+};
+
 class NavigationalDashboardTile extends View {
-  constructor(props) {
-    super(props);
-  }
+  props: Props;
 
   render() {
     const { item, tileWidth } = this.props;
-    const { name, supportedMethods } = item;
+    const { id, name, supportedMethods } = item;
     const { UP, DOWN, STOP } = supportedMethods;
-    const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp} /> : null;
-    const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown} /> : null;
-    const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop} /> : null;
+    const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp(id)} /> : null;
+    const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown(id)} /> : null;
+    const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop(id)} /> : null;
 
     return (
 			<DashboardShadowTile
@@ -111,4 +122,12 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = NavigationalDashboardTile;
+function mapDispatchToProps(dispatch) {
+  return {
+    onDown: id => () => dispatch(down(id)),
+    onUp: id => () => dispatch(up(id)),
+    onStop: id => () => dispatch(stop(id)),
+  };
+}
+
+module.exports = connect(null, mapDispatchToProps)(NavigationalDashboardTile);

@@ -20,14 +20,22 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
+import { bell } from 'Actions_Devices';
+
+type Props = {
+  onBell: number => () => void,
+  item: Object,
+  tileWidth: number,
+  style: Object,
+};
 
 class BellDashboardTile extends View {
-  constructor(props) {
-    super(props);
-  }
+  props: Props;
 
   render() {
     const { item, tileWidth } = this.props;
@@ -38,17 +46,14 @@ class BellDashboardTile extends View {
 				isEnabled={true}
 				name={item.name}
 				tileWidth={tileWidth}
-				style={[this.props.style, {
-  width: tileWidth,
-  height: tileWidth,
-}]}>
-                <TouchableOpacity
-                    onPress={this.props.onBell}
-                    style={styles.container}>
-                    <View style={styles.body}>
-                        <Icon name="bell" size={44} color="orange" />
-                    </View>
-                </TouchableOpacity>
+				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
+          <TouchableOpacity
+            onPress={this.props.onBell(this.props.item.id)}
+            style={styles.container}>
+            <View style={styles.body}>
+              <Icon name="bell" size={44} color="orange" />
+            </View>
+          </TouchableOpacity>
 			</DashboardShadowTile>
     );
   }
@@ -70,4 +75,10 @@ const styles = StyleSheet.create({
   },
 });
 
-module.exports = BellDashboardTile;
+function mapDispatchToProps(dispatch) {
+  return {
+    onBell: id => () => dispatch(bell(id)),
+  };
+}
+
+module.exports = connect(null, mapDispatchToProps)(BellDashboardTile);

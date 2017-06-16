@@ -19,59 +19,31 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { Text, View } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
+import { View } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
+import OffButton from './OffButton';
+import OnButton from './OnButton';
 
-const OffButton = ({ isInState, tileWidth, enabled, onPress }) => (
-	<View style={[styles.turnOffButtonContainer, isInState === 'TURNOFF' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
-		<TouchableOpacity
-			disabled={!enabled}
-			onPress={onPress}
-			style={styles.button} >
-			<Text
-				ellipsizeMode="middle"
-				numberOfLines={1}
-				style = {[styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
-					{ fontSize: Math.floor(tileWidth / 8) }]}>
-				{'Off'}
-			</Text>
-		</TouchableOpacity>
-	</View>
-);
-
-const OnButton = ({ isInState, tileWidth, enabled, onPress }) => (
-	<View style={[styles.turnOnButtonContainer, isInState === 'TURNON' ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled ]}>
-		<TouchableOpacity
-			disabled={!enabled}
-			onPress={onPress}
-			style={styles.button} >
-			<Text
-				ellipsizeMode="middle"
-				numberOfLines={1}
-				style = {[styles.buttonText, isInState === 'TURNON' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
-					{ fontSize: Math.floor(tileWidth / 8) }]}>
-				{'On'}
-			</Text>
-		</TouchableOpacity>
-	</View>
-);
+type Props = {
+  item: Object,
+  style: Object,
+  tileWidth: number,
+};
 
 class ToggleDashboardTile extends View {
-  constructor(props) {
-    super(props);
-  }
+  props: Props;
 
   render() {
     const { item, tileWidth } = this.props;
-    const { name, isInState, supportedMethods } = item;
+    const { id, name, isInState, supportedMethods, methodRequested } = item;
     const { TURNON, TURNOFF } = supportedMethods;
 
-    const turnOnButton = <OnButton isInState={isInState} onPress={this.props.onTurnOn} tileWidth={tileWidth} enabled={!!TURNON} />;
-    const turnOffButton = <OffButton isInState={isInState} onPress={this.props.onTurnOff} tileWidth={tileWidth} enabled={!!TURNOFF} />;
+    const onButton = <OnButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} />;
+    const offButton = <OffButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} />;
 
-    const style = this.props.style;
+    let style = { ...this.props.style };
     style.width = tileWidth;
     style.height = tileWidth;
 
@@ -84,8 +56,8 @@ class ToggleDashboardTile extends View {
 				hasShadow={!!TURNON || !!TURNOFF}
 				style={style}>
 				<View style={{ flexDirection: 'row', flex: 30 }}>
-					{ turnOffButton }
-					{ turnOnButton }
+					{ offButton }
+					{ onButton }
 				</View>
 			</DashboardShadowTile>
     );
@@ -129,13 +101,16 @@ const styles = StyleSheet.create({
   buttonOffDisabled: {
     color: '#a0a0a0',
   },
+  leftCircle: {
+    position: 'absolute',
+    top: 3,
+    left: 3,
+  },
+  rightCircle: {
+    position: 'absolute',
+    top: 3,
+    right: 3,
+  },
 });
-
-ToggleDashboardTile.propTypes = {
-  onTurnOn: PropTypes.func,
-  onTurnOff: PropTypes.func,
-  item: PropTypes.object,
-  enabled: PropTypes.bool,
-};
 
 module.exports = ToggleDashboardTile;
