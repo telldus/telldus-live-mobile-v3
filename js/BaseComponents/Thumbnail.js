@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -25,7 +27,15 @@ import Base from './Base';
 import computeProps from './computeProps';
 import _ from 'lodash';
 
+type Props = {
+  contain: boolean,
+  size: number,
+  circular: boolean,
+  square: boolean,
+};
+
 export default class ThumbnailComponent extends Base {
+  props: Props;
 
 	getInitialStyle() {
 		return {

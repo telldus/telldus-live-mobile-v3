@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/Sensors
+ * @providesModule Actions_Sensors
  */
+
+// @flow
 
 'use strict';
 
@@ -43,7 +45,7 @@ function getSensors(): ThunkAction {
 	};
 }
 
-function processWebsocketMessageForSensor(action, data): Action {
+function processWebsocketMessageForSensor(action: string, data: Object): Action {
 	switch (action) {
 		case 'value':
 			return {

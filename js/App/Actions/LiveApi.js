@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/LiveApi
+ * @providesModule Actions_LiveApi
  */
+
+// @flow
 
 'use strict';
 
@@ -25,10 +27,12 @@ import type { ThunkAction } from './types';
 
 import { getGateways } from './Gateways';
 import { getJobs } from './Jobs';
-import { getDevices } from 'Actions/Devices';
-import { getSensors } from 'Actions/Sensors';
+import { getDevices } from 'Actions_Devices';
+import { getSensors } from 'Actions_Sensors';
 
 import { AppState } from 'react-native';
+
+type Tab = 'sensorsTab' | 'schedulerTab' | 'gatewaysTab';
 
 function syncLiveApiOnForeground(): ThunkAction {
 	return dispatch => {
@@ -42,7 +46,7 @@ function syncLiveApiOnForeground(): ThunkAction {
 }
 
 // NOTE: Devices are retrieved upon syncLiveApiOnForeground and via socket messages
-function syncWithServer(nextTab): ThunkAction {
+function syncWithServer(nextTab: Tab): ThunkAction {
 	return (dispatch, getState) => {
 		const { liveApi } = getState();
 		if (nextTab === 'sensorsTab' && !liveApi.sensors) {

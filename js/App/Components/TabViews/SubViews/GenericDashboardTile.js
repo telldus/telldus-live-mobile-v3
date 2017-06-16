@@ -17,14 +17,20 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
 import { View } from 'BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 
+type Props = {
+  style: Object,
+};
+
 class GenericDashboardTile extends View {
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 	}
 
@@ -42,8 +48,7 @@ class GenericDashboardTile extends View {
 						width: tileWidth,
 						height: tileWidth,
 					},
-				]}
-			>
+				]}>
 				<View style={{ flex: 30 }}/>
 			</DashboardShadowTile>
 		);

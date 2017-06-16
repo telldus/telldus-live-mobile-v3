@@ -19,32 +19,28 @@
  * @providesModule Actions
  */
 
+// @flow
+
 'use strict';
 
-import DeviceActions from './Devices';
 import GatewayActions from './Gateways';
 import LoginActions from './Login';
 import NavigationActions from './Navigation';
 import SensorActions from './Sensors';
-import WebsocketActions from './Websockets';
 import LiveApiActions from './LiveApi';
 import TabActions from './Tabs';
 import DashboardActions from './Dashboard';
-import DimmerActions from './Dimmer';
 import JobActions from './Jobs';
 import AppStateActions from './AppState';
 
 module.exports = {
-	...DeviceActions,
 	...GatewayActions,
 	...LoginActions,
 	...NavigationActions,
 	...SensorActions,
 	...LiveApiActions,
-	...WebsocketActions,
 	...TabActions,
 	...DashboardActions,
-	...DimmerActions,
 	...JobActions,
 	...AppStateActions,
 };

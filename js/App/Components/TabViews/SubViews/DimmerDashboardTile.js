@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//@flow
+
 'use strict';
 
 import React from 'react';
@@ -25,7 +27,7 @@ import { connect } from 'react-redux';
 import { View } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
-import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
+import { showDimmerPopup, hideDimmerPopup } from 'Actions_Dimmer';
 import VerticalSlider from './VerticalSlider';
 
 import throttle from 'lodash/throttle';
@@ -91,8 +93,43 @@ function toSliderValue(dimmerValue) {
 	return Math.round(dimmerValue * 100.0 / 255);
 }
 
+type Props = {
+  item: Object,
+  tileWidth: number,
+  onDimmerSlide: number => void,
+  showDimmerPopup: (name:string, sliderValue:number) => void,
+  hideDimmerPopup: () => void,
+  onDim: number => void,
+  onTurnOn: number => void,
+  onTurnOff: number => void,
+  onDim: number => void,
+  setScrollEnabled: boolean,
+  style: Object,
+};
+
+type State = {
+  bodyWidth: number,
+  bodyHeight: number,
+  value: number,
+  offButtonFadeAnim: Object,
+  onButtonFadeAnim: Object,
+};
+
 class DimmerDashboardTile extends View {
-	constructor(props) {
+	props: Props;
+	state: State;
+	parentScrollEnabled: boolean;
+	onValueChangeThrottled: number => void;
+	onTurnOffButtonStart: () => void;
+	onTurnOffButtonEnd: () => void;
+	onTurnOnButtonStart: () => void;
+	onTurnOnButtonEnd: () => void;
+	layoutView: Object => void;
+	onSlidingStart: (name:string, sliderValue:number) => void;
+	onSlidingComplete: number => void;
+	onValueChange: number => void;
+
+	constructor(props: Props) {
 		super(props);
 		const { item, onDimmerSlide } = this.props;
 		const { value, isInState } = item;
@@ -140,11 +177,11 @@ class DimmerDashboardTile extends View {
 		this.onValueChangeThrottled(toDimmerValue(sliderValue));
 	}
 
-	onSlidingStart(name: String, sliderValue: Number) {
+	onSlidingStart(name:string, sliderValue:number) {
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
-	onSlidingComplete(sliderValue: Number) {
+	onSlidingComplete(sliderValue:number) {
 		this.props.onDim(toDimmerValue(sliderValue));
 		this.props.hideDimmerPopup();
 	}
@@ -296,7 +333,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		showDimmerPopup: (name: String, value: Number) => {
+		showDimmerPopup: (name:string, value:number) => {
 			dispatch(showDimmerPopup(name, value));
 		},
 		hideDimmerPopup: () => {

@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//@flow
+
 'use strict';
 
 import React from 'react';
@@ -59,7 +61,16 @@ const StopButton = ({ supportedMethod, onPress }) => (
 	</TouchableOpacity>
 );
 
+type Props = {
+	device: Object,
+	onUp: number => void,
+	onDown: number => void,
+	onStop: number => void,
+};
+
 class NavigationalButton extends View {
+  props: Props;
+
 	render() {
 		const noop = function () {
 		};

@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -30,7 +32,20 @@ import md5 from 'blueimp-md5';
 
 const GRAVATAR_URI = 'https://www.gravatar.com/avatar/';
 
+type Props = {
+  size: number,
+  mask: 'circle'|'square'|'rounded',
+  emailAddress: string,
+};
+
+type DefaultProps = {
+  size: number,
+  mask: 'circle'|'square'|'rounded',
+};
+
 class Gravatar extends React.Component {
+  props: Props;
+  static defaultProps: DefaultProps;
 
 	_calculateStyle() {
 		const size = {

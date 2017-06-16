@@ -19,6 +19,8 @@
  * @providesModule TabsView
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -109,8 +111,41 @@ const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
 	);
 };
 
+type Props = {
+	dashboard: Object,
+	tab: string,
+	userProfile: Object,
+	gateways: Object,
+	syncGateways: () => void,
+	onTabSelect: string => void,
+	onToggleEditMode: string => void,
+	dispatch: Function,
+};
+
+type State = {
+	settings: boolean,
+	index: number,
+	routes: Array<Object>,
+};
+
 class TabsView extends View {
-	constructor(props) {
+	props: Props;
+	state: State;
+
+	deviceWidth: number;
+	deviceHeight: number;
+	renderScene: Object;
+	renderHeader: Object => Object;
+	renderContent: () => Object;
+	renderNavigationView: () => Object;
+	onOpenSetting: () => void;
+	onCloseSetting: () => void;
+	onTabSelect: string => void;
+	onRequestChangeTab: number => void;
+	toggleEditMode: number => void;
+	openDrawer: () => void;
+
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

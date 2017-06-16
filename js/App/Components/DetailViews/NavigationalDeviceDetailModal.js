@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -25,7 +27,7 @@ import { connect } from 'react-redux';
 import { RoundedCornerShadowView, Icon, View, Text } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { up, down, stop, learn } from 'Actions/Devices';
+import { up, down, stop, learn } from 'Actions_Devices';
 
 const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
 	<RoundedCornerShadowView style={{
@@ -64,9 +66,22 @@ const LearnButton = ({ onLearn }) => (
 	</RoundedCornerShadowView>
 );
 
-class NavigationalDeviceDetailModal extends View {
+type Props = {
+  device: Object,
+  onUp: number => void,
+  onDown: number => void,
+  onStop: number => void,
+  onLearn: number => void,
+};
 
-	constructor(props) {
+class NavigationalDeviceDetailModal extends View {
+	props: Props;
+	onUp: () => void;
+	onDown: () => void;
+	onStop: () => void;
+	onLearn: () => void;
+
+	constructor(props: Props) {
 		super(props);
 
 		this.onUp = this.onUp.bind(this);

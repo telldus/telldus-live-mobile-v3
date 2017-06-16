@@ -16,16 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/Websockets
+ * @providesModule Actions_Websockets
  */
 
+// @flow
+
 'use strict';
+
+import type { Dispatch, GetState, ThunkAction } from './types';
 
 import { v4 } from 'react-native-uuid';
 import TelldusWebsocket from '../Lib/Socket';
 
-import { processWebsocketMessageForSensor } from 'Actions/Sensors';
-import { processWebsocketMessageForDevice } from 'Actions/Devices';
+import { processWebsocketMessageForSensor } from 'Actions_Sensors';
+import { processWebsocketMessageForDevice } from 'Actions_Devices';
 
 import formatTime from '../Lib/formatTime';
 
@@ -47,12 +51,12 @@ const websocketConnections = {};
  * `authenticateSession` returns a promise. It resolves to the authenticated sessionId, which is also
  * stored in the redux state.
  */
-export const authenticateSession = (() => {
+export const authenticateSession : () => ThunkAction = (() => {
 	// immediately executing function to create closure for promise management
 	let promise;
 	let resolving = false;
 
-	return () => (dispatch, getState) => {
+	return () => (dispatch: Dispatch, getState: GetState) => {
 		const {
 			websockets: { session: { ttl, sessionId } },
 		} = getState();
@@ -98,7 +102,7 @@ export const authenticateSession = (() => {
  * Sets up socket connections to known gateways.
  * Makes sure that the session is authenticated before connecting.
  */
-export const connectToGateways = () => (dispatch, getState) => {
+export const connectToGateways = () => (dispatch: Dispatch, getState: GetState ) => {
 	const {
 		gateways: { allIds, byId },
 	} = getState();
@@ -126,7 +130,7 @@ export const connectToGateways = () => (dispatch, getState) => {
  * or different than the one we are connected to, it updates the state and creates
  * a new socket connection.
  */
-export const getWebsocketAddress = gatewayId => (dispatch, getState) => {
+export const getWebsocketAddress = (gatewayId: string) => (dispatch: Dispatch, getState: GetState) => {
 	const payload = {
 		url: `/client/serverAddress?id=${gatewayId}`,
 		requestParams: {
@@ -146,7 +150,7 @@ export const getWebsocketAddress = gatewayId => (dispatch, getState) => {
 			});
 		}
 
-		const websocketConnection = websocketConnections[gatewayId] || {};
+		const websocketConnection:Object = websocketConnections[gatewayId] || {};
 		if (
 			address === websocketAddress.address &&
 			address === websocketConnection.address &&
@@ -202,7 +206,7 @@ const destroyConnection = gatewayId => {
  * calls `getWebsocketAddress`, so that a new connection for the a new address
  * is set up.
  */
-const setupGatewayConnection = (gatewayId, address, port) => (dispatch, getState) => {
+const setupGatewayConnection = (gatewayId:string, address:string, port:string) => (dispatch, getState) => {
 	destroyConnection(gatewayId);
 	const websocketUrl = `ws://${address}:${port}/websocket`;
 	console.log('opening socket connection to', websocketUrl);
@@ -345,15 +349,15 @@ const setupGatewayConnection = (gatewayId, address, port) => (dispatch, getState
 		});
 	};
 
-	function authoriseWebsocket(sessionId) {
+	function authoriseWebsocket(sessionId:string) {
 		sendMessage(`{"module":"auth","action":"auth","data":{"sessionid":"${sessionId}","clientId":"${gatewayId}"}}`);
 	}
 
-	function addWebsocketFilter(module, action) {
+	function addWebsocketFilter(module:string, action:string) {
 		sendMessage(`{"module":"filter","action":"accept","data":{"module":"${module}","action":"${action}"}}`);
 	}
 
-	function sendMessage(message) {
+	function sendMessage(message:string) {
 		const formattedTime = formatTime(new Date());
 		const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
 		try {
@@ -363,6 +367,7 @@ const setupGatewayConnection = (gatewayId, address, port) => (dispatch, getState
 		} catch (e) {
 			console.log(message);
 		}
+    // $FlowFixMe
 		websocket.send(message);
 	}
 };

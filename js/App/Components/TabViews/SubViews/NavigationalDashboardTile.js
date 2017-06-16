@@ -57,8 +57,19 @@ const StopButton = ({ isEnabled, onPress }) => (
 	</TouchableOpacity>
 );
 
+type Props = {
+	item: Object,
+	tileWidth: number,
+	onUp: number => void,
+	onDown: number => void,
+	onStop: number => void,
+	style: Object,
+};
+
 class NavigationalDashboardTile extends View {
-	constructor(props) {
+	props: Props;
+
+	constructor(props: Props) {
 		super(props);
 	}
 

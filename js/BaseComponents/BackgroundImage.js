@@ -17,12 +17,22 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React, { Component } from 'react';
 import Image from 'Image';
 
+type Props = {
+  source: number,
+  children: Object,
+  style: Object,
+};
+
 export default class BackgroundImage extends Component {
+	props : Props;
+
 	render() {
 		const { source, children, style, ...props } = this.props;
 		return (
@@ -38,9 +48,3 @@ export default class BackgroundImage extends Component {
 		);
 	}
 }
-
-BackgroundImage.propTypes = {
-	source: React.PropTypes.number,
-	children: React.PropTypes.object,
-	style: React.PropTypes.object,
-};

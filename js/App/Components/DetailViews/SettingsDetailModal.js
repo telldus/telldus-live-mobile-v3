@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -52,7 +54,20 @@ const Button = ({ text, onPress, width }) => (
 	</TouchableOpacity>
 );
 
+type Props = {
+  isVisible: boolean,
+  onClose: () => void,
+  onLogout: () => void,
+  onSubmitPushToken: () => void,
+};
+
+type State = {
+  isVisible: boolean,
+};
+
 class SettingsDetailModal extends View {
+	props: Props;
+	state: State;
 
 	constructor(props) {
 		super(props);
@@ -79,12 +94,6 @@ class SettingsDetailModal extends View {
 	}
 
 }
-
-SettingsDetailModal.propTypes = {
-	onClose: React.PropTypes.func.isRequired,
-	onSubmitPushToken: React.PropTypes.func.isRequired,
-	onLogout: React.PropTypes.func.isRequired,
-};
 
 const styles = StyleSheet.create({
 	container: {

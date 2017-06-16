@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/Login
+ * @providesModule Actions_Login
  */
+
+// @flow
 
 'use strict';
 
@@ -26,10 +28,10 @@ import { apiServer } from 'Config';
 import { publicKey, privateKey } from 'Config';
 
 import LiveApi from 'LiveApi';
-import { destroyAllConnections } from 'Actions/Websockets';
+import { destroyAllConnections } from 'Actions_Websockets';
 
 // TODO: rewrite into proper ThunkAction that does its own dispatching
-async function loginToTelldus(username, password): Promise<Action> {
+async function loginToTelldus(username:string, password:string): Promise<Action> {
 
 	return new Promise((resolve, reject) => {
 		fetch(
@@ -73,7 +75,7 @@ async function loginToTelldus(username, password): Promise<Action> {
 
 }
 
-function updateAccessToken(accessToken): Action {
+function updateAccessToken(accessToken:Object): Action {
 	return {
 		type: 'RECEIVED_ACCESS_TOKEN',
 		accessToken: accessToken,

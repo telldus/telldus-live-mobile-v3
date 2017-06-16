@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -30,8 +32,24 @@ import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
 import Theme from 'Theme';
 
+type Props = {
+  rows: Array<Object>,
+  dispatch: Function,
+};
+
+type State = {
+  dataSource: Object,
+  settings: false,
+};
+
 class GatewaysTab extends View {
-	constructor(props) {
+	props: Props;
+	state: State;
+
+	renderRow: ({name: string, online: boolean, websocketOnline: boolean}) => Object;
+	onRefresh: () => void;
+
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

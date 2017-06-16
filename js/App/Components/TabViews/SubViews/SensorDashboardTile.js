@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -28,8 +30,24 @@ import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
+type Props = {
+  item: Object,
+  tileWidth: number,
+  displayType: string,
+  style: Object,
+  onPress: () => void,
+};
+
+type State = {
+  currentDisplayType: string,
+};
+
 class SensorDashboardTile extends View {
-	constructor(props) {
+	props: Props;
+	state: State;
+	getSlideList : Object => Array<Object>;
+
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -39,7 +57,7 @@ class SensorDashboardTile extends View {
 		this.getSlideList = this.getSlideList.bind(this);
 	}
 
-	getSlideList(item) {
+	getSlideList(item: Object) : Array<Object> {
 		let slideList = [];
 
 		if (item.humidity) {

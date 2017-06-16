@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -26,8 +28,20 @@ import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Slider from 'react-native-slider';
 
-import { turnOn, turnOff, learn } from 'Actions/Devices';
-import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
+import { turnOn, turnOff, learn } from 'Actions_Devices';
+import { setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
+
+type Props = {
+  device: Object,
+  onTurnOff: number => void,
+  onTurnOn: number => void,
+  onLearn: number => void,
+  onDim: number => void,
+};
+
+type State = {
+  temporaryDimmerValue: number,
+};
 
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
@@ -38,9 +52,7 @@ const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 				},
 			]}
 			onPress={onTurnOff}>
-			<Text style={{
-				fontSize: 16,
-				color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e',
+			<Text style={{ fontSize: 16, color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
 			}}>
 				{'Off'}
 			</Text>
@@ -53,9 +65,7 @@ const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 				},
 			]}
 			onPress={onTurnOn}>
-			<Text style={{
-				fontSize: 16,
-				color: device.isInState !== 'TURNOFF' ? '#2c7e38' : '#9e9e9e',
+			<Text style={{ fontSize: 16, color: device.isInState !== 'TURNOFF' ? '#2c7e38' : '#9e9e9e' }}>
 			}}>
 				{'On'}
 			</Text>
@@ -74,11 +84,19 @@ const LearnButton = ({ device, onLearn }) => (
 );
 
 class DimmerDeviceDetailModal extends View {
+	props: Props;
+	state: State;
+	currentDimmerValue: number;
+	onTurnOn: () => void;
+	onTurnOff: () => void;
+	onLearn: () => void;
+	onValueChange: number => void;
+	onSlidingComplete: number => void;
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
-		const dimmerValue = this.getDimmerValue(this.props.device);
+		const dimmerValue: number = this.getDimmerValue(this.props.device);
 
 		this.state = {
 			temporaryDimmerValue: dimmerValue,
@@ -92,7 +110,7 @@ class DimmerDeviceDetailModal extends View {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 	}
 
-	getDimmerValue(device) {
+	getDimmerValue(device: Object) : number {
 		if (device !== null && device.value !== null) {
 			if (device.isInState === 'TURNON') {
 				return 100;
@@ -102,6 +120,7 @@ class DimmerDeviceDetailModal extends View {
 				return Math.round(device.value * 100.0 / 255);
 			}
 		}
+		return 0;
 	}
 
 	onTurnOn() {

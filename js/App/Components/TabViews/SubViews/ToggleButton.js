@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React, { PropTypes } from 'react';
@@ -63,8 +65,16 @@ const OnButton = ({ isInState, enabled, onPress }) => (
 	</View>
 );
 
+type Props = {
+  device: Object,
+  onTurnOff: number => void,
+  onTurnOn: number => void,
+};
+
 class ToggleButton extends View {
-	constructor(props) {
+	props: Props;
+
+	constructor(props: Props) {
 		super(props);
 	}
 

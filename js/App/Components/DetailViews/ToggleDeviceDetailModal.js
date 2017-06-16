@@ -25,7 +25,7 @@ import { connect } from 'react-redux';
 import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
-import { turnOn, turnOff, learn } from 'Actions/Devices';
+import { turnOn, turnOff, learn } from 'Actions_Devices';
 
 const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
@@ -36,9 +36,7 @@ const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 				},
 			]}
 			onPress={onTurnOff}>
-			<Text style={{
-				fontSize: 16,
-				color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e',
+			<Text style={{ fontSize: 16, color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
 			}}>
 				{'Off'}
 			</Text>
@@ -51,9 +49,7 @@ const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
 				},
 			]}
 			onPress={onTurnOn}>
-			<Text style={{
-				fontSize: 16,
-				color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e',
+			<Text style={{ fontSize: 16, color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e' }}>
 			}}>
 				{'On'}
 			</Text>
@@ -71,9 +67,20 @@ const LearnButton = ({ device, onLearn }) => (
 	</RoundedCornerShadowView>
 );
 
-class ToggleDeviceDetailModal extends View {
+type Props = {
+  device: Object,
+  onTurnOn: number => void,
+  onTurnOff: number => void,
+  onLearn: number => void,
+};
 
-	constructor(props) {
+class ToggleDeviceDetailModal extends View {
+	props: Props;
+	onTurnOn: () => void;
+	onTurnOff: () => void;
+	onLearn: () => void;
+
+	constructor(props: Props) {
 		super(props);
 
 		this.onTurnOn = this.onTurnOn.bind(this);
@@ -117,10 +124,6 @@ class ToggleDeviceDetailModal extends View {
 	}
 
 }
-
-ToggleDeviceDetailModal.propTypes = {
-	device: React.PropTypes.object.isRequired,
-};
 
 const styles = StyleSheet.create({
 	container: {

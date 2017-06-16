@@ -17,14 +17,16 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions_Types';
 
 type State = {
-	show: Boolean,
-	value: Number,
-	name: String
+	show: boolean,
+	value: number,
+	name: string
 };
 
 const initialState: State = {

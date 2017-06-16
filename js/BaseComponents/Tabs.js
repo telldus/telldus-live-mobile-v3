@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -24,7 +26,12 @@ import Base from './Base';
 import computeProps from './computeProps';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 
+type Props = {
+  children: Object,
+};
+
 export default class TabComponent extends Base {
+  props: Props;
 
 	getInitialStyle() {
 		return {

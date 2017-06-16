@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -24,7 +26,14 @@ import View from 'View';
 import Base from './Base';
 import computeProps from './computeProps';
 
+type Props = {
+  contentContainerStyle: Object,
+  padder: number,
+  children: Object,
+};
+
 export default class Content extends Base {
+  props: Props;
 
 	prepareRootProps() {
 

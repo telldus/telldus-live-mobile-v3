@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -25,7 +27,18 @@ import Base from './Base';
 import computeProps from './computeProps';
 import Text from './Text';
 
+type Props = {
+  primary: Object,
+  success: boolean,
+  info: Object,
+  warning: boolean,
+  danger: boolean,
+  children: Object,
+  textStyle: Object,
+};
+
 export default class BadgeComponent extends Base {
+  props: Props;
 
 	prepareRootProps() {
 		let type = {

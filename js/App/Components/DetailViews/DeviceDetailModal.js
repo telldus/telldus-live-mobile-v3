@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -27,15 +29,34 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { addToDashboard, removeFromDashboard } from 'Actions';
 import Modal from 'react-native-modal';
 
-class DeviceDetailModal extends View {
+type Props = {
+  isVisible: boolean,
+  device: Object,
+  inDashboard: boolean,
+  gateway: Object,
+  children: Object,
+  onRemoveFromDashboard: number => void,
+  onAddToDashboard: number => void,
+  onCloseSelected: () => void,
+};
 
-	constructor(props) {
+type State = {
+  isVisible: boolean,
+};
+
+class DeviceDetailModal extends View {
+	props: Props;
+	state: State;
+	onStarButtonSelected: () => void;
+
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			isVisible: this.props.isVisible,
 		};
 
 		this.onStarButtonSelected = this.onStarButtonSelected.bind(this);
+		console.log(this.props.device);
 	}
 
 	onStarButtonSelected() {

@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -24,8 +26,17 @@ import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
+type Props = {
+  onBell: () => void,
+  item: Object,
+  tileWidth: number,
+  style: Object,
+};
+
 class BellDashboardTile extends View {
-	constructor(props) {
+	props: Props;
+
+	constructor(props: Props) {
 		super(props);
 	}
 

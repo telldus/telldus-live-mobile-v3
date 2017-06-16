@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React, { Component } from 'react';
@@ -102,8 +104,16 @@ const SensorLuminance = ({ luminance }) => (
 	</View>
 );
 
+type Props = {
+  sensor: Object,
+};
+
 class SensorRow extends Component {
-	constructor(props) {
+	props: Props;
+	onLayout: Object => void;
+	width: number;
+
+	constructor(props: Props) {
 		super(props);
 		this.width = 0;
 
@@ -187,11 +197,11 @@ class SensorRow extends Component {
 		);
 	}
 
-	onLayout(event) {
+	onLayout(event: Object) {
 		this.width = event.nativeEvent.layout.width;
 	}
 
-	formatLastUpdated(minutes, lastUpdated) {
+	formatLastUpdated(minutes: number, lastUpdated:number): string {
 		if (minutes === 0) {
 			return 'Just now';
 		}

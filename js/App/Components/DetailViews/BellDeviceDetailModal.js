@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -25,7 +27,7 @@ import { connect } from 'react-redux';
 import { Text, RoundedCornerShadowView, View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
-import { bell, learn } from 'Actions/Devices';
+import { bell, learn } from 'Actions_Devices';
 
 const BellButton = ({ onBell }) => (
 	<RoundedCornerShadowView style={styles.bell}>
@@ -48,9 +50,17 @@ const LearnButton = ({ onLearn }) => (
 	</RoundedCornerShadowView>
 );
 
-class BellDeviceDetailModal extends View {
+type Props = {
+  device: Object,
+  onBell: number => void,
+  onLearn: number => void,
+};
 
-	constructor(props) {
+class BellDeviceDetailModal extends View {
+	props: Props;
+	onBell : number => void;
+
+	constructor(props: Props) {
 		super(props);
 		this.onBell = this.onBell.bind(this);
 	}
@@ -82,10 +92,6 @@ class BellDeviceDetailModal extends View {
 		);
 	}
 }
-
-BellDeviceDetailModal.propTypes = {
-	device: React.PropTypes.object.isRequired,
-};
 
 const styles = StyleSheet.create({
 	container: {

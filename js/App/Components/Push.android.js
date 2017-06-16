@@ -19,6 +19,8 @@
  * @providesModule Push
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';

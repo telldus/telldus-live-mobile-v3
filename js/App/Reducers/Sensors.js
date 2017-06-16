@@ -17,16 +17,18 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import type { Action } from 'Actions/Types';
+import type { Action } from 'Actions_Types';
 import { REHYDRATE } from 'redux-persist/constants';
 
 import { combineReducers } from 'redux';
 
 export type State = ?Object;
 
-function reduceSensor(state = {}, action: Action): State {
+function reduceSensor(state:Object = {}, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_SENSORS':
 			// properties originated from server
@@ -42,6 +44,16 @@ function reduceSensor(state = {}, action: Action): State {
 				model: state.model,
 				name: state.name,
 				protocol: state.protocol,
+        temperature: null,
+        humidity: null,
+        rainRate: null,
+        rainTotal: null,
+        uv: null,
+        watt: null,
+        luminance: null,
+        windAverage: null,
+        windGust: null,
+        windDirection: null,
 			};
 
 			// properties originated on client
@@ -127,7 +139,7 @@ function reduceSensor(state = {}, action: Action): State {
 	}
 }
 
-const byId = (state = {}, action: Action): State => {
+const byId = (state: Object = {}, action: Object): State => {
 	if (action.type === REHYDRATE) {
 		if (action.payload.sensors && action.payload.sensors.byId) {
 			console.log('rehydrating sensors.byId');
@@ -173,7 +185,7 @@ const byId = (state = {}, action: Action): State => {
 	return state;
 };
 
-const allIds = (state = [], action: Action): State => {
+const allIds = (state: Array<Object> = [], action: Object): Array<Object> => {
 	if (action.type === REHYDRATE) {
 		if (action.payload.sensors && action.payload.sensors.allIds) {
 			console.log('rehydrating sensors.allIds');
@@ -199,7 +211,7 @@ export default combineReducers({
 	byId,
 });
 
-export function parseSensorsForListView(sensors = {}, gateways = {}, editMode = false) {
+export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}, editMode: boolean = false) {
 	const sections = sensors.allIds.reduce((acc, sensorId) => {
 		acc[sensors.byId[sensorId].clientId] = [];
 		return acc;
