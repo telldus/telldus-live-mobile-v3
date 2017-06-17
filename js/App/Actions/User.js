@@ -27,6 +27,9 @@ import LiveApi from 'LiveApi';
 
 import { format } from 'url';
 
+/*
+ * registers the app at the telldus server for receiving push notification, with push token and other device information.
+ */
 export const registerPushToken = (token: String, name: String, model: String, manufacturer: String, osVersion: String, deviceId: String, pushServiceId: Number ): ThunkAction => dispatch => {
 	const url = format({
 		pathname: '/user/registerPushToken',
@@ -60,6 +63,9 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 	});
 };
 
+/*
+ * unregisters the app at the telldus server from receiving push notification, with the registered push token.
+ */
 export const unregisterPushToken = (token: String): ThunkAction => dispatch => {
 	const url = format({
 		pathname: '/user/unregisterPushToken',

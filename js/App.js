@@ -40,6 +40,10 @@ class App extends React.Component {
     this.pushConf();
   }
 
+  /*
+   * calls the push configuration methods, for logged in users, which will generate push token and listen for local and
+   * remote push notifications.
+   */
   pushConf() {
     if (this.props.accessToken) {
       Push.configure(this.props);
