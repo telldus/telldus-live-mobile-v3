@@ -66,10 +66,14 @@ class SettingsDetailModal extends View {
     super(props);
     this.state = {
       isVisible: this.props.isVisible,
+      isPushSubmitLoading: false,
+      isLogoutLoading: false
     };
   }
 
   render() {
+    let submitButText = this.state.isPushSubmitLoading ? 'Submitting Token...' : 'Submit Push Token';
+    let logoutButText = this.state.isLogoutLoading ? 'Logging Out...' : 'Logout';
     return (
             <Modal isVisible={this.state.isVisible}>
                 <Container style={styles.container}>
@@ -79,11 +83,21 @@ class SettingsDetailModal extends View {
                             {'You are using version 3.3.0 of Telldus Live! mobile.'}
                         </Text>
                         {this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
-                        <Button text={'Submit Push Token'} onPress={() => {this.props.onSubmitPushToken(this.props.store.user.pushToken)}} width={200} />
+                        <Button text={submitButText} onPress={() => {
+                          this.setState({
+                            isPushSubmitLoading: true
+                          });
+                          this.props.onSubmitPushToken(this.props.store.user.pushToken)}
+                        } width={200} />
                         :
                         <StatusView/>
                         }
-                        <Button text={'Logout'} onPress={() => {this.props.onLogout(this.props.store.user.pushToken)}} width={100} />
+                        <Button text={logoutButText} onPress={() => {
+                          this.setState({
+                            isLogoutLoading: true
+                          });
+                          this.props.onLogout(this.props.store.user.pushToken)}
+                        } width={100} />
                     </View>
                 </Container>
             </Modal>
