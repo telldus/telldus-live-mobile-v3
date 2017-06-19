@@ -23,14 +23,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { Image, List, ListDataSource, ListItem, Text, View, I18n } from 'BaseComponents';
 import { getGateways } from 'Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
 import Theme from 'Theme';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 class GatewaysTab extends View {
+
+	static navigationOptions = {
+		title: I18n.t('pages.gateways'),
+		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'gateways'),
+	};
+
 	constructor(props) {
 		super(props);
 

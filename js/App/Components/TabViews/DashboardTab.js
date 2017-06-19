@@ -23,7 +23,7 @@ import { createSelector } from 'reselect';
 import { Dimensions, Image } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
-import { Text, List, ListDataSource, View } from 'BaseComponents';
+import { Text, List, ListDataSource, View, I18n } from 'BaseComponents';
 import Platform from 'Platform';
 import { turnOn, turnOff, bell, down, up, stop, getDevices } from 'Actions/Devices';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
@@ -42,6 +42,7 @@ import {
 import { SettingsDetailModal } from 'DetailViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
 import reactMixin from 'react-mixin';
 
 const tileMargin = 8;
@@ -50,8 +51,8 @@ const listMargin = 8;
 class DashboardTab extends View {
 
 	static navigationOptions = {
-		title: 'Dashboard',
-		tabBarIcon: () => <Image source={require('./img/tabIcons/dashboard-inactive.png')}/>,
+		title: I18n.t('pages.dashboard'),
+		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'dashboard'),
 	};
 
 	constructor(props) {

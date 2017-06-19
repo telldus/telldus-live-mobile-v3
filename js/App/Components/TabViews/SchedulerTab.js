@@ -34,6 +34,7 @@ import { parseJobsForListView } from 'Reducers/Jobs';
 
 import { Image, Dimensions } from 'react-native';
 import { syncWithServer, switchTab } from 'Actions';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -41,12 +42,7 @@ class SchedulerTab extends View {
 
 	static navigationOptions = {
 		title: I18n.t('pages.scheduler'),
-		tabBarIcon: ({ focused }) => {
-			if (focused) {
-				return <Image source={require('./img/tabIcons/scheduler-active.png')}/>;
-			}
-			return <Image source={require('./img/tabIcons/scheduler-inactive.png')}/>;
-		},
+		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
 	};
 
 	constructor(props) {

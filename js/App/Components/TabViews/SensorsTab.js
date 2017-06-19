@@ -23,15 +23,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { List, ListDataSource, View } from 'BaseComponents';
+import { List, ListDataSource, View, I18n } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews/SubViews';
 
 import { getSensors } from 'Actions';
 import { toggleEditMode } from 'Actions';
 
 import { parseSensorsForListView } from '../../Reducers/Sensors';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 class SensorsTab extends View {
+
+	static navigationOptions = {
+		title: I18n.t('pages.sensors'),
+		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'sensors'),
+	};
+
 	constructor(props) {
 		super(props);
 

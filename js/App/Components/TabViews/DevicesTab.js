@@ -23,7 +23,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { List, ListDataSource, Text, View } from 'BaseComponents';
+import { List, ListDataSource, Text, View, I18n } from 'BaseComponents';
 import { DeviceRow, DeviceRowHidden } from 'TabViews/SubViews';
 import {
 	DeviceDetailModal,
@@ -37,12 +37,19 @@ import { getDevices } from 'Actions/Devices';
 import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 import { parseDevicesForListView } from 'Reducers/Devices';
 
 import Theme from 'Theme';
 
 class DevicesTab extends View {
+
+	static navigationOptions = {
+		title: I18n.t('pages.devices'),
+		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'devices'),
+	};
+
 	constructor(props) {
 		super(props);
 
