@@ -23,16 +23,10 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import EventEmitter from 'EventEmitter';
 
-import {
-	I18n,
-	Icon,
-	View,
-} from 'BaseComponents';
+import { Icon, View } from 'BaseComponents';
 
-import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
-import DetailViews from 'DetailViews';
+import { toggleEditMode } from 'Actions';
 import TabViews from 'TabViews';
 
 import { getUserProfile } from '../../Reducers/User';
@@ -41,68 +35,19 @@ import { TabNavigator } from 'react-navigation';
 class TabsView extends View {
 	constructor(props) {
 		super(props);
-		this.eventEmitter = new EventEmitter();
-		this.onTabSelect = this.onTabSelect.bind(this);
-		this.onDashboardTabSelect = this.onDashboardTabSelect.bind(this);
-		this.onDevicesTabSelect = this.onDevicesTabSelect.bind(this);
-		this.onSensorsTabSelect = this.onSensorsTabSelect.bind(this);
-		this.onSchedulerTabSelect = this.onSchedulerTabSelect.bind(this);
-		this.onGatewaysTabSelect = this.onGatewaysTabSelect.bind(this);
 		this.toggleSensorTabEditMode = this.toggleSensorTabEditMode.bind(this);
 		this.toggleDevicesTabEditMode = this.toggleDevicesTabEditMode.bind(this);
 	}
 
 	componentDidMount() {
-		Icon.getImageSource('gear', 22, 'white').then((source) => this.setState({ settingIcon: source }));
-		Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
-
-		if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
-			if (this.props.tab !== 'dashboardTab') {
-				this.onTabSelect('dashboardTab');
-			}
-		} else {
-			this.onTabSelect('devicesTab');
-		}
-	}
-
-	onDashboardTabSelect() {
-		this.onTabSelect('dashboardTab');
-	}
-
-	onDevicesTabSelect() {
-		this.onTabSelect('devicesTab');
-	}
-
-	onSensorsTabSelect() {
-		this.onTabSelect('sensorsTab');
-	}
-
-	onSchedulerTabSelect() {
-		this.onTabSelect('schedulerTab');
-	}
-
-	onGatewaysTabSelect() {
-		this.onTabSelect('gatewaysTab');
-	}
-
-	onTabSelect(tab) {
-		if (this.props.tab !== tab) {
-			this.props.onTabSelect(tab);
-		}
+		// TODO: move to the device component
+		//Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
 	}
 
 	render() {
 		return (
 			<Tabs/>
 		);
-	}
-
-	_openUserDetailView() {
-		this.refs.dashboardNavigator.push({
-			component: DetailViews.User,
-			title: I18n.t('pages.profile'),
-			passProps: { user: this.props.userProfile },
-		});
 	}
 
 	toggleSensorTabEditMode() {
@@ -119,16 +64,11 @@ function mapStateToProps(store) {
 		tab: store.navigation.tab,
 		userIcon: false,
 		userProfile: getUserProfile(store),
-		dashboard: store.dashboard,
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTabSelect: (tab) => {
-			dispatch(syncWithServer(tab));
-			dispatch(switchTab(tab));
-		},
 		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
 		dispatch,
 	};
@@ -136,7 +76,7 @@ function mapDispatchToProps(dispatch) {
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);
 
-export const Tabs = TabNavigator(
+const Tabs = TabNavigator(
 	{
 		Dashboard: {
 			screen: TabViews.Dashboard,
@@ -155,8 +95,12 @@ export const Tabs = TabNavigator(
 		},
 	},
 	{
+		initialRouteName: 'Dashboard',
+		swipeEnabled: false,
+		lazy: true,
+		animationEnabled: false,
 		tabBarOptions: {
-			activeTintColor: '#e91e63',
+			activeTintColor: '#e26901',
 		},
 	}
 );
