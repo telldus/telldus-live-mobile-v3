@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Image, Dimensions, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Base from './Base';
 import computeProps from './computeProps';
 import Button from './Button';
@@ -29,6 +29,7 @@ import Title from './Title';
 import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
 import _ from 'lodash';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class HeaderComponent extends Base {
 
@@ -41,15 +42,13 @@ export default class HeaderComponent extends Base {
 				alignItems: 'center',
 				paddingHorizontal: 15,
 				paddingTop: (Platform.OS === 'ios' ) ? 15 : 0,
-				shadowColor: '#000',
-				shadowOffset: {
-					width: 0,
-					height: 2,
-				},
-				shadowOpacity: 0.1,
-				shadowRadius: 1.5,
 				height: this.getTheme().toolbarHeight,
 				elevation: 3,
+				position: 'relative',
+			},
+			logoImage: {
+				width: Dimensions.get('window').width * 0.277333333,
+				height: Dimensions.get('window').height * 0.026236882,
 			},
 			iosToolbarSearch: {
 				backgroundColor: this.getTheme().toolbarInputColor,
@@ -82,7 +81,14 @@ export default class HeaderComponent extends Base {
 	}
 
 	renderChildren() {
-		if (!Array.isArray(this.props.children)) {
+		if (!this.props.children) {
+			return (
+				<Image
+					source={require('../App/Components/TabViews/img/telldus-logo@3x.png')}
+					style={this.getInitialStyle().logoImage}
+				/>
+			);
+		} else if (!Array.isArray(this.props.children)) {
 			return this.props.children;
 		} else if (Array.isArray(this.props.children)) {
 			let newChildren = [];
@@ -251,10 +257,46 @@ export default class HeaderComponent extends Base {
 		}
 	}
 
+	renderRightButton() {
+		const { rightButton } = this.props;
+
+		return (
+			<TouchableWithoutFeedback onPress={rightButton.onPress}>
+				<View
+					style={{
+						...StyleSheet.absoluteFillObject,
+						alignItems: 'flex-end',
+						justifyContent: 'center',
+						backgroundColor: 'transparent',
+						paddingTop: this.getInitialStyle().navbar.paddingTop,
+						paddingHorizontal: this.getInitialStyle().navbar.paddingHorizontal,
+					}}
+				>
+					{renderButtonContent()}
+				</View>
+			</TouchableWithoutFeedback>
+		);
+
+		function renderButtonContent() {
+			if (rightButton.image) {
+				return <Image source={this.props.rightButton.image}/>;
+			}
+			if (rightButton.icon) {
+				const { name, size, color } = rightButton.icon;
+
+				return <Icon name={name} size={size} color={color}/>;
+			}
+			if (rightButton.title) {
+				return <Text>this.props.rightButton.title</Text>;
+			}
+		}
+	}
+
 	render() {
 		return (
 			<View {...this.prepareRootProps()} >
 				{this.renderChildren()}
+				{this.props.rightButton && this.renderRightButton()}
 			</View>
 		);
 	}
