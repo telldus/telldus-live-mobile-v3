@@ -20,14 +20,15 @@
 
 import React from 'react';
 import { createSelector } from 'reselect';
-import { Dimensions, Image } from 'react-native';
+import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
-import { Text, List, ListDataSource, View, I18n } from 'BaseComponents';
+import { Text, List, ListDataSource, View, I18n, Header } from 'BaseComponents';
 import Platform from 'Platform';
 import { turnOn, turnOff, bell, down, up, stop, getDevices } from 'Actions/Devices';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
 import { changeSensorDisplayType } from 'Actions/Dashboard';
+import { syncWithServer, switchTab } from 'Actions';
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
@@ -70,6 +71,15 @@ class DashboardTab extends View {
 		};
 
 		this.tab = 'dashboardTab';
+
+		this.rightButton = {
+			icon: {
+				name: 'gear',
+				size: 22,
+				color: '#fff',
+			},
+			onPress: this.onOpenSetting.bind(this),
+		};
 
 		this._onLayout = this._onLayout.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
@@ -133,6 +143,11 @@ class DashboardTab extends View {
 			//this.addListenerOn(this.props.events, 'onSetting', this.onOpenSetting);
 		}
 
+		if (!this.props.dashboard.deviceIds.length > 0 || !this.props.dashboard.sensorIds.length > 0) {
+			this.props.navigation.navigate('Scheduler');
+		}
+
+		this.props.onTabSelect('dashboardTab');
 		this.startSensorTimer();
 	}
 
@@ -187,7 +202,7 @@ class DashboardTab extends View {
 		// add to List props: enableEmptySections={true}, to surpress warning
 		return (
 			<View onLayout={this._onLayout}>
-				<Text>111</Text>
+				<Header rightButton={this.rightButton}/>
 				<List
 					ref="list"
 					contentContainerStyle={{
@@ -310,11 +325,16 @@ function mapStateToProps(state, props) {
 		gateways: state.gateways,
 		userProfile: getUserProfile(state),
 		tab: state.navigation.tab,
+		dashboard: state.dashboard,
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
+		onTabSelect: (tab) => {
+			dispatch(syncWithServer(tab));
+			dispatch(switchTab(tab));
+		},
 		onTurnOn: id => () => dispatch(turnOn(id)),
 		onTurnOff: id => () => dispatch(turnOff(id)),
 		onBell: id => () => dispatch(bell(id)),
