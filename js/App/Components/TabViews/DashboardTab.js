@@ -22,12 +22,10 @@ import React from 'react';
 import { createSelector } from 'reselect';
 import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View } from 'BaseComponents';
-import Platform from 'Platform';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
-
+import { toggleSettings } from 'Actions_Settings';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
 
@@ -35,7 +33,6 @@ import { DimmerDashboardTile, NavigationalDashboardTile, BellDashboardTile, Togg
 import { SettingsDetailModal } from 'DetailViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
-import reactMixin from 'react-mixin';
 
 type Props = {
   rows: Array<Object>,
@@ -43,15 +40,15 @@ type Props = {
   userProfile: Object,
   tab: string,
   onChangeDisplayType: () => void,
+  toggleSettings: boolean => void,
   dispatch: Function,
-  events: Object,
+  settings: Object,
 };
 
 type State = {
   tileWidth: number,
   listWidth: number,
   dataSource: Object,
-  settings: boolean,
 };
 
 const tileMargin = 8;
@@ -64,7 +61,6 @@ class DashboardTab extends View {
   tab: string;
   _onLayout: Object => void;
   setScrollEnabled: boolean => void;
-  onOpenSetting: () => void;
   startSensorTimer: () => void;
   stopSensorTimer: () => void;
   changeDisplayType: () => void;
@@ -82,20 +78,17 @@ class DashboardTab extends View {
       dataSource: new ListDataSource({
         rowHasChanged: this.rowHasChanged,
       }).cloneWithRows(this.props.rows),
-      settings: false,
     };
 
     this.tab = 'dashboardTab';
 
     this._onLayout = this._onLayout.bind(this);
     this.setScrollEnabled = this.setScrollEnabled.bind(this);
-    this.onOpenSetting = this.onOpenSetting.bind(this);
     this.startSensorTimer = this.startSensorTimer.bind(this);
     this.stopSensorTimer = this.stopSensorTimer.bind(this);
     this.changeDisplayType = this.changeDisplayType.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.onCloseSetting = this.onCloseSetting.bind(this);
-    this.mixins = [Subscribable.Mixin];
   }
 
   startSensorTimer() {
@@ -129,10 +122,6 @@ class DashboardTab extends View {
   }
 
   componentDidMount() {
-    if (Platform.OS === 'ios') {
-      this.addListenerOn(this.props.events, 'onSetting', this.onOpenSetting);
-    }
-
     this.startSensorTimer();
   }
 
@@ -175,12 +164,8 @@ class DashboardTab extends View {
     return tileWidth;
   }
 
-  onOpenSetting() {
-    this.setState({ settings: true });
-  }
-
   onCloseSetting() {
-    this.setState({ settings: false });
+    this.props.toggleSettings(false);
   }
 
   render() {
@@ -196,7 +181,7 @@ class DashboardTab extends View {
 					onRefresh = {this.onRefresh}
 				/>
 				{
-					this.state.settings ?
+					this.props.settings.status ?
 						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting} /> :
 						null
 				}
@@ -295,16 +280,16 @@ function mapStateToProps(state, props) {
     gateways: state.gateways,
     userProfile: getUserProfile(state),
     tab: state.navigation.tab,
+    settings: state.settings,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     onChangeDisplayType: () => dispatch(changeSensorDisplayType()),
+    toggleSettings: (status) => dispatch(toggleSettings(status)),
     dispatch,
   };
 }
-
-reactMixin(DashboardTab.prototype, Subscribable.Mixin);
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(DashboardTab);

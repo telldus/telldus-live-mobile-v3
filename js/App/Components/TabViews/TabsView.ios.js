@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import EventEmitter from 'EventEmitter';
 
 import {
 	I18n,
@@ -33,16 +32,37 @@ import {
 	View,
 } from 'BaseComponents';
 
-import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
+import { syncWithServer, switchTab, toggleEditMode, toggleSettings } from 'Actions';
 import DetailViews from 'DetailViews';
 import TabViews from 'TabViews';
 
 import { getUserProfile } from '../../Reducers/User';
 
+type Props = {
+  tab: string,
+  userIcon: boolean,
+  userProfile: Object,
+  dashboard: Object,
+  onTabSelect: string => void,
+  onToggleEditMode: string => void,
+  toggleSettings: boolean => void,
+  dispatch: Function,
+};
+
 class TabsView extends View {
-  constructor(props) {
+  props: Props;
+  onTabSelect: string => void;
+  onDashboardTabSelect: () => void;
+  onDevicesTabSelect: () => void;
+  onSensorsTabSelect: () => void;
+  onSchedulerTabSelect: () => void;
+  onGatewaysTabSelect: () => void;
+  toggleSensorTabEditMode: () => void;
+  toggleDevicesTabEditMode: () => void;
+  toggleSettings: () => void;
+
+  constructor(props: Props) {
     super(props);
-    this.eventEmitter = new EventEmitter();
     this.onTabSelect = this.onTabSelect.bind(this);
     this.onDashboardTabSelect = this.onDashboardTabSelect.bind(this);
     this.onDevicesTabSelect = this.onDevicesTabSelect.bind(this);
@@ -51,6 +71,7 @@ class TabsView extends View {
     this.onGatewaysTabSelect = this.onGatewaysTabSelect.bind(this);
     this.toggleSensorTabEditMode = this.toggleSensorTabEditMode.bind(this);
     this.toggleDevicesTabEditMode = this.toggleDevicesTabEditMode.bind(this);
+    this.toggleSettings = this.toggleSettings.bind(this);
   }
 
   componentDidMount() {
@@ -111,12 +132,7 @@ class TabsView extends View {
   title: 'Telldus Live!',
   component: TabViews.Dashboard,
   rightButtonIcon: this.state.settingIcon,
-  passProps: {
-    events: this.eventEmitter,
-  },
-  onRightButtonPress: () => {
-    this.eventEmitter.emit('onSetting');
-  },
+  onRightButtonPress: this.toggleSettings,
 }}
 					/>
 				</TabBarIOS.Item>
@@ -198,6 +214,10 @@ class TabsView extends View {
   toggleDevicesTabEditMode() {
     this.props.onToggleEditMode('devicesTab');
   }
+
+  toggleSettings() {
+    this.props.toggleSettings(true);
+  }
 }
 
 function mapStateToProps(store) {
@@ -216,6 +236,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(switchTab(tab));
     },
     onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+    toggleSettings: (status) => dispatch(toggleSettings(status)),
     dispatch,
   };
 }
