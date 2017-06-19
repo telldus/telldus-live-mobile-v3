@@ -33,8 +33,9 @@ export type Action =
     | { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
     | { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 
-    | { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: Number }
-    | { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: Number }
+    | { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: number }
+    | { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: number }
+    | { type: 'TOGGLE_SETTINGS', status: boolean }
 
     | { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id:Number, displayType: String }
     | { type: 'SHOW_DIMMER_POPUP', name:String, value:Number }
