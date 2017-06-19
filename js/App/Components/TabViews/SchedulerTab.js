@@ -23,7 +23,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { List, ListDataSource, View, Text, I18n } from 'BaseComponents';
+import { List, ListDataSource, View, Text, I18n, Header } from 'BaseComponents';
 import { JobRow } from 'TabViews/SubViews';
 import { getJobs } from 'Actions';
 import Theme from 'Theme';
@@ -74,10 +74,6 @@ class SchedulerTab extends View {
 				justifyContent: 'center',
 				alignItems: 'center',
 				maxHeight: this.windowHeight * 0.095952024,
-			},
-			logo: {
-				width: this.windowWidth * 0.277333333,
-				height: this.windowHeight * 0.026236882,
 			},
 			addButton: {
 				backgroundColor: Theme.Core.brandSecondary,
@@ -145,19 +141,10 @@ class SchedulerTab extends View {
 		//});
 	};
 
-	// TODO: make component
-	renderHeader() {
-		return (
-			<View style={this.styles.header}>
-				<Image source={require('./img/telldus-logo@3x.png')} style={this.styles.logo}/>
-			</View>
-		);
-	}
-
 	render() {
 		return (
 			<View style={this.styles.container}>
-				{this.renderHeader()}
+				<Header/>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
