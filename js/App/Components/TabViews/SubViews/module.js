@@ -39,8 +39,13 @@ import DeviceHeader from './DeviceHeader';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
-import DimmingButton from './DimmingButton';
+import DimmerButton from './DimmerButton';
 import JobRow from './JobRow';
+import OffButton from './OffButton';
+import OnButton from './OnButton';
+import DimmerOffButton from './DimmerOffButton';
+import DimmerOnButton from './DimmerOnButton';
+import LearnButton from './LearnButton';
 
 module.exports = {
 	DeviceRow: DeviceRow,
@@ -61,6 +66,11 @@ module.exports = {
 	ToggleButton: ToggleButton,
 	BellButton: BellButton,
 	NavigationalButton: NavigationalButton,
-	DimmingButton: DimmingButton,
+	DimmerButton: DimmerButton,
 	JobRow: JobRow,
+	OffButton: OffButton,
+	OnButton: OnButton,
+	DimmerOffButton: DimmerOffButton,
+	DimmerOnButton: DimmerOnButton,
+	LearnButton: LearnButton,
 };

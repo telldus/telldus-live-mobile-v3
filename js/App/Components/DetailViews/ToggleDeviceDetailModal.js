@@ -20,84 +20,29 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 
-import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { RoundedCornerShadowView, View } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
+import { OnButton, OffButton, LearnButton } from 'TabViews/SubViews';
 
-import { turnOn, turnOff, learn } from 'Actions_Devices';
-
-const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
-	<RoundedCornerShadowView style={styles.toggleContainer}>
-		<TouchableOpacity
-			style={[
-				styles.toggleButton, {
-					backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
-				},
-			]}
-			onPress={onTurnOff}>
-			<Text style={{ fontSize: 16, color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e' }}>
-			}}>
-				{'Off'}
-			</Text>
-		</TouchableOpacity>
-
-		<TouchableOpacity
-			style={[
-				styles.toggleButton, {
-					backgroundColor: device.isInState === 'TURNON' ? 'white' : '#eeeeee',
-				},
-			]}
-			onPress={onTurnOn}>
-			<Text style={{ fontSize: 16, color: device.isInState === 'TURNON' ? '#2c7e38' : '#9e9e9e' }}>
-			}}>
-				{'On'}
-			</Text>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
-);
-
-const LearnButton = ({ device, onLearn }) => (
-	<RoundedCornerShadowView style={styles.learnContainer}>
-		<TouchableOpacity onPress={onLearn} style={styles.learnButton}>
-			<Text style={styles.learnText}>
-				{'Learn'}
-			</Text>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
-);
+const ToggleButton = ({ device }) => {
+	return (
+		<RoundedCornerShadowView style={styles.toggleContainer}>
+			<OffButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} />
+			<OnButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} />
+		</RoundedCornerShadowView>
+	);
+};
 
 type Props = {
-  device: Object,
-  onTurnOn: number => void,
-  onTurnOff: number => void,
-  onLearn: number => void,
+	device: Object,
 };
 
 class ToggleDeviceDetailModal extends View {
 	props: Props;
-	onTurnOn: () => void;
-	onTurnOff: () => void;
-	onLearn: () => void;
 
 	constructor(props: Props) {
 		super(props);
-
-		this.onTurnOn = this.onTurnOn.bind(this);
-		this.onTurnOff = this.onTurnOff.bind(this);
-		this.onLearn = this.onLearn.bind(this);
-	}
-
-	onTurnOn() {
-		this.props.onTurnOn(this.props.device.id);
-	}
-
-	onTurnOff() {
-		this.props.onTurnOff(this.props.device.id);
-	}
-
-	onLearn() {
-		this.props.onLearn(this.props.device.id);
 	}
 
 	render() {
@@ -112,7 +57,7 @@ class ToggleDeviceDetailModal extends View {
 		}
 
 		if (LEARN) {
-			learnButton = <LearnButton device={device} onLearn={this.onLearn}/>;
+			learnButton = <LearnButton id={device.id} style={styles.learn} />;
 		}
 
 		return (
@@ -125,6 +70,10 @@ class ToggleDeviceDetailModal extends View {
 
 }
 
+ToggleDeviceDetailModal.propTypes = {
+	device: React.PropTypes.object.isRequired,
+};
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 0,
@@ -135,39 +84,25 @@ const styles = StyleSheet.create({
 		marginHorizontal: 8,
 		marginVertical: 16,
 	},
-	toggleButton: {
+	turnOff: {
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'stretch',
+		borderTopLeftRadius: 7,
+		borderBottomLeftRadius: 7,
 	},
-	learnContainer: {
+	turnOn: {
+		flex: 1,
+		alignItems: 'stretch',
+		borderTopRightRadius: 7,
+		borderBottomRightRadius: 7,
+	},
+	learn: {
 		height: 36,
 		marginHorizontal: 8,
 		marginVertical: 8,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	learnButton: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	learnText: {
-		fontSize: 16,
-		color: 'orange',
-	},
 });
 
-function mapStateToProps(store) {
-	return { store };
-}
-
-function mapDispatchToProps(dispatch) {
-	return {
-		onTurnOn: (id) => dispatch(turnOn(id)),
-		onTurnOff: (id) => dispatch(turnOff(id)),
-		onLearn: (id) => dispatch(learn(id)),
-	};
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(ToggleDeviceDetailModal);
+module.exports = ToggleDeviceDetailModal;

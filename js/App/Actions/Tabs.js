@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { Action } from './types';
+import type { Action } from './Types';
 
 type Tab = 'devicesTab' | 'sensorsTab';
 

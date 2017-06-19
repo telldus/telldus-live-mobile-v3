@@ -22,88 +22,21 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 
-import { RoundedCornerShadowView, Icon, View, Text } from 'BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { View } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
 
-import { up, down, stop, learn } from 'Actions_Devices';
-
-const NavigationalButton = ({ device, onUp, onDown, onStop }) => (
-	<RoundedCornerShadowView style={{
-		flexDirection: 'row',
-		height: 36,
-		marginHorizontal: 8,
-		marginVertical: 16,
-		justifyContent: 'center',
-		alignItems: 'center',
-	}}>
-		<TouchableOpacity
-			style={styles.navigationButton}
-			onPress={onUp}>
-			<Icon name="caret-up" size={30} style={{ color: '#1a355b' }}/>
-		</TouchableOpacity>
-		<TouchableOpacity
-			style={styles.navigationButton}
-			onPress={onDown}>
-			<Icon name="caret-down" size={30} style={{ color: '#1a355b' }}/>
-		</TouchableOpacity>
-		<TouchableOpacity
-			style={styles.navigationButton}
-			onPress={onStop}>
-			<Icon name="stop" size={20} style={{ color: '#1a355b' }}/>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
-);
-
-const LearnButton = ({ onLearn }) => (
-	<RoundedCornerShadowView style={styles.learnContainer}>
-		<TouchableOpacity onPress={onLearn} style={styles.learnButton}>
-			<Text style={styles.learnText}>
-				{'Learn'}
-			</Text>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
-);
+import { LearnButton, NavigationalButton } from 'TabViews_SubViews';
 
 type Props = {
-  device: Object,
-  onUp: number => void,
-  onDown: number => void,
-  onStop: number => void,
-  onLearn: number => void,
+	device: Object,
 };
 
 class NavigationalDeviceDetailModal extends View {
 	props: Props;
-	onUp: () => void;
-	onDown: () => void;
-	onStop: () => void;
-	onLearn: () => void;
 
 	constructor(props: Props) {
 		super(props);
-
-		this.onUp = this.onUp.bind(this);
-		this.onDown = this.onDown.bind(this);
-		this.onStop = this.onStop.bind(this);
-		this.onLearn = this.onLearn.bind(this);
-	}
-
-	onUp() {
-		this.props.onUp(this.props.device.id);
-	}
-
-	onDown() {
-		this.props.onDown(this.props.device.id);
-	}
-
-	onStop() {
-		this.props.onStop(this.props.device.id);
-	}
-
-	onLearn() {
-		this.props.onLearn(this.props.device.id);
 	}
 
 	render() {
@@ -114,12 +47,11 @@ class NavigationalDeviceDetailModal extends View {
 		let learnButton = null;
 
 		if (UP || DOWN || STOP) {
-			navigationButtons = <NavigationalButton device={device} onUp={this.onUp} onDown={this.onDown}
-			                                        onLearn={this.onLearn}/>;
+			navigationButtons = <NavigationalButton device={device} style={styles.navigation} />;
 		}
 
 		if (LEARN) {
-			learnButton = <LearnButton device={device} onLearn={this.onLearn}/>;
+			learnButton = <LearnButton id={device.id} style={styles.learn} />;
 		}
 
 		return (
@@ -129,7 +61,6 @@ class NavigationalDeviceDetailModal extends View {
 			</View>
 		);
 	}
-
 }
 
 NavigationalDeviceDetailModal.propTypes = {
@@ -140,40 +71,21 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 0,
 	},
-	navigationButton: {
-		flex: 1,
+	navigation: {
+		flexDirection: 'row',
+		height: 36,
+		marginHorizontal: 8,
+		marginVertical: 16,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	learnContainer: {
+	learn: {
 		height: 36,
 		marginHorizontal: 8,
 		marginVertical: 8,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	learnButton: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	learnText: {
-		fontSize: 16,
-		color: 'orange',
-	},
 });
 
-function mapStateToProps(store) {
-	return { store };
-}
-
-function mapDispatchToProps(dispatch) {
-	return {
-		onUp: (id) => dispatch(up(id)),
-		onDown: (id) => dispatch(down(id)),
-		onStop: (id) => dispatch(stop(id)),
-		onLearn: (id) => dispatch(learn(id)),
-	};
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(NavigationalDeviceDetailModal);
+module.exports = NavigationalDeviceDetailModal;

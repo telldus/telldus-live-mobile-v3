@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { ThunkAction } from './types';
+import type { ThunkAction } from './Types';
 
 import { getGateways } from './Gateways';
 import { getJobs } from './Jobs';

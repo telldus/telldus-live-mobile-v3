@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { Dispatch, GetState, ThunkAction } from './types';
+import type { Dispatch, GetState, ThunkAction } from './Types';
 
 import { v4 } from 'react-native-uuid';
 import TelldusWebsocket from '../Lib/Socket';

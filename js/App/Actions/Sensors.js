@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { ThunkAction, Action } from './types';
+import type { ThunkAction, Action } from './Types';
 
 import LiveApi from 'LiveApi';
 

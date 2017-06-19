@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { Action, ThunkAction } from './types';
+import type { Action, ThunkAction } from './Types';
 
 import LiveApi from 'LiveApi';
 import { supportedMethods } from 'Config';
@@ -121,6 +121,20 @@ export function turnOff(deviceId: number): ThunkAction {
 				...response,
 			},
 		}));
+	};
+}
+
+export function requestTurnOn(deviceId: number): Action {
+	return {
+		type: 'REQUEST_TURNON',
+		payload: { deviceId },
+	};
+}
+
+export function requestTurnOff(deviceId: number): Action {
+	return {
+		type: 'REQUEST_TURNOFF',
+		payload: { deviceId },
 	};
 }
 

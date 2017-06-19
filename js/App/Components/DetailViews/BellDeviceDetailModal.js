@@ -22,33 +22,10 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 
-import { Text, RoundedCornerShadowView, View, Icon } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-
-import { bell, learn } from 'Actions_Devices';
-
-const BellButton = ({ onBell }) => (
-	<RoundedCornerShadowView style={styles.bell}>
-		<Icon
-			name="bell"
-			size={26}
-			color="orange"
-			onPress={onBell}
-		/>
-	</RoundedCornerShadowView>
-);
-
-const LearnButton = ({ onLearn }) => (
-	<RoundedCornerShadowView style={styles.learnContainer}>
-		<TouchableOpacity onPress={onLearn} style={styles.learnButton}>
-			<Text style={styles.learnText}>
-				{'Learn'}
-			</Text>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
-);
+import { View } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
+import { BellButton, LearnButton } from 'TabViews_SubViews';
 
 type Props = {
   device: Object,
@@ -59,16 +36,13 @@ type Props = {
 class BellDeviceDetailModal extends View {
 	props: Props;
 	onBell : number => void;
-
 	constructor(props: Props) {
 		super(props);
 		this.onBell = this.onBell.bind(this);
 	}
-
 	onBell() {
 		this.props.onBell(this.props.device.id);
 	}
-
 	render() {
 		const { device } = this.props;
 		const { BELL, LEARN } = device.supportedMethods;
@@ -77,11 +51,11 @@ class BellDeviceDetailModal extends View {
 		let learnButton = null;
 
 		if (BELL) {
-			bellButton = <BellButton onBell={this.onBell}/>;
+			bellButton = <BellButton id={device.id} style={styles.bell} />;
 		}
 
 		if (LEARN) {
-			learnButton = <LearnButton onLearn={this.onLearn}/>;
+			learnButton = <LearnButton id={device.id} style={styles.learn} />;
 		}
 
 		return (
@@ -104,33 +78,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	learnContainer: {
+	learn: {
 		height: 36,
 		marginHorizontal: 8,
 		marginVertical: 8,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	learnButton: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	learnText: {
-		fontSize: 16,
-		color: 'orange',
-	},
 });
 
-function mapStateToProps(store) {
-	return { store };
-}
-
-function mapDispatchToProps(dispatch) {
-	return {
-		onBell: (id) => dispatch(bell(id)),
-		onLearn: (id) => dispatch(learn(id)),
-	};
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(BellDeviceDetailModal);
+module.exports = BellDeviceDetailModal;

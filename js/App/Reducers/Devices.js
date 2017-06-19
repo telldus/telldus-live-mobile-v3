@@ -76,6 +76,7 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 				...state,
 				isInState: getDeviceStateMethod(action.payload.method),
 				value: action.payload.value,
+				methodRequested: '',
 			};
 
 		case 'SET_DIMMER_VALUE':
@@ -95,6 +96,18 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 			return {
 				...state,
 				isInDashboard: false,
+			};
+
+		case 'REQUEST_TURNON':
+			return {
+				...state,
+				methodRequested: 'TURNON',
+			};
+
+		case 'REQUEST_TURNOFF':
+			return {
+				...state,
+				methodRequested: 'TURNOFF',
 			};
 
 		default:
@@ -149,6 +162,12 @@ function byId(state = {}, action) {
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return {};
+	}
+	if (action.type === 'REQUEST_TURNON' || action.type === 'REQUEST_TURNOFF') {
+		return {
+			...state,
+			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
+		};
 	}
 
 	return state;
