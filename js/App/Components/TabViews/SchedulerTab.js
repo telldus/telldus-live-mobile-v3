@@ -23,7 +23,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { List, ListDataSource, View, Text } from 'BaseComponents';
+import { List, ListDataSource, View, Text, I18n } from 'BaseComponents';
 import { JobRow } from 'TabViews/SubViews';
 import { getJobs } from 'Actions';
 import Theme from 'Theme';
@@ -32,8 +32,7 @@ import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers/Jobs';
 
-//import AddSchedule from 'TabViews/SubViews/AddSchedule';
-import { Image } from 'react-native';
+import { Image, Dimensions } from 'react-native';
 import { syncWithServer, switchTab } from 'Actions';
 
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -41,8 +40,13 @@ const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 class SchedulerTab extends View {
 
 	static navigationOptions = {
-		title: 'Scheduler',
-		tabBarIcon: () => <Image source={require('./img/tabIcons/scheduler-inactive.png')}/>,
+		title: I18n.t('pages.scheduler'),
+		tabBarIcon: ({ focused }) => {
+			if (focused) {
+				return <Image source={require('./img/tabIcons/scheduler-active.png')}/>;
+			}
+			return <Image source={require('./img/tabIcons/scheduler-inactive.png')}/>;
+		},
 	};
 
 	constructor(props) {
@@ -57,15 +61,36 @@ class SchedulerTab extends View {
 			}).cloneWithRowsAndSections(sections, sectionIds),
 		};
 
+		this.windowHeight = Dimensions.get('window').height;
+		this.windowWidth = Dimensions.get('window').width;
+		this.addButtonSize = this.windowWidth * 0.134666667;
+		this.addButtonOffset = this.windowWidth * 0.034666667;
+		this.addButtonTextSize = this.windowWidth * 0.056;
+
 		this.styles = {
+			container: {
+				flex: 1,
+			},
+			header: {
+				paddingTop: 20,
+				backgroundColor: Theme.Core.brandPrimary,
+				flex: 1,
+				justifyContent: 'center',
+				alignItems: 'center',
+				maxHeight: this.windowHeight * 0.095952024,
+			},
+			logo: {
+				width: this.windowWidth * 0.277333333,
+				height: this.windowHeight * 0.026236882,
+			},
 			addButton: {
-				backgroundColor: '#e26901',
+				backgroundColor: Theme.Core.brandSecondary,
 				borderRadius: 50,
 				position: 'absolute',
-				height: 50,
-				width: 50,
-				bottom: 125,
-				right: 15,
+				height: this.addButtonSize,
+				width: this.addButtonSize,
+				bottom: this.addButtonOffset,
+				right: this.addButtonOffset,
 				shadowColor: '#000',
 				shadowOpacity: 0.5,
 				shadowRadius: 2,
@@ -73,15 +98,13 @@ class SchedulerTab extends View {
 					height: 2,
 					width: 0,
 				},
+				flex: 1,
+				alignItems: 'center',
+				justifyContent: 'center',
 			},
-			addButtonText: {
-				backgroundColor: 'transparent',
-				color: '#fff',
-				fontSize: 42,
-				lineHeight: 47,
-				width: 50,
-				height: 50,
-				textAlign: 'center',
+			iconPlus: {
+				width: this.addButtonTextSize,
+				height: this.addButtonTextSize,
 			},
 		};
 
@@ -100,7 +123,7 @@ class SchedulerTab extends View {
 
 	componentDidMount() {
 		this.props.onTabSelect('schedulerTab');
-	};
+	}
 
 	onRefresh() {
 		this.props.dispatch(getJobs());
@@ -126,9 +149,19 @@ class SchedulerTab extends View {
 		//});
 	};
 
+	// TODO: make component
+	renderHeader() {
+		return (
+			<View style={this.styles.header}>
+				<Image source={require('./img/telldus-logo@3x.png')} style={this.styles.logo}/>
+			</View>
+		);
+	}
+
 	render() {
 		return (
-			<View>
+			<View style={this.styles.container}>
+				{this.renderHeader()}
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
@@ -136,7 +169,7 @@ class SchedulerTab extends View {
 					onRefresh={this.onRefresh}
 				/>
 				<View style={this.styles.addButton}>
-					<Text style={this.styles.addButtonText} onPress={this.handleAddingSchedule}>+</Text>
+					<Image source={require('./img/iconPlus.png')} style={this.styles.iconPlus}/>
 				</View>
 			</View>
 		);
