@@ -60,6 +60,18 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 				},
 			});
 		} 
+	}).catch(e => {
+		if(e == 'TypeError: Network request failed') {
+			dispatch({
+				type: 'ERROR',
+			    message: {
+			      error:e,
+			      error_description: 'Network request failed. Check your internet connection',
+			    },
+			});
+		}else{
+			reject(e);
+		}
 	});
 };
 
@@ -90,5 +102,17 @@ export const unregisterPushToken = (token: String): ThunkAction => dispatch => {
 				},
 			});
 		} 
-	});
+	}).catch(e => {
+		if(e == 'TypeError: Network request failed') {
+			dispatch({
+				type: 'ERROR',
+			    message: {
+			      error: e,
+			      error_description: 'Network request failed. Check your internet connection',
+			    },
+			});
+		}else{
+			reject(e);
+		}
+	})
 };

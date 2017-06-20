@@ -28,7 +28,7 @@ import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
 var DeviceInfo = require('react-native-device-info');
 
-import { pushServiceId } from '../../../Config';
+import { pushServiceId, version } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions/User';
 
 const Header = ({ onPress }) => (
@@ -69,6 +69,20 @@ class SettingsDetailModal extends View {
       isPushSubmitLoading: false,
       isLogoutLoading: false
     };
+    this.postLoadMethod = this.postLoadMethod.bind(this);
+  }
+
+  postLoadMethod(type) {
+    if(type == 'REG_TOKEN') {
+        this.setState({
+          isPushSubmitLoading: false
+        });
+    }
+    if(type == 'LOGOUT') {
+      this.setState({
+        isLogoutLoading: false
+      })
+    }
   }
 
   render() {
@@ -79,15 +93,22 @@ class SettingsDetailModal extends View {
                 <Container style={styles.container}>
                     <Header onPress={this.props.onClose} />
                     <View style={styles.body}>
+                        { this.props.store.user.notificationText ? 
+                          (
+                          <Text style={styles.notification}>{this.props.store.user.notificationText}</Text>
+                          ) 
+                          : 
+                          null 
+                        }
                         <Text style={styles.versionInfo}>
-                            {'You are using version 3.3.0 of Telldus Live! mobile.'}
+                            {'You are using version '+ version +' of Telldus Live! mobile.'}
                         </Text>
                         {this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
                         <Button text={submitButText} onPress={() => {
                           this.setState({
                             isPushSubmitLoading: true
                           });
-                          this.props.onSubmitPushToken(this.props.store.user.pushToken)}
+                          this.props.onSubmitPushToken(this.props.store.user.pushToken, this.postLoadMethod)}
                         } width={200} />
                         :
                         <StatusView/>
@@ -96,7 +117,7 @@ class SettingsDetailModal extends View {
                           this.setState({
                             isLogoutLoading: true
                           });
-                          this.props.onLogout(this.props.store.user.pushToken)}
+                          this.props.onLogout(this.props.store.user.pushToken, this.postLoadMethod)}
                         } width={100} />
                     </View>
                 </Container>
@@ -173,6 +194,21 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 8,
   },
+  notification: {
+    padding: 7,
+    marginTop: 10,
+    marginLeft: 100,
+    marginRight: 100,
+
+    borderColor: '#f00',
+    borderWidth: 1,
+    borderRadius: 3,
+
+    fontSize: 13,
+    color: '#1a355b',
+    textAlign: 'center',
+    backgroundColor: '#ff000033',
+  },
 });
 
 function mapStateToProps(store) {
@@ -181,11 +217,29 @@ function mapStateToProps(store) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
   return {
-    onSubmitPushToken: (token) => {dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));},
-    onLogout: (token) => {
-      dispatch(unregisterPushToken(token)).then(() => dispatch(logoutFromTelldus()));
+    onClose: () => {
+      dispatch({
+            type: 'ERROR',
+            message: {
+              error:'',
+              error_description: false,
+            }
+          })
+      ownProps.onClose();
+    },
+    onSubmitPushToken: (token, callback) => {
+      dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId))
+      .then(() => {
+        callback('REG_TOKEN');
+      })
+    },
+    onLogout: (token, callback) => {
+      dispatch(unregisterPushToken(token)).then(() => {
+        dispatch(logoutFromTelldus());
+        callback('LOGOUT');
+      });
     },
     dispatch,
   };

@@ -32,7 +32,8 @@ const initialState = {
   accessToken: false,
   userProfile: false,
   pushToken: false,
-  pushTokenRegistered: false
+  pushTokenRegistered: false,
+  notificationText: false
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -67,6 +68,12 @@ export default function reduceUser(state: State = initialState, action: Action):
   if (action.type === 'LOGGED_OUT') {
     return {
       ...initialState,
+    };
+  }
+  if (action.type === 'ERROR') {
+    return {
+      ...state,
+      notificationText: action.message.error_description,
     };
   }
   return state;
