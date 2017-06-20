@@ -23,7 +23,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { List, ListDataSource, Text, View, I18n } from 'BaseComponents';
+import { List, ListDataSource, Text, View, I18n, Header } from 'BaseComponents';
 import { DeviceRow, DeviceRowHidden } from 'TabViews/SubViews';
 import {
 	DeviceDetailModal,
@@ -117,6 +117,7 @@ class DevicesTab extends View {
 		}
 		return (
 			<View style={{ flex: 1 }}>
+				<Header/>
 				<List
 					ref="list"
 					dataSource={this.state.dataSource}
