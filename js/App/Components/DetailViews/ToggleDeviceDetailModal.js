@@ -23,7 +23,7 @@ import React from 'react';
 
 import { RoundedCornerShadowView, View } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
-import { OnButton, OffButton, LearnButton } from 'TabViews/SubViews';
+import { OnButton, OffButton, LearnButton } from 'TabViews_SubViews';
 
 const ToggleButton = ({ device }) => {
 	return (

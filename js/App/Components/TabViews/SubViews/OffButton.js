@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
-import { turnOff, requestTurnOff } from 'Actions/Devices';
+import { turnOff, requestTurnOff } from 'Actions_Devices';
 
 class OffButton extends View {
 	constructor(props) {

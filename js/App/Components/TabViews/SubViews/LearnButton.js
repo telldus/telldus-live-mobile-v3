@@ -24,7 +24,7 @@ import { connect } from 'react-redux';
 
 import { View, RoundedCornerShadowView, Text } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { learn } from 'Actions/Devices';
+import { learn } from 'Actions_Devices';
 
 class LearnButton extends View {
 	render() {
