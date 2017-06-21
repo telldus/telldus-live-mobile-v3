@@ -1,24 +1,28 @@
 PODS:
-  - React/Core (0.39.2):
-    - React/CSSLayout
-  - React/CSSLayout (0.39.2)
-  - React/RCTActionSheet (0.39.2):
+  - React/Core (0.42.3):
+    - React/cxxreact
+    - Yoga (= 0.42.3.React)
+  - React/cxxreact (0.42.3):
+    - React/jschelpers
+  - React/jschelpers (0.42.3)
+  - React/RCTActionSheet (0.42.3):
     - React/Core
-  - React/RCTImage (0.39.2):
+  - React/RCTImage (0.42.3):
     - React/Core
     - React/RCTNetwork
-  - React/RCTLinkingIOS (0.39.2):
+  - React/RCTLinkingIOS (0.42.3):
     - React/Core
-  - React/RCTNetwork (0.39.2):
+  - React/RCTNetwork (0.42.3):
     - React/Core
-  - React/RCTPushNotification (0.39.2):
+  - React/RCTPushNotification (0.42.3):
     - React/Core
-  - React/RCTText (0.39.2):
+  - React/RCTText (0.42.3):
     - React/Core
-  - React/RCTVibration (0.39.2):
+  - React/RCTVibration (0.42.3):
     - React/Core
-  - React/RCTWebSocket (0.39.2):
+  - React/RCTWebSocket (0.42.3):
     - React/Core
+  - Yoga (0.42.3.React)
 
 DEPENDENCIES:
   - React/Core (from `../node_modules/react-native`)
@@ -30,14 +34,18 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
   React:
-    :path: "../node_modules/react-native"
+    :path: ../node_modules/react-native
+  Yoga:
+    :path: ../node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
-  React: 8c26f75b7d3a78fd1ddad8ab0e40e1a3e945960a
+  React: 35e039680feacd0563677d49ba410112d2748559
+  Yoga: 86ce777665c8259b94ef8dbea76b84634237f4ea
 
-PODFILE CHECKSUM: ca674d91312ab4af7deca435cf0976e4078d370b
+PODFILE CHECKSUM: 8ed24c4b73a09d433f34536e7e6e57da9ca8e5a0
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.2.1
