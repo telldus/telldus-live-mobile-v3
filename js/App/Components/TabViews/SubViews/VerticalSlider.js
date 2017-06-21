@@ -107,12 +107,12 @@ class VerticalSlider extends View {
 		this.onValueChange(newValue);
 	}
 
-	handleStartShouldSetPanResponder = (e: Object, /*gestureState: Object*/): boolean => {
+	handleStartShouldSetPanResponder = (e: Object, /* gestureState: Object */): boolean => {
         // Should we become active when the user presses down on the thumb?
 		return true;
 	};
 
-	handleMoveShouldSetPanResponder = (/*e: Object, gestureState: Object*/): boolean => {
+	handleMoveShouldSetPanResponder = (/* e: Object, gestureState: Object */): boolean => {
         // Should we become active when the user moves a touch over the thumb?
 		return false;
 	};

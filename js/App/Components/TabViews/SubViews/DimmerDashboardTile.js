@@ -17,7 +17,7 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//@flow
+// @flow
 
 'use strict';
 

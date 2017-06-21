@@ -231,6 +231,11 @@
       "words": true,
       "nonwords": false
     }],                              // require or disallow spaces before/after unary operators (words on by default, nonwords off by default)
+    "spaced-comment": ["error", "always", {
+      "block": {
+        "balanced": true
+      }
+    }],                              // requires or disallows a whitespace (space or tab) beginning a comment
     "template-curly-spacing": 2,     // Enforce Usage of Spacing in Template Strings
     "one-var": 0,                    // allow just one var statement per function (off by default)
     "wrap-regex": 0,                 // require regex literals to be wrapped in parentheses (off by default)

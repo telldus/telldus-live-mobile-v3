@@ -72,7 +72,7 @@ export function processWebsocketMessageForDevice(action:string, data:Object): Ac
 
 export function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
 	return (dispatch) => {
-		const payload = { //$FlowFixMe
+		const payload = { // $FlowFixMe
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
 			requestParams: {
 				method: 'GET',
