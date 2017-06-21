@@ -24,11 +24,14 @@
 export type Action =
 	  { type: 'LOGGED_IN' }
 	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
+	| { type: 'RECEIVED_PUSH_TOKEN', pushToken: String }
 	| { type: 'RECEIVED_USER_PROFILE', payload: Object }
 	| { type: 'RECEIVED_DEVICES', payload: Object }
 	| { type: 'RECEIVED_GATEWAYS', payload: Object }
 	| { type: 'RECEIVED_SENSORS', payload: Object }
 	| { type: 'RECEIVED_JOBS', payload: Object }
+	| { type: 'PUSH_TOKEN_REGISTERED', token: String, payload: Object }
+	| { type: 'PUSH_TOKEN_UNREGISTERED', token: String, payload: Object }
 	| { type: 'LOGGED_OUT' }
 	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }

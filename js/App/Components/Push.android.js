@@ -19,41 +19,46 @@
  * @providesModule Push
  */
 
-// @flow
-
 'use strict';
 
-import React from 'react';
-import FCM from 'react-native-fcm';
+const DeviceInfo = require('react-native-device-info');
+const PushNotification = require('react-native-push-notification');
+import { pushSenderId, pushServiceId } from '../../Config';
+import { registerPushToken } from 'Actions_User';
 
-class Push extends React.Component {
+const Push = {
+	configure: (store) => {
+		PushNotification.configure({
 
-	constructor() {
-		super();
-		//FCM.requestPermissions();
-		FCM.getFCMToken().then(token => {
-			console.log('Push Token', token);
-			// store fcm token in your server
+			// Called when Token is generated
+			onRegister: function (data) {
+				if ((!store.pushToken) || (store.pushToken !== data.token)) {
+					// stores fcm token in the server
+					store.dispatch(registerPushToken(data.token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
+					store.dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: data.token });
+				}
+			},
+
+			// Called when a remote or local notification is opened or received
+			onNotification: function (notification) {
+				console.log( 'NOTIFICATION:', notification );
+			},
+
+			// GCM Sender ID (optional - not required for local notifications, but is need to receive remote push notifications)
+			senderID: pushSenderId,
+
+			// Should the initial notification be popped automatically
+			// default: true
+			popInitialNotification: true,
+
+			/**
+				* (optional) default: true
+				* - Specified if permissions (ios) and token (android and ios) will requested or not,
+				* - if not, you must call PushNotificationsHandler.requestPermissions() later
+				*/
+			requestPermissions: true,
 		});
-		this.notificationUnsubscribe = FCM.on('notification', (notif) => {
-			if (notif.message) {
-				console.log(`Received push notification: ${notif.message}`);
-			}
-		});
-		this.refreshUnsubscribe = FCM.on('refreshToken', (token) => {
-			console.log('Push Refresh Token', token);
-		});
-	}
-
-	destructor() {
-		this.refreshUnsubscribe();
-		this.notificationUnsubscribe();
-	}
-
-	render() {
-		return null;
-	}
-
-}
+	},
+};
 
 module.exports = Push;

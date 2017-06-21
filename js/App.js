@@ -27,9 +27,29 @@ import { connect } from 'react-redux';
 import {
 	LoginScreen,
 	AppNavigator,
+	Push,
 } from 'Components';
 
 class App extends React.Component {
+
+	componentDidMount() {
+		this.pushConf();
+	}
+
+	componentDidUpdate() {
+		this.pushConf();
+	}
+
+	/*
+	 * calls the push configuration methods, for logged in users, which will generate push token and listen for local and
+	 * remote push notifications.
+	 */
+	pushConf() {
+		if (this.props.accessToken) {
+			Push.configure(this.props);
+		}
+	}
+
 	render() {
 		if (!this.props.accessToken) {
 			return <LoginScreen />;
@@ -43,6 +63,7 @@ class App extends React.Component {
 function mapStateToProps(store) {
 	return {
 		accessToken: store.user.accessToken,
+		pushToken: store.user.pushToken,
 	};
 }
 
