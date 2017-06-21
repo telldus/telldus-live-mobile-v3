@@ -17,13 +17,22 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
 import { ProgressViewIOS } from 'react-native';
 import Base from './Base';
 
+type Props = {
+  progress: number,
+  color: string,
+  inverse: boolean,
+};
+
 export default class ProgressBarComponent extends Base {
+	props:Props;
 
 	render() {
 		return (

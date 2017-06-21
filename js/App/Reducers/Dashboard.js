@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import { combineReducers } from 'redux';
@@ -26,7 +28,7 @@ import includes from 'lodash/includes';
 import omit from 'lodash/omit';
 
 const allIds = kind => (state = [], action) => {
-	if (action.type === REHYDRATE) {
+	if (action.type === 'persist/REHYDRATE') {
 		if (action.payload.dashboard && action.payload.dashboard.deviceIds && kind === 'device') {
 			console.log('rehydrating dashboard.deviceIds');
 			return [
@@ -132,7 +134,7 @@ export default combineReducers({
 	sensorDisplayTypeById,
 });
 
-export function parseDashboardForListView(dashboard = {}, devices = {}, sensors = {}) {
+export function parseDashboardForListView(dashboard:Object = {}, devices:Object = {}, sensors:Object = {}) {
 	const deviceItems = dashboard.deviceIds.map(deviceId => {
 		return {
 			objectType: 'device',

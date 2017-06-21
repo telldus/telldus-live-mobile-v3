@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -39,7 +41,15 @@ const Title = ({ isEnabled, name, tileWidth }) => (
 	</View>
 );
 
+type Props = {
+  hasShadow: boolean,
+  style: Object,
+  children: Object,
+};
+
 class DashboardShadowTile extends View {
+	props: Props;
+
 	render() {
 		return (
 			// Because of the limitation of react-native so we need 2 nested views to create an rounded corner view

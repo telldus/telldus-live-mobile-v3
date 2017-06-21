@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -29,8 +31,17 @@ import { addToDashboard, removeFromDashboard } from 'Actions';
 
 import Theme from 'Theme';
 
+type Props = {
+  device: Object,
+  removeFromDashboard: number => void,
+  addToDashboard: number => void,
+};
+
 class DeviceRowHidden extends View {
-	constructor(props) {
+	props: Props;
+	onStarSelected : () => void;
+
+	constructor(props: Props) {
 		super(props);
 		this.onStarSelected = this.onStarSelected.bind(this);
 	}

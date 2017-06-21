@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -24,13 +26,23 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { List, ListDataSource, View, Text, I18n, Header } from 'BaseComponents';
-import { JobRow } from 'TabViews/SubViews';
+import { JobRow } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 import Theme from 'Theme';
 
 import moment from 'moment-timezone';
 
-import { parseJobsForListView } from 'Reducers/Jobs';
+import { parseJobsForListView } from 'Reducers_Jobs';
+
+type Props = {
+	rowsAndSections: Object,
+	devices: Object,
+	dispatch: Function,
+};
+
+type State = {
+	dataSource: Object,
+};
 
 import { Image, Dimensions } from 'react-native';
 import { syncWithServer, switchTab } from 'Actions';
@@ -40,12 +52,19 @@ const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 
 class SchedulerTab extends View {
 
+	props: Props;
+	state: State;
+
+	renderRow: (Object) => Object;
+	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	onRefresh: () => void;
+
 	static navigationOptions = {
 		title: I18n.t('pages.scheduler'),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		const { sections, sectionIds } = this.props.rowsAndSections;

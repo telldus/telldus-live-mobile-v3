@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -24,7 +26,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { List, ListDataSource, View, I18n, Header } from 'BaseComponents';
-import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews/SubViews';
+import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
 import { toggleEditMode } from 'Actions';
@@ -32,14 +34,33 @@ import { toggleEditMode } from 'Actions';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 
+type Props = {
+	rowsAndSections: Object,
+	gatewaysById: Object,
+	editMode: boolean,
+	tab: string,
+	dispatch: Function,
+};
+
+type State = {
+	dataSource: Object,
+};
+
 class SensorsTab extends View {
+
+	props: Props;
+	state: State;
+
+	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	renderRow: (Object) => Object;
+	onRefresh: (Object) => void;
 
 	static navigationOptions = {
 		title: I18n.t('pages.sensors'),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'sensors'),
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		const { sections, sectionIds } = this.props.rowsAndSections;

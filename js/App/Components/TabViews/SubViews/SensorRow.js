@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React, { Component } from 'react';
@@ -102,8 +104,16 @@ const SensorLuminance = ({ luminance }) => (
 	</View>
 );
 
+type Props = {
+  sensor: Object,
+};
+
 class SensorRow extends Component {
-	constructor(props) {
+	props: Props;
+	onLayout: Object => void;
+	width: number;
+
+	constructor(props: Props) {
 		super(props);
 		this.width = 0;
 
@@ -162,7 +172,7 @@ class SensorRow extends Component {
 			<ListItem
 				style={Theme.Styles.rowFront}
 				onLayout={this.onLayout}>
-				<View>
+				<View style={styles.container}>
 					<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
 					      ellipsizeMode="middle"
 					      numberOfLines={1}>
@@ -177,21 +187,23 @@ class SensorRow extends Component {
 						{this.formatLastUpdated(minutesAgo, sensor.lastUpdated)}
 					</Text>
 				</View>
-				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ? sensors : (
-					<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true}
-					            directionalLockEnabled={true}>
-						{sensors}
-					</ScrollView>)
+				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ?
+					sensors :
+					(<View style={styles.scrollView}>
+						<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true} directionalLockEnabled={true} >
+							{sensors}
+						</ScrollView>
+					</View>)
 				}
 			</ListItem>
 		);
 	}
 
-	onLayout(event) {
+	onLayout(event: Object) {
 		this.width = event.nativeEvent.layout.width;
 	}
 
-	formatLastUpdated(minutes, lastUpdated) {
+	formatLastUpdated(minutes: number, lastUpdated:number): string {
 		if (minutes === 0) {
 			return 'Just now';
 		}
@@ -220,6 +232,10 @@ class SensorRow extends Component {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		backgroundColor: 'transparent',
+		flex: 1,
+	},
 	name: {
 		color: 'rgba(0,0,0,0.87)',
 		fontSize: 16,
@@ -230,7 +246,8 @@ const styles = StyleSheet.create({
 	},
 	scrollView: {
 		alignSelf: 'stretch',
-		minWidth: 216,
+		maxWidth: 216,
+		flexDirection: 'row',
 	},
 });
 

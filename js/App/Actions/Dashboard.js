@@ -16,17 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/Dashboard
+ * @providesModule Actions_Dashboard
  */
+
+// @flow
 
 'use strict';
 
-import type { Action, ThunkAction } from './types';
+import type { Action, ThunkAction } from './Types';
 
 type Kind = 'device' | 'sensor';
 
-function getSupportedDisplayTypes(item) {
-	const displayTypes = [];
+function getSupportedDisplayTypes(item: Object): Array<string> {
+	let displayTypes = [];
 
 	if (item.humidity) {
 		displayTypes.push('humidity');
@@ -52,13 +54,13 @@ function getSupportedDisplayTypes(item) {
 	return displayTypes;
 }
 
-const addToDashboard = (kind: Kind, id: Number): Action => ({
+const addToDashboard = (kind: Kind, id: number): Action => ({
 	type: 'ADD_TO_DASHBOARD',
 	kind,
 	id,
 });
 
-const removeFromDashboard = (kind: Kind, id: Number): Action => ({
+const removeFromDashboard = (kind : Kind, id: number) : Action => ({
 	type: 'REMOVE_FROM_DASHBOARD',
 	kind,
 	id,

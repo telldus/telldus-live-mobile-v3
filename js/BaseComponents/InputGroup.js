@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -28,7 +30,16 @@ import computeProps from './computeProps';
 import Input from './Input';
 import _ from 'lodash';
 
+type Props = {
+	borderType: 'rounded' | 'regular',
+	children: Object,
+	toolbar: ?Object,
+	atoolbar: ?Object,
+	iconRight: ?Object,
+};
+
 export default class InputGroup extends Base {
+	props: Props;
 
 	getInitialStyle() {
 		return {
@@ -96,7 +107,7 @@ export default class InputGroup extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	getIconProps(icon) {
+	getIconProps(icon: Icon) {
 
 		let defaultStyle = {
 			fontSize: (this.props.toolbar || this.props.atoolbar) ? this.getTheme().toolbarIconSize : 27,
@@ -113,8 +124,7 @@ export default class InputGroup extends Base {
 
 		return computeProps(icon.props, defaultProps);
 	}
-
-	getButtonProps(button) {
+	getButtonProps(button: Button) {
 
 		let defaultStyle = {
 			alignSelf: 'center',

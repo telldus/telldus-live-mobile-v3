@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -24,7 +26,12 @@ import { View, TextInput } from 'react-native';
 import Base from './Base';
 import computeProps from './computeProps';
 
+type Props = {
+  placeholderTextColor: ?string,
+};
+
 export default class Input extends Base {
+	props: Props;
 
 	getInitialStyle() {
 		return {

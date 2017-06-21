@@ -16,12 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Reducers/Jobs
+ * @providesModule Reducers_Jobs
  */
+
+// @flow
 
 'use strict';
 
-import type { Action } from '../actions/types';
+import type { Action } from 'Actions_Types';
 import { REHYDRATE } from 'redux-persist/constants';
 
 import moment from 'moment-timezone';
@@ -35,7 +37,7 @@ export type State = ?Object;
 const initialState = [];
 const jobInitialState = {};
 
-function reduceJob(state: State = jobInitialState, action: Action): State {
+function reduceJob(state: Object = jobInitialState, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_JOBS':
 			let newJob = {
@@ -61,7 +63,7 @@ function reduceJob(state: State = jobInitialState, action: Action): State {
 	}
 }
 
-export default function reduceJobs(state: State = initialState, action: Action): State {
+export default function reduceJobs(state: Array<Object> = initialState, action: Object): Array<Object> {
 	if (action.type === REHYDRATE) {
 		console.log('rehydrating jobs');
 		if (action.payload.jobs) {
@@ -87,7 +89,7 @@ export default function reduceJobs(state: State = initialState, action: Action):
 	return state;
 }
 
-export function parseJobsForListView(jobs = [], gateways = {}, devices = {}) {
+export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}): {sections:Object, sectionIds:Array<Object>} {
 	if (!jobs || !jobs.length) {
 		return {
 			sections: {},

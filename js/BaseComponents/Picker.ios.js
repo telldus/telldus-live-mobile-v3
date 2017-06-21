@@ -35,8 +35,23 @@ import Header from './Header';
 import Title from './Title';
 import _ from 'lodash';
 
+type Props = {
+  value: Object,
+  selectedValue: Object,
+  label: string,
+  children: Object,
+};
+
+type State = {
+  modalVisible: boolean,
+  current: string,
+};
+
 export default class PickerComponent extends Base {
-	constructor(props) {
+	props: Props;
+	state: State;
+
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			modalVisible: false,

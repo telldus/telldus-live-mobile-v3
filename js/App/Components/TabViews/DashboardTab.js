@@ -16,6 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -25,10 +28,9 @@ import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import { Text, List, ListDataSource, View, I18n, Header } from 'BaseComponents';
 import Platform from 'Platform';
-import { turnOn, turnOff, bell, down, up, stop, getDevices } from 'Actions/Devices';
-import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
-import { changeSensorDisplayType } from 'Actions/Dashboard';
 import { syncWithServer, switchTab } from 'Actions';
+import { getDevices } from 'Actions_Devices';
+import { changeSensorDisplayType } from 'Actions_Dashboard';
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
@@ -39,27 +41,68 @@ import {
 	BellDashboardTile,
 	ToggleDashboardTile,
 	SensorDashboardTile,
-} from 'TabViews/SubViews';
+} from 'TabViews_SubViews';
 import { SettingsDetailModal } from 'DetailViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import reactMixin from 'react-mixin';
 
+type Props = {
+	rows: Array<Object>,
+	gateways: Object,
+	userProfile: Object,
+	tab: string,
+	onChangeDisplayType: () => void,
+	dispatch: Function,
+	onTurnOn: (number) => void,
+	onTurnOff: (number) => void,
+	onDim: (number) => void,
+	onDimmerSlide: (number) => void,
+	onBell: (number) => void,
+	onUp: (number) => void,
+	onDown: (number) => void,
+	onStop: (number) => void,
+	events: Object,
+};
+
+type State = {
+	tileWidth: number,
+	listWidth: number,
+	dataSource: Object,
+	settings: boolean,
+};
+
 const tileMargin = 8;
 const listMargin = 8;
 
 class DashboardTab extends View {
+
+	props: Props;
+	state: State;
+
+	tab: string;
+	_onLayout: (Object) => void;
+	setScrollEnabled: (boolean) => void;
+	onSlidingStart: (name: string, value: number) => void;
+	onSlidingComplete: () => void;
+	onValueChange: (number) => void;
+	onOpenSetting: () => void;
+	startSensorTimer: () => void;
+	stopSensorTimer: () => void;
+	changeDisplayType: () => void;
+	onRefresh: () => void;
+	onCloseSetting: () => void;
 
 	static navigationOptions = {
 		title: I18n.t('pages.dashboard'),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'dashboard'),
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 		const { width } = Dimensions.get('window');
-		const tileWidth = this.calculateTileWidth(width);
+		const tileWidth: number = this.calculateTileWidth(width);
 
 		this.state = {
 			tileWidth,
@@ -83,9 +126,6 @@ class DashboardTab extends View {
 
 		this._onLayout = this._onLayout.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
-		this.onSlidingStart = this.onSlidingStart.bind(this);
-		this.onSlidingComplete = this.onSlidingComplete.bind(this);
-		this.onValueChange = this.onValueChange.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
 		this.startSensorTimer = this.startSensorTimer.bind(this);
 		this.stopSensorTimer = this.stopSensorTimer.bind(this);
@@ -119,19 +159,6 @@ class DashboardTab extends View {
 		if (this.refs.list && this.refs.list.setScrollEnabled) {
 			this.refs.list.setScrollEnabled(enable);
 		}
-	}
-
-	onSlidingStart(name: String, value: Number) {
-		this.props.dispatch(showDimmerPopup(name, value));
-	}
-
-	onSlidingComplete() {
-		console.log('onSlidingComplete');
-		this.props.dispatch(hideDimmerPopup());
-	}
-
-	onValueChange(value) {
-		this.props.dispatch(setDimmerValue(value));
 	}
 
 	onRefresh() {
@@ -178,11 +205,11 @@ class DashboardTab extends View {
 		}
 	};
 
-	calculateTileWidth(listWidth) {
+	calculateTileWidth(listWidth: number): number {
 		listWidth -= listMargin;
 		const isPortrait = true; // okay...
 		if (listWidth <= 0) {
-			return;
+			return 0;
 		}
 		const baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
 		const tilesPerRow = Math.floor(listWidth / baseTileSize);
@@ -239,8 +266,6 @@ class DashboardTab extends View {
 				borderRadius: 2,
 			};
 
-			const itemId = row.childObject.id;
-
 			if (row.objectType === 'sensor') {
 				return <SensorDashboardTile
 					style={tileStyle}
@@ -257,8 +282,6 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
-					onTurnOn={this.props.onTurnOn(itemId)}
-					onTurnOff={this.props.onTurnOff(itemId)}
 				/>;
 			}
 
@@ -267,11 +290,7 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
-					onTurnOn={this.props.onTurnOn(itemId)}
-					onTurnOff={this.props.onTurnOff(itemId)}
 					setScrollEnabled={this.setScrollEnabled}
-					onDim={this.props.onDim(itemId)}
-					onDimmerSlide={this.props.onDimmerSlide(itemId)}
 				/>;
 			}
 
@@ -280,7 +299,6 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
-					onBell={this.props.onBell(itemId)}
 				/>;
 			}
 
@@ -289,9 +307,6 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
-					onUp={this.props.onUp(itemId)}
-					onDown={this.props.onDown(itemId)}
-					onStop={this.props.onStop(itemId)}
 				/>;
 			}
 
@@ -299,8 +314,6 @@ class DashboardTab extends View {
 				style={tileStyle}
 				item={row.childObject}
 				tileWidth={tileWidth}
-				onTurnOn={this.props.onTurnOn(itemId)}
-				onTurnOff={this.props.onTurnOff(itemId)}
 			/>;
 		};
 	}
@@ -335,14 +348,6 @@ function mapDispatchToProps(dispatch) {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
 		},
-		onTurnOn: id => () => dispatch(turnOn(id)),
-		onTurnOff: id => () => dispatch(turnOff(id)),
-		onBell: id => () => dispatch(bell(id)),
-		onDown: id => () => dispatch(down(id)),
-		onUp: id => () => dispatch(up(id)),
-		onStop: id => () => dispatch(stop(id)),
-		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-		onDim: id => value => dispatch(updateDimmerValue(id, value)),
 		onChangeDisplayType: () => dispatch(changeSensorDisplayType()),
 		dispatch,
 	};

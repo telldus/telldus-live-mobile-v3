@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -36,8 +38,27 @@ import StyleSheet from 'StyleSheet';
 import StatusBar from 'StatusBar';
 import Theme from 'Theme';
 
+type Props = {
+  dispatch: Function,
+};
+
+type State = {
+  notificationText? : string,
+  isLoading : boolean,
+  username: string,
+  password: string,
+};
+
 class LoginForm extends View {
-	constructor(props) {
+	props: Props;
+	state: State;
+
+	onChangeUsername: (username:string) => void;
+	onChangePassword: (password:string) => void;
+	onForgotPassword: () => void;
+	onFormSubmit: () => void;
+
+	constructor(props: Props) {
 		super(props);
 
 		this.state = this.state || {};

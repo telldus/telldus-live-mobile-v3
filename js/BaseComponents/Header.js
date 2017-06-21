@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -31,7 +33,14 @@ import Subtitle from './Subtitle';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+type Props = {
+  children: Object,
+  rounded: number,
+  searchBar: ?Object,
+};
+
 export default class HeaderComponent extends Base {
+	props: Props;
 
 	getInitialStyle() {
 		return {

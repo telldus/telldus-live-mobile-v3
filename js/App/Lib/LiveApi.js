@@ -19,12 +19,12 @@
  * @providesModule LiveApi
  */
 
+// @flow
+
 'use strict';
 
 import { apiServer, publicKey, privateKey } from 'Config';
-import { updateAccessToken } from 'Actions/Login';
-
-import type { Action } from './types';
+import { updateAccessToken } from 'Actions_Login';
 
 // TODO: fix this pattern, pass store via component tree
 import { getStore } from '../Store/ConfigureStore';
@@ -40,7 +40,7 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export default ({ url, requestParams }) => {
+export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
 	return new Promise((resolve, reject) => {
 		return doApiCall(url, requestParams).then(response => {
 			if (!response) {
@@ -55,7 +55,7 @@ export default ({ url, requestParams }) => {
 	});
 };
 
-async function doApiCall(url, requestParams): Action {
+async function doApiCall(url, requestParams) {
 	let response = await callEndPoint(url, requestParams);
 	if (!response.error) {
 		// All is well, so return the data from the API.

@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Reducers/Devices
+ * @providesModule Reducers_Devices
  */
 
-'use strict';
+// @flow
 
+'use strict';
+import type { Action } from 'Actions_Types';
 import { combineReducers } from 'redux';
 import { REHYDRATE } from 'redux-persist/constants';
 
@@ -28,20 +30,21 @@ import { methods } from '../../Config.js';
 
 import getPowerParts from '../Lib/getPowerParts';
 
-function getSupportedMethods(methodsAggregate: Number): Array {
+function getSupportedMethods(methodsAggregate: number): Object {
 	const methodNumbers = getPowerParts(methodsAggregate);
 	const methodHashmap = methodNumbers.reduce((memo, methodNumber) => {
 		memo[methods[methodNumber]] = true;
 		return memo;
 	}, {});
+
 	return methodHashmap;
 }
 
-function getDeviceStateMethod(deviceStateNumber: number): String {
+function getDeviceStateMethod(deviceStateNumber: number): string {
 	return methods[parseInt(deviceStateNumber, 10)];
 }
 
-function reduceDevice(state = {}, action) {
+function reduceDevice(state:Object = {}, action:Action): Object {
 	switch (action.type) {
 		case 'RECEIVED_DEVICES':
 			// TODO: nothing seems to be reduced here?
@@ -73,6 +76,7 @@ function reduceDevice(state = {}, action) {
 				...state,
 				isInState: getDeviceStateMethod(action.payload.method),
 				value: action.payload.value,
+				methodRequested: '',
 			};
 
 		case 'SET_DIMMER_VALUE':
@@ -92,6 +96,18 @@ function reduceDevice(state = {}, action) {
 			return {
 				...state,
 				isInDashboard: false,
+			};
+
+		case 'REQUEST_TURNON':
+			return {
+				...state,
+				methodRequested: 'TURNON',
+			};
+
+		case 'REQUEST_TURNOFF':
+			return {
+				...state,
+				methodRequested: 'TURNOFF',
 			};
 
 		default:
@@ -147,6 +163,12 @@ function byId(state = {}, action) {
 	if (action.type === 'LOGGED_OUT') {
 		return {};
 	}
+	if (action.type === 'REQUEST_TURNON' || action.type === 'REQUEST_TURNOFF') {
+		return {
+			...state,
+			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
+		};
+	}
 
 	return state;
 }
@@ -180,7 +202,7 @@ export default combineReducers({
 	byId,
 });
 
-export function parseDevicesForListView(devices = {}, gateways = {}, editMode = false) {
+export function parseDevicesForListView(devices:Object = {}, gateways:Object = {}, editMode:boolean = false) {
 	const sections = devices.allIds.reduce((acc, deviceId) => {
 		acc[devices.byId[deviceId].clientId] = [];
 		return acc;

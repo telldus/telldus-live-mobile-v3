@@ -17,9 +17,11 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import type { Action } from 'Actions/Types';
+import type { Action } from 'Actions_Types';
 export type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab';
 
 type State = {

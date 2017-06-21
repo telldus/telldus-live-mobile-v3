@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -29,9 +31,18 @@ import View from './View';
 import Button from './Button';
 import Thumbnail from './Thumbnail';
 
-export default class CardItemComponent extends Base {
+type Props = {
+  header: Object,
+  footer: Object,
+  children: Object,
+  note: string,
+  square: Object,
+};
 
-	getInitialStyle() {
+export default class CardItemComponent extends Base {
+	props: Props;
+
+	getInitialStyle(): Object {
 		return {
 			listItem: {
 				borderBottomWidth: this.getTheme().borderWidth,
@@ -189,7 +200,7 @@ export default class CardItemComponent extends Base {
 		return squareThumbs;
 	}
 
-	getChildProps(child) {
+	getChildProps(child: Object) {
 		let defaultProps = {};
 		if (child.type === Image && !Array.isArray(this.props.children)) {
 			defaultProps = {

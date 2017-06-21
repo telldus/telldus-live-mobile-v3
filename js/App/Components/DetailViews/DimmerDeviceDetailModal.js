@@ -17,82 +17,64 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
 import { connect } from 'react-redux';
 
 import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Slider from 'react-native-slider';
+import { OnButton, OffButton, LearnButton } from 'TabViews_SubViews';
 
-import { turnOn, turnOff, learn } from 'Actions/Devices';
-import { setDimmerValue, updateDimmerValue } from 'Actions/Dimmer';
+import { setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
 
-const ToggleButton = ({ device, onTurnOn, onTurnOff }) => (
+type Props = {
+  device: Object,
+  onTurnOff: number => void,
+  onTurnOn: number => void,
+  onLearn: number => void,
+  onDim: number => void,
+};
+
+type State = {
+  temporaryDimmerValue: number,
+};
+
+const ToggleButton = ({ device }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
-		<TouchableOpacity
-			style={[
-				styles.toggleButton, {
-					backgroundColor: device.isInState === 'TURNOFF' ? 'white' : '#eeeeee',
-				},
-			]}
-			onPress={onTurnOff}>
-			<Text style={{
-				fontSize: 16,
-				color: device.isInState === 'TURNOFF' ? 'red' : '#9e9e9e',
-			}}>
-				{'Off'}
-			</Text>
-		</TouchableOpacity>
-
-		<TouchableOpacity
-			style={[
-				styles.toggleButton, {
-					backgroundColor: device.isInState !== 'TURNOFF' ? 'white' : '#eeeeee',
-				},
-			]}
-			onPress={onTurnOn}>
-			<Text style={{
-				fontSize: 16,
-				color: device.isInState !== 'TURNOFF' ? '#2c7e38' : '#9e9e9e',
-			}}>
-				{'On'}
-			</Text>
-		</TouchableOpacity>
-	</RoundedCornerShadowView>
-);
-
-const LearnButton = ({ device, onLearn }) => (
-	<RoundedCornerShadowView style={styles.learnContainer}>
-		<TouchableOpacity onPress={onLearn} style={styles.learnButton}>
-			<Text style={styles.learnText}>
-				{'Learn'}
-			</Text>
-		</TouchableOpacity>
+		<OffButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} />
+		<OnButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} />
 	</RoundedCornerShadowView>
 );
 
 class DimmerDeviceDetailModal extends View {
+	props: Props;
+	state: State;
+	currentDimmerValue: number;
+	onTurnOn: () => void;
+	onTurnOff: () => void;
+	onLearn: () => void;
+	onValueChange: number => void;
+	onSlidingComplete: number => void;
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
-		const dimmerValue = this.getDimmerValue(this.props.device);
+		const dimmerValue: number = this.getDimmerValue(this.props.device);
 
 		this.state = {
 			temporaryDimmerValue: dimmerValue,
 		};
 
 		this.currentDimmerValue = dimmerValue;
-		this.onTurnOn = this.onTurnOn.bind(this);
-		this.onTurnOff = this.onTurnOff.bind(this);
-		this.onLearn = this.onLearn.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 	}
 
-	getDimmerValue(device) {
+	getDimmerValue(device: Object) : number {
 		if (device !== null && device.value !== null) {
 			if (device.isInState === 'TURNON') {
 				return 100;
@@ -102,18 +84,7 @@ class DimmerDeviceDetailModal extends View {
 				return Math.round(device.value * 100.0 / 255);
 			}
 		}
-	}
-
-	onTurnOn() {
-		this.props.onTurnOn(this.props.device.id);
-	}
-
-	onTurnOff() {
-		this.props.onTurnOff(this.props.device.id);
-	}
-
-	onLearn() {
-		this.props.onLearn(this.props.device.id);
+		return 0;
 	}
 
 	onValueChange(value) {
@@ -131,6 +102,8 @@ class DimmerDeviceDetailModal extends View {
 			this.setState({ temporaryDimmerValue: dimmerValue });
 			this.currentDimmerValue = dimmerValue;
 		}
+
+		this.setState({ request: 'none' });
 	}
 
 	render() {
@@ -146,7 +119,7 @@ class DimmerDeviceDetailModal extends View {
 		}
 
 		if (LEARN) {
-			learnButton = <LearnButton device={device} onLearn={this.onLearn}/>;
+			learnButton = <LearnButton id={device} style={styles.learn} />;
 		}
 
 		if (DIM) {
@@ -158,7 +131,6 @@ class DimmerDeviceDetailModal extends View {
 			                 minimumTrackTintColor="rgba(0,150,136,255)"
 			                 maximumTrackTintColor="rgba(219,219,219,255)"
 			                 thumbTintColor="rgba(0,150,136,255)"
-			                 trackStyle={styles.trackStyle}
 			                 onValueChange={this.onValueChange}
 			                 onSlidingComplete={this.onSlidingComplete}
 			                 animateTransitions={true}/>;
@@ -198,44 +170,32 @@ const styles = StyleSheet.create({
 		marginHorizontal: 8,
 		marginVertical: 16,
 	},
-	toggleButton: {
+	turnOff: {
 		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'stretch',
+		borderTopLeftRadius: 7,
+		borderBottomLeftRadius: 7,
 	},
-	learnContainer: {
+	turnOn: {
+		flex: 1,
+		alignItems: 'stretch',
+		borderTopRightRadius: 7,
+		borderBottomRightRadius: 7,
+	},
+	learn: {
 		height: 36,
 		marginHorizontal: 8,
 		marginVertical: 8,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	learnButton: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	learnText: {
-		fontSize: 16,
-		color: 'orange',
-	},
-	trackStyle: {
-		marginTop: -4, // fix track thumb alignment bug : https://github.com/jeanregisser/react-native-slider/issues/54
-	},
 });
-
-function mapStateToProps(store) {
-	return { store };
-}
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTurnOn: (id) => dispatch(turnOn(id)),
-		onTurnOff: (id) => dispatch(turnOff(id)),
-		onLearn: (id) => dispatch(learn(id)),
 		onDimmerSlide: (id, value) => dispatch(setDimmerValue(id, value)),
 		onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerDeviceDetailModal);
+module.exports = connect(null, mapDispatchToProps)(DimmerDeviceDetailModal);

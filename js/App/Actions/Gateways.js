@@ -16,13 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/Gateways
+ * @providesModule Actions_Gateways
  */
+
+// @flow
 
 'use strict';
 
-import type { ThunkAction } from './types';
-import { getWebsocketAddress } from 'Actions/Websockets';
+import type { ThunkAction } from './Types';
+import { getWebsocketAddress } from 'Actions_Websockets';
 
 import LiveApi from 'LiveApi';
 import { format } from 'url';

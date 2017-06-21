@@ -17,26 +17,31 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+import { bell } from 'Actions_Devices';
+
+type Props = {
+	id: number,
+	onBell: () => void,
+	style: Object,
+};
 
 class BellButton extends View {
+	props: Props;
+
 	render() {
 		return (
-			<RoundedCornerShadowView
-				style={styles.container}
-			>
-				<TouchableOpacity
-					onPress={this.props.onBell}
-				>
-					<Icon
-						name="bell"
-						size={22}
-						color="orange"
-					/>
+			<RoundedCornerShadowView style={this.props.style}>
+				<TouchableOpacity onPress={this.props.onBell(this.props.id)} style={styles.bell}>
+					<Icon name="bell" size={22} color="orange" />
 				</TouchableOpacity>
 			</RoundedCornerShadowView>
 		);
@@ -44,12 +49,17 @@ class BellButton extends View {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 7,
-		height: 32,
+	bell: {
+		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 });
 
-module.exports = BellButton;
+function mapDispatchToProps(dispatch) {
+	return {
+		onBell: id => () => dispatch(bell(id)),
+	};
+}
+
+module.exports = connect(null, mapDispatchToProps)(BellButton);

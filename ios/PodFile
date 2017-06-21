@@ -1,6 +1,8 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 target 'TelldusLiveApp' do
+  react_native_path = "../node_modules/react-native"
+  pod "Yoga", :path => "#{react_native_path}/ReactCommon/yoga"
   pod 'React', :subspecs => [
     'Core',
     'RCTActionSheet',
@@ -11,7 +13,7 @@ target 'TelldusLiveApp' do
     'RCTPushNotification',
     'RCTLinkingIOS',
     'RCTVibration',
-  ], :path => '../node_modules/react-native'
+  ], :path => react_native_path
 end
 
 # Start the React Native JS packager server when running the project in Xcode.

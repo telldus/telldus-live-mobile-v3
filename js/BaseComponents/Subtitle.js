@@ -17,13 +17,20 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
 import { Text, View, Platform } from 'react-native';
 import Base from './Base';
 
+type Props = {
+  children: Object,
+};
+
 export default class Subtitle extends Base {
+	props: Props;
 
 	render() {
 		return (

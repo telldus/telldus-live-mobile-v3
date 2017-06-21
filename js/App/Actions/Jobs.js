@@ -17,9 +17,11 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import type { ThunkAction } from './types';
+import type { ThunkAction } from './Types';
 
 import LiveApi from 'LiveApi';
 

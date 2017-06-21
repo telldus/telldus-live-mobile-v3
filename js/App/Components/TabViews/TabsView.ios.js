@@ -19,6 +19,8 @@
  * @providesModule TabsView
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -32,8 +34,29 @@ import TabViews from 'TabViews';
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
 
+type Props = {
+  tab: string,
+  userIcon: boolean,
+  userProfile: Object,
+  dashboard: Object,
+  onTabSelect: string => void,
+  onToggleEditMode: string => void,
+  dispatch: Function,
+};
+
 class TabsView extends View {
-	constructor(props) {
+	props: Props;
+	eventEmitter: Object;
+	onTabSelect: string => void;
+	onDashboardTabSelect: () => void;
+	onDevicesTabSelect: () => void;
+	onSensorsTabSelect: () => void;
+	onSchedulerTabSelect: () => void;
+	onGatewaysTabSelect: () => void;
+	toggleSensorTabEditMode: () => void;
+	toggleDevicesTabEditMode: () => void;
+
+	constructor(props: Props) {
 		super(props);
 		this.toggleSensorTabEditMode = this.toggleSensorTabEditMode.bind(this);
 		this.toggleDevicesTabEditMode = this.toggleDevicesTabEditMode.bind(this);

@@ -17,12 +17,13 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
+// @flow
+
 
 import _ from 'lodash';
 import ReactNativePropRegistry from 'react-native/Libraries/Renderer/src/renderers/native/ReactNativePropRegistry';
 
-module.exports = function (incomingProps, defaultProps) {
+module.exports = function (incomingProps: Object, defaultProps: Object): Object {
 	// External props has a higher precedence
 	let computedProps = {};
 

@@ -17,58 +17,22 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
 import { connect } from 'react-redux';
 
 import { View } from 'BaseComponents';
-import { StyleSheet, Animated } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
-import { showDimmerPopup, hideDimmerPopup } from 'Actions/Dimmer';
+import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
+import { turnOn, turnOff, requestTurnOn, requestTurnOff } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
-
+import DimmerOffButton from './DimmerOffButton';
+import DimmerOnButton from './DimmerOnButton';
 import throttle from 'lodash/throttle';
-
-const PseudoOffButton = ({ isInState, enabled, tileWidth, fadeAnim }) => (
-	<View style={[
-		styles.turnOffButtonContainer,
-		isInState === 'TURNOFF' && enabled ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled,
-	]}>
-		<Animated.Text
-			ellipsizeMode="middle"
-			numberOfLines={1}
-			style={[
-				styles.buttonText, isInState === 'TURNOFF' ? styles.buttonOffEnabled : styles.buttonOffDisabled,
-				{
-					fontSize: Math.floor(tileWidth / 8),
-					opacity: fadeAnim,
-				},
-			]}>
-			{'Off'}
-		</Animated.Text>
-	</View>
-);
-
-const PseudoOnButton = ({ isInState, enabled, tileWidth, fadeAnim }) => (
-	<View style={[
-		styles.turnOnButtonContainer,
-		isInState !== 'TURNOFF' && enabled ? styles.buttonBackgroundEnabled : styles.buttonBackgroundDisabled,
-	]}>
-		<Animated.Text
-			ellipsizeMode="middle"
-			numberOfLines={1}
-			style={[
-				styles.buttonText, isInState !== 'TURNOFF' ? styles.buttonOnEnabled : styles.buttonOnDisabled,
-				{
-					fontSize: Math.floor(tileWidth / 8),
-					opacity: fadeAnim,
-				},
-			]}>
-			{'On'}
-		</Animated.Text>
-	</View>
-);
 
 function getDimmerValue(value, isInState) {
 	let newValue = value || 0;
@@ -91,8 +55,47 @@ function toSliderValue(dimmerValue) {
 	return Math.round(dimmerValue * 100.0 / 255);
 }
 
+type Props = {
+	item: Object,
+	tileWidth: number,
+	onDimmerSlide: number => void,
+	showDimmerPopup: (name:string, sliderValue:number) => void,
+	hideDimmerPopup: () => void,
+	onDim: number => void,
+	onTurnOn: number => void,
+	onTurnOff: number => void,
+	onDim: number => void,
+	requestTurnOn: number => void,
+	requestTurnOff: number => void,
+	setScrollEnabled: boolean,
+	style: Object,
+};
+
+type State = {
+	bodyWidth: number,
+	bodyHeight: number,
+	value: number,
+	offButtonFadeAnim: Object,
+	onButtonFadeAnim: Object,
+};
+
 class DimmerDashboardTile extends View {
-	constructor(props) {
+	props: Props;
+	state: State;
+	parentScrollEnabled: boolean;
+	onValueChangeThrottled: number => void;
+	onTurnOffButtonStart: () => void;
+	onTurnOffButtonEnd: () => void;
+	onTurnOnButtonStart: () => void;
+	onTurnOnButtonEnd: () => void;
+	onTurnOn: () => void;
+	onTurnOff: () => void;
+	layoutView: Object => void;
+	onSlidingStart: (name:string, sliderValue:number) => void;
+	onSlidingComplete: number => void;
+	onValueChange: number => void;
+
+	constructor(props: Props) {
 		super(props);
 		const { item, onDimmerSlide } = this.props;
 		const { value, isInState } = item;
@@ -105,7 +108,7 @@ class DimmerDashboardTile extends View {
 			onButtonFadeAnim: new Animated.Value(1),
 		};
 
-		this.onValueChangeThrottled = throttle(onDimmerSlide, 200, {
+		this.onValueChangeThrottled = throttle(onDimmerSlide(item.id), 200, {
 			trailing: true,
 		});
 
@@ -113,6 +116,8 @@ class DimmerDashboardTile extends View {
 		this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
 		this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
 		this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
+		this.onTurnOn = this.onTurnOn.bind(this);
+		this.onTurnOff = this.onTurnOff.bind(this);
 		this.layoutView = this.layoutView.bind(this);
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
@@ -121,9 +126,7 @@ class DimmerDashboardTile extends View {
 
 	componentWillReceiveProps(nextProps) {
 		const { value, isInState } = nextProps.item;
-		if (value === this.props.item.value && isInState === this.props.item.isInState) {
-			return;
-		}
+
 		const dimmerValue = getDimmerValue(value, isInState);
 		this.setState({ value: dimmerValue });
 	}
@@ -140,100 +143,75 @@ class DimmerDashboardTile extends View {
 		this.onValueChangeThrottled(toDimmerValue(sliderValue));
 	}
 
-	onSlidingStart(name: String, sliderValue: Number) {
+	onSlidingStart(name:string, sliderValue:number) {
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
-	onSlidingComplete(sliderValue: Number) {
-		this.props.onDim(toDimmerValue(sliderValue));
+	onSlidingComplete(sliderValue:number) {
+		this.props.onDim(this.props.item.id, toDimmerValue(sliderValue));
 		this.props.hideDimmerPopup();
 	}
 
 	onTurnOffButtonStart() {
-		Animated.timing(
-			this.state.offButtonFadeAnim,
-			{
-				toValue: 0.5,
-				duration: 100,
-			}
-		).start();
+		this.refs.offButton.fadeOut();
 	}
 
 	onTurnOffButtonEnd() {
-		Animated.timing(
-			this.state.offButtonFadeAnim,
-			{
-				toValue: 1,
-				duration: 100,
-			}
-		).start();
+		this.refs.offButton.fadeIn();
 	}
 
 	onTurnOnButtonStart() {
-		Animated.timing(
-			this.state.onButtonFadeAnim,
-			{
-				toValue: 0.5,
-				duration: 100,
-			}
-		).start();
+		this.refs.onButton.fadeOut();
 	}
 
 	onTurnOnButtonEnd() {
-		Animated.timing(
-			this.state.onButtonFadeAnim,
-			{
-				toValue: 1,
-				duration: 100,
-			}
-		).start();
+		this.refs.onButton.fadeIn();
+	}
+
+	onTurnOn() {
+		this.props.onTurnOn(this.props.item.id);
+		this.props.requestTurnOn(this.props.item.id);
+	}
+
+	onTurnOff() {
+		this.props.onTurnOff(this.props.item.id);
+		this.props.requestTurnOff(this.props.item.id);
 	}
 
 	render() {
 		const { item, tileWidth } = this.props;
-		const { name, isInState, supportedMethods } = item;
+		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
-		const turnOnButton = <PseudoOnButton isInState={isInState} enabled={!!TURNON} tileWidth={tileWidth}
-		                                     fadeAnim={this.state.onButtonFadeAnim}/>;
-		const turnOffButton = <PseudoOffButton isInState={isInState} enabled={!!TURNOFF} tileWidth={tileWidth}
-		                                       fadeAnim={this.state.offButtonFadeAnim}/>;
-		const slider = DIM ? <VerticalSlider
-			style={[
-				styles.slider, {
-					width: this.state.bodyWidth,
-					height: this.state.bodyHeight,
-					left: 0,
-					bottom: 0,
-				},
-			]}
-			thumbWidth={this.state.bodyWidth / 5}
-			item={item}
-			value={toSliderValue(this.state.value)}
-			setScrollEnabled={this.props.setScrollEnabled}
-			onSlidingStart={this.onSlidingStart}
-			onSlidingComplete={this.onSlidingComplete}
-			onValueChange={this.onValueChange}
-			onLeftStart={this.onTurnOffButtonStart}
-			onLeftEnd={this.onTurnOffButtonEnd}
-			onRightStart={this.onTurnOnButtonStart}
-			onRightEnd={this.onTurnOnButtonEnd}
-			onLeft={this.props.onTurnOff}
-			onRight={this.props.onTurnOn}
-		/> : null;
+
+		const onButton = <DimmerOnButton ref={'onButton'} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
+		const offButton = <DimmerOffButton ref={'offButton'} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
+		const slider = DIM ?
+			<VerticalSlider
+				style={[styles.slider, { width: this.state.bodyWidth, height: this.state.bodyHeight, left: 0, bottom: 0 }]}
+				thumbWidth={this.state.bodyWidth / 5}
+				item={item}
+				value={toSliderValue(this.state.value)}
+				setScrollEnabled={this.props.setScrollEnabled}
+				onSlidingStart={this.onSlidingStart}
+				onSlidingComplete={this.onSlidingComplete}
+				onValueChange={this.onValueChange}
+				onLeftStart={this.onTurnOffButtonStart}
+				onLeftEnd={this.onTurnOffButtonEnd}
+				onRightStart={this.onTurnOnButtonStart}
+				onRightEnd={this.onTurnOnButtonEnd}
+				onLeft={this.onTurnOff}
+				onRight={this.onTurnOn}
+			/> :
+			null;
 		return (
 			<DashboardShadowTile
 				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
 				name={name}
 				tileWidth={tileWidth}
-				style={[
-					this.props.style, {
-						width: tileWidth,
-						height: tileWidth,
-					},
-				]}>
+				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
 				<View style={styles.body} onLayout={this.layoutView}>
-					{ turnOffButton }
-					{ turnOnButton }
+					{ offButton }
+					{ onButton }
 					{ slider }
 				</View>
 			</DashboardShadowTile>
@@ -250,58 +228,38 @@ const styles = StyleSheet.create({
 		flex: 30,
 		flexDirection: 'row',
 	},
-	button: {
-		flex: 1,
-		justifyContent: 'center',
-	},
-	buttonText: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
 	slider: {
 		flex: 1,
 		position: 'absolute',
 	},
-	turnOffButtonContainer: {
+	turnOff: {
 		flex: 1,
 		alignItems: 'stretch',
+		justifyContent: 'center',
 		borderTopLeftRadius: 7,
-		justifyContent: 'center',
 	},
-	turnOnButtonContainer: {
+	turnOn: {
 		flex: 1,
 		alignItems: 'stretch',
-		borderTopRightRadius: 7,
 		justifyContent: 'center',
-	},
-	buttonBackgroundEnabled: {
-		backgroundColor: 'white',
-	},
-	buttonBackgroundDisabled: {
-		backgroundColor: '#eeeeee',
-	},
-	buttonOnEnabled: {
-		color: 'green',
-	},
-	buttonOnDisabled: {
-		color: '#a0a0a0',
-	},
-	buttonOffEnabled: {
-		color: 'red',
-	},
-	buttonOffDisabled: {
-		color: '#a0a0a0',
+		borderTopRightRadius: 7,
 	},
 });
 
 function mapDispatchToProps(dispatch) {
 	return {
-		showDimmerPopup: (name: String, value: Number) => {
+		showDimmerPopup: (name:string, value:number) => {
 			dispatch(showDimmerPopup(name, value));
 		},
 		hideDimmerPopup: () => {
 			dispatch(hideDimmerPopup());
 		},
+		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
+		onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
+		onTurnOn: id => dispatch(turnOn(id)),
+		onTurnOff: id => dispatch(turnOff(id)),
+		requestTurnOn: id => dispatch(requestTurnOn(id)),
+		requestTurnOff: id => dispatch(requestTurnOff(id)),
 	};
 }
 

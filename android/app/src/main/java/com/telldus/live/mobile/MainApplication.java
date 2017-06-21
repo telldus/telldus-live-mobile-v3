@@ -23,7 +23,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
-import com.evollu.react.fcm.FIRMessagingPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -35,14 +35,13 @@ import java.util.List;
 
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
-import fr.aybadb.rnak.RNAKPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
 	private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
 		@Override
-		protected boolean getUseDeveloperSupport() {
+		public boolean getUseDeveloperSupport() {
 			return BuildConfig.DEBUG;
 		}
 
@@ -53,8 +52,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
-				new FIRMessagingPackage(),
-				new RNAKPackage()
+				new ReactNativePushNotificationPackage()
 			);
 		}
 	};

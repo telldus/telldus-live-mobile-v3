@@ -17,9 +17,11 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import type { Action } from 'Actions/Types';
+import type { Action } from 'Actions_Types';
 import { REHYDRATE } from 'redux-persist/constants';
 
 import { combineReducers } from 'redux';
@@ -82,7 +84,7 @@ function reduceGateway(state: State = {}, action: Action): State {
 	}
 }
 
-function byId(state = {}, action: Action): State {
+function byId(state = {}, action): State {
 	if (action.type === REHYDRATE) {
 		if (action.payload.gateways && action.payload.gateways.byId) {
 			console.log('rehydrating gateways.byId');
@@ -98,7 +100,7 @@ function byId(state = {}, action: Action): State {
 			return action.payload.client.reduce((acc, gateway) => {
 				acc[gateway.id] = {
 					...reduceGateway(state[gateway.id], {
-						type: action.type,
+						type: 'RECEIVED_GATEWAYS',
 						payload: gateway,
 					}),
 				};
@@ -119,7 +121,7 @@ function byId(state = {}, action: Action): State {
 	}
 }
 
-function allIds(state = [], action: Action): State {
+function allIds(state = [], action): Array<Object> {
 	if (action.type === REHYDRATE) {
 		if (action.payload.gateways && action.payload.gateways.allIds) {
 			console.log('rehydrating gateways.allIds');
@@ -141,7 +143,7 @@ function allIds(state = [], action: Action): State {
 	}
 }
 
-export function parseGatewaysForListView(gateways = {}) {
+export function parseGatewaysForListView(gateways:Object = {}) {
 	const rows = gateways.allIds.map(gatewayId => gateways.byId[gatewayId]);
 
 	rows.sort((a, b) => {

@@ -16,12 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions/Tabs
+ * @providesModule Actions_Tabs
  */
+
+// @flow
 
 'use strict';
 
-import type { Action } from './types';
+import type { Action } from './Types';
 
 type Tab = 'devicesTab' | 'sensorsTab';
 

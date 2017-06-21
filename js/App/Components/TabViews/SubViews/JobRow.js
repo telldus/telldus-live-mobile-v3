@@ -16,23 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+// @flow
 'use strict';
 
 import React from 'react';
 import { ListItem, Text } from 'BaseComponents';
 import Theme from 'Theme';
 
-export default props => {
+type Props = {
+  device: Object,
+  methodValue: number,
+  method: string,
+  effectiveHour: number,
+  effectiveMinute: number,
+};
+
+export default (props: Props) => {
 	const methodName = {
-		1: 'On',
-		2: 'Off',
-		4: 'Bell',
-		16: 'Dim',
-		32: 'Learn',
-		128: 'Up',
-		256: 'Down',
-		512: 'Stop',
+		[1]: 'On',
+		[2]: 'Off',
+		[4]: 'Bell',
+		[16]: 'Dim',
+		[32]: 'Learn',
+		[128]: 'Up',
+		[256]: 'Down',
+		[512]: 'Stop',
 	};
 
 	const { device, methodValue } = props;
@@ -43,26 +51,13 @@ export default props => {
 	const value = method === 'Dim' ? `${Math.round(methodValue / 255.0 * 100)}%` : method;
 	return (
 		<ListItem style={Theme.Styles.rowFront}>
-			<Text style={{
-				flex: 4,
-				color: 'orange',
-				fontSize: 16,
-			}}>
+			<Text style={{ flex: 4, color: 'orange', fontSize: 16 }}>
 				{`${props.effectiveHour}:${props.effectiveMinute}`}
 			</Text>
-			<Text style={{
-				flex: 20,
-				color: '#1a355c',
-				fontSize: 16,
-				paddingLeft: 6,
-			}}>
+			<Text style={{ flex: 20, color: '#1a355c', fontSize: 16, paddingLeft: 6 }}>
 				{device.name}
 			</Text>
-			<Text style={{
-				flex: 4,
-				color: '#1a355c',
-				fontSize: 16,
-			}}>
+			<Text style={{ flex: 4, color: '#1a355c', fontSize: 16 }}>
 				{value}
 			</Text>
 		</ListItem>

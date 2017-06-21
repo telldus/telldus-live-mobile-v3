@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -31,14 +33,36 @@ import { parseGatewaysForListView } from '../../Reducers/Gateways';
 import Theme from 'Theme';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 
+type Props = {
+	rows: Array<Object>,
+	dispatch: Function,
+};
+
+type State = {
+	dataSource: Object,
+	settings: false,
+};
+
+type renderRowProps = {
+	name: string,
+	online: boolean,
+	websocketOnline: boolean,
+};
+
 class GatewaysTab extends View {
+
+	props: Props;
+	state: State;
+
+	renderRow: (renderRowProps) => Object;
+	onRefresh: () => void;
 
 	static navigationOptions = {
 		title: I18n.t('pages.gateways'),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'gateways'),
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

@@ -17,11 +17,17 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
+
 import { Icon, View, RoundedCornerShadowView } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+
+import { down, up, stop } from 'Actions_Devices';
 
 const UpButton = ({ supportedMethod, onPress }) => (
 	<TouchableOpacity
@@ -40,9 +46,7 @@ const DownButton = ({ supportedMethod, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="caret-down" size={30}
-		      style={{
-			      color: supportedMethod ? '#1a355b' : '#eeeeee',
-		      }}
+			style={supportedMethod ? styles.enabled : styles.disabled}
 		/>
 	</TouchableOpacity>
 );
@@ -52,41 +56,58 @@ const StopButton = ({ supportedMethod, onPress }) => (
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="stop" size={20}
-		      style={{
-			      color: supportedMethod ? '#1a355b' : '#eeeeee',
-		      }}
+			style={supportedMethod ? styles.enabled : styles.disabled}
 		/>
 	</TouchableOpacity>
 );
 
+type Props = {
+	device: Object,
+	onUp: number => void,
+	onDown: number => void,
+	onStop: number => void,
+	style: Object,
+};
+
 class NavigationalButton extends View {
+	props: Props;
+
 	render() {
 		const noop = function () {
 		};
 		const { UP, DOWN, STOP } = this.props.device.supportedMethods;
+		const id = this.props.device.id;
 
 		return (
-			<RoundedCornerShadowView style={styles.container}>
-				<UpButton supportedMethod={UP} onPress={UP ? this.props.onUp : noop}/>
-				<DownButton supportedMethod={DOWN} onPress={DOWN ? this.props.onDown : noop}/>
-				<StopButton supportedMethod={STOP} onPress={STOP ? this.props.onStop : noop}/>
+			<RoundedCornerShadowView style={this.props.style}>
+				<UpButton supportedMethod={UP} onPress={UP ? this.props.onUp(id) : noop} />
+				<DownButton supportedMethod={DOWN} onPress={DOWN ? this.props.onDown(id) : noop} />
+				<StopButton supportedMethod={STOP} onPress={STOP ? this.props.onStop(id) : noop} />
 			</RoundedCornerShadowView>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 7,
-		height: 32,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 	navigationButton: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
+	enabled: {
+		color: '#1a355b',
+	},
+	disabled: {
+		color: '#eeeeee',
+	},
 });
 
-module.exports = NavigationalButton;
+function mapDispatchToProps(dispatch) {
+	return {
+		onDown: id => () => dispatch(down(id)),
+		onUp: id => () => dispatch(up(id)),
+		onStop: id => () => dispatch(stop(id)),
+	};
+}
+
+module.exports = connect(null, mapDispatchToProps)(NavigationalButton);

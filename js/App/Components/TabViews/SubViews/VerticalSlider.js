@@ -17,24 +17,62 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { Text, View } from 'BaseComponents';
 import { PanResponder, Animated, StyleSheet, Vibration, Platform } from 'react-native';
 
-function getSliderLabel(value) {
+function getSliderLabel(value:number):string {
 	if (value === 100) {
 		return 'On';
 	}
 	if (value === 0) {
 		return 'Off';
 	}
-	return value;
+	return value.toString();
 }
 
+type Props = {
+	setScrollEnabled: boolean => void,
+	thumbHeight: number,
+	thumbWidth: number,
+	sensitive: number,
+	value: number,
+	onSlidingStart: () => void,
+	onSlidingComplete: number => void,
+	onValueChange: number => void,
+	onLeftStart: () => void,
+	onLeftEnd: () => void,
+	onLeft: () => void,
+	onRightStart: () => void,
+	onRightEnd: () => void,
+	onRight: () => void,
+	item: Object,
+	fontSize: number,
+	style: Object,
+};
+
+type State = {
+  containerWidth: number,
+  containerHeight: number,
+  value: Object,
+  minimumValue: number,
+  maximumValue: number,
+  step: number,
+  displayedValue: string,
+};
+
 class VerticalSlider extends View {
-	constructor(props) {
+	props: Props;
+	state: State;
+
+	activeSlider: boolean;
+	layoutView: Object => void;
+
+	constructor(props: Props) {
 		super(props);
 		this.parentScrollEnabled = true;
 		this.state = {
@@ -63,18 +101,18 @@ class VerticalSlider extends View {
 		});
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Props) {
 		const newValue = nextProps.value;
 		this.setCurrentValueAnimate(newValue);
 		this.onValueChange(newValue);
 	}
 
-	handleStartShouldSetPanResponder = (e: Object, /*gestureState: Object*/): boolean => {
+	handleStartShouldSetPanResponder = (e: Object, /* gestureState: Object */): boolean => {
         // Should we become active when the user presses down on the thumb?
 		return true;
 	};
 
-	handleMoveShouldSetPanResponder = (/*e: Object, gestureState: Object*/): boolean => {
+	handleMoveShouldSetPanResponder = (/* e: Object, gestureState: Object */): boolean => {
         // Should we become active when the user moves a touch over the thumb?
 		return false;
 	};
@@ -167,24 +205,24 @@ class VerticalSlider extends View {
 		clearTimeout(this.longPressTimeout);
 	};
 
-	getThumbBottom(value) {
+	getThumbBottom(value: number) {
 		const ratio = this.getRatio(value);
 		return ratio * (this.state.containerHeight - this.props.thumbHeight);
 	}
 
-	getRatio(value) {
+	getRatio(value: number): number {
 		return (value - this.state.minimumValue) / (this.state.maximumValue - this.state.minimumValue);
 	}
 
-	setCurrentValue(value) {
+	setCurrentValue(value: number) {
 		this.state.value.setValue(value);
 	}
 
-	setCurrentValueAnimate(value) {
+	setCurrentValueAnimate(value: number) {
 		Animated.timing(this.state.value, { toValue: value, duration: 250 }).start();
 	}
 
-	getValue(gestureState) {
+	getValue(gestureState: Object) {
 		const length = this.state.containerHeight - this.props.thumbHeight;
 		const thumbBottom = this.previousBottom - gestureState.dy / this.props.sensitive;
 		const ratio = thumbBottom / length;
@@ -208,7 +246,7 @@ class VerticalSlider extends View {
 		);
 	}
 
-	layoutView(x) {
+	layoutView(x: Object) {
 		let { width, height } = x.nativeEvent.layout;
 		this.setState({
 			containerWidth: width,
@@ -216,7 +254,7 @@ class VerticalSlider extends View {
 		});
 	}
 
-	onValueChange(val) {
+	onValueChange(val: number) {
 		this.setState({ displayedValue: getSliderLabel(val) });
 	}
 
@@ -229,25 +267,23 @@ class VerticalSlider extends View {
 		});
 
 		return (
-            <View style={[this.props.style]} onLayout={this.layoutView} {...this.panResponder.panHandlers}>
-	            <Animated.View
-		            style={[
-			            styles.thumb, {
-				            width: thumbWidth,
-				            height: thumbHeight,
-				            left: (this.state.containerWidth - thumbWidth) / 2,
-				            transform: [{ translateY: thumbBottom }],
-			            },
-		            ]}
-	            >
-                    <Text
-                        ellipsizeMode="middle"
-                        numberOfLines={1}
-                        style = {[styles.thumbText, { fontSize: this.props.fontSize }]}>
-                        {this.state.displayedValue}
-                    </Text>
-                </Animated.View>
-            </View>
+			<View style={[this.props.style]} onLayout={this.layoutView} {...this.panResponder.panHandlers}>
+				<Animated.View style={[
+					styles.thumb, {
+						width: thumbWidth,
+						height: thumbHeight,
+						left: (this.state.containerWidth - thumbWidth) / 2,
+						transform: [{ translateY: thumbBottom }],
+					},
+				]}>
+					<Text
+						ellipsizeMode="middle"
+						numberOfLines={1}
+						style = {[styles.thumbText, { fontSize: this.props.fontSize }]}>
+						{this.state.displayedValue}
+					</Text>
+				</Animated.View>
+			</View>
 		);
 	}
 }
@@ -270,23 +306,6 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center',
 	},
 });
-
-VerticalSlider.propTypes = {
-	setScrollEnabled: PropTypes.func,
-	thumbHeight: PropTypes.number,
-	thumbWidth: PropTypes.number,
-	sensitive: PropTypes.number,
-	value: PropTypes.number,
-	onSlidingStart: PropTypes.func,
-	onSlidingComplete: PropTypes.func,
-	onValueChange: PropTypes.func,
-	onLeftStart: PropTypes.func,
-	onLeftEnd: PropTypes.func,
-	onLeft: PropTypes.func,
-	onRightStart: PropTypes.func,
-	onRightEnd: PropTypes.func,
-	onRight: PropTypes.func,
-};
 
 VerticalSlider.defaultProps = {
 	thumbHeight: 12,

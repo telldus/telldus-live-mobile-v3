@@ -17,20 +17,25 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import type { Action } from 'Actions/Types';
+import type { Action } from 'Actions_Types';
 
 import { createSelector } from 'reselect';
 
 export type State = {
-	accessToken: ?Object,
-	userProfile: ?Object
+	accessToken: any,
+	userProfile: any,
 };
 
 const initialState = {
 	accessToken: false,
 	userProfile: false,
+	pushToken: false,
+	pushTokenRegistered: false,
+	notificationText: false,
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -44,6 +49,18 @@ export default function reduceUser(state: State = initialState, action: Action):
 			accessToken: accessToken,
 		};
 	}
+	if (action.type === 'RECEIVED_PUSH_TOKEN') {
+		return {
+			...state,
+			pushToken: action.pushToken,
+		};
+	}
+	if (action.type === 'PUSH_TOKEN_REGISTERED') {
+		return {
+			...state,
+			pushTokenRegistered: true,
+		};
+	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {
 		return {
 			...state,
@@ -53,6 +70,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 	if (action.type === 'LOGGED_OUT') {
 		return {
 			...initialState,
+		};
+	}
+	if (action.type === 'ERROR') {
+		return {
+			...state,
+			notificationText: action.message.error_description,
 		};
 	}
 	return state;

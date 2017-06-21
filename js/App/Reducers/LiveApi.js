@@ -17,9 +17,11 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import type { Action } from 'Actions/Types';
+import type { Action } from 'Actions_Types';
 import { REHYDRATE } from 'redux-persist/constants';
 
 const initialState = {
@@ -27,7 +29,9 @@ const initialState = {
 	jobs: false,
 	gateways: false,
 };
-function reduceRefetchLiveApi(state = initialState, action: Action) {
+
+
+function reduceRefetchLiveApi(state: Object = initialState, action: Action): Object {
 	if (action.type === REHYDRATE) {
 		return {
 			...initialState,

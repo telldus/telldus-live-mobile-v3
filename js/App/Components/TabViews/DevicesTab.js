@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -24,7 +26,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { List, ListDataSource, Text, View, I18n, Header } from 'BaseComponents';
-import { DeviceRow, DeviceRowHidden } from 'TabViews/SubViews';
+import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
 import {
 	DeviceDetailModal,
 	ToggleDeviceDetailModal,
@@ -33,24 +35,52 @@ import {
 	NavigationalDeviceDetailModal,
 } from 'DetailViews';
 
-import { getDevices } from 'Actions/Devices';
+import { getDevices } from 'Actions_Devices';
 import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 
-import { parseDevicesForListView } from 'Reducers/Devices';
+import { parseDevicesForListView } from 'Reducers_Devices';
 
 import Theme from 'Theme';
 
+// @flow
+
+type Props = {
+	rowsAndSections: Object,
+	gatewaysById: Object,
+	editMode: boolean,
+	devices: Object,
+	tab: string,
+	dispatch: Function,
+};
+
+type State = {
+	dataSource: Object,
+	deviceId: number,
+	dimmer: boolean,
+};
+
 class DevicesTab extends View {
+
+	props: Props;
+	state: State;
+
+	onCloseSelected: () => void;
+	openDeviceDetail: (number) => void;
+	setScrollEnabled: (boolean) => void;
+	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	renderRow: (Object) => Object;
+	renderHiddenRow: (Object) => Object;
+	onRefresh: () => void;
 
 	static navigationOptions = {
 		title: I18n.t('pages.devices'),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'devices'),
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		const { sections, sectionIds } = this.props.rowsAndSections;
