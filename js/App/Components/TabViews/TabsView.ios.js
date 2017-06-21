@@ -35,24 +35,17 @@ import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
 
 type Props = {
-  tab: string,
-  userIcon: boolean,
-  userProfile: Object,
-  dashboard: Object,
-  onTabSelect: string => void,
-  onToggleEditMode: string => void,
-  dispatch: Function,
+	tab: string,
+	userIcon: boolean,
+	userProfile: Object,
+	dashboard: Object,
+	onTabSelect: (string) => void,
+	onToggleEditMode: (string) => void,
+	dispatch: Function,
 };
 
 class TabsView extends View {
 	props: Props;
-	eventEmitter: Object;
-	onTabSelect: string => void;
-	onDashboardTabSelect: () => void;
-	onDevicesTabSelect: () => void;
-	onSensorsTabSelect: () => void;
-	onSchedulerTabSelect: () => void;
-	onGatewaysTabSelect: () => void;
 	toggleSensorTabEditMode: () => void;
 	toggleDevicesTabEditMode: () => void;
 
