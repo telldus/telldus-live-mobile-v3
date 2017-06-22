@@ -34,6 +34,11 @@ import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
 
+import { Image, Dimensions, TouchableOpacity } from 'react-native';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
+import { StackNavigator } from 'react-navigation';
+import AddSchedule from 'AddSchedule';
+
 type Props = {
 	rowsAndSections: Object,
 	devices: Object,
@@ -43,9 +48,6 @@ type Props = {
 type State = {
 	dataSource: Object,
 };
-
-import { Image, Dimensions } from 'react-native';
-import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -60,7 +62,6 @@ class SchedulerTab extends View {
 
 	static navigationOptions = {
 		title: I18n.t('pages.scheduler'),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
 	};
 
 	constructor(props: Props) {
@@ -148,11 +149,7 @@ class SchedulerTab extends View {
 	}
 
 	handleAddingSchedule = () => {
-		//this.props.navigator.push({
-		//	title: 'Telldus',
-		//	component: AddSchedule.Action,
-		//	navigationBarHidden: false,
-		//});
+		this.props.navigation.navigate('Device');
 	};
 
 	render() {
@@ -164,9 +161,11 @@ class SchedulerTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					onRefresh={this.onRefresh}
 				/>
-				<View style={this.styles.addButton}>
-					<Image source={require('./img/iconPlus.png')} style={this.styles.iconPlus}/>
-				</View>
+				<TouchableOpacity onPress={this.handleAddingSchedule}>
+					<View style={this.styles.addButton}>
+						<Image source={require('./img/iconPlus.png')} style={this.styles.iconPlus}/>
+					</View>
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -235,4 +234,22 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);
+const Scheduler = StackNavigator(
+	{
+		Scheduler: {
+			screen: connect(mapStateToProps, mapDispatchToProps)(SchedulerTab)
+		},
+		Device: {
+			screen: AddSchedule.Device,
+		},
+	},
+	{
+		initialRouteName: 'Scheduler',
+		headerMode: 'none',
+		navigationOptions: {
+			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
+		},
+	}
+);
+
+module.exports = Scheduler;
