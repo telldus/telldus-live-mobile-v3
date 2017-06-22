@@ -49,7 +49,7 @@ export default function getTabBarIcon(focused, tintColor, sourceName) {
 	return (
 		<Image
 			source={focused ? icon.active : icon.inactive}
-			style={{ tintColor: focused ? tintColor : '' }}
+			style={{ tintColor }}
 		/>
 	);
 }
