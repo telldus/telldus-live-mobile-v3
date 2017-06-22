@@ -34,9 +34,10 @@ import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 type Props = {
-  children: Object,
-  rounded: number,
-  searchBar: ?Object,
+	children: Object,
+	rounded: number,
+	searchBar: ?Object,
+	rightButton: Object
 };
 
 export default class HeaderComponent extends Base {
