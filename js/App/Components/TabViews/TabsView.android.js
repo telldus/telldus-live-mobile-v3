@@ -33,19 +33,12 @@ import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Theme from 'Theme';
 
-import DashboardTab from './DashboardTab';
-import DevicesTab from './DevicesTab';
-import SchedulerTab from './SchedulerTab';
-import SensorsTab from './SensorsTab';
 import { SettingsDetailModal } from 'DetailViews';
-import { TabViewAnimated, TabBar, SceneMap } from 'react-native-tab-view';
 
 import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
-
-const TabHeader = ({ fontSize, ...props }) => {
-	return <TabBar {...props} style={{ backgroundColor: Theme.Core.brandPrimary }} labelStyle={{ fontSize }}/>;
-};
+import TabViews from 'TabViews';
+import { TabNavigator } from 'react-navigation';
 
 const Gateway = ({ name, online, websocketOnline }) => {
 	let locationSrc;
@@ -124,19 +117,13 @@ type Props = {
 
 type State = {
 	settings: boolean,
-	index: number,
-	routes: Array<Object>,
+	starIcon: Object,
 };
 
 class TabsView extends View {
 	props: Props;
 	state: State;
 
-	deviceWidth: number;
-	deviceHeight: number;
-	renderScene: Object;
-	renderHeader: (Object) => Object;
-	renderContent: () => Object;
 	renderNavigationView: () => Object;
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
@@ -144,45 +131,15 @@ class TabsView extends View {
 	onRequestChangeTab: (number) => void;
 	toggleEditMode: (number) => void;
 	openDrawer: () => void;
+	onNavigationStateChange: (Object, Object) => void;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			settings: false,
-			index: 0,
-			routes: [
-				{
-					key: '1',
-					title: 'Dashboard',
-				},
-				{
-					key: '2',
-					title: 'Devices',
-				},
-				{
-					key: '3',
-					title: 'Sensors',
-				},
-				{
-					key: '4',
-					title: 'Scheduler',
-				},
-			],
 		};
 
-		this.deviceWidth = Dimensions.get('window').width;
-		this.deviceHeight = Dimensions.get('window').height;
-
-		this.renderScene = SceneMap({
-			'1': () => <DashboardTab />,
-			'2': () => <DevicesTab />,
-			'3': () => <SensorsTab />,
-			'4': () => <SchedulerTab />,
-		});
-
-		this.renderHeader = this.renderHeader.bind(this);
-		this.renderContent = this.renderContent.bind(this);
 		this.renderNavigationView = this.renderNavigationView.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
 		this.onCloseSetting = this.onCloseSetting.bind(this);
@@ -190,22 +147,14 @@ class TabsView extends View {
 		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
 		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.openDrawer = this.openDrawer.bind(this);
+		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
 
 	componentDidMount() {
 		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
-
-		if (this.props.dashboard.deviceIds.length > 0 || this.props.dashboard.sensorIds.length > 0) {
-			if (this.props.tab !== 'dashboardTab') {
-				this.onRequestChangeTab(0);
-			}
-		} else {
-			this.onRequestChangeTab(1);
-		}
 	}
 
 	onTabSelect(tab) {
-
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
 			if (this.refs.drawer) {
@@ -228,22 +177,13 @@ class TabsView extends View {
 		this.onTabSelect(tabNames[index]);
 	}
 
+	onNavigationStateChange(prevState, currentState) {
+		this.onRequestChangeTab(currentState.index);
+	}
+
 	openDrawer() {
 		this.refs.drawer.openDrawer();
 		this.props.syncGateways();
-	}
-
-	renderHeader(props) {
-		return <TabHeader {...props} fontSize={this.deviceWidth / 35}/>;
-	}
-
-	renderContent() {
-		return <TabViewAnimated style={{ flex: 1 }}
-		                        navigationState={this.state}
-		                        renderScene={this.renderScene}
-		                        renderHeader={this.renderHeader}
-		                        onRequestChangeTab={this.onRequestChangeTab}
-		/>;
 	}
 
 	renderNavigationView() {
@@ -259,6 +199,7 @@ class TabsView extends View {
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
+		console.log("STAR", this.state.starIcon);
 
 		// TODO: Refactor: Split this code to smaller components
 		return (
@@ -313,10 +254,11 @@ class TabsView extends View {
 					}
 
 					<View>
-						{this.renderContent()}
+						<Tabs onNavigationStateChange={this.onNavigationStateChange}/>
 						{
-							this.state.settings ? <SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
-								: null
+							this.state.settings ? (
+								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
+							) : null
 						}
 					</View>
 				</View>
@@ -412,5 +354,44 @@ function mapDispatchToProps(dispatch) {
 		dispatch,
 	};
 }
+
+const Tabs = TabNavigator(
+	{
+		Dashboard: {
+			screen: TabViews.Dashboard,
+		},
+		Devices: {
+			screen: TabViews.Devices,
+		},
+		Sensors: {
+			screen: TabViews.Sensors,
+		},
+		Scheduler: {
+			screen: TabViews.Scheduler,
+		},
+		Gateways: {
+			screen: TabViews.Gateways,
+		},
+	},
+	{
+		initialRouteName: 'Dashboard',
+		swipeEnabled: true,
+		lazy: true,
+		animationEnabled: true,
+		tabBarOptions: {
+			activeTintColor: '#fff',
+			indicatorStyle: {
+				backgroundColor: '#fff',
+			},
+			scrollEnabled: true,
+			labelStyle: {
+				fontSize: Dimensions.get('window').width / 35,
+			},
+			style: {
+				backgroundColor: Theme.Core.brandPrimary,
+			},
+		},
+	}
+);
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);

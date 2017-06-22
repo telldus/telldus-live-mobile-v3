@@ -26,9 +26,8 @@ import { createSelector } from 'reselect';
 import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
-import { Text, List, ListDataSource, View, I18n, Header } from 'BaseComponents';
+import { Text, List, ListDataSource, View, I18n } from 'BaseComponents';
 import Platform from 'Platform';
-import { syncWithServer, switchTab } from 'Actions';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
 
@@ -42,7 +41,6 @@ import {
 	ToggleDashboardTile,
 	SensorDashboardTile,
 } from 'TabViews_SubViews';
-import { SettingsDetailModal } from 'DetailViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
@@ -87,12 +85,10 @@ class DashboardTab extends View {
 	onSlidingStart: (name: string, value: number) => void;
 	onSlidingComplete: () => void;
 	onValueChange: (number) => void;
-	onOpenSetting: () => void;
 	startSensorTimer: () => void;
 	stopSensorTimer: () => void;
 	changeDisplayType: () => void;
 	onRefresh: () => void;
-	onCloseSetting: () => void;
 
 	static navigationOptions = {
 		title: I18n.t('pages.dashboard'),
@@ -115,23 +111,12 @@ class DashboardTab extends View {
 
 		this.tab = 'dashboardTab';
 
-		this.rightButton = {
-			icon: {
-				name: 'gear',
-				size: 22,
-				color: '#fff',
-			},
-			onPress: this.onOpenSetting.bind(this),
-		};
-
 		this._onLayout = this._onLayout.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
-		this.onOpenSetting = this.onOpenSetting.bind(this);
 		this.startSensorTimer = this.startSensorTimer.bind(this);
 		this.stopSensorTimer = this.stopSensorTimer.bind(this);
 		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
-		this.onCloseSetting = this.onCloseSetting.bind(this);
 		this.mixins = [Subscribable.Mixin];
 	}
 
@@ -166,15 +151,10 @@ class DashboardTab extends View {
 	}
 
 	componentDidMount() {
-		if (Platform.OS === 'ios') {
-			//this.addListenerOn(this.props.events, 'onSetting', this.onOpenSetting);
+		if (!this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0) {
+			this.props.navigation.navigate('Devices');
 		}
 
-		if (!this.props.dashboard.deviceIds.length > 0 || !this.props.dashboard.sensorIds.length > 0) {
-			this.props.navigation.navigate('Scheduler');
-		}
-
-		this.props.onTabSelect('dashboardTab');
 		this.startSensorTimer();
 	}
 
@@ -217,19 +197,10 @@ class DashboardTab extends View {
 		return tileWidth;
 	}
 
-	onOpenSetting() {
-		this.setState({ settings: true });
-	}
-
-	onCloseSetting() {
-		this.setState({ settings: false });
-	}
-
 	render() {
 		// add to List props: enableEmptySections={true}, to surpress warning
 		return (
 			<View onLayout={this._onLayout}>
-				<Header rightButton={this.rightButton}/>
 				<List
 					ref="list"
 					contentContainerStyle={{
@@ -241,9 +212,6 @@ class DashboardTab extends View {
 					pageSize={100}
 					onRefresh={this.onRefresh}
 				/>
-				{
-					this.state.settings ? <SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/> : null
-				}
 			</View>
 		);
 	}
@@ -344,10 +312,6 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTabSelect: (tab) => {
-			dispatch(syncWithServer(tab));
-			dispatch(switchTab(tab));
-		},
 		onChangeDisplayType: () => dispatch(changeSensorDisplayType()),
 		dispatch,
 	};

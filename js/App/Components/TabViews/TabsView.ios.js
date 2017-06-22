@@ -26,13 +26,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, View } from 'BaseComponents';
+import { Icon, View, Header } from 'BaseComponents';
 
-import { toggleEditMode } from 'Actions';
+import { toggleEditMode, syncWithServer, switchTab } from 'Actions';
 import TabViews from 'TabViews';
 
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
+import { SettingsDetailModal } from 'DetailViews';
 
 type Props = {
 	tab: string,
@@ -44,34 +45,100 @@ type Props = {
 	dispatch: Function,
 };
 
+type State = {
+	index: number,
+	settings: boolean,
+};
+
 class TabsView extends View {
 	props: Props;
+	state: State;
+
 	toggleSensorTabEditMode: () => void;
 	toggleDevicesTabEditMode: () => void;
+	onNavigationStateChange: (Object, Object) => void;
+	onOpenSetting: () => void;
+	onCloseSetting: () => void;
 
 	constructor(props: Props) {
 		super(props);
-		this.toggleSensorTabEditMode = this.toggleSensorTabEditMode.bind(this);
-		this.toggleDevicesTabEditMode = this.toggleDevicesTabEditMode.bind(this);
+
+		this.state = {
+			index: 0,
+			settings: false,
+		};
+
+		this.tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab', 'gatewaysTab'];
+
+		this.settingsButton = {
+			icon: {
+				name: 'gear',
+				size: 22,
+				color: '#fff',
+			},
+			onPress: this.onOpenSetting.bind(this),
+		};
+
+		this.starButton = {
+			icon: {
+				name: 'star',
+				size: 22,
+				color: '#fff',
+			},
+			onPress: this.onToggleEditMode.bind(this),
+		};
+
+		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+		this.onCloseSetting = this.onCloseSetting.bind(this);
 	}
 
-	componentDidMount() {
-		// TODO: move to the device component
-		//Icon.getImageSource('star', 22, 'yellow').then((source) => this.setState({ starIcon: source }));
+	onTabSelect(tab) {
+		this.props.onTabSelect(tab);
+	}
+
+	onNavigationStateChange(prevState, currentState) {
+		const index = currentState.index;
+		this.onTabSelect(this.tabNames[index]);
+		this.setState({ index });
+	}
+
+	onOpenSetting() {
+		this.setState({ settings: true });
+	}
+
+	onCloseSetting() {
+		this.setState({ settings: false });
+	}
+
+	onToggleEditMode() {
+		const tab = this.tabNames[this.state.index];
+		this.props.onToggleEditMode(tab);
 	}
 
 	render() {
+		const { index } = this.state;
+
+		let rightButton;
+
+		if (index === 0) {
+			rightButton = this.settingsButton;
+		} else if (index === 1 || index === 2) {
+			rightButton = this.starButton;
+		} else {
+			rightButton = null;
+		}
+
 		return (
-			<Tabs/>
+			<View>
+				<Header rightButton={rightButton}/>
+				<Tabs onNavigationStateChange={this.onNavigationStateChange}/>
+				{
+					this.state.settings ? (
+						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
+					) : null
+				}
+			</View>
 		);
-	}
-
-	toggleSensorTabEditMode() {
-		this.props.onToggleEditMode('sensorsTab');
-	}
-
-	toggleDevicesTabEditMode() {
-		this.props.onToggleEditMode('devicesTab');
 	}
 }
 
@@ -85,6 +152,10 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
 	return {
+		onTabSelect: (tab) => {
+			dispatch(syncWithServer(tab));
+			dispatch(switchTab(tab));
+		},
 		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
 		dispatch,
 	};

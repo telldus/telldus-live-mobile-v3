@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { Image, List, ListDataSource, ListItem, Text, View, I18n, Header } from 'BaseComponents';
+import { Image, List, ListDataSource, ListItem, Text, View, I18n } from 'BaseComponents';
 import { getGateways } from 'Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
@@ -119,7 +119,6 @@ class GatewaysTab extends View {
 	render() {
 		return (
 			<View>
-				<Header/>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}

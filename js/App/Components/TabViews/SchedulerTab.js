@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { List, ListDataSource, View, Text, I18n, Header } from 'BaseComponents';
+import { List, ListDataSource, View, Text, I18n } from 'BaseComponents';
 import { JobRow } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 import Theme from 'Theme';
@@ -45,7 +45,6 @@ type State = {
 };
 
 import { Image, Dimensions } from 'react-native';
-import { syncWithServer, switchTab } from 'Actions';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -132,10 +131,6 @@ class SchedulerTab extends View {
 		});
 	}
 
-	componentDidMount() {
-		this.props.onTabSelect('schedulerTab');
-	}
-
 	onRefresh() {
 		this.props.dispatch(getJobs());
 	}
@@ -163,7 +158,6 @@ class SchedulerTab extends View {
 	render() {
 		return (
 			<View style={this.styles.container}>
-				<Header/>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
@@ -237,10 +231,6 @@ function mapStateToProps(store) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTabSelect: (tab) => {
-			dispatch(syncWithServer(tab));
-			dispatch(switchTab(tab));
-		},
 		dispatch,
 	};
 }

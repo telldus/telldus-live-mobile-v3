@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { List, ListDataSource, View, I18n, Header } from 'BaseComponents';
+import { List, ListDataSource, View, I18n } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
@@ -107,7 +107,6 @@ class SensorsTab extends View {
 	render() {
 		return (
 			<View>
-				<Header/>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
