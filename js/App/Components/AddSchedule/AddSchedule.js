@@ -25,7 +25,46 @@ import React from 'react';
 import { TouchableOpacity, Image, Dimensions } from 'react-native';
 import { View, Text } from 'BaseComponents';
 
-class HeaderImage extends View {
+import Device from './Device';
+import Action from './Action';
+import Time from './Time';
+import Days from './Days';
+import Summary from './Summary';
+
+const routes = [
+	{
+		name: 'Device',
+		h1: '1. Device',
+		h2: 'Choose a device',
+		component: <Device/>,
+	},
+	{
+		name: 'Action',
+		h1: '2. Action',
+		h2: 'Choose an action to execute',
+		component: <Action/>,
+	},
+	{
+		name: 'Time',
+		h1: '3. Time',
+		h2: 'Choose a time for the action',
+		component: <Time/>,
+	},
+	{
+		name: 'Days',
+		h1: '4. Days',
+		h2: 'Choose days for event repeating',
+		component: <Days/>,
+	},
+	{
+		name: 'Summary',
+		h1: '5. Summary',
+		h2: 'Please confirm the schedule',
+		component: <Summary/>,
+	},
+];
+
+class AddSchedule extends View {
 
 	constructor(props) {
 		super(props);
@@ -82,41 +121,50 @@ class HeaderImage extends View {
 	}
 
 	goBack = () => {
-		this.props.goBack();
+		this.props.navigation.goBack();
+	};
+
+	goNext = () => {
+		const nextIndex = this.props.index + 1;
+		const nextRoute = (nextIndex < routes.length) ? routes[nextIndex].name : 'Scheduler';
+		this.props.navigation.navigate(nextRoute);
 	};
 
 	render() {
-		const { h1, h2 } = this.props;
 		const { bgImage, backButton, header } = this.styles;
+		const { index } = this.props;
 
 		return (
-			<Image
-				source={require('./img/add-schedule-bg.png')}
-				resizeMode="contain"
-				style={bgImage}
-			>
-				<TouchableOpacity onPress={this.goBack} style={backButton.container}>
-					<View style={backButton.wrapper}>
-						<Image
-							source={require('./img/keyboard-left-arrow-button.png')}
-							style={backButton.image}
-						/>
-						<Text style={backButton.text}>
-							Back
+			<View style={{ flex: 1 }}>
+				<Image
+					source={require('./img/add-schedule-bg.png')}
+					resizeMode="contain"
+					style={bgImage}
+				>
+					<TouchableOpacity onPress={this.goBack} style={backButton.container}>
+						<View style={backButton.wrapper}>
+							<Image
+								source={require('./img/keyboard-left-arrow-button.png')}
+								style={backButton.image}
+							/>
+							<Text style={backButton.text}>
+								Back
+							</Text>
+						</View>
+					</TouchableOpacity>
+					<View style={header.container}>
+						<Text style={header.h1}>
+							{routes[index].h1}
+						</Text>
+						<Text style={header.h2}>
+							{routes[index].h2}
 						</Text>
 					</View>
-				</TouchableOpacity>
-				<View style={header.container}>
-					<Text style={header.h1}>
-						{h1}
-					</Text>
-					<Text style={header.h2}>
-						{h2}
-					</Text>
-				</View>
-			</Image>
+				</Image>
+				{React.cloneElement(routes[index].component, { goNext: this.goNext })}
+			</View>
 		);
 	}
 }
 
-module.exports = HeaderImage;
+module.exports = AddSchedule;

@@ -81,6 +81,10 @@ const messages = defineMessages({
 		defaultMessage: 'Wednesday',
 	},
 });
+import { Image, Dimensions, TouchableOpacity } from 'react-native';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
+import { StackNavigator } from 'react-navigation';
+import AddSchedule from '../AddSchedule/AddSchedule';
 
 type Props = {
 	rowsAndSections: Object,
@@ -93,7 +97,6 @@ type State = {
 	dataSource: Object,
 };
 
-import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 class SchedulerTab extends View {
 
@@ -229,4 +232,35 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);
+const Scheduler = StackNavigator(
+	{
+		Scheduler: {
+			screen: connect(mapStateToProps, mapDispatchToProps)(SchedulerTab)
+		},
+		Device: {
+			screen: ({ navigation }) => <AddSchedule index={0} navigation={navigation}/>,
+		},
+		Action: {
+			screen: ({ navigation }) => <AddSchedule index={1} navigation={navigation}/>,
+		},
+		Time: {
+			screen: ({ navigation }) => <AddSchedule index={2} navigation={navigation}/>,
+		},
+		Days: {
+			screen: ({ navigation }) => <AddSchedule index={3} navigation={navigation}/>,
+		},
+		Summary: {
+			screen: ({ navigation }) => <AddSchedule index={4} navigation={navigation}/>,
+		},
+	},
+	{
+		initialRouteName: 'Scheduler',
+		headerMode: 'none',
+		navigationOptions: {
+			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
+			gesturesEnabled: false,
+		},
+	}
+);
+
+module.exports = Scheduler;

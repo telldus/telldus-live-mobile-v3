@@ -22,8 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { View, Text } from 'BaseComponents';
-import HeaderImage from './HeaderImage';
+import { View } from 'BaseComponents';
 import { Button } from 'react-native';
 
 class Time extends View {
@@ -34,14 +33,7 @@ class Time extends View {
 
 	render() {
 		return (
-			<View style={{ flex: 1 }}>
-				<HeaderImage
-					h1="3. Time"
-					h2="Choose a time for the action"
-					goBack={this.props.navigation.goBack}
-				/>
-				<Button title="Days" onPress={() => this.props.navigation.navigate('Days')}/>
-			</View>
+			<Button title="Days" onPress={this.props.goNext}/>
 		);
 	}
 }

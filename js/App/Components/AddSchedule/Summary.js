@@ -22,10 +22,8 @@
 'use strict';
 
 import React from 'react';
-import { View, Text } from 'BaseComponents';
-import HeaderImage from './HeaderImage';
+import { View } from 'BaseComponents';
 import { Button } from 'react-native';
-import { NavigationActions } from 'react-navigation';
 
 class Summary extends View {
 
@@ -35,14 +33,7 @@ class Summary extends View {
 
 	render() {
 		return (
-			<View style={{ flex: 1 }}>
-				<HeaderImage
-					h1="5. Summary"
-					h2="Please confirm the schedule"
-					goBack={this.props.navigation.goBack}
-				/>
-				<Button title="Finish" onPress={() => this.props.navigation.navigate('Scheduler')}/>
-			</View>
+			<Button title="Finish" onPress={this.props.goNext}/>
 		);
 	}
 }
