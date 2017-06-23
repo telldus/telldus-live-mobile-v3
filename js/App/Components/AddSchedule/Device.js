@@ -22,14 +22,67 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Image, Dimensions } from 'react-native';
 import { View, Text } from 'BaseComponents';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 class Device extends View {
 
 	constructor(props) {
 		super(props);
+
+		this.deviceWidth = Dimensions.get('window').width;
+
+		// TODO: font-family
+		this.styles = {
+			container: {
+				flex: 1,
+				position: 'relative',
+			},
+			bgImage: {
+				height: this.deviceWidth * 0.329333333,
+				width: this.deviceWidth,
+			},
+			backButton: {
+				container: {
+					width: 50,
+					height: this.deviceWidth * 0.036,
+					position: 'absolute',
+					top: this.deviceWidth * 0.037333333,
+					left: this.deviceWidth * 0.026666667,
+				},
+				wrapper: {
+					flexDirection: 'row',
+					alignItems: 'center',
+				},
+				image: {
+					width: this.deviceWidth * 0.022666667,
+					height: this.deviceWidth * 0.036,
+				},
+				text: {
+					color: '#fff',
+					marginLeft: this.deviceWidth * 0.026666667,
+					fontSize: this.deviceWidth * 0.037333333,
+				},
+			},
+			header: {
+				container: {
+					position: 'absolute',
+					right: this.deviceWidth * 0.124,
+					top: this.deviceWidth * 0.088,
+					flex: 1,
+					alignItems: 'flex-end',
+				},
+				h1: {
+					color: '#fff',
+					fontSize: this.deviceWidth * 0.085333333,
+					marginRight: this.deviceWidth * 0.008,
+				},
+				h2: {
+					color: '#fff',
+					fontSize: this.deviceWidth * 0.053333333,
+				},
+			},
+		};
 	}
 
 	goBack = () => {
@@ -38,20 +91,31 @@ class Device extends View {
 
 	render() {
 		return (
-			<View style={{ flex: 1 }}>
-				<TouchableOpacity onPress={this.goBack}>
-					<View
-						style={{
-							width: 50,
-							height: 22,
-							flexDirection: 'row',
-							alignItems: 'center',
-						}}
-					>
-						<Icon name="chevron-left" size={22} color="#000"/>
-						<Text>Back</Text>
+			<View style={this.styles.container}>
+				<Image
+					source={require('./img/add-schedule-bg.png')}
+					resizeMode="contain"
+					style={this.styles.bgImage}
+				/>
+				<TouchableOpacity onPress={this.goBack} style={this.styles.backButton.container}>
+					<View style={this.styles.backButton.wrapper}>
+						<Image
+							source={require('./img/keyboard-left-arrow-button.png')}
+							style={this.styles.backButton.image}
+						/>
+						<Text style={this.styles.backButton.text}>
+							Back
+						</Text>
 					</View>
 				</TouchableOpacity>
+				<View style={this.styles.header.container}>
+					<Text style={this.styles.header.h1}>
+						1. Device
+					</Text>
+					<Text style={this.styles.header.h2}>
+						Choose a device
+					</Text>
+				</View>
 			</View>
 		);
 	}
