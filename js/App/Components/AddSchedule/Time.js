@@ -15,24 +15,35 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule AddSchedule
  */
 
 // @flow
 
 'use strict';
 
-import Device from './Device';
-import Action from './Action';
-import Time from './Time';
-import Days from './Days';
-import Summary from './Summary';
+import React from 'react';
+import { View, Text } from 'BaseComponents';
+import HeaderImage from './HeaderImage';
+import { Button } from 'react-native';
 
-module.exports = {
-	Device,
-	Action,
-	Time,
-	Days,
-	Summary,
-};
+class Time extends View {
+
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		return (
+			<View style={{ flex: 1 }}>
+				<HeaderImage
+					h1="3. Time"
+					h2="Choose a time for the action"
+					goBack={this.props.navigation.goBack}
+				/>
+				<Button title="Days" onPress={() => this.props.navigation.navigate('Days')}/>
+			</View>
+		);
+	}
+}
+
+module.exports = Time;
