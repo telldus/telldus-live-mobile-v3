@@ -64,7 +64,17 @@ const routes = [
 	},
 ];
 
+type Props = {
+	index: number,
+	navigation: Object,
+};
+
 class AddSchedule extends View {
+
+	props: Props;
+
+	goBack: () => void;
+	goNext: () => void;
 
 	constructor(props) {
 		super(props);
@@ -166,5 +176,10 @@ class AddSchedule extends View {
 		);
 	}
 }
+
+AddSchedule.propTypes = {
+	index: React.PropTypes.number.isRequired,
+	navigation: React.PropTypes.object.isRequired,
+};
 
 module.exports = AddSchedule;
