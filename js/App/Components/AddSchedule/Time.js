@@ -25,7 +25,13 @@ import React from 'react';
 import { View } from 'BaseComponents';
 import { Button } from 'react-native';
 
+type Props = {
+	goNext: () => void,
+};
+
 class Time extends View {
+
+	props: Props;
 
 	constructor(props) {
 		super(props);
@@ -37,5 +43,9 @@ class Time extends View {
 		);
 	}
 }
+
+Time.propTypes = {
+	goNext: React.PropTypes.func.isRequired,
+};
 
 module.exports = Time;
