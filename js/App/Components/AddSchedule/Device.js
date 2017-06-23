@@ -22,8 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { View, Text } from 'BaseComponents';
-import HeaderImage from './HeaderImage';
+import { View } from 'BaseComponents';
 import { Button } from 'react-native';
 
 class Device extends View {
@@ -34,14 +33,7 @@ class Device extends View {
 
 	render() {
 		return (
-			<View style={{ flex: 1 }}>
-				<HeaderImage
-					h1="1. Device"
-					h2="Choose a device"
-					goBack={this.props.navigation.goBack}
-				/>
-				<Button title="Action" onPress={() => this.props.navigation.navigate('Action')}/>
-			</View>
+			<Button title="Action" onPress={this.props.goNext}/>
 		);
 	}
 }

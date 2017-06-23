@@ -37,7 +37,7 @@ import { parseJobsForListView } from 'Reducers_Jobs';
 import { Image, Dimensions, TouchableOpacity } from 'react-native';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import { StackNavigator } from 'react-navigation';
-import AddSchedule from 'AddSchedule';
+import AddSchedule from '../AddSchedule/AddSchedule';
 
 type Props = {
 	rowsAndSections: Object,
@@ -240,19 +240,19 @@ const Scheduler = StackNavigator(
 			screen: connect(mapStateToProps, mapDispatchToProps)(SchedulerTab)
 		},
 		Device: {
-			screen: AddSchedule.Device,
+			screen: ({ navigation }) => <AddSchedule index={0} navigation={navigation}/>,
 		},
 		Action: {
-			screen: AddSchedule.Action,
+			screen: ({ navigation }) => <AddSchedule index={1} navigation={navigation}/>,
 		},
 		Time: {
-			screen: AddSchedule.Time,
+			screen: ({ navigation }) => <AddSchedule index={2} navigation={navigation}/>,
 		},
 		Days: {
-			screen: AddSchedule.Days,
+			screen: ({ navigation }) => <AddSchedule index={3} navigation={navigation}/>,
 		},
 		Summary: {
-			screen: AddSchedule.Summary,
+			screen: ({ navigation }) => <AddSchedule index={4} navigation={navigation}/>,
 		},
 	},
 	{
