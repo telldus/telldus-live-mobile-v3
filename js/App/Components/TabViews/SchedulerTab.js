@@ -242,12 +242,25 @@ const Scheduler = StackNavigator(
 		Device: {
 			screen: AddSchedule.Device,
 		},
+		Action: {
+			screen: AddSchedule.Action,
+		},
+		Time: {
+			screen: AddSchedule.Time,
+		},
+		Days: {
+			screen: AddSchedule.Days,
+		},
+		Summary: {
+			screen: AddSchedule.Summary,
+		},
 	},
 	{
 		initialRouteName: 'Scheduler',
 		headerMode: 'none',
 		navigationOptions: {
 			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
+			gesturesEnabled: false,
 		},
 	}
 );
