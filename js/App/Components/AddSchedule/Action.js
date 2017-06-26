@@ -45,7 +45,7 @@ class Action extends View {
 }
 
 Action.propTypes = {
-	goNext: React.PropTypes.func.isRequired,
+	goNext: React.PropTypes.func,
 };
 
 module.exports = Action;
