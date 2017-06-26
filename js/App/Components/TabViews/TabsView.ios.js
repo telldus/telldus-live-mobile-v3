@@ -185,7 +185,7 @@ const Tabs = TabNavigator(
 		initialRouteName: 'Dashboard',
 		swipeEnabled: true,
 		lazy: true,
-		animationEnabled: true,
+		animationEnabled: false,
 		tabBarOptions: {
 			activeTintColor: '#e26901',
 		},
