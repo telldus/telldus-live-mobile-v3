@@ -90,13 +90,14 @@ class AddSchedule extends View {
 			},
 			backButton: {
 				container: {
-					width: 50,
-					height: this.deviceWidth * 0.036,
+					width: this.deviceWidth * 0.130666667 + 3,
+					height: this.deviceWidth * 0.036 + 3,
 					position: 'absolute',
 					top: this.deviceWidth * 0.037333333,
 					left: this.deviceWidth * 0.026666667,
 				},
 				wrapper: {
+					flex: 1,
 					flexDirection: 'row',
 					alignItems: 'center',
 				},
