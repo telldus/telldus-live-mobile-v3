@@ -119,6 +119,52 @@ class SchedulerTab extends View {
 			}).cloneWithRowsAndSections(sections, sectionIds),
 		};
 
+		this.windowHeight = Dimensions.get('window').height;
+		this.windowWidth = Dimensions.get('window').width;
+		this.addButtonSize = this.windowWidth * 0.134666667;
+		this.addButtonOffset = this.windowWidth * 0.034666667;
+		this.addButtonTextSize = this.windowWidth * 0.056;
+
+		const centerContent = {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+		};
+
+		this.styles = {
+			centerContent,
+			container: {
+				flex: 1,
+			},
+			header: {
+				...centerContent,
+				paddingTop: 20,
+				backgroundColor: Theme.Core.brandPrimary,
+				maxHeight: this.windowHeight * 0.095952024,
+			},
+			addButton: {
+				backgroundColor: Theme.Core.brandSecondary,
+				borderRadius: 50,
+				position: 'absolute',
+				height: this.addButtonSize,
+				width: this.addButtonSize,
+				bottom: this.addButtonOffset,
+				right: this.addButtonOffset,
+				shadowColor: '#000',
+				shadowOpacity: 0.5,
+				shadowRadius: 2,
+				shadowOffset: {
+					height: 2,
+					width: 0,
+				},
+				elevation: 3,
+			},
+			iconPlus: {
+				width: this.addButtonTextSize,
+				height: this.addButtonTextSize,
+			},
+		};
+
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
@@ -157,6 +203,11 @@ class SchedulerTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					onRefresh={this.onRefresh}
 				/>
+				<TouchableOpacity style={this.styles.addButton} onPress={this.handleAddingSchedule}>
+					<View style={this.styles.centerContent}>
+						<Image source={require('./img/iconPlus.png')} style={this.styles.iconPlus}/>
+					</View>
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -258,7 +309,7 @@ const Scheduler = StackNavigator(
 		headerMode: 'none',
 		navigationOptions: {
 			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
-			gesturesEnabled: false,
+			//gesturesEnabled: false,
 		},
 	}
 );
