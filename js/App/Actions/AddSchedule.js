@@ -26,12 +26,17 @@
 import type { Action } from './Types';
 
 const selectDevice = (device): Action => ({
-	type: 'AS_SELECT_DEVICE',
+	type: 'ADD_SCHEDULE_SELECT_DEVICE',
 	payload: {
 		device,
 	},
 });
 
+const reset = (): Action => ({
+	type: 'ADD_SCHEDULE_RESET',
+});
+
 module.exports = {
 	selectDevice,
+	reset,
 };
