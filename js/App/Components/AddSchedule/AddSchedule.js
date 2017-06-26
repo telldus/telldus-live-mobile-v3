@@ -162,6 +162,7 @@ class AddSchedule extends View {
 		if (nextIndex < routes.length) {
 			this.props.navigation.navigate(routes[nextIndex].name);
 		} else {
+			this.props.reset();
 			this.props.navigation.dispatch(NavigationActions.reset({
 				index: 0,
 				actions: [
