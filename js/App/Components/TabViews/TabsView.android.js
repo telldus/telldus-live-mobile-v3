@@ -199,7 +199,6 @@ class TabsView extends View {
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
-		console.log("STAR", this.state.starIcon);
 
 		// TODO: Refactor: Split this code to smaller components
 		return (

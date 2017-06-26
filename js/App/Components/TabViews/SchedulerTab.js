@@ -82,16 +82,21 @@ class SchedulerTab extends View {
 		this.addButtonOffset = this.windowWidth * 0.034666667;
 		this.addButtonTextSize = this.windowWidth * 0.056;
 
+		const centerContent = {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+		};
+
 		this.styles = {
+			centerContent,
 			container: {
 				flex: 1,
 			},
 			header: {
+				...centerContent,
 				paddingTop: 20,
 				backgroundColor: Theme.Core.brandPrimary,
-				flex: 1,
-				justifyContent: 'center',
-				alignItems: 'center',
 				maxHeight: this.windowHeight * 0.095952024,
 			},
 			addButton: {
@@ -109,9 +114,7 @@ class SchedulerTab extends View {
 					height: 2,
 					width: 0,
 				},
-				flex: 1,
-				alignItems: 'center',
-				justifyContent: 'center',
+				elevation: 3,
 			},
 			iconPlus: {
 				width: this.addButtonTextSize,
@@ -161,8 +164,8 @@ class SchedulerTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					onRefresh={this.onRefresh}
 				/>
-				<TouchableOpacity onPress={this.handleAddingSchedule}>
-					<View style={this.styles.addButton}>
+				<TouchableOpacity style={this.styles.addButton} onPress={this.handleAddingSchedule}>
+					<View style={this.styles.centerContent}>
 						<Image source={require('./img/iconPlus.png')} style={this.styles.iconPlus}/>
 					</View>
 				</TouchableOpacity>
@@ -260,7 +263,7 @@ const Scheduler = StackNavigator(
 		headerMode: 'none',
 		navigationOptions: {
 			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
-			gesturesEnabled: false,
+			//gesturesEnabled: false,
 		},
 	}
 );
