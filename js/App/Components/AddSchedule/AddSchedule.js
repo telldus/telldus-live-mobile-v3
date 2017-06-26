@@ -22,9 +22,11 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { TouchableOpacity, Image, Dimensions } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { View, Text } from 'BaseComponents';
+import { reset } from 'Actions_AddSchedule';
 
 import Device from './Device';
 import Action from './Action';
@@ -68,6 +70,8 @@ const routes = [
 type Props = {
 	index: number,
 	navigation: Object,
+	reset: Function,
+	addSchedule: Object,
 };
 
 class AddSchedule extends View {
@@ -133,6 +137,9 @@ class AddSchedule extends View {
 	}
 
 	goBack = () => {
+		if (this.props.index === 0) {
+			this.props.reset();
+		}
 		this.props.navigation.goBack();
 	};
 
@@ -193,4 +200,12 @@ AddSchedule.propTypes = {
 	navigation: React.PropTypes.object.isRequired,
 };
 
-module.exports = AddSchedule;
+const mapStateToProps = ({ addSchedule }) => ({
+	addSchedule,
+});
+
+const mapDispatchToProps = dispatch => ({
+	reset: () => dispatch(reset()),
+});
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(AddSchedule);

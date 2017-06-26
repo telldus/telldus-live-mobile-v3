@@ -16,39 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Reducers
+ * @providesModule Reducers_AddSchedule
  */
 
 // @flow
 
 'use strict';
 
-import { combineReducers } from 'redux';
+import type { Action } from 'Actions_Types';
 
-import Devices from './Devices';
-import Gateways from './Gateways';
-import Navigation from './Navigation';
-import Sensors from './Sensors';
-import User from './User';
-import Tabs from './Tabs';
-import Dashboard from './Dashboard';
-import Dimmer from './Dimmer';
-import Jobs from './Jobs';
-import LiveApi from './LiveApi';
-import Websockets from './Websockets';
-import AddSchedule from './AddSchedule';
+const initialState = {
+	selectedDevice: {},
+};
 
-module.exports = combineReducers({
-	devices: Devices,
-	gateways: Gateways,
-	navigation: Navigation,
-	sensors: Sensors,
-	user: User,
-	tabs: Tabs,
-	dashboard: Dashboard,
-	dimmer: Dimmer,
-	jobs: Jobs,
-	liveApi: LiveApi,
-	websockets: Websockets,
-	addSchedule: AddSchedule,
-});
+export default function addScheduleReducer(state = initialState, action) {
+	switch (action.type) {
+		case 'ADD_SCHEDULE_SELECT_DEVICE':
+			return {
+				...state,
+				selectedDevice: action.payload.device,
+			};
+
+		case 'ADD_SCHEDULE_RESET':
+			return initialState;
+
+		default:
+			return state;
+	}
+}
