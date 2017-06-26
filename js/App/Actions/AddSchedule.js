@@ -16,33 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions
+ * @providesModule Actions_AddSchedule
  */
 
 // @flow
 
 'use strict';
 
-import GatewayActions from './Gateways';
-import LoginActions from './Login';
-import NavigationActions from './Navigation';
-import SensorActions from './Sensors';
-import LiveApiActions from './LiveApi';
-import TabActions from './Tabs';
-import DashboardActions from './Dashboard';
-import JobActions from './Jobs';
-import AppStateActions from './AppState';
-import AddSchedule from './AddSchedule';
+import type { Action } from './Types';
+
+const selectDevice = (device): Action => ({
+	type: 'AS_SELECT_DEVICE',
+	payload: {
+		device,
+	},
+});
 
 module.exports = {
-	...GatewayActions,
-	...LoginActions,
-	...NavigationActions,
-	...SensorActions,
-	...LiveApiActions,
-	...TabActions,
-	...DashboardActions,
-	...JobActions,
-	...AppStateActions,
-	...AddSchedule,
+	selectDevice,
 };

@@ -22,24 +22,78 @@
 'use strict';
 
 import React from 'react';
-import { View } from 'BaseComponents';
-import { Button } from 'react-native';
+import { connect } from 'react-redux';
+import { View, ListDataSource, List } from 'BaseComponents';
+import { Dimensions } from 'react-native';
+import { getDevices } from 'Actions_Devices';
+import { selectDevice } from 'Actions_AddSchedule';
+import DeviceRow from './SubViews/DeviceRow';
 
 type Props = {
 	goNext: () => void,
+	devices: Object,
+	getDevices: Function,
+	selectDevice: Function,
+};
+
+type State = {
+	dataSource: Object,
 };
 
 class Device extends View {
 
 	props: Props;
+	state: State;
+
+	onRefresh: () => void;
+	renderRow: (Object) => Object;
+	selectDevice: (Object) => void;
 
 	constructor(props) {
 		super(props);
+
+		this.deviceWidth = Dimensions.get('window').width;
+
+		this.styles = {
+			container: {
+				flex: 1,
+				paddingHorizontal: this.deviceWidth * 0.033333333,
+				paddingTop: this.deviceWidth * 0.042666667,
+			},
+		};
+
+		this.state = {
+			dataSource: new ListDataSource({
+				rowHasChanged: (r1, r2) => r1 !== r2,
+			}).cloneWithRows(this.props.devices.byId),
+		};
 	}
+
+	componentDidMount() {
+		this.props.getDevices();
+	}
+
+	onRefresh = () => {
+		this.props.getDevices();
+	};
+
+	selectDevice = device => {
+		this.props.selectDevice(device);
+	};
+
+	renderRow = row => {
+		return <DeviceRow row={row} selectDevice={this.selectDevice}/>
+	};
 
 	render() {
 		return (
-			<Button title="Action" onPress={this.props.goNext}/>
+			<View style={this.styles.container}>
+				<List
+					dataSource={this.state.dataSource}
+					renderRow={this.renderRow}
+					onRefresh={this.onRefresh}
+				/>
+			</View>
 		);
 	}
 }
@@ -48,4 +102,17 @@ Device.propTypes = {
 	goNext: React.PropTypes.func,
 };
 
-module.exports = Device;
+const mapStateToProps = ({ devices }) => (
+	{
+		devices,
+	}
+);
+
+const mapDispatchToProps = dispatch => (
+	{
+		getDevices: () => dispatch(getDevices()),
+		selectDevice: device => dispatch(selectDevice(device)),
+	}
+);
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Device);
