@@ -86,6 +86,8 @@ class AddSchedule extends View {
 
 		this.deviceWidth = Dimensions.get('window').width;
 
+		this.roundedInfoButtonSize = this.deviceWidth * 0.042666667;
+
 		// TODO: font-family
 		this.styles = {
 			bgImage: {
@@ -131,6 +133,17 @@ class AddSchedule extends View {
 				h2: {
 					color: '#fff',
 					fontSize: this.deviceWidth * 0.053333333,
+				},
+			},
+			roundedInfoButton: {
+				container: {
+					position: 'absolute',
+					right: this.deviceWidth * 0.045333333,
+					bottom: this.deviceWidth * 0.036,
+				},
+				icon: {
+					height: this.roundedInfoButtonSize,
+					width: this.roundedInfoButtonSize,
 				},
 			},
 		};
@@ -188,6 +201,14 @@ class AddSchedule extends View {
 							{routes[index].h2}
 						</Text>
 					</View>
+					{this.props.index > 0 && (
+						<TouchableOpacity style={this.styles.roundedInfoButton.container}>
+							<Image
+								source={require('./img/rounded-info-button.png')}
+								style={this.styles.roundedInfoButton.icon}
+							/>
+						</TouchableOpacity>
+					)}
 				</Image>
 				{React.cloneElement(routes[index].component, { goNext: this.goNext })}
 			</View>
