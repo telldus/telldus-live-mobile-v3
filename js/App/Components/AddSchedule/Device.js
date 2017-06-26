@@ -45,7 +45,7 @@ class Device extends View {
 }
 
 Device.propTypes = {
-	goNext: React.PropTypes.func.isRequired,
+	goNext: React.PropTypes.func,
 };
 
 module.exports = Device;

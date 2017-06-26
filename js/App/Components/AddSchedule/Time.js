@@ -45,7 +45,7 @@ class Time extends View {
 }
 
 Time.propTypes = {
-	goNext: React.PropTypes.func.isRequired,
+	goNext: React.PropTypes.func,
 };
 
 module.exports = Time;

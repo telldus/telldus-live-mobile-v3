@@ -45,7 +45,7 @@ class Summary extends View {
 }
 
 Summary.propTypes = {
-	goNext: React.PropTypes.func.isRequired,
+	goNext: React.PropTypes.func,
 };
 
 module.exports = Summary;

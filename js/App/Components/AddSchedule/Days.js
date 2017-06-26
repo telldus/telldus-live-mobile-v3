@@ -45,7 +45,7 @@ class Days extends View {
 }
 
 Days.propTypes = {
-	goNext: React.PropTypes.func.isRequired,
+	goNext: React.PropTypes.func,
 };
 
 module.exports = Days;
