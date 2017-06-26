@@ -70,6 +70,9 @@ export type Action =
 
 	| { type: 'REQUEST_TURNON', payload: Object }
 	| { type: 'REQUEST_TURNOFF', payload: Object }
+
+	| { type: 'ADD_SCHEDULE_SELECT_DEVICE', payload: Object }
+	| { type: 'ADD_SCHEDULE_RESET' }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
