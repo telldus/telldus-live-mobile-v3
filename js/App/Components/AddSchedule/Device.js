@@ -79,6 +79,7 @@ class Device extends View {
 
 	selectDevice = device => {
 		this.props.selectDevice(device);
+		this.props.goNext();
 	};
 
 	renderRow = row => {
