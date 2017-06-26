@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { TouchableOpacity, Image, Dimensions } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import { View, Text } from 'BaseComponents';
 
 import Device from './Device';
@@ -137,8 +138,17 @@ class AddSchedule extends View {
 
 	goNext = () => {
 		const nextIndex = this.props.index + 1;
-		const nextRoute = (nextIndex < routes.length) ? routes[nextIndex].name : 'Scheduler';
-		this.props.navigation.navigate(nextRoute);
+
+		if (nextIndex < routes.length) {
+			this.props.navigation.navigate(routes[nextIndex].name);
+		} else {
+			this.props.navigation.dispatch(NavigationActions.reset({
+				index: 0,
+				actions: [
+					NavigationActions.navigate({ routeName: 'Scheduler' }),
+				],
+			}));
+		}
 	};
 
 	render() {
