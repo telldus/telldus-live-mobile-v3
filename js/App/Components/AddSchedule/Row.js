@@ -59,9 +59,9 @@ class Row extends View {
 				height: this.deviceWidth * 0.209333333,
 				minHeight: this.deviceIconSize + 10,
 				marginBottom: 3,
-				elevation: 1,
+				elevation: 2,
 				shadowColor: '#000',
-				shadowRadius: 1,
+				shadowRadius: 2,
 				shadowOpacity: 0.23,
 				shadowOffset: {
 					width: 0,
