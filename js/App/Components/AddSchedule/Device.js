@@ -24,7 +24,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View, ListDataSource, List } from 'BaseComponents';
-import { Dimensions } from 'react-native';
 import { getDevices } from 'Actions_Devices';
 import { selectDevice } from 'Actions_AddSchedule';
 import Theme from 'Theme';
@@ -32,6 +31,7 @@ import Row from './Row';
 
 type Props = {
 	goNext: () => void,
+	padding: Number,
 	devices: Object,
 	getDevices: Function,
 	selectDevice: Function,
@@ -52,18 +52,6 @@ class Device extends View {
 
 	constructor(props) {
 		super(props);
-
-		this.deviceWidth = Dimensions.get('window').width;
-
-		this.padding = this.deviceWidth * 0.033333333;
-
-		this.styles = {
-			container: {
-				flex: 1,
-				paddingHorizontal: this.padding,
-				paddingTop: this.padding,
-			},
-		};
 
 		this.state = {
 			dataSource: new ListDataSource({
@@ -99,26 +87,25 @@ class Device extends View {
 			<Row
 				row={preparedRow}
 				select={this.selectDevice}
-				padding={this.padding}
+				padding={this.props.padding}
 			/>
 		);
 	};
 
 	render() {
 		return (
-			<View style={this.styles.container}>
-				<List
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					onRefresh={this.onRefresh}
-				/>
-			</View>
+			<List
+				dataSource={this.state.dataSource}
+				renderRow={this.renderRow}
+				onRefresh={this.onRefresh}
+			/>
 		);
 	}
 }
 
 Device.propTypes = {
 	goNext: React.PropTypes.func,
+	padding: React.PropTypes.number,
 };
 
 const mapStateToProps = ({ devices }) => (
