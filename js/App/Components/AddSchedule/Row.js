@@ -24,27 +24,29 @@
 import React from 'react';
 import { View, Text } from 'BaseComponents';
 import { Image, TouchableOpacity, Dimensions } from 'react-native';
-import Theme from 'Theme';
 
 type Props = {
 	row: Object,
-	selectDevice: (Object) => void;
+	padding: Number,
+	select: (Object) => void,
 };
 
-class DeviceRow extends View {
+class Row extends View {
 
 	props: Props;
 
-	selectDevice: () => void;
+	select: () => void;
 
 	constructor(props) {
 		super(props);
 
+		const { row, padding } = this.props;
+		const { textColor, bgColor } = row;
+
 		this.deviceWidth = Dimensions.get('window').width;
 
 		this.deviceIconSize = this.deviceWidth * 0.092;
-		this.paddingHorizontal = this.deviceWidth * 0.033333333;
-		this.rowWidth = this.deviceWidth - 2 * this.paddingHorizontal;
+		this.rowWidth = this.deviceWidth - 2 * padding;
 
 		const centerContent = {
 			alignItems: 'center',
@@ -54,27 +56,30 @@ class DeviceRow extends View {
 		this.styles = {
 			container: {
 				flex: 1,
-				flexDirection: 'row',
-				borderRadius: 2,
-				overflow: 'hidden',
 				height: this.deviceWidth * 0.209333333,
 				minHeight: this.deviceIconSize + 10,
-				marginBottom: 5,
-				elevation: 2,
+				marginBottom: 3,
+				elevation: 1,
 				shadowColor: '#000',
-				shadowRadius: 2,
+				shadowRadius: 1,
 				shadowOpacity: 0.23,
 				shadowOffset: {
 					width: 0,
 					height: 1,
 				},
 			},
+			wrapper: {
+				flex: 1,
+				flexDirection: 'row',
+				borderRadius: 2,
+				overflow: 'hidden',
+			},
 			icon: {
 				container: {
 					...centerContent,
 					minWidth: this.deviceIconSize,
 					width: this.rowWidth * 0.3,
-					backgroundColor: Theme.Core.brandPrimary,
+					backgroundColor: bgColor,
 					padding: 5,
 				},
 				image: {
@@ -94,7 +99,7 @@ class DeviceRow extends View {
 				},
 				name: {
 					fontSize: this.deviceWidth * 0.053333333,
-					color: Theme.Core.brandSecondary,
+					color: textColor,
 					marginBottom: this.deviceWidth * .008,
 				},
 				type: {
@@ -105,25 +110,25 @@ class DeviceRow extends View {
 		};
 	}
 
-	selectDevice = () => {
-		this.props.selectDevice(this.props.row);
+	select = () => {
+		this.props.select(this.props.row);
 	};
 
 	render() {
-		const { name } = this.props.row;
+		const { name, imageSource, description } = this.props.row;
 
 		return (
-			<TouchableOpacity onPress={this.selectDevice}>
-				<View style={this.styles.container}>
+			<TouchableOpacity onPress={this.select} style={this.styles.container}>
+				<View style={this.styles.wrapper}>
 					<View style={this.styles.icon.container}>
 						<Image
-							source={require('./img/device-alt.png')}
+							source={imageSource}
 							style={this.styles.icon.image}
 						/>
 					</View>
 					<View style={this.styles.text.container}>
 						<Text style={this.styles.text.name}>{name}</Text>
-						<Text style={this.styles.text.type}>Fibaro Plug 2</Text>
+						<Text style={this.styles.text.type}>{description}</Text>
 					</View>
 				</View>
 			</TouchableOpacity>
@@ -131,9 +136,10 @@ class DeviceRow extends View {
 	}
 }
 
-DeviceRow.propTypes = {
+Row.propTypes = {
 	row: React.PropTypes.object.isRequired,
-	selectDevice: React.PropTypes.func.isRequired,
+	padding: React.PropTypes.number.isRequired,
+	select: React.PropTypes.func.isRequired,
 };
 
-module.exports = DeviceRow;
+module.exports = Row;
