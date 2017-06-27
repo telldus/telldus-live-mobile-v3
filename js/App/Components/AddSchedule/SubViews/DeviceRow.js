@@ -55,6 +55,8 @@ class DeviceRow extends View {
 			container: {
 				flex: 1,
 				flexDirection: 'row',
+				borderRadius: 2,
+				overflow: 'hidden',
 				height: this.deviceWidth * 0.209333333,
 				minHeight: this.deviceIconSize + 10,
 				marginBottom: 5,
