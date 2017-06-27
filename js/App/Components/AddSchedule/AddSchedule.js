@@ -86,6 +86,7 @@ class AddSchedule extends View {
 
 		this.deviceWidth = Dimensions.get('window').width;
 
+		this.padding = this.deviceWidth * 0.033333333;
 		this.roundedInfoButtonSize = this.deviceWidth * 0.042666667;
 
 		// TODO: font-family
@@ -144,6 +145,13 @@ class AddSchedule extends View {
 				icon: {
 					height: this.roundedInfoButtonSize,
 					width: this.roundedInfoButtonSize,
+				},
+			},
+			children: {
+				container: {
+					flex: 1,
+					paddingHorizontal: this.padding,
+					paddingTop: this.padding,
 				},
 			},
 		};
@@ -211,7 +219,15 @@ class AddSchedule extends View {
 						</TouchableOpacity>
 					)}
 				</Image>
-				{React.cloneElement(routes[index].component, { goNext: this.goNext })}
+				<View style={this.styles.children.container}>
+					{React.cloneElement(
+						routes[index].component,
+						{
+							goNext: this.goNext,
+							padding: this.padding
+						}
+					)}
+				</View>
 			</View>
 		);
 	}
