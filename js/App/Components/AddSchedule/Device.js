@@ -27,7 +27,8 @@ import { View, ListDataSource, List } from 'BaseComponents';
 import { Dimensions } from 'react-native';
 import { getDevices } from 'Actions_Devices';
 import { selectDevice } from 'Actions_AddSchedule';
-import DeviceRow from './SubViews/DeviceRow';
+import Theme from 'Theme';
+import Row from './Row';
 
 type Props = {
 	goNext: () => void,
@@ -54,11 +55,13 @@ class Device extends View {
 
 		this.deviceWidth = Dimensions.get('window').width;
 
+		this.padding = this.deviceWidth * 0.033333333;
+
 		this.styles = {
 			container: {
 				flex: 1,
-				paddingHorizontal: this.deviceWidth * 0.033333333,
-				paddingTop: this.deviceWidth * 0.042666667,
+				paddingHorizontal: this.padding,
+				paddingTop: this.padding,
 			},
 		};
 
@@ -83,7 +86,22 @@ class Device extends View {
 	};
 
 	renderRow = row => {
-		return <DeviceRow row={row} selectDevice={this.selectDevice}/>
+		const preparedRow = Object.assign({}, row,
+			{
+				description: 'Fibaro Plug 2',
+				imageSource: require('./img/device-alt.png'),
+				textColor: Theme.Core.brandSecondary,
+				bgColor: Theme.Core.brandPrimary,
+			}
+		);
+
+		return (
+			<Row
+				row={preparedRow}
+				select={this.selectDevice}
+				padding={this.padding}
+			/>
+		);
 	};
 
 	render() {
