@@ -92,9 +92,15 @@ class AddSchedule extends View {
 		// TODO: font-family
 		this.styles = {
 			bgImage: {
-				height: this.deviceWidth * 0.329333333,
-				width: this.deviceWidth,
-				position: 'relative',
+				mask: {
+					height: this.deviceWidth * 0.333333333,
+					width: this.deviceWidth,
+					overflow: 'hidden',
+				},
+				image: {
+					height: this.deviceWidth * 0.577333333,
+					width: this.deviceWidth,
+				},
 			},
 			backButton: {
 				container: {
@@ -186,11 +192,11 @@ class AddSchedule extends View {
 
 		return (
 			<View style={{ flex: 1 }}>
-				<Image
-					source={require('./img/add-schedule-bg.png')}
-					resizeMode="contain"
-					style={bgImage}
-				>
+				<View style={bgImage.mask}>
+					<Image
+						source={require('./img/telldus-geometric-header-bg.png')}
+						style={bgImage.image}
+					/>
 					<TouchableOpacity onPress={this.goBack} style={backButton.container}>
 						<View style={backButton.wrapper}>
 							<Image
@@ -218,7 +224,7 @@ class AddSchedule extends View {
 							/>
 						</TouchableOpacity>
 					)}
-				</Image>
+				</View>
 				<View style={this.styles.children.container}>
 					{React.cloneElement(
 						routes[index].component,
