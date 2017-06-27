@@ -22,30 +22,98 @@
 'use strict';
 
 import React from 'react';
-import { View } from 'BaseComponents';
-import { Button } from 'react-native';
+import { connect } from 'react-redux';
+import { View, ListDataSource, List, Text } from 'BaseComponents';
+import { selectAction } from 'Actions_AddSchedule';
+import Row from './Row';
+
+// TODO: remove temp data
+const actions = [
+	{
+		name: 'On',
+		description: 'Turns the device on',
+	},
+	{
+		name: 'Off',
+		description: 'Turns the device off',
+	},
+];
 
 type Props = {
 	goNext: () => void,
+	padding: Number,
+	selectAction: Function,
+};
+
+type State = {
+	dataSource: Object,
 };
 
 class Action extends View {
 
 	props: Props;
+	state: State;
 
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			dataSource: new ListDataSource({
+				rowHasChanged: (r1, r2) => r1 !== r2,
+			}).cloneWithRows(actions),
+		};
 	}
+
+	onRefresh = () => {
+		//console.log('refresh');
+	};
+
+	selectAction = action => {
+		this.props.selectAction(action);
+		this.props.goNext();
+	};
+
+	renderRow = row => {
+		const color = (row.name === 'On') ? '#43a047' : '#e53935';
+
+		const preparedRow = Object.assign({}, row,
+			{
+				imageSource: require('./img/power.png'),
+				textColor: color,
+				bgColor: color,
+			}
+		);
+
+		return (
+			<Row
+				row={preparedRow}
+				select={this.selectAction}
+				padding={this.props.padding}
+			/>
+		);
+	};
 
 	render() {
 		return (
-			<Button title="Time" onPress={this.props.goNext}/>
+			<List
+				dataSource={this.state.dataSource}
+				renderRow={this.renderRow}
+				onRefresh={this.onRefresh}
+			/>
 		);
 	}
 }
 
 Action.propTypes = {
 	goNext: React.PropTypes.func,
+	padding: React.PropTypes.number,
+	selectAction: React.PropTypes.func,
 };
 
-module.exports = Action;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = dispatch => ({
+	selectAction: action => dispatch(selectAction(action)),
+});
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Action);

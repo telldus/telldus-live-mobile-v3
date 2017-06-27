@@ -87,6 +87,7 @@ export type Action =
 	| { type: 'USER_REGISTER', accessToken: Object }
 	| { type: 'ADD_SCHEDULE_SELECT_DEVICE', payload: Object }
 	| { type: 'ADD_SCHEDULE_RESET' }
+	| { type: 'ADD_SCHEDULE_SELECT_ACTION', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

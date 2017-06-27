@@ -27,9 +27,12 @@ import type { Action } from './Types';
 
 const selectDevice = (device): Action => ({
 	type: 'ADD_SCHEDULE_SELECT_DEVICE',
-	payload: {
-		device,
-	},
+	payload: device,
+});
+
+const selectAction = (action): Action => ({
+	type: 'ADD_SCHEDULE_SELECT_ACTION',
+	payload: action,
 });
 
 const reset = (): Action => ({
@@ -38,5 +41,6 @@ const reset = (): Action => ({
 
 module.exports = {
 	selectDevice,
+	selectAction,
 	reset,
 };
