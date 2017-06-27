@@ -106,6 +106,8 @@ type Props = {
 	dataSource: Object,
 
 	onScroll: (Object) => void,
+
+	removeClippedSubviews: boolean,
 };
 
 type DefaultProps = {
@@ -245,7 +247,7 @@ class ListComponent extends React.Component {
 		this.props.listViewRef && this.props.listViewRef(ref);
 	}
 
-	renderRow(rowData: Object, secId: number, rowId: number, highlightRow: Object) : Object {
+	renderRow(rowData: Object, secId: number, rowId: number, highlightRow: Object): Object {
 		const Component = this.props.renderRow(rowData, secId, rowId, highlightRow);
 		if (!this.props.renderHiddenRow) {
 			return React.cloneElement(
@@ -292,22 +294,23 @@ class ListComponent extends React.Component {
 
 	render() {
 		return (
-      <ListView
-        {...this.props}
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this.onRefresh}
-            enableEmptySections={true}
-            enabled={this.state.scrollEnabled}
-          />
-        }
-        ref={this.setRefs}
-        onScroll={this.onScroll}
-        renderRow={this.renderRow}
-        contentInset={{ bottom: 64 }}
-        enableEmptySections={true}
-      />
+			<ListView
+				removeClippedSubviews={false}
+				{...this.props}
+				refreshControl={
+					<RefreshControl
+						refreshing={this.state.refreshing}
+						onRefresh={this.onRefresh}
+						enableEmptySections={true}
+						enabled={this.state.scrollEnabled}
+					/>
+				}
+				ref={this.setRefs}
+				onScroll={this.onScroll}
+				renderRow={this.renderRow}
+				contentInset={{ bottom: 64 }}
+				enableEmptySections={true}
+			/>
 		);
 	}
 
