@@ -106,6 +106,8 @@ class Device extends View {
 Device.propTypes = {
 	goNext: React.PropTypes.func,
 	padding: React.PropTypes.number,
+	getDevices: React.PropTypes.func,
+	selectDevice: React.PropTypes.func,
 };
 
 const mapStateToProps = ({ devices }) => (
