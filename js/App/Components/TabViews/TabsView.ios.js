@@ -183,7 +183,7 @@ const Tabs = TabNavigator(
 	},
 	{
 		initialRouteName: 'Dashboard',
-		swipeEnabled: true,
+		swipeEnabled: false,
 		lazy: true,
 		animationEnabled: false,
 		tabBarOptions: {
