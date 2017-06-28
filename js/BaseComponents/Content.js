@@ -27,9 +27,9 @@ import Base from './Base';
 import computeProps from './computeProps';
 
 type Props = {
-  contentContainerStyle: Object,
-  padder: number,
-  children: Object,
+	contentContainerStyle: Object,
+	padder: number,
+	children: Object,
 };
 
 export default class Content extends Base {

@@ -33,16 +33,16 @@ import { OnButton, OffButton } from 'TabViews_SubViews';
 import { setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
 
 type Props = {
-  device: Object,
-  locationData: Object,
-  onTurnOff: number => void,
-  onTurnOn: number => void,
-  onLearn: number => void,
-  onDim: number => void,
+	device: Object,
+	locationData: Object,
+	onTurnOff: number => void,
+	onTurnOn: number => void,
+	onLearn: number => void,
+	onDim: number => void,
 };
 
 type State = {
-  temporaryDimmerValue: number,
+	temporaryDimmerValue: number,
 };
 
 const ToggleButton = ({ device }) => (

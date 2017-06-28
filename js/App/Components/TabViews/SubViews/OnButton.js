@@ -71,9 +71,9 @@ class OnButton extends View {
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNON' ?
-					<Animated.View style={[styles.dot, {opacity: this.state.blinkAnim}]} />
-					:
-					<View style={{height: 0, width: 0}}/>
+						<Animated.View style={[styles.dot, {opacity: this.state.blinkAnim}]} />
+						:
+						<View style={{height: 0, width: 0}}/>
 				}
 			</View>
 		);

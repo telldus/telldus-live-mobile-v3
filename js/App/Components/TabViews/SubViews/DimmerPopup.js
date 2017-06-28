@@ -30,31 +30,31 @@ import * as ANIMATION_DEFINITIONS from 'react-native-animatable/definitions';
 initializeRegistryWithDefinitions(ANIMATION_DEFINITIONS);
 
 type Props = {
-  animationIn: string,
-  animationInTiming: number,
-  animationOut: string,
-  animationOutTiming: number,
-  value: number,
-  isVisible: boolean,
-  hideOnBack: boolean,
-  style: Object,
-  name: string,
-  onBackButtonPress: () => void;
+	animationIn: string,
+	animationInTiming: number,
+	animationOut: string,
+	animationOutTiming: number,
+	value: number,
+	isVisible: boolean,
+	hideOnBack: boolean,
+	style: Object,
+	name: string,
+	onBackButtonPress: () => void;
 };
 
 type State = {
-  isVisible: boolean,
-  deviceWidth: number,
-  deviceHeight: number,
+	isVisible: boolean,
+	deviceWidth: number,
+	deviceHeight: number,
 };
 
 type DefaultProps = {
-  animationIn: string,
-  animationInTiming: number,
-  animationOut: string,
-  animationOutTiming: number,
-  value: number,
-  isVisible: boolean,
+	animationIn: string,
+	animationInTiming: number,
+	animationOut: string,
+	animationOutTiming: number,
+	value: number,
+	isVisible: boolean,
 };
 
 class DimmerPopup extends Component {

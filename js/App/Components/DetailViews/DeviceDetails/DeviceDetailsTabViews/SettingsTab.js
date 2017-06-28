@@ -38,11 +38,11 @@ const deviceHeight = Dimensions.get('window').height;
 import { addToDashboard, removeFromDashboard } from 'Actions';
 
 type Props = {
-  dispatch: Function,
-  device: Object,
-  inDashboard: Boolean,
-  onAddToDashboard: () => void,
-  onRemoveFromDashboard: () => void,
+	dispatch: Function,
+	device: Object,
+	inDashboard: Boolean,
+	onAddToDashboard: () => void,
+	onRemoveFromDashboard: () => void,
 };
 
 type State = {
@@ -106,7 +106,7 @@ class SettingsTab extends View {
 							style={styles.dashSwitch}
 							onValueChange={this.onValueChange}
 							value={this.props.inDashboard}
-							/>
+						/>
 					</View>
 				</View>
 				{learnButton}

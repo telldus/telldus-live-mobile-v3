@@ -27,7 +27,7 @@ import Base from './Base';
 import Icon from './Icon';
 
 type Props = {
-  checked: boolean,
+	checked: boolean,
 };
 
 export default class CheckBox extends Base {

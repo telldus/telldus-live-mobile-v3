@@ -70,9 +70,9 @@ class OffButton extends View {
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNOFF' ?
-					<Animated.View style={[styles.dot, {opacity: this.state.blinkAnim}]} />
-					:
-					<View style={{height: 0, width: 0}}/>
+						<Animated.View style={[styles.dot, {opacity: this.state.blinkAnim}]} />
+						:
+						<View style={{height: 0, width: 0}}/>
 				}
 			</View>
 		);

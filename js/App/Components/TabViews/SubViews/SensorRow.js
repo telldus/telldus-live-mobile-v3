@@ -106,7 +106,7 @@ const SensorLuminance = ({ luminance }) => (
 );
 
 type Props = {
-  sensor: Object,
+	sensor: Object,
 };
 
 class SensorRow extends Component {

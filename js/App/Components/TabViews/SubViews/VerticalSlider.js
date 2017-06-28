@@ -56,13 +56,13 @@ type Props = {
 };
 
 type State = {
-  containerWidth: number,
-  containerHeight: number,
-  value: Object,
-  minimumValue: number,
-  maximumValue: number,
-  step: number,
-  displayedValue: string,
+	containerWidth: number,
+	containerHeight: number,
+	value: Object,
+	minimumValue: number,
+	maximumValue: number,
+	step: number,
+	displayedValue: string,
 };
 
 class VerticalSlider extends View {
@@ -108,12 +108,12 @@ class VerticalSlider extends View {
 	}
 
 	handleStartShouldSetPanResponder = (e: Object, /* gestureState: Object */): boolean => {
-        // Should we become active when the user presses down on the thumb?
+		// Should we become active when the user presses down on the thumb?
 		return true;
 	};
 
 	handleMoveShouldSetPanResponder = (/* e: Object, gestureState: Object */): boolean => {
-        // Should we become active when the user moves a touch over the thumb?
+		// Should we become active when the user moves a touch over the thumb?
 		return false;
 	};
 

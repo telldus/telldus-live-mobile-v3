@@ -27,7 +27,7 @@ import Base from './Base';
 import computeProps from './computeProps';
 
 type Props = {
-  placeholderTextColor: ?string,
+	placeholderTextColor: ?string,
 };
 
 export default class Input extends Base {

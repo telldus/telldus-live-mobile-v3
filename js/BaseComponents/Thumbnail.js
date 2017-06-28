@@ -28,10 +28,10 @@ import computeProps from './computeProps';
 import _ from 'lodash';
 
 type Props = {
-  contain: boolean,
-  size: number,
-  circular: boolean,
-  square: boolean,
+	contain: boolean,
+	size: number,
+	circular: boolean,
+	square: boolean,
 };
 
 export default class ThumbnailComponent extends Base {

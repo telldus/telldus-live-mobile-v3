@@ -28,35 +28,35 @@ const INDETERMINATE_WIDTH_FACTOR = 0.3;
 const BAR_WIDTH_ZERO_POSITION = INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
 
 type Props = {
-  progress: number,
-  indeterminate: boolean,
-  animated: boolean,
-  borderColor?: string,
-  borderRadius: number,
-  borderWidth: number,
-  color: string,
-  height: number,
-  style: Object,
-  unfilledColor?: string,
-  width: number,
+	progress: number,
+	indeterminate: boolean,
+	animated: boolean,
+	borderColor?: string,
+	borderRadius: number,
+	borderWidth: number,
+	color: string,
+	height: number,
+	style: Object,
+	unfilledColor?: string,
+	width: number,
 };
 
 type DefaultProps = {
-  animated: boolean,
-  borderRadius: number,
-  borderWidth: number,
-  color: string,
-  height: number,
-  indeterminate: boolean,
-  progress: number,
-  width: number,
+	animated: boolean,
+	borderRadius: number,
+	borderWidth: number,
+	color: string,
+	height: number,
+	indeterminate: boolean,
+	progress: number,
+	width: number,
 };
 
 type State = {
-  progress: Object,
-  animationValue: Object,
-  containerWidth: number,
-  containerHeight: number,
+	progress: Object,
+	animationValue: Object,
+	containerWidth: number,
+	containerHeight: number,
 };
 
 class DimmerProgressBar extends Component {

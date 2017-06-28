@@ -32,11 +32,11 @@ import Button from './Button';
 import Thumbnail from './Thumbnail';
 
 type Props = {
-  header: Object,
-  footer: Object,
-  children: Object,
-  note: string,
-  square: Object,
+	header: Object,
+	footer: Object,
+	children: Object,
+	note: string,
+	square: Object,
 };
 
 export default class CardItemComponent extends Base {

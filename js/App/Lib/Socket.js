@@ -125,7 +125,7 @@ export default class TelldusWebsocket {
 	_addListener(eventType:string) {
 		const noop = event => console.log('nooping', event);
 		this.websocket[eventType] = event => {
-      // $FlowFixMe
+			// $FlowFixMe
 			const fn = this[eventType] || noop;
 			fn(event);
 		};

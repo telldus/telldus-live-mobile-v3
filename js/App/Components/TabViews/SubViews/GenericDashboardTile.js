@@ -26,7 +26,7 @@ import { View } from 'BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 
 type Props = {
-  style: Object,
+	style: Object,
 };
 
 class GenericDashboardTile extends View {

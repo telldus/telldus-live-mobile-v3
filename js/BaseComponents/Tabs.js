@@ -27,7 +27,7 @@ import computeProps from './computeProps';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 
 type Props = {
-  children: Object,
+	children: Object,
 };
 
 export default class TabComponent extends Base {

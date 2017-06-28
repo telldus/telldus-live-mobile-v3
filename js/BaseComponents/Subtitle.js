@@ -26,7 +26,7 @@ import { Text, View, Platform } from 'react-native';
 import Base from './Base';
 
 type Props = {
-  children: Object,
+	children: Object,
 };
 
 export default class Subtitle extends Base {

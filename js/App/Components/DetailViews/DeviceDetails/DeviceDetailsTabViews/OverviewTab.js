@@ -43,9 +43,9 @@ import {
 } from 'DeviceDetailsSubView';
 
 type Props = {
-  device: Object,
-  devices: Object,
-  gateway: Object,
+	device: Object,
+	devices: Object,
+	gateway: Object,
 };
 
 type State = {

@@ -26,9 +26,9 @@ import Base from './Base';
 import computeProps from './computeProps';
 
 type Props = {
-  progress: number,
-  color: string,
-  inverse: boolean,
+	progress: number,
+	color: string,
+	inverse: boolean,
 };
 
 export default class SpinnerComponent extends Base {

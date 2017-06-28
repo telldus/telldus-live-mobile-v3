@@ -64,7 +64,7 @@ class HistoryTab extends View {
 		super(props);
 		this.state = {
 			dataSource: props.history ? listDataSource
-			.cloneWithRowsAndSections(this.getRowAndSectionData(props.history.data)) : false,
+				.cloneWithRowsAndSections(this.getRowAndSectionData(props.history.data)) : false,
 			isListEmpty: props.history && props.history.data.length === 0 ? true : false,
 			hasRefreshed: false,
 		};
@@ -182,23 +182,23 @@ class HistoryTab extends View {
 		// Loader message when data has not received yet.
 		if (!this.state.dataSource) {
 			return (
-			<View style={styles.containerWhenNoData}>
-				<CustomIcon name="icon_loading" size={20} color="#F06F0C" />
-				<Text style={styles.textWhenNoData}>
-					Loading...
-				</Text>
-			</View>
+				<View style={styles.containerWhenNoData}>
+					<CustomIcon name="icon_loading" size={20} color="#F06F0C" />
+					<Text style={styles.textWhenNoData}>
+						Loading...
+					</Text>
+				</View>
 			);
 		}
 		// response received but, no history for the requested device, so empty list message.
 		if (this.state.dataSource && this.state.isListEmpty) {
 			return (
-			<View style={styles.containerWhenNoData}>
-				<Icon name="exclamation-circle" size={20} color="#F06F0C" />
-				<Text style={styles.textWhenNoData}>
-					No recent activity on device
-				</Text>
-			</View>
+				<View style={styles.containerWhenNoData}>
+					<Icon name="exclamation-circle" size={20} color="#F06F0C" />
+					<Text style={styles.textWhenNoData}>
+						No recent activity on device
+					</Text>
+				</View>
 			);
 		}
 		return (

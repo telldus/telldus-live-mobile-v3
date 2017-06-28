@@ -27,7 +27,7 @@ import Base from './Base';
 import Text from './Text';
 
 type Props = {
-  children: Object,
+	children: Object,
 };
 
 export default class Title extends Base {

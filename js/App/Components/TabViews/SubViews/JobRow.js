@@ -24,11 +24,11 @@ import { ListItem, Text } from 'BaseComponents';
 import Theme from 'Theme';
 
 type Props = {
-  device: Object,
-  methodValue: number,
-  method: string,
-  effectiveHour: number,
-  effectiveMinute: number,
+	device: Object,
+	methodValue: number,
+	method: string,
+	effectiveHour: number,
+	effectiveMinute: number,
 };
 
 export default (props: Props) => {

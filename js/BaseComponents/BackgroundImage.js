@@ -25,9 +25,9 @@ import React, { Component } from 'react';
 import Image from 'Image';
 
 type Props = {
-  source: number,
-  children: Object,
-  style: Object,
+	source: number,
+	children: Object,
+	style: Object,
 };
 
 export default class BackgroundImage extends Component {

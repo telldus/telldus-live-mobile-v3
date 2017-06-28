@@ -74,7 +74,7 @@ type Props = {
 
 
 type State = {
-  isVisible: boolean,
+	isVisible: boolean,
 };
 
 class SettingsDetailModal extends View {
@@ -141,9 +141,9 @@ class SettingsDetailModal extends View {
 							{`You are using version ${version} of Telldus Live! mobile.`}
 						</Text>
 						{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
-						<Button text={submitButText} onPress={this.submitPushToken} width={200} />
-						:
-						<StatusView/>
+							<Button text={submitButText} onPress={this.submitPushToken} width={200} />
+							:
+							<StatusView/>
 						}
 						<Button text={logoutButText} onPress={this.logout} width={100} />
 					</View>
@@ -258,9 +258,9 @@ function mapDispatchToProps(dispatch, ownProps) {
 		},
 		onSubmitPushToken: (token, callback) => {
 			dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId))
-			.then(() => {
-				callback('REG_TOKEN');
-			});
+				.then(() => {
+					callback('REG_TOKEN');
+				});
 		},
 		onLogout: (token, callback) => {
 			dispatch(unregisterPushToken(token)).then(() => {

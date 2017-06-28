@@ -42,10 +42,10 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device' }) => (
 );
 
 type Props = {
-  hasShadow: boolean,
-  style: Object,
-  children: Object,
-  type: String
+	hasShadow: boolean,
+	style: Object,
+	children: Object,
+	type: String
 };
 
 class DashboardShadowTile extends View {

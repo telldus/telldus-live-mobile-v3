@@ -26,7 +26,7 @@ import { View } from 'react-native';
 import Base from './Base';
 
 type Props = {
-  padder: boolean,
+	padder: boolean,
 };
 
 export default class ViewComponent extends Base {

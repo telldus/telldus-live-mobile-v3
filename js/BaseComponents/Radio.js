@@ -48,7 +48,7 @@ export default class Radio extends Base {
 						lineHeight: this.getTheme().radioBtnSize + 4,
 						fontSize: this.getTheme().radioBtnSize,
 					}} />
-				:
+					:
 					<Icon name={this.props.selected ? 'md-radio-button-on' : 'md-radio-button-off'} style={{
 						color: this.props.selected ? this.getTheme().radioSelectedColor : this.getTheme().radioColor,
 						lineHeight: this.getTheme().radioBtnSize + 1,

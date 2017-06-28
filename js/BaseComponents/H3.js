@@ -27,7 +27,7 @@ import Base from './Base';
 import computeProps from './computeProps';
 
 type Props = {
-  children: Object,
+	children: Object,
 };
 
 export default class H3Component extends Base {

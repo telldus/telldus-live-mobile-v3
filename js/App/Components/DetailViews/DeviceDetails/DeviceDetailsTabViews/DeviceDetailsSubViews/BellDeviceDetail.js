@@ -30,8 +30,8 @@ import { BellButton } from 'TabViews_SubViews';
 const deviceHeight = Dimensions.get('window').height;
 
 type Props = {
-  device: Object,
-  onBell: number => void,
+	device: Object,
+	onBell: number => void,
 };
 
 class BellDeviceDetailModal extends View {

@@ -94,7 +94,7 @@ class HistoryRow extends View {
 					<View style={styles.verticalLineView}/>
 					{ this.props.item.successStatus !== 0 ?
 						<CustomIcon name="icon_info" size={deviceHeight * 0.03} color="#d32f2f" />
-					:
+						:
 						<View style={[styles.circularView, { backgroundColor: '#A59F9A' }]} />
 					}
 					<View style={styles.verticalLineView}/>
@@ -104,35 +104,35 @@ class HistoryRow extends View {
 						{time}
 					</Text>
 				</View>
-					<View style={styles.statusArrowLocationContainer}>
-						<View style={styles.arrowViewContainer}>
-							{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
+				<View style={styles.statusArrowLocationContainer}>
+					<View style={styles.arrowViewContainer}>
+						{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
 							<Icon name="play" style={styles.carretIcon} size={deviceHeight * 0.030} color="#A59F9A" />
 							:
 							<Icon name="play" style={styles.carretIcon} size={deviceHeight * 0.030} color="#F06F0C" />
-							}
-						</View>
-						<TouchableWithoutFeedback onPress={this.onOriginPress}>
-							<View style={[styles.statusLocationContainer, styles.shadow]}>
-								{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
-									<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
-										<CustomIcon name="icon_off" size={24} color="#ffffff" />
-									</View>
-								:
-									<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
-										{deviceState === 'DIM' ?
-											<Text>{this.props.item.stateValue}%</Text>
-											:
-											<CustomIcon name={icon} size={24} color="#ffffff" />
-										}
-									</View>
-								}
-								<View style={styles.locationCover}>
-									<Text style={styles.originText} numberOfLines={1}>{this.props.item.origin}</Text>
-								</View>
-							</View>
-						</TouchableWithoutFeedback>
+						}
 					</View>
+					<TouchableWithoutFeedback onPress={this.onOriginPress}>
+						<View style={[styles.statusLocationContainer, styles.shadow]}>
+							{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
+								<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
+									<CustomIcon name="icon_off" size={24} color="#ffffff" />
+								</View>
+								:
+								<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
+									{deviceState === 'DIM' ?
+										<Text>{this.props.item.stateValue}%</Text>
+										:
+										<CustomIcon name={icon} size={24} color="#ffffff" />
+									}
+								</View>
+							}
+							<View style={styles.locationCover}>
+								<Text style={styles.originText} numberOfLines={1}>{this.props.item.origin}</Text>
+							</View>
+						</View>
+					</TouchableWithoutFeedback>
+				</View>
 			</View>
 		);
 	}

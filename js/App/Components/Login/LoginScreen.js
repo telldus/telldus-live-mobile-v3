@@ -38,16 +38,16 @@ import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
 type Props = {
-  dispatch: Function,
-  screenProps: Object,
-  navigation: Object,
+	dispatch: Function,
+	screenProps: Object,
+	navigation: Object,
 };
 
 type State = {
-  notificationText? : string,
-  isLoading : boolean,
-  username: string,
-  password: string,
+	notificationText? : string,
+	isLoading : boolean,
+	username: string,
+	password: string,
 };
 
 class LoginForm extends View {
@@ -139,7 +139,7 @@ class LoginForm extends View {
 					</View>
 					<View style={styles.notificationModalFooter}>
 						<TouchableWithoutFeedback style={styles.notificationModalFooterTextCover}
-						onPress={this._closeModal}>
+							onPress={this._closeModal}>
 							<Text style={styles.notificationModalFooterText}>OK</Text>
 						</TouchableWithoutFeedback>
 					</View>

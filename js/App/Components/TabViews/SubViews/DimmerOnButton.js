@@ -48,8 +48,8 @@ class DimmerOnButton extends View {
 				</Animated.Text>
 				{
 					methodRequested === 'TURNON' ?
-					<ButtonLoadingIndicator style={styles.dot} />
-					: null
+						<ButtonLoadingIndicator style={styles.dot} />
+						: null
 				}
 			</View>
 		);

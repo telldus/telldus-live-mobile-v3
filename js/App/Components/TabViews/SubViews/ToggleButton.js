@@ -28,9 +28,9 @@ import OnButton from './OnButton';
 import OffButton from './OffButton';
 
 type Props = {
-  device: Object,
-  onTurnOff: number => void,
-  onTurnOn: number => void,
+	device: Object,
+	onTurnOff: number => void,
+	onTurnOn: number => void,
 };
 
 class ToggleButton extends View {
@@ -48,10 +48,10 @@ class ToggleButton extends View {
 		const offButton = <OffButton id={id} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} />;
 
 		return (
-      <RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
-        { offButton }
-        { onButton }
-      </RoundedCornerShadowView>
+			<RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
+				{ offButton }
+				{ onButton }
+			</RoundedCornerShadowView>
 		);
 	}
 }

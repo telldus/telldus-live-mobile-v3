@@ -28,13 +28,13 @@ import computeProps from './computeProps';
 import Text from './Text';
 
 type Props = {
-  primary: Object,
-  success: boolean,
-  info: Object,
-  warning: boolean,
-  danger: boolean,
-  children: Object,
-  textStyle: Object,
+	primary: Object,
+	success: boolean,
+	info: Object,
+	warning: boolean,
+	danger: boolean,
+	children: Object,
+	textStyle: Object,
 };
 
 export default class BadgeComponent extends Base {
@@ -44,8 +44,7 @@ export default class BadgeComponent extends Base {
 		let type = {
 			backgroundColor: this.props.primary ? this.getTheme().brandPrimary : this.props.success
 				? this.getTheme().brandSuccess : this.props.info ? this.getTheme().brandInfo : this.props.warning
-					? this.getTheme().brandWarning : this.props.danger ? this.getTheme().brandDanger
-					                                                                               : this.getTheme().badgeBg,
+					? this.getTheme().brandWarning : this.props.danger ? this.getTheme().brandDanger : this.getTheme().badgeBg,
 			padding: 4,
 			alignSelf: 'flex-start',
 			borderRadius: 13,

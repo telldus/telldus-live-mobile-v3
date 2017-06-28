@@ -33,14 +33,14 @@ import md5 from 'blueimp-md5';
 const GRAVATAR_URI = 'https://www.gravatar.com/avatar/';
 
 type Props = {
-  size: number,
-  mask: 'circle'|'square'|'rounded',
-  emailAddress: string,
+	size: number,
+	mask: 'circle'|'square'|'rounded',
+	emailAddress: string,
 };
 
 type DefaultProps = {
-  size: number,
-  mask: 'circle'|'square'|'rounded',
+	size: number,
+	mask: 'circle'|'square'|'rounded',
 };
 
 class Gravatar extends React.Component {

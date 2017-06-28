@@ -103,18 +103,18 @@ class DeviceDetailsTabsView extends View {
 		};
 		return (
 			<View style={styles.container}>
-					<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('./../../../TabViews/img/telldus-geometric-header-bg.png')}>
-						<View style={styles.deviceIconBackground}>
-							<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
-						</View>
-						<Text style={styles.textDeviceName}>
+				<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('./../../../TabViews/img/telldus-geometric-header-bg.png')}>
+					<View style={styles.deviceIconBackground}>
+						<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
+					</View>
+					<Text style={styles.textDeviceName}>
 						{this.props.device.name}
-						</Text>
-					</Image>
-                <View style={{ height: screenSpaceRemaining }}>
-                   <Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
-                </View>
-            </View>
+					</Text>
+				</Image>
+				<View style={{ height: screenSpaceRemaining }}>
+					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
+				</View>
+			</View>
 		);
 	}
 }

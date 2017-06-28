@@ -25,7 +25,7 @@ import type { Action } from 'Actions_Types';
 
 type State = {
 	editModeSensorsTab: boolean,
-  editModeDevicesTab: boolean,
+	editModeDevicesTab: boolean,
 };
 
 const initialState: State = {

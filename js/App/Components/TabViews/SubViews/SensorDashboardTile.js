@@ -31,15 +31,15 @@ import DashboardShadowTile from './DashboardShadowTile';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
 type Props = {
-  item: Object,
-  tileWidth: number,
-  displayType: string,
-  style: Object,
-  onPress: () => void,
+	item: Object,
+	tileWidth: number,
+	displayType: string,
+	style: Object,
+	onPress: () => void,
 };
 
 type State = {
-  currentDisplayType: string,
+	currentDisplayType: string,
 };
 
 class SensorDashboardTile extends View {

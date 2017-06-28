@@ -63,18 +63,18 @@ const NavigationHeader = ({ firstName, lastName }) => (
 		<Image style={styles.navigationHeaderImage}
 		       source={require('./img/telldus.png')}
 		       resizeMode={'contain'}/>
-			<View style={styles.navigationHeaderTextCover}>
-				<Text numberOfLines={1} style={styles.navigationHeaderText}>
-					{firstName}
-				</Text>
-				{lastName ?
+		<View style={styles.navigationHeaderTextCover}>
+			<Text numberOfLines={1} style={styles.navigationHeaderText}>
+				{firstName}
+			</Text>
+			{lastName ?
 				<Text numberOfLines={1} style={styles.navigationHeaderText}>
 					{lastName}
 				</Text>
 				:
 				null
-				}
-			</View>
+			}
+		</View>
 	</View>
 );
 

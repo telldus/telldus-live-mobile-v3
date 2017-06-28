@@ -150,9 +150,9 @@ class DeviceHistoryDetails extends View {
 								{textStatus}
 							</Text>
 							{this.props.detailsData.successStatus === 0 ?
-							null
-							:
-							<Icon name="exclamation-triangle" size={24} color="#d32f2f" />
+								null
+								:
+								<Icon name="exclamation-triangle" size={24} color="#d32f2f" />
 							}
 						</View>
 					</View>

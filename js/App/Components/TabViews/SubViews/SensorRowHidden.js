@@ -32,9 +32,9 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import Theme from 'Theme';
 
 type Props = {
-  sensor: Object,
-  removeFromDashboard: number => void,
-  addToDashboard: number => void,
+	sensor: Object,
+	removeFromDashboard: number => void,
+	addToDashboard: number => void,
 };
 
 class SensorRowHidden extends View {

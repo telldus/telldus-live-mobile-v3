@@ -26,9 +26,9 @@ import { ProgressViewIOS } from 'react-native';
 import Base from './Base';
 
 type Props = {
-  progress: number,
-  color: string,
-  inverse: boolean,
+	progress: number,
+	color: string,
+	inverse: boolean,
 };
 
 export default class ProgressBarComponent extends Base {
