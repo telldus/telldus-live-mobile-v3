@@ -114,7 +114,6 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 - until this is automated with a release script, change the version in the following places:
   - `package.json`: `version` (semver)
   - `android/app/build.gradle`: `versionCode` (Android) and `versionName` (semver)
-  - `android/app/src/main/AndroidManifest.xml`: `versionCode` (Android) and `versionName` (semver)
 
 ### Android
 

@@ -1,7 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.telldus.live.mobile.test"
-    android:versionCode="30400"
-    android:versionName="3.4.0">
+    package="com.telldus.live.mobile.test">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <permission
