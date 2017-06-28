@@ -136,6 +136,9 @@ const TabNavigatorConfig = {
 		labelStyle: {
 			fontSize: Dimensions.get('window').width / 35,
 		},
+		tabStyle: {
+			width: Dimensions.get('window').width / 3.5,
+		},
 		style: {
 			backgroundColor: Theme.Core.brandPrimary,
 		},
