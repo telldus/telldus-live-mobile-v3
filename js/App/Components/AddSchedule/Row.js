@@ -53,12 +53,15 @@ class Row extends View {
 			justifyContent: 'center',
 		};
 
+		const borderRadius = 2;
+
 		this.styles = {
 			container: {
 				flex: 1,
 				height: this.deviceWidth * 0.209333333,
 				minHeight: this.deviceIconSize + 10,
 				marginBottom: 3,
+				borderRadius: borderRadius,
 				elevation: 2,
 				shadowColor: '#000',
 				shadowRadius: 2,
@@ -71,8 +74,6 @@ class Row extends View {
 			wrapper: {
 				flex: 1,
 				flexDirection: 'row',
-				borderRadius: 2,
-				overflow: 'hidden',
 			},
 			icon: {
 				container: {
@@ -81,6 +82,8 @@ class Row extends View {
 					width: this.rowWidth * 0.3,
 					backgroundColor: bgColor,
 					padding: 5,
+					borderTopLeftRadius: borderRadius,
+					borderBottomLeftRadius: borderRadius,
 				},
 				image: {
 					width: this.deviceIconSize,
@@ -96,6 +99,8 @@ class Row extends View {
 					paddingLeft: this.deviceWidth * 0.101333333,
 					paddingRight: 10,
 					paddingVertical: 5,
+					borderTopRightRadius: borderRadius,
+					borderBottomRightRadius: borderRadius,
 				},
 				name: {
 					fontSize: this.deviceWidth * 0.053333333,
@@ -118,7 +123,11 @@ class Row extends View {
 		const { name, imageSource, description } = this.props.row;
 
 		return (
-			<TouchableOpacity onPress={this.select} style={this.styles.container}>
+			<TouchableOpacity
+				onPress={this.select}
+				style={this.styles.container}
+				outlineProvider="bounds"
+			>
 				<View style={this.styles.wrapper}>
 					<View style={this.styles.icon.container}>
 						<Image
