@@ -66,7 +66,6 @@ module.exports = {
 
 **Valid keys:**
 
- - `version`: string - App version
  - `apiServer`: string - Telldus API server url e.g. https://api.telldus.com
  - `publicKey`: string - Telldus API public key
  - `privateKey`: string - Telldus API public key
@@ -116,7 +115,6 @@ You can access the developer menu by shaking your device or by selecting "Shake 
   - `package.json`: `version` (semver)
   - `android/app/build.gradle`: `versionCode` (Android) and `versionName` (semver)
   - `android/app/src/main/AndroidManifest.xml`: `versionCode` (Android) and `versionName` (semver)
-  - `config.local.js`: `version` (semver)
 
 ### Android
 

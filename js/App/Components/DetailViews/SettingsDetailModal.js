@@ -30,7 +30,7 @@ import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 
-import { pushServiceId, version } from '../../../Config';
+import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions_User';
 
 const Header = ({ onPress }) => (
@@ -120,6 +120,7 @@ class SettingsDetailModal extends View {
 	render() {
 		let submitButText = this.state.isPushSubmitLoading ? 'Submitting Token...' : 'Submit Push Token';
 		let logoutButText = this.state.isLogoutLoading ? 'Logging Out...' : 'Logout';
+		let version = DeviceInfo.getVersion();
 		return (
 			<Modal isVisible={this.state.isVisible}>
 				<Container style={styles.container}>
