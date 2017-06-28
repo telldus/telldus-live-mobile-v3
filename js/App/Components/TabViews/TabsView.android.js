@@ -132,12 +132,44 @@ class TabsView extends View {
 	toggleEditMode: (number) => void;
 	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
+	goAddSchedule: () => void;
 
 	constructor(props: Props) {
 		super(props);
 
+		this.deviceWidth = Dimensions.get('window').width;
+
+		this.addButtonSize = this.deviceWidth * 0.134666667;
+		this.addButtonOffset = this.deviceWidth * 0.034666667;
+		this.addButtonTextSize = this.deviceWidth * 0.056;
+
+		this.styles = {
+			addButton: {
+				container: {
+					backgroundColor: Theme.Core.brandSecondary,
+					borderRadius: 50,
+					position: 'absolute',
+					height: this.addButtonSize,
+					width: this.addButtonSize,
+					bottom: this.addButtonOffset,
+					right: this.addButtonOffset,
+					elevation: 2,
+				},
+				wrapper: {
+					flex: 1,
+					alignItems: 'center',
+					justifyContent: 'center',
+				},
+			},
+			iconPlus: {
+				width: this.addButtonTextSize,
+				height: this.addButtonTextSize,
+			},
+		};
+
 		this.state = {
 			settings: false,
+			routeName: '',
 		};
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
@@ -178,7 +210,10 @@ class TabsView extends View {
 	}
 
 	onNavigationStateChange(prevState, currentState) {
-		this.onRequestChangeTab(currentState.index);
+		const index = currentState.index;
+
+		this.setState({ routeName: currentState.routes[index].routeName });
+		this.onRequestChangeTab(index);
 	}
 
 	openDrawer() {
@@ -195,11 +230,16 @@ class TabsView extends View {
 		/>;
 	}
 
+	goAddSchedule = () => {
+		this.props.navigation.navigate('AddSchedule');
+	};
+
 	render() {
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
-		console.log("STAR", this.state.starIcon);
+
+		const { routeName } = this.state;
 
 		// TODO: Refactor: Split this code to smaller components
 		return (
@@ -252,9 +292,23 @@ class TabsView extends View {
 							/>
 						)
 					}
-
 					<View>
 						<Tabs onNavigationStateChange={this.onNavigationStateChange}/>
+						{
+							routeName === 'Scheduler' ? (
+								<TouchableOpacity
+									style={this.styles.addButton.container}
+									onPress={this.goAddSchedule}
+								>
+									<View style={this.styles.addButton.wrapper}>
+										<Image
+											source={require('./img/iconPlus.png')}
+											style={this.styles.iconPlus}
+										/>
+									</View>
+								</TouchableOpacity>
+							) : null
+						}
 						{
 							this.state.settings ? (
 								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
