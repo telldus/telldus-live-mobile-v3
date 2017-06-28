@@ -24,8 +24,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { defineMessages } from 'react-intl';
 
-import { List, ListDataSource, Text, View, I18n } from 'BaseComponents';
+import { List, ListDataSource, Text, View } from 'BaseComponents';
 import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
 
 import { getDevices, getDeviceHistory } from 'Actions_Devices';
@@ -38,7 +39,13 @@ import { parseDevicesForListView } from 'Reducers_Devices';
 
 import Theme from 'Theme';
 
-// @flow
+const messages = defineMessages({
+	devices: {
+		id: 'pages.devices',
+		defaultMessage: 'Devices',
+		description: 'The devices tab',
+	},
+});
 
 type Props = {
 	rowsAndSections: Object,
@@ -69,10 +76,10 @@ class DevicesTab extends View {
 	renderHiddenRow: (Object) => Object;
 	onRefresh: () => void;
 
-	static navigationOptions = {
-		title: I18n.t('pages.devices'),
+	static navigationOptions = ({navigation, screenProps}) => ({
+		title: screenProps.intl.formatMessage(messages.devices),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'devices'),
-	};
+	});
 
 	constructor(props: Props) {
 		super(props);

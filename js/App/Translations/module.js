@@ -19,26 +19,33 @@
  * @providesModule Translations
  */
 
+// @flow
+
 'use strict';
 
-import cs from './cs.json';
-import en from './en.json';
-import fr from './fr.json';
-import nb from './nb.json';
-import nl from './nl.json';
-import pl from './pl.json';
-import ru from './ru.json';
-import sv from './sv.json';
-import th from './th.json';
+// Activate languages when they have been translated.
+
+import {addLocaleData} from 'react-intl';
+// import cs from 'react-intl/locale-data/cs';
+import en from 'react-intl/locale-data/en';
+// import fr from 'react-intl/locale-data/fr';
+// import nb from 'react-intl/locale-data/nb';
+// import nl from 'react-intl/locale-data/nl';
+// import pl from 'react-intl/locale-data/pl';
+// import ru from 'react-intl/locale-data/ru';
+import sv from 'react-intl/locale-data/sv';
+// import th from 'react-intl/locale-data/th';
+
+addLocaleData([...en, ...sv]);
 
 module.exports = {
-	cs: cs,
-	en: en,
-	fr: fr,
-	nb: nb,
-	nl: nl,
-	pl: pl,
-	ru: ru,
-	sv: sv,
-	th: th,
+	// cs: require('./cs.json'),
+	en: require('./en.json'),
+	// fr: require('./fr.json'),
+	// nb: require('./nb.json'),
+	// nl: require('./nl.json'),
+	// pl: require('./pl.json'),
+	// ru: require('./ru.json'),
+	sv: require('./sv.json'),
+	// th: require('./th.json'),
 };

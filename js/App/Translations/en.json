@@ -1,10 +1,17 @@
 {
-	"pages": {
-		"dashboard": "Dashboard",
-		"devices": "Devices",
-		"gateways": "Gateways",
-		"scheduler": "Scheduler",
-		"sensors": "Sensors",
-		"profile": "User Profile"
-	}
+  "friday": "Friday",
+  "monday": "Monday",
+  "nextWeekday": "Next {weekday}",
+  "pages.dashboard": "Dashboard",
+  "pages.devices": "Devices",
+  "pages.gateways": "Gateways",
+  "pages.scheduler": "Scheduler",
+  "pages.sensors": "Sensors",
+  "saturday": "Saturday",
+  "sunday": "Sunday",
+  "thursday": "Thursday",
+  "today": "Today",
+  "tomorrow": "Tomorrow",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday"
 }

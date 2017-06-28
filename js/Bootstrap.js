@@ -25,12 +25,14 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 
 import React from 'React';
+import { NativeModules } from 'react-native';
 import { Provider } from 'react-redux';
 import { Crashlytics } from 'react-native-fabric';
 
 import App from 'App';
 import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
+import * as Translations from 'Translations';
 
 function Bootstrap(): React.Component {
 
@@ -39,8 +41,15 @@ function Bootstrap(): React.Component {
 	class Root extends React.Component {
 		constructor() {
 			super();
+			let locale = this.getLocale();
+			let messages = Translations.en;
+			if (Translations[locale]) {
+				messages = Translations[locale];
+			}
 			this.state = {
 				isLoading: true,
+				locale: locale,
+				messages: messages,
 				store: configureStore(this._configureStoreCompleted.bind(this)),
 			};
 		}
@@ -54,13 +63,25 @@ function Bootstrap(): React.Component {
 			}
 		}
 
+		getLocale() {
+			if (!NativeModules.I18nManager) {
+				return 'en';
+			}
+			let localeIdentifier = NativeModules.I18nManager.localeIdentifier;
+			let parts = localeIdentifier.split('_');
+			if (parts.length === 0) {
+				return 'en';
+			}
+			return parts[0];
+		}
+
 		render() {
 			if (this.state.isLoading) {
 				return null;
 			}
 			return (
 				<Provider store={this.state.store}>
-					<IntlProvider locale="en">
+					<IntlProvider locale={this.state.locale} messages={this.state.messages}>
 						<App />
 					</IntlProvider>
 				</Provider>

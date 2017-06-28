@@ -1,10 +1,8 @@
 {
-	"pages": {
-		"dashboard": "Dashboard",
-		"devices": "Enheter",
-		"gateways": "Gateways",
-		"scheduler": "Schemaläggare",
-		"sensors": "Sensorer",
-		"profile": "Profil"
-	}
+  "friday": "Fredag",
+  "pages.scheduler": "Schemaläggare",
+  "thursday": "Torsdag",
+  "today": "Idag",
+  "tomorrow": "Imorgon",
+  "wednesday": "Onsdag"
 }

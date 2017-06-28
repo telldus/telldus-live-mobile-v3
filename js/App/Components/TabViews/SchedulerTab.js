@@ -24,8 +24,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { defineMessages } from 'react-intl';
 
-import { List, ListDataSource, View, Text, I18n } from 'BaseComponents';
+import { List, ListDataSource, Text, View } from 'BaseComponents';
 import { JobRow } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 import Theme from 'Theme';
@@ -34,10 +35,62 @@ import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
 
+const messages = defineMessages({
+	friday: {
+		id: 'friday',
+		defaultMessage: 'Friday',
+	},
+	monday: {
+		id: 'monday',
+		defaultMessage: 'Monday',
+	},
+	nextWeekday: {
+		id: 'nextWeekday',
+		defaultMessage: 'Next {weekday}',
+		description: 'Used by the scheduler to display the day one week from now. Example "Next Wednesday"',
+	},
+	saturday: {
+		id: 'saturday',
+		defaultMessage: 'Saturday',
+	},
+	scheduler: {
+		id: 'pages.scheduler',
+		defaultMessage: 'Scheduler',
+		description: 'The scheduler tab',
+	},
+	sunday: {
+		id: 'sunday',
+		defaultMessage: 'Sunday',
+	},
+	thursday: {
+		id: 'thursday',
+		defaultMessage: 'Thursday',
+	},
+	today: {
+		id: 'today',
+		defaultMessage: 'Today',
+		description: 'Used by the scheduler to display a header with the schedules running today',
+	},
+	tomorrow: {
+		id: 'tomorrow',
+		defaultMessage: 'Tomorrow',
+		description: 'Used by the scheduler to display a header with the schedules running tomorrow',
+	},
+	tuesday: {
+		id: 'tuesday',
+		defaultMessage: 'Tuesday',
+	},
+	wednesday: {
+		id: 'wednesday',
+		defaultMessage: 'Wednesday',
+	},
+});
+
 type Props = {
 	rowsAndSections: Object,
 	devices: Object,
 	dispatch: Function,
+	screenProps: Object,
 };
 
 type State = {
@@ -45,8 +98,6 @@ type State = {
 };
 
 import getTabBarIcon from '../../Lib/getTabBarIcon';
-
-const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 class SchedulerTab extends View {
 
@@ -113,18 +164,20 @@ class SchedulerTab extends View {
 
 	renderSectionHeader(sectionData, sectionId) {
 		// TODO: move to own Component
+		const {formatMessage} = this.props.screenProps.intl;
 		const todayInWeek = parseInt(moment().format('d'), 10);
 		const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
+		const daysInWeek = [messages.sunday, messages.monday, messages.tuesday, messages.wednesday, messages.thursday, messages.friday, messages.saturday];
 
 		let sectionName;
 		if (sectionId === 0) {
-			sectionName = 'Today';
+			sectionName = formatMessage(messages.today);
 		} else if (sectionId === 1) {
-			sectionName = 'Tomorrow';
+			sectionName = formatMessage(messages.tomorrow);
 		} else if (sectionId === 7) {
-			sectionName = `Next ${daysInWeek[todayInWeek]}`;
+			sectionName = formatMessage(messages.nextWeekday, {weekday: formatMessage(daysInWeek[todayInWeek])});
 		} else {
-			sectionName = daysInWeek[absoluteDayInWeek];
+			sectionName = formatMessage(daysInWeek[absoluteDayInWeek]);
 		}
 
 		return (
@@ -143,10 +196,10 @@ class SchedulerTab extends View {
 	}
 }
 
-SchedulerTab.navigationOptions = {
-	title: I18n.t('pages.scheduler'),
+SchedulerTab.navigationOptions = ({navigation, screenProps}) => ({
+	title: screenProps.intl.formatMessage(messages.scheduler),
 	tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
-};
+});
 
 SchedulerTab.propTypes = {
 	rowsAndSections: React.PropTypes.object,

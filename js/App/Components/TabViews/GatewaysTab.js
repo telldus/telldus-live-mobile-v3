@@ -24,14 +24,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { defineMessages } from 'react-intl';
 
-import { Image, List, ListDataSource, ListItem, Text, View, I18n } from 'BaseComponents';
+import { Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
 import { getGateways } from 'Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
 import Theme from 'Theme';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
+
+const messages = defineMessages({
+	gateways: {
+		id: 'pages.gateways',
+		defaultMessage: 'Gateways',
+		description: 'The gateways tab',
+	},
+});
 
 type Props = {
 	rows: Array<Object>,
@@ -57,10 +66,10 @@ class GatewaysTab extends View {
 	renderRow: (renderRowProps) => Object;
 	onRefresh: () => void;
 
-	static navigationOptions = {
-		title: I18n.t('pages.gateways'),
+	static navigationOptions = ({navigation, screenProps}) => ({
+		title: screenProps.intl.formatMessage(messages.gateways),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'gateways'),
-	};
+	});
 
 	constructor(props: Props) {
 		super(props);

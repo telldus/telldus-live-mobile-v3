@@ -2,6 +2,7 @@
 #
 config.local.js
 *.keystore
+js/App/Translations/whitelist_en.json
 
 # VSCode ignores
 #

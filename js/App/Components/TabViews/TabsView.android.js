@@ -26,6 +26,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
+import { intlShape, injectIntl } from 'react-intl';
 
 import { Text, View, Icon, Image, Header } from 'BaseComponents';
 
@@ -154,6 +155,7 @@ const TabNavigatorConfig = {
 const Tabs = TabNavigator(RouteConfigs, TabNavigatorConfig);
 
 type Props = {
+	intl: intlShape.isRequired,
 	dashboard: Object,
 	tab: string,
 	userProfile: Object,
@@ -291,7 +293,7 @@ class TabsView extends View {
 				<View style={{ flex: 1 }}>
 					<Header leftButton={this.menuButton} rightButton={rightButton}/>
 					<View>
-						<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange}/>
+						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 						{
 							this.state.settings ? (
 								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
@@ -404,4 +406,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(TabsView));

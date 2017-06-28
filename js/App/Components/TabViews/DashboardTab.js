@@ -26,9 +26,10 @@ import { createSelector } from 'reselect';
 import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
-import { Text, List, ListDataSource, View, I18n } from 'BaseComponents';
+import { Text, List, ListDataSource, View } from 'BaseComponents';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
+import { defineMessages } from 'react-intl';
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
@@ -44,6 +45,14 @@ import {
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import reactMixin from 'react-mixin';
+
+const messages = defineMessages({
+	dashboard: {
+		id: 'pages.dashboard',
+		defaultMessage: 'Dashboard',
+		description: 'The dashboard tab',
+	},
+});
 
 type Props = {
 	rows: Array<Object>,
@@ -93,10 +102,10 @@ class DashboardTab extends View {
 	changeDisplayType: () => void;
 	onRefresh: () => void;
 
-	static navigationOptions = {
-		title: I18n.t('pages.dashboard'),
+	static navigationOptions = ({navigation, screenProps}) => ({
+		title: screenProps.intl.formatMessage(messages.dashboard),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'dashboard'),
-	};
+	});
 
 	constructor(props: Props) {
 		super(props);

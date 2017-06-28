@@ -50,6 +50,65 @@ All commands are assumed to be ran from project root.
 
 ## Development
 
+### i18n
+
+The app uses react-intl for translating strings.
+
+Before commiting the code, update the english translation file by running:
+```
+npm run manage:translations
+```
+Make sure there is no duplicate keys.
+
+There is three ways of translating a string in the code.
+
+#### 1) Use the <FormattedMessage> component available in base components.
+
+**Example:**
+```
+<FormattedMessage id="unique.id.for.this.tag" defaultMessage="String to be translated" description="Description for this tag to help the translators" />
+```
+
+#### 2) Use the `<FormattedMessage>` component but define the strings separate
+
+This is similar to the above variant but if the same tag is to be reused it must be defined separately
+
+**Example:**
+```
+const messages = defineMessages({
+	tag: {
+		id: 'unique.id.for.this.tag',
+		defaultMessage: 'String to be translated',
+		description: "Description for this tag to help the translators"
+	},
+);
+
+<FormattedMessage {...messages.tag} />
+```
+
+#### 3) Use the formatMessage function
+First wrap the component using `injectIntl`
+https://github.com/yahoo/react-intl/wiki/API#injection-api
+
+**Example:**
+```
+const messages = defineMessages({
+	tag: {
+		id: 'unique.id.for.this.tag',
+		defaultMessage: 'String to be translated',
+		description: "Description for this tag to help the translators"
+	},
+);
+
+class MyComp extends Component {
+	render() {
+		let formatMessage = this.props.intl.formatMessage;
+		return <Text>{formatMessage(messages.tag)}</Text>
+	}
+}
+export injectIntl(MyComp)
+```
+
 ### Local config
 
 You'll need to add `config.local.js` in the root of your project. It's not to be checked in (ignored by git).

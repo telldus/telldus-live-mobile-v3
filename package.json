@@ -6,6 +6,7 @@
     "lint": "eslint js",
     "lint_autofix": "eslint js --fix",
     "flow": "node_modules/.bin/flow",
+    "manage:translations": "node js/Utils/translationRunner.js",
     "postinstall": "rm -f node_modules/intl/.babelrc",
     "release": "node js/Utils/release.js",
     "sourcemap": "node js/Utils/sourcemap.js"
@@ -52,6 +53,7 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-eslint": "~7.1.1",
+    "babel-plugin-react-intl": "^2.3.1",
     "babel-polyfill": "~6.20.0",
     "babel-preset-react-native": "1.9.2",
     "babel-preset-stage-3": "^6.17.0",
@@ -60,7 +62,8 @@
     "eslint": "~3.12.2",
     "eslint-plugin-react": "^6.10.3",
     "flow-bin": "^0.38.0",
-    "prompt": "^1.0.0"
+    "prompt": "^1.0.0",
+    "react-intl-translations-manager": "^5.0.0"
   },
   "engines": {
     "node": ">=5.0",
