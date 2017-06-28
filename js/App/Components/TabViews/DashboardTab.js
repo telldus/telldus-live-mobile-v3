@@ -222,6 +222,9 @@ class DashboardTab extends View {
 			if (row.objectType !== 'sensor' && row.objectType !== 'device') {
 				return <Text>unknown device or sensor</Text>;
 			}
+			if (!row.childObject) {
+				return <Text>Unknown device or sensor</Text>;
+			}
 
 			let tileStyle = {
 				flexDirection: 'row',
