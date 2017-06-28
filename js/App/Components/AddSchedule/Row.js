@@ -27,7 +27,8 @@ import { Image, TouchableOpacity, Dimensions } from 'react-native';
 
 type Props = {
 	row: Object,
-	padding: Number,
+	padding: number,
+	marginBottom: number,
 	select: (Object) => void,
 };
 
@@ -40,10 +41,10 @@ class Row extends View {
 	constructor(props) {
 		super(props);
 
-		const { row, padding } = this.props;
-		const { textColor, bgColor } = row;
-
 		this.deviceWidth = Dimensions.get('window').width;
+
+		const { row, padding, marginBottom = this.deviceWidth * 0.026666667 } = this.props;
+		const { textColor, bgColor } = row;
 
 		this.deviceIconSize = this.deviceWidth * 0.092;
 		this.rowWidth = this.deviceWidth - 2 * padding;
@@ -60,7 +61,7 @@ class Row extends View {
 				flex: 1,
 				height: this.deviceWidth * 0.209333333,
 				minHeight: this.deviceIconSize + 10,
-				marginBottom: 3,
+				marginBottom,
 				borderRadius: borderRadius,
 				elevation: 2,
 				shadowColor: '#000',
@@ -148,6 +149,7 @@ class Row extends View {
 Row.propTypes = {
 	row: React.PropTypes.object.isRequired,
 	padding: React.PropTypes.number.isRequired,
+	marginBottom: React.PropTypes.number,
 	select: React.PropTypes.func.isRequired,
 };
 

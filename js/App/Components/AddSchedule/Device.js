@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Dimensions } from 'react-native';
 import { View, ListDataSource, List } from 'BaseComponents';
 import { getDevices } from 'Actions_Devices';
 import { selectDevice } from 'Actions_AddSchedule';
@@ -52,6 +53,8 @@ class Device extends View {
 
 	constructor(props) {
 		super(props);
+
+		this.deviceWidth = Dimensions.get('window').width;
 
 		this.state = {
 			dataSource: new ListDataSource({
@@ -88,6 +91,7 @@ class Device extends View {
 				row={preparedRow}
 				select={this.selectDevice}
 				padding={this.props.padding}
+				marginBottom={this.deviceWidth * 0.006666667}
 			/>
 		);
 	};
