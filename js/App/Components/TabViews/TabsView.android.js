@@ -117,9 +117,6 @@ const RouteConfigs = {
 	Scheduler: {
 		screen: TabViews.Scheduler,
 	},
-	Gateways: {
-		screen: TabViews.Gateways,
-	},
 };
 
 const TabNavigatorConfig = {
