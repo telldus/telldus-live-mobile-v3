@@ -178,7 +178,6 @@ class TabsView extends View {
 
 		this.state = {
 			settings: false,
-			routeName: '',
 		};
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
@@ -219,10 +218,7 @@ class TabsView extends View {
 	}
 
 	onNavigationStateChange(prevState, currentState) {
-		const index = currentState.index;
-
-		this.setState({ routeName: currentState.routes[index].routeName });
-		this.onRequestChangeTab(index);
+		this.onRequestChangeTab(currentState.index);
 	}
 
 	openDrawer() {
