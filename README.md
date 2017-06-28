@@ -1,5 +1,7 @@
 # telldus-purple-internal
 
+[![Dependency Status](https://david-dm.org/telldus/telldus-live-mobile-v3.svg)](https://david-dm.org/telldus/telldus-live-mobile-v3) [![devDependency Status](https://david-dm.org/telldus/telldus-live-mobile-v3/dev-status.svg)](https://david-dm.org/telldus/telldus-live-mobile-v3#info=devDependencies)
+
 Internal dev repo for Telldus
 
 **Notes:**
