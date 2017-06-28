@@ -95,7 +95,6 @@ class TabsView extends View {
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
 	onToggleEditMode: () => void;
-	goAddSchedule: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -127,38 +126,6 @@ class TabsView extends View {
 			},
 			onPress: this.onToggleEditMode,
 		};
-
-		this.deviceWidth = Dimensions.get('window').width;
-
-		this.addButtonSize = this.deviceWidth * 0.134666667;
-		this.addButtonOffset = this.deviceWidth * 0.034666667;
-		this.addButtonTextSize = this.deviceWidth * 0.056;
-
-		this.styles = {
-			addButton: {
-				backgroundColor: Theme.Core.brandSecondary,
-				borderRadius: 50,
-				position: 'absolute',
-				height: this.addButtonSize,
-				width: this.addButtonSize,
-				bottom: 50 + this.addButtonOffset,
-				right: this.addButtonOffset,
-				shadowColor: '#000',
-				shadowOpacity: 0.5,
-				shadowRadius: 2,
-				shadowOffset: {
-					height: 2,
-					width: 0,
-				},
-				flex: 1,
-				alignItems: 'center',
-				justifyContent: 'center',
-			},
-			iconPlus: {
-				width: this.addButtonTextSize,
-				height: this.addButtonTextSize,
-			},
-		};
 	}
 
 	onNavigationStateChange = (prevState, newState) => {
@@ -186,10 +153,6 @@ class TabsView extends View {
 		this.props.onToggleEditMode(tab);
 	};
 
-	goAddSchedule = () => {
-		//this.props.navigation.navigate('AddSchedule');
-	};
-
 	render() {
 		const { routeName } = this.state.tab;
 
@@ -207,18 +170,6 @@ class TabsView extends View {
 			<View>
 				<Header rightButton={rightButton}/>
 				<Tabs onNavigationStateChange={this.onNavigationStateChange}/>
-				{
-					routeName === 'Scheduler' ? (
-						<TouchableOpacity onPress={this.goAddSchedule}>
-							<View style={this.styles.addButton}>
-								<Image
-									source={require('./img/iconPlus.png')}
-									style={this.styles.iconPlus}
-								/>
-							</View>
-						</TouchableOpacity>
-					) : null
-				}
 				{
 					this.state.settings ? (
 						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
