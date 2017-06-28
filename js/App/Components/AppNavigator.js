@@ -31,7 +31,7 @@ import {
 	getUserProfile,
 	appStart,
 	appState,
-	syncLiveApiOnForeground
+	syncLiveApiOnForeground,
 } from 'Actions';
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
@@ -42,12 +42,16 @@ import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews_SubViews';
+import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
+	},
+	DeviceDetails: {
+		screen: DeviceDetailsTabsView,
 	},
 };
 

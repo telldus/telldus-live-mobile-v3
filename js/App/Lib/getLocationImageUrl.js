@@ -19,29 +19,37 @@
 
 // @flow
 
-export default function getDeviceType(supportedMethods:Object) : string {
-	console.log('test dude', supportedMethods);
-	const {
-		TURNON,
-		TURNOFF,
-		BELL,
-		DIM,
-		UP,
-		DOWN,
-		STOP,
-	} = supportedMethods;
+export default function getLocationImageUrl(deviceType:string) : string {
+	console.log('test dude deviceType', deviceType);
+	if (deviceType === 'TelldusCenter') {
 
-	if (BELL) {
-		return 'BELL';
+		return 'icon_location_telldus_center_01';
+
 	}
-	if (UP || DOWN || STOP) {
-		return 'NAVIGATIONAL';
+	if (deviceType === 'TellStick Net') {
+
+		return 'icon_location_tell_stick_net_01';
+
 	}
-	if (DIM) {
-		return 'DIMMER';
+	if (deviceType === 'TellStick Net v2') {
+
+		return 'icon_location_tell_stick_net_v2_01';
+
 	}
-	if (TURNON || TURNOFF) {
-		return 'TOGGLE';
+	if (deviceType === 'TellStick ZNet Lite') {
+
+		return 'icon_location_telldus_z_net_lite_01';
+
 	}
-	return 'UNSUPPORTED';
+	if (deviceType === 'TellStick ZNet Lite v2') {
+
+		return 'icon_location_telldus_z_net_lite_01';
+
+	}
+	if (deviceType === 'OtioBox') {
+
+		return 'icon_location_otio_box_01';
+
+	}
+	return 'icon_location_otio_box_01';
 }

@@ -27,13 +27,6 @@ import { createSelector } from 'reselect';
 
 import { List, ListDataSource, Text, View, I18n } from 'BaseComponents';
 import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
-import {
-	DeviceDetailModal,
-	ToggleDeviceDetailModal,
-	BellDeviceDetailModal,
-	DimmerDeviceDetailModal,
-	NavigationalDeviceDetailModal,
-} from 'DetailViews';
 
 import { getDevices } from 'Actions_Devices';
 import { toggleEditMode } from 'Actions';
@@ -54,6 +47,7 @@ type Props = {
 	devices: Object,
 	tab: string,
 	dispatch: Function,
+	stackNavigator: Object,
 };
 
 type State = {
@@ -126,25 +120,6 @@ class DevicesTab extends View {
 	}
 
 	render() {
-		const deviceId = this.state.deviceId;
-		let deviceDetail = null;
-		let device;
-
-		if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
-			const deviceType = this.getType(deviceId);
-			device = this.props.devices.byId[deviceId];
-			if (deviceType === 'TOGGLE') {
-				deviceDetail = <ToggleDeviceDetailModal device={device}/>;
-			} else if (deviceType === 'DIMMER') {
-				deviceDetail = <DimmerDeviceDetailModal device={device}/>;
-			} else if (deviceType === 'BELL') {
-				deviceDetail = <BellDeviceDetailModal device={device}/>;
-			} else if (deviceType === 'NAVIGATIONAL') {
-				deviceDetail = <NavigationalDeviceDetailModal device={device}/>;
-			} else {
-				deviceDetail = <View style={{ height: 0 }}/>;
-			}
-		}
 		return (
 			<View style={{ flex: 1 }}>
 				<List
@@ -157,14 +132,6 @@ class DevicesTab extends View {
 					editMode={this.props.editMode}
 					onRefresh={this.onRefresh}
 				/>
-				{deviceDetail ? (
-					<DeviceDetailModal
-						isVisible={true}
-						onCloseSelected={this.onCloseSelected}
-						device={device}>
-						{deviceDetail}
-					</DeviceDetailModal>
-				) : null}
 			</View>
 		);
 	}
@@ -184,8 +151,8 @@ class DevicesTab extends View {
 		);
 	}
 
-	openDeviceDetail(id) {
-		this.setState({ deviceId: id });
+	openDeviceDetail(device) {
+		this.props.stackNavigator.navigate('DeviceDetails', { device: device, devices: this.props.devices });
 	}
 
 	onCloseSelected() {
@@ -243,8 +210,9 @@ const getRowsAndSections = createSelector(
 	}
 );
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownprops) {
 	return {
+		stackNavigator: ownprops.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(state),
 		gatewaysById: state.gateways.byId,
 		editMode: state.tabs.editModeDevicesTab,

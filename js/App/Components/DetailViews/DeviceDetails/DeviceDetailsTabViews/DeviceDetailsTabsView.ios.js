@@ -15,33 +15,22 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule DeviceDetailsTabsView
  */
 
 // @flow
 
-export default function getDeviceType(supportedMethods:Object) : string {
-	console.log('test dude', supportedMethods);
-	const {
-		TURNON,
-		TURNOFF,
-		BELL,
-		DIM,
-		UP,
-		DOWN,
-		STOP,
-	} = supportedMethods;
+'use strict';
 
-	if (BELL) {
-		return 'BELL';
+import { View } from 'BaseComponents';
+
+class DeviceDetailsTabsView extends View {
+	render() {
+		return (
+			null
+		);
 	}
-	if (UP || DOWN || STOP) {
-		return 'NAVIGATIONAL';
-	}
-	if (DIM) {
-		return 'DIMMER';
-	}
-	if (TURNON || TURNOFF) {
-		return 'TOGGLE';
-	}
-	return 'UNSUPPORTED';
 }
+
+module.exports = DeviceDetailsTabsView;

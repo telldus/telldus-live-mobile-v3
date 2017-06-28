@@ -19,29 +19,59 @@
 
 // @flow
 
-export default function getDeviceType(supportedMethods:Object) : string {
-	console.log('test dude', supportedMethods);
-	const {
-		TURNON,
-		TURNOFF,
-		BELL,
-		DIM,
-		UP,
-		DOWN,
-		STOP,
-	} = supportedMethods;
+'use strict';
 
-	if (BELL) {
-		return 'BELL';
+import React from 'react';
+import { connect } from 'react-redux';
+
+import { Text, View } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
+
+type Props = {
+};
+
+type State = {
+};
+
+class HistoryTab extends View {
+	props: Props;
+	state: State;
+
+	constructor(props: Props) {
+		super(props);
 	}
-	if (UP || DOWN || STOP) {
-		return 'NAVIGATIONAL';
+
+	render() {
+		return (
+			<View style={styles.container}>
+				<Text>
+					Coming Soon..
+				</Text>
+			</View>
+		);
 	}
-	if (DIM) {
-		return 'DIMMER';
-	}
-	if (TURNON || TURNOFF) {
-		return 'TOGGLE';
-	}
-	return 'UNSUPPORTED';
+
 }
+
+HistoryTab.propTypes = {
+};
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 0,
+	},
+});
+
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+	};
+}
+
+function mapStateToProps(state, ownProps) {
+	return {
+		state,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(HistoryTab);

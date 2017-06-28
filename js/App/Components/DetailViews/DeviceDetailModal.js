@@ -56,7 +56,7 @@ class DeviceDetailModal extends View {
 		};
 
 		this.onStarButtonSelected = this.onStarButtonSelected.bind(this);
-		console.log(this.props.device);
+		// console.log(this.props.device);
 	}
 
 	onStarButtonSelected() {
