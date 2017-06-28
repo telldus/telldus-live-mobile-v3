@@ -29,6 +29,7 @@ import Content from './Content';
 import BackgroundImage from './BackgroundImage';
 import Button from './Button';
 import Text from './Text';
+import FormattedMessage from './FormattedMessage';
 import FormattedNumber from './FormattedNumber';
 import Switch from './Switch';
 import Picker from './Picker';
@@ -76,6 +77,7 @@ module.exports = {
 	Content: Content,
 	BackgroundImage: BackgroundImage,
 	Button: Button,
+	FormattedMessage: FormattedMessage,
 	FormattedNumber: FormattedNumber,
 	Text: Text,
 	Switch: Switch,
