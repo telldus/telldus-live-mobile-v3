@@ -23,7 +23,16 @@
 
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
-import { getGateways, getSensors, getJobs, getUserProfile, appStart, appState, syncLiveApiOnForeground } from 'Actions';
+import { StackNavigator } from 'react-navigation';
+import {
+	getGateways,
+	getSensors,
+	getJobs,
+	getUserProfile,
+	appStart,
+	appState,
+	syncLiveApiOnForeground
+} from 'Actions';
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
 
@@ -36,32 +45,51 @@ import { DimmerPopup } from 'TabViews_SubViews';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
+const RouteConfigs = {
+	Tabs: {
+		screen: TabsView,
+	},
+};
+
+const StackNavigatorConfig = {
+	initialRouteName: 'Tabs',
+	navigationOptions: {
+		header: null,
+	},
+};
+
+const Navigator = StackNavigator(RouteConfigs, StackNavigatorConfig);
+
 type Props = {
-  dimmer: Object,
-  tab: string,
-  accessToken: Object,
-  userProfile: Object,
-  dispatch: Function,
+	dimmer: Object,
+	tab: string,
+	accessToken: Object,
+	userProfile: Object,
+	dispatch: Function,
 };
 
 type State = {
-  specificOrientation: Object,
+	specificOrientation: Object,
 }
 
 class AppNavigator extends View {
+
 	props: Props;
 	state: State;
 
-	_updateSpecificOrientation: Object => void;
+	_updateSpecificOrientation: (Object) => void;
+
 	constructor() {
 		super();
+
 		if (Platform.OS !== 'android') {
 			const init = Orientation.getInitialOrientation();
+
 			this.state = {
 				specificOrientation: init,
 			};
+
 			Orientation.unlockAllOrientations();
-			this._updateSpecificOrientation = this._updateSpecificOrientation.bind(this);
 			Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
 		}
 	}
@@ -89,16 +117,16 @@ class AppNavigator extends View {
 		this.props.dispatch(getJobs());
 	}
 
-	_updateSpecificOrientation(specificOrientation) {
+	_updateSpecificOrientation = specificOrientation => {
 		if (Platform.OS !== 'android') {
 			this.setState({ specificOrientation });
 		}
-	}
+	};
 
 	render() {
 		return (
 			<View>
-				<TabsView />
+				<Navigator/>
 				<DimmerPopup
 					isVisible={this.props.dimmer.show}
 					name={this.props.dimmer.name}

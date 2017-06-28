@@ -25,6 +25,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Image, Dimensions, TouchableOpacity } from 'react-native';
 
 import { Icon, View, Header } from 'BaseComponents';
 
@@ -34,6 +35,37 @@ import TabViews from 'TabViews';
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
 import { SettingsDetailModal } from 'DetailViews';
+import Theme from 'Theme';
+
+const RouteConfigs = {
+	Dashboard: {
+		screen: TabViews.Dashboard,
+	},
+	Devices: {
+		screen: TabViews.Devices,
+	},
+	Sensors: {
+		screen: TabViews.Sensors,
+	},
+	Scheduler: {
+		screen: TabViews.Scheduler,
+	},
+	Gateways: {
+		screen: TabViews.Gateways,
+	},
+};
+
+const TabNavigatorConfig = {
+	initialRouteName: 'Dashboard',
+	swipeEnabled: false,
+	lazy: true,
+	animationEnabled: false,
+	tabBarOptions: {
+		activeTintColor: '#e26901',
+	},
+};
+
+const Tabs = TabNavigator(RouteConfigs, TabNavigatorConfig);
 
 type Props = {
 	tab: string,
@@ -45,8 +77,13 @@ type Props = {
 	dispatch: Function,
 };
 
-type State = {
+type Tab = {
 	index: number,
+	routeName: string,
+};
+
+type State = {
+	tab: Tab,
 	settings: boolean,
 };
 
@@ -54,17 +91,20 @@ class TabsView extends View {
 	props: Props;
 	state: State;
 
-	toggleSensorTabEditMode: () => void;
-	toggleDevicesTabEditMode: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
+	onToggleEditMode: () => void;
+	goAddSchedule: () => void;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
-			index: 0,
+			tab: {
+				index: 0,
+				routeName: 'Dashboard',
+			},
 			settings: false,
 		};
 
@@ -76,7 +116,7 @@ class TabsView extends View {
 				size: 22,
 				color: '#fff',
 			},
-			onPress: this.onOpenSetting.bind(this),
+			onPress: this.onOpenSetting,
 		};
 
 		this.starButton = {
@@ -85,44 +125,79 @@ class TabsView extends View {
 				size: 22,
 				color: '#fff',
 			},
-			onPress: this.onToggleEditMode.bind(this),
+			onPress: this.onToggleEditMode,
 		};
 
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-		this.onCloseSetting = this.onCloseSetting.bind(this);
+		this.deviceWidth = Dimensions.get('window').width;
+
+		this.addButtonSize = this.deviceWidth * 0.134666667;
+		this.addButtonOffset = this.deviceWidth * 0.034666667;
+		this.addButtonTextSize = this.deviceWidth * 0.056;
+
+		this.styles = {
+			addButton: {
+				backgroundColor: Theme.Core.brandSecondary,
+				borderRadius: 50,
+				position: 'absolute',
+				height: this.addButtonSize,
+				width: this.addButtonSize,
+				bottom: 50 + this.addButtonOffset,
+				right: this.addButtonOffset,
+				shadowColor: '#000',
+				shadowOpacity: 0.5,
+				shadowRadius: 2,
+				shadowOffset: {
+					height: 2,
+					width: 0,
+				},
+				flex: 1,
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			iconPlus: {
+				width: this.addButtonTextSize,
+				height: this.addButtonTextSize,
+			},
+		};
 	}
 
-	onTabSelect(tab) {
-		this.props.onTabSelect(tab);
-	}
+	onNavigationStateChange = (prevState, newState) => {
+		const index = newState.index;
 
-	onNavigationStateChange(prevState, currentState) {
-		const index = currentState.index;
-		this.onTabSelect(this.tabNames[index]);
-		this.setState({ index });
-	}
+		const tab = {
+			index,
+			routeName: newState.routes[index].routeName,
+		};
 
-	onOpenSetting() {
+		this.setState({ tab });
+		this.props.onTabSelect(this.tabNames[index]);
+	};
+
+	onOpenSetting = () => {
 		this.setState({ settings: true });
-	}
+	};
 
-	onCloseSetting() {
+	onCloseSetting = () => {
 		this.setState({ settings: false });
-	}
+	};
 
-	onToggleEditMode() {
-		const tab = this.tabNames[this.state.index];
+	onToggleEditMode = () => {
+		const tab = this.tabNames[this.state.tab.index];
 		this.props.onToggleEditMode(tab);
-	}
+	};
+
+	goAddSchedule = () => {
+		//this.props.navigation.navigate('AddSchedule');
+	};
 
 	render() {
-		const { index } = this.state;
+		const { routeName } = this.state.tab;
 
 		let rightButton;
 
-		if (index === 0) {
+		if (routeName === 'Dashboard') {
 			rightButton = this.settingsButton;
-		} else if (index === 1 || index === 2) {
+		} else if (routeName === 'Devices' || routeName === 'Sensors') {
 			rightButton = this.starButton;
 		} else {
 			rightButton = null;
@@ -132,6 +207,18 @@ class TabsView extends View {
 			<View>
 				<Header rightButton={rightButton}/>
 				<Tabs onNavigationStateChange={this.onNavigationStateChange}/>
+				{
+					routeName === 'Scheduler' ? (
+						<TouchableOpacity onPress={this.goAddSchedule}>
+							<View style={this.styles.addButton}>
+								<Image
+									source={require('./img/iconPlus.png')}
+									style={this.styles.iconPlus}
+								/>
+							</View>
+						</TouchableOpacity>
+					) : null
+				}
 				{
 					this.state.settings ? (
 						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
@@ -162,32 +249,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);
-
-const Tabs = TabNavigator(
-	{
-		Dashboard: {
-			screen: TabViews.Dashboard,
-		},
-		Devices: {
-			screen: TabViews.Devices,
-		},
-		Sensors: {
-			screen: TabViews.Sensors,
-		},
-		Scheduler: {
-			screen: TabViews.Scheduler,
-		},
-		Gateways: {
-			screen: TabViews.Gateways,
-		},
-	},
-	{
-		initialRouteName: 'Dashboard',
-		swipeEnabled: false,
-		lazy: true,
-		animationEnabled: false,
-		tabBarOptions: {
-			activeTintColor: '#e26901',
-		},
-	}
-);

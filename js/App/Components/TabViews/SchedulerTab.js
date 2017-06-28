@@ -44,7 +44,6 @@ type State = {
 	dataSource: Object,
 };
 
-import { Image, Dimensions } from 'react-native';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 const daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -58,11 +57,6 @@ class SchedulerTab extends View {
 	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
 	onRefresh: () => void;
 
-	static navigationOptions = {
-		title: I18n.t('pages.scheduler'),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
-	};
-
 	constructor(props: Props) {
 		super(props);
 
@@ -73,49 +67,6 @@ class SchedulerTab extends View {
 				rowHasChanged: this.rowHasChanged,
 				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 			}).cloneWithRowsAndSections(sections, sectionIds),
-		};
-
-		this.windowHeight = Dimensions.get('window').height;
-		this.windowWidth = Dimensions.get('window').width;
-		this.addButtonSize = this.windowWidth * 0.134666667;
-		this.addButtonOffset = this.windowWidth * 0.034666667;
-		this.addButtonTextSize = this.windowWidth * 0.056;
-
-		this.styles = {
-			container: {
-				flex: 1,
-			},
-			header: {
-				paddingTop: 20,
-				backgroundColor: Theme.Core.brandPrimary,
-				flex: 1,
-				justifyContent: 'center',
-				alignItems: 'center',
-				maxHeight: this.windowHeight * 0.095952024,
-			},
-			addButton: {
-				backgroundColor: Theme.Core.brandSecondary,
-				borderRadius: 50,
-				position: 'absolute',
-				height: this.addButtonSize,
-				width: this.addButtonSize,
-				bottom: this.addButtonOffset,
-				right: this.addButtonOffset,
-				shadowColor: '#000',
-				shadowOpacity: 0.5,
-				shadowRadius: 2,
-				shadowOffset: {
-					height: 2,
-					width: 0,
-				},
-				flex: 1,
-				alignItems: 'center',
-				justifyContent: 'center',
-			},
-			iconPlus: {
-				width: this.addButtonTextSize,
-				height: this.addButtonTextSize,
-			},
 		};
 
 		this.renderRow = this.renderRow.bind(this);
@@ -147,26 +98,15 @@ class SchedulerTab extends View {
 		);
 	}
 
-	handleAddingSchedule = () => {
-		//this.props.navigator.push({
-		//	title: 'Telldus',
-		//	component: AddSchedule.Action,
-		//	navigationBarHidden: false,
-		//});
-	};
-
 	render() {
 		return (
-			<View style={this.styles.container}>
+			<View style={{ flex: 1 }}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 					onRefresh={this.onRefresh}
 				/>
-				<View style={this.styles.addButton}>
-					<Image source={require('./img/iconPlus.png')} style={this.styles.iconPlus}/>
-				</View>
 			</View>
 		);
 	}
@@ -202,6 +142,11 @@ class SchedulerTab extends View {
 		);
 	}
 }
+
+SchedulerTab.navigationOptions = {
+	title: I18n.t('pages.scheduler'),
+	tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
+};
 
 SchedulerTab.propTypes = {
 	rowsAndSections: React.PropTypes.object,
