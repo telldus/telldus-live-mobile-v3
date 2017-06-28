@@ -93,6 +93,7 @@ class AddSchedule extends View {
 		this.styles = {
 			bgImage: {
 				mask: {
+					borderWidth: 0,
 					height: this.deviceWidth * 0.333333333,
 					width: this.deviceWidth,
 					overflow: 'hidden',
