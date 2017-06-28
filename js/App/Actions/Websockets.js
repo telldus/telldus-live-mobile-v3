@@ -111,7 +111,7 @@ export const connectToGateways = () => (dispatch: Dispatch, getState: GetState )
 		const { websocketAddress } = byId[gatewayId] || {};
 		const { address, port } = websocketAddress || {};
 		if (!address || !port) {
-			return console.error('cannot connect to gateway because address or port is missing', {
+			return console.warn('cannot connect to gateway because address or port is missing', {
 				gatewayId,
 				address,
 				port,
@@ -144,7 +144,7 @@ export const getWebsocketAddress = (gatewayId: string) => (dispatch: Dispatch, g
 		const { websocketAddress } = gateway || {};
 		const { address, port } = response;
 		if (!address || !port) {
-			return console.error('received illegal gateway socket address', {
+			return console.warn('received illegal gateway socket address', {
 				gatewayId,
 				response,
 			});
