@@ -116,7 +116,7 @@ You can access the developer menu by shaking your device or by selecting "Shake 
   - `package.json`: `version` (semver)
   - `android/app/build.gradle`: `versionCode` (Android) and `versionName` (semver)
   - `android/app/src/main/AndroidManifest.xml`: `versionCode` (Android) and `versionName` (semver)
-  - `js/App/Components/DetailViews/SettingsDetailModal.js`: `'You are using version <semver> of Telldus Live! mobile.'`
+  - `config.local.js`: `version` (semver)
 
 ### Android
 
