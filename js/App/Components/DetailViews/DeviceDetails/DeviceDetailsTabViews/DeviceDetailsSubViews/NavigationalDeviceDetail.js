@@ -23,17 +23,15 @@
 
 import React from 'react';
 
-import { View, Text } from 'BaseComponents';
-import { StyleSheet, Dimensions, Image } from 'react-native';
+import { View } from 'BaseComponents';
+import { StyleSheet, Dimensions } from 'react-native';
 
-const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 import { NavigationalButton } from 'TabViews_SubViews';
 
 type Props = {
 	device: Object,
-	locationData: Object,
 };
 
 class NavigationalDeviceDetailModal extends View {
@@ -46,8 +44,6 @@ class NavigationalDeviceDetailModal extends View {
 	render() {
 		const { device } = this.props;
 		const { UP, DOWN, STOP } = device.supportedMethods;
-		const { locationImageUrl, locationType, locationName } = this.props.locationData;
-
 		let navigationButtons = null;
 
 		if (UP || DOWN || STOP) {
@@ -56,26 +52,8 @@ class NavigationalDeviceDetailModal extends View {
 
 		return (
 			<View style={styles.container}>
-				<View style={styles.itemsContainer}>
-					<View style={[styles.navButtonsContainer, styles.shadow]}>
-						{navigationButtons}
-					</View>
-					<View style={[styles.shadow, styles.homeSweetHomeContainer]}>
-						<View style={styles.locationImageContainer}>
-							<Text style={styles.textLocation}>
-								Location :
-							</Text>
-							<Image resizeMode={'stretch'} style={styles.locationImage} source={{ uri: locationImageUrl }} />
-						</View>
-						<View style={styles.locationTextContainer}>
-							<Text numberOfLines={1} style={styles.textHSH}>
-								{locationName}
-							</Text>
-							<Text numberOfLines={1} style={styles.textDeviceLocation}>
-								{locationType}
-							</Text>
-						</View>
-					</View>
+				<View style={[styles.navButtonsContainer, styles.shadow]}>
+					{navigationButtons}
 				</View>
 			</View>
 		);
@@ -84,18 +62,11 @@ class NavigationalDeviceDetailModal extends View {
 
 NavigationalDeviceDetailModal.propTypes = {
 	device: React.PropTypes.object.isRequired,
-	locationData: React.PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 0,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	itemsContainer: {
-		width: (deviceWidth - 20),
-		justifyContent: 'center',
 	},
 	navButtonsContainer: {
 		flex: 0,
@@ -124,46 +95,6 @@ const styles = StyleSheet.create({
 		marginVertical: 16,
 		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	homeSweetHomeContainer: {
-		marginTop: 10,
-		backgroundColor: '#fff',
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		flexDirection: 'row',
-	},
-	locationImageContainer: {
-		height: (deviceHeight * 0.2),
-		width: (deviceWidth - 20) * 0.3,
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		flexDirection: 'column',
-	},
-	locationTextContainer: {
-		width: (deviceWidth - 20) * 0.7,
-		height: (deviceHeight * 0.2),
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingTop: 35,
-	},
-	locationImage: {
-		width: (deviceWidth * 0.22),
-		height: (deviceHeight * 0.12),
-		alignItems: 'flex-start',
-		marginLeft: 5,
-	},
-	textLocation: {
-		color: '#A59F9A',
-		fontSize: 14,
-		paddingLeft: 10,
-	},
-	textHSH: {
-		color: '#F06F0C',
-		fontSize: 18,
-	},
-	textDeviceLocation: {
-		color: '#A59F9A',
-		fontSize: 14,
 	},
 });
 

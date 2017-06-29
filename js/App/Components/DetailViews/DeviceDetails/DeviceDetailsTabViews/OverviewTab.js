@@ -25,16 +25,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { View } from 'BaseComponents';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+const deviceWidth = Dimensions.get('window').width;
 
 import getDeviceType from '../../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
 import {
-	ToggleDeviceDetailModal,
-	BellDeviceDetailModal,
-	DimmerDeviceDetailModal,
-	NavigationalDeviceDetailModal,
-} from 'DetailViews';
+	DeviceLocationDetail,
+	ToggleDeviceDetail,
+	BellDeviceDetail,
+	DimmerDeviceDetail,
+	NavigationalDeviceDetail,
+} from 'DeviceDetailsSubView';
 
 type Props = {
   device: Object,
@@ -68,25 +70,32 @@ class OverviewTab extends View {
 		let deviceId = this.props.device.id;
 		let deviceDetail = null;
 		let device = this.props.device;
+		const locationImageUrl = getLocationImageUrl(this.props.gateway.type);
+		const locationData = {
+			locationImageUrl,
+			locationType: this.props.gateway.type,
+			locationName: this.props.gateway.name,
+		};
 		if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
 			const deviceType = this.getType(deviceId);
-			const locationImageUrl = getLocationImageUrl(this.props.gateway.type);
-			const locationData = { locationImageUrl, locationType: this.props.gateway.type, locationName: this.props.gateway.name };
 			if (deviceType === 'TOGGLE') {
-				deviceDetail = <ToggleDeviceDetailModal device={device} locationData={locationData} />;
+				deviceDetail = <ToggleDeviceDetail device={device} />;
 			} else if (deviceType === 'DIMMER') {
-				deviceDetail = <DimmerDeviceDetailModal device={device} locationData={locationData} />;
+				deviceDetail = <DimmerDeviceDetail device={device} />;
 			} else if (deviceType === 'BELL') {
-				deviceDetail = <BellDeviceDetailModal device={device} locationData={locationData} />;
+				deviceDetail = <BellDeviceDetail device={device} />;
 			} else if (deviceType === 'NAVIGATIONAL') {
-				deviceDetail = <NavigationalDeviceDetailModal device={device} locationData={locationData} />;
+				deviceDetail = <NavigationalDeviceDetail device={device} />;
 			} else {
-				deviceDetail = <View style={{ height: 0 }}/>;
+				deviceDetail = <View style={{ height: 0 }} />;
 			}
 		}
 		return (
 			<View style={styles.container}>
-				{deviceDetail}
+				<View style={styles.itemsContainer}>
+					{deviceDetail}
+					<DeviceLocationDetail {...locationData}/>
+				</View>
 			</View>
 		);
 	}
@@ -101,6 +110,12 @@ OverviewTab.propTypes = {
 const styles = StyleSheet.create({
 	container: {
 		flex: 0,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	itemsContainer: {
+		width: (deviceWidth - 20),
+		justifyContent: 'center',
 	},
 });
 

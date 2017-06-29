@@ -16,12 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule DetailViews
+ * @providesModule DeviceDetailsSubView
  */
 
 'use strict';
-import SettingsDetailModal from './SettingsDetailModal';
+
+import DeviceLocationDetail from './DeviceLocationDetail';
+import ToggleDeviceDetail from './ToggleDeviceDetail';
+import BellDeviceDetail from './BellDeviceDetail';
+import DimmerDeviceDetail from './DimmerDeviceDetail';
+import NavigationalDeviceDetail from './NavigationalDeviceDetail';
 
 module.exports = {
-	SettingsDetailModal,
+	DeviceLocationDetail,
+	ToggleDeviceDetail,
+	BellDeviceDetail,
+	DimmerDeviceDetail,
+	NavigationalDeviceDetail,
 };
