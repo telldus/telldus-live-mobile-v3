@@ -104,6 +104,46 @@ const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
 	);
 };
 
+const RouteConfigs = {
+	Dashboard: {
+		screen: TabViews.Dashboard,
+	},
+	Devices: {
+		screen: TabViews.Devices,
+	},
+	Sensors: {
+		screen: TabViews.Sensors,
+	},
+	Scheduler: {
+		screen: TabViews.Scheduler,
+	},
+	Gateways: {
+		screen: TabViews.Gateways,
+	},
+};
+
+const TabNavigatorConfig = {
+	initialRouteName: 'Dashboard',
+	swipeEnabled: true,
+	lazy: true,
+	animationEnabled: true,
+	tabBarOptions: {
+		activeTintColor: '#fff',
+		indicatorStyle: {
+			backgroundColor: '#fff',
+		},
+		scrollEnabled: true,
+		labelStyle: {
+			fontSize: Dimensions.get('window').width / 35,
+		},
+		style: {
+			backgroundColor: Theme.Core.brandPrimary,
+		},
+	},
+};
+
+const Tabs = TabNavigator(RouteConfigs, TabNavigatorConfig);
+
 type Props = {
 	dashboard: Object,
 	tab: string,
@@ -199,7 +239,6 @@ class TabsView extends View {
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
-		console.log("STAR", this.state.starIcon);
 
 		// TODO: Refactor: Split this code to smaller components
 		return (
@@ -252,7 +291,6 @@ class TabsView extends View {
 							/>
 						)
 					}
-
 					<View>
 						<Tabs onNavigationStateChange={this.onNavigationStateChange}/>
 						{
@@ -354,44 +392,5 @@ function mapDispatchToProps(dispatch) {
 		dispatch,
 	};
 }
-
-const Tabs = TabNavigator(
-	{
-		Dashboard: {
-			screen: TabViews.Dashboard,
-		},
-		Devices: {
-			screen: TabViews.Devices,
-		},
-		Sensors: {
-			screen: TabViews.Sensors,
-		},
-		Scheduler: {
-			screen: TabViews.Scheduler,
-		},
-		Gateways: {
-			screen: TabViews.Gateways,
-		},
-	},
-	{
-		initialRouteName: 'Dashboard',
-		swipeEnabled: true,
-		lazy: true,
-		animationEnabled: true,
-		tabBarOptions: {
-			activeTintColor: '#fff',
-			indicatorStyle: {
-				backgroundColor: '#fff',
-			},
-			scrollEnabled: true,
-			labelStyle: {
-				fontSize: Dimensions.get('window').width / 35,
-			},
-			style: {
-				backgroundColor: Theme.Core.brandPrimary,
-			},
-		},
-	}
-);
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);
