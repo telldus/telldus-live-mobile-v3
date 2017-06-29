@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { Platform, Image, Dimensions, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { Platform, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import Base from './Base';
 import computeProps from './computeProps';
 import Button from './Button';
@@ -32,33 +32,51 @@ import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 type Props = {
 	children: Object,
 	rounded: number,
 	searchBar: ?Object,
-	rightButton: Object
+	rightButton: Object,
+	leftButton: Object,
 };
 
 export default class HeaderComponent extends Base {
+
 	props: Props;
 
+	getInitialStyle: () => Object;
+	prepareRootProps: () => Object;
+	renderChildren: () => Object;
+	renderRightButton: (Object) => Object;
+	renderLeftButton: (Object) => Object;
+	renderButtonContent: (Object) => Object;
+
 	getInitialStyle() {
+		this.deviceWidth = Dimensions.get('window').width;
+
+		this.paddingHorizontal = 15;
+		this.paddingTop = (Platform.OS === 'ios') ? 15 : 0;
+
 		return {
 			navbar: {
 				backgroundColor: this.getTheme().toolbarDefaultBg,
 				justifyContent: (!Array.isArray(this.props.children)) ? 'center' : 'space-between',
 				flexDirection: 'row',
 				alignItems: 'center',
-				paddingHorizontal: 15,
-				paddingTop: (Platform.OS === 'ios' ) ? 15 : 0,
+				paddingHorizontal: this.paddingHorizontal,
+				paddingTop: this.paddingTop,
 				height: this.getTheme().toolbarHeight,
-				elevation: 3,
 				position: 'relative',
 			},
+			statusBar: {
+				height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+				backgroundColor: this.getTheme().toolbarDefaultBg,
+			},
 			logoImage: {
-				width: Dimensions.get('window').width * 0.277333333,
-				height: Dimensions.get('window').height * 0.026236882,
+				width: this.deviceWidth * 0.277333333,
+				height: this.deviceWidth * 0.046666667,
 			},
 			iosToolbarSearch: {
 				backgroundColor: this.getTheme().toolbarInputColor,
@@ -75,7 +93,14 @@ export default class HeaderComponent extends Base {
 				flex: 1,
 			},
 			toolbarButton: {
-				paddingHorizontal: 15,
+				paddingHorizontal: this.paddingHorizontal,
+			},
+			headerButton: {
+				position: 'absolute',
+				flex: 1,
+				justifyContent: 'center',
+				paddingTop: this.paddingTop,
+				paddingHorizontal: this.paddingHorizontal,
 			},
 		};
 	}
@@ -267,47 +292,79 @@ export default class HeaderComponent extends Base {
 		}
 	}
 
-	renderRightButton() {
-		const { rightButton } = this.props;
-
-		return (
-			<TouchableWithoutFeedback onPress={rightButton.onPress}>
-				<View
-					style={{
-						...StyleSheet.absoluteFillObject,
-						alignItems: 'flex-end',
-						justifyContent: 'center',
-						backgroundColor: 'transparent',
-						paddingTop: this.getInitialStyle().navbar.paddingTop,
-						paddingHorizontal: this.getInitialStyle().navbar.paddingHorizontal,
-					}}
-				>
-					{renderButtonContent()}
-				</View>
-			</TouchableWithoutFeedback>
-		);
-
-		function renderButtonContent() {
-			if (rightButton.image) {
-				return <Image source={this.props.rightButton.image}/>;
-			}
-			if (rightButton.icon) {
-				const { name, size, color } = rightButton.icon;
-
-				return <Icon name={name} size={size} color={color}/>;
-			}
-			if (rightButton.title) {
-				return <Text>this.props.rightButton.title</Text>;
-			}
+	renderButtonContent = button => {
+		if (button.image) {
+			return <Image source={button.image}/>;
 		}
-	}
+		if (button.icon) {
+			const { name, size, color } = button.icon;
+			return <Icon name={name} size={size} color={color}/>;
+		}
+		if (button.title) {
+			return <Text>{button.title}</Text>;
+		}
+	};
+
+	renderRightButton = rightButton => {
+		return (
+			<TouchableOpacity
+				onPress={rightButton.onPress}
+				style={[
+					this.getInitialStyle().headerButton,
+					{
+						alignItems: 'flex-end',
+						backgroundColor: 'transparent',
+						right: 0,
+					},
+				]}
+			>
+				{this.renderButtonContent(rightButton)}
+			</TouchableOpacity>
+		);
+	};
+
+	renderLeftButton = leftButton => {
+		return (
+			<TouchableOpacity
+				onPress={leftButton.onPress}
+				style={[
+					this.getInitialStyle().headerButton,
+					{
+						alignItems: 'flex-start',
+						backgroundColor: 'transparent',
+						left: 0,
+					},
+				]}
+			>
+				{this.renderButtonContent(leftButton)}
+			</TouchableOpacity>
+		);
+	};
 
 	render() {
+		const { leftButton, rightButton } = this.props;
+
 		return (
-			<View {...this.prepareRootProps()} >
-				{this.renderChildren()}
-				{this.props.rightButton && this.renderRightButton()}
+			<View style={{ flex: 0 }}>
+				{
+					Platform.OS === 'android' ? (
+						<View style={this.getInitialStyle().statusBar}/>
+					) : null
+				}
+				<View {...this.prepareRootProps()}>
+					{leftButton && this.renderLeftButton(leftButton)}
+					{this.renderChildren()}
+					{rightButton && this.renderRightButton(rightButton)}
+				</View>
 			</View>
 		);
 	}
 }
+
+HeaderComponent.propTypes = {
+	children: React.PropTypes.object,
+	rounded: React.PropTypes.number,
+	searchBar: React.PropTypes.object,
+	rightButton: React.PropTypes.object,
+	leftButton: React.PropTypes.object,
+};

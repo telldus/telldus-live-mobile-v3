@@ -27,7 +27,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Text, View, Icon, Image } from 'BaseComponents';
+import { Text, View, Icon, Image, Header } from 'BaseComponents';
 
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
@@ -176,8 +176,27 @@ class TabsView extends View {
 	constructor(props: Props) {
 		super(props);
 
+		this.starButton = {
+			icon: {
+				name: 'star',
+				size: 22,
+				color: '#fff',
+			},
+			onPress: this.toggleEditMode,
+		};
+
+		this.menuButton = {
+			icon: {
+				name: 'bars',
+				size: 22,
+				color: '#fff',
+			},
+			onPress: this.openDrawer,
+		};
+
 		this.state = {
 			settings: false,
+			routeName: '',
 		};
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
@@ -186,7 +205,6 @@ class TabsView extends View {
 		this.onTabSelect = this.onTabSelect.bind(this);
 		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
 		this.toggleEditMode = this.toggleEditMode.bind(this);
-		this.openDrawer = this.openDrawer.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
 
@@ -218,13 +236,16 @@ class TabsView extends View {
 	}
 
 	onNavigationStateChange(prevState, currentState) {
-		this.onRequestChangeTab(currentState.index);
+		const index = currentState.index;
+
+		this.setState({ routeName: currentState.routes[index].routeName });
+		this.onRequestChangeTab(index);
 	}
 
-	openDrawer() {
+	openDrawer = () => {
 		this.refs.drawer.openDrawer();
 		this.props.syncGateways();
-	}
+	};
 
 	renderNavigationView() {
 		return <NavigationView
@@ -235,10 +256,18 @@ class TabsView extends View {
 		/>;
 	}
 
+	makeRightButton = routeName => {
+		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
+	};
+
 	render() {
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
+
+		const { routeName } = this.state;
+
+		const rightButton = this.makeRightButton(routeName);
 
 		// TODO: Refactor: Split this code to smaller components
 		return (
@@ -249,48 +278,7 @@ class TabsView extends View {
 				renderNavigationView={this.renderNavigationView}
 			>
 				<View style={{ flex: 1 }}>
-					<View style={{
-						height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-						backgroundColor: Theme.Core.brandPrimary,
-					}}
-					/>
-					{
-						this.props.tab === 'devicesTab' || this.props.tab === 'sensorsTab' ? (
-							<Icon.ToolbarAndroid
-								style={{
-									height: 56,
-									backgroundColor: Theme.Core.brandPrimary,
-								}}
-								titleColor={Theme.Core.inverseTextColor}
-								navIconName="bars"
-								overflowIconName="star"
-								iconColor={Theme.Core.inverseTextColor}
-								title="Telldus Live!"
-								actions={[
-									{
-										title: 'Settings',
-										icon: this.state.starIcon,
-										show: 'always',
-									},
-								]}
-								onActionSelected={this.toggleEditMode}
-								onIconClicked={this.openDrawer}
-							/>
-						) : (
-							<Icon.ToolbarAndroid
-								style={{
-									height: 56,
-									backgroundColor: Theme.Core.brandPrimary,
-								}}
-								titleColor={Theme.Core.inverseTextColor}
-								navIconName="bars"
-								overflowIconName="star"
-								iconColor={Theme.Core.inverseTextColor}
-								title="Telldus Live!"
-								onIconClicked={this.openDrawer}
-							/>
-						)
-					}
+					<Header leftButton={this.menuButton} rightButton={rightButton}/>
 					<View>
 						<Tabs onNavigationStateChange={this.onNavigationStateChange}/>
 						{
@@ -304,9 +292,9 @@ class TabsView extends View {
 		);
 	}
 
-	toggleEditMode(position) {
+	toggleEditMode = () => {
 		this.props.onToggleEditMode(this.props.tab);
-	}
+	};
 }
 
 const styles = StyleSheet.create({
