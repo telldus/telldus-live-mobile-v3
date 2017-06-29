@@ -80,18 +80,19 @@ class Device extends View {
 		const preparedRow = Object.assign({}, row,
 			{
 				description: 'Fibaro Plug 2',
-				imageSource: require('./img/device-alt.png'),
-				textColor: Theme.Core.brandSecondary,
-				bgColor: Theme.Core.brandPrimary,
+				icon: 'device-alt',
 			}
 		);
 
 		return (
 			<Row
 				row={preparedRow}
+				textColor={Theme.Core.brandSecondary}
+				bgColor={Theme.Core.brandPrimary}
 				select={this.selectDevice}
 				padding={this.props.padding}
 				marginBottom={this.deviceWidth * 0.006666667}
+				iconSize={56}
 			/>
 		);
 	};

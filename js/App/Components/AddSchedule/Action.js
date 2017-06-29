@@ -23,19 +23,33 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { Dimensions } from 'react-native';
 import { View, ListDataSource, List, Text } from 'BaseComponents';
 import { selectAction } from 'Actions_AddSchedule';
 import Row from './Row';
+import Theme from 'Theme';
 
-// TODO: remove temp data
 const actions = [
 	{
 		name: 'On',
 		description: 'Turns the device on',
+		bgColor: Theme.Core.brandSecondary,
+		textColor: Theme.Core.brandSecondary,
+		icon: 'on',
 	},
 	{
 		name: 'Off',
 		description: 'Turns the device off',
+		bgColor: '#999',
+		textColor: '#999',
+		icon: 'off',
+	},
+	{
+		name: 'Dim',
+		description: 'Dims the device',
+		bgColor: 'rgba(226, 105, 1, 0.80)',
+		textColor: Theme.Core.brandSecondary,
+		icon: 'dim',
 	},
 ];
 
@@ -57,6 +71,8 @@ class Action extends View {
 	constructor(props) {
 		super(props);
 
+		this.deviceWidth = Dimensions.get('window').width;
+
 		this.state = {
 			dataSource: new ListDataSource({
 				rowHasChanged: (r1, r2) => r1 !== r2,
@@ -73,25 +89,16 @@ class Action extends View {
 		this.props.goNext();
 	};
 
-	renderRow = row => {
-		const color = (row.name === 'On') ? '#43a047' : '#e53935';
-
-		const preparedRow = Object.assign({}, row,
-			{
-				imageSource: require('./img/power.png'),
-				textColor: color,
-				bgColor: color,
-			}
-		);
-
-		return (
-			<Row
-				row={preparedRow}
-				select={this.selectAction}
-				padding={this.props.padding}
-			/>
-		);
-	};
+	renderRow = row => (
+		<Row
+			row={row}
+			select={this.selectAction}
+			padding={this.props.padding}
+			bgColor={row.bgColor}
+			textColor={row.textColor}
+			iconSize={this.deviceWidth * 0.092}
+		/>
+	);
 
 	render() {
 		return (

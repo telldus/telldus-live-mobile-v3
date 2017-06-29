@@ -24,12 +24,16 @@
 import React from 'react';
 import { View, Text } from 'BaseComponents';
 import { Image, TouchableOpacity, Dimensions } from 'react-native';
+import Theme from 'Theme';
 
 type Props = {
 	row: Object,
 	padding: number,
 	marginBottom: number,
 	select: (Object) => void,
+	textColor: string,
+	bgColor: string,
+	iconSize: number,
 };
 
 class Row extends View {
@@ -43,10 +47,14 @@ class Row extends View {
 
 		this.deviceWidth = Dimensions.get('window').width;
 
-		const { row, padding, marginBottom = this.deviceWidth * 0.026666667 } = this.props;
-		const { textColor, bgColor } = row;
+		const {
+			textColor,
+			bgColor,
+			padding,
+			iconSize,
+			marginBottom = this.deviceWidth * 0.026666667,
+		} = this.props;
 
-		this.deviceIconSize = this.deviceWidth * 0.092;
 		this.rowWidth = this.deviceWidth - 2 * padding;
 
 		const centerContent = {
@@ -60,7 +68,7 @@ class Row extends View {
 			container: {
 				flex: 1,
 				height: this.deviceWidth * 0.209333333,
-				minHeight: this.deviceIconSize + 10,
+				minHeight: iconSize + 10,
 				marginBottom,
 				borderRadius: borderRadius,
 				elevation: 2,
@@ -79,7 +87,7 @@ class Row extends View {
 			icon: {
 				container: {
 					...centerContent,
-					minWidth: this.deviceIconSize,
+					minWidth: iconSize,
 					width: this.rowWidth * 0.3,
 					backgroundColor: bgColor,
 					padding: 5,
@@ -87,8 +95,13 @@ class Row extends View {
 					borderBottomLeftRadius: borderRadius,
 				},
 				image: {
-					width: this.deviceIconSize,
-					height: this.deviceIconSize,
+					width: iconSize,
+					height: iconSize,
+				},
+				font: {
+					fontFamily: Theme.Core.telldusIconFont,
+					fontSize: iconSize,
+					color: '#fff',
 				},
 			},
 			text: {
@@ -121,7 +134,7 @@ class Row extends View {
 	};
 
 	render() {
-		const { name, imageSource, description } = this.props.row;
+		const { name, imageSource, description, icon } = this.props.row;
 
 		return (
 			<TouchableOpacity
@@ -131,10 +144,18 @@ class Row extends View {
 			>
 				<View style={this.styles.wrapper}>
 					<View style={this.styles.icon.container}>
-						<Image
-							source={imageSource}
-							style={this.styles.icon.image}
-						/>
+						{
+							imageSource ? (
+								<Image
+									source={imageSource}
+									style={this.styles.icon.image}
+								/>
+							) : (
+								<Text style={this.styles.icon.font}>
+									{icon}
+								</Text>
+							)
+						}
 					</View>
 					<View style={this.styles.text.container}>
 						<Text style={this.styles.text.name}>{name}</Text>
