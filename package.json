@@ -60,5 +60,10 @@
   "engines": {
     "node": ">=5.0",
     "npm": ">=3.0"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
   }
 }

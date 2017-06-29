@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -36,6 +35,8 @@
 		DC98AE9FD1CA4A448FC5C87D /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 93967CC4C9724316AFF74B50 /* Foundation.ttf */; };
 		F833995608B34A6AA1968135 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DFA88390E0247E68C113126 /* Entypo.ttf */; };
 		FF46E161818E9B5BE09583C2 /* libPods-TelldusLiveApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E4E10C72947027C61D0AB0E /* libPods-TelldusLiveApp.a */; };
+		FB1B1104911D4C0CABC1E9EC /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 23630B716BB84A33B8A4D6BD /* libRNI18n.a */; };
+		E01A717BB6604D8D8C4C0CA0 /* telldusicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA4E203FFC8849A6989EDD54 /* telldusicons.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -249,6 +250,9 @@
 		B604CB39C11F43B48FD5A634 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		E3C5F7C8FDE3C261C5988FCF /* Pods-TelldusLiveApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.release.xcconfig"; sourceTree = "<group>"; };
+		871731DC54684391B86A38B6 /* RNI18n.xcodeproj */ = {isa = PBXFileReference; name = "RNI18n.xcodeproj"; path = "../node_modules/react-native-i18n/RNI18n.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		23630B716BB84A33B8A4D6BD /* libRNI18n.a */ = {isa = PBXFileReference; name = "libRNI18n.a"; path = "libRNI18n.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		AA4E203FFC8849A6989EDD54 /* telldusicons.ttf */ = {isa = PBXFileReference; name = "telldusicons.ttf"; path = "../assets/fonts/telldusicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +275,7 @@
 				CAAD62D4956A49EA96EC30FA /* libRCTOrientation.a in Frameworks */,
 				34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */,
 				FF46E161818E9B5BE09583C2 /* libPods-TelldusLiveApp.a in Frameworks */,
+				FB1B1104911D4C0CABC1E9EC /* libRNI18n.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +443,7 @@
 				25A65B32BEBD4964AC8D3213 /* RNDeviceInfo.xcodeproj */,
 				782E9B56DE244FAA94B95591 /* RCTOrientation.xcodeproj */,
 				68822640B42549F2A32DDB65 /* RNVectorIcons.xcodeproj */,
+				871731DC54684391B86A38B6 /* RNI18n.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -486,6 +492,7 @@
 				6E20A8C755144668BCAB540B /* Octicons.ttf */,
 				B604CB39C11F43B48FD5A634 /* SimpleLineIcons.ttf */,
 				B1D49054AB364C649FCD5506 /* Zocial.ttf */,
+				AA4E203FFC8849A6989EDD54 /* telldusicons.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -794,6 +801,7 @@
 				36DB5485CDAA4D30BC3A8AE2 /* Octicons.ttf in Resources */,
 				8A0C59785D134F67BFBC177A /* SimpleLineIcons.ttf in Resources */,
 				30E6894E35F74445A4F6F35B /* Zocial.ttf in Resources */,
+				E01A717BB6604D8D8C4C0CA0 /* telldusicons.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -898,6 +906,7 @@
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-i18n/RNI18n",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -910,6 +919,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta;
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
+				);
 			};
 			name = Debug;
 		};
@@ -924,6 +937,7 @@
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
+					"$(SRCROOT)/../node_modules/react-native-i18n/RNI18n",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -936,6 +950,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = se.telldus.live.app.beta;
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
+				);
 			};
 			name = Release;
 		};
