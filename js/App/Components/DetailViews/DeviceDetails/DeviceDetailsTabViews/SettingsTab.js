@@ -51,6 +51,15 @@ class SettingsTab extends View {
 
 	constructor(props: Props) {
 		super(props);
+		this.onValueChange = this.onValueChange.bind(this);
+	}
+
+	onValueChange(value) {
+		if (!value) {
+			this.props.onRemoveFromDashboard(this.props.device.id);
+		} else {
+			this.props.onAddToDashboard(this.props.device.id);
+		}
 	}
 
 	render() {
