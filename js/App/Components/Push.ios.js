@@ -25,8 +25,8 @@
 
 import React from 'react';
 
-class Push extends React.Component {
-
-}
+const Push = {
+	configure: () => {},
+};
 
 module.exports = Push;
