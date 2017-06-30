@@ -29,6 +29,7 @@ import Theme from 'Theme';
 type Props = {
 	onPress: Function,
 	imageSource: number,
+	tabs: boolean,
 };
 
 class FloatingButton extends View {
@@ -38,6 +39,7 @@ class FloatingButton extends View {
 	static propTypes = {
 		onPress: PropTypes.func.isRequired,
 		imageSource: PropTypes.number.isRequired,
+		tabs: PropTypes.bool,
 	};
 
 	constructor(props) {
@@ -47,6 +49,9 @@ class FloatingButton extends View {
 	}
 
 	getStyles = () => {
+		const { tabs = false } = this.props;
+		const isIOSTabs = Platform.OS === 'ios' && tabs;
+
 		const deviceWidth = Dimensions.get('window').width;
 
 		const buttonSize = deviceWidth * 0.134666667;
@@ -60,7 +65,7 @@ class FloatingButton extends View {
 				position: 'absolute',
 				height: buttonSize,
 				width: buttonSize,
-				bottom: buttonOffset + (Platform.OS === 'ios' ? 50 : 0),
+				bottom: buttonOffset + (isIOSTabs ? 50 : 0),
 				right: buttonOffset,
 				elevation: 2,
 				shadowColor: '#000',
