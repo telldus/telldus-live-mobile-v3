@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "blueimp-md5": "^2.6.0",
-    "buffer": "^5.0.6",
     "color": "~1.0.3",
     "date-format": "0.0.2",
     "flat": "^2.0.1",
