@@ -21,21 +21,20 @@
 
 'use strict';
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Dimensions } from 'react-native';
 import { View, ListDataSource, List } from 'BaseComponents';
-import { getDevices } from 'Actions_Devices';
-import { selectDevice } from 'Actions_AddSchedule';
 import Theme from 'Theme';
 import Row from './Row';
 
 type Props = {
-	goNext: () => void,
-	padding: Number,
+	navigation: Object,
+	actions: Object,
+	width: Number,
 	devices: Object,
-	getDevices: Function,
-	selectDevice: Function,
+	onDidMount: (string, string, ?Object) => void,
+	reset: () => void,
 };
 
 type State = {
@@ -56,6 +55,9 @@ class Device extends View {
 
 		this.deviceWidth = Dimensions.get('window').width;
 
+		this.h1 = '1. Device';
+		this.h2 = 'Choose a device';
+
 		this.state = {
 			dataSource: new ListDataSource({
 				rowHasChanged: (r1, r2) => r1 !== r2,
@@ -64,16 +66,25 @@ class Device extends View {
 	}
 
 	componentDidMount() {
-		this.props.getDevices();
+		const { actions, onDidMount, navigation, reset } = this.props;
+
+		if (navigation.state.params && navigation.state.params.reset) {
+			return reset();
+		}
+
+		const { h1, h2 } = this;
+		actions.getDevices();
+		onDidMount(h1, h2);
 	}
 
 	onRefresh = () => {
-		this.props.getDevices();
+		this.props.actions.getDevices();
 	};
 
 	selectDevice = device => {
-		this.props.selectDevice(device);
-		this.props.goNext();
+		const { actions, navigation } = this.props;
+		actions.selectDevice(device.id);
+		navigation.navigate('Action');
 	};
 
 	renderRow = row => {
@@ -90,7 +101,7 @@ class Device extends View {
 				textColor={Theme.Core.brandSecondary}
 				bgColor={Theme.Core.brandPrimary}
 				select={this.selectDevice}
-				padding={this.props.padding}
+				width={this.props.width}
 				marginBottom={this.deviceWidth * 0.006666667}
 				iconSize={56}
 			/>
@@ -109,10 +120,11 @@ class Device extends View {
 }
 
 Device.propTypes = {
-	goNext: React.PropTypes.func,
-	padding: React.PropTypes.number,
-	getDevices: React.PropTypes.func,
-	selectDevice: React.PropTypes.func,
+	navigation: PropTypes.object,
+	actions: PropTypes.object,
+	width: PropTypes.number,
+	onDidMount: PropTypes.func,
+	reset: PropTypes.func,
 };
 
 const mapStateToProps = ({ devices }) => (
@@ -121,11 +133,4 @@ const mapStateToProps = ({ devices }) => (
 	}
 );
 
-const mapDispatchToProps = dispatch => (
-	{
-		getDevices: () => dispatch(getDevices()),
-		selectDevice: device => dispatch(selectDevice(device)),
-	}
-);
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(Device);
+module.exports = connect(mapStateToProps)(Device);

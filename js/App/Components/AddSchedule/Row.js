@@ -28,7 +28,7 @@ import Theme from 'Theme';
 
 type Props = {
 	row: Object,
-	padding: number,
+	width: number,
 	marginBottom: number,
 	select: (Object) => void,
 	textColor: string,
@@ -50,12 +50,10 @@ class Row extends View {
 		const {
 			textColor,
 			bgColor,
-			padding,
+			width,
 			iconSize,
 			marginBottom = this.deviceWidth * 0.026666667,
 		} = this.props;
-
-		this.rowWidth = this.deviceWidth - 2 * padding;
 
 		const centerContent = {
 			alignItems: 'center',
@@ -88,7 +86,7 @@ class Row extends View {
 				container: {
 					...centerContent,
 					minWidth: iconSize,
-					width: this.rowWidth * 0.3,
+					width: width * 0.3,
 					backgroundColor: bgColor,
 					padding: 5,
 					borderTopLeftRadius: borderRadius,
@@ -109,7 +107,7 @@ class Row extends View {
 					...centerContent,
 					backgroundColor: '#fff',
 					alignItems: 'flex-start',
-					width: this.rowWidth * 0.7,
+					width: width * 0.7,
 					paddingLeft: this.deviceWidth * 0.101333333,
 					paddingRight: 10,
 					paddingVertical: 5,
@@ -169,7 +167,7 @@ class Row extends View {
 
 Row.propTypes = {
 	row: React.PropTypes.object.isRequired,
-	padding: React.PropTypes.number.isRequired,
+	width: React.PropTypes.number.isRequired,
 	marginBottom: React.PropTypes.number,
 	select: React.PropTypes.func.isRequired,
 };

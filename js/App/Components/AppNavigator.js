@@ -80,6 +80,8 @@ const RouteConfigs = {
 			headerTintColor: '#ffffff',
 			headerTitle: renderStackHeader(),
 		},
+	Schedule: {
+		screen: ScheduleNavigator,
 	},
 };
 

@@ -21,12 +21,17 @@
 
 'use strict';
 
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { NavigationActions } from 'react-navigation';
 import { View } from 'BaseComponents';
 import { Button } from 'react-native';
 
 type Props = {
-	goNext: () => void,
+	navigation: Object,
+	actions: Object,
+	onDidMount: (string, string, ?Object) => void,
+	width: number,
+	reset: () => void,
 };
 
 class Summary extends View {
@@ -35,17 +40,46 @@ class Summary extends View {
 
 	constructor(props) {
 		super(props);
+
+		this.h1 = '5. Summary';
+		this.h2 = 'Please confirm the schedule';
+		this.infoButton = {
+			tmp: true, // TODO: fill with real fields
+		};
 	}
+
+	componentDidMount() {
+		const { h1, h2, infoButton } = this;
+		this.props.onDidMount(h1, h2, infoButton);
+	}
+
+	saveSchedule = () => {
+		this.props.navigation.dispatch(NavigationActions.reset({
+			index: 0,
+			actions: [
+				NavigationActions.navigate({
+					routeName: 'Device',
+					params: {
+						reset: true,
+					},
+				}),
+			],
+		}));
+	};
 
 	render() {
 		return (
-			<Button title="Finish" onPress={this.props.goNext}/>
+			<Button title="Finish" onPress={this.saveSchedule}/>
 		);
 	}
 }
 
 Summary.propTypes = {
-	goNext: React.PropTypes.func,
+	navigation: PropTypes.object,
+	actions: PropTypes.object,
+	onDidMount: PropTypes.func,
+	width: PropTypes.number,
+	reset: PropTypes.func,
 };
 
 module.exports = Summary;

@@ -21,8 +21,7 @@
 
 'use strict';
 
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { PropTypes } from 'react';
 import { Dimensions } from 'react-native';
 import { View, ListDataSource, List, Text } from 'BaseComponents';
 import { selectAction } from 'Actions_AddSchedule';
@@ -54,9 +53,10 @@ const actions = [
 ];
 
 type Props = {
-	goNext: () => void,
-	padding: Number,
-	selectAction: Function,
+	navigation: Object,
+	actions: Object,
+	width: Number,
+	onDidMount: (string, string, ?Object) => void,
 };
 
 type State = {
@@ -68,10 +68,19 @@ class Action extends View {
 	props: Props;
 	state: State;
 
+	selectAction: (Object) => void;
+	renderRow: (Object) => Object;
+
 	constructor(props) {
 		super(props);
 
 		this.deviceWidth = Dimensions.get('window').width;
+
+		this.h1 = '2. Action';
+		this.h2 = 'Choose an action to execute';
+		this.infoButton = {
+			tmp: true, // TODO: fill with real fields
+		};
 
 		this.state = {
 			dataSource: new ListDataSource({
@@ -80,20 +89,22 @@ class Action extends View {
 		};
 	}
 
-	onRefresh = () => {
-		//console.log('refresh');
-	};
+	componentDidMount() {
+		const { h1, h2, infoButton } = this;
+		this.props.onDidMount(h1, h2, infoButton);
+	}
 
 	selectAction = action => {
-		this.props.selectAction(action);
-		this.props.goNext();
+		const { actions, navigation } = this.props;
+		actions.selectAction(action.method);
+		navigation.navigate('Time');
 	};
 
 	renderRow = row => (
 		<Row
 			row={row}
 			select={this.selectAction}
-			padding={this.props.padding}
+			width={this.props.width}
 			bgColor={row.bgColor}
 			textColor={row.textColor}
 			iconSize={this.deviceWidth * 0.092}
@@ -105,22 +116,16 @@ class Action extends View {
 			<List
 				dataSource={this.state.dataSource}
 				renderRow={this.renderRow}
-				onRefresh={this.onRefresh}
 			/>
 		);
 	}
 }
 
 Action.propTypes = {
-	goNext: React.PropTypes.func,
-	padding: React.PropTypes.number,
-	selectAction: React.PropTypes.func,
+	navigation: PropTypes.object,
+	actions: PropTypes.object,
+	width: PropTypes.number,
+	onDidMount: PropTypes.func,
 };
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = dispatch => ({
-	selectAction: action => dispatch(selectAction(action)),
-});
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(Action);
+module.exports = Action;

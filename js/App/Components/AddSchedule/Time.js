@@ -21,12 +21,15 @@
 
 'use strict';
 
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { View } from 'BaseComponents';
 import { Button } from 'react-native';
 
 type Props = {
-	goNext: () => void,
+	navigation: Object,
+	actions: Object,
+	onDidMount: (string, string, ?Object) => void,
+	width: number,
 };
 
 class Time extends View {
@@ -35,17 +38,35 @@ class Time extends View {
 
 	constructor(props) {
 		super(props);
+
+		this.h1 = '3. Time';
+		this.h2 = 'Choose a time for the action';
+		this.infoButton = {
+			tmp: true, // TODO: fill with real fields
+		};
 	}
+
+	componentDidMount() {
+		const { h1, h2, infoButton } = this;
+		this.props.onDidMount(h1, h2, infoButton);
+	}
+
+	goNext = () => {
+		this.props.navigation.navigate('Days');
+	};
 
 	render() {
 		return (
-			<Button title="Days" onPress={this.props.goNext}/>
+			<Button title="Days" onPress={this.goNext}/>
 		);
 	}
 }
 
 Time.propTypes = {
-	goNext: React.PropTypes.func,
+	navigation: PropTypes.object,
+	actions: PropTypes.object,
+	onDidMount: PropTypes.func,
+	width: PropTypes.number,
 };
 
 module.exports = Time;
