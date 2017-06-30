@@ -40,6 +40,7 @@ class FloatingButton extends View {
 		onPress: PropTypes.func.isRequired,
 		imageSource: PropTypes.number.isRequired,
 		tabs: PropTypes.bool,
+		iconSize: PropTypes.number,
 	};
 
 	constructor(props) {
@@ -49,14 +50,14 @@ class FloatingButton extends View {
 	}
 
 	getStyles = () => {
-		const { tabs = false } = this.props;
-		const isIOSTabs = Platform.OS === 'ios' && tabs;
-
 		const deviceWidth = Dimensions.get('window').width;
+
+		const { tabs = false, iconSize = deviceWidth * 0.056 } = this.props;
+
+		const isIOSTabs = Platform.OS === 'ios' && tabs;
 
 		const buttonSize = deviceWidth * 0.134666667;
 		const buttonOffset = deviceWidth * 0.034666667;
-		const buttonIconSize = deviceWidth * 0.056;
 
 		return {
 			container: {
@@ -82,8 +83,8 @@ class FloatingButton extends View {
 				justifyContent: 'center',
 			},
 			icon: {
-				width: buttonIconSize,
-				height: buttonIconSize,
+				width: iconSize,
+				height: iconSize,
 			},
 		};
 	};
@@ -96,7 +97,7 @@ class FloatingButton extends View {
 		return (
 			<TouchableOpacity style={container} onPress={onPress}>
 				<View style={button}>
-					<Image source={imageSource} style={icon}/>
+					<Image source={imageSource} style={icon} resizeMode="contain"/>
 				</View>
 			</TouchableOpacity>
 		);
