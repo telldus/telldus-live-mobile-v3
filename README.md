@@ -50,7 +50,7 @@ All commands are assumed to be ran from project root.
 
 ### Local config
 
-You'll need to add `local.config.js` in the root of your project. It's not to be checked in (ignored by git).
+You'll need to add `config.local.js` in the root of your project. It's not to be checked in (ignored by git).
 
 Create a file in the root of the project called 'config.local.js' with the contents of the script and fill with the valid keys.
 
@@ -71,7 +71,9 @@ module.exports = {
  - `privateKey`: string - Telldus API public key
  - `googleAnalyticsId`: string - Google Analytics Id
  - `testUsername`: string - Used as a default username at login
- - `testPassword`: string - Used as a default passwod at login
+ - `testPassword`: string - Used as a default password at login
+ - `pushSenderId`: string - User to identify the remote notification sender,
+ - `pushServiceId`: integer - User to Identify the Push Service (GCM or APNS),
 
 ## Run
 
