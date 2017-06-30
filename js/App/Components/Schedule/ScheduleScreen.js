@@ -26,7 +26,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Dimensions } from 'react-native';
 import { View, Text, Header } from 'BaseComponents';
-import Poster from './Poster';
+import Poster from './SubViews/Poster';
 
 import * as scheduleActions from 'Actions_Schedule';
 import { getDevices } from 'Actions_Devices';

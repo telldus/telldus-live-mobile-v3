@@ -99,7 +99,7 @@ class Poster extends View {
 		return (
 			<TouchableOpacity style={styles.container}>
 				<Image
-					source={require('./img/rounded-info-button.png')}
+					source={require('../img/rounded-info-button.png')}
 					style={styles.icon}
 				/>
 			</TouchableOpacity>
@@ -113,7 +113,7 @@ class Poster extends View {
 		return (
 			<View style={bgImage.mask}>
 				<Image
-					source={require('./img/telldus-geometric-header-bg.png')}
+					source={require('../img/telldus-geometric-header-bg.png')}
 					style={bgImage.image}
 				/>
 				<View style={header.container}>
