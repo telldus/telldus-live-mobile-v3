@@ -25,14 +25,19 @@
 
 import type { Action } from './Types';
 
-const selectDevice = (device): Action => ({
-	type: 'ADD_SCHEDULE_SELECT_DEVICE',
-	payload: device,
+const selectDevice = (deviceId): Action => ({
+	type: 'SCHEDULE_SELECT_DEVICE',
+	payload: {
+		deviceId,
+	},
 });
 
-const selectAction = (action): Action => ({
-	type: 'ADD_SCHEDULE_SELECT_ACTION',
-	payload: action,
+const selectAction = (method, methodValue = 0): Action => ({
+	type: 'SCHEDULE_SELECT_ACTION',
+	payload: {
+		method,
+		methodValue,
+	},
 });
 
 const reset = (): Action => ({
