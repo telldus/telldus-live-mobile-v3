@@ -24,8 +24,7 @@
 import React, { PropTypes } from 'react';
 import { Dimensions } from 'react-native';
 import { View, ListDataSource, List, Text } from 'BaseComponents';
-import { selectAction } from 'Actions_AddSchedule';
-import Row from './Row';
+import Row from './SubViews/Row';
 import Theme from 'Theme';
 
 const actions = [

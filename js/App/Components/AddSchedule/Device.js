@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 import { Dimensions } from 'react-native';
 import { View, ListDataSource, List } from 'BaseComponents';
 import Theme from 'Theme';
-import Row from './Row';
+import Row from './SubViews/Row';
 
 type Props = {
 	navigation: Object,
