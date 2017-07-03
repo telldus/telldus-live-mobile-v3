@@ -1,0 +1,2 @@
+json_key_file "play_key.json" # Path to the json secret file - Follow https://github.com/fastlane/supply#setup to get one
+package_name "com.telldus.live.mobile.test" # e.g. com.krausefx.app
