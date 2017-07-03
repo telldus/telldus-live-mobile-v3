@@ -18,17 +18,18 @@ default_platform :android
 platform :android do
   before_all do
     ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
-    ENV["APP_VERSION"] = JSON.parse(IO.read("../../package.json"))["version"]
+    ENV["APP_VERSION"] = JSON.parse(IO.read("../package.json"))["version"]
   end
 
   desc "Runs all the tests"
   lane :test do
-    gradle(task: "test")
+    gradle(project_dir: "./android", task: "test")
   end
 
   desc "Deploy a new alpha version to the Google Play Store"
   lane :alpha do
     gradle(
+      project_dir: "./android",
       task: "assemble",
       build_type: "Release"
     )
