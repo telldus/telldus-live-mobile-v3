@@ -23,7 +23,23 @@
 
 import React, { PropTypes } from 'react';
 import { View } from 'BaseComponents';
-import { Button } from 'react-native';
+import Theme from 'Theme';
+import TimeType from './SubViews/TimeType';
+
+const types = [
+	{
+		name: 'Sunrise',
+		icon: 'sunrise',
+	},
+	{
+		name: 'Sunset',
+		icon: 'sunset',
+	},
+	{
+		name: 'Time',
+		icon: 'time',
+	},
+];
 
 type Props = {
 	navigation: Object,
@@ -33,9 +49,18 @@ type Props = {
 	paddingRight: number,
 };
 
+type State = {
+	selectedTypeIndex: number | null,
+};
+
 class Time extends View {
 
 	props: Props;
+	state: State;
+
+	getStyles: () => Object;
+	selectType: (string) => void;
+	renderTypes: (Array) => Array;
 
 	constructor(props) {
 		super(props);
@@ -45,6 +70,10 @@ class Time extends View {
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
+
+		this.state = {
+			selectedTypeIndex: null,
+		};
 	}
 
 	componentDidMount() {
@@ -52,13 +81,50 @@ class Time extends View {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	goNext = () => {
-		this.props.navigation.navigate('Days');
+	getStyles = () => {
+		return {
+			type: {
+				container: {
+					flex: 1,
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					alignItems: 'flex-start',
+				},
+			},
+		};
+	};
+
+	selectType = typeIndex => {
+		this.setState({ selectedTypeIndex: typeIndex });
+	};
+
+	renderTypes = types => {
+		const { selectedTypeIndex } = this.state;
+
+		return types.map((type, i) => {
+			const isSelected = typeof selectedTypeIndex === 'number' && i === selectedTypeIndex;
+
+			return (
+				<TimeType
+					type={type}
+					index={i}
+					isSelected={isSelected}
+					select={this.selectType}
+					key={type.name}
+				/>
+			);
+		});
 	};
 
 	render() {
+		const { type } = this.getStyles();
+
 		return (
-			<Button title="Days" onPress={this.goNext}/>
+			<View>
+				<View style={type.container}>
+					{this.renderTypes(types)}
+				</View>
+			</View>
 		);
 	}
 }
