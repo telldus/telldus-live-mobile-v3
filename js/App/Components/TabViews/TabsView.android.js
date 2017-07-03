@@ -62,9 +62,18 @@ const NavigationHeader = ({ firstName, lastName }) => (
 		<Image style={styles.navigationHeaderImage}
 		       source={require('./img/telldus.png')}
 		       resizeMode={'contain'}/>
-		<Text style={styles.navigationHeaderText}>
-			{firstName} {lastName}
-		</Text>
+			<View style={styles.navigationHeaderTextCover}>
+				<Text numberOfLines={1} style={styles.navigationHeaderText}>
+					{firstName}
+				</Text>
+				{lastName ?
+				<Text numberOfLines={1} style={styles.navigationHeaderText}>
+					{lastName}
+				</Text>
+				:
+				null
+				}
+			</View>
 	</View>
 );
 
@@ -302,19 +311,30 @@ const styles = StyleSheet.create({
 		height: 60,
 		marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
 		marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-		padding: 5,
 		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'flex-end',
 	},
 	navigationHeaderImage: {
-		width: 46,
-		height: 46,
+		width: 55,
+		height: 57,
+		padding: 5,
 	},
 	navigationHeaderText: {
-		flex: 1,
 		color: '#e26901',
-		fontSize: 24,
-		textAlignVertical: 'center',
-		marginLeft: 20,
+		fontSize: 22,
+		marginLeft: 10,
+		marginTop: 4,
+		zIndex: 3,
+		alignItems: 'flex-end',
+	},
+	navigationHeaderTextCover: {
+		flex: 1,
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		height: 64,
+		justifyContent: 'flex-start',
+		alignItems: 'flex-end',
 	},
 	navigationTitle: {
 		flexDirection: 'row',
