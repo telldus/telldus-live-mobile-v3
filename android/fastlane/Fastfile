@@ -25,6 +25,18 @@ platform :android do
     gradle(task: "test")
   end
 
+  desc "Deploy a new alpha version to the Google Play Store"
+  lane :alpha do
+    gradle(
+      task: "assemble",
+      build_type: "Release"
+    )
+    supply(
+      track: "alpha",
+      apk: "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}"
+    )
+  end
+
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
     gradle(task: "assembleRelease")
