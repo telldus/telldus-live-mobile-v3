@@ -70,6 +70,8 @@ class Action extends View {
 
 	selectAction: (Object) => void;
 	renderRow: (Object) => Object;
+	navigateToDim: () => void;
+	isDim: (Object) => boolean;
 
 	constructor(props) {
 		super(props);
@@ -100,10 +102,16 @@ class Action extends View {
 		navigation.navigate('Time');
 	};
 
+	isDim = row => row.name === 'Dim';
+
+	navigateToDim = () => {
+		this.props.navigation.navigate('ActionDim');
+	};
+
 	renderRow = row => (
 		<Row
 			row={row}
-			select={this.selectAction}
+			select={this.isDim(row) ? this.navigateToDim : this.selectAction}
 			width={this.props.width}
 			bgColor={row.bgColor}
 			textColor={row.textColor}
