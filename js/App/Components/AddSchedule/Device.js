@@ -35,6 +35,7 @@ type Props = {
 	devices: Object,
 	onDidMount: (string, string, ?Object) => void,
 	reset: () => void,
+	paddingRight: number,
 };
 
 type State = {
@@ -125,6 +126,7 @@ Device.propTypes = {
 	width: PropTypes.number,
 	onDidMount: PropTypes.func,
 	reset: PropTypes.func,
+	paddingRight: PropTypes.number,
 };
 
 const mapStateToProps = ({ devices }) => (

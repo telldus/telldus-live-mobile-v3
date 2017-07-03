@@ -56,6 +56,7 @@ type Props = {
 	actions: Object,
 	width: Number,
 	onDidMount: (string, string, ?Object) => void,
+	paddingRight: number,
 };
 
 type State = {
@@ -125,6 +126,7 @@ Action.propTypes = {
 	actions: PropTypes.object,
 	width: PropTypes.number,
 	onDidMount: PropTypes.func,
+	paddingRight: PropTypes.number,
 };
 
 module.exports = Action;

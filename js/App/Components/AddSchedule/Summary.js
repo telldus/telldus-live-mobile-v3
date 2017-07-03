@@ -31,12 +31,14 @@ type Props = {
 	actions: Object,
 	onDidMount: (string, string, ?Object) => void,
 	width: number,
-	reset: () => void,
+	paddingRight: number,
 };
 
 class Summary extends View {
 
 	props: Props;
+
+	saveSchedule: () => void;
 
 	constructor(props) {
 		super(props);
@@ -79,7 +81,7 @@ Summary.propTypes = {
 	actions: PropTypes.object,
 	onDidMount: PropTypes.func,
 	width: PropTypes.number,
-	reset: PropTypes.func,
+	paddingRight: PropTypes.number,
 };
 
 module.exports = Summary;

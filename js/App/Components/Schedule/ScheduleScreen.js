@@ -25,6 +25,7 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Dimensions } from 'react-native';
+import _ from 'lodash';
 import { View, Text, Header } from 'BaseComponents';
 import Poster from './SubViews/Poster';
 
@@ -52,6 +53,7 @@ class ScheduleScreen extends View {
 	getStyles: () => Object;
 	goBack: () => void;
 	onChildDidMount: (string, string, ?Object) => void;
+	isDeviceTab: () => boolean;
 
 	constructor(props) {
 		super(props);
@@ -68,16 +70,22 @@ class ScheduleScreen extends View {
 		};
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		const isStateEqual = _.isEqual(this.state, nextState);
+		const isPropsEqual = _.isEqual(this.props, nextProps);
+		return !(isStateEqual && isPropsEqual);
+	}
+
 	getStyles = () => {
 		const deviceWidth = Dimensions.get('window').width;
-		const padding = deviceWidth * 0.033333333;
-		this.rowWidth = deviceWidth - 2 * padding;
+		this.padding = deviceWidth * 0.033333333;
+		this.rowWidth = deviceWidth - 2 * this.padding;
 
 		// TODO: font-family
 		return {
 			flex: 1,
-			paddingHorizontal: padding,
-			paddingTop: padding,
+			paddingHorizontal: this.padding,
+			paddingTop: this.padding,
 		};
 	};
 
@@ -118,6 +126,7 @@ class ScheduleScreen extends View {
 							navigation,
 							actions,
 							reset: this.isDeviceTab() ? this.goBack : null,
+							paddingRight: this.padding,
 						}
 					)}
 				</View>

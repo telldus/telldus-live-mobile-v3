@@ -30,6 +30,7 @@ type Props = {
 	actions: Object,
 	onDidMount: (string, string, ?Object) => void,
 	width: number,
+	paddingRight: number,
 };
 
 class Days extends View {
@@ -67,6 +68,7 @@ Days.propTypes = {
 	actions: PropTypes.object,
 	onDidMount: PropTypes.func,
 	width: PropTypes.number,
+	paddingRight: PropTypes.number,
 };
 
 module.exports = Days;
