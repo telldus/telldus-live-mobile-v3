@@ -17,6 +17,7 @@ All commands are assumed to be ran from project root.
 - install [nodejs >= 6](https://nodejs.org/en/)
 - install local deps: `npm i`
 - install global deps: `npm install -g react-native-cli`
+- install [fastlane](https://docs.fastlane.tools/#choose-your-installation-method)
 
 ### iOS
 
@@ -113,17 +114,14 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 
 - we use semver (major.minor.path) and the Android version is derived from that (`3.2.10` => `30210`)
 - when releasing a new app, always update the version
-- until this is automated with a release script, change the version in the following places:
-  - `package.json`: `version` (semver)
-  - `android/app/build.gradle`: `versionCode` (Android) and `versionName` (semver)
-
+- Change the version in `package.json`
+- Commit and tag the release. Include the changelog in the tag
 ### Android
 
+
 - find all the instructions for generating signed APK on [Generating Signed APK](https://facebook.github.io/react-native/docs/signed-apk-android.html)
-  - Use `react-native run-android --configuration=release` instead of `react-native run-android --variant=release`, see [SO](http://stackoverflow.com/questions/41263330/error-running-react-native-run-android-variant-release-task-installreleasede)
-  - to make an .apk: `cd android && ./gradlew assembleRelease`
-  - install .apk: `adb install android/app/build/outputs/apk/app-release.apk`
-  - uninstall previous .apk: `adb uninstall com.telldus.live.mobile.test`
+- Copy the Google Playstore credentials file `play_key.json` to the `fastlane/` subfolder.
+- Run `fastlane alpha`
 
 ## Split dependencies
 
