@@ -30,6 +30,8 @@ type Props = {
 	onPress: Function,
 	imageSource: number,
 	tabs: boolean,
+	iconSize: number,
+	paddingRight: number,
 };
 
 class FloatingButton extends View {
@@ -41,6 +43,7 @@ class FloatingButton extends View {
 		imageSource: PropTypes.number.isRequired,
 		tabs: PropTypes.bool,
 		iconSize: PropTypes.number,
+		paddingRight: PropTypes.number,
 	};
 
 	constructor(props) {
@@ -52,12 +55,17 @@ class FloatingButton extends View {
 	getStyles = () => {
 		const deviceWidth = Dimensions.get('window').width;
 
-		const { tabs = false, iconSize = deviceWidth * 0.056 } = this.props;
+		const {
+			tabs = false,
+			iconSize = deviceWidth * 0.056,
+			paddingRight = 0,
+		} = this.props;
 
 		const isIOSTabs = Platform.OS === 'ios' && tabs;
 
 		const buttonSize = deviceWidth * 0.134666667;
-		const buttonOffset = deviceWidth * 0.034666667;
+		const offsetBottom = deviceWidth * 0.046666667 + (isIOSTabs ? 50 : 0);
+		const offsetRight = deviceWidth * 0.034666667 - paddingRight;
 
 		return {
 			container: {
@@ -66,8 +74,8 @@ class FloatingButton extends View {
 				position: 'absolute',
 				height: buttonSize,
 				width: buttonSize,
-				bottom: buttonOffset + (isIOSTabs ? 50 : 0),
-				right: buttonOffset,
+				bottom: offsetBottom,
+				right: offsetRight,
 				elevation: 2,
 				shadowColor: '#000',
 				shadowOpacity: 0.5,
