@@ -56,7 +56,7 @@ class DeviceDetailModal extends View {
 		};
 
 		this.onStarButtonSelected = this.onStarButtonSelected.bind(this);
-		console.log(this.props.device);
+		this.updateModalVisiblity = this.updateModalVisiblity.bind(this);
 	}
 
 	onStarButtonSelected() {
@@ -65,6 +65,10 @@ class DeviceDetailModal extends View {
 		} else {
 			this.props.onAddToDashboard(this.props.device.id);
 		}
+	}
+
+	updateModalVisiblity() {
+		this.props.onCloseSelected();
 	}
 
 	render() {
@@ -95,7 +99,7 @@ class DeviceDetailModal extends View {
 		}
 
 		return (
-			<Modal isVisible={this.state.isVisible}>
+			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
 				<Container style={styles.container}>
 					<View style={styles.header}>
 						<Icon name="wifi" size={26} color="white" style={{
