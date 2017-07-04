@@ -72,8 +72,8 @@ module.exports = {
  - `googleAnalyticsId`: string - Google Analytics Id
  - `testUsername`: string - Used as a default username at login
  - `testPassword`: string - Used as a default password at login
- - `pushSenderId`: string - User to identify the remote notification sender,
- - `pushServiceId`: integer - User to Identify the Push Service (GCM or APNS),
+ - `pushSenderId`: string - Used to identify the remote notification sender,
+ - `pushServiceId`: integer - Used to Identify the Push Service (GCM or APNS),
 
 ## Run
 
