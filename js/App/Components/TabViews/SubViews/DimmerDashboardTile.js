@@ -207,6 +207,7 @@ class DimmerDashboardTile extends View {
 			<DashboardShadowTile
 				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
 				name={name}
+				type={'device'}
 				tileWidth={tileWidth}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
 				<View style={styles.body} onLayout={this.layoutView}>

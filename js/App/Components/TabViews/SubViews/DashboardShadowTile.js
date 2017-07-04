@@ -25,8 +25,8 @@ import React from 'react';
 import { View, Text } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 
-const Title = ({ isEnabled, name, tileWidth }) => (
-	<View style={[styles.title, isEnabled ? styles.titleEnabled : styles.titleDisabled]}>
+const Title = ({ isEnabled, name, tileWidth, type = 'device' }) => (
+	<View style={[styles.title, !isEnabled ? styles.titleDisabled : (type === 'device' ? styles.titleEnabledDevice : styles.titleEnabledSensor)]}>
 		<Text
 			ellipsizeMode="middle"
 			numberOfLines={1}
@@ -45,6 +45,7 @@ type Props = {
   hasShadow: boolean,
   style: Object,
   children: Object,
+  type: String
 };
 
 class DashboardShadowTile extends View {
@@ -83,11 +84,14 @@ const styles = StyleSheet.create({
 		borderBottomLeftRadius: 7,
 		borderBottomRightRadius: 7,
 	},
-	titleEnabled: {
+	titleEnabledDevice: {
 		backgroundColor: '#e56e18',
 	},
 	titleDisabled: {
 		backgroundColor: '#bfbfbf',
+	},
+	titleEnabledSensor: {
+		backgroundColor: '#00255e',
 	},
 	shadow: {
 		borderRadius: 7,

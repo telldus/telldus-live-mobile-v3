@@ -90,6 +90,7 @@ class NavigationalDashboardTile extends View {
 				item={item}
 				isEnabled={true}
 				name={name}
+				type={'device'}
 				tileWidth={tileWidth}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
 				<View style={styles.body}>

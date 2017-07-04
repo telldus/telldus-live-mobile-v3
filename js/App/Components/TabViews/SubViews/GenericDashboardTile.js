@@ -42,6 +42,7 @@ class GenericDashboardTile extends View {
 				item={item}
 				isEnabled={true}
 				name={item.name}
+				type={''}
 				tileWidth={tileWidth}
 				style={[
 					this.props.style, {

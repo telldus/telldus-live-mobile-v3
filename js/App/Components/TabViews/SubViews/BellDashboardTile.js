@@ -51,6 +51,7 @@ class BellDashboardTile extends View {
 				item={item}
 				isEnabled={true}
 				name={item.name}
+				type={'device'}
 				tileWidth={tileWidth}
 				style={[
 					this.props.style, {
