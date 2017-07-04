@@ -31,7 +31,7 @@ import { TextInput, Linking, KeyboardAvoidingView } from 'react-native';
 
 import { BackgroundImage, Button, H1, Text, View } from 'BaseComponents';
 import { loginToTelldus } from 'Actions';
-import { authenticationTimeOut, telldusLiveWebAuthenticationUrl } from 'Config';
+import { authenticationTimeOut, telldusLiveWebAuthenticationUrl, testUsername, testPassword } from 'Config';
 
 import Image from 'Image';
 import StyleSheet from 'StyleSheet';
@@ -61,7 +61,10 @@ class LoginForm extends View {
 	constructor(props: Props) {
 		super(props);
 
-		this.state = this.state || {};
+		this.state = this.state || {
+			username: testUsername,
+			password: testPassword,
+		};
 
 		this.onChangeUsername = this.onChangeUsername.bind(this);
 		this.onChangePassword = this.onChangePassword.bind(this);
@@ -97,6 +100,7 @@ class LoginForm extends View {
 					autoCapitalize="none"
 					autoCorrect={false}
 					placeholderTextColor="#ffffff80"
+					defaultValue={this.state.username}
 				/>
 				<TextInput
 					style={styles.formField}
@@ -106,6 +110,7 @@ class LoginForm extends View {
 					autoCapitalize="none"
 					autoCorrect={false}
 					placeholderTextColor="#ffffff80"
+					defaultValue={this.state.password}
 				/>
 				<View style={{ height: 20 }}/>
 				<Button
