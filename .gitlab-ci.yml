@@ -1,0 +1,42 @@
+stages:
+  - build
+  - release
+
+before_script:
+  - npm install --quiet
+  - npm run postinstall
+
+android:
+  image: elviejokike/react-native-android
+  stage: build
+  artifacts:
+    paths:
+      - android/app/build/outputs/apk/app-release.apk
+    expire_in: '1 mos'
+  script:
+    - cd android
+    - ./buildGitlabRunner.sh
+  only:
+    - tags
+    - master
+    - /^v\d+\.\d+.*$/ # Version branches
+  tags:
+    - android
+
+google_play:
+  image: ruby:2
+  stage: release
+  tags:
+    - docker
+  dependencies:
+    - android
+  environment:
+    name: production
+    url: https://play.google.com/store/apps/details?id=com.telldus.live.mobile.test
+  when: manual
+  only:
+    - tags
+  script:
+    - echo ${GOOGLE_KEY} > play_key.json
+    - bundle install
+    - fastlane supply --apk android/app/build/outputs/apk/app-release.apk --track alpha

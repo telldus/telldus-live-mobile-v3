@@ -1,6 +1,7 @@
 # Telldus Live! mobile
 
 [![Dependency Status](https://david-dm.org/telldus/telldus-live-mobile-v3.svg)](https://david-dm.org/telldus/telldus-live-mobile-v3) [![devDependency Status](https://david-dm.org/telldus/telldus-live-mobile-v3/dev-status.svg)](https://david-dm.org/telldus/telldus-live-mobile-v3#info=devDependencies)
+[![Build status](http://code.telldus.com/telldus/live-app-v3/badges/master/build.svg)](http://code.telldus.com/telldus/live-app-v3/commits/master)
 [![Translation status](http://developer.telldus.com/translate/widgets/telldus-live-mobile/-/svg-badge.svg)](http://developer.telldus.com/translate/engage/telldus-live-mobile/?utm_source=widget)
 
 **Notes:**
