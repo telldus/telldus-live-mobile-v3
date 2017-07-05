@@ -36,6 +36,10 @@ import java.util.List;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
+import com.smixx.fabric.FabricPackage;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
+import io.fabric.sdk.android.Fabric;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -48,6 +52,7 @@ public class MainApplication extends Application implements ReactApplication {
 		@Override
 		protected List<ReactPackage> getPackages() {
 			return Arrays.<ReactPackage>asList(
+				new FabricPackage(),
 				new RNDeviceInfo(),
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
@@ -65,6 +70,11 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        // Set up Crashlytics, disabled for debug builds
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+          .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+          .build();
+        Fabric.with(this, crashlyticsKit);
         SoLoader.init(this, /* native exopackage */ false);
     }
 }

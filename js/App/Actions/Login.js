@@ -26,6 +26,7 @@
 import type { Action, ThunkAction } from './Types';
 import { apiServer } from 'Config';
 import { publicKey, privateKey } from 'Config';
+import { Answers } from 'react-native-fabric';
 
 import LiveApi from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
@@ -56,12 +57,14 @@ async function loginToTelldus(username:string, password:string): Promise<Action>
 				if (responseData.error) {
 					throw responseData;
 				}
+				Answers.logLogin('Password', true);
 				resolve({
 					type: 'RECEIVED_ACCESS_TOKEN',
 					accessToken: responseData,
 				});
 			})
 			.catch((e) => {
+				Answers.logLogin('Password', false);
 				reject({
 					type: 'ERROR',
 					message: {
