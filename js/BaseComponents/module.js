@@ -62,6 +62,7 @@ import Gravatar from './Gravatar';
 import TouchableButton from './TouchableButton';
 import Modal from './Modal';
 import FloatingButton from './FloatingButton';
+import Slider from './Slider';
 
 import {
 	AppState,
@@ -115,6 +116,7 @@ module.exports = {
 	TouchableButton: TouchableButton,
 	Modal: Modal,
 	FloatingButton,
+	Slider,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
