@@ -587,7 +587,7 @@
 				ORGANIZATIONNAME = "Telldus Technologies AB";
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = AJW9CMR547;
+						DevelopmentTeam = M2879GJ5VD;
 						DevelopmentTeamName = "Mark Andrews";
 					};
 				};
@@ -1001,7 +1001,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = AJW9CMR547;
+				DEVELOPMENT_TEAM = M2879GJ5VD;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
@@ -1021,7 +1021,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.beta;
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1032,7 +1032,7 @@
 			baseConfigurationReference = E3C5F7C8FDE3C261C5988FCF /* Pods-TelldusLiveApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = AJW9CMR547;
+				DEVELOPMENT_TEAM = M2879GJ5VD;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
@@ -1052,7 +1052,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.beta;
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

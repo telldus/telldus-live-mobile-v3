@@ -5,35 +5,13 @@ PODS:
   - React/cxxreact (0.42.3):
     - React/jschelpers
   - React/jschelpers (0.42.3)
-  - React/RCTActionSheet (0.42.3):
-    - React/Core
-  - React/RCTImage (0.42.3):
-    - React/Core
-    - React/RCTNetwork
-  - React/RCTLinkingIOS (0.42.3):
-    - React/Core
-  - React/RCTNetwork (0.42.3):
-    - React/Core
   - React/RCTPushNotification (0.42.3):
-    - React/Core
-  - React/RCTText (0.42.3):
-    - React/Core
-  - React/RCTVibration (0.42.3):
-    - React/Core
-  - React/RCTWebSocket (0.42.3):
     - React/Core
   - Yoga (0.42.3.React)
 
 DEPENDENCIES:
   - React/Core (from `../node_modules/react-native`)
-  - React/RCTActionSheet (from `../node_modules/react-native`)
-  - React/RCTImage (from `../node_modules/react-native`)
-  - React/RCTLinkingIOS (from `../node_modules/react-native`)
-  - React/RCTNetwork (from `../node_modules/react-native`)
   - React/RCTPushNotification (from `../node_modules/react-native`)
-  - React/RCTText (from `../node_modules/react-native`)
-  - React/RCTVibration (from `../node_modules/react-native`)
-  - React/RCTWebSocket (from `../node_modules/react-native`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
@@ -46,6 +24,6 @@ SPEC CHECKSUMS:
   React: 35e039680feacd0563677d49ba410112d2748559
   Yoga: 86ce777665c8259b94ef8dbea76b84634237f4ea
 
-PODFILE CHECKSUM: 8ed24c4b73a09d433f34536e7e6e57da9ca8e5a0
+PODFILE CHECKSUM: 5d03c87b2a9ba9250cce73c40eb9a4e02caf9310
 
 COCOAPODS: 1.2.1
