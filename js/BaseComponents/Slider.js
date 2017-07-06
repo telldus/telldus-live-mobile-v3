@@ -26,8 +26,7 @@ import { Dimensions } from 'react-native';
 import Slider from 'react-native-slider';
 import View from './View';
 import Text from './Text';
-
-const THUMB_SIZE = 20;
+import Theme from 'Theme';
 
 type Props = {
 	minimumValue: number,
@@ -63,6 +62,13 @@ export default class SliderComponent extends View {
 	};
 
 	static defaultProps = {
+		minimumTrackTintColor: Theme.Core.brandSecondary,
+		maximumTrackTintColor: '#bdbdbd',
+		trackStyle: {},
+		thumbStyle: {
+			height: 20,
+			width: 20,
+		},
 		caption: false,
 	};
 
@@ -70,20 +76,21 @@ export default class SliderComponent extends View {
 		super(props);
 
 		this.state = {
-			trackWidth: 0,
+			trackWidth: props.trackStyle.width,
 			value: props.value || props.minimumValue,
 		};
 	}
 
 	getStyles = () => {
+		const { trackWidth } = this.state;
 		this.deviceWidth = Dimensions.get('window').width;
 
 		return {
 			container: {
-				flex: 1,
-				alignItems: 'center',
-				opacity: this.state.trackWidth ? 1 : 0,
-			}
+				flex: trackWidth ? 0 : 1,
+				opacity: trackWidth ? 1 : 0,
+				width: trackWidth ? trackWidth : null,
+			},
 		};
 	};
 
@@ -91,20 +98,16 @@ export default class SliderComponent extends View {
 		const { trackStyle, thumbStyle, maximumValue } = this.props;
 		const { value, trackWidth: stateTrackWidth } = this.state;
 
-		const trackWidth = (trackStyle && trackStyle.width) ? trackStyle.width : stateTrackWidth;
-		const thumbWidth = (thumbStyle && thumbStyle.width) ? thumbStyle.width : THUMB_SIZE;
+		const trackWidth = trackStyle.width || stateTrackWidth;
 
-		const captionContainerWidth = trackWidth - thumbWidth;
+		const captionContainerWidth = trackWidth - thumbStyle.width;
 		const captionLeft = captionContainerWidth * (value / maximumValue);
 
 		const captionWidth = this.deviceWidth * 0.09;
-		const translateX = (thumbWidth / 2) + captionLeft - (captionWidth / 2);
-		const translateY = ((thumbStyle && thumbStyle.height) ? thumbStyle.height : THUMB_SIZE) / -1.5;
+		const translateX = (thumbStyle.width / 2) + captionLeft - (captionWidth / 2);
+		const translateY = thumbStyle.height / -1.5;
 
 		return {
-			captionWrapper: {
-				width: trackWidth,
-			},
 			caption: {
 				position: 'absolute',
 				transform: [
@@ -124,7 +127,7 @@ export default class SliderComponent extends View {
 
 	setTrackWidth = e => {
 		const { trackStyle } = this.props;
-		if (!trackStyle || !trackStyle.width) {
+		if (!trackStyle.width) {
 			const trackWidth = e.nativeEvent.layout.width;
 			if (trackWidth !== this.state.trackWidth) {
 				this.setState({ trackWidth });
@@ -139,19 +142,19 @@ export default class SliderComponent extends View {
 
 	render() {
 		const { caption, ...sliderProps } = this.props;
-		const { value } = this.state;
+		const { value, trackWidth } = this.state;
 
 		const style = this.getStyles();
 
-		caption && Object.assign(style, this.getCaptionStyles());
+		if (caption) {
+			Object.assign(style, this.getCaptionStyles());
+		}
 
 		// TODO: fix null-width slider
 		return (
 			<View style={style.container} onLayout={this.setTrackWidth}>
 				{caption && (
-					<View style={style.captionWrapper}>
-						<Text style={style.caption}>{value}</Text>
-					</View>
+					<Text style={style.caption}>{value}</Text>
 				)}
 				<Slider
 					{...sliderProps}
