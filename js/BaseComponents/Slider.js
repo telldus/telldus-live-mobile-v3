@@ -77,7 +77,7 @@ export default class SliderComponent extends View {
 
 		this.state = {
 			trackWidth: props.trackStyle.width,
-			value: props.value || props.minimumValue,
+			value: typeof props.value === 'number' ? props.value : props.minimumValue,
 		};
 	}
 

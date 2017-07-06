@@ -71,7 +71,7 @@ export default class TimeSlider extends View {
 		};
 
 		this.state = {
-			value: props.value || props.minimumValue,
+			value: typeof props.value === 'number' ? props.value : props.minimumValue,
 		};
 	}
 
