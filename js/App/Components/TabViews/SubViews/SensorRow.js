@@ -24,6 +24,7 @@
 import React, { Component } from 'react';
 import { FormattedNumber, Image, ListItem, Text, View } from 'BaseComponents';
 import { ScrollView, StyleSheet } from 'react-native';
+import { Crashlytics } from 'react-native-fabric';
 
 import format from 'date-format';
 import Theme from 'Theme';
@@ -227,7 +228,12 @@ class SensorRow extends Component {
 		if (days <= 7) {
 			return `${days} days ago`;
 		}
-		return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
+		try {
+			return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
+		} catch (exception) {
+			Crashlytics.logException(exception);
+			return 'unknown';
+		}
 	}
 }
 
