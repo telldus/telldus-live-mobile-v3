@@ -53,6 +53,7 @@ type Props = {
 type State = {
 	selectedTypeIndex: number | null,
 	randomValue: number,
+	offsetValue: number,
 };
 
 class Time extends View {
@@ -63,6 +64,8 @@ class Time extends View {
 	getStyles: () => Object;
 	selectType: (string) => void;
 	renderTypes: (Array) => Array;
+	setRandomIntervalValue: (number) => void;
+	setTimeOffsetValue: (number) => void;
 
 	constructor(props) {
 		super(props);
@@ -76,6 +79,7 @@ class Time extends View {
 		this.state = {
 			selectedTypeIndex: null,
 			randomValue: 0,
+			offsetValue: 0,
 		};
 	}
 
@@ -131,6 +135,12 @@ class Time extends View {
 		}
 	};
 
+	setTimeOffsetValue = offsetValue => {
+		if (offsetValue !== this.state.offsetValue) {
+			this.setState({ offsetValue });
+		}
+	};
+
 	render() {
 		const { container, marginBottom, type } = this.getStyles();
 
@@ -139,13 +149,25 @@ class Time extends View {
 				<View style={[type.container, { marginBottom }]}>
 					{this.renderTypes(types)}
 				</View>
-				<TimeSlider
-					description="Set random intervals between 1 to 1446 minutes"
-					icon="random"
-					minimumValue={0}
-					maximumValue={1446}
-					onValueChange={this.setRandomIntervalValue}
-				/>
+				<View style={{ marginBottom }}>
+					<TimeSlider
+						description="Offset the time between -1439 to +1439 minutes"
+						icon="offset"
+						minimumValue={-1439}
+						maximumValue={1439}
+						value={0}
+						onValueChange={this.setTimeOffsetValue}
+					/>
+				</View>
+				<View>
+					<TimeSlider
+						description="Set random intervals between 1 to 1446 minutes"
+						icon="random"
+						minimumValue={0}
+						maximumValue={1446}
+						onValueChange={this.setRandomIntervalValue}
+					/>
+				</View>
 			</View>
 		);
 	}
