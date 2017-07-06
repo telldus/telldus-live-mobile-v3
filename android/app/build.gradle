@@ -2,6 +2,17 @@ apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
 
+def readVersion() {
+    def parsedJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
+    return parsedJson.version
+}
+
+def readVersionCode() {
+    def version = readVersion()
+    def (major, minor, patch) = version.tokenize('.')
+    return (major.toInteger() * 10000) + (minor.toInteger() * 100) + (patch.toInteger())
+}
+
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -90,8 +101,8 @@ android {
         applicationId "com.telldus.live.mobile.test"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 30400
-        versionName "3.4.0"
+        versionCode readVersionCode()
+        versionName readVersion()
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
