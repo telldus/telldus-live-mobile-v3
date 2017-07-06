@@ -147,7 +147,7 @@ class ActionDim extends View {
 	render() {
 		const { container, row, caption, slider } = this.getStyles();
 
-		const dimValue = Math.round(this.state.methodValue / maximumValue * 100);
+		const dimValue = Math.round(this.state.methodValue / this.maximumValue * 100);
 
 		return (
 			<View style={container}>
