@@ -75,6 +75,11 @@ export default class SliderComponent extends View {
 	constructor(props) {
 		super(props);
 
+		const { minimumValue, maximumValue } = props;
+		const minimumValueSymbols = minimumValue.toString().length;
+		const maximumValueSymbols = maximumValue.toString().length;
+		this.maxValueSymbols = Math.max(minimumValueSymbols, maximumValueSymbols);
+
 		this.state = {
 			trackWidth: props.trackStyle.width,
 			value: typeof props.value === 'number' ? props.value : props.minimumValue,
@@ -95,16 +100,18 @@ export default class SliderComponent extends View {
 	};
 
 	getCaptionStyles = () => {
-		const { trackStyle, thumbStyle, maximumValue } = this.props;
+		const { trackStyle, thumbStyle, maximumValue, minimumValue } = this.props;
 		const { value, trackWidth: stateTrackWidth } = this.state;
 
 		const trackWidth = trackStyle.width || stateTrackWidth;
 
-		const captionContainerWidth = trackWidth - thumbStyle.width;
-		const captionLeft = captionContainerWidth * (value / maximumValue);
+		const containerWidth = trackWidth - thumbStyle.width;
+		const valuePosition = (value - minimumValue) / (Math.abs(maximumValue) + Math.abs(minimumValue));
+		const valueLeft = containerWidth * valuePosition;
 
-		const captionWidth = this.deviceWidth * 0.09;
-		const translateX = (thumbStyle.width / 2) + captionLeft - (captionWidth / 2);
+		const fontSize = this.deviceWidth * 0.037333333;
+		const valueDisplayedWidth = this.maxValueSymbols * fontSize;
+		const translateX = (thumbStyle.width / 2) + valueLeft - (valueDisplayedWidth / 2);
 		const translateY = thumbStyle.height / -1.5;
 
 		return {
@@ -118,8 +125,8 @@ export default class SliderComponent extends View {
 						translateY,
 					},
 				],
-				fontSize: this.deviceWidth * 0.037333333,
-				width: captionWidth,
+				fontSize,
+				width: valueDisplayedWidth,
 				textAlign: 'center',
 			},
 		};
@@ -142,7 +149,7 @@ export default class SliderComponent extends View {
 
 	render() {
 		const { caption, ...sliderProps } = this.props;
-		const { value, trackWidth } = this.state;
+		const { value } = this.state;
 
 		const style = this.getStyles();
 
