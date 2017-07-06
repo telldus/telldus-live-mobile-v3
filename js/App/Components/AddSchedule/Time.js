@@ -22,9 +22,10 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
+import { Dimensions } from 'react-native';
 import { View } from 'BaseComponents';
-import Theme from 'Theme';
 import TimeType from './SubViews/TimeType';
+import TimeSlider from './SubViews/TimeSlider';
 
 const types = [
 	{
@@ -51,6 +52,7 @@ type Props = {
 
 type State = {
 	selectedTypeIndex: number | null,
+	randomValue: number,
 };
 
 class Time extends View {
@@ -73,6 +75,7 @@ class Time extends View {
 
 		this.state = {
 			selectedTypeIndex: null,
+			randomValue: 0,
 		};
 	}
 
@@ -82,10 +85,16 @@ class Time extends View {
 	}
 
 	getStyles = () => {
+		const deviceWidth = Dimensions.get('window').width;
+
 		return {
+			container: {
+				flex: 1,
+				justifyContent: 'flex-start',
+			},
+			marginBottom: deviceWidth * 0.025333333,
 			type: {
 				container: {
-					flex: 1,
 					flexDirection: 'row',
 					justifyContent: 'space-between',
 					alignItems: 'flex-start',
@@ -116,14 +125,27 @@ class Time extends View {
 		});
 	};
 
+	setRandomIntervalValue = randomValue => {
+		if (randomValue !== this.state.randomValue) {
+			this.setState({ randomValue });
+		}
+	};
+
 	render() {
-		const { type } = this.getStyles();
+		const { container, marginBottom, type } = this.getStyles();
 
 		return (
-			<View>
-				<View style={type.container}>
+			<View style={container}>
+				<View style={[type.container, { marginBottom }]}>
 					{this.renderTypes(types)}
 				</View>
+				<TimeSlider
+					description="Set random intervals between 1 to 1446 minutes"
+					icon="random"
+					minimumValue={0}
+					maximumValue={1446}
+					onValueChange={this.setRandomIntervalValue}
+				/>
 			</View>
 		);
 	}

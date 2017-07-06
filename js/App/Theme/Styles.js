@@ -154,5 +154,16 @@ export default StyleSheet.create({
 		flex: 4,
 		color: '#1a355c',
 		fontSize: 16,
+	scheduleRow: {
+		backgroundColor: '#fff',
+		borderRadius: 2,
+		elevation: 2,
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowRadius: 2,
+		shadowColor: '#000',
+		shadowOpacity: 0.23,
 	},
 });
