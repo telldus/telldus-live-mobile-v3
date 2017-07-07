@@ -31,7 +31,7 @@ import {
 	getUserProfile,
 	appStart,
 	appState,
-	syncLiveApiOnForeground
+	syncLiveApiOnForeground,
 } from 'Actions';
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
