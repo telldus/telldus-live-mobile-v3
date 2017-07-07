@@ -1,10 +1,19 @@
 stages:
+  - test
   - build
   - release
 
 before_script:
   - npm install --quiet
   - npm run postinstall
+
+eslint:
+  image: node:6
+  stage: test
+  tags:
+    - docker
+  script:
+    - npm run lint
 
 android:
   image: elviejokike/react-native-android
