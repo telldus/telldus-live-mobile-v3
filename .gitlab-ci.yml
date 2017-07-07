@@ -32,6 +32,26 @@ android:
   tags:
     - android
 
+ios:
+  stage: build
+  tags:
+    - osx
+  cache:
+    paths:
+      - node_modules
+  artifacts:
+    paths:
+      - ios/main.jsbundle.map
+      - TelldusLiveApp.ipa
+    expire_in: '1 mos'
+  only:
+    - tags
+    - master
+    - /^v\d+\.\d+.*$/ # Version branches
+  script:
+    - cd ios
+    - ./buildGitlabRunner.sh
+
 google_play:
   image: ruby:2
   stage: release
@@ -49,3 +69,18 @@ google_play:
     - echo ${GOOGLE_KEY} > play_key.json
     - bundle install
     - fastlane supply --apk android/app/build/outputs/apk/app-release.apk --track alpha
+
+testflight:
+  stage: release
+  tags:
+    - osx
+  dependencies:
+    - ios
+  environment:
+    name: production
+    url: https://itunes.apple.com/us/app/telldus-live-mobile-beta/id1014419677
+  when: manual
+  only:
+    - tags
+  script:
+    - fastlane ios build
