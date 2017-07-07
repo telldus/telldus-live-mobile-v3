@@ -28,6 +28,9 @@ import { createSelector } from 'reselect';
 export type State = {
 	accessToken: any,
 	userProfile: any,
+	pushToken: any,
+	pushTokenRegistered: any,
+	notificationText: any,
 };
 
 const initialState = {
