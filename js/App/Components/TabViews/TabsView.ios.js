@@ -25,9 +25,8 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Image, Dimensions, TouchableOpacity } from 'react-native';
 
-import { Icon, View, Header } from 'BaseComponents';
+import { View, Header } from 'BaseComponents';
 
 import { toggleEditMode, syncWithServer, switchTab } from 'Actions';
 import TabViews from 'TabViews';
@@ -35,7 +34,6 @@ import TabViews from 'TabViews';
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
 import { SettingsDetailModal } from 'DetailViews';
-import Theme from 'Theme';
 
 const RouteConfigs = {
 	Dashboard: {
