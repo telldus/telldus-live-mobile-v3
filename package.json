@@ -31,6 +31,7 @@
     "react-native-modal": "^2.3.2",
     "react-native-orientation": "git+https://github.com/yamill/react-native-orientation.git",
     "react-native-push-notification": "^3.0.0",
+    "react-native-root-toast": "^1.1.2",
     "react-native-scrollable-tab-view": "^0.7.0",
     "react-native-slider": "~0.10.0",
     "react-native-tab-view": "0.0.66",
