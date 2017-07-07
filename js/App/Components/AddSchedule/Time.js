@@ -142,6 +142,7 @@ class Time extends View {
 	};
 
 	render() {
+		const { selectedTypeIndex } = this.state;
 		const { container, marginBottom, type } = this.getStyles();
 
 		return (
@@ -149,25 +150,29 @@ class Time extends View {
 				<View style={[type.container, { marginBottom }]}>
 					{this.renderTypes(types)}
 				</View>
-				<View style={{ marginBottom }}>
-					<TimeSlider
-						description="Offset the time between -1439 to +1439 minutes"
-						icon="offset"
-						minimumValue={-1439}
-						maximumValue={1439}
-						value={0}
-						onValueChange={this.setTimeOffsetValue}
-					/>
-				</View>
-				<View>
-					<TimeSlider
-						description="Set random intervals between 1 to 1446 minutes"
-						icon="random"
-						minimumValue={0}
-						maximumValue={1446}
-						onValueChange={this.setRandomIntervalValue}
-					/>
-				</View>
+				{(selectedTypeIndex === 0 || selectedTypeIndex === 1) && (
+					<View style={{ marginBottom }}>
+						<TimeSlider
+							description="Offset the time between -1439 to +1439 minutes"
+							icon="offset"
+							minimumValue={-1439}
+							maximumValue={1439}
+							value={0}
+							onValueChange={this.setTimeOffsetValue}
+						/>
+					</View>
+				)}
+				{selectedTypeIndex !== null && (
+					<View>
+						<TimeSlider
+							description="Set random intervals between 1 to 1446 minutes"
+							icon="random"
+							minimumValue={0}
+							maximumValue={1446}
+							onValueChange={this.setRandomIntervalValue}
+						/>
+					</View>
+				)}
 			</View>
 		);
 	}
