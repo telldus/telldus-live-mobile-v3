@@ -110,7 +110,7 @@ type Props = {
 
 class SensorRow extends Component {
 	props: Props;
-	onLayout: Object => void;
+	onLayout: (Object) => void;
 	width: number;
 
 	constructor(props: Props) {

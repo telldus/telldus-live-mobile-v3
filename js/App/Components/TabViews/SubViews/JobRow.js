@@ -51,7 +51,7 @@ export default (props: Props) => {
 	const value = method === 'Dim' ? `${Math.round(methodValue / 255.0 * 100)}%` : method;
 	return (
 		<ListItem style={Theme.Styles.rowFront}>
-			<Text style={{ flex: 4, color: 'orange', fontSize: 16 }}>
+			<Text style={{ flex: 5, color: 'orange', fontSize: 16 }}>
 				{`${props.effectiveHour}:${props.effectiveMinute}`}
 			</Text>
 			<Text style={{ flex: 20, color: '#1a355c', fontSize: 16, paddingLeft: 6 }}>
