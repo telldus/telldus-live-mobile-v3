@@ -84,6 +84,7 @@ class SettingsDetailModal extends View {
 	logout: () => void;
 	postLoadMethod: () => void;
 	submitPushToken: () => void;
+	updateModalVisiblity: () => void;
 
 	constructor(props) {
 		super(props);
