@@ -21,6 +21,8 @@
 
 #import "React/RCTBundleURLProvider.h"
 #import "React/RCTRootView.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 #import "Orientation.h"
 
@@ -29,6 +31,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	NSURL *jsCodeLocation;
+	[Fabric with:@[[Crashlytics class]]];
 
 	jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
 

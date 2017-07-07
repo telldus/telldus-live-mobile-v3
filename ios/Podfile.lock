@@ -1,4 +1,7 @@
 PODS:
+  - Crashlytics (3.7.0):
+    - Fabric (~> 1.6.3)
+  - Fabric (1.6.7)
   - React/Core (0.42.3):
     - React/cxxreact
     - Yoga (= 0.42.3.React)
@@ -10,6 +13,8 @@ PODS:
   - Yoga (0.42.3.React)
 
 DEPENDENCIES:
+  - Crashlytics
+  - Fabric
   - React/Core (from `../node_modules/react-native`)
   - React/RCTPushNotification (from `../node_modules/react-native`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -21,9 +26,11 @@ EXTERNAL SOURCES:
     :path: ../node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
+  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
+  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   React: 35e039680feacd0563677d49ba410112d2748559
   Yoga: 86ce777665c8259b94ef8dbea76b84634237f4ea
 
-PODFILE CHECKSUM: 5d03c87b2a9ba9250cce73c40eb9a4e02caf9310
+PODFILE CHECKSUM: c1b00a5c6116223d908f15b37448973308f4cdea
 
 COCOAPODS: 1.2.1

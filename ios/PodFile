@@ -7,6 +7,8 @@ target 'TelldusLiveApp' do
     'Core',
     'RCTPushNotification',
   ], :path => react_native_path
+  pod 'Fabric'
+  pod 'Crashlytics'
 end
 
 # Start the React Native JS packager server when running the project in Xcode.
