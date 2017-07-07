@@ -96,13 +96,23 @@ export function turnOn(deviceId: number): ThunkAction {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_TURN_ON',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
+		return LiveApi(payload).then(response => {
+			dispatch({
+				type: 'DEVICE_TURN_ON',
+				payload: {
+					...payload,
+					...response,
+				},
+			});
+		}).catch(error => {
+			dispatch({
+				type: 'DEVICE_UNREACHABLE',
+				payload: {
+					deviceId,
+					message: error.message,
+				},
+			});
+		});
 	};
 }
 
@@ -114,13 +124,23 @@ export function turnOff(deviceId: number): ThunkAction {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_TURN_OFF',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
+		return LiveApi(payload).then(response => {
+			dispatch({
+				type: 'DEVICE_TURN_OFF',
+				payload: {
+					...payload,
+					...response,
+				},
+			});
+		}).catch(error => {
+			dispatch({
+				type: 'DEVICE_UNREACHABLE',
+				payload: {
+					deviceId,
+					message: error.message,
+				},
+			});
+		});
 	};
 }
 
