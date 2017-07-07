@@ -48,7 +48,7 @@ type Props = {
 
 class DeviceRow extends View {
 	props: Props;
-	onSettingsSelected: number => void;
+	onSettingsSelected: (number) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center',
 	},
 	gear: {
-		flex: 2,
+		flex: 2.5,
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginRight: 8,
