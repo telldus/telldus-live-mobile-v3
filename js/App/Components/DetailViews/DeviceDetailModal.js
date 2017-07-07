@@ -103,7 +103,7 @@ class DeviceDetailModal extends View {
 				<Container style={styles.container}>
 					<View style={styles.header}>
 						<Icon name="wifi" size={26} color="white" style={{
-							flex: 1,
+							flex: 1.5,
 							marginLeft: 8,
 						}}/>
 						<Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
