@@ -105,10 +105,6 @@ class DimmerButton extends View {
 
 		};
 
-		this.onValueChangeThrottled = throttle(this.props.onDimmerSlide(this.props.device.id), 200, {
-			trailing: true,
-		});
-
 		this.onTurnOffButtonStart = this.onTurnOffButtonStart.bind(this);
 		this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
 		this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
@@ -135,7 +131,7 @@ class DimmerButton extends View {
 	}
 
 	onValueChange(sliderValue: number) {
-		this.onValueChangeThrottled(toDimmerValue(sliderValue));
+		this.props.onDimmerSlide(this.props.device.id)(toDimmerValue(sliderValue));
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
