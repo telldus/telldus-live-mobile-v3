@@ -31,7 +31,6 @@ import { turnOn, turnOff, requestTurnOn, requestTurnOff } from 'Actions_Devices'
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
-import throttle from 'lodash/throttle';
 
 function getDimmerValue(value: number, isInState: string): number {
 	let newValue = value || 0;
@@ -198,8 +197,8 @@ class DimmerButton extends View {
 						width: this.state.buttonWidth,
 						height: this.state.buttonHeight,
 						left: 0,
-						bottom: 0
-					}
+						bottom: 0,
+					},
 				]}
 				thumbWidth={this.state.buttonWidth / 5}
 				thumbHeight={9}
