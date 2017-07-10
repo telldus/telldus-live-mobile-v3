@@ -139,6 +139,24 @@ Before commiting code. Please make sure tests pass. Test the code:
 
 ## Naming convention branches, commits and pull requests
 
+If possible, try to keep the history linear. That means that your should rebase any feature branches before they are pushed.
+
+It's possible to reference issues and even close them in commit messages. When possible, please do. It helps finding issues in the future. Read more:
+https://docs.gitlab.com/ee/user/project/issues/automatic_issue_closing.html
+
+Make sure the commit message includes all the changes in the commit. It is not sufficient to only reference an issue number. Anyone with git access might not have access to the issue system.  
+This is not ok:  
+`"Fixes #123"`  
+This is ok:  
+`"Check returned value before using it. Fixes #123"`
+
+Make sure the commit message is in imperative present tense in these messages.
+Instead of “I added tests for” or “Adding tests for,” use “Add tests for.”
+The excelent book "Pro Git" covers this well:  
+https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project
+
+For any more info about git, please consider purchasing this book.
+
 ## Logging
 
 ## Redux
