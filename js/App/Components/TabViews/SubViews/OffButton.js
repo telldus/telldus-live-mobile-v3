@@ -23,7 +23,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import Toast from 'react-native-root-toast';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import { turnOff, requestTurnOff } from 'Actions_Devices';
 
@@ -31,43 +30,6 @@ class OffButton extends View {
 	constructor(props) {
 		super(props);
 		this.onPress = this.onPress.bind(this);
-		this.showToast = this.showToast.bind(this);
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.isErrorMessage && (nextProps.methodRequested === 'TURNOFF')) {
-			this.showToast(nextProps.isErrorMessage);
-		}
-	}
-
-	showToast(message) {
-		// Add a Toast on screen.
-		Toast.show(message, {
-			duration: Toast.durations.SHORT,
-			position: 60,
-			shadow: false,
-			animation: true,
-			hideOnPress: true,
-			backgroundColor: '#fff',
-			textColor: '#1a355b',
-			delay: 0,
-			onShow: () => {
-				// calls on toast\`s appear animation start
-			},
-			onShown: () => {
-				// calls on toast\`s appear animation end.
-			},
-			onHide: () => {
-				// calls on toast\`s hide animation start.
-				this.props.dispatch({
-					type: 'RESET_DEVICE_STATE',
-					deviceId: this.props.id,
-				});
-			},
-			onHidden: () => {
-				// calls on toast\`s hide animation end.
-			},
-		});
 	}
 
 	onPress() {
@@ -77,7 +39,6 @@ class OffButton extends View {
 
 	render() {
 		let { isInState, enabled, fontSize, methodRequested } = this.props;
-
 		return (
 			<View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>
 				<TouchableOpacity disabled={!enabled} onPress={this.onPress} style={styles.button} >
@@ -130,7 +91,6 @@ OffButton.propTypes = {
 	enabled: PropTypes.bool,
 	fontSize: PropTypes.number,
 	methodRequested: PropTypes.string,
-	isErrorMessage: PropTypes.any,
 };
 
 OffButton.defaultProps = {

@@ -36,7 +36,7 @@ import {
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
 
-import { View } from 'BaseComponents';
+import { View, RootToast } from 'BaseComponents';
 import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
@@ -66,6 +66,8 @@ type Props = {
 	accessToken: Object,
 	userProfile: Object,
 	dispatch: Function,
+	toastVisible: boolean,
+	toastMessage: string,
 };
 
 type State = {
@@ -132,6 +134,11 @@ class AppNavigator extends View {
 					name={this.props.dimmer.name}
 					value={this.props.dimmer.value / 255}
 				/>
+				<RootToast
+					toastVisible={this.props.toastVisible}
+					toastMessage={this.props.toastMessage}
+					duration={3000}
+				/>
 			</View>
 		);
 	}
@@ -147,6 +154,8 @@ function mapStateToProps(state, ownProps) {
 		accessToken: state.user.accessToken,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
+		toastVisible: state.App.errorGlobalShow,
+		toastMessage: state.App.errorGlobalMessage,
 	};
 }
 

@@ -106,11 +106,16 @@ export function turnOn(deviceId: number): ThunkAction {
 			});
 		}).catch(error => {
 			dispatch({
-				type: 'DEVICE_UNREACHABLE',
+				type: 'GLOBAL_ERROR_SHOW',
 				payload: {
+					source: 'device',
 					deviceId,
 					message: error.message,
 				},
+			});
+			dispatch({
+				type: 'RESET_DEVICE_STATE',
+				deviceId,
 			});
 		});
 	};
@@ -134,11 +139,16 @@ export function turnOff(deviceId: number): ThunkAction {
 			});
 		}).catch(error => {
 			dispatch({
-				type: 'DEVICE_UNREACHABLE',
+				type: 'GLOBAL_ERROR_SHOW',
 				payload: {
+					source: 'device',
 					deviceId,
 					message: error.message,
 				},
+			});
+			dispatch({
+				type: 'RESET_DEVICE_STATE',
+				deviceId,
 			});
 		});
 	};

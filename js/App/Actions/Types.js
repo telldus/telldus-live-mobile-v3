@@ -70,6 +70,9 @@ export type Action =
 	| { type: 'APP_FOREGROUND' }
 	| { type: 'APP_BACKGROUND' }
 
+	| { type: 'GLOBAL_ERROR_SHOW', payload: Object }
+	| { type: 'GLOBAL_ERROR_HIDE' }
+
 	| { type: 'REQUEST_TURNON', payload: Object }
 	| { type: 'REQUEST_TURNOFF', payload: Object }
 	;
