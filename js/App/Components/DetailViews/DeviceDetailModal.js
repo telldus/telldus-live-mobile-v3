@@ -48,6 +48,7 @@ class DeviceDetailModal extends View {
 	props: Props;
 	state: State;
 	onStarButtonSelected: () => void;
+	updateModalVisiblity: () => void;
 
 	constructor(props: Props) {
 		super(props);

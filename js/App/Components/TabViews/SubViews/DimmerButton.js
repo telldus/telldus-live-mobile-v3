@@ -130,7 +130,10 @@ class DimmerButton extends View {
 	}
 
 	onValueChange(sliderValue: number) {
-		this.props.onDimmerSlide(this.props.device.id)(toDimmerValue(sliderValue));
+		let fn = this.props.onDimmerSlide(this.props.device.id);
+		if (fn) {
+			fn(toDimmerValue(sliderValue));
+		}
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {

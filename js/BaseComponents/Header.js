@@ -44,6 +44,9 @@ type Props = {
 
 export default class HeaderComponent extends Base {
 
+	deviceWidth: number;
+	paddingHorizontal: number;
+	paddingTop: number;
 	props: Props;
 
 	getInitialStyle: () => Object;
@@ -292,7 +295,7 @@ export default class HeaderComponent extends Base {
 		}
 	}
 
-	renderButtonContent = button => {
+	renderButtonContent = (button: Object) => {
 		if (button.image) {
 			return <Image source={button.image}/>;
 		}
@@ -305,7 +308,7 @@ export default class HeaderComponent extends Base {
 		}
 	};
 
-	renderRightButton = rightButton => {
+	renderRightButton = (rightButton: Object) => {
 		return (
 			<TouchableOpacity
 				onPress={rightButton.onPress}
@@ -323,7 +326,7 @@ export default class HeaderComponent extends Base {
 		);
 	};
 
-	renderLeftButton = leftButton => {
+	renderLeftButton = (leftButton: Object) => {
 		return (
 			<TouchableOpacity
 				onPress={leftButton.onPress}

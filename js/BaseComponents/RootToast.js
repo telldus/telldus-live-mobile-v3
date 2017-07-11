@@ -25,7 +25,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 
+type DefaultProps = {
+	onToastShow: bool,
+	onToastShown: bool,
+	onToastHide: bool,
+	onToastHidden: bool,
+	position: number,
+	duration: number,
+};
+
 class RootToast extends Component {
+	static defaultProps: DefaultProps;
+
 	onShow: Function;
 	onShown: Function;
 	onHide: Function;
