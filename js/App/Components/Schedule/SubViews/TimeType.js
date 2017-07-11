@@ -45,7 +45,7 @@ class TimeType extends View {
 	selectType: () => void;
 
 	static propTypes = {
-		type: PropTypes.object.isRequired,
+		type: PropTypes.string.isRequired,
 		select: PropTypes.func.isRequired,
 		index: PropTypes.number.isRequired,
 		isSelected: PropTypes.bool.isRequired,
