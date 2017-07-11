@@ -34,20 +34,7 @@ import TimeType from './SubViews/TimeType';
 import TimeSlider from './SubViews/TimeSlider';
 import Theme from 'Theme';
 
-const types = [
-	{
-		name: 'Sunrise',
-		icon: 'sunrise',
-	},
-	{
-		name: 'Sunset',
-		icon: 'sunset',
-	},
-	{
-		name: 'Time',
-		icon: 'time',
-	},
-];
+const types = ['sunrise', 'sunset', 'time'];
 
 type Props = {
 	navigation: Object,

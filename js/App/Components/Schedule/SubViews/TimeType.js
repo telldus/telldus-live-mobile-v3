@@ -26,6 +26,10 @@ import { Dimensions, TouchableOpacity } from 'react-native';
 import { View, Text } from 'BaseComponents';
 import Theme from 'Theme';
 
+String.prototype.capitalize = function() {
+	return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 type Props = {
 	type: Object,
 	select: (number) => void,
@@ -108,8 +112,8 @@ class TimeType extends View {
 				outlineProvider="bounds"
 			>
 				<View style={wrapper}>
-					<Text style={icon}>{type.icon}</Text>
-					<Text style={name}>{type.name}</Text>
+					<Text style={icon}>{type}</Text>
+					<Text style={name}>{type.capitalize()}</Text>
 				</View>
 			</TouchableOpacity>
 		);
