@@ -22,6 +22,7 @@
 .*/node_modules/react-native/local-cli/.*
 .*/node_modules/react-native/packager/.*
 .*/node_modules/react-native/Libraries/Renderer/src/renderers/shared/fiber/.*
+.*/node_modules/react-navigation/.*/__tests__/.*
 [include]
 
 [libs]
