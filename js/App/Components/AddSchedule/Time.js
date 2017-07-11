@@ -29,7 +29,7 @@ import {
 	TimePickerAndroid,
 	TouchableWithoutFeedback,
 } from 'react-native';
-import { View, Text } from 'BaseComponents';
+import { View, Text, FloatingButton } from 'BaseComponents';
 import TimeType from './SubViews/TimeType';
 import TimeSlider from './SubViews/TimeSlider';
 import Theme from 'Theme';
@@ -46,8 +46,8 @@ type Props = {
 
 type State = {
 	selectedTypeIndex: number | null,
-	randomValue: number,
-	offsetValue: number,
+	randomInterval: number,
+	offset: number,
 	date: Date,
 };
 
@@ -76,8 +76,8 @@ class Time extends View {
 
 		this.state = {
 			selectedTypeIndex: null,
-			randomValue: 0,
-			offsetValue: 0,
+			randomInterval: 0,
+			offset: 0,
 			date,
 		};
 
@@ -171,21 +171,21 @@ class Time extends View {
 					index={i}
 					isSelected={isSelected}
 					select={this.selectType}
-					key={type.name}
+					key={type}
 				/>
 			);
 		});
 	};
 
-	setRandomIntervalValue = randomValue => {
-		if (randomValue !== this.state.randomValue) {
-			this.setState({ randomValue });
+	setRandomIntervalValue = randomInterval => {
+		if (randomInterval !== this.state.randomInterval) {
+			this.setState({ randomInterval });
 		}
 	};
 
-	setTimeOffsetValue = offsetValue => {
-		if (offsetValue !== this.state.offsetValue) {
-			this.setState({ offsetValue });
+	setTimeOffsetValue = offset => {
+		if (offset !== this.state.offset) {
+			this.setState({ offset });
 		}
 	};
 
@@ -300,23 +300,53 @@ class Time extends View {
 		);
 	};
 
+	selectTime = () => {
+		const { actions, navigation } = this.props;
+		const { selectedTypeIndex, randomInterval } = this.state;
+
+		const time = {
+			randomInterval,
+		};
+
+		if (selectedTypeIndex < 2) {
+			time.offset = this.state.offset;
+		} else {
+			const { date } = this.state;
+			time.hour = date.getHours();
+			time.minute = date.getMinutes();
+		}
+
+		actions.selectTime(types[selectedTypeIndex], time);
+		navigation.navigate('Days');
+	};
+
 	render() {
 		const { selectedTypeIndex } = this.state;
 		const { container, marginBottom, type } = this.getStyles();
+
+		const shouldRender = selectedTypeIndex !== null;
 
 		return (
 			<View style={container}>
 				<View style={[type.container, { marginBottom }]}>
 					{this.renderTypes(types)}
 				</View>
-				{selectedTypeIndex !== null && this.renderTimeRow(selectedTypeIndex)}
-				{selectedTypeIndex !== null && (
+				{shouldRender && this.renderTimeRow(selectedTypeIndex)}
+				{shouldRender && (
 					<TimeSlider
 						description="Set random intervals between 1 to 1446 minutes"
 						icon="random"
 						minimumValue={0}
 						maximumValue={1446}
 						onValueChange={this.setRandomIntervalValue}
+					/>
+				)}
+				{shouldRender && (
+					<FloatingButton
+						onPress={this.selectTime}
+						imageSource={require('./img/right-arrow-key.png')}
+						iconSize={this.deviceWidth * 0.041333333}
+						paddingRight={this.props.paddingRight}
 					/>
 				)}
 			</View>
