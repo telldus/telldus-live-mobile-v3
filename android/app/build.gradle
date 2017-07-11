@@ -90,6 +90,9 @@ def readVersionCode() {
  *   extraPackagerArgs: []
  * ]
  */
+project.ext.react = [
+	extraPackagerArgs: ["--sourcemap-output", file("$buildDir/outputs/mapping/sourcemap.js")]
+]
 
 apply from: "../../node_modules/react-native/react.gradle"
 

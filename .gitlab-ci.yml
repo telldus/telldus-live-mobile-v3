@@ -21,6 +21,7 @@ android:
   artifacts:
     paths:
       - android/app/build/outputs/apk/app-release.apk
+      - android/app/build/outputs/mapping/sourcemap.js
     expire_in: '1 mos'
   script:
     - cd android
