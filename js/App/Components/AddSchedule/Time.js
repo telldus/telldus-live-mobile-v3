@@ -22,10 +22,11 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, DatePickerIOS, Platform } from 'react-native';
 import { View } from 'BaseComponents';
 import TimeType from './SubViews/TimeType';
 import TimeSlider from './SubViews/TimeSlider';
+import Theme from 'Theme';
 
 const types = [
 	{
@@ -54,6 +55,7 @@ type State = {
 	selectedTypeIndex: number | null,
 	randomValue: number,
 	offsetValue: number,
+	date: Date,
 };
 
 class Time extends View {
@@ -76,10 +78,14 @@ class Time extends View {
 			tmp: true, // TODO: fill with real fields
 		};
 
+		const date = new Date();
+		date.setHours(12, 0, 0, 0);
+
 		this.state = {
 			selectedTypeIndex: null,
 			randomValue: 0,
 			offsetValue: 0,
+			date,
 		};
 	}
 
@@ -89,20 +95,26 @@ class Time extends View {
 	}
 
 	getStyles = () => {
-		const deviceWidth = Dimensions.get('window').width;
+		this.deviceWidth = Dimensions.get('window').width;
 
 		return {
 			container: {
 				flex: 1,
 				justifyContent: 'flex-start',
 			},
-			marginBottom: deviceWidth * 0.025333333,
+			marginBottom: this.deviceWidth * 0.025333333,
 			type: {
 				container: {
 					flexDirection: 'row',
 					justifyContent: 'space-between',
 					alignItems: 'flex-start',
 				},
+			},
+			iosTimeContainer: {
+				flexDirection: 'row',
+				height: 140,
+				alignItems: 'center',
+				overflow: 'hidden',
 			},
 		};
 	};
@@ -141,6 +153,58 @@ class Time extends View {
 		}
 	};
 
+	onDateChange = date => {
+		const hourValue = this.state.date.getHours();
+		const minuteValue = this.state.date.getMinutes();
+
+		const newHourValue = date.getHours();
+		const newMinuteValue = date.getMinutes();
+
+		if (newHourValue !== hourValue || newMinuteValue !== minuteValue) {
+			this.setState({ date });
+		}
+	};
+
+	renderTimeRow = selectedTypeIndex => {
+		const { marginBottom, iosTimeContainer } = this.getStyles();
+
+		let timePicker;
+
+		if (Platform.OS === 'ios') {
+			timePicker = (
+				<View style={iosTimeContainer}>
+					<DatePickerIOS
+						date={this.state.date}
+						mode="time"
+						style={{ flex: 1 }}
+						onDateChange={this.onDateChange}
+					/>
+				</View>
+			);
+		} else {
+			timePicker = (
+				<View/>
+			);
+		}
+
+		const timeSlider = (
+			<TimeSlider
+				description="Offset the time between -1439 to +1439 minutes"
+				icon="offset"
+				minimumValue={-1439}
+				maximumValue={1439}
+				value={0}
+				onValueChange={this.setTimeOffsetValue}
+			/>
+		);
+
+		return (
+			<View style={[Theme.Styles.scheduleRow, { marginBottom }]}>
+				{selectedTypeIndex === 2 ? timePicker : timeSlider}
+			</View>
+		);
+	};
+
 	render() {
 		const { selectedTypeIndex } = this.state;
 		const { container, marginBottom, type } = this.getStyles();
@@ -150,28 +214,15 @@ class Time extends View {
 				<View style={[type.container, { marginBottom }]}>
 					{this.renderTypes(types)}
 				</View>
-				{(selectedTypeIndex === 0 || selectedTypeIndex === 1) && (
-					<View style={{ marginBottom }}>
-						<TimeSlider
-							description="Offset the time between -1439 to +1439 minutes"
-							icon="offset"
-							minimumValue={-1439}
-							maximumValue={1439}
-							value={0}
-							onValueChange={this.setTimeOffsetValue}
-						/>
-					</View>
-				)}
+				{selectedTypeIndex !== null && this.renderTimeRow(selectedTypeIndex)}
 				{selectedTypeIndex !== null && (
-					<View>
-						<TimeSlider
-							description="Set random intervals between 1 to 1446 minutes"
-							icon="random"
-							minimumValue={0}
-							maximumValue={1446}
-							onValueChange={this.setRandomIntervalValue}
-						/>
-					</View>
+					<TimeSlider
+						description="Set random intervals between 1 to 1446 minutes"
+						icon="random"
+						minimumValue={0}
+						maximumValue={1446}
+						onValueChange={this.setRandomIntervalValue}
+					/>
 				)}
 			</View>
 		);
