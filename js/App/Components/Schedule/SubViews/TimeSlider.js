@@ -109,6 +109,7 @@ export default class TimeSlider extends View {
 					width: thumbSize,
 					backgroundColor: '#F6F6F6',
 					borderRadius: thumbSize / 2,
+					elevation: 2,
 					shadowRadius: 2,
 					shadowOpacity: 0.4,
 					shadowOffset: {
