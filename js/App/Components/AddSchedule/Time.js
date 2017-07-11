@@ -22,8 +22,14 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, DatePickerIOS, Platform } from 'react-native';
-import { View } from 'BaseComponents';
+import {
+	Dimensions,
+	DatePickerIOS,
+	Platform,
+	TimePickerAndroid,
+	TouchableWithoutFeedback,
+} from 'react-native';
+import { View, Text } from 'BaseComponents';
 import TimeType from './SubViews/TimeType';
 import TimeSlider from './SubViews/TimeSlider';
 import Theme from 'Theme';
@@ -87,6 +93,8 @@ class Time extends View {
 			offsetValue: 0,
 			date,
 		};
+
+		this.selectTimeAndroid = this.selectTimeAndroid.bind(this);
 	}
 
 	componentDidMount() {
@@ -96,6 +104,10 @@ class Time extends View {
 
 	getStyles = () => {
 		this.deviceWidth = Dimensions.get('window').width;
+
+		const androidTimeWidth = this.deviceWidth * 0.213333333;
+		const androidTimeHeight = this.deviceWidth * 0.177333333;
+		const androidTimeColor = Theme.Core.brandPrimary;
 
 		return {
 			container: {
@@ -115,6 +127,43 @@ class Time extends View {
 				height: 140,
 				alignItems: 'center',
 				overflow: 'hidden',
+			},
+			androidTimeContainer: {
+				alignItems: 'center',
+				justifyContent: 'flex-start',
+				padding: this.deviceWidth * 0.032,
+			},
+			androidTimeValueContainer: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginBottom: this.deviceWidth * 0.017333333,
+			},
+			androidTimeValueWrapper: {
+				backgroundColor: androidTimeColor,
+				borderRadius: 2,
+				position: 'relative',
+				alignItems: 'center',
+				justifyContent: 'center',
+				height: androidTimeHeight,
+				width: androidTimeWidth,
+			},
+			androidTimeValue: {
+				color: '#fff',
+				fontSize: this.deviceWidth * 0.094666667,
+			},
+			androidTimeValueCenterLine: {
+				backgroundColor: androidTimeColor,
+				height: 1,
+				width: androidTimeWidth,
+				position: 'absolute',
+				top: androidTimeHeight / 2,
+				left: 0,
+				zIndex: 10,
+			},
+			androidTimeCaption: {
+				color: '#555555',
+				fontSize: this.deviceWidth * 0.032,
 			},
 		};
 	};
@@ -165,8 +214,39 @@ class Time extends View {
 		}
 	};
 
+	formatTime = value => (value < 10 ? '0' : '') + value;
+
+	async selectTimeAndroid() {
+		const { date } = this.state;
+
+		try {
+			const { action, hour, minute } = await TimePickerAndroid.open({
+				hour: date.getHours(),
+				minute: date.getMinutes(),
+				is24Hour: true,
+			});
+			if (action !== TimePickerAndroid.dismissedAction) {
+				const newDate = new Date();
+				newDate.setHours(hour, minute, 0, 0);
+				this.setState({ date: newDate });
+			}
+		} catch ({ code, message }) {
+			console.warn('Cannot open time picker', message);
+		}
+	};
+
 	renderTimeRow = selectedTypeIndex => {
-		const { marginBottom, iosTimeContainer } = this.getStyles();
+		const { date } = this.state;
+		const {
+			marginBottom,
+			iosTimeContainer,
+			androidTimeContainer,
+			androidTimeValueContainer,
+			androidTimeValueWrapper,
+			androidTimeValue,
+			androidTimeValueCenterLine,
+			androidTimeCaption,
+		} = this.getStyles();
 
 		let timePicker;
 
@@ -174,7 +254,7 @@ class Time extends View {
 			timePicker = (
 				<View style={iosTimeContainer}>
 					<DatePickerIOS
-						date={this.state.date}
+						date={date}
 						mode="time"
 						style={{ flex: 1 }}
 						onDateChange={this.onDateChange}
@@ -183,7 +263,35 @@ class Time extends View {
 			);
 		} else {
 			timePicker = (
-				<View/>
+				<TouchableWithoutFeedback onPress={this.selectTimeAndroid}>
+					<View style={androidTimeContainer}>
+						<View style={androidTimeValueContainer}>
+							<View
+								style={[
+									androidTimeValueWrapper,
+									{
+										marginRight: this.deviceWidth * 0.014666667,
+									}
+								]}
+
+							>
+								<View style={androidTimeValueCenterLine}/>
+								<Text style={androidTimeValue}>
+									{this.formatTime(date.getHours())}
+								</Text>
+							</View>
+							<View style={androidTimeValueWrapper}>
+								<View style={androidTimeValueCenterLine}/>
+								<Text style={androidTimeValue}>
+									{this.formatTime(date.getMinutes())}
+								</Text>
+							</View>
+						</View>
+						<Text style={androidTimeCaption}>
+							Tap to change time
+						</Text>
+					</View>
+				</TouchableWithoutFeedback>
 			);
 		}
 
