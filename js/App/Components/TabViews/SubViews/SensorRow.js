@@ -24,7 +24,7 @@
 import React, { Component } from 'react';
 import { FormattedNumber, Image, ListItem, Text, View } from 'BaseComponents';
 import { ScrollView, StyleSheet } from 'react-native';
-import { Crashlytics } from 'react-native-fabric';
+import { reportException } from 'Analytics';
 
 import format from 'date-format';
 import Theme from 'Theme';
@@ -231,7 +231,7 @@ class SensorRow extends Component {
 		try {
 			return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
 		} catch (exception) {
-			Crashlytics.logException(exception);
+			reportException(exception);
 			return 'unknown';
 		}
 	}

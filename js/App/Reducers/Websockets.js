@@ -22,7 +22,7 @@
 'use strict';
 
 import { REHYDRATE } from 'redux-persist/constants';
-import { Crashlytics } from 'react-native-fabric';
+import { reportException } from 'Analytics';
 
 const initialState = {
 	session: {
@@ -37,7 +37,7 @@ export default function reduceWebsockets(state: Object = { ...initialState }, ac
 		try {
 			date = new Date(action.payload.websockets.session.ttl);  // cast to Date
 		} catch (exception) {
-			Crashlytics.logException(exception);
+			reportException(exception);
 		}
 
 		return {
@@ -54,7 +54,7 @@ export default function reduceWebsockets(state: Object = { ...initialState }, ac
 		try {
 			date = new Date(ttl * 1000);
 		} catch (exception) {
-			Crashlytics.logException(exception);
+			reportException(exception);
 		}
 		return {
 			...state,
