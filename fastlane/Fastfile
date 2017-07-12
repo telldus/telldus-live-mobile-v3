@@ -86,5 +86,11 @@ platform :ios do
     pilot(
       skip_submission: true
     )
+    slack(
+      message: "Successfully deployed new version of Telldus Live! mobile to TestFlight.",
+      payload: {
+        Version: ENV["APP_VERSION"]
+      }
+    )
   end
 end
