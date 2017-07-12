@@ -63,13 +63,13 @@ end
 
 platform :ios do
   before_all do
-    increment_version_number(version_number: ENV["APP_VERSION"], xcodeproj: "ios/TelldusLiveApp.xcodeproj")
-    increment_build_number(build_number: ENV['CI_BUILD_ID'], xcodeproj: "ios/TelldusLiveApp.xcodeproj")
-    cocoapods(podfile: "ios/Podfile")
   end
 
   desc "Build the app"
   lane :build do
+    increment_version_number(version_number: ENV["APP_VERSION"], xcodeproj: "ios/TelldusLiveApp.xcodeproj")
+    increment_build_number(build_number: ENV['CI_BUILD_ID'], xcodeproj: "ios/TelldusLiveApp.xcodeproj")
+    cocoapods(podfile: "ios/Podfile")
     match(type: "appstore")
     disable_automatic_code_signing(path: "ios/TelldusLiveApp.xcodeproj")
     gym(
@@ -81,9 +81,8 @@ platform :ios do
     )
   end
 
-  desc "Submit new Beta Build to Apple TestFlight"
+  desc "Submit new Beta Build to Apple TestFlight. The app must have been build before"
   lane :beta do
-    build
     pilot(
       skip_submission: true
     )
