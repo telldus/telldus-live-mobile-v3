@@ -22,6 +22,7 @@
 'use strict';
 
 import type { Action } from 'Actions_Types';
+import { Crashlytics } from 'react-native-fabric';
 
 import { createSelector } from 'reselect';
 
@@ -65,6 +66,8 @@ export default function reduceUser(state: State = initialState, action: Action):
 		};
 	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {
+		Crashlytics.setUserName(`${action.payload.firstname} ${action.payload.lastname}`);
+		Crashlytics.setUserEmail(action.payload.email);
 		return {
 			...state,
 			userProfile: action.payload,
