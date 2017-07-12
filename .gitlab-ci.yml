@@ -43,6 +43,7 @@ ios:
     paths:
       - ios/main.jsbundle.map
       - TelldusLiveApp.ipa
+      - TelldusLiveApp.app.dSYM.zip
     expire_in: '1 mos'
   only:
     - tags
