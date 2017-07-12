@@ -3,16 +3,13 @@ stages:
   - build
   - release
 
-before_script:
-  - npm install --quiet
-  - npm run postinstall
-
 eslint:
   image: node:6
   stage: test
   tags:
     - docker
   script:
+    - npm install --quiet
     - npm run lint
 
 android:
@@ -24,6 +21,8 @@ android:
       - android/sourcemap.js
     expire_in: '1 mos'
   script:
+    - npm install --quiet
+    - npm run postinstall
     - cd android
     - ./buildGitlabRunner.sh
   only:
@@ -50,6 +49,7 @@ ios:
     - master
     - /^v\d+\.\d+.*$/ # Version branches
   script:
+    - npm install --quiet
     - cd ios
     - ./buildGitlabRunner.sh
 
