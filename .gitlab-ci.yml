@@ -85,4 +85,4 @@ testflight:
   only:
     - tags
   script:
-    - fastlane ios build
+    - fastlane ios beta
