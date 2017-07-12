@@ -23,7 +23,7 @@
 
 import React, { PropTypes } from 'react';
 import { Dimensions } from 'react-native';
-import { View, Text, Slider } from 'BaseComponents';
+import { Slider, Text, View } from 'BaseComponents';
 import Theme from 'Theme';
 
 type Props = {
@@ -33,6 +33,7 @@ type Props = {
 	maximumValue: number,
 	onValueChange: Function,
 	value: number,
+	displayValues: number[] | number,
 };
 
 type State = {
@@ -54,6 +55,10 @@ export default class TimeSlider extends View {
 		maximumValue: PropTypes.number.isRequired,
 		onValueChange: PropTypes.func.isRequired,
 		value: PropTypes.number,
+		displayValues: PropTypes.oneOfType([
+			PropTypes.arrayOf(PropTypes.number),
+			PropTypes.number,
+		]),
 	};
 
 	constructor(props) {
@@ -67,7 +72,10 @@ export default class TimeSlider extends View {
 			minimumTrackTintColor: sliderColor,
 			maximumTrackTintColor: sliderColor,
 			onValueChange: this.onValueChange,
-			caption: true,
+			showValue: true,
+			legend: true,
+			step: 1,
+			displayValues: props.displayValues,
 		};
 
 		this.state = {
@@ -129,27 +137,28 @@ export default class TimeSlider extends View {
 	render() {
 		const { description, icon } = this.props;
 		const styles = this.getStyles();
+		const { row, slider } = styles;
 
 		return (
 			<View style={[Theme.Styles.scheduleRow, styles.container]}>
 				<View
 					style={[
-						styles.row,
+						row,
 						{
 							justifyContent: 'flex-start',
-							marginBottom: this.deviceWidth * 0.116,
+							marginBottom: this.deviceWidth * 0.034666667,
 						}
 					]}
 				>
 					<Text style={styles.icon}>{icon}</Text>
 					<Text style={styles.caption}>{description}</Text>
 				</View>
-				<View style={[styles.row, { justifyContent: 'center' }]}>
+				<View style={[row, { justifyContent: 'center' }]}>
 					<Slider
 						{...this.sliderConfig}
 						value={this.state.value}
-						trackStyle={styles.slider.track}
-						thumbStyle={styles.slider.thumb}
+						trackStyle={slider.track}
+						thumbStyle={slider.thumb}
 					/>
 				</View>
 			</View>
