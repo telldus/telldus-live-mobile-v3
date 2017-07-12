@@ -23,10 +23,10 @@
 
 import React, { PropTypes } from 'react';
 import { Dimensions, TouchableOpacity } from 'react-native';
-import { View, Text } from 'BaseComponents';
+import { Text, View } from 'BaseComponents';
 import Theme from 'Theme';
 
-String.prototype.capitalize = function() {
+String.prototype.capitalize = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
@@ -56,13 +56,27 @@ class TimeType extends View {
 	}
 
 	getStyles = () => {
-		const { isSelected } = this.props;
+		const { isSelected, type } = this.props;
 		const { brandSecondary, telldusIconFont } = Theme.Core;
 
 		const deviceWidth = Dimensions.get('window').width;
 		const size = deviceWidth * 0.293333333;
-		const backgroundColor = isSelected ? brandSecondary : '#fff';
-		const color = isSelected ? '#fff' : brandSecondary;
+
+		let backgroundColor = '#fff';
+		let iconColor = brandSecondary;
+		let textColor = '#555555';
+
+		if (type === 'sunrise') {
+			iconColor = '#ffa726';
+		}
+		if (type === 'sunset') {
+			iconColor = '#EF5350';
+		}
+		if (isSelected) {
+			backgroundColor = brandSecondary;
+			iconColor = '#fff';
+			textColor = '#fff';
+		}
 
 		return {
 			container: {
@@ -85,12 +99,12 @@ class TimeType extends View {
 				justifyContent: 'center',
 			},
 			icon: {
-				color,
+				color: iconColor,
 				fontFamily: telldusIconFont,
 				fontSize: deviceWidth * 0.133333333,
 			},
 			name: {
-				color,
+				color: textColor,
 				fontSize: deviceWidth * 0.037333333,
 			},
 		};
