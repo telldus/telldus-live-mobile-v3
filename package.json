@@ -7,6 +7,7 @@
     "lint_autofix": "eslint js --fix",
     "flow": "node_modules/.bin/flow",
     "postinstall": "rm -f node_modules/intl/.babelrc",
+    "release": "node js/Utils/release.js",
     "sourcemap": "node js/Utils/sourcemap.js"
   },
   "dependencies": {
@@ -55,6 +56,7 @@
     "babel-preset-react-native": "1.9.2",
     "babel-preset-stage-3": "^6.17.0",
     "buffer": "^5.0.6",
+    "child-process-promise": "^2.2.1",
     "eslint": "~3.12.2",
     "eslint-plugin-react": "^6.10.3",
     "flow-bin": "^0.38.0",

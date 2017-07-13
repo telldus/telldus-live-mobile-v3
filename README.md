@@ -116,7 +116,9 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 - we use semver (major.minor.path) and the Android version is derived from that (`3.2.10` => `30210`)
 - when releasing a new app, always update the version
 - Change the version in `package.json`
-- Commit and tag the release. Include the changelog in the tag
+- Add the bump to git: `git add -p packages.json`
+- Run the release script: `npm run release`
+- Check that the new commit and tag made by the release script is ok before pushing
 ### Android
 
 
@@ -157,6 +159,18 @@ The excelent book "Pro Git" covers this well:
 https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project
 
 For any more info about git, please consider purchasing this book.
+
+If the commit should be mentioned in the changelog this must be added to the commit. Add it as an own row prepended with `Changelog:`  
+Please note that the changelog message must not be the same as the commit message. The changelog message will be presented to the user. This is an example of commit message:
+```
+Do not store date objects in the store. See #64.
+
+The redux store must be serializable to JSON so only plain types may be stored.
+
+Changelog: Fix a crash on startup
+```
+
+If you are not sure if your commit should be included in the changelog or not, ask the maintainer first!
 
 ## Logging
 
