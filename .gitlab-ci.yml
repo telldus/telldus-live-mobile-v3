@@ -4,13 +4,22 @@ stages:
   - release
 
 eslint:
-  image: node:6
+  image: node:8.1.2
   stage: test
   tags:
     - docker
   script:
     - npm install --quiet
     - npm run lint
+
+flow:
+  image: danrspencer/node-flow:8.1.2
+  stage: test
+  tags:
+    - docker
+  script:
+    - npm install --quiet
+    - npm run flow
 
 android:
   image: telldus/react-native-android:24
