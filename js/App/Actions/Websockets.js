@@ -61,8 +61,9 @@ export const authenticateSession : () => ThunkAction = (() => {
 			websockets: { session: { ttl, sessionId } },
 		} = getState();
 		const now = new Date();
+		const ttlDate = new Date(ttl * 1000);
 
-		if (ttl > now) {
+		if (ttlDate > now) {
 			// session still valid, not creating new one
 			return new Promise.resolve(sessionId);
 		}

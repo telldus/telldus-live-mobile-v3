@@ -22,7 +22,6 @@
 'use strict';
 
 import { REHYDRATE } from 'redux-persist/constants';
-import { reportException } from 'Analytics';
 
 const initialState = {
 	session: {
@@ -33,34 +32,21 @@ const initialState = {
 
 export default function reduceWebsockets(state: Object = { ...initialState }, action: Object) {
 	if (action.type === REHYDRATE && action.payload.websockets) {
-		let date = Date.now();
-		try {
-			date = new Date(action.payload.websockets.session.ttl);  // cast to Date
-		} catch (exception) {
-			reportException(exception);
-		}
-
 		return {
 			...state,
 			session: {
 				...action.payload.websockets.session,
-				ttl: date,
+				ttl: action.payload.websockets.session.ttl,
 			},
 		};
 	}
 	if (action.type === 'SESSION_ID_AUTHENTICATED') {
 		const { sessionId, ttl } = action.payload;
-		let date = Date.now();
-		try {
-			date = new Date(ttl * 1000);
-		} catch (exception) {
-			reportException(exception);
-		}
 		return {
 			...state,
 			session: {
 				id: sessionId,
-				ttl: date,
+				ttl: ttl,
 			},
 		};
 	}
