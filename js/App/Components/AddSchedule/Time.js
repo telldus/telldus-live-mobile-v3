@@ -290,7 +290,6 @@ class Time extends View {
 				maximumValue={1439}
 				value={0}
 				onValueChange={this.setTimeOffsetValue}
-				displayValues={5}
 			/>
 		);
 
@@ -340,7 +339,6 @@ class Time extends View {
 						minimumValue={0}
 						maximumValue={1446}
 						onValueChange={this.setRandomIntervalValue}
-					    displayValues={5}
 					/>
 				)}
 				{shouldRender && (

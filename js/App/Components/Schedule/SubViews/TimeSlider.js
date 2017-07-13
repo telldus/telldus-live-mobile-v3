@@ -33,7 +33,6 @@ type Props = {
 	maximumValue: number,
 	onValueChange: Function,
 	value: number,
-	displayValues: number[] | number,
 };
 
 type State = {
@@ -55,10 +54,6 @@ export default class TimeSlider extends View {
 		maximumValue: PropTypes.number.isRequired,
 		onValueChange: PropTypes.func.isRequired,
 		value: PropTypes.number,
-		displayValues: PropTypes.oneOfType([
-			PropTypes.arrayOf(PropTypes.number),
-			PropTypes.number,
-		]),
 	};
 
 	constructor(props) {
@@ -73,9 +68,7 @@ export default class TimeSlider extends View {
 			maximumTrackTintColor: sliderColor,
 			onValueChange: this.onValueChange,
 			showValue: true,
-			legend: true,
 			step: 1,
-			displayValues: props.displayValues,
 		};
 
 		this.state = {
