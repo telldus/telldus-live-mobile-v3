@@ -116,11 +116,12 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 				...state,
 				isErrorMessage: action.payload.message,
 			};
-		case 'RESET_DEVICE_STATE':
+		case 'DEVICE_RESET_STATE':
 			return {
 				...state,
 				isErrorMessage: false,
 				methodRequested: '',
+				isInState: getDeviceStateMethod(action.state),
 			};
 
 		default:
@@ -188,7 +189,7 @@ function byId(state = {}, action) {
 			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
 		};
 	}
-	if (action.type === 'RESET_DEVICE_STATE') {
+	if (action.type === 'DEVICE_RESET_STATE') {
 		return {
 			...state,
 			[action.deviceId]: reduceDevice(state[action.deviceId], action),

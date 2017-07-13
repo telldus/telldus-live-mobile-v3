@@ -162,12 +162,12 @@ class DimmerButton extends View {
 	}
 
 	onTurnOn() {
-		this.props.onTurnOn(this.props.device.id);
+		this.props.onTurnOn(this.props.device.id, this.props.device.isInState);
 		this.props.requestTurnOn(this.props.device.id);
 	}
 
 	onTurnOff() {
-		this.props.onTurnOff(this.props.device.id);
+		this.props.onTurnOff(this.props.device.id, this.props.device.isInState);
 		this.props.requestTurnOff(this.props.device.id);
 	}
 
@@ -270,8 +270,8 @@ function mapDispatchToProps(dispatch) {
 		},
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
 		onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
-		onTurnOn: id => dispatch(turnOn(id)),
-		onTurnOff: id => dispatch(turnOff(id)),
+		onTurnOn: (id, isInState) => dispatch(turnOn(id, isInState)),
+		onTurnOff: (id, isInState) => dispatch(turnOff(id, isInState)),
 		requestTurnOn: id => dispatch(requestTurnOn(id)),
 		requestTurnOff: id => dispatch(requestTurnOff(id)),
 	};

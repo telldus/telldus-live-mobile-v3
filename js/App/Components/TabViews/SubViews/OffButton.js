@@ -33,7 +33,7 @@ class OffButton extends View {
 	}
 
 	onPress() {
-		this.props.onTurnOff(this.props.id);
+		this.props.onTurnOff(this.props.id, this.props.isInState);
 		this.props.requestTurnOff(this.props.id);
 	}
 
@@ -99,7 +99,7 @@ OffButton.defaultProps = {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTurnOff: id => dispatch(turnOff(id)),
+		onTurnOff: (id, isInState) => dispatch(turnOff(id, isInState)),
 		requestTurnOff: id => dispatch(requestTurnOff(id)),
 		dispatch,
 	};

@@ -33,7 +33,7 @@ class OnButton extends View {
 	}
 
 	onPress() {
-		this.props.onTurnOn(this.props.id);
+		this.props.onTurnOn(this.props.id, this.props.isInState);
 		this.props.requestTurnOn(this.props.id);
 	}
 
@@ -100,7 +100,7 @@ OnButton.defaultProps = {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTurnOn: id => dispatch(turnOn(id)),
+		onTurnOn: (id, isInState) => dispatch(turnOn(id, isInState)),
 		requestTurnOn: id => dispatch(requestTurnOn(id)),
 		dispatch,
 	};
