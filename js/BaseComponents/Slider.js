@@ -136,6 +136,7 @@ export default class SliderComponent extends View {
 
 		return {
 			backgroundColor: 'transparent',
+			color: '#555555',
 			fontFamily: Theme.Core.fonts.robotoMedium,
 			position: 'absolute',
 			left: 0,
