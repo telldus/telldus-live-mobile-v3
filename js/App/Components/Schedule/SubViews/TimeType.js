@@ -106,6 +106,7 @@ class TimeType extends View {
 			name: {
 				color: textColor,
 				fontSize: deviceWidth * 0.037333333,
+				fontFamily: Theme.Core.fonts.robotoRegular,
 			},
 		};
 	};

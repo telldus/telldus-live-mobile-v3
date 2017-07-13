@@ -24,6 +24,7 @@
 import React, { PropTypes } from 'react';
 import { Dimensions, TouchableOpacity, Image } from 'react-native';
 import { View, Text } from 'BaseComponents';
+import Theme from 'Theme';
 
 type Props = {
 	h1: string,
@@ -75,10 +76,12 @@ class Poster extends View {
 				h1: {
 					color: '#fff',
 					fontSize: deviceWidth * 0.085333333,
+					fontFamily: Theme.Core.fonts.robotoLight,
 				},
 				h2: {
 					color: '#fff',
 					fontSize: deviceWidth * 0.053333333,
+					fontFamily: Theme.Core.fonts.robotoLight,
 				},
 			},
 			roundedInfoButton: {

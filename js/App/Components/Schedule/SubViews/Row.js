@@ -115,11 +115,13 @@ class Row extends View {
 					borderBottomRightRadius: borderRadius,
 				},
 				name: {
+					fontFamily: Theme.Core.fonts.sfnsDisplay,
 					fontSize: this.deviceWidth * 0.053333333,
 					color: textColor,
 					marginBottom: this.deviceWidth * .008,
 				},
 				type: {
+					fontFamily: Theme.Core.fonts.robotoRegular,
 					fontSize: this.deviceWidth * 0.032,
 					color: '#707070',
 				},

@@ -98,6 +98,7 @@ export default class TimeSlider extends View {
 			},
 			caption: {
 				fontSize: this.deviceWidth * 0.032,
+				fontFamily: Theme.Core.fonts.robotoRegular,
 			},
 			slider: {
 				track: {

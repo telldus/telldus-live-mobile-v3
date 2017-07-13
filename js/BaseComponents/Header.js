@@ -33,6 +33,7 @@ import Subtitle from './Subtitle';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import Theme from 'Theme';
 
 type Props = {
 	children: Object,
@@ -104,6 +105,24 @@ export default class HeaderComponent extends Base {
 				justifyContent: 'center',
 				paddingTop: this.paddingTop,
 				paddingHorizontal: this.paddingHorizontal,
+			},
+			backButton: {
+				wrapper: {
+					width: this.deviceWidth * 0.130666667 + 3,
+					height: this.deviceWidth * 0.036 + 3,
+					flexDirection: 'row',
+					alignItems: 'center',
+				},
+				image: {
+					width: this.deviceWidth * 0.022666667,
+					height: this.deviceWidth * 0.036,
+				},
+				text: {
+					color: '#fff',
+					marginLeft: this.deviceWidth * 0.026666667,
+					fontSize: this.deviceWidth * 0.037333333,
+					fontFamily: Theme.Core.fonts.robotoLight,
+				},
 			},
 		};
 	}

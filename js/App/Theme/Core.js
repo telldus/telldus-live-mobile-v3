@@ -38,6 +38,7 @@ export default {
 			robotoLight: 'Roboto-Light',
 			robotoMedium: 'Roboto-Medium',
 			robotoRegular: 'Roboto-Regular',
+			sfnsDisplay: 'SFNS Display',
 		};
 	},
 
