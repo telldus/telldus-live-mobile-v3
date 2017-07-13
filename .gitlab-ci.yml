@@ -62,7 +62,7 @@ google_play:
   dependencies:
     - android
   environment:
-    name: production
+    name: google_play
     url: https://play.google.com/store/apps/details?id=com.telldus.live.mobile.test
   when: manual
   only:
@@ -79,7 +79,7 @@ testflight:
   dependencies:
     - ios
   environment:
-    name: production
+    name: appstore
     url: https://itunes.apple.com/us/app/telldus-live-mobile-beta/id1014419677
   when: manual
   only:
