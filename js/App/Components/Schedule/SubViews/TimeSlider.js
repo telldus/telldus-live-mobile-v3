@@ -96,7 +96,8 @@ export default class TimeSlider extends View {
 				fontSize: this.deviceWidth * 0.038666667,
 				marginRight: this.deviceWidth * 0.022666667,
 			},
-			caption: {
+			description: {
+				color: '#555555',
 				fontSize: this.deviceWidth * 0.032,
 				fontFamily: Theme.Core.fonts.robotoRegular,
 			},
@@ -145,7 +146,7 @@ export default class TimeSlider extends View {
 					]}
 				>
 					<Text style={styles.icon}>{icon}</Text>
-					<Text style={styles.caption}>{description}</Text>
+					<Text style={styles.description}>{description}</Text>
 				</View>
 				<View style={[row, { justifyContent: 'center' }]}>
 					<Slider
