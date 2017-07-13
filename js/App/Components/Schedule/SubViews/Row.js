@@ -97,7 +97,7 @@ class Row extends View {
 					height: iconSize,
 				},
 				font: {
-					fontFamily: Theme.Core.telldusIconFont,
+					fontFamily: Theme.Core.fonts.telldusIconFont,
 					fontSize: iconSize,
 					color: '#fff',
 				},

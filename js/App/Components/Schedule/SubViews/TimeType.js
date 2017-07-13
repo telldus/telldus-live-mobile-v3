@@ -57,7 +57,7 @@ class TimeType extends View {
 
 	getStyles = () => {
 		const { isSelected, type } = this.props;
-		const { brandSecondary, telldusIconFont } = Theme.Core;
+		const { brandSecondary, fonts } = Theme.Core;
 
 		const deviceWidth = Dimensions.get('window').width;
 		const size = deviceWidth * 0.293333333;
@@ -100,7 +100,7 @@ class TimeType extends View {
 			},
 			icon: {
 				color: iconColor,
-				fontFamily: telldusIconFont,
+				fontFamily: fonts.telldusIconFont,
 				fontSize: deviceWidth * 0.133333333,
 			},
 			name: {

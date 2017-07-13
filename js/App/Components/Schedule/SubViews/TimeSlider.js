@@ -92,7 +92,7 @@ export default class TimeSlider extends View {
 				alignItems: 'center',
 			},
 			icon: {
-				fontFamily: Theme.Core.telldusIconFont,
+				fontFamily: Theme.Core.fonts.telldusIconFont,
 				fontSize: this.deviceWidth * 0.038666667,
 				marginRight: this.deviceWidth * 0.022666667,
 			},

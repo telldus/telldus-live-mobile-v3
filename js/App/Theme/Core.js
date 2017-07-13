@@ -31,7 +31,15 @@ export default {
 	brandWarning: '#f0ad4e',
 	brandSidebar: '#252932',
 	iconFamily: 'Ionicons',
-	telldusIconFont: 'telldusicons',
+
+	get fonts() {
+		return {
+			telldusIconFont: 'telldusicons',
+			robotoLight: 'Roboto-Light',
+			robotoMedium: 'Roboto-Medium',
+			robotoRegular: 'Roboto-Regular',
+		};
+	},
 
 	inverseTextColor: '#ffffff',
 	fadedInverseTextColor: '#C3D1E6',
