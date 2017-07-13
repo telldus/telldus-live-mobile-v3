@@ -13,7 +13,7 @@ eslint:
     - npm run lint
 
 android:
-  image: elviejokike/react-native-android
+  image: telldus/react-native-android:24
   stage: build
   artifacts:
     paths:
