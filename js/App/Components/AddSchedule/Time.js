@@ -22,27 +22,18 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import {
-	Dimensions,
-	DatePickerIOS,
-	Platform,
-	TimePickerAndroid,
-	TouchableWithoutFeedback,
-} from 'react-native';
-import { View, Text, FloatingButton } from 'BaseComponents';
+import { DatePickerIOS, Dimensions, Platform, TimePickerAndroid, TouchableWithoutFeedback } from 'react-native';
+import { FloatingButton, Text, View } from 'BaseComponents';
+import { ScheduleProps } from './ScheduleScreen';
 import TimeType from './SubViews/TimeType';
 import TimeSlider from './SubViews/TimeSlider';
 import Theme from 'Theme';
 
 const types = ['sunrise', 'sunset', 'time'];
 
-type Props = {
-	navigation: Object,
-	actions: Object,
-	onDidMount: (string, string, ?Object) => void,
-	width: number,
-	paddingRight: number,
-};
+interface Props extends ScheduleProps {
+	paddingRight: number;
+}
 
 type State = {
 	selectedTypeIndex: number | null,
@@ -51,18 +42,18 @@ type State = {
 	date: Date,
 };
 
-class Time extends View {
+export default class Time extends View<null, Props, State> {
 
-	props: Props;
-	state: State;
+	selectTimeAndroid: Function;
 
-	getStyles: () => Object;
-	selectType: (string) => void;
-	renderTypes: (Array) => Array;
-	setRandomIntervalValue: (number) => void;
-	setTimeOffsetValue: (number) => void;
+	static propTypes = {
+		navigation: PropTypes.object,
+		actions: PropTypes.object,
+		onDidMount: PropTypes.func,
+		paddingRight: PropTypes.number,
+	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.h1 = '3. Time';
@@ -71,14 +62,11 @@ class Time extends View {
 			tmp: true, // TODO: fill with real fields
 		};
 
-		const date = new Date();
-		date.setHours(12, 0, 0, 0);
-
 		this.state = {
 			selectedTypeIndex: null,
 			randomInterval: 0,
 			offset: 0,
-			date,
+			date: this._createDate(),
 		};
 
 		this.selectTimeAndroid = this.selectTimeAndroid.bind(this);
@@ -89,119 +77,17 @@ class Time extends View {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	getStyles = () => {
-		this.deviceWidth = Dimensions.get('window').width;
-
-		const androidTimeWidth = this.deviceWidth * 0.213333333;
-		const androidTimeHeight = this.deviceWidth * 0.177333333;
-		const androidTimeColor = Theme.Core.brandPrimary;
-
-		return {
-			container: {
-				flex: 1,
-				justifyContent: 'flex-start',
-			},
-			marginBottom: this.deviceWidth * 0.025333333,
-			type: {
-				container: {
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					alignItems: 'flex-start',
-				},
-			},
-			iosTimeContainer: {
-				flexDirection: 'row',
-				height: 140,
-				alignItems: 'center',
-				overflow: 'hidden',
-			},
-			androidTimeContainer: {
-				alignItems: 'center',
-				justifyContent: 'flex-start',
-				padding: this.deviceWidth * 0.032,
-			},
-			androidTimeValueContainer: {
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'center',
-				marginBottom: this.deviceWidth * 0.017333333,
-			},
-			androidTimeValueWrapper: {
-				backgroundColor: androidTimeColor,
-				borderRadius: 2,
-				position: 'relative',
-				alignItems: 'center',
-				justifyContent: 'center',
-				height: androidTimeHeight,
-				width: androidTimeWidth,
-			},
-			androidTimeValue: {
-				color: '#fff',
-				fontSize: this.deviceWidth * 0.094666667,
-			},
-			androidTimeValueCenterLine: {
-				backgroundColor: androidTimeColor,
-				height: 1,
-				width: androidTimeWidth,
-				position: 'absolute',
-				top: androidTimeHeight / 2,
-				left: 0,
-				zIndex: 10,
-			},
-			androidTimeCaption: {
-				color: '#555555',
-				fontSize: this.deviceWidth * 0.032,
-			},
-		};
-	};
-
-	selectType = typeIndex => {
-		this.setState({ selectedTypeIndex: typeIndex });
-	};
-
-	renderTypes = types => {
-		const { selectedTypeIndex } = this.state;
-
-		return types.map((type, i) => {
-			const isSelected = typeof selectedTypeIndex === 'number' && i === selectedTypeIndex;
-
-			return (
-				<TimeType
-					type={type}
-					index={i}
-					isSelected={isSelected}
-					select={this.selectType}
-					key={type}
-				/>
-			);
-		});
-	};
-
-	setRandomIntervalValue = randomInterval => {
+	setRandomIntervalValue = (randomInterval: number): void => {
 		if (randomInterval !== this.state.randomInterval) {
 			this.setState({ randomInterval });
 		}
 	};
 
-	setTimeOffsetValue = offset => {
+	setTimeOffsetValue = (offset: number): void => {
 		if (offset !== this.state.offset) {
 			this.setState({ offset });
 		}
 	};
-
-	onDateChange = date => {
-		const hourValue = this.state.date.getHours();
-		const minuteValue = this.state.date.getMinutes();
-
-		const newHourValue = date.getHours();
-		const newMinuteValue = date.getMinutes();
-
-		if (newHourValue !== hourValue || newMinuteValue !== minuteValue) {
-			this.setState({ date });
-		}
-	};
-
-	formatTime = value => (value < 10 ? '0' : '') + value;
 
 	async selectTimeAndroid() {
 		const { date } = this.state;
@@ -217,12 +103,80 @@ class Time extends View {
 				newDate.setHours(hour, minute, 0, 0);
 				this.setState({ date: newDate });
 			}
-		} catch ({ code, message }) {
-			console.warn('Cannot open time picker', message);
+		} catch (error) {
+			console.warn('Cannot open time picker', error.message);
 		}
 	};
 
-	renderTimeRow = selectedTypeIndex => {
+	selectTime = (): void => {
+		const { actions, navigation } = this.props;
+		const { selectedTypeIndex, randomInterval, offset, date } = this.state;
+
+		if (!selectedTypeIndex) {
+			return;
+		}
+
+		const time: {
+			randomInterval: number,
+			offset?: number,
+			hour?: number,
+			minute?: number,
+		} = {
+			randomInterval,
+		};
+
+		if (selectedTypeIndex < 2) {
+			time.offset = offset;
+		} else {
+			time.hour = date.getHours();
+			time.minute = date.getMinutes();
+		}
+
+		actions.selectTime(types[selectedTypeIndex], time);
+		navigation.navigate('Days');
+	};
+
+	render() {
+		const { selectedTypeIndex, randomInterval } = this.state;
+		const { container, marginBottom, type } = this._getStyle();
+
+		const shouldRender = selectedTypeIndex !== null;
+
+		return (
+			<View style={container}>
+				<View style={[type.container, { marginBottom }]}>
+					{this._renderTypes(types)}
+				</View>
+				{this._renderTimeRow()}
+				{shouldRender && (
+					<TimeSlider
+						description="Set random intervals between 1 to 1446 minutes"
+						icon="random"
+						minimumValue={0}
+						maximumValue={1446}
+						value={randomInterval}
+						onValueChange={this.setRandomIntervalValue}
+					/>
+				)}
+				{shouldRender && (
+					<FloatingButton
+						onPress={this.selectTime}
+						imageSource={require('./img/right-arrow-key.png')}
+						iconSize={this._getDeviceWidth() * 0.041333333}
+						paddingRight={this.props.paddingRight}
+					/>
+				)}
+			</View>
+		);
+	}
+
+	_renderTimeRow = (): Object | null => {
+		const { selectedTypeIndex, offset } = this.state;
+
+		if (selectedTypeIndex === null) {
+			return null;
+		}
+
 		const { date } = this.state;
 		const {
 			marginBottom,
@@ -233,7 +187,7 @@ class Time extends View {
 			androidTimeValue,
 			androidTimeValueCenterLine,
 			androidTimeCaption,
-		} = this.getStyles();
+		} = this._getStyle();
 
 		let timePicker;
 
@@ -244,7 +198,7 @@ class Time extends View {
 						date={date}
 						mode="time"
 						style={{ flex: 1 }}
-						onDateChange={this.onDateChange}
+						onDateChange={this._onDateChange}
 					/>
 				</View>
 			);
@@ -264,13 +218,13 @@ class Time extends View {
 							>
 								<View style={androidTimeValueCenterLine}/>
 								<Text style={androidTimeValue}>
-									{this.formatTime(date.getHours())}
+									{this._formatTime(date.getHours())}
 								</Text>
 							</View>
 							<View style={androidTimeValueWrapper}>
 								<View style={androidTimeValueCenterLine}/>
 								<Text style={androidTimeValue}>
-									{this.formatTime(date.getMinutes())}
+									{this._formatTime(date.getMinutes())}
 								</Text>
 							</View>
 						</View>
@@ -288,7 +242,7 @@ class Time extends View {
 				icon="offset"
 				minimumValue={-1439}
 				maximumValue={1439}
-				value={0}
+				value={offset}
 				onValueChange={this.setTimeOffsetValue}
 			/>
 		);
@@ -300,66 +254,120 @@ class Time extends View {
 		);
 	};
 
-	selectTime = () => {
-		const { actions, navigation } = this.props;
-		const { selectedTypeIndex, randomInterval } = this.state;
+	_onDateChange = (date: Date): void => {
+		const { date: oldDate } = this.state;
 
-		const time = {
-			randomInterval,
-		};
+		const oldHours = oldDate.getHours();
+		const oldMinutes = oldDate.getMinutes();
 
-		if (selectedTypeIndex < 2) {
-			time.offset = this.state.offset;
-		} else {
-			const { date } = this.state;
-			time.hour = date.getHours();
-			time.minute = date.getMinutes();
+		const newHours = date.getHours();
+		const newMinutes = date.getMinutes();
+
+		if (newHours !== oldHours || newMinutes !== oldMinutes) {
+			this.setState({ date });
 		}
-
-		actions.selectTime(types[selectedTypeIndex], time);
-		navigation.navigate('Days');
 	};
 
-	render() {
+	_formatTime = (value: number): string => {
+		return (value < 10 ? '0' : '') + value;
+	};
+
+	_selectType = (typeIndex: number): void => {
+		this.setState({ selectedTypeIndex: typeIndex });
+	};
+
+	_renderTypes = (types: string[]): Object[] => {
 		const { selectedTypeIndex } = this.state;
-		const { container, marginBottom, type } = this.getStyles();
 
-		const shouldRender = selectedTypeIndex !== null;
+		return types.map((type, i) => {
+			const isSelected = typeof selectedTypeIndex === 'number' && i === selectedTypeIndex;
 
-		return (
-			<View style={container}>
-				<View style={[type.container, { marginBottom }]}>
-					{this.renderTypes(types)}
-				</View>
-				{shouldRender && this.renderTimeRow(selectedTypeIndex)}
-				{shouldRender && (
-					<TimeSlider
-						description="Set random intervals between 1 to 1446 minutes"
-						icon="random"
-						minimumValue={0}
-						maximumValue={1446}
-						onValueChange={this.setRandomIntervalValue}
-					/>
-				)}
-				{shouldRender && (
-					<FloatingButton
-						onPress={this.selectTime}
-						imageSource={require('./img/right-arrow-key.png')}
-						iconSize={this.deviceWidth * 0.041333333}
-						paddingRight={this.props.paddingRight}
-					/>
-				)}
-			</View>
-		);
-	}
+			return (
+				<TimeType
+					type={type}
+					index={i}
+					isSelected={isSelected}
+					select={this._selectType}
+					key={type}
+				/>
+			);
+		});
+	};
+
+	_createDate = (): Date => {
+		const date = new Date();
+		date.setHours(12, 0, 0, 0);
+		return date;
+	};
+
+	_getDeviceWidth = (): number => {
+		return Dimensions.get('window').width;
+	};
+
+	_getStyle = (): Object => {
+		const deviceWidth = this._getDeviceWidth();
+
+		const androidTimeWidth = deviceWidth * 0.213333333;
+		const androidTimeHeight = deviceWidth * 0.177333333;
+		const androidTimeColor = Theme.Core.brandPrimary;
+
+		return {
+			container: {
+				flex: 1,
+				justifyContent: 'flex-start',
+			},
+			marginBottom: deviceWidth * 0.025333333,
+			type: {
+				container: {
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					alignItems: 'flex-start',
+				},
+			},
+			iosTimeContainer: {
+				flexDirection: 'row',
+				height: 140,
+				alignItems: 'center',
+				overflow: 'hidden',
+			},
+			androidTimeContainer: {
+				alignItems: 'center',
+				justifyContent: 'flex-start',
+				padding: deviceWidth * 0.032,
+			},
+			androidTimeValueContainer: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginBottom: deviceWidth * 0.017333333,
+			},
+			androidTimeValueWrapper: {
+				backgroundColor: androidTimeColor,
+				borderRadius: 2,
+				position: 'relative',
+				alignItems: 'center',
+				justifyContent: 'center',
+				height: androidTimeHeight,
+				width: androidTimeWidth,
+			},
+			androidTimeValue: {
+				color: '#fff',
+				fontSize: deviceWidth * 0.094666667,
+			},
+			androidTimeValueCenterLine: {
+				backgroundColor: androidTimeColor,
+				height: 1,
+				width: androidTimeWidth,
+				position: 'absolute',
+				top: androidTimeHeight / 2,
+				left: 0,
+				zIndex: 10,
+			},
+			androidTimeCaption: {
+				color: '#555555',
+				fontSize: deviceWidth * 0.032,
+			},
+		};
+	};
+
 }
-
-Time.propTypes = {
-	navigation: PropTypes.object,
-	actions: PropTypes.object,
-	onDidMount: PropTypes.func,
-	width: PropTypes.number,
-	paddingRight: PropTypes.number,
-};
-
-module.exports = Time;

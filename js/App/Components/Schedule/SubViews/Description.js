@@ -22,41 +22,51 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'BaseComponents';
-import { Button } from 'react-native';
-import { ScheduleProps } from './ScheduleScreen';
+import { Dimensions, Text, View } from 'react-native';
+import Theme from 'Theme';
 
-export default class Days extends View<null, ScheduleProps, null> {
+type DefaultProps = {
+	color: string,
+};
+
+type Props = {
+	children: string,
+	style?: Object,
+	color?: string,
+};
+
+export default class Description extends View<DefaultProps, Props, null> {
 
 	static propTypes = {
-		navigation: PropTypes.object,
-		actions: PropTypes.object,
-		onDidMount: PropTypes.func,
-		paddingRight: PropTypes.number,
+		children: PropTypes.string.isRequired,
+		style: Text.propTypes.style,
+		color: PropTypes.string,
 	};
 
-	constructor(props: ScheduleProps) {
-		super(props);
-
-		this.h1 = '4. Days';
-		this.h2 = 'Choose days for event repeating';
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
-	}
-
-	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
-	}
-
-	goNext = () => {
-		this.props.navigation.navigate('Summary');
+	static defaultProps = {
+		color: '#707070',
 	};
 
 	render() {
+		const { children, style, color } = this.props;
+		const defaultStyle = this._getDefaultStyle();
+
 		return (
-			<Button title="Summary" onPress={this.goNext}/>
+			<Text style={[defaultStyle, style, { color }]}>
+				{children}
+			</Text>
 		);
 	}
+
+	_getDeviceWidth = (): number => {
+		return Dimensions.get('window').width;
+	};
+
+	_getDefaultStyle = (): Object => {
+		return {
+			fontFamily: Theme.Core.fonts.robotoRegular,
+			fontSize: this._getDeviceWidth() * 0.032,
+		};
+	};
+
 }

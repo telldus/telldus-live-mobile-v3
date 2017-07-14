@@ -24,28 +24,19 @@
 import React, { PropTypes } from 'react';
 import { Dimensions } from 'react-native';
 import Slider from 'react-native-slider';
-import { View, Text, FloatingButton } from 'BaseComponents';
+import { FloatingButton, Text, View } from 'BaseComponents';
+import { ScheduleProps } from './ScheduleScreen';
 import Theme from 'Theme';
 
-type Props = {
-	navigation: Object,
-	actions: Object,
-	onDidMount: (string, string, ?Object) => void,
-	paddingRight: number,
-};
+interface Props extends ScheduleProps {
+	paddingRight: number;
+}
 
 type State = {
 	methodValue: number,
 };
 
-class ActionDim extends View {
-
-	props: Props;
-	state: State;
-
-	getStyles: () => Object;
-	setMethodValue: (number) => void;
-	selectAction: () => void;
+export default class ActionDim extends View<null, Props, State> {
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -54,7 +45,7 @@ class ActionDim extends View {
 		paddingRight: PropTypes.number,
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.h1 = '2. Action';
@@ -72,7 +63,7 @@ class ActionDim extends View {
 			minimumValue: 0,
 			maximumValue: this.maximumValue,
 			value: this.initialValue,
-			onValueChange: this.setMethodValue,
+			onValueChange: this._setMethodValue,
 			minimumTrackTintColor: this.sliderColor,
 		};
 
@@ -86,11 +77,56 @@ class ActionDim extends View {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	getStyles = () => {
-		this.deviceWidth = Dimensions.get('window').width;
+	selectAction = (): void => {
+		const { actions, navigation } = this.props;
+		actions.selectAction(16, this.state.methodValue);
+		navigation.navigate('Time');
+	};
 
-		const thumbSize = this.deviceWidth * 0.066666667;
-		const padding = this.deviceWidth * 0.066666667;
+	render() {
+		const { container, row, caption, slider } = this._getStyle();
+
+		const dimValue = this._getDimValue();
+
+		return (
+			<View style={container}>
+				<View style={row}>
+					<Text style={caption}>
+						{`Set Dim value (${dimValue}%)`}
+					</Text>
+					<Slider
+						{...this.sliderConfig}
+						trackStyle={slider.track}
+						thumbStyle={slider.thumb}
+					/>
+				</View>
+				<FloatingButton
+					onPress={this.selectAction}
+					imageSource={require('./img/right-arrow-key.png')}
+					iconSize={this._getDeviceWidth() * 0.041333333}
+					paddingRight={this.props.paddingRight}
+				/>
+			</View>
+		);
+	}
+
+	_getDimValue = (): number => {
+		return Math.round(this.state.methodValue / this.maximumValue * 100);
+	};
+
+	_setMethodValue = (methodValue: number): void => {
+		this.setState({ methodValue });
+	};
+
+	_getDeviceWidth = (): number => {
+		return Dimensions.get('window').width;
+	};
+
+	_getStyle = () => {
+		const deviceWidth = this._getDeviceWidth();
+
+		const thumbSize = deviceWidth * 0.066666667;
+		const padding = deviceWidth * 0.066666667;
 
 		return {
 			container: {
@@ -112,17 +148,17 @@ class ActionDim extends View {
 				},
 				paddingHorizontal: padding,
 				paddingBottom: padding,
-				paddingTop: this.deviceWidth * 0.026666667,
+				paddingTop: deviceWidth * 0.026666667,
 			},
 			caption: {
-				fontSize: this.deviceWidth * 0.032,
-				marginBottom: this.deviceWidth * 0.092,
+				fontSize: deviceWidth * 0.032,
+				marginBottom: deviceWidth * 0.092,
 				textAlign: 'center',
 			},
 			slider: {
 				track: {
 					borderRadius: 0,
-					height: this.deviceWidth * 0.010666667,
+					height: deviceWidth * 0.010666667,
 				},
 				thumb: {
 					backgroundColor: this.sliderColor,
@@ -134,42 +170,4 @@ class ActionDim extends View {
 		};
 	};
 
-	setMethodValue = methodValue => {
-		this.setState({ methodValue });
-	};
-
-	selectAction = () => {
-		const { actions, navigation } = this.props;
-		actions.selectAction(16, this.state.methodValue);
-		navigation.navigate('Time');
-	};
-
-	render() {
-		const { container, row, caption, slider } = this.getStyles();
-
-		const dimValue = Math.round(this.state.methodValue / this.maximumValue * 100);
-
-		return (
-			<View style={container}>
-				<View style={row}>
-					<Text style={caption}>
-						{`Set Dim value (${dimValue}%)`}
-					</Text>
-					<Slider
-						{...this.sliderConfig}
-						trackStyle={slider.track}
-						thumbStyle={slider.thumb}
-					/>
-				</View>
-				<FloatingButton
-					onPress={this.selectAction}
-					imageSource={require('./img/right-arrow-key.png')}
-					iconSize={this.deviceWidth * 0.041333333}
-					paddingRight={this.props.paddingRight}
-				/>
-			</View>
-		);
-	}
 }
-
-module.exports = ActionDim;

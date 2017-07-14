@@ -26,7 +26,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Dimensions } from 'react-native';
 import _ from 'lodash';
-import { View, Text, Header } from 'BaseComponents';
+import { Header, Text, View } from 'BaseComponents';
 import Poster from './SubViews/Poster';
 
 import * as scheduleActions from 'Actions_Schedule';
@@ -35,8 +35,8 @@ import { getDevices } from 'Actions_Devices';
 type Props = {
 	navigation: Object,
 	children: Object,
-	reset: Function,
-	schedule: Object,
+	reset?: Function,
+	schedule?: Object,
 };
 
 type State = {
@@ -45,63 +45,53 @@ type State = {
 	infoButton: null | Object,
 };
 
-class ScheduleScreen extends View {
+export interface ScheduleProps {
+	navigation: Object;
+	actions: Object;
+	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void;
+}
 
-	props: Props;
-	state: State;
+class ScheduleScreen extends View<null, Props, State> {
 
-	getStyles: () => Object;
-	goBack: () => void;
-	onChildDidMount: (string, string, ?Object) => void;
-	isDeviceTab: () => boolean;
+	static propTypes = {
+		navigation: PropTypes.object.isRequired,
+		children: PropTypes.object.isRequired,
+		reset: PropTypes.func,
+		schedule: PropTypes.object,
+	};
 
-	constructor(props) {
+	state = {
+		h1: '',
+		h2: '',
+		infoButton: null,
+	};
+
+	constructor(props: Props) {
 		super(props);
 
 		this.backButton = {
 			back: true,
 			onPress: this.goBack,
 		};
-
-		this.state = {
-			h1: '',
-			h2: '',
-			infoButton: null,
-		};
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 		const isStateEqual = _.isEqual(this.state, nextState);
 		const isPropsEqual = _.isEqual(this.props, nextProps);
 		return !(isStateEqual && isPropsEqual);
 	}
 
-	getStyles = () => {
-		const deviceWidth = Dimensions.get('window').width;
-		this.padding = deviceWidth * 0.033333333;
-		this.rowWidth = deviceWidth - 2 * this.padding;
-
-		// TODO: font-family
-		return {
-			flex: 1,
-			paddingHorizontal: this.padding,
-			paddingTop: this.padding,
-		};
-	};
-
-	isDeviceTab = () => this.props.navigation.state.routeName === 'Device';
-
 	goBack = () => {
 		const { navigation, actions } = this.props;
 
-		if (this.isDeviceTab()) {
+		if (this._isDeviceTab()) {
 			actions.reset();
 		}
 
 		navigation.goBack(null);
 	};
 
-	onChildDidMount = (h1, h2, infoButton = null) => {
+	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null): void => {
 		this.setState({
 			h1,
 			h2,
@@ -112,35 +102,49 @@ class ScheduleScreen extends View {
 	render() {
 		const { children, navigation, actions } = this.props;
 		const { h1, h2, infoButton } = this.state;
+		const style = this._getStyle();
+		console.log(this.props.schedule);
 
 		return (
 			<View>
 				<Header leftButton={this.backButton}/>
 				<Poster h1={h1} h2={h2} infoButton={infoButton}/>
-				<View style={this.getStyles()}>
+				<View style={style}>
 					{React.cloneElement(
 						children,
 						{
 							onDidMount: this.onChildDidMount,
-							width: this.rowWidth,
 							navigation,
 							actions,
-							reset: this.isDeviceTab() ? this.goBack : null,
-							paddingRight: this.padding,
+							reset: this._isDeviceTab() ? this.goBack : null,
+							paddingRight: style.paddingHorizontal,
 						}
 					)}
 				</View>
 			</View>
 		);
 	}
-}
 
-ScheduleScreen.propTypes = {
-	navigation: PropTypes.object.isRequired,
-	children: PropTypes.object.isRequired,
-	reset: PropTypes.func,
-	schedule: PropTypes.object,
-};
+	_getStyle = (): Object => {
+		const deviceWidth = this._getDeviceWidth();
+		const padding = deviceWidth * 0.033333333;
+
+		return {
+			flex: 1,
+			paddingHorizontal: padding,
+			paddingTop: padding,
+		};
+	};
+
+	_getDeviceWidth = (): number => {
+		return Dimensions.get('window').width;
+	};
+
+	_isDeviceTab = (): boolean => {
+		return this.props.navigation.state.routeName === 'Device';
+	};
+
+}
 
 const mapStateToProps = ({ schedule }) => ({
 	schedule,
@@ -153,4 +157,4 @@ const mapDispatchToProps = dispatch => ({
 	}
 });
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen);

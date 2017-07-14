@@ -23,47 +23,44 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Dimensions } from 'react-native';
-import { View, ListDataSource, List } from 'BaseComponents';
-import Theme from 'Theme';
+import { List, ListDataSource, Text, View } from 'BaseComponents';
+import { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
+import Title from './SubViews/Title';
+import Description from './SubViews/Description';
+import TextRowWrapper from './SubViews/TextRowWrapper';
+import BlockIcon from './SubViews/BlockIcon';
 
-type Props = {
-	navigation: Object,
-	actions: Object,
-	width: Number,
-	devices: Object,
-	onDidMount: (string, string, ?Object) => void,
-	reset: () => void,
-	paddingRight: number,
-};
+interface Props extends ScheduleProps {
+	devices: Object;
+	reset: () => void;
+}
 
 type State = {
 	dataSource: Object,
 };
 
-class Device extends View {
+class Device extends View<void, Props, State> {
 
-	props: Props;
-	state: State;
+	static propTypes = {
+		navigation: PropTypes.object,
+		actions: PropTypes.object,
+		devices: PropTypes.object,
+		onDidMount: PropTypes.func,
+		reset: PropTypes.func,
+	};
 
-	onRefresh: () => void;
-	renderRow: (Object) => Object;
-	selectDevice: (Object) => void;
+	state = {
+		dataSource: new ListDataSource({
+			rowHasChanged: (r1, r2) => r1 !== r2,
+		}).cloneWithRows(this.props.devices.byId),
+	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
-
-		this.deviceWidth = Dimensions.get('window').width;
 
 		this.h1 = '1. Device';
 		this.h2 = 'Choose a device';
-
-		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: (r1, r2) => r1 !== r2,
-			}).cloneWithRows(this.props.devices.byId),
-		};
 	}
 
 	componentDidMount() {
@@ -73,61 +70,43 @@ class Device extends View {
 			return reset();
 		}
 
-		const { h1, h2 } = this;
 		actions.getDevices();
-		onDidMount(h1, h2);
+		onDidMount(this.h1, this.h2);
 	}
 
-	onRefresh = () => {
+	onRefresh = (): void => {
 		this.props.actions.getDevices();
 	};
 
-	selectDevice = device => {
+	selectDevice = (deviceId: number): void => {
 		const { actions, navigation } = this.props;
-		actions.selectDevice(device.id);
+		actions.selectDevice(deviceId);
 		navigation.navigate('Action');
-	};
-
-	renderRow = row => {
-		const preparedRow = Object.assign({}, row,
-			{
-				description: 'Fibaro Plug 2',
-				icon: 'device-alt',
-			}
-		);
-
-		return (
-			<Row
-				row={preparedRow}
-				textColor={Theme.Core.brandSecondary}
-				bgColor={Theme.Core.brandPrimary}
-				select={this.selectDevice}
-				width={this.props.width}
-				marginBottom={this.deviceWidth * 0.006666667}
-				iconSize={56}
-			/>
-		);
 	};
 
 	render() {
 		return (
 			<List
 				dataSource={this.state.dataSource}
-				renderRow={this.renderRow}
+				renderRow={this._renderRow}
 				onRefresh={this.onRefresh}
 			/>
 		);
 	}
-}
 
-Device.propTypes = {
-	navigation: PropTypes.object,
-	actions: PropTypes.object,
-	width: PropTypes.number,
-	onDidMount: PropTypes.func,
-	reset: PropTypes.func,
-	paddingRight: PropTypes.number,
-};
+	_renderRow = (row: Object): Object => {
+		return (
+			<Row onPress={() => this.selectDevice(row.id)} layout="row">
+				<BlockIcon icon="device-alt" size={56}/>
+				<TextRowWrapper>
+					<Title>{row.name}</Title>
+					<Description>Fibaro Plug 2</Description>
+				</TextRowWrapper>
+			</Row>
+		);
+	};
+
+}
 
 const mapStateToProps = ({ devices }) => (
 	{
@@ -135,4 +114,4 @@ const mapStateToProps = ({ devices }) => (
 	}
 );
 
-module.exports = connect(mapStateToProps)(Device);
+export default connect(mapStateToProps)(Device);

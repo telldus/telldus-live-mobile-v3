@@ -22,41 +22,45 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'BaseComponents';
-import { Button } from 'react-native';
-import { ScheduleProps } from './ScheduleScreen';
+import { Dimensions, Text, View } from 'react-native';
 
-export default class Days extends View<null, ScheduleProps, null> {
+type Props = {
+	children: string,
+	style?: Object,
+};
+
+export default class TextRowWrapper extends View<null, Props, null> {
 
 	static propTypes = {
-		navigation: PropTypes.object,
-		actions: PropTypes.object,
-		onDidMount: PropTypes.func,
-		paddingRight: PropTypes.number,
-	};
-
-	constructor(props: ScheduleProps) {
-		super(props);
-
-		this.h1 = '4. Days';
-		this.h2 = 'Choose days for event repeating';
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
-	}
-
-	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
-	}
-
-	goNext = () => {
-		this.props.navigation.navigate('Summary');
+		children: PropTypes.node.isRequired,
+		style: Text.propTypes.style,
 	};
 
 	render() {
+		const { children, style } = this.props;
+		const defaultStyle = this._getDefaultStyle();
+
 		return (
-			<Button title="Summary" onPress={this.goNext}/>
+			<View style={[defaultStyle, style]}>
+				{children}
+			</View>
 		);
 	}
+
+	_getDeviceWidth = (): number => {
+		return Dimensions.get('window').width;
+	};
+
+	_getDefaultStyle = (): Object => {
+		return {
+			justifyContent: 'center',
+			backgroundColor: '#fff',
+			alignItems: 'flex-start',
+			width: '70%',
+			paddingLeft: this._getDeviceWidth() * 0.101333333,
+			paddingRight: 10,
+			paddingVertical: 5,
+		};
+	};
+
 }

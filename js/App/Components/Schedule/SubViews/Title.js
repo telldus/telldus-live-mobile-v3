@@ -22,45 +22,39 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Text, View } from 'react-native';
+import Theme from 'Theme';
 
 type DefaultProps = {
-	layout: 'column',
+	color: string,
 };
 
 type Props = {
-	children: any,
-	onPress?: (row: Object) => void,
-	layout?: 'row' | 'column',
+	children: string,
+	style?: Object,
+	color?: string,
 };
 
-export default class Row extends View<DefaultProps, Props, null> {
+export default class Title extends View<DefaultProps, Props, null> {
 
 	static propTypes = {
-		children: PropTypes.node.isRequired,
-		onPress: PropTypes.func,
-		layout: PropTypes.oneOf(['row', 'column']),
+		children: PropTypes.string.isRequired,
+		style: Text.propTypes.style,
+		color: PropTypes.string,
 	};
 
 	static defaultProps = {
-		layout: 'column',
+		color: Theme.Core.brandSecondary,
 	};
 
 	render() {
-		const { children, onPress } = this.props;
+		const { children, style, color } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<TouchableOpacity
-				onPress={onPress}
-				style={defaultStyle.container}
-				outlineProvider="bounds"
-				disabled={!onPress}
-			>
-				<View style={defaultStyle.wrapper}>
-					{children}
-				</View>
-			</TouchableOpacity>
+			<Text style={[defaultStyle, style, { color }]}>
+				{children}
+			</Text>
 		);
 	}
 
@@ -70,27 +64,10 @@ export default class Row extends View<DefaultProps, Props, null> {
 
 	_getDefaultStyle = (): Object => {
 		const deviceWidth = this._getDeviceWidth();
-
 		return {
-			container: {
-				flex: 1,
-				marginBottom: deviceWidth * 0.006666667,
-				elevation: 2,
-				shadowColor: '#000',
-				shadowRadius: 2,
-				shadowOpacity: 0.23,
-				shadowOffset: {
-					width: 0,
-					height: 1,
-				},
-			},
-			wrapper: {
-				flex: 1,
-				flexDirection: this.props.layout,
-				height: deviceWidth * 0.209333333,
-				overflow: 'hidden',
-				borderRadius: 2,
-			},
+			fontFamily: Theme.Core.fonts.sfnsDisplay,
+			fontSize: deviceWidth * 0.053333333,
+			marginBottom: deviceWidth * .008,
 		};
 	};
 

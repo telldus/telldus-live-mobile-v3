@@ -24,23 +24,23 @@
 import React, { PropTypes } from 'react';
 import { NavigationActions } from 'react-navigation';
 import { View } from 'BaseComponents';
+import { ScheduleProps } from './ScheduleScreen';
 import { Button } from 'react-native';
 
-type Props = {
-	navigation: Object,
-	actions: Object,
-	onDidMount: (string, string, ?Object) => void,
-	width: number,
+interface Props extends ScheduleProps {
 	paddingRight: number,
-};
+}
 
-class Summary extends View {
+export default class Summary extends View<null, Props, null> {
 
-	props: Props;
+	static propTypes = {
+		navigation: PropTypes.object,
+		actions: PropTypes.object,
+		onDidMount: PropTypes.func,
+		paddingRight: PropTypes.number,
+	};
 
-	saveSchedule: () => void;
-
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.h1 = '5. Summary';
@@ -55,7 +55,7 @@ class Summary extends View {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	saveSchedule = () => {
+	saveSchedule = (): void => {
 		this.props.navigation.dispatch(NavigationActions.reset({
 			index: 0,
 			actions: [
@@ -75,13 +75,3 @@ class Summary extends View {
 		);
 	}
 }
-
-Summary.propTypes = {
-	navigation: PropTypes.object,
-	actions: PropTypes.object,
-	onDidMount: PropTypes.func,
-	width: PropTypes.number,
-	paddingRight: PropTypes.number,
-};
-
-module.exports = Summary;

@@ -23,8 +23,13 @@
 
 import React, { PropTypes } from 'react';
 import { Dimensions } from 'react-native';
-import { View, ListDataSource, List, Text } from 'BaseComponents';
+import { List, ListDataSource, Text, View } from 'BaseComponents';
+import { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
+import BlockIcon from './SubViews/BlockIcon';
+import TextRowWrapper from './SubViews/TextRowWrapper';
+import Title from './SubViews/Title';
+import Description from './SubViews/Description';
 import Theme from 'Theme';
 
 const actions = [
@@ -51,43 +56,31 @@ const actions = [
 	},
 ];
 
-type Props = {
-	navigation: Object,
-	actions: Object,
-	width: Number,
-	onDidMount: (string, string, ?Object) => void,
-	paddingRight: number,
-};
-
 type State = {
 	dataSource: Object,
 };
 
-class Action extends View {
+export default class Action extends View<null, ScheduleProps, State> {
 
-	props: Props;
-	state: State;
+	static propTypes = {
+		navigation: PropTypes.object,
+		actions: PropTypes.object,
+		onDidMount: PropTypes.func,
+	};
 
-	selectAction: (Object) => void;
-	renderRow: (Object) => Object;
-	navigateToDim: () => void;
-	isDim: (Object) => boolean;
+	state = {
+		dataSource: new ListDataSource({
+			rowHasChanged: (r1, r2) => r1 !== r2,
+		}).cloneWithRows(actions),
+	};
 
-	constructor(props) {
+	constructor(props: ScheduleProps) {
 		super(props);
-
-		this.deviceWidth = Dimensions.get('window').width;
 
 		this.h1 = '2. Action';
 		this.h2 = 'Choose an action to execute';
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
-		};
-
-		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: (r1, r2) => r1 !== r2,
-			}).cloneWithRows(actions),
 		};
 	}
 
@@ -96,45 +89,50 @@ class Action extends View {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	selectAction = action => {
+	selectAction = (action: number) => {
 		const { actions, navigation } = this.props;
-		actions.selectAction(action.method);
+		actions.selectAction(action);
 		navigation.navigate('Time');
 	};
-
-	isDim = row => row.name === 'Dim';
 
 	navigateToDim = () => {
 		this.props.navigation.navigate('ActionDim');
 	};
 
-	renderRow = row => (
-		<Row
-			row={row}
-			select={this.isDim(row) ? this.navigateToDim : this.selectAction}
-			width={this.props.width}
-			bgColor={row.bgColor}
-			textColor={row.textColor}
-			iconSize={this.deviceWidth * 0.092}
-		/>
-	);
-
 	render() {
 		return (
 			<List
 				dataSource={this.state.dataSource}
-				renderRow={this.renderRow}
+				renderRow={this._renderRow}
 			/>
 		);
 	}
+
+	_getDeviceWidth = (): number => {
+		return Dimensions.get('window').width;
+	};
+
+	_renderRow = row => {
+		return (
+			<Row onPress={() => this._handlePress(row)} layout="row">
+				<BlockIcon
+					icon={row.icon}
+					size={this._getDeviceWidth() * 0.092}
+					bgColor={row.bgColor}
+				/>
+				<TextRowWrapper>
+					<Title color={row.textColor}>{row.name}</Title>
+					<Description>{row.description}</Description>
+				</TextRowWrapper>
+			</Row>
+		);
+	};
+
+	_handlePress = (row: Object): void => {
+		if (row.name === 'Dim') {
+			return this.navigateToDim();
+		}
+		this.selectAction(row.method);
+	};
+
 }
-
-Action.propTypes = {
-	navigation: PropTypes.object,
-	actions: PropTypes.object,
-	width: PropTypes.number,
-	onDidMount: PropTypes.func,
-	paddingRight: PropTypes.number,
-};
-
-module.exports = Action;
