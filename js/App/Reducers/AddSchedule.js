@@ -24,12 +24,6 @@
 'use strict';
 
 import type { Action } from 'Actions_Types';
-import {
-	SCHEDULE_SELECT_DEVICE,
-	SCHEDULE_EDIT_RESET,
-	SCHEDULE_SELECT_ACTION,
-	SCHEDULE_SELECT_TIME,
-} from 'Actions_Types';
 
 const initialState = {
 	device: {},
@@ -47,25 +41,39 @@ const initialState = {
 	weekdays: [],
 };
 
-export default function addScheduleReducer(state = initialState, action) {
+type State = {
+	id: number,
+	deviceId: number,
+	method: number,
+	methodValue: number,
+	type: string,
+	hour: number,
+	minute: number,
+	offset: number,
+	randomInterval: number,
+	active: boolean,
+	weekdays: string[],
+};
+
+export default function scheduleReducer(state: State = initialState, action: Action): State {
 	switch (action.type) {
-		case 'ADD_SCHEDULE_SELECT_DEVICE':
+		case 'SCHEDULE_SELECT_DEVICE':
 			return {
 				...state,
 				device: action.payload,
 			};
 
-		case 'ADD_SCHEDULE_SELECT_ACTION':
+		case 'SCHEDULE_SELECT_ACTION':
 			return {
 				...state,
 				method: action.payload.method,
 				methodValue: action.payload.methodValue,
 			};
 
-		case 'ADD_SCHEDULE_RESET':
+		case 'SCHEDULE_EDIT_RESET':
 			return initialState;
 
-		case SCHEDULE_SELECT_TIME:
+		case 'SCHEDULE_SELECT_TIME':
 			return {
 				...state,
 				type: action.payload.type,

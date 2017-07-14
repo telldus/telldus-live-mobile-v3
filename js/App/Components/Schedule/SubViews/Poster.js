@@ -22,8 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, TouchableOpacity, Image } from 'react-native';
-import { View, Text } from 'BaseComponents';
+import { Dimensions, Image, TouchableOpacity } from 'react-native';
+import { Text, View } from 'BaseComponents';
 import Theme from 'Theme';
 
 type Props = {
@@ -32,9 +32,7 @@ type Props = {
 	infoButton: Object,
 };
 
-class Poster extends View {
-
-	props: Props;
+export default class Poster extends View<null, Props, null> {
 
 	static propTypes = {
 		h1: PropTypes.string.isRequired,
@@ -42,16 +40,15 @@ class Poster extends View {
 		infoButton: PropTypes.object,
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 	}
 
-	getStyles = () => {
+	getStyles = (): Object => {
 		const deviceWidth = Dimensions.get('window').width;
 
 		const roundedInfoButtonSize = deviceWidth * 0.042666667;
 
-		// TODO: font-family
 		return {
 			bgImage: {
 				mask: {
@@ -98,7 +95,7 @@ class Poster extends View {
 		};
 	};
 
-	renderInfoButton = (button, styles) => {
+	renderInfoButton = (button: Object, styles: Object): Object => {
 		return (
 			<TouchableOpacity style={styles.container}>
 				<Image
@@ -132,5 +129,3 @@ class Poster extends View {
 		);
 	}
 }
-
-module.exports = Poster;

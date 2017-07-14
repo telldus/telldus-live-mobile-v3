@@ -25,10 +25,7 @@ import React, { PropTypes } from 'react';
 import { Dimensions, TouchableOpacity } from 'react-native';
 import { Text, View } from 'BaseComponents';
 import Theme from 'Theme';
-
-String.prototype.capitalize = function () {
-	return this.charAt(0).toUpperCase() + this.slice(1);
-};
+import capitalize from '../../../Lib/capitalize';
 
 type Props = {
 	type: Object,
@@ -37,12 +34,7 @@ type Props = {
 	isSelected: boolean,
 };
 
-class TimeType extends View {
-
-	props: Props;
-
-	getStyles: () => Object;
-	selectType: () => void;
+export default class TimeType extends View<null, Props, null> {
 
 	static propTypes = {
 		type: PropTypes.string.isRequired,
@@ -51,11 +43,7 @@ class TimeType extends View {
 		isSelected: PropTypes.bool.isRequired,
 	};
 
-	constructor(props) {
-		super(props);
-	}
-
-	getStyles = () => {
+	getStyles = (): Object => {
 		const { isSelected, type } = this.props;
 		const { brandSecondary, fonts } = Theme.Core;
 
@@ -111,9 +99,8 @@ class TimeType extends View {
 		};
 	};
 
-	selectType = () => {
-		const { select, index } = this.props;
-		select(index);
+	selectType = (): void => {
+		this.props.select(this.props.index);
 	};
 
 	render() {
@@ -128,11 +115,9 @@ class TimeType extends View {
 			>
 				<View style={wrapper}>
 					<Text style={icon}>{type}</Text>
-					<Text style={name}>{type.capitalize()}</Text>
+					<Text style={name}>{capitalize(type)}</Text>
 				</View>
 			</TouchableOpacity>
 		);
 	}
 }
-
-module.exports = TimeType;

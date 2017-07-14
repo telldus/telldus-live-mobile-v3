@@ -39,13 +39,7 @@ type State = {
 	value: number,
 };
 
-export default class TimeSlider extends View {
-
-	props: Props;
-	state: State;
-
-	getStyles: () => Object;
-	onValueChange: (number) => void;
+export default class TimeSlider extends View<null, Props, State> {
 
 	static propTypes = {
 		description: PropTypes.string.isRequired,
@@ -56,7 +50,7 @@ export default class TimeSlider extends View {
 		value: PropTypes.number,
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		const sliderColor = Theme.Core.brandSecondary;
@@ -76,7 +70,7 @@ export default class TimeSlider extends View {
 		};
 	}
 
-	getStyles = () => {
+	getStyles = (): Object => {
 		this.deviceWidth = Dimensions.get('window').width;
 		const padding = this.deviceWidth * 0.026666667;
 		const thumbSize = this.deviceWidth * 0.085333333;
@@ -124,7 +118,7 @@ export default class TimeSlider extends View {
 		};
 	};
 
-	onValueChange = value => {
+	onValueChange = (value: number): void => {
 		this.setState({ value });
 		this.props.onValueChange(value);
 	};
