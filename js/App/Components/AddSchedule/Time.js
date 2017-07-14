@@ -113,7 +113,7 @@ export default class Time extends View<null, Props, State> {
 		const { actions, navigation } = this.props;
 		const { selectedTypeIndex, randomInterval, offset, date } = this.state;
 
-		if (!selectedTypeIndex) {
+		if (selectedTypeIndex === null) {
 			return;
 		}
 
