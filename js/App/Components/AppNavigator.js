@@ -24,6 +24,7 @@
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
+import Toast from 'react-native-simple-toast';
 import {
 	getGateways,
 	getSensors,
@@ -36,7 +37,7 @@ import {
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
 
-import { View, RootToast } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
@@ -119,6 +120,19 @@ class AppNavigator extends View {
 		this.props.dispatch(getJobs());
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.toastVisible) {
+			this._showToast();
+		}
+	}
+
+	_showToast() {
+		Toast.showWithGravity(this.props.toastMessage, Toast.SHORT, Toast.TOP);
+		this.props.dispatch({
+			type: 'GLOBAL_ERROR_HIDE',
+		});
+	}
+
 	_updateSpecificOrientation = specificOrientation => {
 		if (Platform.OS !== 'android') {
 			this.setState({ specificOrientation });
@@ -133,11 +147,6 @@ class AppNavigator extends View {
 					isVisible={this.props.dimmer.show}
 					name={this.props.dimmer.name}
 					value={this.props.dimmer.value / 255}
-				/>
-				<RootToast
-					toastVisible={this.props.toastVisible}
-					toastMessage={this.props.toastMessage}
-					duration={3000}
 				/>
 			</View>
 		);
