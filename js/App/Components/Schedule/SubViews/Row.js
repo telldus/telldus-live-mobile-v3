@@ -22,7 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
+import getDeviceWidth from '../../../Lib/getDeviceWidth';
 
 type DefaultProps = {
 	layout: 'column',
@@ -64,12 +65,8 @@ export default class Row extends View<DefaultProps, Props, null> {
 		);
 	}
 
-	_getDeviceWidth = (): number => {
-		return Dimensions.get('window').width;
-	};
-
 	_getDefaultStyle = (): Object => {
-		const deviceWidth = this._getDeviceWidth();
+		const deviceWidth = getDeviceWidth();
 
 		return {
 			container: {

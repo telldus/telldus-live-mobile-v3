@@ -22,12 +22,13 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { DatePickerIOS, Dimensions, Platform, TimePickerAndroid, TouchableWithoutFeedback } from 'react-native';
+import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback } from 'react-native';
 import { FloatingButton, Text, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import TimeType from './SubViews/TimeType';
 import TimeSlider from './SubViews/TimeSlider';
 import Theme from 'Theme';
+import getDeviceWidth from '../../Lib/getDeviceWidth';
 
 const types = ['sunrise', 'sunset', 'time'];
 
@@ -162,7 +163,7 @@ export default class Time extends View<null, Props, State> {
 					<FloatingButton
 						onPress={this.selectTime}
 						imageSource={require('./img/right-arrow-key.png')}
-						iconSize={this._getDeviceWidth() * 0.041333333}
+						iconSize={getDeviceWidth() * 0.041333333}
 						paddingRight={this.props.paddingRight}
 					/>
 				)}
@@ -300,12 +301,8 @@ export default class Time extends View<null, Props, State> {
 		return date;
 	};
 
-	_getDeviceWidth = (): number => {
-		return Dimensions.get('window').width;
-	};
-
 	_getStyle = (): Object => {
-		const deviceWidth = this._getDeviceWidth();
+		const deviceWidth = getDeviceWidth();
 
 		const androidTimeWidth = deviceWidth * 0.213333333;
 		const androidTimeHeight = deviceWidth * 0.177333333;

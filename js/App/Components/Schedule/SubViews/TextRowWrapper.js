@@ -22,7 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
+import getDeviceWidth from '../../../Lib/getDeviceWidth';
 
 type Props = {
 	children: string,
@@ -47,17 +48,13 @@ export default class TextRowWrapper extends View<null, Props, null> {
 		);
 	}
 
-	_getDeviceWidth = (): number => {
-		return Dimensions.get('window').width;
-	};
-
 	_getDefaultStyle = (): Object => {
 		return {
 			justifyContent: 'center',
 			backgroundColor: '#fff',
 			alignItems: 'flex-start',
 			width: '70%',
-			paddingLeft: this._getDeviceWidth() * 0.101333333,
+			paddingLeft: getDeviceWidth() * 0.101333333,
 			paddingRight: 10,
 			paddingVertical: 5,
 		};

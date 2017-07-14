@@ -22,11 +22,11 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions } from 'react-native';
 import Slider from 'react-native-slider';
 import { FloatingButton, Text, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import Theme from 'Theme';
+import getDeviceWidth from '../../Lib/getDeviceWidth';
 
 interface Props extends ScheduleProps {
 	paddingRight: number;
@@ -103,7 +103,7 @@ export default class ActionDim extends View<null, Props, State> {
 				<FloatingButton
 					onPress={this.selectAction}
 					imageSource={require('./img/right-arrow-key.png')}
-					iconSize={this._getDeviceWidth() * 0.041333333}
+					iconSize={getDeviceWidth() * 0.041333333}
 					paddingRight={this.props.paddingRight}
 				/>
 			</View>
@@ -118,12 +118,8 @@ export default class ActionDim extends View<null, Props, State> {
 		this.setState({ methodValue });
 	};
 
-	_getDeviceWidth = (): number => {
-		return Dimensions.get('window').width;
-	};
-
 	_getStyle = () => {
-		const deviceWidth = this._getDeviceWidth();
+		const deviceWidth = getDeviceWidth();
 
 		const thumbSize = deviceWidth * 0.066666667;
 		const padding = deviceWidth * 0.066666667;

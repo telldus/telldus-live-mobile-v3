@@ -22,9 +22,10 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Slider from 'react-native-slider';
 import Theme from 'Theme';
+import getDeviceWidth from '../App/Lib/getDeviceWidth';
 
 type Props = {
 	value: number,
@@ -165,12 +166,8 @@ export default class SliderComponent extends View {
 		return maxSymbols * fontSize;
 	};
 
-	_getDeviceWidth = (): number => {
-		return Dimensions.get('window').width;
-	};
-
 	_getRelativeSize = (ratio: number): number => {
-		return this._getDeviceWidth() * ratio;
+		return getDeviceWidth() * ratio;
 	};
 
 	_getRatio = (value: number): number => {

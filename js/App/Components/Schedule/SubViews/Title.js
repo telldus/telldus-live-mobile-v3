@@ -22,8 +22,9 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import Theme from 'Theme';
+import getDeviceWidth from '../../../Lib/getDeviceWidth';
 
 type DefaultProps = {
 	color: string,
@@ -58,12 +59,8 @@ export default class Title extends View<DefaultProps, Props, null> {
 		);
 	}
 
-	_getDeviceWidth = (): number => {
-		return Dimensions.get('window').width;
-	};
-
 	_getDefaultStyle = (): Object => {
-		const deviceWidth = this._getDeviceWidth();
+		const deviceWidth = getDeviceWidth();
 		return {
 			fontFamily: Theme.Core.fonts.sfnsDisplay,
 			fontSize: deviceWidth * 0.053333333,

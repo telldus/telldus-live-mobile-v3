@@ -24,10 +24,10 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Dimensions } from 'react-native';
 import _ from 'lodash';
 import { Header, Text, View } from 'BaseComponents';
 import Poster from './SubViews/Poster';
+import getDeviceWidth from '../../Lib/getDeviceWidth';
 
 import * as scheduleActions from 'Actions_Schedule';
 import { getDevices } from 'Actions_Devices';
@@ -126,7 +126,7 @@ class ScheduleScreen extends View<null, Props, State> {
 	}
 
 	_getStyle = (): Object => {
-		const deviceWidth = this._getDeviceWidth();
+		const deviceWidth = getDeviceWidth();
 		const padding = deviceWidth * 0.033333333;
 
 		return {
@@ -134,10 +134,6 @@ class ScheduleScreen extends View<null, Props, State> {
 			paddingHorizontal: padding,
 			paddingTop: padding,
 		};
-	};
-
-	_getDeviceWidth = (): number => {
-		return Dimensions.get('window').width;
 	};
 
 	_isDeviceTab = (): boolean => {

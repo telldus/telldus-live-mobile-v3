@@ -22,7 +22,6 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions } from 'react-native';
 import { List, ListDataSource, Text, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
@@ -31,6 +30,7 @@ import TextRowWrapper from './SubViews/TextRowWrapper';
 import Title from './SubViews/Title';
 import Description from './SubViews/Description';
 import Theme from 'Theme';
+import getDeviceWidth from '../../Lib/getDeviceWidth';
 
 const actions = [
 	{
@@ -108,16 +108,12 @@ export default class Action extends View<null, ScheduleProps, State> {
 		);
 	}
 
-	_getDeviceWidth = (): number => {
-		return Dimensions.get('window').width;
-	};
-
 	_renderRow = row => {
 		return (
 			<Row onPress={() => this._handlePress(row)} layout="row">
 				<BlockIcon
 					icon={row.icon}
-					size={this._getDeviceWidth() * 0.092}
+					size={getDeviceWidth() * 0.092}
 					bgColor={row.bgColor}
 				/>
 				<TextRowWrapper>
