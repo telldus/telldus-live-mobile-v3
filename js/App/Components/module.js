@@ -22,11 +22,11 @@
 'use strict';
 
 import AppNavigator from './AppNavigator';
-import LoginScreen from './Login/LoginScreen';
+import PreLoginNavigator from './PreLoginNavigator';
 import Push from './Push';
 
 module.exports = {
 	AppNavigator: AppNavigator,
-	LoginScreen: LoginScreen,
+	PreLoginNavigator: PreLoginNavigator,
 	Push: Push,
 };

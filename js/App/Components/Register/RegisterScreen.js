@@ -15,56 +15,25 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule App
  */
+
+// @flow
 
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
+import { WebView } from 'react-native';
 
-import {
-	PreLoginNavigator,
-	AppNavigator,
-	Push,
-} from 'Components';
+import { View } from 'BaseComponents';
+import { telldusLiveWebAuthenticationUrl } from 'Config';
 
-class App extends React.Component {
-
-	componentDidMount() {
-		this.pushConf();
-	}
-
-	componentDidUpdate() {
-		this.pushConf();
-	}
-
-	/*
-	 * calls the push configuration methods, for logged in users, which will generate push token and listen for local and
-	 * remote push notifications.
-	 */
-	pushConf() {
-		if (this.props.accessToken) {
-			Push.configure(this.props);
-		}
-	}
+export default class RegisterScreen extends View {
 
 	render() {
-		if (!this.props.accessToken) {
-			return <PreLoginNavigator />;
-		}
 		return (
-			<AppNavigator {...this.props}/>
+			<WebView
+				source={{uri: telldusLiveWebAuthenticationUrl}}
+			/>
 		);
 	}
 }
-
-function mapStateToProps(store) {
-	return {
-		accessToken: store.user.accessToken,
-		pushToken: store.user.pushToken,
-	};
-}
-
-module.exports = connect(mapStateToProps)(App);

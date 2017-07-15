@@ -24,22 +24,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dimensions from 'Dimensions';
-import Orientation from 'react-native-orientation';
-import Platform from 'Platform';
 
-import { TextInput, Linking, KeyboardAvoidingView } from 'react-native';
+
+import { TextInput, KeyboardAvoidingView } from 'react-native';
 
 import { BackgroundImage, Button, H1, Text, View } from 'BaseComponents';
 import { loginToTelldus } from 'Actions';
-import { authenticationTimeOut, telldusLiveWebAuthenticationUrl, testUsername, testPassword } from 'Config';
+import { authenticationTimeOut, testUsername, testPassword } from 'Config';
 
 import Image from 'Image';
 import StyleSheet from 'StyleSheet';
-import StatusBar from 'StatusBar';
 import Theme from 'Theme';
 
 type Props = {
   dispatch: Function,
+  screenProps: Object,
+  navigation: Object,
 };
 
 type State = {
@@ -161,28 +161,11 @@ class LoginForm extends View {
 	}
 
 	onForgotPassword() {
-		Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err));
+		this.props.navigation.navigate('Register');
 	}
 }
 
 class LoginScreen extends View {
-	componentDidMount() {
-		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('default');
-		if (Platform.OS === 'android' && StatusBar) {
-			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
-		}
-		if (Platform.OS !== 'android') {
-			Orientation.lockToPortrait();
-		}
-	}
-
-	componentWillUnmount() {
-		if (Platform.OS !== 'android') {
-			Orientation.unlockAllOrientations();
-		}
-	}
-
 	render() {
 		return (
 			<BackgroundImage source={require('./img/home5.jpg')}>
