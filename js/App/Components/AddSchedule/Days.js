@@ -22,11 +22,23 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'BaseComponents';
-import { Button } from 'react-native';
+import { View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
+import Row from './SubViews/Row';
+import Weekday from './SubViews/Weekday';
+import getDeviceWidth from '../../Lib/getDeviceWidth';
 
-export default class Days extends View<null, ScheduleProps, null> {
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+interface Props extends ScheduleProps {
+	paddingRight: number,
+}
+
+type State = {
+	selectedWeekdays: number[],
+};
+
+export default class Days extends View<null, Props, State> {
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -35,7 +47,11 @@ export default class Days extends View<null, ScheduleProps, null> {
 		paddingRight: PropTypes.number,
 	};
 
-	constructor(props: ScheduleProps) {
+	state = {
+		selectedWeekdays: [],
+	};
+
+	constructor(props: Props) {
 		super(props);
 
 		this.h1 = '4. Days';
@@ -50,13 +66,65 @@ export default class Days extends View<null, ScheduleProps, null> {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	goNext = () => {
-		this.props.navigation.navigate('Summary');
+	toggleWeekdayState = (day: string) => {
+		const { selectedWeekdays } = this.state;
+		const index = DAYS.indexOf(day);
+
+		let newSelectedWeekdays;
+
+		if (this._isSelected(index)) {
+			newSelectedWeekdays = selectedWeekdays.filter((i: number): boolean => i !== index);
+		} else {
+			newSelectedWeekdays = selectedWeekdays.concat(index);
+		}
+
+		this.setState({ selectedWeekdays: newSelectedWeekdays });
 	};
 
 	render() {
+		const { mainContainer, weekdaysContainer } = this._getStyle();
+
 		return (
-			<Button title="Summary" onPress={this.goNext}/>
+			<View style={mainContainer}>
+				<Row layout="row" style={{ height: null }} wrapperStyle={weekdaysContainer}>
+					{this._renderWeekdays()}
+				</Row>
+			</View>
 		);
 	}
+
+	_renderWeekdays = (): Object[] => {
+		return DAYS.map((day: string, i: number): Object => {
+			const isSelected = this._isSelected(i);
+
+			return (
+				<Weekday
+					day={day}
+					isSelected={isSelected}
+					onPress={this.toggleWeekdayState}
+					key={day}
+				/>
+			);
+		});
+	};
+
+	_isSelected = (index: number): boolean => {
+		return this.state.selectedWeekdays.includes(index);
+	};
+
+	_getStyle = (): Object => {
+		const deviceWidth = getDeviceWidth();
+
+		return {
+			mainContainer: {
+				flex: 1,
+				justifyContent: 'flex-start',
+			},
+			weekdaysContainer: {
+				justifyContent: 'space-between',
+				paddingHorizontal: deviceWidth * 0.056,
+				paddingVertical: deviceWidth * 0.102666667,
+			},
+		};
+	};
 }
