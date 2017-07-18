@@ -12,6 +12,12 @@
     "react"
   ],
 
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": true
+    }
+  },
+
   // Map from global var to bool specifying if it can be redefined
   "globals": {
     "__BUNDLE_START_TIME__": false,
