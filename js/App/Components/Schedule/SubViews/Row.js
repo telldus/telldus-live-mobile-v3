@@ -84,8 +84,10 @@ export default class Row extends View<DefaultProps, Props, null> {
 
 		return {
 			container: {
-				flex: 1,
+				backgroundColor: '#fff',
+				flexDirection: 'row',
 				marginBottom: deviceWidth * 0.006666667,
+				height: deviceWidth * 0.209333333,
 				elevation: 2,
 				shadowColor: '#000',
 				shadowRadius: 2,
@@ -98,7 +100,6 @@ export default class Row extends View<DefaultProps, Props, null> {
 			wrapper: {
 				flex: 1,
 				flexDirection: this.props.layout,
-				height: deviceWidth * 0.209333333,
 				overflow: 'hidden',
 				borderRadius: 2,
 			},
