@@ -99,7 +99,7 @@ export default class TimeType extends View<null, Props, null> {
 		};
 	};
 
-	selectType = (): void => {
+	selectType = () => {
 		this.props.select(this.props.index);
 	};
 

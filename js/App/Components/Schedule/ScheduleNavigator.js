@@ -19,8 +19,6 @@
  * @providesModule ScheduleNavigator
  */
 
-// @flow
-
 'use strict';
 
 import React from 'react';

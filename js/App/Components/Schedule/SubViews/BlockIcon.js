@@ -57,7 +57,7 @@ export default class BlockIcon extends View<DefaultProps, Props, null> {
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<View style={[defaultStyle.container, style, { backgroundColor: bgColor, }]}>
+			<View style={[defaultStyle.container, style, { backgroundColor: bgColor }]}>
 				<Text style={defaultStyle.icon}>
 					{icon}
 				</Text>

@@ -55,7 +55,7 @@ export default class Summary extends View<null, Props, null> {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	saveSchedule = (): void => {
+	saveSchedule = () => {
 		this.props.navigation.dispatch(NavigationActions.reset({
 			index: 0,
 			actions: [

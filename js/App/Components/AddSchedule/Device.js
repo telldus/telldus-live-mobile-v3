@@ -23,7 +23,7 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { List, ListDataSource, Text, View } from 'BaseComponents';
+import { List, ListDataSource, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
 import Title from './SubViews/Title';
@@ -32,8 +32,8 @@ import TextRowWrapper from './SubViews/TextRowWrapper';
 import BlockIcon from './SubViews/BlockIcon';
 
 interface Props extends ScheduleProps {
-	devices: Object;
-	reset: () => void;
+	devices: Object,
+	reset: () => void,
 }
 
 type State = {
@@ -52,7 +52,7 @@ class Device extends View<void, Props, State> {
 
 	state = {
 		dataSource: new ListDataSource({
-			rowHasChanged: (r1, r2) => r1 !== r2,
+			rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
 		}).cloneWithRows(this.props.devices.byId),
 	};
 
@@ -74,13 +74,13 @@ class Device extends View<void, Props, State> {
 		onDidMount(this.h1, this.h2);
 	}
 
-	onRefresh = (): void => {
+	onRefresh = () => {
 		this.props.actions.getDevices();
 	};
 
-	selectDevice = (deviceId: number): void => {
+	selectDevice = (row: Object) => {
 		const { actions, navigation } = this.props;
-		actions.selectDevice(deviceId);
+		actions.selectDevice(row.id);
 		navigation.navigate('Action');
 	};
 
@@ -96,7 +96,7 @@ class Device extends View<void, Props, State> {
 
 	_renderRow = (row: Object): Object => {
 		return (
-			<Row onPress={() => this.selectDevice(row.id)} layout="row">
+			<Row onPress={this.selectDevice} layout="row">
 				<BlockIcon icon="device-alt" size={56}/>
 				<TextRowWrapper>
 					<Title>{row.name}</Title>
@@ -108,7 +108,11 @@ class Device extends View<void, Props, State> {
 
 }
 
-const mapStateToProps = ({ devices }) => (
+type mapStateToPropsType = {
+	devices: Object,
+};
+
+const mapStateToProps = ({ devices }: mapStateToPropsType): Object => (
 	{
 		devices,
 	}

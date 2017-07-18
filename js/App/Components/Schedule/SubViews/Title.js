@@ -64,7 +64,7 @@ export default class Title extends View<DefaultProps, Props, null> {
 		return {
 			fontFamily: Theme.Core.fonts.sfnsDisplay,
 			fontSize: deviceWidth * 0.053333333,
-			marginBottom: deviceWidth * .008,
+			marginBottom: deviceWidth * 0.008,
 		};
 	};
 

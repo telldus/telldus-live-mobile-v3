@@ -118,7 +118,7 @@ export default class TimeSlider extends View<null, Props, State> {
 		};
 	};
 
-	onValueChange = (value: number): void => {
+	onValueChange = (value: number) => {
 		this.setState({ value });
 		this.props.onValueChange(value);
 	};
@@ -136,7 +136,7 @@ export default class TimeSlider extends View<null, Props, State> {
 						{
 							justifyContent: 'flex-start',
 							marginBottom: this.deviceWidth * 0.034666667,
-						}
+						},
 					]}
 				>
 					<Text style={styles.icon}>{icon}</Text>

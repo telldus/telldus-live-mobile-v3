@@ -30,10 +30,10 @@ import TimeSlider from './SubViews/TimeSlider';
 import Theme from 'Theme';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 
-const types = ['sunrise', 'sunset', 'time'];
+const TYPES = ['sunrise', 'sunset', 'time'];
 
 interface Props extends ScheduleProps {
-	paddingRight: number;
+	paddingRight: number,
 }
 
 type State = {
@@ -78,13 +78,13 @@ export default class Time extends View<null, Props, State> {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	setRandomIntervalValue = (randomInterval: number): void => {
+	setRandomIntervalValue = (randomInterval: number) => {
 		if (randomInterval !== this.state.randomInterval) {
 			this.setState({ randomInterval });
 		}
 	};
 
-	setTimeOffsetValue = (offset: number): void => {
+	setTimeOffsetValue = (offset: number) => {
 		if (offset !== this.state.offset) {
 			this.setState({ offset });
 		}
@@ -107,9 +107,9 @@ export default class Time extends View<null, Props, State> {
 		} catch (error) {
 			console.warn('Cannot open time picker', error.message);
 		}
-	};
+	}
 
-	selectTime = (): void => {
+	selectTime = () => {
 		const { actions, navigation } = this.props;
 		const { selectedTypeIndex, randomInterval, offset, date } = this.state;
 
@@ -133,7 +133,7 @@ export default class Time extends View<null, Props, State> {
 			time.minute = date.getMinutes();
 		}
 
-		actions.selectTime(types[selectedTypeIndex], time);
+		actions.selectTime(TYPES[selectedTypeIndex], time);
 		navigation.navigate('Days');
 	};
 
@@ -146,7 +146,7 @@ export default class Time extends View<null, Props, State> {
 		return (
 			<View style={container}>
 				<View style={[type.container, { marginBottom }]}>
-					{this._renderTypes(types)}
+					{this._renderTypes(TYPES)}
 				</View>
 				{this._renderTimeRow()}
 				{shouldRender && (
@@ -213,7 +213,7 @@ export default class Time extends View<null, Props, State> {
 									androidTimeValueWrapper,
 									{
 										marginRight: this.deviceWidth * 0.014666667,
-									}
+									},
 								]}
 
 							>
@@ -255,7 +255,7 @@ export default class Time extends View<null, Props, State> {
 		);
 	};
 
-	_onDateChange = (date: Date): void => {
+	_onDateChange = (date: Date) => {
 		const { date: oldDate } = this.state;
 
 		const oldHours = oldDate.getHours();
@@ -273,14 +273,14 @@ export default class Time extends View<null, Props, State> {
 		return (value < 10 ? '0' : '') + value;
 	};
 
-	_selectType = (typeIndex: number): void => {
+	_selectType = (typeIndex: number) => {
 		this.setState({ selectedTypeIndex: typeIndex });
 	};
 
 	_renderTypes = (types: string[]): Object[] => {
 		const { selectedTypeIndex } = this.state;
 
-		return types.map((type, i) => {
+		return types.map((type: string, i: number): Object => {
 			const isSelected = typeof selectedTypeIndex === 'number' && i === selectedTypeIndex;
 
 			return (

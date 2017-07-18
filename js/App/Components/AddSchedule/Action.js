@@ -22,8 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { List, ListDataSource, Text, View } from 'BaseComponents';
-import { ScheduleProps } from './ScheduleScreen';
+import { List, ListDataSource, View } from 'BaseComponents';
+import type { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
 import BlockIcon from './SubViews/BlockIcon';
 import TextRowWrapper from './SubViews/TextRowWrapper';
@@ -32,7 +32,16 @@ import Description from './SubViews/Description';
 import Theme from 'Theme';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 
-const actions = [
+type ActionType = {
+	name: string,
+	description: string,
+	method: number,
+	bgColor: string,
+	textColor: string,
+	icon: string,
+};
+
+const actions: ActionType[] = [
 	{
 		name: 'On',
 		description: 'Turns the device on',
@@ -70,7 +79,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 	state = {
 		dataSource: new ListDataSource({
-			rowHasChanged: (r1, r2) => r1 !== r2,
+			rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
 		}).cloneWithRows(actions),
 	};
 
@@ -90,9 +99,8 @@ export default class Action extends View<null, ScheduleProps, State> {
 	}
 
 	selectAction = (action: number) => {
-		const { actions, navigation } = this.props;
-		actions.selectAction(action);
-		navigation.navigate('Time');
+		this.props.actions.selectAction(action);
+		this.props.navigation.navigate('Time');
 	};
 
 	navigateToDim = () => {
@@ -108,9 +116,9 @@ export default class Action extends View<null, ScheduleProps, State> {
 		);
 	}
 
-	_renderRow = row => {
+	_renderRow = (row: ActionType): Object => {
 		return (
-			<Row onPress={() => this._handlePress(row)} layout="row">
+			<Row onPress={this._handlePress} row={row} layout="row">
 				<BlockIcon
 					icon={row.icon}
 					size={getDeviceWidth() * 0.092}

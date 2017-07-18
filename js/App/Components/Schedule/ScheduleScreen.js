@@ -25,7 +25,7 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { Header, Text, View } from 'BaseComponents';
+import { Header, View } from 'BaseComponents';
 import Poster from './SubViews/Poster';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 
@@ -46,9 +46,9 @@ type State = {
 };
 
 export interface ScheduleProps {
-	navigation: Object;
-	actions: Object;
-	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void;
+	navigation: Object,
+	actions: Object,
+	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
@@ -91,11 +91,11 @@ class ScheduleScreen extends View<null, Props, State> {
 		navigation.goBack(null);
 	};
 
-	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null): void => {
+	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
 		this.setState({
 			h1,
 			h2,
-			infoButton
+			infoButton,
 		});
 	};
 
@@ -103,7 +103,6 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { children, navigation, actions } = this.props;
 		const { h1, h2, infoButton } = this.state;
 		const style = this._getStyle();
-		console.log(this.props.schedule);
 
 		return (
 			<View>
@@ -118,7 +117,7 @@ class ScheduleScreen extends View<null, Props, State> {
 							actions,
 							reset: this._isDeviceTab() ? this.goBack : null,
 							paddingRight: style.paddingHorizontal,
-						}
+						},
 					)}
 				</View>
 			</View>
@@ -142,15 +141,23 @@ class ScheduleScreen extends View<null, Props, State> {
 
 }
 
-const mapStateToProps = ({ schedule }) => ({
-	schedule,
-});
+type mapStateToPropsType = {
+	schedule: Object,
+};
 
-const mapDispatchToProps = dispatch => ({
-	actions: {
-		...bindActionCreators(scheduleActions, dispatch),
-		getDevices: () => dispatch(getDevices()),
+const mapStateToProps = ({ schedule }: mapStateToPropsType): Object => (
+	{
+		schedule,
 	}
-});
+);
+
+const mapDispatchToProps = (dispatch: Function): Object => (
+	{
+		actions: {
+			...bindActionCreators(scheduleActions, dispatch),
+			getDevices: (): Object => dispatch(getDevices()),
+		},
+	}
+);
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen);

@@ -29,7 +29,7 @@ import Theme from 'Theme';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 
 interface Props extends ScheduleProps {
-	paddingRight: number;
+	paddingRight: number,
 }
 
 type State = {
@@ -77,7 +77,7 @@ export default class ActionDim extends View<null, Props, State> {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	selectAction = (): void => {
+	selectAction = () => {
 		const { actions, navigation } = this.props;
 		actions.selectAction(16, this.state.methodValue);
 		navigation.navigate('Time');
@@ -114,11 +114,11 @@ export default class ActionDim extends View<null, Props, State> {
 		return Math.round(this.state.methodValue / this.maximumValue * 100);
 	};
 
-	_setMethodValue = (methodValue: number): void => {
+	_setMethodValue = (methodValue: number) => {
 		this.setState({ methodValue });
 	};
 
-	_getStyle = () => {
+	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
 		const thumbSize = deviceWidth * 0.066666667;
