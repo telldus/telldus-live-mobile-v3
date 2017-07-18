@@ -96,7 +96,7 @@ class Device extends View<void, Props, State> {
 
 	_renderRow = (row: Object): Object => {
 		return (
-			<Row onPress={this.selectDevice} layout="row">
+			<Row onPress={this.selectDevice} row={row} layout="row">
 				<BlockIcon icon="device-alt" size={56}/>
 				<TextRowWrapper>
 					<Title>{row.name}</Title>
