@@ -99,15 +99,12 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 		let { devices } = getState();
 		let device = devices.byId[deviceId];
 		return LiveApi(payload).then(response => {
-			console.log('test response', response);
 			setTimeout(() => {
-				console.log('test device.isInState', device.isInState, device.methodRequested);
 				if (device.methodRequested !== '') {
 					getDeviceInfo(deviceId, 'TURNON', isInState, dispatch);
 				}
 			}, 2000);
 		}).catch(error => {
-			console.log('test error', error);
 			dispatch({
 				type: 'GLOBAL_ERROR_SHOW',
 				payload: {
@@ -270,9 +267,7 @@ export function getDeviceInfo(deviceId: number, requestedState: string, currentS
 			method: 'GET',
 		},
 	};
-	console.log('test getDeviceInfo');
 	return LiveApi(payload).then(response => {
-		console.log('test getDeviceInfo',response);
 		let newState = methods[parseInt(response.state, 10)];
 		if (newState === currentState) {
 			dispatch({
