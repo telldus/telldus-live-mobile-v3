@@ -34,6 +34,8 @@ type Props = {
 	row?: Object,
 	onPress?: (row: Object) => void,
 	layout?: 'row' | 'column',
+	style?: Object,
+	wrapperStyle?: Object,
 };
 
 export default class Row extends View<DefaultProps, Props, null> {
@@ -43,6 +45,8 @@ export default class Row extends View<DefaultProps, Props, null> {
 		row: PropTypes.object,
 		onPress: PropTypes.func,
 		layout: PropTypes.oneOf(['row', 'column']),
+		style: View.propTypes.style,
+		wrapperStyle: View.propTypes.style,
 	};
 
 	static defaultProps = {
@@ -58,17 +62,17 @@ export default class Row extends View<DefaultProps, Props, null> {
 	};
 
 	render() {
-		const { children, onPress } = this.props;
+		const { children, onPress, style, wrapperStyle } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
 			<TouchableOpacity
 				onPress={this.returnRow}
-				style={defaultStyle.container}
+				style={[defaultStyle.container, style]}
 				outlineProvider="bounds"
 				disabled={!onPress}
 			>
-				<View style={defaultStyle.wrapper}>
+				<View style={[defaultStyle.wrapper, wrapperStyle]}>
 					{children}
 				</View>
 			</TouchableOpacity>

@@ -22,32 +22,35 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, TouchableOpacity } from 'react-native';
-import { Text, View } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import Theme from 'Theme';
+import Row from './Row';
+import BlockIcon from './BlockIcon';
+import Description from './Description';
 import capitalize from '../../../Lib/capitalize';
+import getDeviceWidth from '../../../Lib/getDeviceWidth';
 
 type Props = {
 	type: Object,
-	select: (number) => void,
+	onPress: (number) => void,
 	index: number,
 	isSelected: boolean,
 };
 
-export default class TimeType extends View<null, Props, null> {
+export default class TimeBlock extends View<null, Props, null> {
 
 	static propTypes = {
 		type: PropTypes.string.isRequired,
-		select: PropTypes.func.isRequired,
+		onPress: PropTypes.func.isRequired,
 		index: PropTypes.number.isRequired,
 		isSelected: PropTypes.bool.isRequired,
 	};
 
 	getStyles = (): Object => {
 		const { isSelected, type } = this.props;
-		const { brandSecondary, fonts } = Theme.Core;
+		const { brandSecondary } = Theme.Core;
 
-		const deviceWidth = Dimensions.get('window').width;
+		const deviceWidth = getDeviceWidth();
 		const size = deviceWidth * 0.293333333;
 
 		let backgroundColor = '#fff';
@@ -68,56 +71,63 @@ export default class TimeType extends View<null, Props, null> {
 
 		return {
 			container: {
+				flex: 0,
 				backgroundColor,
-				borderRadius: 2,
-				elevation: 2,
-				shadowOffset: {
-					width: 0,
-					height: 2,
-				},
-				shadowRadius: 2,
-				shadowColor: '#000',
-				shadowOpacity: 0.23,
+				marginBottom: 0,
 				height: size,
 				width: size,
 			},
 			wrapper: {
-				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
+				height: null,
 			},
 			icon: {
-				color: iconColor,
-				fontFamily: fonts.telldusIconFont,
-				fontSize: deviceWidth * 0.133333333,
+				padding: 0,
+				width: null,
 			},
-			name: {
-				color: textColor,
+			description: {
 				fontSize: deviceWidth * 0.037333333,
-				fontFamily: Theme.Core.fonts.robotoRegular,
 			},
+			backgroundColor,
+			iconColor,
+			iconSize: deviceWidth * 0.133333333,
+			textColor,
 		};
 	};
 
-	selectType = () => {
-		this.props.select(this.props.index);
-	};
-
 	render() {
-		const { container, wrapper, icon, name } = this.getStyles();
-		const { type } = this.props;
+		const { type, onPress, index } = this.props;
+
+		const {
+			container,
+			wrapper,
+			icon,
+			backgroundColor,
+			iconColor,
+			iconSize,
+			textColor,
+			description,
+		} = this.getStyles();
 
 		return (
-			<TouchableOpacity
+			<Row
+				onPress={onPress}
+				row={{ index }}
 				style={container}
-				onPress={this.selectType}
-				outlineProvider="bounds"
+				wrapperStyle={wrapper}
 			>
-				<View style={wrapper}>
-					<Text style={icon}>{type}</Text>
-					<Text style={name}>{capitalize(type)}</Text>
-				</View>
-			</TouchableOpacity>
+				<BlockIcon
+					icon={type}
+					size={iconSize}
+					color={iconColor}
+					bgColor={backgroundColor}
+					style={icon}
+				/>
+				<Description color={textColor} style={description}>
+					{capitalize(type)}
+				</Description>
+			</Row>
 		);
 	}
 }

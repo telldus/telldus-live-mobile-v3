@@ -25,7 +25,7 @@ import React, { PropTypes } from 'react';
 import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback } from 'react-native';
 import { FloatingButton, Text, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import TimeType from './SubViews/TimeType';
+import TimeBlock from './SubViews/TimeBlock';
 import TimeSlider from './SubViews/TimeSlider';
 import Theme from 'Theme';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
@@ -273,8 +273,8 @@ export default class Time extends View<null, Props, State> {
 		return (value < 10 ? '0' : '') + value;
 	};
 
-	_selectType = (typeIndex: number) => {
-		this.setState({ selectedTypeIndex: typeIndex });
+	_selectType = (row: Object) => {
+		this.setState({ selectedTypeIndex: row.index });
 	};
 
 	_renderTypes = (types: string[]): Object[] => {
@@ -284,11 +284,11 @@ export default class Time extends View<null, Props, State> {
 			const isSelected = typeof selectedTypeIndex === 'number' && i === selectedTypeIndex;
 
 			return (
-				<TimeType
+				<TimeBlock
 					type={type}
+					onPress={this._selectType}
 					index={i}
 					isSelected={isSelected}
-					select={this._selectType}
 					key={type}
 				/>
 			);
