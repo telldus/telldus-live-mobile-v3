@@ -50,6 +50,14 @@ export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
 			}
 			resolve(response);
 		}).catch(error => {
+			if (error.message === 'invalid_token' || error.message === 'expired_token') {
+				const store = getStore();
+				const { dispatch } = store;
+				return dispatch({
+					type: 'LOGGED_OUT',
+					payload: error,
+				});
+			}
 			reject(error);
 		});
 	});
