@@ -29,7 +29,7 @@ import Weekday from './SubViews/Weekday';
 import Description from './SubViews/Description';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 import CheckButton from './SubViews/CheckButton';
-import { CheckboxSolid } from 'BaseComponents';
+import { CheckboxSolid, FloatingButton } from 'BaseComponents';
 import _ from 'lodash';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -150,12 +150,31 @@ export default class Days extends View<null, Props, State> {
 		}
 	};
 
+	selectDays = () => {
+		const { actions, navigation } = this.props;
+
+		let selectedDaysIndexes: number[] = [];
+		const { selectedDays } = this.state;
+
+		for (let i = 0; i < selectedDays.length; i++) {
+			const selectedDayIndex = DAYS.indexOf(selectedDays[i]);
+
+			if (selectedDayIndex > -1) {
+				selectedDaysIndexes.push(selectedDayIndex + 1);
+			}
+		}
+
+		actions.selectDays(selectedDaysIndexes);
+		navigation.navigate('Summary');
+	};
+
 	render() {
 		const {
 			shouldCheckAll,
 			shouldUncheckAll,
 			isWeekdaysSelected,
 			isWeekendsSelected,
+			selectedDays,
 		} = this.state;
 
 		const {
@@ -214,6 +233,14 @@ export default class Days extends View<null, Props, State> {
 						Uncheck all
 					</CheckButton>
 				</View>
+				{selectedDays.length > 0 && (
+					<FloatingButton
+						onPress={this.selectDays}
+						imageSource={require('./img/right-arrow-key.png')}
+						iconSize={getDeviceWidth() * 0.041333333}
+						paddingRight={this.props.paddingRight}
+					/>
+				)}
 			</View>
 		);
 	}

@@ -55,6 +55,13 @@ const selectTime = (type: string, time: Time): Action => ({
 	},
 });
 
+const selectDays = (weekdays: number[]): Action => ({
+	type: 'SCHEDULE_SELECT_DAYS',
+	payload: {
+		weekdays,
+	},
+});
+
 const reset = (): Action => ({
 	type: 'SCHEDULE_EDIT_RESET',
 });
@@ -63,5 +70,6 @@ module.exports = {
 	selectDevice,
 	selectAction,
 	selectTime,
+	selectDays,
 	reset,
 };
