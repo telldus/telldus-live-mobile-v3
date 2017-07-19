@@ -26,6 +26,12 @@ import { Image, Platform, TouchableOpacity, View } from 'react-native';
 import Theme from 'Theme';
 import getDeviceWidth from '../App/Lib/getDeviceWidth';
 
+type DefaultProps = {
+	tabs: boolean,
+	iconSize: number,
+	paddingRight: number,
+};
+
 type Props = {
 	onPress: Function,
 	imageSource: number,
@@ -34,7 +40,7 @@ type Props = {
 	paddingRight: number,
 };
 
-export default class FloatingButton extends View<null, Props, null> {
+export default class FloatingButton extends View<DefaultProps, Props, null> {
 
 	static propTypes = {
 		onPress: PropTypes.func.isRequired,
