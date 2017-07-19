@@ -23,7 +23,9 @@
 
 import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
+import { Image, Dimensions } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
 import {
 	getGateways,
 	getSensors,
@@ -35,6 +37,9 @@ import {
 } from 'Actions';
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
+
+let deviceWidth = Dimensions.get('window').width;
+import Theme from 'Theme';
 
 import { View } from 'BaseComponents';
 import Platform from 'Platform';
@@ -49,17 +54,33 @@ import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
+		navigationOptions: {
+			header: null,
+		},
 	},
 	DeviceDetails: {
 		screen: DeviceDetailsTabsView,
+		navigationOptions: {
+			headerStyle: {
+				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+				backgroundColor: Theme.Core.brandPrimary,
+			},
+			headerTintColor: '#ffffff',
+			headerTitle: renderStackHeader(),
+		},
 	},
 };
 
+function renderStackHeader() {
+	return (
+		<Image style={{ height: 110, width: 130, marginLeft: (deviceWidth * 0.2) }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
+	);
+}
+
+
+
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',
-	navigationOptions: {
-		header: null,
-	},
 };
 
 const Navigator = StackNavigator(RouteConfigs, StackNavigatorConfig);
@@ -144,6 +165,7 @@ class AppNavigator extends View {
 AppNavigator.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 };
+
 
 function mapStateToProps(state, ownProps) {
 	return {

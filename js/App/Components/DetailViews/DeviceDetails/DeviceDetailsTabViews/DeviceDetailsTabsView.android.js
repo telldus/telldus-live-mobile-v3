@@ -66,18 +66,6 @@ class DeviceDetailsTabsView extends View {
 		let screenProps = { device: this.props.device, devices: this.props.devices };
 		return (
 			<View style={styles.container}>
-				<View style={styles.navHeader}>
-					<View style={styles.navLeft}>
-						<TouchableOpacity style={styles.navLeftTouchable} onPress={this.goBack} >
-							<Text style={styles.navLeftText}>
-								Devices
-							</Text>
-						</TouchableOpacity>
-					</View>
-					<View style={styles.navCenter}>
-						<Image style={styles.navigationHeaderImage} resizeMode={'contain'} source={require('./../../../TabViews/img/telldus-logo.png')}/>
-					</View>
-				</View>
 					<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('./../../../TabViews/img/telldus-geometric-header-bg.png')}>
 						<View style={styles.deviceIconBackground}>
 							<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
@@ -95,13 +83,6 @@ class DeviceDetailsTabsView extends View {
 }
 const styles = StyleSheet.create({
 	container: {
-		marginTop: 20,
-	},
-	navHeader: {
-		height: (deviceHeight * 0.08),
-		backgroundColor: Theme.Core.brandPrimary,
-		flexDirection: 'row',
-		alignItems: 'center',
 	},
 	deviceIconBackG: {
 		height: (deviceHeight * 0.2),
@@ -112,27 +93,6 @@ const styles = StyleSheet.create({
 	icon: {
 		width: 15,
 		height: 15,
-	},
-	navigationHeaderImage: {
-		width: 130,
-		height: 110,
-	},
-	navLeft: {
-		alignItems: 'flex-start',
-		width: deviceWidth / 3,
-		paddingLeft: 20,
-	},
-	navLeftTouchable: {
-		alignItems: 'flex-start',
-		width: deviceWidth / 3,
-	},
-	navCenter: {
-		alignItems: 'flex-start',
-		width: deviceWidth / 2,
-	},
-	navLeftText: {
-		fontSize: 14,
-		color: '#fff',
 	},
 	textDeviceName: {
 		fontSize: 18,
