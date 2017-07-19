@@ -26,8 +26,11 @@ import { View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
 import Weekday from './SubViews/Weekday';
+import Description from './SubViews/Description';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 import CheckButton from './SubViews/CheckButton';
+import { CheckboxSolid } from 'BaseComponents';
+import _ from 'lodash';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -39,6 +42,7 @@ type State = {
 	selectedDays: string[],
 	shouldCheckAll: boolean,
 	shouldUncheckAll: boolean,
+	weekdaysSelected: boolean,
 };
 
 export default class Days extends View<null, Props, State> {
@@ -54,6 +58,7 @@ export default class Days extends View<null, Props, State> {
 		selectedDays: [],
 		shouldCheckAll: true,
 		shouldUncheckAll: false,
+		weekdaysSelected: false,
 	};
 
 	constructor(props: Props) {
@@ -86,6 +91,7 @@ export default class Days extends View<null, Props, State> {
 			selectedDays: newSelectedWeekdays,
 			shouldUncheckAll: !!newSelectedWeekdays.length,
 			shouldCheckAll: newSelectedWeekdays.length !== DAYS.length,
+			weekdaysSelected: this._isWeekdaysSelected(newSelectedWeekdays),
 		});
 	};
 
@@ -95,6 +101,7 @@ export default class Days extends View<null, Props, State> {
 				selectedDays: DAYS,
 				shouldCheckAll: false,
 				shouldUncheckAll: true,
+				weekdaysSelected: false,
 			});
 		}
 	};
@@ -105,24 +112,56 @@ export default class Days extends View<null, Props, State> {
 				selectedDays: [],
 				shouldUncheckAll: false,
 				shouldCheckAll: true,
+				weekdaysSelected: false,
+			});
+		}
+	};
+
+	toggleWeekdays = () => {
+		if (this._isWeekdaysSelected()) {
+			this.uncheckAll();
+		} else {
+			this.setState({
+				selectedDays: this._getWeekdays(),
+				shouldUncheckAll: true,
+				shouldCheckAll: true,
+				weekdaysSelected: true,
 			});
 		}
 	};
 
 	render() {
-		const { shouldCheckAll, shouldUncheckAll } = this.state;
+		const { shouldCheckAll, shouldUncheckAll, weekdaysSelected } = this.state;
+
 		const {
 			mainContainer,
 			weekdaysContainer,
 			buttonsContainer,
 			row,
 			rowContainer,
+			checkbox,
+			checkboxText,
 		} = this._getStyle();
 
 		return (
 			<View style={mainContainer}>
 				<Row layout="row" style={[row, weekdaysContainer]} containerStyle={rowContainer}>
 					{this._renderWeekdays()}
+				</Row>
+				<Row
+					layout="row"
+					onPress={this.toggleWeekdays}
+					style={row}
+					containerStyle={rowContainer}
+				>
+					<CheckboxSolid
+						onPress={this.toggleWeekdays}
+						checked={weekdaysSelected}
+						style={checkbox}
+					/>
+					<Description style={checkboxText}>
+						Weekdays (Monday to Friday)
+					</Description>
 				</Row>
 				<View style={[row, buttonsContainer]}>
 					<CheckButton onPress={this.checkAll} disabled={!shouldCheckAll}>
@@ -153,6 +192,20 @@ export default class Days extends View<null, Props, State> {
 		return this.state.selectedDays.includes(day);
 	};
 
+	_isWeekdaysSelected = (selectedDays?: string[] = this.state.selectedDays): boolean => {
+		let isWeekdaysSelected: boolean = false;
+
+		if (selectedDays.length === 5) {
+			isWeekdaysSelected = _.isEqual(selectedDays, this._getWeekdays());
+		}
+
+		return isWeekdaysSelected;
+	};
+
+	_getWeekdays = (): string[] => {
+		return DAYS.slice(0, 5);
+	};
+
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
@@ -171,12 +224,20 @@ export default class Days extends View<null, Props, State> {
 				paddingVertical: 0,
 			},
 			row: {
+				alignItems: 'center',
 				paddingHorizontal: deviceWidth * 0.056,
 				paddingVertical: deviceWidth * 0.037333333,
 			},
 			rowContainer: {
 				height: null,
 				marginBottom: deviceWidth * 0.028,
+			},
+			checkbox: {
+				marginRight: deviceWidth * 0.05,
+			},
+			checkboxText: {
+				color: '#555555',
+				fontSize: deviceWidth * 0.037333333,
 			},
 		};
 	};
