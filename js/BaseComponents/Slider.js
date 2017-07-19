@@ -27,6 +27,16 @@ import Slider from 'react-native-slider';
 import Theme from 'Theme';
 import getDeviceWidth from '../App/Lib/getDeviceWidth';
 
+type DefaultProps = {
+	minimumTrackTintColor: string,
+	maximumTrackTintColor: string,
+	trackStyle: {},
+	thumbStyle: Object,
+	step: number,
+	showValue: boolean,
+	valueStyle: {},
+};
+
 type Props = {
 	value: number,
 	minimumValue: number,
@@ -42,14 +52,11 @@ type Props = {
 };
 
 type State = {
-	trackSize: Object,
+	containerSize: Object,
 	value: number,
 };
 
-export default class SliderComponent extends View {
-
-	props: Props;
-	state: State;
+export default class SliderComponent extends View<DefaultProps, Props, State> {
 
 	static propTypes = {
 		minimumValue: PropTypes.number.isRequired,
@@ -86,25 +93,19 @@ export default class SliderComponent extends View {
 		value: typeof this.props.value === 'number' ? this.props.value : this.props.minimumValue,
 	};
 
-	onValueChange = value => {
+	onValueChange = (value: number) => {
 		this.setState({ value });
 		this.props.onValueChange(value);
 	};
 
 	render() {
-		const {
-			showValue,
-			valueStyle,
-			...sliderProps,
-		} = this.props;
+		const { showValue, valueStyle, ...sliderProps } = this.props;
 
-		const { value } = this.state;
-
-		const mainStyles = this._getMainStyles();
+		const { container } = this._getMainStyles();
 
 		return (
-			<View style={mainStyles.container} onLayout={this._setTrackWidth}>
-				{this._renderValue(showValue, value)}
+			<View style={container} onLayout={this._setTrackWidth}>
+				{this._renderValue(showValue, this.state.value)}
 				<Slider
 					{...sliderProps}
 					onValueChange={this.onValueChange}
@@ -113,9 +114,9 @@ export default class SliderComponent extends View {
 		);
 	}
 
-	_renderValue = (showValue: boolean, value: number): Object => {
+	_renderValue = (showValue: boolean, value: number): Object | null => {
 		if (!showValue) {
-			return;
+			return null;
 		}
 
 		const defaultValueStyle = this._getValueStyle();
@@ -160,7 +161,7 @@ export default class SliderComponent extends View {
 
 		const maxSymbols = Math.max(
 			minimumValue.toString().length,
-			maximumValue.toString().length
+			maximumValue.toString().length,
 		);
 
 		return maxSymbols * fontSize;
@@ -180,13 +181,12 @@ export default class SliderComponent extends View {
 		return ratio * (this.state.containerSize.width - this.props.thumbStyle.width);
 	};
 
-	_setTrackWidth = (e: Object): void => {
-		const { trackStyle } = this.props;
-		if (!trackStyle.width) {
-			const { containerSize } = this.state;
+	_setTrackWidth = (e: Object) => {
+		if (!this.props.trackStyle.width) {
+			const { containerSize: stateContainerSize } = this.state;
 			const { width, height } = e.nativeEvent.layout;
 
-			if (width !== containerSize.width || height !== containerSize.height) {
+			if (width !== stateContainerSize.width || height !== stateContainerSize.height) {
 				const containerSize = {
 					width,
 					height,
