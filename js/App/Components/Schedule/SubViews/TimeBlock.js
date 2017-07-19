@@ -56,7 +56,6 @@ export default class TimeBlock extends View<null, Props, null> {
 			backgroundColor,
 			iconColor,
 			iconSize,
-			textColor,
 			description,
 		} = this._getStyle();
 
@@ -74,7 +73,7 @@ export default class TimeBlock extends View<null, Props, null> {
 					bgColor={backgroundColor}
 					style={icon}
 				/>
-				<Description color={textColor} style={description}>
+				<Description style={description}>
 					{capitalize(type)}
 				</Description>
 			</Row>
@@ -122,12 +121,12 @@ export default class TimeBlock extends View<null, Props, null> {
 				width: null,
 			},
 			description: {
+				color: textColor,
 				fontSize: deviceWidth * 0.037333333,
 			},
 			backgroundColor,
 			iconColor,
 			iconSize: deviceWidth * 0.133333333,
-			textColor,
 		};
 	};
 }

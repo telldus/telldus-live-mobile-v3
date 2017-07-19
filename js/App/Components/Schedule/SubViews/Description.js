@@ -26,34 +26,24 @@ import { Text, View } from 'react-native';
 import Theme from 'Theme';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
 
-type DefaultProps = {
-	color: string,
-};
-
 type Props = {
 	children: string,
 	style?: Object,
-	color?: string,
 };
 
-export default class Description extends View<DefaultProps, Props, null> {
+export default class Description extends View<null, Props, null> {
 
 	static propTypes = {
 		children: PropTypes.string.isRequired,
 		style: Text.propTypes.style,
-		color: PropTypes.string,
-	};
-
-	static defaultProps = {
-		color: '#707070',
 	};
 
 	render() {
-		const { children, style, color } = this.props;
+		const { children, style } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[defaultStyle, style, { color }]}>
+			<Text style={[defaultStyle, style]}>
 				{children}
 			</Text>
 		);
@@ -61,6 +51,7 @@ export default class Description extends View<DefaultProps, Props, null> {
 
 	_getDefaultStyle = (): Object => {
 		return {
+			color: '#707070',
 			fontFamily: Theme.Core.fonts.robotoRegular,
 			fontSize: getDeviceWidth() * 0.032,
 		};
