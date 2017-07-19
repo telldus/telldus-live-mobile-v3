@@ -372,7 +372,12 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 		}
 		try {
 			// $FlowFixMe
-			websocket.send(message);
+			const {
+				gateways: { byId: { [gatewayId]: gateway } },
+			} = getState();
+			if (gateway.websocketOnline) {
+				websocket.send(message);
+			}
 		} catch (e) {
 			reportException(e);
 		}
