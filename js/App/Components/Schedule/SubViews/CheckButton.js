@@ -32,7 +32,7 @@ type Props = {
 	disabled: boolean,
 };
 
-export default class DayButton extends View<null, Props, null> {
+export default class CheckButton extends View<null, Props, null> {
 
 	static propTypes = {
 		children: PropTypes.string.isRequired,

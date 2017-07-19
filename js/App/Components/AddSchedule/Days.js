@@ -27,7 +27,7 @@ import { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
 import Weekday from './SubViews/Weekday';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
-import DayButton from './SubViews/DayButton';
+import CheckButton from './SubViews/CheckButton';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -125,12 +125,12 @@ export default class Days extends View<null, Props, State> {
 					{this._renderWeekdays()}
 				</Row>
 				<View style={[row, buttonsContainer]}>
-					<DayButton onPress={this.checkAll} disabled={!shouldCheckAll}>
+					<CheckButton onPress={this.checkAll} disabled={!shouldCheckAll}>
 						Check all
-					</DayButton>
-					<DayButton onPress={this.uncheckAll} disabled={!shouldUncheckAll}>
+					</CheckButton>
+					<CheckButton onPress={this.uncheckAll} disabled={!shouldUncheckAll}>
 						Uncheck all
-					</DayButton>
+					</CheckButton>
 				</View>
 			</View>
 		);
