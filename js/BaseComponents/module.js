@@ -63,6 +63,7 @@ import TouchableButton from './TouchableButton';
 import Modal from './Modal';
 import FloatingButton from './FloatingButton';
 import Slider from './Slider';
+import CheckboxSolid from './CheckboxSolid';
 
 import {
 	AppState,
@@ -117,6 +118,7 @@ module.exports = {
 	Modal: Modal,
 	FloatingButton,
 	Slider,
+	CheckboxSolid,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
