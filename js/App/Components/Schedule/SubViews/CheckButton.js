@@ -57,11 +57,11 @@ export default class CheckButton extends View<null, Props, null> {
 
 	_getStyle = (): Object => {
 		const { disabled } = this.props;
-		const { shadow: themeShadow, fonts, brandSecondary } = Theme.Core;
+		const { shadow: themeShadow, fonts, brandSecondary, inactiveGray } = Theme.Core;
 		const deviceWidth = getDeviceWidth();
 
 		const borderRadius = 100;
-		const backgroundColor = disabled ? '#bdbdbd' : brandSecondary;
+		const backgroundColor = disabled ? inactiveGray : brandSecondary;
 		const shadow = disabled ? {} : Object.assign({}, themeShadow, {
 			shadowOpacity: 0.5,
 			shadowOffset: {

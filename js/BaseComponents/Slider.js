@@ -74,7 +74,7 @@ export default class SliderComponent extends View<DefaultProps, Props, State> {
 
 	static defaultProps = {
 		minimumTrackTintColor: Theme.Core.brandSecondary,
-		maximumTrackTintColor: '#bdbdbd',
+		maximumTrackTintColor: Theme.Core.inactiveGray,
 		trackStyle: {},
 		thumbStyle: {
 			height: 20,

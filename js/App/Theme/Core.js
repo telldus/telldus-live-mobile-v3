@@ -45,6 +45,7 @@ export default {
 	inverseTextColor: '#ffffff',
 	fadedInverseTextColor: '#C3D1E6',
 	textColor: '#000000',
+	inactiveGray: '#bdbdbd',
 
 	subtitleColor: '#8e8e93',
 

@@ -59,10 +59,10 @@ export default class Weekday extends View<null, Props, null> {
 
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
-		const { brandSecondary, fonts } = Theme.Core;
+		const { brandSecondary, inactiveGray, fonts } = Theme.Core;
 
 		const size = deviceWidth * 0.101333333;
-		const backgroundColor = this.props.isSelected ? brandSecondary : '#bdbdbd';
+		const backgroundColor = this.props.isSelected ? brandSecondary : inactiveGray;
 
 		return {
 			container: {
