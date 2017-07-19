@@ -84,10 +84,11 @@ export default class Row extends View<DefaultProps, Props, null> {
 		const deviceWidth = getDeviceWidth();
 
 		const borderRadius = 2;
+		const backgroundColor = '#fff';
 
 		return {
 			container: {
-				backgroundColor: 'transparent',
+				backgroundColor,
 				flexDirection: 'row',
 				marginBottom: deviceWidth * 0.006666667,
 				height: deviceWidth * 0.209333333,
@@ -95,7 +96,7 @@ export default class Row extends View<DefaultProps, Props, null> {
 				borderRadius,
 			},
 			wrapper: {
-				backgroundColor: '#fff',
+				backgroundColor,
 				flex: 1,
 				flexDirection: this.props.layout,
 				overflow: 'hidden',
