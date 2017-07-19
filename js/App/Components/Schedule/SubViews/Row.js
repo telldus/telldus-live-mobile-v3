@@ -35,7 +35,7 @@ type Props = {
 	onPress?: (row: Object) => void,
 	layout?: 'row' | 'column',
 	style?: Object,
-	wrapperStyle?: Object,
+	containerStyle?: Object,
 };
 
 export default class Row extends View<DefaultProps, Props, null> {
@@ -46,7 +46,7 @@ export default class Row extends View<DefaultProps, Props, null> {
 		onPress: PropTypes.func,
 		layout: PropTypes.oneOf(['row', 'column']),
 		style: View.propTypes.style,
-		wrapperStyle: View.propTypes.style,
+		containerStyle: View.propTypes.style,
 	};
 
 	static defaultProps = {
@@ -62,17 +62,17 @@ export default class Row extends View<DefaultProps, Props, null> {
 	};
 
 	render() {
-		const { children, onPress, style, wrapperStyle } = this.props;
+		const { children, onPress, style, containerStyle } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
 			<TouchableOpacity
 				onPress={this.returnRow}
-				style={[defaultStyle.container, style]}
+				style={[defaultStyle.container, containerStyle]}
 				outlineProvider="bounds"
 				disabled={!onPress}
 			>
-				<View style={[defaultStyle.wrapper, wrapperStyle]}>
+				<View style={[defaultStyle.wrapper, style]}>
 					{children}
 				</View>
 			</TouchableOpacity>
@@ -82,9 +82,11 @@ export default class Row extends View<DefaultProps, Props, null> {
 	_getDefaultStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
+		const borderRadius = 2;
+
 		return {
 			container: {
-				backgroundColor: '#fff',
+				backgroundColor: 'transparent',
 				flexDirection: 'row',
 				marginBottom: deviceWidth * 0.006666667,
 				height: deviceWidth * 0.209333333,
@@ -96,12 +98,14 @@ export default class Row extends View<DefaultProps, Props, null> {
 					width: 0,
 					height: 1,
 				},
+				borderRadius,
 			},
 			wrapper: {
+				backgroundColor: '#fff',
 				flex: 1,
 				flexDirection: this.props.layout,
 				overflow: 'hidden',
-				borderRadius: 2,
+				borderRadius,
 			},
 		};
 	};

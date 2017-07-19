@@ -86,7 +86,7 @@ export default class Days extends View<null, Props, State> {
 
 		return (
 			<View style={mainContainer}>
-				<Row layout="row" style={{ height: null }} wrapperStyle={weekdaysContainer}>
+				<Row layout="row" style={weekdaysContainer} containerStyle={{ height: null }}>
 					{this._renderWeekdays()}
 				</Row>
 			</View>

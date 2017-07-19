@@ -46,7 +46,42 @@ export default class TimeBlock extends View<null, Props, null> {
 		isSelected: PropTypes.bool.isRequired,
 	};
 
-	getStyles = (): Object => {
+	render() {
+		const { type, onPress, index } = this.props;
+
+		const {
+			container,
+			row,
+			icon,
+			backgroundColor,
+			iconColor,
+			iconSize,
+			textColor,
+			description,
+		} = this._getStyle();
+
+		return (
+			<Row
+				onPress={onPress}
+				row={{ index }}
+				style={row}
+				containerStyle={container}
+			>
+				<BlockIcon
+					icon={type}
+					size={iconSize}
+					color={iconColor}
+					bgColor={backgroundColor}
+					style={icon}
+				/>
+				<Description color={textColor} style={description}>
+					{capitalize(type)}
+				</Description>
+			</Row>
+		);
+	}
+
+	_getStyle = (): Object => {
 		const { isSelected, type } = this.props;
 		const { brandSecondary } = Theme.Core;
 
@@ -72,12 +107,12 @@ export default class TimeBlock extends View<null, Props, null> {
 		return {
 			container: {
 				flex: 0,
-				backgroundColor,
 				marginBottom: 0,
 				height: size,
 				width: size,
 			},
-			wrapper: {
+			row: {
+				backgroundColor,
 				alignItems: 'center',
 				justifyContent: 'center',
 				height: null,
@@ -95,39 +130,4 @@ export default class TimeBlock extends View<null, Props, null> {
 			textColor,
 		};
 	};
-
-	render() {
-		const { type, onPress, index } = this.props;
-
-		const {
-			container,
-			wrapper,
-			icon,
-			backgroundColor,
-			iconColor,
-			iconSize,
-			textColor,
-			description,
-		} = this.getStyles();
-
-		return (
-			<Row
-				onPress={onPress}
-				row={{ index }}
-				style={container}
-				wrapperStyle={wrapper}
-			>
-				<BlockIcon
-					icon={type}
-					size={iconSize}
-					color={iconColor}
-					bgColor={backgroundColor}
-					style={icon}
-				/>
-				<Description color={textColor} style={description}>
-					{capitalize(type)}
-				</Description>
-			</Row>
-		);
-	}
 }
