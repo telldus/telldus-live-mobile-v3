@@ -27,6 +27,7 @@ import { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
 import Weekday from './SubViews/Weekday';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
+import DayButton from './SubViews/DayButton';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -35,7 +36,9 @@ interface Props extends ScheduleProps {
 }
 
 type State = {
-	selectedWeekdays: number[],
+	selectedWeekdays: string[],
+	shouldCheckAll: boolean,
+	shouldUncheckAll: boolean,
 };
 
 export default class Days extends View<null, Props, State> {
@@ -49,6 +52,8 @@ export default class Days extends View<null, Props, State> {
 
 	state = {
 		selectedWeekdays: [],
+		shouldCheckAll: true,
+		shouldUncheckAll: false,
 	};
 
 	constructor(props: Props) {
@@ -68,39 +73,69 @@ export default class Days extends View<null, Props, State> {
 
 	toggleWeekdayState = (day: string) => {
 		const { selectedWeekdays } = this.state;
-		const index = DAYS.indexOf(day);
 
-		let newSelectedWeekdays;
+		let newSelectedWeekdays: string[];
 
-		if (this._isSelected(index)) {
-			newSelectedWeekdays = selectedWeekdays.filter((i: number): boolean => i !== index);
+		if (this._isSelected(day)) {
+			newSelectedWeekdays = selectedWeekdays.filter((d: string): boolean => d !== day);
 		} else {
-			newSelectedWeekdays = selectedWeekdays.concat(index);
+			newSelectedWeekdays = selectedWeekdays.concat(day);
 		}
 
-		this.setState({ selectedWeekdays: newSelectedWeekdays });
+		this.setState({
+			selectedWeekdays: newSelectedWeekdays,
+			shouldUncheckAll: !!newSelectedWeekdays.length,
+			shouldCheckAll: newSelectedWeekdays.length !== DAYS.length,
+		});
+	};
+
+	checkAll = () => {
+		if (this.state.shouldCheckAll) {
+			this.setState({
+				selectedWeekdays: DAYS,
+				shouldCheckAll: false,
+				shouldUncheckAll: true,
+			});
+		}
+	};
+
+	uncheckAll = () => {
+		if (this.state.shouldUncheckAll) {
+			this.setState({
+				selectedWeekdays: [],
+				shouldUncheckAll: false,
+				shouldCheckAll: true,
+			});
+		}
 	};
 
 	render() {
-		const { mainContainer, weekdaysContainer } = this._getStyle();
+		const { shouldCheckAll, shouldUncheckAll } = this.state;
+		const { mainContainer, weekdaysContainer, buttonsContainer, row } = this._getStyle();
 
 		return (
 			<View style={mainContainer}>
-				<Row layout="row" style={weekdaysContainer} containerStyle={{ height: null }}>
+				<Row layout="row" style={weekdaysContainer} containerStyle={row}>
 					{this._renderWeekdays()}
 				</Row>
+				<View style={buttonsContainer}>
+					<DayButton onPress={this.checkAll} disabled={!shouldCheckAll}>
+						Check all
+					</DayButton>
+					<DayButton onPress={this.uncheckAll} disabled={!shouldUncheckAll}>
+						Uncheck all
+					</DayButton>
+				</View>
 			</View>
 		);
 	}
 
 	_renderWeekdays = (): Object[] => {
-		return DAYS.map((day: string, i: number): Object => {
-			const isSelected = this._isSelected(i);
-
+		return DAYS.map((day: string): Object => {
 			return (
 				<Weekday
 					day={day}
-					isSelected={isSelected}
+					isSelected={this._isSelected(day)}
 					onPress={this.toggleWeekdayState}
 					key={day}
 				/>
@@ -108,12 +143,14 @@ export default class Days extends View<null, Props, State> {
 		});
 	};
 
-	_isSelected = (index: number): boolean => {
-		return this.state.selectedWeekdays.includes(index);
+	_isSelected = (day: string): boolean => {
+		return this.state.selectedWeekdays.includes(day);
 	};
 
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
+
+		const paddingHorizontal = deviceWidth * 0.056;
 
 		return {
 			mainContainer: {
@@ -122,8 +159,17 @@ export default class Days extends View<null, Props, State> {
 			},
 			weekdaysContainer: {
 				justifyContent: 'space-between',
-				paddingHorizontal: deviceWidth * 0.056,
+				paddingHorizontal,
 				paddingVertical: deviceWidth * 0.102666667,
+			},
+			buttonsContainer: {
+				flexDirection: 'row',
+				justifyContent: 'space-between',
+				paddingHorizontal,
+			},
+			row: {
+				height: null,
+				marginBottom: deviceWidth * 0.028,
 			},
 		};
 	};
