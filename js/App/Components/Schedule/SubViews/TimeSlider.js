@@ -22,10 +22,9 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions } from 'react-native';
 import { Slider, Text, View } from 'BaseComponents';
-import Row from './Row';
 import Theme from 'Theme';
+import getDeviceWidth from '../../../Lib/getDeviceWidth';
 
 type Props = {
 	description: string,
@@ -71,54 +70,6 @@ export default class TimeSlider extends View<null, Props, State> {
 		};
 	}
 
-	getStyles = (): Object => {
-		this.deviceWidth = Dimensions.get('window').width;
-		const padding = this.deviceWidth * 0.026666667;
-		const thumbSize = this.deviceWidth * 0.085333333;
-
-		return {
-			container: {
-				paddingHorizontal: padding,
-				paddingTop: padding,
-				paddingBottom: padding * 1.65,
-			},
-			row: {
-				flexDirection: 'row',
-				alignItems: 'center',
-			},
-			icon: {
-				fontFamily: Theme.Core.fonts.telldusIconFont,
-				fontSize: this.deviceWidth * 0.038666667,
-				marginRight: this.deviceWidth * 0.022666667,
-			},
-			description: {
-				color: '#555555',
-				fontSize: this.deviceWidth * 0.032,
-				fontFamily: Theme.Core.fonts.robotoRegular,
-			},
-			slider: {
-				track: {
-					borderRadius: 13,
-					height: this.deviceWidth * 0.034666667,
-					width: this.deviceWidth * 0.709333333,
-				},
-				thumb: {
-					height: thumbSize,
-					width: thumbSize,
-					backgroundColor: '#F6F6F6',
-					borderRadius: thumbSize / 2,
-					elevation: 2,
-					shadowRadius: 2,
-					shadowOpacity: 0.4,
-					shadowOffset: {
-						width: 0,
-						height: 1,
-					},
-				},
-			},
-		};
-	};
-
 	onValueChange = (value: number) => {
 		this.setState({ value });
 		this.props.onValueChange(value);
@@ -126,22 +77,28 @@ export default class TimeSlider extends View<null, Props, State> {
 
 	render() {
 		const { description, icon } = this.props;
-		const styles = this.getStyles();
-		const { row, slider } = styles;
+		const {
+			container,
+			row,
+			slider,
+			icon: iconStyle,
+			description: descriptionStyle,
+			marginBottom,
+		} = this._getStyle();
 
 		return (
-			<View style={styles.container}>
+			<View style={container}>
 				<View
 					style={[
 						row,
 						{
 							justifyContent: 'flex-start',
-							marginBottom: this.deviceWidth * 0.034666667,
+							marginBottom,
 						},
 					]}
 				>
-					<Text style={styles.icon}>{icon}</Text>
-					<Text style={styles.description}>{description}</Text>
+					<Text style={iconStyle}>{icon}</Text>
+					<Text style={descriptionStyle}>{description}</Text>
 				</View>
 				<View style={[row, { justifyContent: 'center' }]}>
 					<Slider
@@ -154,4 +111,53 @@ export default class TimeSlider extends View<null, Props, State> {
 			</View>
 		);
 	}
+
+	_getStyle = (): Object => {
+		const { telldusIconFont, robotoRegular } = Theme.Core.fonts;
+		const deviceWidth = getDeviceWidth();
+
+		const padding = deviceWidth * 0.026666667;
+		const thumbSize = deviceWidth * 0.085333333;
+		const marginBottom = deviceWidth * 0.034666667;
+
+		const shadow = Object.assign({}, Theme.Core.shadow, { shadowOpacity: 0.4 });
+
+		return {
+			container: {
+				paddingHorizontal: padding,
+				paddingTop: padding,
+				paddingBottom: padding * 1.65,
+			},
+			row: {
+				flexDirection: 'row',
+				alignItems: 'center',
+			},
+			icon: {
+				fontFamily: telldusIconFont,
+				fontSize: deviceWidth * 0.038666667,
+				marginRight: deviceWidth * 0.022666667,
+			},
+			description: {
+				color: '#555555',
+				fontSize: deviceWidth * 0.032,
+				fontFamily: robotoRegular,
+			},
+			slider: {
+				track: {
+					borderRadius: 13,
+					height: deviceWidth * 0.034666667,
+					width: deviceWidth * 0.709333333,
+				},
+				thumb: {
+					height: thumbSize,
+					width: thumbSize,
+					backgroundColor: '#f6f6f6',
+					borderRadius: thumbSize / 2,
+					...shadow,
+				},
+			},
+			marginBottom,
+		};
+	};
+
 }
