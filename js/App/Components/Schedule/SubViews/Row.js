@@ -54,11 +54,13 @@ export default class Row extends View<DefaultProps, Props, null> {
 		layout: 'column',
 	};
 
-	returnRow = () => {
+	onPress = () => {
 		const { row, onPress } = this.props;
 
 		if (row) {
 			onPress(row);
+		} else {
+			onPress();
 		}
 	};
 
@@ -68,7 +70,7 @@ export default class Row extends View<DefaultProps, Props, null> {
 
 		return (
 			<TouchableOpacity
-				onPress={this.returnRow}
+				onPress={this.onPress}
 				style={[defaultStyle.container, containerStyle]}
 				outlineProvider="bounds"
 				disabled={!onPress}
