@@ -83,7 +83,7 @@ export default class Row extends View<DefaultProps, Props, null> {
 	_getDefaultStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
-		const borderRadius = 2;
+		const borderRadius = 3;
 		const backgroundColor = '#fff';
 
 		return {
