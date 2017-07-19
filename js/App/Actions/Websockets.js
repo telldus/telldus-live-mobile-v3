@@ -371,11 +371,11 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 			console.log(message);
 		}
 		try {
-			// $FlowFixMe
 			const {
 				gateways: { byId: { [gatewayId]: gateway } },
 			} = getState();
 			if (gateway.websocketOnline) {
+				// $FlowFixMe
 				websocket.send(message);
 			}
 		} catch (e) {
