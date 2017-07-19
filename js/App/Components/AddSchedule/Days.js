@@ -36,7 +36,7 @@ interface Props extends ScheduleProps {
 }
 
 type State = {
-	selectedWeekdays: string[],
+	selectedDays: string[],
 	shouldCheckAll: boolean,
 	shouldUncheckAll: boolean,
 };
@@ -51,7 +51,7 @@ export default class Days extends View<null, Props, State> {
 	};
 
 	state = {
-		selectedWeekdays: [],
+		selectedDays: [],
 		shouldCheckAll: true,
 		shouldUncheckAll: false,
 	};
@@ -72,18 +72,18 @@ export default class Days extends View<null, Props, State> {
 	}
 
 	toggleWeekdayState = (day: string) => {
-		const { selectedWeekdays } = this.state;
+		const { selectedDays } = this.state;
 
 		let newSelectedWeekdays: string[];
 
 		if (this._isSelected(day)) {
-			newSelectedWeekdays = selectedWeekdays.filter((d: string): boolean => d !== day);
+			newSelectedWeekdays = selectedDays.filter((d: string): boolean => d !== day);
 		} else {
-			newSelectedWeekdays = selectedWeekdays.concat(day);
+			newSelectedWeekdays = selectedDays.concat(day);
 		}
 
 		this.setState({
-			selectedWeekdays: newSelectedWeekdays,
+			selectedDays: newSelectedWeekdays,
 			shouldUncheckAll: !!newSelectedWeekdays.length,
 			shouldCheckAll: newSelectedWeekdays.length !== DAYS.length,
 		});
@@ -92,7 +92,7 @@ export default class Days extends View<null, Props, State> {
 	checkAll = () => {
 		if (this.state.shouldCheckAll) {
 			this.setState({
-				selectedWeekdays: DAYS,
+				selectedDays: DAYS,
 				shouldCheckAll: false,
 				shouldUncheckAll: true,
 			});
@@ -102,7 +102,7 @@ export default class Days extends View<null, Props, State> {
 	uncheckAll = () => {
 		if (this.state.shouldUncheckAll) {
 			this.setState({
-				selectedWeekdays: [],
+				selectedDays: [],
 				shouldUncheckAll: false,
 				shouldCheckAll: true,
 			});
@@ -150,7 +150,7 @@ export default class Days extends View<null, Props, State> {
 	};
 
 	_isSelected = (day: string): boolean => {
-		return this.state.selectedWeekdays.includes(day);
+		return this.state.selectedDays.includes(day);
 	};
 
 	_getStyle = (): Object => {
