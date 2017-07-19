@@ -25,6 +25,7 @@ import React, { PropTypes } from 'react';
 import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback } from 'react-native';
 import { FloatingButton, Text, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
+import Row from './SubViews/Row';
 import TimeBlock from './SubViews/TimeBlock';
 import TimeSlider from './SubViews/TimeSlider';
 import Theme from 'Theme';
@@ -139,7 +140,7 @@ export default class Time extends View<null, Props, State> {
 
 	render() {
 		const { selectedTypeIndex, randomInterval } = this.state;
-		const { container, marginBottom, type } = this._getStyle();
+		const { container, row, marginBottom, type } = this._getStyle();
 
 		const shouldRender = selectedTypeIndex !== null;
 
@@ -150,14 +151,16 @@ export default class Time extends View<null, Props, State> {
 				</View>
 				{this._renderTimeRow()}
 				{shouldRender && (
-					<TimeSlider
-						description="Set random intervals between 1 to 1446 minutes"
-						icon="random"
-						minimumValue={0}
-						maximumValue={1446}
-						value={randomInterval}
-						onValueChange={this.setRandomIntervalValue}
-					/>
+					<Row containerStyle={row}>
+						<TimeSlider
+							description="Set random intervals between 1 to 1446 minutes"
+							icon="random"
+							minimumValue={0}
+							maximumValue={1446}
+							value={randomInterval}
+							onValueChange={this.setRandomIntervalValue}
+						/>
+					</Row>
 				)}
 				{shouldRender && (
 					<FloatingButton
@@ -180,7 +183,7 @@ export default class Time extends View<null, Props, State> {
 
 		const { date } = this.state;
 		const {
-			marginBottom,
+			row,
 			iosTimeContainer,
 			androidTimeContainer,
 			androidTimeValueContainer,
@@ -249,9 +252,9 @@ export default class Time extends View<null, Props, State> {
 		);
 
 		return (
-			<View style={[Theme.Styles.scheduleRow, { marginBottom }]}>
+			<Row containerStyle={row}>
 				{selectedTypeIndex === 2 ? timePicker : timeSlider}
-			</View>
+			</Row>
 		);
 	};
 
@@ -307,13 +310,18 @@ export default class Time extends View<null, Props, State> {
 		const androidTimeWidth = deviceWidth * 0.213333333;
 		const androidTimeHeight = deviceWidth * 0.177333333;
 		const androidTimeColor = Theme.Core.brandPrimary;
+		const marginBottom = deviceWidth * 0.025333333;
 
 		return {
 			container: {
 				flex: 1,
 				justifyContent: 'flex-start',
 			},
-			marginBottom: deviceWidth * 0.025333333,
+			row: {
+				marginBottom,
+				height: null,
+			},
+			marginBottom,
 			type: {
 				container: {
 					flexDirection: 'row',

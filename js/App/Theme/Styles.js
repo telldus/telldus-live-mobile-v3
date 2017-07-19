@@ -154,6 +154,7 @@ export default StyleSheet.create({
 		flex: 4,
 		color: '#1a355c',
 		fontSize: 16,
+	},
 	scheduleRow: {
 		backgroundColor: '#fff',
 		borderRadius: 2,

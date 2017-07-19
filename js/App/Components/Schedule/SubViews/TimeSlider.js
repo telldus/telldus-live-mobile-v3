@@ -24,6 +24,7 @@
 import React, { PropTypes } from 'react';
 import { Dimensions } from 'react-native';
 import { Slider, Text, View } from 'BaseComponents';
+import Row from './Row';
 import Theme from 'Theme';
 
 type Props = {
@@ -129,7 +130,7 @@ export default class TimeSlider extends View<null, Props, State> {
 		const { row, slider } = styles;
 
 		return (
-			<View style={[Theme.Styles.scheduleRow, styles.container]}>
+			<View style={styles.container}>
 				<View
 					style={[
 						row,

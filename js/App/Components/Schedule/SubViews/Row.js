@@ -24,6 +24,7 @@
 import React, { PropTypes } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import Theme from 'Theme';
 
 type DefaultProps = {
 	layout: 'column',
@@ -90,14 +91,7 @@ export default class Row extends View<DefaultProps, Props, null> {
 				flexDirection: 'row',
 				marginBottom: deviceWidth * 0.006666667,
 				height: deviceWidth * 0.209333333,
-				elevation: 2,
-				shadowColor: '#000',
-				shadowRadius: 2,
-				shadowOpacity: 0.23,
-				shadowOffset: {
-					width: 0,
-					height: 1,
-				},
+				...Theme.Core.shadow,
 				borderRadius,
 			},
 			wrapper: {
