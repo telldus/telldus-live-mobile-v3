@@ -22,9 +22,9 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, TouchableOpacity, Image, Platform } from 'react-native';
-import View from './View';
+import { Image, Platform, TouchableOpacity, View } from 'react-native';
 import Theme from 'Theme';
+import getDeviceWidth from '../App/Lib/getDeviceWidth';
 
 type Props = {
 	onPress: Function,
@@ -34,9 +34,7 @@ type Props = {
 	paddingRight: number,
 };
 
-class FloatingButton extends View {
-
-	props: Props;
+export default class FloatingButton extends View<null, Props, null> {
 
 	static propTypes = {
 		onPress: PropTypes.func.isRequired,
@@ -46,20 +44,31 @@ class FloatingButton extends View {
 		paddingRight: PropTypes.number,
 	};
 
-	constructor(props) {
-		super(props);
+	static defaultProps = {
+		tabs: false,
+		iconSize: getDeviceWidth() * 0.056,
+		paddingRight: 0,
+	};
 
-		this.buttonColor = Theme.Core.brandSecondary;
+	render() {
+		const { container, button, icon } = this._getStyle();
+
+		const { onPress, imageSource } = this.props;
+
+		return (
+			<TouchableOpacity style={container} onPress={onPress}>
+				<View style={button}>
+					<Image source={imageSource} style={icon} resizeMode="contain"/>
+				</View>
+			</TouchableOpacity>
+		);
 	}
 
-	getStyles = () => {
-		const deviceWidth = Dimensions.get('window').width;
+	_getStyle = (): Object => {
+		const { shadow: themeShadow, brandSecondary } = Theme.Core;
+		const deviceWidth = getDeviceWidth();
 
-		const {
-			tabs = false,
-			iconSize = deviceWidth * 0.056,
-			paddingRight = 0,
-		} = this.props;
+		const { tabs, iconSize, paddingRight } = this.props;
 
 		const isIOSTabs = Platform.OS === 'ios' && tabs;
 
@@ -67,23 +76,24 @@ class FloatingButton extends View {
 		const offsetBottom = deviceWidth * 0.046666667 + (isIOSTabs ? 50 : 0);
 		const offsetRight = deviceWidth * 0.034666667 - paddingRight;
 
+		const shadow = Object.assign({}, themeShadow, {
+			shadowOpacity: 0.5,
+			shadowOffset: {
+				...themeShadow.shadowOffset,
+				height: 2,
+			},
+		});
+
 		return {
 			container: {
-				backgroundColor: this.buttonColor,
+				backgroundColor: brandSecondary,
 				borderRadius: buttonSize / 2,
 				position: 'absolute',
 				height: buttonSize,
 				width: buttonSize,
 				bottom: offsetBottom,
 				right: offsetRight,
-				elevation: 2,
-				shadowColor: '#000',
-				shadowOpacity: 0.5,
-				shadowRadius: 2,
-				shadowOffset: {
-					height: 2,
-					width: 0,
-				},
+				...shadow,
 			},
 			button: {
 				flex: 1,
@@ -97,19 +107,4 @@ class FloatingButton extends View {
 		};
 	};
 
-	render() {
-		const { container, button, icon } = this.getStyles();
-
-		const { onPress, imageSource } = this.props;
-
-		return (
-			<TouchableOpacity style={container} onPress={onPress}>
-				<View style={button}>
-					<Image source={imageSource} style={icon} resizeMode="contain"/>
-				</View>
-			</TouchableOpacity>
-		);
-	}
 }
-
-module.exports = FloatingButton;
