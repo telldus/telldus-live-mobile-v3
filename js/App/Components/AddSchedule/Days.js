@@ -111,14 +111,20 @@ export default class Days extends View<null, Props, State> {
 
 	render() {
 		const { shouldCheckAll, shouldUncheckAll } = this.state;
-		const { mainContainer, weekdaysContainer, buttonsContainer, row } = this._getStyle();
+		const {
+			mainContainer,
+			weekdaysContainer,
+			buttonsContainer,
+			row,
+			rowContainer,
+		} = this._getStyle();
 
 		return (
 			<View style={mainContainer}>
-				<Row layout="row" style={weekdaysContainer} containerStyle={row}>
+				<Row layout="row" style={[row, weekdaysContainer]} containerStyle={rowContainer}>
 					{this._renderWeekdays()}
 				</Row>
-				<View style={buttonsContainer}>
+				<View style={[row, buttonsContainer]}>
 					<DayButton onPress={this.checkAll} disabled={!shouldCheckAll}>
 						Check all
 					</DayButton>
@@ -150,8 +156,6 @@ export default class Days extends View<null, Props, State> {
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
-		const paddingHorizontal = deviceWidth * 0.056;
-
 		return {
 			mainContainer: {
 				flex: 1,
@@ -159,15 +163,18 @@ export default class Days extends View<null, Props, State> {
 			},
 			weekdaysContainer: {
 				justifyContent: 'space-between',
-				paddingHorizontal,
 				paddingVertical: deviceWidth * 0.102666667,
 			},
 			buttonsContainer: {
 				flexDirection: 'row',
 				justifyContent: 'space-between',
-				paddingHorizontal,
+				paddingVertical: 0,
 			},
 			row: {
+				paddingHorizontal: deviceWidth * 0.056,
+				paddingVertical: deviceWidth * 0.037333333,
+			},
+			rowContainer: {
 				height: null,
 				marginBottom: deviceWidth * 0.028,
 			},
