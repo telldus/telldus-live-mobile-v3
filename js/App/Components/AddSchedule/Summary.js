@@ -26,9 +26,12 @@ import { NavigationActions } from 'react-navigation';
 import { FloatingButton, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
+import DeviceRow from './SubViews/DeviceRow';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
+	schedule: Object,
+	devices: Object,
 }
 
 export default class Summary extends View<null, Props, null> {
@@ -38,6 +41,8 @@ export default class Summary extends View<null, Props, null> {
 		actions: PropTypes.object,
 		onDidMount: PropTypes.func,
 		paddingRight: PropTypes.number,
+		schedule: PropTypes.object,
+		devices: PropTypes.object,
 	};
 
 	constructor(props: Props) {
@@ -70,11 +75,13 @@ export default class Summary extends View<null, Props, null> {
 	};
 
 	render() {
-		const { paddingRight } = this.props;
-		const { iconSize } = this._getStyle();
+		const { schedule, paddingRight } = this.props;
+		const { row, iconSize } = this._getStyle();
+		const device = this._getDeviceById(schedule.deviceId);
 
 		return (
 			<View>
+				<DeviceRow row={device} containerStyle={row}/>
 				<FloatingButton
 					onPress={this.saveSchedule}
 					imageSource={require('./img/check.png')}
@@ -85,10 +92,18 @@ export default class Summary extends View<null, Props, null> {
 		);
 	}
 
+	_getDeviceById = (deviceId: number): Object => {
+		// TODO: use device description
+		return Object.assign({}, this.props.devices.byId[deviceId], { description: 'Fibaro Plug 2' });
+	};
+
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
 		return {
+			row: {
+				marginBottom: deviceWidth * 0.025333333,
+			},
 			iconSize: deviceWidth * 0.050666667,
 		};
 	};

@@ -100,7 +100,7 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	render() {
-		const { children, navigation, actions, devices } = this.props;
+		const { children, navigation, actions, devices, schedule } = this.props;
 		const { h1, h2, infoButton } = this.state;
 		const style = this._getStyle();
 
@@ -118,6 +118,7 @@ class ScheduleScreen extends View<null, Props, State> {
 							reset: this._isDeviceTab() ? this.goBack : null,
 							paddingRight: style.paddingHorizontal,
 							devices,
+							schedule,
 						},
 					)}
 				</View>
