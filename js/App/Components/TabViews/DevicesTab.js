@@ -152,7 +152,7 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device) {
-		this.props.stackNavigator.navigate('DeviceDetails', { device: device, devices: this.props.devices });
+		this.props.stackNavigator.navigate('DeviceDetails', { device: device });
 	}
 
 	onCloseSelected() {

@@ -127,8 +127,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state, ownProps) {
 	return {
-		device: ownProps.screenProps.device,
-		devices: ownProps.screenProps.devices,
+		device: state.devices.byId[ownProps.screenProps.device.id],
+		devices: state.devices,
 		gateway: state.gateways.byId[ownProps.screenProps.device.clientId],
 	};
 }

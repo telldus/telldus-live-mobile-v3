@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Text, View, Image } from 'BaseComponents';
@@ -42,7 +42,6 @@ import Theme from 'Theme';
 type Props = {
 	dispatch: Function,
 	device: Object,
-	devices: Object,
 	stackNavigator: Object,
 };
 
@@ -63,7 +62,7 @@ class DeviceDetailsTabsView extends View {
 	}
 
 	render() {
-		let screenProps = { device: this.props.device, devices: this.props.devices };
+		let screenProps = { device: this.props.device };
 		return (
 			<View style={styles.container}>
 					<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('./../../../TabViews/img/telldus-geometric-header-bg.png')}>
@@ -196,8 +195,6 @@ function mapStateToProps(store, ownprops) {
 	return {
 		stackNavigator: ownprops.navigation,
 		device: ownprops.navigation.state.params.device,
-		devices: ownprops.navigation.state.params.devices,
-		store,
 	};
 }
 function mapDispatchToProps(dispatch) {
