@@ -22,10 +22,9 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'BaseComponents';
+import { BlockIcon, View } from 'BaseComponents';
 import Theme from 'Theme';
 import Row from './Row';
-import BlockIcon from '../../../../BaseComponents/BlockIcon';
 import Description from './Description';
 import capitalize from '../../../Lib/capitalize';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';

@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
 import Row from './Row';
-import BlockIcon from '../../../../BaseComponents/BlockIcon';
+import { BlockIcon } from 'BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
