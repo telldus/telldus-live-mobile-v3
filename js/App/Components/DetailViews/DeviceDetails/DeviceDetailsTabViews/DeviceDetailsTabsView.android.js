@@ -37,7 +37,6 @@ import DeviceDetailsTabView from 'DeviceDetailsTabView';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 let deviceHeight = Dimensions.get('window').height;
 let deviceWidth = Dimensions.get('window').width;
-import Theme from 'Theme';
 
 type Props = {
 	dispatch: Function,
@@ -194,7 +193,7 @@ const Tabs = TabNavigator(
 function mapStateToProps(store, ownprops) {
 	return {
 		stackNavigator: ownprops.navigation,
-		device: ownprops.navigation.state.params.device,
+		device: store.devices.byId[ownprops.navigation.state.params.id],
 	};
 }
 function mapDispatchToProps(dispatch) {
