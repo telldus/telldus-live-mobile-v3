@@ -29,7 +29,7 @@ import getDeviceWidth from '../../../Lib/getDeviceWidth';
 type Props = {
 	day: string,
 	isSelected: boolean,
-	onPress: (index: number) => void,
+	onPress?: (index: number) => void,
 };
 
 export default class Day extends View<null, Props, null> {
@@ -37,7 +37,7 @@ export default class Day extends View<null, Props, null> {
 	static propTypes = {
 		day: PropTypes.string.isRequired,
 		isSelected: PropTypes.bool.isRequired,
-		onPress: PropTypes.func.isRequired,
+		onPress: PropTypes.func,
 	};
 
 	handlePress = () => {
@@ -45,11 +45,11 @@ export default class Day extends View<null, Props, null> {
 	};
 
 	render() {
-		const { day } = this.props;
+		const { day, onPress } = this.props;
 		const { container, name } = this._getStyle();
 
 		return (
-			<TouchableOpacity onPress={this.handlePress} style={container}>
+			<TouchableOpacity onPress={this.handlePress} disabled={!onPress} style={container}>
 				<Text style={name}>
 					{day.charAt(0).toUpperCase()}
 				</Text>
