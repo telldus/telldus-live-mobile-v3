@@ -32,7 +32,7 @@ type Props = {
 	onPress: (index: number) => void,
 };
 
-export default class Weekday extends View<null, Props, null> {
+export default class Day extends View<null, Props, null> {
 
 	static propTypes = {
 		day: PropTypes.string.isRequired,

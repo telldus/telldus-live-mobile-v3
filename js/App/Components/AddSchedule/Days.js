@@ -25,7 +25,7 @@ import React, { PropTypes } from 'react';
 import { View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
-import Weekday from './SubViews/Weekday';
+import Day from './SubViews/Day';
 import Description from './SubViews/Description';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 import CheckButton from './SubViews/CheckButton';
@@ -248,7 +248,7 @@ export default class Days extends View<null, Props, State> {
 	_renderWeekdays = (): Object[] => {
 		return DAYS.map((day: string): Object => {
 			return (
-				<Weekday
+				<Day
 					day={day}
 					isSelected={this._isDaySelected(day)}
 					onPress={this.toggleWeekdayState}
