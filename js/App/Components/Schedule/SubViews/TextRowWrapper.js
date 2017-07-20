@@ -49,12 +49,14 @@ export default class TextRowWrapper extends View<null, Props, null> {
 	}
 
 	_getDefaultStyle = (): Object => {
+		const deviceWidth = getDeviceWidth();
+
 		return {
 			justifyContent: 'center',
 			backgroundColor: '#fff',
 			alignItems: 'flex-start',
-			width: '70%',
-			paddingLeft: getDeviceWidth() * 0.101333333,
+			width: deviceWidth * 0.586666667,
+			paddingLeft: deviceWidth * 0.101333333,
 			paddingRight: 10,
 			paddingVertical: 5,
 		};

@@ -68,7 +68,7 @@ export default class DeviceRow extends View<null, Props, null> {
 		return {
 			icon: {
 				fontSize: deviceWidth * 0.149333333,
-				width: '30%',
+				width: deviceWidth * 0.346666667,
 			},
 			description: {
 				color: '#707070',
