@@ -89,10 +89,10 @@ export default class ActionRow extends View<null, Props, null> {
 		}
 
 		const { onPress, containerStyle } = this.props;
-		const { icon, description } = this._getStyle();
+		const { row, icon, description } = this._getStyle();
 
 		return (
-			<Row onPress={onPress} row={action} layout="row" containerStyle={containerStyle}>
+			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}>
 				<BlockIcon
 					icon={action.icon}
 					bgColor={action.bgColor}
@@ -110,6 +110,9 @@ export default class ActionRow extends View<null, Props, null> {
 		const deviceWidth = getDeviceWidth();
 
 		return {
+			row: {
+				alignItems: 'stretch',
+			},
 			icon: {
 				fontSize: deviceWidth * 0.092,
 				width: deviceWidth * 0.346666667,

@@ -101,7 +101,6 @@ export default class TimeBlock extends View<null, Props, null> {
 				backgroundColor,
 				alignItems: 'center',
 				justifyContent: 'center',
-				height: null,
 			},
 			icon: {
 				marginBottom: deviceWidth * 0.02,

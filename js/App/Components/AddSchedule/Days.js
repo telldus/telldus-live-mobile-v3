@@ -289,7 +289,6 @@ export default class Days extends View<null, Props, State> {
 				paddingVertical: 0,
 			},
 			row: {
-				alignItems: 'center',
 				paddingHorizontal: deviceWidth * 0.056,
 				paddingVertical: deviceWidth * 0.037333333,
 			},
