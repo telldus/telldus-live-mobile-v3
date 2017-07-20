@@ -24,46 +24,9 @@
 import React, { PropTypes } from 'react';
 import { List, ListDataSource, View } from 'BaseComponents';
 import type { ScheduleProps } from './ScheduleScreen';
-import Row from './SubViews/Row';
-import BlockIcon from './SubViews/BlockIcon';
-import TextRowWrapper from './SubViews/TextRowWrapper';
-import Title from './SubViews/Title';
-import Description from './SubViews/Description';
-import Theme from 'Theme';
-import getDeviceWidth from '../../Lib/getDeviceWidth';
+import ActionRow from './SubViews/ActionRow';
 
-type ActionType = {
-	name: string,
-	description: string,
-	method: number,
-	bgColor: string,
-	textColor: string,
-	icon: string,
-};
-
-const actions: ActionType[] = [
-	{
-		name: 'On',
-		description: 'Turns the device on',
-		bgColor: Theme.Core.brandSecondary,
-		textColor: Theme.Core.brandSecondary,
-		icon: 'on',
-	},
-	{
-		name: 'Off',
-		description: 'Turns the device off',
-		bgColor: '#999',
-		textColor: '#999',
-		icon: 'off',
-	},
-	{
-		name: 'Dim',
-		description: 'Dims the device',
-		bgColor: 'rgba(226, 105, 1, 0.80)',
-		textColor: Theme.Core.brandSecondary,
-		icon: 'dim',
-	},
-];
+const METHODS = [1, 2, 16];
 
 type State = {
 	dataSource: Object,
@@ -80,7 +43,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 	state = {
 		dataSource: new ListDataSource({
 			rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
-		}).cloneWithRows(actions),
+		}).cloneWithRows(METHODS),
 	};
 
 	constructor(props: ScheduleProps) {
@@ -116,20 +79,8 @@ export default class Action extends View<null, ScheduleProps, State> {
 		);
 	}
 
-	_renderRow = (row: ActionType): Object => {
-		return (
-			<Row onPress={this._handlePress} row={row} layout="row">
-				<BlockIcon
-					icon={row.icon}
-					size={getDeviceWidth() * 0.092}
-					bgColor={row.bgColor}
-				/>
-				<TextRowWrapper>
-					<Title color={row.textColor}>{row.name}</Title>
-					<Description>{row.description}</Description>
-				</TextRowWrapper>
-			</Row>
-		);
+	_renderRow = (method: number): Object => {
+		return <ActionRow method={method} onPress={this._handlePress}/>;
 	};
 
 	_handlePress = (row: Object): void => {
