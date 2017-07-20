@@ -23,9 +23,9 @@
 
 import React, { PropTypes } from 'react';
 import { NavigationActions } from 'react-navigation';
-import { View } from 'BaseComponents';
+import { FloatingButton, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { Button } from 'react-native';
+import getDeviceWidth from '../../Lib/getDeviceWidth';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -70,8 +70,27 @@ export default class Summary extends View<null, Props, null> {
 	};
 
 	render() {
+		const { paddingRight } = this.props;
+		const { iconSize } = this._getStyle();
+
 		return (
-			<Button title="Finish" onPress={this.saveSchedule}/>
+			<View>
+				<FloatingButton
+					onPress={this.saveSchedule}
+					imageSource={require('./img/check.png')}
+					iconSize={iconSize}
+					paddingRight={paddingRight}
+				/>
+			</View>
 		);
 	}
+
+	_getStyle = (): Object => {
+		const deviceWidth = getDeviceWidth();
+
+		return {
+			iconSize: deviceWidth * 0.050666667,
+		};
+	};
+
 }
