@@ -35,6 +35,7 @@ type Props = {
 	size: number,
 	color?: string,
 	bgColor?: string,
+	style?: Object,
 };
 
 export default class BlockIcon extends View<DefaultProps, Props, null> {
@@ -72,9 +73,6 @@ export default class BlockIcon extends View<DefaultProps, Props, null> {
 			container: {
 				alignItems: 'center',
 				justifyContent: 'center',
-				minWidth: size,
-				padding: 5,
-				width: '30%',
 			},
 			icon: {
 				fontFamily: Theme.Core.fonts.telldusIconFont,

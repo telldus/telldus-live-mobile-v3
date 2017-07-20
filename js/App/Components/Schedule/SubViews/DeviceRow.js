@@ -28,6 +28,7 @@ import BlockIcon from './BlockIcon';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
+import getDeviceWidth from '../../../Lib/getDeviceWidth';
 
 type Props = {
 	row: Object,
@@ -48,7 +49,11 @@ export default class DeviceRow extends View<null, Props, null> {
 
 		return (
 			<Row layout="row" row={row} onPress={onPress} containerStyle={containerStyle}>
-				<BlockIcon icon="device-alt" size={56}/>
+				<BlockIcon
+					icon="device-alt"
+					size={getDeviceWidth() * 0.149333333}
+					style={{ width: '30%' }}
+				/>
 				<TextRowWrapper>
 					<Title>{row.name}</Title>
 					<Description>{row.description}</Description>

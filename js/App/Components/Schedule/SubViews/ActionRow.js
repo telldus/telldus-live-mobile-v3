@@ -82,12 +82,13 @@ export default class ActionRow extends View<null, Props, null> {
 	};
 
 	render() {
-		const { method, onPress, containerStyle } = this.props;
-		const action = ACTIONS.find((a: Object): boolean => a.method === method);
+		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
 
 		if (!action) {
 			return;
 		}
+
+		const { onPress, containerStyle } = this.props;
 
 		return (
 			<Row onPress={onPress} row={action} layout="row" containerStyle={containerStyle}>
@@ -95,6 +96,7 @@ export default class ActionRow extends View<null, Props, null> {
 					icon={action.icon}
 					size={getDeviceWidth() * 0.092}
 					bgColor={action.bgColor}
+					style={{ width: '30%' }}
 				/>
 				<TextRowWrapper>
 					<Title color={action.textColor}>{action.name}</Title>
