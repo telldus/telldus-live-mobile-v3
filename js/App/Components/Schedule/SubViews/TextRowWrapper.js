@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
 
 type Props = {
@@ -34,7 +34,7 @@ export default class TextRowWrapper extends View<null, Props, null> {
 
 	static propTypes = {
 		children: PropTypes.node.isRequired,
-		style: Text.propTypes.style,
+		style: View.propTypes.style,
 	};
 
 	render() {
