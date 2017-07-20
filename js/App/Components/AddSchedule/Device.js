@@ -22,14 +22,9 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
 import { List, ListDataSource, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import Row from './SubViews/Row';
-import Title from './SubViews/Title';
-import Description from './SubViews/Description';
-import TextRowWrapper from './SubViews/TextRowWrapper';
-import BlockIcon from './SubViews/BlockIcon';
+import DeviceRow from './SubViews/DeviceRow';
 
 interface Props extends ScheduleProps {
 	devices: Object,
@@ -40,7 +35,7 @@ type State = {
 	dataSource: Object,
 };
 
-class Device extends View<void, Props, State> {
+export default class Device extends View<void, Props, State> {
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -95,27 +90,10 @@ class Device extends View<void, Props, State> {
 	}
 
 	_renderRow = (row: Object): Object => {
-		return (
-			<Row onPress={this.selectDevice} row={row} layout="row">
-				<BlockIcon icon="device-alt" size={56}/>
-				<TextRowWrapper>
-					<Title>{row.name}</Title>
-					<Description>Fibaro Plug 2</Description>
-				</TextRowWrapper>
-			</Row>
-		);
+		// TODO: use device description
+		const preparedRow = Object.assign({}, row, {description: 'Fibaro Plug 2'});
+
+		return <DeviceRow row={preparedRow} onPress={this.selectDevice}/>;
 	};
 
 }
-
-type mapStateToPropsType = {
-	devices: Object,
-};
-
-const mapStateToProps = ({ devices }: mapStateToPropsType): Object => (
-	{
-		devices,
-	}
-);
-
-export default connect(mapStateToProps)(Device);

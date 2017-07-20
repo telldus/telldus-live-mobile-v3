@@ -100,7 +100,7 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	render() {
-		const { children, navigation, actions } = this.props;
+		const { children, navigation, actions, devices } = this.props;
 		const { h1, h2, infoButton } = this.state;
 		const style = this._getStyle();
 
@@ -117,6 +117,7 @@ class ScheduleScreen extends View<null, Props, State> {
 							actions,
 							reset: this._isDeviceTab() ? this.goBack : null,
 							paddingRight: style.paddingHorizontal,
+							devices,
 						},
 					)}
 				</View>
@@ -143,11 +144,13 @@ class ScheduleScreen extends View<null, Props, State> {
 
 type mapStateToPropsType = {
 	schedule: Object,
+	devices: Object,
 };
 
-const mapStateToProps = ({ schedule }: mapStateToPropsType): Object => (
+const mapStateToProps = ({ schedule, devices }: mapStateToPropsType): mapStateToPropsType => (
 	{
 		schedule,
+		devices,
 	}
 );
 
