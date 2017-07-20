@@ -51,9 +51,10 @@ export default class Description extends View<null, Props, null> {
 
 	_getDefaultStyle = (): Object => {
 		return {
-			color: '#707070',
+			color: '#555',
 			fontFamily: Theme.Core.fonts.robotoRegular,
-			fontSize: getDeviceWidth() * 0.032,
+			fontSize: getDeviceWidth() * 0.04,
+			opacity: 0.87,
 		};
 	};
 

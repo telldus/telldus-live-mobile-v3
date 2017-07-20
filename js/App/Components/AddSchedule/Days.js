@@ -203,7 +203,7 @@ export default class Days extends View<null, Props, State> {
 						checked={isWeekdaysSelected}
 						style={checkbox}
 					/>
-					<Description style={checkboxText}>
+					<Description>
 						Weekdays (Monday to Friday)
 					</Description>
 				</Row>
@@ -221,7 +221,7 @@ export default class Days extends View<null, Props, State> {
 						checked={isWeekendsSelected}
 						style={checkbox}
 					/>
-					<Description style={checkboxText}>
+					<Description>
 						Weekends (Saturday & Sunday)
 					</Description>
 				</Row>
@@ -299,10 +299,6 @@ export default class Days extends View<null, Props, State> {
 			},
 			checkbox: {
 				marginRight: deviceWidth * 0.05,
-			},
-			checkboxText: {
-				color: '#555555',
-				fontSize: deviceWidth * 0.037333333,
 			},
 		};
 	};

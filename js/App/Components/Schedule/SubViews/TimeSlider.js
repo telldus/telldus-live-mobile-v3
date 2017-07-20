@@ -136,7 +136,7 @@ export default class TimeSlider extends View<null, Props, State> {
 				marginRight: deviceWidth * 0.022666667,
 			},
 			description: {
-				color: '#555555',
+				fontSize: deviceWidth * 0.032,
 			},
 			slider: {
 				track: {

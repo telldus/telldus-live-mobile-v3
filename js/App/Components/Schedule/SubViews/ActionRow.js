@@ -89,21 +89,37 @@ export default class ActionRow extends View<null, Props, null> {
 		}
 
 		const { onPress, containerStyle } = this.props;
+		const { icon, description } = this._getStyle();
 
 		return (
 			<Row onPress={onPress} row={action} layout="row" containerStyle={containerStyle}>
 				<BlockIcon
 					icon={action.icon}
-					size={getDeviceWidth() * 0.092}
 					bgColor={action.bgColor}
-					style={{ width: '30%' }}
+					style={icon}
 				/>
 				<TextRowWrapper>
 					<Title color={action.textColor}>{action.name}</Title>
-					<Description>{action.description}</Description>
+					<Description style={description}>{action.description}</Description>
 				</TextRowWrapper>
 			</Row>
 		);
 	}
+
+	_getStyle = (): Object => {
+		const deviceWidth = getDeviceWidth();
+
+		return {
+			icon: {
+				fontSize: deviceWidth * 0.092,
+				width: '30%',
+			},
+			description: {
+				color: '#707070',
+				fontSize: deviceWidth * 0.032,
+				opacity: 1,
+			},
+		};
+	};
 
 }

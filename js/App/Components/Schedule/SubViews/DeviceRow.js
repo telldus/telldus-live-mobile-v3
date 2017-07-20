@@ -46,20 +46,36 @@ export default class DeviceRow extends View<null, Props, null> {
 
 	render() {
 		const { row, onPress, containerStyle } = this.props;
+		const { icon, description } = this._getStyle();
 
 		return (
 			<Row layout="row" row={row} onPress={onPress} containerStyle={containerStyle}>
 				<BlockIcon
 					icon="device-alt"
-					size={getDeviceWidth() * 0.149333333}
-					style={{ width: '30%' }}
+					style={icon}
 				/>
 				<TextRowWrapper>
 					<Title>{row.name}</Title>
-					<Description>{row.description}</Description>
+					<Description style={description}>{row.description}</Description>
 				</TextRowWrapper>
 			</Row>
 		);
 	}
+
+	_getStyle = (): Object => {
+		const deviceWidth = getDeviceWidth();
+
+		return {
+			icon: {
+				fontSize: deviceWidth * 0.149333333,
+				width: '30%',
+			},
+			description: {
+				color: '#707070',
+				fontSize: deviceWidth * 0.032,
+				opacity: 1,
+			},
+		};
+	};
 
 }

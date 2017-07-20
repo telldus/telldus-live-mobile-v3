@@ -33,7 +33,7 @@ type DefaultProps = {
 
 type Props = {
 	icon: string,
-	size: number,
+	size?: number,
 	color?: string,
 	bgColor?: string,
 	style?: Object,
@@ -43,7 +43,7 @@ export default class BlockIcon extends View<DefaultProps, Props, null> {
 
 	static propTypes = {
 		icon: PropTypes.string.isRequired,
-		size: PropTypes.number.isRequired,
+		size: PropTypes.number,
 		color: PropTypes.string,
 		bgColor: PropTypes.string,
 		style: View.propTypes.style,
@@ -57,10 +57,11 @@ export default class BlockIcon extends View<DefaultProps, Props, null> {
 	render() {
 		const { style, bgColor, icon, size, color } = this.props;
 		const defaultStyle = this._getDefaultStyle();
+		const iconSize = size || (style && style.fontSize);
 
 		return (
 			<View style={[defaultStyle, style, { backgroundColor: bgColor }]}>
-				<IconTelldus icon={icon} size={size} color={color}/>
+				<IconTelldus icon={icon} size={iconSize} color={color}/>
 			</View>
 		);
 	}
