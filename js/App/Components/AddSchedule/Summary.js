@@ -28,6 +28,8 @@ import { ScheduleProps } from './ScheduleScreen';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 import DeviceRow from './SubViews/DeviceRow';
 import ActionRow from './SubViews/ActionRow';
+import DaysRow from './SubViews/DaysRow';
+import { DAYS } from 'Constants';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -77,13 +79,15 @@ export default class Summary extends View<null, Props, null> {
 
 	render() {
 		const { schedule, paddingRight } = this.props;
-		const { row, iconSize } = this._getStyle();
+		const { row, lastRow, iconSize } = this._getStyle();
 		const device = this._getDeviceById(schedule.deviceId);
+		const selectedDays = this._getSelectedDays();
 
 		return (
 			<View>
 				<DeviceRow row={device} containerStyle={row}/>
 				<ActionRow method={schedule.method} containerStyle={row}/>
+				<DaysRow selectedDays={selectedDays} containerStyle={lastRow}/>
 				<FloatingButton
 					onPress={this.saveSchedule}
 					imageSource={require('./img/check.png')}
@@ -93,6 +97,17 @@ export default class Summary extends View<null, Props, null> {
 			</View>
 		);
 	}
+
+	_getSelectedDays = (): string[] => {
+		const selectedDays: string[] = [];
+		const { weekdays } = this.props.schedule;
+
+		for (let i = 0; i < weekdays.length; i++) {
+			selectedDays.push(DAYS[weekdays[i] - 1]);
+		}
+
+		return selectedDays;
+	};
 
 	_getDeviceById = (deviceId: number): Object => {
 		// TODO: use device description
@@ -105,6 +120,10 @@ export default class Summary extends View<null, Props, null> {
 		return {
 			row: {
 				marginBottom: deviceWidth * 0.025333333,
+			},
+			lastRow: {
+				height: null,
+				marginBottom: 0,
 			},
 			iconSize: deviceWidth * 0.050666667,
 		};
