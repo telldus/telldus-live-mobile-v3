@@ -27,11 +27,12 @@ import Theme from 'Theme';
 
 type DefaultProps = {
 	color: string,
+	size: number,
 };
 
 type Props = {
 	icon: string,
-	size: number,
+	size?: number,
 	color?: string,
 	style?: Object,
 };
@@ -40,32 +41,32 @@ export default class IconTelldus extends Text<DefaultProps, Props, null> {
 
 	static propTypes = {
 		icon: PropTypes.string.isRequired,
-		size: PropTypes.number.isRequired,
+		size: PropTypes.number,
 		color: PropTypes.string,
 		style: Text.propTypes.style,
 	};
 
 	static defaultProps = {
 		color: '#999',
+		size: Theme.Core.fontSizeBase,
 	};
 
 	render() {
 		const { icon, style } = this.props;
-		const mainStyle = this._getMainStyle();
+		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[style, mainStyle]}>
+			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]}>
 				{icon}
 			</Text>
 		);
 	}
 
-	_getMainStyle = (): Object => {
+	_getDefaultStyle = (): Object => {
 		const { size, color } = this.props;
 
 		return {
 			color,
-			fontFamily: Theme.Core.fonts.telldusIconFont,
 			fontSize: size,
 		};
 	};

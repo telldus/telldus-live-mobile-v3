@@ -22,9 +22,10 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Slider, Text, View } from 'BaseComponents';
+import { IconTelldus, Slider, View } from 'BaseComponents';
 import Theme from 'Theme';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import Description from './Description';
 
 type Props = {
 	description: string,
@@ -97,8 +98,8 @@ export default class TimeSlider extends View<null, Props, State> {
 						},
 					]}
 				>
-					<Text style={iconStyle}>{icon}</Text>
-					<Text style={descriptionStyle}>{description}</Text>
+					<IconTelldus icon={icon} style={iconStyle}/>
+					<Description style={descriptionStyle}>{description}</Description>
 				</View>
 				<View style={[row, { justifyContent: 'center' }]}>
 					<Slider
@@ -113,7 +114,6 @@ export default class TimeSlider extends View<null, Props, State> {
 	}
 
 	_getStyle = (): Object => {
-		const { telldusIconFont, robotoRegular } = Theme.Core.fonts;
 		const deviceWidth = getDeviceWidth();
 
 		const padding = deviceWidth * 0.026666667;
@@ -133,14 +133,11 @@ export default class TimeSlider extends View<null, Props, State> {
 				alignItems: 'center',
 			},
 			icon: {
-				fontFamily: telldusIconFont,
-				fontSize: deviceWidth * 0.038666667,
+				fontSize: deviceWidth * 0.04,
 				marginRight: deviceWidth * 0.022666667,
 			},
 			description: {
 				color: '#555555',
-				fontSize: deviceWidth * 0.032,
-				fontFamily: robotoRegular,
 			},
 			slider: {
 				track: {
