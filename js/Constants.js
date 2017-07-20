@@ -19,7 +19,7 @@
  * @providesModule Constants
  */
 
-export default {
+module.exports = {
 	supportedMethods: 951,
 	methods: {
 		1: 'TURNON',
@@ -55,4 +55,5 @@ export default {
 		2: 'No Reply',
 		3: 'Timed Out',
 	},
+	DAYS: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
 };

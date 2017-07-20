@@ -25,14 +25,13 @@ import React, { PropTypes } from 'react';
 import { View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
 import Row from './SubViews/Row';
-import Day from './SubViews/Day';
 import Description from './SubViews/Description';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 import CheckButton from './SubViews/CheckButton';
 import { CheckboxSolid, FloatingButton } from 'BaseComponents';
 import _ from 'lodash';
-
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+import DaysRow from './SubViews/DaysRow';
+import { DAYS } from 'Constants';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -78,7 +77,7 @@ export default class Days extends View<null, Props, State> {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	toggleWeekdayState = (day: string) => {
+	toggleDayState = (day: string) => {
 		const { selectedDays } = this.state;
 
 		let newSelectedWeekdays: string[];
@@ -179,7 +178,6 @@ export default class Days extends View<null, Props, State> {
 
 		const {
 			mainContainer,
-			weekdaysContainer,
 			buttonsContainer,
 			row,
 			rowContainer,
@@ -189,9 +187,11 @@ export default class Days extends View<null, Props, State> {
 
 		return (
 			<View style={mainContainer}>
-				<Row layout="row" style={[row, weekdaysContainer]} containerStyle={rowContainer}>
-					{this._renderWeekdays()}
-				</Row>
+				<DaysRow
+					selectedDays={selectedDays}
+					containerStyle={rowContainer}
+					onDayPress={this.toggleDayState}
+				/>
 				<Row
 					layout="row"
 					onPress={this.toggleWeekdays}
@@ -245,19 +245,6 @@ export default class Days extends View<null, Props, State> {
 		);
 	}
 
-	_renderWeekdays = (): Object[] => {
-		return DAYS.map((day: string): Object => {
-			return (
-				<Day
-					day={day}
-					isSelected={this._isDaySelected(day)}
-					onPress={this.toggleWeekdayState}
-					key={day}
-				/>
-			);
-		});
-	};
-
 	_isDaySelected = (day: string): boolean => {
 		return this.state.selectedDays.includes(day);
 	};
@@ -295,10 +282,6 @@ export default class Days extends View<null, Props, State> {
 			mainContainer: {
 				flex: 1,
 				justifyContent: 'flex-start',
-			},
-			weekdaysContainer: {
-				justifyContent: 'space-between',
-				paddingVertical: deviceWidth * 0.102666667,
 			},
 			buttonsContainer: {
 				flexDirection: 'row',
