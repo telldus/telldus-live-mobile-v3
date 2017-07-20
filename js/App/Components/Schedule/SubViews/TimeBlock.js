@@ -87,21 +87,9 @@ export default class TimeBlock extends View<null, Props, null> {
 		const deviceWidth = getDeviceWidth();
 		const size = deviceWidth * 0.293333333;
 
-		let backgroundColor = '#fff';
-		let iconColor = brandSecondary;
-		let textColor = '#555555';
-
-		if (type === 'sunrise') {
-			iconColor = '#ffa726';
-		}
-		if (type === 'sunset') {
-			iconColor = '#EF5350';
-		}
-		if (isSelected) {
-			backgroundColor = brandSecondary;
-			iconColor = '#fff';
-			textColor = '#fff';
-		}
+		const backgroundColor = isSelected ? brandSecondary : '#fff';
+		const iconColor = isSelected ? '#fff' : Theme.Core[`${type}Color`];
+		const textColor = isSelected ? '#fff' : '#555555';
 
 		return {
 			container: {

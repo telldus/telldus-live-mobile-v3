@@ -47,6 +47,12 @@ export default {
 	textColor: '#000000',
 	inactiveGray: '#bdbdbd',
 
+	sunriseColor: '#ffa726',
+	sunsetColor: '#ef5350',
+	get timeColor() {
+		return this.brandSecondary;
+	},
+
 	subtitleColor: '#8e8e93',
 
 	fontSizeBase: 12,
