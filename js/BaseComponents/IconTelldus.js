@@ -24,6 +24,7 @@
 import React, { PropTypes } from 'react';
 import { Text } from 'react-native';
 import Theme from 'Theme';
+import getDeviceWidth from '../App/Lib/getDeviceWidth';
 
 type DefaultProps = {
 	color: string,
@@ -48,7 +49,7 @@ export default class IconTelldus extends Text<DefaultProps, Props, null> {
 
 	static defaultProps = {
 		color: '#999',
-		size: Theme.Core.fontSizeBase,
+		size: getDeviceWidth() * 0.04,
 	};
 
 	render() {

@@ -133,7 +133,6 @@ export default class TimeSlider extends View<null, Props, State> {
 				alignItems: 'center',
 			},
 			icon: {
-				fontSize: deviceWidth * 0.04,
 				marginRight: deviceWidth * 0.022666667,
 			},
 			description: {
