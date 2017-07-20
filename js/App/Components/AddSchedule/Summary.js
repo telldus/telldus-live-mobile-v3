@@ -27,6 +27,7 @@ import { FloatingButton, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 import DeviceRow from './SubViews/DeviceRow';
+import ActionRow from './SubViews/ActionRow';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -82,6 +83,7 @@ export default class Summary extends View<null, Props, null> {
 		return (
 			<View>
 				<DeviceRow row={device} containerStyle={row}/>
+				<ActionRow method={schedule.method} containerStyle={row}/>
 				<FloatingButton
 					onPress={this.saveSchedule}
 					imageSource={require('./img/check.png')}
