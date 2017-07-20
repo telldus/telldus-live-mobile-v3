@@ -20,7 +20,6 @@
 // @flow
 
 export default function getDeviceType(supportedMethods:Object) : string {
-	console.log('test dude', supportedMethods);
 	const {
 		TURNON,
 		TURNOFF,

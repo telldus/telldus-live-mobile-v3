@@ -26,12 +26,10 @@ export type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' 
 
 type State = {
 	tab: Tab;
-	navigateToDeviceDetailsTab: boolean;
 };
 
 const initialState: State = {
 	tab: 'dashboardTab',
-	navigateToDeviceDetailsTab: false,
 };
 
 function navigation(state: State = initialState, action: Action): State {

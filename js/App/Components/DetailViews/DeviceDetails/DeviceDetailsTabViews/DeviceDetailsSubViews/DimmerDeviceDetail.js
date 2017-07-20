@@ -108,7 +108,6 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	render() {
-		console.log('test dimmer props', this.props);
 		const { device } = this.props;
 		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
 

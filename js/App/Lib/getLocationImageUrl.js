@@ -20,7 +20,6 @@
 // @flow
 
 export default function getLocationImageUrl(deviceType:string) : string {
-	console.log('test dude deviceType', deviceType);
 	if (deviceType === 'TelldusCenter') {
 
 		return 'icon_location_telldus_center_01';
