@@ -23,7 +23,7 @@
 
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
-import { IconTelldus } from 'BaseComponents';
+import IconTelldus from './IconTelldus';
 import Theme from 'Theme';
 
 type DefaultProps = {
