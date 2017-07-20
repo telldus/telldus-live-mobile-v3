@@ -32,6 +32,7 @@ import Description from './Description';
 type Props = {
 	row: Object,
 	onPress?: Function,
+	containerStyle?: Object,
 };
 
 export default class DeviceRow extends View<null, Props, null> {
@@ -39,13 +40,14 @@ export default class DeviceRow extends View<null, Props, null> {
 	static propTypes = {
 		row: PropTypes.object.isRequired,
 		onPress: PropTypes.func,
+		containerStyle: View.propTypes.style,
 	};
 
 	render() {
-		const { row, onPress } = this.props;
+		const { row, onPress, containerStyle } = this.props;
 
 		return (
-			<Row layout="row" row={row} onPress={onPress}>
+			<Row layout="row" row={row} onPress={onPress} containerStyle={containerStyle}>
 				<BlockIcon icon="device-alt" size={56}/>
 				<TextRowWrapper>
 					<Title>{row.name}</Title>
