@@ -51,7 +51,7 @@ export default class TimeBlock extends View<null, Props, null> {
 		const {
 			container,
 			row,
-			icon,
+			iconContainer,
 			backgroundColor,
 			iconColor,
 			iconSize,
@@ -70,7 +70,7 @@ export default class TimeBlock extends View<null, Props, null> {
 					size={iconSize}
 					color={iconColor}
 					bgColor={backgroundColor}
-					style={icon}
+					containerStyle={iconContainer}
 				/>
 				<Description style={description}>
 					{capitalize(type)}
@@ -102,7 +102,7 @@ export default class TimeBlock extends View<null, Props, null> {
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
-			icon: {
+			iconContainer: {
 				marginBottom: deviceWidth * 0.02,
 			},
 			description: {

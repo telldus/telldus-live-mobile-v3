@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import IconTelldus from './IconTelldus';
 import Theme from 'Theme';
 
@@ -46,7 +46,8 @@ export default class BlockIcon extends View<DefaultProps, Props, null> {
 		size: PropTypes.number,
 		color: PropTypes.string,
 		bgColor: PropTypes.string,
-		style: View.propTypes.style,
+		style: Text.propTypes.style,
+		containerStyle: View.propTypes.style,
 	};
 
 	static defaultProps = {
@@ -55,13 +56,12 @@ export default class BlockIcon extends View<DefaultProps, Props, null> {
 	};
 
 	render() {
-		const { style, bgColor, icon, size, color } = this.props;
+		const { style, containerStyle, bgColor, icon, size, color } = this.props;
 		const defaultStyle = this._getDefaultStyle();
-		const iconSize = size || (style && style.fontSize);
 
 		return (
-			<View style={[defaultStyle, style, { backgroundColor: bgColor }]}>
-				<IconTelldus icon={icon} size={iconSize} color={color}/>
+			<View style={[defaultStyle, containerStyle, { backgroundColor: bgColor }]}>
+				<IconTelldus icon={icon} size={size} color={color} style={style}/>
 			</View>
 		);
 	}

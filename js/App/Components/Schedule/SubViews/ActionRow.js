@@ -89,7 +89,7 @@ export default class ActionRow extends View<null, Props, null> {
 		}
 
 		const { onPress, containerStyle } = this.props;
-		const { row, icon, description } = this._getStyle();
+		const { row, icon, iconContainer, description } = this._getStyle();
 
 		return (
 			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}>
@@ -97,6 +97,7 @@ export default class ActionRow extends View<null, Props, null> {
 					icon={action.icon}
 					bgColor={action.bgColor}
 					style={icon}
+					containerStyle={iconContainer}
 				/>
 				<TextRowWrapper>
 					<Title color={action.textColor}>{action.name}</Title>
@@ -115,6 +116,8 @@ export default class ActionRow extends View<null, Props, null> {
 			},
 			icon: {
 				fontSize: deviceWidth * 0.092,
+			},
+			iconContainer: {
 				width: deviceWidth * 0.346666667,
 			},
 			description: {
