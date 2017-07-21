@@ -30,6 +30,14 @@ import DeviceRow from './SubViews/DeviceRow';
 import ActionRow from './SubViews/ActionRow';
 import DaysRow from './SubViews/DaysRow';
 import { DAYS } from 'Constants';
+import TimeRow from './SubViews/TimeRow';
+import getSuntime from '../../Lib/getSuntime';
+import _ from 'lodash';
+
+type Time = {
+	hour: number,
+	minute: number,
+};
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -37,7 +45,11 @@ interface Props extends ScheduleProps {
 	devices: Object,
 }
 
-export default class Summary extends View<null, Props, null> {
+type State = {
+	time: Time,
+};
+
+export default class Summary extends View<null, Props, State> {
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -46,6 +58,13 @@ export default class Summary extends View<null, Props, null> {
 		paddingRight: PropTypes.number,
 		schedule: PropTypes.object,
 		devices: PropTypes.object,
+	};
+
+	state = {
+		time: {
+			hour: 0,
+			minute: 0,
+		},
 	};
 
 	constructor(props: Props) {
@@ -58,9 +77,17 @@ export default class Summary extends View<null, Props, null> {
 		};
 	}
 
+	componentWillMount() {
+		this.device = this._getDeviceById(this.props.schedule.deviceId);
+	}
+
 	componentDidMount() {
+		const { onDidMount, schedule } = this.props;
+
 		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		onDidMount(h1, h2, infoButton);
+
+		this._getSuntime(this.device.clientId, schedule.type);
 	}
 
 	saveSchedule = () => {
@@ -79,15 +106,22 @@ export default class Summary extends View<null, Props, null> {
 
 	render() {
 		const { schedule, paddingRight } = this.props;
-		const { row, lastRow, iconSize } = this._getStyle();
-		const device = this._getDeviceById(schedule.deviceId);
+		const { method, type, offset, randomInterval } = schedule;
+		const { row, timeRow, daysRow, iconSize } = this._getStyle();
 		const selectedDays = this._getSelectedDays();
 
 		return (
 			<View>
-				<DeviceRow row={device} containerStyle={row}/>
-				<ActionRow method={schedule.method} containerStyle={row}/>
-				<DaysRow selectedDays={selectedDays} containerStyle={lastRow}/>
+				<DeviceRow row={this.device} containerStyle={row}/>
+				<ActionRow method={method} containerStyle={row}/>
+				<TimeRow
+					type={type}
+					time={this.state.time}
+					offset={offset}
+					randomInterval={randomInterval}
+					containerStyle={[row, timeRow]}
+				/>
+				<DaysRow selectedDays={selectedDays} containerStyle={daysRow}/>
 				<FloatingButton
 					onPress={this.saveSchedule}
 					imageSource={require('./img/check.png')}
@@ -97,6 +131,15 @@ export default class Summary extends View<null, Props, null> {
 			</View>
 		);
 	}
+
+	// $FlowFixMe
+	_getSuntime = async (clientId: number, type: string): void => {
+		const time: Time = await getSuntime(clientId, type);
+
+		if (!_.isEqual(this.state.time, time)) {
+			this.setState({ time });
+		}
+	};
 
 	_getSelectedDays = (): string[] => {
 		const selectedDays: string[] = [];
@@ -121,7 +164,11 @@ export default class Summary extends View<null, Props, null> {
 			row: {
 				marginBottom: deviceWidth * 0.025333333,
 			},
-			lastRow: {
+			timeRow: {
+				height: deviceWidth * 0.281333333,
+				paddingHorizontal: deviceWidth * 0.068,
+			},
+			daysRow: {
 				height: null,
 				marginBottom: 0,
 			},
