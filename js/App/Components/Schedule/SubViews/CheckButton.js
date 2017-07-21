@@ -72,7 +72,7 @@ export default class CheckButton extends View<null, Props, null> {
 
 		return {
 			container: {
-				backgroundColor: 'transparent',
+				backgroundColor,
 				height: deviceWidth * 0.128,
 				width: deviceWidth * 0.373333333,
 				...shadow,
