@@ -32,6 +32,7 @@ import { CheckboxSolid, FloatingButton } from 'BaseComponents';
 import _ from 'lodash';
 import DaysRow from './SubViews/DaysRow';
 import { DAYS } from 'Constants';
+import getSelectedDays from '../../Lib/getSelectedDays';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -55,14 +56,6 @@ export default class Days extends View<null, Props, State> {
 		paddingRight: PropTypes.number,
 	};
 
-	state = {
-		selectedDays: [],
-		shouldCheckAll: true,
-		shouldUncheckAll: false,
-		isWeekdaysSelected: false,
-		isWeekendsSelected: false,
-	};
-
 	constructor(props: Props) {
 		super(props);
 
@@ -70,6 +63,14 @@ export default class Days extends View<null, Props, State> {
 		this.h2 = 'Choose days for event repeating';
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
+		};
+
+		this.state = {
+			selectedDays: getSelectedDays(props.schedule.weekdays),
+			shouldCheckAll: true,
+			shouldUncheckAll: false,
+			isWeekdaysSelected: false,
+			isWeekendsSelected: false,
 		};
 	}
 
