@@ -65,11 +65,13 @@ export default class Time extends View<null, Props, State> {
 			tmp: true, // TODO: fill with real fields
 		};
 
+		const {type, offset, randomInterval, hour, minute} = props.schedule;
+
 		this.state = {
-			selectedType: '',
-			randomInterval: 0,
-			offset: 0,
-			date: this._createDate(),
+			selectedType: type,
+			randomInterval,
+			offset,
+			date: this._createDate(hour, minute),
 		};
 
 		this.selectTimeAndroid = this.selectTimeAndroid.bind(this);
@@ -298,9 +300,9 @@ export default class Time extends View<null, Props, State> {
 		});
 	};
 
-	_createDate = (): Date => {
+	_createDate = (hour: number, minute: number): Date => {
 		const date = new Date();
-		date.setHours(12, 0, 0, 0);
+		date.setHours(hour, minute, 0, 0);
 		return date;
 	};
 
