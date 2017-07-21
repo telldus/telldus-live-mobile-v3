@@ -41,7 +41,6 @@ type Time = {
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
-	schedule: Object,
 	devices: Object,
 }
 

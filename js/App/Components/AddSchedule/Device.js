@@ -42,6 +42,7 @@ export default class Device extends View<void, Props, State> {
 		actions: PropTypes.object,
 		devices: PropTypes.object,
 		onDidMount: PropTypes.func,
+		schedule: PropTypes.object,
 		resetSchedule: PropTypes.func,
 	};
 

@@ -52,6 +52,7 @@ export default class Time extends View<null, Props, State> {
 		navigation: PropTypes.object,
 		actions: PropTypes.object,
 		onDidMount: PropTypes.func,
+		schedule: PropTypes.object,
 		paddingRight: PropTypes.number,
 	};
 

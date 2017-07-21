@@ -38,6 +38,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		navigation: PropTypes.object,
 		actions: PropTypes.object,
 		onDidMount: PropTypes.func,
+		schedule: PropTypes.object,
 	};
 
 	state = {

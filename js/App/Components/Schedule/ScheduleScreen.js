@@ -49,6 +49,7 @@ export interface ScheduleProps {
 	navigation: Object,
 	actions: Object,
 	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void,
+	schedule: Object,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
