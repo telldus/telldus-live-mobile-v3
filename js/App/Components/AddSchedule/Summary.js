@@ -29,10 +29,10 @@ import getDeviceWidth from '../../Lib/getDeviceWidth';
 import DeviceRow from './SubViews/DeviceRow';
 import ActionRow from './SubViews/ActionRow';
 import DaysRow from './SubViews/DaysRow';
-import { DAYS } from 'Constants';
 import TimeRow from './SubViews/TimeRow';
 import getSuntime from '../../Lib/getSuntime';
 import _ from 'lodash';
+import getSelectedDays from '../../Lib/getSelectedDays';
 
 type Time = {
 	hour: number,
@@ -114,9 +114,9 @@ export default class Summary extends View<null, Props, State> {
 
 	render() {
 		const { schedule, paddingRight } = this.props;
-		const { method, type, offset, randomInterval } = schedule;
+		const { method, type, offset, randomInterval, weekdays } = schedule;
 		const { row, timeRow, daysRow, iconSize } = this._getStyle();
-		const selectedDays = this._getSelectedDays();
+		const selectedDays = getSelectedDays(weekdays);
 
 		return (
 			<View>
@@ -147,17 +147,6 @@ export default class Summary extends View<null, Props, State> {
 		if (!_.isEqual(this.state.time, time)) {
 			this.setState({ time });
 		}
-	};
-
-	_getSelectedDays = (): string[] => {
-		const selectedDays: string[] = [];
-		const { weekdays } = this.props.schedule;
-
-		for (let i = 0; i < weekdays.length; i++) {
-			selectedDays.push(DAYS[weekdays[i] - 1]);
-		}
-
-		return selectedDays;
 	};
 
 	_getDeviceById = (deviceId: number): Object => {
