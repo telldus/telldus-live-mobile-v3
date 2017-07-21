@@ -105,7 +105,7 @@ export default class TimeRow extends View<null, Props, null> {
 	};
 
 	_formatTimeValue = (value: number): string => {
-		return value < 0 ? value.toString() : `0${value}`;
+		return value > 10 ? value.toString() : `0${value}`;
 	};
 
 	_getStyle = (): Object => {
