@@ -59,13 +59,6 @@ export default class Summary extends View<null, Props, State> {
 		devices: PropTypes.object,
 	};
 
-	state = {
-		time: {
-			hour: 0,
-			minute: 0,
-		},
-	};
-
 	constructor(props: Props) {
 		super(props);
 
@@ -73,6 +66,15 @@ export default class Summary extends View<null, Props, State> {
 		this.h2 = 'Please confirm the schedule';
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
+		};
+
+		const { hour, minute } = props.schedule;
+
+		this.state = {
+			time: {
+				hour,
+				minute,
+			},
 		};
 	}
 
@@ -86,14 +88,7 @@ export default class Summary extends View<null, Props, State> {
 		const { h1, h2, infoButton } = this;
 		onDidMount(h1, h2, infoButton);
 
-		if (schedule.type === 'time') {
-			this.setState({
-				time: {
-					hour: schedule.hour,
-					minute: schedule.minute,
-				},
-			});
-		} else {
+		if (schedule.type !== 'time') {
 			this._getSuntime(this.device.clientId, schedule.type);
 		}
 	}
@@ -144,7 +139,7 @@ export default class Summary extends View<null, Props, State> {
 	_getSuntime = async (clientId: number, type: string): void => {
 		const time: Time = await getSuntime(clientId, type);
 
-		if (!_.isEqual(this.state.time, time)) {
+		if ((time: Time) && !_.isEqual(this.state.time, time)) {
 			this.setState({ time });
 		}
 	};

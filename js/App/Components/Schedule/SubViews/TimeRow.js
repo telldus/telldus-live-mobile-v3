@@ -95,13 +95,10 @@ export default class TimeRow extends View<null, Props, null> {
 	}
 
 	_formatTime = (time: Time): string => {
-		if (time.hour || time.minute) {
-			const hour = this._formatTimeValue(time.hour);
-			const minute = this._formatTimeValue(time.minute);
+		const hour = this._formatTimeValue(time.hour);
+		const minute = this._formatTimeValue(time.minute);
 
-			return `(${hour}:${minute})`;
-		}
-		return '';
+		return `(${hour}:${minute})`;
 	};
 
 	_formatTimeValue = (value: number): string => {
