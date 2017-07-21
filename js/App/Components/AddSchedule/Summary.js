@@ -87,7 +87,16 @@ export default class Summary extends View<null, Props, State> {
 		const { h1, h2, infoButton } = this;
 		onDidMount(h1, h2, infoButton);
 
-		this._getSuntime(this.device.clientId, schedule.type);
+		if (schedule.type === 'time') {
+			this.setState({
+				time: {
+					hour: schedule.hour,
+					minute: schedule.minute,
+				},
+			});
+		} else {
+			this._getSuntime(this.device.clientId, schedule.type);
+		}
 	}
 
 	saveSchedule = () => {
