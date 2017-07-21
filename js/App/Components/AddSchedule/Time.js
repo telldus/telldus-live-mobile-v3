@@ -38,7 +38,7 @@ interface Props extends ScheduleProps {
 }
 
 type State = {
-	selectedTypeIndex: number | null,
+	selectedType: string,
 	randomInterval: number,
 	offset: number,
 	date: Date,
@@ -65,7 +65,7 @@ export default class Time extends View<null, Props, State> {
 		};
 
 		this.state = {
-			selectedTypeIndex: null,
+			selectedType: '',
 			randomInterval: 0,
 			offset: 0,
 			date: this._createDate(),
@@ -112,9 +112,9 @@ export default class Time extends View<null, Props, State> {
 
 	selectTime = () => {
 		const { actions, navigation } = this.props;
-		const { selectedTypeIndex, randomInterval, offset, date } = this.state;
+		const { selectedType, randomInterval, offset, date } = this.state;
 
-		if (selectedTypeIndex === null) {
+		if (!selectedType) {
 			return;
 		}
 
@@ -127,22 +127,22 @@ export default class Time extends View<null, Props, State> {
 			randomInterval,
 		};
 
-		if (selectedTypeIndex < 2) {
+		if (selectedType !== 'time') {
 			time.offset = offset;
 		} else {
 			time.hour = date.getHours();
 			time.minute = date.getMinutes();
 		}
 
-		actions.selectTime(TYPES[selectedTypeIndex], time);
+		actions.selectTime(selectedType, time);
 		navigation.navigate('Days');
 	};
 
 	render() {
-		const { selectedTypeIndex, randomInterval } = this.state;
+		const { selectedType, randomInterval } = this.state;
 		const { container, row, marginBottom, type } = this._getStyle();
 
-		const shouldRender = selectedTypeIndex !== null;
+		const shouldRender = !!selectedType;
 
 		return (
 			<View style={container}>
@@ -175,9 +175,9 @@ export default class Time extends View<null, Props, State> {
 	}
 
 	_renderTimeRow = (): Object | null => {
-		const { selectedTypeIndex, offset } = this.state;
+		const { selectedType, offset } = this.state;
 
-		if (selectedTypeIndex === null) {
+		if (!selectedType) {
 			return null;
 		}
 
@@ -253,7 +253,7 @@ export default class Time extends View<null, Props, State> {
 
 		return (
 			<Row containerStyle={row}>
-				{selectedTypeIndex === 2 ? timePicker : timeSlider}
+				{selectedType === 'time' ? timePicker : timeSlider}
 			</Row>
 		);
 	};
@@ -277,20 +277,19 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	_selectType = (row: Object) => {
-		this.setState({ selectedTypeIndex: row.index });
+		this.setState({ selectedType: row.type });
 	};
 
 	_renderTypes = (types: string[]): Object[] => {
-		const { selectedTypeIndex } = this.state;
+		const { selectedType } = this.state;
 
-		return types.map((type: string, i: number): Object => {
-			const isSelected = typeof selectedTypeIndex === 'number' && i === selectedTypeIndex;
+		return types.map((type: string): Object => {
+			const isSelected = type === selectedType;
 
 			return (
 				<TimeBlock
 					type={type}
 					onPress={this._selectType}
-					index={i}
 					isSelected={isSelected}
 					key={type}
 				/>

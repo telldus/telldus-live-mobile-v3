@@ -30,9 +30,8 @@ import capitalize from '../../../Lib/capitalize';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
 
 type Props = {
-	type: Object,
+	type: string,
 	onPress: (number) => void,
-	index: number,
 	isSelected: boolean,
 };
 
@@ -41,12 +40,11 @@ export default class TimeBlock extends View<null, Props, null> {
 	static propTypes = {
 		type: PropTypes.string.isRequired,
 		onPress: PropTypes.func.isRequired,
-		index: PropTypes.number.isRequired,
 		isSelected: PropTypes.bool.isRequired,
 	};
 
 	render() {
-		const { type, onPress, index } = this.props;
+		const { type, onPress } = this.props;
 
 		const {
 			container,
@@ -61,7 +59,7 @@ export default class TimeBlock extends View<null, Props, null> {
 		return (
 			<Row
 				onPress={onPress}
-				row={{ index }}
+				row={{ type }}
 				style={row}
 				containerStyle={container}
 			>
