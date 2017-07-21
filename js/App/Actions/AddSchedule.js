@@ -62,8 +62,8 @@ const selectDays = (weekdays: number[]): Action => ({
 	},
 });
 
-const reset = (): Action => ({
-	type: 'SCHEDULE_EDIT_RESET',
+const resetSchedule = (): Action => ({
+	type: 'SCHEDULE_RESET',
 });
 
 module.exports = {
@@ -71,5 +71,5 @@ module.exports = {
 	selectAction,
 	selectTime,
 	selectDays,
-	reset,
+	resetSchedule,
 };

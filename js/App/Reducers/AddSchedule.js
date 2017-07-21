@@ -70,7 +70,7 @@ export default function scheduleReducer(state: State = initialState, action: Act
 				methodValue: action.payload.methodValue,
 			};
 
-		case 'SCHEDULE_EDIT_RESET':
+		case 'SCHEDULE_RESET':
 			return initialState;
 
 		case 'SCHEDULE_SELECT_TIME':

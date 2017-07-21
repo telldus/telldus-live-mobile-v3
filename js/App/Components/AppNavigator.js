@@ -39,6 +39,7 @@ import {
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { resetSchedule } from 'Actions_Schedule';
 
 const messages = defineMessages({
 	errortoast: {
@@ -157,6 +158,7 @@ class AppNavigator extends View {
 		this.props.dispatch(getGateways());
 		this.props.dispatch(getSensors());
 		this.props.dispatch(getJobs());
+		this.props.dispatch(resetSchedule());
 	}
 
 	componentWillReceiveProps(nextProps) {

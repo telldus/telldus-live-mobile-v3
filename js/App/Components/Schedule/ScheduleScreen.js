@@ -115,7 +115,7 @@ class ScheduleScreen extends View<null, Props, State> {
 							onDidMount: this.onChildDidMount,
 							navigation,
 							actions,
-							reset: this._isDeviceTab() ? this.goBack : null,
+							resetSchedule: this.goBack,
 							paddingRight: style.paddingHorizontal,
 							devices,
 							schedule,

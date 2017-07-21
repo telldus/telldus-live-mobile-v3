@@ -28,7 +28,7 @@ import DeviceRow from './SubViews/DeviceRow';
 
 interface Props extends ScheduleProps {
 	devices: Object,
-	reset: () => void,
+	resetSchedule: () => void,
 }
 
 type State = {
@@ -42,7 +42,7 @@ export default class Device extends View<void, Props, State> {
 		actions: PropTypes.object,
 		devices: PropTypes.object,
 		onDidMount: PropTypes.func,
-		reset: PropTypes.func,
+		resetSchedule: PropTypes.func,
 	};
 
 	state = {
@@ -59,10 +59,10 @@ export default class Device extends View<void, Props, State> {
 	}
 
 	componentDidMount() {
-		const { actions, onDidMount, navigation, reset } = this.props;
+		const { actions, onDidMount, navigation, resetSchedule } = this.props;
 
 		if (navigation.state.params && navigation.state.params.reset) {
-			return reset();
+			return resetSchedule();
 		}
 
 		actions.getDevices();
