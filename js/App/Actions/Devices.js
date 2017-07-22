@@ -254,7 +254,7 @@ export function getDeviceHistory(device: Object): ThunkAction {
 		toTimestamp is always the current date/time and fromTimestamp, as of now kept 1 month
 		behind toTimestamp.
 		There can be more history thought of fetching those during list infinite scroll.
-		*/ 
+		*/
 		let { fromTimestamp, toTimestamp } = getTimeStamp(tzOffset);
 		const payload = {
 			url: `/device/history?id=${device.id}&from=${fromTimestamp}&to=${toTimestamp}`,

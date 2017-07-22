@@ -80,16 +80,34 @@ class HistoryTab extends View {
 		return rowSectionData;
 	}
 
-	renderRow(item) {
+	renderRow(item, id) {
+		let time = moment.unix(item.ts).format('HH:mm:ss');
 		return (
-			<Text>{item.origin}</Text>
+			<View style={styles.rowItemsContainer}>
+				<View style={styles.circularViewCover}>
+					<View style={styles.verticalLineView}/>
+					<View style={styles.circularView}>
+					</View>
+					<View style={styles.verticalLineView}/>
+				</View>
+				<View style={styles.timeCover}>
+					<Text style={styles.timeText}>
+						{time}
+					</Text>
+				</View>
+				<View style={styles.statusView}>
+				</View>
+				<View style={styles.locationCover}>
+				<Text style={styles.originText} numberOfLines={1}>{item.origin}</Text>
+				</View>
+			</View>
 		);
 	}
 
 	renderSectionHeader(sectionData, timestamp) {
 		return (
 			<View style={styles.sectionHeader}>
-				<Text>{timestamp}</Text>
+				<Text style={styles.sectionHeaderText}>{timestamp}</Text>
 			</View>
 		);
 	}
@@ -145,8 +163,7 @@ const styles = StyleSheet.create({
 	},
 	sectionHeader: {
 		width: deviceWidth,
-		marginTop: 2,
-		height: deviceHeight * 0.05,
+		height: deviceHeight * 0.04,
 		backgroundColor: '#ffffff',
 		shadowColor: '#000000',
 		shadowOffset: {
@@ -156,6 +173,62 @@ const styles = StyleSheet.create({
 		shadowRadius: 1,
 		shadowOpacity: 1.0,
 		elevation: 2,
+		justifyContent: 'center',
+	},
+	sectionHeaderText: {
+		color: '#A59F9A',
+		marginLeft: 5,
+	},
+	rowItemsContainer: {
+		flexDirection: 'row',
+		height: deviceHeight * 0.09,
+		width: deviceWidth,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	circularViewCover: {
+		width: deviceWidth * 0.15,
+		height: deviceHeight * 0.095,
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexDirection: 'column',
+	},
+	circularView: {
+		backgroundColor: '#A59F9A',
+		borderRadius: 30,
+		height: deviceHeight * 0.05,
+		width: deviceWidth * 0.08,
+	},
+	verticalLineView: {
+		backgroundColor: '#A59F9A',
+		height: deviceHeight * 0.022,
+		width: 2,
+	},
+	timeCover: {
+		width: deviceWidth * 0.3,
+		height: deviceHeight * 0.08,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	timeText: {
+		color: '#A59F9A',
+		fontSize: 16,
+	},
+	statusView: {
+		backgroundColor: '#A59F9A',
+		width: deviceWidth * 0.15,
+		height: deviceHeight * 0.07,
+	},
+	locationCover: {
+		width: deviceWidth * 0.4,
+		height: deviceHeight * 0.07,
+		justifyContent: 'center',
+		backgroundColor: '#fff',
+		alignItems: 'center',
+		paddingLeft: 10,
+	},
+	originText: {
+		color: '#A59F9A',
 	},
 });
 
