@@ -227,3 +227,50 @@ export function learn(deviceId: number): ThunkAction {
 		}));
 	};
 }
+
+// calculates the from and to timestamp by considering the tzoffset of the client/location.
+function getTimeStamp(tzOffset: number) {
+	let prevTimestamp = 0;
+	let toTimestamp = Math.floor(Date.now() / 1000) + tzOffset;
+	let d = new Date();
+	let m = d.getMonth();
+	d.setMonth(d.getMonth() - 1);
+	if (d.getMonth() === m) {
+		d.setDate(0);
+	}
+	d.setHours(0, 0, 0);
+	d.setMilliseconds(0);
+	let fromTimestamp = Math.floor(d / 1000) + tzOffset + prevTimestamp;
+	return { fromTimestamp, toTimestamp };
+}
+
+export function getDeviceHistory(device: Object): ThunkAction {
+	return (dispatch, getState) => {
+		const {
+			gateways: { byId },
+		} = getState();
+		let tzOffset = byId[device.clientId].tzoffset;
+		/*
+		toTimestamp is always the current date/time and fromTimestamp, as of now kept 1 month
+		behind toTimestamp.
+		There can be more history thought of fetching those during list infinite scroll.
+		*/ 
+		let { fromTimestamp, toTimestamp } = getTimeStamp(tzOffset);
+		const payload = {
+			url: `/device/history?id=${device.id}&from=${fromTimestamp}&to=${toTimestamp}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+			dispatch({
+				type: 'DEVICE_HISTORY',
+				payload: {
+					deviceId: device.id,
+					timestamp: { fromTimestamp, toTimestamp },
+					...response,
+				},
+			});
+		});
+	};
+}

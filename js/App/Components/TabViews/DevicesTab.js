@@ -28,7 +28,7 @@ import { createSelector } from 'reselect';
 import { List, ListDataSource, Text, View, I18n } from 'BaseComponents';
 import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
 
-import { getDevices } from 'Actions_Devices';
+import { getDevices, getDeviceHistory } from 'Actions_Devices';
 import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
@@ -151,8 +151,9 @@ class DevicesTab extends View {
 		);
 	}
 
-	openDeviceDetail(id) {
-		this.props.stackNavigator.navigate('DeviceDetails', { id });
+	openDeviceDetail(device) {
+		this.props.dispatch(getDeviceHistory(device));
+		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
 	}
 
 	onCloseSelected() {

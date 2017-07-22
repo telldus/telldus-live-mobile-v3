@@ -112,7 +112,7 @@ const OverviewNavigationOptions = {
                 <Icon name="icon_home" size={24} color={tintColor} />
             ),
 		headerStyle: {
-			height: 0,
+			height: 2,
 		},
 	},
 };
@@ -122,7 +122,7 @@ const HistoryNavigationOptions = {
                 <Icon name="icon_history" size={24} color={tintColor}/>
             ),
 		headerStyle: {
-			height: 0,
+			height: 2,
 		},
 	},
 };
@@ -132,7 +132,7 @@ const SettingsNavigationOptions = {
                 <Icon name="icon_settings" size={24} color={tintColor}/>
             ),
 		headerStyle: {
-			height: 0,
+			height: 2,
 		},
 	},
 };
@@ -174,6 +174,9 @@ const Tabs = TabNavigator(
 			},
 			style: {
 				backgroundColor: '#fff',
+				shadowColor: '#000000',
+				shadowOpacity: 1.0,
+				elevation: 2,
 			},
 			tabStyle: {
 				width: Dimensions.get('window').width / 3,

@@ -56,6 +56,8 @@ export type Action =
 	| { type: 'DEVICE_LEARN', payload: Object }
 	| { type: 'DEVICE_DIM', deviceId:number, payload: Object }
 
+	| { type: 'DEVICE_HISTORY', payload: Object }
+
 	| { type: 'LIVEAPI_REFETCH', endpoint: 'sensors' | 'jobs' | 'gateways' }
 
 	| { type: 'SENSOR_UPDATE_VALUE', payload: Object }

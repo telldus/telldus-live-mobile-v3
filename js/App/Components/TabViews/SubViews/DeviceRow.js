@@ -117,7 +117,7 @@ class DeviceRow extends View {
 	}
 
 	onSettingsSelected() {
-		this.props.onSettingsSelected(this.props.device.id);
+		this.props.onSettingsSelected(this.props.device);
 	}
 }
 
