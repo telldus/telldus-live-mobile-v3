@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
 		width: 2,
 	},
 	timeCover: {
-		width: deviceWidth * 0.3,
+		width: deviceWidth * 0.25,
 		height: deviceHeight * 0.08,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
 	},
 	statusTextON: {
 		backgroundColor: '#fff',
-		width: deviceWidth * 0.009,
+		width: deviceWidth * 0.006,
 		height: deviceHeight * 0.03,
 	},
 	statusTextOFF: {
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
 		width: deviceWidth * 0.07,
 		height: deviceHeight * 0.04,
 		borderRadius: 30,
-		borderWidth: 2,
+		borderWidth: 1.5,
 		borderColor: '#fff',
 	},
 	arrowViewContainer: {
