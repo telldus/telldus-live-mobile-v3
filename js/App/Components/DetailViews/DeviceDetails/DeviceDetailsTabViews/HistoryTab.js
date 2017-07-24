@@ -95,7 +95,14 @@ class HistoryTab extends View {
 						{time}
 					</Text>
 				</View>
-				<View style={styles.statusView}>
+				<View style={styles.statusViewCover}>
+					<View style={styles.arrowViewContainer}>
+						<View style={item.state === 1 ? styles.arrowViewTopON : styles.arrowViewTopOFF} />
+						<View style={styles.arrowViewBottom} />
+					</View>
+					<View style={item.state === 1 ? styles.statusViewON : styles.statusViewOFF}>
+						<View style={item.state === 1 ? styles.statusTextON : styles.statusTextOFF} />
+					</View>
 				</View>
 				<View style={styles.locationCover}>
 				<Text style={styles.originText} numberOfLines={1}>{item.origin}</Text>
@@ -214,10 +221,69 @@ const styles = StyleSheet.create({
 		color: '#A59F9A',
 		fontSize: 16,
 	},
-	statusView: {
-		backgroundColor: '#A59F9A',
+	statusViewCover: {
 		width: deviceWidth * 0.15,
+		height: deviceHeight * 0.09,
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexDirection: 'row',
+	},
+	statusViewON: {
+		backgroundColor: '#F06F0C',
+		width: deviceWidth * 0.115,
 		height: deviceHeight * 0.07,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	statusViewOFF: {
+		backgroundColor: '#A59F9A',
+		width: deviceWidth * 0.115,
+		height: deviceHeight * 0.07,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	statusTextON: {
+		backgroundColor: '#fff',
+		width: deviceWidth * 0.009,
+		height: deviceHeight * 0.03,
+	},
+	statusTextOFF: {
+		backgroundColor: '#A59F9A',
+		width: deviceWidth * 0.07,
+		height: deviceHeight * 0.04,
+		borderRadius: 30,
+		borderWidth: 2,
+		borderColor: '#fff',
+	},
+	arrowViewContainer: {
+		backgroundColor: 'transparent',
+		width: deviceWidth * 0.035,
+		height: deviceHeight * 0.07,
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingLeft: 5,
+		paddingTop: deviceHeight * 0.015,
+	},
+	arrowViewTopON: {
+		backgroundColor: '#F06F0C',
+		width: deviceWidth * 0.06,
+		height: deviceHeight * 0.02,
+		transform: [{ rotate: '-30deg' }],
+	},
+	arrowViewTopOFF: {
+		backgroundColor: '#A59F9A',
+		width: deviceWidth * 0.06,
+		height: deviceHeight * 0.02,
+		transform: [{ rotate: '-30deg' }],
+	},
+	arrowViewBottom: {
+		backgroundColor: '#E5E7E9',
+		width: deviceWidth * 0.06,
+		height: deviceHeight * 0.025,
+		position: 'absolute',
+		top: deviceHeight * 0.04,
+		transform: [{ rotate: '30deg' }],
 	},
 	locationCover: {
 		width: deviceWidth * 0.4,
