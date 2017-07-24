@@ -29,7 +29,7 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import { View, Header } from 'BaseComponents';
 
-import { toggleEditMode, syncWithServer, switchTab } from 'Actions';
+import { switchTab, syncWithServer, toggleEditMode } from 'Actions';
 import TabViews from 'TabViews';
 
 import { getUserProfile } from '../../Reducers/User';
@@ -72,8 +72,8 @@ type Props = {
 	userIcon: boolean,
 	userProfile: Object,
 	dashboard: Object,
-	onTabSelect: (string) => void,
-	onToggleEditMode: (string) => void,
+	onTabSelect: (tab: string) => void,
+	onToggleEditMode: (tab: string) => void,
 	dispatch: Function,
 	stackNavigator: Object,
 };
@@ -88,25 +88,22 @@ type State = {
 	settings: boolean,
 };
 
-class TabsView extends View {
-	props: Props;
-	state: State;
+class TabsView extends View<null, Props, State> {
 
 	onNavigationStateChange: (Object, Object) => void;
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
 	onToggleEditMode: () => void;
+	state = {
+		tab: {
+			index: 0,
+			routeName: 'Dashboard',
+		},
+		settings: false,
+	};
 
 	constructor(props: Props) {
 		super(props);
-
-		this.state = {
-			tab: {
-				index: 0,
-				routeName: 'Dashboard',
-			},
-			settings: false,
-		};
 
 		this.tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab', 'gatewaysTab'];
 
@@ -129,10 +126,10 @@ class TabsView extends View {
 		};
 	}
 
-	onNavigationStateChange = (prevState, newState) => {
+	onNavigationStateChange = (prevState: Object, newState: Object) => {
 		const index = newState.index;
 
-		const tab = {
+		const tab: Tab = {
 			index,
 			routeName: newState.routes[index].routeName,
 		};
@@ -150,7 +147,7 @@ class TabsView extends View {
 	};
 
 	onToggleEditMode = () => {
-		const tab = this.tabNames[this.state.tab.index];
+		const tab: string = this.tabNames[this.state.tab.index];
 		this.props.onToggleEditMode(tab);
 	};
 
@@ -158,15 +155,10 @@ class TabsView extends View {
 		let screenProps = { stackNavigator: this.props.stackNavigator };
 		const { routeName } = this.state.tab;
 
-		let rightButton;
+	render() {
+		const { routeName } = this.state.tab;
 
-		if (routeName === 'Dashboard') {
-			rightButton = this.settingsButton;
-		} else if (routeName === 'Devices' || routeName === 'Sensors') {
-			rightButton = this.starButton;
-		} else {
-			rightButton = null;
-		}
+		const rightButton = this._defineRightButton(routeName);
 
 		return (
 			<View>
@@ -180,25 +172,42 @@ class TabsView extends View {
 			</View>
 		);
 	}
+
+	_defineRightButton = (routeName: string): Object | null => {
+		let rightButton: Object | null = null;
+
+		if (routeName === 'Dashboard') {
+			rightButton = this.settingsButton;
+		}
+		if (routeName === 'Devices' || routeName === 'Sensors') {
+			rightButton = this.starButton;
+		}
+
+		return rightButton;
+	};
+
 }
 
-function mapStateToProps(store) {
+const mapStateToProps = (store: Object): Object => {
 	return {
 		tab: store.navigation.tab,
 		userIcon: false,
 		userProfile: getUserProfile(store),
 	};
-}
+};
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch: Function): Object => {
 	return {
-		onTabSelect: (tab) => {
+		onTabSelect: (tab: string) => {
+			// $FlowFixMe
 			dispatch(syncWithServer(tab));
+			// $FlowFixMe
 			dispatch(switchTab(tab));
 		},
-		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+		// $FlowFixMe
+		onToggleEditMode: (tab: string): void => dispatch(toggleEditMode(tab)),
 		dispatch,
 	};
-}
+};
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(TabsView));
