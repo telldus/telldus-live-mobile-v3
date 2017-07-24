@@ -35,8 +35,8 @@ import { getDevices } from 'Actions_Devices';
 type Props = {
 	navigation: Object,
 	children: Object,
-	reset?: Function,
 	schedule?: Object,
+	actions?: Object,
 };
 
 type State = {
@@ -57,8 +57,8 @@ class ScheduleScreen extends View<null, Props, State> {
 	static propTypes = {
 		navigation: PropTypes.object.isRequired,
 		children: PropTypes.object.isRequired,
-		reset: PropTypes.func,
 		schedule: PropTypes.object,
+		actions: PropTypes.objectOf(PropTypes.func),
 	};
 
 	state = {
@@ -83,13 +83,7 @@ class ScheduleScreen extends View<null, Props, State> {
 	}
 
 	goBack = () => {
-		const { navigation, actions } = this.props;
-
-		if (this._isDeviceTab()) {
-			actions.reset();
-		}
-
-		navigation.goBack(null);
+		this.props.navigation.goBack(null);
 	};
 
 	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
@@ -116,7 +110,6 @@ class ScheduleScreen extends View<null, Props, State> {
 							onDidMount: this.onChildDidMount,
 							navigation,
 							actions,
-							resetSchedule: this.goBack,
 							paddingRight: style.paddingHorizontal,
 							devices,
 							schedule,
@@ -136,10 +129,6 @@ class ScheduleScreen extends View<null, Props, State> {
 			paddingHorizontal: padding,
 			paddingTop: padding,
 		};
-	};
-
-	_isDeviceTab = (): boolean => {
-		return this.props.navigation.state.routeName === 'Device';
 	};
 
 }
