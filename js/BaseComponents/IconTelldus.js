@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import Theme from 'Theme';
 import getDeviceWidth from '../App/Lib/getDeviceWidth';
 
@@ -38,7 +38,7 @@ type Props = {
 	style?: Object,
 };
 
-export default class IconTelldus extends Text<DefaultProps, Props, null> {
+export default class IconTelldus extends View<DefaultProps, Props, null> {
 
 	static propTypes = {
 		icon: PropTypes.string.isRequired,
