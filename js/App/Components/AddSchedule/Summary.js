@@ -33,6 +33,7 @@ import TimeRow from './SubViews/TimeRow';
 import getSuntime from '../../Lib/getSuntime';
 import _ from 'lodash';
 import getSelectedDays from '../../Lib/getSelectedDays';
+import { ScrollView } from 'react-native';
 
 type Time = {
 	hour: number,
@@ -115,21 +116,23 @@ export default class Summary extends View<null, Props, State> {
 
 		return (
 			<View>
-				<DeviceRow row={this.device} containerStyle={row}/>
-				<ActionRow
-					method={method}
-					showValue={true}
-					methodValue={methodValue}
-					containerStyle={row}
-				/>
-				<TimeRow
-					type={type}
-					time={this.state.time}
-					offset={offset}
-					randomInterval={randomInterval}
-					containerStyle={[row, timeRow]}
-				/>
-				<DaysRow selectedDays={selectedDays} containerStyle={daysRow}/>
+				<ScrollView>
+					<DeviceRow row={this.device} containerStyle={row}/>
+					<ActionRow
+						method={method}
+						showValue={true}
+						methodValue={methodValue}
+						containerStyle={row}
+					/>
+					<TimeRow
+						type={type}
+						time={this.state.time}
+						offset={offset}
+						randomInterval={randomInterval}
+						containerStyle={[row, timeRow]}
+					/>
+					<DaysRow selectedDays={selectedDays} containerStyle={daysRow}/>
+				</ScrollView>
 				<FloatingButton
 					onPress={this.saveSchedule}
 					imageSource={require('./img/check.png')}
