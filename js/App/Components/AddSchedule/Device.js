@@ -59,15 +59,22 @@ export default class Device extends View<void, Props, State> {
 		this.h2 = 'Choose a device';
 	}
 
-	componentDidMount() {
-		const { actions, onDidMount, navigation, resetSchedule } = this.props;
-
-		if (navigation.state.params && navigation.state.params.reset) {
-			return resetSchedule();
+	componentWillMount() {
+		if (this._shouldReset()) {
+			this.props.navigation.goBack(null);
 		}
+	}
 
+	componentDidMount() {
+		const { actions, onDidMount } = this.props;
 		actions.getDevices();
 		onDidMount(this.h1, this.h2);
+	}
+
+	componentWillUnmount() {
+		if (this._shouldReset()) {
+			this.props.actions.resetSchedule();
+		}
 	}
 
 	onRefresh = () => {
@@ -92,9 +99,14 @@ export default class Device extends View<void, Props, State> {
 
 	_renderRow = (row: Object): Object => {
 		// TODO: use device description
-		const preparedRow = Object.assign({}, row, {description: 'Fibaro Plug 2'});
+		const preparedRow = Object.assign({}, row, { description: 'Fibaro Plug 2' });
 
 		return <DeviceRow row={preparedRow} onPress={this.selectDevice}/>;
+	};
+
+	_shouldReset = (): boolean => {
+		const { params } = this.props.navigation.state;
+		return params && params.reset;
 	};
 
 }
