@@ -219,7 +219,7 @@ export default class Time extends View<null, Props, State> {
 								style={[
 									androidTimeValueWrapper,
 									{
-										marginRight: this.deviceWidth * 0.014666667,
+										marginRight: getDeviceWidth() * 0.014666667,
 									},
 								]}
 
@@ -256,7 +256,7 @@ export default class Time extends View<null, Props, State> {
 		);
 
 		return (
-			<Row containerStyle={row}>
+			<Row style={{ alignItems: 'center' }} containerStyle={row}>
 				{selectedType === 'time' ? timePicker : timeSlider}
 			</Row>
 		);
