@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import Row from './Row';
 import { BlockIcon } from 'BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
@@ -67,18 +67,32 @@ const ACTIONS: ActionType[] = [
 	},
 ];
 
+type DefaultProps = {
+	showValue: boolean,
+	methodValue: number,
+};
+
 type Props = {
 	method: number,
 	onPress?: Function,
 	containerStyle?: Object,
+	showValue?: boolean,
+	methodValue?: number,
 };
 
-export default class ActionRow extends View<null, Props, null> {
+export default class ActionRow extends View<DefaultProps, Props, null> {
 
 	static propTypes = {
 		method: PropTypes.number.isRequired,
 		onPress: PropTypes.func,
 		containerStyle: View.propTypes.style,
+		showValue: PropTypes.bool,
+		methodValue: PropTypes.number,
+	};
+
+	static defaultProps = {
+		showValue: false,
+		methodValue: 0,
 	};
 
 	render() {
@@ -89,16 +103,11 @@ export default class ActionRow extends View<null, Props, null> {
 		}
 
 		const { onPress, containerStyle } = this.props;
-		const { row, icon, iconContainer, description } = this._getStyle();
+		const { row, description } = this._getStyle();
 
 		return (
 			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}>
-				<BlockIcon
-					icon={action.icon}
-					bgColor={action.bgColor}
-					style={icon}
-					containerStyle={iconContainer}
-				/>
+				{this._renderIcon(action)}
 				<TextRowWrapper>
 					<Title color={action.textColor}>{action.name}</Title>
 					<Description style={description}>{action.description}</Description>
@@ -107,8 +116,33 @@ export default class ActionRow extends View<null, Props, null> {
 		);
 	}
 
+	_renderIcon = (action: ActionType): Object => {
+		const { showValue, methodValue } = this.props;
+		const { dimContainer, dimValue, icon, iconContainer } = this._getStyle();
+
+		if (showValue && action.icon === 'dim') {
+			return (
+				<View style={[dimContainer, { backgroundColor: action.bgColor }]}>
+					<Text style={dimValue}>
+						{`${Math.round(methodValue / 255 * 100)}%`}
+					</Text>
+				</View>
+			);
+		}
+
+		return (
+			<BlockIcon
+				icon={action.icon}
+				bgColor={action.bgColor}
+				style={icon}
+				containerStyle={iconContainer}
+			/>
+		);
+	};
+
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
+		const iconContainerWidth = deviceWidth * 0.346666667;
 
 		return {
 			row: {
@@ -118,12 +152,21 @@ export default class ActionRow extends View<null, Props, null> {
 				fontSize: deviceWidth * 0.092,
 			},
 			iconContainer: {
-				width: deviceWidth * 0.346666667,
+				width: iconContainerWidth,
 			},
 			description: {
 				color: '#707070',
 				fontSize: deviceWidth * 0.032,
 				opacity: 1,
+			},
+			dimContainer: {
+				alignItems: 'center',
+				justifyContent: 'center',
+				width: iconContainerWidth,
+			},
+			dimValue: {
+				color: '#fff',
+				fontSize: deviceWidth * 0.053333333,
 			},
 		};
 	};

@@ -109,14 +109,19 @@ export default class Summary extends View<null, Props, State> {
 
 	render() {
 		const { schedule, paddingRight } = this.props;
-		const { method, type, offset, randomInterval, weekdays } = schedule;
+		const { method, methodValue, type, offset, randomInterval, weekdays } = schedule;
 		const { row, timeRow, daysRow, iconSize } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
 			<View>
 				<DeviceRow row={this.device} containerStyle={row}/>
-				<ActionRow method={method} containerStyle={row}/>
+				<ActionRow
+					method={method}
+					showValue={true}
+					methodValue={methodValue}
+					containerStyle={row}
+				/>
 				<TimeRow
 					type={type}
 					time={this.state.time}
