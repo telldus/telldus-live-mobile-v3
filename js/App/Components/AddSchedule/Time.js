@@ -65,7 +65,7 @@ export default class Time extends View<null, Props, State> {
 			tmp: true, // TODO: fill with real fields
 		};
 
-		const {type, offset, randomInterval, hour, minute} = props.schedule;
+		const { type, offset, randomInterval, hour, minute } = props.schedule;
 
 		this.state = {
 			selectedType: type,
@@ -94,7 +94,8 @@ export default class Time extends View<null, Props, State> {
 		}
 	};
 
-	async selectTimeAndroid() {
+	// eslint-disable-next-line flowtype/require-return-type
+	selectTimeAndroid = async () => {
 		const { date } = this.state;
 
 		try {
@@ -111,7 +112,7 @@ export default class Time extends View<null, Props, State> {
 		} catch (error) {
 			console.warn('Cannot open time picker', error.message);
 		}
-	}
+	};
 
 	selectTime = () => {
 		const { actions, navigation } = this.props;
