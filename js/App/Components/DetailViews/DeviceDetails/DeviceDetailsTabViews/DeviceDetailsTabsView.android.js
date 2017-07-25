@@ -26,6 +26,7 @@
 import React from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import { Text, View, Image } from 'BaseComponents';
 
@@ -34,9 +35,15 @@ import icon_settings from './../../../TabViews/img/selection.json';
 const Icon = createIconSetFromIcoMoon(icon_settings);
 
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
-import { TabNavigator, StackNavigator } from 'react-navigation';
+import { TabNavigator } from 'react-navigation';
 let deviceHeight = Dimensions.get('window').height;
 let deviceWidth = Dimensions.get('window').width;
+
+let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
+let stackNavHeaderHeight = deviceHeight * 0.1;
+let deviceIconCoverHeight = (deviceHeight * 0.2);
+let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight;
+let screenSpaceRemaining = deviceHeight - totalTop;
 
 type Props = {
 	dispatch: Function,
@@ -51,8 +58,12 @@ class DeviceDetailsTabsView extends View {
 	props: Props;
 	state: State;
 
+	goBack: () => void;
+
 	constructor(props: Props) {
 		super(props);
+		this.state = {
+		};
 		this.goBack = this.goBack.bind(this);
 	}
 
@@ -61,7 +72,9 @@ class DeviceDetailsTabsView extends View {
 	}
 
 	render() {
-		let screenProps = { device: this.props.device };
+		let screenProps = {
+			device: this.props.device,
+		};
 		return (
 			<View style={styles.container}>
 					<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('./../../../TabViews/img/telldus-geometric-header-bg.png')}>
@@ -72,8 +85,8 @@ class DeviceDetailsTabsView extends View {
 						{this.props.device.name}
 						</Text>
 					</Image>
-                <View style={{ height: (deviceHeight * 0.72) - 20 }}>
-                   <Tabs screenProps={screenProps}/>
+                <View style={{ height: screenSpaceRemaining }}>
+                   <Tabs screenProps={screenProps} />
                 </View>
             </View>
 		);
@@ -106,57 +119,16 @@ const styles = StyleSheet.create({
 	},
 });
 
-const OverviewNavigationOptions = {
-	navigationOptions: {
-		tabBarIcon: ({ tintColor }) => (
-                <Icon name="icon_home" size={24} color={tintColor} />
-            ),
-		headerStyle: {
-			height: 2,
-		},
-	},
-};
-const HistoryNavigationOptions = {
-	navigationOptions: {
-		tabBarIcon: ({ tintColor }) => (
-                <Icon name="icon_history" size={24} color={tintColor}/>
-            ),
-		headerStyle: {
-			height: 2,
-		},
-	},
-};
-const SettingsNavigationOptions = {
-	navigationOptions: {
-		tabBarIcon: ({ tintColor }) => (
-                <Icon name="icon_settings" size={24} color={tintColor}/>
-            ),
-		headerStyle: {
-			height: 2,
-		},
-	},
-};
-
-const OverviewNavigator = StackNavigator({
-	Overview: { screen: DeviceDetailsTabView.Overview },
-}, OverviewNavigationOptions);
-const HistoryNavigator = StackNavigator({
-	History: { screen: DeviceDetailsTabView.History },
-}, HistoryNavigationOptions);
-const SettingsNavigator = StackNavigator({
-	Settings: { screen: DeviceDetailsTabView.Settings },
-}, SettingsNavigationOptions);
-
 const Tabs = TabNavigator(
 	{
 		Overview: {
-			screen: OverviewNavigator,
+			screen: DeviceDetailsTabView.Overview,
 		},
 		History: {
-			screen: HistoryNavigator,
+			screen: DeviceDetailsTabView.History,
 		},
 		Settings: {
-			screen: SettingsNavigator,
+			screen: DeviceDetailsTabView.Settings,
 		},
 	},
 	{
@@ -177,6 +149,7 @@ const Tabs = TabNavigator(
 				shadowColor: '#000000',
 				shadowOpacity: 1.0,
 				elevation: 2,
+				height: deviceHeight * 0.09,
 			},
 			tabStyle: {
 				width: Dimensions.get('window').width / 3,

@@ -27,6 +27,10 @@ import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
 import { StyleSheet, Dimensions, Switch } from 'react-native';
 
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icon_settings from './../../../TabViews/img/selection.json';
+const Icon = createIconSetFromIcoMoon(icon_settings);
+
 import { LearnButton } from 'TabViews_SubViews';
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -53,6 +57,13 @@ class SettingsTab extends View {
 		super(props);
 		this.onValueChange = this.onValueChange.bind(this);
 	}
+
+	static navigationOptions = {
+		tabBarLabel: 'Settings',
+		tabBarIcon: ({ tintColor }) => (
+			<Icon name="icon_settings" size={24} color={tintColor}/>
+		),
+	};
 
 	onValueChange(value) {
 		if (!value) {

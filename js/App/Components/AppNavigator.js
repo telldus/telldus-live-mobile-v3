@@ -38,6 +38,7 @@ import {
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
 
+const deviceHeight = Dimensions.get('window').height;
 let deviceWidth = Dimensions.get('window').width;
 import Theme from 'Theme';
 
@@ -64,6 +65,7 @@ const RouteConfigs = {
 			headerStyle: {
 				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
 				backgroundColor: Theme.Core.brandPrimary,
+				height: deviceHeight * 0.1,
 			},
 			headerTintColor: '#ffffff',
 			headerTitle: renderStackHeader(),

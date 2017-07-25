@@ -24,14 +24,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import moment from 'moment';
+
 import { Text, View, ListDataSource } from 'BaseComponents';
-import { StyleSheet, ListView, Dimensions } from 'react-native';
+import { StyleSheet, ListView, Dimensions, TouchableWithoutFeedback } from 'react-native';
+
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icon_history from './../../../TabViews/img/selection.json';
+const Icon = createIconSetFromIcoMoon(icon_history);
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 import { getDeviceHistory } from 'Actions_Devices';
-import moment from 'moment';
 
 type Props = {
 };
@@ -58,6 +63,13 @@ class HistoryTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 	}
+
+	static navigationOptions = {
+		tabBarLabel: 'History',
+		tabBarIcon: ({ tintColor }) => (
+			<Icon name="icon_history" size={24} color={tintColor}/>
+		),
+	};
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({
@@ -105,7 +117,7 @@ class HistoryTab extends View {
 					</View>
 				</View>
 				<View style={styles.locationCover}>
-				<Text style={styles.originText} numberOfLines={1}>{item.origin}</Text>
+					<Text style={styles.originText} numberOfLines={1}>{item.origin}</Text>
 				</View>
 			</View>
 		);
@@ -310,7 +322,6 @@ function mapStateToProps(state, ownProps) {
 	return {
 		history: data,
 		device: ownProps.screenProps.device,
-		state,
 	};
 }
 

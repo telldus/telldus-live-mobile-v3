@@ -28,6 +28,10 @@ import { View } from 'BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
 
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icon_home from './../../../TabViews/img/selection.json';
+const Icon = createIconSetFromIcoMoon(icon_home);
+
 import getDeviceType from '../../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
 import {
@@ -55,6 +59,13 @@ class OverviewTab extends View {
 		this.state = {
 		};
 	}
+
+	static navigationOptions = {
+		tabBarLabel: 'Overview',
+		tabBarIcon: ({ tintColor }) => (
+			<Icon name="icon_home" size={24} color={tintColor}/>
+		),
+	};
 
 	getType(deviceId) {
 		const filteredItem = this.props.devices.byId[deviceId];
