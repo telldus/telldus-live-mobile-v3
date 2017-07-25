@@ -56,11 +56,11 @@ export default class BlockIcon extends View<DefaultProps, Props, null> {
 	};
 
 	render() {
-		const { style, containerStyle, bgColor, icon, size, color } = this.props;
+		const { style, containerStyle, icon, size, color } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<View style={[defaultStyle, containerStyle, { backgroundColor: bgColor }]}>
+			<View style={[defaultStyle, containerStyle]}>
 				<IconTelldus icon={icon} size={size} color={color} style={style}/>
 			</View>
 		);
@@ -70,6 +70,7 @@ export default class BlockIcon extends View<DefaultProps, Props, null> {
 		return {
 			alignItems: 'center',
 			justifyContent: 'center',
+			backgroundColor: this.props.bgColor,
 		};
 	};
 }
