@@ -49,11 +49,11 @@ export default class Title extends View<DefaultProps, Props, null> {
 	};
 
 	render() {
-		const { children, style, color } = this.props;
+		const { children, style } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[defaultStyle, style, { color }]} numberOfLines={1} ellipsizeMode="tail">
+			<Text style={[defaultStyle, style]} numberOfLines={1} ellipsizeMode="tail">
 				{children}
 			</Text>
 		);
@@ -62,6 +62,7 @@ export default class Title extends View<DefaultProps, Props, null> {
 	_getDefaultStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 		return {
+			color: this.props.color,
 			fontFamily: Theme.Core.fonts.sfnsDisplay,
 			fontSize: deviceWidth * 0.053333333,
 			marginBottom: deviceWidth * 0.008,
