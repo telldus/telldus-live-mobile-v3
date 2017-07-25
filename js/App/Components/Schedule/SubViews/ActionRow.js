@@ -40,7 +40,7 @@ type ActionType = {
 	icon: string,
 };
 
-const ACTIONS: ActionType[] = [
+export const ACTIONS: ActionType[] = [
 	{
 		name: 'On',
 		description: 'Turns the device on',

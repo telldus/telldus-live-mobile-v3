@@ -83,6 +83,7 @@ const messages = defineMessages({
 });
 import { Image, Dimensions, TouchableOpacity } from 'react-native';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
+import getDeviceWidth from '../../Lib/getDeviceWidth';
 
 type NavigationParams = {
 	focused: boolean, tintColor: string,
@@ -189,12 +190,14 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	render() {
+		const { container, line } = this._getStyle();
+
 		return (
-			<View style={{ flex: 1 }}>
+			<View style={container}>
+				<View style={line}/>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this._renderRow}
-					renderSectionHeader={this._renderSectionHeader}
 					onRefresh={this.onRefresh}
 				/>
 				<TouchableOpacity style={this.styles.addButton} onPress={this.handleAddingSchedule}>
@@ -246,11 +249,51 @@ class SchedulerTab extends View<null, Props, State> {
 		);
 	};
 
-	_renderRow = (props: Object): Object => {
+	_renderRow = (props: Object, sectionId: number, rowId: string): Object => {
 		return (
-			<JobRow {...props} />
+			<JobRow
+				{...props}
+				isFirst={this._isFirstRow(sectionId, rowId)}
+				isLast={this._isLastRow(sectionId, rowId)}
+			/>
 		);
-	}
+	};
+
+	_isFirstRow = (sectionId: number, rowId: string): boolean => {
+		const { sectionIds } = this.props.rowsAndSections;
+
+		return sectionIds.indexOf(sectionId) === 0 && +rowId === 0;
+	};
+
+	_isLastRow = (sectionId: number, rowId: string): boolean => {
+		const { sections, sectionIds } = this.props.rowsAndSections;
+		const currentSection = sections[sectionId];
+		const lastSectionIndex = sectionIds.length - 1;
+		const lastRowIndex = currentSection.length - 1;
+
+		return sectionIds.indexOf(sectionId) === lastSectionIndex && +rowId === lastRowIndex;
+	};
+
+	_getStyle = (): Object => {
+		const deviceWidth = getDeviceWidth();
+
+		return {
+			container: {
+				flex: 1,
+				paddingHorizontal: deviceWidth * 0.04,
+			},
+			line: {
+				backgroundColor: '#929292',
+				height: '100%',
+				width: 1,
+				position: 'absolute',
+				left: deviceWidth * 0.069333333,
+				top: 0,
+				zIndex: -1,
+			},
+		};
+	};
+
 }
 
 const getRowsAndSections = createSelector(
@@ -269,7 +312,7 @@ const getRowsAndSections = createSelector(
 );
 
 type MapStateToPropsType = {
-	rowsAndSections: Function,
+	rowsAndSections: Object,
 	devices: Object,
 };
 
