@@ -23,20 +23,19 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
-import moment from 'moment';
-
-import { Text, View, ListDataSource } from 'BaseComponents';
 import { StyleSheet, ListView, Dimensions, TouchableWithoutFeedback } from 'react-native';
 
+import moment from 'moment';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../TabViews/img/selection.json';
 const Icon = createIconSetFromIcoMoon(icon_history);
 
+import { Text, View, ListDataSource } from 'BaseComponents';
+import { DeviceHistoryDetails } from 'DeviceDetailsSubView';
+import { getDeviceHistory } from 'Actions_Devices';
+
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
-
-import { getDeviceHistory } from 'Actions_Devices';
 
 type Props = {
 };
@@ -53,23 +52,30 @@ class HistoryTab extends View {
 	props: Props;
 	state: State;
 
+	onOriginPress: (Object) => void;
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 			dataSource: props.history ? listDataSource
 			.cloneWithRowsAndSections(this.getRowAndSectionData(props.history.data)) : false,
 			isListEmpty: props.history && props.history.data.length === 0 ? true : false,
+			deviceDetailsShow: false,
+			deviceDetailsData: {},
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
+		this.onOriginPress = this.onOriginPress.bind(this);
 	}
 
-	static navigationOptions = {
+	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: 'History',
 		tabBarIcon: ({ tintColor }) => (
 			<Icon name="icon_history" size={24} color={tintColor}/>
 		),
-	};
+		tabBarOnPress: (scene, jumpToIndex) => {
+		},
+	});
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({
@@ -77,6 +83,11 @@ class HistoryTab extends View {
 			.cloneWithRowsAndSections(this.getRowAndSectionData(nextProps.history.data)) : false,
 			isListEmpty: nextProps.history && nextProps.history.data.length === 0 ? true : false,
 		});
+		if (this.props.screenProps.currentTab !== 'History') {
+			this.setState({
+				deviceDetailsShow: false,
+			});
+		}
 	}
 
 	// prepares the row and section data required for the List.
@@ -92,14 +103,20 @@ class HistoryTab extends View {
 		return rowSectionData;
 	}
 
+	onOriginPress(data) {
+		this.setState({
+			deviceDetailsShow: true,
+			deviceDetailsData: data,
+		});
+	}
+
 	renderRow(item, id) {
 		let time = moment.unix(item.ts).format('HH:mm:ss');
 		return (
 			<View style={styles.rowItemsContainer}>
 				<View style={styles.circularViewCover}>
 					<View style={styles.verticalLineView}/>
-					<View style={styles.circularView}>
-					</View>
+					<View style={styles.circularView} />
 					<View style={styles.verticalLineView}/>
 				</View>
 				<View style={styles.timeCover}>
@@ -116,9 +133,13 @@ class HistoryTab extends View {
 						<View style={item.state === 1 ? styles.statusTextON : styles.statusTextOFF} />
 					</View>
 				</View>
+				<TouchableWithoutFeedback onPress={() => {
+					this.onOriginPress(item);
+				}}>
 				<View style={styles.locationCover}>
 					<Text style={styles.originText} numberOfLines={1}>{item.origin}</Text>
 				</View>
+				</TouchableWithoutFeedback>
 			</View>
 		);
 	}
@@ -167,6 +188,9 @@ class HistoryTab extends View {
 					renderRow={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 				/>
+				<DeviceHistoryDetails
+					showDetails={this.state.deviceDetailsShow}
+					detailsData={this.state.deviceDetailsData} />
 			</View>
 		);
 	}

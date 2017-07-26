@@ -60,12 +60,14 @@ class OverviewTab extends View {
 		};
 	}
 
-	static navigationOptions = {
+	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: 'Overview',
 		tabBarIcon: ({ tintColor }) => (
 			<Icon name="icon_home" size={24} color={tintColor}/>
 		),
-	};
+		tabBarOnPress: (scene, jumpToIndex) => {
+		},
+	});
 
 	getType(deviceId) {
 		const filteredItem = this.props.devices.byId[deviceId];

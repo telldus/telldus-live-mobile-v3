@@ -59,21 +59,45 @@ class DeviceDetailsTabsView extends View {
 	state: State;
 
 	goBack: () => void;
+	onNavigationStateChange: (Object, Object) => void;
+	getRouteName: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
+			currentTab: 'Overview',
 		};
 		this.goBack = this.goBack.bind(this);
+		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
 
 	goBack() {
 		this.props.stackNavigator.goBack();
 	}
 
+	getRouteName(navigationState) {
+		if (!navigationState) {
+			return null;
+		}
+		const route = navigationState.routes[navigationState.index];
+		// dive into nested navigators
+		if (route.routes) {
+			return this.getRouteName(route);
+		}
+		return route.routeName;
+		}
+
+	onNavigationStateChange(prevState, currentState) {
+		const currentScreen = this.getRouteName(currentState);
+		this.setState({
+			currentTab: currentScreen,
+		});
+	}
+
 	render() {
 		let screenProps = {
 			device: this.props.device,
+			currentTab: this.state.currentTab,
 		};
 		return (
 			<View style={styles.container}>
@@ -86,7 +110,7 @@ class DeviceDetailsTabsView extends View {
 						</Text>
 					</Image>
                 <View style={{ height: screenSpaceRemaining }}>
-                   <Tabs screenProps={screenProps} />
+                   <Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
                 </View>
             </View>
 		);

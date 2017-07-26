@@ -58,12 +58,14 @@ class SettingsTab extends View {
 		this.onValueChange = this.onValueChange.bind(this);
 	}
 
-	static navigationOptions = {
+	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: 'Settings',
 		tabBarIcon: ({ tintColor }) => (
 			<Icon name="icon_settings" size={24} color={tintColor}/>
 		),
-	};
+		tabBarOnPress: (scene, jumpToIndex) => {
+		},
+	});
 
 	onValueChange(value) {
 		if (!value) {

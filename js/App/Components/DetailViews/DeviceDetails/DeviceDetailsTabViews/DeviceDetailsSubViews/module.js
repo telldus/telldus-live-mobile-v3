@@ -26,6 +26,7 @@ import ToggleDeviceDetail from './ToggleDeviceDetail';
 import BellDeviceDetail from './BellDeviceDetail';
 import DimmerDeviceDetail from './DimmerDeviceDetail';
 import NavigationalDeviceDetail from './NavigationalDeviceDetail';
+import DeviceHistoryDetails from './DeviceHistoryDetails';
 
 module.exports = {
 	DeviceLocationDetail,
@@ -33,4 +34,5 @@ module.exports = {
 	BellDeviceDetail,
 	DimmerDeviceDetail,
 	NavigationalDeviceDetail,
+	DeviceHistoryDetails,
 };
