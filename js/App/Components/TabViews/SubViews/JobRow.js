@@ -124,10 +124,10 @@ export default class JobRow extends View<null, Props, null> {
 						<Row layout="row" containerStyle={rowContainer} style={row}>
 							{this._renderActionIcon()}
 							<TextRowWrapper style={textWrapper}>
-								<Title style={title}>
+								<Title numberOfLines={1} ellipsizeMode="tail" style={title}>
 									{device.name}
 								</Title>
-								<Description style={description}>
+								<Description numberOfLines={1} ellipsizeMode="tail" style={description}>
 									description
 								</Description>
 							</TextRowWrapper>
@@ -234,7 +234,6 @@ export default class JobRow extends View<null, Props, null> {
 			rowWrapper: {
 				flexDirection: 'row',
 				alignItems: 'center',
-				paddingRight: deviceWidth * 0.068,
 				width: deviceWidth * 0.674666667,
 			},
 			triangleContainer: {
@@ -277,7 +276,9 @@ export default class JobRow extends View<null, Props, null> {
 				fontSize: action && action.name === 'Dim' ? deviceWidth * 0.04 : deviceWidth * 0.056,
 			},
 			textWrapper: {
+				flex: 1,
 				paddingLeft: deviceWidth * 0.032,
+				paddingRight: deviceWidth * 0.068,
 				width: null,
 			},
 			title: {
