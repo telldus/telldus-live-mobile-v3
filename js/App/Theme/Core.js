@@ -90,6 +90,7 @@ export default {
 	buttonPadding: 6,
 
 	borderRadiusBase: 2,
+	borderRadiusRow: 3,
 
 	get borderRadiusLarge() {
 		return this.fontSizeBase * 3.8;

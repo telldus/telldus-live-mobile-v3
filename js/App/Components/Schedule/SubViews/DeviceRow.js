@@ -29,6 +29,7 @@ import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import Theme from 'Theme';
 
 type Props = {
 	row: Object,
@@ -64,6 +65,7 @@ export default class DeviceRow extends View<null, Props, null> {
 	}
 
 	_getStyle = (): Object => {
+		const { borderRadiusRow } = Theme.Core;
 		const deviceWidth = getDeviceWidth();
 
 		return {
@@ -75,6 +77,8 @@ export default class DeviceRow extends View<null, Props, null> {
 			},
 			iconContainer: {
 				width: deviceWidth * 0.346666667,
+				borderTopLeftRadius: borderRadiusRow,
+				borderBottomLeftRadius: borderRadiusRow,
 			},
 			description: {
 				color: '#707070',

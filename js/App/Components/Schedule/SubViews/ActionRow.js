@@ -141,6 +141,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	};
 
 	_getStyle = (): Object => {
+		const { borderRadiusRow } = Theme.Core;
 		const deviceWidth = getDeviceWidth();
 		const iconContainerWidth = deviceWidth * 0.346666667;
 
@@ -152,6 +153,8 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 				fontSize: deviceWidth * 0.092,
 			},
 			iconContainer: {
+				borderTopLeftRadius: borderRadiusRow,
+				borderBottomLeftRadius: borderRadiusRow,
 				width: iconContainerWidth,
 			},
 			description: {
@@ -162,6 +165,8 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			dimContainer: {
 				alignItems: 'center',
 				justifyContent: 'center',
+				borderTopLeftRadius: borderRadiusRow,
+				borderBottomLeftRadius: borderRadiusRow,
 				width: iconContainerWidth,
 			},
 			dimValue: {

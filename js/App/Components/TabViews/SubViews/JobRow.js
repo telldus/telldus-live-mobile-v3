@@ -153,7 +153,7 @@ export default class JobRow extends View<null, Props, null> {
 
 	_getStyle = (): Object => {
 		const { active, isFirst, isLast, method } = this.props;
-		const { fonts } = Theme.Core;
+		const { fonts, borderRadiusRow } = Theme.Core;
 		const deviceWidth = getDeviceWidth();
 
 		const timeTypeIconWidth = deviceWidth * 0.061333333;
@@ -217,6 +217,8 @@ export default class JobRow extends View<null, Props, null> {
 			},
 			methodIconContainer: {
 				backgroundColor,
+				borderTopLeftRadius: borderRadiusRow,
+				borderBottomLeftRadius: borderRadiusRow,
 				alignItems: 'center',
 				justifyContent: 'center',
 				width: deviceWidth * 0.16,

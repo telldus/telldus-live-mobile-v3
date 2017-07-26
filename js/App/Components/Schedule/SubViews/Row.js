@@ -83,10 +83,10 @@ export default class Row extends View<DefaultProps, Props, null> {
 	}
 
 	_getDefaultStyle = (): Object => {
+		const { borderRadiusRow } = Theme.Core;
 		const { layout } = this.props;
 		const deviceWidth = getDeviceWidth();
 
-		const borderRadius = 3;
 		const backgroundColor = '#fff';
 
 		return {
@@ -96,7 +96,7 @@ export default class Row extends View<DefaultProps, Props, null> {
 				marginBottom: deviceWidth * 0.006666667,
 				height: deviceWidth * 0.209333333,
 				...Theme.Core.shadow,
-				borderRadius,
+				borderRadius: borderRadiusRow,
 			},
 			wrapper: {
 				backgroundColor,
@@ -104,7 +104,7 @@ export default class Row extends View<DefaultProps, Props, null> {
 				flexDirection: layout,
 				alignItems: layout === 'row' ? 'center' : 'flex-start',
 				overflow: 'hidden',
-				borderRadius,
+				borderRadius: borderRadiusRow,
 			},
 		};
 	};

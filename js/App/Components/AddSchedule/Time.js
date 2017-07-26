@@ -308,11 +308,12 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	_getStyle = (): Object => {
+		const { brandPrimary, borderRadiusRow } = Theme.Core;
 		const deviceWidth = getDeviceWidth();
 
 		const androidTimeWidth = deviceWidth * 0.213333333;
 		const androidTimeHeight = deviceWidth * 0.177333333;
-		const androidTimeColor = Theme.Core.brandPrimary;
+		const androidTimeColor = brandPrimary;
 		const marginBottom = deviceWidth * 0.025333333;
 
 		return {
@@ -351,7 +352,7 @@ export default class Time extends View<null, Props, State> {
 			},
 			androidTimeValueWrapper: {
 				backgroundColor: androidTimeColor,
-				borderRadius: 2,
+				borderRadius: borderRadiusRow,
 				position: 'relative',
 				alignItems: 'center',
 				justifyContent: 'center',
