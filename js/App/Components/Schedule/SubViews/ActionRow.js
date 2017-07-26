@@ -61,7 +61,7 @@ export const ACTIONS: ActionType[] = [
 		name: 'Dim',
 		description: 'Dims the device',
 		method: 16,
-		bgColor: 'rgba(226, 105, 1, 0.80)',
+		bgColor: '#e88631',
 		textColor: Theme.Core.brandSecondary,
 		icon: 'dim',
 	},
