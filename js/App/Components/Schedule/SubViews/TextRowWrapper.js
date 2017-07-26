@@ -53,7 +53,7 @@ export default class TextRowWrapper extends View<null, Props, null> {
 
 		return {
 			justifyContent: 'center',
-			backgroundColor: '#fff',
+			backgroundColor: 'transparent',
 			alignItems: 'flex-start',
 			width: deviceWidth * 0.586666667,
 			paddingLeft: deviceWidth * 0.101333333,
