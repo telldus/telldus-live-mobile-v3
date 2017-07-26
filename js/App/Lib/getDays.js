@@ -21,7 +21,15 @@
 
 import { DAYS } from 'Constants';
 
-export default function getSelectedDays(storedSelectedDays: number[]): string[] {
+export const getWeekdays = (): string[] => {
+	return DAYS.slice(0, 5);
+};
+
+export const getWeekends = (): string[] => {
+	return DAYS.slice(5, 8);
+};
+
+export const getSelectedDays = (storedSelectedDays: number[]): string[] => {
 	const selectedDays: string[] = [];
 
 	for (let i = 0; i < storedSelectedDays.length; i++) {
@@ -29,4 +37,4 @@ export default function getSelectedDays(storedSelectedDays: number[]): string[] 
 	}
 
 	return selectedDays;
-}
+};

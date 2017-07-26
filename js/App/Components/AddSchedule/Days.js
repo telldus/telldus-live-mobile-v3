@@ -32,7 +32,7 @@ import { CheckboxSolid, FloatingButton } from 'BaseComponents';
 import _ from 'lodash';
 import DaysRow from './SubViews/DaysRow';
 import { DAYS } from 'Constants';
-import getSelectedDays from '../../Lib/getSelectedDays';
+import { getWeekdays, getWeekends, getSelectedDays } from '../../Lib/getDays';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -128,7 +128,7 @@ export default class Days extends View<null, Props, State> {
 			this.uncheckAll();
 		} else {
 			this.setState({
-				selectedDays: this._getWeekdays(),
+				selectedDays: getWeekdays(),
 				shouldUncheckAll: true,
 				shouldCheckAll: true,
 				isWeekdaysSelected: true,
@@ -142,7 +142,7 @@ export default class Days extends View<null, Props, State> {
 			this.uncheckAll();
 		} else {
 			this.setState({
-				selectedDays: this._getWeekends(),
+				selectedDays: getWeekends(),
 				shouldUncheckAll: true,
 				shouldCheckAll: true,
 				isWeekdaysSelected: false,
@@ -252,29 +252,21 @@ export default class Days extends View<null, Props, State> {
 	};
 
 	_isSelected = (days: string, selectedDays?: string[] = this.state.selectedDays): boolean => {
-		let isWeekdaysSelected: boolean = false;
+		let isSelected: boolean = false;
 
 		if (days === 'weekdays') {
 			if (selectedDays.length === 5) {
-				isWeekdaysSelected = _.isEqual(selectedDays, this._getWeekdays());
+				isSelected = _.isEqual(selectedDays, getWeekdays());
 			}
 		}
 
 		if (days === 'weekends') {
 			if (selectedDays.length === 2) {
-				isWeekdaysSelected = _.isEqual(selectedDays, this._getWeekends());
+				isSelected = _.isEqual(selectedDays, getWeekends());
 			}
 		}
 
-		return isWeekdaysSelected;
-	};
-
-	_getWeekdays = (): string[] => {
-		return DAYS.slice(0, 5);
-	};
-
-	_getWeekends = (): string[] => {
-		return DAYS.slice(5, 8);
+		return isSelected;
 	};
 
 	_getStyle = (): Object => {

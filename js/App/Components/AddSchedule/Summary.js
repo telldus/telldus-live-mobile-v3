@@ -32,7 +32,7 @@ import DaysRow from './SubViews/DaysRow';
 import TimeRow from './SubViews/TimeRow';
 import getSuntime from '../../Lib/getSuntime';
 import _ from 'lodash';
-import getSelectedDays from '../../Lib/getSelectedDays';
+import { getSelectedDays } from '../../Lib/getDays';
 import { ScrollView } from 'react-native';
 
 type Time = {
