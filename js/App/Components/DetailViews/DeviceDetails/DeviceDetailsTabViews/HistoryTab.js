@@ -179,6 +179,7 @@ HistoryTab.propTypes = {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingTop: 2,
 	},
 	sectionHeader: {
 		width: deviceWidth,

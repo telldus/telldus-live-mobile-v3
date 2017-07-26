@@ -133,14 +133,10 @@ const Tabs = TabNavigator(
 	},
 	{
 		initialRouteName: 'Overview',
-		swipeEnabled: true,
-		lazy: true,
-		animationEnabled: true,
 		tabBarOptions: {
 			indicatorStyle: {
 				backgroundColor: '#fff',
 			},
-			scrollEnabled: true,
 			labelStyle: {
 				fontSize: Math.round(Dimensions.get('window').width / 35),
 			},
@@ -159,6 +155,11 @@ const Tabs = TabNavigator(
 				width: 25,
 				height: 25,
 			},
+			swipeEnabled: true,
+			lazy: true,
+			animationEnabled: true,
+			upperCaseLabel: false,
+			scrollEnabled: true,
 			activeTintColor: '#F06F0C',
 			inactiveTintColor: '#A59F9A',
 			showIcon: true,
