@@ -255,11 +255,23 @@ export default class Time extends View<null, Props, State> {
 			/>
 		);
 
-		return (
-			<Row style={{ alignItems: 'center' }} containerStyle={row}>
-				{selectedType === 'time' ? timePicker : timeSlider}
-			</Row>
-		);
+		let resultRow: Object;
+
+		if (selectedType === 'time') {
+			resultRow = (
+				<Row style={{ alignItems: 'center' }} containerStyle={row}>
+					{timePicker}
+				</Row>
+			);
+		} else {
+			resultRow = (
+				<Row containerStyle={row}>
+					{timeSlider}
+				</Row>
+			);
+		}
+
+		return resultRow;
 	};
 
 	_onDateChange = (date: Date) => {

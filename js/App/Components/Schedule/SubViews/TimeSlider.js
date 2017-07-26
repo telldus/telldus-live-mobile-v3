@@ -127,6 +127,7 @@ export default class TimeSlider extends View<null, Props, State> {
 				paddingHorizontal: padding,
 				paddingTop: padding,
 				paddingBottom: padding * 1.65,
+				width: '100%',
 			},
 			row: {
 				flexDirection: 'row',
