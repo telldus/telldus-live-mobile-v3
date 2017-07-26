@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { BlockIcon } from 'BaseComponents';
 import Theme from 'Theme';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
@@ -86,6 +86,9 @@ export default class JobRow extends View<null, Props, null> {
 			timeTypeIcon,
 			time,
 			rowWrapper,
+			triangleContainer,
+			triangle,
+			triangleShadow,
 			rowContainer,
 			row,
 			textWrapper,
@@ -105,6 +108,10 @@ export default class JobRow extends View<null, Props, null> {
 						{`${effectiveHour}:${effectiveMinute}`}
 					</Text>
 					<View style={rowWrapper}>
+						<View style={triangleContainer}>
+							<Image source={require('../img/triangle-shadow.png')} style={triangleShadow}/>
+							<Image source={require('../img/triangle.png')} style={triangle}/>
+						</View>
 						<Row layout="row" containerStyle={rowContainer} style={row}>
 							{this._renderActionIcon()}
 							<TextRowWrapper style={textWrapper}>
@@ -163,6 +170,9 @@ export default class JobRow extends View<null, Props, null> {
 			backgroundColor = action.bgColor;
 		}
 
+		const triangleWidth = deviceWidth * 0.022666667;
+		const triangleHeight = deviceWidth * 0.025333334;
+
 		return {
 			container: {
 				flexDirection: 'row',
@@ -204,6 +214,28 @@ export default class JobRow extends View<null, Props, null> {
 				flexDirection: 'row',
 				alignItems: 'center',
 				width: deviceWidth * 0.674666667,
+			},
+			triangleContainer: {
+				width: triangleWidth,
+				height: triangleHeight,
+				zIndex: 3,
+			},
+			triangleShadow: {
+				width: triangleWidth,
+				height: triangleHeight,
+				position: 'absolute',
+				right: 0,
+				top: 0,
+				zIndex: -1,
+			},
+			triangle: {
+				width: triangleWidth,
+				height: triangleHeight,
+				position: 'absolute',
+				right: 0,
+				top: 0,
+				zIndex: 1,
+				tintColor: backgroundColor,
 			},
 			rowContainer: {
 				height: null,
