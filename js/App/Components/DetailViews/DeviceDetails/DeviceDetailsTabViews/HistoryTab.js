@@ -135,7 +135,7 @@ class HistoryTab extends View {
 				</View>
 				<View style={styles.statusViewCover}>
 					<View style={styles.arrowViewContainer}>
-						<View style={item.state === 1 ? styles.arrowViewTopON : styles.arrowViewTopOFF} />
+						<View style={item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ? styles.arrowViewTopOFF : styles.arrowViewTopON} />
 						<View style={styles.arrowViewBottom} />
 					</View>
 					{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
