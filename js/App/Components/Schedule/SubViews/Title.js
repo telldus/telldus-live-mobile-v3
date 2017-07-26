@@ -49,11 +49,11 @@ export default class Title extends View<DefaultProps, Props, null> {
 	};
 
 	render() {
-		const { children, style } = this.props;
+		const { children, style, color, ...props } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[defaultStyle, style]} numberOfLines={1} ellipsizeMode="tail">
+			<Text {...props} style={[defaultStyle, style]}>
 				{children}
 			</Text>
 		);

@@ -39,11 +39,11 @@ export default class Description extends View<null, Props, null> {
 	};
 
 	render() {
-		const { children, style } = this.props;
+		const { children, style, ...props } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[defaultStyle, style]}>
+			<Text {...props} style={[defaultStyle, style]}>
 				{children}
 			</Text>
 		);

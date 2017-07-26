@@ -57,7 +57,9 @@ export default class DeviceRow extends View<null, Props, null> {
 					containerStyle={iconContainer}
 				/>
 				<TextRowWrapper>
-					<Title>{row.name}</Title>
+					<Title numberOfLines={1} ellipsizeMode="tail">
+						{row.name}
+					</Title>
 					<Description style={description}>{row.description}</Description>
 				</TextRowWrapper>
 			</Row>
