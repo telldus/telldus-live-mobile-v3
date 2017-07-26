@@ -87,8 +87,9 @@ export default class JobRow extends View<null, Props, null> {
 			time,
 			rowWrapper,
 			triangleContainer,
-			triangle,
+			triangleCommon,
 			triangleShadow,
+			triangle,
 			rowContainer,
 			row,
 			textWrapper,
@@ -109,8 +110,14 @@ export default class JobRow extends View<null, Props, null> {
 					</Text>
 					<View style={rowWrapper}>
 						<View style={triangleContainer}>
-							<Image source={require('../img/triangle-shadow.png')} style={triangleShadow}/>
-							<Image source={require('../img/triangle.png')} style={triangle}/>
+							<Image
+								source={require('../img/triangle-shadow.png')}
+								style={[triangleCommon, triangleShadow]}
+							/>
+							<Image
+								source={require('../img/triangle.png')}
+								style={[triangleCommon, triangle]}
+							/>
 						</View>
 						<Row layout="row" containerStyle={rowContainer} style={row}>
 							{this._renderActionIcon()}
@@ -220,20 +227,17 @@ export default class JobRow extends View<null, Props, null> {
 				height: triangleHeight,
 				zIndex: 3,
 			},
-			triangleShadow: {
+			triangleCommon: {
 				width: triangleWidth,
 				height: triangleHeight,
 				position: 'absolute',
 				right: 0,
 				top: 0,
+			},
+			triangleShadow: {
 				zIndex: -1,
 			},
 			triangle: {
-				width: triangleWidth,
-				height: triangleHeight,
-				position: 'absolute',
-				right: 0,
-				top: 0,
 				zIndex: 1,
 				tintColor: backgroundColor,
 			},
