@@ -55,7 +55,6 @@ type Props = {
 	type: string,
 	weekdays: number[],
 	isFirst: boolean,
-	isLast: boolean,
 };
 
 export default class JobRow extends View<null, Props, null> {
@@ -72,7 +71,6 @@ export default class JobRow extends View<null, Props, null> {
 		type: PropTypes.string.isRequired,
 		weekdays: PropTypes.arrayOf(PropTypes.number).isRequired,
 		isFirst: PropTypes.bool.isRequired,
-		isLast: PropTypes.bool.isRequired,
 	};
 
 	render() {
@@ -152,7 +150,7 @@ export default class JobRow extends View<null, Props, null> {
 	};
 
 	_getStyle = (): Object => {
-		const { active, isFirst, isLast, method } = this.props;
+		const { active, isFirst, method } = this.props;
 		const { fonts, borderRadiusRow } = Theme.Core;
 		const deviceWidth = getDeviceWidth();
 
@@ -183,7 +181,7 @@ export default class JobRow extends View<null, Props, null> {
 				flexDirection: 'row',
 				alignItems: 'center',
 				paddingTop: isFirst ? deviceWidth * 0.037333333 : padding,
-				paddingBottom: isLast ? 0 : padding,
+				paddingBottom: padding,
 				opacity: active ? 1 : 0.5,
 			},
 			timeTypeContainer: {

@@ -251,11 +251,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_renderRow = (props: Object, sectionId: number, rowId: string): Object => {
 		return (
-			<JobRow
-				{...props}
-				isFirst={this._isFirstRow(sectionId, rowId)}
-				isLast={this._isLastRow(sectionId, rowId)}
-			/>
+			<JobRow {...props} isFirst={this._isFirstRow(sectionId, rowId)}/>
 		);
 	};
 
@@ -263,15 +259,6 @@ class SchedulerTab extends View<null, Props, State> {
 		const { sectionIds } = this.props.rowsAndSections;
 
 		return sectionIds.indexOf(sectionId) === 0 && +rowId === 0;
-	};
-
-	_isLastRow = (sectionId: number, rowId: string): boolean => {
-		const { sections, sectionIds } = this.props.rowsAndSections;
-		const currentSection = sections[sectionId];
-		const lastSectionIndex = sectionIds.length - 1;
-		const lastRowIndex = currentSection.length - 1;
-
-		return sectionIds.indexOf(sectionId) === lastSectionIndex && +rowId === lastRowIndex;
 	};
 
 	_getStyle = (): Object => {
