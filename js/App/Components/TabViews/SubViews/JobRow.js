@@ -23,7 +23,7 @@
 
 import React, { PropTypes } from 'react';
 import { Image, Text, View } from 'react-native';
-import { BlockIcon } from 'BaseComponents';
+import { BlockIcon, IconTelldus } from 'BaseComponents';
 import Theme from 'Theme';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
 import Row from '../../Schedule/SubViews/Row';
@@ -78,7 +78,7 @@ export default class JobRow extends View<null, Props, null> {
 			return null;
 		}
 
-		const { type, effectiveHour, effectiveMinute, device } = this.props;
+		const { type, effectiveHour, effectiveMinute, device, offset, randomInterval } = this.props;
 		const {
 			container,
 			wrapper,
@@ -95,6 +95,8 @@ export default class JobRow extends View<null, Props, null> {
 			textWrapper,
 			title,
 			description,
+			iconOffset,
+			iconRandom,
 		} = this._getStyle();
 
 		return (
@@ -129,6 +131,18 @@ export default class JobRow extends View<null, Props, null> {
 									description
 								</Description>
 							</TextRowWrapper>
+							{!!offset && (
+								<IconTelldus
+									icon="offset"
+									style={iconOffset}
+								/>
+							)}
+							{!!randomInterval && (
+								<IconTelldus
+									icon="random"
+									style={iconRandom}
+								/>
+							)}
 						</Row>
 					</View>
 				</View>
@@ -220,6 +234,7 @@ export default class JobRow extends View<null, Props, null> {
 			rowWrapper: {
 				flexDirection: 'row',
 				alignItems: 'center',
+				paddingRight: deviceWidth * 0.068,
 				width: deviceWidth * 0.674666667,
 			},
 			triangleContainer: {
@@ -275,6 +290,16 @@ export default class JobRow extends View<null, Props, null> {
 				color: '#707070',
 				fontSize: deviceWidth * 0.032,
 				opacity: 1,
+			},
+			iconOffset: {
+				position: 'absolute',
+				right: deviceWidth * 0.014666667,
+				top: deviceWidth * 0.016,
+			},
+			iconRandom: {
+				position: 'absolute',
+				right: deviceWidth * 0.014666667,
+				bottom: deviceWidth * 0.016,
 			},
 		};
 	};
