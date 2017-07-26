@@ -94,7 +94,7 @@ class HistoryTab extends View {
 	// prepares the row and section data required for the List.
 	getRowAndSectionData(data) {
 		let rowSectionData = data.reduce((result, key) => {
-			let date = moment.unix(key.ts).format('dddd, MMMM Do');
+			let date = moment.unix(key.ts).format('dddd, MMMM D');
 			if (!result[date]) {
 				result[date] = [];
 			}

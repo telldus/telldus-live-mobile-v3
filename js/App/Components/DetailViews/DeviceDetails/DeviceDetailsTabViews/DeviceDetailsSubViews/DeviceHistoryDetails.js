@@ -27,8 +27,12 @@ import { View, Text } from 'BaseComponents';
 import { StyleSheet, Dimensions, Animated } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
+import moment from 'moment';
+
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
+
+import { states, statusMessage } from '../../../../../../Config';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 let stackNavHeaderHeight = deviceHeight * 0.1;
@@ -72,10 +76,24 @@ class DeviceHistoryDetails extends View {
 	}
 
 	render() {
+		let textState = '', textDate = '', textStatus = '';
+		if (this.props.detailsData.state) {
+			let state = states[this.props.detailsData.state];
+			textState = state === 'Dim' ? `${state} ${this.props.detailsData.stateValue}%` : state;
+		}
+		if (this.props.detailsData.ts) {
+			textDate = moment.unix(this.props.detailsData.ts).format('ddd, MMMM D HH:mm:ss');
+		}
+		if (this.props.detailsData.successStatus >= 0) {
+			let message = statusMessage[this.props.detailsData.successStatus];
+			textStatus = this.props.detailsData.successStatus === 0 ? message : `Failed (${message})`;
+		}
+
 		let YAnimatedValue = this.animatedYValue.interpolate({
 			inputRange: [-screenSpaceRemaining, 0],
 			outputRange: [-screenSpaceRemaining, 0],
 		});
+
 		return (
 			<Animated.View style={[styles.container, { transform: [{ translateY: YAnimatedValue }] }]}>
 				<View style={styles.titleTextCover}>
@@ -92,7 +110,7 @@ class DeviceHistoryDetails extends View {
 						</View>
 						<View style={styles.detailsValueCover}>
 							<Text style={styles.detailsText}>
-								{this.props.detailsData.state === 1 ? 'ON' : 'OFF'}
+								{textState}
 							</Text>
 						</View>
 					</View>
@@ -103,7 +121,8 @@ class DeviceHistoryDetails extends View {
 							</Text>
 						</View>
 						<View style={styles.detailsValueCover}>
-							<Text style={styles.detailsText}>
+							<Text style={styles.detailsText} >
+								{textDate}
 							</Text>
 						</View>
 					</View>
@@ -126,7 +145,8 @@ class DeviceHistoryDetails extends View {
 							</Text>
 						</View>
 						<View style={styles.detailsValueCover}>
-							<Text style={styles.detailsText}>
+							<Text style={this.props.detailsData.successStatus === 0 ? styles.detailsText : styles.detailsTextError} >
+								{textStatus}
 							</Text>
 						</View>
 					</View>
@@ -175,7 +195,7 @@ const styles = StyleSheet.create({
 	},
 	detailsLabelCover: {
 		alignItems: 'flex-start',
-		width: deviceWidth / 2,
+		width: deviceWidth * 0.3,
 	},
 	detailsLabel: {
 		marginLeft: 10,
@@ -184,11 +204,16 @@ const styles = StyleSheet.create({
 	},
 	detailsValueCover: {
 		alignItems: 'flex-end',
-		width: deviceWidth / 2,
+		width: deviceWidth * 0.7,
 	},
 	detailsText: {
 		marginRight: 15,
 		color: '#A59F9A',
+		fontSize: 16,
+	},
+	detailsTextError: {
+		marginRight: 15,
+		color: 'red',
 		fontSize: 16,
 	},
 });
