@@ -30,7 +30,7 @@ import { methods } from '../../Config.js';
 
 import getPowerParts from '../Lib/getPowerParts';
 
-function getSupportedMethods(methodsAggregate: number): Object {
+export function getSupportedMethods(methodsAggregate: number): Object {
 	const methodNumbers = getPowerParts(methodsAggregate);
 	const methodHashmap = methodNumbers.reduce((memo, methodNumber) => {
 		memo[methods[methodNumber]] = true;
@@ -40,7 +40,7 @@ function getSupportedMethods(methodsAggregate: number): Object {
 	return methodHashmap;
 }
 
-function getDeviceStateMethod(deviceStateNumber: number): string {
+export function getDeviceStateMethod(deviceStateNumber: number): string {
 	return methods[parseInt(deviceStateNumber, 10)];
 }
 

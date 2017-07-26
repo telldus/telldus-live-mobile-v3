@@ -33,6 +33,7 @@ const Icon = createIconSetFromIcoMoon(icon_history);
 import { Text, View, ListDataSource } from 'BaseComponents';
 import { DeviceHistoryDetails } from 'DeviceDetailsSubView';
 import { getDeviceHistory } from 'Actions_Devices';
+import { getDeviceStateMethod } from 'Reducers_Devices';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -112,11 +113,19 @@ class HistoryTab extends View {
 
 	renderRow(item, id) {
 		let time = moment.unix(item.ts).format('HH:mm:ss');
+		let deviceState = getDeviceStateMethod(item.state);
 		return (
 			<View style={styles.rowItemsContainer}>
 				<View style={styles.circularViewCover}>
 					<View style={styles.verticalLineView}/>
-					<View style={styles.circularView} />
+					{ item.successStatus !== 0 ?
+						<View style={[styles.circularView, { backgroundColor: 'red' }]} >
+							<View style={styles.verticalDash} />
+							<View style={styles.dot} />
+						</View>
+					:
+						<View style={[styles.circularView, { backgroundColor: '#A59F9A' }]} />
+					}
 					<View style={styles.verticalLineView}/>
 				</View>
 				<View style={styles.timeCover}>
@@ -129,9 +138,19 @@ class HistoryTab extends View {
 						<View style={item.state === 1 ? styles.arrowViewTopON : styles.arrowViewTopOFF} />
 						<View style={styles.arrowViewBottom} />
 					</View>
-					<View style={item.state === 1 ? styles.statusViewON : styles.statusViewOFF}>
-						<View style={item.state === 1 ? styles.statusTextON : styles.statusTextOFF} />
+					{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
+						<View style={styles.statusViewOFF}>
+							<View style={styles.statusTextOFF} />
+						</View>
+					:
+					<View style={styles.statusViewON}>
+						{deviceState === 'DIM' ?
+							<Text>{item.stateValue}%</Text>
+							:
+							<View style={styles.statusTextON} />
+						}
 					</View>
+					}
 				</View>
 				<TouchableWithoutFeedback onPress={() => {
 					this.onOriginPress(item);
@@ -238,10 +257,23 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 	},
 	circularView: {
-		backgroundColor: '#A59F9A',
 		borderRadius: 30,
 		height: deviceHeight * 0.05,
 		width: deviceWidth * 0.08,
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexDirection: 'column',
+	},
+	verticalDash: {
+		width: 2,
+		backgroundColor: '#ffffff',
+		height: deviceHeight * 0.022,
+	},
+	dot: {
+		backgroundColor: '#ffffff',
+		marginTop: 2,
+		width: 2,
+		height: 2,
 	},
 	verticalLineView: {
 		backgroundColor: '#A59F9A',
