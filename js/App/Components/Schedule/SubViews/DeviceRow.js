@@ -60,7 +60,9 @@ export default class DeviceRow extends View<null, Props, null> {
 					<Title numberOfLines={1} ellipsizeMode="tail">
 						{row.name}
 					</Title>
-					<Description style={description}>{row.description}</Description>
+					<Description numberOfLines={1} ellipsizeMode="tail" style={description}>
+						{row.description}
+					</Description>
 				</TextRowWrapper>
 			</Row>
 		);
