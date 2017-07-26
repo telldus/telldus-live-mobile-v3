@@ -31,6 +31,10 @@ import TextRowWrapper from '../../Schedule/SubViews/TextRowWrapper';
 import Title from '../../Schedule/SubViews/Title';
 import Description from '../../Schedule/SubViews/Description';
 import { ACTIONS } from '../../Schedule/SubViews/ActionRow';
+import { getSelectedDays, getWeekdays, getWeekends } from '../../../Lib/getDays';
+import { DAYS } from 'Constants';
+import _ from 'lodash';
+import capitalize from '../../../Lib/capitalize';
 
 const methodNames = {
 	[1]: 'On',
@@ -98,6 +102,7 @@ export default class JobRow extends View<null, Props, null> {
 			iconOffset,
 			iconRandom,
 		} = this._getStyle();
+		const repeat = this._getRepeatDescription();
 
 		return (
 			<View style={container}>
@@ -128,7 +133,7 @@ export default class JobRow extends View<null, Props, null> {
 									{device.name}
 								</Title>
 								<Description numberOfLines={1} ellipsizeMode="tail" style={description}>
-									description
+									{repeat}
 								</Description>
 							</TextRowWrapper>
 							{!!offset && (
@@ -175,6 +180,30 @@ export default class JobRow extends View<null, Props, null> {
 		}
 
 		return null;
+	};
+
+	_getRepeatDescription = (): string => {
+		const { type, effectiveHour, effectiveMinute, weekdays } = this.props;
+		const selectedDays: string[] = getSelectedDays(weekdays);
+
+		let repeatDays: string = '';
+
+		if (selectedDays.length === DAYS.length) {
+			repeatDays = 'Every day';
+		} else if (_.isEqual(selectedDays, getWeekdays())) {
+			repeatDays = 'Every weekdays';
+		} else if (_.isEqual(selectedDays, getWeekends())) {
+			repeatDays = 'Every weekends';
+		} else {
+			for (let day of selectedDays) {
+				repeatDays += `${day.slice(0, 3).toLowerCase()}, `;
+			}
+			repeatDays = capitalize(repeatDays.slice(0, -2));
+		}
+
+		const repeatTime: string = (type === 'time') ? `${effectiveHour}:${effectiveMinute}` : type;
+
+		return `${repeatDays} at ${repeatTime}`;
 	};
 
 	_getStyle = (): Object => {
