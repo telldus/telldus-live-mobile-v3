@@ -54,6 +54,7 @@ class HistoryTab extends View {
 	state: State;
 
 	onOriginPress: (Object) => void;
+	refreshHistoryData: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -63,6 +64,7 @@ class HistoryTab extends View {
 			isListEmpty: props.history && props.history.data.length === 0 ? true : false,
 			deviceDetailsShow: false,
 			deviceDetailsData: {},
+			hasRefreshed: false,
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
@@ -79,16 +81,32 @@ class HistoryTab extends View {
 	});
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({
-			dataSource: nextProps.history ? listDataSource
-			.cloneWithRowsAndSections(this.getRowAndSectionData(nextProps.history.data)) : false,
-			isListEmpty: nextProps.history && nextProps.history.data.length === 0 ? true : false,
-		});
-		if (this.props.screenProps.currentTab !== 'History') {
+		if (nextProps.history && ((!this.props.history) || (nextProps.history.data.length !== this.props.history.data.length))) {
 			this.setState({
-				deviceDetailsShow: false,
+				dataSource: listDataSource.cloneWithRowsAndSections(this.getRowAndSectionData(nextProps.history.data)),
+				isListEmpty: nextProps.history.data.length === 0 ? true : false,
 			});
 		}
+		if (nextProps.screenProps.currentTab === 'History') {
+			if (!this.state.hasRefreshed) {
+				this.refreshHistoryData();
+				this.setState({
+					hasRefreshed: true,
+				});
+			}
+		} else {
+			this.setState({
+				deviceDetailsShow: false,
+				hasRefreshed: false,
+			});
+		}
+	}
+
+	refreshHistoryData() {
+		let that = this;
+		this.delayRefreshHistoryData = setTimeout(() => {
+			that.props.dispatch(getDeviceHistory(that.props.device));
+		}, 2000);
 	}
 
 	// prepares the row and section data required for the List.
@@ -171,12 +189,8 @@ class HistoryTab extends View {
 		);
 	}
 
-	componentDidMount() {
-		// if history data not received yet make an API call.[previous call's result will reach, just a matter of time
-		// and this one is just for precaution, can remove if seems unnecessary]
-		if (!this.props.history) {
-			this.props.dispatch(getDeviceHistory(this.props.device));
-		}
+	componentWillUnmount() {
+		clearTimeout(this.delayRefreshHistoryData);
 	}
 
 	render() {
