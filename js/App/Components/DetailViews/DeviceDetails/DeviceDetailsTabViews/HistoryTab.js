@@ -223,6 +223,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingTop: 2,
+		backgroundColor: '#E5E7E9',
 	},
 	sectionHeader: {
 		width: deviceWidth,
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
 	},
 	verticalLineView: {
 		backgroundColor: '#A59F9A',
-		height: deviceHeight * 0.022,
+		height: deviceHeight * 0.025,
 		width: 2,
 	},
 	timeCover: {
