@@ -26,7 +26,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Header, View } from 'BaseComponents';
-import Poster from './SubViews/Poster';
+import SchedulePoster from './SubViews/SchedulePoster';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 
 import * as scheduleActions from 'Actions_Schedule';
@@ -102,7 +102,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		return (
 			<View>
 				<Header leftButton={this.backButton}/>
-				<Poster h1={h1} h2={h2} infoButton={infoButton}/>
+				<SchedulePoster h1={h1} h2={h2} infoButton={infoButton}/>
 				<View style={style}>
 					{React.cloneElement(
 						children,
