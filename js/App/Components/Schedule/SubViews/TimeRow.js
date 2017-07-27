@@ -71,7 +71,7 @@ export default class TimeRow extends View<null, Props, null> {
 				/>
 				<View style={textWrapper}>
 					<Description style={title}>
-						{`${capitalize(type)} ${this._formatTime(time)}`}
+						{`${capitalize(type)} ${this._formatTime(time, type)}`}
 					</Description>
 					{!!offset && (
 						<View style={iconRow}>
@@ -94,7 +94,11 @@ export default class TimeRow extends View<null, Props, null> {
 		);
 	}
 
-	_formatTime = (time: Time): string => {
+	_formatTime = (time: Time, type: string): string => {
+		if (type !== 'time' && (time.hour === 0 && time.minute === 0)) {
+			return '(––:––)';
+		}
+
 		const hour = this._formatTimeValue(time.hour);
 		const minute = this._formatTimeValue(time.minute);
 
