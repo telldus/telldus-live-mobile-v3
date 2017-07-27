@@ -28,6 +28,8 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
+import { getStore } from '../../../../Store/ConfigureStore';
+
 import { Text, View, Image } from 'BaseComponents';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
@@ -85,7 +87,7 @@ class DeviceDetailsTabsView extends View {
 			return this.getRouteName(route);
 		}
 		return route.routeName;
-		}
+	}
 
 	onNavigationStateChange(prevState, currentState) {
 		const currentScreen = this.getRouteName(currentState);
@@ -116,6 +118,15 @@ class DeviceDetailsTabsView extends View {
 		);
 	}
 }
+// Might not be the best way, but will work fine, may use till a better solution is found.
+function onTabPress(tab) {
+	let { dispatch } = getStore();
+	dispatch({
+		type: 'REQUEST_MODAL_CLOSE',
+		payload: {},
+	});
+}
+
 const styles = StyleSheet.create({
 	container: {
 	},
@@ -178,6 +189,9 @@ const Tabs = TabNavigator(
 			iconStyle: {
 				width: 25,
 				height: 25,
+			},
+			onTabPress: (tab) => {
+				onTabPress(tab);
 			},
 			swipeEnabled: true,
 			lazy: true,

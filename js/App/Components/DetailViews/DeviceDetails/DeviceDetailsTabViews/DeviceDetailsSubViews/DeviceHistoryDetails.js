@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { View, Text, Icon } from 'BaseComponents';
 import { StyleSheet, Dimensions, Animated } from 'react-native';
@@ -223,4 +224,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default DeviceHistoryDetails;
+function mapStateToProps(state) {
+	return {
+		showDetails: state.modal.openModal,
+		detailsData: state.modal.data,
+	};
+}
+
+export default connect(mapStateToProps, null)(DeviceHistoryDetails);

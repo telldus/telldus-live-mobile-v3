@@ -62,8 +62,6 @@ class HistoryTab extends View {
 			dataSource: props.history ? listDataSource
 			.cloneWithRowsAndSections(this.getRowAndSectionData(props.history.data)) : false,
 			isListEmpty: props.history && props.history.data.length === 0 ? true : false,
-			deviceDetailsShow: false,
-			deviceDetailsData: {},
 			hasRefreshed: false,
 		};
 		this.renderRow = this.renderRow.bind(this);
@@ -96,7 +94,6 @@ class HistoryTab extends View {
 			}
 		} else {
 			this.setState({
-				deviceDetailsShow: false,
 				hasRefreshed: false,
 			});
 		}
@@ -123,9 +120,9 @@ class HistoryTab extends View {
 	}
 
 	onOriginPress(data) {
-		this.setState({
-			deviceDetailsShow: true,
-			deviceDetailsData: data,
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_OPEN',
+			payload: data,
 		});
 	}
 
@@ -221,9 +218,7 @@ class HistoryTab extends View {
 					renderRow={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 				/>
-				<DeviceHistoryDetails
-					showDetails={this.state.deviceDetailsShow}
-					detailsData={this.state.deviceDetailsData} />
+				<DeviceHistoryDetails />
 			</View>
 		);
 	}

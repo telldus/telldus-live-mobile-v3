@@ -15,40 +15,38 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Reducers
  */
 
 // @flow
 
 'use strict';
 
-import { combineReducers } from 'redux';
+import type { Action } from 'Actions_Types';
 
-import Devices from './Devices';
-import Gateways from './Gateways';
-import Navigation from './Navigation';
-import Sensors from './Sensors';
-import User from './User';
-import Tabs from './Tabs';
-import Dashboard from './Dashboard';
-import Dimmer from './Dimmer';
-import Jobs from './Jobs';
-import LiveApi from './LiveApi';
-import Websockets from './Websockets';
-import Modal from './Modal';
+export type State = {
+	openModal: boolean,
+	data: Object,
+}
+const initialState = {
+	openModal: false,
+	data: {},
+};
 
-module.exports = combineReducers({
-	devices: Devices,
-	gateways: Gateways,
-	navigation: Navigation,
-	sensors: Sensors,
-	user: User,
-	tabs: Tabs,
-	dashboard: Dashboard,
-	dimmer: Dimmer,
-	jobs: Jobs,
-	liveApi: LiveApi,
-	websockets: Websockets,
-	modal: Modal,
-});
+export default function reduceModal(state: State = initialState, action: Action): State {
+	switch (action.type) {
+		case 'REQUEST_MODAL_OPEN':
+			return {
+				...state,
+				openModal: true,
+				data: action.payload,
+			};
+		case 'REQUEST_MODAL_CLOSE':
+			return {
+				...state,
+				openModal: false,
+			};
+		default:
+			return state;
+	}
+
+}

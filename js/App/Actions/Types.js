@@ -72,6 +72,9 @@ export type Action =
 
 	| { type: 'REQUEST_TURNON', payload: Object }
 	| { type: 'REQUEST_TURNOFF', payload: Object }
+
+	| { type: 'REQUEST_MODAL_OPEN', payload: Object }
+	| { type: 'REQUEST_MODAL_CLOSE', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
