@@ -61,8 +61,10 @@ export default class Poster extends View<DefaultProps, Props, null> {
 
 		return {
 			image: {
-				height: deviceWidth * 0.577333333,
-				width: deviceWidth,
+				flex: 1,
+				height: undefined,
+				width: undefined,
+				resizeMode: 'cover',
 			},
 			mask: {
 				borderWidth: 0,
