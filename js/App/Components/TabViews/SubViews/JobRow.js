@@ -256,7 +256,7 @@ export default class JobRow extends View<null, Props, null> {
 			},
 			time: {
 				color: '#555',
-				fontSize: deviceWidth * 0.046666667,
+				fontSize: Math.floor(deviceWidth * 0.046666667),
 				fontFamily: fonts.robotoMedium,
 				marginHorizontal: deviceWidth * 0.033333333,
 			},
