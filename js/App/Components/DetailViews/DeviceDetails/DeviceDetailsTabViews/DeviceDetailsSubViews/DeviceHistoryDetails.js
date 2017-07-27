@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import { View, Text } from 'BaseComponents';
+import { View, Text, Icon } from 'BaseComponents';
 import { StyleSheet, Dimensions, Animated } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
@@ -144,10 +144,15 @@ class DeviceHistoryDetails extends View {
 								Status
 							</Text>
 						</View>
-						<View style={styles.detailsValueCover}>
+						<View style={[styles.detailsValueCover, { flexDirection: 'row-reverse' }]}>
 							<Text style={this.props.detailsData.successStatus === 0 ? styles.detailsText : styles.detailsTextError} >
 								{textStatus}
 							</Text>
+							{this.props.detailsData.successStatus === 0 ?
+							null
+							:
+							<Icon name="exclamation-triangle" size={24} color="red" />
+							}
 						</View>
 					</View>
 				</View>
