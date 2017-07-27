@@ -23,16 +23,14 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { ScrollView } from 'react-native';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 
-import { I18n, List, ListDataSource, Text, View } from 'BaseComponents';
-import { JobRow } from 'TabViews_SubViews';
+import { I18n, List, ListDataSource, View } from 'BaseComponents';
+import { JobRow, JobsPoster } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
-import Theme from 'Theme';
-
-import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
 
@@ -90,18 +88,13 @@ type NavigationParams = {
 };
 
 type Props = {
-	rowsAndSections: Object,
+	rowsAndSections: Object[],
 	devices: Object,
 	dispatch: Function,
 	screenProps: Object,
 };
 
-type State = {
-	dataSource: Object,
-};
-
-
-class SchedulerTab extends View<null, Props, State> {
+class SchedulerTab extends View<null, Props, null> {
 
 	static propTypes = {
 		rowsAndSections: PropTypes.object,
@@ -114,78 +107,7 @@ class SchedulerTab extends View<null, Props, State> {
 		},
 	};
 
-	constructor(props: Props) {
-		super(props);
-
-		const { sections, sectionIds } = this.props.rowsAndSections;
-
-		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this._rowHasChanged,
-				sectionHeaderHasChanged: (s1: Object, s2: Object): boolean => s1 !== s2,
-			}).cloneWithRowsAndSections(sections, sectionIds),
-		};
-
-		this.windowHeight = Dimensions.get('window').height;
-		this.windowWidth = Dimensions.get('window').width;
-		this.addButtonSize = this.windowWidth * 0.134666667;
-		this.addButtonOffset = this.windowWidth * 0.034666667;
-		this.addButtonTextSize = this.windowWidth * 0.056;
-
-		const centerContent = {
-			flex: 1,
-			justifyContent: 'center',
-			alignItems: 'center',
-		};
-
-		this.styles = {
-			centerContent,
-			container: {
-				flex: 1,
-			},
-			header: {
-				...centerContent,
-				paddingTop: 20,
-				backgroundColor: Theme.Core.brandPrimary,
-				maxHeight: this.windowHeight * 0.095952024,
-			},
-			addButton: {
-				backgroundColor: Theme.Core.brandSecondary,
-				borderRadius: 50,
-				position: 'absolute',
-				height: this.addButtonSize,
-				width: this.addButtonSize,
-				bottom: this.addButtonOffset,
-				right: this.addButtonOffset,
-				shadowColor: '#000',
-				shadowOpacity: 0.5,
-				shadowRadius: 2,
-				shadowOffset: {
-					height: 2,
-					width: 0,
-				},
-				elevation: 3,
-			},
-			iconPlus: {
-				width: this.addButtonTextSize,
-				height: this.addButtonTextSize,
-			},
-		};
-
-		this.renderRow = this.renderRow.bind(this);
-		this.renderSectionHeader = this.renderSectionHeader.bind(this);
-		this.onRefresh = this.onRefresh.bind(this);
-	}
-
-	componentWillReceiveProps(nextProps: Props) {
-		const { sections, sectionIds } = nextProps.rowsAndSections;
-
-		this.setState({
-			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
-		});
-	}
-
-	onRefresh() {
+	onRefresh = () => {
 		this.props.dispatch(getJobs());
 	}
 
@@ -193,46 +115,29 @@ class SchedulerTab extends View<null, Props, State> {
 		const { container, line } = this._getStyle();
 
 		return (
-			<View style={container}>
-				<View style={line}/>
-				<List
-					dataSource={this.state.dataSource}
-					renderRow={this._renderRow}
-					onRefresh={this.onRefresh}
-				/>
-				<TouchableOpacity style={this.styles.addButton} onPress={this.handleAddingSchedule}>
-					<View style={this.styles.centerContent}>
-						<Image source={require('./img/iconPlus.png')} style={this.styles.iconPlus}/>
-					</View>
-				</TouchableOpacity>
-			</View>
-		);
-	}
+			<ScrollView horizontal={true} pagingEnabled={true} showsHorizontalScrollIndicator={false}>
+				{this.props.rowsAndSections.map((section: Object): Object => {
+					const dataSource = new ListDataSource(
+						{
+							rowHasChanged: this._rowHasChanged,
+						},
+					).cloneWithRows(section);
 
-	_renderSectionHeader = (sectionData: Object, sectionId: number): Object => {
-		// TODO: move to own Component
-		const {formatMessage} = this.props.screenProps.intl;
-		const todayInWeek = parseInt(moment().format('d'), 10);
-		const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
-		const daysInWeek = [messages.sunday, messages.monday, messages.tuesday, messages.wednesday, messages.thursday, messages.friday, messages.saturday];
-
-		let sectionName;
-		if (sectionId === 0) {
-			sectionName = formatMessage(messages.today);
-		} else if (sectionId === 1) {
-			sectionName = formatMessage(messages.tomorrow);
-		} else if (sectionId === 7) {
-			sectionName = formatMessage(messages.nextWeekday, {weekday: formatMessage(daysInWeek[todayInWeek])});
-		} else {
-			sectionName = formatMessage(daysInWeek[absoluteDayInWeek]);
-		}
-
-		return (
-			<View style={Theme.Styles.sectionHeader}>
-				<Text style={Theme.Styles.sectionHeaderText}>
-					{sectionName}
-				</Text>
-			</View>
+					return (
+						<View>
+							<JobsPoster/>
+							<View style={container}>
+								<View style={line}/>
+								<List
+									dataSource={dataSource}
+									renderRow={this._renderRow}
+									onRefresh={this.onRefresh}
+								/>
+							</View>
+						</View>
+					);
+				})}
+			</ScrollView>
 		);
 	}
 
@@ -251,14 +156,8 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_renderRow = (props: Object, sectionId: number, rowId: string): Object => {
 		return (
-			<JobRow {...props} isFirst={this._isFirstRow(sectionId, rowId)}/>
+			<JobRow {...props} isFirst={+rowId === 0}/>
 		);
-	};
-
-	_isFirstRow = (sectionId: number, rowId: string): boolean => {
-		const { sectionIds } = this.props.rowsAndSections;
-
-		return sectionIds.indexOf(sectionId) === 0 && +rowId === 0;
 	};
 
 	_getStyle = (): Object => {
@@ -268,6 +167,7 @@ class SchedulerTab extends View<null, Props, State> {
 			container: {
 				flex: 1,
 				paddingHorizontal: deviceWidth * 0.04,
+				backgroundColor: '#fff',
 			},
 			line: {
 				backgroundColor: '#929292',
@@ -289,17 +189,26 @@ const getRowsAndSections = createSelector(
 		({ gateways }: { gateways: Object }): Object => gateways,
 		({ devices }: { devices: Object }): Object => devices,
 	],
-	(jobs: Object[], gateways: Object, devices: Object): Object => {
+	(jobs: Object[], gateways: Object, devices: Object): Object[] => {
 		const { sections, sectionIds } = parseJobsForListView(jobs, gateways, devices);
-		return {
-			sections,
-			sectionIds,
-		};
+
+		const sectionObjects: Object[] = [];
+
+		for (let i = 0; i < sectionIds.length; i++) {
+			sectionObjects.push(
+				sections[i].reduce((acc: Object, cur: Object, j: number): Object => {
+					acc[j] = cur;
+					return acc;
+				}, {}),
+			);
+		}
+
+		return sectionObjects;
 	},
 );
 
 type MapStateToPropsType = {
-	rowsAndSections: Object,
+	rowsAndSections: Object[],
 	devices: Object,
 };
 
