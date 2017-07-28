@@ -127,9 +127,28 @@ class HistoryTab extends View {
 		});
 	}
 
+	getIcon(deviceState) {
+		switch (deviceState) {
+			case 'TURNON':
+				return 'icon_on';
+			case 'TURNOFF':
+				return 'icon_off';
+			case 'UP':
+				return 'icon_up';
+			case 'DOWN':
+				return 'icon_down';
+			case 'STOP':
+				return 'icon_stop';
+			default:
+				return '';
+		}
+
+	}
+
 	renderRow(item, id) {
 		let time = moment.unix(item.ts).format('HH:mm:ss');
 		let deviceState = getDeviceStateMethod(item.state);
+		let icon = this.getIcon(deviceState);
 		return (
 			<View style={styles.rowItemsContainer}>
 				<View style={styles.circularViewCover}>
@@ -156,14 +175,14 @@ class HistoryTab extends View {
 					</View>
 					{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
 						<View style={styles.statusViewOFF}>
-							<View style={styles.statusTextOFF} />
+							<Icon name={icon} size={24} color="#ffffff" />
 						</View>
 					:
 					<View style={styles.statusViewON}>
 						{deviceState === 'DIM' ?
 							<Text>{item.stateValue}%</Text>
 							:
-							<View style={styles.statusTextON} />
+							<Icon name={icon} size={24} color="#ffffff" />
 						}
 					</View>
 					}
