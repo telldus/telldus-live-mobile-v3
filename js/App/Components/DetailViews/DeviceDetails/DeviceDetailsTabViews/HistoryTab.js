@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
 		width: deviceWidth * 0.15,
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
-		marginLeft: 8,
+		marginLeft: deviceWidth * 0.025,
 	},
 	fillerViewToAlign: {
 		flex: 1,
