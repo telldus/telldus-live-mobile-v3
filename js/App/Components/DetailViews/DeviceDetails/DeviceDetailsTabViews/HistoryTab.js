@@ -67,6 +67,7 @@ class HistoryTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.onOriginPress = this.onOriginPress.bind(this);
+		this.renderFillerComponent = this.renderFillerComponent.bind(this);
 	}
 
 	static navigationOptions = ({ navigation }) => ({
@@ -186,6 +187,16 @@ class HistoryTab extends View {
 		);
 	}
 
+	renderFillerComponent() {
+		return (
+			<View style={styles.fillerComponent}>
+				<View style={styles.fillerViewToAlign}>
+					<View style={styles.fillerVerticalLine}/>
+				</View>
+			</View>
+		);
+	}
+
 	componentWillUnmount() {
 		clearTimeout(this.delayRefreshHistoryData);
 	}
@@ -218,6 +229,7 @@ class HistoryTab extends View {
 					renderRow={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 				/>
+				{this.renderFillerComponent()}
 				<DeviceHistoryDetails />
 			</View>
 		);
@@ -233,6 +245,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingTop: 2,
 		backgroundColor: '#E5E7E9',
+		flexDirection: 'row',
+		width: deviceWidth,
+		flexWrap: 'wrap',
+		justifyContent: 'flex-start',
+		alignItems: 'flex-start',
 	},
 	sectionHeader: {
 		width: deviceWidth,
@@ -374,6 +391,24 @@ const styles = StyleSheet.create({
 	},
 	originText: {
 		color: '#A59F9A',
+	},
+	fillerComponent: {
+		flex: 1,
+		width: deviceWidth * 0.15,
+		justifyContent: 'flex-start',
+		alignItems: 'flex-start',
+		marginLeft: 8,
+	},
+	fillerViewToAlign: {
+		flex: 1,
+		width: deviceWidth * 0.15,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	fillerVerticalLine: {
+		flex: 1,
+		backgroundColor: '#A59F9A',
+		width: 2,
 	},
 });
 
