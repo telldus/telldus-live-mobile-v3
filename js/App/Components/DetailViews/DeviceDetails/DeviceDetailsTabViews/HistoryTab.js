@@ -28,9 +28,9 @@ import { StyleSheet, ListView, Dimensions, TouchableWithoutFeedback } from 'reac
 import moment from 'moment';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../TabViews/img/selection.json';
-const Icon = createIconSetFromIcoMoon(icon_history);
+const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { Text, View, ListDataSource } from 'BaseComponents';
+import { Text, View, ListDataSource, Icon } from 'BaseComponents';
 import { DeviceHistoryDetails } from 'DeviceDetailsSubView';
 import { getDeviceHistory } from 'Actions_Devices';
 import { getDeviceStateMethod } from 'Reducers_Devices';
@@ -73,7 +73,7 @@ class HistoryTab extends View {
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: 'History',
 		tabBarIcon: ({ tintColor }) => (
-			<Icon name="icon_history" size={24} color={tintColor}/>
+			<CustomIcon name="icon_history" size={24} color={tintColor}/>
 		),
 		tabBarOnPress: (scene, jumpToIndex) => {
 		},
@@ -175,14 +175,14 @@ class HistoryTab extends View {
 					</View>
 					{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
 						<View style={styles.statusViewOFF}>
-							<Icon name={icon} size={24} color="#ffffff" />
+							<CustomIcon name={icon} size={24} color="#ffffff" />
 						</View>
 					:
 					<View style={styles.statusViewON}>
 						{deviceState === 'DIM' ?
 							<Text>{item.stateValue}%</Text>
 							:
-							<Icon name={icon} size={24} color="#ffffff" />
+							<CustomIcon name={icon} size={24} color="#ffffff" />
 						}
 					</View>
 					}
@@ -224,8 +224,9 @@ class HistoryTab extends View {
 		// Loader message when data has not received yet.
 		if (!this.state.dataSource) {
 			return (
-			<View style={styles.container}>
-				<Text>
+			<View style={styles.containerWhenNoData}>
+				<CustomIcon name="icon_loading" size={20} color="#F06F0C" />
+				<Text style={styles.textWhenNoData}>
 					Loading...
 				</Text>
 			</View>
@@ -234,9 +235,10 @@ class HistoryTab extends View {
 		// response received but, no history for the requested device, so empty list message.
 		if (this.state.dataSource && this.state.isListEmpty) {
 			return (
-			<View style={styles.container}>
-				<Text>
-					No history found for this device.
+			<View style={styles.containerWhenNoData}>
+				<Icon name="exclamation-circle" size={20} color="#F06F0C" />
+				<Text style={styles.textWhenNoData}>
+					No recent activity on device
 				</Text>
 			</View>
 			);
@@ -269,6 +271,19 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
+	},
+	containerWhenNoData: {
+		flex: 1,
+		paddingTop: 20,
+		backgroundColor: '#E5E7E9',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+	},
+	textWhenNoData: {
+		marginLeft: 10,
+		color: '#A59F9A',
+		fontSize: 12,
 	},
 	sectionHeader: {
 		width: deviceWidth,
