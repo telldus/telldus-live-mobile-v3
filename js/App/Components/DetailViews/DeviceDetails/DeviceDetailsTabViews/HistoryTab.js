@@ -135,6 +135,8 @@ class HistoryTab extends View {
 				return 'icon_off';
 			case 'UP':
 				return 'icon_up';
+			case 'BELL':
+				return 'icon_bell';
 			case 'DOWN':
 				return 'icon_down';
 			case 'STOP':
