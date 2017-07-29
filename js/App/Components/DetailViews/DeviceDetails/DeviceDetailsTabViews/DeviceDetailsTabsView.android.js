@@ -148,9 +148,9 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: (deviceWidth * 0.17),
-		height: (deviceHeight * 0.1),
-		borderRadius: 29,
+		width: (deviceHeight * 0.12),
+		height: (deviceHeight * 0.12),
+		borderRadius: (deviceHeight * 0.06),
 	},
 });
 

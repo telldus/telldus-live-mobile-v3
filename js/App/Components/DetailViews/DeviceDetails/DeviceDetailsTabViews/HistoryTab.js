@@ -303,9 +303,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 	},
 	circularView: {
-		borderRadius: 30,
+		borderRadius: deviceHeight * 0.025,
 		height: deviceHeight * 0.05,
-		width: deviceWidth * 0.08,
+		width: deviceHeight * 0.05,
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'column',
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
 	verticalDash: {
 		width: 2,
 		backgroundColor: '#ffffff',
-		height: deviceHeight * 0.022,
+		height: deviceHeight * 0.025,
 	},
 	dot: {
 		backgroundColor: '#ffffff',
