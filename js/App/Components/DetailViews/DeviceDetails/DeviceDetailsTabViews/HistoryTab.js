@@ -222,6 +222,13 @@ class HistoryTab extends View {
 		clearTimeout(this.delayRefreshHistoryData);
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps.screenProps.currentTab !== 'History') {
+			return false;
+		}
+		return true;
+	}
+
 	render() {
 		// Loader message when data has not received yet.
 		if (!this.state.dataSource) {

@@ -79,6 +79,13 @@ class OverviewTab extends View {
 		return getDeviceType(supportedMethods);
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps.screenProps.currentTab !== 'Overview') {
+			return false;
+		}
+		return true;
+	}
+
 	render() {
 		let deviceId = this.props.device.id;
 		let deviceDetail = null;

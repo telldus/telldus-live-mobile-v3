@@ -75,6 +75,13 @@ class SettingsTab extends View {
 		}
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps.screenProps.currentTab !== 'Settings') {
+			return false;
+		}
+		return true;
+	}
+
 	render() {
 		const device = this.props.device;
 		const { LEARN } = device.supportedMethods;
