@@ -180,11 +180,13 @@ const Tabs = TabNavigator(
 				shadowColor: '#000000',
 				shadowOpacity: 1.0,
 				elevation: 2,
-				height: deviceHeight * 0.09,
+				height: deviceHeight * 0.085,
 			},
 			tabStyle: {
 				width: Dimensions.get('window').width / 3,
 				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
 			},
 			iconStyle: {
 				width: 25,

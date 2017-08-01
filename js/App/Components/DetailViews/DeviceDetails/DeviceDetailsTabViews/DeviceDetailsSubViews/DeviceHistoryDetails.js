@@ -38,7 +38,7 @@ import { states, statusMessage } from '../../../../../../Config';
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 let stackNavHeaderHeight = deviceHeight * 0.1;
 let deviceIconCoverHeight = (deviceHeight * 0.2);
-let tabViewHeaderHeight = (deviceHeight * 0.09);
+let tabViewHeaderHeight = (deviceHeight * 0.085);
 let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
 let screenSpaceRemaining = deviceHeight - totalTop;
 
