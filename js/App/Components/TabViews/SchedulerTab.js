@@ -23,63 +23,15 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView } from 'react-native';
+import { ActivityIndicator, ScrollView } from 'react-native';
 import { createSelector } from 'reselect';
-import { defineMessages } from 'react-intl';
-import i18n from '../../Translations/common';
+import moment from 'moment';
 
 import { I18n, List, ListDataSource, View } from 'BaseComponents';
 import { JobRow, JobsPoster } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
-
-const messages = defineMessages({
-	friday: {
-		id: 'days.friday',
-		defaultMessage: 'Friday',
-	},
-	monday: {
-		id: 'days.monday',
-		defaultMessage: 'Monday',
-	},
-	nextWeekday: {
-		id: 'days.nextWeekday',
-		defaultMessage: 'Next {weekday}',
-		description: 'Used by the scheduler to display the day one week from now. Example "Next Wednesday"',
-	},
-	saturday: {
-		id: 'days.saturday',
-		defaultMessage: 'Saturday',
-	},
-	sunday: {
-		id: 'days.sunday',
-		defaultMessage: 'Sunday',
-	},
-	thursday: {
-		id: 'days.thursday',
-		defaultMessage: 'Thursday',
-	},
-	today: {
-		id: 'days.today',
-		defaultMessage: 'Today',
-		description: 'Used by the scheduler to display a header with the schedules running today',
-	},
-	tomorrow: {
-		id: 'days.tomorrow',
-		defaultMessage: 'Tomorrow',
-		description: 'Used by the scheduler to display a header with the schedules running tomorrow',
-	},
-	tuesday: {
-		id: 'days.tuesday',
-		defaultMessage: 'Tuesday',
-	},
-	wednesday: {
-		id: 'days.wednesday',
-		defaultMessage: 'Wednesday',
-	},
-});
-import { Image, Dimensions, TouchableOpacity } from 'react-native';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 
@@ -95,7 +47,8 @@ type Props = {
 };
 
 type State = {
-	daysToRender: React$Element<any>[],
+	daysToRender?: React$Element<any>[],
+	todayIndex?: number,
 };
 
 class SchedulerTab extends View<null, Props, State> {
@@ -114,17 +67,19 @@ class SchedulerTab extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
+		this.contentOffset = 0;
+		this.days = this._getDays(props.rowsAndSections);
+
 		this.state = {
 			daysToRender: this._getDaysToRender(props.rowsAndSections.slice(0, 1)),
+			todayIndex: 0,
+			loading: true,
 		};
 	}
 
 	componentDidMount() {
-		setTimeout(() => {
-			const remainingDaysToRender = this._getDaysToRender(this.props.rowsAndSections.slice(1));
-			const daysToRender = this.state.daysToRender.concat(remainingDaysToRender);
-			this.setState({ daysToRender });
-		});
+		const daysToRender = this._getDaysToRender(this.props.rowsAndSections);
+		this.setState({ daysToRender });
 	}
 
 	componentWillReceiveProps(nextProps: Props) {
@@ -133,26 +88,85 @@ class SchedulerTab extends View<null, Props, State> {
 		this.setState({ daysToRender });
 	}
 
+	componentDidUpdate() {
+		const { loading, daysToRender } = this.state;
+
+		if (loading && daysToRender.length === this.props.rowsAndSections.length) {
+			setTimeout(() => {
+				this.setState({ loading: false });
+			});
+		}
+	}
+
 	onRefresh = () => {
 		this.props.dispatch(getJobs());
 	}
 
 	render() {
+		if (this.state.loading) {
+			return (
+				<View style={{
+					flex: 1,
+					justifyContent: 'center',
+				}}>
+					<ActivityIndicator size="large"/>
+				</View>
+			);
+		}
+
+		const { todayIndex, daysToRender } = this.state;
+
 		return (
-			<ScrollView
-				horizontal={true}
-				pagingEnabled={true}
-				showsHorizontalScrollIndicator={false}
-			>
-				{this.state.daysToRender}
-			</ScrollView>
+			<View>
+				<JobsPoster
+					days={this.days}
+					todayIndex={todayIndex}
+					scroll={this._scroll}
+				/>
+				< ScrollView
+					horizontal={true}
+					pagingEnabled={true}
+					scrollEnabled={false}
+					showsHorizontalScrollIndicator={false}
+					ref={this._refScroll}
+				>
+					{daysToRender}
+				</ScrollView>
+			</View>
 		);
 	}
+
+	_refScroll = (scroll: React$Element<ScrollView>) => {
+		this.scroll = scroll;
+	};
+
+	_scroll = (days: number) => {
+		if (this.scroll) {
+			this.contentOffset += getDeviceWidth() * days;
+
+			this.setState({ todayIndex: this.state.todayIndex + days }, () => {
+				this.scroll.scrollTo({
+					x: this.contentOffset,
+					y: 0,
+				});
+			});
+		}
+	};
+
+	_getDays = (dataArray: Object[]): string[] => {
+		const days: string[] = [];
+
+		for (let i = 0; i < dataArray.length; i++) {
+			days.push(moment().add(i, 'days').format('dddd'));
+		}
+
+		return days;
+	};
 
 	_getDaysToRender = (dataArray: Object[]): React$Element<any>[] => {
 		const { container, line } = this._getStyle();
 
-		return dataArray.map((section: Object): Object => {
+		return dataArray.map((section: Object, i: number): Object => {
 			const dataSource = new ListDataSource(
 				{
 					rowHasChanged: this._rowHasChanged,
@@ -160,16 +174,13 @@ class SchedulerTab extends View<null, Props, State> {
 			).cloneWithRows(section);
 
 			return (
-				<View>
-					<JobsPoster/>
-					<View style={container}>
-						<View style={line}/>
-						<List
-							dataSource={dataSource}
-							renderRow={this._renderRow}
-							onRefresh={this.onRefresh}
-						/>
-					</View>
+				<View style={container} key={i}>
+					<View style={line}/>
+					<List
+						dataSource={dataSource}
+						renderRow={this._renderRow}
+						onRefresh={this.onRefresh}
+					/>
 				</View>
 			);
 		});
