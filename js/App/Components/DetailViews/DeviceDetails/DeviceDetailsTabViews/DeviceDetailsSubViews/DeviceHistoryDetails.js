@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		position: 'absolute',
-		backgroundColor: '#E5E7E9',
+		backgroundColor: '#eeeeef',
 		width: deviceWidth,
 		height: screenSpaceRemaining,
 	},

@@ -170,32 +170,34 @@ class HistoryTab extends View {
 						{time}
 					</Text>
 				</View>
-				<View style={styles.statusViewCover}>
-					<View style={styles.arrowViewContainer}>
-						<View style={item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ? styles.arrowViewTopOFF : styles.arrowViewTopON} />
-						<View style={styles.arrowViewBottom} />
-					</View>
-					{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
-						<View style={styles.statusViewOFF}>
-							<CustomIcon name={icon} size={24} color="#ffffff" />
+					<View style={styles.statusArrowLocationContainer}>
+						<View style={styles.arrowViewContainer}>
+							<View style={item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ? styles.arrowViewTopOFF : styles.arrowViewTopON} />
+							<View style={styles.arrowViewBottom} />
 						</View>
-					:
-					<View style={styles.statusViewON}>
-						{deviceState === 'DIM' ?
-							<Text>{item.stateValue}%</Text>
-							:
-							<CustomIcon name={icon} size={24} color="#ffffff" />
-						}
+						<TouchableWithoutFeedback onPress={() => {
+							this.onOriginPress(item);
+						}}>
+							<View style={[styles.statusViewCover, styles.shadow]}>
+								{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
+									<View style={styles.statusViewOFF}>
+										<CustomIcon name={icon} size={24} color="#ffffff" />
+									</View>
+								:
+									<View style={styles.statusViewON}>
+										{deviceState === 'DIM' ?
+											<Text>{item.stateValue}%</Text>
+											:
+											<CustomIcon name={icon} size={24} color="#ffffff" />
+										}
+									</View>
+								}
+								<View style={styles.locationCover}>
+									<Text style={styles.originText} numberOfLines={1}>{item.origin}</Text>
+								</View>
+							</View>
+						</TouchableWithoutFeedback>
 					</View>
-					}
-				</View>
-				<TouchableWithoutFeedback onPress={() => {
-					this.onOriginPress(item);
-				}}>
-				<View style={styles.locationCover}>
-					<Text style={styles.originText} numberOfLines={1}>{item.origin}</Text>
-				</View>
-				</TouchableWithoutFeedback>
 			</View>
 		);
 	}
@@ -274,7 +276,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingTop: 2,
-		backgroundColor: '#E5E7E9',
+		backgroundColor: '#eeeeef',
 		flexDirection: 'row',
 		width: deviceWidth,
 		flexWrap: 'wrap',
@@ -284,7 +286,7 @@ const styles = StyleSheet.create({
 	containerWhenNoData: {
 		flex: 1,
 		paddingTop: 20,
-		backgroundColor: '#E5E7E9',
+		backgroundColor: '#eeeeef',
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
@@ -360,12 +362,20 @@ const styles = StyleSheet.create({
 		color: '#A59F9A',
 		fontSize: 16,
 	},
-	statusViewCover: {
-		width: deviceWidth * 0.15,
-		height: deviceHeight * 0.09,
+	statusArrowLocationContainer: {
+		width: deviceWidth * 0.55,
+		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'row',
+	},
+	statusViewCover: {
+		width: deviceWidth * 0.515,
+		height: deviceHeight * 0.07,
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexDirection: 'row',
+		borderRadius: 2,
 	},
 	statusViewON: {
 		backgroundColor: '#F06F0C',
@@ -373,6 +383,8 @@ const styles = StyleSheet.create({
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
+		borderTopLeftRadius: 2,
+		borderBottomLeftRadius: 2,
 	},
 	statusViewOFF: {
 		backgroundColor: '#A59F9A',
@@ -380,6 +392,8 @@ const styles = StyleSheet.create({
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
+		borderTopLeftRadius: 2,
+		borderBottomLeftRadius: 2,
 	},
 	statusTextON: {
 		backgroundColor: '#fff',
@@ -395,7 +409,6 @@ const styles = StyleSheet.create({
 		borderColor: '#fff',
 	},
 	arrowViewContainer: {
-		backgroundColor: 'transparent',
 		width: deviceWidth * 0.035,
 		height: deviceHeight * 0.07,
 		flexDirection: 'column',
@@ -417,7 +430,7 @@ const styles = StyleSheet.create({
 		transform: [{ rotate: '-30deg' }],
 	},
 	arrowViewBottom: {
-		backgroundColor: '#E5E7E9',
+		backgroundColor: '#eeeeef',
 		width: deviceWidth * 0.06,
 		height: deviceHeight * 0.025,
 		position: 'absolute',
@@ -431,6 +444,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		paddingLeft: 10,
+		borderTopRightRadius: 2,
+		borderBottomRightRadius: 2,
 	},
 	originText: {
 		color: '#A59F9A',
@@ -452,6 +467,16 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#A59F9A',
 		width: 2,
+	},
+	shadow: {
+		shadowColor: '#000000',
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowRadius: 1,
+		shadowOpacity: 1.0,
+		elevation: 2,
 	},
 });
 
