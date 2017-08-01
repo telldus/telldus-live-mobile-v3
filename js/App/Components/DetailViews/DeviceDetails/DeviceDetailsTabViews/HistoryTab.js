@@ -181,7 +181,7 @@ class HistoryTab extends View {
 							<View style={[styles.statusViewCover, styles.shadow]}>
 								{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
 									<View style={styles.statusViewOFF}>
-										<CustomIcon name={icon} size={24} color="#ffffff" />
+										<CustomIcon name="icon_off" size={24} color="#ffffff" />
 									</View>
 								:
 									<View style={styles.statusViewON}>
