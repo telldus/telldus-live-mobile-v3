@@ -102,7 +102,7 @@ class DeviceHistoryDetails extends View {
 						Details
 					</Text>
 				</View>
-				<View style={styles.detailsConatiner}>
+				<View style={styles.detailsContainer}>
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
 		color: '#A59F9A',
 		fontSize: 16,
 	},
-	detailsConatiner: {
+	detailsContainer: {
 		backgroundColor: '#ffffff',
 		alignItems: 'center',
 		justifyContent: 'flex-end',

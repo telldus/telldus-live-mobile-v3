@@ -180,11 +180,11 @@ class HistoryTab extends View {
 						}}>
 							<View style={[styles.statusLocationContainer, styles.shadow]}>
 								{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
-									<View style={styles.statusViewOFF}>
+									<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
 										<CustomIcon name="icon_off" size={24} color="#ffffff" />
 									</View>
 								:
-									<View style={styles.statusViewON}>
+									<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
 										{deviceState === 'DIM' ?
 											<Text>{item.stateValue}%</Text>
 											:
@@ -386,17 +386,17 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		borderRadius: 2,
 	},
-	statusViewON: {
-		backgroundColor: '#F06F0C',
-		width: deviceWidth * 0.165,
-		height: deviceHeight * 0.07,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderTopLeftRadius: 2,
-		borderBottomLeftRadius: 2,
+	shadow: {
+		shadowColor: '#000000',
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowRadius: 1,
+		shadowOpacity: 1.0,
+		elevation: 2,
 	},
-	statusViewOFF: {
-		backgroundColor: '#A59F9A',
+	statusView: {
 		width: deviceWidth * 0.165,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
@@ -476,16 +476,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#A59F9A',
 		width: 2,
-	},
-	shadow: {
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
 	},
 });
 
