@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
 		width: 2,
 	},
 	timeCover: {
-		width: deviceWidth * 0.25,
+		width: deviceWidth * 0.20,
 		height: deviceHeight * 0.08,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -363,14 +363,14 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	statusArrowLocationContainer: {
-		width: deviceWidth * 0.55,
+		width: deviceWidth * 0.60,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'row',
 	},
 	statusViewCover: {
-		width: deviceWidth * 0.515,
+		width: deviceWidth * 0.565,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
 	},
 	statusViewON: {
 		backgroundColor: '#F06F0C',
-		width: deviceWidth * 0.115,
+		width: deviceWidth * 0.165,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
 	},
 	statusViewOFF: {
 		backgroundColor: '#A59F9A',
-		width: deviceWidth * 0.115,
+		width: deviceWidth * 0.165,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
