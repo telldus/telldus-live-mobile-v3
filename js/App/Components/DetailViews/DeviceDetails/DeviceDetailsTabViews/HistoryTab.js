@@ -178,7 +178,7 @@ class HistoryTab extends View {
 						<TouchableWithoutFeedback onPress={() => {
 							this.onOriginPress(item);
 						}}>
-							<View style={[styles.statusViewCover, styles.shadow]}>
+							<View style={[styles.statusLocationContainer, styles.shadow]}>
 								{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
 									<View style={styles.statusViewOFF}>
 										<CustomIcon name="icon_off" size={24} color="#ffffff" />
@@ -272,6 +272,15 @@ class HistoryTab extends View {
 HistoryTab.propTypes = {
 };
 
+let widthStatusLocationContainer = deviceWidth * 0.565;
+let widthArrowViewContainer = deviceWidth * 0.035;
+
+let widthCircularViewCover = deviceWidth * 0.15;
+let widthTimeCover = deviceWidth * 0.20;
+let widthStatusArrowLocationContainer = widthStatusLocationContainer + widthArrowViewContainer;
+// total= .95 and it is .5 less from the total deviceWidth to bring items in the center,
+// leaving little margin on either side.
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -322,8 +331,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	circularViewCover: {
-		width: deviceWidth * 0.15,
-		height: deviceHeight * 0.095,
+		width: widthCircularViewCover,
+		height: deviceHeight * 0.09,
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'column',
@@ -353,7 +362,7 @@ const styles = StyleSheet.create({
 		width: 2,
 	},
 	timeCover: {
-		width: deviceWidth * 0.20,
+		width: widthTimeCover,
 		height: deviceHeight * 0.08,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -363,14 +372,14 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	statusArrowLocationContainer: {
-		width: deviceWidth * 0.60,
+		width: widthStatusArrowLocationContainer,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'row',
 	},
-	statusViewCover: {
-		width: deviceWidth * 0.565,
+	statusLocationContainer: {
+		width: widthStatusLocationContainer,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -409,7 +418,7 @@ const styles = StyleSheet.create({
 		borderColor: '#fff',
 	},
 	arrowViewContainer: {
-		width: deviceWidth * 0.035,
+		width: widthArrowViewContainer,
 		height: deviceHeight * 0.07,
 		flexDirection: 'column',
 		justifyContent: 'center',
