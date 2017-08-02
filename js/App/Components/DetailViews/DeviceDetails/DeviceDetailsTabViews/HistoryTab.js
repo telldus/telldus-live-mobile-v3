@@ -156,7 +156,7 @@ class HistoryTab extends View {
 				<View style={styles.circularViewCover}>
 					<View style={styles.verticalLineView}/>
 					{ item.successStatus !== 0 ?
-						<CustomIcon name="icon_info" size={24} color="red" />
+						<CustomIcon name="icon_info" size={deviceHeight * 0.03} color="red" />
 					:
 						<View style={[styles.circularView, { backgroundColor: '#A59F9A' }]} />
 					}
@@ -342,20 +342,9 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		flexDirection: 'column',
 	},
-	verticalDash: {
-		width: 2,
-		backgroundColor: '#ffffff',
-		height: deviceHeight * 0.025,
-	},
-	dot: {
-		backgroundColor: '#ffffff',
-		marginTop: 2,
-		width: 2,
-		height: 2,
-	},
 	verticalLineView: {
 		backgroundColor: '#A59F9A',
-		height: deviceHeight * 0.025,
+		height: deviceHeight * 0.045,
 		width: 2,
 	},
 	timeCover: {
