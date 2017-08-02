@@ -272,10 +272,10 @@ class HistoryTab extends View {
 HistoryTab.propTypes = {
 };
 
-let widthStatusLocationContainer = deviceWidth * 0.565;
+let widthStatusLocationContainer = deviceWidth * 0.615;
 let widthArrowViewContainer = deviceWidth * 0.045;
 
-let widthCircularViewCover = deviceWidth * 0.15;
+let widthCircularViewCover = deviceWidth * 0.1;
 let widthTimeCover = deviceWidth * 0.20;
 let widthStatusArrowLocationContainer = widthStatusLocationContainer + widthArrowViewContainer;
 
@@ -441,12 +441,12 @@ const styles = StyleSheet.create({
 		elevation: 2,
 	},
 	locationCover: {
-		width: deviceWidth * 0.4,
+		width: deviceWidth * 0.45,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		backgroundColor: '#fff',
-		alignItems: 'center',
-		paddingLeft: 10,
+		alignItems: 'flex-start',
+		paddingLeft: 5,
 		borderTopRightRadius: 2,
 		borderBottomRightRadius: 2,
 	},
@@ -455,14 +455,13 @@ const styles = StyleSheet.create({
 	},
 	fillerComponent: {
 		flex: 1,
-		width: deviceWidth * 0.15,
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
 		marginLeft: deviceWidth * 0.02,
 	},
 	fillerViewToAlign: {
 		flex: 1,
-		width: deviceWidth * 0.15,
+		width: widthCircularViewCover,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
