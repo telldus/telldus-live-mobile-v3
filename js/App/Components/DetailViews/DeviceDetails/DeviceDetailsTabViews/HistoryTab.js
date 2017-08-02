@@ -156,7 +156,7 @@ class HistoryTab extends View {
 				<View style={styles.circularViewCover}>
 					<View style={styles.verticalLineView}/>
 					{ item.successStatus !== 0 ?
-						<CustomIcon name="icon_info" size={deviceHeight * 0.03} color="red" />
+						<CustomIcon name="icon_info" size={deviceHeight * 0.03} color="#d32f2f" />
 					:
 						<View style={[styles.circularView, { backgroundColor: '#A59F9A' }]} />
 					}

@@ -152,7 +152,7 @@ class DeviceHistoryDetails extends View {
 							{this.props.detailsData.successStatus === 0 ?
 							null
 							:
-							<Icon name="exclamation-triangle" size={24} color="red" />
+							<Icon name="exclamation-triangle" size={24} color="#d32f2f" />
 							}
 						</View>
 					</View>
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
 	},
 	detailsTextError: {
 		marginRight: 15,
-		color: 'red',
+		color: '#d32f2f',
 		fontSize: 16,
 	},
 });
