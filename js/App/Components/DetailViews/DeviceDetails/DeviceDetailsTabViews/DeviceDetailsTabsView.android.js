@@ -181,6 +181,8 @@ const Tabs = TabNavigator(
 				shadowOpacity: 1.0,
 				elevation: 2,
 				height: deviceHeight * 0.085,
+				alignItems: 'center',
+				justifyContent: 'center',
 			},
 			tabStyle: {
 				width: Dimensions.get('window').width / 3,
