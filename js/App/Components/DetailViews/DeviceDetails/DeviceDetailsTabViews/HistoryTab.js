@@ -169,8 +169,11 @@ class HistoryTab extends View {
 				</View>
 					<View style={styles.statusArrowLocationContainer}>
 						<View style={styles.arrowViewContainer}>
-							<View style={item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ? styles.arrowViewTopOFF : styles.arrowViewTopON} />
-							<View style={styles.arrowViewBottom} />
+							{item.state === 2 || (deviceState === 'DIM' && item.stateValue === 0) ?
+							<Icon name="play" style={styles.carretIcon} size={deviceHeight * 0.030} color="#A59F9A" />
+							:
+							<Icon name="play" style={styles.carretIcon} size={deviceHeight * 0.030} color="#F06F0C" />
+							}
 						</View>
 						<TouchableWithoutFeedback onPress={() => {
 							this.onOriginPress(item);
@@ -270,13 +273,11 @@ HistoryTab.propTypes = {
 };
 
 let widthStatusLocationContainer = deviceWidth * 0.565;
-let widthArrowViewContainer = deviceWidth * 0.035;
+let widthArrowViewContainer = deviceWidth * 0.045;
 
 let widthCircularViewCover = deviceWidth * 0.15;
 let widthTimeCover = deviceWidth * 0.20;
 let widthStatusArrowLocationContainer = widthStatusLocationContainer + widthArrowViewContainer;
-// total= .95 and it is .5 less from the total deviceWidth to bring items in the center,
-// leaving little margin on either side.
 
 const styles = StyleSheet.create({
 	container: {
@@ -409,20 +410,26 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
-		paddingLeft: 5,
-		paddingTop: deviceHeight * 0.015,
+	},
+	carretIcon: {
+		left: deviceWidth * 0.015,
+		position: 'absolute',
+		elevation: 2,
+		transform: [{ rotate: '180deg' }],
 	},
 	arrowViewTopON: {
 		backgroundColor: '#F06F0C',
 		width: deviceWidth * 0.06,
 		height: deviceHeight * 0.02,
 		transform: [{ rotate: '-30deg' }],
+		elevation: 2,
 	},
 	arrowViewTopOFF: {
 		backgroundColor: '#A59F9A',
 		width: deviceWidth * 0.06,
 		height: deviceHeight * 0.02,
 		transform: [{ rotate: '-30deg' }],
+		elevation: 2,
 	},
 	arrowViewBottom: {
 		backgroundColor: '#eeeeef',
@@ -431,6 +438,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: deviceHeight * 0.04,
 		transform: [{ rotate: '30deg' }],
+		elevation: 2,
 	},
 	locationCover: {
 		width: deviceWidth * 0.4,
@@ -450,7 +458,7 @@ const styles = StyleSheet.create({
 		width: deviceWidth * 0.15,
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
-		marginLeft: deviceWidth * 0.025,
+		marginLeft: deviceWidth * 0.02,
 	},
 	fillerViewToAlign: {
 		flex: 1,
