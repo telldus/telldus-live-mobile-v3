@@ -46,25 +46,27 @@ export default class JobsPoster extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.scrollDays = new Animated.Value(0);
+		this.scrollDays = new Animated.Value(1);
 		this.leftButton = new Animated.Value(1);
 		this.rightButton = new Animated.Value(1);
 
 		this.state = {
-			todayIndex: this.props.todayIndex,
+			todayIndex: props.todayIndex,
 		};
 	}
 
 	componentWillReceiveProps(nextProps: Props) {
-		const { todayIndex } = nextProps;
+		const { todayIndex } = this.state;
+		const newTodayIndex = nextProps.todayIndex;
 
-		if (todayIndex !== this.props.todayIndex) {
+		if (newTodayIndex !== todayIndex) {
+			this.scrollRight = newTodayIndex > todayIndex;
 			Animated
-				.timing(this.scrollDays, { toValue: 1 })
+				.timing(this.scrollDays, { toValue: this.scrollRight ? 0 : 2 })
 				.start(({ finished }: { finished: boolean }) => {
 					if (finished) {
-						this.setState({ todayIndex }, () => {
-							this.scrollDays.setValue(0);
+						this.setState({ todayIndex: newTodayIndex }, () => {
+							this.scrollDays.setValue(1);
 						});
 					}
 				});
@@ -179,9 +181,12 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	_getAnimation = (index: number): Object => {
 		const { todayIndex } = this.state;
-		const animatedStyle = this._getAnimatedStyle();
+		const animatedStyle = this._getAnimatedStyle(index);
 
 		switch (index) {
+			case todayIndex - 2:
+				return animatedStyle.beforeYesterday;
+
 			case todayIndex - 1:
 				return animatedStyle.yesterday;
 
@@ -191,6 +196,9 @@ export default class JobsPoster extends View<null, Props, State> {
 			case todayIndex + 1:
 				return animatedStyle.tomorrow;
 
+			case todayIndex + 2:
+				return animatedStyle.afterTomorrow;
+
 			default:
 				return animatedStyle.day;
 		}
@@ -198,26 +206,25 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	_interpolate = (...outputRange: any[]): Object => {
 		return this.scrollDays.interpolate({
-			inputRange: [0, 1],
+			inputRange: [0, 1, 2],
 			outputRange,
 		});
 	};
 
-	_getAnimatedStyle = (): Object => {
+	_getAnimatedStyle = (index: number): Object => {
 		const deviceWidth = getDeviceWidth();
 
+		const dayWidth = this._getDayWidth(this.props.days[index]);
 		const dayHeight = deviceWidth * 0.1;
 		const todayWidth = deviceWidth * 0.44;
 
-		const yesterdayLeft = 0;
 		const todayLeft = deviceWidth * 0.205333333;
-		const tomorrowLeft = deviceWidth * 0.652;
 
-		const todayTop = '22.933333333%';
+		const dayTop = deviceWidth * 0.117333333;
+		const todayTop = deviceWidth * 0.058666667;
 
-		const todayFontSize = deviceWidth * 0.084;
-
-		const dayTranslateY = dayHeight / -2;
+		const dayFontSize = Math.floor(deviceWidth * 0.037333333);
+		const todayFontSize = Math.floor(deviceWidth * 0.084);
 
 		const day = {
 			container: {
@@ -225,60 +232,72 @@ export default class JobsPoster extends View<null, Props, State> {
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
-				width: deviceWidth * 0.196,
 				height: dayHeight,
-				top: '50%',
+				top: dayTop,
 				left: '100%',
-				transform: [
-					{ translateY: dayTranslateY },
-				],
 			},
 			text: {
 				backgroundColor: 'transparent',
 				color: '#fff',
-				fontSize: deviceWidth * 0.037333333,
+				fontSize: dayFontSize,
 				fontFamily: Theme.Core.fonts.robotoLight,
 			},
 		};
 
 		return {
 			day,
+			beforeYesterday: {
+				container: {
+					...day.container,
+					left: this._interpolate(0 - 2 * dayWidth, 0 - dayWidth, 0),
+				},
+				text: day.text,
+			},
 			yesterday: {
 				container: {
 					...day.container,
-					left: this._interpolate(yesterdayLeft, -100),
+					width: this._interpolate(dayWidth, dayWidth, todayWidth),
+					left: this._interpolate(0 - dayWidth, 0, todayLeft),
+					top: this._interpolate(dayTop, dayTop, todayTop),
 				},
-				text: day.text,
+				text: {
+					...day.text,
+					fontSize: this._interpolate(dayFontSize, dayFontSize, todayFontSize),
+				},
 			},
 			today: {
 				container: {
 					...day.container,
-					width: this._interpolate(todayWidth, day.container.width),
-					left: this._interpolate(todayLeft, yesterdayLeft),
-					top: this._interpolate(todayTop, day.container.top),
-					transform: [
-						{ translateY: this._interpolate(0, dayTranslateY) },
-					],
+					width: this._interpolate(dayWidth, todayWidth, dayWidth),
+					left: this.scrollRight ? this._interpolate(0, todayLeft, 100) : null,
+					right: this.scrollRight ? null : this._interpolate(100, todayLeft, 0),
+					top: this._interpolate(dayTop, todayTop, dayTop),
 				},
 				text: {
 					...day.text,
-					fontSize: this._interpolate(todayFontSize, day.text.fontSize),
+					fontSize: this._interpolate(dayFontSize, todayFontSize, dayFontSize),
 				},
 			},
 			tomorrow: {
 				container: {
 					...day.container,
-					left: this._interpolate(tomorrowLeft, todayLeft),
-					top: this._interpolate(day.container.top, todayTop),
-					width: this._interpolate(day.container.width, todayWidth),
-					transform: [
-						{ translateY: this._interpolate(dayTranslateY, 0) },
-					],
+					width: this._interpolate(todayWidth, dayWidth, dayWidth),
+					left: null,
+					right: this._interpolate(todayLeft, 0, 0 - dayWidth),
+					top: this._interpolate(todayTop, dayTop, dayTop),
 				},
 				text: {
 					...day.text,
-					fontSize: this._interpolate(day.text.fontSize, todayFontSize),
+					fontSize: this._interpolate(todayFontSize, dayFontSize, dayFontSize),
 				},
+			},
+			afterTomorrow: {
+				container: {
+					...day.container,
+					left: null,
+					right: this._interpolate(0, 0 - dayWidth, 0 - 2 * dayWidth),
+				},
+				text: day.text,
 			},
 		};
 	};
@@ -298,28 +317,50 @@ export default class JobsPoster extends View<null, Props, State> {
 			arrowContainer: {
 				position: 'absolute',
 				width: deviceWidth * 0.196,
-				height: deviceWidth * 0.036,
+				height: deviceWidth * 0.1,
 				left: deviceWidth * 0.026666667,
-				top: '50%',
-				transform: [
-					{ translateY: deviceWidth * 0.036 / -2 },
-				],
+				top: deviceWidth * 0.117333333,
+				justifyContent: 'center',
 			},
 			arrowContainerRight: {
 				left: null,
 				right: deviceWidth * 0.026666667,
 				transform: [
-					{ translateY: deviceWidth * 0.036 / -2 },
 					{ scaleX: -1 },
 				],
 			},
 			arrow: {
-				position: 'absolute',
 				height: deviceWidth * 0.036,
 				width: deviceWidth * 0.022666667,
-				resizeMode: 'contain',
 			},
 		};
+	};
+
+	_getDayWidth = (day: string): number => {
+		const deviceWidth = getDeviceWidth();
+
+		switch (day) {
+			case 'Monday':
+				return deviceWidth * 0.132;
+
+			case 'Tuesday':
+				return deviceWidth * 0.137333333;
+
+			case 'Wednesday':
+				return deviceWidth * 0.189333333;
+
+			case 'Thursday':
+				return deviceWidth * 0.153333333;
+
+			case 'Friday':
+				return deviceWidth * 0.1;
+
+			case 'Saturday':
+				return deviceWidth * 0.145333333;
+
+			default:
+				return deviceWidth * 0.121333333;
+		}
 	};
 
 }
