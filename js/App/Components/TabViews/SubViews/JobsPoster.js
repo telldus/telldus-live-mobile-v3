@@ -73,8 +73,13 @@ export default class JobsPoster extends View<null, Props, State> {
 
 			this.setState(updateButtonsVisibility);
 
+			const config = {
+				toValue: this.scrollRight ? 0 : 2,
+				duration: 400,
+			};
+
 			Animated
-				.timing(this.scrollDays, { toValue: this.scrollRight ? 0 : 2 })
+				.timing(this.scrollDays, config)
 				.start(({ finished }: { finished: boolean }) => {
 					if (finished) {
 						this.setState({ todayIndex: newTodayIndex }, () => {
@@ -93,14 +98,22 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	render() {
 		const { showLeftButton, showRightButton } = this.state;
-		const { daysContainer, arrowContainer, arrowContainerRight, arrow } = this._getStyle();
+		const {
+			daysContainer,
+			dateContainer,
+			arrowContainer,
+			arrowContainerRight,
+			arrow,
+		} = this._getStyle();
 		const image = require('../../../../BaseComponents/img/keyboard-left-arrow-button.png');
 
 		return (
 			<Poster>
 				<View style={daysContainer}>
 					{this._renderDays()}
-					{/* {this._renderDate()} */}
+					<View style={dateContainer}>
+						{this._renderDate()}
+					</View>
 				</View>
 				{showLeftButton && (
 					<TouchableOpacity
@@ -128,8 +141,9 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	_renderDays = (): React$Element<Animated.View>[] => {
 		const { todayIndex } = this.state;
+
 		return this.props.days.map((day: Object, i: number): React$Element<Animated.View> => {
-			const animation = this._getAnimation(i);
+			const animation = this._getDayAnimation(i);
 
 			let simulateClick = {};
 
@@ -149,6 +163,18 @@ export default class JobsPoster extends View<null, Props, State> {
 						{day.day}
 					</Animated.Text>
 				</Animated.View>
+			);
+		});
+	};
+
+	_renderDate = (): React$Element<Animated.Text>[] => {
+		return this.props.days.map((day: Object, i: number): React$Element<Animated.Text> => {
+			const animation = this._getDateAnimation(i);
+
+			return (
+				<Animated.Text style={animation}>
+					{day.date}
+				</Animated.Text>
 			);
 		});
 	};
@@ -201,9 +227,9 @@ export default class JobsPoster extends View<null, Props, State> {
 		).start();
 	};
 
-	_getAnimation = (index: number): Object => {
+	_getDayAnimation = (index: number): Object => {
 		const { todayIndex } = this.state;
-		const animatedStyle = this._getAnimatedStyle(index);
+		const animatedStyle = this._getDayAnimatedStyle(index);
 
 		switch (index) {
 			case todayIndex - 2:
@@ -226,6 +252,25 @@ export default class JobsPoster extends View<null, Props, State> {
 		}
 	};
 
+	_getDateAnimation = (index: number): Object => {
+		const { todayIndex } = this.state;
+		const animatedStyle = this._getDateAnimatedStyle(index);
+
+		switch (index) {
+			case todayIndex - 1:
+				return animatedStyle.yesterday;
+
+			case todayIndex:
+				return animatedStyle.today;
+
+			case todayIndex + 1:
+				return animatedStyle.tomorrow;
+
+			default:
+				return animatedStyle.date;
+		}
+	};
+
 	_interpolate = (...outputRange: any[]): Object => {
 		return this.scrollDays.interpolate({
 			inputRange: [0, 1, 2],
@@ -233,14 +278,14 @@ export default class JobsPoster extends View<null, Props, State> {
 		});
 	};
 
-	_getAnimatedStyle = (index: number): Object => {
+	_getDayAnimatedStyle = (index: number): Object => {
 		const deviceWidth = getDeviceWidth();
 
 		const dayWidth = this._getDayWidth(this.props.days[index].day);
 		const dayHeight = deviceWidth * 0.1;
 		const todayWidth = deviceWidth * 0.44;
 
-		const todayLeft = deviceWidth * 0.205333333;
+		const todayOffset = deviceWidth * 0.205333333;
 
 		const dayTop = deviceWidth * 0.117333333;
 		const todayTop = deviceWidth * 0.058666667;
@@ -279,7 +324,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				container: {
 					...day.container,
 					width: this._interpolate(dayWidth, dayWidth, todayWidth),
-					left: this._interpolate(0 - dayWidth, 0, todayLeft),
+					left: this._interpolate(0 - dayWidth, 0, todayOffset),
 					top: this._interpolate(dayTop, dayTop, todayTop),
 				},
 				text: {
@@ -291,8 +336,8 @@ export default class JobsPoster extends View<null, Props, State> {
 				container: {
 					...day.container,
 					width: this._interpolate(dayWidth, todayWidth, dayWidth),
-					left: this.scrollRight ? this._interpolate(0, todayLeft, 100) : null,
-					right: this.scrollRight ? null : this._interpolate(100, todayLeft, 0),
+					left: this.scrollRight ? this._interpolate(0, todayOffset, 100) : null,
+					right: this.scrollRight ? null : this._interpolate(100, todayOffset, 0),
 					top: this._interpolate(dayTop, todayTop, dayTop),
 				},
 				text: {
@@ -305,7 +350,7 @@ export default class JobsPoster extends View<null, Props, State> {
 					...day.container,
 					width: this._interpolate(todayWidth, dayWidth, dayWidth),
 					left: null,
-					right: this._interpolate(todayLeft, 0, 0 - dayWidth),
+					right: this._interpolate(todayOffset, 0, 0 - dayWidth),
 					top: this._interpolate(todayTop, dayTop, dayTop),
 				},
 				text: {
@@ -324,6 +369,50 @@ export default class JobsPoster extends View<null, Props, State> {
 		};
 	};
 
+	_getDateAnimatedStyle = (): Object => {
+		const deviceWidth = getDeviceWidth();
+
+		const height = deviceWidth * 0.06;
+
+		const date = {
+			backgroundColor: 'transparent',
+			color: '#fff',
+			fontFamily: Theme.Core.fonts.robotoLight,
+			fontSize: Math.floor(deviceWidth * 0.052),
+			height,
+			width: '100%',
+			textAlign: 'center',
+			position: 'absolute',
+			left: 0,
+			top: '100%',
+		};
+
+		return {
+			date,
+			yesterday: {
+				...date,
+				top: this._interpolate('0%', '0%', '50%'),
+				transform: [
+					{ translateY: this._interpolate(-2 * height, -height, height / -2) },
+				],
+			},
+			today: {
+				...date,
+				top: this._interpolate('0%', '50%', '100%'),
+				transform: [
+					{ translateY: this._interpolate(-height, height / -2, 0) },
+				],
+			},
+			tomorrow: {
+				...date,
+				top: this._interpolate('50%', '100%', '100%'),
+				transform: [
+					{ translateY: this._interpolate(height / -2, 0, height) },
+				],
+			},
+		};
+	};
+
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
@@ -335,6 +424,16 @@ export default class JobsPoster extends View<null, Props, State> {
 				bottom: 0,
 				right: deviceWidth * 0.076,
 				overflow: 'hidden',
+			},
+			dateContainer: {
+				alignItems: 'center',
+				justifyContent: 'center',
+				height: deviceWidth * 0.064,
+				width: deviceWidth * 0.44,
+				overflow: 'hidden',
+				position: 'absolute',
+				left: deviceWidth * 0.205333333,
+				top: deviceWidth * 0.176,
 			},
 			arrowContainer: {
 				position: 'absolute',
