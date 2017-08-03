@@ -162,13 +162,12 @@ class SchedulerTab extends View<null, Props, State> {
 	_getDays = (dataArray: Object[]): Object[] => {
 		const days: Object[] = [];
 
-		const today = moment();
-
 		for (let i = 0; i < dataArray.length; i++) {
-			const currentDay = today.add(i, 'days');
+			const day = moment().add(i, 'days');
+
 			days.push({
-				day: currentDay.format('dddd'),
-				date: currentDay.format('DD MMMM YYYY'),
+				day: day.format('dddd'),
+				date: day.format('DD MMMM YYYY'),
 			});
 		}
 
