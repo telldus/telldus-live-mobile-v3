@@ -123,7 +123,7 @@ class SchedulerTab extends View<null, Props, State> {
 					todayIndex={todayIndex}
 					scroll={this._scroll}
 				/>
-				< ScrollView
+				<ScrollView
 					horizontal={true}
 					pagingEnabled={true}
 					scrollEnabled={false}
@@ -159,11 +159,17 @@ class SchedulerTab extends View<null, Props, State> {
 		}
 	};
 
-	_getDays = (dataArray: Object[]): string[] => {
-		const days: string[] = [];
+	_getDays = (dataArray: Object[]): Object[] => {
+		const days: Object[] = [];
+
+		const today = moment();
 
 		for (let i = 0; i < dataArray.length; i++) {
-			days.push(moment().add(i, 'days').format('dddd'));
+			const currentDay = today.add(i, 'days');
+			days.push({
+				day: currentDay.format('dddd'),
+				date: currentDay.format('DD MMMM YYYY'),
+			});
 		}
 
 		return days;

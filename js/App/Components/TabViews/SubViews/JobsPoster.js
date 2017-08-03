@@ -28,7 +28,7 @@ import getDeviceWidth from '../../../Lib/getDeviceWidth';
 import Theme from 'Theme';
 
 type Props = {
-	days: string[],
+	days: Object[],
 	todayIndex: number,
 };
 
@@ -41,7 +41,7 @@ type State = {
 export default class JobsPoster extends View<null, Props, State> {
 
 	static propTypes = {
-		days: PropTypes.arrayOf(PropTypes.string).isRequired,
+		days: PropTypes.arrayOf(PropTypes.object).isRequired,
 		todayIndex: PropTypes.number.isRequired,
 	};
 
@@ -92,36 +92,15 @@ export default class JobsPoster extends View<null, Props, State> {
 	}
 
 	render() {
-		const { todayIndex, showLeftButton, showRightButton } = this.state;
+		const { showLeftButton, showRightButton } = this.state;
 		const { daysContainer, arrowContainer, arrowContainerRight, arrow } = this._getStyle();
 		const image = require('../../../../BaseComponents/img/keyboard-left-arrow-button.png');
 
 		return (
 			<Poster>
 				<View style={daysContainer}>
-					{this.props.days.map((day: string, i: number): React$Element<Animated.Text> => {
-						const animation = this._getAnimation(i);
-
-						let simulateClick = {};
-
-						if (i === todayIndex - 1) {
-							simulateClick = { opacity: this.leftButton };
-						}
-						if (i === todayIndex + 1) {
-							simulateClick = { opacity: this.rightButton };
-						}
-
-						return (
-							<Animated.View
-								style={[animation.container, simulateClick]}
-								key={`${day}${i}`}
-							>
-								<Animated.Text style={animation.text}>
-									{day}
-								</Animated.Text>
-							</Animated.View>
-						);
-					})}
+					{this._renderDays()}
+					{/* {this._renderDate()} */}
 				</View>
 				{showLeftButton && (
 					<TouchableOpacity
@@ -146,6 +125,33 @@ export default class JobsPoster extends View<null, Props, State> {
 			</Poster>
 		);
 	}
+
+	_renderDays = (): React$Element<Animated.View>[] => {
+		const { todayIndex } = this.state;
+		return this.props.days.map((day: Object, i: number): React$Element<Animated.View> => {
+			const animation = this._getAnimation(i);
+
+			let simulateClick = {};
+
+			if (i === todayIndex - 1) {
+				simulateClick = { opacity: this.leftButton };
+			}
+			if (i === todayIndex + 1) {
+				simulateClick = { opacity: this.rightButton };
+			}
+
+			return (
+				<Animated.View
+					style={[animation.container, simulateClick]}
+					key={`${day.day}${i}`}
+				>
+					<Animated.Text style={animation.text}>
+						{day.day}
+					</Animated.Text>
+				</Animated.View>
+			);
+		});
+	};
 
 	_scrollToYesterday = () => {
 		this.props.scroll(-1);
@@ -230,7 +236,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	_getAnimatedStyle = (index: number): Object => {
 		const deviceWidth = getDeviceWidth();
 
-		const dayWidth = this._getDayWidth(this.props.days[index]);
+		const dayWidth = this._getDayWidth(this.props.days[index].day);
 		const dayHeight = deviceWidth * 0.1;
 		const todayWidth = deviceWidth * 0.44;
 
