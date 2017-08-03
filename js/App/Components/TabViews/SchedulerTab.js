@@ -142,14 +142,20 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_scroll = (days: number) => {
 		if (this.scroll) {
-			this.contentOffset += getDeviceWidth() * days;
+			const { todayIndex, daysToRender } = this.state;
 
-			this.setState({ todayIndex: this.state.todayIndex + days }, () => {
-				this.scroll.scrollTo({
-					x: this.contentOffset,
-					y: 0,
+			const newTodayIndex = todayIndex + days;
+
+			if (newTodayIndex >= 0 && newTodayIndex < daysToRender.length) {
+				this.contentOffset += getDeviceWidth() * days;
+
+				this.setState({ todayIndex: newTodayIndex }, () => {
+					this.scroll.scrollTo({
+						x: this.contentOffset,
+						y: 0,
+					});
 				});
-			});
+			}
 		}
 	};
 
