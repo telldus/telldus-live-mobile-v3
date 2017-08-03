@@ -33,7 +33,9 @@ type Props = {
 };
 
 type State = {
-	todayIndex: number,
+	todayIndex?: number,
+	showLeftButton?: boolean,
+	showRightButton?: boolean,
 };
 
 export default class JobsPoster extends View<null, Props, State> {
@@ -52,6 +54,8 @@ export default class JobsPoster extends View<null, Props, State> {
 
 		this.state = {
 			todayIndex: props.todayIndex,
+			showLeftButton: false,
+			showRightButton: true,
 		};
 	}
 
@@ -61,6 +65,14 @@ export default class JobsPoster extends View<null, Props, State> {
 
 		if (newTodayIndex !== todayIndex) {
 			this.scrollRight = newTodayIndex > todayIndex;
+
+			const updateButtonsVisibility: State = {
+				showLeftButton: newTodayIndex > 0,
+				showRightButton: newTodayIndex < (this.props.days.length - 1),
+			};
+
+			this.setState(updateButtonsVisibility);
+
 			Animated
 				.timing(this.scrollDays, { toValue: this.scrollRight ? 0 : 2 })
 				.start(({ finished }: { finished: boolean }) => {
@@ -80,7 +92,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	}
 
 	render() {
-		const { todayIndex } = this.state;
+		const { todayIndex, showLeftButton, showRightButton } = this.state;
 		const { daysContainer, arrowContainer, arrowContainerRight, arrow } = this._getStyle();
 		const image = require('../../../../BaseComponents/img/keyboard-left-arrow-button.png');
 
@@ -111,22 +123,26 @@ export default class JobsPoster extends View<null, Props, State> {
 						);
 					})}
 				</View>
-				<TouchableOpacity
-					onPress={this._scrollToYesterday}
-					onPressIn={this._leftButtonPressIn}
-					onPressOut={this._leftButtonPressOut}
-					style={arrowContainer}
-				>
-					<Image source={image} style={arrow}/>
-				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={this._scrollToTomorrow}
-					onPressIn={this._rightButtonPressIn}
-					onPressOut={this._rightButtonPressOut}
-					style={[arrowContainer, arrowContainerRight]}
-				>
-					<Image source={image} style={arrow}/>
-				</TouchableOpacity>
+				{showLeftButton && (
+					<TouchableOpacity
+						onPress={this._scrollToYesterday}
+						onPressIn={this._leftButtonPressIn}
+						onPressOut={this._leftButtonPressOut}
+						style={arrowContainer}
+					>
+						<Image source={image} style={arrow}/>
+					</TouchableOpacity>
+				)}
+				{showRightButton && (
+					<TouchableOpacity
+						onPress={this._scrollToTomorrow}
+						onPressIn={this._rightButtonPressIn}
+						onPressOut={this._rightButtonPressOut}
+						style={[arrowContainer, arrowContainerRight]}
+					>
+						<Image source={image} style={arrow}/>
+					</TouchableOpacity>
+				)}
 			</Poster>
 		);
 	}
