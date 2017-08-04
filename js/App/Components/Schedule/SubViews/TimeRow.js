@@ -26,8 +26,7 @@ import { View } from 'react-native';
 import { BlockIcon, IconTelldus, Row } from 'BaseComponents';
 import Description from './Description';
 import Theme from 'Theme';
-import getDeviceWidth from '../../../Lib/getDeviceWidth';
-import capitalize from '../../../Lib/capitalize';
+import { capitalize, getDeviceWidth } from 'Lib';
 
 type Time = {
 	hour: number,

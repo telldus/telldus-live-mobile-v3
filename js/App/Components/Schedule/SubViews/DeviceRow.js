@@ -27,7 +27,7 @@ import { BlockIcon, Row } from 'BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
-import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
 type Props = {

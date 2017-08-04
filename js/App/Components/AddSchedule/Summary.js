@@ -25,11 +25,9 @@ import React, { PropTypes } from 'react';
 import { NavigationActions } from 'react-navigation';
 import { FloatingButton, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import getDeviceWidth from '../../Lib/getDeviceWidth';
+import { getDeviceWidth, getSelectedDays, getSuntime } from 'Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow } from 'Schedule_SubViews';
-import getSuntime from '../../Lib/getSuntime';
 import _ from 'lodash';
-import { getSelectedDays } from '../../Lib/getDays';
 import { ScrollView } from 'react-native';
 
 type Time = {

@@ -25,7 +25,7 @@ import React, { PropTypes } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Slider from 'react-native-slider';
 import Theme from 'Theme';
-import getDeviceWidth from '../App/Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 
 type DefaultProps = {
 	minimumTrackTintColor: string,

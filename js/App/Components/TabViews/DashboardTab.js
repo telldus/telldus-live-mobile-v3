@@ -42,8 +42,7 @@ import {
 	SensorDashboardTile,
 } from 'TabViews_SubViews';
 
-import getDeviceType from '../../Lib/getDeviceType';
-import getTabBarIcon from '../../Lib/getTabBarIcon';
+import { getDeviceType, getTabBarIcon } from 'Lib';
 import reactMixin from 'react-mixin';
 
 const messages = defineMessages({

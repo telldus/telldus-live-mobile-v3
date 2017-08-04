@@ -28,7 +28,7 @@ import { REHYDRATE } from 'redux-persist/constants';
 
 import { methods } from '../../Config.js';
 
-import getPowerParts from '../Lib/getPowerParts';
+import { getPowerParts } from 'Lib';
 
 export function getSupportedMethods(methodsAggregate: number): Object {
 	const methodNumbers = getPowerParts(methodsAggregate);

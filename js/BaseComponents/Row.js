@@ -23,7 +23,7 @@
 
 import React, { PropTypes } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import getDeviceWidth from '../App/Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
 type DefaultProps = {

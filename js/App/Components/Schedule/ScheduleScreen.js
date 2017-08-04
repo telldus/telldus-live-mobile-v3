@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Header, View } from 'BaseComponents';
 import { SchedulePoster } from 'Schedule_SubViews';
-import getDeviceWidth from '../../Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 
 import * as scheduleActions from 'Actions_Schedule';
 import { getDevices } from 'Actions_Devices';

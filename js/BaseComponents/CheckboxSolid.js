@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import Theme from 'Theme';
-import getDeviceWidth from '../App/Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 
 type DefaultProps = {
 	size: number,

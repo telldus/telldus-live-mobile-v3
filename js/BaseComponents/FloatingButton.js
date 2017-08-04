@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { Image, Platform, TouchableOpacity, View } from 'react-native';
 import Theme from 'Theme';
-import getDeviceWidth from '../App/Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 
 type DefaultProps = {
 	tabs: boolean,

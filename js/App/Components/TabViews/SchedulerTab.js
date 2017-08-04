@@ -32,8 +32,9 @@ import { JobRow, JobsPoster } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
-import getTabBarIcon from '../../Lib/getTabBarIcon';
-import getDeviceWidth from '../../Lib/getDeviceWidth';
+
+import { getTabBarIcon } from 'Lib';
+import { getDeviceWidth } from 'Lib';
 
 type NavigationParams = {
 	focused: boolean, tintColor: string,

@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { Text, View } from 'react-native';
 import Theme from 'Theme';
-import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 
 type DefaultProps = {
 	color: string,

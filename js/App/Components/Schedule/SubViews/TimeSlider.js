@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { IconTelldus, Slider, View } from 'BaseComponents';
 import Theme from 'Theme';
-import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 import Description from './Description';
 
 type Props = {

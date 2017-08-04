@@ -15,47 +15,34 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Lib
  */
-
-// @flow
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { Text, View } from 'react-native';
-import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
+import capitalize from './capitalize';
+import formatTime from './formatTime';
+import { getSelectedDays, getWeekdays, getWeekends } from './getDays';
+import getDeviceType from './getDeviceType';
+import getDeviceWidth from './getDeviceWidth';
+import getPowerParts from './getPowerParts';
+import getSuntime from './getSuntime';
+import getTabBarIcon from './getTabBarIcon';
+import LiveApi from './LiveApi';
+import TelldusWebsocket from './Socket';
 
-type Props = {
-	children: string,
-	style?: Object,
+module.exports = {
+	capitalize,
+	formatTime,
+	getWeekdays,
+	getWeekends,
+	getSelectedDays,
+	getDeviceType,
+	getDeviceWidth,
+	getPowerParts,
+	getSuntime,
+	getTabBarIcon,
+	LiveApi,
+	TelldusWebsocket,
 };
-
-export default class Description extends View<null, Props, null> {
-
-	static propTypes = {
-		children: PropTypes.string.isRequired,
-		style: Text.propTypes.style,
-	};
-
-	render() {
-		const { children, style, ...props } = this.props;
-		const defaultStyle = this._getDefaultStyle();
-
-		return (
-			<Text {...props} style={[defaultStyle, style]}>
-				{children}
-			</Text>
-		);
-	}
-
-	_getDefaultStyle = (): Object => {
-		return {
-			color: '#555',
-			fontFamily: Theme.Core.fonts.robotoRegular,
-			fontSize: getDeviceWidth() * 0.04,
-			opacity: 0.87,
-		};
-	};
-
-}

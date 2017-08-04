@@ -25,7 +25,7 @@ import React, { PropTypes } from 'react';
 import { Text, View } from 'react-native';
 import BlockIcon from './BlockIcon';
 import RowWithTriangle from './RowWithTriangle';
-import getDeviceWidth from '../App/Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
 type Props = {

@@ -25,12 +25,10 @@ import React, { PropTypes } from 'react';
 import { Text, View } from 'react-native';
 import { BlockIcon, IconTelldus, ListRow } from 'BaseComponents';
 import Theme from 'Theme';
-import getDeviceWidth from '../../../Lib/getDeviceWidth';
 import { ACTIONS, Description, TextRowWrapper, Title } from 'Schedule_SubViews';
-import { getSelectedDays, getWeekdays, getWeekends } from '../../../Lib/getDays';
+import { capitalize, getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from 'Lib';
 import { DAYS } from 'Constants';
 import _ from 'lodash';
-import capitalize from '../../../Lib/capitalize';
 
 const methodNames = {
 	[1]: 'On',

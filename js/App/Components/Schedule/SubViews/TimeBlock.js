@@ -25,8 +25,7 @@ import React, { PropTypes } from 'react';
 import { BlockIcon, Row, View } from 'BaseComponents';
 import Theme from 'Theme';
 import Description from './Description';
-import capitalize from '../../../Lib/capitalize';
-import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import { capitalize, getDeviceWidth } from 'Lib';
 
 type Props = {
 	type: string,

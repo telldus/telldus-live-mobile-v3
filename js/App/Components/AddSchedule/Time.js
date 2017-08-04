@@ -27,7 +27,7 @@ import { FloatingButton, Row, Text, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { TimeBlock, TimeSlider } from 'Schedule_SubViews';
 import Theme from 'Theme';
-import getDeviceWidth from '../../Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 
 const TYPES = ['sunrise', 'sunset', 'time'];
 

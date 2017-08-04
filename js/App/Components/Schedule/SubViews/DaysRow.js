@@ -23,7 +23,7 @@
 
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
-import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 import { Row } from 'BaseComponents';
 import Day from './Day';
 import { DAYS } from 'Constants';

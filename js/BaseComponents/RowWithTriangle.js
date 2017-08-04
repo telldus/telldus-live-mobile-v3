@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { Image, View } from 'react-native';
 import Row from './Row';
-import getDeviceWidth from '../App/Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
 type Props = {

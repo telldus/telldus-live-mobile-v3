@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { Animated, Image, TouchableOpacity, View } from 'react-native';
 import { Poster } from 'BaseComponents';
-import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
 type Props = {

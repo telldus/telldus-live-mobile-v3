@@ -28,7 +28,7 @@ import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
 import Theme from 'Theme';
-import getDeviceWidth from '../../../Lib/getDeviceWidth';
+import { getDeviceWidth } from 'Lib';
 
 type ActionType = {
 	name: string,
