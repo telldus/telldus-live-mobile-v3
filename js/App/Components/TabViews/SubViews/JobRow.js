@@ -22,8 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Image, Text, View } from 'react-native';
-import { BlockIcon, IconTelldus, Row } from 'BaseComponents';
+import { Text, View } from 'react-native';
+import { BlockIcon, IconTelldus, ListRow } from 'BaseComponents';
 import Theme from 'Theme';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
 import TextRowWrapper from '../../Schedule/SubViews/TextRowWrapper';
@@ -81,75 +81,60 @@ export default class JobRow extends View<null, Props, null> {
 			return null;
 		}
 
-		const { type, effectiveHour, effectiveMinute, device, offset, randomInterval } = this.props;
+		const {
+			type,
+			effectiveHour,
+			effectiveMinute,
+			device,
+			offset,
+			randomInterval,
+			active,
+			isFirst,
+		} = this.props;
+
 		const {
 			container,
-			wrapper,
-			timeTypeContainer,
-			timeTypeIcon,
-			time,
-			rowWrapper,
-			triangleContainer,
-			triangleCommon,
-			triangleShadow,
-			triangle,
-			rowContainer,
-			row,
 			textWrapper,
 			title,
 			description,
 			iconOffset,
 			iconRandom,
+			methodIconContainer,
 		} = this._getStyle();
+
 		const repeat = this._getRepeatDescription();
 
 		return (
 			<View style={container}>
-				<View style={wrapper}>
-					<BlockIcon
-						icon={type}
-						containerStyle={timeTypeContainer}
-						style={timeTypeIcon}
-					/>
-					<Text style={time}>
-						{`${effectiveHour}:${effectiveMinute}`}
-					</Text>
-					<View style={rowWrapper}>
-						<View style={triangleContainer}>
-							<Image
-								source={require('../img/triangle-shadow.png')}
-								style={[triangleCommon, triangleShadow]}
-							/>
-							<Image
-								source={require('../img/triangle.png')}
-								style={[triangleCommon, triangle]}
-							/>
-						</View>
-						<Row layout="row" containerStyle={rowContainer} style={row}>
-							{this._renderActionIcon()}
-							<TextRowWrapper style={textWrapper}>
-								<Title numberOfLines={1} ellipsizeMode="tail" style={title}>
-									{device.name}
-								</Title>
-								<Description numberOfLines={1} ellipsizeMode="tail" style={description}>
-									{repeat}
-								</Description>
-							</TextRowWrapper>
-							{!!offset && (
-								<IconTelldus
-									icon="offset"
-									style={iconOffset}
-								/>
-							)}
-							{!!randomInterval && (
-								<IconTelldus
-									icon="random"
-									style={iconRandom}
-								/>
-							)}
-						</Row>
-					</View>
-				</View>
+				<ListRow
+					roundIcon={type}
+					time={`${effectiveHour}:${effectiveMinute}`}
+					containerStyle={{ opacity: active ? 1 : 0.5 }}
+					triangleColor={methodIconContainer.backgroundColor}
+					isFirst={isFirst}
+				>
+					{this._renderActionIcon()}
+					<TextRowWrapper style={textWrapper}>
+						<Title numberOfLines={1} ellipsizeMode="tail" style={title}>
+							{device.name}
+						</Title>
+						<Description numberOfLines={1} ellipsizeMode="tail" style={description}>
+							{repeat}
+						</Description>
+					</TextRowWrapper>
+					{!!offset && (
+						<IconTelldus
+							icon="offset"
+							style={iconOffset}
+						/>
+					)}
+					{!!randomInterval && (
+						<IconTelldus
+							icon="random"
+							style={iconRandom}
+						/>
+					)}
+				</ListRow>
 			</View>
 		);
 	}
@@ -206,21 +191,14 @@ export default class JobRow extends View<null, Props, null> {
 	};
 
 	_getStyle = (): Object => {
-		const { active, isFirst, method } = this.props;
 		const { fonts, borderRadiusRow } = Theme.Core;
 		const deviceWidth = getDeviceWidth();
 
-		const timeTypeIconWidth = deviceWidth * 0.061333333;
-		const padding = deviceWidth * 0.013333333;
-
 		let backgroundColor;
-		const action = ACTIONS.find((a: Object): boolean => a.method === method);
+		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
 		if (action) {
 			backgroundColor = action.bgColor;
 		}
-
-		const triangleWidth = deviceWidth * 0.022666667;
-		const triangleHeight = deviceWidth * 0.025333334;
 
 		return {
 			container: {
@@ -235,61 +213,6 @@ export default class JobRow extends View<null, Props, null> {
 				left: deviceWidth * 0.029333333,
 				top: 0,
 				zIndex: -1,
-			},
-			wrapper: {
-				flexDirection: 'row',
-				alignItems: 'center',
-				paddingTop: isFirst ? deviceWidth * 0.037333333 : padding,
-				paddingBottom: padding,
-				opacity: active ? 1 : 0.5,
-			},
-			timeTypeContainer: {
-				backgroundColor: '#929292',
-				aspectRatio: 1,
-				width: timeTypeIconWidth,
-				borderRadius: timeTypeIconWidth / 2,
-			},
-			timeTypeIcon: {
-				color: '#fff',
-				fontSize: deviceWidth * 0.044,
-			},
-			time: {
-				color: '#555',
-				fontSize: Math.floor(deviceWidth * 0.046666667),
-				fontFamily: fonts.robotoMedium,
-				marginHorizontal: deviceWidth * 0.033333333,
-			},
-			rowWrapper: {
-				flexDirection: 'row',
-				alignItems: 'center',
-				width: deviceWidth * 0.674666667,
-			},
-			triangleContainer: {
-				width: triangleWidth,
-				height: triangleHeight,
-				zIndex: 3,
-			},
-			triangleCommon: {
-				width: triangleWidth,
-				height: triangleHeight,
-				position: 'absolute',
-				right: 0,
-				top: 0,
-			},
-			triangleShadow: {
-				zIndex: -1,
-			},
-			triangle: {
-				zIndex: 1,
-				tintColor: backgroundColor,
-			},
-			rowContainer: {
-				height: null,
-				marginBottom: 0,
-				width: deviceWidth * 0.650666667,
-			},
-			row: {
-				alignItems: 'stretch',
 			},
 			methodIconContainer: {
 				backgroundColor,

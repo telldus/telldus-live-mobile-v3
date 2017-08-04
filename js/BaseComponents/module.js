@@ -67,6 +67,8 @@ import IconTelldus from './IconTelldus';
 import BlockIcon from './BlockIcon';
 import Poster from './Poster';
 import Row from './Row';
+import ListRow from './ListRow';
+import RowWithTriangle from './RowWithTriangle';
 
 import {
 	AppState,
@@ -123,6 +125,8 @@ module.exports = {
 	BlockIcon,
 	Poster,
 	Row,
+	ListRow,
+	RowWithTriangle,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
