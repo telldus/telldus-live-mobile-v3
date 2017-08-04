@@ -23,10 +23,9 @@
 
 import React, { PropTypes } from 'react';
 import { Image, Text, View } from 'react-native';
-import { BlockIcon, IconTelldus } from 'BaseComponents';
+import { BlockIcon, IconTelldus, Row } from 'BaseComponents';
 import Theme from 'Theme';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';
-import Row from '../../Schedule/SubViews/Row';
 import TextRowWrapper from '../../Schedule/SubViews/TextRowWrapper';
 import Title from '../../Schedule/SubViews/Title';
 import Description from '../../Schedule/SubViews/Description';

@@ -23,9 +23,8 @@
 
 import React, { PropTypes } from 'react';
 import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback } from 'react-native';
-import { FloatingButton, Text, View } from 'BaseComponents';
+import { FloatingButton, Row, Text, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import Row from './SubViews/Row';
 import TimeBlock from './SubViews/TimeBlock';
 import TimeSlider from './SubViews/TimeSlider';
 import Theme from 'Theme';

@@ -23,8 +23,7 @@
 
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
-import { BlockIcon, IconTelldus } from 'BaseComponents';
-import Row from './Row';
+import { BlockIcon, IconTelldus, Row } from 'BaseComponents';
 import Description from './Description';
 import Theme from 'Theme';
 import getDeviceWidth from '../../../Lib/getDeviceWidth';

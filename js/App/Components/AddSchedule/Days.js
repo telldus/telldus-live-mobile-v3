@@ -24,15 +24,14 @@
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
-import Row from './SubViews/Row';
 import Description from './SubViews/Description';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
 import CheckButton from './SubViews/CheckButton';
-import { CheckboxSolid, FloatingButton } from 'BaseComponents';
+import { CheckboxSolid, FloatingButton, Row } from 'BaseComponents';
 import _ from 'lodash';
 import DaysRow from './SubViews/DaysRow';
 import { DAYS } from 'Constants';
-import { getWeekdays, getWeekends, getSelectedDays } from '../../Lib/getDays';
+import { getSelectedDays, getWeekdays, getWeekends } from '../../Lib/getDays';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
