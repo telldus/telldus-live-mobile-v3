@@ -24,12 +24,10 @@
 import React, { PropTypes } from 'react';
 import { View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
-import Description from './SubViews/Description';
+import { CheckButton, DaysRow, Description } from 'Schedule_SubViews';
 import getDeviceWidth from '../../Lib/getDeviceWidth';
-import CheckButton from './SubViews/CheckButton';
 import { CheckboxSolid, FloatingButton, Row } from 'BaseComponents';
 import _ from 'lodash';
-import DaysRow from './SubViews/DaysRow';
 import { DAYS } from 'Constants';
 import { getSelectedDays, getWeekdays, getWeekends } from '../../Lib/getDays';
 

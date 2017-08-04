@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { List, ListDataSource, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import DeviceRow from './SubViews/DeviceRow';
+import { DeviceRow } from 'Schedule_SubViews';
 
 interface Props extends ScheduleProps {
 	devices: Object,

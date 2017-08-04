@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { List, ListDataSource, View } from 'BaseComponents';
 import type { ScheduleProps } from './ScheduleScreen';
-import ActionRow from './SubViews/ActionRow';
+import { ActionRow } from 'Schedule_SubViews';
 
 const METHODS = [1, 2, 16];
 
