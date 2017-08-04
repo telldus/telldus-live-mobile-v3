@@ -87,6 +87,7 @@ export type Action =
 	| { type: 'USER_REGISTER', accessToken: Object }
 	| { type: 'SCHEDULE_SELECT_DEVICE', payload: Object }
 	| { type: 'SCHEDULE_RESET' }
+	| { type: 'SCHEDULE_EDIT', payload: Object }
 	| { type: 'SCHEDULE_SELECT_ACTION', payload: Object }
 	| { type: 'SCHEDULE_SELECT_TIME', payload: Object }
 	| { type: 'SCHEDULE_SELECT_DAYS', payload: Object }

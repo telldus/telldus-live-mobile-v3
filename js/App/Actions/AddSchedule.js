@@ -24,6 +24,7 @@
 'use strict';
 
 import type { Action } from './Types';
+import type { Schedule } from 'Reducers_Schedule';
 
 type Time = {
 	hour?: number,
@@ -66,10 +67,18 @@ const resetSchedule = (): Action => ({
 	type: 'SCHEDULE_RESET',
 });
 
+const editSchedule = (schedule: Schedule): Action => ({
+	type: 'SCHEDULE_EDIT',
+	payload: {
+		schedule,
+	},
+});
+
 module.exports = {
 	selectDevice,
 	selectAction,
 	selectTime,
 	selectDays,
 	resetSchedule,
+	editSchedule,
 };
