@@ -31,11 +31,12 @@ import { getDeviceWidth } from 'Lib';
 
 import * as scheduleActions from 'Actions_Schedule';
 import { getDevices } from 'Actions_Devices';
+import type { Schedule } from 'Reducers_Schedule';
 
 type Props = {
 	navigation: Object,
 	children: Object,
-	schedule?: Object,
+	schedule?: Schedule,
 	actions?: Object,
 };
 
@@ -49,7 +50,7 @@ export interface ScheduleProps {
 	navigation: Object,
 	actions: Object,
 	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void,
-	schedule: Object,
+	schedule: Schedule,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
@@ -134,7 +135,7 @@ class ScheduleScreen extends View<null, Props, State> {
 }
 
 type mapStateToPropsType = {
-	schedule: Object,
+	schedule: Schedule,
 	devices: Object,
 };
 
