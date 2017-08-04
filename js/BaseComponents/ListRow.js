@@ -30,15 +30,15 @@ import Theme from 'Theme';
 
 type Props = {
 	children: any,
-	roundIcon: string,
-	roundIconContainerStyle: Object,
-	time: string,
-	timeStyle: Object,
-	containerStyle: Object,
-	rowContainerStyle: Object,
-	rowStyle: Object,
-	isFirst: boolean,
-	triangleColor: string,
+	roundIcon?: string,
+	roundIconContainerStyle?: Object,
+	time?: string,
+	timeStyle?: Object,
+	containerStyle?: Object,
+	rowContainerStyle?: Object,
+	rowStyle?: Object,
+	isFirst?: boolean,
+	triangleColor?: string,
 };
 
 type DefaultProps = {
