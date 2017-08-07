@@ -117,11 +117,11 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 		let { devices } = getState();
 		let device = devices.byId[deviceId];
 		return LiveApi(payload).then(response => {
-			setTimeout(() => {
-				if (device.methodRequested !== '') {
-					getDeviceInfo(deviceId, 'TURNON', isInState, dispatch);
-				}
-			}, 2000);
+			// setTimeout(() => {
+			// 	if (device.methodRequested !== '') {
+			// 		getDeviceInfo(deviceId, 'TURNON', isInState, dispatch);
+			// 	}
+			// }, 2000);
 		}).catch(error => {
 			dispatch({
 				type: 'GLOBAL_ERROR_SHOW',
@@ -151,11 +151,11 @@ export function turnOff(deviceId: number, isInState: string): ThunkAction {
 		let { devices } = getState();
 		let device = devices.byId[deviceId];
 		return LiveApi(payload).then(response => {
-			setTimeout(() => {
-				if (device.methodRequested !== '') {
-					getDeviceInfo(deviceId, 'TURNOFF', isInState, dispatch);
-				}
-			}, 2000);
+			// setTimeout(() => {
+			// 	if (device.methodRequested !== '') {
+			// 		getDeviceInfo(deviceId, 'TURNOFF', isInState, dispatch);
+			// 	}
+			// }, 2000);
 		}).catch(error => {
 			dispatch({
 				type: 'GLOBAL_ERROR_SHOW',
