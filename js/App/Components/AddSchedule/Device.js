@@ -72,9 +72,7 @@ export default class Device extends View<void, Props, State> {
 	}
 
 	componentWillUnmount() {
-		if (this._shouldReset()) {
-			this.props.actions.resetSchedule();
-		}
+		this.props.actions.resetSchedule();
 	}
 
 	onRefresh = () => {
