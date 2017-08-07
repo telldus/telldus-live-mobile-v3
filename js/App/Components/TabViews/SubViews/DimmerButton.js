@@ -55,6 +55,8 @@ function toSliderValue(dimmerValue: number): number {
 
 type Props = {
 	device: Object,
+	commandOn: number,
+	commandOFF: number,
 	onDimmerSlide: number => void,
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
