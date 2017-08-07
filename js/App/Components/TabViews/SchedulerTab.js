@@ -23,11 +23,18 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { ActivityIndicator, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 
-import { FloatingButton, I18n, List, ListDataSource, View } from 'BaseComponents';
+import {
+	FloatingButton,
+	FullPageActivityIndicator,
+	I18n,
+	List,
+	ListDataSource,
+	View,
+} from 'BaseComponents';
 import { JobRow, JobsPoster } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 
@@ -113,14 +120,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	render() {
 		if (this.state.loading) {
-			return (
-				<View style={{
-					flex: 1,
-					justifyContent: 'center',
-				}}>
-					<ActivityIndicator size="large"/>
-				</View>
-			);
+			return <FullPageActivityIndicator/>;
 		}
 
 		const { todayIndex, daysToRender } = this.state;
