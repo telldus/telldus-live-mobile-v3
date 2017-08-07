@@ -22,14 +22,20 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Switch, Text, View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
+import { getDeviceWidth } from 'Lib';
+import Theme from 'Theme';
 
 interface Props extends ScheduleProps {
 	devices: Object,
 }
 
-export default class Edit extends View<null, Props, null> {
+type State = {
+	active: boolean,
+};
+
+export default class Edit extends View<null, Props, State> {
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -40,18 +46,28 @@ export default class Edit extends View<null, Props, null> {
 		loading: PropTypes.func,
 	};
 
+	constructor(props: Props) {
+		super(props);
+
+		this.state = {
+			active: props.schedule.active,
+		};
+	}
+
 	componentWillMount() {
 		this.device = this._getDeviceById(this.props.schedule.deviceId);
 		this._shouldRender();
 	}
 
-	shouldComponentUpdate(nextProps: Props) {
+	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 		const { deviceId } = nextProps.schedule;
 
 		if (deviceId !== this.props.schedule.deviceId) {
 			this.device = this._getDeviceById(deviceId);
-			this._shouldRender();
+			return this._shouldRender();
 		}
+
+		return nextState.active !== this.state.active;
 	}
 
 	componentWillUnmount() {
@@ -59,29 +75,74 @@ export default class Edit extends View<null, Props, null> {
 	}
 
 	render() {
+		const { container, activeRow, activeText } = this._getStyle();
+
 		return (
-			<ScrollView>
-				<Text>Schedule active</Text>
+			<ScrollView style={container}>
+				<View style={activeRow}>
+					<Text style={activeText}>
+						Schedule active
+					</Text>
+					<Switch value={this.state.active} onValueChange={this._toggleScheduleState}/>
+				</View>
 			</ScrollView>
 		);
 	}
+
+	_toggleScheduleState = (active: boolean) => {
+		this.setState({ active });
+	};
 
 	_getDeviceById = (deviceId: number): Object => {
 		return this.props.devices.byId[deviceId];
 	};
 
-	_shouldRender = () => {
+	_shouldRender = (): boolean => {
 		if (!this.device) {
 			this.props.loading(true);
-		} else {
-			const { loading, onDidMount } = this.props;
-
-			this.h1 = `Edit ${this.device.name}`;
-			this.h2 = 'Click the details you want to edit';
-
-			onDidMount(this.h1, this.h2);
-			loading(false);
+			return false;
 		}
+
+		const { loading, onDidMount } = this.props;
+
+		this.h1 = `Edit ${this.device.name}`;
+		this.h2 = 'Click the details you want to edit';
+
+		onDidMount(this.h1, this.h2);
+		loading(false);
+		return true;
+	};
+
+	_getStyle = (): Object => {
+		const deviceWidth = getDeviceWidth();
+
+		const paddingSmall = deviceWidth * 0.026666667;
+		const paddingMiddle = deviceWidth * 0.033333333;
+		const paddingLarge = deviceWidth * 0.04;
+
+		return {
+			container: {
+				flex: 1,
+				paddingTop: paddingLarge,
+			},
+			activeRow: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'space-between',
+				backgroundColor: '#fff',
+				borderTopWidth: 1,
+				borderBottomWidth: 1,
+				borderColor: '#c8c7cc',
+				paddingHorizontal: paddingMiddle,
+				paddingVertical: deviceWidth * 0.02,
+				width: '100%',
+			},
+			activeText: {
+				color: '#5c5c5c',
+				fontSize: deviceWidth * 0.037333333,
+				fontFamily: Theme.Core.fonts.robotoRegular,
+			},
+		};
 	};
 
 }
