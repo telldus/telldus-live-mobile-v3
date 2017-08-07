@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { View, RoundedCornerShadowView } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
-import { turnOn, turnOff, requestTurnOn, requestTurnOff } from 'Actions_Devices';
+import { deviceSetState, requestTurnOn, requestTurnOff } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
@@ -162,12 +162,12 @@ class DimmerButton extends View {
 	}
 
 	onTurnOn() {
-		this.props.onTurnOn(this.props.device.id, this.props.device.isInState);
+		this.props.onTurnOn(this.props.device.id, this.props.commandOn);
 		this.props.requestTurnOn(this.props.device.id);
 	}
 
 	onTurnOff() {
-		this.props.onTurnOff(this.props.device.id, this.props.device.isInState);
+		this.props.onTurnOff(this.props.device.id, this.props.commandOFF);
 		this.props.requestTurnOff(this.props.device.id);
 	}
 
@@ -232,6 +232,11 @@ class DimmerButton extends View {
 	}
 }
 
+DimmerButton.defaultProps = {
+	commandOn: 1,
+	commandOFF: 2,
+};
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 7,
@@ -270,8 +275,8 @@ function mapDispatchToProps(dispatch) {
 		},
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
 		onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
-		onTurnOn: (id, isInState) => dispatch(turnOn(id, isInState)),
-		onTurnOff: (id, isInState) => dispatch(turnOff(id, isInState)),
+		onTurnOn: (id, command) => dispatch(deviceSetState(id, command)),
+		onTurnOff: (id, command) => dispatch(deviceSetState(id, command)),
 		requestTurnOn: id => dispatch(requestTurnOn(id)),
 		requestTurnOff: id => dispatch(requestTurnOff(id)),
 	};
