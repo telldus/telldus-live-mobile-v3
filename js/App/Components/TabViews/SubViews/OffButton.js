@@ -23,9 +23,16 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
-import { turnOff, requestTurnOff } from 'Actions_Devices';
+import { deviceSetState, requestTurnOff } from 'Actions_Devices';
+
+type Props = {
+	requestTurnOff: number => void,
+	onTurnOff: (number, number) => void,
+};
 
 class OffButton extends View {
+	props: Props;
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -37,7 +44,7 @@ class OffButton extends View {
 
 	onPress() {
 		this.props.requestTurnOff(this.props.id);
-		this.props.onTurnOff(this.props.id, this.props.isInState);
+		this.props.onTurnOff(this.props.id, this.props.command);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -117,15 +124,17 @@ OffButton.propTypes = {
 	enabled: PropTypes.bool,
 	fontSize: PropTypes.number,
 	methodRequested: PropTypes.string,
+	command: PropTypes.number,
 };
 
 OffButton.defaultProps = {
 	enabled: true,
+	command: 2,
 };
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTurnOff: (id, isInState) => dispatch(turnOff(id, isInState)),
+		onTurnOff: (id, isInState) => dispatch(deviceSetState(id, isInState)),
 		requestTurnOff: id => dispatch(requestTurnOff(id)),
 		dispatch,
 	};

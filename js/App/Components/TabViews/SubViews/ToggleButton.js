@@ -29,8 +29,7 @@ import OffButton from './OffButton';
 
 type Props = {
   device: Object,
-  onTurnOff: number => void,
-  onTurnOn: number => void,
+  enabled: Boolean,
 };
 
 class ToggleButton extends View {

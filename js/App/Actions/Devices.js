@@ -71,20 +71,38 @@ export function processWebsocketMessageForDevice(action:string, data:Object): Ac
 }
 
 export function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
-	return (dispatch) => {
+	return (dispatch, getState) => {
 		const payload = { // $FlowFixMe
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
 			requestParams: {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_SET_STATE',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
+		return LiveApi(payload).then(response =>{
+			setTimeout(() => {
+				let { devices } = getState();
+				let device = devices.byId[deviceId];
+				if (device.methodRequested !== '') {
+					getDeviceInfo(deviceId, state, device.isInState, dispatch);
+				}
+			}, 500);
+		}).catch(error => {
+			let { devices } = getState();
+			let device = devices.byId[deviceId];
+			dispatch({
+				type: 'GLOBAL_ERROR_SHOW',
+				payload: {
+					source: 'device',
+					deviceId,
+					message: error.message,
+				},
+			});
+			dispatch({
+				type: 'DEVICE_RESET_STATE',
+				deviceId,
+				state: device.isInState,
+			});
+		});
 	};
 }
 
@@ -260,7 +278,7 @@ export function learn(deviceId: number): ThunkAction {
 	};
 }
 
-export function getDeviceInfo(deviceId: number, requestedState: string, currentState: string, dispatch: Dispatch) {
+export function getDeviceInfo(deviceId: number, requestedState: number, currentState: string, dispatch: Dispatch) {
 	const payload = {
 		url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
 		requestParams: {
@@ -269,6 +287,7 @@ export function getDeviceInfo(deviceId: number, requestedState: string, currentS
 	};
 	return LiveApi(payload).then(response => {
 		let newState = methods[parseInt(response.state, 10)];
+		requestedState = methods[requestedState];
 		if (newState === currentState) {
 			dispatch({
 				type: 'DEVICE_RESET_STATE',
@@ -289,8 +308,9 @@ export function getDeviceInfo(deviceId: number, requestedState: string, currentS
 			dispatch({
 				type: 'DEVICE_SET_STATE',
 				payload: {
-					...payload,
-					...response,
+					deviceId,
+					value: response.stateValue,
+					method: response.state,
 				},
 			});
 		}
