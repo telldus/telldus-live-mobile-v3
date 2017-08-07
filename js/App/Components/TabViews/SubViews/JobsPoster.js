@@ -384,7 +384,10 @@ export default class JobsPoster extends View<null, Props, State> {
 			textAlign: 'center',
 			position: 'absolute',
 			left: 0,
-			top: '100%',
+			top: 0,
+			transform: [
+				{ translateY: height },
+			],
 			textAlignVertical: 'center',
 			includeFontPadding: false,
 		};
@@ -393,23 +396,20 @@ export default class JobsPoster extends View<null, Props, State> {
 			date,
 			yesterday: {
 				...date,
-				top: this._interpolate('0%', '0%', '50%'),
 				transform: [
-					{ translateY: this._interpolate(-2 * height, -height, height / -2) },
+					{ translateY: this._interpolate(-2 * height, -height, 0) },
 				],
 			},
 			today: {
 				...date,
-				top: this._interpolate('0%', '50%', '100%'),
 				transform: [
-					{ translateY: this._interpolate(-height, height / -2, 0) },
+					{ translateY: this._interpolate(-height, 0, height) },
 				],
 			},
 			tomorrow: {
 				...date,
-				top: this._interpolate('50%', '100%', '100%'),
 				transform: [
-					{ translateY: this._interpolate(height / -2, 0, height) },
+					{ translateY: this._interpolate(0, height, 2 * height) },
 				],
 			},
 		};
@@ -420,6 +420,7 @@ export default class JobsPoster extends View<null, Props, State> {
 
 		return {
 			daysContainer: {
+				borderWidth: 0,
 				position: 'absolute',
 				left: deviceWidth * 0.076,
 				top: 0,
@@ -428,6 +429,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				overflow: 'hidden',
 			},
 			dateContainer: {
+				borderWidth: 0,
 				alignItems: 'center',
 				justifyContent: 'center',
 				height: deviceWidth * 0.064,
