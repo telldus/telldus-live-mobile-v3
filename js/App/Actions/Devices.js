@@ -85,7 +85,7 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 				if (device.methodRequested !== '') {
 					getDeviceInfo(deviceId, state, device.isInState, dispatch);
 				}
-			}, 500);
+			}, 2000);
 		}).catch(error => {
 			let { devices } = getState();
 			let device = devices.byId[deviceId];
