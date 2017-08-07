@@ -155,9 +155,6 @@ class TabsView extends View<null, Props, State> {
 		let screenProps = { stackNavigator: this.props.stackNavigator };
 		const { routeName } = this.state.tab;
 
-	render() {
-		const { routeName } = this.state.tab;
-
 		const rightButton = this._defineRightButton(routeName);
 
 		return (

@@ -27,14 +27,13 @@ import { ActivityIndicator, ScrollView } from 'react-native';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 
-import { I18n, List, ListDataSource, View } from 'BaseComponents';
+import { FloatingButton, I18n, List, ListDataSource, View } from 'BaseComponents';
 import { JobRow, JobsPoster } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
 
-import { getTabBarIcon } from 'Lib';
-import { getDeviceWidth } from 'Lib';
+import { getDeviceWidth, getTabBarIcon } from 'Lib';
 
 type NavigationParams = {
 	focused: boolean, tintColor: string,
@@ -44,6 +43,7 @@ type Props = {
 	rowsAndSections: Object[],
 	devices: Object,
 	dispatch: Function,
+	navigation: Object,
 	screenProps: Object,
 };
 
@@ -56,6 +56,10 @@ class SchedulerTab extends View<null, Props, State> {
 
 	static propTypes = {
 		rowsAndSections: PropTypes.arrayOf(PropTypes.object),
+		devices: PropTypes.object,
+		dispatch: PropTypes.func,
+		navigation: PropTypes.object,
+		screenProps: PropTypes.object,
 	};
 
 	static navigationOptions = {
@@ -103,6 +107,10 @@ class SchedulerTab extends View<null, Props, State> {
 		this.props.dispatch(getJobs());
 	}
 
+	newSchedule = () => {
+		this.props.screenProps.rootNavigation.navigate('Schedule');
+	};
+
 	render() {
 		if (this.state.loading) {
 			return (
@@ -133,6 +141,10 @@ class SchedulerTab extends View<null, Props, State> {
 				>
 					{daysToRender}
 				</ScrollView>
+				<FloatingButton
+					onPress={this.newSchedule}
+					imageSource={require('./img/iconPlus.png')}
+				/>
 			</View>
 		);
 	}
