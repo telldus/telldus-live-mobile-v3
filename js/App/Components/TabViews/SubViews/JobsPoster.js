@@ -372,7 +372,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	_getDateAnimatedStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
-		const height = deviceWidth * 0.06;
+		const height = deviceWidth * 0.064;
 
 		const date = {
 			backgroundColor: 'transparent',
@@ -385,6 +385,8 @@ export default class JobsPoster extends View<null, Props, State> {
 			position: 'absolute',
 			left: 0,
 			top: '100%',
+			textAlignVertical: 'center',
+			includeFontPadding: false,
 		};
 
 		return {
