@@ -224,7 +224,8 @@ const styles = StyleSheet.create({
 	formSubmit: {
 		padding: 6,
 		minWidth: 100,
-
+		justifyContent: 'center',
+		alignItems: 'center',
 		backgroundColor: Theme.Core.btnPrimaryBg,
 	},
 });
