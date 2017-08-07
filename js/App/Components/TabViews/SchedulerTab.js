@@ -24,6 +24,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 
@@ -36,9 +37,10 @@ import {
 	View,
 } from 'BaseComponents';
 import { JobRow, JobsPoster } from 'TabViews_SubViews';
-import { getJobs } from 'Actions';
+import { editSchedule, getJobs } from 'Actions';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
+import type { Schedule } from 'Reducers_Schedule';
 
 import { getDeviceWidth, getTabBarIcon } from 'Lib';
 
@@ -116,6 +118,19 @@ class SchedulerTab extends View<null, Props, State> {
 
 	newSchedule = () => {
 		this.props.screenProps.rootNavigation.navigate('Schedule');
+	};
+
+	editJob = (schedule: Schedule) => {
+		const { dispatch, screenProps } = this.props;
+
+		const goToEdit = NavigationActions.navigate({
+			routeName: 'Schedule',
+			params: {},
+			action: NavigationActions.navigate({ routeName: 'Edit' }),
+		});
+
+		dispatch(editSchedule(schedule));
+		screenProps.rootNavigation.dispatch(goToEdit);
 	};
 
 	render() {
@@ -225,7 +240,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_renderRow = (props: Object, sectionId: number, rowId: string): React$Element<JobRow> => {
 		return (
-			<JobRow {...props} isFirst={+rowId === 0}/>
+			<JobRow {...props} editJob={this.editJob} isFirst={+rowId === 0}/>
 		);
 	};
 

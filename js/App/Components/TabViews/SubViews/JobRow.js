@@ -22,13 +22,14 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { BlockIcon, IconTelldus, ListRow } from 'BaseComponents';
 import Theme from 'Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from 'Schedule_SubViews';
 import { capitalize, getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from 'Lib';
 import { DAYS } from 'Constants';
 import _ from 'lodash';
+import type { Schedule } from 'Reducers_Schedule';
 
 const methodNames = {
 	[1]: 'On',
@@ -53,22 +54,61 @@ type Props = {
 	type: string,
 	weekdays: number[],
 	isFirst: boolean,
+	editJob: (schedule: Schedule) => void,
 };
 
 export default class JobRow extends View<null, Props, null> {
 
 	static propTypes = {
+		id: PropTypes.number.isRequired,
+		deviceId: PropTypes.number.isRequired,
 		active: PropTypes.bool.isRequired,
 		device: PropTypes.object.isRequired,
 		method: PropTypes.number.isRequired,
 		methodValue: PropTypes.number.isRequired,
+		hour: PropTypes.number.isRequired,
 		effectiveHour: PropTypes.string.isRequired,
+		minute: PropTypes.number.isRequired,
 		effectiveMinute: PropTypes.string.isRequired,
 		offset: PropTypes.number.isRequired,
 		randomInterval: PropTypes.number.isRequired,
 		type: PropTypes.string.isRequired,
 		weekdays: PropTypes.arrayOf(PropTypes.number).isRequired,
 		isFirst: PropTypes.bool.isRequired,
+		editJob: PropTypes.func.isRequired,
+	};
+
+	editJob = () => {
+		const {
+			editJob,
+			id,
+			deviceId,
+			method,
+			methodValue,
+			type,
+			hour,
+			minute,
+			offset,
+			randomInterval,
+			active,
+			weekdays,
+		} = this.props;
+
+		const schedule: Schedule = {
+			id,
+			deviceId,
+			method,
+			methodValue,
+			type,
+			hour,
+			minute,
+			offset,
+			randomInterval,
+			active,
+			weekdays,
+		};
+
+		editJob(schedule);
 	};
 
 	render() {
@@ -85,6 +125,7 @@ export default class JobRow extends View<null, Props, null> {
 			randomInterval,
 			active,
 			isFirst,
+			editJob,
 		} = this.props;
 
 		const {
@@ -100,7 +141,11 @@ export default class JobRow extends View<null, Props, null> {
 		const repeat = this._getRepeatDescription();
 
 		return (
-			<View style={container}>
+			<TouchableOpacity
+				style={container}
+				onPress={this.editJob}
+				disabled={!editJob}
+			>
 				<ListRow
 					roundIcon={type}
 					time={`${effectiveHour}:${effectiveMinute}`}
@@ -130,7 +175,7 @@ export default class JobRow extends View<null, Props, null> {
 						/>
 					)}
 				</ListRow>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 

@@ -25,7 +25,7 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { Header, View } from 'BaseComponents';
+import { FullPageActivityIndicator, Header, View } from 'BaseComponents';
 import { SchedulePoster } from 'Schedule_SubViews';
 import { getDeviceWidth } from 'Lib';
 
@@ -44,6 +44,7 @@ type State = {
 	h1: string,
 	h2: string,
 	infoButton: null | Object,
+	loading: boolean,
 };
 
 export interface ScheduleProps {
@@ -51,6 +52,7 @@ export interface ScheduleProps {
 	actions: Object,
 	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void,
 	schedule: Schedule,
+	loading: (loading: boolean) => void,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
@@ -66,6 +68,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		h1: '',
 		h2: '',
 		infoButton: null,
+		loading: false,
 	};
 
 	constructor(props: Props) {
@@ -95,27 +98,40 @@ class ScheduleScreen extends View<null, Props, State> {
 		});
 	};
 
+	loading = (loading: boolean) => {
+		this.setState({ loading });
+	};
+
 	render() {
 		const { children, navigation, actions, devices, schedule } = this.props;
-		const { h1, h2, infoButton } = this.state;
+		const { h1, h2, infoButton, loading } = this.state;
 		const style = this._getStyle();
 
 		return (
 			<View>
 				<Header leftButton={this.backButton}/>
-				<SchedulePoster h1={h1} h2={h2} infoButton={infoButton}/>
-				<View style={style}>
-					{React.cloneElement(
-						children,
-						{
-							onDidMount: this.onChildDidMount,
-							navigation,
-							actions,
-							paddingRight: style.paddingHorizontal,
-							devices,
-							schedule,
-						},
-					)}
+				{loading && (
+					<FullPageActivityIndicator/>
+				)}
+				<View style={{
+					flex: 1,
+					opacity: loading ? 0 : 1,
+				}}>
+					<SchedulePoster h1={h1} h2={h2} infoButton={infoButton}/>
+					<View style={style}>
+						{React.cloneElement(
+							children,
+							{
+								onDidMount: this.onChildDidMount,
+								navigation,
+								actions,
+								paddingRight: style.paddingHorizontal,
+								devices,
+								schedule,
+								loading: this.loading,
+							},
+						)}
+					</View>
 				</View>
 			</View>
 		);

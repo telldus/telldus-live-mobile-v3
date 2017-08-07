@@ -31,6 +31,7 @@ import ActionDim from './ActionDim';
 import Time from './Time';
 import Days from './Days';
 import Summary from './Summary';
+import Edit from './Edit';
 
 const renderScheduleScreen = navigation => Component => (
 	<ScheduleScreen navigation={navigation}>
@@ -56,6 +57,9 @@ const RouteConfigs = {
 	},
 	Summary: {
 		screen: ({ navigation }) => renderScheduleScreen(navigation)(Summary),
+	},
+	Edit: {
+		screen: ({ navigation }) => renderScheduleScreen(navigation)(Edit),
 	},
 };
 
