@@ -141,10 +141,12 @@ class ScheduleScreen extends View<null, Props, State> {
 		const deviceWidth = getDeviceWidth();
 		const padding = deviceWidth * 0.033333333;
 
+		const isEdit = this.props.navigation.state.routeName === 'Edit';
+
 		return {
 			flex: 1,
-			paddingHorizontal: padding,
-			paddingTop: padding,
+			paddingHorizontal: isEdit ? 0 : padding,
+			paddingTop: isEdit ? 0 : padding,
 		};
 	};
 
