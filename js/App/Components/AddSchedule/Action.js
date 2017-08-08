@@ -68,7 +68,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 		actions.selectAction(action);
 
-		if (isEditMode) {
+		if (isEditMode()) {
 			navigation.goBack();
 		} else {
 			navigation.navigate('Time');

@@ -84,7 +84,7 @@ export default class ActionDim extends View<null, Props, State> {
 
 		actions.selectAction(16, this.state.methodValue);
 
-		if (isEditMode) {
+		if (isEditMode()) {
 			navigation.goBack(navigation.state.params.actionKey);
 		} else {
 			navigation.navigate('Time');
