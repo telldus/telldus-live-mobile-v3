@@ -32,21 +32,31 @@ type Props = {
 	selectedDays: string[],
 	onDayPress?: Function,
 	containerStyle?: Object,
+	editMode?: boolean,
 };
 
-export default class DaysRow extends View<null, Props, null> {
+type DefaultProps = {
+	editMode: boolean,
+};
+
+export default class DaysRow extends View<DefaultProps, Props, null> {
 
 	static propTypes = {
 		selectedDays: PropTypes.arrayOf(PropTypes.string).isRequired,
 		onDayPress: PropTypes.func,
 		containerStyle: View.propTypes.style,
+		editMode: PropTypes.bool,
+	};
+
+	static defaultProps = {
+		editMode: false,
 	};
 
 	render() {
-		const style = this._getStyle();
+		const {container, row} = this._getStyle();
 
 		return (
-			<Row layout="row" style={style} containerStyle={this.props.containerStyle}>
+			<Row layout="row" containerStyle={[container, this.props.containerStyle]} style={row}>
 				{this._renderWeekdays()}
 			</Row>
 		);
@@ -73,10 +83,16 @@ export default class DaysRow extends View<null, Props, null> {
 		const deviceWidth = getDeviceWidth();
 
 		return {
-			alignItems: 'center',
-			justifyContent: 'space-between',
-			paddingVertical: deviceWidth * 0.102666667,
-			paddingHorizontal: deviceWidth * 0.056,
+			container: {
+				height: null,
+				marginBottom: 0,
+			},
+			row: {
+				alignItems: 'center',
+				justifyContent: 'space-between',
+				paddingVertical: this.props.editMode ? deviceWidth * 0.102666667 : deviceWidth * 0.076,
+				paddingHorizontal: deviceWidth * 0.056,
+			},
 		};
 	};
 

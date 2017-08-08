@@ -106,7 +106,7 @@ export default class Summary extends View<null, Props, State> {
 	render() {
 		const { schedule, paddingRight } = this.props;
 		const { method, methodValue, type, offset, randomInterval, weekdays } = schedule;
-		const { row, timeRow, daysRow, iconSize } = this._getStyle();
+		const { row, timeRow, iconSize } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
@@ -126,7 +126,7 @@ export default class Summary extends View<null, Props, State> {
 						randomInterval={randomInterval}
 						containerStyle={[row, timeRow]}
 					/>
-					<DaysRow selectedDays={selectedDays} containerStyle={daysRow}/>
+					<DaysRow selectedDays={selectedDays}/>
 				</ScrollView>
 				<FloatingButton
 					onPress={this.saveSchedule}
@@ -162,10 +162,6 @@ export default class Summary extends View<null, Props, State> {
 			timeRow: {
 				height: deviceWidth * 0.281333333,
 				paddingHorizontal: deviceWidth * 0.068,
-			},
-			daysRow: {
-				height: null,
-				marginBottom: 0,
 			},
 			iconSize: deviceWidth * 0.050666667,
 		};

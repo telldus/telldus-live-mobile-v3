@@ -189,6 +189,7 @@ export default class Days extends View<null, Props, State> {
 					selectedDays={selectedDays}
 					containerStyle={rowContainer}
 					onDayPress={this.toggleDayState}
+					editMode={true}
 				/>
 				<Row
 					layout="row"
@@ -283,7 +284,6 @@ export default class Days extends View<null, Props, State> {
 				paddingVertical: deviceWidth * 0.037333333,
 			},
 			rowContainer: {
-				height: null,
 				marginBottom: deviceWidth * 0.028,
 			},
 			checkbox: {
