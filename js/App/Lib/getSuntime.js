@@ -22,6 +22,7 @@
 'use strict';
 
 import LiveApi from './LiveApi';
+import moment from 'moment-timezone';
 
 type Time = {
 	hour: number,
@@ -30,17 +31,18 @@ type Time = {
 
 export default function getSuntime(clientId: number, type: string): Promise<Time> {
 	const request = {
-		url: `/client/info?id=${clientId}&extras=suntime`,
+		url: `/client/info?id=${clientId}&extras=suntime,timezone`,
 		requestParams: {
 			method: 'GET',
 		},
 	};
+
 	return LiveApi(request).then((response: Object): Time => {
-		const date = new Date(response[type] * 1000);
+		const time = moment(response[type] * 1000).tz(response.timezone);
 
 		return {
-			hour: date.getHours(),
-			minute: date.getMinutes(),
+			hour: time.hour(),
+			minute: time.minute(),
 		};
 	});
 }
