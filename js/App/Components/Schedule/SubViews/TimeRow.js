@@ -38,6 +38,7 @@ type Props = {
 	schedule: Schedule,
 	device: Object,
 	containerStyle?: Object,
+	onPress?: Function,
 };
 
 type State = {
@@ -51,6 +52,7 @@ export default class TimeRow extends View<null, Props, State> {
 		schedule: PropTypes.object.isRequired,
 		device: PropTypes.object.isRequired,
 		containerStyle: View.propTypes.style,
+		onPress: PropTypes.func,
 	};
 
 	constructor(props: Props) {
@@ -111,7 +113,7 @@ export default class TimeRow extends View<null, Props, State> {
 			);
 		}
 
-		const { schedule, containerStyle } = this.props;
+		const { schedule, containerStyle, onPress } = this.props;
 		const { offset, randomInterval, type } = schedule;
 
 		const {
@@ -128,7 +130,7 @@ export default class TimeRow extends View<null, Props, State> {
 		const randomIcon = randomInterval ? 'random' : null;
 
 		return (
-			<Row layout="row" containerStyle={[container, containerStyle]}>
+			<Row layout="row" containerStyle={[container, containerStyle]} onPress={onPress}>
 				<BlockIcon
 					icon={type}
 					size={blockIcon.size}

@@ -52,6 +52,7 @@ export default class Time extends View<null, Props, State> {
 		onDidMount: PropTypes.func,
 		schedule: PropTypes.object,
 		paddingRight: PropTypes.number,
+		isEditMode: PropTypes.bool,
 	};
 
 	constructor(props: Props) {
@@ -113,7 +114,7 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	selectTime = () => {
-		const { actions, navigation } = this.props;
+		const { actions, navigation, isEditMode } = this.props;
 		const { selectedType, randomInterval, offset, date } = this.state;
 
 		if (!selectedType) {
@@ -137,7 +138,12 @@ export default class Time extends View<null, Props, State> {
 		}
 
 		actions.selectTime(selectedType, time);
-		navigation.navigate('Days');
+
+		if (isEditMode()) {
+			navigation.goBack();
+		} else {
+			navigation.navigate('Days');
+		}
 	};
 
 	render() {

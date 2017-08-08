@@ -63,6 +63,10 @@ export default class Edit extends View<null, Props, null> {
 		this._navigate('Action');
 	};
 
+	editTime = () => {
+		this._navigate('Time');
+	};
+
 	setScheduleActiveState = (active: boolean) => {
 		this.props.actions.setActiveState(active);
 	};
@@ -87,6 +91,7 @@ export default class Edit extends View<null, Props, null> {
 						schedule={this.props.schedule}
 						device={this.device}
 						containerStyle={row}
+						onPress={this.editTime}
 					/>
 					<DaysRow selectedDays={selectedDays}/>
 				</View>
