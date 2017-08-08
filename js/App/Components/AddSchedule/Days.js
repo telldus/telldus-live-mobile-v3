@@ -50,6 +50,7 @@ export default class Days extends View<null, Props, State> {
 		onDidMount: PropTypes.func,
 		schedule: PropTypes.object,
 		paddingRight: PropTypes.number,
+		isEditMode: PropTypes.func,
 	};
 
 	constructor(props: Props) {
@@ -148,7 +149,7 @@ export default class Days extends View<null, Props, State> {
 	};
 
 	selectDays = () => {
-		const { actions, navigation } = this.props;
+		const { actions, navigation, isEditMode } = this.props;
 
 		let selectedDaysIndexes: number[] = [];
 		const { selectedDays } = this.state;
@@ -162,7 +163,12 @@ export default class Days extends View<null, Props, State> {
 		}
 
 		actions.selectDays(selectedDaysIndexes);
-		navigation.navigate('Summary');
+
+		if (isEditMode()) {
+			navigation.goBack();
+		} else {
+			navigation.navigate('Summary');
+		}
 	};
 
 	render() {
@@ -174,14 +180,7 @@ export default class Days extends View<null, Props, State> {
 			selectedDays,
 		} = this.state;
 
-		const {
-			mainContainer,
-			buttonsContainer,
-			row,
-			rowContainer,
-			checkbox,
-			checkboxText,
-		} = this._getStyle();
+		const { mainContainer, buttonsContainer, row, rowContainer, checkbox } = this._getStyle();
 
 		return (
 			<View style={mainContainer}>

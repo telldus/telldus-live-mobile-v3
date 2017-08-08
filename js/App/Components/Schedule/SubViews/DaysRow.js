@@ -33,6 +33,7 @@ type Props = {
 	onDayPress?: Function,
 	containerStyle?: Object,
 	editMode?: boolean,
+	onPress?: Function,
 };
 
 type DefaultProps = {
@@ -46,6 +47,7 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 		onDayPress: PropTypes.func,
 		containerStyle: View.propTypes.style,
 		editMode: PropTypes.bool,
+		onPress: PropTypes.func,
 	};
 
 	static defaultProps = {
@@ -53,10 +55,16 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 	};
 
 	render() {
-		const {container, row} = this._getStyle();
+		const { containerStyle, onPress } = this.props;
+		const { container, row } = this._getStyle();
 
 		return (
-			<Row layout="row" containerStyle={[container, this.props.containerStyle]} style={row}>
+			<Row
+				layout="row"
+				containerStyle={[container, containerStyle]}
+				style={row}
+				onPress={onPress}
+			>
 				{this._renderWeekdays()}
 			</Row>
 		);

@@ -67,6 +67,10 @@ export default class Edit extends View<null, Props, null> {
 		this._navigate('Time');
 	};
 
+	editDays = () => {
+		this._navigate('Days');
+	};
+
 	setScheduleActiveState = (active: boolean) => {
 		this.props.actions.setActiveState(active);
 	};
@@ -93,7 +97,7 @@ export default class Edit extends View<null, Props, null> {
 						containerStyle={row}
 						onPress={this.editTime}
 					/>
-					<DaysRow selectedDays={selectedDays}/>
+					<DaysRow selectedDays={selectedDays} onPress={this.editDays}/>
 				</View>
 			</ScrollView>
 		);
