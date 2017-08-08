@@ -53,6 +53,7 @@ export interface ScheduleProps {
 	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void,
 	schedule: Schedule,
 	loading: (loading: boolean) => void,
+	isEditMode: () => boolean,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
@@ -129,6 +130,7 @@ class ScheduleScreen extends View<null, Props, State> {
 								devices,
 								schedule,
 								loading: this.loading,
+								isEditMode: this._isEditMode,
 							},
 						)}
 					</View>
@@ -136,6 +138,11 @@ class ScheduleScreen extends View<null, Props, State> {
 			</View>
 		);
 	}
+
+	_isEditMode = (): boolean => {
+		const { params } = this.props.navigation.state;
+		return params && params.editMode;
+	};
 
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();

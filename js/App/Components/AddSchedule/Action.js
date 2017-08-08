@@ -39,6 +39,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		actions: PropTypes.object,
 		onDidMount: PropTypes.func,
 		schedule: PropTypes.object,
+		isEditMode: PropTypes.func,
 	};
 
 	state = {
@@ -63,12 +64,20 @@ export default class Action extends View<null, ScheduleProps, State> {
 	}
 
 	selectAction = (action: number) => {
-		this.props.actions.selectAction(action);
-		this.props.navigation.navigate('Time');
+		const { actions, navigation, isEditMode } = this.props;
+
+		actions.selectAction(action);
+
+		if (isEditMode) {
+			navigation.goBack();
+		} else {
+			navigation.navigate('Time');
+		}
 	};
 
 	navigateToDim = () => {
-		this.props.navigation.navigate('ActionDim');
+		const { navigation } = this.props;
+		navigation.navigate('ActionDim', { actionKey: navigation.state.key });
 	};
 
 	render() {

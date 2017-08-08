@@ -44,6 +44,7 @@ export default class ActionDim extends View<null, Props, State> {
 		onDidMount: PropTypes.func,
 		schedule: PropTypes.object,
 		paddingRight: PropTypes.number,
+		isEditMode: PropTypes.func,
 	};
 
 	constructor(props: Props) {
@@ -79,9 +80,15 @@ export default class ActionDim extends View<null, Props, State> {
 	}
 
 	selectAction = () => {
-		const { actions, navigation } = this.props;
+		const { actions, navigation, isEditMode } = this.props;
+
 		actions.selectAction(16, this.state.methodValue);
-		navigation.navigate('Time');
+
+		if (isEditMode) {
+			navigation.goBack(navigation.state.params.actionKey);
+		} else {
+			navigation.navigate('Time');
+		}
 	};
 
 	render() {

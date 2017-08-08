@@ -86,6 +86,10 @@ export default class Edit extends View<null, Props, State> {
 		this.props.actions.resetSchedule();
 	}
 
+	editAction = () => {
+		this._navigate('Action');
+	};
+
 	render() {
 		const { method, methodValue, type, offset, randomInterval, weekdays } = this.props.schedule;
 		const { active, time } = this.state;
@@ -105,6 +109,7 @@ export default class Edit extends View<null, Props, State> {
 						method={method}
 						showValue={true}
 						methodValue={methodValue}
+						onPress={this.editAction}
 						containerStyle={row}
 					/>
 					<TimeRow
@@ -119,6 +124,10 @@ export default class Edit extends View<null, Props, State> {
 			</ScrollView>
 		);
 	}
+
+	_navigate = (routeName: string) => {
+		this.props.navigation.navigate(routeName, { editMode: true });
+	};
 
 	_toggleScheduleState = (active: boolean) => {
 		this.setState({ active });
