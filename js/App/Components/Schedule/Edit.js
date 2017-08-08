@@ -69,7 +69,7 @@ export default class Edit extends View<null, Props, null> {
 
 	render() {
 		const { active, method, methodValue, weekdays } = this.props.schedule;
-		const { scrollView, container, row, timeRow } = this._getStyle();
+		const { scrollView, container, row } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
@@ -86,7 +86,7 @@ export default class Edit extends View<null, Props, null> {
 					<TimeRow
 						schedule={this.props.schedule}
 						device={this.device}
-						containerStyle={[row, timeRow]}
+						containerStyle={row}
 					/>
 					<DaysRow selectedDays={selectedDays}/>
 				</View>
@@ -118,10 +118,6 @@ export default class Edit extends View<null, Props, null> {
 			},
 			row: {
 				marginBottom: offsetSmall,
-			},
-			timeRow: {
-				height: deviceWidth * 0.281333333,
-				paddingHorizontal: deviceWidth * 0.068,
 			},
 		};
 	};

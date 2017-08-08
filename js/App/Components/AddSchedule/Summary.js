@@ -81,7 +81,7 @@ export default class Summary extends View<null, Props, null> {
 	render() {
 		const { schedule, paddingRight } = this.props;
 		const { method, methodValue, weekdays } = schedule;
-		const { row, timeRow, iconSize } = this._getStyle();
+		const { row, iconSize } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
@@ -97,7 +97,7 @@ export default class Summary extends View<null, Props, null> {
 					<TimeRow
 						schedule={schedule}
 						device={this.device}
-						containerStyle={[row, timeRow]}
+						containerStyle={row}
 					/>
 					<DaysRow selectedDays={selectedDays}/>
 				</ScrollView>
@@ -122,10 +122,6 @@ export default class Summary extends View<null, Props, null> {
 		return {
 			row: {
 				marginBottom: deviceWidth * 0.025333333,
-			},
-			timeRow: {
-				height: deviceWidth * 0.281333333,
-				paddingHorizontal: deviceWidth * 0.068,
 			},
 			iconSize: deviceWidth * 0.050666667,
 		};

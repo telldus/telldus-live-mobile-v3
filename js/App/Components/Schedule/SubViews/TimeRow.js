@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { BlockIcon, IconTelldus, Row } from 'BaseComponents';
 import Description from './Description';
 import Theme from 'Theme';
@@ -42,6 +42,7 @@ type Props = {
 
 type State = {
 	time: Time,
+	loading: boolean,
 };
 
 export default class TimeRow extends View<null, Props, State> {
@@ -52,38 +53,63 @@ export default class TimeRow extends View<null, Props, State> {
 		containerStyle: View.propTypes.style,
 	};
 
-	state = {
-		time: {
-			hour: 0,
-			minute: 0,
-		},
-	};
+	constructor(props: Props) {
+		super(props);
+
+		const { hour, minute } = props.schedule;
+
+		this.state = {
+			time: {
+				hour,
+				minute,
+			},
+			loading: false,
+		};
+	}
 
 	componentWillMount() {
 		const { schedule, device } = this.props;
 
 		if (schedule.type !== 'time') {
+			this.setState({ loading: true });
 			this._getSuntime(device.clientId, schedule.type);
-		} else {
-			this.setState({
-				time: {
-					hour: schedule.hour,
-					minute: schedule.minute,
-				},
-			});
 		}
 	}
 
 	render() {
+		if (this.state.loading) {
+			return (
+				<Row
+					layout="row"
+					style={{
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+					containerStyle={[this._getStyle().container, this.props.containerStyle]}
+				>
+					<ActivityIndicator size="large"/>
+				</Row>
+			);
+		}
+
 		const { schedule, containerStyle } = this.props;
 		const { offset, randomInterval, type } = schedule;
-		const { blockIcon, textWrapper, title, iconRow, icon, description } = this._getStyle();
+
+		const {
+			container,
+			blockIcon,
+			textWrapper,
+			title,
+			iconRow,
+			icon,
+			description,
+		} = this._getStyle();
 
 		const offsetIcon = offset ? 'offset' : null;
 		const randomIcon = randomInterval ? 'random' : null;
 
 		return (
-			<Row layout="row" containerStyle={containerStyle}>
+			<Row layout="row" containerStyle={[container, containerStyle]}>
 				<BlockIcon
 					icon={type}
 					size={blockIcon.size}
@@ -124,17 +150,16 @@ export default class TimeRow extends View<null, Props, State> {
 
 		if ((time: Time)) {
 			if (time.hour !== hour && time.minute !== minute) {
-				this.setState({ time });
+				this.setState({
+					time,
+					loading: false,
+				});
 			}
 		}
 	};
 
 	_formatTime = (): string => {
 		const { time } = this.state;
-
-		if (this.props.schedule.type !== 'time' && !time.hour && !time.minute) {
-			return '(––:––)';
-		}
 
 		const hour = this._formatTimeValue(time.hour);
 		const minute = this._formatTimeValue(time.minute);
@@ -153,6 +178,10 @@ export default class TimeRow extends View<null, Props, State> {
 		const size = deviceWidth * 0.196;
 
 		return {
+			container: {
+				height: deviceWidth * 0.281333333,
+				paddingHorizontal: deviceWidth * 0.068,
+			},
 			blockIcon: {
 				size,
 				color: Theme.Core[`${type}Color`],
