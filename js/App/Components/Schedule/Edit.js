@@ -24,9 +24,15 @@
 import React, { PropTypes } from 'react';
 import { ScrollView, Switch, Text, View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
-import { getDeviceWidth } from 'Lib';
+import { getDeviceWidth, getSuntime } from 'Lib';
 import Theme from 'Theme';
-import { ActionRow } from 'Schedule_SubViews';
+import { ActionRow, TimeRow } from 'Schedule_SubViews';
+import _ from 'lodash';
+
+type Time = {
+	hour: number,
+	minute: number,
+};
 
 interface Props extends ScheduleProps {
 	devices: Object,
@@ -34,6 +40,7 @@ interface Props extends ScheduleProps {
 
 type State = {
 	active: boolean,
+	time: Time,
 };
 
 export default class Edit extends View<null, Props, State> {
@@ -52,23 +59,27 @@ export default class Edit extends View<null, Props, State> {
 
 		this.state = {
 			active: props.schedule.active,
+			time: {
+				hour: 0,
+				minute: 0,
+			},
 		};
 	}
 
 	componentWillMount() {
-		this.device = this._getDeviceById(this.props.schedule.deviceId);
-		this._shouldRender();
+		this.props.loading(true);
+	}
+
+	componentDidMount() {
+		this._shouldRender(this.props.schedule.deviceId);
 	}
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		const { deviceId } = nextProps.schedule;
+		return !(_.isEqual(nextProps, this.props) && _.isEqual(nextState, this.state));
+	}
 
-		if (deviceId !== this.props.schedule.deviceId) {
-			this.device = this._getDeviceById(deviceId);
-			return this._shouldRender();
-		}
-
-		return nextState.active !== this.state.active;
+	componentWillUpdate(nextProps: Props) {
+		this._shouldRender(nextProps.schedule.deviceId);
 	}
 
 	componentWillUnmount() {
@@ -76,8 +87,9 @@ export default class Edit extends View<null, Props, State> {
 	}
 
 	render() {
-		const { method, methodValue } = this.props.schedule;
-		const { scrollView, activeRow, activeText, container, row } = this._getStyle();
+		const { method, methodValue, type, offset, randomInterval } = this.props.schedule;
+		const { active, time } = this.state;
+		const { scrollView, activeRow, activeText, container, row, timeRow } = this._getStyle();
 
 		return (
 			<ScrollView style={scrollView}>
@@ -85,7 +97,7 @@ export default class Edit extends View<null, Props, State> {
 					<Text style={activeText}>
 						Schedule active
 					</Text>
-					<Switch value={this.state.active} onValueChange={this._toggleScheduleState}/>
+					<Switch value={active} onValueChange={this._toggleScheduleState}/>
 				</View>
 				<View style={container}>
 					<ActionRow
@@ -93,6 +105,13 @@ export default class Edit extends View<null, Props, State> {
 						showValue={true}
 						methodValue={methodValue}
 						containerStyle={row}
+					/>
+					<TimeRow
+						type={type}
+						time={time}
+						offset={offset}
+						randomInterval={randomInterval}
+						containerStyle={[row, timeRow]}
 					/>
 				</View>
 			</ScrollView>
@@ -107,20 +126,41 @@ export default class Edit extends View<null, Props, State> {
 		return this.props.devices.byId[deviceId];
 	};
 
-	_shouldRender = (): boolean => {
-		if (!this.device) {
-			this.props.loading(true);
-			return false;
-		}
+	_shouldRender = (deviceId: number) => {
+		this.device = this._getDeviceById(deviceId);
 
-		const { loading, onDidMount } = this.props;
+		if (this.device) {
+			this._onDidMount();
+		}
+	};
+
+	_onDidMount = () => {
+		const { loading, onDidMount, schedule } = this.props;
 
 		this.h1 = `Edit ${this.device.name}`;
 		this.h2 = 'Click the details you want to edit';
 
+		if (schedule.type !== 'time') {
+			this._getSuntime(this.device.clientId, schedule.type);
+		} else {
+			const time: Time = {
+				hour: schedule.hour,
+				minute: schedule.minute,
+			};
+			this.setState({ time });
+		}
+
 		onDidMount(this.h1, this.h2);
 		loading(false);
-		return true;
+	};
+
+	// $FlowFixMe
+	_getSuntime = async (clientId: number, type: string): void => {
+		const time: Time = await getSuntime(clientId, type);
+
+		if ((time: Time) && !_.isEqual(this.state.time, time)) {
+			this.setState({ time });
+		}
 	};
 
 	_getStyle = (): Object => {
@@ -157,6 +197,10 @@ export default class Edit extends View<null, Props, State> {
 			},
 			row: {
 				marginBottom: offsetSmall,
+			},
+			timeRow: {
+				height: deviceWidth * 0.281333333,
+				paddingHorizontal: deviceWidth * 0.068,
 			},
 		};
 	};
