@@ -26,6 +26,7 @@ import { ScrollView, Switch, Text, View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
 import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
+import { ActionRow } from 'Schedule_SubViews';
 
 interface Props extends ScheduleProps {
 	devices: Object,
@@ -75,15 +76,24 @@ export default class Edit extends View<null, Props, State> {
 	}
 
 	render() {
-		const { container, activeRow, activeText } = this._getStyle();
+		const { method, methodValue } = this.props.schedule;
+		const { scrollView, activeRow, activeText, container, row } = this._getStyle();
 
 		return (
-			<ScrollView style={container}>
+			<ScrollView style={scrollView}>
 				<View style={activeRow}>
 					<Text style={activeText}>
 						Schedule active
 					</Text>
 					<Switch value={this.state.active} onValueChange={this._toggleScheduleState}/>
+				</View>
+				<View style={container}>
+					<ActionRow
+						method={method}
+						showValue={true}
+						methodValue={methodValue}
+						containerStyle={row}
+					/>
 				</View>
 			</ScrollView>
 		);
@@ -116,14 +126,13 @@ export default class Edit extends View<null, Props, State> {
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
-		const paddingSmall = deviceWidth * 0.026666667;
-		const paddingMiddle = deviceWidth * 0.033333333;
-		const paddingLarge = deviceWidth * 0.04;
+		const offsetSmall = deviceWidth * 0.026666667;
+		const offsetMiddle = deviceWidth * 0.033333333;
+		const offsetLarge = deviceWidth * 0.04;
 
 		return {
-			container: {
+			scrollView: {
 				flex: 1,
-				paddingTop: paddingLarge,
 			},
 			activeRow: {
 				flexDirection: 'row',
@@ -133,14 +142,21 @@ export default class Edit extends View<null, Props, State> {
 				borderTopWidth: 1,
 				borderBottomWidth: 1,
 				borderColor: '#c8c7cc',
-				paddingHorizontal: paddingMiddle,
+				paddingHorizontal: offsetMiddle,
 				paddingVertical: deviceWidth * 0.02,
+				marginVertical: offsetLarge,
 				width: '100%',
 			},
 			activeText: {
 				color: '#5c5c5c',
 				fontSize: deviceWidth * 0.037333333,
 				fontFamily: Theme.Core.fonts.robotoRegular,
+			},
+			container: {
+				paddingHorizontal: offsetMiddle,
+			},
+			row: {
+				marginBottom: offsetSmall,
 			},
 		};
 	};
