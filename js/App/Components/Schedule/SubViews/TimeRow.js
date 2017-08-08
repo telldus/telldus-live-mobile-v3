@@ -76,6 +76,25 @@ export default class TimeRow extends View<null, Props, State> {
 		}
 	}
 
+	componentWillReceiveProps(nextProps: Props) {
+		const { hour, minute, type } = nextProps.schedule;
+		const { time } = this.state;
+
+		if (hour !== time.hour || minute !== time.minute) {
+			if (type !== 'time') {
+				this.setState({ loading: true });
+				this._getSuntime(nextProps.device.clientId, type);
+			} else {
+				this.setState({
+					time: {
+						hour,
+						minute,
+					},
+				});
+			}
+		}
+	}
+
 	render() {
 		if (this.state.loading) {
 			return (
