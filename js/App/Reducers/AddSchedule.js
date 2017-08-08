@@ -89,6 +89,12 @@ export default function scheduleReducer(state: Schedule = initialState, action: 
 		case 'SCHEDULE_EDIT':
 			return action.payload.schedule;
 
+		case 'SCHEDULE_SET_ACTIVE_STATE':
+			return {
+				...state,
+				active: action.payload.active,
+			};
+
 		default:
 			return state;
 	}

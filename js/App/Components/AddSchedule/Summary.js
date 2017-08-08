@@ -25,26 +25,16 @@ import React, { PropTypes } from 'react';
 import { NavigationActions } from 'react-navigation';
 import { FloatingButton, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getDeviceWidth, getSelectedDays, getSuntime } from 'Lib';
+import { getDeviceWidth, getSelectedDays } from 'Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow } from 'Schedule_SubViews';
-import _ from 'lodash';
 import { ScrollView } from 'react-native';
-
-type Time = {
-	hour: number,
-	minute: number,
-};
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
 	devices: Object,
 }
 
-type State = {
-	time: Time,
-};
-
-export default class Summary extends View<null, Props, State> {
+export default class Summary extends View<null, Props, null> {
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -63,15 +53,6 @@ export default class Summary extends View<null, Props, State> {
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
-
-		const { hour, minute } = props.schedule;
-
-		this.state = {
-			time: {
-				hour,
-				minute,
-			},
-		};
 	}
 
 	componentWillMount() {
@@ -79,14 +60,8 @@ export default class Summary extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const { onDidMount, schedule } = this.props;
-
 		const { h1, h2, infoButton } = this;
-		onDidMount(h1, h2, infoButton);
-
-		if (schedule.type !== 'time') {
-			this._getSuntime(this.device.clientId, schedule.type);
-		}
+		this.props.onDidMount(h1, h2, infoButton);
 	}
 
 	saveSchedule = () => {
@@ -105,7 +80,7 @@ export default class Summary extends View<null, Props, State> {
 
 	render() {
 		const { schedule, paddingRight } = this.props;
-		const { method, methodValue, type, offset, randomInterval, weekdays } = schedule;
+		const { method, methodValue, weekdays } = schedule;
 		const { row, timeRow, iconSize } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
 
@@ -120,10 +95,8 @@ export default class Summary extends View<null, Props, State> {
 						containerStyle={row}
 					/>
 					<TimeRow
-						type={type}
-						time={this.state.time}
-						offset={offset}
-						randomInterval={randomInterval}
+						schedule={schedule}
+						device={this.device}
 						containerStyle={[row, timeRow]}
 					/>
 					<DaysRow selectedDays={selectedDays}/>
@@ -137,15 +110,6 @@ export default class Summary extends View<null, Props, State> {
 			</View>
 		);
 	}
-
-	// $FlowFixMe
-	_getSuntime = async (clientId: number, type: string): void => {
-		const time: Time = await getSuntime(clientId, type);
-
-		if ((time: Time) && !_.isEqual(this.state.time, time)) {
-			this.setState({ time });
-		}
-	};
 
 	_getDeviceById = (deviceId: number): Object => {
 		// TODO: use device description

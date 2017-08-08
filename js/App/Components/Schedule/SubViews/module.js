@@ -33,6 +33,7 @@ import TimeBlock from './TimeBlock';
 import TimeRow from './TimeRow';
 import TimeSlider from './TimeSlider';
 import Title from './Title';
+import ScheduleSwitch from './ScheduleSwitch';
 
 module.exports = {
 	ActionRow,
@@ -48,4 +49,5 @@ module.exports = {
 	TimeRow,
 	TimeSlider,
 	Title,
+	ScheduleSwitch,
 };

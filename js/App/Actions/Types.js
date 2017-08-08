@@ -91,6 +91,7 @@ export type Action =
 	| { type: 'SCHEDULE_SELECT_ACTION', payload: Object }
 	| { type: 'SCHEDULE_SELECT_TIME', payload: Object }
 	| { type: 'SCHEDULE_SELECT_DAYS', payload: Object }
+	| { type: 'SCHEDULE_SET_ACTIVE_STATE', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

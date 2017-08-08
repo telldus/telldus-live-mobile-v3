@@ -26,7 +26,8 @@ import { View } from 'react-native';
 import { BlockIcon, IconTelldus, Row } from 'BaseComponents';
 import Description from './Description';
 import Theme from 'Theme';
-import { capitalize, getDeviceWidth } from 'Lib';
+import { capitalize, getDeviceWidth, getSuntime } from 'Lib';
+import type { Schedule } from 'Reducers_Schedule';
 
 type Time = {
 	hour: number,
@@ -34,25 +35,48 @@ type Time = {
 };
 
 type Props = {
-	type: string,
-	time: Time,
-	offset?: number,
-	randomInterval?: number,
+	schedule: Schedule,
+	device: Object,
 	containerStyle?: Object,
 };
 
-export default class TimeRow extends View<null, Props, null> {
+type State = {
+	time: Time,
+};
+
+export default class TimeRow extends View<null, Props, State> {
 
 	static propTypes = {
-		type: PropTypes.string.isRequired,
-		time: PropTypes.objectOf(PropTypes.number).isRequired,
-		offset: PropTypes.number,
-		randomInterval: PropTypes.number,
+		schedule: PropTypes.object.isRequired,
+		device: PropTypes.object.isRequired,
 		containerStyle: View.propTypes.style,
 	};
 
+	state = {
+		time: {
+			hour: 0,
+			minute: 0,
+		},
+	};
+
+	componentWillMount() {
+		const { schedule, device } = this.props;
+
+		if (schedule.type !== 'time') {
+			this._getSuntime(device.clientId, schedule.type);
+		} else {
+			this.setState({
+				time: {
+					hour: schedule.hour,
+					minute: schedule.minute,
+				},
+			});
+		}
+	}
+
 	render() {
-		const { type, time, offset, randomInterval, containerStyle } = this.props;
+		const { schedule, containerStyle } = this.props;
+		const { offset, randomInterval, type } = schedule;
 		const { blockIcon, textWrapper, title, iconRow, icon, description } = this._getStyle();
 
 		const offsetIcon = offset ? 'offset' : null;
@@ -69,7 +93,7 @@ export default class TimeRow extends View<null, Props, null> {
 				/>
 				<View style={textWrapper}>
 					<Description style={title}>
-						{`${capitalize(type)} ${this._formatTime(time, type)}`}
+						{`${capitalize(type)} ${this._formatTime()}`}
 					</Description>
 					{!!offset && (
 						<View style={iconRow}>
@@ -92,8 +116,23 @@ export default class TimeRow extends View<null, Props, null> {
 		);
 	}
 
-	_formatTime = (time: Time, type: string): string => {
-		if (type !== 'time' && (time.hour === 0 && time.minute === 0)) {
+	// $FlowFixMe
+	_getSuntime = async (clientId: number, type: string): void => {
+		const { hour, minute } = this.state.time;
+
+		const time: Time = await getSuntime(clientId, type);
+
+		if ((time: Time)) {
+			if (time.hour !== hour && time.minute !== minute) {
+				this.setState({ time });
+			}
+		}
+	};
+
+	_formatTime = (): string => {
+		const { time } = this.state;
+
+		if (this.props.schedule.type !== 'time' && !time.hour && !time.minute) {
 			return '(––:––)';
 		}
 
@@ -108,7 +147,7 @@ export default class TimeRow extends View<null, Props, null> {
 	};
 
 	_getStyle = (): Object => {
-		const { offset, randomInterval } = this.props;
+		const { offset, randomInterval, type } = this.props.schedule;
 		const deviceWidth = getDeviceWidth();
 
 		const size = deviceWidth * 0.196;
@@ -116,7 +155,7 @@ export default class TimeRow extends View<null, Props, null> {
 		return {
 			blockIcon: {
 				size,
-				color: Theme.Core[`${this.props.type}Color`],
+				color: Theme.Core[`${type}Color`],
 				style: {
 					width: deviceWidth * 0.2156,
 				},

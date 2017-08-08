@@ -22,28 +22,16 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { ScrollView, Switch, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
-import { getDeviceWidth, getSelectedDays, getSuntime } from 'Lib';
-import Theme from 'Theme';
-import { ActionRow, DaysRow, TimeRow } from 'Schedule_SubViews';
-import _ from 'lodash';
-
-type Time = {
-	hour: number,
-	minute: number,
-};
+import { getDeviceWidth, getSelectedDays } from 'Lib';
+import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from 'Schedule_SubViews';
 
 interface Props extends ScheduleProps {
 	devices: Object,
 }
 
-type State = {
-	active: boolean,
-	time: Time,
-};
-
-export default class Edit extends View<null, Props, State> {
+export default class Edit extends View<null, Props, null> {
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -57,29 +45,14 @@ export default class Edit extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.state = {
-			active: props.schedule.active,
-			time: {
-				hour: 0,
-				minute: 0,
-			},
-		};
-	}
+		this.device = this._getDeviceById(this.props.schedule.deviceId);
 
-	componentWillMount() {
-		this.props.loading(true);
+		this.h1 = `Edit ${this.device.name}`;
+		this.h2 = 'Click the details you want to edit';
 	}
 
 	componentDidMount() {
-		this._shouldRender(this.props.schedule.deviceId);
-	}
-
-	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		return !(_.isEqual(nextProps, this.props) && _.isEqual(nextState, this.state));
-	}
-
-	componentWillUpdate(nextProps: Props) {
-		this._shouldRender(nextProps.schedule.deviceId);
+		this.props.onDidMount(this.h1, this.h2);
 	}
 
 	componentWillUnmount() {
@@ -90,20 +63,18 @@ export default class Edit extends View<null, Props, State> {
 		this._navigate('Action');
 	};
 
+	setScheduleActiveState = (active: boolean) => {
+		this.props.actions.setActiveState(active);
+	};
+
 	render() {
-		const { method, methodValue, type, offset, randomInterval, weekdays } = this.props.schedule;
-		const { active, time } = this.state;
-		const { scrollView, activeRow, activeText, container, row, timeRow } = this._getStyle();
+		const { active, method, methodValue, weekdays } = this.props.schedule;
+		const { scrollView, container, row, timeRow } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
 			<ScrollView style={scrollView}>
-				<View style={activeRow}>
-					<Text style={activeText}>
-						Schedule active
-					</Text>
-					<Switch value={active} onValueChange={this._toggleScheduleState}/>
-				</View>
+				<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState}/>
 				<View style={container}>
 					<ActionRow
 						method={method}
@@ -113,10 +84,8 @@ export default class Edit extends View<null, Props, State> {
 						containerStyle={row}
 					/>
 					<TimeRow
-						type={type}
-						time={time}
-						offset={offset}
-						randomInterval={randomInterval}
+						schedule={this.props.schedule}
+						device={this.device}
 						containerStyle={[row, timeRow]}
 					/>
 					<DaysRow selectedDays={selectedDays}/>
@@ -129,49 +98,8 @@ export default class Edit extends View<null, Props, State> {
 		this.props.navigation.navigate(routeName, { editMode: true });
 	};
 
-	_toggleScheduleState = (active: boolean) => {
-		this.setState({ active });
-	};
-
 	_getDeviceById = (deviceId: number): Object => {
 		return this.props.devices.byId[deviceId];
-	};
-
-	_shouldRender = (deviceId: number) => {
-		this.device = this._getDeviceById(deviceId);
-
-		if (this.device) {
-			this._onDidMount();
-		}
-	};
-
-	_onDidMount = () => {
-		const { loading, onDidMount, schedule } = this.props;
-
-		this.h1 = `Edit ${this.device.name}`;
-		this.h2 = 'Click the details you want to edit';
-
-		if (schedule.type !== 'time') {
-			this._getSuntime(this.device.clientId, schedule.type);
-		} else {
-			const time: Time = {
-				hour: schedule.hour,
-				minute: schedule.minute,
-			};
-			this.setState({ time });
-		}
-
-		onDidMount(this.h1, this.h2);
-		loading(false);
-	};
-
-	// $FlowFixMe
-	_getSuntime = async (clientId: number, type: string): void => {
-		const time: Time = await getSuntime(clientId, type);
-
-		if ((time: Time) && !_.isEqual(this.state.time, time)) {
-			this.setState({ time });
-		}
 	};
 
 	_getStyle = (): Object => {
@@ -184,24 +112,6 @@ export default class Edit extends View<null, Props, State> {
 		return {
 			scrollView: {
 				flex: 1,
-			},
-			activeRow: {
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'space-between',
-				backgroundColor: '#fff',
-				borderTopWidth: 1,
-				borderBottomWidth: 1,
-				borderColor: '#c8c7cc',
-				paddingHorizontal: offsetMiddle,
-				paddingVertical: deviceWidth * 0.02,
-				marginVertical: offsetLarge,
-				width: '100%',
-			},
-			activeText: {
-				color: '#5c5c5c',
-				fontSize: deviceWidth * 0.037333333,
-				fontFamily: Theme.Core.fonts.robotoRegular,
 			},
 			container: {
 				paddingHorizontal: offsetMiddle,

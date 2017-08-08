@@ -74,6 +74,13 @@ const editSchedule = (schedule: Schedule): Action => ({
 	},
 });
 
+const setActiveState = (active: boolean): Action => ({
+	type: 'SCHEDULE_SET_ACTIVE_STATE',
+	payload: {
+		active,
+	},
+});
+
 module.exports = {
 	selectDevice,
 	selectAction,
@@ -81,4 +88,5 @@ module.exports = {
 	selectDays,
 	resetSchedule,
 	editSchedule,
+	setActiveState,
 };
