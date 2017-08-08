@@ -76,8 +76,18 @@ export default class Action extends View<null, ScheduleProps, State> {
 	};
 
 	navigateToDim = () => {
-		const { navigation } = this.props;
-		navigation.navigate('ActionDim', { actionKey: navigation.state.key });
+		const { navigation, isEditMode } = this.props;
+
+		if (isEditMode()) {
+			navigation.navigate('ActionDim',
+				{
+					actionKey: navigation.state.key,
+					editMode: true,
+				},
+			);
+		} else {
+			navigation.navigate('ActionDim');
+		}
 	};
 
 	render() {
