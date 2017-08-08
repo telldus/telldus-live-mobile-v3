@@ -24,9 +24,9 @@
 import React, { PropTypes } from 'react';
 import { ScrollView, Switch, Text, View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
-import { getDeviceWidth, getSuntime } from 'Lib';
+import { getDeviceWidth, getSelectedDays, getSuntime } from 'Lib';
 import Theme from 'Theme';
-import { ActionRow, TimeRow } from 'Schedule_SubViews';
+import { ActionRow, DaysRow, TimeRow } from 'Schedule_SubViews';
 import _ from 'lodash';
 
 type Time = {
@@ -87,9 +87,10 @@ export default class Edit extends View<null, Props, State> {
 	}
 
 	render() {
-		const { method, methodValue, type, offset, randomInterval } = this.props.schedule;
+		const { method, methodValue, type, offset, randomInterval, weekdays } = this.props.schedule;
 		const { active, time } = this.state;
 		const { scrollView, activeRow, activeText, container, row, timeRow } = this._getStyle();
+		const selectedDays = getSelectedDays(weekdays);
 
 		return (
 			<ScrollView style={scrollView}>
@@ -113,6 +114,7 @@ export default class Edit extends View<null, Props, State> {
 						randomInterval={randomInterval}
 						containerStyle={[row, timeRow]}
 					/>
+					<DaysRow selectedDays={selectedDays}/>
 				</View>
 			</ScrollView>
 		);
