@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { Icon, View, RoundedCornerShadowView } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { down, up, stop } from 'Actions_Devices';
+import { deviceSetState } from 'Actions_Devices';
 
 const UpButton = ({ supportedMethod, onPress }) => (
 	<TouchableOpacity
@@ -67,6 +67,9 @@ type Props = {
 	onDown: number => void,
 	onStop: number => void,
 	style: Object,
+	commandUp: number,
+	commandDown: number,
+	commandStop: number,
 };
 
 class NavigationalButton extends View {
@@ -80,13 +83,19 @@ class NavigationalButton extends View {
 
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
-				<UpButton supportedMethod={UP} onPress={UP ? this.props.onUp(id) : noop} />
-				<DownButton supportedMethod={DOWN} onPress={DOWN ? this.props.onDown(id) : noop} />
-				<StopButton supportedMethod={STOP} onPress={STOP ? this.props.onStop(id) : noop} />
+				<UpButton supportedMethod={UP} onPress={UP ? this.props.onUp(id, this.props.commandUp) : noop} />
+				<DownButton supportedMethod={DOWN} onPress={DOWN ? this.props.onDown(id, this.props.commandDown) : noop} />
+				<StopButton supportedMethod={STOP} onPress={STOP ? this.props.onStop(id, this.props.commandStop) : noop} />
 			</RoundedCornerShadowView>
 		);
 	}
 }
+
+NavigationalButton.defaultProps = {
+	commandUp: 128,
+	commandDown: 256,
+	commandStop: 512,
+};
 
 const styles = StyleSheet.create({
 	navigationButton: {
@@ -104,9 +113,9 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onDown: id => () => dispatch(down(id)),
-		onUp: id => () => dispatch(up(id)),
-		onStop: id => () => dispatch(stop(id)),
+		onDown: (id, command) =>() => dispatch(deviceSetState(id, command)),
+		onUp: (id, command) => () => dispatch(deviceSetState(id, command)),
+		onStop: (id, command) => () => dispatch(deviceSetState(id, command)),
 	};
 }
 

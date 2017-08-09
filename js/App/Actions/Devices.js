@@ -71,6 +71,7 @@ export function processWebsocketMessageForDevice(action:string, data:Object): Ac
 }
 
 export function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
+
 	return (dispatch, getState) => {
 		const payload = { // $FlowFixMe
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
@@ -78,6 +79,7 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 				method: 'GET',
 			},
 		};
+
 		return LiveApi(payload).then(response =>{
 			setTimeout(() => {
 				let { devices } = getState();
@@ -214,13 +216,15 @@ export function up(deviceId: number): ThunkAction {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_UP',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
+		return LiveApi(payload).then(response => {
+			dispatch({
+				type: 'DEVICE_UP',
+				payload: {
+					...payload,
+					...response,
+				},
+			});
+		});
 	};
 }
 
