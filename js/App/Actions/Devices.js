@@ -122,24 +122,6 @@ export function requestTurnOff(deviceId: number): Action {
 	};
 }
 
-export function bell(deviceId: number): ThunkAction {
-	return (dispatch) => {
-		const payload = {
-			url: `/device/bell?id=${deviceId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_BELL',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
-	};
-}
-
 export function learn(deviceId: number): ThunkAction {
 	return (dispatch) => {
 		const payload = {
