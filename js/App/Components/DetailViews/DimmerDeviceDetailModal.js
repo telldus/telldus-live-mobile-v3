@@ -119,7 +119,7 @@ class DimmerDeviceDetailModal extends View {
 		}
 
 		if (LEARN) {
-			learnButton = <LearnButton id={device} style={styles.learn} />;
+			learnButton = <LearnButton id={device.id} style={styles.learn} />;
 		}
 
 		if (DIM) {
