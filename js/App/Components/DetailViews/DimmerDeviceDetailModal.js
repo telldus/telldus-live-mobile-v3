@@ -29,14 +29,16 @@ import { StyleSheet } from 'react-native';
 import Slider from 'react-native-slider';
 import { OnButton, OffButton, LearnButton } from 'TabViews_SubViews';
 
-import { setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
+import { setDimmerValue } from 'Actions_Dimmer';
+import { deviceSetState } from 'Actions_Devices';
 
 type Props = {
   device: Object,
+  commandDIM: number,
   onTurnOff: number => void,
   onTurnOn: number => void,
   onLearn: number => void,
-  onDim: number => void,
+  onDim: (id: number, command: number, value: number) => void,
 };
 
 type State = {
@@ -92,7 +94,7 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	onSlidingComplete(value) {
-		this.props.onDim(this.props.device.id, 255 * value / 100.0);
+		this.props.onDim(this.props.device.id, this.props.commandDIM, 255 * value / 100.0);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -154,6 +156,10 @@ DimmerDeviceDetailModal.propTypes = {
 	device: React.PropTypes.object.isRequired,
 };
 
+DimmerDeviceDetailModal.defaultProps = {
+	commandDIM: 16,
+};
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 0,
@@ -194,7 +200,7 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch) {
 	return {
 		onDimmerSlide: (id, value) => dispatch(setDimmerValue(id, value)),
-		onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
+		onDim: (id, command, value) => dispatch(deviceSetState(id, command, value)),
 	};
 }
 

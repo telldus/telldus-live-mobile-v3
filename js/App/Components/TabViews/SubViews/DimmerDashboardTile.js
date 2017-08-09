@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { View } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
-import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
+import { showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestTurnOn, requestTurnOff } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
@@ -59,14 +59,14 @@ type Props = {
 	item: Object,
 	commandOn: number,
 	commandOFF: number,
+	commandDIM: number,
 	tileWidth: number,
 	onDimmerSlide: number => void,
 	showDimmerPopup: (name:string, sliderValue:number) => void,
 	hideDimmerPopup: () => void,
-	onDim: number => void,
+	onDim: (id: number, command: number, value: number) => void,
 	onTurnOn: number => void,
 	onTurnOff: number => void,
-	onDim: number => void,
 	requestTurnOn: number => void,
 	requestTurnOff: number => void,
 	setScrollEnabled: boolean,
@@ -150,7 +150,7 @@ class DimmerDashboardTile extends View {
 	}
 
 	onSlidingComplete(sliderValue:number) {
-		this.props.onDim(this.props.item.id, toDimmerValue(sliderValue));
+		this.props.onDim(this.props.item.id, this.props.commandDIM, toDimmerValue(sliderValue));
 		this.props.hideDimmerPopup();
 	}
 
@@ -225,6 +225,7 @@ class DimmerDashboardTile extends View {
 DimmerDashboardTile.defaultProps = {
 	commandOn: 1,
 	commandOFF: 2,
+	commandDIM: 16,
 };
 
 const styles = StyleSheet.create({
@@ -263,7 +264,7 @@ function mapDispatchToProps(dispatch) {
 			dispatch(hideDimmerPopup());
 		},
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-		onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
+		onDim: (id, command, value) => dispatch(deviceSetState(id, command, value)),
 		onTurnOn: (id, command) => dispatch(deviceSetState(id, command)),
 		onTurnOff: (id, command) => dispatch(deviceSetState(id, command)),
 		requestTurnOn: id => dispatch(requestTurnOn(id)),
