@@ -122,24 +122,6 @@ export function requestTurnOff(deviceId: number): Action {
 	};
 }
 
-export function learn(deviceId: number): ThunkAction {
-	return (dispatch) => {
-		const payload = {
-			url: `/device/learn?id=${deviceId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_LEARN',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
-	};
-}
-
 export function getDeviceInfo(deviceId: number, requestedState: number, currentState: string, dispatch: Dispatch) {
 	const payload = {
 		url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
