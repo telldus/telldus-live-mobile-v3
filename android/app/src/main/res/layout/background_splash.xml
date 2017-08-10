@@ -6,8 +6,8 @@
 
 	<item>
 		<bitmap
-			android:gravity="center"
-			android:src="@mipmap/ic_launcher"/>
+			android:gravity="fill"
+			android:src="@mipmap/telldusliveapp_launchscreen"/>
 	</item>
 
 </layer-list>
