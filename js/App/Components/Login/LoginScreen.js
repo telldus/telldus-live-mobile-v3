@@ -26,9 +26,10 @@ import { connect } from 'react-redux';
 import Dimensions from 'Dimensions';
 
 
-import { TextInput, KeyboardAvoidingView, Animated, Easing, TouchableWithoutFeedback } from 'react-native';
+import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 
 import { BackgroundImage, Button, H1, Text, View } from 'BaseComponents';
+import Modal from './Modal';
 import { loginToTelldus } from 'Actions';
 import { authenticationTimeOut, testUsername, testPassword } from 'Config';
 
@@ -65,75 +66,24 @@ class LoginForm extends View {
 		this.state = this.state || {
 			username: testUsername,
 			password: testPassword,
+			notificationText: false,
 		};
 
 		this.onChangeUsername = this.onChangeUsername.bind(this);
 		this.onChangePassword = this.onChangePassword.bind(this);
 		this.onForgotPassword = this.onForgotPassword.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
+
 		this._closeModal = this._closeModal.bind(this);
-
-		this.animatedScale = new Animated.Value(0.01);
-		this.animatedOpacity = new Animated.Value(0);
-	}
-
-	_openModal() {
-		Animated.parallel([
-			this._startOpacity(),
-			this._startScale(),
-		]).start();
-	}
-
-	_startScale() {
-		Animated.timing(this.animatedScale,
-			{
-				toValue: 1,
-				duration: 300,
-				easing: Easing.easeOutBack,
-			}).start();
-	}
-
-	_stopScale() {
-		Animated.timing(this.animatedScale,
-			{
-				toValue: 0.01,
-				duration: 200,
-				easing: Easing.easeOutBack,
-			}).start();
-	}
-
-	_startOpacity() {
-		Animated.timing(this.animatedScale,
-			{
-				toValue: 1,
-				duration: 300,
-			}).start();
-	}
-
-	_stopOpacity() {
-		Animated.timing(this.animatedScale,
-			{
-				toValue: 0,
-				duration: 200,
-			}).start();
 	}
 
 	_closeModal() {
-		Animated.parallel([
-			this._stopOpacity(),
-			this._stopScale(),
-		]).start();
+		this.setState({
+			notificationText: false,
+		});
 	}
 
 	render() {
-		const scaleAnim = this.animatedScale.interpolate({
-			inputRange: [0, 1],
-			outputRange: [0, 1],
-		});
-		const opacityAnim = this.animatedScale.interpolate({
-			inputRange: [0, 1],
-			outputRange: [0, 1],
-		});
 		return (
 			<View style={{
 				backgroundColor: '#00000099',
@@ -180,9 +130,7 @@ class LoginForm extends View {
 				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forget your password? Need an
 				                                                                account?</Text>
 				<View style={{ height: 10 }}/>
-				<Animated.View style={[ styles.notificationModal, {transform: [
-					{scale: scaleAnim }], opacity: opacityAnim,
-				}]}>
+				<Modal modalStyle={styles.notificationModal} showModal={this.state.notificationText}>
 					<View style={styles.notificationModalHeader}>
 						<Text style={styles.notificationModalHeaderText}>ERROR</Text>
 					</View>
@@ -195,7 +143,7 @@ class LoginForm extends View {
 							<Text style={styles.notificationModalFooterText}>OK</Text>
 						</TouchableWithoutFeedback>
 					</View>
-				</Animated.View>
+				</Modal>
 			</View>
 		);
 	}
@@ -212,7 +160,6 @@ class LoginForm extends View {
 			.catch(e => {
 				const message = e.message === 'timeout' ? 'Timed out, try again?' : e.message.error_description;
 				this.setState({ notificationText: message });
-				this._openModal();
 				this.setState({ isLoading: false });
 			});
 	}
