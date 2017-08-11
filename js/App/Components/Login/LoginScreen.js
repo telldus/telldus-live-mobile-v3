@@ -57,6 +57,7 @@ class LoginForm extends View {
 	onChangePassword: (password:string) => void;
 	onForgotPassword: () => void;
 	onFormSubmit: () => void;
+	_closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -70,6 +71,7 @@ class LoginForm extends View {
 		this.onChangePassword = this.onChangePassword.bind(this);
 		this.onForgotPassword = this.onForgotPassword.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
+		this._closeModal = this._closeModal.bind(this);
 
 		this.animatedScale = new Animated.Value(0.01);
 		this.animatedOpacity = new Animated.Value(0);
@@ -189,9 +191,7 @@ class LoginForm extends View {
 					</View>
 					<View style={styles.notificationModalFooter}>
 						<TouchableWithoutFeedback style={styles.notificationModalFooterTextCover}
-						onPress={() => {
-							this._closeModal();
-						}}>
+						onPress={this._closeModal}>
 							<Text style={styles.notificationModalFooterText}>OK</Text>
 						</TouchableWithoutFeedback>
 					</View>
