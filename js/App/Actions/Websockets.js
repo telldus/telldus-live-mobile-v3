@@ -228,7 +228,6 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 			console.groupCollapsed(message);
 			console.groupEnd();
 		} catch (e) {
-			reportException(e);
 			console.log(message);
 		}
 
