@@ -47,7 +47,7 @@ import Constants from './Constants.js';
 
 const config = Object.assign({
 	authenticationTimeOut: 5 * 1000, // 5 secs
-	telldusLiveWebAuthenticationUrl: 'https://live.telldus.com/',
+	telldusLiveWebAuthenticationUrl: 'https://login.telldus.com/user/register',
 }, localConfig, Constants);
 
 module.exports = config;
