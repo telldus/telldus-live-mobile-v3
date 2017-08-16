@@ -26,6 +26,7 @@ import { connect } from 'react-redux';
 import { Image, Dimensions } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import Toast from 'react-native-simple-toast';
 import {
 	getGateways,
 	getSensors,
@@ -93,6 +94,8 @@ type Props = {
 	accessToken: Object,
 	userProfile: Object,
 	dispatch: Function,
+	toastVisible: boolean,
+	toastMessage: string,
 };
 
 type State = {
@@ -144,6 +147,19 @@ class AppNavigator extends View {
 		this.props.dispatch(getJobs());
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.toastVisible) {
+			this._showToast();
+		}
+	}
+
+	_showToast() {
+		Toast.showWithGravity(this.props.toastMessage, Toast.SHORT, Toast.TOP);
+		this.props.dispatch({
+			type: 'GLOBAL_ERROR_HIDE',
+		});
+	}
+
 	_updateSpecificOrientation = specificOrientation => {
 		if (Platform.OS !== 'android') {
 			this.setState({ specificOrientation });
@@ -175,6 +191,8 @@ function mapStateToProps(state, ownProps) {
 		accessToken: state.user.accessToken,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
+		toastVisible: state.App.errorGlobalShow,
+		toastMessage: state.App.errorGlobalMessage,
 	};
 }
 

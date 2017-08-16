@@ -22,24 +22,44 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { turnOff, requestTurnOff } from 'Actions_Devices';
 
 class OffButton extends View {
 	constructor(props) {
 		super(props);
+		this.state = {
+			blinkAnim: new Animated.Value(1),
+		};
 		this.onPress = this.onPress.bind(this);
+		this.animationInterval = null;
 	}
 
 	onPress() {
-		this.props.onTurnOff(this.props.id);
 		this.props.requestTurnOff(this.props.id);
+		this.props.onTurnOff(this.props.id, this.props.isInState);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.methodRequested === 'TURNOFF') {
+			let that = this;
+			this.animationInterval = setInterval(() => {
+				Animated.timing( that.state.blinkAnim, {
+					toValue: that.state.blinkAnim._value === 0 ? 1 : 0,
+					duration: 300,
+				}).start();
+			}, 400);
+		} else {
+			clearInterval(this.animationInterval);
+		}
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.animationInterval);
 	}
 
 	render() {
 		let { isInState, enabled, fontSize, methodRequested } = this.props;
-
 		return (
 			<View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>
 				<TouchableOpacity disabled={!enabled} onPress={this.onPress} style={styles.button} >
@@ -50,8 +70,9 @@ class OffButton extends View {
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNOFF' ?
-					<ButtonLoadingIndicator style={styles.dot} />
-					: null
+					<Animated.View style={[styles.dot, {opacity: this.state.blinkAnim}]} />
+					:
+					<View style={{height: 0, width: 0}}/>
 				}
 			</View>
 		);
@@ -83,6 +104,10 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: 3,
 		left: 3,
+		height: 8,
+		width: 8,
+		borderRadius: 8,
+		backgroundColor: 'orange',
 	},
 });
 
@@ -100,8 +125,9 @@ OffButton.defaultProps = {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTurnOff: id => dispatch(turnOff(id)),
+		onTurnOff: (id, isInState) => dispatch(turnOff(id, isInState)),
 		requestTurnOff: id => dispatch(requestTurnOff(id)),
+		dispatch,
 	};
 }
 

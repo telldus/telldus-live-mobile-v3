@@ -60,6 +60,7 @@ class ToggleDashboardTile extends View {
 				item={item}
 				isEnabled={isInState === 'TURNON'}
 				name={name}
+				type={'device'}
 				tileWidth={tileWidth}
 				hasShadow={!!TURNON || !!TURNOFF}
 				style={style}>

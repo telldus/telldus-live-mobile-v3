@@ -31,9 +31,8 @@ import { turnOn, turnOff, requestTurnOn, requestTurnOff } from 'Actions_Devices'
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
-import throttle from 'lodash/throttle';
 
-function getDimmerValue(value: number, isInState: string) : number {
+function getDimmerValue(value: number, isInState: string): number {
 	let newValue = value || 0;
 	if (isInState === 'TURNON') {
 		return 255;
@@ -57,7 +56,7 @@ function toSliderValue(dimmerValue: number): number {
 type Props = {
 	device: Object,
 	onDimmerSlide: number => void,
-	showDimmerPopup: (name:string, sliderValue:number) => void,
+	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	onDim: number => void,
 	setScrollEnabled: boolean,
@@ -86,11 +85,10 @@ class DimmerButton extends View {
 	onTurnOn: () => void;
 	onTurnOff: () => void;
 	layoutView: Object => void;
-	onSlidingStart: (name:string, sliderValue:number) => void;
+	onSlidingStart: (name: string, sliderValue: number) => void;
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
 	onTurnOffButtonEnd: () => void;
-
 
 	constructor(props: Props) {
 		super(props);
@@ -105,10 +103,6 @@ class DimmerButton extends View {
 			onButtonFadeAnim: new Animated.Value(1),
 
 		};
-
-		this.onValueChangeThrottled = throttle(this.props.onDimmerSlide(this.props.device.id), 200, {
-			trailing: true,
-		});
 
 		this.onTurnOffButtonStart = this.onTurnOffButtonStart.bind(this);
 		this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
@@ -136,14 +130,17 @@ class DimmerButton extends View {
 	}
 
 	onValueChange(sliderValue: number) {
-		this.onValueChangeThrottled(toDimmerValue(sliderValue));
+		let fn = this.props.onDimmerSlide(this.props.device.id);
+		if (fn) {
+			fn(toDimmerValue(sliderValue));
+		}
 	}
 
-	onSlidingStart(name:string, sliderValue:number) {
+	onSlidingStart(name: string, sliderValue: number) {
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
-	onSlidingComplete(sliderValue:number) {
+	onSlidingComplete(sliderValue: number) {
 		this.props.onDim(this.props.device.id, toDimmerValue(sliderValue));
 		this.props.hideDimmerPopup();
 	}
@@ -165,23 +162,47 @@ class DimmerButton extends View {
 	}
 
 	onTurnOn() {
-		this.props.onTurnOn(this.props.device.id);
+		this.props.onTurnOn(this.props.device.id, this.props.device.isInState);
 		this.props.requestTurnOn(this.props.device.id);
 	}
 
 	onTurnOff() {
-		this.props.onTurnOff(this.props.device.id);
+		this.props.onTurnOff(this.props.device.id, this.props.device.isInState);
 		this.props.requestTurnOff(this.props.device.id);
 	}
 
 	render() {
 		const { device } = this.props;
 		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
-		const onButton = <DimmerOnButton ref={'onButton'} style={styles.turnOn} isInState={device.isInState} enabled={!!TURNON} methodRequested={device.methodRequested} />;
-		const offButton = <DimmerOffButton ref={'offButton'} style={styles.turnOff} isInState={device.isInState} enabled={!!TURNOFF} methodRequested={device.methodRequested} />;
-		const slider = DIM ?
+		const onButton = (
+			<DimmerOnButton
+				ref={'onButton'}
+				style={styles.turnOn}
+				isInState={device.isInState}
+				enabled={!!TURNON}
+				methodRequested={device.methodRequested}
+			/>
+		);
+		const offButton = (
+			<DimmerOffButton
+				ref={'offButton'}
+				style={styles.turnOff}
+				isInState={device.isInState}
+				enabled={!!TURNOFF}
+				methodRequested={device.methodRequested}
+			/>
+		);
+		const slider = DIM ? (
 			<VerticalSlider
-				style={[styles.slider, { width: this.state.buttonWidth, height: this.state.buttonHeight, left: 0, bottom: 0 }]}
+				style={[
+					styles.slider,
+					{
+						width: this.state.buttonWidth,
+						height: this.state.buttonHeight,
+						left: 0,
+						bottom: 0,
+					},
+				]}
 				thumbWidth={this.state.buttonWidth / 5}
 				thumbHeight={9}
 				fontSize={7}
@@ -198,17 +219,15 @@ class DimmerButton extends View {
 				onRightEnd={this.onTurnOnButtonEnd}
 				onLeft={this.onTurnOff}
 				onRight={this.onTurnOn}
-			/> :
-			null;
+			/>
+		) : null;
 
 		return (
-      <RoundedCornerShadowView
-          onLayout={this.layoutView}
-          style={styles.container}>
-          { offButton }
-          { onButton }
-          { slider }
-      </RoundedCornerShadowView>
+			<RoundedCornerShadowView onLayout={this.layoutView} style={styles.container}>
+				{ offButton }
+				{ onButton }
+				{ slider }
+			</RoundedCornerShadowView>
 		);
 	}
 }
@@ -243,7 +262,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		showDimmerPopup: (name:string, value:number) => {
+		showDimmerPopup: (name: string, value: number) => {
 			dispatch(showDimmerPopup(name, value));
 		},
 		hideDimmerPopup: () => {
@@ -251,8 +270,8 @@ function mapDispatchToProps(dispatch) {
 		},
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
 		onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
-		onTurnOn: id => dispatch(turnOn(id)),
-		onTurnOff: id => dispatch(turnOff(id)),
+		onTurnOn: (id, isInState) => dispatch(turnOn(id, isInState)),
+		onTurnOff: (id, isInState) => dispatch(turnOff(id, isInState)),
 		requestTurnOn: id => dispatch(requestTurnOn(id)),
 		requestTurnOff: id => dispatch(requestTurnOff(id)),
 	};

@@ -56,7 +56,7 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 				name: state.name,
 				value: state.statevalue,
 				ignored: Boolean(state.ignored),
-
+				isErrorMessage: false,
 				// clientDeviceId: parseInt(state.clientDeviceId, 10),
 				// editable: Boolean(state.editable),
 				// state: parseInt(state.state, 10),
@@ -102,12 +102,26 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 			return {
 				...state,
 				methodRequested: 'TURNON',
+				isErrorMessage: false,
 			};
 
 		case 'REQUEST_TURNOFF':
 			return {
 				...state,
 				methodRequested: 'TURNOFF',
+				isErrorMessage: false,
+			};
+		case 'DEVICE_UNREACHABLE':
+			return {
+				...state,
+				isErrorMessage: action.payload.message,
+			};
+		case 'DEVICE_RESET_STATE':
+			return {
+				...state,
+				isErrorMessage: false,
+				methodRequested: '',
+				isInState: getDeviceStateMethod(action.state),
 			};
 
 		case 'DEVICE_HISTORY':
@@ -190,6 +204,18 @@ function byId(state = {}, action) {
 		return {
 			...state,
 			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
+		};
+	}
+	if (action.type === 'DEVICE_UNREACHABLE') {
+		return {
+			...state,
+			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
+		};
+	}
+	if (action.type === 'DEVICE_RESET_STATE') {
+		return {
+			...state,
+			[action.deviceId]: reduceDevice(state[action.deviceId], action),
 		};
 	}
 

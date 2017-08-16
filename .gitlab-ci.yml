@@ -1,0 +1,97 @@
+stages:
+  - test
+  - build
+  - release
+
+eslint:
+  image: node:8.1.2
+  stage: test
+  tags:
+    - docker
+  script:
+    - npm install --quiet
+    - npm run lint
+
+flow:
+  image: danrspencer/node-flow:8.1.2
+  stage: test
+  tags:
+    - docker
+  script:
+    - npm install --quiet
+    - npm run flow
+
+android:
+  image: telldus/react-native-android:24
+  stage: build
+  artifacts:
+    paths:
+      - android/app/build/outputs/apk/app-release.apk
+      - android/sourcemap.js
+    expire_in: '1 mos'
+  script:
+    - npm install --quiet
+    - npm run postinstall
+    - cd android
+    - ./buildGitlabRunner.sh
+  only:
+    - tags
+    - master
+    - /^v\d+\.\d+.*$/ # Version branches
+  tags:
+    - android
+
+ios:
+  stage: build
+  tags:
+    - osx
+  cache:
+    paths:
+      - node_modules
+  artifacts:
+    paths:
+      - ios/main.jsbundle.map
+      - TelldusLiveApp.ipa
+      - TelldusLiveApp.app.dSYM.zip
+    expire_in: '1 mos'
+  only:
+    - tags
+    - master
+    - /^v\d+\.\d+.*$/ # Version branches
+  script:
+    - npm install --quiet
+    - cd ios
+    - ./buildGitlabRunner.sh
+
+google_play:
+  image: ruby:2
+  stage: release
+  tags:
+    - docker
+  dependencies:
+    - android
+  environment:
+    name: google_play
+    url: https://play.google.com/store/apps/details?id=com.telldus.live.mobile.test
+  when: manual
+  only:
+    - tags
+  script:
+    - echo ${GOOGLE_KEY} > play_key.json
+    - bundle install
+    - fastlane supply --apk android/app/build/outputs/apk/app-release.apk --track alpha
+
+testflight:
+  stage: release
+  tags:
+    - osx
+  dependencies:
+    - ios
+  environment:
+    name: appstore
+    url: https://itunes.apple.com/us/app/telldus-live-mobile-beta/id1014419677
+  when: manual
+  only:
+    - tags
+  script:
+    - fastlane ios beta

@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center',
 	},
 	gear: {
-		flex: 2,
+		flex: 2.5,
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginRight: 8,

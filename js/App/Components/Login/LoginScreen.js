@@ -24,22 +24,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dimensions from 'Dimensions';
-import Orientation from 'react-native-orientation';
-import Platform from 'Platform';
 
-import { TextInput, Linking, KeyboardAvoidingView } from 'react-native';
+
+import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 
 import { BackgroundImage, Button, H1, Text, View } from 'BaseComponents';
+import Modal from './Modal';
 import { loginToTelldus } from 'Actions';
-import { authenticationTimeOut, telldusLiveWebAuthenticationUrl } from 'Config';
+import { authenticationTimeOut, testUsername, testPassword } from 'Config';
 
 import Image from 'Image';
 import StyleSheet from 'StyleSheet';
-import StatusBar from 'StatusBar';
 import Theme from 'Theme';
 
 type Props = {
   dispatch: Function,
+  screenProps: Object,
+  navigation: Object,
 };
 
 type State = {
@@ -57,16 +58,29 @@ class LoginForm extends View {
 	onChangePassword: (password:string) => void;
 	onForgotPassword: () => void;
 	onFormSubmit: () => void;
+	_closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
 
-		this.state = this.state || {};
+		this.state = this.state || {
+			username: testUsername,
+			password: testPassword,
+			notificationText: false,
+		};
 
 		this.onChangeUsername = this.onChangeUsername.bind(this);
 		this.onChangePassword = this.onChangePassword.bind(this);
 		this.onForgotPassword = this.onForgotPassword.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
+
+		this._closeModal = this._closeModal.bind(this);
+	}
+
+	_closeModal() {
+		this.setState({
+			notificationText: false,
+		});
 	}
 
 	render() {
@@ -86,9 +100,6 @@ class LoginForm extends View {
 				}}>
 					Login
 				</H1>
-				{ this.state.notificationText ? (
-					<Text style={styles.notification}>{this.state.notificationText}</Text>
-				) : null }
 				<TextInput
 					style={styles.formField}
 					onChangeText={this.onChangeUsername}
@@ -97,6 +108,7 @@ class LoginForm extends View {
 					autoCapitalize="none"
 					autoCorrect={false}
 					placeholderTextColor="#ffffff80"
+					defaultValue={this.state.username}
 				/>
 				<TextInput
 					style={styles.formField}
@@ -106,6 +118,7 @@ class LoginForm extends View {
 					autoCapitalize="none"
 					autoCorrect={false}
 					placeholderTextColor="#ffffff80"
+					defaultValue={this.state.password}
 				/>
 				<View style={{ height: 20 }}/>
 				<Button
@@ -117,6 +130,20 @@ class LoginForm extends View {
 				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forget your password? Need an
 				                                                                account?</Text>
 				<View style={{ height: 10 }}/>
+				<Modal modalStyle={styles.notificationModal} showModal={this.state.notificationText}>
+					<View style={styles.notificationModalHeader}>
+						<Text style={styles.notificationModalHeaderText}>ERROR</Text>
+					</View>
+					<View style={styles.notificationModalBody}>
+						<Text style={styles.notificationModalBodyText}>{this.state.notificationText}</Text>
+					</View>
+					<View style={styles.notificationModalFooter}>
+						<TouchableWithoutFeedback style={styles.notificationModalFooterTextCover}
+						onPress={this._closeModal}>
+							<Text style={styles.notificationModalFooterText}>OK</Text>
+						</TouchableWithoutFeedback>
+					</View>
+				</Modal>
 			</View>
 		);
 	}
@@ -156,28 +183,11 @@ class LoginForm extends View {
 	}
 
 	onForgotPassword() {
-		Linking.openURL(telldusLiveWebAuthenticationUrl).catch(err => console.error('An error occurred', err));
+		this.props.navigation.navigate('Register');
 	}
 }
 
 class LoginScreen extends View {
-	componentDidMount() {
-		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('default');
-		if (Platform.OS === 'android' && StatusBar) {
-			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
-		}
-		if (Platform.OS !== 'android') {
-			Orientation.lockToPortrait();
-		}
-	}
-
-	componentWillUnmount() {
-		if (Platform.OS !== 'android') {
-			Orientation.unlockAllOrientations();
-		}
-	}
-
 	render() {
 		return (
 			<BackgroundImage source={require('./img/home5.jpg')}>
@@ -218,6 +228,54 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		backgroundColor: '#ff000033',
 	},
+	notificationModal: {
+		backgroundColor: '#ffffff',
+		position: 'absolute',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		top: 45,
+	},
+	notificationModalHeader: {
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		paddingLeft: 20,
+		height: Dimensions.get('window').height * 0.08,
+		width: Dimensions.get('window').width * 0.7,
+		backgroundColor: '#e26901',
+	},
+	notificationModalHeaderText: {
+		color: '#ffffff',
+		fontSize: 14,
+	},
+	notificationModalBody: {
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		paddingLeft: 20,
+		paddingRight: 10,
+		height: Dimensions.get('window').height * 0.15,
+		width: Dimensions.get('window').width * 0.7,
+	},
+	notificationModalBodyText: {
+		fontSize: 14,
+		color: '#6B6969',
+	},
+	notificationModalFooter: {
+		alignItems: 'flex-end',
+		justifyContent: 'center',
+		paddingRight: 20,
+		height: Dimensions.get('window').height * 0.08,
+		width: Dimensions.get('window').width * 0.7,
+	},
+	notificationModalFooterTextCover: {
+		height: Dimensions.get('window').height * 0.08,
+		width: Dimensions.get('window').width * 0.3,
+	},
+	notificationModalFooterText: {
+		color: '#e26901',
+		fontSize: 14,
+		fontWeight: 'bold',
+	},
 	formField: {
 		height: 35,
 		padding: 7,
@@ -236,7 +294,8 @@ const styles = StyleSheet.create({
 	formSubmit: {
 		padding: 6,
 		minWidth: 100,
-
+		justifyContent: 'center',
+		alignItems: 'center',
 		backgroundColor: Theme.Core.btnPrimaryBg,
 	},
 });

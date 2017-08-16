@@ -147,6 +147,7 @@ class SensorDashboardTile extends View {
 				item={item}
 				isEnabled={item.state !== 0}
 				name={item.name}
+				type={'sensor'}
 				tileWidth={tileWidth}
 				style={[
 					this.props.style, {

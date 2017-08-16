@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-	LoginScreen,
+	PreLoginNavigator,
 	AppNavigator,
 	Push,
 } from 'Components';
@@ -52,7 +52,7 @@ class App extends React.Component {
 
 	render() {
 		if (!this.props.accessToken) {
-			return <LoginScreen />;
+			return <PreLoginNavigator />;
 		}
 		return (
 			<AppNavigator {...this.props}/>

@@ -30,7 +30,7 @@ import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 
-import { pushServiceId, version } from '../../../Config';
+import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions_User';
 
 const Header = ({ onPress }) => (
@@ -84,6 +84,7 @@ class SettingsDetailModal extends View {
 	logout: () => void;
 	postLoadMethod: () => void;
 	submitPushToken: () => void;
+	updateModalVisiblity: () => void;
 
 	constructor(props) {
 		super(props);
@@ -95,6 +96,7 @@ class SettingsDetailModal extends View {
 		this.logout = this.logout.bind(this);
 		this.postLoadMethod = this.postLoadMethod.bind(this);
 		this.submitPushToken = this.submitPushToken.bind(this);
+		this.updateModalVisiblity = this.updateModalVisiblity.bind(this);
 	}
 
 	logout() {
@@ -117,11 +119,16 @@ class SettingsDetailModal extends View {
 		}
 	}
 
+	updateModalVisiblity() {
+		this.props.onClose();
+	}
+
 	render() {
 		let submitButText = this.state.isPushSubmitLoading ? 'Submitting Token...' : 'Submit Push Token';
 		let logoutButText = this.state.isLogoutLoading ? 'Logging Out...' : 'Logout';
+		let version = DeviceInfo.getVersion();
 		return (
-			<Modal isVisible={this.state.isVisible}>
+			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
 				<Container style={styles.container}>
 					<Header onPress={this.props.onClose}/>
 					<View style={styles.body}>

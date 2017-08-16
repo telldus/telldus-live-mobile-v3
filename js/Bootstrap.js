@@ -26,6 +26,7 @@ import 'intl/locale-data/jsonp/en';
 
 import React from 'React';
 import { Provider } from 'react-redux';
+import { Crashlytics } from 'react-native-fabric';
 
 import App from 'App';
 import { configureStore } from './App/Store/ConfigureStore';
@@ -46,6 +47,11 @@ function Bootstrap(): React.Component {
 
 		_configureStoreCompleted() {
 			this.setState({ isLoading: false });
+			let state = this.state.store.getState();
+			if (state.user && state.user.userProfile) {
+				Crashlytics.setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
+				Crashlytics.setUserEmail(state.user.userProfile.email);
+			}
 		}
 
 		render() {

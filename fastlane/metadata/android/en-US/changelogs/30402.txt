@@ -1,0 +1,2 @@
+- Hopefully fix crash on startup on some devices
+

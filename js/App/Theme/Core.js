@@ -31,6 +31,7 @@ export default {
 	brandWarning: '#f0ad4e',
 	brandSidebar: '#252932',
 	iconFamily: 'Ionicons',
+	telldusIconFont: 'telldusicons',
 
 	inverseTextColor: '#ffffff',
 	fadedInverseTextColor: '#C3D1E6',

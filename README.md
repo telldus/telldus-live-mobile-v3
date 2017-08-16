@@ -1,6 +1,7 @@
 # Telldus Live! mobile
 
 [![Dependency Status](https://david-dm.org/telldus/telldus-live-mobile-v3.svg)](https://david-dm.org/telldus/telldus-live-mobile-v3) [![devDependency Status](https://david-dm.org/telldus/telldus-live-mobile-v3/dev-status.svg)](https://david-dm.org/telldus/telldus-live-mobile-v3#info=devDependencies)
+[![Build status](http://code.telldus.com/telldus/live-app-v3/badges/master/build.svg)](http://code.telldus.com/telldus/live-app-v3/commits/master)
 [![Translation status](http://developer.telldus.com/translate/widgets/telldus-live-mobile/-/svg-badge.svg)](http://developer.telldus.com/translate/engage/telldus-live-mobile/?utm_source=widget)
 
 **Notes:**
@@ -17,6 +18,7 @@ All commands are assumed to be ran from project root.
 - install [nodejs >= 6](https://nodejs.org/en/)
 - install local deps: `npm i`
 - install global deps: `npm install -g react-native-cli`
+- install [fastlane](https://docs.fastlane.tools/#choose-your-installation-method)
 
 ### iOS
 
@@ -50,7 +52,7 @@ All commands are assumed to be ran from project root.
 
 ### Local config
 
-You'll need to add `local.config.js` in the root of your project. It's not to be checked in (ignored by git).
+You'll need to add `config.local.js` in the root of your project. It's not to be checked in (ignored by git).
 
 Create a file in the root of the project called 'config.local.js' with the contents of the script and fill with the valid keys.
 
@@ -66,13 +68,14 @@ module.exports = {
 
 **Valid keys:**
 
- - `version`: string - App version
  - `apiServer`: string - Telldus API server url e.g. https://api.telldus.com
  - `publicKey`: string - Telldus API public key
  - `privateKey`: string - Telldus API public key
  - `googleAnalyticsId`: string - Google Analytics Id
  - `testUsername`: string - Used as a default username at login
- - `testPassword`: string - Used as a default passwod at login
+ - `testPassword`: string - Used as a default password at login
+ - `pushSenderId`: string - Used to identify the remote notification sender,
+ - `pushServiceId`: integer - Used to Identify the Push Service (GCM or APNS),
 
 ## Run
 
@@ -112,19 +115,16 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 
 - we use semver (major.minor.path) and the Android version is derived from that (`3.2.10` => `30210`)
 - when releasing a new app, always update the version
-- until this is automated with a release script, change the version in the following places:
-  - `package.json`: `version` (semver)
-  - `android/app/build.gradle`: `versionCode` (Android) and `versionName` (semver)
-  - `android/app/src/main/AndroidManifest.xml`: `versionCode` (Android) and `versionName` (semver)
-  - `config.local.js`: `version` (semver)
-
+- Change the version in `package.json`
+- Add the bump to git: `git add -p packages.json`
+- Run the release script: `npm run release`
+- Check that the new commit and tag made by the release script is ok before pushing
 ### Android
 
+
 - find all the instructions for generating signed APK on [Generating Signed APK](https://facebook.github.io/react-native/docs/signed-apk-android.html)
-  - Use `react-native run-android --configuration=release` instead of `react-native run-android --variant=release`, see [SO](http://stackoverflow.com/questions/41263330/error-running-react-native-run-android-variant-release-task-installreleasede)
-  - to make an .apk: `cd android && ./gradlew assembleRelease`
-  - install .apk: `adb install android/app/build/outputs/apk/app-release.apk`
-  - uninstall previous .apk: `adb uninstall com.telldus.live.mobile.test`
+- Copy the Google Playstore credentials file `play_key.json` to the `fastlane/` subfolder.
+- Run `fastlane alpha`
 
 ## Split dependencies
 
@@ -136,7 +136,41 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 
 ## Testing
 
+Before commiting code. Please make sure tests pass. Test the code:  
+`npm run lint`  
+`npm run flow`
+
 ## Naming convention branches, commits and pull requests
+
+If possible, try to keep the history linear. That means that your should rebase any feature branches before they are pushed.
+
+It's possible to reference issues and even close them in commit messages. When possible, please do. It helps finding issues in the future. Read more:
+https://docs.gitlab.com/ee/user/project/issues/automatic_issue_closing.html
+
+Make sure the commit message includes all the changes in the commit. It is not sufficient to only reference an issue number. Anyone with git access might not have access to the issue system.  
+This is not ok:  
+`"Fixes #123"`  
+This is ok:  
+`"Check returned value before using it. Fixes #123"`
+
+Make sure the commit message is in imperative present tense in these messages.
+Instead of “I added tests for” or “Adding tests for,” use “Add tests for.”
+The excelent book "Pro Git" covers this well:  
+https://git-scm.com/book/en/v2/Distributed-Git-Contributing-to-a-Project
+
+For any more info about git, please consider purchasing this book.
+
+If the commit should be mentioned in the changelog this must be added to the commit. Add it as an own row prepended with `Changelog:`  
+Please note that the changelog message must not be the same as the commit message. The changelog message will be presented to the user. This is an example of commit message:
+```
+Do not store date objects in the store. See #64.
+
+The redux store must be serializable to JSON so only plain types may be stored.
+
+Changelog: Fix a crash on startup
+```
+
+If you are not sure if your commit should be included in the changelog or not, ask the maintainer first!
 
 ## Logging
 

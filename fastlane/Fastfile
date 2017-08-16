@@ -1,0 +1,96 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.44.1"
+
+ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
+ENV["APP_VERSION"] = JSON.parse(IO.read("../package.json"))["version"]
+
+default_platform :android
+
+platform :android do
+  before_all do
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    gradle(project_dir: "./android", task: "test")
+  end
+
+  desc "Deploy a new alpha version to the Google Play Store"
+  lane :alpha do
+    gradle(
+      project_dir: "./android",
+      task: "assemble",
+      build_type: "Release"
+    )
+    supply(
+      track: "alpha",
+      apk: "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}"
+    )
+
+
+  end
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+
+    slack(
+      message: "Successfully deployed new App Update.",
+      payload: {
+        Version: ENV["APP_VERSION"]
+      }
+    )
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
+  end
+end
+
+platform :ios do
+  before_all do
+  end
+
+  desc "Build the app"
+  lane :build do
+    increment_version_number(version_number: ENV["APP_VERSION"], xcodeproj: "ios/TelldusLiveApp.xcodeproj")
+    increment_build_number(build_number: ENV['CI_BUILD_ID'], xcodeproj: "ios/TelldusLiveApp.xcodeproj")
+    cocoapods(podfile: "ios/Podfile")
+    match(type: "appstore")
+    disable_automatic_code_signing(path: "ios/TelldusLiveApp.xcodeproj")
+    gym(
+      scheme: "TelldusLiveApp",
+      workspace: "ios/TelldusLiveApp.xcworkspace",
+      configuration: "Release",
+      codesigning_identity: "iPhone Distribution",
+      xcargs: "PROVISIONING_PROFILE_SPECIFIER='match AppStore com.telldus.live.mobile.beta'"
+    )
+  end
+
+  desc "Submit new Beta Build to Apple TestFlight. The app must have been build before"
+  lane :beta do
+    pilot(
+      skip_submission: true
+    )
+    slack(
+      message: "Successfully deployed new version of Telldus Live! mobile to TestFlight.",
+      payload: {
+        Version: ENV["APP_VERSION"]
+      }
+    )
+  end
+end

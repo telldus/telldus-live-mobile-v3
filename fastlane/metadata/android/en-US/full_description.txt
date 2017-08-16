@@ -1,0 +1,9 @@
+Telldus Live! mobile: The official app for the Telldus Live! system.
+
+Control and monitor your home, office or summer cottage from anywhere with our easy to use, modern and fast application.
+
+Available features:
+Device control: on/off/dimming, bell, curtains
+Sensor values: automatically updated live (subject to internet connection quality)
+Scheduling: view your upcoming schedule
+Dashboard: overview and control of your devices and sensors

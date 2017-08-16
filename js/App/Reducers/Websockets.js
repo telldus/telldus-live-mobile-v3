@@ -36,7 +36,7 @@ export default function reduceWebsockets(state: Object = { ...initialState }, ac
 			...state,
 			session: {
 				...action.payload.websockets.session,
-				ttl: new Date(action.payload.websockets.session.ttl), // cast to Date
+				ttl: action.payload.websockets.session.ttl,
 			},
 		};
 	}
@@ -46,7 +46,7 @@ export default function reduceWebsockets(state: Object = { ...initialState }, ac
 			...state,
 			session: {
 				id: sessionId,
-				ttl: new Date(ttl * 1000),
+				ttl: ttl,
 			},
 		};
 	}

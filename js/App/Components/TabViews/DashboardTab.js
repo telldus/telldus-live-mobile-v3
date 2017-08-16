@@ -53,7 +53,9 @@ type Props = {
 	dashboard: Object,
 	tab: string,
 	onChangeDisplayType: () => void,
+	dashboard: Object,
 	dispatch: Function,
+	navigation: Object,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
 	onDim: (number) => void,
@@ -222,6 +224,9 @@ class DashboardTab extends View {
 		return (row, secId, rowId, rowMap) => {
 			if (row.objectType !== 'sensor' && row.objectType !== 'device') {
 				return <Text>unknown device or sensor</Text>;
+			}
+			if (!row.childObject) {
+				return <Text>Unknown device or sensor</Text>;
 			}
 
 			let tileStyle = {

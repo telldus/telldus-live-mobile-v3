@@ -1,13 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.telldus.live.mobile.test"
-    android:versionCode="30400"
-    android:versionName="3.4.0">
+    package="com.telldus.live.mobile">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <permission
-        android:name="com.telldus.live.mobile.test.permission.C2D_MESSAGE"
+        android:name="com.telldus.live.mobile.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.telldus.live.mobile.test.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.telldus.live.mobile.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.INTERNET" />
@@ -30,12 +28,12 @@
           android:name=".MainActivity"
           android:label="@string/app_name"
       		android:launchMode="singleTop"
+          android:theme="@style/SplashTheme"
       		android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
-
-            <intent-filter>
+          <intent-filter>
               <action android:name="android.intent.action.MAIN" />
               <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+          </intent-filter>
         </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
         <receiver
@@ -44,7 +42,7 @@
           android:permission="com.google.android.c2dm.permission.SEND" >
           <intent-filter>
               <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-              <category android:name="com.telldus.live.mobile.test" />
+              <category android:name="com.telldus.live.mobile" />
           </intent-filter>
         </receiver>
 
@@ -62,6 +60,10 @@
               <action android:name="com.google.android.c2dm.intent.RECEIVE" />
           </intent-filter>
         </service>
+        <meta-data
+          android:name="io.fabric.ApiKey"
+          android:value="6ddcb9201beba571821a466b7b634103262d6903"
+        />
     </application>
 
 </manifest>

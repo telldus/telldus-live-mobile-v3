@@ -23,10 +23,10 @@
 
 'use strict';
 
-import type { Action, ThunkAction } from './Types';
+import type { Action, ThunkAction, Dispatch } from './Types';
 
 import LiveApi from 'LiveApi';
-import { supportedMethods } from 'Config';
+import { supportedMethods, methods } from 'Config';
 
 import { format } from 'url';
 import moment from 'moment';
@@ -89,39 +89,71 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 	};
 }
 
-export function turnOn(deviceId: number): ThunkAction {
-	return (dispatch) => {
+export function turnOn(deviceId: number, isInState: string): ThunkAction {
+	return (dispatch, getState) => {
 		const payload = {
 			url: `/device/turnOn?id=${deviceId}`,
 			requestParams: {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_TURN_ON',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
+		let { devices } = getState();
+		let device = devices.byId[deviceId];
+		return LiveApi(payload).then(response => {
+			setTimeout(() => {
+				if (device.methodRequested !== '') {
+					getDeviceInfo(deviceId, 'TURNON', isInState, dispatch);
+				}
+			}, 2000);
+		}).catch(error => {
+			dispatch({
+				type: 'GLOBAL_ERROR_SHOW',
+				payload: {
+					source: 'device',
+					deviceId,
+					message: error.message,
+				},
+			});
+			dispatch({
+				type: 'DEVICE_RESET_STATE',
+				deviceId,
+				state: device.isInState,
+			});
+		});
 	};
 }
 
-export function turnOff(deviceId: number): ThunkAction {
-	return (dispatch) => {
+export function turnOff(deviceId: number, isInState: string): ThunkAction {
+	return (dispatch, getState) => {
 		const payload = {
 			url: `/device/turnOff?id=${deviceId}`,
 			requestParams: {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_TURN_OFF',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
+		let { devices } = getState();
+		let device = devices.byId[deviceId];
+		return LiveApi(payload).then(response => {
+			setTimeout(() => {
+				if (device.methodRequested !== '') {
+					getDeviceInfo(deviceId, 'TURNOFF', isInState, dispatch);
+				}
+			}, 2000);
+		}).catch(error => {
+			dispatch({
+				type: 'GLOBAL_ERROR_SHOW',
+				payload: {
+					source: 'device',
+					deviceId,
+					message: error.message,
+				},
+			});
+			dispatch({
+				type: 'DEVICE_RESET_STATE',
+				deviceId,
+				state: device.isInState,
+			});
+		});
 	};
 }
 
@@ -264,4 +296,41 @@ export function getDeviceHistory(device: Object): ThunkAction {
 			});
 		});
 	};
+}
+
+export function getDeviceInfo(deviceId: number, requestedState: string, currentState: string, dispatch: Dispatch) {
+	const payload = {
+		url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
+		requestParams: {
+			method: 'GET',
+		},
+	};
+	return LiveApi(payload).then(response => {
+		let newState = methods[parseInt(response.state, 10)];
+		if (newState === currentState) {
+			dispatch({
+				type: 'DEVICE_RESET_STATE',
+				deviceId,
+				state: response.state,
+			});
+			if (requestedState !== newState) {
+				dispatch({
+					type: 'GLOBAL_ERROR_SHOW',
+					payload: {
+						source: 'device',
+						deviceId,
+						message: '',
+					},
+				});
+			}
+		} else {
+			dispatch({
+				type: 'DEVICE_SET_STATE',
+				payload: {
+					...payload,
+					...response,
+				},
+			});
+		}
+	});
 }

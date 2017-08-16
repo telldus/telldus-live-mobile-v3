@@ -22,19 +22,40 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { turnOn, requestTurnOn } from 'Actions_Devices';
 
 class OnButton extends View {
 	constructor(props) {
 		super(props);
+		this.state = {
+			blinkAnim: new Animated.Value(1),
+		};
 		this.onPress = this.onPress.bind(this);
+		this.animationInterval = null;
 	}
 
 	onPress() {
-		this.props.onTurnOn(this.props.id);
 		this.props.requestTurnOn(this.props.id);
+		this.props.onTurnOn(this.props.id, this.props.isInState);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.methodRequested === 'TURNON') {
+			let that = this;
+			this.animationInterval = setInterval(() => {
+				Animated.timing( that.state.blinkAnim, {
+					toValue: that.state.blinkAnim._value === 0 ? 1 : 0,
+					duration: 300,
+				}).start();
+			}, 350);
+		} else {
+			clearInterval(this.animationInterval);
+		}
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.animationInterval);
 	}
 
 	render() {
@@ -50,8 +71,9 @@ class OnButton extends View {
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNON' ?
-					<ButtonLoadingIndicator style={styles.dot} />
-					: null
+					<Animated.View style={[styles.dot, {opacity: this.state.blinkAnim}]} />
+					:
+					<View style={{height: 0, width: 0}}/>
 				}
 			</View>
 		);
@@ -82,7 +104,11 @@ const styles = StyleSheet.create({
 	dot: {
 		position: 'absolute',
 		top: 3,
-		right: 3,
+		left: 3,
+		height: 8,
+		width: 8,
+		borderRadius: 8,
+		backgroundColor: 'orange',
 	},
 });
 
@@ -100,8 +126,9 @@ OnButton.defaultProps = {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTurnOn: id => dispatch(turnOn(id)),
+		onTurnOn: (id, isInState) => dispatch(turnOn(id, isInState)),
 		requestTurnOn: id => dispatch(requestTurnOn(id)),
+		dispatch,
 	};
 }
 

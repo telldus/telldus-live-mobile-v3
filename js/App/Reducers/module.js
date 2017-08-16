@@ -37,6 +37,7 @@ import Jobs from './Jobs';
 import LiveApi from './LiveApi';
 import Websockets from './Websockets';
 import Modal from './Modal';
+import App from './App';
 
 module.exports = combineReducers({
 	devices: Devices,
@@ -51,4 +52,5 @@ module.exports = combineReducers({
 	liveApi: LiveApi,
 	websockets: Websockets,
 	modal: Modal,
+	App: App,
 });

@@ -49,6 +49,8 @@ export type Action =
 
 	| { type: 'DEVICE_TURN_ON', payload: Object }
 	| { type: 'DEVICE_TURN_OFF', payload: Object }
+	| { type: 'DEVICE_UNREACHABLE', payload: Object }
+	| { type: 'DEVICE_RESET_STATE', deviceId: number, state: number }
 	| { type: 'DEVICE_BELL', payload: Object }
 	| { type: 'DEVICE_UP', payload: Object }
 	| { type: 'DEVICE_DOWN', payload: Object }
@@ -69,6 +71,9 @@ export type Action =
 	| { type: 'APP_START' }
 	| { type: 'APP_FOREGROUND' }
 	| { type: 'APP_BACKGROUND' }
+
+	| { type: 'GLOBAL_ERROR_SHOW', payload: Object }
+	| { type: 'GLOBAL_ERROR_HIDE' }
 
 	| { type: 'REQUEST_TURNON', payload: Object }
 	| { type: 'REQUEST_TURNOFF', payload: Object }
