@@ -56,6 +56,7 @@ import ScrollableTabView from './Tabs';
 import NavigatorIOS from './NavigatorIOS';
 import I18n from './I18n';
 import Gravatar from './Gravatar';
+import TouchableButton from './TouchableButton';
 
 import {
 	AppState,
@@ -103,6 +104,7 @@ module.exports = {
 	Radio: Radio,
 	ProgressBar: ProgressBar,
 	Tabs: ScrollableTabView,
+	TouchableButton: TouchableButton,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
