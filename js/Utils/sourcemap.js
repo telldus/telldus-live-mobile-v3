@@ -18,8 +18,16 @@ function printStack(line, column) {
 function parseStack(stack) {
 	let stackArr = stack.split(' ');
 	for (let i = 0; i < stackArr.length; ++i) {
-		let frame = stackArr[i].split('@');
-		let [line, col] = frame[1].split(':');
+		let frame = stackArr[i];
+		if (frame.indexOf('@') >= 0) {
+			frame = frame.split('@')[1];
+		}
+		// Frame might be in format line:col or file:line:col
+		let [file, line, col] = frame.split(':');
+		if (col === undefined) {
+			col = line;
+			line = file;
+		}
 		printStack(line, col);
 	}
 }
