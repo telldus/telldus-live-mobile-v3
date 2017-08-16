@@ -22,18 +22,221 @@
 'use strict';
 
 import React from 'react';
-import { WebView } from 'react-native';
+import { KeyboardAvoidingView, Dimensions, StyleSheet, TextInput, ScrollView } from 'react-native';
 
-import { View } from 'BaseComponents';
-import { telldusLiveWebAuthenticationUrl } from 'Config';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import { BackgroundImage, View, Image, H1, Text } from 'BaseComponents';
+
+import Theme from 'Theme';
+
+const deviceWidth = Dimensions.get('window').width;
+
+class RegisterForm extends View {
+
+	onFirstNameChange: string => void;
+	onLastNameChange: string => void;
+	onEmailChange: string => void;
+	onConfirmEmailChange: string => void;
+	onFormSubmit: () => void;
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			firstName: '',
+			lastName: '',
+			email: '',
+			confirmEmail: '',
+			loading: false,
+		};
+
+		this.onFirstNameChange = this.onFirstNameChange.bind(this);
+		this.onLastNameChange = this.onLastNameChange.bind(this);
+		this.onEmailChange = this.onEmailChange.bind(this);
+		this.onConfirmEmailChange = this.onConfirmEmailChange.bind(this);
+		this.onFormSubmit = this.onFormSubmit.bind(this);
+	}
+
+	onFirstNameChange(firstName) {
+		this.setState({
+			firstName,
+		});
+	}
+
+	onLastNameChange(lastName) {
+		this.setState({
+			lastName,
+		});
+	}
+
+	onEmailChange(email) {
+		this.setState({
+			email,
+		});
+	}
+
+	onConfirmEmailChange(confirmEmail) {
+		this.setState({
+			confirmEmail,
+		});
+	}
+
+	onFormSubmit() {
+
+	}
+
+	render() {
+		return (
+			<ScrollView contentContainerStyle={{
+				backgroundColor: '#00000099',
+				width: deviceWidth,
+				padding: 10,
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}>
+			<H1 style={{
+				margin: 20,
+				color: '#ffffff80',
+				textAlign: 'center',
+			}}>
+				Create Account
+			</H1>
+			<View style={styles.textFieldCover}>
+				<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
+				<TextInput
+					style={styles.formField}
+					onChangeText={this.onFirstNameChange}
+					placeholder="First Name"
+					autoCapitalize="none"
+					autoCorrect={false}
+					placeholderTextColor="#ffffff80"
+					underlineColorAndroid="#ffffff80"
+					defaultValue={this.state.firstName}
+				/>
+			</View>
+			<View style={styles.textFieldCover}>
+				<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
+				<TextInput
+					style={styles.formField}
+					onChangeText={this.onLastNameChange}
+					placeholder="Last Name"
+					autoCapitalize="none"
+					autoCorrect={false}
+					placeholderTextColor="#ffffff80"
+					underlineColorAndroid="#ffffff80"
+					defaultValue={this.state.lastName}
+				/>
+			</View>
+			<View style={styles.textFieldCover}>
+				<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+				<TextInput
+					style={styles.formField}
+					onChangeText={this.onEmailChange}
+					placeholder="Email Address"
+					keyboardType="email-address"
+					autoCapitalize="none"
+					autoCorrect={false}
+					placeholderTextColor="#ffffff80"
+					underlineColorAndroid="#ffffff80"
+					defaultValue={this.state.email}
+				/>
+			</View>
+			<View style={styles.textFieldCover}>
+				<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+				<TextInput
+					style={styles.formField}
+					onChangeText={this.onConfirmEmailChange}
+					placeholder="Confirm Email Address"
+					keyboardType="email-address"
+					autoCapitalize="none"
+					autoCorrect={false}
+					placeholderTextColor="#ffffff80"
+					underlineColorAndroid="#ffffff80"
+					defaultValue={this.state.confirmEmail}
+				/>
+			</View>
+			<Text
+				style={styles.formSubmit}
+				onPress={this.onFormSubmit}
+			>{ this.state.isLoading ? 'REGISTERING...' : 'REGISTER' }</Text>
+			<Text style={styles.accountExist}> I already have an account </Text>
+			</ScrollView>
+		);
+	}
+}
 
 export default class RegisterScreen extends View {
 
 	render() {
 		return (
-			<WebView
-				source={{uri: telldusLiveWebAuthenticationUrl}}
-			/>
+			<BackgroundImage source={require('./../Login/img/home5.jpg')}>
+				<KeyboardAvoidingView behavior="position">
+					<View style={{
+						flexDirection: 'column',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+						<Image
+							source={require('./../Login/img/telldusLogoBlack.png')}
+							style={{
+								marginTop: 60,
+								marginBottom: 60,
+							}}
+						/>
+						<RegisterForm />
+					</View>
+				</KeyboardAvoidingView>
+			</BackgroundImage>
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+	textFieldCover: {
+		height: 50,
+		width: deviceWidth * 0.7,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	iconAccount: {
+		top: 15,
+		left: 2,
+		position: 'absolute',
+	},
+	iconEmail: {
+		top: 18,
+		left: 3,
+		position: 'absolute',
+	},
+	formField: {
+		paddingLeft: 35,
+		paddingTop: 10,
+		minWidth: 200,
+		borderRadius: 3,
+
+		height: 40,
+		width: deviceWidth * 0.7,
+		fontSize: 14,
+		color: '#ffffff80',
+		textAlign: 'left',
+	},
+	formSubmit: {
+		marginTop: 10,
+		minWidth: 100,
+		justifyContent: 'center',
+		alignItems: 'center',
+		color: '#ffffff',
+		borderRadius: 10,
+		textAlign: 'center',
+		textAlignVertical: 'center',
+		width: deviceWidth * 0.5,
+		height: deviceWidth * 0.1,
+		backgroundColor: Theme.Core.btnPrimaryBg,
+	},
+	accountExist: {
+		marginTop: 10,
+		color: '#ffffff80',
+	},
+});

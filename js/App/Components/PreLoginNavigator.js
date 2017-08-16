@@ -22,7 +22,6 @@
 'use strict';
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
@@ -41,9 +40,7 @@ const RouteConfigs = {
 	Register: {
 		screen: RegisterScreen,
 		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-			},
+			header: null,
 		},
 	},
 };
