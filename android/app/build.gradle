@@ -116,7 +116,7 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "com.telldus.live.mobile.test"
+        applicationId "com.telldus.live.mobile"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode readVersionCode()
