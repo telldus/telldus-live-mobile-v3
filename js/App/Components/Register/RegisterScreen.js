@@ -26,9 +26,7 @@ import { KeyboardAvoidingView, Dimensions, StyleSheet, TextInput, ScrollView } f
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { BackgroundImage, View, Image, H1, Text } from 'BaseComponents';
-
-import Theme from 'Theme';
+import { BackgroundImage, View, Image, H1, Text, TouchableButton } from 'BaseComponents';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -82,7 +80,7 @@ class RegisterForm extends View {
 	}
 
 	onFormSubmit() {
-
+		console.log('test onFormSubmit');
 	}
 
 	render() {
@@ -156,10 +154,11 @@ class RegisterForm extends View {
 					defaultValue={this.state.confirmEmail}
 				/>
 			</View>
-			<Text
+			<TouchableButton
 				style={styles.formSubmit}
 				onPress={this.onFormSubmit}
-			>{ this.state.isLoading ? 'REGISTERING...' : 'REGISTER' }</Text>
+				text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
+			/>
 			<Text style={styles.accountExist}> I already have an account </Text>
 			</ScrollView>
 		);
@@ -224,16 +223,6 @@ const styles = StyleSheet.create({
 	},
 	formSubmit: {
 		marginTop: 10,
-		minWidth: 100,
-		justifyContent: 'center',
-		alignItems: 'center',
-		color: '#ffffff',
-		borderRadius: 10,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		width: deviceWidth * 0.5,
-		height: deviceWidth * 0.1,
-		backgroundColor: Theme.Core.btnPrimaryBg,
 	},
 	accountExist: {
 		marginTop: 10,
