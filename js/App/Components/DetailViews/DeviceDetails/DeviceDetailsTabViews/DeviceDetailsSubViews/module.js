@@ -27,6 +27,7 @@ import BellDeviceDetail from './BellDeviceDetail';
 import DimmerDeviceDetail from './DimmerDeviceDetail';
 import NavigationalDeviceDetail from './NavigationalDeviceDetail';
 import DeviceHistoryDetails from './DeviceHistoryDetails';
+import HistoryRow from './HistoryRow';
 
 module.exports = {
 	DeviceLocationDetail,
@@ -35,4 +36,5 @@ module.exports = {
 	DimmerDeviceDetail,
 	NavigationalDeviceDetail,
 	DeviceHistoryDetails,
+	HistoryRow,
 };

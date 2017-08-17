@@ -53,6 +53,8 @@ class SettingsTab extends View {
 	props: Props;
 	state: State;
 
+	onValueChange: number => void;
+
 	constructor(props: Props) {
 		super(props);
 		this.onValueChange = this.onValueChange.bind(this);
