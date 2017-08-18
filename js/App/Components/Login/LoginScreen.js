@@ -28,7 +28,7 @@ import Dimensions from 'Dimensions';
 
 import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 
-import { BackgroundImage, Button, H1, Text, View } from 'BaseComponents';
+import { BackgroundImage, TouchableButton, H1, Text, View } from 'BaseComponents';
 import Modal from './Modal';
 import { loginToTelldus } from 'Actions';
 import { authenticationTimeOut, testUsername, testPassword } from 'Config';
@@ -121,11 +121,11 @@ class LoginForm extends View {
 					defaultValue={this.state.password}
 				/>
 				<View style={{ height: 20 }}/>
-				<Button
-					name="lock"
+				<TouchableButton
 					style={styles.formSubmit}
 					onPress={this.onFormSubmit}
-				>{ this.state.isLoading ? 'Logging in...' : 'Login' }</Button>
+					text={this.state.isLoading ? 'Logging in...' : 'Login'}
+					/>
 				<View style={{ height: 40 }}/>
 				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forget your password? Need an
 				                                                                account?</Text>
