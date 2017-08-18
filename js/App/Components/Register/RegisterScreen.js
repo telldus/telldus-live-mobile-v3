@@ -32,10 +32,12 @@ const deviceWidth = Dimensions.get('window').width;
 
 class RegisterForm extends View {
 
-	onFirstNameChange: string => void;
-	onLastNameChange: string => void;
-	onEmailChange: string => void;
-	onConfirmEmailChange: string => void;
+	onFirstNameChange: (string) => void;
+	onLastNameChange: (string) => void;
+	onEmailChange: (string) => void;
+	onEmailBlur: () => void;
+	onConfirmEmailChange: (string) => void;
+	onConfirmEmailBlur: () => void;
 	onFormSubmit: () => void;
 	goBackToLogin: () => void;
 
@@ -45,47 +47,108 @@ class RegisterForm extends View {
 			firstName: '',
 			lastName: '',
 			email: '',
+			isEmailValid: false,
 			confirmEmail: '',
 			loading: false,
+			validationMessage: '',
+			formSubmitted: false,
 		};
 
 		this.onFirstNameChange = this.onFirstNameChange.bind(this);
 		this.onLastNameChange = this.onLastNameChange.bind(this);
 		this.onEmailChange = this.onEmailChange.bind(this);
+		this.onEmailBlur = this.onEmailBlur.bind(this);
 		this.onConfirmEmailChange = this.onConfirmEmailChange.bind(this);
+		this.onConfirmEmailBlur = this.onConfirmEmailBlur.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
+
 		this.goBackToLogin = this.goBackToLogin.bind(this);
 	}
 
 	onFirstNameChange(firstName) {
 		this.setState({
 			firstName,
+			validationMessage: '',
 		});
 	}
 
 	onLastNameChange(lastName) {
 		this.setState({
 			lastName,
+			validationMessage: '',
 		});
 	}
 
 	onEmailChange(email) {
 		this.setState({
 			email,
+			validationMessage: '',
 		});
+	}
+
+	onEmailBlur() {
+		let isEmailValid = this.validateEmail(this.state.email);
+		if (isEmailValid) {
+			this.onEmailValid();
+		}
 	}
 
 	onConfirmEmailChange(confirmEmail) {
 		this.setState({
 			confirmEmail,
+			validationMessage: '',
 		});
 	}
 
+	onConfirmEmailBlur() {
+		let isEmailValid = this.validateEmail(this.state.confirmEmail);
+		if (isEmailValid) {
+			this.onEmailValid();
+		}
+	}
+
 	onFormSubmit() {
+		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
+		if (fn !== '' && ln !== '' && em !== '' && cem !== ''
+			&& this.state.isEmailValid
+			&& this.state.validationMessage === '') {
+			this.setState({
+				formSubmitted: true,
+			});
+		} else {
+			let pf = 'can\'t be empty';
+			let message = fn === '' ? `first name ${pf}` : ln === '' ? `last name ${pf}` : ln === '' ? `last name ${pf}` : ln === '' ? `last name ${pf}` : this.state.validationMessage;
+			this.setState({
+				validationMessage: message,
+			});
+		}
 	}
 
 	goBackToLogin() {
 		this.props.navigation.navigate('Login');
+	}
+
+	validateEmail(email) {
+		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+		let emailValid = pattern.test(email);
+		if (!emailValid) {
+			this.setState({
+				validationMessage: 'Invalid Email',
+			});
+		}
+		return emailValid;
+	}
+
+	onEmailValid() {
+		if (this.state.confirmEmail !== this.state.email) {
+			this.setState({
+				validationMessage: 'Email does not match',
+			});
+		} else {
+			this.setState({
+				isEmailValid: true,
+			});
+		}
 	}
 
 	render() {
@@ -99,7 +162,7 @@ class RegisterForm extends View {
 				alignItems: 'center',
 			}}>
 			<H1 style={{
-				margin: 20,
+				margin: 10,
 				color: '#ffffff80',
 				textAlign: 'center',
 			}}>
@@ -136,6 +199,7 @@ class RegisterForm extends View {
 				<TextInput
 					style={styles.formField}
 					onChangeText={this.onEmailChange}
+					onBlur={this.onEmailBlur}
 					placeholder="Email Address"
 					keyboardType="email-address"
 					autoCapitalize="none"
@@ -150,6 +214,7 @@ class RegisterForm extends View {
 				<TextInput
 					style={styles.formField}
 					onChangeText={this.onConfirmEmailChange}
+					onBlur={this.onConfirmEmailBlur}
 					placeholder="Confirm Email Address"
 					keyboardType="email-address"
 					autoCapitalize="none"
@@ -159,6 +224,12 @@ class RegisterForm extends View {
 					defaultValue={this.state.confirmEmail}
 				/>
 			</View>
+			<Text style={{
+				height: 16,
+				width: deviceWidth,
+				textAlign: 'center',
+				color: '#f00',
+			}}>{this.state.validationMessage}</Text>
 			<TouchableButton
 				style={styles.formSubmit}
 				onPress={this.onFormSubmit}
@@ -227,7 +298,6 @@ const styles = StyleSheet.create({
 		textAlign: 'left',
 	},
 	formSubmit: {
-		marginTop: 10,
 	},
 	accountExist: {
 		marginTop: 10,
