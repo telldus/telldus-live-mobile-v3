@@ -37,6 +37,7 @@ class RegisterForm extends View {
 	onEmailChange: string => void;
 	onConfirmEmailChange: string => void;
 	onFormSubmit: () => void;
+	goBackToLogin: () => void;
 
 	constructor(props) {
 		super(props);
@@ -53,6 +54,7 @@ class RegisterForm extends View {
 		this.onEmailChange = this.onEmailChange.bind(this);
 		this.onConfirmEmailChange = this.onConfirmEmailChange.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
+		this.goBackToLogin = this.goBackToLogin.bind(this);
 	}
 
 	onFirstNameChange(firstName) {
@@ -80,7 +82,10 @@ class RegisterForm extends View {
 	}
 
 	onFormSubmit() {
-		console.log('test onFormSubmit');
+	}
+
+	goBackToLogin() {
+		this.props.navigation.navigate('Login');
 	}
 
 	render() {
@@ -159,7 +164,7 @@ class RegisterForm extends View {
 				onPress={this.onFormSubmit}
 				text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 			/>
-			<Text style={styles.accountExist}> I already have an account </Text>
+			<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
 			</ScrollView>
 		);
 	}
@@ -183,7 +188,7 @@ export default class RegisterScreen extends View {
 								marginBottom: 60,
 							}}
 						/>
-						<RegisterForm />
+						<RegisterForm navigation={this.props.navigation}/>
 					</View>
 				</KeyboardAvoidingView>
 			</BackgroundImage>
