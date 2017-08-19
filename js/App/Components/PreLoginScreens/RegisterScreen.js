@@ -160,7 +160,8 @@ class RegisterForm extends View {
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
-			}}>
+			}}
+			keyboardDismissMode= "interactive">
 			<H1 style={{
 				margin: 10,
 				color: '#ffffff80',
@@ -245,13 +246,9 @@ export default class RegisterScreen extends View {
 
 	render() {
 		return (
-			<BackgroundImage source={require('./img/home5.jpg')}>
-				<KeyboardAvoidingView behavior="position">
-					<View style={{
-						flexDirection: 'column',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}>
+			<BackgroundImage source={require('./img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+				<KeyboardAvoidingView behavior="position" contentContainerStyle={{paddingTop: 20}}>
+						<View style={{alignItems: 'center', justifyContent: 'center'}}>
 						<Image
 							source={require('./img/telldusLogoBlack.png')}
 							style={{
@@ -259,8 +256,8 @@ export default class RegisterScreen extends View {
 								marginBottom: 60,
 							}}
 						/>
+						</View>
 						<RegisterForm navigation={this.props.navigation}/>
-					</View>
 				</KeyboardAvoidingView>
 			</BackgroundImage>
 		);
