@@ -21,7 +21,7 @@
 
 'use strict';
 import React, { Component } from 'react';
-import { Text, Dimensions } from 'react-native';
+import { Text } from 'react-native';
 
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
@@ -54,9 +54,9 @@ const styles = StyleSheet.create({
 		backgroundColor: Theme.Core.btnPrimaryBg,
 		color: '#ffffff',
 
-		height: Dimensions.get('window').width * 0.12,
-		width: Dimensions.get('window').width * 0.5,
-		borderRadius: Dimensions.get('window').width * 0.12,
+		height: 50,
+		width: 180,
+		borderRadius: 50,
 		minWidth: 100,
 
 		textAlign: 'center',
