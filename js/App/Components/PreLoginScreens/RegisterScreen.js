@@ -295,6 +295,9 @@ const styles = StyleSheet.create({
 		textAlign: 'left',
 	},
 	formSubmit: {
+		height: 50,
+		width: 180,
+		borderRadius: 50,
 	},
 	accountExist: {
 		marginTop: 10,
