@@ -245,7 +245,7 @@ export default class RegisterScreen extends View {
 
 	render() {
 		return (
-			<BackgroundImage source={require('./../Login/img/home5.jpg')}>
+			<BackgroundImage source={require('./img/home5.jpg')}>
 				<KeyboardAvoidingView behavior="position">
 					<View style={{
 						flexDirection: 'column',
@@ -253,7 +253,7 @@ export default class RegisterScreen extends View {
 						alignItems: 'center',
 					}}>
 						<Image
-							source={require('./../Login/img/telldusLogoBlack.png')}
+							source={require('./img/telldusLogoBlack.png')}
 							style={{
 								marginTop: 60,
 								marginBottom: 60,

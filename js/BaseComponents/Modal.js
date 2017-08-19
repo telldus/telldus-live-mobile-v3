@@ -21,23 +21,21 @@
 
 'use strict';
 
-import React from 'react';
+import React, {Component} from 'react';
 import { Animated, Easing } from 'react-native';
-
-import { View } from 'BaseComponents';
 
 type Props = {
 	showModal: any,
 	children: any,
 }
-export default class Modal extends View {
+export default class Modal extends Component {
 	_closeModal: () => void;
+	animatedScale: any;
+	animatedOpacity: any;
+
 	props : Props;
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-
-		};
 
 		this._closeModal = this._closeModal.bind(this);
 

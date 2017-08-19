@@ -28,8 +28,7 @@ import Dimensions from 'Dimensions';
 
 import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 
-import { BackgroundImage, TouchableButton, H1, Text, View } from 'BaseComponents';
-import Modal from './Modal';
+import { BackgroundImage, TouchableButton, H1, Text, View, Modal } from 'BaseComponents';
 import { loginToTelldus } from 'Actions';
 import { authenticationTimeOut, testUsername, testPassword } from 'Config';
 
