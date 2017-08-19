@@ -57,6 +57,7 @@ import NavigatorIOS from './NavigatorIOS';
 import I18n from './I18n';
 import Gravatar from './Gravatar';
 import TouchableButton from './TouchableButton';
+import Modal from './Modal';
 
 import {
 	AppState,
@@ -105,6 +106,7 @@ module.exports = {
 	ProgressBar: ProgressBar,
 	Tabs: ScrollableTabView,
 	TouchableButton: TouchableButton,
+	Modal: Modal,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
