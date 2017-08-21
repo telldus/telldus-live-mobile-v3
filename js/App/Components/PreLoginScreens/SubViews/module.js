@@ -22,7 +22,9 @@
 'use strict';
 
 import NotificationComponent from './NotificationComponent';
+import FormContainerComponent from './FormContainerComponent';
 
 module.exports = {
 	NotificationComponent,
+	FormContainerComponent,
 };

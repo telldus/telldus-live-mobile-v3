@@ -28,8 +28,7 @@ import Dimensions from 'Dimensions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { TouchableButton, H1, Text, View, Modal } from 'BaseComponents';
-import FormContainer from './FormContainer';
-import {NotificationComponent} from 'PreLoginScreen_SubViews';
+import {NotificationComponent, FormContainerComponent} from 'PreLoginScreen_SubViews';
 import { loginToTelldus } from 'Actions';
 import { authenticationTimeOut, testUsername, testPassword } from 'Config';
 
@@ -86,7 +85,7 @@ class LoginScreen extends View {
 
 	render() {
 		return (
-			<FormContainer>
+			<FormContainerComponent>
 				<H1 style={{
 					margin: 20,
 					color: '#fff',
@@ -136,7 +135,7 @@ class LoginScreen extends View {
 				<Modal modalStyle={styles.notificationModal} showModal={this.state.notificationText}>
 					<NotificationComponent text={this.state.notificationText} onPress={this._closeModal} />
 				</Modal>
-			</FormContainer>
+			</FormContainerComponent>
 		);
 	}
 

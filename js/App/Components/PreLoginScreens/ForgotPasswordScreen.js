@@ -27,7 +27,7 @@ import { Dimensions, StyleSheet, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { View, H1, Text, TouchableButton } from 'BaseComponents';
-import FormContainer from './FormContainer';
+import {FormContainerComponent} from 'PreLoginScreen_SubViews';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -68,7 +68,7 @@ export default class RegisterScreen extends View {
 
 	render() {
 		return (
-			<FormContainer>
+			<FormContainerComponent>
 			<H1 style={{
 				margin: 10,
 				color: '#ffffff80',
@@ -103,7 +103,7 @@ export default class RegisterScreen extends View {
 				text={this.state.isLoading ? 'SENDING...' : 'SEND PASSWORD'}
 			/>
 			<Text style={styles.accountExist} onPress={this.goBackToLogin}> Back to Login </Text>
-			</FormContainer>
+			</FormContainerComponent>
 		);
 	}
 }

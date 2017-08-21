@@ -29,17 +29,17 @@ import StyleSheet from 'StyleSheet';
 
 const deviceWidth = Dimensions.get('window').width;
 
-export default class FormContainer extends View {
+export default class FormContainerComponent extends View {
 
 	render() {
 		return (
-			<BackgroundImage source={require('./img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+			<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
 				<KeyboardAvoidingView behavior="position" contentContainerStyle={{paddingTop: 20}}>
 					<ScrollView
 						keyboardDismissMode= "interactive">
 						<View style={{alignItems: 'center', justifyContent: 'center'}}>
 						<Image
-							source={require('./img/telldusLogoBlack.png')}
+							source={require('./../img/telldusLogoBlack.png')}
 							style={{
 								marginTop: 60,
 								marginBottom: 60,
