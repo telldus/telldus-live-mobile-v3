@@ -93,6 +93,8 @@ export default class Modal extends Component {
 
 	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.showModal) {
+			this.animatedOpacity.setValue(0);
+			this.animatedScale.setValue(0.01);
 			this._openModal();
 		}
 		if (!nextProps.showModal) {
