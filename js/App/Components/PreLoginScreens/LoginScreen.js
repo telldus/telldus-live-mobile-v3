@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import Dimensions from 'Dimensions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { TouchableButton, H1, Text, View, Modal } from 'BaseComponents';
+import { TouchableButton, Text, View, Modal } from 'BaseComponents';
 import {NotificationComponent, FormContainerComponent} from 'PreLoginScreen_SubViews';
 import { loginToTelldus } from 'Actions';
 import { authenticationTimeOut, testUsername, testPassword } from 'Config';
@@ -85,14 +85,7 @@ class LoginScreen extends View {
 
 	render() {
 		return (
-			<FormContainerComponent>
-				<H1 style={{
-					margin: 20,
-					color: '#fff',
-					textAlign: 'center',
-				}}>
-					Login
-				</H1>
+			<FormContainerComponent headerText="Login">
 				<View style={styles.textFieldCover}>
 					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
