@@ -26,7 +26,7 @@ import { Dimensions, StyleSheet, TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, H1, Text, TouchableButton, Modal } from 'BaseComponents';
+import { View, Text, TouchableButton, Modal } from 'BaseComponents';
 import {FormContainerComponent, NotificationComponent} from 'PreLoginScreen_SubViews';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -149,77 +149,70 @@ export default class RegisterScreen extends View {
 
 	render() {
 		return (
-			<FormContainerComponent>
-			<H1 style={{
-				margin: 10,
-				color: '#ffffff80',
-				textAlign: 'center',
-			}}>
-				Create Account
-			</H1>
-			<View style={styles.textFieldCover}>
-				<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onFirstNameChange}
-					placeholder="First Name"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					underlineColorAndroid="#ffffff80"
-					defaultValue={this.state.firstName}
+			<FormContainerComponent headerText="Create Account">
+				<View style={styles.textFieldCover}>
+					<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onFirstNameChange}
+						placeholder="First Name"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.firstName}
+					/>
+				</View>
+				<View style={styles.textFieldCover}>
+					<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onLastNameChange}
+						placeholder="Last Name"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.lastName}
+					/>
+				</View>
+				<View style={styles.textFieldCover}>
+					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onEmailChange}
+						placeholder="Email Address"
+						keyboardType="email-address"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.email}
+					/>
+				</View>
+				<View style={styles.textFieldCover}>
+					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onConfirmEmailChange}
+						placeholder="Confirm Email Address"
+						keyboardType="email-address"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.confirmEmail}
+					/>
+				</View>
+				<TouchableButton
+					style={styles.formSubmit}
+					onPress={this.onFormSubmit}
+					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 				/>
-			</View>
-			<View style={styles.textFieldCover}>
-				<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onLastNameChange}
-					placeholder="Last Name"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					underlineColorAndroid="#ffffff80"
-					defaultValue={this.state.lastName}
-				/>
-			</View>
-			<View style={styles.textFieldCover}>
-				<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onEmailChange}
-					placeholder="Email Address"
-					keyboardType="email-address"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					underlineColorAndroid="#ffffff80"
-					defaultValue={this.state.email}
-				/>
-			</View>
-			<View style={styles.textFieldCover}>
-				<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onConfirmEmailChange}
-					placeholder="Confirm Email Address"
-					keyboardType="email-address"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					underlineColorAndroid="#ffffff80"
-					defaultValue={this.state.confirmEmail}
-				/>
-			</View>
-			<TouchableButton
-				style={styles.formSubmit}
-				onPress={this.onFormSubmit}
-				text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
-			/>
-			<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
-			<Modal modalStyle={styles.notificationModal} showModal={this.state.validationMessage}>
-				<NotificationComponent text={this.state.validationMessage} onPress={this._closeModal} />
-			</Modal>
+				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
+				<Modal modalStyle={styles.notificationModal} showModal={this.state.validationMessage}>
+					<NotificationComponent text={this.state.validationMessage} onPress={this._closeModal} />
+				</Modal>
 			</FormContainerComponent>
 		);
 	}

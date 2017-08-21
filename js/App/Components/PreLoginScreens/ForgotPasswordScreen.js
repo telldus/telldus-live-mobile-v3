@@ -26,7 +26,7 @@ import { Dimensions, StyleSheet, TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, H1, Text, TouchableButton } from 'BaseComponents';
+import { View, Text, TouchableButton } from 'BaseComponents';
 import {FormContainerComponent} from 'PreLoginScreen_SubViews';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -68,41 +68,34 @@ export default class RegisterScreen extends View {
 
 	render() {
 		return (
-			<FormContainerComponent>
-			<H1 style={{
-				margin: 10,
-				color: '#ffffff80',
-				textAlign: 'center',
-			}}>
-				Forgot Password
-			</H1>
-			<View style={styles.textFieldCover}>
-				<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onEmailChange}
-					onBlur={this.onEmailBlur}
-					placeholder="your@emailaddress.com"
-					keyboardType="email-address"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					underlineColorAndroid="#ffffff80"
-					defaultValue={this.state.email}
+			<FormContainerComponent headerText="Forgot Password">
+				<View style={styles.textFieldCover}>
+					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onEmailChange}
+						onBlur={this.onEmailBlur}
+						placeholder="your@emailaddress.com"
+						keyboardType="email-address"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.email}
+					/>
+				</View>
+				<Text style={{
+					height: 16,
+					width: deviceWidth,
+					textAlign: 'center',
+					color: '#f00',
+				}}>{this.state.validationMessage}</Text>
+				<TouchableButton
+					style={styles.formSubmit}
+					onPress={this.onFormSubmit}
+					text={this.state.isLoading ? 'SENDING...' : 'SEND PASSWORD'}
 				/>
-			</View>
-			<Text style={{
-				height: 16,
-				width: deviceWidth,
-				textAlign: 'center',
-				color: '#f00',
-			}}>{this.state.validationMessage}</Text>
-			<TouchableButton
-				style={styles.formSubmit}
-				onPress={this.onFormSubmit}
-				text={this.state.isLoading ? 'SENDING...' : 'SEND PASSWORD'}
-			/>
-			<Text style={styles.accountExist} onPress={this.goBackToLogin}> Back to Login </Text>
+				<Text style={styles.accountExist} onPress={this.goBackToLogin}> Back to Login </Text>
 			</FormContainerComponent>
 		);
 	}

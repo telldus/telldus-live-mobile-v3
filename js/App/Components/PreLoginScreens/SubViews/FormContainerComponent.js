@@ -24,7 +24,7 @@
 import React from 'react';
 import { KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native';
 
-import { BackgroundImage, View, Image } from 'BaseComponents';
+import { BackgroundImage, View, Image, H1 } from 'BaseComponents';
 import StyleSheet from 'StyleSheet';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -47,6 +47,13 @@ export default class FormContainerComponent extends View {
 						/>
 						</View>
 						<View style={styles.container} >
+						<H1 style={{
+							margin: 10,
+							color: '#ffffff80',
+							textAlign: 'center',
+						}}>
+							{this.props.headerText}
+						</H1>
 						{this.props.children}
 						</View>
 					</ScrollView>
