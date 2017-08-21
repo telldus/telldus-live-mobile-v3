@@ -22,11 +22,10 @@
 'use strict';
 
 import React from 'react';
+import { TextInput, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import Dimensions from 'Dimensions';
-
-
-import { TextInput, TouchableWithoutFeedback } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { TouchableButton, H1, Text, View, Modal } from 'BaseComponents';
 import FormContainer from './FormContainer';
@@ -94,26 +93,34 @@ class LoginScreen extends View {
 				}}>
 					Login
 				</H1>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onChangeUsername}
-					placeholder="Username"
-					keyboardType="email-address"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					defaultValue={this.state.username}
-				/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onChangePassword}
-					placeholder="Password"
-					secureTextEntry={true}
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					defaultValue={this.state.password}
-				/>
+				<View style={styles.textFieldCover}>
+					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onChangeUsername}
+						placeholder="Username"
+						keyboardType="email-address"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.username}
+					/>
+				</View>
+				<View style={styles.textFieldCover}>
+					<Icon name="lock" style={styles.iconLock} size={15} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onChangePassword}
+						placeholder="Password"
+						secureTextEntry={true}
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.password}
+					/>
+				</View>
 				<View style={{ height: 20 }}/>
 				<TouchableButton
 					style={styles.formSubmit}
@@ -250,20 +257,35 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		fontWeight: 'bold',
 	},
+	textFieldCover: {
+		height: 40,
+		width: Dimensions.get('window').width * 0.7,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	iconLock: {
+		top: 15,
+		left: 14,
+		position: 'absolute',
+	},
+	iconEmail: {
+		top: 18,
+		left: 15,
+		position: 'absolute',
+	},
 	formField: {
 		height: 35,
 		padding: 7,
+		paddingLeft: 25,
 		marginTop: 10,
 		marginLeft: 50,
 		marginRight: 50,
 		minWidth: 200,
-		borderColor: '#ccc',
-		borderWidth: 1,
-		borderRadius: 3,
 
 		fontSize: 13,
 		color: '#eee',
-		textAlign: 'center',
+		textAlign: 'left',
 	},
 	formSubmit: {
 		padding: 6,
