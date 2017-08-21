@@ -26,13 +26,13 @@ import { connect } from 'react-redux';
 import Dimensions from 'Dimensions';
 
 
-import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+import { TextInput, TouchableWithoutFeedback } from 'react-native';
 
-import { BackgroundImage, TouchableButton, H1, Text, View, Modal } from 'BaseComponents';
+import { TouchableButton, H1, Text, View, Modal } from 'BaseComponents';
+import FormContainer from './FormContainer';
 import { loginToTelldus } from 'Actions';
 import { authenticationTimeOut, testUsername, testPassword } from 'Config';
 
-import Image from 'Image';
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
@@ -49,13 +49,14 @@ type State = {
 	password: string,
 };
 
-class LoginForm extends View {
+class LoginScreen extends View {
 	props: Props;
 	state: State;
 
 	onChangeUsername: (username:string) => void;
 	onChangePassword: (password:string) => void;
 	onForgotPassword: () => void;
+	onNeedAccount: () => void;
 	onFormSubmit: () => void;
 	_closeModal: () => void;
 
@@ -71,6 +72,7 @@ class LoginForm extends View {
 		this.onChangeUsername = this.onChangeUsername.bind(this);
 		this.onChangePassword = this.onChangePassword.bind(this);
 		this.onForgotPassword = this.onForgotPassword.bind(this);
+		this.onNeedAccount = this.onNeedAccount.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 
 		this._closeModal = this._closeModal.bind(this);
@@ -84,14 +86,7 @@ class LoginForm extends View {
 
 	render() {
 		return (
-			<View style={{
-				backgroundColor: '#00000099',
-				width: Dimensions.get('window').width,
-				padding: 10,
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}>
+			<FormContainer>
 				<H1 style={{
 					margin: 20,
 					color: '#fff',
@@ -123,11 +118,12 @@ class LoginForm extends View {
 				<TouchableButton
 					style={styles.formSubmit}
 					onPress={this.onFormSubmit}
-					text={this.state.isLoading ? 'Logging in...' : 'Login'}
+					text={this.state.isLoading ? 'Logging in...' : 'LOGIN'}
 					/>
-				<View style={{ height: 40 }}/>
-				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forget your password? Need an
-				                                                                account?</Text>
+				<View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10 }}>
+					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forgot your password?</Text>
+					<Text style={{ color: '#bbb', paddingLeft: 5 }} onPress={this.onNeedAccount}>Need an account?</Text>
+				</View>
 				<View style={{ height: 10 }}/>
 				<Modal modalStyle={styles.notificationModal} showModal={this.state.notificationText}>
 					<View style={styles.notificationModalHeader}>
@@ -143,7 +139,7 @@ class LoginForm extends View {
 						</TouchableWithoutFeedback>
 					</View>
 				</Modal>
-			</View>
+			</FormContainer>
 		);
 	}
 
@@ -181,33 +177,12 @@ class LoginForm extends View {
 		this.formSubmit(this.state.username, this.state.password);
 	}
 
-	onForgotPassword() {
+	onNeedAccount() {
 		this.props.navigation.navigate('Register');
 	}
-}
 
-class LoginScreen extends View {
-	render() {
-		return (
-			<BackgroundImage source={require('./img/home5.jpg')}>
-				<KeyboardAvoidingView behavior="position">
-					<View style={{
-						flexDirection: 'column',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}>
-						<Image
-							source={require('./img/telldusLogoBlack.png')}
-							style={{
-								marginTop: 100,
-								marginBottom: 100,
-							}}
-						/>
-						<LoginForm {...this.props} />
-					</View>
-				</KeyboardAvoidingView>
-			</BackgroundImage>
-		);
+	onForgotPassword() {
+		this.props.navigation.navigate('ForgotPassword');
 	}
 }
 

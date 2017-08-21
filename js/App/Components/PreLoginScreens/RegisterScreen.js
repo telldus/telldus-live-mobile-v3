@@ -22,15 +22,22 @@
 'use strict';
 
 import React from 'react';
-import { KeyboardAvoidingView, Dimensions, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { Dimensions, StyleSheet, TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { BackgroundImage, View, Image, H1, Text, TouchableButton } from 'BaseComponents';
+import { View, H1, Text, TouchableButton } from 'BaseComponents';
+import FormContainer from './FormContainer';
 
 const deviceWidth = Dimensions.get('window').width;
 
-class RegisterForm extends View {
+type Props = {
+	navigation: Object,
+}
+
+export default class RegisterScreen extends View {
+
+	props: Props;
 
 	onFirstNameChange: (string) => void;
 	onLastNameChange: (string) => void;
@@ -41,7 +48,7 @@ class RegisterForm extends View {
 	onFormSubmit: () => void;
 	goBackToLogin: () => void;
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			firstName: '',
@@ -65,21 +72,21 @@ class RegisterForm extends View {
 		this.goBackToLogin = this.goBackToLogin.bind(this);
 	}
 
-	onFirstNameChange(firstName) {
+	onFirstNameChange(firstName: string) {
 		this.setState({
 			firstName,
 			validationMessage: '',
 		});
 	}
 
-	onLastNameChange(lastName) {
+	onLastNameChange(lastName: string) {
 		this.setState({
 			lastName,
 			validationMessage: '',
 		});
 	}
 
-	onEmailChange(email) {
+	onEmailChange(email: string) {
 		this.setState({
 			email,
 			validationMessage: '',
@@ -93,7 +100,7 @@ class RegisterForm extends View {
 		}
 	}
 
-	onConfirmEmailChange(confirmEmail) {
+	onConfirmEmailChange(confirmEmail: string) {
 		this.setState({
 			confirmEmail,
 			validationMessage: '',
@@ -128,7 +135,7 @@ class RegisterForm extends View {
 		this.props.navigation.navigate('Login');
 	}
 
-	validateEmail(email) {
+	validateEmail(email: string) {
 		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 		let emailValid = pattern.test(email);
 		if (!emailValid) {
@@ -153,15 +160,7 @@ class RegisterForm extends View {
 
 	render() {
 		return (
-			<ScrollView contentContainerStyle={{
-				backgroundColor: '#00000099',
-				width: deviceWidth,
-				padding: 10,
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}
-			keyboardDismissMode= "interactive">
+			<FormContainer>
 			<H1 style={{
 				margin: 10,
 				color: '#ffffff80',
@@ -237,29 +236,7 @@ class RegisterForm extends View {
 				text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 			/>
 			<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
-			</ScrollView>
-		);
-	}
-}
-
-export default class RegisterScreen extends View {
-
-	render() {
-		return (
-			<BackgroundImage source={require('./img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-				<KeyboardAvoidingView behavior="position" contentContainerStyle={{paddingTop: 20}}>
-						<View style={{alignItems: 'center', justifyContent: 'center'}}>
-						<Image
-							source={require('./img/telldusLogoBlack.png')}
-							style={{
-								marginTop: 60,
-								marginBottom: 60,
-							}}
-						/>
-						</View>
-						<RegisterForm navigation={this.props.navigation}/>
-				</KeyboardAvoidingView>
-			</BackgroundImage>
+			</FormContainer>
 		);
 	}
 }

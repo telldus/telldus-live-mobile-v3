@@ -27,11 +27,17 @@ import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
 
 import { View } from 'BaseComponents';
-import { LoginScreen, RegisterScreen } from 'PreLoginScreens';
+import { LoginScreen, RegisterScreen, ForgotPasswordScreen } from 'PreLoginScreens';
 
 const RouteConfigs = {
 	Login: {
 		screen: LoginScreen,
+		navigationOptions: {
+			header: null,
+		},
+	},
+	ForgotPassword: {
+		screen: ForgotPasswordScreen,
 		navigationOptions: {
 			header: null,
 		},
