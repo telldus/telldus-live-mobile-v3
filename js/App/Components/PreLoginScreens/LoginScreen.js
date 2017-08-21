@@ -207,46 +207,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		top: 45,
 	},
-	notificationModalHeader: {
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingLeft: 20,
-		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.7,
-		backgroundColor: '#e26901',
-	},
-	notificationModalHeaderText: {
-		color: '#ffffff',
-		fontSize: 14,
-	},
-	notificationModalBody: {
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingLeft: 20,
-		paddingRight: 10,
-		height: Dimensions.get('window').height * 0.15,
-		width: Dimensions.get('window').width * 0.7,
-	},
-	notificationModalBodyText: {
-		fontSize: 14,
-		color: '#6B6969',
-	},
-	notificationModalFooter: {
-		alignItems: 'flex-end',
-		justifyContent: 'center',
-		paddingRight: 20,
-		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.7,
-	},
-	notificationModalFooterTextCover: {
-		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.3,
-	},
-	notificationModalFooterText: {
-		color: '#e26901',
-		fontSize: 14,
-		fontWeight: 'bold',
-	},
 	textFieldCover: {
 		height: 40,
 		width: Dimensions.get('window').width * 0.7,
