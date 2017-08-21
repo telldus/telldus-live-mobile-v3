@@ -26,8 +26,8 @@ import { Dimensions, StyleSheet, TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, H1, Text, TouchableButton } from 'BaseComponents';
-import {FormContainerComponent} from 'PreLoginScreen_SubViews';
+import { View, H1, Text, TouchableButton, Modal } from 'BaseComponents';
+import {FormContainerComponent, NotificationComponent} from 'PreLoginScreen_SubViews';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -45,6 +45,7 @@ export default class RegisterScreen extends View {
 	onConfirmEmailChange: (string) => void;
 	onFormSubmit: () => void;
 	goBackToLogin: () => void;
+	_closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -54,7 +55,7 @@ export default class RegisterScreen extends View {
 			email: '',
 			confirmEmail: '',
 			loading: false,
-			validationMessage: '',
+			validationMessage: false,
 			formSubmitted: false,
 		};
 
@@ -65,6 +66,13 @@ export default class RegisterScreen extends View {
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
+		this._closeModal = this._closeModal.bind(this);
+	}
+
+	_closeModal() {
+		this.setState({
+			validationMessage: false,
+		});
 	}
 
 	onFirstNameChange(firstName: string) {
@@ -116,7 +124,7 @@ export default class RegisterScreen extends View {
 				});
 			}
 		} else {
-			let pf = 'field can\'t be empty';
+			let pf = 'Field can\'t be Empty';
 			let message = fn === '' ? `${pf}- first name` : ln === '' ? `${pf}- last name ` : em === '' ? `${pf}- email ` : cem === '' ? `${pf}- confirm email` : this.state.validationMessage;
 			this.setState({
 				validationMessage: message,
@@ -216,7 +224,61 @@ export default class RegisterScreen extends View {
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 				/>
+<<<<<<< d179326daa940543328ec4878453c03f2794bd1a
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
+=======
+			</View>
+			<View style={styles.textFieldCover}>
+				<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
+				<TextInput
+					style={styles.formField}
+					onChangeText={this.onLastNameChange}
+					placeholder="Last Name"
+					autoCapitalize="none"
+					autoCorrect={false}
+					placeholderTextColor="#ffffff80"
+					underlineColorAndroid="#ffffff80"
+					defaultValue={this.state.lastName}
+				/>
+			</View>
+			<View style={styles.textFieldCover}>
+				<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+				<TextInput
+					style={styles.formField}
+					onChangeText={this.onEmailChange}
+					placeholder="Email Address"
+					keyboardType="email-address"
+					autoCapitalize="none"
+					autoCorrect={false}
+					placeholderTextColor="#ffffff80"
+					underlineColorAndroid="#ffffff80"
+					defaultValue={this.state.email}
+				/>
+			</View>
+			<View style={styles.textFieldCover}>
+				<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+				<TextInput
+					style={styles.formField}
+					onChangeText={this.onConfirmEmailChange}
+					placeholder="Confirm Email Address"
+					keyboardType="email-address"
+					autoCapitalize="none"
+					autoCorrect={false}
+					placeholderTextColor="#ffffff80"
+					underlineColorAndroid="#ffffff80"
+					defaultValue={this.state.confirmEmail}
+				/>
+			</View>
+			<TouchableButton
+				style={styles.formSubmit}
+				onPress={this.onFormSubmit}
+				text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
+			/>
+			<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
+			<Modal modalStyle={styles.notificationModal} showModal={this.state.validationMessage}>
+				<NotificationComponent text={this.state.validationMessage} onPress={this._closeModal} />
+			</Modal>
+>>>>>>> show validation message in the modal.
 			</FormContainerComponent>
 		);
 	}
@@ -260,5 +322,13 @@ const styles = StyleSheet.create({
 	accountExist: {
 		marginTop: 10,
 		color: '#ffffff80',
+	},
+	notificationModal: {
+		backgroundColor: '#ffffff',
+		position: 'absolute',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		top: 45,
 	},
 });

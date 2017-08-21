@@ -50,7 +50,7 @@ export default class NotificationComponent extends View {
 		return (
 			<View>
 				<View style={styles.notificationModalHeader}>
-					<Text style={styles.notificationModalHeaderText}>ERROR...</Text>
+					<Text style={styles.notificationModalHeaderText}>ERROR</Text>
 				</View>
 				<View style={styles.notificationModalBody}>
 					<Text style={styles.notificationModalBodyText}>{this.props.text}</Text>
