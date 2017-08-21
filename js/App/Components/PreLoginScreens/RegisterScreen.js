@@ -42,9 +42,7 @@ export default class RegisterScreen extends View {
 	onFirstNameChange: (string) => void;
 	onLastNameChange: (string) => void;
 	onEmailChange: (string) => void;
-	onEmailBlur: () => void;
 	onConfirmEmailChange: (string) => void;
-	onConfirmEmailBlur: () => void;
 	onFormSubmit: () => void;
 	goBackToLogin: () => void;
 
@@ -54,7 +52,6 @@ export default class RegisterScreen extends View {
 			firstName: '',
 			lastName: '',
 			email: '',
-			isEmailValid: false,
 			confirmEmail: '',
 			loading: false,
 			validationMessage: '',
@@ -64,9 +61,7 @@ export default class RegisterScreen extends View {
 		this.onFirstNameChange = this.onFirstNameChange.bind(this);
 		this.onLastNameChange = this.onLastNameChange.bind(this);
 		this.onEmailChange = this.onEmailChange.bind(this);
-		this.onEmailBlur = this.onEmailBlur.bind(this);
 		this.onConfirmEmailChange = this.onConfirmEmailChange.bind(this);
-		this.onConfirmEmailBlur = this.onConfirmEmailBlur.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
@@ -93,13 +88,6 @@ export default class RegisterScreen extends View {
 		});
 	}
 
-	onEmailBlur() {
-		let isEmailValid = this.validateEmail(this.state.email);
-		if (isEmailValid) {
-			this.onEmailValid();
-		}
-	}
-
 	onConfirmEmailChange(confirmEmail: string) {
 		this.setState({
 			confirmEmail,
@@ -107,24 +95,29 @@ export default class RegisterScreen extends View {
 		});
 	}
 
-	onConfirmEmailBlur() {
-		let isEmailValid = this.validateEmail(this.state.confirmEmail);
-		if (isEmailValid) {
-			this.onEmailValid();
-		}
-	}
-
 	onFormSubmit() {
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
-		if (fn !== '' && ln !== '' && em !== '' && cem !== ''
-			&& this.state.isEmailValid
-			&& this.state.validationMessage === '') {
-			this.setState({
-				formSubmitted: true,
-			});
+		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
+			let isConfirmEmailValid = this.validateEmail(cem);
+			let isEmailValid = this.validateEmail(em);
+			if (isConfirmEmailValid && isEmailValid) {
+				if (em === cem) {
+					this.setState({
+						formSubmitted: true,
+					});
+				} else {
+					this.setState({
+						validationMessage: 'Email addresses don\'t match. Please Check your entered email address.',
+					});
+				}
+			} else {
+				this.setState({
+					validationMessage: !isConfirmEmailValid && !isEmailValid ? 'Emails not Valid' : !isConfirmEmailValid ? 'Email Not Valid- confirm email' : 'Email not Valid',
+				});
+			}
 		} else {
-			let pf = 'can\'t be empty';
-			let message = fn === '' ? `first name ${pf}` : ln === '' ? `last name ${pf}` : ln === '' ? `last name ${pf}` : ln === '' ? `last name ${pf}` : this.state.validationMessage;
+			let pf = 'field can\'t be empty';
+			let message = fn === '' ? `${pf}- first name` : ln === '' ? `${pf}- last name ` : em === '' ? `${pf}- email ` : cem === '' ? `${pf}- confirm email` : this.state.validationMessage;
 			this.setState({
 				validationMessage: message,
 			});
@@ -144,18 +137,6 @@ export default class RegisterScreen extends View {
 			});
 		}
 		return emailValid;
-	}
-
-	onEmailValid() {
-		if (this.state.confirmEmail !== this.state.email) {
-			this.setState({
-				validationMessage: 'Email does not match',
-			});
-		} else {
-			this.setState({
-				isEmailValid: true,
-			});
-		}
 	}
 
 	render() {
