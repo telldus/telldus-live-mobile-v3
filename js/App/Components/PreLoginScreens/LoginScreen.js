@@ -22,13 +22,14 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, TouchableWithoutFeedback } from 'react-native';
+import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import Dimensions from 'Dimensions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { TouchableButton, H1, Text, View, Modal } from 'BaseComponents';
 import FormContainer from './FormContainer';
+import {NotificationComponent} from 'PreLoginScreen_SubViews';
 import { loginToTelldus } from 'Actions';
 import { authenticationTimeOut, testUsername, testPassword } from 'Config';
 
@@ -126,25 +127,14 @@ class LoginScreen extends View {
 					style={styles.formSubmit}
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? 'Logging in...' : 'LOGIN'}
-					/>
+				/>
 				<View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10 }}>
 					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forgot your password?</Text>
 					<Text style={{ color: '#bbb', paddingLeft: 5 }} onPress={this.onNeedAccount}>Need an account?</Text>
 				</View>
 				<View style={{ height: 10 }}/>
 				<Modal modalStyle={styles.notificationModal} showModal={this.state.notificationText}>
-					<View style={styles.notificationModalHeader}>
-						<Text style={styles.notificationModalHeaderText}>ERROR</Text>
-					</View>
-					<View style={styles.notificationModalBody}>
-						<Text style={styles.notificationModalBodyText}>{this.state.notificationText}</Text>
-					</View>
-					<View style={styles.notificationModalFooter}>
-						<TouchableWithoutFeedback style={styles.notificationModalFooterTextCover}
-							onPress={this._closeModal}>
-							<Text style={styles.notificationModalFooterText}>OK</Text>
-						</TouchableWithoutFeedback>
-					</View>
+					<NotificationComponent text={this.state.notificationText} onPress={this._closeModal} />
 				</Modal>
 			</FormContainer>
 		);

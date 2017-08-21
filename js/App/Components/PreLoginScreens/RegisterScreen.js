@@ -161,81 +161,81 @@ export default class RegisterScreen extends View {
 	render() {
 		return (
 			<FormContainer>
-			<H1 style={{
-				margin: 10,
-				color: '#ffffff80',
-				textAlign: 'center',
-			}}>
+				<H1 style={{
+					margin: 10,
+					color: '#ffffff80',
+					textAlign: 'center',
+				}}>
 				Create Account
-			</H1>
-			<View style={styles.textFieldCover}>
-				<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onFirstNameChange}
-					placeholder="First Name"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					underlineColorAndroid="#ffffff80"
-					defaultValue={this.state.firstName}
+				</H1>
+				<View style={styles.textFieldCover}>
+					<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onFirstNameChange}
+						placeholder="First Name"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.firstName}
+					/>
+				</View>
+				<View style={styles.textFieldCover}>
+					<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onLastNameChange}
+						placeholder="Last Name"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.lastName}
+					/>
+				</View>
+				<View style={styles.textFieldCover}>
+					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onEmailChange}
+						onBlur={this.onEmailBlur}
+						placeholder="Email Address"
+						keyboardType="email-address"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.email}
+					/>
+				</View>
+				<View style={styles.textFieldCover}>
+					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+					<TextInput
+						style={styles.formField}
+						onChangeText={this.onConfirmEmailChange}
+						onBlur={this.onConfirmEmailBlur}
+						placeholder="Confirm Email Address"
+						keyboardType="email-address"
+						autoCapitalize="none"
+						autoCorrect={false}
+						placeholderTextColor="#ffffff80"
+						underlineColorAndroid="#ffffff80"
+						defaultValue={this.state.confirmEmail}
+					/>
+				</View>
+				<Text style={{
+					height: 16,
+					width: deviceWidth,
+					textAlign: 'center',
+					color: '#f00',
+				}}>{this.state.validationMessage}</Text>
+				<TouchableButton
+					style={styles.formSubmit}
+					onPress={this.onFormSubmit}
+					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 				/>
-			</View>
-			<View style={styles.textFieldCover}>
-				<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onLastNameChange}
-					placeholder="Last Name"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					underlineColorAndroid="#ffffff80"
-					defaultValue={this.state.lastName}
-				/>
-			</View>
-			<View style={styles.textFieldCover}>
-				<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onEmailChange}
-					onBlur={this.onEmailBlur}
-					placeholder="Email Address"
-					keyboardType="email-address"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					underlineColorAndroid="#ffffff80"
-					defaultValue={this.state.email}
-				/>
-			</View>
-			<View style={styles.textFieldCover}>
-				<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
-				<TextInput
-					style={styles.formField}
-					onChangeText={this.onConfirmEmailChange}
-					onBlur={this.onConfirmEmailBlur}
-					placeholder="Confirm Email Address"
-					keyboardType="email-address"
-					autoCapitalize="none"
-					autoCorrect={false}
-					placeholderTextColor="#ffffff80"
-					underlineColorAndroid="#ffffff80"
-					defaultValue={this.state.confirmEmail}
-				/>
-			</View>
-			<Text style={{
-				height: 16,
-				width: deviceWidth,
-				textAlign: 'center',
-				color: '#f00',
-			}}>{this.state.validationMessage}</Text>
-			<TouchableButton
-				style={styles.formSubmit}
-				onPress={this.onFormSubmit}
-				text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
-			/>
-			<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
+				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
 			</FormContainer>
 		);
 	}
