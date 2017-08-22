@@ -23,7 +23,10 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -33,8 +36,6 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.oblador.vectoricons.VectorIconsPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
@@ -52,29 +53,30 @@ public class MainApplication extends Application implements ReactApplication {
 		@Override
 		protected List<ReactPackage> getPackages() {
 			return Arrays.<ReactPackage>asList(
-				new FabricPackage(),
-				new RNDeviceInfo(),
-				new VectorIconsPackage(),
-				new ExtraDimensionsPackage(),
-				new MainReactPackage(),
-				new ReactNativePushNotificationPackage()
+					new FabricPackage(),
+					new ExtraDimensionsPackage(),
+					new MainReactPackage(),
+					new VectorIconsPackage(),
+					new RNDeviceInfo(),
+					new MapsPackage(),
+					new ReactNativePushNotificationPackage()
 			);
 		}
 	};
 
 	@Override
 	public ReactNativeHost getReactNativeHost() {
-			return mReactNativeHost;
+		return mReactNativeHost;
 	}
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        // Set up Crashlytics, disabled for debug builds
-        Crashlytics crashlyticsKit = new Crashlytics.Builder()
-          .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-          .build();
-        Fabric.with(this, crashlyticsKit);
-        SoLoader.init(this, /* native exopackage */ false);
-    }
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		// Set up Crashlytics, disabled for debug builds
+		Crashlytics crashlyticsKit = new Crashlytics.Builder()
+				.core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+				.build();
+		Fabric.with(this, crashlyticsKit);
+		SoLoader.init(this, /* native exopackage */ false);
+	}
 }
