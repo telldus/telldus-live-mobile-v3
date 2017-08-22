@@ -23,19 +23,26 @@
 
 import React from 'react';
 import { Dimensions, StyleSheet, TextInput } from 'react-native';
+import { connect } from 'react-redux';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { View, Text, TouchableButton, Modal } from 'BaseComponents';
 import {FormContainerComponent, NotificationComponent} from 'PreLoginScreen_SubViews';
 
+import {RegisterUser} from 'Actions_User';
+
 const deviceWidth = Dimensions.get('window').width;
 
 type Props = {
 	navigation: Object,
+	dispatch: Function,
+	onFormSubmit: Function,
+	validationMessage: string,
+	showModal: boolean,
 }
 
-export default class RegisterScreen extends View {
+class RegisterScreen extends View {
 
 	props: Props;
 
@@ -54,9 +61,7 @@ export default class RegisterScreen extends View {
 			lastName: '',
 			email: '',
 			confirmEmail: '',
-			loading: false,
-			validationMessage: false,
-			formSubmitted: false,
+			isLoading: false,
 		};
 
 		this.onFirstNameChange = this.onFirstNameChange.bind(this);
@@ -71,35 +76,34 @@ export default class RegisterScreen extends View {
 
 	_closeModal() {
 		this.setState({
-			validationMessage: false,
+			isLoading: false,
+		});
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_CLOSE',
 		});
 	}
 
 	onFirstNameChange(firstName: string) {
 		this.setState({
 			firstName,
-			validationMessage: '',
 		});
 	}
 
 	onLastNameChange(lastName: string) {
 		this.setState({
 			lastName,
-			validationMessage: '',
 		});
 	}
 
 	onEmailChange(email: string) {
 		this.setState({
 			email,
-			validationMessage: '',
 		});
 	}
 
 	onConfirmEmailChange(confirmEmail: string) {
 		this.setState({
 			confirmEmail,
-			validationMessage: '',
 		});
 	}
 
@@ -111,25 +115,29 @@ export default class RegisterScreen extends View {
 			if (isConfirmEmailValid && isEmailValid) {
 				if (em === cem) {
 					this.setState({
-						formSubmitted: true,
+						isLoading: true,
 					});
+					this.props.onFormSubmit(em, fn, ln);
 				} else {
-					this.setState({
-						validationMessage: 'Email addresses don\'t match. Please Check your entered email address.',
-					});
+					let message = 'Email addresses don\'t match. Please Check your entered email address.';
+					this.showModal(message);
 				}
 			} else {
-				this.setState({
-					validationMessage: !isConfirmEmailValid && !isEmailValid ? 'Emails not Valid' : !isConfirmEmailValid ? 'Email Not Valid- confirm email' : 'Email not Valid',
-				});
+				let message = !isConfirmEmailValid && !isEmailValid ? 'Emails not Valid' : !isConfirmEmailValid ? 'Email Not Valid- confirm email' : 'Email not Valid';
+				this.showModal(message);
 			}
 		} else {
 			let pf = 'Field can\'t be Empty';
-			let message = fn === '' ? `${pf}- first name` : ln === '' ? `${pf}- last name ` : em === '' ? `${pf}- email ` : cem === '' ? `${pf}- confirm email` : this.state.validationMessage;
-			this.setState({
-				validationMessage: message,
-			});
+			let message = fn === '' ? `${pf}- first name` : ln === '' ? `${pf}- last name ` : em === '' ? `${pf}- email ` : cem === '' ? `${pf}- confirm email` : this.props.validationMessage;
+			this.showModal(message);
 		}
+	}
+
+	showModal(data) {
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_OPEN',
+			payload: data,
+		});
 	}
 
 	goBackToLogin() {
@@ -140,9 +148,7 @@ export default class RegisterScreen extends View {
 		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 		let emailValid = pattern.test(email);
 		if (!emailValid) {
-			this.setState({
-				validationMessage: 'Invalid Email',
-			});
+			this.showModal('Invalid Email');
 		}
 		return emailValid;
 	}
@@ -160,6 +166,7 @@ export default class RegisterScreen extends View {
 						autoCorrect={false}
 						placeholderTextColor="#ffffff80"
 						underlineColorAndroid="#ffffff80"
+						editable={!this.props.showModal}
 						defaultValue={this.state.firstName}
 					/>
 				</View>
@@ -173,6 +180,7 @@ export default class RegisterScreen extends View {
 						autoCorrect={false}
 						placeholderTextColor="#ffffff80"
 						underlineColorAndroid="#ffffff80"
+						editable={!this.props.showModal}
 						defaultValue={this.state.lastName}
 					/>
 				</View>
@@ -187,6 +195,7 @@ export default class RegisterScreen extends View {
 						autoCorrect={false}
 						placeholderTextColor="#ffffff80"
 						underlineColorAndroid="#ffffff80"
+						editable={!this.props.showModal}
 						defaultValue={this.state.email}
 					/>
 				</View>
@@ -201,6 +210,7 @@ export default class RegisterScreen extends View {
 						autoCorrect={false}
 						placeholderTextColor="#ffffff80"
 						underlineColorAndroid="#ffffff80"
+						editable={!this.props.showModal}
 						defaultValue={this.state.confirmEmail}
 					/>
 				</View>
@@ -210,8 +220,8 @@ export default class RegisterScreen extends View {
 					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 				/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
-				<Modal modalStyle={styles.notificationModal} showModal={this.state.validationMessage}>
-					<NotificationComponent text={this.state.validationMessage} onPress={this._closeModal} />
+				<Modal modalStyle={styles.notificationModal} showModal={this.props.showModal}>
+					<NotificationComponent text={this.props.validationMessage} onPress={this._closeModal} />
 				</Modal>
 			</FormContainerComponent>
 		);
@@ -266,3 +276,21 @@ const styles = StyleSheet.create({
 		top: 45,
 	},
 });
+
+function mapDispatchToProps(dispatch) {
+	return {
+		onFormSubmit: (email, firstName, LastName) => {
+			dispatch(RegisterUser(email, firstName, LastName));
+		},
+		dispatch,
+	};
+}
+
+function mapStateToProps(store) {
+	return {
+		validationMessage: store.modal.data,
+		showModal: store.modal.openModal,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
