@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import type { Children } from 'react';
 import { KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native';
 
 import { BackgroundImage, View, Image, H1 } from 'BaseComponents';
@@ -29,39 +30,41 @@ import StyleSheet from 'StyleSheet';
 
 const deviceWidth = Dimensions.get('window').width;
 
-export default class FormContainerComponent extends View {
-
-	render() {
-		return (
-			<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-				<KeyboardAvoidingView behavior="position" contentContainerStyle={{paddingTop: 20}}>
-					<ScrollView
-						keyboardDismissMode= "interactive">
-						<View style={{alignItems: 'center', justifyContent: 'center'}}>
-						<Image
-							source={require('./../img/telldusLogoBlack.png')}
-							style={{
-								marginTop: 60,
-								marginBottom: 60,
-							}}
-						/>
-						</View>
-						<View style={styles.container} >
-						<H1 style={{
-							margin: 10,
-							color: '#ffffff80',
-							textAlign: 'center',
-						}}>
-							{this.props.headerText}
-						</H1>
-						{this.props.children}
-						</View>
-					</ScrollView>
-				</KeyboardAvoidingView>
-			</BackgroundImage>
-		);
-	}
+type Props = {
+	headerText: string,
+	children: Children,
 }
+
+const FormContainerComponent = (props: Props) => (
+	<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+		<KeyboardAvoidingView behavior="position" contentContainerStyle={{paddingTop: 20}}>
+			<ScrollView
+				keyboardDismissMode= "interactive">
+				<View style={{alignItems: 'center', justifyContent: 'center'}}>
+				<Image
+					source={require('./../img/telldusLogoBlack.png')}
+					style={{
+						marginTop: 60,
+						marginBottom: 60,
+					}}
+				/>
+				</View>
+				<View style={styles.container} >
+				<H1 style={{
+					margin: 10,
+					color: '#ffffff80',
+					textAlign: 'center',
+				}}>
+					{props.headerText}
+				</H1>
+				{props.children}
+				</View>
+			</ScrollView>
+		</KeyboardAvoidingView>
+	</BackgroundImage>
+);
+
+export default FormContainerComponent;
 
 const styles = StyleSheet.create({
 	container: {
