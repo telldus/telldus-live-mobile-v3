@@ -24,6 +24,7 @@
 import type { ThunkAction } from './types';
 
 import LiveApi from 'LiveApi';
+import { publicKey, privateKey, apiServer } from 'Config';
 
 import { format } from 'url';
 
@@ -110,5 +111,39 @@ export const unregisterPushToken = (token: String): ThunkAction => dispatch => {
 				},
 			});
 		}
+	});
+};
+
+export const RegisterUser = (email: String, firstName: String, lastName: String): ThunkAction => (dispatch, getState) => {
+	let formData = new FormData();
+	formData.append('email', email);
+	formData.append('firstname', firstName);
+	formData.append('lastname', lastName);
+	formData.append('client_id', publicKey);
+	formData.append('client_secret', privateKey);
+	fetch(
+		`${apiServer}/oauth2/user/register`,
+		{
+			method: 'POST',
+			body: formData,
+		}
+	)
+	.then((response) => response.json())
+	.then((responseData) => {
+		if (responseData.error) {
+			throw responseData;
+		}
+		dispatch({
+			type: 'RECEIVED_ACCESS_TOKEN',
+			accessToken: responseData,
+		});
+	}).catch(e => {
+		let data = !e.error_description && e.message === 'Network request failed'
+		? 'Network request failed. Check your internet connection' : e.error ? e.error :
+		e.error_description ? e.error_description : 'Unknown Error, Please try again later.';
+		dispatch({
+			type: 'REQUEST_MODAL_OPEN',
+			payload: data,
+		});
 	});
 };
