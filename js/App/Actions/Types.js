@@ -82,6 +82,7 @@ export type Action =
 	| { type: 'REQUEST_MODAL_CLOSE', payload: Object }
 
 	| { type: 'REQUEST_DEVICE_ACTION', payload: Object }
+	| { type: 'USER_REGISTER', accessToken: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

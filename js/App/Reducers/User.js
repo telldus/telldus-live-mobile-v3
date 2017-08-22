@@ -32,6 +32,7 @@ export type State = {
 	pushToken: any,
 	pushTokenRegistered: any,
 	notificationText: any,
+	registeredCredential: any,
 };
 
 const initialState = {
@@ -40,9 +41,16 @@ const initialState = {
 	pushToken: false,
 	pushTokenRegistered: false,
 	notificationText: false,
+	registeredCredential: false,
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
+	if (action.type === 'USER_REGISTER') {
+		return {
+			...state,
+			registeredCredential: action.accessToken,
+		};
+	}
 	if (action.type === 'RECEIVED_ACCESS_TOKEN') {
 		let accessToken = action.accessToken;
 		if (state.accessToken) {
@@ -51,6 +59,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			accessToken: accessToken,
+			registeredCredential: false,
 		};
 	}
 	if (action.type === 'RECEIVED_PUSH_TOKEN') {

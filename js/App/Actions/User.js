@@ -134,7 +134,7 @@ export const RegisterUser = (email: String, firstName: String, lastName: String)
 			throw responseData;
 		}
 		dispatch({
-			type: 'RECEIVED_ACCESS_TOKEN',
+			type: 'USER_REGISTER',
 			accessToken: responseData,
 		});
 	}).catch(e => {
