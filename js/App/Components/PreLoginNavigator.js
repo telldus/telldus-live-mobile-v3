@@ -27,7 +27,7 @@ import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
 
 import { View } from 'BaseComponents';
-import { LoginScreen, RegisterScreen, ForgotPasswordScreen } from 'PreLoginScreens';
+import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from 'PreLoginScreens';
 
 const RouteConfigs = {
 	Login: {
@@ -44,6 +44,12 @@ const RouteConfigs = {
 	},
 	Register: {
 		screen: RegisterScreen,
+		navigationOptions: {
+			header: null,
+		},
+	},
+	Welcome: {
+		screen: WelcomeScreen,
 		navigationOptions: {
 			header: null,
 		},

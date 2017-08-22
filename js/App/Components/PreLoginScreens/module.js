@@ -24,9 +24,11 @@
 import LoginScreen from './LoginScreen';
 import RegisterScreen from './RegisterScreen';
 import ForgotPasswordScreen from './ForgotPasswordScreen';
+import WelcomeScreen from './WelcomeScreen';
 
 module.exports = {
 	LoginScreen,
 	RegisterScreen,
 	ForgotPasswordScreen,
+	WelcomeScreen,
 };
