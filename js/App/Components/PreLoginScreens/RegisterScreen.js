@@ -40,6 +40,7 @@ type Props = {
 	onFormSubmit: Function,
 	validationMessage: string,
 	showModal: boolean,
+	registeredCredential: any,
 }
 
 class RegisterScreen extends View {
@@ -151,6 +152,12 @@ class RegisterScreen extends View {
 			this.showModal('Invalid Email');
 		}
 		return emailValid;
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		if (nextProps.registeredCredential) {
+			nextProps.navigation.navigate('Welcome');
+		}
 	}
 
 	render() {
@@ -290,6 +297,7 @@ function mapStateToProps(store) {
 	return {
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
+		registeredCredential: store.user.registeredCredential,
 	};
 }
 
