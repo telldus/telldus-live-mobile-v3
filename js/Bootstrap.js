@@ -33,6 +33,7 @@ import App from 'App';
 import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
 import * as Translations from 'Translations';
+import { forceLocale } from 'Config';
 
 function Bootstrap(): React.Component {
 
@@ -64,6 +65,9 @@ function Bootstrap(): React.Component {
 		}
 
 		getLocale() {
+			if (forceLocale) {
+				return forceLocale;
+			}
 			if (!NativeModules.I18nManager) {
 				return 'en';
 			}
