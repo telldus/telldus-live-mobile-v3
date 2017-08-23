@@ -1,8 +1,15 @@
 {
-  "friday": "Fredag",
-  "pages.scheduler": "Schemaläggare",
-  "thursday": "Torsdag",
-  "today": "Idag",
-  "tomorrow": "Imorgon",
-  "wednesday": "Onsdag"
+    "friday": "Fredag",
+    "monday": "Måndag",
+    "nextWeekday": "Nästa {weekday}",
+    "pages.devices": "Enheter",
+    "pages.scheduler": "Schemaläggare",
+    "pages.sensors": "Sensorer",
+    "saturday": "Lördag",
+    "sunday": "Söndag",
+    "thursday": "Torsdag",
+    "today": "Idag",
+    "tomorrow": "Imorgon",
+    "tuesday": "Tisdag",
+    "wednesday": "Onsdag"
 }
