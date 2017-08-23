@@ -29,6 +29,7 @@ import LiveApi from 'LiveApi';
 import { supportedMethods, methods } from 'Config';
 
 import { format } from 'url';
+import moment from 'moment';
 
 export function getDevices(): ThunkAction {
 	return (dispatch) => {
@@ -257,6 +258,43 @@ export function learn(deviceId: number): ThunkAction {
 				...response,
 			},
 		}));
+	};
+}
+
+// calculates the from and to timestamp by considering the tzoffset of the client/location.
+function getTimeStamp(tzOffset: number) {
+	let prevTimestamp = 0;
+	let toTimestamp = parseInt(moment().format('X'), 10) + tzOffset;
+	let lastWeek = parseInt(moment().subtract('days', 7).format('X'), 10);
+	let fromTimestamp = lastWeek + tzOffset + prevTimestamp;
+	return { fromTimestamp, toTimestamp };
+}
+
+export function getDeviceHistory(device: Object): ThunkAction {
+	return (dispatch, getState) => {
+		const {
+			gateways: { byId },
+		} = getState();
+		let tzOffset = byId[device.clientId].tzoffset;
+		// fromTimestamp : one week before from current time.
+		// toTimestamp : current time.
+		let { fromTimestamp, toTimestamp } = getTimeStamp(tzOffset);
+		const payload = {
+			url: `/device/history?id=${device.id}&from=${fromTimestamp}&to=${toTimestamp}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+			dispatch({
+				type: 'DEVICE_HISTORY',
+				payload: {
+					deviceId: device.id,
+					timestamp: { fromTimestamp, toTimestamp },
+					...response,
+				},
+			});
+		});
 	};
 }
 

@@ -49,6 +49,8 @@ type Props = {
 	rows: Array<Object>,
 	gateways: Object,
 	userProfile: Object,
+	navigation: Object,
+	dashboard: Object,
 	tab: string,
 	onChangeDisplayType: () => void,
 	dashboard: Object,

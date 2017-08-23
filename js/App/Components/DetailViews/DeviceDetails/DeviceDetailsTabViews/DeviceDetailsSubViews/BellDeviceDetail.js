@@ -24,46 +24,46 @@
 import React from 'react';
 
 import { View } from 'BaseComponents';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+import { BellButton } from 'TabViews_SubViews';
 
-import { LearnButton, NavigationalButton } from 'TabViews_SubViews';
+const deviceHeight = Dimensions.get('window').height;
 
 type Props = {
-	device: Object,
+  device: Object,
+  onBell: number => void,
 };
 
-class NavigationalDeviceDetailModal extends View {
+class BellDeviceDetailModal extends View {
 	props: Props;
-
+	onBell : number => void;
 	constructor(props: Props) {
 		super(props);
+		this.onBell = this.onBell.bind(this);
 	}
-
+	onBell() {
+		this.props.onBell(this.props.device.id);
+	}
 	render() {
 		const { device } = this.props;
-		const { UP, DOWN, STOP, LEARN } = device.supportedMethods;
+		const { BELL } = device.supportedMethods;
+		let bellButton = null;
 
-		let navigationButtons = null;
-		let learnButton = null;
-
-		if (UP || DOWN || STOP) {
-			navigationButtons = <NavigationalButton device={device} style={styles.navigation} />;
-		}
-
-		if (LEARN) {
-			learnButton = <LearnButton id={device.id} style={styles.learn} />;
+		if (BELL) {
+			bellButton = <BellButton id={device.id} style={styles.bell} />;
 		}
 
 		return (
 			<View style={styles.container}>
-				{navigationButtons}
-				{learnButton}
+				<View style={[styles.bellButtonContainer, styles.shadow]}>
+					{bellButton}
+				</View>
 			</View>
 		);
 	}
 }
 
-NavigationalDeviceDetailModal.propTypes = {
+BellDeviceDetailModal.propTypes = {
 	device: React.PropTypes.object.isRequired,
 };
 
@@ -71,21 +71,33 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 0,
 	},
-	navigation: {
-		flexDirection: 'row',
+	bellButtonContainer: {
+		flex: 0,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: '#fff',
+		marginTop: 20,
+		height: (deviceHeight * 0.2),
+	},
+	shadow: {
+		borderRadius: 4,
+		backgroundColor: '#fff',
+		shadowColor: '#000000',
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowRadius: 1,
+		shadowOpacity: 1.0,
+		elevation: 2,
+	},
+	bell: {
 		height: 36,
 		marginHorizontal: 8,
 		marginVertical: 16,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	learn: {
-		height: 36,
-		marginHorizontal: 8,
-		marginVertical: 8,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 });
 
-module.exports = NavigationalDeviceDetailModal;
+module.exports = BellDeviceDetailModal;

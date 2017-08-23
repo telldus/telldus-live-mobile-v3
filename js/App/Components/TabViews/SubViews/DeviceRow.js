@@ -41,14 +41,14 @@ type Props = {
 	onDim: (number) => void,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
-	onSettingsSelected: (number) => void,
+	onSettingsSelected: (Object) => void,
 	device: Object,
 	setScrollEnabled: boolean,
 };
 
 class DeviceRow extends View {
 	props: Props;
-	onSettingsSelected: (number) => void;
+	onSettingsSelected: Object => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -117,7 +117,7 @@ class DeviceRow extends View {
 	}
 
 	onSettingsSelected() {
-		this.props.onSettingsSelected(this.props.device.id);
+		this.props.onSettingsSelected(this.props.device);
 	}
 }
 

@@ -34,7 +34,7 @@ function getGateways(): ThunkAction {
 		const url = format({
 			pathname: '/clients/list',
 			query: {
-				extras: 'timezone,suntime',
+				extras: 'timezone,suntime,tzoffset',
 			},
 		});
 		const payload = {

@@ -15,44 +15,40 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Constants
  */
 
-export default {
-	supportedMethods: 951,
-	methods: {
-		1: 'TURNON',
-		2: 'TURNOFF',
-		4: 'BELL',
-		8: 'TOGGLE',
-		16: 'DIM',
-		32: 'LEARN',
-		64: 'EXECUTE',
-		128: 'UP',
-		256: 'DOWN',
-		512: 'STOP',
-		1024: 'RGBW',
-		2048: 'THERMOSTAT',
-	},
-	states: {
-		1: 'On',
-		2: 'Off',
-		4: 'Bell',
-		8: 'Toggle',
-		16: 'Dim',
-		32: 'Learn',
-		64: 'Execute',
-		128: 'Up',
-		256: 'Down',
-		512: 'Stop',
-		1024: 'RGBW',
-		2048: 'Thermostat',
-	},
-	statusMessage: {
-		0: 'Success',
-		1: 'Unknown/Fallback',
-		2: 'No Reply',
-		3: 'Timed Out',
-	},
-};
+// @flow
+
+export default function getLocationImageUrl(deviceType:string) : string {
+	if (deviceType === 'TelldusCenter') {
+
+		return 'icon_location_telldus_center_01';
+
+	}
+	if (deviceType === 'TellStick Net') {
+
+		return 'icon_location_tell_stick_net_01';
+
+	}
+	if (deviceType === 'TellStick Net v2') {
+
+		return 'icon_location_tell_stick_net_v2_01';
+
+	}
+	if (deviceType === 'TellStick ZNet Lite') {
+
+		return 'icon_location_telldus_z_net_lite_01';
+
+	}
+	if (deviceType === 'TellStick ZNet Lite v2') {
+
+		return 'icon_location_telldus_z_net_lite_01';
+
+	}
+	if (deviceType === 'OtioBox') {
+
+		return 'icon_location_otio_box_01';
+
+	}
+	return 'icon_location_otio_box_01';
+}

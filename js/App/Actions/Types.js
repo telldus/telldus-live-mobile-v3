@@ -58,6 +58,8 @@ export type Action =
 	| { type: 'DEVICE_LEARN', payload: Object }
 	| { type: 'DEVICE_DIM', deviceId:number, payload: Object }
 
+	| { type: 'DEVICE_HISTORY', payload: Object }
+
 	| { type: 'LIVEAPI_REFETCH', endpoint: 'sensors' | 'jobs' | 'gateways' }
 
 	| { type: 'SENSOR_UPDATE_VALUE', payload: Object }
@@ -75,6 +77,9 @@ export type Action =
 
 	| { type: 'REQUEST_TURNON', payload: Object }
 	| { type: 'REQUEST_TURNOFF', payload: Object }
+
+	| { type: 'REQUEST_MODAL_OPEN', payload: Object }
+	| { type: 'REQUEST_MODAL_CLOSE', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

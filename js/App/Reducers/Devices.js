@@ -30,7 +30,7 @@ import { methods } from '../../Config.js';
 
 import getPowerParts from '../Lib/getPowerParts';
 
-function getSupportedMethods(methodsAggregate: number): Object {
+export function getSupportedMethods(methodsAggregate: number): Object {
 	const methodNumbers = getPowerParts(methodsAggregate);
 	const methodHashmap = methodNumbers.reduce((memo, methodNumber) => {
 		memo[methods[methodNumber]] = true;
@@ -40,7 +40,7 @@ function getSupportedMethods(methodsAggregate: number): Object {
 	return methodHashmap;
 }
 
-function getDeviceStateMethod(deviceStateNumber: number): string {
+export function getDeviceStateMethod(deviceStateNumber: number): string {
 	return methods[parseInt(deviceStateNumber, 10)];
 }
 
@@ -124,6 +124,23 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 				isInState: getDeviceStateMethod(action.state),
 			};
 
+		case 'DEVICE_HISTORY':
+			/* currently not checking if old data present or not.
+			   should change as, fetch using timestamp and if there are more timestamps/intervals
+			   those subsequest results must be appended to the previous[latest data with respect to time] ones. */
+
+			/* sorting the data w.r.t. date (latest first). */
+			let data = action.payload.history.sort((a, b) => {
+				return b.ts - a.ts;
+			});
+			return {
+				...state,
+				history: {
+					timestamp: action.payload.timestamp,
+					data,
+				},
+			};
+
 		default:
 			return state;
 	}
@@ -178,6 +195,12 @@ function byId(state = {}, action) {
 		return {};
 	}
 	if (action.type === 'REQUEST_TURNON' || action.type === 'REQUEST_TURNOFF') {
+		return {
+			...state,
+			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
+		};
+	}
+	if (action.type === 'DEVICE_HISTORY') {
 		return {
 			...state,
 			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),

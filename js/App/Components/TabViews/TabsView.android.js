@@ -162,6 +162,7 @@ type Props = {
 	onTabSelect: (string) => void,
 	onToggleEditMode: (string) => void,
 	dispatch: Function,
+	stackNavigator: Object,
 };
 
 type State = {
@@ -270,6 +271,7 @@ class TabsView extends View {
 	};
 
 	render() {
+		let screenProps = { stackNavigator: this.props.stackNavigator };
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
@@ -289,7 +291,7 @@ class TabsView extends View {
 				<View style={{ flex: 1 }}>
 					<Header leftButton={this.menuButton} rightButton={rightButton}/>
 					<View>
-						<Tabs onNavigationStateChange={this.onNavigationStateChange}/>
+						<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange}/>
 						{
 							this.state.settings ? (
 								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
@@ -379,8 +381,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(store) {
+function mapStateToProps(store, ownprops) {
 	return {
+		stackNavigator: ownprops.navigation,
 		tab: store.navigation.tab,
 		userProfile: getUserProfile(store),
 		dashboard: store.dashboard,

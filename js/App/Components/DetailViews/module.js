@@ -20,19 +20,8 @@
  */
 
 'use strict';
-
-import DeviceDetailModal from './DeviceDetailModal';
-import ToggleDeviceDetailModal from './ToggleDeviceDetailModal';
-import BellDeviceDetailModal from './BellDeviceDetailModal';
-import DimmerDeviceDetailModal from './DimmerDeviceDetailModal';
-import NavigationalDeviceDetailModal from './NavigationalDeviceDetailModal';
 import SettingsDetailModal from './SettingsDetailModal';
 
 module.exports = {
-	DeviceDetailModal,
-	ToggleDeviceDetailModal,
-	BellDeviceDetailModal,
-	DimmerDeviceDetailModal,
-	NavigationalDeviceDetailModal,
 	SettingsDetailModal,
 };

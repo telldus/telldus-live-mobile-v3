@@ -28,7 +28,9 @@ type State = {
 	tab: Tab;
 };
 
-const initialState: State = { tab: 'dashboardTab' };
+const initialState: State = {
+	tab: 'dashboardTab',
+};
 
 function navigation(state: State = initialState, action: Action): State {
 	if (action.type === 'SWITCH_TAB') {

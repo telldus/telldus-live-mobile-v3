@@ -7,7 +7,7 @@
 	<item>
 		<bitmap
 			android:gravity="fill"
-			android:src="@mipmap/telldusliveapp_launchscreen_landscape"/>
+			android:src="@drawable/telldusliveapp_launchscreen_landscape"/>
 	</item>
 
 </layer-list>
