@@ -26,6 +26,9 @@ import { REHYDRATE } from 'redux-persist/constants';
 
 import includes from 'lodash/includes';
 import omit from 'lodash/omit';
+import pickBy from 'lodash/pickBy';
+import difference from 'lodash/difference';
+import differenceBy from 'lodash/differenceBy';
 
 const allIds = kind => (state = [], action) => {
 	if (action.type === 'persist/REHYDRATE') {
@@ -44,6 +47,20 @@ const allIds = kind => (state = [], action) => {
 			];
 		}
 		return [...state];
+	}
+	if (action.type === 'RECEIVED_DEVICES' && kind === 'device') {
+		let devices = action.payload.device.map(item => {
+			return parseInt(item.id, 10);
+		});
+		let removedDevices = difference(state, devices);
+		return differenceBy(state, removedDevices);
+	}
+	if (action.type === 'RECEIVED_SENSORS' && kind === 'sensor') {
+		let sensors = action.payload.sensor.map(item => {
+			return parseInt(item.id, 10);
+		});
+		let removedSensors = difference(state, sensors);
+		return differenceBy(state, removedSensors);
 	}
 	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === kind) {
 		if (includes(state, action.id)) {
@@ -83,7 +100,34 @@ const byId = kind => (state = {}, action) => {
 		}
 		return { ...state };
 	}
-
+	if (action.type === 'RECEIVED_DEVICES' && kind === 'device') {
+		let devices = action.payload.device.map(item => {
+			return parseInt(item.id, 10);
+		});
+		let itemsToFilter = Object.keys(state);
+		itemsToFilter = itemsToFilter.map(item => {
+			return parseInt(item, 10);
+		});
+		let removedDevices = difference(itemsToFilter, devices);
+		let newState = pickBy(state, (v, k) => {
+			return removedDevices.indexOf(parseInt(k, 10)) === -1;
+		});
+		return newState;
+	}
+	if (action.type === 'RECEIVED_SENSORS' && kind === 'sensor') {
+		let sensors = action.payload.sensor.map(item => {
+			return parseInt(item.id, 10);
+		});
+		let itemsToFilter = Object.keys(state);
+		itemsToFilter = itemsToFilter.map(item => {
+			return parseInt(item, 10);
+		});
+		let removedSensors = difference(itemsToFilter, sensors);
+		let newState = pickBy(state, (v, k) => {
+			return removedSensors.indexOf(parseInt(k, 10)) === -1;
+		});
+		return newState;
+	}
 	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === kind) {
 		return {
 			...state,

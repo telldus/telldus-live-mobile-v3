@@ -25,10 +25,6 @@
 
 import type { Action, ThunkAction } from './Types';
 
-import LiveApi from 'LiveApi';
-
-import { format } from 'url';
-
 export const showDimmerPopup = (name: string, value: number): Action => ({
 	type: 'SHOW_DIMMER_POPUP',
 	name,
@@ -49,26 +45,3 @@ export const setDimmerValue = (id: number, value: number): ThunkAction => (dispa
 	});
 };
 
-export const updateDimmerValue = (id: number, level: number): ThunkAction => dispatch => {
-	const url = format({
-		pathname: '/device/dim',
-		query: {
-			id,
-			level,
-		},
-	});
-	const payload = {
-		url,
-		requestParams: {
-			method: 'GET',
-		},
-	};
-	return LiveApi(payload).then(response => dispatch({
-		type: 'DEVICE_DIM',
-		deviceId: id,
-		payload: {
-			...payload,
-			...response,
-		},
-	}));
-};

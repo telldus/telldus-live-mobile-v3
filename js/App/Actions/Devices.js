@@ -72,74 +72,26 @@ export function processWebsocketMessageForDevice(action:string, data:Object): Ac
 }
 
 export function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
-	return (dispatch) => {
+
+	return (dispatch, getState) => {
 		const payload = { // $FlowFixMe
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
 			requestParams: {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_SET_STATE',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
-	};
-}
 
-export function turnOn(deviceId: number, isInState: string): ThunkAction {
-	return (dispatch, getState) => {
-		const payload = {
-			url: `/device/turnOn?id=${deviceId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		let { devices } = getState();
-		let device = devices.byId[deviceId];
-		return LiveApi(payload).then(response => {
+		return LiveApi(payload).then(response =>{
 			setTimeout(() => {
+				let { devices } = getState();
+				let device = devices.byId[deviceId];
 				if (device.methodRequested !== '') {
-					getDeviceInfo(deviceId, 'TURNON', isInState, dispatch);
+					getDeviceInfo(deviceId, state, device.isInState, dispatch);
 				}
 			}, 2000);
 		}).catch(error => {
-			dispatch({
-				type: 'GLOBAL_ERROR_SHOW',
-				payload: {
-					source: 'device',
-					deviceId,
-					message: error.message,
-				},
-			});
-			dispatch({
-				type: 'DEVICE_RESET_STATE',
-				deviceId,
-				state: device.isInState,
-			});
-		});
-	};
-}
-
-export function turnOff(deviceId: number, isInState: string): ThunkAction {
-	return (dispatch, getState) => {
-		const payload = {
-			url: `/device/turnOff?id=${deviceId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		let { devices } = getState();
-		let device = devices.byId[deviceId];
-		return LiveApi(payload).then(response => {
-			setTimeout(() => {
-				if (device.methodRequested !== '') {
-					getDeviceInfo(deviceId, 'TURNOFF', isInState, dispatch);
-				}
-			}, 2000);
-		}).catch(error => {
+			let { devices } = getState();
+			let device = devices.byId[deviceId];
 			dispatch({
 				type: 'GLOBAL_ERROR_SHOW',
 				payload: {
@@ -171,95 +123,6 @@ export function requestTurnOff(deviceId: number): Action {
 	};
 }
 
-export function bell(deviceId: number): ThunkAction {
-	return (dispatch) => {
-		const payload = {
-			url: `/device/bell?id=${deviceId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_BELL',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
-	};
-}
-
-export function up(deviceId: number): ThunkAction {
-	return (dispatch) => {
-		const payload = {
-			url: `/device/up?id=${deviceId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_UP',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
-	};
-}
-
-export function down(deviceId: number): ThunkAction {
-	return (dispatch) => {
-		const payload = {
-			url: `/device/down?id=${deviceId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_DOWN',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
-	};
-}
-
-export function stop(deviceId: number): ThunkAction {
-	return (dispatch) => {
-		const payload = {
-			url: `/device/stop?id=${deviceId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_STOP',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
-	};
-}
-
-export function learn(deviceId: number): ThunkAction {
-	return (dispatch) => {
-		const payload = {
-			url: `/device/learn?id=${deviceId}`,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'DEVICE_LEARN',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
-	};
-}
 
 // calculates the from and to timestamp by considering the tzoffset of the client/location.
 function getTimeStamp(tzOffset: number) {
@@ -298,7 +161,7 @@ export function getDeviceHistory(device: Object): ThunkAction {
 	};
 }
 
-export function getDeviceInfo(deviceId: number, requestedState: string, currentState: string, dispatch: Dispatch) {
+export function getDeviceInfo(deviceId: number, requestedState: number, currentState: string, dispatch: Dispatch) {
 	const payload = {
 		url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
 		requestParams: {
@@ -307,6 +170,7 @@ export function getDeviceInfo(deviceId: number, requestedState: string, currentS
 	};
 	return LiveApi(payload).then(response => {
 		let newState = methods[parseInt(response.state, 10)];
+		requestedState = methods[requestedState];
 		if (newState === currentState) {
 			dispatch({
 				type: 'DEVICE_RESET_STATE',
@@ -327,8 +191,9 @@ export function getDeviceInfo(deviceId: number, requestedState: string, currentS
 			dispatch({
 				type: 'DEVICE_SET_STATE',
 				payload: {
-					...payload,
-					...response,
+					deviceId,
+					value: response.stateValue,
+					method: response.state,
 				},
 			});
 		}

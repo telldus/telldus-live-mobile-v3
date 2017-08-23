@@ -27,13 +27,14 @@ import { connect } from 'react-redux';
 import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
-import { bell } from 'Actions_Devices';
+import { deviceSetState } from 'Actions_Devices';
 
 type Props = {
 	onBell: () => void,
 	item: Object,
 	tileWidth: number,
 	style: Object,
+	command: number,
 };
 
 class BellDashboardTile extends View {
@@ -60,7 +61,7 @@ class BellDashboardTile extends View {
 					}]
 				}>
 				<TouchableOpacity
-					onPress={this.props.onBell(this.props.item.id)}
+					onPress={this.props.onBell(this.props.item.id, this.props.command)}
 					style={styles.container}>
 					<View style={styles.body}>
 					  <Icon name="bell" size={44} color="orange" />
@@ -70,6 +71,10 @@ class BellDashboardTile extends View {
 		);
 	}
 }
+
+BellDashboardTile.defaultProps = {
+	command: 4,
+};
 
 const styles = StyleSheet.create({
 	container: {
@@ -89,7 +94,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onBell: id => () => dispatch(bell(id)),
+		onBell: (id, command) => () => dispatch(deviceSetState(id, command)),
 	};
 }
 

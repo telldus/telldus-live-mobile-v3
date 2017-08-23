@@ -26,7 +26,7 @@ import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
-import { down, up, stop } from 'Actions_Devices';
+import { deviceSetState } from 'Actions_Devices';
 
 const UpButton = ({ isEnabled, onPress }) => (
 	<TouchableOpacity
@@ -68,6 +68,9 @@ type Props = {
 	onDown: number => void,
 	onStop: number => void,
 	style: Object,
+	commandUp: number,
+	commandDown: number,
+	commandStop: number,
 };
 
 class NavigationalDashboardTile extends View {
@@ -81,9 +84,9 @@ class NavigationalDashboardTile extends View {
 		const { item, tileWidth } = this.props;
 		const { id, name, supportedMethods } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp(id)} /> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown(id)} /> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop(id)} /> : null;
+		const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp(id, this.props.commandUp)} /> : null;
+		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown(id, this.props.commandDown)} /> : null;
+		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop(id, this.props.commandStop)} /> : null;
 
 		return (
 			<DashboardShadowTile
@@ -102,6 +105,12 @@ class NavigationalDashboardTile extends View {
 		);
 	}
 }
+
+NavigationalDashboardTile.defaultProps = {
+	commandUp: 128,
+	commandDown: 256,
+	commandStop: 512,
+};
 
 const styles = StyleSheet.create({
 	body: {
@@ -126,9 +135,9 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onDown: id => () => dispatch(down(id)),
-		onUp: id => () => dispatch(up(id)),
-		onStop: id => () => dispatch(stop(id)),
+		onDown: (id, command) => () => dispatch(deviceSetState(id, command)),
+		onUp: (id, command) => () => dispatch(deviceSetState(id, command)),
+		onStop: (id, command) => () => dispatch(deviceSetState(id, command)),
 	};
 }
 

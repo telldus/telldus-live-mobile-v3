@@ -24,13 +24,13 @@ import { connect } from 'react-redux';
 
 import { View, RoundedCornerShadowView, Text } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { learn } from 'Actions_Devices';
+import { deviceSetState } from 'Actions_Devices';
 
 class LearnButton extends View {
 	render() {
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
-				<TouchableOpacity onPress={this.props.onLearn(this.props.id)} style={styles.learn}>
+				<TouchableOpacity onPress={this.props.onLearn(this.props.id, this.props.command)} style={styles.learn}>
 					<Text style={styles.text}>
 						{'Learn'}
 					</Text>
@@ -39,6 +39,10 @@ class LearnButton extends View {
 		);
 	}
 }
+
+LearnButton.defaultProps = {
+	command: 32,
+};
 
 const styles = StyleSheet.create({
 	learn: {
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onLearn: id => () => dispatch(learn(id)),
+		onLearn: (id, command) => () => dispatch(deviceSetState(id, command)),
 	};
 }
 

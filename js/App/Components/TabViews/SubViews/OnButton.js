@@ -23,9 +23,16 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
-import { turnOn, requestTurnOn } from 'Actions_Devices';
+import { deviceSetState, requestTurnOn } from 'Actions_Devices';
+
+type Props = {
+	requestTurnOn: number => void,
+	onTurnOn: (number, number) => void,
+};
 
 class OnButton extends View {
+	props: Props;
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -37,7 +44,7 @@ class OnButton extends View {
 
 	onPress() {
 		this.props.requestTurnOn(this.props.id);
-		this.props.onTurnOn(this.props.id, this.props.isInState);
+		this.props.onTurnOn(this.props.id, this.props.command);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -118,15 +125,17 @@ OnButton.propTypes = {
 	enabled: PropTypes.bool,
 	fontSize: PropTypes.number,
 	methodRequested: PropTypes.string,
+	command: PropTypes.number,
 };
 
 OnButton.defaultProps = {
 	enabled: true,
+	command: 1,
 };
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTurnOn: (id, isInState) => dispatch(turnOn(id, isInState)),
+		onTurnOn: (id, command) => dispatch(deviceSetState(id, command)),
 		requestTurnOn: id => dispatch(requestTurnOn(id)),
 		dispatch,
 	};

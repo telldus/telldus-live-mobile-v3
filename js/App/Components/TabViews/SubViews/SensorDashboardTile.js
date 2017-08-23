@@ -71,7 +71,7 @@ class SensorDashboardTile extends View {
 			slideList.push({
 				key: 'temperature',
 				icon: require('../img/sensorIcons/TemperatureLargeGray.png'),
-				text: <FormattedNumber value={item.temperature} maximumFractionDigits={1}
+				text: <FormattedNumber value={item.temperature} maximumFractionDigits={1} minimumFractionDigits={1}
 				                       suffix={`${String.fromCharCode(176)}C`}/>,
 			});
 		}

@@ -26,12 +26,13 @@ import { connect } from 'react-redux';
 
 import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { bell } from 'Actions_Devices';
+import { deviceSetState } from 'Actions_Devices';
 
 type Props = {
 	id: number,
 	onBell: () => void,
 	style: Object,
+	command: number,
 };
 
 class BellButton extends View {
@@ -40,13 +41,17 @@ class BellButton extends View {
 	render() {
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
-				<TouchableOpacity onPress={this.props.onBell(this.props.id)} style={styles.bell}>
+				<TouchableOpacity onPress={this.props.onBell(this.props.id, this.props.command)} style={styles.bell}>
 					<Icon name="bell" size={22} color="orange" />
 				</TouchableOpacity>
 			</RoundedCornerShadowView>
 		);
 	}
 }
+
+BellButton.defaultProps = {
+	command: 4,
+};
 
 const styles = StyleSheet.create({
 	bell: {
@@ -58,7 +63,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onBell: id => () => dispatch(bell(id)),
+		onBell: (id, command) => () => dispatch(deviceSetState(id, command)),
 	};
 }
 

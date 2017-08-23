@@ -29,6 +29,7 @@ import OffButton from './OffButton';
 
 type Props = {
 	device: Object,
+	enabled: Boolean,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 };
