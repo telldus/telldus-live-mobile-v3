@@ -79,6 +79,13 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 				methodRequested: '',
 			};
 
+		case 'REQUEST_DEVICE_ACTION':
+			return {
+				...state,
+				methodRequested: getDeviceStateMethod(action.payload.method),
+				isErrorMessage: false,
+			};
+
 		case 'SET_DIMMER_VALUE':
 			return {
 				...state,
@@ -168,6 +175,12 @@ function byId(state = {}, action) {
 		}, {});
 	}
 	if (action.type === 'DEVICE_SET_STATE') {
+		return {
+			...state,
+			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
+		};
+	}
+	if (action.type === 'REQUEST_DEVICE_ACTION') {
 		return {
 			...state,
 			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),

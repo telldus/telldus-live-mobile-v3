@@ -109,6 +109,16 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 	};
 }
 
+export function requestDeviceAction(deviceId: number, method: number): Action {
+	return {
+		type: 'REQUEST_DEVICE_ACTION',
+		payload: {
+			deviceId,
+			method,
+		},
+	};
+}
+
 export function requestTurnOn(deviceId: number): Action {
 	return {
 		type: 'REQUEST_TURNON',
