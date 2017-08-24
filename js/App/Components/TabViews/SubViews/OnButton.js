@@ -22,8 +22,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestTurnOn } from 'Actions_Devices';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 type Props = {
 	requestTurnOn: number => void,
@@ -35,34 +36,12 @@ class OnButton extends View {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			blinkAnim: new Animated.Value(1),
-		};
 		this.onPress = this.onPress.bind(this);
-		this.animationInterval = null;
 	}
 
 	onPress() {
 		this.props.requestTurnOn(this.props.id);
 		this.props.onTurnOn(this.props.id, this.props.command);
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.methodRequested === 'TURNON') {
-			let that = this;
-			this.animationInterval = setInterval(() => {
-				Animated.timing( that.state.blinkAnim, {
-					toValue: that.state.blinkAnim._value === 0 ? 1 : 0,
-					duration: 300,
-				}).start();
-			}, 350);
-		} else {
-			clearInterval(this.animationInterval);
-		}
-	}
-
-	componentWillUnmount() {
-		clearInterval(this.animationInterval);
 	}
 
 	render() {
@@ -78,9 +57,9 @@ class OnButton extends View {
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNON' ?
-						<Animated.View style={[styles.dot, {opacity: this.state.blinkAnim}]} />
+						<ButtonLoadingIndicator style={styles.dot} />
 						:
-						<View style={{height: 0, width: 0}}/>
+						null
 				}
 			</View>
 		);
@@ -111,11 +90,7 @@ const styles = StyleSheet.create({
 	dot: {
 		position: 'absolute',
 		top: 3,
-		left: 3,
-		height: 8,
-		width: 8,
-		borderRadius: 8,
-		backgroundColor: 'orange',
+		right: 3,
 	},
 });
 

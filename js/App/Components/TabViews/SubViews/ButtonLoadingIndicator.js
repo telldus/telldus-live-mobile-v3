@@ -20,8 +20,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Icon } from 'BaseComponents';
-import { View, Animated } from 'react-native';
+import { Icon, View } from 'BaseComponents';
+import { Animated } from 'react-native';
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 

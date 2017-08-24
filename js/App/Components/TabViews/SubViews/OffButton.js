@@ -22,8 +22,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestTurnOff } from 'Actions_Devices';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 type Props = {
 	requestTurnOff: number => void,
@@ -35,9 +36,6 @@ class OffButton extends View {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			blinkAnim: new Animated.Value(1),
-		};
 		this.onPress = this.onPress.bind(this);
 		this.animationInterval = null;
 	}
@@ -45,24 +43,6 @@ class OffButton extends View {
 	onPress() {
 		this.props.requestTurnOff(this.props.id);
 		this.props.onTurnOff(this.props.id, this.props.command);
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.methodRequested === 'TURNOFF') {
-			let that = this;
-			this.animationInterval = setInterval(() => {
-				Animated.timing( that.state.blinkAnim, {
-					toValue: that.state.blinkAnim._value === 0 ? 1 : 0,
-					duration: 300,
-				}).start();
-			}, 400);
-		} else {
-			clearInterval(this.animationInterval);
-		}
-	}
-
-	componentWillUnmount() {
-		clearInterval(this.animationInterval);
 	}
 
 	render() {
@@ -77,9 +57,9 @@ class OffButton extends View {
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNOFF' ?
-						<Animated.View style={[styles.dot, {opacity: this.state.blinkAnim}]} />
+						<ButtonLoadingIndicator style={styles.dot} />
 						:
-						<View style={{height: 0, width: 0}}/>
+						null
 				}
 			</View>
 		);
@@ -110,11 +90,7 @@ const styles = StyleSheet.create({
 	dot: {
 		position: 'absolute',
 		top: 3,
-		left: 3,
-		height: 8,
-		width: 8,
-		borderRadius: 8,
-		backgroundColor: 'orange',
+		right: 3,
 	},
 });
 
