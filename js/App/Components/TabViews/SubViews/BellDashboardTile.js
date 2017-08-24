@@ -27,10 +27,12 @@ import { connect } from 'react-redux';
 import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
-import { deviceSetState } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 type Props = {
-	onBell: () => void,
+	deviceSetState: (id: number, command: number, value?: number) => void,
+	requestDeviceAction: (id: number, command: number) => void,
 	item: Object,
 	tileWidth: number,
 	style: Object,
@@ -40,12 +42,22 @@ type Props = {
 class BellDashboardTile extends View {
 	props: Props;
 
+	onBell: () => void;
+
 	constructor(props: Props) {
 		super(props);
+
+		this.onBell = this.onBell.bind(this);
+	}
+
+	onBell() {
+		this.props.deviceSetState(this.props.item.id, this.props.command);
+		this.props.requestDeviceAction(this.props.item.id, this.props.command);
 	}
 
 	render() {
 		const { item, tileWidth } = this.props;
+		let {methodRequested} = this.props.item;
 
 		return (
 			<DashboardShadowTile
@@ -61,12 +73,18 @@ class BellDashboardTile extends View {
 					}]
 				}>
 				<TouchableOpacity
-					onPress={this.props.onBell(this.props.item.id, this.props.command)}
+					onPress={this.onBell}
 					style={styles.container}>
 					<View style={styles.body}>
 					  <Icon name="bell" size={44} color="orange" />
 					</View>
 				</TouchableOpacity>
+				{
+					methodRequested === 'BELL' ?
+						<ButtonLoadingIndicator style={styles.dot} />
+						:
+						null
+				}
 			</DashboardShadowTile>
 		);
 	}
@@ -90,11 +108,21 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 7,
 		borderTopRightRadius: 7,
 	},
+	dot: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
+	},
 });
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onBell: (id, command) => () => dispatch(deviceSetState(id, command)),
+		deviceSetState: (id: number, command: number, value?: number) =>{
+			dispatch(deviceSetState(id, command, value));
+		},
+		requestDeviceAction: (id: number, command: number) => {
+			dispatch(requestDeviceAction(id, command));
+		},
 	};
 }
 

@@ -50,7 +50,7 @@ class BellDeviceDetailModal extends View {
 		let bellButton = null;
 
 		if (BELL) {
-			bellButton = <BellButton id={device.id} style={styles.bell} />;
+			bellButton = <BellButton device={device} style={styles.bell} />;
 		}
 
 		return (

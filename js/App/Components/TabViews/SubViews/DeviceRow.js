@@ -71,7 +71,7 @@ class DeviceRow extends View {
 
 		if (BELL) {
 			button = <BellButton
-				id={device.id}
+				device={device}
 				style={styles.bell}
 			/>;
 		} else if (UP || DOWN || STOP) {

@@ -26,11 +26,13 @@ import { connect } from 'react-redux';
 
 import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 type Props = {
-	id: number,
-	onBell: () => void,
+	device: Object,
+	deviceSetState: (id: number, command: number, value?: number) => void,
+	requestDeviceAction: (id: number, command: number) => void,
 	style: Object,
 	command: number,
 };
@@ -38,12 +40,32 @@ type Props = {
 class BellButton extends View {
 	props: Props;
 
+	onBell: () => void;
+
+	constructor(props: Props) {
+		super(props);
+
+		this.onBell = this.onBell.bind(this);
+	}
+
+	onBell() {
+		this.props.deviceSetState(this.props.device.id, this.props.command);
+		this.props.requestDeviceAction(this.props.device.id, this.props.command);
+	}
+
 	render() {
+		let {methodRequested} = this.props.device;
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
-				<TouchableOpacity onPress={this.props.onBell(this.props.id, this.props.command)} style={styles.bell}>
+				<TouchableOpacity onPress={this.onBell} style={styles.bell}>
 					<Icon name="bell" size={22} color="orange" />
 				</TouchableOpacity>
+				{
+					methodRequested === 'BELL' ?
+						<ButtonLoadingIndicator style={styles.dot} />
+						:
+						null
+				}
 			</RoundedCornerShadowView>
 		);
 	}
@@ -59,11 +81,21 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
+	dot: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
+	},
 });
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onBell: (id, command) => () => dispatch(deviceSetState(id, command)),
+		deviceSetState: (id: number, command: number, value?: number) =>{
+			dispatch(deviceSetState(id, command, value));
+		},
+		requestDeviceAction: (id: number, command: number) => {
+			dispatch(requestDeviceAction(id, command));
+		},
 	};
 }
 
