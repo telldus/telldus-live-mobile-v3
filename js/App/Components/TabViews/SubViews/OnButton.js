@@ -23,12 +23,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestTurnOn } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 type Props = {
-	requestTurnOn: number => void,
-	onTurnOn: (number, number) => void,
+	deviceSetState: (id: number, command: number, value?: number) => void,
+	requestDeviceAction: (id: number, command: number) => void,
 };
 
 class OnButton extends View {
@@ -40,8 +40,8 @@ class OnButton extends View {
 	}
 
 	onPress() {
-		this.props.requestTurnOn(this.props.id);
-		this.props.onTurnOn(this.props.id, this.props.command);
+		this.props.requestDeviceAction(this.props.id, this.props.command);
+		this.props.deviceSetState(this.props.id, this.props.command);
 	}
 
 	render() {
@@ -110,9 +110,8 @@ OnButton.defaultProps = {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTurnOn: (id, command) => dispatch(deviceSetState(id, command)),
-		requestTurnOn: id => dispatch(requestTurnOn(id)),
-		dispatch,
+		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
 	};
 }
 

@@ -23,12 +23,12 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestTurnOff } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 type Props = {
-	requestTurnOff: number => void,
-	onTurnOff: (number, number) => void,
+	requestDeviceAction: (id: number, command: number, value?: number) => void,
+	deviceSetState: (id: number, command: number) => void,
 };
 
 class OffButton extends View {
@@ -41,8 +41,8 @@ class OffButton extends View {
 	}
 
 	onPress() {
-		this.props.requestTurnOff(this.props.id);
-		this.props.onTurnOff(this.props.id, this.props.command);
+		this.props.requestDeviceAction(this.props.id, this.props.command);
+		this.props.deviceSetState(this.props.id, this.props.command);
 	}
 
 	render() {
@@ -110,8 +110,8 @@ OffButton.defaultProps = {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onTurnOff: (id, isInState) => dispatch(deviceSetState(id, isInState)),
-		requestTurnOff: id => dispatch(requestTurnOff(id)),
+		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
 		dispatch,
 	};
 }

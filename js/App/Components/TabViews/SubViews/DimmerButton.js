@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { View, RoundedCornerShadowView } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
-import { deviceSetState, requestTurnOn, requestTurnOff } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
@@ -61,12 +61,9 @@ type Props = {
 	onDimmerSlide: number => void,
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
-	onDim: (id: number, command: number, value: number) => void,
 	setScrollEnabled: boolean,
-	onTurnOff: () => void,
-	onTurnOn: () => void,
-	requestTurnOn: () => void,
-	requestTurnOff: () => void,
+	deviceSetState: (id: number, command: number, value?: number) => void,
+	requestDeviceAction: (number, number) => void,
 };
 
 type State = {
@@ -144,7 +141,7 @@ class DimmerButton extends View {
 	}
 
 	onSlidingComplete(sliderValue: number) {
-		this.props.onDim(this.props.device.id, this.props.commandDIM, toDimmerValue(sliderValue));
+		this.props.deviceSetState(this.props.device.id, this.props.commandDIM, toDimmerValue(sliderValue));
 		this.props.hideDimmerPopup();
 	}
 
@@ -165,13 +162,13 @@ class DimmerButton extends View {
 	}
 
 	onTurnOn() {
-		this.props.onTurnOn(this.props.device.id, this.props.commandOn);
-		this.props.requestTurnOn(this.props.device.id);
+		this.props.deviceSetState(this.props.device.id, this.props.commandOn);
+		this.props.requestDeviceAction(this.props.device.id, this.props.commandOn);
 	}
 
 	onTurnOff() {
-		this.props.onTurnOff(this.props.device.id, this.props.commandOFF);
-		this.props.requestTurnOff(this.props.device.id);
+		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
+		this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
 	}
 
 	render() {
@@ -278,11 +275,8 @@ function mapDispatchToProps(dispatch) {
 			dispatch(hideDimmerPopup());
 		},
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-		onDim: (id, command, value) => dispatch(deviceSetState(id, command, value)),
-		onTurnOn: (id, command) => dispatch(deviceSetState(id, command)),
-		onTurnOff: (id, command) => dispatch(deviceSetState(id, command)),
-		requestTurnOn: id => dispatch(requestTurnOn(id)),
-		requestTurnOff: id => dispatch(requestTurnOff(id)),
+		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
 	};
 }
 

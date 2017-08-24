@@ -28,7 +28,7 @@ import { View } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
-import { deviceSetState, requestTurnOn, requestTurnOff } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
@@ -64,11 +64,8 @@ type Props = {
 	onDimmerSlide: number => void,
 	showDimmerPopup: (name:string, sliderValue:number) => void,
 	hideDimmerPopup: () => void,
-	onDim: (id: number, command: number, value: number) => void,
-	onTurnOn: number => void,
-	onTurnOff: number => void,
-	requestTurnOn: number => void,
-	requestTurnOff: number => void,
+	deviceSetState: (id: number, command: number, value?: number) => void,
+	requestDeviceAction: (id: number, command: number) => void,
 	setScrollEnabled: boolean,
 	style: Object,
 };
@@ -150,7 +147,7 @@ class DimmerDashboardTile extends View {
 	}
 
 	onSlidingComplete(sliderValue:number) {
-		this.props.onDim(this.props.item.id, this.props.commandDIM, toDimmerValue(sliderValue));
+		this.props.deviceSetState(this.props.item.id, this.props.commandDIM, toDimmerValue(sliderValue));
 		this.props.hideDimmerPopup();
 	}
 
@@ -171,13 +168,13 @@ class DimmerDashboardTile extends View {
 	}
 
 	onTurnOn() {
-		this.props.onTurnOn(this.props.item.id, this.props.commandOn);
-		this.props.requestTurnOn(this.props.item.id);
+		this.props.deviceSetState(this.props.item.id, this.props.commandOn);
+		this.props.requestDeviceAction(this.props.item.id, this.props.commandOn);
 	}
 
 	onTurnOff() {
-		this.props.onTurnOff(this.props.item.id, this.props.commandOFF);
-		this.props.requestTurnOff(this.props.item.id);
+		this.props.deviceSetState(this.props.item.id, this.props.commandOFF);
+		this.props.requestDeviceAction(this.props.item.id, this.props.commandOFF);
 	}
 
 	render() {
@@ -265,10 +262,8 @@ function mapDispatchToProps(dispatch) {
 		},
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
 		onDim: (id, command, value) => dispatch(deviceSetState(id, command, value)),
-		onTurnOn: (id, command) => dispatch(deviceSetState(id, command)),
-		onTurnOff: (id, command) => dispatch(deviceSetState(id, command)),
-		requestTurnOn: id => dispatch(requestTurnOn(id)),
-		requestTurnOff: id => dispatch(requestTurnOff(id)),
+		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
 	};
 }
 
