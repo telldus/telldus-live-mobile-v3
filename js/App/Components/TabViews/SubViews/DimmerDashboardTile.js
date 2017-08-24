@@ -261,7 +261,6 @@ function mapDispatchToProps(dispatch) {
 			dispatch(hideDimmerPopup());
 		},
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-		onDim: (id, command, value) => dispatch(deviceSetState(id, command, value)),
 		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
 		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
 	};

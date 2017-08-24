@@ -119,20 +119,6 @@ export function requestDeviceAction(deviceId: number, method: number): Action {
 	};
 }
 
-export function requestTurnOn(deviceId: number): Action {
-	return {
-		type: 'REQUEST_TURNON',
-		payload: { deviceId },
-	};
-}
-
-export function requestTurnOff(deviceId: number): Action {
-	return {
-		type: 'REQUEST_TURNOFF',
-		payload: { deviceId },
-	};
-}
-
 
 // calculates the from and to timestamp by considering the tzoffset of the client/location.
 function getTimeStamp(tzOffset: number) {
