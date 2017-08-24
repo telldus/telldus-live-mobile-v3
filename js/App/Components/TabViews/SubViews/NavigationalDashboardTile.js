@@ -26,9 +26,11 @@ import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
-import { deviceSetState } from 'Actions_Devices';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
-const UpButton = ({ isEnabled, onPress }) => (
+import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+
+const UpButton = ({ isEnabled, onPress, methodRequested }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -36,10 +38,16 @@ const UpButton = ({ isEnabled, onPress }) => (
 		      size={42}
 		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
 		/>
+		{
+			methodRequested === 'UP' ?
+				<ButtonLoadingIndicator style={styles.dot} />
+				:
+				null
+		}
 	</TouchableOpacity>
 );
 
-const DownButton = ({ isEnabled, onPress }) => (
+const DownButton = ({ isEnabled, onPress, methodRequested }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -47,10 +55,16 @@ const DownButton = ({ isEnabled, onPress }) => (
 		      size={42}
 		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
 		/>
+		{
+			methodRequested === 'DOWN' ?
+				<ButtonLoadingIndicator style={styles.dot} />
+				:
+				null
+		}
 	</TouchableOpacity>
 );
 
-const StopButton = ({ isEnabled, onPress }) => (
+const StopButton = ({ isEnabled, onPress, methodRequested }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -58,6 +72,12 @@ const StopButton = ({ isEnabled, onPress }) => (
 		      size={30}
 		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
 		/>
+		{
+			methodRequested === 'STOP' ?
+				<ButtonLoadingIndicator style={styles.dot} />
+				:
+				null
+		}
 	</TouchableOpacity>
 );
 
@@ -71,22 +91,45 @@ type Props = {
 	commandUp: number,
 	commandDown: number,
 	commandStop: number,
+	deviceSetState: (id: number, command: number, value?: number) => void,
+	requestDeviceAction: (id: number, command: number) => void,
 };
 
 class NavigationalDashboardTile extends View {
 	props: Props;
 
+	onUp: (number) => void;
+	onDown: (number) => void;
+	onStop: (number) => void;
+
 	constructor(props: Props) {
 		super(props);
+
+		this.onUp = this.onUp.bind(this);
+		this.onDown = this.onDown.bind(this);
+		this.onStop = this.onStop.bind(this);
+	}
+
+	onUp() {
+		this.props.requestDeviceAction(this.props.item.id, this.props.commandUp);
+		this.props.deviceSetState(this.props.item.id, this.props.commandUp);
+	}
+	onDown() {
+		this.props.requestDeviceAction(this.props.item.id, this.props.commandDown);
+		this.props.deviceSetState(this.props.item.id, this.props.commandDown);
+	}
+	onStop() {
+		this.props.requestDeviceAction(this.props.item.id, this.props.commandStop);
+		this.props.deviceSetState(this.props.item.id, this.props.commandStop);
 	}
 
 	render() {
 		const { item, tileWidth } = this.props;
-		const { id, name, supportedMethods } = item;
+		const { name, supportedMethods } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true} onPress={this.props.onUp(id, this.props.commandUp)} /> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.props.onDown(id, this.props.commandDown)} /> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.props.onStop(id, this.props.commandStop)} /> : null;
+		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} /> : null;
+		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} /> : null;
+		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} /> : null;
 
 		return (
 			<DashboardShadowTile
@@ -131,13 +174,17 @@ const styles = StyleSheet.create({
 	buttonDisabled: {
 		color: '#eeeeee',
 	},
+	dot: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
+	},
 });
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onDown: (id, command) => () => dispatch(deviceSetState(id, command)),
-		onUp: (id, command) => () => dispatch(deviceSetState(id, command)),
-		onStop: (id, command) => () => dispatch(deviceSetState(id, command)),
+		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
 	};
 }
 

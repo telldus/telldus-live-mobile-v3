@@ -27,9 +27,11 @@ import { connect } from 'react-redux';
 import { Icon, View, RoundedCornerShadowView } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { deviceSetState } from 'Actions_Devices';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
-const UpButton = ({ supportedMethod, onPress }) => (
+import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+
+const UpButton = ({ supportedMethod, onPress, methodRequested }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -38,54 +40,95 @@ const UpButton = ({ supportedMethod, onPress }) => (
 			      color: supportedMethod ? '#1a355b' : '#eeeeee',
 		      }}
 		/>
+		{
+			methodRequested === 'UP' ?
+				<ButtonLoadingIndicator style={styles.dot} />
+				:
+				null
+		}
 	</TouchableOpacity>
 );
 
-const DownButton = ({ supportedMethod, onPress }) => (
+const DownButton = ({ supportedMethod, onPress, methodRequested }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="caret-down" size={30}
 			style={supportedMethod ? styles.enabled : styles.disabled}
 		/>
+		{
+			methodRequested === 'DOWN' ?
+				<ButtonLoadingIndicator style={styles.dot} />
+				:
+				null
+		}
 	</TouchableOpacity>
 );
 
-const StopButton = ({ supportedMethod, onPress }) => (
+const StopButton = ({ supportedMethod, onPress, methodRequested }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
 		<Icon name="stop" size={20}
 			style={supportedMethod ? styles.enabled : styles.disabled}
 		/>
+		{
+			methodRequested === 'STOP' ?
+				<ButtonLoadingIndicator style={styles.dot} />
+				:
+				null
+		}
 	</TouchableOpacity>
 );
 
 type Props = {
 	device: Object,
-	onUp: number => void,
-	onDown: number => void,
-	onStop: number => void,
 	style: Object,
 	commandUp: number,
 	commandDown: number,
 	commandStop: number,
+	deviceSetState: (id: number, command: number, value?: number) => void,
+	requestDeviceAction: (id: number, command: number) => void,
 };
 
 class NavigationalButton extends View {
 	props: Props;
 
+	onUp: (number) => void;
+	onDown: (number) => void;
+	onStop: (number) => void;
+
+	constructor(props: Props) {
+		super(props);
+
+		this.onUp = this.onUp.bind(this);
+		this.onDown = this.onDown.bind(this);
+		this.onStop = this.onStop.bind(this);
+	}
+
+	onUp() {
+		this.props.requestDeviceAction(this.props.device.id, this.props.commandUp);
+		this.props.deviceSetState(this.props.device.id, this.props.commandUp);
+	}
+	onDown() {
+		this.props.requestDeviceAction(this.props.device.id, this.props.commandDown);
+		this.props.deviceSetState(this.props.device.id, this.props.commandDown);
+	}
+	onStop() {
+		this.props.requestDeviceAction(this.props.device.id, this.props.commandStop);
+		this.props.deviceSetState(this.props.device.id, this.props.commandStop);
+	}
+
 	render() {
 		const noop = function () {
 		};
 		const { UP, DOWN, STOP } = this.props.device.supportedMethods;
-		const id = this.props.device.id;
 
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
-				<UpButton supportedMethod={UP} onPress={UP ? this.props.onUp(id, this.props.commandUp) : noop} />
-				<DownButton supportedMethod={DOWN} onPress={DOWN ? this.props.onDown(id, this.props.commandDown) : noop} />
-				<StopButton supportedMethod={STOP} onPress={STOP ? this.props.onStop(id, this.props.commandStop) : noop} />
+				<UpButton supportedMethod={UP} methodRequested={this.props.device.methodRequested} onPress={UP ? this.onUp : noop} />
+				<DownButton supportedMethod={DOWN} methodRequested={this.props.device.methodRequested} onPress={DOWN ? this.onDown : noop} />
+				<StopButton supportedMethod={STOP} methodRequested={this.props.device.methodRequested} onPress={STOP ? this.onStop : noop} />
 			</RoundedCornerShadowView>
 		);
 	}
@@ -109,13 +152,17 @@ const styles = StyleSheet.create({
 	disabled: {
 		color: '#eeeeee',
 	},
+	dot: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
+	},
 });
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onDown: (id, command) =>() => dispatch(deviceSetState(id, command)),
-		onUp: (id, command) => () => dispatch(deviceSetState(id, command)),
-		onStop: (id, command) => () => dispatch(deviceSetState(id, command)),
+		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
 	};
 }
 
