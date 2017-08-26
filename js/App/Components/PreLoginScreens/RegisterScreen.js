@@ -226,7 +226,7 @@ class RegisterScreen extends View {
 				</View>
 				<TouchableButton
 					style={styles.formSubmit}
-					onPress={this.onFormSubmit}
+					onPress={this.props.showModal ? () => {} : this.onFormSubmit}
 					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 				/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
