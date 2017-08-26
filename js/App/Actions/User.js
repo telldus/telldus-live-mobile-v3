@@ -128,22 +128,24 @@ export const RegisterUser = (email: String, firstName: String, lastName: String)
 			body: formData,
 		}
 	)
-	.then((response) => response.json())
-	.then((responseData) => {
-		if (responseData.error) {
-			throw responseData;
-		}
-		dispatch({
-			type: 'USER_REGISTER',
-			accessToken: responseData,
+		.then((response) => response.json())
+		.then((responseData) => {
+			if (responseData.error) {
+				throw responseData;
+			}
+			dispatch({
+				type: 'USER_REGISTER',
+				accessToken: responseData,
+			});
+		}).catch(e => {
+			let data = !e.error_description && e.message === 'Network request failed' ?
+				'Network request failed. Check your internet connection' : e.error_description ?
+					e.error_description : e.error ? e.error : 'Unknown Error, Please try again later.';
+			dispatch({
+				type: 'REQUEST_MODAL_OPEN',
+				payload: {
+					data,
+				},
+			});
 		});
-	}).catch(e => {
-		let data = !e.error_description && e.message === 'Network request failed'
-		? 'Network request failed. Check your internet connection' : e.error ? e.error :
-		e.error_description ? e.error_description : 'Unknown Error, Please try again later.';
-		dispatch({
-			type: 'REQUEST_MODAL_OPEN',
-			payload: data,
-		});
-	});
 };

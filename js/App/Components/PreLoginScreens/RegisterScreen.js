@@ -137,7 +137,9 @@ class RegisterScreen extends View {
 	showModal(data) {
 		this.props.dispatch({
 			type: 'REQUEST_MODAL_OPEN',
-			payload: data,
+			payload: {
+				data,
+			},
 		});
 	}
 
