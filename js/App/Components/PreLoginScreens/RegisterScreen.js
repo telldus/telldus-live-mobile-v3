@@ -108,7 +108,7 @@ class RegisterScreen extends View {
 		});
 	}
 
-	onFormSubmit() {
+	onFormSubmit() { console.log('test press');
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
 		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
 			let isConfirmEmailValid = this.validateEmail(cem);
@@ -144,6 +144,7 @@ class RegisterScreen extends View {
 	}
 
 	goBackToLogin() {
+		this._closeModal();
 		this.props.navigation.navigate('Login');
 	}
 
