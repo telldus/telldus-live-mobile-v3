@@ -116,10 +116,10 @@ export default class Modal extends Component {
 		});
 		return (
 			<Animated.View style={[ this.props.modalStyle, {transform: [
-					{scale: scaleAnim }], opacity: opacityAnim,
+				{scale: scaleAnim }], opacity: opacityAnim,
 			}]}>
-					{this.props.children}
-				</Animated.View>
+				{this.props.children}
+			</Animated.View>
 		);
 	}
 }

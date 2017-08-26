@@ -108,7 +108,7 @@ class RegisterScreen extends View {
 		});
 	}
 
-	onFormSubmit() { console.log('test press');
+	onFormSubmit() {
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
 		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
 			let isConfirmEmailValid = this.validateEmail(cem);
@@ -226,7 +226,7 @@ class RegisterScreen extends View {
 				</View>
 				<TouchableButton
 					style={styles.formSubmit}
-					onPress={this.props.showModal ? () => {} : this.onFormSubmit}
+					onPress={this.props.showModal ? null : this.onFormSubmit}
 					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 				/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
