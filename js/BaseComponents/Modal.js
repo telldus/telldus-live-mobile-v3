@@ -27,85 +27,111 @@ import { Animated, Easing } from 'react-native';
 type Props = {
 	showModal: any,
 	children: any,
+	entry?: string,
+	exit?: string,
+	entryDuration?: number,
+	exitDuration?: number,
 }
+
 export default class Modal extends Component {
 	_closeModal: () => void;
+	_openModal: () => void;
 	animatedScale: any;
 	animatedOpacity: any;
 
+	static defaultProps: Object;
 	props : Props;
+
 	constructor(props: Props) {
 		super(props);
 
 		this._closeModal = this._closeModal.bind(this);
+		this._openModal = this._openModal.bind(this);
 
 		this.animatedScale = new Animated.Value(0.01);
 		this.animatedOpacity = new Animated.Value(0);
 	}
 
-	_openModal() {
+	_openModal(duration) {
 		Animated.parallel([
-			this._startOpacity(),
-			this._startScale(),
+			this._startOpacity(duration),
+			this._startScale(duration),
 		]).start();
 	}
 
-	_startScale() {
+	_closeModal(duration) {
+		Animated.parallel([
+			this._stopOpacity(duration),
+			this._stopScale(duration),
+		]).start();
+	}
+
+	_startScale(duration) {
 		Animated.timing(this.animatedScale,
 			{
 				toValue: 1,
-				duration: 300,
+				duration: duration,
 				easing: Easing.easeOutBack,
 			}).start();
 	}
 
-	_stopScale() {
+	_stopScale(duration) {
 		Animated.timing(this.animatedScale,
 			{
 				toValue: 0.01,
-				duration: 200,
+				duration: duration,
 				easing: Easing.easeOutBack,
 			}).start();
 	}
 
-	_startOpacity() {
+	_startOpacity(duration) {
 		Animated.timing(this.animatedScale,
 			{
 				toValue: 1,
-				duration: 300,
+				duration: duration,
 			}).start();
 	}
 
-	_stopOpacity() {
+	_stopOpacity(duration) {
 		Animated.timing(this.animatedScale,
 			{
 				toValue: 0,
-				duration: 200,
+				duration: duration,
 			}).start();
-	}
-
-	_closeModal() {
-		Animated.parallel([
-			this._stopOpacity(),
-			this._stopScale(),
-		]).start();
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.showModal) {
 			this.animatedOpacity.setValue(0);
 			this.animatedScale.setValue(0.01);
-			this._openModal();
+			let entryAnimationType = this.handleAnimationEntryType(nextProps.entry);
+			entryAnimationType(nextProps.entryDuration);
 		}
 		if (!nextProps.showModal) {
-			this._closeModal();
+			let exitAnimationType = this.handleAnimationExitType(nextProps.exit);
+			exitAnimationType(nextProps.exitDuration);
+		}
+	}
+
+	handleAnimationEntryType(type?: string) {
+		switch (type) {
+			case 'ZoomIn':
+				return this._openModal;
+			default:
+				return this._openModal;
+		}
+	}
+
+	handleAnimationExitType(type?: string) {
+		switch (type) {
+			case 'ZoomOut':
+				return this._closeModal;
+			default:
+				return this._closeModal;
 		}
 	}
 
 	render() {
-		if (!this.props.showModal) {
-			return null;
-		}
 		const scaleAnim = this.animatedScale.interpolate({
 			inputRange: [0, 1],
 			outputRange: [0, 1],
@@ -123,3 +149,8 @@ export default class Modal extends Component {
 		);
 	}
 }
+
+Modal.defaultProps = {
+	entryDuration: 500,
+	exitDuration: 500,
+};
