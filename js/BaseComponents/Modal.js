@@ -121,7 +121,7 @@ export default class Modal extends Component {
 
 	onClose(nextProps: Object) {
 		if (nextProps.onClose) {
-			if (typeof nextProps.onClose === 'function') { console.log('test in');
+			if (typeof nextProps.onClose === 'function') {
 				nextProps.onClose();
 			} else {
 				console.warn('Invalid Prop Passed : onClose expects a Function.');
