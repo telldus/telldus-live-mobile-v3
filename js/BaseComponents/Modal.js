@@ -31,11 +31,15 @@ type Props = {
 	exit?: string,
 	entryDuration?: number,
 	exitDuration?: number,
+	onOpen?: () => void,
+	onClose?: () => void,
 }
 
 export default class Modal extends Component {
 	_closeModal: () => void;
 	_openModal: () => void;
+	onOpen: () => void;
+	onClose: () => void;
 	animatedScale: any;
 	animatedOpacity: any;
 
@@ -52,21 +56,21 @@ export default class Modal extends Component {
 		this.animatedOpacity = new Animated.Value(0);
 	}
 
-	_openModal(duration) {
+	_openModal(duration?: number) {
 		Animated.parallel([
 			this._startOpacity(duration),
 			this._startScale(duration),
 		]).start();
 	}
 
-	_closeModal(duration) {
+	_closeModal(duration?: number) {
 		Animated.parallel([
 			this._stopOpacity(duration),
 			this._stopScale(duration),
 		]).start();
 	}
 
-	_startScale(duration) {
+	_startScale(duration?: number) {
 		Animated.timing(this.animatedScale,
 			{
 				toValue: 1,
@@ -75,7 +79,7 @@ export default class Modal extends Component {
 			}).start();
 	}
 
-	_stopScale(duration) {
+	_stopScale(duration?: number) {
 		Animated.timing(this.animatedScale,
 			{
 				toValue: 0.01,
@@ -84,7 +88,7 @@ export default class Modal extends Component {
 			}).start();
 	}
 
-	_startOpacity(duration) {
+	_startOpacity(duration?: number) {
 		Animated.timing(this.animatedScale,
 			{
 				toValue: 1,
@@ -92,7 +96,7 @@ export default class Modal extends Component {
 			}).start();
 	}
 
-	_stopOpacity(duration) {
+	_stopOpacity(duration?: number) {
 		Animated.timing(this.animatedScale,
 			{
 				toValue: 0,
@@ -101,15 +105,29 @@ export default class Modal extends Component {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.showModal) {
+		if (nextProps.showModal && !this.props.showModal) {
+			this.onOpen();
 			this.animatedOpacity.setValue(0);
 			this.animatedScale.setValue(0.01);
 			let entryAnimationType = this.handleAnimationEntryType(nextProps.entry);
 			entryAnimationType(nextProps.entryDuration);
 		}
-		if (!nextProps.showModal) {
+		if (!nextProps.showModal && this.props.showModal) {
+			this.onClose();
 			let exitAnimationType = this.handleAnimationExitType(nextProps.exit);
 			exitAnimationType(nextProps.exitDuration);
+		}
+	}
+
+	onClose() {
+		if (this.props.onClose) {
+			this.props.onClose();
+		}
+	}
+
+	onOpen() {
+		if (this.props.onOpen) {
+			this.props.onOpen();
 		}
 	}
 
@@ -137,8 +155,8 @@ export default class Modal extends Component {
 			outputRange: [0, 1],
 		});
 		const opacityAnim = this.animatedScale.interpolate({
-			inputRange: [0, 1],
-			outputRange: [0, 1],
+			inputRange: [0, 0.2, 0.5, 1],
+			outputRange: [0, 0.5, 1, 1],
 		});
 		return (
 			<Animated.View style={[ this.props.modalStyle, {transform: [
