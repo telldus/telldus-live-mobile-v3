@@ -53,7 +53,8 @@ class RegisterScreen extends View {
 	onConfirmEmailChange: (string) => void;
 	onFormSubmit: () => void;
 	goBackToLogin: () => void;
-	_closeModal: () => void;
+	closeModal: () => void;
+	onModalOpen: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -72,15 +73,19 @@ class RegisterScreen extends View {
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
-		this._closeModal = this._closeModal.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+		this.onModalOpen = this.onModalOpen.bind(this);
 	}
 
-	_closeModal() {
-		this.setState({
-			isLoading: false,
-		});
+	closeModal() {
 		this.props.dispatch({
 			type: 'REQUEST_MODAL_CLOSE',
+		});
+	}
+
+	onModalOpen() {
+		this.setState({
+			isLoading: false,
 		});
 	}
 
@@ -144,7 +149,7 @@ class RegisterScreen extends View {
 	}
 
 	goBackToLogin() {
-		this._closeModal();
+		this.closeModal();
 		this.props.navigation.navigate('Login');
 	}
 
@@ -237,8 +242,15 @@ class RegisterScreen extends View {
 					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 				/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
-				<Modal modalStyle={styles.notificationModal} showModal={this.props.showModal}>
-					<NotificationComponent text={this.props.validationMessage} onPress={this._closeModal} />
+				<Modal
+					modalStyle={styles.notificationModal}
+					entry= "ZoomIn"
+					exit= "ZoomOut"
+					entryDuration= {300}
+					exitDuration= {100}
+					onOpen= {this.onModalOpen}
+					showModal={this.props.showModal}>
+					<NotificationComponent text={this.props.validationMessage} onPress={this.closeModal} />
 				</Modal>
 			</FormContainerComponent>
 		);
