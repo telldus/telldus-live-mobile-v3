@@ -36,10 +36,10 @@ type Props = {
 }
 
 export default class Modal extends Component {
-	_closeModal: () => void;
-	_openModal: () => void;
-	onOpen: () => void;
-	onClose: () => void;
+	_closeModal: (duration?: number) => void;
+	_openModal: (duration?: number) => void;
+	onOpen: (nextProps: Object) => void;
+	onClose: (nextProps: Object) => void;
 	animatedScale: any;
 	animatedOpacity: any;
 
@@ -106,28 +106,36 @@ export default class Modal extends Component {
 
 	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.showModal && !this.props.showModal) {
-			this.onOpen();
+			this.onOpen(nextProps);
 			this.animatedOpacity.setValue(0);
 			this.animatedScale.setValue(0.01);
 			let entryAnimationType = this.handleAnimationEntryType(nextProps.entry);
 			entryAnimationType(nextProps.entryDuration);
 		}
 		if (!nextProps.showModal && this.props.showModal) {
-			this.onClose();
+			this.onClose(nextProps);
 			let exitAnimationType = this.handleAnimationExitType(nextProps.exit);
 			exitAnimationType(nextProps.exitDuration);
 		}
 	}
 
-	onClose() {
-		if (this.props.onClose) {
-			this.props.onClose();
+	onClose(nextProps: Object) {
+		if (nextProps.onClose) {
+			if (typeof nextProps.onClose === 'function') { console.log('test in');
+				nextProps.onClose();
+			} else {
+				console.warn('Invalid Prop Passed : onClose expects a Function.');
+			}
 		}
 	}
 
-	onOpen() {
-		if (this.props.onOpen) {
-			this.props.onOpen();
+	onOpen(nextProps: Object) {
+		if (nextProps.onOpen) {
+			if (typeof nextProps.onOpen === 'function') {
+				nextProps.onOpen();
+			} else {
+				console.warn('Invalid Prop Passed : onOpen expects a Function.');
+			}
 		}
 	}
 
