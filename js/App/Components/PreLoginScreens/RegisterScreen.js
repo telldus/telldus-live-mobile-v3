@@ -163,6 +163,13 @@ class RegisterScreen extends View {
 		}
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
+			return false;
+		}
+		return true;
+	}
+
 	render() {
 		return (
 			<FormContainerComponent headerText="Create Account">
