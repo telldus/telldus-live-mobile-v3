@@ -286,7 +286,9 @@ function mapDispatchToProps(dispatch) {
 		onOriginPress: (data) => {
 			dispatch({
 				type: 'REQUEST_MODAL_OPEN',
-				payload: data,
+				payload: {
+					data,
+				},
 			});
 		},
 	};
