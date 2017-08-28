@@ -22,14 +22,14 @@
 'use strict';
 
 import React from 'react';
-import { Dimensions, StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { View, Text, TouchableButton } from 'BaseComponents';
 import {FormContainerComponent} from 'PreLoginScreen_SubViews';
 
-const deviceWidth = Dimensions.get('window').width;
+import Theme from 'Theme';
 
 type Props = {
 	navigation: Object,
@@ -69,10 +69,10 @@ export default class RegisterScreen extends View {
 	render() {
 		return (
 			<FormContainerComponent headerText="Forgot Password">
-				<View style={styles.textFieldCover}>
-					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+				<View style={Theme.Styles.textFieldCover}>
+					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={styles.formField}
+						style={Theme.Styles.textField}
 						onChangeText={this.onEmailChange}
 						onBlur={this.onEmailBlur}
 						placeholder="your@emailaddress.com"
@@ -84,17 +84,13 @@ export default class RegisterScreen extends View {
 						defaultValue={this.state.email}
 					/>
 				</View>
-				<Text style={{
-					height: 16,
-					width: deviceWidth,
-					textAlign: 'center',
-					color: '#f00',
-				}}>{this.state.validationMessage}</Text>
+				<View style={{ height: 10 }}/>
 				<TouchableButton
-					style={styles.formSubmit}
+					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? 'SENDING...' : 'SEND PASSWORD'}
 				/>
+				<View style={{ height: 10 }}/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> Back to Login </Text>
 			</FormContainerComponent>
 		);
@@ -102,42 +98,8 @@ export default class RegisterScreen extends View {
 }
 
 const styles = StyleSheet.create({
-	textFieldCover: {
-		height: 50,
-		width: deviceWidth * 0.7,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	iconAccount: {
-		top: 15,
-		left: 2,
-		position: 'absolute',
-	},
-	iconEmail: {
-		top: 18,
-		left: 3,
-		position: 'absolute',
-	},
-	formField: {
-		paddingLeft: 35,
-		paddingTop: 10,
-		minWidth: 200,
-		borderRadius: 3,
-
-		height: 40,
-		width: deviceWidth * 0.7,
-		fontSize: 14,
-		color: '#ffffff80',
-		textAlign: 'left',
-	},
-	formSubmit: {
-		height: 50,
-		width: 180,
-		borderRadius: 50,
-	},
 	accountExist: {
 		marginTop: 10,
-		color: '#ffffff80',
+		color: '#bbb',
 	},
 });
