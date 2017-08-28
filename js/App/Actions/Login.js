@@ -23,59 +23,64 @@
 
 'use strict';
 
+import axios from 'axios';
 import type { Action, ThunkAction } from './Types';
 import { apiServer } from 'Config';
-import { publicKey, privateKey } from 'Config';
+import { publicKey, privateKey, authenticationTimeOut } from 'Config';
 import { Answers } from 'react-native-fabric';
 
 import LiveApi from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
-// TODO: rewrite into proper ThunkAction that does its own dispatching
-async function loginToTelldus(username:string, password:string): Promise<Action> {
-
-	return new Promise((resolve, reject) => {
-		fetch(
-			`${apiServer}/oauth2/accessToken`,
-			{
-				method: 'POST',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					'client_id': publicKey,
-					'client_secret': privateKey,
-					'grant_type': 'password',
-					'username': username,
-					'password': password,
-				}),
-			}
-		)
-			.then((response) => response.json())
-			.then((responseData) => {
-				if (responseData.error) {
-					throw responseData;
-				}
+const loginToTelldus = (username:string, password:string): ThunkAction => (dispatch, getState) => {
+	axios({
+		method: 'post',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		},
+		timeout: authenticationTimeOut,
+		url: `${apiServer}/oauth2/accessToken`,
+		data: {
+			'client_id': publicKey,
+			'client_secret': privateKey,
+			'grant_type': 'password',
+			'username': username,
+			'password': password,
+		},
+	  })
+		.then(response => {
+			if (response.status === 200) {
 				Answers.logLogin('Password', true);
-				resolve({
+				dispatch({
 					type: 'RECEIVED_ACCESS_TOKEN',
-					accessToken: responseData,
+					accessToken: response.data,
 				});
-			})
-			.catch((e) => {
-				Answers.logLogin('Password', false);
-				reject({
-					type: 'ERROR',
-					message: {
-						...e,
-						error_description: !e.error_description && e.message === 'Network request failed'
-							? 'Network request failed. Check your internet connection' : e.error_description,
-					},
-				});
-			});
-	});
+			}
+		})
+		.catch(error => {
+			Answers.logLogin('Password', false);
+			if (error.response) {
+				let errorMessage = error.response.data.error_description ?
+					error.response.data.error_description : error.response.data.error ?
+						error.response.data.error : 'Unknown Error, Please try again later.';
+				dispatch(showLoginError(errorMessage));
+			} else if (error.request) {
+				let errorMessage = !error.status && error.request._timedOut ? 'Timed out, try again?' : 'Network request failed. Check your internet connection';
+				dispatch(showLoginError(errorMessage));
+			} else {
+				dispatch(showLoginError(error.message));
+			}
+		});
+};
 
+function showLoginError(errorMessage: string): Action {
+	return {
+		type: 'REQUEST_MODAL_OPEN',
+		payload: {
+			data: errorMessage,
+		},
+	};
 }
 
 function updateAccessToken(accessToken:Object): Action {
