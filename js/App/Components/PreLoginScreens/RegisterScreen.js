@@ -164,7 +164,7 @@ class RegisterScreen extends View {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.registeredCredential) {
+		if (nextProps.registeredCredential && nextProps.screenProps.currentScreen !== 'Welcome') {
 			nextProps.navigation.navigate('Welcome');
 		}
 	}
