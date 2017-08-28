@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { Dimensions, StyleSheet, TextInput } from 'react-native';
+import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -32,7 +32,8 @@ import {FormContainerComponent, NotificationComponent} from 'PreLoginScreen_SubV
 
 import {RegisterUser} from 'Actions_User';
 
-const deviceWidth = Dimensions.get('window').width;
+import StyleSheet from 'StyleSheet';
+import Theme from 'Theme';
 
 type Props = {
 	navigation: Object,
@@ -178,10 +179,10 @@ class RegisterScreen extends View {
 	render() {
 		return (
 			<FormContainerComponent headerText="Create Account">
-				<View style={styles.textFieldCover}>
-					<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
+				<View style={Theme.Styles.textFieldCover}>
+					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
-						style={styles.formField}
+						style={Theme.Styles.textField}
 						onChangeText={this.onFirstNameChange}
 						placeholder="First Name"
 						autoCapitalize="none"
@@ -192,10 +193,10 @@ class RegisterScreen extends View {
 						defaultValue={this.state.firstName}
 					/>
 				</View>
-				<View style={styles.textFieldCover}>
-					<Icon name="account" style={styles.iconAccount} size={18} color="#ffffff80"/>
+				<View style={Theme.Styles.textFieldCover}>
+					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
-						style={styles.formField}
+						style={Theme.Styles.textField}
 						onChangeText={this.onLastNameChange}
 						placeholder="Last Name"
 						autoCapitalize="none"
@@ -206,10 +207,10 @@ class RegisterScreen extends View {
 						defaultValue={this.state.lastName}
 					/>
 				</View>
-				<View style={styles.textFieldCover}>
-					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+				<View style={Theme.Styles.textFieldCover}>
+					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={styles.formField}
+						style={Theme.Styles.textField}
 						onChangeText={this.onEmailChange}
 						placeholder="Email Address"
 						keyboardType="email-address"
@@ -221,10 +222,10 @@ class RegisterScreen extends View {
 						defaultValue={this.state.email}
 					/>
 				</View>
-				<View style={styles.textFieldCover}>
-					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+				<View style={Theme.Styles.textFieldCover}>
+					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={styles.formField}
+						style={Theme.Styles.textField}
 						onChangeText={this.onConfirmEmailChange}
 						placeholder="Confirm Email Address"
 						keyboardType="email-address"
@@ -237,13 +238,13 @@ class RegisterScreen extends View {
 					/>
 				</View>
 				<TouchableButton
-					style={styles.formSubmit}
+					style={Theme.Styles.submitButton}
 					onPress={this.props.showModal ? null : this.onFormSubmit}
 					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
 				/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
 				<Modal
-					modalStyle={styles.notificationModal}
+					modalStyle={Theme.Styles.notificationModal}
 					entry= "ZoomIn"
 					exit= "ZoomOut"
 					entryDuration= {300}
@@ -258,51 +259,9 @@ class RegisterScreen extends View {
 }
 
 const styles = StyleSheet.create({
-	textFieldCover: {
-		height: 50,
-		width: deviceWidth * 0.7,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	iconAccount: {
-		top: 15,
-		left: 2,
-		position: 'absolute',
-	},
-	iconEmail: {
-		top: 18,
-		left: 3,
-		position: 'absolute',
-	},
-	formField: {
-		paddingLeft: 35,
-		paddingTop: 10,
-		minWidth: 200,
-		borderRadius: 3,
-
-		height: 40,
-		width: deviceWidth * 0.7,
-		fontSize: 14,
-		color: '#ffffff80',
-		textAlign: 'left',
-	},
-	formSubmit: {
-		height: 50,
-		width: 180,
-		borderRadius: 50,
-	},
 	accountExist: {
 		marginTop: 10,
-		color: '#ffffff80',
-	},
-	notificationModal: {
-		backgroundColor: '#ffffff',
-		position: 'absolute',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-		top: 45,
+		color: '#bbb',
 	},
 });
 
