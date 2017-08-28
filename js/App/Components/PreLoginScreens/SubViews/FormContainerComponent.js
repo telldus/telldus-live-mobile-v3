@@ -41,23 +41,23 @@ const FormContainerComponent = (props: Props) => (
 			<ScrollView
 				keyboardDismissMode= "interactive">
 				<View style={{alignItems: 'center', justifyContent: 'center'}}>
-				<Image
-					source={require('./../img/telldusLogoBlack.png')}
-					style={{
-						marginTop: 60,
-						marginBottom: 60,
-					}}
-				/>
+					<Image
+						source={require('./../img/telldusLogoBlack.png')}
+						style={{
+							marginTop: 60,
+							marginBottom: 60,
+						}}
+					/>
 				</View>
 				<View style={styles.container} >
-				<H1 style={{
-					margin: 10,
-					color: '#ffffff80',
-					textAlign: 'center',
-				}}>
-					{props.headerText}
-				</H1>
-				{props.children}
+					<H1 style={{
+						margin: 10,
+						color: '#ffffff80',
+						textAlign: 'center',
+					}}>
+						{props.headerText}
+					</H1>
+					{props.children}
 				</View>
 			</ScrollView>
 		</KeyboardAvoidingView>
