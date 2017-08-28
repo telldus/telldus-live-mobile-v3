@@ -24,28 +24,30 @@
 import React from 'react';
 import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import Dimensions from 'Dimensions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { TouchableButton, Text, View, Modal } from 'BaseComponents';
 import {NotificationComponent, FormContainerComponent} from 'PreLoginScreen_SubViews';
 import { loginToTelldus } from 'Actions';
-import { authenticationTimeOut, testUsername, testPassword } from 'Config';
+import { testUsername, testPassword } from 'Config';
 
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
 type Props = {
-  dispatch: Function,
-  screenProps: Object,
-  navigation: Object,
+		dispatch: Function,
+		screenProps: Object,
+		navigation: Object,
+		loginToTelldus: Function,
+		validationMessage: string,
+		showModal: boolean,
 };
 
 type State = {
-  notificationText? : string,
-  isLoading : boolean,
-  username: string,
-  password: string,
+		notificationText? : string,
+		isLoading : boolean,
+		username: string,
+		password: string,
 };
 
 class LoginScreen extends View {
@@ -57,7 +59,8 @@ class LoginScreen extends View {
 	onForgotPassword: () => void;
 	onNeedAccount: () => void;
 	onFormSubmit: () => void;
-	_closeModal: () => void;
+	closeModal: () => void;
+	onModalOpen: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -74,22 +77,36 @@ class LoginScreen extends View {
 		this.onNeedAccount = this.onNeedAccount.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 
-		this._closeModal = this._closeModal.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+		this.onModalOpen = this.onModalOpen.bind(this);
 	}
 
-	_closeModal() {
-		this.setState({
-			notificationText: false,
+	closeModal() {
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_CLOSE',
 		});
+	}
+
+	onModalOpen() {
+		this.setState({
+			isLoading: false,
+		});
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
+			return false;
+		}
+		return true;
 	}
 
 	render() {
 		return (
 			<FormContainerComponent headerText="Login">
-				<View style={styles.textFieldCover}>
-					<Icon name="email" style={styles.iconEmail} size={14} color="#ffffff80"/>
+				<View style={Theme.Styles.textFieldCover}>
+					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={styles.formField}
+						style={Theme.Styles.textField}
 						onChangeText={this.onChangeUsername}
 						placeholder="Username"
 						keyboardType="email-address"
@@ -100,10 +117,10 @@ class LoginScreen extends View {
 						defaultValue={this.state.username}
 					/>
 				</View>
-				<View style={styles.textFieldCover}>
-					<Icon name="lock" style={styles.iconLock} size={15} color="#ffffff80"/>
+				<View style={Theme.Styles.textFieldCover}>
+					<Icon name="lock" style={Theme.Styles.iconLock} size={15} color="#ffffff80"/>
 					<TextInput
-						style={styles.formField}
+						style={Theme.Styles.textField}
 						onChangeText={this.onChangePassword}
 						placeholder="Password"
 						secureTextEntry={true}
@@ -114,38 +131,29 @@ class LoginScreen extends View {
 						defaultValue={this.state.password}
 					/>
 				</View>
-				<View style={{ height: 20 }}/>
+				<View style={{ height: 10 }}/>
 				<TouchableButton
-					style={styles.formSubmit}
+					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? 'Logging in...' : 'LOGIN'}
-					/>
-				<View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10 }}>
+				/>
+				<View style={styles.otherLinks}>
 					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forgot your password?</Text>
 					<Text style={{ color: '#bbb', paddingLeft: 5 }} onPress={this.onNeedAccount}>Need an account?</Text>
 				</View>
 				<View style={{ height: 10 }}/>
-				<Modal modalStyle={styles.notificationModal} showModal={this.state.notificationText}>
-					<NotificationComponent text={this.state.notificationText} onPress={this._closeModal} />
+				<Modal
+					modalStyle={Theme.Styles.notificationModal}
+					entry= "ZoomIn"
+					exit= "ZoomOut"
+					entryDuration= {300}
+					exitDuration= {100}
+					onOpen= {this.onModalOpen}
+					showModal={this.props.showModal}>
+					<NotificationComponent text={this.props.validationMessage} onPress={this.closeModal} />
 				</Modal>
 			</FormContainerComponent>
 		);
-	}
-
-	async formSubmit(username, password) {
-		this.setState({ isLoading: true });
-		await new Promise((resolve, reject) => {
-			loginToTelldus(username, password)
-				.then(response => resolve(response))
-				.catch(reject);
-			setTimeout(() => reject(new Error('timeout')), authenticationTimeOut);
-		})
-			.then(response => this.props.dispatch(response))
-			.catch(e => {
-				const message = e.message === 'timeout' ? 'Timed out, try again?' : e.message.error_description;
-				this.setState({ notificationText: message });
-				this.setState({ isLoading: false });
-			});
 	}
 
 	onChangeUsername(username) {
@@ -163,88 +171,44 @@ class LoginScreen extends View {
 	}
 
 	onFormSubmit() {
-		this.formSubmit(this.state.username, this.state.password);
+		this.setState({ isLoading: true });
+		this.props.loginToTelldus(this.state.username, this.state.password);
 	}
 
 	onNeedAccount() {
+		this.closeModal();
 		this.props.navigation.navigate('Register');
 	}
 
 	onForgotPassword() {
+		this.closeModal();
 		this.props.navigation.navigate('ForgotPassword');
 	}
 }
 
 const styles = StyleSheet.create({
-	notification: {
-		padding: 7,
-		marginTop: 10,
-		marginLeft: 100,
-		marginRight: 100,
-
-		borderColor: '#f00',
-		borderWidth: 1,
-		borderRadius: 3,
-
-		fontSize: 13,
-		color: '#fdd',
-		textAlign: 'center',
-		backgroundColor: '#ff000033',
-	},
-	notificationModal: {
-		backgroundColor: '#ffffff',
-		position: 'absolute',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-		top: 45,
-	},
-	textFieldCover: {
-		height: 40,
-		width: Dimensions.get('window').width * 0.7,
+	otherLinks: {
 		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	iconLock: {
-		top: 15,
-		left: 14,
-		position: 'absolute',
-	},
-	iconEmail: {
-		top: 18,
-		left: 15,
-		position: 'absolute',
-	},
-	formField: {
-		height: 35,
-		padding: 7,
-		paddingLeft: 25,
-		marginTop: 10,
-		marginLeft: 50,
-		marginRight: 50,
-		minWidth: 200,
-
-		fontSize: 13,
-		color: '#eee',
-		textAlign: 'left',
-	},
-	formSubmit: {
-		padding: 6,
-		minWidth: 100,
-		height: 50,
-		width: 180,
-		borderRadius: 50,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: Theme.Core.btnPrimaryBg,
-	},
+		flexWrap: 'wrap',
+		marginTop: 15 },
 });
 
 function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
 		accessToken: store.user.accessToken,
+		validationMessage: store.modal.data,
+		showModal: store.modal.openModal,
 	};
 }
-module.exports = connect(mapStateToProps)(LoginScreen);
+
+function dispatchToProps(dispatch) {
+	return {
+		loginToTelldus: (userName: string, password: string) => {
+			dispatch(loginToTelldus(userName, password));
+		},
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, dispatchToProps)(LoginScreen);
