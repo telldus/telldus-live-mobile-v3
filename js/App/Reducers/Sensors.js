@@ -163,7 +163,7 @@ const byId = (state: Object = {}, action: Object): State => {
 	if (action.type === 'SENSOR_UPDATE_VALUE') {
 		return {
 			...state,
-			[action.payload.id]: reduceSensor(state[action.payload.id], action),
+			[action.payload.sensorId]: reduceSensor(state[action.payload.sensorId], action),
 		};
 	}
 	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === 'sensor') {
