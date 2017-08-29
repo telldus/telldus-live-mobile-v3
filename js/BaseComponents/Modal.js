@@ -31,17 +31,22 @@ type Props = {
 	exit?: string,
 	entryDuration?: number,
 	exitDuration?: number,
+	startValue?: number,
+	endValue?: number,
 	onOpen?: () => void,
 	onClose?: () => void,
 }
 
 export default class Modal extends Component {
-	_closeModal: (duration?: number) => void;
-	_openModal: (duration?: number) => void;
+	animationZoomOut: (duration?: number) => void;
+	animationZoomIn: (duration?: number) => void;
+	animationSlideInY: (duration?: number) => void;
+	animationSlideOutY: (duration?: number) => void;
 	onOpen: (nextProps: Object) => void;
 	onClose: (nextProps: Object) => void;
 	animatedScale: any;
 	animatedOpacity: any;
+	animatedYValue: any;
 
 	static defaultProps: Object;
 	props : Props;
@@ -49,25 +54,58 @@ export default class Modal extends Component {
 	constructor(props: Props) {
 		super(props);
 
-		this._closeModal = this._closeModal.bind(this);
-		this._openModal = this._openModal.bind(this);
+		this.animationZoomOut = this.animationZoomOut.bind(this);
+		this.animationZoomIn = this.animationZoomIn.bind(this);
+		this.animationSlideInY = this.animationSlideInY.bind(this);
+		this.animationSlideOutY = this.animationSlideOutY.bind(this);
 
 		this.animatedScale = new Animated.Value(0.01);
 		this.animatedOpacity = new Animated.Value(0);
+		this.animatedYValue = new Animated.Value(props.startValue ? props.startValue : 0);
 	}
 
-	_openModal(duration?: number) {
+	animationZoomIn(duration?: number) {
 		Animated.parallel([
 			this._startOpacity(duration),
 			this._startScale(duration),
 		]).start();
 	}
 
-	_closeModal(duration?: number) {
+	animationZoomOut(duration?: number) {
 		Animated.parallel([
 			this._stopOpacity(duration),
 			this._stopScale(duration),
 		]).start();
+	}
+
+	animationSlideInY(duration?: number) {
+		Animated.parallel([
+			this.startSlideInY(duration),
+			this._startOpacity(duration),
+		]).start();
+	}
+
+	animationSlideOutY(duration?: number) {
+		Animated.parallel([
+			this.startSlideOutY(duration),
+			this._stopOpacity(duration),
+		]).start();
+	}
+
+	startSlideInY(duration?: number) {
+		Animated.timing(this.animatedYValue,
+			{
+				toValue: this.props.endValue,
+				duration: 500,
+			}).start();
+	}
+
+	startSlideOutY(duration?: number) {
+		Animated.timing(this.animatedYValue,
+			{
+				toValue: this.props.startValue,
+				duration: 500,
+			}).start();
 	}
 
 	_startScale(duration?: number) {
@@ -119,6 +157,28 @@ export default class Modal extends Component {
 		}
 	}
 
+	handleAnimationEntryType(type?: string) {
+		switch (type) {
+			case 'ZoomIn':
+				return this.animationZoomIn;
+			case 'SlideInY':
+				return this.animationSlideInY;
+			default:
+				return this.animationZoomIn;
+		}
+	}
+
+	handleAnimationExitType(type?: string) {
+		switch (type) {
+			case 'ZoomOut':
+				return this.animationZoomOut;
+			case 'SlideOutY':
+				return this.animationSlideOutY;
+			default:
+				return this.animationZoomOut;
+		}
+	}
+
 	onClose(nextProps: Object) {
 		if (nextProps.onClose) {
 			if (typeof nextProps.onClose === 'function') {
@@ -139,36 +199,28 @@ export default class Modal extends Component {
 		}
 	}
 
-	handleAnimationEntryType(type?: string) {
-		switch (type) {
-			case 'ZoomIn':
-				return this._openModal;
-			default:
-				return this._openModal;
-		}
-	}
-
-	handleAnimationExitType(type?: string) {
-		switch (type) {
-			case 'ZoomOut':
-				return this._closeModal;
-			default:
-				return this._closeModal;
-		}
-	}
-
 	render() {
-		const scaleAnim = this.animatedScale.interpolate({
-			inputRange: [0, 1],
-			outputRange: [0, 1],
-		});
-		const opacityAnim = this.animatedScale.interpolate({
+		let animatedProps = {};
+		if (this.props.entry === 'ZoomIn' && this.props.exit === 'ZoomOut') {
+			let scaleAnim = this.animatedScale.interpolate({
+				inputRange: [0, 1],
+				outputRange: [0, 1],
+			});
+			animatedProps = {scale: scaleAnim};
+		} else if (this.props.entry === 'SlideInY' && this.props.exit === 'SlideOutY') {
+			let YAnimatedValue = this.animatedYValue.interpolate({
+				inputRange: [this.props.startValue, this.props.endValue],
+				outputRange: [this.props.startValue, this.props.endValue],
+			});
+			animatedProps = {translateY: YAnimatedValue};
+		}
+		let opacityAnim = this.animatedScale.interpolate({
 			inputRange: [0, 0.2, 0.5, 1],
 			outputRange: [0, 0.5, 1, 1],
 		});
 		return (
-			<Animated.View style={[ this.props.modalStyle, {transform: [
-				{scale: scaleAnim }], opacity: opacityAnim,
+			<Animated.View style={[ this.props.modalStyle, {transform: [animatedProps],
+				opacity: opacityAnim,
 			}]}>
 				{this.props.children}
 			</Animated.View>
@@ -179,4 +231,6 @@ export default class Modal extends Component {
 Modal.defaultProps = {
 	entryDuration: 500,
 	exitDuration: 500,
+	startValue: 0,
+	endValue: 100,
 };

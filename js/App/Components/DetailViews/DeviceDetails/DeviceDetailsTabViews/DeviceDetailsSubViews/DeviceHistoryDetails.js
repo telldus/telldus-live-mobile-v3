@@ -24,8 +24,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Text, Icon } from 'BaseComponents';
-import { StyleSheet, Dimensions, Animated } from 'react-native';
+import { View, Text, Icon, Modal } from 'BaseComponents';
+import { StyleSheet, Dimensions } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import moment from 'moment';
@@ -45,35 +45,6 @@ let screenSpaceRemaining = deviceHeight - totalTop;
 class DeviceHistoryDetails extends View {
 	constructor(props) {
 		super(props);
-		this.state = {
-
-		};
-		this.animatedYValue = new Animated.Value(-screenSpaceRemaining);
-	}
-
-	openAnimation() {
-		Animated.timing(this.animatedYValue,
-			{
-				toValue: 0,
-				duration: 500,
-			}).start();
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.showDetails && !this.props.showDetails) {
-			this.openAnimation();
-		}
-		if (!nextProps.showDetails && this.props.showDetails) {
-			this.closeAnimation();
-		}
-	}
-
-	closeAnimation() {
-		Animated.timing(this.animatedYValue,
-			{
-				toValue: -screenSpaceRemaining,
-				duration: 500,
-			}).start();
 	}
 
 	render() {
@@ -90,13 +61,17 @@ class DeviceHistoryDetails extends View {
 			textStatus = this.props.detailsData.successStatus === 0 ? message : `Failed (${message})`;
 		}
 
-		let YAnimatedValue = this.animatedYValue.interpolate({
-			inputRange: [-screenSpaceRemaining, 0],
-			outputRange: [-screenSpaceRemaining, 0],
-		});
 
 		return (
-			<Animated.View style={[styles.container, { transform: [{ translateY: YAnimatedValue }] }]}>
+			<Modal
+				modalStyle={styles.container}
+				entry= "SlideInY"
+				exit= "SlideOutY"
+				entryDuration= {300}
+				exitDuration= {100}
+				startValue= {-screenSpaceRemaining}
+				endValue= {0}
+				showModal={this.props.showDetails}>
 				<View style={styles.titleTextCover}>
 					<Text style={styles.titleText}>
 						Details
@@ -157,7 +132,7 @@ class DeviceHistoryDetails extends View {
 						</View>
 					</View>
 				</View>
-			</Animated.View>
+			</Modal>
 		);
 	}
 }
