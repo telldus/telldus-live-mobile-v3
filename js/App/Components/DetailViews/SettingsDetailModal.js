@@ -24,12 +24,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Container, Text, View, Icon } from 'BaseComponents';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Container, Text, View, Icon, TouchableButton } from 'BaseComponents';
+import { StyleSheet } from 'react-native';
 import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 
+import Theme from 'Theme';
 import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions_User';
 
@@ -42,20 +43,6 @@ const Header = ({ onPress }) => (
 		</Text>
 		<Icon name="close" size={26} color="white" style={{ flex: 1 }} onPress={onPress}/>
 	</View>
-);
-
-const Button = ({ text, onPress, width }) => (
-	<TouchableOpacity
-		onPress={onPress}
-		style={[
-			styles.button, {
-				width: width,
-			},
-		]}>
-		<Text style={styles.buttonText}>
-			{text}
-		</Text>
-	</TouchableOpacity>
 );
 
 const StatusView = () => (
@@ -141,11 +128,19 @@ class SettingsDetailModal extends View {
 							{`You are using version ${version} of Telldus Live! mobile.`}
 						</Text>
 						{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
-							<Button text={submitButText} onPress={this.submitPushToken} width={200} />
+							<TouchableButton
+								style={Theme.Styles.submitButton}
+								onPress={this.submitPushToken}
+								text={submitButText}
+							/>
 							:
 							<StatusView/>
 						}
-						<Button text={logoutButText} onPress={this.logout} width={100} />
+						<TouchableButton
+							style={Theme.Styles.submitButton}
+							onPress={this.logout}
+							text={logoutButText}
+						/>
 					</View>
 				</Container>
 			</Modal>
@@ -184,21 +179,6 @@ const styles = StyleSheet.create({
 		flex: 10,
 		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	button: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#1a355b',
-		height: 40,
-		marginVertical: 10,
-	},
-	buttonText: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		color: 'white',
-		fontSize: 14,
-		textAlign: 'center',
-		textAlignVertical: 'center',
 	},
 	statusText: {
 		justifyContent: 'center',
