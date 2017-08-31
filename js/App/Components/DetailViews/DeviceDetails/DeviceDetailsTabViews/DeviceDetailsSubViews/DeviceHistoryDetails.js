@@ -76,11 +76,15 @@ class DeviceHistoryDetails extends View {
 			}).start();
 	}
 
+	getPercentage(value: number) {
+		return Math.round(value * 100.0 / 255);
+	}
+
 	render() {
 		let textState = '', textDate = '', textStatus = '';
 		if (this.props.detailsData.state) {
 			let state = states[this.props.detailsData.state];
-			textState = state === 'Dim' ? `${state} ${this.props.detailsData.stateValue}%` : state;
+			textState = state === 'Dim' ? `${state} ${this.getPercentage(this.props.detailsData.stateValue)}%` : state;
 		}
 		if (this.props.detailsData.ts) {
 			textDate = moment.unix(this.props.detailsData.ts).format('ddd, MMMM D HH:mm:ss');

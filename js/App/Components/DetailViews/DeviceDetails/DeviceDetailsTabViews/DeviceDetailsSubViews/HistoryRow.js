@@ -84,6 +84,10 @@ class HistoryRow extends View {
 
 	}
 
+	getPercentage(value: number) {
+		return Math.round(value * 100.0 / 255);
+	}
+
 	render() {
 		let time = moment.unix(this.props.item.ts).format('HH:mm:ss');
 		let deviceState = getDeviceStateMethod(this.props.item.state);
@@ -121,7 +125,7 @@ class HistoryRow extends View {
 								:
 								<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
 									{deviceState === 'DIM' ?
-										<Text>{this.props.item.stateValue}%</Text>
+										<Text>{this.getPercentage(this.props.item.stateValue)}%</Text>
 										:
 										<CustomIcon name={icon} size={24} color="#ffffff" />
 									}
