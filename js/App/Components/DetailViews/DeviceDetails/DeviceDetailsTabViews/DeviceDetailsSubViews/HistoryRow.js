@@ -125,7 +125,7 @@ class HistoryRow extends View {
 								:
 								<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
 									{deviceState === 'DIM' ?
-										<Text>{this.getPercentage(this.props.item.stateValue)}%</Text>
+										<Text style={styles.statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
 										:
 										<CustomIcon name={icon} size={24} color="#ffffff" />
 									}
@@ -220,6 +220,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderTopLeftRadius: 2,
 		borderBottomLeftRadius: 2,
+	},
+	statusValueText: {
+		color: '#ffffff',
+		fontSize: 14,
 	},
 	statusTextON: {
 		backgroundColor: '#fff',
