@@ -370,10 +370,9 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 			console.log(message);
 		}
 		try {
-			const {
-				gateways: { byId: { [gatewayId]: gateway } },
-			} = getState();
-			if (gateway.websocketOnline) {
+			let {gateways} = getState();
+			let gateway = gateways ? gateways.byId[gatewayId] : false;
+			if (gateway && gateway.websocketOnline) {
 				// $FlowFixMe
 				websocket.send(message);
 			}
