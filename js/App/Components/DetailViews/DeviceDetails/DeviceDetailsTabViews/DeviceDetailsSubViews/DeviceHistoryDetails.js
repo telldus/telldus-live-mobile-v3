@@ -188,9 +188,7 @@ const styles = StyleSheet.create({
 	titleTextCover: {
 		width: deviceWidth,
 		height: deviceHeight * 0.09,
-		borderBottomWidth: 1,
-		borderBottomColor: '#A59F9A',
-		justifyContent: 'flex-end',
+		justifyContent: 'center',
 	},
 	titleText: {
 		marginLeft: 10,
@@ -198,19 +196,17 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	detailsContainer: {
-		backgroundColor: '#ffffff',
 		alignItems: 'center',
 		justifyContent: 'flex-end',
 		flexDirection: 'column',
-		height: Math.floor(deviceHeight * 0.09 * 4),
 		width: deviceWidth,
 	},
 	detailsRow: {
 		flexDirection: 'row',
 		width: deviceWidth,
 		height: deviceHeight * 0.09,
-		borderBottomWidth: 1,
-		borderBottomColor: '#A59F9A',
+		marginTop: 1,
+		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
