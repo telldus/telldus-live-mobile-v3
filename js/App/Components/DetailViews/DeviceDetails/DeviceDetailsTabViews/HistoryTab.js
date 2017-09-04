@@ -25,12 +25,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, ListView, Dimensions } from 'react-native';
 
-import moment from 'moment';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { Text, View, ListDataSource, Icon } from 'BaseComponents';
+import { Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DeviceDetailsSubView';
 import { getDeviceHistory } from 'Actions_Devices';
 
@@ -113,7 +112,7 @@ class HistoryTab extends View {
 	// prepares the row and section data required for the List.
 	getRowAndSectionData(data) {
 		let rowSectionData = data.reduce((result, key) => {
-			let date = moment.unix(key.ts).format('dddd, MMMM D');
+			let date = new Date(key.ts * 1000).toDateString();
 			if (!result[date]) {
 				result[date] = [];
 			}
@@ -152,7 +151,14 @@ class HistoryTab extends View {
 	renderSectionHeader(sectionData, timestamp) {
 		return (
 			<View style={styles.sectionHeader}>
-				<Text style={styles.sectionHeaderText}>{timestamp}</Text>
+				<FormattedDate
+					value={timestamp}
+					localeMatcher= "best fit"
+					formatMatcher= "best fit"
+					weekday="long"
+					day="2-digit"
+					month="long"
+					style={styles.sectionHeaderText} />
 			</View>
 		);
 	}
@@ -255,10 +261,10 @@ const styles = StyleSheet.create({
 		shadowOpacity: 1.0,
 		elevation: 2,
 		justifyContent: 'center',
+		paddingLeft: 5,
 	},
 	sectionHeaderText: {
 		color: '#A59F9A',
-		marginLeft: 5,
 	},
 	fillerComponent: {
 		flex: 1,

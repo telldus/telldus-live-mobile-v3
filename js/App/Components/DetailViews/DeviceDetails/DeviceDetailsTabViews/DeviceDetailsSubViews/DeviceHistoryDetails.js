@@ -24,11 +24,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Text, Icon } from 'BaseComponents';
+import { View, Text, Icon, FormattedDate, FormattedTime } from 'BaseComponents';
 import { StyleSheet, Dimensions, Animated } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-
-import moment from 'moment';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -83,7 +81,7 @@ class DeviceHistoryDetails extends View {
 			textState = state === 'Dim' ? `${state} ${this.props.detailsData.stateValue}%` : state;
 		}
 		if (this.props.detailsData.ts) {
-			textDate = moment.unix(this.props.detailsData.ts).format('ddd, MMMM D HH:mm:ss');
+			textDate = new Date(this.props.detailsData.ts * 1000);
 		}
 		if (this.props.detailsData.successStatus >= 0) {
 			let message = statusMessage[this.props.detailsData.successStatus];
@@ -94,7 +92,6 @@ class DeviceHistoryDetails extends View {
 			inputRange: [-screenSpaceRemaining, 0],
 			outputRange: [-screenSpaceRemaining, 0],
 		});
-
 		return (
 			<Animated.View style={[styles.container, { transform: [{ translateY: YAnimatedValue }] }]}>
 				<View style={styles.titleTextCover}>
@@ -121,11 +118,29 @@ class DeviceHistoryDetails extends View {
 								Time
 							</Text>
 						</View>
-						<View style={styles.detailsValueCover}>
-							<Text style={styles.detailsText} >
-								{textDate}
-							</Text>
-						</View>
+						{textDate !== '' ?
+							<View style={styles.timeCover}>
+
+								<FormattedDate
+									value={textDate}
+									localeMatcher= "best fit"
+									formatMatcher= "best fit"
+									weekday="short"
+									day="2-digit"
+									month="short"
+									style={styles.timeText} />
+								<FormattedTime
+									value={textDate}
+									localeMatcher= "best fit"
+									formatMatcher= "best fit"
+									hour="numeric"
+									minute="numeric"
+									second="numeric"
+									style={[styles.timeText, {paddingLeft: 6, marginRight: 15}]} />
+							</View>
+							:
+							null
+						}
 					</View>
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
@@ -220,6 +235,15 @@ const styles = StyleSheet.create({
 	detailsTextError: {
 		marginRight: 15,
 		color: '#d32f2f',
+		fontSize: 16,
+	},
+	timeCover: {
+		justifyContent: 'flex-end',
+		width: deviceWidth * 0.7,
+		flexDirection: 'row',
+	},
+	timeText: {
+		color: '#A59F9A',
 		fontSize: 16,
 	},
 });
