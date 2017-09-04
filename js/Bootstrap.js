@@ -23,6 +23,7 @@
 
 import 'intl';
 import 'intl/locale-data/jsonp/en';
+import 'intl/locale-data/jsonp/sv';
 
 import React from 'React';
 import { NativeModules } from 'react-native';
