@@ -32,6 +32,7 @@ import { StyleSheet, Switch } from 'react-native';
 import CheckBox from 'react-native-check-box';
 import Theme from 'Theme';
 
+const weekdayStrs = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 
 class JobRow extends View {
@@ -68,20 +69,27 @@ class JobRow extends View {
 
     render() {
         const { job, device } = this.props;
-
+        
+        var dayStrs = [];
+        for(var i=0; i<job.weekdays.length; i++) {
+            dayStrs.push(weekdayStrs[job.weekdays[i] - 1]);
+        }
+        var daysStr = dayStrs.join(',');
+        console.log(daysStr);
 
         return (
             <ListItem style={[Theme.Styles.rowFront, { marginTop: 8 }]}>
                 <Container style={styles.container}>
                     <CheckBox
-                        checkBoxColor={'rgba(226,105,1,1)  '}
+                        checkBoxColor={this.state.checked ? 'rgba(226,105,1,1)' : '#999'}
                         isChecked={this.state.checked}
                         onClick={this.onCheck}
                     />
                     <View style={styles.name}>
-                        <Text style={[styles.text]}>
+                        <Text style={[this.state.checked ? styles.titleActive : styles.titleInactive]}>
                             {device.name? device.name : '(no name)'}
                         </Text>
+                        <Text style={styles.text}>At {job.hour}:{job.minute} - {daysStr}</Text>
                     </View>
                     {
                         this.state.checked ? (
@@ -110,13 +118,21 @@ const styles = StyleSheet.create({
     name: {
         flex: 20,
         justifyContent: 'center',
+        marginLeft: 8,        
     },
-    text: {
-        marginLeft: 8,
+    titleActive: {
         color: 'rgba(226,105,1,1)',
         fontSize: 20,
         textAlignVertical: 'center',
     },
+    titleInactive: {
+        color: '#999',
+        fontSize: 20,
+        textAlignVertical: 'center',
+    },
+    text: {
+        color: '#999'
+    }
 });
 
 module.exports = JobRow;

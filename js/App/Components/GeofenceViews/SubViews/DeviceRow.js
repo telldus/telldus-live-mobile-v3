@@ -150,12 +150,12 @@ class DeviceRow extends View {
 			<ListItem style={[Theme.Styles.rowFront, {marginTop: 8}]}>
 				<Container style={styles.container}>
 					<CheckBox
-						checkBoxColor={'rgba(226,105,1,1)  '}
+						checkBoxColor={this.state.checked ? 'rgba(226,105,1,1)' : '#999'}
 						isChecked={this.state.checked}
 						onClick={this.onCheck}
 					/>
 					<View style={styles.name}>
-						<Text style={[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
+						<Text style={[ styles.text, { opacity: device.name ? 1 : 0.5, color: this.state.checked ? 'rgba(226,105,1,1)' : '#999' }]}>
 							{device.name ? device.name : '(no name)'}
 						</Text>
 					</View>
@@ -186,7 +186,6 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		marginLeft: 8,
-		color: 'rgba(226,105,1,1)',
 		fontSize: 20,
 		textAlignVertical: 'center',
 	},
