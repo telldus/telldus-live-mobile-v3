@@ -25,12 +25,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Dimensions, TouchableWithoutFeedback } from 'react-native';
 
-import moment from 'moment';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { Text, View, Icon } from 'BaseComponents';
+import { Text, View, Icon, FormattedTime } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -89,7 +88,7 @@ class HistoryRow extends View {
 	}
 
 	render() {
-		let time = moment.unix(this.props.item.ts).format('HH:mm:ss');
+		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
 		let icon = this.getIcon(deviceState);
 		return (
@@ -104,9 +103,14 @@ class HistoryRow extends View {
 					<View style={styles.verticalLineView}/>
 				</View>
 				<View style={styles.timeCover}>
-					<Text style={styles.timeText}>
-						{time}
-					</Text>
+					<FormattedTime
+						value={time}
+						localeMatcher= "best fit"
+						formatMatcher= "best fit"
+						hour="numeric"
+						minute="numeric"
+						second="numeric"
+						style={styles.timeText} />
 				</View>
 				<View style={styles.statusArrowLocationContainer}>
 					<View style={styles.arrowViewContainer}>
@@ -186,7 +190,7 @@ const styles = StyleSheet.create({
 	},
 	timeText: {
 		color: '#A59F9A',
-		fontSize: 16,
+		fontSize: 12,
 	},
 	statusArrowLocationContainer: {
 		width: widthStatusArrowLocationContainer,
