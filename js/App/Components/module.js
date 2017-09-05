@@ -23,10 +23,12 @@
 
 import AppNavigator from './AppNavigator';
 import PreLoginNavigator from './PreLoginNavigator';
+import GeofenceNavigator from './GeofenceNavigator';
 import Push from './Push';
 
 module.exports = {
 	AppNavigator: AppNavigator,
 	PreLoginNavigator: PreLoginNavigator,
+	GeofenceNavigator: GeofenceNavigator,
 	Push: Push,
 };

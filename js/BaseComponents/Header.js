@@ -122,7 +122,7 @@ export default class HeaderComponent extends Base {
 		if (!this.props.children) {
 			return (
 				<Image
-					source={require('../App/Components/TabViews/img/telldus-logo@3x.png')}
+					source={require('../App/Components/TabViews/img/telldus-logo-3x.png')}
 					style={this.getInitialStyle().logoImage}
 				/>
 			);
@@ -296,12 +296,20 @@ export default class HeaderComponent extends Base {
 	}
 
 	renderButtonContent = (button: Object) => {
+		if (button.title === 'Back') {
+			return (
+				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+					<Icon name={'chevron-left'} size={12} color={'#FFF'} />
+					<Text style={{ color: '#FFF', marginLeft: 4, fontSize: 14 }}>{'Back'}</Text>
+				</View>
+			);
+		}
 		if (button.image) {
-			return <Image source={button.image}/>;
+			return <Image source={button.image} />;
 		}
 		if (button.icon) {
 			const { name, size, color } = button.icon;
-			return <Icon name={name} size={size} color={color}/>;
+			return <Icon name={name} size={size} color={color} />;
 		}
 		if (button.title) {
 			return <Text>{button.title}</Text>;
@@ -351,10 +359,10 @@ export default class HeaderComponent extends Base {
 			<View style={{ flex: 0 }}>
 				{
 					Platform.OS === 'android' ? (
-						<View style={this.getInitialStyle().statusBar}/>
+						<View style={this.getInitialStyle().statusBar} />
 					) : null
 				}
-				<View {...this.prepareRootProps()}>
+				<View {...this.prepareRootProps() }>
 					{leftButton && this.renderLeftButton(leftButton)}
 					{this.renderChildren()}
 					{rightButton && this.renderRightButton(rightButton)}

@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- * @providesModule Actions_Jobs
+ * @providesModule Actions_Events
  */
 
 // @flow
@@ -26,17 +26,17 @@ import type { ThunkAction } from './Types';
 
 import LiveApi from 'LiveApi';
 
-export function getJobs(): ThunkAction {
+export function getEvents(): ThunkAction {
 	return (dispatch, getState) => {
 		const payload = {
-			url: '/scheduler/jobList',
+			url: '/events/list',
 			requestParams: {
 				method: 'GET',
 			},
 		};
 		return LiveApi(payload).then(response => {
 			dispatch({
-				type: 'RECEIVED_JOBS',
+				type: 'RECEIVED_EVENTS',
 				payload: {
 					...payload,
 					...response,
@@ -46,24 +46,23 @@ export function getJobs(): ThunkAction {
 	};
 }
 
-export function activateJob(jobId, isActive) {
+export function activateEvent(eventId, isActive) {
 	return (dispatch, getState) => {
 		const payload = {
-			url: `/scheduler/setJob?id=${jobId}&active=${isActive}`,
+			url: `/event/setEvent?id=${eventId}&active=${isActive}`,
 			requestParams: {
 				method: 'GET'
 			}
 		};
 
 		return LiveApi(payload).then(response => {
-			console.log("activate job result: ", response);
+			console.log(response);
 		}).catch(error => {
-			console.log("activate job failed:", error);
 			dispatch({
 				type: 'GLOBAL_ERROR_SHOW',
 				payload: {
-					source: 'job',
-					jobId,
+					source: 'event',
+					eventId,
 					message: error.message
 				}
 			});

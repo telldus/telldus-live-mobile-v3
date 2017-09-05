@@ -15,56 +15,51 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule App
  */
+
+// @flow
 
 'use strict';
 
 import React from 'react';
 import { connect } from 'react-redux';
 
-import {
-	PreLoginNavigator,
-	AppNavigator,
-	Push,
-} from 'Components';
+import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import { bell } from 'Actions_Devices';
 
-class App extends React.Component {
+type Props = {
+	id: number,
+	onBell: () => void,
+	style: Object,
+};
 
-	componentDidMount() {
-		this.pushConf();
-	}
-
-	componentDidUpdate() {
-		this.pushConf();
-	}
-
-	/*
-	 * calls the push configuration methods, for logged in users, which will generate push token and listen for local and
-	 * remote push notifications.
-	 */
-	pushConf() {
-		if (this.props.accessToken) {
-			Push.configure(this.props);
-		}
-	}
+class BellButton extends View {
+	props: Props;
 
 	render() {
-		if (!this.props.accessToken) {
-			return <PreLoginNavigator />;
-		}
 		return (
-			<AppNavigator {...this.props}/>
+			<RoundedCornerShadowView style={this.props.style}>
+				<TouchableOpacity style={styles.bell}>
+					<Icon name="bell" size={22} color="orange" />
+				</TouchableOpacity>
+			</RoundedCornerShadowView>
 		);
 	}
 }
 
-function mapStateToProps(store) {
+const styles = StyleSheet.create({
+	bell: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+});
+
+function mapDispatchToProps(dispatch) {
 	return {
-		accessToken: store.user.accessToken,
-		pushToken: store.user.pushToken,
+		onBell: id => () => dispatch(bell(id)),
 	};
 }
 
-module.exports = connect(mapStateToProps)(App);
+module.exports = connect(null, mapDispatchToProps)(BellButton);

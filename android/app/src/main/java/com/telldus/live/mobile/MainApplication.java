@@ -23,6 +23,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.showlocationservicesdialogbox.LocationServicesDialogBoxPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -56,6 +57,7 @@ public class MainApplication extends Application implements ReactApplication {
 					new FabricPackage(),
 					new ExtraDimensionsPackage(),
 					new MainReactPackage(),
+            new LocationServicesDialogBoxPackage(),
 					new VectorIconsPackage(),
 					new RNDeviceInfo(),
 					new MapsPackage(),

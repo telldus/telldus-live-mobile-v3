@@ -25,10 +25,10 @@ import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 import Toast from 'react-native-simple-toast';
+import { Platform, NativeModules, DeviceEventEmitter } from 'react-native';
 import {
 	getGateways,
 	getSensors,
-	getJobs,
 	getUserProfile,
 	appStart,
 	appState,
@@ -36,24 +36,35 @@ import {
 } from 'Actions';
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
+import { getEvents, activateEvent } from 'Actions_Events';
+import { getJobs, activateJob } from 'Actions_Jobs';
 
 import { View } from 'BaseComponents';
-import Platform from 'Platform';
+// import Platform from 'Platform';
 import TabsView from 'TabsView';
+import GeofenceNavigator from 'GeofenceNavigator';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews_SubViews';
+import GeoUtils from 'GeoUtils';
+import { turnOn, turnOff, requestTurnOn, requestTurnOff, bell, up, down, stop  } from 'Actions_Devices';
+import { showDimmerPopup, hideDimmerPopup, setDimmerValue, updateDimmerValue } from 'Actions_Dimmer';
+import { setCurrentLocation } from 'Actions_Geofence';
+
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
 const RouteConfigs = {
+	Geofence: {
+		screen: GeofenceNavigator
+	},
 	Tabs: {
 		screen: TabsView,
 	},
 };
 
 const StackNavigatorConfig = {
-	initialRouteName: 'Tabs',
+	initialRouteName: 'Geofence',
 	navigationOptions: {
 		header: null,
 	},
@@ -118,6 +129,10 @@ class AppNavigator extends View {
 		this.props.dispatch(getGateways());
 		this.props.dispatch(getSensors());
 		this.props.dispatch(getJobs());
+		this.props.dispatch(getEvents());
+
+		this._getCurrentLocation();
+
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -126,6 +141,116 @@ class AppNavigator extends View {
 		}
 	}
 
+	_getCurrentLocation() {
+		if (Platform.OS === 'ios') {
+			NativeModules.RNLocation.requestAlwaysAuthorization();
+			NativeModules.RNLocation.startUpdatingLocation();
+			NativeModules.RNLocation.setDistanceFilter(5.0);
+			DeviceEventEmitter.addListener('locationUpdated', (location) => {
+				const locationMe = {
+					latitude: location.coords.latitude,
+					longitude: location.coords.longitude
+				};
+				this._checkFenceStates(locationMe);
+			});
+		}
+	}
+
+	_checkFenceStates(locationMe) {
+		var _this = this;
+		var fences = this.props.fences.fences;
+		var oldLocation = this.props.fences.location;
+
+		fences.forEach(function (fence) {
+			const {fromHr, fromMin, toHr, toMin} = fence;
+			if(fence.isAlwaysActive || GeoUtils.isActive(fromHr, fromMin, toHr, toMin)) {
+				var inFence = (GeoUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, locationMe.latitude, locationMe.longitude) < fence.radius);
+				var wasInFence = (GeoUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, oldLocation.latitude, oldLocation.longitude) < fence.radius);
+				console.log('Fence active: ', fence.title, inFence, wasInFence);				
+				var actions = null;
+				if (inFence && !wasInFence) { //arrive fence
+					console.log("arrive: ", fence.title);
+					actions = fence.arriving;
+				} else if (!inFence && wasInFence) { //leave fence
+					console.log("leave: ", fence.title);
+					actions = fence.leaving;
+				}
+				
+				if(actions) _this._updateStates(actions);
+			} else {
+				console.log('Fence not active right now: ', fence.title);
+			}
+		});
+		this.props.setCurrentLocation(locationMe);
+	}
+
+	_updateStates(actions) {
+		const {devices, schedules, events} = actions;
+		for(var deviceId in devices) {
+			var deviceAction = devices[deviceId];
+			var device = this.props.devices[deviceId];
+
+			const {
+				TURNON,
+				TURNOFF,
+				BELL,
+				DIM,
+				UP,
+				DOWN,
+				STOP,
+			} = deviceAction.supportedMethods;
+	
+			if (BELL) {
+				this.props.onBell(deviceId);
+			} else if (UP || DOWN || STOP) {
+				if (deviceAction.state === 'UP') {
+					console.log('UP: ', device);
+					this.props.onUp(deviceId);
+				} else if (deviceAction.state === 'DOWN') {
+					console.log('DOWN: ', device);					
+					this.props.onDown(deviceId);
+				} else if(deviceAction.state === 'STOP') {
+					console.log('STOP: ', device);					
+					this.props.onStop(deviceId);
+				}
+			} else if (DIM) {
+				if (deviceAction.state === 'TURNON') {
+					// this.props.requestTurnOn(deviceId);
+					console.log('TURNON: ', device);					
+					this.props.onTurnOn(deviceId, device.isInState)
+				} else if (deviceAction.state === 'TURNOFF') {
+					// this.props.requestTurnOff(deviceId);
+					console.log('TURNOFF: ', device);					
+					this.props.onTurnOff(deviceId, device.isInState);
+				} else if (deviceAction.state === 'DIM') {
+					console.log('DIM: ', device);					
+					this.props.onDim(deviceId, deviceAction.value);
+				}
+			} else if (TURNON || TURNOFF) {
+				if (deviceAction.state === 'TURNON') {
+					// this.props.requestTurnOn(deviceId);
+					console.log('TURNON: ', device);					
+					this.props.onTurnOn(deviceId, device.isInState)
+				} else if (deviceAction.state === 'TURNOFF') {
+					// this.props.requestTurnOff(deviceId);
+					console.log('TURNOFF: ', device);					
+					this.props.onTurnOff(deviceId, device.isInState);
+				}
+			} else {
+			
+			}
+		}
+
+		for(var eventId in events) {
+			var eventAction = events[eventId];
+			this.props.activateEvent(eventId, eventAction.actions ? 1 : 0);
+		}
+
+		for(var jobId in schedules) {
+			var jobAction = schedules[jobId];
+			this.props.activateJob(jobId, jobAction.active ? 1 : 0);
+		}
+	}
 	_showToast() {
 		Toast.showWithGravity(this.props.toastMessage, Toast.SHORT, Toast.TOP);
 		this.props.dispatch({
@@ -142,7 +267,7 @@ class AppNavigator extends View {
 	render() {
 		return (
 			<View>
-				<Navigator/>
+				<Navigator />
 				<DimmerPopup
 					isVisible={this.props.dimmer.show}
 					name={this.props.dimmer.name}
@@ -165,7 +290,29 @@ function mapStateToProps(state, ownProps) {
 		dimmer: state.dimmer,
 		toastVisible: state.App.errorGlobalShow,
 		toastMessage: state.App.errorGlobalMessage,
+		devices: state.devices.byId,
+		events: state.events,
+		fences: state.fences
 	};
 }
 
-module.exports = connect(mapStateToProps)(AppNavigator);
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+		setCurrentLocation: (location) => dispatch(setCurrentLocation(location)),
+		onBell: id => () => dispatch(bell(id)),
+		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
+		onDim: (id, value) => dispatch(updateDimmerValue(id, value)),
+		onTurnOn: (id, isInState) => dispatch(turnOn(id, isInState)),
+		onTurnOff: (id, isInState) => dispatch(turnOff(id, isInState)),
+		requestTurnOn: id => dispatch(requestTurnOn(id)),
+		requestTurnOff: id => dispatch(requestTurnOff(id)),
+		onDown: id => () => dispatch(down(id)),
+		onUp: id => () => dispatch(up(id)),
+		onStop: id => () => dispatch(stop(id)),
+		activateEvent: (eventId, isActive) => dispatch(activateEvent(eventId, isActive)),
+		activateJob: (jobId, isActive) => dispatch(activateJob(jobId, isActive))
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(AppNavigator);

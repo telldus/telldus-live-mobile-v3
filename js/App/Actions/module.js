@@ -31,6 +31,7 @@ import LiveApiActions from './LiveApi';
 import TabActions from './Tabs';
 import DashboardActions from './Dashboard';
 import JobActions from './Jobs';
+import EventActions from './Events';
 import AppStateActions from './AppState';
 
 module.exports = {
@@ -42,5 +43,6 @@ module.exports = {
 	...TabActions,
 	...DashboardActions,
 	...JobActions,
+	...EventActions,
 	...AppStateActions,
 };

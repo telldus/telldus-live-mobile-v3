@@ -261,3 +261,15 @@ export function parseDevicesForListView(devices:Object = {}, gateways:Object = {
 		sectionIds,
 	};
 }
+
+export function parseDevicesForGeofence(devices: Object = {}) {
+
+	var result = [];
+
+	devices.allIds.forEach(deviceId=> {
+		result.push(devices.byId[deviceId]);
+	});
+
+	return result;
+	
+}

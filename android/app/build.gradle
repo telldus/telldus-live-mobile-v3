@@ -170,6 +170,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-android-location-services-dialog-box')
     compile project(':react-native-vector-icons')
     compile project(':react-native-push-notification')
     compile project(':react-native-device-info')
