@@ -29,8 +29,9 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { Text, View, Icon, FormattedTime } from 'BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedTime } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
+import i18n from '../../../../../Translations/common';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -91,6 +92,21 @@ class HistoryRow extends View {
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
 		let icon = this.getIcon(deviceState);
+		let originText = '';
+		let origin = this.props.item.origin;
+		if (origin === 'Scheduler') {
+			originText = <FormattedMessage {...i18n.scheduler} style={styles.originText}/>;
+		} else if (origin === 'Incoming signal') {
+			originText = <FormattedMessage {...i18n.incommingSignal} style={styles.originText}/>;
+		} else if (origin === 'Unknown') {
+			originText = <FormattedMessage {...i18n.unknown} style={styles.originText}/>;
+		} else if (origin.substring(0, 5) === 'Group') {
+			originText = <Text style={styles.originText}><FormattedMessage {...i18n.group} style={styles.originText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else if (origin.substring(0, 5) === 'Event') {
+			originText = <Text style={styles.originText}><FormattedMessage {...i18n.event} style={styles.originText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else {
+			originText = origin;
+		}
 		return (
 			<View style={styles.rowItemsContainer}>
 				<View style={styles.circularViewCover}>
@@ -136,7 +152,7 @@ class HistoryRow extends View {
 								</View>
 							}
 							<View style={styles.locationCover}>
-								<Text style={styles.originText} numberOfLines={1}>{this.props.item.origin}</Text>
+								<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
 							</View>
 						</View>
 					</TouchableWithoutFeedback>

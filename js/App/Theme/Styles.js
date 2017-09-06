@@ -100,4 +100,9 @@ export default StyleSheet.create({
 		justifyContent: 'flex-start',
 		alignItems: 'center',
 	},
+	jobRowMethod: {
+		flex: 4,
+		color: '#1a355c',
+		fontSize: 16,
+	},
 });

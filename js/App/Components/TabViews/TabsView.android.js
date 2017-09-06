@@ -26,9 +26,10 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { Text, View, Icon, Image, Header } from 'BaseComponents';
+import { FormattedMessage, Text, View, Icon, Image, Header } from 'BaseComponents';
+import i18n from '../../Translations/common';
 
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
@@ -40,6 +41,13 @@ import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
 import TabViews from 'TabViews';
 import { TabNavigator } from 'react-navigation';
+
+const messages = defineMessages({
+	connectedLocations: {
+		id: 'settings.connectedLocations',
+		defaultMessage: 'Connected Locations',
+	},
+});
 
 const Gateway = ({ name, online, websocketOnline }) => {
 	let locationSrc;
@@ -80,16 +88,15 @@ const NavigationHeader = ({ firstName, lastName }) => (
 
 const ConnectedLocations = () => (
 	<View style={styles.navigationTitle}>
-		<Image source={require('./img/tabIcons/router.png')} resizeMode={'contain'}
-		       style={styles.navigationTitleImage}/>
-		<Text style={styles.navigationTextTitle}>Connected Locations</Text>
+		<Image source={require('./img/tabIcons/router.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
+		<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
 	</View>
 );
 
 const SettingsButton = ({ onPress }) => (
 	<TouchableOpacity onPress={onPress} style={styles.navigationTitle}>
 		<Image source={require('./img/tabIcons/gear.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
-		<Text style={styles.navigationTextTitle}>Settings</Text>
+		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
 	</TouchableOpacity>
 );
 

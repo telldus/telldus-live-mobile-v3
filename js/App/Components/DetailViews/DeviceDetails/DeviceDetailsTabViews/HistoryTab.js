@@ -29,12 +29,28 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
+import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DeviceDetailsSubView';
 import { getDeviceHistory } from 'Actions_Devices';
+import { defineMessages } from 'react-intl';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
+
+const messages = defineMessages({
+	historyHeader: {
+		id: 'history',
+		defaultMessage: 'History',
+	},
+	loading: {
+		id: 'loading',
+		defaultMessage: 'Loading',
+	},
+	noRecentActivity: {
+		id: 'deviceSettings.noRecentActivity',
+		defaultMessage: 'No recent activity',
+	},
+});
 
 type Props = {
 	dispatch: Function,
@@ -73,7 +89,7 @@ class HistoryTab extends View {
 	}
 
 	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: 'History',
+		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
 		tabBarIcon: ({ tintColor }) => (
 			<CustomIcon name="icon_history" size={24} color={tintColor}/>
 		),
@@ -191,7 +207,7 @@ class HistoryTab extends View {
 				<View style={styles.containerWhenNoData}>
 					<CustomIcon name="icon_loading" size={20} color="#F06F0C" />
 					<Text style={styles.textWhenNoData}>
-						Loading...
+						<FormattedMessage {...messages.loading} style={styles.textWhenNoData}/>...
 					</Text>
 				</View>
 			);
@@ -202,7 +218,7 @@ class HistoryTab extends View {
 				<View style={styles.containerWhenNoData}>
 					<Icon name="exclamation-circle" size={20} color="#F06F0C" />
 					<Text style={styles.textWhenNoData}>
-						No recent activity on device
+						<FormattedMessage {...messages.noRecentActivity} style={styles.textWhenNoData}/>...
 					</Text>
 				</View>
 			);

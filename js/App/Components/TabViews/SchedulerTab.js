@@ -25,6 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
+import i18n from '../../Translations/common';
 
 import { List, ListDataSource, Text, View } from 'BaseComponents';
 import { JobRow } from 'TabViews_SubViews';
@@ -37,51 +38,46 @@ import { parseJobsForListView } from 'Reducers_Jobs';
 
 const messages = defineMessages({
 	friday: {
-		id: 'friday',
+		id: 'days.friday',
 		defaultMessage: 'Friday',
 	},
 	monday: {
-		id: 'monday',
+		id: 'days.monday',
 		defaultMessage: 'Monday',
 	},
 	nextWeekday: {
-		id: 'nextWeekday',
+		id: 'days.nextWeekday',
 		defaultMessage: 'Next {weekday}',
 		description: 'Used by the scheduler to display the day one week from now. Example "Next Wednesday"',
 	},
 	saturday: {
-		id: 'saturday',
+		id: 'days.saturday',
 		defaultMessage: 'Saturday',
 	},
-	scheduler: {
-		id: 'pages.scheduler',
-		defaultMessage: 'Scheduler',
-		description: 'The scheduler tab',
-	},
 	sunday: {
-		id: 'sunday',
+		id: 'days.sunday',
 		defaultMessage: 'Sunday',
 	},
 	thursday: {
-		id: 'thursday',
+		id: 'days.thursday',
 		defaultMessage: 'Thursday',
 	},
 	today: {
-		id: 'today',
+		id: 'days.today',
 		defaultMessage: 'Today',
 		description: 'Used by the scheduler to display a header with the schedules running today',
 	},
 	tomorrow: {
-		id: 'tomorrow',
+		id: 'days.tomorrow',
 		defaultMessage: 'Tomorrow',
 		description: 'Used by the scheduler to display a header with the schedules running tomorrow',
 	},
 	tuesday: {
-		id: 'tuesday',
+		id: 'days.tuesday',
 		defaultMessage: 'Tuesday',
 	},
 	wednesday: {
-		id: 'wednesday',
+		id: 'days.wednesday',
 		defaultMessage: 'Wednesday',
 	},
 });
@@ -197,7 +193,7 @@ class SchedulerTab extends View {
 }
 
 SchedulerTab.navigationOptions = ({navigation, screenProps}) => ({
-	title: screenProps.intl.formatMessage(messages.scheduler),
+	title: screenProps.intl.formatMessage(i18n.scheduler),
 	tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
 });
 

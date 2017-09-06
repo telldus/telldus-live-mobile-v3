@@ -24,9 +24,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
+import { FormattedMessage, View } from 'BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
+import { defineMessages } from 'react-intl';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_home from './../../../TabViews/img/selection.json';
@@ -41,6 +42,13 @@ import {
 	DimmerDeviceDetail,
 	NavigationalDeviceDetail,
 } from 'DeviceDetailsSubView';
+
+const messages = defineMessages({
+	overviewHeader: {
+		id: 'deviceSettings.overviewHeader',
+		defaultMessage: 'Overview',
+	},
+});
 
 type Props = {
 	device: Object,
@@ -61,7 +69,7 @@ class OverviewTab extends View {
 	}
 
 	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: 'Overview',
+		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.overviewHeader} style={{color: tintColor}}/>),
 		tabBarIcon: ({ tintColor }) => (
 			<Icon name="icon_home" size={24} color={tintColor}/>
 		),

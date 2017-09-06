@@ -22,12 +22,57 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { FormattedNumber, Image, ListItem, Text, View } from 'BaseComponents';
+import { FormattedMessage, FormattedNumber, Image, ListItem, Text, View } from 'BaseComponents';
 import { ScrollView, StyleSheet } from 'react-native';
 import { reportException } from 'Analytics';
+import { defineMessages } from 'react-intl';
+import i18n from '../../../Translations/common';
 
 import moment from 'moment';
 import Theme from 'Theme';
+
+const messages = defineMessages({
+	dayAgo: {
+		id: 'sensor.dayAgo',
+		defaultMessage: 'day ago',
+		description: 'How long ago a sensor was update',
+	},
+	daysAgo: {
+		id: 'sensor.daysAgo',
+		defaultMessage: 'days ago',
+		description: 'How long ago a sensor was update',
+	},
+	hourAgo: {
+		id: 'sensor.hourAgo',
+		defaultMessage: 'hour ago',
+		description: 'How long ago a sensor was update',
+	},
+	hoursAgo: {
+		id: 'sensor.hoursAgo',
+		defaultMessage: 'hours ago',
+		description: 'How long ago a sensor was update',
+	},
+	justNow: {
+		id: 'sensor.justNow',
+		defaultMessage: 'just now',
+		description: 'How long ago a sensor was update',
+	},
+	noName: {
+		id: 'noName',
+		defaultMessage: 'no name',
+		description: 'Used when an item does not have a name',
+	},
+	minuteAgo: {
+		id: 'sensor.minuteAgo',
+		defaultMessage: 'minute ago',
+		description: 'How long ago a sensor was update',
+	},
+	minutesAgo: {
+		id: 'sensor.minutesAgo',
+		defaultMessage: 'minutes ago',
+		description: 'How long ago a sensor was update',
+	},
+});
 
 const SensorHumidity = ({ humidity }) => (
 	<View style={Theme.Styles.sensorValue}>
@@ -177,7 +222,7 @@ class SensorRow extends Component {
 					<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
 					      ellipsizeMode="middle"
 					      numberOfLines={1}>
-						{sensor.name ? sensor.name : '(no name)'}
+						{sensor.name ? sensor.name : <FormattedMessage {...messages.noName} /> }
 					</Text>
 					<Text style={[
 						styles.time, {
@@ -206,33 +251,33 @@ class SensorRow extends Component {
 
 	formatLastUpdated(minutes: number, lastUpdated:number): string {
 		if (minutes === 0) {
-			return 'Just now';
+			return <FormattedMessage {...messages.justNow} />;
 		}
 		if (minutes === 1) {
-			return '1 minute ago';
+			return ( <Text>1 <FormattedMessage {...messages.minuteAgo} /></Text>);
 		}
 		if (minutes < 60) {
-			return `${minutes} minutes ago`;
+			return ( <Text>{minutes} <FormattedMessage {...messages.minutesAgo} /></Text>);
 		}
 		const hours = Math.round(minutes / 60);
 		if (hours === 1) {
-			return '1 hour ago';
+			return ( <Text>1 <FormattedMessage {...messages.hourAgo} /></Text>);
 		}
 		if (hours < 24) {
-			return `${hours} hours ago`;
+			return ( <Text>{hours} <FormattedMessage {...messages.hoursAgo} /></Text>);
 		}
 		const days = Math.round(minutes / 60 / 24);
 		if (days === 1) {
-			return '1 day ago';
+			return ( <Text>1 <FormattedMessage {...messages.dayAgo} /></Text>);
 		}
 		if (days <= 7) {
-			return `${days} days ago`;
+			return ( <Text>{days} <FormattedMessage {...messages.daysAgo} /></Text>);
 		}
 		try {
 			return moment.unix(lastUpdated).format('MM-DD-YYYY');
 		} catch (exception) {
 			reportException(exception);
-			return 'unknown';
+			return <FormattedMessage {...i18n.unknown} />;
 		}
 	}
 }

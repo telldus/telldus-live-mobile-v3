@@ -24,9 +24,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Text, Icon, FormattedDate, FormattedTime } from 'BaseComponents';
+import { FormattedMessage, View, Text, Icon, FormattedDate, FormattedTime } from 'BaseComponents';
 import { StyleSheet, Dimensions, Animated } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { defineMessages } from 'react-intl';
+import i18n from '../../../../../Translations/common';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -39,6 +41,29 @@ let deviceIconCoverHeight = (deviceHeight * 0.2);
 let tabViewHeaderHeight = (deviceHeight * 0.085);
 let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
 let screenSpaceRemaining = deviceHeight - totalTop;
+
+const messages = defineMessages({
+	success: {
+		id: 'success',
+		defaultMessage: 'Success',
+	},
+	failed: {
+		id: 'error.failed',
+		defaultMessage: 'Failed',
+	},
+	noReply: {
+		id: 'error.noReply',
+		defaultMessage: 'No reply',
+	},
+	notConfirmed: {
+		id: 'error.notConfirmed',
+		defaultMessage: 'Not confirmed',
+	},
+	timedOut: {
+		id: 'error.timedOut',
+		defaultMessage: 'Timed out',
+	},
+});
 
 class DeviceHistoryDetails extends View {
 	constructor(props) {
@@ -80,16 +105,74 @@ class DeviceHistoryDetails extends View {
 
 	render() {
 		let textState = '', textDate = '', textStatus = '';
+		let originText = '';
+		let origin = this.props.detailsData.origin;
+		if (origin === 'Scheduler') {
+			originText = <FormattedMessage {...i18n.scheduler} style={styles.detailsText}/>;
+		} else if (origin === 'Incoming signal') {
+			originText = <FormattedMessage {...i18n.incommingSignal} style={styles.detailsText}/>;
+		} else if (origin === 'Unknown') {
+			originText = <FormattedMessage {...i18n.unknown} style={styles.detailsText}/>;
+		} else if (origin.substring(0, 5) === 'Group') {
+			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.group} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else if (origin.substring(0, 5) === 'Event') {
+			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.event} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else {
+			originText = origin;
+		}
 		if (this.props.detailsData.state) {
 			let state = states[this.props.detailsData.state];
 			textState = state === 'Dim' ? `${state} ${this.getPercentage(this.props.detailsData.stateValue)}%` : state;
+			switch (state) {
+				case 'On':
+					textState = <FormattedMessage {...i18n.on} style={styles.detailsText}/>;
+					break;
+				case 'Off':
+					textState = <FormattedMessage {...i18n.off} style={styles.detailsText}/>;
+					break;
+				case 'Dim':
+					textState = <Text style={styles.detailsText}><FormattedMessage {...i18n.dimmingLevel} style={styles.detailsText}/>: {this.getPercentage(this.props.detailsData.stateValue)}% </Text>;
+					break;
+				case 'Bell':
+					textState = <FormattedMessage {...i18n.bell} style={styles.detailsText}/>;
+					break;
+				case 'Down':
+					textState = <FormattedMessage {...i18n.down} style={styles.detailsText}/>;
+					break;
+				case 'Up':
+					textState = <FormattedMessage {...i18n.up} style={styles.detailsText}/>;
+					break;
+				case 'Stop':
+					textState = <FormattedMessage {...i18n.stop} style={styles.detailsText}/>;
+					break;
+				default:
+					textState = state;
+			}
 		}
 		if (this.props.detailsData.ts) {
 			textDate = new Date(this.props.detailsData.ts * 1000);
 		}
 		if (this.props.detailsData.successStatus >= 0) {
-			let message = statusMessage[this.props.detailsData.successStatus];
-			textStatus = this.props.detailsData.successStatus === 0 ? message : `Failed (${message})`;
+			switch (this.props.detailsData.successStatus) {
+				case 0:
+					textStatus = <FormattedMessage {...messages.success} style={styles.detailsText}/>;
+					break;
+				case '1':
+					textStatus = <FormattedMessage {...messages.failed} style={styles.detailsTextError}/>;
+					break;
+				case '2':
+					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.noReply} style={styles.detailsTextError}/>)</Text>;
+					break;
+				case '3':
+					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.timedOut} style={styles.detailsTextError}/>)</Text>;
+					break;
+				case '4':
+					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.notConfirmed} style={styles.detailsTextError}/>)</Text>;
+					break;
+				default:
+					let message = statusMessage[this.props.detailsData.successStatus];
+					textStatus = this.props.detailsData.successStatus === 0 ? message : `Failed (${message})`;
+			}
 		}
 
 		let YAnimatedValue = this.animatedYValue.interpolate({
@@ -100,14 +183,14 @@ class DeviceHistoryDetails extends View {
 			<Animated.View style={[styles.container, { transform: [{ translateY: YAnimatedValue }] }]}>
 				<View style={styles.titleTextCover}>
 					<Text style={styles.titleText}>
-						Details
+						<FormattedMessage {...i18n.details} style={styles.titleText}/>
 					</Text>
 				</View>
 				<View style={styles.detailsContainer}>
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
-								State
+								<FormattedMessage {...i18n.state} style={styles.detailsLabel}/>
 							</Text>
 						</View>
 						<View style={styles.detailsValueCover}>
@@ -119,7 +202,7 @@ class DeviceHistoryDetails extends View {
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
-								Time
+								<FormattedMessage {...i18n.time} style={styles.detailsLabel}/>
 							</Text>
 						</View>
 						{textDate !== '' ?
@@ -149,19 +232,19 @@ class DeviceHistoryDetails extends View {
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
-								Origin
+								<FormattedMessage {...i18n.origin} style={styles.detailsLabel}/>
 							</Text>
 						</View>
 						<View style={styles.detailsValueCover}>
 							<Text style={styles.detailsText} numberOfLines={1}>
-								{this.props.detailsData.origin}
+								{originText}
 							</Text>
 						</View>
 					</View>
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
-								Status
+								<FormattedMessage {...i18n.status} style={styles.detailsLabel}/>
 							</Text>
 						</View>
 						<View style={[styles.detailsValueCover, { flexDirection: 'row-reverse' }]}>
