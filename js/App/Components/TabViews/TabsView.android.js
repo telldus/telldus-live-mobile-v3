@@ -131,6 +131,9 @@ const RouteConfigs = {
 	Sensors: {
 		screen: TabViews.Sensors,
 	},
+	Gateways: {
+		screen: TabViews.Gateways,
+	},
 	Scheduler: {
 		screen: TabViews.Scheduler,
 	},
