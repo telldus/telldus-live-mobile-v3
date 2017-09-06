@@ -48,6 +48,11 @@ const messages = defineMessages({
 		id: 'deviceSettings.overviewHeader',
 		defaultMessage: 'Overview',
 	},
+	location: {
+		id: 'deviceSettings.location',
+		defaultMessage: 'Location',
+		description: 'Header for which location a device belongs to',
+	},
 });
 
 type Props = {
@@ -100,9 +105,10 @@ class OverviewTab extends View {
 		let device = this.props.device;
 		const locationImageUrl = getLocationImageUrl(this.props.gateway.type);
 		const locationData = {
-			locationImageUrl,
-			locationType: this.props.gateway.type,
-			locationName: this.props.gateway.name,
+			title: messages.location,
+			image: locationImageUrl,
+			H1: this.props.gateway.name,
+			H2: this.props.gateway.type,
 		};
 		if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
 			const deviceType = this.getType(deviceId);
@@ -122,7 +128,7 @@ class OverviewTab extends View {
 			<View style={styles.container}>
 				<View style={styles.itemsContainer}>
 					{deviceDetail}
-					<DeviceLocationDetail {...locationData}/>
+					<DeviceLocationDetail {...locationData} style={{marginTop: 10}}/>
 				</View>
 			</View>
 		);

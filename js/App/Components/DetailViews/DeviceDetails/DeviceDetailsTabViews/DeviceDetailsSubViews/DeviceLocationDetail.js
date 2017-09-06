@@ -25,23 +25,16 @@ import React from 'react';
 
 import { FormattedMessage, Text, View } from 'BaseComponents';
 import { StyleSheet, Image, Dimensions } from 'react-native';
-import { defineMessages } from 'react-intl';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-const messages = defineMessages({
-	location: {
-		id: 'deviceSettings.location',
-		defaultMessage: 'Location',
-		description: 'Header for which location a device belongs to',
-	},
-});
-
 type Props = {
-	locationImageUrl: String,
-	locationName: String,
-	locationType: String,
+	title?: any,
+	image: String,
+	H1: String,
+	H2: String,
+	style: any,
 };
 
 type State = {
@@ -59,19 +52,21 @@ class DeviceLocationDetail extends View {
 
 	render() {
 		return (
-			<View style={[styles.shadow, styles.homeSweetHomeContainer]}>
+			<View style={[styles.shadow, styles.homeSweetHomeContainer, this.props.style]}>
 				<View style={styles.locationImageContainer}>
-					<Text style={styles.textLocation}>
-						<FormattedMessage {...messages.location} style={styles.textLocation} />:
-					</Text>
-					<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: this.props.locationImageUrl, isStatic: true }} />
+					{this.props.title && this.props.title !== '' ?
+						<FormattedMessage {...this.props.title} style={styles.textLocation} />
+						:
+						null
+					}
+					<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: this.props.image, isStatic: true }} />
 				</View>
 				<View style={styles.locationTextContainer}>
 					<Text numberOfLines={1} style={styles.textHSH}>
-						{this.props.locationName}
+						{this.props.H1}
 					</Text>
 					<Text numberOfLines={1} style={styles.textLocation}>
-						{this.props.locationType}
+						{this.props.H2}
 					</Text>
 				</View>
 			</View>
@@ -79,15 +74,8 @@ class DeviceLocationDetail extends View {
 	}
 }
 
-DeviceLocationDetail.propTypes = {
-	locationImageUrl: React.PropTypes.string.isRequired,
-	locationName: React.PropTypes.string.isRequired,
-	locationType: React.PropTypes.string.isRequired,
-};
-
 const styles = StyleSheet.create({
 	homeSweetHomeContainer: {
-		marginTop: 10,
 		backgroundColor: '#fff',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
@@ -128,7 +116,6 @@ const styles = StyleSheet.create({
 	textLocation: {
 		color: '#A59F9A',
 		fontSize: 14,
-		paddingLeft: 10,
 	},
 	textHSH: {
 		color: '#F06F0C',
