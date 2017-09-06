@@ -103,9 +103,9 @@ class GatewaysTab extends View {
 	renderRow({ name, type, online, websocketOnline }) {
 		let locationImageUrl = getLocationImageUrl(type);
 		let locationData = {
-			locationImageUrl,
-			locationType: type,
-			locationName: name,
+			image: locationImageUrl,
+			H1: name,
+			H2: type,
 		};
 		return (
 			<View style={styles.rowItemsCover}>
@@ -116,7 +116,7 @@ class GatewaysTab extends View {
 
 	render() {
 		return (
-			<View>
+			<View style={{marginTop: 10}}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'column',
 		alignItems: 'center',
+		marginBottom: 5,
 	},
 });
 
