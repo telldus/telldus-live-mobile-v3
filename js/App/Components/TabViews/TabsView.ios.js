@@ -25,6 +25,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { intlShape, injectIntl } from 'react-intl';
 
 import { View, Header } from 'BaseComponents';
 
@@ -66,6 +67,7 @@ const TabNavigatorConfig = {
 const Tabs = TabNavigator(RouteConfigs, TabNavigatorConfig);
 
 type Props = {
+	intl: intlShape.isRequired,
 	tab: string,
 	userIcon: boolean,
 	userProfile: Object,
@@ -73,6 +75,7 @@ type Props = {
 	onTabSelect: (string) => void,
 	onToggleEditMode: (string) => void,
 	dispatch: Function,
+	stackNavigator: Object,
 };
 
 type Tab = {
@@ -152,6 +155,7 @@ class TabsView extends View {
 	};
 
 	render() {
+		let screenProps = { stackNavigator: this.props.stackNavigator };
 		const { routeName } = this.state.tab;
 
 		let rightButton;
@@ -167,7 +171,7 @@ class TabsView extends View {
 		return (
 			<View>
 				<Header rightButton={rightButton}/>
-				<Tabs onNavigationStateChange={this.onNavigationStateChange}/>
+				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 				{
 					this.state.settings ? (
 						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
@@ -197,4 +201,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(TabsView);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(TabsView));
