@@ -26,13 +26,14 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 
-import { Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
+import { List, ListDataSource, View, StyleSheet } from 'BaseComponents';
+import {DeviceLocationDetail} from 'DeviceDetailsSubView';
 import { getGateways } from 'Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
-import Theme from 'Theme';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
+import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
 const messages = defineMessages({
 	gateways: {
@@ -99,29 +100,17 @@ class GatewaysTab extends View {
 		this.props.dispatch(getGateways());
 	}
 
-	renderRow({ name, online, websocketOnline }) {
-		let locationSrc;
-		if (!online) {
-			locationSrc = require('./img/tabIcons/location-red.png');
-		} else if (!websocketOnline) {
-			locationSrc = require('./img/tabIcons/location-orange.png');
-		} else {
-			locationSrc = require('./img/tabIcons/location-green.png');
-		}
+	renderRow({ name, type, online, websocketOnline }) {
+		let locationImageUrl = getLocationImageUrl(type);
+		let locationData = {
+			locationImageUrl,
+			locationType: type,
+			locationName: name,
+		};
 		return (
-			<ListItem style={Theme.Styles.gatewayRowFront}>
-				<View style={Theme.Styles.listItemAvatar}>
-					<Image source={locationSrc}/>
-				</View>
-				<Text style={{
-					color: 'rgba(0,0,0,0.87)',
-					fontSize: 16,
-					opacity: name ? 1 : 0.5,
-					marginBottom: 2,
-				}}>
-					{name ? name : '(no name)'}
-				</Text>
-			</ListItem>
+			<View style={styles.rowItemsCover}>
+				<DeviceLocationDetail {...locationData}/>
+			</View>
 		);
 	}
 
@@ -137,6 +126,14 @@ class GatewaysTab extends View {
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+	rowItemsCover: {
+		flex: 1,
+		flexDirection: 'column',
+		alignItems: 'center',
+	},
+});
 
 const getRows = createSelector(
 	[
