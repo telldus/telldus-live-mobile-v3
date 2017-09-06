@@ -51,8 +51,8 @@ type Props = {
 	dispatch: Function,
 	device: Object,
 	inDashboard: Boolean,
-	onAddToDashboard: () => void,
-	onRemoveFromDashboard: () => void,
+	onAddToDashboard: (id: number) => void,
+	onRemoveFromDashboard: (id: number) => void,
 };
 
 type State = {
@@ -101,7 +101,7 @@ class SettingsTab extends View {
 		let learnButton = null;
 
 		if (LEARN) {
-			learnButton = <LearnButton id={device} style={styles.learn} />;
+			learnButton = <LearnButton id={device.id} style={styles.learn} />;
 		}
 		return (
 			<View style={styles.container}>
