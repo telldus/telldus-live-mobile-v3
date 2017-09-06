@@ -36,8 +36,8 @@ class MainMapView extends View {
 
         this.state = {
             region: {
-                latitude: this.props.location.latitude,
-                longitude: this.props.location.longitude,
+                latitude: this.props.location ? this.props.location.latitude : 0,
+                longitude: this.props.location ? this.props.location.longitude : 0,
                 latitudeDelta: 0.1,
                 longitudeDelta: 0.1
             },
@@ -57,6 +57,7 @@ class MainMapView extends View {
     }
 
     onEditFence(index) {
+        console.log('callout index: ', index);
         this.props.setEditFence(index);
         this.props.navigation.navigate('EditFenceMain');
         this.setState({activeFenceIndex: -1});
@@ -81,7 +82,7 @@ class MainMapView extends View {
                 coordinate={{ latitude: fence.latitude, longitude: fence.longitude }}
                 onPress={() => this.setActiveFence(index)}
             >
-                <MapView.Callout>
+                <MapView.Callout onPress={()=> this.onEditFence(index)}>
                     <FenceCallout
                         title={fence.title}
                         onEdit={()=> this.onEditFence(index)}

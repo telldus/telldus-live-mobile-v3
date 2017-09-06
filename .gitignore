@@ -41,6 +41,7 @@ project.xcworkspace
 .idea
 .gradle
 local.properties
+*.apk
 
 # node.js
 #

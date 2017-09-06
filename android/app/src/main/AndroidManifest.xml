@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.telldus.live.mobile">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <permission
         android:name="com.telldus.live.mobile.permission.C2D_MESSAGE"
@@ -10,7 +12,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <uses-sdk
@@ -64,6 +66,9 @@
           android:name="io.fabric.ApiKey"
           android:value="6ddcb9201beba571821a466b7b634103262d6903"
         />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD5fozXJnItZ4Ly3HNEZzLSk16p6pbEnBU" />
     </application>
 
 </manifest>

@@ -25,7 +25,7 @@ import React, { PropTypes } from 'React';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 import Toast from 'react-native-simple-toast';
-import { Platform, NativeModules, DeviceEventEmitter } from 'react-native';
+import { Platform, NativeModules, PermissionsAndroid, DeviceEventEmitter } from 'react-native';
 import {
 	getGateways,
 	getSensors,
@@ -35,6 +35,7 @@ import {
 	syncLiveApiOnForeground,
 } from 'Actions';
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
+import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 import { getDevices } from 'Actions_Devices';
 import { getEvents, activateEvent } from 'Actions_Events';
 import { getJobs, activateJob } from 'Actions_Jobs';
@@ -142,6 +143,10 @@ class AppNavigator extends View {
 	}
 
 	_getCurrentLocation() {
+
+		var _this = this;
+
+		console.log('location: ', this.props.fences.location);		
 		if (Platform.OS === 'ios') {
 			NativeModules.RNLocation.requestAlwaysAuthorization();
 			NativeModules.RNLocation.startUpdatingLocation();
@@ -151,7 +156,34 @@ class AppNavigator extends View {
 					latitude: location.coords.latitude,
 					longitude: location.coords.longitude
 				};
-				this._checkFenceStates(locationMe);
+				_this._checkFenceStates(locationMe);
+			});
+		} else if (Platform.OS === 'android') {
+			PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+			.then((granted) => {
+				console.log('location permission granted: ', granted);
+				if(granted === PermissionsAndroid.RESULTS.GRANTED) {
+					LocationServicesDialogBox.checkLocationServicesIsEnabled({
+						message: "<h2>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+						ok: "YES",
+						cancel: "NO",
+						enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => ONLY GPS PROVIDER
+						showDialog: true // false => Opens the Location access page directly
+					}).then(function(success) {
+						console.log(success); // success => {alreadyEnabled: false, enabled: true, status: "enabled"}
+						navigator.geolocation.watchPosition((location) => {
+							const locationMe = {
+								latitude: location.coords.latitude,
+								longitude: location.coords.longitude
+							};
+							_this._checkFenceStates(locationMe);
+						});
+					}).catch((error) => {
+						console.log(error.message); // error.message => "disabled"
+					});
+				}
+			}).catch((error) => {
+				console.log('location permission error: ', error.message);
 			});
 		}
 	}
@@ -160,27 +192,28 @@ class AppNavigator extends View {
 		var _this = this;
 		var fences = this.props.fences.fences;
 		var oldLocation = this.props.fences.location;
-
-		fences.forEach(function (fence) {
-			const {fromHr, fromMin, toHr, toMin} = fence;
-			if(fence.isAlwaysActive || GeoUtils.isActive(fromHr, fromMin, toHr, toMin)) {
-				var inFence = (GeoUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, locationMe.latitude, locationMe.longitude) < fence.radius);
-				var wasInFence = (GeoUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, oldLocation.latitude, oldLocation.longitude) < fence.radius);
-				console.log('Fence active: ', fence.title, inFence, wasInFence);				
-				var actions = null;
-				if (inFence && !wasInFence) { //arrive fence
-					console.log("arrive: ", fence.title);
-					actions = fence.arriving;
-				} else if (!inFence && wasInFence) { //leave fence
-					console.log("leave: ", fence.title);
-					actions = fence.leaving;
+		if(oldLocation) {
+			fences.forEach(function (fence) {
+				const {fromHr, fromMin, toHr, toMin} = fence;
+				if(fence.isAlwaysActive || GeoUtils.isActive(fromHr, fromMin, toHr, toMin)) {
+					var inFence = (GeoUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, locationMe.latitude, locationMe.longitude) < fence.radius);
+					var wasInFence = (GeoUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, oldLocation.latitude, oldLocation.longitude) < fence.radius);
+					console.log('Fence active: ', fence.title, inFence, wasInFence);				
+					var actions = null;
+					if (inFence && !wasInFence) { //arrive fence
+						console.log("arrive: ", fence.title);
+						actions = fence.arriving;
+					} else if (!inFence && wasInFence) { //leave fence
+						console.log("leave: ", fence.title);
+						actions = fence.leaving;
+					}
+					
+					if(actions) _this._updateStates(actions);
+				} else {
+					console.log('Fence not active right now: ', fence.title);
 				}
-				
-				if(actions) _this._updateStates(actions);
-			} else {
-				console.log('Fence not active right now: ', fence.title);
-			}
-		});
+			});
+		}
 		this.props.setCurrentLocation(locationMe);
 	}
 

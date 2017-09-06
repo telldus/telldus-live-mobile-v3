@@ -7,7 +7,7 @@ export const initialState = Immutable({
     fences: [],
     fence: {},
     editIndex: -1,
-    location: {}
+    location: null
 });
 
 const setArea = (state, action) => ({
