@@ -26,7 +26,7 @@ import { FormattedNumber, Image, ListItem, Text, View } from 'BaseComponents';
 import { ScrollView, StyleSheet } from 'react-native';
 import { reportException } from 'Analytics';
 
-import format from 'date-format';
+import moment from 'moment';
 import Theme from 'Theme';
 
 const SensorHumidity = ({ humidity }) => (
@@ -229,7 +229,7 @@ class SensorRow extends Component {
 			return `${days} days ago`;
 		}
 		try {
-			return format.asString('yyyy-MM-dd', new Date(lastUpdated * 1000));
+			return moment.unix(lastUpdated).format('MM-DD-YYYY');
 		} catch (exception) {
 			reportException(exception);
 			return 'unknown';
