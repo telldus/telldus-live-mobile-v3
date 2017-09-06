@@ -23,7 +23,6 @@ import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import promise from './Promise';
 import array from './Array';
-import analytics from './Analytics';
 import reducers from 'Reducers';
 import { createLogger } from 'redux-logger';
 import { persistStore, autoRehydrate } from 'redux-persist';
@@ -37,7 +36,7 @@ let logger = createLogger({
 	duration: true,
 });
 
-let createTheStore = applyMiddleware(thunk, promise, array, analytics, logger)(createStore);
+let createTheStore = applyMiddleware(thunk, promise, array, logger)(createStore);
 
 let _store;
 export function configureStore(onComplete: ?() => void) {
