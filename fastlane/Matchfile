@@ -3,7 +3,7 @@ git_url "git@code.telldus.com:telldus/ios-signing.git"
 type "development" # The default type, can be: appstore, adhoc, enterprise or development
 shallow_clone "false"
 
-app_identifier "com.telldus.live.mobile.beta"
+app_identifier "com.telldus.live.mobile"
 username "ios-dev@telldus.se"
 
 # For all available options run `fastlane match --help`
