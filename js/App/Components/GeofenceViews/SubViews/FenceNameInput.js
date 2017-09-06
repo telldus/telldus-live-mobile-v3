@@ -61,6 +61,7 @@ class FenceNameInput extends View {
                         value={this.state.title}
                         style={styles.input}
                         onChangeText={this.onChangeText}
+                        underlineColorAndroid={'transparent'}
                     />
                 </View>
             </View>
@@ -85,8 +86,9 @@ var styles = StyleSheet.create({
     input: {
         flex: 1,
         textAlign: 'center',
-        fontSize: 24,
+        fontSize: 20,
         color: 'rgba(226,105,1,1)',
+        paddingVertical: 0,
 
     },
     placeIcon: {
