@@ -18,9 +18,11 @@
  *
  */
 import React, { PropTypes, Component } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { View, Text, Image, H1, H2 } from 'BaseComponents';
 import Icon from 'react-native-vector-icons/MaterialIcons'
+
+const { width , height } = Dimensions.get('window');
 
 class BrownHeader extends View {
 
@@ -65,9 +67,10 @@ const styles = StyleSheet.create({
     bkgImage: {
         position: 'absolute',
         top: 0,
-        bottom: 0,
         left: 0,
-        right: 0
+        width: width,
+        height: 120,
+        overflow: 'hidden'
     }
 });
 

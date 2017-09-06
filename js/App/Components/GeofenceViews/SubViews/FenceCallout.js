@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
         marginLeft: 8
     },
     editIcon: {
-        color: '#999'
+        color: '#999',
+        fontSize: 20
     }
 });
 

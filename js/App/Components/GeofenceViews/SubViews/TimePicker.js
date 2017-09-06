@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     },
     picker: {
         flex: 1,
-        backgroundColor: '#FFF',
+        color: '#000'
     }
 });
 

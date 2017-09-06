@@ -129,6 +129,7 @@ class EditFenceMainView extends View {
                             style={styles.nameInput} 
                             value={this.state.title}
                             onChangeText={this.onTitleChange}
+                            underlineColorAndroid={'transparent'}
                         />
                     </View>
                     <TouchableOpacity
@@ -229,7 +230,8 @@ const styles = StyleSheet.create({
     nameInput: {
         flex: 1,
         color: '#777',
-        textAlign: 'right'
+        textAlign: 'right',
+        paddingVertical: 0
     },
     arrowIcon: {
         color: '#777',
