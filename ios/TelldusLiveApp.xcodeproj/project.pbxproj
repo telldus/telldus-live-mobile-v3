@@ -1148,7 +1148,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.beta;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile;
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1185,7 +1185,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.beta;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile;
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

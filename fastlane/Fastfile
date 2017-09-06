@@ -77,7 +77,7 @@ platform :ios do
       workspace: "ios/TelldusLiveApp.xcworkspace",
       configuration: "Release",
       codesigning_identity: "iPhone Distribution",
-      xcargs: "PROVISIONING_PROFILE_SPECIFIER='match AppStore com.telldus.live.mobile.beta'"
+      xcargs: "PROVISIONING_PROFILE_SPECIFIER='match AppStore com.telldus.live.mobile'"
     )
   end
 
