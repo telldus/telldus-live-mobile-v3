@@ -72,7 +72,16 @@ function Bootstrap(): React.Component {
 			if (!NativeModules.I18nManager) {
 				return 'en';
 			}
-			let localeIdentifier = NativeModules.I18nManager.localeIdentifier;
+			let localeIdentifier = '';
+			if (NativeModules.I18nManager.localeIdentifier) {
+				// Only available on Android
+				localeIdentifier = NativeModules.I18nManager.localeIdentifier;
+			} else if (NativeModules.SettingsManager.settings.AppleLocale) {
+				// iOS
+				localeIdentifier = NativeModules.SettingsManager.settings.AppleLocale;
+			} else {
+				return 'en';
+			}
 			let parts = localeIdentifier.split('_');
 			if (parts.length === 0) {
 				return 'en';
