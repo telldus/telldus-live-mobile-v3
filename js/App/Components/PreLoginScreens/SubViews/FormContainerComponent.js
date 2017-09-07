@@ -37,9 +37,9 @@ type Props = {
 
 const FormContainerComponent = (props: Props) => (
 	<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-		<KeyboardAvoidingView behavior="position" contentContainerStyle={{paddingTop: 20}}>
-			<ScrollView
-				keyboardDismissMode= "interactive">
+		<ScrollView
+			keyboardDismissMode= "interactive">
+			<KeyboardAvoidingView behavior="padding" contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}>
 				<View style={{alignItems: 'center', justifyContent: 'center'}}>
 					<Image
 						source={require('./../img/telldusLogoBlack.png')}
@@ -59,8 +59,8 @@ const FormContainerComponent = (props: Props) => (
 					</H1>
 					{props.children}
 				</View>
-			</ScrollView>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</ScrollView>
 	</BackgroundImage>
 );
 
