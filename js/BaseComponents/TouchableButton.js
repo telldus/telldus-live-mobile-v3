@@ -22,6 +22,7 @@
 'use strict';
 import React, { Component } from 'react';
 import { Text } from 'react-native';
+import { intlShape, injectIntl } from 'react-intl';
 
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
@@ -30,9 +31,10 @@ type Props = {
 	style: any,
 	text: string,
 	onPress: Function,
+	intl: intlShape.isRequired,
 };
 
-export default class TouchableButton extends Component {
+class TouchableButton extends Component {
 
 	props: Props;
 
@@ -42,7 +44,7 @@ export default class TouchableButton extends Component {
 	render() {
 		return (
 			<Text style={[styles.button, this.props.style]} onPress={this.props.onPress} >
-				{this.props.text ? this.props.text : null}
+				{this.props.intl.formatMessage(this.props.text)}
 			</Text>
 		);
 	}
@@ -64,3 +66,4 @@ const styles = StyleSheet.create({
 	},
 });
 
+export default injectIntl(TouchableButton);
