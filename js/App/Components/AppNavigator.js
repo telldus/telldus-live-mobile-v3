@@ -38,6 +38,15 @@ import {
 } from 'Actions';
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
+import { intlShape, injectIntl, defineMessages } from 'react-intl';
+
+const messages = defineMessages({
+	errortoast: {
+		id: 'errortoast',
+		defaultMessage: 'Action Currently Unavailable',
+		description: 'The error messgage to show, when a device action cannot be performed',
+	},
+});
 
 const deviceHeight = Dimensions.get('window').height;
 let deviceWidth = Dimensions.get('window').width;
@@ -96,6 +105,7 @@ type Props = {
 	dispatch: Function,
 	toastVisible: boolean,
 	toastMessage: string,
+	intl: intlShape.isRequired,
 };
 
 type State = {
@@ -154,7 +164,7 @@ class AppNavigator extends View {
 	}
 
 	_showToast() {
-		Toast.showWithGravity(this.props.toastMessage, Toast.SHORT, Toast.TOP);
+		Toast.showWithGravity(this.props.intl.formatMessage(messages.errortoast), Toast.SHORT, Toast.TOP);
 		this.props.dispatch({
 			type: 'GLOBAL_ERROR_HIDE',
 		});
@@ -196,4 +206,4 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-module.exports = connect(mapStateToProps)(AppNavigator);
+module.exports = connect(mapStateToProps)(injectIntl(AppNavigator));
