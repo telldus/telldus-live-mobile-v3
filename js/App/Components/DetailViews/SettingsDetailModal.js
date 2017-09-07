@@ -34,6 +34,8 @@ import Theme from 'Theme';
 import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions_User';
 
+import i18n from './../../Translations/common';
+
 const Header = ({ onPress }) => (
 	<View style={styles.header}>
 		<Icon name="gear" size={26} color="white"
@@ -111,8 +113,8 @@ class SettingsDetailModal extends View {
 	}
 
 	render() {
-		let submitButText = this.state.isPushSubmitLoading ? 'Submitting Token...' : 'Submit Push Token';
-		let logoutButText = this.state.isLogoutLoading ? 'Logging Out...' : 'Logout';
+		let submitButText = this.state.isPushSubmitLoading ? i18n.submittingtoken : i18n.submittoken;
+		let logoutButText = this.state.isLogoutLoading ? i18n.loggingout : i18n.logout;
 		let version = DeviceInfo.getVersion();
 		return (
 			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>

@@ -32,6 +32,8 @@ import {FormContainerComponent, NotificationComponent} from 'PreLoginScreen_SubV
 
 import {RegisterUser} from 'Actions_User';
 
+import i18n from './../../Translations/common';
+
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
@@ -240,7 +242,7 @@ class RegisterScreen extends View {
 				<TouchableButton
 					style={Theme.Styles.submitButton}
 					onPress={this.props.showModal ? null : this.onFormSubmit}
-					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
+					text={this.state.isLoading ? i18n.registering : i18n.register}
 				/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
 				<Modal

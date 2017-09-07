@@ -29,6 +29,8 @@ import { StyleSheet } from 'react-native';
 import { View, Text, TouchableButton } from 'BaseComponents';
 import {FormContainerComponent} from 'PreLoginScreen_SubViews';
 
+import i18n from './../../Translations/common';
+
 type Props = {
 	accessToken: Object,
 	onPressOK: Function,
@@ -59,7 +61,7 @@ class WelcomeScreen extends View {
 				<TouchableButton
 					style={styles.formSubmit}
 					onPress={this.onPressOK}
-					text={'GOT IT'}
+					text={i18n.welcome}
 				/>
 			</FormContainerComponent>
 		);

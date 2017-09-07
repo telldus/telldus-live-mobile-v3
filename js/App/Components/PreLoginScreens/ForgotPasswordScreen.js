@@ -29,6 +29,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, Text, TouchableButton } from 'BaseComponents';
 import {FormContainerComponent} from 'PreLoginScreen_SubViews';
 
+import i18n from './../../Translations/common';
+
 import Theme from 'Theme';
 
 type Props = {
@@ -88,7 +90,7 @@ export default class RegisterScreen extends View {
 				<TouchableButton
 					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
-					text={this.state.isLoading ? 'SENDING...' : 'SEND PASSWORD'}
+					text={this.state.isLoading ? i18n.sendingpassword : i18n.sendpassword}
 				/>
 				<View style={{ height: 10 }}/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> Back to Login </Text>

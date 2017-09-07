@@ -82,12 +82,48 @@ const messages = defineMessages({
 		defaultMessage: 'Up',
 	},
 	login: {
-		id: 'login',
+		id: 'button.login',
 		defaultMessage: 'LOGIN',
 	},
-	logging: {
-		id: 'logging',
+	loggingin: {
+		id: 'button.loggingin',
 		defaultMessage: 'LOGGING IN...',
+	},
+	logout: {
+		id: 'button.logout',
+		defaultMessage: 'LOGOUT',
+	},
+	loggingout: {
+		id: 'button.loggingout',
+		defaultMessage: 'LOGGING OUT...',
+	},
+	submittoken: {
+		id: 'button.submittoken',
+		defaultMessage: 'Submit Push Token',
+	},
+	submittingtoken: {
+		id: 'button.submittingtoken',
+		defaultMessage: 'Submitting Token...',
+	},
+	register: {
+		id: 'button.register',
+		defaultMessage: 'REGISTER',
+	},
+	registering: {
+		id: 'button.registering',
+		defaultMessage: 'REGISTERING...',
+	},
+	sendpassword: {
+		id: 'button.sendpassword',
+		defaultMessage: 'SEND PASSWORD',
+	},
+	sendingpassword: {
+		id: 'button.sendingpassword',
+		defaultMessage: 'SENDING...',
+	},
+	welcome: {
+		id: 'button.welcome',
+		defaultMessage: 'GOT IT',
 	},
 });
 
