@@ -149,6 +149,7 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		top: 45,
+	},
 	jobRowMethod: {
 		flex: 4,
 		color: '#1a355c',
