@@ -33,7 +33,7 @@ const Push = {
 
 			// Called when Token is generated
 			onRegister: function (data) {
-				if ((!store.pushToken) || (store.pushToken !== data.token)) {
+				if ((!store.pushToken) || (store.pushToken !== data.token) || (!store.pushTokenRegistered)) {
 					// stores fcm token in the server
 					store.dispatch(registerPushToken(data.token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 					store.dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: data.token });
