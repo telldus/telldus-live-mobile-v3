@@ -78,15 +78,15 @@ class DeviceHistoryDetails extends View {
 		let textState = '', textDate = '', textStatus = '';
 		let originText = '';
 		let origin = this.props.detailsData.origin;
-		if (origin === 'Scheduler') {
+		if (origin && origin === 'Scheduler') {
 			originText = <FormattedMessage {...i18n.scheduler} style={styles.detailsText}/>;
-		} else if (origin === 'Incoming signal') {
+		} else if (origin && origin === 'Incoming signal') {
 			originText = <FormattedMessage {...i18n.incommingSignal} style={styles.detailsText}/>;
-		} else if (origin === 'Unknown') {
+		} else if (origin && origin === 'Unknown') {
 			originText = <FormattedMessage {...i18n.unknown} style={styles.detailsText}/>;
-		} else if (origin.substring(0, 5) === 'Group') {
+		} else if (origin && origin.substring(0, 5) === 'Group') {
 			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.group} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
-		} else if (origin.substring(0, 5) === 'Event') {
+		} else if (origin && origin.substring(0, 5) === 'Event') {
 			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.event} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
 		} else {
 			originText = origin;

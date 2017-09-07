@@ -78,6 +78,8 @@ class HistoryRow extends View {
 				return 'icon_down';
 			case 'STOP':
 				return 'icon_stop';
+			case 'LEARN':
+				return 'icon_learn';
 			default:
 				return '';
 		}

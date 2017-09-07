@@ -82,13 +82,15 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 		};
 
 		return LiveApi(payload).then(response =>{
-			setTimeout(() => {
-				let { devices } = getState();
-				let device = devices.byId[deviceId];
-				if (device.methodRequested !== '') {
-					getDeviceInfo(deviceId, state, device.isInState, dispatch);
-				}
-			}, 2000);
+			if (state !== 32) {
+				setTimeout(() => {
+					let { devices } = getState();
+					let device = devices.byId[deviceId];
+					if (device.methodRequested !== '') {
+						getDeviceInfo(deviceId, state, device.isInState, dispatch);
+					}
+				}, 2000);
+			}
 		}).catch(error => {
 			let { devices } = getState();
 			let device = devices.byId[deviceId];
@@ -100,11 +102,13 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 					message: error.message,
 				},
 			});
-			dispatch({
-				type: 'DEVICE_RESET_STATE',
-				deviceId,
-				state: device.isInState,
-			});
+			if (state !== 32) {
+				dispatch({
+					type: 'DEVICE_RESET_STATE',
+					deviceId,
+					state: device.isInState,
+				});
+			}
 		});
 	};
 }
