@@ -24,8 +24,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Text, View } from 'BaseComponents';
+import { FormattedMessage, Text, View } from 'BaseComponents';
 import { StyleSheet, Dimensions, Switch } from 'react-native';
+import { defineMessages } from 'react-intl';
+import i18n from '../../../../Translations/common';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from './../../../TabViews/img/selection.json';
@@ -36,6 +38,14 @@ const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
+
+const messages = defineMessages({
+	showOnDashborad: {
+		id: 'showOnDashboard',
+		defaultMessage: 'Show on dashboard',
+		description: 'Select if this item should be shown on the dashboard',
+	},
+});
 
 type Props = {
 	dispatch: Function,
@@ -61,7 +71,7 @@ class SettingsTab extends View {
 	}
 
 	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: 'Settings',
+		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...i18n.settingsHeader} style={{color: tintColor}}/>),
 		tabBarIcon: ({ tintColor }) => (
 			<Icon name="icon_settings" size={24} color={tintColor}/>
 		),
@@ -98,7 +108,7 @@ class SettingsTab extends View {
 				<View style={styles.ShowOnDashCover}>
 					<View style={styles.textShowOnDashCover}>
 						<Text style={styles.textShowOnDash}>
-							Show on dashboard
+							<FormattedMessage {...messages.showOnDashborad} style={styles.textShowOnDash}/>
 						</Text>
 					</View>
 					<View style={styles.dashSwitchCover}>

@@ -1,10 +1,18 @@
 {
-	"pages": {
-		"dashboard": "",
-		"devices": "",
-		"gateways": "",
-		"scheduler": "",
-		"sensors": "",
-		"profile": ""
-	}
+    "friday": "Fredag",
+    "monday": "Mandag",
+    "nextWeekday": "Neste {weekday}",
+    "pages.dashboard": "Dashboard",
+    "pages.devices": "Enheter",
+    "pages.gateways": "Gatewayer",
+    "pages.profile": "",
+    "pages.scheduler": "Tidsplanlegger",
+    "pages.sensors": "Sensorer",
+    "saturday": "Lørdag",
+    "sunday": "Søndag",
+    "thursday": "Torsdag",
+    "today": "I dag",
+    "tomorrow": "I morgen",
+    "tuesday": "Tirsdag",
+    "wednesday": "Onsdag"
 }

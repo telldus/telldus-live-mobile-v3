@@ -17,31 +17,20 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import type { Action } from 'Actions_Types';
-import DeviceInfo from 'react-native-device-info';
+import React from 'react';
+import { injectIntl } from 'react-intl';
+import {FormattedDate} from 'react-intl';
+import Text from './Text';
 
-import { Analytics, Hits as GAHits } from 'react-native-google-analytics';
-import { googleAnalyticsId } from 'Config';
+const FormattedDateComponent = (props: Object) => (
+	<FormattedDate {...props}>{formattedDate => {
+		return <Text style={props.style}>{formattedDate}</Text>;
+	}}
+	</FormattedDate>
+);
 
-function track(action: Action): void {
-
-	let clientId = DeviceInfo.getUniqueID();
-	let ga = new Analytics(googleAnalyticsId, clientId, 1, DeviceInfo.getUserAgent());
-
-	if (action.type === 'SWITCH_TAB') {
-		let screenView = new GAHits.ScreenView(
-			'Telldus Live! app',
-			action.tab,
-			DeviceInfo.getVersion(),
-			DeviceInfo.getBundleId()
-		);
-		ga.send(screenView);
-	} else {
-		let gaEvent = new GAHits.Event('Action', action.type);
-		ga.send(gaEvent);
-	}
-}
-
-module.exports = track;
+export default injectIntl(FormattedDateComponent);

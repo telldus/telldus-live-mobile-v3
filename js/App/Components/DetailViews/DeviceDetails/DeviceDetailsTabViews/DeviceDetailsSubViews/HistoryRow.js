@@ -25,13 +25,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Dimensions, TouchableWithoutFeedback } from 'react-native';
 
-import moment from 'moment';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { Text, View, Icon } from 'BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedTime } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
+import i18n from '../../../../../Translations/common';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -84,10 +84,29 @@ class HistoryRow extends View {
 
 	}
 
+	getPercentage(value: number) {
+		return Math.round(value * 100.0 / 255);
+	}
+
 	render() {
-		let time = moment.unix(this.props.item.ts).format('HH:mm:ss');
+		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
 		let icon = this.getIcon(deviceState);
+		let originText = '';
+		let origin = this.props.item.origin;
+		if (origin === 'Scheduler') {
+			originText = <FormattedMessage {...i18n.scheduler} style={styles.originText}/>;
+		} else if (origin === 'Incoming signal') {
+			originText = <FormattedMessage {...i18n.incommingSignal} style={styles.originText}/>;
+		} else if (origin === 'Unknown') {
+			originText = <FormattedMessage {...i18n.unknown} style={styles.originText}/>;
+		} else if (origin.substring(0, 5) === 'Group') {
+			originText = <Text style={styles.originText}><FormattedMessage {...i18n.group} style={styles.originText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else if (origin.substring(0, 5) === 'Event') {
+			originText = <Text style={styles.originText}><FormattedMessage {...i18n.event} style={styles.originText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else {
+			originText = origin;
+		}
 		return (
 			<View style={styles.rowItemsContainer}>
 				<View style={styles.circularViewCover}>
@@ -100,9 +119,14 @@ class HistoryRow extends View {
 					<View style={styles.verticalLineView}/>
 				</View>
 				<View style={styles.timeCover}>
-					<Text style={styles.timeText}>
-						{time}
-					</Text>
+					<FormattedTime
+						value={time}
+						localeMatcher= "best fit"
+						formatMatcher= "best fit"
+						hour="numeric"
+						minute="numeric"
+						second="numeric"
+						style={styles.timeText} />
 				</View>
 				<View style={styles.statusArrowLocationContainer}>
 					<View style={styles.arrowViewContainer}>
@@ -121,14 +145,14 @@ class HistoryRow extends View {
 								:
 								<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
 									{deviceState === 'DIM' ?
-										<Text>{this.props.item.stateValue}%</Text>
+										<Text style={styles.statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
 										:
 										<CustomIcon name={icon} size={24} color="#ffffff" />
 									}
 								</View>
 							}
 							<View style={styles.locationCover}>
-								<Text style={styles.originText} numberOfLines={1}>{this.props.item.origin}</Text>
+								<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
@@ -182,7 +206,7 @@ const styles = StyleSheet.create({
 	},
 	timeText: {
 		color: '#A59F9A',
-		fontSize: 16,
+		fontSize: 12,
 	},
 	statusArrowLocationContainer: {
 		width: widthStatusArrowLocationContainer,
@@ -216,6 +240,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderTopLeftRadius: 2,
 		borderBottomLeftRadius: 2,
+	},
+	statusValueText: {
+		color: '#ffffff',
+		fontSize: 14,
 	},
 	statusTextON: {
 		backgroundColor: '#fff',

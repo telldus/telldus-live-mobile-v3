@@ -22,9 +22,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, RoundedCornerShadowView, Text } from 'BaseComponents';
+import { FormattedMessage, View, RoundedCornerShadowView, Text } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState } from 'Actions_Devices';
+import i18n from '../../../Translations/common';
 
 class LearnButton extends View {
 	render() {
@@ -32,7 +33,7 @@ class LearnButton extends View {
 			<RoundedCornerShadowView style={this.props.style}>
 				<TouchableOpacity onPress={this.props.onLearn(this.props.id, this.props.command)} style={styles.learn}>
 					<Text style={styles.text}>
-						{'Learn'}
+						<FormattedMessage {...i18n.learn} style={styles.text} />
 					</Text>
 				</TouchableOpacity>
 			</RoundedCornerShadowView>

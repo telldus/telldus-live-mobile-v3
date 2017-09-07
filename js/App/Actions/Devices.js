@@ -124,7 +124,7 @@ export function requestDeviceAction(deviceId: number, method: number): Action {
 function getTimeStamp(tzOffset: number) {
 	let prevTimestamp = 0;
 	let toTimestamp = parseInt(moment().format('X'), 10) + tzOffset;
-	let lastWeek = parseInt(moment().subtract('days', 7).format('X'), 10);
+	let lastWeek = parseInt(moment().subtract(7, 'days').format('X'), 10);
 	let fromTimestamp = lastWeek + tzOffset + prevTimestamp;
 	return { fromTimestamp, toTimestamp };
 }

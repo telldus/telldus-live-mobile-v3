@@ -30,7 +30,9 @@ import BackgroundImage from './BackgroundImage';
 import Button from './Button';
 import Text from './Text';
 import FormattedMessage from './FormattedMessage';
+import FormattedDate from './FormattedDate';
 import FormattedNumber from './FormattedNumber';
+import FormattedTime from './FormattedTime';
 import Switch from './Switch';
 import Picker from './Picker';
 import List from './List';
@@ -81,6 +83,8 @@ module.exports = {
 	Button: Button,
 	FormattedMessage: FormattedMessage,
 	FormattedNumber: FormattedNumber,
+	FormattedDate: FormattedDate,
+	FormattedTime: FormattedTime,
 	Text: Text,
 	Switch: Switch,
 	Picker: Picker,

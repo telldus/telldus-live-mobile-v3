@@ -20,8 +20,9 @@
 'use strict';
 
 import React from 'react';
-import { ListItem, Text } from 'BaseComponents';
+import { FormattedMessage, ListItem, Text } from 'BaseComponents';
 import Theme from 'Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	device: Object,
@@ -48,7 +49,35 @@ export default (props: Props) => {
 		return null;
 	}
 	const method = methodName[props.method];
-	const value = method === 'Dim' ? `${Math.round(methodValue / 255.0 * 100)}%` : method;
+	let value = '';
+	switch (method) {
+		case 'Dim':
+			value = `${Math.round(methodValue / 255.0 * 100)}%`;
+			break;
+		case 'On':
+			value = <FormattedMessage {...i18n.on} style={Theme.Styles.jobRowMethod}/>;
+			break;
+		case 'Off':
+			value = <FormattedMessage {...i18n.off} style={Theme.Styles.jobRowMethod}/>;
+			break;
+		case 'Bell':
+			value = <FormattedMessage {...i18n.bell} style={Theme.Styles.jobRowMethod}/>;
+			break;
+		case 'Learn':
+			value = <FormattedMessage {...i18n.learn} style={Theme.Styles.jobRowMethod}/>;
+			break;
+		case 'Up':
+			value = <FormattedMessage {...i18n.up} style={Theme.Styles.jobRowMethod}/>;
+			break;
+		case 'Down':
+			value = <FormattedMessage {...i18n.down} style={Theme.Styles.jobRowMethod}/>;
+			break;
+		case 'Stop':
+			value = <FormattedMessage {...i18n.stop} style={Theme.Styles.jobRowMethod}/>;
+			break;
+		default:
+			value = method;
+	}
 	return (
 		<ListItem style={Theme.Styles.rowFront}>
 			<Text style={{ flex: 5, color: 'orange', fontSize: 16 }}>

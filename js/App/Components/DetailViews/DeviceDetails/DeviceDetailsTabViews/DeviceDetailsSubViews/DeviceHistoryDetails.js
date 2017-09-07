@@ -23,12 +23,12 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
-import { View, Text, Icon, Modal } from 'BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { defineMessages } from 'react-intl';
 
-import moment from 'moment';
+import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from 'BaseComponents';
+import i18n from '../../../../../Translations/common';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
@@ -42,25 +42,109 @@ let tabViewHeaderHeight = (deviceHeight * 0.085);
 let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
 let screenSpaceRemaining = deviceHeight - totalTop;
 
+const messages = defineMessages({
+	success: {
+		id: 'success',
+		defaultMessage: 'Success',
+	},
+	failed: {
+		id: 'error.failed',
+		defaultMessage: 'Failed',
+	},
+	noReply: {
+		id: 'error.noReply',
+		defaultMessage: 'No reply',
+	},
+	notConfirmed: {
+		id: 'error.notConfirmed',
+		defaultMessage: 'Not confirmed',
+	},
+	timedOut: {
+		id: 'error.timedOut',
+		defaultMessage: 'Timed out',
+	},
+});
+
 class DeviceHistoryDetails extends View {
 	constructor(props) {
 		super(props);
 	}
 
+	getPercentage(value: number) {
+		return Math.round(value * 100.0 / 255);
+	}
+
 	render() {
 		let textState = '', textDate = '', textStatus = '';
+		let originText = '';
+		let origin = this.props.detailsData.origin;
+		if (origin === 'Scheduler') {
+			originText = <FormattedMessage {...i18n.scheduler} style={styles.detailsText}/>;
+		} else if (origin === 'Incoming signal') {
+			originText = <FormattedMessage {...i18n.incommingSignal} style={styles.detailsText}/>;
+		} else if (origin === 'Unknown') {
+			originText = <FormattedMessage {...i18n.unknown} style={styles.detailsText}/>;
+		} else if (origin.substring(0, 5) === 'Group') {
+			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.group} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else if (origin.substring(0, 5) === 'Event') {
+			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.event} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else {
+			originText = origin;
+		}
 		if (this.props.detailsData.state) {
 			let state = states[this.props.detailsData.state];
-			textState = state === 'Dim' ? `${state} ${this.props.detailsData.stateValue}%` : state;
+			textState = state === 'Dim' ? `${state} ${this.getPercentage(this.props.detailsData.stateValue)}%` : state;
+			switch (state) {
+				case 'On':
+					textState = <FormattedMessage {...i18n.on} style={styles.detailsText}/>;
+					break;
+				case 'Off':
+					textState = <FormattedMessage {...i18n.off} style={styles.detailsText}/>;
+					break;
+				case 'Dim':
+					textState = <Text style={styles.detailsText}><FormattedMessage {...i18n.dimmingLevel} style={styles.detailsText}/>: {this.getPercentage(this.props.detailsData.stateValue)}% </Text>;
+					break;
+				case 'Bell':
+					textState = <FormattedMessage {...i18n.bell} style={styles.detailsText}/>;
+					break;
+				case 'Down':
+					textState = <FormattedMessage {...i18n.down} style={styles.detailsText}/>;
+					break;
+				case 'Up':
+					textState = <FormattedMessage {...i18n.up} style={styles.detailsText}/>;
+					break;
+				case 'Stop':
+					textState = <FormattedMessage {...i18n.stop} style={styles.detailsText}/>;
+					break;
+				default:
+					textState = state;
+			}
 		}
 		if (this.props.detailsData.ts) {
-			textDate = moment.unix(this.props.detailsData.ts).format('ddd, MMMM D HH:mm:ss');
+			textDate = new Date(this.props.detailsData.ts * 1000);
 		}
 		if (this.props.detailsData.successStatus >= 0) {
-			let message = statusMessage[this.props.detailsData.successStatus];
-			textStatus = this.props.detailsData.successStatus === 0 ? message : `Failed (${message})`;
+			switch (this.props.detailsData.successStatus) {
+				case 0:
+					textStatus = <FormattedMessage {...messages.success} style={styles.detailsText}/>;
+					break;
+				case '1':
+					textStatus = <FormattedMessage {...messages.failed} style={styles.detailsTextError}/>;
+					break;
+				case '2':
+					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.noReply} style={styles.detailsTextError}/>)</Text>;
+					break;
+				case '3':
+					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.timedOut} style={styles.detailsTextError}/>)</Text>;
+					break;
+				case '4':
+					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.notConfirmed} style={styles.detailsTextError}/>)</Text>;
+					break;
+				default:
+					let message = statusMessage[this.props.detailsData.successStatus];
+					textStatus = this.props.detailsData.successStatus === 0 ? message : `Failed (${message})`;
+			}
 		}
-
 
 		return (
 			<Modal
@@ -74,14 +158,14 @@ class DeviceHistoryDetails extends View {
 				showModal={this.props.showDetails}>
 				<View style={styles.titleTextCover}>
 					<Text style={styles.titleText}>
-						Details
+						<FormattedMessage {...i18n.details} style={styles.titleText}/>
 					</Text>
 				</View>
 				<View style={styles.detailsContainer}>
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
-								State
+								<FormattedMessage {...i18n.state} style={styles.detailsLabel}/>
 							</Text>
 						</View>
 						<View style={styles.detailsValueCover}>
@@ -93,31 +177,49 @@ class DeviceHistoryDetails extends View {
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
-								Time
+								<FormattedMessage {...i18n.time} style={styles.detailsLabel}/>
 							</Text>
 						</View>
-						<View style={styles.detailsValueCover}>
-							<Text style={styles.detailsText} >
-								{textDate}
-							</Text>
-						</View>
+						{textDate !== '' ?
+							<View style={styles.timeCover}>
+
+								<FormattedDate
+									value={textDate}
+									localeMatcher= "best fit"
+									formatMatcher= "best fit"
+									weekday="short"
+									day="2-digit"
+									month="short"
+									style={styles.timeText} />
+								<FormattedTime
+									value={textDate}
+									localeMatcher= "best fit"
+									formatMatcher= "best fit"
+									hour="numeric"
+									minute="numeric"
+									second="numeric"
+									style={[styles.timeText, {paddingLeft: 6, marginRight: 15}]} />
+							</View>
+							:
+							null
+						}
 					</View>
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
-								Origin
+								<FormattedMessage {...i18n.origin} style={styles.detailsLabel}/>
 							</Text>
 						</View>
 						<View style={styles.detailsValueCover}>
 							<Text style={styles.detailsText} numberOfLines={1}>
-								{this.props.detailsData.origin}
+								{originText}
 							</Text>
 						</View>
 					</View>
 					<View style={styles.detailsRow}>
 						<View style={styles.detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
-								Status
+								<FormattedMessage {...i18n.status} style={styles.detailsLabel}/>
 							</Text>
 						</View>
 						<View style={[styles.detailsValueCover, { flexDirection: 'row-reverse' }]}>
@@ -148,9 +250,7 @@ const styles = StyleSheet.create({
 	titleTextCover: {
 		width: deviceWidth,
 		height: deviceHeight * 0.09,
-		borderBottomWidth: 1,
-		borderBottomColor: '#A59F9A',
-		justifyContent: 'flex-end',
+		justifyContent: 'center',
 	},
 	titleText: {
 		marginLeft: 10,
@@ -158,19 +258,17 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	detailsContainer: {
-		backgroundColor: '#ffffff',
 		alignItems: 'center',
 		justifyContent: 'flex-end',
 		flexDirection: 'column',
-		height: Math.floor(deviceHeight * 0.09 * 4),
 		width: deviceWidth,
 	},
 	detailsRow: {
 		flexDirection: 'row',
 		width: deviceWidth,
 		height: deviceHeight * 0.09,
-		borderBottomWidth: 1,
-		borderBottomColor: '#A59F9A',
+		marginTop: 1,
+		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -195,6 +293,15 @@ const styles = StyleSheet.create({
 	detailsTextError: {
 		marginRight: 15,
 		color: '#d32f2f',
+		fontSize: 16,
+	},
+	timeCover: {
+		justifyContent: 'flex-end',
+		width: deviceWidth * 0.7,
+		flexDirection: 'row',
+	},
+	timeText: {
+		color: '#A59F9A',
 		fontSize: 16,
 	},
 });

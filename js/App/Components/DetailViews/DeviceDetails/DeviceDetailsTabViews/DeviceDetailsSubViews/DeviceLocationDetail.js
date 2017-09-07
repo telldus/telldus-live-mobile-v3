@@ -23,10 +23,20 @@
 
 import React from 'react';
 
-import { Text, View } from 'BaseComponents';
+import { FormattedMessage, Text, View } from 'BaseComponents';
 import { StyleSheet, Image, Dimensions } from 'react-native';
+import { defineMessages } from 'react-intl';
+
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
+
+const messages = defineMessages({
+	location: {
+		id: 'deviceSettings.location',
+		defaultMessage: 'Location',
+		description: 'Header for which location a device belongs to',
+	},
+});
 
 type Props = {
 	locationImageUrl: String,
@@ -52,7 +62,7 @@ class DeviceLocationDetail extends View {
 			<View style={[styles.shadow, styles.homeSweetHomeContainer]}>
 				<View style={styles.locationImageContainer}>
 					<Text style={styles.textLocation}>
-						Location :
+						<FormattedMessage {...messages.location} style={styles.textLocation} />:
 					</Text>
 					<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: this.props.locationImageUrl, isStatic: true }} />
 				</View>

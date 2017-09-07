@@ -17,11 +17,20 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
-import track from './Track';
+import React from 'react';
+import { injectIntl } from 'react-intl';
+import {FormattedTime} from 'react-intl';
+import Text from './Text';
 
-module.exports = store => next => action => {
-	track(action);
-	return next(action);
-};
+const FormattedTimeComponent = (props: Object) => (
+	<FormattedTime {...props}>{formattedTime => {
+		return <Text style={props.style}>{formattedTime}</Text>;
+	}}
+	</FormattedTime>
+);
+
+export default injectIntl(FormattedTimeComponent);

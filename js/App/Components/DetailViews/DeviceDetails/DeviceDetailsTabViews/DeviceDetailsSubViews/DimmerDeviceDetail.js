@@ -30,8 +30,9 @@ const deviceHeight = Dimensions.get('window').height;
 
 import { setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState } from 'Actions_Devices';
-import { RoundedCornerShadowView, Text, View } from 'BaseComponents';
+import { FormattedMessage, RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { OnButton, OffButton } from 'TabViews_SubViews';
+import i18n from '../../../../../Translations/common';
 
 type Props = {
 	commandDIM: number,
@@ -138,7 +139,7 @@ class DimmerDeviceDetailModal extends View {
 			<View style={styles.container}>
 				<View style={[styles.shadow, styles.dimmerContainer]}>
 					<Text style={styles.textDimmingLevel}>
-						{`Dimming level: ${this.state.temporaryDimmerValue}%`}
+						<FormattedMessage {...i18n.dimmingLevel} style={styles.textDimmingLevel} />: {this.state.temporaryDimmerValue}%
 					</Text>
 					{slider}
 					{toggleButton}
