@@ -26,6 +26,7 @@
   "error.noReply": "inget svar",
   "error.notConfirmed": "inte bekräftat",
   "error.timedOut": "tog för lång tid",
+  "errortoast": "Det gick inte att utföra åtgärden",
   "event": "Händelse",
   "group": "Grupp",
   "history": "Historik",
