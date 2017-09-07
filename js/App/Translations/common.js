@@ -81,6 +81,14 @@ const messages = defineMessages({
 		id: 'device.up',
 		defaultMessage: 'Up',
 	},
+	login: {
+		id: 'login',
+		defaultMessage: 'LOGIN',
+	},
+	logging: {
+		id: 'logging',
+		defaultMessage: 'LOGGING IN...',
+	},
 });
 
 export default messages;

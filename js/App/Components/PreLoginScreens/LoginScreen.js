@@ -31,6 +31,8 @@ import {NotificationComponent, FormContainerComponent} from 'PreLoginScreen_SubV
 import { loginToTelldus } from 'Actions';
 import { testUsername, testPassword } from 'Config';
 
+import i18n from './../../Translations/common';
+
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
@@ -135,7 +137,7 @@ class LoginScreen extends View {
 				<TouchableButton
 					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
-					text={this.state.isLoading ? 'Logging in...' : 'LOGIN'}
+					text={this.state.isLoading ? i18n.logging : i18n.login}
 				/>
 				<View style={styles.otherLinks}>
 					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forgot your password?</Text>
