@@ -1,4 +1,15 @@
 {
+  "button.loggingin": "Logging in",
+  "button.loggingout": "Logging out",
+  "button.login": "Login",
+  "button.logout": "Logout",
+  "button.register": "Register",
+  "button.registering": "Registering",
+  "button.sendingpassword": "Sending",
+  "button.sendpassword": "Password sent",
+  "button.submittingtoken": "Submitting Token",
+  "button.submittoken": "Submit Push Token",
+  "button.welcome": "GOT IT",
   "days.friday": "Friday",
   "days.monday": "Monday",
   "days.nextWeekday": "Next {weekday}",
@@ -53,5 +64,16 @@
   "status": "Status",
   "success": "Success",
   "time": "Time",
-  "unknown": "Unknown"
+  "unknown": "Unknown",
+  "user.alreadyHaveAccount": "I already have an account",
+  "user.confirmEmailAddress": "Confirm email address",
+  "user.createAccount": "Create Account",
+  "user.emailAddress": "Email address",
+  "user.emailAdressNotMatch": "Email addresses don't match. Please Check your entered email address.",
+  "user.emailNotValid": "Email address not Valid",
+  "user.firstName": "First Name",
+  "user.forgotPassword": "Forgot your password?",
+  "user.lastName": "Last Name",
+  "user.needAccount": "Need an account?",
+  "user.password": "Password"
 }
