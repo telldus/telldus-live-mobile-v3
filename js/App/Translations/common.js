@@ -87,7 +87,7 @@ const messages = defineMessages({
 	},
 	loggingin: {
 		id: 'button.loggingin',
-		defaultMessage: 'LOGGING IN...',
+		defaultMessage: 'LOGGING IN',
 	},
 	logout: {
 		id: 'button.logout',
@@ -95,7 +95,7 @@ const messages = defineMessages({
 	},
 	loggingout: {
 		id: 'button.loggingout',
-		defaultMessage: 'LOGGING OUT...',
+		defaultMessage: 'LOGGING OUT',
 	},
 	submittoken: {
 		id: 'button.submittoken',
@@ -103,7 +103,7 @@ const messages = defineMessages({
 	},
 	submittingtoken: {
 		id: 'button.submittingtoken',
-		defaultMessage: 'Submitting Token...',
+		defaultMessage: 'Submitting Token',
 	},
 	register: {
 		id: 'button.register',
@@ -111,7 +111,7 @@ const messages = defineMessages({
 	},
 	registering: {
 		id: 'button.registering',
-		defaultMessage: 'REGISTERING...',
+		defaultMessage: 'REGISTERING',
 	},
 	sendpassword: {
 		id: 'button.sendpassword',
@@ -119,7 +119,7 @@ const messages = defineMessages({
 	},
 	sendingpassword: {
 		id: 'button.sendingpassword',
-		defaultMessage: 'SENDING...',
+		defaultMessage: 'SENDING',
 	},
 	welcome: {
 		id: 'button.welcome',

@@ -91,6 +91,7 @@ export default class RegisterScreen extends View {
 					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? i18n.sendingpassword : i18n.sendpassword}
+					postScript={this.state.isLoading ? '...' : null}
 				/>
 				<View style={{ height: 10 }}/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> Back to Login </Text>

@@ -137,7 +137,8 @@ class LoginScreen extends View {
 				<TouchableButton
 					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
-					text={this.state.isLoading ? i18n.logging : i18n.login}
+					text={this.state.isLoading ? i18n.loggingin : i18n.login}
+					postScript={this.state.isLoading ? '...' : null}
 				/>
 				<View style={styles.otherLinks}>
 					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forgot your password?</Text>

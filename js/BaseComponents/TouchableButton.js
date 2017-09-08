@@ -32,6 +32,8 @@ type Props = {
 	text: string,
 	onPress: Function,
 	intl: intlShape.isRequired,
+	postScript?: any,
+	preScript?: any,
 };
 
 class TouchableButton extends Component {
@@ -44,7 +46,7 @@ class TouchableButton extends Component {
 	render() {
 		return (
 			<Text style={[styles.button, this.props.style]} onPress={this.props.onPress} >
-				{this.props.intl.formatMessage(this.props.text)}
+				{this.props.preScript}{this.props.intl.formatMessage(this.props.text)}{this.props.postScript}
 			</Text>
 		);
 	}

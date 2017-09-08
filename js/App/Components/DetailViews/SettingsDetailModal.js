@@ -56,8 +56,8 @@ const StatusView = () => (
 type Props = {
 	isVisible: boolean,
 	onClose: () => void,
-	onLogout: () => void,
-	onSubmitPushToken: () => void,
+	onLogout: (string, Function) => void,
+	onSubmitPushToken: (string, Function) => void,
 	store: Object,
 };
 
@@ -134,6 +134,7 @@ class SettingsDetailModal extends View {
 								style={Theme.Styles.submitButton}
 								onPress={this.submitPushToken}
 								text={submitButText}
+								postScript={this.state.isPushSubmitLoading ? '...' : null}
 							/>
 							:
 							<StatusView/>
@@ -142,6 +143,7 @@ class SettingsDetailModal extends View {
 							style={Theme.Styles.submitButton}
 							onPress={this.logout}
 							text={logoutButText}
+							postScript={this.state.isLoading ? '...' : null}
 						/>
 					</View>
 				</Container>

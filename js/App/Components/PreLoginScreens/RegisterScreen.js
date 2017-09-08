@@ -243,6 +243,7 @@ class RegisterScreen extends View {
 					style={Theme.Styles.submitButton}
 					onPress={this.props.showModal ? null : this.onFormSubmit}
 					text={this.state.isLoading ? i18n.registering : i18n.register}
+					postScript={this.state.isLoading ? '...' : null}
 				/>
 				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
 				<Modal
