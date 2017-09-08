@@ -143,7 +143,7 @@ class SettingsDetailModal extends View {
 							style={Theme.Styles.submitButton}
 							onPress={this.logout}
 							text={logoutButText}
-							postScript={this.state.isLoading ? '...' : null}
+							postScript={this.state.isLogoutLoading ? '...' : null}
 						/>
 					</View>
 				</Container>
