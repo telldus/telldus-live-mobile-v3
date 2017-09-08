@@ -25,6 +25,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
+import { Dimensions, TouchableWithoutFeedback } from 'react-native';
+
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 import { List, ListDataSource, View, StyleSheet } from 'BaseComponents';
 import {DeviceLocationDetail} from 'DeviceDetailsSubView';
@@ -34,6 +38,8 @@ import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
+
+import Theme from 'Theme';
 
 const messages = defineMessages({
 	gateways: {
@@ -66,6 +72,7 @@ class GatewaysTab extends View {
 
 	renderRow: (renderRowProps) => Object;
 	onRefresh: () => void;
+	addLocation: () => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(messages.gateways),
@@ -84,6 +91,7 @@ class GatewaysTab extends View {
 
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
+		this.addLocation = this.addLocation.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -114,6 +122,9 @@ class GatewaysTab extends View {
 		);
 	}
 
+	addLocation() {
+	}
+
 	render() {
 		return (
 			<View style={{marginTop: 10}}>
@@ -122,6 +133,9 @@ class GatewaysTab extends View {
 					renderRow={this.renderRow}
 					onRefresh={this.onRefresh}
 				/>
+				<TouchableWithoutFeedback onPress={this.addLocation}>
+					<View style={[styles.addButtonCover, styles.shadow]} />
+				</TouchableWithoutFeedback>
 			</View>
 		);
 	}
@@ -133,6 +147,25 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		alignItems: 'center',
 		marginBottom: 5,
+	},
+	addButtonCover: {
+		position: 'absolute',
+		backgroundColor: Theme.Core.brandSecondary,
+		height: 60,
+		width: 60,
+		borderRadius: 60,
+		top: deviceHeight * 0.6,
+		left: deviceWidth * 0.78,
+	},
+	shadow: {
+		shadowColor: '#000000',
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowRadius: 60,
+		shadowOpacity: 1.0,
+		elevation: 15,
 	},
 });
 
