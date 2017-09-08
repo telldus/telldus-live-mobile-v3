@@ -145,6 +145,11 @@ const messages = defineMessages({
 		id: 'user.lastName',
 		defaultMessage: 'Last Name',
 	},
+	forgotPassword: {
+		id: 'user.forgotPassword',
+		defaultMessage: 'Forgot your password?',
+		description: 'Message to show on the login screen and forgot password screen',
+	},
 });
 
 export default messages;

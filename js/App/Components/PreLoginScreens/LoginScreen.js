@@ -39,11 +39,6 @@ import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
 const messages = defineMessages({
-	forgotPassword: {
-		id: 'user.forgotPassword',
-		defaultMessage: 'Forgot your password?',
-		description: 'Message to show on the login screen',
-	},
 	needAccount: {
 		id: 'user.needAccount',
 		defaultMessage: 'Need an account?',
@@ -157,7 +152,7 @@ class LoginScreen extends View {
 					postScript={this.state.isLoading ? '...' : null}
 				/>
 				<View style={styles.otherLinks}>
-					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}><FormattedMessage {...messages.forgotPassword} style={{ color: '#bbb' }}/></Text>
+					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}><FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb' }}/></Text>
 					<Text style={{ color: '#bbb', paddingLeft: 5 }} onPress={this.onNeedAccount}><FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5 }}/></Text>
 				</View>
 				<View style={{ height: 10 }}/>
