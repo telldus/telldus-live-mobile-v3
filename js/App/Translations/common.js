@@ -97,14 +97,6 @@ const messages = defineMessages({
 		id: 'button.loggingout',
 		defaultMessage: 'LOGGING OUT',
 	},
-	submittoken: {
-		id: 'button.submittoken',
-		defaultMessage: 'Submit Push Token',
-	},
-	submittingtoken: {
-		id: 'button.submittingtoken',
-		defaultMessage: 'Submitting Token',
-	},
 	register: {
 		id: 'button.register',
 		defaultMessage: 'REGISTER',

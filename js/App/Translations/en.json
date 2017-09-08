@@ -7,8 +7,6 @@
   "button.registering": "Registering",
   "button.sendingpassword": "Send password",
   "button.sendpassword": "Password sent",
-  "button.submittingtoken": "Submitting Token",
-  "button.submittoken": "Submit Push Token",
   "button.welcome": "GOT IT",
   "days.friday": "Friday",
   "days.monday": "Monday",
@@ -59,6 +57,9 @@
   "sensor.minutesAgo": "minutes ago",
   "settings": "Settings",
   "settings.connectedLocations": "Connected Locations",
+  "settings.pushEnabled": "Device subscribed for push notifications.",
+  "settings.pushRegister": "Register for push notifications",
+  "settings.pushRegisters": "Registers for push notifications",
   "showOnDashboard": "Show on dashboard",
   "state": "State",
   "status": "Status",
@@ -76,5 +77,6 @@
   "user.forgotPassword": "Forgot your password?",
   "user.lastName": "Last Name",
   "user.needAccount": "Need an account?",
-  "user.password": "Password"
+  "user.password": "Password",
+  "version": "version"
 }

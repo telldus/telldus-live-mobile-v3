@@ -7,8 +7,6 @@
   "button.registering": "Registrerar",
   "button.sendingpassword": "Lösenord skickat",
   "button.sendpassword": "Skicka lösenord",
-  "button.submittingtoken": "Registrerar för push",
-  "button.submittoken": "Registrera för push",
   "button.welcome": "GOT IT",
   "days.friday": "Fredag",
   "days.monday": "Måndag",
@@ -59,6 +57,9 @@
   "sensor.minutesAgo": "minuter sedan",
   "settings": "Inställningar",
   "settings.connectedLocations": "Anslutna platser",
+  "settings.pushEnabled": "Enheten är registrerad för push-notifikationer.",
+  "settings.pushRegister": "Registrerar för push-notifikationer",
+  "settings.pushRegisters": "Registrera för push-notifikationer",
   "showOnDashboard": "Visa på dashborad",
   "state": "Åtgärd",
   "status": "Status",
@@ -76,5 +77,6 @@
   "user.forgotPassword": "Glömt ditt lösenord?",
   "user.lastName": "Efternamn",
   "user.needAccount": "Behöver du ett konto?",
-  "user.password": "Lösenord"
+  "user.password": "Lösenord",
+  "version": "version"
 }
