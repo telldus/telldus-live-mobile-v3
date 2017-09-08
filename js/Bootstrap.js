@@ -26,9 +26,9 @@ import 'intl/locale-data/jsonp/en';
 import 'intl/locale-data/jsonp/sv';
 
 import React from 'React';
-import { NativeModules } from 'react-native';
 import { Provider } from 'react-redux';
 import { Crashlytics } from 'react-native-fabric';
+import DeviceInfo from 'react-native-device-info';
 
 import App from 'App';
 import { configureStore } from './App/Store/ConfigureStore';
@@ -69,19 +69,7 @@ function Bootstrap(): React.Component {
 			if (forceLocale) {
 				return forceLocale;
 			}
-			if (!NativeModules.I18nManager) {
-				return 'en';
-			}
-			let localeIdentifier = '';
-			if (NativeModules.I18nManager.localeIdentifier) {
-				// Only available on Android
-				localeIdentifier = NativeModules.I18nManager.localeIdentifier;
-			} else if (NativeModules.SettingsManager.settings.AppleLocale) {
-				// iOS
-				localeIdentifier = NativeModules.SettingsManager.settings.AppleLocale;
-			} else {
-				return 'en';
-			}
+			let localeIdentifier = DeviceInfo.getDeviceLocale();
 			let parts = localeIdentifier.split('_');
 			if (parts.length === 0) {
 				return 'en';
