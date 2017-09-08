@@ -27,15 +27,29 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { TouchableButton, Text, View, Modal } from 'BaseComponents';
+import { FormattedMessage, TouchableButton, Text, View, Modal } from 'BaseComponents';
 import {NotificationComponent, FormContainerComponent} from 'PreLoginScreen_SubViews';
 import { loginToTelldus } from 'Actions';
 import { testUsername, testPassword } from 'Config';
 
 import i18n from './../../Translations/common';
+import {defineMessages} from 'react-intl';
 
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
+
+const messages = defineMessages({
+	forgotPassword: {
+		id: 'user.forgotPassword',
+		defaultMessage: 'Forgot your password?',
+		description: 'Message to show on the login screen',
+	},
+	needAccount: {
+		id: 'user.needAccount',
+		defaultMessage: 'Need an account?',
+		description: 'Message to show on the login screen',
+	},
+});
 
 type Props = {
 		dispatch: Function,
@@ -106,7 +120,7 @@ class LoginScreen extends View {
 
 	render() {
 		return (
-			<FormContainerComponent headerText="Login">
+			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.login)}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
@@ -143,8 +157,8 @@ class LoginScreen extends View {
 					postScript={this.state.isLoading ? '...' : null}
 				/>
 				<View style={styles.otherLinks}>
-					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forgot your password?</Text>
-					<Text style={{ color: '#bbb', paddingLeft: 5 }} onPress={this.onNeedAccount}>Need an account?</Text>
+					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}><FormattedMessage {...messages.forgotPassword} style={{ color: '#bbb' }}/></Text>
+					<Text style={{ color: '#bbb', paddingLeft: 5 }} onPress={this.onNeedAccount}><FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5 }}/></Text>
 				</View>
 				<View style={{ height: 10 }}/>
 				<Modal
