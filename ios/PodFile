@@ -5,7 +5,6 @@ target 'TelldusLiveApp' do
   pod "Yoga", :path => "#{react_native_path}/ReactCommon/yoga"
   pod 'React', :subspecs => [
     'Core',
-    'RCTPushNotification',
   ], :path => react_native_path
   pod 'Fabric'
   pod 'Crashlytics'
