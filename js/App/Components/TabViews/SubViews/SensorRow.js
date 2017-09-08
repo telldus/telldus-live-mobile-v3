@@ -205,7 +205,7 @@ class SensorRow extends Component {
 	}
 
 	formatLastUpdated(minutes: number, lastUpdated:number): string {
-		if (minutes === 0) {
+		if (minutes <= 0) {
 			return 'Just now';
 		}
 		if (minutes === 1) {
