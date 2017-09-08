@@ -125,6 +125,26 @@ const messages = defineMessages({
 		id: 'button.welcome',
 		defaultMessage: 'GOT IT',
 	},
+	emailAddress: {
+		id: 'user.emailAddress',
+		defaultMessage: 'Email address',
+	},
+	confirmEmailAddress: {
+		id: 'user.confirmEmailAddress',
+		defaultMessage: 'Confirm email address',
+	},
+	password: {
+		id: 'user.password',
+		defaultMessage: 'Password',
+	},
+	firstName: {
+		id: 'user.firstName',
+		defaultMessage: 'First Name',
+	},
+	lastName: {
+		id: 'user.lastName',
+		defaultMessage: 'Last Name',
+	},
 });
 
 export default messages;

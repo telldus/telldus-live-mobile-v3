@@ -24,6 +24,7 @@
 import React from 'react';
 import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
+import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { TouchableButton, Text, View, Modal } from 'BaseComponents';
@@ -43,6 +44,7 @@ type Props = {
 		loginToTelldus: Function,
 		validationMessage: string,
 		showModal: boolean,
+		intl: intlShape.isRequired,
 };
 
 type State = {
@@ -110,7 +112,7 @@ class LoginScreen extends View {
 					<TextInput
 						style={Theme.Styles.textField}
 						onChangeText={this.onChangeUsername}
-						placeholder="Username"
+						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 						keyboardType="email-address"
 						autoCapitalize="none"
 						autoCorrect={false}
@@ -124,7 +126,7 @@ class LoginScreen extends View {
 					<TextInput
 						style={Theme.Styles.textField}
 						onChangeText={this.onChangePassword}
-						placeholder="Password"
+						placeholder={this.props.intl.formatMessage(i18n.password)}
 						secureTextEntry={true}
 						autoCapitalize="none"
 						autoCorrect={false}
@@ -214,4 +216,4 @@ function dispatchToProps(dispatch) {
 	};
 }
 
-module.exports = connect(mapStateToProps, dispatchToProps)(LoginScreen);
+module.exports = connect(mapStateToProps, dispatchToProps)(injectIntl(LoginScreen));
