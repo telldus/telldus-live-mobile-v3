@@ -66,9 +66,11 @@
   "success": "Success",
   "time": "Time",
   "unknown": "Unknown",
+  "user.accountCreated": "Your account is created and you will now be logged in.",
   "user.alreadyHaveAccount": "I already have an account",
   "user.backToLogin": "Back to Login",
   "user.confirmEmailAddress": "Confirm email address",
+  "user.confirmMessage": "An email is sent to you with a link to confirm your account. Please confirm your account within 24 hours, otherwise the account will be deleted.",
   "user.createAccount": "Create Account",
   "user.emailAddress": "Email address",
   "user.emailAdressNotMatch": "Email addresses don't match. Please Check your entered email address.",
@@ -78,5 +80,6 @@
   "user.lastName": "Last Name",
   "user.needAccount": "Need an account?",
   "user.password": "Password",
+  "user.welcome": "Welcome to Telldus",
   "version": "version"
 }
