@@ -26,18 +26,28 @@ import { StyleSheet, TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, Text, TouchableButton } from 'BaseComponents';
+import { FormattedMessage, View, Text, TouchableButton } from 'BaseComponents';
 import {FormContainerComponent} from 'PreLoginScreen_SubViews';
 
 import i18n from './../../Translations/common';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import Theme from 'Theme';
 
+const messages = defineMessages({
+	backToLogin: {
+		id: 'user.backToLogin',
+		defaultMessage: 'Back to Login',
+		description: 'Message to show on the forgot password screen',
+	},
+});
+
 type Props = {
 	navigation: Object,
+	intl: intlShape.isRequired,
 }
 
-export default class RegisterScreen extends View {
+class ForgotPasswordScreen extends View {
 
 	props: Props;
 
@@ -70,14 +80,14 @@ export default class RegisterScreen extends View {
 
 	render() {
 		return (
-			<FormContainerComponent headerText="Forgot Password">
+			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
 						style={Theme.Styles.textField}
 						onChangeText={this.onEmailChange}
 						onBlur={this.onEmailBlur}
-						placeholder="your@emailaddress.com"
+						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 						keyboardType="email-address"
 						autoCapitalize="none"
 						autoCorrect={false}
@@ -94,7 +104,7 @@ export default class RegisterScreen extends View {
 					postScript={this.state.isLoading ? '...' : null}
 				/>
 				<View style={{ height: 10 }}/>
-				<Text style={styles.accountExist} onPress={this.goBackToLogin}> Back to Login </Text>
+				<Text style={styles.accountExist} onPress={this.goBackToLogin}> <FormattedMessage {...messages.backToLogin} style={styles.accountExist} /> </Text>
 			</FormContainerComponent>
 		);
 	}
@@ -106,3 +116,5 @@ const styles = StyleSheet.create({
 		color: '#bbb',
 	},
 });
+
+export default injectIntl(ForgotPasswordScreen);
