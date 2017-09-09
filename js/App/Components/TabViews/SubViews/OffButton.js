@@ -21,10 +21,12 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Text, View } from 'BaseComponents';
+import { View, FormattedMessage } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+
+import i18n from '../../../Translations/common';
 
 type Props = {
 	requestDeviceAction: (id: number, command: number, value?: number) => void,
@@ -50,10 +52,7 @@ class OffButton extends View {
 		return (
 			<View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>
 				<TouchableOpacity disabled={!enabled} onPress={this.onPress} style={styles.button} >
-					<Text ellipsizeMode="middle" numberOfLines={1}
-						style = {[styles.buttonText, isInState === 'TURNOFF' || methodRequested === 'TURNOFF' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}>
-						{'Off'}
-					</Text>
+					<FormattedMessage {...i18n.off} style = {[styles.buttonText, isInState === 'TURNOFF' || methodRequested === 'TURNOFF' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}/>
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNOFF' ?
