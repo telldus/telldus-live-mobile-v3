@@ -59,6 +59,11 @@ const messages = defineMessages({
 		defaultMessage: 'Email address not Valid',
 		description: 'Error message on the create account screen',
 	},
+	fieldEmpty: {
+		id: 'form.fieldEmpty',
+		defaultMessage: 'Field can\'t be Empty',
+		description: 'Error message Pre-fix on form submitted, with fields empty',
+	},
 });
 
 type Props = {
@@ -153,16 +158,20 @@ class RegisterScreen extends View {
 					});
 					this.props.onFormSubmit(em, fn, ln);
 				} else {
-					let message = <FormattedMessage {...messages.emailAdressNotMatch} />;
+					let message = this.props.intl.formatMessage(messages.emailAdressNotMatch);
 					this.showModal(message);
 				}
 			} else {
-				let message = <FormattedMessage {...messages.emailNotValid} />;
+				let message = this.props.intl.formatMessage(messages.emailNotValid);
 				this.showModal(message);
 			}
 		} else {
-			let pf = 'Field can\'t be Empty';
-			let message = fn === '' ? `${pf}- first name` : ln === '' ? `${pf}- last name ` : em === '' ? `${pf}- email ` : cem === '' ? `${pf}- confirm email` : this.props.validationMessage;
+			let pf = this.props.intl.formatMessage(messages.fieldEmpty);
+			let message = fn === '' ? `${pf}- ${this.props.intl.formatMessage(i18n.firstName)}`
+				: ln === '' ? `${pf}- ${this.props.intl.formatMessage(i18n.lastName)}`
+					: em === '' ? `${pf}- ${this.props.intl.formatMessage(i18n.emailAddress)}`
+						: cem === '' ? `${pf}- ${this.props.intl.formatMessage(i18n.confirmEmailAddress)}`
+							: this.props.validationMessage;
 			this.showModal(message);
 		}
 	}
