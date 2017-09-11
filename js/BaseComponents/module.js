@@ -33,6 +33,7 @@ import FormattedMessage from './FormattedMessage';
 import FormattedDate from './FormattedDate';
 import FormattedNumber from './FormattedNumber';
 import FormattedTime from './FormattedTime';
+import FormattedRelative from './FormattedRelative';
 import Switch from './Switch';
 import Picker from './Picker';
 import List from './List';
@@ -85,6 +86,7 @@ module.exports = {
 	FormattedNumber: FormattedNumber,
 	FormattedDate: FormattedDate,
 	FormattedTime: FormattedTime,
+	FormattedRelative: FormattedRelative,
 	Text: Text,
 	Switch: Switch,
 	Picker: Picker,

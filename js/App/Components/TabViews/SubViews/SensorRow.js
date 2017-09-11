@@ -22,55 +22,17 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { FormattedMessage, FormattedNumber, Image, ListItem, Text, View } from 'BaseComponents';
+import { FormattedMessage, FormattedNumber, Image, ListItem, Text, View, FormattedRelative } from 'BaseComponents';
 import { ScrollView, StyleSheet } from 'react-native';
-import { reportException } from 'Analytics';
 import { defineMessages } from 'react-intl';
-import i18n from '../../../Translations/common';
 
-import moment from 'moment';
 import Theme from 'Theme';
 
 const messages = defineMessages({
-	dayAgo: {
-		id: 'sensor.dayAgo',
-		defaultMessage: 'day ago',
-		description: 'How long ago a sensor was update',
-	},
-	daysAgo: {
-		id: 'sensor.daysAgo',
-		defaultMessage: 'days ago',
-		description: 'How long ago a sensor was update',
-	},
-	hourAgo: {
-		id: 'sensor.hourAgo',
-		defaultMessage: 'hour ago',
-		description: 'How long ago a sensor was update',
-	},
-	hoursAgo: {
-		id: 'sensor.hoursAgo',
-		defaultMessage: 'hours ago',
-		description: 'How long ago a sensor was update',
-	},
-	justNow: {
-		id: 'sensor.justNow',
-		defaultMessage: 'just now',
-		description: 'How long ago a sensor was update',
-	},
 	noName: {
 		id: 'noName',
 		defaultMessage: 'no name',
 		description: 'Used when an item does not have a name',
-	},
-	minuteAgo: {
-		id: 'sensor.minuteAgo',
-		defaultMessage: 'minute ago',
-		description: 'How long ago a sensor was update',
-	},
-	minutesAgo: {
-		id: 'sensor.minutesAgo',
-		defaultMessage: 'minutes ago',
-		description: 'How long ago a sensor was update',
 	},
 });
 
@@ -169,6 +131,7 @@ class SensorRow extends Component {
 	render() {
 		const { sensor } = this.props;
 		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
+		let date = minutesAgo >= 0 ? new Date(sensor.lastUpdated * 1000) : Date.now();
 		let sensors = [];
 
 		const {
@@ -213,7 +176,6 @@ class SensorRow extends Component {
 		if (luminance) {
 			sensors.push(<SensorLuminance {...{ luminance }} key={`${id}luminance`}/>);
 		}
-
 		return (
 			<ListItem
 				style={Theme.Styles.rowFront}
@@ -224,14 +186,14 @@ class SensorRow extends Component {
 					      numberOfLines={1}>
 						{sensor.name ? sensor.name : <FormattedMessage {...messages.noName} /> }
 					</Text>
-					<Text style={[
-						styles.time, {
-							color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
-							opacity: minutesAgo < 1440 ? 1 : 0.5,
-						},
-					]}>
-						{this.formatLastUpdated(minutesAgo, sensor.lastUpdated)}
-					</Text>
+					<FormattedRelative
+						value={date}
+						textStyle={[
+							styles.time, {
+								color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
+								opacity: minutesAgo < 1440 ? 1 : 0.5,
+							},
+						]}/>
 				</View>
 				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ?
 					sensors :
@@ -249,37 +211,6 @@ class SensorRow extends Component {
 		this.width = event.nativeEvent.layout.width;
 	}
 
-	formatLastUpdated(minutes: number, lastUpdated:number): string {
-		if (minutes <= 0) {
-			return <FormattedMessage {...messages.justNow} />;
-		}
-		if (minutes === 1) {
-			return ( <Text>1 <FormattedMessage {...messages.minuteAgo} /></Text>);
-		}
-		if (minutes < 60) {
-			return ( <Text>{minutes} <FormattedMessage {...messages.minutesAgo} /></Text>);
-		}
-		const hours = Math.round(minutes / 60);
-		if (hours === 1) {
-			return ( <Text>1 <FormattedMessage {...messages.hourAgo} /></Text>);
-		}
-		if (hours < 24) {
-			return ( <Text>{hours} <FormattedMessage {...messages.hoursAgo} /></Text>);
-		}
-		const days = Math.round(minutes / 60 / 24);
-		if (days === 1) {
-			return ( <Text>1 <FormattedMessage {...messages.dayAgo} /></Text>);
-		}
-		if (days <= 7) {
-			return ( <Text>{days} <FormattedMessage {...messages.daysAgo} /></Text>);
-		}
-		try {
-			return moment.unix(lastUpdated).format('MM-DD-YYYY');
-		} catch (exception) {
-			reportException(exception);
-			return <FormattedMessage {...i18n.unknown} />;
-		}
-	}
 }
 
 const styles = StyleSheet.create({
