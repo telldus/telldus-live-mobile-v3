@@ -48,6 +48,7 @@
   "sensor.minutesAgo": "minutes ago",
   "settings": "Settings",
   "settings.connectedLocations": "Connected Locations",
+  "settings.addNewLocation": "Add New Location",
   "showOnDashboard": "Show on dashboard",
   "state": "State",
   "status": "Status",

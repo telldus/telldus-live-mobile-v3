@@ -47,7 +47,22 @@ const messages = defineMessages({
 		id: 'settings.connectedLocations',
 		defaultMessage: 'Connected Locations',
 	},
+	addNewLocation: {
+		id: 'settings.addNewLocation',
+		defaultMessage: 'Add New Location',
+	},
 });
+
+const AddLocation = ({onPress}) => {
+	return (
+		<View style={styles.addNewLocationContainer}>
+			<TouchableOpacity onPress={onPress} style={styles.addNewLocationCover}>
+				<Icon name="plus-circle" size={20} color="#e26901"/>
+				<FormattedMessage {...messages.addNewLocation} style={styles.addNewLocationText}/>
+			</TouchableOpacity>
+		</View>
+	);
+};
 
 const Gateway = ({ name, online, websocketOnline }) => {
 	let locationSrc;
@@ -100,7 +115,7 @@ const SettingsButton = ({ onPress }) => (
 	</TouchableOpacity>
 );
 
-const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
+const NavigationView = ({ gateways, userProfile, onOpenSetting, addNewLocation }) => {
 	return (
 		<View style={{
 			flex: 1,
@@ -115,6 +130,7 @@ const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
 				{gateways.allIds.map((id, index) => {
 					return (<Gateway {...gateways.byId[id]} key={index}/>);
 				})}
+				<AddLocation onPress={addNewLocation} />
 				<SettingsButton onPress={onOpenSetting}/>
 			</View>
 		</View>
@@ -130,9 +146,6 @@ const RouteConfigs = {
 	},
 	Sensors: {
 		screen: TabViews.Sensors,
-	},
-	Gateways: {
-		screen: TabViews.Gateways,
 	},
 	Scheduler: {
 		screen: TabViews.Scheduler,
@@ -228,6 +241,7 @@ class TabsView extends View {
 		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
 		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+		this.addNewLocation = this.addNewLocation.bind(this);
 	}
 
 	componentDidMount() {
@@ -272,6 +286,7 @@ class TabsView extends View {
 	renderNavigationView() {
 		return <NavigationView
 			gateways={this.props.gateways}
+			addNewLocation={this.addNewLocation}
 			userProfile={this.props.userProfile}
 			theme={this.getTheme()}
 			onOpenSetting={this.onOpenSetting}
@@ -281,6 +296,9 @@ class TabsView extends View {
 	makeRightButton = routeName => {
 		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
+
+	addNewLocation() {
+	}
 
 	render() {
 		let screenProps = { stackNavigator: this.props.stackNavigator };
@@ -390,6 +408,23 @@ const styles = StyleSheet.create({
 	gatewayIcon: {
 		width: 20,
 		height: 20,
+	},
+	addNewLocationCover: {
+		flexDirection: 'row',
+	},
+	addNewLocationContainer: {
+		borderBottomWidth: 1,
+		borderBottomColor: '#eeeeef',
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: 10,
+		height: 40,
+		justifyContent: 'flex-start',
+	},
+	addNewLocationText: {
+		fontSize: 14,
+		color: '#e26901',
+		marginLeft: 10,
 	},
 });
 
