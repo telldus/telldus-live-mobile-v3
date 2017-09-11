@@ -1,7 +1,7 @@
 {
     "days.friday": "Fredag",
     "days.monday": "Mandag",
-    "days.nextWeekday": "Neste (ukedag)",
+    "days.nextWeekday": "Neste {weekday}",
     "days.saturday": "Lørdag",
     "days.sunday": "Søndag",
     "days.thursday": "Torsdag",
