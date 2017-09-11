@@ -61,7 +61,7 @@ const messages = defineMessages({
 	},
 	fieldEmpty: {
 		id: 'form.fieldEmpty',
-		defaultMessage: 'Field can\'t be Empty',
+		defaultMessage: 'Field can\'t be empty',
 		description: 'Error message Pre-fix on form submitted, with fields empty',
 	},
 });
@@ -167,10 +167,10 @@ class RegisterScreen extends View {
 			}
 		} else {
 			let pf = this.props.intl.formatMessage(messages.fieldEmpty);
-			let message = fn === '' ? `${pf}- ${this.props.intl.formatMessage(i18n.firstName)}`
-				: ln === '' ? `${pf}- ${this.props.intl.formatMessage(i18n.lastName)}`
-					: em === '' ? `${pf}- ${this.props.intl.formatMessage(i18n.emailAddress)}`
-						: cem === '' ? `${pf}- ${this.props.intl.formatMessage(i18n.confirmEmailAddress)}`
+			let message = fn === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.firstName)}`
+				: ln === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.lastName)}`
+					: em === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.emailAddress)}`
+						: cem === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.confirmEmailAddress)}`
 							: this.props.validationMessage;
 			this.showModal(message);
 		}

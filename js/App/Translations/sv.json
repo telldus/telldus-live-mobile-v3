@@ -37,6 +37,7 @@
   "error.timedOut": "tog för lång tid",
   "errortoast": "Det gick inte att utföra åtgärden",
   "event": "Händelse",
+  "form.fieldEmpty": "Fältet kan inte vara tomt",
   "group": "Grupp",
   "history": "Historik",
   "incommingSignal": "Inkommande signal",

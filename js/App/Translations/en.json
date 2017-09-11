@@ -37,6 +37,7 @@
   "error.timedOut": "Timed out",
   "errortoast": "Action Currently Unavailable",
   "event": "Event",
+  "form.fieldEmpty": "Field can't be empty",
   "group": "Group",
   "history": "History",
   "incommingSignal": "Incomming signal",
