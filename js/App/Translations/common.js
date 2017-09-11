@@ -113,10 +113,6 @@ const messages = defineMessages({
 		id: 'button.sendingpassword',
 		defaultMessage: 'SENDING',
 	},
-	welcome: {
-		id: 'button.welcome',
-		defaultMessage: 'GOT IT',
-	},
 	emailAddress: {
 		id: 'user.emailAddress',
 		defaultMessage: 'Email address',
