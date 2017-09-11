@@ -24,6 +24,9 @@ flow:
 android:
   image: telldus/react-native-android:24
   stage: build
+  cache:
+    paths:
+      - node_modules
   artifacts:
     paths:
       - android/app/build/outputs/apk/app-release.apk
