@@ -24,7 +24,7 @@
 import React from 'react';
 
 import { FormattedMessage, Text, View } from 'BaseComponents';
-import { StyleSheet, Image, Dimensions } from 'react-native';
+import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback } from 'react-native';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
@@ -35,6 +35,7 @@ type Props = {
 	H1: String,
 	H2: String,
 	style: any,
+	onPress?: Function,
 };
 
 type State = {
@@ -44,10 +45,24 @@ class DeviceLocationDetail extends View {
 	props: Props;
 	state: State;
 
+	onPress: () => void;
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 		};
+
+		this.onPress = this.onPress.bind(this);
+	}
+
+	onPress() {
+		if (this.props.onPress) {
+			if (typeof this.props.onPress === 'function') {
+				this.props.onPress();
+			} else {
+				console.warn('Invalid Prop Passed : onPress expects a Function.');
+			}
+		}
 	}
 
 	render() {
@@ -62,14 +77,16 @@ class DeviceLocationDetail extends View {
 					<View style={styles.locationImageContainer}>
 						<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: this.props.image, isStatic: true }} />
 					</View>
-					<View style={styles.locationTextContainer}>
-						<Text numberOfLines={1} style={styles.textHSH}>
-							{this.props.H1}
-						</Text>
-						<Text numberOfLines={1} style={styles.textLocation}>
-							{this.props.H2}
-						</Text>
-					</View>
+					<TouchableWithoutFeedback onPress={this.onPress}>
+						<View style={styles.locationTextContainer}>
+							<Text numberOfLines={1} style={styles.textHSH}>
+								{this.props.H1}
+							</Text>
+							<Text numberOfLines={1} style={styles.textLocation}>
+								{this.props.H2}
+							</Text>
+						</View>
+					</TouchableWithoutFeedback>
 				</View>
 			</View>
 		);
