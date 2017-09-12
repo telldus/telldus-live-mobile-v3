@@ -30,6 +30,7 @@ import { defineMessages } from 'react-intl';
 import { View, StyleSheet, Dimensions, Icon } from 'BaseComponents';
 import {DeviceLocationDetail} from 'DeviceDetailsSubView';
 import StackScreenContainer from 'StackScreenContainer';
+import Banner from './Banner';
 
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
@@ -41,6 +42,16 @@ const messages = defineMessages({
 		id: 'addNewLocation.locationDetected',
 		defaultMessage: 'Location Detected',
 		description: 'Header for which location a device belongs to',
+	},
+	banner: {
+		id: 'addNewLocation.locationDetected.banner',
+		defaultMessage: 'Select Location',
+		description: 'Main Banner Text for the Location Detected Screen',
+	},
+	bannerSub: {
+		id: 'addNewLocation.locationDetected.bannerSub',
+		defaultMessage: 'Setup your TellStick to start',
+		description: 'Main Banner Text for the Location Detected Screen',
 	},
 });
 
@@ -63,6 +74,12 @@ class LocationDetected extends View {
 	}
 
 	render() {
+		let bannerProps = {
+			prefix: '1. ',
+			bannerMain: messages.banner,
+			bannerSub: messages.bannerSub,
+		};
+		let BannerComponent = Banner(bannerProps);
 		let locationImageUrl = getLocationImageUrl('TellStick Net');
 		let locationData = {
 			title: messages.locationDetected,
@@ -72,7 +89,7 @@ class LocationDetected extends View {
 			onPress: this.onActivateAuto,
 		};
 		return (
-			<StackScreenContainer>
+			<StackScreenContainer banner={BannerComponent}>
 				<View style={styles.container}>
 					<View style={styles.itemsContainer}>
 						<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow} onPress={this.onActivateAuto}/>

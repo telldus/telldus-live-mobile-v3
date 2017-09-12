@@ -33,7 +33,11 @@ export default class StackScreenContainer extends View {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}/>
+				<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
+					<View style={styles.BannerContainer}>
+						{this.props.banner}
+					</View>
+				</Image>
 				{this.props.children}
 			</View>
 		);
@@ -46,6 +50,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	deviceIconBackG: {
+		height: (deviceHeight * 0.2),
+		width: deviceWidth,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	BannerContainer: {
 		height: (deviceHeight * 0.2),
 		width: deviceWidth,
 		alignItems: 'center',

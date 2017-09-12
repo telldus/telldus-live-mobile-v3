@@ -29,15 +29,21 @@ import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react
 import { defineMessages } from 'react-intl';
 
 import StackScreenContainer from 'StackScreenContainer';
+import Banner from './Banner';
 import {View, StyleSheet, FormattedMessage, Dimensions, Icon} from 'BaseComponents';
 
 let deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
-	name: {
-		id: 'addNewLocation.name',
+	locationName: {
+		id: 'addNewLocation.locationName',
 		defaultMessage: 'Name',
 		description: 'Label for the field Location Name',
+	},
+	bannerSub: {
+		id: 'addNewLocation.locationName.bannerSub',
+		defaultMessage: 'Setup your TellStick to start',
+		description: 'Main Banner Text for the Location Detected Screen',
 	},
 });
 type Props = {
@@ -68,12 +74,18 @@ class LocationName extends View {
 	}
 
 	render() {
+		let bannerProps = {
+			prefix: '2. ',
+			bannerMain: messages.locationName,
+			bannerSub: messages.bannerSub,
+		};
+		let BannerComponent = Banner(bannerProps);
 		return (
-			<StackScreenContainer>
+			<StackScreenContainer banner={BannerComponent}>
 				<KeyboardAvoidingView behavior="position" contentContainerStyle={{justifyContent: 'center'}}>
 					<View style={styles.container}>
 						<View style={[styles.itemsContainer, styles.shadow]}>
-							<FormattedMessage {...messages.name} style={styles.title}/>
+							<FormattedMessage {...messages.locationName} style={styles.title}/>
 							<TextInput
 								style={styles.textField}
 								onChangeText={this.onLocationNameChange}

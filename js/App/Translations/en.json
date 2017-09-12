@@ -56,6 +56,11 @@
   "time": "Time",
   "unknown": "Unknown",
   "addNewLocation.locationDetected": "Location Detected",
-  "addNewLocation.activationCode": "Activation Code",
-  "addNewLocation.name": "Name"
+  "addNewLocation.activateManual": "Activation Code",
+  "addNewLocation.locationName": "Name",
+  "addNewLocation.locationDetected.banner": "Select Location",
+  "addNewLocation.locationDetected.bannerSub": "Setup your TellStick to start",
+  "addNewLocation.activateManual.banner": "Select Location",
+  "addNewLocation.activateManual.bannerSub": "Enter Activation Code",
+  "addNewLocation.locationName.bannerSub": "Name Your Location"
 }

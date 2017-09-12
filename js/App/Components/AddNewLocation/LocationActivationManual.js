@@ -29,15 +29,26 @@ import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react
 import { defineMessages } from 'react-intl';
 
 import StackScreenContainer from 'StackScreenContainer';
+import Banner from './Banner';
 import {View, StyleSheet, FormattedMessage, Text, Dimensions, Icon} from 'BaseComponents';
 
 let deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
 	activationCode: {
-		id: 'addNewLocation.activationCode',
+		id: 'addNewLocation.activateManual',
 		defaultMessage: 'Activation Code',
-		description: 'Label for the field Location Activate Field',
+		description: 'Label for the field Location Manual Activate Field',
+	},
+	banner: {
+		id: 'addNewLocation.activateManual.banner',
+		defaultMessage: 'Select Location',
+		description: 'Main Banner Text for the Location Manual Activate Screen',
+	},
+	bannerSub: {
+		id: 'addNewLocation.activateManual.bannerSub',
+		defaultMessage: 'Enter Activation Code',
+		description: 'Main Banner Text for the Location Manual Activate Screen',
 	},
 });
 type Props = {
@@ -71,8 +82,14 @@ class LocationActivationManual extends View {
 	}
 
 	render() {
+		let bannerProps = {
+			prefix: '1. ',
+			bannerMain: messages.banner,
+			bannerSub: messages.bannerSub,
+		};
+		let BannerComponent = Banner(bannerProps);
 		return (
-			<StackScreenContainer>
+			<StackScreenContainer banner={BannerComponent}>
 				<KeyboardAvoidingView behavior="position" contentContainerStyle={{justifyContent: 'center'}}>
 					<View style={styles.container}>
 						<View style={[styles.itemsContainer, styles.shadow]}>
