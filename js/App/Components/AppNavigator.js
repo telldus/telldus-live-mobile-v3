@@ -106,6 +106,18 @@ const RouteConfigs = {
 			headerTitle: renderStackHeader(),
 		},
 	},
+	LocationName: {
+		screen: AddNewLocation.LocationName,
+		navigationOptions: {
+			headerStyle: {
+				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+				backgroundColor: Theme.Core.brandPrimary,
+				height: deviceHeight * 0.1,
+			},
+			headerTintColor: '#ffffff',
+			headerTitle: renderStackHeader(),
+		},
+	},
 };
 
 function renderStackHeader() {

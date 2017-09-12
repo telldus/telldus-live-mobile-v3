@@ -56,5 +56,6 @@
   "time": "Time",
   "unknown": "Unknown",
   "addNewLocation.locationDetected": "Location Detected",
-  "addNewLocation.activationCode": "Activation Code"
+  "addNewLocation.activationCode": "Activation Code",
+  "addNewLocation.name": "Name"
 }

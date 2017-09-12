@@ -29,45 +29,42 @@ import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react
 import { defineMessages } from 'react-intl';
 
 import StackScreenContainer from 'StackScreenContainer';
-import {View, StyleSheet, FormattedMessage, Text, Dimensions, Icon} from 'BaseComponents';
+import {View, StyleSheet, FormattedMessage, Dimensions, Icon} from 'BaseComponents';
 
 let deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
-	activationCode: {
-		id: 'addNewLocation.activationCode',
-		defaultMessage: 'Activation Code',
-		description: 'Label for the field Location Activate Field',
+	name: {
+		id: 'addNewLocation.name',
+		defaultMessage: 'Name',
+		description: 'Label for the field Location Name',
 	},
 });
 type Props = {
-	navigation: Object,
 }
 
-class LocationActivationManual extends View {
+class LocationName extends View {
 	props: Props;
 
-	onActivationCodeChange: (string) => void;
-	onActivationCodeSubmit: () => void;
+	onLocationNameChange: (string) => void;
+	onNameSubmit: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			activationCode: '',
+			locationName: '',
 		};
-
-		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
-		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);
+		this.onLocationNameChange = this.onLocationNameChange.bind(this);
+		this.onNameSubmit = this.onNameSubmit.bind(this);
 	}
 
-	onActivationCodeChange(activationCode: string) {
+	onLocationNameChange(locationName) {
 		this.setState({
-			activationCode,
+			locationName,
 		});
 	}
 
-	onActivationCodeSubmit() {
-		this.props.navigation.navigate('LocationName');
+	onNameSubmit() {
 	}
 
 	render() {
@@ -76,23 +73,20 @@ class LocationActivationManual extends View {
 				<KeyboardAvoidingView behavior="position" contentContainerStyle={{justifyContent: 'center'}}>
 					<View style={styles.container}>
 						<View style={[styles.itemsContainer, styles.shadow]}>
-							<FormattedMessage {...messages.activationCode} style={styles.title}/>
+							<FormattedMessage {...messages.name} style={styles.title}/>
 							<TextInput
 								style={styles.textField}
-								onChangeText={this.onActivationCodeChange}
+								onChangeText={this.onLocationNameChange}
 								autoCapitalize="none"
 								autoCorrect={false}
 								underlineColorAndroid="#e26901"
-								defaultValue={this.state.activationCode}
+								defaultValue={this.state.locationName}
 							/>
-							<Text style={styles.textBody}>Activate your TellStick by typing the activation code. The activation code
-							is written on the label on the bottom of your TellStick.
-							</Text>
 						</View>
 					</View>
 				</KeyboardAvoidingView>
 				<View style={styles.circularViewContainer}>
-					<TouchableWithoutFeedback onPress={this.onActivationCodeSubmit}>
+					<TouchableWithoutFeedback onPress={this.onNameSubmit}>
 						<View style={styles.circularView}>
 							<Icon name="angle-right" size={44} color="#ffffff"/>
 						</View>
@@ -172,4 +166,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect()(LocationActivationManual);
+export default connect()(LocationName);

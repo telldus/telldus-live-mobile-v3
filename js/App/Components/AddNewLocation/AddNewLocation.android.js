@@ -25,10 +25,12 @@
 
 import LocationDetected from './LocationDetected';
 import LocationActivationManual from './LocationActivationManual';
+import LocationName from './LocationName';
 
 module.exports = {
 	LocationDetected,
 	LocationActivationManual,
+	LocationName,
 };
 
 

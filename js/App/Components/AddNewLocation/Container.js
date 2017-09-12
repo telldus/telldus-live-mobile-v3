@@ -43,6 +43,7 @@ export default class StackScreenContainer extends View {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		alignItems: 'center',
 	},
 	deviceIconBackG: {
 		height: (deviceHeight * 0.2),
