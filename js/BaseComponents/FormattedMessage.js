@@ -29,6 +29,8 @@ import Text from './Text';
 
 type Props = {
 	style: Object,
+	prefix?: string,
+	postfix?: string,
 };
 
 class FormattedMessageComponent extends Base {
@@ -37,7 +39,7 @@ class FormattedMessageComponent extends Base {
 	render() {
 		return (
 			<FormattedMessage {...this.props}>{msg => {
-				return <Text style={this.props.style}>{msg}</Text>;
+				return <Text style={this.props.style}>{this.props.prefix}{msg}{this.props.postfix}</Text>;
 			}}
 			</FormattedMessage>
 		);
