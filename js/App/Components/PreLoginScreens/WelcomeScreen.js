@@ -30,8 +30,6 @@ import { StyleSheet } from 'react-native';
 import { FormattedMessage, View, Text, TouchableButton } from 'BaseComponents';
 import {FormContainerComponent} from 'PreLoginScreen_SubViews';
 
-import i18n from './../../Translations/common';
-
 const messages = defineMessages({
 	welcomeHeader: {
 		id: 'user.welcome',
@@ -81,7 +79,7 @@ class WelcomeScreen extends View {
 				<TouchableButton
 					style={styles.formSubmit}
 					onPress={this.onPressOK}
-					text={i18n.welcome}
+					text={messages.welcomeButton}
 				/>
 			</FormContainerComponent>
 		);
