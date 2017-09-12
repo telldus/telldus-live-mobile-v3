@@ -24,10 +24,11 @@
 'use strict';
 
 import React from 'react';
+import {ScrollView} from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { View, StyleSheet, Dimensions, Icon } from 'BaseComponents';
+import { View, StyleSheet, Dimensions, Icon, TouchableButton } from 'BaseComponents';
 import {DeviceLocationDetail} from 'DeviceDetailsSubView';
 import StackScreenContainer from 'StackScreenContainer';
 import Banner from './Banner';
@@ -57,19 +58,26 @@ const messages = defineMessages({
 
 type Props = {
 	navigation: Object,
+	intl: intlShape.isRequired,
 }
 
 class LocationDetected extends View {
 	props: Props;
 
 	onActivateAuto: () => void;
+	onActivateManual: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.onActivateAuto = this.onActivateAuto.bind(this);
+		this.onActivateManual = this.onActivateManual.bind(this);
 	}
 
 	onActivateAuto() {
+		this.props.navigation.navigate('LocationName');
+	}
+
+	onActivateManual() {
 		this.props.navigation.navigate('LocationActivationManual');
 	}
 
@@ -91,10 +99,15 @@ class LocationDetected extends View {
 		return (
 			<StackScreenContainer banner={BannerComponent}>
 				<View style={styles.container}>
-					<View style={styles.itemsContainer}>
+					<ScrollView contentContainerStyle={styles.itemsContainer}>
 						<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow} onPress={this.onActivateAuto}/>
 						<DeviceLocationDetail {...locationData} style={styles.locationDetailStyle}/>
-					</View>
+						<TouchableButton
+							style={styles.button}
+							onPress={this.onActivateManual}
+							text={'Manual Activation'}
+						/>
+					</ScrollView>
 				</View>
 			</StackScreenContainer>
 		);
@@ -113,6 +126,10 @@ const styles = StyleSheet.create({
 	locationDetailStyle: {
 		marginTop: 20,
 	},
+	button: {
+		marginTop: 20,
+		alignSelf: 'center',
+	},
 	arrow: {
 		position: 'absolute',
 		top: deviceHeight * 0.12,
@@ -127,5 +144,5 @@ function mapStateToProps(store, ownProps) {
 	};
 }
 
-export default connect(mapStateToProps, null)(LocationDetected);
+export default connect(mapStateToProps, null)(injectIntl(LocationDetected));
 

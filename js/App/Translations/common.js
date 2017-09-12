@@ -81,6 +81,10 @@ const messages = defineMessages({
 		id: 'device.up',
 		defaultMessage: 'Up',
 	},
+	manualActivation: {
+		id: 'button.manualActivation',
+		defaultMessage: 'Manual Activation',
+	},
 });
 
 export default messages;
