@@ -45,6 +45,7 @@ const messages = defineMessages({
 });
 
 type Props = {
+	navigation: Object,
 }
 
 class LocationDetected extends View {
@@ -58,6 +59,7 @@ class LocationDetected extends View {
 	}
 
 	onActivateAuto() {
+		this.props.navigation.navigate('LocationActivationManual');
 	}
 
 	render() {

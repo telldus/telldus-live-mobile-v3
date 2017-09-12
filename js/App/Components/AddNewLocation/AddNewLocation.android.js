@@ -24,9 +24,11 @@
 'use strict';
 
 import LocationDetected from './LocationDetected';
+import LocationActivationManual from './LocationActivationManual';
 
 module.exports = {
 	LocationDetected,
+	LocationActivationManual,
 };
 
 

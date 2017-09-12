@@ -1,0 +1,136 @@
+/**
+ * Copyright 2016-present Telldus Technologies AB.
+ *
+ * This file is part of the Telldus Live! app.
+ *
+ * Telldus Live! app is free : you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Telldus Live! app is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ */
+
+// @flow
+
+'use strict';
+
+import React from 'react';
+import { connect } from 'react-redux';
+import { TextInput, KeyboardAvoidingView } from 'react-native';
+import { defineMessages } from 'react-intl';
+
+import StackScreenContainer from 'StackScreenContainer';
+import {View, StyleSheet, FormattedMessage, Text, Dimensions} from 'BaseComponents';
+
+let deviceWidth = Dimensions.get('window').width;
+
+const messages = defineMessages({
+	activationCode: {
+		id: 'addNewLocation.activationCode',
+		defaultMessage: 'Activation Code',
+		description: 'Label for the field Location Activate Field',
+	},
+});
+type Props = {
+}
+
+class LocationActivationManual extends View {
+	props: Props;
+
+	onActivationCodeChange: (string) => void;
+
+	constructor(props: Props) {
+		super(props);
+		this.state = {
+			activationCode: '',
+		};
+	}
+
+	onActivationCodeChange(activationCode) {
+		this.setState({
+			activationCode,
+		});
+	}
+
+	render() {
+		return (
+			<StackScreenContainer>
+				<KeyboardAvoidingView behavior="position" contentContainerStyle={{justifyContent: 'center'}}>
+					<View style={styles.container}>
+						<View style={[styles.itemsContainer, styles.shadow]}>
+							<FormattedMessage {...messages.activationCode} style={styles.title}/>
+							<TextInput
+								style={styles.textField}
+								onChangeText={this.onActivationCodeChange}
+								autoCapitalize="none"
+								autoCorrect={false}
+								underlineColorAndroid="#e26901"
+								defaultValue={this.state.activationCode}
+							/>
+							<Text style={styles.textBody}>Activate your TellStick by typing the activation code. The activation code
+							is written on the label on the bottom of your TellStick.
+							</Text>
+						</View>
+					</View>
+				</KeyboardAvoidingView>
+			</StackScreenContainer>
+		);
+	}
+}
+
+const styles = StyleSheet.create({
+	container: {
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	itemsContainer: {
+		flexDirection: 'column',
+		backgroundColor: '#fff',
+		marginTop: 20,
+		paddingLeft: 10,
+		paddingRight: 10,
+		paddingBottom: 10,
+		paddingTop: 10,
+		alignItems: 'flex-start',
+		width: (deviceWidth - 20),
+	},
+	shadow: {
+		borderRadius: 4,
+		backgroundColor: '#fff',
+		shadowColor: '#000000',
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowRadius: 1,
+		shadowOpacity: 1.0,
+		elevation: 2,
+	},
+	title: {
+		color: '#e26901',
+		fontSize: 14,
+		paddingLeft: 2,
+	},
+	textBody: {
+		color: '#A59F9A',
+		marginTop: 10,
+		textAlign: 'left',
+		fontSize: 13,
+		paddingLeft: 2,
+	},
+	textField: {
+		height: 50,
+		width: deviceWidth - 40,
+	},
+});
+
+export default connect()(LocationActivationManual);
