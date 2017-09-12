@@ -58,4 +58,25 @@ function getGateways(): ThunkAction {
 	};
 }
 
-module.exports = { getGateways };
+function addNewGateway(): ThunkAction {
+	return (dispatch, getState) => {
+		const url = format({
+			pathname: '/clients/list',
+			query: {
+				extras: {
+					autodetect: 1,
+				},
+			},
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+		});
+	};
+}
+
+module.exports = { getGateways, addNewGateway };

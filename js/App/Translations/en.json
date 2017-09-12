@@ -19,7 +19,6 @@
   "device.stop": "Stop",
   "device.up": "Up",
   "deviceSettings.location": "Location",
-  "deviceSettings.locationDetected": "Location Detected",
   "deviceSettings.noRecentActivity": "No recent activity",
   "deviceSettings.overviewHeader": "Overview",
   "dimmingLevel": "Dimming level",
@@ -55,5 +54,7 @@
   "status": "Status",
   "success": "Success",
   "time": "Time",
-  "unknown": "Unknown"
+  "unknown": "Unknown",
+  "addNewLocation.locationDetected": "Location Detected",
+  "addNewLocation.activationCode": "Activation Code"
 }

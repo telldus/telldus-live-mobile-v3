@@ -38,7 +38,7 @@ import Theme from 'Theme';
 import { SettingsDetailModal } from 'DetailViews';
 
 import { getUserProfile } from '../../Reducers/User';
-import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
+import { syncWithServer, switchTab, toggleEditMode, addNewGateway } from 'Actions';
 import TabViews from 'TabViews';
 import { TabNavigator } from 'react-navigation';
 
@@ -188,6 +188,7 @@ type Props = {
 	onToggleEditMode: (string) => void,
 	dispatch: Function,
 	stackNavigator: Object,
+	addNewLocation: () => void,
 };
 
 type State = {
@@ -207,6 +208,7 @@ class TabsView extends View {
 	toggleEditMode: (number) => void;
 	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
+	addNewLocation: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -298,7 +300,8 @@ class TabsView extends View {
 	};
 
 	addNewLocation() {
-		this.props.stackNavigator.navigate('AddNewLocation');
+		this.props.addNewLocation();
+		this.props.stackNavigator.navigate('LocationDetected');
 	}
 
 	render() {
@@ -448,6 +451,7 @@ function mapDispatchToProps(dispatch) {
 			dispatch(switchTab(tab));
 		},
 		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+		addNewLocation: () => dispatch(addNewGateway()),
 		dispatch,
 	};
 }

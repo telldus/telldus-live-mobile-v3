@@ -82,8 +82,8 @@ const RouteConfigs = {
 			headerTitle: renderStackHeader(),
 		},
 	},
-	AddNewLocation: {
-		screen: AddNewLocation,
+	LocationDetected: {
+		screen: AddNewLocation.LocationDetected,
 		navigationOptions: {
 			headerStyle: {
 				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),

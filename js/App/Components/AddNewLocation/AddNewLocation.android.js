@@ -23,19 +23,10 @@
 
 'use strict';
 
-import React from 'react';
-import { View } from 'BaseComponents';
-import StackScreenContainer from 'StackScreenContainer';
 import LocationDetected from './LocationDetected';
 
-class AddNewLocation extends View {
-	render() {
-		return (
-			<StackScreenContainer>
-				<LocationDetected />
-			</StackScreenContainer>
-		);
-	}
-}
+module.exports = {
+	LocationDetected,
+};
 
-module.exports = AddNewLocation;
+

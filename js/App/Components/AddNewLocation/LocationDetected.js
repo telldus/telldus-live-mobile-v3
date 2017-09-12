@@ -24,24 +24,42 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 
-import { View, StyleSheet, Dimensions } from 'BaseComponents';
+import { View, StyleSheet, Dimensions, Icon } from 'BaseComponents';
 import {DeviceLocationDetail} from 'DeviceDetailsSubView';
+import StackScreenContainer from 'StackScreenContainer';
 
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
 let deviceWidth = Dimensions.get('window').width;
+let deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
 	locationDetected: {
-		id: 'deviceSettings.locationDetected',
+		id: 'addNewLocation.locationDetected',
 		defaultMessage: 'Location Detected',
 		description: 'Header for which location a device belongs to',
 	},
 });
 
-export default class LocationDetected extends View {
+type Props = {
+}
+
+class LocationDetected extends View {
+	props: Props;
+
+	onActivateAuto: () => void;
+
+	constructor(props: Props) {
+		super(props);
+		this.onActivateAuto = this.onActivateAuto.bind(this);
+	}
+
+	onActivateAuto() {
+	}
+
 	render() {
 		let locationImageUrl = getLocationImageUrl('TellStick Net');
 		let locationData = {
@@ -49,13 +67,17 @@ export default class LocationDetected extends View {
 			image: locationImageUrl,
 			H1: 'TellStick',
 			H2: 'Click to activate',
+			onPress: this.onActivateAuto,
 		};
 		return (
-			<View style={styles.container}>
-				<View style={styles.itemsContainer}>
-					<DeviceLocationDetail {...locationData} style={styles.locationDetailStyle}/>
+			<StackScreenContainer>
+				<View style={styles.container}>
+					<View style={styles.itemsContainer}>
+						<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow} onPress={this.onActivateAuto}/>
+						<DeviceLocationDetail {...locationData} style={styles.locationDetailStyle}/>
+					</View>
 				</View>
-			</View>
+			</StackScreenContainer>
 		);
 	}
 }
@@ -72,6 +94,19 @@ const styles = StyleSheet.create({
 	locationDetailStyle: {
 		marginTop: 20,
 	},
+	arrow: {
+		position: 'absolute',
+		top: deviceHeight * 0.12,
+		left: deviceWidth * 0.8,
+		elevation: 3,
+	},
 });
 
+function mapStateToProps(store, ownProps) {
+	return {
+		store,
+	};
+}
+
+export default connect(mapStateToProps, null)(LocationDetected);
 
