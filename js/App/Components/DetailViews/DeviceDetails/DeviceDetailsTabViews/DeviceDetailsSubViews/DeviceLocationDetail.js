@@ -52,22 +52,24 @@ class DeviceLocationDetail extends View {
 
 	render() {
 		return (
-			<View style={[styles.shadow, styles.homeSweetHomeContainer, this.props.style]}>
-				<View style={styles.locationImageContainer}>
-					{this.props.title && this.props.title !== '' ?
-						<FormattedMessage {...this.props.title} style={styles.textLocation} />
-						:
-						null
-					}
-					<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: this.props.image, isStatic: true }} />
-				</View>
-				<View style={styles.locationTextContainer}>
-					<Text numberOfLines={1} style={styles.textHSH}>
-						{this.props.H1}
-					</Text>
-					<Text numberOfLines={1} style={styles.textLocation}>
-						{this.props.H2}
-					</Text>
+			<View style={[styles.shadow, styles.container, this.props.style]}>
+				{this.props.title && this.props.title !== '' ?
+					<FormattedMessage {...this.props.title} style={styles.textLocation} />
+					:
+					null
+				}
+				<View style={styles.imageHeaderContainer}>
+					<View style={styles.locationImageContainer}>
+						<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: this.props.image, isStatic: true }} />
+					</View>
+					<View style={styles.locationTextContainer}>
+						<Text numberOfLines={1} style={styles.textHSH}>
+							{this.props.H1}
+						</Text>
+						<Text numberOfLines={1} style={styles.textLocation}>
+							{this.props.H2}
+						</Text>
+					</View>
 				</View>
 			</View>
 		);
@@ -75,8 +77,14 @@ class DeviceLocationDetail extends View {
 }
 
 const styles = StyleSheet.create({
-	homeSweetHomeContainer: {
+	container: {
+		flexDirection: 'column',
 		backgroundColor: '#fff',
+		paddingLeft: 10,
+		paddingRight: 10,
+		paddingTop: 10,
+	},
+	imageHeaderContainer: {
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 		flexDirection: 'row',
@@ -94,18 +102,16 @@ const styles = StyleSheet.create({
 		elevation: 2,
 	},
 	locationImageContainer: {
-		height: (deviceHeight * 0.2),
-		width: (deviceWidth - 20) * 0.3,
+		height: (deviceHeight * 0.16),
+		width: (deviceWidth * 0.4),
 		justifyContent: 'center',
 		alignItems: 'flex-start',
-		flexDirection: 'column',
 	},
 	locationTextContainer: {
-		width: (deviceWidth - 20) * 0.7,
-		height: (deviceHeight * 0.2),
+		height: (deviceHeight * 0.16),
+		width: (deviceWidth * 0.6),
 		justifyContent: 'center',
 		alignItems: 'flex-start',
-		paddingTop: 35,
 	},
 	locationImage: {
 		width: (deviceWidth * 0.22),
