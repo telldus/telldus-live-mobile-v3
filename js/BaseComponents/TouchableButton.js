@@ -46,7 +46,7 @@ class TouchableButton extends Component {
 	render() {
 		return (
 			<Text style={[styles.button, this.props.style]} onPress={this.props.onPress} >
-				{this.props.preScript}{this.props.intl.formatMessage(this.props.text)}{this.props.postScript}
+				{this.props.preScript}{this.props.intl.formatMessage(this.props.text).toUpperCase()}{this.props.postScript}
 			</Text>
 		);
 	}
