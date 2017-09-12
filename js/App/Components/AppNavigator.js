@@ -59,6 +59,7 @@ import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
+import AddNewLocation from 'AddNewLocation';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
@@ -71,6 +72,18 @@ const RouteConfigs = {
 	},
 	DeviceDetails: {
 		screen: DeviceDetailsTabsView,
+		navigationOptions: {
+			headerStyle: {
+				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+				backgroundColor: Theme.Core.brandPrimary,
+				height: deviceHeight * 0.1,
+			},
+			headerTintColor: '#ffffff',
+			headerTitle: renderStackHeader(),
+		},
+	},
+	AddNewLocation: {
+		screen: AddNewLocation,
 		navigationOptions: {
 			headerStyle: {
 				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),

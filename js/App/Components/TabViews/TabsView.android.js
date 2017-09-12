@@ -298,6 +298,7 @@ class TabsView extends View {
 	};
 
 	addNewLocation() {
+		this.props.stackNavigator.navigate('AddNewLocation');
 	}
 
 	render() {

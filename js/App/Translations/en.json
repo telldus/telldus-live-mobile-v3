@@ -19,6 +19,7 @@
   "device.stop": "Stop",
   "device.up": "Up",
   "deviceSettings.location": "Location",
+  "deviceSettings.locationDetected": "Location Detected",
   "deviceSettings.noRecentActivity": "No recent activity",
   "deviceSettings.overviewHeader": "Overview",
   "dimmingLevel": "Dimming level",
