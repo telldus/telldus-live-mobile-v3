@@ -84,7 +84,14 @@ function addNewGateway(): ThunkAction {
 				});
 			}
 		}).catch(err => {
-			console.log('err', err);
+			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
+			dispatch({
+				type: 'GLOBAL_ERROR_SHOW',
+				payload: {
+					source: 'Add_Location',
+					message: message,
+				},
+			});
 		});
 	};
 }
