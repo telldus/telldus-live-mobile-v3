@@ -52,7 +52,7 @@ const messages = defineMessages({
 	bannerSub: {
 		id: 'addNewLocation.locationDetected.bannerSub',
 		defaultMessage: 'Setup your TellStick to start',
-		description: 'Main Banner Text for the Location Detected Screen',
+		description: 'Seconday Banner Text for the Location Detected Screen',
 	},
 });
 

@@ -43,10 +43,11 @@ const messages = defineMessages({
 	bannerSub: {
 		id: 'addNewLocation.locationName.bannerSub',
 		defaultMessage: 'Setup your TellStick to start',
-		description: 'Main Banner Text for the Location Detected Screen',
+		description: 'Secondary Banner Text for the Location Detected Screen',
 	},
 });
 type Props = {
+	navigation: Object,
 }
 
 class LocationName extends View {
@@ -71,6 +72,7 @@ class LocationName extends View {
 	}
 
 	onNameSubmit() {
+		this.props.navigation.navigate('TimeZoneContinent');
 	}
 
 	render() {

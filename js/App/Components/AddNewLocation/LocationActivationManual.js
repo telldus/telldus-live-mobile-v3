@@ -48,7 +48,7 @@ const messages = defineMessages({
 	bannerSub: {
 		id: 'addNewLocation.activateManual.bannerSub',
 		defaultMessage: 'Enter Activation Code',
-		description: 'Main Banner Text for the Location Manual Activate Screen',
+		description: 'Secondary Banner Text for the Location Manual Activate Screen',
 	},
 });
 type Props = {
