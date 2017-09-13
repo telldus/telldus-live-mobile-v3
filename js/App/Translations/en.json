@@ -62,5 +62,8 @@
   "addNewLocation.locationDetected.bannerSub": "Setup your TellStick to start",
   "addNewLocation.activateManual.banner": "Select Location",
   "addNewLocation.activateManual.bannerSub": "Enter Activation Code",
-  "addNewLocation.locationName.bannerSub": "Name Your Location"
+  "addNewLocation.locationName.bannerSub": "Name Your Location",
+  "addNewLocation.timeZone.banner": "Time Zone",
+  "addNewLocation.timeZoneContinent.bannerSub": "Select Continent",
+  "addNewLocation.timeZoneCity.bannerSub": "Select City"
 }
