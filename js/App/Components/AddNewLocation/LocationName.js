@@ -27,6 +27,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { defineMessages } from 'react-intl';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icon_location from '../TabViews/img/selection.json';
+const CustomIcon = createIconSetFromIcoMoon(icon_location);
 
 import StackScreenContainer from 'StackScreenContainer';
 import Banner from './Banner';
@@ -88,6 +91,7 @@ class LocationName extends View {
 					<View style={styles.container}>
 						<View style={[styles.itemsContainer, styles.shadow]}>
 							<FormattedMessage {...messages.locationName} style={styles.title}/>
+							<CustomIcon name="icon_location" size={34} color="#A59F9A" style={styles.locationIcon}/>
 							<TextInput
 								style={styles.textField}
 								onChangeText={this.onLocationNameChange}
@@ -154,6 +158,12 @@ const styles = StyleSheet.create({
 	textField: {
 		height: 50,
 		width: deviceWidth - 40,
+		paddingLeft: 35,
+	},
+	locationIcon: {
+		position: 'absolute',
+		top: 35,
+		left: 8,
 	},
 	circularViewContainer: {
 		width: (deviceWidth - 20),
