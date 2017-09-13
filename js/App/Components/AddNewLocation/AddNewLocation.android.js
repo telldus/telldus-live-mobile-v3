@@ -26,11 +26,15 @@
 import LocationDetected from './LocationDetected';
 import LocationActivationManual from './LocationActivationManual';
 import LocationName from './LocationName';
+import TimeZoneContinent from './TimeZoneContinent';
+import TimeZoneCity from './TimeZoneCity';
 
 module.exports = {
 	LocationDetected,
 	LocationActivationManual,
 	LocationName,
+	TimeZoneContinent,
+	TimeZoneCity,
 };
 
 
