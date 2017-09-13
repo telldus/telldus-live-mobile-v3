@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
 	},
 	locationTextContainer: {
 		height: (deviceHeight * 0.16),
-		width: (deviceWidth * 0.6),
+		width: (deviceWidth * 0.6) - 30,
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 	},

@@ -28,22 +28,15 @@ import {ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { View, StyleSheet, Dimensions, Icon, TouchableButton } from 'BaseComponents';
-import {DeviceLocationDetail} from 'DeviceDetailsSubView';
+import { View, StyleSheet, Dimensions, TouchableButton } from 'BaseComponents';
 import StackScreenContainer from 'StackScreenContainer';
 import Banner from './Banner';
-
-import getLocationImageUrl from '../../Lib/getLocationImageUrl';
+import Clients from './Clients';
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
-	locationDetected: {
-		id: 'addNewLocation.locationDetected',
-		defaultMessage: 'Location Detected',
-		description: 'Header for which location a device belongs to',
-	},
 	banner: {
 		id: 'addNewLocation.locationDetected.banner',
 		defaultMessage: 'Select Location',
@@ -81,6 +74,12 @@ class LocationDetected extends View {
 		this.props.navigation.navigate('LocationActivationManual');
 	}
 
+	renderClient(client, i) {
+		return (
+			<Clients key={i} client={client} onPress={this.onActivateAuto}/>
+		);
+	}
+
 	render() {
 		let bannerProps = {
 			prefix: '1. ',
@@ -88,20 +87,17 @@ class LocationDetected extends View {
 			bannerSub: messages.bannerSub,
 		};
 		let BannerComponent = Banner(bannerProps);
-		let locationImageUrl = getLocationImageUrl('TellStick Net');
-		let locationData = {
-			title: messages.locationDetected,
-			image: locationImageUrl,
-			H1: 'TellStick',
-			H2: 'Click to activate',
-			onPress: this.onActivateAuto,
-		};
+		let items = [];
+		if (this.props.navigation.state.params.clients) {
+			items = this.props.navigation.state.params.clients.map((client, i) => {
+				return this.renderClient(client, i);
+			});
+		}
 		return (
 			<StackScreenContainer banner={BannerComponent}>
 				<View style={styles.container}>
 					<ScrollView contentContainerStyle={styles.itemsContainer}>
-						<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow} onPress={this.onActivateAuto}/>
-						<DeviceLocationDetail {...locationData} style={styles.locationDetailStyle}/>
+						{items}
 						<TouchableButton
 							style={styles.button}
 							onPress={this.onActivateManual}
@@ -116,15 +112,13 @@ class LocationDetected extends View {
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	itemsContainer: {
 		width: (deviceWidth - 20),
 		justifyContent: 'center',
-	},
-	locationDetailStyle: {
-		marginTop: 20,
 	},
 	button: {
 		marginTop: 20,

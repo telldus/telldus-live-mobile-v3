@@ -250,6 +250,15 @@ class TabsView extends View {
 		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.gateways.toActivate.requestActivation || nextProps.gateways.allIds.length === 0) {
+			this.props.stackNavigator.navigate('LocationDetected', {clients: nextProps.gateways.toActivate.clients});
+			this.props.dispatch({
+				type: 'ADD_GATEWAY_DECLINE',
+			});
+		}
+	}
+
 	onTabSelect(tab) {
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
@@ -301,7 +310,6 @@ class TabsView extends View {
 
 	addNewLocation() {
 		this.props.addNewLocation();
-		this.props.stackNavigator.navigate('LocationDetected');
 	}
 
 	render() {
