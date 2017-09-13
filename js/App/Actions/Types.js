@@ -83,6 +83,9 @@ export type Action =
 
 	| { type: 'REQUEST_DEVICE_ACTION', payload: Object }
 	| { type: 'USER_REGISTER', accessToken: Object }
+
+	| { type: 'ADD_GATEWAY_REQUEST', payload: Object }
+	| { type: 'ADD_GATEWAY_DECLINE' }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

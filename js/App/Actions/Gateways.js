@@ -75,6 +75,16 @@ function addNewGateway(): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
+			if (response.client) {
+				dispatch({
+					type: 'ADD_GATEWAY_REQUEST',
+					payload: {
+						clients: response.client,
+					},
+				});
+			}
+		}).catch(err => {
+			console.log('err', err);
 		});
 	};
 }

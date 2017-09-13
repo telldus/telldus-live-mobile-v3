@@ -143,6 +143,34 @@ function allIds(state = [], action): Array<Object> {
 	}
 }
 
+let initialToActivateState = {
+	clients: [],
+	requestActivation: false,
+};
+
+function toActivate(state: State = {}, action): State {
+	switch (action.type) {
+		case 'REHYDRATE':
+			return {
+				...initialToActivateState,
+				requestActivation: false,
+			};
+		case 'ADD_GATEWAY_REQUEST':
+			return {
+				...initialToActivateState,
+				clients: action.payload.clients,
+				requestActivation: true,
+			};
+		case 'ADD_GATEWAY_DECLINE':
+			return {
+				...initialToActivateState,
+				requestActivation: false,
+			};
+		default:
+			return state;
+	}
+}
+
 export function parseGatewaysForListView(gateways:Object = {}) {
 	const rows = gateways.allIds.map(gatewayId => gateways.byId[gatewayId]);
 
@@ -161,4 +189,5 @@ export function parseGatewaysForListView(gateways:Object = {}) {
 export default combineReducers({
 	allIds,
 	byId,
+	toActivate,
 });
