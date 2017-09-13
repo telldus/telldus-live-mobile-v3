@@ -234,6 +234,7 @@ class TabsView extends View {
 		this.state = {
 			settings: false,
 			routeName: '',
+			addingNewLocation: false,
 		};
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
@@ -251,7 +252,13 @@ class TabsView extends View {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.gateways.toActivate.requestActivation || nextProps.gateways.allIds.length === 0) {
+		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation) {
+			this.props.addNewLocation();
+			this.setState({
+				addingNewLocation: true,
+			});
+		}
+		if (nextProps.gateways.toActivate.requestActivation) {
 			this.props.stackNavigator.navigate('LocationDetected', {clients: nextProps.gateways.toActivate.clients});
 			this.props.dispatch({
 				type: 'ADD_GATEWAY_DECLINE',
