@@ -38,6 +38,7 @@ import {View, StyleSheet, FormattedMessage, Text, Dimensions, Icon, Modal} from 
 import Theme from 'Theme';
 
 let deviceWidth = Dimensions.get('window').width;
+let deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
 	activationCode: {
@@ -137,7 +138,7 @@ class LocationActivationManual extends View {
 					</TouchableWithoutFeedback>
 				</View>
 				<Modal
-					modalStyle={[Theme.Styles.notificationModal, {top: 120}]}
+					modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22}]}
 					entry= "ZoomIn"
 					exit= "ZoomOut"
 					entryDuration= {300}
