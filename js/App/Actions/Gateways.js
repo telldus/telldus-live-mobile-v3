@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { ThunkAction } from './Types';
+import type { ThunkAction, Dispatch } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
 
 import LiveApi from 'LiveApi';
@@ -96,4 +96,73 @@ function addNewGateway(): ThunkAction {
 	};
 }
 
-module.exports = { getGateways, addNewGateway };
+function activateGateway(clientInfo: Object): ThunkAction {
+	let {clientId, uuid, name, timezone} = {...clientInfo};
+	return (dispatch, getState) => {
+		register(clientId, uuid, dispatch);
+		setName(clientId, name, dispatch);
+		setTimezone(clientId, timezone, dispatch);
+	};
+}
+
+function register(id: string, uuid: string, dispatch: Dispatch) {
+	const url = format({
+		pathname: '/client/register',
+		query: {
+			id,
+			uuid,
+		},
+	});
+	const payload = {
+		url,
+		requestParams: {
+			method: 'GET',
+		},
+	};
+	return LiveApi(payload).then(response => {
+	}).catch(err => {
+		console.log('err register', err);
+	});
+}
+
+function setName(id: string, name: string, dispatch: Dispatch) {
+	const url = format({
+		pathname: '/client/setName',
+		query: {
+			id,
+			name,
+		},
+	});
+	const payload = {
+		url,
+		requestParams: {
+			method: 'GET',
+		},
+	};
+	return LiveApi(payload).then(response => {
+	}).catch(err => {
+		console.log('err setName', err);
+	});
+}
+
+function setTimezone(id: string, timezone: string, dispatch: Dispatch) {
+	const url = format({
+		pathname: '/client/setTimezone',
+		query: {
+			id,
+			timezone,
+		},
+	});
+	const payload = {
+		url,
+		requestParams: {
+			method: 'GET',
+		},
+	};
+	return LiveApi(payload).then(response => {
+	}).catch(err => {
+		console.log('err setTimezone', err);
+	});
+}
+
+module.exports = { getGateways, addNewGateway, activateGateway };
