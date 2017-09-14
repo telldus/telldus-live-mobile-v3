@@ -32,8 +32,10 @@ import icon_location from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_location);
 
 import StackScreenContainer from 'StackScreenContainer';
+import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 import Banner from './Banner';
-import {View, StyleSheet, FormattedMessage, Text, Dimensions, Icon} from 'BaseComponents';
+import {View, StyleSheet, FormattedMessage, Text, Dimensions, Icon, Modal} from 'BaseComponents';
+import Theme from 'Theme';
 
 let deviceWidth = Dimensions.get('window').width;
 
@@ -63,11 +65,13 @@ class LocationActivationManual extends View {
 
 	onActivationCodeChange: (string) => void;
 	onActivationCodeSubmit: () => void;
+	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 			activationCode: '',
+			showModal: false,
 		};
 
 		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
@@ -81,7 +85,20 @@ class LocationActivationManual extends View {
 	}
 
 	onActivationCodeSubmit() {
-		this.props.navigation.navigate('LocationName');
+		if (this.state.activationCode !== '') {
+			this.props.navigation.navigate('LocationName');
+		} else {
+			// using the local state to control Modal as it is a local validation, not using the action/reducer.
+			this.setState({
+				showModal: true,
+			});
+		}
+	}
+
+	closeModal() {
+		this.setState({
+			showModal: false,
+		});
 	}
 
 	render() {
@@ -119,6 +136,15 @@ class LocationActivationManual extends View {
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
+				<Modal
+					modalStyle={[Theme.Styles.notificationModal, {top: 120}]}
+					entry= "ZoomIn"
+					exit= "ZoomOut"
+					entryDuration= {300}
+					exitDuration= {100}
+					showModal={this.state.showModal}>
+					<NotificationComponent text={'Please enter a valid activation code.'} onPress={this.closeModal} />
+				</Modal>
 			</StackScreenContainer>
 		);
 	}

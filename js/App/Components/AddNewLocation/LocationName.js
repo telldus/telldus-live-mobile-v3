@@ -32,8 +32,10 @@ import icon_location from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_location);
 
 import StackScreenContainer from 'StackScreenContainer';
+import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 import Banner from './Banner';
-import {View, StyleSheet, FormattedMessage, Dimensions, Icon} from 'BaseComponents';
+import {View, StyleSheet, FormattedMessage, Dimensions, Icon, Modal} from 'BaseComponents';
+import Theme from 'Theme';
 
 let deviceWidth = Dimensions.get('window').width;
 
@@ -58,14 +60,17 @@ class LocationName extends View {
 
 	onLocationNameChange: (string) => void;
 	onNameSubmit: () => void;
+	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 			locationName: '',
+			showModal: false,
 		};
 		this.onLocationNameChange = this.onLocationNameChange.bind(this);
 		this.onNameSubmit = this.onNameSubmit.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 	}
 
 	onLocationNameChange(locationName) {
@@ -75,13 +80,26 @@ class LocationName extends View {
 	}
 
 	onNameSubmit() {
-		let navigation = this.props.navigation;
-		let clientInfo = {
-			clientId: navigation.state.params.clientInfo.clientId,
-			uuid: navigation.state.params.clientInfo.uuid,
-			name: this.state.locationName,
-		};
-		this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
+		if (this.state.locationName !== '') {
+			let navigation = this.props.navigation;
+			let clientInfo = {
+				clientId: navigation.state.params.clientInfo.clientId,
+				uuid: navigation.state.params.clientInfo.uuid,
+				name: this.state.locationName,
+			};
+			this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
+		} else {
+			// using the local state to control Modal as it is a local validation, not using the action/reducer.
+			this.setState({
+				showModal: true,
+			});
+		}
+	}
+
+	closeModal() {
+		this.setState({
+			showModal: false,
+		});
 	}
 
 	render() {
@@ -116,6 +134,15 @@ class LocationName extends View {
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
+				<Modal
+					modalStyle={[Theme.Styles.notificationModal, {top: 120}]}
+					entry= "ZoomIn"
+					exit= "ZoomOut"
+					entryDuration= {300}
+					exitDuration= {100}
+					showModal={this.state.showModal}>
+					<NotificationComponent text={'Please enter a valid name.'} onPress={this.closeModal} />
+				</Modal>
 			</StackScreenContainer>
 		);
 	}
