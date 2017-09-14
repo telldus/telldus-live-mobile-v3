@@ -146,14 +146,16 @@ function allIds(state = [], action): Array<Object> {
 let initialToActivateState = {
 	clients: [],
 	requestActivation: false,
+	checkIfGatewaysEmpty: false,
 };
 
 function toActivate(state: State = {}, action): State {
 	switch (action.type) {
-		case 'REHYDRATE':
+		case REHYDRATE:
 			return {
 				...initialToActivateState,
 				requestActivation: false,
+				checkIfGatewaysEmpty: false,
 			};
 		case 'ADD_GATEWAY_REQUEST':
 			return {
@@ -166,8 +168,16 @@ function toActivate(state: State = {}, action): State {
 				...initialToActivateState,
 				requestActivation: false,
 			};
+		case 'RECEIVED_GATEWAYS':
+			return {
+				...state,
+				checkIfGatewaysEmpty: true,
+			};
 		default:
-			return state;
+			return {
+				...state,
+				checkIfGatewaysEmpty: false,
+			};
 	}
 }
 

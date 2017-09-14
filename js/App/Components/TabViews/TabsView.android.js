@@ -252,7 +252,7 @@ class TabsView extends View {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation) {
+		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation && nextProps.gateways.toActivate.checkIfGatewaysEmpty) {
 			this.props.addNewLocation();
 			this.setState({
 				addingNewLocation: true,
