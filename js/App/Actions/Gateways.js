@@ -97,20 +97,20 @@ function addNewGateway(): ThunkAction {
 }
 
 function activateGateway(clientInfo: Object): ThunkAction {
-	let {clientId, uuid, name, timezone} = {...clientInfo};
 	return (dispatch, getState) => {
-		register(clientId, uuid, dispatch);
-		setName(clientId, name, dispatch);
-		setTimezone(clientId, timezone, dispatch);
+		if (clientInfo.activationCode) {
+			getGatewayInfo(clientInfo, dispatch);
+		} else {
+			register(clientInfo, dispatch);
+		}
 	};
 }
 
-function register(id: string, uuid: string, dispatch: Dispatch) {
+function getGatewayInfo(clientInfo: Object, dispatch: Dispatch) {
 	const url = format({
-		pathname: '/client/register',
+		pathname: '/client/info',
 		query: {
-			id,
-			uuid,
+			code: clientInfo.activationCode,
 		},
 	});
 	const payload = {
@@ -120,8 +120,43 @@ function register(id: string, uuid: string, dispatch: Dispatch) {
 		},
 	};
 	return LiveApi(payload).then(response => {
+		if (response.id) {
+			clientInfo.clientId = response.id;
+			clientInfo.uuid = response.uuid;
+			register(clientInfo, dispatch);
+		}
 	}).catch(err => {
-		console.log('err register', err);
+		console.log('err getGatewayInfo', err);
+	});
+}
+
+function register(clientInfo: Object, dispatch: Dispatch) {
+	const url = format({
+		pathname: '/client/register',
+		query: {
+			id: clientInfo.clientId,
+			uuid: clientInfo.uuid,
+		},
+	});
+	const payload = {
+		url,
+		requestParams: {
+			method: 'GET',
+		},
+	};
+	return LiveApi(payload).then(response => {
+		if (response.status === 'success') {
+			setName(clientInfo.clientId, clientInfo.name, dispatch);
+			setTimezone(clientInfo.clientId, clientInfo.timezone, dispatch);
+		}
+	}).catch(err => {
+		let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
+		dispatch({
+			type: 'REQUEST_MODAL_OPEN',
+			payload: {
+				data: message,
+			},
+		});
 	});
 }
 

@@ -87,7 +87,10 @@ class LocationActivationManual extends View {
 
 	onActivationCodeSubmit() {
 		if (this.state.activationCode !== '') {
-			this.props.navigation.navigate('LocationName');
+			let clientInfo = {
+				activationCode: this.state.activationCode,
+			};
+			this.props.navigation.navigate('LocationName', {clientInfo});
 		} else {
 			// using the local state to control Modal as it is a local validation, not using the action/reducer.
 			this.setState({
