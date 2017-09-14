@@ -41,7 +41,27 @@ const messages = defineMessages({
 	},
 });
 
+type Props = {
+	onPress: Function,
+	client: Object,
+};
+
 export default class Clients extends View {
+	onPress: () => void;
+
+	props: Props;
+
+	constructor(props: Props) {
+		super(props);
+		this.onPress = this.onPress.bind(this);
+	}
+
+	onPress() {
+		if (this.props.onPress) {
+			this.props.onPress(this.props.client);
+		}
+	}
+
 	render() {
 		let locationImageUrl = getLocationImageUrl(this.props.client.type);
 		let locationData = {
@@ -49,7 +69,7 @@ export default class Clients extends View {
 			image: locationImageUrl,
 			H1: this.props.client.name,
 			H2: 'Click to activate',
-			onPress: this.props.onPress,
+			onPress: this.onPress,
 		};
 		return (
 			<View>

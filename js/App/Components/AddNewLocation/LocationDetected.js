@@ -57,7 +57,7 @@ type Props = {
 class LocationDetected extends View {
 	props: Props;
 
-	onActivateAuto: () => void;
+	onActivateAuto: (Object) => void;
 	onActivateManual: () => void;
 
 	constructor(props: Props) {
@@ -66,8 +66,12 @@ class LocationDetected extends View {
 		this.onActivateManual = this.onActivateManual.bind(this);
 	}
 
-	onActivateAuto() {
-		this.props.navigation.navigate('LocationName');
+	onActivateAuto(client) {
+		let clientInfo = {
+			clientId: client.id,
+			uuid: client.uuid,
+		};
+		this.props.navigation.navigate('LocationName', {clientInfo});
 	}
 
 	onActivateManual() {

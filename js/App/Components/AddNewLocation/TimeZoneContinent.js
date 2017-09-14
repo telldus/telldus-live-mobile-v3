@@ -85,7 +85,14 @@ class TimeZoneContinent extends View {
 			let flag = items[0] === v2 ? false : true;
 			return flag;
 		});
-		this.props.navigation.navigate('TimeZoneCity', {cities: data});
+		let navigation = this.props.navigation;
+		let clientInfo = {
+			clientId: navigation.state.params.clientInfo.clientId,
+			uuid: navigation.state.params.clientInfo.uuid,
+			name: navigation.state.params.clientInfo.name,
+			continent: continent,
+		};
+		this.props.navigation.navigate('TimeZoneCity', {cities: data, clientInfo});
 	}
 
 	renderRow(item) {

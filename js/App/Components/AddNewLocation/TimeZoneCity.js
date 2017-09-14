@@ -32,6 +32,8 @@ import Banner from './Banner';
 import {View, List, ListDataSource, Text} from 'BaseComponents';
 import ListRow from './ListRow';
 
+import {activateGateway} from 'Actions';
+
 const messages = defineMessages({
 	banner: {
 		id: 'addNewLocation.timeZone.banner',
@@ -47,6 +49,7 @@ const messages = defineMessages({
 
 type Props = {
 	navigation: Object,
+	activateGateway: (clientInfo: Object) => void;
 }
 const listDataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,
@@ -80,7 +83,14 @@ class TimeZoneCity extends View {
 	}
 
 	onCityChoose(city) {
-
+		let navigation = this.props.navigation;
+		let clientInfo = {
+			clientId: navigation.state.params.clientInfo.clientId,
+			uuid: navigation.state.params.clientInfo.uuid,
+			name: navigation.state.params.clientInfo.name,
+			timezone: `${navigation.state.params.clientInfo.continent}/${city}`,
+		};
+		this.props.activateGateway(clientInfo);
 	}
 
 	renderRow(item) {
@@ -114,4 +124,10 @@ class TimeZoneCity extends View {
 	}
 }
 
-export default connect()(TimeZoneCity);
+function mapDispatchToProps(dispatch, store) {
+	return {
+		activateGateway: (clientInfo) => dispatch(activateGateway(clientInfo)),
+	};
+}
+
+export default connect(null, mapDispatchToProps)(TimeZoneCity);
