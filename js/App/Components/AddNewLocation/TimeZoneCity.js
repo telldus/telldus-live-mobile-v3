@@ -112,7 +112,7 @@ class TimeZoneCity extends View {
 			<StackScreenContainer banner={BannerComponent}>
 				{this.state.dataSource ?
 					<List
-						contentContainerStyle={{ marginTop: 20}}
+						contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
 						dataSource={this.state.dataSource}
 						renderRow={this.renderRow}
 					/>
