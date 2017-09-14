@@ -168,6 +168,8 @@ const styles = StyleSheet.create({
 		height: 50,
 		width: deviceWidth - 40,
 		paddingLeft: 35,
+		color: '#A59F9A',
+		fontSize: 20,
 	},
 	locationIcon: {
 		position: 'absolute',

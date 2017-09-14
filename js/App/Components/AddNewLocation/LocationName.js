@@ -75,7 +75,13 @@ class LocationName extends View {
 	}
 
 	onNameSubmit() {
-		this.props.navigation.navigate('TimeZoneContinent');
+		let navigation = this.props.navigation;
+		let clientInfo = {
+			clientId: navigation.state.params.clientInfo.clientId,
+			uuid: navigation.state.params.clientInfo.uuid,
+			name: this.state.locationName,
+		};
+		this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
 	}
 
 	render() {
@@ -159,6 +165,8 @@ const styles = StyleSheet.create({
 		height: 50,
 		width: deviceWidth - 40,
 		paddingLeft: 35,
+		color: '#A59F9A',
+		fontSize: 20,
 	},
 	locationIcon: {
 		position: 'absolute',
