@@ -126,7 +126,13 @@ function getGatewayInfo(clientInfo: Object, dispatch: Dispatch) {
 			register(clientInfo, dispatch);
 		}
 	}).catch(err => {
-		console.log('err getGatewayInfo', err);
+		let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
+		dispatch({
+			type: 'REQUEST_MODAL_OPEN',
+			payload: {
+				data: message,
+			},
+		});
 	});
 }
 
@@ -176,7 +182,13 @@ function setName(id: string, name: string, dispatch: Dispatch) {
 	};
 	return LiveApi(payload).then(response => {
 	}).catch(err => {
-		console.log('err setName', err);
+		let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
+		dispatch({
+			type: 'REQUEST_MODAL_OPEN',
+			payload: {
+				data: message,
+			},
+		});
 	});
 }
 
@@ -196,7 +208,13 @@ function setTimezone(id: string, timezone: string, dispatch: Dispatch) {
 	};
 	return LiveApi(payload).then(response => {
 	}).catch(err => {
-		console.log('err setTimezone', err);
+		let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
+		dispatch({
+			type: 'REQUEST_MODAL_OPEN',
+			payload: {
+				data: message,
+			},
+		});
 	});
 }
 
