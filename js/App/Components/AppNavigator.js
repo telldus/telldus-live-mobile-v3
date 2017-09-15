@@ -28,16 +28,13 @@ import { StackNavigator } from 'react-navigation';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Toast from 'react-native-simple-toast';
 import {
-	getGateways,
-	getSensors,
-	getJobs,
 	getUserProfile,
 	appStart,
 	appState,
 	syncLiveApiOnForeground,
+	getAppData,
+	getGateways,
 } from 'Actions';
-import { authenticateSession, connectToGateways } from 'Actions_Websockets';
-import { getDevices } from 'Actions_Devices';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 const messages = defineMessages({
@@ -208,14 +205,10 @@ class AppNavigator extends View {
 		}
 
 		this.props.dispatch(getUserProfile());
-		this.props.dispatch(authenticateSession());
-		this.props.dispatch(connectToGateways());
 		this.props.dispatch(syncLiveApiOnForeground());
 
-		this.props.dispatch(getDevices());
 		this.props.dispatch(getGateways());
-		this.props.dispatch(getSensors());
-		this.props.dispatch(getJobs());
+		this.props.dispatch(getAppData());
 	}
 
 	componentWillReceiveProps(nextProps) {

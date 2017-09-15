@@ -26,6 +26,7 @@
 import type { ThunkAction, Dispatch } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
 
+import {getAppData} from './AppData';
 import LiveApi from 'LiveApi';
 import { format } from 'url';
 
@@ -150,10 +151,21 @@ function register(clientInfo: Object): ThunkAction {
 		};
 		return LiveApi(payload).then(response => {
 			if (response.status === 'success') {
-				dispatch(setName(clientInfo.clientId, clientInfo.name));
-				dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone));
-				let message = 'Location has been added successfully';
-				showActivationSuccess(message, dispatch);
+				Promise.all([
+					dispatch(setName(clientInfo.clientId, clientInfo.name)),
+					dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone)),
+				]).then(val => {
+					if (val[0].status && val[0].status === 'success' &&
+						val[1].status && val[1].status === 'success') {
+						let message = 'Location has been added successfully';
+						showActivationSuccess(message, dispatch);
+					} else {
+						let message = 'Location has been Activated but some actions Could not be completed.';
+						showActivationError(message, dispatch);
+					}
+					dispatch(getAppData());
+					dispatch(getGateways());
+				});
 			}
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
@@ -178,9 +190,9 @@ function setName(id: string, name: string): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
+			return response;
 		}).catch(err => {
-			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			showActivationError(message, dispatch);
+			return err;
 		});
 	};
 }
@@ -201,15 +213,15 @@ function setTimezone(id: string, timezone: string): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
+			return response;
 		}).catch(err => {
-			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			showActivationError(message, dispatch);
+			return err;
 		});
 	};
 }
 
 function showActivationError(message: string, dispatch: Dispatch) {
-	 dispatch({
+	dispatch({
 		type: 'REQUEST_MODAL_OPEN',
 		payload: {
 			data: message,
