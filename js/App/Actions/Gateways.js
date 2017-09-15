@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { ThunkAction, Dispatch } from './Types';
+import type { ThunkAction } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
 
 import LiveApi from 'LiveApi';
@@ -99,123 +99,135 @@ function addNewGateway(): ThunkAction {
 function activateGateway(clientInfo: Object): ThunkAction {
 	return (dispatch, getState) => {
 		if (clientInfo.activationCode) {
-			getGatewayInfo(clientInfo, dispatch);
+			dispatch(getGatewayInfo(clientInfo));
 		} else {
-			register(clientInfo, dispatch);
+			dispatch(register(clientInfo));
 		}
 	};
 }
 
-function getGatewayInfo(clientInfo: Object, dispatch: Dispatch) {
-	const url = format({
-		pathname: '/client/info',
-		query: {
-			code: clientInfo.activationCode,
-		},
-	});
-	const payload = {
-		url,
-		requestParams: {
-			method: 'GET',
-		},
-	};
-	return LiveApi(payload).then(response => {
-		if (response.id) {
-			clientInfo.clientId = response.id;
-			clientInfo.uuid = response.uuid;
-			register(clientInfo, dispatch);
-		}
-	}).catch(err => {
-		let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-		dispatch({
-			type: 'REQUEST_MODAL_OPEN',
-			payload: {
-				data: message,
+function getGatewayInfo(clientInfo: Object): ThunkAction {
+	return (dispatch, getState) => {
+		const url = format({
+			pathname: '/client/info',
+			query: {
+				code: clientInfo.activationCode,
 			},
 		});
-	});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+			if (response.id) {
+				clientInfo.clientId = response.id;
+				clientInfo.uuid = response.uuid;
+				dispatch(register(clientInfo));
+			}
+		}).catch(err => {
+			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
+			dispatch({
+				type: 'REQUEST_MODAL_OPEN',
+				payload: {
+					data: message,
+				},
+			});
+		});
+	};
 }
 
-function register(clientInfo: Object, dispatch: Dispatch) {
-	const url = format({
-		pathname: '/client/register',
-		query: {
-			id: clientInfo.clientId,
-			uuid: clientInfo.uuid,
-		},
-	});
-	const payload = {
-		url,
-		requestParams: {
-			method: 'GET',
-		},
-	};
-	return LiveApi(payload).then(response => {
-		if (response.status === 'success') {
-			setName(clientInfo.clientId, clientInfo.name, dispatch);
-			setTimezone(clientInfo.clientId, clientInfo.timezone, dispatch);
-		}
-	}).catch(err => {
-		let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-		dispatch({
-			type: 'REQUEST_MODAL_OPEN',
-			payload: {
-				data: message,
+function register(clientInfo: Object): ThunkAction {
+	return (dispatch, getState) => {
+		const url = format({
+			pathname: '/client/register',
+			query: {
+				id: clientInfo.clientId,
+				uuid: clientInfo.uuid,
 			},
 		});
-	});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+			if (response.status === 'success') {
+				dispatch(setName(clientInfo.clientId, clientInfo.name));
+				dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone));
+				let updateGatewaysTimeout = setTimeout(() => {
+					dispatch(getGateways());
+					clearTimeout(updateGatewaysTimeout);
+				}, 2000);
+			}
+		}).catch(err => { console.log('test ', err);
+			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
+			dispatch({
+				type: 'REQUEST_MODAL_OPEN',
+				payload: {
+					data: message,
+				},
+			});
+		});
+	};
 }
 
-function setName(id: string, name: string, dispatch: Dispatch) {
-	const url = format({
-		pathname: '/client/setName',
-		query: {
-			id,
-			name,
-		},
-	});
-	const payload = {
-		url,
-		requestParams: {
-			method: 'GET',
-		},
-	};
-	return LiveApi(payload).then(response => {
-	}).catch(err => {
-		let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-		dispatch({
-			type: 'REQUEST_MODAL_OPEN',
-			payload: {
-				data: message,
+function setName(id: string, name: string): ThunkAction {
+	return (dispatch, getState) => {
+		const url = format({
+			pathname: '/client/setName',
+			query: {
+				id,
+				name,
 			},
 		});
-	});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+		}).catch(err => {
+			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
+			dispatch({
+				type: 'REQUEST_MODAL_OPEN',
+				payload: {
+					data: message,
+				},
+			});
+		});
+	};
 }
 
-function setTimezone(id: string, timezone: string, dispatch: Dispatch) {
-	const url = format({
-		pathname: '/client/setTimezone',
-		query: {
-			id,
-			timezone,
-		},
-	});
-	const payload = {
-		url,
-		requestParams: {
-			method: 'GET',
-		},
-	};
-	return LiveApi(payload).then(response => {
-	}).catch(err => {
-		let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-		dispatch({
-			type: 'REQUEST_MODAL_OPEN',
-			payload: {
-				data: message,
+function setTimezone(id: string, timezone: string): ThunkAction {
+	return (dispatch, getState) => {
+		const url = format({
+			pathname: '/client/setTimezone',
+			query: {
+				id,
+				timezone,
 			},
 		});
-	});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+		}).catch(err => {
+			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
+			dispatch({
+				type: 'REQUEST_MODAL_OPEN',
+				payload: {
+					data: message,
+				},
+			});
+		});
+	};
 }
 
 module.exports = { getGateways, addNewGateway, activateGateway };
