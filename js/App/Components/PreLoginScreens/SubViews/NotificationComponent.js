@@ -29,6 +29,7 @@ import { Text, View } from 'BaseComponents';
 type Props = {
 	onPress: Function,
 	text: string,
+	title?: string,
 }
 
 export default class NotificationComponent extends View {
@@ -47,10 +48,11 @@ export default class NotificationComponent extends View {
 	}
 
 	render() {
+		let title = this.props.title ? this.props.title : 'ERROR';
 		return (
 			<View>
 				<View style={styles.notificationModalHeader}>
-					<Text style={styles.notificationModalHeaderText}>ERROR</Text>
+					<Text style={styles.notificationModalHeaderText}>{title}</Text>
 				</View>
 				<View style={styles.notificationModalBody}>
 					<Text style={styles.notificationModalBodyText}>{this.props.text}</Text>

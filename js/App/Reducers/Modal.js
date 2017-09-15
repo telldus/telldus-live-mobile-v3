@@ -30,6 +30,7 @@ export type State = {
 }
 const initialState = {
 	openModal: false,
+	title: '',
 	data: '',
 };
 
@@ -39,6 +40,7 @@ export default function reduceModal(state: State = initialState, action: Action)
 			return {
 				...state,
 				openModal: false,
+				title: '',
 				data: '',
 			};
 
@@ -46,6 +48,7 @@ export default function reduceModal(state: State = initialState, action: Action)
 			return {
 				...state,
 				openModal: true,
+				title: action.payload.title,
 				data: action.payload.data,
 			};
 
