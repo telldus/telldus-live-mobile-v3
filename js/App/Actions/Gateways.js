@@ -99,19 +99,33 @@ function addNewGateway(): ThunkAction {
 function activateGateway(clientInfo: Object): ThunkAction {
 	return (dispatch, getState) => {
 		if (clientInfo.activationCode) {
-			dispatch(getGatewayInfo(clientInfo));
+			let {activationCode, name, timezone} = {...clientInfo};
+			dispatch(getGatewayInfo(activationCode, successResponse => {
+				let {id, uuid} = {...successResponse};
+				dispatch(register(id, uuid, regSuccessResponse => {
+					dispatch(setName(id, name));
+					dispatch(setTimezone(id, timezone));
+				}, regErrorResponse => {
+				}));
+			}, errorResponse => {
+			}));
 		} else {
-			dispatch(register(clientInfo));
+			let {clientId, uuid, name, timezone} = {...clientInfo};
+			dispatch(register(clientId, uuid, regSuccessResponse => {
+				dispatch(setName(clientId, name));
+				dispatch(setTimezone(clientId, timezone));
+			}, regErrorResponse => {
+			}));
 		}
 	};
 }
 
-function getGatewayInfo(clientInfo: Object): ThunkAction {
+function getGatewayInfo(code: string, successCallback?: Function, errorCallback?: Function): ThunkAction {
 	return (dispatch, getState) => {
 		const url = format({
 			pathname: '/client/info',
 			query: {
-				code: clientInfo.activationCode,
+				code,
 			},
 		});
 		const payload = {
@@ -121,12 +135,13 @@ function getGatewayInfo(clientInfo: Object): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
-			if (response.id) {
-				clientInfo.clientId = response.id;
-				clientInfo.uuid = response.uuid;
-				dispatch(register(clientInfo));
+			if (response.id && successCallback && typeof successCallback === 'function') {
+				successCallback(response);
 			}
 		}).catch(err => {
+			if (errorCallback && typeof errorCallback === 'function') {
+				errorCallback(err);
+			}
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
 			dispatch({
 				type: 'REQUEST_MODAL_OPEN',
@@ -138,13 +153,13 @@ function getGatewayInfo(clientInfo: Object): ThunkAction {
 	};
 }
 
-function register(clientInfo: Object): ThunkAction {
+function register(id: string, uuid: string, successCallback?: Function, errorCallback?: Function): ThunkAction {
 	return (dispatch, getState) => {
 		const url = format({
 			pathname: '/client/register',
 			query: {
-				id: clientInfo.clientId,
-				uuid: clientInfo.uuid,
+				id,
+				uuid,
 			},
 		});
 		const payload = {
@@ -154,15 +169,13 @@ function register(clientInfo: Object): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
-			if (response.status === 'success') {
-				dispatch(setName(clientInfo.clientId, clientInfo.name));
-				dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone));
-				let updateGatewaysTimeout = setTimeout(() => {
-					dispatch(getGateways());
-					clearTimeout(updateGatewaysTimeout);
-				}, 2000);
+			if (response.status === 'success' && successCallback && typeof successCallback === 'function') {
+				successCallback(response);
 			}
-		}).catch(err => { console.log('test ', err);
+		}).catch(err => {
+			if (errorCallback && typeof errorCallback === 'function') {
+				errorCallback(err);
+			}
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
 			dispatch({
 				type: 'REQUEST_MODAL_OPEN',
