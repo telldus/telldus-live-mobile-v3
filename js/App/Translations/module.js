@@ -27,6 +27,7 @@
 
 import {addLocaleData} from 'react-intl';
 // import cs from 'react-intl/locale-data/cs';
+import de from 'react-intl/locale-data/de';
 import en from 'react-intl/locale-data/en';
 import fr from 'react-intl/locale-data/fr';
 import nb from 'react-intl/locale-data/nb';
@@ -36,10 +37,11 @@ import nb from 'react-intl/locale-data/nb';
 import sv from 'react-intl/locale-data/sv';
 // import th from 'react-intl/locale-data/th';
 
-addLocaleData([...en, ...fr, ...nb, ...sv]);
+addLocaleData([...de, ...en, ...fr, ...nb, ...sv]);
 
 module.exports = {
 	// cs: require('./cs.json'),
+	de: require('./de.json'),
 	en: require('./en.json'),
 	fr: require('./fr.json'),
 	nb: require('./nb.json'),
