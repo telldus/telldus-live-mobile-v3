@@ -28,9 +28,13 @@ import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 
 import StackScreenContainer from 'StackScreenContainer';
+import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 import Banner from './Banner';
-import {View, List, ListDataSource, Text} from 'BaseComponents';
+import {View, List, ListDataSource, Text, Modal, Dimensions} from 'BaseComponents';
 import ListRow from './ListRow';
+
+import Theme from 'Theme';
+let deviceHeight = Dimensions.get('window').height;
 
 import {activateGateway} from 'Actions';
 
@@ -50,6 +54,11 @@ const messages = defineMessages({
 type Props = {
 	navigation: Object,
 	activateGateway: (clientInfo: Object) => void;
+	showModal: boolean,
+	modalMessage: string,
+	modalTitle: string,
+	dispatch: Function,
+	activeId: any,
 }
 const listDataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,
@@ -59,6 +68,7 @@ class TimeZoneCity extends View {
 	renderRow:(string) => void;
 	parseDataForList:(string) => void;
 	onCityChoose: () => void;
+	closeModal: () => void;
 
 	props: Props;
 
@@ -70,6 +80,13 @@ class TimeZoneCity extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.parseDataForList = this.parseDataForList.bind(this);
 		this.onCityChoose = this.onCityChoose.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+	}
+
+	closeModal() {
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_CLOSE',
+		});
 	}
 
 	parseDataForList(data) {
@@ -114,6 +131,15 @@ class TimeZoneCity extends View {
 					:
 					<Text> UTC </Text>
 				}
+				<Modal
+					modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22}]}
+					entry= "ZoomIn"
+					exit= "ZoomOut"
+					entryDuration= {300}
+					exitDuration= {100}
+					showModal={this.props.showModal}>
+					<NotificationComponent title={this.props.modalTitle} text={this.props.modalMessage} onPress={this.closeModal} />
+				</Modal>
 			</StackScreenContainer>
 		);
 	}
@@ -122,7 +148,16 @@ class TimeZoneCity extends View {
 function mapDispatchToProps(dispatch, store) {
 	return {
 		activateGateway: (clientInfo) => dispatch(activateGateway(clientInfo)),
+		dispatch,
 	};
 }
 
-export default connect(null, mapDispatchToProps)(TimeZoneCity);
+function mapStateToProps(store, ownProps) {
+	return {
+		showModal: store.modal.openModal,
+		modalTitle: store.modal.title,
+		modalMessage: store.modal.data,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TimeZoneCity);

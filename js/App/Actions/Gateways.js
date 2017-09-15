@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { ThunkAction } from './Types';
+import type { ThunkAction, Dispatch } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
 
 import LiveApi from 'LiveApi';
@@ -99,33 +99,19 @@ function addNewGateway(): ThunkAction {
 function activateGateway(clientInfo: Object): ThunkAction {
 	return (dispatch, getState) => {
 		if (clientInfo.activationCode) {
-			let {activationCode, name, timezone} = {...clientInfo};
-			dispatch(getGatewayInfo(activationCode, successResponse => {
-				let {id, uuid} = {...successResponse};
-				dispatch(register(id, uuid, regSuccessResponse => {
-					dispatch(setName(id, name));
-					dispatch(setTimezone(id, timezone));
-				}, regErrorResponse => {
-				}));
-			}, errorResponse => {
-			}));
+			dispatch(getGatewayInfo(clientInfo));
 		} else {
-			let {clientId, uuid, name, timezone} = {...clientInfo};
-			dispatch(register(clientId, uuid, regSuccessResponse => {
-				dispatch(setName(clientId, name));
-				dispatch(setTimezone(clientId, timezone));
-			}, regErrorResponse => {
-			}));
+			dispatch(register(clientInfo));
 		}
 	};
 }
 
-function getGatewayInfo(code: string, successCallback?: Function, errorCallback?: Function): ThunkAction {
+function getGatewayInfo(clientInfo: Object): ThunkAction {
 	return (dispatch, getState) => {
 		const url = format({
 			pathname: '/client/info',
 			query: {
-				code,
+				code: clientInfo.activationCode,
 			},
 		});
 		const payload = {
@@ -135,31 +121,25 @@ function getGatewayInfo(code: string, successCallback?: Function, errorCallback?
 			},
 		};
 		return LiveApi(payload).then(response => {
-			if (response.id && successCallback && typeof successCallback === 'function') {
-				successCallback(response);
+			if (response.id) {
+				clientInfo.clientId = response.id;
+				clientInfo.uuid = response.uuid;
+				dispatch(register(clientInfo));
 			}
 		}).catch(err => {
-			if (errorCallback && typeof errorCallback === 'function') {
-				errorCallback(err);
-			}
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch({
-				type: 'REQUEST_MODAL_OPEN',
-				payload: {
-					data: message,
-				},
-			});
+			showActivationError(message, dispatch);
 		});
 	};
 }
 
-function register(id: string, uuid: string, successCallback?: Function, errorCallback?: Function): ThunkAction {
+function register(clientInfo: Object): ThunkAction {
 	return (dispatch, getState) => {
 		const url = format({
 			pathname: '/client/register',
 			query: {
-				id,
-				uuid,
+				id: clientInfo.clientId,
+				uuid: clientInfo.uuid,
 			},
 		});
 		const payload = {
@@ -169,20 +149,15 @@ function register(id: string, uuid: string, successCallback?: Function, errorCal
 			},
 		};
 		return LiveApi(payload).then(response => {
-			if (response.status === 'success' && successCallback && typeof successCallback === 'function') {
-				successCallback(response);
+			if (response.status === 'success') {
+				dispatch(setName(clientInfo.clientId, clientInfo.name));
+				dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone));
+				let message = 'Location has been added successfully';
+				showActivationSuccess(message, dispatch);
 			}
 		}).catch(err => {
-			if (errorCallback && typeof errorCallback === 'function') {
-				errorCallback(err);
-			}
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch({
-				type: 'REQUEST_MODAL_OPEN',
-				payload: {
-					data: message,
-				},
-			});
+			showActivationError(message, dispatch);
 		});
 	};
 }
@@ -205,12 +180,7 @@ function setName(id: string, name: string): ThunkAction {
 		return LiveApi(payload).then(response => {
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch({
-				type: 'REQUEST_MODAL_OPEN',
-				payload: {
-					data: message,
-				},
-			});
+			showActivationError(message, dispatch);
 		});
 	};
 }
@@ -233,14 +203,28 @@ function setTimezone(id: string, timezone: string): ThunkAction {
 		return LiveApi(payload).then(response => {
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch({
-				type: 'REQUEST_MODAL_OPEN',
-				payload: {
-					data: message,
-				},
-			});
+			showActivationError(message, dispatch);
 		});
 	};
+}
+
+function showActivationError(message: string, dispatch: Dispatch) {
+	 dispatch({
+		type: 'REQUEST_MODAL_OPEN',
+		payload: {
+			data: message,
+		},
+	});
+}
+
+function showActivationSuccess(message: string, dispatch: Dispatch) {
+	dispatch({
+		type: 'REQUEST_MODAL_OPEN',
+		payload: {
+			data: message,
+			title: 'MESSAGE',
+		},
+	});
 }
 
 module.exports = { getGateways, addNewGateway, activateGateway };
