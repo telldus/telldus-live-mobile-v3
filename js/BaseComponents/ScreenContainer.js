@@ -23,17 +23,31 @@
 
 'use strict';
 
-import React from 'react';
-import { View, Image, StyleSheet, Dimensions } from 'BaseComponents';
+import React, {Component} from 'react';
+import type { Children } from 'react';
+import { Image, StyleSheet, Dimensions } from 'react-native';
+
+import View from './View';
 
 let deviceHeight = Dimensions.get('window').height;
 let deviceWidth = Dimensions.get('window').width;
 
-export default class StackScreenContainer extends View {
+type Props = {
+	children?: Children,
+	banner?: Children,
+};
+
+export default class StackScreenContainer extends Component {
+	props : Props;
+
+	constructor(props: Props) {
+		super(props);
+	}
+
 	render() {
 		return (
 			<View style={styles.container}>
-				<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
+				<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('../App/Components/TabViews/img/telldus-geometric-header-bg.png')}>
 					<View style={styles.BannerContainer}>
 						{this.props.banner}
 					</View>

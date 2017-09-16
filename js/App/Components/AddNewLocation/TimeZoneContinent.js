@@ -29,10 +29,9 @@ import { defineMessages } from 'react-intl';
 import uniqBy from 'lodash/uniqBy';
 import differenceWith from 'lodash/differenceWith';
 
-import StackScreenContainer from 'StackScreenContainer';
 import Banner from './Banner';
 import timeZone from '../../Lib/TimeZone';
-import {View, List, ListDataSource} from 'BaseComponents';
+import {View, List, ListDataSource, ScreenContainer} from 'BaseComponents';
 import ListRow from './ListRow';
 
 
@@ -106,13 +105,13 @@ class TimeZoneContinent extends View {
 		};
 		let BannerComponent = Banner(bannerProps);
 		return (
-			<StackScreenContainer banner={BannerComponent}>
+			<ScreenContainer banner={BannerComponent}>
 				<List
 					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
 				/>
-			</StackScreenContainer>
+			</ScreenContainer>
 		);
 	}
 }

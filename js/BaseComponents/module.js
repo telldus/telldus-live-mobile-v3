@@ -61,6 +61,7 @@ import I18n from './I18n';
 import Gravatar from './Gravatar';
 import TouchableButton from './TouchableButton';
 import Modal from './Modal';
+import ScreenContainer from './ScreenContainer';
 
 import {
 	AppState,
@@ -113,6 +114,7 @@ module.exports = {
 	Tabs: ScrollableTabView,
 	TouchableButton: TouchableButton,
 	Modal: Modal,
+	ScreenContainer: ScreenContainer,
 
 	AppState: AppState,
 	Dimensions: Dimensions,

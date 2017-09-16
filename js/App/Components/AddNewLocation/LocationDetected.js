@@ -28,8 +28,7 @@ import {ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { View, StyleSheet, Dimensions, TouchableButton } from 'BaseComponents';
-import StackScreenContainer from 'StackScreenContainer';
+import { View, StyleSheet, Dimensions, TouchableButton, ScreenContainer } from 'BaseComponents';
 import Banner from './Banner';
 import Clients from './Clients';
 
@@ -98,7 +97,7 @@ class LocationDetected extends View {
 			});
 		}
 		return (
-			<StackScreenContainer banner={BannerComponent}>
+			<ScreenContainer banner={BannerComponent}>
 				<View style={styles.container}>
 					<ScrollView contentContainerStyle={styles.itemsContainer}>
 						{items}
@@ -109,7 +108,7 @@ class LocationDetected extends View {
 						/>
 					</ScrollView>
 				</View>
-			</StackScreenContainer>
+			</ScreenContainer>
 		);
 	}
 }

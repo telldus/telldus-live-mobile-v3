@@ -31,10 +31,9 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_location from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_location);
 
-import StackScreenContainer from 'StackScreenContainer';
 import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 import Banner from './Banner';
-import {View, StyleSheet, FormattedMessage, Text, Dimensions, Icon, Modal} from 'BaseComponents';
+import {View, StyleSheet, FormattedMessage, Text, Dimensions, Icon, Modal, ScreenContainer} from 'BaseComponents';
 import Theme from 'Theme';
 
 let deviceWidth = Dimensions.get('window').width;
@@ -113,7 +112,7 @@ class LocationActivationManual extends View {
 		};
 		let BannerComponent = Banner(bannerProps);
 		return (
-			<StackScreenContainer banner={BannerComponent}>
+			<ScreenContainer banner={BannerComponent}>
 				<KeyboardAvoidingView behavior="position" contentContainerStyle={{justifyContent: 'center'}}>
 					<View style={styles.container}>
 						<View style={[styles.itemsContainer, styles.shadow]}>
@@ -149,7 +148,7 @@ class LocationActivationManual extends View {
 					showModal={this.state.showModal}>
 					<NotificationComponent text={'Please enter a valid activation code.'} onPress={this.closeModal} />
 				</Modal>
-			</StackScreenContainer>
+			</ScreenContainer>
 		);
 	}
 }

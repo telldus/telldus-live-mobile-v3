@@ -27,10 +27,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 
-import StackScreenContainer from 'StackScreenContainer';
 import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 import Banner from './Banner';
-import {View, List, ListDataSource, Text, Modal, Dimensions} from 'BaseComponents';
+import {View, List, ListDataSource, Text, Modal, Dimensions, ScreenContainer} from 'BaseComponents';
 import ListRow from './ListRow';
 
 import Theme from 'Theme';
@@ -127,7 +126,7 @@ class TimeZoneCity extends View {
 		let BannerComponent = Banner(bannerProps);
 		let modalTitle = this.props.modalExtra === 'SUCCESS' ? messages.successTitle : null;
 		return (
-			<StackScreenContainer banner={BannerComponent}>
+			<ScreenContainer banner={BannerComponent}>
 				{this.state.dataSource ?
 					<List
 						contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
@@ -146,7 +145,7 @@ class TimeZoneCity extends View {
 					showModal={this.props.showModal}>
 					<NotificationComponent title={modalTitle} text={this.props.modalMessage} onPress={this.closeModal} />
 				</Modal>
-			</StackScreenContainer>
+			</ScreenContainer>
 		);
 	}
 }
