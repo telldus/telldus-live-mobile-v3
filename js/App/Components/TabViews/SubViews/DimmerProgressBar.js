@@ -23,6 +23,9 @@
 
 import React, { Component } from 'react';
 import { Animated, Easing, View, Text, StyleSheet } from 'react-native';
+import { intlShape, injectIntl } from 'react-intl';
+
+import i18n from '../../../Translations/common';
 
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
 const BAR_WIDTH_ZERO_POSITION = INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
@@ -39,6 +42,7 @@ type Props = {
 	style: Object,
 	unfilledColor?: string,
 	width: number,
+	intl: intlShape.isRequired,
 };
 
 type DefaultProps = {
@@ -175,9 +179,9 @@ class DimmerProgressBar extends Component {
 		let progressText = '';
 
 		if (this.props.progress === 0) {
-			progressText = 'Off';
+			progressText = this.props.intl.formatMessage(i18n.off);
 		} else if (this.props.progress === 1) {
-			progressText = 'On';
+			progressText = this.props.intl.formatMessage(i18n.on);
 		} else {
 			progressText = `${Math.round(this.props.progress * 100)}%`;
 		}
@@ -228,4 +232,4 @@ DimmerProgressBar.defaultProps = {
 	progress: 0,
 	width: 150,
 };
-module.exports = DimmerProgressBar;
+module.exports = injectIntl(DimmerProgressBar);
