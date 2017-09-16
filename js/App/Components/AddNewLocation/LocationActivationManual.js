@@ -76,6 +76,7 @@ class LocationActivationManual extends View {
 
 		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
 		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 	}
 
 	onActivationCodeChange(activationCode: string) {
