@@ -49,6 +49,11 @@ const messages = defineMessages({
 		defaultMessage: 'Select City',
 		description: 'Secondary Banner Text for the Select City Screen',
 	},
+	successTitle: {
+		id: 'notification.successTitle',
+		defaultMessage: 'MESSAGE',
+		description: 'Title on Success for the notification component',
+	},
 });
 
 type Props = {
@@ -56,7 +61,7 @@ type Props = {
 	activateGateway: (clientInfo: Object) => void;
 	showModal: boolean,
 	modalMessage: string,
-	modalTitle: string,
+	modalExtra: string,
 	dispatch: Function,
 	activeId: any,
 }
@@ -120,6 +125,7 @@ class TimeZoneCity extends View {
 			bannerSub: messages.bannerSub,
 		};
 		let BannerComponent = Banner(bannerProps);
+		let modalTitle = this.props.modalExtra === 'SUCCESS' ? messages.successTitle : null;
 		return (
 			<StackScreenContainer banner={BannerComponent}>
 				{this.state.dataSource ?
@@ -138,7 +144,7 @@ class TimeZoneCity extends View {
 					entryDuration= {300}
 					exitDuration= {100}
 					showModal={this.props.showModal}>
-					<NotificationComponent title={this.props.modalTitle} text={this.props.modalMessage} onPress={this.closeModal} />
+					<NotificationComponent title={modalTitle} text={this.props.modalMessage} onPress={this.closeModal} />
 				</Modal>
 			</StackScreenContainer>
 		);
@@ -155,8 +161,8 @@ function mapDispatchToProps(dispatch, store) {
 function mapStateToProps(store, ownProps) {
 	return {
 		showModal: store.modal.openModal,
-		modalTitle: store.modal.title,
 		modalMessage: store.modal.data,
+		modalExtra: store.modal.extras,
 	};
 }
 

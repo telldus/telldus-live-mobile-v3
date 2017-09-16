@@ -23,14 +23,23 @@
 
 import React from 'react';
 import { Dimensions, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { defineMessages } from 'react-intl';
 
-import { Text, View } from 'BaseComponents';
+import { Text, View, FormattedMessage } from 'BaseComponents';
 
 type Props = {
 	onPress: Function,
 	text: string,
-	title?: string,
+	title?: Object,
 }
+
+const messages = defineMessages({
+	defaultTitle: {
+		id: 'notification.defaultTitle',
+		defaultMessage: 'ERROR',
+		description: 'Default Title for the notification component',
+	},
+});
 
 export default class NotificationComponent extends View {
 
@@ -48,11 +57,11 @@ export default class NotificationComponent extends View {
 	}
 
 	render() {
-		let title = this.props.title ? this.props.title : 'ERROR';
+		let title = this.props.title ? this.props.title : messages.defaultTitle;
 		return (
 			<View>
 				<View style={styles.notificationModalHeader}>
-					<Text style={styles.notificationModalHeaderText}>{title}</Text>
+					<FormattedMessage style={styles.notificationModalHeaderText} {...title} />
 				</View>
 				<View style={styles.notificationModalBody}>
 					<Text style={styles.notificationModalBodyText}>{this.props.text}</Text>
