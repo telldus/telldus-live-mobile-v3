@@ -225,6 +225,7 @@ function showActivationError(message: string, dispatch: Dispatch) {
 		type: 'REQUEST_MODAL_OPEN',
 		payload: {
 			data: message,
+			extras: 'ERROR',
 		},
 	});
 }
@@ -234,7 +235,7 @@ function showActivationSuccess(message: string, dispatch: Dispatch) {
 		type: 'REQUEST_MODAL_OPEN',
 		payload: {
 			data: message,
-			title: 'MESSAGE',
+			extras: 'SUCCESS',
 		},
 	});
 }
