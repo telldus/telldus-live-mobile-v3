@@ -58,7 +58,7 @@ export type Action =
 	| { type: 'DEVICE_LEARN', payload: Object }
 	| { type: 'DEVICE_DIM', deviceId:number, payload: Object }
 
-	| {type: 'SAVE_DIMMER_INITIAL_STATE', initialValue: number, initialState: string}
+	| {type: 'SAVE_DIMMER_INITIAL_STATE', payload: Object}
 
 	| { type: 'DEVICE_HISTORY', payload: Object }
 

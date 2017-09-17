@@ -29,6 +29,7 @@ type State = {
 	name: string,
 	initialValue: number,
 	initialState: string,
+	deviceId: number,
 };
 
 const initialState: State = {
@@ -36,6 +37,7 @@ const initialState: State = {
 	value: 0,
 	initialValue: 0,
 	initialState: '',
+	deviceId: 0,
 	name: 'N/A',
 };
 
@@ -51,8 +53,9 @@ function dimmer(state: State = initialState, action: Action): State {
 	if (action.type === 'SAVE_DIMMER_INITIAL_STATE') {
 		return {
 			...state,
-			initialValue: action.initialValue,
-			initialState: action.initialState,
+			deviceId: action.payload.deviceId,
+			initialValue: action.payload.initialValue,
+			initialState: action.payload.initialState,
 		};
 	}
 	if (action.type === 'HIDE_DIMMER_POPUP') {
