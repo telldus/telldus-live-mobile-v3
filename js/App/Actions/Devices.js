@@ -103,10 +103,21 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 				},
 			});
 			if (state !== 32) {
+				let value = device.value, deviceState = device.isInState;
+				let { dimmer } = getState();
+				// handle Dimmer sliding action,reset state by getting the initial state from 'dimmer' reducer,
+				// as the value in 'device' reducer is modified by 'SET_DIMMER_VALUE' action.
+				if (state === 16 && dimmer.deviceId === deviceId) {
+					value = dimmer.initialValue;
+					deviceState = dimmer.initialState;
+				}
 				dispatch({
 					type: 'DEVICE_RESET_STATE',
-					deviceId,
-					state: device.isInState,
+					payload: {
+						deviceId,
+						state: deviceState,
+						value,
+					},
 				});
 			}
 		});
@@ -174,8 +185,11 @@ export function getDeviceInfo(deviceId: number, requestedState: number, currentS
 		if (newState === currentState) {
 			dispatch({
 				type: 'DEVICE_RESET_STATE',
-				deviceId,
-				state: response.state,
+				payload: {
+					deviceId,
+					state: response.state,
+					value: response.statevalue,
+				},
 			});
 			if (requestedState !== newState) {
 				dispatch({
@@ -192,7 +206,7 @@ export function getDeviceInfo(deviceId: number, requestedState: number, currentS
 				type: 'DEVICE_SET_STATE',
 				payload: {
 					deviceId,
-					value: response.stateValue,
+					value: response.statevalue,
 					method: response.state,
 				},
 			});

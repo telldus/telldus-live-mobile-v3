@@ -130,12 +130,13 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 				isErrorMessage: action.payload.message,
 			};
 		case 'DEVICE_RESET_STATE':
-			let isInState = typeof action.state === 'string' ? action.state : getDeviceStateMethod(action.state);
+			let isInState = typeof action.payload.state === 'string' ? action.payload.state : getDeviceStateMethod(action.payload.state);
 			return {
 				...state,
 				isErrorMessage: false,
 				methodRequested: '',
 				isInState,
+				value: action.payload.value,
 			};
 
 		case 'DEVICE_HISTORY':
@@ -239,7 +240,7 @@ function byId(state = {}, action) {
 	if (action.type === 'DEVICE_RESET_STATE') {
 		return {
 			...state,
-			[action.deviceId]: reduceDevice(state[action.deviceId], action),
+			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
 		};
 	}
 
