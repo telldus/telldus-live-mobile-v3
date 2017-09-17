@@ -28,7 +28,7 @@ import Slider from 'react-native-slider';
 
 const deviceHeight = Dimensions.get('window').height;
 
-import { setDimmerValue } from 'Actions_Dimmer';
+import { setDimmerValue, saveDimmerInitialState } from 'Actions_Dimmer';
 import { deviceSetState } from 'Actions_Devices';
 import { FormattedMessage, RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { OnButton, OffButton } from 'TabViews_SubViews';
@@ -42,10 +42,11 @@ type Props = {
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 	onLearn: number => void,
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
 };
 
 type State = {
-	temporaryDimmerValue: number,
+	dimmerValue: number,
 };
 
 const ToggleButton = ({ device }) => (
@@ -57,12 +58,12 @@ const ToggleButton = ({ device }) => (
 class DimmerDeviceDetailModal extends View {
 	props: Props;
 	state: State;
-	currentDimmerValue: number;
 	onTurnOn: () => void;
 	onTurnOff: () => void;
 	onLearn: () => void;
-	onValueChange: number => void;
-	onSlidingComplete: number => void;
+	onSlidingStart: () => void;
+	onValueChange: (number) => void;
+	onSlidingComplete: (number) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -70,10 +71,10 @@ class DimmerDeviceDetailModal extends View {
 		const dimmerValue: number = this.getDimmerValue(this.props.device);
 
 		this.state = {
-			temporaryDimmerValue: dimmerValue,
+			dimmerValue,
 		};
 
-		this.currentDimmerValue = dimmerValue;
+		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 	}
@@ -91,8 +92,12 @@ class DimmerDeviceDetailModal extends View {
 		return 0;
 	}
 
-	onValueChange(value) {
-		this.setState({ temporaryDimmerValue: value });
+	onSlidingStart() {
+		this.props.saveDimmerInitialState(this.props.device.id, this.props.device.value, this.props.device.isInState);
+	}
+
+	onValueChange(dimmerValue) {
+		this.setState({ dimmerValue });
 	}
 
 	onSlidingComplete(value) {
@@ -102,9 +107,8 @@ class DimmerDeviceDetailModal extends View {
 	componentWillReceiveProps(nextProps) {
 		const device = nextProps.device;
 		const dimmerValue = this.getDimmerValue(device);
-		if (this.currentDimmerValue !== dimmerValue) {
-			this.setState({ temporaryDimmerValue: dimmerValue });
-			this.currentDimmerValue = dimmerValue;
+		if (this.state.dimmerValue !== dimmerValue) {
+			this.setState({ dimmerValue });
 		}
 
 		this.setState({ request: 'none' });
@@ -122,7 +126,7 @@ class DimmerDeviceDetailModal extends View {
 		}
 
 		if (DIM) {
-			slider = <Slider minimumValue={0} maximumValue={100} step={1} value={this.currentDimmerValue}
+			slider = <Slider minimumValue={0} maximumValue={100} step={1} value={this.state.dimmerValue}
 			                 style={{
 				                 marginHorizontal: 8,
 				                 marginVertical: 8,
@@ -131,6 +135,7 @@ class DimmerDeviceDetailModal extends View {
 			                 maximumTrackTintColor="rgba(219,219,219,255)"
 			                 thumbTintColor="rgba(0,150,136,255)"
 			                 onValueChange={this.onValueChange}
+							 onSlidingStart={this.onSlidingStart}
 			                 onSlidingComplete={this.onSlidingComplete}
 			                 animateTransitions={true}/>;
 		}
@@ -139,7 +144,7 @@ class DimmerDeviceDetailModal extends View {
 			<View style={styles.container}>
 				<View style={[styles.shadow, styles.dimmerContainer]}>
 					<Text style={styles.textDimmingLevel}>
-						<FormattedMessage {...i18n.dimmingLevel} style={styles.textDimmingLevel} />: {this.state.temporaryDimmerValue}%
+						<FormattedMessage {...i18n.dimmingLevel} style={styles.textDimmingLevel} />: {this.state.dimmerValue}%
 					</Text>
 					{slider}
 					{toggleButton}
@@ -208,6 +213,7 @@ function mapDispatchToProps(dispatch) {
 	return {
 		onDimmerSlide: (id, value) => dispatch(setDimmerValue(id, value)),
 		onDim: (id, command, value) => dispatch(deviceSetState(id, command, value)),
+		saveDimmerInitialState: (deviceId, initalValue, initialState) => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
 	};
 }
 

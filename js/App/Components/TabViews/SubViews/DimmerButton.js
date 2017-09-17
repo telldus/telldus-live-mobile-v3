@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 
 import { View, RoundedCornerShadowView } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
-import { showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
@@ -59,6 +59,7 @@ type Props = {
 	commandOFF: number,
 	commandDIM: number,
 	onDimmerSlide: number => void,
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	setScrollEnabled: boolean,
@@ -137,6 +138,7 @@ class DimmerButton extends View {
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
+		this.props.saveDimmerInitialState(this.props.device.id, this.props.device.value, this.props.device.isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
@@ -268,6 +270,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
+		saveDimmerInitialState: (deviceId, initalValue, initialState) => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
 		showDimmerPopup: (name: string, value: number) => {
 			dispatch(showDimmerPopup(name, value));
 		},

@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { View } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
-import { showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
@@ -62,6 +62,7 @@ type Props = {
 	commandDIM: number,
 	tileWidth: number,
 	onDimmerSlide: number => void,
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
 	showDimmerPopup: (name:string, sliderValue:number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
@@ -143,6 +144,7 @@ class DimmerDashboardTile extends View {
 	}
 
 	onSlidingStart(name:string, sliderValue:number) {
+		this.props.saveDimmerInitialState(this.props.item.id, this.props.item.value, this.props.item.isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
@@ -254,6 +256,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
+		saveDimmerInitialState: (deviceId, initalValue, initialState) => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
 		showDimmerPopup: (name:string, value:number) => {
 			dispatch(showDimmerPopup(name, value));
 		},
