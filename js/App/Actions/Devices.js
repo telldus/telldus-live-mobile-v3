@@ -187,7 +187,7 @@ export function getDeviceInfo(deviceId: number, requestedState: number, currentS
 				type: 'DEVICE_RESET_STATE',
 				payload: {
 					deviceId,
-					state: response.state,
+					state: newState,
 					value: response.statevalue,
 				},
 			});
