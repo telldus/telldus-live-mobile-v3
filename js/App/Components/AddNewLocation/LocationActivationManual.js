@@ -34,7 +34,7 @@ const CustomIcon = createIconSetFromIcoMoon(icon_location);
 import {getGatewayInfo, showModal, hideModal} from 'Actions';
 import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 import Banner from './Banner';
-import {View, StyleSheet, FormattedMessage, Text, Dimensions, Icon, Modal, ScreenContainer} from 'BaseComponents';
+import {View, StyleSheet, FormattedMessage, Dimensions, Icon, Modal, ScreenContainer} from 'BaseComponents';
 import Theme from 'Theme';
 
 let deviceWidth = Dimensions.get('window').width;
@@ -60,6 +60,12 @@ const messages = defineMessages({
 		id: 'addNewLocation.activateManual.invalidActivationCode',
 		defaultMessage: 'Invalid Activation Code',
 		description: 'Local Validation text when Activation Code is Invalid',
+	},
+	bodyContent: {
+		id: 'addNewLocation.activateManual.bodyContent',
+		defaultMessage: 'Activate your TellStick by typing the activation code. The activation code ' +
+		'is written on the label on the bottom of your TellStick.',
+		description: 'The body content for the Location Manual Activate Screen',
 	},
 });
 type Props = {
@@ -140,9 +146,7 @@ class LocationActivationManual extends View {
 								underlineColorAndroid="#e26901"
 								defaultValue={this.state.activationCode}
 							/>
-							<Text style={styles.textBody}>Activate your TellStick by typing the activation code. The activation code
-							is written on the label on the bottom of your TellStick.
-							</Text>
+							<FormattedMessage style={styles.textBody} {...messages.bodyContent}/>
 						</View>
 					</View>
 				</KeyboardAvoidingView>

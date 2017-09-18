@@ -26,7 +26,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
-import { defineMessages } from 'react-intl';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_location from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_location);
@@ -50,9 +50,15 @@ const messages = defineMessages({
 		defaultMessage: 'Setup your TellStick to start',
 		description: 'Secondary Banner Text for the Location Detected Screen',
 	},
+	invalidLocationName: {
+		id: 'addNewLocation.locationName.invalidLocationName',
+		defaultMessage: 'Location name can\'t be empty',
+		description: 'Local validation text when Location name field is left empty',
+	},
 });
 type Props = {
 	navigation: Object,
+	intl: intlShape.isRequired,
 }
 
 class LocationName extends View {
@@ -137,7 +143,7 @@ class LocationName extends View {
 					entryDuration= {300}
 					exitDuration= {100}
 					showModal={this.state.showModal}>
-					<NotificationComponent text={'Please enter a valid name.'} onPress={this.closeModal} />
+					<NotificationComponent text={this.props.intl.formatMessage(messages.invalidLocationName)} onPress={this.closeModal} />
 				</Modal>
 			</ScreenContainer>
 		);
@@ -221,4 +227,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect()(LocationName);
+export default connect()(injectIntl(LocationName));
