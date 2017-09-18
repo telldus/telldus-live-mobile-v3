@@ -155,7 +155,9 @@ class DimmerDashboardTile extends View {
 		if (sliderValue === 0) {
 			this.props.requestDeviceAction(this.props.item.id, this.props.commandOFF);
 		}
-		this.props.deviceSetState(this.props.item.id, this.props.commandDIM, toDimmerValue(sliderValue));
+		let dimValue = toDimmerValue(sliderValue);
+		let command = dimValue === 0 ? this.props.commandOFF : this.props.commandDIM;
+		this.props.deviceSetState(this.props.item.id, command, dimValue);
 		this.props.hideDimmerPopup();
 	}
 

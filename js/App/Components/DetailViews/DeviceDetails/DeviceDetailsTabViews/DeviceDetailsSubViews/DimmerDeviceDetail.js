@@ -120,7 +120,9 @@ class DimmerDeviceDetailModal extends View {
 		this.setState({
 			isControlling: false,
 		});
-		this.props.deviceSetState(this.props.device.id, this.props.commandDIM, toDimmerValue(sliderValue));
+		let dimValue = toDimmerValue(sliderValue);
+		let command = dimValue === 0 ? this.props.commandOFF : this.props.commandDIM;
+		this.props.deviceSetState(this.props.device.id, command, dimValue);
 	}
 
 	componentWillReceiveProps(nextProps) {
