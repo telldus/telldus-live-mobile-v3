@@ -24,16 +24,47 @@
 import React from 'react';
 import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, Text, TouchableButton, Modal } from 'BaseComponents';
+import { FormattedMessage, View, Text, TouchableButton, Modal } from 'BaseComponents';
 import {FormContainerComponent, NotificationComponent} from 'PreLoginScreen_SubViews';
 
 import {RegisterUser} from 'Actions_User';
 
+import i18n from './../../Translations/common';
+
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
+
+const messages = defineMessages({
+	createAccount: {
+		id: 'user.createAccount',
+		defaultMessage: 'Create Account',
+		description: 'Header for the create account screen',
+	},
+	alreadyHaveAccount: {
+		id: 'user.alreadyHaveAccount',
+		defaultMessage: 'I already have an account',
+		description: 'Message to show on the create account screen',
+	},
+	emailAdressNotMatch: {
+		id: 'user.emailAdressNotMatch',
+		defaultMessage: 'Email addresses don\'t match. Please Check your entered email address.',
+		description: 'Error message on the create account screen',
+	},
+	emailNotValid: {
+		id: 'user.emailNotValid',
+		defaultMessage: 'Email address not Valid',
+		description: 'Error message on the create account screen',
+	},
+	fieldEmpty: {
+		id: 'form.fieldEmpty',
+		defaultMessage: 'Field can\'t be empty',
+		description: 'Error message Pre-fix on form submitted, with fields empty',
+	},
+});
 
 type Props = {
 	navigation: Object,
@@ -42,6 +73,7 @@ type Props = {
 	validationMessage: string,
 	showModal: boolean,
 	registeredCredential: any,
+	intl: intlShape.isRequired,
 }
 
 class RegisterScreen extends View {
@@ -126,16 +158,20 @@ class RegisterScreen extends View {
 					});
 					this.props.onFormSubmit(em, fn, ln);
 				} else {
-					let message = 'Email addresses don\'t match. Please Check your entered email address.';
+					let message = this.props.intl.formatMessage(messages.emailAdressNotMatch);
 					this.showModal(message);
 				}
 			} else {
-				let message = !isConfirmEmailValid && !isEmailValid ? 'Emails not Valid' : !isConfirmEmailValid ? 'Email Not Valid- confirm email' : 'Email not Valid';
+				let message = this.props.intl.formatMessage(messages.emailNotValid);
 				this.showModal(message);
 			}
 		} else {
-			let pf = 'Field can\'t be Empty';
-			let message = fn === '' ? `${pf}- first name` : ln === '' ? `${pf}- last name ` : em === '' ? `${pf}- email ` : cem === '' ? `${pf}- confirm email` : this.props.validationMessage;
+			let pf = this.props.intl.formatMessage(messages.fieldEmpty);
+			let message = fn === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.firstName)}`
+				: ln === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.lastName)}`
+					: em === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.emailAddress)}`
+						: cem === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.confirmEmailAddress)}`
+							: this.props.validationMessage;
 			this.showModal(message);
 		}
 	}
@@ -178,13 +214,13 @@ class RegisterScreen extends View {
 
 	render() {
 		return (
-			<FormContainerComponent headerText="Create Account">
+			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
 						style={Theme.Styles.textField}
 						onChangeText={this.onFirstNameChange}
-						placeholder="First Name"
+						placeholder={this.props.intl.formatMessage(i18n.firstName)}
 						autoCapitalize="none"
 						autoCorrect={false}
 						placeholderTextColor="#ffffff80"
@@ -198,7 +234,7 @@ class RegisterScreen extends View {
 					<TextInput
 						style={Theme.Styles.textField}
 						onChangeText={this.onLastNameChange}
-						placeholder="Last Name"
+						placeholder={this.props.intl.formatMessage(i18n.lastName)}
 						autoCapitalize="none"
 						autoCorrect={false}
 						placeholderTextColor="#ffffff80"
@@ -212,7 +248,7 @@ class RegisterScreen extends View {
 					<TextInput
 						style={Theme.Styles.textField}
 						onChangeText={this.onEmailChange}
-						placeholder="Email Address"
+						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 						keyboardType="email-address"
 						autoCapitalize="none"
 						autoCorrect={false}
@@ -227,7 +263,7 @@ class RegisterScreen extends View {
 					<TextInput
 						style={Theme.Styles.textField}
 						onChangeText={this.onConfirmEmailChange}
-						placeholder="Confirm Email Address"
+						placeholder={this.props.intl.formatMessage(i18n.confirmEmailAddress)}
 						keyboardType="email-address"
 						autoCapitalize="none"
 						autoCorrect={false}
@@ -240,9 +276,10 @@ class RegisterScreen extends View {
 				<TouchableButton
 					style={Theme.Styles.submitButton}
 					onPress={this.props.showModal ? null : this.onFormSubmit}
-					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
+					text={this.state.isLoading ? i18n.registering : i18n.register}
+					postScript={this.state.isLoading ? '...' : null}
 				/>
-				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
+				<Text style={styles.accountExist} onPress={this.goBackToLogin}><FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/></Text>
 				<Modal
 					modalStyle={Theme.Styles.notificationModal}
 					entry= "ZoomIn"
@@ -282,4 +319,4 @@ function mapStateToProps(store) {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(RegisterScreen));

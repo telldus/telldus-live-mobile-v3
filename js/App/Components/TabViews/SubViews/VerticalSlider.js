@@ -24,13 +24,16 @@
 import React from 'react';
 import { Text, View } from 'BaseComponents';
 import { PanResponder, Animated, StyleSheet, Vibration, Platform } from 'react-native';
+import { intlShape, injectIntl } from 'react-intl';
 
-function getSliderLabel(value:number):string {
+import i18n from '../../../Translations/common';
+
+function getSliderLabel(value:number, intl: intlShape):string {
 	if (value === 100) {
-		return 'On';
+		return intl.formatMessage(i18n.on);
 	}
 	if (value === 0) {
-		return 'Off';
+		return intl.formatMessage(i18n.off);
 	}
 	return value.toString();
 }
@@ -53,6 +56,7 @@ type Props = {
 	item: Object,
 	fontSize: number,
 	style: Object,
+	intl: intlShape.isRequired,
 };
 
 type State = {
@@ -82,7 +86,7 @@ class VerticalSlider extends View {
 			minimumValue: 0,
 			maximumValue: 100,
 			step: 1,
-			displayedValue: getSliderLabel(this.props.value),
+			displayedValue: getSliderLabel(this.props.value, this.props.intl),
 		};
 		this.activeSlider = false;
 
@@ -255,7 +259,7 @@ class VerticalSlider extends View {
 	}
 
 	onValueChange(val: number) {
-		this.setState({ displayedValue: getSliderLabel(val) });
+		this.setState({ displayedValue: getSliderLabel(val, this.props.intl) });
 	}
 
 	render() {
@@ -315,4 +319,4 @@ VerticalSlider.defaultProps = {
 	value: 0,
 };
 
-module.exports = VerticalSlider;
+module.exports = injectIntl(VerticalSlider);

@@ -23,8 +23,9 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { defineMessages } from 'react-intl';
 
-import { Container, Text, View, Icon, TouchableButton } from 'BaseComponents';
+import { FormattedMessage, Container, Text, View, Icon, TouchableButton } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
@@ -34,12 +35,36 @@ import Theme from 'Theme';
 import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions_User';
 
+import i18n from './../../Translations/common';
+
+const messages = defineMessages({
+	pushEnabled: {
+		id: 'settings.pushEnabled',
+		defaultMessage: 'Device subscribed for push notifications.',
+		description: 'Message in the settings window shown if app is registered for push notifications, in settings view',
+	},
+	pushRegister: {
+		id: 'settings.pushRegister',
+		defaultMessage: 'Register for push notifications',
+		description: 'Message in the settings window shown if the app was not registered for push notifications, in settings view',
+	},
+	pushRegisters: {
+		id: 'settings.pushRegisters',
+		defaultMessage: 'Registers for push notifications',
+		description: 'Message in the settings window shown when registrating for push notifications',
+	},
+	version: {
+		id: 'version',
+		defaultMessage: 'version',
+	},
+});
+
 const Header = ({ onPress }) => (
 	<View style={styles.header}>
 		<Icon name="gear" size={26} color="white"
 		      style={styles.gear}/>
 		<Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
-			{'Settings'}
+			<FormattedMessage {...i18n.settingsHeader} style={styles.textHeaderTitle}/>
 		</Text>
 		<Icon name="close" size={26} color="white" style={{ flex: 1 }} onPress={onPress}/>
 	</View>
@@ -47,15 +72,15 @@ const Header = ({ onPress }) => (
 
 const StatusView = () => (
 	<Text style={styles.statusText}>
-	You have subscribed for telldus notification.
+		<FormattedMessage {...messages.pushEnabled} style={styles.statusText} />
 	</Text>
 );
 
 type Props = {
 	isVisible: boolean,
 	onClose: () => void,
-	onLogout: () => void,
-	onSubmitPushToken: () => void,
+	onLogout: (string, Function) => void,
+	onSubmitPushToken: (string, Function) => void,
 	store: Object,
 };
 
@@ -111,8 +136,8 @@ class SettingsDetailModal extends View {
 	}
 
 	render() {
-		let submitButText = this.state.isPushSubmitLoading ? 'Submitting Token...' : 'Submit Push Token';
-		let logoutButText = this.state.isLogoutLoading ? 'Logging Out...' : 'Logout';
+		let submitButText = this.state.isPushSubmitLoading ? messages.pushRegisters : messages.pushRegister;
+		let logoutButText = this.state.isLogoutLoading ? i18n.loggingout : i18n.logout;
 		let version = DeviceInfo.getVersion();
 		return (
 			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
@@ -125,21 +150,25 @@ class SettingsDetailModal extends View {
 							null
 						}
 						<Text style={styles.versionInfo}>
-							{`You are using version ${version} of Telldus Live! mobile.`}
+							Telldus Live! mobile{'\n'}
+							<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
 						</Text>
 						{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
 							<TouchableButton
 								style={Theme.Styles.submitButton}
 								onPress={this.submitPushToken}
 								text={submitButText}
+								postScript={this.state.isPushSubmitLoading ? '...' : null}
 							/>
 							:
 							<StatusView/>
 						}
+						<View style={{height: 20}} />
 						<TouchableButton
 							style={Theme.Styles.submitButton}
 							onPress={this.logout}
 							text={logoutButText}
+							postScript={this.state.isLogoutLoading ? '...' : null}
 						/>
 					</View>
 				</Container>
