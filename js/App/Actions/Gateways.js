@@ -84,6 +84,7 @@ function addNewGateway(): ThunkAction {
 						clients: response.client,
 					},
 				});
+				return response;
 			}
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
@@ -94,6 +95,7 @@ function addNewGateway(): ThunkAction {
 					message: message,
 				},
 			});
+			return err;
 		});
 	};
 }

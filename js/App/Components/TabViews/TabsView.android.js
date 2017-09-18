@@ -253,15 +253,9 @@ class TabsView extends View {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation && nextProps.gateways.toActivate.checkIfGatewaysEmpty) {
-			this.props.addNewLocation();
+			this.addNewLocation();
 			this.setState({
 				addingNewLocation: true,
-			});
-		}
-		if (nextProps.gateways.toActivate.requestActivation) {
-			this.props.stackNavigator.navigate('LocationDetected', {clients: nextProps.gateways.toActivate.clients});
-			this.props.dispatch({
-				type: 'ADD_GATEWAY_DECLINE',
 			});
 		}
 	}
@@ -316,7 +310,15 @@ class TabsView extends View {
 	};
 
 	addNewLocation() {
-		this.props.addNewLocation();
+		this.props.addNewLocation()
+			.then(response => {
+				if (response.client) {
+					this.props.stackNavigator.navigate('LocationDetected', {clients: response.client});
+					this.props.dispatch({
+						type: 'ADD_GATEWAY_DECLINE',
+					});
+				}
+			});
 	}
 
 	render() {
@@ -466,7 +468,9 @@ function mapDispatchToProps(dispatch) {
 			dispatch(switchTab(tab));
 		},
 		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
-		addNewLocation: () => dispatch(addNewGateway()),
+		addNewLocation: () => {
+			return dispatch(addNewGateway());
+		},
 		dispatch,
 	};
 }
