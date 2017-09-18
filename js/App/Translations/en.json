@@ -2,6 +2,7 @@
   "addNewLocation.activateManual": "Activation Code",
   "addNewLocation.activateManual.banner": "Select Location",
   "addNewLocation.activateManual.bannerSub": "Enter Activation Code",
+  "addNewLocation.activateManual.invalidActivationCode": "Invalid Activation Code",
   "addNewLocation.locationDetected": "Location Detected",
   "addNewLocation.locationDetected.banner": "Select Location",
   "addNewLocation.locationDetected.bannerSub": "Setup your TellStick to start",

@@ -26,7 +26,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
-import { defineMessages } from 'react-intl';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_location from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_location);
@@ -56,6 +56,11 @@ const messages = defineMessages({
 		defaultMessage: 'Enter Activation Code',
 		description: 'Secondary Banner Text for the Location Manual Activate Screen',
 	},
+	invalidActivationCode: {
+		id: 'addNewLocation.activateManual.invalidActivationCode',
+		defaultMessage: 'Invalid Activation Code',
+		description: 'Local Validation text when Activation Code is Invalid',
+	},
 });
 type Props = {
 	navigation: Object,
@@ -64,6 +69,7 @@ type Props = {
 	showModal: boolean,
 	modalMessage: String,
 	modalExtra: any,
+	intl: intlShape.isRequired,
 }
 
 class LocationActivationManual extends View {
@@ -92,7 +98,7 @@ class LocationActivationManual extends View {
 	}
 
 	onActivationCodeSubmit() {
-		if (this.state.activationCode !== '') {
+		if (this.state.activationCode.length === 10) {
 			this.props.getGatewayInfo(this.state.activationCode).then(response => {
 				if (response.id) {
 					let clientInfo = {
@@ -103,8 +109,7 @@ class LocationActivationManual extends View {
 				}
 			});
 		} else {
-			// using the local state to control Modal as it is a local validation, not using the action/reducer.
-			let message = 'Invalid Activation Code.';
+			let message = this.props.intl.formatMessage(messages.invalidActivationCode);
 			this.props.dispatch(showModal(message, 'ERROR'));
 		}
 	}
@@ -256,4 +261,4 @@ function mapStateToProps(store) {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LocationActivationManual);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(LocationActivationManual));
