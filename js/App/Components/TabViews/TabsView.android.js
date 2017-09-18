@@ -314,9 +314,6 @@ class TabsView extends View {
 			.then(response => {
 				if (response.client) {
 					this.props.stackNavigator.navigate('LocationDetected', {clients: response.client});
-					this.props.dispatch({
-						type: 'ADD_GATEWAY_DECLINE',
-					});
 				}
 			});
 	}
