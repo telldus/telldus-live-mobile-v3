@@ -29,16 +29,19 @@ import Slider from 'react-native-slider';
 const deviceHeight = Dimensions.get('window').height;
 
 import { setDimmerValue, saveDimmerInitialState } from 'Actions_Dimmer';
-import { deviceSetState } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import { FormattedMessage, RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { OnButton, OffButton } from 'TabViews_SubViews';
 import i18n from '../../../../../Translations/common';
 
 type Props = {
+	commandON: number,
+	commandOFF: number,
 	commandDIM: number,
 	device: Object,
 	locationData: Object,
-	onDim: (id: number, command: number, value: number) => void,
+	deviceSetState: (id: number, command: number, value?: number) => void,
+	requestDeviceAction: (number, number) => void,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 	onLearn: number => void,
@@ -48,6 +51,10 @@ type Props = {
 type State = {
 	dimmerValue: number,
 };
+
+function toDimmerValue(sliderValue) {
+	return Math.round(sliderValue * 255 / 100.0);
+}
 
 const ToggleButton = ({ device }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
@@ -100,8 +107,14 @@ class DimmerDeviceDetailModal extends View {
 		this.setState({ dimmerValue });
 	}
 
-	onSlidingComplete(value) {
-		this.props.onDim(this.props.device.id, this.props.commandDIM, 255 * value / 100.0);
+	onSlidingComplete(sliderValue: number) {
+		if (sliderValue > 0) {
+			this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
+		}
+		if (sliderValue === 0) {
+			this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
+		}
+		this.props.deviceSetState(this.props.device.id, this.props.commandDIM, toDimmerValue(sliderValue));
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -160,6 +173,8 @@ DimmerDeviceDetailModal.propTypes = {
 };
 
 DimmerDeviceDetailModal.defaultProps = {
+	commandON: 1,
+	commandOFF: 2,
 	commandDIM: 16,
 };
 
@@ -212,7 +227,8 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch) {
 	return {
 		onDimmerSlide: (id, value) => dispatch(setDimmerValue(id, value)),
-		onDim: (id, command, value) => dispatch(deviceSetState(id, command, value)),
+		deviceSetState: (id, command, value) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
 		saveDimmerInitialState: (deviceId, initalValue, initialState) => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
 	};
 }

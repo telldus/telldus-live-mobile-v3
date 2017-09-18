@@ -55,7 +55,7 @@ function toSliderValue(dimmerValue: number): number {
 
 type Props = {
 	device: Object,
-	commandOn: number,
+	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
 	onDimmerSlide: number => void,
@@ -143,6 +143,12 @@ class DimmerButton extends View {
 	}
 
 	onSlidingComplete(sliderValue: number) {
+		if (sliderValue > 0) {
+			this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
+		}
+		if (sliderValue === 0) {
+			this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
+		}
 		this.props.deviceSetState(this.props.device.id, this.props.commandDIM, toDimmerValue(sliderValue));
 		this.props.hideDimmerPopup();
 	}
@@ -164,8 +170,8 @@ class DimmerButton extends View {
 	}
 
 	onTurnOn() {
-		this.props.deviceSetState(this.props.device.id, this.props.commandOn);
-		this.props.requestDeviceAction(this.props.device.id, this.props.commandOn);
+		this.props.deviceSetState(this.props.device.id, this.props.commandON);
+		this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
 	}
 
 	onTurnOff() {
@@ -235,7 +241,7 @@ class DimmerButton extends View {
 }
 
 DimmerButton.defaultProps = {
-	commandOn: 1,
+	commandON: 1,
 	commandOFF: 2,
 	commandDIM: 16,
 };

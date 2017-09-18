@@ -57,7 +57,7 @@ function toSliderValue(dimmerValue) {
 
 type Props = {
 	item: Object,
-	commandOn: number,
+	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
 	tileWidth: number,
@@ -149,6 +149,12 @@ class DimmerDashboardTile extends View {
 	}
 
 	onSlidingComplete(sliderValue:number) {
+		if (sliderValue > 0) {
+			this.props.requestDeviceAction(this.props.item.id, this.props.commandON);
+		}
+		if (sliderValue === 0) {
+			this.props.requestDeviceAction(this.props.item.id, this.props.commandOFF);
+		}
 		this.props.deviceSetState(this.props.item.id, this.props.commandDIM, toDimmerValue(sliderValue));
 		this.props.hideDimmerPopup();
 	}
@@ -170,8 +176,8 @@ class DimmerDashboardTile extends View {
 	}
 
 	onTurnOn() {
-		this.props.deviceSetState(this.props.item.id, this.props.commandOn);
-		this.props.requestDeviceAction(this.props.item.id, this.props.commandOn);
+		this.props.deviceSetState(this.props.item.id, this.props.commandON);
+		this.props.requestDeviceAction(this.props.item.id, this.props.commandON);
 	}
 
 	onTurnOff() {
@@ -222,7 +228,7 @@ class DimmerDashboardTile extends View {
 }
 
 DimmerDashboardTile.defaultProps = {
-	commandOn: 1,
+	commandON: 1,
 	commandOFF: 2,
 	commandDIM: 16,
 };
