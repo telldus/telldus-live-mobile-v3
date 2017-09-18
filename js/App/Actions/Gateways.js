@@ -100,22 +100,12 @@ function addNewGateway(): ThunkAction {
 	};
 }
 
-function activateGateway(clientInfo: Object): ThunkAction {
-	return (dispatch, getState) => {
-		if (clientInfo.activationCode) {
-			dispatch(getGatewayInfo(clientInfo));
-		} else {
-			dispatch(register(clientInfo));
-		}
-	};
-}
-
-function getGatewayInfo(clientInfo: Object): ThunkAction {
+function getGatewayInfo(activationCode: string): ThunkAction {
 	return (dispatch, getState) => {
 		const url = format({
 			pathname: '/client/info',
 			query: {
-				code: clientInfo.activationCode,
+				code: activationCode,
 			},
 		});
 		const payload = {
@@ -126,18 +116,17 @@ function getGatewayInfo(clientInfo: Object): ThunkAction {
 		};
 		return LiveApi(payload).then(response => {
 			if (response.id) {
-				clientInfo.clientId = response.id;
-				clientInfo.uuid = response.uuid;
-				dispatch(register(clientInfo));
+				return response;
 			}
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch(onActivationError(message, dispatch));
+			dispatch(showModal(message, 'ERROR'));
+			return message;
 		});
 	};
 }
 
-function register(clientInfo: Object): ThunkAction {
+function activateGateway(clientInfo: Object): ThunkAction {
 	return (dispatch, getState) => {
 		const url = format({
 			pathname: '/client/register',
@@ -235,4 +224,4 @@ function onActivationSuccess(message: string): ThunkAction {
 	};
 }
 
-module.exports = { getGateways, addNewGateway, activateGateway };
+module.exports = { getGateways, addNewGateway, activateGateway, getGatewayInfo };

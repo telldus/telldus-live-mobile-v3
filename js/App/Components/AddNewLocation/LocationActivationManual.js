@@ -31,6 +31,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_location from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_location);
 
+import {getGatewayInfo, showModal, hideModal} from 'Actions';
 import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 import Banner from './Banner';
 import {View, StyleSheet, FormattedMessage, Text, Dimensions, Icon, Modal, ScreenContainer} from 'BaseComponents';
@@ -58,6 +59,11 @@ const messages = defineMessages({
 });
 type Props = {
 	navigation: Object,
+	dispatch: Function,
+	getGatewayInfo: (activationCode: string) => any;
+	showModal: boolean,
+	modalMessage: String,
+	modalExtra: any,
 }
 
 class LocationActivationManual extends View {
@@ -87,22 +93,24 @@ class LocationActivationManual extends View {
 
 	onActivationCodeSubmit() {
 		if (this.state.activationCode !== '') {
-			let clientInfo = {
-				activationCode: this.state.activationCode,
-			};
-			this.props.navigation.navigate('LocationName', {clientInfo});
+			this.props.getGatewayInfo(this.state.activationCode).then(response => {
+				if (response.id) {
+					let clientInfo = {
+						clientId: response.id,
+						uuid: response.uuid,
+					};
+					this.props.navigation.navigate('LocationName', {clientInfo});
+				}
+			});
 		} else {
 			// using the local state to control Modal as it is a local validation, not using the action/reducer.
-			this.setState({
-				showModal: true,
-			});
+			let message = 'Invalid Activation Code.';
+			this.props.dispatch(showModal(message, 'ERROR'));
 		}
 	}
 
 	closeModal() {
-		this.setState({
-			showModal: false,
-		});
+		this.props.dispatch(hideModal());
 	}
 
 	render() {
@@ -146,8 +154,8 @@ class LocationActivationManual extends View {
 					exit= "ZoomOut"
 					entryDuration= {300}
 					exitDuration= {100}
-					showModal={this.state.showModal}>
-					<NotificationComponent text={'Please enter a valid activation code.'} onPress={this.closeModal} />
+					showModal={this.props.showModal}>
+					<NotificationComponent text={this.props.modalMessage} onPress={this.closeModal} />
 				</Modal>
 			</ScreenContainer>
 		);
@@ -231,4 +239,21 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect()(LocationActivationManual);
+function mapDispatchToProps(dispatch) {
+	return {
+		getGatewayInfo: (activationCode: string) => {
+			return dispatch(getGatewayInfo(activationCode));
+		},
+		dispatch,
+	};
+}
+
+function mapStateToProps(store) {
+	return {
+		showModal: store.modal.openModal,
+		modalMessage: store.modal.data,
+		modalExtra: store.modal.extras,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LocationActivationManual);
