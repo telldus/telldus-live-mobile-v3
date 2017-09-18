@@ -79,8 +79,8 @@ class DimmerDeviceDetailModal extends View {
 
 		this.state = {
 			dimmerValue,
+			isControlling: false,
 		};
-
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
@@ -100,6 +100,9 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	onSlidingStart() {
+		this.setState({
+			isControlling: true,
+		});
 		this.props.saveDimmerInitialState(this.props.device.id, this.props.device.value, this.props.device.isInState);
 	}
 
@@ -114,13 +117,16 @@ class DimmerDeviceDetailModal extends View {
 		if (sliderValue === 0) {
 			this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
 		}
+		this.setState({
+			isControlling: false,
+		});
 		this.props.deviceSetState(this.props.device.id, this.props.commandDIM, toDimmerValue(sliderValue));
 	}
 
 	componentWillReceiveProps(nextProps) {
 		const device = nextProps.device;
 		const dimmerValue = this.getDimmerValue(device);
-		if (this.state.dimmerValue !== dimmerValue) {
+		if (this.state.dimmerValue !== dimmerValue && !this.state.isControlling) {
 			this.setState({ dimmerValue });
 		}
 
