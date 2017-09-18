@@ -254,10 +254,19 @@ class TabsView extends View {
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation && nextProps.gateways.toActivate.checkIfGatewaysEmpty) {
 			this.addNewLocation();
-			this.setState({
-				addingNewLocation: true,
-			});
 		}
+	}
+
+	addNewLocation() {
+		this.props.addNewLocation()
+			.then(response => {
+				if (response.client) {
+					this.props.stackNavigator.navigate('LocationDetected', {clients: response.client});
+					this.setState({
+						addingNewLocation: true,
+					});
+				}
+			});
 	}
 
 	onTabSelect(tab) {
@@ -308,15 +317,6 @@ class TabsView extends View {
 	makeRightButton = routeName => {
 		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
-
-	addNewLocation() {
-		this.props.addNewLocation()
-			.then(response => {
-				if (response.client) {
-					this.props.stackNavigator.navigate('LocationDetected', {clients: response.client});
-				}
-			});
-	}
 
 	render() {
 		let screenProps = { stackNavigator: this.props.stackNavigator };
