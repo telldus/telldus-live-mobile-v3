@@ -16,35 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions
+ * @providesModule Actions_Modal
  */
 
 // @flow
 
 'use strict';
 
-import GatewayActions from './Gateways';
-import LoginActions from './Login';
-import NavigationActions from './Navigation';
-import SensorActions from './Sensors';
-import LiveApiActions from './LiveApi';
-import TabActions from './Tabs';
-import DashboardActions from './Dashboard';
-import JobActions from './Jobs';
-import AppStateActions from './AppState';
-import AppDataActions from './AppData';
-import ModalActions from './Modal';
+import type { Action } from './Types';
+
+const showModal = (data?: any, extras?: any): Action => ({
+	type: 'REQUEST_MODAL_OPEN',
+	payload: {
+		data,
+		extras,
+	},
+});
+
+const hideModal = (data?: any, extras?: any): Action => ({
+	type: 'REQUEST_MODAL_CLOSE',
+	payload: {
+		data,
+		extras,
+	},
+});
 
 module.exports = {
-	...GatewayActions,
-	...LoginActions,
-	...NavigationActions,
-	...SensorActions,
-	...LiveApiActions,
-	...TabActions,
-	...DashboardActions,
-	...JobActions,
-	...AppStateActions,
-	...AppDataActions,
-	...ModalActions,
+	showModal,
+	hideModal,
 };

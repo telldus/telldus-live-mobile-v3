@@ -23,8 +23,9 @@
 
 'use strict';
 
-import type { ThunkAction, Dispatch } from './Types';
+import type { ThunkAction } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
+import {showModal} from 'Actions_Modal';
 
 import {getAppData} from './AppData';
 import LiveApi from 'LiveApi';
@@ -129,7 +130,7 @@ function getGatewayInfo(clientInfo: Object): ThunkAction {
 			}
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			showActivationError(message, dispatch);
+			dispatch(onActivationError(message, dispatch));
 		});
 	};
 }
@@ -158,10 +159,10 @@ function register(clientInfo: Object): ThunkAction {
 					if (val[0].status && val[0].status === 'success' &&
 						val[1].status && val[1].status === 'success') {
 						let message = 'Location has been added successfully';
-						showActivationSuccess(message, dispatch);
+						dispatch(onActivationSuccess(message));
 					} else {
 						let message = 'Location has been Activated but some actions Could not be completed.';
-						showActivationError(message, dispatch);
+						dispatch(onActivationError(message));
 					}
 					dispatch(getAppData());
 					dispatch(getGateways());
@@ -169,7 +170,7 @@ function register(clientInfo: Object): ThunkAction {
 			}
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			showActivationError(message, dispatch);
+			dispatch(onActivationError(message, dispatch));
 		});
 	};
 }
@@ -220,24 +221,16 @@ function setTimezone(id: string, timezone: string): ThunkAction {
 	};
 }
 
-function showActivationError(message: string, dispatch: Dispatch) {
-	dispatch({
-		type: 'REQUEST_MODAL_OPEN',
-		payload: {
-			data: message,
-			extras: 'ERROR',
-		},
-	});
+function onActivationError(message: string): ThunkAction {
+	return (dispatch, getState) => {
+		dispatch(showModal(message, 'ERROR'));
+	};
 }
 
-function showActivationSuccess(message: string, dispatch: Dispatch) {
-	dispatch({
-		type: 'REQUEST_MODAL_OPEN',
-		payload: {
-			data: message,
-			extras: 'SUCCESS',
-		},
-	});
+function onActivationSuccess(message: string): ThunkAction {
+	return (dispatch, getState) => {
+		dispatch(showModal(message, 'SUCCESS'));
+	};
 }
 
 module.exports = { getGateways, addNewGateway, activateGateway };
