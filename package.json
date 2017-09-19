@@ -9,7 +9,8 @@
     "manage:translations": "node js/Utils/translationRunner.js",
     "postinstall": "rm -f node_modules/intl/.babelrc",
     "release": "node js/Utils/release.js",
-    "sourcemap": "node js/Utils/sourcemap.js"
+    "sourcemap": "node js/Utils/sourcemap.js",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -50,21 +51,31 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-eslint": "~7.2.3",
+    "babel-jest": "^21.0.2",
     "babel-plugin-react-intl": "^2.3.1",
     "babel-polyfill": "~6.20.0",
     "babel-preset-react-native": "1.9.2",
     "babel-preset-stage-3": "^6.17.0",
     "buffer": "^5.0.6",
     "child-process-promise": "^2.2.1",
+    "enzyme": "^2.9.1",
     "eslint": "~4.4.1",
     "eslint-plugin-react": "^7.2.1",
+    "fetch-mock": "^5.12.2",
     "flow-bin": "^0.38.0",
+    "jest": "^21.1.0",
     "prompt": "^1.0.0",
     "react-intl-translations-manager": "^5.0.0"
   },
   "engines": {
     "node": ">=5.0",
     "npm": ">=3.0"
+  },
+  "jest": {
+    "preset": "react-native",
+    "setupFiles": [
+      "<rootDir>/js/Utils/jest.js"
+    ]
   },
   "rnpm": {
     "assets": [
