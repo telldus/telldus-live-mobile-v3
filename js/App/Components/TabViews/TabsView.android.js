@@ -151,7 +151,7 @@ const TabNavigatorConfig = {
 			fontSize: Dimensions.get('window').width / 35,
 		},
 		tabStyle: {
-			width: Dimensions.get('window').width / 3.5,
+			width: Dimensions.get('window').width / 2.8,
 		},
 		style: {
 			backgroundColor: Theme.Core.brandPrimary,
