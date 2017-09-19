@@ -127,7 +127,7 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 				...state,
 				isErrorMessage: false,
 				methodRequested: '',
-				isInState: getDeviceStateMethod(action.state),
+				isInState: action.state,
 			};
 
 		default:
