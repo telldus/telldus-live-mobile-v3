@@ -96,15 +96,17 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 				method: 'GET',
 			},
 		};
-		let { devices } = getState();
-		let device = devices.byId[deviceId];
 		return LiveApi(payload).then(response => {
 			setTimeout(() => {
+				let { devices } = getState();
+				let device = devices.byId[deviceId];
 				if (device.methodRequested !== '') {
 					getDeviceInfo(deviceId, 'TURNON', isInState, dispatch);
 				}
 			}, 2000);
 		}).catch(error => {
+			let { devices } = getState();
+			let device = devices.byId[deviceId];
 			dispatch({
 				type: 'GLOBAL_ERROR_SHOW',
 				payload: {
@@ -130,15 +132,17 @@ export function turnOff(deviceId: number, isInState: string): ThunkAction {
 				method: 'GET',
 			},
 		};
-		let { devices } = getState();
-		let device = devices.byId[deviceId];
 		return LiveApi(payload).then(response => {
 			setTimeout(() => {
+				let { devices } = getState();
+				let device = devices.byId[deviceId];
 				if (device.methodRequested !== '') {
 					getDeviceInfo(deviceId, 'TURNOFF', isInState, dispatch);
 				}
 			}, 2000);
 		}).catch(error => {
+			let { devices } = getState();
+			let device = devices.byId[deviceId];
 			dispatch({
 				type: 'GLOBAL_ERROR_SHOW',
 				payload: {
@@ -273,7 +277,7 @@ export function getDeviceInfo(deviceId: number, requestedState: string, currentS
 			dispatch({
 				type: 'DEVICE_RESET_STATE',
 				deviceId,
-				state: response.state,
+				state: newState,
 			});
 			if (requestedState !== newState) {
 				dispatch({
