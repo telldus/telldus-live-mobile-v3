@@ -161,7 +161,7 @@ function activateGateway(clientInfo: Object): ThunkAction {
 			}
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch(onActivationError(message, dispatch));
+			dispatch(onActivationError(message));
 		});
 	};
 }
