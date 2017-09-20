@@ -28,11 +28,11 @@ import { REHYDRATE } from 'redux-persist/constants';
 
 import { methods } from '../../Config.js';
 
-import { getPowerParts } from 'Lib';
+import getPowerParts from '../Lib/getPowerParts';
 
 export function getSupportedMethods(methodsAggregate: number): Object {
 	const methodNumbers = getPowerParts(methodsAggregate);
-	const methodHashmap = methodNumbers.reduce((memo, methodNumber) => {
+	const methodHashmap = methodNumbers.reduce((memo: Object, methodNumber: number): Object => {
 		memo[methods[methodNumber]] = true;
 		return memo;
 	}, {});
@@ -44,7 +44,7 @@ export function getDeviceStateMethod(deviceStateNumber: number): string {
 	return methods[parseInt(deviceStateNumber, 10)];
 }
 
-function reduceDevice(state:Object = {}, action:Action): Object {
+function reduceDevice(state: Object = {}, action: Action): Object {
 	switch (action.type) {
 		case REHYDRATE:
 			return {
@@ -160,7 +160,7 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 	}
 }
 
-function byId(state = {}, action) {
+function byId(state: Object = {}, action: Object): Object {
 	if (action.type === REHYDRATE) {
 		if (action.payload.devices && action.payload.devices.byId) {
 			console.log('rehydrating devices.byId');
@@ -176,7 +176,7 @@ function byId(state = {}, action) {
 		return { ...state };
 	}
 	if (action.type === 'RECEIVED_DEVICES') {
-		return action.payload.device.reduce((acc, deviceState) => {
+		return action.payload.device.reduce((acc: Object, deviceState: Object): Object => {
 			acc[deviceState.id] = {
 				...state[deviceState.id],
 				// TODO: pass in received state as action.payload (see gateways reducer)
@@ -246,7 +246,7 @@ function byId(state = {}, action) {
 	return state;
 }
 
-const allIds = (state = [], action) => {
+const allIds = (state: Array<Object> = [], action: Object): Array<Object> => {
 	if (action.type === REHYDRATE) {
 		if (action.payload.devices && action.payload.devices.allIds) {
 			console.log('rehydrating devices.allIds');
@@ -261,8 +261,8 @@ const allIds = (state = [], action) => {
 		// overwrites entire state
 		// exclude ignored devices
 		return action.payload.device
-		             .filter(deviceState => !deviceState.ignored)
-		             .map(deviceState => deviceState.id);
+		             .filter((deviceState: Object): boolean => !deviceState.ignored)
+		             .map((deviceState: Object): number => deviceState.id);
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return [];
@@ -275,14 +275,14 @@ export default combineReducers({
 	byId,
 });
 
-export function parseDevicesForListView(devices:Object = {}, gateways:Object = {}, editMode:boolean = false) {
-	const sections = devices.allIds.reduce((acc, deviceId) => {
+export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}, editMode: boolean = false): Object {
+	const sections = devices.allIds.reduce((acc: Object, deviceId: string): Object => {
 		acc[devices.byId[deviceId].clientId] = [];
 		return acc;
 	}, {});
-	const sectionIds = Object.keys(sections).map(id => parseInt(id, 10));
+	const sectionIds = Object.keys(sections).map((id: string): number => parseInt(id, 10));
 
-	devices.allIds.forEach(deviceId => {
+	devices.allIds.forEach((deviceId: number) => {
 		const device = devices.byId[deviceId];
 		sections[device.clientId].push({
 			device,
@@ -290,7 +290,7 @@ export function parseDevicesForListView(devices:Object = {}, gateways:Object = {
 		});
 	});
 
-	sectionIds.sort((a, b) => {
+	sectionIds.sort((a: number, b: number): number => {
 		// might be that devices get rendered before gateways are fetched
 		const gatewayA = gateways.byId[a] ? gateways.byId[a].name : a;
 		const gatewayB = gateways.byId[b] ? gateways.byId[b].name : b;

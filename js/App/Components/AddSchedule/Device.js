@@ -85,7 +85,7 @@ export default class Device extends View<void, Props, State> {
 		navigation.navigate('Action');
 	};
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<List
 				dataSource={this.state.dataSource}
