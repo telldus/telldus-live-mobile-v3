@@ -131,7 +131,7 @@ class SchedulerTab extends View<null, Props, State> {
 		});
 
 		dispatch(editSchedule(schedule));
-		screenProps.rootNavigation.dispatch(goToEdit);
+		screenProps.stackNavigator.dispatch(goToEdit);
 	};
 
 	render(): React$Element<any> {
