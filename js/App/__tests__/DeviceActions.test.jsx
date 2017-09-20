@@ -3,6 +3,8 @@ import { configureStore } from '../Store/ConfigureStore';
 
 import fetchMock from 'fetch-mock';
 
+jest.useFakeTimers();
+
 describe('Test device actions', ()=>{
 	let store;
 
@@ -37,6 +39,32 @@ describe('Test device actions', ()=>{
 				expect(store.getState().devices.byId['1'].isInState).toBe('TURNON');
 				expect(fetchMock.calls('deviceCommand').length).toBe(1);
 				expect(fetchMock.calls('deviceInfo').length).toBe(0);
+			});
+	});
+	it('check action with api when web socket does not update', () => {
+		return store.dispatch(deviceSetState(1, 1))
+			.then(() => {
+				jest.runAllTimers();
+				// SET new state after checking with API
+				store.dispatch({type: 'DEVICE_SET_STATE', payload: {deviceId: 1, method: 1}});
+			})
+			.then(() => {
+				expect(store.getState().devices.byId['1'].isInState).toBe('TURNON');
+				expect(fetchMock.calls('deviceCommand').length).toBe(1);
+				expect(fetchMock.calls('deviceInfo').length).toBe(1);
+			});
+	});
+	it('check action with api when web socket does not update', () => {
+		return store.dispatch(deviceSetState(1, 1))
+			.then(() => {
+				jest.runAllTimers();
+				// RESET to previous state after checking with API.
+				store.dispatch({type: 'DEVICE_RESET_STATE', payload: {deviceId: 1, state: 'TURNOFF'}});
+			})
+			.then(() => {
+				expect(store.getState().devices.byId['1'].isInState).toBe('TURNOFF');
+				expect(fetchMock.calls('deviceCommand').length).toBe(1);
+				expect(fetchMock.calls('deviceInfo').length).toBe(1);
 			});
 	});
 });
