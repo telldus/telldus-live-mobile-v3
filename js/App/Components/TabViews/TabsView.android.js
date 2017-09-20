@@ -49,11 +49,11 @@ const messages = defineMessages({
 	},
 });
 
-const Gateway = ({ name, online, websocketOnline }) => {
+const Gateway = (props: Object): React$Element => {
 	let locationSrc;
-	if (!online) {
+	if (!props.online) {
 		locationSrc = require('./img/tabIcons/location-red.png');
-	} else if (!websocketOnline) {
+	} else if (!props.websocketOnline) {
 		locationSrc = require('./img/tabIcons/location-orange.png');
 	} else {
 		locationSrc = require('./img/tabIcons/location-green.png');
@@ -61,23 +61,23 @@ const Gateway = ({ name, online, websocketOnline }) => {
 	return (
 		<View style={styles.gatewayContainer}>
 			<Image style={styles.gatewayIcon} source={locationSrc}/>
-			<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
+			<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{props.name}</Text>
 		</View>
 	);
 };
 
-const NavigationHeader = ({ firstName, lastName }) => (
+const NavigationHeader = (props: Object): React$Element => (
 	<View style={styles.navigationHeader}>
 		<Image style={styles.navigationHeaderImage}
 		       source={require('./img/telldus.png')}
 		       resizeMode={'contain'}/>
 		<View style={styles.navigationHeaderTextCover}>
 			<Text numberOfLines={1} style={styles.navigationHeaderText}>
-				{firstName}
+				{props.firstName}
 			</Text>
-			{lastName ?
+			{props.lastName ?
 				<Text numberOfLines={1} style={styles.navigationHeaderText}>
-					{lastName}
+					{props.lastName}
 				</Text>
 				:
 				null
@@ -86,36 +86,36 @@ const NavigationHeader = ({ firstName, lastName }) => (
 	</View>
 );
 
-const ConnectedLocations = () => (
+const ConnectedLocations = (): React$Element => (
 	<View style={styles.navigationTitle}>
 		<Image source={require('./img/tabIcons/router.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
 	</View>
 );
 
-const SettingsButton = ({ onPress }) => (
-	<TouchableOpacity onPress={onPress} style={styles.navigationTitle}>
+const SettingsButton = (Props: Object): React$Element => (
+	<TouchableOpacity onPress={Props.onPress} style={styles.navigationTitle}>
 		<Image source={require('./img/tabIcons/gear.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
 	</TouchableOpacity>
 );
 
-const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
+const NavigationView = (props: Object): React$Element => {
 	return (
 		<View style={{
 			flex: 1,
 			backgroundColor: 'rgba(26,53,92,255)',
 		}}>
-			<NavigationHeader firstName={userProfile.firstname} lastName={userProfile.lastname}/>
+			<NavigationHeader firstName={props.userProfile.firstname} lastName={props.userProfile.lastname}/>
 			<View style={{
 				flex: 1,
 				backgroundColor: 'white',
 			}}>
 				<ConnectedLocations />
-				{gateways.allIds.map((id, index) => {
-					return (<Gateway {...gateways.byId[id]} key={index}/>);
+				{props.gateways.allIds.map((id: number, index: number): React$Element => {
+					return (<Gateway {...props.gateways.byId[id]} key={index}/>);
 				})}
-				<SettingsButton onPress={onOpenSetting}/>
+				<SettingsButton onPress={props.onOpenSetting}/>
 			</View>
 		</View>
 	);
@@ -228,10 +228,10 @@ class TabsView extends View {
 	}
 
 	componentDidMount() {
-		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
+		Icon.getImageSource('star', 22, 'white').then((source: string): void => this.setState({ starIcon: source }));
 	}
 
-	onTabSelect(tab) {
+	onTabSelect(tab: string) {
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
 			if (this.refs.drawer) {
@@ -248,13 +248,13 @@ class TabsView extends View {
 		this.setState({ settings: false });
 	}
 
-	onRequestChangeTab(index) {
+	onRequestChangeTab(index: number) {
 		this.setState({ index });
 		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
 		this.onTabSelect(tabNames[index]);
 	}
 
-	onNavigationStateChange(prevState, currentState) {
+	onNavigationStateChange(prevState: Object, currentState: Object) {
 		const index = currentState.index;
 
 		this.setState({ routeName: currentState.routes[index].routeName });
@@ -266,7 +266,7 @@ class TabsView extends View {
 		this.props.syncGateways();
 	};
 
-	renderNavigationView() {
+	renderNavigationView(): React$Element {
 		return <NavigationView
 			gateways={this.props.gateways}
 			userProfile={this.props.userProfile}
@@ -275,11 +275,11 @@ class TabsView extends View {
 		/>;
 	}
 
-	makeRightButton = routeName => {
+	makeRightButton = (routeName: string): any => {
 		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
 
-	render() {
+	render(): React$Element {
 		let screenProps = { stackNavigator: this.props.stackNavigator };
 		if (!this.state || !this.state.starIcon) {
 			return false;
@@ -288,7 +288,9 @@ class TabsView extends View {
 		const { routeName } = this.state;
 
 		const rightButton = this.makeRightButton(routeName);
-
+		let screenProps = {
+			stackNavigator: this.props.stackNavigator,
+		};
 		// TODO: Refactor: Split this code to smaller components
 		return (
 			<DrawerLayoutAndroid
@@ -390,9 +392,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(store, ownprops) {
+function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
-		stackNavigator: ownprops.navigation,
+		stackNavigator: ownProps.navigation,
 		tab: store.navigation.tab,
 		userProfile: getUserProfile(store),
 		dashboard: store.dashboard,
@@ -401,14 +403,14 @@ function mapStateToProps(store, ownprops) {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		syncGateways: () => dispatch(syncWithServer('gatewaysTab')),
-		onTabSelect: (tab) => {
+		syncGateways: (): void => dispatch(syncWithServer('gatewaysTab')),
+		onTabSelect: (tab: string) => {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
 		},
-		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+		onToggleEditMode: (tab: string): void => dispatch(toggleEditMode(tab)),
 		dispatch,
 	};
 }

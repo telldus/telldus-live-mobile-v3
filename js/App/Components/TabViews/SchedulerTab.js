@@ -89,6 +89,7 @@ class SchedulerTab extends View<null, Props, State> {
 			todayIndex: 0,
 			loading: true,
 		};
+		this.newSchedule = this.newSchedule.bind(this);
 	}
 
 	componentDidMount() {
@@ -117,7 +118,7 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	newSchedule = () => {
-		this.props.screenProps.rootNavigation.navigate('Schedule');
+		this.props.screenProps.stackNavigator.navigate('Schedule');
 	};
 
 	editJob = (schedule: Schedule) => {
@@ -133,7 +134,7 @@ class SchedulerTab extends View<null, Props, State> {
 		screenProps.rootNavigation.dispatch(goToEdit);
 	};
 
-	render() {
+	render(): React$Element<any> {
 		if (this.state.loading) {
 			return <FullPageActivityIndicator/>;
 		}

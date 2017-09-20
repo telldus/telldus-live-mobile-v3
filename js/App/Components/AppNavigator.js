@@ -113,7 +113,7 @@ type Props = {
 
 type State = {
 	specificOrientation: Object,
-}
+};
 
 class AppNavigator extends View {
 
@@ -180,7 +180,7 @@ class AppNavigator extends View {
 		}
 	};
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View>
 				<Navigator/>
@@ -198,8 +198,7 @@ AppNavigator.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 };
 
-
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
