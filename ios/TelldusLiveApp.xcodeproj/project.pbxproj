@@ -27,6 +27,7 @@
 		34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */; };
 		36DB5485CDAA4D30BC3A8AE2 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6E20A8C755144668BCAB540B /* Octicons.ttf */; };
 		409837641F602515005E56A9 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 409837611F6024EE005E56A9 /* libRCTPushNotification.a */; };
+		40D7C76A1F73AB9C0078E086 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8A0C59785D134F67BFBC177A /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B604CB39C11F43B48FD5A634 /* SimpleLineIcons.ttf */; };
 		98FA87B1CC964159A5629AFF /* libSMXCrashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A59E17B346064409AF705800 /* libSMXCrashlytics.a */; };
@@ -309,6 +310,7 @@
 		32D76CC4AAED4E2F94ADAE4F /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
 		4098375B1F6024ED005E56A9 /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		409837E21F6140AE005E56A9 /* TelldusLiveApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TelldusLiveApp.entitlements; path = TelldusLiveApp/TelldusLiveApp.entitlements; sourceTree = "<group>"; };
+		40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TelldusLiveApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		598B9ECEAE4E41CCAF3F07D3 /* libRCTOrientation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTOrientation.a; sourceTree = "<group>"; };
 		609A0D1A94684C4DB8A9D337 /* LRDRCTSimpleToast.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = LRDRCTSimpleToast.xcodeproj; path = "../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast.xcodeproj"; sourceTree = "<group>"; };
 		67549022A05F434F8B812357 /* libLRDRCTSimpleToast.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libLRDRCTSimpleToast.a; sourceTree = "<group>"; };
@@ -425,6 +427,7 @@
 		13B07FAE1A68108700A75B9A /* TelldusLiveApp */ = {
 			isa = PBXGroup;
 			children = (
+				40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */,
 				409837E21F6140AE005E56A9 /* TelldusLiveApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -1012,6 +1015,7 @@
 				A17FFBC3ED7A45A28EE23A2E /* MaterialIcons.ttf in Resources */,
 				36DB5485CDAA4D30BC3A8AE2 /* Octicons.ttf in Resources */,
 				8A0C59785D134F67BFBC177A /* SimpleLineIcons.ttf in Resources */,
+				40D7C76A1F73AB9C0078E086 /* LaunchScreen.storyboard in Resources */,
 				30E6894E35F74445A4F6F35B /* Zocial.ttf in Resources */,
 				E01A717BB6604D8D8C4C0CA0 /* telldusicons.ttf in Resources */,
 			);
