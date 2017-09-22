@@ -151,9 +151,12 @@ class TabsView extends View<null, Props, State> {
 		this.props.onToggleEditMode(tab);
 	};
 
-	render() {
+	render(): React$Element{
 		let screenProps = { stackNavigator: this.props.stackNavigator };
 		const { routeName } = this.state.tab;
+		let ScreenProps = {
+			stackNavigator: this.props.stackNavigator,
+		};
 
 		const rightButton = this._defineRightButton(routeName);
 
@@ -185,8 +188,9 @@ class TabsView extends View<null, Props, State> {
 
 }
 
-const mapStateToProps = (store: Object): Object => {
+const mapStateToProps = (store: Object, ownProps: Object): Object => {
 	return {
+		stackNavigator: ownProps.navigation,
 		tab: store.navigation.tab,
 		userIcon: false,
 		userProfile: getUserProfile(store),
