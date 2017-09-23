@@ -27,6 +27,10 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
+const DeviceInfo = require('react-native-device-info');
+
+import Theme from 'Theme';
+import {activateGateway} from 'Actions';
 
 import {
 	View,
@@ -36,10 +40,14 @@ import {
 	Dimensions,
 	Text,
 	Icon,
+	Modal,
 } from 'BaseComponents';
 import Banner from './Banner';
+import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 
 const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+
 
 const messages = defineMessages({
 	banner: {
@@ -60,21 +68,63 @@ const messages = defineMessages({
 });
 
 type Props = {
+	timeZone: string,
+	navigation: Object,
+	dispatch: Function,
+	showModal: boolean,
+	modalMessage: string,
+	modalExtra: string,
+	activateGateway: (clientInfo: Object) => void;
 }
 
 type State = {
+	timeZone: string,
 }
 
 class TimeZone extends View<void, Props, State> {
 
+	props: Props;
+	state: State;
+
 	onTimeZoneSubmit: () => void;
+	onEditTimeZone: () => void;
+	getTimeZone: () => Object;
+	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
+		let {timeZone, autoDetected} = this.getTimeZone();
+		this.state = {
+			timeZone,
+			autoDetected,
+		};
 		this.onTimeZoneSubmit = this.onTimeZoneSubmit.bind(this);
+		this.onEditTimeZone = this.onEditTimeZone.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+	}
+
+	getTimeZone(): Object {
+		let clientInfo = this.props.navigation.state.params.clientInfo;
+		let timeZone = clientInfo.timezone ? clientInfo.timezone : DeviceInfo.getTimezone();
+		let autoDetected = clientInfo.timezone ? false : true;
+		return {timeZone, autoDetected};
 	}
 
 	onTimeZoneSubmit() {
+		let clientInfo = this.props.navigation.state.params.clientInfo;
+		clientInfo.timezone = this.state.timeZone;
+		this.props.activateGateway(clientInfo);
+	}
+
+	onEditTimeZone() {
+		let clientInfo = this.props.navigation.state.params.clientInfo;
+		this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
+	}
+
+	closeModal() {
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_CLOSE',
+		});
 	}
 
 	render() {
@@ -90,11 +140,23 @@ class TimeZone extends View<void, Props, State> {
 			<ScreenContainer banner={BannerComponent}>
 				<View style={[styles.itemsContainer, styles.shadow]}>
 					<FormattedMessage {...messages.banner} style={styles.title}/>
-					<Text style={styles.hint}>
+					<View style={styles.timeZoneContainer}>
+						<Text style={styles.timeZone}>
+							{this.state.timeZone}
+						</Text>
+						<TouchableWithoutFeedback onPress={this.onEditTimeZone} style={{height: 20, width: 20}}>
+							<Icon name="pencil" size={16} color="#A59F9A" style={{marginTop: 7}}/>
+						</TouchableWithoutFeedback>
+					</View>
+					{this.state.autoDetected ?
+						<Text style={styles.hint}>
 						(
-						<FormattedMessage {...messages.hint} style={styles.hint}/>
+							<FormattedMessage {...messages.hint} style={styles.hint}/>
 						)
-					</Text>
+						</Text>
+						:
+						null
+					}
 				</View>
 				<View style={styles.circularViewContainer}>
 					<TouchableWithoutFeedback onPress={this.onTimeZoneSubmit}>
@@ -103,6 +165,15 @@ class TimeZone extends View<void, Props, State> {
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
+				<Modal
+					modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22, elevation: 4}]}
+					entry= "ZoomIn"
+					exit= "ZoomOut"
+					entryDuration= {300}
+					exitDuration= {100}
+					showModal={this.props.showModal}>
+					<NotificationComponent text={this.props.modalMessage} onPress={this.closeModal} />
+				</Modal>
 			</ScreenContainer>
 		);
 	}
@@ -113,10 +184,10 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		backgroundColor: '#fff',
 		marginTop: 20,
-		paddingLeft: 10,
-		paddingRight: 10,
-		paddingBottom: 10,
-		paddingTop: 10,
+		paddingLeft: 20,
+		paddingRight: 20,
+		paddingBottom: 20,
+		paddingTop: 20,
 		alignItems: 'flex-start',
 		width: (deviceWidth - 20),
 	},
@@ -136,6 +207,18 @@ const styles = StyleSheet.create({
 		color: '#e26901',
 		fontSize: 14,
 		paddingLeft: 2,
+	},
+	timeZoneContainer: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		paddingTop: 5,
+		paddingBottom: 5,
+	},
+	timeZone: {
+		color: '#00000099',
+		fontSize: 20,
+		paddingLeft: 2,
+		marginRight: 10,
 	},
 	hint: {
 		color: '#A59F9A',
@@ -167,4 +250,19 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect()(TimeZone);
+function mapDispatchToProps(dispatch): Object {
+	return {
+		activateGateway: (clientInfo) => dispatch(activateGateway(clientInfo)),
+		dispatch,
+	};
+}
+
+function mapStateToProps(store, ownProps) {
+	return {
+		showModal: store.modal.openModal,
+		modalMessage: store.modal.data,
+		modalExtra: store.modal.extras,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TimeZone);

@@ -27,15 +27,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 
-import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 import Banner from './Banner';
-import {View, List, ListDataSource, Text, Modal, Dimensions, ScreenContainer} from 'BaseComponents';
+import {View, List, ListDataSource, Text, ScreenContainer} from 'BaseComponents';
 import ListRow from './ListRow';
-
-import Theme from 'Theme';
-let deviceHeight = Dimensions.get('window').height;
-
-import {activateGateway} from 'Actions';
 
 const messages = defineMessages({
 	banner: {
@@ -48,21 +42,12 @@ const messages = defineMessages({
 		defaultMessage: 'Select City',
 		description: 'Secondary Banner Text for the Select City Screen',
 	},
-	successTitle: {
-		id: 'notification.successTitle',
-		defaultMessage: 'MESSAGE',
-		description: 'Title on Success for the notification component',
-	},
 });
 
 type Props = {
 	navigation: Object,
 	activateGateway: (clientInfo: Object) => void;
-	showModal: boolean,
-	modalMessage: string,
-	modalExtra: string,
 	dispatch: Function,
-	activeId: any,
 }
 const listDataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,
@@ -84,13 +69,6 @@ class TimeZoneCity extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.parseDataForList = this.parseDataForList.bind(this);
 		this.onCityChoose = this.onCityChoose.bind(this);
-		this.closeModal = this.closeModal.bind(this);
-	}
-
-	closeModal() {
-		this.props.dispatch({
-			type: 'REQUEST_MODAL_CLOSE',
-		});
 	}
 
 	parseDataForList(data) {
@@ -106,7 +84,7 @@ class TimeZoneCity extends View {
 	onCityChoose(city) {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.timezone = `${clientInfo.continent}/${city}`;
-		this.props.activateGateway(clientInfo);
+		this.props.navigation.navigate('TimeZone', {clientInfo});
 	}
 
 	renderRow(item) {
@@ -124,7 +102,6 @@ class TimeZoneCity extends View {
 			bannerSub: messages.bannerSub,
 		};
 		let BannerComponent = Banner(bannerProps);
-		let modalTitle = this.props.modalExtra === 'SUCCESS' ? messages.successTitle : null;
 		return (
 			<ScreenContainer banner={BannerComponent}>
 				{this.state.dataSource ?
@@ -136,15 +113,6 @@ class TimeZoneCity extends View {
 					:
 					<Text> UTC </Text>
 				}
-				<Modal
-					modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22}]}
-					entry= "ZoomIn"
-					exit= "ZoomOut"
-					entryDuration= {300}
-					exitDuration= {100}
-					showModal={this.props.showModal}>
-					<NotificationComponent title={modalTitle} text={this.props.modalMessage} onPress={this.closeModal} />
-				</Modal>
 			</ScreenContainer>
 		);
 	}
@@ -152,17 +120,8 @@ class TimeZoneCity extends View {
 
 function mapDispatchToProps(dispatch, store) {
 	return {
-		activateGateway: (clientInfo) => dispatch(activateGateway(clientInfo)),
 		dispatch,
 	};
 }
 
-function mapStateToProps(store, ownProps) {
-	return {
-		showModal: store.modal.openModal,
-		modalMessage: store.modal.data,
-		modalExtra: store.modal.extras,
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TimeZoneCity);
+export default connect(null, mapDispatchToProps)(TimeZoneCity);
