@@ -115,6 +115,18 @@ const RouteConfigs = {
 			headerTitle: renderStackHeader(),
 		},
 	},
+	TimeZone: {
+		screen: AddNewLocation.TimeZone,
+		navigationOptions: {
+			headerStyle: {
+				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+				backgroundColor: Theme.Core.brandPrimary,
+				height: deviceHeight * 0.1,
+			},
+			headerTintColor: '#ffffff',
+			headerTitle: renderStackHeader(),
+		},
+	},
 	TimeZoneContinent: {
 		screen: AddNewLocation.TimeZoneContinent,
 		navigationOptions: {

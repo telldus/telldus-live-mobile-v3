@@ -89,7 +89,7 @@ class LocationName extends View {
 		if (this.state.locationName !== '') {
 			let clientInfo = this.props.navigation.state.params.clientInfo;
 			clientInfo.name = this.state.locationName;
-			this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
+			this.props.navigation.navigate('TimeZone', {clientInfo});
 		} else {
 			// using the local state to control Modal as it is a local validation, not using the action/reducer.
 			this.setState({

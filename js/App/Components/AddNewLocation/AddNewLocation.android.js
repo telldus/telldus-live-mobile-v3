@@ -28,6 +28,7 @@ import LocationActivationManual from './LocationActivationManual';
 import LocationName from './LocationName';
 import TimeZoneContinent from './TimeZoneContinent';
 import TimeZoneCity from './TimeZoneCity';
+import TimeZone from './TimeZone';
 
 module.exports = {
 	LocationDetected,
@@ -35,6 +36,5 @@ module.exports = {
 	LocationName,
 	TimeZoneContinent,
 	TimeZoneCity,
+	TimeZone,
 };
-
-
