@@ -47,7 +47,6 @@ const messages = defineMessages({
 type Props = {
 	navigation: Object,
 	activateGateway: (clientInfo: Object) => void;
-	dispatch: Function,
 }
 const listDataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,
@@ -118,10 +117,4 @@ class TimeZoneCity extends View {
 	}
 }
 
-function mapDispatchToProps(dispatch, store) {
-	return {
-		dispatch,
-	};
-}
-
-export default connect(null, mapDispatchToProps)(TimeZoneCity);
+export default connect()(TimeZoneCity);
