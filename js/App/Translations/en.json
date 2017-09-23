@@ -11,6 +11,8 @@
   "addNewLocation.locationName.bannerSub": "Name Your Location",
   "addNewLocation.locationName.invalidLocationName": "Location name can't be empty",
   "addNewLocation.timeZone.banner": "Time Zone",
+  "addNewLocation.timeZone.bannerSub": "Select Time Zone",
+  "addNewLocation.timeZone.hint": "Autodetected",
   "addNewLocation.timeZoneCity.bannerSub": "Select City",
   "addNewLocation.timeZoneContinent.bannerSub": "Select Continent",
   "button.manualActivation": "Manual Activation",
