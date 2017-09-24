@@ -147,16 +147,9 @@ function activateGateway(clientInfo: Object): ThunkAction {
 					dispatch(setName(clientInfo.clientId, clientInfo.name)),
 					dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone)),
 				]).then(val => {
-					if (val[0].status && val[0].status === 'success' &&
-						val[1].status && val[1].status === 'success') {
-						let message = 'Location has been added successfully';
-						dispatch(onActivationSuccess(message));
-					} else {
-						let message = 'Location has been Activated but some actions Could not be completed.';
-						dispatch(onActivationError(message));
-					}
 					dispatch(getAppData());
 					dispatch(getGateways());
+					return val;
 				});
 			}
 		}).catch(err => {
@@ -215,12 +208,6 @@ function setTimezone(id: string, timezone: string): ThunkAction {
 function onActivationError(message: string): ThunkAction {
 	return (dispatch, getState) => {
 		dispatch(showModal(message, 'ERROR'));
-	};
-}
-
-function onActivationSuccess(message: string): ThunkAction {
-	return (dispatch, getState) => {
-		dispatch(showModal(message, 'SUCCESS'));
 	};
 }
 

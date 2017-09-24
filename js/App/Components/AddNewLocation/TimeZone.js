@@ -74,7 +74,7 @@ type Props = {
 	showModal: boolean,
 	modalMessage: string,
 	modalExtra: string,
-	activateGateway: (clientInfo: Object) => void;
+	activateGateway: (clientInfo: Object) => Promise<any>;
 }
 
 type State = {
@@ -113,7 +113,12 @@ class TimeZone extends View<void, Props, State> {
 	onTimeZoneSubmit() {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.timezone = this.state.timeZone;
-		this.props.activateGateway(clientInfo);
+		this.props.activateGateway(clientInfo)
+			.then(response => {
+				if (response) {
+					this.props.navigation.navigate('Success');
+				}
+			});
 	}
 
 	onEditTimeZone() {
@@ -252,7 +257,9 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch): Object {
 	return {
-		activateGateway: (clientInfo) => dispatch(activateGateway(clientInfo)),
+		activateGateway: (clientInfo) => {
+			return dispatch(activateGateway(clientInfo));
+		},
 		dispatch,
 	};
 }
