@@ -84,6 +84,7 @@ const messages = defineMessages({
 
 type Props = {
 	intl: intlShape.isRequired,
+	navigation: Object,
 }
 
 type State = {
@@ -102,6 +103,7 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
+		this.props.navigation.navigate('Tabs');
 	}
 
 	onPressHelp() {
