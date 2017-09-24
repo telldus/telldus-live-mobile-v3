@@ -143,7 +143,7 @@ function activateGateway(clientInfo: Object): ThunkAction {
 		};
 		return LiveApi(payload).then(response => {
 			if (response.status === 'success') {
-				Promise.all([
+				return Promise.all([
 					dispatch(setName(clientInfo.clientId, clientInfo.name)),
 					dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone)),
 				]).then(val => {
