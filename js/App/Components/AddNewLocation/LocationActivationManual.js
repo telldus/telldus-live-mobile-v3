@@ -110,6 +110,7 @@ class LocationActivationManual extends View {
 					let clientInfo = {
 						clientId: response.id,
 						uuid: response.uuid,
+						type: response.type,
 					};
 					this.props.navigation.navigate('LocationName', {clientInfo});
 				}

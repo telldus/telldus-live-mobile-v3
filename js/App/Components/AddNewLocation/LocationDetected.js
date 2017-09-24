@@ -69,6 +69,7 @@ class LocationDetected extends View {
 		let clientInfo = {
 			clientId: client.id,
 			uuid: client.uuid,
+			type: client.type,
 		};
 		this.props.navigation.navigate('LocationName', {clientInfo});
 	}

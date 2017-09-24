@@ -43,6 +43,8 @@ import {
 	TouchableButton,
 } from 'BaseComponents';
 
+import getLocationImageUrl from '../../Lib/getLocationImageUrl';
+
 const deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
@@ -120,13 +122,15 @@ class Success extends View<void, Props, State> {
 			bannerSub: messages.bannerSub,
 		};
 		let BannerComponent = Banner(bannerProps);
+		let clientInfo = this.props.navigation.state.params.clientInfo;
+		let locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (
 			<ScreenContainer banner={BannerComponent}>
 				<ScrollView>
 					<View style={[styles.itemsContainer, styles.shadow]}>
 						<View style={styles.imageTitleContainer}>
-							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: 'icon_location_telldus_center_01', isStatic: true}} />
+							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
 							<Icon name="check-circle" size={44} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
 							<FormattedMessage {...messages.messageTitle} style={styles.messageTitle} postfix={'!'}/>
 						</View>
