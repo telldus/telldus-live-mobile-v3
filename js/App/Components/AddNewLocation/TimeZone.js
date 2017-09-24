@@ -116,7 +116,7 @@ class TimeZone extends View<void, Props, State> {
 		this.props.activateGateway(clientInfo)
 			.then(response => {
 				if (response) {
-					this.props.navigation.navigate('Success');
+					this.props.navigation.navigate('Success', {clientInfo});
 				}
 			});
 	}
