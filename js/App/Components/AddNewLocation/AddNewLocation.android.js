@@ -29,6 +29,7 @@ import LocationName from './LocationName';
 import TimeZoneContinent from './TimeZoneContinent';
 import TimeZoneCity from './TimeZoneCity';
 import TimeZone from './TimeZone';
+import Success from './Success';
 
 module.exports = {
 	LocationDetected,
@@ -37,4 +38,5 @@ module.exports = {
 	TimeZoneContinent,
 	TimeZoneCity,
 	TimeZone,
+	Success,
 };
