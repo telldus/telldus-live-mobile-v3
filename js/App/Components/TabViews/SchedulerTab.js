@@ -24,6 +24,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
+import { defineMessages } from 'react-intl';
 import { NavigationActions } from 'react-navigation';
 import { createSelector } from 'reselect';
 import moment from 'moment';
@@ -31,7 +32,6 @@ import moment from 'moment';
 import {
 	FloatingButton,
 	FullPageActivityIndicator,
-	I18n,
 	List,
 	ListDataSource,
 	View,
@@ -43,6 +43,14 @@ import { parseJobsForListView } from 'Reducers_Jobs';
 import type { Schedule } from 'Reducers_Schedule';
 
 import { getDeviceWidth, getTabBarIcon } from 'Lib';
+
+const messages = defineMessages({
+	scheduler: {
+		id: 'pages.scheduler',
+		defaultMessage: 'Scheduler',
+		description: 'The Schedulers tab',
+	},
+});
 
 type NavigationParams = {
 	focused: boolean, tintColor: string,
@@ -71,12 +79,12 @@ class SchedulerTab extends View<null, Props, State> {
 		screenProps: PropTypes.object,
 	};
 
-	static navigationOptions = {
-		title: I18n.t('pages.scheduler'),
+	static navigationOptions = (props: Object): Object => ({
+		title: props.screenProps.intl.formatMessage(messages.scheduler),
 		tabBarIcon: ({ focused, tintColor }: NavigationParams): Object => {
 			return getTabBarIcon(focused, tintColor, 'scheduler');
 		},
-	};
+	});
 
 	constructor(props: Props) {
 		super(props);
