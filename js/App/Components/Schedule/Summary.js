@@ -22,111 +22,108 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { ScrollView, View } from 'react-native';
+import { NavigationActions } from 'react-navigation';
+import { FloatingButton, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getDeviceWidth, getSelectedDays } from 'Lib';
-import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from 'Schedule_SubViews';
+import { ActionRow, DaysRow, DeviceRow, TimeRow } from 'Schedule_SubViews';
+import { ScrollView } from 'react-native';
 
 interface Props extends ScheduleProps {
+	paddingRight: number,
 	devices: Object,
 }
 
-export default class Edit extends View<null, Props, null> {
+export default class Summary extends View<null, Props, null> {
 
 	static propTypes = {
 		navigation: PropTypes.object,
 		actions: PropTypes.object,
 		onDidMount: PropTypes.func,
+		paddingRight: PropTypes.number,
 		schedule: PropTypes.object,
 		devices: PropTypes.object,
-		loading: PropTypes.func,
 	};
 
 	constructor(props: Props) {
 		super(props);
 
-		this.device = this._getDeviceById(this.props.schedule.deviceId);
+		this.h1 = '5. Summary';
+		this.h2 = 'Please confirm the schedule';
+		this.infoButton = {
+			tmp: true, // TODO: fill with real fields
+		};
+	}
 
-		this.h1 = `Edit ${this.device.name}`;
-		this.h2 = 'Click the details you want to edit';
+	componentWillMount() {
+		this.device = this._getDeviceById(this.props.schedule.deviceId);
 	}
 
 	componentDidMount() {
-		this.props.onDidMount(this.h1, this.h2);
+		const { h1, h2, infoButton } = this;
+		this.props.onDidMount(h1, h2, infoButton);
 	}
 
-	componentWillUnmount() {
-		this.props.actions.resetSchedule();
-	}
-
-	editAction = () => {
-		this._navigate('Action');
-	};
-
-	editTime = () => {
-		this._navigate('Time');
-	};
-
-	editDays = () => {
-		this._navigate('Days');
-	};
-
-	setScheduleActiveState = (active: boolean) => {
-		this.props.actions.setActiveState(active);
+	saveSchedule = () => {
+		this.props.navigation.dispatch(NavigationActions.reset({
+			index: 0,
+			actions: [
+				NavigationActions.navigate({
+					routeName: 'Device',
+					params: {
+						reset: true,
+					},
+				}),
+			],
+		}));
 	};
 
 	render(): React$Element<any> {
-		const { active, method, methodValue, weekdays } = this.props.schedule;
-		const { scrollView, container, row } = this._getStyle();
+		const { schedule, paddingRight } = this.props;
+		const { method, methodValue, weekdays } = schedule;
+		const { row, iconSize } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
-			<ScrollView style={scrollView}>
-				<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState}/>
-				<View style={container}>
+			<View>
+				<ScrollView>
+					<DeviceRow row={this.device} containerStyle={row}/>
 					<ActionRow
 						method={method}
 						showValue={true}
 						methodValue={methodValue}
-						onPress={this.editAction}
 						containerStyle={row}
 					/>
 					<TimeRow
-						schedule={this.props.schedule}
+						schedule={schedule}
 						device={this.device}
 						containerStyle={row}
-						onPress={this.editTime}
 					/>
-					<DaysRow selectedDays={selectedDays} onPress={this.editDays}/>
-				</View>
-			</ScrollView>
+					<DaysRow selectedDays={selectedDays}/>
+				</ScrollView>
+				<FloatingButton
+					onPress={this.saveSchedule}
+					imageSource={require('./img/check.png')}
+					iconSize={iconSize}
+					paddingRight={paddingRight}
+				/>
+			</View>
 		);
 	}
 
-	_navigate = (routeName: string) => {
-		this.props.navigation.navigate(routeName, { editMode: true });
-	};
-
 	_getDeviceById = (deviceId: number): Object => {
-		return this.props.devices.byId[deviceId];
+		// TODO: use device description
+		return Object.assign({}, this.props.devices.byId[deviceId], { description: 'Fibaro Plug 2' });
 	};
 
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
 
-		const offsetSmall = deviceWidth * 0.026666667;
-		const offsetMiddle = deviceWidth * 0.033333333;
-
 		return {
-			scrollView: {
-				flex: 1,
-			},
-			container: {
-				paddingHorizontal: offsetMiddle,
-			},
 			row: {
-				marginBottom: offsetSmall,
+				marginBottom: deviceWidth * 0.025333333,
 			},
+			iconSize: deviceWidth * 0.050666667,
 		};
 	};
 

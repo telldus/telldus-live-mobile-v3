@@ -38,7 +38,7 @@ import LiveApi from './LiveApi';
 import Websockets from './Websockets';
 import Modal from './Modal';
 import App from './App';
-import AddSchedule from './AddSchedule';
+import Schedule from './Schedule';
 
 module.exports = combineReducers({
 	devices: Devices,
@@ -54,5 +54,5 @@ module.exports = combineReducers({
 	websockets: Websockets,
 	modal: Modal,
 	App: App,
-	addSchedule: AddSchedule,
+	schedule: Schedule,
 });

@@ -40,6 +40,7 @@ import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import { resetSchedule } from 'Actions_Schedule';
+import ScheduleNavigator from 'ScheduleNavigator';
 
 const messages = defineMessages({
 	errortoast: {
@@ -81,12 +82,22 @@ const RouteConfigs = {
 			headerTintColor: '#ffffff',
 			headerTitle: renderStackHeader(),
 		},
+	},
 	Schedule: {
 		screen: ScheduleNavigator,
+		navigationOptions: {
+			headerStyle: {
+				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+				backgroundColor: Theme.Core.brandPrimary,
+				height: deviceHeight * 0.1,
+			},
+			headerTintColor: '#ffffff',
+			headerTitle: renderStackHeader(),
+		},
 	},
 };
 
-function renderStackHeader() {
+function renderStackHeader(): React$Element<any> {
 	return (
 		<Image style={{ height: 110, width: 130, marginLeft: (deviceWidth * 0.2) }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
 	);
@@ -161,7 +172,7 @@ class AppNavigator extends View {
 		this.props.dispatch(resetSchedule());
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.toastVisible) {
 			this._showToast();
 		}
@@ -174,7 +185,7 @@ class AppNavigator extends View {
 		});
 	}
 
-	_updateSpecificOrientation = specificOrientation => {
+	_updateSpecificOrientation = (specificOrientation: string) => {
 		if (Platform.OS !== 'android') {
 			this.setState({ specificOrientation });
 		}

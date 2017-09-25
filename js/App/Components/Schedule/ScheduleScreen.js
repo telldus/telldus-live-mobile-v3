@@ -25,7 +25,7 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { FullPageActivityIndicator, Header, View } from 'BaseComponents';
+import { FullPageActivityIndicator, View } from 'BaseComponents';
 import { SchedulePoster } from 'Schedule_SubViews';
 import { getDeviceWidth } from 'Lib';
 
@@ -103,14 +103,13 @@ class ScheduleScreen extends View<null, Props, State> {
 		this.setState({ loading });
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { children, navigation, actions, devices, schedule } = this.props;
 		const { h1, h2, infoButton, loading } = this.state;
 		const style = this._getStyle();
 
 		return (
 			<View>
-				<Header leftButton={this.backButton}/>
 				{loading && (
 					<FullPageActivityIndicator/>
 				)}

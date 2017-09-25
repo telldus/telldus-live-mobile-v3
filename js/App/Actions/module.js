@@ -32,7 +32,7 @@ import TabActions from './Tabs';
 import DashboardActions from './Dashboard';
 import JobActions from './Jobs';
 import AppStateActions from './AppState';
-import AddSchedule from './AddSchedule';
+import Schedule from './Schedule';
 
 module.exports = {
 	...GatewayActions,
@@ -44,5 +44,5 @@ module.exports = {
 	...DashboardActions,
 	...JobActions,
 	...AppStateActions,
-	...AddSchedule,
+	...Schedule,
 };

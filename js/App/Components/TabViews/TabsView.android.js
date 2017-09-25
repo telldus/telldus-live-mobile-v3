@@ -280,7 +280,6 @@ class TabsView extends View {
 	};
 
 	render(): React$Element {
-		let screenProps = { stackNavigator: this.props.stackNavigator };
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
