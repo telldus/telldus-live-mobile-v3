@@ -24,10 +24,12 @@
 'use strict';
 
 import React from 'react';
-import { Linking, ScrollView } from 'react-native';
+import { Linking, ScrollView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
-import Hyperlink from 'react-native-hyperlink';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
+import icon_guide from '../TabViews/img/selection.json';
+const CustomIcon = createIconSetFromIcoMoon(icon_guide);
 
 import Theme from 'Theme';
 import Banner from './Banner';
@@ -72,8 +74,13 @@ const messages = defineMessages({
 	messageBodyParaTwo: {
 		id: 'addNewLocation.success.messageBodyParaTwo',
 		defaultMessage: 'If you want help or would like to learn tips and tricks on how to setup your smart home you ' +
-		'can view our guides on',
+		'can view our guides by clicking below',
 		description: 'Message Body for the add location success Screen Para two',
+	},
+	hyperLintText: {
+		id: 'addNewLocation.success.hyperLintText',
+		defaultMessage: 'Guides',
+		description: 'Hyper link button text',
 	},
 	continue: {
 		id: 'button.success.continue',
@@ -136,14 +143,16 @@ class Success extends View<void, Props, State> {
 							<Icon name="check-circle" size={44} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
 							<FormattedMessage {...messages.messageTitle} style={styles.messageTitle} postfix={'!'}/>
 						</View>
-						<Hyperlink linkDefault={true} linkStyle={{color: '#e26901', fontSize: 14}}>
-							<Text>
-								<FormattedMessage {...messages.messageBodyParaOne} style={styles.messageBody}/>
-								{'\n\n'}
-								<FormattedMessage {...messages.messageBodyParaTwo} style={styles.messageBody}/>
-								{` ${this.link}`}
-							</Text>
-						</Hyperlink>
+						<Text>
+							<FormattedMessage {...messages.messageBodyParaOne} style={styles.messageBody}/>
+							{'\n\n'}
+							<FormattedMessage {...messages.messageBodyParaTwo} style={styles.messageBody}/>
+						</Text>
+						<TouchableOpacity onPress={this.onPressHelp} style={styles.hyperLinkButton}>
+							<CustomIcon name="icon_guide" size={36} color={Theme.Core.brandSecondary} />
+							<FormattedMessage {...messages.hyperLintText} style={styles.hyperLink}/>
+							<Icon name="angle-right" size={26} color={'#A59F9A'}/>
+						</TouchableOpacity>
 					</View>
 					<TouchableButton
 						text={this.props.intl.formatMessage(messages.continue)}
@@ -203,6 +212,20 @@ const styles = StyleSheet.create({
 	messageBody: {
 		color: '#A59F9A',
 		fontSize: 14,
+	},
+	hyperLinkButton: {
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+		alignItems: 'center',
+		marginTop: 10,
+		height: 40,
+		width: 130,
+	},
+	hyperLink: {
+		color: '#00000099',
+		fontSize: 22,
+		marginLeft: 5,
+		marginRight: 5,
 	},
 	button: {
 		alignSelf: 'center',
