@@ -100,12 +100,13 @@ function addNewGateway(): ThunkAction {
 	};
 }
 
-function getGatewayInfo(activationCode: string): ThunkAction {
+function getGatewayInfo(uniqueParam: Object, extras?: string|null = null): ThunkAction {
 	return (dispatch, getState) => {
 		const url = format({
 			pathname: '/client/info',
 			query: {
-				code: activationCode,
+				...uniqueParam,
+				extras,
 			},
 		});
 		const payload = {
@@ -120,7 +121,6 @@ function getGatewayInfo(activationCode: string): ThunkAction {
 			}
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch(showModal(message, 'ERROR'));
 			return message;
 		});
 	};
@@ -211,4 +211,9 @@ function onActivationError(message: string): ThunkAction {
 	};
 }
 
-module.exports = { getGateways, addNewGateway, activateGateway, getGatewayInfo };
+module.exports = {
+	getGateways,
+	addNewGateway,
+	activateGateway,
+	getGatewayInfo,
+};

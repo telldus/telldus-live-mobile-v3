@@ -36,6 +36,8 @@ import Banner from './Banner';
 import {View, StyleSheet, FormattedMessage, Dimensions, Icon, Modal, ScreenContainer} from 'BaseComponents';
 import Theme from 'Theme';
 
+import {getGatewayInfo} from 'Actions';
+
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
 
@@ -56,9 +58,11 @@ const messages = defineMessages({
 		description: 'Local validation text when Location name field is left empty',
 	},
 });
+
 type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
+	getGatewayInfo: (uniqueParam: Object, extras: string) => Promise<any>;
 }
 
 class LocationName extends View {
@@ -89,7 +93,21 @@ class LocationName extends View {
 		if (this.state.locationName !== '') {
 			let clientInfo = this.props.navigation.state.params.clientInfo;
 			clientInfo.name = this.state.locationName;
-			this.props.navigation.navigate('TimeZone', {clientInfo});
+			if (clientInfo.timezone) {
+				this.props.navigation.navigate('TimeZone', {clientInfo});
+			} else {
+				let uniqueParam = {id: clientInfo.clientId};
+				this.props.getGatewayInfo(uniqueParam, 'timezone')
+					.then(response => {
+						if (response.timezone) {
+							clientInfo.timezone = response.timezone;
+							clientInfo.autoDetected = true;
+							this.props.navigation.navigate('TimeZone', {clientInfo});
+						} else {
+							this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
+						}
+					});
+			}
 		} else {
 			// using the local state to control Modal as it is a local validation, not using the action/reducer.
 			this.setState({
@@ -227,4 +245,13 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect()(injectIntl(LocationName));
+function mapDispatchToProps(dispatch) {
+	return {
+		getGatewayInfo: (uniqueParam: Object, extras: string) => {
+			return dispatch(getGatewayInfo(uniqueParam, extras));
+		},
+		dispatch,
+	};
+}
+
+export default connect(null, mapDispatchToProps)(injectIntl(LocationName));

@@ -71,7 +71,7 @@ const messages = defineMessages({
 type Props = {
 	navigation: Object,
 	dispatch: Function,
-	getGatewayInfo: (activationCode: string) => any;
+	getGatewayInfo: (param: Object, string) => Promise<any>;
 	showModal: boolean,
 	modalMessage: String,
 	modalExtra: any,
@@ -105,14 +105,19 @@ class LocationActivationManual extends View {
 
 	onActivationCodeSubmit() {
 		if (this.state.activationCode.length === 10) {
-			this.props.getGatewayInfo(this.state.activationCode).then(response => {
+			let param = {code: this.state.activationCode};
+			this.props.getGatewayInfo(param, 'timezone').then(response => {
 				if (response.id) {
 					let clientInfo = {
 						clientId: response.id,
 						uuid: response.uuid,
 						type: response.type,
+						timezone: response.timezone,
+						autoDetected: true,
 					};
 					this.props.navigation.navigate('LocationName', {clientInfo});
+				} else {
+					this.props.dispatch(showModal(response, 'ERROR'));
 				}
 			});
 		} else {
@@ -251,8 +256,8 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		getGatewayInfo: (activationCode: string) => {
-			return dispatch(getGatewayInfo(activationCode));
+		getGatewayInfo: (param: Object, extras: string) => {
+			return dispatch(getGatewayInfo(param, extras));
 		},
 		dispatch,
 	};

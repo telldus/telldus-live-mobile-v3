@@ -27,7 +27,6 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
-const DeviceInfo = require('react-native-device-info');
 
 import Theme from 'Theme';
 import {activateGateway} from 'Actions';
@@ -105,8 +104,8 @@ class TimeZone extends View<void, Props, State> {
 
 	getTimeZone(): Object {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
-		let timeZone = clientInfo.timezone ? clientInfo.timezone : DeviceInfo.getTimezone();
-		let autoDetected = clientInfo.timezone ? false : true;
+		let timeZone = clientInfo.timezone;
+		let autoDetected = clientInfo.autoDetected;
 		return {timeZone, autoDetected};
 	}
 
