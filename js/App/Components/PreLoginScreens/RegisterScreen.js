@@ -49,20 +49,35 @@ const messages = defineMessages({
 		defaultMessage: 'I already have an account',
 		description: 'Message to show on the create account screen',
 	},
-	emailAdressNotMatch: {
-		id: 'user.emailAdressNotMatch',
+	emailAddressNotMatchHeader: {
+		id: 'user.emailAddressNotMatchHeader',
+		defaultMessage: 'Emails don\'t match',
+		description: 'Validation Message Header when Emails don\'t match',
+	},
+	emailNotValidHeader: {
+		id: 'user.emailNotValidHeader',
+		defaultMessage: 'Invalid email address',
+		description: 'Validation Message Header when Email address not Valid',
+	},
+	emailAddressNotMatchBody: {
+		id: 'user.emailAddressNotMatchBody',
 		defaultMessage: 'Email addresses don\'t match. Please Check your entered email address.',
-		description: 'Error message on the create account screen',
+		description: 'Validation Message Body when Emails don\'t match',
 	},
-	emailNotValid: {
-		id: 'user.emailNotValid',
-		defaultMessage: 'Email address not Valid',
-		description: 'Error message on the create account screen',
+	emailNotValidBody: {
+		id: 'user.emailNotValidBody',
+		defaultMessage: 'The email address you entered is not valid. Please check that your email address is entered correctly.',
+		description: 'Validation Message Body when Email address not Valid',
 	},
-	fieldEmpty: {
-		id: 'form.fieldEmpty',
-		defaultMessage: 'Field can\'t be empty',
+	fieldEmptyPrefix: {
+		id: 'form.register.fieldEmptyPrefix',
+		defaultMessage: 'Something seems to be missing in your form. Please check that',
 		description: 'Error message Pre-fix on form submitted, with fields empty',
+	},
+	fieldEmptyPostfix: {
+		id: 'form.register.fieldEmptyPostfix',
+		defaultMessage: 'is entered correctly.',
+		description: 'Error message Post-fix on form submitted, with fields empty',
 	},
 });
 
@@ -74,6 +89,7 @@ type Props = {
 	showModal: boolean,
 	registeredCredential: any,
 	intl: intlShape.isRequired,
+	validationMessageHeader: string,
 }
 
 class RegisterScreen extends View {
@@ -158,29 +174,33 @@ class RegisterScreen extends View {
 					});
 					this.props.onFormSubmit(em, fn, ln);
 				} else {
-					let message = this.props.intl.formatMessage(messages.emailAdressNotMatch);
-					this.showModal(message);
+					let message = this.props.intl.formatMessage(messages.emailAddressNotMatchBody);
+					let header = this.props.intl.formatMessage(messages.emailAddressNotMatchHeader);
+					this.showModal(message, header);
 				}
 			} else {
-				let message = this.props.intl.formatMessage(messages.emailNotValid);
-				this.showModal(message);
+				let message = this.props.intl.formatMessage(messages.emailNotValidBody);
+				let header = this.props.intl.formatMessage(messages.emailNotValidHeader);
+				this.showModal(message, header);
 			}
 		} else {
-			let pf = this.props.intl.formatMessage(messages.fieldEmpty);
-			let message = fn === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.firstName)}`
-				: ln === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.lastName)}`
-					: em === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.emailAddress)}`
-						: cem === '' ? `${pf}: ${this.props.intl.formatMessage(i18n.confirmEmailAddress)}`
+			let preF = this.props.intl.formatMessage(messages.fieldEmptyPrefix);
+			let postF = this.props.intl.formatMessage(messages.fieldEmptyPostfix);
+			let message = fn === '' ? `${preF} ${this.props.intl.formatMessage(i18n.firstName)} ${postF}`
+				: ln === '' ? `${preF} ${this.props.intl.formatMessage(i18n.lastName)} ${postF}`
+					: em === '' ? `${preF} ${this.props.intl.formatMessage(i18n.emailAddress)} ${postF}`
+						: cem === '' ? `${preF} ${this.props.intl.formatMessage(i18n.confirmEmailAddress)} ${postF}`
 							: this.props.validationMessage;
 			this.showModal(message);
 		}
 	}
 
-	showModal(data) {
+	showModal(data, extras = false) {
 		this.props.dispatch({
 			type: 'REQUEST_MODAL_OPEN',
 			payload: {
 				data,
+				extras,
 			},
 		});
 	}
@@ -288,7 +308,11 @@ class RegisterScreen extends View {
 					exitDuration= {100}
 					onOpen= {this.onModalOpen}
 					showModal={this.props.showModal}>
-					<NotificationComponent text={this.props.validationMessage} onPress={this.closeModal} />
+					<NotificationComponent
+						text={this.props.validationMessage}
+						onPress={this.closeModal}
+						header={this.props.validationMessageHeader}
+					/>
 				</Modal>
 			</FormContainerComponent>
 		);
@@ -314,6 +338,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(store) {
 	return {
 		validationMessage: store.modal.data,
+		validationMessageHeader: store.modal.extras,
 		showModal: store.modal.openModal,
 		registeredCredential: store.user.registeredCredential,
 	};

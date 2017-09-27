@@ -44,6 +44,12 @@ const messages = defineMessages({
 		defaultMessage: 'Need an account?',
 		description: 'Message to show on the login screen',
 	},
+	fieldEmpty: {
+		id: 'form.login.fieldEmpty',
+		defaultMessage: 'Something seems to be missing in your form. Please check that ' +
+		'both email and password are entered correctly.',
+		description: 'Validation message to show on the login screen when Form submitted with empty fields',
+	},
 });
 
 type Props = {
@@ -185,8 +191,18 @@ class LoginScreen extends View {
 	}
 
 	onFormSubmit() {
-		this.setState({ isLoading: true });
-		this.props.loginToTelldus(this.state.username, this.state.password);
+		if (this.state.username !== '' && this.state.password !== '') {
+			this.setState({ isLoading: true });
+			this.props.loginToTelldus(this.state.username, this.state.password);
+		} else {
+			let message = this.props.intl.formatMessage(messages.fieldEmpty);
+			this.props.dispatch({
+				type: 'REQUEST_MODAL_OPEN',
+				payload: {
+					data: message,
+				},
+			});
+		}
 	}
 
 	onNeedAccount() {
