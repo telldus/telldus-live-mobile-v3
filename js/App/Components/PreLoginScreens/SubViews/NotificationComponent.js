@@ -22,16 +22,28 @@
 'use strict';
 
 import React from 'react';
-import { Dimensions, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import { Text, View } from 'BaseComponents';
+
+const messages = defineMessages({
+	defaultHeader: {
+		id: 'notification.defaultHeader',
+		defaultMessage: 'OOPS',
+		description: 'Default Header for the notification component',
+	},
+});
+
 
 type Props = {
 	onPress: Function,
 	text: string,
+	header?: string,
+	intl: intlShape.isRequired,
 }
 
-export default class NotificationComponent extends View {
+class NotificationComponent extends View {
 
 	props: Props;
 
@@ -47,19 +59,23 @@ export default class NotificationComponent extends View {
 	}
 
 	render() {
+		let header = this.props.header ? this.props.header :
+			`${this.props.intl.formatMessage(messages.defaultHeader)}!`;
 		return (
 			<View>
 				<View style={styles.notificationModalHeader}>
-					<Text style={styles.notificationModalHeaderText}>ERROR</Text>
+					<Text style={styles.notificationModalHeaderText}>
+						{header}
+					</Text>
 				</View>
 				<View style={styles.notificationModalBody}>
 					<Text style={styles.notificationModalBodyText}>{this.props.text}</Text>
 				</View>
 				<View style={styles.notificationModalFooter}>
-					<TouchableWithoutFeedback style={styles.notificationModalFooterTextCover}
+					<TouchableOpacity style={styles.notificationModalFooterTextCover}
 						onPress={this._closeModal}>
 						<Text style={styles.notificationModalFooterText}>OK</Text>
-					</TouchableWithoutFeedback>
+					</TouchableOpacity>
 				</View>
 			</View>
 		);
@@ -72,7 +88,7 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		paddingLeft: 20,
 		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.7,
+		width: Dimensions.get('window').width * 0.75,
 		backgroundColor: '#e26901',
 	},
 	notificationModalHeaderText: {
@@ -84,8 +100,8 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		paddingLeft: 20,
 		paddingRight: 10,
-		height: Dimensions.get('window').height * 0.15,
-		width: Dimensions.get('window').width * 0.7,
+		height: Dimensions.get('window').height * 0.2,
+		width: Dimensions.get('window').width * 0.75,
 	},
 	notificationModalBodyText: {
 		fontSize: 14,
@@ -96,9 +112,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		paddingRight: 20,
 		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.7,
+		width: Dimensions.get('window').width * 0.75,
 	},
 	notificationModalFooterTextCover: {
+		alignItems: 'flex-end',
+		justifyContent: 'center',
 		height: Dimensions.get('window').height * 0.08,
 		width: Dimensions.get('window').width * 0.3,
 	},
@@ -109,3 +127,4 @@ const styles = StyleSheet.create({
 	},
 });
 
+export default injectIntl(NotificationComponent);
