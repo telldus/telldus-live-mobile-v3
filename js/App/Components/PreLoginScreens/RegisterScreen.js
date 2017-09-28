@@ -51,12 +51,12 @@ const messages = defineMessages({
 	},
 	emailAddressNotMatchHeader: {
 		id: 'user.emailAddressNotMatchHeader',
-		defaultMessage: 'Emails don\'t match',
+		defaultMessage: 'EMAILS DON\'T MATCH',
 		description: 'Validation Message Header when Emails don\'t match',
 	},
 	emailNotValidHeader: {
 		id: 'user.emailNotValidHeader',
-		defaultMessage: 'Invalid email address',
+		defaultMessage: 'INVALID EMAIL ADDRESS',
 		description: 'Validation Message Header when Email address not Valid',
 	},
 	emailAddressNotMatchBody: {
@@ -69,14 +69,9 @@ const messages = defineMessages({
 		defaultMessage: 'The email address you entered is not valid. Please check that your email address is entered correctly.',
 		description: 'Validation Message Body when Email address not Valid',
 	},
-	fieldEmptyPrefix: {
-		id: 'form.register.fieldEmptyPrefix',
-		defaultMessage: 'Something seems to be missing in your form. Please check that',
-		description: 'Error message Pre-fix on form submitted, with fields empty',
-	},
 	fieldEmptyPostfix: {
 		id: 'form.register.fieldEmptyPostfix',
-		defaultMessage: 'is entered correctly.',
+		defaultMessage: 'seems to be missing in your form. Please check that it is entered correctly.',
 		description: 'Error message Post-fix on form submitted, with fields empty',
 	},
 });
@@ -184,12 +179,11 @@ class RegisterScreen extends View {
 				this.showModal(message, header);
 			}
 		} else {
-			let preF = this.props.intl.formatMessage(messages.fieldEmptyPrefix);
 			let postF = this.props.intl.formatMessage(messages.fieldEmptyPostfix);
-			let message = fn === '' ? `${preF} ${this.props.intl.formatMessage(i18n.firstName)} ${postF}`
-				: ln === '' ? `${preF} ${this.props.intl.formatMessage(i18n.lastName)} ${postF}`
-					: em === '' ? `${preF} ${this.props.intl.formatMessage(i18n.emailAddress)} ${postF}`
-						: cem === '' ? `${preF} ${this.props.intl.formatMessage(i18n.confirmEmailAddress)} ${postF}`
+			let message = fn === '' ? `${this.props.intl.formatMessage(i18n.firstName)} ${postF}`
+				: ln === '' ? `${this.props.intl.formatMessage(i18n.lastName)} ${postF}`
+					: em === '' ? `${this.props.intl.formatMessage(i18n.emailAddress)} ${postF}`
+						: cem === '' ? `${this.props.intl.formatMessage(i18n.confirmEmailAddress)} ${postF}`
 							: this.props.validationMessage;
 			this.showModal(message);
 		}
