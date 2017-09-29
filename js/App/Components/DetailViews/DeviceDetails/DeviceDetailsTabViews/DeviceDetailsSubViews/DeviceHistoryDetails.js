@@ -65,16 +65,21 @@ const messages = defineMessages({
 	},
 });
 
+type Props = {
+};
+
 class DeviceHistoryDetails extends View {
-	constructor(props) {
+	props = Props;
+
+	constructor(props: Props) {
 		super(props);
 	}
 
-	getPercentage(value: number) {
+	getPercentage(value: number): number {
 		return Math.round(value * 100.0 / 255);
 	}
 
-	render() {
+	render(): React$Element {
 		let textState = '', textDate = '', textStatus = '';
 		let originText = '';
 		let origin = this.props.detailsData.origin;
@@ -306,7 +311,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Object): Object {
 	return {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,

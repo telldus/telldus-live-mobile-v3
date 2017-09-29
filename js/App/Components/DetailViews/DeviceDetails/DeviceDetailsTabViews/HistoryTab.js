@@ -32,6 +32,7 @@ const CustomIcon = createIconSetFromIcoMoon(icon_history);
 import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DeviceDetailsSubView';
 import { getDeviceHistory } from 'Actions_Devices';
+import { Dispatch } from 'Actions_Types';
 import { defineMessages } from 'react-intl';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -53,7 +54,7 @@ const messages = defineMessages({
 });
 
 type Props = {
-	dispatch: Function,
+	dispatch: Dispatch,
 	history: Object,
 	device: Object,
 };
@@ -62,8 +63,8 @@ type State = {
 };
 
 const listDataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-	sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+	rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
+	sectionHeaderHasChanged: (s1: Object, s2: Object): boolean => s1 !== s2,
 });
 
 class HistoryTab extends View {
@@ -72,8 +73,8 @@ class HistoryTab extends View {
 
 	refreshHistoryData: () => void;
 	renderFillerComponent: () => void;
-	renderSectionHeader: (Object, String) => void;
-	renderRow: (Object, String) => void;
+	renderSectionHeader: (Object, string) => void;
+	renderRow: (Object, string) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -88,16 +89,16 @@ class HistoryTab extends View {
 		this.renderFillerComponent = this.renderFillerComponent.bind(this);
 	}
 
-	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }) => (
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): React$Element => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
+		tabBarIcon: ({ tintColor }: Object): React$Element => (
 			<CustomIcon name="icon_history" size={24} color={tintColor}/>
 		),
-		tabBarOnPress: (scene, jumpToIndex) => {
+		tabBarOnPress: (scene: Object, jumpToIndex: number) => {
 		},
 	});
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.history && ((!this.props.history) || (nextProps.history.data.length !== this.props.history.data.length))) {
 			this.setState({
 				dataSource: listDataSource.cloneWithRowsAndSections(this.getRowAndSectionData(nextProps.history.data)),
@@ -126,8 +127,8 @@ class HistoryTab extends View {
 	}
 
 	// prepares the row and section data required for the List.
-	getRowAndSectionData(data) {
-		let rowSectionData = data.reduce((result, key) => {
+	getRowAndSectionData(data: Array): Object {
+		let rowSectionData = data.reduce((result: Object, key: Object): Object => {
 			let date = new Date(key.ts * 1000).toDateString();
 			if (!result[date]) {
 				result[date] = [];
@@ -138,7 +139,7 @@ class HistoryTab extends View {
 		return rowSectionData;
 	}
 
-	getIcon(deviceState) {
+	getIcon(deviceState: string): string {
 		switch (deviceState) {
 			case 'TURNON':
 				return 'icon_on';
@@ -158,13 +159,13 @@ class HistoryTab extends View {
 
 	}
 
-	renderRow(item, id) {
+	renderRow(item: Object, id: number): React$Element {
 		return (
 			<HistoryRow id={id} item={item}/>
 		);
 	}
 
-	renderSectionHeader(sectionData, timestamp) {
+	renderSectionHeader(sectionData: Object, timestamp: string): React$Element {
 		return (
 			<View style={styles.sectionHeader}>
 				<FormattedDate
@@ -179,7 +180,7 @@ class HistoryTab extends View {
 		);
 	}
 
-	renderFillerComponent() {
+	renderFillerComponent(): React$Element {
 		return (
 			<View style={styles.fillerComponent}>
 				<View style={styles.fillerViewToAlign}>
@@ -193,14 +194,14 @@ class HistoryTab extends View {
 		clearTimeout(this.delayRefreshHistoryData);
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		if (nextProps.screenProps.currentTab !== 'History') {
 			return false;
 		}
 		return true;
 	}
 
-	render() {
+	render(): React$Element {
 		// Loader message when data has not received yet.
 		if (!this.state.dataSource) {
 			return (
@@ -301,13 +302,13 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
 		dispatch,
 	};
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	// some times the history data might not have received yet, so passing 'false' value.
 	let data = state.devices.byId[ownProps.screenProps.device.id].history ? state.devices.byId[ownProps.screenProps.device.id].history : false;
 	return {

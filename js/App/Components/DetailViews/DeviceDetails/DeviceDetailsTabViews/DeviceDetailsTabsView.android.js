@@ -29,6 +29,7 @@ import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import { getStore } from '../../../../Store/ConfigureStore';
+import { Dispatch } from 'Actions_Types';
 
 import { Text, View, Image } from 'BaseComponents';
 
@@ -48,7 +49,7 @@ let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight;
 let screenSpaceRemaining = deviceHeight - totalTop;
 
 type Props = {
-	dispatch: Function,
+	dispatch: Dispatch,
 	device: Object,
 	stackNavigator: Object,
 };
@@ -77,7 +78,7 @@ class DeviceDetailsTabsView extends View {
 		this.props.stackNavigator.goBack();
 	}
 
-	getRouteName(navigationState) {
+	getRouteName(navigationState: Object): any {
 		if (!navigationState) {
 			return null;
 		}
@@ -89,14 +90,14 @@ class DeviceDetailsTabsView extends View {
 		return route.routeName;
 	}
 
-	onNavigationStateChange(prevState, currentState) {
+	onNavigationStateChange(prevState: Object, currentState: Object) {
 		const currentScreen = this.getRouteName(currentState);
 		this.setState({
 			currentTab: currentScreen,
 		});
 	}
 
-	render() {
+	render(): React$Element<any> {
 		let screenProps = {
 			device: this.props.device,
 			currentTab: this.state.currentTab,
@@ -119,7 +120,7 @@ class DeviceDetailsTabsView extends View {
 	}
 }
 // Might not be the best way, but will work fine, may use till a better solution is found.
-function onTabPress(tab) {
+function onTabPress(tab: Object) {
 	let { dispatch } = getStore();
 	dispatch({
 		type: 'REQUEST_MODAL_CLOSE',
@@ -194,7 +195,7 @@ const Tabs = TabNavigator(
 				width: 25,
 				height: 25,
 			},
-			onTabPress: (tab) => {
+			onTabPress: (tab: Object) => {
 				onTabPress(tab);
 			},
 			swipeEnabled: true,
@@ -209,13 +210,13 @@ const Tabs = TabNavigator(
 	}
 );
 
-function mapStateToProps(store, ownprops) {
+function mapStateToProps(store: Object, ownprops: Object): Object {
 	return {
 		stackNavigator: ownprops.navigation,
 		device: store.devices.byId[ownprops.navigation.state.params.id],
 	};
 }
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
 		dispatch,
 	};

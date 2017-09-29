@@ -39,9 +39,9 @@ const messages = defineMessages({
 });
 
 type Props = {
-	locationImageUrl: String,
-	locationName: String,
-	locationType: String,
+	locationImageUrl: string,
+	locationName: string,
+	locationType: string,
 };
 
 type State = {
@@ -57,7 +57,7 @@ class DeviceLocationDetail extends View {
 		};
 	}
 
-	render() {
+	render(): React$Element {
 		return (
 			<View style={[styles.shadow, styles.homeSweetHomeContainer]}>
 				<View style={styles.locationImageContainer}>

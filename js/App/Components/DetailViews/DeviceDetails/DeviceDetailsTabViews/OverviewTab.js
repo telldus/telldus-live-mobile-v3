@@ -33,6 +33,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_home from './../../../TabViews/img/selection.json';
 const Icon = createIconSetFromIcoMoon(icon_home);
 
+import { Dispatch } from 'Actions_Types';
 import getDeviceType from '../../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
 import {
@@ -68,16 +69,16 @@ class OverviewTab extends View {
 		};
 	}
 
-	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.overviewHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }) => (
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): React$Element => (<FormattedMessage {...messages.overviewHeader} style={{color: tintColor}}/>),
+		tabBarIcon: ({ tintColor }: Object): React$Element => (
 			<Icon name="icon_home" size={24} color={tintColor}/>
 		),
-		tabBarOnPress: (scene, jumpToIndex) => {
+		tabBarOnPress: (scene: Object, jumpToIndex: number) => {
 		},
 	});
 
-	getType(deviceId) {
+	getType(deviceId: number): () => string {
 		const filteredItem = this.props.devices.byId[deviceId];
 		if (!filteredItem) {
 			return null;
@@ -87,14 +88,14 @@ class OverviewTab extends View {
 		return getDeviceType(supportedMethods);
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		if (nextProps.screenProps.currentTab !== 'Overview') {
 			return false;
 		}
 		return true;
 	}
 
-	render() {
+	render(): React$Element {
 		let deviceId = this.props.device.id;
 		let deviceDetail = null;
 		let device = this.props.device;
@@ -147,13 +148,13 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
 		dispatch,
 	};
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		device: state.devices.byId[ownProps.screenProps.device.id],
 		devices: state.devices,

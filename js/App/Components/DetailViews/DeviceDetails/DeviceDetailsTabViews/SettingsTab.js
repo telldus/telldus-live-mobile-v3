@@ -29,6 +29,7 @@ import { StyleSheet, Dimensions, Switch } from 'react-native';
 import { defineMessages } from 'react-intl';
 import i18n from '../../../../Translations/common';
 
+import { Dispatch } from 'Actions_Types';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from './../../../TabViews/img/selection.json';
 const Icon = createIconSetFromIcoMoon(icon_settings);
@@ -48,9 +49,9 @@ const messages = defineMessages({
 });
 
 type Props = {
-	dispatch: Function,
+	dispatch: Dispatch,
 	device: Object,
-	inDashboard: Boolean,
+	inDashboard: boolean,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
 };
@@ -70,16 +71,16 @@ class SettingsTab extends View {
 		this.onValueChange = this.onValueChange.bind(this);
 	}
 
-	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...i18n.settingsHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }) => (
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): React$Element => (<FormattedMessage {...i18n.settingsHeader} style={{color: tintColor}}/>),
+		tabBarIcon: ({ tintColor }: Object): React$Element => (
 			<Icon name="icon_settings" size={24} color={tintColor}/>
 		),
-		tabBarOnPress: (scene, jumpToIndex) => {
+		tabBarOnPress: (scene: Object, jumpToIndex: number) => {
 		},
 	});
 
-	onValueChange(value) {
+	onValueChange(value: any) {
 		if (!value) {
 			this.props.onRemoveFromDashboard(this.props.device.id);
 		} else {
@@ -87,14 +88,14 @@ class SettingsTab extends View {
 		}
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		if (nextProps.screenProps.currentTab !== 'Settings') {
 			return false;
 		}
 		return true;
 	}
 
-	render() {
+	render(): React$Element {
 		const device = this.props.device;
 		const { LEARN } = device.supportedMethods;
 
@@ -175,14 +176,18 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		onAddToDashboard: id => dispatch(addToDashboard('device', id)),
-		onRemoveFromDashboard: id => dispatch(removeFromDashboard('device', id)),
+		onAddToDashboard: (id: number) => {
+			dispatch(addToDashboard('device', id));
+		},
+		onRemoveFromDashboard: (id: number) => {
+			dispatch(removeFromDashboard('device', id));
+		},
 		dispatch,
 	};
 }
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		device: ownProps.screenProps.device,
 		inDashboard: !!state.dashboard.devicesById[ownProps.screenProps.device.id],

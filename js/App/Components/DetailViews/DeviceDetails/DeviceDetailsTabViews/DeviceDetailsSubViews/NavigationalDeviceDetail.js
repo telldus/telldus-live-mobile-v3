@@ -41,7 +41,7 @@ class NavigationalDeviceDetailModal extends View {
 		super(props);
 	}
 
-	render() {
+	render(): React$Element {
 		const { device } = this.props;
 		const { UP, DOWN, STOP } = device.supportedMethods;
 		let navigationButtons = null;

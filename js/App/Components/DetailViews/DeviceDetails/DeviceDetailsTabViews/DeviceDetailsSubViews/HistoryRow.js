@@ -31,6 +31,7 @@ const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
 import { FormattedMessage, Text, View, Icon, FormattedTime } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
+import { Dispatch } from 'Actions_Types';
 import i18n from '../../../../../Translations/common';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -38,7 +39,7 @@ const deviceHeight = Dimensions.get('window').height;
 
 type Props = {
 	item: Object,
-	onOriginPress: Function,
+	onOriginPress: () => void,
 };
 
 type State = {
@@ -57,14 +58,11 @@ class HistoryRow extends View {
 		this.onOriginPress = this.onOriginPress.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-	}
-
 	onOriginPress() {
 		this.props.onOriginPress(this.props.item);
 	}
 
-	getIcon(deviceState) {
+	getIcon(deviceState: string): string {
 		switch (deviceState) {
 			case 'TURNON':
 				return 'icon_on';
@@ -86,11 +84,11 @@ class HistoryRow extends View {
 
 	}
 
-	getPercentage(value: number) {
+	getPercentage(value: number): number {
 		return Math.round(value * 100.0 / 255);
 	}
 
-	render() {
+	render(): React$Element {
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
 		let icon = this.getIcon(deviceState);
@@ -311,9 +309,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		onOriginPress: (data) => {
+		onOriginPress: (data: Object) => {
 			dispatch({
 				type: 'REQUEST_MODAL_OPEN',
 				payload: {

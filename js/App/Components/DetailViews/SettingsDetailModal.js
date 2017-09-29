@@ -27,7 +27,7 @@ import { defineMessages } from 'react-intl';
 
 import { FormattedMessage, Container, Text, View, Icon, TouchableButton } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
-import { logoutFromTelldus } from 'Actions';
+import { logoutFromTelldus, Dispatch } from 'Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 
@@ -59,7 +59,7 @@ const messages = defineMessages({
 	},
 });
 
-const Header = ({ onPress }) => (
+const Header = ({ onPress }: Object): React$Element<any> => (
 	<View style={styles.header}>
 		<Icon name="gear" size={26} color="white"
 		      style={styles.gear}/>
@@ -70,7 +70,7 @@ const Header = ({ onPress }) => (
 	</View>
 );
 
-const StatusView = () => (
+const StatusView = (): React$Element<any> => (
 	<Text style={styles.statusText}>
 		<FormattedMessage {...messages.pushEnabled} style={styles.statusText} />
 	</Text>
@@ -79,9 +79,9 @@ const StatusView = () => (
 type Props = {
 	isVisible: boolean,
 	onClose: () => void,
-	onLogout: (string, Function) => void,
-	onSubmitPushToken: (string, Function) => void,
-	store: Object,
+	onLogout: (string, (string) => void) => void,
+	onSubmitPushToken: (string, (string) => void) => void,
+	store: object,
 };
 
 
@@ -98,7 +98,7 @@ class SettingsDetailModal extends View {
 	submitPushToken: () => void;
 	updateModalVisiblity: () => void;
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			isVisible: this.props.isVisible,
@@ -118,7 +118,7 @@ class SettingsDetailModal extends View {
 		this.props.onLogout(this.props.store.user.pushToken, this.postLoadMethod);
 	}
 
-	postLoadMethod(type) {
+	postLoadMethod(type: string) {
 		if (type === 'REG_TOKEN') {
 			this.setState({
 				isPushSubmitLoading: false,
@@ -135,7 +135,7 @@ class SettingsDetailModal extends View {
 		this.props.onClose();
 	}
 
-	render() {
+	render(): React$Element<any> {
 		let submitButText = this.state.isPushSubmitLoading ? messages.pushRegisters : messages.pushRegister;
 		let logoutButText = this.state.isLogoutLoading ? i18n.loggingout : i18n.logout;
 		let version = DeviceInfo.getVersion();
@@ -247,13 +247,13 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		store,
 	};
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch: Dispatch, ownProps: Object): Object {
 	return {
 		onClose: () => {
 			dispatch({
@@ -265,13 +265,13 @@ function mapDispatchToProps(dispatch, ownProps) {
 			});
 			ownProps.onClose();
 		},
-		onSubmitPushToken: (token, callback) => {
+		onSubmitPushToken: (token: string, callback: (string) => void) => {
 			dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId))
 				.then(() => {
 					callback('REG_TOKEN');
 				});
 		},
-		onLogout: (token, callback) => {
+		onLogout: (token: string, callback: (string) => void) => {
 			dispatch(unregisterPushToken(token)).then(() => {
 				dispatch(logoutFromTelldus());
 				callback('LOGOUT');
