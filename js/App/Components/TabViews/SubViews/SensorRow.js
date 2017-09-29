@@ -249,7 +249,7 @@ class SensorRow extends Component {
 		this.width = event.nativeEvent.layout.width;
 	}
 
-	formatLastUpdated(minutes: number, lastUpdated:number): string {
+	formatLastUpdated(minutes: number, lastUpdated: number): string {
 		if (minutes <= 0) {
 			return <FormattedMessage {...messages.justNow} />;
 		}

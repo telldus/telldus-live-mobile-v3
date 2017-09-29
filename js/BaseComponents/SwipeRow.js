@@ -185,7 +185,7 @@ class SwipeRow extends Component {
 		this.onRowPress = this.onRowPress.bind(this);
 	}
 
-	getPreviewAnimation(toValue:number, delay:number):Object {
+	getPreviewAnimation(toValue: number, delay: number): Object {
 		return Animated.timing(
 			this.state.translateX,
 			{
@@ -196,7 +196,7 @@ class SwipeRow extends Component {
 		);
 	}
 
-	getSlideAnimation(toValue:number, delay:number):Object {
+	getSlideAnimation(toValue: number, delay: number): Object {
 		return Animated.timing(
 			this.state.translateX,
 			{
@@ -207,7 +207,7 @@ class SwipeRow extends Component {
 		);
 	}
 
-	onContentLayout(e:Object) {
+	onContentLayout(e: Object) {
 
 		this.setState({
 			dimensionsSet: !this.props.recalculateHiddenLayout,
@@ -234,12 +234,12 @@ class SwipeRow extends Component {
 		}
 	}
 
-	handleOnMoveShouldSetPanResponder(e:Object, gs:Object) {
+	handleOnMoveShouldSetPanResponder(e: Object, gs: Object) {
 		const { dx } = gs;
 		return Math.abs(dx) > DIRECTIONAL_DISTANCE_CHANGE_THRESHOLD;
 	}
 
-	handlePanResponderMove(e:Object, gestureState:Object) {
+	handlePanResponderMove(e: Object, gestureState: Object) {
 		const { dx, dy } = gestureState;
 		const absDx = Math.abs(dx);
 		const absDy = Math.abs(dy);
@@ -281,7 +281,7 @@ class SwipeRow extends Component {
 		}
 	}
 
-	handlePanResponderEnd(e:Object, gestureState:Object) {
+	handlePanResponderEnd(e: Object, gestureState: Object) {
 		// re-enable scrolling on listView parent
 		if (!this.parentScrollEnabled) {
 			this.parentScrollEnabled = true;
@@ -312,7 +312,7 @@ class SwipeRow extends Component {
 		this.manuallySwipeRow(0);
 	}
 
-	manuallySwipeRow(toValue:number) {
+	manuallySwipeRow(toValue: number) {
 		Animated.spring(
 			this.state.translateX,
 			{

@@ -40,7 +40,7 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
+export default ({ url, requestParams }: {url: string, requestParams: Object}) => {
 	return new Promise((resolve, reject) => {
 		return doApiCall(url, requestParams).then(response => {
 			if (!response) {

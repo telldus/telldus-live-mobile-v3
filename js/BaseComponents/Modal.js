@@ -35,7 +35,7 @@ type Props = {
 	endValue?: number,
 	onOpen?: () => void,
 	onClose?: () => void,
-}
+};
 
 export default class Modal extends Component {
 	animationZoomOut: (duration?: number) => void;
@@ -49,7 +49,7 @@ export default class Modal extends Component {
 	animatedYValue: any;
 
 	static defaultProps: Object;
-	props : Props;
+	props: Props;
 
 	constructor(props: Props) {
 		super(props);

@@ -62,8 +62,8 @@ type Props = {
 	commandDIM: number,
 	tileWidth: number,
 	onDimmerSlide: number => void,
-	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
-	showDimmerPopup: (name:string, sliderValue:number) => void,
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
+	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (id: number, command: number) => void,
@@ -91,7 +91,7 @@ class DimmerDashboardTile extends View {
 	onTurnOn: () => void;
 	onTurnOff: () => void;
 	layoutView: Object => void;
-	onSlidingStart: (name:string, sliderValue:number) => void;
+	onSlidingStart: (name: string, sliderValue: number) => void;
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
 
@@ -143,12 +143,12 @@ class DimmerDashboardTile extends View {
 		this.onValueChangeThrottled(toDimmerValue(sliderValue));
 	}
 
-	onSlidingStart(name:string, sliderValue:number) {
+	onSlidingStart(name: string, sliderValue: number) {
 		this.props.saveDimmerInitialState(this.props.item.id, this.props.item.value, this.props.item.isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
-	onSlidingComplete(sliderValue:number) {
+	onSlidingComplete(sliderValue: number) {
 		if (sliderValue > 0) {
 			this.props.requestDeviceAction(this.props.item.id, this.props.commandON);
 		}
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch) {
 	return {
 		saveDimmerInitialState: (deviceId, initalValue, initialState) => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
-		showDimmerPopup: (name:string, value:number) => {
+		showDimmerPopup: (name: string, value: number) => {
 			dispatch(showDimmerPopup(name, value));
 		},
 		hideDimmerPopup: () => {

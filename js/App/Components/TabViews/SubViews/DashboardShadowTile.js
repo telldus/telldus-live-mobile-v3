@@ -45,7 +45,7 @@ type Props = {
 	hasShadow: boolean,
 	style: Object,
 	children: Object,
-	type: String
+	type: String,
 };
 
 class DashboardShadowTile extends View {

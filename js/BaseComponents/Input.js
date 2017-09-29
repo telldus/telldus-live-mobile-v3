@@ -33,7 +33,7 @@ type Props = {
 export default class Input extends Base {
 	props: Props;
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			input: {
 				height: this.getTheme().inputHeightBase,

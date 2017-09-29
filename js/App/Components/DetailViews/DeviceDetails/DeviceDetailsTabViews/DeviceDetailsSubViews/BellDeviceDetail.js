@@ -36,7 +36,7 @@ type Props = {
 
 class BellDeviceDetailModal extends View {
 	props: Props;
-	onBell : number => void;
+	onBell: number => void;
 	constructor(props: Props) {
 		super(props);
 		this.onBell = this.onBell.bind(this);

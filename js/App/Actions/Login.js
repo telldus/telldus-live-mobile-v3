@@ -32,7 +32,7 @@ import { Answers } from 'react-native-fabric';
 import LiveApi from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
-const loginToTelldus = (username:string, password:string): ThunkAction => (dispatch, getState) => {
+const loginToTelldus = (username: string, password: string): ThunkAction => (dispatch, getState) => {
 	axios({
 		method: 'post',
 		headers: {
@@ -83,7 +83,7 @@ function showLoginError(errorMessage: string): Action {
 	};
 }
 
-function updateAccessToken(accessToken:Object): Action {
+function updateAccessToken(accessToken: Object): Action {
 	return {
 		type: 'RECEIVED_ACCESS_TOKEN',
 		accessToken: accessToken,

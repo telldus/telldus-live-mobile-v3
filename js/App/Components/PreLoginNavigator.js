@@ -63,7 +63,7 @@ const StackNavigatorConfig = {
 const Navigator = StackNavigator(RouteConfigs, StackNavigatorConfig);
 
 type Props = {
-}
+};
 
 type State = {
 	currentScreen: string,

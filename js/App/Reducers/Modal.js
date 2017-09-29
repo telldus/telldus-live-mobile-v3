@@ -27,7 +27,7 @@ import { REHYDRATE } from 'redux-persist/constants';
 export type State = {
 	openModal: boolean,
 	data: any,
-}
+};
 const initialState = {
 	openModal: false,
 	data: '',

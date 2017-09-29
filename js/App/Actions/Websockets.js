@@ -206,7 +206,7 @@ const destroyConnection = gatewayId => {
  * calls `getWebsocketAddress`, so that a new connection for the a new address
  * is set up.
  */
-const setupGatewayConnection = (gatewayId:string, address:string, port:string) => (dispatch, getState) => {
+const setupGatewayConnection = (gatewayId: string, address: string, port: string) => (dispatch, getState) => {
 	destroyConnection(gatewayId);
 	const websocketUrl = `ws://${address}:${port}/websocket`;
 	console.log('opening socket connection to', websocketUrl);
@@ -349,15 +349,15 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 		});
 	};
 
-	function authoriseWebsocket(sessionId:string) {
+	function authoriseWebsocket(sessionId: string) {
 		sendMessage(`{"module":"auth","action":"auth","data":{"sessionid":"${sessionId}","clientId":"${gatewayId}"}}`);
 	}
 
-	function addWebsocketFilter(module:string, action:string) {
+	function addWebsocketFilter(module: string, action: string) {
 		sendMessage(`{"module":"filter","action":"accept","data":{"module":"${module}","action":"${action}"}}`);
 	}
 
-	function sendMessage(message:string) {
+	function sendMessage(message: string) {
 		const formattedTime = formatTime(new Date());
 		const title_prefix = `sending websocket_message @ ${formattedTime} (for gateway ${gatewayId})`;
 		try {

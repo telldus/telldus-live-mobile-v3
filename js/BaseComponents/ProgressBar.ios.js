@@ -32,7 +32,7 @@ type Props = {
 };
 
 export default class ProgressBarComponent extends Base {
-	props:Props;
+	props: Props;
 
 	render() {
 		return (

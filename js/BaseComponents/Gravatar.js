@@ -34,13 +34,13 @@ const GRAVATAR_URI = 'https://www.gravatar.com/avatar/';
 
 type Props = {
 	size: number,
-	mask: 'circle'|'square'|'rounded',
+	mask: 'circle' | 'square' | 'rounded',
 	emailAddress: string,
 };
 
 type DefaultProps = {
 	size: number,
-	mask: 'circle'|'square'|'rounded',
+	mask: 'circle' | 'square' | 'rounded',
 };
 
 class Gravatar extends React.Component {

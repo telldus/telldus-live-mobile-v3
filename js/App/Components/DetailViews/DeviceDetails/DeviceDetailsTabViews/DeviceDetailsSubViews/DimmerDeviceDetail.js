@@ -45,7 +45,7 @@ type Props = {
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 	onLearn: number => void,
-	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
 };
 
 type State = {
@@ -86,7 +86,7 @@ class DimmerDeviceDetailModal extends View {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 	}
 
-	getDimmerValue(device: Object) : number {
+	getDimmerValue(device: Object): number {
 		if (device !== null && device.value !== null) {
 			if (device.isInState === 'TURNON') {
 				return 100;

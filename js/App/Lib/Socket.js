@@ -46,13 +46,13 @@ export default class TelldusWebsocket {
 	websocketUrl: string;
 	websocket: Object;
 	send: Object;
-	_onAppStateChange : string => void;
+	_onAppStateChange: string => void;
 	onmessage: Function;
 	onerror: Function;
 	onclose: Function;
 	onopen: Function;
 
-	constructor(gatewayId:string, websocketUrl:string) {
+	constructor(gatewayId: string, websocketUrl: string) {
 		this.gatewayId = gatewayId;
 		this.websocketUrl = websocketUrl;
 
@@ -122,7 +122,7 @@ export default class TelldusWebsocket {
 		this._addListener('onclose');
 	}
 
-	_addListener(eventType:string) {
+	_addListener(eventType: string) {
 		const noop = event => console.log('nooping', event);
 		this.websocket[eventType] = event => {
 			// $FlowFixMe

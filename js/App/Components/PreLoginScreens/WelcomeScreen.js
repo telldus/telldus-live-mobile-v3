@@ -54,7 +54,7 @@ type Props = {
 	onPressOK: Function,
 	registeredCredential: any,
 	intl: intlShape.isRequired,
-}
+};
 
 class WelcomeScreen extends View {
 

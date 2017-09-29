@@ -60,7 +60,7 @@ const addToDashboard = (kind: Kind, id: number): Action => ({
 	id,
 });
 
-const removeFromDashboard = (kind : Kind, id: number) : Action => ({
+const removeFromDashboard = (kind: Kind, id: number): Action => ({
 	type: 'REMOVE_FROM_DASHBOARD',
 	kind,
 	id,

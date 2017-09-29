@@ -19,7 +19,7 @@
 
 // @flow
 
-export default function getLocationImageUrl(deviceType:string) : string {
+export default function getLocationImageUrl(deviceType: string): string {
 	if (deviceType === 'TelldusCenter') {
 
 		return 'icon_location_telldus_center_01';

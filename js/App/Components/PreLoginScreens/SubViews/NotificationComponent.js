@@ -29,7 +29,7 @@ import { Text, View } from 'BaseComponents';
 type Props = {
 	onPress: Function,
 	text: string,
-}
+};
 
 export default class NotificationComponent extends View {
 

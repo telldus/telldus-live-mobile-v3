@@ -28,7 +28,7 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import i18n from '../../../Translations/common';
 
-function getSliderLabel(value:number, intl: intlShape):string {
+function getSliderLabel(value: number, intl: intlShape): string {
 	if (value === 100) {
 		return intl.formatMessage(i18n.on);
 	}

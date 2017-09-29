@@ -39,7 +39,7 @@ type Props = {
 
 class DeviceRowHidden extends View {
 	props: Props;
-	onStarSelected : () => void;
+	onStarSelected: () => void;
 
 	constructor(props: Props) {
 		super(props);

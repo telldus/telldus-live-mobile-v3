@@ -25,7 +25,7 @@ import type { Action } from 'Actions_Types';
 export type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab';
 
 type State = {
-	tab: Tab;
+	tab: Tab,
 };
 
 const initialState: State = {
