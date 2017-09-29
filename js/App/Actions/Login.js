@@ -24,7 +24,7 @@
 'use strict';
 
 import axios from 'axios';
-import type { Action, ThunkAction } from './Types';
+import type { Action, ThunkAction, Dispatch } from './Types';
 import { apiServer } from 'Config';
 import { publicKey, privateKey, authenticationTimeOut } from 'Config';
 import { Answers } from 'react-native-fabric';
@@ -32,7 +32,7 @@ import { Answers } from 'react-native-fabric';
 import LiveApi from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
-const loginToTelldus = (username: string, password: string): ThunkAction => (dispatch, getState) => {
+const loginToTelldus = (username: string, password: string): ThunkAction => (dispatch: Dispatch, getState: Function) => {
 	axios({
 		method: 'post',
 		headers: {
@@ -49,7 +49,7 @@ const loginToTelldus = (username: string, password: string): ThunkAction => (dis
 			'password': password,
 		},
 	  })
-		.then(response => {
+		.then((response: Object) => {
 			if (response.status === 200) {
 				Answers.logLogin('Password', true);
 				dispatch({
@@ -58,7 +58,7 @@ const loginToTelldus = (username: string, password: string): ThunkAction => (dis
 				});
 			}
 		})
-		.catch(error => {
+		.catch((error: Object) => {
 			Answers.logLogin('Password', false);
 			if (error.response) {
 				let errorMessage = error.response.data.error_description ?
@@ -91,14 +91,14 @@ function updateAccessToken(accessToken: Object): Action {
 }
 
 function getUserProfile(): ThunkAction {
-	return (dispatch, getState) => {
+	return (dispatch: Dispatch, getState: Function): Promise<any> => {
 		const payload = {
 			url: '/user/profile',
 			requestParams: {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
+		return LiveApi(payload).then((response: Object): Dispatch => dispatch({
 			type: 'RECEIVED_USER_PROFILE',
 			payload: {
 				...payload,
@@ -110,7 +110,7 @@ function getUserProfile(): ThunkAction {
 
 function logoutFromTelldus(): ThunkAction {
 	destroyAllConnections();
-	return (dispatch) => {
+	return (dispatch: Dispatch): Dispatch => {
 		return dispatch({
 			type: 'LOGGED_OUT',
 		});

@@ -19,6 +19,8 @@
  * @providesModule Actions_User
  */
 
+// @flow
+
 'use strict';
 
 import type { ThunkAction } from './types';
@@ -31,7 +33,7 @@ import { format } from 'url';
 /*
  * registers the app at the telldus server for receiving push notification, with push token and other device information.
  */
-export const registerPushToken = (token: String, name: String, model: String, manufacturer: String, osVersion: String, deviceId: String, pushServiceId: Number ): ThunkAction => dispatch => {
+export const registerPushToken = (token: string, name: string, model: string, manufacturer: string, osVersion: string, deviceId: string, pushServiceId: number ): ThunkAction => (dispatch: Dispatch): Promise<any> => {
 	const url = format({
 		pathname: '/user/registerPushToken',
 		query: {
@@ -50,7 +52,7 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 			method: 'GET',
 		},
 	};
-	return LiveApi(payload).then(response => {
+	return LiveApi(payload).then((response: Object) => {
 		if ((!response.error) && (response.status === 'success')) {
 			dispatch({
 				type: 'PUSH_TOKEN_REGISTERED',
@@ -61,7 +63,7 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 				},
 			});
 		}
-	}).catch(e => {
+	}).catch((e: Object) => {
 		if (e === 'TypeError: Network request failed') {
 			dispatch({
 				type: 'ERROR',
@@ -77,7 +79,7 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 /*
  * unregisters the app at the telldus server from receiving push notification, with the registered push token.
  */
-export const unregisterPushToken = (token: String): ThunkAction => dispatch => {
+export const unregisterPushToken = (token: string): ThunkAction => (dispatch: Dispatch): Prmise<any> => {
 	const url = format({
 		pathname: '/user/unregisterPushToken',
 		query: {
@@ -90,7 +92,7 @@ export const unregisterPushToken = (token: String): ThunkAction => dispatch => {
 			method: 'GET',
 		},
 	};
-	return LiveApi(payload).then(response => {
+	return LiveApi(payload).then((response: Object) => {
 		if ((!response.error) && (response.status === 'success')) {
 			dispatch({
 				type: 'PUSH_TOKEN_UNREGISTERED',
@@ -101,7 +103,7 @@ export const unregisterPushToken = (token: String): ThunkAction => dispatch => {
 				},
 			});
 		}
-	}).catch(e => {
+	}).catch((e: Object) => {
 		if (e === 'TypeError: Network request failed') {
 			dispatch({
 				type: 'ERROR',
@@ -114,7 +116,7 @@ export const unregisterPushToken = (token: String): ThunkAction => dispatch => {
 	});
 };
 
-export const RegisterUser = (email: String, firstName: String, lastName: String): ThunkAction => (dispatch, getState) => {
+export const RegisterUser = (email: string, firstName: string, lastName: string): ThunkAction => (dispatch: Dispatch, getState: Function) => {
 	let formData = new FormData();
 	formData.append('email', email);
 	formData.append('firstname', firstName);
@@ -128,8 +130,8 @@ export const RegisterUser = (email: String, firstName: String, lastName: String)
 			body: formData,
 		}
 	)
-		.then((response) => response.json())
-		.then((responseData) => {
+		.then((response: string): Object => response.json())
+		.then((responseData: Object) => {
 			if (responseData.error) {
 				throw responseData;
 			}
@@ -137,7 +139,7 @@ export const RegisterUser = (email: String, firstName: String, lastName: String)
 				type: 'USER_REGISTER',
 				accessToken: responseData,
 			});
-		}).catch(e => {
+		}).catch((e: Object) => {
 			let data = !e.error_description && e.message === 'Network request failed' ?
 				'Network request failed. Check your internet connection' : e.error_description ?
 					e.error_description : e.error ? e.error : 'Unknown Error, Please try again later.';

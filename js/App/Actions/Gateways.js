@@ -23,14 +23,14 @@
 
 'use strict';
 
-import type { ThunkAction } from './Types';
+import type { ThunkAction, Dispatch } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
 
 import LiveApi from 'LiveApi';
 import { format } from 'url';
 
 function getGateways(): ThunkAction {
-	return (dispatch, getState) => {
+	return (dispatch: Dispatch, getState: Function): Promise<any> => {
 		const url = format({
 			pathname: '/clients/list',
 			query: {
@@ -43,7 +43,7 @@ function getGateways(): ThunkAction {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => {
+		return LiveApi(payload).then((response: Object) => {
 			dispatch({
 				type: 'RECEIVED_GATEWAYS',
 				payload: {
@@ -51,7 +51,7 @@ function getGateways(): ThunkAction {
 					...response,
 				},
 			});
-			response.client.forEach(gateway => {
+			response.client.forEach((gateway: Object) => {
 				dispatch(getWebsocketAddress(gateway.id));
 			});
 		});

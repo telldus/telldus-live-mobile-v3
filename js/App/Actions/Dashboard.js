@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { Action, ThunkAction } from './Types';
+import type { Action, ThunkAction, Dispatch } from './Types';
 
 type Kind = 'device' | 'sensor';
 
@@ -66,11 +66,11 @@ const removeFromDashboard = (kind: Kind, id: number): Action => ({
 	id,
 });
 
-const changeSensorDisplayType = (): ThunkAction => (dispatch, getState) => {
+const changeSensorDisplayType = (): ThunkAction => (dispatch: Dispatch, getState: Function) => {
 	const { sensors, dashboard } = getState();
 	const { sensorIds, sensorDisplayTypeById } = dashboard;
 
-	sensorIds.forEach(sensorId => {
+	sensorIds.forEach((sensorId: number) => {
 		const sensor = sensors.byId[sensorId];
 		const supportedDisplayTypes = getSupportedDisplayTypes(sensor);
 

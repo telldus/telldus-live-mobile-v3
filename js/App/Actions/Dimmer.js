@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { Action, ThunkAction } from './Types';
+import type { Action, ThunkAction, Dispatch } from './Types';
 
 export const showDimmerPopup = (name: string, value: number): Action => ({
 	type: 'SHOW_DIMMER_POPUP',
@@ -44,7 +44,7 @@ export const hideDimmerPopup = (): Action => ({
 	type: 'HIDE_DIMMER_POPUP',
 });
 
-export const setDimmerValue = (id: number, value: number): ThunkAction => (dispatch) => {
+export const setDimmerValue = (id: number, value: number): ThunkAction => (dispatch: Dispatch) => {
 	dispatch({
 		type: 'SET_DIMMER_VALUE',
 		payload: {

@@ -32,7 +32,7 @@ import { format } from 'url';
 import moment from 'moment';
 
 export function getDevices(): ThunkAction {
-	return (dispatch) => {
+	return (dispatch: Dispatch): Promise<any> => {
 		const url = format({
 			pathname: '/devices/list',
 			query: {
@@ -46,7 +46,7 @@ export function getDevices(): ThunkAction {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
+		return LiveApi(payload).then((response: Object): Dispatch => dispatch({
 			type: 'RECEIVED_DEVICES',
 			payload: {
 				...payload,
@@ -73,7 +73,7 @@ export function processWebsocketMessageForDevice(action: string, data: Object): 
 
 export function deviceSetState(deviceId: number, state: number, stateValue: number | null = null): ThunkAction {
 
-	return (dispatch, getState) => {
+	return (dispatch: Dispatch, getState: Function): Promise<any> => {
 		const payload = { // $FlowFixMe
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
 			requestParams: {
@@ -81,7 +81,7 @@ export function deviceSetState(deviceId: number, state: number, stateValue: numb
 			},
 		};
 
-		return LiveApi(payload).then(response =>{
+		return LiveApi(payload).then((response: Object) =>{
 			if (state !== 32) {
 				setTimeout(() => {
 					let { devices } = getState();
@@ -91,7 +91,7 @@ export function deviceSetState(deviceId: number, state: number, stateValue: numb
 					}
 				}, 2000);
 			}
-		}).catch(error => {
+		}).catch((error: Object) => {
 			let { devices } = getState();
 			let device = devices.byId[deviceId];
 			dispatch({
@@ -136,7 +136,7 @@ export function requestDeviceAction(deviceId: number, method: number): Action {
 
 
 // calculates the from and to timestamp by considering the tzoffset of the client/location.
-function getTimeStamp(tzOffset: number) {
+function getTimeStamp(tzOffset: number): Object {
 	let prevTimestamp = 0;
 	let toTimestamp = parseInt(moment().format('X'), 10) + tzOffset;
 	let lastWeek = parseInt(moment().subtract(7, 'days').format('X'), 10);
@@ -145,7 +145,7 @@ function getTimeStamp(tzOffset: number) {
 }
 
 export function getDeviceHistory(device: Object): ThunkAction {
-	return (dispatch, getState) => {
+	return (dispatch: Dispatch, getState: Function): Promise<any> => {
 		const {
 			gateways: { byId },
 		} = getState();
@@ -159,7 +159,7 @@ export function getDeviceHistory(device: Object): ThunkAction {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => {
+		return LiveApi(payload).then((response: Object) => {
 			dispatch({
 				type: 'DEVICE_HISTORY',
 				payload: {
@@ -172,14 +172,14 @@ export function getDeviceHistory(device: Object): ThunkAction {
 	};
 }
 
-export function getDeviceInfo(deviceId: number, requestedState: number, currentState: string, dispatch: Dispatch) {
+export function getDeviceInfo(deviceId: number, requestedState: number, currentState: string, dispatch: Dispatch): Promise<any> {
 	const payload = {
 		url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
 		requestParams: {
 			method: 'GET',
 		},
 	};
-	return LiveApi(payload).then(response => {
+	return LiveApi(payload).then((response: Object) => {
 		let newState = methods[parseInt(response.state, 10)];
 		requestedState = methods[requestedState];
 		if (newState === currentState) {

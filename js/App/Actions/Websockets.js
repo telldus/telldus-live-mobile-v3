@@ -50,12 +50,12 @@ const websocketConnections = {};
  * `authenticateSession` returns a promise. It resolves to the authenticated sessionId, which is also
  * stored in the redux state.
  */
-export const authenticateSession : () => ThunkAction = (() => {
+export const authenticateSession : () => ThunkAction = ((): Promise<any> => {
 	// immediately executing function to create closure for promise management
 	let promise;
 	let resolving = false;
 
-	return () => (dispatch: Dispatch, getState: GetState) => {
+	return (): Promise<any> => (dispatch: Dispatch, getState: GetState): Promise<any> => {
 		const {
 			websockets: { session: { ttl, sessionId } },
 		} = getState();
@@ -84,14 +84,14 @@ export const authenticateSession : () => ThunkAction = (() => {
 		resolving = true;
 		promise = LiveApi(payload);
 		return promise
-			.then(response => dispatch({
+			.then((response: Object): Dispatch => dispatch({
 				type: 'SESSION_ID_AUTHENTICATED',
 				payload: {
 					sessionId: newSessionId,
 					ttl: response.ttl,
 				},
 			}))
-			.then(() => {
+			.then((): any => {
 				resolving = false;
 				return newSessionId;
 			});
@@ -102,12 +102,12 @@ export const authenticateSession : () => ThunkAction = (() => {
  * Sets up socket connections to known gateways.
  * Makes sure that the session is authenticated before connecting.
  */
-export const connectToGateways = () => (dispatch: Dispatch, getState: GetState ) => {
+export const connectToGateways = (): any => (dispatch: Dispatch, getState: GetState ) => {
 	const {
 		gateways: { allIds, byId },
 	} = getState();
 
-	allIds.forEach(gatewayId => {
+	allIds.forEach((gatewayId: number): any => {
 		const { websocketAddress } = byId[gatewayId] || {};
 		const { address, port } = websocketAddress || {};
 		if (!address || !port) {
@@ -130,14 +130,14 @@ export const connectToGateways = () => (dispatch: Dispatch, getState: GetState )
  * or different than the one we are connected to, it updates the state and creates
  * a new socket connection.
  */
-export const getWebsocketAddress = (gatewayId: string) => (dispatch: Dispatch, getState: GetState) => {
+export const getWebsocketAddress = (gatewayId: string): Promise<any> => (dispatch: Dispatch, getState: GetState): Promise<any> => {
 	const payload = {
 		url: `/client/serverAddress?id=${gatewayId}`,
 		requestParams: {
 			method: 'GET',
 		},
 	};
-	return LiveApi(payload).then(response => {
+	return LiveApi(payload).then((response: Object): any => {
 		const {
 			gateways: { byId: { [gatewayId]: gateway } },
 		} = getState();
@@ -181,7 +181,7 @@ export const destroyAllConnections = () => {
 	Object.keys(websocketConnections).forEach(destroyConnection);
 };
 
-const destroyConnection = gatewayId => {
+const destroyConnection = (gatewayId: number) => {
 	const websocketConnection = websocketConnections[gatewayId];
 	if (!websocketConnection) {
 		return;
@@ -206,7 +206,7 @@ const destroyConnection = gatewayId => {
  * calls `getWebsocketAddress`, so that a new connection for the a new address
  * is set up.
  */
-const setupGatewayConnection = (gatewayId: string, address: string, port: string) => (dispatch, getState) => {
+const setupGatewayConnection = (gatewayId: string, address: string, port: string): any => (dispatch: Dispatch, getState: Function): any => {
 	destroyConnection(gatewayId);
 	const websocketUrl = `ws://${address}:${port}/websocket`;
 	console.log('opening socket connection to', websocketUrl);
@@ -259,7 +259,7 @@ const setupGatewayConnection = (gatewayId: string, address: string, port: string
 		});
 	};
 
-	websocket.onmessage = (msg) => {
+	websocket.onmessage = (msg: Object) => {
 		const formattedTime = formatTime(new Date());
 		const title_prefix = `websocket_message @ ${formattedTime} (from gateway ${gatewayId})`;
 		let title = '';
@@ -321,7 +321,7 @@ const setupGatewayConnection = (gatewayId: string, address: string, port: string
 		}
 	};
 
-	websocket.onerror = (e) => {
+	websocket.onerror = (e: any) => {
 		const formattedTime = formatTime(new Date());
 		const message = `websocket_error @ ${formattedTime} (gateway ${gatewayId})`;
 		try {

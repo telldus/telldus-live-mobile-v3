@@ -21,19 +21,19 @@
 
 'use strict';
 
-import type { ThunkAction } from './Types';
+import type { ThunkAction, Dispatch } from './Types';
 
 import LiveApi from 'LiveApi';
 
 function getJobs(): ThunkAction {
-	return (dispatch, getState) => {
+	return (dispatch: Dispatch, getState: Function): Promise<any> => {
 		const payload = {
 			url: '/scheduler/jobList',
 			requestParams: {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => {
+		return LiveApi(payload).then((response: Object) => {
 			dispatch({
 				type: 'RECEIVED_JOBS',
 				payload: {
