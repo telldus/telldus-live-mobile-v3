@@ -27,10 +27,10 @@ import { View, Text } from 'BaseComponents';
 import Theme from 'Theme';
 
 type Props = {
-	gateway:Object,
+	gateway: Object,
 };
 
-export default ({ gateway } : Props ) => {
+export default ({ gateway }: Props ) => {
 	return (
 		<View style={Theme.Styles.sectionHeader}>
 			<Text style={Theme.Styles.sectionHeaderText}>

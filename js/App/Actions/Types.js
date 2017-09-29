@@ -39,8 +39,8 @@ export type Action =
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: number }
 	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: number }
 
-	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id:number, displayType: string }
-	| { type: 'SHOW_DIMMER_POPUP', name:string, value:number }
+	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id: number, displayType: string }
+	| { type: 'SHOW_DIMMER_POPUP', name: string, value: number }
 	| { type: 'HIDE_DIMMER_POPUP' }
 	| { type: 'SET_DIMMER_VALUE', payload: Object }
 	| { type: 'DEVICE_SET_STATE', payload: Object }
@@ -56,7 +56,7 @@ export type Action =
 	| { type: 'DEVICE_DOWN', payload: Object }
 	| { type: 'DEVICE_STOP', payload: Object }
 	| { type: 'DEVICE_LEARN', payload: Object }
-	| { type: 'DEVICE_DIM', deviceId:number, payload: Object }
+	| { type: 'DEVICE_DIM', deviceId: number, payload: Object }
 
 	| {type: 'SAVE_DIMMER_INITIAL_STATE', payload: Object}
 

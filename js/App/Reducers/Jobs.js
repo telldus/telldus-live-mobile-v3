@@ -99,7 +99,7 @@ export default function reduceJobs(state: Array<Object> = initialState, action: 
 	return state;
 }
 
-export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}): {sections:Object, sectionIds:Array<Object>} {
+export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}): {sections: Object, sectionIds: Array<Object>} {
 	if (!jobs || !jobs.length) {
 		return {
 			sections: {},

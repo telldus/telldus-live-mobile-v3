@@ -31,7 +31,7 @@ type Props = {
 	icon: string,
 	text: string,
 	text2: string,
-	text3:string,
+	text3: string,
 };
 
 class SensorDashboardTileSlide extends View {

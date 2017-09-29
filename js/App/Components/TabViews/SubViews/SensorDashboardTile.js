@@ -45,7 +45,7 @@ type State = {
 class SensorDashboardTile extends View {
 	props: Props;
 	state: State;
-	getSlideList : Object => Array<Object>;
+	getSlideList: Object => Array<Object>;
 
 	constructor(props: Props) {
 		super(props);
@@ -57,7 +57,7 @@ class SensorDashboardTile extends View {
 		this.getSlideList = this.getSlideList.bind(this);
 	}
 
-	getSlideList(item: Object) : Array<Object> {
+	getSlideList(item: Object): Array<Object> {
 		let slideList = [];
 
 		if (item.humidity) {

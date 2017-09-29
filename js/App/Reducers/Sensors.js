@@ -28,7 +28,7 @@ import { combineReducers } from 'redux';
 
 export type State = ?Object;
 
-function reduceSensor(state:Object = {}, action: Action): State {
+function reduceSensor(state: Object = {}, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_SENSORS':
 			// properties originated from server

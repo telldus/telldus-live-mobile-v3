@@ -178,7 +178,7 @@ export default combineReducers({
 	sensorDisplayTypeById,
 });
 
-export function parseDashboardForListView(dashboard:Object = {}, devices:Object = {}, sensors:Object = {}) {
+export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}) {
 	const deviceItems = dashboard.deviceIds.map(deviceId => {
 		return {
 			objectType: 'device',

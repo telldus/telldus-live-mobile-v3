@@ -45,7 +45,7 @@ const messages = defineMessages({
 type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
-}
+};
 
 class ForgotPasswordScreen extends View {
 

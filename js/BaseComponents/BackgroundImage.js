@@ -31,7 +31,7 @@ type Props = {
 };
 
 export default class BackgroundImage extends Component {
-	props : Props;
+	props: Props;
 
 	render() {
 		const { source, children, style, ...props } = this.props;

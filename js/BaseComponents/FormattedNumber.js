@@ -23,7 +23,7 @@ import React, { PropTypes } from 'react';
 import { Text } from 'react-native';
 import * as Intl from 'react-intl';
 
-const FormattedNumberComponent = (props : Object) => {
+const FormattedNumberComponent = (props: Object) => {
 	const style = props.style;
 
 	const formatOptions = {

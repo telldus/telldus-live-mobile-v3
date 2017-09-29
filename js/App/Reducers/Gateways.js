@@ -143,7 +143,7 @@ function allIds(state = [], action): Array<Object> {
 	}
 }
 
-export function parseGatewaysForListView(gateways:Object = {}) {
+export function parseGatewaysForListView(gateways: Object = {}) {
 	const rows = gateways.allIds.map(gatewayId => gateways.byId[gatewayId]);
 
 	rows.sort((a, b) => {

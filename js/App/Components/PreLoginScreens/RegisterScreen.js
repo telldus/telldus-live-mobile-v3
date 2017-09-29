@@ -74,7 +74,7 @@ type Props = {
 	showModal: boolean,
 	registeredCredential: any,
 	intl: intlShape.isRequired,
-}
+};
 
 class RegisterScreen extends View {
 

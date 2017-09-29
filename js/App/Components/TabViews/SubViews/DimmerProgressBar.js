@@ -65,7 +65,7 @@ type State = {
 
 class DimmerProgressBar extends Component {
 	props: Props;
-	static defaultProps : DefaultProps;
+	static defaultProps: DefaultProps;
 	state: State;
 	layoutView: Object => void;
 

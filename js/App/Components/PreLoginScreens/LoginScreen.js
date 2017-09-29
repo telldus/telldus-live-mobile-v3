@@ -57,8 +57,8 @@ type Props = {
 };
 
 type State = {
-		notificationText? : string,
-		isLoading : boolean,
+		notificationText?: string,
+		isLoading: boolean,
 		username: string,
 		password: string,
 };
@@ -67,8 +67,8 @@ class LoginScreen extends View {
 	props: Props;
 	state: State;
 
-	onChangeUsername: (username:string) => void;
-	onChangePassword: (password:string) => void;
+	onChangeUsername: (username: string) => void;
+	onChangePassword: (password: string) => void;
 	onForgotPassword: () => void;
 	onNeedAccount: () => void;
 	onFormSubmit: () => void;

@@ -56,7 +56,7 @@ export function getDevices(): ThunkAction {
 	};
 }
 
-export function processWebsocketMessageForDevice(action:string, data:Object): Action {
+export function processWebsocketMessageForDevice(action: string, data: Object): Action {
 	switch (action) {
 		case 'setState':
 			return {
@@ -71,7 +71,7 @@ export function processWebsocketMessageForDevice(action:string, data:Object): Ac
 	}
 }
 
-export function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
+export function deviceSetState(deviceId: number, state: number, stateValue: number | null = null): ThunkAction {
 
 	return (dispatch, getState) => {
 		const payload = { // $FlowFixMe

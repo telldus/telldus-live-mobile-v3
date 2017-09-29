@@ -59,7 +59,7 @@ type Props = {
 	commandOFF: number,
 	commandDIM: number,
 	onDimmerSlide: number => void,
-	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	setScrollEnabled: boolean,

@@ -33,7 +33,7 @@ const deviceWidth = Dimensions.get('window').width;
 type Props = {
 	headerText: string,
 	children: Children,
-}
+};
 
 const FormContainerComponent = (props: Props) => (
 	<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>

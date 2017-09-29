@@ -11,3 +11,4 @@ declare module 'MessageQueue' {
 declare module '../../local-cli/bundle/assetPathUtils' {
 	declare var exports: any;
 }
+declare var console: any;
