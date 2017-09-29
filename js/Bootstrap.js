@@ -19,6 +19,8 @@
  * @providesModule Bootstrap
  */
 
+// @flow
+
 'use strict';
 
 import 'intl';
@@ -36,11 +38,20 @@ import { IntlProvider } from 'react-intl';
 import * as Translations from 'Translations';
 import { forceLocale } from 'Config';
 
-function Bootstrap(): React.Component {
+function Bootstrap(): Object {
 
 	console.disableYellowBox = true;
 
+	type State = {
+		isLoading: boolean,
+		locale: string,
+		messages: string,
+		store: Object,
+	};
+
 	class Root extends React.Component {
+		state: State;
+
 		constructor() {
 			super();
 			let locale = this.getLocale();
@@ -65,7 +76,7 @@ function Bootstrap(): React.Component {
 			}
 		}
 
-		getLocale() {
+		getLocale(): string {
 			if (forceLocale) {
 				return forceLocale;
 			}
@@ -77,7 +88,7 @@ function Bootstrap(): React.Component {
 			return parts[0];
 		}
 
-		render() {
+		render(): Provider {
 			if (this.state.isLoading) {
 				return null;
 			}
@@ -94,7 +105,7 @@ function Bootstrap(): React.Component {
 	return Root;
 }
 
-global.LOG = (...args) => {
+global.LOG = (...args: any): Array<any> => {
 	console.log('/------------------------------\\');
 	console.log(...args);
 	console.log('\\------------------------------/');
