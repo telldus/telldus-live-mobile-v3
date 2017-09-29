@@ -31,6 +31,7 @@ import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
 
 import { getDevices, getDeviceHistory } from 'Actions_Devices';
 import { toggleEditMode } from 'Actions';
+import { Dispatch } from 'Actions_Types';
 
 import { getDeviceType, getTabBarIcon } from 'Lib';
 
@@ -52,7 +53,7 @@ type Props = {
 	editMode: boolean,
 	devices: Object,
 	tab: string,
-	dispatch: Function,
+	dispatch: Dispatch,
 	stackNavigator: Object,
 };
 
@@ -75,9 +76,9 @@ class DevicesTab extends View {
 	renderHiddenRow: (Object) => Object;
 	onRefresh: () => void;
 
-	static navigationOptions = ({navigation, screenProps}) => ({
+	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.devices),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'devices'),
+		tabBarIcon: ({ focused, tintColor }: Object): React$Element => getTabBarIcon(focused, tintColor, 'devices'),
 	});
 
 	constructor(props: Props) {
@@ -88,7 +89,7 @@ class DevicesTab extends View {
 		this.state = {
 			dataSource: new ListDataSource({
 				rowHasChanged: this.rowHasChanged,
-				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+				sectionHeaderHasChanged: (s1: Object, s2: Object): boolean => s1 !== s2,
 			}).cloneWithRowsAndSections(sections, sectionIds),
 			deviceId: -1,
 			dimmer: false,
@@ -102,7 +103,7 @@ class DevicesTab extends View {
 		this.onRefresh = this.onRefresh.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		const { sections, sectionIds } = nextProps.rowsAndSections;
 
 		this.setState({
@@ -114,7 +115,7 @@ class DevicesTab extends View {
 		}
 	}
 
-	rowHasChanged(r1, r2) {
+	rowHasChanged(r1: Object, r2: Object): boolean {
 		if (r1 === r2) {
 			return false;
 		}
@@ -125,7 +126,7 @@ class DevicesTab extends View {
 		);
 	}
 
-	render() {
+	render(): React$Element {
 		return (
 			<View style={{ flex: 1 }}>
 				<List
@@ -142,7 +143,7 @@ class DevicesTab extends View {
 		);
 	}
 
-	renderRow(row) {
+	renderRow(row: Object): React$Element {
 		return (
 			<DeviceRow {...row}
 			           onSettingsSelected={this.openDeviceDetail}
@@ -151,13 +152,13 @@ class DevicesTab extends View {
 		);
 	}
 
-	renderHiddenRow(row) {
+	renderHiddenRow(row: Object): React$Element {
 		return (
 			<DeviceRowHidden {...row}/>
 		);
 	}
 
-	openDeviceDetail(device) {
+	openDeviceDetail(device: Object) {
 		this.props.dispatch(getDeviceHistory(device));
 		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
 	}
@@ -166,13 +167,13 @@ class DevicesTab extends View {
 		this.setState({ deviceId: -1 });
 	}
 
-	setScrollEnabled(enable) {
+	setScrollEnabled(enable: boolean) {
 		if (this.refs.list && this.refs.list.setScrollEnabled) {
 			this.refs.list.setScrollEnabled(enable);
 		}
 	}
 
-	renderSectionHeader(sectionData, sectionId) {
+	renderSectionHeader(sectionData: Object, sectionId: number): React$Element {
 		const gateway = this.props.gatewaysById[sectionId];
 		return (
 			<View style={Theme.Styles.sectionHeader}>
@@ -187,7 +188,7 @@ class DevicesTab extends View {
 		this.props.dispatch(getDevices());
 	}
 
-	getType(deviceId) {
+	getType(deviceId: number): any {
 		const filteredItem = this.props.devices.byId[deviceId];
 		if (!filteredItem) {
 			return null;
@@ -204,11 +205,11 @@ DevicesTab.propTypes = {
 
 const getRowsAndSections = createSelector(
 	[
-		({ devices }) => devices,
-		({ gateways }) => gateways,
-		({ tabs }) => tabs.editModeDevicesTab,
+		({ devices }: Object): Object => devices,
+		({ gateways }: Object): Object => gateways,
+		({ tabs }: Object): Object => tabs.editModeDevicesTab,
 	],
-	(devices, gateways, editMode) => {
+	(devices: Object, gateways: Object, editMode: Object): Object => {
 		const { sections, sectionIds } = parseDevicesForListView(devices, gateways, editMode);
 		return {
 			sections,
@@ -217,7 +218,7 @@ const getRowsAndSections = createSelector(
 	}
 );
 
-function mapStateToProps(state, ownprops) {
+function mapStateToProps(state: Object, ownprops: Object): Object {
 	return {
 		stackNavigator: ownprops.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(state),
@@ -228,7 +229,7 @@ function mapStateToProps(state, ownprops) {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
 		dispatch,
 	};

@@ -33,6 +33,7 @@ import { defineMessages } from 'react-intl';
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
+import { Dispatch } from 'Actions_Types';
 
 import {
 	DimmerDashboardTile,
@@ -62,7 +63,7 @@ type Props = {
 	tab: string,
 	onChangeDisplayType: () => void,
 	dashboard: Object,
-	dispatch: Function,
+	dispatch: Dispatch,
 	navigation: Object,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
@@ -101,9 +102,9 @@ class DashboardTab extends View {
 	changeDisplayType: () => void;
 	onRefresh: () => void;
 
-	static navigationOptions = ({navigation, screenProps}) => ({
+	static navigationOptions = ({navigation, screenProps}: Object): React$Element => ({
 		title: screenProps.intl.formatMessage(messages.dashboard),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'dashboard'),
+		tabBarIcon: ({ focused, tintColor }: Object): React$Element => getTabBarIcon(focused, tintColor, 'dashboard'),
 	});
 
 	constructor(props: Props) {
@@ -147,11 +148,11 @@ class DashboardTab extends View {
 		this.startSensorTimer();
 	}
 
-	rowHasChanged(r1, r2) {
+	rowHasChanged(r1: Object, r2: Object): boolean {
 		return r1.childObject !== r2.childObject;
 	}
 
-	setScrollEnabled(enable) {
+	setScrollEnabled(enable: boolean) {
 		if (this.refs.list && this.refs.list.setScrollEnabled) {
 			this.refs.list.setScrollEnabled(enable);
 		}
@@ -173,7 +174,7 @@ class DashboardTab extends View {
 		this.stopSensorTimer();
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
 		});
@@ -187,7 +188,7 @@ class DashboardTab extends View {
 		}
 	}
 
-	_onLayout = (event) => {
+	_onLayout = (event: Object) => {
 		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width);
 		if (tileWidth !== this.state.tileWidth) {
 			this.setState({
@@ -208,7 +209,7 @@ class DashboardTab extends View {
 		return tileWidth;
 	}
 
-	render() {
+	render(): React$Element {
 		// add to List props: enableEmptySections={true}, to surpress warning
 		return (
 			<View onLayout={this._onLayout}>
@@ -227,9 +228,9 @@ class DashboardTab extends View {
 		);
 	}
 
-	_renderRow(tileWidth) {
+	_renderRow(tileWidth: number): React$Element {
 		tileWidth -= tileMargin;
-		return (row, secId, rowId, rowMap) => {
+		return (row: Object, secId: number, rowId: number, rowMap: Object): React$Element => {
 			if (row.objectType !== 'sensor' && row.objectType !== 'device') {
 				return <Text>unknown device or sensor</Text>;
 			}
@@ -307,14 +308,14 @@ DashboardTab.propTypes = {
 
 const getRows = createSelector(
 	[
-		({ dashboard }) => dashboard,
-		({ devices }) => devices,
-		({ sensors }) => sensors,
+		({ dashboard }: Object): Object => dashboard,
+		({ devices }: Object): Object => devices,
+		({ sensors }: Object): Object => sensors,
 	],
-	(dashboard, devices, sensors) => parseDashboardForListView(dashboard, devices, sensors)
+	(dashboard: Object, devices: Object, sensors: Object): Object => parseDashboardForListView(dashboard, devices, sensors)
 );
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
 		gateways: state.gateways,
@@ -324,9 +325,11 @@ function mapStateToProps(state, props) {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		onChangeDisplayType: () => dispatch(changeSensorDisplayType()),
+		onChangeDisplayType: () => {
+			dispatch(changeSensorDisplayType());
+		},
 		dispatch,
 	};
 }

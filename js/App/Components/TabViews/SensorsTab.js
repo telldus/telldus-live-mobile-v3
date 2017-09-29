@@ -34,6 +34,7 @@ import { toggleEditMode } from 'Actions';
 
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import { getTabBarIcon } from 'Lib';
+import { Dispatch } from 'Actions_Types';
 
 const messages = defineMessages({
 	sensors: {
@@ -48,7 +49,7 @@ type Props = {
 	gatewaysById: Object,
 	editMode: boolean,
 	tab: string,
-	dispatch: Function,
+	dispatch: Dispatch,
 };
 
 type State = {
@@ -64,9 +65,9 @@ class SensorsTab extends View {
 	renderRow: (Object) => Object;
 	onRefresh: (Object) => void;
 
-	static navigationOptions = ({navigation, screenProps}) => ({
+	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.sensors),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'sensors'),
+		tabBarIcon: ({ focused, tintColor }: Object): React$Element => getTabBarIcon(focused, tintColor, 'sensors'),
 	});
 
 	constructor(props: Props) {
@@ -77,7 +78,7 @@ class SensorsTab extends View {
 		this.state = {
 			dataSource: new ListDataSource({
 				rowHasChanged: this.rowHasChanged,
-				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+				sectionHeaderHasChanged: (s1: Object, s2: Object): boolean => s1 !== s2,
 			}).cloneWithRowsAndSections(sections, sectionIds),
 		};
 
@@ -86,7 +87,7 @@ class SensorsTab extends View {
 		this.onRefresh = this.onRefresh.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		const { sections, sectionIds } = nextProps.rowsAndSections;
 
 		this.setState({
@@ -102,7 +103,7 @@ class SensorsTab extends View {
 		this.props.dispatch(getSensors());
 	}
 
-	rowHasChanged(r1, r2) {
+	rowHasChanged(r1: Object, r2: Object): boolean {
 		if (r1 === r2) {
 			return false;
 		}
@@ -113,7 +114,7 @@ class SensorsTab extends View {
 		);
 	}
 
-	render() {
+	render(): React$Element {
 		return (
 			<View>
 				<List
@@ -129,7 +130,7 @@ class SensorsTab extends View {
 		);
 	}
 
-	renderSectionHeader(sectionData, sectionId) {
+	renderSectionHeader(sectionData: Object, sectionId: number): React$Element {
 		return (
 			<DeviceHeader
 				sectionData={sectionData}
@@ -139,13 +140,13 @@ class SensorsTab extends View {
 		);
 	}
 
-	renderRow(row) {
+	renderRow(row: Object): React$Element {
 		return (
 			<SensorRow {...row}/>
 		);
 	}
 
-	renderHiddenRow(row) {
+	renderHiddenRow(row: Object): React$Element {
 		return (
 			<SensorRowHidden {...row}/>
 		);
@@ -158,11 +159,11 @@ SensorsTab.propTypes = {
 
 const getRowsAndSections = createSelector(
 	[
-		({ sensors }) => sensors,
-		({ gateways }) => gateways,
-		({ tabs }) => tabs.editModeSensorsTab,
+		({ sensors }: Object): Object => sensors,
+		({ gateways }: Object): Object => gateways,
+		({ tabs }: Object): Object => tabs.editModeSensorsTab,
 	],
-	(sensors, gateways, editMode) => {
+	(sensors: Object, gateways: Object, editMode: any): Object => {
 		const { sections, sectionIds } = parseSensorsForListView(sensors, gateways, editMode);
 		return {
 			sections,
@@ -171,7 +172,7 @@ const getRowsAndSections = createSelector(
 	}
 );
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		gatewaysById: store.gateways.byId,
@@ -180,7 +181,7 @@ function mapStateToProps(store) {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
 		dispatch,
 	};

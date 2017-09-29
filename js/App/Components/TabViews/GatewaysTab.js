@@ -30,6 +30,7 @@ import { Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponent
 import { getGateways } from 'Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
+import { Dispatch } from 'Actions_Types';
 
 import Theme from 'Theme';
 import { getTabBarIcon } from 'Lib';
@@ -44,7 +45,7 @@ const messages = defineMessages({
 
 type Props = {
 	rows: Array<Object>,
-	dispatch: Function,
+	dispatch: Dispatch,
 };
 
 type State = {
@@ -66,9 +67,9 @@ class GatewaysTab extends View {
 	renderRow: (renderRowProps) => Object;
 	onRefresh: () => void;
 
-	static navigationOptions = ({navigation, screenProps}) => ({
+	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.gateways),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'gateways'),
+		tabBarIcon: ({ focused, tintColor }: Object): React$Element => getTabBarIcon(focused, tintColor, 'gateways'),
 	});
 
 	constructor(props: Props) {
@@ -85,13 +86,13 @@ class GatewaysTab extends View {
 		this.onRefresh = this.onRefresh.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
 		});
 	}
 
-	rowHasChanged(r1, r2) {
+	rowHasChanged(r1: Object, r2: Object): boolean {
 		return r1 !== r2;
 	}
 
@@ -99,7 +100,7 @@ class GatewaysTab extends View {
 		this.props.dispatch(getGateways());
 	}
 
-	renderRow({ name, online, websocketOnline }) {
+	renderRow({ name, online, websocketOnline }: Object): any {
 		let locationSrc;
 		if (!online) {
 			locationSrc = require('./img/tabIcons/location-red.png');
@@ -125,7 +126,7 @@ class GatewaysTab extends View {
 		);
 	}
 
-	render() {
+	render(): React$Element {
 		return (
 			<View>
 				<List
@@ -140,12 +141,12 @@ class GatewaysTab extends View {
 
 const getRows = createSelector(
 	[
-		({ gateways }) => gateways,
+		({ gateways }: Object): Object => gateways,
 	],
-	(gateways) => parseGatewaysForListView(gateways)
+	(gateways: Object): Object => parseGatewaysForListView(gateways)
 );
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
 	};
