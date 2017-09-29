@@ -97,7 +97,7 @@ export default class TimeRow extends View<null, Props, State> {
 		}
 	}
 
-	render() {
+	render(): React$Element {
 		if (this.state.loading) {
 			return (
 				<Row

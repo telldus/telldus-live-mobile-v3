@@ -76,7 +76,7 @@ export default class TimeSlider extends View<null, Props, State> {
 		this.props.onValueChange(value);
 	};
 
-	render() {
+	render(): React$Element {
 		const { description, icon } = this.props;
 		const {
 			container,

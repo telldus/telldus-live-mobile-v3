@@ -40,7 +40,7 @@ export default class SchedulePoster extends View<null, Props, null> {
 		infoButton: PropTypes.object,
 	};
 
-	render() {
+	render(): React$Element {
 		const style = this._getStyle();
 		const { h1, h2, infoButton } = this.props;
 

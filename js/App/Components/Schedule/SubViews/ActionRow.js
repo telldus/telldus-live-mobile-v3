@@ -94,7 +94,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 		methodValue: 0,
 	};
 
-	render() {
+	render(): React$Element {
 		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
 
 		if (!action) {

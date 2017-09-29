@@ -44,7 +44,7 @@ export default class DeviceRow extends View<null, Props, null> {
 		containerStyle: View.propTypes.style,
 	};
 
-	render() {
+	render(): React$Element {
 		const { row, onPress, containerStyle } = this.props;
 		const { row: rowStyle, icon, iconContainer, description } = this._getStyle();
 

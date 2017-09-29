@@ -41,7 +41,7 @@ export default class TimeBlock extends View<null, Props, null> {
 		isSelected: PropTypes.bool.isRequired,
 	};
 
-	render() {
+	render(): React$Element {
 		const { type, onPress } = this.props;
 
 		const {
