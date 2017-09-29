@@ -78,7 +78,7 @@ class ForgotPasswordScreen extends View {
 		this.props.navigation.navigate('Login');
 	}
 
-	render() {
+	render(): React$Element {
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)}>
 				<View style={Theme.Styles.textFieldCover}>

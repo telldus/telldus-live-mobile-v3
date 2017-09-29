@@ -32,6 +32,7 @@ import { FormattedMessage, View, Text, TouchableButton, Modal } from 'BaseCompon
 import {FormContainerComponent, NotificationComponent} from 'PreLoginScreen_SubViews';
 
 import {RegisterUser} from 'Actions_User';
+import { Dispatch } from 'Actions_Types';
 
 import i18n from './../../Translations/common';
 
@@ -68,8 +69,8 @@ const messages = defineMessages({
 
 type Props = {
 	navigation: Object,
-	dispatch: Function,
-	onFormSubmit: Function,
+	dispatch: Dispatch,
+	onFormSubmit: (string, string, string) => void,
 	validationMessage: string,
 	showModal: boolean,
 	registeredCredential: any,
@@ -176,7 +177,7 @@ class RegisterScreen extends View {
 		}
 	}
 
-	showModal(data) {
+	showModal(data: string) {
 		this.props.dispatch({
 			type: 'REQUEST_MODAL_OPEN',
 			payload: {
@@ -190,7 +191,7 @@ class RegisterScreen extends View {
 		this.props.navigation.navigate('Login');
 	}
 
-	validateEmail(email: string) {
+	validateEmail(email: string): boolean {
 		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 		let emailValid = pattern.test(email);
 		if (!emailValid) {
@@ -205,14 +206,14 @@ class RegisterScreen extends View {
 		}
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
 			return false;
 		}
 		return true;
 	}
 
-	render() {
+	render(): React$Element {
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)}>
 				<View style={Theme.Styles.textFieldCover}>
@@ -302,16 +303,16 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		onFormSubmit: (email, firstName, LastName) => {
+		onFormSubmit: (email: string, firstName: string, LastName: string) => {
 			dispatch(RegisterUser(email, firstName, LastName));
 		},
 		dispatch,
 	};
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,

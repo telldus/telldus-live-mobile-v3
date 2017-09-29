@@ -101,9 +101,9 @@ class PreLoginNavigator extends View {
 	}
 
 	// gets the current screen from navigation state
-	getCurrentRouteName(navigationState: Object) {
+	getCurrentRouteName(navigationState: Object): any {
 		if (!navigationState) {
-	  return null;
+			return null;
 		}
 		const route = navigationState.routes[navigationState.index];
 		// dive into nested navigators
@@ -120,7 +120,7 @@ class PreLoginNavigator extends View {
 		});
 	}
 
-	render() {
+	render(): React$Element {
 		let screenProps = {currentScreen: this.state.currentScreen};
 		return (
 			<Navigator

@@ -27,7 +27,7 @@ import { Dimensions, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { Text, View } from 'BaseComponents';
 
 type Props = {
-	onPress: Function,
+	onPress: () => void,
 	text: string,
 };
 
@@ -46,7 +46,7 @@ export default class NotificationComponent extends View {
 		this.props.onPress();
 	}
 
-	render() {
+	render(): React$Element {
 		return (
 			<View>
 				<View style={styles.notificationModalHeader}>

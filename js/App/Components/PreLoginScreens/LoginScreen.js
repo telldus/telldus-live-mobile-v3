@@ -31,6 +31,7 @@ import { FormattedMessage, TouchableButton, Text, View, Modal } from 'BaseCompon
 import {NotificationComponent, FormContainerComponent} from 'PreLoginScreen_SubViews';
 import { loginToTelldus } from 'Actions';
 import { testUsername, testPassword } from 'Config';
+import { Dispatch } from 'Actions_Types';
 
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
@@ -47,10 +48,10 @@ const messages = defineMessages({
 });
 
 type Props = {
-		dispatch: Function,
+		dispatch: Dispatch,
 		screenProps: Object,
 		navigation: Object,
-		loginToTelldus: Function,
+		loginToTelldus: (string, string) => void,
 		validationMessage: string,
 		showModal: boolean,
 		intl: intlShape.isRequired,
@@ -106,14 +107,14 @@ class LoginScreen extends View {
 		});
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
 			return false;
 		}
 		return true;
 	}
 
-	render() {
+	render(): React$Element {
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.login)}>
 				<View style={Theme.Styles.textFieldCover}>
@@ -170,14 +171,14 @@ class LoginScreen extends View {
 		);
 	}
 
-	onChangeUsername(username) {
+	onChangeUsername(username: string) {
 		this.setState({
 			username,
 			notificationText: false,
 		});
 	}
 
-	onChangePassword(password) {
+	onChangePassword(password: string) {
 		this.setState({
 			password,
 			notificationText: false,
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
 		marginTop: 15 },
 });
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		tab: store.navigation.tab,
 		accessToken: store.user.accessToken,
@@ -216,7 +217,7 @@ function mapStateToProps(store) {
 	};
 }
 
-function dispatchToProps(dispatch) {
+function dispatchToProps(dispatch: Dispatch): Object {
 	return {
 		loginToTelldus: (userName: string, password: string) => {
 			dispatch(loginToTelldus(userName, password));
