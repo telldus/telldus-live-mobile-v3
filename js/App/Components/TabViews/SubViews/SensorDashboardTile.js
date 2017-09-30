@@ -122,13 +122,13 @@ class SensorDashboardTile extends View {
 		return slideList;
 	}
 
-	render() {
+	render(): React$Element {
 		const { item, tileWidth } = this.props;
 		const displayType = this.props.displayType;
 
 		const slideList = this.getSlideList(item);
 
-		const slides = slideList.map((data) =>
+		const slides = slideList.map((data: Object): React$Element =>
 			<SensorDashboardTileSlide key={data.key} icon={data.icon} text={data.text} tileWidth={tileWidth}/>
 		);
 
@@ -167,7 +167,7 @@ class SensorDashboardTile extends View {
 		);
 	}
 
-	_windDirection(value) {
+	_windDirection(value: number): string {
 		const directions = [
 			'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 		];
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(state, { item }) {
+function mapStateToProps(state: Object, { item }: Object): Object {
 	return {
 		displayType: state.dashboard.sensorDisplayTypeById[item.id],
 	};

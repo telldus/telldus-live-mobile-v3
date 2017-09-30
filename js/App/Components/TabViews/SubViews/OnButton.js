@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
@@ -25,7 +26,7 @@ import { View, FormattedMessage } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
-
+import { Dispatch } from 'Actions_Types';
 import i18n from '../../../Translations/common';
 
 type Props = {
@@ -36,7 +37,7 @@ type Props = {
 class OnButton extends View {
 	props: Props;
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 		this.onPress = this.onPress.bind(this);
 	}
@@ -46,7 +47,7 @@ class OnButton extends View {
 		this.props.deviceSetState(this.props.id, this.props.command);
 	}
 
-	render() {
+	render(): React$Element {
 		let { isInState, enabled, fontSize, methodRequested } = this.props;
 
 		return (
@@ -107,10 +108,14 @@ OnButton.defaultProps = {
 	command: 1,
 };
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		deviceSetState: (id: number, command: number, value?: number) => {
+			dispatch(deviceSetState(id, command, value));
+		},
+		requestDeviceAction: (id: number, command: number) => {
+			dispatch(requestDeviceAction(id, command));
+		},
 	};
 }
 

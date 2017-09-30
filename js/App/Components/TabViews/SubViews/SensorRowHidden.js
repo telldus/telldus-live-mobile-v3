@@ -25,6 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
+import { Dispatch } from 'Actions_Types';
 
 import { View, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
@@ -46,7 +47,7 @@ class SensorRowHidden extends View {
 		this.onStarSelected = this.onStarSelected.bind(this);
 	}
 
-	render() {
+	render(): React$Element {
 		const { isInDashboard } = this.props.sensor;
 		return (
 			<View style={Theme.Styles.rowBack}>
@@ -69,10 +70,14 @@ class SensorRowHidden extends View {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		addToDashboard: id => dispatch(addToDashboard('sensor', id)),
-		removeFromDashboard: id => dispatch(removeFromDashboard('sensor', id)),
+		addToDashboard: (id: number) => {
+			dispatch(addToDashboard('sensor', id));
+		},
+		removeFromDashboard: (id: number) => {
+			dispatch(removeFromDashboard('sensor', id));
+		},
 	};
 }
 

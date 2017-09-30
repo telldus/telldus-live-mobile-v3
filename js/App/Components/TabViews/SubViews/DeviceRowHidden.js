@@ -28,6 +28,7 @@ import { View, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
+import { Dispatch } from 'Actions_Types';
 
 import Theme from 'Theme';
 
@@ -46,7 +47,7 @@ class DeviceRowHidden extends View {
 		this.onStarSelected = this.onStarSelected.bind(this);
 	}
 
-	render() {
+	render(): React$Element {
 		const { isInDashboard } = this.props.device;
 		return (
 			<View style={Theme.Styles.rowBack}>
@@ -69,10 +70,14 @@ class DeviceRowHidden extends View {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		addToDashboard: id => dispatch(addToDashboard('device', id)),
-		removeFromDashboard: id => dispatch(removeFromDashboard('device', id)),
+		addToDashboard: (id: number) => {
+			dispatch(addToDashboard('device', id));
+		},
+		removeFromDashboard: (id: number) => {
+			dispatch(removeFromDashboard('device', id));
+		},
 	};
 }
 

@@ -43,7 +43,7 @@ class ToggleDashboardTile extends View {
 		super(props);
 	}
 
-	render() {
+	render(): React$Element {
 		const { item, tileWidth } = this.props;
 		const { id, name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF } = supportedMethods;

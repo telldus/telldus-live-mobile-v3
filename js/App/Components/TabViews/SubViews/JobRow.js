@@ -31,17 +31,6 @@ import { DAYS } from 'Constants';
 import _ from 'lodash';
 import type { Schedule } from 'Reducers_Schedule';
 
-const methodNames = {
-	[1]: 'On',
-	[2]: 'Off',
-	[4]: 'Bell',
-	[16]: 'Dim',
-	[32]: 'Learn',
-	[128]: 'Up',
-	[256]: 'Down',
-	[512]: 'Stop',
-};
-
 type Props = {
 	active: boolean,
 	device: Object,
@@ -111,7 +100,7 @@ export default class JobRow extends View<null, Props, null> {
 		editJob(schedule);
 	};
 
-	render() {
+	render(): React$Element {
 		if (!this.props.device) {
 			return null;
 		}

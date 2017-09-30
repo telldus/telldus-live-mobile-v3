@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
@@ -27,8 +28,18 @@ import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import i18n from '../../../Translations/common';
 let AnimatedFormattedMessage = Animated.createAnimatedComponent(FormattedMessage);
 
+type Props = {
+	isInState: string,
+	enabled: boolean,
+	fontSize: number,
+	style: Object,
+	methodRequested: string,
+};
+
 class DimmerOnButton extends View {
-	constructor(props) {
+	props: Props;
+
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			fadeAnim: new Animated.Value(1),
@@ -37,7 +48,7 @@ class DimmerOnButton extends View {
 		this.fadeOut = this.fadeOut.bind(this);
 	}
 
-	render() {
+	render(): React$Element {
 		let { isInState, enabled, fontSize, style, methodRequested } = this.props;
 
 		return (

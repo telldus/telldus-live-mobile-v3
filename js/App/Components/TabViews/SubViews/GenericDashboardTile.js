@@ -34,7 +34,7 @@ class GenericDashboardTile extends View {
 		super(props);
 	}
 
-	render() {
+	render(): React$Element {
 		const { item, tileWidth } = this.props;
 
 		return (

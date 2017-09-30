@@ -96,7 +96,7 @@ export default class JobsPoster extends View<null, Props, State> {
 		return newProps || newState;
 	}
 
-	render() {
+	render(): React$Element {
 		const { showLeftButton, showRightButton } = this.state;
 		const {
 			daysContainer,

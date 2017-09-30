@@ -130,14 +130,14 @@ class DimmerProgressBar extends Component {
 			duration: 1000,
 			easing: Easing.linear,
 			isInteraction: false,
-		}).start((endState) => {
+		}).start((endState: Object) => {
 			if (endState.finished) {
 				this.animate();
 			}
 		});
 	}
 
-	render() {
+	render(): React$Element {
 		this.state.progress._value = Math.max(0.0001, this.state.progress._value); // fix a bug in android :
 	                                                                               // https://github.com/facebook/react-native/issues/6278
 

@@ -30,8 +30,9 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { Dispatch } from 'Actions_Types';
 
-const UpButton = ({ supportedMethod, onPress, methodRequested }) => (
+const UpButton = ({ supportedMethod, onPress, methodRequested }: Object): React$Element => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -49,7 +50,7 @@ const UpButton = ({ supportedMethod, onPress, methodRequested }) => (
 	</TouchableOpacity>
 );
 
-const DownButton = ({ supportedMethod, onPress, methodRequested }) => (
+const DownButton = ({ supportedMethod, onPress, methodRequested }: Object): React$Element => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -65,7 +66,7 @@ const DownButton = ({ supportedMethod, onPress, methodRequested }) => (
 	</TouchableOpacity>
 );
 
-const StopButton = ({ supportedMethod, onPress, methodRequested }) => (
+const StopButton = ({ supportedMethod, onPress, methodRequested }: Object): React$Element => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -119,7 +120,7 @@ class NavigationalButton extends View {
 		this.props.deviceSetState(this.props.device.id, this.props.commandStop);
 	}
 
-	render() {
+	render(): React$Element {
 		const noop = function () {
 		};
 		const { UP, DOWN, STOP } = this.props.device.supportedMethods;
@@ -159,10 +160,14 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		deviceSetState: (id: number, command: number, value?: number) => {
+			dispatch(deviceSetState(id, command, value));
+		},
+		requestDeviceAction: (id: number, command: number) => {
+			dispatch(requestDeviceAction(id, command));
+		},
 	};
 }
 

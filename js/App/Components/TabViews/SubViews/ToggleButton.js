@@ -29,7 +29,7 @@ import OffButton from './OffButton';
 
 type Props = {
 	device: Object,
-	enabled: Boolean,
+	enabled: boolean,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 };
@@ -41,7 +41,7 @@ class ToggleButton extends View {
 		super(props);
 	}
 
-	render() {
+	render(): React$Element {
 		const { TURNON, TURNOFF } = this.props.device.supportedMethods;
 		const { id, isInState, methodRequested } = this.props.device;
 

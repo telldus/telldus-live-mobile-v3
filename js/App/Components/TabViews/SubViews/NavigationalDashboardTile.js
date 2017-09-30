@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
@@ -29,8 +30,9 @@ import DashboardShadowTile from './DashboardShadowTile';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { Dispatch } from 'Actions_Types';
 
-const UpButton = ({ isEnabled, onPress, methodRequested }) => (
+const UpButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -47,7 +49,7 @@ const UpButton = ({ isEnabled, onPress, methodRequested }) => (
 	</TouchableOpacity>
 );
 
-const DownButton = ({ isEnabled, onPress, methodRequested }) => (
+const DownButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -64,7 +66,7 @@ const DownButton = ({ isEnabled, onPress, methodRequested }) => (
 	</TouchableOpacity>
 );
 
-const StopButton = ({ isEnabled, onPress, methodRequested }) => (
+const StopButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -123,7 +125,7 @@ class NavigationalDashboardTile extends View {
 		this.props.deviceSetState(this.props.item.id, this.props.commandStop);
 	}
 
-	render() {
+	render(): React$Element {
 		const { item, tileWidth } = this.props;
 		const { name, supportedMethods } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
@@ -181,10 +183,14 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		deviceSetState: (id: number, command: number, value?: number) => {
+			dispatch(deviceSetState(id, command, value));
+		},
+		requestDeviceAction: (id: number, command: number) => {
+			dispatch(requestDeviceAction(id, command));
+		},
 	};
 }
 

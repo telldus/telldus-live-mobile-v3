@@ -26,6 +26,7 @@ import { connect } from 'react-redux';
 
 import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+import { Dispatch } from 'Actions_Types';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
@@ -53,7 +54,7 @@ class BellButton extends View {
 		this.props.requestDeviceAction(this.props.device.id, this.props.command);
 	}
 
-	render() {
+	render(): React$Element {
 		let {methodRequested} = this.props.device;
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) =>{
 			dispatch(deviceSetState(id, command, value));

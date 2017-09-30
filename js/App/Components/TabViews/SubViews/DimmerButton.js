@@ -28,6 +28,7 @@ import { View, RoundedCornerShadowView } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { Dispatch } from 'Actions_Types';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
@@ -117,7 +118,7 @@ class DimmerButton extends View {
 		this.onValueChange = this.onValueChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		const dimmerValue = getDimmerValue(nextProps.device.value, nextProps.device.isInState);
 		this.setState({ value: dimmerValue });
 	}
@@ -181,7 +182,7 @@ class DimmerButton extends View {
 		this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
 	}
 
-	render() {
+	render(): React$Element {
 		const { device } = this.props;
 		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
 		const onButton = (
@@ -276,18 +277,24 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		saveDimmerInitialState: (deviceId, initalValue, initialState) => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
+		saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => {
+			dispatch(saveDimmerInitialState(deviceId, initalValue, initialState));
+		},
 		showDimmerPopup: (name: string, value: number) => {
 			dispatch(showDimmerPopup(name, value));
 		},
 		hideDimmerPopup: () => {
 			dispatch(hideDimmerPopup());
 		},
-		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		onDimmerSlide: (id: number): any => (value: number): any => dispatch(setDimmerValue(id, value)),
+		deviceSetState: (id: number, command: number, value?: number) => {
+			dispatch(deviceSetState(id, command, value));
+		},
+		requestDeviceAction: (id: number, command: number) => {
+			dispatch(requestDeviceAction(id, command));
+		},
 	};
 }
 

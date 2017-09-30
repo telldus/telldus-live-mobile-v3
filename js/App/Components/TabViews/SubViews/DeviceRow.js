@@ -56,7 +56,7 @@ class DeviceRow extends View {
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 	}
 
-	render() {
+	render(): React$Element {
 		let button = null;
 		const { device } = this.props;
 		const {

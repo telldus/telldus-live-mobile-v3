@@ -30,7 +30,7 @@ type Props = {
 	gateway: Object,
 };
 
-export default ({ gateway }: Props ) => {
+export default ({ gateway }: Props ): Object => {
 	return (
 		<View style={Theme.Styles.sectionHeader}>
 			<Text style={Theme.Styles.sectionHeaderText}>

@@ -29,12 +29,13 @@ import { Animated, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { Dispatch } from 'Actions_Types';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import throttle from 'lodash/throttle';
 
-function getDimmerValue(value, isInState) {
+function getDimmerValue(value: number, isInState: string): number {
 	let newValue = value || 0;
 	if (isInState === 'TURNON') {
 		return 255;
@@ -47,11 +48,11 @@ function getDimmerValue(value, isInState) {
 	return newValue;
 }
 
-function toDimmerValue(sliderValue) {
+function toDimmerValue(sliderValue: number): number {
 	return Math.round(sliderValue * 255 / 100.0);
 }
 
-function toSliderValue(dimmerValue) {
+function toSliderValue(dimmerValue: number): number {
 	return Math.round(dimmerValue * 100.0 / 255);
 }
 
@@ -124,14 +125,14 @@ class DimmerDashboardTile extends View {
 		this.onValueChange = this.onValueChange.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		const { value, isInState } = nextProps.item;
 
 		const dimmerValue = getDimmerValue(value, isInState);
 		this.setState({ value: dimmerValue });
 	}
 
-	layoutView(x) {
+	layoutView(x: Object) {
 		let { width, height } = x.nativeEvent.layout;
 		this.setState({
 			bodyWidth: width,
@@ -139,7 +140,7 @@ class DimmerDashboardTile extends View {
 		});
 	}
 
-	onValueChange(sliderValue) {
+	onValueChange(sliderValue: number) {
 		this.onValueChangeThrottled(toDimmerValue(sliderValue));
 	}
 
@@ -187,7 +188,7 @@ class DimmerDashboardTile extends View {
 		this.props.requestDeviceAction(this.props.item.id, this.props.commandOFF);
 	}
 
-	render() {
+	render(): React$Element {
 		const { item, tileWidth } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
@@ -262,18 +263,24 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		saveDimmerInitialState: (deviceId, initalValue, initialState) => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
+		saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => {
+			dispatch(saveDimmerInitialState(deviceId, initalValue, initialState));
+		},
 		showDimmerPopup: (name: string, value: number) => {
 			dispatch(showDimmerPopup(name, value));
 		},
 		hideDimmerPopup: () => {
 			dispatch(hideDimmerPopup());
 		},
-		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		onDimmerSlide: (id: number): any => (value: number): any => dispatch(setDimmerValue(id, value)),
+		deviceSetState: (id: number, command: number, value?: number) => {
+			dispatch(deviceSetState(id, command, value));
+		},
+		requestDeviceAction: (id: number, command: number) => {
+			dispatch(requestDeviceAction(id, command));
+		},
 	};
 }
 

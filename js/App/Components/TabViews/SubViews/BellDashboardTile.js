@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
+import { Dispatch } from 'Actions_Types';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
@@ -55,7 +56,7 @@ class BellDashboardTile extends View {
 		this.props.requestDeviceAction(this.props.item.id, this.props.command);
 	}
 
-	render() {
+	render(): React$Element {
 		const { item, tileWidth } = this.props;
 		let {methodRequested} = this.props.item;
 
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) =>{
 			dispatch(deviceSetState(id, command, value));

@@ -37,7 +37,7 @@ type Props = {
 class SensorDashboardTileSlide extends View {
 	props: Props;
 
-	render() {
+	render(): React$Element {
 		return (
 			<View style={Theme.Styles.sensorTileItem}>
 				<View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
