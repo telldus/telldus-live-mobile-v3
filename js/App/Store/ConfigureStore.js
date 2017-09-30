@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
@@ -31,7 +32,7 @@ import { AsyncStorage } from 'react-native';
 let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
 let logger = createLogger({
-	predicate: (getState, action) => isDebuggingInChrome,
+	predicate: (getState: () => Object, action: Object): boolean => isDebuggingInChrome,
 	collapsed: true,
 	duration: true,
 });
@@ -39,7 +40,7 @@ let logger = createLogger({
 let createTheStore = applyMiddleware(thunk, promise, array, logger)(createStore);
 
 let _store;
-export function configureStore(onComplete: ?() => void) {
+export function configureStore(onComplete: ?() => void): Object {
 	const store = autoRehydrate()(createTheStore)(reducers);
 	persistStore(store, { storage: AsyncStorage }, onComplete);
 	if (isDebuggingInChrome) {
@@ -50,6 +51,6 @@ export function configureStore(onComplete: ?() => void) {
 }
 
 // TODO: should not be needed, remove when LiveApi gets store via component tree
-export function getStore() {
+export function getStore(): Object {
 	return _store;
 }
