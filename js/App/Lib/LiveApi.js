@@ -25,7 +25,7 @@
 
 import { apiServer, publicKey, privateKey } from 'Config';
 import { updateAccessToken } from 'Actions_Login';
-
+import { Dispatch } from 'Actions_Types';
 // TODO: fix this pattern, pass store via component tree
 import { getStore } from '../Store/ConfigureStore';
 
@@ -40,16 +40,16 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export default ({ url, requestParams }: {url: string, requestParams: Object}) => {
-	return new Promise((resolve, reject) => {
-		return doApiCall(url, requestParams).then(response => {
+export default ({ url, requestParams }: {url: string, requestParams: Object}): Promise<any> => {
+	return new Promise((resolve: Function, reject: Function): Object => {
+		return doApiCall(url, requestParams).then((response: Object): any => {
 			if (!response) {
 				return reject(new Error('unexpected error: response empty', {
 					response,
 				}));
 			}
 			resolve(response);
-		}).catch(error => {
+		}).catch((error: Object): any => {
 			if (error.message === 'invalid_token' || error.message === 'expired_token') {
 				const store = getStore();
 				const { dispatch } = store;
@@ -63,7 +63,7 @@ export default ({ url, requestParams }: {url: string, requestParams: Object}) =>
 	});
 };
 
-async function doApiCall(url, requestParams) {
+async function doApiCall(url: string, requestParams: Object): any {
 	let response = await callEndPoint(url, requestParams);
 	if (!response.error) {
 		// All is well, so return the data from the API.
@@ -99,7 +99,7 @@ async function doApiCall(url, requestParams) {
 	);
 }
 
-async function callEndPoint(url, requestParams) {
+async function callEndPoint(url: string, requestParams: Object): any {
 	const accessToken = getStore().getState().user.accessToken;
 	if (!accessToken) {
 		throw new Error('LiveApi: need accessToken');
@@ -119,7 +119,7 @@ async function callEndPoint(url, requestParams) {
 }
 
 // create new token with refresh token
-async function refreshAccessToken(url, requestParams) {
+async function refreshAccessToken(url: string, requestParams: Object): Promise<any> {
 	const store = getStore();
 	const accessToken = store.getState().user.accessToken;
 	const { dispatch } = store;
@@ -137,8 +137,8 @@ async function refreshAccessToken(url, requestParams) {
 			'refresh_token': accessToken.refresh_token,
 		}),
 	})
-		.then(response => response.json())
-		.then(response => {
+		.then((response: string): Object => response.json())
+		.then((response: Object): Dispatch => {
 			if (response.error) {
 				// We couldn't get a new access token with the refresh_token, so we logout the user.
 				return dispatch({
