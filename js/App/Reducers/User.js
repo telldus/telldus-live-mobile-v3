@@ -97,8 +97,8 @@ export default function reduceUser(state: State = initialState, action: Action):
 }
 
 export const getUserProfile = createSelector(
-	[({ user }) => user.userProfile],
-	(userProfile) => userProfile || {
+	[({ user }: Object): Object => user.userProfile],
+	(userProfile: Object): Object => userProfile || {
 		firstname: '',
 		lastname: '',
 		email: '',

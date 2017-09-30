@@ -30,7 +30,7 @@ import pickBy from 'lodash/pickBy';
 import difference from 'lodash/difference';
 import differenceBy from 'lodash/differenceBy';
 
-const allIds = kind => (state = [], action) => {
+const allIds = (kind: string): Function => (state: Object = [], action: Object): Object => {
 	if (action.type === 'persist/REHYDRATE') {
 		if (action.payload.dashboard && action.payload.dashboard.deviceIds && kind === 'device') {
 			console.log('rehydrating dashboard.deviceIds');
@@ -49,14 +49,14 @@ const allIds = kind => (state = [], action) => {
 		return [...state];
 	}
 	if (action.type === 'RECEIVED_DEVICES' && kind === 'device') {
-		let devices = action.payload.device.map(item => {
+		let devices = action.payload.device.map((item: Object): number => {
 			return parseInt(item.id, 10);
 		});
 		let removedDevices = difference(state, devices);
 		return differenceBy(state, removedDevices);
 	}
 	if (action.type === 'RECEIVED_SENSORS' && kind === 'sensor') {
-		let sensors = action.payload.sensor.map(item => {
+		let sensors = action.payload.sensor.map((item: Object): number => {
 			return parseInt(item.id, 10);
 		});
 		let removedSensors = difference(state, sensors);
@@ -72,7 +72,7 @@ const allIds = kind => (state = [], action) => {
 		];
 	}
 	if (action.type === 'REMOVE_FROM_DASHBOARD' && action.kind === kind) {
-		return state.filter(id => id !== action.id);
+		return state.filter((id: number): boolean => id !== action.id);
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return [];
@@ -80,7 +80,7 @@ const allIds = kind => (state = [], action) => {
 	return state;
 };
 
-const byId = kind => (state = {}, action) => {
+const byId = (kind: string): Function => (state: Object = {}, action: Object): Object => {
 	if (action.type === REHYDRATE) {
 		if (action.payload.dashboard && action.payload.dashboard.devicesById
 		    && kind === 'device') {
@@ -101,29 +101,29 @@ const byId = kind => (state = {}, action) => {
 		return { ...state };
 	}
 	if (action.type === 'RECEIVED_DEVICES' && kind === 'device') {
-		let devices = action.payload.device.map(item => {
+		let devices = action.payload.device.map((item: Object): Object => {
 			return parseInt(item.id, 10);
 		});
 		let itemsToFilter = Object.keys(state);
-		itemsToFilter = itemsToFilter.map(item => {
+		itemsToFilter = itemsToFilter.map((item: Object): Object => {
 			return parseInt(item, 10);
 		});
 		let removedDevices = difference(itemsToFilter, devices);
-		let newState = pickBy(state, (v, k) => {
+		let newState = pickBy(state, (v: Object, k: string): boolean => {
 			return removedDevices.indexOf(parseInt(k, 10)) === -1;
 		});
 		return newState;
 	}
 	if (action.type === 'RECEIVED_SENSORS' && kind === 'sensor') {
-		let sensors = action.payload.sensor.map(item => {
+		let sensors = action.payload.sensor.map((item: Object): number => {
 			return parseInt(item.id, 10);
 		});
 		let itemsToFilter = Object.keys(state);
-		itemsToFilter = itemsToFilter.map(item => {
+		itemsToFilter = itemsToFilter.map((item: Object): number => {
 			return parseInt(item, 10);
 		});
 		let removedSensors = difference(itemsToFilter, sensors);
-		let newState = pickBy(state, (v, k) => {
+		let newState = pickBy(state, (v: Object, k: string): boolean => {
 			return removedSensors.indexOf(parseInt(k, 10)) === -1;
 		});
 		return newState;
@@ -144,7 +144,7 @@ const byId = kind => (state = {}, action) => {
 	return state;
 };
 
-const sensorDisplayTypeById = (state = {}, action) => {
+const sensorDisplayTypeById = (state: Object = {}, action: Object): Object => {
 	if (action.type === REHYDRATE) {
 		if (action.payload.dashboard && action.payload.dashboard.sensorDisplayTypeById) {
 			console.log('rehydrating dashboard.sensorDisplayTypeById');
@@ -178,15 +178,15 @@ export default combineReducers({
 	sensorDisplayTypeById,
 });
 
-export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}) {
-	const deviceItems = dashboard.deviceIds.map(deviceId => {
+export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}): Array {
+	const deviceItems = dashboard.deviceIds.map((deviceId: number): Object => {
 		return {
 			objectType: 'device',
 			childObject: devices.byId[deviceId],
 		};
 	});
 
-	const sensorItems = dashboard.sensorIds.map(sensorId => {
+	const sensorItems = dashboard.sensorIds.map((sensorId: number): Object => {
 		return {
 			objectType: 'sensor',
 			childObject: sensors.byId[sensorId],

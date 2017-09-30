@@ -30,7 +30,7 @@ const initialState = {
 	},
 };
 
-export default function reduceWebsockets(state: Object = { ...initialState }, action: Object) {
+export default function reduceWebsockets(state: Object = { ...initialState }, action: Object): Object {
 	if (action.type === REHYDRATE && action.payload.websockets) {
 		return {
 			...state,

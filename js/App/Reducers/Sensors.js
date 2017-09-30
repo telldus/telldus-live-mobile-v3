@@ -94,7 +94,7 @@ function reduceSensor(state: Object = {}, action: Action): State {
 
 			newState.lastUpdated = parseInt(action.payload.time, 10);
 			newState.battery = action.payload.battery;
-			action.payload.data.forEach(sensorData => {
+			action.payload.data.forEach((sensorData: Object) => {
 				if (sensorData.type === 1) {
 					newState.temperature = sensorData.value;
 				} else if (sensorData.type === 2) {
@@ -151,7 +151,7 @@ const byId = (state: Object = {}, action: Object): State => {
 		return { ...state };
 	}
 	if (action.type === 'RECEIVED_SENSORS') {
-		return action.payload.sensor.reduce((acc, sensorState) => {
+		return action.payload.sensor.reduce((acc: Object, sensorState: Object): Object => {
 			acc[sensorState.id] = {
 				...state[sensorState.id],
 				// TODO: pass in received state as action.payload (see gateways reducer)
@@ -198,7 +198,7 @@ const allIds = (state: Array<Object> = [], action: Object): Array<Object> => {
 	}
 	if (action.type === 'RECEIVED_SENSORS') {
 		// overwrites entire state
-		return action.payload.sensor.map(sensorState => sensorState.id);
+		return action.payload.sensor.map((sensorState: Object): Array => sensorState.id);
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return [];
@@ -211,14 +211,14 @@ export default combineReducers({
 	byId,
 });
 
-export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}, editMode: boolean = false) {
-	const sections = sensors.allIds.reduce((acc, sensorId) => {
+export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}, editMode: boolean = false): Object {
+	const sections = sensors.allIds.reduce((acc: Object, sensorId: Object): Object => {
 		acc[sensors.byId[sensorId].clientId] = [];
 		return acc;
 	}, {});
-	const sectionIds = Object.keys(sections).map(id => parseInt(id, 10));
+	const sectionIds = Object.keys(sections).map((id: string): number => parseInt(id, 10));
 
-	sensors.allIds.forEach(sensorId => {
+	sensors.allIds.forEach((sensorId: number) => {
 		const sensor = sensors.byId[sensorId];
 		sections[sensor.clientId].push({
 			sensor,
@@ -226,7 +226,7 @@ export function parseSensorsForListView(sensors: Object = {}, gateways: Object =
 		});
 	});
 
-	sectionIds.sort((a, b) => {
+	sectionIds.sort((a: Object, b: Object): number => {
 		// might be that sensors get rendered before gateways are fetched
 		const gatewayA = gateways.byId[a] ? gateways.byId[a].name : a;
 		const gatewayB = gateways.byId[b] ? gateways.byId[b].name : b;

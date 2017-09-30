@@ -37,12 +37,12 @@ export type State = ?Object;
 const initialState = [];
 const jobInitialState = {};
 
-function getWeekDaysAsIterable(weekdays: String) {
+function getWeekDaysAsIterable(weekdays: string): any {
 	let weekDaysArray = weekdays.split(','), iterable = [];
 	if (weekDaysArray.length === 1 && weekDaysArray[0] === '') {
 		iterable = false;
 	} else {
-		iterable = weekDaysArray.map(day => parseInt(day, 10));
+		iterable = weekDaysArray.map((day: string): number => parseInt(day, 10));
 	}
 	return iterable;
 }
@@ -86,8 +86,8 @@ export default function reduceJobs(state: Array<Object> = initialState, action: 
 	}
 	if (action.type === 'RECEIVED_JOBS') {
 		return action.payload.job
-		             .filter(jobState => jobState.active)
-		             .map(jobState =>
+		             .filter((jobState: Object): Object => jobState.active)
+		             .map((jobState: Object): Object =>
 			             // TODO: pass in received state as action.payload (see gateways reducer)
 			             reduceJob(jobState, action)
 		             );
@@ -109,12 +109,12 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 
 	const todayInWeek = parseInt(moment().format('d'), 10);
 	const sectionIds = range(0, 8);
-	let sections = sectionIds.reduce((memo, day) => ({
+	let sections = sectionIds.reduce((memo: Object, day: number): Object => ({
 		...memo,
 		[day]: [],
 	}), {});
 
-	jobs.forEach(job => {
+	jobs.forEach((job: Object): any => {
 		let tempDay;
 		const device = devices.byId[job.deviceId];
 		if (!device) {
@@ -149,7 +149,7 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 
 		const now = moment().tz(timezone);
 		if (job.weekdays) {
-			job.weekdays.forEach(day => {
+			job.weekdays.forEach((day: number): Array => {
 				if (day !== todayInWeek) {
 					const relativeDay = (7 + day - todayInWeek) % 7; // 7 % 7 = 0
 					return sections[relativeDay].push(job);
@@ -166,8 +166,8 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		}
 	});
 
-	sections = mapValues(sections, _jobs => {
-		_jobs.sort((a, b) => {
+	sections = mapValues(sections, (_jobs: Array): Array => {
+		_jobs.sort((a: Object, b: Object): number => {
 			const totalA = parseInt(a.effectiveHour, 10) * 60 + parseInt(a.effectiveMinute, 10);
 			const totalB = parseInt(b.effectiveHour, 10) * 60 + parseInt(b.effectiveMinute, 10);
 			if (totalA === totalB) {
@@ -183,7 +183,7 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		return _jobs;
 	});
 
-	const filteredSectionIds = filter(sectionIds, sectionId => sections[sectionId].length);
+	const filteredSectionIds = filter(sectionIds, (sectionId: number): number => sections[sectionId].length);
 	return {
 		sections,
 		sectionIds: filteredSectionIds,

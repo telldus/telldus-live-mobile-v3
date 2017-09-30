@@ -84,7 +84,7 @@ function reduceGateway(state: State = {}, action: Action): State {
 	}
 }
 
-function byId(state = {}, action): State {
+function byId(state: Object = {}, action: Object): State {
 	if (action.type === REHYDRATE) {
 		if (action.payload.gateways && action.payload.gateways.byId) {
 			console.log('rehydrating gateways.byId');
@@ -97,7 +97,7 @@ function byId(state = {}, action): State {
 	}
 	switch (action.type) {
 		case 'RECEIVED_GATEWAYS':
-			return action.payload.client.reduce((acc, gateway) => {
+			return action.payload.client.reduce((acc: Object, gateway: Object): Object => {
 				acc[gateway.id] = {
 					...reduceGateway(state[gateway.id], {
 						type: 'RECEIVED_GATEWAYS',
@@ -121,7 +121,7 @@ function byId(state = {}, action): State {
 	}
 }
 
-function allIds(state = [], action): Array<Object> {
+function allIds(state: Array = [], action: Object): Array<Object> {
 	if (action.type === REHYDRATE) {
 		if (action.payload.gateways && action.payload.gateways.allIds) {
 			console.log('rehydrating gateways.allIds');
@@ -135,7 +135,7 @@ function allIds(state = [], action): Array<Object> {
 	switch (action.type) {
 		case 'RECEIVED_GATEWAYS':
 			// overwrites entire state
-			return action.payload.client.map(gateway => gateway.id);
+			return action.payload.client.map((gateway: Object): number => gateway.id);
 		case 'LOGGED_OUT':
 			return [];
 		default:
@@ -143,10 +143,10 @@ function allIds(state = [], action): Array<Object> {
 	}
 }
 
-export function parseGatewaysForListView(gateways: Object = {}) {
-	const rows = gateways.allIds.map(gatewayId => gateways.byId[gatewayId]);
+export function parseGatewaysForListView(gateways: Object = {}): Array {
+	const rows = gateways.allIds.map((gatewayId: number): Array => gateways.byId[gatewayId]);
 
-	rows.sort((a, b) => {
+	rows.sort((a: Object, b: Object): number => {
 		if (a.name < b.name) {
 			return -1;
 		}
