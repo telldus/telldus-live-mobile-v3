@@ -38,7 +38,7 @@ export default class Description extends View<null, Props, null> {
 		style: Text.propTypes.style,
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { children, style, ...props } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 

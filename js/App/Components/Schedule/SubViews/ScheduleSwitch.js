@@ -38,7 +38,7 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 		onValueChange: PropTypes.func.isRequired,
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { value, onValueChange } = this.props;
 		const { container, description } = this._getStyle();
 

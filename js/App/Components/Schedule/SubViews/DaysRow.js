@@ -54,7 +54,7 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 		editMode: false,
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { containerStyle, onPress } = this.props;
 		const { container, row } = this._getStyle();
 

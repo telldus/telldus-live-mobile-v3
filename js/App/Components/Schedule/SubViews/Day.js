@@ -44,7 +44,7 @@ export default class Day extends View<null, Props, null> {
 		this.props.onPress(this.props.day);
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { day, onPress } = this.props;
 		const { container, name } = this._getStyle();
 

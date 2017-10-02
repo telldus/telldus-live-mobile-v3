@@ -94,11 +94,11 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 		methodValue: 0,
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> | null {
 		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
 
 		if (!action) {
-			return;
+			return null;
 		}
 
 		const { onPress, containerStyle } = this.props;

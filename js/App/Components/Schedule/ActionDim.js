@@ -91,7 +91,7 @@ export default class ActionDim extends View<null, Props, State> {
 		}
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { container, row, caption, slider } = this._getStyle();
 
 		const dimValue = this._getDimValue();

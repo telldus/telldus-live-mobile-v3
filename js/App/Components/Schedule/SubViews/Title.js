@@ -48,7 +48,7 @@ export default class Title extends View<DefaultProps, Props, null> {
 		color: Theme.Core.brandSecondary,
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { children, style, ...props } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 

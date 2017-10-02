@@ -40,7 +40,7 @@ export default class CheckButton extends View<null, Props, null> {
 		disabled: PropTypes.bool.isRequired,
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { children, onPress, disabled } = this.props;
 		const { container, button, text } = this._getStyle();
 
