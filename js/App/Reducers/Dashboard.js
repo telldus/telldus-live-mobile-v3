@@ -30,7 +30,7 @@ import pickBy from 'lodash/pickBy';
 import difference from 'lodash/difference';
 import differenceBy from 'lodash/differenceBy';
 
-const allIds = (kind: string): Function => (state: Object = [], action: Object): Object => {
+const allIds = (kind: string): Function => (state: Array<any> = [], action: Object): Array<any> => {
 	if (action.type === 'persist/REHYDRATE') {
 		if (action.payload.dashboard && action.payload.dashboard.deviceIds && kind === 'device') {
 			console.log('rehydrating dashboard.deviceIds');
@@ -64,7 +64,7 @@ const allIds = (kind: string): Function => (state: Object = [], action: Object):
 	}
 	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === kind) {
 		if (includes(state, action.id)) {
-			return state;
+			return [...state];
 		}
 		return [
 			...state,
@@ -77,7 +77,7 @@ const allIds = (kind: string): Function => (state: Object = [], action: Object):
 	if (action.type === 'LOGGED_OUT') {
 		return [];
 	}
-	return state;
+	return [...state];
 };
 
 const byId = (kind: string): Function => (state: Object = {}, action: Object): Object => {
@@ -101,11 +101,11 @@ const byId = (kind: string): Function => (state: Object = {}, action: Object): O
 		return { ...state };
 	}
 	if (action.type === 'RECEIVED_DEVICES' && kind === 'device') {
-		let devices = action.payload.device.map((item: Object): Object => {
+		let devices = action.payload.device.map((item: Object): number => {
 			return parseInt(item.id, 10);
 		});
 		let itemsToFilter = Object.keys(state);
-		itemsToFilter = itemsToFilter.map((item: Object): Object => {
+		itemsToFilter = itemsToFilter.map((item: string): number => {
 			return parseInt(item, 10);
 		});
 		let removedDevices = difference(itemsToFilter, devices);
@@ -119,7 +119,7 @@ const byId = (kind: string): Function => (state: Object = {}, action: Object): O
 			return parseInt(item.id, 10);
 		});
 		let itemsToFilter = Object.keys(state);
-		itemsToFilter = itemsToFilter.map((item: Object): number => {
+		itemsToFilter = itemsToFilter.map((item: string): number => {
 			return parseInt(item, 10);
 		});
 		let removedSensors = difference(itemsToFilter, sensors);
@@ -178,7 +178,7 @@ export default combineReducers({
 	sensorDisplayTypeById,
 });
 
-export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}): Array {
+export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}): Array<Object> {
 	const deviceItems = dashboard.deviceIds.map((deviceId: number): Object => {
 		return {
 			objectType: 'device',

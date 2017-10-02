@@ -47,28 +47,28 @@ function syncLiveApiOnForeground(): ThunkAction {
 
 // NOTE: Devices are retrieved upon syncLiveApiOnForeground and via socket messages
 function syncWithServer(nextTab: Tab): ThunkAction {
-	return (dispatch: Dispatch, getState: Function): Dispatch => {
+	return (dispatch: Dispatch, getState: Function) => {
 		const { liveApi } = getState();
 		if (nextTab === 'sensorsTab' && !liveApi.sensors) {
 			dispatch({
 				type: 'LIVEAPI_REFETCH',
 				endpoint: 'sensors',
 			});
-			return dispatch(getSensors());
+			dispatch(getSensors());
 		}
 		if (nextTab === 'schedulerTab' && !liveApi.jobs) {
 			dispatch({
 				type: 'LIVEAPI_REFETCH',
 				endpoint: 'jobs',
 			});
-			return dispatch(getJobs());
+			dispatch(getJobs());
 		}
 		if (nextTab === 'gatewaysTab' && !liveApi.gateways) {
 			dispatch({
 				type: 'LIVEAPI_REFETCH',
 				endpoint: 'gateways',
 			});
-			return dispatch(getGateways());
+			dispatch(getGateways());
 		}
 	};
 }

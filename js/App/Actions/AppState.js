@@ -32,14 +32,14 @@ module.exports = {
 		type: 'APP_START',
 	}),
 	appState: (): ThunkAction => (dispatch: Dispatch) => {
-		AppState.addEventListener('change', (appState: string): Dispatch => {
+		AppState.addEventListener('change', (appState: string) => {
 			if (appState === 'active') {
-				return dispatch({
+				dispatch({
 					type: 'APP_FOREGROUND',
 				});
 			}
 			if (appState === 'background') {
-				return dispatch({
+				dispatch({
 					type: 'APP_BACKGROUND',
 				});
 			}

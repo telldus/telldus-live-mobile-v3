@@ -25,7 +25,6 @@
 
 import { apiServer, publicKey, privateKey } from 'Config';
 import { updateAccessToken } from 'Actions_Login';
-import { Dispatch } from 'Actions_Types';
 // TODO: fix this pattern, pass store via component tree
 import { getStore } from '../Store/ConfigureStore';
 
@@ -49,11 +48,11 @@ export default ({ url, requestParams }: {url: string, requestParams: Object}): P
 				}));
 			}
 			resolve(response);
-		}).catch((error: Object): any => {
+		}).catch((error: Object) => {
 			if (error.message === 'invalid_token' || error.message === 'expired_token') {
 				const store = getStore();
 				const { dispatch } = store;
-				return dispatch({
+				dispatch({
 					type: 'LOGGED_OUT',
 					payload: error,
 				});
@@ -137,13 +136,12 @@ async function refreshAccessToken(url: string, requestParams: Object): Promise<a
 			'refresh_token': accessToken.refresh_token,
 		}),
 	})
-		.then((response: string): Object => response.json())
-		.then((response: Object): Dispatch => {
+		.then((response: Object): Object => response.json())
+		.then((response: Object) => {
 			if (response.error) {
 				// We couldn't get a new access token with the refresh_token, so we logout the user.
-				return dispatch({
+				dispatch({
 					type: 'LOGGED_OUT',
-					payload: response,
 				});
 			}
 			dispatch(updateAccessToken(response));
