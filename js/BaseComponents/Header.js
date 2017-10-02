@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import type { Children } from 'react';
 import { Platform, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import Base from './Base';
 import computeProps from './computeProps';
