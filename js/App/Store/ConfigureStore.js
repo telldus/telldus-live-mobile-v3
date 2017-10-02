@@ -40,7 +40,7 @@ let logger = createLogger({
 let createTheStore = applyMiddleware(thunk, promise, array, logger)(createStore);
 
 let _store;
-export function configureStore(onComplete: ?() => void): Object {
+export function configureStore(onComplete ?: () => void): Object {
 	const store = autoRehydrate()(createTheStore)(reducers);
 	persistStore(store, { storage: AsyncStorage }, onComplete);
 	if (isDebuggingInChrome) {

@@ -87,7 +87,7 @@ export default function reduceJobs(state: Array<Object> = initialState, action: 
 	if (action.type === 'RECEIVED_JOBS') {
 		return action.payload.job
 		             .filter((jobState: Object): Object => jobState.active)
-		             .map((jobState: Object): Object =>
+		             .map((jobState: Object): State =>
 			             // TODO: pass in received state as action.payload (see gateways reducer)
 			             reduceJob(jobState, action)
 		             );
@@ -149,7 +149,7 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 
 		const now = moment().tz(timezone);
 		if (job.weekdays) {
-			job.weekdays.forEach((day: number): Array => {
+			job.weekdays.forEach((day: number): Object | void => {
 				if (day !== todayInWeek) {
 					const relativeDay = (7 + day - todayInWeek) % 7; // 7 % 7 = 0
 					return sections[relativeDay].push(job);
@@ -166,8 +166,8 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		}
 	});
 
-	sections = mapValues(sections, (_jobs: Array): Array => {
-		_jobs.sort((a: Object, b: Object): number => {
+	sections = mapValues(sections, (_jobs: Object): Object => {
+		_jobs.sort((a: Object, b: Object): number | void => {
 			const totalA = parseInt(a.effectiveHour, 10) * 60 + parseInt(a.effectiveMinute, 10);
 			const totalB = parseInt(b.effectiveHour, 10) * 60 + parseInt(b.effectiveMinute, 10);
 			if (totalA === totalB) {

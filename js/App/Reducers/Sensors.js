@@ -198,7 +198,7 @@ const allIds = (state: Array<Object> = [], action: Object): Array<Object> => {
 	}
 	if (action.type === 'RECEIVED_SENSORS') {
 		// overwrites entire state
-		return action.payload.sensor.map((sensorState: Object): Array => sensorState.id);
+		return action.payload.sensor.map((sensorState: Object): Array<Object> => sensorState.id);
 	}
 	if (action.type === 'LOGGED_OUT') {
 		return [];
@@ -226,7 +226,7 @@ export function parseSensorsForListView(sensors: Object = {}, gateways: Object =
 		});
 	});
 
-	sectionIds.sort((a: Object, b: Object): number => {
+	sectionIds.sort((a: number, b: number): number => {
 		// might be that sensors get rendered before gateways are fetched
 		const gatewayA = gateways.byId[a] ? gateways.byId[a].name : a;
 		const gatewayB = gateways.byId[b] ? gateways.byId[b].name : b;

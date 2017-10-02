@@ -144,7 +144,7 @@ function reduceDevice(state: Object = {}, action: Action): Object {
 			   those subsequest results must be appended to the previous[latest data with respect to time] ones. */
 
 			/* sorting the data w.r.t. date (latest first). */
-			let data = action.payload.history.sort((a: Object, b: Object): boolean => {
+			let data = action.payload.history.sort((a: Object, b: Object): number => {
 				return b.ts - a.ts;
 			});
 			return {

@@ -121,7 +121,7 @@ function byId(state: Object = {}, action: Object): State {
 	}
 }
 
-function allIds(state: Array = [], action: Object): Array<Object> {
+function allIds(state: Array<Object> = [], action: Object): Array<Object> {
 	if (action.type === REHYDRATE) {
 		if (action.payload.gateways && action.payload.gateways.allIds) {
 			console.log('rehydrating gateways.allIds');
@@ -143,8 +143,8 @@ function allIds(state: Array = [], action: Object): Array<Object> {
 	}
 }
 
-export function parseGatewaysForListView(gateways: Object = {}): Array {
-	const rows = gateways.allIds.map((gatewayId: number): Array => gateways.byId[gatewayId]);
+export function parseGatewaysForListView(gateways: Object = {}): Array<Object> {
+	const rows = gateways.allIds.map((gatewayId: number): Array<Object> => gateways.byId[gatewayId]);
 
 	rows.sort((a: Object, b: Object): number => {
 		if (a.name < b.name) {
