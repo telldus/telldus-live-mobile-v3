@@ -33,7 +33,7 @@ import { defineMessages } from 'react-intl';
 
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 import {
 	DimmerDashboardTile,
@@ -102,9 +102,9 @@ class DashboardTab extends View {
 	changeDisplayType: () => void;
 	onRefresh: () => void;
 
-	static navigationOptions = ({navigation, screenProps}: Object): React$Element => ({
+	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.dashboard),
-		tabBarIcon: ({ focused, tintColor }: Object): React$Element => getTabBarIcon(focused, tintColor, 'dashboard'),
+		tabBarIcon: ({ focused, tintColor }: Object): React$Element<any> => getTabBarIcon(focused, tintColor, 'dashboard'),
 	});
 
 	constructor(props: Props) {
@@ -209,7 +209,7 @@ class DashboardTab extends View {
 		return tileWidth;
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		// add to List props: enableEmptySections={true}, to surpress warning
 		return (
 			<View onLayout={this._onLayout}>
@@ -228,9 +228,9 @@ class DashboardTab extends View {
 		);
 	}
 
-	_renderRow(tileWidth: number): React$Element {
+	_renderRow(tileWidth: number): (Object, number, number, Object) => React$Element<any> {
 		tileWidth -= tileMargin;
-		return (row: Object, secId: number, rowId: number, rowMap: Object): React$Element => {
+		return (row: Object, secId: number, rowId: number, rowMap: Object): React$Element<any> => {
 			if (row.objectType !== 'sensor' && row.objectType !== 'device') {
 				return <Text>unknown device or sensor</Text>;
 			}
@@ -312,7 +312,7 @@ const getRows = createSelector(
 		({ devices }: Object): Object => devices,
 		({ sensors }: Object): Object => sensors,
 	],
-	(dashboard: Object, devices: Object, sensors: Object): Object => parseDashboardForListView(dashboard, devices, sensors)
+	(dashboard: Object, devices: Object, sensors: Object): Array<Object> => parseDashboardForListView(dashboard, devices, sensors)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {

@@ -30,7 +30,7 @@ import { Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponent
 import { getGateways } from 'Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 import Theme from 'Theme';
 import { getTabBarIcon } from 'Lib';
@@ -69,7 +69,7 @@ class GatewaysTab extends View {
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.gateways),
-		tabBarIcon: ({ focused, tintColor }: Object): React$Element => getTabBarIcon(focused, tintColor, 'gateways'),
+		tabBarIcon: ({ focused, tintColor }: Object): React$Element<any> => getTabBarIcon(focused, tintColor, 'gateways'),
 	});
 
 	constructor(props: Props) {
@@ -126,7 +126,7 @@ class GatewaysTab extends View {
 		);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
 			<View>
 				<List
@@ -143,7 +143,7 @@ const getRows = createSelector(
 	[
 		({ gateways }: Object): Object => gateways,
 	],
-	(gateways: Object): Object => parseGatewaysForListView(gateways)
+	(gateways: Object): Array<Object> => parseGatewaysForListView(gateways)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {

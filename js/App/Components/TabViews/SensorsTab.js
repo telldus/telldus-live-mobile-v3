@@ -34,7 +34,7 @@ import { toggleEditMode } from 'Actions';
 
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import { getTabBarIcon } from 'Lib';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 const messages = defineMessages({
 	sensors: {
@@ -67,7 +67,7 @@ class SensorsTab extends View {
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.sensors),
-		tabBarIcon: ({ focused, tintColor }: Object): React$Element => getTabBarIcon(focused, tintColor, 'sensors'),
+		tabBarIcon: ({ focused, tintColor }: Object): React$Element<any> => getTabBarIcon(focused, tintColor, 'sensors'),
 	});
 
 	constructor(props: Props) {
@@ -114,7 +114,7 @@ class SensorsTab extends View {
 		);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
 			<View>
 				<List
@@ -130,7 +130,7 @@ class SensorsTab extends View {
 		);
 	}
 
-	renderSectionHeader(sectionData: Object, sectionId: number): React$Element {
+	renderSectionHeader(sectionData: Object, sectionId: number): React$Element<any> {
 		return (
 			<DeviceHeader
 				sectionData={sectionData}
@@ -140,13 +140,13 @@ class SensorsTab extends View {
 		);
 	}
 
-	renderRow(row: Object): React$Element {
+	renderRow(row: Object): React$Element<any> {
 		return (
 			<SensorRow {...row}/>
 		);
 	}
 
-	renderHiddenRow(row: Object): React$Element {
+	renderHiddenRow(row: Object): React$Element<any> {
 		return (
 			<SensorRowHidden {...row}/>
 		);

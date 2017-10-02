@@ -151,7 +151,7 @@ class TabsView extends View<null, Props, State> {
 		this.props.onToggleEditMode(tab);
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		let screenProps = { stackNavigator: this.props.stackNavigator };
 		const { routeName } = this.state.tab;
 

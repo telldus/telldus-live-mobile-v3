@@ -31,7 +31,7 @@ import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
 
 import { getDevices, getDeviceHistory } from 'Actions_Devices';
 import { toggleEditMode } from 'Actions';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 import { getDeviceType, getTabBarIcon } from 'Lib';
 
@@ -78,7 +78,7 @@ class DevicesTab extends View {
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.devices),
-		tabBarIcon: ({ focused, tintColor }: Object): React$Element => getTabBarIcon(focused, tintColor, 'devices'),
+		tabBarIcon: ({ focused, tintColor }: Object): React$Element<any> => getTabBarIcon(focused, tintColor, 'devices'),
 	});
 
 	constructor(props: Props) {
@@ -126,7 +126,7 @@ class DevicesTab extends View {
 		);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
 			<View style={{ flex: 1 }}>
 				<List
@@ -143,7 +143,7 @@ class DevicesTab extends View {
 		);
 	}
 
-	renderRow(row: Object): React$Element {
+	renderRow(row: Object): React$Element<any> {
 		return (
 			<DeviceRow {...row}
 			           onSettingsSelected={this.openDeviceDetail}
@@ -152,7 +152,7 @@ class DevicesTab extends View {
 		);
 	}
 
-	renderHiddenRow(row: Object): React$Element {
+	renderHiddenRow(row: Object): React$Element<any> {
 		return (
 			<DeviceRowHidden {...row}/>
 		);
@@ -173,7 +173,7 @@ class DevicesTab extends View {
 		}
 	}
 
-	renderSectionHeader(sectionData: Object, sectionId: number): React$Element {
+	renderSectionHeader(sectionData: Object, sectionId: number): React$Element<any> {
 		const gateway = this.props.gatewaysById[sectionId];
 		return (
 			<View style={Theme.Styles.sectionHeader}>
@@ -209,7 +209,7 @@ const getRowsAndSections = createSelector(
 		({ gateways }: Object): Object => gateways,
 		({ tabs }: Object): Object => tabs.editModeDevicesTab,
 	],
-	(devices: Object, gateways: Object, editMode: Object): Object => {
+	(devices: Object, gateways: Object, editMode: boolean): Object => {
 		const { sections, sectionIds } = parseDevicesForListView(devices, gateways, editMode);
 		return {
 			sections,

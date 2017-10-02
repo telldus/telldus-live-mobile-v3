@@ -49,7 +49,7 @@ const messages = defineMessages({
 	},
 });
 
-const Gateway = (props: Object): React$Element => {
+const Gateway = (props: Object): React$Element<any> => {
 	let locationSrc;
 	if (!props.online) {
 		locationSrc = require('./img/tabIcons/location-red.png');
@@ -66,7 +66,7 @@ const Gateway = (props: Object): React$Element => {
 	);
 };
 
-const NavigationHeader = (props: Object): React$Element => (
+const NavigationHeader = (props: Object): React$Element<any> => (
 	<View style={styles.navigationHeader}>
 		<Image style={styles.navigationHeaderImage}
 		       source={require('./img/telldus.png')}
@@ -86,21 +86,21 @@ const NavigationHeader = (props: Object): React$Element => (
 	</View>
 );
 
-const ConnectedLocations = (): React$Element => (
+const ConnectedLocations = (): React$Element<any> => (
 	<View style={styles.navigationTitle}>
 		<Image source={require('./img/tabIcons/router.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
 	</View>
 );
 
-const SettingsButton = (Props: Object): React$Element => (
+const SettingsButton = (Props: Object): React$Element<any> => (
 	<TouchableOpacity onPress={Props.onPress} style={styles.navigationTitle}>
 		<Image source={require('./img/tabIcons/gear.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
 	</TouchableOpacity>
 );
 
-const NavigationView = (props: Object): React$Element => {
+const NavigationView = (props: Object): React$Element<any> => {
 	return (
 		<View style={{
 			flex: 1,
@@ -112,7 +112,7 @@ const NavigationView = (props: Object): React$Element => {
 				backgroundColor: 'white',
 			}}>
 				<ConnectedLocations />
-				{props.gateways.allIds.map((id: number, index: number): React$Element => {
+				{props.gateways.allIds.map((id: number, index: number): React$Element<any> => {
 					return (<Gateway {...props.gateways.byId[id]} key={index}/>);
 				})}
 				<SettingsButton onPress={props.onOpenSetting}/>
@@ -266,7 +266,7 @@ class TabsView extends View {
 		this.props.syncGateways();
 	};
 
-	renderNavigationView(): React$Element {
+	renderNavigationView(): React$Element<any> {
 		return <NavigationView
 			gateways={this.props.gateways}
 			userProfile={this.props.userProfile}
@@ -279,7 +279,7 @@ class TabsView extends View {
 		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
