@@ -41,7 +41,7 @@ class ToggleButton extends View {
 		super(props);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { TURNON, TURNOFF } = this.props.device.supportedMethods;
 		const { id, isInState, methodRequested } = this.props.device;
 

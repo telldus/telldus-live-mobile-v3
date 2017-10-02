@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 import { View, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
@@ -47,7 +47,7 @@ class SensorRowHidden extends View {
 		this.onStarSelected = this.onStarSelected.bind(this);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { isInDashboard } = this.props.sensor;
 		return (
 			<View style={Theme.Styles.rowBack}>

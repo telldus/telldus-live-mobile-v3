@@ -34,9 +34,9 @@ type Props = {
 class FormattedMessageComponent extends Base {
 	props: Props;
 
-	render() {
+	render(): React$Element<any> {
 		return (
-			<FormattedMessage {...this.props}>{msg => {
+			<FormattedMessage {...this.props}>{(msg: string): React$Element<any> => {
 				return <Text style={this.props.style}>{msg}</Text>;
 			}}
 			</FormattedMessage>

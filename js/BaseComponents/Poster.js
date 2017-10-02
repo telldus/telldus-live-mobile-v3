@@ -44,7 +44,7 @@ export default class Poster extends View<DefaultProps, Props, null> {
 		source: require('./img/telldus-geometric-header-bg.png'),
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { children, source } = this.props;
 		const { image, mask } = this._getStyle();
 

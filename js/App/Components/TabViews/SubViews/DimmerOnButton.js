@@ -39,6 +39,9 @@ type Props = {
 class DimmerOnButton extends View {
 	props: Props;
 
+	fadeIn: () => void;
+	fadeOut: () => void;
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
@@ -48,7 +51,7 @@ class DimmerOnButton extends View {
 		this.fadeOut = this.fadeOut.bind(this);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		let { isInState, enabled, fontSize, style, methodRequested } = this.props;
 
 		return (

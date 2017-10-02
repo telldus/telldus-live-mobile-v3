@@ -64,7 +64,7 @@ export default class Row extends View<DefaultProps, Props, null> {
 		}
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { children, onPress, style, containerStyle } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 

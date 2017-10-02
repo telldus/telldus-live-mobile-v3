@@ -122,13 +122,13 @@ class SensorDashboardTile extends View {
 		return slideList;
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { item, tileWidth } = this.props;
 		const displayType = this.props.displayType;
 
 		const slideList = this.getSlideList(item);
 
-		const slides = slideList.map((data: Object): React$Element =>
+		const slides = slideList.map((data: Object): React$Element<any> =>
 			<SensorDashboardTileSlide key={data.key} icon={data.icon} text={data.text} tileWidth={tileWidth}/>
 		);
 

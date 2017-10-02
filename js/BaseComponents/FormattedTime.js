@@ -26,8 +26,8 @@ import { injectIntl } from 'react-intl';
 import {FormattedTime} from 'react-intl';
 import Text from './Text';
 
-const FormattedTimeComponent = (props: Object) => (
-	<FormattedTime {...props}>{formattedTime => {
+const FormattedTimeComponent = (props: Object): React$Element<any> => (
+	<FormattedTime {...props}>{(formattedTime: string): React$Element<any> => {
 		return <Text style={props.style}>{formattedTime}</Text>;
 	}}
 	</FormattedTime>

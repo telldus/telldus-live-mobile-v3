@@ -30,9 +30,9 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
-const UpButton = ({ supportedMethod, onPress, methodRequested }: Object): React$Element => (
+const UpButton = ({ supportedMethod, onPress, methodRequested }: Object): React$Element<any> => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -50,7 +50,7 @@ const UpButton = ({ supportedMethod, onPress, methodRequested }: Object): React$
 	</TouchableOpacity>
 );
 
-const DownButton = ({ supportedMethod, onPress, methodRequested }: Object): React$Element => (
+const DownButton = ({ supportedMethod, onPress, methodRequested }: Object): React$Element<any> => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -66,7 +66,7 @@ const DownButton = ({ supportedMethod, onPress, methodRequested }: Object): Reac
 	</TouchableOpacity>
 );
 
-const StopButton = ({ supportedMethod, onPress, methodRequested }: Object): React$Element => (
+const StopButton = ({ supportedMethod, onPress, methodRequested }: Object): React$Element<any> => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -120,7 +120,7 @@ class NavigationalButton extends View {
 		this.props.deviceSetState(this.props.device.id, this.props.commandStop);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const noop = function () {
 		};
 		const { UP, DOWN, STOP } = this.props.device.supportedMethods;

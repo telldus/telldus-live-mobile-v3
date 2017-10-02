@@ -52,7 +52,7 @@ export default class IconTelldus extends View<DefaultProps, Props, null> {
 		size: getDeviceWidth() * 0.04,
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { icon, style } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 

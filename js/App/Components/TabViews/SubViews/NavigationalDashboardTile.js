@@ -30,9 +30,9 @@ import DashboardShadowTile from './DashboardShadowTile';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
-const UpButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element => (
+const UpButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element<any> => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -49,7 +49,7 @@ const UpButton = ({ isEnabled, onPress, methodRequested }: Object): React$Elemen
 	</TouchableOpacity>
 );
 
-const DownButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element => (
+const DownButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element<any> => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -66,7 +66,7 @@ const DownButton = ({ isEnabled, onPress, methodRequested }: Object): React$Elem
 	</TouchableOpacity>
 );
 
-const StopButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element => (
+const StopButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element<any> => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}>
@@ -125,7 +125,7 @@ class NavigationalDashboardTile extends View {
 		this.props.deviceSetState(this.props.item.id, this.props.commandStop);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { item, tileWidth } = this.props;
 		const { name, supportedMethods } = item;
 		const { UP, DOWN, STOP } = supportedMethods;

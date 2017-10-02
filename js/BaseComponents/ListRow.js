@@ -64,7 +64,7 @@ export default class ListRow extends View<DefaultProps, Props, null> {
 		isFirst: false,
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const {
 			children,
 			roundIcon,

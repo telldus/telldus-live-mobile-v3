@@ -262,7 +262,7 @@ class VerticalSlider extends View {
 		this.setState({ displayedValue: getSliderLabel(val, this.props.intl) });
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { minimumValue, maximumValue, value, containerHeight } = this.state;
 		const { thumbWidth, thumbHeight } = this.props;
 		const thumbBottom = value.interpolate({

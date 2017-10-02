@@ -29,7 +29,7 @@ import { Animated, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
@@ -188,7 +188,7 @@ class DimmerDashboardTile extends View {
 		this.props.requestDeviceAction(this.props.item.id, this.props.commandOFF);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { item, tileWidth } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;

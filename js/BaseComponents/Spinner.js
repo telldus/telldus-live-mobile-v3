@@ -35,7 +35,7 @@ type Props = {
 export default class SpinnerComponent extends Base {
 	props: Props;
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let type = {
 			height: 80,
@@ -49,7 +49,7 @@ export default class SpinnerComponent extends Base {
 
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<ActivityIndicator {...this.prepareRootProps()}
 			                   color={this.props.color ? this.props.color : this.props.inverse

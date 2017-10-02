@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import type { Children } from 'react';
 import { Platform, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import Base from './Base';
 import computeProps from './computeProps';
@@ -57,7 +58,7 @@ export default class HeaderComponent extends Base {
 	renderLeftButton: (Object) => Object;
 	renderButtonContent: (Object) => Object;
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		this.deviceWidth = Dimensions.get('window').width;
 
 		this.paddingHorizontal = 15;
@@ -127,7 +128,7 @@ export default class HeaderComponent extends Base {
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let defaultProps = {
 			style: this.getInitialStyle().navbar,
@@ -137,7 +138,7 @@ export default class HeaderComponent extends Base {
 
 	}
 
-	renderChildren() {
+	renderChildren(): Array<React$Element<any>> | Children {
 		if (!this.props.children) {
 			return (
 				<Image
@@ -152,31 +153,35 @@ export default class HeaderComponent extends Base {
 			let childrenArray = React.Children.toArray(this.props.children);
 
 			let buttons = [];
-			buttons = _.remove(childrenArray, (item) => {
+			buttons = _.remove(childrenArray, (item: Object): boolean => {
 				if (item.type === Button) {
 					return true;
 				}
+				return false;
 			});
 
 			let title = [];
-			title = _.remove(childrenArray, (item) => {
+			title = _.remove(childrenArray, (item: Object): boolean => {
 				if (item.type === Title) {
 					return true;
 				}
+				return false;
 			});
 
 			let subtitle = [];
-			subtitle = _.remove(childrenArray, (item) => {
+			subtitle = _.remove(childrenArray, (item: Object): boolean => {
 				if (item.type === Subtitle) {
 					return true;
 				}
+				return false;
 			});
 
 			let input = [];
-			input = _.remove(childrenArray, (item) => {
+			input = _.remove(childrenArray, (item: Object): boolean => {
 				if (item.type === InputGroup) {
 					return true;
 				}
+				return false;
 			});
 
 			if (this.props.searchBar) {
@@ -314,7 +319,7 @@ export default class HeaderComponent extends Base {
 		}
 	}
 
-	renderButtonContent = (button: Object) => {
+	renderButtonContent = (button: Object): React$Element<any> => {
 		if (button.image) {
 			return <Image source={button.image}/>;
 		}
@@ -327,7 +332,7 @@ export default class HeaderComponent extends Base {
 		}
 	};
 
-	renderRightButton = (rightButton: Object) => {
+	renderRightButton = (rightButton: Object): React$Element<any> => {
 		return (
 			<TouchableOpacity
 				onPress={rightButton.onPress}
@@ -345,7 +350,7 @@ export default class HeaderComponent extends Base {
 		);
 	};
 
-	renderLeftButton = (leftButton: Object) => {
+	renderLeftButton = (leftButton: Object): React$Element<any> => {
 		return (
 			<TouchableOpacity
 				onPress={leftButton.onPress}
@@ -363,7 +368,7 @@ export default class HeaderComponent extends Base {
 		);
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { leftButton, rightButton } = this.props;
 
 		return (

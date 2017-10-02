@@ -56,7 +56,7 @@ export default class FloatingButton extends View<DefaultProps, Props, null> {
 		paddingRight: 0,
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { container, button, icon } = this._getStyle();
 
 		const { onPress, imageSource } = this.props;

@@ -51,7 +51,7 @@ type Props = {
 class DashboardShadowTile extends View {
 	props: Props;
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
 			// Because of the limitation of react-native so we need 2 nested views to create an rounded corner view
 			// with shadow

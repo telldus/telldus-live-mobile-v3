@@ -46,7 +46,7 @@ export default class FullPageActivityIndicator extends View<DefaultProps, Props,
 		size: 'large',
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { animating, color, size } = this.props;
 
 		return (

@@ -43,7 +43,7 @@ class TouchableButton extends Component {
 	constructor(props: Props) {
 		super(props);
 	}
-	render() {
+	render(): React$Element<any> {
 		return (
 			<Text style={[styles.button, this.props.style]} onPress={this.props.onPress} >
 				{this.props.preScript}{this.props.intl.formatMessage(this.props.text).toUpperCase()}{this.props.postScript}

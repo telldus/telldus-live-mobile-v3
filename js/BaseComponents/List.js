@@ -254,25 +254,25 @@ class ListComponent extends React.Component {
 				Component,
 				{
 					...Component.props,
-					ref: row => (this._rows[`${secId}${rowId}`] = row),
-					onRowOpen: _ => this.onRowOpen(secId, rowId, this._rows),
-					onRowClose: _ => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows),
-					onRowPress: _ => this.onRowPress(`${secId}${rowId}`),
-					setScrollEnabled: enable => this.setScrollEnabled(enable),
+					ref: (row: Object): Object => (this._rows[`${secId}${rowId}`] = row),
+					onRowOpen: (_: null): void => this.onRowOpen(secId, rowId, this._rows),
+					onRowClose: (_: null): void => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows),
+					onRowPress: (_: null): void => this.onRowPress(`${secId}${rowId}`),
+					setScrollEnabled: (enable: boolean): void => this.setScrollEnabled(enable),
 				}
 			);
 		}
 		const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
 		return (
 			<SwipeRow
-				ref={row => (this._rows[`${secId}${rowId}`] = row)} // eslint-disable-line react/jsx-no-bind
-				onRowOpen={_ => this.onRowOpen(secId, rowId, this._rows)} // eslint-disable-line react/jsx-no-bind
-				onRowClose={_ => this.props.onRowClose && this.props.onRowClose( // eslint-disable-line react/jsx-no-bind
+				ref={(row: Object): Object => (this._rows[`${secId}${rowId}`] = row)} // eslint-disable-line react/jsx-no-bind
+				onRowOpen={(_: null): void => this.onRowOpen(secId, rowId, this._rows)} // eslint-disable-line react/jsx-no-bind
+				onRowClose={(_: null): void => this.props.onRowClose && this.props.onRowClose( // eslint-disable-line react/jsx-no-bind
 					secId,
 					rowId,
 					this._rows
 				)}
-				onRowPress={_ => this.onRowPress(`${secId}${rowId}`)} // eslint-disable-line react/jsx-no-bind
+				onRowPress={(_: null): void => this.onRowPress(`${secId}${rowId}`)} // eslint-disable-line react/jsx-no-bind
 				setScrollEnabled={this.setScrollEnabled}
 				leftOpenValue={this.props.leftOpenValue}
 				rightOpenValue={this.props.rightOpenValue}
@@ -292,7 +292,7 @@ class ListComponent extends React.Component {
 		);
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<ListView
 				removeClippedSubviews={false}

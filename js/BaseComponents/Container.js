@@ -27,7 +27,7 @@ import Base from './Base';
 
 export default class ContainerComponent extends Base {
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View {...this.props} />
 		);

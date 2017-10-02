@@ -54,7 +54,7 @@ export default class CheckboxSolid extends View<DefaultProps, Props, null> {
 		disabled: false,
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { disabled, onPress, style } = this.props;
 		const defaultStyle = this._getStyle();
 

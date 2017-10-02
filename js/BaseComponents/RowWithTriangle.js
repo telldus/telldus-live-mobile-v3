@@ -55,7 +55,7 @@ export default class RowWithTriangle extends View<DefaultProps, Props, null> {
 		triangleColor: Theme.Core.brandSecondary,
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { children, layout, containerStyle, style } = this.props;
 
 		const {

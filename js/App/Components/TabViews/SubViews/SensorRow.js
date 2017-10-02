@@ -74,7 +74,7 @@ const messages = defineMessages({
 	},
 });
 
-const SensorHumidity = ({ humidity }: Object): React$Element => (
+const SensorHumidity = ({ humidity }: Object): React$Element<any> => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image source={require('../img/sensorIcons/Humidity.png')}/>
 		<Text>
@@ -83,7 +83,7 @@ const SensorHumidity = ({ humidity }: Object): React$Element => (
 	</View>
 );
 
-const SensorTemperature = ({ temperature }: Object): React$Element => (
+const SensorTemperature = ({ temperature }: Object): React$Element<any> => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image source={require('../img/sensorIcons/Temperature.png')}/>
 		<Text>
@@ -93,7 +93,7 @@ const SensorTemperature = ({ temperature }: Object): React$Element => (
 	</View>
 );
 
-const SensorRain = ({ rainRate, rainTotal }: Object): React$Element => (
+const SensorRain = ({ rainRate, rainTotal }: Object): React$Element<any> => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image source={require('../img/sensorIcons/Rain.png')}/>
 		<Text>
@@ -103,11 +103,11 @@ const SensorRain = ({ rainRate, rainTotal }: Object): React$Element => (
 	</View>
 );
 
-const SensorWind = ({ windAverage, windGust, windDirection }: Object): React$Element => {
+const SensorWind = ({ windAverage, windGust, windDirection }: Object): React$Element<any> => {
 	const directions = [
 		'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 	];
-	const getWindDirection = (value: number): number => directions[Math.floor(value / 22.5)];
+	const getWindDirection = (value: number): string => directions[Math.floor(value / 22.5)];
 
 	return (
 		<View style={Theme.Styles.sensorValue}>
@@ -123,14 +123,14 @@ const SensorWind = ({ windAverage, windGust, windDirection }: Object): React$Ele
 	);
 };
 
-const SensorUV = ({ uv }: Object): React$Element => (
+const SensorUV = ({ uv }: Object): React$Element<any> => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image source={require('../img/sensorIcons/UV.png')}/>
 		<FormattedNumber value={uv} maximumFractionDigits={0}/>
 	</View>
 );
 
-const SensorWatt = ({ watt }: Object): React$Element => (
+const SensorWatt = ({ watt }: Object): React$Element<any> => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image source={require('../img/sensorIcons/Watt.png')}/>
 		<Text>
@@ -140,7 +140,7 @@ const SensorWatt = ({ watt }: Object): React$Element => (
 	</View>
 );
 
-const SensorLuminance = ({ luminance }: Object): React$Element => (
+const SensorLuminance = ({ luminance }: Object): React$Element<any> => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image source={require('../img/sensorIcons/Luminance.png')}/>
 		<Text>
@@ -166,7 +166,7 @@ class SensorRow extends Component {
 		this.onLayout = this.onLayout.bind(this);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { sensor } = this.props;
 		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
 		let sensors = [];

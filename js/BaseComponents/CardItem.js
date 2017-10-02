@@ -96,7 +96,7 @@ export default class CardItemComponent extends Base {
 		};
 	}
 
-	getRightStyle() {
+	getRightStyle(): Object {
 		return {
 			right: {
 				flex: 1,
@@ -121,9 +121,9 @@ export default class CardItemComponent extends Base {
 		};
 	}
 
-	thumbnailPresent() {
+	thumbnailPresent(): boolean {
 		let thumbnailComponentPresent = false;
-		React.Children.forEach(this.props.children, (child) => {
+		React.Children.forEach(this.props.children, (child: Object) => {
 			if (child.type === Thumbnail) {
 				thumbnailComponentPresent = true;
 			}
@@ -132,9 +132,9 @@ export default class CardItemComponent extends Base {
 		return thumbnailComponentPresent;
 	}
 
-	imagePresent() {
+	imagePresent(): boolean {
 		let imagePresent = false;
-		React.Children.forEach(this.props.children, (child) => {
+		React.Children.forEach(this.props.children, (child: Object) => {
 			if (child.type === Image) {
 				imagePresent = true;
 			}
@@ -143,9 +143,9 @@ export default class CardItemComponent extends Base {
 		return imagePresent;
 	}
 
-	iconPresent() {
+	iconPresent(): boolean {
 		let iconComponentPresent = false;
-		React.Children.forEach(this.props.children, (child) => {
+		React.Children.forEach(this.props.children, (child: Object) => {
 			if (child.type === Icon) {
 				iconComponentPresent = true;
 			}
@@ -154,9 +154,9 @@ export default class CardItemComponent extends Base {
 		return iconComponentPresent;
 	}
 
-	buttonPresent() {
+	buttonPresent(): boolean {
 		let buttonComponentPresent = false;
-		React.Children.forEach(this.props.children, (child) => {
+		React.Children.forEach(this.props.children, (child: Object) => {
 			if (child.type === Button) {
 				buttonComponentPresent = true;
 			}
@@ -165,7 +165,7 @@ export default class CardItemComponent extends Base {
 		return buttonComponentPresent;
 	}
 
-	ifShowCase() {
+	ifShowCase(): boolean {
 		let ifShowCase = false;
 
 		if (this.props.cardBody) {
@@ -175,10 +175,10 @@ export default class CardItemComponent extends Base {
 		return ifShowCase;
 	}
 
-	notePresent() {
+	notePresent(): boolean {
 		let notePresent = false;
 
-		React.Children.forEach(this.props.children, (child) => {
+		React.Children.forEach(this.props.children, (child: Object) => {
 			if (child.type === Text && child.props.note) {
 				notePresent = true;
 			}
@@ -187,10 +187,10 @@ export default class CardItemComponent extends Base {
 		return notePresent;
 	}
 
-	squareThumbs() {
+	squareThumbs(): boolean {
 		let squareThumbs = false;
 		if (this.thumbnailPresent()) {
-			React.Children.forEach(this.props.children, (child) => {
+			React.Children.forEach(this.props.children, (child: Object) => {
 				if (child.props.square) {
 					squareThumbs = true;
 				}
@@ -200,7 +200,7 @@ export default class CardItemComponent extends Base {
 		return squareThumbs;
 	}
 
-	getChildProps(child: Object) {
+	getChildProps(child: Object): Object {
 		let defaultProps = {};
 		if (child.type === Image && !Array.isArray(this.props.children)) {
 			defaultProps = {
@@ -251,7 +251,7 @@ export default class CardItemComponent extends Base {
 		return computeProps(child.props, defaultProps);
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 		let defaultProps = {};
 
 		if ((this.props.header) || (this.props.footer)) {
@@ -268,11 +268,11 @@ export default class CardItemComponent extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	renderChildren() {
+	renderChildren(): Array<Object> {
 		let newChildren = [];
 
 		if (!this.thumbnailPresent() && !this.iconPresent()) {
-			newChildren = React.Children.map(this.props.children, (child, i) => {
+			newChildren = React.Children.map(this.props.children, (child: Object, i: number): Object => {
 				return React.cloneElement(
 					child,
 					{
@@ -296,7 +296,7 @@ export default class CardItemComponent extends Base {
 				newChildren.push(
 					<View key="cardItem" style={this.notePresent() ? this.getRightStyle().right : this.squareThumbs()
 						? this.getRightStyle().right3 : this.getRightStyle().right2}>
-						{childrenArray.slice(1).map((child, i) => {
+						{childrenArray.slice(1).map((child: Object, i: number): Object => {
 							return React.cloneElement(
 								child,
 								{
@@ -313,7 +313,7 @@ export default class CardItemComponent extends Base {
 		return newChildren;
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View {...this.prepareRootProps()} >
 				{this.renderChildren()}

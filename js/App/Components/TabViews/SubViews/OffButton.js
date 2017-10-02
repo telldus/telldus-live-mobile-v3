@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 import { View, FormattedMessage } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
@@ -34,10 +34,19 @@ import i18n from '../../../Translations/common';
 type Props = {
 	requestDeviceAction: (id: number, command: number, value?: number) => void,
 	deviceSetState: (id: number, command: number) => void,
+	isInState: string,
+	enabled: boolean,
+	fontSize: number,
+	methodRequested: string,
+	command: number,
+	id: number,
+	style: Object,
 };
 
 class OffButton extends View {
 	props: Props;
+
+	onPress: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -50,7 +59,7 @@ class OffButton extends View {
 		this.props.deviceSetState(this.props.id, this.props.command);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		let { isInState, enabled, fontSize, methodRequested } = this.props;
 		return (
 			<View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>

@@ -26,16 +26,25 @@ import { View, FormattedMessage } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 import i18n from '../../../Translations/common';
 
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (id: number, command: number) => void,
+	isInState: string,
+	enabled: boolean,
+	fontSize: number,
+	methodRequested: string,
+	command: number,
+	id: number,
+	style: Object,
 };
 
 class OnButton extends View {
 	props: Props;
+
+	onPress: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -47,7 +56,7 @@ class OnButton extends View {
 		this.props.deviceSetState(this.props.id, this.props.command);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		let { isInState, enabled, fontSize, methodRequested } = this.props;
 
 		return (

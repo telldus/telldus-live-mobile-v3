@@ -55,7 +55,7 @@ export default class BlockIcon extends View<DefaultProps, Props, null> {
 		bgColor: Theme.Core.brandPrimary,
 	};
 
-	render() {
+	render(): React$Element<any> {
 		const { style, containerStyle, icon, size, color } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 

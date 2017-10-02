@@ -28,7 +28,7 @@ import { View, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 import Theme from 'Theme';
 
@@ -47,7 +47,7 @@ class DeviceRowHidden extends View {
 		this.onStarSelected = this.onStarSelected.bind(this);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { isInDashboard } = this.props.device;
 		return (
 			<View style={Theme.Styles.rowBack}>

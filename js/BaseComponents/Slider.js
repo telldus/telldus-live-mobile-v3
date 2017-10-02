@@ -98,8 +98,8 @@ export default class SliderComponent extends View<DefaultProps, Props, State> {
 		this.props.onValueChange(value);
 	};
 
-	render() {
-		const { showValue, valueStyle, ...sliderProps } = this.props;
+	render(): React$Element<any> {
+		const { showValue, ...sliderProps } = this.props;
 
 		const { container } = this._getMainStyles();
 

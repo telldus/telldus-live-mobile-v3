@@ -28,7 +28,7 @@ import { View, RoundedCornerShadowView } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
@@ -182,7 +182,7 @@ class DimmerButton extends View {
 		this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { device } = this.props;
 		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
 		const onButton = (

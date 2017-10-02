@@ -100,7 +100,7 @@ export default class JobRow extends View<null, Props, null> {
 		editJob(schedule);
 	};
 
-	render(): React$Element {
+	render(): React$Element<any> | null {
 		if (!this.props.device) {
 			return null;
 		}

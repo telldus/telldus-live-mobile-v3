@@ -34,7 +34,7 @@ type Props = {
 export default class SpinnerComponent extends Base {
 	props: Props;
 
-	prepareRootProps() {
+	prepareRootProps(): () => Object {
 
 		let type = {
 			height: 40,
@@ -48,7 +48,7 @@ export default class SpinnerComponent extends Base {
 
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<ProgressBar {...this.prepareRootProps()} styleAttr="Horizontal"
 			             indeterminate={false} progress={this.props.progress ? this.props.progress / 100 : 0.5}

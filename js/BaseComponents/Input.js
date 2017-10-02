@@ -46,7 +46,7 @@ export default class Input extends Base {
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 		let defaultProps = {
 			style: this.getInitialStyle().input,
 		};
@@ -54,7 +54,7 @@ export default class Input extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	render() {
+	render(): React$Element<any> {
 
 		return (
 			<View style={{ flex: 1 }}>

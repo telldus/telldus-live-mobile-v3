@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+// @flow
 'use strict';
 
 import React from 'react';
@@ -47,9 +47,14 @@ type State = {
 	current: string,
 };
 
-export default class PickerComponent extends Base {
+export default class PickerComponent extends Base<null, Props, State> {
 	props: Props;
 	state: State;
+
+	openModal: () => void;
+	closeModal: () => void;
+	setModalVisible: () => void;
+	renderRow: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -64,7 +69,7 @@ export default class PickerComponent extends Base {
 		this.renderRow = this.renderRow.bind(this);
 	}
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			picker: {
 				// alignItems: 'flex-end'
@@ -81,11 +86,11 @@ export default class PickerComponent extends Base {
 		this.setModalVisible(false);
 	}
 
-	setModalVisible(visible) {
+	setModalVisible(visible: boolean) {
 		this.setState({ modalVisible: visible });
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): () => Object {
 
 		let defaultProps = {
 			style: this.getInitialStyle().picker,
@@ -96,15 +101,15 @@ export default class PickerComponent extends Base {
 
 	}
 
-	getSelected() {
-		const selected = _.find(this.props.children, (o) => {
+	getSelected(): Object {
+		const selected = _.find(this.props.children, (o: Object): Object => {
 			return o.props.value === this.props.selectedValue;
 		});
 		console.log('title', );
 		return selected;
 	}
 
-	renderRow(child) {
+	renderRow(child: Object): React$Element<any> {
 		return (
 			<ListItem style={{ paddingVertical: 10 }}
 			          iconRight button
@@ -121,7 +126,7 @@ export default class PickerComponent extends Base {
 		);
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View>
 				<Button transparent onPress={this.openModal}>{this.state.current}</Button>
@@ -149,7 +154,7 @@ export default class PickerComponent extends Base {
 }
 
 PickerComponent.Item = React.createClass({
-	render: function () {
+	render: function (): React$Element<any> {
 		return (
 			<Picker.Item {...this.props()}/>
 		);

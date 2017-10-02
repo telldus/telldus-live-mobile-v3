@@ -109,7 +109,7 @@ class DimmerPopup extends Component {
 		this.contentRef[this.props.animationIn](this.props.animationInTiming);
 	}
 
-	close = async (): void => {
+	close = async (): Promise<any> => {
 		this.contentRef[this.props.animationOut](this.props.animationOutTiming).then(() => {
 			this.setState({ isVisible: false });
 		});
@@ -139,7 +139,7 @@ class DimmerPopup extends Component {
 		this.contentRef = ref;
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> | null {
 		const { deviceWidth } = this.state;
 
 		if (!this.state.isVisible) {

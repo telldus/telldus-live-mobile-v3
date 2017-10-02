@@ -47,7 +47,7 @@ class Gravatar extends React.Component {
 	props: Props;
 	static defaultProps: DefaultProps;
 
-	_calculateStyle() {
+	_calculateStyle(): Object {
 		const size = {
 			width: this.props.size,
 			height: this.props.size,
@@ -69,7 +69,7 @@ class Gravatar extends React.Component {
 		return { ...size, ...border };
 	}
 
-	render() {
+	render(): React$Element<any> {
 		const uri = `${GRAVATAR_URI + md5(this.props.emailAddress)}?d=mm&s=${this.props.size * 2}`;
 		const style = this._calculateStyle();
 		return (

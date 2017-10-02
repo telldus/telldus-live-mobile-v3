@@ -234,7 +234,7 @@ class SwipeRow extends Component {
 		}
 	}
 
-	handleOnMoveShouldSetPanResponder(e: Object, gs: Object) {
+	handleOnMoveShouldSetPanResponder(e: Object, gs: Object): boolean {
 		const { dx } = gs;
 		return Math.abs(dx) > DIRECTIONAL_DISTANCE_CHANGE_THRESHOLD;
 	}
@@ -333,7 +333,7 @@ class SwipeRow extends Component {
 		this.horizontalSwipeGestureBegan = false;
 	}
 
-	renderVisibleContent() {
+	renderVisibleContent(): React$Element<any> | null {
 		// handle touchables
 		if (this.props.children === null || this.props.children === undefined || this.props.children.length < 2) {
 			return null;
@@ -342,7 +342,7 @@ class SwipeRow extends Component {
 		const onPress = this.props.children[1].props.onPress;
 
 		if (onPress) {
-			const newOnPress = _ => {
+			const newOnPress = (_: null) => {
 				this.onRowPress();
 				onPress();
 			};
@@ -362,7 +362,7 @@ class SwipeRow extends Component {
 		);
 	}
 
-	renderRowContent() {
+	renderRowContent(): React$Element<any> {
 		const slideOpenValue = this.props.editMode ? this.props.leftOpenValue : 0;
 
 		return (
@@ -379,7 +379,7 @@ class SwipeRow extends Component {
 		);
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View style={this.props.style ? this.props.style : styles.container}>
 				<View style={[ styles.hidden, { height: this.state.hiddenHeight, width: this.state.hiddenWidth }]}>

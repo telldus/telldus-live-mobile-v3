@@ -33,7 +33,7 @@ type Props = {
 export default class Footer extends Base {
 	props: Props;
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			navbar: {
 				shadowColor: '#000',
@@ -52,7 +52,7 @@ export default class Footer extends Base {
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let defaultProps = {
 			style: this.getInitialStyle().navbar,
@@ -62,7 +62,7 @@ export default class Footer extends Base {
 
 	}
 
-	render() {
+	render(): React$Element<any> {
 
 		return (
 			<View {...this.prepareRootProps()}>
