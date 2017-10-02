@@ -255,9 +255,9 @@ class ListComponent extends React.Component {
 				{
 					...Component.props,
 					ref: (row: Object): Object => (this._rows[`${secId}${rowId}`] = row),
-					onRowOpen: (_: null): void => this.onRowOpen(secId, rowId, this._rows),
-					onRowClose: (_: null): void => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows),
-					onRowPress: (_: null): void => this.onRowPress(`${secId}${rowId}`),
+					onRowOpen: (_: void): void => this.onRowOpen(secId, rowId, this._rows),
+					onRowClose: (_: void): void => this.props.onRowClose && this.props.onRowClose(secId, rowId, this._rows),
+					onRowPress: (_: void): void => this.onRowPress(`${secId}${rowId}`),
 					setScrollEnabled: (enable: boolean): void => this.setScrollEnabled(enable),
 				}
 			);
@@ -266,13 +266,13 @@ class ListComponent extends React.Component {
 		return (
 			<SwipeRow
 				ref={(row: Object): Object => (this._rows[`${secId}${rowId}`] = row)} // eslint-disable-line react/jsx-no-bind
-				onRowOpen={(_: null): void => this.onRowOpen(secId, rowId, this._rows)} // eslint-disable-line react/jsx-no-bind
-				onRowClose={(_: null): void => this.props.onRowClose && this.props.onRowClose( // eslint-disable-line react/jsx-no-bind
+				onRowOpen={(_: void): void => this.onRowOpen(secId, rowId, this._rows)} // eslint-disable-line react/jsx-no-bind
+				onRowClose={(_: void): void => this.props.onRowClose && this.props.onRowClose( // eslint-disable-line react/jsx-no-bind
 					secId,
 					rowId,
 					this._rows
 				)}
-				onRowPress={(_: null): void => this.onRowPress(`${secId}${rowId}`)} // eslint-disable-line react/jsx-no-bind
+				onRowPress={(_: void): void => this.onRowPress(`${secId}${rowId}`)} // eslint-disable-line react/jsx-no-bind
 				setScrollEnabled={this.setScrollEnabled}
 				leftOpenValue={this.props.leftOpenValue}
 				rightOpenValue={this.props.rightOpenValue}

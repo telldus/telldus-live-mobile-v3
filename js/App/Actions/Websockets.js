@@ -55,7 +55,7 @@ export const authenticateSession : () => Function = ((): () => ThunkAction => {
 	let promise;
 	let resolving = false;
 
-	return (): ThunkAction => (dispatch: Dispatch, getState: GetState): Promise<any> => {
+	return (): ThunkAction => (dispatch: Dispatch, getState: GetState): any => {
 		const {
 			websockets: { session: { ttl, sessionId } },
 		} = getState();

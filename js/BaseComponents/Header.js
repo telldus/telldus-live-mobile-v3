@@ -138,7 +138,7 @@ export default class HeaderComponent extends Base {
 
 	}
 
-	renderChildren(): Array<React$Element<any>> | Children {
+	renderChildren(): any {
 		if (!this.props.children) {
 			return (
 				<Image
@@ -319,7 +319,7 @@ export default class HeaderComponent extends Base {
 		}
 	}
 
-	renderButtonContent = (button: Object): React$Element<any> => {
+	renderButtonContent = (button: Object): any => {
 		if (button.image) {
 			return <Image source={button.image}/>;
 		}
