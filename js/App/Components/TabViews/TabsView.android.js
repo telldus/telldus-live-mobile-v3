@@ -92,6 +92,13 @@ const SettingsButton = ({ onPress }) => (
 	</TouchableOpacity>
 );
 
+const GeofenceButton = ({ onPress }) => (
+	<TouchableOpacity onPress={onPress} style={styles.navigationTitle}>
+		<Image source={require('./img/tabIcons/gear.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
+		<Text style={styles.navigationTextTitle}>Settings</Text>
+	</TouchableOpacity>
+);
+
 const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
 	return (
 		<View style={{
@@ -108,6 +115,7 @@ const NavigationView = ({ gateways, userProfile, onOpenSetting }) => {
 					return (<Gateway {...gateways.byId[id]} key={index}/>);
 				})}
 				<SettingsButton onPress={onOpenSetting}/>
+				{/* <GeofenceButton onPress={this.props.navigation.navigate('Geofence')}/>				 */}
 			</View>
 		</View>
 	);

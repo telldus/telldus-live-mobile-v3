@@ -143,7 +143,6 @@ class EditFenceArrivingView extends View {
     }
 
     render() {
-        // alert(JSON.stringify(this.props.devices));
         return (
             <View>
                 <Header

@@ -45,7 +45,6 @@ class AddFenceTitleView extends View {
     }
 
     componentDidMount() {
-        alert(JSON.stringify(this.props.fences.fence));
     }
 
     onChangeText(text) {

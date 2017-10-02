@@ -49,7 +49,7 @@ export function getEvents(): ThunkAction {
 export function activateEvent(eventId, isActive) {
 	return (dispatch, getState) => {
 		const payload = {
-			url: `/event/setEvent?id=${eventId}&active=${isActive}`,
+			url: `/event/setEvent?id=${eventId}&active=${isActive}&description=dummy`,
 			requestParams: {
 				method: 'GET'
 			}

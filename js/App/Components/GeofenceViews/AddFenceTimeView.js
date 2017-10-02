@@ -49,7 +49,6 @@ class AddFenceTimeView extends View {
     }
 
     componentDidMount() {
-        alert(JSON.stringify(this.props.fence));
     }
 
     onBack() {

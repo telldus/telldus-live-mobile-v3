@@ -162,7 +162,7 @@ class AppNavigator extends View {
 			PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
 			.then((granted) => {
 				console.log('location permission granted: ', granted);
-				if(granted === PermissionsAndroid.RESULTS.GRANTED) {
+				if(granted === PermissionsAndroid.RESULTS.GRANTED || granted === true) {
 					LocationServicesDialogBox.checkLocationServicesIsEnabled({
 						message: "<h2>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
 						ok: "YES",
@@ -170,7 +170,7 @@ class AppNavigator extends View {
 						enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => ONLY GPS PROVIDER
 						showDialog: true // false => Opens the Location access page directly
 					}).then(function(success) {
-						console.log(success); // success => {alreadyEnabled: false, enabled: true, status: "enabled"}
+						console.log('location service dialog box result: ', success); // success => {alreadyEnabled: false, enabled: true, status: "enabled"}
 						navigator.geolocation.watchPosition((location) => {
 							const locationMe = {
 								latitude: location.coords.latitude,
@@ -189,6 +189,9 @@ class AppNavigator extends View {
 	}
 
 	_checkFenceStates(locationMe) {
+
+		console.log('---check fence states---');
+
 		var _this = this;
 		var fences = this.props.fences.fences;
 		var oldLocation = this.props.fences.location;
@@ -276,11 +279,13 @@ class AppNavigator extends View {
 
 		for(var eventId in events) {
 			var eventAction = events[eventId];
-			this.props.activateEvent(eventId, eventAction.actions ? 1 : 0);
+			console.log(`event ${eventId} set status ${eventAction.active}`);
+			this.props.activateEvent(eventId, eventAction.active ? 1 : 0);
 		}
-
+	
 		for(var jobId in schedules) {
 			var jobAction = schedules[jobId];
+			console.log(`job ${jobId} set status ${jobAction.active}`);		
 			this.props.activateJob(jobId, jobAction.active ? 1 : 0);
 		}
 	}

@@ -94,9 +94,7 @@ class MainMapView extends View {
 
     render() {
         
-        // alert(JSON.stringify(this.props.fences));
         const {devices, events, jobs} = this.props;
-        // console.log(devices, events, jobs);
         return (
             <View>
                 <Header />
