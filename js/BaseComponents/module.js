@@ -34,7 +34,6 @@ import FormattedDate from './FormattedDate';
 import FormattedNumber from './FormattedNumber';
 import FormattedTime from './FormattedTime';
 import Switch from './Switch';
-import Picker from './Picker';
 import List from './List';
 import ListItem from './ListItem';
 import CardItem from './CardItem';
@@ -96,7 +95,6 @@ module.exports = {
 	FormattedTime: FormattedTime,
 	Text: Text,
 	Switch: Switch,
-	Picker: Picker,
 	List: List,
 	ListItem: ListItem,
 	CardItem: CardItem,
