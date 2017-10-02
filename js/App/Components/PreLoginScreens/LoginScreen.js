@@ -31,7 +31,7 @@ import { FormattedMessage, TouchableButton, Text, View, Modal } from 'BaseCompon
 import {NotificationComponent, FormContainerComponent} from 'PreLoginScreen_SubViews';
 import { loginToTelldus } from 'Actions';
 import { testUsername, testPassword } from 'Config';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
@@ -114,7 +114,7 @@ class LoginScreen extends View {
 		return true;
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.login)}>
 				<View style={Theme.Styles.textFieldCover}>

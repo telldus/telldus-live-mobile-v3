@@ -30,7 +30,7 @@ import { StyleSheet } from 'react-native';
 import { FormattedMessage, View, Text, TouchableButton } from 'BaseComponents';
 import {FormContainerComponent} from 'PreLoginScreen_SubViews';
 
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 const messages = defineMessages({
 	welcomeHeader: {
@@ -73,7 +73,7 @@ class WelcomeScreen extends View {
 		this.props.onPressOK(this.props.registeredCredential);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.welcomeHeader)}>
 				<Text style={styles.textBody}><FormattedMessage {...messages.accountCreated} style={styles.textBody}/></Text>
@@ -111,7 +111,7 @@ function mapStateToProps(store: Object): Object {
 
 function mapDispatchToProps(dispatch: Dispatch): Object {
 	return {
-		onPressOK: (accessToken: string) => {
+		onPressOK: (accessToken: Object) => {
 			dispatch({
 				type: 'RECEIVED_ACCESS_TOKEN',
 				accessToken,

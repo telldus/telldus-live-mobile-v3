@@ -46,7 +46,7 @@ export default class NotificationComponent extends View {
 		this.props.onPress();
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
 			<View>
 				<View style={styles.notificationModalHeader}>

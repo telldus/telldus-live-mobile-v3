@@ -32,7 +32,7 @@ import { FormattedMessage, View, Text, TouchableButton, Modal } from 'BaseCompon
 import {FormContainerComponent, NotificationComponent} from 'PreLoginScreen_SubViews';
 
 import {RegisterUser} from 'Actions_User';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 import i18n from './../../Translations/common';
 
@@ -213,7 +213,7 @@ class RegisterScreen extends View {
 		return true;
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)}>
 				<View style={Theme.Styles.textFieldCover}>

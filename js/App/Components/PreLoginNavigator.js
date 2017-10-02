@@ -120,7 +120,7 @@ class PreLoginNavigator extends View {
 		});
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		let screenProps = {currentScreen: this.state.currentScreen};
 		return (
 			<Navigator
