@@ -26,9 +26,9 @@
 import { View } from 'BaseComponents';
 
 class DeviceDetailsTabsView extends View {
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
-			null
+			<View />
 		);
 	}
 }

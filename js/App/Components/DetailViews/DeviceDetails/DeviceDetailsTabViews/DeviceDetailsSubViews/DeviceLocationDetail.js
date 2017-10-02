@@ -57,7 +57,7 @@ class DeviceLocationDetail extends View {
 		};
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		return (
 			<View style={[styles.shadow, styles.homeSweetHomeContainer]}>
 				<View style={styles.locationImageContainer}>

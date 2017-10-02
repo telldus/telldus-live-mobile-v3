@@ -27,7 +27,8 @@ import { defineMessages } from 'react-intl';
 
 import { FormattedMessage, Container, Text, View, Icon, TouchableButton } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
-import { logoutFromTelldus, Dispatch } from 'Actions';
+import { logoutFromTelldus } from 'Actions';
+import type { Dispatch } from 'Actions_Types';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 
@@ -81,7 +82,7 @@ type Props = {
 	onClose: () => void,
 	onLogout: (string, (string) => void) => void,
 	onSubmitPushToken: (string, (string) => void) => void,
-	store: object,
+	store: Object,
 };
 
 

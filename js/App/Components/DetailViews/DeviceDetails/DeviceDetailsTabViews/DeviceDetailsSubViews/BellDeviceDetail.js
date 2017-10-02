@@ -44,7 +44,7 @@ class BellDeviceDetailModal extends View {
 	onBell() {
 		this.props.onBell(this.props.device.id);
 	}
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { device } = this.props;
 		const { BELL } = device.supportedMethods;
 		let bellButton = null;

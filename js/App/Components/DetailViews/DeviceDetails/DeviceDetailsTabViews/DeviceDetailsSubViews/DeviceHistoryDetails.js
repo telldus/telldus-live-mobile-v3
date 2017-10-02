@@ -66,10 +66,12 @@ const messages = defineMessages({
 });
 
 type Props = {
+	detailsData: Object,
+	showDetails: boolean,
 };
 
 class DeviceHistoryDetails extends View {
-	props = Props;
+	props: Props;
 
 	constructor(props: Props) {
 		super(props);
@@ -79,7 +81,7 @@ class DeviceHistoryDetails extends View {
 		return Math.round(value * 100.0 / 255);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		let textState = '', textDate = '', textStatus = '';
 		let originText = '';
 		let origin = this.props.detailsData.origin;

@@ -29,7 +29,7 @@ import { StyleSheet, Dimensions, Switch } from 'react-native';
 import { defineMessages } from 'react-intl';
 import i18n from '../../../../Translations/common';
 
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from './../../../TabViews/img/selection.json';
 const Icon = createIconSetFromIcoMoon(icon_settings);
@@ -72,8 +72,8 @@ class SettingsTab extends View {
 	}
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): React$Element => (<FormattedMessage {...i18n.settingsHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }: Object): React$Element => (
+		tabBarLabel: ({ tintColor }: Object): React$Element<FormattedMessage> => (<FormattedMessage {...i18n.settingsHeader} style={{color: tintColor}}/>),
+		tabBarIcon: ({ tintColor }: Object): React$Element<Icon> => (
 			<Icon name="icon_settings" size={24} color={tintColor}/>
 		),
 		tabBarOnPress: (scene: Object, jumpToIndex: number) => {
@@ -95,7 +95,7 @@ class SettingsTab extends View {
 		return true;
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const device = this.props.device;
 		const { LEARN } = device.supportedMethods;
 

@@ -32,7 +32,7 @@ const CustomIcon = createIconSetFromIcoMoon(icon_history);
 import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DeviceDetailsSubView';
 import { getDeviceHistory } from 'Actions_Devices';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 import { defineMessages } from 'react-intl';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -90,8 +90,8 @@ class HistoryTab extends View {
 	}
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): React$Element => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }: Object): React$Element => (
+		tabBarLabel: ({ tintColor }: Object): React$Element<any> => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
+		tabBarIcon: ({ tintColor }: Object): React$Element<any> => (
 			<CustomIcon name="icon_history" size={24} color={tintColor}/>
 		),
 		tabBarOnPress: (scene: Object, jumpToIndex: number) => {
@@ -127,7 +127,7 @@ class HistoryTab extends View {
 	}
 
 	// prepares the row and section data required for the List.
-	getRowAndSectionData(data: Array): Object {
+	getRowAndSectionData(data: Array<Object>): Object {
 		let rowSectionData = data.reduce((result: Object, key: Object): Object => {
 			let date = new Date(key.ts * 1000).toDateString();
 			if (!result[date]) {
@@ -159,13 +159,13 @@ class HistoryTab extends View {
 
 	}
 
-	renderRow(item: Object, id: number): React$Element {
+	renderRow(item: Object, id: number): React$Element<any> {
 		return (
 			<HistoryRow id={id} item={item}/>
 		);
 	}
 
-	renderSectionHeader(sectionData: Object, timestamp: string): React$Element {
+	renderSectionHeader(sectionData: Object, timestamp: string): React$Element<any> {
 		return (
 			<View style={styles.sectionHeader}>
 				<FormattedDate
@@ -180,7 +180,7 @@ class HistoryTab extends View {
 		);
 	}
 
-	renderFillerComponent(): React$Element {
+	renderFillerComponent(): React$Element<any> {
 		return (
 			<View style={styles.fillerComponent}>
 				<View style={styles.fillerViewToAlign}>
@@ -201,7 +201,7 @@ class HistoryTab extends View {
 		return true;
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		// Loader message when data has not received yet.
 		if (!this.state.dataSource) {
 			return (

@@ -33,7 +33,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_home from './../../../TabViews/img/selection.json';
 const Icon = createIconSetFromIcoMoon(icon_home);
 
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 import getDeviceType from '../../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
 import {
@@ -70,15 +70,15 @@ class OverviewTab extends View {
 	}
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): React$Element => (<FormattedMessage {...messages.overviewHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }: Object): React$Element => (
+		tabBarLabel: ({ tintColor }: Object): React$Element<any> => (<FormattedMessage {...messages.overviewHeader} style={{color: tintColor}}/>),
+		tabBarIcon: ({ tintColor }: Object): React$Element<any> => (
 			<Icon name="icon_home" size={24} color={tintColor}/>
 		),
 		tabBarOnPress: (scene: Object, jumpToIndex: number) => {
 		},
 	});
 
-	getType(deviceId: number): () => string {
+	getType(deviceId: number): mixed {
 		const filteredItem = this.props.devices.byId[deviceId];
 		if (!filteredItem) {
 			return null;
@@ -95,7 +95,7 @@ class OverviewTab extends View {
 		return true;
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		let deviceId = this.props.device.id;
 		let deviceDetail = null;
 		let device = this.props.device;

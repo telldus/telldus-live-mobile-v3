@@ -28,7 +28,7 @@ import Slider from 'react-native-slider';
 
 const deviceHeight = Dimensions.get('window').height;
 
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 import { setDimmerValue, saveDimmerInitialState } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import { FormattedMessage, RoundedCornerShadowView, Text, View } from 'BaseComponents';
@@ -57,7 +57,7 @@ function toDimmerValue(sliderValue: number): number {
 	return Math.round(sliderValue * 255 / 100.0);
 }
 
-const ToggleButton = ({ device }: Object): React$Element => (
+const ToggleButton = ({ device }: Object): React$Element<any> => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
 		<OffButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} />
 		<OnButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} />
@@ -136,7 +136,7 @@ class DimmerDeviceDetailModal extends View {
 		this.setState({ request: 'none' });
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { device } = this.props;
 		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
 

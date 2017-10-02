@@ -29,7 +29,7 @@ import { OnButton, OffButton } from 'TabViews_SubViews';
 
 const deviceHeight = Dimensions.get('window').height;
 
-const ToggleButton = ({ device }: Object): React$Element => {
+const ToggleButton = ({ device }: Object): React$Element<any> => {
 	return (
 		<RoundedCornerShadowView style={styles.toggleContainer}>
 			<OffButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} />
@@ -49,7 +49,7 @@ class ToggleDeviceDetailModal extends View {
 		super(props);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		const { device } = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		let toggleButton = null;

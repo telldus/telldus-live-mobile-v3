@@ -31,7 +31,7 @@ const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
 import { FormattedMessage, Text, View, Icon, FormattedTime } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 import i18n from '../../../../../Translations/common';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -88,7 +88,7 @@ class HistoryRow extends View {
 		return Math.round(value * 100.0 / 255);
 	}
 
-	render(): React$Element {
+	render(): React$Element<any> {
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
 		let icon = this.getIcon(deviceState);

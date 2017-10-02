@@ -29,7 +29,7 @@ import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import { getStore } from '../../../../Store/ConfigureStore';
-import { Dispatch } from 'Actions_Types';
+import type { Dispatch } from 'Actions_Types';
 
 import { Text, View, Image } from 'BaseComponents';
 
