@@ -50,12 +50,12 @@ const websocketConnections = {};
  * `authenticateSession` returns a promise. It resolves to the authenticated sessionId, which is also
  * stored in the redux state.
  */
-export const authenticateSession : () => ThunkAction = ((): Promise<any> => {
+export const authenticateSession : () => Function = ((): () => ThunkAction => {
 	// immediately executing function to create closure for promise management
 	let promise;
 	let resolving = false;
 
-	return (): Promise<any> => (dispatch: Dispatch, getState: GetState): Promise<any> => {
+	return (): ThunkAction => (dispatch: Dispatch, getState: GetState): Promise<any> => {
 		const {
 			websockets: { session: { ttl, sessionId } },
 		} = getState();
@@ -84,13 +84,15 @@ export const authenticateSession : () => ThunkAction = ((): Promise<any> => {
 		resolving = true;
 		promise = LiveApi(payload);
 		return promise
-			.then((response: Object): Dispatch => dispatch({
-				type: 'SESSION_ID_AUTHENTICATED',
-				payload: {
-					sessionId: newSessionId,
-					ttl: response.ttl,
-				},
-			}))
+			.then((response: Object) => {
+				dispatch({
+					type: 'SESSION_ID_AUTHENTICATED',
+					payload: {
+						sessionId: newSessionId,
+						ttl: response.ttl,
+					},
+				});
+			})
 			.then((): any => {
 				resolving = false;
 				return newSessionId;
@@ -107,7 +109,7 @@ export const connectToGateways = (): any => (dispatch: Dispatch, getState: GetSt
 		gateways: { allIds, byId },
 	} = getState();
 
-	allIds.forEach((gatewayId: number): any => {
+	allIds.forEach((gatewayId: string): any => {
 		const { websocketAddress } = byId[gatewayId] || {};
 		const { address, port } = websocketAddress || {};
 		if (!address || !port) {
@@ -130,7 +132,7 @@ export const connectToGateways = (): any => (dispatch: Dispatch, getState: GetSt
  * or different than the one we are connected to, it updates the state and creates
  * a new socket connection.
  */
-export const getWebsocketAddress = (gatewayId: string): Promise<any> => (dispatch: Dispatch, getState: GetState): Promise<any> => {
+export const getWebsocketAddress = (gatewayId: string): ThunkAction => (dispatch: Dispatch, getState: GetState): Promise<any> => {
 	const payload = {
 		url: `/client/serverAddress?id=${gatewayId}`,
 		requestParams: {
@@ -181,7 +183,7 @@ export const destroyAllConnections = () => {
 	Object.keys(websocketConnections).forEach(destroyConnection);
 };
 
-const destroyConnection = (gatewayId: number) => {
+const destroyConnection = (gatewayId: string) => {
 	const websocketConnection = websocketConnections[gatewayId];
 	if (!websocketConnection) {
 		return;
@@ -371,7 +373,6 @@ const setupGatewayConnection = (gatewayId: string, address: string, port: string
 			let {gateways} = getState();
 			let gateway = gateways ? gateways.byId[gatewayId] : false;
 			if (gateway && gateway.websocketOnline) {
-				// $FlowFixMe
 				websocket.send(message);
 			}
 		} catch (e) {

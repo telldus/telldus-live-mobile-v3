@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { ThunkAction, Action } from './Types';
+import type { ThunkAction, Action, Dispatch } from './Types';
 
 import LiveApi from 'LiveApi';
 
@@ -35,13 +35,16 @@ function getSensors(): ThunkAction {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then((response: Object): Dispatch => dispatch({
-			type: 'RECEIVED_SENSORS',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
+		return LiveApi(payload).then((response: Object) => {
+			dispatch({
+				type: 'RECEIVED_SENSORS',
+				payload: {
+					...payload,
+					...response,
+				},
+			});
+		}
+		);
 	};
 }
 

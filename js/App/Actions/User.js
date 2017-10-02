@@ -23,7 +23,7 @@
 
 'use strict';
 
-import type { ThunkAction } from './types';
+import type { ThunkAction, Dispatch } from './Types';
 
 import LiveApi from 'LiveApi';
 import { publicKey, privateKey, apiServer } from 'Config';
@@ -79,7 +79,7 @@ export const registerPushToken = (token: string, name: string, model: string, ma
 /*
  * unregisters the app at the telldus server from receiving push notification, with the registered push token.
  */
-export const unregisterPushToken = (token: string): ThunkAction => (dispatch: Dispatch): Prmise<any> => {
+export const unregisterPushToken = (token: string): ThunkAction => (dispatch: Dispatch): Promise<any> => {
 	const url = format({
 		pathname: '/user/unregisterPushToken',
 		query: {
@@ -130,7 +130,7 @@ export const RegisterUser = (email: string, firstName: string, lastName: string)
 			body: formData,
 		}
 	)
-		.then((response: string): Object => response.json())
+		.then((response: Object): Object => response.json())
 		.then((responseData: Object) => {
 			if (responseData.error) {
 				throw responseData;
