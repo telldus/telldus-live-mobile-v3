@@ -22,7 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import View from './View';
+import Text from './Text';
 import IconTelldus from './IconTelldus';
 import Theme from 'Theme';
 

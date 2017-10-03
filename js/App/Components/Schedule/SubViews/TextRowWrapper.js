@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'react-native';
+import { View } from 'BaseComponents';
 import { getDeviceWidth } from 'Lib';
 
 type Props = {

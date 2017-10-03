@@ -27,8 +27,9 @@ import React, {
 import {
 	Animated,
 	StyleSheet,
-	View,
 } from 'react-native';
+
+import View from './View';
 
 type Props = {
 	/**

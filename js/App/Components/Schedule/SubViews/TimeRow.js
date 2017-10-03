@@ -22,8 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import { BlockIcon, IconTelldus, Row } from 'BaseComponents';
+import { ActivityIndicator } from 'react-native';
+import { BlockIcon, IconTelldus, Row, View } from 'BaseComponents';
 import Description from './Description';
 import Theme from 'Theme';
 import { capitalize, getDeviceWidth, getSuntime } from 'Lib';

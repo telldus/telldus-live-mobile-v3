@@ -22,7 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Dimensions, Image, View } from 'react-native';
+import { Dimensions, Image } from 'react-native';
+import View from './View';
 
 type Props = {
 	children?: any,
@@ -33,16 +34,21 @@ type DefaultProps = {
 	source: number,
 };
 
-export default class Poster extends View<DefaultProps, Props, null> {
+export default class Poster extends View {
+	props: Props;
 
 	static propTypes = {
 		children: PropTypes.any,
 		source: PropTypes.number,
 	};
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		source: require('./img/telldus-geometric-header-bg.png'),
 	};
+
+	constructor(props: Props) {
+		super(props);
+	}
 
 	render(): React$Element<any> {
 		const { children, source } = this.props;
@@ -63,7 +69,7 @@ export default class Poster extends View<DefaultProps, Props, null> {
 			image: {
 				flex: 1,
 				height: undefined,
-				width: undefined,
+				width: deviceWidth,
 				resizeMode: 'cover',
 			},
 			mask: {

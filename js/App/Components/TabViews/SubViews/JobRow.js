@@ -22,8 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { BlockIcon, IconTelldus, ListRow } from 'BaseComponents';
+import { TouchableOpacity } from 'react-native';
+import { BlockIcon, IconTelldus, ListRow, View, Text } from 'BaseComponents';
 import Theme from 'Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from 'Schedule_SubViews';
 import { capitalize, getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from 'Lib';

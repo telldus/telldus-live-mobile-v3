@@ -22,7 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import View from './View';
 import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 

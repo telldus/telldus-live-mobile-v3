@@ -22,11 +22,10 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { View } from 'react-native';
 import { ScheduleProps } from './ScheduleScreen';
 import { CheckButton, DaysRow, Description } from 'Schedule_SubViews';
 import { getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from 'Lib';
-import { CheckboxSolid, FloatingButton, Row } from 'BaseComponents';
+import { CheckboxSolid, FloatingButton, Row, View } from 'BaseComponents';
 import _ from 'lodash';
 import { DAYS } from 'Constants';
 

@@ -22,7 +22,8 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { Switch, Text, View } from 'react-native';
+import { Switch } from 'react-native';
+import {Text, View} from 'BaseComponents';
 import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
