@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Image, Platform, TouchableOpacity } from 'react-native';
 import View from './View';
 import Theme from 'Theme';
@@ -41,7 +41,8 @@ type Props = {
 	paddingRight: number,
 };
 
-export default class FloatingButton extends View<DefaultProps, Props, null> {
+export default class FloatingButton extends Component {
+	props: Props;
 
 	static propTypes = {
 		onPress: PropTypes.func.isRequired,
@@ -51,7 +52,7 @@ export default class FloatingButton extends View<DefaultProps, Props, null> {
 		paddingRight: PropTypes.number,
 	};
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		tabs: false,
 		iconSize: getDeviceWidth() * 0.056,
 		paddingRight: 0,

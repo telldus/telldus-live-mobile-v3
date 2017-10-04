@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Image } from 'react-native';
 import View from './View';
 import Row from './Row';
@@ -29,9 +29,9 @@ import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
 type Props = {
-	children: any,
+	children?: any,
 	layout: 'row' | 'column',
-	containerStyle: Object,
+	containerStyle: any,
 	style: Object,
 	triangleColor: string,
 };
@@ -41,17 +41,10 @@ type DefaultProps = {
 	triangleColor: string,
 };
 
-export default class RowWithTriangle extends View<DefaultProps, Props, null> {
+export default class RowWithTriangle extends Component {
+	props: Props;
 
-	static propTypes = {
-		children: PropTypes.node.isRequired,
-		layout: PropTypes.oneOf(['row', 'column']),
-		containerStyle: View.propTypes.style,
-		style: View.propTypes.style,
-		triangleColor: PropTypes.string,
-	};
-
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		layout: 'row',
 		triangleColor: Theme.Core.brandSecondary,
 	};

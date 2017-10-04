@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Dimensions, Image } from 'react-native';
 import View from './View';
 
@@ -34,7 +34,7 @@ type DefaultProps = {
 	source: number,
 };
 
-export default class Poster extends View {
+export default class Poster extends Component {
 	props: Props;
 
 	static propTypes = {

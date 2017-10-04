@@ -21,8 +21,7 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import View from './View';
+import React, { PropTypes, Component } from 'react';
 import Text from './Text';
 import Theme from 'Theme';
 import { getDeviceWidth } from 'Lib';
@@ -39,16 +38,17 @@ type Props = {
 	style?: Object,
 };
 
-export default class IconTelldus extends View<DefaultProps, Props, null> {
+export default class IconTelldus extends Component {
+	props: Props;
 
 	static propTypes = {
 		icon: PropTypes.string.isRequired,
 		size: PropTypes.number,
 		color: PropTypes.string,
-		style: Text.propTypes.style,
+		style: PropTypes.object,
 	};
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		color: '#999',
 		size: getDeviceWidth() * 0.04,
 	};

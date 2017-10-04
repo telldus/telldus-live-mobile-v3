@@ -21,47 +21,47 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { TouchableOpacity } from 'react-native';
 import View from './View';
 import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
 type DefaultProps = {
-	layout: 'column',
 };
 
 type Props = {
-	children: any,
+	children?: any,
 	row?: Object,
-	onPress?: (row: Object) => void,
+	onPress?: (row?: Object) => void,
 	layout?: 'row' | 'column',
-	style?: Object,
-	containerStyle?: Object,
+	style?: any,
+	containerStyle?: any,
 };
 
-export default class Row extends View<DefaultProps, Props, null> {
+export default class Row extends Component {
+	props: Props;
 
 	static propTypes = {
-		children: PropTypes.node.isRequired,
+		children: PropTypes.node,
 		row: PropTypes.object,
 		onPress: PropTypes.func,
 		layout: PropTypes.oneOf(['row', 'column']),
-		style: View.propTypes.style,
-		containerStyle: View.propTypes.style,
+		style: PropTypes.object,
+		containerStyle: PropTypes.any,
 	};
 
-	static defaultProps = {
-		layout: 'column',
+	static defaultProps: DefaultProps = {
 	};
 
 	onPress = () => {
 		const { row, onPress } = this.props;
-
-		if (row) {
-			onPress(row);
-		} else {
-			onPress();
+		if (onPress) {
+			if (row) {
+				onPress(row);
+			} else {
+				onPress();
+			}
 		}
 	};
 

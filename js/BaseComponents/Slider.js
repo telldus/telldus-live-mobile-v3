@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { StyleSheet } from 'react-native';
 import View from './View';
 import Text from './Text';
@@ -58,7 +58,9 @@ type State = {
 	value: number,
 };
 
-export default class SliderComponent extends View<DefaultProps, Props, State> {
+export default class SliderComponent extends Component {
+	props: Props;
+	state: State;
 
 	static propTypes = {
 		minimumValue: PropTypes.number.isRequired,
@@ -68,13 +70,13 @@ export default class SliderComponent extends View<DefaultProps, Props, State> {
 		minimumTrackTintColor: PropTypes.string,
 		maximumTrackTintColor: PropTypes.string,
 		step: PropTypes.number,
-		trackStyle: View.propTypes.style,
-		thumbStyle: View.propTypes.style,
+		trackStyle: PropTypes.object,
+		thumbStyle: PropTypes.object,
 		showValue: PropTypes.bool,
-		valueStyle: Text.propTypes.style,
+		valueStyle: PropTypes.object,
 	};
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		minimumTrackTintColor: Theme.Core.brandSecondary,
 		maximumTrackTintColor: Theme.Core.inactiveGray,
 		trackStyle: {},

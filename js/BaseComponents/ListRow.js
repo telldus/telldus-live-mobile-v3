@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import View from './View';
 import Text from './Text';
 import BlockIcon from './BlockIcon';
@@ -46,22 +46,23 @@ type DefaultProps = {
 	isFirst: boolean,
 };
 
-export default class ListRow extends View<DefaultProps, Props, null> {
+export default class ListRow extends Component {
+	props: Props;
 
 	static propTypes = {
 		children: PropTypes.node.isRequired,
 		roundIcon: PropTypes.string,
-		roundIconContainerStyle: View.propTypes.style,
+		roundIconContainerStyle: PropTypes.object,
 		time: PropTypes.string,
-		timeStyle: View.propTypes.style,
-		containerStyle: View.propTypes.style,
-		rowContainerStyle: View.propTypes.style,
-		rowStyle: View.propTypes.style,
+		timeStyle: PropTypes.object,
+		containerStyle: PropTypes.object,
+		rowContainerStyle: PropTypes.object,
+		rowStyle: PropTypes.object,
 		isFirst: PropTypes.bool,
 		triangleColor: PropTypes.string,
 	};
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		isFirst: false,
 	};
 
@@ -93,7 +94,7 @@ export default class ListRow extends View<DefaultProps, Props, null> {
 					</Text>
 				)}
 				<RowWithTriangle
-					layout="row"
+					layout={'row'}
 					triangleColor={triangleColor}
 					containerStyle={rowContainerStyle}
 					style={rowStyle}

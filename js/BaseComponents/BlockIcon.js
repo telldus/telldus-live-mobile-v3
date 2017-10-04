@@ -21,9 +21,8 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import View from './View';
-import Text from './Text';
 import IconTelldus from './IconTelldus';
 import Theme from 'Theme';
 
@@ -38,20 +37,22 @@ type Props = {
 	color?: string,
 	bgColor?: string,
 	style?: Object,
+	containerStyle?: any,
 };
 
-export default class BlockIcon extends View<DefaultProps, Props, null> {
+export default class BlockIcon extends Component {
+	props: Props;
 
 	static propTypes = {
 		icon: PropTypes.string.isRequired,
 		size: PropTypes.number,
 		color: PropTypes.string,
 		bgColor: PropTypes.string,
-		style: Text.propTypes.style,
-		containerStyle: View.propTypes.style,
+		style: PropTypes.object,
+		containerStyle: PropTypes.any,
 	};
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		color: '#fff',
 		bgColor: Theme.Core.brandPrimary,
 	};
