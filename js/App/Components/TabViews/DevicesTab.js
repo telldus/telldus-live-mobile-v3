@@ -115,6 +115,10 @@ class DevicesTab extends View {
 		}
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.tab === 'devicesTab';
+	}
+
 	rowHasChanged(r1: Object, r2: Object): boolean {
 		if (r1 === r2) {
 			return false;

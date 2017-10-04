@@ -111,6 +111,10 @@ class SchedulerTab extends View<null, Props, State> {
 		this.setState({ daysToRender });
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.tab === 'schedulerTab';
+	}
+
 	componentDidUpdate() {
 		const { loading, daysToRender } = this.state;
 
@@ -303,12 +307,14 @@ const getRowsAndSections = createSelector(
 type MapStateToPropsType = {
 	rowsAndSections: Object[],
 	devices: Object,
+	tab: string,
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		devices: store.devices,
+		tab: store.navigation.tab,
 	};
 };
 

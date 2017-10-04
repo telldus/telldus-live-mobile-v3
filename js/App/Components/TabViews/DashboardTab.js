@@ -188,6 +188,10 @@ class DashboardTab extends View {
 		}
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.tab === 'dashboardTab';
+	}
+
 	_onLayout = (event: Object) => {
 		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width);
 		if (tileWidth !== this.state.tileWidth) {
