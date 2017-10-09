@@ -28,6 +28,7 @@ import { createSelector } from 'reselect';
 
 export type State = {
 	accessToken: any,
+	isTokenValid: boolean,
 	userProfile: any,
 	pushToken: any,
 	pushTokenRegistered: any,
@@ -36,6 +37,7 @@ export type State = {
 
 const initialState = {
 	accessToken: false,
+	isTokenValid: false,
 	userProfile: false,
 	pushToken: false,
 	pushTokenRegistered: false,
@@ -51,6 +53,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			accessToken: accessToken,
+			isTokenValid: true,
 		};
 	}
 	if (action.type === 'RECEIVED_PUSH_TOKEN') {
@@ -76,6 +79,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 	if (action.type === 'LOGGED_OUT') {
 		return {
 			...initialState,
+		};
+	}
+	if (action.type === 'LOCK_SESSION') {
+		return {
+			...state,
+			isTokenValid: false,
 		};
 	}
 	if (action.type === 'ERROR') {

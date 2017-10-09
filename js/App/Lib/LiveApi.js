@@ -40,7 +40,7 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
+export function LiveApi({ url, requestParams }: {url:string, requestParams:Object}) {
 	return new Promise((resolve, reject) => {
 		return doApiCall(url, requestParams).then(response => {
 			if (!response) {
@@ -54,14 +54,13 @@ export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
 				const store = getStore();
 				const { dispatch } = store;
 				return dispatch({
-					type: 'LOGGED_OUT',
-					payload: error,
+					type: 'LOCK_SESSION',
 				});
 			}
 			reject(error);
 		});
 	});
-};
+}
 
 async function doApiCall(url, requestParams) {
 	let response = await callEndPoint(url, requestParams);
@@ -119,7 +118,7 @@ async function callEndPoint(url, requestParams) {
 }
 
 // create new token with refresh token
-async function refreshAccessToken(url, requestParams) {
+export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}): any {
 	const store = getStore();
 	const accessToken = store.getState().user.accessToken;
 	const { dispatch } = store;
@@ -140,10 +139,9 @@ async function refreshAccessToken(url, requestParams) {
 		.then(response => response.json())
 		.then(response => {
 			if (response.error) {
-				// We couldn't get a new access token with the refresh_token, so we logout the user.
+				// We couldn't get a new access token with the refresh_token, so lock the session.
 				return dispatch({
-					type: 'LOGGED_OUT',
-					payload: response,
+					type: 'LOCK_SESSION',
 				});
 			}
 			dispatch(updateAccessToken(response));

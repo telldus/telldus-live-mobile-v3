@@ -26,30 +26,132 @@ import { connect } from 'react-redux';
 import Dimensions from 'Dimensions';
 
 
-import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, TouchableOpacity, ScrollView } from 'react-native';
 
 import { BackgroundImage, Button, H1, Text, View } from 'BaseComponents';
 import Modal from './Modal';
-import { loginToTelldus } from 'Actions';
+import { loginToTelldus, logoutFromTelldus } from 'Actions';
+import { refreshAccessToken } from 'LiveApi';
 import { authenticationTimeOut, testUsername, testPassword } from 'Config';
 
 import Image from 'Image';
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
+type SLProps = {
+	refreshAccessToken: () => void;
+	logoutFromTelldus: () => void;
+};
+
+
+class SessionLocked extends View {
+	props: SLProps;
+
+	onPressLogout: () => void;
+	closeModal: () => void;
+
+	constructor(props: SLProps) {
+		super(props);
+		this.state = {
+			showModal: false,
+		};
+
+		this.onPressLogout = this.onPressLogout.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+	}
+
+	onPressLogout() {
+		this.setState({
+			showModal: true,
+		});
+	}
+
+	closeModal() {
+		this.setState({
+			showModal: false,
+		});
+	}
+
+	render(): Object {
+		return (
+			<ScrollView contentContainerStyle={styles.container}>
+				<H1 style={{
+					margin: 20,
+					color: '#fff',
+					textAlign: 'center',
+				}}>
+					Lost Connection
+				</H1>
+				<View style={styles.bodyCover}>
+					<Text style={styles.contentText}>
+						For some reason we can't connect your account right now.
+					</Text>
+					<Text/>
+					<Text style={[styles.contentText, {paddingLeft: 20}]}>
+						Make sure that your internet connection is working and retry by tapping the retry button below.
+					</Text>
+					<TouchableOpacity
+						onPress={this.props.refreshAccessToken}
+						style={[styles.button, {marginTop: 10}]}>
+						<View style={styles.button}>
+							<Text style={{color: '#fff'}}>
+									RETRY
+							</Text>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={this.onPressLogout}
+						style={[styles.button, {marginTop: 10}]}>
+						<View style={styles.button}>
+							<Text style={{color: '#fff'}}>
+									LOGOUT
+							</Text>
+						</View>
+					</TouchableOpacity>
+				</View>
+				<Modal modalStyle={styles.notificationModal} showModal={this.state.showModal}>
+					<View style={styles.notificationModalHeader}>
+						<Text style={styles.notificationModalHeaderText}>Logout?</Text>
+					</View>
+					<View style={styles.notificationModalBody}>
+						<Text style={styles.notificationModalBodyText}>
+								If you logout from your account you will have to add your devices to your dashboard manually.
+						</Text>
+					</View>
+					<View style={styles.notificationModalFooter}>
+						<TouchableOpacity
+							style={styles.notificationModalFooterTextCover}
+							onPress={this.closeModal}>
+							<Text style={styles.notificationModalFooterTextCancel}>
+									CANCEL
+							</Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={styles.notificationModalFooterTextCover}
+							onPress={this.props.logoutFromTelldus}>
+							<Text style={styles.notificationModalFooterText}>
+									LOGOUT
+							</Text>
+						</TouchableOpacity>
+					</View>
+				</Modal>
+			</ScrollView>
+		);
+	}
+}
+
 type Props = {
-  dispatch: Function,
-  screenProps: Object,
-  navigation: Object,
+	dispatch: Function,
+	screenProps: Object,
+	navigation: Object,
 };
 
 type State = {
-  notificationText? : string,
-  isLoading : boolean,
-  username: string,
-  password: string,
+	notificationText? : string,
+	isLoading : boolean,
+	username: string,
+	password: string,
 };
-
 class LoginForm extends View {
 	props: Props;
 	state: State;
@@ -85,14 +187,7 @@ class LoginForm extends View {
 
 	render() {
 		return (
-			<View style={{
-				backgroundColor: '#00000099',
-				width: Dimensions.get('window').width,
-				padding: 10,
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}>
+			<View style={styles.container}>
 				<H1 style={{
 					margin: 20,
 					color: '#fff',
@@ -139,7 +234,7 @@ class LoginForm extends View {
 					</View>
 					<View style={styles.notificationModalFooter}>
 						<TouchableWithoutFeedback style={styles.notificationModalFooterTextCover}
-						onPress={this._closeModal}>
+							onPress={this._closeModal}>
 							<Text style={styles.notificationModalFooterText}>OK</Text>
 						</TouchableWithoutFeedback>
 					</View>
@@ -204,7 +299,13 @@ class LoginScreen extends View {
 								marginBottom: 100,
 							}}
 						/>
-						<LoginForm {...this.props} />
+						{this.props.accessToken && !this.props.isTokenValid ?
+							<SessionLocked
+								refreshAccessToken={this.props.refreshAccessToken}
+								logoutFromTelldus={this.props.logoutFromTelldus}/>
+							:
+							<LoginForm {...this.props} />
+						}
 					</View>
 				</KeyboardAvoidingView>
 			</BackgroundImage>
@@ -213,6 +314,17 @@ class LoginScreen extends View {
 }
 
 const styles = StyleSheet.create({
+	container: {
+		backgroundColor: '#00000099',
+		width: Dimensions.get('window').width,
+		padding: 10,
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	bodyCover: {
+		width: Dimensions.get('window').width - 50,
+	},
 	notification: {
 		padding: 7,
 		marginTop: 10,
@@ -261,18 +373,25 @@ const styles = StyleSheet.create({
 		color: '#6B6969',
 	},
 	notificationModalFooter: {
-		alignItems: 'flex-end',
-		justifyContent: 'center',
+		alignItems: 'center',
+		justifyContent: 'flex-end',
 		paddingRight: 20,
+		flexDirection: 'row',
 		height: Dimensions.get('window').height * 0.08,
 		width: Dimensions.get('window').width * 0.7,
 	},
 	notificationModalFooterTextCover: {
-		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.3,
+		height: 50,
+		width: 70,
+		justifyContent: 'center',
 	},
 	notificationModalFooterText: {
 		color: '#e26901',
+		fontSize: 14,
+		fontWeight: 'bold',
+	},
+	notificationModalFooterTextCancel: {
+		color: '#6B6969',
 		fontSize: 14,
 		fontWeight: 'bold',
 	},
@@ -298,12 +417,38 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: Theme.Core.btnPrimaryBg,
 	},
+	contentText: {
+		color: '#fff',
+		textAlign: 'center',
+		fontSize: 12,
+	},
+	button: {
+		height: 50,
+		width: 200,
+		backgroundColor: Theme.Core.btnPrimaryBg,
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 30,
+		alignSelf: 'center',
+	},
 });
 
 function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
 		accessToken: store.user.accessToken,
+		isTokenValid: store.user.isTokenValid,
 	};
 }
-module.exports = connect(mapStateToProps)(LoginScreen);
+function mapDispatchToProps(dispatch) {
+	return {
+		logoutFromTelldus: () => {
+			dispatch(logoutFromTelldus());
+		},
+		refreshAccessToken: () => {
+			dispatch(refreshAccessToken());
+		},
+		dispatch,
+	};
+}
+module.exports = connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

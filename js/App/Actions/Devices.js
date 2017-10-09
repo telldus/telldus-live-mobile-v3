@@ -25,7 +25,7 @@
 
 import type { Action, ThunkAction, Dispatch } from './Types';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 import { supportedMethods, methods } from 'Config';
 
 import { format } from 'url';

@@ -23,7 +23,7 @@
 
 import type { ThunkAction } from './Types';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 
 function getJobs(): ThunkAction {
 	return (dispatch, getState) => {

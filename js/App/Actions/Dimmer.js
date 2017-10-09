@@ -25,7 +25,7 @@
 
 import type { Action, ThunkAction } from './Types';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 
 import { format } from 'url';
 

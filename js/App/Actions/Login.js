@@ -28,7 +28,7 @@ import { apiServer } from 'Config';
 import { publicKey, privateKey } from 'Config';
 import { Answers } from 'react-native-fabric';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
 // TODO: rewrite into proper ThunkAction that does its own dispatching
