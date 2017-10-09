@@ -8,6 +8,9 @@ declare module 'AnimatedImplementation' {
 declare module 'MessageQueue' {
 	declare var exports: any;
 }
+declare module 'react-navigation' {
+	declare var exports: any;
+}
 declare module '../../local-cli/bundle/assetPathUtils' {
 	declare var exports: any;
 }
