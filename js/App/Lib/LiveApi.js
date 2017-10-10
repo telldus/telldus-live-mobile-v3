@@ -139,7 +139,7 @@ export async function refreshAccessToken(url?: string = '', requestParams?: Obje
 		.then(response => response.json())
 		.then(response => {
 			if (response.error) {
-				// We couldn't get a new access token with the refresh_token, so we logout the user.
+				// We couldn't get a new access token with the refresh_token, so we lock the session.
 				return dispatch({
 					type: 'LOCK_SESSION',
 				});
