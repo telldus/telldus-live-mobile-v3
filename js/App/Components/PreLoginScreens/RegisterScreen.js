@@ -303,9 +303,11 @@ class RegisterScreen extends View {
 					onOpen= {this.onModalOpen}
 					showModal={this.props.showModal}>
 					<NotificationComponent
-						text={this.props.validationMessage}
-						onPress={this.closeModal}
 						header={this.props.validationMessageHeader}
+						text={this.props.validationMessage}
+						showPositive={true}
+						showNegative={false}
+						onPressPositive={this.closeModal}
 					/>
 				</Modal>
 			</FormContainerComponent>
