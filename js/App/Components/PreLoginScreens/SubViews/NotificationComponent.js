@@ -33,6 +33,16 @@ const messages = defineMessages({
 		defaultMessage: 'OOPS',
 		description: 'Default Header for the notification component',
 	},
+	defaultPositiveText: {
+		id: 'notification.defaultPositiveText',
+		defaultMessage: 'OK',
+		description: 'Default Positive text for the notification component',
+	},
+	defaultNegativeText: {
+		id: 'notification.defaultNegativeText',
+		defaultMessage: 'CANCEL',
+		description: 'Default Negative text for the notification component',
+	},
 });
 
 
@@ -40,6 +50,12 @@ type Props = {
 	onPress: Function,
 	text: string,
 	header?: string,
+	showPositive: boolean,
+	showNegative: boolean,
+	positiveText?: string,
+	negativeText?: string,
+	onPressPositive?: () => void;
+	onPressNegative?: () => void;
 	intl: intlShape.isRequired,
 }
 
@@ -47,20 +63,41 @@ class NotificationComponent extends View {
 
 	props: Props;
 
-	_closeModal: () => void;
+	onPressPositive: () => void;
+	onPressNegative: () => void;
 
 	constructor(props: Props) {
 		super(props);
-		this._closeModal = this._closeModal.bind(this);
+		this.onPressPositive = this.onPressPositive.bind(this);
+		this.onPressNegative = this.onPressNegative.bind(this);
 	}
 
-	_closeModal() {
-		this.props.onPress();
+	onPressNegative() {
+		let {onPress, onPressNegative} = this.props;
+		if (onPress) {
+			onPress();
+		}
+		if (onPressNegative) {
+			onPressNegative();
+		}
+	}
+	onPressPositive() {
+		let {onPress, onPressPositive} = this.props;
+		if (onPress) {
+			onPress();
+		}
+		if (onPressPositive) {
+			onPressPositive();
+		}
 	}
 
 	render() {
 		let header = this.props.header ? this.props.header :
 			`${this.props.intl.formatMessage(messages.defaultHeader)}!`;
+		let positiveText = this.props.positiveText ? this.props.positiveText :
+			`${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
+		let negativeText = this.props.negativeText ? this.props.negativeText :
+			`${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
 		return (
 			<View>
 				<View style={styles.notificationModalHeader}>
@@ -72,10 +109,22 @@ class NotificationComponent extends View {
 					<Text style={styles.notificationModalBodyText}>{this.props.text}</Text>
 				</View>
 				<View style={styles.notificationModalFooter}>
-					<TouchableOpacity style={styles.notificationModalFooterTextCover}
-						onPress={this._closeModal}>
-						<Text style={styles.notificationModalFooterText}>OK</Text>
-					</TouchableOpacity>
+					{this.props.showNegative ?
+						<TouchableOpacity style={styles.notificationModalFooterTextCover}
+							onPress={this.onPressNegative}>
+							<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>
+						</TouchableOpacity>
+						:
+						null
+					}
+					{this.props.showPositive ?
+						<TouchableOpacity style={styles.notificationModalFooterTextCover}
+							onPress={this.onPressPositive}>
+							<Text style={styles.notificationModalFooterPositiveText}>{positiveText}</Text>
+						</TouchableOpacity>
+						:
+						null
+					}
 				</View>
 			</View>
 		);
@@ -108,8 +157,9 @@ const styles = StyleSheet.create({
 		color: '#6B6969',
 	},
 	notificationModalFooter: {
-		alignItems: 'flex-end',
-		justifyContent: 'center',
+		alignItems: 'center',
+		justifyContent: 'flex-end',
+		flexDirection: 'row',
 		paddingRight: 20,
 		height: Dimensions.get('window').height * 0.08,
 		width: Dimensions.get('window').width * 0.75,
@@ -118,9 +168,15 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-end',
 		justifyContent: 'center',
 		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.3,
+		paddingRight: 5,
+		paddingLeft: 5,
 	},
-	notificationModalFooterText: {
+	notificationModalFooterNegativeText: {
+		color: '#6B6969',
+		fontSize: 14,
+		fontWeight: 'bold',
+	},
+	notificationModalFooterPositiveText: {
 		color: '#e26901',
 		fontSize: 14,
 		fontWeight: 'bold',
