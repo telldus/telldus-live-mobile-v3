@@ -40,7 +40,7 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
+export function LiveApi({ url, requestParams }: {url:string, requestParams:Object}) {
 	return new Promise((resolve, reject) => {
 		return doApiCall(url, requestParams).then(response => {
 			if (!response) {
@@ -61,7 +61,7 @@ export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
 			reject(error);
 		});
 	});
-};
+}
 
 async function doApiCall(url, requestParams) {
 	let response = await callEndPoint(url, requestParams);
@@ -119,7 +119,7 @@ async function callEndPoint(url, requestParams) {
 }
 
 // create new token with refresh token
-async function refreshAccessToken(url, requestParams) {
+export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}) {
 	const store = getStore();
 	const accessToken = store.getState().user.accessToken;
 	const { dispatch } = store;
