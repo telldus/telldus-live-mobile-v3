@@ -23,8 +23,12 @@
 
 import NotificationComponent from './NotificationComponent';
 import FormContainerComponent from './FormContainerComponent';
+import LoginForm from './LoginForm';
+import SessionLocked from './SessionLocked';
 
 module.exports = {
 	NotificationComponent,
 	FormContainerComponent,
+	LoginForm,
+	SessionLocked,
 };
