@@ -26,9 +26,9 @@ import { connect } from 'react-redux';
 import {
 	TouchableOpacity,
 } from 'react-native';
+import {defineMessages, intlShape, injectIntl} from 'react-intl';
 
 import {
-	H1,
 	Text,
 	View,
 	StyleSheet,
@@ -40,76 +40,77 @@ import { refreshAccessToken } from 'LiveApi';
 
 import Theme from 'Theme';
 
-type SLProps = {
+const messages = defineMessages({
+	sessionLocked: {
+		id: 'user.sessionLockedLogoutConfirm',
+		defaultMessage: 'If you logout from your account you will have to add your devices to your dashboard manually.',
+		description: 'Content for Logout Confirmation Dialoge in Session Locked Screen',
+	},
+});
+
+type Props = {
 	refreshAccessToken: () => void;
 	logoutFromTelldus: () => void;
+	intl: intlShape.isRequired,
+	dispatch: Function;
+	onPressLogout: boolean,
 };
 
 class SessionLocked extends View {
-	props: SLProps;
+	props: Props;
 
 	onPressLogout: () => void;
-	closeModal: () => void;
 
-	constructor(props: SLProps) {
+	constructor(props: Props) {
 		super(props);
-		this.state = {
-			showModal: false,
-		};
 
 		this.onPressLogout = this.onPressLogout.bind(this);
-		this.closeModal = this.closeModal.bind(this);
 	}
 
 	onPressLogout() {
-		this.setState({
-			showModal: true,
+		let message = this.props.intl.formatMessage(messages.sessionLocked);
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_OPEN',
+			payload: {
+				data: message,
+			},
 		});
 	}
 
-	closeModal() {
-		this.setState({
-			showModal: false,
-		});
+	componentWillReceiveProps(nextProps: Object) {
+		if (nextProps.onPressLogout) {
+			this.props.logoutFromTelldus();
+		}
 	}
 
 	render(): Object {
 		return (
-			<View style={styles.container}>
-				<H1 style={{
-					margin: 20,
-					color: '#fff',
-					textAlign: 'center',
-				}}>
-					Lost Connection
-				</H1>
-				<View style={styles.bodyCover}>
-					<Text style={styles.contentText}>
-						For some reason we can't connect your account right now.
-					</Text>
-					<Text/>
-					<Text style={[styles.contentText, {paddingLeft: 20}]}>
-						Make sure that your internet connection is working and retry by tapping the retry button below.
-					</Text>
-					<TouchableOpacity
-						onPress={this.props.refreshAccessToken}
-						style={[styles.button, {marginTop: 10}]}>
-						<View style={styles.button}>
-							<Text style={{color: '#fff'}}>
-									RETRY
-							</Text>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={this.onPressLogout}
-						style={[styles.button, {marginTop: 10}]}>
-						<View style={styles.button}>
-							<Text style={{color: '#fff'}}>
-									LOGOUT
-							</Text>
-						</View>
-					</TouchableOpacity>
-				</View>
+			<View style={styles.bodyCover}>
+				<Text style={styles.contentText}>
+					For some reason we can't connect your account right now.
+				</Text>
+				<Text/>
+				<Text style={[styles.contentText, {paddingLeft: 20}]}>
+					Make sure that your internet connection is working and retry by tapping the retry button below.
+				</Text>
+				<TouchableOpacity
+					onPress={this.props.refreshAccessToken}
+					style={[styles.button, {marginTop: 10}]}>
+					<View style={styles.button}>
+						<Text style={{color: '#fff'}}>
+								RETRY
+						</Text>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={this.onPressLogout}
+					style={[styles.button, {marginTop: 10}]}>
+					<View style={styles.button}>
+						<Text style={{color: '#fff'}}>
+								LOGOUT
+						</Text>
+					</View>
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
 		width: Dimensions.get('window').width - 50,
 	},
 	contentText: {
-		color: '#fff',
+		color: '#ffffff80',
 		textAlign: 'center',
 		fontSize: 12,
 	},
@@ -161,5 +162,5 @@ function mapDispatchToProps(dispatch) {
 		dispatch,
 	};
 }
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SessionLocked);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(SessionLocked));
 

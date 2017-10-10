@@ -54,8 +54,7 @@ export function LiveApi({ url, requestParams }: {url:string, requestParams:Objec
 				const store = getStore();
 				const { dispatch } = store;
 				return dispatch({
-					type: 'LOGGED_OUT',
-					payload: error,
+					type: 'LOCK_SESSION',
 				});
 			}
 			reject(error);
@@ -142,8 +141,7 @@ export async function refreshAccessToken(url?: string = '', requestParams?: Obje
 			if (response.error) {
 				// We couldn't get a new access token with the refresh_token, so we logout the user.
 				return dispatch({
-					type: 'LOGGED_OUT',
-					payload: response,
+					type: 'LOCK_SESSION',
 				});
 			}
 			dispatch(updateAccessToken(response));

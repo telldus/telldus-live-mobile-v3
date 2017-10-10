@@ -45,6 +45,9 @@
   "loading": "Loading",
   "noName": "no name",
   "notification.defaultHeader": "OOPS",
+  "notification.defaultNegativeText": "CANCEL",
+  "notification.defaultPositiveText": "OK",
+  "notification.notificationPositiveTextSL": "LOGOUT",
   "origin": "Origin",
   "pages.dashboard": "Dashboard",
   "pages.devices": "Devices",
@@ -82,9 +85,11 @@
   "user.emailNotValidHeader": "INVALID EMAIL ADDRESS",
   "user.firstName": "First Name",
   "user.forgotPassword": "Forgot your password?",
+  "user.headerSessionLocked": "Lost Connection",
   "user.lastName": "Last Name",
   "user.needAccount": "Need an account?",
   "user.password": "Password",
+  "user.sessionLockedLogoutConfirm": "If you logout from your account you will have to add your devices to your dashboard manually.",
   "user.welcome": "Welcome to Telldus",
   "version": "version"
 }
