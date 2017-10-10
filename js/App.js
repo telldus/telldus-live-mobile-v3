@@ -51,7 +51,7 @@ class App extends React.Component {
 	}
 
 	render() {
-		if (!this.props.accessToken) {
+		if (!this.props.accessToken || (this.props.accessToken && !this.props.isTokenValid)) {
 			return <PreLoginNavigator />;
 		}
 		return (
@@ -63,6 +63,7 @@ class App extends React.Component {
 function mapStateToProps(store) {
 	return {
 		accessToken: store.user.accessToken,
+		isTokenValid: store.user.isTokenValid,
 		pushToken: store.user.pushToken,
 	};
 }
