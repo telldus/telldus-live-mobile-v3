@@ -27,6 +27,7 @@ import { Image, Dimensions } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Toast from 'react-native-simple-toast';
+import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import {
 	getGateways,
 	getSensors,
@@ -41,6 +42,7 @@ import { getDevices } from 'Actions_Devices';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import { resetSchedule } from 'Actions_Schedule';
 import ScheduleNavigator from 'ScheduleNavigator';
+import Drawer from 'Drawer';
 
 const messages = defineMessages({
 	errortoast: {
@@ -51,10 +53,9 @@ const messages = defineMessages({
 });
 
 const deviceHeight = Dimensions.get('window').height;
-let deviceWidth = Dimensions.get('window').width;
 import Theme from 'Theme';
 
-import { View } from 'BaseComponents';
+import { View, Icon, HeaderNav } from 'BaseComponents';
 import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
@@ -67,8 +68,20 @@ import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
-		navigationOptions: {
-			header: null,
+		navigationOptions: ({navigation}: Object): Object => {
+			let {state} = navigation;
+			return {
+				headerStyle: {
+					marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+					backgroundColor: Theme.Core.brandPrimary,
+					height: deviceHeight * 0.1,
+					elevation: 0,
+				},
+				headerTintColor: '#ffffff',
+				headerTitle: renderStackHeader(),
+				headerLeft: renderMainTabHeaderLeft(state),
+				headerRight: renderMainTabHeaderRight(state),
+			};
 		},
 	},
 	DeviceDetails: {
@@ -99,8 +112,32 @@ const RouteConfigs = {
 
 function renderStackHeader(): React$Element<any> {
 	return (
-		<Image style={{ height: 110, width: 130, marginLeft: (deviceWidth * 0.2) }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
+		<Image style={{ height: 110, width: 130, alignSelf: 'center' }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
 	);
+}
+
+function renderMainTabHeaderLeft(state: Object): React$Element<any> {
+	return (
+		<HeaderNav onPress={openDrawer} onPressParam={state}>
+			<Icon name={'bars'} size={22} color={'#fff'}/>
+		</HeaderNav>
+	);
+}
+
+function openDrawer(args: Object) {
+	args.params.openDrawer();
+}
+
+function renderMainTabHeaderRight(state: Object): React$Element<any> {
+	return (
+		<HeaderNav onPress={toggleEditMode} onPressParam={state}>
+			<Icon name={'star'} size={22} color={'#fff'}/>
+		</HeaderNav>
+	);
+}
+
+function toggleEditMode(args: Object) {
+	args.params.toggleEditMode();
 }
 
 
@@ -120,6 +157,7 @@ type Props = {
 	toastVisible: boolean,
 	toastMessage: string,
 	intl: intlShape.isRequired,
+	gateways: Object,
 };
 
 type State = {
@@ -132,6 +170,9 @@ class AppNavigator extends View {
 	state: State;
 
 	_updateSpecificOrientation: (Object) => void;
+	renderNavigationView: () => Object;
+	openDrawer: () => void;
+	closeDrawer: () => void;
 
 	constructor() {
 		super();
@@ -146,6 +187,26 @@ class AppNavigator extends View {
 			Orientation.unlockAllOrientations();
 			Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
 		}
+
+		this.starButton = {
+			icon: {
+				name: 'star',
+				size: 22,
+				color: '#fff',
+			},
+		};
+
+		this.menuButton = {
+			icon: {
+				name: 'bars',
+				size: 22,
+				color: '#fff',
+			},
+		};
+
+		this.renderNavigationView = this.renderNavigationView.bind(this);
+		this.openDrawer = this.openDrawer.bind(this);
+		this.closeDrawer = this.closeDrawer.bind(this);
 	}
 
 	componentWillMount() {
@@ -191,10 +252,38 @@ class AppNavigator extends View {
 		}
 	};
 
+	openDrawer() {
+		this.refs.drawer.openDrawer();
+	}
+
+	closeDrawer() {
+		this.refs.drawer.closeDrawer();
+	}
+
+	renderNavigationView(): React$Element<any> {
+		return <Drawer
+			gateways={this.props.gateways}
+			userProfile={this.props.userProfile}
+			theme={this.getTheme()}
+		/>;
+	}
+
 	render(): React$Element<any> {
+		let screenProps = {
+			openDrawer: this.openDrawer,
+			closeDrawer: this.closeDrawer,
+		};
+
 		return (
 			<View>
-				<Navigator/>
+				<DrawerLayoutAndroid
+					ref="drawer"
+					drawerWidth={250}
+					drawerPosition={DrawerLayoutAndroid.positions.Left}
+					renderNavigationView={this.renderNavigationView}
+				>
+					<Navigator screenProps={screenProps}/>
+				</DrawerLayoutAndroid>
 				<DimmerPopup
 					isVisible={this.props.dimmer.show}
 					name={this.props.dimmer.name}
@@ -215,6 +304,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		accessToken: state.user.accessToken,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
+		gateways: state.gateways,
 		toastVisible: state.App.errorGlobalShow,
 		toastMessage: state.App.errorGlobalMessage,
 	};

@@ -50,6 +50,7 @@ type Props = {
 	editMode: boolean,
 	tab: string,
 	dispatch: Dispatch,
+	stackNavigator: Object,
 };
 
 type State = {
@@ -64,6 +65,7 @@ class SensorsTab extends View {
 	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
 	renderRow: (Object) => Object;
 	onRefresh: (Object) => void;
+	toggleEditMode: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.sensors),
@@ -85,6 +87,18 @@ class SensorsTab extends View {
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
+		this.toggleEditMode = this.toggleEditMode.bind(this);
+	}
+
+	componentDidMount() {
+		let {setParams} = this.props.stackNavigator;
+		setParams({
+			toggleEditMode: this.toggleEditMode,
+		});
+	}
+
+	toggleEditMode() {
+		this.props.dispatch(toggleEditMode('sensorsTab'));
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -176,8 +190,9 @@ const getRowsAndSections = createSelector(
 	}
 );
 
-function mapStateToProps(store: Object): Object {
+function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
+		stackNavigator: ownProps.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(store),
 		gatewaysById: store.gateways.byId,
 		editMode: store.tabs.editModeSensorsTab,

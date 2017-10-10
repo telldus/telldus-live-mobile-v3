@@ -75,6 +75,7 @@ class DevicesTab extends View {
 	renderRow: (Object) => Object;
 	renderHiddenRow: (Object) => Object;
 	onRefresh: () => void;
+	toggleEditMode: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.devices),
@@ -101,6 +102,18 @@ class DevicesTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
+		this.toggleEditMode = this.toggleEditMode.bind(this);
+	}
+
+	componentDidMount() {
+		let {setParams} = this.props.stackNavigator;
+		setParams({
+			toggleEditMode: this.toggleEditMode,
+		});
+	}
+
+	toggleEditMode() {
+		this.props.dispatch(toggleEditMode('devicesTab'));
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -109,10 +122,6 @@ class DevicesTab extends View {
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
 		});
-
-		if (nextProps.tab !== 'devicesTab' && nextProps.editMode === true) {
-			this.props.dispatch(toggleEditMode('devicesTab'));
-		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -222,9 +231,9 @@ const getRowsAndSections = createSelector(
 	}
 );
 
-function mapStateToProps(state: Object, ownprops: Object): Object {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		stackNavigator: ownprops.screenProps.stackNavigator,
+		stackNavigator: ownProps.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(state),
 		gatewaysById: state.gateways.byId,
 		editMode: state.tabs.editModeDevicesTab,
