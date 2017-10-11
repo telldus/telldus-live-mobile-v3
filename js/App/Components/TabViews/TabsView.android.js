@@ -128,7 +128,12 @@ class TabsView extends View {
 		let {setParams} = this.props.stackNavigator;
 		setParams({
 			openDrawer: this.props.screenProps.openDrawer,
+			toggleEditMode: this.toggleEditMode,
 		});
+	}
+
+	toggleEditMode() {
+		this.props.dispatch(toggleEditMode(this.state.routeName));
 	}
 
 	onTabSelect(tab: string) {
@@ -140,6 +145,10 @@ class TabsView extends View {
 	onRequestChangeTab(index: number) {
 		this.setState({ index });
 		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
+		let {setParams} = this.props.stackNavigator;
+		setParams({
+			currentTab: tabNames[index],
+		});
 		this.onTabSelect(tabNames[index]);
 	}
 
@@ -164,7 +173,6 @@ class TabsView extends View {
 			return false;
 		}
 
-		const { routeName } = this.state;
 		let screenProps = {
 			stackNavigator: this.props.stackNavigator,
 		};

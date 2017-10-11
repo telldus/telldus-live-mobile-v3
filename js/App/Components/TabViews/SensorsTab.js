@@ -30,7 +30,6 @@ import { List, ListDataSource, View } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
-import { toggleEditMode } from 'Actions';
 
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import { getTabBarIcon } from 'Lib';
@@ -65,7 +64,6 @@ class SensorsTab extends View {
 	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
 	renderRow: (Object) => Object;
 	onRefresh: (Object) => void;
-	toggleEditMode: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.sensors),
@@ -87,18 +85,6 @@ class SensorsTab extends View {
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
-		this.toggleEditMode = this.toggleEditMode.bind(this);
-	}
-
-	componentDidMount() {
-		let {setParams} = this.props.stackNavigator;
-		setParams({
-			toggleEditMode: this.toggleEditMode,
-		});
-	}
-
-	toggleEditMode() {
-		this.props.dispatch(toggleEditMode('sensorsTab'));
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -107,10 +93,6 @@ class SensorsTab extends View {
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
 		});
-
-		if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
-			this.props.dispatch(toggleEditMode('sensorsTab'));
-		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

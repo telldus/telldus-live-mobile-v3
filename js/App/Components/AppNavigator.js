@@ -129,11 +129,14 @@ function openDrawer(args: Object) {
 }
 
 function renderMainTabHeaderRight(state: Object): React$Element<any> {
-	return (
-		<HeaderNav onPress={toggleEditMode} onPressParam={state}>
-			<Icon name={'star'} size={22} color={'#fff'}/>
-		</HeaderNav>
-	);
+	if (state.params && (state.params.currentTab === 'devicesTab' || state.params.currentTab === 'sensorsTab')) {
+		return (
+			<HeaderNav onPress={toggleEditMode} onPressParam={state}>
+				<Icon name={'star'} size={22} color={'#fff'}/>
+			</HeaderNav>
+		);
+	}
+	return <View style={{width: 50}}/>;
 }
 
 function toggleEditMode(args: Object) {

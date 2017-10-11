@@ -30,7 +30,6 @@ import { List, ListDataSource, Text, View } from 'BaseComponents';
 import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
 
 import { getDevices, getDeviceHistory } from 'Actions_Devices';
-import { toggleEditMode } from 'Actions';
 import type { Dispatch } from 'Actions_Types';
 
 import { getDeviceType, getTabBarIcon } from 'Lib';
@@ -75,7 +74,6 @@ class DevicesTab extends View {
 	renderRow: (Object) => Object;
 	renderHiddenRow: (Object) => Object;
 	onRefresh: () => void;
-	toggleEditMode: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.devices),
@@ -102,18 +100,6 @@ class DevicesTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
-		this.toggleEditMode = this.toggleEditMode.bind(this);
-	}
-
-	componentDidMount() {
-		let {setParams} = this.props.stackNavigator;
-		setParams({
-			toggleEditMode: this.toggleEditMode,
-		});
-	}
-
-	toggleEditMode() {
-		this.props.dispatch(toggleEditMode('devicesTab'));
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
