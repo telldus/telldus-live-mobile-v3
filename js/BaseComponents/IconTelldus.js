@@ -35,7 +35,7 @@ type Props = {
 	icon: string,
 	size?: number,
 	color?: string,
-	style?: Object,
+	style?: number,
 };
 
 export default class IconTelldus extends Component {

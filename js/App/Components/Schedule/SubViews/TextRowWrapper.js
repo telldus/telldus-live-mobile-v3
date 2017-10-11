@@ -34,7 +34,7 @@ export default class TextRowWrapper extends View<null, Props, null> {
 
 	static propTypes = {
 		children: PropTypes.node.isRequired,
-		style: View.propTypes.style,
+		style: PropTypes.object,
 	};
 
 	render(): React$Element<any> {

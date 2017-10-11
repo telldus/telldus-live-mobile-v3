@@ -61,7 +61,7 @@ export default class RowWithTriangle extends Component {
 			rowContainer,
 			row,
 		} = this._getStyle();
-
+		let styles = {...row, ...style};
 		return (
 			<View style={container}>
 				<View style={triangleContainer}>
@@ -77,7 +77,7 @@ export default class RowWithTriangle extends Component {
 				<Row
 					layout={layout}
 					containerStyle={[rowContainer, containerStyle]}
-					style={[row, style]}
+					style={styles}
 				>
 					{children}
 				</Row>

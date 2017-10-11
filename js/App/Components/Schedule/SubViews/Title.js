@@ -40,7 +40,7 @@ export default class Title extends View<DefaultProps, Props, null> {
 
 	static propTypes = {
 		children: PropTypes.string.isRequired,
-		style: Text.propTypes.style,
+		style: PropTypes.object,
 		color: PropTypes.string,
 	};
 

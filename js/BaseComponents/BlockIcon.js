@@ -36,7 +36,7 @@ type Props = {
 	size?: number,
 	color?: string,
 	bgColor?: string,
-	style?: Object,
+	style?: number,
 	containerStyle?: any,
 };
 

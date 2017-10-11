@@ -40,7 +40,7 @@ export default class DeviceRow extends View<null, Props, null> {
 	static propTypes = {
 		row: PropTypes.object.isRequired,
 		onPress: PropTypes.func,
-		containerStyle: View.propTypes.style,
+		containerStyle: PropTypes.object,
 	};
 
 	render(): React$Element<any> {

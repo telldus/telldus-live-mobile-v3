@@ -141,7 +141,7 @@ class SchedulerTab extends View<null, Props, State> {
 			params: {},
 			action: NavigationActions.navigate({ routeName: 'Edit' }),
 		});
-
+		console.log('TEST EDIT');
 		dispatch(editSchedule(schedule));
 		screenProps.stackNavigator.dispatch(goToEdit);
 	};

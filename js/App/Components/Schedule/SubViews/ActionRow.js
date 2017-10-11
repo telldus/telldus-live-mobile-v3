@@ -83,7 +83,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	static propTypes = {
 		method: PropTypes.number.isRequired,
 		onPress: PropTypes.func,
-		containerStyle: View.propTypes.style,
+		containerStyle: PropTypes.object,
 		showValue: PropTypes.bool,
 		methodValue: PropTypes.number,
 	};

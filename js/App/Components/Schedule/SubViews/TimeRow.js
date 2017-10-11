@@ -51,7 +51,7 @@ export default class TimeRow extends View<null, Props, State> {
 	static propTypes = {
 		schedule: PropTypes.object.isRequired,
 		device: PropTypes.object.isRequired,
-		containerStyle: View.propTypes.style,
+		containerStyle: PropTypes.object,
 		onPress: PropTypes.func,
 	};
 

@@ -35,7 +35,7 @@ export default class Description extends View<null, Props, null> {
 
 	static propTypes = {
 		children: PropTypes.string.isRequired,
-		style: Text.propTypes.style,
+		style: PropTypes.object,
 	};
 
 	render(): React$Element<any> {
