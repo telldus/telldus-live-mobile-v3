@@ -53,6 +53,7 @@ const messages = defineMessages({
 });
 
 const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
 import Theme from 'Theme';
 
 import { View, Icon, HeaderNav } from 'BaseComponents';
@@ -78,9 +79,9 @@ const RouteConfigs = {
 					elevation: 0,
 				},
 				headerTintColor: '#ffffff',
-				headerTitle: renderStackHeader(),
-				headerLeft: renderMainTabHeaderLeft(state),
-				headerRight: renderMainTabHeaderRight(state),
+				headerTitle: renderHeader(),
+				headerLeft: renderHeaderLeft(state),
+				headerRight: renderHeaderRight(state),
 			};
 		},
 	},
@@ -93,7 +94,7 @@ const RouteConfigs = {
 				height: deviceHeight * 0.1,
 			},
 			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
+			headerTitle: renderHeader(),
 		},
 	},
 	Schedule: {
@@ -105,18 +106,18 @@ const RouteConfigs = {
 				height: deviceHeight * 0.1,
 			},
 			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
+			headerTitle: renderHeader(),
 		},
 	},
 };
 
-function renderStackHeader(): React$Element<any> {
+function renderHeader(): React$Element<any> {
 	return (
-		<Image style={{ height: 110, width: 130, alignSelf: 'center' }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
+		<Image style={{ height: 110, width: 130, marginLeft: deviceWidth * 0.14 }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
 	);
 }
 
-function renderMainTabHeaderLeft(state: Object): React$Element<any> {
+function renderHeaderLeft(state: Object): React$Element<any> {
 	return (
 		<HeaderNav onPress={openDrawer} onPressParam={state}>
 			<Icon name={'bars'} size={22} color={'#fff'}/>
@@ -128,7 +129,7 @@ function openDrawer(args: Object) {
 	args.params.openDrawer();
 }
 
-function renderMainTabHeaderRight(state: Object): React$Element<any> {
+function renderHeaderRight(state: Object): React$Element<any> {
 	if (state.params && (state.params.currentTab === 'devicesTab' || state.params.currentTab === 'sensorsTab')) {
 		return (
 			<HeaderNav onPress={toggleEditMode} onPressParam={state}>
