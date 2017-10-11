@@ -149,7 +149,7 @@ function mapDispatchToProps(dispatch) {
 			dispatch(logoutFromTelldus());
 		},
 		refreshAccessToken: () => {
-			dispatch(refreshAccessToken());
+			refreshAccessToken();
 		},
 		dispatch,
 	};
