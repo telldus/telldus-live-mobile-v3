@@ -87,10 +87,8 @@ type Props = {
 	gateways: Object,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
-	onToggleEditMode: (string) => void,
 	dispatch: Function,
 	stackNavigator: Object,
-	openDrawer: boolean,
 };
 
 type State = {
@@ -107,7 +105,6 @@ class TabsView extends View {
 	onTabSelect: (string) => void;
 	onRequestChangeTab: (number) => void;
 	toggleEditMode: (number) => void;
-	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 
 	constructor(props: Props) {
@@ -159,11 +156,6 @@ class TabsView extends View {
 		this.onRequestChangeTab(index);
 	}
 
-	openDrawer = () => {
-		this.refs.drawer.openDrawer();
-		this.props.syncGateways();
-	};
-
 	makeRightButton = (routeName: string): any => {
 		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
@@ -191,9 +183,6 @@ class TabsView extends View {
 		);
 	}
 
-	toggleEditMode = () => {
-		this.props.onToggleEditMode(this.props.tab);
-	};
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
@@ -214,7 +203,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
 		},
-		onToggleEditMode: (tab: string): void => dispatch(toggleEditMode(tab)),
 		dispatch,
 	};
 }
