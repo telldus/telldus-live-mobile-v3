@@ -22,9 +22,9 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { FormattedMessage, View, Text } from 'BaseComponents';
+import { FormattedMessage, View } from 'BaseComponents';
 import {FormContainerComponent, ForgotPasswordForm} from 'PreLoginScreen_SubViews';
 
 import i18n from './../../Translations/common';
@@ -68,7 +68,9 @@ class ForgotPasswordScreen extends View {
 			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)}>
 				<ForgotPasswordForm />
 				<View style={{ height: 10 }}/>
-				<Text style={styles.accountExist} onPress={this.goBackToLogin}> <FormattedMessage {...messages.backToLogin} style={styles.accountExist} /> </Text>
+				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
+					<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
+				</TouchableOpacity>
 			</FormContainerComponent>
 		);
 	}

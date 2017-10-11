@@ -22,10 +22,11 @@
 'use strict';
 
 import React from 'react';
+import {TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, Text, Modal } from 'BaseComponents';
+import { FormattedMessage, View, Modal } from 'BaseComponents';
 import {FormContainerComponent, NotificationComponent, RegisterForm} from 'PreLoginScreen_SubViews';
 
 import StyleSheet from 'StyleSheet';
@@ -96,7 +97,9 @@ class RegisterScreen extends View {
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)}>
 				<RegisterForm />
-				<Text style={styles.accountExist} onPress={this.goBackToLogin}><FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/></Text>
+				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
+					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
+				</TouchableOpacity>
 				<Modal
 					modalStyle={Theme.Styles.notificationModal}
 					entry= "ZoomIn"

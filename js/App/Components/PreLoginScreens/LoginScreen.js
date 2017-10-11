@@ -22,10 +22,11 @@
 'use strict';
 
 import React from 'react';
+import {TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, Text, View, Modal } from 'BaseComponents';
+import { FormattedMessage, View, Modal } from 'BaseComponents';
 import {NotificationComponent, FormContainerComponent, LoginForm, SessionLocked} from 'PreLoginScreen_SubViews';
 
 import i18n from './../../Translations/common';
@@ -141,8 +142,12 @@ class LoginScreen extends View {
 					<View>
 						<LoginForm />
 						<View style={styles.otherLinks}>
-							<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}><FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb' }}/></Text>
-							<Text style={{ color: '#bbb', paddingLeft: 5 }} onPress={this.onNeedAccount}><FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5 }}/></Text>
+							<TouchableOpacity style={{height: 25}} onPress={this.onForgotPassword}>
+								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb' }}/>
+							</TouchableOpacity>
+							<TouchableOpacity style={{height: 25, paddingLeft: 5 }} onPress={this.onNeedAccount}>
+								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5 }}/>
+							</TouchableOpacity>
 						</View>
 						<View style={{ height: 10 }}/>
 					</View>
