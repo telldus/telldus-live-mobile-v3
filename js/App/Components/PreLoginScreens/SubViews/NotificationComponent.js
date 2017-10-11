@@ -47,7 +47,6 @@ const messages = defineMessages({
 
 
 type Props = {
-	onPress: Function,
 	text: string,
 	header?: string,
 	showPositive: boolean,
@@ -73,21 +72,24 @@ class NotificationComponent extends View {
 	}
 
 	onPressNegative() {
-		let {onPress, onPressNegative} = this.props;
-		if (onPress) {
-			onPress();
-		}
+		let {onPressNegative} = this.props;
 		if (onPressNegative) {
-			onPressNegative();
+			if (typeof onPressNegative === 'function') {
+				onPressNegative();
+			} else {
+				console.warn('Invalid Prop Passed : onPressNegative expects a Function.');
+			}
 		}
 	}
+
 	onPressPositive() {
-		let {onPress, onPressPositive} = this.props;
-		if (onPress) {
-			onPress();
-		}
+		let {onPressPositive} = this.props;
 		if (onPressPositive) {
-			onPressPositive();
+			if (typeof onPressPositive === 'function') {
+				onPressPositive();
+			} else {
+				console.warn('Invalid Prop Passed : onPressPositive expects a Function.');
+			}
 		}
 	}
 
