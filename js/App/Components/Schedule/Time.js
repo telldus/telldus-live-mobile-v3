@@ -52,7 +52,7 @@ export default class Time extends View<null, Props, State> {
 		onDidMount: PropTypes.func,
 		schedule: PropTypes.object,
 		paddingRight: PropTypes.number,
-		isEditMode: PropTypes.bool,
+		isEditMode: PropTypes.func,
 	};
 
 	constructor(props: Props) {
