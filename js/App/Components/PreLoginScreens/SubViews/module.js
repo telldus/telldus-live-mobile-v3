@@ -25,6 +25,7 @@ import NotificationComponent from './NotificationComponent';
 import FormContainerComponent from './FormContainerComponent';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
+import ForgotPasswordForm from './ForgotPasswordForm';
 import SessionLocked from './SessionLocked';
 
 module.exports = {
@@ -32,5 +33,6 @@ module.exports = {
 	FormContainerComponent,
 	LoginForm,
 	RegisterForm,
+	ForgotPasswordForm,
 	SessionLocked,
 };
