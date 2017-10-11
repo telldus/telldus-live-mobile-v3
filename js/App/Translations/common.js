@@ -113,6 +113,10 @@ const messages = defineMessages({
 		id: 'button.sendingpassword',
 		defaultMessage: 'SENDING',
 	},
+	retry: {
+		id: 'button.retry',
+		defaultMessage: 'RETRY',
+	},
 	emailAddress: {
 		id: 'user.emailAddress',
 		defaultMessage: 'Email address',

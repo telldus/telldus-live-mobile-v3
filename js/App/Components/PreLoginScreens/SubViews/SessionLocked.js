@@ -23,9 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-	TouchableOpacity,
-} from 'react-native';
 import {defineMessages, intlShape, injectIntl} from 'react-intl';
 
 import {
@@ -33,18 +30,28 @@ import {
 	View,
 	StyleSheet,
 	Dimensions,
+	TouchableButton,
 } from 'BaseComponents';
 
+import i18n from '../../../Translations/common';
 import { logoutFromTelldus } from 'Actions';
 import { refreshAccessToken } from 'LiveApi';
-
-import Theme from 'Theme';
 
 const messages = defineMessages({
 	sessionLocked: {
 		id: 'user.sessionLockedLogoutConfirm',
 		defaultMessage: 'If you logout from your account you will have to add your devices to your dashboard manually.',
 		description: 'Content for Logout Confirmation Dialoge in Session Locked Screen',
+	},
+	sessionLockedBodyParaOne: {
+		id: 'user.sessionLockedBodyParaOne',
+		defaultMessage: 'For some reason we can\'t connect your account right now.',
+		description: 'Para One content for Session Locked Screen',
+	},
+	sessionLockedBodyParaTwo: {
+		id: 'user.sessionLockedBodyParaTwo',
+		defaultMessage: 'Make sure that your internet connection is working and retry by tapping the retry button below.',
+		description: 'Para Two content for Session Locked Screen',
 	},
 });
 
@@ -64,15 +71,19 @@ class SessionLocked extends View {
 	constructor(props: Props) {
 		super(props);
 
+		this.bodyOne = this.props.intl.formatMessage(messages.sessionLockedBodyParaOne);
+		this.bodyTwo = this.props.intl.formatMessage(messages.sessionLockedBodyParaTwo);
+		this.buttonOne = this.props.intl.formatMessage(i18n.retry);
+		this.buttonTwo = this.props.intl.formatMessage(i18n.logout);
+		this.confirmMessage = this.props.intl.formatMessage(messages.sessionLocked);
 		this.onPressLogout = this.onPressLogout.bind(this);
 	}
 
 	onPressLogout() {
-		let message = this.props.intl.formatMessage(messages.sessionLocked);
 		this.props.dispatch({
 			type: 'REQUEST_MODAL_OPEN',
 			payload: {
-				data: message,
+				data: this.confirmMessage,
 			},
 		});
 	}
@@ -87,30 +98,20 @@ class SessionLocked extends View {
 		return (
 			<View style={styles.bodyCover}>
 				<Text style={styles.contentText}>
-					For some reason we can't connect your account right now.
+					{this.bodyOne}
 				</Text>
 				<Text/>
 				<Text style={[styles.contentText, {paddingLeft: 20}]}>
-					Make sure that your internet connection is working and retry by tapping the retry button below.
+					{this.bodyTwo}
 				</Text>
-				<TouchableOpacity
+				<TouchableButton
 					onPress={this.props.refreshAccessToken}
-					style={[styles.button, {marginTop: 10}]}>
-					<View style={styles.button}>
-						<Text style={{color: '#fff'}}>
-								RETRY
-						</Text>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity
+					text={this.buttonOne}
+					style={{marginTop: 10}}/>
+				<TouchableButton
 					onPress={this.onPressLogout}
-					style={[styles.button, {marginTop: 10}]}>
-					<View style={styles.button}>
-						<Text style={{color: '#fff'}}>
-								LOGOUT
-						</Text>
-					</View>
-				</TouchableOpacity>
+					text={this.buttonTwo}
+					style={{marginTop: 10}}/>
 			</View>
 		);
 	}
@@ -132,15 +133,6 @@ const styles = StyleSheet.create({
 		color: '#ffffff80',
 		textAlign: 'center',
 		fontSize: 12,
-	},
-	button: {
-		height: 50,
-		width: 200,
-		backgroundColor: Theme.Core.btnPrimaryBg,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderRadius: 30,
-		alignSelf: 'center',
 	},
 });
 
