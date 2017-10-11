@@ -24,17 +24,14 @@
 import React, {Component} from 'react';
 import {TouchableOpacity, Dimensions, StyleSheet} from 'react-native';
 
-import View from './View';
-import Icon from './Icon';
 const deviceHeight = Dimensions.get('window').height;
-let deviceWidth = Dimensions.get('window').width;
 
 type Props = {
-	onPressParam?: any;
-	onPress?: (onPressParam?: any) => void;
+	onPressParam?: any,
+	onPress?: (onPressParam?: any) => void,
 	style?: Object,
 	children?: any,
-}
+};
 
 export default class HeaderNav extends Component {
 	props: Props;
@@ -49,10 +46,10 @@ export default class HeaderNav extends Component {
 	onPress() {
 		let {onPress, onPressParam} = this.props;
 		if (onPress) {
-			if (typeof onPress === 'function')  {
-				let param = onPressParam ? onPressParam : null; 
+			if (typeof onPress === 'function') {
+				let param = onPressParam ? onPressParam : null;
 				onPress(param);
-			}else{
+			} else {
 				console.warn('Invalid Prop Passed : onPress expects a Function.');
 			}
 		}
@@ -78,4 +75,4 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-})
+});
