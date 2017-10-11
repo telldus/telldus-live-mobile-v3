@@ -45,11 +45,6 @@ const messages = defineMessages({
 		defaultMessage: 'Lost Connection',
 		description: 'Header for Session Locked Screen',
 	},
-	notificationPositiveTextSL: {
-		id: 'notification.notificationPositiveTextSL',
-		defaultMessage: 'LOGOUT',
-		description: 'Positive text for the notification component',
-	},
 });
 
 type Props = {
@@ -117,8 +112,8 @@ class LoginScreen extends View {
 			showNegative = false, showPositive = true;
 		if (this.props.accessToken && !this.props.isTokenValid) {
 			headerText = this.props.intl.formatMessage(messages.headerSessionLocked);
-			positiveText = this.props.intl.formatMessage(messages.notificationPositiveTextSL);
-			notificationHeader = `${this.props.intl.formatMessage(messages.notificationPositiveTextSL)}?`;
+			positiveText = this.props.intl.formatMessage(i18n.logout).toUpperCase();
+			notificationHeader = `${this.props.intl.formatMessage(i18n.logout)}?`;
 			onPressPositive = this.onPressPositive;
 			onPressNegative = this.closeModal;
 			showNegative = true;
