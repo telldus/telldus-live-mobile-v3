@@ -105,7 +105,7 @@ const Drawer = (props: Object): React$Element<any> => {
 				{props.gateways.allIds.map((id: number, index: number): React$Element<any> => {
 					return (<Gateway {...props.gateways.byId[id]} key={index}/>);
 				})}
-				<SettingsButton onPress={props.onOpenSetting}/>
+				<SettingsButton onPress={props.openSetting}/>
 			</View>
 		</View>
 	);

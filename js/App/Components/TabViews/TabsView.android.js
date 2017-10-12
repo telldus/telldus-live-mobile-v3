@@ -175,8 +175,8 @@ class TabsView extends View {
 				<View>
 					<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 					{
-						this.state.settings ? (
-							<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
+						this.props.screenProps.openSetting ? (
+							<SettingsDetailModal isVisible={true} onClose={this.props.screenProps.closeSetting}/>
 						) : null
 					}
 				</View>

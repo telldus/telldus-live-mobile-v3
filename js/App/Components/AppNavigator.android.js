@@ -60,7 +60,6 @@ import { View, Icon, HeaderNav } from 'BaseComponents';
 import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
-import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
 
@@ -166,6 +165,7 @@ type Props = {
 
 type State = {
 	specificOrientation: Object,
+	openSetting: boolean,
 };
 
 class AppNavigator extends View {
@@ -177,40 +177,21 @@ class AppNavigator extends View {
 	renderNavigationView: () => Object;
 	openDrawer: () => void;
 	closeDrawer: () => void;
+	openSetting: () => void;
+	closeSetting: () => void;
 
 	constructor() {
 		super();
 
-		if (Platform.OS !== 'android') {
-			const init = Orientation.getInitialOrientation();
-
-			this.state = {
-				specificOrientation: init,
-			};
-
-			Orientation.unlockAllOrientations();
-			Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
-		}
-
-		this.starButton = {
-			icon: {
-				name: 'star',
-				size: 22,
-				color: '#fff',
-			},
-		};
-
-		this.menuButton = {
-			icon: {
-				name: 'bars',
-				size: 22,
-				color: '#fff',
-			},
+		this.state = {
+			openSetting: false,
 		};
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
 		this.openDrawer = this.openDrawer.bind(this);
 		this.closeDrawer = this.closeDrawer.bind(this);
+		this.openSetting = this.openSetting.bind(this);
+		this.closeSetting = this.closeSetting.bind(this);
 	}
 
 	componentWillMount() {
@@ -264,11 +245,24 @@ class AppNavigator extends View {
 		this.refs.drawer.closeDrawer();
 	}
 
+	openSetting() {
+		this.setState({
+			openSetting: true,
+		});
+	}
+
+	closeSetting() {
+		this.setState({
+			openSetting: false,
+		});
+	}
+
 	renderNavigationView(): React$Element<any> {
 		return <Drawer
 			gateways={this.props.gateways}
 			userProfile={this.props.userProfile}
 			theme={this.getTheme()}
+			openSetting={this.openSetting}
 		/>;
 	}
 
@@ -276,6 +270,8 @@ class AppNavigator extends View {
 		let screenProps = {
 			openDrawer: this.openDrawer,
 			closeDrawer: this.closeDrawer,
+			openSetting: this.state.openSetting,
+			closeSetting: this.closeSetting,
 		};
 
 		return (
