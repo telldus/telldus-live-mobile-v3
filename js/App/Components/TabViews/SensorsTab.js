@@ -96,7 +96,7 @@ class SensorsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.tab === 'sensorsTab';
+		return nextProps.tab === 'sensorsTab' || nextProps.editMode !== this.props.editMode;
 	}
 
 	onRefresh() {

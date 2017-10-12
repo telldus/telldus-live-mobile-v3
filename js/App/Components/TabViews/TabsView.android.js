@@ -152,7 +152,9 @@ class TabsView extends View {
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
 		const index = currentState.index;
-
+		if (this.props.editModeDevices || this.props.editModeSensors) {
+			this.toggleEditMode();
+		}
 		this.setState({ routeName: currentState.routes[index].routeName });
 		this.onRequestChangeTab(index);
 	}
@@ -193,6 +195,8 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		userProfile: getUserProfile(store),
 		dashboard: store.dashboard,
 		gateways: store.gateways,
+		editModeDevices: store.tabs.editModeDevicesTab,
+		editModeSensors: store.tabs.editModeSensorsTab,
 		store,
 	};
 }
