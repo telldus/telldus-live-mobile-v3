@@ -57,7 +57,6 @@ const deviceWidth = Dimensions.get('window').width;
 import Theme from 'Theme';
 
 import { View, Icon, HeaderNav } from 'BaseComponents';
-import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
 import { DimmerPopup } from 'TabViews_SubViews';
@@ -143,8 +142,6 @@ function toggleEditMode(args: Object) {
 	args.params.toggleEditMode();
 }
 
-
-
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',
 };
@@ -173,7 +170,6 @@ class AppNavigator extends View {
 	props: Props;
 	state: State;
 
-	_updateSpecificOrientation: (Object) => void;
 	renderNavigationView: () => Object;
 	openDrawer: () => void;
 	closeDrawer: () => void;
@@ -200,8 +196,7 @@ class AppNavigator extends View {
 	}
 
 	componentDidMount() {
-		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
-		if (Platform.OS === 'android' && StatusBar) {
+		if (StatusBar) {
 			StatusBar.setTranslucent(true);
 			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
 		}
@@ -231,12 +226,6 @@ class AppNavigator extends View {
 		});
 	}
 
-	_updateSpecificOrientation = (specificOrientation: string) => {
-		if (Platform.OS !== 'android') {
-			this.setState({ specificOrientation });
-		}
-	};
-
 	openDrawer() {
 		this.refs.drawer.openDrawer();
 	}
@@ -261,7 +250,6 @@ class AppNavigator extends View {
 		return <Drawer
 			gateways={this.props.gateways}
 			userProfile={this.props.userProfile}
-			theme={this.getTheme()}
 			openSetting={this.openSetting}
 		/>;
 	}

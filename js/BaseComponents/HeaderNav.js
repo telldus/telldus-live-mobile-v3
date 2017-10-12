@@ -27,6 +27,11 @@ import {TouchableOpacity, Dimensions, StyleSheet} from 'react-native';
 const deviceHeight = Dimensions.get('window').height;
 
 type Props = {
+	/**
+	*  @onPressParam will be received as first argument
+	*  for function passed as @onPress.(A work around to call onPress function
+	*  with some argument/data by not using Arrow Function.)
+	*/
 	onPressParam?: any,
 	onPress?: (onPressParam?: any) => void,
 	style?: Object,
