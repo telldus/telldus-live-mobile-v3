@@ -130,7 +130,8 @@ class TabsView extends View {
 	}
 
 	toggleEditMode() {
-		this.props.dispatch(toggleEditMode(this.state.routeName));
+		let {state} = this.props.stackNavigator;
+		this.props.dispatch(toggleEditMode(state.params.currentTab));
 	}
 
 	onTabSelect(tab: string) {
