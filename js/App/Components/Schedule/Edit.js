@@ -23,14 +23,29 @@
 
 import React, { PropTypes } from 'react';
 import { ScrollView } from 'react-native';
-import {View} from 'BaseComponents';
+import {View, TouchableButton} from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getDeviceWidth, getSelectedDays } from 'Lib';
 import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from 'Schedule_SubViews';
+import { defineMessages } from 'react-intl';
+import Theme from 'Theme';
 
 interface Props extends ScheduleProps {
 	devices: Object,
 }
+
+const messages = defineMessages({
+	confirmAndSave: {
+		id: 'button.confirmAndSave',
+		defaultMessage: 'Confirm & Save',
+		description: 'save button label in edit schedule page',
+	},
+	delete: {
+		id: 'button.delete',
+		defaultMessage: 'Delete',
+		description: 'delete button label in edit schedule page',
+	},
+});
 
 export default class Edit extends View<null, Props, null> {
 
@@ -78,11 +93,11 @@ export default class Edit extends View<null, Props, null> {
 
 	render(): React$Element<any> {
 		const { active, method, methodValue, weekdays } = this.props.schedule;
-		const { scrollView, container, row } = this._getStyle();
+		const { container, row, save, cancel } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
-			<ScrollView style={scrollView}>
+			<ScrollView>
 				<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState}/>
 				<View style={container}>
 					<ActionRow
@@ -99,6 +114,14 @@ export default class Edit extends View<null, Props, null> {
 						onPress={this.editTime}
 					/>
 					<DaysRow selectedDays={selectedDays} onPress={this.editDays}/>
+					<TouchableButton
+						text={messages.confirmAndSave}
+						style={save}
+					/>
+					<TouchableButton
+						text={messages.delete}
+						style={cancel}
+					/>
 				</View>
 			</ScrollView>
 		);
@@ -119,14 +142,23 @@ export default class Edit extends View<null, Props, null> {
 		const offsetMiddle = deviceWidth * 0.033333333;
 
 		return {
-			scrollView: {
-				flex: 1,
-			},
 			container: {
 				paddingHorizontal: offsetMiddle,
+				alignItems: 'center',
+				marginBottom: offsetSmall,
 			},
 			row: {
 				marginBottom: offsetSmall,
+			},
+			save: {
+				marginTop: 10,
+				backgroundColor: Theme.Core.brandSecondary,
+				color: '#fff',
+			},
+			cancel: {
+				marginTop: 10,
+				backgroundColor: Theme.Core.brandDanger,
+				color: '#fff',
 			},
 		};
 	};

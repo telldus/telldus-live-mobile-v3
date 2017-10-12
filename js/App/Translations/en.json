@@ -1,4 +1,6 @@
 {
+  "button.confirmAndSave": "Confirm & Save",
+  "button.delete": "Delete",
   "button.loggingin": "Logging in",
   "button.loggingout": "Logging out",
   "button.login": "Login",
