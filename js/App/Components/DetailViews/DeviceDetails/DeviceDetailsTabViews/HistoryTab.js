@@ -57,6 +57,7 @@ type Props = {
 	dispatch: Dispatch,
 	history: Object,
 	device: Object,
+	tabNavigator: Object,
 };
 
 type State = {
@@ -75,6 +76,19 @@ class HistoryTab extends View {
 	renderFillerComponent: () => void;
 	renderSectionHeader: (Object, string) => void;
 	renderRow: (Object, string) => void;
+	closeHistoryDetailsModal: () => void;
+
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): React$Element<any> => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
+		tabBarIcon: ({ tintColor }: Object): React$Element<any> => (
+			<CustomIcon name="icon_history" size={24} color={tintColor}/>
+		),
+		tabBarOnPress: (scene: Object, jumpToIndex: Function) => {
+			let {state} = navigation;
+			state.params.actionOnHistoryTabPress();
+			jumpToIndex(scene.index);
+		},
+	});
 
 	constructor(props: Props) {
 		super(props);
@@ -87,16 +101,22 @@ class HistoryTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderFillerComponent = this.renderFillerComponent.bind(this);
+		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
 	}
 
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): React$Element<any> => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }: Object): React$Element<any> => (
-			<CustomIcon name="icon_history" size={24} color={tintColor}/>
-		),
-		tabBarOnPress: (scene: Object, jumpToIndex: number) => {
-		},
-	});
+	componentDidMount() {
+		let {setParams} = this.props.tabNavigator;
+		setParams({
+			actionOnHistoryTabPress: this.closeHistoryDetailsModal,
+		});
+	}
+
+	closeHistoryDetailsModal() {
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_CLOSE',
+			payload: {},
+		});
+	}
 
 	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.history && ((!this.props.history) || (nextProps.history.data.length !== this.props.history.data.length))) {
@@ -312,6 +332,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	// some times the history data might not have received yet, so passing 'false' value.
 	let data = state.devices.byId[ownProps.screenProps.device.id].history ? state.devices.byId[ownProps.screenProps.device.id].history : false;
 	return {
+		tabNavigator: ownProps.navigation,
 		history: data,
 		device: ownProps.screenProps.device,
 	};

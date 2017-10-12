@@ -66,19 +66,20 @@ class SettingsTab extends View {
 
 	onValueChange: number => void;
 
-	constructor(props: Props) {
-		super(props);
-		this.onValueChange = this.onValueChange.bind(this);
-	}
-
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): React$Element<FormattedMessage> => (<FormattedMessage {...i18n.settingsHeader} style={{color: tintColor}}/>),
 		tabBarIcon: ({ tintColor }: Object): React$Element<Icon> => (
 			<Icon name="icon_settings" size={24} color={tintColor}/>
 		),
-		tabBarOnPress: (scene: Object, jumpToIndex: number) => {
+		tabBarOnPress: (scene: Object, jumpToIndex: Function) => {
+			jumpToIndex(scene.index);
 		},
 	});
+
+	constructor(props: Props) {
+		super(props);
+		this.onValueChange = this.onValueChange.bind(this);
+	}
 
 	onValueChange(value: any) {
 		if (!value) {

@@ -63,20 +63,22 @@ type State = {
 class OverviewTab extends View {
 	props: Props;
 	state: State;
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-		};
-	}
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): React$Element<any> => (<FormattedMessage {...messages.overviewHeader} style={{color: tintColor}}/>),
 		tabBarIcon: ({ tintColor }: Object): React$Element<any> => (
 			<Icon name="icon_home" size={24} color={tintColor}/>
 		),
-		tabBarOnPress: (scene: Object, jumpToIndex: number) => {
+		tabBarOnPress: (scene: Object, jumpToIndex: Function) => {
+			jumpToIndex(scene.index);
 		},
 	});
+
+	constructor(props: Props) {
+		super(props);
+		this.state = {
+		};
+	}
 
 	getType(deviceId: number): mixed {
 		const filteredItem = this.props.devices.byId[deviceId];

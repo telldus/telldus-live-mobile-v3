@@ -28,7 +28,6 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
-import { getStore } from '../../../../Store/ConfigureStore';
 import type { Dispatch } from 'Actions_Types';
 
 import { Text, View, Image } from 'BaseComponents';
@@ -119,14 +118,6 @@ class DeviceDetailsTabsView extends View {
 		);
 	}
 }
-// Might not be the best way, but will work fine, may use till a better solution is found.
-function onTabPress(tab: Object) {
-	let { dispatch } = getStore();
-	dispatch({
-		type: 'REQUEST_MODAL_CLOSE',
-		payload: {},
-	});
-}
 
 const styles = StyleSheet.create({
 	container: {
@@ -194,9 +185,6 @@ const Tabs = TabNavigator(
 			iconStyle: {
 				width: 25,
 				height: 25,
-			},
-			onTabPress: (tab: Object) => {
-				onTabPress(tab);
 			},
 			swipeEnabled: true,
 			lazy: true,
