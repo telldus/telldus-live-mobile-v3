@@ -30,7 +30,7 @@ import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import type { Dispatch } from 'Actions_Types';
 
-import { Text, View, Image } from 'BaseComponents';
+import { Text, View, Poster } from 'BaseComponents';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from './../../../TabViews/img/selection.json';
@@ -102,15 +102,17 @@ class DeviceDetailsTabsView extends View {
 			currentTab: this.state.currentTab,
 		};
 		return (
-			<View style={styles.container}>
-				<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('./../../../TabViews/img/telldus-geometric-header-bg.png')}>
-					<View style={styles.deviceIconBackground}>
-						<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
+			<View>
+				<Poster>
+					<View style={styles.banner}>
+						<View style={styles.deviceIconBackground}>
+							<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
+						</View>
+						<Text style={styles.textDeviceName}>
+							{this.props.device.name}
+						</Text>
 					</View>
-					<Text style={styles.textDeviceName}>
-						{this.props.device.name}
-					</Text>
-				</Image>
+				</Poster>
 				<View style={{ height: screenSpaceRemaining }}>
 					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
@@ -120,17 +122,12 @@ class DeviceDetailsTabsView extends View {
 }
 
 const styles = StyleSheet.create({
-	container: {
-	},
-	deviceIconBackG: {
+	banner: {
+		position: 'absolute',
 		height: (deviceHeight * 0.2),
 		width: deviceWidth,
 		alignItems: 'center',
 		justifyContent: 'center',
-	},
-	icon: {
-		width: 15,
-		height: 15,
 	},
 	textDeviceName: {
 		fontSize: 18,
