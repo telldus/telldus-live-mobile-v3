@@ -82,7 +82,9 @@ type Props = {
 	onClose: () => void,
 	onLogout: (string, (string) => void) => void,
 	onSubmitPushToken: (string, (string) => void) => void,
-	store: Object,
+	pushToken: string,
+	pushTokenRegistered: boolean,
+	notificationText: string,
 };
 
 
@@ -116,7 +118,7 @@ class SettingsDetailModal extends View {
 		this.setState({
 			isLogoutLoading: true,
 		});
-		this.props.onLogout(this.props.store.user.pushToken, this.postLoadMethod);
+		this.props.onLogout(this.props.pushToken, this.postLoadMethod);
 	}
 
 	postLoadMethod(type: string) {
@@ -145,8 +147,8 @@ class SettingsDetailModal extends View {
 				<Container style={styles.container}>
 					<Header onPress={this.props.onClose}/>
 					<View style={styles.body}>
-						{ this.props.store.user.notificationText ?
-							<Text style={styles.notification}>{this.props.store.user.notificationText}</Text>
+						{ this.props.notificationText ?
+							<Text style={styles.notification}>{this.props.notificationText}</Text>
 							:
 							null
 						}
@@ -154,7 +156,7 @@ class SettingsDetailModal extends View {
 							Telldus Live! mobile{'\n'}
 							<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
 						</Text>
-						{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
+						{this.props.pushToken && !this.props.pushTokenRegistered ?
 							<TouchableButton
 								style={Theme.Styles.submitButton}
 								onPress={this.submitPushToken}
@@ -181,7 +183,7 @@ class SettingsDetailModal extends View {
 		this.setState({
 			isPushSubmitLoading: true,
 		});
-		this.props.onSubmitPushToken(this.props.store.user.pushToken, this.postLoadMethod);
+		this.props.onSubmitPushToken(this.props.pushToken, this.postLoadMethod);
 	}
 }
 
@@ -250,7 +252,9 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object): Object {
 	return {
-		store,
+		pushToken: store.user.pushToken,
+		pushTokenRegistered: store.user.pushTokenRegistered,
+		notificationText: store.user.notificationText,
 	};
 }
 
