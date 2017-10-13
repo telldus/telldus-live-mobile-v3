@@ -102,6 +102,7 @@ export default class RowWithTriangle extends Component {
 				width: triangleWidth,
 				height: triangleHeight,
 				zIndex: 3,
+				elevation: 2,
 			},
 			triangleCommon: {
 				width: triangleWidth,
