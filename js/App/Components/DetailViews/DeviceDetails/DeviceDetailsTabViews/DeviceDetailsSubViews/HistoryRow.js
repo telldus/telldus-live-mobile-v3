@@ -23,13 +23,19 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { FormattedMessage, Text, View, Icon, FormattedTime } from 'BaseComponents';
+import {
+	FormattedMessage,
+	Text,
+	View,
+	FormattedTime,
+	RowWithTriangle,
+} from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
 import type { Dispatch } from 'Actions_Types';
 import i18n from '../../../../../Translations/common';
@@ -39,7 +45,7 @@ const deviceHeight = Dimensions.get('window').height;
 
 type Props = {
 	item: Object,
-	onOriginPress: () => void,
+	onOriginPress: (data: Object) => void,
 };
 
 type State = {
@@ -88,6 +94,29 @@ class HistoryRow extends View {
 		return Math.round(value * 100.0 / 255);
 	}
 
+	getRowStyle(): Object {
+		return {
+			statusLocationContainer: {
+				width: widthStatusLocationContainer,
+				height: deviceHeight * 0.07,
+				justifyContent: 'center',
+				alignItems: 'center',
+				flexDirection: 'row',
+				borderRadius: 2,
+			},
+			shadow: {
+				shadowColor: '#000000',
+				shadowOffset: {
+					width: 0,
+					height: 0,
+				},
+				shadowRadius: 1,
+				shadowOpacity: 1.0,
+				elevation: 2,
+			},
+		};
+	}
+
 	render(): React$Element<any> {
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
@@ -107,16 +136,15 @@ class HistoryRow extends View {
 		} else {
 			originText = origin;
 		}
+		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
 		return (
 			<View style={styles.rowItemsContainer}>
 				<View style={styles.circularViewCover}>
-					<View style={styles.verticalLineView}/>
 					{ this.props.item.successStatus !== 0 ?
-						<CustomIcon name="icon_info" size={deviceHeight * 0.03} color="#d32f2f" />
+						<CustomIcon name="icon_info" size={deviceHeight * 0.035} color="#d32f2f" />
 						:
 						<View style={[styles.circularView, { backgroundColor: '#A59F9A' }]} />
 					}
-					<View style={styles.verticalLineView}/>
 				</View>
 				<View style={styles.timeCover}>
 					<FormattedTime
@@ -129,15 +157,8 @@ class HistoryRow extends View {
 						style={styles.timeText} />
 				</View>
 				<View style={styles.statusArrowLocationContainer}>
-					<View style={styles.arrowViewContainer}>
-						{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
-							<Icon name="play" style={styles.carretIcon} size={deviceHeight * 0.030} color="#A59F9A" />
-							:
-							<Icon name="play" style={styles.carretIcon} size={deviceHeight * 0.030} color="#F06F0C" />
-						}
-					</View>
-					<TouchableWithoutFeedback onPress={this.onOriginPress}>
-						<View style={[styles.statusLocationContainer, styles.shadow]}>
+					<TouchableOpacity onPress={this.onOriginPress}>
+						<RowWithTriangle triangleColor={triangleColor} style={[...this.getRowStyle()]}>
 							{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
 								<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
 									<CustomIcon name="icon_off" size={24} color="#ffffff" />
@@ -154,8 +175,8 @@ class HistoryRow extends View {
 							<View style={styles.locationCover}>
 								<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
 							</View>
-						</View>
-					</TouchableWithoutFeedback>
+						</RowWithTriangle>
+					</TouchableOpacity>
 				</View>
 			</View>
 		);
@@ -166,8 +187,8 @@ class HistoryRow extends View {
 let widthStatusLocationContainer = deviceWidth * 0.615;
 let widthArrowViewContainer = deviceWidth * 0.045;
 
-let widthCircularViewCover = deviceWidth * 0.1;
-let widthTimeCover = deviceWidth * 0.20;
+let widthCircularViewCover = deviceWidth * 0.06;
+let widthTimeCover = deviceWidth * 0.24;
 let widthStatusArrowLocationContainer = widthStatusLocationContainer + widthArrowViewContainer;
 
 const styles = StyleSheet.create({
@@ -193,11 +214,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		flexDirection: 'column',
 	},
-	verticalLineView: {
-		backgroundColor: '#A59F9A',
-		height: deviceHeight * 0.045,
-		width: 2,
-	},
 	timeCover: {
 		width: widthTimeCover,
 		height: deviceHeight * 0.08,
@@ -214,14 +230,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'row',
-	},
-	statusLocationContainer: {
-		width: widthStatusLocationContainer,
-		height: deviceHeight * 0.07,
-		justifyContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'row',
-		borderRadius: 2,
 	},
 	shadow: {
 		shadowColor: '#000000',
@@ -257,42 +265,6 @@ const styles = StyleSheet.create({
 		borderRadius: 30,
 		borderWidth: 1.5,
 		borderColor: '#fff',
-	},
-	arrowViewContainer: {
-		width: widthArrowViewContainer,
-		height: deviceHeight * 0.07,
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	carretIcon: {
-		left: deviceWidth * 0.015,
-		position: 'absolute',
-		elevation: 2,
-		transform: [{ rotate: '180deg' }],
-	},
-	arrowViewTopON: {
-		backgroundColor: '#F06F0C',
-		width: deviceWidth * 0.06,
-		height: deviceHeight * 0.02,
-		transform: [{ rotate: '-30deg' }],
-		elevation: 2,
-	},
-	arrowViewTopOFF: {
-		backgroundColor: '#A59F9A',
-		width: deviceWidth * 0.06,
-		height: deviceHeight * 0.02,
-		transform: [{ rotate: '-30deg' }],
-		elevation: 2,
-	},
-	arrowViewBottom: {
-		backgroundColor: '#eeeeef',
-		width: deviceWidth * 0.06,
-		height: deviceHeight * 0.025,
-		position: 'absolute',
-		top: deviceHeight * 0.04,
-		transform: [{ rotate: '30deg' }],
-		elevation: 2,
 	},
 	locationCover: {
 		width: deviceWidth * 0.45,

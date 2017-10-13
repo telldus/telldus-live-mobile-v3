@@ -73,7 +73,6 @@ class HistoryTab extends View {
 	state: State;
 
 	refreshHistoryData: () => void;
-	renderFillerComponent: () => void;
 	renderSectionHeader: (Object, string) => void;
 	renderRow: (Object, string) => void;
 	closeHistoryDetailsModal: () => void;
@@ -100,7 +99,6 @@ class HistoryTab extends View {
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
-		this.renderFillerComponent = this.renderFillerComponent.bind(this);
 		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
 	}
 
@@ -200,16 +198,6 @@ class HistoryTab extends View {
 		);
 	}
 
-	renderFillerComponent(): React$Element<any> {
-		return (
-			<View style={styles.fillerComponent}>
-				<View style={styles.fillerViewToAlign}>
-					<View style={styles.fillerVerticalLine}/>
-				</View>
-			</View>
-		);
-	}
-
 	componentWillUnmount() {
 		clearTimeout(this.delayRefreshHistoryData);
 	}
@@ -251,15 +239,13 @@ class HistoryTab extends View {
 					renderRow={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 				/>
-				{this.renderFillerComponent()}
+				<View style={styles.line}/>
 				<DeviceHistoryDetails />
 			</View>
 		);
 	}
 
 }
-
-let widthCircularViewCover = deviceWidth * 0.1;
 
 const styles = StyleSheet.create({
 	container: {
@@ -303,22 +289,14 @@ const styles = StyleSheet.create({
 	sectionHeaderText: {
 		color: '#A59F9A',
 	},
-	fillerComponent: {
-		flex: 1,
-		justifyContent: 'flex-start',
-		alignItems: 'flex-start',
-		marginLeft: deviceWidth * 0.02,
-	},
-	fillerViewToAlign: {
-		flex: 1,
-		width: widthCircularViewCover,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	fillerVerticalLine: {
-		flex: 1,
+	line: {
 		backgroundColor: '#A59F9A',
-		width: 2,
+		height: '100%',
+		width: 1,
+		position: 'absolute',
+		left: deviceWidth * 0.05,
+		top: 0,
+		zIndex: -1,
 	},
 });
 
