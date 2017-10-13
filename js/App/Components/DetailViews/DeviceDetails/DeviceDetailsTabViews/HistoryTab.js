@@ -23,13 +23,13 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, ListView, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
+import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate, List } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DeviceDetailsSubView';
 import { getDeviceHistory } from 'Actions_Devices';
 import type { Dispatch } from 'Actions_Types';
@@ -234,7 +234,7 @@ class HistoryTab extends View {
 		}
 		return (
 			<View style={styles.container}>
-				<ListView
+				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
