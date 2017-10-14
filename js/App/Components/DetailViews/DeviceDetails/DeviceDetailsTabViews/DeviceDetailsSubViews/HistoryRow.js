@@ -33,8 +33,7 @@ import {
 	FormattedMessage,
 	Text,
 	View,
-	FormattedTime,
-	RowWithTriangle,
+	ListRow,
 } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
 import type { Dispatch } from 'Actions_Types';
@@ -94,29 +93,6 @@ class HistoryRow extends View {
 		return Math.round(value * 100.0 / 255);
 	}
 
-	getRowStyle(): Object {
-		return {
-			statusLocationContainer: {
-				width: widthStatusLocationContainer,
-				height: deviceHeight * 0.07,
-				justifyContent: 'center',
-				alignItems: 'center',
-				flexDirection: 'row',
-				borderRadius: 2,
-			},
-			shadow: {
-				shadowColor: '#000000',
-				shadowOffset: {
-					width: 0,
-					height: 0,
-				},
-				shadowRadius: 1,
-				shadowOpacity: 1.0,
-				elevation: 2,
-			},
-		};
-	}
-
 	render(): React$Element<any> {
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
@@ -137,109 +113,46 @@ class HistoryRow extends View {
 			originText = origin;
 		}
 		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
+		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
+		let roundIconContainer = this.props.item.successStatus !== 0 ? styles.roundIconContainer : null;
 		return (
-			<View style={styles.rowItemsContainer}>
-				<View style={styles.circularViewCover}>
-					{ this.props.item.successStatus !== 0 ?
-						<CustomIcon name="icon_info" size={deviceHeight * 0.035} color="#d32f2f" />
+			<ListRow
+				roundIcon={roundIcon}
+				roundIconStyle={styles.roundIcon}
+				roundIconContainerStyle={roundIconContainer}
+				time={time}
+				containerStyle={{paddingHorizontal: deviceWidth * 0.04}}
+				triangleColor={triangleColor}
+				isFirst={false}
+			>
+				<TouchableOpacity style={styles.rowItemsContainer} onPress={this.onOriginPress}>
+					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
+						<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
+							<CustomIcon name="icon_off" size={24} color="#ffffff" />
+						</View>
 						:
-						<View style={[styles.circularView, { backgroundColor: '#A59F9A' }]} />
-					}
-				</View>
-				<View style={styles.timeCover}>
-					<FormattedTime
-						value={time}
-						localeMatcher= "best fit"
-						formatMatcher= "best fit"
-						hour="numeric"
-						minute="numeric"
-						second="numeric"
-						style={styles.timeText} />
-				</View>
-				<View style={styles.statusArrowLocationContainer}>
-					<TouchableOpacity onPress={this.onOriginPress}>
-						<RowWithTriangle triangleColor={triangleColor} style={[...this.getRowStyle()]}>
-							{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
-								<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
-									<CustomIcon name="icon_off" size={24} color="#ffffff" />
-								</View>
+						<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
+							{deviceState === 'DIM' ?
+								<Text style={styles.statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
 								:
-								<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
-									{deviceState === 'DIM' ?
-										<Text style={styles.statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
-										:
-										<CustomIcon name={icon} size={24} color="#ffffff" />
-									}
-								</View>
+								<CustomIcon name={icon} size={24} color="#ffffff" />
 							}
-							<View style={styles.locationCover}>
-								<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
-							</View>
-						</RowWithTriangle>
-					</TouchableOpacity>
-				</View>
-			</View>
+						</View>
+					}
+					<View style={styles.locationCover}>
+						<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
+					</View>
+				</TouchableOpacity>
+			</ListRow>
 		);
 	}
 
 }
 
-let widthStatusLocationContainer = deviceWidth * 0.615;
-let widthArrowViewContainer = deviceWidth * 0.045;
-
-let widthCircularViewCover = deviceWidth * 0.06;
-let widthTimeCover = deviceWidth * 0.24;
-let widthStatusArrowLocationContainer = widthStatusLocationContainer + widthArrowViewContainer;
-
 const styles = StyleSheet.create({
 	rowItemsContainer: {
 		flexDirection: 'row',
-		height: deviceHeight * 0.09,
-		width: deviceWidth,
-		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	circularViewCover: {
-		width: widthCircularViewCover,
-		height: deviceHeight * 0.09,
-		justifyContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'column',
-	},
-	circularView: {
-		borderRadius: deviceHeight * 0.015,
-		height: deviceHeight * 0.03,
-		width: deviceHeight * 0.03,
-		justifyContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'column',
-	},
-	timeCover: {
-		width: widthTimeCover,
-		height: deviceHeight * 0.08,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	timeText: {
-		color: '#A59F9A',
-		fontSize: 12,
-	},
-	statusArrowLocationContainer: {
-		width: widthStatusArrowLocationContainer,
-		height: deviceHeight * 0.07,
-		justifyContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'row',
-	},
-	shadow: {
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
 	},
 	statusView: {
 		width: deviceWidth * 0.165,
@@ -278,6 +191,13 @@ const styles = StyleSheet.create({
 	},
 	originText: {
 		color: '#A59F9A',
+	},
+	roundIconContainer: {
+		backgroundColor: 'transparent',
+	},
+	roundIcon: {
+		color: '#d32f2f',
+		fontSize: deviceWidth * 0.065555555,
 	},
 });
 
