@@ -125,9 +125,12 @@ export default class JobRow extends View<null, Props, null> {
 			iconOffset,
 			iconRandom,
 			methodIconContainer,
+			roundIcon,
 		} = this._getStyle();
 
 		const repeat = this._getRepeatDescription();
+		let date = `01/01/17 ${effectiveHour}:${effectiveMinute}`;
+		let timestamp = Date.parse(date);
 
 		return (
 			<TouchableOpacity
@@ -137,7 +140,12 @@ export default class JobRow extends View<null, Props, null> {
 			>
 				<ListRow
 					roundIcon={type}
-					time={`${effectiveHour}:${effectiveMinute}`}
+					roundIconStyle={roundIcon}
+					time={timestamp}
+					timeFormat= {{
+						hour: 'numeric',
+						minute: 'numeric',
+					}}
 					containerStyle={{ opacity: active ? 1 : 0.5 }}
 					triangleColor={methodIconContainer.backgroundColor}
 					isFirst={isFirst}
@@ -281,6 +289,10 @@ export default class JobRow extends View<null, Props, null> {
 				position: 'absolute',
 				right: deviceWidth * 0.014666667,
 				bottom: deviceWidth * 0.016,
+			},
+			roundIcon: {
+				color: '#fff',
+				fontSize: deviceWidth * 0.044,
 			},
 		};
 	};
