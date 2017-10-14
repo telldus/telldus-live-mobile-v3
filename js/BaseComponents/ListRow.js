@@ -23,7 +23,7 @@
 
 import React, { PropTypes, Component } from 'react';
 import View from './View';
-import Text from './Text';
+import FormattedTime from './FormattedTime';
 import BlockIcon from './BlockIcon';
 import RowWithTriangle from './RowWithTriangle';
 import { getDeviceWidth } from 'Lib';
@@ -32,11 +32,13 @@ import Theme from 'Theme';
 type Props = {
 	children: any,
 	roundIcon?: string,
-	roundIconContainerStyle?: Object,
-	time?: string,
-	timeStyle?: Object,
-	containerStyle?: Object,
-	rowContainerStyle?: Object,
+	roundIconStyle?: Object | number,
+	roundIconContainerStyle?: Object | number,
+	time?: Date | number,
+	timeFormat?: Object,
+	timeStyle?: Object | number,
+	containerStyle?: Object | number,
+	rowContainerStyle?: Object | number,
 	rowStyle?: Object,
 	isFirst?: boolean,
 	triangleColor?: string,
@@ -44,6 +46,11 @@ type Props = {
 
 type DefaultProps = {
 	isFirst: boolean,
+	timeFormat: {
+		hour: 'numeric',
+		minute: 'numeric',
+		second: 'numeric',
+	},
 };
 
 export default class ListRow extends Component {
@@ -52,8 +59,10 @@ export default class ListRow extends Component {
 	static propTypes = {
 		children: PropTypes.node.isRequired,
 		roundIcon: PropTypes.string,
-		roundIconContainerStyle: PropTypes.object,
-		time: PropTypes.string,
+		roundIconStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		roundIconContainerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		time: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.number]),
+		timeFormat: PropTypes.object,
 		timeStyle: PropTypes.object,
 		containerStyle: PropTypes.object,
 		rowContainerStyle: PropTypes.object,
@@ -64,12 +73,18 @@ export default class ListRow extends Component {
 
 	static defaultProps: DefaultProps = {
 		isFirst: false,
+		timeFormat: {
+			hour: 'numeric',
+			minute: 'numeric',
+			second: 'numeric',
+		},
 	};
 
 	render(): React$Element<any> {
 		const {
 			children,
 			roundIcon,
+			roundIconStyle,
 			roundIconContainerStyle,
 			time,
 			timeStyle,
@@ -77,6 +92,7 @@ export default class ListRow extends Component {
 			rowContainerStyle,
 			rowStyle,
 			triangleColor,
+			timeFormat,
 		} = this.props;
 
 		const style = this._getStyle();
@@ -86,12 +102,16 @@ export default class ListRow extends Component {
 				<BlockIcon
 					icon={roundIcon}
 					containerStyle={[style.roundIconContainer, roundIconContainerStyle]}
-					style={style.roundIcon}
+					style={roundIconStyle}
 				/>
 				{!!time && (
-					<Text style={[style.time, timeStyle]}>
-						{time}
-					</Text>
+					<FormattedTime
+						value={time}
+						localeMatcher= "best fit"
+						formatMatcher= "best fit"
+						{...timeFormat}
+						style={[style.time, timeStyle]} />
+
 				)}
 				<RowWithTriangle
 					layout={'row'}
@@ -124,10 +144,6 @@ export default class ListRow extends Component {
 				aspectRatio: 1,
 				width: roundIconWidth,
 				borderRadius: roundIconWidth / 2,
-			},
-			roundIcon: {
-				color: '#fff',
-				fontSize: deviceWidth * 0.044,
 			},
 			time: {
 				color: '#555',
