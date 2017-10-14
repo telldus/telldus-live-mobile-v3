@@ -36,8 +36,8 @@ type Props = {
 	size?: number,
 	color?: string,
 	bgColor?: string,
-	style?: number,
-	containerStyle?: any,
+	style?: number | Object,
+	containerStyle?: number | Object | Array<any>,
 };
 
 export default class BlockIcon extends Component {
@@ -48,8 +48,8 @@ export default class BlockIcon extends Component {
 		size: PropTypes.number,
 		color: PropTypes.string,
 		bgColor: PropTypes.string,
-		style: PropTypes.object,
-		containerStyle: PropTypes.any,
+		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		containerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
 	};
 
 	static defaultProps: DefaultProps = {

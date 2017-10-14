@@ -35,7 +35,7 @@ type Props = {
 	icon: string,
 	size?: number,
 	color?: string,
-	style?: number,
+	style?: Object | number,
 };
 
 export default class IconTelldus extends Component {
@@ -45,7 +45,7 @@ export default class IconTelldus extends Component {
 		icon: PropTypes.string.isRequired,
 		size: PropTypes.number,
 		color: PropTypes.string,
-		style: PropTypes.object,
+		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 	};
 
 	static defaultProps: DefaultProps = {
