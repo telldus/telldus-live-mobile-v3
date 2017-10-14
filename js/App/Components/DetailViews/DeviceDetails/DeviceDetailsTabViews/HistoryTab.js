@@ -250,7 +250,6 @@ class HistoryTab extends View {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 2,
 		backgroundColor: '#eeeeef',
 		flexDirection: 'row',
 		width: deviceWidth,
@@ -294,7 +293,7 @@ const styles = StyleSheet.create({
 		height: '100%',
 		width: 1,
 		position: 'absolute',
-		left: deviceWidth * 0.05,
+		left: deviceWidth * 0.069333333,
 		top: 0,
 		zIndex: -1,
 	},
