@@ -195,10 +195,11 @@ const styles = StyleSheet.create({
 	},
 	roundIconContainer: {
 		backgroundColor: 'transparent',
+		width: deviceWidth * 0.068888888,
 	},
 	roundIcon: {
 		color: '#d32f2f',
-		fontSize: deviceWidth * 0.065555555,
+		fontSize: deviceWidth * 0.067777777,
 	},
 });
 
