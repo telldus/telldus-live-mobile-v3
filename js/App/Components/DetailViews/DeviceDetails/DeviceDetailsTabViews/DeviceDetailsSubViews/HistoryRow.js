@@ -122,7 +122,9 @@ class HistoryRow extends View {
 				roundIconStyle={styles.roundIcon}
 				roundIconContainerStyle={roundIconContainer}
 				time={time}
+				timeStyle={{width: deviceWidth * 0.26}}
 				containerStyle={{paddingHorizontal: deviceWidth * 0.04}}
+				rowContainerStyle={{width: deviceWidth * 0.53}}
 				triangleColor={triangleColor}
 				isFirst={this.props.isFirst}
 			>
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	statusView: {
-		width: deviceWidth * 0.165,
+		width: deviceWidth * 0.13,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -181,7 +183,7 @@ const styles = StyleSheet.create({
 		borderColor: '#fff',
 	},
 	locationCover: {
-		width: deviceWidth * 0.45,
+		width: deviceWidth * 0.40,
 		height: deviceHeight * 0.07,
 		justifyContent: 'center',
 		backgroundColor: '#fff',
@@ -189,13 +191,14 @@ const styles = StyleSheet.create({
 		paddingLeft: 5,
 		borderTopRightRadius: 2,
 		borderBottomRightRadius: 2,
+		flexWrap: 'wrap',
 	},
 	originText: {
 		color: '#A59F9A',
 	},
 	roundIconContainer: {
 		backgroundColor: 'transparent',
-		width: deviceWidth * 0.068888888,
+		width: deviceWidth * 0.0667777777,
 	},
 	roundIcon: {
 		color: '#d32f2f',

@@ -146,6 +146,8 @@ export default class JobRow extends View<null, Props, null> {
 						hour: 'numeric',
 						minute: 'numeric',
 					}}
+					timeStyle={{width: getDeviceWidth() * 0.20}}
+					rowContainerStyle={{width: getDeviceWidth() * 0.6}}
 					containerStyle={{ opacity: active ? 1 : 0.5 }}
 					triangleColor={methodIconContainer.backgroundColor}
 					isFirst={isFirst}
