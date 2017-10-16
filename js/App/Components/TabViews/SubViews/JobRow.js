@@ -23,7 +23,7 @@
 
 import React, { PropTypes } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { BlockIcon, IconTelldus, ListRow, View, Text } from 'BaseComponents';
+import { BlockIcon, IconTelldus, ListRow, View, Text, FormattedTime } from 'BaseComponents';
 import Theme from 'Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from 'Schedule_SubViews';
 import { capitalize, getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from 'Lib';
@@ -129,7 +129,7 @@ export default class JobRow extends View<null, Props, null> {
 		} = this._getStyle();
 
 		const repeat = this._getRepeatDescription();
-		let date = `01/01/17 ${effectiveHour}:${effectiveMinute}`;
+		let date = `01/01/1970 ${effectiveHour}:${effectiveMinute}`;
 		let timestamp = Date.parse(date);
 
 		return (
@@ -159,6 +159,14 @@ export default class JobRow extends View<null, Props, null> {
 						</Title>
 						<Description numberOfLines={1} ellipsizeMode="tail" style={description}>
 							{repeat}
+							{type === 'time' && (
+								<FormattedTime
+									value={timestamp}
+									hour="numeric"
+									minute="numeric"
+									style={description}
+								/>)
+							}
 						</Description>
 					</TextRowWrapper>
 					{!!offset && (
@@ -206,7 +214,7 @@ export default class JobRow extends View<null, Props, null> {
 	};
 
 	_getRepeatDescription = (): string => {
-		const { type, effectiveHour, effectiveMinute, weekdays } = this.props;
+		const { type, weekdays } = this.props;
 		const selectedDays: string[] = getSelectedDays(weekdays);
 
 		let repeatDays: string = '';
@@ -224,7 +232,7 @@ export default class JobRow extends View<null, Props, null> {
 			repeatDays = capitalize(repeatDays.slice(0, -2));
 		}
 
-		const repeatTime: string = (type === 'time') ? `${effectiveHour}:${effectiveMinute}` : type;
+		const repeatTime: string = (type === 'time') ? '' : type;
 
 		return `${repeatDays} at ${repeatTime}`;
 	};
