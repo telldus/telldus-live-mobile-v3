@@ -100,6 +100,8 @@ class HistoryTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
+
+		this.isFirstFlag = null;
 	}
 
 	componentDidMount() {
@@ -118,6 +120,7 @@ class HistoryTab extends View {
 
 	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.history && ((!this.props.history) || (nextProps.history.data.length !== this.props.history.data.length))) {
+			this.isFirstFlag = null;
 			this.setState({
 				dataSource: listDataSource.cloneWithRowsAndSections(this.getRowAndSectionData(nextProps.history.data)),
 				isListEmpty: nextProps.history.data.length === 0 ? true : false,
@@ -177,9 +180,11 @@ class HistoryTab extends View {
 
 	}
 
-	renderRow(item: Object, id: number): React$Element<any> {
+	renderRow(item: Object, sectionId: string, rowId: number): React$Element<any> {
+		let isFirst = +rowId === 0 && this.isFirstFlag === null;
+		this.isFirstFlag = isFirst;
 		return (
-			<HistoryRow id={id} item={item}/>
+			<HistoryRow id={rowId} item={item} isFirst={isFirst}/>
 		);
 	}
 

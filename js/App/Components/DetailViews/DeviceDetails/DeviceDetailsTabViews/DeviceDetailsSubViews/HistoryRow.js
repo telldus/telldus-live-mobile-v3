@@ -45,6 +45,7 @@ const deviceHeight = Dimensions.get('window').height;
 type Props = {
 	item: Object,
 	onOriginPress: (data: Object) => void,
+	isFirst: boolean,
 };
 
 type State = {
@@ -123,7 +124,7 @@ class HistoryRow extends View {
 				time={time}
 				containerStyle={{paddingHorizontal: deviceWidth * 0.04}}
 				triangleColor={triangleColor}
-				isFirst={false}
+				isFirst={this.props.isFirst}
 			>
 				<TouchableOpacity style={styles.rowItemsContainer} onPress={this.onOriginPress}>
 					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
