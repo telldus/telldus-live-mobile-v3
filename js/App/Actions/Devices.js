@@ -299,8 +299,9 @@ export function getDeviceInfo(deviceId: number, requestedState: string, currentS
 			dispatch({
 				type: 'DEVICE_SET_STATE',
 				payload: {
-					...payload,
-					...response,
+					deviceId,
+					method: response.state,
+					value: response.statevalue,
 				},
 			});
 		}
