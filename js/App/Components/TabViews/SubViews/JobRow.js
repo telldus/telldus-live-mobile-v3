@@ -129,7 +129,7 @@ export default class JobRow extends View<null, Props, null> {
 		} = this._getStyle();
 
 		const repeat = this._getRepeatDescription();
-		let date = `01/01/1970 ${effectiveHour}:${effectiveMinute}`;
+		let date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
 		let timestamp = Date.parse(date);
 
 		return (
