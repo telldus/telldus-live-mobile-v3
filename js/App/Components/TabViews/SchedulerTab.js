@@ -262,7 +262,6 @@ class SchedulerTab extends View<null, Props, State> {
 		return {
 			container: {
 				flex: 1,
-				paddingHorizontal: deviceWidth * 0.04,
 				backgroundColor: '#eeeeef',
 			},
 			line: {
