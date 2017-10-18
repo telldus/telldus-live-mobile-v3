@@ -146,10 +146,10 @@ export default class ListRow extends Component {
 				borderRadius: roundIconWidth / 2,
 			},
 			time: {
-				color: '#555',
+				color: '#707070',
 				fontSize: Math.floor(deviceWidth * 0.046666667),
 				fontFamily: Theme.Core.fonts.robotoMedium,
-				marginHorizontal: deviceWidth * 0.033333333,
+				textAlign: 'center',
 			},
 		};
 	};
