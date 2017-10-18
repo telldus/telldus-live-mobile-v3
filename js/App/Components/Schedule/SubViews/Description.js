@@ -27,14 +27,14 @@ import Theme from 'Theme';
 import { getDeviceWidth } from 'Lib';
 
 type Props = {
-	children: Array<any>,
+	children: string | Array<any>,
 	style?: Object,
 };
 
 export default class Description extends View<null, Props, null> {
 
 	static propTypes = {
-		children: PropTypes.array.isRequired,
+		children: PropTypes.oneOfType([PropTypes.array.isRequired, PropTypes.string.isRequired]),
 		style: PropTypes.object,
 	};
 
