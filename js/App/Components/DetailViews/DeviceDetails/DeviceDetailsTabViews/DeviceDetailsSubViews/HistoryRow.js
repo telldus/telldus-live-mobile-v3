@@ -122,9 +122,9 @@ class HistoryRow extends View {
 				roundIconStyle={styles.roundIcon}
 				roundIconContainerStyle={roundIconContainer}
 				time={time}
-				timeStyle={{width: deviceWidth * 0.26}}
+				timeStyle={{width: deviceWidth * 0.30}}
 				containerStyle={{paddingHorizontal: deviceWidth * 0.04}}
-				rowContainerStyle={{width: deviceWidth * 0.53}}
+				rowContainerStyle={{width: deviceWidth * 0.55}}
 				triangleColor={triangleColor}
 				isFirst={this.props.isFirst}
 			>
