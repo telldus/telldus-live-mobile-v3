@@ -79,7 +79,7 @@ export default class TelldusWebsocket {
 		this._onAppStateChange = this._onAppStateChange.bind(this);
 	}
 
-	close() {
+	close(keepClosed?: boolean = true) {
 		if (!this.websocket) {
 			return console.error('there is no websocket to close');
 		}
@@ -91,7 +91,7 @@ export default class TelldusWebsocket {
 		}
 
 		this.websocket.close(null, null, {
-			keepClosed: true,
+			keepClosed: keepClosed,
 			// fastClose: true,
 		});
 	}
@@ -138,6 +138,7 @@ export default class TelldusWebsocket {
 	_onAppStateChange(appState) {
 		if (appState === 'active') {
 			console.log('app is active, reopening socket connection');
+			this.close(false);
 			this.open();
 		}
 		if (appState === 'background') {
