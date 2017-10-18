@@ -126,6 +126,8 @@ export default class JobRow extends View<null, Props, null> {
 			iconRandom,
 			methodIconContainer,
 			roundIcon,
+			time,
+			rowContainer,
 		} = this._getStyle();
 
 		const repeat = this._getRepeatDescription();
@@ -146,8 +148,8 @@ export default class JobRow extends View<null, Props, null> {
 						hour: 'numeric',
 						minute: 'numeric',
 					}}
-					timeStyle={{width: getDeviceWidth() * 0.20}}
-					rowContainerStyle={{width: getDeviceWidth() * 0.6}}
+					timeStyle={time}
+					rowContainerStyle={rowContainer}
 					containerStyle={{ opacity: active ? 1 : 0.5 }}
 					triangleColor={methodIconContainer.backgroundColor}
 					isFirst={isFirst}
@@ -251,6 +253,8 @@ export default class JobRow extends View<null, Props, null> {
 			container: {
 				flexDirection: 'row',
 				alignItems: 'center',
+				paddingHorizontal: deviceWidth * 0.03888888,
+				width: deviceWidth,
 			},
 			line: {
 				backgroundColor: '#929292',
@@ -303,6 +307,13 @@ export default class JobRow extends View<null, Props, null> {
 			roundIcon: {
 				color: '#fff',
 				fontSize: deviceWidth * 0.044,
+			},
+			time: {
+				width: deviceWidth * 0.26,
+				textAlign: 'center',
+			},
+			rowContainer: {
+				width: deviceWidth * 0.58666666,
 			},
 		};
 	};
