@@ -23,11 +23,13 @@
 
 import React, { PropTypes } from 'react';
 import { ScrollView } from 'react-native';
+import {NavigationActions} from 'react-navigation';
+import { defineMessages } from 'react-intl';
+
 import {View, TouchableButton} from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getDeviceWidth, getSelectedDays } from 'Lib';
 import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from 'Schedule_SubViews';
-import { defineMessages } from 'react-intl';
 import Theme from 'Theme';
 
 interface Props extends ScheduleProps {
@@ -49,6 +51,8 @@ const messages = defineMessages({
 
 export default class Edit extends View<null, Props, null> {
 
+	onSaveSchedule: () => void;
+
 	static propTypes = {
 		navigation: PropTypes.object,
 		actions: PropTypes.object,
@@ -65,6 +69,8 @@ export default class Edit extends View<null, Props, null> {
 
 		this.h1 = `Edit ${this.device.name}`;
 		this.h2 = 'Click the details you want to edit';
+
+		this.onSaveSchedule = this.onSaveSchedule.bind(this);
 	}
 
 	componentDidMount() {
@@ -90,6 +96,29 @@ export default class Edit extends View<null, Props, null> {
 	setScheduleActiveState = (active: boolean) => {
 		this.props.actions.setActiveState(active);
 	};
+
+	onSaveSchedule = () => {
+		let options = this.props.actions.getScheduleOptions(this.props.schedule);
+		this.props.actions.saveSchedule(options).then((response: Object) => {
+			if (response.id) {
+				this.resetNavigation();
+			}
+		});
+	};
+
+	resetNavigation = () => {
+		this.props.navigation.dispatch(NavigationActions.reset({
+			index: 0,
+			actions: [
+				NavigationActions.navigate({
+					routeName: 'Device',
+					params: {
+						reset: true,
+					},
+				}),
+			],
+		}));
+	}
 
 	render(): React$Element<any> {
 		const { active, method, methodValue, weekdays } = this.props.schedule;
@@ -117,6 +146,7 @@ export default class Edit extends View<null, Props, null> {
 					<TouchableButton
 						text={messages.confirmAndSave}
 						style={save}
+						onPress={this.onSaveSchedule}
 					/>
 					<TouchableButton
 						text={messages.delete}

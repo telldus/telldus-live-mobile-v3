@@ -25,6 +25,8 @@
 
 import type { Action } from './Types';
 import type { Schedule } from 'Reducers_Schedule';
+import LiveApi from 'LiveApi';
+import { format } from 'url';
 
 type Time = {
 	hour?: number,
@@ -81,6 +83,36 @@ const setActiveState = (active: boolean): Action => ({
 	},
 });
 
+const getScheduleOptions = (args: Object): Object => {
+	let {action, weekdays, ...options} = args;// eslint-disable-line no-unused-vars
+	let weekDays = JSON.stringify(weekdays);
+	weekDays = weekDays.slice(1, weekDays.length - 1);
+	options.weekdays = weekDays;
+	return options;
+};
+
+const saveSchedule = (schedule: Object): () => Promise<any> => {
+	return (): Promise<any> => {
+		const url = format({
+			pathname: '/scheduler/setJob',
+			query: {
+				...schedule,
+			},
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then((response: Object): Object => {
+			return response;
+		}).catch((err: Object): Object => {
+			return err;
+		});
+	};
+};
+
 module.exports = {
 	selectDevice,
 	selectAction,
@@ -89,4 +121,6 @@ module.exports = {
 	resetSchedule,
 	editSchedule,
 	setActiveState,
+	saveSchedule,
+	getScheduleOptions,
 };

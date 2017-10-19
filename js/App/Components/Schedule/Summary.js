@@ -65,6 +65,15 @@ export default class Summary extends View<null, Props, null> {
 	}
 
 	saveSchedule = () => {
+		let options = this.props.actions.getScheduleOptions(this.props.schedule);
+		this.props.actions.saveSchedule(options).then((response: Object) => {
+			if (response.id) {
+				this.resetNavigation();
+			}
+		});
+	};
+
+	resetNavigation = () => {
 		this.props.navigation.dispatch(NavigationActions.reset({
 			index: 0,
 			actions: [
@@ -76,7 +85,7 @@ export default class Summary extends View<null, Props, null> {
 				}),
 			],
 		}));
-	};
+	}
 
 	render(): React$Element<any> {
 		const { schedule, paddingRight } = this.props;
