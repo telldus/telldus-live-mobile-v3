@@ -52,6 +52,7 @@ const messages = defineMessages({
 export default class Edit extends View<null, Props, null> {
 
 	onSaveSchedule: () => void;
+	onDeleteSchedule: () => void;
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -71,6 +72,7 @@ export default class Edit extends View<null, Props, null> {
 		this.h2 = 'Click the details you want to edit';
 
 		this.onSaveSchedule = this.onSaveSchedule.bind(this);
+		this.onDeleteSchedule = this.onDeleteSchedule.bind(this);
 	}
 
 	componentDidMount() {
@@ -120,6 +122,14 @@ export default class Edit extends View<null, Props, null> {
 		}));
 	}
 
+	onDeleteSchedule = () => {
+		this.props.actions.deleteSchedule(this.props.schedule.id).then((response: Object) => {
+			if (response.status && response.status === 'success') {
+				this.resetNavigation();
+			}
+		});
+	}
+
 	render(): React$Element<any> {
 		const { active, method, methodValue, weekdays } = this.props.schedule;
 		const { container, row, save, cancel } = this._getStyle();
@@ -151,6 +161,7 @@ export default class Edit extends View<null, Props, null> {
 					<TouchableButton
 						text={messages.delete}
 						style={cancel}
+						onPress={this.onDeleteSchedule}
 					/>
 				</View>
 			</ScrollView>

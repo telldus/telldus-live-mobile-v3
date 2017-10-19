@@ -113,6 +113,28 @@ const saveSchedule = (schedule: Object): () => Promise<any> => {
 	};
 };
 
+const deleteSchedule = (id: number): () => Promise<any> => {
+	return (): Promise<any> => {
+		const url = format({
+			pathname: '/scheduler/removeJob',
+			query: {
+				id,
+			},
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then((response: Object): Object => {
+			return response;
+		}).catch((err: Object): Object => {
+			return err;
+		});
+	};
+};
+
 module.exports = {
 	selectDevice,
 	selectAction,
@@ -123,4 +145,5 @@ module.exports = {
 	setActiveState,
 	saveSchedule,
 	getScheduleOptions,
+	deleteSchedule,
 };
