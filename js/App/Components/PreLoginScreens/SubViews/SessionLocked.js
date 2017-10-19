@@ -38,11 +38,6 @@ import { logoutFromTelldus } from 'Actions';
 import { refreshAccessToken } from 'LiveApi';
 
 const messages = defineMessages({
-	sessionLocked: {
-		id: 'user.sessionLockedLogoutConfirm',
-		defaultMessage: 'If you logout from your account you will have to add your devices to your dashboard manually.',
-		description: 'Content for Logout Confirmation Dialoge in Session Locked Screen',
-	},
 	sessionLockedBodyParaOne: {
 		id: 'user.sessionLockedBodyParaOne',
 		defaultMessage: 'For some reason we can\'t connect your account right now.',
@@ -75,7 +70,7 @@ class SessionLocked extends View {
 		this.bodyTwo = this.props.intl.formatMessage(messages.sessionLockedBodyParaTwo);
 		this.buttonOne = this.props.intl.formatMessage(i18n.retry);
 		this.buttonTwo = this.props.intl.formatMessage(i18n.logout);
-		this.confirmMessage = this.props.intl.formatMessage(messages.sessionLocked);
+		this.confirmMessage = this.props.intl.formatMessage(i18n.contentLogoutConfirm);
 		this.onPressLogout = this.onPressLogout.bind(this);
 	}
 

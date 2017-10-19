@@ -48,7 +48,6 @@
   "notification.defaultHeader": "OOPS",
   "notification.defaultNegativeText": "CANCEL",
   "notification.defaultPositiveText": "OK",
-  "notification.notificationPositiveTextSL": "LOGOUT",
   "origin": "Origin",
   "pages.dashboard": "Dashboard",
   "pages.devices": "Devices",
@@ -78,6 +77,7 @@
   "user.backToLogin": "Back to Login",
   "user.confirmEmailAddress": "Confirm email address",
   "user.confirmMessage": "An email is sent to you with a link to confirm your account. Please confirm your account within 24 hours, otherwise the account will be deleted.",
+  "user.contentLogoutConfirm": "If you logout from your account you will have to add your devices to your dashboard manually.",
   "user.createAccount": "Create Account",
   "user.emailAddress": "Email address",
   "user.emailAddressNotMatchBody": "Email addresses don't match. Please Check your entered email address.",
@@ -92,7 +92,6 @@
   "user.password": "Password",
   "user.sessionLockedBodyParaOne": "For some reason we can't connect your account right now.",
   "user.sessionLockedBodyParaTwo": "Make sure that your internet connection is working and retry by tapping the retry button below.",
-  "user.sessionLockedLogoutConfirm": "If you logout from your account you will have to add your devices to your dashboard manually.",
   "user.welcome": "Welcome to Telldus",
   "version": "version"
 }

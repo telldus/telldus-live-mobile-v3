@@ -142,6 +142,11 @@ const messages = defineMessages({
 		defaultMessage: 'Forgot your password?',
 		description: 'Message to show on the login screen and forgot password screen',
 	},
+	contentLogoutConfirm: {
+		id: 'user.contentLogoutConfirm',
+		defaultMessage: 'If you logout from your account you will have to add your devices to your dashboard manually.',
+		description: 'Content for Logout Confirmation Dialoge',
+	},
 });
 
 export default messages;
