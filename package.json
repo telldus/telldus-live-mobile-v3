@@ -30,7 +30,6 @@
     "react-native-extra-dimensions-android": "git+https://github.com/BelinChung/react-native-extra-dimensions-android.git",
     "react-native-fabric": "^0.4.1",
     "react-native-i18n": "^0.1.1",
-    "react-native-keyboard-aware-scroll-view": "^0.3.0",
     "react-native-modal": "^3.1.0",
     "react-native-orientation": "git+https://github.com/yamill/react-native-orientation.git",
     "react-native-push-notification": "^3.0.0",
