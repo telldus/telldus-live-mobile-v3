@@ -26,7 +26,6 @@
 import type { Action } from 'Actions_Types';
 
 const initialState = {
-	device: {},
 	action: {},
 	id: 0,
 	deviceId: 0,
@@ -60,7 +59,7 @@ export default function scheduleReducer(state: Schedule = initialState, action: 
 		case 'SCHEDULE_SELECT_DEVICE':
 			return {
 				...state,
-				device: action.payload,
+				deviceId: action.payload.deviceId,
 			};
 
 		case 'SCHEDULE_SELECT_ACTION':
