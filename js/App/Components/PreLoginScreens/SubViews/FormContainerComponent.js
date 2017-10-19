@@ -23,7 +23,8 @@
 
 import React from 'react';
 import type { Children } from 'react';
-import { KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { BackgroundImage, View, Image, H1 } from 'BaseComponents';
 import StyleSheet from 'StyleSheet';
@@ -37,30 +38,27 @@ type Props = {
 
 const FormContainerComponent = (props: Props) => (
 	<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-		<ScrollView
-			keyboardDismissMode= "interactive">
-			<KeyboardAvoidingView behavior="padding" contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}>
-				<View style={{alignItems: 'center', justifyContent: 'center'}}>
-					<Image
-						source={require('./../img/telldusLogoBlack.png')}
-						style={{
-							marginTop: 60,
-							marginBottom: 60,
-						}}
-					/>
-				</View>
-				<View style={styles.container} >
-					<H1 style={{
-						margin: 10,
-						color: '#ffffff80',
-						textAlign: 'center',
-					}}>
-						{props.headerText}
-					</H1>
-					{props.children}
-				</View>
-			</KeyboardAvoidingView>
-		</ScrollView>
+		<KeyboardAwareScrollView>
+			<View style={{alignItems: 'center', justifyContent: 'center'}}>
+				<Image
+					source={require('./../img/telldusLogoBlack.png')}
+					style={{
+						marginTop: 60,
+						marginBottom: 60,
+					}}
+				/>
+			</View>
+			<View style={styles.container} >
+				<H1 style={{
+					margin: 10,
+					color: '#ffffff80',
+					textAlign: 'center',
+				}}>
+					{props.headerText}
+				</H1>
+				{props.children}
+			</View>
+		</KeyboardAwareScrollView>
 	</BackgroundImage>
 );
 
