@@ -70,6 +70,7 @@ export default class Summary extends View<null, Props, null> {
 			if (response.id) {
 				this.resetNavigation();
 			}
+			this.props.actions.getJobs();
 		});
 	};
 

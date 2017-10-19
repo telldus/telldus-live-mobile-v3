@@ -31,6 +31,7 @@ import { getDeviceWidth } from 'Lib';
 
 import * as scheduleActions from 'Actions_Schedule';
 import { getDevices } from 'Actions_Devices';
+import { getJobs } from 'Actions';
 import type { Schedule } from 'Reducers_Schedule';
 
 type Props = {
@@ -173,7 +174,7 @@ const mapStateToProps = ({ schedule, devices }: mapStateToPropsType): mapStateTo
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators(scheduleActions, dispatch),
+			...bindActionCreators({getJobs, ...scheduleActions}, dispatch),
 			getDevices: (): Object => dispatch(getDevices()),
 		},
 	}

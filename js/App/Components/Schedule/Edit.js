@@ -105,6 +105,7 @@ export default class Edit extends View<null, Props, null> {
 			if (response.id) {
 				this.resetNavigation();
 			}
+			this.props.actions.getJobs();
 		});
 	};
 
@@ -127,6 +128,7 @@ export default class Edit extends View<null, Props, null> {
 			if (response.status && response.status === 'success') {
 				this.resetNavigation();
 			}
+			this.props.actions.getJobs();
 		});
 	}
 
