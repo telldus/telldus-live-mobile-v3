@@ -35,6 +35,7 @@ import {
 
 import i18n from '../../../Translations/common';
 import { logoutFromTelldus } from 'Actions';
+import { unregisterPushToken } from 'Actions_User';
 import { refreshAccessToken } from 'LiveApi';
 
 const messages = defineMessages({
@@ -55,6 +56,7 @@ type Props = {
 	logoutFromTelldus: () => void;
 	intl: intlShape.isRequired,
 	dispatch: Function;
+	pushToken: string,
 	onPressLogout: boolean,
 };
 
@@ -145,14 +147,16 @@ const styles = StyleSheet.create({
 function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
-		accessToken: store.user.accessToken,
+		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
 	};
 }
 function mapDispatchToProps(dispatch) {
 	return {
-		logoutFromTelldus: () => {
-			dispatch(logoutFromTelldus());
+		logoutFromTelldus: (pushToken) => {
+			dispatch(unregisterPushToken(pushToken)).then((res) => {
+				dispatch(logoutFromTelldus());
+			});
 		},
 		refreshAccessToken: () => {
 			refreshAccessToken();
