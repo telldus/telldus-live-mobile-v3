@@ -26,7 +26,7 @@ import {TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, Modal } from 'BaseComponents';
+import { FormattedMessage, View, Modal, Dimensions } from 'BaseComponents';
 import {NotificationComponent, FormContainerComponent, LoginForm, SessionLocked} from 'PreLoginScreen_SubViews';
 
 import i18n from './../../Translations/common';
@@ -135,7 +135,7 @@ class LoginScreen extends View {
 			headerText, notificationHeader, positiveText,
 			onPressPositive, onPressNegative, showPositive, showNegative} = this.getRelativeData();
 		return (
-			<FormContainerComponent headerText={headerText}>
+			<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
 				{this.props.accessToken && !this.props.isTokenValid ?
 					<SessionLocked onPressLogout={this.state.onPressLogout} />
 					:
@@ -187,7 +187,12 @@ const styles = StyleSheet.create({
 	otherLinks: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		marginTop: 15 },
+		marginTop: 15,
+		marginHorizontal: 10,
+	},
+	formContainer: {
+		height: Dimensions.get('window').height * 0.50,
+	},
 });
 
 function mapStateToProps(store) {

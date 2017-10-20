@@ -84,7 +84,7 @@ class LoginForm extends View {
 
 	render() {
 		return (
-			<View>
+			<View style={{flex: 0}}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput

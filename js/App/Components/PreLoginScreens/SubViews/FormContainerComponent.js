@@ -33,6 +33,7 @@ const deviceWidth = Dimensions.get('window').width;
 type Props = {
 	headerText: string,
 	children: Children,
+	formContainerStyle?: number | Object,
 }
 
 const FormContainerComponent = (props: Props) => (
@@ -49,7 +50,7 @@ const FormContainerComponent = (props: Props) => (
 						}}
 					/>
 				</View>
-				<View style={styles.container} >
+				<View style={[styles.container, props.formContainerStyle]} >
 					<H1 style={{
 						margin: 10,
 						color: '#ffffff80',
