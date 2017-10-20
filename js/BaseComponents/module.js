@@ -70,6 +70,7 @@ import ListRow from './ListRow';
 import RowWithTriangle from './RowWithTriangle';
 import FullPageActivityIndicator from './FullPageActivityIndicator';
 import HeaderNav from './HeaderNav';
+import Throbber from './Throbber';
 
 import {
 	AppState,
@@ -129,6 +130,7 @@ module.exports = {
 	RowWithTriangle,
 	FullPageActivityIndicator,
 	HeaderNav,
+	Throbber,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
