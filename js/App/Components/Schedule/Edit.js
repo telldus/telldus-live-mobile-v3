@@ -26,7 +26,7 @@ import { ScrollView } from 'react-native';
 import {NavigationActions} from 'react-navigation';
 import { defineMessages } from 'react-intl';
 
-import {View, TouchableButton} from 'BaseComponents';
+import {View, TouchableButton, Dimensions, Throbber} from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getDeviceWidth, getSelectedDays } from 'Lib';
 import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from 'Schedule_SubViews';
@@ -49,7 +49,14 @@ const messages = defineMessages({
 	},
 });
 
-export default class Edit extends View<null, Props, null> {
+type State = {
+	isSaving: boolean,
+	isDeleting: boolean,
+};
+
+export default class Edit extends View<null, Props, State> {
+
+	state: State;
 
 	onSaveSchedule: () => void;
 	onDeleteSchedule: () => void;
@@ -66,6 +73,11 @@ export default class Edit extends View<null, Props, null> {
 	constructor(props: Props) {
 		super(props);
 
+		this.state = {
+			isSaving: false,
+			isDeleting: false,
+		};
+
 		this.device = this._getDeviceById(this.props.schedule.deviceId);
 
 		this.h1 = `Edit ${this.device.name}`;
@@ -81,6 +93,7 @@ export default class Edit extends View<null, Props, null> {
 
 	componentWillUnmount() {
 		this.props.actions.resetSchedule();
+		clearInterval(this.rotateInterval);
 	}
 
 	editAction = () => {
@@ -100,13 +113,21 @@ export default class Edit extends View<null, Props, null> {
 	};
 
 	onSaveSchedule = () => {
-		let options = this.props.actions.getScheduleOptions(this.props.schedule);
-		this.props.actions.saveSchedule(options).then((response: Object) => {
-			if (response.id) {
-				this.resetNavigation();
-			}
-			this.props.actions.getJobs();
-		});
+		if (!this.state.isDeleting) {
+			this.setState({
+				isSaving: true,
+			});
+			let options = this.props.actions.getScheduleOptions(this.props.schedule);
+			this.props.actions.saveSchedule(options).then((response: Object) => {
+				this.setState({
+					isSaving: false,
+				});
+				if (response.id) {
+					this.resetNavigation();
+				}
+				this.props.actions.getJobs();
+			});
+		}
 	};
 
 	resetNavigation = () => {
@@ -124,18 +145,28 @@ export default class Edit extends View<null, Props, null> {
 	}
 
 	onDeleteSchedule = () => {
-		this.props.actions.deleteSchedule(this.props.schedule.id).then((response: Object) => {
-			if (response.status && response.status === 'success') {
-				this.resetNavigation();
-			}
-			this.props.actions.getJobs();
-		});
+		if (!this.state.isSaving) {
+			this.setState({
+				isDeleting: true,
+			});
+			this.props.actions.deleteSchedule(this.props.schedule.id).then((response: Object) => {
+				this.setState({
+					isDeleting: false,
+				});
+				if (response.status && response.status === 'success') {
+					this.resetNavigation();
+				}
+				this.props.actions.getJobs();
+			});
+		}
 	}
 
 	render(): React$Element<any> {
 		const { active, method, methodValue, weekdays } = this.props.schedule;
-		const { container, row, save, cancel } = this._getStyle();
+		const { container, row, save, cancel, throbber,
+			throbberContainer, throbberContainerOnSave, throbberContainerOnDelete } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
+		const throbberContainerStyle = this.state.isSaving ? throbberContainerOnSave : this.state.isDeleting ? throbberContainerOnDelete : {};
 
 		return (
 			<ScrollView>
@@ -155,16 +186,25 @@ export default class Edit extends View<null, Props, null> {
 						onPress={this.editTime}
 					/>
 					<DaysRow selectedDays={selectedDays} onPress={this.editDays}/>
-					<TouchableButton
-						text={messages.confirmAndSave}
-						style={save}
-						onPress={this.onSaveSchedule}
-					/>
-					<TouchableButton
-						text={messages.delete}
-						style={cancel}
-						onPress={this.onDeleteSchedule}
-					/>
+					<View style={{flexDirection: 'column'}}>
+						<TouchableButton
+							text={messages.confirmAndSave}
+							style={save}
+							onPress={this.onSaveSchedule}
+						/>
+						<TouchableButton
+							text={messages.delete}
+							style={cancel}
+							onPress={this.onDeleteSchedule}
+						/>
+						{!!(this.state.isDeleting || this.state.isSaving) &&
+						(
+							<Throbber
+								throbberContainerStyle={[throbberContainer, throbberContainerStyle]}
+								throbberStyle={throbber}
+							/>
+						)}
+					</View>
 				</View>
 			</ScrollView>
 		);
@@ -180,6 +220,7 @@ export default class Edit extends View<null, Props, null> {
 
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
+		const deviceHeight = Dimensions.get('window').height;
 
 		const offsetSmall = deviceWidth * 0.026666667;
 		const offsetMiddle = deviceWidth * 0.033333333;
@@ -202,6 +243,19 @@ export default class Edit extends View<null, Props, null> {
 				marginTop: 10,
 				backgroundColor: Theme.Core.brandDanger,
 				color: '#fff',
+			},
+			throbberContainer: {
+				right: -(deviceWidth * 0.12),
+			},
+			throbberContainerOnDelete: {
+				top: deviceHeight * 0.16,
+			},
+			throbberContainerOnSave: {
+				top: deviceHeight * 0.04,
+			},
+			throbber: {
+				fontSize: 30,
+				color: Theme.Core.brandSecondary,
 			},
 		};
 	};
