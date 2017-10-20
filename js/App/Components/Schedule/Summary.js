@@ -34,7 +34,13 @@ interface Props extends ScheduleProps {
 	devices: Object,
 }
 
-export default class Summary extends View<null, Props, null> {
+type State = {
+	isLoading: boolean,
+};
+
+export default class Summary extends View<null, Props, State> {
+
+	state: State;
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -47,6 +53,10 @@ export default class Summary extends View<null, Props, null> {
 
 	constructor(props: Props) {
 		super(props);
+
+		this.state = {
+			isLoading: false,
+		};
 
 		this.h1 = '5. Summary';
 		this.h2 = 'Please confirm the schedule';
@@ -65,8 +75,14 @@ export default class Summary extends View<null, Props, null> {
 	}
 
 	saveSchedule = () => {
+		this.setState({
+			isLoading: true,
+		});
 		let options = this.props.actions.getScheduleOptions(this.props.schedule);
 		this.props.actions.saveSchedule(options).then((response: Object) => {
+			this.setState({
+				isLoading: false,
+			});
 			if (response.id) {
 				this.resetNavigation();
 			}
@@ -113,9 +129,10 @@ export default class Summary extends View<null, Props, null> {
 				</ScrollView>
 				<FloatingButton
 					onPress={this.saveSchedule}
-					imageSource={require('./img/check.png')}
+					imageSource={this.state.isLoading ? false : require('./img/check.png')}
 					iconSize={iconSize}
 					paddingRight={paddingRight}
+					showThrobber={this.state.isLoading}
 				/>
 			</View>
 		);
