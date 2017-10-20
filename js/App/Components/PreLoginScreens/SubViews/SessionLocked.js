@@ -62,16 +62,25 @@ class SessionLocked extends View {
 	props: Props;
 
 	onPressLogout: () => void;
+	refreshAccessToken: () => void;
 
 	constructor(props: Props) {
 		super(props);
 
+		this.state = {
+			isLogginIn: false,
+		};
+
 		this.bodyOne = this.props.intl.formatMessage(messages.sessionLockedBodyParaOne);
 		this.bodyTwo = this.props.intl.formatMessage(messages.sessionLockedBodyParaTwo);
 		this.buttonOne = this.props.intl.formatMessage(i18n.retry);
+		this.buttonOneOne = this.props.intl.formatMessage(i18n.loggingin);
 		this.buttonTwo = this.props.intl.formatMessage(i18n.logout);
+		this.buttonTwoTwo = this.props.intl.formatMessage(i18n.loggingout);
 		this.confirmMessage = this.props.intl.formatMessage(i18n.contentLogoutConfirm);
+
 		this.onPressLogout = this.onPressLogout.bind(this);
+		this.refreshAccessToken = this.refreshAccessToken.bind(this);
 	}
 
 	onPressLogout() {
@@ -83,6 +92,13 @@ class SessionLocked extends View {
 		});
 	}
 
+	refreshAccessToken() {
+		this.setState({
+			isLogginIn: true,
+		});
+		this.props.refreshAccessToken();
+	}
+
 	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.onPressLogout) {
 			this.props.logoutFromTelldus();
@@ -90,6 +106,9 @@ class SessionLocked extends View {
 	}
 
 	render(): Object {
+		let buttonOneLabel = this.state.isLogginIn ? `${this.buttonOneOne}...` : this.buttonOne;
+		let buttonTwoLabel = this.props.onPressLogout ? `${this.buttonTwoTwo}...` : this.buttonTwo;
+
 		return (
 			<View style={styles.bodyCover}>
 				<Text style={styles.contentText}>
@@ -100,12 +119,12 @@ class SessionLocked extends View {
 					{this.bodyTwo}
 				</Text>
 				<TouchableButton
-					onPress={this.props.refreshAccessToken}
-					text={this.buttonOne}
+					onPress={this.refreshAccessToken}
+					text={buttonOneLabel}
 					style={{marginTop: 10}}/>
 				<TouchableButton
 					onPress={this.onPressLogout}
-					text={this.buttonTwo}
+					text={buttonTwoLabel}
 					style={{marginTop: 10}}/>
 			</View>
 		);
