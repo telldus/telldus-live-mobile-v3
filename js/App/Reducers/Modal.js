@@ -27,10 +27,12 @@ import { REHYDRATE } from 'redux-persist/constants';
 export type State = {
 	openModal: boolean,
 	data: any,
+	extras?: any,
 }
 const initialState = {
 	openModal: false,
 	data: '',
+	extras: false,
 };
 
 export default function reduceModal(state: State = initialState, action: Action): State {
@@ -40,19 +42,23 @@ export default function reduceModal(state: State = initialState, action: Action)
 				...state,
 				openModal: false,
 				data: '',
+				extras: false,
 			};
 
 		case 'REQUEST_MODAL_OPEN':
+			let extras = action.payload.extras ? action.payload.extras : false;
 			return {
 				...state,
 				openModal: true,
 				data: action.payload.data,
+				extras,
 			};
 
 		case 'REQUEST_MODAL_CLOSE':
 			return {
 				...state,
 				openModal: false,
+				extras: false,
 			};
 
 		default:

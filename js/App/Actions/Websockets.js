@@ -34,7 +34,7 @@ import { processWebsocketMessageForDevice } from 'Actions_Devices';
 
 import formatTime from '../Lib/formatTime';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 
 // TODO: expose websocket lib via Provider component, so that it is bound and so that we have access to store
 

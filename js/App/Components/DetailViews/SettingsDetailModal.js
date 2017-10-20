@@ -23,9 +23,19 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, Container, Text, View, Icon, TouchableButton } from 'BaseComponents';
+import {
+	FormattedMessage,
+	Container,
+	Text,
+	View,
+	Icon,
+	TouchableButton,
+	Dimensions,
+} from 'BaseComponents';
+import {Modal as CustomModal} from 'BaseComponents';
+import { NotificationComponent } from 'PreLoginScreen_SubViews';
 import { StyleSheet } from 'react-native';
 import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
@@ -36,6 +46,9 @@ import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions_User';
 
 import i18n from './../../Translations/common';
+
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
 	pushEnabled: {
@@ -77,11 +90,15 @@ const StatusView = () => (
 );
 
 type Props = {
+	dispatch: Function,
 	isVisible: boolean,
 	onClose: () => void,
 	onLogout: (string, Function) => void,
 	onSubmitPushToken: (string, Function) => void,
 	store: Object,
+	validationMessage: string,
+	showModal: boolean,
+	intl: intlShape.isRequired,
 };
 
 
@@ -97,6 +114,8 @@ class SettingsDetailModal extends View {
 	postLoadMethod: () => void;
 	submitPushToken: () => void;
 	updateModalVisiblity: () => void;
+	onConfirmLogout: () => void;
+	closeModal: () => void;
 
 	constructor(props) {
 		super(props);
@@ -106,16 +125,36 @@ class SettingsDetailModal extends View {
 			isLogoutLoading: false,
 		};
 		this.logout = this.logout.bind(this);
+		this.onConfirmLogout = this.onConfirmLogout.bind(this);
 		this.postLoadMethod = this.postLoadMethod.bind(this);
 		this.submitPushToken = this.submitPushToken.bind(this);
 		this.updateModalVisiblity = this.updateModalVisiblity.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+
+		this.confirmMessage = this.props.intl.formatMessage(i18n.contentLogoutConfirm);
 	}
 
 	logout() {
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_OPEN',
+			payload: {
+				data: this.confirmMessage,
+			},
+		});
+	}
+
+	onConfirmLogout() {
+		this.closeModal();
 		this.setState({
 			isLogoutLoading: true,
 		});
 		this.props.onLogout(this.props.store.user.pushToken, this.postLoadMethod);
+	}
+
+	closeModal() {
+		this.props.dispatch({
+			type: 'REQUEST_MODAL_CLOSE',
+		});
 	}
 
 	postLoadMethod(type) {
@@ -135,10 +174,40 @@ class SettingsDetailModal extends View {
 		this.props.onClose();
 	}
 
-	render() {
+	getRelativeData() {
+		let notificationHeader = `${this.props.intl.formatMessage(i18n.logout)}?`, showPositive = true,
+			showNegative = true, positiveText = this.props.intl.formatMessage(i18n.logout).toUpperCase(),
+			onPressPositive = this.onConfirmLogout, onPressNegative = this.closeModal;
 		let submitButText = this.state.isPushSubmitLoading ? messages.pushRegisters : messages.pushRegister;
 		let logoutButText = this.state.isLogoutLoading ? i18n.loggingout : i18n.logout;
 		let version = DeviceInfo.getVersion();
+
+		return {
+			notificationHeader,
+			showPositive,
+			showNegative,
+			positiveText,
+			onPressPositive,
+			onPressNegative,
+			submitButText,
+			logoutButText,
+			version,
+		};
+	}
+
+	render() {
+		let {
+			notificationHeader,
+			showPositive,
+			showNegative,
+			positiveText,
+			onPressPositive,
+			onPressNegative,
+			submitButText,
+			logoutButText,
+			version,
+		} = this.getRelativeData();
+
 		return (
 			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
 				<Container style={styles.container}>
@@ -170,6 +239,22 @@ class SettingsDetailModal extends View {
 							text={logoutButText}
 							postScript={this.state.isLogoutLoading ? '...' : null}
 						/>
+						<CustomModal
+							modalStyle={[Theme.Styles.notificationModal, styles.modal]}
+							entry= "ZoomIn"
+							exit= "ZoomOut"
+							entryDuration= {300}
+							exitDuration= {100}
+							showModal={this.props.showModal}>
+							<NotificationComponent
+								header={notificationHeader}
+								text={this.props.validationMessage}
+								showPositive={showPositive}
+								showNegative={showNegative}
+								positiveText={positiveText}
+								onPressPositive={onPressPositive}
+								onPressNegative={onPressNegative} />
+						</CustomModal>
 					</View>
 				</Container>
 			</Modal>
@@ -245,10 +330,16 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		backgroundColor: '#ff000033',
 	},
+	modal: {
+		width: deviceWidth * 0.8,
+		top: deviceHeight * 0.2,
+	},
 });
 
 function mapStateToProps(store) {
 	return {
+		validationMessage: store.modal.data,
+		showModal: store.modal.openModal,
 		store,
 	};
 }
@@ -281,4 +372,4 @@ function mapDispatchToProps(dispatch, ownProps) {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SettingsDetailModal);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(SettingsDetailModal));

@@ -23,7 +23,7 @@
 
 import type { ThunkAction } from './types';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 import { publicKey, privateKey, apiServer } from 'Config';
 
 import { format } from 'url';
@@ -121,7 +121,7 @@ export const RegisterUser = (email: String, firstName: String, lastName: String)
 	formData.append('lastname', lastName);
 	formData.append('client_id', publicKey);
 	formData.append('client_secret', privateKey);
-	fetch(
+	return fetch(
 		`${apiServer}/oauth2/user/register`,
 		{
 			method: 'POST',
@@ -137,6 +137,7 @@ export const RegisterUser = (email: String, firstName: String, lastName: String)
 				type: 'USER_REGISTER',
 				accessToken: responseData,
 			});
+			return responseData;
 		}).catch(e => {
 			let data = !e.error_description && e.message === 'Network request failed' ?
 				'Network request failed. Check your internet connection' : e.error_description ?
@@ -147,5 +148,6 @@ export const RegisterUser = (email: String, firstName: String, lastName: String)
 					data,
 				},
 			});
+			return data;
 		});
 };

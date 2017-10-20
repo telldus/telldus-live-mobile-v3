@@ -29,11 +29,11 @@ import { apiServer } from 'Config';
 import { publicKey, privateKey, authenticationTimeOut } from 'Config';
 import { Answers } from 'react-native-fabric';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
 const loginToTelldus = (username:string, password:string): ThunkAction => (dispatch, getState) => {
-	axios({
+	return axios({
 		method: 'post',
 		headers: {
 			'Accept': 'application/json',
@@ -56,6 +56,7 @@ const loginToTelldus = (username:string, password:string): ThunkAction => (dispa
 					type: 'RECEIVED_ACCESS_TOKEN',
 					accessToken: response.data,
 				});
+				return response;
 			}
 		})
 		.catch(error => {
@@ -71,6 +72,7 @@ const loginToTelldus = (username:string, password:string): ThunkAction => (dispa
 			} else {
 				dispatch(showLoginError(error.message));
 			}
+			return error;
 		});
 };
 

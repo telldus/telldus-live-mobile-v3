@@ -22,15 +22,12 @@
 'use strict';
 
 import React from 'react';
-import { TextInput } from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { FormattedMessage, TouchableButton, Text, View, Modal } from 'BaseComponents';
-import {NotificationComponent, FormContainerComponent} from 'PreLoginScreen_SubViews';
-import { loginToTelldus } from 'Actions';
-import { testUsername, testPassword } from 'Config';
+import { FormattedMessage, View, Modal, Dimensions } from 'BaseComponents';
+import {NotificationComponent, FormContainerComponent, LoginForm, SessionLocked} from 'PreLoginScreen_SubViews';
 
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
@@ -43,6 +40,11 @@ const messages = defineMessages({
 		id: 'user.needAccount',
 		defaultMessage: 'Need an account?',
 		description: 'Message to show on the login screen',
+	},
+	headerSessionLocked: {
+		id: 'user.headerSessionLocked',
+		defaultMessage: 'Lost Connection',
+		description: 'Header for Session Locked Screen',
 	},
 });
 
@@ -58,40 +60,31 @@ type Props = {
 
 type State = {
 		notificationText? : string,
-		isLoading : boolean,
-		username: string,
-		password: string,
+		onPressLogout: boolean,
 };
 
 class LoginScreen extends View {
 	props: Props;
 	state: State;
 
-	onChangeUsername: (username:string) => void;
-	onChangePassword: (password:string) => void;
 	onForgotPassword: () => void;
 	onNeedAccount: () => void;
-	onFormSubmit: () => void;
 	closeModal: () => void;
-	onModalOpen: () => void;
+	onPressPositive: () => void;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.state = this.state || {
-			username: testUsername,
-			password: testPassword,
 			notificationText: false,
+			onPressLogout: false,
 		};
 
-		this.onChangeUsername = this.onChangeUsername.bind(this);
-		this.onChangePassword = this.onChangePassword.bind(this);
 		this.onForgotPassword = this.onForgotPassword.bind(this);
 		this.onNeedAccount = this.onNeedAccount.bind(this);
-		this.onFormSubmit = this.onFormSubmit.bind(this);
 
 		this.closeModal = this.closeModal.bind(this);
-		this.onModalOpen = this.onModalOpen.bind(this);
+		this.onPressPositive = this.onPressPositive.bind(this);
 	}
 
 	closeModal() {
@@ -100,9 +93,10 @@ class LoginScreen extends View {
 		});
 	}
 
-	onModalOpen() {
+	onPressPositive() {
+		this.closeModal();
 		this.setState({
-			isLoading: false,
+			onPressLogout: true,
 		});
 	}
 
@@ -113,80 +107,69 @@ class LoginScreen extends View {
 		return true;
 	}
 
+	getRelativeData() {
+		let headerText = this.props.intl.formatMessage(i18n.login), notificationHeader = false,
+			positiveText = false, onPressPositive = this.closeModal, onPressNegative = false,
+			showNegative = false, showPositive = true;
+		if (this.props.accessToken && !this.props.isTokenValid) {
+			headerText = this.props.intl.formatMessage(messages.headerSessionLocked);
+			positiveText = this.props.intl.formatMessage(i18n.logout).toUpperCase();
+			notificationHeader = `${this.props.intl.formatMessage(i18n.logout)}?`;
+			onPressPositive = this.onPressPositive;
+			onPressNegative = this.closeModal;
+			showNegative = true;
+		}
+		return {
+			headerText,
+			notificationHeader,
+			showPositive,
+			showNegative,
+			positiveText,
+			onPressPositive,
+			onPressNegative,
+		};
+	}
+
 	render() {
+		let {
+			headerText, notificationHeader, positiveText,
+			onPressPositive, onPressNegative, showPositive, showNegative} = this.getRelativeData();
 		return (
-			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.login)}>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
-					<TextInput
-						style={Theme.Styles.textField}
-						onChangeText={this.onChangeUsername}
-						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
-						keyboardType="email-address"
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						defaultValue={this.state.username}
-					/>
-				</View>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="lock" style={Theme.Styles.iconLock} size={15} color="#ffffff80"/>
-					<TextInput
-						style={Theme.Styles.textField}
-						onChangeText={this.onChangePassword}
-						placeholder={this.props.intl.formatMessage(i18n.password)}
-						secureTextEntry={true}
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						defaultValue={this.state.password}
-					/>
-				</View>
-				<View style={{ height: 10 }}/>
-				<TouchableButton
-					style={Theme.Styles.submitButton}
-					onPress={this.onFormSubmit}
-					text={this.state.isLoading ? i18n.loggingin : i18n.login}
-					postScript={this.state.isLoading ? '...' : null}
-				/>
-				<View style={styles.otherLinks}>
-					<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}><FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb' }}/></Text>
-					<Text style={{ color: '#bbb', paddingLeft: 5 }} onPress={this.onNeedAccount}><FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5 }}/></Text>
-				</View>
-				<View style={{ height: 10 }}/>
+			<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
+				{this.props.accessToken && !this.props.isTokenValid ?
+					<SessionLocked onPressLogout={this.state.onPressLogout} />
+					:
+					<View>
+						<LoginForm />
+						<View style={styles.otherLinks}>
+							<TouchableOpacity style={{height: 25}} onPress={this.onForgotPassword}>
+								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb' }}/>
+							</TouchableOpacity>
+							<TouchableOpacity style={{height: 25, paddingLeft: 5 }} onPress={this.onNeedAccount}>
+								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5 }}/>
+							</TouchableOpacity>
+						</View>
+						<View style={{ height: 10 }}/>
+					</View>
+				}
 				<Modal
 					modalStyle={Theme.Styles.notificationModal}
 					entry= "ZoomIn"
 					exit= "ZoomOut"
 					entryDuration= {300}
 					exitDuration= {100}
-					onOpen= {this.onModalOpen}
 					showModal={this.props.showModal}>
-					<NotificationComponent text={this.props.validationMessage} onPress={this.closeModal} />
+					<NotificationComponent
+						header={notificationHeader}
+						text={this.props.validationMessage}
+						showPositive={showPositive}
+						showNegative={showNegative}
+						positiveText={positiveText}
+						onPressPositive={onPressPositive}
+						onPressNegative={onPressNegative} />
 				</Modal>
 			</FormContainerComponent>
 		);
-	}
-
-	onChangeUsername(username) {
-		this.setState({
-			username,
-			notificationText: false,
-		});
-	}
-
-	onChangePassword(password) {
-		this.setState({
-			password,
-			notificationText: false,
-		});
-	}
-
-	onFormSubmit() {
-		this.setState({ isLoading: true });
-		this.props.loginToTelldus(this.state.username, this.state.password);
 	}
 
 	onNeedAccount() {
@@ -204,13 +187,19 @@ const styles = StyleSheet.create({
 	otherLinks: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		marginTop: 15 },
+		marginTop: 15,
+		marginHorizontal: 10,
+	},
+	formContainer: {
+		height: Dimensions.get('window').height * 0.50,
+	},
 });
 
 function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
 		accessToken: store.user.accessToken,
+		isTokenValid: store.user.isTokenValid,
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
 	};
@@ -218,9 +207,6 @@ function mapStateToProps(store) {
 
 function dispatchToProps(dispatch) {
 	return {
-		loginToTelldus: (userName: string, password: string) => {
-			dispatch(loginToTelldus(userName, password));
-		},
 		dispatch,
 	};
 }
