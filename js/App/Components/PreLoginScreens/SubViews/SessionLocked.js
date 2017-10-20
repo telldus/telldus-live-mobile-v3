@@ -113,14 +113,6 @@ class SessionLocked extends View {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		backgroundColor: '#00000099',
-		width: Dimensions.get('window').width,
-		padding: 10,
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 	bodyCover: {
 		width: Dimensions.get('window').width - 50,
 	},
