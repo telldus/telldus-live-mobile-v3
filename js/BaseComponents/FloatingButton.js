@@ -24,6 +24,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Image, Platform, TouchableOpacity } from 'react-native';
 import View from './View';
+import Throbber from './Throbber';
 import Theme from 'Theme';
 import { getDeviceWidth } from 'Lib';
 
@@ -39,6 +40,7 @@ type Props = {
 	tabs: boolean,
 	iconSize: number,
 	paddingRight: number,
+	showThrobber: boolean,
 };
 
 export default class FloatingButton extends Component {
@@ -50,23 +52,36 @@ export default class FloatingButton extends Component {
 		tabs: PropTypes.bool,
 		iconSize: PropTypes.number,
 		paddingRight: PropTypes.number,
+		showThrobber: PropTypes.bool,
 	};
 
 	static defaultProps: DefaultProps = {
 		tabs: false,
 		iconSize: getDeviceWidth() * 0.056,
 		paddingRight: 0,
+		showThrobber: false,
 	};
 
 	render(): React$Element<any> {
-		const { container, button, icon } = this._getStyle();
+		const { container, button, icon, throbber } = this._getStyle();
 
-		const { onPress, imageSource } = this.props;
+		const { onPress, imageSource, showThrobber } = this.props;
 
 		return (
 			<TouchableOpacity style={container} onPress={onPress}>
 				<View style={button}>
-					<Image source={imageSource} style={icon} resizeMode="contain"/>
+					{!!imageSource &&
+					(
+						<Image source={imageSource} style={icon} resizeMode="contain"/>
+					)
+					}
+					{!!showThrobber &&
+					(
+						<Throbber
+							throbberStyle={throbber}
+						/>
+					)
+					}
 				</View>
 			</TouchableOpacity>
 		);
@@ -111,6 +126,9 @@ export default class FloatingButton extends Component {
 			icon: {
 				width: iconSize,
 				height: iconSize,
+			},
+			throbber: {
+				color: '#ffffff',
 			},
 		};
 	};
