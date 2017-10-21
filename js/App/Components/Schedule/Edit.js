@@ -252,7 +252,7 @@ export default class Edit extends View<null, Props, State> {
 				right: -(deviceWidth * 0.12),
 			},
 			throbberContainerOnDelete: {
-				top: deviceHeight * 0.16,
+				top: deviceHeight * 0.13,
 			},
 			throbberContainerOnSave: {
 				top: deviceHeight * 0.04,
