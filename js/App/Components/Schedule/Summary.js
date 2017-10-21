@@ -85,8 +85,10 @@ export default class Summary extends View<null, Props, State> {
 			});
 			if (response.id) {
 				this.resetNavigation();
+				this.props.actions.getJobs();
+			} else if (response.message) {
+				this.props.actions.showModal(response.message);
 			}
-			this.props.actions.getJobs();
 		});
 	};
 

@@ -25,14 +25,17 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { FullPageActivityIndicator, View } from 'BaseComponents';
+import { FullPageActivityIndicator, View, Modal, Dimensions } from 'BaseComponents';
+import { NotificationComponent} from 'PreLoginScreen_SubViews';
 import { SchedulePoster } from 'Schedule_SubViews';
 import { getDeviceWidth } from 'Lib';
 
 import * as scheduleActions from 'Actions_Schedule';
+import * as modalActions from 'Actions_Modal';
 import { getDevices } from 'Actions_Devices';
 import { getJobs } from 'Actions';
 import type { Schedule } from 'Reducers_Schedule';
+import Theme from 'Theme';
 
 type Props = {
 	navigation: Object,
@@ -80,6 +83,9 @@ class ScheduleScreen extends View<null, Props, State> {
 			back: true,
 			onPress: this.goBack,
 		};
+
+		this.onModalOpen = this.onModalOpen.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
@@ -104,10 +110,17 @@ class ScheduleScreen extends View<null, Props, State> {
 		this.setState({ loading });
 	};
 
+	onModalOpen = () => {
+	}
+
+	closeModal = () => {
+		this.props.actions.hideModal();
+	}
+
 	render(): React$Element<any> {
 		const { children, navigation, actions, devices, schedule } = this.props;
 		const { h1, h2, infoButton, loading } = this.state;
-		const style = this._getStyle();
+		const { style, modal } = this._getStyle();
 
 		return (
 			<View>
@@ -134,6 +147,16 @@ class ScheduleScreen extends View<null, Props, State> {
 							},
 						)}
 					</View>
+					<Modal
+						modalStyle={[Theme.Styles.notificationModal, modal]}
+						entry= "ZoomIn"
+						exit= "ZoomOut"
+						entryDuration= {300}
+						exitDuration= {100}
+						onOpen= {this.onModalOpen}
+						showModal={this.props.showModal}>
+						<NotificationComponent text={this.props.validationMessage} onPress={this.closeModal} />
+					</Modal>
 				</View>
 			</View>
 		);
@@ -146,14 +169,21 @@ class ScheduleScreen extends View<null, Props, State> {
 
 	_getStyle = (): Object => {
 		const deviceWidth = getDeviceWidth();
+		const deviceHeight = Dimensions.get('window').height;
 		const padding = deviceWidth * 0.033333333;
 
 		const isEdit = this.props.navigation.state.routeName === 'Edit';
 
 		return {
-			flex: 1,
-			paddingHorizontal: isEdit ? 0 : padding,
-			paddingTop: isEdit ? 0 : padding,
+			style: {
+				flex: 1,
+				paddingHorizontal: isEdit ? 0 : padding,
+				paddingTop: isEdit ? 0 : padding,
+			},
+			modal: {
+				alignSelf: 'center',
+				top: deviceHeight * 0.3,
+			},
 		};
 	};
 
@@ -162,19 +192,22 @@ class ScheduleScreen extends View<null, Props, State> {
 type mapStateToPropsType = {
 	schedule: Schedule,
 	devices: Object,
+	modal: Object,
 };
 
-const mapStateToProps = ({ schedule, devices }: mapStateToPropsType): mapStateToPropsType => (
+const mapStateToProps = ({ schedule, devices, modal }: mapStateToPropsType): Object => (
 	{
 		schedule,
 		devices,
+		validationMessage: modal.data,
+		showModal: modal.openModal,
 	}
 );
 
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({getJobs, ...scheduleActions}, dispatch),
+			...bindActionCreators({getJobs, ...scheduleActions, ...modalActions}, dispatch),
 			getDevices: (): Object => dispatch(getDevices()),
 		},
 	}
