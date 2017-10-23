@@ -39,7 +39,7 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export function LiveApi ({ url, requestParams }: {url: string, requestParams: Object}): Promise<any> {
+export function LiveApi({ url, requestParams }: {url: string, requestParams: Object}): Promise<any> {
 	return new Promise((resolve: Function, reject: Function): Object => {
 		return doApiCall(url, requestParams).then((response: Object): any => {
 			if (!response) {
@@ -48,7 +48,7 @@ export function LiveApi ({ url, requestParams }: {url: string, requestParams: Ob
 				}));
 			}
 			resolve(response);
-		}).catch((error: Object) => {
+		}).catch((error: Object): any => {
 			if (error.message === 'invalid_token' || error.message === 'expired_token') {
 				const store = getStore();
 				const { dispatch } = store;

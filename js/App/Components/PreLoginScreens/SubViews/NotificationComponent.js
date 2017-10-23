@@ -53,10 +53,10 @@ type Props = {
 	showNegative: boolean,
 	positiveText?: string,
 	negativeText?: string,
-	onPressPositive?: () => void;
-	onPressNegative?: () => void;
+	onPressPositive?: () => void,
+	onPressNegative?: () => void,
 	intl: intlShape.isRequired,
-}
+};
 
 class NotificationComponent extends View {
 

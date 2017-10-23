@@ -52,10 +52,10 @@ const messages = defineMessages({
 });
 
 type Props = {
-	refreshAccessToken: () => void;
-	logoutFromTelldus: () => void;
+	refreshAccessToken: () => void,
+	logoutFromTelldus: () => void,
 	intl: intlShape.isRequired,
-	dispatch: Function;
+	dispatch: Function,
 	pushToken: string,
 	onPressLogout: boolean,
 };
@@ -144,17 +144,17 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		tab: store.navigation.tab,
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
 	};
 }
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		logoutFromTelldus: (pushToken) => {
-			dispatch(unregisterPushToken(pushToken)).then((res) => {
+		logoutFromTelldus: (pushToken: string) => {
+			dispatch(unregisterPushToken(pushToken)).then((res: Object) => {
 				dispatch(logoutFromTelldus());
 			});
 		},

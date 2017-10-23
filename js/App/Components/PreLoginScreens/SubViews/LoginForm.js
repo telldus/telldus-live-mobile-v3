@@ -53,7 +53,7 @@ type Props = {
 };
 
 type State = {
-		isLoading : boolean,
+		isLoading: boolean,
 		username: string,
 		password: string,
 };
@@ -62,8 +62,8 @@ class LoginForm extends View {
 	props: Props;
 	state: State;
 
-	onChangeUsername: (username:string) => void;
-	onChangePassword: (password:string) => void;
+	onChangeUsername: (username: string) => void;
+	onChangePassword: (password: string) => void;
 	onFormSubmit: (username: string, password: string, callback: () => void) => void;
 	postSubmit: () => void;
 
@@ -82,7 +82,7 @@ class LoginForm extends View {
 		this.postSubmit = this.postSubmit.bind(this);
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<View style={{flex: 0}}>
 				<View style={Theme.Styles.textFieldCover}>
@@ -124,14 +124,14 @@ class LoginForm extends View {
 		);
 	}
 
-	onChangeUsername(username) {
+	onChangeUsername(username: string) {
 		this.setState({
 			username,
 			notificationText: false,
 		});
 	}
 
-	onChangePassword(password) {
+	onChangePassword(password: string) {
 		this.setState({
 			password,
 			notificationText: false,
@@ -161,16 +161,16 @@ class LoginForm extends View {
 
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		accessToken: store.user.accessToken,
 	};
 }
 
-function dispatchToProps(dispatch) {
+function dispatchToProps(dispatch: Function): Object {
 	return {
 		loginToTelldus: (userName: string, password: string, callback: () => void) => {
-			dispatch(loginToTelldus(userName, password)).then(res => {
+			dispatch(loginToTelldus(userName, password)).then((res: Object) => {
 				callback();
 			});
 		},

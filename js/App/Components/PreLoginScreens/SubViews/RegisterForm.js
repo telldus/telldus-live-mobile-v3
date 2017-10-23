@@ -71,7 +71,7 @@ type Props = {
 	showModal: boolean,
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
-}
+};
 
 class RegisterForm extends View {
 
@@ -164,7 +164,7 @@ class RegisterForm extends View {
 		}
 	}
 
-	showModal(data, extras = false) {
+	showModal(data: any, extras: any = false) {
 		this.props.dispatch({
 			type: 'REQUEST_MODAL_OPEN',
 			payload: {
@@ -174,7 +174,7 @@ class RegisterForm extends View {
 		});
 	}
 
-	validateEmail(email: string) {
+	validateEmail(email: string): boolean {
 		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 		let emailValid = pattern.test(email);
 		if (!emailValid) {
@@ -183,7 +183,7 @@ class RegisterForm extends View {
 		return emailValid;
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<View>
 				<View style={Theme.Styles.textFieldCover}>
@@ -255,10 +255,10 @@ class RegisterForm extends View {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		onFormSubmit: (email: string, firstName: string, LastName: string, callback: () => void) => {
-			dispatch(RegisterUser(email, firstName, LastName)).then(res => {
+			dispatch(RegisterUser(email, firstName, LastName)).then((res: Object) => {
 				callback();
 			});
 		},
@@ -266,7 +266,7 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
 		validationMessageHeader: store.modal.extras,

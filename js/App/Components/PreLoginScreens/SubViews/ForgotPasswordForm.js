@@ -36,7 +36,7 @@ import Theme from 'Theme';
 
 type Props = {
 	intl: intlShape.isRequired,
-}
+};
 
 class ForgotPasswordForm extends View {
 
@@ -63,7 +63,7 @@ class ForgotPasswordForm extends View {
 		});
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<View>
 				<View style={Theme.Styles.textFieldCover}>
