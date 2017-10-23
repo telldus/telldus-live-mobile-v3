@@ -37,6 +37,7 @@ import {
 	syncLiveApiOnForeground,
 } from 'Actions';
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
+import { hideToast } from 'Actions_App';
 import { getDevices } from 'Actions_Devices';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import { resetSchedule } from 'Actions_Schedule';
@@ -180,9 +181,7 @@ class AppNavigator extends View {
 
 	_showToast() {
 		Toast.showWithGravity(this.props.intl.formatMessage(messages.errortoast), Toast.SHORT, Toast.TOP);
-		this.props.dispatch({
-			type: 'GLOBAL_ERROR_HIDE',
-		});
+		this.props.dispatch(hideToast());
 	}
 
 	_updateSpecificOrientation = (specificOrientation: string) => {
@@ -215,8 +214,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		accessToken: state.user.accessToken,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
-		toastVisible: state.App.errorGlobalShow,
-		toastMessage: state.App.errorGlobalMessage,
+		toastVisible: state.App.showToast,
+		toastMessage: state.App.message,
 	};
 }
 

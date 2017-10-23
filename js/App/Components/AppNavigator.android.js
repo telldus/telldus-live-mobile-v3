@@ -39,6 +39,7 @@ import {
 } from 'Actions';
 import { authenticateSession, connectToGateways } from 'Actions_Websockets';
 import { getDevices } from 'Actions_Devices';
+import { hideToast } from 'Actions_App';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import { resetSchedule } from 'Actions_Schedule';
 import ScheduleNavigator from 'ScheduleNavigator';
@@ -215,15 +216,14 @@ class AppNavigator extends View {
 
 	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.toastVisible) {
-			this._showToast();
+			let message = nextProps.toastMessage ? nextProps.toastMessage : this.props.intl.formatMessage(messages.errortoast);
+			this._showToast(message);
 		}
 	}
 
-	_showToast() {
-		Toast.showWithGravity(this.props.intl.formatMessage(messages.errortoast), Toast.SHORT, Toast.TOP);
-		this.props.dispatch({
-			type: 'GLOBAL_ERROR_HIDE',
-		});
+	_showToast(message: string) {
+		Toast.showWithGravity(message, Toast.SHORT, Toast.TOP);
+		this.props.dispatch(hideToast());
 	}
 
 	openDrawer() {
@@ -293,8 +293,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
 		gateways: state.gateways,
-		toastVisible: state.App.errorGlobalShow,
-		toastMessage: state.App.errorGlobalMessage,
+		toastVisible: state.App.showToast,
+		toastMessage: state.App.message,
 	};
 }
 

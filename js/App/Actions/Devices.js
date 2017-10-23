@@ -27,6 +27,7 @@ import type { Action, ThunkAction, Dispatch } from './Types';
 
 import LiveApi from 'LiveApi';
 import { supportedMethods, methods } from 'Config';
+import { showToast } from 'Actions_App';
 
 import { format } from 'url';
 import moment from 'moment';
@@ -94,14 +95,7 @@ export function deviceSetState(deviceId: number, state: number, stateValue: numb
 		}).catch((error: Object) => {
 			let { devices } = getState();
 			let device = devices.byId[deviceId];
-			dispatch({
-				type: 'GLOBAL_ERROR_SHOW',
-				payload: {
-					source: 'device',
-					deviceId,
-					message: error.message,
-				},
-			});
+			dispatch(showToast('device'));
 			if (state !== 32) {
 				let value = device.value, deviceState = device.isInState;
 				let { dimmer } = getState();
@@ -192,14 +186,7 @@ export function getDeviceInfo(deviceId: number, requestedState: number, currentS
 				},
 			});
 			if (requestedState !== newState) {
-				dispatch({
-					type: 'GLOBAL_ERROR_SHOW',
-					payload: {
-						source: 'device',
-						deviceId,
-						message: '',
-					},
-				});
+				dispatch(showToast('device'));
 			}
 		} else {
 			dispatch({

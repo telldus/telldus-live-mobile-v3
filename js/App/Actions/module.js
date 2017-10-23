@@ -34,6 +34,7 @@ import JobActions from './Jobs';
 import AppStateActions from './AppState';
 import Schedule from './Schedule';
 import Modal from './Modal';
+import App from './App';
 
 module.exports = {
 	...GatewayActions,
@@ -47,4 +48,5 @@ module.exports = {
 	...AppStateActions,
 	...Schedule,
 	...Modal,
+	...App,
 };

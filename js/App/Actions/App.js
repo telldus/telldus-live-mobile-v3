@@ -15,39 +15,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @providesModule Actions_App
  */
 
 // @flow
 
 'use strict';
 
-import type { Action } from 'Actions_Types';
+import type { Action } from './Types';
 
-export type State = {
-	message: any,
-	showToast: boolean,
-};
+export const showToast = (source?: string, message?: string): Action => ({
+	type: 'TOAST_SHOW',
+	payload: {
+		source,
+		message,
+	},
+});
 
-const initialState = {
-	message: false,
-	showToast: false,
-};
-
-export default function reduceApp(state: State = initialState, action: Action): State {
-	if (action.type === 'TOAST_SHOW') {
-		let message = action.payload.message ? action.payload.message : false;
-		return {
-			...state,
-			showToast: true,
-			message,
-		};
-	}
-	if (action.type === 'TOAST_HIDE') {
-		return {
-			...state,
-			showToast: false,
-		};
-	}
-	return state;
-}
-
+export const hideToast = (): Action => ({
+	type: 'TOAST_HIDE',
+});
