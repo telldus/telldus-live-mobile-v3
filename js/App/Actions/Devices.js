@@ -145,7 +145,7 @@ export function turnOff(deviceId: number, isInState: string): ThunkAction {
 					getDeviceInfo(deviceId, requestedState, isInState, dispatch);
 				}
 				clearTimeout(setStateTimeout);
-			}, 2000);
+			}, 10000);
 		}).catch(error => {
 			let { devices } = getState();
 			let device = devices.byId[deviceId];
