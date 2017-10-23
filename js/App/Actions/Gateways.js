@@ -26,7 +26,7 @@
 import type { ThunkAction, Dispatch } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 import { format } from 'url';
 
 function getGateways(): ThunkAction {

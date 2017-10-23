@@ -21,7 +21,7 @@
 
 'use strict';
 
-import LiveApi from './LiveApi';
+import { LiveApi } from './LiveApi';
 import moment from 'moment-timezone';
 
 type Time = {

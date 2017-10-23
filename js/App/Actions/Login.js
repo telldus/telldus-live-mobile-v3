@@ -29,7 +29,7 @@ import { apiServer } from 'Config';
 import { publicKey, privateKey, authenticationTimeOut } from 'Config';
 import { Answers } from 'react-native-fabric';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
 const loginToTelldus = (username: string, password: string): ThunkAction => (dispatch: Dispatch, getState: Function) => {
@@ -49,7 +49,7 @@ const loginToTelldus = (username: string, password: string): ThunkAction => (dis
 			'password': password,
 		},
 	  })
-		.then((response: Object) => {
+		.then((response: Object): Object => {
 			if (response.status === 200) {
 				Answers.logLogin('Password', true);
 				dispatch({
@@ -57,8 +57,9 @@ const loginToTelldus = (username: string, password: string): ThunkAction => (dis
 					accessToken: response.data,
 				});
 			}
+			return response;
 		})
-		.catch((error: Object) => {
+		.catch((error: Object): Object => {
 			Answers.logLogin('Password', false);
 			if (error.response) {
 				let errorMessage = error.response.data.error_description ?
@@ -71,6 +72,7 @@ const loginToTelldus = (username: string, password: string): ThunkAction => (dis
 			} else {
 				dispatch(showLoginError(error.message));
 			}
+			return error;
 		});
 };
 

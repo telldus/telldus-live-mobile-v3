@@ -113,6 +113,10 @@ const messages = defineMessages({
 		id: 'button.sendingpassword',
 		defaultMessage: 'SENDING',
 	},
+	retry: {
+		id: 'button.retry',
+		defaultMessage: 'RETRY',
+	},
 	emailAddress: {
 		id: 'user.emailAddress',
 		defaultMessage: 'Email address',
@@ -142,6 +146,11 @@ const messages = defineMessages({
 		id: 'toast.deviceActionError',
 		defaultMessage: 'Action Currently Unavailable',
 		description: 'The error messgage to show, when a device action cannot be performed',
+	},
+	contentLogoutConfirm: {
+		id: 'user.contentLogoutConfirm',
+		defaultMessage: 'If you logout from your account you will have to add your devices to your dashboard manually.',
+		description: 'Content for Logout Confirmation Dialoge',
 	},
 });
 

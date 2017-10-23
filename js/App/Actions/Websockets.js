@@ -32,7 +32,7 @@ import { formatTime, TelldusWebsocket } from 'Lib';
 import { processWebsocketMessageForSensor } from 'Actions_Sensors';
 import { processWebsocketMessageForDevice } from 'Actions_Devices';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 
 // TODO: expose websocket lib via Provider component, so that it is bound and so that we have access to store
 

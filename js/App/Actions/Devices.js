@@ -25,7 +25,7 @@
 
 import type { Action, ThunkAction, Dispatch } from './Types';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 import { supportedMethods, methods } from 'Config';
 import { showToast } from 'Actions_App';
 
@@ -84,12 +84,15 @@ export function deviceSetState(deviceId: number, state: number, stateValue: numb
 
 		return LiveApi(payload).then((response: Object) =>{
 			if (state !== 32) {
-				setTimeout(() => {
+				let setStateTimeout = setTimeout(() => {
 					let { devices } = getState();
 					let device = devices.byId[deviceId];
-					if (device.methodRequested !== '') {
-						getDeviceInfo(deviceId, state, device.isInState, dispatch);
+					let currentState = device.isInState;
+					let requestedState = methods[state];
+					if (currentState !== requestedState || device.methodRequested !== '') {
+						getDeviceInfo(deviceId, requestedState, currentState, dispatch);
 					}
+					clearTimeout(setStateTimeout);
 				}, 2000);
 			}
 		}).catch((error: Object) => {
@@ -166,7 +169,7 @@ export function getDeviceHistory(device: Object): ThunkAction {
 	};
 }
 
-export function getDeviceInfo(deviceId: number, requestedState: number, currentState: string, dispatch: Dispatch): Promise<any> {
+export function getDeviceInfo(deviceId: number, requestedState: string, currentState: string, dispatch: Dispatch): Promise<any> {
 	const payload = {
 		url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
 		requestParams: {
@@ -175,7 +178,6 @@ export function getDeviceInfo(deviceId: number, requestedState: number, currentS
 	};
 	return LiveApi(payload).then((response: Object) => {
 		let newState = methods[parseInt(response.state, 10)];
-		requestedState = methods[requestedState];
 		if (newState === currentState) {
 			dispatch({
 				type: 'DEVICE_RESET_STATE',

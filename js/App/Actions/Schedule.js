@@ -25,7 +25,7 @@
 
 import type { Action } from './Types';
 import type { Schedule } from 'Reducers_Schedule';
-import LiveApi from 'LiveApi';
+import { LiveApi } from 'LiveApi';
 import { format } from 'url';
 
 type Time = {

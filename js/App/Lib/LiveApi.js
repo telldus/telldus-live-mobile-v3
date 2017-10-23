@@ -39,7 +39,7 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export default ({ url, requestParams }: {url: string, requestParams: Object}): Promise<any> => {
+export function LiveApi ({ url, requestParams }: {url: string, requestParams: Object}): Promise<any> {
 	return new Promise((resolve: Function, reject: Function): Object => {
 		return doApiCall(url, requestParams).then((response: Object): any => {
 			if (!response) {
@@ -52,15 +52,14 @@ export default ({ url, requestParams }: {url: string, requestParams: Object}): P
 			if (error.message === 'invalid_token' || error.message === 'expired_token') {
 				const store = getStore();
 				const { dispatch } = store;
-				dispatch({
-					type: 'LOGGED_OUT',
-					payload: error,
+				return dispatch({
+					type: 'LOCK_SESSION',
 				});
 			}
 			reject(error);
 		});
 	});
-};
+}
 
 async function doApiCall(url: string, requestParams: Object): any {
 	let response = await callEndPoint(url, requestParams);
@@ -118,7 +117,7 @@ async function callEndPoint(url: string, requestParams: Object): any {
 }
 
 // create new token with refresh token
-async function refreshAccessToken(url: string, requestParams: Object): Promise<any> {
+export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}): Promise<any> {
 	const store = getStore();
 	const accessToken = store.getState().user.accessToken;
 	const { dispatch } = store;
@@ -137,11 +136,11 @@ async function refreshAccessToken(url: string, requestParams: Object): Promise<a
 		}),
 	})
 		.then((response: Object): Object => response.json())
-		.then((response: Object) => {
+		.then((response: Object): any => {
 			if (response.error) {
-				// We couldn't get a new access token with the refresh_token, so we logout the user.
-				dispatch({
-					type: 'LOGGED_OUT',
+				// We couldn't get a new access token with the refresh_token, so we lock the session.
+				return dispatch({
+					type: 'LOCK_SESSION',
 				});
 			}
 			dispatch(updateAccessToken(response));
