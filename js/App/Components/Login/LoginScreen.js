@@ -222,7 +222,7 @@ class LoginForm extends View {
 					onPress={this.onFormSubmit}
 				>{ this.state.isLoading ? 'Logging in...' : 'Login' }</Button>
 				<View style={{ height: 40 }}/>
-				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forget your password? Need an
+				<Text style={{ color: '#bbb' }} onPress={this.onForgotPassword}>Forgot your password? Need an
 				                                                                account?</Text>
 				<View style={{ height: 10 }}/>
 				<Modal modalStyle={styles.notificationModal} showModal={this.state.notificationText}>
