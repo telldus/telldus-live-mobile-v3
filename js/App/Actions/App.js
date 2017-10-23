@@ -25,7 +25,7 @@
 
 import type { Action } from './Types';
 
-export const showToast = (source?: string, message?: string): Action => ({
+const showToast = (source?: string, message?: string): Action => ({
 	type: 'TOAST_SHOW',
 	payload: {
 		source,
@@ -33,6 +33,11 @@ export const showToast = (source?: string, message?: string): Action => ({
 	},
 });
 
-export const hideToast = (): Action => ({
+const hideToast = (): Action => ({
 	type: 'TOAST_HIDE',
 });
+
+module.exports = {
+	showToast,
+	hideToast,
+};
