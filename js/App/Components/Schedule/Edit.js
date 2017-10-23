@@ -24,7 +24,7 @@
 import React, { PropTypes } from 'react';
 import { ScrollView } from 'react-native';
 import {NavigationActions} from 'react-navigation';
-import { defineMessages } from 'react-intl';
+import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 import {View, TouchableButton, Dimensions, Throbber} from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
@@ -34,6 +34,7 @@ import Theme from 'Theme';
 
 interface Props extends ScheduleProps {
 	devices: Object,
+	intl: intlShape.isRequired,
 }
 
 const messages = defineMessages({
@@ -47,6 +48,16 @@ const messages = defineMessages({
 		defaultMessage: 'Delete',
 		description: 'delete button label in edit schedule page',
 	},
+	updateScheduleSuccess: {
+		id: 'toast.updateScheduleSuccess',
+		defaultMessage: 'Schedule has been updated successfully',
+		description: 'The message to show, when a schedule is updated and saved successfully',
+	},
+	deleteScheduleSuccess: {
+		id: 'toast.deleteScheduleSuccess',
+		defaultMessage: 'Schedule has been deleted successfully',
+		description: 'The message to show, when a schedule is deleted successfully',
+	},
 });
 
 type State = {
@@ -54,7 +65,7 @@ type State = {
 	isDeleting: boolean,
 };
 
-export default class Edit extends View<null, Props, State> {
+class Edit extends View<null, Props, State> {
 
 	state: State;
 
@@ -82,6 +93,8 @@ export default class Edit extends View<null, Props, State> {
 
 		this.h1 = `Edit ${this.device.name}`;
 		this.h2 = 'Click the details you want to edit';
+		this.messageOnDelete = this.props.intl.formatMessage(messages.deleteScheduleSuccess);
+		this.messageOnUpdate = this.props.intl.formatMessage(messages.updateScheduleSuccess);
 
 		this.onSaveSchedule = this.onSaveSchedule.bind(this);
 		this.onDeleteSchedule = this.onDeleteSchedule.bind(this);
@@ -125,6 +138,7 @@ export default class Edit extends View<null, Props, State> {
 				if (response.id) {
 					this.resetNavigation();
 					this.props.actions.getJobs();
+					this.props.actions.showToast('schedule', this.messageOnUpdate);
 				} else if (response.message) {
 					this.props.actions.showModal(response.message);
 				}
@@ -158,6 +172,7 @@ export default class Edit extends View<null, Props, State> {
 				if (response.status && response.status === 'success') {
 					this.resetNavigation();
 					this.props.actions.getJobs();
+					this.props.actions.showToast('schedule', this.messageOnDelete);
 				} else if (response.message) {
 					this.props.actions.showModal(response.message);
 				}
@@ -265,3 +280,5 @@ export default class Edit extends View<null, Props, State> {
 	};
 
 }
+
+export default injectIntl(Edit);

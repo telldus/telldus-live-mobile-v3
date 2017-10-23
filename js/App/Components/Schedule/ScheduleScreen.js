@@ -33,6 +33,7 @@ import { getDeviceWidth } from 'Lib';
 import * as scheduleActions from 'Actions_Schedule';
 import * as modalActions from 'Actions_Modal';
 import { getDevices } from 'Actions_Devices';
+import { showToast } from 'Actions_App';
 import { getJobs } from 'Actions';
 import type { Schedule } from 'Reducers_Schedule';
 import Theme from 'Theme';
@@ -207,7 +208,7 @@ const mapStateToProps = ({ schedule, devices, modal }: mapStateToPropsType): Obj
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({getJobs, ...scheduleActions, ...modalActions}, dispatch),
+			...bindActionCreators({getJobs, showToast, ...scheduleActions, ...modalActions}, dispatch),
 			getDevices: (): Object => dispatch(getDevices()),
 		},
 	}

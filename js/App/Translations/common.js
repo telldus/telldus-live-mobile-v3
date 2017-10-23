@@ -138,6 +138,11 @@ const messages = defineMessages({
 		defaultMessage: 'Forgot your password?',
 		description: 'Message to show on the login screen and forgot password screen',
 	},
+	deviceActionError: {
+		id: 'toast.deviceActionError',
+		defaultMessage: 'Action Currently Unavailable',
+		description: 'The error messgage to show, when a device action cannot be performed',
+	},
 });
 
 export default messages;

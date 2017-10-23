@@ -28,17 +28,27 @@ import { ScheduleProps } from './ScheduleScreen';
 import { getDeviceWidth, getSelectedDays } from 'Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow } from 'Schedule_SubViews';
 import { ScrollView } from 'react-native';
+import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
 	devices: Object,
+	intl: intlShape.isRequired,
 }
 
 type State = {
 	isLoading: boolean,
 };
 
-export default class Summary extends View<null, Props, State> {
+const messages = defineMessages({
+	addScheduleSuccess: {
+		id: 'toast.addScheduleSuccess',
+		defaultMessage: 'Schedule has been added successfully',
+		description: 'The message to show, when a schedule is added successfully',
+	},
+});
+
+class Summary extends View<null, Props, State> {
 
 	state: State;
 
@@ -60,6 +70,7 @@ export default class Summary extends View<null, Props, State> {
 
 		this.h1 = '5. Summary';
 		this.h2 = 'Please confirm the schedule';
+		this.messageOnAdd = this.props.intl.formatMessage(messages.addScheduleSuccess);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
@@ -86,6 +97,7 @@ export default class Summary extends View<null, Props, State> {
 			if (response.id) {
 				this.resetNavigation();
 				this.props.actions.getJobs();
+				this.props.actions.showToast('schedule', this.messageOnAdd);
 			} else if (response.message) {
 				this.props.actions.showModal(response.message);
 			}
@@ -157,3 +169,5 @@ export default class Summary extends View<null, Props, State> {
 	};
 
 }
+
+export default injectIntl(Summary);
