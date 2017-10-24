@@ -102,7 +102,7 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 				let device = devices.byId[deviceId];
 				let currentState = device.isInState;
 				let requestedState = 'TURNON';
-				if (currentState !== requestedState && device.methodRequested === requestedState) {
+				if ((currentState !== requestedState || device.methodRequested !== '') && device.methodRequested === requestedState) {
 					dispatch(getDeviceInfo(deviceId, requestedState));
 				}
 				clearTimeout(setStateTimeout);
@@ -141,7 +141,7 @@ export function turnOff(deviceId: number, isInState: string): ThunkAction {
 				let device = devices.byId[deviceId];
 				let currentState = device.isInState;
 				let requestedState = 'TURNOFF';
-				if (currentState !== requestedState && device.methodRequested === requestedState) {
+				if ((currentState !== requestedState || device.methodRequested !== '') && device.methodRequested === requestedState) {
 					dispatch(getDeviceInfo(deviceId, requestedState));
 				}
 				clearTimeout(setStateTimeout);
