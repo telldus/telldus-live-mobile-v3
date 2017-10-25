@@ -29,7 +29,7 @@ import {LiveApi} from 'LiveApi';
 import { supportedMethods, methods } from 'Config';
 
 import { format } from 'url';
-let setStateTimeout;
+let setStateTimeout = {};
 
 export function getDevices(): ThunkAction {
 	return (dispatch) => {
@@ -91,7 +91,9 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 
 export function turnOn(deviceId: number, isInState: string): ThunkAction {
 	return (dispatch, getState) => {
-		clearTimeout(setStateTimeout);
+		if (setStateTimeout[deviceId]) {
+			clearTimeout(setStateTimeout[deviceId]);
+		}
 		const payload = {
 			url: `/device/turnOn?id=${deviceId}`,
 			requestParams: {
@@ -99,7 +101,7 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
-			setStateTimeout = setTimeout(() => {
+			setStateTimeout[deviceId] = setTimeout(() => {
 				let { devices } = getState();
 				let device = devices.byId[deviceId];
 				let currentState = device.isInState;
@@ -107,7 +109,6 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 				if (currentState !== requestedState || device.methodRequested !== '') {
 					dispatch(getDeviceInfo(deviceId, requestedState));
 				}
-				clearTimeout(setStateTimeout);
 			}, 10000);
 		}).catch(error => {
 			let { devices } = getState();
@@ -131,7 +132,9 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 
 export function turnOff(deviceId: number, isInState: string): ThunkAction {
 	return (dispatch, getState) => {
-		clearTimeout(setStateTimeout);
+		if (setStateTimeout[deviceId]) {
+			clearTimeout(setStateTimeout[deviceId]);
+		}
 		const payload = {
 			url: `/device/turnOff?id=${deviceId}`,
 			requestParams: {
@@ -139,7 +142,7 @@ export function turnOff(deviceId: number, isInState: string): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
-			setStateTimeout = setTimeout(() => {
+			setStateTimeout[deviceId] = setTimeout(() => {
 				let { devices } = getState();
 				let device = devices.byId[deviceId];
 				let currentState = device.isInState;
@@ -147,7 +150,6 @@ export function turnOff(deviceId: number, isInState: string): ThunkAction {
 				if (currentState !== requestedState || device.methodRequested !== '') {
 					dispatch(getDeviceInfo(deviceId, requestedState));
 				}
-				clearTimeout(setStateTimeout);
 			}, 10000);
 		}).catch(error => {
 			let { devices } = getState();
