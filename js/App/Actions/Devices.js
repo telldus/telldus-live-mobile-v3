@@ -29,6 +29,7 @@ import {LiveApi} from 'LiveApi';
 import { supportedMethods, methods } from 'Config';
 
 import { format } from 'url';
+let setStateTimeout;
 
 export function getDevices(): ThunkAction {
 	return (dispatch) => {
@@ -90,6 +91,7 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 
 export function turnOn(deviceId: number, isInState: string): ThunkAction {
 	return (dispatch, getState) => {
+		clearTimeout(setStateTimeout);
 		const payload = {
 			url: `/device/turnOn?id=${deviceId}`,
 			requestParams: {
@@ -97,12 +99,12 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
-			let setStateTimeout = setTimeout(() => {
+			setStateTimeout = setTimeout(() => {
 				let { devices } = getState();
 				let device = devices.byId[deviceId];
 				let currentState = device.isInState;
 				let requestedState = 'TURNON';
-				if ((currentState !== requestedState || device.methodRequested !== '') && device.methodRequested === requestedState) {
+				if (currentState !== requestedState || device.methodRequested !== '') {
 					dispatch(getDeviceInfo(deviceId, requestedState));
 				}
 				clearTimeout(setStateTimeout);
@@ -129,6 +131,7 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 
 export function turnOff(deviceId: number, isInState: string): ThunkAction {
 	return (dispatch, getState) => {
+		clearTimeout(setStateTimeout);
 		const payload = {
 			url: `/device/turnOff?id=${deviceId}`,
 			requestParams: {
@@ -136,12 +139,12 @@ export function turnOff(deviceId: number, isInState: string): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
-			let setStateTimeout = setTimeout(() => {
+			setStateTimeout = setTimeout(() => {
 				let { devices } = getState();
 				let device = devices.byId[deviceId];
 				let currentState = device.isInState;
 				let requestedState = 'TURNOFF';
-				if ((currentState !== requestedState || device.methodRequested !== '') && device.methodRequested === requestedState) {
+				if (currentState !== requestedState || device.methodRequested !== '') {
 					dispatch(getDeviceInfo(deviceId, requestedState));
 				}
 				clearTimeout(setStateTimeout);
