@@ -31,6 +31,8 @@ import { supportedMethods, methods } from 'Config';
 import { format } from 'url';
 import moment from 'moment';
 
+let setStateTimeout = {};
+
 export function getDevices(): ThunkAction {
 	return (dispatch) => {
 		const url = format({
@@ -74,6 +76,9 @@ export function processWebsocketMessageForDevice(action:string, data:Object): Ac
 export function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
 
 	return (dispatch, getState) => {
+		if (setStateTimeout[deviceId]) {
+			clearTimeout(setStateTimeout[deviceId]);
+		}
 		const payload = { // $FlowFixMe
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
 			requestParams: {
@@ -82,16 +87,15 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 		};
 		return LiveApi(payload).then(response =>{
 			if (state !== 32) {
-				let setStateTimeout = setTimeout(() => {
+				setStateTimeout[deviceId] = setTimeout(() => {
 					let { devices } = getState();
 					let device = devices.byId[deviceId];
 					let currentState = device.isInState;
 					let requestedState = methods[state];
 					if (currentState !== requestedState || device.methodRequested !== '') {
-						getDeviceInfo(deviceId, requestedState, currentState, dispatch);
+						dispatch(getDeviceInfo(deviceId, requestedState));
 					}
-					clearTimeout(setStateTimeout);
-				}, 2000);
+				}, 10000);
 			}
 		}).catch(error => {
 			let { devices } = getState();
@@ -174,43 +178,48 @@ export function getDeviceHistory(device: Object): ThunkAction {
 	};
 }
 
-export function getDeviceInfo(deviceId: number, requestedState: string, currentState: string, dispatch: Dispatch) {
-	const payload = {
-		url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
-		requestParams: {
-			method: 'GET',
-		},
-	};
-	return LiveApi(payload).then(response => {
-		let newState = methods[parseInt(response.state, 10)];
-		if (newState === currentState) {
-			dispatch({
-				type: 'DEVICE_RESET_STATE',
-				payload: {
-					deviceId,
-					state: newState,
-					value: response.statevalue,
-				},
-			});
-			if (requestedState !== newState) {
+export function getDeviceInfo(deviceId: number, requestedState: string): ThunkAction {
+	return (dispatch: Dispatch, getState: Function) => {
+		const payload = {
+			url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+			let { devices } = getState();
+			let device = devices.byId[deviceId];
+			let currentState = device.isInState;
+			let newState = methods[parseInt(response.state, 10)];
+			if (newState === currentState) {
 				dispatch({
-					type: 'GLOBAL_ERROR_SHOW',
+					type: 'DEVICE_RESET_STATE',
 					payload: {
-						source: 'device',
 						deviceId,
-						message: '',
+						state: newState,
+						value: response.statevalue,
+					},
+				});
+				if (requestedState !== newState) {
+					dispatch({
+						type: 'GLOBAL_ERROR_SHOW',
+						payload: {
+							source: 'device',
+							deviceId,
+							message: '',
+						},
+					});
+				}
+			} else {
+				dispatch({
+					type: 'DEVICE_SET_STATE',
+					payload: {
+						deviceId,
+						value: response.statevalue,
+						method: response.state,
 					},
 				});
 			}
-		} else {
-			dispatch({
-				type: 'DEVICE_SET_STATE',
-				payload: {
-					deviceId,
-					value: response.statevalue,
-					method: response.state,
-				},
-			});
-		}
-	});
+		});
+	};
 }
