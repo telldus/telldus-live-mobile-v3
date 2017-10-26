@@ -101,6 +101,9 @@ export function turnOn(deviceId: number, isInState: string): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
+			if (setStateTimeout[deviceId]) {
+				clearTimeout(setStateTimeout[deviceId]);
+			}
 			setStateTimeout[deviceId] = setTimeout(() => {
 				let { devices } = getState();
 				let device = devices.byId[deviceId];
@@ -142,6 +145,9 @@ export function turnOff(deviceId: number, isInState: string): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
+			if (setStateTimeout[deviceId]) {
+				clearTimeout(setStateTimeout[deviceId]);
+			}
 			setStateTimeout[deviceId] = setTimeout(() => {
 				let { devices } = getState();
 				let device = devices.byId[deviceId];
