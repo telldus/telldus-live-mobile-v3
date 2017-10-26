@@ -87,6 +87,9 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 		};
 		return LiveApi(payload).then(response =>{
 			if (state !== 32) {
+				if (setStateTimeout[deviceId]) {
+					clearTimeout(setStateTimeout[deviceId]);
+				}
 				setStateTimeout[deviceId] = setTimeout(() => {
 					let { devices } = getState();
 					let device = devices.byId[deviceId];
