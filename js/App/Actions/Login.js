@@ -32,8 +32,8 @@ import { Answers } from 'react-native-fabric';
 import {LiveApi} from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
-const loginToTelldus = (username: string, password: string): ThunkAction => (dispatch: Dispatch, getState: Function) => {
-	axios({
+const loginToTelldus = (username: string, password: string): ThunkAction => (dispatch: Dispatch, getState: Function): Promise<any> => {
+	return axios({
 		method: 'post',
 		headers: {
 			'Accept': 'application/json',
