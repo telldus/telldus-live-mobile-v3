@@ -58,11 +58,22 @@ const messages = defineMessages({
 		defaultMessage: 'Schedule has been deleted successfully',
 		description: 'The message to show, when a schedule is deleted successfully',
 	},
+	deleteScheduleDialogue: {
+		id: 'modal.deleteScheduleDialogue',
+		defaultMessage: 'Are you sure you want to delete the schedule ?',
+		description: 'Dialogue box content when user choose to delete schedule.',
+	},
+	deleteScheduleDialogueHeader: {
+		id: 'modal.deleteScheduleDialogueHeader',
+		defaultMessage: 'DELETE',
+		description: 'Dialogue box header when user choose to delete schedule.',
+	},
 });
 
 type State = {
 	isSaving: boolean,
 	isDeleting: boolean,
+	choseDelete: boolean,
 };
 
 class Edit extends View<null, Props, State> {
@@ -71,6 +82,7 @@ class Edit extends View<null, Props, State> {
 
 	onSaveSchedule: () => void;
 	onDeleteSchedule: () => void;
+	onDeleteConfirm: () => void;
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -87,6 +99,7 @@ class Edit extends View<null, Props, State> {
 		this.state = {
 			isSaving: false,
 			isDeleting: false,
+			choseDelete: false,
 		};
 
 		this.device = this._getDeviceById(this.props.schedule.deviceId);
@@ -95,9 +108,13 @@ class Edit extends View<null, Props, State> {
 		this.h2 = 'Click the details you want to edit';
 		this.messageOnDelete = this.props.intl.formatMessage(messages.deleteScheduleSuccess);
 		this.messageOnUpdate = this.props.intl.formatMessage(messages.updateScheduleSuccess);
+		this.deleteScheduleDialogue = this.props.intl.formatMessage(messages.deleteScheduleDialogue);
+		this.deleteScheduleDialogueHeader = `${this.props.intl.formatMessage(messages.deleteScheduleDialogueHeader)}?`;
 
 		this.onSaveSchedule = this.onSaveSchedule.bind(this);
 		this.onDeleteSchedule = this.onDeleteSchedule.bind(this);
+
+		this.onDeleteConfirm = this.onDeleteConfirm.bind(this);
 	}
 
 	componentDidMount() {
@@ -126,7 +143,7 @@ class Edit extends View<null, Props, State> {
 	};
 
 	onSaveSchedule = () => {
-		if (!this.state.isDeleting) {
+		if (!this.state.isDeleting && !this.state.choseDelete) {
 			this.setState({
 				isSaving: true,
 			});
@@ -160,23 +177,45 @@ class Edit extends View<null, Props, State> {
 		}));
 	}
 
+	onDeleteCancel = () => {
+		this.props.actions.hideModal();
+		this.setState({
+			choseDelete: false,
+		});
+	}
+
+	onDeleteConfirm = () => {
+		this.props.actions.hideModal();
+		this.setState({
+			isDeleting: true,
+		});
+		this.props.actions.deleteSchedule(this.props.schedule.id).then((response: Object) => {
+			this.setState({
+				isDeleting: false,
+				choseDelete: false,
+			});
+			if (response.status && response.status === 'success') {
+				this.resetNavigation();
+				this.props.actions.getJobs();
+				this.props.actions.showToast('schedule', this.messageOnDelete);
+			} else if (response.message) {
+				this.props.actions.showModal(response.message);
+			}
+		});
+	}
+
 	onDeleteSchedule = () => {
 		if (!this.state.isSaving) {
 			this.setState({
-				isDeleting: true,
+				choseDelete: true,
 			});
-			this.props.actions.deleteSchedule(this.props.schedule.id).then((response: Object) => {
-				this.setState({
-					isDeleting: false,
-				});
-				if (response.status && response.status === 'success') {
-					this.resetNavigation();
-					this.props.actions.getJobs();
-					this.props.actions.showToast('schedule', this.messageOnDelete);
-				} else if (response.message) {
-					this.props.actions.showModal(response.message);
-				}
-			});
+			let modalExtras = {
+				dialogueHeader: this.deleteScheduleDialogueHeader,
+				showNegative: true,
+				onPressPositive: this.onDeleteConfirm,
+				onPressNegative: this.onDeleteCancel,
+			};
+			this.props.actions.showModal(this.deleteScheduleDialogue, modalExtras);
 		}
 	}
 
@@ -205,25 +244,23 @@ class Edit extends View<null, Props, State> {
 						onPress={this.editTime}
 					/>
 					<DaysRow selectedDays={selectedDays} onPress={this.editDays}/>
-					<View style={{flexDirection: 'column'}}>
-						<TouchableButton
-							text={messages.confirmAndSave}
-							style={save}
-							onPress={this.onSaveSchedule}
+					<TouchableButton
+						text={messages.confirmAndSave}
+						style={save}
+						onPress={this.onSaveSchedule}
+					/>
+					<TouchableButton
+						text={messages.delete}
+						style={cancel}
+						onPress={this.onDeleteSchedule}
+					/>
+					{!!(this.state.isDeleting || this.state.isSaving) &&
+					(
+						<Throbber
+							throbberContainerStyle={[throbberContainer, throbberContainerStyle]}
+							throbberStyle={throbber}
 						/>
-						<TouchableButton
-							text={messages.delete}
-							style={cancel}
-							onPress={this.onDeleteSchedule}
-						/>
-						{!!(this.state.isDeleting || this.state.isSaving) &&
-						(
-							<Throbber
-								throbberContainerStyle={[throbberContainer, throbberContainerStyle]}
-								throbberStyle={throbber}
-							/>
-						)}
-					</View>
+					)}
 				</View>
 			</ScrollView>
 		);
@@ -267,10 +304,12 @@ class Edit extends View<null, Props, State> {
 				right: -(deviceWidth * 0.12),
 			},
 			throbberContainerOnDelete: {
-				top: deviceHeight * 0.13,
+				top: deviceHeight * 0.65,
+				left: deviceWidth * 0.65,
 			},
 			throbberContainerOnSave: {
-				top: deviceHeight * 0.04,
+				top: deviceHeight * 0.53,
+				left: deviceWidth * 0.65,
 			},
 			throbber: {
 				fontSize: 30,

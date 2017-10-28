@@ -36,6 +36,8 @@
   "history": "History",
   "incommingSignal": "Incomming signal",
   "loading": "Loading",
+  "modal.deleteScheduleDialogue": "Are you sure you want to delete the schedule ?",
+  "modal.deleteScheduleDialogueHeader": "DELETE",
   "noName": "no name",
   "notification.defaultHeader": "OOPS",
   "notification.defaultNegativeText": "CANCEL",

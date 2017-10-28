@@ -112,16 +112,28 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	onModalOpen = () => {
-	}
+	};
 
 	closeModal = () => {
 		this.props.actions.hideModal();
-	}
+	};
+
+	getRelativeData = (): Object => {
+		let {modalExtras} = this.props;
+		return {
+			dialgueHeader: modalExtras.dialogueHeader ? modalExtras.dialogueHeader : false,
+			showNegative: modalExtras.showNegative ? true : false,
+			positiveText: modalExtras.positiveText ? modalExtras.positiveText : false,
+			onPressPositive: modalExtras.onPressPositive ? modalExtras.onPressPositive : this.closeModal,
+			onPressNegative: modalExtras.onPressNegative ? modalExtras.onPressNegative : this.closeModal,
+		};
+	};
 
 	render(): React$Element<any> {
 		const { children, navigation, actions, devices, schedule } = this.props;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style, modal } = this._getStyle();
+		const { dialgueHeader, showNegative, positiveText, onPressPositive, onPressNegative} = this.getRelativeData();
 
 		return (
 			<View>
@@ -150,13 +162,20 @@ class ScheduleScreen extends View<null, Props, State> {
 					</View>
 					<Modal
 						modalStyle={[Theme.Styles.notificationModal, modal]}
-						entry= "ZoomIn"
-						exit= "ZoomOut"
-						entryDuration= {300}
-						exitDuration= {100}
-						onOpen= {this.onModalOpen}
+						entry="ZoomIn"
+						exit="ZoomOut"
+						entryDuration={300}
+						exitDuration={100}
+						onOpen={this.onModalOpen}
 						showModal={this.props.showModal}>
-						<NotificationComponent text={this.props.validationMessage} onPress={this.closeModal} />
+						<NotificationComponent
+							header={dialgueHeader}
+							text={this.props.validationMessage}
+							showPositive={true}
+							showNegative={showNegative}
+							positiveText={positiveText}
+							onPressPositive={onPressPositive}
+							onPressNegative={onPressNegative} />
 					</Modal>
 				</View>
 			</View>
@@ -202,6 +221,7 @@ const mapStateToProps = ({ schedule, devices, modal }: mapStateToPropsType): Obj
 		devices,
 		validationMessage: modal.data,
 		showModal: modal.openModal,
+		modalExtras: modal.extras,
 	}
 );
 
