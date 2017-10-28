@@ -47,10 +47,11 @@ export default function reduceModal(state: State = initialState, action: Action)
 
 		case 'REQUEST_MODAL_OPEN':
 			let extras = action.payload.extras ? action.payload.extras : false;
+			let data = action.payload.data ? action.payload.data : '';
 			return {
 				...state,
 				openModal: true,
-				data: action.payload.data,
+				data,
 				extras,
 			};
 
@@ -58,7 +59,6 @@ export default function reduceModal(state: State = initialState, action: Action)
 			return {
 				...state,
 				openModal: false,
-				extras: false,
 			};
 
 		default:
