@@ -121,6 +121,7 @@ class DialogueBox extends Component {
 	render(): Object {
 		let {
 			showDialogue,
+			style,
 			entry,
 			exit,
 			entryDuration,
@@ -134,7 +135,7 @@ class DialogueBox extends Component {
 			`${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
 		return (
 			<Modal
-				modalStyle={Theme.Styles.notificationModal}
+				modalStyle={[Theme.Styles.notificationModal, style]}
 				entry={entry}
 				exit={exit}
 				entryDuration={entryDuration}
