@@ -26,12 +26,11 @@ import {TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, Modal } from 'BaseComponents';
-import {FormContainerComponent, NotificationComponent, RegisterForm} from 'PreLoginScreen_SubViews';
+import { FormattedMessage, View, DialogueBox } from 'BaseComponents';
+import {FormContainerComponent, RegisterForm} from 'PreLoginScreen_SubViews';
 import type { Dispatch } from 'Actions_Types';
 
 import StyleSheet from 'StyleSheet';
-import Theme from 'Theme';
 
 const messages = defineMessages({
 	createAccount: {
@@ -101,22 +100,15 @@ class RegisterScreen extends View {
 				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
 					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
 				</TouchableOpacity>
-				<Modal
-					modalStyle={Theme.Styles.notificationModal}
-					entry= "ZoomIn"
-					exit= "ZoomOut"
-					entryDuration= {300}
-					exitDuration= {100}
+				<DialogueBox
+					showDialogue={this.props.showModal}
+					header={this.props.validationMessageHeader}
+					text={this.props.validationMessage}
 					onOpen= {this.onModalOpen}
-					showModal={this.props.showModal}>
-					<NotificationComponent
-						header={this.props.validationMessageHeader}
-						text={this.props.validationMessage}
-						showPositive={true}
-						showNegative={false}
-						onPressPositive={this.closeModal}
-					/>
-				</Modal>
+					showPositive={true}
+					showNegative={false}
+					onPressPositive={this.closeModal}
+				/>
 			</FormContainerComponent>
 		);
 	}
