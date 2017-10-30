@@ -34,8 +34,7 @@ import {
 	TouchableButton,
 	Dimensions,
 } from 'BaseComponents';
-import {Modal as CustomModal} from 'BaseComponents';
-import { NotificationComponent } from 'PreLoginScreen_SubViews';
+import { DialogueBox } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 import { logoutFromTelldus } from 'Actions';
 import type { Dispatch } from 'Actions_Types';
@@ -242,22 +241,16 @@ class SettingsDetailModal extends View {
 							text={logoutButText}
 							postScript={this.state.isLogoutLoading ? '...' : null}
 						/>
-						<CustomModal
-							modalStyle={[Theme.Styles.notificationModal, styles.modal]}
-							entry= "ZoomIn"
-							exit= "ZoomOut"
-							entryDuration= {300}
-							exitDuration= {100}
-							showModal={this.props.showModal}>
-							<NotificationComponent
-								header={notificationHeader}
-								text={this.props.validationMessage}
-								showPositive={showPositive}
-								showNegative={showNegative}
-								positiveText={positiveText}
-								onPressPositive={onPressPositive}
-								onPressNegative={onPressNegative} />
-						</CustomModal>
+						<DialogueBox
+							style={styles.modal}
+							showDialogue={this.props.showModal}
+							header={notificationHeader}
+							text={this.props.validationMessage}
+							showPositive={showPositive}
+							showNegative={showNegative}
+							positiveText={positiveText}
+							onPressPositive={onPressPositive}
+							onPressNegative={onPressNegative} />
 					</View>
 				</Container>
 			</Modal>
