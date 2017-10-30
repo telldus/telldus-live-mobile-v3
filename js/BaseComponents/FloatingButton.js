@@ -36,7 +36,7 @@ type DefaultProps = {
 
 type Props = {
 	onPress: Function,
-	imageSource: number,
+	imageSource: number | boolean,
 	tabs: boolean,
 	iconSize: number,
 	paddingRight: number,
@@ -48,7 +48,7 @@ export default class FloatingButton extends Component {
 
 	static propTypes = {
 		onPress: PropTypes.func.isRequired,
-		imageSource: PropTypes.number.isRequired,
+		imageSource: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
 		tabs: PropTypes.bool,
 		iconSize: PropTypes.number,
 		paddingRight: PropTypes.number,
