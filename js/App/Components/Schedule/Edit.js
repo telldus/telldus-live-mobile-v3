@@ -293,12 +293,10 @@ class Edit extends View<null, Props, State> {
 			save: {
 				marginTop: 10,
 				backgroundColor: Theme.Core.brandSecondary,
-				color: '#fff',
 			},
 			cancel: {
 				marginTop: 10,
 				backgroundColor: Theme.Core.brandDanger,
-				color: '#fff',
 			},
 			throbberContainer: {
 				right: -(deviceWidth * 0.12),
