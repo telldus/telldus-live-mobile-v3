@@ -71,6 +71,7 @@ import RowWithTriangle from './RowWithTriangle';
 import FullPageActivityIndicator from './FullPageActivityIndicator';
 import HeaderNav from './HeaderNav';
 import Throbber from './Throbber';
+import DialogueBox from './DialogueBox';
 
 import {
 	AppState,
@@ -131,6 +132,7 @@ module.exports = {
 	FullPageActivityIndicator,
 	HeaderNav,
 	Throbber,
+	DialogueBox,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
