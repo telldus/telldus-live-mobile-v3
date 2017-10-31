@@ -60,6 +60,11 @@ public class MainApplication extends Application implements ReactApplication {
 				new ReactNativePushNotificationPackage()
 			);
 		}
+		
+		@Override
+		protected String getJSMainModuleName() {
+			return "index";
+		}
 	};
 
 	@Override
