@@ -38,7 +38,7 @@
     "react-native-slider": "^0.10.0",
     "react-native-uuid": "^1.4.9",
     "react-native-vector-icons": "4.2.0",
-    "react-navigation": "^1.0.0-beta.11",
+    "react-navigation": "~1.0.0-beta.13",
     "react-redux": "~5.0.1",
     "reconnecting-websocket": "^3.0.3",
     "redux": "~3.7.2",
