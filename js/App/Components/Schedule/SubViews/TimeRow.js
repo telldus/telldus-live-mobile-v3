@@ -175,7 +175,15 @@ export default class TimeRow extends View<null, Props, State> {
 					time,
 					loading: false,
 				});
+			} else {
+				this.setState({
+					loading: false,
+				});
 			}
+		} else {
+			this.setState({
+				loading: false,
+			});
 		}
 	};
 
