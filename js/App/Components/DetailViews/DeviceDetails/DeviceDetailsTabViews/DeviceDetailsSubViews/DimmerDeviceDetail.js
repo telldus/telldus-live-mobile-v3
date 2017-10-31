@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StyleSheet, Dimensions } from 'react-native';
 import Slider from 'react-native-slider';
@@ -177,7 +178,7 @@ class DimmerDeviceDetailModal extends View {
 }
 
 DimmerDeviceDetailModal.propTypes = {
-	device: React.PropTypes.object.isRequired,
+	device: PropTypes.object.isRequired,
 };
 
 DimmerDeviceDetailModal.defaultProps = {

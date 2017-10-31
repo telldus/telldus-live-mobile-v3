@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
 	StyleSheet,
 	View,
@@ -82,9 +83,9 @@ class Gravatar extends React.Component {
 
 Gravatar.propTypes = {
 	...View.PropTypes,
-	emailAddress: React.PropTypes.string.isRequired,
-	size: React.PropTypes.number.isRequired,
-	mask: React.PropTypes.oneOf(['circle', 'square', 'rounded']),
+	emailAddress: PropTypes.string.isRequired,
+	size: PropTypes.number.isRequired,
+	mask: PropTypes.oneOf(['circle', 'square', 'rounded']),
 };
 
 Gravatar.defaultProps = {

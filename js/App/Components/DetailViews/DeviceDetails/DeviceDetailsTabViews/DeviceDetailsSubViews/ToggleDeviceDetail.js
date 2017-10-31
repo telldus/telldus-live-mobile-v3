@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import { RoundedCornerShadowView, View } from 'BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 import { OnButton, OffButton } from 'TabViews_SubViews';
@@ -68,7 +68,7 @@ class ToggleDeviceDetailModal extends View {
 }
 
 ToggleDeviceDetailModal.propTypes = {
-	device: React.PropTypes.object.isRequired,
+	device: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

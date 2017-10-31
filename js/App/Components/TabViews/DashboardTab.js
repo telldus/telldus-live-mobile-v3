@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
 import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
@@ -303,7 +304,7 @@ class DashboardTab extends View {
 }
 
 DashboardTab.propTypes = {
-	rows: React.PropTypes.array,
+	rows: PropTypes.array,
 };
 
 const getRows = createSelector(

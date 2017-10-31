@@ -19,7 +19,8 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { View, FormattedMessage } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
