@@ -112,7 +112,7 @@ const RouteConfigs = {
 
 function renderHeader(): React$Element<any> {
 	return (
-		<Image style={{ height: 110, width: 130, marginLeft: deviceWidth * 0.14 }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
+		<Image style={{ height: 110, width: 130, marginHorizontal: deviceWidth * 0.18 }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
 	);
 }
 
@@ -136,7 +136,6 @@ function renderHeaderRight(state: Object): React$Element<any> {
 			</HeaderNav>
 		);
 	}
-	return <View style={{width: 50}}/>;
 }
 
 function toggleEditMode(args: Object) {
