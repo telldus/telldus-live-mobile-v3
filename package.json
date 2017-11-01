@@ -63,7 +63,7 @@
     "eslint-plugin-react": "^7.2.1",
     "fetch-mock": "^5.12.2",
     "flow-bin": "^0.57.3",
-    "jest": "^21.1.0",
+    "jest": "^21.2.1",
     "prompt": "^1.0.0",
     "react-intl-translations-manager": "^5.0.0"
   },
