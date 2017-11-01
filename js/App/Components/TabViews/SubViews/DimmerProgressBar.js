@@ -63,7 +63,7 @@ type State = {
 	containerHeight: number,
 };
 
-class DimmerProgressBar extends Component {
+class DimmerProgressBar extends Component<Props, State> {
 	props: Props;
 	static defaultProps : DefaultProps;
 	state: State;

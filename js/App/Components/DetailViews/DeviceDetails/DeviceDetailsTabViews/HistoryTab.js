@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StyleSheet, ListView, Dimensions } from 'react-native';
 
@@ -59,6 +60,9 @@ type Props = {
 };
 
 type State = {
+	dataSource: any,
+	isListEmpty: boolean,
+	hasRefreshed: boolean,
 };
 
 const listDataSource = new ListDataSource({

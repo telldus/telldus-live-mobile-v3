@@ -30,7 +30,7 @@ type Props = {
 	style: Object,
 };
 
-export default class BackgroundImage extends Component {
+export default class BackgroundImage extends Component<Props, void> {
 	props : Props;
 
 	render() {

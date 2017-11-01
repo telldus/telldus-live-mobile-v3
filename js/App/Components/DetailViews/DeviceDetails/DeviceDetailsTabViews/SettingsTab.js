@@ -51,7 +51,7 @@ const messages = defineMessages({
 type Props = {
 	dispatch: Function,
 	device: Object,
-	inDashboard: Boolean,
+	inDashboard: boolean,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
 };
