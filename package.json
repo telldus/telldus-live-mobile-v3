@@ -75,7 +75,8 @@
     "preset": "react-native",
     "setupFiles": [
       "<rootDir>/js/Utils/jest.js"
-    ]
+    ],
+    "testEnvironment": "jsdom"
   },
   "rnpm": {
     "assets": [
