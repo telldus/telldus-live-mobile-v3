@@ -114,7 +114,7 @@ export default class Modal extends Component<Props, void> {
 			{
 				toValue: 1,
 				duration: duration,
-				easing: Easing.inOut,
+				easing: Easing.in,
 			}).start();
 	}
 
@@ -123,7 +123,7 @@ export default class Modal extends Component<Props, void> {
 			{
 				toValue: 0.01,
 				duration: duration,
-				easing: Easing.inOut,
+				easing: Easing.in,
 			}).start();
 	}
 
