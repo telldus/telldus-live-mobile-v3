@@ -103,7 +103,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		this.setState({
 			h1,
 			h2,
-			infoButton,
+			infoButton: null,
 		});
 	};
 
