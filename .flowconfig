@@ -27,6 +27,10 @@
 .*/node_modules/react-native/packager/.*
 .*/node_modules/react-native/Libraries/Renderer/src/renderers/shared/fiber/.*
 .*/node_modules/react-navigation/.*
+.*/node_modules/react-native/Libraries/StyleSheet/StyleSheetValidation.js
+.*/node_modules/react-native/Libraries/Lists/ListView/ListView.js
+.*/node_modules/react-native/Libraries/Components/Slider/Slider.js
+.*/node_modules/react-native/Libraries/react-native/react-native-implementation.js
 [include]
 
 [libs]
