@@ -97,7 +97,7 @@ export default class Device extends View<void, Props, State> {
 
 	_renderRow = (row: Object): Object => {
 		// TODO: use device description
-		const preparedRow = Object.assign({}, row, { description: 'Fibaro Plug 2' });
+		const preparedRow = Object.assign({}, row, { description: '' });
 
 		return <DeviceRow row={preparedRow} onPress={this.selectDevice}/>;
 	};
