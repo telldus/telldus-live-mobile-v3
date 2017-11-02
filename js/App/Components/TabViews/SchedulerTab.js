@@ -25,7 +25,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { defineMessages } from 'react-intl';
-import { NavigationActions } from 'react-navigation';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
@@ -133,19 +132,14 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	newSchedule = () => {
-		this.props.screenProps.stackNavigator.navigate('Schedule');
+		this.props.screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: false});
 	};
 
 	editJob = (schedule: Schedule) => {
 		const { dispatch, screenProps } = this.props;
 
-		const goToEdit = NavigationActions.navigate({
-			routeName: 'Schedule',
-			params: {},
-			action: NavigationActions.navigate({ routeName: 'Edit' }),
-		});
 		dispatch(editSchedule(schedule));
-		screenProps.stackNavigator.dispatch(goToEdit);
+		screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: true});
 	};
 
 	onIndexChanged = (index: number) => {
