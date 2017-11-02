@@ -61,7 +61,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		if (deviceType === 'NAVIGATIONAL') {
 			methods = [128, 256, 512];
 		}
-		
+
 		this.state = {
 			dataSource: new ListDataSource({
 				rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
