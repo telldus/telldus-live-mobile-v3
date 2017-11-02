@@ -36,6 +36,7 @@
     "react-native-scrollable-tab-view": "^0.7.0",
     "react-native-simple-toast": "0.0.6",
     "react-native-slider": "^0.10.0",
+    "react-native-swiper": "^1.5.13",
     "react-native-uuid": "^1.4.9",
     "react-native-vector-icons": "4.2.0",
     "react-navigation": "~1.0.0-beta.13",
@@ -60,13 +61,13 @@
     "child-process-promise": "^2.2.1",
     "enzyme": "^2.9.1",
     "eslint": "~4.4.1",
+    "eslint-plugin-flowtype": "^2.39.1",
     "eslint-plugin-react": "^7.2.1",
     "fetch-mock": "^5.12.2",
     "flow-bin": "^0.38.0",
     "jest": "^21.1.0",
     "prompt": "^1.0.0",
-    "react-intl-translations-manager": "^5.0.0",
-    "eslint-plugin-flowtype": "^2.35.0"
+    "react-intl-translations-manager": "^5.0.0"
   },
   "engines": {
     "node": ">=5.0",

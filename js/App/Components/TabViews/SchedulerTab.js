@@ -28,6 +28,7 @@ import { defineMessages } from 'react-intl';
 import { NavigationActions } from 'react-navigation';
 import { createSelector } from 'reselect';
 import moment from 'moment';
+import Swiper from 'react-native-swiper';
 
 import {
 	FloatingButton,
@@ -35,6 +36,7 @@ import {
 	List,
 	ListDataSource,
 	View,
+	StyleSheet,
 } from 'BaseComponents';
 import { JobRow, JobsPoster } from 'TabViews_SubViews';
 import { editSchedule, getJobs } from 'Actions';
@@ -98,6 +100,7 @@ class SchedulerTab extends View<null, Props, State> {
 			loading: true,
 		};
 		this.newSchedule = this.newSchedule.bind(this);
+		this.onIndexChanged = this.onIndexChanged.bind(this);
 	}
 
 	componentDidMount() {
@@ -145,6 +148,12 @@ class SchedulerTab extends View<null, Props, State> {
 		screenProps.stackNavigator.dispatch(goToEdit);
 	};
 
+	onIndexChanged = (index) => {
+		this.setState({
+			todayIndex: index,
+		});
+	}
+
 	render(): React$Element<any> {
 		if (this.state.loading) {
 			return <FullPageActivityIndicator/>;
@@ -159,15 +168,15 @@ class SchedulerTab extends View<null, Props, State> {
 					todayIndex={todayIndex}
 					scroll={this._scroll}
 				/>
-				<ScrollView
-					horizontal={true}
-					pagingEnabled={true}
-					scrollEnabled={false}
-					showsHorizontalScrollIndicator={false}
+				<Swiper
 					ref={this._refScroll}
-				>
+					showsButtons={false}
+					loadMinimal={true}
+					loop={false}
+					showsPagination={false}
+					onIndexChanged={this.onIndexChanged}>
 					{daysToRender}
-				</ScrollView>
+				</Swiper>
 				<FloatingButton
 					onPress={this.newSchedule}
 					imageSource={require('./img/iconPlus.png')}
@@ -181,22 +190,24 @@ class SchedulerTab extends View<null, Props, State> {
 	};
 
 	_scroll = (days: number) => {
-		if (this.scroll) {
-			const { todayIndex, daysToRender } = this.state;
+		// if (this.scroll) {
+		// 	const { todayIndex, daysToRender } = this.state;
 
-			const newTodayIndex = todayIndex + days;
+		// 	const newTodayIndex = todayIndex + days;
 
-			if (newTodayIndex >= 0 && newTodayIndex < daysToRender.length) {
-				this.contentOffset += getDeviceWidth() * days;
+		// 	if (newTodayIndex >= 0 && newTodayIndex < daysToRender.length) {
+		// 		this.contentOffset += getDeviceWidth() * days;
 
-				this.setState({ todayIndex: newTodayIndex }, () => {
-					this.scroll.scrollTo({
-						x: this.contentOffset,
-						y: 0,
-					});
-				});
-			}
-		}
+		// 		this.setState({ todayIndex: newTodayIndex }, () => {
+		// 			this.scroll.scrollTo({
+		// 				x: this.contentOffset,
+		// 				y: 0,
+		// 			});
+		// 		});
+		// 	}
+		// }
+		this.scroll.scrollBy(days, true);
+
 	};
 
 	_getDays = (dataArray: Object[]): Object[] => {
@@ -215,7 +226,6 @@ class SchedulerTab extends View<null, Props, State> {
 	};
 
 	_getDaysToRender = (dataArray: Object[]): React$Element<any>[] => {
-		const { container, line } = this._getStyle();
 
 		return dataArray.map((section: Object, i: number): Object => {
 			const dataSource = new ListDataSource(
@@ -225,8 +235,8 @@ class SchedulerTab extends View<null, Props, State> {
 			).cloneWithRows(section);
 
 			return (
-				<View style={container} key={i}>
-					<View style={line}/>
+				<View style={styles.container} key={i}>
+					<View style={styles.line}/>
 					<List
 						dataSource={dataSource}
 						renderRow={this._renderRow}
@@ -255,27 +265,6 @@ class SchedulerTab extends View<null, Props, State> {
 			<JobRow {...props} editJob={this.editJob} isFirst={+rowId === 0}/>
 		);
 	};
-
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
-
-		return {
-			container: {
-				flex: 1,
-				backgroundColor: '#eeeeef',
-			},
-			line: {
-				backgroundColor: '#929292',
-				height: '100%',
-				width: 1,
-				position: 'absolute',
-				left: deviceWidth * 0.069333333,
-				top: 0,
-				zIndex: -1,
-			},
-		};
-	};
-
 }
 
 const getRowsAndSections = createSelector(
@@ -301,6 +290,24 @@ const getRowsAndSections = createSelector(
 		return sectionObjects;
 	},
 );
+
+const deviceWidth = getDeviceWidth();
+
+var styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: '#eeeeef',
+	},
+	line: {
+		backgroundColor: '#929292',
+		height: '100%',
+		width: 1,
+		position: 'absolute',
+		left: deviceWidth * 0.069333333,
+		top: 0,
+		zIndex: -1,
+	},
+});
 
 type MapStateToPropsType = {
 	rowsAndSections: Object[],
