@@ -43,6 +43,7 @@ type Props = {
 	children: Object,
 	schedule?: Schedule,
 	actions?: Object,
+	devices?: Object,
 };
 
 type State = {
@@ -59,6 +60,7 @@ export interface ScheduleProps {
 	schedule: Schedule,
 	loading: (loading: boolean) => void,
 	isEditMode: () => boolean,
+	devices: Object,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
@@ -68,6 +70,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		children: PropTypes.object.isRequired,
 		schedule: PropTypes.object,
 		actions: PropTypes.objectOf(PropTypes.func),
+		devices: PropTypes.object,
 	};
 
 	state = {

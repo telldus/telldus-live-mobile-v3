@@ -25,8 +25,7 @@ import React, { PropTypes } from 'react';
 import { List, ListDataSource, View } from 'BaseComponents';
 import type { ScheduleProps } from './ScheduleScreen';
 import { ActionRow } from 'Schedule_SubViews';
-
-const METHODS = [1, 2, 16];
+import getDeviceType from '../../Lib/getDeviceType';
 
 type State = {
 	dataSource: Object,
@@ -39,13 +38,8 @@ export default class Action extends View<null, ScheduleProps, State> {
 		actions: PropTypes.object,
 		onDidMount: PropTypes.func,
 		schedule: PropTypes.object,
+		devices: PropTypes.object,
 		isEditMode: PropTypes.func,
-	};
-
-	state = {
-		dataSource: new ListDataSource({
-			rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
-		}).cloneWithRows(METHODS),
 	};
 
 	constructor(props: ScheduleProps) {
@@ -56,6 +50,33 @@ export default class Action extends View<null, ScheduleProps, State> {
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
+
+		let deviceType = this.getType(props.schedule.deviceId), methods = [];
+		if (deviceType === 'TOGGLE') {
+			methods = [1, 2];
+		}
+		if (deviceType === 'DIMMER') {
+			methods = [1, 2, 16];
+		}
+		if (deviceType === 'NAVIGATIONAL') {
+			methods = [128, 256, 512];
+		}
+		
+		this.state = {
+			dataSource: new ListDataSource({
+				rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
+			}).cloneWithRows(methods),
+		};
+	}
+
+	getType(deviceId: number): mixed {
+		const filteredItem = this.props.devices.byId[deviceId];
+		if (!filteredItem) {
+			return null;
+		}
+
+		const supportedMethods = filteredItem.supportedMethods;
+		return getDeviceType(supportedMethods);
 	}
 
 	componentDidMount() {

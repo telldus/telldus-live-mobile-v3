@@ -63,6 +63,30 @@ export const ACTIONS: ActionType[] = [
 		textColor: Theme.Core.brandSecondary,
 		icon: 'dim',
 	},
+	{
+		name: 'Up',
+		description: 'Turn the device up',
+		method: 128,
+		bgColor: Theme.Core.brandSecondary,
+		textColor: Theme.Core.brandSecondary,
+		icon: 'up',
+	},
+	{
+		name: 'Down',
+		description: 'Turn the device down',
+		method: 256,
+		bgColor: Theme.Core.brandSecondary,
+		textColor: Theme.Core.brandSecondary,
+		icon: 'down',
+	},
+	{
+		name: 'Stop',
+		description: 'Stop the device',
+		method: 512,
+		bgColor: Theme.Core.brandSecondary,
+		textColor: Theme.Core.brandSecondary,
+		icon: 'stop',
+	},
 ];
 
 type DefaultProps = {
