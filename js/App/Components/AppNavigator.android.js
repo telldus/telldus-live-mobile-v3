@@ -42,7 +42,7 @@ import { getDevices } from 'Actions_Devices';
 import { hideToast } from 'Actions_App';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import { resetSchedule } from 'Actions_Schedule';
-import ScheduleNavigator from 'ScheduleNavigator';
+import ScheduleNavigator from 'ScheduleNavigatorNew';
 import Drawer from 'Drawer';
 
 const messages = defineMessages({
@@ -98,14 +98,23 @@ const RouteConfigs = {
 	},
 	Schedule: {
 		screen: ScheduleNavigator,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderHeader(),
+		navigationOptions: ({navigation}: Object): Object => {
+			let {state} = navigation;
+			let renderRootHeader = state.params && state.params.renderRootHeader;
+			if (renderRootHeader) {
+				return {
+					headerStyle: {
+						marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+						backgroundColor: Theme.Core.brandPrimary,
+						height: deviceHeight * 0.1,
+					},
+					headerTintColor: '#ffffff',
+					headerTitle: renderHeader(),
+				};
+			}
+			return {
+				header: null,
+			};
 		},
 	},
 };
