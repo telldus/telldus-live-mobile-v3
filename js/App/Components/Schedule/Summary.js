@@ -22,7 +22,6 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
-import { NavigationActions } from 'react-navigation';
 import { FloatingButton, View } from 'BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getDeviceWidth, getSelectedDays } from 'Lib';
@@ -85,6 +84,10 @@ class Summary extends View<null, Props, State> {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'Summary';
+	}
+
 	saveSchedule = () => {
 		this.setState({
 			isLoading: true,
@@ -105,17 +108,7 @@ class Summary extends View<null, Props, State> {
 	};
 
 	resetNavigation = () => {
-		this.props.navigation.dispatch(NavigationActions.reset({
-			index: 0,
-			actions: [
-				NavigationActions.navigate({
-					routeName: 'Device',
-					params: {
-						reset: true,
-					},
-				}),
-			],
-		}));
+		this.props.rootNavigator.goBack();
 	}
 
 	render(): React$Element<any> {
@@ -154,7 +147,7 @@ class Summary extends View<null, Props, State> {
 
 	_getDeviceById = (deviceId: number): Object => {
 		// TODO: use device description
-		return Object.assign({}, this.props.devices.byId[deviceId], { description: 'Fibaro Plug 2' });
+		return Object.assign({}, this.props.devices.byId[deviceId], { description: '' });
 	};
 
 	_getStyle = (): Object => {

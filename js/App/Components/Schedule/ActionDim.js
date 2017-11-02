@@ -79,6 +79,10 @@ export default class ActionDim extends View<null, Props, State> {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'ActionDim';
+	}
+
 	selectAction = () => {
 		const { actions, navigation, isEditMode } = this.props;
 

@@ -71,6 +71,10 @@ export default class Device extends View<void, Props, State> {
 		onDidMount(this.h1, this.h2);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'InitialScreen';
+	}
+
 	componentWillUnmount() {
 		this.props.actions.resetSchedule();
 	}
@@ -80,9 +84,12 @@ export default class Device extends View<void, Props, State> {
 	};
 
 	selectDevice = (row: Object) => {
-		const { actions, navigation } = this.props;
-		actions.selectDevice(row.id);
+		const { actions, navigation, rootNavigator } = this.props;
 		navigation.navigate('Action');
+		actions.selectDevice(row.id);
+		rootNavigator.setParams({
+			renderRootHeader: false,
+		});
 	};
 
 	render(): React$Element<List> {

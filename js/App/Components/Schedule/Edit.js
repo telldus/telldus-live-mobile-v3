@@ -23,7 +23,6 @@
 
 import React, { PropTypes } from 'react';
 import { ScrollView } from 'react-native';
-import {NavigationActions} from 'react-navigation';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 import {View, TouchableButton, Dimensions, Throbber} from 'BaseComponents';
@@ -121,6 +120,10 @@ class Edit extends View<null, Props, State> {
 		this.props.onDidMount(this.h1, this.h2);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'InitialScreen';
+	}
+
 	componentWillUnmount() {
 		this.props.actions.resetSchedule();
 		clearInterval(this.rotateInterval);
@@ -164,17 +167,7 @@ class Edit extends View<null, Props, State> {
 	};
 
 	resetNavigation = () => {
-		this.props.navigation.dispatch(NavigationActions.reset({
-			index: 0,
-			actions: [
-				NavigationActions.navigate({
-					routeName: 'Device',
-					params: {
-						reset: true,
-					},
-				}),
-			],
-		}));
+		this.props.rootNavigator.goBack();
 	}
 
 	onDeleteCancel = () => {
@@ -267,6 +260,9 @@ class Edit extends View<null, Props, State> {
 	}
 
 	_navigate = (routeName: string) => {
+		this.props.rootNavigator.setParams({
+			renderRootHeader: false,
+		});
 		this.props.navigation.navigate(routeName, { editMode: true });
 	};
 

@@ -75,6 +75,10 @@ export default class Days extends View<null, Props, State> {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'Days';
+	}
+
 	toggleDayState = (day: string) => {
 		const { selectedDays } = this.state;
 

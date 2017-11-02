@@ -84,6 +84,10 @@ export default class Action extends View<null, ScheduleProps, State> {
 		this.props.onDidMount(h1, h2, infoButton);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'Action';
+	}
+
 	selectAction = (action: number) => {
 		const { actions, navigation, isEditMode } = this.props;
 
