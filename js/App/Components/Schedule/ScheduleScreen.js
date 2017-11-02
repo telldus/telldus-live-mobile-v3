@@ -44,6 +44,7 @@ type Props = {
 	schedule?: Schedule,
 	actions?: Object,
 	devices?: Object,
+	screenProps: Object,
 };
 
 type State = {
@@ -71,6 +72,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		schedule: PropTypes.object,
 		actions: PropTypes.objectOf(PropTypes.func),
 		devices: PropTypes.object,
+		screenProps: PropTypes.object,
 	};
 
 	state = {
@@ -133,7 +135,7 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { children, navigation, actions, devices, schedule } = this.props;
+		const { children, navigation, actions, devices, schedule, screenProps } = this.props;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style, modal } = this._getStyle();
 		const { dialgueHeader, showNegative, positiveText, onPressPositive, onPressNegative} = this.getRelativeData();
@@ -160,6 +162,7 @@ class ScheduleScreen extends View<null, Props, State> {
 								schedule,
 								loading: this.loading,
 								isEditMode: this._isEditMode,
+								...screenProps,
 							},
 						)}
 					</View>
@@ -195,13 +198,15 @@ class ScheduleScreen extends View<null, Props, State> {
 		const deviceHeight = Dimensions.get('window').height;
 		const padding = deviceWidth * 0.033333333;
 
-		const isEdit = this.props.navigation.state.routeName === 'Edit';
+		let { state } = this.props.screenProps.rootNavigator;
 
+		const notEdit = (this.props.screenProps.currentScreen === 'InitialScreen' && !state.params.editMode)
+			|| this.props.screenProps.currentScreen !== 'InitialScreen';
 		return {
 			style: {
 				flex: 1,
-				paddingHorizontal: isEdit ? 0 : padding,
-				paddingTop: isEdit ? 0 : padding,
+				paddingHorizontal: notEdit ? padding : 0,
+				paddingTop: padding,
 			},
 			modal: {
 				alignSelf: 'center',
