@@ -260,9 +260,11 @@ class AppNavigator extends View {
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
 		const currentScreen = this.getRouteName(currentState);
-		this.setState({
-			currentScreen,
-		});
+		if (this.state.currentScreen !== currentScreen) {
+			this.setState({
+				currentScreen,
+			});
+		}
 	}
 
 	renderNavigationView(): React$Element<any> {
