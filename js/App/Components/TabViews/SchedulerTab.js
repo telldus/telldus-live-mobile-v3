@@ -148,7 +148,7 @@ class SchedulerTab extends View<null, Props, State> {
 		screenProps.stackNavigator.dispatch(goToEdit);
 	};
 
-	onIndexChanged = (index) => {
+	onIndexChanged = (index: number) => {
 		this.setState({
 			todayIndex: index,
 		});
@@ -293,7 +293,7 @@ const getRowsAndSections = createSelector(
 
 const deviceWidth = getDeviceWidth();
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#eeeeef',
