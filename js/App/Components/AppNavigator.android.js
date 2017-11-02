@@ -150,7 +150,6 @@ const Navigator = StackNavigator(RouteConfigs, StackNavigatorConfig);
 
 type Props = {
 	dimmer: Object,
-	tab: string,
 	accessToken: Object,
 	userProfile: Object,
 	dispatch: Function,
@@ -309,7 +308,6 @@ AppNavigator.propTypes = {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
