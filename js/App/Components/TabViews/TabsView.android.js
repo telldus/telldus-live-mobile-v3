@@ -129,6 +129,10 @@ class TabsView extends View {
 		});
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.screenProps.currentScreen === 'Tabs';
+	}
+
 	toggleEditMode() {
 		let {state} = this.props.stackNavigator;
 		this.props.dispatch(toggleEditMode(state.params.currentTab));
@@ -197,7 +201,6 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		gateways: store.gateways,
 		editModeDevices: store.tabs.editModeDevicesTab,
 		editModeSensors: store.tabs.editModeSensorsTab,
-		store,
 	};
 }
 

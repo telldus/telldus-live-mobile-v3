@@ -181,6 +181,7 @@ class AppNavigator extends View {
 
 		this.state = {
 			openSetting: false,
+			currentScreen: 'Tabs',
 		};
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
@@ -188,6 +189,8 @@ class AppNavigator extends View {
 		this.closeDrawer = this.closeDrawer.bind(this);
 		this.openSetting = this.openSetting.bind(this);
 		this.closeSetting = this.closeSetting.bind(this);
+
+		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
 
 	componentWillMount() {
@@ -245,6 +248,24 @@ class AppNavigator extends View {
 		});
 	}
 
+	getRouteName(navigationState: Object): any {
+		if (!navigationState) {
+			return null;
+		}
+		const route = navigationState.routes[navigationState.index];
+		if (route.routes) {
+			return this.getRouteName(route);
+		}
+		return route.routeName;
+	}
+
+	onNavigationStateChange(prevState: Object, currentState: Object) {
+		const currentScreen = this.getRouteName(currentState);
+		this.setState({
+			currentScreen,
+		});
+	}
+
 	renderNavigationView(): React$Element<any> {
 		return <Drawer
 			gateways={this.props.gateways}
@@ -259,6 +280,7 @@ class AppNavigator extends View {
 			closeDrawer: this.closeDrawer,
 			openSetting: this.state.openSetting,
 			closeSetting: this.closeSetting,
+			currentScreen: this.state.currentScreen,
 		};
 
 		return (
@@ -269,7 +291,7 @@ class AppNavigator extends View {
 					drawerPosition={DrawerLayoutAndroid.positions.Left}
 					renderNavigationView={this.renderNavigationView}
 				>
-					<Navigator screenProps={screenProps}/>
+					<Navigator screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange}/>
 				</DrawerLayoutAndroid>
 				<DimmerPopup
 					isVisible={this.props.dimmer.show}
