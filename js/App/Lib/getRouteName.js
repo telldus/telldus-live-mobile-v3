@@ -15,36 +15,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Lib
  */
 
-'use strict';
+// @flow
 
-import capitalize from './capitalize';
-import formatTime from './formatTime';
-import { getSelectedDays, getWeekdays, getWeekends } from './getDays';
-import getDeviceType from './getDeviceType';
-import getDeviceWidth from './getDeviceWidth';
-import getPowerParts from './getPowerParts';
-import getSuntime from './getSuntime';
-import getTabBarIcon from './getTabBarIcon';
-import LiveApi from './LiveApi';
-import TelldusWebsocket from './Socket';
-import getRouteName from './getRouteName';
-
-module.exports = {
-	capitalize,
-	formatTime,
-	getWeekdays,
-	getWeekends,
-	getSelectedDays,
-	getDeviceType,
-	getDeviceWidth,
-	getPowerParts,
-	getSuntime,
-	getTabBarIcon,
-	LiveApi,
-	TelldusWebsocket,
-	getRouteName,
-};
+export default function getRouteName(navigationState: Object): any {
+	if (!navigationState) {
+		return null;
+	}
+	const route = navigationState.routes[navigationState.index];
+	if (route.routes) {
+		return this.getRouteName(route);
+	}
+	return route.routeName;
+}
