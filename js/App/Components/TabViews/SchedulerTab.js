@@ -23,7 +23,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView } from 'react-native';
 import { defineMessages } from 'react-intl';
 import { createSelector } from 'reselect';
 import moment from 'moment';
@@ -179,29 +178,12 @@ class SchedulerTab extends View<null, Props, State> {
 		);
 	}
 
-	_refScroll = (scroll: React$Element<ScrollView>) => {
+	_refScroll = (scroll: any): mixed => {
 		this.scroll = scroll;
 	};
 
 	_scroll = (days: number) => {
-		// if (this.scroll) {
-		// 	const { todayIndex, daysToRender } = this.state;
-
-		// 	const newTodayIndex = todayIndex + days;
-
-		// 	if (newTodayIndex >= 0 && newTodayIndex < daysToRender.length) {
-		// 		this.contentOffset += getDeviceWidth() * days;
-
-		// 		this.setState({ todayIndex: newTodayIndex }, () => {
-		// 			this.scroll.scrollTo({
-		// 				x: this.contentOffset,
-		// 				y: 0,
-		// 			});
-		// 		});
-		// 	}
-		// }
 		this.scroll.scrollBy(days, true);
-
 	};
 
 	_getDays = (dataArray: Object[]): Object[] => {
