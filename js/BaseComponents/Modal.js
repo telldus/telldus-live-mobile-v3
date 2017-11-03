@@ -22,10 +22,15 @@
 'use strict';
 
 import React, {Component} from 'react';
-import { Animated, Easing } from 'react-native';
+import { Animated, Easing, StyleSheet, Dimensions } from 'react-native';
+
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
 
 type Props = {
 	showModal: any,
+	modalStyle?: Array<any> | number | Object,
+	modalContainerStyle?: Array<any> | number | Object,
 	children: any,
 	entry?: string,
 	exit?: string,
@@ -113,7 +118,7 @@ export default class Modal extends Component {
 			{
 				toValue: 1,
 				duration: duration,
-				easing: Easing.easeOutBack,
+				easing: Easing.linear,
 			}).start();
 	}
 
@@ -122,23 +127,25 @@ export default class Modal extends Component {
 			{
 				toValue: 0.01,
 				duration: duration,
-				easing: Easing.easeOutBack,
+				easing: Easing.linear,
 			}).start();
 	}
 
 	_startOpacity(duration?: number) {
-		Animated.timing(this.animatedScale,
+		Animated.timing(this.animatedOpacity,
 			{
 				toValue: 1,
 				duration: duration,
+				easing: Easing.linear,
 			}).start();
 	}
 
 	_stopOpacity(duration?: number) {
-		Animated.timing(this.animatedScale,
+		Animated.timing(this.animatedOpacity,
 			{
 				toValue: 0,
 				duration: duration,
+				easing: Easing.linear,
 			}).start();
 	}
 
@@ -214,19 +221,38 @@ export default class Modal extends Component {
 			});
 			animatedProps = {translateY: YAnimatedValue};
 		}
-		let opacityAnim = this.animatedScale.interpolate({
+		let opacityAnim = this.animatedOpacity.interpolate({
 			inputRange: [0, 0.2, 0.5, 1],
 			outputRange: [0, 0.5, 1, 1],
 		});
 		return (
-			<Animated.View style={[ this.props.modalStyle, {transform: [animatedProps],
+			<Animated.View style={[ styles.modalContainer, this.props.modalContainerStyle, {transform: [animatedProps],
 				opacity: opacityAnim,
 			}]}>
-				{this.props.children}
+				<Animated.View style={[ styles.modal, this.props.modalStyle, {transform: [animatedProps],
+					opacity: opacityAnim,
+				}]}>
+					{this.props.children}
+				</Animated.View>
 			</Animated.View>
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+	modalContainer: {
+		flex: 1,
+		position: 'absolute',
+		height: deviceHeight,
+		width: deviceWidth,
+		backgroundColor: 'transparent',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	modal: {
+		position: 'absolute',
+	},
+});
 
 Modal.defaultProps = {
 	entryDuration: 500,
