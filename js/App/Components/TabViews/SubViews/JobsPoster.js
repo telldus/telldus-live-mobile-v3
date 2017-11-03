@@ -254,7 +254,7 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	_getDateAnimation = (index: number): Object => {
 		const { todayIndex } = this.state;
-		const animatedStyle = this._getDateAnimatedStyle(index);
+		const animatedStyle = this._getDateAnimatedStyle();
 
 		switch (index) {
 			case todayIndex - 1:
