@@ -207,6 +207,7 @@ class Edit extends View<null, Props, State> {
 				showNegative: true,
 				onPressPositive: this.onDeleteConfirm,
 				onPressNegative: this.onDeleteCancel,
+				showBackground: true,
 			};
 			this.props.actions.showModal(this.deleteScheduleDialogue, modalExtras);
 		}

@@ -131,6 +131,7 @@ class ScheduleScreen extends View<null, Props, State> {
 			positiveText: modalExtras.positiveText ? modalExtras.positiveText : false,
 			onPressPositive: modalExtras.onPressPositive ? modalExtras.onPressPositive : this.closeModal,
 			onPressNegative: modalExtras.onPressNegative ? modalExtras.onPressNegative : this.closeModal,
+			dialogueContainerStyle: modalExtras.showBackground ? {backgroundColor: '#00000099'} : null,
 		};
 	};
 
@@ -138,7 +139,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { children, navigation, actions, devices, schedule, screenProps } = this.props;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style, modal } = this._getStyle();
-		const { dialgueHeader, showNegative, positiveText, onPressPositive, onPressNegative} = this.getRelativeData();
+		const { dialgueHeader, showNegative, positiveText, onPressPositive, onPressNegative, dialogueContainerStyle} = this.getRelativeData();
 
 		return (
 			<View>
@@ -168,6 +169,7 @@ class ScheduleScreen extends View<null, Props, State> {
 					</View>
 					<Modal
 						modalStyle={[Theme.Styles.notificationModal, modal]}
+						modalContainerStyle={dialogueContainerStyle}
 						entry="ZoomIn"
 						exit="ZoomOut"
 						entryDuration={300}
