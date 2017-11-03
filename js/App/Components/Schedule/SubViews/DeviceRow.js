@@ -25,7 +25,6 @@ import React, { PropTypes } from 'react';
 import { BlockIcon, Row, View } from 'BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
-import Description from './Description';
 import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
@@ -45,7 +44,7 @@ export default class DeviceRow extends View<null, Props, null> {
 
 	render(): React$Element<any> {
 		const { row, onPress, containerStyle } = this.props;
-		const { row: rowStyle, icon, iconContainer, description } = this._getStyle();
+		const { row: rowStyle, icon, iconContainer } = this._getStyle();
 
 		return (
 			<Row layout="row" row={row} onPress={onPress} style={rowStyle} containerStyle={containerStyle}>
@@ -58,9 +57,6 @@ export default class DeviceRow extends View<null, Props, null> {
 					<Title numberOfLines={1} ellipsizeMode="tail">
 						{row.name}
 					</Title>
-					<Description numberOfLines={1} ellipsizeMode="tail" style={description}>
-						{row.description}
-					</Description>
 				</TextRowWrapper>
 			</Row>
 		);
