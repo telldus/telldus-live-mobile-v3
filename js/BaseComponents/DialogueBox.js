@@ -52,6 +52,7 @@ const messages = defineMessages({
 type Props = {
 	showDialogue?: boolean,
 	style?: number | Object | Array<any>,
+	dialogueContainerStyle?: Array<any> | number | Object,
 	entry?: string,
 	exit?: string,
 	entryDuration?: number,
@@ -136,6 +137,7 @@ class DialogueBox extends Component {
 		return (
 			<Modal
 				modalStyle={[Theme.Styles.notificationModal, style]}
+				modalContainerStyle={this.props.dialogueContainerStyle}
 				entry={entry}
 				exit={exit}
 				entryDuration={entryDuration}
