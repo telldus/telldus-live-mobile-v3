@@ -56,6 +56,14 @@ export const ACTIONS: ActionType[] = [
 		icon: 'off',
 	},
 	{
+		name: 'Bell',
+		description: 'Ring the bell',
+		method: 4,
+		bgColor: Theme.Core.brandSecondary,
+		textColor: Theme.Core.brandSecondary,
+		icon: 'bell',
+	},
+	{
 		name: 'Dim',
 		description: 'Dims the device',
 		method: 16,

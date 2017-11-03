@@ -61,6 +61,9 @@ export default class Action extends View<null, ScheduleProps, State> {
 		if (deviceType === 'NAVIGATIONAL') {
 			methods = [128, 256, 512];
 		}
+		if (deviceType === 'BELL') {
+			methods = [4];
+		}
 
 		this.state = {
 			dataSource: new ListDataSource({
