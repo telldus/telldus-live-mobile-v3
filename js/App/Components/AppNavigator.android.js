@@ -209,7 +209,7 @@ class AppNavigator extends View {
 	componentDidMount() {
 		if (StatusBar) {
 			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
+			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
 
 		this.props.dispatch(getUserProfile());
