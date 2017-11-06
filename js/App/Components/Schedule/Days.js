@@ -183,7 +183,7 @@ export default class Days extends View<null, Props, State> {
 			selectedDays,
 		} = this.state;
 
-		const { mainContainer, buttonsContainer, row, rowContainer, checkbox } = this._getStyle();
+		const { mainContainer, buttonsContainer, row, rowContainer, checkbox, buttonStyle } = this._getStyle();
 
 		return (
 			<View style={mainContainer}>
@@ -236,6 +236,7 @@ export default class Days extends View<null, Props, State> {
 				</View>
 				{selectedDays.length > 0 && (
 					<FloatingButton
+						buttonStyle={buttonStyle}
 						onPress={this.selectDays}
 						imageSource={require('./img/right-arrow-key.png')}
 						iconSize={getDeviceWidth() * 0.041333333}
@@ -290,6 +291,10 @@ export default class Days extends View<null, Props, State> {
 			},
 			checkbox: {
 				marginRight: deviceWidth * 0.05,
+			},
+			buttonStyle: {
+				elevation: 4,
+				shadowOpacity: 0.99,
 			},
 		};
 	};

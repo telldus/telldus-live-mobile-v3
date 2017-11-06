@@ -114,7 +114,7 @@ class Summary extends View<null, Props, State> {
 	render(): React$Element<any> {
 		const { schedule, paddingRight } = this.props;
 		const { method, methodValue, weekdays } = schedule;
-		const { row, iconSize } = this._getStyle();
+		const { row, iconSize, buttonStyle } = this._getStyle();
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
@@ -135,6 +135,7 @@ class Summary extends View<null, Props, State> {
 					<DaysRow selectedDays={selectedDays}/>
 				</ScrollView>
 				<FloatingButton
+					buttonStyle={buttonStyle}
 					onPress={this.saveSchedule}
 					imageSource={this.state.isLoading ? false : require('./img/check.png')}
 					iconSize={iconSize}
@@ -158,6 +159,10 @@ class Summary extends View<null, Props, State> {
 				marginBottom: deviceWidth * 0.025333333,
 			},
 			iconSize: deviceWidth * 0.050666667,
+			buttonStyle: {
+				elevation: 4,
+				shadowOpacity: 0.99,
+			},
 		};
 	};
 
