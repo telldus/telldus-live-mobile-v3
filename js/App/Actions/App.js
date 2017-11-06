@@ -25,11 +25,16 @@
 
 import type { Action } from './Types';
 
-const showToast = (source?: string, message?: string): Action => ({
+type Duration = 'SHORT' | 'LONG';
+type POSITION = 'TOP' | 'CENTER' | 'BOTTOM';
+
+const showToast = (source?: string = '', message?: string, duration?: Duration = 'SHORT', position: POSITION = 'TOP'): Action => ({
 	type: 'TOAST_SHOW',
 	payload: {
 		source,
 		message,
+		duration,
+		position,
 	},
 });
 

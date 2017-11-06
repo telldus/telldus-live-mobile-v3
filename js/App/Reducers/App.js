@@ -26,11 +26,15 @@ import type { Action } from 'Actions_Types';
 export type State = {
 	message: any,
 	showToast: boolean,
+	duration: 'SHORT' | 'LONG',
+	position: 'TOP' | 'CENTER' | 'BOTTOM',
 };
 
 const initialState = {
 	message: false,
 	showToast: false,
+	duration: 'SHORT',
+	position: 'TOP',
 };
 
 export default function reduceApp(state: State = initialState, action: Action): State {
@@ -40,6 +44,8 @@ export default function reduceApp(state: State = initialState, action: Action): 
 			...state,
 			showToast: true,
 			message,
+			duration: action.payload.duration,
+			position: action.payload.position,
 		};
 	}
 	if (action.type === 'TOAST_HIDE') {
