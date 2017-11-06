@@ -41,6 +41,7 @@ type Props = {
 	iconSize: number,
 	paddingRight: number,
 	showThrobber: boolean,
+	buttonStyle: number | Array<any> | Object,
 };
 
 export default class FloatingButton extends Component {
@@ -53,6 +54,7 @@ export default class FloatingButton extends Component {
 		iconSize: PropTypes.number,
 		paddingRight: PropTypes.number,
 		showThrobber: PropTypes.bool,
+		buttonStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.array, PropTypes.object]),
 	};
 
 	static defaultProps: DefaultProps = {
@@ -65,10 +67,10 @@ export default class FloatingButton extends Component {
 	render(): React$Element<any> {
 		const { container, button, icon, throbber } = this._getStyle();
 
-		const { onPress, imageSource, showThrobber } = this.props;
+		const { buttonStyle, onPress, imageSource, showThrobber } = this.props;
 
 		return (
-			<TouchableOpacity style={container} onPress={onPress}>
+			<TouchableOpacity style={[container, buttonStyle]} onPress={onPress}>
 				<View style={button}>
 					{!!imageSource &&
 					(
