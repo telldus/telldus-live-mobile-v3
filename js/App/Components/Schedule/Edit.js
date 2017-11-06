@@ -158,7 +158,7 @@ class Edit extends View<null, Props, State> {
 				if (response.id) {
 					this.resetNavigation();
 					this.props.actions.getJobs();
-					this.props.actions.showToast('schedule', this.messageOnUpdate);
+					this.props.actions.showToast('schedule', this.messageOnUpdate, 'LONG');
 				} else if (response.message) {
 					this.props.actions.showModal(response.message);
 				}
@@ -190,7 +190,7 @@ class Edit extends View<null, Props, State> {
 			if (response.status && response.status === 'success') {
 				this.resetNavigation();
 				this.props.actions.getJobs();
-				this.props.actions.showToast('schedule', this.messageOnDelete);
+				this.props.actions.showToast('schedule', this.messageOnDelete, 'LONG');
 			} else if (response.message) {
 				this.props.actions.showModal(response.message);
 			}

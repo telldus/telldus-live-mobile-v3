@@ -100,7 +100,7 @@ class Summary extends View<null, Props, State> {
 			if (response.id) {
 				this.resetNavigation();
 				this.props.actions.getJobs();
-				this.props.actions.showToast('schedule', this.messageOnAdd);
+				this.props.actions.showToast('schedule', this.messageOnAdd, 'LONG');
 			} else if (response.message) {
 				this.props.actions.showModal(response.message);
 			}

@@ -120,6 +120,8 @@ type Props = {
 	dispatch: Function,
 	toastVisible: boolean,
 	toastMessage: string,
+	toastDuration: string,
+	toastPosition: string,
 	intl: intlShape.isRequired,
 };
 
@@ -175,12 +177,13 @@ class AppNavigator extends View {
 
 	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.toastVisible) {
-			this._showToast();
+			let message = nextProps.toastMessage ? nextProps.toastMessage : this.props.intl.formatMessage(messages.errortoast);
+			this._showToast(message, nextProps.toastDuration, nextProps.toastPosition);
 		}
 	}
 
-	_showToast() {
-		Toast.showWithGravity(this.props.intl.formatMessage(messages.errortoast), Toast.SHORT, Toast.TOP);
+	_showToast(message: string, duration: string, position: string) {
+		Toast.showWithGravity(message, Toast[duration], Toast[position]);
 		this.props.dispatch(hideToast());
 	}
 
@@ -216,6 +219,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		dimmer: state.dimmer,
 		toastVisible: state.App.showToast,
 		toastMessage: state.App.message,
+		toastDuration: state.App.duration,
+		toastPosition: state.App.position,
 	};
 }
 
