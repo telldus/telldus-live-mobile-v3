@@ -22,6 +22,7 @@
 'use strict';
 
 import React, { PropTypes } from 'react';
+import {BackAndroid} from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -66,6 +67,8 @@ export interface ScheduleProps {
 
 class ScheduleScreen extends View<null, Props, State> {
 
+	handleBackPress: () => void;
+
 	static propTypes = {
 		navigation: PropTypes.object.isRequired,
 		children: PropTypes.object.isRequired,
@@ -92,7 +95,27 @@ class ScheduleScreen extends View<null, Props, State> {
 
 		this.onModalOpen = this.onModalOpen.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+		this.handleBackPress = this.handleBackPress.bind(this);
 	}
+
+	componentDidMount() {
+		BackAndroid.addEventListener('hardwareBackPress', this.handleBackPress);
+	}
+
+	componentWillUnmount() {
+		BackAndroid.removeEventListener('hardwareBackPress', this.handleBackPress);
+	}
+
+	handleBackPress(): boolean {
+		let {navigation, screenProps} = this.props;
+		if (screenProps.currentScreen === 'InitialScreen') {
+			screenProps.rootNavigator.goBack();
+			return true;
+		}
+		navigation.dispatch({ type: 'Navigation/BACK'});
+		return true;
+	}
+
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 		const isStateEqual = _.isEqual(this.state, nextState);
