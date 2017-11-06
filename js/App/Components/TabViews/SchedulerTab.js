@@ -35,6 +35,8 @@ import {
 	ListDataSource,
 	View,
 	StyleSheet,
+	Text,
+	Icon,
 } from 'BaseComponents';
 import { JobRow, JobsPoster } from 'TabViews_SubViews';
 import { editSchedule, getJobs } from 'Actions';
@@ -49,6 +51,11 @@ const messages = defineMessages({
 		id: 'pages.scheduler',
 		defaultMessage: 'Scheduler',
 		description: 'The Schedulers tab',
+	},
+	noScheduleMessage: {
+		id: 'schedule.noScheduleMessage',
+		defaultMessage: 'No schedules on this day',
+		description: 'Message when no schedules',
 	},
 });
 
@@ -88,6 +95,8 @@ class SchedulerTab extends View<null, Props, State> {
 
 	constructor(props: Props) {
 		super(props);
+
+		this.noScheduleMessage = props.screenProps.intl.formatMessage(messages.noScheduleMessage);
 
 		this.contentOffset = 0;
 		this.days = this._getDays(props.rowsAndSections);
@@ -165,6 +174,7 @@ class SchedulerTab extends View<null, Props, State> {
 					ref={this._refScroll}
 					showsButtons={false}
 					loadMinimal={true}
+					loadMinimalSize={0}
 					loop={false}
 					showsPagination={false}
 					onIndexChanged={this.onIndexChanged}>
@@ -201,9 +211,21 @@ class SchedulerTab extends View<null, Props, State> {
 		return days;
 	};
 
-	_getDaysToRender = (dataArray: Object[]): React$Element<any>[] => {
-
+	_getDaysToRender = (dataArray: Object[]): React$Element<any>[] | Object=> {
 		return dataArray.map((section: Object, i: number): Object => {
+
+			let isEmpty = !Object.keys(section).length;
+			if (isEmpty) {
+				return (
+					<View style={[styles.container, styles.containerWhenNoData]} key={i}>
+						<Icon name="exclamation-circle" size={20} color="#F06F0C" />
+						<Text style={styles.textWhenNoData}>
+							{this.noScheduleMessage}
+						</Text>
+					</View>
+				);
+			}
+
 			const dataSource = new ListDataSource(
 				{
 					rowHasChanged: this._rowHasChanged,
@@ -274,6 +296,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#eeeeef',
 	},
+	containerWhenNoData: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		paddingTop: 40,
+	},
 	line: {
 		backgroundColor: '#929292',
 		height: '100%',
@@ -282,6 +309,11 @@ const styles = StyleSheet.create({
 		left: deviceWidth * 0.069333333,
 		top: 0,
 		zIndex: -1,
+	},
+	textWhenNoData: {
+		marginLeft: 10,
+		color: '#A59F9A',
+		fontSize: 12,
 	},
 });
 

@@ -48,6 +48,7 @@
   "pages.gateways": "Gateways",
   "pages.scheduler": "Scheduler",
   "pages.sensors": "Sensors",
+  "schedule.noScheduleMessage": "No schedules on this day",
   "scheduler": "Scheduler",
   "sensor.dayAgo": "day ago",
   "sensor.daysAgo": "days ago",
