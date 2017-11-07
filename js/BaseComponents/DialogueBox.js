@@ -123,6 +123,7 @@ class DialogueBox extends Component {
 		let {
 			showDialogue,
 			style,
+			dialogueContainerStyle,
 			entry,
 			exit,
 			entryDuration,
@@ -137,7 +138,7 @@ class DialogueBox extends Component {
 		return (
 			<Modal
 				modalStyle={[Theme.Styles.notificationModal, style]}
-				modalContainerStyle={this.props.dialogueContainerStyle}
+				modalContainerStyle={dialogueContainerStyle}
 				entry={entry}
 				exit={exit}
 				entryDuration={entryDuration}
