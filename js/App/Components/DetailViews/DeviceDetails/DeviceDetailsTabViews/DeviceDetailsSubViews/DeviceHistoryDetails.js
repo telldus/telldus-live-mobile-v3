@@ -156,6 +156,7 @@ class DeviceHistoryDetails extends View {
 		return (
 			<Modal
 				modalStyle={styles.container}
+				modalContainerStyle={styles.container}
 				entry= "SlideInY"
 				exit= "SlideOutY"
 				entryDuration= {300}
