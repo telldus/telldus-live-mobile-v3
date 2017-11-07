@@ -327,7 +327,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#ff000033',
 	},
 	modal: {
-		width: deviceWidth * 0.8,
 		top: deviceHeight * 0.2,
 	},
 });

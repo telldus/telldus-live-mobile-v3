@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		height: deviceHeight,
 		width: deviceWidth,
-		backgroundColor: 'transparent',
+		backgroundColor: '#00000099',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
