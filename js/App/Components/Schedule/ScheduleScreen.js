@@ -26,8 +26,7 @@ import {BackAndroid} from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { FullPageActivityIndicator, View, Modal, Dimensions } from 'BaseComponents';
-import { NotificationComponent} from 'PreLoginScreen_SubViews';
+import { FullPageActivityIndicator, View, Dimensions, DialogueBox } from 'BaseComponents';
 import { SchedulePoster } from 'Schedule_SubViews';
 import { getDeviceWidth } from 'Lib';
 
@@ -37,7 +36,6 @@ import { getDevices } from 'Actions_Devices';
 import { showToast } from 'Actions_App';
 import { getJobs } from 'Actions';
 import type { Schedule } from 'Reducers_Schedule';
-import Theme from 'Theme';
 
 type Props = {
 	navigation: Object,
@@ -93,7 +91,6 @@ class ScheduleScreen extends View<null, Props, State> {
 			onPress: this.goBack,
 		};
 
-		this.onModalOpen = this.onModalOpen.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
 	}
@@ -139,9 +136,6 @@ class ScheduleScreen extends View<null, Props, State> {
 		this.setState({ loading });
 	};
 
-	onModalOpen = () => {
-	};
-
 	closeModal = () => {
 		this.props.actions.hideModal();
 	};
@@ -154,7 +148,7 @@ class ScheduleScreen extends View<null, Props, State> {
 			positiveText: modalExtras.positiveText ? modalExtras.positiveText : false,
 			onPressPositive: modalExtras.onPressPositive ? modalExtras.onPressPositive : this.closeModal,
 			onPressNegative: modalExtras.onPressNegative ? modalExtras.onPressNegative : this.closeModal,
-			dialogueContainerStyle: modalExtras.showBackground ? {backgroundColor: '#00000099'} : null,
+			dialogueContainerStyle: {backgroundColor: '#00000099'},
 		};
 	};
 
@@ -190,24 +184,17 @@ class ScheduleScreen extends View<null, Props, State> {
 							},
 						)}
 					</View>
-					<Modal
-						modalStyle={[Theme.Styles.notificationModal, modal]}
-						modalContainerStyle={dialogueContainerStyle}
-						entry="ZoomIn"
-						exit="ZoomOut"
-						entryDuration={300}
-						exitDuration={100}
-						onOpen={this.onModalOpen}
-						showModal={this.props.showModal}>
-						<NotificationComponent
-							header={dialgueHeader}
-							text={this.props.validationMessage}
-							showPositive={true}
-							showNegative={showNegative}
-							positiveText={positiveText}
-							onPressPositive={onPressPositive}
-							onPressNegative={onPressNegative} />
-					</Modal>
+					<DialogueBox
+						showDialogue={this.props.showModal}
+						modalStyle={modal}
+						dialogueContainerStyle={dialogueContainerStyle}
+						header={dialgueHeader}
+						text={this.props.validationMessage}
+						showPositive={true}
+						showNegative={showNegative}
+						positiveText={positiveText}
+						onPressPositive={onPressPositive}
+						onPressNegative={onPressNegative}/>
 				</View>
 			</View>
 		);
