@@ -38,17 +38,19 @@ export default class Throbber extends Component {
 	props: Props;
 
 	animatedValue: Object;
-	nextAnimatedValue: number;
+	nextValue: number;
+	currentValue: number;
 	startThrob: () => void;
 
 	static defaultProps = {
-		throbSpeed: 30,
+		throbSpeed: 10,
 	}
 
 	constructor(props: Props) {
 		super(props);
 		this.animatedValue = new Animated.Value(0);
-		this.nextAnimatedValue = 0;
+		this.currentValue = 0;
+		this.nextValue = 100;
 	}
 
 	componentDidMount() {
@@ -56,12 +58,14 @@ export default class Throbber extends Component {
 	}
 
 	startThrob() {
-		this.nextAnimatedValue += 100;
 		Animated.timing(this.animatedValue, {
-			toValue: this.nextAnimatedValue,
+			toValue: this.nextValue,
 			duration: this.props.throbSpeed,
+			delay: 10,
 		}).start((event: Object) => {
 			if (event.finished) {
+				this.currentValue = this.nextValue;
+				this.nextValue += 100;
 				this.startThrob();
 			}
 		});
@@ -74,7 +78,7 @@ export default class Throbber extends Component {
 		} = this.props;
 
 		let interpolatedValue = this.animatedValue.interpolate({
-			inputRange: [this.nextAnimatedValue, this.nextAnimatedValue + 100],
+			inputRange: [this.currentValue, this.nextValue],
 			outputRange: ['0deg', '45deg'],
 		});
 
