@@ -29,7 +29,15 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from './../../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate, List } from 'BaseComponents';
+import {
+	FormattedMessage,
+	Text,
+	View,
+	ListDataSource,
+	Icon, FormattedDate,
+	List,
+	Throbber,
+} from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DeviceDetailsSubView';
 import { getDeviceHistory } from 'Actions_Devices';
 import type { Dispatch } from 'Actions_Types';
@@ -215,11 +223,13 @@ class HistoryTab extends View {
 	}
 
 	render(): React$Element<any> {
-		// Loader message when data has not received yet.
+		// Loading message when data has not received yet.
 		if (!this.state.dataSource) {
 			return (
 				<View style={styles.containerWhenNoData}>
-					<CustomIcon name="icon_loading" size={20} color="#F06F0C" />
+					<Throbber
+						throbberContainerStyle={styles.throbberContainer}
+						throbberStyle={styles.throbber}/>
 					<Text style={styles.textWhenNoData}>
 						<FormattedMessage {...messages.loading} style={styles.textWhenNoData}/>...
 					</Text>
@@ -301,6 +311,13 @@ const styles = StyleSheet.create({
 		left: deviceWidth * 0.069333333,
 		top: 0,
 		zIndex: -1,
+	},
+	throbberContainer: {
+		top: 20,
+		right: deviceWidth * 0.5999,
+	},
+	throbber: {
+		fontSize: 24,
 	},
 });
 
