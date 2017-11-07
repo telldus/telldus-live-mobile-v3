@@ -83,6 +83,7 @@ export type Action =
 
 	| { type: 'REQUEST_MODAL_OPEN', payload: Object }
 	| { type: 'REQUEST_MODAL_CLOSE', payload?: Object }
+	| { type: 'REQUEST_MODAL_CLEAR_DATA' }
 
 	| { type: 'REQUEST_DEVICE_ACTION', payload: Object }
 	| { type: 'USER_REGISTER', accessToken: Object }

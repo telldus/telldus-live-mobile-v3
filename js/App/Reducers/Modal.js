@@ -61,6 +61,9 @@ export default function reduceModal(state: State = initialState, action: Action)
 				openModal: false,
 			};
 
+		case 'REQUEST_MODAL_CLEAR_DATA':
+			return initialState;
+
 		default:
 			return state;
 	}
