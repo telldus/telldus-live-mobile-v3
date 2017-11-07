@@ -24,10 +24,14 @@
 import React, {Component} from 'react';
 import { Animated, Easing, StyleSheet, Dimensions } from 'react-native';
 
+import { connect } from 'react-redux';
+import { clearData } from 'Actions_Modal';
+
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
 type Props = {
+	dispatch: Function,
 	showModal: any,
 	modalStyle?: Array<any> | number | Object,
 	modalContainerStyle?: Array<any> | number | Object,
@@ -42,7 +46,7 @@ type Props = {
 	onClose?: () => void,
 };
 
-export default class Modal extends Component {
+class Modal extends Component {
 	animationZoomOut: (duration?: number) => void;
 	animationZoomIn: (duration?: number) => void;
 	animationSlideInY: (duration?: number) => void;
@@ -67,6 +71,10 @@ export default class Modal extends Component {
 		this.animatedScale = new Animated.Value(0.01);
 		this.animatedOpacity = new Animated.Value(0);
 		this.animatedYValue = new Animated.Value(props.startValue ? props.startValue : 0);
+	}
+
+	componentWillUnmount() {
+		this.props.dispatch(clearData());
 	}
 
 	animationZoomIn(duration?: number) {
@@ -260,3 +268,11 @@ Modal.defaultProps = {
 	startValue: 0,
 	endValue: 100,
 };
+
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		dispatch,
+	};
+}
+
+export default connect(null, mapDispatchToProps)(Modal);
