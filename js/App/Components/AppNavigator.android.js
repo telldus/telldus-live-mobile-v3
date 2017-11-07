@@ -42,7 +42,7 @@ import { getDevices } from 'Actions_Devices';
 import { hideToast } from 'Actions_App';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import { resetSchedule } from 'Actions_Schedule';
-import ScheduleNavigator from 'ScheduleNavigatorNew';
+import ScheduleNavigator from 'ScheduleNavigator';
 import Drawer from 'Drawer';
 
 const messages = defineMessages({

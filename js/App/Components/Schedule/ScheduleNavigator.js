@@ -17,13 +17,20 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @providesModule ScheduleNavigator
+ * 
+ * @flow
  */
 
 'use strict';
 
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
+
 import ScheduleScreen from './ScheduleScreen';
+import { View, Image, Dimensions } from 'BaseComponents';
+
+import {getRouteName} from 'Lib';
 
 import Device from './Device';
 import Action from './Action';
@@ -33,41 +40,121 @@ import Days from './Days';
 import Summary from './Summary';
 import Edit from './Edit';
 
-const renderScheduleScreen = navigation => Component => (
-	<ScheduleScreen navigation={navigation}>
+import Theme from 'Theme';
+const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
+
+const renderScheduleScreen = (navigation, screenProps) => Component => (
+	<ScheduleScreen navigation={navigation} screenProps={screenProps}>
 		<Component/>
 	</ScheduleScreen>
 );
 
 const RouteConfigs = {
-	Device: {
-		screen: ({ navigation }) => renderScheduleScreen(navigation)(Device),
+	InitialScreen: {
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(
+			screenProps.rootNavigator.state.params.editMode ?
+				Edit
+				:
+				Device),
 	},
 	Action: {
-		screen: ({ navigation }) => renderScheduleScreen(navigation)(Action),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Action),
 	},
 	ActionDim: {
-		screen: ({ navigation }) => renderScheduleScreen(navigation)(ActionDim),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(ActionDim),
 	},
 	Time: {
-		screen: ({ navigation }) => renderScheduleScreen(navigation)(Time),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Time),
 	},
 	Days: {
-		screen: ({ navigation }) => renderScheduleScreen(navigation)(Days),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Days),
 	},
 	Summary: {
-		screen: ({ navigation }) => renderScheduleScreen(navigation)(Summary),
-	},
-	Edit: {
-		screen: ({ navigation }) => renderScheduleScreen(navigation)(Edit),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Summary),
 	},
 };
 
 const StackNavigatorConfig = {
-	initialRouteName: 'Device',
-	headerMode: 'none',
+	initialRouteName: 'InitialScreen',
+	headerMode: 'float',
+	initialRouteParams: {renderHeader: false},
+	navigationOptions: ({navigation}) => {
+		let {state} = navigation;
+		let renderStackHeader = state.routeName !== 'InitialScreen';
+		if (renderStackHeader) {
+			return {
+				headerStyle: {
+					marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+					backgroundColor: Theme.Core.brandPrimary,
+					height: deviceHeight * 0.1,
+				},
+				headerTintColor: '#ffffff',
+				headerTitle: renderHeader(),
+			};
+		}
+		return {
+			header: null,
+		};
+	},
 };
 
-const ScheduleNavigator = StackNavigator(RouteConfigs, StackNavigatorConfig);
+const Schedule = StackNavigator(RouteConfigs, StackNavigatorConfig);
+
+function renderHeader(): Object {
+	return (
+		<Image style={{ height: 110, width: 130, marginHorizontal: deviceWidth * 0.18 }} resizeMode={'contain'} source={require('../TabViews/img/telldus-logo.png')}/>
+	);
+}
+
+type Props = {
+	navigation: Object,
+};
+
+type State = {
+	currentScreen: string,
+};
+
+class ScheduleNavigator extends View {
+	props: Props;
+	state: State;
+
+	onNavigationStateChange: () => void;
+
+	constructor(props: Props) {
+		super(props);
+
+		this.state = {
+			currentScreen: 'InitialScreen',
+		};
+
+		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+	}
+
+	onNavigationStateChange(prevState: Object, currentState: Object) {
+		const currentScreen = getRouteName(currentState);
+		if (this.state.currentScreen !== currentScreen) {
+			this.setState({
+				currentScreen,
+			});
+			let {navigation} = this.props;
+			if (currentScreen === 'InitialScreen' && !navigation.state.params.renderRootHeader) {
+				navigation.setParams({renderRootHeader: true});
+			}
+		}
+	}
+
+	render() {
+		let { currentScreen } = this.state;
+		let screenProps = {
+			currentScreen,
+			rootNavigator: this.props.navigation,
+		};
+
+		return (
+			<Schedule onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps} />
+		);
+	}
+}
 
 module.exports = ScheduleNavigator;
