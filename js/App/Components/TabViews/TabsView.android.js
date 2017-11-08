@@ -261,7 +261,7 @@ class TabsView extends View {
 		this.props.addNewLocation()
 			.then(response => {
 				if (response.client) {
-					this.props.stackNavigator.navigate('LocationDetected', {clients: response.client});
+					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
 					this.setState({
 						addingNewLocation: true,
 					});
