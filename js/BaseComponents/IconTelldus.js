@@ -24,7 +24,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Dimensions } from 'react-native';
 import Text from './Text';
-import View from './View';
 import Theme from 'Theme';
 
 const deviceWidth = Dimensions.get('window').width;
