@@ -23,6 +23,8 @@
 
 'use strict';
 
+import { googleAPIKey } from 'Config';
+
 import type { ThunkAction } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
 import {showModal} from 'Actions_Modal';
@@ -205,6 +207,44 @@ function setTimezone(id: string, timezone: string): ThunkAction {
 	};
 }
 
+function getGeoCodePosition(address: string): ThunkAction {
+	return (dispatch: Function, getState: Object) => {
+		const googleUrl = 'https://maps.google.com/maps/api/geocode/json';
+		const url = format({
+			pathname: googleUrl,
+			query: {
+				key: googleAPIKey,
+				address,
+			},
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return fetch(payload)
+			.then((response) => response.json())
+			.then((responseData) => {
+				if (responseData.error) {
+					throw responseData;
+				}
+				return responseData;
+			}).catch(e => {
+				let data = !e.error_description && e.message === 'Network request failed' ?
+					'Network request failed. Check your internet connection' : e.error_description ?
+						e.error_description : e.error ? e.error : 'Unknown Error, Please try again later.';
+				dispatch({
+					type: 'REQUEST_MODAL_OPEN',
+					payload: {
+						data,
+					},
+				});
+				return data;
+			});
+	};
+}
+
 function onActivationError(message: string): ThunkAction {
 	return (dispatch, getState) => {
 		dispatch(showModal(message, 'ERROR'));
@@ -216,4 +256,5 @@ module.exports = {
 	addNewGateway,
 	activateGateway,
 	getGatewayInfo,
+	getGeoCodePosition,
 };
