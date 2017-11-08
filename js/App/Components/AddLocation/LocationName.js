@@ -31,14 +31,11 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_location from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_location);
 
-import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
-import {View, StyleSheet, FormattedMessage, Dimensions, Icon, Modal} from 'BaseComponents';
-import Theme from 'Theme';
+import {View, StyleSheet, FormattedMessage, Dimensions, Icon} from 'BaseComponents';
 
 import {getGatewayInfo} from 'Actions';
 
 let deviceWidth = Dimensions.get('window').width;
-let deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
 	locationName: {
@@ -62,6 +59,7 @@ type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
 	onDidMount: Function,
+	actions: Object,
 	getGatewayInfo: (uniqueParam: Object, extras: string) => Promise<any>;
 }
 
@@ -70,13 +68,11 @@ class LocationName extends View {
 
 	onLocationNameChange: (string) => void;
 	onNameSubmit: () => void;
-	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 			locationName: '',
-			showModal: false,
 		};
 
 		this.h1 = `2. ${props.intl.formatMessage(messages.locationName)}`;
@@ -84,7 +80,6 @@ class LocationName extends View {
 
 		this.onLocationNameChange = this.onLocationNameChange.bind(this);
 		this.onNameSubmit = this.onNameSubmit.bind(this);
-		this.closeModal = this.closeModal.bind(this);
 	}
 
 	componentDidMount() {
@@ -122,17 +117,9 @@ class LocationName extends View {
 					});
 			}
 		} else {
-			// using the local state to control Modal as it is a local validation, not using the action/reducer.
-			this.setState({
-				showModal: true,
-			});
+			let message = this.props.intl.formatMessage(messages.invalidLocationName);
+			this.props.actions.showModal(message);
 		}
-	}
-
-	closeModal() {
-		this.setState({
-			showModal: false,
-		});
 	}
 
 	render() {
@@ -161,15 +148,6 @@ class LocationName extends View {
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
-				<Modal
-					modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22}]}
-					entry= "ZoomIn"
-					exit= "ZoomOut"
-					entryDuration= {300}
-					exitDuration= {100}
-					showModal={this.state.showModal}>
-					<NotificationComponent text={this.props.intl.formatMessage(messages.invalidLocationName)} onPress={this.closeModal} />
-				</Modal>
 			</View>
 		);
 	}

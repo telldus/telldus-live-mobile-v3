@@ -31,13 +31,10 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_location from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_location);
 
-import {getGatewayInfo, showModal, hideModal} from 'Actions';
-import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
-import {View, StyleSheet, FormattedMessage, Dimensions, Icon, Modal} from 'BaseComponents';
-import Theme from 'Theme';
+import {getGatewayInfo} from 'Actions';
+import {View, StyleSheet, FormattedMessage, Dimensions, Icon} from 'BaseComponents';
 
 let deviceWidth = Dimensions.get('window').width;
-let deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
 	activationCode: {
@@ -72,9 +69,7 @@ type Props = {
 	dispatch: Function,
 	onDidMount: Function,
 	getGatewayInfo: (param: Object, string) => Promise<any>;
-	showModal: boolean,
-	modalMessage: String,
-	modalExtra: any,
+	actions: Object,
 	intl: intlShape.isRequired,
 }
 
@@ -83,13 +78,11 @@ class LocationActivationManual extends View {
 
 	onActivationCodeChange: (string) => void;
 	onActivationCodeSubmit: () => void;
-	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 			activationCode: '',
-			showModal: false,
 		};
 
 		this.h1 = `1. ${props.intl.formatMessage(messages.banner)}`;
@@ -97,7 +90,6 @@ class LocationActivationManual extends View {
 
 		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
 		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);
-		this.closeModal = this.closeModal.bind(this);
 	}
 
 	componentDidMount() {
@@ -129,17 +121,13 @@ class LocationActivationManual extends View {
 					};
 					this.props.navigation.navigate('LocationName', {clientInfo});
 				} else {
-					this.props.dispatch(showModal(response, 'ERROR'));
+					this.props.actions.showModal(response, 'ERROR');
 				}
 			});
 		} else {
 			let message = this.props.intl.formatMessage(messages.invalidActivationCode);
-			this.props.dispatch(showModal(message, 'ERROR'));
+			this.props.actions.showModal(message, 'ERROR');
 		}
-	}
-
-	closeModal() {
-		this.props.dispatch(hideModal());
 	}
 
 	render() {
@@ -170,15 +158,6 @@ class LocationActivationManual extends View {
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
-				<Modal
-					modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22}]}
-					entry= "ZoomIn"
-					exit= "ZoomOut"
-					entryDuration= {300}
-					exitDuration= {100}
-					showModal={this.props.showModal}>
-					<NotificationComponent text={this.props.modalMessage} onPress={this.closeModal} />
-				</Modal>
 			</View>
 		);
 	}
@@ -270,12 +249,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-function mapStateToProps(store) {
-	return {
-		showModal: store.modal.openModal,
-		modalMessage: store.modal.data,
-		modalExtra: store.modal.extras,
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LocationActivationManual);
+export default connect(null, mapDispatchToProps)(LocationActivationManual);

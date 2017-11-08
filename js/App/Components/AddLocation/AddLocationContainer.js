@@ -28,10 +28,16 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { View, Dimensions, StyleSheet } from 'BaseComponents';
+import { View, Dimensions, StyleSheet, Modal } from 'BaseComponents';
+import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 import { AddLocationPoster } from 'AddNewLocation_SubViews';
 
+import * as modalActions from 'Actions_Modal';
+
+import Theme from 'Theme';
+
 const deviceWidth = Dimensions.get('window').width;
+let deviceHeight = Dimensions.get('window').height;
 
 type Props = {
 	navigation: Object,
@@ -39,6 +45,8 @@ type Props = {
 	actions?: Object,
 	screenProps: Object,
 	intl: intlShape.isRequired,
+	showModal: boolean,
+	validationMessage: any,
 };
 
 type State = {
@@ -63,6 +71,8 @@ class AddLocationContainer extends View<null, Props, State> {
 		children: PropTypes.object.isRequired,
 		actions: PropTypes.objectOf(PropTypes.func),
 		screenProps: PropTypes.object,
+		showModal: PropTypes.bool,
+		validationMessage: PropTypes.any,
 	};
 
 	state = {
@@ -131,7 +141,8 @@ class AddLocationContainer extends View<null, Props, State> {
 	};
 
 	render(): Object {
-		const { children, navigation, actions, screenProps, intl } = this.props;
+		const { children, navigation, actions, screenProps, intl,
+			showModal, validationMessage } = this.props;
 		const { h1, h2 } = this.state;
 
 		let padding = screenProps.currentScreen === 'TimeZoneCity' || screenProps.currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * 0.027777);
@@ -142,6 +153,7 @@ class AddLocationContainer extends View<null, Props, State> {
 				<View style={{
 					flex: 1,
 					opacity: 1,
+					alignItems: 'center',
 				}}>
 					<AddLocationPoster h1={h1} h2={h2} />
 					<View style={[styles.style, {paddingHorizontal: padding}]}>
@@ -156,6 +168,15 @@ class AddLocationContainer extends View<null, Props, State> {
 							},
 						)}
 					</View>
+					<Modal
+						modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22}]}
+						entry= "ZoomIn"
+						exit= "ZoomOut"
+						entryDuration= {300}
+						exitDuration= {100}
+						showModal={showModal}>
+						<NotificationComponent text={validationMessage} onPress={this.closeModal} />
+					</Modal>
 				</View>
 			</View>
 		);
@@ -170,17 +191,20 @@ const styles = StyleSheet.create({
 });
 
 type mapStateToPropsType = {
+	modal: Object,
 };
 
 const mapStateToProps = ({ schedule, devices, modal }: mapStateToPropsType): Object => (
 	{
+		showModal: modal.openModal,
+		validationMessage: modal.data,
 	}
 );
 
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({}, dispatch),
+			...bindActionCreators({...modalActions}, dispatch),
 		},
 	}
 );

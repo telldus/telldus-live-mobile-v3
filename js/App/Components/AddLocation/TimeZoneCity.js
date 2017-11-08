@@ -57,7 +57,6 @@ class TimeZoneCity extends View {
 	renderRow:(string) => void;
 	parseDataForList:(string) => void;
 	onCityChoose: () => void;
-	closeModal: () => void;
 
 	props: Props;
 

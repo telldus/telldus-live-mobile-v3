@@ -28,8 +28,6 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 
-import Theme from 'Theme';
-
 import {
 	View,
 	FormattedMessage,
@@ -37,12 +35,9 @@ import {
 	Dimensions,
 	Text,
 	Icon,
-	Modal,
 } from 'BaseComponents';
-import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 
 const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
 
 
 const messages = defineMessages({
@@ -67,9 +62,6 @@ type Props = {
 	timeZone: string,
 	navigation: Object,
 	dispatch: Function,
-	showModal: boolean,
-	modalMessage: string,
-	modalExtra: string,
 	intl: intlShape.isRequired,
 	onDidMount: Function,
 	activateGateway: (clientInfo: Object) => Promise<any>,
@@ -87,7 +79,6 @@ class TimeZone extends View<void, Props, State> {
 	onTimeZoneSubmit: () => void;
 	onEditTimeZone: () => void;
 	getTimeZone: () => Object;
-	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -102,7 +93,6 @@ class TimeZone extends View<void, Props, State> {
 
 		this.onTimeZoneSubmit = this.onTimeZoneSubmit.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
-		this.closeModal = this.closeModal.bind(this);
 	}
 
 	componentDidMount() {
@@ -138,12 +128,6 @@ class TimeZone extends View<void, Props, State> {
 		this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
 	}
 
-	closeModal() {
-		this.props.dispatch({
-			type: 'REQUEST_MODAL_CLOSE',
-		});
-	}
-
 	render() {
 
 		return (
@@ -175,15 +159,6 @@ class TimeZone extends View<void, Props, State> {
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
-				<Modal
-					modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22, elevation: 4}]}
-					entry= "ZoomIn"
-					exit= "ZoomOut"
-					entryDuration= {300}
-					exitDuration= {100}
-					showModal={this.props.showModal}>
-					<NotificationComponent text={this.props.modalMessage} onPress={this.closeModal} />
-				</Modal>
 			</View>
 		);
 	}

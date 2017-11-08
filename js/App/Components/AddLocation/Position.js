@@ -190,9 +190,6 @@ function mapDispatchToProps(dispatch): Object {
 
 function mapStateToProps(store, ownProps) {
 	return {
-		showModal: store.modal.openModal,
-		modalMessage: store.modal.data,
-		modalExtra: store.modal.extras,
 	};
 }
 
