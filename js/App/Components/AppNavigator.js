@@ -56,7 +56,7 @@ import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
-import AddNewLocation from 'AddNewLocation';
+import AddLocationNavigator from 'AddLocationNavigator';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
@@ -79,89 +79,27 @@ const RouteConfigs = {
 			headerTitle: renderStackHeader(),
 		},
 	},
-	LocationDetected: {
-		screen: AddNewLocation.LocationDetected,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
+	AddLocation: {
+		screen: AddLocationNavigator,
+		navigationOptions: ({navigation}: Object): Object => {
+			let {state} = navigation;
+			let renderRootHeader = state.params && state.params.renderRootHeader;
+			if (renderRootHeader) {
+				return {
+					headerStyle: {
+						marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+						backgroundColor: Theme.Core.brandPrimary,
+						height: deviceHeight * 0.1,
+					},
+					headerTintColor: '#ffffff',
+					headerTitle: renderStackHeader(),
+				};
+			}
+			return {
+				header: null,
+			};
 		},
-	},
-	LocationActivationManual: {
-		screen: AddNewLocation.LocationActivationManual,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
-		},
-	},
-	LocationName: {
-		screen: AddNewLocation.LocationName,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
-		},
-	},
-	TimeZone: {
-		screen: AddNewLocation.TimeZone,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
-		},
-	},
-	TimeZoneContinent: {
-		screen: AddNewLocation.TimeZoneContinent,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
-		},
-	},
-	TimeZoneCity: {
-		screen: AddNewLocation.TimeZoneCity,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
-		},
-	},
-	Success: {
-		screen: AddNewLocation.Success,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
-		},
+
 	},
 };
 
@@ -170,8 +108,6 @@ function renderStackHeader() {
 		<Image style={{ height: 110, width: 130, marginLeft: (deviceWidth * 0.2) }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
 	);
 }
-
-
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',
