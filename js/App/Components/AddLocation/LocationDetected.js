@@ -26,10 +26,9 @@
 import React from 'react';
 import {ScrollView} from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { defineMessages, intlShape } from 'react-intl';
 
-import { View, StyleSheet, Dimensions, TouchableButton, ScreenContainer } from 'BaseComponents';
-import Banner from './Banner';
+import { View, StyleSheet, Dimensions, TouchableButton } from 'BaseComponents';
 import Clients from './Clients';
 
 let deviceWidth = Dimensions.get('window').width;
@@ -51,6 +50,8 @@ const messages = defineMessages({
 type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
+	rootNavigator: Object,
+	onDidMount: Function,
 }
 
 class LocationDetected extends View {
@@ -61,8 +62,21 @@ class LocationDetected extends View {
 
 	constructor(props: Props) {
 		super(props);
+
+		this.h1 = `1. ${props.intl.formatMessage(messages.banner)}`;
+		this.h2 = props.intl.formatMessage(messages.bannerSub);
+
 		this.onActivateAuto = this.onActivateAuto.bind(this);
 		this.onActivateManual = this.onActivateManual.bind(this);
+	}
+
+	componentDidMount() {
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'LocationDetected';
 	}
 
 	onActivateAuto(client) {
@@ -85,31 +99,26 @@ class LocationDetected extends View {
 	}
 
 	render() {
-		let bannerProps = {
-			prefix: '1. ',
-			bannerMain: messages.banner,
-			bannerSub: messages.bannerSub,
-		};
-		let BannerComponent = Banner(bannerProps);
 		let items = [];
-		if (this.props.navigation.state.params.clients) {
-			items = this.props.navigation.state.params.clients.map((client, i) => {
+		let {rootNavigator} = this.props;
+
+		if (rootNavigator.state.params.clients) {
+			items = rootNavigator.state.params.clients.map((client, i) => {
 				return this.renderClient(client, i);
 			});
 		}
+
 		return (
-			<ScreenContainer banner={BannerComponent}>
-				<View style={styles.container}>
-					<ScrollView contentContainerStyle={styles.itemsContainer}>
-						{items}
-						<TouchableButton
-							style={styles.button}
-							onPress={this.onActivateManual}
-							text={'Manual Activation'}
-						/>
-					</ScrollView>
-				</View>
-			</ScreenContainer>
+			<View style={styles.container}>
+				<ScrollView contentContainerStyle={styles.itemsContainer}>
+					{items}
+					<TouchableButton
+						style={styles.button}
+						onPress={this.onActivateManual}
+						text={'Manual Activation'}
+					/>
+				</ScrollView>
+			</View>
 		);
 	}
 }
@@ -117,11 +126,8 @@ class LocationDetected extends View {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
 	},
 	itemsContainer: {
-		width: (deviceWidth - 20),
 		justifyContent: 'center',
 	},
 	button: {
@@ -142,5 +148,5 @@ function mapStateToProps(store, ownProps) {
 	};
 }
 
-export default connect(mapStateToProps, null)(injectIntl(LocationDetected));
+export default connect(mapStateToProps, null)(LocationDetected);
 

@@ -25,13 +25,12 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
+import { defineMessages, intlShape } from 'react-intl';
 import uniqBy from 'lodash/uniqBy';
 import differenceWith from 'lodash/differenceWith';
 
-import Banner from './Banner';
 import timeZone from '../../Lib/TimeZone';
-import {View, List, ListDataSource, ScreenContainer} from 'BaseComponents';
+import {View, List, ListDataSource} from 'BaseComponents';
 import ListRow from './ListRow';
 
 
@@ -54,6 +53,8 @@ const listDataSource = new ListDataSource({
 
 type Props = {
 	navigation: Object,
+	onDidMount: Function,
+	intl: intlShape.isRequired,
 }
 
 class TimeZoneContinent extends View {
@@ -67,8 +68,21 @@ class TimeZoneContinent extends View {
 		this.state = {
 			dataSource: listDataSource.cloneWithRows(this.parseDataForList(timeZone)),
 		};
+
+		this.h1 = `3. ${props.intl.formatMessage(messages.banner)}`;
+		this.h2 = props.intl.formatMessage(messages.bannerSub);
+
 		this.renderRow = this.renderRow.bind(this);
 		this.onContinentChoose = this.onContinentChoose.bind(this);
+	}
+
+	componentDidMount() {
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'TimeZoneContinent';
 	}
 
 	parseDataForList(data) {
@@ -99,20 +113,15 @@ class TimeZoneContinent extends View {
 	}
 
 	render() {
-		let bannerProps = {
-			prefix: '3. ',
-			bannerMain: messages.banner,
-			bannerSub: messages.bannerSub,
-		};
-		let BannerComponent = Banner(bannerProps);
+
 		return (
-			<ScreenContainer banner={BannerComponent}>
+			<View style={{flex: 1}}>
 				<List
 					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
 				/>
-			</ScreenContainer>
+			</View>
 		);
 	}
 }

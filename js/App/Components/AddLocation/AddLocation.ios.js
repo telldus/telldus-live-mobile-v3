@@ -16,27 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule AddNewLocation
+ * @providesModule AddLocationNavigator
  */
 
 // @flow
 
 'use strict';
+import { View } from 'BaseComponents';
 
-import LocationDetected from './LocationDetected';
-import LocationActivationManual from './LocationActivationManual';
-import LocationName from './LocationName';
-import TimeZoneContinent from './TimeZoneContinent';
-import TimeZoneCity from './TimeZoneCity';
-import TimeZone from './TimeZone';
-import Success from './Success';
+class AddLocationNavigator extends View {
+	render() {
+		return (
+			null
+		);
+	}
+}
 
-module.exports = {
-	LocationDetected,
-	LocationActivationManual,
-	LocationName,
-	TimeZoneContinent,
-	TimeZoneCity,
-	TimeZone,
-	Success,
-};
+module.exports = AddLocationNavigator;

@@ -26,18 +26,16 @@
 import React from 'react';
 import { Linking, ScrollView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { defineMessages, intlShape } from 'react-intl';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_guide from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_guide);
 
 import Theme from 'Theme';
-import Banner from './Banner';
 import {
 	View,
 	Text,
 	FormattedMessage,
-	ScreenContainer,
 	StyleSheet,
 	Dimensions,
 	Image,
@@ -92,6 +90,7 @@ const messages = defineMessages({
 type Props = {
 	intl: intlShape.isRequired,
 	navigation: Object,
+	onDidMount: Function,
 }
 
 type State = {
@@ -107,6 +106,18 @@ class Success extends View<void, Props, State> {
 		this.link = 'http://live.telldus.com/help/guides';
 		this.onPressHelp = this.onPressHelp.bind(this);
 		this.onPressContinue = this.onPressContinue.bind(this);
+
+		this.h1 = props.intl.formatMessage(messages.banner);
+		this.h2 = props.intl.formatMessage(messages.bannerSub);
+	}
+
+	componentDidMount() {
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'Success';
 	}
 
 	onPressContinue() {
@@ -125,17 +136,12 @@ class Success extends View<void, Props, State> {
 	}
 
 	render() {
-		let bannerProps = {
-			prefix: '3. ',
-			bannerMain: messages.banner,
-			bannerSub: messages.bannerSub,
-		};
-		let BannerComponent = Banner(bannerProps);
+
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		let locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (
-			<ScreenContainer banner={BannerComponent}>
+			<View style={{flex: 1}}>
 				<ScrollView>
 					<View style={[styles.itemsContainer, styles.shadow]}>
 						<View style={styles.imageTitleContainer}>
@@ -160,7 +166,7 @@ class Success extends View<void, Props, State> {
 						style={styles.button}
 					/>
 				</ScrollView>
-			</ScreenContainer>
+			</View>
 		);
 	}
 }
@@ -234,4 +240,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect()(injectIntl(Success));
+export default connect()(Success);

@@ -26,22 +26,19 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
+import { defineMessages, intlShape } from 'react-intl';
 
 import Theme from 'Theme';
-import {activateGateway} from 'Actions';
 
 import {
 	View,
 	FormattedMessage,
-	ScreenContainer,
 	StyleSheet,
 	Dimensions,
 	Text,
 	Icon,
 	Modal,
 } from 'BaseComponents';
-import Banner from './Banner';
 import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -73,7 +70,9 @@ type Props = {
 	showModal: boolean,
 	modalMessage: string,
 	modalExtra: string,
-	activateGateway: (clientInfo: Object) => Promise<any>;
+	intl: intlShape.isRequired,
+	onDidMount: Function,
+	activateGateway: (clientInfo: Object) => Promise<any>,
 }
 
 type State = {
@@ -97,9 +96,22 @@ class TimeZone extends View<void, Props, State> {
 			timeZone,
 			autoDetected,
 		};
+
+		this.h1 = `3. ${props.intl.formatMessage(messages.banner)}`;
+		this.h2 = props.intl.formatMessage(messages.bannerSub);
+
 		this.onTimeZoneSubmit = this.onTimeZoneSubmit.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+	}
+
+	componentDidMount() {
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'TimeZone';
 	}
 
 	getTimeZone(): Object {
@@ -112,12 +124,13 @@ class TimeZone extends View<void, Props, State> {
 	onTimeZoneSubmit() {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.timezone = this.state.timeZone;
-		this.props.activateGateway(clientInfo)
-			.then(response => {
-				if (response) {
-					this.props.navigation.navigate('Success', {clientInfo});
-				}
-			});
+		this.props.navigation.navigate('Position', {clientInfo});
+		// this.props.activateGateway(clientInfo)
+		// 	.then(response => {
+		// 		if (response) {
+		// 			this.props.navigation.navigate('Success', {clientInfo});
+		// 		}
+		// 	});
 	}
 
 	onEditTimeZone() {
@@ -133,15 +146,8 @@ class TimeZone extends View<void, Props, State> {
 
 	render() {
 
-		let bannerProps = {
-			prefix: '3. ',
-			bannerMain: messages.banner,
-			bannerSub: messages.bannerSub,
-		};
-		let BannerComponent = Banner(bannerProps);
-
 		return (
-			<ScreenContainer banner={BannerComponent}>
+			<View style={{flex: 1}}>
 				<View style={[styles.itemsContainer, styles.shadow]}>
 					<FormattedMessage {...messages.banner} style={styles.title}/>
 					<View style={styles.timeZoneContainer}>
@@ -178,7 +184,7 @@ class TimeZone extends View<void, Props, State> {
 					showModal={this.props.showModal}>
 					<NotificationComponent text={this.props.modalMessage} onPress={this.closeModal} />
 				</Modal>
-			</ScreenContainer>
+			</View>
 		);
 	}
 }
@@ -254,21 +260,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch): Object {
-	return {
-		activateGateway: (clientInfo) => {
-			return dispatch(activateGateway(clientInfo));
-		},
-		dispatch,
-	};
-}
-
-function mapStateToProps(store, ownProps) {
-	return {
-		showModal: store.modal.openModal,
-		modalMessage: store.modal.data,
-		modalExtra: store.modal.extras,
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TimeZone);
+export default connect(null, null)(TimeZone);

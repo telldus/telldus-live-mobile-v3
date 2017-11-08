@@ -26,129 +26,145 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { defineMessages, intlShape } from 'react-intl';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_location from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_location);
 
+import {getGatewayInfo, showModal, hideModal} from 'Actions';
 import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
-import Banner from './Banner';
-import {View, StyleSheet, FormattedMessage, Dimensions, Icon, Modal, ScreenContainer} from 'BaseComponents';
+import {View, StyleSheet, FormattedMessage, Dimensions, Icon, Modal} from 'BaseComponents';
 import Theme from 'Theme';
-
-import {getGatewayInfo} from 'Actions';
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
-	locationName: {
-		id: 'addNewLocation.locationName',
-		defaultMessage: 'Name',
-		description: 'Label for the field Location Name',
+	activationCode: {
+		id: 'addNewLocation.activateManual',
+		defaultMessage: 'Activation Code',
+		description: 'Label for the field Location Manual Activate Field',
+	},
+	banner: {
+		id: 'addNewLocation.activateManual.banner',
+		defaultMessage: 'Select Location',
+		description: 'Main Banner Text for the Location Manual Activate Screen',
 	},
 	bannerSub: {
-		id: 'addNewLocation.locationName.bannerSub',
-		defaultMessage: 'Setup your TellStick to start',
-		description: 'Secondary Banner Text for the Location Detected Screen',
+		id: 'addNewLocation.activateManual.bannerSub',
+		defaultMessage: 'Enter Activation Code',
+		description: 'Secondary Banner Text for the Location Manual Activate Screen',
 	},
-	invalidLocationName: {
-		id: 'addNewLocation.locationName.invalidLocationName',
-		defaultMessage: 'Location name can\'t be empty',
-		description: 'Local validation text when Location name field is left empty',
+	invalidActivationCode: {
+		id: 'addNewLocation.activateManual.invalidActivationCode',
+		defaultMessage: 'Invalid Activation Code',
+		description: 'Local Validation text when Activation Code is Invalid',
+	},
+	bodyContent: {
+		id: 'addNewLocation.activateManual.bodyContent',
+		defaultMessage: 'Activate your TellStick by typing the activation code. The activation code ' +
+		'is written on the label on the bottom of your TellStick.',
+		description: 'The body content for the Location Manual Activate Screen',
 	},
 });
-
 type Props = {
 	navigation: Object,
+	dispatch: Function,
+	onDidMount: Function,
+	getGatewayInfo: (param: Object, string) => Promise<any>;
+	showModal: boolean,
+	modalMessage: String,
+	modalExtra: any,
 	intl: intlShape.isRequired,
-	getGatewayInfo: (uniqueParam: Object, extras: string) => Promise<any>;
 }
 
-class LocationName extends View {
+class LocationActivationManual extends View {
 	props: Props;
 
-	onLocationNameChange: (string) => void;
-	onNameSubmit: () => void;
+	onActivationCodeChange: (string) => void;
+	onActivationCodeSubmit: () => void;
 	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			locationName: '',
+			activationCode: '',
 			showModal: false,
 		};
-		this.onLocationNameChange = this.onLocationNameChange.bind(this);
-		this.onNameSubmit = this.onNameSubmit.bind(this);
+
+		this.h1 = `1. ${props.intl.formatMessage(messages.banner)}`;
+		this.h2 = props.intl.formatMessage(messages.bannerSub);
+
+		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
+		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 	}
 
-	onLocationNameChange(locationName) {
+	componentDidMount() {
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'LocationActivationManual';
+	}
+
+	onActivationCodeChange(activationCode: string) {
 		this.setState({
-			locationName,
+			activationCode,
 		});
 	}
 
-	onNameSubmit() {
-		if (this.state.locationName !== '') {
-			let clientInfo = this.props.navigation.state.params.clientInfo;
-			clientInfo.name = this.state.locationName;
-			if (clientInfo.timezone) {
-				this.props.navigation.navigate('TimeZone', {clientInfo});
-			} else {
-				let uniqueParam = {id: clientInfo.clientId};
-				this.props.getGatewayInfo(uniqueParam, 'timezone')
-					.then(response => {
-						if (response.timezone) {
-							clientInfo.timezone = response.timezone;
-							clientInfo.autoDetected = true;
-							this.props.navigation.navigate('TimeZone', {clientInfo});
-						} else {
-							this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
-						}
-					});
-			}
-		} else {
-			// using the local state to control Modal as it is a local validation, not using the action/reducer.
-			this.setState({
-				showModal: true,
+	onActivationCodeSubmit() {
+		if (this.state.activationCode.length === 10) {
+			let param = {code: this.state.activationCode};
+			this.props.getGatewayInfo(param, 'timezone').then(response => {
+				if (response.id) {
+					let clientInfo = {
+						clientId: response.id,
+						uuid: response.uuid,
+						type: response.type,
+						timezone: response.timezone,
+						autoDetected: true,
+					};
+					this.props.navigation.navigate('LocationName', {clientInfo});
+				} else {
+					this.props.dispatch(showModal(response, 'ERROR'));
+				}
 			});
+		} else {
+			let message = this.props.intl.formatMessage(messages.invalidActivationCode);
+			this.props.dispatch(showModal(message, 'ERROR'));
 		}
 	}
 
 	closeModal() {
-		this.setState({
-			showModal: false,
-		});
+		this.props.dispatch(hideModal());
 	}
 
 	render() {
-		let bannerProps = {
-			prefix: '2. ',
-			bannerMain: messages.locationName,
-			bannerSub: messages.bannerSub,
-		};
-		let BannerComponent = Banner(bannerProps);
+
 		return (
-			<ScreenContainer banner={BannerComponent}>
+			<View style={{flex: 1}}>
 				<KeyboardAvoidingView behavior="position" contentContainerStyle={{justifyContent: 'center'}}>
 					<View style={styles.container}>
 						<View style={[styles.itemsContainer, styles.shadow]}>
-							<FormattedMessage {...messages.locationName} style={styles.title}/>
+							<FormattedMessage {...messages.activationCode} style={styles.title}/>
 							<CustomIcon name="icon_location" size={34} color="#A59F9A" style={styles.locationIcon}/>
 							<TextInput
 								style={styles.textField}
-								onChangeText={this.onLocationNameChange}
+								onChangeText={this.onActivationCodeChange}
 								autoCapitalize="none"
 								autoCorrect={false}
 								underlineColorAndroid="#e26901"
-								defaultValue={this.state.locationName}
+								defaultValue={this.state.activationCode}
 							/>
+							<FormattedMessage style={styles.textBody} {...messages.bodyContent}/>
 						</View>
 					</View>
 				</KeyboardAvoidingView>
 				<View style={styles.circularViewContainer}>
-					<TouchableWithoutFeedback onPress={this.onNameSubmit}>
+					<TouchableWithoutFeedback onPress={this.onActivationCodeSubmit}>
 						<View style={styles.circularView}>
 							<Icon name="angle-right" size={44} color="#ffffff"/>
 						</View>
@@ -160,10 +176,10 @@ class LocationName extends View {
 					exit= "ZoomOut"
 					entryDuration= {300}
 					exitDuration= {100}
-					showModal={this.state.showModal}>
-					<NotificationComponent text={this.props.intl.formatMessage(messages.invalidLocationName)} onPress={this.closeModal} />
+					showModal={this.props.showModal}>
+					<NotificationComponent text={this.props.modalMessage} onPress={this.closeModal} />
 				</Modal>
-			</ScreenContainer>
+			</View>
 		);
 	}
 }
@@ -247,11 +263,19 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		getGatewayInfo: (uniqueParam: Object, extras: string) => {
-			return dispatch(getGatewayInfo(uniqueParam, extras));
+		getGatewayInfo: (param: Object, extras: string) => {
+			return dispatch(getGatewayInfo(param, extras));
 		},
 		dispatch,
 	};
 }
 
-export default connect(null, mapDispatchToProps)(injectIntl(LocationName));
+function mapStateToProps(store) {
+	return {
+		showModal: store.modal.openModal,
+		modalMessage: store.modal.data,
+		modalExtra: store.modal.extras,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LocationActivationManual);
