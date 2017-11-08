@@ -33,6 +33,7 @@ import NotificationComponent from '../PreLoginScreens/SubViews/NotificationCompo
 import { AddLocationPoster } from 'AddNewLocation_SubViews';
 
 import * as modalActions from 'Actions_Modal';
+import * as gatewayActions from 'Actions_Gateways';
 
 import Theme from 'Theme';
 
@@ -204,7 +205,7 @@ const mapStateToProps = ({ schedule, devices, modal }: mapStateToPropsType): Obj
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({...modalActions}, dispatch),
+			...bindActionCreators({...modalActions, ...gatewayActions}, dispatch),
 		},
 	}
 );

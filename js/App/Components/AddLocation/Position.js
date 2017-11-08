@@ -62,10 +62,12 @@ const messages = defineMessages({
 type Props = {
 	intl: intlShape.isRequired,
 	onDidMount: Function,
+	actions: Object,
 };
 
 type State = {
-	region: string,
+	region: Object,
+	address: string,
 }
 
 class Position extends View {
@@ -73,12 +75,20 @@ class Position extends View {
 	state: State;
 
 	onAddressChange: () => void;
+	onEndEditing: () => void;
+	_refs: (Object | any) => mixed;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
-			region: '',
+			address: '',
+			region: {
+				latitude: 55.70584,
+				longitude: 13.19321,
+				latitudeDelta: 0.2,
+				longitudeDelta: 0.2,
+			},
 		};
 
 		this.h1 = `4. ${props.intl.formatMessage(messages.headerOne)}`;
@@ -86,6 +96,8 @@ class Position extends View {
 		this.label = props.intl.formatMessage(messages.label);
 
 		this.onAddressChange = this.onAddressChange.bind(this);
+		this.onEndEditing = this.onEndEditing.bind(this);
+		this._refs = this._refs.bind(this);
 	}
 
 	componentDidMount() {
@@ -93,10 +105,36 @@ class Position extends View {
 		this.props.onDidMount(h1, h2);
 	}
 
-	onAddressChange(region: string) {
+	onAddressChange(address: string) {
 		this.setState({
-			region,
+			address,
 		});
+	}
+
+	onEndEditing() {
+		if (this.state.address !== '') {
+			this.props.actions.getGeoCodePosition(this.state.address).then(response => {
+				if (response.status && response.status === 'OK' && response.results[0]) {
+					let { location } = response.results[0].geometry;
+					let latitude = location.lat;
+					let longitude = location.lng;
+					let region = {
+						latitude,
+						longitude,
+						latitudeDelta: 0.0043,
+						longitudeDelta: 0.0034,
+					};
+					this.map.animateToRegion(region);
+				}
+			});
+		} else {
+			// let message = this.props.intl.formatMessage(messages.invalidAddress);
+			// this.props.actions.showModal(message);
+		}
+	}
+
+	_refs(map: Object) {
+		this.map = map;
 	}
 
 	render() {
@@ -110,21 +148,18 @@ class Position extends View {
 						showIcon={true}>
 						<TextInput
 							style={styles.address}
-							onChangeText={this.region}
+							onChangeText={this.onAddressChange}
+							onEndEditing={this.onEndEditing}
 							autoCapitalize="none"
 							autoCorrect={false}
 							underlineColorAndroid="#e26901"
-							value={this.state.region}/>
+							value={this.state.address}/>
 					</LabelBox>
 					<View style={styles.mapViewCover}>
 						<MapView
 							style={styles.map}
-							region={{
-								latitude: 37.78825,
-								longitude: -122.4324,
-								latitudeDelta: 0.015,
-								longitudeDelta: 0.0121,
-							}}
+							ref={this._refs}
+							region={this.state.region}
 						/>
 					</View>
 				</View>
