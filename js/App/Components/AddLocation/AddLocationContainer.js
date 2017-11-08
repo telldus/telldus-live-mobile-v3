@@ -92,7 +92,7 @@ class AddLocationContainer extends View<null, Props, State> {
 
 	handleBackPress(): boolean {
 		let {navigation, screenProps} = this.props;
-		if (screenProps.currentScreen === 'InitialScreen') {
+		if (screenProps.currentScreen === 'LocationDetected') {
 			screenProps.rootNavigator.goBack();
 			return true;
 		}
