@@ -618,13 +618,13 @@
 			sourceTree = "<group>";
 		};
 		ADBDB9201DFEBF0600ED6528 /* Products */ = {
-+			isa = PBXGroup;
-+			children = (
-+				ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */,
-+			);
-+			name = Products;
-+			sourceTree = "<group>";
-+		};
+			isa = PBXGroup;
+			children = (
+				ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		978DD6CDC2824ACE99408D92 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -714,9 +714,9 @@
 					ProjectRef = 144028731EE69000000945A3 /* RCTAnimation.xcodeproj */;
 				},
 				{
-+					ProductGroup = ADBDB9201DFEBF0600ED6528 /* Products */;
-+					ProjectRef = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
-+				},
+					ProductGroup = ADBDB9201DFEBF0600ED6528 /* Products */;
+					ProjectRef = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
+				},
 				{
 					ProductGroup = 00C302B61ABCB90400DB3ED1 /* Products */;
 					ProjectRef = 00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */;
@@ -1006,8 +1006,7 @@
 		3DAD3EA31DF850E9000B6D8A /* libReact-tvOS.a */ = {
  			isa = PBXReferenceProxy;
  			fileType = archive.ar;
--			path = libReact.a;
-+			path = "libReact-tvOS.a";
+			path = "libReact-tvOS.a";
  			remoteRef = 3DAD3EA21DF850E9000B6D8A /* PBXContainerItemProxy */;
  			sourceTree = BUILT_PRODUCTS_DIR;
  		};
