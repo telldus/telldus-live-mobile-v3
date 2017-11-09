@@ -182,8 +182,9 @@ class TabsView extends View {
 	}
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store, ownProps) {
 	return {
+		stackNavigator: ownProps.navigation,
 		tab: store.navigation.tab,
 		userIcon: false,
 		userProfile: getUserProfile(store),
