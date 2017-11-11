@@ -86,8 +86,8 @@ class Position extends View {
 			region: {
 				latitude: 55.70584,
 				longitude: 13.19321,
-				latitudeDelta: 0.2,
-				longitudeDelta: 0.2,
+				latitudeDelta: 0.24442,
+				longitudeDelta: 0.24442,
 			},
 		};
 
@@ -115,22 +115,30 @@ class Position extends View {
 		if (this.state.address !== '') {
 			this.props.actions.getGeoCodePosition(this.state.address).then(response => {
 				if (response.status && response.status === 'OK' && response.results[0]) {
-					let { location } = response.results[0].geometry;
-					let latitude = location.lat;
-					let longitude = location.lng;
+					let { location, bounds } = response.results[0].geometry;
+					let latitude = location.lat, longitude = location.lng;
+					let { longitudeDelta, latitudeDelta } = this.getDeltas(bounds);
 					let region = {
 						latitude,
 						longitude,
-						latitudeDelta: 0.0043,
-						longitudeDelta: 0.0034,
+						latitudeDelta,
+						longitudeDelta,
 					};
-					this.map.animateToRegion(region);
+					this.setState({
+						region,
+					});
 				}
 			});
 		} else {
 			// let message = this.props.intl.formatMessage(messages.invalidAddress);
 			// this.props.actions.showModal(message);
 		}
+	}
+
+	getDeltas(bounds) {
+		let { northeast, southwest } = bounds;
+		let longitudeDelta = northeast.lng - southwest.lng, latitudeDelta = northeast.lat - southwest.lat;
+		return {longitudeDelta, latitudeDelta};
 	}
 
 	_refs(map: Object) {
