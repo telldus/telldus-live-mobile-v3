@@ -171,7 +171,6 @@ class Position extends View {
 			<View style={styles.container}>
 				<View style={styles.body}>
 					<LabelBox
-						containerStyle={styles.labelContainer}
 						label={this.label}
 						showIcon={true}>
 						<TextInput

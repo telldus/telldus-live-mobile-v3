@@ -170,7 +170,7 @@ class AddLocationContainer extends View<null, Props, State> {
 						)}
 					</View>
 					<Modal
-						modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22}]}
+						modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22, elevation: 5}]}
 						entry= "ZoomIn"
 						exit= "ZoomOut"
 						entryDuration= {300}
