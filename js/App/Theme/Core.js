@@ -197,4 +197,18 @@ export default {
 
 	defaultProgressColor: '#E4202D',
 	inverseProgressColor: '#1A191B',
+
+	get shadow() {
+		return {
+			elevation: 2,
+			shadowColor: '#000',
+			shadowRadius: 2,
+			shadowOpacity: 0.23,
+			shadowOffset: {
+				width: 0,
+				height: 1,
+			},
+		};
+	},
+
 };
