@@ -64,7 +64,7 @@ export default class FloatingButton extends Component {
 		showThrobber: false,
 	};
 
-	render(): React$Element<any> {
+	render(): Object {
 		const { container, button, icon, throbber } = this._getStyle();
 
 		const { buttonStyle, onPress, imageSource, showThrobber } = this.props;
