@@ -64,6 +64,8 @@ import Modal from './Modal';
 import ScreenContainer from './ScreenContainer';
 import Poster from './Poster';
 import IconTelldus from './IconTelldus';
+import Throbber from './Throbber';
+import FloatingButton from './FloatingButton';
 
 import {
 	AppState,
@@ -119,6 +121,8 @@ module.exports = {
 	ScreenContainer: ScreenContainer,
 	Poster: Poster,
 	IconTelldus: IconTelldus,
+	Throbber: Throbber,
+	FloatingButton: FloatingButton,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
