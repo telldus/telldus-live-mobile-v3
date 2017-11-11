@@ -63,6 +63,8 @@ type Props = {
 	intl: intlShape.isRequired,
 	onDidMount: Function,
 	actions: Object,
+	navigation: Object,
+	activateGateway: (Object) => Promise<any>;
 };
 
 type State = {
@@ -114,6 +116,19 @@ class Position extends View {
 	}
 
 	onSubmit() {
+		if (this.state.address !== '') {
+			let clientInfo = this.props.navigation.state.params.clientInfo;
+			clientInfo.cordinates = {longitude: this.state.region.longitude, latitude: this.state.region.latitude};
+			this.props.activateGateway(clientInfo)
+				.then(response => {
+					if (response) {
+						this.props.navigation.navigate('Success', {clientInfo});
+					}
+				});
+		} else {
+			let message = this.props.intl.formatMessage(messages.invalidAddress);
+			this.props.actions.showModal(message);
+		}
 	}
 
 	onEndEditing() {
