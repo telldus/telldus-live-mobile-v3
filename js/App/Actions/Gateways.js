@@ -224,7 +224,7 @@ function setCoordinates(id: string, longitude: number, latitude: number): ThunkA
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => { console.log('TEST response', response);
+		return LiveApi(payload).then(response => {
 			return response;
 		}).catch(err => {
 			return err;
