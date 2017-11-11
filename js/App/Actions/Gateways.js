@@ -148,6 +148,7 @@ function activateGateway(clientInfo: Object): ThunkAction {
 				return Promise.all([
 					dispatch(setName(clientInfo.clientId, clientInfo.name)),
 					dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone)),
+					dispatch(setCoordinates(clientInfo.clientId, ...clientInfo.cordinates)),
 				]).then(val => {
 					dispatch(getAppData());
 					dispatch(getGateways());
@@ -200,6 +201,30 @@ function setTimezone(id: string, timezone: string): ThunkAction {
 			},
 		};
 		return LiveApi(payload).then(response => {
+			return response;
+		}).catch(err => {
+			return err;
+		});
+	};
+}
+
+function setCoordinates(id: string, longitude: number, latitude: number): ThunkAction {
+	return (dispatch, getState) => {
+		const url = format({
+			pathname: '/client/setCoordinates',
+			query: {
+				id,
+				longitude,
+				latitude,
+			},
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => { console.log('TEST response', response);
 			return response;
 		}).catch(err => {
 			return err;
