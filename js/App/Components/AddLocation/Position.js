@@ -29,7 +29,7 @@ import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
 
-import { View, StyleSheet, Dimensions } from 'BaseComponents';
+import { View, StyleSheet, Dimensions, FloatingButton } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
 import {activateGateway} from 'Actions';
@@ -77,6 +77,7 @@ class Position extends View {
 	onAddressChange: () => void;
 	onEndEditing: () => void;
 	_refs: (Object | any) => mixed;
+	onSubmit: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -97,6 +98,7 @@ class Position extends View {
 
 		this.onAddressChange = this.onAddressChange.bind(this);
 		this.onEndEditing = this.onEndEditing.bind(this);
+		this.onSubmit = this.onSubmit.bind(this);
 		this._refs = this._refs.bind(this);
 	}
 
@@ -109,6 +111,9 @@ class Position extends View {
 		this.setState({
 			address,
 		});
+	}
+
+	onSubmit() {
 	}
 
 	onEndEditing() {
@@ -169,6 +174,12 @@ class Position extends View {
 							ref={this._refs}
 							region={this.state.region}
 						/>
+						<FloatingButton
+							buttonStyle={styles.buttonStyle}
+							onPress={this.onSubmit}
+							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							showThrobber={false}
+						/>
 					</View>
 				</View>
 			</View>
@@ -219,7 +230,11 @@ const styles = StyleSheet.create({
 	h2: {
 		fontSize: deviceWidth * 0.053333333,
 	},
-
+	buttonStyle: {
+		right: deviceWidth * 0.053333333,
+		elevation: 10,
+		shadowOpacity: 0.99,
+	},
 });
 
 function mapDispatchToProps(dispatch): Object {
