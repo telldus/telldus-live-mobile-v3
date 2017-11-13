@@ -210,4 +210,10 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-module.exports = connect(mapStateToProps)(injectIntl(AppNavigator));
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(AppNavigator));
