@@ -11,6 +11,9 @@ declare module 'MessageQueue' {
 declare module 'react-navigation' {
 	declare var exports: any;
 }
+declare module 'react-native-tab-view' {
+	declare var exports: any;
+}
 declare module '../../local-cli/bundle/assetPathUtils' {
 	declare var exports: any;
 }
