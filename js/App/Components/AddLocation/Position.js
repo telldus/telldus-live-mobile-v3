@@ -135,9 +135,9 @@ class Position extends View {
 		if (this.state.address !== '') {
 			this.props.actions.getGeoCodePosition(this.state.address).then(response => {
 				if (response.status && response.status === 'OK' && response.results[0]) {
-					let { location, bounds } = response.results[0].geometry;
+					let { location, viewport } = response.results[0].geometry;
 					let latitude = location.lat, longitude = location.lng;
-					let { longitudeDelta, latitudeDelta } = this.getDeltas(bounds);
+					let { longitudeDelta, latitudeDelta } = this.getDeltas(viewport);
 					let region = {
 						latitude,
 						longitude,
@@ -155,8 +155,8 @@ class Position extends View {
 		}
 	}
 
-	getDeltas(bounds) {
-		let { northeast, southwest } = bounds;
+	getDeltas(viewport) {
+		let { northeast, southwest } = viewport;
 		let longitudeDelta = northeast.lng - southwest.lng, latitudeDelta = northeast.lat - southwest.lat;
 		return {longitudeDelta, latitudeDelta};
 	}
