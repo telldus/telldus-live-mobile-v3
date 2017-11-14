@@ -172,4 +172,10 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-module.exports = connect(mapStateToProps)(AppNavigator);
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(AppNavigator);
