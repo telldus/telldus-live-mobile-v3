@@ -35,7 +35,9 @@ import {
 	Dimensions,
 	Text,
 	Icon,
+	FloatingButton,
 } from 'BaseComponents';
+import { LabelBox } from 'AddNewLocation_SubViews';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -90,6 +92,7 @@ class TimeZone extends View<void, Props, State> {
 
 		this.h1 = `3. ${props.intl.formatMessage(messages.banner)}`;
 		this.h2 = props.intl.formatMessage(messages.bannerSub);
+		this.label = props.intl.formatMessage(messages.banner);
 
 		this.onTimeZoneSubmit = this.onTimeZoneSubmit.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
@@ -132,8 +135,9 @@ class TimeZone extends View<void, Props, State> {
 
 		return (
 			<View style={{flex: 1}}>
-				<View style={[styles.itemsContainer, styles.shadow]}>
-					<FormattedMessage {...messages.banner} style={styles.title}/>
+				<LabelBox
+					label={this.label}
+					showIcon={false}>
 					<View style={styles.timeZoneContainer}>
 						<Text style={styles.timeZone}>
 							{this.state.timeZone}
@@ -151,53 +155,24 @@ class TimeZone extends View<void, Props, State> {
 						:
 						null
 					}
-				</View>
-				<View style={styles.circularViewContainer}>
-					<TouchableWithoutFeedback onPress={this.onTimeZoneSubmit}>
-						<View style={styles.circularView}>
-							<Icon name="angle-right" size={44} color="#ffffff"/>
-						</View>
-					</TouchableWithoutFeedback>
-				</View>
+				</LabelBox>
+				<FloatingButton
+					buttonStyle={styles.buttonStyle}
+					onPress={this.onTimeZoneSubmit}
+					imageSource={require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={false}
+				/>
 			</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
-	itemsContainer: {
-		flexDirection: 'column',
-		backgroundColor: '#fff',
-		marginTop: 20,
-		paddingLeft: 20,
-		paddingRight: 20,
-		paddingBottom: 20,
-		paddingTop: 20,
-		alignItems: 'flex-start',
-		width: (deviceWidth - 20),
-	},
-	shadow: {
-		borderRadius: 4,
-		backgroundColor: '#fff',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
-	},
-	title: {
-		color: '#e26901',
-		fontSize: 14,
-		paddingLeft: 2,
-	},
 	timeZoneContainer: {
 		flexDirection: 'row',
-		justifyContent: 'center',
-		paddingTop: 5,
-		paddingBottom: 5,
+		justifyContent: 'flex-start',
+		marginTop: 10,
+		width: (deviceWidth - 40),
 	},
 	timeZone: {
 		color: '#00000099',
@@ -210,28 +185,10 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		paddingLeft: 2,
 	},
-	circularViewContainer: {
-		width: (deviceWidth - 20),
-		alignItems: 'flex-end',
-		justifyContent: 'flex-end',
-		flex: 1,
-		marginBottom: 20,
-	},
-	circularView: {
-		height: 50,
-		width: 50,
-		borderRadius: 50,
-		backgroundColor: '#e26901',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		alignItems: 'center',
-		justifyContent: 'center',
-		shadowRadius: 50,
-		shadowOpacity: 1.0,
-		elevation: 25,
+	buttonStyle: {
+		right: deviceWidth * 0.053333333,
+		elevation: 10,
+		shadowOpacity: 0.99,
 	},
 });
 

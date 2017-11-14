@@ -25,13 +25,11 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { TextInput, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+import { TextInput, KeyboardAvoidingView } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_location from '../TabViews/img/selection.json';
-const CustomIcon = createIconSetFromIcoMoon(icon_location);
 
-import {View, StyleSheet, FormattedMessage, Dimensions, Icon} from 'BaseComponents';
+import {View, StyleSheet, Dimensions, FloatingButton} from 'BaseComponents';
+import { LabelBox } from 'AddNewLocation_SubViews';
 
 import {getGatewayInfo} from 'Actions';
 
@@ -77,6 +75,7 @@ class LocationName extends View {
 
 		this.h1 = `2. ${props.intl.formatMessage(messages.locationName)}`;
 		this.h2 = props.intl.formatMessage(messages.bannerSub);
+		this.label = props.intl.formatMessage(messages.locationName);
 
 		this.onLocationNameChange = this.onLocationNameChange.bind(this);
 		this.onNameSubmit = this.onNameSubmit.bind(this);
@@ -126,73 +125,32 @@ class LocationName extends View {
 		return (
 			<View style={{flex: 1}}>
 				<KeyboardAvoidingView behavior="position" contentContainerStyle={{justifyContent: 'center'}}>
-					<View style={styles.container}>
-						<View style={[styles.itemsContainer, styles.shadow]}>
-							<FormattedMessage {...messages.locationName} style={styles.title}/>
-							<CustomIcon name="icon_location" size={34} color="#A59F9A" style={styles.locationIcon}/>
-							<TextInput
-								style={styles.textField}
-								onChangeText={this.onLocationNameChange}
-								autoCapitalize="none"
-								autoCorrect={false}
-								underlineColorAndroid="#e26901"
-								defaultValue={this.state.locationName}
-							/>
-						</View>
-					</View>
+					<LabelBox
+						containerStyle={{marginBottom: 10}}
+						label={this.label}
+						showIcon={true}>
+						<TextInput
+							style={styles.textField}
+							onChangeText={this.onLocationNameChange}
+							autoCapitalize="none"
+							autoCorrect={false}
+							underlineColorAndroid="#e26901"
+							defaultValue={this.state.locationName}
+						/>
+					</LabelBox>
 				</KeyboardAvoidingView>
-				<View style={styles.circularViewContainer}>
-					<TouchableWithoutFeedback onPress={this.onNameSubmit}>
-						<View style={styles.circularView}>
-							<Icon name="angle-right" size={44} color="#ffffff"/>
-						</View>
-					</TouchableWithoutFeedback>
-				</View>
+				<FloatingButton
+					buttonStyle={styles.buttonStyle}
+					onPress={this.onNameSubmit}
+					imageSource={require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={false}
+				/>
 			</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
-	container: {
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	itemsContainer: {
-		flexDirection: 'column',
-		backgroundColor: '#fff',
-		marginTop: 20,
-		paddingLeft: 10,
-		paddingRight: 10,
-		paddingBottom: 10,
-		paddingTop: 10,
-		alignItems: 'flex-start',
-		width: (deviceWidth - 20),
-	},
-	shadow: {
-		borderRadius: 4,
-		backgroundColor: '#fff',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
-	},
-	title: {
-		color: '#e26901',
-		fontSize: 14,
-		paddingLeft: 2,
-	},
-	textBody: {
-		color: '#A59F9A',
-		marginTop: 10,
-		textAlign: 'left',
-		fontSize: 13,
-		paddingLeft: 2,
-	},
 	textField: {
 		height: 50,
 		width: deviceWidth - 40,
@@ -200,33 +158,10 @@ const styles = StyleSheet.create({
 		color: '#A59F9A',
 		fontSize: 20,
 	},
-	locationIcon: {
-		position: 'absolute',
-		top: 35,
-		left: 8,
-	},
-	circularViewContainer: {
-		width: (deviceWidth - 20),
-		alignItems: 'flex-end',
-		justifyContent: 'flex-end',
-		flex: 1,
-		marginBottom: 20,
-	},
-	circularView: {
-		height: 50,
-		width: 50,
-		borderRadius: 50,
-		backgroundColor: '#e26901',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		alignItems: 'center',
-		justifyContent: 'center',
-		shadowRadius: 50,
-		shadowOpacity: 1.0,
-		elevation: 25,
+	buttonStyle: {
+		right: deviceWidth * 0.053333333,
+		elevation: 10,
+		shadowOpacity: 0.99,
 	},
 });
 
