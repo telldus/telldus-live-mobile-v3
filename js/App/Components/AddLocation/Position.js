@@ -86,12 +86,12 @@ class Position extends View {
 
 		this.state = {
 			address: '',
-			region: {
+			region: new MapView.AnimatedRegion({
 				latitude: 55.70584,
 				longitude: 13.19321,
 				latitudeDelta: 0.24442,
 				longitudeDelta: 0.24442,
-			},
+		  }),
 		};
 
 		this.h1 = `4. ${props.intl.formatMessage(messages.headerOne)}`;
@@ -138,12 +138,12 @@ class Position extends View {
 					let { location, viewport } = response.results[0].geometry;
 					let latitude = location.lat, longitude = location.lng;
 					let { longitudeDelta, latitudeDelta } = this.getDeltas(viewport);
-					let region = {
+					let region = new MapView.AnimatedRegion({
 						latitude,
 						longitude,
 						latitudeDelta,
 						longitudeDelta,
-					};
+					});
 					this.setState({
 						region,
 					});
@@ -183,7 +183,7 @@ class Position extends View {
 							value={this.state.address}/>
 					</LabelBox>
 					<View style={styles.mapViewCover}>
-						<MapView
+						<MapView.Animated
 							style={styles.map}
 							ref={this._refs}
 							region={this.state.region}
