@@ -118,12 +118,6 @@ class TimeZone extends View<void, Props, State> {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.timezone = this.state.timeZone;
 		this.props.navigation.navigate('Position', {clientInfo});
-		// this.props.activateGateway(clientInfo)
-		// 	.then(response => {
-		// 		if (response) {
-		// 			this.props.navigation.navigate('Success', {clientInfo});
-		// 		}
-		// 	});
 	}
 
 	onEditTimeZone() {
