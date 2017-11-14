@@ -54,6 +54,7 @@ type Props = {
 };
 
 type State = {
+	currentTab: string,
 };
 
 class DeviceDetailsTabsView extends View {
