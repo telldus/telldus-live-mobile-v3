@@ -30,6 +30,7 @@ import { defineMessages, intlShape } from 'react-intl';
 
 import { View, StyleSheet, Dimensions, TouchableButton } from 'BaseComponents';
 import { Clients } from 'AddNewLocation_SubViews';
+import i18n from '../../Translations/common';
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
@@ -65,6 +66,7 @@ class LocationDetected extends View {
 
 		this.h1 = `1. ${props.intl.formatMessage(messages.headerOne)}`;
 		this.h2 = props.intl.formatMessage(messages.headerTwo);
+		this.buttonLabel = props.intl.formatMessage(i18n.manualActivation).toUpperCase();
 
 		this.onActivateAuto = this.onActivateAuto.bind(this);
 		this.onActivateManual = this.onActivateManual.bind(this);
@@ -115,7 +117,7 @@ class LocationDetected extends View {
 					<TouchableButton
 						style={styles.button}
 						onPress={this.onActivateManual}
-						text={'Manual Activation'}
+						text={this.buttonLabel}
 					/>
 				</ScrollView>
 			</View>
