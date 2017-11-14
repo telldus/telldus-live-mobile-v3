@@ -35,15 +35,15 @@ let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
-	banner: {
-		id: 'addNewLocation.locationDetected.banner',
+	headerOne: {
+		id: 'addNewLocation.locationDetected.headerOne',
 		defaultMessage: 'Select Location',
-		description: 'Main Banner Text for the Location Detected Screen',
+		description: 'Main header Text for the Location Detected Screen',
 	},
-	bannerSub: {
-		id: 'addNewLocation.locationDetected.bannerSub',
+	headerTwo: {
+		id: 'addNewLocation.locationDetected.headerTwo',
 		defaultMessage: 'Setup your TellStick to start',
-		description: 'Seconday Banner Text for the Location Detected Screen',
+		description: 'Seconday header Text for the Location Detected Screen',
 	},
 });
 
@@ -63,8 +63,8 @@ class LocationDetected extends View {
 	constructor(props: Props) {
 		super(props);
 
-		this.h1 = `1. ${props.intl.formatMessage(messages.banner)}`;
-		this.h2 = props.intl.formatMessage(messages.bannerSub);
+		this.h1 = `1. ${props.intl.formatMessage(messages.headerOne)}`;
+		this.h2 = props.intl.formatMessage(messages.headerTwo);
 
 		this.onActivateAuto = this.onActivateAuto.bind(this);
 		this.onActivateManual = this.onActivateManual.bind(this);

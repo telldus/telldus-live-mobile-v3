@@ -43,15 +43,15 @@ const deviceWidth = Dimensions.get('window').width;
 
 
 const messages = defineMessages({
-	banner: {
-		id: 'addNewLocation.timeZone.banner',
+	headerOne: {
+		id: 'addNewLocation.timeZone.headerOne',
 		defaultMessage: 'Time Zone',
-		description: 'Main Banner Text for the Select City Screen',
+		description: 'Main header for the Select City Screen',
 	},
-	bannerSub: {
-		id: 'addNewLocation.timeZone.bannerSub',
+	headerTwo: {
+		id: 'addNewLocation.timeZone.headerTwo',
 		defaultMessage: 'Select Time Zone',
-		description: 'Secondary Banner Text for the Select City Screen',
+		description: 'Secondary header for the Select City Screen',
 	},
 	hint: {
 		id: 'addNewLocation.timeZone.hint',
@@ -90,9 +90,9 @@ class TimeZone extends View<void, Props, State> {
 			autoDetected,
 		};
 
-		this.h1 = `3. ${props.intl.formatMessage(messages.banner)}`;
-		this.h2 = props.intl.formatMessage(messages.bannerSub);
-		this.label = props.intl.formatMessage(messages.banner);
+		this.h1 = `3. ${props.intl.formatMessage(messages.headerOne)}`;
+		this.h2 = props.intl.formatMessage(messages.headerTwo);
+		this.label = props.intl.formatMessage(messages.headerOne);
 
 		this.onTimeZoneSubmit = this.onTimeZoneSubmit.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);

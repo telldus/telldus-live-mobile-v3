@@ -48,15 +48,15 @@ import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 const deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
-	banner: {
-		id: 'addNewLocation.success.banner',
+	headerOne: {
+		id: 'addNewLocation.success.headerOne',
 		defaultMessage: 'Congratulations',
-		description: 'Main Banner Text for the add location success Screen',
+		description: 'Main header for the add location success Screen',
 	},
-	bannerSub: {
-		id: 'addNewLocation.success.bannerSub',
+	headerTwo: {
+		id: 'addNewLocation.success.headerTwo',
 		defaultMessage: 'Location added successfully',
-		description: 'Secondary Banner Text for the add location success Screen',
+		description: 'Secondary header for the add location success Screen',
 	},
 	messageTitle: {
 		id: 'addNewLocation.success.messageTitle',
@@ -107,8 +107,8 @@ class Success extends View<void, Props, State> {
 		this.onPressHelp = this.onPressHelp.bind(this);
 		this.onPressContinue = this.onPressContinue.bind(this);
 
-		this.h1 = props.intl.formatMessage(messages.banner);
-		this.h2 = props.intl.formatMessage(messages.bannerSub);
+		this.h1 = props.intl.formatMessage(messages.headerOne);
+		this.h2 = props.intl.formatMessage(messages.headerTwo);
 	}
 
 	componentDidMount() {

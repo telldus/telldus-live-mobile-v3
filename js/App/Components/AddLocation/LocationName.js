@@ -36,15 +36,15 @@ import {getGatewayInfo} from 'Actions';
 let deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
-	locationName: {
-		id: 'addNewLocation.locationName',
+	label: {
+		id: 'addNewLocation.locationName.label',
 		defaultMessage: 'Name',
 		description: 'Label for the field Location Name',
 	},
-	bannerSub: {
-		id: 'addNewLocation.locationName.bannerSub',
+	headerTwo: {
+		id: 'addNewLocation.locationName.headerTwo',
 		defaultMessage: 'Setup your TellStick to start',
-		description: 'Secondary Banner Text for the Location Detected Screen',
+		description: 'Secondary header Text for the Location Detected Screen',
 	},
 	invalidLocationName: {
 		id: 'addNewLocation.locationName.invalidLocationName',
@@ -73,9 +73,9 @@ class LocationName extends View {
 			locationName: '',
 		};
 
-		this.h1 = `2. ${props.intl.formatMessage(messages.locationName)}`;
-		this.h2 = props.intl.formatMessage(messages.bannerSub);
-		this.label = props.intl.formatMessage(messages.locationName);
+		this.h1 = `2. ${props.intl.formatMessage(messages.label)}`;
+		this.h2 = props.intl.formatMessage(messages.headerTwo);
+		this.label = props.intl.formatMessage(messages.label);
 
 		this.onLocationNameChange = this.onLocationNameChange.bind(this);
 		this.onNameSubmit = this.onNameSubmit.bind(this);

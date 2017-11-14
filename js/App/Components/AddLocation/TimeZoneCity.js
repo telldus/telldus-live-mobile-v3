@@ -31,15 +31,15 @@ import {View, List, ListDataSource, Text} from 'BaseComponents';
 import { ListRow } from 'AddNewLocation_SubViews';
 
 const messages = defineMessages({
-	banner: {
-		id: 'addNewLocation.timeZone.banner',
+	headerOne: {
+		id: 'addNewLocation.timeZone.headerOne',
 		defaultMessage: 'Time Zone',
-		description: 'Main Banner Text for the Select City Screen',
+		description: 'Main header for the Select City Screen',
 	},
-	bannerSub: {
-		id: 'addNewLocation.timeZoneCity.bannerSub',
+	headerTwo: {
+		id: 'addNewLocation.timeZoneCity.headerTwo',
 		defaultMessage: 'Select City',
-		description: 'Secondary Banner Text for the Select City Screen',
+		description: 'Secondary header for the Select City Screen',
 	},
 });
 
@@ -69,8 +69,8 @@ class TimeZoneCity extends View {
 		this.parseDataForList = this.parseDataForList.bind(this);
 		this.onCityChoose = this.onCityChoose.bind(this);
 
-		this.h1 = `3. ${props.intl.formatMessage(messages.banner)}`;
-		this.h2 = props.intl.formatMessage(messages.bannerSub);
+		this.h1 = `3. ${props.intl.formatMessage(messages.headerOne)}`;
+		this.h2 = props.intl.formatMessage(messages.headerTwo);
 	}
 
 	componentDidMount() {

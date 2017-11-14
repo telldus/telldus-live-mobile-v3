@@ -35,20 +35,20 @@ import { LabelBox } from 'AddNewLocation_SubViews';
 let deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
-	activationCode: {
-		id: 'addNewLocation.activateManual',
+	label: {
+		id: 'addNewLocation.activateManual.label',
 		defaultMessage: 'Activation Code',
 		description: 'Label for the field Location Manual Activate Field',
 	},
-	banner: {
-		id: 'addNewLocation.activateManual.banner',
+	headerOne: {
+		id: 'addNewLocation.activateManual.headerOne',
 		defaultMessage: 'Select Location',
-		description: 'Main Banner Text for the Location Manual Activate Screen',
+		description: 'Main header for the Location Manual Activate Screen',
 	},
-	bannerSub: {
-		id: 'addNewLocation.activateManual.bannerSub',
+	headerTwo: {
+		id: 'addNewLocation.activateManual.headerTwo',
 		defaultMessage: 'Enter Activation Code',
-		description: 'Secondary Banner Text for the Location Manual Activate Screen',
+		description: 'Secondary header for the Location Manual Activate Screen',
 	},
 	invalidActivationCode: {
 		id: 'addNewLocation.activateManual.invalidActivationCode',
@@ -83,9 +83,9 @@ class LocationActivationManual extends View {
 			activationCode: '',
 		};
 
-		this.h1 = `1. ${props.intl.formatMessage(messages.banner)}`;
-		this.h2 = props.intl.formatMessage(messages.bannerSub);
-		this.label = props.intl.formatMessage(messages.activationCode);
+		this.h1 = `1. ${props.intl.formatMessage(messages.headerOne)}`;
+		this.h2 = props.intl.formatMessage(messages.headerTwo);
+		this.label = props.intl.formatMessage(messages.label);
 
 		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
 		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);

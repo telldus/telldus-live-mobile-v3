@@ -35,15 +35,15 @@ import { ListRow } from 'AddNewLocation_SubViews';
 
 
 const messages = defineMessages({
-	banner: {
-		id: 'addNewLocation.timeZone.banner',
+	headerOne: {
+		id: 'addNewLocation.timeZone.headerOne',
 		defaultMessage: 'Time Zone',
-		description: 'Main Banner Text for the Select Continent Screen',
+		description: 'Main header for the Select Continent Screen',
 	},
-	bannerSub: {
-		id: 'addNewLocation.timeZoneContinent.bannerSub',
+	headerTwo: {
+		id: 'addNewLocation.timeZoneContinent.headerTwo',
 		defaultMessage: 'Select Continent',
-		description: 'Secondary Banner Text for the Select Continent Screen',
+		description: 'Secondary header for the Select Continent Screen',
 	},
 });
 
@@ -69,8 +69,8 @@ class TimeZoneContinent extends View {
 			dataSource: listDataSource.cloneWithRows(this.parseDataForList(timeZone)),
 		};
 
-		this.h1 = `3. ${props.intl.formatMessage(messages.banner)}`;
-		this.h2 = props.intl.formatMessage(messages.bannerSub);
+		this.h1 = `3. ${props.intl.formatMessage(messages.headerOne)}`;
+		this.h2 = props.intl.formatMessage(messages.headerTwo);
 
 		this.renderRow = this.renderRow.bind(this);
 		this.onContinentChoose = this.onContinentChoose.bind(this);
