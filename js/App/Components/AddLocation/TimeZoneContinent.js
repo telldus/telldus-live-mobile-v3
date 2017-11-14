@@ -31,7 +31,7 @@ import differenceWith from 'lodash/differenceWith';
 
 import timeZone from '../../Lib/TimeZone';
 import {View, List, ListDataSource} from 'BaseComponents';
-import ListRow from './ListRow';
+import { ListRow } from 'AddNewLocation_SubViews';
 
 
 const messages = defineMessages({

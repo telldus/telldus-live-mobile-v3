@@ -29,7 +29,7 @@ import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 
 import { View, StyleSheet, Dimensions, TouchableButton } from 'BaseComponents';
-import Clients from './Clients';
+import { Clients } from 'AddNewLocation_SubViews';
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;

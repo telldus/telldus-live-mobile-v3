@@ -28,7 +28,7 @@ import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 
 import {View, List, ListDataSource, Text} from 'BaseComponents';
-import ListRow from './ListRow';
+import { ListRow } from 'AddNewLocation_SubViews';
 
 const messages = defineMessages({
 	banner: {

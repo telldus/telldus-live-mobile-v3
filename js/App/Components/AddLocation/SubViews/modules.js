@@ -25,8 +25,12 @@
 
 import LabelBox from './LabelBox';
 import AddLocationPoster from './AddLocationPoster';
+import ListRow from './ListRow';
+import Clients from './Clients';
 
 module.exports = {
 	LabelBox,
 	AddLocationPoster,
+	ListRow,
+	Clients,
 };
