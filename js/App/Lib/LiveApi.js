@@ -63,7 +63,7 @@ export function LiveApi({ url, requestParams }: {url:string, requestParams:Objec
 }
 
 async function doApiCall(url, requestParams) {
-	let response = await callEndPoint(url, requestParams);
+	let response = await callEndPoint(url, requestParams, null);
 	if (!response.error) {
 		// All is well, so return the data from the API.
 		return response;
@@ -82,7 +82,7 @@ async function doApiCall(url, requestParams) {
 
 	response = await refreshAccessToken(url, requestParams); // Token has expired, so we'll try to get a new one.
 
-	response = await callEndPoint(url, requestParams); // retry api call
+	response = await callEndPoint(url, requestParams, response); // retry api call
 	if (!response.error) {
 		// All is well, so return the data from the API.
 		return response;
@@ -98,8 +98,8 @@ async function doApiCall(url, requestParams) {
 	);
 }
 
-async function callEndPoint(url, requestParams) {
-	const accessToken = getStore().getState().user.accessToken;
+async function callEndPoint(url, requestParams, token = null) {
+	const accessToken = token ? token : getStore().getState().user.accessToken;
 	if (!accessToken) {
 		throw new Error('LiveApi: need accessToken');
 	}
@@ -140,10 +140,12 @@ export async function refreshAccessToken(url?: string = '', requestParams?: Obje
 		.then(response => {
 			if (response.error) {
 				// We couldn't get a new access token with the refresh_token, so lock the session.
-				return dispatch({
+				dispatch({
 					type: 'LOCK_SESSION',
 				});
+				return null;
 			}
 			dispatch(updateAccessToken(response));
+			return response;
 		});
 }
