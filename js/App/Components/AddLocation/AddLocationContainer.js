@@ -21,7 +21,8 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {BackAndroid} from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';

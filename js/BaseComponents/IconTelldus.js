@@ -21,7 +21,8 @@
 
 'use strict';
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Dimensions } from 'react-native';
 import Text from './Text';
 import Theme from 'Theme';
