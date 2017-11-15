@@ -32,7 +32,7 @@ jest:
     - npm test
 
 android:
-  image: telldus/react-native-android:24
+  image: telldus/react-native-android:26
   stage: build
   cache:
     paths:
