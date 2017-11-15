@@ -41,7 +41,7 @@ type Props = {
 	style?: Object | number,
 };
 
-export default class IconTelldus extends Component {
+export default class IconTelldus extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {

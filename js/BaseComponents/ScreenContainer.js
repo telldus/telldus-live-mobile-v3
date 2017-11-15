@@ -24,7 +24,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-import type { Children } from 'react';
+import typeof { Children } from 'react';
 import { Image, StyleSheet, Dimensions } from 'react-native';
 
 import View from './View';
@@ -37,7 +37,7 @@ type Props = {
 	banner?: Children,
 };
 
-export default class StackScreenContainer extends Component {
+export default class StackScreenContainer extends Component<Props, null> {
 	props : Props;
 
 	constructor(props: Props) {

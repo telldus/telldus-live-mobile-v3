@@ -45,7 +45,7 @@ type Props = {
 	buttonStyle: number | Array<any> | Object,
 };
 
-export default class FloatingButton extends Component {
+export default class FloatingButton extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {

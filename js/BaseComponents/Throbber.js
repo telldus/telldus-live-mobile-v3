@@ -34,7 +34,7 @@ type Props = {
 	throbSpeed?: number,
 };
 
-export default class Throbber extends Component {
+export default class Throbber extends Component<Props, null> {
 	props: Props;
 
 	animatedValue: Object;

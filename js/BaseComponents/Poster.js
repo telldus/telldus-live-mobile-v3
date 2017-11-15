@@ -35,7 +35,7 @@ type DefaultProps = {
 	source: number,
 };
 
-export default class Poster extends Component {
+export default class Poster extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {

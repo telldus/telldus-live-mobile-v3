@@ -25,7 +25,7 @@ import React from 'react';
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { Text, View, FormattedMessage } from 'BaseComponents';
+import { Text, View } from 'BaseComponents';
 
 const messages = defineMessages({
 	defaultHeader: {
