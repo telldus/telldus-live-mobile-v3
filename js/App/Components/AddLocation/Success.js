@@ -91,6 +91,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	navigation: Object,
 	onDidMount: Function,
+	rootNavigator: Object,
 }
 
 type State = {
@@ -121,7 +122,7 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		this.props.navigation.navigate('Tabs');
+		this.props.rootNavigator.navigate('Tabs');
 	}
 
 	onPressHelp() {
