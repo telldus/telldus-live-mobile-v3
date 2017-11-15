@@ -22,27 +22,35 @@
 'use strict';
 import React, { Component } from 'react';
 import { Text } from 'react-native';
+import { intlShape, injectIntl } from 'react-intl';
 
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
 type Props = {
 	style: any,
-	text: string,
+	text: string | Object,
 	onPress: Function,
+	intl: intlShape.isRequired,
+	postScript?: any,
+	preScript?: any,
 };
 
-export default class TouchableButton extends Component {
+class TouchableButton extends Component<Props, void> {
 
 	props: Props;
 
 	constructor(props: Props) {
 		super(props);
 	}
+
 	render() {
+		let {onPress, style, intl, text, preScript, postScript} = this.props;
+		let label = typeof text === 'string' ? text : intl.formatMessage(text);
+
 		return (
-			<Text style={[styles.button, this.props.style]} onPress={this.props.onPress} >
-				{this.props.text ? this.props.text : null}
+			<Text style={[styles.button, style]} onPress={onPress} >
+				{preScript}{label.toUpperCase()}{postScript}
 			</Text>
 		);
 	}
@@ -60,7 +68,9 @@ const styles = StyleSheet.create({
 		minWidth: 100,
 
 		textAlign: 'center',
+		alignSelf: 'center',
 		textAlignVertical: 'center',
 	},
 });
 
+export default injectIntl(TouchableButton);

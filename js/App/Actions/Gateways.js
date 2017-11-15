@@ -30,7 +30,7 @@ import { getWebsocketAddress } from 'Actions_Websockets';
 import {showModal} from 'Actions_Modal';
 
 import {getAppData} from './AppData';
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 import { format } from 'url';
 
 function getGateways(): ThunkAction {

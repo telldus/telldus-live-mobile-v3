@@ -37,6 +37,16 @@ export type State = ?Object;
 const initialState = [];
 const jobInitialState = {};
 
+function getWeekDaysAsIterable(weekdays: String) {
+	let weekDaysArray = weekdays.split(','), iterable = [];
+	if (weekDaysArray.length === 1 && weekDaysArray[0] === '') {
+		iterable = false;
+	} else {
+		iterable = weekDaysArray.map(day => parseInt(day, 10));
+	}
+	return iterable;
+}
+
 function reduceJob(state: Object = jobInitialState, action: Action): State {
 	switch (action.type) {
 		case 'RECEIVED_JOBS':
@@ -55,7 +65,7 @@ function reduceJob(state: Object = jobInitialState, action: Action): State {
 				retryInterval: parseInt(state.retryInterval, 10),
 				reps: parseInt(state.reps, 10),
 				active: !!state.active,
-				weekdays: state.weekdays.split(',').map(day => parseInt(day, 10)),
+				weekdays: getWeekDaysAsIterable(state.weekdays),
 			};
 			return newJob;
 		default:
@@ -138,20 +148,22 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		job.gateway = gateway;
 
 		const now = moment().tz(timezone);
-		job.weekdays.forEach(day => {
-			if (day !== todayInWeek) {
-				const relativeDay = (7 + day - todayInWeek) % 7; // 7 % 7 = 0
-				return sections[relativeDay].push(job);
-			}
+		if (job.weekdays) {
+			job.weekdays.forEach(day => {
+				if (day !== todayInWeek) {
+					const relativeDay = (7 + day - todayInWeek) % 7; // 7 % 7 = 0
+					return sections[relativeDay].push(job);
+				}
 
-			const nowInMinutes = now.hours() * 60 + now.minutes();
-			const jobInMinutes = parseInt(job.effectiveHour, 10) * 60 + parseInt(job.effectiveMinute, 10);
-			if (jobInMinutes >= nowInMinutes) {
-				sections[0].push(job); // today
-			} else {
-				sections[7].push(job); // today, next week
-			}
-		});
+				const nowInMinutes = now.hours() * 60 + now.minutes();
+				const jobInMinutes = parseInt(job.effectiveHour, 10) * 60 + parseInt(job.effectiveMinute, 10);
+				if (jobInMinutes >= nowInMinutes) {
+					sections[0].push(job); // today
+				} else {
+					sections[7].push(job); // today, next week
+				}
+			});
+		}
 	});
 
 	sections = mapValues(sections, _jobs => {

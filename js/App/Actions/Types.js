@@ -33,6 +33,7 @@ export type Action =
 	| { type: 'PUSH_TOKEN_REGISTERED', token: String, payload: Object }
 	| { type: 'PUSH_TOKEN_UNREGISTERED', token: String, payload: Object }
 	| { type: 'LOGGED_OUT' }
+	| { type: 'LOCK_SESSION' }
 	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 
@@ -50,13 +51,15 @@ export type Action =
 	| { type: 'DEVICE_TURN_ON', payload: Object }
 	| { type: 'DEVICE_TURN_OFF', payload: Object }
 	| { type: 'DEVICE_UNREACHABLE', payload: Object }
-	| { type: 'DEVICE_RESET_STATE', deviceId: number, state: number }
+	| { type: 'DEVICE_RESET_STATE', payload: Object }
 	| { type: 'DEVICE_BELL', payload: Object }
 	| { type: 'DEVICE_UP', payload: Object }
 	| { type: 'DEVICE_DOWN', payload: Object }
 	| { type: 'DEVICE_STOP', payload: Object }
 	| { type: 'DEVICE_LEARN', payload: Object }
 	| { type: 'DEVICE_DIM', deviceId:number, payload: Object }
+
+	| {type: 'SAVE_DIMMER_INITIAL_STATE', payload: Object}
 
 	| { type: 'DEVICE_HISTORY', payload: Object }
 

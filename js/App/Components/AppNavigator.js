@@ -21,7 +21,8 @@
 
 'use strict';
 
-import React, { PropTypes } from 'React';
+import React from 'React';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, Dimensions } from 'react-native';
 import { StackNavigator } from 'react-navigation';
@@ -164,11 +165,14 @@ class AppNavigator extends View {
 			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
 		}
 
-		this.props.dispatch(getUserProfile());
-		this.props.dispatch(syncLiveApiOnForeground());
-
-		this.props.dispatch(getGateways());
-		this.props.dispatch(getAppData());
+		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
+		// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
+		// and results in generating multiple tokens.
+		this.props.dispatch(getUserProfile()).then(() => {
+			this.props.dispatch(syncLiveApiOnForeground());
+			this.props.dispatch(getGateways());
+			this.props.dispatch(getAppData());
+		});
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -220,4 +224,10 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-module.exports = connect(mapStateToProps)(injectIntl(AppNavigator));
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(AppNavigator));

@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import { FormattedMessage, Text, View } from 'BaseComponents';
 import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback } from 'react-native';
 

@@ -19,10 +19,14 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { View } from 'BaseComponents';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View, FormattedMessage } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+
+import i18n from '../../../Translations/common';
+let AnimatedFormattedMessage = Animated.createAnimatedComponent(FormattedMessage);
 
 class DimmerOffButton extends View {
 	constructor(props) {
@@ -39,13 +43,10 @@ class DimmerOffButton extends View {
 
 		return (
 			<View style={[style, isInState === 'TURNOFF' && enabled ? styles.enabled : styles.disabled]}>
-				<Animated.Text
-					ellipsizeMode="middle"
-					numberOfLines={1}
+				<AnimatedFormattedMessage
+					{...i18n.off}
 					style = {[(isInState === 'TURNOFF' || methodRequested === 'TURNOFF') && enabled ? styles.textEnabled : styles.textDisabled, { opacity: this.state.fadeAnim, fontSize: fontSize ? fontSize : 12 }]}
-				>
-					{'Off'}
-				</Animated.Text>
+				/>
 				{
 					methodRequested === 'TURNOFF' ?
 						<ButtonLoadingIndicator style={styles.dot} />

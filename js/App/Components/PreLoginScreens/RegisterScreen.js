@@ -22,60 +22,51 @@
 'use strict';
 
 import React from 'react';
-import { TextInput } from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import { View, Text, TouchableButton, Modal } from 'BaseComponents';
-import {FormContainerComponent, NotificationComponent} from 'PreLoginScreen_SubViews';
-
-import {RegisterUser} from 'Actions_User';
+import { FormattedMessage, View, Modal } from 'BaseComponents';
+import {FormContainerComponent, NotificationComponent, RegisterForm} from 'PreLoginScreen_SubViews';
 
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
+const messages = defineMessages({
+	createAccount: {
+		id: 'user.createAccount',
+		defaultMessage: 'Create Account',
+		description: 'Header for the create account screen',
+	},
+	alreadyHaveAccount: {
+		id: 'user.alreadyHaveAccount',
+		defaultMessage: 'I already have an account',
+		description: 'Message to show on the create account screen',
+	},
+});
+
 type Props = {
 	navigation: Object,
 	dispatch: Function,
-	onFormSubmit: Function,
 	validationMessage: string,
 	showModal: boolean,
 	registeredCredential: any,
+	intl: intlShape.isRequired,
+	validationMessageHeader: string,
 }
 
 class RegisterScreen extends View {
 
 	props: Props;
 
-	onFirstNameChange: (string) => void;
-	onLastNameChange: (string) => void;
-	onEmailChange: (string) => void;
-	onConfirmEmailChange: (string) => void;
-	onFormSubmit: () => void;
 	goBackToLogin: () => void;
 	closeModal: () => void;
-	onModalOpen: () => void;
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			firstName: '',
-			lastName: '',
-			email: '',
-			confirmEmail: '',
-			isLoading: false,
-		};
-
-		this.onFirstNameChange = this.onFirstNameChange.bind(this);
-		this.onLastNameChange = this.onLastNameChange.bind(this);
-		this.onEmailChange = this.onEmailChange.bind(this);
-		this.onConfirmEmailChange = this.onConfirmEmailChange.bind(this);
-		this.onFormSubmit = this.onFormSubmit.bind(this);
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
 		this.closeModal = this.closeModal.bind(this);
-		this.onModalOpen = this.onModalOpen.bind(this);
 	}
 
 	closeModal() {
@@ -84,83 +75,9 @@ class RegisterScreen extends View {
 		});
 	}
 
-	onModalOpen() {
-		this.setState({
-			isLoading: false,
-		});
-	}
-
-	onFirstNameChange(firstName: string) {
-		this.setState({
-			firstName,
-		});
-	}
-
-	onLastNameChange(lastName: string) {
-		this.setState({
-			lastName,
-		});
-	}
-
-	onEmailChange(email: string) {
-		this.setState({
-			email,
-		});
-	}
-
-	onConfirmEmailChange(confirmEmail: string) {
-		this.setState({
-			confirmEmail,
-		});
-	}
-
-	onFormSubmit() {
-		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
-		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
-			let isConfirmEmailValid = this.validateEmail(cem);
-			let isEmailValid = this.validateEmail(em);
-			if (isConfirmEmailValid && isEmailValid) {
-				if (em === cem) {
-					this.setState({
-						isLoading: true,
-					});
-					this.props.onFormSubmit(em, fn, ln);
-				} else {
-					let message = 'Email addresses don\'t match. Please Check your entered email address.';
-					this.showModal(message);
-				}
-			} else {
-				let message = !isConfirmEmailValid && !isEmailValid ? 'Emails not Valid' : !isConfirmEmailValid ? 'Email Not Valid- confirm email' : 'Email not Valid';
-				this.showModal(message);
-			}
-		} else {
-			let pf = 'Field can\'t be Empty';
-			let message = fn === '' ? `${pf}- first name` : ln === '' ? `${pf}- last name ` : em === '' ? `${pf}- email ` : cem === '' ? `${pf}- confirm email` : this.props.validationMessage;
-			this.showModal(message);
-		}
-	}
-
-	showModal(data) {
-		this.props.dispatch({
-			type: 'REQUEST_MODAL_OPEN',
-			payload: {
-				data,
-			},
-		});
-	}
-
 	goBackToLogin() {
 		this.closeModal();
 		this.props.navigation.navigate('Login');
-	}
-
-	validateEmail(email: string) {
-		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-		let emailValid = pattern.test(email);
-		if (!emailValid) {
-			this.showModal('Invalid Email');
-		}
-		return emailValid;
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -178,71 +95,11 @@ class RegisterScreen extends View {
 
 	render() {
 		return (
-			<FormContainerComponent headerText="Create Account">
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
-					<TextInput
-						style={Theme.Styles.textField}
-						onChangeText={this.onFirstNameChange}
-						placeholder="First Name"
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						editable={!this.props.showModal}
-						defaultValue={this.state.firstName}
-					/>
-				</View>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
-					<TextInput
-						style={Theme.Styles.textField}
-						onChangeText={this.onLastNameChange}
-						placeholder="Last Name"
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						editable={!this.props.showModal}
-						defaultValue={this.state.lastName}
-					/>
-				</View>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
-					<TextInput
-						style={Theme.Styles.textField}
-						onChangeText={this.onEmailChange}
-						placeholder="Email Address"
-						keyboardType="email-address"
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						editable={!this.props.showModal}
-						defaultValue={this.state.email}
-					/>
-				</View>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
-					<TextInput
-						style={Theme.Styles.textField}
-						onChangeText={this.onConfirmEmailChange}
-						placeholder="Confirm Email Address"
-						keyboardType="email-address"
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						editable={!this.props.showModal}
-						defaultValue={this.state.confirmEmail}
-					/>
-				</View>
-				<TouchableButton
-					style={Theme.Styles.submitButton}
-					onPress={this.props.showModal ? null : this.onFormSubmit}
-					text={this.state.isLoading ? 'REGISTERING...' : 'REGISTER'}
-				/>
-				<Text style={styles.accountExist} onPress={this.goBackToLogin}> I already have an account </Text>
+			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)}>
+				<RegisterForm />
+				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
+					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
+				</TouchableOpacity>
 				<Modal
 					modalStyle={Theme.Styles.notificationModal}
 					entry= "ZoomIn"
@@ -251,7 +108,13 @@ class RegisterScreen extends View {
 					exitDuration= {100}
 					onOpen= {this.onModalOpen}
 					showModal={this.props.showModal}>
-					<NotificationComponent text={this.props.validationMessage} onPress={this.closeModal} />
+					<NotificationComponent
+						header={this.props.validationMessageHeader}
+						text={this.props.validationMessage}
+						showPositive={true}
+						showNegative={false}
+						onPressPositive={this.closeModal}
+					/>
 				</Modal>
 			</FormContainerComponent>
 		);
@@ -267,9 +130,6 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onFormSubmit: (email, firstName, LastName) => {
-			dispatch(RegisterUser(email, firstName, LastName));
-		},
 		dispatch,
 	};
 }
@@ -277,9 +137,10 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(store) {
 	return {
 		validationMessage: store.modal.data,
+		validationMessageHeader: store.modal.extras,
 		showModal: store.modal.openModal,
 		registeredCredential: store.user.registeredCredential,
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(RegisterScreen));

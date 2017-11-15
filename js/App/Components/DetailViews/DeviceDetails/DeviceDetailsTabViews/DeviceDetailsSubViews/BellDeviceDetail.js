@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import { View } from 'BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 import { BellButton } from 'TabViews_SubViews';
@@ -64,7 +64,7 @@ class BellDeviceDetailModal extends View {
 }
 
 BellDeviceDetailModal.propTypes = {
-	device: React.PropTypes.object.isRequired,
+	device: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

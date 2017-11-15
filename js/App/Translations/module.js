@@ -27,22 +27,24 @@
 
 import {addLocaleData} from 'react-intl';
 // import cs from 'react-intl/locale-data/cs';
+import de from 'react-intl/locale-data/de';
 import en from 'react-intl/locale-data/en';
-// import fr from 'react-intl/locale-data/fr';
-// import nb from 'react-intl/locale-data/nb';
+import fr from 'react-intl/locale-data/fr';
+import nb from 'react-intl/locale-data/nb';
 // import nl from 'react-intl/locale-data/nl';
 // import pl from 'react-intl/locale-data/pl';
 // import ru from 'react-intl/locale-data/ru';
 import sv from 'react-intl/locale-data/sv';
 // import th from 'react-intl/locale-data/th';
 
-addLocaleData([...en, ...sv]);
+addLocaleData([...de, ...en, ...fr, ...nb, ...sv]);
 
 module.exports = {
 	// cs: require('./cs.json'),
+	de: require('./de.json'),
 	en: require('./en.json'),
-	// fr: require('./fr.json'),
-	// nb: require('./nb.json'),
+	fr: require('./fr.json'),
+	nb: require('./nb.json'),
 	// nl: require('./nl.json'),
 	// pl: require('./pl.json'),
 	// ru: require('./ru.json'),

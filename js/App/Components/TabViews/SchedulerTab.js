@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
@@ -198,7 +199,7 @@ SchedulerTab.navigationOptions = ({navigation, screenProps}) => ({
 });
 
 SchedulerTab.propTypes = {
-	rowsAndSections: React.PropTypes.object,
+	rowsAndSections: PropTypes.object,
 };
 
 const getRowsAndSections = createSelector(

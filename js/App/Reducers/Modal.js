@@ -32,7 +32,7 @@ export type State = {
 const initialState = {
 	openModal: false,
 	data: '',
-	extras: '',
+	extras: false,
 };
 
 export default function reduceModal(state: State = initialState, action: Action): State {
@@ -42,21 +42,23 @@ export default function reduceModal(state: State = initialState, action: Action)
 				...state,
 				openModal: false,
 				data: '',
-				extras: '',
+				extras: false,
 			};
 
 		case 'REQUEST_MODAL_OPEN':
+			let extras = action.payload.extras ? action.payload.extras : false;
 			return {
 				...state,
 				openModal: true,
 				data: action.payload.data,
-				extras: action.payload.extras,
+				extras,
 			};
 
 		case 'REQUEST_MODAL_CLOSE':
 			return {
 				...state,
 				openModal: false,
+				extras: false,
 			};
 
 		default:

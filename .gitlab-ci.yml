@@ -21,9 +21,22 @@ flow:
     - npm install --quiet
     - npm run flow
 
+jest:
+  image: node:8.1.2
+  stage: test
+  tags:
+    - docker
+  script:
+    - echo "module.exports = {}" > config.local.js
+    - npm install --quiet
+    - npm test
+
 android:
-  image: telldus/react-native-android:24
+  image: telldus/react-native-android:26
   stage: build
+  cache:
+    paths:
+      - node_modules
   artifacts:
     paths:
       - android/app/build/outputs/apk/app-release.apk

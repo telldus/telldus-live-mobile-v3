@@ -1,10 +1,20 @@
 {
-	"pages": {
-		"dashboard": "панель приборов",
-		"devices": "приборы",
-		"gateways": "",
-		"scheduler": "планировщик",
-		"sensors": "датчиков",
-		"profile": ""
-	}
+    "days.friday": "пятница",
+    "days.monday": "понедельник",
+    "days.saturday": "Cуббота",
+    "days.sunday": "Воскресенье",
+    "days.thursday": "Четверг",
+    "days.today": "Cегодня",
+    "days.tomorrow": "завтра",
+    "days.tuesday": "вторник",
+    "days.wednesday": "среда",
+    "device.off": "от",
+    "device.on": "на",
+    "pages.dashboard": "панель приборов",
+    "pages.devices": "приборы",
+    "pages.gateways": "",
+    "pages.profile": "",
+    "pages.scheduler": "планировщик",
+    "pages.sensors": "датчиков",
+    "scheduler": "планировщик"
 }

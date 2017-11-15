@@ -35,9 +35,10 @@ type Props = {
 	endValue?: number,
 	onOpen?: () => void,
 	onClose?: () => void,
+	modalStyle?: Array<any> | Object | number,
 }
 
-export default class Modal extends Component {
+export default class Modal extends Component<Props, void> {
 	animationZoomOut: (duration?: number) => void;
 	animationZoomIn: (duration?: number) => void;
 	animationSlideInY: (duration?: number) => void;
@@ -113,7 +114,7 @@ export default class Modal extends Component {
 			{
 				toValue: 1,
 				duration: duration,
-				easing: Easing.easeOutBack,
+				easing: Easing.in,
 			}).start();
 	}
 
@@ -122,7 +123,7 @@ export default class Modal extends Component {
 			{
 				toValue: 0.01,
 				duration: duration,
-				easing: Easing.easeOutBack,
+				easing: Easing.in,
 			}).start();
 	}
 

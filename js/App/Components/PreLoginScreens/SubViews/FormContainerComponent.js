@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import type { Children } from 'react';
+import typeof { Children as Children} from 'react';
 import { KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native';
 
 import { BackgroundImage, View, Image, H1 } from 'BaseComponents';
@@ -33,6 +33,7 @@ const deviceWidth = Dimensions.get('window').width;
 type Props = {
 	headerText: string,
 	children: Children,
+	formContainerStyle?: number | Object,
 }
 
 const FormContainerComponent = (props: Props) => (
@@ -49,7 +50,7 @@ const FormContainerComponent = (props: Props) => (
 						}}
 					/>
 				</View>
-				<View style={styles.container} >
+				<View style={[styles.container, props.formContainerStyle]} >
 					<H1 style={{
 						margin: 10,
 						color: '#ffffff80',

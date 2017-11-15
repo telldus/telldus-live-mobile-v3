@@ -81,6 +81,72 @@ const messages = defineMessages({
 		id: 'device.up',
 		defaultMessage: 'Up',
 	},
+	login: {
+		id: 'button.login',
+		defaultMessage: 'LOGIN',
+	},
+	loggingin: {
+		id: 'button.loggingin',
+		defaultMessage: 'LOGGING IN',
+	},
+	logout: {
+		id: 'button.logout',
+		defaultMessage: 'LOGOUT',
+	},
+	loggingout: {
+		id: 'button.loggingout',
+		defaultMessage: 'LOGGING OUT',
+	},
+	register: {
+		id: 'button.register',
+		defaultMessage: 'REGISTER',
+	},
+	registering: {
+		id: 'button.registering',
+		defaultMessage: 'REGISTERING',
+	},
+	sendpassword: {
+		id: 'button.sendpassword',
+		defaultMessage: 'SEND PASSWORD',
+	},
+	sendingpassword: {
+		id: 'button.sendingpassword',
+		defaultMessage: 'SENDING',
+	},
+	retry: {
+		id: 'button.retry',
+		defaultMessage: 'RETRY',
+	},
+	emailAddress: {
+		id: 'user.emailAddress',
+		defaultMessage: 'Email address',
+	},
+	confirmEmailAddress: {
+		id: 'user.confirmEmailAddress',
+		defaultMessage: 'Confirm email address',
+	},
+	password: {
+		id: 'user.password',
+		defaultMessage: 'Password',
+	},
+	firstName: {
+		id: 'user.firstName',
+		defaultMessage: 'First Name',
+	},
+	lastName: {
+		id: 'user.lastName',
+		defaultMessage: 'Last Name',
+	},
+	forgotPassword: {
+		id: 'user.forgotPassword',
+		defaultMessage: 'Forgot your password?',
+		description: 'Message to show on the login screen and forgot password screen',
+	},
+	contentLogoutConfirm: {
+		id: 'user.contentLogoutConfirm',
+		defaultMessage: 'If you logout from your account you will have to add your devices to your dashboard manually.',
+		description: 'Content for Logout Confirmation Dialoge',
+	},
 	manualActivation: {
 		id: 'button.manualActivation',
 		defaultMessage: 'Manual Activation',

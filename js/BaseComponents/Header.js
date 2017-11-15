@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Platform, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import Base from './Base';
 import computeProps from './computeProps';
@@ -122,7 +123,7 @@ export default class HeaderComponent extends Base {
 		if (!this.props.children) {
 			return (
 				<Image
-					source={require('../App/Components/TabViews/img/telldus-logo@3x.png')}
+					source={require('../App/Components/TabViews/img/telldus-logo3.png')}
 					style={this.getInitialStyle().logoImage}
 				/>
 			);
@@ -365,9 +366,9 @@ export default class HeaderComponent extends Base {
 }
 
 HeaderComponent.propTypes = {
-	children: React.PropTypes.object,
-	rounded: React.PropTypes.number,
-	searchBar: React.PropTypes.object,
-	rightButton: React.PropTypes.object,
-	leftButton: React.PropTypes.object,
+	children: PropTypes.object,
+	rounded: PropTypes.number,
+	searchBar: PropTypes.object,
+	rightButton: PropTypes.object,
+	leftButton: PropTypes.object,
 };

@@ -31,6 +31,15 @@ export const showDimmerPopup = (name: string, value: number): Action => ({
 	value,
 });
 
+export const saveDimmerInitialState = (deviceId: number, initialValue: number, initialState: string): Action => ({
+	type: 'SAVE_DIMMER_INITIAL_STATE',
+	payload: {
+		deviceId,
+		initialValue,
+		initialState,
+	},
+});
+
 export const hideDimmerPopup = (): Action => ({
 	type: 'HIDE_DIMMER_POPUP',
 });

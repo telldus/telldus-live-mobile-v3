@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { FormattedMessage, View } from 'BaseComponents';
@@ -137,8 +138,8 @@ class OverviewTab extends View {
 }
 
 OverviewTab.propTypes = {
-	device: React.PropTypes.object.isRequired,
-	devices: React.PropTypes.object.isRequired,
+	device: PropTypes.object.isRequired,
+	devices: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({

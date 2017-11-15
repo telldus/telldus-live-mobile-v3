@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
@@ -153,7 +154,7 @@ class SensorsTab extends View {
 }
 
 SensorsTab.propTypes = {
-	rowsAndSections: React.PropTypes.object,
+	rowsAndSections: PropTypes.object,
 };
 
 const getRowsAndSections = createSelector(

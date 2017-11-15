@@ -40,13 +40,11 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
+export function LiveApi({ url, requestParams }: {url:string, requestParams:Object}): Promise<any> {
 	return new Promise((resolve, reject) => {
 		return doApiCall(url, requestParams).then(response => {
 			if (!response) {
-				return reject(new Error('unexpected error: response empty', {
-					response,
-				}));
+				return reject(new Error('unexpected error: response empty'));
 			}
 			resolve(response);
 		}).catch(error => {
@@ -54,53 +52,38 @@ export default ({ url, requestParams }: {url:string, requestParams:Object}) => {
 				const store = getStore();
 				const { dispatch } = store;
 				return dispatch({
-					type: 'LOGGED_OUT',
-					payload: error,
+					type: 'LOCK_SESSION',
 				});
 			}
 			reject(error);
 		});
 	});
-};
+}
 
 async function doApiCall(url, requestParams) {
-	let response = await callEndPoint(url, requestParams);
+	let response = await callEndPoint(url, requestParams, null);
 	if (!response.error) {
 		// All is well, so return the data from the API.
 		return response;
 	}
 	if (response.error !== 'invalid_token' && response.error !== 'expired_token') {
 		// An error from the API we cannot recover from
-		throw new Error(
-			response.error,
-			{
-				url,
-				requestParams,
-				response,
-			}
-		);
+		throw new Error(response.error);
 	}
 
 	response = await refreshAccessToken(url, requestParams); // Token has expired, so we'll try to get a new one.
 
-	response = await callEndPoint(url, requestParams); // retry api call
+	response = await callEndPoint(url, requestParams, response); // retry api call
 	if (!response.error) {
 		// All is well, so return the data from the API.
 		return response;
 	}
 
-	throw new Error(
-		response.error,
-		{
-			url,
-			requestParams,
-			response,
-		}
-	);
+	throw new Error(response.error);
 }
 
-async function callEndPoint(url, requestParams) {
-	const accessToken = getStore().getState().user.accessToken;
+async function callEndPoint(url, requestParams, token = null) {
+	const accessToken = token ? token : getStore().getState().user.accessToken;
 	if (!accessToken) {
 		throw new Error('LiveApi: need accessToken');
 	}
@@ -119,7 +102,7 @@ async function callEndPoint(url, requestParams) {
 }
 
 // create new token with refresh token
-async function refreshAccessToken(url, requestParams) {
+export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}) {
 	const store = getStore();
 	const accessToken = store.getState().user.accessToken;
 	const { dispatch } = store;
@@ -140,12 +123,13 @@ async function refreshAccessToken(url, requestParams) {
 		.then(response => response.json())
 		.then(response => {
 			if (response.error) {
-				// We couldn't get a new access token with the refresh_token, so we logout the user.
-				return dispatch({
-					type: 'LOGGED_OUT',
-					payload: response,
+				// We couldn't get a new access token with the refresh_token, so we lock the session.
+				dispatch({
+					type: 'LOCK_SESSION',
 				});
+				return null;
 			}
 			dispatch(updateAccessToken(response));
+			return response;
 		});
 }

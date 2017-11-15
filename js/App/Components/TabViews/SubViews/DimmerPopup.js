@@ -57,12 +57,12 @@ type DefaultProps = {
 	isVisible: boolean,
 };
 
-class DimmerPopup extends Component {
+class DimmerPopup extends Component<Props, State> {
 	props: Props;
 	state: State;
 	static defaultProps : DefaultProps;
 	handleLayout : Object => void;
-	setRefs: Object => void;
+	setRefs: (any) => mixed;
 	contentRef: Object;
 
 	constructor(props: Props) {

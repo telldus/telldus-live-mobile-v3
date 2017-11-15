@@ -21,7 +21,8 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { View } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';

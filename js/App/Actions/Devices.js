@@ -25,11 +25,13 @@
 
 import type { Action, ThunkAction, Dispatch } from './Types';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 import { supportedMethods, methods } from 'Config';
 
 import { format } from 'url';
 import moment from 'moment';
+
+let setStateTimeout = {};
 
 export function getDevices(): ThunkAction {
 	return (dispatch) => {
@@ -74,22 +76,29 @@ export function processWebsocketMessageForDevice(action:string, data:Object): Ac
 export function deviceSetState(deviceId: number, state:number, stateValue:number|null = null): ThunkAction {
 
 	return (dispatch, getState) => {
+		if (setStateTimeout[deviceId]) {
+			clearTimeout(setStateTimeout[deviceId]);
+		}
 		const payload = { // $FlowFixMe
 			url: `/device/command?id=${deviceId}&method=${state}&value=${stateValue}`,
 			requestParams: {
 				method: 'GET',
 			},
 		};
-
 		return LiveApi(payload).then(response =>{
 			if (state !== 32) {
-				setTimeout(() => {
+				if (setStateTimeout[deviceId]) {
+					clearTimeout(setStateTimeout[deviceId]);
+				}
+				setStateTimeout[deviceId] = setTimeout(() => {
 					let { devices } = getState();
 					let device = devices.byId[deviceId];
-					if (device.methodRequested !== '') {
-						getDeviceInfo(deviceId, state, device.isInState, dispatch);
+					let currentState = device.isInState;
+					let requestedState = methods[state];
+					if (currentState !== requestedState || device.methodRequested !== '') {
+						dispatch(getDeviceInfo(deviceId, requestedState));
 					}
-				}, 2000);
+				}, 10000);
 			}
 		}).catch(error => {
 			let { devices } = getState();
@@ -103,10 +112,21 @@ export function deviceSetState(deviceId: number, state:number, stateValue:number
 				},
 			});
 			if (state !== 32) {
+				let value = device.value, deviceState = device.isInState;
+				let { dimmer } = getState();
+				// handle Dimmer sliding action,reset state by getting the initial state from 'dimmer' reducer,
+				// as the value in 'device' reducer is modified by 'SET_DIMMER_VALUE' action.
+				if (state === 16 && dimmer.deviceId === deviceId) {
+					value = dimmer.initialValue;
+					deviceState = dimmer.initialState;
+				}
 				dispatch({
 					type: 'DEVICE_RESET_STATE',
-					deviceId,
-					state: device.isInState,
+					payload: {
+						deviceId,
+						state: deviceState,
+						value,
+					},
 				});
 			}
 		});
@@ -161,41 +181,48 @@ export function getDeviceHistory(device: Object): ThunkAction {
 	};
 }
 
-export function getDeviceInfo(deviceId: number, requestedState: number, currentState: string, dispatch: Dispatch) {
-	const payload = {
-		url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
-		requestParams: {
-			method: 'GET',
-		},
-	};
-	return LiveApi(payload).then(response => {
-		let newState = methods[parseInt(response.state, 10)];
-		requestedState = methods[requestedState];
-		if (newState === currentState) {
-			dispatch({
-				type: 'DEVICE_RESET_STATE',
-				deviceId,
-				state: response.state,
-			});
-			if (requestedState !== newState) {
+export function getDeviceInfo(deviceId: number, requestedState: string): ThunkAction {
+	return (dispatch: Dispatch, getState: Function) => {
+		const payload = {
+			url: `/device/info?id=${deviceId}&supportedMethods=${supportedMethods}`,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LiveApi(payload).then(response => {
+			let { devices } = getState();
+			let device = devices.byId[deviceId];
+			let currentState = device.isInState;
+			let newState = methods[parseInt(response.state, 10)];
+			if (newState === currentState) {
 				dispatch({
-					type: 'GLOBAL_ERROR_SHOW',
+					type: 'DEVICE_RESET_STATE',
 					payload: {
-						source: 'device',
 						deviceId,
-						message: '',
+						state: newState,
+						value: response.statevalue,
+					},
+				});
+				if (requestedState !== newState) {
+					dispatch({
+						type: 'GLOBAL_ERROR_SHOW',
+						payload: {
+							source: 'device',
+							deviceId,
+							message: '',
+						},
+					});
+				}
+			} else {
+				dispatch({
+					type: 'DEVICE_SET_STATE',
+					payload: {
+						deviceId,
+						value: response.statevalue,
+						method: response.state,
 					},
 				});
 			}
-		} else {
-			dispatch({
-				type: 'DEVICE_SET_STATE',
-				payload: {
-					deviceId,
-					value: response.stateValue,
-					method: response.state,
-				},
-			});
-		}
-	});
+		});
+	};
 }

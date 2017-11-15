@@ -25,7 +25,7 @@
 
 import type { ThunkAction, Action } from './Types';
 
-import LiveApi from 'LiveApi';
+import {LiveApi} from 'LiveApi';
 
 function getSensors(): ThunkAction {
 	return (dispatch, getState) => {

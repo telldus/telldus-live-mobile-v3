@@ -23,16 +23,37 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import { StyleSheet } from 'react-native';
 
-import { View, Text, TouchableButton } from 'BaseComponents';
+import { FormattedMessage, View, Text, TouchableButton } from 'BaseComponents';
 import {FormContainerComponent} from 'PreLoginScreen_SubViews';
+
+const messages = defineMessages({
+	welcomeHeader: {
+		id: 'user.welcome',
+		defaultMessage: 'Welcome to Telldus',
+	},
+	welcomeButton: {
+		id: 'button.welcome',
+		defaultMessage: 'GOT IT',
+	},
+	accountCreated: {
+		id: 'user.accountCreated',
+		defaultMessage: 'Your account is created and you will now be logged in.',
+	},
+	confirmMessage: {
+		id: 'user.confirmMessage',
+		defaultMessage: 'An email is sent to you with a link to confirm your account. Please confirm your account within 24 hours, otherwise the account will be deleted.',
+	},
+});
 
 type Props = {
 	accessToken: Object,
 	onPressOK: Function,
 	registeredCredential: any,
+	intl: intlShape.isRequired,
 }
 
 class WelcomeScreen extends View {
@@ -52,14 +73,13 @@ class WelcomeScreen extends View {
 
 	render() {
 		return (
-			<FormContainerComponent headerText="Welcome to Telldus!">
-				<Text style={styles.textBody}>Your account is created and you will now be logged in.</Text>
-				<Text style={styles.textBody}>An email is sent to you with a link to confirm your account.
-				 Please confirm your account within 24 hours, otherwise the account will be deleted.</Text>
+			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.welcomeHeader)}>
+				<Text style={styles.textBody}><FormattedMessage {...messages.accountCreated} style={styles.textBody}/></Text>
+				<Text style={styles.textBody}><FormattedMessage {...messages.confirmMessage} style={styles.textBody}/></Text>
 				<TouchableButton
 					style={styles.formSubmit}
 					onPress={this.onPressOK}
-					text={'GOT IT'}
+					text={messages.welcomeButton}
 				/>
 			</FormContainerComponent>
 		);
@@ -98,4 +118,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(WelcomeScreen);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(WelcomeScreen));
