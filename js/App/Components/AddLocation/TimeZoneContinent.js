@@ -93,15 +93,19 @@ class TimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent) {
-		// Need to handle UTC here, skip city screen and navigate to the next.
-		let data = differenceWith(timeZone, [continent], (v1, v2) => {
-			let items = v1.split('/');
-			let flag = items[0] === v2 ? false : true;
-			return flag;
-		});
 		let clientInfo = this.props.navigation.state.params.clientInfo;
-		clientInfo.continent = continent;
-		this.props.navigation.navigate('TimeZoneCity', {cities: data, clientInfo});
+		if (continent === 'UTC') {
+			clientInfo.timezone = continent;
+			this.props.navigation.navigate('Position', {clientInfo});
+		} else {
+			let data = differenceWith(timeZone, [continent], (v1, v2) => {
+				let items = v1.split('/');
+				let flag = items[0] === v2 ? false : true;
+				return flag;
+			});
+			clientInfo.continent = continent;
+			this.props.navigation.navigate('TimeZoneCity', {cities: data, clientInfo});
+		}
 	}
 
 	renderRow(item) {
