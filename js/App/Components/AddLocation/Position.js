@@ -70,6 +70,9 @@ type Props = {
 type State = {
 	region: Object,
 	address: string,
+	coordinate: Object,
+	latitudeDelta: number,
+	longitudeDelta: number,
 }
 
 class Position extends View {
@@ -80,6 +83,7 @@ class Position extends View {
 	onEndEditing: () => void;
 	_refs: (Object | any) => mixed;
 	onSubmit: () => void;
+	onDragEnd: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -91,7 +95,13 @@ class Position extends View {
 				longitude: 13.19321,
 				latitudeDelta: 0.24442,
 				longitudeDelta: 0.24442,
-		  }),
+			}),
+			coordinate: {
+				latitude: 55.70584,
+				longitude: 13.19321,
+			},
+			latitudeDelta: 0.24442,
+			longitudeDelta: 0.24442,
 		};
 
 		this.h1 = `4. ${props.intl.formatMessage(messages.headerOne)}`;
@@ -102,6 +112,7 @@ class Position extends View {
 		this.onEndEditing = this.onEndEditing.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 		this._refs = this._refs.bind(this);
+		this.onDragEnd = this.onDragEnd.bind(this);
 	}
 
 	componentDidMount() {
@@ -118,7 +129,7 @@ class Position extends View {
 	onSubmit() {
 		if (this.state.address !== '') {
 			let clientInfo = this.props.navigation.state.params.clientInfo;
-			clientInfo.cordinates = {longitude: this.state.region.longitude, latitude: this.state.region.latitude};
+			clientInfo.cordinates = { ...this.state.coordinate };
 			this.props.activateGateway(clientInfo)
 				.then(response => {
 					if (response) {
@@ -144,14 +155,18 @@ class Position extends View {
 						latitudeDelta,
 						longitudeDelta,
 					});
+					let coordinate = {
+						latitude,
+						longitude,
+					};
 					this.setState({
 						region,
+						coordinate,
+						latitudeDelta,
+						longitudeDelta,
 					});
 				}
 			});
-		} else {
-			// let message = this.props.intl.formatMessage(messages.invalidAddress);
-			// this.props.actions.showModal(message);
 		}
 	}
 
@@ -163,6 +178,22 @@ class Position extends View {
 
 	_refs(map: Object) {
 		this.map = map;
+	}
+
+	onDragEnd(event: Object) {
+		let { coordinate } = event.nativeEvent;
+		let { latitudeDelta, longitudeDelta } = this.state;
+		let region = new MapView.AnimatedRegion({
+			...coordinate,
+			latitudeDelta,
+			longitudeDelta,
+		});
+		this.setState({
+			region,
+			coordinate,
+			latitudeDelta,
+			longitudeDelta,
+		});
 	}
 
 	render() {
@@ -187,7 +218,12 @@ class Position extends View {
 							style={styles.map}
 							ref={this._refs}
 							region={this.state.region}
-						/>
+						>
+							<MapView.Marker.Animated
+								draggable
+								coordinate={this.state.coordinate}
+								onDragEnd={this.onDragEnd}/>
+						</MapView.Animated>
 						<FloatingButton
 							buttonStyle={styles.buttonStyle}
 							onPress={this.onSubmit}
