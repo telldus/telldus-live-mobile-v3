@@ -22,10 +22,11 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Text } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 
-const Title = ({ isEnabled, name, tileWidth, type = 'device' }) => (
+const Title = ({ isEnabled, name, tileWidth, type = 'device' }: Object) => (
 	<View style={[styles.title, !isEnabled ? styles.titleDisabled : (type === 'device' ? styles.titleEnabledDevice : styles.titleEnabledSensor)]}>
 		<Text
 			ellipsizeMode="middle"
@@ -118,10 +119,10 @@ const styles = StyleSheet.create({
 });
 
 DashboardShadowTile.propTypes = {
-	hasShadow: React.PropTypes.bool,
-	isEnabled: React.PropTypes.bool,
-	name: React.PropTypes.string,
-	tileWidth: React.PropTypes.number,
+	hasShadow: PropTypes.bool,
+	isEnabled: PropTypes.bool,
+	name: PropTypes.string,
+	tileWidth: PropTypes.number,
 };
 
 DashboardShadowTile.defaultProps = {

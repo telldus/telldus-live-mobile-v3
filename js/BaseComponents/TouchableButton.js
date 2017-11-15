@@ -36,7 +36,7 @@ type Props = {
 	preScript?: any,
 };
 
-class TouchableButton extends Component {
+class TouchableButton extends Component<Props, void> {
 
 	props: Props;
 

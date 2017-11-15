@@ -43,7 +43,7 @@ type DefaultProps = {
 	mask: 'circle'|'square'|'rounded',
 };
 
-class Gravatar extends React.Component {
+class Gravatar extends React.Component<Props, void> {
 	props: Props;
 	static defaultProps: DefaultProps;
 
@@ -79,13 +79,6 @@ class Gravatar extends React.Component {
 		);
 	}
 }
-
-Gravatar.propTypes = {
-	...View.PropTypes,
-	emailAddress: React.PropTypes.string.isRequired,
-	size: React.PropTypes.number.isRequired,
-	mask: React.PropTypes.oneOf(['circle', 'square', 'rounded']),
-};
 
 Gravatar.defaultProps = {
 	size: 600,

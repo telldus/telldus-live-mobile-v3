@@ -154,7 +154,7 @@ type Props = {
 	sensor: Object,
 };
 
-class SensorRow extends Component {
+class SensorRow extends Component<Props, void> {
 	props: Props;
 	onLayout: (Object) => void;
 	width: number;
@@ -249,7 +249,7 @@ class SensorRow extends Component {
 		this.width = event.nativeEvent.layout.width;
 	}
 
-	formatLastUpdated(minutes: number, lastUpdated:number): string {
+	formatLastUpdated(minutes: number, lastUpdated:number): Object {
 		if (minutes <= 0) {
 			return <FormattedMessage {...messages.justNow} />;
 		}

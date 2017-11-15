@@ -159,7 +159,7 @@ type State = {
 	scrollEnabled: boolean,
 };
 
-class ListComponent extends React.Component {
+class ListComponent extends React.Component<Props, State> {
 	props: Props;
 	static defaultProps: DefaultProps;
 	state: State;
@@ -169,7 +169,7 @@ class ListComponent extends React.Component {
 	onRefresh: () => void;
 	setScrollEnabled: (boolean) => void;
 	onScroll: (Object) => void;
-	setRefs: (Object) => void;
+	setRefs: (any) => mixed;
 	renderRow: (Object, number, number, Object) => Object;
 
 	constructor(props: Props) {

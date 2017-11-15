@@ -40,13 +40,11 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export function LiveApi({ url, requestParams }: {url:string, requestParams:Object}) {
+export function LiveApi({ url, requestParams }: {url:string, requestParams:Object}): Promise<any> {
 	return new Promise((resolve, reject) => {
 		return doApiCall(url, requestParams).then(response => {
 			if (!response) {
-				return reject(new Error('unexpected error: response empty', {
-					response,
-				}));
+				return reject(new Error('unexpected error: response empty'));
 			}
 			resolve(response);
 		}).catch(error => {
@@ -70,14 +68,7 @@ async function doApiCall(url, requestParams) {
 	}
 	if (response.error !== 'invalid_token' && response.error !== 'expired_token') {
 		// An error from the API we cannot recover from
-		throw new Error(
-			response.error,
-			{
-				url,
-				requestParams,
-				response,
-			}
-		);
+		throw new Error(response.error);
 	}
 
 	response = await refreshAccessToken(url, requestParams); // Token has expired, so we'll try to get a new one.
@@ -88,14 +79,7 @@ async function doApiCall(url, requestParams) {
 		return response;
 	}
 
-	throw new Error(
-		response.error,
-		{
-			url,
-			requestParams,
-			response,
-		}
-	);
+	throw new Error(response.error);
 }
 
 async function callEndPoint(url, requestParams, token = null) {

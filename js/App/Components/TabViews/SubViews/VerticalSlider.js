@@ -44,7 +44,7 @@ type Props = {
 	thumbWidth: number,
 	sensitive: number,
 	value: number,
-	onSlidingStart: () => void,
+	onSlidingStart: (string, number) => void,
 	onSlidingComplete: number => void,
 	onValueChange: number => void,
 	onLeftStart: () => void,

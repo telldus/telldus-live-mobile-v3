@@ -20,6 +20,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import Base from './Base';
 
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
 });
 
 RoundedCornerShadowView.propTypes = {
-	hasShadow: React.PropTypes.bool,
+	hasShadow: PropTypes.bool,
 };
 
 RoundedCornerShadowView.defaultProps = {

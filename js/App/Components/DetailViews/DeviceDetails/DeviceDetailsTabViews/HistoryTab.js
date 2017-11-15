@@ -59,6 +59,9 @@ type Props = {
 };
 
 type State = {
+	dataSource: any,
+	isListEmpty: boolean,
+	hasRefreshed: boolean,
 };
 
 const listDataSource = new ListDataSource({

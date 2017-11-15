@@ -21,7 +21,8 @@
 
 'use strict';
 
-import React, { PropTypes } from 'React';
+import React from 'React';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Image, Dimensions } from 'react-native';
 import { StackNavigator } from 'react-navigation';

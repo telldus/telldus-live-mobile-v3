@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import { FormattedMessage, Text, View } from 'BaseComponents';
 import { StyleSheet, Image, Dimensions } from 'react-native';
 import { defineMessages } from 'react-intl';
@@ -80,9 +80,9 @@ class DeviceLocationDetail extends View {
 }
 
 DeviceLocationDetail.propTypes = {
-	locationImageUrl: React.PropTypes.string.isRequired,
-	locationName: React.PropTypes.string.isRequired,
-	locationType: React.PropTypes.string.isRequired,
+	locationImageUrl: PropTypes.string.isRequired,
+	locationName: PropTypes.string.isRequired,
+	locationType: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({

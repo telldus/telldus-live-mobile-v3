@@ -21,24 +21,25 @@
 
 'use strict';
 
-import React, { Component } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 import Theme from 'Theme';
 
-export default class Base extends Component {
+export default class Base extends Component<Object, void> {
 
 	static contextTypes = {
-		theme: React.PropTypes.object,
-		foregroundColor: React.PropTypes.string,
+		theme: PropTypes.object,
+		foregroundColor: PropTypes.string,
 	};
 
 	static propTypes = {
-		theme: React.PropTypes.object,
-		foregroundColor: React.PropTypes.string,
+		theme: PropTypes.object,
+		foregroundColor: PropTypes.string,
 	};
 
 	static childContextTypes = {
-		theme: React.PropTypes.object,
-		foregroundColor: React.PropTypes.string,
+		theme: PropTypes.object,
+		foregroundColor: PropTypes.string,
 	};
 
 	getChildContext() {
