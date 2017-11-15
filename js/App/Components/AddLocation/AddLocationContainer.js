@@ -177,7 +177,10 @@ class AddLocationContainer extends View<null, Props, State> {
 						entryDuration= {300}
 						exitDuration= {100}
 						showModal={showModal}>
-						<NotificationComponent text={validationMessage} onPress={this.closeModal} />
+						<NotificationComponent
+							text={validationMessage}
+							showPositive={true}
+							onPressPositive={this.closeModal} />
 					</Modal>
 				</View>
 			</View>
