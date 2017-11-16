@@ -27,7 +27,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 
-import {View, List, ListDataSource, Text} from 'BaseComponents';
+import {View, List, ListDataSource} from 'BaseComponents';
 import { ListRow } from 'AddNewLocation_SubViews';
 
 const messages = defineMessages({
@@ -83,13 +83,7 @@ class TimeZoneCity extends View {
 	}
 
 	parseDataForList(data) {
-		let dataSource = false;
-		if (data.length === 1 && data[0] === 'UTC') {
-			dataSource = false;
-		} else {
-			dataSource = listDataSource.cloneWithRows(data);
-		}
-		return dataSource;
+		return listDataSource.cloneWithRows(data);
 	}
 
 	onCityChoose(city) {
@@ -111,15 +105,11 @@ class TimeZoneCity extends View {
 
 		return (
 			<View style={{flex: 1}}>
-				{this.state.dataSource ?
-					<List
-						contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
-						dataSource={this.state.dataSource}
-						renderRow={this.renderRow}
-					/>
-					:
-					<Text> UTC </Text>
-				}
+				<List
+					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
+					dataSource={this.state.dataSource}
+					renderRow={this.renderRow}
+				/>
 			</View>
 		);
 	}
