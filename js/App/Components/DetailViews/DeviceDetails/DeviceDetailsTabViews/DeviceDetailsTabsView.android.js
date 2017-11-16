@@ -119,14 +119,6 @@ class DeviceDetailsTabsView extends View {
 		);
 	}
 }
-// Might not be the best way, but will work fine, may use till a better solution is found.
-function onTabPress(tab) {
-	let { dispatch } = getStore();
-	dispatch({
-		type: 'REQUEST_MODAL_CLOSE',
-		payload: {},
-	});
-}
 
 const styles = StyleSheet.create({
 	container: {
@@ -194,9 +186,6 @@ const Tabs = TabNavigator(
 			iconStyle: {
 				width: 25,
 				height: 25,
-			},
-			onTabPress: (tab) => {
-				onTabPress(tab);
 			},
 			swipeEnabled: true,
 			lazy: true,
