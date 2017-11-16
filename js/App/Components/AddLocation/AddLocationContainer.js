@@ -29,17 +29,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { View, Dimensions, StyleSheet, Modal } from 'BaseComponents';
-import NotificationComponent from '../PreLoginScreens/SubViews/NotificationComponent';
+import { View, Dimensions, StyleSheet, DialogueBox } from 'BaseComponents';
 import { AddLocationPoster } from 'AddNewLocation_SubViews';
 
 import * as modalActions from 'Actions_Modal';
 import * as gatewayActions from 'Actions_Gateways';
 
-import Theme from 'Theme';
-
 const deviceWidth = Dimensions.get('window').width;
-let deviceHeight = Dimensions.get('window').height;
 
 type Props = {
 	navigation: Object,
@@ -172,18 +168,11 @@ class AddLocationContainer extends View<null, Props, State> {
 							},
 						)}
 					</View>
-					<Modal
-						modalStyle={[Theme.Styles.notificationModal, {top: deviceHeight * 0.22, elevation: 5}]}
-						entry= "ZoomIn"
-						exit= "ZoomOut"
-						entryDuration= {300}
-						exitDuration= {100}
-						showModal={showModal}>
-						<NotificationComponent
-							text={validationMessage}
-							showPositive={true}
-							onPressPositive={this.closeModal} />
-					</Modal>
+					<DialogueBox
+						showDialogue={showModal}
+						text={validationMessage}
+						showPositive={true}
+						onPressPositive={this.closeModal}/>
 				</View>
 			</View>
 		);
