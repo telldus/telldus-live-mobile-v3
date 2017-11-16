@@ -23,19 +23,47 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BackHandler } from 'react-native';
-import { intlShape, injectIntl } from 'react-intl';
+import { BackHandler, ImageBackground } from 'react-native';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { View, Dimensions, StyleSheet, DialogueBox } from 'BaseComponents';
+import { View, Dimensions, StyleSheet, DialogueBox, Text, RoundedInfoButton } from 'BaseComponents';
 import { AddLocationPoster } from 'AddNewLocation_SubViews';
 
 import * as modalActions from 'Actions_Modal';
 import * as gatewayActions from 'Actions_Gateways';
 
 const deviceWidth = Dimensions.get('window').width;
+
+const messages = defineMessages({
+	dialogueHeader: {
+		id: 'addLocation.position.dialogueHeader',
+		defaultMessage: 'Geographic position',
+		description: 'Dialogue header on pressing info button in geographic position.',
+	},
+	dialogueBodyParaOne: {
+		id: 'addNewLocation.position.dialogueBodyParaOne',
+		defaultMessage: 'The geographic position is used for calculating correct sunrise and sunset times for scheduled events',
+		description: 'First Paragraph of Dialogue\'s body',
+	},
+	dialogueBodyParaTwo: {
+		id: 'addNewLocation.position.dialogueBodyParaTwo',
+		defaultMessage: 'Press and hold the marker to change the position manually',
+		description: 'Second Paragraph of Dialogue\'s body',
+	},
+	dialogueBodyParaThree: {
+		id: 'addNewLocation.position.dialogueBodyParaThree',
+		defaultMessage: 'If you want to skip this step you can just click next without entering anything',
+		description: 'Third Paragraph of Dialogue\'s body',
+	},
+	dialoguePositiveText: {
+		id: 'addLocation.position.dialoguePositiveText',
+		defaultMessage: 'Close',
+		description: 'Dialogue Positive Text on pressing info button in geographic position.',
+	},
+});
 
 type Props = {
 	navigation: Object,
@@ -45,6 +73,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	showModal: boolean,
 	validationMessage: any,
+	source: number,
 };
 
 type State = {
@@ -53,6 +82,10 @@ type State = {
 	infoButton: null | Object,
 	loading: boolean,
 };
+
+type DefaultProps = {
+	source: number,
+}
 
 export interface ScheduleProps {
 	navigation: Object,
@@ -71,6 +104,11 @@ class AddLocationContainer extends View<null, Props, State> {
 		screenProps: PropTypes.object,
 		showModal: PropTypes.bool,
 		validationMessage: PropTypes.any,
+		source: PropTypes.number,
+	};
+
+	static defaultProps: DefaultProps = {
+		source: require('../TabViews/img/telldus-geometric-header-bg.png'),
 	};
 
 	state = {
@@ -87,8 +125,15 @@ class AddLocationContainer extends View<null, Props, State> {
 			onPress: this.goBack,
 		};
 
+		this.dlogPOne = `${props.intl.formatMessage(messages.dialogueBodyParaOne)}.`;
+		this.dlogPTwo = `${props.intl.formatMessage(messages.dialogueBodyParaTwo)}.`;
+		this.dlogPThree = `${props.intl.formatMessage(messages.dialogueBodyParaThree)}.`;
+
+		this.dialogueHeader = props.intl.formatMessage(messages.dialogueHeader);
+
 		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
+		this.getRelativeData = this.getRelativeData.bind(this);
 	}
 
 	componentDidMount() {
@@ -128,25 +173,59 @@ class AddLocationContainer extends View<null, Props, State> {
 		this.props.actions.hideModal();
 	};
 
+	renderCustomDialogueHeader() {
+		let buttonProps = {
+			infoButtonContainerStyle: styles.infoButtonContainer,
+		};
+		return (
+			<ImageBackground style={styles.dialogueHeader} source={this.props.source}>
+				<RoundedInfoButton buttonProps={buttonProps}/>
+				<Text style={styles.dialogueHeaderText}>
+					{this.dialogueHeader}
+				</Text>
+			</ImageBackground>
+		);
+	}
+
+	renderCustomBody() {
+		return (
+			<View style={styles.dialogueBody}>
+				<Text style={styles.dialogueBodyText}>
+					{'\n'}{this.dlogPOne}{'\n'}
+				</Text>
+				<Text style={styles.dialogueBodyText}>
+					{this.dlogPTwo}{'\n'}
+				</Text>
+				<Text style={styles.dialogueBodyText}>
+					{this.dlogPThree}
+				</Text>
+			</View>
+		);
+	}
+
 	getRelativeData = (): Object => {
-		let {modalExtras} = this.props;
+		let {modalExtras, validationMessage, intl} = this.props;
+		if (modalExtras.source && modalExtras.source === 'Position') {
+			return {
+				dialogueHeader: this.renderCustomDialogueHeader(),
+				validationMessage: this.renderCustomBody(),
+				positiveText: intl.formatMessage(messages.dialoguePositiveText).toUpperCase(),
+			};
+		}
 		return {
-			dialgueHeader: modalExtras.dialogueHeader ? modalExtras.dialogueHeader : false,
-			showNegative: modalExtras.showNegative ? true : false,
-			positiveText: modalExtras.positiveText ? modalExtras.positiveText : false,
-			onPressPositive: modalExtras.onPressPositive ? modalExtras.onPressPositive : this.closeModal,
-			onPressNegative: modalExtras.onPressNegative ? modalExtras.onPressNegative : this.closeModal,
-			dialogueContainerStyle: {backgroundColor: '#00000099'},
+			dialogueHeader: false,
+			validationMessage: validationMessage,
+			positiveText: false,
 		};
 	};
 
 	render(): Object {
 		const { children, navigation, actions, screenProps, intl,
-			showModal, validationMessage } = this.props;
+			showModal } = this.props;
 		const { h1, h2, infoButton } = this.state;
 
 		let padding = screenProps.currentScreen === 'TimeZoneCity' || screenProps.currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * 0.027777);
-		// const { dialgueHeader, showNegative, positiveText, onPressPositive, onPressNegative, dialogueContainerStyle} = this.getRelativeData();
+		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData();
 
 		return (
 			<View>
@@ -169,9 +248,11 @@ class AddLocationContainer extends View<null, Props, State> {
 						)}
 					</View>
 					<DialogueBox
+						header={dialogueHeader}
 						showDialogue={showModal}
 						text={validationMessage}
 						showPositive={true}
+						positiveText={positiveText}
 						onPressPositive={this.closeModal}/>
 				</View>
 			</View>
@@ -184,6 +265,38 @@ const styles = StyleSheet.create({
 	style: {
 		flex: 1,
 	},
+	dialogueHeader: {
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+		alignItems: 'center',
+		paddingLeft: 20,
+		height: Dimensions.get('window').height * 0.08,
+		width: Dimensions.get('window').width * 0.75,
+	},
+	infoButtonContainer: {
+		position: 'relative',
+		right: 0,
+		bottom: 0,
+	},
+	dialogueHeaderText: {
+		textAlign: 'center',
+		textAlignVertical: 'center',
+		color: '#fff',
+		fontSize: 14,
+		paddingLeft: 10,
+	},
+	dialogueBody: {
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		paddingLeft: 20,
+		paddingRight: 10,
+		width: Dimensions.get('window').width * 0.75,
+	},
+	dialogueBodyText: {
+		color: '#A59F9A',
+		fontSize: 14,
+		textAlign: 'left',
+	},
 });
 
 type mapStateToPropsType = {
@@ -194,6 +307,7 @@ const mapStateToProps = ({ schedule, devices, modal }: mapStateToPropsType): Obj
 	{
 		showModal: modal.openModal,
 		validationMessage: modal.data,
+		modalExtras: modal.extras,
 	}
 );
 
