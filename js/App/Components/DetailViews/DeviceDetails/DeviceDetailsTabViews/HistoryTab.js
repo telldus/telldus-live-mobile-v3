@@ -32,6 +32,7 @@ const CustomIcon = createIconSetFromIcoMoon(icon_history);
 import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DeviceDetailsSubView';
 import { getDeviceHistory } from 'Actions_Devices';
+import { hideModal } from 'Actions_Modal';
 import { defineMessages } from 'react-intl';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -56,6 +57,7 @@ type Props = {
 	dispatch: Function,
 	history: Object,
 	device: Object,
+	deviceHistoryNavigator: Object,
 };
 
 type State = {
@@ -77,6 +79,19 @@ class HistoryTab extends View {
 	renderFillerComponent: () => void;
 	renderSectionHeader: (Object, String) => void;
 	renderRow: (Object, String) => void;
+	closeHistoryDetailsModal: () => void;
+
+	static navigationOptions = ({ navigation }) => ({
+		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
+		tabBarIcon: ({ tintColor }) => (
+			<CustomIcon name="icon_history" size={24} color={tintColor}/>
+		),
+		tabBarOnPress: (scene: Object, jumpToIndex: Function) => {
+			let {state} = navigation;
+			state.params.actionOnHistoryTabPress();
+			jumpToIndex(scene.index);
+		},
+	});
 
 	constructor(props: Props) {
 		super(props);
@@ -89,16 +104,19 @@ class HistoryTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderFillerComponent = this.renderFillerComponent.bind(this);
+		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
 	}
 
-	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }) => (
-			<CustomIcon name="icon_history" size={24} color={tintColor}/>
-		),
-		tabBarOnPress: (scene, jumpToIndex) => {
-		},
-	});
+	componentDidMount() {
+		let {setParams} = this.props.deviceHistoryNavigator;
+		setParams({
+			actionOnHistoryTabPress: this.closeHistoryDetailsModal,
+		});
+	}
+
+	closeHistoryDetailsModal() {
+		this.props.dispatch(hideModal());
+	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.history && ((!this.props.history) || (nextProps.history.data.length !== this.props.history.data.length))) {
@@ -314,6 +332,7 @@ function mapStateToProps(state, ownProps) {
 	// some times the history data might not have received yet, so passing 'false' value.
 	let data = state.devices.byId[ownProps.screenProps.device.id].history ? state.devices.byId[ownProps.screenProps.device.id].history : false;
 	return {
+		deviceHistoryNavigator: ownProps.navigation,
 		history: data,
 		device: ownProps.screenProps.device,
 	};

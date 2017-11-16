@@ -79,7 +79,8 @@ class OverviewTab extends View {
 		tabBarIcon: ({ tintColor }) => (
 			<Icon name="icon_home" size={24} color={tintColor}/>
 		),
-		tabBarOnPress: (scene, jumpToIndex) => {
+		tabBarOnPress: (scene: Object, jumpToIndex: Function) => {
+			jumpToIndex(scene.index);
 		},
 	});
 
