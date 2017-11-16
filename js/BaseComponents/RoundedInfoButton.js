@@ -58,7 +58,13 @@ export default class RoundedInfoButton extends Component<Props, null> {
 	}
 
 	render() {
-		let { infoButtonContainerStyle, infoButtonStyle } = this.props.buttonProps;
+		let infoButtonContainerStyle = {}, infoButtonStyle = {};
+		if (this.props.buttonProps && this.props.buttonProps.infoButtonContainerStyle) {
+			infoButtonContainerStyle = this.props.buttonProps.infoButtonContainerStyle;
+		}
+		if (this.props.buttonProps && this.props.buttonProps.infoButtonStyle) {
+			infoButtonStyle = this.props.buttonProps.infoButtonStyle;
+		}
 		return (
 			<TouchableOpacity style={[styles.roundedInfoButtonContainer, infoButtonContainerStyle]} onPress={this.onPress}>
 				<Image
