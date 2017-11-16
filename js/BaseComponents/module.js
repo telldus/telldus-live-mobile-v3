@@ -66,6 +66,7 @@ import IconTelldus from './IconTelldus';
 import Throbber from './Throbber';
 import FloatingButton from './FloatingButton';
 import RoundedInfoButton from './RoundedInfoButton';
+import DialogueBox from './DialogueBox';
 
 import {
 	AppState,
@@ -123,6 +124,7 @@ module.exports = {
 	Throbber: Throbber,
 	FloatingButton: FloatingButton,
 	RoundedInfoButton: RoundedInfoButton,
+	DialogueBox: DialogueBox,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
