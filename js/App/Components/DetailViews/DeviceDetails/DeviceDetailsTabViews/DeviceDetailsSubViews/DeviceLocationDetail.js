@@ -119,13 +119,14 @@ const styles = StyleSheet.create({
 	},
 	locationImageContainer: {
 		height: (deviceHeight * 0.16),
-		width: (deviceWidth * 0.4),
+		width: (deviceWidth * 0.34),
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 	},
 	locationTextContainer: {
 		height: (deviceHeight * 0.16),
-		width: (deviceWidth * 0.6) - 30,
+		width: (deviceWidth * 0.6) - 50,
+		marginRight: 20,
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 	},

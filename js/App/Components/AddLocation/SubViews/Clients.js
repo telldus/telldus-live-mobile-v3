@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
 	arrow: {
 		position: 'absolute',
 		top: deviceHeight * 0.12,
-		left: deviceWidth * 0.8,
+		left: deviceWidth * 0.823,
 		elevation: 3,
 	},
 });
