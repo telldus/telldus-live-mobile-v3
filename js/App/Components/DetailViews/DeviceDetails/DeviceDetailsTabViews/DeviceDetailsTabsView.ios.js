@@ -28,8 +28,6 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
-import { getStore } from '../../../../Store/ConfigureStore';
-
 import { Text, View, Image } from 'BaseComponents';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';

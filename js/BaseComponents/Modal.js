@@ -30,7 +30,7 @@ import { clearData } from 'Actions_Modal';
 type Props = {
 	showModal: any,
 	children: any,
-	dispatch: Object,
+	dispatch: Function,
 	entry?: string,
 	exit?: string,
 	entryDuration?: number,
