@@ -21,15 +21,18 @@
 
 'use strict';
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
+import View from './View';
+import Text from './Text';
 import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
 type Props = {
-	style: any,
+	style?: Object | number | Array<any>,
 	text: string | Object,
+	labelStyle?: Object | number | Array<any>,
 	onPress: Function,
 	intl: intlShape.isRequired,
 	postScript?: any,
@@ -37,40 +40,66 @@ type Props = {
 };
 
 class TouchableButton extends Component<Props, void> {
+	onPress: () => void;
 
 	props: Props;
 
 	constructor(props: Props) {
 		super(props);
+		this.onPress = this.onPress.bind(this);
 	}
 
+	onPress = () => {
+		let {onPress} = this.props;
+		if (onPress) {
+			if (typeof onPress === 'function') {
+				onPress();
+			} else {
+				console.warn('Invalid Prop Passed : onPress expects a Function.');
+			}
+		}
+	}
+
+
 	render() {
-		let {onPress, style, intl, text, preScript, postScript} = this.props;
+		let { style, labelStyle, intl, text, preScript, postScript } = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
+		let shadow = Theme.Core.shadow;
 
 		return (
-			<Text style={[styles.button, style]} onPress={onPress} >
-				{preScript}{label.toUpperCase()}{postScript}
-			</Text>
+			<TouchableOpacity style={[shadow, styles.buttonContainer, style]} onPress={this.onPress}>
+				<View style={styles.button}>
+					<Text style={[styles.label, labelStyle]}>
+						{preScript}{label.toUpperCase()}{postScript}
+					</Text>
+				</View>
+			</TouchableOpacity>
 		);
 	}
 
 }
 
 const styles = StyleSheet.create({
-	button: {
+	buttonContainer: {
 		backgroundColor: Theme.Core.btnPrimaryBg,
-		color: '#ffffff',
-
 		height: 50,
 		width: 180,
 		borderRadius: 50,
 		minWidth: 100,
+		alignSelf: 'center',
+	},
+	button: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	label: {
+		color: '#ffffff',
 
 		textAlign: 'center',
-		alignSelf: 'center',
 		textAlignVertical: 'center',
 	},
+
 });
 
 export default injectIntl(TouchableButton);
