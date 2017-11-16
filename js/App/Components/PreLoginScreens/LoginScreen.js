@@ -26,14 +26,13 @@ import {TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, Modal, Dimensions } from 'BaseComponents';
-import {NotificationComponent, FormContainerComponent, LoginForm, SessionLocked} from 'PreLoginScreen_SubViews';
+import { FormattedMessage, View, DialogueBox, Dimensions } from 'BaseComponents';
+import { FormContainerComponent, LoginForm, SessionLocked } from 'PreLoginScreen_SubViews';
 
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
 
 import StyleSheet from 'StyleSheet';
-import Theme from 'Theme';
 
 const messages = defineMessages({
 	needAccount: {
@@ -152,22 +151,16 @@ class LoginScreen extends View {
 						<View style={{ height: 10 }}/>
 					</View>
 				}
-				<Modal
-					modalStyle={Theme.Styles.notificationModal}
-					entry= "ZoomIn"
-					exit= "ZoomOut"
-					entryDuration= {300}
-					exitDuration= {100}
-					showModal={this.props.showModal}>
-					<NotificationComponent
-						header={notificationHeader}
-						text={this.props.validationMessage}
-						showPositive={showPositive}
-						showNegative={showNegative}
-						positiveText={positiveText}
-						onPressPositive={onPressPositive}
-						onPressNegative={onPressNegative} />
-				</Modal>
+				<DialogueBox
+					showDialogue={this.props.showModal}
+					header={notificationHeader}
+					text={this.props.validationMessage}
+					showPositive={showPositive}
+					showNegative={showNegative}
+					positiveText={positiveText}
+					onPressPositive={onPressPositive}
+					onPressNegative={onPressNegative}/>
+
 			</FormContainerComponent>
 		);
 	}
