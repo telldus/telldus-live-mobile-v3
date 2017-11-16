@@ -23,10 +23,14 @@
 
 import React, {Component} from 'react';
 import { Animated, Easing } from 'react-native';
+import { connect } from 'react-redux';
+
+import { clearData } from 'Actions_Modal';
 
 type Props = {
 	showModal: any,
 	children: any,
+	dispatch: Object,
 	entry?: string,
 	exit?: string,
 	entryDuration?: number,
@@ -38,7 +42,7 @@ type Props = {
 	modalStyle?: Array<any> | Object | number,
 }
 
-export default class Modal extends Component<Props, void> {
+class Modal extends Component<Props, void> {
 	animationZoomOut: (duration?: number) => void;
 	animationZoomIn: (duration?: number) => void;
 	animationSlideInY: (duration?: number) => void;
@@ -158,6 +162,10 @@ export default class Modal extends Component<Props, void> {
 		}
 	}
 
+	componentWillUnmount() {
+		this.props.dispatch(clearData());
+	}
+
 	handleAnimationEntryType(type?: string) {
 		switch (type) {
 			case 'ZoomIn':
@@ -235,3 +243,11 @@ Modal.defaultProps = {
 	startValue: 0,
 	endValue: 100,
 };
+
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		dispatch,
+	};
+}
+
+export default connect(null, mapDispatchToProps)(Modal);

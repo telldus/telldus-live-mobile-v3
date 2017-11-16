@@ -41,7 +41,12 @@ const hideModal = (data?: any, extras?: any): Action => ({
 	},
 });
 
+const clearData = (): Action => ({
+	type: 'REQUEST_MODAL_CLEAR_DATA',
+});
+
 module.exports = {
 	showModal,
 	hideModal,
+	clearData,
 };
