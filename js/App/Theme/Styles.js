@@ -144,11 +144,9 @@ export default StyleSheet.create({
 	},
 	notificationModal: {
 		backgroundColor: '#ffffff',
-		position: 'absolute',
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
-		top: 45,
 	},
 	jobRowMethod: {
 		flex: 4,
