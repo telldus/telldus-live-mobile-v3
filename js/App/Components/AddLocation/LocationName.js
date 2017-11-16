@@ -124,7 +124,7 @@ class LocationName extends View {
 	render() {
 		return (
 			<View style={{flex: 1}}>
-				<KeyboardAvoidingView behavior="position" contentContainerStyle={{justifyContent: 'center'}}>
+				<KeyboardAvoidingView behavior="padding" contentContainerStyle={{justifyContent: 'center'}}>
 					<LabelBox
 						containerStyle={{marginBottom: 10}}
 						label={this.label}
@@ -139,12 +139,14 @@ class LocationName extends View {
 						/>
 					</LabelBox>
 				</KeyboardAvoidingView>
-				<FloatingButton
-					buttonStyle={styles.buttonStyle}
-					onPress={this.onNameSubmit}
-					imageSource={require('../TabViews/img/right-arrow-key.png')}
-					showThrobber={false}
-				/>
+				<View style={styles.buttonCover}>
+					<FloatingButton
+						buttonStyle={styles.buttonStyle}
+						onPress={this.onNameSubmit}
+						imageSource={require('../TabViews/img/right-arrow-key.png')}
+						showThrobber={false}
+					/>
+				</View>
 			</View>
 		);
 	}
@@ -162,6 +164,11 @@ const styles = StyleSheet.create({
 		right: deviceWidth * 0.053333333,
 		elevation: 10,
 		shadowOpacity: 0.99,
+	},
+	buttonCover: {
+		flex: 1,
+		borderWidth: 1,
+		borderColor: 'transparent',
 	},
 });
 
