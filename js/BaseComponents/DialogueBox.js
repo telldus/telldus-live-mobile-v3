@@ -88,11 +88,19 @@ class DialogueBox extends Component<Props, null> {
 		exitDuration: 100,
 	}
 
+	renderHeader: () => void;
+	renderBody: () => void;
+	renderFooter: () => void;
+
 	onPressPositive: () => void;
 	onPressNegative: () => void;
 
 	constructor(props: Props) {
 		super(props);
+		this.renderHeader = this.renderHeader.bind(this);
+		this.renderBody = this.renderBody.bind(this);
+		this.renderFooter = this.renderFooter.bind(this);
+
 		this.onPressPositive = this.onPressPositive.bind(this);
 		this.onPressNegative = this.onPressNegative.bind(this);
 	}
@@ -119,6 +127,68 @@ class DialogueBox extends Component<Props, null> {
 		}
 	}
 
+	renderHeader() {
+		let { header } = this.props;
+		if (header && typeof header === 'object') {
+			return (
+				header
+			);
+		}
+		if (!header) {
+			header = `${this.props.intl.formatMessage(messages.defaultHeader)}!`;
+		}
+
+		return (
+			<View style={styles.notificationModalHeader}>
+				<Text style={styles.notificationModalHeaderText}>
+					{header}
+				</Text>
+			</View>
+		);
+	}
+
+	renderBody() {
+		let { text } = this.props;
+		if (text && typeof text === 'object') {
+			return (
+				text
+			);
+		}
+
+		return (
+			<View style={styles.notificationModalBody}>
+				<Text style={styles.notificationModalBodyText}>{text}</Text>
+			</View>
+		);
+	}
+
+	renderFooter() {
+		let positiveText = this.props.positiveText ? this.props.positiveText :
+			`${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
+		let negativeText = this.props.negativeText ? this.props.negativeText :
+			`${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
+		return (
+			<View style={styles.notificationModalFooter}>
+				{this.props.showNegative ?
+					<TouchableOpacity style={styles.notificationModalFooterTextCover}
+						onPress={this.onPressNegative}>
+						<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>
+					</TouchableOpacity>
+					:
+					null
+				}
+				{this.props.showPositive ?
+					<TouchableOpacity style={styles.notificationModalFooterTextCover}
+						onPress={this.onPressPositive}>
+						<Text style={styles.notificationModalFooterPositiveText}>{positiveText}</Text>
+					</TouchableOpacity>
+					:
+					null
+				}
+			</View>
+		);
+	}
+
 	render(): Object {
 		let {
 			showDialogue,
@@ -129,12 +199,6 @@ class DialogueBox extends Component<Props, null> {
 			entryDuration,
 			exitDuration,
 		} = this.props;
-		let header = this.props.header ? this.props.header :
-			`${this.props.intl.formatMessage(messages.defaultHeader)}!`;
-		let positiveText = this.props.positiveText ? this.props.positiveText :
-			`${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
-		let negativeText = this.props.negativeText ? this.props.negativeText :
-			`${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
 		return (
 			<Modal
 				modalStyle={[Theme.Styles.notificationModal, style]}
@@ -144,32 +208,9 @@ class DialogueBox extends Component<Props, null> {
 				entryDuration={entryDuration}
 				exitDuration={exitDuration}
 				showModal={showDialogue}>
-				<View style={styles.notificationModalHeader}>
-					<Text style={styles.notificationModalHeaderText}>
-						{header}
-					</Text>
-				</View>
-				<View style={styles.notificationModalBody}>
-					<Text style={styles.notificationModalBodyText}>{this.props.text}</Text>
-				</View>
-				<View style={styles.notificationModalFooter}>
-					{this.props.showNegative ?
-						<TouchableOpacity style={styles.notificationModalFooterTextCover}
-							onPress={this.onPressNegative}>
-							<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>
-						</TouchableOpacity>
-						:
-						null
-					}
-					{this.props.showPositive ?
-						<TouchableOpacity style={styles.notificationModalFooterTextCover}
-							onPress={this.onPressPositive}>
-							<Text style={styles.notificationModalFooterPositiveText}>{positiveText}</Text>
-						</TouchableOpacity>
-						:
-						null
-					}
-				</View>
+				{this.renderHeader()}
+				{this.renderBody()}
+				{this.renderFooter()}
 			</Modal>
 		);
 	}
