@@ -228,7 +228,7 @@ class Modal extends Component<Props, void> {
 			outputRange: [0, 0.5, 1, 1],
 		});
 		return (
-			<Animated.View style={[ this.props.modalStyle, {transform: [animatedProps],
+			<Animated.View style={[{elevation: 5}, this.props.modalStyle, {transform: [animatedProps],
 				opacity: opacityAnim,
 			}]}>
 				{this.props.children}
