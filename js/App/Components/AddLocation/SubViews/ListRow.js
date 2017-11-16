@@ -53,11 +53,11 @@ export default class ListRow extends View {
 
 	render() {
 		return (
-			<View style={styles.rowItems}>
-				<TouchableOpacity onPress={this.onPress}>
+			<TouchableOpacity onPress={this.onPress}>
+				<View style={styles.rowItems}>
 					<Text style={styles.text}>{this.props.item}</Text>
-				</TouchableOpacity>
-			</View>
+				</View>
+			</TouchableOpacity>
 		);
 	}
 }
