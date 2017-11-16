@@ -22,15 +22,20 @@
 'use strict';
 
 import React, {Component} from 'react';
-import { Animated, Easing } from 'react-native';
-import { connect } from 'react-redux';
+import { Animated, Easing, StyleSheet, Dimensions } from 'react-native';
 
+import { connect } from 'react-redux';
 import { clearData } from 'Actions_Modal';
 
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
+
 type Props = {
-	showModal: any,
-	children: any,
 	dispatch: Function,
+	showModal: any,
+	modalStyle?: Array<any> | number | Object,
+	modalContainerStyle?: Array<any> | number | Object,
+	children: any,
 	entry?: string,
 	exit?: string,
 	entryDuration?: number,
@@ -39,8 +44,7 @@ type Props = {
 	endValue?: number,
 	onOpen?: () => void,
 	onClose?: () => void,
-	modalStyle?: Array<any> | Object | number,
-}
+};
 
 class Modal extends Component<Props, void> {
 	animationZoomOut: (duration?: number) => void;
@@ -54,7 +58,7 @@ class Modal extends Component<Props, void> {
 	animatedYValue: any;
 
 	static defaultProps: Object;
-	props : Props;
+	props: Props;
 
 	constructor(props: Props) {
 		super(props);
@@ -67,6 +71,10 @@ class Modal extends Component<Props, void> {
 		this.animatedScale = new Animated.Value(0.01);
 		this.animatedOpacity = new Animated.Value(0);
 		this.animatedYValue = new Animated.Value(props.startValue ? props.startValue : 0);
+	}
+
+	componentWillUnmount() {
+		this.props.dispatch(clearData());
 	}
 
 	animationZoomIn(duration?: number) {
@@ -118,7 +126,7 @@ class Modal extends Component<Props, void> {
 			{
 				toValue: 1,
 				duration: duration,
-				easing: Easing.in,
+				easing: Easing.linear,
 			}).start();
 	}
 
@@ -127,23 +135,25 @@ class Modal extends Component<Props, void> {
 			{
 				toValue: 0.01,
 				duration: duration,
-				easing: Easing.in,
+				easing: Easing.linear,
 			}).start();
 	}
 
 	_startOpacity(duration?: number) {
-		Animated.timing(this.animatedScale,
+		Animated.timing(this.animatedOpacity,
 			{
 				toValue: 1,
 				duration: duration,
+				easing: Easing.linear,
 			}).start();
 	}
 
 	_stopOpacity(duration?: number) {
-		Animated.timing(this.animatedScale,
+		Animated.timing(this.animatedOpacity,
 			{
 				toValue: 0,
 				duration: duration,
+				easing: Easing.linear,
 			}).start();
 	}
 
@@ -162,11 +172,7 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
-	componentWillUnmount() {
-		this.props.dispatch(clearData());
-	}
-
-	handleAnimationEntryType(type?: string) {
+	handleAnimationEntryType(type?: string): () => void {
 		switch (type) {
 			case 'ZoomIn':
 				return this.animationZoomIn;
@@ -177,7 +183,7 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
-	handleAnimationExitType(type?: string) {
+	handleAnimationExitType(type?: string): () => void {
 		switch (type) {
 			case 'ZoomOut':
 				return this.animationZoomOut;
@@ -208,7 +214,7 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
-	render() {
+	render(): React$Element<any> {
 		let animatedProps = {};
 		if (this.props.entry === 'ZoomIn' && this.props.exit === 'ZoomOut') {
 			let scaleAnim = this.animatedScale.interpolate({
@@ -223,19 +229,39 @@ class Modal extends Component<Props, void> {
 			});
 			animatedProps = {translateY: YAnimatedValue};
 		}
-		let opacityAnim = this.animatedScale.interpolate({
+		let opacityAnim = this.animatedOpacity.interpolate({
 			inputRange: [0, 0.2, 0.5, 1],
 			outputRange: [0, 0.5, 1, 1],
 		});
 		return (
-			<Animated.View style={[{elevation: 5}, this.props.modalStyle, {transform: [animatedProps],
+			<Animated.View style={[ styles.modalContainer, this.props.modalContainerStyle, {transform: [animatedProps],
 				opacity: opacityAnim,
 			}]}>
-				{this.props.children}
+				<Animated.View style={[ styles.modal, this.props.modalStyle, {transform: [animatedProps],
+					opacity: opacityAnim,
+				}]}>
+					{this.props.children}
+				</Animated.View>
 			</Animated.View>
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+	modalContainer: {
+		flex: 1,
+		position: 'absolute',
+		height: deviceHeight,
+		elevation: 8,
+		width: deviceWidth,
+		backgroundColor: '#00000099',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	modal: {
+		position: 'absolute',
+	},
+});
 
 Modal.defaultProps = {
 	entryDuration: 500,
