@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 
@@ -129,27 +129,27 @@ class TimeZone extends View<void, Props, State> {
 
 		return (
 			<View style={{flex: 1}}>
-				<LabelBox
-					label={this.label}
-					showIcon={false}>
-					<View style={styles.timeZoneContainer}>
-						<Text style={styles.timeZone}>
-							{this.state.timeZone}
-						</Text>
-						<TouchableWithoutFeedback onPress={this.onEditTimeZone} style={{height: 20, width: 20}}>
+				<TouchableOpacity onPress={this.onEditTimeZone}>
+					<LabelBox
+						label={this.label}
+						showIcon={false}>
+						<View style={styles.timeZoneContainer}>
+							<Text style={styles.timeZone}>
+								{this.state.timeZone}
+							</Text>
 							<Icon name="pencil" size={16} color="#A59F9A" style={{marginTop: 7}}/>
-						</TouchableWithoutFeedback>
-					</View>
-					{this.state.autoDetected ?
-						<Text style={styles.hint}>
-						(
-							<FormattedMessage {...messages.hint} style={styles.hint}/>
-						)
-						</Text>
-						:
-						null
-					}
-				</LabelBox>
+						</View>
+						{this.state.autoDetected ?
+							<Text style={styles.hint}>
+							(
+								<FormattedMessage {...messages.hint} style={styles.hint}/>
+							)
+							</Text>
+							:
+							null
+						}
+					</LabelBox>
+				</TouchableOpacity>
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onTimeZoneSubmit}
