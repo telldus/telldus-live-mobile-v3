@@ -25,7 +25,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { TextInput, KeyboardAvoidingView } from 'react-native';
+import { TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 
 import {View, StyleSheet, Dimensions, FloatingButton} from 'BaseComponents';
@@ -67,10 +67,14 @@ class LocationName extends View {
 	onLocationNameChange: (string) => void;
 	onNameSubmit: () => void;
 
+	keyboardDidShow: () => void;
+	keyboardDidHide: () => void;
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 			locationName: '',
+			isKeyboardShown: false,
 		};
 
 		this.h1 = `2. ${props.intl.formatMessage(messages.label)}`;
@@ -79,11 +83,28 @@ class LocationName extends View {
 
 		this.onLocationNameChange = this.onLocationNameChange.bind(this);
 		this.onNameSubmit = this.onNameSubmit.bind(this);
+
+		this.keyboardDidShow = this.keyboardDidShow.bind(this);
+		this.keyboardDidHide = this.keyboardDidHide.bind(this);
 	}
 
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+	}
+
+	keyboardDidShow() {
+		this.setState({
+			isKeyboardShown: true,
+		});
+	}
+
+	keyboardDidHide() {
+		this.setState({
+			isKeyboardShown: false,
+		});
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -97,6 +118,9 @@ class LocationName extends View {
 	}
 
 	onNameSubmit() {
+		if (this.state.isKeyboardShown) {
+			Keyboard.dismiss();
+		}
 		if (this.state.locationName !== '') {
 			let clientInfo = this.props.navigation.state.params.clientInfo;
 			clientInfo.name = this.state.locationName;
@@ -139,14 +163,12 @@ class LocationName extends View {
 						/>
 					</LabelBox>
 				</KeyboardAvoidingView>
-				<View style={styles.buttonCover}>
-					<FloatingButton
-						buttonStyle={styles.buttonStyle}
-						onPress={this.onNameSubmit}
-						imageSource={require('../TabViews/img/right-arrow-key.png')}
-						showThrobber={false}
-					/>
-				</View>
+				<FloatingButton
+					buttonStyle={styles.buttonStyle}
+					onPress={this.onNameSubmit}
+					imageSource={require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={false}
+				/>
 			</View>
 		);
 	}
@@ -164,11 +186,6 @@ const styles = StyleSheet.create({
 		right: deviceWidth * 0.053333333,
 		elevation: 10,
 		shadowOpacity: 0.99,
-	},
-	buttonCover: {
-		flex: 1,
-		borderWidth: 1,
-		borderColor: 'transparent',
 	},
 });
 

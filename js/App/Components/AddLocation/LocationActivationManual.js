@@ -25,7 +25,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { TextInput, KeyboardAvoidingView } from 'react-native';
+import { TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 
 import {getGatewayInfo} from 'Actions';
@@ -77,10 +77,14 @@ class LocationActivationManual extends View {
 	onActivationCodeChange: (string) => void;
 	onActivationCodeSubmit: () => void;
 
+	keyboardDidShow: () => void;
+	keyboardDidHide: () => void;
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 			activationCode: '',
+			isKeyboardShown: false,
 		};
 
 		this.h1 = `1. ${props.intl.formatMessage(messages.headerOne)}`;
@@ -89,11 +93,28 @@ class LocationActivationManual extends View {
 
 		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
 		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);
+
+		this.keyboardDidShow = this.keyboardDidShow.bind(this);
+		this.keyboardDidHide = this.keyboardDidHide.bind(this);
 	}
 
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+	}
+
+	keyboardDidShow() {
+		this.setState({
+			isKeyboardShown: true,
+		});
+	}
+
+	keyboardDidHide() {
+		this.setState({
+			isKeyboardShown: false,
+		});
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -107,6 +128,9 @@ class LocationActivationManual extends View {
 	}
 
 	onActivationCodeSubmit() {
+		if (this.state.isKeyboardShown) {
+			Keyboard.dismiss();
+		}
 		if (this.state.activationCode.length === 10) {
 			let param = {code: this.state.activationCode};
 			this.props.getGatewayInfo(param, 'timezone').then(response => {
@@ -149,14 +173,12 @@ class LocationActivationManual extends View {
 						<FormattedMessage style={styles.textBody} {...messages.bodyContent}/>
 					</LabelBox>
 				</KeyboardAvoidingView>
-				<View style={styles.buttonCover}>
-					<FloatingButton
-						buttonStyle={styles.buttonStyle}
-						onPress={this.onActivationCodeSubmit}
-						imageSource={require('../TabViews/img/right-arrow-key.png')}
-						showThrobber={false}
-					/>
-				</View>
+				<FloatingButton
+					buttonStyle={styles.buttonStyle}
+					onPress={this.onActivationCodeSubmit}
+					imageSource={require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={false}
+				/>
 			</View>
 		);
 	}
@@ -186,11 +208,6 @@ const styles = StyleSheet.create({
 		right: deviceWidth * 0.053333333,
 		elevation: 10,
 		shadowOpacity: 0.99,
-	},
-	buttonCover: {
-		flex: 1,
-		borderWidth: 1,
-		borderColor: 'transparent',
 	},
 });
 
