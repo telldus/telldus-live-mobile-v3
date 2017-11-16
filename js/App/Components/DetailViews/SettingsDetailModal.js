@@ -48,7 +48,6 @@ import { registerPushToken, unregisterPushToken } from 'Actions_User';
 import i18n from './../../Translations/common';
 
 const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
 	pushEnabled: {

@@ -172,7 +172,7 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
-	handleAnimationEntryType(type?: string): () => void {
+	handleAnimationEntryType(type?: string): (number) => void {
 		switch (type) {
 			case 'ZoomIn':
 				return this.animationZoomIn;
@@ -183,7 +183,7 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
-	handleAnimationExitType(type?: string): () => void {
+	handleAnimationExitType(type?: string): (number) => void {
 		switch (type) {
 			case 'ZoomOut':
 				return this.animationZoomOut;
@@ -214,7 +214,7 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
-	render(): React$Element<any> {
+	render(): Object {
 		let animatedProps = {};
 		if (this.props.entry === 'ZoomIn' && this.props.exit === 'ZoomOut') {
 			let scaleAnim = this.animatedScale.interpolate({
