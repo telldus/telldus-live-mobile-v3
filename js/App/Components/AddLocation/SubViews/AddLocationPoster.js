@@ -24,15 +24,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Text, Dimensions, StyleSheet, Poster } from 'BaseComponents';
+import { View, Text, Dimensions, StyleSheet, Poster, RoundedInfoButton } from 'BaseComponents';
 
 import Theme from 'Theme';
 
 const deviceWidth = Dimensions.get('window').width;
 
+type InfoButton = {
+	onPress?: Function,
+	infoButtonContainerStyle?: Array<any> | Object | number,
+	infoButtonStyle?: Array<any> | Object | number,
+};
+
 type Props = {
 	h1: string,
 	h2: string,
+	infoButton?: InfoButton,
 };
 
 export default class AddLocationPoster extends View {
@@ -41,15 +48,22 @@ export default class AddLocationPoster extends View {
 	static propTypes = {
 		h1: PropTypes.string,
 		h2: PropTypes.string,
+		infoButton: PropTypes.object,
 	};
 
 	constructor(props: Props) {
 		super(props);
+		this._renderInfoButton = this._renderInfoButton.bind(this);
 	}
 
-	render(): Object {
-		const { h1, h2 } = this.props;
+	_renderInfoButton = (button: Object): Object => {
+		return (
+			<RoundedInfoButton buttonProps={button}/>
+		);
+	};
 
+	render(): Object {
+		const { h1, h2, infoButton } = this.props;
 		return (
 			<Poster>
 				<View style={styles.hContainer}>
@@ -60,6 +74,7 @@ export default class AddLocationPoster extends View {
 						{!!h2 && h2}
 					</Text>
 				</View>
+				{!!infoButton && this._renderInfoButton(infoButton)}
 			</Poster>
 		);
 	}

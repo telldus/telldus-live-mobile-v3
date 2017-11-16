@@ -84,6 +84,7 @@ class Position extends View {
 	_refs: (Object | any) => mixed;
 	onSubmit: () => void;
 	onDragEnd: (Object) => void;
+	onInfoPress: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -107,6 +108,9 @@ class Position extends View {
 		this.h1 = `4. ${props.intl.formatMessage(messages.headerOne)}`;
 		this.h2 = props.intl.formatMessage(messages.headerTwo);
 		this.label = props.intl.formatMessage(messages.label);
+		this.infoButton = {
+			onPress: this.onInfoPress.bind(this),
+		};
 
 		this.onAddressChange = this.onAddressChange.bind(this);
 		this.onEndEditing = this.onEndEditing.bind(this);
@@ -116,8 +120,11 @@ class Position extends View {
 	}
 
 	componentDidMount() {
-		const { h1, h2 } = this;
-		this.props.onDidMount(h1, h2);
+		const { h1, h2, infoButton} = this;
+		this.props.onDidMount(h1, h2, infoButton);
+	}
+
+	onInfoPress() {
 	}
 
 	onAddressChange(address: string) {
@@ -127,19 +134,14 @@ class Position extends View {
 	}
 
 	onSubmit() {
-		if (this.state.address !== '') {
-			let clientInfo = this.props.navigation.state.params.clientInfo;
-			clientInfo.cordinates = { ...this.state.coordinate };
-			this.props.activateGateway(clientInfo)
-				.then(response => {
-					if (response) {
-						this.props.navigation.navigate('Success', {clientInfo});
-					}
-				});
-		} else {
-			let message = this.props.intl.formatMessage(messages.invalidAddress);
-			this.props.actions.showModal(message);
-		}
+		let clientInfo = this.props.navigation.state.params.clientInfo;
+		clientInfo.cordinates = { ...this.state.coordinate };
+		this.props.activateGateway(clientInfo)
+			.then(response => {
+				if (response) {
+					this.props.navigation.navigate('Success', {clientInfo});
+				}
+			});
 	}
 
 	onEndEditing() {

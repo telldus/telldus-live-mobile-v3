@@ -80,6 +80,7 @@ class AddLocationContainer extends View<null, Props, State> {
 	state = {
 		h1: '',
 		h2: '',
+		infoButton: null,
 	};
 
 	constructor(props: Props) {
@@ -119,10 +120,11 @@ class AddLocationContainer extends View<null, Props, State> {
 		return !(isStateEqual && isPropsEqual);
 	}
 
-	onChildDidMount = (h1: string, h2: string) => {
+	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
 		this.setState({
 			h1,
 			h2,
+			infoButton,
 		});
 	};
 
@@ -145,7 +147,7 @@ class AddLocationContainer extends View<null, Props, State> {
 	render(): Object {
 		const { children, navigation, actions, screenProps, intl,
 			showModal, validationMessage } = this.props;
-		const { h1, h2 } = this.state;
+		const { h1, h2, infoButton } = this.state;
 
 		let padding = screenProps.currentScreen === 'TimeZoneCity' || screenProps.currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * 0.027777);
 		// const { dialgueHeader, showNegative, positiveText, onPressPositive, onPressNegative, dialogueContainerStyle} = this.getRelativeData();
@@ -157,7 +159,7 @@ class AddLocationContainer extends View<null, Props, State> {
 					opacity: 1,
 					alignItems: 'center',
 				}}>
-					<AddLocationPoster h1={h1} h2={h2} />
+					<AddLocationPoster h1={h1} h2={h2} infoButton={infoButton} />
 					<View style={[styles.style, {paddingHorizontal: padding}]}>
 						{React.cloneElement(
 							children,
