@@ -32,7 +32,7 @@ import MapView from 'react-native-maps';
 import { View, StyleSheet, Dimensions, FloatingButton } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
-import {activateGateway} from 'Actions';
+import {activateGateway, showModal} from 'Actions';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -65,6 +65,7 @@ type Props = {
 	actions: Object,
 	navigation: Object,
 	activateGateway: (Object) => Promise<any>;
+	dispatch: Function,
 };
 
 type State = {
@@ -108,6 +109,7 @@ class Position extends View {
 		this.h1 = `4. ${props.intl.formatMessage(messages.headerOne)}`;
 		this.h2 = props.intl.formatMessage(messages.headerTwo);
 		this.label = props.intl.formatMessage(messages.label);
+
 		this.infoButton = {
 			onPress: this.onInfoPress.bind(this),
 		};
@@ -125,6 +127,7 @@ class Position extends View {
 	}
 
 	onInfoPress() {
+		this.props.dispatch(showModal(null, {source: 'Position'}));
 	}
 
 	onAddressChange(address: string) {
