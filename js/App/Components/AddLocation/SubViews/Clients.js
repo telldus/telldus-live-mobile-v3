@@ -39,11 +39,17 @@ const messages = defineMessages({
 		defaultMessage: 'Location Detected',
 		description: 'Header for which location a device belongs to',
 	},
+	labelBoxHeaderTwo: {
+		id: 'addNewLocation.locationDetected.labelBoxHeaderTwo',
+		defaultMessage: 'Click to activate',
+		description: 'Secondary header for location details box',
+	},
 });
 
 type Props = {
 	onPress: Function,
 	client: Object,
+	intl: Object,
 };
 
 export default class Clients extends View {
@@ -54,6 +60,9 @@ export default class Clients extends View {
 	constructor(props: Props) {
 		super(props);
 		this.onPress = this.onPress.bind(this);
+
+		this.boxTitle = `${props.intl.formatMessage(messages.locationDetected)}:`;
+		this.boxHeaderTwo = props.intl.formatMessage(messages.labelBoxHeaderTwo);
 	}
 
 	onPress() {
@@ -65,10 +74,10 @@ export default class Clients extends View {
 	render() {
 		let locationImageUrl = getLocationImageUrl(this.props.client.type);
 		let locationData = {
-			title: messages.locationDetected,
+			title: this.boxTitle,
 			image: locationImageUrl,
 			H1: this.props.client.name,
-			H2: 'Click to activate',
+			H2: this.boxHeaderTwo,
 			onPress: this.onPress,
 		};
 		return (
