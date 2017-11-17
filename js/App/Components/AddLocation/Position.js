@@ -39,7 +39,7 @@ const deviceWidth = Dimensions.get('window').width;
 const messages = defineMessages({
 	label: {
 		id: 'addNewLocation.position.label',
-		defaultMessage: 'City',
+		defaultMessage: 'Address',
 		description: 'Label for the field City Name',
 	},
 	headerOne: {
