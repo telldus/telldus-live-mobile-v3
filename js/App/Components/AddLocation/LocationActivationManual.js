@@ -173,12 +173,14 @@ class LocationActivationManual extends View {
 						<FormattedMessage style={styles.textBody} {...messages.bodyContent}/>
 					</LabelBox>
 				</KeyboardAvoidingView>
-				<FloatingButton
-					buttonStyle={styles.buttonStyle}
-					onPress={this.onActivationCodeSubmit}
-					imageSource={require('../TabViews/img/right-arrow-key.png')}
-					showThrobber={false}
-				/>
+				<View style={styles.fixElevationIssue}>
+					<FloatingButton
+						buttonStyle={styles.buttonStyle}
+						onPress={this.onActivationCodeSubmit}
+						imageSource={require('../TabViews/img/right-arrow-key.png')}
+						showThrobber={false}
+					/>
+				</View>
 			</View>
 		);
 	}
@@ -208,6 +210,10 @@ const styles = StyleSheet.create({
 		right: deviceWidth * 0.053333333,
 		elevation: 10,
 		shadowOpacity: 0.99,
+	},
+	fixElevationIssue: {
+		flex: 1,
+		borderRadius: 0,
 	},
 });
 
