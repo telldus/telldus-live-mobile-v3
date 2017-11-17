@@ -149,17 +149,16 @@ class Success extends View<void, Props, State> {
 						</View>
 						<Text>
 							<FormattedMessage {...messages.messageBodyParaOne} style={styles.messageBody}/>
-							{/**{'\n\n'}
+							{/** {'\n\n'}
 							TODO: Bring back this when guides are available in live-v3
 							<FormattedMessage {...messages.messageBodyParaTwo} style={styles.messageBody}/>
 							*/}
 						</Text>
-
-						{/**<TouchableOpacity onPress={this.onPressHelp} style={styles.hyperLinkButton}>
+						{/** <TouchableOpacity onPress={this.onPressHelp} style={styles.hyperLinkButton}>
 							<CustomIcon name="icon_guide" size={36} color={Theme.Core.brandSecondary} />
 							<FormattedMessage {...messages.hyperLintText} style={styles.hyperLink}/>
 							<Icon name="angle-right" size={26} color={'#A59F9A'}/>
-						</TouchableOpacity>*/}
+						</TouchableOpacity> */}
 					</View>
 					<TouchableButton
 						text={this.props.intl.formatMessage(messages.continue)}
