@@ -248,6 +248,7 @@ class AddLocationContainer extends View<null, Props, State> {
 						)}
 					</View>
 					<DialogueBox
+						dialogueContainerStyle={{elevation: 0}}
 						header={dialogueHeader}
 						showDialogue={showModal}
 						text={validationMessage}
