@@ -24,12 +24,9 @@
 'use strict';
 
 import React from 'react';
-import { Linking, ScrollView, TouchableOpacity } from 'react-native';
+import { Linking, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_guide from '../TabViews/img/selection.json';
-const CustomIcon = createIconSetFromIcoMoon(icon_guide);
 
 import Theme from 'Theme';
 import {
