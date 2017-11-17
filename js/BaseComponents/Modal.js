@@ -27,6 +27,8 @@ import { Animated, Easing, StyleSheet, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { clearData } from 'Actions_Modal';
 
+import Theme from 'Theme';
+
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
@@ -254,12 +256,14 @@ const styles = StyleSheet.create({
 		height: deviceHeight,
 		elevation: 8,
 		width: deviceWidth,
-		backgroundColor: '#00000099',
+		backgroundColor: '#00000060',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	modal: {
 		position: 'absolute',
+		...Theme.Core.shadow,
+		elevation: 8,
 	},
 });
 
