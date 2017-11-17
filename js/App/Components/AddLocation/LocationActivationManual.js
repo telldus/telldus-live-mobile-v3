@@ -121,6 +121,11 @@ class LocationActivationManual extends View {
 		return nextProps.currentScreen === 'LocationActivationManual';
 	}
 
+	componentWillUnmount() {
+		this.keyboardDidShowListener.remove();
+		this.keyboardDidHideListener.remove();
+	}
+
 	onActivationCodeChange(activationCode: string) {
 		this.setState({
 			activationCode,

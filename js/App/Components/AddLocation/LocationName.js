@@ -111,6 +111,11 @@ class LocationName extends View {
 		return nextProps.currentScreen === 'LocationName';
 	}
 
+	componentWillUnmount() {
+		this.keyboardDidShowListener.remove();
+		this.keyboardDidHideListener.remove();
+	}
+
 	onLocationNameChange(locationName) {
 		this.setState({
 			locationName,
