@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { FormattedMessage, Text, View } from 'BaseComponents';
+import { Text, View } from 'BaseComponents';
 import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback } from 'react-native';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -65,24 +65,27 @@ class DeviceLocationDetail extends View {
 	}
 
 	render() {
+
+		let { title, H1, H2, image, style } = this.props;
+
 		return (
-			<View style={[styles.shadow, styles.container, this.props.style]}>
-				{this.props.title && this.props.title !== '' ?
-					<FormattedMessage {...this.props.title} style={styles.textLocation} />
-					:
-					null
+			<View style={[styles.shadow, styles.container, style]}>
+				{!!title && (
+					<Text style={styles.textLocation}>
+						{title}
+					</Text>)
 				}
 				<View style={styles.imageHeaderContainer}>
 					<View style={styles.locationImageContainer}>
-						<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: this.props.image, isStatic: true }} />
+						<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: image, isStatic: true }} />
 					</View>
 					<TouchableWithoutFeedback onPress={this.onPress}>
 						<View style={styles.locationTextContainer}>
 							<Text numberOfLines={1} style={styles.textHSH}>
-								{this.props.H1}
+								{!!H1 && H1}
 							</Text>
 							<Text numberOfLines={1} style={styles.textLocation}>
-								{this.props.H2}
+								{!!H2 && H2}
 							</Text>
 						</View>
 					</TouchableWithoutFeedback>
