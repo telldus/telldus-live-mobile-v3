@@ -170,7 +170,7 @@ class LocationActivationManual extends View {
 						<TextInput
 							style={styles.textField}
 							onChangeText={this.onActivationCodeChange}
-							autoCapitalize="none"
+							autoCapitalize="characters"
 							autoCorrect={false}
 							underlineColorAndroid="#e26901"
 							defaultValue={this.state.activationCode}
