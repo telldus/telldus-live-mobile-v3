@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { TextInput } from 'react-native';
+import { TextInput, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
@@ -206,18 +206,20 @@ class Position extends View {
 		return (
 			<View style={styles.container}>
 				<View style={styles.body}>
-					<LabelBox
-						label={this.label}
-						showIcon={true}>
-						<TextInput
-							style={styles.address}
-							onChangeText={this.onAddressChange}
-							onEndEditing={this.onEndEditing}
-							autoCapitalize="none"
-							autoCorrect={false}
-							underlineColorAndroid="#e26901"
-							value={this.state.address}/>
-					</LabelBox>
+					<KeyboardAvoidingView behavior="padding" contentContainerStyle={{justifyContent: 'center'}}>
+						<LabelBox
+							label={this.label}
+							showIcon={true}>
+							<TextInput
+								style={styles.address}
+								onChangeText={this.onAddressChange}
+								onEndEditing={this.onEndEditing}
+								autoCapitalize="none"
+								autoCorrect={false}
+								underlineColorAndroid="#e26901"
+								value={this.state.address}/>
+						</LabelBox>
+					</KeyboardAvoidingView>
 					<View style={styles.mapViewCover}>
 						<MapView.Animated
 							style={styles.map}
