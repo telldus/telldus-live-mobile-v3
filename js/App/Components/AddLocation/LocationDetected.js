@@ -96,7 +96,7 @@ class LocationDetected extends View {
 
 	renderClient(client, i) {
 		return (
-			<Clients key={i} client={client} onPress={this.onActivateAuto}/>
+			<Clients key={i} client={client} onPress={this.onActivateAuto} intl={this.props.intl}/>
 		);
 	}
 
