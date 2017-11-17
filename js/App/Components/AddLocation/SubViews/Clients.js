@@ -72,7 +72,7 @@ export default class Clients extends View {
 			onPress: this.onPress,
 		};
 		return (
-			<View>
+			<View style={{flex: 1}}>
 				<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow}/>
 				<DeviceLocationDetail {...locationData} style={{marginTop: 20}}/>
 			</View>
