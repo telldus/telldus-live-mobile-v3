@@ -28,7 +28,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, View } from 'BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
-import { defineMessages } from 'react-intl';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_home from './../../../TabViews/img/selection.json';
@@ -60,6 +60,7 @@ type Props = {
 	device: Object,
 	devices: Object,
 	gateway: Object,
+	intl: intlShape.isRequired,
 };
 
 type State = {
@@ -72,6 +73,8 @@ class OverviewTab extends View {
 		super(props);
 		this.state = {
 		};
+
+		this.boxTitle = `${props.intl.formatMessage(messages.location)}:`;
 	}
 
 	static navigationOptions = ({ navigation }) => ({
@@ -107,7 +110,7 @@ class OverviewTab extends View {
 		let device = this.props.device;
 		const locationImageUrl = getLocationImageUrl(this.props.gateway.type);
 		const locationData = {
-			title: messages.location,
+			title: this.boxTitle,
 			image: locationImageUrl,
 			H1: this.props.gateway.name,
 			H2: this.props.gateway.type,
@@ -169,4 +172,4 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(OverviewTab);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(OverviewTab));
