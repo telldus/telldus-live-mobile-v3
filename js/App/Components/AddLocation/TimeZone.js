@@ -129,10 +129,10 @@ class TimeZone extends View<void, Props, State> {
 
 		return (
 			<View style={{flex: 1}}>
-				<TouchableOpacity onPress={this.onEditTimeZone}>
-					<LabelBox
-						label={this.label}
-						showIcon={false}>
+				<LabelBox
+					label={this.label}
+					showIcon={false}>
+					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 0}}>
 						<View style={styles.timeZoneContainer}>
 							<Text style={styles.timeZone}>
 								{this.state.timeZone}
@@ -148,8 +148,8 @@ class TimeZone extends View<void, Props, State> {
 							:
 							null
 						}
-					</LabelBox>
-				</TouchableOpacity>
+					</TouchableOpacity>
+				</LabelBox>
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onTimeZoneSubmit}
