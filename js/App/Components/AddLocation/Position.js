@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, KeyboardAvoidingView } from 'react-native';
+import { TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
@@ -87,11 +87,15 @@ class Position extends View {
 	onDragEnd: (Object) => void;
 	onInfoPress: () => void;
 
+	keyboardDidShow: () => void;
+	keyboardDidHide: () => void;
+
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			address: '',
+			isKeyboardShown: false,
 			region: new MapView.AnimatedRegion({
 				latitude: 55.70584,
 				longitude: 13.19321,
@@ -119,11 +123,34 @@ class Position extends View {
 		this.onSubmit = this.onSubmit.bind(this);
 		this._refs = this._refs.bind(this);
 		this.onDragEnd = this.onDragEnd.bind(this);
+
+		this.keyboardDidShow = this.keyboardDidShow.bind(this);
+		this.keyboardDidHide = this.keyboardDidHide.bind(this);
 	}
 
 	componentDidMount() {
 		const { h1, h2, infoButton} = this;
 		this.props.onDidMount(h1, h2, infoButton);
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+	}
+
+	keyboardDidShow() {
+		this.setState({
+			isKeyboardShown: true,
+		});
+	}
+
+	keyboardDidHide() {
+		this.setState({
+			isKeyboardShown: false,
+		});
+		this.onEndEditing();
+	}
+
+	componentWillUnmount() {
+		this.keyboardDidShowListener.remove();
+		this.keyboardDidHideListener.remove();
 	}
 
 	onInfoPress() {
@@ -137,6 +164,9 @@ class Position extends View {
 	}
 
 	onSubmit() {
+		if (this.state.isKeyboardShown) {
+			Keyboard.dismiss();
+		}
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.cordinates = { ...this.state.coordinate };
 		this.props.activateGateway(clientInfo)
