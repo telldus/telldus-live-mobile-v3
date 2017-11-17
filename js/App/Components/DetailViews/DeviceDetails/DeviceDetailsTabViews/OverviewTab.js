@@ -28,7 +28,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, View } from 'BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_home from './../../../TabViews/img/selection.json';
@@ -60,7 +60,7 @@ type Props = {
 	device: Object,
 	devices: Object,
 	gateway: Object,
-	intl: intlShape.isRequired,
+	screenProps: Object,
 };
 
 type State = {
@@ -74,7 +74,7 @@ class OverviewTab extends View {
 		this.state = {
 		};
 
-		this.boxTitle = `${props.intl.formatMessage(messages.location)}:`;
+		this.boxTitle = `${props.screenProps.intl.formatMessage(messages.location)}:`;
 	}
 
 	static navigationOptions = ({ navigation }) => ({
@@ -172,4 +172,4 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(OverviewTab));
+module.exports = connect(mapStateToProps, mapDispatchToProps)(OverviewTab);

@@ -27,6 +27,7 @@ import React from 'react';
 import { StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { intlShape, injectIntl } from 'react-intl';
 
 import { Text, View } from 'BaseComponents';
 
@@ -49,6 +50,7 @@ type Props = {
 	dispatch: Function,
 	device: Object,
 	stackNavigator: Object,
+	intl: intlShape.isRequired,
 };
 
 type State = {
@@ -99,6 +101,7 @@ class DeviceDetailsTabsView extends View {
 		let screenProps = {
 			device: this.props.device,
 			currentTab: this.state.currentTab,
+			intl: this.props.intl,
 		};
 		return (
 			<View style={styles.container}>
@@ -197,16 +200,16 @@ const Tabs = TabNavigator(
 	}
 );
 
-function mapStateToProps(store, ownprops) {
+function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
-		stackNavigator: ownprops.navigation,
-		device: store.devices.byId[ownprops.navigation.state.params.id],
+		stackNavigator: ownProps.navigation,
+		device: store.devices.byId[ownProps.navigation.state.params.id],
 	};
 }
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DeviceDetailsTabsView);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(DeviceDetailsTabsView));
