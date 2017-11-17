@@ -40,7 +40,7 @@ const messages = defineMessages({
 	label: {
 		id: 'addNewLocation.position.label',
 		defaultMessage: 'Address',
-		description: 'Label for the field City Name',
+		description: 'Label for the Address field',
 	},
 	headerOne: {
 		id: 'addNewLocation.position.headerOne',
