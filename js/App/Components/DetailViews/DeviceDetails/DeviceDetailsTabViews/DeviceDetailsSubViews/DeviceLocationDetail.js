@@ -71,7 +71,7 @@ class DeviceLocationDetail extends View {
 		return (
 			<View style={[styles.shadow, styles.container, style]}>
 				{!!title && (
-					<Text style={styles.textLocation}>
+					<Text style={[styles.textLocation, {marginLeft: 10}]}>
 						{title}
 					</Text>)
 				}
@@ -122,14 +122,14 @@ const styles = StyleSheet.create({
 	},
 	locationImageContainer: {
 		height: (deviceHeight * 0.16),
-		width: (deviceWidth * 0.37),
+		width: (deviceWidth * 0.28),
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 	},
 	locationTextContainer: {
 		height: (deviceHeight * 0.16),
 		width: (deviceWidth * 0.53),
-		marginRight: 20,
+		marginRight: (deviceWidth * 0.09),
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 	},
@@ -137,7 +137,6 @@ const styles = StyleSheet.create({
 		width: (deviceWidth * 0.22),
 		height: (deviceHeight * 0.12),
 		alignItems: 'flex-start',
-		marginLeft: 5,
 	},
 	textLocation: {
 		color: '#A59F9A',
