@@ -52,11 +52,6 @@ const messages = defineMessages({
 		defaultMessage: 'Select geographic position',
 		description: 'Secondary Header for the Position Screen',
 	},
-	invalidAddress: {
-		id: 'addNewLocation.position.invalidAddress',
-		defaultMessage: 'City name can\'t be empty',
-		description: 'Local validation text when city name field is left empty',
-	},
 });
 
 type Props = {

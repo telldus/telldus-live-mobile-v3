@@ -25,7 +25,6 @@
   "addNewLocation.position.dialogueBodyParaTwo": "Press and hold the marker to change the position manually",
   "addNewLocation.position.headerOne": "Position",
   "addNewLocation.position.headerTwo": "Select geographic position",
-  "addNewLocation.position.invalidAddress": "City name can't be empty",
   "addNewLocation.position.label": "Address",
   "addNewLocation.success.banner": "Congratulations",
   "addNewLocation.success.bannerSub": "Location added successfully",
