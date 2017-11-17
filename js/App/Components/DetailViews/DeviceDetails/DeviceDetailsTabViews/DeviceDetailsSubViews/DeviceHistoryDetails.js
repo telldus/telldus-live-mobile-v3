@@ -75,9 +75,9 @@ class DeviceHistoryDetails extends View {
 	}
 
 	render() {
-		let textState = '', textDate = '', textStatus = '';
-		let originText = '';
-		let origin = this.props.detailsData.origin;
+		let { detailsData } = this.props;
+		let textState = '', textDate = '', textStatus = '', originText = '';
+		let { origin, stateValue, ts, successStatus } = detailsData;
 		if (origin && origin === 'Scheduler') {
 			originText = <FormattedMessage {...i18n.scheduler} style={styles.detailsText}/>;
 		} else if (origin && origin === 'Incoming signal') {
@@ -93,7 +93,7 @@ class DeviceHistoryDetails extends View {
 		}
 		if (this.props.detailsData.state) {
 			let state = states[this.props.detailsData.state];
-			textState = state === 'Dim' ? `${state} ${this.getPercentage(this.props.detailsData.stateValue)}%` : state;
+			textState = state === 'Dim' ? `${state} ${this.getPercentage(stateValue)}%` : state;
 			switch (state) {
 				case 'On':
 					textState = <FormattedMessage {...i18n.on} style={styles.detailsText}/>;
@@ -102,7 +102,7 @@ class DeviceHistoryDetails extends View {
 					textState = <FormattedMessage {...i18n.off} style={styles.detailsText}/>;
 					break;
 				case 'Dim':
-					textState = <Text style={styles.detailsText}><FormattedMessage {...i18n.dimmingLevel} style={styles.detailsText}/>: {this.getPercentage(this.props.detailsData.stateValue)}% </Text>;
+					textState = <Text style={styles.detailsText}><FormattedMessage {...i18n.dimmingLevel} style={styles.detailsText}/>: {this.getPercentage(stateValue)}% </Text>;
 					break;
 				case 'Bell':
 					textState = <FormattedMessage {...i18n.bell} style={styles.detailsText}/>;
@@ -120,11 +120,11 @@ class DeviceHistoryDetails extends View {
 					textState = state;
 			}
 		}
-		if (this.props.detailsData.ts) {
-			textDate = new Date(this.props.detailsData.ts * 1000);
+		if (ts) {
+			textDate = new Date(ts * 1000);
 		}
-		if (this.props.detailsData.successStatus >= 0) {
-			switch (this.props.detailsData.successStatus) {
+		if (successStatus >= 0) {
+			switch (successStatus) {
 				case 0:
 					textStatus = <FormattedMessage {...messages.success} style={styles.detailsText}/>;
 					break;
@@ -141,14 +141,15 @@ class DeviceHistoryDetails extends View {
 					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.notConfirmed} style={styles.detailsTextError}/>)</Text>;
 					break;
 				default:
-					let message = statusMessage[this.props.detailsData.successStatus];
-					textStatus = this.props.detailsData.successStatus === 0 ? message : `Failed (${message})`;
+					let message = statusMessage[successStatus];
+					textStatus = successStatus === 0 ? message : `Failed (${message})`;
 			}
 		}
 
 		return (
 			<Modal
 				modalStyle={styles.container}
+				modalContainerStyle={styles.container}
 				entry= "SlideInY"
 				exit= "SlideOutY"
 				entryDuration= {300}
@@ -223,10 +224,10 @@ class DeviceHistoryDetails extends View {
 							</Text>
 						</View>
 						<View style={[styles.detailsValueCover, { flexDirection: 'row-reverse' }]}>
-							<Text style={this.props.detailsData.successStatus === 0 ? styles.detailsText : styles.detailsTextError} >
+							<Text style={successStatus === 0 ? styles.detailsText : styles.detailsTextError} >
 								{textStatus}
 							</Text>
-							{this.props.detailsData.successStatus === 0 ?
+							{successStatus === 0 ?
 								null
 								:
 								<Icon name="exclamation-triangle" size={24} color="#d32f2f" />
