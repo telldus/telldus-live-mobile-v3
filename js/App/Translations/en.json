@@ -26,7 +26,7 @@
   "addNewLocation.position.headerOne": "Position",
   "addNewLocation.position.headerTwo": "Select geographic position",
   "addNewLocation.position.invalidAddress": "City name can't be empty",
-  "addNewLocation.position.label": "City",
+  "addNewLocation.position.label": "Address",
   "addNewLocation.success.banner": "Congratulations",
   "addNewLocation.success.bannerSub": "Location added successfully",
   "addNewLocation.success.headerOne": "Congratulations",
