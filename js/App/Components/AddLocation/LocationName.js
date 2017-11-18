@@ -163,6 +163,7 @@ class LocationName extends View {
 							onChangeText={this.onLocationNameChange}
 							autoCapitalize="none"
 							autoCorrect={false}
+							autoFocus={true}
 							underlineColorAndroid="#e26901"
 							defaultValue={this.state.locationName}
 						/>

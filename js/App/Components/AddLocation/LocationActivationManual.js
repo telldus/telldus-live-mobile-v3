@@ -172,6 +172,7 @@ class LocationActivationManual extends View {
 							onChangeText={this.onActivationCodeChange}
 							autoCapitalize="characters"
 							autoCorrect={false}
+							autoFocus={true}
 							underlineColorAndroid="#e26901"
 							defaultValue={this.state.activationCode}
 						/>

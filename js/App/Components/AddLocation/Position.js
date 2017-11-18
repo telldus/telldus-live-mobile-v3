@@ -241,6 +241,7 @@ class Position extends View {
 								onEndEditing={this.onEndEditing}
 								autoCapitalize="none"
 								autoCorrect={false}
+								autoFocus={true}
 								underlineColorAndroid="#e26901"
 								value={this.state.address}/>
 						</LabelBox>
