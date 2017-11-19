@@ -32,7 +32,6 @@ import Theme from 'Theme';
 import {
 	View,
 	Text,
-	FormattedMessage,
 	StyleSheet,
 	Dimensions,
 	Image,
@@ -138,15 +137,15 @@ class Success extends View<void, Props, State> {
 
 	render() {
 
-		// let clientInfo = this.props.navigation.state.params.clientInfo;
-		// let locationImageUrl = getLocationImageUrl(clientInfo.type);
+		let clientInfo = this.props.navigation.state.params.clientInfo;
+		let locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (
 			<View style={{flex: 1}}>
 				<ScrollView>
 					<View style={[styles.itemsContainer, styles.shadow]}>
 						<View style={styles.imageTitleContainer}>
-							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: 'icon_location_tell_stick_net_01', isStatic: true}} />
+							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
 							<Icon name="check-circle" size={44} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
 							<View style={{flex: 1, flexWarp: 'wrap'}}>
 								<Text style={styles.messageTitle}>
