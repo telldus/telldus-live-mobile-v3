@@ -107,6 +107,9 @@ class Success extends View<void, Props, State> {
 
 		this.h1 = props.intl.formatMessage(messages.headerOne);
 		this.h2 = props.intl.formatMessage(messages.headerTwo);
+
+		this.title = `${props.intl.formatMessage(messages.messageTitle)}!`;
+		this.body = props.intl.formatMessage(messages.messageBodyParaOne);
 	}
 
 	componentDidMount() {
@@ -135,20 +138,24 @@ class Success extends View<void, Props, State> {
 
 	render() {
 
-		let clientInfo = this.props.navigation.state.params.clientInfo;
-		let locationImageUrl = getLocationImageUrl(clientInfo.type);
+		// let clientInfo = this.props.navigation.state.params.clientInfo;
+		// let locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (
 			<View style={{flex: 1}}>
 				<ScrollView>
 					<View style={[styles.itemsContainer, styles.shadow]}>
 						<View style={styles.imageTitleContainer}>
-							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
+							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: 'icon_location_tell_stick_net_01', isStatic: true}} />
 							<Icon name="check-circle" size={44} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
-							<FormattedMessage {...messages.messageTitle} style={styles.messageTitle} postfix={'!'}/>
+							<View style={{flex: 1, flexWarp: 'wrap'}}>
+								<Text style={styles.messageTitle}>
+									{this.title}
+								</Text>
+							</View>
 						</View>
-						<Text>
-							<FormattedMessage {...messages.messageBodyParaOne} style={styles.messageBody}/>
+						<Text style={styles.messageBody}>
+							{this.body}
 							{/** {'\n\n'}
 							TODO: Bring back this when guides are available in live-v3
 							<FormattedMessage {...messages.messageBodyParaTwo} style={styles.messageBody}/>
@@ -173,13 +180,11 @@ class Success extends View<void, Props, State> {
 
 const styles = StyleSheet.create({
 	itemsContainer: {
+		flex: 1,
 		flexDirection: 'column',
-		backgroundColor: '#fff',
 		marginTop: 20,
-		paddingLeft: 20,
+		paddingVertical: 20,
 		paddingRight: 20,
-		paddingBottom: 20,
-		paddingTop: 20,
 		alignItems: 'flex-start',
 		width: (deviceWidth - 20),
 	},
@@ -196,26 +201,31 @@ const styles = StyleSheet.create({
 		elevation: 2,
 	},
 	imageLocation: {
-		width: (deviceWidth * 0.3) - 20,
-		height: 80,
-		alignItems: 'flex-start',
+		width: deviceWidth * 0.32,
+		height: deviceWidth * 0.23,
 	},
 	imageTitleContainer: {
+		flex: 1,
 		flexDirection: 'row',
+		alignItems: 'flex-end',
+		justifyContent: 'flex-start',
 	},
 	iconCheck: {
 		position: 'absolute',
-		left: 40,
+		top: 20,
+		left: deviceWidth * 0.18,
+		backgroundColor: '#fff',
+		borderBottomLeftRadius: 35,
+		borderTopRightRadius: 25,
 	},
 	messageTitle: {
 		color: '#00000099',
-		paddingLeft: 20,
-		paddingRight: 10,
-		width: (deviceWidth * 0.7) - 20,
 		fontSize: 24,
 		flexWrap: 'wrap',
 	},
 	messageBody: {
+		marginLeft: 20,
+		marginTop: 10,
 		color: '#A59F9A',
 		fontSize: 14,
 	},
