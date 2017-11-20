@@ -31,18 +31,18 @@ const deviceWidth = Dimensions.get('window').width;
 import { defineMessages } from 'react-intl';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_home from './../../../TabViews/img/selection.json';
+import icon_home from '../TabViews/img/selection.json';
 const Icon = createIconSetFromIcoMoon(icon_home);
 
-import getDeviceType from '../../../../Lib/getDeviceType';
-import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
+import getDeviceType from '../../Lib/getDeviceType';
+import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 import {
 	DeviceLocationDetail,
 	ToggleDeviceDetail,
 	BellDeviceDetail,
 	DimmerDeviceDetail,
 	NavigationalDeviceDetail,
-} from 'DeviceDetailsSubView';
+} from 'SubViews';
 
 const messages = defineMessages({
 	overviewHeader: {

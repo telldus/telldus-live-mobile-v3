@@ -28,12 +28,12 @@ import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { defineMessages } from 'react-intl';
 
 import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from 'BaseComponents';
-import i18n from '../../../../../Translations/common';
+import i18n from '../../../Translations/common';
 
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
-import { states, statusMessage } from '../../../../../../Config';
+import { states, statusMessage } from '../../../../Config';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 let stackNavHeaderHeight = deviceHeight * 0.1;

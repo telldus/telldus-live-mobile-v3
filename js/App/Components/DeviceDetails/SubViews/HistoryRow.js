@@ -26,12 +26,12 @@ import { connect } from 'react-redux';
 import { StyleSheet, Dimensions, TouchableWithoutFeedback } from 'react-native';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_history from './../../../../TabViews/img/selection.json';
+import icon_history from '../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
 import { FormattedMessage, Text, View, Icon, FormattedTime } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
-import i18n from '../../../../../Translations/common';
+import i18n from '../../../Translations/common';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;

@@ -28,7 +28,7 @@ import {View, Icon, StyleSheet, Dimensions} from 'BaseComponents';
 import { defineMessages } from 'react-intl';
 
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
-import {DeviceLocationDetail} from 'DeviceDetailsSubView';
+import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDetail';
 
 let deviceWidth = Dimensions.get('window').width;
 let deviceHeight = Dimensions.get('window').height;

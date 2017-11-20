@@ -33,7 +33,7 @@ import { setDimmerValue, saveDimmerInitialState } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import { FormattedMessage, RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { OnButton, OffButton } from 'TabViews_SubViews';
-import i18n from '../../../../../Translations/common';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	commandON: number,

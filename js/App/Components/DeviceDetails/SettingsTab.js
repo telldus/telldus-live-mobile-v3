@@ -28,10 +28,10 @@ import { connect } from 'react-redux';
 import { FormattedMessage, Text, View } from 'BaseComponents';
 import { StyleSheet, Dimensions, Switch } from 'react-native';
 import { defineMessages } from 'react-intl';
-import i18n from '../../../../Translations/common';
+import i18n from '../../Translations/common';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_settings from './../../../TabViews/img/selection.json';
+import icon_settings from '../TabViews/img/selection.json';
 const Icon = createIconSetFromIcoMoon(icon_settings);
 
 import { LearnButton } from 'TabViews_SubViews';

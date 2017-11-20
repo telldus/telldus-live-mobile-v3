@@ -24,15 +24,15 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { Text, View } from 'BaseComponents';
+import { Text, View, Image } from 'BaseComponents';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_settings from './../../../TabViews/img/selection.json';
+import icon_settings from '../TabViews/img/selection.json';
 const Icon = createIconSetFromIcoMoon(icon_settings);
 
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
@@ -105,14 +105,14 @@ class DeviceDetailsTabsView extends View {
 		};
 		return (
 			<View style={styles.container}>
-				<ImageBackground style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('./../../../TabViews/img/telldus-geometric-header-bg.png')}>
+				<Image style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('./../../../TabViews/img/telldus-geometric-header-bg.png')}>
 					<View style={styles.deviceIconBackground}>
 						<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
 					</View>
 					<Text style={styles.textDeviceName}>
 						{this.props.device.name}
 					</Text>
-				</ImageBackground>
+				</Image>
 				<View style={{ height: screenSpaceRemaining }}>
 					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
@@ -162,6 +162,7 @@ const Tabs = TabNavigator(
 	},
 	{
 		initialRouteName: 'Overview',
+		tabBarPosition: 'top',
 		tabBarOptions: {
 			indicatorStyle: {
 				backgroundColor: '#fff',

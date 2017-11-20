@@ -26,11 +26,11 @@ import { connect } from 'react-redux';
 import { StyleSheet, ListView, Dimensions } from 'react-native';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_history from './../../../TabViews/img/selection.json';
+import icon_history from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
 import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
-import { DeviceHistoryDetails, HistoryRow } from 'DeviceDetailsSubView';
+import { DeviceHistoryDetails, HistoryRow } from 'SubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
 import { defineMessages } from 'react-intl';
