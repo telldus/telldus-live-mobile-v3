@@ -75,11 +75,15 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 	},
 	sensorValue: {
-		width: 108,
+		width: 85,
 		flexDirection: 'row',
-		justifyContent: 'space-around',
+		justifyContent: 'flex-start',
 		alignItems: 'center',
 		paddingRight: 12,
+	},
+	sensorIcon: {
+		height: 26,
+		width: 26,
 	},
 	sensorTileItem: {
 		position: 'absolute',

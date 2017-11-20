@@ -76,7 +76,7 @@ const messages = defineMessages({
 
 const SensorHumidity = ({ humidity }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Humidity.png')}/>
+		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Humidity.png')}/>
 		<Text>
 			<FormattedNumber value={humidity / 100} formatStyle="percent"/>
 		</Text>
@@ -85,7 +85,7 @@ const SensorHumidity = ({ humidity }) => (
 
 const SensorTemperature = ({ temperature }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Temperature.png')}/>
+		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Temperature.png')}/>
 		<Text>
 			<FormattedNumber value={temperature} maximumFractionDigits={1} minimumFractionDigits={1}/>
 			{`${String.fromCharCode(176)}C`}
@@ -95,7 +95,7 @@ const SensorTemperature = ({ temperature }) => (
 
 const SensorRain = ({ rainRate, rainTotal }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Rain.png')}/>
+		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Rain.png')}/>
 		<Text>
 			{ rainRate && ( <Text><FormattedNumber value={rainRate} maximumFractionDigits={0}/> {'mm/h\n'} </Text> ) }
 			{ rainTotal && ( <Text><FormattedNumber value={rainTotal} maximumFractionDigits={0}/> {'mm'} </Text> ) }
@@ -111,7 +111,7 @@ const SensorWind = ({ windAverage, windGust, windDirection }) => {
 
 	return (
 		<View style={Theme.Styles.sensorValue}>
-			<Image source={require('../img/sensorIcons/Wind.png')}/>
+			<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Wind.png')}/>
 			<Text>
 				{ windAverage && (
 					<Text><FormattedNumber value={windAverage} maximumFractionDigits={1}/> {'m/s\n'} </Text> ) }
@@ -125,14 +125,14 @@ const SensorWind = ({ windAverage, windGust, windDirection }) => {
 
 const SensorUV = ({ uv }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/UV.png')}/>
+		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/UV.png')}/>
 		<FormattedNumber value={uv} maximumFractionDigits={0}/>
 	</View>
 );
 
 const SensorWatt = ({ watt }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Watt.png')}/>
+		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Watt.png')}/>
 		<Text>
 			<FormattedNumber value={watt} maximumFractionDigits={1}/>
 			{'W'}
@@ -142,7 +142,7 @@ const SensorWatt = ({ watt }) => (
 
 const SensorLuminance = ({ luminance }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image source={require('../img/sensorIcons/Luminance.png')}/>
+		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Luminance.png')}/>
 		<Text>
 			<FormattedNumber value={luminance} maximumFractionDigits={0}/>
 			{'lx'}
@@ -284,12 +284,12 @@ class SensorRow extends Component<Props, void> {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: 'transparent',
 		flex: 1,
+		backgroundColor: 'transparent',
 	},
 	name: {
 		color: 'rgba(0,0,0,0.87)',
-		fontSize: 16,
+		fontSize: 15,
 		marginBottom: 2,
 	},
 	time: {
