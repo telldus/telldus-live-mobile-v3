@@ -60,6 +60,7 @@ import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
 import AddLocationNavigator from 'AddLocationNavigator';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
+import { hasStatusBar } from 'Lib';
 
 const RouteConfigs = {
 	Tabs: {
@@ -72,7 +73,7 @@ const RouteConfigs = {
 		screen: DeviceDetailsTabsView,
 		navigationOptions: {
 			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+				marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 				backgroundColor: Theme.Core.brandPrimary,
 				height: deviceHeight * 0.1,
 			},
@@ -88,7 +89,7 @@ const RouteConfigs = {
 			if (renderRootHeader) {
 				return {
 					headerStyle: {
-						marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+						marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 						backgroundColor: Theme.Core.brandPrimary,
 						height: deviceHeight * 0.1,
 					},

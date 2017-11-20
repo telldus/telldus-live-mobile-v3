@@ -40,6 +40,7 @@ import { SettingsDetailModal } from 'DetailViews';
 import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode, addNewGateway } from 'Actions';
 import TabViews from 'TabViews';
+import { hasStatusBar } from 'Lib';
 import { TabNavigator } from 'react-navigation';
 
 const messages = defineMessages({
@@ -120,6 +121,7 @@ const NavigationView = ({ gateways, userProfile, onOpenSetting, addNewLocation }
 		<View style={{
 			flex: 1,
 			backgroundColor: 'rgba(26,53,92,255)',
+			paddingTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 		}}>
 			<NavigationHeader firstName={userProfile.firstname} lastName={userProfile.lastname}/>
 			<View style={{

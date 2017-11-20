@@ -39,7 +39,7 @@ import TimeZone from './TimeZone';
 import Success from './Success';
 import Position from './Position';
 
-import {getRouteName} from 'Lib';
+import { getRouteName, hasStatusBar } from 'Lib';
 
 import Theme from 'Theme';
 const deviceHeight = Dimensions.get('window').height;
@@ -89,7 +89,7 @@ const StackNavigatorConfig = {
 		if (renderStackHeader) {
 			return {
 				headerStyle: {
-					marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+					marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 					backgroundColor: Theme.Core.brandPrimary,
 					height: deviceHeight * 0.1,
 				},

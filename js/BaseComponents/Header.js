@@ -24,6 +24,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Platform, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { hasStatusBar } from 'Lib';
+
 import Base from './Base';
 import computeProps from './computeProps';
 import Button from './Button';
@@ -32,8 +36,6 @@ import Title from './Title';
 import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
 import _ from 'lodash';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 type Props = {
 	children: Object,
@@ -351,7 +353,7 @@ export default class HeaderComponent extends Base {
 		return (
 			<View style={{ flex: 0 }}>
 				{
-					Platform.OS === 'android' ? (
+					Platform.OS === 'android' && hasStatusBar() ? (
 						<View style={this.getInitialStyle().statusBar}/>
 					) : null
 				}

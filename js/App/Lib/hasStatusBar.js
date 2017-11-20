@@ -15,18 +15,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Lib
  */
 
 'use strict';
+import Platform from 'Platform';
+import DeviceInfo from 'react-native-device-info';
 
-import getRouteName from './getRouteName';
-import getDeviceWidth from './getDeviceWidth';
-import hasStatusBar from './hasStatusBar';
-
-module.exports = {
-	getRouteName,
-	getDeviceWidth,
-	hasStatusBar,
-};
+export default function hasStatusBar() {
+	return Platform.OS === 'android' && DeviceInfo.getAPILevel() > 19;
+}
