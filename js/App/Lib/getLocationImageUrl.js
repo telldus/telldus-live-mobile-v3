@@ -22,33 +22,33 @@
 export default function getLocationImageUrl(deviceType:string) : string {
 	if (deviceType === 'TelldusCenter') {
 
-		return 'icon_location_telldus_center_01';
+		return 'icon_location_telldus_center';
 
 	}
 	if (deviceType === 'TellStick Net') {
 
-		return 'icon_location_tell_stick_net_01';
+		return 'icon_location_tell_stick_net';
 
 	}
 	if (deviceType === 'TellStick Net v2') {
 
-		return 'icon_location_tell_stick_net_v2_01';
+		return 'icon_location_tell_stick_netv2';
 
 	}
 	if (deviceType === 'TellStick ZNet Lite') {
 
-		return 'icon_location_telldus_z_net_lite_01';
+		return 'icon_location_tell_stick_z_net_lite';
 
 	}
 	if (deviceType === 'TellStick ZNet Lite v2') {
 
-		return 'icon_location_telldus_z_net_lite_01';
+		return 'icon_location_tell_stick_z_net_litev2';
 
 	}
 	if (deviceType === 'OtioBox') {
 
-		return 'icon_location_otio_box_01';
+		return 'icon_location_otio_box';
 
 	}
-	return 'icon_location_otio_box_01';
+	return 'icon_location_otio_box';
 }
