@@ -162,7 +162,7 @@ class LocationActivationManual extends View {
 
 		return (
 			<View style={{flex: 1}}>
-				<KeyboardAvoidingView behavior="position" contentContainerStyle={{justifyContent: 'center'}}>
+				<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{justifyContent: 'center'}}>
 					<LabelBox
 						containerStyle={{marginBottom: 10}}
 						label={this.label}
@@ -178,15 +178,13 @@ class LocationActivationManual extends View {
 						/>
 						<FormattedMessage style={styles.textBody} {...messages.bodyContent}/>
 					</LabelBox>
-				</KeyboardAvoidingView>
-				<View style={styles.fixElevationIssue}>
 					<FloatingButton
 						buttonStyle={styles.buttonStyle}
 						onPress={this.onActivationCodeSubmit}
 						imageSource={require('../TabViews/img/right-arrow-key.png')}
 						showThrobber={false}
 					/>
-				</View>
+				</KeyboardAvoidingView>
 			</View>
 		);
 	}
@@ -216,10 +214,6 @@ const styles = StyleSheet.create({
 		right: deviceWidth * 0.053333333,
 		elevation: 10,
 		shadowOpacity: 0.99,
-	},
-	fixElevationIssue: {
-		flex: 1,
-		borderRadius: 0,
 	},
 });
 

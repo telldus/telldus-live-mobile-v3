@@ -153,7 +153,7 @@ class LocationName extends View {
 	render() {
 		return (
 			<View style={{flex: 1}}>
-				<KeyboardAvoidingView behavior="padding" contentContainerStyle={{justifyContent: 'center'}}>
+				<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{justifyContent: 'center'}}>
 					<LabelBox
 						containerStyle={{marginBottom: 10}}
 						label={this.label}
@@ -168,15 +168,13 @@ class LocationName extends View {
 							defaultValue={this.state.locationName}
 						/>
 					</LabelBox>
-				</KeyboardAvoidingView>
-				<View style={styles.fixElevationIssue}>
 					<FloatingButton
 						buttonStyle={styles.buttonStyle}
 						onPress={this.onNameSubmit}
 						imageSource={require('../TabViews/img/right-arrow-key.png')}
 						showThrobber={false}
 					/>
-				</View>
+				</KeyboardAvoidingView>
 			</View>
 		);
 	}
@@ -194,10 +192,6 @@ const styles = StyleSheet.create({
 		right: deviceWidth * 0.053333333,
 		elevation: 10,
 		shadowOpacity: 0.99,
-	},
-	fixElevationIssue: {
-		flex: 1,
-		borderRadius: 0,
 	},
 });
 
