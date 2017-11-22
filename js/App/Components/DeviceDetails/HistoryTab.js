@@ -86,7 +86,7 @@ class HistoryTab extends View {
 		tabBarIcon: ({ tintColor }) => (
 			<CustomIcon name="icon_history" size={24} color={tintColor}/>
 		),
-		tabBarOnPress: (scene: Object, jumpToIndex: Function) => {
+		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			let {state} = navigation;
 			state.params.actionOnHistoryTabPress();
 			jumpToIndex(scene.index);

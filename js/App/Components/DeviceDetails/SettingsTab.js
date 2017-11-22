@@ -76,7 +76,7 @@ class SettingsTab extends View {
 		tabBarIcon: ({ tintColor }) => (
 			<Icon name="icon_settings" size={24} color={tintColor}/>
 		),
-		tabBarOnPress: (scene: Object, jumpToIndex: Function) => {
+		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			jumpToIndex(scene.index);
 		},
 	});
