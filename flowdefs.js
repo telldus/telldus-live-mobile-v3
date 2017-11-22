@@ -14,6 +14,9 @@ declare module 'react-navigation' {
 declare module 'react-native-tab-view' {
 	declare var exports: any;
 }
+declare module 'redux-persist' {
+	declare var exports: any;
+}
 declare module '../../local-cli/bundle/assetPathUtils' {
 	declare var exports: any;
 }

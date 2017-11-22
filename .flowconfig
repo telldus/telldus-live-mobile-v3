@@ -22,6 +22,7 @@
 .*/node_modules/react-native/Libraries/BatchedBridge/MessageQueue.js
 .*/node_modules/react-native/Libraries/Network/NetInfo.js
 .*/node_modules/react-native-tab-view/.*
+.*/node_modules/redux-persist/.*
 .*/node_modules/react-native/local-cli/.*
 .*/node_modules/react-native/packager/.*
 .*/node_modules/react-native/Libraries/Renderer/src/renderers/shared/fiber/.*
