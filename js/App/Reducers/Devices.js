@@ -24,7 +24,7 @@
 'use strict';
 import type { Action } from 'Actions_Types';
 import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 
 import { methods } from '../../Config.js';
 
@@ -137,7 +137,7 @@ function reduceDevice(state:Object = {}, action:Action): Object {
 
 function byId(state = {}, action) {
 	if (action.type === REHYDRATE) {
-		if (action.payload.devices && action.payload.devices.byId) {
+		if (action.payload && action.payload.devices && action.payload.devices.byId) {
 			console.log('rehydrating devices.byId');
 			let devices = Object.keys(action.payload.devices.byId).map(k => action.payload.devices.byId[k]);
 			return devices.reduce((acc, deviceState) => {
@@ -211,7 +211,7 @@ function byId(state = {}, action) {
 
 const allIds = (state = [], action) => {
 	if (action.type === REHYDRATE) {
-		if (action.payload.devices && action.payload.devices.allIds) {
+		if (action.payload && action.payload.devices && action.payload.devices.allIds) {
 			console.log('rehydrating devices.allIds');
 			return [
 				...state,

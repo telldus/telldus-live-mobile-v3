@@ -24,7 +24,7 @@
 'use strict';
 
 import type { Action } from 'Actions_Types';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 
 import moment from 'moment-timezone';
 
@@ -76,7 +76,7 @@ function reduceJob(state: Object = jobInitialState, action: Action): State {
 export default function reduceJobs(state: Array<Object> = initialState, action: Object): Array<Object> {
 	if (action.type === REHYDRATE) {
 		console.log('rehydrating jobs');
-		if (action.payload.jobs) {
+		if (action.payload && action.payload.jobs) {
 			return [
 				...state,
 				...action.payload.jobs,
