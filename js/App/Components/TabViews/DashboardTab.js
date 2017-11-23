@@ -27,6 +27,8 @@ import { createSelector } from 'reselect';
 import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
+import Orientation from 'react-native-orientation';
+
 import { Text, List, ListDataSource, View } from 'BaseComponents';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
@@ -82,6 +84,7 @@ type State = {
 	listWidth: number,
 	dataSource: Object,
 	settings: boolean,
+	orientation: string,
 };
 
 const tileMargin = 8;
@@ -102,6 +105,7 @@ class DashboardTab extends View {
 	stopSensorTimer: () => void;
 	changeDisplayType: () => void;
 	onRefresh: () => void;
+	orientationDidChange: (string) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(messages.dashboard),
@@ -110,8 +114,9 @@ class DashboardTab extends View {
 
 	constructor(props: Props) {
 		super(props);
+		const orientation = Orientation.getInitialOrientation();
 		const { width } = Dimensions.get('window');
-		const tileWidth: number = this.calculateTileWidth(width);
+		const tileWidth: number = this.calculateTileWidth(width, orientation);
 
 		this.state = {
 			tileWidth,
@@ -120,6 +125,7 @@ class DashboardTab extends View {
 				rowHasChanged: this.rowHasChanged,
 			}).cloneWithRows(this.props.rows),
 			settings: false,
+			orientation,
 		};
 
 		this.tab = 'dashboardTab';
@@ -131,6 +137,8 @@ class DashboardTab extends View {
 		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.mixins = [Subscribable.Mixin];
+
+		this.orientationDidChange = this.orientationDidChange.bind(this);
 	}
 
 	startSensorTimer() {
@@ -169,10 +177,18 @@ class DashboardTab extends View {
 		}
 
 		this.startSensorTimer();
+		Orientation.addOrientationListener(this.orientationDidChange);
+	}
+
+	orientationDidChange(orientation) {
+		this.setState({
+			orientation,
+		});
 	}
 
 	componentWillUnmount() {
 		this.stopSensorTimer();
+		Orientation.removeOrientationListener(this.orientationDidChange);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -190,7 +206,7 @@ class DashboardTab extends View {
 	}
 
 	_onLayout = (event) => {
-		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width);
+		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width, this.state.orientation);
 		if (tileWidth !== this.state.tileWidth) {
 			this.setState({
 				tileWidth,
@@ -198,9 +214,9 @@ class DashboardTab extends View {
 		}
 	};
 
-	calculateTileWidth(listWidth: number): number {
+	calculateTileWidth(listWidth: number, orientation: string): number {
 		listWidth -= listMargin;
-		const isPortrait = true; // okay...
+		const isPortrait = orientation === 'PORTRAIT';
 		if (listWidth <= 0) {
 			return 0;
 		}
