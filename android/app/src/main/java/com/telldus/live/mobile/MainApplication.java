@@ -41,6 +41,7 @@ import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import io.fabric.sdk.android.Fabric;
+import com.github.yamill.orientation.OrientationPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -59,7 +60,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
 				new MapsPackage(),
-				new ReactNativePushNotificationPackage()
+				new ReactNativePushNotificationPackage(),
+				new OrientationPackage()
 			);
 		}
 		
