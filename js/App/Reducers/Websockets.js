@@ -21,7 +21,7 @@
 
 'use strict';
 
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 
 const initialState = {
 	session: {
@@ -31,7 +31,7 @@ const initialState = {
 };
 
 export default function reduceWebsockets(state: Object = { ...initialState }, action: Object) {
-	if (action.type === REHYDRATE && action.payload.websockets) {
+	if (action.type === REHYDRATE && action.payload && action.payload.websockets) {
 		return {
 			...state,
 			session: {

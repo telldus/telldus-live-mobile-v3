@@ -23,7 +23,9 @@
 
 'use strict';
 
-import { combineReducers } from 'redux';
+import { persistCombineReducers } from 'redux-persist';
+import { AsyncStorage } from 'react-native';
+import { localStorageKey } from 'Config';
 
 import Devices from './Devices';
 import Gateways from './Gateways';
@@ -39,7 +41,12 @@ import Websockets from './Websockets';
 import Modal from './Modal';
 import App from './App';
 
-module.exports = combineReducers({
+const config = {
+	key: localStorageKey,
+	storage: AsyncStorage,
+};
+
+module.exports = persistCombineReducers(config, {
 	devices: Devices,
 	gateways: Gateways,
 	navigation: Navigation,

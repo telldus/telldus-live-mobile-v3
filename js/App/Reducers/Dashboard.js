@@ -22,7 +22,7 @@
 'use strict';
 
 import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 
 import includes from 'lodash/includes';
 import omit from 'lodash/omit';
@@ -32,14 +32,14 @@ import differenceBy from 'lodash/differenceBy';
 
 const allIds = kind => (state = [], action) => {
 	if (action.type === 'persist/REHYDRATE') {
-		if (action.payload.dashboard && action.payload.dashboard.deviceIds && kind === 'device') {
+		if (action.payload && action.payload.dashboard && action.payload.dashboard.deviceIds && kind === 'device') {
 			console.log('rehydrating dashboard.deviceIds');
 			return [
 				...state,
 				...action.payload.dashboard.deviceIds,
 			];
 		}
-		if (action.payload.dashboard && action.payload.dashboard.sensorIds && kind === 'sensor') {
+		if (action.payload && action.payload.dashboard && action.payload.dashboard.sensorIds && kind === 'sensor') {
 			console.log('rehydrating dashboard.sensorIds');
 			return [
 				...state,
@@ -82,7 +82,7 @@ const allIds = kind => (state = [], action) => {
 
 const byId = kind => (state = {}, action) => {
 	if (action.type === REHYDRATE) {
-		if (action.payload.dashboard && action.payload.dashboard.devicesById
+		if (action.payload && action.payload.dashboard && action.payload.dashboard.devicesById
 		    && kind === 'device') {
 			console.log('rehydrating dashboard.devicesById');
 			return {
@@ -90,7 +90,7 @@ const byId = kind => (state = {}, action) => {
 				...action.payload.dashboard.devicesById,
 			};
 		}
-		if (action.payload.dashboard && action.payload.dashboard.sensorsById
+		if (action.payload && action.payload.dashboard && action.payload.dashboard.sensorsById
 		    && kind === 'sensor') {
 			console.log('rehydrating dashboard.sensorsById');
 			return {
@@ -146,7 +146,7 @@ const byId = kind => (state = {}, action) => {
 
 const sensorDisplayTypeById = (state = {}, action) => {
 	if (action.type === REHYDRATE) {
-		if (action.payload.dashboard && action.payload.dashboard.sensorDisplayTypeById) {
+		if (action.payload && action.payload.dashboard && action.payload.dashboard.sensorDisplayTypeById) {
 			console.log('rehydrating dashboard.sensorDisplayTypeById');
 			return {
 				...state,

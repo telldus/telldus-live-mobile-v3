@@ -22,7 +22,7 @@
 'use strict';
 
 import type { Action } from 'Actions_Types';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 
 import { combineReducers } from 'redux';
 
@@ -86,7 +86,7 @@ function reduceGateway(state: State = {}, action: Action): State {
 
 function byId(state = {}, action): State {
 	if (action.type === REHYDRATE) {
-		if (action.payload.gateways && action.payload.gateways.byId) {
+		if (action.payload && action.payload.gateways && action.payload.gateways.byId) {
 			console.log('rehydrating gateways.byId');
 			return {
 				...state,
@@ -123,7 +123,7 @@ function byId(state = {}, action): State {
 
 function allIds(state = [], action): Array<Object> {
 	if (action.type === REHYDRATE) {
-		if (action.payload.gateways && action.payload.gateways.allIds) {
+		if (action.payload && action.payload.gateways && action.payload.gateways.allIds) {
 			console.log('rehydrating gateways.allIds');
 			return [
 				...state,

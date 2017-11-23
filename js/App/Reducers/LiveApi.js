@@ -22,7 +22,7 @@
 'use strict';
 
 import type { Action } from 'Actions_Types';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 
 const initialState = {
 	sensors: false,

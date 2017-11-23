@@ -22,7 +22,7 @@
 'use strict';
 
 import type { Action } from 'Actions_Types';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 
 import { combineReducers } from 'redux';
 
@@ -141,7 +141,7 @@ function reduceSensor(state:Object = {}, action: Action): State {
 
 const byId = (state: Object = {}, action: Object): State => {
 	if (action.type === REHYDRATE) {
-		if (action.payload.sensors && action.payload.sensors.byId) {
+		if (action.payload && action.payload.sensors && action.payload.sensors.byId) {
 			console.log('rehydrating sensors.byId');
 			return {
 				...state,
@@ -187,7 +187,7 @@ const byId = (state: Object = {}, action: Object): State => {
 
 const allIds = (state: Array<Object> = [], action: Object): Array<Object> => {
 	if (action.type === REHYDRATE) {
-		if (action.payload.sensors && action.payload.sensors.allIds) {
+		if (action.payload && action.payload.sensors && action.payload.sensors.allIds) {
 			console.log('rehydrating sensors.allIds');
 			return [
 				...state,
