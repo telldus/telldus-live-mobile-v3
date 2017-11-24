@@ -370,7 +370,6 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 			console.log(message);
 		}
 		try {
-			console.log('TEST getState', getState());
 			let {gateways, App} = getState();
 			let gateway = gateways ? gateways.byId[gatewayId] : false;
 			if (gateway && gateway.websocketOnline && App.active) {
