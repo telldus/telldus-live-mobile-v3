@@ -235,6 +235,11 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 			websockets: { session: { id: sessionId } },
 		} = getState();
 
+		dispatch({
+			type: 'GATEWAY_WEBSOCKET_OPEN',
+			gatewayId,
+		});
+
 		authoriseWebsocket(sessionId);
 
 		addWebsocketFilter('device', 'added');
@@ -254,11 +259,6 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 		addWebsocketFilter('zwave', 'addNodeToNetworkStartTimeout');
 		addWebsocketFilter('zwave', 'interviewDone');
 		addWebsocketFilter('zwave', 'nodeInfo');
-
-		dispatch({
-			type: 'GATEWAY_WEBSOCKET_OPEN',
-			gatewayId,
-		});
 	};
 
 	websocket.onmessage = (msg) => {
