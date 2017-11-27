@@ -7,10 +7,11 @@ jest.useFakeTimers();
 
 describe('Test device actions', ()=>{
 	let store;
+	let accessToken = {access_token: 'bajs', refresh_token: 'bajs'};
 
 	beforeEach(() => {
 		store = configureStore();
-		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken: 'bajs'});
+		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
 		store.dispatch({type: 'RECEIVED_DEVICES', payload: {
 			device: [{
 				id: '1',
