@@ -79,7 +79,7 @@ export default class TelldusWebsocket {
 		this._onAppStateChange = this._onAppStateChange.bind(this);
 	}
 
-	close(keepClosed?: boolean = true) {
+	close() {
 		if (!this.websocket) {
 			return console.error('there is no websocket to close');
 		}
@@ -91,7 +91,7 @@ export default class TelldusWebsocket {
 		}
 
 		this.websocket.close(null, null, {
-			keepClosed: keepClosed,
+			keepClosed: true,
 			// fastClose: true,
 		});
 	}
@@ -125,7 +125,7 @@ export default class TelldusWebsocket {
 	_addListener(eventType:string) {
 		const noop = event => console.log('nooping', event);
 		this.websocket[eventType] = event => {
-      // $FlowFixMe
+		// $FlowFixMe
 			const fn = this[eventType] || noop;
 			fn(event);
 		};
@@ -138,7 +138,6 @@ export default class TelldusWebsocket {
 	_onAppStateChange(appState) {
 		if (appState === 'active') {
 			console.log('app is active, reopening socket connection');
-			this.close(false);
 			this.open();
 		}
 		if (appState === 'background') {
