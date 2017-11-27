@@ -26,11 +26,13 @@ import type { Action } from 'Actions_Types';
 export type State = {
 	errorGlobalMessage: any,
 	errorGlobalShow: boolean,
+	active: boolean,
 };
 
 const initialState = {
 	errorGlobalMessage: 'Action Currently Unavailable',
 	errorGlobalShow: false,
+	active: false,
 };
 
 export default function reduceApp(state: State = initialState, action: Action): State {
@@ -44,6 +46,18 @@ export default function reduceApp(state: State = initialState, action: Action): 
 		return {
 			...state,
 			errorGlobalShow: false,
+		};
+	}
+	if (action.type === 'APP_FOREGROUND') {
+		return {
+			...state,
+			active: true,
+		};
+	}
+	if (action.type === 'APP_BACKGROUND') {
+		return {
+			...state,
+			active: false,
 		};
 	}
 	return state;
