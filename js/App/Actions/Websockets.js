@@ -235,6 +235,11 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 			websockets: { session: { id: sessionId } },
 		} = getState();
 
+		dispatch({
+			type: 'GATEWAY_WEBSOCKET_OPEN',
+			gatewayId,
+		});
+
 		authoriseWebsocket(sessionId);
 
 		addWebsocketFilter('device', 'added');
@@ -254,11 +259,6 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 		addWebsocketFilter('zwave', 'addNodeToNetworkStartTimeout');
 		addWebsocketFilter('zwave', 'interviewDone');
 		addWebsocketFilter('zwave', 'nodeInfo');
-
-		dispatch({
-			type: 'GATEWAY_WEBSOCKET_OPEN',
-			gatewayId,
-		});
 	};
 
 	websocket.onmessage = (msg) => {
@@ -370,9 +370,9 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 			console.log(message);
 		}
 		try {
-			let {gateways} = getState();
+			let {gateways, App} = getState();
 			let gateway = gateways ? gateways.byId[gatewayId] : false;
-			if (gateway && gateway.websocketOnline) {
+			if (gateway && gateway.websocketOnline && App.active) {
 				// $FlowFixMe
 				websocket.send(message);
 			}
