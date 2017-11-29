@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
+import Platform from 'Platform';
 
 import { List, ListDataSource, Text, View } from 'BaseComponents';
 import { JobRow } from 'TabViews_SubViews';
@@ -36,6 +37,10 @@ import Theme from 'Theme';
 import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
+import {
+	getDeviceHeight,
+	getDeviceWidth,
+} from 'Lib';
 
 const messages = defineMessages({
 	friday: {
@@ -147,8 +152,15 @@ class SchedulerTab extends View {
 	}
 
 	render() {
+
+		let containerStyle = null;
+		if (Platform.OS === 'android') {
+			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
+				{flex: 1, marginTop: getDeviceHeight() * 0.0888} : {flex: 1, marginLeft: getDeviceWidth() * 0.0888};
+		}
+
 		return (
-			<View style={{ flex: 1 }}>
+			<View style={containerStyle}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}

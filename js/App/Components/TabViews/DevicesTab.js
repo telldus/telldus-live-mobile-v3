@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
+import Platform from 'Platform';
 
 import { List, ListDataSource, Text, View } from 'BaseComponents';
 import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
@@ -35,6 +36,10 @@ import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
+import {
+	getDeviceHeight,
+	getDeviceWidth,
+} from 'Lib';
 
 import { parseDevicesForListView } from 'Reducers_Devices';
 
@@ -56,6 +61,7 @@ type Props = {
 	tab: string,
 	dispatch: Function,
 	stackNavigator: Object,
+	screenProps: Object,
 };
 
 type State = {
@@ -128,8 +134,15 @@ class DevicesTab extends View {
 	}
 
 	render() {
+
+		let containerStyle = null;
+		if (Platform.OS === 'android') {
+			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
+				{flex: 1, marginTop: getDeviceHeight() * 0.0888} : {flex: 1, marginLeft: getDeviceWidth() * 0.0888};
+		}
+
 		return (
-			<View style={{ flex: 1 }}>
+			<View style={containerStyle}>
 				<List
 					ref="list"
 					dataSource={this.state.dataSource}

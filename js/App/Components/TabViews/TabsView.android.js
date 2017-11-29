@@ -24,23 +24,25 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import Orientation from 'react-native-orientation';
+const orientation = Orientation.getInitialOrientation();
 
 import { FormattedMessage, Text, View, Icon, Image, Header } from 'BaseComponents';
 import i18n from '../../Translations/common';
 
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import Theme from 'Theme';
 
 import { SettingsDetailModal } from 'DetailViews';
+import TabBar from './TabBar';
 
 import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode, addNewGateway } from 'Actions';
 import TabViews from 'TabViews';
-import { hasStatusBar } from 'Lib';
+import { hasStatusBar, getDeviceHeight, getDeviceWidth } from 'Lib';
 import { TabNavigator } from 'react-navigation';
 
 const messages = defineMessages({
@@ -159,21 +161,14 @@ const TabNavigatorConfig = {
 	swipeEnabled: true,
 	lazy: true,
 	animationEnabled: true,
+	tabBarComponent: TabBar,
+	tabBarPosition: 'top',
 	tabBarOptions: {
 		activeTintColor: '#fff',
 		indicatorStyle: {
 			backgroundColor: '#fff',
 		},
 		scrollEnabled: true,
-		labelStyle: {
-			fontSize: Dimensions.get('window').width / 35,
-		},
-		tabStyle: {
-			width: Dimensions.get('window').width / 2.8,
-		},
-		style: {
-			backgroundColor: Theme.Core.brandPrimary,
-		},
 	},
 };
 
@@ -233,10 +228,22 @@ class TabsView extends View {
 			onPress: this.openDrawer,
 		};
 
+		this.menuButtonOnLand = {
+			icon: {
+				name: 'bars',
+				size: 22,
+				color: '#fff',
+				style: styles.menuButOnLand,
+				iconStyle: styles.menuIconOnLand,
+			},
+			onPress: this.openDrawer,
+		};
+
 		this.state = {
 			settings: false,
 			routeName: '',
 			addingNewLocation: false,
+			orientation,
 		};
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
@@ -247,10 +254,23 @@ class TabsView extends View {
 		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
+
+		this.orientationDidChange = this.orientationDidChange.bind(this);
 	}
 
 	componentDidMount() {
 		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
+		Orientation.addOrientationListener(this.orientationDidChange);
+	}
+
+	orientationDidChange(deviceOrientation) {
+		this.setState({
+			orientation: deviceOrientation,
+		});
+	}
+
+	componentWillUnmount() {
+		Orientation.removeOrientationListener(this.orientationDidChange);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -321,7 +341,13 @@ class TabsView extends View {
 	};
 
 	render() {
-		let screenProps = { stackNavigator: this.props.stackNavigator };
+
+		let headerStyle = this.state.orientation === 'PORTRAIT' ? {height: getDeviceHeight() * 0.1111} : styles.headerOnLand;
+		let containerStyle = this.state.orientation === 'PORTRAIT' ? {flex: 1} : styles.containerOnLand;
+		let logoStyle = this.state.orientation === 'PORTRAIT' ? {} : styles.logoOnLand;
+		let leftButton = this.state.orientation === 'PORTRAIT' ? this.menuButton : this.menuButtonOnLand;
+
+		let screenProps = { stackNavigator: this.props.stackNavigator, orientation: this.state.orientation };
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
@@ -338,9 +364,9 @@ class TabsView extends View {
 				drawerPosition={DrawerLayoutAndroid.positions.Left}
 				renderNavigationView={this.renderNavigationView}
 			>
-				<View style={{ flex: 1 }}>
-					<Header leftButton={this.menuButton} rightButton={rightButton}/>
-					<View>
+				<View style={{flex: 1}}>
+					<Header style={headerStyle} logoStyle={logoStyle} leftButton={leftButton} rightButton={rightButton}/>
+					<View style={containerStyle}>
 						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 						{
 							this.state.settings ? (
@@ -359,6 +385,31 @@ class TabsView extends View {
 }
 
 const styles = StyleSheet.create({
+	headerOnLand: {
+		transform: [{rotateZ: '-90deg'}],
+		position: 'absolute',
+		left: -(getDeviceHeight() * 0.4444),
+		top: orientation === 'PORTRAIT' ? getDeviceWidth() * 0.7444 : getDeviceHeight() * 0.7444,
+		width: getDeviceHeight(),
+		height: getDeviceHeight() * 0.1111,
+	},
+	containerOnLand: {
+		flex: 1,
+		marginLeft: getDeviceHeight() * 0.1000,
+	},
+	menuButOnLand: {
+		position: 'absolute',
+		left: getDeviceHeight() * 0.8999,
+		top: getDeviceHeight() * 0.0400,
+	},
+	menuIconOnLand: {
+		transform: [{rotateZ: '90deg'}],
+	},
+	logoOnLand: {
+		position: 'absolute',
+		left: getDeviceHeight() * 0.5999,
+		top: getDeviceHeight() * 0.0400,
+	},
 	navigationHeader: {
 		height: 60,
 		marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),

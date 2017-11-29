@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
+import Platform from 'Platform';
 
 import { List, ListDataSource, View } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
@@ -35,6 +36,10 @@ import { toggleEditMode } from 'Actions';
 
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
+import {
+	getDeviceHeight,
+	getDeviceWidth,
+} from 'Lib';
 
 const messages = defineMessages({
 	sensors: {
@@ -50,6 +55,7 @@ type Props = {
 	editMode: boolean,
 	tab: string,
 	dispatch: Function,
+	screenProps: Object,
 };
 
 type State = {
@@ -115,8 +121,15 @@ class SensorsTab extends View {
 	}
 
 	render() {
+
+		let containerStyle = null;
+		if (Platform.OS === 'android') {
+			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
+				{flex: 1, marginTop: getDeviceHeight() * 0.0888} : {flex: 1, marginLeft: getDeviceWidth() * 0.0888};
+		}
+
 		return (
-			<View>
+			<View style={containerStyle}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
