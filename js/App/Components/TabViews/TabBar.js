@@ -24,17 +24,21 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import Orientation from 'react-native-orientation';
 const orientation = Orientation.getInitialOrientation();
 import Theme from 'Theme';
 
-import { View, Text } from 'BaseComponents';
+import { View } from 'BaseComponents';
+import Tabs from './Tabs';
 
 const deviceHeight = orientation === 'PORTRAIT' ? Dimensions.get('screen').height : Dimensions.get('screen').width;
 const deviceWidth = orientation === 'PORTRAIT' ? Dimensions.get('screen').width : Dimensions.get('screen').height;
 
 type Props = {
+	navigationState: Object,
+	navigation: Object,
+	screenProps: Object,
 };
 
 type State = {
@@ -45,6 +49,7 @@ export default class TabBar extends View {
 	state: State;
 
 	orientationDidChange: (string) => void;
+	renderTabs: (Object, number) => Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -53,6 +58,8 @@ export default class TabBar extends View {
 		this.state = {
 			orientation,
 		};
+
+		this.renderTabs = this.renderTabs.bind(this);
 	}
 
 	componentDidMount() {
@@ -69,30 +76,23 @@ export default class TabBar extends View {
 		Orientation.removeOrientationListener(this.orientationDidChange);
 	}
 
+	renderTabs(tab: Object, index: number): Object {
+		let { screenProps, navigation } = this.props;
+		return (
+			<Tabs key={index} intl={screenProps.intl} tab={tab} navigation={navigation}/>
+		);
+	}
+
 	render() {
+		let { navigationState } = this.props;
+		let tabs = navigationState.routes.map((tab, index) => {
+			return this.renderTabs(tab, index);
+		});
 		let containerStyle = this.state.orientation === 'PORTRAIT' ? styles.container : styles.containerOnLand;
+
 		return (
 			<View style={containerStyle}>
-				<TouchableOpacity style={styles.tabBar}>
-					<Text style={styles.label}>
-				DASHBOARD
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.tabBar}>
-					<Text style={styles.label}>
-				DASHBOARD
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.tabBar}>
-					<Text style={styles.label}>
-				DASHBOARD
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.tabBar}>
-					<Text style={styles.label}>
-				DASHBOARD
-					</Text>
-				</TouchableOpacity>
+				{tabs}
 			</View>
 		);
 	}
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
 		width: deviceHeight,
 		backgroundColor: Theme.Core.brandPrimary,
 		...Theme.Core.shadow,
+		zIndex: 1,
 	},
 	containerOnLand: {
 		flexDirection: 'row',
@@ -121,12 +122,13 @@ const styles = StyleSheet.create({
 		width: deviceHeight,
 		backgroundColor: Theme.Core.brandPrimary,
 		...Theme.Core.shadow,
+		zIndex: 1,
 	},
 	tabBar: {
-		width: deviceWidth * 0.28,
 		backgroundColor: Theme.Core.brandPrimary,
 	},
 	label: {
+		paddingHorizontal: 20,
 		color: '#fff',
 	},
 });
