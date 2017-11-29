@@ -15,20 +15,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Lib
  */
 
-'use strict';
+// @flow
 
-import getRouteName from './getRouteName';
-import getDeviceWidth from './getDeviceWidth';
-import getDeviceHeight from './getDeviceHeight';
-import hasStatusBar from './hasStatusBar';
+import { Dimensions } from 'react-native';
 
-module.exports = {
-	getRouteName,
-	getDeviceWidth,
-	getDeviceHeight,
-	hasStatusBar,
-};
+export default function getDeviceHeight(): number {
+	return Dimensions.get('window').height;
+}
