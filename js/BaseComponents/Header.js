@@ -39,6 +39,7 @@ import _ from 'lodash';
 
 type Props = {
 	children: Object,
+	logoStyle: Object | number,
 	rounded: number,
 	searchBar: ?Object,
 	rightButton: Object,
@@ -126,7 +127,7 @@ export default class HeaderComponent extends Base {
 			return (
 				<Image
 					source={require('../App/Components/TabViews/img/telldus-logo3.png')}
-					style={this.getInitialStyle().logoImage}
+					style={[this.getInitialStyle().logoImage, this.props.logoStyle]}
 				/>
 			);
 		} else if (!Array.isArray(this.props.children)) {
@@ -303,8 +304,8 @@ export default class HeaderComponent extends Base {
 			return <Image source={button.image}/>;
 		}
 		if (button.icon) {
-			const { name, size, color } = button.icon;
-			return <Icon name={name} size={size} color={color}/>;
+			const { name, size, color, iconStyle } = button.icon;
+			return <Icon name={name} size={size} color={color} style={iconStyle}/>;
 		}
 		if (button.title) {
 			return <Text>{button.title}</Text>;
@@ -340,6 +341,7 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						left: 0,
 					},
+					leftButton.icon.style,
 				]}
 			>
 				{this.renderButtonContent(leftButton)}
