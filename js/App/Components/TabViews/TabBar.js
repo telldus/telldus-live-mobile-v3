@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import Orientation from 'react-native-orientation';
 const orientation = Orientation.getInitialOrientation();
 import Theme from 'Theme';
@@ -89,46 +89,49 @@ export default class TabBar extends View {
 			return this.renderTabs(tab, index);
 		});
 		let containerStyle = this.state.orientation === 'PORTRAIT' ? styles.container : styles.containerOnLand;
-
+		let scrollView = this.state.orientation === 'PORTRAIT' ? styles.scrollView : styles.scrollViewLand;
 		return (
-			<View style={containerStyle}>
+			<ScrollView
+				contentContainerStyle={containerStyle}
+				style={scrollView}
+				horizontal
+			>
 				{tabs}
-			</View>
+			</ScrollView>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
+	scrollView: {
+		position: 'absolute',
+		...Theme.Core.shadow,
+		zIndex: 1,
+	},
 	container: {
 		flexDirection: 'row',
-		position: 'absolute',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
 		height: deviceHeight * 0.0777,
 		width: deviceHeight,
 		backgroundColor: Theme.Core.brandPrimary,
+		zIndex: 1,
+	},
+	scrollViewLand: {
+		position: 'absolute',
+		transform: [{rotateZ: '-90deg'}],
 		...Theme.Core.shadow,
 		zIndex: 1,
+		left: -(deviceHeight * 0.3722),
+		top: orientation === 'PORTRAIT' ? deviceWidth * 0.6669 : deviceHeight * 0.6669,
 	},
 	containerOnLand: {
 		flexDirection: 'row',
-		position: 'absolute',
-		transform: [{rotateZ: '-90deg'}],
-		left: -(deviceHeight * 0.4666),
-		top: orientation === 'PORTRAIT' ? deviceWidth * 0.7444 : deviceHeight * 0.7444,
 		height: deviceHeight * 0.0777,
 		alignItems: 'center',
 		justifyContent: 'flex-end',
 		width: deviceHeight,
 		backgroundColor: Theme.Core.brandPrimary,
-		...Theme.Core.shadow,
 		zIndex: 1,
-	},
-	tabBar: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	label: {
-		paddingHorizontal: 20,
-		color: '#fff',
 	},
 });
