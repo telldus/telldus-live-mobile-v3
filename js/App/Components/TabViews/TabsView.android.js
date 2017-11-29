@@ -241,7 +241,7 @@ class TabsView extends View {
 
 		this.state = {
 			settings: false,
-			routeName: '',
+			routeName: 'Dashboard',
 			addingNewLocation: false,
 			orientation,
 		};
@@ -347,7 +347,11 @@ class TabsView extends View {
 		let logoStyle = this.state.orientation === 'PORTRAIT' ? {} : styles.logoOnLand;
 		let leftButton = this.state.orientation === 'PORTRAIT' ? this.menuButton : this.menuButtonOnLand;
 
-		let screenProps = { stackNavigator: this.props.stackNavigator, orientation: this.state.orientation };
+		let screenProps = {
+			stackNavigator: this.props.stackNavigator,
+			orientation: this.state.orientation,
+			currentTab: this.state.routeName,
+		};
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}

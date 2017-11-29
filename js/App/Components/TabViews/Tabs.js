@@ -24,20 +24,24 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import Orientation from 'react-native-orientation';
+const orientation = Orientation.getInitialOrientation();
 import Theme from 'Theme';
 import i18n from '../../Translations/common';
 
 import { View, Text } from 'BaseComponents';
 
 type Props = {
-	intl: Object,
+	screenProps: Object,
 	tab: Object,
 	navigation: Object,
 };
 
 type State = {
 };
+
+const deviceHeight = orientation === 'PORTRAIT' ? Dimensions.get('screen').height : Dimensions.get('screen').width;
 
 export default class Tabs extends View {
 	props: Props;
@@ -48,7 +52,7 @@ export default class Tabs extends View {
 	constructor(props: Props) {
 		super(props);
 
-		let { intl } = this.props;
+		let { intl } = this.props.screenProps;
 
 		this.dashboard = intl.formatMessage(i18n.dashboard).toUpperCase();
 		this.devices = intl.formatMessage(i18n.devices).toUpperCase();
@@ -66,7 +70,7 @@ export default class Tabs extends View {
 
 	render() {
 		let label = '';
-		let { tab } = this.props;
+		let { tab, screenProps } = this.props;
 		if (tab.routeName === 'Dashboard') {
 			label = this.dashboard;
 		}
@@ -79,11 +83,15 @@ export default class Tabs extends View {
 		if (tab.routeName === 'Scheduler') {
 			label = this.scheduler;
 		}
+
 		return (
 			<TouchableOpacity style={styles.tabBar} onPress={this.onTabPress}>
 				<Text style={styles.label}>
 					{label}
 				</Text>
+				{!!(screenProps.currentTab === tab.routeName) &&
+					<View style={styles.indicator}/>
+				}
 			</TouchableOpacity>
 		);
 	}
@@ -94,8 +102,13 @@ const styles = StyleSheet.create({
 		backgroundColor: Theme.Core.brandPrimary,
 	},
 	label: {
-		paddingHorizontal: 20,
-		paddingVertical: 20,
+		paddingHorizontal: 30,
+		paddingVertical: deviceHeight * 0.02599,
 		color: '#fff',
+	},
+	indicator: {
+		flex: 1,
+		backgroundColor: '#fff',
+		height: 2,
 	},
 });
