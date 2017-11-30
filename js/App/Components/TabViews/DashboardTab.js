@@ -49,7 +49,6 @@ import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import reactMixin from 'react-mixin';
 import {
-	getDeviceHeight,
 	getDeviceWidth,
 } from 'Lib';
 
@@ -223,7 +222,7 @@ class DashboardTab extends View {
 		let containerStyle = null;
 		if (Platform.OS === 'android') {
 			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				{marginTop: getDeviceHeight() * 0.0888} : {marginLeft: getDeviceWidth() * 0.1};
+				{} : {marginLeft: getDeviceWidth() * 0.1};
 		}
 
 		return (

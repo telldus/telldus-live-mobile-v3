@@ -99,22 +99,24 @@ export default class TabBar extends View {
 		let containerStyle = this.state.orientation === 'PORTRAIT' ? styles.container : styles.containerOnLand;
 		let scrollView = this.state.orientation === 'PORTRAIT' ? styles.scrollView : styles.scrollViewLand;
 		return (
-			<ScrollView
-				ref="scrollView"
-				contentContainerStyle={containerStyle}
-				style={scrollView}
-				horizontal
-				showsHorizontalScrollIndicator={false}
-			>
-				{tabs}
-			</ScrollView>
+			<View style={scrollView}>
+				<ScrollView
+					ref="scrollView"
+					contentContainerStyle={containerStyle}
+					horizontal
+					showsHorizontalScrollIndicator={false}
+				>
+					{tabs}
+				</ScrollView>
+			</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
 	scrollView: {
-		position: 'absolute',
+		flex: 0,
+		backgroundColor: Theme.Core.brandPrimary,
 		...Theme.Core.shadow,
 		zIndex: 1,
 	},
@@ -123,13 +125,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'flex-start',
 		height: deviceHeight * 0.0777,
-		width: deviceHeight,
-		backgroundColor: Theme.Core.brandPrimary,
 		zIndex: 1,
 	},
 	scrollViewLand: {
+		flex: 0,
 		position: 'absolute',
 		transform: [{rotateZ: '-90deg'}],
+		backgroundColor: Theme.Core.brandPrimary,
 		...Theme.Core.shadow,
 		zIndex: 1,
 		left: -(deviceHeight * 0.3722),
@@ -141,7 +143,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'flex-end',
 		width: deviceHeight,
-		backgroundColor: Theme.Core.brandPrimary,
 		zIndex: 1,
 	},
 });

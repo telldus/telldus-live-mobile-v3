@@ -37,7 +37,6 @@ import { toggleEditMode } from 'Actions';
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import {
-	getDeviceHeight,
 	getDeviceWidth,
 } from 'Lib';
 
@@ -138,7 +137,7 @@ class DevicesTab extends View {
 		let containerStyle = null;
 		if (Platform.OS === 'android') {
 			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				{flex: 1, marginTop: getDeviceHeight() * 0.0888} : {flex: 1, marginLeft: getDeviceWidth() * 0.1};
+				{flex: 1} : {flex: 1, marginLeft: getDeviceWidth() * 0.1};
 		}
 
 		return (
