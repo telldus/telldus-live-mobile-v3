@@ -43,6 +43,8 @@ type Props = {
 type State = {
 	xCord: number,
 	width: number,
+	widthLand: any,
+	heightLand: any,
 };
 
 const deviceHeight = orientation === 'PORTRAIT' ? Dimensions.get('screen').height : Dimensions.get('screen').width;
@@ -53,6 +55,7 @@ export default class Tabs extends View {
 
 	onTabPress: () => void;
 	onLayout: (Object) => void;
+	onLabelLayout: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -60,6 +63,8 @@ export default class Tabs extends View {
 		this.state = {
 			xCord: 0,
 			width: 0,
+			widthLand: undefined,
+			heightLand: undefined,
 		};
 
 		let { intl } = this.props.screenProps;
@@ -71,6 +76,7 @@ export default class Tabs extends View {
 
 		this.onTabPress = this.onTabPress.bind(this);
 		this.onLayout = this.onLayout.bind(this);
+		this.onLabelLayout = this.onLabelLayout.bind(this);
 
 	}
 
@@ -88,9 +94,19 @@ export default class Tabs extends View {
 		});
 	}
 
+	onLabelLayout(ev: Object) {
+		if (this.props.screenProps.orientation !== 'PORTRAIT' && !this.state.heightLand && !this.state.widthLand) {
+			this.setState({
+				heightLand: ev.nativeEvent.layout.width + 30,
+				widthLand: ev.nativeEvent.layout.height + (deviceHeight * 0.05),
+			});
+		}
+	}
+
 	render() {
 		let label = '';
 		let { tab, screenProps } = this.props;
+		let { widthLand, heightLand } = this.state;
 		if (tab.routeName === 'Dashboard') {
 			label = this.dashboard;
 		}
@@ -104,14 +120,19 @@ export default class Tabs extends View {
 			label = this.scheduler;
 		}
 
+		let labelLand = screenProps.orientation === 'PORTRAIT' ? styles.label : styles.labelLand;
+		let tabBarLand = screenProps.orientation === 'PORTRAIT' ? {flexDirection: 'column'} : {flexDirection: 'row', height: heightLand, width: widthLand};
+
 		return (
-			<TouchableOpacity style={styles.tabBar} onPress={this.onTabPress} onLayout={this.onLayout}>
-				<Text style={styles.label}>
-					{label}
-				</Text>
-				{!!(screenProps.currentTab === tab.routeName) &&
-					<View style={styles.indicator}/>
-				}
+			<TouchableOpacity onPress={this.onTabPress} onLayout={this.onLayout}>
+				<View style={[styles.tabBar, tabBarLand]}>
+					<Text style={labelLand} onLayout={this.onLabelLayout}>
+						{label}
+					</Text>
+					{!!(screenProps.currentTab === tab.routeName) &&
+						<View style={styles.indicator}/>
+					}
+				</View>
 			</TouchableOpacity>
 		);
 	}
@@ -120,14 +141,22 @@ export default class Tabs extends View {
 const styles = StyleSheet.create({
 	tabBar: {
 		backgroundColor: Theme.Core.brandPrimary,
+		alignItems: 'center',
+		justifyContent: 'center',
+		flexWrap: 'nowrap',
 	},
 	label: {
 		paddingHorizontal: 30,
 		paddingVertical: deviceHeight * 0.02599,
 		color: '#fff',
 	},
+	labelLand: {
+		transform: [{rotateZ: '-90deg'}],
+		color: '#fff',
+		paddingHorizontal: 30,
+		paddingVertical: deviceHeight * 0.02599,
+	},
 	indicator: {
-		flex: 1,
 		backgroundColor: '#fff',
 		height: 2,
 	},

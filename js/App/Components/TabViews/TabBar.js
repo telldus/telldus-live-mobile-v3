@@ -103,7 +103,7 @@ export default class TabBar extends View {
 				<ScrollView
 					ref="scrollView"
 					contentContainerStyle={containerStyle}
-					horizontal
+					horizontal={this.state.orientation === 'PORTRAIT'}
 					showsHorizontalScrollIndicator={false}
 					overScrollMode="never"
 				>
@@ -129,21 +129,18 @@ const styles = StyleSheet.create({
 		zIndex: 1,
 	},
 	scrollViewLand: {
-		flex: 0,
+		top: 0,
+		bottom: 0,
 		position: 'absolute',
-		transform: [{rotateZ: '-90deg'}],
 		backgroundColor: Theme.Core.brandPrimary,
 		...Theme.Core.shadow,
 		zIndex: 1,
-		left: -(deviceHeight * 0.3722),
-		top: orientation === 'PORTRAIT' ? deviceWidth * 0.6610 : deviceHeight * 0.6610,
 	},
 	containerOnLand: {
-		flexDirection: 'row',
-		height: deviceHeight * 0.09222,
+		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'flex-end',
-		width: deviceHeight,
+		justifyContent: 'flex-start',
+		width: deviceHeight * 0.0777,
 		zIndex: 1,
 	},
 });
