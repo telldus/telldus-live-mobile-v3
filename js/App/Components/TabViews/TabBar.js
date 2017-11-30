@@ -104,6 +104,7 @@ export default class TabBar extends View {
 				contentContainerStyle={containerStyle}
 				style={scrollView}
 				horizontal
+				showsHorizontalScrollIndicator={false}
 			>
 				{tabs}
 			</ScrollView>
