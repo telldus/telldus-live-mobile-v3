@@ -36,9 +36,13 @@ type Props = {
 	screenProps: Object,
 	tab: Object,
 	navigation: Object,
+	onLayout: Object,
+	onPress: Function,
 };
 
 type State = {
+	xCord: number,
+	width: number,
 };
 
 const deviceHeight = orientation === 'PORTRAIT' ? Dimensions.get('screen').height : Dimensions.get('screen').width;
@@ -48,9 +52,15 @@ export default class Tabs extends View {
 	state: State;
 
 	onTabPress: () => void;
+	onLayout: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
+
+		this.state = {
+			xCord: 0,
+			width: 0,
+		};
 
 		let { intl } = this.props.screenProps;
 
@@ -60,12 +70,22 @@ export default class Tabs extends View {
 		this.scheduler = intl.formatMessage(i18n.scheduler).toUpperCase();
 
 		this.onTabPress = this.onTabPress.bind(this);
+		this.onLayout = this.onLayout.bind(this);
 
 	}
 
 	onTabPress() {
-		let { navigation, tab } = this.props;
+		let { navigation, tab, onPress } = this.props;
+		let { xCord, width } = this.state;
 		navigation.navigate(tab.routeName);
+		onPress(xCord, width);
+	}
+
+	onLayout(ev: Object) {
+		this.setState({
+			xCord: ev.nativeEvent.layout.x,
+			width: ev.nativeEvent.layout.width,
+		});
 	}
 
 	render() {
@@ -85,7 +105,7 @@ export default class Tabs extends View {
 		}
 
 		return (
-			<TouchableOpacity style={styles.tabBar} onPress={this.onTabPress}>
+			<TouchableOpacity style={styles.tabBar} onPress={this.onTabPress} onLayout={this.onLayout}>
 				<Text style={styles.label}>
 					{label}
 				</Text>

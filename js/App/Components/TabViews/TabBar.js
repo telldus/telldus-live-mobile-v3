@@ -50,6 +50,7 @@ export default class TabBar extends View {
 
 	orientationDidChange: (string) => void;
 	renderTabs: (Object, number) => Object;
+	scrollToTab: (number, number) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -60,6 +61,7 @@ export default class TabBar extends View {
 		};
 
 		this.renderTabs = this.renderTabs.bind(this);
+		this.scrollToTab = this.scrollToTab.bind(this);
 	}
 
 	componentDidMount() {
@@ -76,10 +78,16 @@ export default class TabBar extends View {
 		Orientation.removeOrientationListener(this.orientationDidChange);
 	}
 
+	scrollToTab(position: number, width: number) {
+		let x = (position + width) - (deviceWidth);
+		x = x < 0 ? 0 : x;
+		this.refs.scrollView.scrollTo({x: x, y: undefined, animated: true});
+	}
+
 	renderTabs(tab: Object, index: number): Object {
 		let { screenProps, navigation } = this.props;
 		return (
-			<Tabs key={index} screenProps={screenProps} tab={tab} navigation={navigation}/>
+			<Tabs key={index} onPress={this.scrollToTab} screenProps={screenProps} tab={tab} navigation={navigation}/>
 		);
 	}
 
@@ -92,6 +100,7 @@ export default class TabBar extends View {
 		let scrollView = this.state.orientation === 'PORTRAIT' ? styles.scrollView : styles.scrollViewLand;
 		return (
 			<ScrollView
+				ref="scrollView"
 				contentContainerStyle={containerStyle}
 				style={scrollView}
 				horizontal
