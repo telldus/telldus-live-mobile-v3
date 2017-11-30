@@ -156,7 +156,7 @@ class SchedulerTab extends View {
 		let containerStyle = null;
 		if (Platform.OS === 'android') {
 			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				{flex: 1, marginTop: getDeviceHeight() * 0.0888} : {flex: 1, marginLeft: getDeviceWidth() * 0.0888};
+				{flex: 1, marginTop: getDeviceHeight() * 0.0888} : {flex: 1, marginLeft: getDeviceWidth() * 0.1};
 		}
 
 		return (

@@ -133,11 +133,11 @@ const styles = StyleSheet.create({
 		...Theme.Core.shadow,
 		zIndex: 1,
 		left: -(deviceHeight * 0.3722),
-		top: orientation === 'PORTRAIT' ? deviceWidth * 0.6669 : deviceHeight * 0.6669,
+		top: orientation === 'PORTRAIT' ? deviceWidth * 0.6610 : deviceHeight * 0.6610,
 	},
 	containerOnLand: {
 		flexDirection: 'row',
-		height: deviceHeight * 0.0777,
+		height: deviceHeight * 0.09222,
 		alignItems: 'center',
 		justifyContent: 'flex-end',
 		width: deviceHeight,

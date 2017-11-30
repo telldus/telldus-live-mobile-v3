@@ -223,7 +223,7 @@ class DashboardTab extends View {
 		let containerStyle = null;
 		if (Platform.OS === 'android') {
 			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				{marginTop: getDeviceHeight() * 0.0888} : {marginLeft: getDeviceWidth() * 0.0888};
+				{marginTop: getDeviceHeight() * 0.0888} : {marginLeft: getDeviceWidth() * 0.1};
 		}
 
 		return (
