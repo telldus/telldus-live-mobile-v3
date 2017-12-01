@@ -106,6 +106,7 @@ export default class TabBar extends View {
 					contentContainerStyle={containerStyle}
 					horizontal={this.state.orientation === 'PORTRAIT'}
 					showsHorizontalScrollIndicator={false}
+					showsVerticalScrollIndicator={false}
 					overScrollMode="never"
 				>
 					{tabs}
@@ -126,7 +127,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		height: getDeviceHeight() * 0.0777,
 		zIndex: 1,
 	},
 	scrollViewLand: {
