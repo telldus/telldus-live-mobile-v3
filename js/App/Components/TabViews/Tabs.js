@@ -96,8 +96,8 @@ export default class Tabs extends View {
 	onLabelLayout(ev: Object) {
 		if (this.props.screenProps.orientation !== 'PORTRAIT' && !this.state.heightLand && !this.state.widthLand) {
 			this.setState({
-				heightLand: ev.nativeEvent.layout.width + 30,
-				widthLand: ev.nativeEvent.layout.height + 30,
+				heightLand: ev.nativeEvent.layout.width + 60,
+				widthLand: ev.nativeEvent.layout.height + 60,
 			});
 		}
 	}
@@ -105,7 +105,7 @@ export default class Tabs extends View {
 	render() {
 		let label = '';
 		let { tab, screenProps } = this.props;
-		let { widthLand, heightLand } = this.state;
+		let { heightLand, width } = this.state;
 		if (tab.routeName === 'Dashboard') {
 			label = this.dashboard;
 		}
@@ -120,18 +120,20 @@ export default class Tabs extends View {
 		}
 
 		let labelLand = screenProps.orientation === 'PORTRAIT' ? styles.label : styles.labelLand;
-		let tabBarLand = screenProps.orientation === 'PORTRAIT' ? {flexDirection: 'column'} : { height: heightLand, width: widthLand, transform: [{rotateZ: '-90deg'}]};
-
+		let tabBarLand = screenProps.orientation === 'PORTRAIT' ? {flexDirection: 'column'} : {height: heightLand, width: heightLand};
+		let touchable = screenProps.orientation === 'PORTRAIT' ? {flexDirection: 'column'} : {flexDirection: 'row'};
+		let indicator = screenProps.orientation === 'PORTRAIT' ? [styles.indicator, {}] : [styles.indicatorLand, {left: heightLand * 0.68888}];
+		let stretch = screenProps.orientation === 'PORTRAIT' ? {width} : {height: width};
 		return (
-			<TouchableOpacity onPress={this.onTabPress} onLayout={this.onLayout}>
+			<TouchableOpacity onPress={this.onTabPress} style={touchable} onLayout={this.onLayout}>
 				<View style={[styles.tabBar, tabBarLand]}>
 					<Text style={labelLand} onLayout={this.onLabelLayout}>
 						{label}
 					</Text>
-					{!!(screenProps.currentTab === tab.routeName) &&
-						<View style={[styles.indicator, {width: this.state.width}]}/>
-					}
 				</View>
+				{!!(screenProps.currentTab === tab.routeName) &&
+						<View style={[indicator, stretch]}/>
+				}
 			</TouchableOpacity>
 		);
 	}
@@ -142,7 +144,6 @@ const styles = StyleSheet.create({
 		backgroundColor: Theme.Core.brandPrimary,
 		alignItems: 'center',
 		justifyContent: 'center',
-		flexWrap: 'nowrap',
 	},
 	label: {
 		paddingHorizontal: 30,
@@ -151,11 +152,15 @@ const styles = StyleSheet.create({
 	},
 	labelLand: {
 		color: '#fff',
-		paddingHorizontal: 30,
-		paddingVertical: getDeviceHeight() * 0.01,
+		transform: [{rotateZ: '-90deg'}],
 	},
 	indicator: {
 		backgroundColor: '#fff',
 		height: 2,
+	},
+	indicatorLand: {
+		position: 'absolute',
+		backgroundColor: '#fff',
+		width: 2,
 	},
 });

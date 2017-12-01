@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		width: getDeviceHeight() * 0.0777,
+		width: getDeviceHeight() * 0.07777,
 		zIndex: 1,
 	},
 });
