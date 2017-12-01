@@ -97,7 +97,7 @@ export default class Tabs extends View {
 		if (this.props.screenProps.orientation !== 'PORTRAIT' && !this.state.heightLand && !this.state.widthLand) {
 			this.setState({
 				heightLand: ev.nativeEvent.layout.width + 30,
-				widthLand: ev.nativeEvent.layout.height + (getDeviceHeight() * 0.05),
+				widthLand: ev.nativeEvent.layout.height + 30,
 			});
 		}
 	}
@@ -120,7 +120,7 @@ export default class Tabs extends View {
 		}
 
 		let labelLand = screenProps.orientation === 'PORTRAIT' ? styles.label : styles.labelLand;
-		let tabBarLand = screenProps.orientation === 'PORTRAIT' ? {flexDirection: 'column'} : {flexDirection: 'row', height: heightLand, width: widthLand};
+		let tabBarLand = screenProps.orientation === 'PORTRAIT' ? {flexDirection: 'column'} : { height: heightLand, width: widthLand, transform: [{rotateZ: '-90deg'}]};
 
 		return (
 			<TouchableOpacity onPress={this.onTabPress} onLayout={this.onLayout}>
@@ -129,7 +129,7 @@ export default class Tabs extends View {
 						{label}
 					</Text>
 					{!!(screenProps.currentTab === tab.routeName) &&
-						<View style={styles.indicator}/>
+						<View style={[styles.indicator, {width: this.state.width}]}/>
 					}
 				</View>
 			</TouchableOpacity>
@@ -146,14 +146,13 @@ const styles = StyleSheet.create({
 	},
 	label: {
 		paddingHorizontal: 30,
-		paddingVertical: getDeviceHeight() * 0.02599,
+		paddingVertical: getDeviceHeight() * 0.015,
 		color: '#fff',
 	},
 	labelLand: {
-		transform: [{rotateZ: '-90deg'}],
 		color: '#fff',
 		paddingHorizontal: 30,
-		paddingVertical: getDeviceHeight() * 0.02599,
+		paddingVertical: getDeviceHeight() * 0.01,
 	},
 	indicator: {
 		backgroundColor: '#fff',
