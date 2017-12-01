@@ -24,16 +24,17 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import Orientation from 'react-native-orientation';
 const orientation = Orientation.getInitialOrientation();
 import Theme from 'Theme';
 
 import { View } from 'BaseComponents';
 import Tabs from './Tabs';
-
-const deviceHeight = orientation === 'PORTRAIT' ? Dimensions.get('screen').height : Dimensions.get('screen').width;
-const deviceWidth = orientation === 'PORTRAIT' ? Dimensions.get('screen').width : Dimensions.get('screen').height;
+import {
+	getDeviceWidth,
+	getDeviceHeight,
+} from 'Lib';
 
 type Props = {
 	navigationState: Object,
@@ -79,7 +80,7 @@ export default class TabBar extends View {
 	}
 
 	scrollToTab(position: number, width: number) {
-		let x = (position + width) - (deviceWidth);
+		let x = (position + width) - (getDeviceWidth());
 		x = x < 0 ? 0 : x;
 		this.refs.scrollView.scrollTo({x: x, y: undefined, animated: true});
 	}
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		height: deviceHeight * 0.0777,
+		height: getDeviceHeight() * 0.0777,
 		zIndex: 1,
 	},
 	scrollViewLand: {
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		width: deviceHeight * 0.0777,
+		width: getDeviceHeight() * 0.0777,
 		zIndex: 1,
 	},
 });

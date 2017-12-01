@@ -24,13 +24,14 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import Orientation from 'react-native-orientation';
-const orientation = Orientation.getInitialOrientation();
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import Theme from 'Theme';
 import i18n from '../../Translations/common';
 
 import { View, Text } from 'BaseComponents';
+import {
+	getDeviceHeight,
+} from 'Lib';
 
 type Props = {
 	screenProps: Object,
@@ -46,8 +47,6 @@ type State = {
 	widthLand: any,
 	heightLand: any,
 };
-
-const deviceHeight = orientation === 'PORTRAIT' ? Dimensions.get('screen').height : Dimensions.get('screen').width;
 
 export default class Tabs extends View {
 	props: Props;
@@ -98,7 +97,7 @@ export default class Tabs extends View {
 		if (this.props.screenProps.orientation !== 'PORTRAIT' && !this.state.heightLand && !this.state.widthLand) {
 			this.setState({
 				heightLand: ev.nativeEvent.layout.width + 30,
-				widthLand: ev.nativeEvent.layout.height + (deviceHeight * 0.05),
+				widthLand: ev.nativeEvent.layout.height + (getDeviceHeight() * 0.05),
 			});
 		}
 	}
@@ -147,14 +146,14 @@ const styles = StyleSheet.create({
 	},
 	label: {
 		paddingHorizontal: 30,
-		paddingVertical: deviceHeight * 0.02599,
+		paddingVertical: getDeviceHeight() * 0.02599,
 		color: '#fff',
 	},
 	labelLand: {
 		transform: [{rotateZ: '-90deg'}],
 		color: '#fff',
 		paddingHorizontal: 30,
-		paddingVertical: deviceHeight * 0.02599,
+		paddingVertical: getDeviceHeight() * 0.02599,
 	},
 	indicator: {
 		backgroundColor: '#fff',
