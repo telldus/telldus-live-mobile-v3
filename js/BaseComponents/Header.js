@@ -23,10 +23,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Platform, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
+import { Platform, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import { hasStatusBar } from 'Lib';
+import { hasStatusBar, getWindowDimensions } from 'Lib';
 
 import Base from './Base';
 import computeProps from './computeProps';
@@ -61,7 +61,7 @@ export default class HeaderComponent extends Base {
 	renderButtonContent: (Object) => Object;
 
 	getInitialStyle() {
-		this.deviceWidth = Dimensions.get('window').width;
+		this.deviceWidth = getWindowDimensions().width;
 
 		this.paddingHorizontal = 15;
 		this.paddingTop = (Platform.OS === 'ios') ? 15 : 0;

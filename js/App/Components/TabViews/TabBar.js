@@ -30,7 +30,7 @@ import Theme from 'Theme';
 import { View } from 'BaseComponents';
 import Tabs from './Tabs';
 import {
-	getDeviceHeight,
+	getWindowDimensions,
 } from 'Lib';
 
 type Props = {
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		width: getDeviceHeight() * 0.07777,
+		width: getWindowDimensions().height * 0.07777,
 		zIndex: 1,
 	},
 });

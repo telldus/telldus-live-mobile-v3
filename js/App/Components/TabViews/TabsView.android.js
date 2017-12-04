@@ -42,7 +42,7 @@ import TabBar from './TabBar';
 import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode, addNewGateway } from 'Actions';
 import TabViews from 'TabViews';
-import { hasStatusBar, getDeviceHeight, getDeviceWidth } from 'Lib';
+import { hasStatusBar, getWindowDimensions } from 'Lib';
 import { TabNavigator } from 'react-navigation';
 
 const messages = defineMessages({
@@ -254,7 +254,6 @@ class TabsView extends View {
 		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
-
 		this.orientationDidChange = this.orientationDidChange.bind(this);
 	}
 
@@ -342,7 +341,7 @@ class TabsView extends View {
 
 	render() {
 
-		let headerStyle = this.state.orientation === 'PORTRAIT' ? {height: getDeviceHeight() * 0.1111} : styles.headerOnLand;
+		let headerStyle = this.state.orientation === 'PORTRAIT' ? {height: getWindowDimensions().height * 0.1111} : styles.headerOnLand;
 		let containerStyle = this.state.orientation === 'PORTRAIT' ? {flex: 1} : styles.containerOnLand;
 		let logoStyle = this.state.orientation === 'PORTRAIT' ? {} : styles.logoOnLand;
 		let leftButton = this.state.orientation === 'PORTRAIT' ? this.menuButton : this.menuButtonOnLand;
@@ -392,27 +391,27 @@ const styles = StyleSheet.create({
 	headerOnLand: {
 		transform: [{rotateZ: '-90deg'}],
 		position: 'absolute',
-		left: -(getDeviceHeight() * 0.4444),
-		top: orientation === 'PORTRAIT' ? getDeviceWidth() * 0.7444 : getDeviceHeight() * 0.7444,
-		width: getDeviceHeight(),
-		height: getDeviceHeight() * 0.1111,
+		left: -(getWindowDimensions().height * 0.4444),
+		top: getWindowDimensions().height * 0.4444,
+		width: getWindowDimensions().height,
+		height: getWindowDimensions().height * 0.1111,
 	},
 	containerOnLand: {
 		flex: 1,
-		marginLeft: getDeviceHeight() * 0.1000,
+		marginLeft: getWindowDimensions().height * 0.1000,
 	},
 	menuButOnLand: {
 		position: 'absolute',
-		left: getDeviceHeight() * 0.8999,
-		top: getDeviceHeight() * 0.0400,
+		left: getWindowDimensions().height * 0.8999,
+		top: getWindowDimensions().height * 0.0400,
 	},
 	menuIconOnLand: {
 		transform: [{rotateZ: '90deg'}],
 	},
 	logoOnLand: {
 		position: 'absolute',
-		left: getDeviceHeight() * 0.5999,
-		top: getDeviceHeight() * 0.0400,
+		left: getWindowDimensions().height * 0.5999,
+		top: getWindowDimensions().height * 0.0400,
 	},
 	navigationHeader: {
 		height: 60,
