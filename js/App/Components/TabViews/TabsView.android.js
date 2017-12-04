@@ -206,6 +206,7 @@ class TabsView extends View {
 	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 	addNewLocation: () => void;
+	getRelativeStyle: () => Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -228,13 +229,13 @@ class TabsView extends View {
 			onPress: this.openDrawer,
 		};
 
-		this.menuButtonOnLand = {
+		this.menuButtonLand = {
 			icon: {
 				name: 'bars',
 				size: 22,
 				color: '#fff',
-				style: styles.menuButOnLand,
-				iconStyle: styles.menuIconOnLand,
+				style: styles.menuButLand,
+				iconStyle: styles.menuIconLand,
 			},
 			onPress: this.openDrawer,
 		};
@@ -254,7 +255,9 @@ class TabsView extends View {
 		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
+
 		this.orientationDidChange = this.orientationDidChange.bind(this);
+		this.getRelativeStyle = this.getRelativeStyle.bind(this);
 	}
 
 	componentDidMount() {
@@ -339,12 +342,30 @@ class TabsView extends View {
 		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
 
+	getRelativeStyle() {
+		let relativeStyle = {
+			headerStyle: styles.header,
+			containerStyle: styles.container,
+			logoStyle: null,
+			leftButton: this.menuButton,
+		};
+		if (this.state.orientation !== 'PORTRAIT') {
+			relativeStyle.headerStyle = [relativeStyle.headerStyle, styles.headerLand];
+			relativeStyle.containerStyle = [relativeStyle.containerStyle, styles.containerLand];
+			relativeStyle.logoStyle = styles.logoLand;
+			relativeStyle.leftButton = this.menuButtonLand;
+		}
+		return relativeStyle;
+	}
+
 	render() {
 
-		let headerStyle = this.state.orientation === 'PORTRAIT' ? {height: getWindowDimensions().height * 0.1111} : styles.headerOnLand;
-		let containerStyle = this.state.orientation === 'PORTRAIT' ? {flex: 1} : styles.containerOnLand;
-		let logoStyle = this.state.orientation === 'PORTRAIT' ? {} : styles.logoOnLand;
-		let leftButton = this.state.orientation === 'PORTRAIT' ? this.menuButton : this.menuButtonOnLand;
+		let {
+			headerStyle,
+			containerStyle,
+			logoStyle,
+			leftButton,
+		} = this.getRelativeStyle();
 
 		let screenProps = {
 			stackNavigator: this.props.stackNavigator,
@@ -388,30 +409,36 @@ class TabsView extends View {
 }
 
 const styles = StyleSheet.create({
-	headerOnLand: {
+	header: {
+		height: getWindowDimensions().height * 0.1111,
+	},
+	headerLand: {
 		transform: [{rotateZ: '-90deg'}],
 		position: 'absolute',
 		left: -(getWindowDimensions().height * 0.4444),
 		top: getWindowDimensions().height * 0.4444,
 		width: getWindowDimensions().height,
-		height: getWindowDimensions().height * 0.1111,
 	},
-	containerOnLand: {
+	container: {
 		flex: 1,
+	},
+	containerLand: {
 		marginLeft: getWindowDimensions().height * 0.1000,
 	},
-	menuButOnLand: {
+	menuButLand: {
 		position: 'absolute',
-		left: getWindowDimensions().height * 0.8999,
+		left: getWindowDimensions().height * 0.8555,
 		top: getWindowDimensions().height * 0.0400,
 	},
-	menuIconOnLand: {
+	menuIconLand: {
 		transform: [{rotateZ: '90deg'}],
 	},
-	logoOnLand: {
+	logoLand: {
 		position: 'absolute',
 		left: getWindowDimensions().height * 0.5999,
 		top: getWindowDimensions().height * 0.0400,
+		width: getWindowDimensions().width * 0.277333333,
+		height: getWindowDimensions().width * 0.046666667,
 	},
 	navigationHeader: {
 		height: 60,
