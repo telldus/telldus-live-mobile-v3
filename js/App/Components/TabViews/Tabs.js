@@ -29,6 +29,7 @@ import Theme from 'Theme';
 import i18n from '../../Translations/common';
 
 import { View, Text } from 'BaseComponents';
+import { getWindowDimensions } from 'Lib';
 
 type Props = {
 	screenProps: Object,
@@ -89,9 +90,10 @@ export default class Tabs extends View {
 
 	onLabelLayout(ev: Object) {
 		if (this.props.screenProps.orientation !== 'PORTRAIT' && !this.state.heightLand && !this.state.widthLand) {
+			let { width, height } = ev.nativeEvent.layout;
 			this.setState({
-				heightLand: ev.nativeEvent.layout.width + 60,
-				widthLand: ev.nativeEvent.layout.height + 60,
+				heightLand: width + 60,
+				widthLand: height,
 			});
 		}
 	}
@@ -110,7 +112,7 @@ export default class Tabs extends View {
 			relativeStyle.labelStyle = styles.labelLand;
 			relativeStyle.tabBarStyle = {height: heightLand, width: heightLand};
 			relativeStyle.touchableStyle = styles.touchableLand;
-			relativeStyle.indicatorStyle = [styles.indicatorLand, {height: width, left: heightLand * 0.68888}];
+			relativeStyle.indicatorStyle = [styles.indicatorLand, {height: width, left: getWindowDimensions().height * 0.2299}];
 		}
 		return relativeStyle;
 	}
@@ -146,7 +148,7 @@ export default class Tabs extends View {
 					</Text>
 				</View>
 				{!!(screenProps.currentTab === tab.routeName) &&
-						<View style={indicatorStyle}/>
+				<View style={indicatorStyle}/>
 				}
 			</TouchableOpacity>
 		);
@@ -166,13 +168,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	label: {
-		paddingHorizontal: 30,
+		paddingHorizontal: getWindowDimensions().width * 0.0666,
 		paddingVertical: 15,
 		color: '#fff',
+		fontSize: getWindowDimensions().width * 0.0333,
 	},
 	labelLand: {
 		color: '#fff',
 		transform: [{rotateZ: '-90deg'}],
+		fontSize: getWindowDimensions().width * 0.0333,
 	},
 	indicator: {
 		backgroundColor: '#fff',
