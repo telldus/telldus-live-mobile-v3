@@ -29,9 +29,6 @@ import Theme from 'Theme';
 import i18n from '../../Translations/common';
 
 import { View, Text } from 'BaseComponents';
-import {
-	getDeviceHeight,
-} from 'Lib';
 
 type Props = {
 	screenProps: Object,
@@ -54,6 +51,7 @@ export default class Tabs extends View {
 	onTabPress: () => void;
 	onLayout: (Object) => void;
 	onLabelLayout: (Object) => void;
+	getRelativeStyle: () => Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -74,7 +72,7 @@ export default class Tabs extends View {
 		this.onTabPress = this.onTabPress.bind(this);
 		this.onLayout = this.onLayout.bind(this);
 		this.onLabelLayout = this.onLabelLayout.bind(this);
-
+		this.getRelativeStyle = this.getRelativeStyle.bind(this);
 	}
 
 	onTabPress() {
@@ -98,11 +96,28 @@ export default class Tabs extends View {
 		}
 	}
 
+	getRelativeStyle() {
+		let { screenProps } = this.props;
+		let { heightLand } = this.state;
+		let { width } = this.state.layout;
+		let relativeStyle = {
+			labelStyle: styles.label,
+			tabBarStyle: {},
+			touchableStyle: styles.touchable,
+			indicatorStyle: [styles.indicator, {width}],
+		};
+		if (screenProps.orientation !== 'PORTRAIT') {
+			relativeStyle.labelStyle = styles.labelLand;
+			relativeStyle.tabBarStyle = {height: heightLand, width: heightLand};
+			relativeStyle.touchableStyle = styles.touchableLand;
+			relativeStyle.indicatorStyle = [styles.indicatorLand, {height: width, left: heightLand * 0.68888}];
+		}
+		return relativeStyle;
+	}
+
 	render() {
 		let label = '';
 		let { tab, screenProps } = this.props;
-		let { heightLand } = this.state;
-		let { width } = this.state.layout;
 		if (tab.routeName === 'Dashboard') {
 			label = this.dashboard;
 		}
@@ -116,20 +131,22 @@ export default class Tabs extends View {
 			label = this.scheduler;
 		}
 
-		let labelLand = screenProps.orientation === 'PORTRAIT' ? styles.label : styles.labelLand;
-		let tabBarLand = screenProps.orientation === 'PORTRAIT' ? {flexDirection: 'column'} : {height: heightLand, width: heightLand};
-		let touchable = screenProps.orientation === 'PORTRAIT' ? {flexDirection: 'column'} : {flexDirection: 'row'};
-		let indicator = screenProps.orientation === 'PORTRAIT' ? [styles.indicator, {}] : [styles.indicatorLand, {left: heightLand * 0.68888}];
-		let stretch = screenProps.orientation === 'PORTRAIT' ? {width} : {height: width};
+		let {
+			labelStyle,
+			tabBarStyle,
+			touchableStyle,
+			indicatorStyle,
+		} = this.getRelativeStyle();
+
 		return (
-			<TouchableOpacity onPress={this.onTabPress} style={touchable} onLayout={this.onLayout}>
-				<View style={[styles.tabBar, tabBarLand]}>
-					<Text style={labelLand} onLayout={this.onLabelLayout}>
+			<TouchableOpacity onPress={this.onTabPress} style={touchableStyle} onLayout={this.onLayout}>
+				<View style={[styles.tabBar, tabBarStyle]}>
+					<Text style={labelStyle} onLayout={this.onLabelLayout}>
 						{label}
 					</Text>
 				</View>
 				{!!(screenProps.currentTab === tab.routeName) &&
-						<View style={[indicator, stretch]}/>
+						<View style={indicatorStyle}/>
 				}
 			</TouchableOpacity>
 		);
@@ -137,6 +154,12 @@ export default class Tabs extends View {
 }
 
 const styles = StyleSheet.create({
+	touchable: {
+		flexDirection: 'column',
+	},
+	touchableLand: {
+		flexDirection: 'row',
+	},
 	tabBar: {
 		backgroundColor: Theme.Core.brandPrimary,
 		alignItems: 'center',
@@ -144,7 +167,7 @@ const styles = StyleSheet.create({
 	},
 	label: {
 		paddingHorizontal: 30,
-		paddingVertical: getDeviceHeight() * 0.015,
+		paddingVertical: 15,
 		color: '#fff',
 	},
 	labelLand: {
@@ -156,8 +179,8 @@ const styles = StyleSheet.create({
 		height: 2,
 	},
 	indicatorLand: {
-		position: 'absolute',
 		backgroundColor: '#fff',
+		position: 'absolute',
 		width: 2,
 	},
 });

@@ -25,8 +25,6 @@
 
 import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
-import Orientation from 'react-native-orientation';
-const orientation = Orientation.getInitialOrientation();
 import Theme from 'Theme';
 
 import { View } from 'BaseComponents';
@@ -48,39 +46,24 @@ export default class TabBar extends View {
 	props: Props;
 	state: State;
 
-	orientationDidChange: (string) => void;
 	renderTabs: (Object, number) => Object;
-	scrollToTab: (number, number) => void;
+	scrollToTab: (Object) => void;
+	getRelativeStyle: () => Object;
 
 	constructor(props: Props) {
 		super(props);
-		this.orientationDidChange = this.orientationDidChange.bind(this);
 
 		this.state = {
-			orientation,
 		};
 
 		this.renderTabs = this.renderTabs.bind(this);
 		this.scrollToTab = this.scrollToTab.bind(this);
-	}
-
-	componentDidMount() {
-		Orientation.addOrientationListener(this.orientationDidChange);
-	}
-
-	orientationDidChange(deviceOrientation: string) {
-		this.setState({
-			orientation: deviceOrientation,
-		});
-	}
-
-	componentWillUnmount() {
-		Orientation.removeOrientationListener(this.orientationDidChange);
+		this.getRelativeStyle = this.getRelativeStyle.bind(this);
 	}
 
 	scrollToTab(layout: Object) {
 		let {x, y, width, height} = layout;
-		if (this.state.orientation === 'PORTRAIT') {
+		if (this.props.screenProps.orientation === 'PORTRAIT') {
 			let position = (x + width) / 3;
 			position = x <= 0 ? 0 : position;
 			this.refs.scrollView.scrollTo({x: position, y: undefined, animated: true});
@@ -98,19 +81,35 @@ export default class TabBar extends View {
 		);
 	}
 
+	getRelativeStyle() {
+		let relativeStyle = {
+			containerStyle: styles.container,
+			scrollViewStyle: styles.scrollView,
+		};
+		if (this.props.screenProps.orientation !== 'PORTRAIT') {
+			relativeStyle.containerStyle = styles.containerLand;
+			relativeStyle.scrollViewStyle = styles.scrollViewLand;
+		}
+		return relativeStyle;
+	}
+
 	render() {
-		let { navigationState } = this.props;
+		let { navigationState, screenProps } = this.props;
 		let tabs = navigationState.routes.map((tab, index) => {
 			return this.renderTabs(tab, index);
 		});
-		let containerStyle = this.state.orientation === 'PORTRAIT' ? styles.container : styles.containerOnLand;
-		let scrollView = this.state.orientation === 'PORTRAIT' ? styles.scrollView : styles.scrollViewLand;
+
+		let {
+			containerStyle,
+			scrollViewStyle,
+		} = this.getRelativeStyle();
+
 		return (
-			<View style={scrollView}>
+			<View style={scrollViewStyle}>
 				<ScrollView
 					ref="scrollView"
 					contentContainerStyle={containerStyle}
-					horizontal={this.state.orientation === 'PORTRAIT'}
+					horizontal={screenProps.orientation === 'PORTRAIT'}
 					showsHorizontalScrollIndicator={false}
 					showsVerticalScrollIndicator={false}
 					overScrollMode="never"
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
 		...Theme.Core.shadow,
 		zIndex: 1,
 	},
-	containerOnLand: {
+	containerLand: {
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
