@@ -78,13 +78,16 @@ export default class TabBar extends View {
 		Orientation.removeOrientationListener(this.orientationDidChange);
 	}
 
-	scrollToTab(x: number, y: number) {
+	scrollToTab(layout: Object) {
+		let {x, y, width, height} = layout;
 		if (this.state.orientation === 'PORTRAIT') {
-			x = x < 0 ? 0 : x;
-			this.refs.scrollView.scrollTo({x: x, y: undefined, animated: true});
+			let position = (x + width) / 3;
+			position = x <= 0 ? 0 : position;
+			this.refs.scrollView.scrollTo({x: position, y: undefined, animated: true});
 		} else {
-			y = y < 0 ? 0 : y;
-			this.refs.scrollView.scrollTo({x: undefined, y: y, animated: true});
+			let position = (y + height) / 3;
+			position = y <= 0 ? 0 : position;
+			this.refs.scrollView.scrollTo({x: undefined, y: position, animated: true});
 		}
 	}
 

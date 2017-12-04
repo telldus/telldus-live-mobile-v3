@@ -79,9 +79,8 @@ export default class Tabs extends View {
 
 	onTabPress() {
 		let { navigation, tab, onPress } = this.props;
-		let { x, y } = this.state.layout;
 		navigation.navigate(tab.routeName);
-		onPress(x, y);
+		onPress(this.state.layout);
 	}
 
 	onLayout(ev: Object) {
