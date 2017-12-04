@@ -42,8 +42,7 @@ type Props = {
 };
 
 type State = {
-	xCord: number,
-	width: number,
+	layout: Object,
 	widthLand: any,
 	heightLand: any,
 };
@@ -60,8 +59,7 @@ export default class Tabs extends View {
 		super(props);
 
 		this.state = {
-			xCord: 0,
-			width: 0,
+			layout: {},
 			widthLand: undefined,
 			heightLand: undefined,
 		};
@@ -81,15 +79,14 @@ export default class Tabs extends View {
 
 	onTabPress() {
 		let { navigation, tab, onPress } = this.props;
-		let { xCord, width } = this.state;
+		let { x, y } = this.state.layout;
 		navigation.navigate(tab.routeName);
-		onPress(xCord, width);
+		onPress(x, y);
 	}
 
 	onLayout(ev: Object) {
 		this.setState({
-			xCord: ev.nativeEvent.layout.x,
-			width: ev.nativeEvent.layout.width,
+			layout: ev.nativeEvent.layout,
 		});
 	}
 
@@ -105,7 +102,8 @@ export default class Tabs extends View {
 	render() {
 		let label = '';
 		let { tab, screenProps } = this.props;
-		let { heightLand, width } = this.state;
+		let { heightLand } = this.state;
+		let { width } = this.state.layout;
 		if (tab.routeName === 'Dashboard') {
 			label = this.dashboard;
 		}

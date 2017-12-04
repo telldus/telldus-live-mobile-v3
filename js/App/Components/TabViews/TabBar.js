@@ -32,7 +32,6 @@ import Theme from 'Theme';
 import { View } from 'BaseComponents';
 import Tabs from './Tabs';
 import {
-	getDeviceWidth,
 	getDeviceHeight,
 } from 'Lib';
 
@@ -79,10 +78,14 @@ export default class TabBar extends View {
 		Orientation.removeOrientationListener(this.orientationDidChange);
 	}
 
-	scrollToTab(position: number, width: number) {
-		let x = (position + width) - (getDeviceWidth());
-		x = x < 0 ? 0 : x;
-		this.refs.scrollView.scrollTo({x: x, y: undefined, animated: true});
+	scrollToTab(x: number, y: number) {
+		if (this.state.orientation === 'PORTRAIT') {
+			x = x < 0 ? 0 : x;
+			this.refs.scrollView.scrollTo({x: x, y: undefined, animated: true});
+		} else {
+			y = y < 0 ? 0 : y;
+			this.refs.scrollView.scrollTo({x: undefined, y: y, animated: true});
+		}
 	}
 
 	renderTabs(tab: Object, index: number): Object {
