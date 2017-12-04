@@ -15,22 +15,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule Lib
  */
 
-'use strict';
+// @flow
 
-import getRouteName from './getRouteName';
-import getDeviceWidth from './getDeviceWidth';
-import getDeviceHeight from './getDeviceHeight';
-import getWindowDimensions from './getWindowDimensions';
-import hasStatusBar from './hasStatusBar';
+import { Dimensions } from 'react-native';
+import Orientation from 'react-native-orientation';
+const orientation = Orientation.getInitialOrientation();
 
-module.exports = {
-	getRouteName,
-	getDeviceWidth,
-	getDeviceHeight,
-	getWindowDimensions,
-	hasStatusBar,
-};
+export default function getWindowDimensions(): Object {
+	let isPortrait = orientation === 'PORTRAIT';
+	return {
+		height: isPortrait ? Dimensions.get('window').height : Dimensions.get('window').width,
+		width: isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height,
+	};
+}
