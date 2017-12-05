@@ -77,7 +77,7 @@ export default class TabBar extends View {
 	renderTabs(tab: Object, index: number): Object {
 		let { screenProps, navigation } = this.props;
 		return (
-			<Tabs key={index} onPress={this.scrollToTab} screenProps={screenProps} tab={tab} navigation={navigation}/>
+			<Tabs key={index} adjustScroll={this.scrollToTab} screenProps={screenProps} tab={tab} navigation={navigation}/>
 		);
 	}
 

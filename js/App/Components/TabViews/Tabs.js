@@ -36,7 +36,7 @@ type Props = {
 	tab: Object,
 	navigation: Object,
 	onLayout: Object,
-	onPress: Function,
+	adjustScroll: Function,
 };
 
 type State = {
@@ -77,15 +77,21 @@ export default class Tabs extends View {
 	}
 
 	onTabPress() {
-		let { navigation, tab, onPress } = this.props;
+		let { navigation, tab } = this.props;
 		navigation.navigate(tab.routeName);
-		onPress(this.state.layout);
 	}
 
 	onLayout(ev: Object) {
 		this.setState({
 			layout: ev.nativeEvent.layout,
 		});
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenProps, adjustScroll } = this.props;
+		if (nextProps.screenProps.currentTab === nextProps.tab.routeName && screenProps.currentTab !== nextProps.screenProps.currentTab) {
+			adjustScroll(this.state.layout);
+		}
 	}
 
 	onLabelLayout(ev: Object) {
