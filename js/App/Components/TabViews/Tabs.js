@@ -87,9 +87,9 @@ export default class Tabs extends View {
 		});
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { adjustScroll } = this.props;
-		if (nextProps.screenProps.currentTab === nextProps.tab.routeName) {
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { adjustScroll, screenProps, tab } = prevProps;
+		if (screenProps.currentTab === tab.routeName) {
 			adjustScroll(this.state.layout);
 		}
 	}
