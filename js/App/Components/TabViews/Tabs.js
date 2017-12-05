@@ -118,7 +118,7 @@ export default class Tabs extends View {
 			relativeStyle.labelStyle = styles.labelLand;
 			relativeStyle.tabBarStyle = {height: heightLand, width: heightLand};
 			relativeStyle.touchableStyle = styles.touchableLand;
-			relativeStyle.indicatorStyle = [styles.indicatorLand, {height: width, left: getWindowDimensions().height * 0.2299}];
+			relativeStyle.indicatorStyle = [styles.indicatorLand, {height: width, left: heightLand * 0.68499}];
 		}
 		return relativeStyle;
 	}
