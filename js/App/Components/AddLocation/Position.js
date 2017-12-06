@@ -33,8 +33,6 @@ import { View, StyleSheet, Dimensions, FloatingButton } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
 import { showModal } from 'Actions';
-import { actions as sharedActions } from 'live-shared-data';
-const { Gateways: { activateGateway } } = sharedActions;
 import { googleAPIKey } from 'Config';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -167,7 +165,7 @@ class Position extends View {
 		}
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.cordinates = { ...this.state.coordinate };
-		this.props.activateGateway(clientInfo)
+		this.props.actions.activateGateway(clientInfo)
 			.then(response => {
 				if (response) {
 					this.props.navigation.navigate('Success', {clientInfo});
@@ -325,16 +323,8 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch): Object {
 	return {
-		activateGateway: (clientInfo) => {
-			return dispatch(activateGateway(clientInfo));
-		},
 		dispatch,
 	};
 }
 
-function mapStateToProps(store, ownProps) {
-	return {
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Position);
+export default connect(null, mapDispatchToProps)(Position);

@@ -28,7 +28,6 @@ import { connect } from 'react-redux';
 import { TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 
-import {getGatewayInfo} from 'Actions';
 import {View, StyleSheet, FormattedMessage, Dimensions, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
@@ -66,7 +65,6 @@ type Props = {
 	navigation: Object,
 	dispatch: Function,
 	onDidMount: Function,
-	getGatewayInfo: (param: Object, string) => Promise<any>;
 	actions: Object,
 	intl: intlShape.isRequired,
 }
@@ -138,7 +136,7 @@ class LocationActivationManual extends View {
 		}
 		if (this.state.activationCode.length === 10) {
 			let param = {code: this.state.activationCode};
-			this.props.getGatewayInfo(param, 'timezone').then(response => {
+			this.props.actions.getGatewayInfo(param, 'timezone').then(response => {
 				if (response.id) {
 					let clientInfo = {
 						clientId: response.id,
@@ -219,9 +217,6 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		getGatewayInfo: (param: Object, extras: string) => {
-			return dispatch(getGatewayInfo(param, extras));
-		},
 		dispatch,
 	};
 }
