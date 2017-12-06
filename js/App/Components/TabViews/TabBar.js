@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		width: getWindowDimensions().width * 0.1444,
+		width: getWindowDimensions().width * 0.13,
 		zIndex: 1,
 	},
 });

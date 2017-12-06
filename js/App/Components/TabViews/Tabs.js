@@ -111,14 +111,14 @@ export default class Tabs extends View {
 		let relativeStyle = {
 			labelStyle: styles.label,
 			tabBarStyle: {},
-			touchableStyle: styles.touchable,
-			indicatorStyle: [styles.indicator, {width}],
+			indicatorActive: [styles.indicatorActivePort, {width}],
+			indicatorPassive: [styles.indicatorPassivePort, {width}],
 		};
 		if (screenProps.orientation !== 'PORTRAIT') {
 			relativeStyle.labelStyle = styles.labelLand;
-			relativeStyle.tabBarStyle = {height: heightLand, width: heightLand};
-			relativeStyle.touchableStyle = styles.touchableLand;
-			relativeStyle.indicatorStyle = [styles.indicatorLand, {height: width, left: heightLand * 0.68499}];
+			relativeStyle.tabBarStyle = {height: heightLand, width: heightLand, transform: [{rotateZ: '-90deg'}]};
+			relativeStyle.indicatorActive = [styles.indicatorActiveLand, {width}];
+			relativeStyle.indicatorPassive = [styles.indicatorPassiveLand, {width}];
 		}
 		return relativeStyle;
 	}
@@ -142,20 +142,22 @@ export default class Tabs extends View {
 		let {
 			labelStyle,
 			tabBarStyle,
-			touchableStyle,
-			indicatorStyle,
+			indicatorActive,
+			indicatorPassive,
 		} = this.getRelativeStyle();
 
 		return (
-			<TouchableOpacity onPress={this.onTabPress} style={touchableStyle} onLayout={this.onLayout}>
+			<TouchableOpacity onPress={this.onTabPress} onLayout={this.onLayout}>
 				<View style={[styles.tabBar, tabBarStyle]}>
 					<Text style={labelStyle} onLayout={this.onLabelLayout}>
 						{label}
 					</Text>
+					{(screenProps.currentTab === tab.routeName) ?
+						<View style={indicatorActive}/>
+						:
+						<View style={indicatorPassive}/>
+					}
 				</View>
-				{!!(screenProps.currentTab === tab.routeName) &&
-				<View style={indicatorStyle}/>
-				}
 			</TouchableOpacity>
 		);
 	}
@@ -173,6 +175,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	container: {
+		transform: [{rotateZ: '-90deg'}],
+		alignItems: 'center',
+	},
 	label: {
 		paddingHorizontal: getWindowDimensions().width * 0.0666,
 		paddingVertical: 15,
@@ -181,16 +187,26 @@ const styles = StyleSheet.create({
 	},
 	labelLand: {
 		color: '#fff',
-		transform: [{rotateZ: '-90deg'}],
 		fontSize: getWindowDimensions().width * 0.0333,
 	},
-	indicator: {
+	indicatorPassivePort: {
+		backgroundColor: 'transparent',
+		height: 2,
+		marginTop: getWindowDimensions().height * 0.01,
+	},
+	indicatorActivePort: {
 		backgroundColor: '#fff',
 		height: 2,
+		marginTop: getWindowDimensions().height * 0.01,
 	},
-	indicatorLand: {
+	indicatorPassiveLand: {
+		backgroundColor: 'transparent',
+		height: 2,
+		marginTop: getWindowDimensions().height * 0.0481,
+	},
+	indicatorActiveLand: {
 		backgroundColor: '#fff',
-		position: 'absolute',
-		width: 2,
+		height: 2,
+		marginTop: getWindowDimensions().height * 0.0481,
 	},
 });
