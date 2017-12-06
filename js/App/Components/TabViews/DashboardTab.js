@@ -29,7 +29,7 @@ import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import Platform from 'Platform';
 
-import { Text, List, ListDataSource, View } from 'BaseComponents';
+import { Text, List, ListDataSource, View, StyleSheet } from 'BaseComponents';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
 import { defineMessages } from 'react-intl';
@@ -49,7 +49,7 @@ import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import reactMixin from 'react-mixin';
 import {
-	getDeviceWidth,
+	getWindowDimensions,
 } from 'Lib';
 
 const messages = defineMessages({
@@ -222,7 +222,7 @@ class DashboardTab extends View {
 		let containerStyle = null;
 		if (Platform.OS === 'android') {
 			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				{} : {marginLeft: getDeviceWidth() * 0.1};
+				styles.conatiner : styles.containerLand;
 		}
 
 		return (
@@ -319,6 +319,16 @@ class DashboardTab extends View {
 DashboardTab.propTypes = {
 	rows: PropTypes.array,
 };
+
+const styles = StyleSheet.create({
+	conatiner: {
+		flex: 1,
+	},
+	containerLand: {
+		flex: 1,
+		marginLeft: getWindowDimensions().height * 0.08,
+	},
+});
 
 const getRows = createSelector(
 	[

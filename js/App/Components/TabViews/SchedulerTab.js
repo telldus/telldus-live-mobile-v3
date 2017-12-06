@@ -29,7 +29,7 @@ import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 import Platform from 'Platform';
 
-import { List, ListDataSource, Text, View } from 'BaseComponents';
+import { List, ListDataSource, Text, View, StyleSheet } from 'BaseComponents';
 import { JobRow } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 import Theme from 'Theme';
@@ -38,7 +38,7 @@ import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
 import {
-	getDeviceWidth,
+	getWindowDimensions,
 } from 'Lib';
 
 const messages = defineMessages({
@@ -155,7 +155,7 @@ class SchedulerTab extends View {
 		let containerStyle = null;
 		if (Platform.OS === 'android') {
 			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				{flex: 1} : {flex: 1, marginLeft: getDeviceWidth() * 0.1};
+				styles.conatiner : styles.containerLand;
 		}
 
 		return (
@@ -212,6 +212,16 @@ SchedulerTab.navigationOptions = ({navigation, screenProps}) => ({
 SchedulerTab.propTypes = {
 	rowsAndSections: PropTypes.object,
 };
+
+const styles = StyleSheet.create({
+	conatiner: {
+		flex: 1,
+	},
+	containerLand: {
+		flex: 1,
+		marginLeft: getWindowDimensions().height * 0.08,
+	},
+});
 
 const getRowsAndSections = createSelector(
 	[

@@ -439,12 +439,13 @@ const styles = StyleSheet.create({
 		left: -(getWindowDimensions().height * 0.4444),
 		top: getWindowDimensions().height * 0.4444,
 		width: getWindowDimensions().height,
+		height: getWindowDimensions().height * 0.1111,
 	},
 	container: {
 		flex: 1,
 	},
 	containerLand: {
-		marginLeft: getWindowDimensions().height * 0.1000,
+		marginLeft: getWindowDimensions().height * 0.11,
 	},
 	menuButLand: {
 		position: 'absolute',

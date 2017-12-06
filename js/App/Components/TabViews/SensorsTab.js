@@ -28,7 +28,7 @@ import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
-import { List, ListDataSource, View } from 'BaseComponents';
+import { List, ListDataSource, View, StyleSheet } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
@@ -37,7 +37,7 @@ import { toggleEditMode } from 'Actions';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import {
-	getDeviceWidth,
+	getWindowDimensions,
 } from 'Lib';
 
 const messages = defineMessages({
@@ -124,7 +124,7 @@ class SensorsTab extends View {
 		let containerStyle = null;
 		if (Platform.OS === 'android') {
 			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				{flex: 1} : {flex: 1, marginLeft: getDeviceWidth() * 0.1};
+				styles.conatiner : styles.containerLand;
 		}
 
 		return (
@@ -168,6 +168,16 @@ class SensorsTab extends View {
 SensorsTab.propTypes = {
 	rowsAndSections: PropTypes.object,
 };
+
+const styles = StyleSheet.create({
+	conatiner: {
+		flex: 1,
+	},
+	containerLand: {
+		flex: 1,
+		marginLeft: getWindowDimensions().height * 0.08,
+	},
+});
 
 const getRowsAndSections = createSelector(
 	[
