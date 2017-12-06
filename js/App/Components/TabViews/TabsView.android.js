@@ -221,6 +221,16 @@ class TabsView extends View {
 			onPress: this.toggleEditMode,
 		};
 
+		this.starButtonLand = {
+			icon: {
+				name: 'star',
+				size: 22,
+				color: '#fff',
+				style: styles.starButLand,
+			},
+			onPress: this.toggleEditMode,
+		};
+
 		this.menuButton = {
 			icon: {
 				name: 'bars',
@@ -349,7 +359,8 @@ class TabsView extends View {
 	}
 
 	makeRightButton = routeName => {
-		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
+		return (routeName === 'Devices' || routeName === 'Sensors') ?
+			(this.state.orientation === 'PORTRAIT' ? this.starButton : this.starButtonLand) : null;
 	};
 
 	getRelativeStyle() {
@@ -437,8 +448,13 @@ const styles = StyleSheet.create({
 	},
 	menuButLand: {
 		position: 'absolute',
-		left: getWindowDimensions().height * 0.8555,
-		top: getWindowDimensions().height * 0.0400,
+		left: getWindowDimensions().height * 0.8666,
+		top: getWindowDimensions().height * 0.03666,
+	},
+	starButLand: {
+		position: 'absolute',
+		right: getWindowDimensions().height * 0.50,
+		top: getWindowDimensions().height * 0.03666,
 	},
 	menuIconLand: {
 		transform: [{rotateZ: '90deg'}],

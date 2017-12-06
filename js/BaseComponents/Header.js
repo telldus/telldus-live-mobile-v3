@@ -323,6 +323,7 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						right: 0,
 					},
+					rightButton.icon.style,
 				]}
 			>
 				{this.renderButtonContent(rightButton)}
