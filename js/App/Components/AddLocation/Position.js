@@ -32,7 +32,10 @@ import MapView from 'react-native-maps';
 import { View, StyleSheet, Dimensions, FloatingButton } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
-import {activateGateway, showModal} from 'Actions';
+import { showModal } from 'Actions';
+import { actions as sharedActions } from 'live-shared-data';
+const { Gateways: { activateGateway } } = sharedActions;
+import { googleAPIKey } from 'Config';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -174,7 +177,7 @@ class Position extends View {
 
 	onEndEditing() {
 		if (this.state.address !== '') {
-			this.props.actions.getGeoCodePosition(this.state.address).then(response => {
+			this.props.actions.getGeoCodePosition(this.state.address, googleAPIKey).then(response => {
 				if (response.status && response.status === 'OK' && response.results[0]) {
 					let { location, viewport } = response.results[0].geometry;
 					let latitude = location.lat, longitude = location.lng;

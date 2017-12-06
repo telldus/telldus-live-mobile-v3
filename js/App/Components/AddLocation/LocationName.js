@@ -31,7 +31,8 @@ import { defineMessages, intlShape } from 'react-intl';
 import {View, StyleSheet, Dimensions, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
-import {getGatewayInfo} from 'Actions';
+import { actions as sharedActions } from 'live-shared-data';
+const { Gateways: {getGatewayInfo} } = sharedActions;
 
 let deviceWidth = Dimensions.get('window').width;
 
