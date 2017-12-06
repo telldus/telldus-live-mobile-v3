@@ -179,6 +179,7 @@ type Props = {
 	dashboard: Object,
 	tab: string,
 	userProfile: Object,
+	isAppActive: boolean,
 	gateways: Object,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
@@ -278,6 +279,15 @@ class TabsView extends View {
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation && nextProps.gateways.toActivate.checkIfGatewaysEmpty) {
 			this.addNewLocation();
+		}
+		if (nextProps.isAppActive && !this.props.isAppActive) {
+			Orientation.getOrientation((error: any, deviceOrientation: string) => {
+				if (deviceOrientation) {
+					this.setState({
+						orientation: deviceOrientation,
+					});
+				}
+			});
 		}
 	}
 
@@ -536,7 +546,7 @@ function mapStateToProps(store, ownprops) {
 		userProfile: getUserProfile(store),
 		dashboard: store.dashboard,
 		gateways: store.gateways,
-		store,
+		isAppActive: store.App.active,
 	};
 }
 
