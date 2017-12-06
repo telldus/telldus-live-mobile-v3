@@ -23,11 +23,8 @@
 
 'use strict';
 
-import { googleAPIKey } from 'Config';
-
 import type { ThunkAction } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
-import {showModal} from 'Actions_Modal';
 
 import {getAppData} from './AppData';
 import {LiveApi} from 'LiveApi';
@@ -157,7 +154,13 @@ function activateGateway(clientInfo: Object): ThunkAction {
 			}
 		}).catch(err => {
 			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch(onActivationError(message));
+			dispatch({
+				type: 'REQUEST_MODAL_OPEN',
+				payload: {
+					data: message,
+					extras: 'ERROR',
+				},
+			});
 		});
 	};
 }
@@ -232,7 +235,7 @@ function setCoordinates(id: string, longitude: number, latitude: number): ThunkA
 	};
 }
 
-function getGeoCodePosition(address: string): ThunkAction {
+function getGeoCodePosition(address: string, googleAPIKey: string): ThunkAction {
 	return (dispatch: Function, getState: Object) => {
 		const googleUrl = 'https://maps.google.com/maps/api/geocode/json';
 		const url = format({
@@ -267,12 +270,6 @@ function getGeoCodePosition(address: string): ThunkAction {
 				});
 				return data;
 			});
-	};
-}
-
-function onActivationError(message: string): ThunkAction {
-	return (dispatch, getState) => {
-		dispatch(showModal(message, 'ERROR'));
 	};
 }
 
