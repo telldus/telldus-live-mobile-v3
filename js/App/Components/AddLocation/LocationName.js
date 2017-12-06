@@ -31,9 +31,6 @@ import { defineMessages, intlShape } from 'react-intl';
 import {View, StyleSheet, Dimensions, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
-import { actions as sharedActions } from 'live-shared-data';
-const { Gateways: {getGatewayInfo} } = sharedActions;
-
 let deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
@@ -59,7 +56,6 @@ type Props = {
 	intl: intlShape.isRequired,
 	onDidMount: Function,
 	actions: Object,
-	getGatewayInfo: (uniqueParam: Object, extras: string) => Promise<any>;
 }
 
 class LocationName extends View {
@@ -134,7 +130,7 @@ class LocationName extends View {
 				this.props.navigation.navigate('TimeZone', {clientInfo});
 			} else {
 				let uniqueParam = {id: clientInfo.clientId};
-				this.props.getGatewayInfo(uniqueParam, 'timezone')
+				this.props.actions.getGatewayInfo(uniqueParam, 'timezone')
 					.then(response => {
 						if (response.timezone) {
 							clientInfo.timezone = response.timezone;
@@ -198,9 +194,6 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
 	return {
-		getGatewayInfo: (uniqueParam: Object, extras: string) => {
-			return dispatch(getGatewayInfo(uniqueParam, extras));
-		},
 		dispatch,
 	};
 }
