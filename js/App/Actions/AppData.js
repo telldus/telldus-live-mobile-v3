@@ -24,11 +24,16 @@
 'use strict';
 
 import type { ThunkAction } from './Types';
+import { actions } from 'live-shared-data';
+const {Devices: {getDevices}} = actions;
+const {Sensors: {getSensors}} = actions;
+const {Jobs: {getJobs}} = actions;
+const {Websockets: {authenticateSession, connectToGateways}} = actions;
 
-import { authenticateSession, connectToGateways } from 'Actions_Websockets';
-import { getJobs } from './Jobs';
-import { getDevices } from 'Actions_Devices';
-import { getSensors } from 'Actions_Sensors';
+// import { authenticateSession, connectToGateways } from 'Actions_Websockets';
+// import { getJobs } from './Jobs';
+// import { getDevices } from 'Actions_Devices';
+// import { getSensors } from 'Actions_Sensors';
 
 function getAppData(): ThunkAction {
 	return (dispatch, getState) => {

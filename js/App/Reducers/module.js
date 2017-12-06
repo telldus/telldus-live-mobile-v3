@@ -40,6 +40,7 @@ import LiveApi from './LiveApi';
 import Websockets from './Websockets';
 import Modal from './Modal';
 import App from './App';
+import { reducers } from 'live-shared-data';
 
 const config = {
 	key: localStorageKey,
@@ -60,4 +61,5 @@ module.exports = persistCombineReducers(config, {
 	websockets: Websockets,
 	modal: Modal,
 	App: App,
+	...reducers,
 });

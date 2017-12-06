@@ -26,6 +26,8 @@ import array from './Array';
 import reducers from 'Reducers';
 import { createLogger } from 'redux-logger';
 import { persistStore } from 'redux-persist';
+import {LiveApi} from 'LiveApi';
+import TelldusWebsocket from '../Lib/Socket';
 
 let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
@@ -38,7 +40,7 @@ let logger = createLogger({
 const store = createStore(
 	reducers,
 	undefined,
-	applyMiddleware(thunk, promise, array, logger),
+	applyMiddleware(thunk.withExtraArgument({LiveApi, TelldusWebsocket}), promise, array, logger),
 );
 
 let _store;
