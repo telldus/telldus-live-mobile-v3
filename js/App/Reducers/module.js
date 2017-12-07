@@ -27,15 +27,9 @@ import { persistCombineReducers } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
 import { localStorageKey } from 'Config';
 
-import Devices from './Devices';
-import Gateways from './Gateways';
 import Navigation from './Navigation';
-import Sensors from './Sensors';
 import User from './User';
 import Tabs from './Tabs';
-import Dashboard from './Dashboard';
-import Dimmer from './Dimmer';
-import Jobs from './Jobs';
 import LiveApi from './LiveApi';
 import Websockets from './Websockets';
 import Modal from './Modal';
@@ -48,15 +42,9 @@ const config = {
 };
 
 module.exports = persistCombineReducers(config, {
-	devices: Devices,
-	gateways: Gateways,
 	navigation: Navigation,
-	sensors: Sensors,
 	user: User,
 	tabs: Tabs,
-	dashboard: Dashboard,
-	dimmer: Dimmer,
-	jobs: Jobs,
 	liveApi: LiveApi,
 	websockets: Websockets,
 	modal: Modal,

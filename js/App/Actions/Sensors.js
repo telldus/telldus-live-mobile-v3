@@ -22,46 +22,10 @@
 // @flow
 
 'use strict';
-
-import type { ThunkAction, Action } from './Types';
-
-import {LiveApi} from 'LiveApi';
-
-function getSensors(): ThunkAction {
-	return (dispatch, getState) => {
-		const payload = {
-			url: '/sensors/list?includeValues=1',
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => dispatch({
-			type: 'RECEIVED_SENSORS',
-			payload: {
-				...payload,
-				...response,
-			},
-		}));
-	};
-}
-
-function processWebsocketMessageForSensor(action: string, data: Object): Action {
-	switch (action) {
-		case 'value':
-			return {
-				type: 'SENSOR_UPDATE_VALUE',
-				payload: data,
-			};
-		default:
-	}
-
-	return {
-		type: 'SENSOR_WEBSOCKET_UNHANDLED',
-		payload: data,
-	};
-}
+// Sensors actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { Sensors } = actions;
 
 module.exports = {
-	getSensors,
-	processWebsocketMessageForSensor,
+	...Sensors,
 };
