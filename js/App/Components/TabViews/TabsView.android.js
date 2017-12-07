@@ -449,14 +449,14 @@ const styles = StyleSheet.create({
 	},
 	menuButLand: {
 		position: 'absolute',
-		left: getWindowDimensions().height * 0.8666,
+		left: getWindowDimensions().height * 0.8999,
 		top: getWindowDimensions().height * 0.03666,
 		paddingTop: 0,
 		paddingHorizontal: 0,
 	},
 	starButLand: {
 		position: 'absolute',
-		right: getWindowDimensions().height * 0.50,
+		right: getWindowDimensions().height * 0.5333,
 		top: getWindowDimensions().height * 0.03666,
 		paddingTop: 0,
 		paddingHorizontal: 0,
