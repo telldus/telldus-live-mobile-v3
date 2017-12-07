@@ -24,7 +24,6 @@
 'use strict';
 
 import { apiServer, publicKey, privateKey } from 'Config';
-import { updateAccessToken } from 'Actions_Login';
 
 // TODO: fix this pattern, pass store via component tree
 import { getStore } from '../Store/ConfigureStore';
@@ -129,7 +128,12 @@ export async function refreshAccessToken(url?: string = '', requestParams?: Obje
 				});
 				return null;
 			}
-			dispatch(updateAccessToken(response));
+			// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
+			// works on exporting 'updateAccessToken' directly(cant be do as there are multiple exports already). need to investigate.
+			dispatch({
+				type: 'RECEIVED_ACCESS_TOKEN',
+				accessToken: response,
+			});
 			return response;
 		});
 }
