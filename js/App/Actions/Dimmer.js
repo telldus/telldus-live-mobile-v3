@@ -22,35 +22,11 @@
 // @flow
 
 'use strict';
+// Dimmer actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { Dimmer } = actions;
 
-import type { Action, ThunkAction } from './Types';
-
-export const showDimmerPopup = (name: string, value: number): Action => ({
-	type: 'SHOW_DIMMER_POPUP',
-	name,
-	value,
-});
-
-export const saveDimmerInitialState = (deviceId: number, initialValue: number, initialState: string): Action => ({
-	type: 'SAVE_DIMMER_INITIAL_STATE',
-	payload: {
-		deviceId,
-		initialValue,
-		initialState,
-	},
-});
-
-export const hideDimmerPopup = (): Action => ({
-	type: 'HIDE_DIMMER_POPUP',
-});
-
-export const setDimmerValue = (id: number, value: number): ThunkAction => (dispatch) => {
-	dispatch({
-		type: 'SET_DIMMER_VALUE',
-		payload: {
-			deviceId: id,
-			value,
-		},
-	});
+module.exports = {
+	...Dimmer,
 };
 
