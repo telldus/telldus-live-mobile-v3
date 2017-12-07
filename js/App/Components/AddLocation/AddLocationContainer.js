@@ -33,8 +33,7 @@ import { View, Dimensions, StyleSheet, DialogueBox, Text, RoundedInfoButton } fr
 import { AddLocationPoster } from 'AddNewLocation_SubViews';
 
 import * as modalActions from 'Actions_Modal';
-import { actions as sharedActions } from 'live-shared-data';
-const { Gateways } = sharedActions;
+import * as gatewayActions from 'Actions_Gateways';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -316,7 +315,7 @@ const mapStateToProps = ({ schedule, devices, modal }: mapStateToPropsType): Obj
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({...modalActions, ...Gateways}, dispatch),
+			...bindActionCreators({...modalActions, ...gatewayActions}, dispatch),
 		},
 	}
 );
