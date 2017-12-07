@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
 		zIndex: 1,
 	},
 	containerLand: {
-		flexDirection: 'column',
+		flexDirection: 'column-reverse',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
 		width: getWindowDimensions().width * 0.13,
