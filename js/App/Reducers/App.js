@@ -32,7 +32,7 @@ export type State = {
 const initialState = {
 	errorGlobalMessage: 'Action Currently Unavailable',
 	errorGlobalShow: false,
-	active: false,
+	active: true,
 };
 
 export default function reduceApp(state: State = initialState, action: Action): State {
