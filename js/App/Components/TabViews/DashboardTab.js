@@ -233,6 +233,7 @@ class DashboardTab extends View {
 						flexDirection: 'row',
 						flexWrap: 'wrap',
 					}}
+					key={this.state.tileWidth}
 					dataSource={this.state.dataSource}
 					renderRow={this._renderRow(this.state.tileWidth)}
 					pageSize={100}
