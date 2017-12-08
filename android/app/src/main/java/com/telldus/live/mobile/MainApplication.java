@@ -30,6 +30,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.telldus.live.mobile.MainActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,6 +80,8 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+		// saving current locale of the user inorder to reload the app(inside MainActivity) on locale change.
+		MainActivity.currentLocale = getResources().getConfiguration().locale.toString();
         // Set up Crashlytics, disabled for debug builds
         Crashlytics crashlyticsKit = new Crashlytics.Builder()
           .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())

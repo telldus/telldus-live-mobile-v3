@@ -33,7 +33,7 @@
           android:label="@string/app_name"
       		android:launchMode="singleTop"
           android:theme="@style/SplashTheme"
-      		android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
+      		android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|layoutDirection|locale">
           <intent-filter>
               <action android:name="android.intent.action.MAIN" />
               <category android:name="android.intent.category.LAUNCHER" />
