@@ -9,6 +9,7 @@ module.exports = {
     apiServer: 'https://api3.telldus.com',
     publicKey: "${PUBLIC_KEY_ANDROID}",
     privateKey: "${PRIVATE_KEY_ANDROID}",
+    localStorageKey: 'tellduslive',
     googleAnalyticsId: '${GOOGLE_ANALYTICS_ID}',
     testUsername: '',
     testPassword: '',
