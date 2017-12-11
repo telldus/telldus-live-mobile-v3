@@ -22,21 +22,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { FormattedMessage, View, RoundedCornerShadowView, Text } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableButton } from 'BaseComponents';
 import { deviceSetState } from 'Actions_Devices';
 import i18n from '../../../Translations/common';
 
 class LearnButton extends View {
 	render() {
 		return (
-			<RoundedCornerShadowView style={this.props.style}>
-				<TouchableOpacity onPress={this.props.onLearn(this.props.id, this.props.command)} style={styles.learn}>
-					<Text style={styles.text}>
-						<FormattedMessage {...i18n.learn} style={styles.text} />
-					</Text>
-				</TouchableOpacity>
-			</RoundedCornerShadowView>
+			<TouchableButton
+				style={this.props.style}
+				onPress={this.props.onLearn(this.props.id, this.props.command)}
+				text={i18n.learn}
+			/>
 		);
 	}
 }
@@ -44,18 +41,6 @@ class LearnButton extends View {
 LearnButton.defaultProps = {
 	command: 32,
 };
-
-const styles = StyleSheet.create({
-	learn: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	text: {
-		fontSize: 16,
-		color: '#fff',
-	},
-});
 
 function mapDispatchToProps(dispatch) {
 	return {
