@@ -28,29 +28,27 @@ import Theme from 'Theme';
 
 type Props = {
 	tileWidth: number,
-	icon: string,
-	text: string,
-	text2: string,
-	text3:string,
+	data: Object,
 };
 
 class SensorDashboardTileSlide extends View {
 	props: Props;
 
 	render() {
+		let { data, tileWidth } = this.props;
 		return (
 			<View style={Theme.Styles.sensorTileItem}>
 				<View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
-					<Image source={this.props.icon}/>
+					<Image source={data.icon}/>
 				</View>
 				<View style={{ flex: 5, justifyContent: 'center', alignItems: 'center' }}>
 					<Text style={{
 						color: '#00255e',
-						fontSize: Math.floor(this.props.tileWidth / 8),
+						fontSize: Math.floor(tileWidth / 8),
 					}}>
-						{this.props.text && this.props.text}
-						{this.props.text2 && this.props.text2}
-						{this.props.text3 && this.props.text3}
+						{data.text && data.text}
+						{data.text2 && data.text2}
+						{data.text3 && data.text3}
 					</Text>
 				</View>
 			</View>
