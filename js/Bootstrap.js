@@ -100,6 +100,7 @@ global.LOG = (...args) => {
 	console.log('\\------------------------------/');
 	return args[args.length - 1];
 };
+// ignoring react-intl errors on missing translated strings[Except the errors in development mode, the behaviour is fine].
 if (process.env.NODE_ENV !== 'production') {
 	const originalConsoleError = console.error
 	if (console.error === originalConsoleError) {
