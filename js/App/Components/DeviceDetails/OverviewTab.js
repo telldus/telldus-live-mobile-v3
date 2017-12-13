@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { FormattedMessage, View } from 'BaseComponents';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
 import { defineMessages } from 'react-intl';
 
@@ -130,12 +130,10 @@ class OverviewTab extends View {
 			}
 		}
 		return (
-			<View style={styles.container}>
-				<View style={styles.itemsContainer}>
-					{deviceDetail}
-					<DeviceLocationDetail {...locationData} style={{marginTop: 10}}/>
-				</View>
-			</View>
+			<ScrollView contentContainerStyle={styles.itemsContainer}>
+				{deviceDetail}
+				<DeviceLocationDetail {...locationData} style={{marginTop: 10}}/>
+			</ScrollView>
 		);
 	}
 
@@ -153,8 +151,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	itemsContainer: {
-		width: (deviceWidth - 20),
 		justifyContent: 'center',
+		marginHorizontal: deviceWidth * 0.02233,
 	},
 });
 

@@ -51,7 +51,7 @@ const deviceHeight = Dimensions.get('window').height;
 let deviceWidth = Dimensions.get('window').width;
 import Theme from 'Theme';
 
-import { View } from 'BaseComponents';
+import { View, HeaderTitle } from 'BaseComponents';
 import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
@@ -79,7 +79,7 @@ const RouteConfigs = {
 				height: deviceHeight * 0.1,
 			},
 			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
+			headerTitle: HeaderTitle,
 		},
 	},
 	AddLocation: {
