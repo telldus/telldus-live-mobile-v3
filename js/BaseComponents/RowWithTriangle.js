@@ -32,7 +32,7 @@ type Props = {
 	children?: any,
 	layout: 'row' | 'column',
 	containerStyle: any,
-	style: Object,
+	style: any,
 	triangleColor: string,
 };
 
@@ -41,7 +41,7 @@ type DefaultProps = {
 	triangleColor: string,
 };
 
-export default class RowWithTriangle extends Component {
+export default class RowWithTriangle extends Component<Props, null> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {

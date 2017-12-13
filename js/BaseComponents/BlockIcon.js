@@ -33,7 +33,7 @@ type DefaultProps = {
 };
 
 type Props = {
-	icon: string,
+	icon?: string,
 	size?: number,
 	color?: string,
 	bgColor?: string,
