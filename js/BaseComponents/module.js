@@ -63,11 +63,14 @@ import Modal from './Modal';
 import ScreenContainer from './ScreenContainer';
 import Poster from './Poster';
 import IconTelldus from './IconTelldus';
+import BlockIcon from './BlockIcon';
 import Throbber from './Throbber';
 import FloatingButton from './FloatingButton';
 import RoundedInfoButton from './RoundedInfoButton';
 import DialogueBox from './DialogueBox';
 import HeaderTitle from './HeaderTitle';
+import ListRow from './ListRow';
+import RowWithTriangle from './RowWithTriangle';
 
 import {
 	AppState,
@@ -122,11 +125,14 @@ module.exports = {
 	ScreenContainer: ScreenContainer,
 	Poster: Poster,
 	IconTelldus: IconTelldus,
+	BlockIcon: BlockIcon,
 	Throbber: Throbber,
 	FloatingButton: FloatingButton,
 	RoundedInfoButton: RoundedInfoButton,
 	DialogueBox: DialogueBox,
 	HeaderTitle: HeaderTitle,
+	ListRow,
+	RowWithTriangle,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
