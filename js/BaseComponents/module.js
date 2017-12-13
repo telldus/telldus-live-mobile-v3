@@ -67,6 +67,7 @@ import Throbber from './Throbber';
 import FloatingButton from './FloatingButton';
 import RoundedInfoButton from './RoundedInfoButton';
 import DialogueBox from './DialogueBox';
+import HeaderTitle from './HeaderTitle';
 
 import {
 	AppState,
@@ -125,6 +126,7 @@ module.exports = {
 	FloatingButton: FloatingButton,
 	RoundedInfoButton: RoundedInfoButton,
 	DialogueBox: DialogueBox,
+	HeaderTitle: HeaderTitle,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
