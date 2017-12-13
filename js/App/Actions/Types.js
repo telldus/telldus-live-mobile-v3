@@ -75,6 +75,8 @@ export type Action =
 	| { type: 'APP_FOREGROUND' }
 	| { type: 'APP_BACKGROUND' }
 
+	| { type: 'APP_ORIENTATION', value: string }
+
 	| { type: 'GLOBAL_ERROR_SHOW', payload: Object }
 	| { type: 'GLOBAL_ERROR_HIDE' }
 
