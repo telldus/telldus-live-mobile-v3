@@ -32,6 +32,7 @@ import {
 	getUserProfile,
 	appStart,
 	appState,
+	appOrientation,
 	syncLiveApiOnForeground,
 	getAppData,
 	getGateways,
@@ -129,7 +130,7 @@ type Props = {
 };
 
 type State = {
-	specificOrientation: Object,
+	specificOrientation: string,
 }
 
 class AppNavigator extends View {
@@ -142,16 +143,14 @@ class AppNavigator extends View {
 	constructor() {
 		super();
 
-		if (Platform.OS !== 'android') {
-			const init = Orientation.getInitialOrientation();
+		const init = Orientation.getInitialOrientation();
 
-			this.state = {
-				specificOrientation: init,
-			};
+		this.state = {
+			specificOrientation: init,
+		};
 
-			Orientation.unlockAllOrientations();
-			Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
-		}
+		Orientation.unlockAllOrientations();
+		Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
 	}
 
 	componentWillMount() {
@@ -174,6 +173,7 @@ class AppNavigator extends View {
 			this.props.dispatch(getGateways());
 			this.props.dispatch(getAppData());
 		});
+		this.props.dispatch(appOrientation(this.state.specificOrientation));
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -190,9 +190,7 @@ class AppNavigator extends View {
 	}
 
 	_updateSpecificOrientation = specificOrientation => {
-		if (Platform.OS !== 'android') {
-			this.setState({ specificOrientation });
-		}
+		this.setState({ specificOrientation });
 	};
 
 	render() {
