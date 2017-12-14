@@ -76,7 +76,6 @@ class HistoryTab extends View {
 	state: State;
 
 	refreshHistoryData: () => void;
-	renderFillerComponent: () => void;
 	renderSectionHeader: (Object, String) => void;
 	renderRow: (Object, String) => void;
 	closeHistoryDetailsModal: () => void;
@@ -103,8 +102,9 @@ class HistoryTab extends View {
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
-		this.renderFillerComponent = this.renderFillerComponent.bind(this);
 		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
+
+		this.isFirstFlag = null;
 	}
 
 	componentDidMount() {
@@ -120,6 +120,7 @@ class HistoryTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.history && ((!this.props.history) || (nextProps.history.data.length !== this.props.history.data.length))) {
+			this.isFirstFlag = null;
 			this.setState({
 				dataSource: listDataSource.cloneWithRowsAndSections(this.getRowAndSectionData(nextProps.history.data)),
 				isListEmpty: nextProps.history.data.length === 0 ? true : false,
@@ -179,9 +180,11 @@ class HistoryTab extends View {
 
 	}
 
-	renderRow(item, id) {
+	renderRow(item: Object, sectionId: string, rowId: number) {
+		let isFirst = +rowId === 0 && this.isFirstFlag === null;
+		this.isFirstFlag = isFirst;
 		return (
-			<HistoryRow id={id} item={item}/>
+			<HistoryRow id={rowId} item={item} isFirst={isFirst}/>
 		);
 	}
 
@@ -196,16 +199,6 @@ class HistoryTab extends View {
 					day="2-digit"
 					month="long"
 					style={styles.sectionHeaderText} />
-			</View>
-		);
-	}
-
-	renderFillerComponent() {
-		return (
-			<View style={styles.fillerComponent}>
-				<View style={styles.fillerViewToAlign}>
-					<View style={styles.fillerVerticalLine}/>
-				</View>
 			</View>
 		);
 	}
@@ -251,7 +244,7 @@ class HistoryTab extends View {
 					renderRow={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 				/>
-				{this.renderFillerComponent()}
+				<View style={styles.line}/>
 				<DeviceHistoryDetails />
 			</View>
 		);
@@ -259,15 +252,12 @@ class HistoryTab extends View {
 
 }
 
-let widthCircularViewCover = deviceWidth * 0.1;
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingTop: 2,
 		backgroundColor: '#eeeeef',
 		flexDirection: 'row',
-		width: deviceWidth,
 		flexWrap: 'wrap',
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
@@ -286,7 +276,6 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 	},
 	sectionHeader: {
-		width: deviceWidth,
 		height: deviceHeight * 0.04,
 		backgroundColor: '#ffffff',
 		shadowColor: '#000000',
@@ -303,23 +292,16 @@ const styles = StyleSheet.create({
 	sectionHeaderText: {
 		color: '#A59F9A',
 	},
-	fillerComponent: {
-		flex: 1,
-		justifyContent: 'flex-start',
-		alignItems: 'flex-start',
-		marginLeft: deviceWidth * 0.02,
-	},
-	fillerViewToAlign: {
-		flex: 1,
-		width: widthCircularViewCover,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	fillerVerticalLine: {
-		flex: 1,
+	line: {
 		backgroundColor: '#A59F9A',
-		width: 2,
+		height: '100%',
+		width: 1,
+		position: 'absolute',
+		left: deviceWidth * 0.069333333,
+		top: 0,
+		zIndex: -1,
 	},
+
 });
 
 function mapDispatchToProps(dispatch) {

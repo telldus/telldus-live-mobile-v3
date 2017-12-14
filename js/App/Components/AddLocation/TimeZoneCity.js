@@ -32,7 +32,7 @@ import { ListRow } from 'AddNewLocation_SubViews';
 
 const messages = defineMessages({
 	headerOne: {
-		id: 'addNewLocation.timeZone.headerOne',
+		id: 'addNewLocation.timeZoneCity.headerOne',
 		defaultMessage: 'Time Zone',
 		description: 'Main header for the Select City Screen',
 	},

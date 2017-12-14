@@ -32,17 +32,17 @@ import Theme from 'Theme';
 
 const messages = defineMessages({
 	defaultHeader: {
-		id: 'notification.defaultHeader',
+		id: 'dialogueBox.defaultHeader',
 		defaultMessage: 'OOPS',
 		description: 'Default Header for the notification component',
 	},
 	defaultPositiveText: {
-		id: 'notification.defaultPositiveText',
+		id: 'dialogueBox.defaultPositiveText',
 		defaultMessage: 'OK',
 		description: 'Default Positive text for the notification component',
 	},
 	defaultNegativeText: {
-		id: 'notification.defaultNegativeText',
+		id: 'dialogueBox.defaultNegativeText',
 		defaultMessage: 'CANCEL',
 		description: 'Default Negative text for the notification component',
 	},

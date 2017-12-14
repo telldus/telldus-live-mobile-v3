@@ -26,7 +26,6 @@
 import React from 'react';
 import { StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { connect } from 'react-redux';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { Text, View } from 'BaseComponents';
@@ -40,17 +39,12 @@ import { TabNavigator } from 'react-navigation';
 let deviceHeight = Dimensions.get('window').height;
 let deviceWidth = Dimensions.get('window').width;
 
-let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
-let stackNavHeaderHeight = deviceHeight * 0.1;
-let deviceIconCoverHeight = (deviceHeight * 0.2);
-let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight;
-let screenSpaceRemaining = deviceHeight - totalTop;
-
 type Props = {
 	dispatch: Function,
 	device: Object,
 	stackNavigator: Object,
 	intl: intlShape.isRequired,
+	appOrientation: string,
 };
 
 type State = {
@@ -103,17 +97,18 @@ class DeviceDetailsTabsView extends View {
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
 		};
+		let { appOrientation } = this.props;
 		return (
 			<View style={styles.container}>
-				<ImageBackground style={styles.deviceIconBackG} resizeMode={'stretch'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
-					<View style={styles.deviceIconBackground}>
+				<ImageBackground style={appOrientation === 'PORTRAIT' ? styles.posterPort : styles.posterLand} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
+					<View style={appOrientation === 'PORTRAIT' ? styles.iconBackgroundPort : styles.iconBackgroundLand}>
 						<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
 					</View>
 					<Text style={styles.textDeviceName}>
 						{this.props.device.name}
 					</Text>
 				</ImageBackground>
-				<View style={{ height: screenSpaceRemaining }}>
+				<View style={{flex: 1}}>
 					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
 			</View>
@@ -123,12 +118,20 @@ class DeviceDetailsTabsView extends View {
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 	},
-	deviceIconBackG: {
+	posterPort: {
 		height: (deviceHeight * 0.2),
 		width: deviceWidth,
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+	posterLand: {
+		height: (deviceWidth * 0.2),
+		width: deviceHeight,
+		alignItems: 'center',
+		justifyContent: 'center',
+		flexDirection: 'row',
 	},
 	icon: {
 		width: 15,
@@ -138,13 +141,22 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		color: '#fff',
 	},
-	deviceIconBackground: {
+	iconBackgroundPort: {
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
 		width: (deviceHeight * 0.12),
 		height: (deviceHeight * 0.12),
 		borderRadius: (deviceHeight * 0.06),
+	},
+	iconBackgroundLand: {
+		backgroundColor: '#fff',
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: (deviceWidth * 0.1),
+		height: (deviceWidth * 0.1),
+		borderRadius: (deviceWidth * 0.05),
+		marginRight: 10,
 	},
 });
 
@@ -204,6 +216,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
 		stackNavigator: ownProps.navigation,
 		device: store.devices.byId[ownProps.navigation.state.params.id],
+		appOrientation: store.App.orientation,
 	};
 }
 function mapDispatchToProps(dispatch: Function): Object {

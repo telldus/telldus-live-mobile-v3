@@ -163,17 +163,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	learn: {
-		height: (deviceHeight * 0.09),
-		width: (deviceWidth * 0.5),
 		marginHorizontal: (deviceWidth * 0.5) / 2,
 		marginVertical: 25,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#F06F0C',
-		borderBottomRightRadius: 26,
-		borderTopLeftRadius: 26,
-		borderBottomLeftRadius: 26,
-		borderTopRightRadius: 26,
 	},
 });
 

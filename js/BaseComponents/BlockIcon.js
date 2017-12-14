@@ -23,57 +23,57 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dimensions } from 'react-native';
-import Text from './Text';
+import View from './View';
+import IconTelldus from './IconTelldus';
 import Theme from 'Theme';
-
-const deviceWidth = Dimensions.get('window').width;
 
 type DefaultProps = {
 	color: string,
-	size: number,
+	bgColor: string,
 };
 
 type Props = {
 	icon?: string,
 	size?: number,
 	color?: string,
-	style?: Object | number,
+	bgColor?: string,
+	style?: number | Object,
+	containerStyle?: number | Object | Array<any>,
 };
 
-export default class IconTelldus extends Component<Props, null> {
+export default class BlockIcon extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {
 		icon: PropTypes.string.isRequired,
 		size: PropTypes.number,
 		color: PropTypes.string,
+		bgColor: PropTypes.string,
 		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		containerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
 	};
 
 	static defaultProps: DefaultProps = {
-		color: '#999',
-		size: deviceWidth * 0.04,
+		color: '#fff',
+		bgColor: Theme.Core.brandPrimary,
 	};
 
 	render(): Object {
-		const { icon, style } = this.props;
+		const { style, containerStyle, icon, size, color } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]}>
-				{icon}
-			</Text>
+			<View style={[defaultStyle, containerStyle]}>
+				<IconTelldus icon={icon} size={size} color={color} style={style}/>
+			</View>
 		);
 	}
 
 	_getDefaultStyle = (): Object => {
-		const { size, color } = this.props;
-
 		return {
-			color,
-			fontSize: size,
+			alignItems: 'center',
+			justifyContent: 'center',
+			backgroundColor: this.props.bgColor,
 		};
 	};
-
 }
