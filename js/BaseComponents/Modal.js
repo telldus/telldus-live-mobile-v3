@@ -22,15 +22,12 @@
 'use strict';
 
 import React, {Component} from 'react';
-import { Animated, Easing, StyleSheet, Dimensions } from 'react-native';
+import { Animated, Easing, StyleSheet } from 'react-native';
 
 import { connect } from 'react-redux';
 import { clearData } from 'Actions_Modal';
 
 import Theme from 'Theme';
-
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 
 type Props = {
 	dispatch: Function,
@@ -253,9 +250,7 @@ const styles = StyleSheet.create({
 	modalContainer: {
 		flex: 1,
 		position: 'absolute',
-		height: deviceHeight,
 		elevation: 8,
-		width: deviceWidth,
 		backgroundColor: '#00000060',
 		alignItems: 'center',
 		justifyContent: 'center',
