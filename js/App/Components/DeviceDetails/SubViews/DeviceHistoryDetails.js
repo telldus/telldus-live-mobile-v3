@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { defineMessages } from 'react-intl';
 
@@ -72,6 +72,26 @@ class DeviceHistoryDetails extends View {
 
 	getPercentage(value: number) {
 		return Math.round(value * 100.0 / 255);
+	}
+
+	getRelativeStyle() {
+		let relativeStyle = {
+			container: styles.container,
+			detailsRow: styles.detailsRowPort,
+			detailsLabelCover: styles.detailsLabelCover,
+			detailsValueCover: styles.detailsValueCover,
+			timeCover: styles.timeCover,
+			detailsContainer: styles.detailsContainerPort,
+		};
+		if (this.props.appOrientation !== 'PORTRAIT') {
+			relativeStyle.container = styles.containerLand;
+			relativeStyle.detailsRow = styles.detailsRowLand;
+			relativeStyle.detailsLabelCover = styles.detailsLabelCoverLand;
+			relativeStyle.detailsValueCover = styles.detailsValueCoverLand;
+			relativeStyle.timeCover = styles.timeCoverLand;
+			relativeStyle.detailsContainer = styles.detailsContainerLand;
+		}
+		return relativeStyle;
 	}
 
 	render() {
@@ -146,10 +166,19 @@ class DeviceHistoryDetails extends View {
 			}
 		}
 
+		let {
+			container,
+			detailsRow,
+			detailsLabelCover,
+			detailsValueCover,
+			timeCover,
+			detailsContainer,
+		} = this.getRelativeStyle();
+
 		return (
 			<Modal
-				modalStyle={styles.container}
-				modalContainerStyle={styles.container}
+				modalStyle={container}
+				modalContainerStyle={container}
 				entry= "SlideInY"
 				exit= "SlideOutY"
 				entryDuration= {300}
@@ -162,27 +191,27 @@ class DeviceHistoryDetails extends View {
 						<FormattedMessage {...i18n.details} style={styles.titleText}/>
 					</Text>
 				</View>
-				<View style={styles.detailsContainer}>
-					<View style={styles.detailsRow}>
-						<View style={styles.detailsLabelCover}>
+				<ScrollView contentContainerStyle={[styles.detailsContainer, detailsContainer]}>
+					<View style={[styles.detailsRow, detailsRow]}>
+						<View style={detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
 								<FormattedMessage {...i18n.state} style={styles.detailsLabel}/>
 							</Text>
 						</View>
-						<View style={styles.detailsValueCover}>
+						<View style={detailsValueCover}>
 							<Text style={styles.detailsText}>
 								{textState}
 							</Text>
 						</View>
 					</View>
-					<View style={styles.detailsRow}>
-						<View style={styles.detailsLabelCover}>
+					<View style={[styles.detailsRow, detailsRow]}>
+						<View style={detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
 								<FormattedMessage {...i18n.time} style={styles.detailsLabel}/>
 							</Text>
 						</View>
 						{textDate !== '' ?
-							<View style={styles.timeCover}>
+							<View style={timeCover}>
 
 								<FormattedDate
 									value={textDate}
@@ -205,25 +234,25 @@ class DeviceHistoryDetails extends View {
 							null
 						}
 					</View>
-					<View style={styles.detailsRow}>
-						<View style={styles.detailsLabelCover}>
+					<View style={[styles.detailsRow, detailsRow]}>
+						<View style={detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
 								<FormattedMessage {...i18n.origin} style={styles.detailsLabel}/>
 							</Text>
 						</View>
-						<View style={styles.detailsValueCover}>
+						<View style={detailsValueCover}>
 							<Text style={styles.detailsText} numberOfLines={1}>
 								{originText}
 							</Text>
 						</View>
 					</View>
-					<View style={styles.detailsRow}>
-						<View style={styles.detailsLabelCover}>
+					<View style={[styles.detailsRow, detailsRow]}>
+						<View style={detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
 								<FormattedMessage {...i18n.status} style={styles.detailsLabel}/>
 							</Text>
 						</View>
-						<View style={[styles.detailsValueCover, { flexDirection: 'row-reverse' }]}>
+						<View style={[detailsValueCover, { flexDirection: 'row-reverse' }]}>
 							<Text style={successStatus === 0 ? styles.detailsText : styles.detailsTextError} >
 								{textStatus}
 							</Text>
@@ -234,7 +263,7 @@ class DeviceHistoryDetails extends View {
 							}
 						</View>
 					</View>
-				</View>
+				</ScrollView>
 			</Modal>
 		);
 	}
@@ -245,8 +274,17 @@ const styles = StyleSheet.create({
 		flex: 1,
 		position: 'absolute',
 		backgroundColor: '#eeeeef',
+		top: 0,
+		bottom: 0,
 		width: deviceWidth,
-		height: screenSpaceRemaining,
+	},
+	containerLand: {
+		flex: 1,
+		position: 'absolute',
+		backgroundColor: '#eeeeef',
+		top: 0,
+		bottom: 0,
+		width: deviceHeight,
 	},
 	titleTextCover: {
 		width: deviceWidth,
@@ -262,20 +300,34 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'flex-end',
 		flexDirection: 'column',
+	},
+	detailsContainerPort: {
 		width: deviceWidth,
+	},
+	detailsContainerLand: {
+		width: deviceHeight,
 	},
 	detailsRow: {
 		flexDirection: 'row',
-		width: deviceWidth,
 		height: deviceHeight * 0.09,
 		marginTop: 1,
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	detailsRowPort: {
+		width: deviceWidth,
+	},
+	detailsRowLand: {
+		width: deviceHeight,
+	},
 	detailsLabelCover: {
 		alignItems: 'flex-start',
 		width: deviceWidth * 0.3,
+	},
+	detailsLabelCoverLand: {
+		alignItems: 'flex-start',
+		width: deviceHeight * 0.3,
 	},
 	detailsLabel: {
 		marginLeft: 10,
@@ -285,6 +337,10 @@ const styles = StyleSheet.create({
 	detailsValueCover: {
 		alignItems: 'flex-end',
 		width: deviceWidth * 0.7,
+	},
+	detailsValueCoverLand: {
+		alignItems: 'flex-end',
+		width: deviceHeight * 0.7,
 	},
 	detailsText: {
 		marginRight: 15,
@@ -301,6 +357,11 @@ const styles = StyleSheet.create({
 		width: deviceWidth * 0.7,
 		flexDirection: 'row',
 	},
+	timeCoverLand: {
+		justifyContent: 'flex-end',
+		width: deviceHeight * 0.7,
+		flexDirection: 'row',
+	},
 	timeText: {
 		color: '#A59F9A',
 		fontSize: 16,
@@ -311,6 +372,7 @@ function mapStateToProps(state) {
 	return {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,
+		appOrientation: state.App.orientation,
 	};
 }
 
