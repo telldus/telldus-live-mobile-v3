@@ -181,6 +181,7 @@ class DeviceHistoryDetails extends View {
 				modalContainerStyle={container}
 				entry= "SlideInY"
 				exit= "SlideOutY"
+				showOverlay= {false}
 				entryDuration= {300}
 				exitDuration= {100}
 				startValue= {-screenSpaceRemaining}

@@ -28,10 +28,12 @@ import { connect } from 'react-redux';
 import { clearData } from 'Actions_Modal';
 
 import Theme from 'Theme';
+import { getWindowDimensions } from 'Lib';
 
 type Props = {
 	dispatch: Function,
 	showModal: any,
+	showOverlay?: boolean,
 	modalStyle?: Array<any> | number | Object,
 	modalContainerStyle?: Array<any> | number | Object,
 	children: any,
@@ -215,16 +217,19 @@ class Modal extends Component<Props, void> {
 
 	render(): Object {
 		let animatedProps = {};
-		if (this.props.entry === 'ZoomIn' && this.props.exit === 'ZoomOut') {
+		let { showOverlay, modalContainerStyle, modalStyle, children,
+			entry, exit, startValue, endValue } = this.props;
+
+		if (entry === 'ZoomIn' && exit === 'ZoomOut') {
 			let scaleAnim = this.animatedScale.interpolate({
 				inputRange: [0, 1],
 				outputRange: [0, 1],
 			});
 			animatedProps = {scale: scaleAnim};
-		} else if (this.props.entry === 'SlideInY' && this.props.exit === 'SlideOutY') {
+		} else if (entry === 'SlideInY' && exit === 'SlideOutY') {
 			let YAnimatedValue = this.animatedYValue.interpolate({
-				inputRange: [this.props.startValue, this.props.endValue],
-				outputRange: [this.props.startValue, this.props.endValue],
+				inputRange: [startValue, endValue],
+				outputRange: [startValue, endValue],
 			});
 			animatedProps = {translateY: YAnimatedValue};
 		}
@@ -232,14 +237,15 @@ class Modal extends Component<Props, void> {
 			inputRange: [0, 0.2, 0.5, 1],
 			outputRange: [0, 0.5, 1, 1],
 		});
+		let overlayProps = showOverlay ? styles.overlayLayout : null;
 		return (
-			<Animated.View style={[ styles.modalContainer, this.props.modalContainerStyle, {transform: [animatedProps],
+			<Animated.View style={[ styles.modalContainer, modalContainerStyle, overlayProps, {transform: [animatedProps],
 				opacity: opacityAnim,
 			}]}>
-				<Animated.View style={[ styles.modal, this.props.modalStyle, {transform: [animatedProps],
+				<Animated.View style={[ styles.modal, modalStyle, {transform: [animatedProps],
 					opacity: opacityAnim,
 				}]}>
-					{this.props.children}
+					{children}
 				</Animated.View>
 			</Animated.View>
 		);
@@ -255,6 +261,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	overlayLayout: {
+		width: getWindowDimensions().width,
+		height: getWindowDimensions().height,
+	},
 	modal: {
 		position: 'absolute',
 		...Theme.Core.shadow,
@@ -267,6 +277,7 @@ Modal.defaultProps = {
 	exitDuration: 500,
 	startValue: 0,
 	endValue: 100,
+	showOverlay: true,
 };
 
 function mapDispatchToProps(dispatch: Function): Object {
