@@ -176,6 +176,10 @@ class AppNavigator extends View {
 		this.props.dispatch(appOrientation(this.state.specificOrientation));
 	}
 
+	componentWillUnmount() {
+		Orientation.removeSpecificOrientationListener(this._updateSpecificOrientation);
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.toastVisible) {
 			this._showToast();
