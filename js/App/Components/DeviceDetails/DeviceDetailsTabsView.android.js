@@ -24,9 +24,10 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { StyleSheet, Dimensions, ImageBackground, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
+const AnimatedBackground = Animated.createAnimatedComponent(ImageBackground);
 
 import { Text, View } from 'BaseComponents';
 
@@ -49,6 +50,10 @@ type Props = {
 
 type State = {
 	currentTab: string,
+	posterTop: number,
+	posterHeight: number,
+	posterNextTop: number,
+	posterPrevTop: number,
 };
 
 class DeviceDetailsTabsView extends View {
@@ -58,14 +63,25 @@ class DeviceDetailsTabsView extends View {
 	goBack: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 	getRouteName: (Object) => void;
+	onLayout: (Object) => void;
+	onListScroll: (number) => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 			currentTab: 'Overview',
+			posterTop: 0,
+			posterHeight: 0,
+			posterNextTop: 0,
+			posterPrevTop: 0,
 		};
 		this.goBack = this.goBack.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+
+		this.animatedY = new Animated.Value(0);
+
+		this.onLayout = this.onLayout.bind(this);
+		this.onListScroll = this.onListScroll.bind(this);
 	}
 
 	goBack() {
@@ -91,23 +107,47 @@ class DeviceDetailsTabsView extends View {
 		});
 	}
 
+	onLayout(ev: Object) {
+		this.setState({
+			posterTop: ev.nativeEvent.layout.y,
+			posterHeight: ev.nativeEvent.layout.height,
+		});
+	}
+
+	onListScroll(value: number) {
+		this.setState({
+			posterNextTop: value,
+			posterPrevTop: this.state.posterNextTop,
+		});
+		Animated.timing(this.animatedY, {
+			duration: 5,
+			toValue: value,
+		}).start();
+	}
+
 	render() {
+		let { appOrientation } = this.props;
 		let screenProps = {
 			device: this.props.device,
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
+			posterTop: this.state.posterTop,
+			posterHeight: this.state.posterHeight,
+			onListScroll: this.onListScroll,
 		};
-		let { appOrientation } = this.props;
+
+		let poster = appOrientation === 'PORTRAIT' ? styles.posterPort : styles.posterLand;
+
 		return (
-			<View style={styles.container}>
-				<ImageBackground style={appOrientation === 'PORTRAIT' ? styles.posterPort : styles.posterLand} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
+			<View style={[styles.container]}>
+				<AnimatedBackground onLayout={this.onLayout} style={[poster, {marginTop: this.animatedY}]} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
 					<View style={appOrientation === 'PORTRAIT' ? styles.iconBackgroundPort : styles.iconBackgroundLand}>
 						<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
 					</View>
 					<Text style={styles.textDeviceName}>
 						{this.props.device.name}
 					</Text>
-				</ImageBackground>
+				</AnimatedBackground>
 				<View style={{flex: 1}}>
 					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>

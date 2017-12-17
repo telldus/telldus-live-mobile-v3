@@ -59,12 +59,15 @@ type Props = {
 	history: Object,
 	device: Object,
 	deviceHistoryNavigator: Object,
+	screenProps: Object,
 };
 
 type State = {
 	dataSource: any,
 	isListEmpty: boolean,
 	hasRefreshed: boolean,
+	scrollEnabled: boolean,
+	scrollOffsetY: number,
 };
 
 class HistoryTab extends View {
@@ -75,6 +78,9 @@ class HistoryTab extends View {
 	renderSectionHeader: (Object, String) => void;
 	renderRow: (Object, String) => void;
 	closeHistoryDetailsModal: () => void;
+	onResponderMove: (Object) => void;
+	onMoveShouldSetResponder: (Object) => void;
+	onScroll: (Object) => void;
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
@@ -94,10 +100,19 @@ class HistoryTab extends View {
 			dataSource: props.history ? this.getRowAndSectionData(props.history.data) : false,
 			isListEmpty: props.history && props.history.data.length === 0 ? true : false,
 			hasRefreshed: false,
+			scrollEnabled: false,
+			scrollOffsetY: 0,
 		};
+
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
+
+		this.onResponderMove = this.onResponderMove.bind(this);
+		this.onMoveShouldSetResponder = this.onMoveShouldSetResponder.bind(this);
+		this.onScroll = this.onScroll.bind(this);
+
+		this.posterPrevTop = null;
 	}
 
 	componentDidMount() {
@@ -175,6 +190,10 @@ class HistoryTab extends View {
 
 	}
 
+	keyExtractor(item) {
+		return item.ts;
+	}
+
 	renderRow(item: Object) {
 		return (
 			<HistoryRow id={item.item.index} item={item.item} isFirst={+item.item.index === 0}/>
@@ -207,7 +226,66 @@ class HistoryTab extends View {
 		return true;
 	}
 
+	onMoveShouldSetResponder(ev: Object): boolean {
+		let flag = true;
+		this.posterPrevTop = this.posterPrevTop ? this.posterPrevTop : this.props.screenProps.posterTop;
+		// if ((this.posterPrevTop <= this.props.screenProps.posterTop) && ((this.posterPrevTop >= -this.props.screenProps.posterHeight) && (this.state.scrollOffsetY === 0))) {
+		if ((this.posterPrevTop === -this.props.screenProps.posterHeight) && (this.state.scrollOffsetY !== 0)) {
+			flag = false;
+			this.setState({
+				scrollEnabled: true,
+			});
+		} else if (this.state.scrollEnabled) {
+			this.setState({
+				scrollEnabled: false,
+			});
+		}
+		this.position = ev.nativeEvent.pageY;
+		return flag;
+	}
+
+	onResponderMove(ev: Object) {
+
+		let dragUp = this.position > ev.nativeEvent.pageY;
+		let distanceDragged = this.position - ev.nativeEvent.pageY;
+		this.position = ev.nativeEvent.pageY;
+
+		let posterNextTop = this.posterPrevTop - distanceDragged;
+		// let actualDragPosition = posterNextTop;
+		posterNextTop = dragUp && posterNextTop < -this.props.screenProps.posterHeight ? -this.props.screenProps.posterHeight : posterNextTop;
+		posterNextTop = !dragUp && posterNextTop > this.props.screenProps.posterTop ? this.props.screenProps.posterTop : posterNextTop;
+		this.posterPrevTop = posterNextTop;
+
+		if (dragUp) {
+			this.props.screenProps.onListScroll(posterNextTop);
+			if (posterNextTop === -this.props.screenProps.posterHeight) {
+				this.setState({
+					scrollEnabled: true,
+				});
+
+				// TODO - Once the poster has been COMPLETELY dragged up and hidden start scrolling the list.
+
+				// let listPosition = this.state.scrollOffsetY + Math.abs(actualDragPosition - posterNextTop);
+				// this.refs.sectionList._wrapperListRef._listRef.scrollToOffset({offset: listPosition});
+			}
+		}
+		if (!dragUp) {
+			this.props.screenProps.onListScroll(posterNextTop);
+		}
+	}
+
+	onScroll(ev: Object) {
+		this.setState({
+			scrollOffsetY: ev.nativeEvent.contentOffset.y,
+		});
+		if (ev.nativeEvent.contentOffset.y <= 0) {
+			// TODO - drag the poster downwards when list is scrolled beyond it's top.
+			// see if velocity too can be handled.
+		}
+	}
+
 	render() {
+
 		// Loader message when data has not received yet.
 		if (!this.state.dataSource) {
 			return (
@@ -233,9 +311,15 @@ class HistoryTab extends View {
 		return (
 			<View style={styles.container}>
 				<SectionList
+					ref={'sectionList'}
 					sections={this.state.dataSource}
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
+					keyExtractor={this.keyExtractor}
+					onMoveShouldSetResponder={this.onMoveShouldSetResponder}
+					onResponderMove={this.onResponderMove}
+					scrollEnabled={this.state.scrollEnabled}
+					onScroll={this.onScroll}
 				/>
 				<View style={styles.line}/>
 				<DeviceHistoryDetails />
