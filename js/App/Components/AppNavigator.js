@@ -162,7 +162,7 @@ class AppNavigator extends View {
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
 		if (Platform.OS === 'android' && StatusBar) {
 			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
+			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
 
 		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
