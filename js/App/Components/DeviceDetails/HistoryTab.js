@@ -227,25 +227,22 @@ class HistoryTab extends View {
 	}
 
 	onMoveShouldSetResponder(ev: Object): boolean {
-		let flag = true;
 		this.posterPrevTop = this.posterPrevTop ? this.posterPrevTop : this.props.screenProps.posterTop;
-		// if ((this.posterPrevTop <= this.props.screenProps.posterTop) && ((this.posterPrevTop >= -this.props.screenProps.posterHeight) && (this.state.scrollOffsetY === 0))) {
 		if ((this.posterPrevTop === -this.props.screenProps.posterHeight) && (this.state.scrollOffsetY !== 0)) {
-			flag = false;
 			this.setState({
 				scrollEnabled: true,
 			});
+			return false;
 		} else if (this.state.scrollEnabled) {
 			this.setState({
 				scrollEnabled: false,
 			});
 		}
 		this.position = ev.nativeEvent.pageY;
-		return flag;
+		return true;
 	}
 
 	onResponderMove(ev: Object) {
-
 		let dragUp = this.position > ev.nativeEvent.pageY;
 		let distanceDragged = this.position - ev.nativeEvent.pageY;
 		this.position = ev.nativeEvent.pageY;
@@ -256,7 +253,7 @@ class HistoryTab extends View {
 		posterNextTop = !dragUp && posterNextTop > this.props.screenProps.posterTop ? this.props.screenProps.posterTop : posterNextTop;
 		this.posterPrevTop = posterNextTop;
 
-		if (dragUp) {
+		if (dragUp && !this.state.scrollEnabled) {
 			this.props.screenProps.onListScroll(posterNextTop);
 			if (posterNextTop === -this.props.screenProps.posterHeight) {
 				this.setState({
@@ -269,7 +266,7 @@ class HistoryTab extends View {
 				// this.refs.sectionList._wrapperListRef._listRef.scrollToOffset({offset: listPosition});
 			}
 		}
-		if (!dragUp) {
+		if (!dragUp && !this.state.scrollEnabled) {
 			this.props.screenProps.onListScroll(posterNextTop);
 		}
 	}
