@@ -82,6 +82,7 @@ class HistoryTab extends View {
 	onScroll: (Object) => void;
 	onMomentumScrollEnd: (Object) => void;
 	toggleScroll: (boolean) => void;
+	setScrolling: (boolean) => void;
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
@@ -113,6 +114,7 @@ class HistoryTab extends View {
 		this.onScroll = this.onScroll.bind(this);
 		this.onMomentumScrollEnd = this.onMomentumScrollEnd.bind(this);
 		this.toggleScroll = this.toggleScroll.bind(this);
+		this.setScrolling = this.setScrolling.bind(this);
 
 	}
 
@@ -203,6 +205,7 @@ class HistoryTab extends View {
 				isFirst={+item.item.index === 0}
 				screenProps={this.props.screenProps}
 				toggleScroll={this.toggleScroll}
+				setScrolling={this.setScrolling}
 				scrollEnabled={this.state.scrollEnabled}
 				scrollOffsetY={this.state.scrollOffsetY}
 				isScrolling={this.state.isScrolling}
@@ -248,8 +251,12 @@ class HistoryTab extends View {
 	}
 
 	onMomentumScrollEnd(ev: Object) {
+		this.setScrolling(false);
+	}
+
+	setScrolling(isScrolling: boolean) {
 		this.setState({
-			isScrolling: false,
+			isScrolling,
 		});
 	}
 

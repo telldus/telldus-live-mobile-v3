@@ -46,6 +46,7 @@ type Props = {
 	scrollEnabled: boolean,
 	scrollOffsetY: number,
 	isScrolling: boolean,
+	setScrolling: Function,
 };
 
 type State = {
@@ -83,6 +84,9 @@ class HistoryRow extends View {
 	}
 
 	onStartShouldSetResponder(ev: Object): boolean {
+		// setting isScrolling 'false' on the begining of each touch, because 'onMomentumScrollEnd' does not always seem to call.
+		this.props.setScrolling(false);
+
 		this.posterPrevTop = this.posterPrevTop ? this.posterPrevTop : this.props.screenProps.posterNextTop;
 		if ((this.posterPrevTop === -this.props.screenProps.posterHeight) && (this.props.scrollOffsetY !== 0)) {
 			this.props.toggleScroll(true);
@@ -136,7 +140,7 @@ class HistoryRow extends View {
 	}
 
 	onResponderRelease(ev: Object) {
-		if (!this.state.isDragging) {
+		if (!this.state.isDragging && !this.props.isScrolling) {
 			this.onOriginPress();
 			this.setState({
 				isDragging: false,
