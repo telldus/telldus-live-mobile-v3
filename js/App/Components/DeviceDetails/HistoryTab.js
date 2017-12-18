@@ -115,7 +115,6 @@ class HistoryTab extends View {
 		this.onMomentumScrollEnd = this.onMomentumScrollEnd.bind(this);
 		this.toggleScroll = this.toggleScroll.bind(this);
 		this.setScrolling = this.setScrolling.bind(this);
-
 	}
 
 	componentDidMount() {
@@ -240,14 +239,18 @@ class HistoryTab extends View {
 	}
 
 	onScroll(ev: Object) {
+		if (ev.nativeEvent.contentOffset.y <= 0) {
+			// TODO - drag the poster downwards when list is scrolled beyond it's top.
+			// see if velocity too can be handled.
+			if (ev.nativeEvent.velocity.y <= -0.2) {
+				this.props.screenProps.onListScroll(this.props.screenProps.posterTop);
+				this.toggleScroll(false);
+			}
+		}
 		this.setState({
 			scrollOffsetY: ev.nativeEvent.contentOffset.y,
 			isScrolling: true,
 		});
-		if (ev.nativeEvent.contentOffset.y <= 0) {
-			// TODO - drag the poster downwards when list is scrolled beyond it's top.
-			// see if velocity too can be handled.
-		}
 	}
 
 	onMomentumScrollEnd(ev: Object) {
@@ -268,6 +271,14 @@ class HistoryTab extends View {
 
 	onStartShouldSetResponder(ev: Object) {
 		return false;
+	}
+
+	onMoveShouldSetResponder(ev: Object) {
+		return false;
+	}
+
+	onResponderTerminationRequest(ev: Object) {
+		return true;
 	}
 
 	render() {
@@ -305,6 +316,8 @@ class HistoryTab extends View {
 				<SectionList
 					ref={'sectionList'}
 					onStartShouldSetResponder={this.onStartShouldSetResponder}
+					onMoveShouldSetResponder={this.onMoveShouldSetResponder}
+					onResponderTerminationRequest={this.onResponderTerminationRequest}
 					sections={this.state.dataSource}
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}

@@ -87,8 +87,11 @@ class HistoryRow extends View {
 		// setting isScrolling 'false' on the begining of each touch, because 'onMomentumScrollEnd' does not always seem to call.
 		this.props.setScrolling(false);
 
-		this.posterPrevTop = this.posterPrevTop ? this.posterPrevTop : this.props.screenProps.posterNextTop;
-		if ((this.posterPrevTop === -this.props.screenProps.posterHeight) && (this.props.scrollOffsetY !== 0)) {
+		this.setState({
+			isDragging: false,
+		});
+
+		if ((this.props.screenProps.posterNextTop === -this.props.screenProps.posterHeight) && (this.props.scrollOffsetY !== 0)) {
 			this.props.toggleScroll(true);
 			return false;
 		} else if (this.props.scrollEnabled) {
@@ -99,16 +102,14 @@ class HistoryRow extends View {
 	}
 
 	onResponderMove(ev: Object) {
-		this.posterPrevTop = this.posterPrevTop ? this.posterPrevTop : this.props.screenProps.posterNextTop;
 		let dragUp = this.position > ev.nativeEvent.pageY;
 		let distanceDragged = this.position - ev.nativeEvent.pageY;
 		this.position = ev.nativeEvent.pageY;
 
-		let posterNextTop = this.posterPrevTop - distanceDragged;
+		let posterNextTop = (this.props.screenProps.posterNextTop - distanceDragged) * 1.5;
 		// let actualDragPosition = posterNextTop;
-		posterNextTop = dragUp && posterNextTop < -this.props.screenProps.posterHeight ? -this.props.screenProps.posterHeight : posterNextTop;
-		posterNextTop = !dragUp && posterNextTop > this.props.screenProps.posterTop ? this.props.screenProps.posterTop : posterNextTop;
-		this.posterPrevTop = posterNextTop;
+		posterNextTop = posterNextTop < -this.props.screenProps.posterHeight ? -this.props.screenProps.posterHeight : posterNextTop;
+		posterNextTop = posterNextTop > this.props.screenProps.posterTop ? this.props.screenProps.posterTop : posterNextTop;
 
 		if (dragUp && !this.props.scrollEnabled && distanceDragged !== 0) {
 			this.setState({
@@ -128,10 +129,6 @@ class HistoryRow extends View {
 				isDragging: true,
 			});
 			this.props.screenProps.onListScroll(posterNextTop);
-		} else {
-			this.setState({
-				isDragging: false,
-			});
 		}
 	}
 
@@ -207,6 +204,7 @@ class HistoryRow extends View {
 		return (
 			<View
 				onStartShouldSetResponder={this.onStartShouldSetResponder}
+				onMoveShouldSetResponder={this.onMoveShouldSetResponder}
 				onResponderMove={this.onResponderMove}
 				onMoveShouldSetResponderCapture={this.onMoveShouldSetResponderCapture}
 				onResponderRelease={this.onResponderRelease}
