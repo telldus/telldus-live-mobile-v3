@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from '../../TabViews/img/selection.json';
@@ -41,9 +41,15 @@ type Props = {
 	onOriginPress: Function,
 	isFirst: boolean,
 	appOrientation: string,
+	screenProps: Object,
+	toggleScroll: Function,
+	scrollEnabled: boolean,
+	scrollOffsetY: number,
+	isScrolling: boolean,
 };
 
 type State = {
+	isDragging: boolean,
 };
 
 class HistoryRow extends View {
@@ -51,12 +57,22 @@ class HistoryRow extends View {
 	state: State;
 
 	onOriginPress: () => void;
+	onResponderMove: (Object) => void;
+	onStartShouldSetResponder: (Object) => void;
+	onResponderRelease: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
+			isDragging: false,
 		};
 		this.onOriginPress = this.onOriginPress.bind(this);
+
+		this.onResponderMove = this.onResponderMove.bind(this);
+		this.onStartShouldSetResponder = this.onStartShouldSetResponder.bind(this);
+		this.onResponderRelease = this.onResponderRelease.bind(this);
+
+		this.posterPrevTop = null;
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -64,6 +80,72 @@ class HistoryRow extends View {
 
 	onOriginPress() {
 		this.props.onOriginPress(this.props.item);
+	}
+
+	onStartShouldSetResponder(ev: Object): boolean {
+		this.posterPrevTop = this.posterPrevTop ? this.posterPrevTop : this.props.screenProps.posterNextTop;
+		if ((this.posterPrevTop === -this.props.screenProps.posterHeight) && (this.props.scrollOffsetY !== 0)) {
+			this.props.toggleScroll(true);
+			return false;
+		} else if (this.props.scrollEnabled) {
+			this.props.toggleScroll(false);
+		}
+		this.position = ev.nativeEvent.pageY;
+		return true;
+	}
+
+	onResponderMove(ev: Object) {
+		this.posterPrevTop = this.posterPrevTop ? this.posterPrevTop : this.props.screenProps.posterNextTop;
+		let dragUp = this.position > ev.nativeEvent.pageY;
+		let distanceDragged = this.position - ev.nativeEvent.pageY;
+		this.position = ev.nativeEvent.pageY;
+
+		let posterNextTop = this.posterPrevTop - distanceDragged;
+		// let actualDragPosition = posterNextTop;
+		posterNextTop = dragUp && posterNextTop < -this.props.screenProps.posterHeight ? -this.props.screenProps.posterHeight : posterNextTop;
+		posterNextTop = !dragUp && posterNextTop > this.props.screenProps.posterTop ? this.props.screenProps.posterTop : posterNextTop;
+		this.posterPrevTop = posterNextTop;
+
+		if (dragUp && !this.props.scrollEnabled && distanceDragged !== 0) {
+			this.setState({
+				isDragging: true,
+			});
+			this.props.screenProps.onListScroll(posterNextTop);
+			if (posterNextTop === -this.props.screenProps.posterHeight) {
+				this.props.toggleScroll(true);
+
+			// TODO - Once the poster has been COMPLETELY dragged up and hidden start scrolling the list.
+
+			// let listPosition = this.state.scrollOffsetY + Math.abs(actualDragPosition - posterNextTop);
+			// this.refs.sectionList._wrapperListRef._listRef.scrollToOffset({offset: listPosition});
+			}
+		} else if (!dragUp && !this.props.scrollEnabled && distanceDragged !== 0) {
+			this.setState({
+				isDragging: true,
+			});
+			this.props.screenProps.onListScroll(posterNextTop);
+		} else {
+			this.setState({
+				isDragging: false,
+			});
+		}
+	}
+
+	onMoveShouldSetResponderCapture(ev: Object) {
+		return true;
+	}
+
+	onResponderRelease(ev: Object) {
+		if (!this.state.isDragging) {
+			this.onOriginPress();
+			this.setState({
+				isDragging: false,
+			});
+		}
+	}
+
+	onResponderTerminationRequest(ev: Object) {
+		return false;
 	}
 
 	getIcon(deviceState) {
@@ -119,36 +201,44 @@ class HistoryRow extends View {
 		let isPortrait = this.props.appOrientation === 'PORTRAIT';
 
 		return (
-			<ListRow
-				roundIcon={roundIcon}
-				roundIconStyle={{fontSize: deviceWidth * 0.067777777, color: '#d32f2f'}}
-				roundIconContainerStyle={roundIconContainer}
-				time={time}
-				timeStyle={isPortrait ? {width: deviceWidth * 0.30, fontSize: deviceWidth * 0.046666667} : {width: deviceHeight * 0.30, fontSize: deviceWidth * 0.046666667}}
-				containerStyle={{paddingHorizontal: deviceWidth * 0.04}}
-				rowContainerStyle={isPortrait ? {width: deviceWidth * 0.55} : {width: deviceHeight * 0.55}}
-				triangleColor={triangleColor}
-				isFirst={this.props.isFirst}
+			<View
+				onStartShouldSetResponder={this.onStartShouldSetResponder}
+				onResponderMove={this.onResponderMove}
+				onMoveShouldSetResponderCapture={this.onMoveShouldSetResponderCapture}
+				onResponderRelease={this.onResponderRelease}
+				onResponderTerminationRequest={this.onResponderTerminationRequest}
 			>
-				<TouchableOpacity style={styles.rowItemsContainer} onPress={this.onOriginPress}>
-					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
-						<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
-							<CustomIcon name="icon_off" size={24} color="#ffffff" />
+				<ListRow
+					roundIcon={roundIcon}
+					roundIconStyle={{fontSize: deviceWidth * 0.067777777, color: '#d32f2f'}}
+					roundIconContainerStyle={roundIconContainer}
+					time={time}
+					timeStyle={isPortrait ? {width: deviceWidth * 0.30, fontSize: deviceWidth * 0.046666667} : {width: deviceHeight * 0.30, fontSize: deviceWidth * 0.046666667}}
+					containerStyle={{paddingHorizontal: deviceWidth * 0.04}}
+					rowContainerStyle={isPortrait ? {width: deviceWidth * 0.55} : {width: deviceHeight * 0.55}}
+					triangleColor={triangleColor}
+					isFirst={this.props.isFirst}
+				>
+					<View style={styles.rowItemsContainer}>
+						{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
+							<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
+								<CustomIcon name="icon_off" size={24} color="#ffffff" />
+							</View>
+							:
+							<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
+								{deviceState === 'DIM' ?
+									<Text style={styles.statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
+									:
+									<CustomIcon name={icon} size={24} color="#ffffff" />
+								}
+							</View>
+						}
+						<View style={styles.locationCover}>
+							<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
 						</View>
-						:
-						<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
-							{deviceState === 'DIM' ?
-								<Text style={styles.statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
-								:
-								<CustomIcon name={icon} size={24} color="#ffffff" />
-							}
-						</View>
-					}
-					<View style={styles.locationCover}>
-						<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
 					</View>
-				</TouchableOpacity>
-			</ListRow>
+				</ListRow>
+			</View>
 
 		);
 	}

@@ -132,6 +132,7 @@ class DeviceDetailsTabsView extends View {
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
 			posterTop: this.state.posterTop,
+			posterNextTop: this.state.posterNextTop,
 			posterHeight: this.state.posterHeight,
 			onListScroll: this.onListScroll,
 		};
