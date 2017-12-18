@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Dimensions, ImageBackground, Animated } from 'react-native';
+import { StyleSheet, Dimensions, ImageBackground, Animated, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 const AnimatedBackground = Animated.createAnimatedComponent(ImageBackground);
@@ -68,6 +68,7 @@ class DeviceDetailsTabsView extends View {
 
 	constructor(props: Props) {
 		super(props);
+		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		this.state = {
 			currentTab: 'Overview',
 			posterTop: 0,
@@ -115,14 +116,11 @@ class DeviceDetailsTabsView extends View {
 	}
 
 	onListScroll(value: number) {
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
 		this.setState({
 			posterNextTop: value,
 			posterPrevTop: this.state.posterNextTop,
 		});
-		Animated.timing(this.animatedY, {
-			duration: 5,
-			toValue: value,
-		}).start();
 	}
 
 	render() {
@@ -141,7 +139,7 @@ class DeviceDetailsTabsView extends View {
 
 		return (
 			<View style={[styles.container]}>
-				<AnimatedBackground onLayout={this.onLayout} style={[poster, {marginTop: this.animatedY}]} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
+				<AnimatedBackground onLayout={this.onLayout} style={[poster, {marginTop: this.state.posterNextTop}]} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
 					<View style={appOrientation === 'PORTRAIT' ? styles.iconBackgroundPort : styles.iconBackgroundLand}>
 						<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
 					</View>
