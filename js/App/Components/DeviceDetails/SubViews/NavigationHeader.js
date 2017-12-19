@@ -24,6 +24,7 @@ import React from 'React';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { View, Header, StyleSheet } from 'BaseComponents';
 import { hasStatusBar } from 'Lib';
@@ -43,17 +44,19 @@ class NavigationHeader extends View {
 		this.goBack = this.goBack.bind(this);
 
 		this.leftIcon = {
-			icon: {
-				name: 'arrow-left',
-				size: 22,
-				color: '#fff',
-			},
+			component: this.getLeftIcon(),
 			onPress: this.goBack,
 		};
 	}
 
 	goBack() {
 		this.props.navigation.goBack(null);
+	}
+
+	getLeftIcon() {
+		return (
+			<Icon name="arrow-back" size={22} color="#fff"/>
+		);
 	}
 
 	render() {
