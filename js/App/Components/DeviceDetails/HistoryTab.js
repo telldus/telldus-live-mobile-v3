@@ -84,6 +84,7 @@ class HistoryTab extends View {
 	toggleScroll: (boolean) => void;
 	setScrolling: (boolean) => void;
 	onStartShouldSetResponder: (Object) => void;
+	manualScrollSectionList: (number) => void;
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
@@ -114,6 +115,7 @@ class HistoryTab extends View {
 
 		this.onScroll = this.onScroll.bind(this);
 		this.onMomentumScrollEnd = this.onMomentumScrollEnd.bind(this);
+		this.manualScrollSectionList = this.manualScrollSectionList.bind(this);
 		this.toggleScroll = this.toggleScroll.bind(this);
 		this.setScrolling = this.setScrolling.bind(this);
 		this.onStartShouldSetResponder = this.onStartShouldSetResponder.bind(this);
@@ -210,6 +212,7 @@ class HistoryTab extends View {
 				scrollEnabled={this.state.scrollEnabled}
 				scrollOffsetY={this.state.scrollOffsetY}
 				isScrolling={this.state.isScrolling}
+				manualScrollSectionList={this.manualScrollSectionList}
 			/>
 		);
 	}
@@ -287,6 +290,10 @@ class HistoryTab extends View {
 		return true;
 	}
 
+	manualScrollSectionList(offset: number) {
+		this.refs.sectionList._wrapperListRef._listRef.scrollToOffset({offset});
+	}
+
 	render() {
 
 		// Loader message when data has not received yet.
@@ -311,6 +318,7 @@ class HistoryTab extends View {
 				</View>
 			);
 		}
+		// additional data for the sectionlist, to re-render the children, on change.
 		let additionalData = {
 			...this.props.screenProps,
 			scrollEnabled: this.state.scrollEnabled,
