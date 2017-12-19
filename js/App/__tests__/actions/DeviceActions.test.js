@@ -1,5 +1,5 @@
 import { deviceSetState } from 'Actions_Devices';
-import { configureStore } from '../Store/ConfigureStore';
+import { configureStore } from '../../Store/ConfigureStore';
 
 import fetchMock from 'fetch-mock';
 

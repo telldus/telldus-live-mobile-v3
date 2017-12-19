@@ -1,5 +1,5 @@
 import React from 'react';
-import * as actions from "../../Actions/Dimmer.js";
+import * as actions from "../../Actions/Dimmer.js"
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 const middlewares = [thunk]
