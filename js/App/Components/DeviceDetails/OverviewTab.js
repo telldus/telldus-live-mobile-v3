@@ -42,7 +42,7 @@ import {
 	BellDeviceDetail,
 	DimmerDeviceDetail,
 	NavigationalDeviceDetail,
-} from 'SubViews';
+} from 'DDSubViews';
 
 const messages = defineMessages({
 	overviewHeader: {

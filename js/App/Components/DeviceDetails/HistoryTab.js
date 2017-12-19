@@ -30,7 +30,7 @@ import icon_history from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
 import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
-import { DeviceHistoryDetails, HistoryRow } from 'SubViews';
+import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
 import { defineMessages } from 'react-intl';

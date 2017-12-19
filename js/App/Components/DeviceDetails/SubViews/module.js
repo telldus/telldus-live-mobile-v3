@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule SubViews
+ * @providesModule DDSubViews
  */
 
 'use strict';
@@ -28,6 +28,7 @@ import DimmerDeviceDetail from './DimmerDeviceDetail';
 import NavigationalDeviceDetail from './NavigationalDeviceDetail';
 import DeviceHistoryDetails from './DeviceHistoryDetails';
 import HistoryRow from './HistoryRow';
+import NavigationHeader from './NavigationHeader';
 
 module.exports = {
 	DeviceLocationDetail,
@@ -37,4 +38,5 @@ module.exports = {
 	NavigationalDeviceDetail,
 	DeviceHistoryDetails,
 	HistoryRow,
+	NavigationHeader,
 };
