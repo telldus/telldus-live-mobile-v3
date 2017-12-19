@@ -24,15 +24,16 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { StyleSheet, Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { Text, View } from 'BaseComponents';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
-const Icon = createIconSetFromIcoMoon(icon_settings);
+const CustomIcon = createIconSetFromIcoMoon(icon_settings);
 
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
 import { TabNavigator } from 'react-navigation';
@@ -101,8 +102,15 @@ class DeviceDetailsTabsView extends View {
 		return (
 			<View style={styles.container}>
 				<ImageBackground style={appOrientation === 'PORTRAIT' ? styles.posterPort : styles.posterLand} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
+					{(appOrientation !== 'PORTRAIT') &&
+						<TouchableOpacity
+							style={styles.backButtonLand}
+							onPress={this.goBack}>
+							<Icon name="arrow-back" size={22} color="#fff"/>
+						</TouchableOpacity>
+					}
 					<View style={appOrientation === 'PORTRAIT' ? styles.iconBackgroundPort : styles.iconBackgroundLand}>
-						<Icon name="icon_device_alt" size={36} color={'#F06F0C'} />
+						<CustomIcon name="icon_device_alt" size={36} color={'#F06F0C'} />
 					</View>
 					<Text style={styles.textDeviceName}>
 						{this.props.device.name}
@@ -157,6 +165,14 @@ const styles = StyleSheet.create({
 		height: (deviceWidth * 0.1),
 		borderRadius: (deviceWidth * 0.05),
 		marginRight: 10,
+	},
+	backButtonLand: {
+		position: 'absolute',
+		alignItems: 'flex-start',
+		justifyContent: 'center',
+		backgroundColor: 'transparent',
+		left: 10,
+		top: 10,
 	},
 });
 
