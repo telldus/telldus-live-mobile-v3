@@ -83,6 +83,7 @@ class HistoryTab extends View {
 	onMomentumScrollEnd: (Object) => void;
 	toggleScroll: (boolean) => void;
 	setScrolling: (boolean) => void;
+	onStartShouldSetResponder: (Object) => void;
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
