@@ -95,7 +95,7 @@ class DeviceHistoryDetails extends View {
 	}
 
 	render() {
-		let { detailsData } = this.props;
+		let { detailsData, screenProps } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
 		if (origin && origin === 'Scheduler') {
@@ -174,18 +174,19 @@ class DeviceHistoryDetails extends View {
 			timeCover,
 			detailsContainer,
 		} = this.getRelativeStyle();
+		let startValue = -(screenSpaceRemaining - screenProps.posterNextTop);
 
 		return (
 			<Modal
 				modalStyle={container}
 				modalContainerStyle={container}
-				entry= "SlideInY"
-				exit= "SlideOutY"
-				showOverlay= {false}
-				entryDuration= {300}
-				exitDuration= {100}
-				startValue= {-screenSpaceRemaining}
-				endValue= {0}
+				entry="SlideInY"
+				exit="SlideOutY"
+				showOverlay={false}
+				entryDuration={300}
+				exitDuration={100}
+				startValue={startValue}
+				endValue={0}
 				showModal={this.props.showDetails}>
 				<View style={styles.titleTextCover}>
 					<Text style={styles.titleText}>

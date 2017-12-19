@@ -335,7 +335,7 @@ class HistoryTab extends View {
 					additionalData={additionalData}
 				/>
 				<View style={styles.line}/>
-				<DeviceHistoryDetails />
+				<DeviceHistoryDetails screenProps={this.props.screenProps}/>
 			</View>
 		);
 	}
