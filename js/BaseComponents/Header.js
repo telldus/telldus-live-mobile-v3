@@ -310,9 +310,13 @@ export default class HeaderComponent extends Base {
 		if (button.title) {
 			return <Text>{button.title}</Text>;
 		}
+		if (button.component) {
+			return button.component;
+		}
 	};
 
 	renderRightButton = (rightButton: Object) => {
+		let style = rightButton.icon ? rightButton.icon.style : null;
 		return (
 			<TouchableOpacity
 				onPress={rightButton.onPress}
@@ -323,7 +327,7 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						right: 0,
 					},
-					rightButton.icon.style,
+					style,
 				]}
 			>
 				{this.renderButtonContent(rightButton)}
@@ -332,6 +336,7 @@ export default class HeaderComponent extends Base {
 	};
 
 	renderLeftButton = (leftButton: Object) => {
+		let style = leftButton.icon ? leftButton.icon.style : null;
 		return (
 			<TouchableOpacity
 				onPress={leftButton.onPress}
@@ -342,7 +347,7 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						left: 0,
 					},
-					leftButton.icon.style,
+					style,
 				]}
 			>
 				{this.renderButtonContent(leftButton)}
