@@ -28,6 +28,7 @@ import { StyleSheet, Dimensions, ImageBackground, TouchableOpacity } from 'react
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import DeviceInfo from 'react-native-device-info';
 
 import { Text, View } from 'BaseComponents';
 
@@ -67,6 +68,8 @@ class DeviceDetailsTabsView extends View {
 		};
 		this.goBack = this.goBack.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+
+		this.isTablet = DeviceInfo.isTablet();
 	}
 
 	goBack() {
@@ -93,16 +96,17 @@ class DeviceDetailsTabsView extends View {
 	}
 
 	render() {
+		let { appOrientation } = this.props;
 		let screenProps = {
 			device: this.props.device,
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
 		};
-		let { appOrientation } = this.props;
+
 		return (
 			<View style={styles.container}>
 				<ImageBackground style={appOrientation === 'PORTRAIT' ? styles.posterPort : styles.posterLand} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
-					{(appOrientation !== 'PORTRAIT') &&
+					{(!this.isTablet) && (appOrientation !== 'PORTRAIT') &&
 						<TouchableOpacity
 							style={styles.backButtonLand}
 							onPress={this.goBack}>
