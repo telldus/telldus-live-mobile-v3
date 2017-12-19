@@ -89,6 +89,25 @@ class DeviceDetailsTabsView extends View {
 		this.props.stackNavigator.goBack();
 	}
 
+	componentWillReceiveProps(nextProps: Object) {
+		// On orientation change, converting the current top relative to deviceHeight/deviceWidth.
+		if (this.props.appOrientation === 'PORTRAIT' && nextProps.appOrientation !== 'PORTRAIT') {
+			this.setState({
+				posterNextTop: this.convertPosterTopValue(deviceHeight, deviceWidth),
+			});
+		}
+		if (this.props.appOrientation !== 'PORTRAIT' && nextProps.appOrientation === 'PORTRAIT') {
+			this.setState({
+				posterNextTop: this.convertPosterTopValue(deviceWidth, deviceHeight),
+			});
+		}
+	}
+
+	convertPosterTopValue(from: number, to: number): number {
+		let marginInDeviceHeight = this.state.posterNextTop / from;
+		return marginInDeviceHeight * to;
+	}
+
 	getRouteName(navigationState) {
 		if (!navigationState) {
 			return null;
@@ -133,6 +152,7 @@ class DeviceDetailsTabsView extends View {
 			posterNextTop: this.state.posterNextTop,
 			posterHeight: this.state.posterHeight,
 			onListScroll: this.onListScroll,
+			appOrientation: appOrientation,
 		};
 
 		let poster = appOrientation === 'PORTRAIT' ? styles.posterPort : styles.posterLand;
