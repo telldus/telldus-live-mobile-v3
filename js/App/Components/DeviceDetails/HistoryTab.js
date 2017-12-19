@@ -245,8 +245,8 @@ class HistoryTab extends View {
 
 	onScroll(ev: Object) {
 		if (ev.nativeEvent.contentOffset.y <= 0) {
-			// TODO - drag the poster downwards when list is scrolled beyond it's top.
-			// see if velocity too can be handled.
+
+			// When Section List top is hit, with a higher than threshhold velocity, the poster is dragged down fully.
 			if (ev.nativeEvent.velocity.y <= -0.2) {
 				this.props.screenProps.onListScroll(this.props.screenProps.posterTop);
 				this.toggleScroll(false);
