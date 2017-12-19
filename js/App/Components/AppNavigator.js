@@ -51,13 +51,14 @@ const deviceHeight = Dimensions.get('window').height;
 let deviceWidth = Dimensions.get('window').width;
 import Theme from 'Theme';
 
-import { View, HeaderTitle } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
+import { NavigationHeader } from 'DDSubViews';
 import AddLocationNavigator from 'AddLocationNavigator';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
@@ -72,14 +73,10 @@ const RouteConfigs = {
 	},
 	DeviceDetails: {
 		screen: DeviceDetailsTabsView,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: HeaderTitle,
+		navigationOptions: ({navigation}: Object): Object => {
+			return {
+				header: <NavigationHeader navigation={navigation}/>,
+			};
 		},
 	},
 	AddLocation: {
@@ -162,7 +159,7 @@ class AppNavigator extends View {
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
 		if (Platform.OS === 'android' && StatusBar) {
 			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
+			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
 
 		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
