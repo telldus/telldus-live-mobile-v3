@@ -128,6 +128,9 @@ class HistoryRow extends View {
 				this.props.toggleScroll(true);
 
 				// TODO - Once the poster has been COMPLETELY dragged up and hidden start scrolling the list.
+				// issue 1: latest value of 'this.props.scrollOffsetY' is received late when moved fast(cause JERK)
+				// issue 2: 'onListScroll' call above and resultant poster motion is late compared to list manual scroll
+				// (result list to scroll without poster hidden completely).
 				// this.props.manualScrollSectionList(this.props.scrollOffsetY + distanceDragged);
 			}
 		} else if (!dragUp && !this.props.scrollEnabled && distanceDragged !== 0) {
