@@ -47,6 +47,7 @@ type Props = {
 	scrollOffsetY: number,
 	isScrolling: boolean,
 	setScrolling: Function,
+	manualScrollSectionList: Function,
 };
 
 type State = {
@@ -115,7 +116,6 @@ class HistoryRow extends View {
 		this.position = ev.nativeEvent.pageY;
 
 		let posterNextTop = (this.props.screenProps.posterNextTop - distanceDragged) * 1.5;
-		// let actualDragPosition = posterNextTop;
 		posterNextTop = posterNextTop < -this.props.screenProps.posterHeight ? -this.props.screenProps.posterHeight : posterNextTop;
 		posterNextTop = posterNextTop > this.props.screenProps.posterTop ? this.props.screenProps.posterTop : posterNextTop;
 
@@ -127,10 +127,8 @@ class HistoryRow extends View {
 			if (posterNextTop === -this.props.screenProps.posterHeight) {
 				this.props.toggleScroll(true);
 
-			// TODO - Once the poster has been COMPLETELY dragged up and hidden start scrolling the list.
-
-			// let listPosition = this.state.scrollOffsetY + Math.abs(actualDragPosition - posterNextTop);
-			// this.refs.sectionList._wrapperListRef._listRef.scrollToOffset({offset: listPosition});
+				// TODO - Once the poster has been COMPLETELY dragged up and hidden start scrolling the list.
+				// this.props.manualScrollSectionList(this.props.scrollOffsetY + distanceDragged);
 			}
 		} else if (!dragUp && !this.props.scrollEnabled && distanceDragged !== 0) {
 			this.setState({
@@ -141,6 +139,7 @@ class HistoryRow extends View {
 	}
 
 	onResponderRelease(ev: Object) {
+		// Handling row Press.
 		if (!this.state.isDragging && !this.props.isScrolling) {
 			this.onOriginPress();
 			this.setState({
