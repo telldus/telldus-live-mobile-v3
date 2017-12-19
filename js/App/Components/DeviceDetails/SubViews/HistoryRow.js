@@ -101,6 +101,14 @@ class HistoryRow extends View {
 		return true;
 	}
 
+	onMoveShouldSetResponderCapture(ev: Object) {
+		return true;
+	}
+
+	onMoveShouldSetResponder(ev:Object) {
+		return true;
+	}
+
 	onResponderMove(ev: Object) {
 		let dragUp = this.position > ev.nativeEvent.pageY;
 		let distanceDragged = this.position - ev.nativeEvent.pageY;
@@ -130,10 +138,6 @@ class HistoryRow extends View {
 			});
 			this.props.screenProps.onListScroll(posterNextTop);
 		}
-	}
-
-	onMoveShouldSetResponderCapture(ev: Object) {
-		return true;
 	}
 
 	onResponderRelease(ev: Object) {

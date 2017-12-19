@@ -115,6 +115,7 @@ class HistoryTab extends View {
 		this.onMomentumScrollEnd = this.onMomentumScrollEnd.bind(this);
 		this.toggleScroll = this.toggleScroll.bind(this);
 		this.setScrolling = this.setScrolling.bind(this);
+		this.onStartShouldSetResponder = this.onStartShouldSetResponder.bind(this);
 	}
 
 	componentDidMount() {
@@ -277,6 +278,10 @@ class HistoryTab extends View {
 		return false;
 	}
 
+	onMoveShouldSetResponderCapture(ev: Object) {
+		return false;
+	}
+
 	onResponderTerminationRequest(ev: Object) {
 		return true;
 	}
@@ -317,6 +322,7 @@ class HistoryTab extends View {
 					ref={'sectionList'}
 					onStartShouldSetResponder={this.onStartShouldSetResponder}
 					onMoveShouldSetResponder={this.onMoveShouldSetResponder}
+					onMoveShouldSetResponderCapture={this.onMoveShouldSetResponderCapture}
 					onResponderTerminationRequest={this.onResponderTerminationRequest}
 					sections={this.state.dataSource}
 					renderItem={this.renderRow}
