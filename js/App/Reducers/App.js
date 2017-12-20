@@ -28,6 +28,7 @@ export type State = {
 	errorGlobalShow: boolean,
 	active: boolean,
 	orientation: string,
+	layout: Object,
 };
 
 const initialState = {
@@ -35,6 +36,7 @@ const initialState = {
 	errorGlobalShow: false,
 	active: true,
 	orientation: '',
+	layout: {},
 };
 
 export default function reduceApp(state: State = initialState, action: Action): State {
@@ -66,6 +68,12 @@ export default function reduceApp(state: State = initialState, action: Action): 
 		return {
 			...state,
 			orientation: action.value,
+		};
+	}
+	if (action.type === 'APP_LAYOUT') {
+		return {
+			...state,
+			layout: action.payload,
 		};
 	}
 	return state;

@@ -58,4 +58,10 @@ module.exports = {
 			value: initialOrientation,
 		});
 	},
+	setAppLayout: (layout: Object): ThunkAction => dispatch => {
+		return dispatch({
+			type: 'APP_LAYOUT',
+			payload: layout,
+		});
+	},
 };
