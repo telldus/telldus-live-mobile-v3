@@ -1,6 +1,9 @@
 
 import React from 'react';
-import * as actions from "../../Actions/Sensors.js";
+import { processWebsocketMessageForSensor, getSensors } from "../../Actions/Sensors.js";
+import { configureStore } from '../../Store/ConfigureStore';
+
+
 
 
 describe('(Sensor) processWebsocketMessageForSensor ', () => {
@@ -10,6 +13,6 @@ describe('(Sensor) processWebsocketMessageForSensor ', () => {
       type: 'SENSOR_WEBSOCKET_UNHANDLED',
       payload: data,
     };
-     expect(actions.processWebsocketMessageForSensor(data)).toEqual(expectedAction)
+     expect(processWebsocketMessageForSensor(data)).toEqual(expectedAction)
   })
 })

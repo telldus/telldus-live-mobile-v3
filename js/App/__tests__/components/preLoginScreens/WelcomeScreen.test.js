@@ -6,7 +6,6 @@ import { IntlProvider } from 'react-intl';
 import { shallow } from 'enzyme';
 const store = configureStore();
 import WelcomeScreen from "../../../Components/PreLoginScreens/WelcomeScreen";
-import { shallowToJson } from 'enzyme-to-json';
 
 describe('<WelcomeScreen />', () => {
 
@@ -19,6 +18,5 @@ describe('<WelcomeScreen />', () => {
             </Provider>
         );
         expect(wrapper).toBeTruthy();
-        // expect(shallowToJson(wrapper)).toMatchSnapshot();
     });
 });
