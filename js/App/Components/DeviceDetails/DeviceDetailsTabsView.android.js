@@ -197,9 +197,6 @@ const Tabs = TabNavigator(
 			indicatorStyle: {
 				backgroundColor: '#fff',
 			},
-			labelStyle: {
-				fontSize: Math.round(getWindowDimensions().width / 35),
-			},
 			style: {
 				backgroundColor: '#fff',
 				shadowColor: '#000000',
@@ -214,10 +211,6 @@ const Tabs = TabNavigator(
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
-			},
-			iconStyle: {
-				width: 25,
-				height: 25,
 			},
 			swipeEnabled: true,
 			lazy: true,

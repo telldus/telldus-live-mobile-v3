@@ -25,14 +25,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { FormattedMessage, Text, View } from 'BaseComponents';
+import { FormattedMessage, Text, View, TabBar } from 'BaseComponents';
 import { StyleSheet, Dimensions, Switch } from 'react-native';
 import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
-
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_settings from '../TabViews/img/selection.json';
-const Icon = createIconSetFromIcoMoon(icon_settings);
 
 import { LearnButton } from 'TabViews_SubViews';
 const deviceWidth = Dimensions.get('window').width;
@@ -72,9 +68,8 @@ class SettingsTab extends View {
 	}
 
 	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...i18n.settingsHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }) => (
-			<Icon name="icon_settings" size={24} color={tintColor}/>
+		tabBarLabel: ({ tintColor }) => (
+			<TabBar icon="icon_settings" tintColor={tintColor} label={i18n.settingsHeader}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			jumpToIndex(scene.index);

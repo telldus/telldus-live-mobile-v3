@@ -23,19 +23,17 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, ListView, Dimensions } from 'react-native';
+import { StyleSheet, ListView } from 'react-native';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate } from 'BaseComponents';
+import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate, TabBar } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
 import { defineMessages } from 'react-intl';
-
-const deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
 	historyHeader: {
@@ -82,9 +80,8 @@ class HistoryTab extends View {
 	closeHistoryDetailsModal: () => void;
 
 	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.historyHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }) => (
-			<CustomIcon name="icon_history" size={24} color={tintColor}/>
+		tabBarLabel: ({ tintColor }) => (
+			<TabBar icon="icon_history" tintColor={tintColor} label={messages.historyHeader}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			let {state} = navigation;
