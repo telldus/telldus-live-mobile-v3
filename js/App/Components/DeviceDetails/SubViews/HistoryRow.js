@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from '../../TabViews/img/selection.json';
@@ -32,8 +32,6 @@ const CustomIcon = createIconSetFromIcoMoon(icon_history);
 import { FormattedMessage, Text, View, ListRow } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
 import i18n from '../../../Translations/common';
-
-const deviceWidth = Dimensions.get('window').width;
 
 type Props = {
 	item: Object,
