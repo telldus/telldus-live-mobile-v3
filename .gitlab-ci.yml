@@ -27,7 +27,15 @@ jest:
   tags:
     - docker
   script:
-    - echo "module.exports = {}" > config.local.js
+    - echo "module.exports = {
+        version: '3.5.1',
+      	apiServer: 'https://api3.telldus.com',
+      	publicKey: 'XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG',
+      	privateKey: 'NUKU6APRAKATRESPECHEX3WECRAPHUCA',
+      	localStorageKey: 'tellduslive',
+      	testUsername: 'developer@telldus.com',
+      	testPassword: 'developer'
+    }" > config.local.js
     - npm install --quiet
     - npm test
 
