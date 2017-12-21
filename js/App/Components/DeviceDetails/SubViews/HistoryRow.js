@@ -105,6 +105,7 @@ class HistoryRow extends View {
 			timeContainerStyle,
 			statusView,
 			originTextStyle,
+			roundIconContainerStyle,
 		} = this.getStyle(isPortrait, appLayout);
 
 		let time = new Date(this.props.item.ts * 1000);
@@ -128,7 +129,6 @@ class HistoryRow extends View {
 
 		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
-		let roundIconContainerStyle = this.props.item.successStatus !== 0 ? {backgroundColor: 'transparent', width: deviceWidth * 0.0667777777} : {width: deviceWidth * 0.0667777777};
 
 		return (
 			<ListRow
@@ -191,7 +191,7 @@ class HistoryRow extends View {
 				borderBottomLeftRadius: 2,
 			},
 			roundIconStyle: {
-				fontSize: isPortrait ? width * 0.067777777 : height * 0.067777777,
+				fontSize: width * 0.067777777,
 				color: '#d32f2f',
 			},
 			rowContainerStyle: {
@@ -206,6 +206,10 @@ class HistoryRow extends View {
 			originTextStyle: {
 				color: '#A59F9A',
 				fontSize: isPortrait ? Math.floor(width * 0.025) : Math.floor(height * 0.025),
+			},
+			roundIconContainerStyle: {
+				backgroundColor: this.props.item.successStatus !== 0 ? 'transparent' : '#929292',
+				width: isPortrait ? width * 0.0667777777 : height * 0.0667777777,
 			},
 		};
 	}

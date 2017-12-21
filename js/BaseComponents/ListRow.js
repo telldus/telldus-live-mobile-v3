@@ -140,7 +140,7 @@ class ListRow extends Component<Props, null> {
 		const deviceWidth = appLayout.width;
 		const deviceHeight = appLayout.height;
 
-		const roundIconWidth = deviceWidth * 0.061333333;
+		const roundIconWidth = isPortrait ? deviceWidth * 0.061333333 : deviceHeight * 0.061333333;
 
 		const padding = isPortrait ? deviceWidth * 0.013333333 : deviceHeight * 0.013333333;
 		const paddingFirst = isPortrait ? deviceWidth * 0.037333333 : deviceHeight * 0.037333333;
