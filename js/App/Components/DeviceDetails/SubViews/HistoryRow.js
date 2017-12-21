@@ -102,6 +102,7 @@ class HistoryRow extends View {
 			containerStyle,
 			roundIconStyle,
 			rowContainerStyle,
+			timeStyle,
 			timeContainerStyle,
 			statusView,
 			originTextStyle,
@@ -136,7 +137,7 @@ class HistoryRow extends View {
 				roundIconStyle={roundIconStyle}
 				roundIconContainerStyle={roundIconContainerStyle}
 				time={time}
-				timeStyle={isPortrait ? { fontSize: deviceWidth * 0.046666667 } : { fontSize: deviceWidth * 0.046666667 }}
+				timeStyle={timeStyle}
 				timeContainerStyle={timeContainerStyle}
 				containerStyle={containerStyle}
 				rowContainerStyle={rowContainerStyle}
@@ -200,8 +201,12 @@ class HistoryRow extends View {
 			containerStyle: {
 				paddingHorizontal: isPortrait ? width * 0.04 : height * 0.04,
 			},
+			timeStyle: {
+				fontSize: isPortrait ? width * 0.047 : height * 0.047,
+			},
 			timeContainerStyle: {
 				width: width * 0.30,
+				zIndex: 1,
 			},
 			originTextStyle: {
 				color: '#A59F9A',
