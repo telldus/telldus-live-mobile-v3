@@ -1,4 +1,4 @@
-import { deviceSetState, requestDeviceAction, getDeviceInfo, getDeviceHistory } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction, getDeviceInfo } from 'Actions_Devices';
 import { configureStore } from '../../Store/ConfigureStore';
 
 import fetchMock from 'fetch-mock';
@@ -73,28 +73,28 @@ describe('Test device actions', ()=>{
 	it('check requestDeviceAction', () => {
 		const DeviceId = 37;
 		const Method = 10;
-			const expectedAction = {
-				type: 'REQUEST_DEVICE_ACTION',
-				payload : {
-				deviceId:DeviceId,
-				method:Method
+		const expectedAction = {
+			type: 'REQUEST_DEVICE_ACTION',
+			payload: {
+				deviceId: DeviceId,
+				method: Method,
 			}};
-			expect(requestDeviceAction( DeviceId,Method)).toEqual(expectedAction);
+		expect(requestDeviceAction( DeviceId, Method)).toEqual(expectedAction);
 
-});
+	});
 
-				it('check getDeviceInfo', () => {
-					return store.dispatch(getDeviceInfo(1, 1))
-						.then(() => {
-							jest.runAllTimers();
-							// RESET to previous state after checking with API.
-							store.dispatch({type: 'DEVICE_RESET_STATE', payload: {deviceId: 1, state: 'TURNOFF'}});
-						})
-						.then(() => {
-							expect(store.getState().devices.byId['1'].isInState).toBe('TURNOFF');
-							expect(fetchMock.calls('deviceCommand').length).toBe(0);
-							expect(fetchMock.calls('deviceInfo').length).toBe(1);
-						});
-});
+	it('check getDeviceInfo', () => {
+		return store.dispatch(getDeviceInfo(1, 1))
+			.then(() => {
+				jest.runAllTimers();
+				// RESET to previous state after checking with API.
+				store.dispatch({type: 'DEVICE_RESET_STATE', payload: {deviceId: 1, state: 'TURNOFF'}});
+			})
+			.then(() => {
+				expect(store.getState().devices.byId['1'].isInState).toBe('TURNOFF');
+				expect(fetchMock.calls('deviceCommand').length).toBe(0);
+				expect(fetchMock.calls('deviceInfo').length).toBe(1);
+			});
+	});
 
 });
