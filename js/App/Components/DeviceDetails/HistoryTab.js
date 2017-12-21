@@ -279,7 +279,7 @@ class HistoryTab extends View {
 			},
 			sectionHeaderText: {
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.028) : Math.floor(height * 0.028),
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			sectionHeader: {
 				height: isPortrait ? height * 0.04 : width * 0.04,

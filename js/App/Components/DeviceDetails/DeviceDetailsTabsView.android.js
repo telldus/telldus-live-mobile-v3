@@ -158,7 +158,7 @@ class DeviceDetailsTabsView extends View {
 				size: isPortrait ? height * 0.08 : height * 0.06,
 			},
 			textDeviceName: {
-				fontSize: isPortrait ? width * 0.04 : height * 0.04,
+				fontSize: isPortrait ? width * 0.05 : height * 0.05,
 				color: '#fff',
 			},
 		};

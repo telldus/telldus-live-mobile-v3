@@ -205,7 +205,7 @@ class HistoryRow extends View {
 			},
 			originTextStyle: {
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.025) : Math.floor(height * 0.025),
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			roundIconContainerStyle: {
 				backgroundColor: this.props.item.successStatus !== 0 ? 'transparent' : '#929292',
