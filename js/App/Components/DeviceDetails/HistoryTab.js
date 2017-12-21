@@ -35,7 +35,6 @@ import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
 import { defineMessages } from 'react-intl';
 
-const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
@@ -58,6 +57,8 @@ type Props = {
 	history: Object,
 	device: Object,
 	deviceHistoryNavigator: Object,
+	appOrientation: string,
+	appLayout: Object,
 };
 
 type State = {
@@ -215,6 +216,13 @@ class HistoryTab extends View {
 	}
 
 	render() {
+		let { appOrientation, appLayout } = this.props;
+		let isPortrait = appOrientation === 'PORTRAIT';
+
+		let {
+			line,
+		} = this.getStyle(isPortrait, appLayout);
+
 		// Loader message when data has not received yet.
 		if (!this.state.dataSource) {
 			return (
@@ -244,10 +252,27 @@ class HistoryTab extends View {
 					renderRow={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 				/>
-				<View style={styles.line}/>
+				<View style={line}/>
 				<DeviceHistoryDetails />
 			</View>
 		);
+	}
+
+	getStyle(isPortrait: boolean, appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+
+		return {
+			line: {
+				backgroundColor: '#A59F9A',
+				height: '100%',
+				width: 1,
+				position: 'absolute',
+				left: isPortrait ? width * 0.069333333 : height * 0.069333333,
+				top: 0,
+				zIndex: -1,
+			},
+		};
 	}
 
 }
@@ -292,16 +317,6 @@ const styles = StyleSheet.create({
 	sectionHeaderText: {
 		color: '#A59F9A',
 	},
-	line: {
-		backgroundColor: '#A59F9A',
-		height: '100%',
-		width: 1,
-		position: 'absolute',
-		left: deviceWidth * 0.069333333,
-		top: 0,
-		zIndex: -1,
-	},
-
 });
 
 function mapDispatchToProps(dispatch) {
@@ -317,6 +332,8 @@ function mapStateToProps(state, ownProps) {
 		deviceHistoryNavigator: ownProps.navigation,
 		history: data,
 		device: ownProps.screenProps.device,
+		appOrientation: state.App.orientation,
+		appLayout: state.App.layout,
 	};
 }
 

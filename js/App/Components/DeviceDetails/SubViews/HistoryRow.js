@@ -34,13 +34,13 @@ import { getDeviceStateMethod } from 'Reducers_Devices';
 import i18n from '../../../Translations/common';
 
 const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
 
 type Props = {
 	item: Object,
 	onOriginPress: Function,
 	isFirst: boolean,
 	appOrientation: string,
+	appLayout: Object,
 };
 
 type State = {
@@ -93,6 +93,19 @@ class HistoryRow extends View {
 	}
 
 	render() {
+
+		let { appOrientation, appLayout } = this.props;
+		let isPortrait = appOrientation === 'PORTRAIT';
+
+		let {
+			locationCover,
+			containerStyle,
+			roundIconStyle,
+			rowContainerStyle,
+			timeContainerStyle,
+			statusView,
+		} = this.getStyle(isPortrait, appLayout);
+
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
 		let icon = this.getIcon(deviceState);
@@ -114,29 +127,28 @@ class HistoryRow extends View {
 
 		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
-		let roundIconContainer = this.props.item.successStatus !== 0 ? {backgroundColor: 'transparent', width: deviceWidth * 0.0667777777} : {width: deviceWidth * 0.0667777777};
-
-		let isPortrait = this.props.appOrientation === 'PORTRAIT';
+		let roundIconContainerStyle = this.props.item.successStatus !== 0 ? {backgroundColor: 'transparent', width: deviceWidth * 0.0667777777} : {width: deviceWidth * 0.0667777777};
 
 		return (
 			<ListRow
 				roundIcon={roundIcon}
-				roundIconStyle={{fontSize: deviceWidth * 0.067777777, color: '#d32f2f'}}
-				roundIconContainerStyle={roundIconContainer}
+				roundIconStyle={roundIconStyle}
+				roundIconContainerStyle={roundIconContainerStyle}
 				time={time}
-				timeStyle={isPortrait ? {width: deviceWidth * 0.30, fontSize: deviceWidth * 0.046666667} : {width: deviceHeight * 0.30, fontSize: deviceWidth * 0.046666667}}
-				containerStyle={{paddingHorizontal: deviceWidth * 0.04}}
-				rowContainerStyle={isPortrait ? {width: deviceWidth * 0.55} : {width: deviceHeight * 0.55}}
+				timeStyle={isPortrait ? { fontSize: deviceWidth * 0.046666667 } : { fontSize: deviceWidth * 0.046666667 }}
+				timeContainerStyle={timeContainerStyle}
+				containerStyle={containerStyle}
+				rowContainerStyle={rowContainerStyle}
 				triangleColor={triangleColor}
 				isFirst={this.props.isFirst}
 			>
 				<TouchableOpacity style={styles.rowItemsContainer} onPress={this.onOriginPress}>
 					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
-						<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
+						<View style={[statusView, { backgroundColor: '#A59F9A' }]}>
 							<CustomIcon name="icon_off" size={24} color="#ffffff" />
 						</View>
 						:
-						<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
+						<View style={[statusView, { backgroundColor: '#F06F0C' }]}>
 							{deviceState === 'DIM' ?
 								<Text style={styles.statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
 								:
@@ -144,7 +156,7 @@ class HistoryRow extends View {
 							}
 						</View>
 					}
-					<View style={styles.locationCover}>
+					<View style={locationCover}>
 						<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
 					</View>
 				</TouchableOpacity>
@@ -153,6 +165,45 @@ class HistoryRow extends View {
 		);
 	}
 
+	getStyle(isPortrait: boolean, appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+
+		return {
+			locationCover: {
+				width: width * 0.40,
+				height: isPortrait ? height * 0.07 : width * 0.07,
+				justifyContent: 'center',
+				backgroundColor: '#fff',
+				alignItems: 'flex-start',
+				paddingLeft: 5,
+				borderTopRightRadius: 2,
+				borderBottomRightRadius: 2,
+				flexWrap: 'wrap',
+			},
+			statusView: {
+				width: width * 0.13,
+				height: isPortrait ? height * 0.07 : width * 0.07,
+				justifyContent: 'center',
+				alignItems: 'center',
+				borderTopLeftRadius: 2,
+				borderBottomLeftRadius: 2,
+			},
+			roundIconStyle: {
+				fontSize: isPortrait ? width * 0.067777777 : height * 0.067777777,
+				color: '#d32f2f',
+			},
+			rowContainerStyle: {
+				width: width * 0.55,
+			},
+			containerStyle: {
+				paddingHorizontal: isPortrait ? width * 0.04 : height * 0.04,
+			},
+			timeContainerStyle: {
+				width: width * 0.30,
+			},
+		};
+	}
 }
 
 const styles = StyleSheet.create({
@@ -160,41 +211,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
-	statusView: {
-		width: deviceWidth * 0.13,
-		height: deviceHeight * 0.07,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderTopLeftRadius: 2,
-		borderBottomLeftRadius: 2,
-	},
 	statusValueText: {
 		color: '#ffffff',
 		fontSize: 14,
-	},
-	statusTextON: {
-		backgroundColor: '#fff',
-		width: deviceWidth * 0.006,
-		height: deviceHeight * 0.03,
-	},
-	statusTextOFF: {
-		backgroundColor: '#A59F9A',
-		width: deviceWidth * 0.07,
-		height: deviceHeight * 0.04,
-		borderRadius: 30,
-		borderWidth: 1.5,
-		borderColor: '#fff',
-	},
-	locationCover: {
-		width: deviceWidth * 0.40,
-		height: deviceHeight * 0.07,
-		justifyContent: 'center',
-		backgroundColor: '#fff',
-		alignItems: 'flex-start',
-		paddingLeft: 5,
-		borderTopRightRadius: 2,
-		borderBottomRightRadius: 2,
-		flexWrap: 'wrap',
 	},
 	originText: {
 		color: '#A59F9A',
@@ -204,6 +223,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(store: Object): Object {
 	return {
 		appOrientation: store.App.orientation,
+		appLayout: store.App.layout,
 	};
 }
 

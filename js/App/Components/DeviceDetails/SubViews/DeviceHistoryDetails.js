@@ -23,24 +23,18 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { defineMessages } from 'react-intl';
+import Platform from 'Platform';
+import StatusBar from 'StatusBar';
 
 import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from 'BaseComponents';
 import i18n from '../../../Translations/common';
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-
 import { states, statusMessage } from '../../../../Config';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
-let stackNavHeaderHeight = deviceHeight * 0.1;
-let deviceIconCoverHeight = (deviceHeight * 0.2);
-let tabViewHeaderHeight = (deviceHeight * 0.085);
-let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
-let screenSpaceRemaining = deviceHeight - totalTop;
 
 const messages = defineMessages({
 	success: {
@@ -68,34 +62,23 @@ const messages = defineMessages({
 class DeviceHistoryDetails extends View {
 	constructor(props) {
 		super(props);
+
+		let { appLayout } = this.props;
+
+		let stackNavHeaderHeight = appLayout.height * 0.1;
+		let deviceIconCoverHeight = appLayout.height * 0.2;
+		let tabViewHeaderHeight = appLayout.height * 0.085;
+		statusBarHeight = (Platform.OS === 'android' && StatusBar) ? statusBarHeight : 0;
+		let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
+		this.screenSpaceRemaining = appLayout.height - totalTop;
 	}
 
 	getPercentage(value: number) {
 		return Math.round(value * 100.0 / 255);
 	}
 
-	getRelativeStyle() {
-		let relativeStyle = {
-			container: styles.container,
-			detailsRow: styles.detailsRowPort,
-			detailsLabelCover: styles.detailsLabelCover,
-			detailsValueCover: styles.detailsValueCover,
-			timeCover: styles.timeCover,
-			detailsContainer: styles.detailsContainerPort,
-		};
-		if (this.props.appOrientation !== 'PORTRAIT') {
-			relativeStyle.container = styles.containerLand;
-			relativeStyle.detailsRow = styles.detailsRowLand;
-			relativeStyle.detailsLabelCover = styles.detailsLabelCoverLand;
-			relativeStyle.detailsValueCover = styles.detailsValueCoverLand;
-			relativeStyle.timeCover = styles.timeCoverLand;
-			relativeStyle.detailsContainer = styles.detailsContainerLand;
-		}
-		return relativeStyle;
-	}
-
 	render() {
-		let { detailsData } = this.props;
+		let { detailsData, appOrientation, appLayout } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
 		if (origin && origin === 'Scheduler') {
@@ -166,14 +149,17 @@ class DeviceHistoryDetails extends View {
 			}
 		}
 
+		let isPortrait = appOrientation === 'PORTRAIT';
+
 		let {
 			container,
+			titleTextCover,
+			detailsContainer,
 			detailsRow,
 			detailsLabelCover,
 			detailsValueCover,
 			timeCover,
-			detailsContainer,
-		} = this.getRelativeStyle();
+		} = this.getStyle(isPortrait, appLayout);
 
 		return (
 			<Modal
@@ -184,16 +170,16 @@ class DeviceHistoryDetails extends View {
 				showOverlay= {false}
 				entryDuration= {300}
 				exitDuration= {100}
-				startValue= {-screenSpaceRemaining}
+				startValue= {-this.screenSpaceRemaining}
 				endValue= {0}
 				showModal={this.props.showDetails}>
-				<View style={styles.titleTextCover}>
+				<View style={titleTextCover}>
 					<Text style={styles.titleText}>
 						<FormattedMessage {...i18n.details} style={styles.titleText}/>
 					</Text>
 				</View>
-				<ScrollView contentContainerStyle={[styles.detailsContainer, detailsContainer]}>
-					<View style={[styles.detailsRow, detailsRow]}>
+				<ScrollView contentContainerStyle={detailsContainer}>
+					<View style={detailsRow}>
 						<View style={detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
 								<FormattedMessage {...i18n.state} style={styles.detailsLabel}/>
@@ -205,7 +191,7 @@ class DeviceHistoryDetails extends View {
 							</Text>
 						</View>
 					</View>
-					<View style={[styles.detailsRow, detailsRow]}>
+					<View style={detailsRow}>
 						<View style={detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
 								<FormattedMessage {...i18n.time} style={styles.detailsLabel}/>
@@ -235,7 +221,7 @@ class DeviceHistoryDetails extends View {
 							null
 						}
 					</View>
-					<View style={[styles.detailsRow, detailsRow]}>
+					<View style={detailsRow}>
 						<View style={detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
 								<FormattedMessage {...i18n.origin} style={styles.detailsLabel}/>
@@ -247,7 +233,7 @@ class DeviceHistoryDetails extends View {
 							</Text>
 						</View>
 					</View>
-					<View style={[styles.detailsRow, detailsRow]}>
+					<View style={detailsRow}>
 						<View style={detailsLabelCover}>
 							<Text style={styles.detailsLabel}>
 								<FormattedMessage {...i18n.status} style={styles.detailsLabel}/>
@@ -268,80 +254,67 @@ class DeviceHistoryDetails extends View {
 			</Modal>
 		);
 	}
+
+	getStyle(isPortrait: boolean, appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+
+		return {
+			container: {
+				flex: 1,
+				position: 'absolute',
+				backgroundColor: '#eeeeef',
+				top: 0,
+				bottom: 0,
+				width: width,
+			},
+			titleTextCover: {
+				width: width,
+				height: isPortrait ? height * 0.09 : width * 0.09,
+				justifyContent: 'center',
+			},
+			detailsContainer: {
+				alignItems: 'center',
+				justifyContent: 'flex-end',
+				flexDirection: 'column',
+				width: width,
+			},
+			detailsRow: {
+				flexDirection: 'row',
+				height: isPortrait ? height * 0.09 : width * 0.09,
+				marginTop: 1,
+				backgroundColor: '#fff',
+				alignItems: 'center',
+				justifyContent: 'space-between',
+				width: width,
+			},
+			detailsLabelCover: {
+				alignItems: 'flex-start',
+				width: width * 0.3,
+			},
+			detailsValueCover: {
+				alignItems: 'flex-end',
+				width: width * 0.7,
+			},
+			timeCover: {
+				justifyContent: 'flex-end',
+				width: width * 0.7,
+				flexDirection: 'row',
+			},
+		};
+	}
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		position: 'absolute',
-		backgroundColor: '#eeeeef',
-		top: 0,
-		bottom: 0,
-		width: deviceWidth,
-	},
-	containerLand: {
-		flex: 1,
-		position: 'absolute',
-		backgroundColor: '#eeeeef',
-		top: 0,
-		bottom: 0,
-		width: deviceHeight,
-	},
-	titleTextCover: {
-		width: deviceWidth,
-		height: deviceHeight * 0.09,
-		justifyContent: 'center',
-	},
 	titleText: {
 		marginLeft: 10,
 		color: '#A59F9A',
 		fontSize: 16,
 	},
-	detailsContainer: {
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-		flexDirection: 'column',
-	},
-	detailsContainerPort: {
-		width: deviceWidth,
-	},
-	detailsContainerLand: {
-		width: deviceHeight,
-	},
-	detailsRow: {
-		flexDirection: 'row',
-		height: deviceHeight * 0.09,
-		marginTop: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	detailsRowPort: {
-		width: deviceWidth,
-	},
-	detailsRowLand: {
-		width: deviceHeight,
-	},
-	detailsLabelCover: {
-		alignItems: 'flex-start',
-		width: deviceWidth * 0.3,
-	},
-	detailsLabelCoverLand: {
-		alignItems: 'flex-start',
-		width: deviceHeight * 0.3,
-	},
 	detailsLabel: {
 		marginLeft: 10,
 		fontSize: 16,
 		color: '#4C4C4C',
-	},
-	detailsValueCover: {
-		alignItems: 'flex-end',
-		width: deviceWidth * 0.7,
-	},
-	detailsValueCoverLand: {
-		alignItems: 'flex-end',
-		width: deviceHeight * 0.7,
 	},
 	detailsText: {
 		marginRight: 15,
@@ -352,16 +325,6 @@ const styles = StyleSheet.create({
 		marginRight: 15,
 		color: '#d32f2f',
 		fontSize: 16,
-	},
-	timeCover: {
-		justifyContent: 'flex-end',
-		width: deviceWidth * 0.7,
-		flexDirection: 'row',
-	},
-	timeCoverLand: {
-		justifyContent: 'flex-end',
-		width: deviceHeight * 0.7,
-		flexDirection: 'row',
 	},
 	timeText: {
 		color: '#A59F9A',
@@ -374,6 +337,7 @@ function mapStateToProps(state) {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,
 		appOrientation: state.App.orientation,
+		appLayout: state.App.layout,
 	};
 }
 

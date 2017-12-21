@@ -22,12 +22,12 @@
 'use strict';
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import View from './View';
 import FormattedTime from './FormattedTime';
 import BlockIcon from './BlockIcon';
 import RowWithTriangle from './RowWithTriangle';
-import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
 
 type Props = {
@@ -40,9 +40,12 @@ type Props = {
 	timeStyle?: Object | number,
 	containerStyle?: Object | number,
 	rowContainerStyle?: Object | number,
+	timeContainerStyle?: Object | number,
 	rowStyle?: Object,
 	isFirst?: boolean,
 	triangleColor?: string,
+	appOrientation?: string,
+	appLayout: Object,
 };
 
 type DefaultProps = {
@@ -54,7 +57,7 @@ type DefaultProps = {
 	},
 };
 
-export default class ListRow extends Component<Props, null> {
+class ListRow extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {
@@ -64,10 +67,11 @@ export default class ListRow extends Component<Props, null> {
 		roundIconContainerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 		time: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.number]),
 		timeFormat: PropTypes.object,
-		timeStyle: PropTypes.object,
-		containerStyle: PropTypes.object,
-		rowContainerStyle: PropTypes.object,
-		rowStyle: PropTypes.object,
+		timeStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		timeContainerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		containerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		rowContainerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		rowStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 		isFirst: PropTypes.bool,
 		triangleColor: PropTypes.string,
 	};
@@ -89,6 +93,7 @@ export default class ListRow extends Component<Props, null> {
 			roundIconContainerStyle,
 			time,
 			timeStyle,
+			timeContainerStyle,
 			containerStyle,
 			rowContainerStyle,
 			rowStyle,
@@ -106,12 +111,14 @@ export default class ListRow extends Component<Props, null> {
 					style={roundIconStyle}
 				/>
 				{!!time && (
-					<FormattedTime
-						value={time}
-						localeMatcher= "best fit"
-						formatMatcher= "best fit"
-						{...timeFormat}
-						style={[style.time, timeStyle]} />
+					<View style={timeContainerStyle}>
+						<FormattedTime
+							value={time}
+							localeMatcher= "best fit"
+							formatMatcher= "best fit"
+							{...timeFormat}
+							style={[style.time, timeStyle]} />
+					</View>
 
 				)}
 				<RowWithTriangle
@@ -127,17 +134,22 @@ export default class ListRow extends Component<Props, null> {
 	}
 
 	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+		let { appOrientation, appLayout } = this.props;
+		let isPortrait = appOrientation === 'PORTRAIT';
+
+		const deviceWidth = appLayout.width;
+		const deviceHeight = appLayout.height;
 
 		const roundIconWidth = deviceWidth * 0.061333333;
 
-		const padding = deviceWidth * 0.013333333;
+		const padding = isPortrait ? deviceWidth * 0.013333333 : deviceHeight * 0.013333333;
+		const paddingFirst = isPortrait ? deviceWidth * 0.037333333 : deviceHeight * 0.037333333;
 
 		return {
 			container: {
 				flexDirection: 'row',
 				alignItems: 'center',
-				paddingTop: this.props.isFirst ? deviceWidth * 0.037333333 : padding,
+				paddingTop: this.props.isFirst ? paddingFirst : padding,
 				paddingBottom: padding,
 			},
 			roundIconContainer: {
@@ -156,3 +168,12 @@ export default class ListRow extends Component<Props, null> {
 	};
 
 }
+
+function mapStateToProps(state: Object, ownProps: Object): Object {
+	return {
+		appOrientation: state.App.orientation,
+		appLayout: state.App.layout,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(ListRow);

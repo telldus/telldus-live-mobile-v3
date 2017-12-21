@@ -24,22 +24,20 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
-
-import { Text, View } from 'BaseComponents';
+import { TabNavigator } from 'react-navigation';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_settings);
 
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
-import { TabNavigator } from 'react-navigation';
-let deviceHeight = Dimensions.get('window').height;
-let deviceWidth = Dimensions.get('window').width;
+import { Text, View } from 'BaseComponents';
+import { getWindowDimensions } from 'Lib';
 
 type Props = {
 	dispatch: Function,
@@ -47,6 +45,7 @@ type Props = {
 	stackNavigator: Object,
 	intl: intlShape.isRequired,
 	appOrientation: string,
+	appLayout: Object,
 };
 
 type State = {
@@ -96,24 +95,30 @@ class DeviceDetailsTabsView extends View {
 	}
 
 	render() {
-		let { appOrientation } = this.props;
+		let { appOrientation, appLayout } = this.props;
 		let screenProps = {
 			device: this.props.device,
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
 		};
+		let isPortrait = appOrientation === 'PORTRAIT';
+
+		let {
+			poster,
+			iconBackground,
+		} = this.getStyles(isPortrait, appLayout);
 
 		return (
 			<View style={styles.container}>
-				<ImageBackground style={appOrientation === 'PORTRAIT' ? styles.posterPort : styles.posterLand} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
-					{(!this.isTablet) && (appOrientation !== 'PORTRAIT') &&
+				<ImageBackground style={poster} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
+					{(!this.isTablet) && (!isPortrait) &&
 						<TouchableOpacity
 							style={styles.backButtonLand}
 							onPress={this.goBack}>
 							<Icon name="arrow-back" size={22} color="#fff"/>
 						</TouchableOpacity>
 					}
-					<View style={appOrientation === 'PORTRAIT' ? styles.iconBackgroundPort : styles.iconBackgroundLand}>
+					<View style={iconBackground}>
 						<CustomIcon name="icon_device_alt" size={36} color={'#F06F0C'} />
 					</View>
 					<Text style={styles.textDeviceName}>
@@ -126,24 +131,34 @@ class DeviceDetailsTabsView extends View {
 			</View>
 		);
 	}
+
+	getStyles(isPortrait: boolean, appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		return {
+			poster: {
+				height: height * 0.2,
+				width: width,
+				alignItems: 'center',
+				justifyContent: 'center',
+				flexDirection: isPortrait ? 'column' : 'row',
+			},
+			iconBackground: {
+				backgroundColor: '#fff',
+				alignItems: 'center',
+				justifyContent: 'center',
+				width: isPortrait ? height * 0.12 : height * 0.12,
+				height: isPortrait ? height * 0.12 : height * 0.12,
+				borderRadius: isPortrait ? height * 0.06 : height * 0.06,
+				marginRight: isPortrait ? 0 : 10,
+			},
+		};
+	}
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-	},
-	posterPort: {
-		height: (deviceHeight * 0.2),
-		width: deviceWidth,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	posterLand: {
-		height: (deviceWidth * 0.2),
-		width: deviceHeight,
-		alignItems: 'center',
-		justifyContent: 'center',
-		flexDirection: 'row',
 	},
 	icon: {
 		width: 15,
@@ -152,23 +167,6 @@ const styles = StyleSheet.create({
 	textDeviceName: {
 		fontSize: 18,
 		color: '#fff',
-	},
-	iconBackgroundPort: {
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: (deviceHeight * 0.12),
-		height: (deviceHeight * 0.12),
-		borderRadius: (deviceHeight * 0.06),
-	},
-	iconBackgroundLand: {
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: (deviceWidth * 0.1),
-		height: (deviceWidth * 0.1),
-		borderRadius: (deviceWidth * 0.05),
-		marginRight: 10,
 	},
 	backButtonLand: {
 		position: 'absolute',
@@ -199,19 +197,19 @@ const Tabs = TabNavigator(
 				backgroundColor: '#fff',
 			},
 			labelStyle: {
-				fontSize: Math.round(Dimensions.get('window').width / 35),
+				fontSize: Math.round(getWindowDimensions().width / 35),
 			},
 			style: {
 				backgroundColor: '#fff',
 				shadowColor: '#000000',
 				shadowOpacity: 1.0,
 				elevation: 2,
-				height: deviceHeight * 0.085,
+				height: getWindowDimensions().height * 0.085,
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
 			tabStyle: {
-				width: Dimensions.get('window').width / 3,
+				width: getWindowDimensions().width / 3,
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
@@ -237,6 +235,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		stackNavigator: ownProps.navigation,
 		device: store.devices.byId[ownProps.navigation.state.params.id],
 		appOrientation: store.App.orientation,
+		appLayout: store.App.layout,
 	};
 }
 function mapDispatchToProps(dispatch: Function): Object {
