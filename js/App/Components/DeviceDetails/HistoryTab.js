@@ -190,8 +190,16 @@ class HistoryTab extends View {
 	}
 
 	renderSectionHeader(sectionData, timestamp) {
+		let { appOrientation, appLayout } = this.props;
+		let isPortrait = appOrientation === 'PORTRAIT';
+
+		let {
+			sectionHeader,
+			sectionHeaderText,
+		} = this.getStyle(isPortrait, appLayout);
+
 		return (
-			<View style={styles.sectionHeader}>
+			<View style={sectionHeader}>
 				<FormattedDate
 					value={timestamp}
 					localeMatcher= "best fit"
@@ -199,7 +207,7 @@ class HistoryTab extends View {
 					weekday="long"
 					day="2-digit"
 					month="long"
-					style={styles.sectionHeaderText} />
+					style={sectionHeaderText} />
 			</View>
 		);
 	}
@@ -268,9 +276,27 @@ class HistoryTab extends View {
 				height: '100%',
 				width: 1,
 				position: 'absolute',
-				left: isPortrait ? width * 0.069333333 : height * 0.069333333,
+				left: isPortrait ? width * 0.071333333 : height * 0.071333333,
 				top: 0,
 				zIndex: -1,
+			},
+			sectionHeaderText: {
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.028) : Math.floor(height * 0.028),
+			},
+			sectionHeader: {
+				height: isPortrait ? height * 0.04 : width * 0.04,
+				backgroundColor: '#ffffff',
+				shadowColor: '#000000',
+				shadowOffset: {
+					width: 0,
+					height: 2,
+				},
+				shadowRadius: 1,
+				shadowOpacity: 1.0,
+				elevation: 2,
+				justifyContent: 'center',
+				paddingLeft: 5,
 			},
 		};
 	}
@@ -299,23 +325,6 @@ const styles = StyleSheet.create({
 		marginLeft: 10,
 		color: '#A59F9A',
 		fontSize: 12,
-	},
-	sectionHeader: {
-		height: deviceHeight * 0.04,
-		backgroundColor: '#ffffff',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
-		justifyContent: 'center',
-		paddingLeft: 5,
-	},
-	sectionHeaderText: {
-		color: '#A59F9A',
 	},
 });
 

@@ -104,6 +104,7 @@ class HistoryRow extends View {
 			rowContainerStyle,
 			timeContainerStyle,
 			statusView,
+			originTextStyle,
 		} = this.getStyle(isPortrait, appLayout);
 
 		let time = new Date(this.props.item.ts * 1000);
@@ -157,7 +158,7 @@ class HistoryRow extends View {
 						</View>
 					}
 					<View style={locationCover}>
-						<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
+						<Text style={originTextStyle} numberOfLines={1}>{originText}</Text>
 					</View>
 				</TouchableOpacity>
 			</ListRow>
@@ -202,6 +203,10 @@ class HistoryRow extends View {
 			timeContainerStyle: {
 				width: width * 0.30,
 			},
+			originTextStyle: {
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.025) : Math.floor(height * 0.025),
+			},
 		};
 	}
 }
@@ -214,9 +219,6 @@ const styles = StyleSheet.create({
 	statusValueText: {
 		color: '#ffffff',
 		fontSize: 14,
-	},
-	originText: {
-		color: '#A59F9A',
 	},
 });
 
