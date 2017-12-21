@@ -106,6 +106,8 @@ class DeviceDetailsTabsView extends View {
 		let {
 			poster,
 			iconBackground,
+			deviceIcon,
+			textDeviceName,
 		} = this.getStyles(isPortrait, appLayout);
 
 		return (
@@ -115,13 +117,13 @@ class DeviceDetailsTabsView extends View {
 						<TouchableOpacity
 							style={styles.backButtonLand}
 							onPress={this.goBack}>
-							<Icon name="arrow-back" size={22} color="#fff"/>
+							<Icon name="arrow-back" size={appLayout.width * 0.0323} color="#fff"/>
 						</TouchableOpacity>
 					}
 					<View style={iconBackground}>
-						<CustomIcon name="icon_device_alt" size={36} color={'#F06F0C'} />
+						<CustomIcon name="icon_device_alt" size={deviceIcon.size} color={'#F06F0C'} />
 					</View>
-					<Text style={styles.textDeviceName}>
+					<Text style={textDeviceName}>
 						{this.props.device.name}
 					</Text>
 				</ImageBackground>
@@ -147,10 +149,17 @@ class DeviceDetailsTabsView extends View {
 				backgroundColor: '#fff',
 				alignItems: 'center',
 				justifyContent: 'center',
-				width: isPortrait ? height * 0.12 : height * 0.12,
-				height: isPortrait ? height * 0.12 : height * 0.12,
-				borderRadius: isPortrait ? height * 0.06 : height * 0.06,
+				width: isPortrait ? height * 0.12 : height * 0.10,
+				height: isPortrait ? height * 0.12 : height * 0.10,
+				borderRadius: isPortrait ? height * 0.06 : height * 0.05,
 				marginRight: isPortrait ? 0 : 10,
+			},
+			deviceIcon: {
+				size: isPortrait ? height * 0.08 : height * 0.06,
+			},
+			textDeviceName: {
+				fontSize: isPortrait ? width * 0.04 : height * 0.04,
+				color: '#fff',
 			},
 		};
 	}
@@ -159,14 +168,6 @@ class DeviceDetailsTabsView extends View {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-	},
-	icon: {
-		width: 15,
-		height: 15,
-	},
-	textDeviceName: {
-		fontSize: 18,
-		color: '#fff',
 	},
 	backButtonLand: {
 		position: 'absolute',
