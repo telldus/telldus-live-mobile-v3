@@ -36,6 +36,7 @@ import {
 	syncLiveApiOnForeground,
 	getAppData,
 	getGateways,
+	setAppLayout,
 } from 'Actions';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
@@ -136,6 +137,7 @@ class AppNavigator extends View {
 	state: State;
 
 	_updateSpecificOrientation: (Object) => void;
+	onLayout: (Object) => void;
 
 	constructor() {
 		super();
@@ -148,6 +150,7 @@ class AppNavigator extends View {
 
 		Orientation.unlockAllOrientations();
 		Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
+		this.onLayout = this.onLayout.bind(this);
 	}
 
 	componentWillMount() {
@@ -194,9 +197,13 @@ class AppNavigator extends View {
 		this.setState({ specificOrientation });
 	};
 
+	onLayout(ev: Object) {
+		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+	}
+
 	render() {
 		return (
-			<View>
+			<View onLayout={this.onLayout}>
 				<Navigator/>
 				<DimmerPopup
 					isVisible={this.props.dimmer.show}
