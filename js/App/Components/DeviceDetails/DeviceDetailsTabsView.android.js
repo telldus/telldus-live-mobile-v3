@@ -209,7 +209,6 @@ const Tabs = TabNavigator(
 			},
 			tabStyle: {
 				width: getWindowDimensions().width / 3,
-				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
@@ -220,7 +219,7 @@ const Tabs = TabNavigator(
 			scrollEnabled: true,
 			activeTintColor: '#F06F0C',
 			inactiveTintColor: '#A59F9A',
-			showIcon: true,
+			showIcon: false,
 		},
 	}
 );
