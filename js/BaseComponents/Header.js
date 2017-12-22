@@ -22,11 +22,12 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Platform, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import { hasStatusBar, getWindowDimensions } from 'Lib';
+import { hasStatusBar } from 'Lib';
 
 import Base from './Base';
 import computeProps from './computeProps';
@@ -44,9 +45,10 @@ type Props = {
 	searchBar: ?Object,
 	rightButton: Object,
 	leftButton: Object,
+	appLayout: Object,
 };
 
-export default class HeaderComponent extends Base {
+class HeaderComponent extends Base {
 
 	deviceWidth: number;
 	paddingHorizontal: number;
@@ -61,7 +63,9 @@ export default class HeaderComponent extends Base {
 	renderButtonContent: (Object) => Object;
 
 	getInitialStyle() {
-		this.deviceWidth = getWindowDimensions().width;
+		let { appLayout } = this.props;
+		let { height, width } = appLayout;
+		this.deviceWidth = height > width ? width : height;
 
 		this.paddingHorizontal = 15;
 		this.paddingTop = (Platform.OS === 'ios') ? 15 : 0;
@@ -382,3 +386,11 @@ HeaderComponent.propTypes = {
 	rightButton: PropTypes.object,
 	leftButton: PropTypes.object,
 };
+
+function mapStateToProps(store: Object): Object {
+	return {
+		appLayout: store.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(HeaderComponent);
