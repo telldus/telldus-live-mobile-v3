@@ -28,7 +28,7 @@ const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 type Props = {
-	appOrientation: string,
+	appLayout: Object,
 };
 
 class HeaderTitle extends Component<Props, null> {
@@ -37,9 +37,9 @@ class HeaderTitle extends Component<Props, null> {
 	}
 
 	render() {
-		let { appOrientation } = this.props;
+		let { appLayout } = this.props;
 		return (
-			<Image style={appOrientation === 'PORTRAIT' ? styles.port : styles.land} resizeMode={'contain'} source={require('../App/Components/TabViews/img/telldus-logo.png')}/>
+			<Image style={appLayout.height > appLayout.width ? styles.port : styles.land} resizeMode={'contain'} source={require('../App/Components/TabViews/img/telldus-logo.png')}/>
 		);
 	}
 }
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object) {
 	return {
-		appOrientation: store.App.orientation,
+		appLayout: store.App.layout,
 	};
 }
 

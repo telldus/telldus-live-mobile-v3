@@ -44,7 +44,6 @@ type Props = {
 	rowStyle?: Object,
 	isFirst?: boolean,
 	triangleColor?: string,
-	appOrientation?: string,
 	appLayout: Object,
 };
 
@@ -74,6 +73,7 @@ class ListRow extends Component<Props, null> {
 		rowStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 		isFirst: PropTypes.bool,
 		triangleColor: PropTypes.string,
+		appLayout: PropTypes.object,
 	};
 
 	static defaultProps: DefaultProps = {
@@ -134,8 +134,8 @@ class ListRow extends Component<Props, null> {
 	}
 
 	_getStyle = (): Object => {
-		let { appOrientation, appLayout } = this.props;
-		let isPortrait = appOrientation === 'PORTRAIT';
+		let { appLayout } = this.props;
+		let isPortrait = appLayout.height > appLayout.width;
 
 		const deviceWidth = appLayout.width;
 		const deviceHeight = appLayout.height;
@@ -171,7 +171,6 @@ class ListRow extends Component<Props, null> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appOrientation: state.App.orientation,
 		appLayout: state.App.layout,
 	};
 }
