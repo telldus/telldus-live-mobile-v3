@@ -62,15 +62,6 @@ const messages = defineMessages({
 class DeviceHistoryDetails extends View {
 	constructor(props) {
 		super(props);
-
-		let { appLayout } = this.props;
-
-		let stackNavHeaderHeight = appLayout.height * 0.1;
-		let deviceIconCoverHeight = appLayout.height * 0.2;
-		let tabViewHeaderHeight = appLayout.height * 0.085;
-		statusBarHeight = (Platform.OS === 'android' && StatusBar) ? statusBarHeight : 0;
-		let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
-		this.screenSpaceRemaining = appLayout.height - totalTop;
 	}
 
 	getPercentage(value: number) {
@@ -85,6 +76,7 @@ class DeviceHistoryDetails extends View {
 		let isPortrait = appOrientation === 'PORTRAIT';
 
 		let {
+			startValue,
 			container,
 			titleTextCover,
 			detailsContainer,
@@ -177,7 +169,7 @@ class DeviceHistoryDetails extends View {
 				showOverlay= {false}
 				entryDuration= {300}
 				exitDuration= {100}
-				startValue= {-this.screenSpaceRemaining}
+				startValue= {-startValue}
 				endValue= {0}
 				showModal={this.props.showDetails}>
 				<View style={titleTextCover}>
@@ -266,7 +258,16 @@ class DeviceHistoryDetails extends View {
 		const height = appLayout.height;
 		const width = appLayout.width;
 
+		let stackNavHeaderHeight = appLayout.height * 0.1;
+		let deviceIconCoverHeight = appLayout.height * 0.2;
+		let tabViewHeaderHeight = appLayout.height * 0.085;
+		statusBarHeight = (Platform.OS === 'android' && StatusBar) ? statusBarHeight : 0;
+		stackNavHeaderHeight = isPortrait ? stackNavHeaderHeight : 0;
+		let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
+		let screenSpaceRemaining = appLayout.height - totalTop;
+
 		return {
+			startValue: screenSpaceRemaining,
 			container: {
 				flex: 1,
 				position: 'absolute',
