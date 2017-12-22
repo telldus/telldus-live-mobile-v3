@@ -178,8 +178,8 @@ class HistoryRow extends View {
 				backgroundColor: '#fff',
 				alignItems: 'flex-start',
 				paddingLeft: 5,
-				borderTopRightRadius: 2,
-				borderBottomRightRadius: 2,
+				borderTopRightRadius: 3,
+				borderBottomRightRadius: 3,
 				flexWrap: 'wrap',
 			},
 			statusView: {
@@ -187,8 +187,8 @@ class HistoryRow extends View {
 				height: isPortrait ? height * 0.07 : width * 0.07,
 				justifyContent: 'center',
 				alignItems: 'center',
-				borderTopLeftRadius: 2,
-				borderBottomLeftRadius: 2,
+				borderTopLeftRadius: 3,
+				borderBottomLeftRadius: 3,
 			},
 			roundIconStyle: {
 				fontSize: width * 0.067777777,
@@ -229,6 +229,7 @@ const styles = StyleSheet.create({
 	rowItemsContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
+		justifyContent: 'flex-start',
 	},
 });
 

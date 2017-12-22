@@ -27,6 +27,7 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import View from './View';
 import Theme from 'Theme';
+import Platform from 'Platform';
 
 type DefaultProps = {
 };
@@ -106,7 +107,7 @@ class Row extends Component<Props, null> {
 				flex: 1,
 				flexDirection: layout,
 				alignItems: layout === 'row' ? 'center' : 'flex-start',
-				overflow: 'hidden',
+				overflow: Platform.OS === 'android' ? 'visible' : 'hidden',
 				borderRadius: borderRadiusRow,
 			},
 		};

@@ -97,7 +97,7 @@ class RowWithTriangle extends Component<Props, null> {
 			container: {
 				flexDirection: 'row',
 				alignItems: 'center',
-				width: deviceWidth * 0.674666667,
+				width: deviceWidth * 0.673333334,
 			},
 			triangleContainer: {
 				width: triangleWidth,
