@@ -26,13 +26,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { FormattedMessage, Text, View, TabBar } from 'BaseComponents';
-import { StyleSheet, Dimensions, Switch } from 'react-native';
+import { StyleSheet, Switch } from 'react-native';
 import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 
 import { LearnButton } from 'TabViews_SubViews';
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
 
