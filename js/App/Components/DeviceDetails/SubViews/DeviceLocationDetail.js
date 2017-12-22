@@ -33,7 +33,6 @@ type Props = {
 	H2: String,
 	style: any,
 	onPress?: Function,
-	appOrientation: string,
 	appLayout: Object,
 };
 
@@ -66,8 +65,7 @@ class DeviceLocationDetail extends View {
 
 	render() {
 
-		let { title, H1, H2, image, style, appOrientation, appLayout } = this.props;
-		let isPortrait = appOrientation === 'PORTRAIT';
+		let { title, H1, H2, image, style, appLayout } = this.props;
 
 		let {
 			locationImageContainer,
@@ -75,7 +73,7 @@ class DeviceLocationDetail extends View {
 			locationImage,
 			textHSH,
 			textLocation,
-		} = this.getStyle(isPortrait, appLayout);
+		} = this.getStyle(appLayout);
 
 		return (
 			<View style={[styles.shadow, styles.container, style]}>
@@ -103,9 +101,10 @@ class DeviceLocationDetail extends View {
 		);
 	}
 
-	getStyle(isPortrait: boolean, appLayout: Object): Object {
+	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
+		let isPortrait = height > width;
 
 		return {
 			locationImageContainer: {
@@ -167,7 +166,6 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appOrientation: store.App.orientation,
 		appLayout: store.App.layout,
 	};
 }

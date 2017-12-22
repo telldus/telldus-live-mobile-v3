@@ -44,7 +44,6 @@ type Props = {
 	device: Object,
 	stackNavigator: Object,
 	intl: intlShape.isRequired,
-	appOrientation: string,
 	appLayout: Object,
 };
 
@@ -95,20 +94,20 @@ class DeviceDetailsTabsView extends View {
 	}
 
 	render() {
-		let { appOrientation, appLayout } = this.props;
+		let { appLayout } = this.props;
 		let screenProps = {
 			device: this.props.device,
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
 		};
-		let isPortrait = appOrientation === 'PORTRAIT';
+		let isPortrait = appLayout.height > appLayout.width;
 
 		let {
 			poster,
 			iconBackground,
 			deviceIcon,
 			textDeviceName,
-		} = this.getStyles(isPortrait, appLayout);
+		} = this.getStyles(appLayout);
 
 		return (
 			<View style={styles.container}>
@@ -134,9 +133,11 @@ class DeviceDetailsTabsView extends View {
 		);
 	}
 
-	getStyles(isPortrait: boolean, appLayout: Object): Object {
+	getStyles(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
+		let isPortrait = height > width;
+
 		return {
 			poster: {
 				height: height * 0.2,
@@ -228,7 +229,6 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
 		stackNavigator: ownProps.navigation,
 		device: store.devices.byId[ownProps.navigation.state.params.id],
-		appOrientation: store.App.orientation,
 		appLayout: store.App.layout,
 	};
 }

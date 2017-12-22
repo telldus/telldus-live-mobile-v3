@@ -69,11 +69,9 @@ class DeviceHistoryDetails extends View {
 	}
 
 	render() {
-		let { detailsData, appOrientation, appLayout } = this.props;
+		let { detailsData, appLayout } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
-
-		let isPortrait = appOrientation === 'PORTRAIT';
 
 		let {
 			startValue,
@@ -90,7 +88,7 @@ class DeviceHistoryDetails extends View {
 			detailsText,
 			timeText,
 			detailsTextError,
-		} = this.getStyle(isPortrait, appLayout);
+		} = this.getStyle(appLayout);
 
 		if (origin && origin === 'Scheduler') {
 			originText = <FormattedMessage {...i18n.scheduler} style={detailsText}/>;
@@ -254,9 +252,10 @@ class DeviceHistoryDetails extends View {
 		);
 	}
 
-	getStyle(isPortrait: boolean, appLayout: Object): Object {
+	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
+		let isPortrait = height > width;
 
 		let stackNavHeaderHeight = appLayout.height * 0.1;
 		let deviceIconCoverHeight = appLayout.height * 0.2;
@@ -342,7 +341,6 @@ function mapStateToProps(state) {
 	return {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,
-		appOrientation: state.App.orientation,
 		appLayout: state.App.layout,
 	};
 }

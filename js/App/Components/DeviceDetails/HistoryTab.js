@@ -55,7 +55,6 @@ type Props = {
 	history: Object,
 	device: Object,
 	deviceHistoryNavigator: Object,
-	appOrientation: string,
 	appLayout: Object,
 };
 
@@ -187,13 +186,12 @@ class HistoryTab extends View {
 	}
 
 	renderSectionHeader(sectionData, timestamp) {
-		let { appOrientation, appLayout } = this.props;
-		let isPortrait = appOrientation === 'PORTRAIT';
+		let { appLayout } = this.props;
 
 		let {
 			sectionHeader,
 			sectionHeaderText,
-		} = this.getStyle(isPortrait, appLayout);
+		} = this.getStyle(appLayout);
 
 		return (
 			<View style={sectionHeader}>
@@ -221,12 +219,11 @@ class HistoryTab extends View {
 	}
 
 	render() {
-		let { appOrientation, appLayout } = this.props;
-		let isPortrait = appOrientation === 'PORTRAIT';
+		let { appLayout } = this.props;
 
 		let {
 			line,
-		} = this.getStyle(isPortrait, appLayout);
+		} = this.getStyle(appLayout);
 
 		// Loader message when data has not received yet.
 		if (!this.state.dataSource) {
@@ -263,9 +260,10 @@ class HistoryTab extends View {
 		);
 	}
 
-	getStyle(isPortrait: boolean, appLayout: Object): Object {
+	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
+		let isPortrait = height > width;
 
 		return {
 			line: {
@@ -338,7 +336,6 @@ function mapStateToProps(state, ownProps) {
 		deviceHistoryNavigator: ownProps.navigation,
 		history: data,
 		device: ownProps.screenProps.device,
-		appOrientation: state.App.orientation,
 		appLayout: state.App.layout,
 	};
 }

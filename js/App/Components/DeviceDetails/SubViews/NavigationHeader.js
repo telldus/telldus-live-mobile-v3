@@ -30,7 +30,6 @@ import { View, Header, StyleSheet } from 'BaseComponents';
 import { hasStatusBar } from 'Lib';
 
 type Props = {
-	appOrientation: string,
 	navigation: Object,
 	appLayout: Object,
 };
@@ -50,8 +49,8 @@ class NavigationHeader extends View {
 	}
 
 	getLeftIcon() {
-		let { appLayout, appOrientation } = this.props;
-		let size = appOrientation === 'PORTRAIT' ? appLayout.width * 0.075 : appLayout.height * 0.075;
+		let { appLayout } = this.props;
+		let size = appLayout.height > appLayout.width ? appLayout.width * 0.075 : appLayout.height * 0.075;
 
 		return (
 			<Icon name="arrow-back" size={size} color="#fff"/>
@@ -59,7 +58,9 @@ class NavigationHeader extends View {
 	}
 
 	render() {
-		if (this.props.appOrientation !== 'PORTRAIT' && !this.isTablet) {
+		let { appLayout } = this.props;
+
+		if (appLayout.height < appLayout.width && !this.isTablet) {
 			return <View style={styles.emptyHeader}/>;
 		}
 
@@ -83,7 +84,6 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appOrientation: store.App.orientation,
 		appLayout: store.App.layout,
 	};
 }

@@ -48,7 +48,6 @@ type Props = {
 	inDashboard: boolean,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
-	appOrientation: string,
 	appLayout: Object,
 };
 
@@ -93,8 +92,7 @@ class SettingsTab extends View {
 
 	render() {
 
-		let { appOrientation, appLayout } = this.props;
-		let isPortrait = appOrientation === 'PORTRAIT';
+		let { appLayout } = this.props;
 
 		let {
 			ShowOnDashCover,
@@ -102,7 +100,7 @@ class SettingsTab extends View {
 			textShowOnDash,
 			dashSwitchCover,
 			dashSwitch,
-		} = this.getStyle(isPortrait, appLayout);
+		} = this.getStyle(appLayout);
 
 		const device = this.props.device;
 		const { LEARN } = device.supportedMethods;
@@ -133,9 +131,10 @@ class SettingsTab extends View {
 		);
 	}
 
-	getStyle(isPortrait: boolean, appLayout: Object): Object {
+	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
+		let isPortrait = height > width;
 
 		return {
 			ShowOnDashCover: {
@@ -193,7 +192,6 @@ function mapStateToProps(state, ownProps) {
 	return {
 		device: ownProps.screenProps.device,
 		inDashboard: !!state.dashboard.devicesById[ownProps.screenProps.device.id],
-		appOrientation: state.App.orientation,
 		appLayout: state.App.layout,
 	};
 }

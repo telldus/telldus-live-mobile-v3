@@ -36,7 +36,6 @@ type Props = {
 	tintColor: number | string,
 	label: any,
 	appLayout: Object,
-	appOrientation: string,
 };
 
 class TabBar extends Component<Props, null> {
@@ -47,9 +46,9 @@ class TabBar extends Component<Props, null> {
 	}
 
 	render() {
-		let { icon, tintColor, label, appLayout, appOrientation } = this.props;
-		let isPortrait = appOrientation === 'PORTRAIT';
-		const width = isPortrait ? appLayout.width : appLayout.height;
+		let { icon, tintColor, label, appLayout } = this.props;
+		let isPortrait = appLayout.width > appLayout.height;
+		const width = isPortrait ? appLayout.height : appLayout.width;
 
 		return (
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -62,7 +61,6 @@ class TabBar extends Component<Props, null> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appOrientation: state.App.orientation,
 		appLayout: state.App.layout,
 	};
 }

@@ -37,7 +37,6 @@ type Props = {
 	item: Object,
 	onOriginPress: Function,
 	isFirst: boolean,
-	appOrientation: string,
 	appLayout: Object,
 };
 
@@ -92,8 +91,7 @@ class HistoryRow extends View {
 
 	render() {
 
-		let { appOrientation, appLayout } = this.props;
-		let isPortrait = appOrientation === 'PORTRAIT';
+		let { appLayout } = this.props;
 
 		let {
 			locationCover,
@@ -107,7 +105,7 @@ class HistoryRow extends View {
 			roundIconContainerStyle,
 			statusIconSize,
 			statusValueText,
-		} = this.getStyle(isPortrait, appLayout);
+		} = this.getStyle(appLayout);
 
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
@@ -167,9 +165,10 @@ class HistoryRow extends View {
 		);
 	}
 
-	getStyle(isPortrait: boolean, appLayout: Object): Object {
+	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
+		let isPortrait = height > width;
 
 		return {
 			locationCover: {
@@ -235,7 +234,6 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appOrientation: store.App.orientation,
 		appLayout: store.App.layout,
 	};
 }
