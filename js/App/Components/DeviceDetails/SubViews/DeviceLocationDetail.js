@@ -22,11 +22,9 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
-import { StyleSheet, Image, Dimensions, TouchableWithoutFeedback } from 'react-native';
-
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
+import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
 
 type Props = {
 	title?: any,
@@ -35,6 +33,8 @@ type Props = {
 	H2: String,
 	style: any,
 	onPress?: Function,
+	appOrientation: string,
+	appLayout: Object,
 };
 
 type State = {
@@ -66,25 +66,34 @@ class DeviceLocationDetail extends View {
 
 	render() {
 
-		let { title, H1, H2, image, style } = this.props;
+		let { title, H1, H2, image, style, appOrientation, appLayout } = this.props;
+		let isPortrait = appOrientation === 'PORTRAIT';
+
+		let {
+			locationImageContainer,
+			locationTextContainer,
+			locationImage,
+			textHSH,
+			textLocation,
+		} = this.getStyle(isPortrait, appLayout);
 
 		return (
 			<View style={[styles.shadow, styles.container, style]}>
 				{!!title && (
-					<Text style={[styles.textLocation, {marginLeft: 10}]}>
+					<Text style={[textLocation, {marginLeft: 10}]}>
 						{title}
 					</Text>)
 				}
 				<View style={styles.imageHeaderContainer}>
-					<View style={styles.locationImageContainer}>
-						<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: image, isStatic: true }} />
+					<View style={locationImageContainer}>
+						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
 					</View>
 					<TouchableWithoutFeedback onPress={this.onPress}>
-						<View style={styles.locationTextContainer}>
-							<Text numberOfLines={1} style={styles.textHSH}>
+						<View style={locationTextContainer}>
+							<Text numberOfLines={1} style={textHSH}>
 								{!!H1 && H1}
 							</Text>
-							<Text numberOfLines={1} style={styles.textLocation}>
+							<Text numberOfLines={1} style={textLocation}>
 								{!!H2 && H2}
 							</Text>
 						</View>
@@ -92,6 +101,40 @@ class DeviceLocationDetail extends View {
 				</View>
 			</View>
 		);
+	}
+
+	getStyle(isPortrait: boolean, appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+
+		return {
+			locationImageContainer: {
+				height: isPortrait ? height * 0.16 : width * 0.16,
+				width: width * 0.28,
+				justifyContent: 'center',
+				alignItems: 'flex-start',
+			},
+			locationTextContainer: {
+				height: isPortrait ? height * 0.16 : width * 0.16,
+				width: width * 0.53,
+				marginRight: width * 0.09,
+				justifyContent: 'center',
+				alignItems: 'flex-start',
+			},
+			locationImage: {
+				width: isPortrait ? width * 0.22 : height * 0.22,
+				height: isPortrait ? height * 0.12 : width * 0.12,
+				alignSelf: 'flex-start',
+			},
+			textLocation: {
+				color: '#A59F9A',
+				fontSize: isPortrait ? width * 0.047 : height * 0.047,
+			},
+			textHSH: {
+				color: '#F06F0C',
+				fontSize: isPortrait ? width * 0.060 : height * 0.060,
+			},
+		};
 	}
 }
 
@@ -104,7 +147,7 @@ const styles = StyleSheet.create({
 		paddingTop: 10,
 	},
 	imageHeaderContainer: {
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
 		flexDirection: 'row',
 	},
@@ -120,36 +163,13 @@ const styles = StyleSheet.create({
 		shadowOpacity: 1.0,
 		elevation: 2,
 	},
-	locationImageContainer: {
-		height: (deviceHeight * 0.16),
-		width: (deviceWidth * 0.28),
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-	},
-	locationTextContainer: {
-		height: (deviceHeight * 0.16),
-		width: (deviceWidth * 0.53),
-		marginRight: (deviceWidth * 0.09),
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-	},
-	locationImage: {
-		width: (deviceWidth * 0.22),
-		height: (deviceHeight * 0.12),
-		alignItems: 'flex-start',
-	},
-	textLocation: {
-		color: '#A59F9A',
-		fontSize: 14,
-	},
-	textHSH: {
-		color: '#F06F0C',
-		fontSize: 18,
-	},
-	textDeviceLocation: {
-		color: '#A59F9A',
-		fontSize: 14,
-	},
 });
 
-module.exports = DeviceLocationDetail;
+function mapStateToProps(store: Object): Object {
+	return {
+		appOrientation: store.App.orientation,
+		appLayout: store.App.layout,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(DeviceLocationDetail);
