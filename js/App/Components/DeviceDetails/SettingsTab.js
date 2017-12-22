@@ -156,10 +156,11 @@ class SettingsTab extends View {
 				justifyContent: 'center',
 			},
 			dashSwitch: {
+				height: isPortrait ? height * 0.06 : width * 0.06,
 			},
 			textShowOnDash: {
 				color: '#8A8682',
-				fontSize: 14,
+				fontSize: isPortrait ? width * 0.047 : height * 0.047,
 				marginLeft: 8,
 				justifyContent: 'center',
 			},
