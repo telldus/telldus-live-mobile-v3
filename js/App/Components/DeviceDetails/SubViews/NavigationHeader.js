@@ -32,6 +32,7 @@ import { hasStatusBar } from 'Lib';
 type Props = {
 	appOrientation: string,
 	navigation: Object,
+	appLayout: Object,
 };
 
 class NavigationHeader extends View {
@@ -42,11 +43,6 @@ class NavigationHeader extends View {
 		super(props);
 		this.isTablet = DeviceInfo.isTablet();
 		this.goBack = this.goBack.bind(this);
-
-		this.leftIcon = {
-			component: this.getLeftIcon(),
-			onPress: this.goBack,
-		};
 	}
 
 	goBack() {
@@ -54,8 +50,11 @@ class NavigationHeader extends View {
 	}
 
 	getLeftIcon() {
+		let { appLayout, appOrientation } = this.props;
+		let size = appOrientation === 'PORTRAIT' ? appLayout.width * 0.075 : appLayout.height * 0.075;
+
 		return (
-			<Icon name="arrow-back" size={22} color="#fff"/>
+			<Icon name="arrow-back" size={size} color="#fff"/>
 		);
 	}
 
@@ -63,8 +62,13 @@ class NavigationHeader extends View {
 		if (this.props.appOrientation !== 'PORTRAIT' && !this.isTablet) {
 			return <View style={styles.emptyHeader}/>;
 		}
+
+		let leftIcon = {
+			component: this.getLeftIcon(),
+			onPress: this.goBack,
+		};
 		return (
-			<Header leftButton={this.leftIcon}/>
+			<Header leftButton={leftIcon}/>
 		);
 	}
 }
@@ -80,6 +84,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(store: Object): Object {
 	return {
 		appOrientation: store.App.orientation,
+		appLayout: store.App.layout,
 	};
 }
 

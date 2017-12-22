@@ -117,7 +117,7 @@ class DeviceDetailsTabsView extends View {
 						<TouchableOpacity
 							style={styles.backButtonLand}
 							onPress={this.goBack}>
-							<Icon name="arrow-back" size={appLayout.width * 0.0323} color="#fff"/>
+							<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff"/>
 						</TouchableOpacity>
 					}
 					<View style={iconBackground}>
