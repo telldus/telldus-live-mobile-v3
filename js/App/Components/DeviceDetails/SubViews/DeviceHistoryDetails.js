@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
@@ -81,73 +81,6 @@ class DeviceHistoryDetails extends View {
 		let { detailsData, appOrientation, appLayout } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
-		if (origin && origin === 'Scheduler') {
-			originText = <FormattedMessage {...i18n.scheduler} style={styles.detailsText}/>;
-		} else if (origin && origin === 'Incoming signal') {
-			originText = <FormattedMessage {...i18n.incommingSignal} style={styles.detailsText}/>;
-		} else if (origin && origin === 'Unknown') {
-			originText = <FormattedMessage {...i18n.unknown} style={styles.detailsText}/>;
-		} else if (origin && origin.substring(0, 5) === 'Group') {
-			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.group} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
-		} else if (origin && origin.substring(0, 5) === 'Event') {
-			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.event} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
-		} else {
-			originText = origin;
-		}
-		if (this.props.detailsData.state) {
-			let state = states[this.props.detailsData.state];
-			textState = state === 'Dim' ? `${state} ${this.getPercentage(stateValue)}%` : state;
-			switch (state) {
-				case 'On':
-					textState = <FormattedMessage {...i18n.on} style={styles.detailsText}/>;
-					break;
-				case 'Off':
-					textState = <FormattedMessage {...i18n.off} style={styles.detailsText}/>;
-					break;
-				case 'Dim':
-					textState = <Text style={styles.detailsText}><FormattedMessage {...i18n.dimmingLevel} style={styles.detailsText}/>: {this.getPercentage(stateValue)}% </Text>;
-					break;
-				case 'Bell':
-					textState = <FormattedMessage {...i18n.bell} style={styles.detailsText}/>;
-					break;
-				case 'Down':
-					textState = <FormattedMessage {...i18n.down} style={styles.detailsText}/>;
-					break;
-				case 'Up':
-					textState = <FormattedMessage {...i18n.up} style={styles.detailsText}/>;
-					break;
-				case 'Stop':
-					textState = <FormattedMessage {...i18n.stop} style={styles.detailsText}/>;
-					break;
-				default:
-					textState = state;
-			}
-		}
-		if (ts) {
-			textDate = new Date(ts * 1000);
-		}
-		if (successStatus >= 0) {
-			switch (successStatus) {
-				case 0:
-					textStatus = <FormattedMessage {...messages.success} style={styles.detailsText}/>;
-					break;
-				case '1':
-					textStatus = <FormattedMessage {...messages.failed} style={styles.detailsTextError}/>;
-					break;
-				case '2':
-					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.noReply} style={styles.detailsTextError}/>)</Text>;
-					break;
-				case '3':
-					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.timedOut} style={styles.detailsTextError}/>)</Text>;
-					break;
-				case '4':
-					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.notConfirmed} style={styles.detailsTextError}/>)</Text>;
-					break;
-				default:
-					let message = statusMessage[successStatus];
-					textStatus = successStatus === 0 ? message : `Failed (${message})`;
-			}
-		}
 
 		let isPortrait = appOrientation === 'PORTRAIT';
 
@@ -159,7 +92,81 @@ class DeviceHistoryDetails extends View {
 			detailsLabelCover,
 			detailsValueCover,
 			timeCover,
+			titleText,
+			statusIconSize,
+			detailsLabel,
+			detailsText,
+			timeText,
+			detailsTextError,
 		} = this.getStyle(isPortrait, appLayout);
+
+		if (origin && origin === 'Scheduler') {
+			originText = <FormattedMessage {...i18n.scheduler} style={detailsText}/>;
+		} else if (origin && origin === 'Incoming signal') {
+			originText = <FormattedMessage {...i18n.incommingSignal} style={detailsText}/>;
+		} else if (origin && origin === 'Unknown') {
+			originText = <FormattedMessage {...i18n.unknown} style={detailsText}/>;
+		} else if (origin && origin.substring(0, 5) === 'Group') {
+			originText = <Text style={detailsText}><FormattedMessage {...i18n.group} style={detailsText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else if (origin && origin.substring(0, 5) === 'Event') {
+			originText = <Text style={detailsText}><FormattedMessage {...i18n.event} style={detailsText}/> {origin.substring(6, (origin.length))}</Text>;
+		} else {
+			originText = origin;
+		}
+		if (this.props.detailsData.state) {
+			let state = states[this.props.detailsData.state];
+			textState = state === 'Dim' ? `${state} ${this.getPercentage(stateValue)}%` : state;
+			switch (state) {
+				case 'On':
+					textState = <FormattedMessage {...i18n.on} style={detailsText}/>;
+					break;
+				case 'Off':
+					textState = <FormattedMessage {...i18n.off} style={detailsText}/>;
+					break;
+				case 'Dim':
+					textState = <Text style={detailsText}><FormattedMessage {...i18n.dimmingLevel} style={detailsText}/>: {this.getPercentage(stateValue)}% </Text>;
+					break;
+				case 'Bell':
+					textState = <FormattedMessage {...i18n.bell} style={detailsText}/>;
+					break;
+				case 'Down':
+					textState = <FormattedMessage {...i18n.down} style={detailsText}/>;
+					break;
+				case 'Up':
+					textState = <FormattedMessage {...i18n.up} style={detailsText}/>;
+					break;
+				case 'Stop':
+					textState = <FormattedMessage {...i18n.stop} style={detailsText}/>;
+					break;
+				default:
+					textState = state;
+			}
+		}
+		if (ts) {
+			textDate = new Date(ts * 1000);
+		}
+		if (successStatus >= 0) {
+			switch (successStatus) {
+				case 0:
+					textStatus = <FormattedMessage {...messages.success} style={detailsText}/>;
+					break;
+				case '1':
+					textStatus = <FormattedMessage {...messages.failed} style={detailsTextError}/>;
+					break;
+				case '2':
+					textStatus = <Text style={detailsTextError}><FormattedMessage {...messages.failed} style={detailsTextError}/> (<FormattedMessage {...messages.noReply} style={detailsTextError}/>)</Text>;
+					break;
+				case '3':
+					textStatus = <Text style={detailsTextError}><FormattedMessage {...messages.failed} style={detailsTextError}/> (<FormattedMessage {...messages.timedOut} style={detailsTextError}/>)</Text>;
+					break;
+				case '4':
+					textStatus = <Text style={detailsTextError}><FormattedMessage {...messages.failed} style={detailsTextError}/> (<FormattedMessage {...messages.notConfirmed} style={detailsTextError}/>)</Text>;
+					break;
+				default:
+					let message = statusMessage[successStatus];
+					textStatus = successStatus === 0 ? message : `Failed (${message})`;
+			}
+		}
 
 		return (
 			<Modal
@@ -174,27 +181,27 @@ class DeviceHistoryDetails extends View {
 				endValue= {0}
 				showModal={this.props.showDetails}>
 				<View style={titleTextCover}>
-					<Text style={styles.titleText}>
-						<FormattedMessage {...i18n.details} style={styles.titleText}/>
+					<Text style={titleText}>
+						<FormattedMessage {...i18n.details} style={titleText}/>
 					</Text>
 				</View>
 				<ScrollView contentContainerStyle={detailsContainer}>
 					<View style={detailsRow}>
 						<View style={detailsLabelCover}>
-							<Text style={styles.detailsLabel}>
-								<FormattedMessage {...i18n.state} style={styles.detailsLabel}/>
+							<Text style={detailsLabel}>
+								<FormattedMessage {...i18n.state} style={detailsLabel}/>
 							</Text>
 						</View>
 						<View style={detailsValueCover}>
-							<Text style={styles.detailsText}>
+							<Text style={detailsText}>
 								{textState}
 							</Text>
 						</View>
 					</View>
 					<View style={detailsRow}>
 						<View style={detailsLabelCover}>
-							<Text style={styles.detailsLabel}>
-								<FormattedMessage {...i18n.time} style={styles.detailsLabel}/>
+							<Text style={detailsLabel}>
+								<FormattedMessage {...i18n.time} style={detailsLabel}/>
 							</Text>
 						</View>
 						{textDate !== '' ?
@@ -207,7 +214,7 @@ class DeviceHistoryDetails extends View {
 									weekday="short"
 									day="2-digit"
 									month="short"
-									style={styles.timeText} />
+									style={timeText} />
 								<FormattedTime
 									value={textDate}
 									localeMatcher= "best fit"
@@ -215,7 +222,7 @@ class DeviceHistoryDetails extends View {
 									hour="numeric"
 									minute="numeric"
 									second="numeric"
-									style={[styles.timeText, {paddingLeft: 6, marginRight: 15}]} />
+									style={[timeText, {paddingLeft: 6, marginRight: 15}]} />
 							</View>
 							:
 							null
@@ -223,30 +230,30 @@ class DeviceHistoryDetails extends View {
 					</View>
 					<View style={detailsRow}>
 						<View style={detailsLabelCover}>
-							<Text style={styles.detailsLabel}>
-								<FormattedMessage {...i18n.origin} style={styles.detailsLabel}/>
+							<Text style={detailsLabel}>
+								<FormattedMessage {...i18n.origin} style={detailsLabel}/>
 							</Text>
 						</View>
 						<View style={detailsValueCover}>
-							<Text style={styles.detailsText} numberOfLines={1}>
+							<Text style={detailsText} numberOfLines={1}>
 								{originText}
 							</Text>
 						</View>
 					</View>
 					<View style={detailsRow}>
 						<View style={detailsLabelCover}>
-							<Text style={styles.detailsLabel}>
-								<FormattedMessage {...i18n.status} style={styles.detailsLabel}/>
+							<Text style={detailsLabel}>
+								<FormattedMessage {...i18n.status} style={detailsLabel}/>
 							</Text>
 						</View>
 						<View style={[detailsValueCover, { flexDirection: 'row-reverse' }]}>
-							<Text style={successStatus === 0 ? styles.detailsText : styles.detailsTextError} >
+							<Text style={successStatus === 0 ? detailsText : detailsTextError} >
 								{textStatus}
 							</Text>
 							{successStatus === 0 ?
 								null
 								:
-								<Icon name="exclamation-triangle" size={24} color="#d32f2f" />
+								<Icon name="exclamation-triangle" size={statusIconSize} color="#d32f2f" />
 							}
 						</View>
 					</View>
@@ -301,36 +308,34 @@ class DeviceHistoryDetails extends View {
 				width: width * 0.7,
 				flexDirection: 'row',
 			},
+			titleText: {
+				marginLeft: 10,
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+			statusIconSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
+			detailsLabel: {
+				marginLeft: 10,
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				color: '#4C4C4C',
+			},
+			detailsText: {
+				marginRight: 15,
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+			detailsTextError: {
+				marginRight: 15,
+				color: '#d32f2f',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+			timeText: {
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
 		};
 	}
 }
-
-const styles = StyleSheet.create({
-	titleText: {
-		marginLeft: 10,
-		color: '#A59F9A',
-		fontSize: 16,
-	},
-	detailsLabel: {
-		marginLeft: 10,
-		fontSize: 16,
-		color: '#4C4C4C',
-	},
-	detailsText: {
-		marginRight: 15,
-		color: '#A59F9A',
-		fontSize: 16,
-	},
-	detailsTextError: {
-		marginRight: 15,
-		color: '#d32f2f',
-		fontSize: 16,
-	},
-	timeText: {
-		color: '#A59F9A',
-		fontSize: 16,
-	},
-});
 
 function mapStateToProps(state) {
 	return {

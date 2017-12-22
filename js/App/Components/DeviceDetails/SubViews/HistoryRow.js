@@ -105,6 +105,8 @@ class HistoryRow extends View {
 			statusView,
 			originTextStyle,
 			roundIconContainerStyle,
+			statusIconSize,
+			statusValueText,
 		} = this.getStyle(isPortrait, appLayout);
 
 		let time = new Date(this.props.item.ts * 1000);
@@ -145,14 +147,14 @@ class HistoryRow extends View {
 				<TouchableOpacity style={styles.rowItemsContainer} onPress={this.onOriginPress}>
 					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
 						<View style={[statusView, { backgroundColor: '#A59F9A' }]}>
-							<CustomIcon name="icon_off" size={24} color="#ffffff" />
+							<CustomIcon name="icon_off" size={statusIconSize} color="#ffffff" />
 						</View>
 						:
 						<View style={[statusView, { backgroundColor: '#F06F0C' }]}>
 							{deviceState === 'DIM' ?
-								<Text style={styles.statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
+								<Text style={statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
 								:
-								<CustomIcon name={icon} size={24} color="#ffffff" />
+								<CustomIcon name={icon} size={statusIconSize} color="#ffffff" />
 							}
 						</View>
 					}
@@ -214,6 +216,12 @@ class HistoryRow extends View {
 				backgroundColor: this.props.item.successStatus !== 0 ? 'transparent' : '#929292',
 				width: isPortrait ? width * 0.0667777777 : height * 0.0667777777,
 			},
+			statusIconSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
+			statusValueText: {
+				color: '#ffffff',
+				fontSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
+			},
+
 		};
 	}
 }
@@ -222,10 +230,6 @@ const styles = StyleSheet.create({
 	rowItemsContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-	},
-	statusValueText: {
-		color: '#ffffff',
-		fontSize: 14,
 	},
 });
 
