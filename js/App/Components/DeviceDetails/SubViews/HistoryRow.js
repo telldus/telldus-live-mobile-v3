@@ -195,7 +195,7 @@ class HistoryRow extends View {
 				color: '#d32f2f',
 			},
 			rowContainerStyle: {
-				width: width * 0.55,
+				width: isPortrait ? width * 0.55 : width * 0.68,
 			},
 			containerStyle: {
 				paddingHorizontal: isPortrait ? width * 0.04 : height * 0.04,
@@ -204,7 +204,7 @@ class HistoryRow extends View {
 				fontSize: isPortrait ? width * 0.047 : height * 0.047,
 			},
 			timeContainerStyle: {
-				width: width * 0.30,
+				width: isPortrait ? width * 0.30 : width * 0.20,
 				zIndex: 1,
 			},
 			originTextStyle: {
