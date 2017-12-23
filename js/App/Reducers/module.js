@@ -25,7 +25,7 @@
 
 import { persistCombineReducers } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
-import { localStorageKey } from 'Config';
+// import { localStorageKey } from 'Config';
 
 import Devices from './Devices';
 import Gateways from './Gateways';
@@ -42,7 +42,7 @@ import Modal from './Modal';
 import App from './App';
 
 const config = {
-	key: localStorageKey,
+	key: 'tellduslive',
 	storage: AsyncStorage,
 };
 
