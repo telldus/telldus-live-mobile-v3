@@ -22,12 +22,11 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
-import { List, ListDataSource, View, StyleSheet } from 'BaseComponents';
+import { List, ListDataSource, View } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
@@ -36,9 +35,6 @@ import { toggleEditMode } from 'Actions';
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
-import {
-	getWindowDimensions,
-} from 'Lib';
 
 type Props = {
 	rowsAndSections: Object,
@@ -46,6 +42,7 @@ type Props = {
 	editMode: boolean,
 	tab: string,
 	dispatch: Function,
+	appLayout: Object,
 	screenProps: Object,
 };
 
@@ -113,14 +110,12 @@ class SensorsTab extends View {
 
 	render() {
 
-		let containerStyle = null;
-		if (Platform.OS === 'android') {
-			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				styles.conatiner : styles.containerLand;
-		}
+		let { appLayout } = this.props;
+
+		let style = this.getStyles(appLayout);
 
 		return (
-			<View style={containerStyle}>
+			<View style={style.container}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
@@ -155,21 +150,20 @@ class SensorsTab extends View {
 			<SensorRowHidden {...row}/>
 		);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			container: {
+				flex: 1,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+			},
+		};
+	}
 }
-
-SensorsTab.propTypes = {
-	rowsAndSections: PropTypes.object,
-};
-
-const styles = StyleSheet.create({
-	conatiner: {
-		flex: 1,
-	},
-	containerLand: {
-		flex: 1,
-		marginLeft: getWindowDimensions().height * 0.08,
-	},
-});
 
 const getRowsAndSections = createSelector(
 	[
@@ -192,6 +186,7 @@ function mapStateToProps(store) {
 		gatewaysById: store.gateways.byId,
 		editMode: store.tabs.editModeSensorsTab,
 		tab: store.navigation.tab,
+		appLayout: store.App.layout,
 	};
 }
 
