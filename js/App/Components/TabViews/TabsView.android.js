@@ -217,16 +217,8 @@ class TabsView extends View {
 				name: 'star',
 				size: 22,
 				color: '#fff',
-			},
-			onPress: this.toggleEditMode,
-		};
-
-		this.starButtonLand = {
-			icon: {
-				name: 'star',
-				size: 22,
-				color: '#fff',
-				style: styles.starButLand,
+				style: null,
+				iconStyle: null,
 			},
 			onPress: this.toggleEditMode,
 		};
@@ -236,17 +228,8 @@ class TabsView extends View {
 				name: 'bars',
 				size: 22,
 				color: '#fff',
-			},
-			onPress: this.openDrawer,
-		};
-
-		this.menuButtonLand = {
-			icon: {
-				name: 'bars',
-				size: 22,
-				color: '#fff',
-				style: styles.menuButLand,
-				iconStyle: styles.menuIconLand,
+				style: null,
+				iconStyle: null,
 			},
 			onPress: this.openDrawer,
 		};
@@ -358,9 +341,9 @@ class TabsView extends View {
 		/>;
 	}
 
-	makeRightButton = routeName => {
-		return (routeName === 'Devices' || routeName === 'Sensors') ?
-			(this.state.orientation === 'PORTRAIT' ? this.starButton : this.starButtonLand) : null;
+	makeRightButton = (routeName: string, starButtonStyle: Object) => {
+		this.starButton.icon.style = starButtonStyle;
+		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
 
 	getRelativeStyle() {
@@ -381,12 +364,16 @@ class TabsView extends View {
 
 	render() {
 
+		let { appLayout } = this.props;
+
 		let {
-			headerStyle,
-			containerStyle,
+			header,
+			container,
 			logoStyle,
-			leftButton,
-		} = this.getRelativeStyle();
+			starButtonStyle,
+			menuButtonStyle,
+			menuIconStyle,
+		} = this.getStyles(appLayout);
 
 		let screenProps = {
 			stackNavigator: this.props.stackNavigator,
@@ -399,7 +386,11 @@ class TabsView extends View {
 
 		const { routeName } = this.state;
 
-		const rightButton = this.makeRightButton(routeName);
+		const rightButton = this.makeRightButton(routeName, starButtonStyle);
+		const leftButton = this.menuButton;
+
+		leftButton.icon.style = menuButtonStyle;
+		leftButton.icon.iconStyle = menuIconStyle;
 
 		// TODO: Refactor: Split this code to smaller components
 		return (
@@ -410,8 +401,8 @@ class TabsView extends View {
 				renderNavigationView={this.renderNavigationView}
 			>
 				<View style={{flex: 1}}>
-					<Header style={headerStyle} logoStyle={logoStyle} leftButton={leftButton} rightButton={rightButton}/>
-					<View style={containerStyle}>
+					<Header style={header} logoStyle={logoStyle} leftButton={leftButton} rightButton={rightButton}/>
+					<View style={container}>
 						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 						{
 							this.state.settings ? (
@@ -424,53 +415,58 @@ class TabsView extends View {
 		);
 	}
 
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+		let deviceHeight = isPortrait ? height : width;
+
+		return {
+			header: isPortrait ? {
+				height: deviceHeight * 0.1111,
+			} : {
+				transform: [{rotateZ: '-90deg'}],
+				position: 'absolute',
+				left: -deviceHeight * 0.4444,
+				top: deviceHeight * 0.4444,
+				width: deviceHeight,
+				height: deviceHeight * 0.1111,
+			},
+			container: {
+				flex: 1,
+				marginLeft: isPortrait ? 0 : deviceHeight * 0.11,
+			},
+			menuButtonStyle: isPortrait ? null : {
+				position: 'absolute',
+				left: deviceHeight * 0.8999,
+				top: deviceHeight * 0.03666,
+				paddingTop: 0,
+				paddingHorizontal: 0,
+			},
+			starButtonStyle: isPortrait ? null : {
+				position: 'absolute',
+				right: deviceHeight * 0.5333,
+				top: deviceHeight * 0.03666,
+				paddingTop: 0,
+				paddingHorizontal: 0,
+			},
+			menuIconStyle: isPortrait ? null : {
+				transform: [{rotateZ: '90deg'}],
+			},
+			logoStyle: isPortrait ? null : {
+				position: 'absolute',
+				left: deviceHeight * 0.6255,
+				top: deviceHeight * 0.0400,
+			},
+		};
+	}
+
 	toggleEditMode = () => {
 		this.props.onToggleEditMode(this.props.tab);
 	};
 }
 
 const styles = StyleSheet.create({
-	header: {
-		height: getWindowDimensions().height * 0.1111,
-	},
-	headerLand: {
-		transform: [{rotateZ: '-90deg'}],
-		position: 'absolute',
-		left: -(getWindowDimensions().height * 0.4444),
-		top: getWindowDimensions().height * 0.4444,
-		width: getWindowDimensions().height,
-		height: getWindowDimensions().height * 0.1111,
-	},
-	container: {
-		flex: 1,
-	},
-	containerLand: {
-		marginLeft: getWindowDimensions().height * 0.11,
-	},
-	menuButLand: {
-		position: 'absolute',
-		left: getWindowDimensions().height * 0.8999,
-		top: getWindowDimensions().height * 0.03666,
-		paddingTop: 0,
-		paddingHorizontal: 0,
-	},
-	starButLand: {
-		position: 'absolute',
-		right: getWindowDimensions().height * 0.5333,
-		top: getWindowDimensions().height * 0.03666,
-		paddingTop: 0,
-		paddingHorizontal: 0,
-	},
-	menuIconLand: {
-		transform: [{rotateZ: '90deg'}],
-	},
-	logoLand: {
-		position: 'absolute',
-		left: getWindowDimensions().height * 0.5999,
-		top: getWindowDimensions().height * 0.0400,
-		width: getWindowDimensions().width * 0.277333333,
-		height: getWindowDimensions().width * 0.046666667,
-	},
 	navigationHeader: {
 		height: 60,
 		marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
@@ -568,6 +564,7 @@ function mapStateToProps(store, ownprops) {
 		dashboard: store.dashboard,
 		gateways: store.gateways,
 		isAppActive: store.App.active,
+		appLayout: store.App.layout,
 	};
 }
 
