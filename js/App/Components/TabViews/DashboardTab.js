@@ -349,13 +349,14 @@ class DashboardTab extends View {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		let isPortrait = height > width;
+		let isEmpty = !this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0;
 
 		return {
 			container: {
 				flex: 1,
-				alignItems: 'center',
+				alignItems: isEmpty ? 'center' : 'flex-start',
 				justifyContent: 'center',
-				paddingHorizontal: !this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0 ? 30 : 0,
+				paddingHorizontal: isEmpty ? 30 : 0,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
