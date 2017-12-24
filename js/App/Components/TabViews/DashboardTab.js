@@ -227,36 +227,35 @@ class DashboardTab extends View {
 		return tileWidth;
 	}
 
+	noItemsMessage(style: Object) {
+		return (
+			<View style={style.container}>
+				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
+				<Text style={style.noItemsTitle}>
+					{this.noItemsTitle}
+				</Text>
+				<Text style={style.noItemsContent}>
+					{'\n'}
+					{this.noItemsContent}
+				</Text>
+			</View>
+		);
+	}
+
 	render() {
 
 		let { appLayout } = this.props;
 
-		let {
-			container,
-			noItemsTitle,
-			noItemsContent,
-			starIconSize,
-		} = this.getStyles(appLayout);
+		let style = this.getStyles(appLayout);
 
 		// add to List props: enableEmptySections={true}, to surpress warning
 
 		if (!this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0) {
-			return (
-				<View style={container}>
-					<Icon name={'star'} size={starIconSize} color={Theme.Core.brandSecondary}/>
-					<Text style={noItemsTitle}>
-						{this.noItemsTitle}
-					</Text>
-					<Text style={noItemsContent}>
-						{'\n'}
-						{this.noItemsContent}
-					</Text>
-				</View>
-			);
+			return this.noItemsMessage(style);
 		}
 
 		return (
-			<View onLayout={this._onLayout} style={container}>
+			<View onLayout={this._onLayout} style={style.container}>
 				<List
 					ref="list"
 					contentContainerStyle={{

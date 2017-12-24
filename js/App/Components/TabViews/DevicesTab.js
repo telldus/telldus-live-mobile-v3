@@ -251,62 +251,62 @@ class DevicesTab extends View {
 		}
 	}
 
+	noDeviceMessage(style: Object) {
+		return (
+			<View style={style.container}>
+				<Text style={style.noItemsTitle}>
+					{this.noDeviceTitle}
+				</Text>
+				<Text style={style.noItemsContent}>
+					{'\n'}
+					{this.noDeviceContent}
+				</Text>
+				<TouchableOpacity style={style.linkCover} onPress={this.onPressAddDevice}>
+					<Image source={require('./img/telldus.png')} style={style.image}/>
+					<Text style={style.link}>
+						live.telldus.com
+					</Text>
+					<Image source={require('./img/right-arrow-key.png')} tintColor={'rgba(110,110,110,255)'} style={style.rightArrow}/>
+				</TouchableOpacity>
+			</View>
+		);
+	}
+
+	noGatewayMessage(style: Object) {
+		return (
+			<View style={style.container}>
+				<Text style={style.noItemsTitle}>
+					{this.noGatewayTitle}
+				</Text>
+				<Text style={style.noItemsContent}>
+					{'\n'}
+					{this.noGatewayContent}
+					{'\n\n'}
+				</Text>
+				<TouchableButton
+					onPress={this.onPressAddLocation}
+					text="ADD LOCATION"
+				/>
+			</View>
+		);
+	}
+
 	render() {
 
 		let { appLayout, devices } = this.props;
 
-		let {
-			container,
-			noItemsTitle,
-			noItemsContent,
-			linkCover,
-			image,
-			link,
-			rightArrow,
-		} = this.getStyles(appLayout);
+		let style = this.getStyles(appLayout);
 
 		if (this.state.addGateway) {
-			return (
-				<View style={container}>
-					<Text style={noItemsTitle}>
-						{this.noGatewayTitle}
-					</Text>
-					<Text style={noItemsContent}>
-						{'\n'}
-						{this.noGatewayContent}
-						{'\n\n'}
-					</Text>
-					<TouchableButton
-						onPress={this.onPressAddLocation}
-						text="ADD LOCATION"
-					/>
-				</View>
-			);
+			return this.noGatewayMessage(style);
 		}
 
 		if (!devices.allIds.length > 0) {
-			return (
-				<View style={container}>
-					<Text style={noItemsTitle}>
-						{this.noDeviceTitle}
-					</Text>
-					<Text style={noItemsContent}>
-						{'\n'}
-						{this.noDeviceContent}
-					</Text>
-					<TouchableOpacity style={linkCover} onPress={this.onPressAddDevice}>
-						<Image source={require('./img/telldus.png')} style={image}/>
-						<Text style={link}>
-							live.telldus.com
-						</Text>
-						<Image source={require('./img/right-arrow-key.png')} tintColor={'rgba(110,110,110,255)'} style={rightArrow}/>
-					</TouchableOpacity>
-				</View>
-			);
+			return this.noDeviceMessage(style);
 		}
 
 		return (
-			<View style={container}>
+			<View style={style.container}>
 				<List
 					ref="list"
 					dataSource={this.state.dataSource}
