@@ -61,13 +61,13 @@ const messages = defineMessages({
 	},
 	messageNoDeviceContent: {
 		id: 'pages.devices.messageNoDeviceContent',
-		defaultMessage: 'Currently, adding devices is only possible through our web interface, live.telldus.com.' +
+		defaultMessage: 'Currently, adding devices is only possible through our web interface, live.telldus.com. ' +
 		'Click below to open the web interface.',
 		description: 'Message title when no devices',
 	},
 	messageNoGatewayContent: {
 		id: 'pages.devices.messageNoGatewayContent',
-		defaultMessage: 'Before adding devices you need to add a gateway as a location in your account.' +
+		defaultMessage: 'Before adding devices you need to add a gateway as a location in your account. ' +
 		'Click below if you want to do that now.',
 		description: 'Message content when no gateways',
 	},
