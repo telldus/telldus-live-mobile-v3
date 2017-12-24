@@ -25,7 +25,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
 import { List, ListDataSource, View, StyleSheet } from 'BaseComponents';
@@ -34,19 +33,12 @@ import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 import { getSensors } from 'Actions';
 import { toggleEditMode } from 'Actions';
 
+import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import {
 	getWindowDimensions,
 } from 'Lib';
-
-const messages = defineMessages({
-	sensors: {
-		id: 'pages.sensors',
-		defaultMessage: 'Sensors',
-		description: 'The sensors tab',
-	},
-});
 
 type Props = {
 	rowsAndSections: Object,
@@ -71,7 +63,7 @@ class SensorsTab extends View {
 	onRefresh: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
-		title: screenProps.intl.formatMessage(messages.sensors),
+		title: screenProps.intl.formatMessage(i18n.sensors),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'sensors'),
 	});
 

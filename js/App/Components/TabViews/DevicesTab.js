@@ -41,14 +41,10 @@ import getTabBarIcon from '../../Lib/getTabBarIcon';
 import { parseDevicesForListView } from 'Reducers_Devices';
 import { addNewGateway } from 'Actions';
 
+import i18n from '../../Translations/common';
 import Theme from 'Theme';
 
 const messages = defineMessages({
-	devices: {
-		id: 'pages.devices',
-		defaultMessage: 'Devices',
-		description: 'The devices tab',
-	},
 	messageNoDeviceTitle: {
 		id: 'pages.devices.messageNoDeviceTitle',
 		defaultMessage: 'You have not added any devices yet.',
@@ -109,7 +105,7 @@ class DevicesTab extends View {
 	onPressAddDevice: () => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
-		title: screenProps.intl.formatMessage(messages.devices),
+		title: screenProps.intl.formatMessage(i18n.devices),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'devices'),
 	});
 
