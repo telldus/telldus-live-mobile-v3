@@ -21,12 +21,11 @@
 
 'use strict';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
-import View from './View';
 import Text from './Text';
-import StyleSheet from 'StyleSheet';
 import Theme from 'Theme';
 
 type Props = {
@@ -37,6 +36,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	postScript?: any,
 	preScript?: any,
+	appLayout: Object,
 };
 
 class TouchableButton extends Component<Props, void> {
@@ -66,40 +66,54 @@ class TouchableButton extends Component<Props, void> {
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		let shadow = Theme.Core.shadow;
 
+		const {
+		} = this.props;
+
+		let {
+			buttonContainer,
+			buttonLabel,
+		} = this.getStyle();
+
 		return (
-			<TouchableOpacity style={[shadow, styles.buttonContainer, style]} onPress={this.onPress}>
-				<View style={styles.button}>
-					<Text style={[styles.label, labelStyle]}>
-						{preScript}{label.toUpperCase()}{postScript}
-					</Text>
-				</View>
+			<TouchableOpacity style={[shadow, buttonContainer, style]} onPress={this.onPress}>
+				<Text style={[buttonLabel, labelStyle]}>
+					{preScript}{label.toUpperCase()}{postScript}
+				</Text>
 			</TouchableOpacity>
 		);
 	}
 
+	getStyle = (): Object => {
+		let { appLayout } = this.props;
+		const width = appLayout.width;
+		const height = appLayout.height;
+		const isPortrait = height > width;
+
+		return {
+			buttonContainer: {
+				backgroundColor: Theme.Core.btnPrimaryBg,
+				height: isPortrait ? width * 0.13 : height * 0.13,
+				width: isPortrait ? width * 0.5 : height * 0.5,
+				borderRadius: isPortrait ? width * 0.13 : height * 0.13,
+				alignSelf: 'center',
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			buttonLabel: {
+				color: '#ffffff',
+
+				textAlign: 'center',
+				textAlignVertical: 'center',
+			},
+		};
+	}
+
 }
 
-const styles = StyleSheet.create({
-	buttonContainer: {
-		backgroundColor: Theme.Core.btnPrimaryBg,
-		height: 50,
-		width: 180,
-		borderRadius: 50,
-		minWidth: 100,
-		alignSelf: 'center',
-	},
-	button: {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	label: {
-		color: '#ffffff',
+function mapStateToProps(state: Object, ownProps: Object): Object {
+	return {
+		appLayout: state.App.layout,
+	};
+}
 
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-
-});
-
-export default injectIntl(TouchableButton);
+export default connect(mapStateToProps, null)(injectIntl(TouchableButton));
