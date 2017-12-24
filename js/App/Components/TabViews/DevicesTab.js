@@ -83,6 +83,7 @@ type Props = {
 	stackNavigator: Object,
 	screenProps: Object,
 	appLayout: Object,
+	addNewLocation: Function,
 };
 
 type State = {

@@ -144,7 +144,6 @@ class DashboardTab extends View {
 		this.stopSensorTimer = this.stopSensorTimer.bind(this);
 		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
-		this.getStyles = this.getStyles.bind(this);
 		this.mixins = [Subscribable.Mixin];
 
 		this.noItemsTitle = props.screenProps.intl.formatMessage(messages.messageNoItemsTitle);
