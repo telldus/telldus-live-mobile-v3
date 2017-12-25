@@ -42,7 +42,7 @@ import TabBar from './TabBar';
 import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode, addNewGateway } from 'Actions';
 import TabViews from 'TabViews';
-import { hasStatusBar, getWindowDimensions } from 'Lib';
+import { hasStatusBar } from 'Lib';
 import { TabNavigator } from 'react-navigation';
 
 const messages = defineMessages({
