@@ -29,8 +29,6 @@ import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { FormattedMessage, View, DialogueBox } from 'BaseComponents';
 import {FormContainerComponent, RegisterForm} from 'PreLoginScreen_SubViews';
 
-import StyleSheet from 'StyleSheet';
-
 const messages = defineMessages({
 	createAccount: {
 		id: 'user.createAccount',
@@ -52,6 +50,7 @@ type Props = {
 	registeredCredential: any,
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
+	appLayout: Object,
 }
 
 class RegisterScreen extends View {
@@ -93,10 +92,12 @@ class RegisterScreen extends View {
 	}
 
 	render() {
-		let { showModal, validationMessage } = this.props;
+		let { showModal, validationMessage, appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		return (
-			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)}>
-				<RegisterForm />
+			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)} formContainerStyle={styles.formContainer}>
+				<RegisterForm appLayout/>
 				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
 					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
 				</TouchableOpacity>
@@ -109,14 +110,21 @@ class RegisterScreen extends View {
 			</FormContainerComponent>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	accountExist: {
-		marginTop: 10,
-		color: '#bbb',
-	},
-});
+	getStyles(appLayout: Object): Object {
+		const width = appLayout.width;
+
+		return {
+			accountExist: {
+				marginTop: 10,
+				color: '#bbb',
+			},
+			formContainer: {
+				width: width,
+			},
+		};
+	}
+}
 
 function mapDispatchToProps(dispatch) {
 	return {
@@ -130,6 +138,7 @@ function mapStateToProps(store) {
 		validationMessageHeader: store.modal.extras,
 		showModal: store.modal.openModal,
 		registeredCredential: store.user.registeredCredential,
+		appLayout: store.App.layout,
 	};
 }
 

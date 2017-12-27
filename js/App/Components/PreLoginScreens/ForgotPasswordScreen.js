@@ -22,7 +22,8 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { TouchableOpacity } from 'react-native';
 
 import { FormattedMessage, View } from 'BaseComponents';
 import {FormContainerComponent, ForgotPasswordForm} from 'PreLoginScreen_SubViews';
@@ -41,6 +42,7 @@ const messages = defineMessages({
 type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
+	appLayout: Object,
 }
 
 class ForgotPasswordScreen extends View {
@@ -64,8 +66,11 @@ class ForgotPasswordScreen extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		return (
-			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)}>
+			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)} formContainerStyle={styles.formContainer}>
 				<ForgotPasswordForm />
 				<View style={{ height: 10 }}/>
 				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
@@ -74,13 +79,26 @@ class ForgotPasswordScreen extends View {
 			</FormContainerComponent>
 		);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const width = appLayout.width;
+
+		return {
+			accountExist: {
+				marginTop: 10,
+				color: '#bbb',
+			},
+			formContainer: {
+				width: width,
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	accountExist: {
-		marginTop: 10,
-		color: '#bbb',
-	},
-});
+function mapStateToProps(store) {
+	return {
+		appLayout: store.App.layout,
+	};
+}
 
-export default injectIntl(ForgotPasswordScreen);
+export default connect(mapStateToProps, null)(injectIntl(ForgotPasswordScreen));

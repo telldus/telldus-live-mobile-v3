@@ -28,8 +28,6 @@ import {defineMessages, intlShape, injectIntl} from 'react-intl';
 import {
 	Text,
 	View,
-	StyleSheet,
-	Dimensions,
 	TouchableButton,
 } from 'BaseComponents';
 
@@ -58,6 +56,7 @@ type Props = {
 	dispatch: Function;
 	pushToken: string,
 	onPressLogout: boolean,
+	appLayout: Object,
 };
 
 class SessionLocked extends View {
@@ -108,6 +107,9 @@ class SessionLocked extends View {
 	}
 
 	render(): Object {
+		let { appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		let buttonOneLabel = this.state.isLogginIn ? `${this.buttonOneOne}...` : this.buttonOne;
 		let buttonTwoLabel = this.props.onPressLogout ? `${this.buttonTwoTwo}...` : this.buttonTwo;
 
@@ -131,24 +133,31 @@ class SessionLocked extends View {
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	bodyCover: {
-		width: Dimensions.get('window').width - 50,
-	},
-	contentText: {
-		color: '#ffffff80',
-		textAlign: 'center',
-		fontSize: 12,
-	},
-});
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			bodyCover: {
+				width: isPortrait ? (width - 50) : (height - 50),
+			},
+			contentText: {
+				color: '#ffffff80',
+				textAlign: 'center',
+				fontSize: isPortrait ? Math.floor(width * 0.039) : Math.floor(height * 0.039),
+			},
+		};
+	}
+}
 
 function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
+		appLayout: store.App.layout,
 	};
 }
 function mapDispatchToProps(dispatch) {

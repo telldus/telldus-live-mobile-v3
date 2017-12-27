@@ -26,13 +26,11 @@ import {TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, DialogueBox, Dimensions } from 'BaseComponents';
+import { FormattedMessage, View, DialogueBox } from 'BaseComponents';
 import { FormContainerComponent, LoginForm, SessionLocked } from 'PreLoginScreen_SubViews';
 
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
-
-import StyleSheet from 'StyleSheet';
 
 const messages = defineMessages({
 	needAccount: {
@@ -55,6 +53,7 @@ type Props = {
 		validationMessage: string,
 		showModal: boolean,
 		intl: intlShape.isRequired,
+		appLayout: Object,
 };
 
 type State = {
@@ -130,6 +129,9 @@ class LoginScreen extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		let {
 			headerText, notificationHeader, positiveText,
 			onPressPositive, onPressNegative, showPositive, showNegative} = this.getRelativeData();
@@ -139,7 +141,7 @@ class LoginScreen extends View {
 					<SessionLocked onPressLogout={this.state.onPressLogout} />
 					:
 					<View>
-						<LoginForm />
+						<LoginForm appLayout/>
 						<View style={styles.otherLinks}>
 							<TouchableOpacity style={{height: 25}} onPress={this.onForgotPassword}>
 								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb' }}/>
@@ -165,6 +167,26 @@ class LoginScreen extends View {
 		);
 	}
 
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			otherLinks: {
+				flexDirection: 'row',
+				flexWrap: 'wrap',
+				marginTop: 15,
+				justifyContent: 'center',
+				marginHorizontal: 10,
+			},
+			formContainer: {
+				height: isPortrait ? height * 0.50 : width * 0.50,
+				width: width,
+			},
+		};
+	}
+
 	onNeedAccount() {
 		this.closeModal();
 		this.props.navigation.navigate('Register');
@@ -176,19 +198,6 @@ class LoginScreen extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	otherLinks: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		marginTop: 15,
-		justifyContent: 'center',
-		marginHorizontal: 10,
-	},
-	formContainer: {
-		height: Dimensions.get('window').height * 0.50,
-	},
-});
-
 function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
@@ -196,6 +205,7 @@ function mapStateToProps(store) {
 		isTokenValid: store.user.isTokenValid,
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
+		appLayout: store.App.layout,
 	};
 }
 
