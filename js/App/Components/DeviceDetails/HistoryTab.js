@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, SectionList } from 'react-native';
+import { StyleSheet, SectionList, PanResponder } from 'react-native';
 import _ from 'lodash';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
@@ -63,6 +63,8 @@ type State = {
 	dataSource: any,
 	isListEmpty: boolean,
 	hasRefreshed: boolean,
+	scrollEnabled: boolean,
+	scrollPositionY: number,
 };
 
 class HistoryTab extends View {
@@ -73,6 +75,8 @@ class HistoryTab extends View {
 	renderSectionHeader: (Object, String) => void;
 	renderRow: (Object, String) => void;
 	closeHistoryDetailsModal: () => void;
+	onMoveShouldSetPanResponder: () => void;
+	onMoveShouldSetPanResponder: () => void;
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (
@@ -91,10 +95,16 @@ class HistoryTab extends View {
 			dataSource: props.history ? this.getRowAndSectionData(props.history.data) : false,
 			isListEmpty: props.history && props.history.data.length === 0 ? true : false,
 			hasRefreshed: false,
+			scrollEnabled: false,
+			scrollPositionY: 0,
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
+
+		this.onScroll = this.onScroll.bind(this);
+		this.onMoveShouldSetPanResponder = this.onMoveShouldSetPanResponder.bind(this);
+		this.onMoveShouldSetPanResponderCapture = this.onMoveShouldSetPanResponderCapture.bind(this);
 	}
 
 	componentDidMount() {
@@ -215,6 +225,53 @@ class HistoryTab extends View {
 		return true;
 	}
 
+	componentWillMount() {
+		this._panResponder = PanResponder.create({
+			onMoveShouldSetPanResponderCapture: this.onMoveShouldSetPanResponderCapture,
+			onMoveShouldSetPanResponder: this.onMoveShouldSetPanResponder,
+			onPanResponderGrant: (evt, gestureState) => {
+			},
+			onPanResponderMove: (evt, gestureState) => {
+				let { screenProps } = this.props;
+				let distance = screenProps.posterNextTop + gestureState.dy;
+
+				distance = distance < 0 && distance < -screenProps.posterHeight ? -screenProps.posterHeight : distance;
+				distance = distance > 0 && distance > screenProps.posterTop ? screenProps.posterTop : distance;
+				this.props.screenProps.onListScroll(distance);
+			},
+			onPanResponderTerminationRequest: (evt, gestureState) => true,
+			onPanResponderRelease: (evt, gestureState) => {
+				this.moveY = null;
+			},
+			onPanResponderTerminate: (evt, gestureState) => {
+				return true;
+			},
+			onShouldBlockNativeResponder: (evt, gestureState) => {
+				return true;
+			},
+		});
+	}
+	onMoveShouldSetPanResponderCapture(ev: Object, gestureState: Object) {
+		return false;
+	}
+	onMoveShouldSetPanResponder(ev: Object, gestureState: Object) {
+		return gestureState.dy !== 0;
+	}
+
+	onScroll(ev: Object) {
+		let { screenProps } = this.props;
+		if (ev.nativeEvent.contentOffset.y === 0 && screenProps.posterNextTop === -screenProps.posterHeight) {
+			this.setState({
+				scrollEnabled: false,
+				scrollPositionY: ev.nativeEvent.contentOffset.y,
+			});
+		} else {
+			this.setState({
+				scrollPositionY: ev.nativeEvent.contentOffset.y,
+			});
+		}
+	}
+
 	render() {
 		let { appLayout } = this.props;
 
@@ -251,9 +308,12 @@ class HistoryTab extends View {
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 					keyExtractor={this.keyExtractor}
+					scrollEnabled={this.state.scrollEnabled}
+					onScroll={this.onScroll}
+					{...this._panResponder.panHandlers}
 				/>
 				<View style={line}/>
-				<DeviceHistoryDetails />
+				{/* <DeviceHistoryDetails /> */}
 			</View>
 		);
 	}

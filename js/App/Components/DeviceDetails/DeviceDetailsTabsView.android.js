@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, ImageBackground, TouchableOpacity, UIManager, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -61,11 +61,18 @@ class DeviceDetailsTabsView extends View {
 
 	constructor(props: Props) {
 		super(props);
+		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		this.state = {
 			currentTab: 'Overview',
+			posterTop: 0,
+			posterHeight: 0,
+			posterNextTop: 0,
+			posterPrevTop: 0,
 		};
 		this.goBack = this.goBack.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+		this.onLayout = this.onLayout.bind(this);
+		this.onListScroll = this.onListScroll.bind(this);
 
 		this.isTablet = DeviceInfo.isTablet();
 	}
@@ -93,12 +100,32 @@ class DeviceDetailsTabsView extends View {
 		});
 	}
 
+	onListScroll(value: number) {
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+		this.setState({
+			posterNextTop: value,
+			posterPrevTop: this.state.posterNextTop,
+		});
+	}
+
+	onLayout(ev: Object) {
+		this.setState({
+			posterTop: ev.nativeEvent.layout.y,
+			posterHeight: ev.nativeEvent.layout.height,
+		});
+	}
+
 	render() {
 		let { appLayout } = this.props;
 		let screenProps = {
 			device: this.props.device,
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
+			posterTop: this.state.posterTop,
+			posterNextTop: this.state.posterNextTop,
+			posterPrevTop: this.state.posterPrevTop,
+			posterHeight: this.state.posterHeight,
+			onListScroll: this.onListScroll,
 		};
 		let isPortrait = appLayout.height > appLayout.width;
 
@@ -111,7 +138,7 @@ class DeviceDetailsTabsView extends View {
 
 		return (
 			<View style={styles.container}>
-				<ImageBackground style={poster} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
+				<ImageBackground onLayout={this.onLayout} style={[poster, {marginTop: this.state.posterNextTop}]} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
 					{(!this.isTablet) && (!isPortrait) &&
 						<TouchableOpacity
 							style={styles.backButtonLand}
