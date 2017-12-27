@@ -23,13 +23,14 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, ListView } from 'react-native';
+import { StyleSheet, SectionList } from 'react-native';
+import _ from 'lodash';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { FormattedMessage, Text, View, ListDataSource, Icon, FormattedDate, TabBar } from 'BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
@@ -64,11 +65,6 @@ type State = {
 	hasRefreshed: boolean,
 };
 
-const listDataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-	sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-});
-
 class HistoryTab extends View {
 	props: Props;
 	state: State;
@@ -92,16 +88,13 @@ class HistoryTab extends View {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			dataSource: props.history ? listDataSource
-				.cloneWithRowsAndSections(this.getRowAndSectionData(props.history.data)) : false,
+			dataSource: props.history ? this.getRowAndSectionData(props.history.data) : false,
 			isListEmpty: props.history && props.history.data.length === 0 ? true : false,
 			hasRefreshed: false,
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
-
-		this.isFirstFlag = null;
 	}
 
 	componentDidMount() {
@@ -117,9 +110,8 @@ class HistoryTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.history && ((!this.props.history) || (nextProps.history.data.length !== this.props.history.data.length))) {
-			this.isFirstFlag = null;
 			this.setState({
-				dataSource: listDataSource.cloneWithRowsAndSections(this.getRowAndSectionData(nextProps.history.data)),
+				dataSource: this.getRowAndSectionData(nextProps.history.data),
 				isListEmpty: nextProps.history.data.length === 0 ? true : false,
 			});
 		}
@@ -137,6 +129,10 @@ class HistoryTab extends View {
 		}
 	}
 
+	keyExtractor(item) {
+		return item.ts;
+	}
+
 	refreshHistoryData() {
 		let that = this;
 		this.delayRefreshHistoryData = setTimeout(() => {
@@ -146,15 +142,18 @@ class HistoryTab extends View {
 
 	// prepares the row and section data required for the List.
 	getRowAndSectionData(data) {
-		let rowSectionData = data.reduce((result, key) => {
-			let date = new Date(key.ts * 1000).toDateString();
-			if (!result[date]) {
-				result[date] = [];
-			}
-			result[date].push(key);
-			return result;
-		}, {});
-		return rowSectionData;
+		let result = _.groupBy(data, items => {
+			let date = new Date(items.ts * 1000).toDateString();
+			return date;
+		});
+		result = _.reduce(result, (acc, next, index) => {
+			acc.push({
+				key: index,
+				data: next,
+			});
+			return acc;
+		}, []);
+		return result;
 	}
 
 	getIcon(deviceState) {
@@ -177,15 +176,13 @@ class HistoryTab extends View {
 
 	}
 
-	renderRow(item: Object, sectionId: string, rowId: number) {
-		let isFirst = +rowId === 0 && this.isFirstFlag === null;
-		this.isFirstFlag = isFirst;
+	renderRow(item: Object) {
 		return (
-			<HistoryRow id={rowId} item={item} isFirst={isFirst}/>
+			<HistoryRow id={item.item.index} item={item.item} isFirst={+item.item.index === 0}/>
 		);
 	}
 
-	renderSectionHeader(sectionData, timestamp) {
+	renderSectionHeader(item: Object): Object {
 		let { appLayout } = this.props;
 
 		let {
@@ -196,7 +193,7 @@ class HistoryTab extends View {
 		return (
 			<View style={sectionHeader}>
 				<FormattedDate
-					value={timestamp}
+					value={item.section.key}
 					localeMatcher= "best fit"
 					formatMatcher= "best fit"
 					weekday="long"
@@ -249,10 +246,11 @@ class HistoryTab extends View {
 		}
 		return (
 			<View style={styles.container}>
-				<ListView
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
+				<SectionList
+					sections={this.state.dataSource}
+					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
+					keyExtractor={this.keyExtractor}
 				/>
 				<View style={line}/>
 				<DeviceHistoryDetails />
