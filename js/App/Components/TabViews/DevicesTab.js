@@ -262,7 +262,7 @@ class DevicesTab extends View {
 					<Text style={style.link}>
 						live.telldus.com
 					</Text>
-					<Image source={require('./img/right-arrow-key.png')} tintColor={'rgba(110,110,110,255)'} style={style.rightArrow}/>
+					<Image source={require('./img/right-arrow-key.png')} tintColor={'#BDBDBD'} style={style.rightArrow}/>
 				</TouchableOpacity>
 			</View>
 		);
