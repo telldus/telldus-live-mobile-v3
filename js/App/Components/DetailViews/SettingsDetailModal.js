@@ -221,16 +221,13 @@ class SettingsDetailModal extends View {
 							Telldus Live! mobile{'\n'}
 							<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
 						</Text>
-						{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
-							<TouchableButton
-								style={Theme.Styles.submitButton}
-								onPress={this.submitPushToken}
-								text={submitButText}
-								postScript={this.state.isPushSubmitLoading ? '...' : null}
-							/>
-							:
-							<StatusView/>
-						}
+						<TouchableButton
+							style={Theme.Styles.submitButton}
+							onPress={this.submitPushToken}
+							text={submitButText}
+							postScript={this.state.isPushSubmitLoading ? '...' : null}
+						/>
+						<StatusView/>
 						<View style={{height: 20}} />
 						<TouchableButton
 							style={Theme.Styles.submitButton}
