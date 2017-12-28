@@ -24,9 +24,7 @@
 import React from 'React';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, Dimensions } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Toast from 'react-native-simple-toast';
 import {
 	getUserProfile,
@@ -47,9 +45,6 @@ const messages = defineMessages({
 		description: 'The error messgage to show, when a device action cannot be performed',
 	},
 });
-
-const deviceHeight = Dimensions.get('window').height;
-let deviceWidth = Dimensions.get('window').width;
 import Theme from 'Theme';
 
 import { View } from 'BaseComponents';
@@ -63,7 +58,6 @@ import { NavigationHeader } from 'DDSubViews';
 import AddLocationNavigator from 'AddLocationNavigator';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
-import { hasStatusBar } from 'Lib';
 
 const RouteConfigs = {
 	Tabs: {
@@ -87,13 +81,7 @@ const RouteConfigs = {
 			let renderRootHeader = state.params && state.params.renderRootHeader;
 			if (renderRootHeader) {
 				return {
-					headerStyle: {
-						marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-						backgroundColor: Theme.Core.brandPrimary,
-						height: deviceHeight * 0.1,
-					},
-					headerTintColor: '#ffffff',
-					headerTitle: renderStackHeader(),
+					header: <NavigationHeader navigation={navigation}/>,
 				};
 			}
 			return {
@@ -103,12 +91,6 @@ const RouteConfigs = {
 
 	},
 };
-
-function renderStackHeader() {
-	return (
-		<Image style={{ height: 110, width: 130, marginLeft: (deviceWidth * 0.2) }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
-	);
-}
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',

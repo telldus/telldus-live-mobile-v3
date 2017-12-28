@@ -238,7 +238,7 @@ class AddLocationContainer extends View<null, Props, State> {
 
 					<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 						<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-							<AddLocationPoster h1={h1} h2={h2} infoButton={infoButton} screenProps/>
+							<AddLocationPoster h1={h1} h2={h2} infoButton={infoButton} screenProps={screenProps} navigation={navigation}/>
 							<View style={[styles.style, {paddingHorizontal: padding}]}>
 								{React.cloneElement(
 									children,

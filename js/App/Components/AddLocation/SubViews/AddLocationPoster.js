@@ -22,8 +22,11 @@
 'use strict';
 
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import DeviceInfo from 'react-native-device-info';
 
 import { View, Text, Poster, RoundedInfoButton } from 'BaseComponents';
 
@@ -40,10 +43,13 @@ type Props = {
 	h2: string,
 	infoButton?: InfoButton,
 	appLayout: Object,
+	screenProps: Object,
+	navigation: Object,
 };
 
 class AddLocationPoster extends View {
 	props: Props;
+	goBack: () => void;
 
 	static propTypes = {
 		h1: PropTypes.string,
@@ -54,6 +60,8 @@ class AddLocationPoster extends View {
 	constructor(props: Props) {
 		super(props);
 		this._renderInfoButton = this._renderInfoButton.bind(this);
+		this.goBack = this.goBack.bind(this);
+		this.isTablet = DeviceInfo.isTablet();
 	}
 
 	_renderInfoButton = (button: Object): Object => {
@@ -62,12 +70,28 @@ class AddLocationPoster extends View {
 		);
 	};
 
+	goBack() {
+		if (this.props.screenProps.currentScreen === 'LocationDetected') {
+			this.props.screenProps.rootNavigator.goBack();
+		} else {
+			this.props.navigation.goBack();
+		}
+	}
+
 	render(): Object {
 		const { h1, h2, infoButton, appLayout } = this.props;
 		const styles = this.getStyle(appLayout);
+		const isPortrait = appLayout.height > appLayout.width;
 
 		return (
 			<Poster>
+				{(!this.isTablet) && (!isPortrait) &&
+						<TouchableOpacity
+							style={styles.backButtonLand}
+							onPress={this.goBack}>
+							<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff"/>
+						</TouchableOpacity>
+				}
 				<View style={styles.hContainer}>
 					<Text style={[styles.h, styles.h1]}>
 						{!!h1 && h1}
@@ -104,6 +128,14 @@ class AddLocationPoster extends View {
 			},
 			h2: {
 				fontSize: isPortrait ? width * 0.053333333 : height * 0.053333333,
+			},
+			backButtonLand: {
+				position: 'absolute',
+				alignItems: 'flex-start',
+				justifyContent: 'center',
+				backgroundColor: 'transparent',
+				left: 10,
+				top: 10,
 			},
 		};
 	}
