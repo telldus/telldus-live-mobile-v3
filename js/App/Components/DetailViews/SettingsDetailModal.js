@@ -67,8 +67,8 @@ const StatusView = () => (
 type Props = {
 	isVisible: boolean,
 	onClose: () => void,
-	onLogout: () => void,
-	onSubmitPushToken: () => void,
+	onLogout: (Object, Function) => void,
+	onSubmitPushToken: (Object, Function) => void,
 	store: Object,
 };
 
@@ -140,11 +140,8 @@ class SettingsDetailModal extends View {
 						<Text style={styles.versionInfo}>
 							{`You are using version ${version} of Telldus Live! mobile.`}
 						</Text>
-						{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
 						<Button text={submitButText} onPress={this.submitPushToken} width={200} />
-						:
 						<StatusView/>
-						}
 						<Button text={logoutButText} onPress={this.logout} width={100} />
 					</View>
 				</Container>
