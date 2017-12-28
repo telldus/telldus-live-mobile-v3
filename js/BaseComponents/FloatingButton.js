@@ -28,11 +28,9 @@ import { Image, Platform, TouchableOpacity } from 'react-native';
 import View from './View';
 import Throbber from './Throbber';
 import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
 
 type DefaultProps = {
 	tabs: boolean,
-	iconSize: number,
 	paddingRight: number,
 };
 
@@ -62,7 +60,6 @@ class FloatingButton extends Component<Props, null> {
 
 	static defaultProps: DefaultProps = {
 		tabs: false,
-		iconSize: getDeviceWidth() * 0.056,
 		paddingRight: 0,
 		showThrobber: false,
 	};
@@ -99,7 +96,8 @@ class FloatingButton extends Component<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { tabs, iconSize, paddingRight } = this.props;
+		let { tabs, iconSize, paddingRight } = this.props;
+		iconSize = iconSize ? iconSize : isPortrait ? width * 0.056 : height * 0.056;
 
 		const isIOSTabs = Platform.OS === 'ios' && tabs;
 
