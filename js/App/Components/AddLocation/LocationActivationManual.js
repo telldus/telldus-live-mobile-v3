@@ -25,14 +25,12 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 
 import {getGatewayInfo} from 'Actions';
-import {View, StyleSheet, FormattedMessage, Dimensions, FloatingButton} from 'BaseComponents';
+import {View, FormattedMessage, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
-
-let deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
 	label: {
@@ -69,6 +67,7 @@ type Props = {
 	getGatewayInfo: (param: Object, string) => Promise<any>;
 	actions: Object,
 	intl: intlShape.isRequired,
+	appLayout: Object,
 }
 
 class LocationActivationManual extends View {
@@ -159,63 +158,70 @@ class LocationActivationManual extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
 
 		return (
 			<View style={{flex: 1}}>
-				<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{justifyContent: 'center'}}>
-					<LabelBox
-						containerStyle={{marginBottom: 10}}
-						label={this.label}
-						showIcon={true}>
-						<TextInput
-							style={styles.textField}
-							onChangeText={this.onActivationCodeChange}
-							autoCapitalize="characters"
-							autoCorrect={false}
-							autoFocus={true}
-							underlineColorAndroid="#e26901"
-							defaultValue={this.state.activationCode}
-						/>
-						<FormattedMessage style={styles.textBody} {...messages.bodyContent}/>
-					</LabelBox>
-					<FloatingButton
-						buttonStyle={styles.buttonStyle}
-						onPress={this.onActivationCodeSubmit}
-						imageSource={require('../TabViews/img/right-arrow-key.png')}
-						showThrobber={false}
+				<LabelBox
+					containerStyle={{marginBottom: 10}}
+					label={this.label}
+					showIcon={true}
+					appLayout={appLayout}>
+					<TextInput
+						style={styles.textField}
+						onChangeText={this.onActivationCodeChange}
+						autoCapitalize="characters"
+						autoCorrect={false}
+						autoFocus={true}
+						underlineColorAndroid="#e26901"
+						defaultValue={this.state.activationCode}
 					/>
-				</KeyboardAvoidingView>
+					<FormattedMessage style={styles.textBody} {...messages.bodyContent}/>
+				</LabelBox>
+				<FloatingButton
+					buttonStyle={styles.buttonStyle}
+					onPress={this.onActivationCodeSubmit}
+					imageSource={require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={false}
+				/>
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	textBody: {
-		color: '#A59F9A',
-		marginTop: 10,
-		textAlign: 'left',
-		fontSize: 13,
-		paddingLeft: 2,
-	},
-	textField: {
-		height: 50,
-		width: deviceWidth - 40,
-		paddingLeft: 35,
-		color: '#A59F9A',
-		fontSize: 20,
-	},
-	locationIcon: {
-		position: 'absolute',
-		top: 35,
-		left: 8,
-	},
-	buttonStyle: {
-		right: deviceWidth * 0.053333333,
-		elevation: 10,
-		shadowOpacity: 0.99,
-	},
-});
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+
+		return {
+			textBody: {
+				color: '#A59F9A',
+				marginTop: 10,
+				textAlign: 'left',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				paddingLeft: 2,
+			},
+			textField: {
+				height: 50,
+				width: width - 40,
+				paddingLeft: 35,
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+			},
+			locationIcon: {
+				position: 'absolute',
+				top: 35,
+				left: 8,
+			},
+			buttonStyle: {
+				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
+				elevation: 10,
+				shadowOpacity: 0.99,
+			},
+		};
+	}
+}
 
 function mapDispatchToProps(dispatch) {
 	return {

@@ -25,6 +25,7 @@
 
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
+import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import { View, Image, Dimensions } from 'BaseComponents';
@@ -113,6 +114,7 @@ function renderHeader(): Object {
 
 type Props = {
 	navigation: Object,
+	appLayout: Object,
 };
 
 type State = {
@@ -157,9 +159,11 @@ class AddLocationNavigator extends View {
 	render() {
 
 		let { currentScreen } = this.state;
+		let { appLayout, navigation } = this.props;
 		let screenProps = {
 			currentScreen,
-			rootNavigator: this.props.navigation,
+			rootNavigator: navigation,
+			appLayout: appLayout,
 		};
 
 		return (
@@ -168,4 +172,10 @@ class AddLocationNavigator extends View {
 	}
 }
 
-export default AddLocationNavigator;
+function mapStateToProps(state, ownProps) {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(AddLocationNavigator);

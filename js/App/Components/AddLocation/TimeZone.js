@@ -31,16 +31,11 @@ import { defineMessages, intlShape } from 'react-intl';
 import {
 	View,
 	FormattedMessage,
-	StyleSheet,
-	Dimensions,
 	Text,
 	Icon,
 	FloatingButton,
 } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
-
-const deviceWidth = Dimensions.get('window').width;
-
 
 const messages = defineMessages({
 	headerOne: {
@@ -67,6 +62,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	onDidMount: Function,
 	activateGateway: (clientInfo: Object) => Promise<any>,
+	appLayout: Object,
 }
 
 type State = {
@@ -126,12 +122,15 @@ class TimeZone extends View<void, Props, State> {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
 
 		return (
 			<View style={{flex: 1}}>
 				<LabelBox
 					label={this.label}
-					showIcon={false}>
+					showIcon={false}
+					appLayout={appLayout}>
 					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 0}}>
 						<View style={styles.timeZoneContainer}>
 							<Text style={styles.timeZone}>
@@ -159,31 +158,37 @@ class TimeZone extends View<void, Props, State> {
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	timeZoneContainer: {
-		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		marginTop: 10,
-		width: (deviceWidth - 40),
-	},
-	timeZone: {
-		color: '#00000099',
-		fontSize: 20,
-		paddingLeft: 2,
-		marginRight: 10,
-	},
-	hint: {
-		color: '#A59F9A',
-		fontSize: 14,
-		paddingLeft: 2,
-	},
-	buttonStyle: {
-		right: deviceWidth * 0.053333333,
-		elevation: 10,
-		shadowOpacity: 0.99,
-	},
-});
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			timeZoneContainer: {
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				marginTop: 10,
+				width: width - 40,
+			},
+			timeZone: {
+				color: '#00000099',
+				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+				paddingLeft: 2,
+				marginRight: 10,
+			},
+			hint: {
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				paddingLeft: 2,
+			},
+			buttonStyle: {
+				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
+				elevation: 10,
+				shadowOpacity: 0.99,
+			},
+		};
+	}
+}
 
 export default connect(null, null)(TimeZone);

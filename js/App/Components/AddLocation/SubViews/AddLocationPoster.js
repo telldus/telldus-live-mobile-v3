@@ -22,13 +22,12 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { View, Text, Dimensions, StyleSheet, Poster, RoundedInfoButton } from 'BaseComponents';
+import { View, Text, Poster, RoundedInfoButton } from 'BaseComponents';
 
 import Theme from 'Theme';
-
-const deviceWidth = Dimensions.get('window').width;
 
 type InfoButton = {
 	onPress?: Function,
@@ -40,9 +39,10 @@ type Props = {
 	h1: string,
 	h2: string,
 	infoButton?: InfoButton,
+	appLayout: Object,
 };
 
-export default class AddLocationPoster extends View {
+class AddLocationPoster extends View {
 	props: Props;
 
 	static propTypes = {
@@ -63,7 +63,9 @@ export default class AddLocationPoster extends View {
 	};
 
 	render(): Object {
-		const { h1, h2, infoButton } = this.props;
+		const { h1, h2, infoButton, appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
+
 		return (
 			<Poster>
 				<View style={styles.hContainer}>
@@ -79,25 +81,38 @@ export default class AddLocationPoster extends View {
 		);
 	}
 
+	getStyle = (appLayout: Object): Object => {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+
+		return {
+			hContainer: {
+				position: 'absolute',
+				right: isPortrait ? width * 0.124 : height * 0.124,
+				top: isPortrait ? width * 0.088 : height * 0.088,
+				flex: 1,
+				alignItems: 'flex-end',
+			},
+			h: {
+				color: '#fff',
+				backgroundColor: 'transparent',
+				fontFamily: Theme.Core.fonts.robotoLight,
+			},
+			h1: {
+				fontSize: isPortrait ? width * 0.085333333 : height * 0.085333333,
+			},
+			h2: {
+				fontSize: isPortrait ? width * 0.053333333 : height * 0.053333333,
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	hContainer: {
-		position: 'absolute',
-		right: deviceWidth * 0.124,
-		top: deviceWidth * 0.088,
-		flex: 1,
-		alignItems: 'flex-end',
-	},
-	h: {
-		color: '#fff',
-		backgroundColor: 'transparent',
-		fontFamily: Theme.Core.fonts.robotoLight,
-	},
-	h1: {
-		fontSize: deviceWidth * 0.085333333,
-	},
-	h2: {
-		fontSize: deviceWidth * 0.053333333,
-	},
-});
+function mapStateToProps(state: Object): Object {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(AddLocationPoster);

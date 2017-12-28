@@ -55,6 +55,7 @@ type Props = {
 	navigation: Object,
 	onDidMount: Function,
 	intl: intlShape.isRequired,
+	appLayout: Object,
 }
 
 class TimeZoneContinent extends View {
@@ -112,7 +113,7 @@ class TimeZoneContinent extends View {
 		item = item.split('/');
 		item = item[0];
 		return (
-			<ListRow item={item} onPress={this.onContinentChoose}/>
+			<ListRow item={item} onPress={this.onContinentChoose} appLayout={this.props.appLayout}/>
 		);
 	}
 
@@ -124,6 +125,7 @@ class TimeZoneContinent extends View {
 					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
+					key={this.props.appLayout.width}
 				/>
 			</View>
 		);

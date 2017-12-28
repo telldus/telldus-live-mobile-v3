@@ -28,12 +28,9 @@ import {ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 
-import { View, StyleSheet, Dimensions, TouchableButton } from 'BaseComponents';
+import { View, TouchableButton } from 'BaseComponents';
 import { Clients } from 'AddNewLocation_SubViews';
 import i18n from '../../Translations/common';
-
-let deviceWidth = Dimensions.get('window').width;
-let deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
 	headerOne: {
@@ -53,6 +50,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	rootNavigator: Object,
 	onDidMount: Function,
+	appLayout: Object,
 }
 
 class LocationDetected extends View {
@@ -94,19 +92,21 @@ class LocationDetected extends View {
 		this.props.navigation.navigate('LocationActivationManual');
 	}
 
-	renderClient(client, i) {
+	renderClient(client, i, appLayout) {
 		return (
-			<Clients key={i} client={client} onPress={this.onActivateAuto} intl={this.props.intl}/>
+			<Clients key={i} client={client} appLayout={appLayout} onPress={this.onActivateAuto} intl={this.props.intl}/>
 		);
 	}
 
 	render() {
 		let items = [];
-		let {rootNavigator} = this.props;
+		let { rootNavigator, appLayout } = this.props;
+
+		const styles = this.getStyle(appLayout);
 
 		if (rootNavigator.state.params.clients) {
 			items = rootNavigator.state.params.clients.map((client, i) => {
-				return this.renderClient(client, i);
+				return this.renderClient(client, i, appLayout);
 			});
 		}
 
@@ -123,26 +123,23 @@ class LocationDetected extends View {
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	itemsContainer: {
-		justifyContent: 'center',
-	},
-	button: {
-		marginVertical: 20,
-		alignSelf: 'center',
-	},
-	arrow: {
-		position: 'absolute',
-		top: deviceHeight * 0.12,
-		left: deviceWidth * 0.8,
-		elevation: 3,
-	},
-});
+	getStyle(appLayout: Object): Object {
+
+		return {
+			container: {
+				flex: 1,
+			},
+			itemsContainer: {
+				justifyContent: 'center',
+			},
+			button: {
+				marginVertical: 20,
+				alignSelf: 'center',
+			},
+		};
+	}
+}
 
 function mapStateToProps(store, ownProps) {
 	return {

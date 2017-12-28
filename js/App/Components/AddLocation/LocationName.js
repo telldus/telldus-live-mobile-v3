@@ -25,15 +25,13 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 
-import {View, StyleSheet, Dimensions, FloatingButton} from 'BaseComponents';
+import {View, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
 import {getGatewayInfo} from 'Actions';
-
-let deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
 	label: {
@@ -59,6 +57,7 @@ type Props = {
 	onDidMount: Function,
 	actions: Object,
 	getGatewayInfo: (uniqueParam: Object, extras: string) => Promise<any>;
+	appLayout: Object,
 }
 
 class LocationName extends View {
@@ -151,49 +150,57 @@ class LocationName extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
+
 		return (
 			<View style={{flex: 1}}>
-				<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{justifyContent: 'center'}}>
-					<LabelBox
-						containerStyle={{marginBottom: 10}}
-						label={this.label}
-						showIcon={true}>
-						<TextInput
-							style={styles.textField}
-							onChangeText={this.onLocationNameChange}
-							autoCapitalize="none"
-							autoCorrect={false}
-							autoFocus={true}
-							underlineColorAndroid="#e26901"
-							defaultValue={this.state.locationName}
-						/>
-					</LabelBox>
-					<FloatingButton
-						buttonStyle={styles.buttonStyle}
-						onPress={this.onNameSubmit}
-						imageSource={require('../TabViews/img/right-arrow-key.png')}
-						showThrobber={false}
+				<LabelBox
+					containerStyle={{marginBottom: 10}}
+					label={this.label}
+					showIcon={true}
+					appLayout={appLayout}>
+					<TextInput
+						style={styles.textField}
+						onChangeText={this.onLocationNameChange}
+						autoCapitalize="none"
+						autoCorrect={false}
+						autoFocus={true}
+						underlineColorAndroid="#e26901"
+						defaultValue={this.state.locationName}
 					/>
-				</KeyboardAvoidingView>
+				</LabelBox>
+				<FloatingButton
+					buttonStyle={styles.buttonStyle}
+					onPress={this.onNameSubmit}
+					imageSource={require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={false}
+				/>
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	textField: {
-		height: 50,
-		width: deviceWidth - 40,
-		paddingLeft: 35,
-		color: '#A59F9A',
-		fontSize: 20,
-	},
-	buttonStyle: {
-		right: deviceWidth * 0.053333333,
-		elevation: 10,
-		shadowOpacity: 0.99,
-	},
-});
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			textField: {
+				height: 50,
+				width: width - 40,
+				paddingLeft: 35,
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+			},
+			buttonStyle: {
+				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
+				elevation: 10,
+				shadowOpacity: 0.99,
+			},
+		};
+	}
+}
 
 function mapDispatchToProps(dispatch) {
 	return {

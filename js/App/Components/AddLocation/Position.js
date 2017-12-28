@@ -24,17 +24,15 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { TextInput, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
 
-import { View, StyleSheet, Dimensions, FloatingButton } from 'BaseComponents';
+import { View, FloatingButton } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
 import {activateGateway, showModal} from 'Actions';
-
-const deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
 	label: {
@@ -61,6 +59,7 @@ type Props = {
 	navigation: Object,
 	activateGateway: (Object) => Promise<any>;
 	dispatch: Function,
+	appLayout: Object,
 };
 
 type State = {
@@ -213,11 +212,13 @@ class Position extends View {
 	onDragEnd(event: Object) {
 		let { coordinate } = event.nativeEvent;
 		let { latitudeDelta, longitudeDelta } = this.state;
+
 		let region = new MapView.AnimatedRegion({
 			...coordinate,
 			latitudeDelta,
 			longitudeDelta,
 		});
+
 		this.setState({
 			region,
 			coordinate,
@@ -227,25 +228,32 @@ class Position extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
 
 		return (
 			<View style={styles.container}>
 				<View style={styles.body}>
-					<KeyboardAvoidingView behavior="padding" contentContainerStyle={{justifyContent: 'center'}}>
-						<LabelBox
-							label={this.label}
-							showIcon={true}>
-							<TextInput
-								style={styles.address}
-								onChangeText={this.onAddressChange}
-								onEndEditing={this.onEndEditing}
-								autoCapitalize="none"
-								autoCorrect={false}
-								autoFocus={true}
-								underlineColorAndroid="#e26901"
-								value={this.state.address}/>
-						</LabelBox>
-					</KeyboardAvoidingView>
+					<LabelBox
+						label={this.label}
+						showIcon={true}
+						appLayout={appLayout}>
+						<TextInput
+							style={styles.address}
+							onChangeText={this.onAddressChange}
+							onEndEditing={this.onEndEditing}
+							autoCapitalize="none"
+							autoCorrect={false}
+							autoFocus={true}
+							underlineColorAndroid="#e26901"
+							value={this.state.address}/>
+					</LabelBox>
+					<FloatingButton
+						buttonStyle={styles.buttonStyle}
+						onPress={this.onSubmit}
+						imageSource={require('../TabViews/img/right-arrow-key.png')}
+						showThrobber={false}
+					/>
 					<View style={styles.mapViewCover}>
 						<MapView.Animated
 							style={styles.map}
@@ -257,68 +265,67 @@ class Position extends View {
 								coordinate={this.state.coordinate}
 								onDragEnd={this.onDragEnd}/>
 						</MapView.Animated>
-						<FloatingButton
-							buttonStyle={styles.buttonStyle}
-							onPress={this.onSubmit}
-							imageSource={require('../TabViews/img/right-arrow-key.png')}
-							showThrobber={false}
-						/>
 					</View>
 				</View>
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	container: {
-	  flex: 1,
-	},
-	body: {
-		flex: 1,
-	},
-	mapViewCover: {
-		flex: 1,
-		marginTop: 10,
-		borderRadius: 4,
-		overflow: 'hidden',
-	},
-	map: {
-	  flex: 1,
-	  overflow: 'hidden',
-	},
-	locationIcon: {
-	},
-	address: {
-		height: 50,
-		width: deviceWidth - 40,
-		paddingLeft: 35,
-		color: '#A59F9A',
-		fontSize: 20,
-	},
-	hContainer: {
-		position: 'absolute',
-		right: deviceWidth * 0.124,
-		top: deviceWidth * 0.088,
-		flex: 1,
-		alignItems: 'flex-end',
-	},
-	h: {
-		color: '#fff',
-		backgroundColor: 'transparent',
-	},
-	h1: {
-		fontSize: deviceWidth * 0.085333333,
-	},
-	h2: {
-		fontSize: deviceWidth * 0.053333333,
-	},
-	buttonStyle: {
-		right: deviceWidth * 0.053333333,
-		elevation: 10,
-		shadowOpacity: 0.99,
-	},
-});
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		return {
+			container: {
+				flex: 1,
+			  },
+			  body: {
+				  flex: 1,
+			  },
+			  mapViewCover: {
+				  flex: 1,
+				  marginTop: 10,
+				  borderRadius: 4,
+				  overflow: 'hidden',
+			  },
+			  map: {
+				flex: 1,
+				overflow: 'hidden',
+			  },
+			  address: {
+				  height: 50,
+				  width: width - 40,
+				  paddingLeft: 35,
+				  color: '#A59F9A',
+				  fontSize: Math.floor(deviceWidth * 0.06),
+			  },
+			  hContainer: {
+				  position: 'absolute',
+				  right: deviceWidth * 0.124,
+				  top: deviceWidth * 0.088,
+				  flex: 1,
+				  alignItems: 'flex-end',
+			  },
+			  h: {
+				  color: '#fff',
+				  backgroundColor: 'transparent',
+			  },
+			  h1: {
+				  fontSize: deviceWidth * 0.085333333,
+			  },
+			  h2: {
+				  fontSize: deviceWidth * 0.053333333,
+			  },
+			  buttonStyle: {
+				  right: deviceWidth * 0.053333333,
+				  elevation: 10,
+				  shadowOpacity: 0.99,
+			  },
+		};
+	}
+}
 
 function mapDispatchToProps(dispatch): Object {
 	return {

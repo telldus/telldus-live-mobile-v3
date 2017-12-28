@@ -48,6 +48,7 @@ type Props = {
 	activateGateway: (clientInfo: Object) => void,
 	intl: intlShape.isRequired,
 	onDidMount: Function,
+	appLayout: Object,
 }
 const listDataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,
@@ -97,7 +98,7 @@ class TimeZoneCity extends View {
 		item = item.split('/');
 		item = item[1];
 		return (
-			<ListRow item={item} onPress={this.onCityChoose}/>
+			<ListRow item={item} appLayout={this.props.appLayout} onPress={this.onCityChoose}/>
 		);
 	}
 
@@ -109,6 +110,7 @@ class TimeZoneCity extends View {
 					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
+					key={this.props.appLayout.width}
 				/>
 			</View>
 		);
