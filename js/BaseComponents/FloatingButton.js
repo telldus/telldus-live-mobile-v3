@@ -22,6 +22,7 @@
 'use strict';
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Image, Platform, TouchableOpacity } from 'react-native';
 import View from './View';
@@ -43,9 +44,10 @@ type Props = {
 	paddingRight: number,
 	showThrobber: boolean,
 	buttonStyle: number | Array<any> | Object,
+	appLayout: Object,
 };
 
-export default class FloatingButton extends Component<Props, null> {
+class FloatingButton extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {
@@ -66,9 +68,9 @@ export default class FloatingButton extends Component<Props, null> {
 	};
 
 	render(): Object {
-		const { container, button, icon, throbber } = this._getStyle();
+		const { buttonStyle, onPress, imageSource, showThrobber, appLayout } = this.props;
 
-		const { buttonStyle, onPress, imageSource, showThrobber } = this.props;
+		const { container, button, icon, throbber } = this._getStyle(appLayout);
 
 		return (
 			<TouchableOpacity style={[container, buttonStyle]} onPress={onPress}>
@@ -90,9 +92,12 @@ export default class FloatingButton extends Component<Props, null> {
 		);
 	}
 
-	_getStyle = (): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { shadow: themeShadow, brandSecondary } = Theme.Core;
-		const deviceWidth = getDeviceWidth();
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const { tabs, iconSize, paddingRight } = this.props;
 
@@ -137,3 +142,11 @@ export default class FloatingButton extends Component<Props, null> {
 	};
 
 }
+
+function mapStateToProps(state, ownProps) {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(FloatingButton);
