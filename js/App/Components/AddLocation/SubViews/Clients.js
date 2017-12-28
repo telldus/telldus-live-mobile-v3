@@ -75,7 +75,7 @@ export default class Clients extends View {
 		let locationData = {
 			title: this.boxTitle,
 			image: locationImageUrl,
-			H1: this.props.client.name,
+			H1: this.props.client.type,
 			H2: this.boxHeaderTwo,
 			onPress: this.onPress,
 		};
