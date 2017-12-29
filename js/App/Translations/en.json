@@ -92,7 +92,7 @@
   "notification.defaultPositiveText": "OK",
   "origin": "Origin",
   "pages.dashboard": "Dashboard",
-  "pages.dashboard.messageNoItemsContent": "You have not added any devices or sensors to your dashboard yet. Go to devices of sensors tab, click the start in the top right corner and choose the ones you want to add.",
+  "pages.dashboard.messageNoItemsContent": "You have not added any devices or sensors to your dashboard yet. Go to devices or sensors tab, click the start in the top right corner and choose the ones you want to add.",
   "pages.dashboard.messageNoItemsTitle": "Your dashboard is empty.",
   "pages.devices": "Devices",
   "pages.devices.messageNoDeviceContent": "Currently, adding devices is only possible through our web interface, live.telldus.com. Click below to open the web interface.",
