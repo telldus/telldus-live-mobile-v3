@@ -70,7 +70,7 @@ const messages = defineMessages({
 	},
 });
 
-const Header = ({ onPress }) => (
+const Header = ({ onPress, styles }) => (
 	<View style={styles.header}>
 		<Icon name="gear" size={26} color="white"
 		      style={styles.gear}/>
@@ -81,7 +81,7 @@ const Header = ({ onPress }) => (
 	</View>
 );
 
-const StatusView = () => (
+const StatusView = ({styles}) => (
 	<Text style={styles.statusText}>
 		<FormattedMessage {...messages.pushEnabled} style={styles.statusText} />
 	</Text>
@@ -97,6 +97,7 @@ type Props = {
 	validationMessage: string,
 	showModal: boolean,
 	intl: intlShape.isRequired,
+	appLayout: Object,
 };
 
 
@@ -205,11 +206,13 @@ class SettingsDetailModal extends View {
 			logoutButText,
 			version,
 		} = this.getRelativeData();
+		let { appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
 
 		return (
 			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
 				<Container style={styles.container}>
-					<Header onPress={this.props.onClose}/>
+					<Header onPress={this.props.onClose} styles={styles}/>
 					<View style={styles.body}>
 						{ this.props.store.user.notificationText ?
 							<Text style={styles.notification}>{this.props.store.user.notificationText}</Text>
@@ -228,7 +231,7 @@ class SettingsDetailModal extends View {
 								postScript={this.state.isPushSubmitLoading ? '...' : null}
 							/>
 							:
-							<StatusView/>
+							<StatusView styles={styles}/>
 						}
 						<View style={{height: 20}} />
 						<TouchableButton
@@ -238,7 +241,6 @@ class SettingsDetailModal extends View {
 							postScript={this.state.isLogoutLoading ? '...' : null}
 						/>
 						<DialogueBox
-							modalStyle={styles.modal}
 							showDialogue={this.props.showModal}
 							header={notificationHeader}
 							text={this.props.validationMessage}
@@ -259,78 +261,82 @@ class SettingsDetailModal extends View {
 		});
 		this.props.onSubmitPushToken(this.props.store.user.pushToken, this.postLoadMethod);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+
+		return {
+			container: {
+				flex: 1,
+				backgroundColor: 'white',
+				margin: 10,
+			},
+			header: {
+				height: 46,
+				backgroundColor: '#1a355b',
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			textHeaderTitle: {
+				marginLeft: 8,
+				color: 'white',
+				fontSize: isPortrait ? Math.floor(width * 0.057) : Math.floor(height * 0.057),
+				fontWeight: 'bold',
+				flex: 8,
+			},
+			body: {
+				flex: 10,
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			statusText: {
+				justifyContent: 'center',
+				alignItems: 'center',
+				color: '#1a355b',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				textAlign: 'center',
+				textAlignVertical: 'center',
+			},
+			versionInfo: {
+				color: '#1a355b',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				textAlign: 'center',
+				textAlignVertical: 'center',
+				width: 200,
+				height: 45,
+				marginVertical: 20,
+			},
+			gear: {
+				flex: 1,
+				marginLeft: 8,
+			},
+			notification: {
+				padding: 7,
+				marginTop: 10,
+				marginLeft: 100,
+				marginRight: 100,
+
+				borderColor: '#f00',
+				borderWidth: 1,
+				borderRadius: 3,
+
+				fontSize: isPortrait ? Math.floor(width * 0.041) : Math.floor(height * 0.041),
+				color: '#1a355b',
+				textAlign: 'center',
+				backgroundColor: '#ff000033',
+			},
+		};
+	}
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: 'white',
-		margin: 10,
-	},
-	header: {
-		height: 46,
-		backgroundColor: '#1a355b',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	textHeaderTitle: {
-		marginLeft: 8,
-		color: 'white',
-		fontSize: 18,
-		fontWeight: 'bold',
-		flex: 8,
-	},
-	body: {
-		flex: 10,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	statusText: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		color: '#1a355b',
-		fontSize: 14,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	versionInfo: {
-		color: '#1a355b',
-		fontSize: 14,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		width: 200,
-		height: 45,
-		marginVertical: 20,
-	},
-	gear: {
-		flex: 1,
-		marginLeft: 8,
-	},
-	notification: {
-		padding: 7,
-		marginTop: 10,
-		marginLeft: 100,
-		marginRight: 100,
-
-		borderColor: '#f00',
-		borderWidth: 1,
-		borderRadius: 3,
-
-		fontSize: 13,
-		color: '#1a355b',
-		textAlign: 'center',
-		backgroundColor: '#ff000033',
-	},
-	modal: {
-		top: deviceHeight * 0.2,
-	},
-});
 
 function mapStateToProps(store) {
 	return {
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
+		appLayout: store.App.layout,
 		store,
 	};
 }
