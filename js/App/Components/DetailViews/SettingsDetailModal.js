@@ -231,7 +231,6 @@ class SettingsDetailModal extends View {
 						}
 						<View style={{height: 20}} />
 						<TouchableButton
-							style={Theme.Styles.submitButton}
 							onPress={this.logout}
 							text={logoutButText}
 							postScript={this.state.isLogoutLoading ? '...' : null}
