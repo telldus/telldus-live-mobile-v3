@@ -341,8 +341,9 @@ class TabsView extends View {
 		/>;
 	}
 
-	makeRightButton = (routeName: string, starButtonStyle: Object) => {
+	makeRightButton = (routeName: string, starButtonStyle: Object, buttonSize: number): any => {
 		this.starButton.icon.style = starButtonStyle;
+		this.starButton.icon.size = buttonSize;
 		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
 
@@ -373,6 +374,7 @@ class TabsView extends View {
 			starButtonStyle,
 			menuButtonStyle,
 			menuIconStyle,
+			buttonSize,
 		} = this.getStyles(appLayout);
 
 		let screenProps = {
@@ -386,11 +388,12 @@ class TabsView extends View {
 
 		const { routeName } = this.state;
 
-		const rightButton = this.makeRightButton(routeName, starButtonStyle);
+		const rightButton = this.makeRightButton(routeName, starButtonStyle, buttonSize);
 		const leftButton = this.menuButton;
 
 		leftButton.icon.style = menuButtonStyle;
 		leftButton.icon.iconStyle = menuIconStyle;
+		leftButton.icon.size = buttonSize;
 
 		// TODO: Refactor: Split this code to smaller components
 		return (
@@ -436,6 +439,7 @@ class TabsView extends View {
 				flex: 1,
 				marginLeft: isPortrait ? 0 : deviceHeight * 0.11,
 			},
+			buttonSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			menuButtonStyle: isPortrait ? null : {
 				position: 'absolute',
 				left: deviceHeight * 0.8999,
