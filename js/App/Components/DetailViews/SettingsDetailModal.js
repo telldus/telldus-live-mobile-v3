@@ -32,10 +32,8 @@ import {
 	View,
 	Icon,
 	TouchableButton,
-	Dimensions,
 	DialogueBox,
 } from 'BaseComponents';
-import { StyleSheet } from 'react-native';
 import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
@@ -45,8 +43,6 @@ import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions_User';
 
 import i18n from './../../Translations/common';
-
-const deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
 	pushEnabled: {
