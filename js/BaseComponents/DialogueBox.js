@@ -22,7 +22,8 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { TouchableOpacity } from 'react-native';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
@@ -66,6 +67,7 @@ type Props = {
 	onPressPositive?: () => void,
 	onPressNegative?: () => void,
 	intl: intlShape.isRequired,
+	appLayout: Object,
 };
 
 type defaultProps = {
@@ -88,9 +90,9 @@ class DialogueBox extends Component<Props, null> {
 		exitDuration: 100,
 	}
 
-	renderHeader: () => void;
-	renderBody: () => void;
-	renderFooter: () => void;
+	renderHeader: (Object) => void;
+	renderBody: (Object) => void;
+	renderFooter: (Object) => void;
 
 	onPressPositive: () => void;
 	onPressNegative: () => void;
@@ -127,7 +129,7 @@ class DialogueBox extends Component<Props, null> {
 		}
 	}
 
-	renderHeader() {
+	renderHeader(styles: Object): any {
 		let { header } = this.props;
 		if (header && typeof header === 'object') {
 			return (
@@ -147,7 +149,7 @@ class DialogueBox extends Component<Props, null> {
 		);
 	}
 
-	renderBody() {
+	renderBody(styles: Object): any {
 		let { text } = this.props;
 		if (text && typeof text === 'object') {
 			return (
@@ -162,7 +164,7 @@ class DialogueBox extends Component<Props, null> {
 		);
 	}
 
-	renderFooter() {
+	renderFooter(styles: Object): any {
 		let positiveText = this.props.positiveText ? this.props.positiveText :
 			`${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
 		let negativeText = this.props.negativeText ? this.props.negativeText :
@@ -198,7 +200,10 @@ class DialogueBox extends Component<Props, null> {
 			exit,
 			entryDuration,
 			exitDuration,
+			appLayout,
 		} = this.props;
+		let styles = this.getStyles(appLayout);
+
 		return (
 			<Modal
 				modalStyle={[Theme.Styles.notificationModal, style]}
@@ -208,64 +213,78 @@ class DialogueBox extends Component<Props, null> {
 				entryDuration={entryDuration}
 				exitDuration={exitDuration}
 				showModal={showDialogue}>
-				{this.renderHeader()}
-				{this.renderBody()}
-				{this.renderFooter()}
+				{this.renderHeader(styles)}
+				{this.renderBody(styles)}
+				{this.renderFooter(styles)}
 			</Modal>
 		);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+		const deviceWidth = isPortrait ? width : height;
+
+		return {
+			notificationModalHeader: {
+				justifyContent: 'center',
+				alignItems: 'flex-start',
+				paddingLeft: 20,
+				height: deviceHeight * 0.08,
+				width: deviceWidth * 0.75,
+				backgroundColor: '#e26901',
+			},
+			notificationModalHeaderText: {
+				color: '#ffffff',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+			},
+			notificationModalBody: {
+				justifyContent: 'center',
+				alignItems: 'flex-start',
+				paddingLeft: 20,
+				paddingRight: 10,
+				height: deviceHeight * 0.2,
+				width: deviceWidth * 0.75,
+			},
+			notificationModalBodyText: {
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				color: '#6B6969',
+			},
+			notificationModalFooter: {
+				alignItems: 'center',
+				justifyContent: 'flex-end',
+				flexDirection: 'row',
+				paddingRight: 20,
+				height: deviceHeight * 0.08,
+				width: deviceWidth * 0.75,
+			},
+			notificationModalFooterTextCover: {
+				alignItems: 'flex-end',
+				justifyContent: 'center',
+				height: deviceHeight * 0.08,
+				paddingRight: 5,
+				paddingLeft: 5,
+			},
+			notificationModalFooterNegativeText: {
+				color: '#6B6969',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontWeight: 'bold',
+			},
+			notificationModalFooterPositiveText: {
+				color: '#e26901',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontWeight: 'bold',
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	notificationModalHeader: {
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingLeft: 20,
-		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.75,
-		backgroundColor: '#e26901',
-	},
-	notificationModalHeaderText: {
-		color: '#ffffff',
-		fontSize: 14,
-	},
-	notificationModalBody: {
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingLeft: 20,
-		paddingRight: 10,
-		height: Dimensions.get('window').height * 0.2,
-		width: Dimensions.get('window').width * 0.75,
-	},
-	notificationModalBodyText: {
-		fontSize: 14,
-		color: '#6B6969',
-	},
-	notificationModalFooter: {
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-		flexDirection: 'row',
-		paddingRight: 20,
-		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.75,
-	},
-	notificationModalFooterTextCover: {
-		alignItems: 'flex-end',
-		justifyContent: 'center',
-		height: Dimensions.get('window').height * 0.08,
-		paddingRight: 5,
-		paddingLeft: 5,
-	},
-	notificationModalFooterNegativeText: {
-		color: '#6B6969',
-		fontSize: 14,
-		fontWeight: 'bold',
-	},
-	notificationModalFooterPositiveText: {
-		color: '#e26901',
-		fontSize: 14,
-		fontWeight: 'bold',
-	},
-});
+function mapStateToProps(store: Object): Object {
+	return {
+		appLayout: store.App.layout,
+	};
+}
 
-export default injectIntl(DialogueBox);
+export default connect(mapStateToProps, null)(injectIntl(DialogueBox));
