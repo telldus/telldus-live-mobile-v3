@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import Orientation from 'react-native-orientation';
@@ -56,7 +56,7 @@ const messages = defineMessages({
 	},
 });
 
-const AddLocation = ({onPress}) => {
+const AddLocation = ({onPress, styles}) => {
 	return (
 		<View style={styles.addNewLocationContainer}>
 			<TouchableOpacity onPress={onPress} style={styles.addNewLocationCover}>
@@ -67,7 +67,7 @@ const AddLocation = ({onPress}) => {
 	);
 };
 
-const Gateway = ({ name, online, websocketOnline }) => {
+const Gateway = ({ name, online, websocketOnline, styles }) => {
 	let locationSrc;
 	if (!online) {
 		locationSrc = require('./img/tabIcons/location-red.png');
@@ -84,7 +84,7 @@ const Gateway = ({ name, online, websocketOnline }) => {
 	);
 };
 
-const NavigationHeader = ({ firstName, lastName }) => (
+const NavigationHeader = ({ firstName, lastName, styles }) => (
 	<View style={styles.navigationHeader}>
 		<Image style={styles.navigationHeaderImage}
 		       source={require('./img/telldus.png')}
@@ -104,40 +104,38 @@ const NavigationHeader = ({ firstName, lastName }) => (
 	</View>
 );
 
-const ConnectedLocations = () => (
+const ConnectedLocations = ({styles}) => (
 	<View style={styles.navigationTitle}>
 		<Image source={require('./img/tabIcons/router.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
 	</View>
 );
 
-const SettingsButton = ({ onPress }) => (
+const SettingsButton = ({ onPress, styles }) => (
 	<TouchableOpacity onPress={onPress} style={styles.navigationTitle}>
 		<Image source={require('./img/tabIcons/gear.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
 	</TouchableOpacity>
 );
 
-const NavigationView = ({ gateways, userProfile, onOpenSetting, addNewLocation }) => {
+const NavigationView = ({ gateways, userProfile, onOpenSetting, addNewLocation, styles }) => {
 	return (
-		<View style={{
+		<ScrollView style={{
 			flex: 1,
-			backgroundColor: 'rgba(26,53,92,255)',
-			paddingTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 		}}>
-			<NavigationHeader firstName={userProfile.firstname} lastName={userProfile.lastname}/>
+			<NavigationHeader firstName={userProfile.firstname} lastName={userProfile.lastname} styles={styles}/>
 			<View style={{
 				flex: 1,
 				backgroundColor: 'white',
 			}}>
-				<ConnectedLocations />
+				<ConnectedLocations styles={styles}/>
 				{gateways.allIds.map((id, index) => {
-					return (<Gateway {...gateways.byId[id]} key={index}/>);
+					return (<Gateway {...gateways.byId[id]} key={index} styles={styles}/>);
 				})}
-				<AddLocation onPress={addNewLocation} />
-				<SettingsButton onPress={onOpenSetting}/>
+				<AddLocation onPress={addNewLocation} styles={styles}/>
+				<SettingsButton onPress={onOpenSetting} styles={styles}/>
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 
@@ -207,7 +205,6 @@ class TabsView extends View {
 	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 	addNewLocation: () => void;
-	getRelativeStyle: () => Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -251,7 +248,6 @@ class TabsView extends View {
 		this.addNewLocation = this.addNewLocation.bind(this);
 
 		this.orientationDidChange = this.orientationDidChange.bind(this);
-		this.getRelativeStyle = this.getRelativeStyle.bind(this);
 	}
 
 	componentDidMount() {
@@ -331,51 +327,45 @@ class TabsView extends View {
 		this.props.syncGateways();
 	};
 
-	renderNavigationView() {
+	renderNavigationView(): Object {
+		let { appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		return <NavigationView
 			gateways={this.props.gateways}
 			addNewLocation={this.addNewLocation}
 			userProfile={this.props.userProfile}
 			theme={this.getTheme()}
 			onOpenSetting={this.onOpenSetting}
+			styles={styles}
 		/>;
 	}
 
-	makeRightButton = (routeName: string, starButtonStyle: Object, buttonSize: number): any => {
-		this.starButton.icon.style = starButtonStyle;
-		this.starButton.icon.size = buttonSize;
+	makeRightButton = (routeName: string, styles: Object): any => {
+		this.starButton.icon.style = styles.starButtonStyle;
+		this.starButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
 		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
 
-	getRelativeStyle() {
-		let relativeStyle = {
-			headerStyle: styles.header,
-			containerStyle: styles.container,
-			logoStyle: null,
-			leftButton: this.menuButton,
-		};
-		if (this.state.orientation !== 'PORTRAIT') {
-			relativeStyle.headerStyle = [relativeStyle.headerStyle, styles.headerLand];
-			relativeStyle.containerStyle = [relativeStyle.containerStyle, styles.containerLand];
-			relativeStyle.logoStyle = styles.logoLand;
-			relativeStyle.leftButton = this.menuButtonLand;
-		}
-		return relativeStyle;
+	makeLeftButton = (styles: Object): any => {
+		this.menuButton.icon.style = styles.menuButtonStyle;
+		this.menuButton.icon.iconStyle = styles.menuIconStyle;
+		this.menuButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
+		return this.menuButton;
+	};
+
+	getDrawerWidth = (deviceWidth: number): number => {
+		let minWidth = 250;
+		let width = deviceWidth * 0.6;
+		return width < minWidth ? minWidth : width;
 	}
 
 	render() {
 
 		let { appLayout } = this.props;
-
-		let {
-			header,
-			container,
-			logoStyle,
-			starButtonStyle,
-			menuButtonStyle,
-			menuIconStyle,
-			buttonSize,
-		} = this.getStyles(appLayout);
+		let isPortrait = appLayout.height > appLayout.width;
+		let deviceWidth = isPortrait ? appLayout.width : appLayout.height;
+		let styles = this.getStyles(appLayout);
 
 		let screenProps = {
 			stackNavigator: this.props.stackNavigator,
@@ -388,24 +378,21 @@ class TabsView extends View {
 
 		const { routeName } = this.state;
 
-		const rightButton = this.makeRightButton(routeName, starButtonStyle, buttonSize);
-		const leftButton = this.menuButton;
-
-		leftButton.icon.style = menuButtonStyle;
-		leftButton.icon.iconStyle = menuIconStyle;
-		leftButton.icon.size = buttonSize;
+		const rightButton = this.makeRightButton(routeName, styles);
+		const leftButton = this.makeLeftButton(styles);
+		const drawerWidth = this.getDrawerWidth(deviceWidth);
 
 		// TODO: Refactor: Split this code to smaller components
 		return (
 			<DrawerLayoutAndroid
 				ref="drawer"
-				drawerWidth={250}
+				drawerWidth={drawerWidth}
 				drawerPosition={DrawerLayoutAndroid.positions.Left}
 				renderNavigationView={this.renderNavigationView}
 			>
 				<View style={{flex: 1}}>
-					<Header style={header} logoStyle={logoStyle} leftButton={leftButton} rightButton={rightButton}/>
-					<View style={container}>
+					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton} rightButton={rightButton}/>
+					<View style={styles.container}>
 						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 						{
 							this.state.settings ? (
@@ -462,6 +449,98 @@ class TabsView extends View {
 				left: deviceHeight * 0.6255,
 				top: deviceHeight * 0.0400,
 			},
+
+			navigationHeader: {
+				height: deviceHeight * 0.18111,
+				width: isPortrait ? width * 0.6 : height * 0.6,
+				minWidth: 250,
+				backgroundColor: 'rgba(26,53,92,255)',
+				marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
+				paddingBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'flex-end',
+				paddingLeft: 10,
+			},
+			navigationHeaderImage: {
+				width: 55,
+				height: 57,
+				padding: 5,
+			},
+			navigationHeaderText: {
+				color: '#e26901',
+				fontSize: 22,
+				marginLeft: 10,
+				marginTop: 4,
+				zIndex: 3,
+				alignItems: 'flex-end',
+			},
+			navigationHeaderTextCover: {
+				flex: 1,
+				flexDirection: 'row',
+				flexWrap: 'wrap',
+				height: 64,
+				justifyContent: 'flex-start',
+				alignItems: 'flex-end',
+			},
+			navigationTitle: {
+				flexDirection: 'row',
+				height: 30,
+				marginLeft: 10,
+				marginTop: 20,
+				marginBottom: 10,
+			},
+			navigationTextTitle: {
+				color: 'rgba(26,53,92,255)',
+				fontSize: 18,
+				marginLeft: 10,
+			},
+			navigationTitleImage: {
+				width: 28,
+				height: 28,
+			},
+			settingsButton: {
+				padding: 6,
+				minWidth: 100,
+			},
+			settingsText: {
+				color: 'white',
+				fontSize: 18,
+			},
+			gatewayContainer: {
+				marginLeft: 10,
+				height: 20,
+				flexDirection: 'row',
+				marginTop: 10,
+				marginBottom: 10,
+			},
+			gateway: {
+				fontSize: 14,
+				color: 'rgba(110,110,110,255)',
+				marginLeft: 10,
+				maxWidth: 220,
+			},
+			gatewayIcon: {
+				width: 20,
+				height: 20,
+			},
+			addNewLocationCover: {
+				flexDirection: 'row',
+			},
+			addNewLocationContainer: {
+				borderBottomWidth: 1,
+				borderBottomColor: '#eeeeef',
+				marginLeft: 10,
+				marginRight: 10,
+				marginTop: 10,
+				height: 40,
+				justifyContent: 'flex-start',
+			},
+			addNewLocationText: {
+				fontSize: 14,
+				color: '#e26901',
+				marginLeft: 10,
+			},
 		};
 	}
 
@@ -469,96 +548,6 @@ class TabsView extends View {
 		this.props.onToggleEditMode(this.props.tab);
 	};
 }
-
-const styles = StyleSheet.create({
-	navigationHeader: {
-		height: 60,
-		marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-		marginBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'flex-end',
-	},
-	navigationHeaderImage: {
-		width: 55,
-		height: 57,
-		padding: 5,
-	},
-	navigationHeaderText: {
-		color: '#e26901',
-		fontSize: 22,
-		marginLeft: 10,
-		marginTop: 4,
-		zIndex: 3,
-		alignItems: 'flex-end',
-	},
-	navigationHeaderTextCover: {
-		flex: 1,
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		height: 64,
-		justifyContent: 'flex-start',
-		alignItems: 'flex-end',
-	},
-	navigationTitle: {
-		flexDirection: 'row',
-		height: 30,
-		marginLeft: 10,
-		marginTop: 20,
-		marginBottom: 10,
-	},
-	navigationTextTitle: {
-		color: 'rgba(26,53,92,255)',
-		fontSize: 18,
-		marginLeft: 10,
-	},
-	navigationTitleImage: {
-		width: 28,
-		height: 28,
-	},
-	settingsButton: {
-		padding: 6,
-		minWidth: 100,
-	},
-	settingsText: {
-		color: 'white',
-		fontSize: 18,
-	},
-	gatewayContainer: {
-		marginLeft: 10,
-		height: 20,
-		flexDirection: 'row',
-		marginTop: 10,
-		marginBottom: 10,
-	},
-	gateway: {
-		fontSize: 14,
-		color: 'rgba(110,110,110,255)',
-		marginLeft: 10,
-		maxWidth: 220,
-	},
-	gatewayIcon: {
-		width: 20,
-		height: 20,
-	},
-	addNewLocationCover: {
-		flexDirection: 'row',
-	},
-	addNewLocationContainer: {
-		borderBottomWidth: 1,
-		borderBottomColor: '#eeeeef',
-		marginLeft: 10,
-		marginRight: 10,
-		marginTop: 10,
-		height: 40,
-		justifyContent: 'flex-start',
-	},
-	addNewLocationText: {
-		fontSize: 14,
-		color: '#e26901',
-		marginLeft: 10,
-	},
-});
 
 function mapStateToProps(store, ownprops) {
 	return {
