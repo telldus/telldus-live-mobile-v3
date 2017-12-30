@@ -52,9 +52,6 @@ class LabelBox extends View {
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
 
 		return {
 			container: {
@@ -82,13 +79,13 @@ class LabelBox extends View {
 			},
 			label: {
 				color: '#e26901',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: 15,
 				paddingLeft: 2,
 			},
 			icon: {
 				position: 'absolute',
 				top: 40,
-				left: isPortrait ? width * 0.035 : height * 0.035,
+				left: 8,
 			},
 		};
 	}

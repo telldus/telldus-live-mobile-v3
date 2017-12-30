@@ -183,15 +183,16 @@ class LocationName extends View {
 	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
-		let isPortrait = height > width;
+		const isPortrait = height > width;
+		const padding = width * 0.068;
 
 		return {
 			textField: {
 				height: 50,
-				width: width - 40,
+				width: width - padding,
 				paddingLeft: 35,
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+				fontSize: 20,
 			},
 			buttonStyle: {
 				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
