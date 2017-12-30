@@ -278,7 +278,7 @@ class SettingsDetailModal extends View {
 			textHeaderTitle: {
 				marginLeft: 8,
 				color: 'white',
-				fontSize: isPortrait ? Math.floor(width * 0.057) : Math.floor(height * 0.057),
+				fontSize: 18,
 				fontWeight: 'bold',
 				flex: 8,
 			},
