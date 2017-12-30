@@ -50,7 +50,9 @@ class NavigationHeader extends View {
 
 	getLeftIcon() {
 		let { appLayout } = this.props;
-		let size = appLayout.height > appLayout.width ? appLayout.width * 0.075 : appLayout.height * 0.075;
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let size = isPortrait ? width * 0.06 : height * 0.06;
 
 		return (
 			<Icon name="arrow-back" size={size} color="#fff"/>
@@ -59,6 +61,9 @@ class NavigationHeader extends View {
 
 	render() {
 		let { appLayout } = this.props;
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let deviceHeight = isPortrait ? height : width;
 
 		if (appLayout.height < appLayout.width && !this.isTablet) {
 			return <View style={styles.emptyHeader}/>;
@@ -69,7 +74,7 @@ class NavigationHeader extends View {
 			onPress: this.goBack,
 		};
 		return (
-			<Header leftButton={leftIcon}/>
+			<Header leftButton={leftIcon} style={{height: deviceHeight * 0.1111}}/>
 		);
 	}
 }
