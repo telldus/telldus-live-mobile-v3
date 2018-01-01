@@ -297,7 +297,7 @@ class HistoryTab extends View {
 			},
 			throbber: {
 				fontSize: 24,
-			},		
+			},
 		};
 	}
 
