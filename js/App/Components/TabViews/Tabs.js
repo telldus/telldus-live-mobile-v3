@@ -150,11 +150,16 @@ export default class Tabs extends View {
 		let isPortrait = height > width;
 
 		return {
-			tabBarStyle: isPortrait ? null : {
-				height: heightLand,
-				width: heightLand,
-				transform: [{rotateZ: '-90deg'}],
-			},
+			tabBarStyle: isPortrait ?
+				{
+					flex: 1,
+				}
+				:
+				{
+					height: heightLand,
+					width: heightLand,
+					transform: [{rotateZ: '-90deg'}],
+				},
 			labelStyle: {
 				paddingHorizontal: isPortrait ? height * 0.0666 : 0,
 				paddingVertical: isPortrait ? 15 : 0,
@@ -163,15 +168,19 @@ export default class Tabs extends View {
 			},
 			indicatorPassiveStyle: {
 				backgroundColor: 'transparent',
+				position: isPortrait ? 'absolute' : 'relative',
+				bottom: 0,
 				height: 2,
 				width: layout.width,
-				marginTop: isPortrait ? height * 0.01 : height * 0.08,
+				marginTop: isPortrait ? undefined : height * 0.08,
 			},
 			indicatorActiveStyle: {
 				backgroundColor: '#fff',
 				height: 2,
 				width: layout.width,
-				marginTop: isPortrait ? height * 0.01 : height * 0.08,
+				position: isPortrait ? 'absolute' : 'relative',
+				bottom: 0,
+				marginTop: isPortrait ? undefined : height * 0.08,
 			},
 		};
 	}

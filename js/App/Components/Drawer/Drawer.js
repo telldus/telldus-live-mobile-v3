@@ -149,7 +149,7 @@ export default class Drawer extends View<Props, null> {
 
 		return {
 			navigationHeader: {
-				height: deviceHeight * 0.18111,
+				height: deviceHeight * 0.197,
 				width: isPortrait ? width * 0.6 : height * 0.6,
 				minWidth: 250,
 				backgroundColor: 'rgba(26,53,92,255)',
