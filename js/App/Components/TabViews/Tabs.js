@@ -165,13 +165,13 @@ export default class Tabs extends View {
 				backgroundColor: 'transparent',
 				height: 2,
 				width: layout.width,
-				marginTop: isPortrait ? height * 0.01 : width * 0.0481,
+				marginTop: isPortrait ? height * 0.01 : height * 0.08,
 			},
 			indicatorActiveStyle: {
 				backgroundColor: '#fff',
 				height: 2,
 				width: layout.width,
-				marginTop: isPortrait ? height * 0.01 : width * 0.0481,
+				marginTop: isPortrait ? height * 0.01 : height * 0.08,
 			},
 		};
 	}
