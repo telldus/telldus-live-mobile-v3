@@ -291,6 +291,7 @@ class TabsView extends View {
 				drawerWidth={drawerWidth}
 				drawerPosition={DrawerLayoutAndroid.positions.Left}
 				renderNavigationView={this.renderNavigationView}
+				drawerBackgroundColor={'transparent'}
 			>
 				<View style={{flex: 1}}>
 					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton} rightButton={rightButton}/>
