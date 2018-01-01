@@ -26,11 +26,7 @@ import { connect } from 'react-redux';
 import { StyleSheet, SectionList } from 'react-native';
 import _ from 'lodash';
 
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_history from '../TabViews/img/selection.json';
-const CustomIcon = createIconSetFromIcoMoon(icon_history);
-
-import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from 'BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar, Throbber } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
@@ -220,13 +216,17 @@ class HistoryTab extends View {
 
 		let {
 			line,
+			throbberContainer,
+			throbber,
 		} = this.getStyle(appLayout);
 
 		// Loader message when data has not received yet.
 		if (!this.state.dataSource) {
 			return (
 				<View style={styles.containerWhenNoData}>
-					<CustomIcon name="icon_loading" size={20} color="#F06F0C" />
+					<Throbber
+						throbberContainerStyle={throbberContainer}
+						throbberStyle={throbber}/>
 					<Text style={styles.textWhenNoData}>
 						<FormattedMessage {...messages.loading} style={styles.textWhenNoData}/>...
 					</Text>
@@ -291,6 +291,13 @@ class HistoryTab extends View {
 				justifyContent: 'center',
 				paddingLeft: 5,
 			},
+			throbberContainer: {
+				top: 20,
+				right: width * 0.5999,
+			},
+			throbber: {
+				fontSize: 24,
+			},		
 		};
 	}
 
