@@ -84,6 +84,7 @@ class LocationActivationManual extends View {
 		this.state = {
 			activationCode: '',
 			isKeyboardShown: false,
+			isLoading: false,
 		};
 
 		this.h1 = `1. ${props.intl.formatMessage(messages.headerOne)}`;
@@ -136,6 +137,9 @@ class LocationActivationManual extends View {
 			Keyboard.dismiss();
 		}
 		if (this.state.activationCode.length === 10) {
+			this.setState({
+				isLoading: true,
+			});
 			let param = {code: this.state.activationCode};
 			this.props.getGatewayInfo(param, 'timezone').then(response => {
 				if (response.id) {
@@ -150,6 +154,9 @@ class LocationActivationManual extends View {
 				} else {
 					this.props.actions.showModal(response, 'ERROR');
 				}
+				this.setState({
+					isLoading: false,
+				});
 			});
 		} else {
 			let message = this.props.intl.formatMessage(messages.invalidActivationCode);
@@ -182,8 +189,8 @@ class LocationActivationManual extends View {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onActivationCodeSubmit}
-					imageSource={require('../TabViews/img/right-arrow-key.png')}
-					showThrobber={false}
+					imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={this.state.isLoading}
 				/>
 			</View>
 		);

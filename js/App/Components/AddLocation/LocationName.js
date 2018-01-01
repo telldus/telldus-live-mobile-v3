@@ -74,6 +74,7 @@ class LocationName extends View {
 		this.state = {
 			locationName: '',
 			isKeyboardShown: false,
+			isLoading: false,
 		};
 
 		this.h1 = `2. ${props.intl.formatMessage(messages.label)}`;
@@ -126,6 +127,9 @@ class LocationName extends View {
 			Keyboard.dismiss();
 		}
 		if (this.state.locationName !== '') {
+			this.setState({
+				isLoading: true,
+			});
 			let clientInfo = this.props.navigation.state.params.clientInfo;
 			clientInfo.name = this.state.locationName;
 			if (clientInfo.timezone) {
@@ -141,6 +145,9 @@ class LocationName extends View {
 						} else {
 							this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
 						}
+						this.setState({
+							isLoading: false,
+						});
 					});
 			}
 		} else {
@@ -173,8 +180,8 @@ class LocationName extends View {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onNameSubmit}
-					imageSource={require('../TabViews/img/right-arrow-key.png')}
-					showThrobber={false}
+					imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={this.state.isLoading}
 				/>
 			</View>
 		);

@@ -68,6 +68,7 @@ type State = {
 	coordinate: Object,
 	latitudeDelta: number,
 	longitudeDelta: number,
+	isLoading: boolean,
 }
 
 class Position extends View {
@@ -102,6 +103,7 @@ class Position extends View {
 			},
 			latitudeDelta: 0.24442,
 			longitudeDelta: 0.24442,
+			isLoading: false,
 		};
 
 		this.h1 = `4. ${props.intl.formatMessage(messages.headerOne)}`;
@@ -161,11 +163,17 @@ class Position extends View {
 		if (this.state.isKeyboardShown) {
 			Keyboard.dismiss();
 		}
+		this.setState({
+			isLoading: true,
+		});
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.cordinates = { ...this.state.coordinate };
 		this.props.activateGateway(clientInfo)
 			.then(response => {
 				if (response) {
+					this.setState({
+						isLoading: false,
+					});
 					this.props.navigation.navigate('Success', {clientInfo});
 				}
 			});
@@ -251,8 +259,8 @@ class Position extends View {
 					<FloatingButton
 						buttonStyle={styles.buttonStyle}
 						onPress={this.onSubmit}
-						imageSource={require('../TabViews/img/right-arrow-key.png')}
-						showThrobber={false}
+						imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+						showThrobber={this.state.isLoading}
 					/>
 					<View style={styles.mapViewCover}>
 						<MapView.Animated
