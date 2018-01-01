@@ -146,7 +146,7 @@ class SessionLocked extends View {
 			contentText: {
 				color: '#ffffff80',
 				textAlign: 'center',
-				fontSize: isPortrait ? Math.floor(width * 0.039) : Math.floor(height * 0.039),
+				fontSize: isPortrait ? 13 : 13,
 			},
 		};
 	}
