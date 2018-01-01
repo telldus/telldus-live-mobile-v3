@@ -171,11 +171,11 @@ class Position extends View {
 		this.props.activateGateway(clientInfo)
 			.then(response => {
 				if (response) {
-					this.setState({
-						isLoading: false,
-					});
 					this.props.navigation.navigate('Success', {clientInfo});
 				}
+				this.setState({
+					isLoading: false,
+				});
 			});
 	}
 
@@ -256,12 +256,6 @@ class Position extends View {
 							underlineColorAndroid="#e26901"
 							value={this.state.address}/>
 					</LabelBox>
-					<FloatingButton
-						buttonStyle={styles.buttonStyle}
-						onPress={this.onSubmit}
-						imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
-						showThrobber={this.state.isLoading}
-					/>
 					<View style={styles.mapViewCover}>
 						<MapView.Animated
 							style={styles.map}
@@ -274,6 +268,12 @@ class Position extends View {
 								onDragEnd={this.onDragEnd}/>
 						</MapView.Animated>
 					</View>
+					<FloatingButton
+						buttonStyle={styles.buttonStyle}
+						onPress={this.onSubmit}
+						imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+						showThrobber={this.state.isLoading}
+					/>
 				</View>
 			</View>
 		);
