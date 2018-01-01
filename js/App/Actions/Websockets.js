@@ -210,7 +210,7 @@ const destroyConnection = gatewayId => {
  */
 const setupGatewayConnection = (gatewayId:string, address:string, port:string) => (dispatch, getState) => {
 	destroyConnection(gatewayId);
-	const websocketUrl = `ws://${address}:${port}/websocket`;
+	const websocketUrl = `wss://${address}/websocket`;
 	console.log('opening socket connection to', websocketUrl);
 	const websocket = new TelldusWebsocket(gatewayId, websocketUrl);
 	websocketConnections[gatewayId] = {
