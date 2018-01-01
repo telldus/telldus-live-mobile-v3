@@ -72,7 +72,6 @@ const Gateway = ({ name, online, websocketOnline, styles }) => {
 };
 
 const NavigationHeader = ({ firstName, lastName, styles }) => {
-	console.log('TEST styles', styles.navigationHeader);
 	return (
 		<View style={styles.navigationHeader}>
 			<Image style={styles.navigationHeaderImage}
