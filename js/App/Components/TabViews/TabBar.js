@@ -130,7 +130,6 @@ class TabBar extends View {
 				alignItems: 'center',
 				justifyContent: 'flex-start',
 				width: isPortrait ? undefined : height * 0.13,
-				height: isPortrait ? height * 0.07 : undefined,
 				zIndex: 1,
 			},
 		};
