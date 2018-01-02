@@ -297,7 +297,7 @@ class DevicesTab extends View {
 			return this.noGatewayMessage(style);
 		}
 
-		if (!devices.allIds.length > 0) {
+		if (!devices.allIds.length > 0 && devices.didFetch) {
 			return this.noDeviceMessage(style);
 		}
 
