@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import { StyleSheet, SectionList } from 'react-native';
 import _ from 'lodash';
 
@@ -49,16 +50,15 @@ const messages = defineMessages({
 
 type Props = {
 	dispatch: Function,
-	history: Object,
 	device: Object,
 	deviceHistoryNavigator: Object,
 	appLayout: Object,
+	rowsAndSections: Array<any> | boolean,
 };
 
 type State = {
-	dataSource: any,
-	isListEmpty: boolean,
 	hasRefreshed: boolean,
+	rowsAndSections: Array<any> | boolean,
 };
 
 class HistoryTab extends View {
@@ -84,8 +84,7 @@ class HistoryTab extends View {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			dataSource: props.history ? this.getRowAndSectionData(props.history.data) : false,
-			isListEmpty: props.history && props.history.data.length === 0 ? true : false,
+			rowsAndSections: props.rowsAndSections,
 			hasRefreshed: false,
 		};
 		this.renderRow = this.renderRow.bind(this);
@@ -105,10 +104,9 @@ class HistoryTab extends View {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.history && ((!this.props.history) || (nextProps.history.data.length !== this.props.history.data.length))) {
+		if (nextProps.rowsAndSections) {
 			this.setState({
-				dataSource: this.getRowAndSectionData(nextProps.history.data),
-				isListEmpty: nextProps.history.data.length === 0 ? true : false,
+				rowsAndSections: nextProps.rowsAndSections,
 			});
 		}
 		if (nextProps.screenProps.currentTab === 'History') {
@@ -134,22 +132,6 @@ class HistoryTab extends View {
 		this.delayRefreshHistoryData = setTimeout(() => {
 			that.props.dispatch(getDeviceHistory(that.props.device));
 		}, 2000);
-	}
-
-	// prepares the row and section data required for the List.
-	getRowAndSectionData(data) {
-		let result = _.groupBy(data, items => {
-			let date = new Date(items.ts * 1000).toDateString();
-			return date;
-		});
-		result = _.reduce(result, (acc, next, index) => {
-			acc.push({
-				key: index,
-				data: next,
-			});
-			return acc;
-		}, []);
-		return result;
 	}
 
 	getIcon(deviceState) {
@@ -221,7 +203,7 @@ class HistoryTab extends View {
 		} = this.getStyle(appLayout);
 
 		// Loader message when data has not received yet.
-		if (!this.state.dataSource) {
+		if (!this.state.rowsAndSections) {
 			return (
 				<View style={styles.containerWhenNoData}>
 					<Throbber
@@ -234,7 +216,7 @@ class HistoryTab extends View {
 			);
 		}
 		// response received but, no history for the requested device, so empty list message.
-		if (this.state.dataSource && this.state.isListEmpty) {
+		if (this.state.rowsAndSections && this.state.rowsAndSections.length === 0) {
 			return (
 				<View style={styles.containerWhenNoData}>
 					<Icon name="exclamation-circle" size={20} color="#F06F0C" />
@@ -247,7 +229,7 @@ class HistoryTab extends View {
 		return (
 			<View style={styles.container}>
 				<SectionList
-					sections={this.state.dataSource}
+					sections={this.state.rowsAndSections}
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 					keyExtractor={this.keyExtractor}
@@ -328,18 +310,44 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+// prepares the row and section data required for the List.
+const parseHistoryForSectionList = (data): Array<any> => {
+	let result = _.groupBy(data, items => {
+		let date = new Date(items.ts * 1000).toDateString();
+		return date;
+	});
+	result = _.reduce(result, (acc, next, index) => {
+		acc.push({
+			key: index,
+			data: next,
+		});
+		return acc;
+	}, []);
+	return result;
+};
+
+const getRowsAndSections = createSelector(
+	[
+		({ history }) => history.data,
+	],
+	(history) => {
+		let deviceHistory = parseHistoryForSectionList(history);
+		return deviceHistory;
+	}
+);
+
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	// some times the history data might not have received yet, so passing 'false' value.
-	let data = state.devices.byId[ownProps.screenProps.device.id].history ? state.devices.byId[ownProps.screenProps.device.id].history : false;
+	let rowsAndSections = state.devices.byId[ownProps.screenProps.device.id].history ? getRowsAndSections(state.devices.byId[ownProps.screenProps.device.id]) : false;
 	return {
 		deviceHistoryNavigator: ownProps.navigation,
-		history: data,
+		rowsAndSections,
 		device: ownProps.screenProps.device,
 		appLayout: state.App.layout,
 	};
