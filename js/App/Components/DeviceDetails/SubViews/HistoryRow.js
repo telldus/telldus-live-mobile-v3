@@ -113,15 +113,15 @@ class HistoryRow extends View {
 		let originText = '';
 		let origin = this.props.item.origin;
 		if (origin === 'Scheduler') {
-			originText = <FormattedMessage {...i18n.scheduler} style={styles.originText}/>;
+			originText = <FormattedMessage {...i18n.scheduler} style={originTextStyle}/>;
 		} else if (origin === 'Incoming signal') {
-			originText = <FormattedMessage {...i18n.incommingSignal} style={styles.originText}/>;
+			originText = <FormattedMessage {...i18n.incommingSignal} style={originTextStyle}/>;
 		} else if (origin === 'Unknown') {
-			originText = <FormattedMessage {...i18n.unknown} style={styles.originText}/>;
+			originText = <FormattedMessage {...i18n.unknown} style={originTextStyle}/>;
 		} else if (origin.substring(0, 5) === 'Group') {
-			originText = <Text style={styles.originText}><FormattedMessage {...i18n.group} style={styles.originText}/> {origin.substring(6, (origin.length))}</Text>;
+			originText = <Text style={originTextStyle}><FormattedMessage {...i18n.group} style={originTextStyle}/> {origin.substring(6, (origin.length))}</Text>;
 		} else if (origin.substring(0, 5) === 'Event') {
-			originText = <Text style={styles.originText}><FormattedMessage {...i18n.event} style={styles.originText}/> {origin.substring(6, (origin.length))}</Text>;
+			originText = <Text style={originTextStyle}><FormattedMessage {...i18n.event} style={originTextStyle}/> {origin.substring(6, (origin.length))}</Text>;
 		} else {
 			originText = origin;
 		}
