@@ -281,7 +281,7 @@ class DevicesTab extends View {
 				</Text>
 				<TouchableButton
 					onPress={this.onPressAddLocation}
-					text="ADD LOCATION"
+					text={i18n.addLocation}
 				/>
 			</View>
 		);

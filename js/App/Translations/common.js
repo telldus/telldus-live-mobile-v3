@@ -163,6 +163,10 @@ const messages = defineMessages({
 		id: 'button.manualActivation',
 		defaultMessage: 'Manual Activation',
 	},
+	addLocation: {
+		id: 'button.addLocation',
+		defaultMessage: 'add location',
+	},
 });
 
 export default messages;

@@ -32,6 +32,7 @@
   "addNewLocation.timeZoneCity.headerTwo": "Select City",
   "addNewLocation.timeZoneContinent.headerOne": "Time Zone",
   "addNewLocation.timeZoneContinent.headerTwo": "Select Continent",
+  "button.addLocation": "add location",
   "button.confirmAndSave": "Confirm & Save",
   "button.delete": "Delete",
   "button.loggingin": "Logging in",
