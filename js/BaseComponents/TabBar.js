@@ -23,6 +23,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
 import FormattedMessage from './FormattedMessage';
@@ -36,6 +37,8 @@ type Props = {
 	tintColor: number | string,
 	label: any,
 	appLayout: Object,
+	intl: intlShape.isRequired,
+	accessibilityLabel?: Object,
 };
 
 class TabBar extends Component<Props, null> {
@@ -46,12 +49,14 @@ class TabBar extends Component<Props, null> {
 	}
 
 	render() {
-		let { icon, tintColor, label, appLayout } = this.props;
+		let { icon, tintColor, label, appLayout, intl, accessibilityLabel } = this.props;
 		let isPortrait = appLayout.width > appLayout.height;
+		accessibilityLabel = intl.formatMessage(accessibilityLabel);
+
 		const width = isPortrait ? appLayout.height : appLayout.width;
 
 		return (
-			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+			<View style={{flexDirection: 'row', alignItems: 'center'}} accessibilityLabel={accessibilityLabel}>
 				<CustomIcon name={icon} size={width * 0.08} color={tintColor}/>
 				<FormattedMessage {...label} style={{color: tintColor, fontSize: width * 0.035, paddingLeft: 5}}/>
 			</View>
@@ -65,4 +70,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(TabBar);
+module.exports = connect(mapStateToProps, null)(injectIntl(TabBar));

@@ -26,12 +26,13 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { StyleSheet, SectionList } from 'react-native';
 import _ from 'lodash';
+import { defineMessages } from 'react-intl';
 
 import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar, Throbber } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
-import { defineMessages } from 'react-intl';
+import i18n from '../../Translations/common';
 
 const messages = defineMessages({
 	historyHeader: {
@@ -72,7 +73,11 @@ class HistoryTab extends View {
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (
-			<TabBar icon="icon_history" tintColor={tintColor} label={messages.historyHeader}/>
+			<TabBar
+				icon="icon_history"
+				tintColor={tintColor}
+				label={messages.historyHeader}
+				accessibilityLabel={i18n.deviceHistoryTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			let {state} = navigation;

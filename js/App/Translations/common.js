@@ -167,6 +167,34 @@ const messages = defineMessages({
 		id: 'button.addLocation',
 		defaultMessage: 'add location',
 	},
+	dashboardTab: {
+		id: 'accessibilityLabel.dashboardTab',
+		defaultMessage: 'dashboard tab',
+	},
+	devicesTab: {
+		id: 'accessibilityLabel.devicesTab',
+		defaultMessage: 'devices tab',
+	},
+	sensorsTab: {
+		id: 'accessibilityLabel.sensorsTab',
+		defaultMessage: 'sensors tab',
+	},
+	schedulerTab: {
+		id: 'accessibilityLabel.schedulerTab',
+		defaultMessage: 'scheduler tab',
+	},
+	deviceOverviewTab: {
+		id: 'accessibilityLabel.deviceOverviewTab',
+		defaultMessage: 'device overview tab',
+	},
+	deviceHistoryTab: {
+		id: 'accessibilityLabel.deviceHistoryTab',
+		defaultMessage: 'device history tab',
+	},
+	deviceSettingsTab: {
+		id: 'accessibilityLabel.deviceSettingsTab',
+		defaultMessage: 'device settings tab',
+	},
 });
 
 export default messages;

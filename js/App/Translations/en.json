@@ -1,4 +1,11 @@
 {
+  "accessibilityLabel.dashboardTab": "dashboard tab",
+  "accessibilityLabel.deviceHistoryTab": "device history tab",
+  "accessibilityLabel.deviceOverviewTab": "device overview tab",
+  "accessibilityLabel.deviceSettingsTab": "device settings tab",
+  "accessibilityLabel.devicesTab": "devices tab",
+  "accessibilityLabel.schedulerTab": "scheduler tab",
+  "accessibilityLabel.sensorsTab": "sensors tab",
   "addLocation.position.dialogueHeader": "Geographic position",
   "addLocation.position.dialoguePositiveText": "Close",
   "addNewLocation.activateManual.bodyContent": "Activate your TellStick by typing the activation code. The activation code is written on the label on the bottom of your TellStick.",

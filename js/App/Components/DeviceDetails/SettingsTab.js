@@ -68,7 +68,11 @@ class SettingsTab extends View {
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (
-			<TabBar icon="icon_settings" tintColor={tintColor} label={i18n.settingsHeader}/>
+			<TabBar
+				icon="icon_settings"
+				tintColor={tintColor}
+				label={i18n.settingsHeader}
+				accessibilityLabel={i18n.deviceSettingsTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			jumpToIndex(scene.index);

@@ -39,6 +39,7 @@ import {
 	DimmerDeviceDetail,
 	NavigationalDeviceDetail,
 } from 'DDSubViews';
+import i18n from '../../Translations/common';
 
 const messages = defineMessages({
 	overviewHeader: {
@@ -75,7 +76,11 @@ class OverviewTab extends View {
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (
-			<TabBar icon="icon_home" tintColor={tintColor} label={messages.overviewHeader}/>
+			<TabBar
+				icon="icon_home"
+				tintColor={tintColor}
+				label={messages.overviewHeader}
+				accessibilityLabel={i18n.deviceOverviewTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			jumpToIndex(scene.index);

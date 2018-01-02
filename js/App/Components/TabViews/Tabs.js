@@ -64,10 +64,22 @@ export default class Tabs extends View {
 
 		let { intl } = this.props.screenProps;
 
-		this.dashboard = intl.formatMessage(i18n.dashboard).toUpperCase();
-		this.devices = intl.formatMessage(i18n.devices).toUpperCase();
-		this.sensors = intl.formatMessage(i18n.sensors).toUpperCase();
-		this.scheduler = intl.formatMessage(i18n.scheduler).toUpperCase();
+		this.dashboard = {
+			label: intl.formatMessage(i18n.dashboard).toUpperCase(),
+			accessibilityLabel: intl.formatMessage(i18n.dashboardTab),
+		};
+		this.devices = {
+			label: intl.formatMessage(i18n.devices).toUpperCase(),
+			accessibilityLabel: intl.formatMessage(i18n.devicesTab),
+		};
+		this.sensors = {
+			label: intl.formatMessage(i18n.sensors).toUpperCase(),
+			accessibilityLabel: intl.formatMessage(i18n.sensorsTab),
+		};
+		this.scheduler = {
+			label: intl.formatMessage(i18n.scheduler).toUpperCase(),
+			accessibilityLabel: intl.formatMessage(i18n.schedulerTab),
+		};
 
 		this.onTabPress = this.onTabPress.bind(this);
 		this.onLayout = this.onLayout.bind(this);
@@ -102,21 +114,25 @@ export default class Tabs extends View {
 		}
 	}
 
+	getLabel(routeName: string): Object {
+		if (routeName === 'Dashboard') {
+			return this.dashboard;
+		}
+		if (routeName === 'Devices') {
+			return this.devices;
+		}
+		if (routeName === 'Sensors') {
+			return this.sensors;
+		}
+		if (routeName === 'Scheduler') {
+			return this.scheduler;
+		}
+		return {};
+	}
+
 	render() {
-		let label = '';
 		let { tab, screenProps, appLayout } = this.props;
-		if (tab.routeName === 'Dashboard') {
-			label = this.dashboard;
-		}
-		if (tab.routeName === 'Devices') {
-			label = this.devices;
-		}
-		if (tab.routeName === 'Sensors') {
-			label = this.sensors;
-		}
-		if (tab.routeName === 'Scheduler') {
-			label = this.scheduler;
-		}
+		let {label, accessibilityLabel} = this.getLabel(tab.routeName);
 
 		let {
 			tabBarStyle,
@@ -126,7 +142,10 @@ export default class Tabs extends View {
 		} = this.getStyles(appLayout);
 
 		return (
-			<TouchableOpacity onPress={this.onTabPress} onLayout={this.onLayout}>
+			<TouchableOpacity
+				accessibilityLabel={accessibilityLabel}
+				onPress={this.onTabPress}
+				onLayout={this.onLayout}>
 				<View style={[styles.tabBar, tabBarStyle]}>
 					<Text style={labelStyle} onLayout={this.onLabelLayout}>
 						{label}
