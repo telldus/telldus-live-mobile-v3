@@ -57,6 +57,7 @@ class SensorsTab extends View {
 
 	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
 	renderRow: (Object) => Object;
+	renderHiddenRow: (Object) => Object;
 	onRefresh: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
