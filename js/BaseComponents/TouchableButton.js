@@ -101,6 +101,7 @@ class TouchableButton extends Component<Props, void> {
 			},
 			buttonLabel: {
 				color: '#ffffff',
+				fontSize: Theme.Core.btnTextSize,
 
 				textAlign: 'center',
 				textAlignVertical: 'center',
