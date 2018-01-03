@@ -56,6 +56,7 @@ type Props = {
 	removeFromDashboard: number => void,
 	addToDashboard: number => void,
 	intl: Object,
+	editMode: boolean,
 };
 
 class SensorRowHidden extends View {
@@ -73,12 +74,15 @@ class SensorRowHidden extends View {
 	render() {
 		const { isInDashboard } = this.props.sensor;
 		let accessibilityLabel = isInDashboard ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
+		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
 
 		return (
-			<View style={Theme.Styles.rowBack}>
+			<View style={Theme.Styles.rowBack} importantForAccessibility={importantForAccessibility}>
 				<TouchableOpacity
 					style={Theme.Styles.rowBackButton}
 					onPress={this.onStarSelected}
+					accessible={this.props.editMode}
 					accessibilityLabel={accessibilityLabel}>
 					<Icon name="star" size={26} style={isInDashboard ? styles.enabled : styles.disabled}/>
 				</TouchableOpacity>
@@ -103,6 +107,12 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
+function mapStateToProps(store: Object): Object {
+	return {
+		editMode: store.tabs.editModeSensorsTab,
+	};
+}
+
 const styles = StyleSheet.create({
 	enabled: {
 		color: 'rgba(226, 105, 0, 255)',
@@ -112,4 +122,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect(null, mapDispatchToProps)(SensorRowHidden);
+export default connect(mapStateToProps, mapDispatchToProps)(SensorRowHidden);

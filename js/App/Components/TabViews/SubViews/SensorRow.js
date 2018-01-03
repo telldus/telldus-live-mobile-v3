@@ -261,6 +261,7 @@ class SensorRow extends Component<Props, void> {
 			<ListItem
 				style={Theme.Styles.rowFront}
 				onLayout={this.onLayout}
+				importantForAccessibility={'yes'}
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}>
 				<View style={styles.container}>

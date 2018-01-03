@@ -136,6 +136,7 @@ class DeviceRow extends View {
 			<ListItem
 				style={Theme.Styles.rowFront}
 				accessible={true}
+				importantForAccessibility={'yes'}
 				accessibilityLabel={accessibilityLabel}>
 				<Container style={styles.container}>
 					{button}
