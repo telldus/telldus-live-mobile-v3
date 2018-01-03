@@ -28,6 +28,7 @@ import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
+import i18n from '../../../Translations/common';
 
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
@@ -44,16 +45,51 @@ type Props = {
 	onSettingsSelected: (Object) => void,
 	device: Object,
 	setScrollEnabled: boolean,
+	intl: Object,
 };
+
+function toSliderValue(dimmerValue: number): number {
+	return Math.round(dimmerValue * 100.0 / 255);
+}
 
 class DeviceRow extends View {
 	props: Props;
 	onSettingsSelected: Object => void;
+	getLabelStatus: (string, number) => string;
 
 	constructor(props: Props) {
 		super(props);
 
+		this.labelDevice = props.intl.formatMessage(i18n.labelDevice);
+		this.labelStatus = props.intl.formatMessage(i18n.status);
+		this.labelOff = props.intl.formatMessage(i18n.off);
+		this.labelOn = props.intl.formatMessage(i18n.on);
+		this.labelDim = props.intl.formatMessage(i18n.dim);
+		this.labelUp = props.intl.formatMessage(i18n.up);
+		this.labelDown = props.intl.formatMessage(i18n.down);
+		this.labelStop = props.intl.formatMessage(i18n.stop);
+
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
+	}
+
+	getLabelStatus(status: string, value: any): string {
+		switch (status) {
+			case 'TURNOFF':
+				return `${this.labelStatus} ${this.labelOff}`;
+			case 'TURNON':
+				return `${this.labelStatus} ${this.labelOn}`;
+			case 'UP':
+				return `${this.labelStatus} ${this.labelUp}`;
+			case 'DOWN':
+				return `${this.labelStatus} ${this.labelDown}`;
+			case 'STOP':
+				return `${this.labelStatus} ${this.labelStop}`;
+			case 'DIM':
+				let dimmerValue = toSliderValue(value);
+				return `${this.labelStatus} ${dimmerValue}% ${this.labelDim}`;
+			default:
+				return '';
+		}
 	}
 
 	render() {
@@ -93,9 +129,14 @@ class DeviceRow extends View {
 				device={device}
 			/>;
 		}
+		let status = this.getLabelStatus(device.isInState, device.value);
+		let accessibilityLabel = `${this.labelDevice} ${device.name}, ${status}`;
 
 		return (
-			<ListItem style={Theme.Styles.rowFront}>
+			<ListItem
+				style={Theme.Styles.rowFront}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
 				<Container style={styles.container}>
 					{button}
 					<View style={styles.name}>

@@ -195,6 +195,10 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.deviceSettingsTab',
 		defaultMessage: 'device settings tab',
 	},
+	labelDevice: {
+		id: 'accessibilityLabel.labelDevice',
+		defaultMessage: 'device',
+	},
 	labelSensor: {
 		id: 'accessibilityLabel.labelSensor',
 		defaultMessage: 'sensor',

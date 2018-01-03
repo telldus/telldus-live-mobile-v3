@@ -8,6 +8,7 @@
   "accessibilityLabel.devices.iconRemovePhraseOne": "remove device",
   "accessibilityLabel.devices.iconRemovePhraseTwo": "from dashboard",
   "accessibilityLabel.devicesTab": "devices tab",
+  "accessibilityLabel.labelDevice": "device",
   "accessibilityLabel.labelSensor": "sensor",
   "accessibilityLabel.menuIcon": "Menu",
   "accessibilityLabel.schedulerTab": "scheduler tab",
