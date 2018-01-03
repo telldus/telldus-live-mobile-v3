@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { defineMessages } from 'react-intl';
 
 import { View, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
@@ -31,10 +32,30 @@ import { addToDashboard, removeFromDashboard } from 'Actions';
 
 import Theme from 'Theme';
 
+const messages = defineMessages({
+	iconAddPhraseOne: {
+		id: 'accessibilityLabel.devices.iconAddPhraseOne',
+		defaultMessage: 'add device',
+	},
+	iconAddPhraseTwo: {
+		id: 'accessibilityLabel.devices.iconAddPhraseTwo',
+		defaultMessage: 'to dashboard',
+	},
+	iconRemovePhraseOne: {
+		id: 'accessibilityLabel.devices.iconRemovePhraseOne',
+		defaultMessage: 'remove device',
+	},
+	iconRemovePhraseTwo: {
+		id: 'accessibilityLabel.devices.iconRemovePhraseTwo',
+		defaultMessage: 'from dashboard',
+	},
+});
+
 type Props = {
 	device: Object,
 	removeFromDashboard: number => void,
 	addToDashboard: number => void,
+	intl: Object,
 };
 
 class DeviceRowHidden extends View {
@@ -44,15 +65,21 @@ class DeviceRowHidden extends View {
 	constructor(props: Props) {
 		super(props);
 		this.onStarSelected = this.onStarSelected.bind(this);
+		let { intl, device } = props;
+		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
+		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
 	}
 
 	render() {
 		const { isInDashboard } = this.props.device;
+		let accessibilityLabel = isInDashboard ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+
 		return (
 			<View style={Theme.Styles.rowBack}>
 				<TouchableOpacity
 					style={Theme.Styles.rowBackButton}
-					onPress={this.onStarSelected}>
+					onPress={this.onStarSelected}
+					accessibilityLabel={accessibilityLabel}>
 					<Icon name="star" size={26} style={isInDashboard ? styles.enabled : styles.disabled}/>
 				</TouchableOpacity>
 			</View>

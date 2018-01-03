@@ -78,6 +78,7 @@ class SensorsTab extends View {
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
+		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 	}
 
@@ -140,14 +141,18 @@ class SensorsTab extends View {
 	}
 
 	renderRow(row) {
+		let { screenProps } = this.props;
+
 		return (
-			<SensorRow {...row}/>
+			<SensorRow {...row} intl={screenProps.intl}/>
 		);
 	}
 
 	renderHiddenRow(row) {
+		let { screenProps } = this.props;
+
 		return (
-			<SensorRowHidden {...row}/>
+			<SensorRowHidden {...row} intl={screenProps.intl}/>
 		);
 	}
 

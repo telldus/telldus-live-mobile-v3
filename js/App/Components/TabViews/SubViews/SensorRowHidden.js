@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { defineMessages } from 'react-intl';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
 
@@ -31,10 +32,30 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from 'Theme';
 
+const messages = defineMessages({
+	iconAddPhraseOne: {
+		id: 'accessibilityLabel.sensors.iconAddPhraseOne',
+		defaultMessage: 'add sensor',
+	},
+	iconAddPhraseTwo: {
+		id: 'accessibilityLabel.sensors.iconAddPhraseTwo',
+		defaultMessage: 'to dashboard',
+	},
+	iconRemovePhraseOne: {
+		id: 'accessibilityLabel.sensors.iconRemovePhraseOne',
+		defaultMessage: 'remove sensor',
+	},
+	iconRemovePhraseTwo: {
+		id: 'accessibilityLabel.sensors.iconRemovePhraseTwo',
+		defaultMessage: 'from dashboard',
+	},
+});
+
 type Props = {
 	sensor: Object,
 	removeFromDashboard: number => void,
 	addToDashboard: number => void,
+	intl: Object,
 };
 
 class SensorRowHidden extends View {
@@ -44,15 +65,21 @@ class SensorRowHidden extends View {
 	constructor(props: Props) {
 		super(props);
 		this.onStarSelected = this.onStarSelected.bind(this);
+		let { intl, sensor } = props;
+		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
+		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
 	}
 
 	render() {
 		const { isInDashboard } = this.props.sensor;
+		let accessibilityLabel = isInDashboard ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+
 		return (
 			<View style={Theme.Styles.rowBack}>
 				<TouchableOpacity
 					style={Theme.Styles.rowBackButton}
-					onPress={this.onStarSelected}>
+					onPress={this.onStarSelected}
+					accessibilityLabel={accessibilityLabel}>
 					<Icon name="star" size={26} style={isInDashboard ? styles.enabled : styles.disabled}/>
 				</TouchableOpacity>
 			</View>
