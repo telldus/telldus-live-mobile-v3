@@ -90,7 +90,7 @@ class LoginForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.85, fontSize: 15 }]}
 						onChangeText={this.onChangeUsername}
 						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 						keyboardType="email-address"
@@ -104,7 +104,7 @@ class LoginForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="lock" style={Theme.Styles.iconLock} size={15} color="#ffffff80"/>
 					<TextInput
-						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.85, fontSize: 15 }]}
 						onChangeText={this.onChangePassword}
 						placeholder={this.props.intl.formatMessage(i18n.password)}
 						secureTextEntry={true}

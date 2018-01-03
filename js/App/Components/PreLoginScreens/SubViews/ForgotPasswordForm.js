@@ -85,7 +85,6 @@ class ForgotPasswordForm extends View {
 				</View>
 				<View style={{ height: 10 }}/>
 				<TouchableButton
-					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? i18n.sendingpassword : i18n.sendpassword}
 					postScript={this.state.isLoading ? '...' : null}

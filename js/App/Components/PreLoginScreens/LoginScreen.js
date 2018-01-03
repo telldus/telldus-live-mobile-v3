@@ -144,10 +144,10 @@ class LoginScreen extends View {
 						<LoginForm appLayout={appLayout}/>
 						<View style={styles.otherLinks}>
 							<TouchableOpacity style={{height: 25}} onPress={this.onForgotPassword}>
-								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb' }}/>
+								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb', fontSize: 13 }}/>
 							</TouchableOpacity>
 							<TouchableOpacity style={{height: 25, paddingLeft: 5 }} onPress={this.onNeedAccount}>
-								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5 }}/>
+								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5, fontSize: 13 }}/>
 							</TouchableOpacity>
 						</View>
 						<View style={{ height: 10 }}/>
