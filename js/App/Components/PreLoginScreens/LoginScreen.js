@@ -140,8 +140,8 @@ class LoginScreen extends View {
 				{this.props.accessToken && !this.props.isTokenValid ?
 					<SessionLocked onPressLogout={this.state.onPressLogout} />
 					:
-					<View>
-						<LoginForm appLayout/>
+					<View style={{alignItems: 'center'}}>
+						<LoginForm appLayout={appLayout}/>
 						<View style={styles.otherLinks}>
 							<TouchableOpacity style={{height: 25}} onPress={this.onForgotPassword}>
 								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb' }}/>

@@ -71,7 +71,7 @@ class ForgotPasswordScreen extends View {
 
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)} formContainerStyle={styles.formContainer}>
-				<ForgotPasswordForm appLayout/>
+				<ForgotPasswordForm appLayout={appLayout}/>
 				<View style={{ height: 10 }}/>
 				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
 					<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />

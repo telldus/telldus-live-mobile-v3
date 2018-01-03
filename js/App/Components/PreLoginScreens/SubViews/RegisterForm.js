@@ -191,7 +191,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
-						style={[Theme.Styles.textField, appLayout.width * 0.7]}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onFirstNameChange}
 						placeholder={this.props.intl.formatMessage(i18n.firstName)}
 						autoCapitalize="none"
@@ -205,7 +205,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
-						style={[Theme.Styles.textField, appLayout.width * 0.7]}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onLastNameChange}
 						placeholder={this.props.intl.formatMessage(i18n.lastName)}
 						autoCapitalize="none"
@@ -219,7 +219,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={[Theme.Styles.textField, appLayout.width * 0.7]}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onEmailChange}
 						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 						keyboardType="email-address"
@@ -234,7 +234,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={[Theme.Styles.textField, appLayout.width * 0.7]}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onConfirmEmailChange}
 						placeholder={this.props.intl.formatMessage(i18n.confirmEmailAddress)}
 						keyboardType="email-address"

@@ -97,7 +97,7 @@ class RegisterScreen extends View {
 
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)} formContainerStyle={styles.formContainer}>
-				<RegisterForm appLayout/>
+				<RegisterForm appLayout={appLayout}/>
 				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
 					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
 				</TouchableOpacity>

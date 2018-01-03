@@ -71,7 +71,7 @@ class ForgotPasswordForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={[Theme.Styles.textField, appLayout.width * 0.7]}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onEmailChange}
 						onBlur={this.onEmailBlur}
 						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
