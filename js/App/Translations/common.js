@@ -195,6 +195,54 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.deviceSettingsTab',
 		defaultMessage: 'device settings tab',
 	},
+	labelSensor: {
+		id: 'accessibilityLabel.labelSensor',
+		defaultMessage: 'sensor',
+	},
+	labelHumidity: {
+		id: 'accessibilityLabel.sensors.labelHumidity',
+		defaultMessage: 'humidity',
+	},
+	labelTemperature: {
+		id: 'accessibilityLabel.sensors.labelTemperature',
+		defaultMessage: 'temperature',
+	},
+	labelRainRate: {
+		id: 'accessibilityLabel.sensors.labelRainRate',
+		defaultMessage: 'rain rate',
+	},
+	labelRainTotal: {
+		id: 'accessibilityLabel.sensors.labelRainTotal',
+		defaultMessage: 'rain total',
+	},
+	labelWindGust: {
+		id: 'accessibilityLabel.sensors.labelWindGust',
+		defaultMessage: 'wind gust',
+	},
+	labelWindAverage: {
+		id: 'accessibilityLabel.sensors.labelWindAverage',
+		defaultMessage: 'wind average',
+	},
+	labelWindDirection: {
+		id: 'accessibilityLabel.sensors.labelWindDirection',
+		defaultMessage: 'wind direction',
+	},
+	labelUVIndex: {
+		id: 'accessibilityLabel.sensors.labelUVIndex',
+		defaultMessage: 'UV index',
+	},
+	labelWatt: {
+		id: 'accessibilityLabel.sensors.labelWatt',
+		defaultMessage: 'power',
+	},
+	labelLuminance: {
+		id: 'accessibilityLabel.sensors.labelLuminance',
+		defaultMessage: 'luminance',
+	},
+	labelTimeAgo: {
+		id: 'accessibilityLabel.sensors.labelTimeAgo',
+		defaultMessage: 'updated',
+	},
 });
 
 export default messages;

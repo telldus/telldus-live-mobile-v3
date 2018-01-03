@@ -74,6 +74,10 @@ const messages = defineMessages({
 	},
 });
 
+const directions = [
+	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
+];
+
 const SensorHumidity = ({ humidity }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Humidity.png')}/>
@@ -104,9 +108,6 @@ const SensorRain = ({ rainRate, rainTotal }) => (
 );
 
 const SensorWind = ({ windAverage, windGust, windDirection }) => {
-	const directions = [
-		'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
-	];
 	const getWindDirection = value => directions[Math.floor(value / 22.5)];
 
 	return (
@@ -152,16 +153,42 @@ const SensorLuminance = ({ luminance }) => (
 
 type Props = {
 	sensor: Object,
+	intl: Object,
 };
 
 class SensorRow extends Component<Props, void> {
 	props: Props;
 	onLayout: (Object) => void;
+	labelSensor: string;
+	labelHumidity: string;
+	labelTemperature: string;
+	labelRainRate: string;
+	labelRainTotal: string;
+	labelWindGust: string;
+	labelWindAverage: string;
+	labelWindDirection: string;
+	labelUVIndex: string;
+	labelWatt: string;
+	labelLuminance: string;
+	labelTimeAgo: string;
 	width: number;
 
 	constructor(props: Props) {
 		super(props);
 		this.width = 0;
+
+		this.labelSensor = props.intl.formatMessage(i18n.labelSensor);
+		this.labelHumidity = props.intl.formatMessage(i18n.labelHumidity);
+		this.labelTemperature = props.intl.formatMessage(i18n.labelTemperature);
+		this.labelRainRate = props.intl.formatMessage(i18n.labelRainRate);
+		this.labelRainTotal = props.intl.formatMessage(i18n.labelRainTotal);
+		this.labelWindGust = props.intl.formatMessage(i18n.labelWindGust);
+		this.labelWindAverage = props.intl.formatMessage(i18n.labelWindAverage);
+		this.labelWindDirection = props.intl.formatMessage(i18n.labelWindDirection);
+		this.labelUVIndex = props.intl.formatMessage(i18n.labelUVIndex);
+		this.labelWatt = props.intl.formatMessage(i18n.labelWatt);
+		this.labelLuminance = props.intl.formatMessage(i18n.labelLuminance);
+		this.labelTimeAgo = props.intl.formatMessage(i18n.labelTimeAgo);
 
 		this.onLayout = this.onLayout.bind(this);
 	}
@@ -183,21 +210,32 @@ class SensorRow extends Component<Props, void> {
 			uv,
 			watt,
 			luminance,
+			name,
 		} = sensor;
 
+		let [ lastUpdatedValue, lastUpdatedComponent ] = this.formatLastUpdated(minutesAgo, sensor.lastUpdated);
+		let accessibilityLabel = `${this.labelSensor}, ${name}`;
+
 		if (humidity) {
+			accessibilityLabel = `${accessibilityLabel},  ${this.labelHumidity} ${humidity}%`;
 			sensors.push(<SensorHumidity {...{ humidity }} key={`${id}humidity`}/>);
 		}
 		if (temperature) {
+			accessibilityLabel = `${accessibilityLabel},  ${this.labelTemperature} ${temperature} ${String.fromCharCode(176)}C`;
 			sensors.push(<SensorTemperature {...{ temperature }} key={`${id}temperature`}/>);
 		}
 		if (rainRate || rainTotal) {
+			accessibilityLabel = `${accessibilityLabel},  ${this.labelRainRate} ${rainRate} mm/h,  ${this.labelRainTotal} ${rainTotal} mm`;
 			sensors.push(<SensorRain {...{
 				rainRate,
 				rainTotal,
 			}} key={`${id}rain`}/>);
 		}
 		if (windGust || windAverage || windDirection) {
+			const getWindDirection = value => directions[Math.floor(value / 22.5)];
+			const direction = [...getWindDirection(windDirection)].toString();
+			accessibilityLabel = `${accessibilityLabel},  ${this.labelWindGust} ${windGust}m/s,  ${this.labelWindAverage} ${windAverage}m/s*
+			,  ${this.labelWindDirection} ${direction}`;
 			sensors.push(<SensorWind {...{
 				windGust,
 				windAverage,
@@ -205,19 +243,26 @@ class SensorRow extends Component<Props, void> {
 			}} key={`${id}wind`}/>);
 		}
 		if (uv) {
+			accessibilityLabel = `${accessibilityLabel},  ${this.labelUVIndex} ${uv}`;
 			sensors.push(<SensorUV {...{ uv }} key={`${id}uv`}/>);
 		}
 		if (watt) {
+			accessibilityLabel = `${accessibilityLabel},  ${this.labelWatt} ${watt}W`;
 			sensors.push(<SensorWatt {...{ watt }} key={`${id}watt`}/>);
 		}
 		if (luminance) {
+			accessibilityLabel = `${accessibilityLabel},  ${this.labelLuminance} ${luminance}lx`;
 			sensors.push(<SensorLuminance {...{ luminance }} key={`${id}luminance`}/>);
 		}
+
+		accessibilityLabel = `${accessibilityLabel}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
 		return (
 			<ListItem
 				style={Theme.Styles.rowFront}
-				onLayout={this.onLayout}>
+				onLayout={this.onLayout}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
 				<View style={styles.container}>
 					<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
 					      ellipsizeMode="middle"
@@ -230,7 +275,7 @@ class SensorRow extends Component<Props, void> {
 							opacity: minutesAgo < 1440 ? 1 : 0.5,
 						},
 					]}>
-						{this.formatLastUpdated(minutesAgo, sensor.lastUpdated)}
+						{lastUpdatedComponent}
 					</Text>
 				</View>
 				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ?
@@ -249,35 +294,63 @@ class SensorRow extends Component<Props, void> {
 		this.width = event.nativeEvent.layout.width;
 	}
 
-	formatLastUpdated(minutes: number, lastUpdated:number): Object {
+	formatLastUpdated(minutes: number, lastUpdated:number): Array<any> {
+		let { intl } = this.props;
 		if (minutes <= 0) {
-			return <FormattedMessage {...messages.justNow} />;
+			return [
+				intl.formatMessage(messages.justNow),
+				<FormattedMessage {...messages.justNow} />,
+			];
 		}
 		if (minutes === 1) {
-			return ( <Text>1 <FormattedMessage {...messages.minuteAgo} /></Text>);
+			return [
+				`1 ${intl.formatMessage(messages.minuteAgo)}`,
+				<Text>1 <FormattedMessage {...messages.minuteAgo} /></Text>,
+			];
 		}
 		if (minutes < 60) {
-			return ( <Text>{minutes} <FormattedMessage {...messages.minutesAgo} /></Text>);
+			return [
+				`${minutes} ${intl.formatMessage(messages.minutesAgo)}`,
+				<Text>{minutes} <FormattedMessage {...messages.minutesAgo} /></Text>,
+			];
 		}
 		const hours = Math.round(minutes / 60);
 		if (hours === 1) {
-			return ( <Text>1 <FormattedMessage {...messages.hourAgo} /></Text>);
+			return [
+				`1 ${intl.formatMessage(messages.hourAgo)}`,
+				<Text>1 <FormattedMessage {...messages.hourAgo} /></Text>,
+			];
 		}
 		if (hours < 24) {
-			return ( <Text>{hours} <FormattedMessage {...messages.hoursAgo} /></Text>);
+			return [
+				`${hours} ${intl.formatMessage(messages.hoursAgo)}`,
+				<Text>{hours} <FormattedMessage {...messages.hoursAgo} /></Text>,
+			];
 		}
 		const days = Math.round(minutes / 60 / 24);
 		if (days === 1) {
-			return ( <Text>1 <FormattedMessage {...messages.dayAgo} /></Text>);
+			return [
+				`1 ${intl.formatMessage(messages.dayAgo)}`,
+				<Text>1 <FormattedMessage {...messages.dayAgo} /></Text>,
+			];
 		}
 		if (days <= 7) {
-			return ( <Text>{days} <FormattedMessage {...messages.daysAgo} /></Text>);
+			return [
+				`${days} ${intl.formatMessage(messages.daysAgo)}`,
+				<Text>{days} <FormattedMessage {...messages.daysAgo} /></Text>,
+			];
 		}
 		try {
-			return moment.unix(lastUpdated).format('MM-DD-YYYY');
+			return [
+				moment.unix(lastUpdated).format('MM-DD-YYYY'),
+				moment.unix(lastUpdated).format('MM-DD-YYYY'),
+			];
 		} catch (exception) {
 			reportException(exception);
-			return <FormattedMessage {...i18n.unknown} />;
+			return [
+				`${intl.formatMessage(messages.unknown)}`,
+				<FormattedMessage {...i18n.unknown} />,
+			];
 		}
 	}
 }
