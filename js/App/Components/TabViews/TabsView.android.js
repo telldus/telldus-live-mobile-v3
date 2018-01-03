@@ -25,6 +25,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { defineMessages } from 'react-intl';
 import { intlShape, injectIntl } from 'react-intl';
 import Orientation from 'react-native-orientation';
 const orientation = Orientation.getInitialOrientation();
@@ -41,6 +42,29 @@ import { syncWithServer, switchTab, toggleEditMode, addNewGateway } from 'Action
 import TabViews from 'TabViews';
 import { TabNavigator } from 'react-navigation';
 import Drawer from 'Drawer';
+
+const messages = defineMessages({
+	menuIcon: {
+		id: 'accessibilityLabel.menuIcon',
+		defaultMessage: 'Menu',
+	},
+	starIconShowDevices: {
+		id: 'accessibilityLabel.starIconShowDevices',
+		defaultMessage: 'Show, add to dashboard marker, for all devices',
+	},
+	starIconHideDevices: {
+		id: 'accessibilityLabel.starIconHideDevices',
+		defaultMessage: 'Hide, add to dashboard marker, for all devices',
+	},
+	starIconShowSensors: {
+		id: 'accessibilityLabel.starIconShowSensors',
+		defaultMessage: 'Show, add to dashboard marker, for all sensors',
+	},
+	starIconHideSensors: {
+		id: 'accessibilityLabel.starIconHideSensors',
+		defaultMessage: 'Hide, add to dashboard marker, for all sensors',
+	},
+});
 
 const RouteConfigs = {
 	Dashboard: {
@@ -112,6 +136,12 @@ class TabsView extends View {
 	constructor(props: Props) {
 		super(props);
 
+		this.menuIcon = props.intl.formatMessage(messages.menuIcon);
+		this.starIconShowDevices = props.intl.formatMessage(messages.starIconShowDevices);
+		this.starIconHideDevices = props.intl.formatMessage(messages.starIconHideDevices);
+		this.starIconShowSensors = props.intl.formatMessage(messages.starIconShowSensors);
+		this.starIconHideSensors = props.intl.formatMessage(messages.starIconHideSensors);
+
 		this.starButton = {
 			icon: {
 				name: 'star',
@@ -121,6 +151,7 @@ class TabsView extends View {
 				iconStyle: null,
 			},
 			onPress: this.toggleEditMode,
+			accessibilityLabel: '',
 		};
 
 		this.menuButton = {
@@ -132,6 +163,7 @@ class TabsView extends View {
 				iconStyle: null,
 			},
 			onPress: this.openDrawer,
+			accessibilityLabel: '',
 		};
 
 		this.state = {
@@ -244,8 +276,17 @@ class TabsView extends View {
 	}
 
 	makeRightButton = (routeName: string, styles: Object): any => {
+		let { editModeDevicesTab, editModeSensorsTab } = this.props;
+		if (routeName === 'Devices') {
+			this.starButton.accessibilityLabel = editModeDevicesTab ? this.starIconHideDevices : this.starIconShowDevices;
+		}
+		if (routeName === 'Sensors') {
+			this.starButton.accessibilityLabel = editModeSensorsTab ? this.starIconHideSensors : this.starIconShowSensors;
+		}
+
 		this.starButton.icon.style = styles.starButtonStyle;
 		this.starButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
+
 		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
 
@@ -253,6 +294,8 @@ class TabsView extends View {
 		this.menuButton.icon.style = styles.menuButtonStyle;
 		this.menuButton.icon.iconStyle = styles.menuIconStyle;
 		this.menuButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
+		this.menuButton.accessibilityLabel = this.menuIcon;
+
 		return this.menuButton;
 	};
 
@@ -369,6 +412,8 @@ function mapStateToProps(store, ownprops) {
 		gateways: store.gateways,
 		isAppActive: store.App.active,
 		appLayout: store.App.layout,
+		editModeDevicesTab: store.tabs.editModeDevicesTab,
+		editModeSensorsTab: store.tabs.editModeSensorsTab,
 	};
 }
 

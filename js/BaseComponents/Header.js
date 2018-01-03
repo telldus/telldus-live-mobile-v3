@@ -320,10 +320,12 @@ class HeaderComponent extends Base {
 	};
 
 	renderRightButton = (rightButton: Object) => {
-		let style = rightButton.icon ? rightButton.icon.style : null;
+		let { accessibilityLabel, icon } = rightButton;
+		let style = icon ? icon.style : null;
 		return (
 			<TouchableOpacity
 				onPress={rightButton.onPress}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.getInitialStyle().headerButton,
 					{
@@ -340,10 +342,12 @@ class HeaderComponent extends Base {
 	};
 
 	renderLeftButton = (leftButton: Object) => {
-		let style = leftButton.icon ? leftButton.icon.style : null;
+		let { accessibilityLabel, icon } = leftButton;
+		let style = icon ? icon.style : null;
 		return (
 			<TouchableOpacity
 				onPress={leftButton.onPress}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.getInitialStyle().headerButton,
 					{
