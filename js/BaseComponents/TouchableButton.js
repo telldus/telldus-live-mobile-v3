@@ -25,6 +25,7 @@ import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
+import i18n from '../App/Translations/common';
 import Text from './Text';
 import Theme from 'Theme';
 
@@ -37,16 +38,22 @@ type Props = {
 	postScript?: any,
 	preScript?: any,
 	appLayout: Object,
+	accessibilityLabel?: string,
 };
 
 class TouchableButton extends Component<Props, void> {
 	onPress: () => void;
+	defaultDescription: string;
+	labelButton: string;
 
 	props: Props;
 
 	constructor(props: Props) {
 		super(props);
 		this.onPress = this.onPress.bind(this);
+
+		this.defaultDescription = `${props.intl.formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelButton = `${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	onPress = () => {
@@ -62,9 +69,10 @@ class TouchableButton extends Component<Props, void> {
 
 
 	render() {
-		let { style, labelStyle, intl, text, preScript, postScript } = this.props;
+		let { style, labelStyle, intl, text, preScript, postScript, accessibilityLabel } = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		let shadow = Theme.Core.shadow;
+		accessibilityLabel = accessibilityLabel ? accessibilityLabel : `${label} ${this.labelButton}, ${this.defaultDescription}`;
 
 		const {
 		} = this.props;
@@ -75,7 +83,10 @@ class TouchableButton extends Component<Props, void> {
 		} = this.getStyle();
 
 		return (
-			<TouchableOpacity style={[shadow, buttonContainer, style]} onPress={this.onPress}>
+			<TouchableOpacity
+				accessibilityLabel={accessibilityLabel}
+				style={[shadow, buttonContainer, style]}
+				onPress={this.onPress}>
 				<Text style={[buttonLabel, labelStyle]}>
 					{preScript}{label.toUpperCase()}{postScript}
 				</Text>

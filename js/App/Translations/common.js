@@ -267,6 +267,10 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.devices.labelAction',
 		defaultMessage: 'action',
 	},
+	defaultDescriptionButton: {
+		id: 'accessibilityLabel.defaultDescriptionButton',
+		defaultMessage: 'Double tap to activate',
+	},
 });
 
 export default messages;
