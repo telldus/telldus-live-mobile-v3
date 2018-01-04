@@ -35,6 +35,7 @@ type Props = {
 	tileWidth: number,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
+	intl: Object,
 };
 
 class ToggleDashboardTile extends View {
@@ -45,12 +46,12 @@ class ToggleDashboardTile extends View {
 	}
 
 	render() {
-		const { item, tileWidth } = this.props;
+		const { item, tileWidth, intl } = this.props;
 		const { id, name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
-		const onButton = <OnButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} />;
-		const offButton = <OffButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} />;
+		const onButton = <OnButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} intl={intl}/>;
+		const offButton = <OffButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} intl={intl}/>;
 
 		let style = { ...this.props.style };
 		style.width = tileWidth;

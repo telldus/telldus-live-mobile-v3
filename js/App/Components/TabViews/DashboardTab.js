@@ -115,6 +115,7 @@ class DashboardTab extends View {
 	stopSensorTimer: () => void;
 	changeDisplayType: () => void;
 	onRefresh: () => void;
+	_renderRow: (number) => Object;
 	orientationDidChange: (string) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
@@ -139,6 +140,7 @@ class DashboardTab extends View {
 		this.tab = 'dashboardTab';
 
 		this._onLayout = this._onLayout.bind(this);
+		this._renderRow = this._renderRow.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
 		this.startSensorTimer = this.startSensorTimer.bind(this);
 		this.stopSensorTimer = this.stopSensorTimer.bind(this);
@@ -273,6 +275,7 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(tileWidth) {
+		let { screenProps } = this.props;
 		tileWidth -= tileMargin;
 		return (row, secId, rowId, rowMap) => {
 			if (row.objectType !== 'sensor' && row.objectType !== 'device') {
@@ -299,6 +302,7 @@ class DashboardTab extends View {
 					tileWidth={tileWidth}
 					item={row.childObject}
 					onPress={this.changeDisplayType}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -309,6 +313,7 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -318,6 +323,7 @@ class DashboardTab extends View {
 					tileWidth={tileWidth}
 					style={tileStyle}
 					setScrollEnabled={this.setScrollEnabled}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -326,6 +332,7 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -334,6 +341,7 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -341,6 +349,7 @@ class DashboardTab extends View {
 				style={tileStyle}
 				item={row.childObject}
 				tileWidth={tileWidth}
+				intl={screenProps.intl}
 			/>;
 		};
 	}

@@ -27,13 +27,14 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
-
+import i18n from '../../../Translations/common';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 
-const UpButton = ({ isEnabled, onPress, methodRequested }) => (
+const UpButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
-		onPress={onPress}>
+		onPress={onPress}
+		accessibilityLabel={accessibilityLabel}>
 		<Icon name="caret-up"
 		      size={42}
 		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
@@ -47,10 +48,11 @@ const UpButton = ({ isEnabled, onPress, methodRequested }) => (
 	</TouchableOpacity>
 );
 
-const DownButton = ({ isEnabled, onPress, methodRequested }) => (
+const DownButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
-		onPress={onPress}>
+		onPress={onPress}
+		accessibilityLabel={accessibilityLabel}>
 		<Icon name="caret-down"
 		      size={42}
 		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
@@ -64,10 +66,11 @@ const DownButton = ({ isEnabled, onPress, methodRequested }) => (
 	</TouchableOpacity>
 );
 
-const StopButton = ({ isEnabled, onPress, methodRequested }) => (
+const StopButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
-		onPress={onPress}>
+		onPress={onPress}
+		accessibilityLabel={accessibilityLabel}>
 		<Icon name="stop"
 		      size={30}
 		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
@@ -93,6 +96,7 @@ type Props = {
 	commandStop: number,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (id: number, command: number) => void,
+	intl: Object,
 };
 
 class NavigationalDashboardTile extends View {
@@ -108,6 +112,10 @@ class NavigationalDashboardTile extends View {
 		this.onUp = this.onUp.bind(this);
 		this.onDown = this.onDown.bind(this);
 		this.onStop = this.onStop.bind(this);
+
+		this.labelUpButton = `${props.intl.formatMessage(i18n.up)} ${props.intl.formatMessage(i18n.button)}`;
+		this.labelDownButton = `${props.intl.formatMessage(i18n.down)} ${props.intl.formatMessage(i18n.button)}`;
+		this.labelStopButton = `${props.intl.formatMessage(i18n.stop)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	onUp() {
@@ -127,9 +135,9 @@ class NavigationalDashboardTile extends View {
 		const { item, tileWidth } = this.props;
 		const { name, supportedMethods } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} /> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} /> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} /> : null;
+		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} accessibilityLabel={this.labelUpButton}/> : null;
+		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} accessibilityLabel={this.labelDownButton}/> : null;
+		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} accessibilityLabel={this.labelStopButton}/> : null;
 
 		return (
 			<DashboardShadowTile

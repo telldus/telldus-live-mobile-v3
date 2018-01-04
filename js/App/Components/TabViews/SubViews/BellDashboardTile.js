@@ -29,6 +29,7 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
@@ -37,6 +38,7 @@ type Props = {
 	tileWidth: number,
 	style: Object,
 	command: number,
+	intl: Object,
 };
 
 class BellDashboardTile extends View {
@@ -48,6 +50,7 @@ class BellDashboardTile extends View {
 		super(props);
 
 		this.onBell = this.onBell.bind(this);
+		this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	onBell() {
@@ -58,6 +61,7 @@ class BellDashboardTile extends View {
 	render() {
 		const { item, tileWidth } = this.props;
 		let {methodRequested} = this.props.item;
+		let accessibilityLabel = this.labelBellButton;
 
 		return (
 			<DashboardShadowTile
@@ -74,7 +78,8 @@ class BellDashboardTile extends View {
 				}>
 				<TouchableOpacity
 					onPress={this.onBell}
-					style={styles.container}>
+					style={styles.container}
+					accessibilityLabel={accessibilityLabel}>
 					<View style={styles.body}>
 					  <Icon name="bell" size={44} color="orange" />
 					</View>

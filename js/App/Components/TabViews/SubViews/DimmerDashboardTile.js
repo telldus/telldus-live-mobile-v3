@@ -69,6 +69,7 @@ type Props = {
 	requestDeviceAction: (id: number, command: number) => void,
 	setScrollEnabled: boolean,
 	style: Object,
+	intl: Object,
 };
 
 type State = {
@@ -188,12 +189,12 @@ class DimmerDashboardTile extends View {
 	}
 
 	render() {
-		const { item, tileWidth } = this.props;
+		const { item, tileWidth, intl } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 
-		const onButton = <DimmerOnButton ref={'onButton'} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
-		const offButton = <DimmerOffButton ref={'offButton'} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
+		const onButton = <DimmerOnButton ref={'onButton'} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} intl={intl}/>;
+		const offButton = <DimmerOffButton ref={'offButton'} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} intl={intl}/>;
 		const slider = DIM ?
 			<VerticalSlider
 				style={[styles.slider, { width: this.state.bodyWidth, height: this.state.bodyHeight, left: 0, bottom: 0 }]}
@@ -210,6 +211,7 @@ class DimmerDashboardTile extends View {
 				onRightEnd={this.onTurnOnButtonEnd}
 				onLeft={this.onTurnOff}
 				onRight={this.onTurnOn}
+				intl={intl}
 			/> :
 			null;
 		return (
