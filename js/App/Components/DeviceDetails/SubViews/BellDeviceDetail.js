@@ -32,6 +32,7 @@ const deviceHeight = Dimensions.get('window').height;
 type Props = {
 	device: Object,
 	onBell: number => void,
+	intl: Object,
 };
 
 class BellDeviceDetailModal extends View {
@@ -45,12 +46,12 @@ class BellDeviceDetailModal extends View {
 		this.props.onBell(this.props.device.id);
 	}
 	render() {
-		const { device } = this.props;
+		const { device, intl } = this.props;
 		const { BELL } = device.supportedMethods;
 		let bellButton = null;
 
 		if (BELL) {
-			bellButton = <BellButton device={device} style={styles.bell} />;
+			bellButton = <BellButton device={device} style={styles.bell} intl={intl}/>;
 		}
 
 		return (

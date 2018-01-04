@@ -101,6 +101,10 @@ const messages = defineMessages({
 		id: 'device.up',
 		defaultMessage: 'Up',
 	},
+	button: {
+		id: 'button.button',
+		defaultMessage: 'button',
+	},
 	login: {
 		id: 'button.login',
 		defaultMessage: 'LOGIN',

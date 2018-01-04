@@ -105,26 +105,26 @@ class OverviewTab extends View {
 	}
 
 	render() {
-		let deviceId = this.props.device.id;
+		let { device, screenProps, gateway } = this.props;
+		let deviceId = device.id;
 		let deviceDetail = null;
-		let device = this.props.device;
-		const locationImageUrl = getLocationImageUrl(this.props.gateway.type);
+		const locationImageUrl = getLocationImageUrl(gateway.type);
 		const locationData = {
 			title: this.boxTitle,
 			image: locationImageUrl,
-			H1: this.props.gateway.name,
-			H2: this.props.gateway.type,
+			H1: gateway.name,
+			H2: gateway.type,
 		};
 		if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
 			const deviceType = this.getType(deviceId);
 			if (deviceType === 'TOGGLE') {
-				deviceDetail = <ToggleDeviceDetail device={device} />;
+				deviceDetail = <ToggleDeviceDetail device={device} intl={screenProps.intl}/>;
 			} else if (deviceType === 'DIMMER') {
-				deviceDetail = <DimmerDeviceDetail device={device} />;
+				deviceDetail = <DimmerDeviceDetail device={device} intl={screenProps.intl}/>;
 			} else if (deviceType === 'BELL') {
-				deviceDetail = <BellDeviceDetail device={device} />;
+				deviceDetail = <BellDeviceDetail device={device} intl={screenProps.intl}/>;
 			} else if (deviceType === 'NAVIGATIONAL') {
-				deviceDetail = <NavigationalDeviceDetail device={device} />;
+				deviceDetail = <NavigationalDeviceDetail device={device} intl={screenProps.intl}/>;
 			} else {
 				deviceDetail = <View style={{ height: 0 }} />;
 			}

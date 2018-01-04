@@ -33,6 +33,7 @@ type Props = {
 	enabled: Boolean,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
+	intl: Object,
 };
 
 class ToggleButton extends View {
@@ -43,11 +44,12 @@ class ToggleButton extends View {
 	}
 
 	render() {
-		const { TURNON, TURNOFF } = this.props.device.supportedMethods;
-		const { id, isInState, methodRequested } = this.props.device;
+		const { intl, device } = this.props;
+		const { TURNON, TURNOFF } = device.supportedMethods;
+		const { id, isInState, methodRequested } = device;
 
-		const onButton = <OnButton id={id} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} methodRequested={methodRequested} />;
-		const offButton = <OffButton id={id} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} />;
+		const onButton = <OnButton id={id} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} methodRequested={methodRequested} intl={intl}/>;
+		const offButton = <OffButton id={id} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} intl={intl}/>;
 
 		return (
 			<RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>

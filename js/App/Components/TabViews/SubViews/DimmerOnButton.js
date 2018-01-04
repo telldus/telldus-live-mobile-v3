@@ -36,13 +36,20 @@ class DimmerOnButton extends View {
 		};
 		this.fadeIn = this.fadeIn.bind(this);
 		this.fadeOut = this.fadeOut.bind(this);
+
+		this.labelOnButton = `${props.intl.formatMessage(i18n.on)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	render() {
 		let { isInState, enabled, fontSize, style, methodRequested } = this.props;
+		let accessibilityLabel = this.labelOnButton;
 
 		return (
-			<View style={[style, isInState !== 'TURNOFF' && enabled ? styles.enabled : styles.disabled]}>
+			<View
+				style={[style, isInState !== 'TURNOFF' && enabled ? styles.enabled : styles.disabled]}
+				accessibilityLabel={accessibilityLabel}
+				accessible={true}
+				importantForAccessibility={'yes'}>
 				<AnimatedFormattedMessage
 					{...i18n.on}
 					style = {[(isInState !== 'TURNOFF' || methodRequested === 'TURNON') && enabled ? styles.textEnabled : styles.textDisabled, { opacity: this.state.fadeAnim, fontSize: fontSize ? fontSize : 12 }]}

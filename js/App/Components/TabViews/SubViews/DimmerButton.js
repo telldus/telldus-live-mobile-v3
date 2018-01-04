@@ -65,6 +65,7 @@ type Props = {
 	setScrollEnabled: boolean,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (number, number) => void,
+	intl: Object,
 };
 
 type State = {
@@ -182,7 +183,7 @@ class DimmerButton extends View {
 	}
 
 	render() {
-		const { device } = this.props;
+		const { device, intl } = this.props;
 		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
 		const onButton = (
 			<DimmerOnButton
@@ -191,6 +192,7 @@ class DimmerButton extends View {
 				isInState={device.isInState}
 				enabled={!!TURNON}
 				methodRequested={device.methodRequested}
+				intl={intl}
 			/>
 		);
 		const offButton = (
@@ -200,6 +202,7 @@ class DimmerButton extends View {
 				isInState={device.isInState}
 				enabled={!!TURNOFF}
 				methodRequested={device.methodRequested}
+				intl={intl}
 			/>
 		);
 		const slider = DIM ? (
@@ -229,6 +232,7 @@ class DimmerButton extends View {
 				onRightEnd={this.onTurnOnButtonEnd}
 				onLeft={this.onTurnOff}
 				onRight={this.onTurnOn}
+				intl={intl}
 			/>
 		) : null;
 

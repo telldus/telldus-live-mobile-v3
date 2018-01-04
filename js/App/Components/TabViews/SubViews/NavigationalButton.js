@@ -28,13 +28,14 @@ import { Icon, View, RoundedCornerShadowView } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
-
+import i18n from '../../../Translations/common';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 
-const UpButton = ({ supportedMethod, onPress, methodRequested }) => (
+const UpButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabel }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
-		onPress={onPress}>
+		onPress={onPress}
+		accessibilityLabel={accessibilityLabel}>
 		<Icon name="caret-up" size={30}
 		      style={{
 			      color: supportedMethod ? '#1a355b' : '#eeeeee',
@@ -49,10 +50,11 @@ const UpButton = ({ supportedMethod, onPress, methodRequested }) => (
 	</TouchableOpacity>
 );
 
-const DownButton = ({ supportedMethod, onPress, methodRequested }) => (
+const DownButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabel }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
-		onPress={onPress}>
+		onPress={onPress}
+		accessibilityLabel={accessibilityLabel}>
 		<Icon name="caret-down" size={30}
 			style={supportedMethod ? styles.enabled : styles.disabled}
 		/>
@@ -65,10 +67,11 @@ const DownButton = ({ supportedMethod, onPress, methodRequested }) => (
 	</TouchableOpacity>
 );
 
-const StopButton = ({ supportedMethod, onPress, methodRequested }) => (
+const StopButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabel }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
-		onPress={onPress}>
+		onPress={onPress}
+		accessibilityLabel={accessibilityLabel}>
 		<Icon name="stop" size={20}
 			style={supportedMethod ? styles.enabled : styles.disabled}
 		/>
@@ -89,6 +92,7 @@ type Props = {
 	commandStop: number,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (id: number, command: number) => void,
+	intl: Object,
 };
 
 class NavigationalButton extends View {
@@ -104,6 +108,10 @@ class NavigationalButton extends View {
 		this.onUp = this.onUp.bind(this);
 		this.onDown = this.onDown.bind(this);
 		this.onStop = this.onStop.bind(this);
+
+		this.labelUpButton = `${props.intl.formatMessage(i18n.up)} ${props.intl.formatMessage(i18n.button)}`;
+		this.labelDownButton = `${props.intl.formatMessage(i18n.down)} ${props.intl.formatMessage(i18n.button)}`;
+		this.labelStopButton = `${props.intl.formatMessage(i18n.stop)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	onUp() {
@@ -126,9 +134,9 @@ class NavigationalButton extends View {
 
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
-				<UpButton supportedMethod={UP} methodRequested={this.props.device.methodRequested} onPress={UP ? this.onUp : noop} />
-				<DownButton supportedMethod={DOWN} methodRequested={this.props.device.methodRequested} onPress={DOWN ? this.onDown : noop} />
-				<StopButton supportedMethod={STOP} methodRequested={this.props.device.methodRequested} onPress={STOP ? this.onStop : noop} />
+				<UpButton supportedMethod={UP} methodRequested={this.props.device.methodRequested} onPress={UP ? this.onUp : noop} accessibilityLabel={this.labelUpButton} />
+				<DownButton supportedMethod={DOWN} methodRequested={this.props.device.methodRequested} onPress={DOWN ? this.onDown : noop} accessibilityLabel={this.labelDownButton}/>
+				<StopButton supportedMethod={STOP} methodRequested={this.props.device.methodRequested} onPress={STOP ? this.onStop : noop} accessibilityLabel={this.labelStopButton}/>
 			</RoundedCornerShadowView>
 		);
 	}

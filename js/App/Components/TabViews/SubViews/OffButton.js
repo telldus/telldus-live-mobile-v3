@@ -32,6 +32,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	requestDeviceAction: (id: number, command: number, value?: number) => void,
 	deviceSetState: (id: number, command: number) => void,
+	intl: Object,
 };
 
 class OffButton extends View {
@@ -41,6 +42,8 @@ class OffButton extends View {
 		super(props);
 		this.onPress = this.onPress.bind(this);
 		this.animationInterval = null;
+
+		this.labelOffButton = `${props.intl.formatMessage(i18n.off)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	onPress() {
@@ -50,9 +53,15 @@ class OffButton extends View {
 
 	render() {
 		let { isInState, enabled, fontSize, methodRequested } = this.props;
+		let accessibilityLabel = this.labelOffButton;
+
 		return (
 			<View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>
-				<TouchableOpacity disabled={!enabled} onPress={this.onPress} style={styles.button} >
+				<TouchableOpacity
+					disabled={!enabled}
+					onPress={this.onPress}
+					style={styles.button}
+					accessibilityLabel={accessibilityLabel}>
 					<FormattedMessage {...i18n.off} style = {[styles.buttonText, isInState === 'TURNOFF' || methodRequested === 'TURNOFF' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}/>
 				</TouchableOpacity>
 				{

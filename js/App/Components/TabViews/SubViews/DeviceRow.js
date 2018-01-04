@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import { Container, ListItem, Text, View, Icon } from 'BaseComponents';
 import ToggleButton from './ToggleButton';
@@ -68,6 +69,9 @@ class DeviceRow extends View {
 		this.labelUp = props.intl.formatMessage(i18n.up);
 		this.labelDown = props.intl.formatMessage(i18n.down);
 		this.labelStop = props.intl.formatMessage(i18n.stop);
+		this.labelButton = props.intl.formatMessage(i18n.button);
+		this.labelSettings = props.intl.formatMessage(i18n.settingsHeader);
+		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
 
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 	}
@@ -94,7 +98,7 @@ class DeviceRow extends View {
 
 	render() {
 		let button = null;
-		const { device } = this.props;
+		const { device, intl } = this.props;
 		const {
 			TURNON,
 			TURNOFF,
@@ -109,28 +113,34 @@ class DeviceRow extends View {
 			button = <BellButton
 				device={device}
 				style={styles.bell}
+				intl={intl}
 			/>;
 		} else if (UP || DOWN || STOP) {
 			button = <NavigationalButton
 				device={device}
 				style={styles.navigation}
+				intl={intl}
 			/>;
 		} else if (DIM) {
 			button = <DimmerButton
 				device={device}
 				setScrollEnabled={this.props.setScrollEnabled}
+				intl={intl}
 			/>;
 		} else if (TURNON || TURNOFF) {
 			button = <ToggleButton
 				device={device}
+				intl={intl}
 			/>;
 		} else {
 			button = <ToggleButton
 				device={device}
+				intl={intl}
 			/>;
 		}
 		let status = this.getLabelStatus(device.isInState, device.value);
 		let accessibilityLabel = `${this.labelDevice} ${device.name}, ${status}`;
+		let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 
 		return (
 			<ListItem
@@ -145,14 +155,16 @@ class DeviceRow extends View {
 							{device.name ? device.name : '(no name)'}
 						</Text>
 					</View>
-					<View style={styles.gear}>
+					<TouchableOpacity
+						style={styles.gear}
+						accessibilityLabel={accessibilityLabelGearButton}
+						onPress={this.onSettingsSelected}>
 						<Icon
 							name="gear"
 							size={26}
 							color="#bbbbbb"
-							onPress={this.onSettingsSelected}
 						/>
-					</View>
+					</TouchableOpacity>
 				</Container>
 			</ListItem>
 		);
