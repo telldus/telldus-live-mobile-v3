@@ -29,8 +29,18 @@ import {
 	AppNavigator,
 	Push,
 } from 'Components';
+import { View } from 'BaseComponents';
+import {
+	setAppLayout,
+} from 'Actions';
 
 class App extends React.Component {
+	onLayout: (Object) => void;
+
+	constructor() {
+		super();
+		this.onLayout = this.onLayout.bind(this);
+	}
 
 	componentDidMount() {
 		this.pushConf();
@@ -50,12 +60,20 @@ class App extends React.Component {
 		}
 	}
 
+	onLayout(ev: Object) {
+		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+	}
+
 	render() {
-		if ((!this.props.accessToken) || (this.props.accessToken && !this.props.isTokenValid)) {
-			return <PreLoginNavigator />;
-		}
+		let hasNotLoggedIn = ((!this.props.accessToken) || (this.props.accessToken && !this.props.isTokenValid));
 		return (
-			<AppNavigator {...this.props}/>
+			<View onLayout={this.onLayout}>
+				{hasNotLoggedIn ?
+					<PreLoginNavigator />
+					:
+					<AppNavigator {...this.props}/>
+				}
+			</View>
 		);
 	}
 }
@@ -68,4 +86,10 @@ function mapStateToProps(store) {
 	};
 }
 
-module.exports = connect(mapStateToProps)(App);
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(App);
