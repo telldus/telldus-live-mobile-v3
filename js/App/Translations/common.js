@@ -45,6 +45,14 @@ const messages = defineMessages({
 		id: 'device.on',
 		defaultMessage: 'On',
 	},
+	turnOn: {
+		id: 'device.turnOn',
+		defaultMessage: 'turn on',
+	},
+	turnOff: {
+		id: 'device.turnOff',
+		defaultMessage: 'turn off',
+	},
 	origin: {
 		id: 'origin',
 		defaultMessage: 'Origin',
@@ -203,6 +211,10 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.labelSensor',
 		defaultMessage: 'sensor',
 	},
+	labelSchedule: {
+		id: 'accessibilityLabel.labelSchedule',
+		defaultMessage: 'Schedule',
+	},
 	labelHumidity: {
 		id: 'accessibilityLabel.sensors.labelHumidity',
 		defaultMessage: 'humidity',
@@ -246,6 +258,10 @@ const messages = defineMessages({
 	labelTimeAgo: {
 		id: 'accessibilityLabel.sensors.labelTimeAgo',
 		defaultMessage: 'updated',
+	},
+	labelAction: {
+		id: 'accessibilityLabel.devices.labelAction',
+		defaultMessage: 'action',
 	},
 });
 

@@ -105,6 +105,7 @@ class SchedulerTab extends View {
 
 	renderRow: (Object) => Object;
 	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	getSectionName: (number) => string;
 	onRefresh: () => void;
 
 	constructor(props: Props) {
@@ -121,6 +122,7 @@ class SchedulerTab extends View {
 
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
+		this.getSectionName = this.getSectionName.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 	}
 
@@ -166,8 +168,7 @@ class SchedulerTab extends View {
 		);
 	}
 
-	renderSectionHeader(sectionData, sectionId) {
-		// TODO: move to own Component
+	getSectionName(sectionId: number): string {
 		const {formatMessage} = this.props.screenProps.intl;
 		const todayInWeek = parseInt(moment().format('d'), 10);
 		const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
@@ -183,6 +184,12 @@ class SchedulerTab extends View {
 		} else {
 			sectionName = formatMessage(daysInWeek[absoluteDayInWeek]);
 		}
+		return sectionName;
+	}
+
+	renderSectionHeader(sectionData, sectionId) {
+		// TODO: move to own Component
+		let sectionName = this.getSectionName(sectionId);
 
 		return (
 			<View style={Theme.Styles.sectionHeader}>
@@ -193,9 +200,12 @@ class SchedulerTab extends View {
 		);
 	}
 
-	renderRow(props) {
+	renderRow(props, sectionId) {
+		let { screenProps } = this.props;
+		let sectionName = this.getSectionName(sectionId);
+
 		return (
-			<JobRow {...props} />
+			<JobRow {...props} intl={screenProps.intl} sectionName={sectionName}/>
 		);
 	}
 

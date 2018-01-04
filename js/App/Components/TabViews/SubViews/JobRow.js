@@ -22,7 +22,15 @@
 import React from 'react';
 import { FormattedMessage, ListItem, Text } from 'BaseComponents';
 import Theme from 'Theme';
+import { defineMessages } from 'react-intl';
 import i18n from '../../../Translations/common';
+
+const messages = defineMessages({
+	phraseOne: {
+		id: 'accessibilityLabel.scheduler.phraseOne',
+		defaultMessage: 'schedule for',
+	},
+});
 
 type Props = {
 	device: Object,
@@ -30,9 +38,13 @@ type Props = {
 	method: string,
 	effectiveHour: number,
 	effectiveMinute: number,
+	intl: Object,
+	sectionName: string,
 };
 
 export default (props: Props) => {
+	const { device, methodValue, intl, sectionName, effectiveHour, effectiveMinute} = props;
+
 	const methodName = {
 		[1]: 'On',
 		[2]: 'Off',
@@ -44,44 +56,62 @@ export default (props: Props) => {
 		[512]: 'Stop',
 	};
 
-	const { device, methodValue } = props;
 	if (!device) {
 		return null;
 	}
 	const method = methodName[props.method];
-	let value = '';
+	let value = '', labelAction = '';
 	switch (method) {
 		case 'Dim':
 			value = `${Math.round(methodValue / 255.0 * 100)}%`;
+			labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.dim)} ${value}%`;
 			break;
 		case 'On':
 			value = <FormattedMessage {...i18n.on} style={Theme.Styles.jobRowMethod}/>;
+			labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.turnOn)}`;
 			break;
 		case 'Off':
 			value = <FormattedMessage {...i18n.off} style={Theme.Styles.jobRowMethod}/>;
+			labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.turnOff)}`;
 			break;
 		case 'Bell':
 			value = <FormattedMessage {...i18n.bell} style={Theme.Styles.jobRowMethod}/>;
+			labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.dim)}`;
 			break;
 		case 'Learn':
 			value = <FormattedMessage {...i18n.learn} style={Theme.Styles.jobRowMethod}/>;
+			labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.learn)}`;
 			break;
 		case 'Up':
 			value = <FormattedMessage {...i18n.up} style={Theme.Styles.jobRowMethod}/>;
+			labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.up)}`;
 			break;
 		case 'Down':
 			value = <FormattedMessage {...i18n.down} style={Theme.Styles.jobRowMethod}/>;
+			labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.down)}`;
 			break;
 		case 'Stop':
 			value = <FormattedMessage {...i18n.stop} style={Theme.Styles.jobRowMethod}/>;
+			labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.stop)}`;
 			break;
 		default:
 			value = method;
+			labelAction = '';
 	}
+
+	let labelDay = `${intl.formatMessage(messages.phraseOne)} ${sectionName}`;
+	let labelTime = `${intl.formatMessage(i18n.time)} ${effectiveHour}:${effectiveMinute}`;
+	let labelDevice = `${intl.formatMessage(i18n.labelDevice)} ${device.name}`;
+	let accessibilityLabel = `${labelDay}, ${labelTime}, ${labelDevice}, ${labelAction}`;
+
 	return (
-		<ListItem style={Theme.Styles.rowFront}>
+		<ListItem
+			style={Theme.Styles.rowFront}
+			importantForAccessibility={'yes'}
+			accessible={true}
+			accessibilityLabel={accessibilityLabel}>
 			<Text style={{ flex: 5, color: 'orange', fontSize: 16 }}>
-				{`${props.effectiveHour}:${props.effectiveMinute}`}
+				{`${effectiveHour}:${effectiveMinute}`}
 			</Text>
 			<Text style={{ flex: 20, color: '#1a355c', fontSize: 16, paddingLeft: 6 }}>
 				{device.name}
