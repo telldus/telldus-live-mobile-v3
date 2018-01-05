@@ -38,6 +38,7 @@ type Props = {
 	postScript?: any,
 	preScript?: any,
 	appLayout: Object,
+	accessible: boolean,
 	accessibilityLabel?: string,
 };
 
@@ -69,10 +70,11 @@ class TouchableButton extends Component<Props, void> {
 
 
 	render() {
-		let { style, labelStyle, intl, text, preScript, postScript, accessibilityLabel } = this.props;
+		let { style, labelStyle, intl, text, preScript, postScript, accessibilityLabel, accessible } = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		let shadow = Theme.Core.shadow;
-		accessibilityLabel = accessibilityLabel ? accessibilityLabel : `${label} ${this.labelButton}, ${this.defaultDescription}`;
+		accessibilityLabel = !accessible ? '' :
+			accessibilityLabel ? accessibilityLabel : `${label} ${this.labelButton}, ${this.defaultDescription}`;
 
 		const {
 		} = this.props;
@@ -84,6 +86,7 @@ class TouchableButton extends Component<Props, void> {
 
 		return (
 			<TouchableOpacity
+				accessible={accessible}
 				accessibilityLabel={accessibilityLabel}
 				style={[shadow, buttonContainer, style]}
 				onPress={this.onPress}>
