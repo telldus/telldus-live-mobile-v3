@@ -25,11 +25,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import View from './View';
 import Text from './Text';
 import Modal from './Modal';
 import Theme from 'Theme';
+import i18n from '../App/Translations/common';
 
 const messages = defineMessages({
 	defaultHeader: {
@@ -68,6 +70,7 @@ type Props = {
 	onPressNegative?: () => void,
 	intl: intlShape.isRequired,
 	appLayout: Object,
+	accessibilityLabel?: string,
 };
 
 type defaultProps = {
@@ -96,6 +99,18 @@ class DialogueBox extends Component<Props, null> {
 
 	onPressPositive: () => void;
 	onPressNegative: () => void;
+	onModalOpened: () => void;
+
+	defaultHeader: string;
+	defaultPositiveText: string;
+	defaultNegativeText: string;
+	labelPress: string;
+	labelToConfirm: string;
+	labelToReturn: string;
+	labelButtondefaultDescription: string;
+	labelButton: string;
+
+	labelDefaultDialoguePhrase: string;
 
 	constructor(props: Props) {
 		super(props);
@@ -105,6 +120,19 @@ class DialogueBox extends Component<Props, null> {
 
 		this.onPressPositive = this.onPressPositive.bind(this);
 		this.onPressNegative = this.onPressNegative.bind(this);
+		this.onModalOpened = this.onModalOpened.bind(this);
+
+		this.defaultHeader = `${this.props.intl.formatMessage(messages.defaultHeader)}!`;
+		this.defaultPositiveText = `${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
+		this.defaultNegativeText = `${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
+
+		this.labelButton = `${this.props.intl.formatMessage(i18n.button)}`;
+		this.labelButtondefaultDescription = `${this.props.intl.formatMessage(i18n.defaultDescriptionButton)}`;
+
+		this.labelDefaultDialoguePhrase = `${this.props.intl.formatMessage(i18n.defaultDialoguePhrase)}!`;
+		this.labelPress = `${this.props.intl.formatMessage(i18n.labelPress)}!`;
+		this.labelToConfirm = `${this.props.intl.formatMessage(i18n.labelToConfirm)}!`;
+		this.labelToReturn = `${this.props.intl.formatMessage(i18n.labelToReturn)}!`;
 	}
 
 	onPressNegative() {
@@ -137,7 +165,7 @@ class DialogueBox extends Component<Props, null> {
 			);
 		}
 		if (!header) {
-			header = `${this.props.intl.formatMessage(messages.defaultHeader)}!`;
+			header = this.defaultHeader;
 		}
 
 		return (
@@ -166,14 +194,19 @@ class DialogueBox extends Component<Props, null> {
 
 	renderFooter(styles: Object): any {
 		let positiveText = this.props.positiveText ? this.props.positiveText :
-			`${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
+			this.defaultPositiveText;
 		let negativeText = this.props.negativeText ? this.props.negativeText :
-			`${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
+			this.defaultNegativeText;
+
+		let accessibilityLabelPositive = `${positiveText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
+		let accessibilityLabelNegative = `${negativeText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
+
 		return (
 			<View style={styles.notificationModalFooter}>
 				{this.props.showNegative ?
 					<TouchableOpacity style={styles.notificationModalFooterTextCover}
-						onPress={this.onPressNegative}>
+						onPress={this.onPressNegative}
+						accessibilityLabel={accessibilityLabelNegative}>
 						<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>
 					</TouchableOpacity>
 					:
@@ -181,7 +214,8 @@ class DialogueBox extends Component<Props, null> {
 				}
 				{this.props.showPositive ?
 					<TouchableOpacity style={styles.notificationModalFooterTextCover}
-						onPress={this.onPressPositive}>
+						onPress={this.onPressPositive}
+						accessibilityLabel={accessibilityLabelPositive}>
 						<Text style={styles.notificationModalFooterPositiveText}>{positiveText}</Text>
 					</TouchableOpacity>
 					:
@@ -189,6 +223,32 @@ class DialogueBox extends Component<Props, null> {
 				}
 			</View>
 		);
+	}
+
+	onModalOpened() {
+		this.announceForAccessibility();
+	}
+
+	announceForAccessibility() {
+		let message = this.getAccessibiltyMessage();
+		announceForAccessibility(message);
+	}
+
+	getAccessibiltyMessage() {
+		let { accessibilityLabel, text, showNegative, showPositive, positiveText, negativeText } = this.props;
+		if (accessibilityLabel) {
+			return accessibilityLabel;
+		}
+
+		let phrase = this.labelDefaultDialoguePhrase;
+		let hasMessage = text && typeof text === 'string';
+
+		let PositiveInfo = showPositive ? (positiveText ? `${positiveText} ${this.labelToConfirm}` : `${this.defaultPositiveText} ${this.labelToConfirm}`) : '';
+		let NegativeInfo = showNegative ? (negativeText ? `${negativeText} ${this.labelToConfirm}` : `${this.defaultNegativeText} ${this.labelToConfirm}`) : '';
+		let labelButtonInfo = `${this.labelPress}, ${PositiveInfo} ${NegativeInfo}`;
+		let buttonInfo = !showPositive && !showNegative ? '' : labelButtonInfo;
+
+		return hasMessage ? `${phrase}. ${text}. ${buttonInfo}` : '';
 	}
 
 	render(): Object {
@@ -212,7 +272,8 @@ class DialogueBox extends Component<Props, null> {
 				exit={exit}
 				entryDuration={entryDuration}
 				exitDuration={exitDuration}
-				showModal={showDialogue}>
+				showModal={showDialogue}
+				onOpened={this.onModalOpened}>
 				{this.renderHeader(styles)}
 				{this.renderBody(styles)}
 				{this.renderFooter(styles)}
