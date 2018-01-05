@@ -151,7 +151,9 @@ class DeviceHistoryDetails extends View {
 						<FormattedMessage {...i18n.details} style={titleText}/>
 					</Text>
 				</View>
-				<ScrollView contentContainerStyle={detailsContainer}>
+				<ScrollView contentContainerStyle={detailsContainer}
+					accessible={true}
+					importantForAccessibility={'yes'}>
 					<View style={detailsRow}>
 						<View style={detailsLabelCover}>
 							<Text style={detailsLabel}>

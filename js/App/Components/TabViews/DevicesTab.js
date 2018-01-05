@@ -170,6 +170,7 @@ class DevicesTab extends View {
 			           onSettingsSelected={this.openDeviceDetail}
 					   setScrollEnabled={this.setScrollEnabled}
 					   intl={screenProps.intl}
+					   currentTab={screenProps.currentTab}
 			/>
 		);
 	}

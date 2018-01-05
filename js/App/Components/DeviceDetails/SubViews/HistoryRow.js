@@ -41,6 +41,7 @@ type Props = {
 	appLayout: Object,
 	section: string,
 	intl: Object,
+	isModalOpen: boolean,
 };
 
 type State = {
@@ -66,8 +67,8 @@ class HistoryRow extends View {
 		this.labelAction = formatMessage(i18n.labelAction);
 		this.labelStatus = formatMessage(i18n.status);
 
-		this.labelOff = formatMessage(i18n.off);
-		this.labelOn = formatMessage(i18n.on);
+		this.labelOff = formatMessage(i18n.turnOff);
+		this.labelOn = formatMessage(i18n.turnOn);
 		this.labelDim = formatMessage(i18n.dim);
 		this.labelUp = formatMessage(i18n.up);
 		this.labelDown = formatMessage(i18n.down);
@@ -152,7 +153,7 @@ class HistoryRow extends View {
 
 	render() {
 
-		let { appLayout, intl } = this.props;
+		let { appLayout, intl, isModalOpen } = this.props;
 
 		let {
 			locationCover,
@@ -201,9 +202,9 @@ class HistoryRow extends View {
 
 		return (
 			<TouchableOpacity style={styles.rowItemsContainer}
-				accessibilityLabel={accessibilityLabel}
-				accessible={true}
-				importantForAccessibility={'yes'}
+				accessible={!isModalOpen}
+				importantForAccessibility={isModalOpen ? 'no-hide-descendants' : 'yes'}
+				accessibilityLabel={isModalOpen ? '' : accessibilityLabel}
 				onPress={this.onOriginPress}>
 				<ListRow
 					roundIcon={roundIcon}
@@ -310,6 +311,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(store: Object): Object {
 	return {
 		appLayout: store.App.layout,
+		isModalOpen: store.modal.openModal,
 	};
 }
 
