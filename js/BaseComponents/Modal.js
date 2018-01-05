@@ -44,6 +44,8 @@ type Props = {
 	endValue?: number,
 	onOpen?: () => void,
 	onClose?: () => void,
+	onOpened?: () => void,
+	onClosed?: () => void,
 	appLayout: Object,
 };
 
@@ -82,14 +84,22 @@ class Modal extends Component<Props, void> {
 		Animated.parallel([
 			this._startOpacity(duration),
 			this._startScale(duration),
-		]).start();
+		]).start((event: Object) => {
+			if (event.finished) {
+				this.onOpened();
+			}
+		});
 	}
 
 	animationZoomOut(duration?: number) {
 		Animated.parallel([
 			this._stopOpacity(duration),
 			this._stopScale(duration),
-		]).start();
+		]).start((event: Object) => {
+			if (event.finished) {
+				this.onClosed();
+			}
+		});
 	}
 
 	animationSlideInY(duration?: number) {
@@ -211,6 +221,28 @@ class Modal extends Component<Props, void> {
 				nextProps.onOpen();
 			} else {
 				console.warn('Invalid Prop Passed : onOpen expects a Function.');
+			}
+		}
+	}
+
+	onClosed(nextProps: Object) {
+		let { onClosed } = this.props;
+		if (onClosed) {
+			if (typeof onClosed === 'function') {
+				onClosed();
+			} else {
+				console.warn('Invalid Prop Passed : onClosed expects a Function.');
+			}
+		}
+	}
+
+	onOpened(nextProps: Object) {
+		let { onOpened } = this.props;
+		if (onOpened) {
+			if (typeof onOpened === 'function') {
+				onOpened();
+			} else {
+				console.warn('Invalid Prop Passed : onOpened expects a Function.');
 			}
 		}
 	}
