@@ -194,7 +194,6 @@ class HistoryTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		console.log('test nextProps', nextProps);
 		return nextProps.screenProps.currentTab === 'History';
 	}
 
