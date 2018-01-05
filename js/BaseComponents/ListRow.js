@@ -104,7 +104,7 @@ class ListRow extends Component<Props, null> {
 		const style = this._getStyle();
 
 		return (
-			<View style={[style.container, containerStyle]}>
+			<View style={[style.container, containerStyle]} accessible={false} importantForAccessibility={'no-hide-descendants'}>
 				<BlockIcon
 					icon={roundIcon}
 					containerStyle={[style.roundIconContainer, roundIconContainerStyle]}
