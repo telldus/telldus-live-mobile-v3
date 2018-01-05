@@ -244,7 +244,7 @@ class DialogueBox extends Component<Props, null> {
 		let hasMessage = text && typeof text === 'string';
 
 		let PositiveInfo = showPositive ? (positiveText ? `${positiveText} ${this.labelToConfirm}` : `${this.defaultPositiveText} ${this.labelToConfirm}`) : '';
-		let NegativeInfo = showNegative ? (negativeText ? `${negativeText} ${this.labelToConfirm}` : `${this.defaultNegativeText} ${this.labelToConfirm}`) : '';
+		let NegativeInfo = showNegative ? (negativeText ? `${negativeText} ${this.labelToReturn}` : `${this.defaultNegativeText} ${this.labelToReturn}`) : '';
 		let labelButtonInfo = `${this.labelPress}, ${PositiveInfo} ${NegativeInfo}`;
 		let buttonInfo = !showPositive && !showNegative ? '' : labelButtonInfo;
 
