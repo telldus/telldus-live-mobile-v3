@@ -74,6 +74,7 @@ class Row extends Component<Props, null> {
 
 		return (
 			<TouchableOpacity
+				accessible={false}
 				onPress={this.onPress}
 				style={[defaultStyle.container, containerStyle]}
 				outlineProvider="bounds"

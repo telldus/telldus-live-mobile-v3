@@ -24,6 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import moment from 'moment';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from '../../TabViews/img/selection.json';
@@ -38,10 +39,16 @@ type Props = {
 	onOriginPress: Function,
 	isFirst: boolean,
 	appLayout: Object,
+	section: string,
+	intl: Object,
 };
 
 type State = {
 };
+
+function toSliderValue(dimmerValue: number): number {
+	return Math.round(dimmerValue * 100.0 / 255);
+}
 
 class HistoryRow extends View {
 	props: Props;
@@ -54,9 +61,23 @@ class HistoryRow extends View {
 		this.state = {
 		};
 		this.onOriginPress = this.onOriginPress.bind(this);
-	}
 
-	componentWillReceiveProps(nextProps) {
+		let { formatMessage } = props.intl;
+		this.labelAction = formatMessage(i18n.labelAction);
+		this.labelStatus = formatMessage(i18n.status);
+
+		this.labelOff = formatMessage(i18n.off);
+		this.labelOn = formatMessage(i18n.on);
+		this.labelDim = formatMessage(i18n.dim);
+		this.labelUp = formatMessage(i18n.up);
+		this.labelDown = formatMessage(i18n.down);
+		this.labelStop = formatMessage(i18n.stop);
+
+		this.labelSuccess = formatMessage(i18n.success);
+		this.labelFailed = formatMessage(i18n.failed);
+
+		this.labelDate = formatMessage(i18n.date);
+		this.labelOrigin = formatMessage(i18n.origin);
 	}
 
 	onOriginPress() {
@@ -89,9 +110,49 @@ class HistoryRow extends View {
 		return Math.round(value * 100.0 / 255);
 	}
 
+	getLabelAction(status: string, value: number): string {
+		switch (status) {
+			case 'TURNOFF':
+				return this.labelOff;
+			case 'TURNON':
+				return this.labelOn;
+			case 'UP':
+				return this.labelUp;
+			case 'DOWN':
+				return this.labelDown;
+			case 'STOP':
+				return this.labelStop;
+			case 'DIM':
+				let dimmerValue = toSliderValue(value);
+				return `${this.labelDim} ${dimmerValue}%`;
+			default:
+				return '';
+		}
+	}
+
+	accessibilityLabel(deviceState: string): string {
+		let { item, section } = this.props;
+		let { stateValue, successStatus } = item;
+
+		let action = this.getLabelAction(deviceState, stateValue);
+		let actionInfo = `${this.labelAction}, ${action}`;
+
+		let status = successStatus !== 0 ? this.labelFailed : this.labelSuccess;
+		let statusInfo = `${this.labelStatus}, ${status}`;
+
+		let date = section;
+		let dateInfo = `${this.labelDate} ${date}`;
+		let time = item.ts * 1000;
+		time = moment(time).format('HH:mm:ss');
+
+		let accessibilityLabel = `${actionInfo}. ${statusInfo}. ${dateInfo}, ${time}`;
+
+		return accessibilityLabel;
+	}
+
 	render() {
 
-		let { appLayout } = this.props;
+		let { appLayout, intl } = this.props;
 
 		let {
 			locationCover,
@@ -110,39 +171,53 @@ class HistoryRow extends View {
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
 		let icon = this.getIcon(deviceState);
-		let originText = '';
+		let originText = '', originInfo = '';
 		let origin = this.props.item.origin;
 		if (origin === 'Scheduler') {
 			originText = <FormattedMessage {...i18n.scheduler} style={originTextStyle}/>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.scheduler)}`;
 		} else if (origin === 'Incoming signal') {
 			originText = <FormattedMessage {...i18n.incommingSignal} style={originTextStyle}/>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.incommingSignal)}`;
 		} else if (origin === 'Unknown') {
 			originText = <FormattedMessage {...i18n.unknown} style={originTextStyle}/>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.unknown)}`;
 		} else if (origin.substring(0, 5) === 'Group') {
 			originText = <Text style={originTextStyle}><FormattedMessage {...i18n.group} style={originTextStyle}/> {origin.substring(6, (origin.length))}</Text>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.group)}`;
 		} else if (origin.substring(0, 5) === 'Event') {
 			originText = <Text style={originTextStyle}><FormattedMessage {...i18n.event} style={originTextStyle}/> {origin.substring(6, (origin.length))}</Text>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.event)}`;
 		} else {
 			originText = origin;
+			originInfo = `${this.labelOrigin}, ${origin}`;
 		}
+
+		let accessibilityLabel = this.accessibilityLabel(deviceState);
+		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
 
 		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
 
 		return (
-			<ListRow
-				roundIcon={roundIcon}
-				roundIconStyle={roundIconStyle}
-				roundIconContainerStyle={roundIconContainerStyle}
-				time={time}
-				timeStyle={timeStyle}
-				timeContainerStyle={timeContainerStyle}
-				containerStyle={containerStyle}
-				rowContainerStyle={rowContainerStyle}
-				triangleColor={triangleColor}
-				isFirst={this.props.isFirst}
-			>
-				<TouchableOpacity style={styles.rowItemsContainer} onPress={this.onOriginPress}>
+			<TouchableOpacity style={styles.rowItemsContainer}
+				accessibilityLabel={accessibilityLabel}
+				accessible={true}
+				importantForAccessibility={'yes'}
+				onPress={this.onOriginPress}>
+				<ListRow
+					roundIcon={roundIcon}
+					roundIconStyle={roundIconStyle}
+					roundIconContainerStyle={roundIconContainerStyle}
+					time={time}
+					timeStyle={timeStyle}
+					timeContainerStyle={timeContainerStyle}
+					containerStyle={containerStyle}
+					rowContainerStyle={rowContainerStyle}
+					triangleColor={triangleColor}
+					isFirst={this.props.isFirst}
+				>
+
 					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
 						<View style={[statusView, { backgroundColor: '#A59F9A' }]}>
 							<CustomIcon name="icon_off" size={statusIconSize} color="#ffffff" />
@@ -159,9 +234,8 @@ class HistoryRow extends View {
 					<View style={locationCover}>
 						<Text style={originTextStyle} numberOfLines={1}>{originText}</Text>
 					</View>
-				</TouchableOpacity>
-			</ListRow>
-
+				</ListRow>
+			</TouchableOpacity>
 		);
 	}
 

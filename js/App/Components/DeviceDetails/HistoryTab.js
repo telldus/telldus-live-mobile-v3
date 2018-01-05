@@ -55,6 +55,7 @@ type Props = {
 	deviceHistoryNavigator: Object,
 	appLayout: Object,
 	rowsAndSections: Array<any> | boolean,
+	screenProps: Object,
 };
 
 type State = {
@@ -109,16 +110,16 @@ class HistoryTab extends View {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.rowsAndSections) {
-			this.setState({
-				rowsAndSections: nextProps.rowsAndSections,
-			});
-		}
 		if (nextProps.screenProps.currentTab === 'History') {
 			if (!this.state.hasRefreshed) {
 				this.refreshHistoryData();
 				this.setState({
 					hasRefreshed: true,
+				});
+			}
+			if (nextProps.rowsAndSections) {
+				this.setState({
+					rowsAndSections: nextProps.rowsAndSections,
 				});
 			}
 		} else {
@@ -160,8 +161,9 @@ class HistoryTab extends View {
 	}
 
 	renderRow(item: Object) {
+		let { screenProps } = this.props;
 		return (
-			<HistoryRow id={item.item.index} item={item.item} isFirst={+item.item.index === 0}/>
+			<HistoryRow id={item.item.index} item={item.item} section={item.section.key} intl={screenProps.intl} isFirst={+item.item.index === 0}/>
 		);
 	}
 
@@ -192,10 +194,8 @@ class HistoryTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (nextProps.screenProps.currentTab !== 'History') {
-			return false;
-		}
-		return true;
+		console.log('test nextProps', nextProps);
+		return nextProps.screenProps.currentTab === 'History';
 	}
 
 	render() {

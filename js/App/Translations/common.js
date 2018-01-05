@@ -299,6 +299,30 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.labelLogOut',
 		defaultMessage: 'Log Out',
 	},
+	date: {
+		id: 'accessibilityLabel.date',
+		defaultMessage: 'date',
+	},
+	success: {
+		id: 'success',
+		defaultMessage: 'Success',
+	},
+	failed: {
+		id: 'error.failed',
+		defaultMessage: 'Failed',
+	},
+	noReply: {
+		id: 'error.noReply',
+		defaultMessage: 'No reply',
+	},
+	notConfirmed: {
+		id: 'error.notConfirmed',
+		defaultMessage: 'Not confirmed',
+	},
+	timedOut: {
+		id: 'error.timedOut',
+		defaultMessage: 'Timed out',
+	},
 });
 
 export default messages;
