@@ -25,6 +25,7 @@
     "react-intl": "^2.4.0",
     "react-mixin": "^3.0.5",
     "react-native": "^0.50.1",
+    "react-native-accessibility": "^1.0.1",
     "react-native-device-info": "^0.12.1",
     "react-native-easy-grid": "^0.1.15",
     "react-native-extra-dimensions-android": "^0.21",
