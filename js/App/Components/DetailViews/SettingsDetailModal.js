@@ -209,38 +209,41 @@ class SettingsDetailModal extends View {
 		let styles = this.getStyles(appLayout);
 
 		let buttonAccessible = !isLogoutLoading && !isPushSubmitLoading && !showModal;
+		let importantForAccessibility = showModal ? 'no-hide-descendants' : 'yes';
 
 		return (
 			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
 				<Container style={styles.container}>
 					<Header onPress={this.props.onClose} styles={styles}/>
 					<View style={styles.body}>
-						{ this.props.store.user.notificationText ?
-							<Text style={styles.notification}>{this.props.store.user.notificationText}</Text>
-							:
-							null
-						}
-						<Text style={styles.versionInfo}>
-							Telldus Live! mobile{'\n'}
-							<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
-						</Text>
-						{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
+						<View style={styles.body} importantForAccessibility={importantForAccessibility}>
+							{ this.props.store.user.notificationText ?
+								<Text style={styles.notification}>{this.props.store.user.notificationText}</Text>
+								:
+								null
+							}
+							<Text style={styles.versionInfo}>
+								Telldus Live! mobile{'\n'}
+								<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
+							</Text>
+							{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
+								<TouchableButton
+									style={Theme.Styles.submitButton}
+									onPress={this.submitPushToken}
+									text={submitButText}
+									postScript={this.state.isPushSubmitLoading ? '...' : null}
+								/>
+								:
+								<StatusView styles={styles}/>
+							}
+							<View style={{height: 20}} />
 							<TouchableButton
-								style={Theme.Styles.submitButton}
-								onPress={this.submitPushToken}
-								text={submitButText}
-								postScript={this.state.isPushSubmitLoading ? '...' : null}
+								onPress={this.logout}
+								text={logoutButText}
+								postScript={this.state.isLogoutLoading ? '...' : null}
+								accessible={buttonAccessible}
 							/>
-							:
-							<StatusView styles={styles}/>
-						}
-						<View style={{height: 20}} />
-						<TouchableButton
-							onPress={this.logout}
-							text={logoutButText}
-							postScript={this.state.isLogoutLoading ? '...' : null}
-							accessible={buttonAccessible}
-						/>
+						</View>
 						<DialogueBox
 							showDialogue={this.props.showModal}
 							header={notificationHeader}
