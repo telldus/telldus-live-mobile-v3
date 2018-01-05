@@ -275,7 +275,6 @@ class TabsView extends View {
 
 	openDrawer = () => {
 		this.refs.drawer.openDrawer();
-		this.onOpenDrawer();
 		this.props.syncGateways();
 	};
 
@@ -353,6 +352,7 @@ class TabsView extends View {
 				drawerPosition={DrawerLayoutAndroid.positions.Left}
 				renderNavigationView={this.renderNavigationView}
 				drawerBackgroundColor={'transparent'}
+				onDrawerOpen={this.onOpenDrawer}
 				onDrawerClose={this.onCloseDrawer}
 			>
 				<View style={{flex: 1}} >
