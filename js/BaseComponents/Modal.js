@@ -225,7 +225,7 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
-	onClosed(nextProps: Object) {
+	onClosed() {
 		let { onClosed } = this.props;
 		if (onClosed) {
 			if (typeof onClosed === 'function') {
@@ -236,7 +236,7 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
-	onOpened(nextProps: Object) {
+	onOpened() {
 		let { onOpened } = this.props;
 		if (onOpened) {
 			if (typeof onOpened === 'function') {
