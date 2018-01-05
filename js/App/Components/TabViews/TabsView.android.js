@@ -172,6 +172,7 @@ class TabsView extends View {
 		};
 
 		this.state = {
+			drawer: false,
 			settings: false,
 			routeName: 'Dashboard',
 			addingNewLocation: false,
@@ -181,6 +182,8 @@ class TabsView extends View {
 		this.renderNavigationView = this.renderNavigationView.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
 		this.onCloseSetting = this.onCloseSetting.bind(this);
+		this.onCloseDrawer = this.onCloseDrawer.bind(this);
+		this.onOpenDrawer = this.onOpenDrawer.bind(this);
 		this.onTabSelect = this.onTabSelect.bind(this);
 		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
 		this.toggleEditMode = this.toggleEditMode.bind(this);
@@ -249,6 +252,14 @@ class TabsView extends View {
 		this.setState({ settings: false });
 	}
 
+	onOpenDrawer() {
+		this.setState({ drawer: true });
+	}
+
+	onCloseDrawer() {
+		this.setState({ drawer: false });
+	}
+
 	onRequestChangeTab(index) {
 		this.setState({ index });
 		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
@@ -264,6 +275,7 @@ class TabsView extends View {
 
 	openDrawer = () => {
 		this.refs.drawer.openDrawer();
+		this.onOpenDrawer();
 		this.props.syncGateways();
 	};
 
@@ -277,6 +289,7 @@ class TabsView extends View {
 			theme={this.getTheme()}
 			onOpenSetting={this.onOpenSetting}
 			appLayout={appLayout}
+			isOpen={this.state.drawer}
 		/>;
 	}
 
@@ -301,7 +314,7 @@ class TabsView extends View {
 		this.menuButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
 		this.menuButton.accessibilityLabel = this.menuIcon;
 
-		return this.menuButton;
+		return this.state.drawer ? null : this.menuButton;
 	};
 
 	getDrawerWidth = (deviceWidth: number): number => {
@@ -340,8 +353,9 @@ class TabsView extends View {
 				drawerPosition={DrawerLayoutAndroid.positions.Left}
 				renderNavigationView={this.renderNavigationView}
 				drawerBackgroundColor={'transparent'}
+				onDrawerClose={this.onCloseDrawer}
 			>
-				<View style={{flex: 1}}>
+				<View style={{flex: 1}} >
 					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton} rightButton={rightButton}/>
 					<View style={styles.container}>
 						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
