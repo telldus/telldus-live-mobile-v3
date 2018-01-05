@@ -66,14 +66,14 @@ const messages = defineMessages({
 	},
 });
 
-const Header = ({ onPress, styles }) => (
+const Header = ({ onPress, styles, buttonAccessibilityLabel }) => (
 	<View style={styles.header}>
 		<Icon name="gear" size={26} color="white"
 		      style={styles.gear}/>
 		<Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
 			<FormattedMessage {...i18n.settingsHeader} style={styles.textHeaderTitle}/>
 		</Text>
-		<Icon name="close" size={26} color="white" style={{ flex: 1 }} onPress={onPress}/>
+		<Icon name="close" size={26} color="white" style={{ flex: 1 }} accessibilityLabel={buttonAccessibilityLabel} onPress={onPress}/>
 	</View>
 );
 
@@ -128,7 +128,13 @@ class SettingsDetailModal extends View {
 		this.updateModalVisiblity = this.updateModalVisiblity.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 
-		this.confirmMessage = this.props.intl.formatMessage(i18n.contentLogoutConfirm);
+		let { formatMessage } = this.props.intl;
+
+		this.confirmMessage = formatMessage(i18n.contentLogoutConfirm);
+		this.labelButton = formatMessage(i18n.button);
+		this.labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelLogOut = `${formatMessage(i18n.labelLogOut)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
+		this.labelCloseSettings = `${formatMessage(i18n.labelClose)} ${formatMessage(i18n.settingsHeader)}. ${this.labelButtondefaultDescription}`;
 	}
 
 	logout() {
@@ -214,7 +220,7 @@ class SettingsDetailModal extends View {
 		return (
 			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
 				<Container style={styles.container}>
-					<Header onPress={this.props.onClose} styles={styles}/>
+					<Header onPress={this.props.onClose} styles={styles} buttonAccessibilityLabel={this.labelCloseSettings}/>
 					<View style={styles.body}>
 						<View style={styles.body} importantForAccessibility={importantForAccessibility}>
 							{ this.props.store.user.notificationText ?
@@ -241,6 +247,7 @@ class SettingsDetailModal extends View {
 								onPress={this.logout}
 								text={logoutButText}
 								postScript={this.state.isLogoutLoading ? '...' : null}
+								accessibilityLabel={this.labelLogOut}
 								accessible={buttonAccessible}
 							/>
 						</View>

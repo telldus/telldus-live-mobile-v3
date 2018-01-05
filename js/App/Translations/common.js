@@ -291,6 +291,14 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.labelLink',
 		defaultMessage: 'link',
 	},
+	labelClose: {
+		id: 'accessibilityLabel.labelClose',
+		defaultMessage: 'close',
+	},
+	labelLogOut: {
+		id: 'accessibilityLabel.labelLogOut',
+		defaultMessage: 'Log Out',
+	},
 });
 
 export default messages;
