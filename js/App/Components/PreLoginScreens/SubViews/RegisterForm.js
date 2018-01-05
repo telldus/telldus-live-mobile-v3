@@ -72,6 +72,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
 	appLayout: Object,
+	dialogueOpen: boolean,
 }
 
 class RegisterForm extends View {
@@ -185,9 +186,12 @@ class RegisterForm extends View {
 	}
 
 	render() {
-		let { appLayout } = this.props;
+		let { appLayout, dialogueOpen } = this.props;
+		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
+		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
+
 		return (
-			<View>
+			<View importantForAccessibility={importantForAccessibility}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
@@ -250,6 +254,7 @@ class RegisterForm extends View {
 					onPress={this.props.showModal ? null : this.onFormSubmit}
 					text={this.state.isLoading ? i18n.registering : i18n.register}
 					postScript={this.state.isLoading ? '...' : null}
+					accessible={buttonAccessible}
 				/>
 			</View>
 		);

@@ -29,6 +29,8 @@ import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { FormattedMessage, View, DialogueBox } from 'BaseComponents';
 import {FormContainerComponent, RegisterForm} from 'PreLoginScreen_SubViews';
 
+import i18n from './../../Translations/common';
+
 const messages = defineMessages({
 	createAccount: {
 		id: 'user.createAccount',
@@ -65,6 +67,15 @@ class RegisterScreen extends View {
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.alreadyHaveAccount = formatMessage(messages.alreadyHaveAccount);
+
+		this.labelLink = formatMessage(i18n.labelLink);
+		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+
+		this.labelAlreadyHaveAccount = `${this.labelLink} ${this.alreadyHaveAccount} ${this.labelButtondefaultDescription}`;
 	}
 
 	closeModal() {
@@ -97,8 +108,10 @@ class RegisterScreen extends View {
 
 		return (
 			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)} formContainerStyle={styles.formContainer}>
-				<RegisterForm appLayout={appLayout}/>
-				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
+				<RegisterForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
+				<TouchableOpacity style={{height: 25}}
+					onPress={this.goBackToLogin}
+					accessibilityLabel={this.labelAlreadyHaveAccount}>
 					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
 				</TouchableOpacity>
 				<DialogueBox

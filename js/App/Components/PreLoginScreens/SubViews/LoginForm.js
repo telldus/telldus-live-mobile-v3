@@ -51,6 +51,7 @@ type Props = {
 		loginToTelldus: Function,
 		intl: intlShape.isRequired,
 		appLayout: Object,
+		dialogueOpen: Object,
 };
 
 type State = {
@@ -84,9 +85,12 @@ class LoginForm extends View {
 	}
 
 	render() {
-		let { appLayout } = this.props;
+		let { appLayout, dialogueOpen } = this.props;
+		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
+		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
+
 		return (
-			<View style={{flex: 0}}>
+			<View style={{flex: 0}} importantForAccessibility={importantForAccessibility}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
@@ -120,6 +124,7 @@ class LoginForm extends View {
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? i18n.loggingin : i18n.login}
 					postScript={this.state.isLoading ? '...' : null}
+					accessible={buttonAccessible}
 				/>
 			</View>
 		);

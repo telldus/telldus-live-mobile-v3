@@ -271,6 +271,26 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.defaultDescriptionButton',
 		defaultMessage: 'Double tap to activate',
 	},
+	defaultDialoguePhrase: {
+		id: 'accessibilityLabel.defaultPhraseDialogue',
+		defaultMessage: 'reading dialogue message',
+	},
+	labelPress: {
+		id: 'accessibilityLabel.LabelPress',
+		defaultMessage: 'press',
+	},
+	labelToConfirm: {
+		id: 'accessibilityLabel.labelToConfirm',
+		defaultMessage: 'to confirm',
+	},
+	labelToReturn: {
+		id: 'accessibilityLabel.labelToReturn',
+		defaultMessage: 'to return',
+	},
+	labelLink: {
+		id: 'accessibilityLabel.labelLink',
+		defaultMessage: 'link',
+	},
 });
 
 export default messages;

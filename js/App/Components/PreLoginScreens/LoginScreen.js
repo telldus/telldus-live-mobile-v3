@@ -83,6 +83,16 @@ class LoginScreen extends View {
 
 		this.closeModal = this.closeModal.bind(this);
 		this.onPressPositive = this.onPressPositive.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.forgotPassword = formatMessage(i18n.forgotPassword);
+		this.needAccount = formatMessage(messages.needAccount);
+
+		this.labelLink = formatMessage(i18n.labelLink);
+		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+		this.labelForgotPassword = `${this.labelLink} ${this.forgotPassword} ${this.labelButtondefaultDescription}`;
+		this.labelNeedAccount = `${this.labelLink} ${this.needAccount} ${this.labelButtondefaultDescription}`;
 	}
 
 	closeModal() {
@@ -138,15 +148,19 @@ class LoginScreen extends View {
 		return (
 			<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
 				{this.props.accessToken && !this.props.isTokenValid ?
-					<SessionLocked onPressLogout={this.state.onPressLogout} />
+					<SessionLocked onPressLogout={this.state.onPressLogout} dialogueOpen={this.props.showModal}/>
 					:
 					<View style={{alignItems: 'center'}}>
-						<LoginForm appLayout={appLayout}/>
+						<LoginForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
 						<View style={styles.otherLinks}>
-							<TouchableOpacity style={{height: 25}} onPress={this.onForgotPassword}>
+							<TouchableOpacity style={{height: 25}}
+								onPress={this.onForgotPassword}
+								accessibilityLabel={this.labelForgotPassword}>
 								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb', fontSize: 13 }}/>
 							</TouchableOpacity>
-							<TouchableOpacity style={{height: 25, paddingLeft: 5 }} onPress={this.onNeedAccount}>
+							<TouchableOpacity style={{height: 25, paddingLeft: 5 }}
+								onPress={this.onNeedAccount}
+								accessibilityLabel={this.labelNeedAccount}>
 								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5, fontSize: 13 }}/>
 							</TouchableOpacity>
 						</View>

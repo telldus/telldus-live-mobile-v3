@@ -59,6 +59,15 @@ class ForgotPasswordScreen extends View {
 		};
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.backToLogin = formatMessage(messages.backToLogin);
+
+		this.labelLink = formatMessage(i18n.labelLink);
+		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+
+		this.labelBackToLogin = `${this.labelLink} ${this.backToLogin} ${this.labelButtondefaultDescription}`;
 	}
 
 	goBackToLogin() {
@@ -73,7 +82,9 @@ class ForgotPasswordScreen extends View {
 			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)} formContainerStyle={styles.formContainer}>
 				<ForgotPasswordForm appLayout={appLayout}/>
 				<View style={{ height: 10 }}/>
-				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
+				<TouchableOpacity style={{height: 25}}
+					onPress={this.goBackToLogin}
+					accessibilityLabel={this.labelBackToLogin}>
 					<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
 				</TouchableOpacity>
 			</FormContainerComponent>
