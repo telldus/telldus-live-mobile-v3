@@ -75,6 +75,7 @@ class TouchableButton extends Component<Props, void> {
 		let shadow = Theme.Core.shadow;
 		accessibilityLabel = !accessible ? '' :
 			accessibilityLabel ? accessibilityLabel : `${label} ${this.labelButton}, ${this.defaultDescription}`;
+		let importantForAccessibility = !accessible ? 'no-hide-descendants' : 'yes';
 
 		const {
 		} = this.props;
@@ -88,6 +89,7 @@ class TouchableButton extends Component<Props, void> {
 			<TouchableOpacity
 				accessible={accessible}
 				accessibilityLabel={accessibilityLabel}
+				importantForAccessibility={importantForAccessibility}
 				style={[shadow, buttonContainer, style]}
 				onPress={this.onPress}>
 				<Text style={[buttonLabel, labelStyle]}>

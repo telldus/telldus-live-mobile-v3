@@ -99,6 +99,8 @@ type Props = {
 
 type State = {
 	isVisible: boolean,
+	isPushSubmitLoading: boolean,
+	isLogoutLoading: boolean,
 };
 
 class SettingsDetailModal extends View {
@@ -202,8 +204,11 @@ class SettingsDetailModal extends View {
 			logoutButText,
 			version,
 		} = this.getRelativeData();
-		let { appLayout } = this.props;
+		let { appLayout, showModal } = this.props;
+		let { isLogoutLoading, isPushSubmitLoading } = this.state;
 		let styles = this.getStyles(appLayout);
+
+		let buttonAccessible = !isLogoutLoading && !isPushSubmitLoading && !showModal;
 
 		return (
 			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
@@ -234,6 +239,7 @@ class SettingsDetailModal extends View {
 							onPress={this.logout}
 							text={logoutButText}
 							postScript={this.state.isLogoutLoading ? '...' : null}
+							accessible={buttonAccessible}
 						/>
 						<DialogueBox
 							showDialogue={this.props.showModal}
