@@ -25,7 +25,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
 
@@ -35,29 +34,6 @@ import i18n from '../../../Translations/common';
 import { states, statusMessage } from '../../../../Config';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
-
-const messages = defineMessages({
-	success: {
-		id: 'success',
-		defaultMessage: 'Success',
-	},
-	failed: {
-		id: 'error.failed',
-		defaultMessage: 'Failed',
-	},
-	noReply: {
-		id: 'error.noReply',
-		defaultMessage: 'No reply',
-	},
-	notConfirmed: {
-		id: 'error.notConfirmed',
-		defaultMessage: 'Not confirmed',
-	},
-	timedOut: {
-		id: 'error.timedOut',
-		defaultMessage: 'Timed out',
-	},
-});
 
 class DeviceHistoryDetails extends View {
 	constructor(props) {
@@ -138,19 +114,19 @@ class DeviceHistoryDetails extends View {
 		if (successStatus >= 0) {
 			switch (successStatus) {
 				case 0:
-					textStatus = <FormattedMessage {...messages.success} style={detailsText}/>;
+					textStatus = <FormattedMessage {...i18n.success} style={detailsText}/>;
 					break;
 				case '1':
-					textStatus = <FormattedMessage {...messages.failed} style={detailsTextError}/>;
+					textStatus = <FormattedMessage {...i18n.failed} style={detailsTextError}/>;
 					break;
 				case '2':
-					textStatus = <Text style={detailsTextError}><FormattedMessage {...messages.failed} style={detailsTextError}/> (<FormattedMessage {...messages.noReply} style={detailsTextError}/>)</Text>;
+					textStatus = <Text style={detailsTextError}><FormattedMessage {...i18n.failed} style={detailsTextError}/> (<FormattedMessage {...i18n.noReply} style={detailsTextError}/>)</Text>;
 					break;
 				case '3':
-					textStatus = <Text style={detailsTextError}><FormattedMessage {...messages.failed} style={detailsTextError}/> (<FormattedMessage {...messages.timedOut} style={detailsTextError}/>)</Text>;
+					textStatus = <Text style={detailsTextError}><FormattedMessage {...i18n.failed} style={detailsTextError}/> (<FormattedMessage {...i18n.timedOut} style={detailsTextError}/>)</Text>;
 					break;
 				case '4':
-					textStatus = <Text style={detailsTextError}><FormattedMessage {...messages.failed} style={detailsTextError}/> (<FormattedMessage {...messages.notConfirmed} style={detailsTextError}/>)</Text>;
+					textStatus = <Text style={detailsTextError}><FormattedMessage {...i18n.failed} style={detailsTextError}/> (<FormattedMessage {...i18n.notConfirmed} style={detailsTextError}/>)</Text>;
 					break;
 				default:
 					let message = statusMessage[successStatus];
