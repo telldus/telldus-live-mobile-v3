@@ -36,7 +36,7 @@ import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 
 import { SettingsDetailModal } from 'DetailViews';
 import TabBar from './TabBar';
-
+import i18n from '../../Translations/common';
 import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode, addNewGateway } from 'Actions';
 import TabViews from 'TabViews';
@@ -136,11 +136,16 @@ class TabsView extends View {
 	constructor(props: Props) {
 		super(props);
 
-		this.menuIcon = props.intl.formatMessage(messages.menuIcon);
-		this.starIconShowDevices = props.intl.formatMessage(messages.starIconShowDevices);
-		this.starIconHideDevices = props.intl.formatMessage(messages.starIconHideDevices);
-		this.starIconShowSensors = props.intl.formatMessage(messages.starIconShowSensors);
-		this.starIconHideSensors = props.intl.formatMessage(messages.starIconHideSensors);
+		let { formatMessage } = props.intl;
+
+		this.labelButton = formatMessage(i18n.button);
+		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+
+		this.menuIcon = `${formatMessage(messages.menuIcon)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
+		this.starIconShowDevices = `${formatMessage(messages.starIconShowDevices)}. ${this.labelButtondefaultDescription}`;
+		this.starIconHideDevices = `${formatMessage(messages.starIconHideDevices)}. ${this.labelButtondefaultDescription}`;
+		this.starIconShowSensors = `${formatMessage(messages.starIconShowSensors)}. ${this.labelButtondefaultDescription}`;
+		this.starIconHideSensors = `${formatMessage(messages.starIconHideSensors)}. ${this.labelButtondefaultDescription}`;
 
 		this.starButton = {
 			icon: {
