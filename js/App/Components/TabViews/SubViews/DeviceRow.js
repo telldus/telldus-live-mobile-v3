@@ -63,8 +63,8 @@ class DeviceRow extends View {
 
 		this.labelDevice = props.intl.formatMessage(i18n.labelDevice);
 		this.labelStatus = props.intl.formatMessage(i18n.status);
-		this.labelOff = props.intl.formatMessage(i18n.turnOff);
-		this.labelOn = props.intl.formatMessage(i18n.turnOn);
+		this.labelOff = props.intl.formatMessage(i18n.off);
+		this.labelOn = props.intl.formatMessage(i18n.on);
 		this.labelDim = props.intl.formatMessage(i18n.dim);
 		this.labelUp = props.intl.formatMessage(i18n.up);
 		this.labelDown = props.intl.formatMessage(i18n.down);
