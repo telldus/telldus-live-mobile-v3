@@ -175,10 +175,10 @@ class DeviceHistoryDetails extends View {
 						<FormattedMessage {...i18n.details} style={titleText}/>
 					</Text>
 				</View>
-				<ScrollView contentContainerStyle={detailsContainer}
-					accessible={true}
-					importantForAccessibility={'yes'}>
-					<View style={detailsRow}>
+				<ScrollView contentContainerStyle={detailsContainer}>
+					<View style={detailsRow}
+						accessible={true}
+						importantForAccessibility={'yes'}>
 						<View style={detailsLabelCover}>
 							<Text style={detailsLabel}>
 								<FormattedMessage {...i18n.state} style={detailsLabel}/>
@@ -190,7 +190,9 @@ class DeviceHistoryDetails extends View {
 							</Text>
 						</View>
 					</View>
-					<View style={detailsRow}>
+					<View style={detailsRow}
+						accessible={true}
+						importantForAccessibility={'yes'}>
 						<View style={detailsLabelCover}>
 							<Text style={detailsLabel}>
 								<FormattedMessage {...i18n.time} style={detailsLabel}/>
@@ -220,7 +222,9 @@ class DeviceHistoryDetails extends View {
 							null
 						}
 					</View>
-					<View style={detailsRow}>
+					<View style={detailsRow}
+						accessible={true}
+						importantForAccessibility={'yes'}>
 						<View style={detailsLabelCover}>
 							<Text style={detailsLabel}>
 								<FormattedMessage {...i18n.origin} style={detailsLabel}/>
@@ -232,7 +236,9 @@ class DeviceHistoryDetails extends View {
 							</Text>
 						</View>
 					</View>
-					<View style={detailsRow}>
+					<View style={detailsRow}
+						accessible={true}
+						importantForAccessibility={'yes'}>
 						<View style={detailsLabelCover}>
 							<Text style={detailsLabel}>
 								<FormattedMessage {...i18n.status} style={detailsLabel}/>
