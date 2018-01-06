@@ -29,6 +29,7 @@ export type State = {
 	active: boolean,
 	orientation: string,
 	layout: Object,
+	screenReaderEnabled: boolean,
 };
 
 const initialState = {
@@ -37,6 +38,7 @@ const initialState = {
 	active: true,
 	orientation: '',
 	layout: {},
+	screenReaderEnabled: false,
 };
 
 export default function reduceApp(state: State = initialState, action: Action): State {
@@ -74,6 +76,12 @@ export default function reduceApp(state: State = initialState, action: Action): 
 		return {
 			...state,
 			layout: action.payload,
+		};
+	}
+	if (action.type === 'ACCESSIBILITY_INFO') {
+		return {
+			...state,
+			screenReaderEnabled: action.payload,
 		};
 	}
 	return state;

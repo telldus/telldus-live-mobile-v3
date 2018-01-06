@@ -27,6 +27,7 @@ import type { Action, ThunkAction } from './Types';
 
 import { AppState } from 'react-native';
 import Orientation from 'react-native-orientation';
+import { AccessibilityInfo } from 'react-native';
 
 module.exports = {
 	appStart: (): Action => ({
@@ -63,5 +64,19 @@ module.exports = {
 			type: 'APP_LAYOUT',
 			payload: layout,
 		});
+	},
+	setAccessibilityInfo: (status: boolean): ThunkAction => dispatch => {
+		return dispatch({
+			type: 'ACCESSIBILITY_INFO',
+			payload: status,
+		});
+	},
+	setAccessibilityListener: (callback: Function): ThunkAction => dispatch => {
+		AccessibilityInfo.addEventListener(
+			'change',
+			(isEnabled: boolean) => {
+				return dispatch(callback(isEnabled));
+			}
+		);
 	},
 };

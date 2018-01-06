@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { AccessibilityInfo } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
@@ -32,6 +33,8 @@ import {
 import { View } from 'BaseComponents';
 import {
 	setAppLayout,
+	setAccessibilityListener,
+	setAccessibilityInfo,
 } from 'Actions';
 
 class App extends React.Component {
@@ -43,11 +46,24 @@ class App extends React.Component {
 	}
 
 	componentDidMount() {
+		let { dispatch } = this.props;
+
 		this.pushConf();
+		AccessibilityInfo.fetch().done((isEnabled) => {
+			dispatch(setAccessibilityInfo(isEnabled));
+			dispatch(setAccessibilityListener(setAccessibilityInfo));
+		});
 	}
 
 	componentDidUpdate() {
 		this.pushConf();
+	}
+
+	componentWillUnmount() {
+		AccessibilityInfo.removeEventListener(
+		  'change',
+		  setAccessibilityInfo
+		);
 	}
 
 	/*
