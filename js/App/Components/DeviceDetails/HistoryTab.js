@@ -198,7 +198,7 @@ class HistoryTab extends View {
 	}
 
 	render() {
-		let { appLayout } = this.props;
+		let { appLayout, screenProps } = this.props;
 
 		let {
 			line,
@@ -239,7 +239,7 @@ class HistoryTab extends View {
 					keyExtractor={this.keyExtractor}
 				/>
 				<View style={line}/>
-				<DeviceHistoryDetails />
+				<DeviceHistoryDetails intl={screenProps.intl}/>
 			</View>
 		);
 	}

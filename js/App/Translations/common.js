@@ -303,6 +303,10 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.date',
 		defaultMessage: 'date',
 	},
+	announcementOnModalClose: {
+		id: 'accessibilityLabel.announcementOnModalClose',
+		defaultMessage: 'Modal Closed',
+	},
 	success: {
 		id: 'success',
 		defaultMessage: 'Success',

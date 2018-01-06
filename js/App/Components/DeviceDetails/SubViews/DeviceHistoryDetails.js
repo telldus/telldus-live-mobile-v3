@@ -24,7 +24,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
+import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { announceForAccessibility } from 'react-native-accessibility';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
 
@@ -35,13 +37,35 @@ import { states, statusMessage } from '../../../../Config';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 
+
+const messages = defineMessages({
+	announcementOnDetailsModalOpen: {
+		id: 'accessibilityLabel.announcementOnDetailsModalOpen',
+		defaultMessage: 'Showing device action details. Double tap on device history tab to close the modal',
+	},
+});
+
 class DeviceHistoryDetails extends View {
 	constructor(props) {
 		super(props);
+
+		let { formatMessage } = props.intl;
+
+		this.labelAnnouncementOnOpen = formatMessage(messages.announcementOnDetailsModalOpen);
+		this.labelAnnouncementOnClose = `${formatMessage(i18n.announcementOnModalClose)}.`;
 	}
 
 	getPercentage(value: number) {
 		return Math.round(value * 100.0 / 255);
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		if (nextProps.showDetails && !this.props.showDetails) {
+			announceForAccessibility(this.labelAnnouncementOnOpen);
+		}
+		if (this.props.showDetails && !nextProps.showDetails) {
+			announceForAccessibility(this.labelAnnouncementOnClose);
+		}
 	}
 
 	render() {
