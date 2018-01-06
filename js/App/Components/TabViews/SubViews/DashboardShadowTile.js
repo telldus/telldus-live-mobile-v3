@@ -25,7 +25,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
-import i18n from '../../../Translations/common';
 
 const Title = ({ isEnabled, name, tileWidth, type = 'device' }: Object) => (
 	<View style={[styles.title, !isEnabled ? styles.titleDisabled : (type === 'device' ? styles.titleEnabledDevice : styles.titleEnabledSensor)]}>
