@@ -323,8 +323,8 @@ class TabsView extends View {
 	}
 
 	render() {
-
 		let { appLayout } = this.props;
+		let { currentScreen } = this.props.screenProps;
 		let isPortrait = appLayout.height > appLayout.width;
 		let deviceWidth = isPortrait ? appLayout.width : appLayout.height;
 		let styles = this.getStyles(appLayout);
@@ -333,6 +333,7 @@ class TabsView extends View {
 			stackNavigator: this.props.stackNavigator,
 			orientation: this.state.orientation,
 			currentTab: this.state.routeName,
+			currentScreen,
 		};
 		if (!this.state || !this.state.starIcon) {
 			return false;

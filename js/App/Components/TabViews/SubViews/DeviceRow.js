@@ -48,6 +48,7 @@ type Props = {
 	setScrollEnabled: boolean,
 	intl: Object,
 	currentTab: string,
+	currentScreen: string,
 };
 
 function toSliderValue(dimmerValue: number): number {
@@ -99,7 +100,7 @@ class DeviceRow extends View {
 
 	render() {
 		let button = null;
-		const { device, intl, currentTab } = this.props;
+		const { device, intl, currentTab, currentScreen } = this.props;
 		const {
 			TURNON,
 			TURNOFF,
@@ -140,7 +141,7 @@ class DeviceRow extends View {
 			/>;
 		}
 		let status = this.getLabelStatus(device.isInState, device.value);
-		let accessible = currentTab === 'Devices';
+		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
 		let accessibilityLabel = `${this.labelDevice} ${device.name}, ${status}`;
 		let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 

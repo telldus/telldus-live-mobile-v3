@@ -154,6 +154,8 @@ const SensorLuminance = ({ luminance }) => (
 type Props = {
 	sensor: Object,
 	intl: Object,
+	currentTab: string,
+	currentScreen: string,
 };
 
 class SensorRow extends Component<Props, void> {
@@ -194,7 +196,7 @@ class SensorRow extends Component<Props, void> {
 	}
 
 	render() {
-		const { sensor } = this.props;
+		const { sensor, currentTab, currentScreen } = this.props;
 		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
 		let sensors = [];
 
@@ -255,15 +257,16 @@ class SensorRow extends Component<Props, void> {
 			sensors.push(<SensorLuminance {...{ luminance }} key={`${id}luminance`}/>);
 		}
 
+		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
 		accessibilityLabel = `${accessibilityLabel}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
 		return (
 			<ListItem
 				style={Theme.Styles.rowFront}
 				onLayout={this.onLayout}
-				importantForAccessibility={'yes'}
-				accessible={true}
-				accessibilityLabel={accessibilityLabel}>
+				accessible={accessible}
+				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+				accessibilityLabel={accessible ? accessibilityLabel : ''}>
 				<View style={styles.container}>
 					<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
 					      ellipsizeMode="middle"

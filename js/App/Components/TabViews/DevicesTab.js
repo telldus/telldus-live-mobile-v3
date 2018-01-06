@@ -164,13 +164,14 @@ class DevicesTab extends View {
 	}
 
 	renderRow(row) {
-		let { screenProps } = this.props;
+		let { intl, currentTab, currentScreen } = this.props.screenProps;
 		return (
 			<DeviceRow {...row}
 			           onSettingsSelected={this.openDeviceDetail}
 					   setScrollEnabled={this.setScrollEnabled}
-					   intl={screenProps.intl}
-					   currentTab={screenProps.currentTab}
+					   intl={intl}
+					   currentTab={currentTab}
+					   currentScreen={currentScreen}
 			/>
 		);
 	}
