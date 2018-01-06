@@ -87,6 +87,7 @@ type State = {
 	deviceId: number,
 	dimmer: boolean,
 	addGateway: boolean,
+	makeRowAccessible: 0 | 1,
 };
 
 class DevicesTab extends View {
@@ -122,6 +123,7 @@ class DevicesTab extends View {
 			deviceId: -1,
 			dimmer: false,
 			addGateway: false,
+			makeRowAccessible: 0,
 		};
 		this.onCloseSelected = this.onCloseSelected.bind(this);
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
@@ -143,8 +145,18 @@ class DevicesTab extends View {
 	componentWillReceiveProps(nextProps) {
 		const { sections, sectionIds } = nextProps.rowsAndSections;
 
+		let { makeRowAccessible } = this.state;
+		let { screenReaderEnabled } = nextProps;
+		let { currentScreen, currentTab } = nextProps.screenProps;
+		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Devices') {
+			makeRowAccessible = 1;
+		} else {
+			makeRowAccessible = 0;
+		}
+
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+			makeRowAccessible,
 		});
 
 		if (nextProps.tab !== 'devicesTab' && nextProps.editMode === true) {
@@ -317,6 +329,8 @@ class DevicesTab extends View {
 					leftOpenValue={40}
 					editMode={this.props.editMode}
 					onRefresh={this.onRefresh}
+					// adding key to force render list rows, to gain back the accessibilty.
+					key={this.state.makeRowAccessible}
 				/>
 			</View>
 		);
@@ -398,6 +412,7 @@ function mapStateToProps(state, ownprops) {
 		gateways: state.gateways,
 		tab: state.navigation.tab,
 		appLayout: state.App.layout,
+		screenReaderEnabled: state.App.screenReaderEnabled,
 	};
 }
 

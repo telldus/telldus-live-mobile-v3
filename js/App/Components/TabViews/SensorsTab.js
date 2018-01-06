@@ -48,6 +48,7 @@ type Props = {
 
 type State = {
 	dataSource: Object,
+	makeRowAccessible: 0 | 1,
 };
 
 class SensorsTab extends View {
@@ -75,6 +76,7 @@ class SensorsTab extends View {
 				rowHasChanged: this.rowHasChanged,
 				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 			}).cloneWithRowsAndSections(sections, sectionIds),
+			makeRowAccessible: 0,
 		};
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
@@ -86,8 +88,18 @@ class SensorsTab extends View {
 	componentWillReceiveProps(nextProps) {
 		const { sections, sectionIds } = nextProps.rowsAndSections;
 
+		let { makeRowAccessible } = this.state;
+		let { screenReaderEnabled } = nextProps;
+		let { currentScreen, currentTab } = nextProps.screenProps;
+		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
+			makeRowAccessible = 1;
+		} else {
+			makeRowAccessible = 0;
+		}
+
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+			makeRowAccessible,
 		});
 
 		if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
@@ -126,6 +138,8 @@ class SensorsTab extends View {
 					leftOpenValue={40}
 					editMode={this.props.editMode}
 					onRefresh={this.onRefresh}
+					// adding key to force render list rows, to gain back the accessibilty.
+					key={this.state.makeRowAccessible}
 				/>
 			</View>
 		);
