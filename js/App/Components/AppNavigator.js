@@ -110,6 +110,7 @@ type Props = {
 
 type State = {
 	specificOrientation: string,
+	currentScreen: string,
 }
 
 class AppNavigator extends View {
@@ -118,6 +119,7 @@ class AppNavigator extends View {
 	state: State;
 
 	_updateSpecificOrientation: (Object) => void;
+	onNavigationStateChange: (Object) => void;
 
 	constructor() {
 		super();
@@ -126,10 +128,12 @@ class AppNavigator extends View {
 
 		this.state = {
 			specificOrientation: init,
+			currentScreen: 'Tabs',
 		};
 
 		Orientation.unlockAllOrientations();
 		Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
+		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
 
 	componentWillMount() {
@@ -176,10 +180,21 @@ class AppNavigator extends View {
 		this.setState({ specificOrientation });
 	};
 
+	onNavigationStateChange(prevState, currentState) {
+		const index = currentState.index;
+
+		this.setState({ currentScreen: currentState.routes[index].routeName });
+	}
+
 	render() {
+		let { currentScreen } = this.state;
+		let screenProps = {
+			currentScreen,
+		};
+
 		return (
 			<View>
-				<Navigator/>
+				<Navigator onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
 				<DimmerPopup
 					isVisible={this.props.dimmer.show}
 					name={this.props.dimmer.name}
