@@ -71,6 +71,7 @@ class HistoryRow extends View {
 
 		this.labelOff = formatMessage(i18n.turnOff);
 		this.labelOn = formatMessage(i18n.turnOn);
+		this.labelBell = formatMessage(i18n.bell);
 		this.labelDim = formatMessage(i18n.dim);
 		this.labelUp = formatMessage(i18n.up);
 		this.labelDown = formatMessage(i18n.down);
@@ -119,6 +120,8 @@ class HistoryRow extends View {
 				return this.labelOff;
 			case 'TURNON':
 				return this.labelOn;
+			case 'BELL':
+				return this.labelBell;
 			case 'UP':
 				return this.labelUp;
 			case 'DOWN':
