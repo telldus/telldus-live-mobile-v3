@@ -77,8 +77,8 @@ const Header = ({ onPress, styles, buttonAccessibilityLabel }) => (
 	</View>
 );
 
-const StatusView = ({styles}) => (
-	<Text style={styles.statusText}>
+const StatusView = ({styles, accessible, importantForAccessibility}) => (
+	<Text style={styles.statusText} accessible={accessible} importantForAccessibility={importantForAccessibility}>
 		<FormattedMessage {...messages.pushEnabled} style={styles.statusText} />
 	</Text>
 );
@@ -222,13 +222,18 @@ class SettingsDetailModal extends View {
 				<Container style={styles.container}>
 					<Header onPress={this.props.onClose} styles={styles} buttonAccessibilityLabel={this.labelCloseSettings}/>
 					<View style={styles.body}>
-						<View style={styles.body} importantForAccessibility={importantForAccessibility}>
+						<View style={styles.body}>
 							{ this.props.store.user.notificationText ?
-								<Text style={styles.notification}>{this.props.store.user.notificationText}</Text>
+								<Text style={styles.notification}
+									accessible={buttonAccessible}
+									importantForAccessibility={importantForAccessibility}>
+									{this.props.store.user.notificationText}
+								</Text>
 								:
 								null
 							}
-							<Text style={styles.versionInfo}>
+							<Text style={styles.versionInfo} accessible={buttonAccessible}
+								importantForAccessibility={importantForAccessibility}>
 								Telldus Live! mobile{'\n'}
 								<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
 							</Text>
@@ -238,9 +243,12 @@ class SettingsDetailModal extends View {
 									onPress={this.submitPushToken}
 									text={submitButText}
 									postScript={this.state.isPushSubmitLoading ? '...' : null}
+									accessible={buttonAccessible}
 								/>
 								:
-								<StatusView styles={styles}/>
+								<StatusView styles={styles}
+									accessible={buttonAccessible}
+									importantForAccessibility={importantForAccessibility}/>
 							}
 							<View style={{height: 20}} />
 							<TouchableButton

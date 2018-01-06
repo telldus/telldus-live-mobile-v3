@@ -88,11 +88,13 @@ class TouchableButton extends Component<Props, void> {
 		return (
 			<TouchableOpacity
 				accessible={accessible}
-				accessibilityLabel={accessibilityLabel}
 				importantForAccessibility={importantForAccessibility}
+				accessibilityLabel={accessibilityLabel}
 				style={[shadow, buttonContainer, style]}
 				onPress={this.onPress}>
-				<Text style={[buttonLabel, labelStyle]}>
+				<Text style={[buttonLabel, labelStyle]}
+					accessible={accessible}
+					importantForAccessibility={importantForAccessibility}>
 					{preScript}{label.toUpperCase()}{postScript}
 				</Text>
 			</TouchableOpacity>
