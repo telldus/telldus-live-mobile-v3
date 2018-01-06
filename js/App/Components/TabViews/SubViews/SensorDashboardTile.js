@@ -30,12 +30,15 @@ import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
+import i18n from '../../../Translations/common';
+
 type Props = {
 	item: Object,
 	tileWidth: number,
 	displayType: string,
 	style: Object,
 	onPress: () => void,
+	intl: Object,
 };
 
 type State = {
@@ -45,7 +48,7 @@ type State = {
 class SensorDashboardTile extends View {
 	props: Props;
 	state: State;
-	getSlideList : Object => Array<Object>;
+	getSlideList : Object => Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -54,11 +57,25 @@ class SensorDashboardTile extends View {
 			currentDisplayType: 'default',
 		};
 
+		let { formatMessage } = this.props.intl;
+
+		this.labelSensor = formatMessage(i18n.labelSensor);
+		this.labelHumidity = formatMessage(i18n.labelHumidity);
+		this.labelTemperature = formatMessage(i18n.labelTemperature);
+		this.labelRainRate = formatMessage(i18n.labelRainRate);
+		this.labelRainTotal = formatMessage(i18n.labelRainTotal);
+		this.labelWindGust = formatMessage(i18n.labelWindGust);
+		this.labelWindAverage = formatMessage(i18n.labelWindAverage);
+		this.labelWindDirection = formatMessage(i18n.labelWindDirection);
+		this.labelUVIndex = formatMessage(i18n.labelUVIndex);
+		this.labelWatt = formatMessage(i18n.labelWatt);
+		this.labelLuminance = formatMessage(i18n.labelLuminance);
+
 		this.getSlideList = this.getSlideList.bind(this);
 	}
 
-	getSlideList(item: Object) : Array<Object> {
-		let slideList = [];
+	getSlideList(item: Object) : Object {
+		let slideList = [], sensorInfo = '';
 
 		if (item.humidity) {
 			slideList.push({
@@ -66,6 +83,7 @@ class SensorDashboardTile extends View {
 				icon: require('../img/sensorIcons/HumidityLargeGray.png'),
 				text: <FormattedNumber value={item.humidity / 100} formatStyle="percent"/>,
 			});
+			sensorInfo = item.humidity ? `${this.labelHumidity} ${item.humidity}%` : '';
 		}
 		if (item.temperature) {
 			slideList.push({
@@ -74,6 +92,7 @@ class SensorDashboardTile extends View {
 				text: <FormattedNumber value={item.temperature} maximumFractionDigits={1} minimumFractionDigits={1}
 				                       suffix={`${String.fromCharCode(176)}C`}/>,
 			});
+			sensorInfo = item.temperature ? `${sensorInfo}, ${this.labelTemperature} ${item.temperature}${String.fromCharCode(176)}C` : `${sensorInfo}`;
 		}
 		if (item.rainRate || item.rainTotal) {
 			slideList.push({
@@ -84,6 +103,9 @@ class SensorDashboardTile extends View {
 				text2: (item.rainTotal && <FormattedNumber value={item.rainTotal} maximumFractionDigits={0}
 				                                           suffix={'mm'}/> ),
 			});
+			let rainRateInfo = item.rainRate ? `${this.labelRainRate} ${item.rainRate}mm/h,` : '';
+			let rainTotalInfo = item.rainTotal ? `${this.labelRainTotal} ${item.rainTotal}mm,` : '';
+			sensorInfo = `${sensorInfo}, ${rainRateInfo} ${rainTotalInfo}`;
 		}
 		if (item.windGust || item.windAverage || item.windDirection) {
 			slideList.push({
@@ -95,6 +117,10 @@ class SensorDashboardTile extends View {
 				                                          suffix={'m/s*\n'}/> ),
 				text3: (item.windDirection && this._windDirection(item.windDirection)),
 			});
+			let windAverageInfo = item.windAverage ? `${this.labelWindAverage} ${item.windAverage}m/s,` : '';
+			let windGustInfo = item.windGust ? `${this.labelWindGust} ${item.windGust}m/s*,` : '';
+			let windDirectionInfo = item.windDirection ? `${this.labelWindDirection} ${item.windDirection}${this._windDirection(item.windDirection)},` : '';
+			sensorInfo = `${sensorInfo}, ${windAverageInfo} ${windGustInfo} ${windDirectionInfo}`;
 		}
 		if (item.uv) {
 			slideList.push({
@@ -102,6 +128,8 @@ class SensorDashboardTile extends View {
 				icon: require('../img/sensorIcons/UVLargeGray.png'),
 				text: <FormattedNumber value={item.uv} maximumFractionDigits={0}/>,
 			});
+			let uvInfo = item.uv ? `${this.labelUVIndex} ${item.uv},` : '';
+			sensorInfo = `${sensorInfo}, ${uvInfo}`;
 		}
 		if (item.watt) {
 			slideList.push({
@@ -109,6 +137,8 @@ class SensorDashboardTile extends View {
 				icon: require('../img/sensorIcons/WattLargeGray.png'),
 				text: <FormattedNumber value={item.watt} maximumFractionDigits={1} suffix={' W'}/>,
 			});
+			let wattInfo = item.watt ? `${this.labelWatt} ${item.watt}W,` : '';
+			sensorInfo = `${sensorInfo}, ${wattInfo}`;
 		}
 		if (item.luminance) {
 			slideList.push({
@@ -117,16 +147,20 @@ class SensorDashboardTile extends View {
 				text: <FormattedNumber value={item.luminance} maximumFractionDigits={0} suffix={'lx'}
 				                       useGrouping={false}/>,
 			});
+			let luminanceInfo = item.luminance ? `${this.labelLuminance} ${item.luminance}lx,` : '';
+			sensorInfo = `${sensorInfo}, ${luminanceInfo}`;
 		}
 
-		return slideList;
+		return {slideList, sensorInfo};
 	}
 
 	render() {
 		const { item, tileWidth } = this.props;
 		const displayType = this.props.displayType;
 
-		const slideList = this.getSlideList(item);
+		const { slideList, sensorInfo } = this.getSlideList(item);
+
+		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorInfo}`;
 
 		const slides = slideList.map((data) =>
 			<SensorDashboardTileSlide
@@ -152,6 +186,7 @@ class SensorDashboardTile extends View {
 				name={item.name}
 				type={'sensor'}
 				tileWidth={tileWidth}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.props.style, {
 						width: tileWidth,
