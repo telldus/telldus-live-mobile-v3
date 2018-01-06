@@ -56,6 +56,8 @@ type Props = {
 	appLayout: Object,
 	rowsAndSections: Array<any> | boolean,
 	screenProps: Object,
+	currentScreen: string,
+	currentTab: string,
 };
 
 type State = {
@@ -162,8 +164,14 @@ class HistoryTab extends View {
 
 	renderRow(item: Object) {
 		let { screenProps } = this.props;
+		let { intl, currentTab, currentScreen } = screenProps;
+
 		return (
-			<HistoryRow id={item.item.index} item={item.item} section={item.section.key} intl={screenProps.intl} isFirst={+item.item.index === 0}/>
+			<HistoryRow id={item.item.index}
+				item={item.item} section={item.section.key}
+				intl={intl} isFirst={+item.item.index === 0}
+				currentTab={currentTab} currentScreen={currentScreen}
+			/>
 		);
 	}
 
@@ -199,6 +207,7 @@ class HistoryTab extends View {
 
 	render() {
 		let { appLayout, screenProps } = this.props;
+		let { intl, currentTab, currentScreen } = screenProps;
 
 		let {
 			line,
@@ -239,7 +248,7 @@ class HistoryTab extends View {
 					keyExtractor={this.keyExtractor}
 				/>
 				<View style={line}/>
-				<DeviceHistoryDetails intl={screenProps.intl}/>
+				<DeviceHistoryDetails intl={intl} currentTab={currentTab} currentScreen={currentScreen}/>
 			</View>
 		);
 	}

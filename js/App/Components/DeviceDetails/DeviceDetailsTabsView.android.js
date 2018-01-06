@@ -95,10 +95,12 @@ class DeviceDetailsTabsView extends View {
 
 	render() {
 		let { appLayout } = this.props;
+		let { currentScreen } = this.props.screenProps;
 		let screenProps = {
 			device: this.props.device,
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
+			currentScreen,
 		};
 		let isPortrait = appLayout.height > appLayout.width;
 

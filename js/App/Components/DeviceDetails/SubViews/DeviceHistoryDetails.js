@@ -69,7 +69,7 @@ class DeviceHistoryDetails extends View {
 	}
 
 	render() {
-		let { detailsData, appLayout } = this.props;
+		let { detailsData, appLayout, currentScreen, currentTab } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
 
@@ -158,6 +158,8 @@ class DeviceHistoryDetails extends View {
 			}
 		}
 
+		let accessible = currentTab === 'History' && currentScreen === 'DeviceDetails';
+
 		return (
 			<Modal
 				modalStyle={container}
@@ -177,8 +179,8 @@ class DeviceHistoryDetails extends View {
 				</View>
 				<ScrollView contentContainerStyle={detailsContainer}>
 					<View style={detailsRow}
-						accessible={true}
-						importantForAccessibility={'yes'}>
+						accessible={accessible}
+						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
 							<Text style={detailsLabel}>
 								<FormattedMessage {...i18n.state} style={detailsLabel}/>
@@ -191,8 +193,8 @@ class DeviceHistoryDetails extends View {
 						</View>
 					</View>
 					<View style={detailsRow}
-						accessible={true}
-						importantForAccessibility={'yes'}>
+						accessible={accessible}
+						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
 							<Text style={detailsLabel}>
 								<FormattedMessage {...i18n.time} style={detailsLabel}/>
@@ -223,8 +225,8 @@ class DeviceHistoryDetails extends View {
 						}
 					</View>
 					<View style={detailsRow}
-						accessible={true}
-						importantForAccessibility={'yes'}>
+						accessible={accessible}
+						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
 							<Text style={detailsLabel}>
 								<FormattedMessage {...i18n.origin} style={detailsLabel}/>
@@ -237,8 +239,8 @@ class DeviceHistoryDetails extends View {
 						</View>
 					</View>
 					<View style={detailsRow}
-						accessible={true}
-						importantForAccessibility={'yes'}>
+						accessible={accessible}
+						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
 							<Text style={detailsLabel}>
 								<FormattedMessage {...i18n.status} style={detailsLabel}/>

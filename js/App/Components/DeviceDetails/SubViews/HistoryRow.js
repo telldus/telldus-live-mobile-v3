@@ -42,6 +42,8 @@ type Props = {
 	section: string,
 	intl: Object,
 	isModalOpen: boolean,
+	currentScreen: string,
+	currentTab: string,
 };
 
 type State = {
@@ -153,7 +155,7 @@ class HistoryRow extends View {
 
 	render() {
 
-		let { appLayout, intl, isModalOpen } = this.props;
+		let { appLayout, intl, isModalOpen, currentScreen, currentTab } = this.props;
 
 		let {
 			locationCover,
@@ -196,15 +198,16 @@ class HistoryRow extends View {
 
 		let accessibilityLabel = this.accessibilityLabel(deviceState);
 		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
+		let accessible = !isModalOpen && currentTab === 'History' && currentScreen === 'DeviceDetails';
 
 		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
 
 		return (
 			<TouchableOpacity style={styles.rowItemsContainer}
-				accessible={!isModalOpen}
-				importantForAccessibility={isModalOpen ? 'no-hide-descendants' : 'yes'}
-				accessibilityLabel={isModalOpen ? '' : accessibilityLabel}
+				accessible={accessible}
+				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+				accessibilityLabel={accessible ? accessibilityLabel : ''}
 				onPress={this.onOriginPress}>
 				<ListRow
 					roundIcon={roundIcon}
