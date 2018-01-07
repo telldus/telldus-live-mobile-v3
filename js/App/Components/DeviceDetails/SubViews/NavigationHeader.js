@@ -55,7 +55,7 @@ class NavigationHeader extends View {
 		let size = isPortrait ? width * 0.06 : height * 0.06;
 
 		return (
-			<Icon name="arrow-back" size={size} color="#fff"/>
+			<Icon name="arrow-back" size={size} color="#fff" style={styles.iconLeft}/>
 		);
 	}
 
@@ -84,6 +84,9 @@ const styles = StyleSheet.create({
 		marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 		height: 0,
 		width: 0,
+	},
+	iconLeft: {
+		paddingVertical: 10,
 	},
 });
 
