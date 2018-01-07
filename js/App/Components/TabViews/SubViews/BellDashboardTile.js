@@ -50,7 +50,12 @@ class BellDashboardTile extends View {
 		super(props);
 
 		this.onBell = this.onBell.bind(this);
-		this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
+
+		let { formatMessage } = props.intl;
+
+		this.labelDevice = formatMessage(i18n.labelDevice);
+		this.labelBell = `${this.labelDevice} ${formatMessage(i18n.bell)}`;
+		this.labelBellButton = `${formatMessage(i18n.bell)} ${formatMessage(i18n.button)}`;
 	}
 
 	onBell() {
@@ -61,7 +66,9 @@ class BellDashboardTile extends View {
 	render() {
 		const { item, tileWidth } = this.props;
 		let {methodRequested} = this.props.item;
-		let accessibilityLabel = this.labelBellButton;
+
+		const accessibilityLabelButton = this.labelBellButton;
+		const accessibilityLabel = this.labelBell;
 
 		return (
 			<DashboardShadowTile
@@ -70,6 +77,7 @@ class BellDashboardTile extends View {
 				name={item.name}
 				type={'device'}
 				tileWidth={tileWidth}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.props.style, {
 						width: tileWidth,
@@ -79,7 +87,7 @@ class BellDashboardTile extends View {
 				<TouchableOpacity
 					onPress={this.onBell}
 					style={styles.container}
-					accessibilityLabel={accessibilityLabel}>
+					accessibilityLabel={accessibilityLabelButton}>
 					<View style={styles.body}>
 					  <Icon name="bell" size={44} color="orange" />
 					</View>

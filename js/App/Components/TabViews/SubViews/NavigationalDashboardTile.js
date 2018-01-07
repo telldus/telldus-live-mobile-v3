@@ -113,9 +113,17 @@ class NavigationalDashboardTile extends View {
 		this.onDown = this.onDown.bind(this);
 		this.onStop = this.onStop.bind(this);
 
-		this.labelUpButton = `${props.intl.formatMessage(i18n.up)} ${props.intl.formatMessage(i18n.button)}`;
-		this.labelDownButton = `${props.intl.formatMessage(i18n.down)} ${props.intl.formatMessage(i18n.button)}`;
-		this.labelStopButton = `${props.intl.formatMessage(i18n.stop)} ${props.intl.formatMessage(i18n.button)}`;
+		let { formatMessage } = props.intl;
+
+		this.labelDevice = formatMessage(i18n.labelDevice);
+
+		this.labelStatusUp = `${formatMessage(i18n.status)} ${formatMessage(i18n.up)}`;
+		this.labelStatusDown = `${formatMessage(i18n.status)} ${formatMessage(i18n.down)}`;
+		this.labelStatusStop = `${formatMessage(i18n.status)} ${formatMessage(i18n.stop)}`;
+
+		this.labelUpButton = `${formatMessage(i18n.up)} ${formatMessage(i18n.button)}`;
+		this.labelDownButton = `${formatMessage(i18n.down)} ${formatMessage(i18n.button)}`;
+		this.labelStopButton = `${formatMessage(i18n.stop)} ${formatMessage(i18n.button)}`;
 	}
 
 	onUp() {
@@ -133,11 +141,16 @@ class NavigationalDashboardTile extends View {
 
 	render() {
 		const { item, tileWidth } = this.props;
-		const { name, supportedMethods } = item;
+		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
 		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} accessibilityLabel={this.labelUpButton}/> : null;
 		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} accessibilityLabel={this.labelDownButton}/> : null;
 		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} accessibilityLabel={this.labelStopButton}/> : null;
+
+		const deviceInfo = `${this.labelDevice} ${name}`;
+		const statusInfo = isInState === 'UP' ? this.labelStatusUp : isInState === 'DOWN'
+			? this.labelStatusDown : this.labelStatusStop;
+		const accessibilityLabel = `${deviceInfo}, ${statusInfo}`;
 
 		return (
 			<DashboardShadowTile
@@ -146,6 +159,7 @@ class NavigationalDashboardTile extends View {
 				name={name}
 				type={'device'}
 				tileWidth={tileWidth}
+				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
 				<View style={styles.body}>
 					{ upButton }
