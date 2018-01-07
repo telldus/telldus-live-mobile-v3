@@ -228,7 +228,7 @@ class DimmerDashboardTile extends View {
 		const statusInfo = isInState === 'DIM' ? `${this.labelStatusDim} ${toSliderValue(this.state.value)}%` :
 			isInState === 'TURNON' ? this.labelStatusOn : this.labelStatusOff;
 		const accessibilityLabel = `${deviceInfo}, ${statusInfo}`;
- 
+
 		return (
 			<DashboardShadowTile
 				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
