@@ -81,11 +81,12 @@ export default class Clients extends View {
 		};
 
 		const styles = this.getStyle(appLayout);
+		const accessibilityLabel = `${this.boxTitle}, ${this.props.client.type}`;
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1}} accessible={true} accessibilityLabel={accessibilityLabel}>
 				<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData} style={{marginTop: 20}}/>
+				<DeviceLocationDetail {...locationData} accessible={false} style={{marginTop: 20}}/>
 			</View>
 		);
 	}
