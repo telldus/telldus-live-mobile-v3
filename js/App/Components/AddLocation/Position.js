@@ -277,7 +277,7 @@ class Position extends View {
 							underlineColorAndroid="#e26901"
 							value={this.state.address}/>
 					</LabelBox>
-					<View style={styles.mapViewCover}>
+					<View style={styles.mapViewCover} accessible={false} importantForAccessibility="no-hide-descendants">
 						<MapView.Animated
 							style={styles.map}
 							ref={this._refs}
