@@ -78,6 +78,7 @@
   "addNewLocation.timeZone.headerOne": "Time Zone",
   "addNewLocation.timeZone.headerTwo": "Select Time Zone",
   "addNewLocation.timeZone.hint": "Autodetected",
+  "addNewLocation.timeZone.labelHintChangeTimeZone": "Double tap to change",
   "addNewLocation.timeZoneCity.headerOne": "Time Zone",
   "addNewLocation.timeZoneCity.headerTwo": "Select City",
   "addNewLocation.timeZoneContinent.headerOne": "Time Zone",

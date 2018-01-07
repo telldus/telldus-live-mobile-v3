@@ -55,6 +55,11 @@ const messages = defineMessages({
 		defaultMessage: 'Autodetected',
 		description: 'hint text for user',
 	},
+	labelHintChangeTimeZone: {
+		id: 'addNewLocation.timeZone.labelHintChangeTimeZone',
+		defaultMessage: 'Double tap to change',
+		description: 'accessibility message to change time zone',
+	},
 });
 
 type Props = {
@@ -97,6 +102,8 @@ class TimeZone extends View<void, Props, State> {
 		this.label = formatMessage(messages.headerOne);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
+		this.labelHintChangeTimeZone = formatMessage(messages.labelHintChangeTimeZone);
+		this.labelHint = formatMessage(messages.hint);
 
 		this.onTimeZoneSubmit = this.onTimeZoneSubmit.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
@@ -146,13 +153,16 @@ class TimeZone extends View<void, Props, State> {
 		let { appLayout } = this.props;
 		const styles = this.getStyle(appLayout);
 
+		let timeZoneInfo = `${this.label}, ${this.state.timeZone}, ${this.state.autoDetected ? this.labelHint : ''}`;
+		let accessibilityLabel = `${timeZoneInfo}. ${this.labelHintChangeTimeZone}.`;
+
 		return (
 			<View style={{flex: 1}}>
 				<LabelBox
 					label={this.label}
 					showIcon={false}
 					appLayout={appLayout}>
-					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 0}}>
+					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 0}} accessibilityLabel={accessibilityLabel}>
 						<View style={styles.timeZoneContainer}>
 							<Text style={styles.timeZone}>
 								{this.state.timeZone}
