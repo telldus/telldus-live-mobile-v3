@@ -34,6 +34,7 @@ type Props = {
 	style: any,
 	onPress?: Function,
 	appLayout: Object,
+	accessible?: boolean,
 };
 
 type State = {
@@ -65,7 +66,7 @@ class DeviceLocationDetail extends View {
 
 	render() {
 
-		let { title, H1, H2, image, style, appLayout } = this.props;
+		let { title, H1, H2, image, style, appLayout, accessible } = this.props;
 
 		let {
 			locationImageContainer,
@@ -86,7 +87,7 @@ class DeviceLocationDetail extends View {
 					<View style={locationImageContainer}>
 						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
 					</View>
-					<TouchableWithoutFeedback onPress={this.onPress}>
+					<TouchableWithoutFeedback onPress={this.onPress} accessible={accessible}>
 						<View style={locationTextContainer}>
 							<Text numberOfLines={1} style={textHSH}>
 								{!!H1 && H1}
