@@ -315,6 +315,10 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.next',
 		defaultMessage: 'next',
 	},
+	navigationBackButton: {
+		id: 'accessibilityLabel.navigationBackButton',
+		defaultMessage: 'navigational back button',
+	},
 	success: {
 		id: 'success',
 		defaultMessage: 'Success',

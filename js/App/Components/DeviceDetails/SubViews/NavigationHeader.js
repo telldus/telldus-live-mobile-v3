@@ -25,13 +25,16 @@ import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { intlShape, injectIntl } from 'react-intl';
 
 import { View, Header, StyleSheet } from 'BaseComponents';
 import { hasStatusBar } from 'Lib';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	navigation: Object,
 	appLayout: Object,
+	intl: intlShape.isRequired,
 };
 
 class NavigationHeader extends View {
@@ -42,6 +45,11 @@ class NavigationHeader extends View {
 		super(props);
 		this.isTablet = DeviceInfo.isTablet();
 		this.goBack = this.goBack.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
 	}
 
 	goBack() {
@@ -72,6 +80,7 @@ class NavigationHeader extends View {
 		let leftIcon = {
 			component: this.getLeftIcon(),
 			onPress: this.goBack,
+			accessibilityLabel: this.labelLeftIcon,
 		};
 		return (
 			<Header leftButton={leftIcon} style={{height: deviceHeight * 0.1111}}/>
@@ -96,4 +105,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(NavigationHeader);
+export default connect(mapStateToProps, null)(injectIntl(NavigationHeader));
