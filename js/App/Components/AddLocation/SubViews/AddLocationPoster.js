@@ -30,6 +30,7 @@ import DeviceInfo from 'react-native-device-info';
 
 import { View, Text, Poster, RoundedInfoButton } from 'BaseComponents';
 
+import i18n from '../../../Translations/common';
 import Theme from 'Theme';
 
 type InfoButton = {
@@ -45,6 +46,7 @@ type Props = {
 	appLayout: Object,
 	screenProps: Object,
 	navigation: Object,
+	intl: Object,
 };
 
 class AddLocationPoster extends View {
@@ -62,6 +64,11 @@ class AddLocationPoster extends View {
 		this._renderInfoButton = this._renderInfoButton.bind(this);
 		this.goBack = this.goBack.bind(this);
 		this.isTablet = DeviceInfo.isTablet();
+
+		let { formatMessage } = props.intl;
+
+		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
 	}
 
 	_renderInfoButton = (button: Object): Object => {
@@ -88,8 +95,9 @@ class AddLocationPoster extends View {
 				{(!this.isTablet) && (!isPortrait) &&
 						<TouchableOpacity
 							style={styles.backButtonLand}
-							onPress={this.goBack}>
-							<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff"/>
+							onPress={this.goBack}
+							accessibilityLabel={this.labelLeftIcon}>
+							<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff" style={styles.iconLeft}/>
 						</TouchableOpacity>
 				}
 				<View style={styles.hContainer}>
@@ -136,6 +144,9 @@ class AddLocationPoster extends View {
 				backgroundColor: 'transparent',
 				left: 10,
 				top: 10,
+			},
+			iconLeft: {
+				paddingVertical: 10,
 			},
 		};
 	}

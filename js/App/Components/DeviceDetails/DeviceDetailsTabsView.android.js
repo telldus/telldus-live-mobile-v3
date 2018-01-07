@@ -38,6 +38,7 @@ const CustomIcon = createIconSetFromIcoMoon(icon_settings);
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
 import { Text, View } from 'BaseComponents';
 import { getWindowDimensions } from 'Lib';
+import i18n from '../../Translations/common';
 
 type Props = {
 	dispatch: Function,
@@ -68,6 +69,11 @@ class DeviceDetailsTabsView extends View {
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 
 		this.isTablet = DeviceInfo.isTablet();
+
+		let { formatMessage } = props.intl;
+
+		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
 	}
 
 	goBack() {
@@ -117,7 +123,8 @@ class DeviceDetailsTabsView extends View {
 					{(!this.isTablet) && (!isPortrait) &&
 						<TouchableOpacity
 							style={styles.backButtonLand}
-							onPress={this.goBack}>
+							onPress={this.goBack}
+							accessibilityLabel={this.labelLeftIcon}>
 							<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff"/>
 						</TouchableOpacity>
 					}
