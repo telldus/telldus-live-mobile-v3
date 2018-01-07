@@ -24,6 +24,7 @@
   "accessibilityLabel.labelToConfirm": "to confirm",
   "accessibilityLabel.labelToReturn": "to return",
   "accessibilityLabel.menuIcon": "Menu",
+  "accessibilityLabel.messageCloseMenu": "swipe left, using three fingers to close",
   "accessibilityLabel.navigationBackButton": "navigational back button",
   "accessibilityLabel.next": "next",
   "accessibilityLabel.scheduler.phraseOne": "schedule for",

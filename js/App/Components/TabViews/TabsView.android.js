@@ -29,6 +29,7 @@ import { defineMessages } from 'react-intl';
 import { intlShape, injectIntl } from 'react-intl';
 import Orientation from 'react-native-orientation';
 const orientation = Orientation.getInitialOrientation();
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, Icon, Header } from 'BaseComponents';
 
@@ -47,6 +48,10 @@ const messages = defineMessages({
 	menuIcon: {
 		id: 'accessibilityLabel.menuIcon',
 		defaultMessage: 'Menu',
+	},
+	messageCloseMenu: {
+		id: 'accessibilityLabel.messageCloseMenu',
+		defaultMessage: 'swipe left, using three fingers to close',
 	},
 	starIconShowDevices: {
 		id: 'accessibilityLabel.starIconShowDevices',
@@ -112,6 +117,7 @@ type Props = {
 	dispatch: Function,
 	stackNavigator: Object,
 	addNewLocation: () => void,
+	screenReaderEnabled: boolean,
 };
 
 type State = {
@@ -146,6 +152,7 @@ class TabsView extends View {
 		this.starIconHideDevices = `${formatMessage(messages.starIconHideDevices)}. ${this.labelButtondefaultDescription}`;
 		this.starIconShowSensors = `${formatMessage(messages.starIconShowSensors)}. ${this.labelButtondefaultDescription}`;
 		this.starIconHideSensors = `${formatMessage(messages.starIconHideSensors)}. ${this.labelButtondefaultDescription}`;
+		this.messageCloseMenu = `${formatMessage(messages.messageCloseMenu)}`;
 
 		this.starButton = {
 			icon: {
@@ -254,6 +261,9 @@ class TabsView extends View {
 
 	onOpenDrawer() {
 		this.setState({ drawer: true });
+		if (this.props.screenReaderEnabled) {
+			announceForAccessibility(this.messageCloseMenu);
+		}
 	}
 
 	onCloseDrawer() {
@@ -432,6 +442,7 @@ function mapStateToProps(store, ownprops) {
 		gateways: store.gateways,
 		isAppActive: store.App.active,
 		appLayout: store.App.layout,
+		screenReaderEnabled: store.App.screenReaderEnabled,
 		editModeDevicesTab: store.tabs.editModeDevicesTab,
 		editModeSensorsTab: store.tabs.editModeSensorsTab,
 	};
