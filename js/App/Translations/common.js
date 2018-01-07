@@ -311,6 +311,10 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.screen',
 		defaultMessage: 'screen',
 	},
+	next: {
+		id: 'accessibilityLabel.next',
+		defaultMessage: 'next',
+	},
 	success: {
 		id: 'success',
 		defaultMessage: 'Success',

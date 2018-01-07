@@ -25,9 +25,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Image, Platform, TouchableOpacity } from 'react-native';
+import { intlShape, injectIntl } from 'react-intl';
+
 import View from './View';
 import Throbber from './Throbber';
 import Theme from 'Theme';
+import i18n from '../App/Translations/common';
 
 type DefaultProps = {
 	tabs: boolean,
@@ -43,9 +46,15 @@ type Props = {
 	showThrobber: boolean,
 	buttonStyle: number | Array<any> | Object,
 	appLayout: Object,
+	accessible: boolean,
+	accessibilityLabel?: string,
+	intl: intlShape.isRequired,
 };
 
 class FloatingButton extends Component<Props, null> {
+	defaultDescription: string;
+	labelButton: string;
+	defaultLabel: string;
 	props: Props;
 
 	static propTypes = {
@@ -62,15 +71,27 @@ class FloatingButton extends Component<Props, null> {
 		tabs: false,
 		paddingRight: 0,
 		showThrobber: false,
+		accessible: true,
 	};
 
+	constructor(props: Props) {
+		super(props);
+
+		let { formatMessage } = props.intl;
+
+		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelButton = `${formatMessage(i18n.button)}`;
+		this.defaultLabel = `${formatMessage(i18n.next)} ${this.labelButton}. ${this.defaultDescription}`;
+	}
+
 	render(): Object {
-		const { buttonStyle, onPress, imageSource, showThrobber, appLayout } = this.props;
+		let { buttonStyle, onPress, imageSource, showThrobber, appLayout, accessible, accessibilityLabel } = this.props;
+		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
 		const { container, button, icon, throbber } = this._getStyle(appLayout);
 
 		return (
-			<TouchableOpacity style={[container, buttonStyle]} onPress={onPress}>
+			<TouchableOpacity style={[container, buttonStyle]} onPress={onPress} accessible={accessible} accessibilityLabel={accessibilityLabel}>
 				<View style={button}>
 					{!!imageSource &&
 					(
@@ -147,4 +168,4 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-export default connect(mapStateToProps, null)(FloatingButton);
+export default connect(mapStateToProps, null)(injectIntl(FloatingButton));
