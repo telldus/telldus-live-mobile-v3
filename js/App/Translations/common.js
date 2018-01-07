@@ -307,6 +307,10 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.announcementOnModalClose',
 		defaultMessage: 'Modal Closed',
 	},
+	screen: {
+		id: 'accessibilityLabel.screen',
+		defaultMessage: 'screen',
+	},
 	success: {
 		id: 'success',
 		defaultMessage: 'Success',

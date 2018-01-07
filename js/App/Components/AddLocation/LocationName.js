@@ -27,12 +27,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import {View, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
 import {getGatewayInfo} from 'Actions';
 
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	label: {
 		id: 'addNewLocation.locationName.label',
@@ -58,6 +60,8 @@ type Props = {
 	actions: Object,
 	getGatewayInfo: (uniqueParam: Object, extras: string) => Promise<any>;
 	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 }
 
 class LocationName extends View {
@@ -77,9 +81,13 @@ class LocationName extends View {
 			isLoading: false,
 		};
 
-		this.h1 = `2. ${props.intl.formatMessage(messages.label)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
-		this.label = props.intl.formatMessage(messages.label);
+		let { formatMessage } = props.intl;
+
+		this.h1 = `2. ${formatMessage(messages.label)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+		this.label = formatMessage(messages.label);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.onLocationNameChange = this.onLocationNameChange.bind(this);
 		this.onNameSubmit = this.onNameSubmit.bind(this);
@@ -93,6 +101,19 @@ class LocationName extends View {
 		this.props.onDidMount(h1, h2);
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'LocationName' && this.props.currentScreen !== 'LocationName';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	keyboardDidShow() {

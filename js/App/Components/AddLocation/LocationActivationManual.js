@@ -27,11 +27,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import {getGatewayInfo} from 'Actions';
 import {View, FormattedMessage, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	label: {
 		id: 'addNewLocation.activateManual.label',
@@ -68,6 +70,8 @@ type Props = {
 	actions: Object,
 	intl: intlShape.isRequired,
 	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 }
 
 class LocationActivationManual extends View {
@@ -87,9 +91,13 @@ class LocationActivationManual extends View {
 			isLoading: false,
 		};
 
-		this.h1 = `1. ${props.intl.formatMessage(messages.headerOne)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
-		this.label = props.intl.formatMessage(messages.label);
+		let { formatMessage } = props.intl;
+
+		this.h1 = `1. ${formatMessage(messages.headerOne)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+		this.label = formatMessage(messages.label);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
 		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);
@@ -103,6 +111,19 @@ class LocationActivationManual extends View {
 		this.props.onDidMount(h1, h2);
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'LocationActivationManual' && this.props.currentScreen !== 'LocationActivationManual';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	keyboardDidShow() {

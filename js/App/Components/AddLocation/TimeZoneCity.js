@@ -26,10 +26,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import {View, List, ListDataSource} from 'BaseComponents';
 import { ListRow } from 'AddNewLocation_SubViews';
 
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.timeZoneCity.headerOne',
@@ -49,6 +51,8 @@ type Props = {
 	intl: intlShape.isRequired,
 	onDidMount: Function,
 	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 }
 const listDataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,
@@ -70,13 +74,30 @@ class TimeZoneCity extends View {
 		this.parseDataForList = this.parseDataForList.bind(this);
 		this.onCityChoose = this.onCityChoose.bind(this);
 
-		this.h1 = `3. ${props.intl.formatMessage(messages.headerOne)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
+		let { formatMessage } = props.intl;
+
+		this.h1 = `3. ${formatMessage(messages.headerOne)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 	}
 
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'TimeZoneCity' && this.props.currentScreen !== 'TimeZoneCity';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

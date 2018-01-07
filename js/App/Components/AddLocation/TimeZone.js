@@ -27,6 +27,7 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import {
 	View,
@@ -37,6 +38,7 @@ import {
 } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.timeZone.headerOne',
@@ -63,6 +65,8 @@ type Props = {
 	onDidMount: Function,
 	activateGateway: (clientInfo: Object) => Promise<any>,
 	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 }
 
 type State = {
@@ -86,9 +90,13 @@ class TimeZone extends View<void, Props, State> {
 			autoDetected,
 		};
 
-		this.h1 = `3. ${props.intl.formatMessage(messages.headerOne)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
-		this.label = props.intl.formatMessage(messages.headerOne);
+		let { formatMessage } = props.intl;
+
+		this.h1 = `3. ${formatMessage(messages.headerOne)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+		this.label = formatMessage(messages.headerOne);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.onTimeZoneSubmit = this.onTimeZoneSubmit.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
@@ -97,6 +105,19 @@ class TimeZone extends View<void, Props, State> {
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'TimeZone' && this.props.currentScreen !== 'TimeZone';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

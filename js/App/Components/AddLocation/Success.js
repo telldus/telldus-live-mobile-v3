@@ -27,6 +27,7 @@ import React from 'react';
 import { Linking, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import Theme from 'Theme';
 import {
@@ -39,6 +40,7 @@ import {
 
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.success.headerOne',
@@ -85,6 +87,8 @@ type Props = {
 	onDidMount: Function,
 	rootNavigator: Object,
 	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 }
 
 type State = {
@@ -101,16 +105,33 @@ class Success extends View<void, Props, State> {
 		this.onPressHelp = this.onPressHelp.bind(this);
 		this.onPressContinue = this.onPressContinue.bind(this);
 
-		this.h1 = props.intl.formatMessage(messages.headerOne);
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
+		let { formatMessage } = props.intl;
 
-		this.title = `${props.intl.formatMessage(messages.messageTitle)}!`;
-		this.body = props.intl.formatMessage(messages.messageBodyParaOne);
+		this.h1 = formatMessage(messages.headerOne);
+		this.h2 = formatMessage(messages.headerTwo);
+
+		this.title = `${formatMessage(messages.messageTitle)}!`;
+		this.body = formatMessage(messages.messageBodyParaOne);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 	}
 
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'Success' && this.props.currentScreen !== 'Success';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

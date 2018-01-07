@@ -99,6 +99,7 @@ const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
 type Props = {
 	navigation: Object,
 	appLayout: Object,
+	screenReaderEnabled: boolean,
 };
 
 type State = {
@@ -143,11 +144,12 @@ class AddLocationNavigator extends View {
 	render() {
 
 		let { currentScreen } = this.state;
-		let { appLayout, navigation } = this.props;
+		let { appLayout, navigation, screenReaderEnabled } = this.props;
 		let screenProps = {
 			currentScreen,
 			rootNavigator: navigation,
-			appLayout: appLayout,
+			appLayout,
+			screenReaderEnabled,
 		};
 
 		return (
@@ -159,6 +161,7 @@ class AddLocationNavigator extends View {
 function mapStateToProps(state, ownProps) {
 	return {
 		appLayout: state.App.layout,
+		screenReaderEnabled: state.App.screenReaderEnabled,
 	};
 }
 

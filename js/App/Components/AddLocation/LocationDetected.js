@@ -25,13 +25,13 @@
 
 import React from 'react';
 import {ScrollView} from 'react-native';
-import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, TouchableButton } from 'BaseComponents';
 import { Clients } from 'AddNewLocation_SubViews';
-import i18n from '../../Translations/common';
 
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.locationDetected.headerOne',
@@ -51,6 +51,8 @@ type Props = {
 	rootNavigator: Object,
 	onDidMount: Function,
 	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 }
 
 class LocationDetected extends View {
@@ -62,9 +64,13 @@ class LocationDetected extends View {
 	constructor(props: Props) {
 		super(props);
 
-		this.h1 = `1. ${props.intl.formatMessage(messages.headerOne)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
-		this.buttonLabel = props.intl.formatMessage(i18n.manualActivation).toUpperCase();
+		let { formatMessage } = props.intl;
+
+		this.h1 = `1. ${formatMessage(messages.headerOne)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+		this.buttonLabel = formatMessage(i18n.manualActivation).toUpperCase();
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.onActivateAuto = this.onActivateAuto.bind(this);
 		this.onActivateManual = this.onActivateManual.bind(this);
@@ -73,13 +79,26 @@ class LocationDetected extends View {
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'LocationDetected' && this.props.currentScreen !== 'LocationDetected';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.currentScreen === 'LocationDetected';
 	}
 
-	onActivateAuto(client) {
+	onActivateAuto(client: Object) {
 		let clientInfo = {
 			clientId: client.id,
 			uuid: client.uuid,
@@ -92,7 +111,7 @@ class LocationDetected extends View {
 		this.props.navigation.navigate('LocationActivationManual');
 	}
 
-	renderClient(client, i, appLayout) {
+	renderClient(client: Object, i: number, appLayout: Object) {
 		return (
 			<Clients key={i} client={client} appLayout={appLayout} onPress={this.onActivateAuto} intl={this.props.intl}/>
 		);
@@ -118,6 +137,7 @@ class LocationDetected extends View {
 						style={styles.button}
 						onPress={this.onActivateManual}
 						text={this.buttonLabel}
+						accessible={true}
 					/>
 				</ScrollView>
 			</View>
@@ -141,11 +161,5 @@ class LocationDetected extends View {
 	}
 }
 
-function mapStateToProps(store, ownProps) {
-	return {
-		store,
-	};
-}
-
-export default connect(mapStateToProps, null)(LocationDetected);
+export default LocationDetected;
 

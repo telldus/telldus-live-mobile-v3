@@ -28,12 +28,14 @@ import { TextInput, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, FloatingButton } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
 import {activateGateway, showModal} from 'Actions';
 
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	label: {
 		id: 'addNewLocation.position.label',
@@ -60,6 +62,8 @@ type Props = {
 	activateGateway: (Object) => Promise<any>;
 	dispatch: Function,
 	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 };
 
 type State = {
@@ -106,9 +110,13 @@ class Position extends View {
 			isLoading: false,
 		};
 
-		this.h1 = `4. ${props.intl.formatMessage(messages.headerOne)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
-		this.label = props.intl.formatMessage(messages.label);
+		let { formatMessage } = props.intl;
+
+		this.h1 = `4. ${formatMessage(messages.headerOne)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+		this.label = formatMessage(messages.label);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.infoButton = {
 			onPress: this.onInfoPress.bind(this),
@@ -129,6 +137,19 @@ class Position extends View {
 		this.props.onDidMount(h1, h2, infoButton);
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'Position' && this.props.currentScreen !== 'Position';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	keyboardDidShow() {

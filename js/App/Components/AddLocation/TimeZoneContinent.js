@@ -28,12 +28,13 @@ import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import uniqBy from 'lodash/uniqBy';
 import differenceWith from 'lodash/differenceWith';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import timeZone from '../../Lib/TimeZone';
 import {View, List, ListDataSource} from 'BaseComponents';
 import { ListRow } from 'AddNewLocation_SubViews';
 
-
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.timeZoneContinent.headerOne',
@@ -56,6 +57,8 @@ type Props = {
 	onDidMount: Function,
 	intl: intlShape.isRequired,
 	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 }
 
 class TimeZoneContinent extends View {
@@ -70,8 +73,12 @@ class TimeZoneContinent extends View {
 			dataSource: listDataSource.cloneWithRows(this.parseDataForList(timeZone)),
 		};
 
-		this.h1 = `3. ${props.intl.formatMessage(messages.headerOne)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
+		let { formatMessage } = props.intl;
+
+		this.h1 = `3. ${formatMessage(messages.headerOne)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.renderRow = this.renderRow.bind(this);
 		this.onContinentChoose = this.onContinentChoose.bind(this);
@@ -80,6 +87,19 @@ class TimeZoneContinent extends View {
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'TimeZoneContinent' && this.props.currentScreen !== 'TimeZoneContinent';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
