@@ -150,20 +150,22 @@ class LoginScreen extends View {
 				{this.props.accessToken && !this.props.isTokenValid ?
 					<SessionLocked onPressLogout={this.state.onPressLogout} dialogueOpen={this.props.showModal}/>
 					:
-					<View style={{alignItems: 'center'}}>
-						<LoginForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
-						<View style={styles.otherLinks}>
-							<TouchableOpacity style={{height: 25}}
-								onPress={this.onForgotPassword}
-								accessibilityLabel={this.labelForgotPassword}>
-								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb', fontSize: 13 }}/>
-							</TouchableOpacity>
-							<TouchableOpacity style={{height: 25, paddingLeft: 5 }}
-								onPress={this.onNeedAccount}
-								accessibilityLabel={this.labelNeedAccount}>
-								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5, fontSize: 13 }}/>
-							</TouchableOpacity>
-						</View>
+					<LoginForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
+				}
+				{this.props.accessToken && !this.props.isTokenValid ?
+					null
+					:
+					<View style={styles.otherLinks}>
+						<TouchableOpacity style={{height: 25}}
+							onPress={this.onForgotPassword}
+							accessibilityLabel={this.labelForgotPassword}>
+							<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb', fontSize: 13 }}/>
+						</TouchableOpacity>
+						<TouchableOpacity style={{height: 25, paddingLeft: 5 }}
+							onPress={this.onNeedAccount}
+							accessibilityLabel={this.labelNeedAccount}>
+							<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5, fontSize: 13 }}/>
+						</TouchableOpacity>
 						<View style={{ height: 10 }}/>
 					</View>
 				}
@@ -182,9 +184,7 @@ class LoginScreen extends View {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
 		const width = appLayout.width;
-		let isPortrait = height > width;
 
 		return {
 			otherLinks: {
@@ -195,7 +195,6 @@ class LoginScreen extends View {
 				marginHorizontal: 10,
 			},
 			formContainer: {
-				height: isPortrait ? height * 0.50 : width * 0.50,
 				width: width,
 			},
 		};

@@ -90,7 +90,7 @@ class LoginForm extends View {
 		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
 
 		return (
-			<View style={{flex: 0}} importantForAccessibility={importantForAccessibility}>
+			<View importantForAccessibility={importantForAccessibility}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
