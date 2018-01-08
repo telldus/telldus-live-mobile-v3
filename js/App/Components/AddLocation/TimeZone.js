@@ -72,10 +72,13 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	actions: Object,
 }
 
 type State = {
 	timeZone: string,
+	autoDetected: boolean,
+	isLoading: boolean,
 }
 
 class TimeZone extends View<void, Props, State> {
@@ -93,6 +96,7 @@ class TimeZone extends View<void, Props, State> {
 		this.state = {
 			timeZone,
 			autoDetected,
+			isLoading: false,
 		};
 
 		let { formatMessage } = props.intl;
@@ -141,7 +145,23 @@ class TimeZone extends View<void, Props, State> {
 	onTimeZoneSubmit() {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.timezone = this.state.timeZone;
-		this.props.navigation.navigate('Position', {clientInfo});
+		let { screenReaderEnabled, actions } = this.props;
+		if (screenReaderEnabled) {
+			this.setState({
+				isLoading: true,
+			});
+			actions.activateGateway(clientInfo)
+				.then(response => {
+					if (response) {
+						this.props.navigation.navigate('Success', {clientInfo});
+					}
+					this.setState({
+						isLoading: false,
+					});
+				});
+		} else {
+			this.props.navigation.navigate('Position', {clientInfo});
+		}
 	}
 
 	onEditTimeZone() {
@@ -183,8 +203,8 @@ class TimeZone extends View<void, Props, State> {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onTimeZoneSubmit}
-					imageSource={require('../TabViews/img/right-arrow-key.png')}
-					showThrobber={false}
+					imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={this.state.isLoading}
 				/>
 			</View>
 		);
