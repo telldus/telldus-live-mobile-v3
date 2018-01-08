@@ -34,6 +34,9 @@ import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import { FormattedMessage, RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { OnButton, OffButton } from 'TabViews_SubViews';
 import i18n from '../../../Translations/common';
+import {
+	toDimmerValue,
+} from 'Lib';
 
 type Props = {
 	commandON: number,
@@ -53,10 +56,6 @@ type Props = {
 type State = {
 	dimmerValue: number,
 };
-
-function toDimmerValue(sliderValue) {
-	return Math.round(sliderValue * 255 / 100.0);
-}
 
 const ToggleButton = ({ device, intl }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>

@@ -31,27 +31,11 @@ import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
-
-function getDimmerValue(value: number, isInState: string): number {
-	let newValue = value || 0;
-	if (isInState === 'TURNON') {
-		return 255;
-	}
-	if (isInState === 'TURNOFF') {
-		return 0;
-	}
-
-	newValue = parseInt(newValue, 10);
-	return newValue;
-}
-
-function toDimmerValue(sliderValue: number): number {
-	return Math.round(sliderValue * 255 / 100.0);
-}
-
-function toSliderValue(dimmerValue: number): number {
-	return Math.round(dimmerValue * 100.0 / 255);
-}
+import {
+	getDimmerValue,
+	toDimmerValue,
+	toSliderValue,
+} from 'Lib';
 
 type Props = {
 	device: Object,

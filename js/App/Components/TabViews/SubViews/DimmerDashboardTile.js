@@ -34,27 +34,11 @@ import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import throttle from 'lodash/throttle';
 import { getLabelDevice } from 'Accessibility';
-
-function getDimmerValue(value, isInState) {
-	let newValue = value || 0;
-	if (isInState === 'TURNON') {
-		return 255;
-	}
-	if (isInState === 'TURNOFF') {
-		return 0;
-	}
-
-	newValue = parseInt(newValue, 10);
-	return newValue;
-}
-
-function toDimmerValue(sliderValue) {
-	return Math.round(sliderValue * 255 / 100.0);
-}
-
-function toSliderValue(dimmerValue) {
-	return Math.round(dimmerValue * 100.0 / 255);
-}
+import {
+	getDimmerValue,
+	toDimmerValue,
+	toSliderValue,
+} from 'Lib';
 
 type Props = {
 	item: Object,

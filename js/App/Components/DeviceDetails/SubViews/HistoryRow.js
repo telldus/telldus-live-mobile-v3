@@ -33,6 +33,9 @@ const CustomIcon = createIconSetFromIcoMoon(icon_history);
 import { FormattedMessage, Text, View, ListRow } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
 import i18n from '../../../Translations/common';
+import {
+	toSliderValue,
+} from 'Lib';
 
 type Props = {
 	item: Object,
@@ -48,10 +51,6 @@ type Props = {
 
 type State = {
 };
-
-function toSliderValue(dimmerValue: number): number {
-	return Math.round(dimmerValue * 100.0 / 255);
-}
 
 class HistoryRow extends View {
 	props: Props;
