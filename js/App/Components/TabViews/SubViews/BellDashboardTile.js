@@ -30,6 +30,7 @@ import DashboardShadowTile from './DashboardShadowTile';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import i18n from '../../../Translations/common';
+import { getLabelDevice } from 'Accessibility';
 
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
@@ -53,8 +54,6 @@ class BellDashboardTile extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.labelDevice = formatMessage(i18n.labelDevice);
-		this.labelBell = `${this.labelDevice} ${formatMessage(i18n.bell)}`;
 		this.labelBellButton = `${formatMessage(i18n.bell)} ${formatMessage(i18n.button)}`;
 	}
 
@@ -64,11 +63,11 @@ class BellDashboardTile extends View {
 	}
 
 	render() {
-		const { item, tileWidth } = this.props;
+		const { item, tileWidth, intl } = this.props;
 		let {methodRequested} = this.props.item;
 
 		const accessibilityLabelButton = this.labelBellButton;
-		const accessibilityLabel = this.labelBell;
+		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
 		return (
 			<DashboardShadowTile

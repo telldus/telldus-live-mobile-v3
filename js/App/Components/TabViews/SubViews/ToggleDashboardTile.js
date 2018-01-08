@@ -28,7 +28,7 @@ import { StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
-import i18n from '../../../Translations/common';
+import { getLabelDevice } from 'Accessibility';
 
 type Props = {
 	item: Object,
@@ -44,13 +44,6 @@ class ToggleDashboardTile extends View {
 
 	constructor(props: Props) {
 		super(props);
-
-		let { formatMessage } = props.intl;
-
-		this.labelDevice = formatMessage(i18n.labelDevice);
-		this.labelStatus = formatMessage(i18n.status);
-		this.labelOff = formatMessage(i18n.off);
-		this.labelOn = formatMessage(i18n.on);
 	}
 
 	render() {
@@ -65,9 +58,7 @@ class ToggleDashboardTile extends View {
 		style.width = tileWidth;
 		style.height = tileWidth;
 
-		const deviceInfo = `${this.labelDevice} ${name}`;
-		const statusInfo = `${this.labelStatus} ${isInState === 'TURNON' ? this.labelOn : this.labelOff}`;
-		const accessibilityLabel = `${deviceInfo}, ${statusInfo}`;
+		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
 		return (
 			<DashboardShadowTile

@@ -33,7 +33,7 @@ import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import throttle from 'lodash/throttle';
-import i18n from '../../../Translations/common';
+import { getLabelDevice } from 'Accessibility';
 
 function getDimmerValue(value, isInState) {
 	let newValue = value || 0;
@@ -109,14 +109,6 @@ class DimmerDashboardTile extends View {
 			offButtonFadeAnim: new Animated.Value(1),
 			onButtonFadeAnim: new Animated.Value(1),
 		};
-
-		let { formatMessage } = props.intl;
-
-		this.labelDevice = formatMessage(i18n.labelDevice);
-		this.labelStatus = formatMessage(i18n.status);
-		this.labelStatusOff = `${this.labelStatus} ${formatMessage(i18n.off)}`;
-		this.labelStatusOn = `${this.labelStatus} ${formatMessage(i18n.on)}`;
-		this.labelStatusDim = `${this.labelStatus} ${formatMessage(i18n.dim)}`;
 
 		this.onValueChangeThrottled = throttle(onDimmerSlide(item.id), 200, {
 			trailing: true,
@@ -224,10 +216,7 @@ class DimmerDashboardTile extends View {
 			/> :
 			null;
 
-		const deviceInfo = `${this.labelDevice} ${name}`;
-		const statusInfo = isInState === 'DIM' ? `${this.labelStatusDim} ${toSliderValue(this.state.value)}%` :
-			isInState === 'TURNON' ? this.labelStatusOn : this.labelStatusOff;
-		const accessibilityLabel = `${deviceInfo}, ${statusInfo}`;
+		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
 		return (
 			<DashboardShadowTile

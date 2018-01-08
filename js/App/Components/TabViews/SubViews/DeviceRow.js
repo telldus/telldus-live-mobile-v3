@@ -29,6 +29,8 @@ import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
+import { getLabelDevice } from 'Accessibility';
+
 import i18n from '../../../Translations/common';
 
 import { StyleSheet } from 'react-native';
@@ -51,51 +53,20 @@ type Props = {
 	currentScreen: string,
 };
 
-function toSliderValue(dimmerValue: number): number {
-	return Math.round(dimmerValue * 100.0 / 255);
-}
-
 class DeviceRow extends View {
 	props: Props;
 	onSettingsSelected: Object => void;
-	getLabelStatus: (string, number) => string;
 
 	constructor(props: Props) {
 		super(props);
 
-		this.labelDevice = props.intl.formatMessage(i18n.labelDevice);
-		this.labelStatus = props.intl.formatMessage(i18n.status);
-		this.labelOff = props.intl.formatMessage(i18n.off);
-		this.labelOn = props.intl.formatMessage(i18n.on);
-		this.labelDim = props.intl.formatMessage(i18n.dim);
-		this.labelUp = props.intl.formatMessage(i18n.up);
-		this.labelDown = props.intl.formatMessage(i18n.down);
-		this.labelStop = props.intl.formatMessage(i18n.stop);
-		this.labelButton = props.intl.formatMessage(i18n.button);
-		this.labelSettings = props.intl.formatMessage(i18n.settingsHeader);
+		let { formatMessage } = props.intl;
+
+		this.labelButton = formatMessage(i18n.button);
+		this.labelSettings = formatMessage(i18n.settingsHeader);
 		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
 
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
-	}
-
-	getLabelStatus(status: string, value: any): string {
-		switch (status) {
-			case 'TURNOFF':
-				return `${this.labelStatus} ${this.labelOff}`;
-			case 'TURNON':
-				return `${this.labelStatus} ${this.labelOn}`;
-			case 'UP':
-				return `${this.labelStatus} ${this.labelUp}`;
-			case 'DOWN':
-				return `${this.labelStatus} ${this.labelDown}`;
-			case 'STOP':
-				return `${this.labelStatus} ${this.labelStop}`;
-			case 'DIM':
-				let dimmerValue = toSliderValue(value);
-				return `${this.labelStatus} ${dimmerValue}% ${this.labelDim}`;
-			default:
-				return '';
-		}
 	}
 
 	render() {
@@ -140,9 +111,8 @@ class DeviceRow extends View {
 				intl={intl}
 			/>;
 		}
-		let status = this.getLabelStatus(device.isInState, device.value);
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
-		let accessibilityLabel = `${this.labelDevice} ${device.name}, ${status}`;
+		let accessibilityLabel = getLabelDevice(intl.formatMessage, device);
 		let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 
 		return (

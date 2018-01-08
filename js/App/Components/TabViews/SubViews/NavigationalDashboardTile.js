@@ -29,6 +29,7 @@ import DashboardShadowTile from './DashboardShadowTile';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import i18n from '../../../Translations/common';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { getLabelDevice } from 'Accessibility';
 
 const UpButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
 	<TouchableOpacity
@@ -115,12 +116,6 @@ class NavigationalDashboardTile extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.labelDevice = formatMessage(i18n.labelDevice);
-
-		this.labelStatusUp = `${formatMessage(i18n.status)} ${formatMessage(i18n.up)}`;
-		this.labelStatusDown = `${formatMessage(i18n.status)} ${formatMessage(i18n.down)}`;
-		this.labelStatusStop = `${formatMessage(i18n.status)} ${formatMessage(i18n.stop)}`;
-
 		this.labelUpButton = `${formatMessage(i18n.up)} ${formatMessage(i18n.button)}`;
 		this.labelDownButton = `${formatMessage(i18n.down)} ${formatMessage(i18n.button)}`;
 		this.labelStopButton = `${formatMessage(i18n.stop)} ${formatMessage(i18n.button)}`;
@@ -140,17 +135,14 @@ class NavigationalDashboardTile extends View {
 	}
 
 	render() {
-		const { item, tileWidth } = this.props;
-		const { name, supportedMethods, isInState } = item;
+		const { item, tileWidth, intl } = this.props;
+		const { name, supportedMethods } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
 		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} accessibilityLabel={this.labelUpButton}/> : null;
 		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} accessibilityLabel={this.labelDownButton}/> : null;
 		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} accessibilityLabel={this.labelStopButton}/> : null;
 
-		const deviceInfo = `${this.labelDevice} ${name}`;
-		const statusInfo = isInState === 'UP' ? this.labelStatusUp : isInState === 'DOWN'
-			? this.labelStatusDown : this.labelStatusStop;
-		const accessibilityLabel = `${deviceInfo}, ${statusInfo}`;
+		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
 		return (
 			<DashboardShadowTile
