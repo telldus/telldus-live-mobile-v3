@@ -30,8 +30,8 @@ const deviceHeight = Dimensions.get('window').height;
 const ToggleButton = ({ device, intl }) => {
 	return (
 		<RoundedCornerShadowView style={styles.toggleContainer}>
-			<OffButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} intl={intl}/>
-			<OnButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} intl={intl}/>
+			<OffButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} intl={intl}/>
+			<OnButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} intl={intl}/>
 		</RoundedCornerShadowView>
 	);
 };
