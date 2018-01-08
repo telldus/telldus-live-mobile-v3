@@ -64,16 +64,16 @@ class BellDashboardTile extends View {
 
 	render() {
 		const { item, tileWidth, intl } = this.props;
-		let {methodRequested} = this.props.item;
+		let { methodRequested, name } = this.props.item;
 
-		const accessibilityLabelButton = this.labelBellButton;
+		const accessibilityLabelButton = `${this.labelBellButton}, ${name}`;
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
 		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
-				name={item.name}
+				name={name}
 				type={'device'}
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}

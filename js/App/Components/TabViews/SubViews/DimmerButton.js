@@ -168,14 +168,16 @@ class DimmerButton extends View {
 
 	render() {
 		const { device, intl } = this.props;
-		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
+		const { isInState, name, supportedMethods, methodRequested } = device;
+		const { TURNON, TURNOFF, DIM } = supportedMethods;
 		const onButton = (
 			<DimmerOnButton
 				ref={'onButton'}
 				style={styles.turnOn}
-				isInState={device.isInState}
+				isInState={isInState}
+				name={name}
 				enabled={!!TURNON}
-				methodRequested={device.methodRequested}
+				methodRequested={methodRequested}
 				intl={intl}
 			/>
 		);
@@ -183,9 +185,10 @@ class DimmerButton extends View {
 			<DimmerOffButton
 				ref={'offButton'}
 				style={styles.turnOff}
-				isInState={device.isInState}
+				isInState={isInState}
+				name={name}
 				enabled={!!TURNOFF}
-				methodRequested={device.methodRequested}
+				methodRequested={methodRequested}
 				intl={intl}
 			/>
 		);

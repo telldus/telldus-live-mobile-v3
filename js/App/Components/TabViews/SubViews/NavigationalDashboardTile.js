@@ -138,9 +138,9 @@ class NavigationalDashboardTile extends View {
 		const { item, tileWidth, intl } = this.props;
 		const { name, supportedMethods } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} accessibilityLabel={this.labelUpButton}/> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} accessibilityLabel={this.labelDownButton}/> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} accessibilityLabel={this.labelStopButton}/> : null;
+		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} accessibilityLabel={`${this.labelUpButton}, ${name}`}/> : null;
+		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} accessibilityLabel={`${this.labelDownButton}, ${name}`}/> : null;
+		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} accessibilityLabel={`${this.labelStopButton}, ${name}`}/> : null;
 
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 

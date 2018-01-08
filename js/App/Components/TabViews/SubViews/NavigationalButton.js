@@ -130,13 +130,14 @@ class NavigationalButton extends View {
 	render() {
 		const noop = function () {
 		};
-		const { UP, DOWN, STOP } = this.props.device.supportedMethods;
+		const { name, supportedMethods, methodRequested } = this.props.device;		
+		const { UP, DOWN, STOP } = supportedMethods;
 
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
-				<UpButton supportedMethod={UP} methodRequested={this.props.device.methodRequested} onPress={UP ? this.onUp : noop} accessibilityLabel={this.labelUpButton} />
-				<DownButton supportedMethod={DOWN} methodRequested={this.props.device.methodRequested} onPress={DOWN ? this.onDown : noop} accessibilityLabel={this.labelDownButton}/>
-				<StopButton supportedMethod={STOP} methodRequested={this.props.device.methodRequested} onPress={STOP ? this.onStop : noop} accessibilityLabel={this.labelStopButton}/>
+				<UpButton supportedMethod={UP} methodRequested={methodRequested} onPress={UP ? this.onUp : noop} accessibilityLabel={`${this.labelUpButton}, ${name}`} />
+				<DownButton supportedMethod={DOWN} methodRequested={methodRequested} onPress={DOWN ? this.onDown : noop} accessibilityLabel={`${this.labelDownButton}, ${name}`}/>
+				<StopButton supportedMethod={STOP} methodRequested={methodRequested} onPress={STOP ? this.onStop : noop} accessibilityLabel={`${this.labelStopButton}, ${name}`}/>
 			</RoundedCornerShadowView>
 		);
 	}

@@ -46,10 +46,10 @@ class ToggleButton extends View {
 	render() {
 		const { intl, device } = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
-		const { id, isInState, methodRequested } = device;
+		const { id, isInState, methodRequested, name } = device;
 
-		const onButton = <OnButton id={id} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} methodRequested={methodRequested} intl={intl}/>;
-		const offButton = <OffButton id={id} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} intl={intl}/>;
+		const onButton = <OnButton id={id} name={name} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} methodRequested={methodRequested} intl={intl}/>;
+		const offButton = <OffButton id={id} name={name} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} intl={intl}/>;
 
 		return (
 			<RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>

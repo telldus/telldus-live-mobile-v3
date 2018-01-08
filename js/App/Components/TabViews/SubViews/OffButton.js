@@ -33,6 +33,7 @@ type Props = {
 	requestDeviceAction: (id: number, command: number, value?: number) => void,
 	deviceSetState: (id: number, command: number) => void,
 	intl: Object,
+	name: string,
 };
 
 class OffButton extends View {
@@ -52,8 +53,8 @@ class OffButton extends View {
 	}
 
 	render() {
-		let { isInState, enabled, fontSize, methodRequested } = this.props;
-		let accessibilityLabel = this.labelOffButton;
+		let { isInState, enabled, fontSize, methodRequested, name } = this.props;
+		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
 
 		return (
 			<View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>

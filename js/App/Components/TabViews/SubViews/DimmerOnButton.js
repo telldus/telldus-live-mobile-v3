@@ -41,8 +41,8 @@ class DimmerOnButton extends View {
 	}
 
 	render() {
-		let { isInState, enabled, fontSize, style, methodRequested } = this.props;
-		let accessibilityLabel = this.labelOnButton;
+		let { isInState, enabled, fontSize, style, methodRequested, name } = this.props;
+		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 
 		return (
 			<View

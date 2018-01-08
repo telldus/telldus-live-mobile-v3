@@ -57,8 +57,8 @@ class BellButton extends View {
 	}
 
 	render() {
-		let {methodRequested} = this.props.device;
-		let accessibilityLabel = this.labelBellButton;
+		let { methodRequested, name } = this.props.device;
+		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
 
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
