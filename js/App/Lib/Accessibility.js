@@ -22,7 +22,7 @@
 // @flow
 
 import i18n from '../Translations/common';
-import { toSliderValue } from './Slider';
+import { toSliderValue } from './Dimmer';
 
 module.exports = {
 	getLabelDevice: (formatMessage: Function, device: Object): string => {
