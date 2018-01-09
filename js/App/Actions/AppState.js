@@ -26,7 +26,6 @@
 import type { Action, ThunkAction } from './Types';
 
 import { AppState } from 'react-native';
-import Orientation from 'react-native-orientation';
 
 module.exports = {
 	appStart: (): Action => ({
@@ -44,18 +43,6 @@ module.exports = {
 					type: 'APP_BACKGROUND',
 				});
 			}
-		});
-	},
-	appOrientation: (initialOrientation: string): ThunkAction => dispatch => {
-		Orientation.addOrientationListener((orientation: string) => {
-			return dispatch({
-				type: 'APP_ORIENTATION',
-				value: orientation,
-			});
-		});
-		return dispatch({
-			type: 'APP_ORIENTATION',
-			value: initialOrientation,
 		});
 	},
 };

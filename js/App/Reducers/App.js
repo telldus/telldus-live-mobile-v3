@@ -27,14 +27,12 @@ export type State = {
 	errorGlobalMessage: any,
 	errorGlobalShow: boolean,
 	active: boolean,
-	orientation: string,
 };
 
 const initialState = {
 	errorGlobalMessage: 'Action Currently Unavailable',
 	errorGlobalShow: false,
-	active: true,
-	orientation: '',
+	active: false,
 };
 
 export default function reduceApp(state: State = initialState, action: Action): State {
@@ -60,12 +58,6 @@ export default function reduceApp(state: State = initialState, action: Action): 
 		return {
 			...state,
 			active: false,
-		};
-	}
-	if (action.type === 'APP_ORIENTATION') {
-		return {
-			...state,
-			orientation: action.value,
 		};
 	}
 	return state;

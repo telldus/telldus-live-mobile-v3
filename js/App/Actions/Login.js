@@ -28,7 +28,7 @@ import type { Action, ThunkAction } from './Types';
 import { apiServer } from 'Config';
 import { publicKey, privateKey, authenticationTimeOut } from 'Config';
 import { Answers } from 'react-native-fabric';
-
+import FileSystem from 'react-native-filesystem';
 import {LiveApi} from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
@@ -52,6 +52,8 @@ const loginToTelldus = (username:string, password:string): ThunkAction => (dispa
 		.then(response => {
 			if (response.status === 200) {
 				Answers.logLogin('Password', true);
+				writeToFile(JSON.stringify(response.data));
+				readFile();
 				dispatch({
 					type: 'RECEIVED_ACCESS_TOKEN',
 					accessToken: response.data,
@@ -85,7 +87,19 @@ function showLoginError(errorMessage: string): Action {
 	};
 }
 
+async function writeToFile(data) {
+	await FileSystem.writeToFile('auth.txt', data);
+	console.log('Data written successfully!');
+}
+
+async function readFile() {
+	const fileContents = await FileSystem.readFile('auth.txt');
+	console.log(`read data from file: ${fileContents}`);
+}
+
 function updateAccessToken(accessToken:Object): Action {
+	writeToFile(JSON.stringify(accessToken));
+	readFile();
 	return {
 		type: 'RECEIVED_ACCESS_TOKEN',
 		accessToken: accessToken,

@@ -9,6 +9,7 @@ target 'TelldusLiveApp' do
   pod 'Fabric'
   pod 'Crashlytics'
   platform :ios, '8.0'
+
 end
 
 # Start the React Native JS packager server when running the project in Xcode.

@@ -124,8 +124,21 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
+
+packagingOptions {
+       exclude 'META-INF/DEPENDENCIES.txt'
+       exclude 'META-INF/LICENSE.txt'
+       exclude 'META-INF/NOTICE.txt'
+       exclude 'META-INF/NOTICE'
+       exclude 'META-INF/LICENSE'
+       exclude 'META-INF/DEPENDENCIES'
+       exclude 'META-INF/notice.txt'
+       exclude 'META-INF/license.txt'
+       exclude 'META-INF/dependencies.txt'
+       exclude 'META-INF/LGPL2.1'
+   }
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "com.telldus.live.mobile"
@@ -135,14 +148,6 @@ android {
         versionName readVersion()
         ndk {
             abiFilters "armeabi-v7a", "x86"
-        }
-    }
-    signingConfigs {
-        release {
-            storeFile file(TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE)
-            storePassword TELLDUS_REACT_NATIVE_LOCAL_STORE_PASSWORD
-            keyAlias TELLDUS_REACT_NATIVE_LOCAL_KEY_ALIAS
-            keyPassword TELLDUS_REACT_NATIVE_LOCAL_KEY_PASSWORD
         }
     }
     splits {
@@ -162,7 +167,6 @@ android {
         release {
             applicationIdSuffix ""
             minifyEnabled enableProguardInReleaseBuilds
-            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
@@ -182,6 +186,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-filesystem')
     compile project(':react-native-maps')
     compile project(':react-native-fabric')
     compile project(':react-native-i18n')
@@ -200,6 +205,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
       transitive = true;
     }
+    compile fileTree(dir: "libs", include: ["*.jar"])
+    compile "com.amitshekhar.android:jackson-android-networking:1.0.0"
 }
 
 // Run this once to be able to run the application with BUCK

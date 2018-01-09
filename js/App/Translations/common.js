@@ -49,18 +49,6 @@ const messages = defineMessages({
 		id: 'origin',
 		defaultMessage: 'Origin',
 	},
-	dashboard: {
-		id: 'pages.dashboard',
-		defaultMessage: 'Dashboard',
-	},
-	devices: {
-		id: 'pages.devices',
-		defaultMessage: 'Devices',
-	},
-	sensors: {
-		id: 'pages.sensors',
-		defaultMessage: 'Sensors',
-	},
 	scheduler: {
 		id: 'scheduler',
 		defaultMessage: 'Scheduler',

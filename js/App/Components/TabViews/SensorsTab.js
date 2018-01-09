@@ -26,9 +26,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
-import Platform from 'Platform';
 
-import { List, ListDataSource, View, StyleSheet } from 'BaseComponents';
+import { List, ListDataSource, View } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
@@ -36,9 +35,6 @@ import { toggleEditMode } from 'Actions';
 
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
-import {
-	getWindowDimensions,
-} from 'Lib';
 
 const messages = defineMessages({
 	sensors: {
@@ -54,7 +50,6 @@ type Props = {
 	editMode: boolean,
 	tab: string,
 	dispatch: Function,
-	screenProps: Object,
 };
 
 type State = {
@@ -120,15 +115,8 @@ class SensorsTab extends View {
 	}
 
 	render() {
-
-		let containerStyle = null;
-		if (Platform.OS === 'android') {
-			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				styles.conatiner : styles.containerLand;
-		}
-
 		return (
-			<View style={containerStyle}>
+			<View>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
@@ -168,16 +156,6 @@ class SensorsTab extends View {
 SensorsTab.propTypes = {
 	rowsAndSections: PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-	conatiner: {
-		flex: 1,
-	},
-	containerLand: {
-		flex: 1,
-		marginLeft: getWindowDimensions().height * 0.08,
-	},
-});
 
 const getRowsAndSections = createSelector(
 	[

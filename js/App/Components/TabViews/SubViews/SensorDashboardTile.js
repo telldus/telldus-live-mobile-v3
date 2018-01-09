@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { FormattedNumber, View } from 'BaseComponents';
+import { FormattedNumber, Text, View } from 'BaseComponents';
 
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
@@ -93,7 +93,7 @@ class SensorDashboardTile extends View {
 				                                            suffix={'m/s\n'}/> ),
 				text2: (item.windGust && <FormattedNumber value={item.windGust} maximumFractionDigits={1}
 				                                          suffix={'m/s*\n'}/> ),
-				text3: (item.windDirection && this._windDirection(item.windDirection)),
+				text3: (item.windDirection && <Text>{ this._windDirection(item.windDirection) }</Text> ),
 			});
 		}
 		if (item.uv) {
@@ -129,10 +129,7 @@ class SensorDashboardTile extends View {
 		const slideList = this.getSlideList(item);
 
 		const slides = slideList.map((data) =>
-			<SensorDashboardTileSlide
-				key={data.key}
-				data={data}
-				tileWidth={tileWidth}/>
+			<SensorDashboardTileSlide key={data.key} icon={data.icon} text={data.text} tileWidth={tileWidth}/>
 		);
 
 		let selectedSlideIndex = 0;

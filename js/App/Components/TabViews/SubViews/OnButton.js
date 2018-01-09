@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
 	dot: {
 		position: 'absolute',
 		top: 3,
-		left: 3,
+		right: 3,
 	},
 });
 

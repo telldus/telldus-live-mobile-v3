@@ -23,14 +23,10 @@
 
 import getRouteName from './getRouteName';
 import getDeviceWidth from './getDeviceWidth';
-import getDeviceHeight from './getDeviceHeight';
-import getWindowDimensions from './getWindowDimensions';
 import hasStatusBar from './hasStatusBar';
 
 module.exports = {
 	getRouteName,
 	getDeviceWidth,
-	getDeviceHeight,
-	getWindowDimensions,
 	hasStatusBar,
 };

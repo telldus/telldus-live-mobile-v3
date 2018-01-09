@@ -27,9 +27,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
-import Platform from 'Platform';
 
-import { List, ListDataSource, Text, View, StyleSheet } from 'BaseComponents';
+import { List, ListDataSource, Text, View } from 'BaseComponents';
 import { JobRow } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 import Theme from 'Theme';
@@ -37,9 +36,6 @@ import Theme from 'Theme';
 import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
-import {
-	getWindowDimensions,
-} from 'Lib';
 
 const messages = defineMessages({
 	friday: {
@@ -151,15 +147,8 @@ class SchedulerTab extends View {
 	}
 
 	render() {
-
-		let containerStyle = null;
-		if (Platform.OS === 'android') {
-			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				styles.conatiner : styles.containerLand;
-		}
-
 		return (
-			<View style={containerStyle}>
+			<View style={{ flex: 1 }}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
@@ -212,16 +201,6 @@ SchedulerTab.navigationOptions = ({navigation, screenProps}) => ({
 SchedulerTab.propTypes = {
 	rowsAndSections: PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-	conatiner: {
-		flex: 1,
-	},
-	containerLand: {
-		flex: 1,
-		marginLeft: getWindowDimensions().height * 0.08,
-	},
-});
 
 const getRowsAndSections = createSelector(
 	[

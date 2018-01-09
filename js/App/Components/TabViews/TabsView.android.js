@@ -24,25 +24,23 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
-import Orientation from 'react-native-orientation';
-const orientation = Orientation.getInitialOrientation();
 
 import { FormattedMessage, Text, View, Icon, Image, Header } from 'BaseComponents';
 import i18n from '../../Translations/common';
 
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import Theme from 'Theme';
 
 import { SettingsDetailModal } from 'DetailViews';
-import TabBar from './TabBar';
 
 import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, toggleEditMode, addNewGateway } from 'Actions';
 import TabViews from 'TabViews';
-import { hasStatusBar, getWindowDimensions } from 'Lib';
+import { hasStatusBar } from 'Lib';
 import { TabNavigator } from 'react-navigation';
 
 const messages = defineMessages({
@@ -161,14 +159,21 @@ const TabNavigatorConfig = {
 	swipeEnabled: true,
 	lazy: true,
 	animationEnabled: true,
-	tabBarComponent: TabBar,
-	tabBarPosition: 'top',
 	tabBarOptions: {
 		activeTintColor: '#fff',
 		indicatorStyle: {
 			backgroundColor: '#fff',
 		},
 		scrollEnabled: true,
+		labelStyle: {
+			fontSize: Dimensions.get('window').width / 35,
+		},
+		tabStyle: {
+			width: Dimensions.get('window').width / 2.8,
+		},
+		style: {
+			backgroundColor: Theme.Core.brandPrimary,
+		},
 	},
 };
 
@@ -179,7 +184,6 @@ type Props = {
 	dashboard: Object,
 	tab: string,
 	userProfile: Object,
-	isAppActive: boolean,
 	gateways: Object,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
@@ -207,7 +211,6 @@ class TabsView extends View {
 	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 	addNewLocation: () => void;
-	getRelativeStyle: () => Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -221,16 +224,6 @@ class TabsView extends View {
 			onPress: this.toggleEditMode,
 		};
 
-		this.starButtonLand = {
-			icon: {
-				name: 'star',
-				size: 22,
-				color: '#fff',
-				style: styles.starButLand,
-			},
-			onPress: this.toggleEditMode,
-		};
-
 		this.menuButton = {
 			icon: {
 				name: 'bars',
@@ -240,22 +233,10 @@ class TabsView extends View {
 			onPress: this.openDrawer,
 		};
 
-		this.menuButtonLand = {
-			icon: {
-				name: 'bars',
-				size: 22,
-				color: '#fff',
-				style: styles.menuButLand,
-				iconStyle: styles.menuIconLand,
-			},
-			onPress: this.openDrawer,
-		};
-
 		this.state = {
 			settings: false,
-			routeName: 'Dashboard',
+			routeName: '',
 			addingNewLocation: false,
-			orientation,
 		};
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
@@ -266,38 +247,15 @@ class TabsView extends View {
 		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
-
-		this.orientationDidChange = this.orientationDidChange.bind(this);
-		this.getRelativeStyle = this.getRelativeStyle.bind(this);
 	}
 
 	componentDidMount() {
 		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
-		Orientation.addOrientationListener(this.orientationDidChange);
-	}
-
-	orientationDidChange(deviceOrientation) {
-		this.setState({
-			orientation: deviceOrientation,
-		});
-	}
-
-	componentWillUnmount() {
-		Orientation.removeOrientationListener(this.orientationDidChange);
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation && nextProps.gateways.toActivate.checkIfGatewaysEmpty) {
 			this.addNewLocation();
-		}
-		if (nextProps.isAppActive && !this.props.isAppActive) {
-			Orientation.getOrientation((error: any, deviceOrientation: string) => {
-				if (deviceOrientation) {
-					this.setState({
-						orientation: deviceOrientation,
-					});
-				}
-			});
 		}
 	}
 
@@ -359,40 +317,11 @@ class TabsView extends View {
 	}
 
 	makeRightButton = routeName => {
-		return (routeName === 'Devices' || routeName === 'Sensors') ?
-			(this.state.orientation === 'PORTRAIT' ? this.starButton : this.starButtonLand) : null;
+		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
 	};
 
-	getRelativeStyle() {
-		let relativeStyle = {
-			headerStyle: styles.header,
-			containerStyle: styles.container,
-			logoStyle: null,
-			leftButton: this.menuButton,
-		};
-		if (this.state.orientation !== 'PORTRAIT') {
-			relativeStyle.headerStyle = [relativeStyle.headerStyle, styles.headerLand];
-			relativeStyle.containerStyle = [relativeStyle.containerStyle, styles.containerLand];
-			relativeStyle.logoStyle = styles.logoLand;
-			relativeStyle.leftButton = this.menuButtonLand;
-		}
-		return relativeStyle;
-	}
-
 	render() {
-
-		let {
-			headerStyle,
-			containerStyle,
-			logoStyle,
-			leftButton,
-		} = this.getRelativeStyle();
-
-		let screenProps = {
-			stackNavigator: this.props.stackNavigator,
-			orientation: this.state.orientation,
-			currentTab: this.state.routeName,
-		};
+		let screenProps = { stackNavigator: this.props.stackNavigator };
 		if (!this.state || !this.state.starIcon) {
 			return false;
 		}
@@ -409,9 +338,9 @@ class TabsView extends View {
 				drawerPosition={DrawerLayoutAndroid.positions.Left}
 				renderNavigationView={this.renderNavigationView}
 			>
-				<View style={{flex: 1}}>
-					<Header style={headerStyle} logoStyle={logoStyle} leftButton={leftButton} rightButton={rightButton}/>
-					<View style={containerStyle}>
+				<View style={{ flex: 1 }}>
+					<Header leftButton={this.menuButton} rightButton={rightButton}/>
+					<View>
 						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 						{
 							this.state.settings ? (
@@ -430,47 +359,6 @@ class TabsView extends View {
 }
 
 const styles = StyleSheet.create({
-	header: {
-		height: getWindowDimensions().height * 0.1111,
-	},
-	headerLand: {
-		transform: [{rotateZ: '-90deg'}],
-		position: 'absolute',
-		left: -(getWindowDimensions().height * 0.4444),
-		top: getWindowDimensions().height * 0.4444,
-		width: getWindowDimensions().height,
-		height: getWindowDimensions().height * 0.1111,
-	},
-	container: {
-		flex: 1,
-	},
-	containerLand: {
-		marginLeft: getWindowDimensions().height * 0.11,
-	},
-	menuButLand: {
-		position: 'absolute',
-		left: getWindowDimensions().height * 0.8999,
-		top: getWindowDimensions().height * 0.03666,
-		paddingTop: 0,
-		paddingHorizontal: 0,
-	},
-	starButLand: {
-		position: 'absolute',
-		right: getWindowDimensions().height * 0.5333,
-		top: getWindowDimensions().height * 0.03666,
-		paddingTop: 0,
-		paddingHorizontal: 0,
-	},
-	menuIconLand: {
-		transform: [{rotateZ: '90deg'}],
-	},
-	logoLand: {
-		position: 'absolute',
-		left: getWindowDimensions().height * 0.5999,
-		top: getWindowDimensions().height * 0.0400,
-		width: getWindowDimensions().width * 0.277333333,
-		height: getWindowDimensions().width * 0.046666667,
-	},
 	navigationHeader: {
 		height: 60,
 		marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
@@ -567,7 +455,7 @@ function mapStateToProps(store, ownprops) {
 		userProfile: getUserProfile(store),
 		dashboard: store.dashboard,
 		gateways: store.gateways,
-		isAppActive: store.App.active,
+		store,
 	};
 }
 

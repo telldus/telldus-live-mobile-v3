@@ -27,9 +27,9 @@ import { createSelector } from 'reselect';
 import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
-import Platform from 'Platform';
+import Orientation from 'react-native-orientation';
 
-import { Text, List, ListDataSource, View, StyleSheet } from 'BaseComponents';
+import { Text, List, ListDataSource, View } from 'BaseComponents';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
 import { defineMessages } from 'react-intl';
@@ -48,9 +48,6 @@ import {
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import reactMixin from 'react-mixin';
-import {
-	getWindowDimensions,
-} from 'Lib';
 
 const messages = defineMessages({
 	dashboard: {
@@ -80,7 +77,6 @@ type Props = {
 	onDown: (number) => void,
 	onStop: (number) => void,
 	events: Object,
-	screenProps: Object,
 };
 
 type State = {
@@ -88,6 +84,7 @@ type State = {
 	listWidth: number,
 	dataSource: Object,
 	settings: boolean,
+	orientation: string,
 };
 
 const tileMargin = 8;
@@ -117,8 +114,9 @@ class DashboardTab extends View {
 
 	constructor(props: Props) {
 		super(props);
+		const orientation = Orientation.getInitialOrientation();
 		const { width } = Dimensions.get('window');
-		const tileWidth: number = this.calculateTileWidth(width, props.screenProps.orientation);
+		const tileWidth: number = this.calculateTileWidth(width, orientation);
 
 		this.state = {
 			tileWidth,
@@ -127,6 +125,7 @@ class DashboardTab extends View {
 				rowHasChanged: this.rowHasChanged,
 			}).cloneWithRows(this.props.rows),
 			settings: false,
+			orientation,
 		};
 
 		this.tab = 'dashboardTab';
@@ -138,6 +137,8 @@ class DashboardTab extends View {
 		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.mixins = [Subscribable.Mixin];
+
+		this.orientationDidChange = this.orientationDidChange.bind(this);
 	}
 
 	startSensorTimer() {
@@ -176,10 +177,18 @@ class DashboardTab extends View {
 		}
 
 		this.startSensorTimer();
+		Orientation.addOrientationListener(this.orientationDidChange);
+	}
+
+	orientationDidChange(orientation) {
+		this.setState({
+			orientation,
+		});
 	}
 
 	componentWillUnmount() {
 		this.stopSensorTimer();
+		Orientation.removeOrientationListener(this.orientationDidChange);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -197,7 +206,7 @@ class DashboardTab extends View {
 	}
 
 	_onLayout = (event) => {
-		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width, this.props.screenProps.orientation);
+		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width, this.state.orientation);
 		if (tileWidth !== this.state.tileWidth) {
 			this.setState({
 				tileWidth,
@@ -219,21 +228,14 @@ class DashboardTab extends View {
 
 	render() {
 		// add to List props: enableEmptySections={true}, to surpress warning
-		let containerStyle = null;
-		if (Platform.OS === 'android') {
-			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				styles.conatiner : styles.containerLand;
-		}
-
 		return (
-			<View onLayout={this._onLayout} style={containerStyle}>
+			<View onLayout={this._onLayout}>
 				<List
 					ref="list"
 					contentContainerStyle={{
 						flexDirection: 'row',
 						flexWrap: 'wrap',
 					}}
-					key={this.state.tileWidth}
 					dataSource={this.state.dataSource}
 					renderRow={this._renderRow(this.state.tileWidth)}
 					pageSize={100}
@@ -320,16 +322,6 @@ class DashboardTab extends View {
 DashboardTab.propTypes = {
 	rows: PropTypes.array,
 };
-
-const styles = StyleSheet.create({
-	conatiner: {
-		flex: 1,
-	},
-	containerLand: {
-		flex: 1,
-		marginLeft: getWindowDimensions().height * 0.08,
-	},
-});
 
 const getRows = createSelector(
 	[

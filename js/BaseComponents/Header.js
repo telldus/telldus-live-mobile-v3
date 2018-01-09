@@ -23,10 +23,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Platform, Image, Text, TouchableOpacity } from 'react-native';
+import { Platform, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import { hasStatusBar, getWindowDimensions } from 'Lib';
+import { hasStatusBar } from 'Lib';
 
 import Base from './Base';
 import computeProps from './computeProps';
@@ -39,7 +39,6 @@ import _ from 'lodash';
 
 type Props = {
 	children: Object,
-	logoStyle: Object | number,
 	rounded: number,
 	searchBar: ?Object,
 	rightButton: Object,
@@ -61,7 +60,7 @@ export default class HeaderComponent extends Base {
 	renderButtonContent: (Object) => Object;
 
 	getInitialStyle() {
-		this.deviceWidth = getWindowDimensions().width;
+		this.deviceWidth = Dimensions.get('window').width;
 
 		this.paddingHorizontal = 15;
 		this.paddingTop = (Platform.OS === 'ios') ? 15 : 0;
@@ -127,7 +126,7 @@ export default class HeaderComponent extends Base {
 			return (
 				<Image
 					source={require('../App/Components/TabViews/img/telldus-logo3.png')}
-					style={[this.getInitialStyle().logoImage, this.props.logoStyle]}
+					style={this.getInitialStyle().logoImage}
 				/>
 			);
 		} else if (!Array.isArray(this.props.children)) {
@@ -304,8 +303,8 @@ export default class HeaderComponent extends Base {
 			return <Image source={button.image}/>;
 		}
 		if (button.icon) {
-			const { name, size, color, iconStyle } = button.icon;
-			return <Icon name={name} size={size} color={color} style={iconStyle}/>;
+			const { name, size, color } = button.icon;
+			return <Icon name={name} size={size} color={color}/>;
 		}
 		if (button.title) {
 			return <Text>{button.title}</Text>;
@@ -323,7 +322,6 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						right: 0,
 					},
-					rightButton.icon.style,
 				]}
 			>
 				{this.renderButtonContent(rightButton)}
@@ -342,7 +340,6 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						left: 0,
 					},
-					leftButton.icon.style,
 				]}
 			>
 				{this.renderButtonContent(leftButton)}
