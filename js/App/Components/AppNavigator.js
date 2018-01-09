@@ -126,12 +126,12 @@ class AppNavigator extends View {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.toastVisible) {
-			this._showToast();
+			this._showToast(nextProps.toastMessage);
 		}
 	}
 
-	_showToast() {
-		Toast.showWithGravity(this.props.toastMessage, Toast.SHORT, Toast.TOP);
+	_showToast(toastMessage: string) {
+		Toast.showWithGravity(toastMessage, Toast.SHORT, Toast.TOP);
 		this.props.dispatch({
 			type: 'GLOBAL_ERROR_HIDE',
 		});
