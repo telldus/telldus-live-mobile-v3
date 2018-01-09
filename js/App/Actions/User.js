@@ -21,7 +21,6 @@
 
 'use strict';
 
-import {Alert} from 'react-native';
 import type { ThunkAction } from './types';
 
 import {LiveApi} from 'LiveApi';
@@ -51,8 +50,6 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 		},
 	};
 	return LiveApi(payload).then(response => {
-		let res = JSON.stringify(response);
-		Alert.alert('registerPushToken response', res);
 		if ((!response.error) && (response.status === 'success')) {
 			dispatch({
 				type: 'PUSH_TOKEN_REGISTERED',
@@ -64,8 +61,6 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 			});
 		}
 	}).catch(e => {
-		let err = JSON.stringify(e);
-		Alert.alert('registerPushToken error', err);
 		if (e === 'TypeError: Network request failed') {
 			dispatch({
 				type: 'ERROR',
