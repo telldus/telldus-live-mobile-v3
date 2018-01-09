@@ -62,6 +62,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	dialogueOpen: boolean,
 }
 
 class LocationName extends View {
@@ -178,11 +179,13 @@ class LocationName extends View {
 	}
 
 	render() {
-		let { appLayout } = this.props;
+		let { appLayout, dialogueOpen, currentScreen } = this.props;
 		const styles = this.getStyle(appLayout);
 
+		let importantForAccessibility = !dialogueOpen && currentScreen === 'LocationName' ? 'no' : 'no-hide-descendants';
+
 		return (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
 				<LabelBox
 					containerStyle={{marginBottom: 10}}
 					label={this.label}
