@@ -124,7 +124,7 @@ class SettingsDetailModal extends View {
 	}
 
 	render() {
-		let submitButText = this.state.isPushSubmitLoading ? 'Submitting Token...' : 'Submit Push Token';
+		let submitButText = this.state.isPushSubmitLoading ? 'Registering this phone for push...' : 'Re-register this phone for push';
 		let logoutButText = this.state.isLogoutLoading ? 'Logging Out...' : 'Logout';
 		let version = DeviceInfo.getVersion();
 		return (
