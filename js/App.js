@@ -65,6 +65,7 @@ function mapStateToProps(store) {
 		accessToken: store.user.accessToken,
 		isTokenValid: store.user.isTokenValid,
 		pushToken: store.user.pushToken,
+		pushTokenRegistered: store.user.pushTokenRegistered,
 	};
 }
 
