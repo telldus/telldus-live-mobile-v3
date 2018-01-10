@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
+import com.telldus.live.mobile.Database.Utility;
 import com.telldus.live.mobile.Model.DeviceInfo;
 
 /**
@@ -119,6 +120,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
                e.printStackTrace();
            }
        }
+//       createDeviceApi();
 
 
         setResult(RESULT_CANCELED);
@@ -126,7 +128,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
         views = new RemoteViews(this.getPackageName(), R.layout.configurable_device_widget);
         widgetManager = AppWidgetManager.getInstance(this);
 
-        //createDeviceApi();
+    //    createDeviceApi();
 
 
         Intent intent = getIntent();
@@ -216,7 +218,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
 
 
     void createDeviceApi() {
-      //  String accessToken="fb727e6e326c99a59eb3ef9fa9ca324a78b62ecd";
+      //  accessToken= Utility.access;
 
         AndroidNetworking.post("https://api3.telldus.com/oauth2/devices/list")
                 .addHeaders("Content-Type", "application/json")

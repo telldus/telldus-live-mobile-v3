@@ -139,6 +139,34 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
         return r;
     }
+
+
+    public SensorInfo findSensorDevice(int id) {
+        String query = "Select * FROM " + TABLE_SENSOR + " WHERE " + SENSOR_DEVICE_ID + " =  \"" + id + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        SensorInfo r = new SensorInfo();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+
+            r.setWidgetName(cursor.getString(2));
+            r.setWidgetID(cursor.getInt(0));
+            r.setWidgetType(cursor.getString(3));
+            r.setDeviceID(1);
+
+            cursor.close();
+        } else {
+            r = null;
+        }
+        db.close();
+        return r;
+    }
+
+
     // Login user name and password
     public DeviceInfo getSinlgeDeviceID(int id)
     {

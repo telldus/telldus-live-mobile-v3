@@ -100,6 +100,10 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".ServiceBackground.MyService"
+            android:enabled="true" />
+
     </application>
 
 </manifest>
