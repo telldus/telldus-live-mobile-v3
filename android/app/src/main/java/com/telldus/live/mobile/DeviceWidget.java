@@ -27,6 +27,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
+import com.telldus.live.mobile.Database.Utility;
 import com.telldus.live.mobile.Model.DeviceInfo;
 
 /**
@@ -116,7 +117,7 @@ public class DeviceWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
 
         if (ACTION_ON.equals(intent.getAction())) {
-            String accessToken;
+            String accessToken="";
             String expiresIn;
             String tokenType;
             String scope;
@@ -125,7 +126,6 @@ public class DeviceWidget extends AppWidgetProvider {
             Bundle extras=intent.getExtras();
             int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
             DeviceInfo widgetID=db.getSinlgeDeviceID(wigetID);
-
 
             File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
             if (fileAuth.exists()) {
@@ -169,11 +169,13 @@ public class DeviceWidget extends AppWidgetProvider {
 
           //  createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On");
 
+          //  createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
+
 
         }
         if(ACTION_OFF.equals(intent.getAction()))
         {
-            String accessToken;
+            String accessToken="";
             String expiresIn;
             String tokenType;
             String scope;
@@ -225,7 +227,7 @@ public class DeviceWidget extends AppWidgetProvider {
                 }
             }
 
-
+        //    createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off",accessToken);
 
           //  createDeviceApi(context,id.getDeviceID(),1,wigetID,db,"On",accessToken);
 
@@ -260,7 +262,7 @@ public class DeviceWidget extends AppWidgetProvider {
     }
 
     void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action,String accessToken) {
-       // final String accessToken="fb727e6e326c99a59eb3ef9fa9ca324a78b62ecd";
+      //  accessToken= Utility.access;
         String str="https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
         Log.v("***********",str);
         AndroidNetworking.get("https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null")

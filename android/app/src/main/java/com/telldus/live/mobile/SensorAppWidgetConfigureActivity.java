@@ -1,6 +1,7 @@
 package com.telldus.live.mobile;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -38,7 +39,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
+import com.telldus.live.mobile.Database.Utility;
 import com.telldus.live.mobile.Model.SensorInfo;
+import com.telldus.live.mobile.ServiceBackground.MyService;
 
 /**
  * The configuration screen for the {@link SensorAppWidget SensorAppWidget} AppWidget.
@@ -117,7 +120,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
 
 
 
-        //createSensorApi();
+      //  createSensorApi();
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_sensor_widget_configure);
@@ -159,6 +162,18 @@ public class SensorAppWidgetConfigureActivity extends Activity {
                 views.setTextViewText(R.id.txtSensorType, sensorName.getText());
                 views.setImageViewResource(R.id.iconSensor, R.drawable.sensor);
                 widgetManager.updateAppWidget(mAppWidgetId, views);
+
+                boolean b=isMyServiceRunning(MyService.class);
+                if (!b)
+                {
+                    startService(new Intent(getApplicationContext(), MyService.class));
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Service already running",Toast.LENGTH_LONG).show();
+                }
+
+
 
                 Intent resultValue = new Intent();
                 // Set the results as expected from a 'configure activity'.
@@ -210,7 +225,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
         });
     }
     void createSensorApi() {
-  //      accessToken="fb727e6e326c99a59eb3ef9fa9ca324a78b62ecd";
+    //    accessToken= Utility.access;
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
         AndroidNetworking.post("https://api.telldus.com/oauth2/sensors/list")
                 .addHeaders("Content-Type", "application/json")
@@ -232,6 +247,8 @@ public class SensorAppWidgetConfigureActivity extends Activity {
                                 Log.d("&&&&&&&&&&&&&&&&&&&&&&&", name);
                                 nameListItems.add(name);
 
+                                Log.v("Sensor response",response.toString());
+
 
                             }
                             sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
@@ -245,5 +262,15 @@ public class SensorAppWidgetConfigureActivity extends Activity {
 
                     }
                 });
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
