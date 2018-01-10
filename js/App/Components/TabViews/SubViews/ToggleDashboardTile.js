@@ -28,6 +28,7 @@ import { StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
+import { getLabelDevice } from 'Accessibility';
 
 type Props = {
 	item: Object,
@@ -35,6 +36,7 @@ type Props = {
 	tileWidth: number,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
+	intl: Object,
 };
 
 class ToggleDashboardTile extends View {
@@ -45,20 +47,23 @@ class ToggleDashboardTile extends View {
 	}
 
 	render() {
-		const { item, tileWidth } = this.props;
+		const { item, tileWidth, intl } = this.props;
 		const { id, name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
-		const onButton = <OnButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} />;
-		const offButton = <OffButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} />;
+		const onButton = <OnButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} intl={intl}/>;
+		const offButton = <OffButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} intl={intl}/>;
 
 		let style = { ...this.props.style };
 		style.width = tileWidth;
 		style.height = tileWidth;
 
+		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
+
 		return (
 			<DashboardShadowTile
 				item={item}
+				accessibilityLabel={accessibilityLabel}
 				isEnabled={isInState === 'TURNON'}
 				name={name}
 				type={'device'}

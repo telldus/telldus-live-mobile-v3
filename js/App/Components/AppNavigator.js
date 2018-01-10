@@ -24,9 +24,7 @@
 import React from 'React';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, Dimensions } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Toast from 'react-native-simple-toast';
 import {
 	getUserProfile,
@@ -46,22 +44,19 @@ const messages = defineMessages({
 		description: 'The error messgage to show, when a device action cannot be performed',
 	},
 });
-
-const deviceHeight = Dimensions.get('window').height;
-let deviceWidth = Dimensions.get('window').width;
 import Theme from 'Theme';
 
-import { View, HeaderTitle } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
+import { NavigationHeader } from 'DDSubViews';
 import AddLocationNavigator from 'AddLocationNavigator';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
-import { hasStatusBar } from 'Lib';
 
 const RouteConfigs = {
 	Tabs: {
@@ -72,14 +67,10 @@ const RouteConfigs = {
 	},
 	DeviceDetails: {
 		screen: DeviceDetailsTabsView,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: HeaderTitle,
+		navigationOptions: ({navigation}: Object): Object => {
+			return {
+				header: <NavigationHeader navigation={navigation}/>,
+			};
 		},
 	},
 	AddLocation: {
@@ -89,13 +80,7 @@ const RouteConfigs = {
 			let renderRootHeader = state.params && state.params.renderRootHeader;
 			if (renderRootHeader) {
 				return {
-					headerStyle: {
-						marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-						backgroundColor: Theme.Core.brandPrimary,
-						height: deviceHeight * 0.1,
-					},
-					headerTintColor: '#ffffff',
-					headerTitle: renderStackHeader(),
+					header: <NavigationHeader navigation={navigation}/>,
 				};
 			}
 			return {
@@ -105,12 +90,6 @@ const RouteConfigs = {
 
 	},
 };
-
-function renderStackHeader() {
-	return (
-		<Image style={{ height: 110, width: 130, marginLeft: (deviceWidth * 0.2) }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
-	);
-}
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',
@@ -131,6 +110,7 @@ type Props = {
 
 type State = {
 	specificOrientation: string,
+	currentScreen: string,
 }
 
 class AppNavigator extends View {
@@ -139,6 +119,7 @@ class AppNavigator extends View {
 	state: State;
 
 	_updateSpecificOrientation: (Object) => void;
+	onNavigationStateChange: (Object) => void;
 
 	constructor() {
 		super();
@@ -147,10 +128,12 @@ class AppNavigator extends View {
 
 		this.state = {
 			specificOrientation: init,
+			currentScreen: 'Tabs',
 		};
 
 		Orientation.unlockAllOrientations();
 		Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
+		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
 
 	componentWillMount() {
@@ -162,7 +145,7 @@ class AppNavigator extends View {
 		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
 		if (Platform.OS === 'android' && StatusBar) {
 			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
+			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
 
 		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
@@ -197,10 +180,21 @@ class AppNavigator extends View {
 		this.setState({ specificOrientation });
 	};
 
+	onNavigationStateChange(prevState, currentState) {
+		const index = currentState.index;
+
+		this.setState({ currentScreen: currentState.routes[index].routeName });
+	}
+
 	render() {
+		let { currentScreen } = this.state;
+		let screenProps = {
+			currentScreen,
+		};
+
 		return (
 			<View>
-				<Navigator/>
+				<Navigator onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
 				<DimmerPopup
 					isVisible={this.props.dimmer.show}
 					name={this.props.dimmer.name}

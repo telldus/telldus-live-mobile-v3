@@ -76,6 +76,8 @@ export type Action =
 	| { type: 'APP_BACKGROUND' }
 
 	| { type: 'APP_ORIENTATION', value: string }
+	| { type: 'APP_LAYOUT', payload: Object }
+	| { type: 'ACCESSIBILITY_INFO', payload: boolean }
 
 	| { type: 'GLOBAL_ERROR_SHOW', payload: Object }
 	| { type: 'GLOBAL_ERROR_HIDE' }

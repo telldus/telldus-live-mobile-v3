@@ -23,91 +23,83 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { ScrollView } from 'react-native';
 import { defineMessages } from 'react-intl';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { announceForAccessibility } from 'react-native-accessibility';
+import Platform from 'Platform';
+import StatusBar from 'StatusBar';
 
 import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from 'BaseComponents';
 import i18n from '../../../Translations/common';
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-
 import { states, statusMessage } from '../../../../Config';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
-let stackNavHeaderHeight = deviceHeight * 0.1;
-let deviceIconCoverHeight = (deviceHeight * 0.2);
-let tabViewHeaderHeight = (deviceHeight * 0.085);
-let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
-let screenSpaceRemaining = deviceHeight - totalTop;
+
 
 const messages = defineMessages({
-	success: {
-		id: 'success',
-		defaultMessage: 'Success',
-	},
-	failed: {
-		id: 'error.failed',
-		defaultMessage: 'Failed',
-	},
-	noReply: {
-		id: 'error.noReply',
-		defaultMessage: 'No reply',
-	},
-	notConfirmed: {
-		id: 'error.notConfirmed',
-		defaultMessage: 'Not confirmed',
-	},
-	timedOut: {
-		id: 'error.timedOut',
-		defaultMessage: 'Timed out',
+	announcementOnDetailsModalOpen: {
+		id: 'accessibilityLabel.announcementOnDetailsModalOpen',
+		defaultMessage: 'Showing device action details. Double tap on device history tab to close the modal',
 	},
 });
 
 class DeviceHistoryDetails extends View {
 	constructor(props) {
 		super(props);
+
+		let { formatMessage } = props.intl;
+
+		this.labelAnnouncementOnOpen = formatMessage(messages.announcementOnDetailsModalOpen);
+		this.labelAnnouncementOnClose = `${formatMessage(i18n.announcementOnModalClose)}.`;
 	}
 
 	getPercentage(value: number) {
 		return Math.round(value * 100.0 / 255);
 	}
 
-	getRelativeStyle() {
-		let relativeStyle = {
-			container: styles.container,
-			detailsRow: styles.detailsRowPort,
-			detailsLabelCover: styles.detailsLabelCover,
-			detailsValueCover: styles.detailsValueCover,
-			timeCover: styles.timeCover,
-			detailsContainer: styles.detailsContainerPort,
-		};
-		if (this.props.appOrientation !== 'PORTRAIT') {
-			relativeStyle.container = styles.containerLand;
-			relativeStyle.detailsRow = styles.detailsRowLand;
-			relativeStyle.detailsLabelCover = styles.detailsLabelCoverLand;
-			relativeStyle.detailsValueCover = styles.detailsValueCoverLand;
-			relativeStyle.timeCover = styles.timeCoverLand;
-			relativeStyle.detailsContainer = styles.detailsContainerLand;
+	componentWillReceiveProps(nextProps: Object) {
+		if (nextProps.showDetails && !this.props.showDetails) {
+			announceForAccessibility(this.labelAnnouncementOnOpen);
 		}
-		return relativeStyle;
+		if (this.props.showDetails && !nextProps.showDetails) {
+			announceForAccessibility(this.labelAnnouncementOnClose);
+		}
 	}
 
 	render() {
-		let { detailsData } = this.props;
+		let { detailsData, appLayout, currentScreen, currentTab } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
+
+		let {
+			startValue,
+			container,
+			titleTextCover,
+			detailsContainer,
+			detailsRow,
+			detailsLabelCover,
+			detailsValueCover,
+			timeCover,
+			titleText,
+			statusIconSize,
+			detailsLabel,
+			detailsText,
+			timeText,
+			detailsTextError,
+		} = this.getStyle(appLayout);
+
 		if (origin && origin === 'Scheduler') {
-			originText = <FormattedMessage {...i18n.scheduler} style={styles.detailsText}/>;
+			originText = <FormattedMessage {...i18n.scheduler} style={detailsText}/>;
 		} else if (origin && origin === 'Incoming signal') {
-			originText = <FormattedMessage {...i18n.incommingSignal} style={styles.detailsText}/>;
+			originText = <FormattedMessage {...i18n.incommingSignal} style={detailsText}/>;
 		} else if (origin && origin === 'Unknown') {
-			originText = <FormattedMessage {...i18n.unknown} style={styles.detailsText}/>;
+			originText = <FormattedMessage {...i18n.unknown} style={detailsText}/>;
 		} else if (origin && origin.substring(0, 5) === 'Group') {
-			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.group} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
+			originText = <Text style={detailsText}><FormattedMessage {...i18n.group} style={detailsText}/> {origin.substring(6, (origin.length))}</Text>;
 		} else if (origin && origin.substring(0, 5) === 'Event') {
-			originText = <Text style={styles.detailsText}><FormattedMessage {...i18n.event} style={styles.detailsText}/> {origin.substring(6, (origin.length))}</Text>;
+			originText = <Text style={detailsText}><FormattedMessage {...i18n.event} style={detailsText}/> {origin.substring(6, (origin.length))}</Text>;
 		} else {
 			originText = origin;
 		}
@@ -116,25 +108,25 @@ class DeviceHistoryDetails extends View {
 			textState = state === 'Dim' ? `${state} ${this.getPercentage(stateValue)}%` : state;
 			switch (state) {
 				case 'On':
-					textState = <FormattedMessage {...i18n.on} style={styles.detailsText}/>;
+					textState = <FormattedMessage {...i18n.on} style={detailsText}/>;
 					break;
 				case 'Off':
-					textState = <FormattedMessage {...i18n.off} style={styles.detailsText}/>;
+					textState = <FormattedMessage {...i18n.off} style={detailsText}/>;
 					break;
 				case 'Dim':
-					textState = <Text style={styles.detailsText}><FormattedMessage {...i18n.dimmingLevel} style={styles.detailsText}/>: {this.getPercentage(stateValue)}% </Text>;
+					textState = <Text style={detailsText}><FormattedMessage {...i18n.dimmingLevel} style={detailsText}/>: {this.getPercentage(stateValue)}% </Text>;
 					break;
 				case 'Bell':
-					textState = <FormattedMessage {...i18n.bell} style={styles.detailsText}/>;
+					textState = <FormattedMessage {...i18n.bell} style={detailsText}/>;
 					break;
 				case 'Down':
-					textState = <FormattedMessage {...i18n.down} style={styles.detailsText}/>;
+					textState = <FormattedMessage {...i18n.down} style={detailsText}/>;
 					break;
 				case 'Up':
-					textState = <FormattedMessage {...i18n.up} style={styles.detailsText}/>;
+					textState = <FormattedMessage {...i18n.up} style={detailsText}/>;
 					break;
 				case 'Stop':
-					textState = <FormattedMessage {...i18n.stop} style={styles.detailsText}/>;
+					textState = <FormattedMessage {...i18n.stop} style={detailsText}/>;
 					break;
 				default:
 					textState = state;
@@ -146,19 +138,19 @@ class DeviceHistoryDetails extends View {
 		if (successStatus >= 0) {
 			switch (successStatus) {
 				case 0:
-					textStatus = <FormattedMessage {...messages.success} style={styles.detailsText}/>;
+					textStatus = <FormattedMessage {...i18n.success} style={detailsText}/>;
 					break;
 				case '1':
-					textStatus = <FormattedMessage {...messages.failed} style={styles.detailsTextError}/>;
+					textStatus = <FormattedMessage {...i18n.failed} style={detailsTextError}/>;
 					break;
 				case '2':
-					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.noReply} style={styles.detailsTextError}/>)</Text>;
+					textStatus = <Text style={detailsTextError}><FormattedMessage {...i18n.failed} style={detailsTextError}/> (<FormattedMessage {...i18n.noReply} style={detailsTextError}/>)</Text>;
 					break;
 				case '3':
-					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.timedOut} style={styles.detailsTextError}/>)</Text>;
+					textStatus = <Text style={detailsTextError}><FormattedMessage {...i18n.failed} style={detailsTextError}/> (<FormattedMessage {...i18n.timedOut} style={detailsTextError}/>)</Text>;
 					break;
 				case '4':
-					textStatus = <Text style={styles.detailsTextError}><FormattedMessage {...messages.failed} style={styles.detailsTextError}/> (<FormattedMessage {...messages.notConfirmed} style={styles.detailsTextError}/>)</Text>;
+					textStatus = <Text style={detailsTextError}><FormattedMessage {...i18n.failed} style={detailsTextError}/> (<FormattedMessage {...i18n.notConfirmed} style={detailsTextError}/>)</Text>;
 					break;
 				default:
 					let message = statusMessage[successStatus];
@@ -166,14 +158,7 @@ class DeviceHistoryDetails extends View {
 			}
 		}
 
-		let {
-			container,
-			detailsRow,
-			detailsLabelCover,
-			detailsValueCover,
-			timeCover,
-			detailsContainer,
-		} = this.getRelativeStyle();
+		let accessible = currentTab === 'History' && currentScreen === 'DeviceDetails';
 
 		return (
 			<Modal
@@ -184,31 +169,35 @@ class DeviceHistoryDetails extends View {
 				showOverlay= {false}
 				entryDuration= {300}
 				exitDuration= {100}
-				startValue= {-screenSpaceRemaining}
+				startValue= {-startValue}
 				endValue= {0}
 				showModal={this.props.showDetails}>
-				<View style={styles.titleTextCover}>
-					<Text style={styles.titleText}>
-						<FormattedMessage {...i18n.details} style={styles.titleText}/>
+				<View style={titleTextCover}>
+					<Text style={titleText}>
+						<FormattedMessage {...i18n.details} style={titleText}/>
 					</Text>
 				</View>
-				<ScrollView contentContainerStyle={[styles.detailsContainer, detailsContainer]}>
-					<View style={[styles.detailsRow, detailsRow]}>
+				<ScrollView contentContainerStyle={detailsContainer}>
+					<View style={detailsRow}
+						accessible={accessible}
+						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
-							<Text style={styles.detailsLabel}>
-								<FormattedMessage {...i18n.state} style={styles.detailsLabel}/>
+							<Text style={detailsLabel}>
+								<FormattedMessage {...i18n.state} style={detailsLabel}/>
 							</Text>
 						</View>
 						<View style={detailsValueCover}>
-							<Text style={styles.detailsText}>
+							<Text style={detailsText}>
 								{textState}
 							</Text>
 						</View>
 					</View>
-					<View style={[styles.detailsRow, detailsRow]}>
+					<View style={detailsRow}
+						accessible={accessible}
+						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
-							<Text style={styles.detailsLabel}>
-								<FormattedMessage {...i18n.time} style={styles.detailsLabel}/>
+							<Text style={detailsLabel}>
+								<FormattedMessage {...i18n.time} style={detailsLabel}/>
 							</Text>
 						</View>
 						{textDate !== '' ?
@@ -221,7 +210,7 @@ class DeviceHistoryDetails extends View {
 									weekday="short"
 									day="2-digit"
 									month="short"
-									style={styles.timeText} />
+									style={timeText} />
 								<FormattedTime
 									value={textDate}
 									localeMatcher= "best fit"
@@ -229,38 +218,42 @@ class DeviceHistoryDetails extends View {
 									hour="numeric"
 									minute="numeric"
 									second="numeric"
-									style={[styles.timeText, {paddingLeft: 6, marginRight: 15}]} />
+									style={[timeText, {paddingLeft: 6, marginRight: 15}]} />
 							</View>
 							:
 							null
 						}
 					</View>
-					<View style={[styles.detailsRow, detailsRow]}>
+					<View style={detailsRow}
+						accessible={accessible}
+						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
-							<Text style={styles.detailsLabel}>
-								<FormattedMessage {...i18n.origin} style={styles.detailsLabel}/>
+							<Text style={detailsLabel}>
+								<FormattedMessage {...i18n.origin} style={detailsLabel}/>
 							</Text>
 						</View>
 						<View style={detailsValueCover}>
-							<Text style={styles.detailsText} numberOfLines={1}>
+							<Text style={detailsText} numberOfLines={1}>
 								{originText}
 							</Text>
 						</View>
 					</View>
-					<View style={[styles.detailsRow, detailsRow]}>
+					<View style={detailsRow}
+						accessible={accessible}
+						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
-							<Text style={styles.detailsLabel}>
-								<FormattedMessage {...i18n.status} style={styles.detailsLabel}/>
+							<Text style={detailsLabel}>
+								<FormattedMessage {...i18n.status} style={detailsLabel}/>
 							</Text>
 						</View>
 						<View style={[detailsValueCover, { flexDirection: 'row-reverse' }]}>
-							<Text style={successStatus === 0 ? styles.detailsText : styles.detailsTextError} >
+							<Text style={successStatus === 0 ? detailsText : detailsTextError} >
 								{textStatus}
 							</Text>
 							{successStatus === 0 ?
 								null
 								:
-								<Icon name="exclamation-triangle" size={24} color="#d32f2f" />
+								<Icon name="exclamation-triangle" size={statusIconSize} color="#d32f2f" />
 							}
 						</View>
 					</View>
@@ -268,112 +261,97 @@ class DeviceHistoryDetails extends View {
 			</Modal>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		position: 'absolute',
-		backgroundColor: '#eeeeef',
-		top: 0,
-		bottom: 0,
-		width: deviceWidth,
-	},
-	containerLand: {
-		flex: 1,
-		position: 'absolute',
-		backgroundColor: '#eeeeef',
-		top: 0,
-		bottom: 0,
-		width: deviceHeight,
-	},
-	titleTextCover: {
-		width: deviceWidth,
-		height: deviceHeight * 0.09,
-		justifyContent: 'center',
-	},
-	titleText: {
-		marginLeft: 10,
-		color: '#A59F9A',
-		fontSize: 16,
-	},
-	detailsContainer: {
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-		flexDirection: 'column',
-	},
-	detailsContainerPort: {
-		width: deviceWidth,
-	},
-	detailsContainerLand: {
-		width: deviceHeight,
-	},
-	detailsRow: {
-		flexDirection: 'row',
-		height: deviceHeight * 0.09,
-		marginTop: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	detailsRowPort: {
-		width: deviceWidth,
-	},
-	detailsRowLand: {
-		width: deviceHeight,
-	},
-	detailsLabelCover: {
-		alignItems: 'flex-start',
-		width: deviceWidth * 0.3,
-	},
-	detailsLabelCoverLand: {
-		alignItems: 'flex-start',
-		width: deviceHeight * 0.3,
-	},
-	detailsLabel: {
-		marginLeft: 10,
-		fontSize: 16,
-		color: '#4C4C4C',
-	},
-	detailsValueCover: {
-		alignItems: 'flex-end',
-		width: deviceWidth * 0.7,
-	},
-	detailsValueCoverLand: {
-		alignItems: 'flex-end',
-		width: deviceHeight * 0.7,
-	},
-	detailsText: {
-		marginRight: 15,
-		color: '#A59F9A',
-		fontSize: 16,
-	},
-	detailsTextError: {
-		marginRight: 15,
-		color: '#d32f2f',
-		fontSize: 16,
-	},
-	timeCover: {
-		justifyContent: 'flex-end',
-		width: deviceWidth * 0.7,
-		flexDirection: 'row',
-	},
-	timeCoverLand: {
-		justifyContent: 'flex-end',
-		width: deviceHeight * 0.7,
-		flexDirection: 'row',
-	},
-	timeText: {
-		color: '#A59F9A',
-		fontSize: 16,
-	},
-});
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		let stackNavHeaderHeight = appLayout.height * 0.1;
+		let deviceIconCoverHeight = appLayout.height * 0.2;
+		let tabViewHeaderHeight = appLayout.height * 0.085;
+		statusBarHeight = (Platform.OS === 'android' && StatusBar) ? statusBarHeight : 0;
+		stackNavHeaderHeight = isPortrait ? stackNavHeaderHeight : 0;
+		let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
+		let screenSpaceRemaining = appLayout.height - totalTop;
+
+		return {
+			startValue: screenSpaceRemaining,
+			container: {
+				flex: 1,
+				position: 'absolute',
+				backgroundColor: '#eeeeef',
+				top: 0,
+				bottom: 0,
+				width: width,
+			},
+			titleTextCover: {
+				width: width,
+				height: isPortrait ? height * 0.09 : width * 0.09,
+				justifyContent: 'center',
+			},
+			detailsContainer: {
+				alignItems: 'center',
+				justifyContent: 'flex-end',
+				flexDirection: 'column',
+				width: width,
+			},
+			detailsRow: {
+				flexDirection: 'row',
+				height: isPortrait ? height * 0.09 : width * 0.09,
+				marginTop: 1,
+				backgroundColor: '#fff',
+				alignItems: 'center',
+				justifyContent: 'space-between',
+				width: width,
+			},
+			detailsLabelCover: {
+				alignItems: 'flex-start',
+				width: width * 0.3,
+			},
+			detailsValueCover: {
+				alignItems: 'flex-end',
+				width: width * 0.7,
+			},
+			timeCover: {
+				justifyContent: 'flex-end',
+				width: width * 0.7,
+				flexDirection: 'row',
+			},
+			titleText: {
+				marginLeft: 10,
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+			statusIconSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
+			detailsLabel: {
+				marginLeft: 10,
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				color: '#4C4C4C',
+			},
+			detailsText: {
+				marginRight: 15,
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+			detailsTextError: {
+				marginRight: 15,
+				color: '#d32f2f',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+			timeText: {
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+		};
+	}
+}
 
 function mapStateToProps(state) {
 	return {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,
-		appOrientation: state.App.orientation,
+		appLayout: state.App.layout,
 	};
 }
 

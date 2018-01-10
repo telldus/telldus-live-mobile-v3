@@ -27,13 +27,12 @@ import React from 'react';
 import { Linking, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import Theme from 'Theme';
 import {
 	View,
 	Text,
-	StyleSheet,
-	Dimensions,
 	Image,
 	Icon,
 	TouchableButton,
@@ -41,8 +40,7 @@ import {
 
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
-const deviceWidth = Dimensions.get('window').width;
-
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.success.headerOne',
@@ -88,6 +86,9 @@ type Props = {
 	navigation: Object,
 	onDidMount: Function,
 	rootNavigator: Object,
+	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 }
 
 type State = {
@@ -104,16 +105,33 @@ class Success extends View<void, Props, State> {
 		this.onPressHelp = this.onPressHelp.bind(this);
 		this.onPressContinue = this.onPressContinue.bind(this);
 
-		this.h1 = props.intl.formatMessage(messages.headerOne);
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
+		let { formatMessage } = props.intl;
 
-		this.title = `${props.intl.formatMessage(messages.messageTitle)}!`;
-		this.body = props.intl.formatMessage(messages.messageBodyParaOne);
+		this.h1 = formatMessage(messages.headerOne);
+		this.h2 = formatMessage(messages.headerTwo);
+
+		this.title = `${formatMessage(messages.messageTitle)}!`;
+		this.body = formatMessage(messages.messageBodyParaOne);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 	}
 
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'Success' && this.props.currentScreen !== 'Success';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -136,6 +154,8 @@ class Success extends View<void, Props, State> {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
 
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		let locationImageUrl = getLocationImageUrl(clientInfo.type);
@@ -175,78 +195,84 @@ class Success extends View<void, Props, State> {
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	itemsContainer: {
-		flex: 1,
-		flexDirection: 'column',
-		marginTop: 20,
-		paddingVertical: 20,
-		paddingRight: 20,
-		alignItems: 'flex-start',
-		width: (deviceWidth - 20),
-	},
-	shadow: {
-		borderRadius: 4,
-		backgroundColor: '#fff',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
-	},
-	imageLocation: {
-		width: deviceWidth * 0.32,
-		height: deviceWidth * 0.23,
-	},
-	imageTitleContainer: {
-		flex: 1,
-		flexDirection: 'row',
-		alignItems: 'flex-end',
-		justifyContent: 'flex-start',
-	},
-	iconCheck: {
-		position: 'absolute',
-		top: 20,
-		left: deviceWidth * 0.18,
-		backgroundColor: '#fff',
-		borderBottomLeftRadius: 35,
-		borderTopRightRadius: 25,
-	},
-	messageTitle: {
-		color: '#00000099',
-		fontSize: 24,
-		flexWrap: 'wrap',
-	},
-	messageBody: {
-		marginLeft: 20,
-		marginTop: 10,
-		color: '#A59F9A',
-		fontSize: 14,
-	},
-	hyperLinkButton: {
-		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		alignItems: 'center',
-		marginTop: 10,
-		height: 40,
-		width: 130,
-	},
-	hyperLink: {
-		color: '#00000099',
-		fontSize: 22,
-		marginLeft: 5,
-		marginRight: 5,
-	},
-	button: {
-		alignSelf: 'center',
-		marginTop: 20,
-		marginBottom: 10,
-	},
-});
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+
+		return {
+			itemsContainer: {
+				flex: 1,
+				flexDirection: 'column',
+				marginTop: 20,
+				paddingVertical: 20,
+				paddingRight: 20,
+				alignItems: 'flex-start',
+				width: width - 20,
+			},
+			shadow: {
+				borderRadius: 4,
+				backgroundColor: '#fff',
+				shadowColor: '#000000',
+				shadowOffset: {
+					width: 0,
+					height: 0,
+				},
+				shadowRadius: 1,
+				shadowOpacity: 1.0,
+				elevation: 2,
+			},
+			imageLocation: {
+				width: isPortrait ? width * 0.32 : height * 0.32,
+				height: isPortrait ? width * 0.23 : height * 0.23,
+			},
+			imageTitleContainer: {
+				flex: 1,
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'flex-start',
+			},
+			iconCheck: {
+				position: 'absolute',
+				top: 20,
+				left: isPortrait ? width * 0.18 : height * 0.18,
+				backgroundColor: '#fff',
+				borderBottomLeftRadius: 35,
+				borderTopRightRadius: 25,
+			},
+			messageTitle: {
+				color: '#00000099',
+				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
+				flexWrap: 'wrap',
+			},
+			messageBody: {
+				marginLeft: 20,
+				marginTop: 10,
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+			},
+			hyperLinkButton: {
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				alignItems: 'center',
+				marginTop: 10,
+				height: 40,
+				width: 130,
+			},
+			hyperLink: {
+				color: '#00000099',
+				fontSize: 22,
+				marginLeft: 5,
+				marginRight: 5,
+			},
+			button: {
+				alignSelf: 'center',
+				marginTop: 20,
+				marginBottom: 10,
+			},
+		};
+	}
+}
 
 export default connect()(Success);

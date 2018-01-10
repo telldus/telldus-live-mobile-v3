@@ -15,28 +15,27 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @providesModule DDSubViews
  */
 
-'use strict';
-
-import DeviceLocationDetail from './DeviceLocationDetail';
-import ToggleDeviceDetail from './ToggleDeviceDetail';
-import BellDeviceDetail from './BellDeviceDetail';
-import DimmerDeviceDetail from './DimmerDeviceDetail';
-import NavigationalDeviceDetail from './NavigationalDeviceDetail';
-import DeviceHistoryDetails from './DeviceHistoryDetails';
-import HistoryRow from './HistoryRow';
-import NavigationHeader from './NavigationHeader';
+// @flow
 
 module.exports = {
-	DeviceLocationDetail,
-	ToggleDeviceDetail,
-	BellDeviceDetail,
-	DimmerDeviceDetail,
-	NavigationalDeviceDetail,
-	DeviceHistoryDetails,
-	HistoryRow,
-	NavigationHeader,
+	getDimmerValue: (value: number, isInState: string): number => {
+		let newValue = value || 0;
+		if (isInState === 'TURNON') {
+			return 255;
+		}
+		if (isInState === 'TURNOFF') {
+			return 0;
+		}
+
+		newValue = parseInt(newValue, 10);
+		return newValue;
+	},
+	toDimmerValue: (sliderValue: number): number => {
+		return Math.round(sliderValue * 255 / 100.0);
+	},
+	toSliderValue: (dimmerValue: number): number => {
+		return Math.round(dimmerValue * 100.0 / 255);
+	},
 };

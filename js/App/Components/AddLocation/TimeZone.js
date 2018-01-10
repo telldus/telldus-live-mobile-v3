@@ -27,21 +27,18 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import {
 	View,
 	FormattedMessage,
-	StyleSheet,
-	Dimensions,
 	Text,
 	Icon,
 	FloatingButton,
 } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
-const deviceWidth = Dimensions.get('window').width;
-
-
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.timeZone.headerOne',
@@ -58,6 +55,11 @@ const messages = defineMessages({
 		defaultMessage: 'Autodetected',
 		description: 'hint text for user',
 	},
+	labelHintChangeTimeZone: {
+		id: 'addNewLocation.timeZone.labelHintChangeTimeZone',
+		defaultMessage: 'Double tap to change',
+		description: 'accessibility message to change time zone',
+	},
 });
 
 type Props = {
@@ -67,10 +69,16 @@ type Props = {
 	intl: intlShape.isRequired,
 	onDidMount: Function,
 	activateGateway: (clientInfo: Object) => Promise<any>,
+	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
+	actions: Object,
 }
 
 type State = {
 	timeZone: string,
+	autoDetected: boolean,
+	isLoading: boolean,
 }
 
 class TimeZone extends View<void, Props, State> {
@@ -88,11 +96,18 @@ class TimeZone extends View<void, Props, State> {
 		this.state = {
 			timeZone,
 			autoDetected,
+			isLoading: false,
 		};
 
-		this.h1 = `3. ${props.intl.formatMessage(messages.headerOne)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
-		this.label = props.intl.formatMessage(messages.headerOne);
+		let { formatMessage } = props.intl;
+
+		this.h1 = `3. ${formatMessage(messages.headerOne)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+		this.label = formatMessage(messages.headerOne);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
+		this.labelHintChangeTimeZone = formatMessage(messages.labelHintChangeTimeZone);
+		this.labelHint = formatMessage(messages.hint);
 
 		this.onTimeZoneSubmit = this.onTimeZoneSubmit.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
@@ -101,6 +116,19 @@ class TimeZone extends View<void, Props, State> {
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'TimeZone' && this.props.currentScreen !== 'TimeZone';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -117,7 +145,23 @@ class TimeZone extends View<void, Props, State> {
 	onTimeZoneSubmit() {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.timezone = this.state.timeZone;
-		this.props.navigation.navigate('Position', {clientInfo});
+		let { screenReaderEnabled, actions } = this.props;
+		if (screenReaderEnabled) {
+			this.setState({
+				isLoading: true,
+			});
+			actions.activateGateway(clientInfo)
+				.then(response => {
+					if (response) {
+						this.props.navigation.navigate('Success', {clientInfo});
+					}
+					this.setState({
+						isLoading: false,
+					});
+				});
+		} else {
+			this.props.navigation.navigate('Position', {clientInfo});
+		}
 	}
 
 	onEditTimeZone() {
@@ -126,13 +170,19 @@ class TimeZone extends View<void, Props, State> {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
+
+		let timeZoneInfo = `${this.label}, ${this.state.timeZone}, ${this.state.autoDetected ? this.labelHint : ''}`;
+		let accessibilityLabel = `${timeZoneInfo}. ${this.labelHintChangeTimeZone}.`;
 
 		return (
 			<View style={{flex: 1}}>
 				<LabelBox
 					label={this.label}
-					showIcon={false}>
-					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 0}}>
+					showIcon={false}
+					appLayout={appLayout}>
+					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 0}} accessibilityLabel={accessibilityLabel}>
 						<View style={styles.timeZoneContainer}>
 							<Text style={styles.timeZone}>
 								{this.state.timeZone}
@@ -153,37 +203,43 @@ class TimeZone extends View<void, Props, State> {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onTimeZoneSubmit}
-					imageSource={require('../TabViews/img/right-arrow-key.png')}
-					showThrobber={false}
+					imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={this.state.isLoading}
 				/>
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	timeZoneContainer: {
-		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		marginTop: 10,
-		width: (deviceWidth - 40),
-	},
-	timeZone: {
-		color: '#00000099',
-		fontSize: 20,
-		paddingLeft: 2,
-		marginRight: 10,
-	},
-	hint: {
-		color: '#A59F9A',
-		fontSize: 14,
-		paddingLeft: 2,
-	},
-	buttonStyle: {
-		right: deviceWidth * 0.053333333,
-		elevation: 10,
-		shadowOpacity: 0.99,
-	},
-});
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			timeZoneContainer: {
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				marginTop: 10,
+				width: width - 40,
+			},
+			timeZone: {
+				color: '#00000099',
+				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+				paddingLeft: 2,
+				marginRight: 10,
+			},
+			hint: {
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				paddingLeft: 2,
+			},
+			buttonStyle: {
+				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
+				elevation: 10,
+				shadowOpacity: 0.99,
+			},
+		};
+	}
+}
 
 export default connect(null, null)(TimeZone);

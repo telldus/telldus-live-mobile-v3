@@ -26,13 +26,12 @@
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 
-import {View, Dimensions, StyleSheet} from 'BaseComponents';
-
-let deviceWidth = Dimensions.get('window').width;
+import { View } from 'BaseComponents';
 
 type Props = {
 	item: string,
 	onPress: Function,
+	appLayout: Object,
 }
 
 export default class ListRow extends View {
@@ -52,6 +51,9 @@ export default class ListRow extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
+
 		return (
 			<TouchableOpacity onPress={this.onPress}>
 				<View style={styles.rowItems}>
@@ -60,19 +62,23 @@ export default class ListRow extends View {
 			</TouchableOpacity>
 		);
 	}
+
+	getStyle(appLayout: Object): Object {
+		const width = appLayout.width;
+
+		return {
+			rowItems: {
+				width: width,
+				height: 50,
+				backgroundColor: '#ffffff',
+				marginTop: 2,
+				justifyContent: 'center',
+			},
+			text: {
+				marginLeft: 10,
+				color: '#A59F9A',
+			},
+		};
+	}
 }
 
-
-const styles = StyleSheet.create({
-	rowItems: {
-		width: deviceWidth,
-		height: 50,
-		backgroundColor: '#ffffff',
-		marginTop: 2,
-		justifyContent: 'center',
-	},
-	text: {
-		marginLeft: 10,
-		color: '#A59F9A',
-	},
-});

@@ -24,31 +24,29 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
+import { ScrollView } from 'react-native';
 import Theme from 'Theme';
 
 import { View } from 'BaseComponents';
 import Tabs from './Tabs';
-import {
-	getWindowDimensions,
-} from 'Lib';
 
 type Props = {
 	navigationState: Object,
 	navigation: Object,
 	screenProps: Object,
+	appLayout: Object,
 };
 
 type State = {
 };
 
-export default class TabBar extends View {
+class TabBar extends View {
 	props: Props;
 	state: State;
 
 	renderTabs: (Object, number) => Object;
 	scrollToTab: (Object) => void;
-	getRelativeStyle: () => Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -58,7 +56,6 @@ export default class TabBar extends View {
 
 		this.renderTabs = this.renderTabs.bind(this);
 		this.scrollToTab = this.scrollToTab.bind(this);
-		this.getRelativeStyle = this.getRelativeStyle.bind(this);
 	}
 
 	scrollToTab(layout: Object) {
@@ -75,41 +72,34 @@ export default class TabBar extends View {
 	}
 
 	renderTabs(tab: Object, index: number): Object {
-		let { screenProps, navigation } = this.props;
+		let { screenProps, navigation, appLayout } = this.props;
 		return (
-			<Tabs key={index} adjustScroll={this.scrollToTab} screenProps={screenProps} tab={tab} navigation={navigation}/>
+			<Tabs
+				key={index}
+				adjustScroll={this.scrollToTab}
+				screenProps={screenProps}
+				tab={tab}
+				navigation={navigation}
+				appLayout={appLayout}/>
 		);
 	}
 
-	getRelativeStyle() {
-		let relativeStyle = {
-			containerStyle: styles.container,
-			scrollViewStyle: styles.scrollView,
-		};
-		if (this.props.screenProps.orientation !== 'PORTRAIT') {
-			relativeStyle.containerStyle = styles.containerLand;
-			relativeStyle.scrollViewStyle = styles.scrollViewLand;
-		}
-		return relativeStyle;
-	}
-
 	render() {
-		let { navigationState, screenProps } = this.props;
+		let { navigationState, appLayout } = this.props;
 		let tabs = navigationState.routes.map((tab, index) => {
 			return this.renderTabs(tab, index);
 		});
-
 		let {
-			containerStyle,
-			scrollViewStyle,
-		} = this.getRelativeStyle();
+			container,
+			contentContainer,
+		} = this.getStyles(appLayout);
 
 		return (
-			<View style={scrollViewStyle}>
+			<View style={container}>
 				<ScrollView
 					ref="scrollView"
-					contentContainerStyle={containerStyle}
-					horizontal={screenProps.orientation === 'PORTRAIT'}
+					contentContainerStyle={contentContainer}
+					horizontal={appLayout.height > appLayout.width}
 					showsHorizontalScrollIndicator={false}
 					showsVerticalScrollIndicator={false}
 					overScrollMode="never"
@@ -119,34 +109,38 @@ export default class TabBar extends View {
 			</View>
 		);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			container: {
+				flex: 0,
+				backgroundColor: Theme.Core.brandPrimary,
+				...Theme.Core.shadow,
+				zIndex: 1,
+				top: 0,
+				bottom: 0,
+				position: isPortrait ? 'relative' : 'absolute',
+			},
+			contentContainer: {
+				flexDirection: isPortrait ? 'row' : 'column-reverse',
+				alignItems: 'center',
+				justifyContent: 'flex-start',
+				width: isPortrait ? undefined : height * 0.13,
+				height: isPortrait ? height * 0.086 : undefined,
+				zIndex: 1,
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	scrollView: {
-		flex: 0,
-		backgroundColor: Theme.Core.brandPrimary,
-		...Theme.Core.shadow,
-		zIndex: 1,
-	},
-	container: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
-		zIndex: 1,
-	},
-	scrollViewLand: {
-		top: 0,
-		bottom: 0,
-		position: 'absolute',
-		backgroundColor: Theme.Core.brandPrimary,
-		...Theme.Core.shadow,
-		zIndex: 1,
-	},
-	containerLand: {
-		flexDirection: 'column-reverse',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
-		width: getWindowDimensions().width * 0.13,
-		zIndex: 1,
-	},
-});
+function mapStateToProps(store) {
+	return {
+		appLayout: store.App.layout,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(TabBar);

@@ -27,17 +27,18 @@ import { OnButton, OffButton } from 'TabViews_SubViews';
 
 const deviceHeight = Dimensions.get('window').height;
 
-const ToggleButton = ({ device }) => {
+const ToggleButton = ({ device, intl }) => {
 	return (
 		<RoundedCornerShadowView style={styles.toggleContainer}>
-			<OffButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} />
-			<OnButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} />
+			<OffButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} intl={intl}/>
+			<OnButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} intl={intl}/>
 		</RoundedCornerShadowView>
 	);
 };
 
 type Props = {
 	device: Object,
+	intl: Object,
 };
 
 class ToggleDeviceDetailModal extends View {
@@ -48,12 +49,12 @@ class ToggleDeviceDetailModal extends View {
 	}
 
 	render() {
-		const { device } = this.props;
+		const { device, intl } = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		let toggleButton = null;
 
 		if (TURNON || TURNOFF) {
-			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff}/>;
+			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} intl={intl}/>;
 		}
 
 		return (

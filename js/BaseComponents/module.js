@@ -71,6 +71,7 @@ import DialogueBox from './DialogueBox';
 import HeaderTitle from './HeaderTitle';
 import ListRow from './ListRow';
 import RowWithTriangle from './RowWithTriangle';
+import TabBar from './TabBar';
 
 import {
 	AppState,
@@ -133,6 +134,7 @@ module.exports = {
 	HeaderTitle: HeaderTitle,
 	ListRow,
 	RowWithTriangle,
+	TabBar,
 
 	AppState: AppState,
 	Dimensions: Dimensions,

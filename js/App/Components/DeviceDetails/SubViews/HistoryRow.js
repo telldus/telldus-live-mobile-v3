@@ -23,7 +23,8 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import moment from 'moment';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from '../../TabViews/img/selection.json';
@@ -32,15 +33,20 @@ const CustomIcon = createIconSetFromIcoMoon(icon_history);
 import { FormattedMessage, Text, View, ListRow } from 'BaseComponents';
 import { getDeviceStateMethod } from 'Reducers_Devices';
 import i18n from '../../../Translations/common';
-
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
+import {
+	toSliderValue,
+} from 'Lib';
 
 type Props = {
 	item: Object,
 	onOriginPress: Function,
 	isFirst: boolean,
-	appOrientation: string,
+	appLayout: Object,
+	section: string,
+	intl: Object,
+	isModalOpen: boolean,
+	currentScreen: string,
+	currentTab: string,
 };
 
 type State = {
@@ -57,9 +63,24 @@ class HistoryRow extends View {
 		this.state = {
 		};
 		this.onOriginPress = this.onOriginPress.bind(this);
-	}
 
-	componentWillReceiveProps(nextProps) {
+		let { formatMessage } = props.intl;
+		this.labelAction = formatMessage(i18n.labelAction);
+		this.labelStatus = formatMessage(i18n.status);
+
+		this.labelOff = formatMessage(i18n.turnOff);
+		this.labelOn = formatMessage(i18n.turnOn);
+		this.labelBell = formatMessage(i18n.bell);
+		this.labelDim = formatMessage(i18n.dim);
+		this.labelUp = formatMessage(i18n.up);
+		this.labelDown = formatMessage(i18n.down);
+		this.labelStop = formatMessage(i18n.stop);
+
+		this.labelSuccess = formatMessage(i18n.success);
+		this.labelFailed = formatMessage(i18n.failed);
+
+		this.labelDate = formatMessage(i18n.date);
+		this.labelOrigin = formatMessage(i18n.origin);
 	}
 
 	onOriginPress() {
@@ -92,118 +113,210 @@ class HistoryRow extends View {
 		return Math.round(value * 100.0 / 255);
 	}
 
+	getLabelAction(status: string, value: number): string {
+		switch (status) {
+			case 'TURNOFF':
+				return this.labelOff;
+			case 'TURNON':
+				return this.labelOn;
+			case 'BELL':
+				return this.labelBell;
+			case 'UP':
+				return this.labelUp;
+			case 'DOWN':
+				return this.labelDown;
+			case 'STOP':
+				return this.labelStop;
+			case 'DIM':
+				let dimmerValue = toSliderValue(value);
+				return `${this.labelDim} ${dimmerValue}%`;
+			default:
+				return '';
+		}
+	}
+
+	accessibilityLabel(deviceState: string): string {
+		let { item, section } = this.props;
+		let { stateValue, successStatus } = item;
+
+		let action = this.getLabelAction(deviceState, stateValue);
+		let actionInfo = `${this.labelAction}, ${action}`;
+
+		let status = successStatus !== 0 ? this.labelFailed : this.labelSuccess;
+		let statusInfo = `${this.labelStatus}, ${status}`;
+
+		let date = section;
+		let dateInfo = `${this.labelDate} ${date}`;
+		let time = item.ts * 1000;
+		time = moment(time).format('HH:mm:ss');
+
+		let accessibilityLabel = `${actionInfo}. ${statusInfo}. ${dateInfo}, ${time}`;
+
+		return accessibilityLabel;
+	}
+
 	render() {
+
+		let { appLayout, intl, isModalOpen, currentScreen, currentTab } = this.props;
+
+		let {
+			locationCover,
+			containerStyle,
+			roundIconStyle,
+			rowContainerStyle,
+			timeStyle,
+			timeContainerStyle,
+			statusView,
+			originTextStyle,
+			roundIconContainerStyle,
+			statusIconSize,
+			statusValueText,
+		} = this.getStyle(appLayout);
+
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
 		let icon = this.getIcon(deviceState);
-		let originText = '';
+		let originText = '', originInfo = '';
 		let origin = this.props.item.origin;
 		if (origin === 'Scheduler') {
-			originText = <FormattedMessage {...i18n.scheduler} style={styles.originText}/>;
+			originText = <FormattedMessage {...i18n.scheduler} style={originTextStyle}/>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.scheduler)}`;
 		} else if (origin === 'Incoming signal') {
-			originText = <FormattedMessage {...i18n.incommingSignal} style={styles.originText}/>;
+			originText = <FormattedMessage {...i18n.incommingSignal} style={originTextStyle}/>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.incommingSignal)}`;
 		} else if (origin === 'Unknown') {
-			originText = <FormattedMessage {...i18n.unknown} style={styles.originText}/>;
+			originText = <FormattedMessage {...i18n.unknown} style={originTextStyle}/>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.unknown)}`;
 		} else if (origin.substring(0, 5) === 'Group') {
-			originText = <Text style={styles.originText}><FormattedMessage {...i18n.group} style={styles.originText}/> {origin.substring(6, (origin.length))}</Text>;
+			originText = <Text style={originTextStyle}><FormattedMessage {...i18n.group} style={originTextStyle}/> {origin.substring(6, (origin.length))}</Text>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.group)}`;
 		} else if (origin.substring(0, 5) === 'Event') {
-			originText = <Text style={styles.originText}><FormattedMessage {...i18n.event} style={styles.originText}/> {origin.substring(6, (origin.length))}</Text>;
+			originText = <Text style={originTextStyle}><FormattedMessage {...i18n.event} style={originTextStyle}/> {origin.substring(6, (origin.length))}</Text>;
+			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.event)}`;
 		} else {
 			originText = origin;
+			originInfo = `${this.labelOrigin}, ${origin}`;
 		}
+
+		let accessibilityLabel = this.accessibilityLabel(deviceState);
+		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
+		let accessible = !isModalOpen && currentTab === 'History' && currentScreen === 'DeviceDetails';
 
 		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
-		let roundIconContainer = this.props.item.successStatus !== 0 ? {backgroundColor: 'transparent', width: deviceWidth * 0.0667777777} : {width: deviceWidth * 0.0667777777};
-
-		let isPortrait = this.props.appOrientation === 'PORTRAIT';
 
 		return (
-			<ListRow
-				roundIcon={roundIcon}
-				roundIconStyle={{fontSize: deviceWidth * 0.067777777, color: '#d32f2f'}}
-				roundIconContainerStyle={roundIconContainer}
-				time={time}
-				timeStyle={isPortrait ? {width: deviceWidth * 0.30, fontSize: deviceWidth * 0.046666667} : {width: deviceHeight * 0.30, fontSize: deviceWidth * 0.046666667}}
-				containerStyle={{paddingHorizontal: deviceWidth * 0.04}}
-				rowContainerStyle={isPortrait ? {width: deviceWidth * 0.55} : {width: deviceHeight * 0.55}}
-				triangleColor={triangleColor}
-				isFirst={this.props.isFirst}
-			>
-				<TouchableOpacity style={styles.rowItemsContainer} onPress={this.onOriginPress}>
+			<TouchableOpacity style={styles.rowItemsContainer}
+				accessible={accessible}
+				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+				accessibilityLabel={accessible ? accessibilityLabel : ''}
+				onPress={this.onOriginPress}>
+				<ListRow
+					roundIcon={roundIcon}
+					roundIconStyle={roundIconStyle}
+					roundIconContainerStyle={roundIconContainerStyle}
+					time={time}
+					timeStyle={timeStyle}
+					timeContainerStyle={timeContainerStyle}
+					containerStyle={containerStyle}
+					rowContainerStyle={rowContainerStyle}
+					triangleColor={triangleColor}
+					isFirst={this.props.isFirst}
+				>
+
 					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
-						<View style={[styles.statusView, { backgroundColor: '#A59F9A' }]}>
-							<CustomIcon name="icon_off" size={24} color="#ffffff" />
+						<View style={[statusView, { backgroundColor: '#A59F9A' }]}>
+							<CustomIcon name="icon_off" size={statusIconSize} color="#ffffff" />
 						</View>
 						:
-						<View style={[styles.statusView, { backgroundColor: '#F06F0C' }]}>
+						<View style={[statusView, { backgroundColor: '#F06F0C' }]}>
 							{deviceState === 'DIM' ?
-								<Text style={styles.statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
+								<Text style={statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
 								:
-								<CustomIcon name={icon} size={24} color="#ffffff" />
+								<CustomIcon name={icon} size={statusIconSize} color="#ffffff" />
 							}
 						</View>
 					}
-					<View style={styles.locationCover}>
-						<Text style={styles.originText} numberOfLines={1}>{originText}</Text>
+					<View style={locationCover}>
+						<Text style={originTextStyle} numberOfLines={1}>{originText}</Text>
 					</View>
-				</TouchableOpacity>
-			</ListRow>
-
+				</ListRow>
+			</TouchableOpacity>
 		);
 	}
 
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			locationCover: {
+				width: width * 0.40,
+				height: isPortrait ? height * 0.07 : width * 0.07,
+				justifyContent: 'center',
+				backgroundColor: '#fff',
+				alignItems: 'flex-start',
+				paddingLeft: 5,
+				borderTopRightRadius: 3,
+				borderBottomRightRadius: 3,
+				flexWrap: 'wrap',
+			},
+			statusView: {
+				width: width * 0.13,
+				height: isPortrait ? height * 0.07 : width * 0.07,
+				justifyContent: 'center',
+				alignItems: 'center',
+				borderTopLeftRadius: 3,
+				borderBottomLeftRadius: 3,
+			},
+			roundIconStyle: {
+				fontSize: width * 0.067777777,
+				color: '#d32f2f',
+			},
+			rowContainerStyle: {
+				width: isPortrait ? width * 0.55 : width * 0.68,
+			},
+			containerStyle: {
+				paddingHorizontal: isPortrait ? width * 0.04 : height * 0.04,
+			},
+			timeStyle: {
+				fontSize: isPortrait ? width * 0.047 : height * 0.047,
+			},
+			timeContainerStyle: {
+				width: isPortrait ? width * 0.30 : width * 0.20,
+				zIndex: 1,
+			},
+			originTextStyle: {
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+			roundIconContainerStyle: {
+				backgroundColor: this.props.item.successStatus !== 0 ? 'transparent' : '#929292',
+				width: isPortrait ? width * 0.0667777777 : height * 0.0667777777,
+			},
+			statusIconSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
+			statusValueText: {
+				color: '#ffffff',
+				fontSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
+			},
+
+		};
+	}
 }
 
 const styles = StyleSheet.create({
 	rowItemsContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
-	},
-	statusView: {
-		width: deviceWidth * 0.13,
-		height: deviceHeight * 0.07,
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderTopLeftRadius: 2,
-		borderBottomLeftRadius: 2,
-	},
-	statusValueText: {
-		color: '#ffffff',
-		fontSize: 14,
-	},
-	statusTextON: {
-		backgroundColor: '#fff',
-		width: deviceWidth * 0.006,
-		height: deviceHeight * 0.03,
-	},
-	statusTextOFF: {
-		backgroundColor: '#A59F9A',
-		width: deviceWidth * 0.07,
-		height: deviceHeight * 0.04,
-		borderRadius: 30,
-		borderWidth: 1.5,
-		borderColor: '#fff',
-	},
-	locationCover: {
-		width: deviceWidth * 0.40,
-		height: deviceHeight * 0.07,
-		justifyContent: 'center',
-		backgroundColor: '#fff',
-		alignItems: 'flex-start',
-		paddingLeft: 5,
-		borderTopRightRadius: 2,
-		borderBottomRightRadius: 2,
-		flexWrap: 'wrap',
-	},
-	originText: {
-		color: '#A59F9A',
+		justifyContent: 'flex-start',
 	},
 });
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appOrientation: store.App.orientation,
+		appLayout: store.App.layout,
+		isModalOpen: store.modal.openModal,
 	};
 }
 

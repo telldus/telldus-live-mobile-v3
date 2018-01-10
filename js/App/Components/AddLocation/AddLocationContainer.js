@@ -23,19 +23,17 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BackHandler, ImageBackground } from 'react-native';
+import { BackHandler, ImageBackground, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { View, Dimensions, StyleSheet, DialogueBox, Text, RoundedInfoButton } from 'BaseComponents';
+import { View, DialogueBox, Text, RoundedInfoButton } from 'BaseComponents';
 import { AddLocationPoster } from 'AddNewLocation_SubViews';
 
 import * as modalActions from 'Actions_Modal';
 import * as gatewayActions from 'Actions_Gateways';
-
-const deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
 	dialogueHeader: {
@@ -74,6 +72,7 @@ type Props = {
 	showModal: boolean,
 	validationMessage: any,
 	source: number,
+	appLayout: Object,
 };
 
 type State = {
@@ -173,7 +172,7 @@ class AddLocationContainer extends View<null, Props, State> {
 		this.props.actions.hideModal();
 	};
 
-	renderCustomDialogueHeader() {
+	renderCustomDialogueHeader(styles: Object): Object {
 		let buttonProps = {
 			infoButtonContainerStyle: styles.infoButtonContainer,
 		};
@@ -187,7 +186,7 @@ class AddLocationContainer extends View<null, Props, State> {
 		);
 	}
 
-	renderCustomBody() {
+	renderCustomBody(styles: Object): Object {
 		return (
 			<View style={styles.dialogueBody}>
 				<Text style={styles.dialogueBodyText}>
@@ -203,12 +202,12 @@ class AddLocationContainer extends View<null, Props, State> {
 		);
 	}
 
-	getRelativeData = (): Object => {
+	getRelativeData = (styles: Object): Object => {
 		let {modalExtras, validationMessage, intl} = this.props;
 		if (modalExtras.source && modalExtras.source === 'Position') {
 			return {
-				dialogueHeader: this.renderCustomDialogueHeader(),
-				validationMessage: this.renderCustomBody(),
+				dialogueHeader: this.renderCustomDialogueHeader(styles),
+				validationMessage: this.renderCustomBody(styles),
 				positiveText: intl.formatMessage(messages.dialoguePositiveText).toUpperCase(),
 			};
 		}
@@ -221,11 +220,13 @@ class AddLocationContainer extends View<null, Props, State> {
 
 	render(): Object {
 		const { children, navigation, actions, screenProps, intl,
-			showModal } = this.props;
+			showModal, appLayout } = this.props;
 		const { h1, h2, infoButton } = this.state;
+		const styles = this.getStyle(appLayout);
+		let width = appLayout.height > appLayout.width ? appLayout.width : appLayout.height;
 
-		let padding = screenProps.currentScreen === 'TimeZoneCity' || screenProps.currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * 0.027777);
-		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData();
+		let padding = screenProps.currentScreen === 'TimeZoneCity' || screenProps.currentScreen === 'TimeZoneContinent' ? 0 : (width * 0.027777);
+		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
 
 		return (
 			<View>
@@ -234,19 +235,25 @@ class AddLocationContainer extends View<null, Props, State> {
 					opacity: 1,
 					alignItems: 'center',
 				}}>
-					<AddLocationPoster h1={h1} h2={h2} infoButton={infoButton} />
-					<View style={[styles.style, {paddingHorizontal: padding}]}>
-						{React.cloneElement(
-							children,
-							{
-								onDidMount: this.onChildDidMount,
-								navigation,
-								actions,
-								intl,
-								...screenProps,
-							},
-						)}
-					</View>
+
+					<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+						<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
+							<AddLocationPoster h1={h1} h2={h2} infoButton={infoButton} screenProps={screenProps} intl={intl} navigation={navigation}/>
+							<View style={[styles.style, {paddingHorizontal: padding}]}>
+								{React.cloneElement(
+									children,
+									{
+										onDidMount: this.onChildDidMount,
+										navigation,
+										actions,
+										intl,
+										...screenProps,
+										dialogueOpen: showModal,
+									},
+								)}
+							</View>
+						</KeyboardAvoidingView>
+					</ScrollView>
 					<DialogueBox
 						dialogueContainerStyle={{elevation: 0}}
 						header={dialogueHeader}
@@ -260,55 +267,57 @@ class AddLocationContainer extends View<null, Props, State> {
 		);
 	}
 
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+
+		return {
+			style: {
+				flex: 1,
+			},
+			dialogueHeader: {
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				alignItems: 'center',
+				paddingLeft: 20,
+				height: isPortrait ? height * 0.08 : width * 0.08,
+				width: isPortrait ? width * 0.75 : height * 0.75,
+			},
+			infoButtonContainer: {
+				position: 'relative',
+				right: 0,
+				bottom: 0,
+			},
+			dialogueHeaderText: {
+				textAlign: 'center',
+				textAlignVertical: 'center',
+				color: '#fff',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				paddingLeft: 10,
+			},
+			dialogueBody: {
+				justifyContent: 'center',
+				alignItems: 'flex-start',
+				paddingLeft: 20,
+				paddingRight: 10,
+				width: isPortrait ? width * 0.75 : height * 0.75,
+			},
+			dialogueBodyText: {
+				color: '#A59F9A',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				textAlign: 'left',
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	style: {
-		flex: 1,
-	},
-	dialogueHeader: {
-		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		alignItems: 'center',
-		paddingLeft: 20,
-		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.75,
-	},
-	infoButtonContainer: {
-		position: 'relative',
-		right: 0,
-		bottom: 0,
-	},
-	dialogueHeaderText: {
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		color: '#fff',
-		fontSize: 14,
-		paddingLeft: 10,
-	},
-	dialogueBody: {
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingLeft: 20,
-		paddingRight: 10,
-		width: Dimensions.get('window').width * 0.75,
-	},
-	dialogueBodyText: {
-		color: '#A59F9A',
-		fontSize: 14,
-		textAlign: 'left',
-	},
-});
-
-type mapStateToPropsType = {
-	modal: Object,
-};
-
-const mapStateToProps = ({ schedule, devices, modal }: mapStateToPropsType): Object => (
+const mapStateToProps = (store: Object): Object => (
 	{
-		showModal: modal.openModal,
-		validationMessage: modal.data,
-		modalExtras: modal.extras,
+		showModal: store.modal.openModal,
+		validationMessage: store.modal.data,
+		modalExtras: store.modal.extras,
+		appLayout: store.App.layout,
 	}
 );
 

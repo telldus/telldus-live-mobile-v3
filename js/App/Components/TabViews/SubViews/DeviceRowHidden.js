@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { defineMessages } from 'react-intl';
 
 import { View, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
@@ -31,10 +32,31 @@ import { addToDashboard, removeFromDashboard } from 'Actions';
 
 import Theme from 'Theme';
 
+const messages = defineMessages({
+	iconAddPhraseOne: {
+		id: 'accessibilityLabel.devices.iconAddPhraseOne',
+		defaultMessage: 'add device',
+	},
+	iconAddPhraseTwo: {
+		id: 'accessibilityLabel.devices.iconAddPhraseTwo',
+		defaultMessage: 'to dashboard',
+	},
+	iconRemovePhraseOne: {
+		id: 'accessibilityLabel.devices.iconRemovePhraseOne',
+		defaultMessage: 'remove device',
+	},
+	iconRemovePhraseTwo: {
+		id: 'accessibilityLabel.devices.iconRemovePhraseTwo',
+		defaultMessage: 'from dashboard',
+	},
+});
+
 type Props = {
 	device: Object,
 	removeFromDashboard: number => void,
 	addToDashboard: number => void,
+	intl: Object,
+	editMode: boolean,
 };
 
 class DeviceRowHidden extends View {
@@ -44,15 +66,24 @@ class DeviceRowHidden extends View {
 	constructor(props: Props) {
 		super(props);
 		this.onStarSelected = this.onStarSelected.bind(this);
+		let { intl, device } = props;
+		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
+		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
 	}
 
 	render() {
 		const { isInDashboard } = this.props.device;
+		let accessibilityLabel = isInDashboard ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
+		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
+
 		return (
-			<View style={Theme.Styles.rowBack}>
+			<View style={Theme.Styles.rowBack} importantForAccessibility={importantForAccessibility}>
 				<TouchableOpacity
 					style={Theme.Styles.rowBackButton}
-					onPress={this.onStarSelected}>
+					onPress={this.onStarSelected}
+					accessible={this.props.editMode}
+					accessibilityLabel={accessibilityLabel}>
 					<Icon name="star" size={26} style={isInDashboard ? styles.enabled : styles.disabled}/>
 				</TouchableOpacity>
 			</View>
@@ -76,6 +107,12 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
+function mapStateToProps(store: Object): Object {
+	return {
+		editMode: store.tabs.editModeDevicesTab,
+	};
+}
+
 const styles = StyleSheet.create({
 	enabled: {
 		color: 'rgba(226, 105, 0, 255)',
@@ -85,4 +122,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default connect(null, mapDispatchToProps)(DeviceRowHidden);
+export default connect(mapStateToProps, mapDispatchToProps)(DeviceRowHidden);

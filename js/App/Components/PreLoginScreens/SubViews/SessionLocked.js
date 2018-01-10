@@ -28,8 +28,6 @@ import {defineMessages, intlShape, injectIntl} from 'react-intl';
 import {
 	Text,
 	View,
-	StyleSheet,
-	Dimensions,
 	TouchableButton,
 } from 'BaseComponents';
 
@@ -58,6 +56,8 @@ type Props = {
 	dispatch: Function;
 	pushToken: string,
 	onPressLogout: boolean,
+	appLayout: Object,
+	dialogueOpen: boolean,
 };
 
 class SessionLocked extends View {
@@ -108,47 +108,66 @@ class SessionLocked extends View {
 	}
 
 	render(): Object {
+		let { appLayout, dialogueOpen } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		let buttonOneLabel = this.state.isLogginIn ? `${this.buttonOneOne}...` : this.buttonOne;
 		let buttonTwoLabel = this.props.onPressLogout ? `${this.buttonTwoTwo}...` : this.buttonTwo;
 
+		let butOneAccessibilityLabel = this.state.isLogginIn ? this.buttonOneOne : null;
+		let butTwoAccessibilityLabel = this.props.onPressLogout ? this.buttonTwoTwo : null;
+
 		return (
-			<View style={styles.bodyCover}>
-				<Text style={styles.contentText}>
-					{this.bodyOne}
-				</Text>
-				<Text/>
-				<Text style={[styles.contentText, {paddingLeft: 20}]}>
-					{this.bodyTwo}
-				</Text>
+			<View style={styles.bodyCover} accessible={!dialogueOpen}>
+				<View accessibilityLiveRegion="assertive">
+					<Text style={styles.contentText}>
+						{this.bodyOne}
+					</Text>
+					<Text/>
+					<Text style={[styles.contentText, {paddingLeft: 20}]}>
+						{this.bodyTwo}
+					</Text>
+				</View>
 				<TouchableButton
 					onPress={this.refreshAccessToken}
 					text={buttonOneLabel}
-					style={{marginTop: 10}}/>
+					style={{marginTop: 10}}
+					accessible={!dialogueOpen}
+					accessibilityLabel={butOneAccessibilityLabel}/>
 				<TouchableButton
 					onPress={this.onPressLogout}
 					text={buttonTwoLabel}
-					style={{marginTop: 10}}/>
+					style={{marginTop: 10}}
+					accessible={!dialogueOpen}
+					accessibilityLabel={butTwoAccessibilityLabel}/>
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	bodyCover: {
-		width: Dimensions.get('window').width - 50,
-	},
-	contentText: {
-		color: '#ffffff80',
-		textAlign: 'center',
-		fontSize: 12,
-	},
-});
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			bodyCover: {
+				width: isPortrait ? (width - 50) : (height - 50),
+			},
+			contentText: {
+				color: '#ffffff80',
+				textAlign: 'center',
+				fontSize: isPortrait ? 13 : 13,
+			},
+		};
+	}
+}
 
 function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
+		appLayout: store.App.layout,
 	};
 }
 function mapDispatchToProps(dispatch) {

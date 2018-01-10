@@ -29,7 +29,7 @@ import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { FormattedMessage, View, DialogueBox } from 'BaseComponents';
 import {FormContainerComponent, RegisterForm} from 'PreLoginScreen_SubViews';
 
-import StyleSheet from 'StyleSheet';
+import i18n from './../../Translations/common';
 
 const messages = defineMessages({
 	createAccount: {
@@ -52,6 +52,7 @@ type Props = {
 	registeredCredential: any,
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
+	appLayout: Object,
 }
 
 class RegisterScreen extends View {
@@ -66,6 +67,15 @@ class RegisterScreen extends View {
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.alreadyHaveAccount = formatMessage(messages.alreadyHaveAccount);
+
+		this.labelLink = formatMessage(i18n.labelLink);
+		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+
+		this.labelAlreadyHaveAccount = `${this.labelLink} ${this.alreadyHaveAccount} ${this.labelButtondefaultDescription}`;
 	}
 
 	closeModal() {
@@ -93,11 +103,15 @@ class RegisterScreen extends View {
 	}
 
 	render() {
-		let { showModal, validationMessage } = this.props;
+		let { showModal, validationMessage, appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		return (
-			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)}>
-				<RegisterForm />
-				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
+			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)} formContainerStyle={styles.formContainer}>
+				<RegisterForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
+				<TouchableOpacity style={{height: 25}}
+					onPress={this.goBackToLogin}
+					accessibilityLabel={this.labelAlreadyHaveAccount}>
 					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
 				</TouchableOpacity>
 				<DialogueBox
@@ -109,14 +123,21 @@ class RegisterScreen extends View {
 			</FormContainerComponent>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	accountExist: {
-		marginTop: 10,
-		color: '#bbb',
-	},
-});
+	getStyles(appLayout: Object): Object {
+		const width = appLayout.width;
+
+		return {
+			accountExist: {
+				marginTop: 10,
+				color: '#bbb',
+			},
+			formContainer: {
+				width: width,
+			},
+		};
+	}
+}
 
 function mapDispatchToProps(dispatch) {
 	return {
@@ -130,6 +151,7 @@ function mapStateToProps(store) {
 		validationMessageHeader: store.modal.extras,
 		showModal: store.modal.openModal,
 		registeredCredential: store.user.registeredCredential,
+		appLayout: store.App.layout,
 	};
 }
 

@@ -270,9 +270,20 @@ const allIds = (state = [], action) => {
 	return state;
 };
 
+const didFetch = (state = false, action) => {
+	if (action.type === 'RECEIVED_DEVICES') {
+		return true;
+	}
+	if (action.type === 'LOGGED_OUT') {
+		return false;
+	}
+	return state;
+};
+
 export default combineReducers({
 	allIds,
 	byId,
+	didFetch,
 });
 
 export function parseDevicesForListView(devices:Object = {}, gateways:Object = {}, editMode:boolean = false) {

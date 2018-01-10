@@ -29,7 +29,6 @@ import Theme from 'Theme';
 import i18n from '../../Translations/common';
 
 import { View, Text } from 'BaseComponents';
-import { getWindowDimensions } from 'Lib';
 
 type Props = {
 	screenProps: Object,
@@ -37,6 +36,7 @@ type Props = {
 	navigation: Object,
 	onLayout: Object,
 	adjustScroll: Function,
+	appLayout: Object,
 };
 
 type State = {
@@ -52,7 +52,6 @@ export default class Tabs extends View {
 	onTabPress: () => void;
 	onLayout: (Object) => void;
 	onLabelLayout: (Object) => void;
-	getRelativeStyle: () => Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -65,15 +64,26 @@ export default class Tabs extends View {
 
 		let { intl } = this.props.screenProps;
 
-		this.dashboard = intl.formatMessage(i18n.dashboard).toUpperCase();
-		this.devices = intl.formatMessage(i18n.devices).toUpperCase();
-		this.sensors = intl.formatMessage(i18n.sensors).toUpperCase();
-		this.scheduler = intl.formatMessage(i18n.scheduler).toUpperCase();
+		this.dashboard = {
+			label: intl.formatMessage(i18n.dashboard).toUpperCase(),
+			accessibilityLabel: intl.formatMessage(i18n.dashboardTab),
+		};
+		this.devices = {
+			label: intl.formatMessage(i18n.devices).toUpperCase(),
+			accessibilityLabel: intl.formatMessage(i18n.devicesTab),
+		};
+		this.sensors = {
+			label: intl.formatMessage(i18n.sensors).toUpperCase(),
+			accessibilityLabel: intl.formatMessage(i18n.sensorsTab),
+		};
+		this.scheduler = {
+			label: intl.formatMessage(i18n.scheduler).toUpperCase(),
+			accessibilityLabel: intl.formatMessage(i18n.schedulerTab),
+		};
 
 		this.onTabPress = this.onTabPress.bind(this);
 		this.onLayout = this.onLayout.bind(this);
 		this.onLabelLayout = this.onLabelLayout.bind(this);
-		this.getRelativeStyle = this.getRelativeStyle.bind(this);
 	}
 
 	onTabPress() {
@@ -104,109 +114,101 @@ export default class Tabs extends View {
 		}
 	}
 
-	getRelativeStyle() {
-		let { screenProps } = this.props;
-		let { heightLand } = this.state;
-		let { width } = this.state.layout;
-		let relativeStyle = {
-			labelStyle: styles.label,
-			tabBarStyle: {},
-			indicatorActive: [styles.indicatorActivePort, {width}],
-			indicatorPassive: [styles.indicatorPassivePort, {width}],
-		};
-		if (screenProps.orientation !== 'PORTRAIT') {
-			relativeStyle.labelStyle = styles.labelLand;
-			relativeStyle.tabBarStyle = {height: heightLand, width: heightLand, transform: [{rotateZ: '-90deg'}]};
-			relativeStyle.indicatorActive = [styles.indicatorActiveLand, {width}];
-			relativeStyle.indicatorPassive = [styles.indicatorPassiveLand, {width}];
+	getLabel(routeName: string): Object {
+		if (routeName === 'Dashboard') {
+			return this.dashboard;
 		}
-		return relativeStyle;
+		if (routeName === 'Devices') {
+			return this.devices;
+		}
+		if (routeName === 'Sensors') {
+			return this.sensors;
+		}
+		if (routeName === 'Scheduler') {
+			return this.scheduler;
+		}
+		return {};
 	}
 
 	render() {
-		let label = '';
-		let { tab, screenProps } = this.props;
-		if (tab.routeName === 'Dashboard') {
-			label = this.dashboard;
-		}
-		if (tab.routeName === 'Devices') {
-			label = this.devices;
-		}
-		if (tab.routeName === 'Sensors') {
-			label = this.sensors;
-		}
-		if (tab.routeName === 'Scheduler') {
-			label = this.scheduler;
-		}
+		let { tab, screenProps, appLayout } = this.props;
+		let {label, accessibilityLabel} = this.getLabel(tab.routeName);
 
 		let {
-			labelStyle,
 			tabBarStyle,
-			indicatorActive,
-			indicatorPassive,
-		} = this.getRelativeStyle();
+			labelStyle,
+			indicatorActiveStyle,
+			indicatorPassiveStyle,
+		} = this.getStyles(appLayout);
 
 		return (
-			<TouchableOpacity onPress={this.onTabPress} onLayout={this.onLayout}>
+			<TouchableOpacity
+				accessibilityLabel={accessibilityLabel}
+				onPress={this.onTabPress}
+				onLayout={this.onLayout}>
 				<View style={[styles.tabBar, tabBarStyle]}>
 					<Text style={labelStyle} onLayout={this.onLabelLayout}>
 						{label}
 					</Text>
 					{(screenProps.currentTab === tab.routeName) ?
-						<View style={indicatorActive}/>
+						<View style={indicatorActiveStyle}/>
 						:
-						<View style={indicatorPassive}/>
+						<View style={indicatorPassiveStyle}/>
 					}
 				</View>
 			</TouchableOpacity>
 		);
 	}
+
+	getStyles(appLayout: Object): Object {
+
+		let { heightLand, layout } = this.state;
+
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			tabBarStyle: isPortrait ?
+				{
+					flex: 1,
+				}
+				:
+				{
+					height: heightLand,
+					width: heightLand,
+					transform: [{rotateZ: '-90deg'}],
+				},
+			labelStyle: {
+				paddingHorizontal: isPortrait ? height * 0.0666 : 0,
+				paddingVertical: isPortrait ? 15 : 0,
+				color: '#fff',
+				fontSize: isPortrait ? width * 0.0333 : height * 0.0333,
+			},
+			indicatorPassiveStyle: {
+				backgroundColor: 'transparent',
+				position: isPortrait ? 'absolute' : 'relative',
+				bottom: 0,
+				height: 2,
+				width: layout.width,
+				marginTop: isPortrait ? undefined : height * 0.08,
+			},
+			indicatorActiveStyle: {
+				backgroundColor: '#fff',
+				height: 2,
+				width: layout.width,
+				position: isPortrait ? 'absolute' : 'relative',
+				bottom: 0,
+				marginTop: isPortrait ? undefined : height * 0.08,
+			},
+		};
+	}
 }
 
 const styles = StyleSheet.create({
-	touchable: {
-		flexDirection: 'column',
-	},
-	touchableLand: {
-		flexDirection: 'row',
-	},
 	tabBar: {
 		backgroundColor: Theme.Core.brandPrimary,
 		alignItems: 'center',
 		justifyContent: 'center',
-	},
-	container: {
-		transform: [{rotateZ: '-90deg'}],
-		alignItems: 'center',
-	},
-	label: {
-		paddingHorizontal: getWindowDimensions().width * 0.0666,
-		paddingVertical: 15,
-		color: '#fff',
-		fontSize: getWindowDimensions().width * 0.0333,
-	},
-	labelLand: {
-		color: '#fff',
-		fontSize: getWindowDimensions().width * 0.0333,
-	},
-	indicatorPassivePort: {
-		backgroundColor: 'transparent',
-		height: 2,
-		marginTop: getWindowDimensions().height * 0.01,
-	},
-	indicatorActivePort: {
-		backgroundColor: '#fff',
-		height: 2,
-		marginTop: getWindowDimensions().height * 0.01,
-	},
-	indicatorPassiveLand: {
-		backgroundColor: 'transparent',
-		height: 2,
-		marginTop: getWindowDimensions().height * 0.0481,
-	},
-	indicatorActiveLand: {
-		backgroundColor: '#fff',
-		height: 2,
-		marginTop: getWindowDimensions().height * 0.0481,
 	},
 });

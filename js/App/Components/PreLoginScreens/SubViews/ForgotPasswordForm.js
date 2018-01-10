@@ -36,6 +36,7 @@ import Theme from 'Theme';
 
 type Props = {
 	intl: intlShape.isRequired,
+	appLayout: Object,
 }
 
 class ForgotPasswordForm extends View {
@@ -64,12 +65,13 @@ class ForgotPasswordForm extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
 		return (
 			<View>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onEmailChange}
 						onBlur={this.onEmailBlur}
 						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
@@ -83,7 +85,6 @@ class ForgotPasswordForm extends View {
 				</View>
 				<View style={{ height: 10 }}/>
 				<TouchableButton
-					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? i18n.sendingpassword : i18n.sendpassword}
 					postScript={this.state.isLoading ? '...' : null}

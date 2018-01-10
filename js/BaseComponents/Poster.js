@@ -22,20 +22,22 @@
 'use strict';
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Dimensions, Image } from 'react-native';
+import { Image } from 'react-native';
 import View from './View';
 
 type Props = {
 	children?: any,
 	source?: number,
+	appLayout: Object,
 };
 
 type DefaultProps = {
 	source: number,
 };
 
-export default class Poster extends Component<Props, null> {
+class Poster extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {
@@ -52,8 +54,8 @@ export default class Poster extends Component<Props, null> {
 	}
 
 	render(): Object {
-		const { children, source } = this.props;
-		const { image, mask } = this._getStyle();
+		const { children, source, appLayout } = this.props;
+		const { image, mask } = this._getStyle(appLayout);
 
 		return (
 			<View style={mask}>
@@ -63,23 +65,33 @@ export default class Poster extends Component<Props, null> {
 		);
 	}
 
-	_getStyle = (): Object => {
-		const deviceWidth = Dimensions.get('window').width;
+	_getStyle = (appLayout: Object): Object => {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
 
 		return {
 			image: {
 				flex: 1,
 				height: undefined,
-				width: deviceWidth,
+				width: width,
 				resizeMode: 'cover',
 			},
 			mask: {
 				borderWidth: 0,
-				height: deviceWidth * 0.333333333,
-				width: deviceWidth,
+				height: isPortrait ? width * 0.333333333 : height * 0.333333333,
+				width: width,
 				overflow: 'hidden',
 			},
 		};
 	};
 
 }
+
+function mapStateToProps(state, ownProps) {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(Poster);

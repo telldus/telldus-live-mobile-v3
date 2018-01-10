@@ -46,17 +46,24 @@ type Props = {
 	hasShadow: boolean,
 	style: Object,
 	children: Object,
-	type: String
+	type: String,
+	item: string,
+	intl: Object,
+	accessibilityLabel: string,
 };
 
 class DashboardShadowTile extends View {
 	props: Props;
 
 	render() {
+		let { accessibilityLabel } = this.props;
+
 		return (
 			// Because of the limitation of react-native so we need 2 nested views to create an rounded corner view
 			// with shadow
 			<View
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, (this.props.hasShadow ? styles.shadow : styles.noShadow)]}>
 				<View style={{
 					flex: 1,

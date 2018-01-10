@@ -24,14 +24,11 @@
 'use strict';
 
 import React from 'react';
-import {View, Icon, StyleSheet, Dimensions} from 'BaseComponents';
+import { View, Icon } from 'BaseComponents';
 import { defineMessages } from 'react-intl';
 
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDetail';
-
-let deviceWidth = Dimensions.get('window').width;
-let deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
 	locationDetected: {
@@ -50,6 +47,7 @@ type Props = {
 	onPress: Function,
 	client: Object,
 	intl: Object,
+	appLayout: Object,
 };
 
 export default class Clients extends View {
@@ -72,28 +70,40 @@ export default class Clients extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
 		let locationImageUrl = getLocationImageUrl(this.props.client.type);
 		let locationData = {
 			title: this.boxTitle,
 			image: locationImageUrl,
-			H1: this.props.client.name,
+			H1: this.props.client.type,
 			H2: this.boxHeaderTwo,
 			onPress: this.onPress,
 		};
+
+		const styles = this.getStyle(appLayout);
+		const accessibilityLabel = `${this.boxTitle}, ${this.props.client.type}`;
+
 		return (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1}} accessible={true} accessibilityLabel={accessibilityLabel}>
 				<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData} style={{marginTop: 20}}/>
+				<DeviceLocationDetail {...locationData} accessible={false} style={{marginTop: 20}}/>
 			</View>
 		);
 	}
+
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			arrow: {
+				position: 'absolute',
+				top: isPortrait ? height * 0.12 : width * 0.12,
+				left: width * 0.823,
+				elevation: 3,
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	arrow: {
-		position: 'absolute',
-		top: deviceHeight * 0.12,
-		left: deviceWidth * 0.823,
-		elevation: 3,
-	},
-});

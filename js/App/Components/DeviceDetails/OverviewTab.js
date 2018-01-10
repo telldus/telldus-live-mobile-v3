@@ -25,14 +25,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { FormattedMessage, View } from 'BaseComponents';
+import { View, TabBar } from 'BaseComponents';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
 import { defineMessages } from 'react-intl';
-
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_home from '../TabViews/img/selection.json';
-const Icon = createIconSetFromIcoMoon(icon_home);
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
@@ -42,7 +38,8 @@ import {
 	BellDeviceDetail,
 	DimmerDeviceDetail,
 	NavigationalDeviceDetail,
-} from 'SubViews';
+} from 'DDSubViews';
+import i18n from '../../Translations/common';
 
 const messages = defineMessages({
 	overviewHeader: {
@@ -78,9 +75,12 @@ class OverviewTab extends View {
 	}
 
 	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...messages.overviewHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }) => (
-			<Icon name="icon_home" size={24} color={tintColor}/>
+		tabBarLabel: ({ tintColor }) => (
+			<TabBar
+				icon="icon_home"
+				tintColor={tintColor}
+				label={messages.overviewHeader}
+				accessibilityLabel={i18n.deviceOverviewTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			jumpToIndex(scene.index);
@@ -105,26 +105,26 @@ class OverviewTab extends View {
 	}
 
 	render() {
-		let deviceId = this.props.device.id;
+		let { device, screenProps, gateway } = this.props;
+		let deviceId = device.id;
 		let deviceDetail = null;
-		let device = this.props.device;
-		const locationImageUrl = getLocationImageUrl(this.props.gateway.type);
+		const locationImageUrl = getLocationImageUrl(gateway.type);
 		const locationData = {
 			title: this.boxTitle,
 			image: locationImageUrl,
-			H1: this.props.gateway.name,
-			H2: this.props.gateway.type,
+			H1: gateway.name,
+			H2: gateway.type,
 		};
 		if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
 			const deviceType = this.getType(deviceId);
 			if (deviceType === 'TOGGLE') {
-				deviceDetail = <ToggleDeviceDetail device={device} />;
+				deviceDetail = <ToggleDeviceDetail device={device} intl={screenProps.intl}/>;
 			} else if (deviceType === 'DIMMER') {
-				deviceDetail = <DimmerDeviceDetail device={device} />;
+				deviceDetail = <DimmerDeviceDetail device={device} intl={screenProps.intl}/>;
 			} else if (deviceType === 'BELL') {
-				deviceDetail = <BellDeviceDetail device={device} />;
+				deviceDetail = <BellDeviceDetail device={device} intl={screenProps.intl}/>;
 			} else if (deviceType === 'NAVIGATIONAL') {
-				deviceDetail = <NavigationalDeviceDetail device={device} />;
+				deviceDetail = <NavigationalDeviceDetail device={device} intl={screenProps.intl}/>;
 			} else {
 				deviceDetail = <View style={{ height: 0 }} />;
 			}

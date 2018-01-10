@@ -32,11 +32,8 @@ import {
 	View,
 	Icon,
 	TouchableButton,
-	Dimensions,
+	DialogueBox,
 } from 'BaseComponents';
-import {Modal as CustomModal} from 'BaseComponents';
-import { NotificationComponent } from 'PreLoginScreen_SubViews';
-import { StyleSheet } from 'react-native';
 import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
@@ -46,8 +43,6 @@ import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions_User';
 
 import i18n from './../../Translations/common';
-
-const deviceHeight = Dimensions.get('window').height;
 
 const messages = defineMessages({
 	pushEnabled: {
@@ -71,19 +66,19 @@ const messages = defineMessages({
 	},
 });
 
-const Header = ({ onPress }) => (
+const Header = ({ onPress, styles, buttonAccessibilityLabel }) => (
 	<View style={styles.header}>
 		<Icon name="gear" size={26} color="white"
 		      style={styles.gear}/>
 		<Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
 			<FormattedMessage {...i18n.settingsHeader} style={styles.textHeaderTitle}/>
 		</Text>
-		<Icon name="close" size={26} color="white" style={{ flex: 1 }} onPress={onPress}/>
+		<Icon name="close" size={26} color="white" style={{ flex: 1 }} accessibilityLabel={buttonAccessibilityLabel} onPress={onPress}/>
 	</View>
 );
 
-const StatusView = () => (
-	<Text style={styles.statusText}>
+const StatusView = ({styles, accessible, importantForAccessibility}) => (
+	<Text style={styles.statusText} accessible={accessible} importantForAccessibility={importantForAccessibility}>
 		<FormattedMessage {...messages.pushEnabled} style={styles.statusText} />
 	</Text>
 );
@@ -98,11 +93,14 @@ type Props = {
 	validationMessage: string,
 	showModal: boolean,
 	intl: intlShape.isRequired,
+	appLayout: Object,
 };
 
 
 type State = {
 	isVisible: boolean,
+	isPushSubmitLoading: boolean,
+	isLogoutLoading: boolean,
 };
 
 class SettingsDetailModal extends View {
@@ -130,7 +128,13 @@ class SettingsDetailModal extends View {
 		this.updateModalVisiblity = this.updateModalVisiblity.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 
-		this.confirmMessage = this.props.intl.formatMessage(i18n.contentLogoutConfirm);
+		let { formatMessage } = this.props.intl;
+
+		this.confirmMessage = formatMessage(i18n.contentLogoutConfirm);
+		this.labelButton = formatMessage(i18n.button);
+		this.labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelLogOut = `${formatMessage(i18n.labelLogOut)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
+		this.labelCloseSettings = `${formatMessage(i18n.labelClose)} ${formatMessage(i18n.settingsHeader)}. ${this.labelButtondefaultDescription}`;
 	}
 
 	logout() {
@@ -206,54 +210,64 @@ class SettingsDetailModal extends View {
 			logoutButText,
 			version,
 		} = this.getRelativeData();
+		let { appLayout, showModal } = this.props;
+		let { isLogoutLoading, isPushSubmitLoading } = this.state;
+		let styles = this.getStyles(appLayout);
+
+		let buttonAccessible = !isLogoutLoading && !isPushSubmitLoading && !showModal;
+		let importantForAccessibility = showModal ? 'no-hide-descendants' : 'yes';
 
 		return (
 			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
 				<Container style={styles.container}>
-					<Header onPress={this.props.onClose}/>
+					<Header onPress={this.props.onClose} styles={styles} buttonAccessibilityLabel={this.labelCloseSettings}/>
 					<View style={styles.body}>
-						{ this.props.store.user.notificationText ?
-							<Text style={styles.notification}>{this.props.store.user.notificationText}</Text>
-							:
-							null
-						}
-						<Text style={styles.versionInfo}>
-							Telldus Live! mobile{'\n'}
-							<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
-						</Text>
-						{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
+						<View style={styles.body}>
+							{ this.props.store.user.notificationText ?
+								<Text style={styles.notification}
+									accessible={buttonAccessible}
+									importantForAccessibility={importantForAccessibility}>
+									{this.props.store.user.notificationText}
+								</Text>
+								:
+								null
+							}
+							<Text style={styles.versionInfo} accessible={buttonAccessible}
+								importantForAccessibility={importantForAccessibility}>
+								Telldus Live! mobile{'\n'}
+								<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
+							</Text>
+							{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
+								<TouchableButton
+									style={Theme.Styles.submitButton}
+									onPress={this.submitPushToken}
+									text={submitButText}
+									postScript={this.state.isPushSubmitLoading ? '...' : null}
+									accessible={buttonAccessible}
+								/>
+								:
+								<StatusView styles={styles}
+									accessible={buttonAccessible}
+									importantForAccessibility={importantForAccessibility}/>
+							}
+							<View style={{height: 20}} />
 							<TouchableButton
-								style={Theme.Styles.submitButton}
-								onPress={this.submitPushToken}
-								text={submitButText}
-								postScript={this.state.isPushSubmitLoading ? '...' : null}
+								onPress={this.logout}
+								text={logoutButText}
+								postScript={this.state.isLogoutLoading ? '...' : null}
+								accessibilityLabel={this.labelLogOut}
+								accessible={buttonAccessible}
 							/>
-							:
-							<StatusView/>
-						}
-						<View style={{height: 20}} />
-						<TouchableButton
-							style={Theme.Styles.submitButton}
-							onPress={this.logout}
-							text={logoutButText}
-							postScript={this.state.isLogoutLoading ? '...' : null}
-						/>
-						<CustomModal
-							modalStyle={[Theme.Styles.notificationModal, styles.modal]}
-							entry= "ZoomIn"
-							exit= "ZoomOut"
-							entryDuration= {300}
-							exitDuration= {100}
-							showModal={this.props.showModal}>
-							<NotificationComponent
-								header={notificationHeader}
-								text={this.props.validationMessage}
-								showPositive={showPositive}
-								showNegative={showNegative}
-								positiveText={positiveText}
-								onPressPositive={onPressPositive}
-								onPressNegative={onPressNegative} />
-						</CustomModal>
+						</View>
+						<DialogueBox
+							showDialogue={this.props.showModal}
+							header={notificationHeader}
+							text={this.props.validationMessage}
+							showPositive={showPositive}
+							showNegative={showNegative}
+							positiveText={positiveText}
+							onPressPositive={onPressPositive}
+							onPressNegative={onPressNegative}/>
 					</View>
 				</Container>
 			</Modal>
@@ -266,78 +280,82 @@ class SettingsDetailModal extends View {
 		});
 		this.props.onSubmitPushToken(this.props.store.user.pushToken, this.postLoadMethod);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+
+		return {
+			container: {
+				flex: 1,
+				backgroundColor: 'white',
+				margin: 10,
+			},
+			header: {
+				height: 46,
+				backgroundColor: '#1a355b',
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			textHeaderTitle: {
+				marginLeft: 8,
+				color: 'white',
+				fontSize: 18,
+				fontWeight: 'bold',
+				flex: 8,
+			},
+			body: {
+				flex: 10,
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			statusText: {
+				justifyContent: 'center',
+				alignItems: 'center',
+				color: '#1a355b',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				textAlign: 'center',
+				textAlignVertical: 'center',
+			},
+			versionInfo: {
+				color: '#1a355b',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				textAlign: 'center',
+				textAlignVertical: 'center',
+				width: 200,
+				height: 45,
+				marginVertical: 20,
+			},
+			gear: {
+				flex: 1,
+				marginLeft: 8,
+			},
+			notification: {
+				padding: 7,
+				marginTop: 10,
+				marginLeft: 100,
+				marginRight: 100,
+
+				borderColor: '#f00',
+				borderWidth: 1,
+				borderRadius: 3,
+
+				fontSize: isPortrait ? Math.floor(width * 0.041) : Math.floor(height * 0.041),
+				color: '#1a355b',
+				textAlign: 'center',
+				backgroundColor: '#ff000033',
+			},
+		};
+	}
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: 'white',
-		margin: 10,
-	},
-	header: {
-		height: 46,
-		backgroundColor: '#1a355b',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	textHeaderTitle: {
-		marginLeft: 8,
-		color: 'white',
-		fontSize: 18,
-		fontWeight: 'bold',
-		flex: 8,
-	},
-	body: {
-		flex: 10,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	statusText: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		color: '#1a355b',
-		fontSize: 14,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	versionInfo: {
-		color: '#1a355b',
-		fontSize: 14,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		width: 200,
-		height: 45,
-		marginVertical: 20,
-	},
-	gear: {
-		flex: 1,
-		marginLeft: 8,
-	},
-	notification: {
-		padding: 7,
-		marginTop: 10,
-		marginLeft: 100,
-		marginRight: 100,
-
-		borderColor: '#f00',
-		borderWidth: 1,
-		borderRadius: 3,
-
-		fontSize: 13,
-		color: '#1a355b',
-		textAlign: 'center',
-		backgroundColor: '#ff000033',
-	},
-	modal: {
-		top: deviceHeight * 0.2,
-	},
-});
 
 function mapStateToProps(store) {
 	return {
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
+		appLayout: store.App.layout,
 		store,
 	};
 }

@@ -28,14 +28,17 @@ import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import Platform from 'Platform';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Text, List, ListDataSource, View, StyleSheet } from 'BaseComponents';
+import { Text, List, ListDataSource, View } from 'BaseComponents';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
 import { defineMessages } from 'react-intl';
 
+import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
+import Theme from 'Theme';
 
 import {
 	DimmerDashboardTile,
@@ -48,15 +51,18 @@ import {
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import reactMixin from 'react-mixin';
-import {
-	getWindowDimensions,
-} from 'Lib';
 
 const messages = defineMessages({
-	dashboard: {
-		id: 'pages.dashboard',
-		defaultMessage: 'Dashboard',
-		description: 'The dashboard tab',
+	messageNoItemsTitle: {
+		id: 'pages.dashboard.messageNoItemsTitle',
+		defaultMessage: 'Your dashboard is empty.',
+		description: 'Message title when no items',
+	},
+	messageNoItemsContent: {
+		id: 'pages.dashboard.messageNoItemsContent',
+		defaultMessage: 'You have not added any devices or sensors to your dashboard yet. Go to devices or sensors tab, click the ' +
+		'start in the top right corner and choose the ones you want to add.',
+		description: 'Message title when no items',
 	},
 });
 
@@ -81,6 +87,7 @@ type Props = {
 	onStop: (number) => void,
 	events: Object,
 	screenProps: Object,
+	appLayout: Object,
 };
 
 type State = {
@@ -108,10 +115,11 @@ class DashboardTab extends View {
 	stopSensorTimer: () => void;
 	changeDisplayType: () => void;
 	onRefresh: () => void;
+	_renderRow: (number) => Object;
 	orientationDidChange: (string) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
-		title: screenProps.intl.formatMessage(messages.dashboard),
+		title: screenProps.intl.formatMessage(i18n.dashboard),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'dashboard'),
 	});
 
@@ -132,12 +140,16 @@ class DashboardTab extends View {
 		this.tab = 'dashboardTab';
 
 		this._onLayout = this._onLayout.bind(this);
+		this._renderRow = this._renderRow.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
 		this.startSensorTimer = this.startSensorTimer.bind(this);
 		this.stopSensorTimer = this.stopSensorTimer.bind(this);
 		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.mixins = [Subscribable.Mixin];
+
+		this.noItemsTitle = props.screenProps.intl.formatMessage(messages.messageNoItemsTitle);
+		this.noItemsContent = props.screenProps.intl.formatMessage(messages.messageNoItemsContent);
 	}
 
 	startSensorTimer() {
@@ -217,16 +229,35 @@ class DashboardTab extends View {
 		return tileWidth;
 	}
 
+	noItemsMessage(style: Object) {
+		return (
+			<View style={style.container}>
+				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
+				<Text style={style.noItemsTitle}>
+					{this.noItemsTitle}
+				</Text>
+				<Text style={style.noItemsContent}>
+					{'\n'}
+					{this.noItemsContent}
+				</Text>
+			</View>
+		);
+	}
+
 	render() {
+
+		let { appLayout } = this.props;
+
+		let style = this.getStyles(appLayout);
+
 		// add to List props: enableEmptySections={true}, to surpress warning
-		let containerStyle = null;
-		if (Platform.OS === 'android') {
-			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				styles.conatiner : styles.containerLand;
+
+		if (!this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0) {
+			return this.noItemsMessage(style);
 		}
 
 		return (
-			<View onLayout={this._onLayout} style={containerStyle}>
+			<View onLayout={this._onLayout} style={style.container}>
 				<List
 					ref="list"
 					contentContainerStyle={{
@@ -244,6 +275,7 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(tileWidth) {
+		let { screenProps } = this.props;
 		tileWidth -= tileMargin;
 		return (row, secId, rowId, rowMap) => {
 			if (row.objectType !== 'sensor' && row.objectType !== 'device') {
@@ -270,6 +302,7 @@ class DashboardTab extends View {
 					tileWidth={tileWidth}
 					item={row.childObject}
 					onPress={this.changeDisplayType}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -280,6 +313,7 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -289,6 +323,7 @@ class DashboardTab extends View {
 					tileWidth={tileWidth}
 					style={tileStyle}
 					setScrollEnabled={this.setScrollEnabled}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -297,6 +332,7 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -305,6 +341,7 @@ class DashboardTab extends View {
 					item={row.childObject}
 					tileWidth={tileWidth}
 					style={tileStyle}
+					intl={screenProps.intl}
 				/>;
 			}
 
@@ -312,7 +349,37 @@ class DashboardTab extends View {
 				style={tileStyle}
 				item={row.childObject}
 				tileWidth={tileWidth}
+				intl={screenProps.intl}
 			/>;
+		};
+	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+		let isEmpty = !this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0;
+
+		return {
+			container: {
+				flex: 1,
+				alignItems: isEmpty ? 'center' : 'flex-start',
+				justifyContent: 'center',
+				paddingHorizontal: isEmpty ? 30 : 0,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+			},
+			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
+			noItemsTitle: {
+				textAlign: 'center',
+				color: '#4C4C4C',
+				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
+				paddingTop: 15,
+			},
+			noItemsContent: {
+				textAlign: 'center',
+				color: '#4C4C4C',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
 		};
 	}
 }
@@ -320,16 +387,6 @@ class DashboardTab extends View {
 DashboardTab.propTypes = {
 	rows: PropTypes.array,
 };
-
-const styles = StyleSheet.create({
-	conatiner: {
-		flex: 1,
-	},
-	containerLand: {
-		flex: 1,
-		marginLeft: getWindowDimensions().height * 0.08,
-	},
-});
 
 const getRows = createSelector(
 	[
@@ -347,6 +404,7 @@ function mapStateToProps(state, props) {
 		userProfile: getUserProfile(state),
 		tab: state.navigation.tab,
 		dashboard: state.dashboard,
+		appLayout: state.App.layout,
 	};
 }
 
