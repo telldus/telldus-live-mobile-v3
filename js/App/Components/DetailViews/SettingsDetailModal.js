@@ -38,7 +38,6 @@ import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 
-import Theme from 'Theme';
 import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken } from 'Actions_User';
 
@@ -380,7 +379,7 @@ class SettingsDetailModal extends View {
 			},
 			pushSubmitButton: {
 				width: isPortrait ? width * 0.55 : height * 0.55,
-			}
+			},
 		};
 	}
 }
