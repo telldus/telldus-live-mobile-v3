@@ -3,12 +3,14 @@ package com.telldus.live.mobile;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
+import com.telldus.live.mobile.ServiceBackground.MyService;
 
 /**
  * Implementation of App Widget functionality.
@@ -61,6 +63,17 @@ public class SensorAppWidget extends AppWidgetProvider {
             {
                 Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
             }
+            int count=db.CountSensorTableValues();
+            if(count>0)
+            {
+                Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
+
+            }else
+            {
+                context.stopService(new Intent(context, MyService.class));
+                //Toast.makeText(context,String.valueOf(count)+"Count<0",Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 

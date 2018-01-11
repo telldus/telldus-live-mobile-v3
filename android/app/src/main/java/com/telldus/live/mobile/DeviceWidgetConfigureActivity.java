@@ -218,7 +218,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
 
 
     void createDeviceApi() {
-      //  accessToken= Utility.access;
+    //    accessToken= Utility.access;
 
         AndroidNetworking.post("https://api3.telldus.com/oauth2/devices/list")
                 .addHeaders("Content-Type", "application/json")

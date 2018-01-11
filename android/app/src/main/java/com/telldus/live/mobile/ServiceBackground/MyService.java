@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -178,7 +179,7 @@ public class MyService extends Service {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 Log.v("Websocket", "Opened");
-                authoriseWebsocket("d632e538-511c-4278-bf78-ffda3b532d12", mWebSocketClient);
+                authoriseWebsocket("7c3f9db9-08ca-469f-a979-f9c8151d9441", mWebSocketClient);
 
                 addWebsocketFilter("device", "added",mWebSocketClient);
                 addWebsocketFilter("device", "removed",mWebSocketClient);
@@ -242,9 +243,19 @@ public class MyService extends Service {
 
 
                             long timeStamp = Long.parseLong(time);
+                             long now = System.currentTimeMillis();
+
+
+                        if (timeStamp < 1000000000000L) {
+                            // if timestamp given in seconds, convert to millis
+                            timeStamp *= 1000;
+                        }
+
+                        CharSequence timeSpanString=  DateUtils.getRelativeTimeSpanString(timeStamp, now,
+                                0L, DateUtils.FORMAT_ABBREV_ALL);
 
                             views.setTextViewText(R.id.txtSensorType, widgetname);
-                            views.setTextViewText(R.id.txtHistoryInfo, String.valueOf(timeStamp));
+                            views.setTextViewText(R.id.txtHistoryInfo, "Last updated  "+timeSpanString);
                             views.setTextViewText(R.id.txtSensorValue, valueSensor);
 
                             widgetManager.updateAppWidget(widgeID, views);
@@ -265,7 +276,8 @@ public class MyService extends Service {
             @Override
             public void onClose(int i, String s, boolean b) {
                 Log.v("Websocket", "Closed " + s);
-                connectWebSocket();
+              //  connectWebSocket();
+
 
             }
 
@@ -284,9 +296,12 @@ public class MyService extends Service {
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Service Stopped", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+        mWebSocketClient.close();
 
     }
+
+
 
 
     @Nullable
@@ -329,41 +344,6 @@ public class MyService extends Service {
         }
     }
 
-    public String timeStampFunction(long time, Context ctx)
-    {
-          final int SECOND_MILLIS = 1000;
-          final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-          final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-          final int DAY_MILLIS = 24 * HOUR_MILLIS;
-        if (time < 1000000000000L) {
-            // if timestamp given in seconds, convert to millis
-            time *= 1000;
-        }
-
-        long now = System.currentTimeMillis();
-        if (time > now || time <= 0) {
-            return null;
-        }
-
-        // TODO: localize
-        final long diff = now - time;
-        if (diff < MINUTE_MILLIS) {
-            return "just now";
-        } else if (diff < 2 * MINUTE_MILLIS) {
-            return "a minute ago";
-        } else if (diff < 50 * MINUTE_MILLIS) {
-            return diff / MINUTE_MILLIS + " minutes ago";
-        } else if (diff < 90 * MINUTE_MILLIS) {
-            return "an hour ago";
-        } else if (diff < 24 * HOUR_MILLIS) {
-            return diff / HOUR_MILLIS + " hours ago";
-        } else if (diff < 48 * HOUR_MILLIS) {
-            return "yesterday";
-        } else {
-            return diff / DAY_MILLIS + " days ago";
-        }
-
-    }
 
 
 }

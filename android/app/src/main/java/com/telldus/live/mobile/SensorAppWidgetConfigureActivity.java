@@ -41,6 +41,7 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.Utility;
 import com.telldus.live.mobile.Model.SensorInfo;
+import com.telldus.live.mobile.ServiceBackground.AEScreenOnOffService;
 import com.telldus.live.mobile.ServiceBackground.MyService;
 
 /**
@@ -120,7 +121,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
 
 
 
-      //  createSensorApi();
+    //    createSensorApi();
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_sensor_widget_configure);
@@ -167,13 +168,12 @@ public class SensorAppWidgetConfigureActivity extends Activity {
                 if (!b)
                 {
                     startService(new Intent(getApplicationContext(), MyService.class));
+                   // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
                 }
                 else
                 {
                     Toast.makeText(getApplicationContext(),"Service already running",Toast.LENGTH_LONG).show();
                 }
-
-
 
                 Intent resultValue = new Intent();
                 // Set the results as expected from a 'configure activity'.
@@ -225,7 +225,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
         });
     }
     void createSensorApi() {
-    //    accessToken= Utility.access;
+      //  accessToken= Utility.access;
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
         AndroidNetworking.post("https://api.telldus.com/oauth2/sensors/list")
                 .addHeaders("Content-Type", "application/json")
