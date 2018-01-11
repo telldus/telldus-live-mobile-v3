@@ -33,7 +33,7 @@ export type State = {
 };
 
 const initialState = {
-	errorGlobalMessage: 'Action Currently Unavailable',
+	errorGlobalMessage: null,
 	errorGlobalShow: false,
 	active: true,
 	orientation: '',
@@ -43,9 +43,13 @@ const initialState = {
 
 export default function reduceApp(state: State = initialState, action: Action): State {
 	if (action.type === 'GLOBAL_ERROR_SHOW') {
+		let { customMessage } = action.payload;
+		let errorGlobalMessage = customMessage ? customMessage : initialState.errorGlobalMessage;
+
 		return {
 			...state,
 			errorGlobalShow: true,
+			errorGlobalMessage,
 		};
 	}
 	if (action.type === 'GLOBAL_ERROR_HIDE') {
