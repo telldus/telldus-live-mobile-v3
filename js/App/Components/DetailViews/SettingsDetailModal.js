@@ -52,12 +52,12 @@ const messages = defineMessages({
 	},
 	pushRegister: {
 		id: 'settings.pushRegister',
-		defaultMessage: 'Re-register this phone for push',
+		defaultMessage: 'Re-register for push',
 		description: 'Message in the settings window shown if the app was not registered for push notifications, in settings view',
 	},
 	pushRegisters: {
 		id: 'settings.pushRegisters',
-		defaultMessage: 'Registering this phone for push',
+		defaultMessage: 'Registering for push',
 		description: 'Message in the settings window shown when registrating for push notifications',
 	},
 	version: {
@@ -89,7 +89,7 @@ type Props = {
 	onClose: () => void,
 	onLogout: (string, Function) => void,
 	onSubmitPushToken: (string, Function) => void,
-	store: Object,
+	user: Object,
 	validationMessage: string,
 	showModal: boolean,
 	intl: intlShape.isRequired,
@@ -151,7 +151,7 @@ class SettingsDetailModal extends View {
 		this.setState({
 			isLogoutLoading: true,
 		});
-		this.props.onLogout(this.props.store.user.pushToken, this.postLoadMethod);
+		this.props.onLogout(this.props.user.pushToken, this.postLoadMethod);
 	}
 
 	closeModal() {
@@ -225,11 +225,11 @@ class SettingsDetailModal extends View {
 					<Header onPress={this.props.onClose} styles={styles} buttonAccessibilityLabel={this.labelCloseSettings}/>
 					<View style={styles.body}>
 						<View style={styles.body}>
-							{ this.props.store.user.notificationText ?
+							{ this.props.user.notificationText ?
 								<Text style={styles.notification}
 									accessible={buttonAccessible}
 									importantForAccessibility={importantForAccessibility}>
-									{this.props.store.user.notificationText}
+									{this.props.user.notificationText}
 								</Text>
 								:
 								null
@@ -239,19 +239,16 @@ class SettingsDetailModal extends View {
 								Telldus Live! mobile{'\n'}
 								<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
 							</Text>
-							{this.props.store.user.pushToken && !this.props.store.user.pushTokenRegistered ?
-								<TouchableButton
-									style={Theme.Styles.submitButton}
-									onPress={this.submitPushToken}
-									text={submitButText}
-									postScript={this.state.isPushSubmitLoading ? '...' : null}
-									accessible={buttonAccessible}
-								/>
-								:
-								<StatusView styles={styles}
-									accessible={buttonAccessible}
-									importantForAccessibility={importantForAccessibility}/>
-							}
+							<TouchableButton
+								style={styles.pushSubmitButton}
+								labelStyle={{fontSize: 12}}
+								onPress={this.submitPushToken}
+								text={submitButText}
+								accessible={buttonAccessible}
+							/>
+							<StatusView styles={styles}
+								accessible={buttonAccessible}
+								importantForAccessibility={importantForAccessibility}/>
 							<View style={{height: 20}} />
 							<TouchableButton
 								onPress={this.logout}
@@ -280,7 +277,7 @@ class SettingsDetailModal extends View {
 		this.setState({
 			isPushSubmitLoading: true,
 		});
-		this.props.onSubmitPushToken(this.props.store.user.pushToken, this.postLoadMethod);
+		this.props.onSubmitPushToken(this.props.user.pushToken, this.postLoadMethod);
 	}
 
 	getStyles(appLayout: Object): Object {
@@ -349,6 +346,9 @@ class SettingsDetailModal extends View {
 				textAlign: 'center',
 				backgroundColor: '#ff000033',
 			},
+			pushSubmitButton: {
+				width: isPortrait ? width * 0.55 : height * 0.55,
+			}
 		};
 	}
 }
@@ -358,7 +358,7 @@ function mapStateToProps(store) {
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
 		appLayout: store.App.layout,
-		store,
+		user: store.user,
 	};
 }
 
