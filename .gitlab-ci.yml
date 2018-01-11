@@ -24,6 +24,8 @@ flow:
 jest:
   image: node:8.1.2
   stage: test
+  variables:
+    localStorageKey: 'tellduslive'
   tags:
     - docker
   script:
