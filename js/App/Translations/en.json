@@ -170,6 +170,8 @@
   "settings.connectedLocations": "Connected Locations",
   "settings.pushEnabled": "Device subscribed for push notifications.",
   "settings.pushRegister": "Re-register for push",
+  "settings.pushRegisterFailed": "Failed to register for push. Please try again",
+  "settings.pushRegisterSuccess": "This phone is now registered for push",
   "settings.pushRegisters": "Registering for push",
   "showOnDashboard": "Show on dashboard",
   "state": "State",

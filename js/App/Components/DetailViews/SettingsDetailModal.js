@@ -60,6 +60,16 @@ const messages = defineMessages({
 		defaultMessage: 'Registering for push',
 		description: 'Message in the settings window shown when registrating for push notifications',
 	},
+	pushRegisterSuccess: {
+		id: 'settings.pushRegisterSuccess',
+		defaultMessage: 'This phone is now registered for push',
+		description: 'Message to show when token registered successfully',
+	},
+	pushRegisterFailed: {
+		id: 'settings.pushRegisterFailed',
+		defaultMessage: 'Failed to register for push. Please try again',
+		description: 'Message to show when token register failed',
+	},
 	version: {
 		id: 'version',
 		defaultMessage: 'version',
@@ -88,7 +98,7 @@ type Props = {
 	isVisible: boolean,
 	onClose: () => void,
 	onLogout: (string, Function) => void,
-	onSubmitPushToken: (string, Function) => void,
+	onSubmitPushToken: (string) => Promise<any>,
 	user: Object,
 	validationMessage: string,
 	showModal: boolean,
@@ -277,7 +287,29 @@ class SettingsDetailModal extends View {
 		this.setState({
 			isPushSubmitLoading: true,
 		});
-		this.props.onSubmitPushToken(this.props.user.pushToken, this.postLoadMethod);
+		let { formatMessage } = this.props.intl;
+		this.props.onSubmitPushToken(this.props.user.pushToken).then(response => {
+			let message = formatMessage(messages.pushRegisterSuccess);
+			this.showToast(message);
+		}).catch((err) => {
+			console.log(err);
+			let message = formatMessage(messages.pushRegisterFailed);
+			this.showToast(message);
+		});
+
+	}
+
+	showToast(message: string) {
+		this.props.dispatch({
+			type: 'GLOBAL_ERROR_SHOW',
+			payload: {
+				source: 'settings',
+				customMessage: message,
+			},
+		});
+		this.setState({
+			isPushSubmitLoading: false,
+		});
 	}
 
 	getStyles(appLayout: Object): Object {
@@ -374,11 +406,8 @@ function mapDispatchToProps(dispatch, ownProps) {
 			});
 			ownProps.onClose();
 		},
-		onSubmitPushToken: (token, callback) => {
-			dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId))
-				.then(() => {
-					callback('REG_TOKEN');
-				});
+		onSubmitPushToken: (token) => {
+			return dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 		},
 		onLogout: (token, callback) => {
 			dispatch(unregisterPushToken(token)).then(() => {
