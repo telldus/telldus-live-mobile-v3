@@ -228,7 +228,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return  db.delete(this.TABLE_SENSOR ,SENSOR_WIDGET_ID+" = ?",whereArgs)>0;
     }
 
+public int CountSensorTableValues()
+{
+    SQLiteDatabase db = this.getWritableDatabase();
+    String count = "SELECT count(*) FROM sensor";
+    Cursor mcursor = db.rawQuery(count, null);
+    mcursor.moveToFirst();
+    int icount = mcursor.getInt(0);
 
+
+    return icount;
+}
 
 
 /*

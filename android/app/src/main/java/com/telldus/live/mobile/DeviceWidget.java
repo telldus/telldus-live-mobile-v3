@@ -169,7 +169,7 @@ public class DeviceWidget extends AppWidgetProvider {
 
           //  createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On");
 
-          //  createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
+          ///  createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
 
 
         }
@@ -262,7 +262,7 @@ public class DeviceWidget extends AppWidgetProvider {
     }
 
     void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action,String accessToken) {
-      //  accessToken= Utility.access;
+    //    accessToken= Utility.access;
         String str="https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
         Log.v("***********",str);
         AndroidNetworking.get("https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null")

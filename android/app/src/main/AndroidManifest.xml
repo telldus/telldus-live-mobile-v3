@@ -102,6 +102,17 @@
         <service
             android:name=".ServiceBackground.MyService"
             android:enabled="true" />
+        <receiver android:name=".BroadcastReceiver.BootCompleteReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".ServiceBackground.AEScreenOnOffService">
+            <intent-filter>
+                <action android:name="com.androidexample.screenonoff.AEScreenOnOffService" />
+            </intent-filter>
+        </service>
 
     </application>
 
