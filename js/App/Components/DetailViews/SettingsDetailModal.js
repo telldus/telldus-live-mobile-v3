@@ -52,12 +52,12 @@ const messages = defineMessages({
 	},
 	pushRegister: {
 		id: 'settings.pushRegister',
-		defaultMessage: 'Register for push notifications',
+		defaultMessage: 'Re-register this phone for push',
 		description: 'Message in the settings window shown if the app was not registered for push notifications, in settings view',
 	},
 	pushRegisters: {
 		id: 'settings.pushRegisters',
-		defaultMessage: 'Registers for push notifications',
+		defaultMessage: 'Registering this phone for push',
 		description: 'Message in the settings window shown when registrating for push notifications',
 	},
 	version: {
@@ -178,11 +178,13 @@ class SettingsDetailModal extends View {
 	}
 
 	getRelativeData() {
-		let notificationHeader = `${this.props.intl.formatMessage(i18n.logout)}?`, showPositive = true,
-			showNegative = true, positiveText = this.props.intl.formatMessage(i18n.logout).toUpperCase(),
+		let { formatMessage } = this.props.intl;
+
+		let notificationHeader = `${formatMessage(i18n.logout)}?`, showPositive = true,
+			showNegative = true, positiveText = formatMessage(i18n.logout).toUpperCase(),
 			onPressPositive = this.onConfirmLogout, onPressNegative = this.closeModal;
-		let submitButText = this.state.isPushSubmitLoading ? messages.pushRegisters : messages.pushRegister;
-		let logoutButText = this.state.isLogoutLoading ? i18n.loggingout : i18n.logout;
+		let submitButText = this.state.isPushSubmitLoading ? `${formatMessage(messages.pushRegisters)}...` : formatMessage(messages.pushRegister);
+		let logoutButText = this.state.isLogoutLoading ? formatMessage(i18n.loggingout) : formatMessage(i18n.logout);
 		let version = DeviceInfo.getVersion();
 
 		return {
