@@ -76,6 +76,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
     private String tokenType;
     private String scope;
     private String refreshToken;
+    int stateID;
 
    @Override
     public void onCreate(Bundle icicle) {
@@ -148,7 +149,6 @@ public class DeviceWidgetConfigureActivity extends Activity {
         deviceName = (TextView) findViewById(R.id.txtDeviceName);
         deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
 
-        //Add button to device
 
         btAdd = (Button) findViewById(R.id.btAdd);
         btAdd.setOnClickListener(new View.OnClickListener() {
@@ -156,22 +156,9 @@ public class DeviceWidgetConfigureActivity extends Activity {
             public void onClick(View view) {
                 views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
-                DeviceInfo mInsert=new DeviceInfo(deviceName.getText().toString(),mAppWidgetId,id);
+                DeviceInfo mInsert=new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString());
                 db.addUser(mInsert);
-                Toast.makeText(getApplicationContext(),"Successfull added",Toast.LENGTH_SHORT).show();
-
-
-                if (deviceStateVal[0] == "1") {
-
-                    views.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
-                    views.setImageViewResource(R.id.iconOff, R.drawable.off_light);
-                } else {
-
-                    views.setImageViewResource(R.id.iconOn, R.drawable.on_light);
-                    views.setImageViewResource(R.id.iconOff, R.drawable.off_dark);
-                }
-            //    widgetManager.updateAppWidget(mAppWidgetId, views);
-                DeviceWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+                  DeviceWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
                 Intent resultValue = new Intent();
                 // Set the results as expected from a 'configure activity'.
                 resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
@@ -195,6 +182,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
 
                                 deviceHint.setText(null);
                                 deviceStateVal[0] = (String) deviceStateList[which];
+                             //   Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_LONG).show();
                                 ad.dismiss();
 
 
@@ -203,24 +191,16 @@ public class DeviceWidgetConfigureActivity extends Activity {
                 ad = builder.show();//   builder.show();
             }
         });
-      /*  btnCan=(Button) findViewById(R.id.btn_cancel);
-        btnCan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-           // mList=db.getAllLabels();
-         //   Toast.makeText(getApplicationContext(),mList.toString(),Toast.LENGTH_LONG).show();
-            }
-        });
-*/
+
 
     }
 
 
 
     void createDeviceApi() {
-    //    accessToken= Utility.access;
-
-        AndroidNetworking.post("https://api3.telldus.com/oauth2/devices/list")
+      //  accessToken= Utility.access;
+//https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1
+        AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accpet", "application/json")
                 .addHeaders("Authorization", "Bearer " + accessToken)
@@ -231,18 +211,29 @@ public class DeviceWidgetConfigureActivity extends Activity {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject deviceData = new JSONObject(response.toString());
+                           // Log.v("JSON Object",deviceData.toString());
                             JSONArray deviceList = deviceData.getJSONArray("device");
+
+
+
+
                             for (int i = 0; i < deviceList.length(); i++) {
                                 JSONObject curObj = deviceList.getJSONObject(i);
                                 String name = curObj.getString("name");
-                                Integer state = curObj.getInt("state");
-                                Integer id=curObj.getInt("id");
-                                DeviceID.put(name,id);
-                                nameListItems.add(name);
-                                stateListItems.add(state.toString());
+                                stateID = curObj.getInt("state");
+
+
+                                if (stateID == 1 || stateID == 2) {
+                                    Integer id = curObj.getInt("id");
+                                    DeviceID.put(name, id);
+                                    nameListItems.add(name);
+                                    stateListItems.add(String.valueOf(stateID));
+
+                                }
                             }
                             deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                             deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
+                         //  Toast.makeText(getApplicationContext(),deviceStateList.toString(),Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         };

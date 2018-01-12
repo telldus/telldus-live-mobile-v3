@@ -114,7 +114,7 @@
                 <action android:name="com.androidexample.screenonoff.AEScreenOnOffService" />
             </intent-filter>
         </service>
-
+        <service android:name=".UpdateSensorService"></service>
     </application>
 
 </manifest>

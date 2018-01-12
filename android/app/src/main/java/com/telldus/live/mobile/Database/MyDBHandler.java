@@ -29,6 +29,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String SENSOR_DEVICE_ID = "SENSOR_deviceid";
     public static final String SENSOR_WIDGET_NAME = "SENSOR_device_name";
     public static final String SENSOR_VALUE_TYPE="SENSOR_widget_action";
+    public static final String SENSOR_UPDATE="Last_update";
+    public static final String SENSOR_VALUE="Sensor_value";
 
 
 
@@ -43,10 +45,15 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 TABLE_REGISTER + "("+ WIDGET_ID + " INTEGER," + DEVICE_ID
                 + " INTEGER," + WIDGET_NAME + " TEXT," + WIDGET_ACTION + " TEXT" + ")";
 
+/*
+        String CREATE_SENSOR_TABLE = "CREATE TABLE " +
+                TABLE_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
+                + " INTEGER," + SENSOR_WIDGET_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT" + ")";*/
+
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
-                + " INTEGER," + SENSOR_WIDGET_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT" + ")";
+                + " INTEGER," + SENSOR_WIDGET_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT," + SENSOR_UPDATE + " TEXT,"+ SENSOR_VALUE + " TEXT" + ")";
 
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_SENSOR_TABLE);
@@ -65,8 +72,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(WIDGET_ID,mDeviceInfo.getWidgetID());
         values.put(DEVICE_ID,mDeviceInfo.getDeviceID());
-        values.put(WIDGET_NAME,mDeviceInfo.getAction());
-        values.put(WIDGET_ACTION,"null");
+        values.put(WIDGET_NAME,mDeviceInfo.getDeviceName());
+        values.put(WIDGET_ACTION,mDeviceInfo.getState());
+        //values.put(WIDGET_ACTION,"null");
+
 
         //Inserting Row
         db.insert(TABLE_REGISTER, null, values);
@@ -82,6 +91,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(SENSOR_DEVICE_ID,mSensorInfo.getDeviceID());
         values.put(SENSOR_WIDGET_NAME,mSensorInfo.getWidgetName());
         values.put(SENSOR_VALUE_TYPE,mSensorInfo.getWidgetType());
+        values.put(SENSOR_UPDATE,mSensorInfo.getSensorUpdate());
+        values.put(SENSOR_VALUE,mSensorInfo.getSensorValue());
 
         //Inserting Row
         db.insert(TABLE_SENSOR, null, values);
@@ -105,7 +116,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
             r.setDeviceName(cursor.getString(2));
             r.setWidgetID(cursor.getInt(0));
-            r.setAction(cursor.getString(3));
+            r.setState(cursor.getString(3));
 
             cursor.close();
         } else {
@@ -127,10 +138,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
 
-            r.setWidgetName(cursor.getString(2));
+
             r.setWidgetID(cursor.getInt(0));
+            r.setDeviceID(cursor.getInt(1));
+            r.setWidgetName(cursor.getString(2));
             r.setWidgetType(cursor.getString(3));
-            r.setDeviceID(1);
+            r.setSensorUpdate(cursor.getString(4));
+            r.setSensorValue(cursor.getString(5));
+
 
             cursor.close();
         } else {
@@ -182,6 +197,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
             r.setDeviceID(cursor.getInt(1));
+            r.setState(cursor.getString(3));
 
 
             cursor.close();
@@ -192,6 +208,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return r;
 
     }
+
+
     public boolean updateAction(String action,int id)
     {
         String val=String.valueOf(id);
@@ -203,6 +221,22 @@ public class MyDBHandler extends SQLiteOpenHelper {
         String[] whereArgs= {val};
         int count =db.update(TABLE_REGISTER,contentValues, WIDGET_ID+" = ?",whereArgs );
         return true;
+    }
+
+    public int updateSensorInfo(String value,long time,int SensorID)
+    {
+          String time1=String.valueOf(time);
+          SQLiteDatabase db = this.getWritableDatabase();
+          ContentValues contentValues = new ContentValues();
+        //contentValues.put(myDbHelper.NAME,newName);
+
+        String id=String.valueOf(SensorID);
+
+        contentValues.put(SENSOR_VALUE,value);
+        contentValues.put(SENSOR_UPDATE,time1);
+        String[] whereArgs= {id};
+        int count =db.update(TABLE_SENSOR,contentValues, SENSOR_DEVICE_ID+" = ?",whereArgs );
+        return count;
     }
 
 
