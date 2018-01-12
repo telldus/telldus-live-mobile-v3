@@ -2,7 +2,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target 'TelldusLiveApp' do
   react_native_path = "../node_modules/react-native"
-  pod "Yoga", :path => "#{react_native_path}/ReactCommon/yoga"
+  pod "yoga", :path => "#{react_native_path}/ReactCommon/yoga"
   pod 'React', :subspecs => [
     'Core',
   ], :path => react_native_path

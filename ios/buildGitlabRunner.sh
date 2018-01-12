@@ -17,6 +17,6 @@ module.exports = {
 EOF
 
 cd ..
-react-native bundle --platform ios --dev false --entry-file index.ios.js --bundle-output ios/main.jsbundle --sourcemap-output ios/main.jsbundle.map
+react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --sourcemap-output ios/main.jsbundle.map
 
 fastlane ios build
