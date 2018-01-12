@@ -136,6 +136,11 @@ module.exports = {
  - `pushSenderId`: string - Used to identify the remote notification sender,
  - `pushServiceId`: integer - Used to Identify the Push Service (GCM or APNS),
 
+### Docker
+
+The CI system builds the app in a Docker image. The `Dockerfile` is placed in the `android/` subfolder. To build it run:  
+`docker build android/ -t telldus/react-native-android:26`
+
 ## Run
 
 - environment vars?
