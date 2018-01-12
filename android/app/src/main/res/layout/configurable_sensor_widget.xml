@@ -55,16 +55,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="22"
+                    android:textStyle="bold"
                     android:textColor="@color/orange"
-                    android:textSize="24sp"/>
+                    android:textSize="21sp"/>
 
                 <TextView
                     android:id="@+id/txtHistoryInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Last updated 20 mins ago"
-                    android:textColor="@color/darkGray"
-                    android:textSize="8sp"/>
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textSize="15dp"/>
 
             </LinearLayout>
 

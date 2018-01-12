@@ -1,40 +1,35 @@
 package com.telldus.live.mobile.Model;
 
+import com.telldus.live.mobile.DeviceWidget;
+
 /**
  * Created by crosssales on 1/4/2018.
  */
 
 public class DeviceInfo {
-    String action;
+    String state;
     int widgetID;
     int deviceID;
     String deviceName;
 
-    public DeviceInfo(String action, int widgetID, int deviceID, String deviceName) {
-        this.action = action;
+    public DeviceInfo()
+    {
+
+    }
+
+    public DeviceInfo(String state, int widgetID, int deviceID, String deviceName) {
+        this.state = state;
         this.widgetID = widgetID;
         this.deviceID = deviceID;
         this.deviceName = deviceName;
     }
 
-    public DeviceInfo(String action, int widgetID, int deviceID) {
-        this.action = action;
-        this.widgetID = widgetID;
-        this.deviceID = deviceID;
+    public String getState() {
+        return state;
     }
 
-
-
-    public DeviceInfo(){
-
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public int getWidgetID() {
@@ -53,7 +48,6 @@ public class DeviceInfo {
         this.deviceID = deviceID;
     }
 
-
     public String getDeviceName() {
         return deviceName;
     }
@@ -61,6 +55,4 @@ public class DeviceInfo {
     public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
     }
-
-
 }

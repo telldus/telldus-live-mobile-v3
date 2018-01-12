@@ -153,7 +153,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
             public void onClick(View view) {
 
                 SensorInfo mSensorInfo=new SensorInfo(mAppWidgetId,sensorName.getText().toString(),
-                        sensorDataName.getText().toString(),id);
+                        sensorDataName.getText().toString(),id,"22","1515735980");
                 database.addSensor(mSensorInfo);
 
                 // Gets user input
@@ -162,17 +162,14 @@ public class SensorAppWidgetConfigureActivity extends Activity {
 //                views.setOnClickPendingIntent(R.id.iconWidget, pending);
                 views.setTextViewText(R.id.txtSensorType, sensorName.getText());
                 views.setImageViewResource(R.id.iconSensor, R.drawable.sensor);
-                widgetManager.updateAppWidget(mAppWidgetId, views);
+              //  widgetManager.updateAppWidget(mAppWidgetId, views);
+                SensorAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
                 boolean b=isMyServiceRunning(MyService.class);
                 if (!b)
                 {
                     startService(new Intent(getApplicationContext(), MyService.class));
                    // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"Service already running",Toast.LENGTH_LONG).show();
                 }
 
                 Intent resultValue = new Intent();
@@ -225,7 +222,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
         });
     }
     void createSensorApi() {
-      //  accessToken= Utility.access;
+    //    accessToken= Utility.access;
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
         AndroidNetworking.post("https://api.telldus.com/oauth2/sensors/list")
                 .addHeaders("Content-Type", "application/json")

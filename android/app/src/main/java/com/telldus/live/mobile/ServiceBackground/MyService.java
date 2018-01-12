@@ -39,130 +39,18 @@ import com.telldus.live.mobile.R;
 
 public class MyService extends Service {
     MyDBHandler db = new MyDBHandler(this);
-    private AppWidgetManager widgetManager;
-    private RemoteViews views;
 
     private WebSocketClient mWebSocketClient;
     @Override
     public void onCreate() {
-        Toast.makeText(this, "Service Created", Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "Service Created", Toast.LENGTH_LONG).show();
 
     }
 
     @Override
     public void onStart(Intent intent, int startid) {
         Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
-        views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
-        widgetManager = AppWidgetManager.getInstance(getApplicationContext());
-//        widgetManager = AppWidgetManager.getInstance(this);
 
-  /*      String get = "ws://tyra.telldus.com:80/websocket";
-
-
-        AsyncHttpClient.getDefaultInstance().websocket(get, "my-protocol", new AsyncHttpClient.WebSocketConnectCallback() {
-
-
-            @Override
-            public void onCompleted(Exception ex, WebSocket webSocket) {
-                if (ex != null) {
-                    ex.printStackTrace();
-                    return;
-                }
-                // webSocket.send("a string");
-                //webSocket.send(new byte[10]);
-                authoriseWebsocket("048c5abd-f955-4291-9a7f-79eceb5ad402", webSocket);
-
-                addWebsocketFilter("device", "added", webSocket);
-                addWebsocketFilter("device", "removed", webSocket);
-                addWebsocketFilter("device", "failSetState", webSocket);
-                addWebsocketFilter("device", "setState", webSocket);
-
-                addWebsocketFilter("sensor", "added", webSocket);
-                addWebsocketFilter("sensor", "removed", webSocket);
-                addWebsocketFilter("sensor", "setName", webSocket);
-                addWebsocketFilter("sensor", "setPower", webSocket);
-                addWebsocketFilter("sensor", "value", webSocket);
-
-                addWebsocketFilter("zwave", "removeNodeFromNetwork", webSocket);
-                addWebsocketFilter("zwave", "removeNodeFromNetworkStartTimeout", webSocket);
-                addWebsocketFilter("zwave", "addNodeToNetwork", webSocket);
-                addWebsocketFilter("zwave", "addNodeToNetworkStartTimeout", webSocket);
-                addWebsocketFilter("zwave", "interviewDone", webSocket);
-                addWebsocketFilter("zwave", "nodeInfo", webSocket);
-
-
-                webSocket.setStringCallback(new WebSocket.StringCallback() {
-                    public void onStringAvailable(String s) {
-                        System.out.println("I got a string: " + s);
-                        try {
-                            JSONObject jsonObject = new JSONObject(s);
-                            Log.v("Json_Response", jsonObject.toString());
-
-                            JSONObject jsonDataObject = new JSONObject();
-                            jsonDataObject = jsonObject.getJSONObject("data");
-                            int sensorid = Integer.parseInt(jsonDataObject.getString("sensorId"));
-                            String module = jsonObject.getString("module");
-                            String time = jsonDataObject.getString("time");
-
-                            JSONArray jsonArray = new JSONArray();
-                            jsonArray = jsonDataObject.optJSONArray("data");
-                            Log.v("JSON-Array", jsonArray.toString());
-                            String valueSensor = null;
-
-                            //   for(int i=0;i<jsonArray.length();i++)
-                            // {
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(jsonArray.length() - 1);
-                            valueSensor = jsonObject1.optString("value");
-                            // }
-                            Log.v("************", "------------->" + jsonObject1.toString());
-
-
-                            SensorInfo mSensorInfo = db.findSensorDevice(sensorid);
-
-                            if (mSensorInfo != null) {
-                                String widgetname = mSensorInfo.getWidgetName();
-                                String widgettype = mSensorInfo.getWidgetType();
-                                int sensorID = mSensorInfo.getDeviceID();
-                                int widgeID = mSensorInfo.getWidgetID();
-                                Log.d("Widgetname", widgetname);
-                                Log.d("widgetype", widgettype);
-                                Log.d("sensorID", String.valueOf(sensorID));
-                                Log.d("widgetID", String.valueOf(widgeID));
-                                Log.v("*********", "------->" + "Fire");
-                                long timeStamp = Long.parseLong(time);
-                                String timeStr = GetTimeAgo.getTimeAgo(timeStamp, getApplicationContext());
-                                views.setTextViewText(R.id.txtSensorType, widgetname);
-                                views.setTextViewText(R.id.txtHistoryInfo, timeStr);
-                                views.setTextViewText(R.id.txtSensorValue, valueSensor);
-
-                                widgetManager.updateAppWidget(widgeID, views);
-
-
-                            }
-
-
-                            Log.v("SensorID", "--------->" + sensorid);
-                            Log.v("Module", "---------->" + module);
-                            Log.v("Time", "----------->" + time);
-
-                        } catch (Exception e) {
-
-                        }
-
-                    }
-                });
-
-
-                webSocket.setDataCallback(new DataCallback() {
-                    public void onDataAvailable(DataEmitter emitter, ByteBufferList byteBufferList) {
-                        System.out.println("I got some bytes!");
-                        // note that this data has been read
-                        byteBufferList.recycle();
-                    }
-                });
-            }
-        });*//*
-  */
         connectWebSocket();
     }
 
@@ -179,7 +67,7 @@ public class MyService extends Service {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 Log.v("Websocket", "Opened");
-                authoriseWebsocket("7c3f9db9-08ca-469f-a979-f9c8151d9441", mWebSocketClient);
+                authoriseWebsocket("63faf3df-07c0-49be-b4b5-1864c0b5654vgfc", mWebSocketClient);
 
                 addWebsocketFilter("device", "added",mWebSocketClient);
                 addWebsocketFilter("device", "removed",mWebSocketClient);
@@ -233,32 +121,17 @@ public class MyService extends Service {
                     if (mSensorInfo != null) {
                         String widgetname = mSensorInfo.getWidgetName();
                         String widgettype = mSensorInfo.getWidgetType();
-                        int sensorID = mSensorInfo.getDeviceID();
+                     //   int sensorID = mSensorInfo.getDeviceID();
                         int widgeID = mSensorInfo.getWidgetID();
-                        Log.d("Widgetname", widgetname);
-                        Log.d("widgetype", widgettype);
-                        Log.d("sensorID", String.valueOf(sensorID));
-                        Log.d("widgetID", String.valueOf(widgeID));
+                        Log.v("Widgetname", widgetname);
+                        Log.v("widgetype", widgettype);
+                       // Log.v("sensorID", String.valueOf(sensorID));
+                        Log.v("widgetID", String.valueOf(widgeID));
                         Log.v("*********", "------->" + "Fire");
-
-
                             long timeStamp = Long.parseLong(time);
-                             long now = System.currentTimeMillis();
 
 
-                        if (timeStamp < 1000000000000L) {
-                            // if timestamp given in seconds, convert to millis
-                            timeStamp *= 1000;
-                        }
-
-                        CharSequence timeSpanString=  DateUtils.getRelativeTimeSpanString(timeStamp, now,
-                                0L, DateUtils.FORMAT_ABBREV_ALL);
-
-                            views.setTextViewText(R.id.txtSensorType, widgetname);
-                            views.setTextViewText(R.id.txtHistoryInfo, "Last updated  "+timeSpanString);
-                            views.setTextViewText(R.id.txtSensorValue, valueSensor);
-
-                            widgetManager.updateAppWidget(widgeID, views);
+                      int result=  db.updateSensorInfo(valueSensor,timeStamp,sensorid);
 
                     }
                     Log.v("SensorID", "--------->" + sensorid);
@@ -266,17 +139,14 @@ public class MyService extends Service {
                     Log.v("Time", "----------->" + time);
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
-
-
-
             }
 
             @Override
             public void onClose(int i, String s, boolean b) {
-                Log.v("Websocket", "Closed " + s);
-              //  connectWebSocket();
+              //  Log.v("Websocket", "Closed " + s);
+                connectWebSocket();
 
 
             }
@@ -284,20 +154,15 @@ public class MyService extends Service {
             @Override
             public void onError(Exception e) {
                 Log.v("Websocket", "Error " + e.getMessage());
-                connectWebSocket();
+                //connectWebSocket();
             }
         };
         mWebSocketClient.connect();
     }
-
-
-
-
-
     @Override
     public void onDestroy() {
         Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
-        mWebSocketClient.close();
+     //   mWebSocketClient.close();
 
     }
 

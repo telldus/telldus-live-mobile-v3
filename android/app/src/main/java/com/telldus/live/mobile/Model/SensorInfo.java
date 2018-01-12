@@ -9,13 +9,18 @@ public class SensorInfo {
     String WidgetName;
     String WidgetType;
     int DeviceID;
+    String sensorValue;
+    String sensorUpdate;
 
-    public SensorInfo(int widgetID, String widgetName, String widgetType, int deviceID) {
+    public SensorInfo(int widgetID, String widgetName, String widgetType, int deviceID, String sensorValue, String sensorUpdate) {
         this.widgetID = widgetID;
         WidgetName = widgetName;
         WidgetType = widgetType;
         DeviceID = deviceID;
+        this.sensorValue = sensorValue;
+        this.sensorUpdate = sensorUpdate;
     }
+
     public SensorInfo()
     {
 
@@ -51,5 +56,21 @@ public class SensorInfo {
 
     public void setDeviceID(int deviceID) {
         DeviceID = deviceID;
+    }
+
+    public String getSensorValue() {
+        return sensorValue;
+    }
+
+    public void setSensorValue(String sensorValue) {
+        this.sensorValue = sensorValue;
+    }
+
+    public String getSensorUpdate() {
+        return sensorUpdate;
+    }
+
+    public void setSensorUpdate(String sensorUpdate) {
+        this.sensorUpdate = sensorUpdate;
     }
 }
