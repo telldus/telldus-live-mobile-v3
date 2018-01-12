@@ -25,16 +25,16 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
-import {View, StyleSheet, Dimensions, FloatingButton} from 'BaseComponents';
+import {View, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
 import {getGatewayInfo} from 'Actions';
 
-let deviceWidth = Dimensions.get('window').width;
-
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	label: {
 		id: 'addNewLocation.locationName.label',
@@ -59,6 +59,10 @@ type Props = {
 	onDidMount: Function,
 	actions: Object,
 	getGatewayInfo: (uniqueParam: Object, extras: string) => Promise<any>;
+	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
+	dialogueOpen: boolean,
 }
 
 class LocationName extends View {
@@ -75,11 +79,16 @@ class LocationName extends View {
 		this.state = {
 			locationName: '',
 			isKeyboardShown: false,
+			isLoading: false,
 		};
 
-		this.h1 = `2. ${props.intl.formatMessage(messages.label)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
-		this.label = props.intl.formatMessage(messages.label);
+		let { formatMessage } = props.intl;
+
+		this.h1 = `2. ${formatMessage(messages.label)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+		this.label = formatMessage(messages.label);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.onLocationNameChange = this.onLocationNameChange.bind(this);
 		this.onNameSubmit = this.onNameSubmit.bind(this);
@@ -93,6 +102,19 @@ class LocationName extends View {
 		this.props.onDidMount(h1, h2);
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'LocationName' && this.props.currentScreen !== 'LocationName';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	keyboardDidShow() {
@@ -127,6 +149,9 @@ class LocationName extends View {
 			Keyboard.dismiss();
 		}
 		if (this.state.locationName !== '') {
+			this.setState({
+				isLoading: true,
+			});
 			let clientInfo = this.props.navigation.state.params.clientInfo;
 			clientInfo.name = this.state.locationName;
 			if (clientInfo.timezone) {
@@ -142,6 +167,9 @@ class LocationName extends View {
 						} else {
 							this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
 						}
+						this.setState({
+							isLoading: false,
+						});
 					});
 			}
 		} else {
@@ -151,49 +179,60 @@ class LocationName extends View {
 	}
 
 	render() {
+		let { appLayout, dialogueOpen, currentScreen } = this.props;
+		const styles = this.getStyle(appLayout);
+
+		let importantForAccessibility = !dialogueOpen && currentScreen === 'LocationName' ? 'no' : 'no-hide-descendants';
+
 		return (
-			<View style={{flex: 1}}>
-				<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{justifyContent: 'center'}}>
-					<LabelBox
-						containerStyle={{marginBottom: 10}}
-						label={this.label}
-						showIcon={true}>
-						<TextInput
-							style={styles.textField}
-							onChangeText={this.onLocationNameChange}
-							autoCapitalize="none"
-							autoCorrect={false}
-							autoFocus={true}
-							underlineColorAndroid="#e26901"
-							defaultValue={this.state.locationName}
-						/>
-					</LabelBox>
-					<FloatingButton
-						buttonStyle={styles.buttonStyle}
-						onPress={this.onNameSubmit}
-						imageSource={require('../TabViews/img/right-arrow-key.png')}
-						showThrobber={false}
+			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
+				<LabelBox
+					containerStyle={{marginBottom: 10}}
+					label={this.label}
+					showIcon={true}
+					appLayout={appLayout}>
+					<TextInput
+						style={styles.textField}
+						onChangeText={this.onLocationNameChange}
+						autoCapitalize="none"
+						autoCorrect={false}
+						autoFocus={true}
+						underlineColorAndroid="#e26901"
+						defaultValue={this.state.locationName}
 					/>
-				</KeyboardAvoidingView>
+				</LabelBox>
+				<FloatingButton
+					buttonStyle={styles.buttonStyle}
+					onPress={this.onNameSubmit}
+					imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+					showThrobber={this.state.isLoading}
+				/>
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	textField: {
-		height: 50,
-		width: deviceWidth - 40,
-		paddingLeft: 35,
-		color: '#A59F9A',
-		fontSize: 20,
-	},
-	buttonStyle: {
-		right: deviceWidth * 0.053333333,
-		elevation: 10,
-		shadowOpacity: 0.99,
-	},
-});
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const padding = width * 0.068;
+
+		return {
+			textField: {
+				height: 50,
+				width: width - padding,
+				paddingLeft: 35,
+				color: '#A59F9A',
+				fontSize: 20,
+			},
+			buttonStyle: {
+				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
+				elevation: 10,
+				shadowOpacity: 0.99,
+			},
+		};
+	}
+}
 
 function mapDispatchToProps(dispatch) {
 	return {

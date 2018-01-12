@@ -22,14 +22,160 @@
 // @flow
 
 'use strict';
-import { View } from 'BaseComponents';
+
+import React from 'react';
+import { StackNavigator } from 'react-navigation';
+import { connect } from 'react-redux';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
+
+import { View, Image, Dimensions } from 'BaseComponents';
+import AddLocationContainer from './AddLocationContainer';
+
+import LocationDetected from './LocationDetected';
+import LocationActivationManual from './LocationActivationManual';
+import LocationName from './LocationName';
+import TimeZoneContinent from './TimeZoneContinent';
+import TimeZoneCity from './TimeZoneCity';
+import TimeZone from './TimeZone';
+import Success from './Success';
+import Position from './Position';
+
+import { getRouteName, hasStatusBar } from 'Lib';
+
+import Theme from 'Theme';
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
+
+const renderAddLocationContainer = (navigation, screenProps) => Component => (
+	<AddLocationContainer navigation={navigation} screenProps={screenProps}>
+		<Component/>
+	</AddLocationContainer>
+);
+
+
+const RouteConfigs = {
+	LocationDetected: {
+		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(LocationDetected),
+	},
+	LocationActivationManual: {
+		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(LocationActivationManual),
+	},
+	LocationName: {
+		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(LocationName),
+	},
+	TimeZoneContinent: {
+		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(TimeZoneContinent),
+	},
+	TimeZoneCity: {
+		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(TimeZoneCity),
+	},
+	TimeZone: {
+		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(TimeZone),
+	},
+	Position: {
+		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(Position),
+	},
+	Success: {
+		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(Success),
+	},
+};
+
+const StackNavigatorConfig = {
+	initialRouteName: 'LocationDetected',
+	headerMode: 'float',
+	initialRouteParams: {renderHeader: false},
+	navigationOptions: ({navigation}) => {
+		let {state} = navigation;
+		let renderStackHeader = state.routeName !== 'LocationDetected';
+		if (renderStackHeader) {
+			return {
+				headerStyle: {
+					marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
+					backgroundColor: Theme.Core.brandPrimary,
+					height: deviceHeight * 0.1,
+				},
+				headerTintColor: '#ffffff',
+				headerTitle: renderHeader(),
+			};
+		}
+		return {
+			header: null,
+		};
+	},
+};
+
+const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
+
+function renderHeader(): Object {
+	return (
+		<Image style={{ height: 110, width: 130, marginHorizontal: deviceWidth * 0.18 }} resizeMode={'contain'} source={require('../TabViews/img/telldus-logo.png')}/>
+	);
+}
+
+type Props = {
+	navigation: Object,
+	appLayout: Object,
+};
+
+type State = {
+	currentScreen: string,
+};
+
 
 class AddLocationNavigator extends View {
+
+	props: Props;
+	state: State;
+
+	onNavigationStateChange: () => void;
+
+	constructor(props: Props) {
+		super(props);
+
+		this.state = {
+			currentScreen: 'LocationDetected',
+		};
+
+		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+	}
+
+	onNavigationStateChange(prevState: Object, currentState: Object) {
+		const currentScreen = getRouteName(currentState);
+		if (this.state.currentScreen !== currentScreen) {
+			this.setState({
+				currentScreen,
+			});
+			let {navigation} = this.props;
+			if (currentScreen === 'LocationDetected' && !navigation.state.params.renderRootHeader) {
+				navigation.setParams({renderRootHeader: true});
+			}
+			if (currentScreen !== 'LocationDetected' && navigation.state.params.renderRootHeader) {
+				navigation.setParams({renderRootHeader: false});
+			}
+		}
+	}
+
+
 	render() {
+
+		let { currentScreen } = this.state;
+		let { appLayout, navigation } = this.props;
+		let screenProps = {
+			currentScreen,
+			rootNavigator: navigation,
+			appLayout: appLayout,
+		};
+
 		return (
-			null
+			<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
 		);
 	}
 }
 
-module.exports = AddLocationNavigator;
+function mapStateToProps(state, ownProps) {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(AddLocationNavigator);

@@ -24,18 +24,18 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { TextInput, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
+import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View, StyleSheet, Dimensions, FloatingButton } from 'BaseComponents';
+import { View, FloatingButton } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
 import {activateGateway, showModal} from 'Actions';
 
-const deviceWidth = Dimensions.get('window').width;
-
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	label: {
 		id: 'addNewLocation.position.label',
@@ -61,6 +61,9 @@ type Props = {
 	navigation: Object,
 	activateGateway: (Object) => Promise<any>;
 	dispatch: Function,
+	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 };
 
 type State = {
@@ -69,6 +72,7 @@ type State = {
 	coordinate: Object,
 	latitudeDelta: number,
 	longitudeDelta: number,
+	isLoading: boolean,
 }
 
 class Position extends View {
@@ -103,11 +107,16 @@ class Position extends View {
 			},
 			latitudeDelta: 0.24442,
 			longitudeDelta: 0.24442,
+			isLoading: false,
 		};
 
-		this.h1 = `4. ${props.intl.formatMessage(messages.headerOne)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
-		this.label = props.intl.formatMessage(messages.label);
+		let { formatMessage } = props.intl;
+
+		this.h1 = `4. ${formatMessage(messages.headerOne)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+		this.label = formatMessage(messages.label);
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.infoButton = {
 			onPress: this.onInfoPress.bind(this),
@@ -128,6 +137,19 @@ class Position extends View {
 		this.props.onDidMount(h1, h2, infoButton);
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'Position' && this.props.currentScreen !== 'Position';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	keyboardDidShow() {
@@ -162,6 +184,9 @@ class Position extends View {
 		if (this.state.isKeyboardShown) {
 			Keyboard.dismiss();
 		}
+		this.setState({
+			isLoading: true,
+		});
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.cordinates = { ...this.state.coordinate };
 		this.props.activateGateway(clientInfo)
@@ -169,6 +194,9 @@ class Position extends View {
 				if (response) {
 					this.props.navigation.navigate('Success', {clientInfo});
 				}
+				this.setState({
+					isLoading: false,
+				});
 			});
 	}
 
@@ -213,11 +241,13 @@ class Position extends View {
 	onDragEnd(event: Object) {
 		let { coordinate } = event.nativeEvent;
 		let { latitudeDelta, longitudeDelta } = this.state;
+
 		let region = new MapView.AnimatedRegion({
 			...coordinate,
 			latitudeDelta,
 			longitudeDelta,
 		});
+
 		this.setState({
 			region,
 			coordinate,
@@ -227,26 +257,27 @@ class Position extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
 
 		return (
 			<View style={styles.container}>
 				<View style={styles.body}>
-					<KeyboardAvoidingView behavior="padding" contentContainerStyle={{justifyContent: 'center'}}>
-						<LabelBox
-							label={this.label}
-							showIcon={true}>
-							<TextInput
-								style={styles.address}
-								onChangeText={this.onAddressChange}
-								onEndEditing={this.onEndEditing}
-								autoCapitalize="none"
-								autoCorrect={false}
-								autoFocus={true}
-								underlineColorAndroid="#e26901"
-								value={this.state.address}/>
-						</LabelBox>
-					</KeyboardAvoidingView>
-					<View style={styles.mapViewCover}>
+					<LabelBox
+						label={this.label}
+						showIcon={true}
+						appLayout={appLayout}>
+						<TextInput
+							style={styles.address}
+							onChangeText={this.onAddressChange}
+							onEndEditing={this.onEndEditing}
+							autoCapitalize="none"
+							autoCorrect={false}
+							autoFocus={true}
+							underlineColorAndroid="#e26901"
+							value={this.state.address}/>
+					</LabelBox>
+					<View style={styles.mapViewCover} accessible={false} importantForAccessibility="no-hide-descendants">
 						<MapView.Animated
 							style={styles.map}
 							ref={this._refs}
@@ -257,68 +288,74 @@ class Position extends View {
 								coordinate={this.state.coordinate}
 								onDragEnd={this.onDragEnd}/>
 						</MapView.Animated>
-						<FloatingButton
-							buttonStyle={styles.buttonStyle}
-							onPress={this.onSubmit}
-							imageSource={require('../TabViews/img/right-arrow-key.png')}
-							showThrobber={false}
-						/>
 					</View>
+					<FloatingButton
+						buttonStyle={styles.buttonStyle}
+						onPress={this.onSubmit}
+						imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+						showThrobber={this.state.isLoading}
+					/>
 				</View>
 			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	container: {
-	  flex: 1,
-	},
-	body: {
-		flex: 1,
-	},
-	mapViewCover: {
-		flex: 1,
-		marginTop: 10,
-		borderRadius: 4,
-		overflow: 'hidden',
-	},
-	map: {
-	  flex: 1,
-	  overflow: 'hidden',
-	},
-	locationIcon: {
-	},
-	address: {
-		height: 50,
-		width: deviceWidth - 40,
-		paddingLeft: 35,
-		color: '#A59F9A',
-		fontSize: 20,
-	},
-	hContainer: {
-		position: 'absolute',
-		right: deviceWidth * 0.124,
-		top: deviceWidth * 0.088,
-		flex: 1,
-		alignItems: 'flex-end',
-	},
-	h: {
-		color: '#fff',
-		backgroundColor: 'transparent',
-	},
-	h1: {
-		fontSize: deviceWidth * 0.085333333,
-	},
-	h2: {
-		fontSize: deviceWidth * 0.053333333,
-	},
-	buttonStyle: {
-		right: deviceWidth * 0.053333333,
-		elevation: 10,
-		shadowOpacity: 0.99,
-	},
-});
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const padding = width * 0.068;
+
+		return {
+			container: {
+				flex: 1,
+			  },
+			  body: {
+				  flex: 1,
+			  },
+			  mapViewCover: {
+				  flex: 1,
+				  marginTop: 10,
+				  borderRadius: 4,
+				  overflow: 'hidden',
+			  },
+			  map: {
+				flex: 1,
+				overflow: 'hidden',
+			  },
+			  address: {
+				  height: 50,
+				  width: width - padding,
+				  paddingLeft: 35,
+				  color: '#A59F9A',
+				  fontSize: Math.floor(deviceWidth * 0.06),
+			  },
+			  hContainer: {
+				  position: 'absolute',
+				  right: deviceWidth * 0.124,
+				  top: deviceWidth * 0.088,
+				  flex: 1,
+				  alignItems: 'flex-end',
+			  },
+			  h: {
+				  color: '#fff',
+				  backgroundColor: 'transparent',
+			  },
+			  h1: {
+				  fontSize: deviceWidth * 0.085333333,
+			  },
+			  h2: {
+				  fontSize: deviceWidth * 0.053333333,
+			  },
+			  buttonStyle: {
+				  right: deviceWidth * 0.053333333,
+				  elevation: 10,
+				  shadowOpacity: 0.99,
+			  },
+		};
+	}
+}
 
 function mapDispatchToProps(dispatch): Object {
 	return {

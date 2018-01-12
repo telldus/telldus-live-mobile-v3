@@ -29,6 +29,8 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+import i18n from '../../../Translations/common';
+import { getLabelDevice } from 'Accessibility';
 
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
@@ -37,6 +39,7 @@ type Props = {
 	tileWidth: number,
 	style: Object,
 	command: number,
+	intl: Object,
 };
 
 class BellDashboardTile extends View {
@@ -48,6 +51,10 @@ class BellDashboardTile extends View {
 		super(props);
 
 		this.onBell = this.onBell.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.labelBellButton = `${formatMessage(i18n.bell)} ${formatMessage(i18n.button)}`;
 	}
 
 	onBell() {
@@ -56,16 +63,20 @@ class BellDashboardTile extends View {
 	}
 
 	render() {
-		const { item, tileWidth } = this.props;
-		let {methodRequested} = this.props.item;
+		const { item, tileWidth, intl } = this.props;
+		let { methodRequested, name } = this.props.item;
+
+		const accessibilityLabelButton = `${this.labelBellButton}, ${name}`;
+		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
 		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
-				name={item.name}
+				name={name}
 				type={'device'}
 				tileWidth={tileWidth}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.props.style, {
 						width: tileWidth,
@@ -74,7 +85,8 @@ class BellDashboardTile extends View {
 				}>
 				<TouchableOpacity
 					onPress={this.onBell}
-					style={styles.container}>
+					style={styles.container}
+					accessibilityLabel={accessibilityLabelButton}>
 					<View style={styles.body}>
 					  <Icon name="bell" size={44} color="orange" />
 					</View>

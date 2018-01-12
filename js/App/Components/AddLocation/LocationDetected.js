@@ -25,16 +25,13 @@
 
 import React from 'react';
 import {ScrollView} from 'react-native';
-import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View, StyleSheet, Dimensions, TouchableButton } from 'BaseComponents';
+import { View, TouchableButton } from 'BaseComponents';
 import { Clients } from 'AddNewLocation_SubViews';
+
 import i18n from '../../Translations/common';
-
-let deviceWidth = Dimensions.get('window').width;
-let deviceHeight = Dimensions.get('window').height;
-
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.locationDetected.headerOne',
@@ -53,6 +50,9 @@ type Props = {
 	intl: intlShape.isRequired,
 	rootNavigator: Object,
 	onDidMount: Function,
+	appLayout: Object,
+	screenReaderEnabled: boolean,
+	currentScreen: string,
 }
 
 class LocationDetected extends View {
@@ -64,9 +64,13 @@ class LocationDetected extends View {
 	constructor(props: Props) {
 		super(props);
 
-		this.h1 = `1. ${props.intl.formatMessage(messages.headerOne)}`;
-		this.h2 = props.intl.formatMessage(messages.headerTwo);
-		this.buttonLabel = props.intl.formatMessage(i18n.manualActivation).toUpperCase();
+		let { formatMessage } = props.intl;
+
+		this.h1 = `1. ${formatMessage(messages.headerOne)}`;
+		this.h2 = formatMessage(messages.headerTwo);
+		this.buttonLabel = formatMessage(i18n.manualActivation).toUpperCase();
+
+		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.onActivateAuto = this.onActivateAuto.bind(this);
 		this.onActivateManual = this.onActivateManual.bind(this);
@@ -75,13 +79,26 @@ class LocationDetected extends View {
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
+
+		let { screenReaderEnabled } = this.props;
+		if (screenReaderEnabled) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { screenReaderEnabled, currentScreen } = nextProps;
+		let shouldAnnounce = currentScreen === 'LocationDetected' && this.props.currentScreen !== 'LocationDetected';
+		if (screenReaderEnabled && shouldAnnounce) {
+			announceForAccessibility(this.labelMessageToAnnounce);
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.currentScreen === 'LocationDetected';
 	}
 
-	onActivateAuto(client) {
+	onActivateAuto(client: Object) {
 		let clientInfo = {
 			clientId: client.id,
 			uuid: client.uuid,
@@ -94,19 +111,21 @@ class LocationDetected extends View {
 		this.props.navigation.navigate('LocationActivationManual');
 	}
 
-	renderClient(client, i) {
+	renderClient(client: Object, i: number, appLayout: Object) {
 		return (
-			<Clients key={i} client={client} onPress={this.onActivateAuto} intl={this.props.intl}/>
+			<Clients key={i} client={client} appLayout={appLayout} onPress={this.onActivateAuto} intl={this.props.intl}/>
 		);
 	}
 
 	render() {
 		let items = [];
-		let {rootNavigator} = this.props;
+		let { rootNavigator, appLayout } = this.props;
+
+		const styles = this.getStyle(appLayout);
 
 		if (rootNavigator.state.params.clients) {
 			items = rootNavigator.state.params.clients.map((client, i) => {
-				return this.renderClient(client, i);
+				return this.renderClient(client, i, appLayout);
 			});
 		}
 
@@ -118,37 +137,29 @@ class LocationDetected extends View {
 						style={styles.button}
 						onPress={this.onActivateManual}
 						text={this.buttonLabel}
+						accessible={true}
 					/>
 				</ScrollView>
 			</View>
 		);
 	}
+
+	getStyle(appLayout: Object): Object {
+
+		return {
+			container: {
+				flex: 1,
+			},
+			itemsContainer: {
+				justifyContent: 'center',
+			},
+			button: {
+				marginVertical: 20,
+				alignSelf: 'center',
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	itemsContainer: {
-		justifyContent: 'center',
-	},
-	button: {
-		marginVertical: 20,
-		alignSelf: 'center',
-	},
-	arrow: {
-		position: 'absolute',
-		top: deviceHeight * 0.12,
-		left: deviceWidth * 0.8,
-		elevation: 3,
-	},
-});
-
-function mapStateToProps(store, ownProps) {
-	return {
-		store,
-	};
-}
-
-export default connect(mapStateToProps, null)(LocationDetected);
+export default LocationDetected;
 

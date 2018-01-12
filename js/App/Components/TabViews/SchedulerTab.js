@@ -29,7 +29,7 @@ import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 import Platform from 'Platform';
 
-import { List, ListDataSource, Text, View, StyleSheet } from 'BaseComponents';
+import { List, ListDataSource, Text, View } from 'BaseComponents';
 import { JobRow } from 'TabViews_SubViews';
 import { getJobs } from 'Actions';
 import Theme from 'Theme';
@@ -37,9 +37,6 @@ import Theme from 'Theme';
 import moment from 'moment-timezone';
 
 import { parseJobsForListView } from 'Reducers_Jobs';
-import {
-	getWindowDimensions,
-} from 'Lib';
 
 const messages = defineMessages({
 	friday: {
@@ -92,6 +89,7 @@ type Props = {
 	devices: Object,
 	dispatch: Function,
 	screenProps: Object,
+	appLayout: Object,
 };
 
 type State = {
@@ -107,6 +105,7 @@ class SchedulerTab extends View {
 
 	renderRow: (Object) => Object;
 	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	getSectionName: (number) => string;
 	onRefresh: () => void;
 
 	constructor(props: Props) {
@@ -123,6 +122,7 @@ class SchedulerTab extends View {
 
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
+		this.getSectionName = this.getSectionName.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 	}
 
@@ -152,14 +152,12 @@ class SchedulerTab extends View {
 
 	render() {
 
-		let containerStyle = null;
-		if (Platform.OS === 'android') {
-			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				styles.conatiner : styles.containerLand;
-		}
+		let { appLayout } = this.props;
+
+		let style = this.getStyles(appLayout);
 
 		return (
-			<View style={containerStyle}>
+			<View style={style.container}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
@@ -170,8 +168,7 @@ class SchedulerTab extends View {
 		);
 	}
 
-	renderSectionHeader(sectionData, sectionId) {
-		// TODO: move to own Component
+	getSectionName(sectionId: number): string {
 		const {formatMessage} = this.props.screenProps.intl;
 		const todayInWeek = parseInt(moment().format('d'), 10);
 		const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
@@ -187,6 +184,12 @@ class SchedulerTab extends View {
 		} else {
 			sectionName = formatMessage(daysInWeek[absoluteDayInWeek]);
 		}
+		return sectionName;
+	}
+
+	renderSectionHeader(sectionData, sectionId) {
+		// TODO: move to own Component
+		let sectionName = this.getSectionName(sectionId);
 
 		return (
 			<View style={Theme.Styles.sectionHeader}>
@@ -197,10 +200,26 @@ class SchedulerTab extends View {
 		);
 	}
 
-	renderRow(props) {
+	renderRow(props, sectionId) {
+		let { screenProps } = this.props;
+		let sectionName = this.getSectionName(sectionId);
+
 		return (
-			<JobRow {...props} />
+			<JobRow {...props} intl={screenProps.intl} sectionName={sectionName}/>
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			container: {
+				flex: 1,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+			},
+		};
 	}
 }
 
@@ -212,16 +231,6 @@ SchedulerTab.navigationOptions = ({navigation, screenProps}) => ({
 SchedulerTab.propTypes = {
 	rowsAndSections: PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-	conatiner: {
-		flex: 1,
-	},
-	containerLand: {
-		flex: 1,
-		marginLeft: getWindowDimensions().height * 0.08,
-	},
-});
 
 const getRowsAndSections = createSelector(
 	[
@@ -242,6 +251,7 @@ function mapStateToProps(store) {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		devices: store.devices,
+		appLayout: store.App.layout,
 	};
 }
 

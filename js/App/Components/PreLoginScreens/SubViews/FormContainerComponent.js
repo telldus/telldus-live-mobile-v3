@@ -23,12 +23,10 @@
 
 import React from 'react';
 import typeof { Children as Children} from 'react';
-import { KeyboardAvoidingView, ScrollView, Dimensions } from 'react-native';
+import { KeyboardAvoidingView, ScrollView } from 'react-native';
 
 import { BackgroundImage, View, Image, H1 } from 'BaseComponents';
 import StyleSheet from 'StyleSheet';
-
-const deviceWidth = Dimensions.get('window').width;
 
 type Props = {
 	headerText: string,
@@ -70,7 +68,6 @@ export default FormContainerComponent;
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#00000099',
-		width: deviceWidth,
 		padding: 10,
 		flexDirection: 'column',
 		justifyContent: 'center',

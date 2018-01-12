@@ -28,20 +28,28 @@ export type State = {
 	errorGlobalShow: boolean,
 	active: boolean,
 	orientation: string,
+	layout: Object,
+	screenReaderEnabled: boolean,
 };
 
 const initialState = {
-	errorGlobalMessage: 'Action Currently Unavailable',
+	errorGlobalMessage: null,
 	errorGlobalShow: false,
 	active: true,
 	orientation: '',
+	layout: {},
+	screenReaderEnabled: false,
 };
 
 export default function reduceApp(state: State = initialState, action: Action): State {
 	if (action.type === 'GLOBAL_ERROR_SHOW') {
+		let { customMessage } = action.payload;
+		let errorGlobalMessage = customMessage ? customMessage : initialState.errorGlobalMessage;
+
 		return {
 			...state,
 			errorGlobalShow: true,
+			errorGlobalMessage,
 		};
 	}
 	if (action.type === 'GLOBAL_ERROR_HIDE') {
@@ -66,6 +74,18 @@ export default function reduceApp(state: State = initialState, action: Action): 
 		return {
 			...state,
 			orientation: action.value,
+		};
+	}
+	if (action.type === 'APP_LAYOUT') {
+		return {
+			...state,
+			layout: action.payload,
+		};
+	}
+	if (action.type === 'ACCESSIBILITY_INFO') {
+		return {
+			...state,
+			screenReaderEnabled: action.payload,
 		};
 	}
 	return state;

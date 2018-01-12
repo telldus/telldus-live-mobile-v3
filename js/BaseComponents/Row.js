@@ -24,9 +24,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 import View from './View';
-import { getDeviceWidth } from 'Lib';
 import Theme from 'Theme';
+import Platform from 'Platform';
 
 type DefaultProps = {
 };
@@ -38,9 +39,10 @@ type Props = {
 	layout?: 'row' | 'column',
 	style?: any,
 	containerStyle?: any,
+	appLayout: Object,
 };
 
-export default class Row extends Component<Props, null> {
+class Row extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {
@@ -72,6 +74,7 @@ export default class Row extends Component<Props, null> {
 
 		return (
 			<TouchableOpacity
+				accessible={false}
 				onPress={this.onPress}
 				style={[defaultStyle.container, containerStyle]}
 				outlineProvider="bounds"
@@ -87,7 +90,7 @@ export default class Row extends Component<Props, null> {
 	_getDefaultStyle = (): Object => {
 		const { borderRadiusRow } = Theme.Core;
 		const { layout } = this.props;
-		const deviceWidth = getDeviceWidth();
+		const deviceWidth = this.props.appLayout.width;
 
 		const backgroundColor = '#fff';
 
@@ -105,10 +108,19 @@ export default class Row extends Component<Props, null> {
 				flex: 1,
 				flexDirection: layout,
 				alignItems: layout === 'row' ? 'center' : 'flex-start',
-				overflow: 'hidden',
+				overflow: Platform.OS === 'android' ? 'visible' : 'hidden',
 				borderRadius: borderRadiusRow,
 			},
 		};
 	};
 
 }
+
+function mapStateToProps(state: Object, ownProps: Object): Object {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(Row);
+

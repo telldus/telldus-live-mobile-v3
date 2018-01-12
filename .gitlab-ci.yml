@@ -27,7 +27,7 @@ jest:
   tags:
     - docker
   script:
-    - echo "module.exports = {}" > config.local.js
+    - echo "module.exports = {localStorageKey:'tellduslive'}" > config.local.js
     - npm install --quiet
     - npm test
 

@@ -22,12 +22,16 @@
 'use strict';
 
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 
 import { Container, ListItem, Text, View, Icon } from 'BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
+import { getLabelDevice } from 'Accessibility';
+
+import i18n from '../../../Translations/common';
 
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
@@ -44,6 +48,9 @@ type Props = {
 	onSettingsSelected: (Object) => void,
 	device: Object,
 	setScrollEnabled: boolean,
+	intl: Object,
+	currentTab: string,
+	currentScreen: string,
 };
 
 class DeviceRow extends View {
@@ -53,12 +60,18 @@ class DeviceRow extends View {
 	constructor(props: Props) {
 		super(props);
 
+		let { formatMessage } = props.intl;
+
+		this.labelButton = formatMessage(i18n.button);
+		this.labelSettings = formatMessage(i18n.settingsHeader);
+		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
+
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 	}
 
 	render() {
 		let button = null;
-		const { device } = this.props;
+		const { device, intl, currentTab, currentScreen } = this.props;
 		const {
 			TURNON,
 			TURNOFF,
@@ -73,29 +86,41 @@ class DeviceRow extends View {
 			button = <BellButton
 				device={device}
 				style={styles.bell}
+				intl={intl}
 			/>;
 		} else if (UP || DOWN || STOP) {
 			button = <NavigationalButton
 				device={device}
 				style={styles.navigation}
+				intl={intl}
 			/>;
 		} else if (DIM) {
 			button = <DimmerButton
 				device={device}
 				setScrollEnabled={this.props.setScrollEnabled}
+				intl={intl}
 			/>;
 		} else if (TURNON || TURNOFF) {
 			button = <ToggleButton
 				device={device}
+				intl={intl}
 			/>;
 		} else {
 			button = <ToggleButton
 				device={device}
+				intl={intl}
 			/>;
 		}
+		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
+		let accessibilityLabel = getLabelDevice(intl.formatMessage, device);
+		let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 
 		return (
-			<ListItem style={Theme.Styles.rowFront}>
+			<ListItem
+				style={Theme.Styles.rowFront}
+				accessible={accessible}
+				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+				accessibilityLabel={accessible ? accessibilityLabel : ''}>
 				<Container style={styles.container}>
 					{button}
 					<View style={styles.name}>
@@ -103,14 +128,16 @@ class DeviceRow extends View {
 							{device.name ? device.name : '(no name)'}
 						</Text>
 					</View>
-					<View style={styles.gear}>
+					<TouchableOpacity
+						style={styles.gear}
+						accessibilityLabel={accessibilityLabelGearButton}
+						onPress={this.onSettingsSelected}>
 						<Icon
 							name="gear"
 							size={26}
 							color="#bbbbbb"
-							onPress={this.onSettingsSelected}
 						/>
-					</View>
+					</TouchableOpacity>
 				</Container>
 			</ListItem>
 		);

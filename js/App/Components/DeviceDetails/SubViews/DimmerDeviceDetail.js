@@ -34,6 +34,9 @@ import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import { FormattedMessage, RoundedCornerShadowView, Text, View } from 'BaseComponents';
 import { OnButton, OffButton } from 'TabViews_SubViews';
 import i18n from '../../../Translations/common';
+import {
+	toDimmerValue,
+} from 'Lib';
 
 type Props = {
 	commandON: number,
@@ -46,21 +49,18 @@ type Props = {
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 	onLearn: number => void,
-	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
+	intl: Object,
 };
 
 type State = {
 	dimmerValue: number,
 };
 
-function toDimmerValue(sliderValue) {
-	return Math.round(sliderValue * 255 / 100.0);
-}
-
-const ToggleButton = ({ device }) => (
+const ToggleButton = ({ device, intl }) => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
-		<OffButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} />
-		<OnButton id={device.id} isInState={device.isInState} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} />
+		<OffButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} intl={intl}/>
+		<OnButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} intl={intl}/>
 	</RoundedCornerShadowView>
 );
 class DimmerDeviceDetailModal extends View {
@@ -137,14 +137,14 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	render() {
-		const { device } = this.props;
+		const { device, intl } = this.props;
 		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
 
 		let toggleButton = null;
 		let slider = null;
 
 		if (TURNON || TURNOFF) {
-			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff}/>;
+			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} intl={intl}/>;
 		}
 
 		if (DIM) {
@@ -159,7 +159,8 @@ class DimmerDeviceDetailModal extends View {
 			                 onValueChange={this.onValueChange}
 							 onSlidingStart={this.onSlidingStart}
 			                 onSlidingComplete={this.onSlidingComplete}
-			                 animateTransitions={true}/>;
+			                 animateTransitions={true}
+							 intl={intl}/>;
 		}
 
 		return (

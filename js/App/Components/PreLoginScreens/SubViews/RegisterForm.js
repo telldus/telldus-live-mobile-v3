@@ -71,6 +71,8 @@ type Props = {
 	showModal: boolean,
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
+	appLayout: Object,
+	dialogueOpen: boolean,
 }
 
 class RegisterForm extends View {
@@ -184,12 +186,16 @@ class RegisterForm extends View {
 	}
 
 	render() {
+		let { appLayout, dialogueOpen } = this.props;
+		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
+		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
+
 		return (
-			<View>
+			<View importantForAccessibility={importantForAccessibility}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onFirstNameChange}
 						placeholder={this.props.intl.formatMessage(i18n.firstName)}
 						autoCapitalize="none"
@@ -203,7 +209,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onLastNameChange}
 						placeholder={this.props.intl.formatMessage(i18n.lastName)}
 						autoCapitalize="none"
@@ -217,7 +223,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onEmailChange}
 						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 						keyboardType="email-address"
@@ -232,7 +238,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onConfirmEmailChange}
 						placeholder={this.props.intl.formatMessage(i18n.confirmEmailAddress)}
 						keyboardType="email-address"
@@ -245,10 +251,10 @@ class RegisterForm extends View {
 					/>
 				</View>
 				<TouchableButton
-					style={Theme.Styles.submitButton}
 					onPress={this.props.showModal ? null : this.onFormSubmit}
 					text={this.state.isLoading ? i18n.registering : i18n.register}
 					postScript={this.state.isLoading ? '...' : null}
+					accessible={buttonAccessible}
 				/>
 			</View>
 		);

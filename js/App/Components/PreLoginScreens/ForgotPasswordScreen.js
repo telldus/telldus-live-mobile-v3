@@ -22,7 +22,8 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { TouchableOpacity } from 'react-native';
 
 import { FormattedMessage, View } from 'BaseComponents';
 import {FormContainerComponent, ForgotPasswordForm} from 'PreLoginScreen_SubViews';
@@ -41,6 +42,7 @@ const messages = defineMessages({
 type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
+	appLayout: Object,
 }
 
 class ForgotPasswordScreen extends View {
@@ -57,6 +59,15 @@ class ForgotPasswordScreen extends View {
 		};
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.backToLogin = formatMessage(messages.backToLogin);
+
+		this.labelLink = formatMessage(i18n.labelLink);
+		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+
+		this.labelBackToLogin = `${this.labelLink} ${this.backToLogin} ${this.labelButtondefaultDescription}`;
 	}
 
 	goBackToLogin() {
@@ -64,23 +75,41 @@ class ForgotPasswordScreen extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		return (
-			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)}>
-				<ForgotPasswordForm />
+			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)} formContainerStyle={styles.formContainer}>
+				<ForgotPasswordForm appLayout={appLayout}/>
 				<View style={{ height: 10 }}/>
-				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
+				<TouchableOpacity style={{height: 25}}
+					onPress={this.goBackToLogin}
+					accessibilityLabel={this.labelBackToLogin}>
 					<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
 				</TouchableOpacity>
 			</FormContainerComponent>
 		);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const width = appLayout.width;
+
+		return {
+			accountExist: {
+				marginTop: 10,
+				color: '#bbb',
+			},
+			formContainer: {
+				width: width,
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	accountExist: {
-		marginTop: 10,
-		color: '#bbb',
-	},
-});
+function mapStateToProps(store) {
+	return {
+		appLayout: store.App.layout,
+	};
+}
 
-export default injectIntl(ForgotPasswordScreen);
+export default connect(mapStateToProps, null)(injectIntl(ForgotPasswordScreen));

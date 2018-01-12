@@ -31,27 +31,11 @@ import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import VerticalSlider from './VerticalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
-
-function getDimmerValue(value: number, isInState: string): number {
-	let newValue = value || 0;
-	if (isInState === 'TURNON') {
-		return 255;
-	}
-	if (isInState === 'TURNOFF') {
-		return 0;
-	}
-
-	newValue = parseInt(newValue, 10);
-	return newValue;
-}
-
-function toDimmerValue(sliderValue: number): number {
-	return Math.round(sliderValue * 255 / 100.0);
-}
-
-function toSliderValue(dimmerValue: number): number {
-	return Math.round(dimmerValue * 100.0 / 255);
-}
+import {
+	getDimmerValue,
+	toDimmerValue,
+	toSliderValue,
+} from 'Lib';
 
 type Props = {
 	device: Object,
@@ -65,6 +49,7 @@ type Props = {
 	setScrollEnabled: boolean,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (number, number) => void,
+	intl: Object,
 };
 
 type State = {
@@ -182,24 +167,29 @@ class DimmerButton extends View {
 	}
 
 	render() {
-		const { device } = this.props;
-		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
+		const { device, intl } = this.props;
+		const { isInState, name, supportedMethods, methodRequested } = device;
+		const { TURNON, TURNOFF, DIM } = supportedMethods;
 		const onButton = (
 			<DimmerOnButton
 				ref={'onButton'}
 				style={styles.turnOn}
-				isInState={device.isInState}
+				isInState={isInState}
+				name={name}
 				enabled={!!TURNON}
-				methodRequested={device.methodRequested}
+				methodRequested={methodRequested}
+				intl={intl}
 			/>
 		);
 		const offButton = (
 			<DimmerOffButton
 				ref={'offButton'}
 				style={styles.turnOff}
-				isInState={device.isInState}
+				isInState={isInState}
+				name={name}
 				enabled={!!TURNOFF}
-				methodRequested={device.methodRequested}
+				methodRequested={methodRequested}
+				intl={intl}
 			/>
 		);
 		const slider = DIM ? (
@@ -229,6 +219,7 @@ class DimmerButton extends View {
 				onRightEnd={this.onTurnOnButtonEnd}
 				onLeft={this.onTurnOff}
 				onRight={this.onTurnOn}
+				intl={intl}
 			/>
 		) : null;
 

@@ -17,10 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Core from './Core';
-
-const deviceWidth = Dimensions.get('window').width;
 
 const listItemHeight = 56;
 const listItemWidth = 30;
@@ -109,7 +107,6 @@ export default StyleSheet.create({
 
 	textFieldCover: {
 		height: 50,
-		width: deviceWidth * 0.7,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -121,7 +118,6 @@ export default StyleSheet.create({
 		borderRadius: 3,
 
 		height: 40,
-		width: deviceWidth * 0.7,
 		fontSize: 14,
 		color: '#ffffff80',
 		textAlign: 'left',

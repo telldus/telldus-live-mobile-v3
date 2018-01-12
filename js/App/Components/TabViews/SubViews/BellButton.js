@@ -28,6 +28,7 @@ import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	device: Object,
@@ -35,6 +36,7 @@ type Props = {
 	requestDeviceAction: (id: number, command: number) => void,
 	style: Object,
 	command: number,
+	intl: Object,
 };
 
 class BellButton extends View {
@@ -46,6 +48,7 @@ class BellButton extends View {
 		super(props);
 
 		this.onBell = this.onBell.bind(this);
+		this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	onBell() {
@@ -54,10 +57,12 @@ class BellButton extends View {
 	}
 
 	render() {
-		let {methodRequested} = this.props.device;
+		let { methodRequested, name } = this.props.device;
+		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
+
 		return (
 			<RoundedCornerShadowView style={this.props.style}>
-				<TouchableOpacity onPress={this.onBell} style={styles.bell}>
+				<TouchableOpacity onPress={this.onBell} style={styles.bell} accessibilityLabel={accessibilityLabel}>
 					<Icon name="bell" size={22} color="orange" />
 				</TouchableOpacity>
 				{

@@ -22,31 +22,19 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
-import { List, ListDataSource, View, StyleSheet } from 'BaseComponents';
+import { List, ListDataSource, View } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
 import { toggleEditMode } from 'Actions';
 
+import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
-import {
-	getWindowDimensions,
-} from 'Lib';
-
-const messages = defineMessages({
-	sensors: {
-		id: 'pages.sensors',
-		defaultMessage: 'Sensors',
-		description: 'The sensors tab',
-	},
-});
 
 type Props = {
 	rowsAndSections: Object,
@@ -54,11 +42,13 @@ type Props = {
 	editMode: boolean,
 	tab: string,
 	dispatch: Function,
+	appLayout: Object,
 	screenProps: Object,
 };
 
 type State = {
 	dataSource: Object,
+	makeRowAccessible: 0 | 1,
 };
 
 class SensorsTab extends View {
@@ -68,10 +58,11 @@ class SensorsTab extends View {
 
 	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
 	renderRow: (Object) => Object;
+	renderHiddenRow: (Object) => Object;
 	onRefresh: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
-		title: screenProps.intl.formatMessage(messages.sensors),
+		title: screenProps.intl.formatMessage(i18n.sensors),
 		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'sensors'),
 	});
 
@@ -85,18 +76,30 @@ class SensorsTab extends View {
 				rowHasChanged: this.rowHasChanged,
 				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
 			}).cloneWithRowsAndSections(sections, sectionIds),
+			makeRowAccessible: 0,
 		};
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
+		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
 		const { sections, sectionIds } = nextProps.rowsAndSections;
 
+		let { makeRowAccessible } = this.state;
+		let { screenReaderEnabled } = nextProps;
+		let { currentScreen, currentTab } = nextProps.screenProps;
+		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
+			makeRowAccessible = 1;
+		} else {
+			makeRowAccessible = 0;
+		}
+
 		this.setState({
 			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+			makeRowAccessible,
 		});
 
 		if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
@@ -121,14 +124,12 @@ class SensorsTab extends View {
 
 	render() {
 
-		let containerStyle = null;
-		if (Platform.OS === 'android') {
-			containerStyle = this.props.screenProps.orientation === 'PORTRAIT' ?
-				styles.conatiner : styles.containerLand;
-		}
+		let { appLayout } = this.props;
+
+		let style = this.getStyles(appLayout);
 
 		return (
-			<View style={containerStyle}>
+			<View style={style.container}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
@@ -137,6 +138,8 @@ class SensorsTab extends View {
 					leftOpenValue={40}
 					editMode={this.props.editMode}
 					onRefresh={this.onRefresh}
+					// adding key to force render list rows, to gain back the accessibilty.
+					key={this.state.makeRowAccessible}
 				/>
 			</View>
 		);
@@ -153,31 +156,37 @@ class SensorsTab extends View {
 	}
 
 	renderRow(row) {
+		let { intl, currentTab, currentScreen } = this.props.screenProps;
+
 		return (
-			<SensorRow {...row}/>
+			<SensorRow {...row}
+				intl={intl}
+				currentTab={currentTab}
+				currentScreen={currentScreen}/>
 		);
 	}
 
 	renderHiddenRow(row) {
+		let { screenProps } = this.props;
+
 		return (
-			<SensorRowHidden {...row}/>
+			<SensorRowHidden {...row} intl={screenProps.intl}/>
 		);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			container: {
+				flex: 1,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+			},
+		};
+	}
 }
-
-SensorsTab.propTypes = {
-	rowsAndSections: PropTypes.object,
-};
-
-const styles = StyleSheet.create({
-	conatiner: {
-		flex: 1,
-	},
-	containerLand: {
-		flex: 1,
-		marginLeft: getWindowDimensions().height * 0.08,
-	},
-});
 
 const getRowsAndSections = createSelector(
 	[
@@ -200,6 +209,7 @@ function mapStateToProps(store) {
 		gatewaysById: store.gateways.byId,
 		editMode: store.tabs.editModeSensorsTab,
 		tab: store.navigation.tab,
+		appLayout: store.App.layout,
 	};
 }
 

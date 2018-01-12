@@ -22,7 +22,8 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
+import { connect } from 'react-redux';
+import { TouchableOpacity, Image } from 'react-native';
 
 type ButtonProps = {
 	onPress?: Function,
@@ -32,11 +33,10 @@ type ButtonProps = {
 
 type Props = {
 	buttonProps: ButtonProps,
+	appLayout: Object,
 };
 
-const deviceWidth = Dimensions.get('window').width;
-
-export default class RoundedInfoButton extends Component<Props, null> {
+class RoundedInfoButton extends Component<Props, null> {
 	props: Props;
 
 	constructor(props: Props) {
@@ -65,6 +65,9 @@ export default class RoundedInfoButton extends Component<Props, null> {
 		if (this.props.buttonProps && this.props.buttonProps.infoButtonStyle) {
 			infoButtonStyle = this.props.buttonProps.infoButtonStyle;
 		}
+		let { appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
+
 		return (
 			<TouchableOpacity style={[styles.roundedInfoButtonContainer, infoButtonContainerStyle]} onPress={this.onPress}>
 				<Image
@@ -75,16 +78,30 @@ export default class RoundedInfoButton extends Component<Props, null> {
 		);
 	}
 
+	getStyle = (appLayout: Object): Object => {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		return {
+			roundedInfoButtonContainer: {
+				position: 'absolute',
+				right: deviceWidth * 0.045333333,
+				bottom: deviceWidth * 0.036,
+			},
+			roundedInfoButton: {
+				height: deviceWidth * 0.042666667,
+				width: deviceWidth * 0.042666667,
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	roundedInfoButtonContainer: {
-		position: 'absolute',
-		right: deviceWidth * 0.045333333,
-		bottom: deviceWidth * 0.036,
-	},
-	roundedInfoButton: {
-		height: deviceWidth * 0.042666667,
-		width: deviceWidth * 0.042666667,
-	},
-});
+function mapStateToProps(state: Object): Object {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(RoundedInfoButton);

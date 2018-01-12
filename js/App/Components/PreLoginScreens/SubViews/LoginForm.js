@@ -50,6 +50,8 @@ type Props = {
 		screenProps: Object,
 		loginToTelldus: Function,
 		intl: intlShape.isRequired,
+		appLayout: Object,
+		dialogueOpen: Object,
 };
 
 type State = {
@@ -83,12 +85,16 @@ class LoginForm extends View {
 	}
 
 	render() {
+		let { appLayout, dialogueOpen } = this.props;
+		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
+		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
+
 		return (
-			<View style={{flex: 0}}>
+			<View importantForAccessibility={importantForAccessibility}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.85, fontSize: 15 }]}
 						onChangeText={this.onChangeUsername}
 						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 						keyboardType="email-address"
@@ -102,7 +108,7 @@ class LoginForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="lock" style={Theme.Styles.iconLock} size={15} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.85, fontSize: 15 }]}
 						onChangeText={this.onChangePassword}
 						placeholder={this.props.intl.formatMessage(i18n.password)}
 						secureTextEntry={true}
@@ -115,10 +121,10 @@ class LoginForm extends View {
 				</View>
 				<View style={{ height: 10 }}/>
 				<TouchableButton
-					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? i18n.loggingin : i18n.login}
 					postScript={this.state.isLoading ? '...' : null}
+					accessible={buttonAccessible}
 				/>
 			</View>
 		);

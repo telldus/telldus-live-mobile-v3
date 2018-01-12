@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { AccessibilityInfo } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
@@ -29,15 +30,40 @@ import {
 	AppNavigator,
 	Push,
 } from 'Components';
+import { View } from 'BaseComponents';
+import {
+	setAppLayout,
+	setAccessibilityListener,
+	setAccessibilityInfo,
+} from 'Actions';
 
 class App extends React.Component {
+	onLayout: (Object) => void;
+
+	constructor() {
+		super();
+		this.onLayout = this.onLayout.bind(this);
+	}
 
 	componentDidMount() {
+		let { dispatch } = this.props;
+
 		this.pushConf();
+		AccessibilityInfo.fetch().done((isEnabled) => {
+			dispatch(setAccessibilityInfo(isEnabled));
+			dispatch(setAccessibilityListener(setAccessibilityInfo));
+		});
 	}
 
 	componentDidUpdate() {
 		this.pushConf();
+	}
+
+	componentWillUnmount() {
+		AccessibilityInfo.removeEventListener(
+		  'change',
+		  setAccessibilityInfo
+		);
 	}
 
 	/*
@@ -50,12 +76,20 @@ class App extends React.Component {
 		}
 	}
 
+	onLayout(ev: Object) {
+		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+	}
+
 	render() {
-		if ((!this.props.accessToken) || (this.props.accessToken && !this.props.isTokenValid)) {
-			return <PreLoginNavigator />;
-		}
+		let hasNotLoggedIn = ((!this.props.accessToken) || (this.props.accessToken && !this.props.isTokenValid));
 		return (
-			<AppNavigator {...this.props}/>
+			<View onLayout={this.onLayout}>
+				{hasNotLoggedIn ?
+					<PreLoginNavigator />
+					:
+					<AppNavigator {...this.props}/>
+				}
+			</View>
 		);
 	}
 }
@@ -65,7 +99,14 @@ function mapStateToProps(store) {
 		accessToken: store.user.accessToken,
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
+		pushTokenRegistered: store.user.pushTokenRegistered,
 	};
 }
 
-module.exports = connect(mapStateToProps)(App);
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(App);

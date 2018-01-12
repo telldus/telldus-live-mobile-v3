@@ -60,7 +60,9 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 					...response,
 				},
 			});
+			return response;
 		}
+		throw response;
 	}).catch(e => {
 		if (e === 'TypeError: Network request failed') {
 			dispatch({
@@ -71,6 +73,7 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 				},
 			});
 		}
+		throw e;
 	});
 };
 

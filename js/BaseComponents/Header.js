@@ -22,11 +22,12 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Platform, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import { hasStatusBar, getWindowDimensions } from 'Lib';
+import { hasStatusBar } from 'Lib';
 
 import Base from './Base';
 import computeProps from './computeProps';
@@ -44,9 +45,10 @@ type Props = {
 	searchBar: ?Object,
 	rightButton: Object,
 	leftButton: Object,
+	appLayout: Object,
 };
 
-export default class HeaderComponent extends Base {
+class HeaderComponent extends Base {
 
 	deviceWidth: number;
 	paddingHorizontal: number;
@@ -61,7 +63,9 @@ export default class HeaderComponent extends Base {
 	renderButtonContent: (Object) => Object;
 
 	getInitialStyle() {
-		this.deviceWidth = getWindowDimensions().width;
+		let { appLayout } = this.props;
+		let { height, width } = appLayout;
+		this.deviceWidth = height > width ? width : height;
 
 		this.paddingHorizontal = 15;
 		this.paddingTop = (Platform.OS === 'ios') ? 15 : 0;
@@ -310,12 +314,18 @@ export default class HeaderComponent extends Base {
 		if (button.title) {
 			return <Text>{button.title}</Text>;
 		}
+		if (button.component) {
+			return button.component;
+		}
 	};
 
 	renderRightButton = (rightButton: Object) => {
+		let { accessibilityLabel, icon } = rightButton;
+		let style = icon ? icon.style : null;
 		return (
 			<TouchableOpacity
 				onPress={rightButton.onPress}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.getInitialStyle().headerButton,
 					{
@@ -323,7 +333,7 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						right: 0,
 					},
-					rightButton.icon.style,
+					style,
 				]}
 			>
 				{this.renderButtonContent(rightButton)}
@@ -332,9 +342,12 @@ export default class HeaderComponent extends Base {
 	};
 
 	renderLeftButton = (leftButton: Object) => {
+		let { accessibilityLabel, icon } = leftButton;
+		let style = icon ? icon.style : null;
 		return (
 			<TouchableOpacity
 				onPress={leftButton.onPress}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.getInitialStyle().headerButton,
 					{
@@ -342,7 +355,7 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						left: 0,
 					},
-					leftButton.icon.style,
+					style,
 				]}
 			>
 				{this.renderButtonContent(leftButton)}
@@ -377,3 +390,11 @@ HeaderComponent.propTypes = {
 	rightButton: PropTypes.object,
 	leftButton: PropTypes.object,
 };
+
+function mapStateToProps(store: Object): Object {
+	return {
+		appLayout: store.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(HeaderComponent);

@@ -22,13 +22,12 @@
 'use strict';
 
 import React, {Component} from 'react';
-import { Animated, Easing, StyleSheet } from 'react-native';
+import { Animated, Easing } from 'react-native';
 
 import { connect } from 'react-redux';
 import { clearData } from 'Actions_Modal';
 
 import Theme from 'Theme';
-import { getWindowDimensions } from 'Lib';
 
 type Props = {
 	dispatch: Function,
@@ -45,6 +44,9 @@ type Props = {
 	endValue?: number,
 	onOpen?: () => void,
 	onClose?: () => void,
+	onOpened?: () => void,
+	onClosed?: () => void,
+	appLayout: Object,
 };
 
 class Modal extends Component<Props, void> {
@@ -82,14 +84,22 @@ class Modal extends Component<Props, void> {
 		Animated.parallel([
 			this._startOpacity(duration),
 			this._startScale(duration),
-		]).start();
+		]).start((event: Object) => {
+			if (event.finished) {
+				this.onOpened();
+			}
+		});
 	}
 
 	animationZoomOut(duration?: number) {
 		Animated.parallel([
 			this._stopOpacity(duration),
 			this._stopScale(duration),
-		]).start();
+		]).start((event: Object) => {
+			if (event.finished) {
+				this.onClosed();
+			}
+		});
 	}
 
 	animationSlideInY(duration?: number) {
@@ -215,10 +225,33 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
+	onClosed() {
+		let { onClosed } = this.props;
+		if (onClosed) {
+			if (typeof onClosed === 'function') {
+				onClosed();
+			} else {
+				console.warn('Invalid Prop Passed : onClosed expects a Function.');
+			}
+		}
+	}
+
+	onOpened() {
+		let { onOpened } = this.props;
+		if (onOpened) {
+			if (typeof onOpened === 'function') {
+				onOpened();
+			} else {
+				console.warn('Invalid Prop Passed : onOpened expects a Function.');
+			}
+		}
+	}
+
 	render(): Object {
 		let animatedProps = {};
 		let { showOverlay, modalContainerStyle, modalStyle, children,
-			entry, exit, startValue, endValue } = this.props;
+			entry, exit, startValue, endValue, appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
 
 		if (entry === 'ZoomIn' && exit === 'ZoomOut') {
 			let scaleAnim = this.animatedScale.interpolate({
@@ -250,27 +283,32 @@ class Modal extends Component<Props, void> {
 			</Animated.View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	modalContainer: {
-		flex: 1,
-		position: 'absolute',
-		elevation: 8,
-		backgroundColor: '#00000060',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	overlayLayout: {
-		width: getWindowDimensions().width,
-		height: getWindowDimensions().height,
-	},
-	modal: {
-		position: 'absolute',
-		...Theme.Core.shadow,
-		elevation: 8,
-	},
-});
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+
+		return {
+			modalContainer: {
+				flex: 1,
+				position: 'absolute',
+				elevation: 8,
+				backgroundColor: '#00000060',
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			overlayLayout: {
+				width: width,
+				height: height,
+			},
+			modal: {
+				position: 'absolute',
+				...Theme.Core.shadow,
+				elevation: 8,
+			},
+		};
+	}
+}
 
 Modal.defaultProps = {
 	entryDuration: 500,
@@ -280,10 +318,16 @@ Modal.defaultProps = {
 	showOverlay: true,
 };
 
+function mapStateToProps(store: Object): Object {
+	return {
+		appLayout: store.App.layout,
+	};
+}
+
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};
 }
 
-export default connect(null, mapDispatchToProps)(Modal);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

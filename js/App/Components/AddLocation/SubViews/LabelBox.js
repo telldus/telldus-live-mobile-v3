@@ -28,15 +28,13 @@ import React from 'react';
 import {
 	View,
 	Text,
-	StyleSheet,
-	Dimensions,
 	IconTelldus,
 } from 'BaseComponents';
-const deviceWidth = Dimensions.get('window').width;
 
 class LabelBox extends View {
 	render() {
-		let { containerStyle, label, children, showIcon } = this.props;
+		let { containerStyle, label, children, showIcon, appLayout } = this.props;
+		const styles = this.getStyle(appLayout);
 
 		return (
 			<View style={[styles.container, containerStyle]}>
@@ -52,43 +50,45 @@ class LabelBox extends View {
 			</View>
 		);
 	}
+
+	getStyle(appLayout: Object): Object {
+
+		return {
+			container: {
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			itemsContainer: {
+				flexDirection: 'column',
+				backgroundColor: '#fff',
+				marginTop: 15,
+				padding: 10,
+				alignItems: 'flex-start',
+			},
+			shadow: {
+				borderRadius: 4,
+				backgroundColor: '#fff',
+				shadowColor: '#000000',
+				shadowOffset: {
+					width: 0,
+					height: 0,
+				},
+				shadowRadius: 1,
+				shadowOpacity: 1.0,
+				elevation: 2,
+			},
+			label: {
+				color: '#e26901',
+				fontSize: 15,
+				paddingLeft: 2,
+			},
+			icon: {
+				position: 'absolute',
+				top: 40,
+				left: 8,
+			},
+		};
+	}
 }
-
-
-const styles = StyleSheet.create({
-	container: {
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	itemsContainer: {
-		flexDirection: 'column',
-		backgroundColor: '#fff',
-		marginTop: 15,
-		padding: 10,
-		alignItems: 'flex-start',
-	},
-	shadow: {
-		borderRadius: 4,
-		backgroundColor: '#fff',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
-	},
-	label: {
-		color: '#e26901',
-		fontSize: 14,
-		paddingLeft: 2,
-	},
-	icon: {
-		position: 'absolute',
-		top: 40,
-		left: deviceWidth * 0.03,
-	},
-});
 
 export default LabelBox;

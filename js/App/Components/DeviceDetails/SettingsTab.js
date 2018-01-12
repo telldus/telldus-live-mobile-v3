@@ -25,18 +25,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { FormattedMessage, Text, View } from 'BaseComponents';
-import { StyleSheet, Dimensions, Switch } from 'react-native';
+import { FormattedMessage, Text, View, TabBar } from 'BaseComponents';
+import { StyleSheet, Switch } from 'react-native';
 import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_settings from '../TabViews/img/selection.json';
-const Icon = createIconSetFromIcoMoon(icon_settings);
-
 import { LearnButton } from 'TabViews_SubViews';
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
 
@@ -54,6 +48,7 @@ type Props = {
 	inDashboard: boolean,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
+	appLayout: Object,
 };
 
 type State = {
@@ -72,9 +67,12 @@ class SettingsTab extends View {
 	}
 
 	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (<FormattedMessage {...i18n.settingsHeader} style={{color: tintColor}}/>),
-		tabBarIcon: ({ tintColor }) => (
-			<Icon name="icon_settings" size={24} color={tintColor}/>
+		tabBarLabel: ({ tintColor }) => (
+			<TabBar
+				icon="icon_settings"
+				tintColor={tintColor}
+				label={i18n.settingsHeader}
+				accessibilityLabel={i18n.deviceSettingsTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			jumpToIndex(scene.index);
@@ -97,6 +95,17 @@ class SettingsTab extends View {
 	}
 
 	render() {
+
+		let { appLayout } = this.props;
+
+		let {
+			ShowOnDashCover,
+			textShowOnDashCover,
+			textShowOnDash,
+			dashSwitchCover,
+			dashSwitch,
+		} = this.getStyle(appLayout);
+
 		const device = this.props.device;
 		const { LEARN } = device.supportedMethods;
 
@@ -107,15 +116,15 @@ class SettingsTab extends View {
 		}
 		return (
 			<View style={styles.container}>
-				<View style={styles.ShowOnDashCover}>
-					<View style={styles.textShowOnDashCover}>
-						<Text style={styles.textShowOnDash}>
-							<FormattedMessage {...messages.showOnDashborad} style={styles.textShowOnDash}/>
+				<View style={ShowOnDashCover}>
+					<View style={textShowOnDashCover}>
+						<Text style={textShowOnDash}>
+							<FormattedMessage {...messages.showOnDashborad} style={textShowOnDash}/>
 						</Text>
 					</View>
-					<View style={styles.dashSwitchCover}>
+					<View style={dashSwitchCover}>
 						<Switch
-							style={styles.dashSwitch}
+							style={dashSwitch}
 							onValueChange={this.onValueChange}
 							value={this.props.inDashboard}
 						/>
@@ -126,6 +135,45 @@ class SettingsTab extends View {
 		);
 	}
 
+	getStyle(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			ShowOnDashCover: {
+				backgroundColor: '#fff',
+				height: isPortrait ? height * 0.09 : width * 0.09,
+				marginTop: 25,
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			textShowOnDashCover: {
+				width: width * 0.5,
+				alignItems: 'flex-start',
+				justifyContent: 'center',
+			},
+			dashSwitchCover: {
+				width: width * 0.5,
+				alignItems: 'flex-end',
+				justifyContent: 'center',
+			},
+			dashSwitch: {
+				height: isPortrait ? height * 0.06 : width * 0.06,
+			},
+			textShowOnDash: {
+				color: '#8A8682',
+				fontSize: isPortrait ? width * 0.047 : height * 0.047,
+				marginLeft: 8,
+				justifyContent: 'center',
+			},
+			learn: {
+				marginHorizontal: width * 0.25,
+				marginVertical: 25,
+			},
+		};
+	}
 }
 
 SettingsTab.propTypes = {
@@ -135,36 +183,6 @@ SettingsTab.propTypes = {
 const styles = StyleSheet.create({
 	container: {
 		flex: 0,
-	},
-	ShowOnDashCover: {
-		backgroundColor: '#fff',
-		height: (deviceHeight * 0.09),
-		marginTop: 25,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	textShowOnDashCover: {
-		width: (deviceWidth / 2),
-		alignItems: 'flex-start',
-		justifyContent: 'center',
-	},
-	dashSwitchCover: {
-		width: (deviceWidth / 2),
-		alignItems: 'flex-end',
-		justifyContent: 'center',
-	},
-	dashSwitch: {
-	},
-	textShowOnDash: {
-		color: '#8A8682',
-		fontSize: 14,
-		marginLeft: 8,
-		justifyContent: 'center',
-	},
-	learn: {
-		marginHorizontal: (deviceWidth * 0.5) / 2,
-		marginVertical: 25,
 	},
 });
 
@@ -179,6 +197,7 @@ function mapStateToProps(state, ownProps) {
 	return {
 		device: ownProps.screenProps.device,
 		inDashboard: !!state.dashboard.devicesById[ownProps.screenProps.device.id],
+		appLayout: state.App.layout,
 	};
 }
 
