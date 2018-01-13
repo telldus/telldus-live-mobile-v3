@@ -159,6 +159,16 @@ const SensorLuminance = ({ luminance, unit }) => (
 	</View>
 );
 
+const SensorNew = ({ value, unit }) => (
+	<View style={Theme.Styles.sensorValue}>
+		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Luminance.png')}/>
+		<Text>
+			<FormattedNumber value={value} maximumFractionDigits={1}/>
+			{unit}
+		</Text>
+	</View>
+);
+
 type Props = {
 	sensor: Object,
 	intl: Object,
@@ -246,6 +256,15 @@ class SensorRow extends Component<Props, void> {
 			}
 			if (name === 'luminance') {
 				sensors.push(<SensorLuminance luminance={value} key={key} unit={unit}/>);
+			}
+			if (name === 'dewp') {
+				sensors.push(<SensorNew value={value} key={key} unit={unit}/>);
+			}
+			if (name === 'barpress') {
+				sensors.push(<SensorNew value={value} key={key} unit={unit}/>);
+			}
+			if (name === 'genmeter') {
+				sensors.push(<SensorNew value={value} key={key} unit={unit}/>);
 			}
 		}
 		return sensors;
