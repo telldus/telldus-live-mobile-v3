@@ -99,7 +99,7 @@ class SensorDashboardTile extends View {
 					key: 'temperature',
 					icon: require('../img/sensorIcons/TemperatureLargeGray.png'),
 					text: <FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}
-										suffix={unit}/>,
+						suffix={unit}/>,
 				});
 			}
 			if (name === 'rrate' || name === 'rtotal') {
@@ -107,9 +107,9 @@ class SensorDashboardTile extends View {
 					key: 'rain',
 					icon: require('../img/sensorIcons/RainLargeGray.png'),
 					text: (name === 'rrate' && <FormattedNumber value={value} maximumFractionDigits={0}
-																suffix={`${unit}\n`}/> ),
+						suffix={`${unit}\n`}/> ),
 					text2: (name === 'rtotal' && <FormattedNumber value={value} maximumFractionDigits={0}
-																suffix={unit}/> ),
+						suffix={unit}/> ),
 				});
 			}
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
@@ -117,9 +117,9 @@ class SensorDashboardTile extends View {
 					key: 'wind',
 					icon: require('../img/sensorIcons/WindLargeGray.png'),
 					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={1}
-																suffix={`${unit}\n`}/> ),
+						suffix={`${unit}\n`}/> ),
 					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={1}
-																suffix={`${unit}\n`}/> ),
+						suffix={`${unit}\n`}/> ),
 					text3: (name === 'wdir' && this._windDirection(value)),
 				});
 			}
@@ -142,7 +142,7 @@ class SensorDashboardTile extends View {
 					key: 'luminance',
 					icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}
-										useGrouping={false}/>,
+						useGrouping={false}/>,
 				});
 			}
 			if (name === 'dewp') {
