@@ -32,8 +32,6 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import {View, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
-import {getGatewayInfo} from 'Actions';
-
 import i18n from '../../Translations/common';
 const messages = defineMessages({
 	label: {
@@ -58,7 +56,6 @@ type Props = {
 	intl: intlShape.isRequired,
 	onDidMount: Function,
 	actions: Object,
-	getGatewayInfo: (uniqueParam: Object, extras: string) => Promise<any>;
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
