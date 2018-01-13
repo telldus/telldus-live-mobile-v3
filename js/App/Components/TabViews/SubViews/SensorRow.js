@@ -28,6 +28,10 @@ import { reportException } from 'Analytics';
 import { defineMessages } from 'react-intl';
 import i18n from '../../../Translations/common';
 
+import { utils } from 'live-shared-data';
+const { sensorUtils } = utils;
+const { getSensorTypes, getSensorUnits } = sensorUtils;
+
 import moment from 'moment';
 import Theme from 'Theme';
 
@@ -78,36 +82,37 @@ const directions = [
 	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 ];
 
-const SensorHumidity = ({ humidity }) => (
+const SensorHumidity = ({ humidity, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Humidity.png')}/>
 		<Text>
-			<FormattedNumber value={humidity / 100} formatStyle="percent"/>
+			<FormattedNumber value={humidity / 100}/>
+			{unit}
 		</Text>
 	</View>
 );
 
-const SensorTemperature = ({ temperature }) => (
+const SensorTemperature = ({ temperature, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Temperature.png')}/>
 		<Text>
 			<FormattedNumber value={temperature} maximumFractionDigits={1} minimumFractionDigits={1}/>
-			{`${String.fromCharCode(176)}C`}
+			{unit}
 		</Text>
 	</View>
 );
 
-const SensorRain = ({ rainRate, rainTotal }) => (
+const SensorRain = ({ rainRate, rainTotal, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Rain.png')}/>
 		<Text>
-			{ rainRate && ( <Text><FormattedNumber value={rainRate} maximumFractionDigits={0}/> {'mm/h\n'} </Text> ) }
-			{ rainTotal && ( <Text><FormattedNumber value={rainTotal} maximumFractionDigits={0}/> {'mm'} </Text> ) }
+			{ rainRate && ( <Text><FormattedNumber value={rainRate} maximumFractionDigits={0}/> {`${unit}\n`} </Text> ) }
+			{ rainTotal && ( <Text><FormattedNumber value={rainTotal} maximumFractionDigits={0}/> {unit} </Text> ) }
 		</Text>
 	</View>
 );
 
-const SensorWind = ({ windAverage, windGust, windDirection }) => {
+const SensorWind = ({ windAverage, windGust, windDirection, unit }) => {
 	const getWindDirection = value => directions[Math.floor(value / 22.5)];
 
 	return (
@@ -115,38 +120,41 @@ const SensorWind = ({ windAverage, windGust, windDirection }) => {
 			<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Wind.png')}/>
 			<Text>
 				{ windAverage && (
-					<Text><FormattedNumber value={windAverage} maximumFractionDigits={1}/> {'m/s\n'} </Text> ) }
+					<Text><FormattedNumber value={windAverage} maximumFractionDigits={1}/> {`${unit}\n`} </Text> ) }
 				{ windGust && (
-					<Text><FormattedNumber value={windGust} maximumFractionDigits={1}/> {'m/s*\n'} </Text> ) }
+					<Text><FormattedNumber value={windGust} maximumFractionDigits={1}/> {`${unit}\n`} </Text> ) }
 				{ windDirection && ( <Text>{getWindDirection(windDirection)}</Text> ) }
 			</Text>
 		</View>
 	);
 };
 
-const SensorUV = ({ uv }) => (
+const SensorUV = ({ uv, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/UV.png')}/>
-		<FormattedNumber value={uv} maximumFractionDigits={0}/>
-	</View>
-);
-
-const SensorWatt = ({ watt }) => (
-	<View style={Theme.Styles.sensorValue}>
-		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Watt.png')}/>
 		<Text>
-			<FormattedNumber value={watt} maximumFractionDigits={1}/>
-			{'W'}
+			<FormattedNumber value={uv} maximumFractionDigits={0}/>
+			{unit}
 		</Text>
 	</View>
 );
 
-const SensorLuminance = ({ luminance }) => (
+const SensorWatt = ({ watt, unit }) => (
+	<View style={Theme.Styles.sensorValue}>
+		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Watt.png')}/>
+		<Text>
+			<FormattedNumber value={watt} maximumFractionDigits={1}/>
+			{unit}
+		</Text>
+	</View>
+);
+
+const SensorLuminance = ({ luminance, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Luminance.png')}/>
 		<Text>
 			<FormattedNumber value={luminance} maximumFractionDigits={0}/>
-			{'lx'}
+			{unit}
 		</Text>
 	</View>
 );
@@ -174,6 +182,7 @@ class SensorRow extends Component<Props, void> {
 	labelLuminance: string;
 	labelTimeAgo: string;
 	width: number;
+	sensorTypes: Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -192,73 +201,69 @@ class SensorRow extends Component<Props, void> {
 		this.labelLuminance = props.intl.formatMessage(i18n.labelLuminance);
 		this.labelTimeAgo = props.intl.formatMessage(i18n.labelTimeAgo);
 
+		this.sensorTypes = getSensorTypes();
+
 		this.onLayout = this.onLayout.bind(this);
+	}
+
+	getSensors(data: Object): Array<Object> {
+		let sensors = [];
+		for (let key in data) {
+			let values = data[key];
+			let { value, scale, name } = values;
+			let sensorType = this.sensorTypes[values.name];
+			let sensorUnits = getSensorUnits(sensorType);
+			let unit = sensorUnits[scale];
+
+			if (name === 'humidity') {
+				sensors.push(<SensorHumidity humidity={value} unit={unit} key={key}/>);
+			}
+			if (name === 'temp') {
+				sensors.push(<SensorTemperature temperature={value} unit={unit} key={key}/>);
+			}
+			if (name === 'rrate' || name === 'rtotal') {
+				sensors.push(<SensorRain
+					rainRate={name === 'rrate' ? value : null}
+					rainTotal={name === 'rtotal' ? value : null}
+					unit={unit}
+					key={key}/>);
+			}
+			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
+				// const getWindDirection = value => directions[Math.floor(value / 22.5)];
+				// const direction = [...getWindDirection(windDirection)].toString();
+				sensors.push(<SensorWind
+					windGust={name === 'wgust' ? value : null}
+					windAverage={name === 'wavg' ? value : null}
+					windDirection={name === 'wdir' ? value : null}
+					unit={unit}
+					key={key}/>);
+			}
+			if (name === 'uv') {
+				sensors.push(<SensorUV uv={value} key={key} unit={unit}/>);
+			}
+			if (name === 'watt') {
+				sensors.push(<SensorWatt watt={value} key={key} unit={unit}/>);
+			}
+			if (name === 'luminance') {
+				sensors.push(<SensorLuminance luminance={value} key={key} unit={unit}/>);
+			}
+		}
+		return sensors;
 	}
 
 	render() {
 		const { sensor, currentTab, currentScreen } = this.props;
 		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
-		let sensors = [];
-
 		const {
-			id,
-			humidity,
-			temperature,
-			rainRate,
-			rainTotal,
-			windGust,
-			windAverage,
-			windDirection,
-			uv,
-			watt,
-			luminance,
+			data,
 			name,
 		} = sensor;
 
+		let sensors = this.getSensors(data);
 		let [ lastUpdatedValue, lastUpdatedComponent ] = this.formatLastUpdated(minutesAgo, sensor.lastUpdated);
-		let accessibilityLabel = `${this.labelSensor}, ${name}`;
 
-		if (humidity) {
-			accessibilityLabel = `${accessibilityLabel},  ${this.labelHumidity} ${humidity}%`;
-			sensors.push(<SensorHumidity {...{ humidity }} key={`${id}humidity`}/>);
-		}
-		if (temperature) {
-			accessibilityLabel = `${accessibilityLabel},  ${this.labelTemperature} ${temperature} ${String.fromCharCode(176)}C`;
-			sensors.push(<SensorTemperature {...{ temperature }} key={`${id}temperature`}/>);
-		}
-		if (rainRate || rainTotal) {
-			accessibilityLabel = `${accessibilityLabel},  ${this.labelRainRate} ${rainRate} mm/h,  ${this.labelRainTotal} ${rainTotal} mm`;
-			sensors.push(<SensorRain {...{
-				rainRate,
-				rainTotal,
-			}} key={`${id}rain`}/>);
-		}
-		if (windGust || windAverage || windDirection) {
-			const getWindDirection = value => directions[Math.floor(value / 22.5)];
-			const direction = [...getWindDirection(windDirection)].toString();
-			accessibilityLabel = `${accessibilityLabel},  ${this.labelWindGust} ${windGust}m/s,  ${this.labelWindAverage} ${windAverage}m/s*
-			,  ${this.labelWindDirection} ${direction}`;
-			sensors.push(<SensorWind {...{
-				windGust,
-				windAverage,
-				windDirection,
-			}} key={`${id}wind`}/>);
-		}
-		if (uv) {
-			accessibilityLabel = `${accessibilityLabel},  ${this.labelUVIndex} ${uv}`;
-			sensors.push(<SensorUV {...{ uv }} key={`${id}uv`}/>);
-		}
-		if (watt) {
-			accessibilityLabel = `${accessibilityLabel},  ${this.labelWatt} ${watt}W`;
-			sensors.push(<SensorWatt {...{ watt }} key={`${id}watt`}/>);
-		}
-		if (luminance) {
-			accessibilityLabel = `${accessibilityLabel},  ${this.labelLuminance} ${luminance}lx`;
-			sensors.push(<SensorLuminance {...{ luminance }} key={`${id}luminance`}/>);
-		}
-
+		let accessibilityLabel = `${this.labelSensor}, ${name}, ${lastUpdatedValue}`;
 		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
-		accessibilityLabel = `${accessibilityLabel}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
 		return (
 			<ListItem
