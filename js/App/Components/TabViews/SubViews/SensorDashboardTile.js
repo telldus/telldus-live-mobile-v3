@@ -72,6 +72,9 @@ class SensorDashboardTile extends View {
 		this.labelWindDirection = formatMessage(i18n.labelWindDirection);
 		this.labelUVIndex = formatMessage(i18n.labelUVIndex);
 		this.labelWatt = formatMessage(i18n.labelWatt);
+		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
+		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
+		this.labelGenricMeter = formatMessage(i18n.labelGenricMeter);
 		this.labelLuminance = formatMessage(i18n.labelLuminance);
 
 		this.sensorTypes = getSensorTypes();
@@ -93,6 +96,7 @@ class SensorDashboardTile extends View {
 					icon: require('../img/sensorIcons/HumidityLargeGray.png'),
 					text: <FormattedNumber value={value / 100} suffix={unit}/>,
 				});
+				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
 			}
 			if (name === 'temp') {
 				slideList.push({
@@ -101,6 +105,7 @@ class SensorDashboardTile extends View {
 					text: <FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}
 						suffix={unit}/>,
 				});
+				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
 			}
 			if (name === 'rrate' || name === 'rtotal') {
 				slideList.push({
@@ -111,8 +116,15 @@ class SensorDashboardTile extends View {
 					text2: (name === 'rtotal' && <FormattedNumber value={value} maximumFractionDigits={0}
 						suffix={unit}/> ),
 				});
+				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
+				let rtotalInfo = name === 'rtotal' ? `${this.labelRainTotal} ${value}${unit}` : '';
+				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
 			}
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
+				let directions = '';
+				if (name === 'wdir') {
+					directions = [...this._windDirection(value)].toString();
+				}
 				slideList.push({
 					key: 'wind',
 					icon: require('../img/sensorIcons/WindLargeGray.png'),
@@ -122,6 +134,10 @@ class SensorDashboardTile extends View {
 						suffix={`${unit}\n`}/> ),
 					text3: (name === 'wdir' && this._windDirection(value)),
 				});
+				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
+				let wavgInfo = name === 'wavg' ? `${this.labelWindAverage} ${value}${unit}` : '';
+				let wdirInfo = name === 'wdir' ? `${this.labelWindDirection} ${directions}` : '';
+				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
 			}
 			if (name === 'uv') {
 				slideList.push({
@@ -129,6 +145,7 @@ class SensorDashboardTile extends View {
 					icon: require('../img/sensorIcons/UVLargeGray.png'),
 					text: <FormattedNumber value={value} maximumFractionDigits={0} suffix={unit}/>,
 				});
+				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
 			}
 			if (name === 'watt') {
 				slideList.push({
@@ -136,6 +153,7 @@ class SensorDashboardTile extends View {
 					icon: require('../img/sensorIcons/WattLargeGray.png'),
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}/>,
 				});
+				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;
 			}
 			if (name === 'luminance') {
 				slideList.push({
@@ -144,6 +162,7 @@ class SensorDashboardTile extends View {
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}
 						useGrouping={false}/>,
 				});
+				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
 			}
 			if (name === 'dewp') {
 				slideList.push({
@@ -151,6 +170,7 @@ class SensorDashboardTile extends View {
 					icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}/>,
 				});
+				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
 			}
 			if (name === 'barpress') {
 				slideList.push({
@@ -158,6 +178,7 @@ class SensorDashboardTile extends View {
 					icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}/>,
 				});
+				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
 			}
 			if (name === 'genmeter') {
 				slideList.push({
@@ -165,6 +186,7 @@ class SensorDashboardTile extends View {
 					icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
 					text: <FormattedNumber value={value} maximumFractionDigits={0} suffix={unit}/>,
 				});
+				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
 			}
 		}
 

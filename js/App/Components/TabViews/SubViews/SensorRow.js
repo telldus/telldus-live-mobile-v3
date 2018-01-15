@@ -190,6 +190,9 @@ class SensorRow extends Component<Props, void> {
 	labelUVIndex: string;
 	labelWatt: string;
 	labelLuminance: string;
+	labelDewPoint: string;
+	labelBarometricPressure: string;
+	labelGenricMeter: string;
 	labelTimeAgo: string;
 	width: number;
 	sensorTypes: Object;
@@ -197,27 +200,31 @@ class SensorRow extends Component<Props, void> {
 	constructor(props: Props) {
 		super(props);
 		this.width = 0;
+		let { formatMessage } = props.intl;
 
-		this.labelSensor = props.intl.formatMessage(i18n.labelSensor);
-		this.labelHumidity = props.intl.formatMessage(i18n.labelHumidity);
-		this.labelTemperature = props.intl.formatMessage(i18n.labelTemperature);
-		this.labelRainRate = props.intl.formatMessage(i18n.labelRainRate);
-		this.labelRainTotal = props.intl.formatMessage(i18n.labelRainTotal);
-		this.labelWindGust = props.intl.formatMessage(i18n.labelWindGust);
-		this.labelWindAverage = props.intl.formatMessage(i18n.labelWindAverage);
-		this.labelWindDirection = props.intl.formatMessage(i18n.labelWindDirection);
-		this.labelUVIndex = props.intl.formatMessage(i18n.labelUVIndex);
-		this.labelWatt = props.intl.formatMessage(i18n.labelWatt);
-		this.labelLuminance = props.intl.formatMessage(i18n.labelLuminance);
-		this.labelTimeAgo = props.intl.formatMessage(i18n.labelTimeAgo);
+		this.labelSensor = formatMessage(i18n.labelSensor);
+		this.labelHumidity = formatMessage(i18n.labelHumidity);
+		this.labelTemperature = formatMessage(i18n.labelTemperature);
+		this.labelRainRate = formatMessage(i18n.labelRainRate);
+		this.labelRainTotal = formatMessage(i18n.labelRainTotal);
+		this.labelWindGust = formatMessage(i18n.labelWindGust);
+		this.labelWindAverage = formatMessage(i18n.labelWindAverage);
+		this.labelWindDirection = formatMessage(i18n.labelWindDirection);
+		this.labelUVIndex = formatMessage(i18n.labelUVIndex);
+		this.labelWatt = formatMessage(i18n.labelWatt);
+		this.labelLuminance = formatMessage(i18n.labelLuminance);
+		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
+		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
+		this.labelGenricMeter = formatMessage(i18n.labelGenricMeter);
+		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
 
 		this.sensorTypes = getSensorTypes();
 
 		this.onLayout = this.onLayout.bind(this);
 	}
 
-	getSensors(data: Object): Array<Object> {
-		let sensors = [];
+	getSensors(data: Object): Object {
+		let sensors = [], sensorInfo = '';
 		for (let key in data) {
 			let values = data[key];
 			let { value, scale, name } = values;
@@ -227,9 +234,11 @@ class SensorRow extends Component<Props, void> {
 
 			if (name === 'humidity') {
 				sensors.push(<SensorHumidity humidity={value} unit={unit} key={key}/>);
+				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
 			}
 			if (name === 'temp') {
 				sensors.push(<SensorTemperature temperature={value} unit={unit} key={key}/>);
+				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
 			}
 			if (name === 'rrate' || name === 'rtotal') {
 				sensors.push(<SensorRain
@@ -237,37 +246,53 @@ class SensorRow extends Component<Props, void> {
 					rainTotal={name === 'rtotal' ? value : null}
 					unit={unit}
 					key={key}/>);
+				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
+				let rtotalInfo = name === 'rtotal' ? `${this.labelRainTotal} ${value}${unit}` : '';
+				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
 			}
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				// const getWindDirection = value => directions[Math.floor(value / 22.5)];
-				// const direction = [...getWindDirection(windDirection)].toString();
+				let direction = '';
+				if (name === 'wdir') {
+					const getWindDirection = value => directions[Math.floor(value / 22.5)];
+					direction = [...getWindDirection(value)].toString();
+				}
 				sensors.push(<SensorWind
 					windGust={name === 'wgust' ? value : null}
 					windAverage={name === 'wavg' ? value : null}
 					windDirection={name === 'wdir' ? value : null}
 					unit={unit}
 					key={key}/>);
+				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
+				let wavgInfo = name === 'wavg' ? `${this.labelWindAverage} ${value}${unit}` : '';
+				let wdirInfo = name === 'wdir' ? `${this.labelWindDirection} ${direction}` : '';
+				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
 			}
 			if (name === 'uv') {
 				sensors.push(<SensorUV uv={value} key={key} unit={unit}/>);
+				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
 			}
 			if (name === 'watt') {
 				sensors.push(<SensorWatt watt={value} key={key} unit={unit}/>);
+				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;
 			}
 			if (name === 'luminance') {
 				sensors.push(<SensorLuminance luminance={value} key={key} unit={unit}/>);
+				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
 			}
 			if (name === 'dewp') {
 				sensors.push(<SensorNew value={value} key={key} unit={unit}/>);
+				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
 			}
 			if (name === 'barpress') {
 				sensors.push(<SensorNew value={value} key={key} unit={unit}/>);
+				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
 			}
 			if (name === 'genmeter') {
 				sensors.push(<SensorNew value={value} key={key} unit={unit}/>);
+				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
 			}
 		}
-		return sensors;
+		return {sensors, sensorInfo};
 	}
 
 	render() {
@@ -278,10 +303,10 @@ class SensorRow extends Component<Props, void> {
 			name,
 		} = sensor;
 
-		let sensors = this.getSensors(data);
+		let {sensors, sensorInfo} = this.getSensors(data);
 		let [ lastUpdatedValue, lastUpdatedComponent ] = this.formatLastUpdated(minutesAgo, sensor.lastUpdated);
 
-		let accessibilityLabel = `${this.labelSensor}, ${name}, ${lastUpdatedValue}`;
+		let accessibilityLabel = `${this.labelSensor}, ${name}, ${sensorInfo},${this.labelTimeAgo} ${lastUpdatedValue}`;
 		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
 
 		return (
