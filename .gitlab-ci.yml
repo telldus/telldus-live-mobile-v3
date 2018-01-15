@@ -43,7 +43,7 @@ android:
       - android/sourcemap.js
     expire_in: '1 mos'
   script:
-    - npm install --quiet
+    - yarn install --quiet
     - npm run postinstall
     - cd android
     - ./buildGitlabRunner.sh
