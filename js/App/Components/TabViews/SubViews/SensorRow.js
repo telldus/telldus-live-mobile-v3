@@ -253,7 +253,7 @@ class SensorRow extends Component<Props, void> {
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
 				let direction = '';
 				if (name === 'wdir') {
-					const getWindDirection = value => directions[Math.floor(value / 22.5)];
+					const getWindDirection = sValue => directions[Math.floor(sValue / 22.5)];
 					direction = [...getWindDirection(value)].toString();
 				}
 				sensors.push(<SensorWind
