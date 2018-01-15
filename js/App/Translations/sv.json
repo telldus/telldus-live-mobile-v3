@@ -169,7 +169,7 @@
     "pages.devices.messageNoGatewayTitle": "Du har inte lagt till någon gateway ännu.",
     "pages.gateways": "Gateways",
     "pages.sensors": "Sensorer",
-    "scheduler": "Schemaläggare",
+    "scheduler": "Schema",
     "sensor.dayAgo": "dag sedan",
     "sensor.daysAgo": "dagar sedan",
     "sensor.hourAgo": "timme sedan",
