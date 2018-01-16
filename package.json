@@ -7,7 +7,6 @@
     "lint_autofix": "eslint js --fix",
     "flow": "node_modules/.bin/flow",
     "manage:translations": "node js/Utils/translationRunner.js",
-    "postinstall": "rm -f node_modules/intl/.babelrc",
     "release": "node js/Utils/release.js",
     "sourcemap": "node js/Utils/sourcemap.js",
     "test": "jest"
