@@ -33,6 +33,11 @@ public class MainActivity extends ReactActivity {
 		return "TelldusLiveApp";
 	}
 
+	@Override
+	public void invokeDefaultOnBackPressed() {
+		moveTaskToBack(true);
+	}
+
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		Intent intent = new Intent("onConfigurationChanged");
