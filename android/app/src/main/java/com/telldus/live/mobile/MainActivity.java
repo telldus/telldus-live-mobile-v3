@@ -36,6 +36,11 @@ public class MainActivity extends ReactActivity {
 		return "TelldusLiveApp";
 	}
 
+	@Override
+	public void invokeDefaultOnBackPressed() {
+		moveTaskToBack(true);
+	}
+
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		// Reloads the app when ever a change in user's locale is detected.
