@@ -3,6 +3,7 @@ package com.telldus.live.mobile;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,7 +48,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
 
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF="ACTION_OFF";
-
+    private ProgressDialog pDialog;
     CharSequence[] deviceNameList = null;
     List<String> nameListItems = new ArrayList<String>();
     CharSequence[] deviceStateList = null;
@@ -115,6 +116,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
                Log.d("Token type", tokenType);
                Log.d("Scope", scope);
                Log.d("Refresh token", refreshToken);
+               Utility.access=accessToken;
 
                createDeviceApi();
            } catch (JSONException e) {
@@ -129,7 +131,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
         views = new RemoteViews(this.getPackageName(), R.layout.configurable_device_widget);
         widgetManager = AppWidgetManager.getInstance(this);
 
-    //    createDeviceApi();
+      //  createDeviceApi();
 
 
         Intent intent = getIntent();
@@ -200,6 +202,14 @@ public class DeviceWidgetConfigureActivity extends Activity {
     void createDeviceApi() {
       //  accessToken= Utility.access;
 //https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1
+
+
+        pDialog = new ProgressDialog(DeviceWidgetConfigureActivity.this);
+        pDialog.setMax(5);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
         AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accpet", "application/json")
@@ -210,6 +220,7 @@ public class DeviceWidgetConfigureActivity extends Activity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
+
                             JSONObject deviceData = new JSONObject(response.toString());
                            // Log.v("JSON Object",deviceData.toString());
                             JSONArray deviceList = deviceData.getJSONArray("device");
@@ -233,6 +244,8 @@ public class DeviceWidgetConfigureActivity extends Activity {
                             }
                             deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                             deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
+                            if (pDialog.isShowing())
+                                pDialog.dismiss();
                          //  Toast.makeText(getApplicationContext(),deviceStateList.toString(),Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -241,7 +254,8 @@ public class DeviceWidgetConfigureActivity extends Activity {
 
                     @Override
                     public void onError(ANError anError) {
-
+                        if (pDialog.isShowing())
+                            pDialog.dismiss();
                     }
                 });
     }
