@@ -5,5 +5,5 @@ package com.telldus.live.mobile.Database;
  */
 
 public class Utility {
-    public static String access="41e46bd3013a9bb249af8b11a231bf517654a84c";
+    public static String access="825b9c9bb9d4a303ffa62ab34eba257196f6b8db";
 }

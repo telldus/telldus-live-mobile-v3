@@ -28,7 +28,7 @@ public class SensorAppWidget extends AppWidgetProvider {
 
         CharSequence widgetText = "Sensor widget";
         String sensorHistory="Last updated 20 mins ago";
-        CharSequence sensorValue="txtSensorValue";
+        CharSequence sensorValue="22";
         MyDBHandler db = new MyDBHandler(context);
         SensorInfo sensorID = db.findSensor(appWidgetId);
 

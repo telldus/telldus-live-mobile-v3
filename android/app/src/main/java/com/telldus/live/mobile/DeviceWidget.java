@@ -135,54 +135,53 @@ public class DeviceWidget extends AppWidgetProvider {
             {
             //    createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
 
-                        File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
-                        if (fileAuth.exists()) {
-                            Log.d("File exists?", "Yes");
+            //}
 
-                            //Read text from file
-                            StringBuilder text = new StringBuilder();
 
-                            try {
-                                BufferedReader br = new BufferedReader(new FileReader(fileAuth));
-                                String line;
-                                while ((line = br.readLine()) != null) {
-                                    text.append(line);
-                                    text.append('\n');
-                                }
-                                br.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
 
-                            try {
-                                JSONObject authInfo = new JSONObject(String.valueOf(text));
-                                accessToken = String.valueOf(authInfo.getString("access_token"));
-                                expiresIn = String.valueOf(authInfo.getString("expires_in"));
-                                tokenType = String.valueOf(authInfo.getString("token_type"));
-                                scope = String.valueOf(authInfo.getString("scope"));
-                                refreshToken = String.valueOf(authInfo.getString("refresh_token"));
+            File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
+            if (fileAuth.exists()) {
+                Log.d("File exists?", "Yes");
 
-                                Log.d("Auth token", accessToken);
-                                Log.d("Expires in", expiresIn);
-                                Log.d("Token type", tokenType);
-                                Log.d("Scope", scope);
-                                Log.d("Refresh token", refreshToken);
+                //Read text from file
+                StringBuilder text = new StringBuilder();
 
-                                createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(fileAuth));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        text.append(line);
+                        text.append('\n');
+                    }
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+                try {
+                    JSONObject authInfo = new JSONObject(String.valueOf(text));
+                    accessToken = String.valueOf(authInfo.getString("access_token"));
+                    expiresIn = String.valueOf(authInfo.getString("expires_in"));
+                    tokenType = String.valueOf(authInfo.getString("token_type"));
+                    scope = String.valueOf(authInfo.getString("scope"));
+                    refreshToken = String.valueOf(authInfo.getString("refresh_token"));
+
+                    Log.d("Auth token", accessToken);
+                    Log.d("Expires in", expiresIn);
+                    Log.d("Token type", tokenType);
+                    Log.d("Scope", scope);
+                    Log.d("Refresh token", refreshToken);
+
+                    createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-
-
-/**/
 
 
           //  createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On");
 
-
+}
 
 
         }
@@ -207,53 +206,52 @@ public class DeviceWidget extends AppWidgetProvider {
                 Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
             }else
             {
-              //  createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off",accessToken);
-              File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
-              if (fileAuth.exists()) {
-                  Log.d("File exists?", "Yes");
+//                createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off",accessToken);
 
-                  //Read text from file
-                  StringBuilder text = new StringBuilder();
-
-                  try {
-                      BufferedReader br = new BufferedReader(new FileReader(fileAuth));
-                      String line;
-                      while ((line = br.readLine()) != null) {
-                          text.append(line);
-                          text.append('\n');
-                      }
-                      br.close();
-                  } catch (IOException e) {
-                      e.printStackTrace();
-                  }
-
-                  try {
-                      JSONObject authInfo = new JSONObject(String.valueOf(text));
-                      accessToken = String.valueOf(authInfo.getString("access_token"));
-                      expiresIn = String.valueOf(authInfo.getString("expires_in"));
-                      tokenType = String.valueOf(authInfo.getString("token_type"));
-                      scope = String.valueOf(authInfo.getString("scope"));
-                      refreshToken = String.valueOf(authInfo.getString("refresh_token"));
-
-                      Log.d("Auth token", accessToken);
-                      Log.d("Expires in", expiresIn);
-                      Log.d("Token type", tokenType);
-                      Log.d("Scope", scope);
-                      Log.d("Refresh token", refreshToken);
-
-                      createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"On",accessToken);
-                  } catch (JSONException e) {
-                      e.printStackTrace();
-                  }
-              }
-
-            }
+  //          }
 
 
 
            // createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off");
-/*
-*/
+
+            File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
+            if (fileAuth.exists()) {
+                Log.d("File exists?", "Yes");
+
+                //Read text from file
+                StringBuilder text = new StringBuilder();
+
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(fileAuth));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        text.append(line);
+                        text.append('\n');
+                    }
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    JSONObject authInfo = new JSONObject(String.valueOf(text));
+                    accessToken = String.valueOf(authInfo.getString("access_token"));
+                    expiresIn = String.valueOf(authInfo.getString("expires_in"));
+                    tokenType = String.valueOf(authInfo.getString("token_type"));
+                    scope = String.valueOf(authInfo.getString("scope"));
+                    refreshToken = String.valueOf(authInfo.getString("refresh_token"));
+
+                    Log.d("Auth token", accessToken);
+                    Log.d("Expires in", expiresIn);
+                    Log.d("Token type", tokenType);
+                    Log.d("Scope", scope);
+                    Log.d("Refresh token", refreshToken);
+
+                    createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off",accessToken);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
           //
 
@@ -262,7 +260,7 @@ public class DeviceWidget extends AppWidgetProvider {
         }
     }
 
-
+}
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created

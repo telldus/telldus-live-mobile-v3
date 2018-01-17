@@ -3,6 +3,7 @@ package com.telldus.live.mobile;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -56,6 +57,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
     private ImageView imgSensorType;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
+    private ProgressDialog pDialog;
 
     //    CharSequence sensorList[] = new CharSequence[] {"Outdoor Temp", "Indoor Temp", "Fridge", "Freezer"};
     CharSequence sensorDataList[] = new CharSequence[] {"Temperature", "Humidity", "Wind", "Rain"};
@@ -121,7 +123,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
 
 
 
-    //    createSensorApi();
+      //  createSensorApi();
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_sensor_widget_configure);
@@ -222,8 +224,16 @@ public class SensorAppWidgetConfigureActivity extends Activity {
         });
     }
     void createSensorApi() {
-    //    accessToken= Utility.access;
+      //  accessToken= Utility.access;
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+        pDialog = new ProgressDialog(SensorAppWidgetConfigureActivity.this);
+        pDialog.setMax(5);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+
         AndroidNetworking.post("https://api.telldus.com/oauth2/sensors/list")
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accpet", "application/json")
@@ -249,14 +259,17 @@ public class SensorAppWidgetConfigureActivity extends Activity {
 
                             }
                             sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                            if (pDialog.isShowing())
+                                pDialog.dismiss();
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        };
+                        }
                     }
 
                     @Override
                     public void onError(ANError anError) {
-
+                        if (pDialog.isShowing())
+                            pDialog.dismiss();
                     }
                 });
     }
