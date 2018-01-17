@@ -67,9 +67,7 @@ function addNewGateway(): ThunkAction {
 		const url = format({
 			pathname: '/clients/list',
 			query: {
-				extras: {
-					autodetect: 1,
-				},
+				autodetect: 1,
 			},
 		});
 		const payload = {
