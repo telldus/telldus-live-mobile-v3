@@ -40,7 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
-import com.telldus.live.mobile.Database.Utility;
+import com.telldus.live.mobile.Database.PrefManager;
+
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.ServiceBackground.AEScreenOnOffService;
 import com.telldus.live.mobile.ServiceBackground.MyService;
@@ -58,6 +59,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
     private AppWidgetManager widgetManager;
     private RemoteViews views;
     private ProgressDialog pDialog;
+    private PrefManager prefManager;
 
     //    CharSequence sensorList[] = new CharSequence[] {"Outdoor Temp", "Indoor Temp", "Fridge", "Freezer"};
     CharSequence sensorDataList[] = new CharSequence[] {"Temperature", "Humidity", "Wind", "Rain"};
@@ -72,6 +74,8 @@ public class SensorAppWidgetConfigureActivity extends Activity {
     private String tokenType;
     private String scope;
     private String refreshToken;
+    private String sesID;
+    private String ttl;
     MyDBHandler database=new MyDBHandler(this);
 
     @Override
@@ -82,6 +86,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
         // out of the widget placement if the user presses the back button.
 
         //Get the text file
+        prefManager=new PrefManager(this);
         File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
         if (fileAuth.exists()) {
             Log.d("File exists?", "Yes");
@@ -108,6 +113,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
                 tokenType = String.valueOf(authInfo.getString("token_type"));
                 scope = String.valueOf(authInfo.getString("scope"));
                 refreshToken = String.valueOf(authInfo.getString("refresh_token"));
+                prefManager.AccessTokenDetails(accessToken,expiresIn);
 
                 Log.d("Auth token", accessToken);
                 Log.d("Expires in", expiresIn);
@@ -122,16 +128,45 @@ public class SensorAppWidgetConfigureActivity extends Activity {
         }
 
 
+        File fileSession = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/session.txt");
+        if (fileSession.exists()) {
+            Log.d("File exists?", "Yes");
+            //Read text from file
+            StringBuilder text = new StringBuilder();
 
-      //  createSensorApi();
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(fileSession));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    text.append(line);
+                    text.append('\n');
+                }
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                JSONObject authInfo = new JSONObject(String.valueOf(text));
+                sesID = String.valueOf(authInfo.getString("sessionId"));
+                ttl = String.valueOf(authInfo.getString("ttl"));
+
+                Log.d("Session ID", sesID);
+                Log.d("Expires in", ttl);
+                prefManager.saveSessionID(sesID,ttl);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         setResult(RESULT_CANCELED);
 
         setContentView(R.layout.activity_sensor_widget_configure);
 
         // activity stuffs
         setContentView(R.layout.activity_sensor_widget_configure);
-        //Typeface font = Typeface.createFromAsset(getAssets(), "fonts/telldusicons.ttf");
-        // etUrl = (EditText) findViewById(R.id.etUrl);
+
         widgetManager = AppWidgetManager.getInstance(this);
         views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
         // Find the widget id from the intent.
@@ -224,7 +259,7 @@ public class SensorAppWidgetConfigureActivity extends Activity {
         });
     }
     void createSensorApi() {
-      //  accessToken= Utility.access;
+
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
 
         pDialog = new ProgressDialog(SensorAppWidgetConfigureActivity.this);
@@ -249,13 +284,15 @@ public class SensorAppWidgetConfigureActivity extends Activity {
                             for (int i = 0; i < sensorList.length(); i++) {
                                 JSONObject curObj = sensorList.getJSONObject(i);
                                 String name = curObj.getString("name");
-                                Integer id=curObj.getInt("id");
-                                DeviceID.put(name,id);
-                                Log.d("&&&&&&&&&&&&&&&&&&&&&&&", name);
-                                nameListItems.add(name);
+                                if(name!=null&&!name.equals("null"))
+                                {
+                                  Integer id=curObj.getInt("id");
+                                  DeviceID.put(name,id);
+                                  Log.d("&&&&&&&&&&&&&&&&&&&&&&&", name);
+                                  nameListItems.add(name);
 
-                                Log.v("Sensor response",response.toString());
-
+                                  Log.v("Sensor response",response.toString());
+                                }
 
                             }
                             sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);

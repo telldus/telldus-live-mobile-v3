@@ -38,7 +38,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
-import com.telldus.live.mobile.Database.Utility;
+import com.telldus.live.mobile.Database.PrefManager;
+
 import com.telldus.live.mobile.Model.DeviceInfo;
 
 /**
@@ -79,11 +80,16 @@ public class DeviceWidgetConfigureActivity extends Activity {
     private String refreshToken;
     int stateID;
 
-   @Override
+    private String sesID;
+    private String ttl;
+    MyDBHandler database=new MyDBHandler(this);
+    private PrefManager prefManager;
+
+
+    @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-       //Get the text file
+        prefManager=new PrefManager(this);
        File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
        if (fileAuth.exists()) {
            Log.d("File exists?", "Yes");
@@ -110,28 +116,58 @@ public class DeviceWidgetConfigureActivity extends Activity {
                tokenType = String.valueOf(authInfo.getString("token_type"));
                scope = String.valueOf(authInfo.getString("scope"));
                refreshToken = String.valueOf(authInfo.getString("refresh_token"));
+               prefManager.AccessTokenDetails(accessToken,expiresIn);
 
                Log.d("Auth token", accessToken);
                Log.d("Expires in", expiresIn);
                Log.d("Token type", tokenType);
                Log.d("Scope", scope);
                Log.d("Refresh token", refreshToken);
-               Utility.access=accessToken;
 
                createDeviceApi();
            } catch (JSONException e) {
                e.printStackTrace();
            }
        }
-//       createDeviceApi();
 
 
+       File fileSession = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/session.txt");
+       if (fileSession.exists()) {
+           Log.d("File exists?", "Yes");
+           //Read text from file
+           StringBuilder text = new StringBuilder();
+
+           try {
+               BufferedReader br = new BufferedReader(new FileReader(fileSession));
+               String line;
+               while ((line = br.readLine()) != null) {
+                   text.append(line);
+                   text.append('\n');
+               }
+               br.close();
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+
+           try {
+               JSONObject authInfo = new JSONObject(String.valueOf(text));
+               sesID = String.valueOf(authInfo.getString("sessionId"));
+               ttl = String.valueOf(authInfo.getString("ttl"));
+
+               Log.d("Session ID", sesID);
+               Log.d("Expires in", ttl);
+               prefManager.saveSessionID(sesID,ttl);
+
+           } catch (JSONException e) {
+               e.printStackTrace();
+           }
+       }
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
         views = new RemoteViews(this.getPackageName(), R.layout.configurable_device_widget);
         widgetManager = AppWidgetManager.getInstance(this);
 
-      //  createDeviceApi();
+//        createDeviceApi();
 
 
         Intent intent = getIntent();
@@ -200,10 +236,6 @@ public class DeviceWidgetConfigureActivity extends Activity {
 
 
     void createDeviceApi() {
-      //  accessToken= Utility.access;
-//https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1
-
-
         pDialog = new ProgressDialog(DeviceWidgetConfigureActivity.this);
         pDialog.setMax(5);
         pDialog.setMessage("Please wait...");

@@ -27,7 +27,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
-import com.telldus.live.mobile.Database.Utility;
+import com.telldus.live.mobile.Database.PrefManager;
+
 import com.telldus.live.mobile.Model.DeviceInfo;
 
 /**
@@ -38,9 +39,11 @@ public class DeviceWidget extends AppWidgetProvider {
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF="ACTION_OFF";
 
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         MyDBHandler db = new MyDBHandler(context);
+
         CharSequence widgetText = "Telldus";
 
         DeviceInfo widgetID=db.findUser(appWidgetId);
@@ -116,6 +119,7 @@ public class DeviceWidget extends AppWidgetProvider {
 
         MyDBHandler db = new MyDBHandler(context);
 
+
         if (ACTION_ON.equals(intent.getAction())) {
             String accessToken="";
             String expiresIn;
@@ -133,9 +137,7 @@ public class DeviceWidget extends AppWidgetProvider {
                 Toast.makeText(context,"Already Turned on",Toast.LENGTH_LONG).show();
             }else
             {
-            //    createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
-
-            //}
+               // createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
 
 
 
@@ -178,10 +180,8 @@ public class DeviceWidget extends AppWidgetProvider {
                 }
             }
 
+            }
 
-          //  createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On");
-
-}
 
 
         }
@@ -206,61 +206,51 @@ public class DeviceWidget extends AppWidgetProvider {
                 Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
             }else
             {
-//                createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off",accessToken);
 
-  //          }
+                File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
+                if (fileAuth.exists()) {
+                    Log.d("File exists?", "Yes");
 
+                    //Read text from file
+                    StringBuilder text = new StringBuilder();
 
-
-           // createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off");
-
-            File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
-            if (fileAuth.exists()) {
-                Log.d("File exists?", "Yes");
-
-                //Read text from file
-                StringBuilder text = new StringBuilder();
-
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(fileAuth));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        text.append(line);
-                        text.append('\n');
+                    try {
+                        BufferedReader br = new BufferedReader(new FileReader(fileAuth));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            text.append(line);
+                            text.append('\n');
+                        }
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                    try {
+                        JSONObject authInfo = new JSONObject(String.valueOf(text));
+                        accessToken = String.valueOf(authInfo.getString("access_token"));
+                        expiresIn = String.valueOf(authInfo.getString("expires_in"));
+                        tokenType = String.valueOf(authInfo.getString("token_type"));
+                        scope = String.valueOf(authInfo.getString("scope"));
+                        refreshToken = String.valueOf(authInfo.getString("refresh_token"));
+
+                        Log.d("Auth token", accessToken);
+                        Log.d("Expires in", expiresIn);
+                        Log.d("Token type", tokenType);
+                        Log.d("Scope", scope);
+                        Log.d("Refresh token", refreshToken);
+
+                        createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off",accessToken);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
-                try {
-                    JSONObject authInfo = new JSONObject(String.valueOf(text));
-                    accessToken = String.valueOf(authInfo.getString("access_token"));
-                    expiresIn = String.valueOf(authInfo.getString("expires_in"));
-                    tokenType = String.valueOf(authInfo.getString("token_type"));
-                    scope = String.valueOf(authInfo.getString("scope"));
-                    refreshToken = String.valueOf(authInfo.getString("refresh_token"));
-
-                    Log.d("Auth token", accessToken);
-                    Log.d("Expires in", expiresIn);
-                    Log.d("Token type", tokenType);
-                    Log.d("Scope", scope);
-                    Log.d("Refresh token", refreshToken);
-
-                    createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off",accessToken);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
-
-          //
-
-          //  createDeviceApi(context,id.getDeviceID(),1,wigetID,db,"On",accessToken);
-
-        }
+     }
     }
 
-}
+
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
@@ -288,7 +278,7 @@ public class DeviceWidget extends AppWidgetProvider {
     }
 
     void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action,String accessToken) {
-      //  accessToken= Utility.access;
+
         String str="https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
         Log.v("***********",str);
         AndroidNetworking.get("https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null")
