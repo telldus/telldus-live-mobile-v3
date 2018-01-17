@@ -28,7 +28,7 @@ import type { Dispatch, GetState, ThunkAction } from './Types';
 import { v4 } from 'react-native-uuid';
 import { reportException } from 'Analytics';
 import TelldusWebsocket from '../Lib/Socket';
-
+import FileSystem from 'react-native-filesystem';
 import { processWebsocketMessageForSensor } from 'Actions_Sensors';
 import { processWebsocketMessageForDevice } from 'Actions_Devices';
 
@@ -208,6 +208,16 @@ const destroyConnection = gatewayId => {
  * calls `getWebsocketAddress`, so that a new connection for the a new address
  * is set up.
  */
+
+async function writeToFile(data) {
+	await FileSystem.writeToFile('session.txt', data);
+	console.log('Data written successfully!');
+}
+
+async function readFile() {
+	const fileContents = await FileSystem.readFile('session.txt');
+	console.log(`read data from file: ${fileContents}`);
+}
 const setupGatewayConnection = (gatewayId:string, address:string, port:string) => (dispatch, getState) => {
 	destroyConnection(gatewayId);
 	const websocketUrl = `ws://${address}:${port}/websocket`;
@@ -232,13 +242,15 @@ const setupGatewayConnection = (gatewayId:string, address:string, port:string) =
 		}
 
 		const {
-			websockets: { session: { id: sessionId } },
+			websockets: { session: { id: sessionId, ttl: ttl } },
 		} = getState();
-
 		dispatch({
 			type: 'GATEWAY_WEBSOCKET_OPEN',
 			gatewayId,
 		});
+		let SessionID = { sessionId: sessionId, ttl: ttl };
+		writeToFile(JSON.stringify(SessionID));
+		readFile();
 
 		authoriseWebsocket(sessionId);
 

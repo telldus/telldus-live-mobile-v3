@@ -41,8 +41,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
-import com.telldus.live.mobile.Database.Utility;
-import com.telldus.live.mobile.GetTimeAgo;
+import com.telldus.live.mobile.Database.PrefManager;
+
+
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.R;
 
@@ -55,6 +56,7 @@ public class MyService extends Service {
     ArrayList<String> client_list=new ArrayList<>();
     private WebSocketClient mWebSocketClient;
     boolean isConnecting=false;
+    private PrefManager mPrefmanager;
 
     String parent="ws://";
     String endpoint="websocket";
@@ -64,6 +66,8 @@ public class MyService extends Service {
     Map<String,String> addressMap=new LinkedHashMap<>();
     String ctD;
     boolean isError=false;
+    private String sessionID;
+    private String accessToken;
 
     @Override
     public void onCreate() {
@@ -74,6 +78,9 @@ public class MyService extends Service {
     @Override
     public void onStart(Intent intent, int startid) {
         Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        mPrefmanager=new PrefManager(this);
+        sessionID=mPrefmanager.getSession();
+        accessToken=mPrefmanager.getAccess();
 
         //connectWebSocket();
         getClientList();
@@ -85,7 +92,7 @@ public class MyService extends Service {
     void getClientList() {
         client_list.clear();
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        final String finalAccessToken = Utility.access;
+        final String finalAccessToken = accessToken;
         AndroidNetworking.get("https://api.telldus.com/oauth2/clients/list")
                 .addHeaders("Authorization","Bearer "+finalAccessToken)
                 .setPriority(Priority.LOW)
@@ -140,7 +147,7 @@ public class MyService extends Service {
               //  String accessToken="82c579429a838b8796a63a4304c28c983bac25a5";
 
                 AndroidNetworking.get(url)
-                        .addHeaders("Authorization", "Bearer " + Utility.access)
+                        .addHeaders("Authorization", "Bearer " + accessToken)
                         .setPriority(Priority.LOW)
                         .build()
                         .getAsString(new StringRequestListener() {
@@ -208,7 +215,7 @@ public class MyService extends Service {
                 @Override
                 public void onOpen(ServerHandshake handshakedata) {
                     //1855ca0f-5e0c-41fd-8306-69b15ec0765c
-                    authoriseWebsocket(ClientID, "1d276070-fba2-4d25-b3fa-98c621972ae5", mWebSocketClient);
+                    authoriseWebsocket(ClientID, sessionID, mWebSocketClient);
                     addWebsocketFilter("device", "added", mWebSocketClient);
                     addWebsocketFilter("device", "removed", mWebSocketClient);
                     addWebsocketFilter("device", "failSetState", mWebSocketClient);
@@ -333,113 +340,6 @@ public class MyService extends Service {
     }
 
 
-
-/*
-    private void connectWebSocket() {
-        URI uri;
-        try {
-            uri = new URI("ws://tyra.telldus.com:80/websocket");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        mWebSocketClient = new WebSocketClient(uri) {
-            @Override
-            public void onOpen(ServerHandshake serverHandshake) {
-                Log.v("Websocket", "Opened");
-
-                authoriseWebsocket(ClientID,"56c94d19-5078-43c7-869f-613ebab478a3", mWebSocketClient);
-                addWebsocketFilter("device", "added",mWebSocketClient);
-                addWebsocketFilter("device", "removed",mWebSocketClient);
-                addWebsocketFilter("device", "failSetState",mWebSocketClient);
-                addWebsocketFilter("device", "setState",mWebSocketClient);
-
-                addWebsocketFilter("sensor", "added",mWebSocketClient);
-                addWebsocketFilter("sensor", "removed",mWebSocketClient);
-                addWebsocketFilter("sensor", "setName",mWebSocketClient);
-                addWebsocketFilter("sensor", "setPower",mWebSocketClient);
-                addWebsocketFilter("sensor", "value",mWebSocketClient);
-
-                addWebsocketFilter("zwave", "removeNodeFromNetwork",mWebSocketClient);
-                addWebsocketFilter("zwave", "removeNodeFromNetworkStartTimeout",mWebSocketClient);
-                addWebsocketFilter("zwave", "addNodeToNetwork",mWebSocketClient);
-                addWebsocketFilter("zwave", "addNodeToNetworkStartTimeout",mWebSocketClient);
-                addWebsocketFilter("zwave", "interviewDone",mWebSocketClient);
-                addWebsocketFilter("zwave", "nodeInfo",mWebSocketClient);
-
-            }
-
-            @Override
-            public void onMessage(String s) {
-                Log.v("JsonResponse",s);
-
-                try {
-                    JSONObject jsonObject = new JSONObject(s);
-                    Log.v("Json_Response", jsonObject.toString());
-
-                    JSONObject jsonDataObject = new JSONObject();
-                    jsonDataObject = jsonObject.getJSONObject("data");
-                    int sensorid = Integer.parseInt(jsonDataObject.getString("sensorId"));
-                    String module = jsonObject.getString("module");
-                    String time = jsonDataObject.getString("time");
-
-                    JSONArray jsonArray = new JSONArray();
-                    jsonArray = jsonDataObject.optJSONArray("data");
-                    Log.v("JSON-Array", jsonArray.toString());
-                    String valueSensor = null;
-
-                    //   for(int i=0;i<jsonArray.length();i++)
-                    // {
-                    JSONObject jsonObject1 = jsonArray.getJSONObject(jsonArray.length() - 1);
-                    valueSensor = jsonObject1.optString("value");
-                    // }
-                    Log.v("************", "------------->" + jsonObject1.toString());
-
-
-                    SensorInfo mSensorInfo = db.findSensorDevice(sensorid);
-
-                    if (mSensorInfo != null) {
-                        String widgetname = mSensorInfo.getWidgetName();
-                        String widgettype = mSensorInfo.getWidgetType();
-                     //   int sensorID = mSensorInfo.getDeviceID();
-                        int widgeID = mSensorInfo.getWidgetID();
-                        Log.v("Widgetname", widgetname);
-                        Log.v("widgetype", widgettype);
-                       // Log.v("sensorID", String.valueOf(sensorID));
-                        Log.v("widgetID", String.valueOf(widgeID));
-                        Log.v("*********", "------->" + "Fire");
-                            long timeStamp = Long.parseLong(time);
-
-
-                      int result=  db.updateSensorInfo(valueSensor,timeStamp,sensorid);
-
-                    }
-                    Log.v("SensorID", "--------->" + sensorid);
-                    Log.v("Module", "---------->" + module);
-                    Log.v("Time", "----------->" + time);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onClose(int i, String s, boolean b) {
-              //  Log.v("Websocket", "Closed " + s);
-                connectWebSocket();
-
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-                Log.v("Websocket", "Error " + e.getMessage());
-                //connectWebSocket();
-            }
-        };
-        mWebSocketClient.connect();
-    }*/
     @Override
     public void onDestroy() {
         Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();

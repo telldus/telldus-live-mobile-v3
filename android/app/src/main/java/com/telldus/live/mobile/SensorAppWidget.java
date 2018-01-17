@@ -25,7 +25,6 @@ public class SensorAppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-
         CharSequence widgetText = "Sensor widget";
         String sensorHistory="Last updated 20 mins ago";
         CharSequence sensorValue="22";
@@ -42,20 +41,16 @@ public class SensorAppWidget extends AppWidgetProvider {
 
             if(!sensorHistory.equals("1515735980"))
             {
-                if (time < 1000000000000L) {
+                 if (time < 1000000000000L) {
                     // if timestamp given in seconds, convert to millis
                     time *= 1000;
                 }
-
                 CharSequence timeSpanString=  DateUtils.getRelativeTimeSpanString(time, now,
                         0L, DateUtils.FORMAT_ABBREV_ALL);
                 sensorHistory = "Last updated "+String.valueOf(timeSpanString);
             }else {
                 sensorHistory = "Waiting for update..";
             }
-
-
-
           //  Toast.makeText(context,sensorHistory,Toast.LENGTH_LONG).show();
         }
 
