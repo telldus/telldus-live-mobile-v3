@@ -22,6 +22,7 @@
 'use strict';
 
 import type { Action } from 'Actions_Types';
+import { REHYDRATE } from 'redux-persist';
 
 type State = {
 	show: boolean,
@@ -42,6 +43,11 @@ const initialState: State = {
 };
 
 function dimmer(state: State = initialState, action: Action): State {
+	if (action.type === REHYDRATE) {
+		return {
+			...initialState,
+		};
+	}
 	if (action.type === 'SHOW_DIMMER_POPUP') {
 		return {
 			...state,
