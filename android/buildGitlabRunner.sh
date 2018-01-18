@@ -41,4 +41,5 @@ fi
 
 git clone git@code.telldus.com:telldus/android-signing.git
 
+./gradlew clean
 ./gradlew assembleRelease
