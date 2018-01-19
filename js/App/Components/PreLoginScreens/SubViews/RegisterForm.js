@@ -30,7 +30,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { View, TouchableButton } from 'BaseComponents';
 
-import {RegisterUser} from 'Actions_User';
+import { RegisterUser } from 'Actions_User';
+import { showModal } from 'Actions_Modal';
 
 import i18n from '../../../Translations/common';
 
@@ -102,6 +103,11 @@ class RegisterForm extends View {
 		this.onConfirmEmailChange = this.onConfirmEmailChange.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 		this.postSubmit = this.postSubmit.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 	}
 
 	postSubmit() {
@@ -135,6 +141,7 @@ class RegisterForm extends View {
 	}
 
 	onFormSubmit() {
+		let { dispatch } = this.props;
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
 		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
 			let isConfirmEmailValid = this.validateEmail(cem);
@@ -144,16 +151,23 @@ class RegisterForm extends View {
 					this.setState({
 						isLoading: true,
 					});
-					this.props.onFormSubmit(em, fn, ln, this.postSubmit);
+					this.props.onFormSubmit(em, fn, ln, this.postSubmit)
+						.then(response => {
+							this.postSubmit();
+						})
+						.catch(err => {
+							this.postSubmit();
+							this.handleRegisterError(err);
+						});
 				} else {
 					let message = this.props.intl.formatMessage(messages.emailAddressNotMatchBody);
 					let header = this.props.intl.formatMessage(messages.emailAddressNotMatchHeader);
-					this.showModal(message, header);
+					dispatch(showModal(message, header));
 				}
 			} else {
 				let message = this.props.intl.formatMessage(messages.emailNotValidBody);
 				let header = this.props.intl.formatMessage(messages.emailNotValidHeader);
-				this.showModal(message, header);
+				dispatch(showModal(message, header));
 			}
 		} else {
 			let postF = this.props.intl.formatMessage(messages.fieldEmptyPostfix);
@@ -162,18 +176,16 @@ class RegisterForm extends View {
 					: em === '' ? `${this.props.intl.formatMessage(i18n.emailAddress)} ${postF}`
 						: cem === '' ? `${this.props.intl.formatMessage(i18n.confirmEmailAddress)} ${postF}`
 							: this.props.validationMessage;
-			this.showModal(message);
+			dispatch(showModal(message));
 		}
 	}
 
-	showModal(data, extras = false) {
-		this.props.dispatch({
-			type: 'REQUEST_MODAL_OPEN',
-			payload: {
-				data,
-				extras,
-			},
-		});
+	handleRegisterError(error: Object) {
+		let { dispatch } = this.props;
+		let data = !error.error_description && error.message === 'Network request failed' ?
+			this.networkFailed : error.error_description ?
+				error.error_description : error.error ? error.error : this.unknownError;
+		dispatch(showModal(data));
 	}
 
 	validateEmail(email: string) {
@@ -260,10 +272,8 @@ class RegisterForm extends View {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		onFormSubmit: (email: string, firstName: string, LastName: string, callback: () => void) => {
-			dispatch(RegisterUser(email, firstName, LastName)).then(res => {
-				callback();
-			});
+		onFormSubmit: (email: string, firstName: string, LastName: string) => {
+			return dispatch(RegisterUser(email, firstName, LastName));
 		},
 		dispatch,
 	};
