@@ -141,7 +141,9 @@ class RegisterForm extends View {
 	}
 
 	onFormSubmit() {
-		let { dispatch } = this.props;
+		let { dispatch, intl, validationMessage, onFormSubmit } = this.props;
+		let { formatMessage } = intl;
+
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
 		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
 			let isConfirmEmailValid = this.validateEmail(cem);
@@ -151,7 +153,7 @@ class RegisterForm extends View {
 					this.setState({
 						isLoading: true,
 					});
-					this.props.onFormSubmit(em, fn, ln, this.postSubmit)
+					onFormSubmit(em, fn, ln, this.postSubmit)
 						.then(response => {
 							this.postSubmit();
 						})
@@ -160,22 +162,22 @@ class RegisterForm extends View {
 							this.handleRegisterError(err);
 						});
 				} else {
-					let message = this.props.intl.formatMessage(messages.emailAddressNotMatchBody);
-					let header = this.props.intl.formatMessage(messages.emailAddressNotMatchHeader);
+					let message = formatMessage(messages.emailAddressNotMatchBody);
+					let header = formatMessage(messages.emailAddressNotMatchHeader);
 					dispatch(showModal(message, header));
 				}
 			} else {
-				let message = this.props.intl.formatMessage(messages.emailNotValidBody);
-				let header = this.props.intl.formatMessage(messages.emailNotValidHeader);
+				let message = formatMessage(messages.emailNotValidBody);
+				let header = formatMessage(messages.emailNotValidHeader);
 				dispatch(showModal(message, header));
 			}
 		} else {
-			let postF = this.props.intl.formatMessage(messages.fieldEmptyPostfix);
-			let message = fn === '' ? `${this.props.intl.formatMessage(i18n.firstName)} ${postF}`
-				: ln === '' ? `${this.props.intl.formatMessage(i18n.lastName)} ${postF}`
-					: em === '' ? `${this.props.intl.formatMessage(i18n.emailAddress)} ${postF}`
-						: cem === '' ? `${this.props.intl.formatMessage(i18n.confirmEmailAddress)} ${postF}`
-							: this.props.validationMessage;
+			let postF = formatMessage(messages.fieldEmptyPostfix);
+			let message = fn === '' ? `${formatMessage(i18n.firstName)} ${postF}`
+				: ln === '' ? `${formatMessage(i18n.lastName)} ${postF}`
+					: em === '' ? `${formatMessage(i18n.emailAddress)} ${postF}`
+						: cem === '' ? `${formatMessage(i18n.confirmEmailAddress)} ${postF}`
+							: validationMessage;
 			dispatch(showModal(message));
 		}
 	}
