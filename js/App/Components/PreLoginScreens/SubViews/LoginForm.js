@@ -82,6 +82,12 @@ class LoginForm extends View {
 		this.onChangePassword = this.onChangePassword.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 		this.postSubmit = this.postSubmit.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.timedOut = `${formatMessage(i18n.timedOut)}, ${formatMessage(i18n.tryAgain)}?`;
+		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 	}
 
 	render() {
@@ -167,10 +173,10 @@ class LoginForm extends View {
 		if (error.response) {
 			let errorMessage = error.response.data.error_description ?
 				error.response.data.error_description : error.response.data.error ?
-					error.response.data.error : 'Unknown Error, Please try again later.';
+					error.response.data.error : this.unknownError;
 			dispatch(showModal(errorMessage));
 		} else if (error.request) {
-			let errorMessage = !error.status && error.request._timedOut ? 'Timed out, try again?' : 'Network request failed. Please check your internet connection';
+			let errorMessage = !error.status && error.request._timedOut ? this.timedOut : this.networkFailed;
 			dispatch(showModal(errorMessage));
 		} else {
 			dispatch(showModal(error.message));

@@ -339,6 +339,18 @@ const messages = defineMessages({
 		id: 'error.timedOut',
 		defaultMessage: 'Timed out',
 	},
+	tryAgain: {
+		id: 'error.tryAgain',
+		defaultMessage: 'try again',
+	},
+	unknownError: {
+		id: 'error.unknownError',
+		defaultMessage: 'Unknown Error, Please try again later',
+	},
+	networkFailed: {
+		id: 'error.networkFailed',
+		defaultMessage: 'Network request failed. Please check your internet connection',
+	},
 });
 
 export default messages;
