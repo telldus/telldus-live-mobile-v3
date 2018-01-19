@@ -145,6 +145,7 @@ class LoginForm extends View {
 	}
 
 	onFormSubmit() {
+		let { intl, dispatch } = this.props;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
 			this.props.loginToTelldus(this.state.username, this.state.password, this.postSubmit)
@@ -156,13 +157,8 @@ class LoginForm extends View {
 					this.handleLoginError(err);
 				});
 		} else {
-			let message = this.props.intl.formatMessage(messages.fieldEmpty);
-			this.props.dispatch({
-				type: 'REQUEST_MODAL_OPEN',
-				payload: {
-					data: message,
-				},
-			});
+			let message = intl.formatMessage(messages.fieldEmpty);
+			dispatch(showModal(message));
 		}
 	}
 
