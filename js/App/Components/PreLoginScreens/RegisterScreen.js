@@ -103,7 +103,7 @@ class RegisterScreen extends View {
 	}
 
 	render() {
-		let { showModal, validationMessage, appLayout } = this.props;
+		let { showModal, validationMessage, validationMessageHeader, appLayout } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
@@ -117,6 +117,7 @@ class RegisterScreen extends View {
 				<DialogueBox
 					showDialogue={showModal}
 					text={validationMessage}
+					header={validationMessageHeader}
 					showPositive={true}
 					showNegative={false}
 					onPressPositive={this.closeModal}/>
