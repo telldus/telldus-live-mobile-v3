@@ -193,7 +193,7 @@
   "user.contentLogoutConfirm": "If you logout from your account you will have to add your devices to your dashboard manually.",
   "user.createAccount": "Create Account",
   "user.emailAddress": "Email address",
-  "user.emailAddressNotMatchBody": "Email addresses don't match. Please Check your entered email address.",
+  "user.emailAddressNotMatchBody": "Email addresses don't match. Please check your entered email address.",
   "user.emailAddressNotMatchHeader": "EMAILS DON'T MATCH",
   "user.emailNotValidBody": "The email address you entered is not valid. Please check that your email address is entered correctly.",
   "user.emailNotValidHeader": "INVALID EMAIL ADDRESS",

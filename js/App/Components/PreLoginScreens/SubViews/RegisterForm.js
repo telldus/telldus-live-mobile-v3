@@ -50,7 +50,7 @@ const messages = defineMessages({
 	},
 	emailAddressNotMatchBody: {
 		id: 'user.emailAddressNotMatchBody',
-		defaultMessage: 'Email addresses don\'t match. Please Check your entered email address.',
+		defaultMessage: 'Email addresses don\'t match. Please check your entered email address.',
 		description: 'Validation Message Body when Emails don\'t match',
 	},
 	emailNotValidBody: {
