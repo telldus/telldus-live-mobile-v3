@@ -27,6 +27,7 @@ import {LiveApi} from 'LiveApi';
 import { publicKey, privateKey, apiServer } from 'Config';
 
 import { format } from 'url';
+import { reportError } from 'Analytics';
 
 /*
  * registers the app at the telldus server for receiving push notification, with push token and other device information.
@@ -64,6 +65,7 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 		}
 		throw response;
 	}).catch(e => {
+		reportError(e);
 		if (e === 'TypeError: Network request failed') {
 			dispatch({
 				type: 'ERROR',
