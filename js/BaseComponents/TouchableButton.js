@@ -77,9 +77,6 @@ class TouchableButton extends Component<Props, void> {
 			accessibilityLabel ? accessibilityLabel : `${label} ${this.labelButton}, ${this.defaultDescription}`;
 		let importantForAccessibility = !accessible ? 'no-hide-descendants' : 'yes';
 
-		const {
-		} = this.props;
-
 		let {
 			buttonContainer,
 			buttonLabel,
