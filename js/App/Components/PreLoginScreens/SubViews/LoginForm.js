@@ -28,7 +28,7 @@ import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { TouchableButton, View } from 'BaseComponents';
-import { loginToTelldus } from 'Actions';
+import { loginToTelldus, showModal } from 'Actions';
 import { testUsername, testPassword } from 'Config';
 
 import i18n from '../../../Translations/common';
@@ -66,7 +66,7 @@ class LoginForm extends View {
 
 	onChangeUsername: (username:string) => void;
 	onChangePassword: (password:string) => void;
-	onFormSubmit: (username: string, password: string, callback: () => void) => void;
+	onFormSubmit: (username: string, password: string) => void;
 	postSubmit: () => void;
 
 	constructor(props: Props) {
@@ -147,7 +147,14 @@ class LoginForm extends View {
 	onFormSubmit() {
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
-			this.props.loginToTelldus(this.state.username, this.state.password, this.postSubmit);
+			this.props.loginToTelldus(this.state.username, this.state.password, this.postSubmit)
+				.then(res => {
+					this.postSubmit();
+				})
+				.catch(err => {
+					this.postSubmit();
+					this.handleLoginError(err);
+				});
 		} else {
 			let message = this.props.intl.formatMessage(messages.fieldEmpty);
 			this.props.dispatch({
@@ -156,6 +163,21 @@ class LoginForm extends View {
 					data: message,
 				},
 			});
+		}
+	}
+
+	handleLoginError(error: Object) {
+		let { dispatch } = this.props;
+		if (error.response) {
+			let errorMessage = error.response.data.error_description ?
+				error.response.data.error_description : error.response.data.error ?
+					error.response.data.error : 'Unknown Error, Please try again later.';
+			dispatch(showModal(errorMessage));
+		} else if (error.request) {
+			let errorMessage = !error.status && error.request._timedOut ? 'Timed out, try again?' : 'Network request failed. Please check your internet connection';
+			dispatch(showModal(errorMessage));
+		} else {
+			dispatch(showModal(error.message));
 		}
 	}
 
@@ -175,10 +197,8 @@ function mapStateToProps(store) {
 
 function dispatchToProps(dispatch) {
 	return {
-		loginToTelldus: (userName: string, password: string, callback: () => void) => {
-			dispatch(loginToTelldus(userName, password)).then(res => {
-				callback();
-			});
+		loginToTelldus: (userName: string, password: string) => {
+			return dispatch(loginToTelldus(userName, password));
 		},
 		dispatch,
 	};

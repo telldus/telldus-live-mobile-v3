@@ -58,32 +58,13 @@ const loginToTelldus = (username:string, password:string): ThunkAction => (dispa
 				});
 				return response;
 			}
+			throw response;
 		})
 		.catch(error => {
 			Answers.logLogin('Password', false);
-			if (error.response) {
-				let errorMessage = error.response.data.error_description ?
-					error.response.data.error_description : error.response.data.error ?
-						error.response.data.error : 'Unknown Error, Please try again later.';
-				dispatch(showLoginError(errorMessage));
-			} else if (error.request) {
-				let errorMessage = !error.status && error.request._timedOut ? 'Timed out, try again?' : 'Network request failed. Check your internet connection';
-				dispatch(showLoginError(errorMessage));
-			} else {
-				dispatch(showLoginError(error.message));
-			}
-			return error;
+			throw error;
 		});
 };
-
-function showLoginError(errorMessage: string): Action {
-	return {
-		type: 'REQUEST_MODAL_OPEN',
-		payload: {
-			data: errorMessage,
-		},
-	};
-}
 
 function updateAccessToken(accessToken:Object): Action {
 	return {
