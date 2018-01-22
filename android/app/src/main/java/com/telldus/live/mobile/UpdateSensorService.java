@@ -9,13 +9,8 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import java.util.Calendar;
-
-import com.telldus.live.mobile.Database.MyDBHandler;
-import com.telldus.live.mobile.Model.SensorInfo;
 
 public class UpdateSensorService extends Service {
     @Nullable
@@ -26,13 +21,13 @@ public class UpdateSensorService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int widgetIDs[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), SensorAppWidget.class));
+        int widgetIDs[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewSensorWidget.class));
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(this);
 
         for(int id : widgetIDs) {
                  AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(id, R.id.never);
 
-                SensorAppWidget.updateAppWidget(getApplicationContext(),widgetManager,id);
+                NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,id);
             }
 
         /*for (int id : widgetIDs) {

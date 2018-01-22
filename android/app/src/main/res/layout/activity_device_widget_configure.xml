@@ -23,8 +23,8 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="5dp"
+            android:layout_height="20dp"
+            android:paddingLeft="-10dp"
             android:src="@drawable/telldus"/>
 
     </LinearLayout>
@@ -44,20 +44,23 @@
 
             <TextView
                 android:id="@+id/testText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:gravity="right"
+                android:layout_gravity="center"
                 android:layout_marginBottom="4dp"
                 android:text="Add device widget"
                 android:textSize="30sp"
                 android:textColor="@color/white"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Choose settings for your widget"
                 android:textSize="20sp"
+                android:layout_gravity="center"
                 android:textColor="@color/white"/>
 
         </LinearLayout>
@@ -72,6 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Device:"
+                android:layout_marginLeft="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/darkGray"/>
 
@@ -85,7 +89,7 @@
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="0.38"
-                    android:background="@color/blue"
+                    android:background="@drawable/shape_left"
                     android:gravity="center">
 
                     <ImageView
@@ -101,7 +105,7 @@
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="0.62"
-                    android:background="@color/white"
+                    android:background="@drawable/shape_right"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:layout_gravity="center">
@@ -137,14 +141,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Settings:"
+                android:layout_marginLeft="10dp"
                 android:textSize="16sp"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/darkGray"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:background="@color/white">
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/shape">
 
                 <Switch
                     android:layout_width="fill_parent"
@@ -170,9 +178,10 @@
                     android:paddingBottom="10dp"
                     android:textColor="@color/white"
                     android:background="@drawable/orangebutton"
-                    android:text="CONFIRM N SAVE"/>
+                    android:text="@string/confirm"/>
 
                 <Button
+                    android:id="@+id/btn_cancel"
                     android:layout_width="220sp"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"

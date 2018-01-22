@@ -12,15 +12,13 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
-import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.ServiceBackground.MyService;
 
 /**
  * Implementation of App Widget functionality.
- * App Widget Configuration implemented in {@link SensorAppWidgetConfigureActivity SensorAppWidgetConfigureActivity}
+ * App Widget Configuration implemented in {@link NewSensorWidgetConfigureActivity NewSensorWidgetConfigureActivity}
  */
-public class SensorAppWidget extends AppWidgetProvider {
+public class NewSensorWidget extends AppWidgetProvider {
     private PendingIntent pendingIntent;
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -36,22 +34,18 @@ public class SensorAppWidget extends AppWidgetProvider {
             sensorValue = sensorID.getSensorValue();
             sensorHistory = sensorID.getSensorUpdate();
             long time = Long.parseLong(sensorHistory);
-          //  String timeStamp = GetTimeAgo.getTimeAgo(time, context);
+            //  String timeStamp = GetTimeAgo.getTimeAgo(time, context);
             long now = System.currentTimeMillis();
 
-            if(!sensorHistory.equals("1515735980"))
-            {
-                 if (time < 1000000000000L) {
+                if (time < 1000000000000L) {
                     // if timestamp given in seconds, convert to millis
                     time *= 1000;
                 }
                 CharSequence timeSpanString=  DateUtils.getRelativeTimeSpanString(time, now,
                         0L, DateUtils.FORMAT_ABBREV_ALL);
                 sensorHistory = "Last updated "+String.valueOf(timeSpanString);
-            }else {
-                sensorHistory = "Waiting for update..";
-            }
-          //  Toast.makeText(context,sensorHistory,Toast.LENGTH_LONG).show();
+
+            //  Toast.makeText(context,sensorHistory,Toast.LENGTH_LONG).show();
         }
 
 
