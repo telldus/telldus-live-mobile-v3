@@ -44,22 +44,22 @@
 
             <TextView
                 android:id="@+id/testText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="4dp"
                 android:text="Add sensor widget"
                 android:gravity="right"
-                android:layout_gravity="center"
+                android:layout_marginRight="40dp"
                 android:textSize="30sp"
                 android:textColor="@color/white"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:gravity="right"
-                android:layout_gravity="center"
+                android:layout_marginRight="40dp"
                 android:text="Choose settings for your widget"
                 android:textSize="20sp"
                 android:textColor="@color/white"/>
@@ -250,12 +250,12 @@
 
             </LinearLayout>
 
-<!--             <EditText
-                android:id="@+id/etUrl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="URL"
-                android:inputType="text"/> -->
+            <!--             <EditText
+                            android:id="@+id/etUrl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="URL"
+                            android:inputType="text"/> -->
 
         </LinearLayout>
 

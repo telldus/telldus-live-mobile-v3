@@ -7,4 +7,5 @@
 
 	<string name="pick_sensor">Pick a sensor</string>
 	<string name="pick_sensor_data">Pick a sensor data type</string>
+	<string name="confirm">Confirm &amp; Save</string>
 </resources>

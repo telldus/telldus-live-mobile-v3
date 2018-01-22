@@ -1,30 +1,18 @@
 package com.telldus.live.mobile.ServiceBackground;
 
-import android.app.ActivityManager;
 import android.app.Service;
-import android.appwidget.AppWidgetManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.text.format.DateUtils;
 import android.util.Log;
-import android.widget.RemoteViews;
 import android.widget.Toast;
-
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
-import com.koushikdutta.async.ByteBufferList;
-import com.koushikdutta.async.DataEmitter;
-import com.koushikdutta.async.callback.DataCallback;
-import com.koushikdutta.async.http.AsyncHttpClient;
-import com.koushikdutta.async.http.WebSocket;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_17;
@@ -38,14 +26,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
-
-
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.R;
 
 /**
  * Created by crosssales on 1/9/2018.
@@ -238,7 +222,7 @@ public class MyService extends Service {
 
                 @Override
                 public void onMessage(String message) {
-                    Log.v("message", message);
+                    //Log.v("message", message);
                     if (message.equals("validconnection")) {
                         isConnecting = true;
                         Log.v("Websocket open","websocket_opened @"+ClientID);
@@ -252,7 +236,7 @@ public class MyService extends Service {
 
                         try {
                             JSONObject jsonObject = new JSONObject(message);
-                            Log.v("Json_Response", jsonObject.toString());
+                            Log.v("Json_Response", jsonObject.toString(10));
 
                             JSONObject jsonDataObject = new JSONObject();
                             jsonDataObject = jsonObject.getJSONObject("data");
@@ -262,33 +246,23 @@ public class MyService extends Service {
 
                             JSONArray jsonArray = new JSONArray();
                             jsonArray = jsonDataObject.optJSONArray("data");
-                            Log.v("JSON-Array", jsonArray.toString());
                             String valueSensor = null;
 
-                            //   for(int i=0;i<jsonArray.length();i++)
-                            // {
                             JSONObject jsonObject1 = jsonArray.getJSONObject(jsonArray.length() - 1);
                             valueSensor = jsonObject1.optString("value");
-                            // }
-                            Log.v("************", "------------->" + jsonObject1.toString());
-
-
                             SensorInfo mSensorInfo = db.findSensorDevice(sensorid);
 
                             if (mSensorInfo != null) {
                                 String widgetname = mSensorInfo.getWidgetName();
                                 String widgettype = mSensorInfo.getWidgetType();
-                                //   int sensorID = mSensorInfo.getDeviceID();
+
                                 int widgeID = mSensorInfo.getWidgetID();
                                 Log.v("Widgetname", widgetname);
                                 Log.v("widgetype", widgettype);
-                                // Log.v("sensorID", String.valueOf(sensorID));
                                 Log.v("widgetID", String.valueOf(widgeID));
                                 Log.v("*********", "------->" + "Fire");
                                 long timeStamp = Long.parseLong(time);
-
-
-                                int result = db.updateSensorInfo(valueSensor, timeStamp, sensorid);
+                              int result = db.updateSensorInfo(valueSensor, timeStamp, sensorid);
 
                             }
                             Log.v("SensorID", "--------->" + sensorid);
@@ -298,9 +272,7 @@ public class MyService extends Service {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
-
-                    }
+                   }
                 }
 
                 @Override
@@ -312,9 +284,6 @@ public class MyService extends Service {
                 @Override
                 public void onError(Exception ex) {
                     Log.v("Websocket", "Error " + ex.getMessage());
-
-
-
                 }
             };
             mWebSocketClient.connect();
@@ -338,7 +307,6 @@ public class MyService extends Service {
             getClientList();
         }
     }
-
 
     @Override
     public void onDestroy() {
@@ -392,7 +360,6 @@ public class MyService extends Service {
         }
 
     }
-
 
 
 }

@@ -1,6 +1,6 @@
 package com.telldus.live.mobile.Model;
 
-import com.telldus.live.mobile.DeviceWidget;
+
 
 /**
  * Created by crosssales on 1/4/2018.

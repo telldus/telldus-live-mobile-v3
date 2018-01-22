@@ -3,10 +3,8 @@ package com.telldus.live.mobile;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -17,7 +15,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,15 +24,14 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
-import com.telldus.live.mobile.Database.PrefManager;
-
 import com.telldus.live.mobile.Model.DeviceInfo;
 
 /**
  * Implementation of App Widget functionality.
- * App Widget Configuration implemented in {@link DeviceWidgetConfigureActivity DeviceWidgetConfigureActivity}
+ * App Widget Configuration implemented in {@link NewAppWidgetConfigureActivity NewAppWidgetConfigureActivity}
  */
-public class DeviceWidget extends AppWidgetProvider {
+public class NewAppWidget extends AppWidgetProvider {
+
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF="ACTION_OFF";
 
@@ -58,7 +54,7 @@ public class DeviceWidget extends AppWidgetProvider {
             String action=widgetID.getState();
             if(action.equals("1"))
             {
-            //    Toast.makeText(context,"On",Toast.LENGTH_LONG).show();
+                //    Toast.makeText(context,"On",Toast.LENGTH_LONG).show();
                 views.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
                 views.setImageViewResource(R.id.iconOff,R.drawable.off_light);
                 //       ComponentName appWidget = new ComponentName(context, DeviceWidget.class);
@@ -67,7 +63,7 @@ public class DeviceWidget extends AppWidgetProvider {
             }
             if(action.equals("2"))
             {
-              //  Toast.makeText(context,"OFF",Toast.LENGTH_LONG).show();
+                //  Toast.makeText(context,"OFF",Toast.LENGTH_LONG).show();
                 views.setImageViewResource(R.id.iconOn, R.drawable.on_light);
                 views.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
 
@@ -97,7 +93,7 @@ public class DeviceWidget extends AppWidgetProvider {
         }
     }
 
-    protected PendingIntent getPendingSelfIntent(Context context, String action,int id) {
+    protected PendingIntent getPendingSelfIntent(Context context, String action, int id) {
         Intent intent = new Intent(context, getClass());
         intent.setAction(action);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
@@ -106,7 +102,7 @@ public class DeviceWidget extends AppWidgetProvider {
 
 
     private static PendingIntent getPendingSelf(Context context, String action, int id) {
-        Intent intent = new Intent(context, DeviceWidget.class);
+        Intent intent = new Intent(context, NewAppWidget.class);
         intent.setAction(action);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
         return PendingIntent.getBroadcast(context, id, intent, 0);
@@ -137,48 +133,48 @@ public class DeviceWidget extends AppWidgetProvider {
                 Toast.makeText(context,"Already Turned on",Toast.LENGTH_LONG).show();
             }else
             {
-               // createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
+                // createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
 
 
 
-            File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
-            if (fileAuth.exists()) {
-                Log.d("File exists?", "Yes");
+                File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
+                if (fileAuth.exists()) {
+                    Log.d("File exists?", "Yes");
 
-                //Read text from file
-                StringBuilder text = new StringBuilder();
+                    //Read text from file
+                    StringBuilder text = new StringBuilder();
 
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(fileAuth));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        text.append(line);
-                        text.append('\n');
+                    try {
+                        BufferedReader br = new BufferedReader(new FileReader(fileAuth));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            text.append(line);
+                            text.append('\n');
+                        }
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+
+                    try {
+                        JSONObject authInfo = new JSONObject(String.valueOf(text));
+                        accessToken = String.valueOf(authInfo.getString("access_token"));
+                        expiresIn = String.valueOf(authInfo.getString("expires_in"));
+                        tokenType = String.valueOf(authInfo.getString("token_type"));
+                        scope = String.valueOf(authInfo.getString("scope"));
+                        refreshToken = String.valueOf(authInfo.getString("refresh_token"));
+
+                        Log.d("Auth token", accessToken);
+                        Log.d("Expires in", expiresIn);
+                        Log.d("Token type", tokenType);
+                        Log.d("Scope", scope);
+                        Log.d("Refresh token", refreshToken);
+
+                        createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-
-                try {
-                    JSONObject authInfo = new JSONObject(String.valueOf(text));
-                    accessToken = String.valueOf(authInfo.getString("access_token"));
-                    expiresIn = String.valueOf(authInfo.getString("expires_in"));
-                    tokenType = String.valueOf(authInfo.getString("token_type"));
-                    scope = String.valueOf(authInfo.getString("scope"));
-                    refreshToken = String.valueOf(authInfo.getString("refresh_token"));
-
-                    Log.d("Auth token", accessToken);
-                    Log.d("Expires in", expiresIn);
-                    Log.d("Token type", tokenType);
-                    Log.d("Scope", scope);
-                    Log.d("Refresh token", refreshToken);
-
-                    createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
 
             }
 
@@ -187,7 +183,7 @@ public class DeviceWidget extends AppWidgetProvider {
         }
         if(ACTION_OFF.equals(intent.getAction()))
         {
-           // DeviceInfo widgetID=db.findUser(appWidgetId);
+            // DeviceInfo widgetID=db.findUser(appWidgetId);
 
             String accessToken="";
             String expiresIn;
@@ -247,7 +243,7 @@ public class DeviceWidget extends AppWidgetProvider {
                 }
 
             }
-     }
+        }
     }
 
 
@@ -266,14 +262,14 @@ public class DeviceWidget extends AppWidgetProvider {
         super.onDeleted(context, appWidgetIds);
         MyDBHandler db = new MyDBHandler(context);
         for (int appWidgetId : appWidgetIds) {
-        boolean b=db.delete(appWidgetId);
-        if(b)
-        {
-            Toast.makeText(context,"Successfully deleted",Toast.LENGTH_LONG).show();
-        }else
-        {
-            Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
-        }
+            boolean b=db.delete(appWidgetId);
+            if(b)
+            {
+                Toast.makeText(context,"Successfully deleted",Toast.LENGTH_LONG).show();
+            }else
+            {
+                Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -291,23 +287,23 @@ public class DeviceWidget extends AppWidgetProvider {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                           Log.v("------->",response.toString());
+                            Log.v("------->",response.toString());
 
-                           String status=response.optString("status");
-                           String error=response.optString("error");
+                            String status=response.optString("status");
+                            String error=response.optString("error");
 
-                           if(!status.isEmpty()&&status!=null&&action.equals("On"))
-                           {
-                               boolean b=db.updateAction("1",wigetID);
-                               RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.configurable_device_widget);
-                               remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
-                               remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_light);
-                                  AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                               //   appWidgetManager.updateAppWidget(appWidget, remoteViews);
-                               appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                            if(!status.isEmpty()&&status!=null&&action.equals("On"))
+                            {
+                                boolean b=db.updateAction("1",wigetID);
+                                RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.configurable_device_widget);
+                                remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
+                                remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_light);
+                                AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
+                                //   appWidgetManager.updateAppWidget(appWidget, remoteViews);
+                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
-                               Toast.makeText(ctx,"Turn on  "+status,Toast.LENGTH_LONG).show();
-                           }
+                                Toast.makeText(ctx,"Turn on  "+status,Toast.LENGTH_LONG).show();
+                            }
 
                             if(!status.isEmpty()&&status!=null&&action.equals("Off"))
                             {

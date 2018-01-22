@@ -8,18 +8,13 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
-import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -41,15 +36,14 @@ import java.util.Map;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
-
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.ServiceBackground.AEScreenOnOffService;
 import com.telldus.live.mobile.ServiceBackground.MyService;
 
 /**
- * The configuration screen for the {@link SensorAppWidget SensorAppWidget} AppWidget.
+ * The configuration screen for the {@link NewSensorWidget NewSensorWidget} AppWidget.
  */
-public class SensorAppWidgetConfigureActivity extends Activity {
+public class NewSensorWidgetConfigureActivity extends Activity {
+
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     // private EditText etUrl;
     private Button btAdd;
@@ -61,13 +55,22 @@ public class SensorAppWidgetConfigureActivity extends Activity {
     private ProgressDialog pDialog;
     private PrefManager prefManager;
 
+//    String temp=null,hum=null,windAvg=null,windGust=null,rainRate=null,rainTotal=null,luminance=null,
+//            watt=null,windDirection=null,uv=null;
+
     //    CharSequence sensorList[] = new CharSequence[] {"Outdoor Temp", "Indoor Temp", "Fridge", "Freezer"};
-    CharSequence sensorDataList[] = new CharSequence[] {"Temperature", "Humidity", "Wind", "Rain"};
+   // CharSequence sensorDataList[] = new CharSequence[] {"Temperature", "Humidity", "windAverage","windGust",
+    //        "Rain Rate","Rain Total",
+    //        "Luminance","UV","Watt","Wind Direction"};
+   // CharSequence[] sensorList=null;
+    CharSequence[] sensorDataList=null;
     CharSequence[] sensorNameList = null;
+
     List<String> nameListItems = new ArrayList<String>();
 
-   private Map<String,Integer> DeviceID=new HashMap<String,Integer>();
-   private int id;
+
+    private Map<String,Integer> DeviceID=new HashMap<String,Integer>();
+    private int id;
 
     private String accessToken;
     private String expiresIn;
@@ -76,17 +79,18 @@ public class SensorAppWidgetConfigureActivity extends Activity {
     private String refreshToken;
     private String sesID;
     private String ttl;
+    String lastUp,senValue;
     MyDBHandler database=new MyDBHandler(this);
+    private JSONArray JsonsensorList;
+    JSONObject searchObject;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        // Set the result to CANCELED.  This will cause the widget host to cancel
-        // out of the widget placement if the user presses the back button.
 
-        //Get the text file
         prefManager=new PrefManager(this);
+
         File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
         if (fileAuth.exists()) {
             Log.d("File exists?", "Yes");
@@ -160,9 +164,12 @@ public class SensorAppWidgetConfigureActivity extends Activity {
             }
         }
 
+      //  prefManager.AccessTokenDetails("eca8a3f57bf4b3ba50f1b9a3bb0a40f26766f439","232323");
+       // prefManager.saveSessionID("ee329148-1e76-441d-983d-e4985e8aeb70","23422323");
+       // createSensorApi();
         setResult(RESULT_CANCELED);
 
-        setContentView(R.layout.activity_sensor_widget_configure);
+     //   setContentView(R.layout.activity_sensor_widget_configure);
 
         // activity stuffs
         setContentView(R.layout.activity_sensor_widget_configure);
@@ -190,23 +197,18 @@ public class SensorAppWidgetConfigureActivity extends Activity {
             public void onClick(View view) {
 
                 SensorInfo mSensorInfo=new SensorInfo(mAppWidgetId,sensorName.getText().toString(),
-                        sensorDataName.getText().toString(),id,"22","1515735980");
+                        sensorDataName.getText().toString(),id,senValue,lastUp);
                 database.addSensor(mSensorInfo);
-
-                // Gets user input
-                // Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(etUrl.getText().toString()));
-                // PendingIntent pending = PendingIntent.getActivity(ConfigurableSensorWidgetConfigureActivity.this, 0, intent, 0);
-//                views.setOnClickPendingIntent(R.id.iconWidget, pending);
                 views.setTextViewText(R.id.txtSensorType, sensorName.getText());
                 views.setImageViewResource(R.id.iconSensor, R.drawable.sensor);
-              //  widgetManager.updateAppWidget(mAppWidgetId, views);
-                SensorAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+                //  widgetManager.updateAppWidget(mAppWidgetId, views);
+                NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
                 boolean b=isMyServiceRunning(MyService.class);
                 if (!b)
                 {
                     startService(new Intent(getApplicationContext(), MyService.class));
-                   // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
+                    // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
                 }
 
                 Intent resultValue = new Intent();
@@ -223,14 +225,112 @@ public class SensorAppWidgetConfigureActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(SensorAppWidgetConfigureActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this);
                 builder.setTitle(R.string.pick_sensor)
                         .setSingleChoiceItems(sensorNameList, checkedItem, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+
+                                //refersh datatype
+                                sensorDataName.setText("Select data item");
+                                sensorDataHint.setText("Tap to change value to display");
+
                                 sensorName.setText(sensorNameList[which]);
+
                                 sensorHint.setText(null);
                                 id=DeviceID.get(sensorNameList[which]);
+                                String str=String.valueOf(sensorNameList[which]);
+
+                                String temp=null,hum=null,windAvg=null,windGust=null,rainRate=null,rainTotal=null,luminance=null,
+                                        watt=null,windDirection=null,uv=null;
+                                List<String> sensorValue=new ArrayList<String>();
+
+                                    searchObject=new JSONObject();
+
+                                for (int i = 0; i < JsonsensorList.length(); i++) {
+                                    try {
+                                        JSONObject currObject = JsonsensorList.getJSONObject(i);
+                                        String sensorname = currObject.getString("name");
+                                        if(sensorname.equals(str))
+                                        {
+                                            searchObject = currObject;
+                                            Log.v("SearchObject",searchObject.toString(10));
+                                            temp=searchObject.optString("temp");
+                                            hum=searchObject.optString("humidity");
+                                            luminance=searchObject.optString("lum");
+                                            uv=searchObject.optString("uv");
+                                            rainRate=searchObject.optString("rrate");
+                                            rainTotal=searchObject.optString("rtot");
+                                            windDirection=searchObject.optString("wdir");
+                                            windAvg=searchObject.optString("wavg");
+                                            windGust=searchObject.optString("wgust");
+                                            watt=searchObject.optString("watt");
+                                            lastUp=searchObject.optString("lastUpdated");
+
+
+                                            Log.v("lastUpdated",lastUp);
+                                            Log.v("temp",temp);
+                                            Log.v("hum",hum);
+                                            Log.v("luminance",luminance);
+                                            Log.v("uv",uv);
+                                            Log.v("rainRate",rainRate);
+                                            Log.v("rainTotal",rainTotal);
+                                            Log.v("windDirection",windDirection);
+                                            Log.v("windAvg",windAvg);
+                                            Log.v("windGust",windGust);
+                                            Log.v("Watt",watt);
+
+                                            if(watt!=null&!watt.equals(""))
+                                            {
+                                                sensorValue.add("watt");
+                                            }
+
+                                            if(temp!=null && !temp.equals(""))
+                                            {
+                                                sensorValue.add("temp");
+                                            }
+                                            if(hum!=null && !hum.equals(""))
+                                            {
+                                                sensorValue.add("humidity");
+
+                                            }
+                                            if(luminance!=null && !luminance.equals(""))
+                                            {
+                                                sensorValue.add("lum");
+                                            }
+                                            if(uv!=null&& !uv.equals(""))
+                                            {
+                                                sensorValue.add("uv");
+                                            }
+                                            if(rainRate!=null&& !rainRate.equals(""))
+                                            {
+                                                sensorValue.add("rrate");
+                                            }
+                                            if(rainTotal!=null&& !rainTotal.equals(""))
+                                            {
+                                                sensorValue.add("rtot");
+                                            }
+                                            if(windDirection!=null&& !windDirection.equals(""))
+                                            {
+                                                sensorValue.add("wdir");
+                                            }
+                                            if(windAvg!=null&& !windAvg.equals(""))
+                                            {
+                                                sensorValue.add("wavg");
+                                            }
+                                            if(windGust!=null&& !windGust.equals(""))
+                                            {
+                                                sensorValue.add("wgust");
+                                            }
+
+                                            sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
+                                        }
+                                    }
+                                    catch (Exception e)
+                                    {
+
+                                    }
+                              }
                                 ad.dismiss();
                             }
                         });
@@ -244,12 +344,20 @@ public class SensorAppWidgetConfigureActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(SensorAppWidgetConfigureActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this);
                 builder.setTitle(R.string.pick_sensor_data)
                         .setSingleChoiceItems(sensorDataList, checkedItem, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 sensorDataName.setText(sensorDataList[i]);
+
+                                try {
+                                   senValue = searchObject.getString(String.valueOf(sensorDataList[i]));
+
+                                }catch (Exception ex)
+                                {
+                                    ex.printStackTrace();
+                                }
                                 sensorDataHint.setText(null);
                                 ad1.dismiss();
                             }
@@ -259,17 +367,17 @@ public class SensorAppWidgetConfigureActivity extends Activity {
         });
     }
     void createSensorApi() {
+       // accessToken=prefManager.getAccess();
 
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
 
-        pDialog = new ProgressDialog(SensorAppWidgetConfigureActivity.this);
+        pDialog = new ProgressDialog(NewSensorWidgetConfigureActivity.this);
         pDialog.setMax(5);
         pDialog.setMessage("Please wait...");
         pDialog.setCancelable(false);
         pDialog.show();
 
-
-        AndroidNetworking.post("https://api.telldus.com/oauth2/sensors/list")
+        AndroidNetworking.get("https://api.telldus.com/oauth2/sensors/list?includeValues=1")
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accpet", "application/json")
                 .addHeaders("Authorization", "Bearer " + accessToken)
@@ -280,31 +388,30 @@ public class SensorAppWidgetConfigureActivity extends Activity {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject sensorData = new JSONObject(response.toString());
-                            JSONArray sensorList = sensorData.getJSONArray("sensor");
-                            for (int i = 0; i < sensorList.length(); i++) {
-                                JSONObject curObj = sensorList.getJSONObject(i);
+                            JsonsensorList = sensorData.getJSONArray("sensor");
+                            for (int i = 0; i < JsonsensorList.length(); i++) {
+                                JSONObject curObj = JsonsensorList.getJSONObject(i);
                                 String name = curObj.getString("name");
                                 if(name!=null&&!name.equals("null"))
                                 {
-                                  Integer id=curObj.getInt("id");
-                                  DeviceID.put(name,id);
-                                  Log.d("&&&&&&&&&&&&&&&&&&&&&&&", name);
-                                  nameListItems.add(name);
-
-                                  Log.v("Sensor response",response.toString());
+                                    Integer id=curObj.getInt("id");
+                                    String last=String.valueOf(curObj.getLong("lastUpdated"));
+                                    DeviceID.put(name,id);
+                                    Log.d("&&&&&&&&&&&&&&&&&&&&&&&", name);
+                                    nameListItems.add(name);
+                                    Log.v("Sensor response",response.toString());
                                 }
-
                             }
                             sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
-                            if (pDialog.isShowing())
+                         if (pDialog.isShowing())
                                 pDialog.dismiss();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-
-                    @Override
+                   @Override
                     public void onError(ANError anError) {
+                        Log.v("AnError",anError.toString());
                         if (pDialog.isShowing())
                             pDialog.dismiss();
                     }
