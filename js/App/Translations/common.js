@@ -351,6 +351,10 @@ const messages = defineMessages({
 		id: 'error.networkFailed',
 		defaultMessage: 'Network request failed. Please check your internet connection',
 	},
+	addNewLocationFailed: {
+		id: 'error.addNewLocationFailed',
+		defaultMessage: 'Add new location could not be completed. Please try again',
+	},
 });
 
 export default messages;
