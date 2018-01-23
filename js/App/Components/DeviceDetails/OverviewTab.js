@@ -55,7 +55,6 @@ const messages = defineMessages({
 
 type Props = {
 	device: Object,
-	devices: Object,
 	gateway: Object,
 	screenProps: Object,
 };
@@ -83,25 +82,21 @@ class OverviewTab extends View {
 				accessibilityLabel={i18n.deviceOverviewTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			jumpToIndex(scene.index);
+			navigation.navigate('Overview');
 		},
 	});
 
-	getType(deviceId) {
-		const filteredItem = this.props.devices.byId[deviceId];
-		if (!filteredItem) {
+	getType(device) {
+		if (!device) {
 			return null;
 		}
 
-		const supportedMethods = filteredItem.supportedMethods;
+		const supportedMethods = device.supportedMethods;
 		return getDeviceType(supportedMethods);
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (nextProps.screenProps.currentTab !== 'Overview') {
-			return false;
-		}
-		return true;
+		return nextProps.screenProps.currentTab === 'Overview';
 	}
 
 	render() {
@@ -116,7 +111,7 @@ class OverviewTab extends View {
 			H2: gateway.type,
 		};
 		if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
-			const deviceType = this.getType(deviceId);
+			const deviceType = this.getType(device);
 			if (deviceType === 'TOGGLE') {
 				deviceDetail = <ToggleDeviceDetail device={device} intl={screenProps.intl}/>;
 			} else if (deviceType === 'DIMMER') {
@@ -141,7 +136,6 @@ class OverviewTab extends View {
 
 OverviewTab.propTypes = {
 	device: PropTypes.object.isRequired,
-	devices: PropTypes.object.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -165,7 +159,6 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state, ownProps) {
 	return {
 		device: state.devices.byId[ownProps.screenProps.device.id],
-		devices: state.devices,
 		gateway: state.gateways.byId[ownProps.screenProps.device.clientId],
 	};
 }
