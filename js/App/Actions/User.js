@@ -65,7 +65,8 @@ export const registerPushToken = (token: String, name: String, model: String, ma
 		}
 		throw response;
 	}).catch(e => {
-		reportError(e);
+		let log = JSON.stringify(e);
+		reportError(log);
 		if (e === 'TypeError: Network request failed') {
 			dispatch({
 				type: 'ERROR',
