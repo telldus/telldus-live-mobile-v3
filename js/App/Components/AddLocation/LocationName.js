@@ -48,7 +48,7 @@ const messages = defineMessages({
 	},
 	invalidLocationName: {
 		id: 'addNewLocation.locationName.invalidLocationName',
-		defaultMessage: 'Location name can\'t be empty',
+		defaultMessage: 'Location name can not be empty',
 		description: 'Local validation text when Location name field is left empty',
 	},
 });
@@ -87,6 +87,9 @@ class LocationName extends View {
 		this.h1 = `2. ${formatMessage(messages.label)}`;
 		this.h2 = formatMessage(messages.headerTwo);
 		this.label = formatMessage(messages.label);
+
+		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
@@ -167,6 +170,13 @@ class LocationName extends View {
 						} else {
 							this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
 						}
+						this.setState({
+							isLoading: false,
+						});
+					}).catch(error => {
+						let message = error.message ? (error.message === 'Network request failed' ? this.networkFailed : error.message)
+							: error.error ? error.error : this.unknownError;
+						this.props.actions.showModal(message);
 						this.setState({
 							isLoading: false,
 						});

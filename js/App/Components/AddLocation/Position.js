@@ -118,6 +118,9 @@ class Position extends View {
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
+		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+
 		this.infoButton = {
 			onPress: this.onInfoPress.bind(this),
 		};
@@ -224,6 +227,11 @@ class Position extends View {
 						longitudeDelta,
 					});
 				}
+			}).catch(error => {
+				let data = !error.error_description && error.message === 'Network request failed' ?
+					this.networkFailed : error.error_description ?
+						error.error_description : error.error ? error.error : this.unknownError;
+				this.props.dispatch(showModal(data));
 			});
 		}
 	}

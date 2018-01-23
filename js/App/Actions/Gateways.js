@@ -84,18 +84,10 @@ function addNewGateway(): ThunkAction {
 						clients: response.client,
 					},
 				});
-				return response;
 			}
+			return response;
 		}).catch(err => {
-			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch({
-				type: 'GLOBAL_ERROR_SHOW',
-				payload: {
-					source: 'Add_Location',
-					message: message,
-				},
-			});
-			return err;
+			throw err;
 		});
 	};
 }
@@ -116,12 +108,9 @@ function getGatewayInfo(uniqueParam: Object, extras?: string|null = null): Thunk
 			},
 		};
 		return LiveApi(payload).then(response => {
-			if (response.id) {
-				return response;
-			}
+			return response;
 		}).catch(err => {
-			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			return message;
+			throw err;
 		});
 	};
 }
@@ -254,16 +243,7 @@ function getGeoCodePosition(address: string): ThunkAction {
 				}
 				return responseData;
 			}).catch(e => {
-				let data = !e.error_description && e.message === 'Network request failed' ?
-					'Network request failed. Check your internet connection' : e.error_description ?
-						e.error_description : e.error ? e.error : 'Unknown Error, Please try again later.';
-				dispatch({
-					type: 'REQUEST_MODAL_OPEN',
-					payload: {
-						data,
-					},
-				});
-				return data;
+				throw e;
 			});
 	};
 }

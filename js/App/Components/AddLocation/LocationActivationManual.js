@@ -52,7 +52,7 @@ const messages = defineMessages({
 	},
 	invalidActivationCode: {
 		id: 'addNewLocation.activateManual.invalidActivationCode',
-		defaultMessage: 'Invalid Activation Code',
+		defaultMessage: 'The activation code you entered is invalid. Please check that it is entered correctly.',
 		description: 'Local Validation text when Activation Code is Invalid',
 	},
 	bodyContent: {
@@ -98,6 +98,8 @@ class LocationActivationManual extends View {
 		this.h1 = `1. ${formatMessage(messages.headerOne)}`;
 		this.h2 = formatMessage(messages.headerTwo);
 		this.label = formatMessage(messages.label);
+
+		this.invalidActivationCode = formatMessage(messages.invalidActivationCode);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
@@ -180,10 +182,16 @@ class LocationActivationManual extends View {
 				this.setState({
 					isLoading: false,
 				});
+			}).catch(error => {
+				let message = error.message ? (error.message === 'Invalid activation code' ? this.invalidActivationCode : error.message) :
+					error.error ? error.error : 'Unknown Error';
+				this.props.actions.showModal(message, 'ERROR');
+				this.setState({
+					isLoading: false,
+				});
 			});
 		} else {
-			let message = this.props.intl.formatMessage(messages.invalidActivationCode);
-			this.props.actions.showModal(message, 'ERROR');
+			this.props.actions.showModal(this.invalidActivationCode, 'ERROR');
 		}
 	}
 
