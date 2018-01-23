@@ -110,7 +110,7 @@ class HistoryTab extends View {
 
 	closeHistoryDetailsModal() {
 		if (this.props.showModal) {
-			this.props.dispatch(hideModal());			
+			this.props.dispatch(hideModal());
 		}
 	}
 
