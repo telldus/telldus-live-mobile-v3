@@ -52,9 +52,23 @@ type Props = {
 type State = {
 };
 
-class HistoryRow extends View {
+class HistoryRow extends React.PureComponent<Props, State> {
 	props: Props;
 	state: State;
+
+	labelAction: string;
+	labelStatus: string;
+	labelOff: string;
+	labelOn: string;
+	labelBell: string;
+	labelDim: string;
+	labelUp: string;
+	labelDown: string;
+	labelStop: string;
+	labelSuccess: string;
+	labelFailed: string;
+	labelDate: string;
+	labelOrigin: string;
 
 	onOriginPress: () => void;
 
