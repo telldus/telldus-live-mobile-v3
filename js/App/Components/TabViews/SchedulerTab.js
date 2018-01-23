@@ -134,6 +134,10 @@ class SchedulerTab extends View {
 		});
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		return nextProps.tab === 'schedulerTab';
+	}
+
 	onRefresh() {
 		this.props.dispatch(getJobs());
 	}

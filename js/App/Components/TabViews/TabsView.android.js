@@ -233,6 +233,10 @@ class TabsView extends View {
 		}
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		return nextProps.screenProps.currentScreen === 'Tabs';
+	}
+
 	addNewLocation() {
 		this.props.addNewLocation()
 			.then(response => {
