@@ -75,7 +75,7 @@ class SettingsTab extends View {
 				accessibilityLabel={i18n.deviceSettingsTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			jumpToIndex(scene.index);
+			navigation.navigate('Settings');
 		},
 	});
 
@@ -88,14 +88,10 @@ class SettingsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (nextProps.screenProps.currentTab !== 'Settings') {
-			return false;
-		}
-		return true;
+		return nextProps.screenProps.currentTab === 'Settings';
 	}
 
 	render() {
-
 		let { appLayout } = this.props;
 
 		let {
