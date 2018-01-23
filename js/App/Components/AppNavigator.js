@@ -40,7 +40,7 @@ import { intlShape, injectIntl, defineMessages } from 'react-intl';
 const messages = defineMessages({
 	errortoast: {
 		id: 'errortoast',
-		defaultMessage: 'Action Currently Unavailable',
+		defaultMessage: 'Action could not be completed.',
 		description: 'The error messgage to show, when a device action cannot be performed',
 	},
 });
