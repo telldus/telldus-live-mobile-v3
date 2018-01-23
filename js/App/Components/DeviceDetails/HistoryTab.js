@@ -58,6 +58,7 @@ type Props = {
 	screenProps: Object,
 	currentScreen: string,
 	currentTab: string,
+	showModal: boolean,
 };
 
 type State = {
@@ -85,14 +86,14 @@ class HistoryTab extends View {
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			let {state} = navigation;
 			state.params.actionOnHistoryTabPress();
-			jumpToIndex(scene.index);
+			navigation.navigate('History');
 		},
 	});
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			rowsAndSections: props.rowsAndSections,
+			rowsAndSections: false,
 			hasRefreshed: false,
 		};
 		this.renderRow = this.renderRow.bind(this);
@@ -108,7 +109,9 @@ class HistoryTab extends View {
 	}
 
 	closeHistoryDetailsModal() {
-		this.props.dispatch(hideModal());
+		if (this.props.showModal) {
+			this.props.dispatch(hideModal());			
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -119,9 +122,9 @@ class HistoryTab extends View {
 					hasRefreshed: true,
 				});
 			}
-			if (nextProps.rowsAndSections) {
+			if (nextProps.device && nextProps.device.history) {
 				this.setState({
-					rowsAndSections: nextProps.rowsAndSections,
+					rowsAndSections: getRowsAndSections(nextProps.device),
 				});
 			}
 		} else {
@@ -131,8 +134,9 @@ class HistoryTab extends View {
 		}
 	}
 
-	keyExtractor(item) {
-		return item.ts;
+	keyExtractor(item: Object, index: number) {
+		let key = `${item.ts}${index}`;
+		return key;
 	}
 
 	refreshHistoryData() {
@@ -167,9 +171,9 @@ class HistoryTab extends View {
 		let { intl, currentTab, currentScreen } = screenProps;
 
 		return (
-			<HistoryRow id={item.item.index}
+			<HistoryRow id={item.index}
 				item={item.item} section={item.section.key}
-				intl={intl} isFirst={+item.item.index === 0}
+				intl={intl} isFirst={+item.index === 0}
 				currentTab={currentTab} currentScreen={currentScreen}
 			/>
 		);
@@ -246,6 +250,7 @@ class HistoryTab extends View {
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 					keyExtractor={this.keyExtractor}
+					initialNumToRender={10}
 				/>
 				<View style={line}/>
 				<DeviceHistoryDetails intl={intl} currentTab={currentTab} currentScreen={currentScreen}/>
@@ -356,13 +361,11 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	// some times the history data might not have received yet, so passing 'false' value.
-	let rowsAndSections = state.devices.byId[ownProps.screenProps.device.id].history ? getRowsAndSections(state.devices.byId[ownProps.screenProps.device.id]) : false;
 	return {
 		deviceHistoryNavigator: ownProps.navigation,
-		rowsAndSections,
 		device: ownProps.screenProps.device,
 		appLayout: state.App.layout,
+		showModal: state.modal.openModal,
 	};
 }
 
