@@ -194,9 +194,14 @@ class Position extends View {
 		clientInfo.cordinates = { ...this.state.coordinate };
 		this.props.activateGateway(clientInfo)
 			.then(response => {
-				if (response) {
-					this.props.navigation.navigate('Success', {clientInfo});
-				}
+				this.props.navigation.navigate('Success', {clientInfo});
+				this.setState({
+					isLoading: false,
+				});
+			}).catch(error => {
+				let message = error.message ? (error.message === 'Network request failed' ? this.networkFailed : error.message) :
+					error.error ? error.error : this.unknownError;
+				this.props.actions.showModal(message);
 				this.setState({
 					isLoading: false,
 				});

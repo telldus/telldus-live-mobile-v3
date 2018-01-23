@@ -103,6 +103,8 @@ class LocationDetected extends View {
 			clientId: client.id,
 			uuid: client.uuid,
 			type: client.type,
+			timezone: client.timezone,
+			autoDetected: client.timezoneAutodetected,
 		};
 		this.props.navigation.navigate('LocationName', {clientInfo});
 	}

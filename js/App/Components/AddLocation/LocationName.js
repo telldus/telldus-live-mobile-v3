@@ -32,8 +32,6 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import {View, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
-import {getGatewayInfo} from 'Actions';
-
 import i18n from '../../Translations/common';
 const messages = defineMessages({
 	label: {
@@ -58,7 +56,6 @@ type Props = {
 	intl: intlShape.isRequired,
 	onDidMount: Function,
 	actions: Object,
-	getGatewayInfo: (uniqueParam: Object, extras: string) => Promise<any>;
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
@@ -152,36 +149,9 @@ class LocationName extends View {
 			Keyboard.dismiss();
 		}
 		if (this.state.locationName !== '') {
-			this.setState({
-				isLoading: true,
-			});
 			let clientInfo = this.props.navigation.state.params.clientInfo;
 			clientInfo.name = this.state.locationName;
-			if (clientInfo.timezone) {
-				this.props.navigation.navigate('TimeZone', {clientInfo});
-			} else {
-				let uniqueParam = {id: clientInfo.clientId};
-				this.props.getGatewayInfo(uniqueParam, 'timezone')
-					.then(response => {
-						if (response.timezone) {
-							clientInfo.timezone = response.timezone;
-							clientInfo.autoDetected = true;
-							this.props.navigation.navigate('TimeZone', {clientInfo});
-						} else {
-							this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
-						}
-						this.setState({
-							isLoading: false,
-						});
-					}).catch(error => {
-						let message = error.message ? (error.message === 'Network request failed' ? this.networkFailed : error.message)
-							: error.error ? error.error : this.unknownError;
-						this.props.actions.showModal(message);
-						this.setState({
-							isLoading: false,
-						});
-					});
-			}
+			this.props.navigation.navigate('TimeZone', {clientInfo});
 		} else {
 			let message = this.props.intl.formatMessage(messages.invalidLocationName);
 			this.props.actions.showModal(message);
@@ -214,7 +184,7 @@ class LocationName extends View {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onNameSubmit}
-					imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+					imageSource={require('../TabViews/img/right-arrow-key.png')}
 					showThrobber={this.state.isLoading}
 				/>
 			</View>
@@ -246,9 +216,6 @@ class LocationName extends View {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		getGatewayInfo: (uniqueParam: Object, extras: string) => {
-			return dispatch(getGatewayInfo(uniqueParam, extras));
-		},
 		dispatch,
 	};
 }

@@ -27,11 +27,12 @@ import { googleAPIKey } from 'Config';
 
 import type { ThunkAction } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
-import {showModal} from 'Actions_Modal';
 
 import {getAppData} from './AppData';
 import {LiveApi} from 'LiveApi';
 import { format } from 'url';
+
+import { reportError } from 'Analytics';
 
 function getGateways(): ThunkAction {
 	return (dispatch, getState) => {
@@ -68,6 +69,7 @@ function addNewGateway(): ThunkAction {
 			pathname: '/clients/list',
 			query: {
 				autodetect: 1,
+				extras: 'timezone',
 			},
 		});
 		const payload = {
@@ -132,7 +134,7 @@ function activateGateway(clientInfo: Object): ThunkAction {
 		};
 		return LiveApi(payload).then(response => {
 			if (response.status === 'success') {
-				return Promise.all([
+				Promise.all([
 					dispatch(setName(clientInfo.clientId, clientInfo.name)),
 					dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone)),
 					dispatch(setCoordinates(clientInfo.clientId, ...clientInfo.cordinates)),
@@ -141,10 +143,13 @@ function activateGateway(clientInfo: Object): ThunkAction {
 					dispatch(getGateways());
 					return val;
 				});
+				return response;
 			}
+			throw response;
 		}).catch(err => {
-			let message = err.message ? err.message : err.error ? err.error : 'Unknown Error';
-			dispatch(onActivationError(message));
+			let log = JSON.stringify(err);
+			reportError(log);
+			throw err;
 		});
 	};
 }
@@ -245,12 +250,6 @@ function getGeoCodePosition(address: string): ThunkAction {
 			}).catch(e => {
 				throw e;
 			});
-	};
-}
-
-function onActivationError(message: string): ThunkAction {
-	return (dispatch, getState) => {
-		dispatch(showModal(message, 'ERROR'));
 	};
 }
 
