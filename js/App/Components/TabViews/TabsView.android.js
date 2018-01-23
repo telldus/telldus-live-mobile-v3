@@ -154,6 +154,9 @@ class TabsView extends View {
 		this.starIconHideSensors = `${formatMessage(messages.starIconHideSensors)}. ${this.labelButtondefaultDescription}`;
 		this.messageCloseMenu = `${formatMessage(messages.messageCloseMenu)}`;
 
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
+
 		this.starButton = {
 			icon: {
 				name: 'star',
@@ -239,6 +242,15 @@ class TabsView extends View {
 						addingNewLocation: true,
 					});
 				}
+			}).catch(error => {
+				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
+				this.props.dispatch({
+					type: 'GLOBAL_ERROR_SHOW',
+					payload: {
+						source: 'Add_Location',
+						customMessage: message,
+					},
+				});
 			});
 	}
 
