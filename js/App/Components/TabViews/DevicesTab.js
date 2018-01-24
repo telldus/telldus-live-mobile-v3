@@ -32,7 +32,7 @@ import Platform from 'Platform';
 import { List, ListDataSource, Text, View, TouchableButton } from 'BaseComponents';
 import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
 
-import { getDevices, getDeviceHistory } from 'Actions_Devices';
+import { getDevices } from 'Actions_Devices';
 import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
@@ -196,7 +196,6 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device) {
-		this.props.dispatch(getDeviceHistory(device));
 		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
 	}
 
