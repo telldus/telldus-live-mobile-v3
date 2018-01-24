@@ -91,6 +91,7 @@
         <service android:name=".UpdateSensorService" />
 
         <receiver android:name=".NewAppWidget">
+          
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

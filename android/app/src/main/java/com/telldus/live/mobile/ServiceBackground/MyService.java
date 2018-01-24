@@ -30,6 +30,7 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
+import com.telldus.live.mobile.Utility.SensorType;
 
 /**
  * Created by crosssales on 1/9/2018.
@@ -244,30 +245,80 @@ public class MyService extends Service {
                             String module = jsonObject.getString("module");
                             String time = jsonDataObject.getString("time");
 
-                            JSONArray jsonArray = new JSONArray();
-                            jsonArray = jsonDataObject.optJSONArray("data");
+                            JSONArray jsonArray = jsonDataObject.optJSONArray("data");
+                         //   Log.v("JSON ARRAY",jsonArray.toString(10));
+
                             String valueSensor = null;
 
-                            JSONObject jsonObject1 = jsonArray.getJSONObject(jsonArray.length() - 1);
-                            valueSensor = jsonObject1.optString("value");
-                            SensorInfo mSensorInfo = db.findSensorDevice(sensorid);
+                              ArrayList<SensorInfo> mSensorInfoList = db.findSensorDevice(sensorid);
 
+                              for(int i=0;i<mSensorInfoList.size();i++)
+                              {
+                                  SensorInfo objInfo=mSensorInfoList.get(i);
+
+                                  String widgetName=objInfo.getWidgetName();
+                                  int widgetID=objInfo.getWidgetID();
+                                  String widgetType=objInfo.getWidgetType();
+                            //      int SensorID=objInfo.getDeviceID();
+
+
+                                  for(int j=0;j<jsonArray.length();j++)
+                                  {
+                                      JSONObject jsonObject1 =jsonArray.getJSONObject(j);
+                                      String type=jsonObject1.getString("type");
+                                      String scale=jsonObject1.getString("scale");
+                                  String typeValue=String.valueOf(SensorType.getValueLang(widgetType));
+
+                                      if(type.equals(typeValue))
+                                      {
+                                          //Log.v("JSONObject",jsonObject1.toString(10));
+
+                                          Log.v("Widget name",widgetName);
+                                          Log.v("Widget ID",String.valueOf(widgetID));
+                                          Log.v("Widget Type",widgetType);
+                                          Log.v(" Sensor ID",String.valueOf(objInfo.getDeviceID()));
+                                          valueSensor = jsonObject1.optString("value");
+                                          long timeStamp = Long.parseLong(time);
+                                          int result = db.updateSensorInfo(valueSensor, timeStamp, widgetID);
+
+
+                                      }
+
+                                  }
+                              }
+
+
+/*
                             if (mSensorInfo != null) {
                                 String widgetname = mSensorInfo.getWidgetName();
                                 String widgettype = mSensorInfo.getWidgetType();
+                                int widgetIDD=mSensorInfo.getWidgetID();
+
+                                String typeValue=String.valueOf(SensorType.getValueLang(widgettype));
+
+                                 for(int i=0;i<jsonArray.length();i++)
+                                 {
+                                     JSONObject jsonObject1 =jsonArray.getJSONObject(i);
+                                     String type=jsonObject1.getString("type");
+                                    if(type.equals(typeValue))
+                                    {
+                                        valueSensor = jsonObject1.optString("value");
+
+                                    }
+
+                                }
 
                                 int widgeID = mSensorInfo.getWidgetID();
                                 Log.v("Widgetname", widgetname);
                                 Log.v("widgetype", widgettype);
                                 Log.v("widgetID", String.valueOf(widgeID));
                                 Log.v("*********", "------->" + "Fire");
-                                long timeStamp = Long.parseLong(time);
-                              int result = db.updateSensorInfo(valueSensor, timeStamp, sensorid);
 
-                            }
-                            Log.v("SensorID", "--------->" + sensorid);
+
+                            }*/
+                          /*  Log.v("SensorID", "--------->" + sensorid);
                             Log.v("Module", "---------->" + module);
-                            Log.v("Time", "----------->" + time);
+                            Log.v("Time", "----------->" + time);*/
 
                         } catch (Exception e) {
                             e.printStackTrace();
