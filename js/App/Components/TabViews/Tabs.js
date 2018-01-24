@@ -105,7 +105,9 @@ export default class Tabs extends View {
 	}
 
 	onLabelLayout(ev: Object) {
-		if (this.props.screenProps.orientation !== 'PORTRAIT' && !this.state.heightLand && !this.state.widthLand) {
+		const { appLayout } = this.props;
+		const isPortrait = appLayout.height > appLayout.width;
+		if (!isPortrait && !this.state.heightLand && !this.state.widthLand) {
 			let { width, height } = ev.nativeEvent.layout;
 			this.setState({
 				heightLand: width + 60,

@@ -60,7 +60,10 @@ class TabBar extends View {
 
 	scrollToTab(layout: Object) {
 		let {x, y, width, height} = layout;
-		if (this.props.screenProps.orientation === 'PORTRAIT') {
+		let { appLayout } = this.props;
+		let isPortrait = appLayout.height > appLayout.width;
+
+		if (isPortrait) {
 			let position = (x + width) / 3;
 			position = x <= 0 ? 0 : position;
 			this.refs.scrollView.scrollTo({x: position, y: undefined, animated: true});

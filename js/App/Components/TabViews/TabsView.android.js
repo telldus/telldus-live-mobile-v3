@@ -27,8 +27,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 import { intlShape, injectIntl } from 'react-intl';
-import Orientation from 'react-native-orientation';
-const orientation = Orientation.getInitialOrientation();
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, Icon, Header } from 'BaseComponents';
@@ -186,7 +184,6 @@ class TabsView extends View {
 			settings: false,
 			routeName: 'Dashboard',
 			addingNewLocation: false,
-			orientation,
 		};
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
@@ -199,37 +196,15 @@ class TabsView extends View {
 		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
-
-		this.orientationDidChange = this.orientationDidChange.bind(this);
 	}
 
 	componentDidMount() {
 		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
-		Orientation.addOrientationListener(this.orientationDidChange);
-	}
-
-	orientationDidChange(deviceOrientation) {
-		this.setState({
-			orientation: deviceOrientation,
-		});
-	}
-
-	componentWillUnmount() {
-		Orientation.removeOrientationListener(this.orientationDidChange);
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation && nextProps.gateways.toActivate.checkIfGatewaysEmpty) {
 			this.addNewLocation();
-		}
-		if (nextProps.isAppActive && !this.props.isAppActive) {
-			Orientation.getOrientation((error: any, deviceOrientation: string) => {
-				if (deviceOrientation) {
-					this.setState({
-						orientation: deviceOrientation,
-					});
-				}
-			});
 		}
 	}
 
@@ -357,7 +332,6 @@ class TabsView extends View {
 
 		let screenProps = {
 			stackNavigator: this.props.stackNavigator,
-			orientation: this.state.orientation,
 			currentTab: this.state.routeName,
 			currentScreen,
 		};

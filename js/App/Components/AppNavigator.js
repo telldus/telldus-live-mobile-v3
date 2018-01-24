@@ -30,7 +30,6 @@ import {
 	getUserProfile,
 	appStart,
 	appState,
-	appOrientation,
 	syncLiveApiOnForeground,
 	getAppData,
 	getGateways,
@@ -50,7 +49,6 @@ import { View } from 'BaseComponents';
 import Platform from 'Platform';
 import TabsView from 'TabsView';
 import StatusBar from 'StatusBar';
-import Orientation from 'react-native-orientation';
 import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
 import { NavigationHeader } from 'DDSubViews';
@@ -109,7 +107,6 @@ type Props = {
 };
 
 type State = {
-	specificOrientation: string,
 	currentScreen: string,
 }
 
@@ -118,21 +115,15 @@ class AppNavigator extends View {
 	props: Props;
 	state: State;
 
-	_updateSpecificOrientation: (Object) => void;
 	onNavigationStateChange: (Object) => void;
 
 	constructor() {
 		super();
 
-		const init = Orientation.getInitialOrientation();
-
 		this.state = {
-			specificOrientation: init,
 			currentScreen: 'Tabs',
 		};
 
-		Orientation.unlockAllOrientations();
-		Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
 
@@ -156,11 +147,6 @@ class AppNavigator extends View {
 			this.props.dispatch(getGateways());
 			this.props.dispatch(getAppData());
 		});
-		this.props.dispatch(appOrientation(this.state.specificOrientation));
-	}
-
-	componentWillUnmount() {
-		Orientation.removeSpecificOrientationListener(this._updateSpecificOrientation);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -177,10 +163,6 @@ class AppNavigator extends View {
 			type: 'GLOBAL_ERROR_HIDE',
 		});
 	}
-
-	_updateSpecificOrientation = specificOrientation => {
-		this.setState({ specificOrientation });
-	};
 
 	onNavigationStateChange(prevState, currentState) {
 		const index = currentState.index;

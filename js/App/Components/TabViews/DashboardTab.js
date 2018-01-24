@@ -116,7 +116,6 @@ class DashboardTab extends View {
 	changeDisplayType: () => void;
 	onRefresh: () => void;
 	_renderRow: (number) => Object;
-	orientationDidChange: (string) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(i18n.dashboard),
@@ -126,7 +125,7 @@ class DashboardTab extends View {
 	constructor(props: Props) {
 		super(props);
 		const { width } = Dimensions.get('window');
-		const tileWidth: number = this.calculateTileWidth(width, props.screenProps.orientation);
+		const tileWidth: number = this.calculateTileWidth(width);
 
 		this.state = {
 			tileWidth,
@@ -209,7 +208,7 @@ class DashboardTab extends View {
 	}
 
 	_onLayout = (event) => {
-		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width, this.props.screenProps.orientation);
+		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width);
 		if (tileWidth !== this.state.tileWidth) {
 			this.setState({
 				tileWidth,
@@ -217,9 +216,10 @@ class DashboardTab extends View {
 		}
 	};
 
-	calculateTileWidth(listWidth: number, orientation: string): number {
+	calculateTileWidth(listWidth: number): number {
 		listWidth -= listMargin;
-		const isPortrait = orientation === 'PORTRAIT';
+		const { appLayout } = this.props;
+		const isPortrait = appLayout.height > appLayout.width;
 		if (listWidth <= 0) {
 			return 0;
 		}

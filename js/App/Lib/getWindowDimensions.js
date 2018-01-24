@@ -20,13 +20,10 @@
 // @flow
 
 import { Dimensions } from 'react-native';
-import Orientation from 'react-native-orientation';
-const orientation = Orientation.getInitialOrientation();
 
 export default function getWindowDimensions(): Object {
-	let isPortrait = orientation === 'PORTRAIT';
 	return {
-		height: isPortrait ? Dimensions.get('window').height : Dimensions.get('window').width,
-		width: isPortrait ? Dimensions.get('window').width : Dimensions.get('window').height,
+		height: Dimensions.get('window').height,
+		width: Dimensions.get('window').width,
 	};
 }
