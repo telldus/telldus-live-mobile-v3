@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String SENSOR_WIDGET_ID = "SENSOR_widget_id";
     public static final String SENSOR_DEVICE_ID = "SENSOR_deviceid";
     public static final String SENSOR_WIDGET_NAME = "SENSOR_device_name";
-    public static final String SENSOR_VALUE_TYPE="SENSOR_widget_action";
+    public static final String SENSOR_VALUE_TYPE="SENSOR_TYPE";
     public static final String SENSOR_UPDATE="Last_update";
     public static final String SENSOR_VALUE="Sensor_value";
 
@@ -154,9 +155,35 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
         return r;
     }
+    public ArrayList<SensorInfo> findSensorDevice(int id) {
+
+      //  String selectQuery="SELECT  * FROM " + TABLE_SENSOR;
+        String selectQuery = "Select * FROM " + TABLE_SENSOR + " WHERE " + SENSOR_DEVICE_ID + " =  \"" + id + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        ArrayList<SensorInfo> mSensorInfo=new ArrayList<SensorInfo>();
 
 
-    public SensorInfo findSensorDevice(int id) {
+
+        if (cursor.moveToFirst()) {
+            do {
+                SensorInfo r = new SensorInfo();
+                r.setWidgetID(cursor.getInt(0));
+                r.setDeviceID(1);
+                r.setWidgetName(cursor.getString(2));
+                r.setWidgetType(cursor.getString(3));
+                mSensorInfo.add(r);
+            } while (cursor.moveToNext());
+        }
+            cursor.close();
+
+        db.close();
+        return mSensorInfo;
+    }
+
+    /*public SensorInfo findSensorDevice(int id) {
         String query = "Select * FROM " + TABLE_SENSOR + " WHERE " + SENSOR_DEVICE_ID + " =  \"" + id + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -179,7 +206,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         }
         db.close();
         return r;
-    }
+    }*/
 
 
     // Login user name and password
@@ -223,19 +250,19 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return true;
     }
 
-    public int updateSensorInfo(String value,long time,int SensorID)
+    public int updateSensorInfo(String value,long time,int Wid)
     {
           String time1=String.valueOf(time);
           SQLiteDatabase db = this.getWritableDatabase();
           ContentValues contentValues = new ContentValues();
         //contentValues.put(myDbHelper.NAME,newName);
 
-        String id=String.valueOf(SensorID);
+        String id=String.valueOf(Wid);
 
         contentValues.put(SENSOR_VALUE,value);
         contentValues.put(SENSOR_UPDATE,time1);
         String[] whereArgs= {id};
-        int count =db.update(TABLE_SENSOR,contentValues, SENSOR_DEVICE_ID+" = ?",whereArgs );
+        int count =db.update(TABLE_SENSOR,contentValues, SENSOR_WIDGET_ID+" = ?",whereArgs );
         return count;
     }
 
@@ -299,11 +326,11 @@ public int CountSensorTableValues()
     }*/
 
 
-    public List<String> getAllLabels(){
-        List<String> list = new ArrayList<String>();
+    public ArrayList<String> getAllLabels(){
+        ArrayList<String> list = new ArrayList<String>();
 
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_REGISTER;
+        String selectQuery = "SELECT  * FROM " + TABLE_SENSOR;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
@@ -314,6 +341,7 @@ public int CountSensorTableValues()
                 list.add(cursor.getString(1));//adding 2nd column data
             } while (cursor.moveToNext());
         }
+        Log.v("Sampleeeeeeeeeeeee",list.toString());
         // closing connection
         cursor.close();
         db.close();

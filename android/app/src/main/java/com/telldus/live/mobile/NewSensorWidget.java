@@ -26,6 +26,8 @@ public class NewSensorWidget extends AppWidgetProvider {
         CharSequence widgetText = "Sensor widget";
         String sensorHistory="Last updated 20 mins ago";
         CharSequence sensorValue="22";
+        int src=R.drawable.sensor;
+        String widgetType;
         MyDBHandler db = new MyDBHandler(context);
         SensorInfo sensorID = db.findSensor(appWidgetId);
 
@@ -33,6 +35,31 @@ public class NewSensorWidget extends AppWidgetProvider {
             widgetText = sensorID.getWidgetName();
             sensorValue = sensorID.getSensorValue();
             sensorHistory = sensorID.getSensorUpdate();
+            widgetType=sensorID.getWidgetType();
+
+            if(widgetType.equals("wgust")||widgetType.equals("wavg")||widgetType.equals("wdir"))
+            {
+                src=R.drawable.wind;
+            }else if(widgetType.equals("watt"))
+            {
+                src=R.drawable.watt;
+            } else if (widgetType.equals("temp"))
+            {
+                src=R.drawable.temperature;
+            }else if(widgetType.equals("humidity"))
+            {
+                src=R.drawable.humidity;
+            }else if(widgetType.equals("lum"))
+            {
+                src=R.drawable.luminance;
+            }else if(widgetType.equals("rrate")|| widgetType.equals("rtot"))
+            {
+                src=R.drawable.rain;
+            }else if(widgetType.equals("uv"))
+            {
+                src=R.drawable.uv;
+            }
+
             long time = Long.parseLong(sensorHistory);
             //  String timeStamp = GetTimeAgo.getTimeAgo(time, context);
             long now = System.currentTimeMillis();
@@ -50,6 +77,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
 
         RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
+        view.setImageViewResource(R.id.iconSensor,src);
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo,sensorHistory);
         view.setTextViewText(R.id.txtSensorValue,sensorValue);

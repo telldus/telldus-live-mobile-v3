@@ -164,9 +164,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             }
         }
 
-      //  prefManager.AccessTokenDetails("eca8a3f57bf4b3ba50f1b9a3bb0a40f26766f439","232323");
-       // prefManager.saveSessionID("ee329148-1e76-441d-983d-e4985e8aeb70","23422323");
-       // createSensorApi();
+       /* prefManager.AccessTokenDetails("bcc1cf7d4a820001eb4d7a3352422d52bdb08e64","232323");
+        prefManager.saveSessionID("9c0c71d9-76b4-43c6-be55-e133da18ca08","23422323");
+        createSensorApi();*/
         setResult(RESULT_CANCELED);
 
      //   setContentView(R.layout.activity_sensor_widget_configure);
@@ -367,7 +367,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         });
     }
     void createSensorApi() {
-       // accessToken=prefManager.getAccess();
+     //   accessToken=prefManager.getAccess();
 
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
 

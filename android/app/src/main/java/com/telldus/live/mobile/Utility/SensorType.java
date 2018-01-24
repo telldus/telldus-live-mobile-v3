@@ -9,17 +9,17 @@ import android.util.Log;
 public enum SensorType {
 
 
-    NONE(""),
-    Temperature("1"),
-    Humidity("2"),
-    rainRate("4"),
-    rainTotal("8"),
-    windGust("64"),
-    windAverage("32"),
-    windDirection("16"),
+
+    temp("1"),
+    humidity("2"),
+    rrate("4"),
+    rtot("8"),
+    wgust("64"),
+    wavg("32"),
+    wdir("16"),
     uv("128"),
     watt("256"),
-    luminance("512");
+    lum("512");
         /**
      * Google's String representation of this language.
      */
