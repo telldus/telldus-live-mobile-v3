@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { StyleSheet, SectionList } from 'react-native';
+import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import _ from 'lodash';
 import { defineMessages } from 'react-intl';
 
@@ -33,6 +33,7 @@ import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
 import i18n from '../../Translations/common';
+import Theme from 'Theme';
 
 const messages = defineMessages({
 	historyHeader: {
@@ -64,6 +65,7 @@ type Props = {
 type State = {
 	hasRefreshed: boolean,
 	rowsAndSections: Array<any> | boolean,
+	refreshing: boolean,
 };
 
 class HistoryTab extends View {
@@ -74,6 +76,7 @@ class HistoryTab extends View {
 	renderSectionHeader: (Object, String) => void;
 	renderRow: (Object, String) => void;
 	closeHistoryDetailsModal: () => void;
+	_onRefresh: () => void;
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (
@@ -95,10 +98,13 @@ class HistoryTab extends View {
 		this.state = {
 			rowsAndSections: false,
 			hasRefreshed: false,
+			refreshing: false,
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
+
+		this._onRefresh = this._onRefresh.bind(this);
 	}
 
 	componentDidMount() {
@@ -142,7 +148,19 @@ class HistoryTab extends View {
 	refreshHistoryData() {
 		let that = this;
 		this.delayRefreshHistoryData = setTimeout(() => {
-			that.props.dispatch(getDeviceHistory(that.props.device));
+			that.setState({
+				refreshing: true,
+			});
+			that.props.dispatch(getDeviceHistory(that.props.device))
+				.then(() => {
+					that.setState({
+						refreshing: false,
+					});
+				}).catch(() => {
+					that.setState({
+						refreshing: false,
+					});
+				});
 		}, 2000);
 	}
 
@@ -209,9 +227,26 @@ class HistoryTab extends View {
 		return nextProps.screenProps.currentTab === 'History';
 	}
 
+	_onRefresh() {
+		this.setState({
+			refreshing: true,
+		});
+		this.props.dispatch(getDeviceHistory(this.props.device))
+			.then(() => {
+				this.setState({
+					refreshing: false,
+				});
+			}).catch(() => {
+				this.setState({
+					refreshing: false,
+				});
+			});
+	}
+
 	render() {
 		let { appLayout, screenProps } = this.props;
 		let { intl, currentTab, currentScreen } = screenProps;
+		let { brandPrimary } = Theme.Core;
 
 		let {
 			line,
@@ -251,6 +286,13 @@ class HistoryTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					keyExtractor={this.keyExtractor}
 					initialNumToRender={10}
+					refreshControl={
+						<RefreshControl
+						  refreshing={this.state.refreshing}
+						  onRefresh={this._onRefresh}
+						  colors={[brandPrimary]}
+						/>
+					  }
 				/>
 				<View style={line}/>
 				<DeviceHistoryDetails intl={intl} currentTab={currentTab} currentScreen={currentScreen}/>

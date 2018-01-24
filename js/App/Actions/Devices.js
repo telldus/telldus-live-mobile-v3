@@ -177,6 +177,9 @@ export function getDeviceHistory(device: Object): ThunkAction {
 					...response,
 				},
 			});
+			return response;
+		}).catch(err => {
+			return err;
 		});
 	};
 }
