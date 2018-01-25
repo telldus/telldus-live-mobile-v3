@@ -25,6 +25,7 @@ import type { Action } from 'Actions_Types';
 import { REHYDRATE } from 'redux-persist';
 
 import { combineReducers } from 'redux';
+import _ from 'lodash';
 
 export type State = ?Object;
 
@@ -211,36 +212,17 @@ export default combineReducers({
 	byId,
 });
 
-export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}, editMode: boolean = false) {
-	const sections = sensors.allIds.reduce((acc, sensorId) => {
-		acc[sensors.byId[sensorId].clientId] = [];
-		return acc;
-	}, {});
-	const sectionIds = Object.keys(sections).map(id => parseInt(id, 10));
-
-	sensors.allIds.forEach(sensorId => {
-		const sensor = sensors.byId[sensorId];
-		sections[sensor.clientId].push({
-			sensor,
-			editMode,
+export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}) {
+	let result = _.groupBy(sensors, items => {
+		let gateway = gateways[items.clientId].name;
+		return gateway;
+	});
+	result = _.reduce(result, (acc, next, index) => {
+		acc.push({
+			key: index,
+			data: next,
 		});
-	});
-
-	sectionIds.sort((a, b) => {
-		// might be that sensors get rendered before gateways are fetched
-		const gatewayA = gateways.byId[a] ? gateways.byId[a].name : a;
-		const gatewayB = gateways.byId[b] ? gateways.byId[b].name : b;
-
-		if (gatewayA < gatewayB) {
-			return -1;
-		}
-		if (gatewayA > gatewayB) {
-			return 1;
-		}
-		return 0;
-	});
-	return {
-		sections,
-		sectionIds,
-	};
+		return acc;
+	}, []);
+	return result;
 }

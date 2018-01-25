@@ -22,11 +22,12 @@
 'use strict';
 
 import React from 'react';
+import { SectionList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
-import { List, ListDataSource, View } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
@@ -69,13 +70,8 @@ class SensorsTab extends View {
 	constructor(props: Props) {
 		super(props);
 
-		const { sections, sectionIds } = this.props.rowsAndSections;
-
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-			}).cloneWithRowsAndSections(sections, sectionIds),
+			dataSource: this.props.rowsAndSections,
 			makeRowAccessible: 0,
 		};
 
@@ -86,7 +82,6 @@ class SensorsTab extends View {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const { sections, sectionIds } = nextProps.rowsAndSections;
 
 		let { makeRowAccessible } = this.state;
 		let { screenReaderEnabled } = nextProps;
@@ -98,7 +93,7 @@ class SensorsTab extends View {
 		}
 
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+			dataSource: nextProps.rowsAndSections,
 			makeRowAccessible,
 		});
 
@@ -130,36 +125,32 @@ class SensorsTab extends View {
 
 		return (
 			<View style={style.container}>
-				<List
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					renderHiddenRow={this.renderHiddenRow}
+				<SectionList
+					sections={this.state.dataSource}
+					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
-					leftOpenValue={40}
-					editMode={this.props.editMode}
+					initialNumToRender={15}
 					onRefresh={this.onRefresh}
-					// adding key to force render list rows, to gain back the accessibilty.
-					key={this.state.makeRowAccessible}
+					refreshing={false}
+					extraData={this.state.makeRowAccessible}
 				/>
 			</View>
 		);
 	}
 
-	renderSectionHeader(sectionData, sectionId) {
+	renderSectionHeader(sectionData) {
 		return (
 			<DeviceHeader
-				sectionData={sectionData}
-				sectionId={sectionId}
-				gateway={this.props.gatewaysById[sectionId]}
+				gateway={sectionData.section.key}
 			/>
 		);
 	}
 
 	renderRow(row) {
 		let { intl, currentTab, currentScreen } = this.props.screenProps;
-
 		return (
-			<SensorRow {...row}
+			<SensorRow
+				sensor={row.item}
 				intl={intl}
 				currentTab={currentTab}
 				currentScreen={currentScreen}/>
@@ -190,16 +181,12 @@ class SensorsTab extends View {
 
 const getRowsAndSections = createSelector(
 	[
-		({ sensors }) => sensors,
-		({ gateways }) => gateways,
-		({ tabs }) => tabs.editModeSensorsTab,
+		({ sensors }) => sensors.byId,
+		({ gateways }) => gateways.byId,
 	],
-	(sensors, gateways, editMode) => {
-		const { sections, sectionIds } = parseSensorsForListView(sensors, gateways, editMode);
-		return {
-			sections,
-			sectionIds,
-		};
+	(sensors, gateways) => {
+		const sections = parseSensorsForListView(sensors, gateways);
+		return sections;
 	}
 );
 
