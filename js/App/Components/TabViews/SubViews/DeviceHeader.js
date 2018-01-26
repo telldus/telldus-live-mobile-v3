@@ -32,8 +32,8 @@ type Props = {
 
 export default ({ gateway } : Props ) => {
 	return (
-		<View style={Theme.Styles.sectionHeader}>
-			<Text style={Theme.Styles.sectionHeaderText}>
+		<View style={Theme.Styles.sectionHeaderNew}>
+			<Text style={Theme.Styles.sectionHeaderTextNew}>
 				{gateway}
 			</Text>
 		</View>

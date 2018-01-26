@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { FormattedMessage, FormattedNumber, Image, ListItem, Text, View } from 'BaseComponents';
+import { FormattedMessage, FormattedNumber, Image, ListItem, Text, View, BlockIcon } from 'BaseComponents';
 import { ScrollView, StyleSheet } from 'react-native';
 import { reportException } from 'Analytics';
 import { defineMessages } from 'react-intl';
@@ -156,6 +156,7 @@ type Props = {
 	intl: Object,
 	currentTab: string,
 	currentScreen: string,
+	appLayout: Object,
 };
 
 class SensorRow extends Component<Props, void> {
@@ -196,7 +197,8 @@ class SensorRow extends Component<Props, void> {
 	}
 
 	render() {
-		const { sensor, currentTab, currentScreen } = this.props;
+		const { sensor, currentTab, currentScreen, appLayout } = this.props;
+		const styles = this.getStyles(appLayout);
 		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
 		let sensors = [];
 
@@ -215,7 +217,7 @@ class SensorRow extends Component<Props, void> {
 			name,
 		} = sensor;
 
-		let [ lastUpdatedValue, lastUpdatedComponent ] = this.formatLastUpdated(minutesAgo, sensor.lastUpdated);
+		let [ lastUpdatedValue, lastUpdatedComponent ] = this.formatLastUpdated(minutesAgo, sensor.lastUpdated, styles);
 		let accessibilityLabel = `${this.labelSensor}, ${name}`;
 
 		if (humidity) {
@@ -262,25 +264,28 @@ class SensorRow extends Component<Props, void> {
 
 		return (
 			<ListItem
-				style={Theme.Styles.rowFront}
+				style={styles.row}
 				onLayout={this.onLayout}
 				accessible={accessible}
 				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 				accessibilityLabel={accessible ? accessibilityLabel : ''}>
 				<View style={styles.container}>
-					<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
-					      ellipsizeMode="middle"
-					      numberOfLines={1}>
-						{sensor.name ? sensor.name : <FormattedMessage {...messages.noName} /> }
-					</Text>
-					<Text style={[
-						styles.time, {
-							color: minutesAgo < 1440 ? 'rgba(0,0,0,0.71)' : '#990000',
-							opacity: minutesAgo < 1440 ? 1 : 0.5,
-						},
-					]}>
-						{lastUpdatedComponent}
-					</Text>
+					<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
+					<View>
+						<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
+							ellipsizeMode="middle"
+							numberOfLines={1}>
+							{sensor.name ? sensor.name : <FormattedMessage {...messages.noName} /> }
+						</Text>
+						<Text style={[
+							styles.time, {
+								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+								opacity: minutesAgo < 1440 ? 1 : 0.5,
+							},
+						]}>
+							{lastUpdatedComponent}
+						</Text>
+					</View>
 				</View>
 				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ?
 					sensors :
@@ -298,50 +303,50 @@ class SensorRow extends Component<Props, void> {
 		this.width = event.nativeEvent.layout.width;
 	}
 
-	formatLastUpdated(minutes: number, lastUpdated:number): Array<any> {
+	formatLastUpdated(minutes: number, lastUpdated:number, styles: Object): Array<any> {
 		let { intl } = this.props;
 		if (minutes <= 0) {
 			return [
 				intl.formatMessage(messages.justNow),
-				<FormattedMessage {...messages.justNow} />,
+				<FormattedMessage {...messages.justNow} style={styles.time}/>,
 			];
 		}
 		if (minutes === 1) {
 			return [
 				`1 ${intl.formatMessage(messages.minuteAgo)}`,
-				<Text>1 <FormattedMessage {...messages.minuteAgo} /></Text>,
+				<Text style={styles.time}>1 <FormattedMessage {...messages.minuteAgo} style={styles.time}/></Text>,
 			];
 		}
 		if (minutes < 60) {
 			return [
 				`${minutes} ${intl.formatMessage(messages.minutesAgo)}`,
-				<Text>{minutes} <FormattedMessage {...messages.minutesAgo} /></Text>,
+				<Text style={styles.time}>{minutes} <FormattedMessage {...messages.minutesAgo} style={styles.time}/></Text>,
 			];
 		}
 		const hours = Math.round(minutes / 60);
 		if (hours === 1) {
 			return [
 				`1 ${intl.formatMessage(messages.hourAgo)}`,
-				<Text>1 <FormattedMessage {...messages.hourAgo} /></Text>,
+				<Text style={styles.time}>1 <FormattedMessage {...messages.hourAgo} style={styles.time}/></Text>,
 			];
 		}
 		if (hours < 24) {
 			return [
 				`${hours} ${intl.formatMessage(messages.hoursAgo)}`,
-				<Text>{hours} <FormattedMessage {...messages.hoursAgo} /></Text>,
+				<Text style={styles.time}>{hours} <FormattedMessage {...messages.hoursAgo} style={styles.time}/></Text>,
 			];
 		}
 		const days = Math.round(minutes / 60 / 24);
 		if (days === 1) {
 			return [
 				`1 ${intl.formatMessage(messages.dayAgo)}`,
-				<Text>1 <FormattedMessage {...messages.dayAgo} /></Text>,
+				<Text style={styles.time}>1 <FormattedMessage {...messages.dayAgo} style={styles.time}/></Text>,
 			];
 		}
 		if (days <= 7) {
 			return [
 				`${days} ${intl.formatMessage(messages.daysAgo)}`,
-				<Text>{days} <FormattedMessage {...messages.daysAgo} /></Text>,
+				<Text style={styles.time}>{days} <FormattedMessage {...messages.daysAgo} style={styles.time}/></Text>,
 			];
 		}
 		try {
@@ -353,30 +358,64 @@ class SensorRow extends Component<Props, void> {
 			reportException(exception);
 			return [
 				`${intl.formatMessage(messages.unknown)}`,
-				<FormattedMessage {...i18n.unknown} />,
+				<FormattedMessage {...i18n.unknown} style={styles.time} />,
 			];
 		}
 	}
-}
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: 'transparent',
-	},
-	name: {
-		color: 'rgba(0,0,0,0.87)',
-		fontSize: 15,
-		marginBottom: 2,
-	},
-	time: {
-		fontSize: 12,
-	},
-	scrollView: {
-		alignSelf: 'stretch',
-		maxWidth: 216,
-		flexDirection: 'row',
-	},
-});
+	getStyles(appLayout: Object) {
+		let { width } = appLayout;
+
+		let labelWidth = (width - 24) * 0.6;
+		let valueWidth = (width - 24) * 0.4;
+
+		return {
+			container: {
+				flex: 0,
+				backgroundColor: 'transparent',
+				width: labelWidth,
+				flexDirection: 'row',
+				alignItems: 'center',
+			},
+			name: {
+				color: Theme.Core.rowTextColor,
+				fontSize: 15,
+				marginBottom: 2,
+			},
+			row: {
+				marginHorizontal: 12,
+				marginBottom: 5,
+				backgroundColor: '#FFFFFF',
+				flexDirection: 'row',
+				height: 70,
+				justifyContent: 'space-between',
+				paddingLeft: 16,
+				alignItems: 'center',
+				borderRadius: 2,
+				...Theme.Core.shadow,
+			},
+			sensorIcon: {
+				fontSize: 12,
+			},
+			iconContainerStyle: {
+				borderRadius: 25,
+				width: 25,
+				height: 25,
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginHorizontal: 5,
+			},
+			time: {
+				fontSize: 12,
+				color: Theme.Core.rowTextColor,
+			},
+			scrollView: {
+				alignSelf: 'stretch',
+				maxWidth: 216,
+				flexDirection: 'row',
+			},
+		};
+	}
+}
 
 module.exports = SensorRow;

@@ -117,6 +117,10 @@ class SensorsTab extends View {
 		let { appLayout } = this.props;
 
 		let style = this.getStyles(appLayout);
+		let extraData = {
+			makeRowAccessible: this.state.makeRowAccessible,
+			appLayout: appLayout,
+		};
 
 		return (
 			<View style={style.container}>
@@ -128,7 +132,7 @@ class SensorsTab extends View {
 					onRefresh={this.onRefresh}
 					refreshing={false}
 					keyExtractor={this.keyExtractor}
-					extraData={this.state.makeRowAccessible}
+					extraData={extraData}
 				/>
 			</View>
 		);
@@ -148,6 +152,7 @@ class SensorsTab extends View {
 			<SensorRow
 				sensor={row.item}
 				intl={intl}
+				appLayout={this.props.appLayout}
 				currentTab={currentTab}
 				currentScreen={currentScreen}/>
 		);

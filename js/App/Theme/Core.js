@@ -46,6 +46,9 @@ export default {
 	fadedInverseTextColor: '#C3D1E6',
 	textColor: '#000000',
 
+	sectionTextColor: '#8e8e93',
+	rowTextColor: '#8e8e93',
+
 	subtitleColor: '#8e8e93',
 
 	fontSizeBase: 12,

@@ -32,8 +32,20 @@ export default StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 	},
+	sectionHeaderNew: {
+		backgroundColor: 'transparent',
+		height: 26,
+		flexDirection: 'column',
+		justifyContent: 'center',
+	},
 	sectionHeaderText: {
 		color: Core.brandPrimary,
+		fontSize: 14,
+		marginLeft: 16,
+		fontWeight: '500',
+	},
+	sectionHeaderTextNew: {
+		color: Core.sectionTextColor,
 		fontSize: 14,
 		marginLeft: 16,
 		fontWeight: '500',
