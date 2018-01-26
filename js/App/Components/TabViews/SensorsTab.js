@@ -61,6 +61,7 @@ class SensorsTab extends View {
 	renderRow: (Object) => Object;
 	renderHiddenRow: (Object) => Object;
 	onRefresh: (Object) => void;
+	keyExtractor: (Object) => number;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
@@ -79,6 +80,7 @@ class SensorsTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
+		this.keyExtractor = this.keyExtractor.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -106,15 +108,8 @@ class SensorsTab extends View {
 		this.props.dispatch(getSensors());
 	}
 
-	rowHasChanged(r1, r2) {
-		if (r1 === r2) {
-			return false;
-		}
-		return (
-			r1.sensor !== r2.sensor ||
-			r1.inDashboard !== r2.inDashboard ||
-			r1.editMode !== r2.editMode
-		);
+	keyExtractor(item) {
+		return item.id;
 	}
 
 	render() {
@@ -132,6 +127,7 @@ class SensorsTab extends View {
 					initialNumToRender={15}
 					onRefresh={this.onRefresh}
 					refreshing={false}
+					keyExtractor={this.keyExtractor}
 					extraData={this.state.makeRowAccessible}
 				/>
 			</View>
