@@ -259,6 +259,18 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.sensors.labelLuminance',
 		defaultMessage: 'luminance',
 	},
+	labelDewPoint: {
+		id: 'accessibilityLabel.sensors.labelDewPoint',
+		defaultMessage: 'dewpoint',
+	},
+	labelBarometricPressure: {
+		id: 'accessibilityLabel.sensors.labelBarometricPressure',
+		defaultMessage: 'barometric pressure',
+	},
+	labelGenricMeter: {
+		id: 'accessibilityLabel.sensors.labelGenricMeter',
+		defaultMessage: 'genric meter',
+	},
 	labelTimeAgo: {
 		id: 'accessibilityLabel.sensors.labelTimeAgo',
 		defaultMessage: 'updated',
