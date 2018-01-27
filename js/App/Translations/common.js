@@ -367,6 +367,10 @@ const messages = defineMessages({
 		id: 'error.addNewLocationFailed',
 		defaultMessage: 'Add new location could not be completed. Please try again',
 	},
+	offline: {
+		id: 'gateway.offline',
+		defaultMessage: 'Offline',
+	},
 });
 
 export default messages;

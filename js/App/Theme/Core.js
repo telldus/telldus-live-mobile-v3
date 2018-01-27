@@ -49,6 +49,8 @@ export default {
 	sectionTextColor: '#8e8e93',
 	rowTextColor: '#8e8e93',
 
+	offlineColor: '#b5b5b5',
+
 	subtitleColor: '#8e8e93',
 
 	fontSizeBase: 12,

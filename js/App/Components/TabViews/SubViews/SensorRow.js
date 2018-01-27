@@ -216,6 +216,7 @@ type Props = {
 	currentTab: string,
 	currentScreen: string,
 	appLayout: Object,
+	isGatewayActive: boolean,
 };
 
 type State = {
@@ -243,6 +244,7 @@ class SensorRow extends PureComponent<Props, State> {
 	labelGenricMeter: string;
 	labelTimeAgo: string;
 	width: number;
+	offline: string;
 	sensorTypes: Object;
 	changeDisplayType: (number) => void;
 
@@ -270,6 +272,8 @@ class SensorRow extends PureComponent<Props, State> {
 		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
 		this.labelGenricMeter = formatMessage(i18n.labelGenricMeter);
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
+
+		this.offline = formatMessage(i18n.offline);
 
 		this.sensorTypes = getSensorTypes();
 
@@ -353,8 +357,8 @@ class SensorRow extends PureComponent<Props, State> {
 	}
 
 	render() {
-		const { sensor, currentTab, currentScreen, appLayout } = this.props;
-		const styles = this.getStyles(appLayout);
+		const { sensor, currentTab, currentScreen, appLayout, isGatewayActive } = this.props;
+		const styles = this.getStyles(appLayout, isGatewayActive);
 		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
 		const {
 			data,
@@ -390,7 +394,13 @@ class SensorRow extends PureComponent<Props, State> {
 								opacity: minutesAgo < 1440 ? 1 : 0.5,
 							},
 						]}>
-							{lastUpdatedComponent}
+							{isGatewayActive ?
+								lastUpdatedComponent
+								:
+								<Text style={{color: Theme.Core.rowTextColor}}>
+									{this.offline}
+								</Text>
+							}
 						</Text>
 					</View>
 				</View>
@@ -478,12 +488,14 @@ class SensorRow extends PureComponent<Props, State> {
 		}
 	}
 
-	getStyles(appLayout: Object) {
+	getStyles(appLayout: Object, isGatewayActive: boolean): Object {
 		let { width } = appLayout;
 
 		let labelBoxWidth = (width - 24) * 0.56;
 		let valueBoxWidth = (width - 24) * 0.44;
 		let rowHeight = 70;
+
+		let backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
 
 		return {
 			container: {
@@ -518,6 +530,7 @@ class SensorRow extends PureComponent<Props, State> {
 				borderRadius: 25,
 				width: 25,
 				height: 25,
+				backgroundColor: backgroundColor,
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginHorizontal: 5,
@@ -533,7 +546,7 @@ class SensorRow extends PureComponent<Props, State> {
 			},
 			sensorSlideBox: {
 				width: valueBoxWidth,
-				backgroundColor: Theme.Core.brandPrimary,
+				backgroundColor: backgroundColor,
 				height: rowHeight,
 				alignItems: 'flex-start',
 				justifyContent: 'center',

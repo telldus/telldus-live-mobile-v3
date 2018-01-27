@@ -143,6 +143,7 @@
   "event": "Event",
   "form.login.fieldEmpty": "Something seems to be missing in your form. Please check that both email and password are entered correctly.",
   "form.register.fieldEmptyPostfix": "seems to be missing in your form. Please check that it is entered correctly.",
+  "gateway.offline": "Offline",
   "group": "Group",
   "history": "History",
   "incommingSignal": "Incomming signal",

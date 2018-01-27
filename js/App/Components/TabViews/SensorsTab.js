@@ -165,8 +165,9 @@ class SensorsTab extends View {
 	}
 
 	renderRow(row) {
-		let { screenProps } = this.props;
+		let { screenProps, gatewaysById } = this.props;
 		let { intl, currentTab, currentScreen } = screenProps;
+		let isGatewayActive = gatewaysById[row.item.clientId].online;
 
 		return (
 			<SensorRow
@@ -174,7 +175,8 @@ class SensorsTab extends View {
 				intl={intl}
 				appLayout={this.props.appLayout}
 				currentTab={currentTab}
-				currentScreen={currentScreen}/>
+				currentScreen={currentScreen}
+				isGatewayActive={isGatewayActive}/>
 		);
 	}
 
