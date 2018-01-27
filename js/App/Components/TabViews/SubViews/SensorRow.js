@@ -21,16 +21,18 @@
 
 'use strict';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+import { TouchableOpacity } from 'react-native';
+
 import { FormattedMessage, FormattedNumber, Image, ListItem, Text, View, BlockIcon } from 'BaseComponents';
-import { ScrollView } from 'react-native';
 import { reportException } from 'Analytics';
 import { defineMessages } from 'react-intl';
 import i18n from '../../../Translations/common';
 
-import { utils } from 'live-shared-data';
+import { utils, actions } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
+const { Dashboard: { getSupportedDisplayTypes } } = actions;
 
 import moment from 'moment';
 import Theme from 'Theme';
@@ -82,90 +84,129 @@ const directions = [
 	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 ];
 
-const SensorHumidity = ({ humidity, unit }) => (
+const SensorHumidity = ({ value, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Humidity.png')}/>
-		<Text>
-			<FormattedNumber value={humidity / 100}/>
-			{unit}
-		</Text>
+		<View style={Theme.Styles.sensorValueCover}>
+			<Text style={Theme.Styles.sensorValueText}>
+				<FormattedNumber value={value / 100}/>
+				{unit}
+			</Text>
+			<Text style={{color: '#ffffff'}}>
+				Humidity
+			</Text>
+		</View>
 	</View>
 );
 
-const SensorTemperature = ({ temperature, unit }) => (
+const SensorTemperature = ({ value, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Temperature.png')}/>
-		<Text>
-			<FormattedNumber value={temperature} maximumFractionDigits={1} minimumFractionDigits={1}/>
-			{unit}
-		</Text>
+		<View style={Theme.Styles.sensorValueCover}>
+			<Text style={Theme.Styles.sensorValueText}>
+				<FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}/>
+				{unit}
+			</Text>
+			<Text style={{color: '#ffffff'}}>
+				Temperature
+			</Text>
+		</View>
 	</View>
 );
 
-const SensorRain = ({ rainRate, rainTotal, unit }) => (
+const SensorRain = ({value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Rain.png')}/>
-		<Text>
-			{ rainRate && ( <Text><FormattedNumber value={rainRate} maximumFractionDigits={0}/> {`${unit}\n`} </Text> ) }
-			{ rainTotal && ( <Text><FormattedNumber value={rainTotal} maximumFractionDigits={0}/> {unit} </Text> ) }
-		</Text>
+		<View style={Theme.Styles.sensorValueCover}>
+			<Text style={Theme.Styles.sensorValueText}><FormattedNumber value={value} maximumFractionDigits={0}/>{unit}</Text>
+			<Text style={{color: '#ffffff'}}>
+				{label}
+			</Text>
+		</View>
 	</View>
 );
 
-const SensorWind = ({ windAverage, windGust, windDirection, unit }) => {
-	const getWindDirection = value => directions[Math.floor(value / 22.5)];
-
+const SensorWind = ({ name, value, unit, label }) => {
 	return (
 		<View style={Theme.Styles.sensorValue}>
 			<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Wind.png')}/>
-			<Text>
-				{ windAverage && (
-					<Text><FormattedNumber value={windAverage} maximumFractionDigits={1}/> {`${unit}\n`} </Text> ) }
-				{ windGust && (
-					<Text><FormattedNumber value={windGust} maximumFractionDigits={1}/> {`${unit}\n`} </Text> ) }
-				{ windDirection && ( <Text>{getWindDirection(windDirection)}</Text> ) }
-			</Text>
+			<View style={Theme.Styles.sensorValueCover}>
+				<Text style={Theme.Styles.sensorValueText}>
+					{
+						name === 'wdir' ?
+							value
+							:
+							<Text style={Theme.Styles.sensorValueText}>
+								<FormattedNumber value={value} maximumFractionDigits={1}/>{unit}
+							</Text>
+
+					}
+				</Text>
+				<Text style={{color: '#ffffff'}}>
+					{label}
+				</Text>
+			</View>
 		</View>
 	);
 };
 
-const SensorUV = ({ uv, unit }) => (
+const SensorUV = ({ value, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/UV.png')}/>
-		<Text>
-			<FormattedNumber value={uv} maximumFractionDigits={0}/>
-			{unit}
-		</Text>
+		<View style={Theme.Styles.sensorValueCover}>
+			<Text style={Theme.Styles.sensorValueText}>
+				<FormattedNumber value={value} maximumFractionDigits={0}/>
+				{unit}
+			</Text>
+			<Text style={{color: '#ffffff'}}>
+				UV index
+			</Text>
+		</View>
 	</View>
 );
 
-const SensorWatt = ({ watt, unit }) => (
+const SensorWatt = ({ value, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Watt.png')}/>
-		<Text>
-			<FormattedNumber value={watt} maximumFractionDigits={1}/>
-			{unit}
-		</Text>
+		<View style={Theme.Styles.sensorValueCover}>
+			<Text style={Theme.Styles.sensorValueText}>
+				<FormattedNumber value={value} maximumFractionDigits={1}/>
+				{unit}
+			</Text>
+			<Text style={{color: '#ffffff'}}>
+				UV index
+			</Text>
+		</View>
 	</View>
 );
 
-const SensorLuminance = ({ luminance, unit }) => (
+const SensorLuminance = ({ value, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Luminance.png')}/>
-		<Text>
-			<FormattedNumber value={luminance} maximumFractionDigits={0}/>
-			{unit}
-		</Text>
+		<View style={Theme.Styles.sensorValueCover}>
+			<Text style={Theme.Styles.sensorValueText}>
+				<FormattedNumber value={value} maximumFractionDigits={0}/>
+				{unit}
+			</Text>
+			<Text style={{color: '#ffffff'}}>
+				UV index
+			</Text>
+		</View>
 	</View>
 );
 
 const SensorNew = ({ value, unit }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Luminance.png')}/>
-		<Text>
-			<FormattedNumber value={value} maximumFractionDigits={1}/>
-			{unit}
-		</Text>
+		<View style={Theme.Styles.sensorValueCover}>
+			<Text style={Theme.Styles.sensorValueText}>
+				<FormattedNumber value={value} maximumFractionDigits={1}/>
+				{unit}
+			</Text>
+			<Text style={{color: '#ffffff'}}>
+				UV index
+			</Text>
+		</View>
 	</View>
 );
 
@@ -177,8 +218,14 @@ type Props = {
 	appLayout: Object,
 };
 
-class SensorRow extends Component<Props, void> {
+type State = {
+	currentIndex: number,
+}
+
+class SensorRow extends PureComponent<Props, State> {
 	props: Props;
+	state: State;
+
 	onLayout: (Object) => void;
 	labelSensor: string;
 	labelHumidity: string;
@@ -197,6 +244,11 @@ class SensorRow extends Component<Props, void> {
 	labelTimeAgo: string;
 	width: number;
 	sensorTypes: Object;
+	changeDisplayType: (number) => void;
+
+	state = {
+		currentIndex: 0,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -222,6 +274,7 @@ class SensorRow extends Component<Props, void> {
 		this.sensorTypes = getSensorTypes();
 
 		this.onLayout = this.onLayout.bind(this);
+		this.changeDisplayType = this.changeDisplayType.bind(this);
 	}
 
 	getSensors(data: Object): Object {
@@ -234,34 +287,37 @@ class SensorRow extends Component<Props, void> {
 			let unit = sensorUnits[scale];
 
 			if (name === 'humidity') {
-				sensors.push(<SensorHumidity humidity={value} unit={unit} key={key}/>);
+				sensors.push(<SensorHumidity value={value} unit={unit} key={key} label={'Humidity'}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
 			}
 			if (name === 'temp') {
-				sensors.push(<SensorTemperature temperature={value} unit={unit} key={key}/>);
+				sensors.push(<SensorTemperature value={value} unit={unit} key={key} label={'Temperature'}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
 			}
 			if (name === 'rrate' || name === 'rtotal') {
 				sensors.push(<SensorRain
-					rainRate={name === 'rrate' ? value : null}
-					rainTotal={name === 'rtotal' ? value : null}
+					name={name}
+					value={value}
 					unit={unit}
+					label={name === 'rrate' ? 'Rain Rate' : 'Rain Total'}
 					key={key}/>);
 				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
 				let rtotalInfo = name === 'rtotal' ? `${this.labelRainTotal} ${value}${unit}` : '';
 				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
 			}
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let direction = '';
+				let direction = '', label = name === 'wgust' ? 'Wind Gust' : 'Wind Average';
 				if (name === 'wdir') {
 					const getWindDirection = sValue => directions[Math.floor(sValue / 22.5)];
 					direction = [...getWindDirection(value)].toString();
+					value = getWindDirection(value);
+					label = 'Wind Direction';
 				}
 				sensors.push(<SensorWind
-					windGust={name === 'wgust' ? value : null}
-					windAverage={name === 'wavg' ? value : null}
-					windDirection={name === 'wdir' ? value : null}
+					name={name}
+					value={value}
 					unit={unit}
+					label={label}
 					key={key}/>);
 				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
 				let wavgInfo = name === 'wavg' ? `${this.labelWindAverage} ${value}${unit}` : '';
@@ -269,27 +325,27 @@ class SensorRow extends Component<Props, void> {
 				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
 			}
 			if (name === 'uv') {
-				sensors.push(<SensorUV uv={value} key={key} unit={unit}/>);
+				sensors.push(<SensorUV value={value} key={key} unit={unit} label={'UV Index'}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
 			}
 			if (name === 'watt') {
-				sensors.push(<SensorWatt watt={value} key={key} unit={unit}/>);
+				sensors.push(<SensorWatt value={value} key={key} unit={unit} label={'Acc. Power'}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;
 			}
 			if (name === 'luminance') {
-				sensors.push(<SensorLuminance luminance={value} key={key} unit={unit}/>);
+				sensors.push(<SensorLuminance value={value} key={key} unit={unit} label={'Luminance'}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
 			}
 			if (name === 'dewp') {
-				sensors.push(<SensorNew value={value} key={key} unit={unit}/>);
+				sensors.push(<SensorNew value={value} key={key} unit={unit} label={'Dew Point'}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
 			}
 			if (name === 'barpress') {
-				sensors.push(<SensorNew value={value} key={key} unit={unit}/>);
+				sensors.push(<SensorNew value={value} key={key} unit={unit} label={'Bar Pressure'}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
 			}
 			if (name === 'genmeter') {
-				sensors.push(<SensorNew value={value} key={key} unit={unit}/>);
+				sensors.push(<SensorNew value={value} key={key} unit={unit} label={'Genric Meter'}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
 			}
 		}
@@ -305,11 +361,13 @@ class SensorRow extends Component<Props, void> {
 			name,
 		} = sensor;
 
-		let {sensors, sensorInfo} = this.getSensors(data);
+		let { sensors, sensorInfo } = this.getSensors(data);
 		let [ lastUpdatedValue, lastUpdatedComponent ] = this.formatLastUpdated(minutesAgo, sensor.lastUpdated, styles);
 
 		let accessibilityLabel = `${this.labelSensor}, ${name}, ${sensorInfo},${this.labelTimeAgo} ${lastUpdatedValue}`;
 		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
+
+		let { currentIndex } = this.state;
 
 		return (
 			<ListItem
@@ -336,16 +394,24 @@ class SensorRow extends Component<Props, void> {
 						</Text>
 					</View>
 				</View>
-				{ sensors.length * 108 < Math.max(this.width / 2.0, 217) ?
-					sensors :
-					(<View style={styles.scrollView}>
-						<ScrollView style={styles.scrollView} horizontal={true} pagingEnabled={true} directionalLockEnabled={true} >
-							{sensors}
-						</ScrollView>
-					</View>)
-				}
+				<TouchableOpacity onPress={this.changeDisplayType} style={styles.sensorSlideBox}>
+					{sensors[currentIndex] && (
+						sensors[currentIndex]
+					)}
+				</TouchableOpacity>
 			</ListItem>
 		);
+	}
+
+	changeDisplayType(index: number) {
+		let { data } = this.props.sensor;
+		let { currentIndex } = this.state;
+		let displayTypes = getSupportedDisplayTypes(data);
+		let nextIndex = currentIndex + 1;
+		nextIndex = nextIndex > (displayTypes.length - 1) ? 0 : nextIndex;
+		this.setState({
+			currentIndex: nextIndex,
+		});
 	}
 
 	onLayout(event: Object) {
@@ -415,15 +481,18 @@ class SensorRow extends Component<Props, void> {
 	getStyles(appLayout: Object) {
 		let { width } = appLayout;
 
-		let labelWidth = (width - 24) * 0.6;
+		let labelBoxWidth = (width - 24) * 0.56;
+		let valueBoxWidth = (width - 24) * 0.44;
+		let rowHeight = 70;
 
 		return {
 			container: {
 				flex: 0,
 				backgroundColor: 'transparent',
-				width: labelWidth,
+				width: labelBoxWidth,
 				flexDirection: 'row',
 				alignItems: 'center',
+				marginTop: 5,
 			},
 			name: {
 				color: Theme.Core.rowTextColor,
@@ -435,9 +504,9 @@ class SensorRow extends Component<Props, void> {
 				marginBottom: 5,
 				backgroundColor: '#FFFFFF',
 				flexDirection: 'row',
-				height: 70,
+				height: rowHeight,
 				justifyContent: 'space-between',
-				paddingLeft: 16,
+				paddingLeft: 5,
 				alignItems: 'center',
 				borderRadius: 2,
 				...Theme.Core.shadow,
@@ -461,6 +530,13 @@ class SensorRow extends Component<Props, void> {
 				alignSelf: 'stretch',
 				maxWidth: 216,
 				flexDirection: 'row',
+			},
+			sensorSlideBox: {
+				width: valueBoxWidth,
+				backgroundColor: Theme.Core.brandPrimary,
+				height: rowHeight,
+				alignItems: 'flex-start',
+				justifyContent: 'center',
 			},
 		};
 	}
