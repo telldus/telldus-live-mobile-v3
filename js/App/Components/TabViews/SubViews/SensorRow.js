@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { TouchableOpacity, UIManager, LayoutAnimation } from 'react-native';
+import { TouchableWithoutFeedback, UIManager, LayoutAnimation } from 'react-native';
 
 import { FormattedMessage, FormattedNumber, Image, ListItem, Text, View, BlockIcon } from 'BaseComponents';
 import { reportException } from 'Analytics';
@@ -417,11 +417,13 @@ class SensorRow extends PureComponent<Props, State> {
 						</Text>
 					</View>
 				</View>
-				<TouchableOpacity onPress={this.changeDisplayType} style={styles.sensorValueCover}>
-					{sensors[currentIndex] && (
-						sensors[currentIndex]
-					)}
-				</TouchableOpacity>
+				<TouchableWithoutFeedback onPress={this.changeDisplayType} style={styles.sensorValueCover}>
+					<View style={styles.sensorValueCover}>
+						{sensors[currentIndex] && (
+							sensors[currentIndex]
+						)}
+					</View>
+				</TouchableWithoutFeedback>
 			</ListItem>
 		);
 	}
