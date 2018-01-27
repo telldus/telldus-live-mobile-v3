@@ -330,11 +330,13 @@ public class MyService extends Service {
                 public void onClose(int code, String reason, boolean remote) {
                     Log.v("Websocket", "Closed " + reason);
                     Log.v("Websocket close","websocket_closed @"+ClientID);
+
                 }
 
                 @Override
                 public void onError(Exception ex) {
                     Log.v("Websocket", "Error " + ex.getMessage());
+
                 }
             };
             mWebSocketClient.connect();

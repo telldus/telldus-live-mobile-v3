@@ -6,12 +6,18 @@ import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,10 +69,12 @@ public class NewAppWidgetConfigureActivity extends Activity {
     //    private EditText etUrl;
     private Button btAdd,btnCan;
     private View btSelectDevice;
-    TextView deviceName, deviceHint, deviceOn, deviceOff;
+    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
+    Switch switch_background;
+
 
     private String accessToken;
     private String expiresIn;
@@ -79,6 +87,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     private String ttl;
     MyDBHandler database=new MyDBHandler(this);
     private PrefManager prefManager;
+    private String switchStatus="false";
 
 
     @Override
@@ -157,12 +166,44 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 e.printStackTrace();
             }
         }
+       /* prefManager.AccessTokenDetails("3db77e79f8c2d88c8fe9f6914a3c43da0ff038d1","232323");
+        prefManager.saveSessionID("26758c97-0cf7-426a-9ec0-8b56f56de976","23422323");
+        createDeviceApi();
+       */
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
         views = new RemoteViews(this.getPackageName(), R.layout.configurable_device_widget);
         widgetManager = AppWidgetManager.getInstance(this);
 
+        textTest=(TextView)findViewById(R.id.testText);
+        chooseSetting=(TextView)findViewById(R.id.chooseSetting);
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
+        textTest.setTypeface(font);
+        chooseSetting.setTypeface(font);
+        switch_background=(Switch)findViewById(R.id.switch_background);
+
+        switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // do something, the isChecked will be
+                // true if the switch is in the On position
+                if(isChecked)
+                {
+                    switchStatus="true";
+                }else
+                {
+                    switchStatus="false";
+
+                }
+            }
+        });
+
+
 //        createDeviceApi();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow(); // in Activity's onCreate() for instance
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+
 
 
         Intent intent = getIntent();
@@ -189,7 +230,9 @@ public class NewAppWidgetConfigureActivity extends Activity {
             public void onClick(View view) {
                 views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
-                DeviceInfo mInsert=new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString());
+
+
+                DeviceInfo mInsert=new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString(),switchStatus);
                 db.addUser(mInsert);
                 NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
                 Intent resultValue = new Intent();
@@ -231,6 +274,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
 
     void createDeviceApi() {
+     //   accessToken=prefManager.getAccess();
         pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
         pDialog.setMax(5);
         pDialog.setMessage("Please wait...");

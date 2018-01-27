@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.SystemClock;
 import android.text.format.DateUtils;
 import android.widget.RemoteViews;
@@ -30,13 +31,15 @@ public class NewSensorWidget extends AppWidgetProvider {
         String widgetType;
         MyDBHandler db = new MyDBHandler(context);
         SensorInfo sensorID = db.findSensor(appWidgetId);
+        String transparent;
+        RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
 
         if(sensorID!=null) {
             widgetText = sensorID.getWidgetName();
             sensorValue = sensorID.getSensorValue();
             sensorHistory = sensorID.getSensorUpdate();
             widgetType=sensorID.getWidgetType();
-
+            transparent=sensorID.getTransparent();
             if(widgetType.equals("wgust")||widgetType.equals("wavg")||widgetType.equals("wdir"))
             {
                 src=R.drawable.wind;
@@ -73,14 +76,21 @@ public class NewSensorWidget extends AppWidgetProvider {
                 sensorHistory = "Last updated "+String.valueOf(timeSpanString);
 
             //  Toast.makeText(context,sensorHistory,Toast.LENGTH_LONG).show();
+            if(transparent.equals("true"))
+            {
+                view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
+                view.setInt(R.id.linear_background,"setBackgroundColor", Color.TRANSPARENT);
+
+            }
         }
 
 
-        RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
+
         view.setImageViewResource(R.id.iconSensor,src);
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo,sensorHistory);
         view.setTextViewText(R.id.txtSensorValue,sensorValue);
+
 
 
         // Instruct the widget manager to update the widget

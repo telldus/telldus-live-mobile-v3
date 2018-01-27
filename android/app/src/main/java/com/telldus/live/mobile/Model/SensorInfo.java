@@ -11,19 +11,29 @@ public class SensorInfo {
     int DeviceID;
     String sensorValue;
     String sensorUpdate;
+    String transparent;
 
-    public SensorInfo(int widgetID, String widgetName, String widgetType, int deviceID, String sensorValue, String sensorUpdate) {
+    public SensorInfo(int widgetID, String widgetName, String widgetType, int deviceID, String sensorValue, String sensorUpdate,String transparent) {
         this.widgetID = widgetID;
         WidgetName = widgetName;
         WidgetType = widgetType;
         DeviceID = deviceID;
         this.sensorValue = sensorValue;
         this.sensorUpdate = sensorUpdate;
+        this.transparent=transparent;
     }
 
     public SensorInfo()
     {
 
+    }
+    public String getTransparent()
+    {
+        return transparent;
+    }
+    public void setTransparent(String transparent)
+    {
+        this.transparent=transparent;
     }
 
     public int getWidgetID() {
