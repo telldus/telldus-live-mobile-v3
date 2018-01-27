@@ -50,6 +50,7 @@ type Props = {
 type State = {
 	dataSource: Object,
 	makeRowAccessible: 0 | 1,
+	isRefreshing: boolean,
 };
 
 class SensorsTab extends View {
@@ -74,6 +75,7 @@ class SensorsTab extends View {
 		this.state = {
 			dataSource: this.props.rowsAndSections,
 			makeRowAccessible: 0,
+			isRefreshing: false,
 		};
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
@@ -104,8 +106,24 @@ class SensorsTab extends View {
 		}
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+		return nextProps.tab === 'sensorsTab';
+	}
+
 	onRefresh() {
-		this.props.dispatch(getSensors());
+		this.setState({
+			isRefreshing: true,
+		});
+		this.props.dispatch(getSensors())
+			.then(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			}).catch(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			});
 	}
 
 	keyExtractor(item) {
@@ -130,7 +148,7 @@ class SensorsTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					initialNumToRender={15}
 					onRefresh={this.onRefresh}
-					refreshing={false}
+					refreshing={this.state.isRefreshing}
 					keyExtractor={this.keyExtractor}
 					extraData={extraData}
 				/>
@@ -147,7 +165,9 @@ class SensorsTab extends View {
 	}
 
 	renderRow(row) {
-		let { intl, currentTab, currentScreen } = this.props.screenProps;
+		let { screenProps } = this.props;
+		let { intl, currentTab, currentScreen } = screenProps;
+
 		return (
 			<SensorRow
 				sensor={row.item}
