@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, UIManager, LayoutAnimation } from 'react-native';
 
 import { FormattedMessage, FormattedNumber, Image, ListItem, Text, View, BlockIcon } from 'BaseComponents';
 import { reportException } from 'Analytics';
@@ -84,7 +84,7 @@ const directions = [
 	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 ];
 
-const SensorHumidity = ({ value, unit }) => (
+const SensorHumidity = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Humidity.png')}/>
 		<View style={Theme.Styles.sensorValueCover}>
@@ -93,13 +93,13 @@ const SensorHumidity = ({ value, unit }) => (
 				{unit}
 			</Text>
 			<Text style={{color: '#ffffff'}}>
-				Humidity
+				{label}
 			</Text>
 		</View>
 	</View>
 );
 
-const SensorTemperature = ({ value, unit }) => (
+const SensorTemperature = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Temperature.png')}/>
 		<View style={Theme.Styles.sensorValueCover}>
@@ -108,7 +108,7 @@ const SensorTemperature = ({ value, unit }) => (
 				{unit}
 			</Text>
 			<Text style={{color: '#ffffff'}}>
-				Temperature
+				{label}
 			</Text>
 		</View>
 	</View>
@@ -150,7 +150,7 @@ const SensorWind = ({ name, value, unit, label }) => {
 	);
 };
 
-const SensorUV = ({ value, unit }) => (
+const SensorUV = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/UV.png')}/>
 		<View style={Theme.Styles.sensorValueCover}>
@@ -159,13 +159,13 @@ const SensorUV = ({ value, unit }) => (
 				{unit}
 			</Text>
 			<Text style={{color: '#ffffff'}}>
-				UV index
+				{label}
 			</Text>
 		</View>
 	</View>
 );
 
-const SensorWatt = ({ value, unit }) => (
+const SensorWatt = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Watt.png')}/>
 		<View style={Theme.Styles.sensorValueCover}>
@@ -174,13 +174,13 @@ const SensorWatt = ({ value, unit }) => (
 				{unit}
 			</Text>
 			<Text style={{color: '#ffffff'}}>
-				UV index
+				{label}
 			</Text>
 		</View>
 	</View>
 );
 
-const SensorLuminance = ({ value, unit }) => (
+const SensorLuminance = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Luminance.png')}/>
 		<View style={Theme.Styles.sensorValueCover}>
@@ -189,13 +189,13 @@ const SensorLuminance = ({ value, unit }) => (
 				{unit}
 			</Text>
 			<Text style={{color: '#ffffff'}}>
-				UV index
+				{label}
 			</Text>
 		</View>
 	</View>
 );
 
-const SensorNew = ({ value, unit }) => (
+const SensorNew = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Luminance.png')}/>
 		<View style={Theme.Styles.sensorValueCover}>
@@ -204,7 +204,7 @@ const SensorNew = ({ value, unit }) => (
 				{unit}
 			</Text>
 			<Text style={{color: '#ffffff'}}>
-				UV index
+				{label}
 			</Text>
 		</View>
 	</View>
@@ -247,6 +247,7 @@ class SensorRow extends PureComponent<Props, State> {
 	offline: string;
 	sensorTypes: Object;
 	changeDisplayType: (number) => void;
+	LayoutLinear: Object;
 
 	state = {
 		currentIndex: 0,
@@ -279,6 +280,18 @@ class SensorRow extends PureComponent<Props, State> {
 
 		this.onLayout = this.onLayout.bind(this);
 		this.changeDisplayType = this.changeDisplayType.bind(this);
+
+		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+		this.LayoutLinear = {
+			duration: 200,
+			create: {
+				type: LayoutAnimation.Types.linear,
+				property: LayoutAnimation.Properties.opacity,
+			  },
+			update: {
+			  type: LayoutAnimation.Types.linear,
+			},
+		};
 	}
 
 	getSensors(data: Object): Object {
@@ -404,7 +417,7 @@ class SensorRow extends PureComponent<Props, State> {
 						</Text>
 					</View>
 				</View>
-				<TouchableOpacity onPress={this.changeDisplayType} style={styles.sensorSlideBox}>
+				<TouchableOpacity onPress={this.changeDisplayType} style={styles.sensorValueCover}>
 					{sensors[currentIndex] && (
 						sensors[currentIndex]
 					)}
@@ -419,6 +432,7 @@ class SensorRow extends PureComponent<Props, State> {
 		let displayTypes = getSupportedDisplayTypes(data);
 		let nextIndex = currentIndex + 1;
 		nextIndex = nextIndex > (displayTypes.length - 1) ? 0 : nextIndex;
+		LayoutAnimation.configureNext(this.LayoutLinear);
 		this.setState({
 			currentIndex: nextIndex,
 		});
@@ -544,7 +558,7 @@ class SensorRow extends PureComponent<Props, State> {
 				maxWidth: 216,
 				flexDirection: 'row',
 			},
-			sensorSlideBox: {
+			sensorValueCover: {
 				width: valueBoxWidth,
 				backgroundColor: backgroundColor,
 				height: rowHeight,
