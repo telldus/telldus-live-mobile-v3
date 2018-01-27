@@ -505,10 +505,14 @@ class SensorRow extends PureComponent<Props, State> {
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean): Object {
-		let { width } = appLayout;
+		let { width, height } = appLayout;
+		let isPortrait = height > width;
 
-		let labelBoxWidth = (width - 24) * 0.56;
-		let valueBoxWidth = (width - 24) * 0.44;
+		let tabBarHeight = height * 0.13;// Main tab bar height in landscape mode.
+		let headerHeight = width * 0.1111;// Header height in landscape mode.
+
+		let labelBoxWidth = isPortrait ? (width - 24) * 0.56 : (width - 24 - tabBarHeight - headerHeight) * 0.56;
+		let valueBoxWidth = isPortrait ? (width - 24) * 0.44 : (width - 24 - tabBarHeight - headerHeight) * 0.44;
 		let rowHeight = 70;
 
 		let backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
