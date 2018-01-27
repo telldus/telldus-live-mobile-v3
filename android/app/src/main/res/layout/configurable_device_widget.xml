@@ -26,6 +26,7 @@
                 android:text="Light Switch"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:maxLines="1"
                 android:textColor="@color/white"/>
 
         </LinearLayout>
@@ -37,6 +38,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/onLayout"
                 android:layout_width="0dip"
                 android:layout_height="40sp"
                 android:background="@color/white"
@@ -62,6 +64,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/offLinear"
                 android:layout_width="0dip"
                 android:layout_height="40sp"
                 android:background="@color/white"

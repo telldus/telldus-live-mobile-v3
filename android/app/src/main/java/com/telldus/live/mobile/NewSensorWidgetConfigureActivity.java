@@ -8,12 +8,17 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -54,6 +59,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private RemoteViews views;
     private ProgressDialog pDialog;
     private PrefManager prefManager;
+    private String transparent="false";
+    Switch switch_background;
 
 //    String temp=null,hum=null,windAvg=null,windGust=null,rainRate=null,rainTotal=null,luminance=null,
 //            watt=null,windDirection=null,uv=null;
@@ -90,7 +97,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
 
         prefManager=new PrefManager(this);
-
         File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
         if (fileAuth.exists()) {
             Log.d("File exists?", "Yes");
@@ -163,9 +169,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 e.printStackTrace();
             }
         }
-
-       /* prefManager.AccessTokenDetails("bcc1cf7d4a820001eb4d7a3352422d52bdb08e64","232323");
-        prefManager.saveSessionID("9c0c71d9-76b4-43c6-be55-e133da18ca08","23422323");
+/*
+        prefManager.AccessTokenDetails("3db77e79f8c2d88c8fe9f6914a3c43da0ff038d1","232323");
+        prefManager.saveSessionID("26758c97-0cf7-426a-9ec0-8b56f56de976","23422323");
         createSensorApi();*/
         setResult(RESULT_CANCELED);
 
@@ -173,6 +179,10 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
         // activity stuffs
         setContentView(R.layout.activity_sensor_widget_configure);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow(); // in Activity's onCreate() for instance
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
 
         widgetManager = AppWidgetManager.getInstance(this);
         views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
@@ -192,12 +202,29 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         sensorDataHint = (TextView) findViewById(R.id.txtSensorDataHint);
         imgSensorType = (ImageView) findViewById(R.id.imgSensorType);
         btAdd = (Button) findViewById(R.id.btAdd);
+        switch_background=(Switch)findViewById(R.id.switch_background);
+
+        switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // do something, the isChecked will be
+                // true if the switch is in the On position
+                if(isChecked)
+                {
+                    transparent="true";
+                }else
+                {
+                    transparent="false";
+
+                }
+            }
+        });
+
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 SensorInfo mSensorInfo=new SensorInfo(mAppWidgetId,sensorName.getText().toString(),
-                        sensorDataName.getText().toString(),id,senValue,lastUp);
+                        sensorDataName.getText().toString(),id,senValue,lastUp,transparent);
                 database.addSensor(mSensorInfo);
                 views.setTextViewText(R.id.txtSensorType, sensorName.getText());
                 views.setImageViewResource(R.id.iconSensor, R.drawable.sensor);
@@ -367,7 +394,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         });
     }
     void createSensorApi() {
-     //   accessToken=prefManager.getAccess();
+   //     accessToken=prefManager.getAccess();
 
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
 

@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:background="@color/blue"
         android:gravity="center">
@@ -35,35 +35,37 @@
         android:orientation="vertical"
         android:background="@color/lightGray">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="0.21"
-            android:background="@drawable/telldus_geometric_header_bg"
-            android:orientation="vertical">
+            android:background="@drawable/header">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerInParent="true">
 
             <TextView
                 android:id="@+id/testText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="right"
-                android:layout_gravity="center"
-                android:layout_marginBottom="4dp"
                 android:text="Add device widget"
                 android:textSize="30sp"
+                android:layout_marginStart="17dp"
                 android:textColor="@color/white"/>
 
             <TextView
+                android:id="@+id/chooseSetting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Choose settings for your widget"
                 android:textSize="20sp"
-                android:layout_gravity="center"
                 android:textColor="@color/white"/>
-
-        </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -155,6 +157,7 @@
                 android:background="@drawable/shape">
 
                 <Switch
+                    android:id="@+id/switch_background"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Transparent Background"/>

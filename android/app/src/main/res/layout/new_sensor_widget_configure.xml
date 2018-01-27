@@ -35,36 +35,38 @@
         android:orientation="vertical"
         android:background="@color/lightGray">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="0.21"
-            android:background="@drawable/telldus_geometric_header_bg"
-            android:orientation="vertical">
+            android:alpha="2"
+            android:background="@drawable/header"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerInParent="true">
 
             <TextView
                 android:id="@+id/testText"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="4dp"
                 android:text="Add sensor widget"
                 android:gravity="right"
-                android:layout_marginRight="40dp"
+                android:layout_marginStart="14dp"
                 android:textSize="30sp"
                 android:textColor="@color/white"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:gravity="right"
-                android:layout_marginRight="40dp"
+
                 android:text="Choose settings for your widget"
                 android:textSize="20sp"
                 android:textColor="@color/white"/>
-
-        </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

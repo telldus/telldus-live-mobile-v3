@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -24,6 +25,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
+import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
 
 /**
@@ -41,6 +43,7 @@ public class NewAppWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
 
         CharSequence widgetText = "Telldus";
+        String transparent;
 
         DeviceInfo widgetID=db.findUser(appWidgetId);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.configurable_device_widget);
@@ -68,8 +71,19 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
 
             }
+            transparent=widgetID.getTransparent();
+            if(transparent.equals("true"))
+            {
+                views.setInt(R.id.iconWidget,"setBackgroundColor", Color.TRANSPARENT);
+                views.setInt(R.id.onLayout,"setBackgroundColor", Color.TRANSPARENT);
+                views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);
+            }
 
         }
+        /*views.setInt(R.id.iconWidget,"setBackgroundColor", Color.TRANSPARENT);
+        views.setInt(R.id.onLayout,"setBackgroundColor", Color.TRANSPARENT);
+        views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);*/
+
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -136,7 +150,6 @@ public class NewAppWidget extends AppWidgetProvider {
                 // createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
 
 
-
                 File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
                 if (fileAuth.exists()) {
                     Log.d("File exists?", "Yes");
@@ -175,8 +188,9 @@ public class NewAppWidget extends AppWidgetProvider {
                         e.printStackTrace();
                     }
                 }
-
+               // createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On",accessToken);
             }
+
 
 
 
@@ -202,7 +216,6 @@ public class NewAppWidget extends AppWidgetProvider {
                 Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
             }else
             {
-
                 File fileAuth = new File(context.getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
                 if (fileAuth.exists()) {
                     Log.d("File exists?", "Yes");
@@ -241,7 +254,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         e.printStackTrace();
                     }
                 }
-
+              //  createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off",accessToken);
             }
         }
     }
@@ -274,7 +287,8 @@ public class NewAppWidget extends AppWidgetProvider {
     }
 
     void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action,String accessToken) {
-
+     //   PrefManager prefManager=new PrefManager(ctx);
+      //  accessToken=prefManager.getAccess();
         String str="https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
         Log.v("***********",str);
         AndroidNetworking.get("https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null")
