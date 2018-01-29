@@ -21,12 +21,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, FormattedMessage } from 'BaseComponents';
+import { View, IconTelldus } from 'BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
-let AnimatedFormattedMessage = Animated.createAnimatedComponent(FormattedMessage);
+import Theme from 'Theme';
 
 class DimmerOnButton extends View {
 	constructor(props) {
@@ -41,19 +41,20 @@ class DimmerOnButton extends View {
 	}
 
 	render() {
-		let { isInState, enabled, fontSize, style, methodRequested, name } = this.props;
+		let { isInState, style, methodRequested, name, isGatewayActive } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
+		let buttonStyle = !isGatewayActive ?
+			(isInState !== 'TURNOFF' ? styles.offline : styles.disabled) : (isInState !== 'TURNOFF' ? styles.enabled : styles.disabled);
+		let iconColor = !isGatewayActive ?
+			(isInState !== 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState !== 'TURNOFF' ? '#fff' : Theme.Core.brandSecondary);
 
 		return (
 			<View
-				style={[style, isInState !== 'TURNOFF' && enabled ? styles.enabled : styles.disabled]}
+				style={[style, buttonStyle]}
 				accessibilityLabel={accessibilityLabel}
 				accessible={true}
 				importantForAccessibility={'yes'}>
-				<AnimatedFormattedMessage
-					{...i18n.on}
-					style = {[(isInState !== 'TURNOFF' || methodRequested === 'TURNON') && enabled ? styles.textEnabled : styles.textDisabled, { opacity: this.state.fadeAnim, fontSize: fontSize ? fontSize : 12 }]}
-				/>
+				<IconTelldus icon="on" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
 				{
 					methodRequested === 'TURNON' ?
 						<ButtonLoadingIndicator style={styles.dot} />
@@ -74,10 +75,13 @@ class DimmerOnButton extends View {
 
 const styles = StyleSheet.create({
 	enabled: {
-		backgroundColor: '#fafafa',
+		backgroundColor: Theme.Core.brandSecondary,
 	},
 	disabled: {
 		backgroundColor: '#eeeeee',
+	},
+	offline: {
+		backgroundColor: '#a2a2a2',
 	},
 	textEnabled: {
 		textAlign: 'center',

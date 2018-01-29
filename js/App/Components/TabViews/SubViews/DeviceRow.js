@@ -92,6 +92,8 @@ class DeviceRow extends PureComponent<Props, null> {
 				device={device}
 				style={styles.bell}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
 			/>;
 			icon = 'bell';
 		} else if (UP || DOWN || STOP) {
@@ -99,6 +101,8 @@ class DeviceRow extends PureComponent<Props, null> {
 				device={device}
 				style={styles.navigation}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
 			/>;
 			icon = 'device-alt-solid';
 		} else if (DIM) {
@@ -106,18 +110,24 @@ class DeviceRow extends PureComponent<Props, null> {
 				device={device}
 				setScrollEnabled={this.props.setScrollEnabled}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
 			/>;
 			icon = 'device-alt-solid';
 		} else if (TURNON || TURNOFF) {
 			button = <ToggleButton
 				device={device}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
 			/>;
 			icon = 'device-alt-solid';
 		} else {
 			button = <ToggleButton
 				device={device}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
 			/>;
 			icon = 'device-alt-solid';
 		}
@@ -151,7 +161,7 @@ class DeviceRow extends PureComponent<Props, null> {
 	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
 		// let { width, height } = appLayout;
 		// let isPortrait = height > width;
-		let rowHeight = 70;
+		let rowHeight = 60;
 
 		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 		let backgroundColor = !isGatewayActive ? Theme.Core.offlineColor : color;
@@ -198,14 +208,15 @@ class DeviceRow extends PureComponent<Props, null> {
 				marginHorizontal: 5,
 			},
 			bell: {
-				flex: 7,
-				height: 32,
 				justifyContent: 'center',
-				alignItems: 'stretch',
+				alignItems: 'center',
+				backgroundColor: '#eeeeee',
+				width: rowHeight,
+				borderLeftWidth: 1,
+				borderLeftColor: '#ddd',
 			},
 			navigation: {
-				flex: 7,
-				height: 32,
+				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'center',
 			},

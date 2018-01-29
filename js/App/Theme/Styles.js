@@ -95,6 +95,9 @@ export default StyleSheet.create({
 		marginTop: 5,
 		marginLeft: 5,
 	},
+	deviceActionIcon: {
+		fontSize: 30,
+	},
 	sensorValueCover: {
 		justifyContent: 'center',
 		alignItems: 'flex-start',

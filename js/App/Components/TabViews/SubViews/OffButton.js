@@ -22,18 +22,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, FormattedMessage } from 'BaseComponents';
+import { View, IconTelldus } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
+import Theme from 'Theme';
 
 type Props = {
 	requestDeviceAction: (id: number, command: number, value?: number) => void,
 	deviceSetState: (id: number, command: number) => void,
 	intl: Object,
 	name: string,
+	isGatewayActive: boolean,
 };
 
 class OffButton extends View {
@@ -53,17 +55,21 @@ class OffButton extends View {
 	}
 
 	render() {
-		let { isInState, enabled, fontSize, methodRequested, name } = this.props;
+		let { isInState, enabled, methodRequested, name, isGatewayActive } = this.props;
 		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
+		let buttonStyle = !isGatewayActive ?
+			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) : (isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
+		let iconColor = !isGatewayActive ?
+			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
 
 		return (
-			<View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>
+			<View style={[this.props.style, buttonStyle]}>
 				<TouchableOpacity
 					disabled={!enabled}
 					onPress={this.onPress}
 					style={styles.button}
 					accessibilityLabel={accessibilityLabel}>
-					<FormattedMessage {...i18n.off} style = {[styles.buttonText, isInState === 'TURNOFF' || methodRequested === 'TURNOFF' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}/>
+					<IconTelldus icon="off" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNOFF' ?
@@ -78,16 +84,19 @@ class OffButton extends View {
 
 const styles = StyleSheet.create({
 	enabled: {
-		backgroundColor: '#fafafa',
+		backgroundColor: Theme.Core.brandPrimary,
 	},
 	disabled: {
 		backgroundColor: '#eeeeee',
 	},
+	offline: {
+		backgroundColor: '#a2a2a2',
+	},
 	textEnabled: {
-		color: 'red',
+		color: '#fff',
 	},
 	textDisabled: {
-		color: '#a2a2a2',
+		color: Theme.Core.brandPrimary,
 	},
 	button: {
 		flex: 1,

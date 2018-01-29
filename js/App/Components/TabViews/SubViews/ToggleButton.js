@@ -34,6 +34,8 @@ type Props = {
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 	intl: Object,
+	isGatewayActive: boolean,
+	appLayout: Object,
 };
 
 class ToggleButton extends View {
@@ -44,42 +46,47 @@ class ToggleButton extends View {
 	}
 
 	render() {
-		const { intl, device } = this.props;
+		const { intl, device, appLayout, isGatewayActive} = this.props;
+		const styles = this.getStyles(appLayout, isGatewayActive);
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		const { id, isInState, methodRequested, name } = device;
 
-		const onButton = <OnButton id={id} name={name} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} methodRequested={methodRequested} intl={intl}/>;
-		const offButton = <OffButton id={id} name={name} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} intl={intl}/>;
+		const onButton = <OnButton id={id} name={name} isInState={isInState} enabled={!!TURNON}
+			style={styles.turnOn} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
+		const offButton = <OffButton id={id} name={name} isInState={isInState} enabled={!!TURNOFF}
+			style={styles.turnOff} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
 
 		return (
-			<RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
+			<View style={styles.container}>
 				{ offButton }
 				{ onButton }
-			</RoundedCornerShadowView>
+			</View>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 7,
-		height: 32,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	turnOff: {
-		flex: 1,
-		alignItems: 'stretch',
-		borderTopLeftRadius: 7,
-		borderBottomLeftRadius: 7,
-	},
-	turnOn: {
-		flex: 1,
-		alignItems: 'stretch',
-		borderTopRightRadius: 7,
-		borderBottomRightRadius: 7,
-	},
-});
+	getStyles(appLayout, isGatewayActive) {
+		let buttonWidth = 60;
+
+		return {
+			container: {
+				flex: 0,
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			turnOff: {
+				width: buttonWidth,
+				alignItems: 'center',
+				borderLeftWidth: 1,
+				borderLeftColor: '#ddd',
+			},
+			turnOn: {
+				width: buttonWidth,
+				alignItems: 'center',
+			},
+		};
+	}
+}
 
 ToggleButton.propTypes = {
 	device: PropTypes.object,

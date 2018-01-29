@@ -50,6 +50,8 @@ type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (number, number) => void,
 	intl: Object,
+	isGatewayActive: boolean,
+	appLayout: Object,
 };
 
 type State = {
@@ -167,7 +169,7 @@ class DimmerButton extends View {
 	}
 
 	render() {
-		const { device, intl } = this.props;
+		const { device, intl, isGatewayActive } = this.props;
 		const { isInState, name, supportedMethods, methodRequested } = device;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 		const onButton = (
@@ -179,6 +181,7 @@ class DimmerButton extends View {
 				enabled={!!TURNON}
 				methodRequested={methodRequested}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
 			/>
 		);
 		const offButton = (
@@ -190,6 +193,7 @@ class DimmerButton extends View {
 				enabled={!!TURNOFF}
 				methodRequested={methodRequested}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
 			/>
 		);
 		const slider = DIM ? (
@@ -224,11 +228,11 @@ class DimmerButton extends View {
 		) : null;
 
 		return (
-			<RoundedCornerShadowView onLayout={this.layoutView} style={styles.container}>
+			<View onLayout={this.layoutView} style={styles.container}>
 				{ offButton }
 				{ onButton }
 				{ slider }
-			</RoundedCornerShadowView>
+			</View>
 		);
 	}
 }
@@ -241,29 +245,29 @@ DimmerButton.defaultProps = {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 7,
-		width: 88,
-		height: 32,
+		flex: 0,
+		flexDirection: 'row',
 		justifyContent: 'center',
-		alignItems: 'stretch',
+		alignItems: 'center',
+		height: 60,
 	},
 	slider: {
 		flex: 1,
 		position: 'absolute',
 	},
 	turnOff: {
-		flex: 1,
-		alignItems: 'stretch',
+		width: 60,
+		height: 60,
+		alignItems: 'center',
 		justifyContent: 'center',
-		borderTopLeftRadius: 7,
-		borderBottomLeftRadius: 7,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	turnOn: {
-		flex: 1,
-		alignItems: 'stretch',
+		width: 60,
+		height: 60,
+		alignItems: 'center',
 		justifyContent: 'center',
-		borderTopRightRadius: 7,
-		borderBottomRightRadius: 7,
 	},
 });
 

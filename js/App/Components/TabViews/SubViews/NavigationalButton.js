@@ -30,15 +30,16 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import i18n from '../../../Translations/common';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import Theme from 'Theme';
 
-const UpButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabel }) => (
+const UpButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabel, buttonStyle, iconColor }) => (
 	<TouchableOpacity
-		style={styles.navigationButton}
+		style={[styles.navigationButton, buttonStyle]}
 		onPress={onPress}
 		accessibilityLabel={accessibilityLabel}>
 		<Icon name="caret-up" size={30}
 		      style={{
-			      color: supportedMethod ? '#1a355b' : '#eeeeee',
+			      color: supportedMethod ? iconColor : '#eeeeee',
 		      }}
 		/>
 		{
@@ -50,13 +51,15 @@ const UpButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabe
 	</TouchableOpacity>
 );
 
-const DownButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabel }) => (
+const DownButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabel, buttonStyle, iconColor }) => (
 	<TouchableOpacity
-		style={styles.navigationButton}
+		style={[styles.navigationButton, buttonStyle]}
 		onPress={onPress}
 		accessibilityLabel={accessibilityLabel}>
 		<Icon name="caret-down" size={30}
-			style={supportedMethod ? styles.enabled : styles.disabled}
+			style={{
+				color: supportedMethod ? iconColor : '#eeeeee',
+			}}
 		/>
 		{
 			methodRequested === 'DOWN' ?
@@ -67,13 +70,15 @@ const DownButton = ({ supportedMethod, onPress, methodRequested, accessibilityLa
 	</TouchableOpacity>
 );
 
-const StopButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabel }) => (
+const StopButton = ({ supportedMethod, onPress, methodRequested, accessibilityLabel, buttonStyle, iconColor }) => (
 	<TouchableOpacity
-		style={styles.navigationButton}
+		style={[styles.navigationButton, buttonStyle]}
 		onPress={onPress}
 		accessibilityLabel={accessibilityLabel}>
 		<Icon name="stop" size={20}
-			style={supportedMethod ? styles.enabled : styles.disabled}
+			style={{
+				color: supportedMethod ? iconColor : '#eeeeee',
+			}}
 		/>
 		{
 			methodRequested === 'STOP' ?
@@ -93,6 +98,8 @@ type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (id: number, command: number) => void,
 	intl: Object,
+	isGatewayActive: boolean,
+	appLayout: Object,
 };
 
 class NavigationalButton extends View {
@@ -130,15 +137,35 @@ class NavigationalButton extends View {
 	render() {
 		const noop = function () {
 		};
-		const { name, supportedMethods, methodRequested } = this.props.device;
+
+		let { device, isGatewayActive } = this.props;
+		const { name, supportedMethods, methodRequested, isInState } = device;
 		const { UP, DOWN, STOP } = supportedMethods;
 
+		let upButtonStyle = !isGatewayActive ?
+			(isInState === 'UP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'UP' ? styles.enabledBackground : styles.disabledBackground);
+		let upIconColor = !isGatewayActive ?
+			(isInState === 'UP' ? '#fff' : '#a2a2a2') : (isInState === 'UP' ? '#fff' : Theme.Core.brandSecondary);
+
+		let downButtonStyle = !isGatewayActive ?
+			(isInState === 'DOWN' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'DOWN' ? styles.enabledBackground : styles.disabledBackground);
+		let downIconColor = !isGatewayActive ?
+			(isInState === 'DOWN' ? '#fff' : '#a2a2a2') : (isInState === 'DOWN' ? '#fff' : Theme.Core.brandSecondary);
+
+		let stopButtonStyle = !isGatewayActive ?
+			(isInState === 'STOP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'STOP' ? styles.enabledBackgroundStop : styles.disabledBackground);
+		let stopIconColor = !isGatewayActive ?
+			(isInState === 'STOP' ? '#fff' : '#a2a2a2') : (isInState === 'STOP' ? '#fff' : Theme.Core.brandPrimary);
+
 		return (
-			<RoundedCornerShadowView style={this.props.style}>
-				<UpButton supportedMethod={UP} methodRequested={methodRequested} onPress={UP ? this.onUp : noop} accessibilityLabel={`${this.labelUpButton}, ${name}`} />
-				<DownButton supportedMethod={DOWN} methodRequested={methodRequested} onPress={DOWN ? this.onDown : noop} accessibilityLabel={`${this.labelDownButton}, ${name}`}/>
-				<StopButton supportedMethod={STOP} methodRequested={methodRequested} onPress={STOP ? this.onStop : noop} accessibilityLabel={`${this.labelStopButton}, ${name}`}/>
-			</RoundedCornerShadowView>
+			<View style={this.props.style}>
+				<UpButton supportedMethod={UP} methodRequested={methodRequested}onPress={UP ? this.onUp : noop}
+					accessibilityLabel={`${this.labelUpButton}, ${name}`} buttonStyle={upButtonStyle} iconColor={upIconColor}/>
+				<DownButton supportedMethod={DOWN} methodRequested={methodRequested} onPress={DOWN ? this.onDown : noop}
+					accessibilityLabel={`${this.labelDownButton}, ${name}`} buttonStyle={downButtonStyle} iconColor={downIconColor}/>
+				<StopButton supportedMethod={STOP} methodRequested={methodRequested} onPress={STOP ? this.onStop : noop}
+					accessibilityLabel={`${this.labelStopButton}, ${name}`} buttonStyle={stopButtonStyle} iconColor={stopIconColor}/>
+			</View>
 		);
 	}
 }
@@ -151,12 +178,27 @@ NavigationalButton.defaultProps = {
 
 const styles = StyleSheet.create({
 	navigationButton: {
-		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+		width: 60,
+		height: 60,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	enabled: {
 		color: '#1a355b',
+	},
+	enabledBackground: {
+		backgroundColor: Theme.Core.brandSecondary,
+	},
+	disabledBackground: {
+		backgroundColor: '#eeeeee',
+	},
+	enabledBackgroundStop: {
+		backgroundColor: Theme.Core.brandPrimary,
+	},
+	offlineBackground: {
+		backgroundColor: '#a2a2a2',
 	},
 	disabled: {
 		color: '#eeeeee',

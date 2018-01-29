@@ -22,18 +22,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, FormattedMessage } from 'BaseComponents';
+import { View, IconTelldus } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
 
+import Theme from 'Theme';
+
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (id: number, command: number) => void,
 	intl: Object,
 	name: string,
+	isGatewayActive: boolean,
 };
 
 class OnButton extends View {
@@ -52,17 +55,21 @@ class OnButton extends View {
 	}
 
 	render() {
-		let { isInState, enabled, fontSize, methodRequested, name } = this.props;
+		let { isInState, enabled, methodRequested, name, isGatewayActive } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
+		let buttonStyle = !isGatewayActive ?
+			(isInState === 'TURNON' ? styles.offline : styles.disabled) : (isInState === 'TURNON' ? styles.enabled : styles.disabled);
+		let iconColor = !isGatewayActive ?
+			(isInState === 'TURNON' ? '#fff' : '#a2a2a2') : (isInState === 'TURNON' ? '#fff' : Theme.Core.brandSecondary);
 
 		return (
-			<View style={[this.props.style, isInState !== 'TURNOFF' ? styles.enabled : styles.disabled]}>
+			<View style={[this.props.style, buttonStyle]}>
 				<TouchableOpacity
 					disabled={!enabled}
 					onPress={this.onPress}
 					style={styles.button}
 					accessibilityLabel={accessibilityLabel}>
-					<FormattedMessage {...i18n.on} style = {[styles.buttonText, isInState !== 'TURNOFF' || methodRequested === 'TURNON' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}/>
+					<IconTelldus icon="on" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNON' ?
@@ -77,16 +84,19 @@ class OnButton extends View {
 
 const styles = StyleSheet.create({
 	enabled: {
-		backgroundColor: '#fafafa',
+		backgroundColor: Theme.Core.brandSecondary,
 	},
 	disabled: {
 		backgroundColor: '#eeeeee',
 	},
+	offline: {
+		backgroundColor: '#a2a2a2',
+	},
 	textEnabled: {
-		color: 'green',
+		color: '#fff',
 	},
 	textDisabled: {
-		color: '#a2a2a2',
+		color: Theme.Core.brandSecondary,
 	},
 	button: {
 		flex: 1,
