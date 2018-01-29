@@ -544,7 +544,7 @@ class SensorRow extends PureComponent<Props, State> {
 				...Theme.Core.shadow,
 			},
 			sensorIcon: {
-				fontSize: 12,
+				fontSize: 16,
 			},
 			iconContainerStyle: {
 				borderRadius: 25,
