@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { Image, TouchableOpacity, Linking } from 'react-native';
+import { Image, TouchableOpacity, Linking, SectionList } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -70,7 +70,7 @@ const messages = defineMessages({
 });
 
 type Props = {
-	rowsAndSections: Object,
+	rowsAndSections: Array,
 	gateways: Object,
 	editMode: boolean,
 	devices: Object,
@@ -83,11 +83,12 @@ type Props = {
 };
 
 type State = {
-	dataSource: Object,
+	dataSource: Array,
 	deviceId: number,
 	dimmer: boolean,
 	addGateway: boolean,
 	makeRowAccessible: 0 | 1,
+	isRefreshing: boolean,
 };
 
 class DevicesTab extends View {
@@ -98,9 +99,8 @@ class DevicesTab extends View {
 	onCloseSelected: () => void;
 	openDeviceDetail: (number) => void;
 	setScrollEnabled: (boolean) => void;
-	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	renderSectionHeader: (sectionData: Object) => Object;
 	renderRow: (Object) => Object;
-	renderHiddenRow: (Object) => Object;
 	onRefresh: () => void;
 	onPressAddLocation: () => void;
 	onPressAddDevice: () => void;
@@ -113,24 +113,19 @@ class DevicesTab extends View {
 	constructor(props: Props) {
 		super(props);
 
-		const { sections, sectionIds } = this.props.rowsAndSections;
-
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-			}).cloneWithRowsAndSections(sections, sectionIds),
+			dataSource: this.props.rowsAndSections,
 			deviceId: -1,
 			dimmer: false,
 			addGateway: false,
 			makeRowAccessible: 0,
+			isRefreshing: false,
 		};
 		this.onCloseSelected = this.onCloseSelected.bind(this);
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
-		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.onPressAddLocation = this.onPressAddLocation.bind(this);
 		this.onPressAddDevice = this.onPressAddDevice.bind(this);
@@ -143,7 +138,6 @@ class DevicesTab extends View {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const { sections, sectionIds } = nextProps.rowsAndSections;
 
 		let { makeRowAccessible } = this.state;
 		let { screenReaderEnabled } = nextProps;
@@ -155,7 +149,7 @@ class DevicesTab extends View {
 		}
 
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+			dataSource: nextProps.rowsAndSections,
 			makeRowAccessible,
 		});
 
@@ -168,34 +162,22 @@ class DevicesTab extends View {
 		return nextProps.tab === 'devicesTab';
 	}
 
-	rowHasChanged(r1, r2) {
-		if (r1 === r2) {
-			return false;
-		}
-		return (
-			r1.device !== r2.device ||
-			r1.inDashboard !== r2.inDashboard ||
-			r1.editMode !== r2.editMode
-		);
-	}
-
 	renderRow(row) {
-		let { intl, currentTab, currentScreen } = this.props.screenProps;
-		return (
-			<DeviceRow {...row}
-			           onSettingsSelected={this.openDeviceDetail}
-					   setScrollEnabled={this.setScrollEnabled}
-					   intl={intl}
-					   currentTab={currentTab}
-					   currentScreen={currentScreen}
-			/>
-		);
-	}
+		let { screenProps, gateways } = this.props;
+		let { intl, currentTab, currentScreen } = screenProps;
+		let isGatewayActive = gateways.byId[row.item.clientId].online;
 
-	renderHiddenRow(row) {
-		let { screenProps } = this.props;
 		return (
-			<DeviceRowHidden {...row} intl={screenProps.intl}/>
+			<DeviceRow
+				device={row.item}
+				onSettingsSelected={this.openDeviceDetail}
+				setScrollEnabled={this.setScrollEnabled}
+				intl={intl}
+				appLayout={this.props.appLayout}
+				currentTab={currentTab}
+				currentScreen={currentScreen}
+				isGatewayActive={isGatewayActive}
+			/>
 		);
 	}
 
@@ -213,12 +195,11 @@ class DevicesTab extends View {
 		}
 	}
 
-	renderSectionHeader(sectionData, sectionId) {
-		const gateway = this.props.gateways.byId[sectionId];
+	renderSectionHeader(sectionData: Object): Object {
 		return (
 			<View style={Theme.Styles.sectionHeader}>
 				<Text style={Theme.Styles.sectionHeaderText}>
-					{(gateway && gateway.name) ? gateway.name : ''}
+					{sectionData.section.key}
 				</Text>
 			</View>
 		);
@@ -226,6 +207,10 @@ class DevicesTab extends View {
 
 	onRefresh() {
 		this.props.dispatch(getDevices());
+	}
+
+	keyExtractor(item) {
+		return item.id;
 	}
 
 	getType(deviceId) {
@@ -321,19 +306,22 @@ class DevicesTab extends View {
 			return this.noDeviceMessage(style);
 		}
 
+		let extraData = {
+			makeRowAccessible: this.state.makeRowAccessible,
+			appLayout: appLayout,
+		};
+
 		return (
 			<View style={style.container}>
-				<List
-					ref="list"
-					dataSource={this.state.dataSource}
-					renderHiddenRow={this.renderHiddenRow}
-					renderRow={this.renderRow}
+				<SectionList
+					sections={this.state.dataSource}
+					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
-					leftOpenValue={40}
-					editMode={this.props.editMode}
+					initialNumToRender={15}
 					onRefresh={this.onRefresh}
-					// adding key to force render list rows, to gain back the accessibilty.
-					key={this.state.makeRowAccessible}
+					refreshing={this.state.isRefreshing}
+					keyExtractor={this.keyExtractor}
+					extraData={extraData}
 				/>
 			</View>
 		);
@@ -387,26 +375,18 @@ class DevicesTab extends View {
 	}
 }
 
-DevicesTab.propTypes = {
-	rowsAndSections: PropTypes.object,
-};
-
 const getRowsAndSections = createSelector(
 	[
-		({ devices }) => devices,
-		({ gateways }) => gateways,
-		({ tabs }) => tabs.editModeDevicesTab,
+		({ devices }) => devices.byId,
+		({ gateways }) => gateways.byId,
 	],
-	(devices, gateways, editMode) => {
-		const { sections, sectionIds } = parseDevicesForListView(devices, gateways, editMode);
-		return {
-			sections,
-			sectionIds,
-		};
+	(devices, gateways) => {
+		const sections = parseDevicesForListView(devices, gateways);
+		return sections;
 	}
 );
 
-function mapStateToProps(state, ownprops) {
+function mapStateToProps(state: Object, ownprops: Object): Object {
 	return {
 		stackNavigator: ownprops.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(state),
