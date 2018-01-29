@@ -24,11 +24,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, RoundedCornerShadowView } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import VerticalSlider from './VerticalSlider';
+import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import {
@@ -197,22 +197,13 @@ class DimmerButton extends View {
 			/>
 		);
 		const slider = DIM ? (
-			<VerticalSlider
-				style={[
-					styles.slider,
-					{
-						width: this.state.buttonWidth,
-						height: this.state.buttonHeight,
-						left: 0,
-						bottom: 0,
-					},
-				]}
-				thumbWidth={this.state.buttonWidth / 5}
-				thumbHeight={9}
-				fontSize={7}
+			<HorizontalSlider
+				style={styles.slider}
+				thumbWidth={10}
+				thumbHeight={10}
+				fontSize={9}
 				item={device}
 				value={toSliderValue(this.state.value)}
-				sensitive={4}
 				setScrollEnabled={this.props.setScrollEnabled}
 				onSlidingStart={this.onSlidingStart}
 				onSlidingComplete={this.onSlidingComplete}
@@ -221,8 +212,6 @@ class DimmerButton extends View {
 				onLeftEnd={this.onTurnOffButtonEnd}
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
-				onLeft={this.onTurnOff}
-				onRight={this.onTurnOn}
 				intl={intl}
 			/>
 		) : null;
@@ -252,8 +241,13 @@ const styles = StyleSheet.create({
 		height: 60,
 	},
 	slider: {
-		flex: 1,
 		position: 'absolute',
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: 60,
+		height: 60,
+		left: 60,
+		bottom: 0,
 	},
 	turnOff: {
 		width: 60,
@@ -266,6 +260,7 @@ const styles = StyleSheet.create({
 	turnOn: {
 		width: 60,
 		height: 60,
+		marginLeft: 61,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
