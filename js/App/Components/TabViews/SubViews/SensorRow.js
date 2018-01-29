@@ -24,7 +24,7 @@
 import React, { PureComponent } from 'react';
 import { TouchableWithoutFeedback, UIManager, LayoutAnimation } from 'react-native';
 
-import { FormattedMessage, FormattedNumber, Image, ListItem, Text, View, BlockIcon } from 'BaseComponents';
+import { FormattedMessage, FormattedNumber, ListItem, Text, View, BlockIcon, IconTelldus } from 'BaseComponents';
 import { reportException } from 'Analytics';
 import { defineMessages } from 'react-intl';
 import i18n from '../../../Translations/common';
@@ -86,7 +86,7 @@ const directions = [
 
 const SensorHumidity = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Humidity.png')}/>
+		<IconTelldus icon="humidity" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
 			<Text style={Theme.Styles.sensorValueText}>
 				<FormattedNumber value={value / 100}/>
@@ -101,7 +101,7 @@ const SensorHumidity = ({ value, unit, label }) => (
 
 const SensorTemperature = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Temperature.png')}/>
+		<IconTelldus icon="temperature" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
 			<Text style={Theme.Styles.sensorValueText}>
 				<FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}/>
@@ -116,7 +116,7 @@ const SensorTemperature = ({ value, unit, label }) => (
 
 const SensorRain = ({value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Rain.png')}/>
+		<IconTelldus icon="rain" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
 			<Text style={Theme.Styles.sensorValueText}><FormattedNumber value={value} maximumFractionDigits={0}/>{unit}</Text>
 			<Text style={{color: '#ffffff'}}>
@@ -129,7 +129,7 @@ const SensorRain = ({value, unit, label }) => (
 const SensorWind = ({ name, value, unit, label }) => {
 	return (
 		<View style={Theme.Styles.sensorValue}>
-			<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Wind.png')}/>
+			<IconTelldus icon="wind" style={Theme.Styles.sensorIcon}/>
 			<View style={Theme.Styles.sensorValueCover}>
 				<Text style={Theme.Styles.sensorValueText}>
 					{
@@ -152,7 +152,7 @@ const SensorWind = ({ name, value, unit, label }) => {
 
 const SensorUV = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/UV.png')}/>
+		<IconTelldus icon="uv" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
 			<Text style={Theme.Styles.sensorValueText}>
 				<FormattedNumber value={value} maximumFractionDigits={0}/>
@@ -167,7 +167,7 @@ const SensorUV = ({ value, unit, label }) => (
 
 const SensorWatt = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Watt.png')}/>
+		<IconTelldus icon="watt" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
 			<Text style={Theme.Styles.sensorValueText}>
 				<FormattedNumber value={value} maximumFractionDigits={1}/>
@@ -182,7 +182,7 @@ const SensorWatt = ({ value, unit, label }) => (
 
 const SensorLuminance = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Luminance.png')}/>
+		<IconTelldus icon="luminance" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
 			<Text style={Theme.Styles.sensorValueText}>
 				<FormattedNumber value={value} maximumFractionDigits={0}/>
@@ -197,7 +197,7 @@ const SensorLuminance = ({ value, unit, label }) => (
 
 const SensorNew = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
-		<Image style={Theme.Styles.sensorIcon} source={require('../img/sensorIcons/Luminance.png')}/>
+		<IconTelldus icon="humidity" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
 			<Text style={Theme.Styles.sensorValueText}>
 				<FormattedNumber value={value} maximumFractionDigits={1}/>

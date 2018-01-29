@@ -90,11 +90,10 @@ export default StyleSheet.create({
 		alignItems: 'center',
 	},
 	sensorIcon: {
+		fontSize: 40,
+		color: '#fff',
 		marginTop: 5,
 		marginLeft: 5,
-		height: 48,
-		width: 40,
-		tintColor: '#ffffff',
 	},
 	sensorValueCover: {
 		justifyContent: 'center',
