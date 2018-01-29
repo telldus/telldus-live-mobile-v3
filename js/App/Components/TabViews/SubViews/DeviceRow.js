@@ -49,11 +49,16 @@ type Props = {
 	intl: Object,
 	currentTab: string,
 	currentScreen: string,
+	appLayout: Object,
+	isGatewayActive: boolean,
 };
 
 class DeviceRow extends PureComponent<Props, null> {
 	props: Props;
 	onSettingsSelected: Object => void;
+	labelButton: string;
+	labelSettings: string;
+	labelGearButton: string;
 
 	constructor(props: Props) {
 		super(props);
