@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, View, RoundedCornerShadowView } from 'BaseComponents';
+import { Icon, View } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
