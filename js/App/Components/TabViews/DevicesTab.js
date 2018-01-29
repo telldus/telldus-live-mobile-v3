@@ -205,7 +205,19 @@ class DevicesTab extends View {
 	}
 
 	onRefresh() {
-		this.props.dispatch(getDevices());
+		this.setState({
+			isRefreshing: true,
+		});
+		this.props.dispatch(getDevices())
+			.then(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			}).catch(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			});
 	}
 
 	keyExtractor(item) {
