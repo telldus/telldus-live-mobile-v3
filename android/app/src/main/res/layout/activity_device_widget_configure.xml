@@ -4,30 +4,47 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:background="@color/blue"
-        android:gravity="center">
+        android:layout_height="60dp"
+         android:background="@color/blue">
 
-        <TextView
+        <RelativeLayout
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:id="@+id/deviceBack">
+        <ImageView
+            android:id="@+id/backdevice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="TELLDUS"
-            android:textSize="@dimen/header_fontsize"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:background="@drawable/backarrow"
+            android:tint="@color/white"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="15dp"/>
+        </RelativeLayout>
 
-        <ImageView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:paddingLeft="-10dp"
-            android:src="@drawable/telldus"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true">
+<!--
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TELLDUS"
+                android:textSize="@dimen/header_fontsize"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>-->
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:src="@drawable/telldus_1"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,9 +69,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add device widget"
-                android:textSize="30sp"
-                android:layout_marginStart="17dp"
-                android:textColor="@color/white"/>
+                android:textSize="27sp"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/white"
+
+                />
 
             <TextView
                 android:id="@+id/chooseSetting"
@@ -62,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Choose settings for your widget"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textColor="@color/white"/>
             </LinearLayout>
         </RelativeLayout>
@@ -102,40 +121,39 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/btSelectDevice"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="0.62"
-                    android:background="@drawable/shape_right"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_gravity="center">
+                    android:background="@drawable/shape_right">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_centerInParent="true">
 
                     <TextView
                         android:id="@+id/txtDeviceName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:text="Select device"
-                        android:textSize="20sp"
+                        android:textSize="25sp"
                         android:textColor="@color/orange"/>
 
                     <TextView
                         android:id="@+id/txtDeviceHint"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
                         android:text="Tap to select device"
-                        android:textSize="10sp"
+                        android:textSize="15sp"
+                        android:layout_marginStart="4dp"
                         android:textColor="@color/darkGray"/>
 
-                    <TextView
-                        android:id="@+id/valDeviceState"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
 
-                </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 

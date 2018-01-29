@@ -56,6 +56,46 @@ public class PrefManager {
     {
         return pref.getString("expire","");
     }
+    public void infoAccessToken(String client_id,String client_secret,String grant_type,String user,String pwd)
+    {
+        editor.putString("client_id",client_id);
+        editor.putString("client_secret",client_secret);
+        editor.putString("grant_type",grant_type);
+        editor.putString("user_name",user);
+        editor.putString("password",pwd);
+        editor.commit();
+    }
+    public String getClientID()
+    {
+        return pref.getString("client_id","");
+    }
+    public String getClientSecret()
+    {
+        return pref.getString("client_secret","");
+    }
+    public String getGrantType()
+    {
+        return pref.getString("grant_type","");
+    }
+    public String getUsername()
+    {
+        return pref.getString("user_name","");
+    }
+    public String getPassword()
+    {
+        return pref.getString("password","");
+    }
+
+    public void timeStampAccessToken(String timeStamp)
+    {
+        editor.putString("access_time",timeStamp);
+        editor.commit();
+    }
+    public String getAccessTime()
+    {
+        return pref.getString("access_time","");
+    }
+
 
 
 }

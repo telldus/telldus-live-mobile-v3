@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+<!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
@@ -29,7 +29,36 @@
             android:paddingLeft="-10dp"
             android:src="@drawable/telldus"/>
 
-    </LinearLayout>
+    </LinearLayout>-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/blue">
+
+    <RelativeLayout
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:id="@+id/sensorBack">
+
+        <ImageView
+            android:id="@+id/backsensor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/backarrow"
+            android:tint="@color/white"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="15dp"/>
+    </RelativeLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/telldus_1"/>
+
+    </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,19 +79,20 @@
                 android:layout_centerInParent="true">
 
             <TextView
-                android:id="@+id/testText"
+                android:id="@+id/testTextSensor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add sensor widget"
-                android:textSize="30sp"
+                android:textSize="27sp"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/white"/>
 
             <TextView
+                android:id="@+id/chooseSettingSensor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Choose settings for your widget"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textColor="@color/white"/>
             </LinearLayout>
         </RelativeLayout>
@@ -118,7 +148,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Select sensor"
-                        android:textSize="20sp"
+                        android:textSize="22sp"
                         android:textColor="@color/orange"/>
 
                     <TextView
@@ -127,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:text="Tap to select sensor"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         android:textColor="@color/darkGray"/>
 
                 </LinearLayout>
@@ -180,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:text="Select data item"
-                        android:textSize="20sp"
+                        android:textSize="22sp"
                         android:textColor="@color/orange"/>
 
                     <TextView
@@ -189,7 +219,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:text="Tap to change value to display"
-                        android:textSize="10sp"
+                        android:textSize="12sp"
                         android:textColor="@color/darkGray"/>
 
                 </LinearLayout>
@@ -241,6 +271,7 @@
                     android:text="@string/confirm"/>
 
                 <Button
+                    android:id="@+id/button_cancel"
                     android:layout_width="220sp"
                     android:layout_height="wrap_content"
                     android:paddingTop="10dp"
