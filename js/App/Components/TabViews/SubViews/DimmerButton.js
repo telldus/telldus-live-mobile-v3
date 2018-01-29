@@ -248,6 +248,8 @@ const styles = StyleSheet.create({
 		height: 60,
 		left: 60,
 		bottom: 0,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	turnOff: {
 		width: 60,
