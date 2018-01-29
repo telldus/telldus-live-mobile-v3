@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, RoundedCornerShadowView } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 import OnButton from './OnButton';
 import OffButton from './OffButton';
@@ -46,8 +46,7 @@ class ToggleButton extends View {
 	}
 
 	render() {
-		const { intl, device, appLayout, isGatewayActive} = this.props;
-		const styles = this.getStyles(appLayout, isGatewayActive);
+		const { intl, device, isGatewayActive} = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		const { id, isInState, methodRequested, name } = device;
 
@@ -63,30 +62,26 @@ class ToggleButton extends View {
 			</View>
 		);
 	}
-
-	getStyles(appLayout, isGatewayActive) {
-		let buttonWidth = 60;
-
-		return {
-			container: {
-				flex: 0,
-				flexDirection: 'row',
-				justifyContent: 'center',
-				alignItems: 'center',
-			},
-			turnOff: {
-				width: buttonWidth,
-				alignItems: 'center',
-				borderLeftWidth: 1,
-				borderLeftColor: '#ddd',
-			},
-			turnOn: {
-				width: buttonWidth,
-				alignItems: 'center',
-			},
-		};
-	}
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 0,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	turnOff: {
+		width: 60,
+		alignItems: 'center',
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
+	},
+	turnOn: {
+		width: 60,
+		alignItems: 'center',
+	},
+});
 
 ToggleButton.propTypes = {
 	device: PropTypes.object,
