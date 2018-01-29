@@ -104,7 +104,7 @@ class DeviceRow extends PureComponent<Props, null> {
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
 			/>;
-			icon = 'device-alt-solid';
+			icon = 'curtain';
 		} else if (DIM) {
 			button = <DimmerButton
 				device={device}
