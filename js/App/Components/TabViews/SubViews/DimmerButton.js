@@ -177,6 +177,7 @@ class DimmerButton extends View {
 				ref={'onButton'}
 				style={styles.turnOn}
 				isInState={isInState}
+				onPress={this.onTurnOn}
 				name={name}
 				enabled={!!TURNON}
 				methodRequested={methodRequested}
@@ -189,6 +190,7 @@ class DimmerButton extends View {
 				ref={'offButton'}
 				style={styles.turnOff}
 				isInState={isInState}
+				onPress={this.onTurnOff}
 				name={name}
 				enabled={!!TURNOFF}
 				methodRequested={methodRequested}
