@@ -8,6 +8,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -51,9 +53,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     // private EditText etUrl;
-    private Button btAdd;
+    private Button btAdd,button_cancel;
     private View btSelectSensor, btSelectDisplayItem;
-    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint;
+    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint,chooseSettingSensor,testText;
     private ImageView imgSensorType;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
@@ -61,6 +63,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private PrefManager prefManager;
     private String transparent="false";
     Switch switch_background;
+    ImageView backSensor;
+    private RelativeLayout mSensorBack;
 
 //    String temp=null,hum=null,windAvg=null,windGust=null,rainRate=null,rainTotal=null,luminance=null,
 //            watt=null,windDirection=null,uv=null;
@@ -179,10 +183,10 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
         // activity stuffs
         setContentView(R.layout.activity_sensor_widget_configure);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
+        }*/
 
         widgetManager = AppWidgetManager.getInstance(this);
         views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
@@ -203,6 +207,33 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         imgSensorType = (ImageView) findViewById(R.id.imgSensorType);
         btAdd = (Button) findViewById(R.id.btAdd);
         switch_background=(Switch)findViewById(R.id.switch_background);
+
+        chooseSettingSensor=(TextView)findViewById(R.id.chooseSettingSensor);
+        testText=(TextView)findViewById(R.id.testTextSensor);
+
+       /* Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
+        testText.setTypeface(font);
+        chooseSettingSensor.setTypeface(font);
+        sensorName.setTypeface(font);
+        sensorHint.setTypeface(font);
+        sensorDataName.setTypeface(font);
+        sensorDataHint.setTypeface(font);*/
+        mSensorBack=(RelativeLayout)findViewById(R.id.sensorBack);
+
+        mSensorBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        button_cancel=(Button)findViewById(R.id.button_cancel);
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -264,7 +295,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
                                 sensorName.setText(sensorNameList[which]);
 
-                                sensorHint.setText(null);
+                            //    sensorHint.setText(null);
                                 id=DeviceID.get(sensorNameList[which]);
                                 String str=String.valueOf(sensorNameList[which]);
 
@@ -385,7 +416,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 {
                                     ex.printStackTrace();
                                 }
-                                sensorDataHint.setText(null);
+                             //   sensorDataHint.setText(null);
                                 ad1.dismiss();
                             }
                         });

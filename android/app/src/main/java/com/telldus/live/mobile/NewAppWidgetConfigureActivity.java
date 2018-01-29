@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -81,6 +82,13 @@ public class NewAppWidgetConfigureActivity extends Activity {
     private String tokenType;
     private String scope;
     private String refreshToken;
+
+    private String client_ID;
+    private String client_secret;
+    private String grant_Type;
+    private String user_name;
+    private String password;
+
     int stateID;
 
     private String sesID;
@@ -88,6 +96,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
     MyDBHandler database=new MyDBHandler(this);
     private PrefManager prefManager;
     private String switchStatus="false";
+    private ImageView backDevice;
+    private RelativeLayout mBackLayout;
 
 
     @Override
@@ -120,7 +130,18 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 tokenType = String.valueOf(authInfo.getString("token_type"));
                 scope = String.valueOf(authInfo.getString("scope"));
                 refreshToken = String.valueOf(authInfo.getString("refresh_token"));
+
+            //    client_ID=String.valueOf(authInfo.getString("client_id"));
+              //  client_secret=String.valueOf(authInfo.getString("client_secret"));
+                //grant_Type=String.valueOf(authInfo.getString("grant_type"));
+                //user_name=String.valueOf(authInfo.getString("username"));
+              //  password=String.valueOf(authInfo.getString("password"));
+
+
+           //     prefManager.timeStampAccessToken(expiresIn);
                 prefManager.AccessTokenDetails(accessToken,expiresIn);
+             //   prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password);
+
 
                 Log.d("Auth token", accessToken);
                 Log.d("Expires in", expiresIn);
@@ -177,9 +198,33 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
         textTest=(TextView)findViewById(R.id.testText);
         chooseSetting=(TextView)findViewById(R.id.chooseSetting);
+        deviceName = (TextView) findViewById(R.id.txtDeviceName);
+        deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
+        backDevice=(ImageView)findViewById(R.id.backdevice);
+
+        mBackLayout=(RelativeLayout)findViewById(R.id.deviceBack);
+        mBackLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        btnCan=(Button)findViewById(R.id.btn_cancel);
+        btnCan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+/*
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
         textTest.setTypeface(font);
         chooseSetting.setTypeface(font);
+
+  //      Typeface font1 = Typeface.createFromAsset(getAssets(), "fonts/Lato-Thin.ttf");
+        deviceName.setTypeface(font);
+        deviceHint.setTypeface(font);*/
+
         switch_background=(Switch)findViewById(R.id.switch_background);
 
         switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -199,10 +244,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
 
 //        createDeviceApi();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
+        }*/
 
 
 
@@ -218,10 +263,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
             finish();
             return;
         }
-        Toast.makeText(getApplicationContext(),String.valueOf(mAppWidgetId),Toast.LENGTH_LONG).show();
+    //    Toast.makeText(getApplicationContext(),String.valueOf(mAppWidgetId),Toast.LENGTH_LONG).show();
         final String[] deviceStateVal = {"0"};
-        deviceName = (TextView) findViewById(R.id.txtDeviceName);
-        deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
+
+
 
 
         btAdd = (Button) findViewById(R.id.btAdd);
@@ -256,7 +301,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 deviceName.setText(deviceNameList[which]);
                                 id=DeviceID.get(deviceNameList[which]);
 
-                                deviceHint.setText(null);
+                            //    deviceHint.setText(null);
                                 deviceStateVal[0] = (String) deviceStateList[which];
                                 //   Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_LONG).show();
                                 ad.dismiss();
