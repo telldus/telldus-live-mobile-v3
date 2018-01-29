@@ -23,14 +23,13 @@
 
 import React from 'react';
 import { Image, TouchableOpacity, Linking, SectionList } from 'react-native';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
-import { List, ListDataSource, Text, View, TouchableButton } from 'BaseComponents';
-import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
+import { Text, View, TouchableButton } from 'BaseComponents';
+import { DeviceRow } from 'TabViews_SubViews';
 
 import { getDevices } from 'Actions_Devices';
 import { toggleEditMode } from 'Actions';
@@ -70,7 +69,7 @@ const messages = defineMessages({
 });
 
 type Props = {
-	rowsAndSections: Array,
+	rowsAndSections: Array<Object>,
 	gateways: Object,
 	editMode: boolean,
 	devices: Object,
@@ -83,7 +82,7 @@ type Props = {
 };
 
 type State = {
-	dataSource: Array,
+	dataSource: Array<Object>,
 	deviceId: number,
 	dimmer: boolean,
 	addGateway: boolean,
