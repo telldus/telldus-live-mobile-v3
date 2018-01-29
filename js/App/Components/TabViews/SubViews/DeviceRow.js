@@ -21,10 +21,9 @@
 
 'use strict';
 
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import React, { PureComponent } from 'react';
 
-import { Container, ListItem, Text, View, Icon } from 'BaseComponents';
+import { Container, ListItem, Text, View, BlockIcon } from 'BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
@@ -33,7 +32,6 @@ import { getLabelDevice } from 'Accessibility';
 
 import i18n from '../../../Translations/common';
 
-import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
 
 type Props = {
@@ -53,7 +51,7 @@ type Props = {
 	currentScreen: string,
 };
 
-class DeviceRow extends View {
+class DeviceRow extends PureComponent<Props, null> {
 	props: Props;
 	onSettingsSelected: Object => void;
 
@@ -70,8 +68,10 @@ class DeviceRow extends View {
 	}
 
 	render() {
-		let button = null;
-		const { device, intl, currentTab, currentScreen } = this.props;
+		let button = null, icon = null;
+		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive } = this.props;
+		const { isInState } = device;
+		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const {
 			TURNON,
 			TURNOFF,
@@ -88,56 +88,52 @@ class DeviceRow extends View {
 				style={styles.bell}
 				intl={intl}
 			/>;
+			icon = 'bell';
 		} else if (UP || DOWN || STOP) {
 			button = <NavigationalButton
 				device={device}
 				style={styles.navigation}
 				intl={intl}
 			/>;
+			icon = 'device-alt-solid';
 		} else if (DIM) {
 			button = <DimmerButton
 				device={device}
 				setScrollEnabled={this.props.setScrollEnabled}
 				intl={intl}
 			/>;
+			icon = 'device-alt-solid';
 		} else if (TURNON || TURNOFF) {
 			button = <ToggleButton
 				device={device}
 				intl={intl}
 			/>;
+			icon = 'device-alt-solid';
 		} else {
 			button = <ToggleButton
 				device={device}
 				intl={intl}
 			/>;
+			icon = 'device-alt-solid';
 		}
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
 		let accessibilityLabel = getLabelDevice(intl.formatMessage, device);
-		let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
+		// let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 
 		return (
 			<ListItem
-				style={Theme.Styles.rowFront}
+				style={styles.row}
 				accessible={accessible}
 				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 				accessibilityLabel={accessible ? accessibilityLabel : ''}>
 				<Container style={styles.container}>
-					{button}
+					<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
 					<View style={styles.name}>
 						<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
 							{device.name ? device.name : '(no name)'}
 						</Text>
 					</View>
-					<TouchableOpacity
-						style={styles.gear}
-						accessibilityLabel={accessibilityLabelGearButton}
-						onPress={this.onSettingsSelected}>
-						<Icon
-							name="gear"
-							size={26}
-							color="#bbbbbb"
-						/>
-					</TouchableOpacity>
+					{button}
 				</Container>
 			</ListItem>
 		);
@@ -146,42 +142,70 @@ class DeviceRow extends View {
 	onSettingsSelected() {
 		this.props.onSettingsSelected(this.props.device);
 	}
-}
 
-const styles = StyleSheet.create({
-	container: {
-		marginLeft: 2,
-		flexDirection: 'row',
-		alignItems: 'stretch',
-	},
-	name: {
-		flex: 20,
-		justifyContent: 'center',
-	},
-	text: {
-		marginLeft: 8,
-		color: 'rgba(0,0,0,0.87)',
-		fontSize: 16,
-		textAlignVertical: 'center',
-	},
-	gear: {
-		flex: 2.5,
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginRight: 8,
-	},
-	bell: {
-		flex: 7,
-		height: 32,
-		justifyContent: 'center',
-		alignItems: 'stretch',
-	},
-	navigation: {
-		flex: 7,
-		height: 32,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-});
+	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
+		// let { width, height } = appLayout;
+		// let isPortrait = height > width;
+		let rowHeight = 70;
+
+		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+		let backgroundColor = !isGatewayActive ? Theme.Core.offlineColor : color;
+
+		return {
+			container: {
+				marginLeft: 2,
+				flexDirection: 'row',
+				alignItems: 'center',
+			},
+			row: {
+				marginHorizontal: 12,
+				marginBottom: 5,
+				backgroundColor: '#FFFFFF',
+				flexDirection: 'row',
+				height: rowHeight,
+				justifyContent: 'space-between',
+				paddingLeft: 5,
+				alignItems: 'center',
+				borderRadius: 2,
+				...Theme.Core.shadow,
+			},
+			name: {
+				flex: 20,
+				justifyContent: 'center',
+			},
+			text: {
+				marginLeft: 8,
+				color: Theme.Core.rowTextColor,
+				fontSize: 15,
+				textAlignVertical: 'center',
+			},
+			deviceIcon: {
+				fontSize: 18,
+				color: '#fff',
+			},
+			iconContainerStyle: {
+				backgroundColor: backgroundColor,
+				borderRadius: 25,
+				width: 25,
+				height: 25,
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginHorizontal: 5,
+			},
+			bell: {
+				flex: 7,
+				height: 32,
+				justifyContent: 'center',
+				alignItems: 'stretch',
+			},
+			navigation: {
+				flex: 7,
+				height: 32,
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+		};
+	}
+}
 
 module.exports = DeviceRow;

@@ -196,8 +196,8 @@ class DevicesTab extends View {
 
 	renderSectionHeader(sectionData: Object): Object {
 		return (
-			<View style={Theme.Styles.sectionHeader}>
-				<Text style={Theme.Styles.sectionHeaderText}>
+			<View style={Theme.Styles.sectionHeaderNew}>
+				<Text style={Theme.Styles.sectionHeaderTextNew}>
 					{sectionData.section.key}
 				</Text>
 			</View>
