@@ -215,6 +215,8 @@ class DimmerButton extends View {
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
 				intl={intl}
+				isInState={isInState}
+				isGatewayActive={isGatewayActive}
 			/>
 		) : null;
 

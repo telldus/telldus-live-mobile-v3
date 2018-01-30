@@ -51,6 +51,8 @@ type Props = {
 	fontSize: number,
 	style: Object,
 	intl: intlShape.isRequired,
+	isGatewayActive: boolean,
+	isInState: string,
 };
 
 type State = {
@@ -265,20 +267,27 @@ class HorizontalSlider extends View {
 
 	render() {
 		const { minimumValue, maximumValue, value, containerHeight, containerWidth, scaleWidth } = this.state;
-		const { thumbWidth, thumbHeight } = this.props;
+		const { thumbWidth, thumbHeight, isGatewayActive, isInState } = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
 		});
 
+		let thumbStyle = !isGatewayActive ? (isInState === 'TURNOFF' ? styles.enabledBackground : styles.offline) :
+			(isInState === 'TURNOFF' ? styles.enabledOff : styles.enabled);
+		let scaleStyle = !isGatewayActive ? (isInState === 'TURNOFF' ? styles.enabledBackground : styles.offline) :
+			(isInState === 'TURNOFF' ? styles.enabledOff : styles.enabled);
+		let styleBackground = !isGatewayActive ? (isInState === 'TURNOFF' ? styles.offline : styles.disabled) :
+			styles.disabled;
+
 		return (
-			<View style={[this.props.style]} onLayout={this.layoutView} {...this.panResponder.panHandlers}>
-				<View style={[styles.sliderScale, {
+			<View style={[this.props.style, styleBackground]} onLayout={this.layoutView} {...this.panResponder.panHandlers}>
+				<View style={[styles.sliderScale, scaleStyle, {
 					height: thumbHeight / 3,
 					width: (containerWidth - (2 * thumbWidth)),
 				}]} onLayout={this.layoutScale}/>
 				<Animated.View style={[
-					styles.thumb, {
+					styles.thumb, thumbStyle, {
 						width: thumbWidth,
 						height: thumbHeight,
 						borderRadius: thumbHeight / 2,
@@ -302,16 +311,29 @@ class HorizontalSlider extends View {
 }
 
 const styles = StyleSheet.create({
+	enabledBackground: {
+		backgroundColor: '#fff',
+	},
+	enabled: {
+		backgroundColor: Theme.Core.brandSecondary,
+	},
+	enabledOff: {
+		backgroundColor: Theme.Core.brandPrimary,
+	},
+	disabled: {
+		backgroundColor: '#eeeeee',
+	},
+	offline: {
+		backgroundColor: '#a2a2a2',
+	},
 	thumb: {
 		flex: 1,
 		position: 'absolute',
 		bottom: 0,
 		justifyContent: 'center',
 		elevation: 2,
-		backgroundColor: Theme.Core.brandSecondary,
 	},
 	sliderScale: {
-		backgroundColor: Theme.Core.brandSecondary,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
