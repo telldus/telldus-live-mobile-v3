@@ -273,12 +273,11 @@ class HorizontalSlider extends View {
 			outputRange: [0, scaleWidth - thumbWidth],
 		});
 
-		let thumbStyle = !isGatewayActive ? (isInState === 'TURNOFF' ? styles.enabledBackground : styles.offline) :
+		let thumbStyle = !isGatewayActive ? styles.offline :
 			(isInState === 'TURNOFF' ? styles.enabledOff : styles.enabled);
-		let scaleStyle = !isGatewayActive ? (isInState === 'TURNOFF' ? styles.enabledBackground : styles.offline) :
+		let scaleStyle = !isGatewayActive ? styles.offline :
 			(isInState === 'TURNOFF' ? styles.enabledOff : styles.enabled);
-		let styleBackground = !isGatewayActive ? (isInState === 'TURNOFF' ? styles.offline : styles.disabled) :
-			styles.disabled;
+		let styleBackground = styles.disabled;
 
 		return (
 			<View style={[this.props.style, styleBackground]} onLayout={this.layoutView} {...this.panResponder.panHandlers}>
