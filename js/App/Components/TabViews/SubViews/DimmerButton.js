@@ -266,9 +266,11 @@ const styles = StyleSheet.create({
 	turnOn: {
 		width: 60,
 		height: 60,
-		marginLeft: 61,
+		marginLeft: 60,
 		alignItems: 'center',
 		justifyContent: 'center',
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 });
 

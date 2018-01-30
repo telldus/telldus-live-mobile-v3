@@ -292,7 +292,7 @@ class HorizontalSlider extends View {
 						height: thumbHeight,
 						borderRadius: thumbHeight / 2,
 						bottom: (containerHeight - thumbHeight) / 2,
-						left: thumbHeight,
+						left: thumbWidth,
 						transform: [{ translateX: thumbLeft }],
 					},
 				]}/>
