@@ -22,12 +22,12 @@
 'use strict';
 
 import React from 'react';
-import { SectionList } from 'react-native';
+import { SectionList, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
-import { View } from 'BaseComponents';
+import { View, IconTelldus } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
@@ -36,6 +36,7 @@ import { toggleEditMode } from 'Actions';
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
+import Theme from 'Theme';
 
 type Props = {
 	rowsAndSections: Object,
@@ -48,9 +49,12 @@ type Props = {
 };
 
 type State = {
-	dataSource: Object,
+	visibleList: Array<Object>,
+	hiddenList: Array<Object>,
 	makeRowAccessible: 0 | 1,
 	isRefreshing: boolean,
+	listEnd: boolean,
+	showHiddenList: boolean,
 };
 
 class SensorsTab extends View {
@@ -63,6 +67,8 @@ class SensorsTab extends View {
 	renderHiddenRow: (Object) => Object;
 	onRefresh: (Object) => void;
 	keyExtractor: (Object) => number;
+	onEndReachedVisibleList: () => void;
+	toggleHiddenList: () => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
@@ -72,10 +78,15 @@ class SensorsTab extends View {
 	constructor(props: Props) {
 		super(props);
 
+		let { visibleList, hiddenList } = props.rowsAndSections;
+
 		this.state = {
-			dataSource: this.props.rowsAndSections,
+			visibleList,
+			hiddenList,
 			makeRowAccessible: 0,
 			isRefreshing: false,
+			listEnd: false,
+			showHiddenList: false,
 		};
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
@@ -83,12 +94,21 @@ class SensorsTab extends View {
 		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.keyExtractor = this.keyExtractor.bind(this);
+
+		this.onEndReachedVisibleList = this.onEndReachedVisibleList.bind(this);
+		this.toggleHiddenList = this.toggleHiddenList.bind(this);
+
+		let { formatMessage } = props.screenProps.intl;
+
+		let hiddenSensors = formatMessage(i18n.hiddenSensors).toLowerCase();
+		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenSensors}`;
+		this.showHidden = `${formatMessage(i18n.show)} ${hiddenSensors}`;
 	}
 
 	componentWillReceiveProps(nextProps) {
 
 		let { makeRowAccessible } = this.state;
-		let { screenReaderEnabled } = nextProps;
+		let { screenReaderEnabled, rowsAndSections } = nextProps;
 		let { currentScreen, currentTab } = nextProps.screenProps;
 		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
 			makeRowAccessible = 1;
@@ -96,8 +116,11 @@ class SensorsTab extends View {
 			makeRowAccessible = 0;
 		}
 
+		let { visibleList, hiddenList } = rowsAndSections;
+
 		this.setState({
-			dataSource: nextProps.rowsAndSections,
+			visibleList,
+			hiddenList,
 			makeRowAccessible,
 		});
 
@@ -130,9 +153,37 @@ class SensorsTab extends View {
 		return item.id;
 	}
 
+	onEndReachedVisibleList() {
+		this.setState({
+			listEnd: true,
+		});
+	}
+
+	toggleHiddenList() {
+		this.setState({
+			showHiddenList: !this.state.showHiddenList,
+		});
+	}
+
+	toggleHiddenListButton(style): Object {
+		return (
+			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
+				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}/>
+				<Text style={style.toggleHiddenListText}>
+					{this.state.showHiddenList ?
+						this.hideHidden
+						:
+						this.showHidden
+					}
+				</Text>
+			</TouchableOpacity>
+		);
+	}
+
 	render() {
 
 		let { appLayout } = this.props;
+		let { listEnd, showHiddenList, hiddenList, visibleList, isRefreshing } = this.state;
 
 		let style = this.getStyles(appLayout);
 		let extraData = {
@@ -141,18 +192,36 @@ class SensorsTab extends View {
 		};
 
 		return (
-			<View style={style.container}>
+			<ScrollView style={style.container}
+				onRefresh={this.onRefresh}
+				refreshing={isRefreshing}>
 				<SectionList
-					sections={this.state.dataSource}
+					sections={visibleList}
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 					initialNumToRender={15}
-					onRefresh={this.onRefresh}
-					refreshing={this.state.isRefreshing}
 					keyExtractor={this.keyExtractor}
 					extraData={extraData}
+					onEndReached={this.onEndReachedVisibleList}
 				/>
-			</View>
+				{listEnd && (
+					<View>
+						{this.toggleHiddenListButton(style)}
+						{showHiddenList ?
+							<SectionList
+								sections={hiddenList}
+								renderItem={this.renderRow}
+								renderSectionHeader={this.renderSectionHeader}
+								keyExtractor={this.keyExtractor}
+								extraData={extraData}
+							/>
+							:
+							<View style={{height: 80}}/>
+						}
+					</View>
+				)
+				}
+			</ScrollView>
 		);
 	}
 
@@ -198,6 +267,24 @@ class SensorsTab extends View {
 				flex: 1,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
+			toggleHiddenListButton: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginVertical: 10,
+				paddingVertical: 10,
+			},
+			toggleHiddenListIcon: {
+				marginTop: 4,
+				fontSize: 34,
+				color: Theme.Core.rowTextColor,
+			},
+			toggleHiddenListText: {
+				marginLeft: 6,
+				fontSize: 16,
+				textAlign: 'center',
+				color: Theme.Core.rowTextColor,
+			},
 		};
 	}
 }
@@ -208,8 +295,7 @@ const getRowsAndSections = createSelector(
 		({ gateways }) => gateways.byId,
 	],
 	(sensors, gateways) => {
-		const sections = parseSensorsForListView(sensors, gateways);
-		return sections;
+		return parseSensorsForListView(sensors, gateways);
 	}
 );
 

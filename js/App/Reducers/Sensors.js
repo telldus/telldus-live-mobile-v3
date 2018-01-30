@@ -212,8 +212,8 @@ export default combineReducers({
 	byId,
 });
 
-export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}) {
-	let result = _.groupBy(sensors, items => {
+function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
+	let result = _.groupBy(paramOne, items => {
 		let gateway = gateways[items.clientId].name;
 		return gateway;
 	});
@@ -225,4 +225,13 @@ export function parseSensorsForListView(sensors: Object = {}, gateways: Object =
 		return acc;
 	}, []);
 	return result;
+}
+
+export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}) {
+	let [hidden, visible] = _.partition(sensors, (sensor) => {
+		return sensor.ignored;
+	});
+	let visibleList = prepareSectionRow(visible, gateways);
+	let hiddenList = prepareSectionRow(hidden, gateways);
+	return { visibleList, hiddenList };
 }
