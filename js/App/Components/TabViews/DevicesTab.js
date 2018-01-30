@@ -286,7 +286,6 @@ class DevicesTab extends View {
 	}
 
 	onEndReachedVisibleList() {
-		console.log('TEST called');
 		this.setState({
 			listEnd: true,
 		});
