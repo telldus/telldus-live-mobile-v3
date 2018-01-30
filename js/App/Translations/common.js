@@ -371,6 +371,22 @@ const messages = defineMessages({
 		id: 'gateway.offline',
 		defaultMessage: 'Offline',
 	},
+	show: {
+		id: 'text.show',
+		defaultMessage: 'Show',
+	},
+	hide: {
+		id: 'text.hide',
+		defaultMessage: 'Hide',
+	},
+	hiddenDevices: {
+		id: 'text.hiddenDevices',
+		defaultMessage: 'Hidden devices',
+	},
+	hiddenSensors: {
+		id: 'text.hiddenSensors',
+		defaultMessage: 'Hidden sensors',
+	},
 });
 
 export default messages;

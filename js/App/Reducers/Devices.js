@@ -288,8 +288,8 @@ export default combineReducers({
 	didFetch,
 });
 
-export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}) {
-	let result = _.groupBy(devices, items => {
+function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
+	let result = _.groupBy(paramOne, items => {
 		let gateway = gateways[items.clientId].name;
 		return gateway;
 	});
@@ -301,4 +301,13 @@ export function parseDevicesForListView(devices: Object = {}, gateways: Object =
 		return acc;
 	}, []);
 	return result;
+}
+
+export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
+	let [hidden, visible] = _.partition(devices, (device) => {
+		return device.ignored;
+	});
+	let visibleList = prepareSectionRow(visible, gateways);
+	let hiddenList = prepareSectionRow(hidden, gateways);
+	return { visibleList, hiddenList };
 }
