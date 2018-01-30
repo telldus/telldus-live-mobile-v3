@@ -38,6 +38,7 @@
     "button.delete": "Löschen",
     "button.loggingout": "Ausloggen",
     "button.login": "Login",
+    "button.manualActivation": "Manuelle Aktivierung",
     "button.register": "Registrieren",
     "button.registering": "Registrierung",
     "button.retry": "NOCHMAL",
