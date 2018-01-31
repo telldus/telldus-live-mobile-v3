@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { SectionList, ScrollView, TouchableOpacity, Text } from 'react-native';
+import { SectionList, ScrollView, TouchableOpacity, Text, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
@@ -193,8 +193,11 @@ class SensorsTab extends View {
 
 		return (
 			<ScrollView style={style.container}
-				onRefresh={this.onRefresh}
-				refreshing={isRefreshing}>
+				refreshControl={
+					<RefreshControl
+						refreshing={isRefreshing}
+						onRefresh={this.onRefresh}
+					/>}>
 				<SectionList
 					sections={visibleList}
 					renderItem={this.renderRow}

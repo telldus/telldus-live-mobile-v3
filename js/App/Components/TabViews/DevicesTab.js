@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { Image, TouchableOpacity, Linking, SectionList, ScrollView } from 'react-native';
+import { Image, TouchableOpacity, Linking, SectionList, ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
@@ -374,8 +374,12 @@ class DevicesTab extends View {
 
 		return (
 			<ScrollView style={style.container}
-				onRefresh={this.onRefresh}
-				refreshing={isRefreshing}>
+				refreshControl={
+					<RefreshControl
+						refreshing={isRefreshing}
+						onRefresh={this.onRefresh}
+					/>}
+			>
 				<SectionList
 					sections={visibleList}
 					renderItem={this.renderRow}
