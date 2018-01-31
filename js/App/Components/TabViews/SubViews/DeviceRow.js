@@ -23,7 +23,8 @@
 
 import React, { PureComponent } from 'react';
 
-import { Container, ListItem, Text, View, BlockIcon } from 'BaseComponents';
+import { TouchableOpacity } from 'react-native';
+import { ListItem, Text, View, BlockIcon } from 'BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
@@ -133,7 +134,7 @@ class DeviceRow extends PureComponent<Props, null> {
 		}
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
 		let accessibilityLabel = getLabelDevice(intl.formatMessage, device);
-		// let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
+		let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 
 		return (
 			<ListItem
@@ -141,15 +142,16 @@ class DeviceRow extends PureComponent<Props, null> {
 				accessible={accessible}
 				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 				accessibilityLabel={accessible ? accessibilityLabel : ''}>
-				<Container style={styles.container}>
+				<TouchableOpacity onPress={this.onSettingsSelected}
+					style={styles.touchableContainer} accessibilityLabel={accessibilityLabelGearButton}>
 					<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
 					<View style={styles.name}>
 						<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
 							{device.name ? device.name : '(no name)'}
 						</Text>
 					</View>
-					{button}
-				</Container>
+				</TouchableOpacity>
+				{button}
 			</ListItem>
 		);
 	}
@@ -167,10 +169,11 @@ class DeviceRow extends PureComponent<Props, null> {
 		let backgroundColor = !isGatewayActive ? Theme.Core.offlineColor : color;
 
 		return {
-			container: {
-				marginLeft: 2,
+			touchableContainer: {
+				flex: 1,
 				flexDirection: 'row',
 				alignItems: 'center',
+				height: rowHeight,
 			},
 			row: {
 				marginHorizontal: 12,

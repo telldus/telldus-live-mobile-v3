@@ -183,25 +183,6 @@ class DevicesTab extends View {
 		return nextProps.tab === 'devicesTab';
 	}
 
-	renderRow(row) {
-		let { screenProps, gateways } = this.props;
-		let { intl, currentTab, currentScreen } = screenProps;
-		let isGatewayActive = gateways.byId[row.item.clientId].online;
-
-		return (
-			<DeviceRow
-				device={row.item}
-				onSettingsSelected={this.openDeviceDetail}
-				setScrollEnabled={this.setScrollEnabled}
-				intl={intl}
-				appLayout={this.props.appLayout}
-				currentTab={currentTab}
-				currentScreen={currentScreen}
-				isGatewayActive={isGatewayActive}
-			/>
-		);
-	}
-
 	openDeviceDetail(device) {
 		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
 	}
@@ -223,6 +204,25 @@ class DevicesTab extends View {
 					{sectionData.section.key}
 				</Text>
 			</View>
+		);
+	}
+
+	renderRow(row) {
+		let { screenProps, gateways } = this.props;
+		let { intl, currentTab, currentScreen } = screenProps;
+		let isGatewayActive = gateways.byId[row.item.clientId].online;
+
+		return (
+			<DeviceRow
+				device={row.item}
+				onSettingsSelected={this.openDeviceDetail}
+				setScrollEnabled={this.setScrollEnabled}
+				intl={intl}
+				appLayout={this.props.appLayout}
+				currentTab={currentTab}
+				currentScreen={currentScreen}
+				isGatewayActive={isGatewayActive}
+			/>
 		);
 	}
 
