@@ -107,6 +107,13 @@ export default StyleSheet.create({
 		fontSize: 18,
 		color: '#ffffff',
 	},
+	sensorValueLabelText: {
+		fontSize: 13,
+		color: '#ffffff',
+		marginLeft: 3,
+		paddingTop: 3,
+		textAlignVertical: 'bottom',
+	},
 	sensorTileItem: {
 		position: 'absolute',
 		top: 0,

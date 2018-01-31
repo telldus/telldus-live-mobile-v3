@@ -88,10 +88,14 @@ const SensorHumidity = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<IconTelldus icon="humidity" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
-			<Text style={Theme.Styles.sensorValueText}>
-				<FormattedNumber value={value / 100}/>
-				{unit}
-			</Text>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<Text style={Theme.Styles.sensorValueText}>
+					<FormattedNumber value={value / 100}/>
+				</Text>
+				<Text style={Theme.Styles.sensorValueLabelText}>
+					{unit}
+				</Text>
+			</View>
 			<Text style={{color: '#ffffff'}}>
 				{label}
 			</Text>
@@ -103,10 +107,14 @@ const SensorTemperature = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<IconTelldus icon="temperature" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
-			<Text style={Theme.Styles.sensorValueText}>
-				<FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}/>
-				{unit}
-			</Text>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<Text style={Theme.Styles.sensorValueText}>
+					<FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}/>
+				</Text>
+				<Text style={Theme.Styles.sensorValueLabelText}>
+					{unit}
+				</Text>
+			</View>
 			<Text style={{color: '#ffffff'}}>
 				{label}
 			</Text>
@@ -118,7 +126,14 @@ const SensorRain = ({value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<IconTelldus icon="rain" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
-			<Text style={Theme.Styles.sensorValueText}><FormattedNumber value={value} maximumFractionDigits={0}/>{unit}</Text>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<Text style={Theme.Styles.sensorValueText}>
+					<FormattedNumber value={value} maximumFractionDigits={0}/>
+				</Text>
+				<Text style={Theme.Styles.sensorValueLabelText}>
+					{unit}
+				</Text>
+			</View>
 			<Text style={{color: '#ffffff'}}>
 				{label}
 			</Text>
@@ -131,17 +146,22 @@ const SensorWind = ({ name, value, unit, label }) => {
 		<View style={Theme.Styles.sensorValue}>
 			<IconTelldus icon="wind" style={Theme.Styles.sensorIcon}/>
 			<View style={Theme.Styles.sensorValueCover}>
-				<Text style={Theme.Styles.sensorValueText}>
-					{
-						name === 'wdir' ?
-							value
-							:
+				{
+					name === 'wdir' ?
+						<Text style={Theme.Styles.sensorValueText}>
+							{value}
+						</Text>
+						:
+						<View style={{flexDirection: 'row', alignItems: 'center'}}>
 							<Text style={Theme.Styles.sensorValueText}>
-								<FormattedNumber value={value} maximumFractionDigits={1}/>{unit}
+								<FormattedNumber value={value} maximumFractionDigits={1}/>
 							</Text>
+							<Text style={Theme.Styles.sensorValueLabelText}>
+								{unit}
+							</Text>
+						</View>
 
-					}
-				</Text>
+				}
 				<Text style={{color: '#ffffff'}}>
 					{label}
 				</Text>
@@ -154,10 +174,14 @@ const SensorUV = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<IconTelldus icon="uv" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
-			<Text style={Theme.Styles.sensorValueText}>
-				<FormattedNumber value={value} maximumFractionDigits={0}/>
-				{unit}
-			</Text>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<Text style={Theme.Styles.sensorValueText}>
+					<FormattedNumber value={value} maximumFractionDigits={0}/>
+				</Text>
+				<Text style={Theme.Styles.sensorValueLabelText}>
+					{unit}
+				</Text>
+			</View>
 			<Text style={{color: '#ffffff'}}>
 				{label}
 			</Text>
@@ -169,10 +193,14 @@ const SensorWatt = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<IconTelldus icon="watt" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
-			<Text style={Theme.Styles.sensorValueText}>
-				<FormattedNumber value={value} maximumFractionDigits={1}/>
-				{unit}
-			</Text>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<Text style={Theme.Styles.sensorValueText}>
+					<FormattedNumber value={value} maximumFractionDigits={1}/>
+				</Text>
+				<Text style={Theme.Styles.sensorValueLabelText}>
+					{unit}
+				</Text>
+			</View>
 			<Text style={{color: '#ffffff'}}>
 				{label}
 			</Text>
@@ -184,10 +212,14 @@ const SensorLuminance = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<IconTelldus icon="luminance" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
-			<Text style={Theme.Styles.sensorValueText}>
-				<FormattedNumber value={value} maximumFractionDigits={0}/>
-				{unit}
-			</Text>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<Text style={Theme.Styles.sensorValueText}>
+					<FormattedNumber value={value} maximumFractionDigits={0}/>
+				</Text>
+				<Text style={Theme.Styles.sensorValueLabelText}>
+					{unit}
+				</Text>
+			</View>
 			<Text style={{color: '#ffffff'}}>
 				{label}
 			</Text>
@@ -199,10 +231,14 @@ const SensorNew = ({ value, unit, label }) => (
 	<View style={Theme.Styles.sensorValue}>
 		<IconTelldus icon="humidity" style={Theme.Styles.sensorIcon}/>
 		<View style={Theme.Styles.sensorValueCover}>
-			<Text style={Theme.Styles.sensorValueText}>
-				<FormattedNumber value={value} maximumFractionDigits={1}/>
-				{unit}
-			</Text>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<Text style={Theme.Styles.sensorValueText}>
+					<FormattedNumber value={value} maximumFractionDigits={1}/>
+				</Text>
+				<Text style={Theme.Styles.sensorValueLabelText}>
+					{unit}
+				</Text>
+			</View>
 			<Text style={{color: '#ffffff'}}>
 				{label}
 			</Text>
