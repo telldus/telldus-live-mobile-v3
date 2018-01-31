@@ -221,55 +221,75 @@ const messages = defineMessages({
 	},
 	labelHumidity: {
 		id: 'accessibilityLabel.sensors.labelHumidity',
-		defaultMessage: 'humidity',
+		defaultMessage: 'Humidity',
 	},
 	labelTemperature: {
 		id: 'accessibilityLabel.sensors.labelTemperature',
-		defaultMessage: 'temperature',
+		defaultMessage: 'Temperature',
 	},
 	labelRainRate: {
 		id: 'accessibilityLabel.sensors.labelRainRate',
-		defaultMessage: 'rain rate',
+		defaultMessage: 'Rain Rate',
 	},
 	labelRainTotal: {
 		id: 'accessibilityLabel.sensors.labelRainTotal',
-		defaultMessage: 'rain total',
+		defaultMessage: 'Rain Total',
 	},
 	labelWindGust: {
 		id: 'accessibilityLabel.sensors.labelWindGust',
-		defaultMessage: 'wind gust',
+		defaultMessage: 'Wind Gust',
 	},
 	labelWindAverage: {
 		id: 'accessibilityLabel.sensors.labelWindAverage',
-		defaultMessage: 'wind average',
+		defaultMessage: 'Wind Average',
 	},
 	labelWindDirection: {
 		id: 'accessibilityLabel.sensors.labelWindDirection',
-		defaultMessage: 'wind direction',
+		defaultMessage: 'Wind Direction',
 	},
 	labelUVIndex: {
 		id: 'accessibilityLabel.sensors.labelUVIndex',
-		defaultMessage: 'UV index',
+		defaultMessage: 'UV Index',
 	},
 	labelWatt: {
 		id: 'accessibilityLabel.sensors.labelWatt',
-		defaultMessage: 'power',
+		defaultMessage: 'Power',
+	},
+	current: {
+		id: 'accessibilityLabel.sensors.current',
+		defaultMessage: 'Current',
+	},
+	energy: {
+		id: 'accessibilityLabel.sensors.energy',
+		defaultMessage: 'Energy',
+	},
+	accumulated: {
+		id: 'accessibilityLabel.sensors.Accumulated',
+		defaultMessage: 'Accumulated',
+	},
+	acc: {
+		id: 'accessibilityLabel.sensors.acc',
+		defaultMessage: 'Acc.',
+	},
+	voltage: {
+		id: 'accessibilityLabel.sensors.voltage',
+		defaultMessage: 'Voltage',
 	},
 	labelLuminance: {
 		id: 'accessibilityLabel.sensors.labelLuminance',
-		defaultMessage: 'luminance',
+		defaultMessage: 'Luminance',
 	},
 	labelDewPoint: {
 		id: 'accessibilityLabel.sensors.labelDewPoint',
-		defaultMessage: 'dewpoint',
+		defaultMessage: 'Dew Point',
 	},
 	labelBarometricPressure: {
 		id: 'accessibilityLabel.sensors.labelBarometricPressure',
-		defaultMessage: 'barometric pressure',
+		defaultMessage: 'Barometric Pressure',
 	},
 	labelGenricMeter: {
 		id: 'accessibilityLabel.sensors.labelGenricMeter',
-		defaultMessage: 'genric meter',
+		defaultMessage: 'Genric Meter',
 	},
 	labelTimeAgo: {
 		id: 'accessibilityLabel.sensors.labelTimeAgo',

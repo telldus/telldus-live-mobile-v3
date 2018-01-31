@@ -238,6 +238,11 @@ class SensorRow extends PureComponent<Props, State> {
 	labelWindDirection: string;
 	labelUVIndex: string;
 	labelWatt: string;
+	labelCurrent: string;
+	labelEnergy: string;
+	labelAccumulated: string;
+	labelAcc: string;
+	labelVoltage: string;
 	labelLuminance: string;
 	labelDewPoint: string;
 	labelBarometricPressure: string;
@@ -267,7 +272,14 @@ class SensorRow extends PureComponent<Props, State> {
 		this.labelWindAverage = formatMessage(i18n.labelWindAverage);
 		this.labelWindDirection = formatMessage(i18n.labelWindDirection);
 		this.labelUVIndex = formatMessage(i18n.labelUVIndex);
+
 		this.labelWatt = formatMessage(i18n.labelWatt);
+		this.labelCurrent = formatMessage(i18n.current);
+		this.labelEnergy = formatMessage(i18n.energy);
+		this.labelAccumulated = formatMessage(i18n.accumulated);
+		this.labelAcc = formatMessage(i18n.acc);
+		this.labelVoltage = formatMessage(i18n.voltage);
+
 		this.labelLuminance = formatMessage(i18n.labelLuminance);
 		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
 		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
@@ -304,11 +316,11 @@ class SensorRow extends PureComponent<Props, State> {
 			let unit = sensorUnits[scale];
 
 			if (name === 'humidity') {
-				sensors.push(<SensorHumidity value={value} unit={unit} key={key} label={'Humidity'}/>);
+				sensors.push(<SensorHumidity value={value} unit={unit} key={key} label={this.labelHumidity}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
 			}
 			if (name === 'temp') {
-				sensors.push(<SensorTemperature value={value} unit={unit} key={key} label={'Temperature'}/>);
+				sensors.push(<SensorTemperature value={value} unit={unit} key={key} label={this.labelTemperature}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
 			}
 			if (name === 'rrate' || name === 'rtotal') {
@@ -316,19 +328,19 @@ class SensorRow extends PureComponent<Props, State> {
 					name={name}
 					value={value}
 					unit={unit}
-					label={name === 'rrate' ? 'Rain Rate' : 'Rain Total'}
+					label={name === 'rrate' ? this.labelRainRate : this.labelRainTotal}
 					key={key}/>);
 				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
 				let rtotalInfo = name === 'rtotal' ? `${this.labelRainTotal} ${value}${unit}` : '';
 				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
 			}
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let direction = '', label = name === 'wgust' ? 'Wind Gust' : 'Wind Average';
+				let direction = '', label = name === 'wgust' ? this.labelWindGust : this.labelWindAverage;
 				if (name === 'wdir') {
 					const getWindDirection = sValue => directions[Math.floor(sValue / 22.5)];
 					direction = [...getWindDirection(value)].toString();
 					value = getWindDirection(value);
-					label = 'Wind Direction';
+					label = this.labelWindDirection;
 				}
 				sensors.push(<SensorWind
 					name={name}
@@ -342,27 +354,43 @@ class SensorRow extends PureComponent<Props, State> {
 				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
 			}
 			if (name === 'uv') {
-				sensors.push(<SensorUV value={value} key={key} unit={unit} label={'UV Index'}/>);
+				sensors.push(<SensorUV value={value} key={key} unit={unit} label={this.labelUVIndex}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
 			}
 			if (name === 'watt') {
-				sensors.push(<SensorWatt value={value} key={key} unit={unit} label={'Acc. Power'}/>);
+				let label = this.labelEnergy;
+				if (scale === '0') {
+					label = `${this.labelAcc} ${this.labelWatt}`;
+				}
+				if (scale === '2') {
+					label = this.labelWatt;
+				}
+				if (scale === '3') {
+					label = this.labelEnergy;// change once confirmed.
+				}
+				if (scale === '4') {
+					label = this.labelVoltage;
+				}
+				if (scale === '5') {
+					label = this.labelEnergy;// change once confirmed.
+				}
+				sensors.push(<SensorWatt value={value} key={key} unit={unit} label={label}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;
 			}
 			if (name === 'luminance') {
-				sensors.push(<SensorLuminance value={value} key={key} unit={unit} label={'Luminance'}/>);
+				sensors.push(<SensorLuminance value={value} key={key} unit={unit} label={this.labelLuminance}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
 			}
 			if (name === 'dewp') {
-				sensors.push(<SensorNew value={value} key={key} unit={unit} label={'Dew Point'}/>);
+				sensors.push(<SensorNew value={value} key={key} unit={unit} label={this.labelDewPoint}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
 			}
 			if (name === 'barpress') {
-				sensors.push(<SensorNew value={value} key={key} unit={unit} label={'Bar Pressure'}/>);
+				sensors.push(<SensorNew value={value} key={key} unit={unit} label={this.labelBarometricPressure}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
 			}
 			if (name === 'genmeter') {
-				sensors.push(<SensorNew value={value} key={key} unit={unit} label={'Genric Meter'}/>);
+				sensors.push(<SensorNew value={value} key={key} unit={unit} label={this.labelGenricMeter}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
 			}
 		}
