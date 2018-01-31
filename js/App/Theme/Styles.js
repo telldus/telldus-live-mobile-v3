@@ -88,12 +88,12 @@ export default StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
 		alignItems: 'center',
+		paddingLeft: 10,
 	},
 	sensorIcon: {
 		fontSize: 40,
 		color: '#fff',
 		marginTop: 5,
-		marginLeft: 5,
 	},
 	deviceActionIcon: {
 		fontSize: 30,
@@ -101,7 +101,6 @@ export default StyleSheet.create({
 	sensorValueCover: {
 		justifyContent: 'center',
 		alignItems: 'flex-start',
-		marginLeft: 5,
 	},
 	sensorValueText: {
 		fontSize: 18,
