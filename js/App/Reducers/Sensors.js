@@ -231,7 +231,11 @@ export function parseSensorsForListView(sensors: Object = {}, gateways: Object =
 	let [hidden, visible] = _.partition(sensors, (sensor) => {
 		return sensor.ignored;
 	});
-	let visibleList = prepareSectionRow(visible, gateways);
-	let hiddenList = prepareSectionRow(hidden, gateways);
+	let visibleList = [], hiddenList = [];
+	let isGatwaysEmpty = _.isEmpty(gateways);
+	if (!isGatwaysEmpty) {
+		visibleList = prepareSectionRow(visible, gateways);
+		hiddenList = prepareSectionRow(hidden, gateways);
+	}
 	return { visibleList, hiddenList };
 }
