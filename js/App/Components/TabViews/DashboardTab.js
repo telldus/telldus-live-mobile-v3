@@ -24,13 +24,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
-import { Dimensions } from 'react-native';
+import { Dimensions, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Text, List, ListDataSource, View } from 'BaseComponents';
+import { Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
 import { defineMessages } from 'react-intl';
@@ -93,8 +93,9 @@ type Props = {
 type State = {
 	tileWidth: number,
 	listWidth: number,
-	dataSource: Object,
+	dataSource: Array<Object>,
 	settings: boolean,
+	numColumns: number,
 };
 
 const tileMargin = 8;
@@ -125,15 +126,13 @@ class DashboardTab extends View {
 	constructor(props: Props) {
 		super(props);
 		const { width } = Dimensions.get('window');
-		const tileWidth: number = this.calculateTileWidth(width);
-
+		const { tileWidth, numColumns } = this.calculateTileWidth(width);
 		this.state = {
 			tileWidth,
 			listWidth: 0,
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-			}).cloneWithRows(this.props.rows),
+			dataSource: this.props.rows,
 			settings: false,
+			numColumns,
 		};
 
 		this.tab = 'dashboardTab';
@@ -195,7 +194,7 @@ class DashboardTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
+			dataSource: nextProps.rows,
 		});
 
 		if (nextProps.tab !== 'dashboardTab') {
@@ -212,25 +211,26 @@ class DashboardTab extends View {
 	}
 
 	_onLayout = (event) => {
-		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width);
+		const { tileWidth, numColumns } = this.calculateTileWidth(event.nativeEvent.layout.width);
 		if (tileWidth !== this.state.tileWidth) {
 			this.setState({
 				tileWidth,
+				numColumns,
 			});
 		}
 	};
 
-	calculateTileWidth(listWidth: number): number {
+	calculateTileWidth(listWidth: number): Object {
 		listWidth -= listMargin;
 		const { appLayout } = this.props;
 		const isPortrait = appLayout.height > appLayout.width;
 		if (listWidth <= 0) {
-			return 0;
+			return {tileWidth: 0, numColumns: 0};
 		}
 		const baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
 		const tilesPerRow = Math.floor(listWidth / baseTileSize);
 		const tileWidth = tilesPerRow === 0 ? baseTileSize : Math.floor(listWidth / tilesPerRow);
-		return tileWidth;
+		return { tileWidth, numColumns: tilesPerRow };
 	}
 
 	noItemsMessage(style: Object) {
@@ -249,7 +249,6 @@ class DashboardTab extends View {
 	}
 
 	render() {
-
 		let { appLayout } = this.props;
 
 		let style = this.getStyles(appLayout);
@@ -262,100 +261,105 @@ class DashboardTab extends View {
 
 		return (
 			<View onLayout={this._onLayout} style={style.container}>
-				<List
+				<FlatList
 					ref="list"
-					contentContainerStyle={{
-						flexDirection: 'row',
-						flexWrap: 'wrap',
-					}}
-					key={this.state.tileWidth}
-					dataSource={this.state.dataSource}
-					renderRow={this._renderRow(this.state.tileWidth)}
-					pageSize={100}
+					extraData={this.state.tileWidth}
+					data={this.state.dataSource}
+					renderItem={this._renderRow}
 					onRefresh={this.onRefresh}
+					numColumns={this.state.numColumns}
+					refreshing={false}
+					key={this.state.numColumns}
 				/>
 			</View>
 		);
 	}
 
-	_renderRow(tileWidth) {
+	_renderRow(row: Object): Object {
 		let { screenProps } = this.props;
+		let { tileWidth } = this.state;
+		let { data, objectType } = row.item;
 		tileWidth -= tileMargin;
-		return (row, secId, rowId, rowMap) => {
-			if (row.objectType !== 'sensor' && row.objectType !== 'device') {
-				return <Text>unknown device or sensor</Text>;
-			}
-			if (!row.childObject) {
-				return <Text>Unknown device or sensor</Text>;
-			}
+		let key = data.id;
+		if (objectType !== 'sensor' && objectType !== 'device') {
+			return <Text key={key}>unknown device or sensor</Text>;
+		}
+		if (!data) {
+			return <Text key={key}>Unknown device or sensor</Text>;
+		}
 
-			let tileStyle = {
-				flexDirection: 'row',
-				justifyContent: 'flex-start',
-				alignItems: 'center',
-				width: tileWidth - tileMargin,
-				height: tileWidth - tileMargin,
-				marginTop: tileMargin,
-				marginLeft: tileMargin,
-				borderRadius: 2,
-			};
-
-			if (row.objectType === 'sensor') {
-				return <SensorDashboardTile
-					style={tileStyle}
-					tileWidth={tileWidth}
-					item={row.childObject}
-					onPress={this.changeDisplayType}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			const deviceType = getDeviceType(row.childObject.supportedMethods);
-
-			if (deviceType === 'TOGGLE') {
-				return <ToggleDashboardTile
-					item={row.childObject}
-					tileWidth={tileWidth}
-					style={tileStyle}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			if (deviceType === 'DIMMER') {
-				return <DimmerDashboardTile
-					item={row.childObject}
-					tileWidth={tileWidth}
-					style={tileStyle}
-					setScrollEnabled={this.setScrollEnabled}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			if (deviceType === 'BELL') {
-				return <BellDashboardTile
-					item={row.childObject}
-					tileWidth={tileWidth}
-					style={tileStyle}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			if (deviceType === 'NAVIGATIONAL') {
-				return <NavigationalDashboardTile
-					item={row.childObject}
-					tileWidth={tileWidth}
-					style={tileStyle}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			return <ToggleDashboardTile
-				style={tileStyle}
-				item={row.childObject}
-				tileWidth={tileWidth}
-				intl={screenProps.intl}
-			/>;
+		let tileStyle = {
+			flexDirection: 'row',
+			justifyContent: 'flex-start',
+			alignItems: 'center',
+			width: tileWidth - tileMargin,
+			height: tileWidth - tileMargin,
+			marginTop: tileMargin,
+			marginLeft: tileMargin,
+			borderRadius: 2,
 		};
+
+		if (objectType === 'sensor') {
+			return <SensorDashboardTile
+				style={tileStyle}
+				tileWidth={tileWidth}
+				item={data}
+				onPress={this.changeDisplayType}
+				intl={screenProps.intl}
+				key={key}
+			/>;
+		}
+
+		const deviceType = getDeviceType(data.supportedMethods);
+
+		if (deviceType === 'TOGGLE') {
+			return <ToggleDashboardTile
+				item={data}
+				tileWidth={tileWidth}
+				style={tileStyle}
+				intl={screenProps.intl}
+				key={key}
+			/>;
+		}
+
+		if (deviceType === 'DIMMER') {
+			return <DimmerDashboardTile
+				item={data}
+				tileWidth={tileWidth}
+				style={tileStyle}
+				setScrollEnabled={this.setScrollEnabled}
+				intl={screenProps.intl}
+				key={key}
+			/>;
+		}
+
+		if (deviceType === 'BELL') {
+			return <BellDashboardTile
+				item={data}
+				tileWidth={tileWidth}
+				style={tileStyle}
+				intl={screenProps.intl}
+				key={key}
+			/>;
+		}
+
+		if (deviceType === 'NAVIGATIONAL') {
+			return <NavigationalDashboardTile
+				item={data}
+				tileWidth={tileWidth}
+				style={tileStyle}
+				intl={screenProps.intl}
+				key={key}
+			/>;
+		}
+
+		return <ToggleDashboardTile
+			style={tileStyle}
+			item={data}
+			tileWidth={tileWidth}
+			intl={screenProps.intl}
+			key={key}
+		/>;
 	}
 
 	getStyles(appLayout: Object): Object {
