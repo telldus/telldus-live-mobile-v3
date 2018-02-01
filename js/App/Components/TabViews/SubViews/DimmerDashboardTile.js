@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
 		borderRightWidth: 1,
 		borderRightColor: '#ddd',
 		borderLeftWidth: 1,
-		borderLeftColor: '#ddd'
+		borderLeftColor: '#ddd',
 	},
 	turnOff: {
 		flex: 1,
