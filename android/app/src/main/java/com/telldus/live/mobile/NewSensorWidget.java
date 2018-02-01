@@ -13,7 +13,9 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
+import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
+import com.telldus.live.mobile.ServiceBackground.MyService;
 
 /**
  * Implementation of App Widget functionality.
@@ -116,6 +118,7 @@ public class NewSensorWidget extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         // When the user deletes the widget, delete the preference associated with it.
+        PrefManager prefManager=new PrefManager(context);
         MyDBHandler db = new MyDBHandler(context);
         for (int appWidgetId : appWidgetIds) {
             boolean b=db.deleteSensor(appWidgetId);
@@ -126,17 +129,20 @@ public class NewSensorWidget extends AppWidgetProvider {
             {
                 Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
             }
-           /* int count=db.CountSensorTableValues();
+            int count=db.CountSensorTableValues();
             if(count>0)
             {
                 Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
 
             }else
             {
-               // context.stopService(new Intent(context, MyService.class));
+                Toast.makeText(context,"No sensor",Toast.LENGTH_SHORT).show();
+                prefManager.sensorDB(false);
+                prefManager.websocketService(false);
+                context.stopService(new Intent(context, MyService.class));
 
             }
-*/
+
         }
     }
 

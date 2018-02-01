@@ -26,6 +26,17 @@ public class PrefManager {
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
+
+    public void ExpireAccessDate(String date)
+    {
+        editor.putString("access_date",date);
+        editor.commit();
+    }
+    public String getAccessDate()
+    {
+        return pref.getString("access_date","");
+    }
+
     public void saveSessionID(String id, String ttl) {
         /*SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();*/
@@ -33,6 +44,27 @@ public class PrefManager {
         editor.putString("ttl", ttl);
         editor.commit();
     }
+    public void TokenService(boolean b)
+    {
+        editor.putBoolean("token_service",b);
+        editor.commit();
+    }
+    public boolean getTokenService()
+    {
+        return pref.getBoolean("token_service",false);
+    }
+
+    public void websocketService(boolean b)
+    {
+        editor.putBoolean("web_service",b);
+        editor.commit();
+    }
+    public boolean getWebService()
+    {
+        return pref.getBoolean("web_service",false);
+    }
+
+
     public void AccessTokenDetails(String accessToken, String expire) {
         /*SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();*/
@@ -40,6 +72,42 @@ public class PrefManager {
         editor.putString("expire", expire);
         editor.commit();
     }
+    public void webSocketState(boolean web)
+    {
+        editor.putBoolean("websocket",web);
+        editor.commit();
+
+    }
+    public boolean getWebSocketState()
+    {
+        return pref.getBoolean("websocket",false);
+    }
+    public void sessionExDate(String date)
+    {
+        editor.putString("access_date",date);
+        editor.commit();
+
+    }
+
+    public void sensorDB(boolean b)
+    {
+        editor.putBoolean("sensor_db",b);
+
+        editor.commit();
+    }
+    public boolean getSensorDB()
+    {
+        return pref.getBoolean("sensor_db",false);
+    }
+
+
+
+
+    public String getSessionExDate()
+    {
+        return pref.getString("access_date","");
+    }
+
     public String getSession()
     {
         return pref.getString("session","");
@@ -56,13 +124,14 @@ public class PrefManager {
     {
         return pref.getString("expire","");
     }
-    public void infoAccessToken(String client_id,String client_secret,String grant_type,String user,String pwd)
+    public void infoAccessToken(String client_id,String client_secret,String grant_type,String user,String pwd,String ref)
     {
         editor.putString("client_id",client_id);
         editor.putString("client_secret",client_secret);
         editor.putString("grant_type",grant_type);
         editor.putString("user_name",user);
         editor.putString("password",pwd);
+        editor.putString("ref_token",ref);
         editor.commit();
     }
     public String getClientID()
@@ -84,6 +153,10 @@ public class PrefManager {
     public String getPassword()
     {
         return pref.getString("password","");
+    }
+    public String refToken()
+    {
+        return pref.getString("ref_token","");
     }
 
     public void timeStampAccessToken(String timeStamp)

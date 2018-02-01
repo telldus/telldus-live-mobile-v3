@@ -52,7 +52,21 @@ const loginToTelldus = (username:string, password:string): ThunkAction => (dispa
 		.then(response => {
 			if (response.status === 200) {
 				Answers.logLogin('Password', true);
-				writeToFile(JSON.stringify(response.data));
+				let token = response.data;
+				let authData = {
+					'client_id': publicKey,
+					'client_secret': privateKey,
+					'grant_type': 'password',
+					'username': username,
+					'password': password,
+					 'timeout': authenticationTimeOut,
+					'access_token': token.access_token,
+					'expires_in': token.expires_in,
+					'token_type': token.token_type,
+					'scope': token.scope,
+					'refresh_token': token.refresh_token,
+				};
+				writeToFile(JSON.stringify(authData));
 				readFile();
 				dispatch({
 					type: 'RECEIVED_ACCESS_TOKEN',
@@ -98,8 +112,6 @@ async function readFile() {
 }
 
 function updateAccessToken(accessToken:Object): Action {
-	writeToFile(JSON.stringify(accessToken));
-	readFile();
 	return {
 		type: 'RECEIVED_ACCESS_TOKEN',
 		accessToken: accessToken,
