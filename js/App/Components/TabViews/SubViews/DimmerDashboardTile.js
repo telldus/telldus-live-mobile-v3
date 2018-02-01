@@ -29,7 +29,7 @@ import { Animated, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import VerticalSlider from './VerticalSlider';
+import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import throttle from 'lodash/throttle';
@@ -181,15 +181,22 @@ class DimmerDashboardTile extends View {
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 
 		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
-			style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+			style={[styles.turnOn, {marginLeft: tileWidth / 3}]} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
 			intl={intl} isGatewayActive={isGatewayActive}/>;
 		const offButton = <DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={!!TURNOFF}
 			style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
 			intl={intl} isGatewayActive={isGatewayActive}/>;
 		const slider = DIM ?
-			<VerticalSlider
-				style={[styles.slider, { width: this.state.bodyWidth, height: this.state.bodyHeight, left: 0, bottom: 0 }]}
-				thumbWidth={this.state.bodyWidth / 5}
+			<HorizontalSlider
+				style={[styles.slider, {
+					width: (tileWidth - 4) / 3,
+					height: tileWidth * 0.4,
+					bottom: 0,
+					left: (tileWidth - 4) / 3,
+				}]}
+				thumbWidth={7}
+				thumbHeight={7}
+				fontSize={8}
 				item={item}
 				value={toSliderValue(this.state.value)}
 				setScrollEnabled={this.props.setScrollEnabled}
@@ -203,6 +210,8 @@ class DimmerDashboardTile extends View {
 				onLeft={this.onTurnOff}
 				onRight={this.onTurnOn}
 				intl={intl}
+				isInState={isInState}
+				isGatewayActive={isGatewayActive}
 			/> :
 			null;
 
@@ -257,8 +266,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	slider: {
-		flex: 1,
 		position: 'absolute',
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRightWidth: 1,
+		borderRightColor: '#ddd',
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd'
 	},
 	turnOff: {
 		flex: 1,

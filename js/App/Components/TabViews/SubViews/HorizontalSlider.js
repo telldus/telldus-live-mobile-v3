@@ -300,7 +300,7 @@ class HorizontalSlider extends View {
 					numberOfLines={1}
 					style = {[styles.thumbText, {
 						fontSize: this.props.fontSize,
-						bottom: (containerHeight - thumbHeight) * 0.32,
+						bottom: (containerHeight - thumbHeight) / 3.8,
 					}]}>
 					{this.state.displayedValue}%
 				</Text>
