@@ -29,23 +29,13 @@ import DashboardShadowTile from './DashboardShadowTile';
 import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
-import i18n from '../../../Translations/common';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import { getLabelDevice } from 'Accessibility';
 import Theme from 'Theme';
 
 type Props = {
 	item: Object,
 	tileWidth: number,
-	onUp: number => void,
-	onDown: number => void,
-	onStop: number => void,
 	style: Object,
-	commandUp: number,
-	commandDown: number,
-	commandStop: number,
-	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
 	intl: Object,
 	isGatewayActive: boolean,
 };
@@ -53,52 +43,22 @@ type Props = {
 class NavigationalDashboardTile extends View {
 	props: Props;
 
-	onUp: (number) => void;
-	onDown: (number) => void;
-	onStop: (number) => void;
-
 	constructor(props: Props) {
 		super(props);
-
-		this.onUp = this.onUp.bind(this);
-		this.onDown = this.onDown.bind(this);
-		this.onStop = this.onStop.bind(this);
-
-		let { formatMessage } = props.intl;
-
-		this.labelUpButton = `${formatMessage(i18n.up)} ${formatMessage(i18n.button)}`;
-		this.labelDownButton = `${formatMessage(i18n.down)} ${formatMessage(i18n.button)}`;
-		this.labelStopButton = `${formatMessage(i18n.stop)} ${formatMessage(i18n.button)}`;
-	}
-
-	onUp() {
-		this.props.requestDeviceAction(this.props.item.id, this.props.commandUp);
-		this.props.deviceSetState(this.props.item.id, this.props.commandUp);
-	}
-	onDown() {
-		this.props.requestDeviceAction(this.props.item.id, this.props.commandDown);
-		this.props.deviceSetState(this.props.item.id, this.props.commandDown);
-	}
-	onStop() {
-		this.props.requestDeviceAction(this.props.item.id, this.props.commandStop);
-		this.props.deviceSetState(this.props.item.id, this.props.commandStop);
 	}
 
 	render() {
 		const { item, tileWidth, intl, isGatewayActive } = this.props;
 		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp}
-			methodRequested={item.methodRequested} iconSize={30}
-			accessibilityLabel={`${this.labelUpButton}, ${name}`} isGatewayActive={isGatewayActive}
+		const upButton = UP ? <UpButton isEnabled={true}
+			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id}/> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown}
-			methodRequested={item.methodRequested} iconSize={30}
-			accessibilityLabel={`${this.labelDownButton}, ${name}`} isGatewayActive={isGatewayActive}
+		const downButton = DOWN ? <DownButton isEnabled={true}
+			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id}/> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop}
-			methodRequested={item.methodRequested} iconSize={20}
-			accessibilityLabel={`${this.labelStopButton}, ${name}`} isGatewayActive={isGatewayActive}
+		const stopButton = STOP ? <StopButton isEnabled={true}
+			methodRequested={item.methodRequested} iconSize={20} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id}/> : null;
 
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
@@ -142,9 +102,6 @@ class NavigationalDashboardTile extends View {
 }
 
 NavigationalDashboardTile.defaultProps = {
-	commandUp: 128,
-	commandDown: 256,
-	commandStop: 512,
 };
 
 const styles = StyleSheet.create({
@@ -175,11 +132,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
-	return {
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
-	};
-}
-
-module.exports = connect(null, mapDispatchToProps)(NavigationalDashboardTile);
+module.exports = connect(null, null)(NavigationalDashboardTile);
