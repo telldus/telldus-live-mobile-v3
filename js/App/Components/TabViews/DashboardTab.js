@@ -98,7 +98,7 @@ type State = {
 	numColumns: number,
 };
 
-const tileMargin = 8;
+const tileMargin = 2;
 const listMargin = 8;
 
 class DashboardTab extends View {
@@ -276,10 +276,11 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(row: Object): Object {
-		let { screenProps } = this.props;
+		let { screenProps, gateways } = this.props;
 		let { tileWidth } = this.state;
 		let { data, objectType } = row.item;
-		tileWidth -= tileMargin;
+		let isGatewayActive = gateways.byId[data.clientId].online;
+		tileWidth -= (2 * tileMargin);
 		let key = data.id;
 		if (objectType !== 'sensor' && objectType !== 'device') {
 			return <Text key={key}>unknown device or sensor</Text>;
@@ -289,13 +290,13 @@ class DashboardTab extends View {
 		}
 
 		let tileStyle = {
-			flexDirection: 'row',
+			flexDirection: 'column',
 			justifyContent: 'flex-start',
-			alignItems: 'center',
-			width: tileWidth - tileMargin,
-			height: tileWidth - tileMargin,
-			marginTop: tileMargin,
-			marginLeft: tileMargin,
+			alignItems: 'flex-start',
+			width: tileWidth - (2 * tileMargin),
+			height: tileWidth - (2 * tileMargin),
+			marginHorizontal: tileMargin,
+			marginVertical: tileMargin,
 			borderRadius: 2,
 		};
 
@@ -319,6 +320,7 @@ class DashboardTab extends View {
 				style={tileStyle}
 				intl={screenProps.intl}
 				key={key}
+				isGatewayActive={isGatewayActive}
 			/>;
 		}
 
@@ -330,6 +332,7 @@ class DashboardTab extends View {
 				setScrollEnabled={this.setScrollEnabled}
 				intl={screenProps.intl}
 				key={key}
+				isGatewayActive={isGatewayActive}
 			/>;
 		}
 
@@ -340,6 +343,7 @@ class DashboardTab extends View {
 				style={tileStyle}
 				intl={screenProps.intl}
 				key={key}
+				isGatewayActive={isGatewayActive}
 			/>;
 		}
 
@@ -350,6 +354,7 @@ class DashboardTab extends View {
 				style={tileStyle}
 				intl={screenProps.intl}
 				key={key}
+				isGatewayActive={isGatewayActive}
 			/>;
 		}
 
@@ -359,6 +364,7 @@ class DashboardTab extends View {
 			tileWidth={tileWidth}
 			intl={screenProps.intl}
 			key={key}
+			isGatewayActive={isGatewayActive}
 		/>;
 	}
 
@@ -371,9 +377,10 @@ class DashboardTab extends View {
 		return {
 			container: {
 				flex: 1,
-				alignItems: isEmpty ? 'center' : 'flex-start',
+				alignItems: 'center',
 				justifyContent: 'center',
 				paddingHorizontal: isEmpty ? 30 : 0,
+				paddingTop: 10,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),

@@ -22,68 +22,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Icon } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import DashboardShadowTile from './DashboardShadowTile';
+import { StyleSheet } from 'react-native';
 
-import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+import { View } from 'BaseComponents';
+import DashboardShadowTile from './DashboardShadowTile';
+import StopButton from './Navigational/StopButton';
+import UpButton from './Navigational/UpButton';
+import DownButton from './Navigational/DownButton';
 import i18n from '../../../Translations/common';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import { getLabelDevice } from 'Accessibility';
-
-const UpButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
-	<TouchableOpacity
-		style={styles.navigationButton}
-		onPress={onPress}
-		accessibilityLabel={accessibilityLabel}>
-		<Icon name="caret-up"
-		      size={42}
-		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
-		/>
-		{
-			methodRequested === 'UP' ?
-				<ButtonLoadingIndicator style={styles.dot} />
-				:
-				null
-		}
-	</TouchableOpacity>
-);
-
-const DownButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
-	<TouchableOpacity
-		style={styles.navigationButton}
-		onPress={onPress}
-		accessibilityLabel={accessibilityLabel}>
-		<Icon name="caret-down"
-		      size={42}
-		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
-		/>
-		{
-			methodRequested === 'DOWN' ?
-				<ButtonLoadingIndicator style={styles.dot} />
-				:
-				null
-		}
-	</TouchableOpacity>
-);
-
-const StopButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
-	<TouchableOpacity
-		style={styles.navigationButton}
-		onPress={onPress}
-		accessibilityLabel={accessibilityLabel}>
-		<Icon name="stop"
-		      size={30}
-		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
-		/>
-		{
-			methodRequested === 'STOP' ?
-				<ButtonLoadingIndicator style={styles.dot} />
-				:
-				null
-		}
-	</TouchableOpacity>
-);
+import Theme from 'Theme';
 
 type Props = {
 	item: Object,
@@ -98,6 +47,7 @@ type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (id: number, command: number) => void,
 	intl: Object,
+	isGatewayActive: boolean,
 };
 
 class NavigationalDashboardTile extends View {
@@ -135,25 +85,53 @@ class NavigationalDashboardTile extends View {
 	}
 
 	render() {
-		const { item, tileWidth, intl } = this.props;
-		const { name, supportedMethods } = item;
+		const { item, tileWidth, intl, isGatewayActive } = this.props;
+		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} accessibilityLabel={`${this.labelUpButton}, ${name}`}/> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} accessibilityLabel={`${this.labelDownButton}, ${name}`}/> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} accessibilityLabel={`${this.labelStopButton}, ${name}`}/> : null;
+		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp}
+			methodRequested={item.methodRequested} iconSize={30}
+			accessibilityLabel={`${this.labelUpButton}, ${name}`} isGatewayActive={isGatewayActive}
+			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id}/> : null;
+		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown}
+			methodRequested={item.methodRequested} iconSize={30}
+			accessibilityLabel={`${this.labelDownButton}, ${name}`} isGatewayActive={isGatewayActive}
+			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id}/> : null;
+		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop}
+			methodRequested={item.methodRequested} iconSize={20}
+			accessibilityLabel={`${this.labelStopButton}, ${name}`} isGatewayActive={isGatewayActive}
+			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id}/> : null;
 
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
+
+		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
 				name={name}
+				icon={'curtain'}
+				iconStyle={{
+					color: '#fff',
+					fontSize: tileWidth / 4.5,
+				}}
+				iconContainerStyle={[iconContainerStyle, {
+					width: tileWidth / 4,
+					height: tileWidth / 4,
+					borderRadius: tileWidth / 8,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}
 				type={'device'}
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
-				<View style={styles.body}>
+				<View style={{
+					width: tileWidth - 4,
+					height: tileWidth * 0.4,
+					flexDirection: 'row',
+				}}>
 					{ upButton }
 					{ downButton }
 					{ stopButton }
@@ -170,13 +148,6 @@ NavigationalDashboardTile.defaultProps = {
 };
 
 const styles = StyleSheet.create({
-	body: {
-		flex: 30,
-		flexDirection: 'row',
-		backgroundColor: 'white',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
-	},
 	navigationButton: {
 		flex: 1,
 		justifyContent: 'center',
@@ -192,6 +163,15 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		top: 3,
 		left: 3,
+	},
+	itemIconContainerOn: {
+		backgroundColor: Theme.Core.brandSecondary,
+	},
+	itemIconContainerOff: {
+		backgroundColor: Theme.Core.brandPrimary,
+	},
+	itemIconContainerOffline: {
+		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 

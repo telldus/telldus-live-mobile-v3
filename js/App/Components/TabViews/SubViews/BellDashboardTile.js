@@ -24,13 +24,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Icon } from 'BaseComponents';
+import { View, IconTelldus } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import i18n from '../../../Translations/common';
 import { getLabelDevice } from 'Accessibility';
+import Theme from 'Theme';
 
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
@@ -40,6 +41,7 @@ type Props = {
 	style: Object,
 	command: number,
 	intl: Object,
+	isGatewayActive: boolean,
 };
 
 class BellDashboardTile extends View {
@@ -63,20 +65,36 @@ class BellDashboardTile extends View {
 	}
 
 	render() {
-		const { item, tileWidth, intl } = this.props;
+		const { item, tileWidth, intl, isGatewayActive } = this.props;
 		let { methodRequested, name } = this.props.item;
 
 		const accessibilityLabelButton = `${this.labelBellButton}, ${name}`;
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
+
+		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
+		let iconColor = isGatewayActive ? Theme.Core.brandSecondary : Theme.Core.offlineColor;
 
 		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
 				name={name}
+				icon={'bell'}
+				iconStyle={{
+					color: '#fff',
+					fontSize: tileWidth / 4.5,
+				}}
+				iconContainerStyle={[iconContainerStyle, {
+					width: tileWidth / 4,
+					height: tileWidth / 4,
+					borderRadius: tileWidth / 8,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}
 				type={'device'}
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}
+				isGatewayActive={isGatewayActive}
 				style={[
 					this.props.style, {
 						width: tileWidth,
@@ -85,18 +103,18 @@ class BellDashboardTile extends View {
 				}>
 				<TouchableOpacity
 					onPress={this.onBell}
-					style={styles.container}
+					style={[styles.container, {width: tileWidth - 4, height: tileWidth * 0.4}]}
 					accessibilityLabel={accessibilityLabelButton}>
 					<View style={styles.body}>
-					  <Icon name="bell" size={44} color="orange" />
+					  <IconTelldus icon="bell" size={32} color={iconColor} />
 					</View>
+					{
+						methodRequested === 'BELL' ?
+							<ButtonLoadingIndicator style={styles.dot} />
+							:
+							null
+					}
 				</TouchableOpacity>
-				{
-					methodRequested === 'BELL' ?
-						<ButtonLoadingIndicator style={styles.dot} />
-						:
-						null
-				}
 			</DashboardShadowTile>
 		);
 	}
@@ -108,7 +126,6 @@ BellDashboardTile.defaultProps = {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 30,
 		justifyContent: 'center',
 	},
 	body: {
@@ -116,14 +133,20 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: 'white',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
+		backgroundColor: '#eeeeee',
+		borderBottomLeftRadius: 2,
+		borderBottomRightRadius: 2,
 	},
 	dot: {
 		position: 'absolute',
 		top: 3,
 		left: 3,
+	},
+	itemIconContainerOn: {
+		backgroundColor: Theme.Core.brandSecondary,
+	},
+	itemIconContainerOffline: {
+		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 

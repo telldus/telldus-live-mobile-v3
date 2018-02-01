@@ -34,6 +34,7 @@ import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import throttle from 'lodash/throttle';
 import { getLabelDevice } from 'Accessibility';
+import Theme from 'Theme';
 import {
 	getDimmerValue,
 	toDimmerValue,
@@ -55,6 +56,7 @@ type Props = {
 	setScrollEnabled: boolean,
 	style: Object,
 	intl: Object,
+	isGatewayActive: boolean,
 };
 
 type State = {
@@ -174,12 +176,16 @@ class DimmerDashboardTile extends View {
 	}
 
 	render() {
-		const { item, tileWidth, intl } = this.props;
+		const { item, tileWidth, intl, isGatewayActive } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 
-		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} intl={intl}/>;
-		const offButton = <DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} intl={intl}/>;
+		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
+			style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+			intl={intl} isGatewayActive={isGatewayActive}/>;
+		const offButton = <DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={!!TURNOFF}
+			style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+			intl={intl} isGatewayActive={isGatewayActive}/>;
 		const slider = DIM ?
 			<VerticalSlider
 				style={[styles.slider, { width: this.state.bodyWidth, height: this.state.bodyHeight, left: 0, bottom: 0 }]}
@@ -202,15 +208,34 @@ class DimmerDashboardTile extends View {
 
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
+		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
+
 		return (
 			<DashboardShadowTile
 				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
 				name={name}
+				icon={'device-alt-solid'}
+				iconStyle={{
+					color: '#fff',
+					fontSize: tileWidth / 4.5,
+				}}
+				iconContainerStyle={[iconContainerStyle, {
+					width: tileWidth / 4,
+					height: tileWidth / 4,
+					borderRadius: tileWidth / 8,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}
 				type={'device'}
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
-				<View style={styles.body} onLayout={this.layoutView}>
+				<View style={{
+					width: tileWidth - 4,
+					height: tileWidth * 0.4,
+					flexDirection: 'row',
+				}} onLayout={this.layoutView}>
 					{ offButton }
 					{ onButton }
 					{ slider }
@@ -231,25 +256,30 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 	},
-	body: {
-		flex: 30,
-		flexDirection: 'row',
-	},
 	slider: {
 		flex: 1,
 		position: 'absolute',
 	},
 	turnOff: {
 		flex: 1,
-		alignItems: 'stretch',
+		alignItems: 'center',
 		justifyContent: 'center',
-		borderTopLeftRadius: 7,
+		borderBottomLeftRadius: 2,
 	},
 	turnOn: {
 		flex: 1,
-		alignItems: 'stretch',
+		alignItems: 'center',
 		justifyContent: 'center',
-		borderTopRightRadius: 7,
+		borderBottomRightRadius: 2,
+	},
+	itemIconContainerOn: {
+		backgroundColor: Theme.Core.brandSecondary,
+	},
+	itemIconContainerOff: {
+		backgroundColor: Theme.Core.brandPrimary,
+	},
+	itemIconContainerOffline: {
+		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 
