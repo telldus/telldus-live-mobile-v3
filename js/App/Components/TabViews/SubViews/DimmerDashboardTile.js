@@ -182,10 +182,10 @@ class DimmerDashboardTile extends View {
 
 		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
 			style={[styles.turnOn, {marginLeft: tileWidth / 3}]} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
-			intl={intl} isGatewayActive={isGatewayActive}/>;
+			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>;
 		const offButton = <DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={!!TURNOFF}
 			style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
-			intl={intl} isGatewayActive={isGatewayActive}/>;
+			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOff}/>;
 		const slider = DIM ?
 			<HorizontalSlider
 				style={[styles.slider, {
@@ -207,8 +207,6 @@ class DimmerDashboardTile extends View {
 				onLeftEnd={this.onTurnOffButtonEnd}
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
-				onLeft={this.onTurnOff}
-				onRight={this.onTurnOn}
 				intl={intl}
 				isInState={isInState}
 				isGatewayActive={isGatewayActive}
