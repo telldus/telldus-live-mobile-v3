@@ -43,7 +43,7 @@ type Props = {
 	name: string,
 	methodRequested: string,
 	supportedMethod: string,
-	id: string,
+	id: number,
 	iconSize: number,
 };
 
