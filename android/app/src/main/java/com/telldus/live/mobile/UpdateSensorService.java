@@ -38,11 +38,5 @@ public class UpdateSensorService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private String getCurrentDateTime() {
-        Calendar c = Calendar.getInstance();
-        int minute = c.get(Calendar.MINUTE);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
 
-        return hour + ":" + minute;
-    }
 }

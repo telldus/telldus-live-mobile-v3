@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -44,6 +45,7 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
+import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.MyService;
 
 /**
@@ -95,6 +97,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private JSONArray JsonsensorList;
     JSONObject searchObject;
 
+    private String client_ID;
+    private String client_secret;
+    private String grant_Type;
+    private String user_name;
+    private String password;
+
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -135,6 +144,20 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 Log.d("Scope", scope);
                 Log.d("Refresh token", refreshToken);
 
+
+                client_ID=String.valueOf(authInfo.getString("client_id"));
+                client_secret=String.valueOf(authInfo.getString("client_secret"));
+                grant_Type=String.valueOf(authInfo.getString("grant_type"));
+                user_name=String.valueOf(authInfo.getString("username"));
+                password=String.valueOf(authInfo.getString("password"));
+
+
+                prefManager.timeStampAccessToken(expiresIn);
+                prefManager.AccessTokenDetails(accessToken,expiresIn);
+                prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
+
+
+
                 createSensorApi();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -173,10 +196,22 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 e.printStackTrace();
             }
         }
-/*
-        prefManager.AccessTokenDetails("3db77e79f8c2d88c8fe9f6914a3c43da0ff038d1","232323");
-        prefManager.saveSessionID("26758c97-0cf7-426a-9ec0-8b56f56de976","23422323");
+
+
+       /* client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
+        client_secret="NUKU6APRAKATRESPECHEX3WECRAPHUCA";
+        grant_Type="password";
+        user_name="developer@telldus.com";
+        password="developer";
+        refreshToken="89342c1e2c06d8e80aee7fed52eb666e62c931d8";
+
+        prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
+
+        prefManager.AccessTokenDetails("c87662c7bcebb21434610519bb7e480e0643ebee","10800");
+        prefManager.saveSessionID("8f6dbc8c-e7b6-4e74-b3d8-252f7408f11a","1517334449");
+
         createSensorApi();*/
+
         setResult(RESULT_CANCELED);
 
      //   setContentView(R.layout.activity_sensor_widget_configure);
@@ -253,6 +288,23 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean token_service=prefManager.getTokenService();
+
+                boolean b=prefManager.getSensorDB();
+                if(!b)
+                {
+                    prefManager.sensorDB(true);
+                }
+
+                if(!token_service) {
+                    prefManager.TokenService(true);
+                    // Service for Access token
+                    Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
+                    startService(serviceIntent);
+                }else
+                {
+                    Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
+                }
 
                 SensorInfo mSensorInfo=new SensorInfo(mAppWidgetId,sensorName.getText().toString(),
                         sensorDataName.getText().toString(),id,senValue,lastUp,transparent);
@@ -262,12 +314,24 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 //  widgetManager.updateAppWidget(mAppWidgetId, views);
                 NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
-                boolean b=isMyServiceRunning(MyService.class);
+               /* boolean b=isMyServiceRunning(MyService.class);
                 if (!b)
                 {
                     startService(new Intent(getApplicationContext(), MyService.class));
                     // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
+                }*/
+
+                boolean web_service=prefManager.getWebService();
+                if(!web_service) {
+                    prefManager.websocketService(true);
+                    // Service for Access token
+                    Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
+                    startService(serviceIntent);
+                }else
+                {
+                    Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
                 }
+
 
                 Intent resultValue = new Intent();
                 // Set the results as expected from a 'configure activity'.
@@ -425,7 +489,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         });
     }
     void createSensorApi() {
-   //     accessToken=prefManager.getAccess();
+        accessToken=prefManager.getAccess();
 
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
 
@@ -469,20 +533,14 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
                    @Override
                     public void onError(ANError anError) {
-                        Log.v("AnError",anError.toString());
-                        if (pDialog.isShowing())
-                            pDialog.dismiss();
-                    }
+                       Log.v("AnError", anError.toString());
+                       if (pDialog.isShowing()) {
+                           pDialog.dismiss();
+
+                       }
+                   }
                 });
     }
 
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
+
 }

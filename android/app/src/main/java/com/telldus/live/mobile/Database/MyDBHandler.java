@@ -355,4 +355,10 @@ public int CountSensorTableValues()
         return list;
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        this.close();
+        super.finalize();
+    }
+
 }

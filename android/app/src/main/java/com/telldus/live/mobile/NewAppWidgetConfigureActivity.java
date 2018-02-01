@@ -43,6 +43,7 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 
 /**
  * The configuration screen for the {@link NewAppWidget NewAppWidget} AppWidget.
@@ -89,6 +90,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     private String user_name;
     private String password;
 
+
     int stateID;
 
     private String sesID;
@@ -104,6 +106,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         prefManager=new PrefManager(this);
+
+
         File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
         if (fileAuth.exists()) {
             Log.d("File exists?", "Yes");
@@ -131,16 +135,17 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 scope = String.valueOf(authInfo.getString("scope"));
                 refreshToken = String.valueOf(authInfo.getString("refresh_token"));
 
-            //    client_ID=String.valueOf(authInfo.getString("client_id"));
-              //  client_secret=String.valueOf(authInfo.getString("client_secret"));
-                //grant_Type=String.valueOf(authInfo.getString("grant_type"));
-                //user_name=String.valueOf(authInfo.getString("username"));
-              //  password=String.valueOf(authInfo.getString("password"));
+
+                client_ID=String.valueOf(authInfo.getString("client_id"));
+                client_secret=String.valueOf(authInfo.getString("client_secret"));
+                grant_Type=String.valueOf(authInfo.getString("grant_type"));
+                user_name=String.valueOf(authInfo.getString("username"));
+                password=String.valueOf(authInfo.getString("password"));
 
 
-           //     prefManager.timeStampAccessToken(expiresIn);
+                prefManager.timeStampAccessToken(expiresIn);
                 prefManager.AccessTokenDetails(accessToken,expiresIn);
-             //   prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password);
+                prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
 
 
                 Log.d("Auth token", accessToken);
@@ -187,10 +192,21 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 e.printStackTrace();
             }
         }
-       /* prefManager.AccessTokenDetails("3db77e79f8c2d88c8fe9f6914a3c43da0ff038d1","232323");
-        prefManager.saveSessionID("26758c97-0cf7-426a-9ec0-8b56f56de976","23422323");
-        createDeviceApi();
-       */
+
+     /*   client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
+        client_secret="NUKU6APRAKATRESPECHEX3WECRAPHUCA";
+        grant_Type="password";
+        user_name="developer@telldus.com";
+        password="developer";
+        refreshToken="89342c1e2c06d8e80aee7fed52eb666e62c931d8";
+
+
+        prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
+
+        prefManager.AccessTokenDetails("c87662c7bcebb21434610519bb7e480e0643ebee","10800");
+
+        createDeviceApi();*/
+
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
         views = new RemoteViews(this.getPackageName(), R.layout.configurable_device_widget);
@@ -216,14 +232,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 finish();
             }
         });
-/*
-        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
-        textTest.setTypeface(font);
-        chooseSetting.setTypeface(font);
-
-  //      Typeface font1 = Typeface.createFromAsset(getAssets(), "fonts/Lato-Thin.ttf");
-        deviceName.setTypeface(font);
-        deviceHint.setTypeface(font);*/
 
         switch_background=(Switch)findViewById(R.id.switch_background);
 
@@ -242,15 +250,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
             }
         });
 
-
-//        createDeviceApi();
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window w = getWindow(); // in Activity's onCreate() for instance
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }*/
-
-
-
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -267,12 +266,21 @@ public class NewAppWidgetConfigureActivity extends Activity {
         final String[] deviceStateVal = {"0"};
 
 
-
-
         btAdd = (Button) findViewById(R.id.btAdd);
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                boolean token_service=prefManager.getTokenService();
+                if(!token_service) {
+                    prefManager.TokenService(true);
+                    // Service for Access token
+                    Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
+                    startService(serviceIntent);
+                }else
+                {
+                    Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
+                }
                 views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
 
@@ -319,7 +327,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
 
     void createDeviceApi() {
-     //   accessToken=prefManager.getAccess();
+        accessToken=prefManager.getAccess();
         pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
         pDialog.setMax(5);
         pDialog.setMessage("Please wait...");
@@ -340,10 +348,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                             JSONObject deviceData = new JSONObject(response.toString());
                             // Log.v("JSON Object",deviceData.toString());
                             JSONArray deviceList = deviceData.getJSONArray("device");
-
-
-
-
                             for (int i = 0; i < deviceList.length(); i++) {
                                 JSONObject curObj = deviceList.getJSONObject(i);
                                 String name = curObj.getString("name");
@@ -371,8 +375,14 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     @Override
                     public void onError(ANError anError) {
                         if (pDialog.isShowing())
+                        {
+
                             pDialog.dismiss();
+
+
+                        }
                     }
+
                 });
     }
 }
