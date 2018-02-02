@@ -95,7 +95,7 @@ const SensorHumidity = ({ value, unit, label, isLong }) => (
 		<View style={Theme.Styles.sensorValueCover}>
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<Text style={Theme.Styles.sensorValueText}>
-					<FormattedNumber value={value / 100}/>
+					<FormattedNumber value={value}/>
 				</Text>
 				<Text style={Theme.Styles.sensorValueLabelText}>
 					{unit}
@@ -458,7 +458,7 @@ class SensorRow extends PureComponent<Props, State> {
 			data,
 			name,
 		} = sensor;
-
+		console.log('TEST sensor', sensor);
 		let { sensors, sensorInfo } = this.getSensors(data);
 		let [ lastUpdatedValue, lastUpdatedComponent ] = this.formatLastUpdated(minutesAgo, sensor.lastUpdated, styles);
 

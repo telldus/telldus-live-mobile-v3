@@ -94,7 +94,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				slideList.push({
 					key: 'humidity',
 					icon: require('../img/sensorIcons/HumidityLargeGray.png'),
-					text: <FormattedNumber value={value / 100} suffix={unit}/>,
+					text: <FormattedNumber value={value} suffix={unit}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
 			}
