@@ -458,7 +458,7 @@ class SensorRow extends PureComponent<Props, State> {
 			data,
 			name,
 		} = sensor;
-		console.log('TEST sensor', sensor);
+
 		let { sensors, sensorInfo } = this.getSensors(data);
 		let [ lastUpdatedValue, lastUpdatedComponent ] = this.formatLastUpdated(minutesAgo, sensor.lastUpdated, styles);
 
