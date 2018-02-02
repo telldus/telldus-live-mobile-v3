@@ -259,16 +259,21 @@ class DashboardTab extends View {
 			return this.noItemsMessage(style);
 		}
 
+		let extraData = {
+			propOne: this.state.tileWidth,
+			propsTwo: appLayout,
+		};
+
 		return (
 			<View onLayout={this._onLayout} style={style.container}>
 				<FlatList
 					ref="list"
-					extraData={this.state.tileWidth}
 					data={this.state.dataSource}
 					renderItem={this._renderRow}
 					onRefresh={this.onRefresh}
 					numColumns={this.state.numColumns}
 					refreshing={false}
+					extraData={extraData}
 					key={this.state.numColumns}
 				/>
 			</View>
