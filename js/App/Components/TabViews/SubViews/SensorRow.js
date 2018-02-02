@@ -23,8 +23,11 @@
 
 import React, { PureComponent } from 'react';
 import { TouchableWithoutFeedback, UIManager, LayoutAnimation } from 'react-native';
+import { SwipeRow } from 'react-native-swipe-list-view';
 
 import { FormattedMessage, FormattedNumber, ListItem, Text, View, BlockIcon, IconTelldus } from 'BaseComponents';
+import HiddenRow from './Sensor/HiddenRow';
+
 import { reportException } from 'Analytics';
 import { defineMessages } from 'react-intl';
 import i18n from '../../../Translations/common';
@@ -36,6 +39,8 @@ const { Dashboard: { getSupportedDisplayTypes } } = actions;
 
 import moment from 'moment';
 import Theme from 'Theme';
+
+let rowHeight = 70;
 
 const messages = defineMessages({
 	dayAgo: {
@@ -446,7 +451,7 @@ class SensorRow extends PureComponent<Props, State> {
 	}
 
 	render() {
-		const { sensor, currentTab, currentScreen, appLayout, isGatewayActive } = this.props;
+		const { sensor, currentTab, currentScreen, appLayout, isGatewayActive, intl } = this.props;
 		const styles = this.getStyles(appLayout, isGatewayActive);
 		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
 		const {
@@ -463,44 +468,51 @@ class SensorRow extends PureComponent<Props, State> {
 		let { currentIndex } = this.state;
 
 		return (
-			<ListItem
-				style={styles.row}
-				onLayout={this.onLayout}
-				accessible={accessible}
-				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-				accessibilityLabel={accessible ? accessibilityLabel : ''}>
-				<View style={styles.container}>
-					<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
-					<View>
-						<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
-							ellipsizeMode="middle"
-							numberOfLines={1}>
-							{sensor.name ? sensor.name : <FormattedMessage {...messages.noName} /> }
-						</Text>
-						<Text style={[
-							styles.time, {
-								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
-								opacity: minutesAgo < 1440 ? 1 : 0.5,
-							},
-						]}>
-							{isGatewayActive ?
-								lastUpdatedComponent
-								:
-								<Text style={{color: Theme.Core.rowTextColor}}>
-									{this.offline}
+			<SwipeRow
+				rightOpenValue={-40}
+				disableRightSwipe={true}>
+				<HiddenRow sensor={sensor} intl={intl}/>
+				<ListItem
+					style={styles.row}
+					onLayout={this.onLayout}
+					accessible={accessible}
+					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+					accessibilityLabel={accessible ? accessibilityLabel : ''}>
+					<TouchableWithoutFeedback style={styles.container}>
+						<View style={styles.container}>
+							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
+							<View>
+								<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
+									ellipsizeMode="middle"
+									numberOfLines={1}>
+									{sensor.name ? sensor.name : <FormattedMessage {...messages.noName} /> }
 								</Text>
-							}
-						</Text>
-					</View>
-				</View>
-				<TouchableWithoutFeedback onPress={this.changeDisplayType} style={styles.sensorValueCover}>
-					<View style={styles.sensorValueCover}>
-						{sensors[currentIndex] && (
-							sensors[currentIndex]
-						)}
-					</View>
-				</TouchableWithoutFeedback>
-			</ListItem>
+								<Text style={[
+									styles.time, {
+										color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+										opacity: minutesAgo < 1440 ? 1 : 0.5,
+									},
+								]}>
+									{isGatewayActive ?
+										lastUpdatedComponent
+										:
+										<Text style={{color: Theme.Core.rowTextColor}}>
+											{this.offline}
+										</Text>
+									}
+								</Text>
+							</View>
+						</View>
+					</TouchableWithoutFeedback>
+					<TouchableWithoutFeedback onPress={this.changeDisplayType} style={styles.sensorValueCover}>
+						<View style={styles.sensorValueCover}>
+							{sensors[currentIndex] && (
+								sensors[currentIndex]
+							)}
+						</View>
+					</TouchableWithoutFeedback>
+				</ListItem>
+			</SwipeRow>
 		);
 	}
 
@@ -589,7 +601,6 @@ class SensorRow extends PureComponent<Props, State> {
 
 		let labelBoxWidth = isPortrait ? (width - 24) * 0.56 : (width - 24 - tabBarHeight - headerHeight) * 0.56;
 		let valueBoxWidth = isPortrait ? (width - 24) * 0.44 : (width - 24 - tabBarHeight - headerHeight) * 0.44;
-		let rowHeight = 70;
 
 		let backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
 

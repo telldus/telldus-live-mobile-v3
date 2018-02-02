@@ -24,12 +24,15 @@
 import React, { PureComponent } from 'react';
 
 import { TouchableOpacity } from 'react-native';
+import { SwipeRow } from 'react-native-swipe-list-view';
+
 import { ListItem, Text, View, BlockIcon } from 'BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
 import { getLabelDevice } from 'Accessibility';
+import HiddenRow from './Device/HiddenRow';
 
 import i18n from '../../../Translations/common';
 
@@ -137,22 +140,27 @@ class DeviceRow extends PureComponent<Props, null> {
 		let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 
 		return (
-			<ListItem
-				style={styles.row}
-				accessible={accessible}
-				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-				accessibilityLabel={accessible ? accessibilityLabel : ''}>
-				<TouchableOpacity onPress={this.onSettingsSelected}
-					style={styles.touchableContainer} accessibilityLabel={accessibilityLabelGearButton}>
-					<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
-					<View style={styles.name}>
-						<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
-							{device.name ? device.name : '(no name)'}
-						</Text>
-					</View>
-				</TouchableOpacity>
-				{button}
-			</ListItem>
+			<SwipeRow
+				rightOpenValue={-40}
+				disableRightSwipe={true}>
+				<HiddenRow device={device} intl={intl}/>
+				<ListItem
+					style={styles.row}
+					accessible={accessible}
+					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+					accessibilityLabel={accessible ? accessibilityLabel : ''}>
+					<TouchableOpacity onPress={this.onSettingsSelected}
+						style={styles.touchableContainer} accessibilityLabel={accessibilityLabelGearButton}>
+						<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
+						<View style={styles.name}>
+							<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
+								{device.name ? device.name : '(no name)'}
+							</Text>
+						</View>
+					</TouchableOpacity>
+					{button}
+				</ListItem>
+			</SwipeRow>
 		);
 	}
 
