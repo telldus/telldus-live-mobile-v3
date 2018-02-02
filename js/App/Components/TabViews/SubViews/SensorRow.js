@@ -28,62 +28,17 @@ import { SwipeRow } from 'react-native-swipe-list-view';
 import { FormattedMessage, FormattedNumber, ListItem, Text, View, BlockIcon, IconTelldus } from 'BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
 
-import { reportException } from 'Analytics';
-import { defineMessages } from 'react-intl';
 import i18n from '../../../Translations/common';
 
+import { formatLastUpdated } from 'Lib';
 import { utils, actions } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
 const { Dashboard: { getSupportedDisplayTypes } } = actions;
 
-import moment from 'moment';
 import Theme from 'Theme';
 
 let rowHeight = 70;
-
-const messages = defineMessages({
-	dayAgo: {
-		id: 'sensor.dayAgo',
-		defaultMessage: 'day ago',
-		description: 'How long ago a sensor was update',
-	},
-	daysAgo: {
-		id: 'sensor.daysAgo',
-		defaultMessage: 'days ago',
-		description: 'How long ago a sensor was update',
-	},
-	hourAgo: {
-		id: 'sensor.hourAgo',
-		defaultMessage: 'hour ago',
-		description: 'How long ago a sensor was update',
-	},
-	hoursAgo: {
-		id: 'sensor.hoursAgo',
-		defaultMessage: 'hours ago',
-		description: 'How long ago a sensor was update',
-	},
-	justNow: {
-		id: 'sensor.justNow',
-		defaultMessage: 'just now',
-		description: 'How long ago a sensor was update',
-	},
-	noName: {
-		id: 'noName',
-		defaultMessage: 'no name',
-		description: 'Used when an item does not have a name',
-	},
-	minuteAgo: {
-		id: 'sensor.minuteAgo',
-		defaultMessage: 'minute ago',
-		description: 'How long ago a sensor was update',
-	},
-	minutesAgo: {
-		id: 'sensor.minutesAgo',
-		defaultMessage: 'minutes ago',
-		description: 'How long ago a sensor was update',
-	},
-});
 
 const directions = [
 	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
@@ -460,8 +415,7 @@ class SensorRow extends PureComponent<Props, State> {
 		} = sensor;
 
 		let { sensors, sensorInfo } = this.getSensors(data);
-		let [ lastUpdatedValue, lastUpdatedComponent ] = this.formatLastUpdated(minutesAgo, sensor.lastUpdated, styles);
-
+		let lastUpdatedValue = formatLastUpdated(minutesAgo, sensor.lastUpdated, intl.formatMessage);
 		let accessibilityLabel = `${this.labelSensor}, ${name}, ${sensorInfo},${this.labelTimeAgo} ${lastUpdatedValue}`;
 		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
 
@@ -485,7 +439,7 @@ class SensorRow extends PureComponent<Props, State> {
 								<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
 									ellipsizeMode="middle"
 									numberOfLines={1}>
-									{sensor.name ? sensor.name : <FormattedMessage {...messages.noName} /> }
+									{sensor.name ? sensor.name : <FormattedMessage {...i18n.noName} /> }
 								</Text>
 								<Text style={[
 									styles.time, {
@@ -494,7 +448,9 @@ class SensorRow extends PureComponent<Props, State> {
 									},
 								]}>
 									{isGatewayActive ?
-										lastUpdatedComponent
+										<Text style={styles.time}>
+											{lastUpdatedValue}
+										</Text>
 										:
 										<Text style={{color: Theme.Core.rowTextColor}}>
 											{this.offline}
@@ -530,66 +486,6 @@ class SensorRow extends PureComponent<Props, State> {
 
 	onLayout(event: Object) {
 		this.width = event.nativeEvent.layout.width;
-	}
-
-	formatLastUpdated(minutes: number, lastUpdated:number, styles: Object): Array<any> {
-		let { intl } = this.props;
-		if (minutes <= 0) {
-			return [
-				intl.formatMessage(messages.justNow),
-				<FormattedMessage {...messages.justNow} style={styles.time}/>,
-			];
-		}
-		if (minutes === 1) {
-			return [
-				`1 ${intl.formatMessage(messages.minuteAgo)}`,
-				<Text style={styles.time}>1 <FormattedMessage {...messages.minuteAgo} style={styles.time}/></Text>,
-			];
-		}
-		if (minutes < 60) {
-			return [
-				`${minutes} ${intl.formatMessage(messages.minutesAgo)}`,
-				<Text style={styles.time}>{minutes} <FormattedMessage {...messages.minutesAgo} style={styles.time}/></Text>,
-			];
-		}
-		const hours = Math.round(minutes / 60);
-		if (hours === 1) {
-			return [
-				`1 ${intl.formatMessage(messages.hourAgo)}`,
-				<Text style={styles.time}>1 <FormattedMessage {...messages.hourAgo} style={styles.time}/></Text>,
-			];
-		}
-		if (hours < 24) {
-			return [
-				`${hours} ${intl.formatMessage(messages.hoursAgo)}`,
-				<Text style={styles.time}>{hours} <FormattedMessage {...messages.hoursAgo} style={styles.time}/></Text>,
-			];
-		}
-		const days = Math.round(minutes / 60 / 24);
-		if (days === 1) {
-			return [
-				`1 ${intl.formatMessage(messages.dayAgo)}`,
-				<Text style={styles.time}>1 <FormattedMessage {...messages.dayAgo} style={styles.time}/></Text>,
-			];
-		}
-		if (days <= 7) {
-			return [
-				`${days} ${intl.formatMessage(messages.daysAgo)}`,
-				<Text style={styles.time}>{days} <FormattedMessage {...messages.daysAgo} style={styles.time}/></Text>,
-			];
-		}
-		try {
-			return [
-				moment.unix(lastUpdated).format('MM-DD-YYYY'),
-				moment.unix(lastUpdated).format('MM-DD-YYYY'),
-			];
-		} catch (exception) {
-			reportException(exception);
-			return [
-				`${intl.formatMessage(messages.unknown)}`,
-				<FormattedMessage {...i18n.unknown} style={styles.time} />,
-			];
-		}
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean): Object {

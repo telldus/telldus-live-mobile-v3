@@ -407,6 +407,11 @@ const messages = defineMessages({
 		id: 'text.hiddenSensors',
 		defaultMessage: 'Hidden sensors',
 	},
+	noName: {
+		id: 'noName',
+		defaultMessage: 'no name',
+		description: 'Used when an item does not have a name',
+	},
 });
 
 export default messages;
