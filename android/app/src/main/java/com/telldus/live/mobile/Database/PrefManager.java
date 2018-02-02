@@ -27,6 +27,18 @@ public class PrefManager {
         editor = pref.edit();
     }
 
+    public void checkAvailability(boolean b)
+    {
+        editor.putBoolean("availability",b);
+        editor.commit();
+        editor.apply();
+
+    }
+    public boolean  getAvailability()
+    {
+        return pref.getBoolean("availability",false);
+    }
+
     public void ExpireAccessDate(String date)
     {
         editor.putString("access_date",date);
