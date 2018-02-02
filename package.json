@@ -17,6 +17,7 @@
     "color": "~2.0.0",
     "global": "^4.3.1",
     "intl": "^1.2.5",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git",
     "lodash": "~4.17.4",
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.14",
@@ -37,6 +38,7 @@
     "react-native-scrollable-tab-view": "^0.8.0",
     "react-native-simple-toast": "0.0.7",
     "react-native-slider": "^0.11.0",
+    "react-native-swipe-list-view": "^1.0.5",
     "react-native-uuid": "^1.4.9",
     "react-native-vector-icons": "^4.4.2",
     "react-navigation": "^1.0.0-beta.15",
@@ -47,8 +49,7 @@
     "redux-persist": "^5.4.0",
     "redux-thunk": "~2.2.0",
     "reselect": "^3.0.1",
-    "url": "^0.11.0",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git"
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
