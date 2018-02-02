@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
 import { View, IconTelldus } from 'BaseComponents';
@@ -44,7 +44,7 @@ type Props = {
 	isGatewayActive: boolean,
 };
 
-class BellDashboardTile extends View {
+class BellDashboardTile extends PureComponent<Props, null> {
 	props: Props;
 
 	onBell: () => void;

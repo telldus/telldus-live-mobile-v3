@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
 import { View } from 'BaseComponents';
@@ -67,7 +67,7 @@ type State = {
 	onButtonFadeAnim: Object,
 };
 
-class DimmerDashboardTile extends View {
+class DimmerDashboardTile extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
 	parentScrollEnabled: boolean;

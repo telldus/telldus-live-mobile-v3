@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
@@ -41,7 +41,7 @@ type Props = {
 	isGatewayActive: boolean,
 };
 
-class ToggleDashboardTile extends View {
+class ToggleDashboardTile extends PureComponent<Props, null> {
 	props: Props;
 
 	constructor(props: Props) {

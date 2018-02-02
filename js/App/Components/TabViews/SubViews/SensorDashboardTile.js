@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
 import { FormattedNumber, View } from 'BaseComponents';
@@ -48,7 +48,7 @@ type State = {
 	currentDisplayType: string,
 };
 
-class SensorDashboardTile extends View {
+class SensorDashboardTile extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
 	getSlideList : Object => Object;
