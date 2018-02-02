@@ -45,6 +45,7 @@ type Props = {
 	supportedMethod: string,
 	id: number,
 	iconSize: number,
+	style: Object | Array<any> | number,
 };
 
 class StopButton extends View {
@@ -69,7 +70,7 @@ class StopButton extends View {
 		};
 
 		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize } = this.props;
+			name, methodRequested, iconSize, style } = this.props;
 
 		let stopButtonStyle = !isGatewayActive ?
 			(isInState === 'STOP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'STOP' ? styles.enabledBackgroundStop : styles.disabledBackground);
@@ -78,7 +79,7 @@ class StopButton extends View {
 
 		return (
 			<TouchableOpacity
-				style={[styles.navigationButton, stopButtonStyle]}
+				style={[stopButtonStyle, style]}
 				onPress={supportedMethod ? this.onStop : noop}
 				accessibilityLabel={`${this.labelStopButton}, ${name}`}>
 				<Icon name="stop" size={iconSize}

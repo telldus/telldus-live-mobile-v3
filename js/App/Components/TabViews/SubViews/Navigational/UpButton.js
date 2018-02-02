@@ -44,6 +44,7 @@ type Props = {
 	supportedMethod: string,
 	id: number,
 	iconSize: number,
+	style: Object | Array<any> | number,
 };
 
 class UpButton extends View {
@@ -69,7 +70,7 @@ class UpButton extends View {
 		};
 
 		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize } = this.props;
+			name, methodRequested, iconSize, style } = this.props;
 
 		let upButtonStyle = !isGatewayActive ?
 			(isInState === 'UP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'UP' ? styles.enabledBackground : styles.disabledBackground);
@@ -78,7 +79,7 @@ class UpButton extends View {
 
 		return (
 			<TouchableOpacity
-				style={[styles.navigationButton, upButtonStyle]}
+				style={[upButtonStyle, style]}
 				onPress={supportedMethod ? this.onUp : noop}
 				accessibilityLabel={`${this.labelUpButton}, ${name}`}>
 				<Icon name="caret-up" size={iconSize}

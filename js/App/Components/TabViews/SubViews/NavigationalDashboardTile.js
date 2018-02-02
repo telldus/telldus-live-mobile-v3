@@ -20,7 +20,6 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { StyleSheet } from 'react-native';
 
@@ -51,13 +50,13 @@ class NavigationalDashboardTile extends View {
 		const { item, tileWidth, intl, isGatewayActive } = this.props;
 		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true}
+		const upButton = UP ? <UpButton isEnabled={true} style={styles.navigationButton}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id}/> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true}
+		const downButton = DOWN ? <DownButton isEnabled={true} style={styles.navigationButton}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id}/> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true}
+		const stopButton = STOP ? <StopButton isEnabled={true} style={styles.navigationButton}
 			methodRequested={item.methodRequested} iconSize={20} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id}/> : null;
 
@@ -101,25 +100,11 @@ class NavigationalDashboardTile extends View {
 	}
 }
 
-NavigationalDashboardTile.defaultProps = {
-};
-
 const styles = StyleSheet.create({
 	navigationButton: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-	},
-	buttonEnabled: {
-		color: '#1a355b',
-	},
-	buttonDisabled: {
-		color: '#eeeeee',
-	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
 	},
 	itemIconContainerOn: {
 		backgroundColor: Theme.Core.brandSecondary,
@@ -132,4 +117,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = connect(null, null)(NavigationalDashboardTile);
+module.exports = NavigationalDashboardTile;

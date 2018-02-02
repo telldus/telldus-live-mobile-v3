@@ -44,6 +44,7 @@ type Props = {
 	supportedMethod: string,
 	id: number,
 	iconSize: number,
+	style: Object | Array<any> | number,
 };
 
 class DownButton extends View {
@@ -69,7 +70,7 @@ class DownButton extends View {
 		};
 
 		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize } = this.props;
+			name, methodRequested, iconSize, style } = this.props;
 
 
 		let downButtonStyle = !isGatewayActive ?
@@ -80,7 +81,7 @@ class DownButton extends View {
 
 		return (
 			<TouchableOpacity
-				style={[styles.navigationButton, downButtonStyle]}
+				style={[downButtonStyle, style]}
 				onPress={supportedMethod ? this.onDown : noop}
 				accessibilityLabel={`${this.labelDownButton}, ${name}`}>
 				<Icon name="caret-down" size={iconSize}
@@ -104,11 +105,6 @@ DownButton.defaultProps = {
 };
 
 const styles = StyleSheet.create({
-	navigationButton: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 	enabled: {
 		color: '#1a355b',
 	},
