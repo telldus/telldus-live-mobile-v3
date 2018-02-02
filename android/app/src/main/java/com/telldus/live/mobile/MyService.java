@@ -1,8 +1,11 @@
-package com.telldus.live.mobile.ServiceBackground;
+package com.telldus.live.mobile;
 
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -26,14 +29,13 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.Utility.SensorType;
+import com.telldus.live.mobile.Utility.helper;
 
 /**
  * Created by crosssales on 1/9/2018.
@@ -51,6 +53,8 @@ public class MyService extends Service {
     String port;
     String address;
     String socket_address;
+
+    Runnable r;
 
     String ctD;
     boolean isError=false;
@@ -226,7 +230,6 @@ public void FetchWebAddress()
                     addWebsocketFilter("zwave", "addNodeToNetworkStartTimeout", mWebSocketClient);
                     addWebsocketFilter("zwave", "interviewDone", mWebSocketClient);
                     addWebsocketFilter("zwave", "nodeInfo", mWebSocketClient);
-
                 }
 
                 @Override
@@ -240,13 +243,10 @@ public void FetchWebAddress()
                             isRunnable=false;
                             handler.removeCallbacks(mRunnable);
                         }
-
                     }
-
                     if(message.equals("error"))
                     {
                         isError=true;
-
                     }
                     if (!message.equals("validconnection") && !message.equals("error")&& !message.equals("nothere")) {
 
@@ -255,50 +255,72 @@ public void FetchWebAddress()
                             Log.v("Json_Response", jsonObject.toString(10));
 
                             JSONObject jsonDataObject = new JSONObject();
-                            jsonDataObject = jsonObject.getJSONObject("data");
-                            int sensorid = Integer.parseInt(jsonDataObject.getString("sensorId"));
-                            String module = jsonObject.getString("module");
-                            String time = jsonDataObject.getString("time");
+                            String chooseWidget=jsonObject.getString("module");
 
-                            JSONArray jsonArray = jsonDataObject.optJSONArray("data");
-                         //   Log.v("JSON ARRAY",jsonArray.toString(10));
+                            if(chooseWidget.equals("device"))
+                            {
+                                jsonDataObject = jsonObject.getJSONObject("data");
+                                int deviceID=jsonDataObject.getInt("deviceId");
+                                String method=jsonDataObject.getString("method");
 
-                            String valueSensor = null;
+                                boolean b=db.updateActionDevice(method,deviceID);
 
-                              ArrayList<SensorInfo> mSensorInfoList = db.findSensorDevice(sensorid);
+                                if(b)
+                                {
+                                    int widgetIDs[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewAppWidget.class));
+                                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(getApplicationContext());
 
-                              for(int i=0;i<mSensorInfoList.size();i++)
-                              {
-                                  SensorInfo objInfo=mSensorInfoList.get(i);
+                                    for(int id : widgetIDs) {
+                                        AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(id, R.id.never);
 
-                                  String widgetName=objInfo.getWidgetName();
-                                  int widgetID=objInfo.getWidgetID();
-                                  String widgetType=objInfo.getWidgetType();
-                            //      int SensorID=objInfo.getDeviceID();
+                                        NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,id);
+                                    }
+                                }
+
+                            }
+                            else {
+                                jsonDataObject = jsonObject.getJSONObject("data");
+                                int sensorid = Integer.parseInt(jsonDataObject.getString("sensorId"));
+
+                                String time = jsonDataObject.getString("time");
+
+                                JSONArray jsonArray = jsonDataObject.optJSONArray("data");
+                                //   Log.v("JSON ARRAY",jsonArray.toString(10));
+
+                                String valueSensor = null;
+
+                                ArrayList<SensorInfo> mSensorInfoList = db.findSensorDevice(sensorid);
+
+                                for (int i = 0; i < mSensorInfoList.size(); i++) {
+                                    SensorInfo objInfo = mSensorInfoList.get(i);
+
+                                    String widgetName = objInfo.getWidgetName();
+                                    int widgetID = objInfo.getWidgetID();
+                                    String widgetType = objInfo.getWidgetType();
+                                    //      int SensorID=objInfo.getDeviceID();
 
 
-                                  for(int j=0;j<jsonArray.length();j++)
-                                  {
-                                      JSONObject jsonObject1 =jsonArray.getJSONObject(j);
-                                      String type=jsonObject1.getString("type");
-                                      String scale=jsonObject1.getString("scale");
-                                  String typeValue=String.valueOf(SensorType.getValueLang(widgetType));
+                                    for (int j = 0; j < jsonArray.length(); j++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(j);
+                                        String type = jsonObject1.getString("type");
+                                        String scale = jsonObject1.getString("scale");
+                                        String typeValue = String.valueOf(SensorType.getValueLang(widgetType));
 
-                                      if(type.equals(typeValue))
-                                      {
-                                          //Log.v("JSONObject",jsonObject1.toString(10));
+                                        if (type.equals(typeValue)) {
+                                            //Log.v("JSONObject",jsonObject1.toString(10));
 
-                                          Log.v("Widget name",widgetName);
-                                          Log.v("Widget ID",String.valueOf(widgetID));
-                                          Log.v("Widget Type",widgetType);
-                                          Log.v(" Sensor ID",String.valueOf(objInfo.getDeviceID()));
-                                          valueSensor = jsonObject1.optString("value");
-                                          long timeStamp = Long.parseLong(time);
-                                          int result = db.updateSensorInfo(valueSensor, timeStamp, widgetID);
+                                            Log.v("Widget name", widgetName);
+                                            Log.v("Widget ID", String.valueOf(widgetID));
+                                            Log.v("Widget Type", widgetType);
+                                            Log.v(" Sensor ID", String.valueOf(objInfo.getDeviceID()));
+                                            valueSensor = jsonObject1.optString("value");
+                                            long timeStamp = Long.parseLong(time);
+                                            int result = db.updateSensorInfo(valueSensor, timeStamp, widgetID);
 
-                                      }
-                                  }
-                              }
+                                        }
+                                    }
+                                }
+                            }
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -309,61 +331,69 @@ public void FetchWebAddress()
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
                     Log.v("Websocket", "Closed " + reason);
-                    Log.v("Websocket close","websocket_closed @"+SOC_CLI);
-                    boolean sensorDB=prefManager.getSensorDB();
+                    Log.v("Websocket close", "websocket_closed @" + SOC_CLI);
+                    boolean screenCheck = helper.screenOn;
+                    if (screenCheck) {
+                        boolean bol = isNetworkConnected();
+                        if (bol) {
+                            Log.v("Network enabled", "Network enabled");
+                            boolean sensorDB = prefManager.getSensorDB();
+                            boolean deviceDB = prefManager.getDeviceDB();
 
-                    if(sensorDB) {
+                            if (sensorDB || deviceDB) {
 
+                                Log.v("sensorDB || deviceDB", "sensorDB || deviceDB");
+                                if (!isError) {
+                                    isConnecting = false;
+                                    if (count + 1 < client_list.size()) {
+                                        count = count + 1;
+                                        FetchWebAddress();
+                                    } else {
+                                        count = 0;
+                                        getClientList();
+                                        Log.v("Called  OnClose", "-----" + "*****************************************************");
 
-                        if (!isError) {
-
-                            isConnecting = false;
-
-                            if (count + 1 < client_list.size()) {
-                                count = count + 1;
-                                FetchWebAddress();
-
-
+                                    }
+                                    if (!isRunnable && !isConnecting) {
+                                        reconnectWebsocket();
+                                    }
+                                } else {
+                                    isError = false;
+                                    SessionID();
+                                }
                             } else {
-                                count = 0;
-                                getClientList();
-                                Log.v("Called  OnClose", "-----" + "*****************************************************");
 
-                                //new MyTask().execute(client_list);
+                                if (isRunnable) {
+                                    isRunnable = false;
+                                    handler.removeCallbacks(mRunnable);
+                                }
+                                Log.v("WebSocket Stopped", "????????????????????????????????????????????????" + " No database");
                             }
-                            if (!isRunnable && !isConnecting) {
-
-                                reconnectWebsocket();
-                            }
-
                         } else {
-                            isError = false;
-                            SessionID();
+                            if (isRunnable) {
+                                isRunnable = false;
+                                handler.removeCallbacks(mRunnable);
+                            }
+                            Log.v("WebSocket Stoped", "No internet Connection");
                         }
-                    }else
-                    {
-                        Log.v("WebSocket Stopped","????????????????????????????????????????????????");
-                    }
 
+                    } else {
+                        Log.v("Websocket stopted","Device screen off");
+                        if (isRunnable) {
+                            isRunnable = false;
+                            handler.removeCallbacks(mRunnable);
+                        }
+                    }
                 }
 
                 @Override
                 public void onError(Exception ex) {
                     Log.v("Websocket", "Error " + ex.getMessage());
-
-
-                    /*if(isConnected)
-                    {
-                        getClientList();
-                    }*/
-
-
                 }
             };
             mWebSocketClient.connect();
 
     }
-
 
     public void reconnectWebsocket()
     {
@@ -377,7 +407,7 @@ public void FetchWebAddress()
 
                 if(!isConnecting)
                 {
-                    mWebSocketClient.close();
+                   // mWebSocketClient.close();
                     Log.v("Called  Reconnection","-----" +"*****************************************************");
                     getClientList();
 
@@ -392,9 +422,17 @@ public void FetchWebAddress()
     @Override
     public void onDestroy() {
         Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
-        mWebSocketClient.close();
-   //     prefManager.websocketService(false);
 
+      if(isConnecting) {
+          mWebSocketClient.close();
+      }
+        prefManager.websocketService(false);
+
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
     }
 
 
@@ -486,7 +524,5 @@ public void FetchWebAddress()
                     }
                 });
     }
-
-
 
 }

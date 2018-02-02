@@ -254,6 +254,18 @@ public class MyDBHandler extends SQLiteOpenHelper {
         int count =db.update(TABLE_REGISTER,contentValues, WIDGET_ID+" = ?",whereArgs );
         return true;
     }
+    public boolean updateActionDevice(String action,int id)
+    {
+        String val=String.valueOf(id);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        //contentValues.put(myDbHelper.NAME,newName);
+
+        contentValues.put(WIDGET_ACTION,action);
+        String[] whereArgs= {val};
+        int count =db.update(TABLE_REGISTER,contentValues, DEVICE_ID+" = ?",whereArgs );
+        return true;
+    }
 
     public int updateSensorInfo(String value,long time,int Wid)
     {
@@ -304,6 +316,18 @@ public int CountSensorTableValues()
 
 
     return icount;
+}
+
+public int CountDeviceWidgetValues()
+{
+    SQLiteDatabase db = this.getWritableDatabase();
+    String count = "SELECT count(*) FROM Widget";
+    Cursor mcursor = db.rawQuery(count, null);
+    mcursor.moveToFirst();
+    int icount = mcursor.getInt(0);
+
+    return icount;
+
 }
 
 

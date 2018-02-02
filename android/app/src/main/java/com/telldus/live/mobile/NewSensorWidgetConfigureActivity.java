@@ -8,13 +8,9 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -46,7 +42,7 @@ import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
-import com.telldus.live.mobile.ServiceBackground.MyService;
+import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 
 /**
  * The configuration screen for the {@link NewSensorWidget NewSensorWidget} AppWidget.
@@ -118,7 +114,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
                 //Read text from file
                 StringBuilder text = new StringBuilder();
-
                 try {
                     BufferedReader br = new BufferedReader(new FileReader(fileAuth));
                     String line;
@@ -205,7 +200,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         }
 
 
-       /* client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
+     /*   client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
         client_secret="NUKU6APRAKATRESPECHEX3WECRAPHUCA";
         grant_Type="password";
         user_name="developer@telldus.com";
@@ -214,10 +209,10 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
         prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
 
-        prefManager.AccessTokenDetails("c87662c7bcebb21434610519bb7e480e0643ebee","10800");
-        prefManager.saveSessionID("8f6dbc8c-e7b6-4e74-b3d8-252f7408f11a","1517334449");
+        prefManager.saveSessionID("c87662c7bcebb21434610519bb7e480e0643ebee","10800");
+        prefManager.AccessTokenDetails("edf6d9d45da954efa6289000c718cce20d0d7976","10800");*/
 
-        createSensorApi();*/
+      //  createSensorApi();
 
         setResult(RESULT_CANCELED);
 
@@ -250,13 +245,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         chooseSettingSensor=(TextView)findViewById(R.id.chooseSettingSensor);
         testText=(TextView)findViewById(R.id.testTextSensor);
 
-       /* Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Lato-Light.ttf");
-        testText.setTypeface(font);
-        chooseSettingSensor.setTypeface(font);
-        sensorName.setTypeface(font);
-        sensorHint.setTypeface(font);
-        sensorDataName.setTypeface(font);
-        sensorDataHint.setTypeface(font);*/
+
         mSensorBack=(RelativeLayout)findViewById(R.id.sensorBack);
 
         mSensorBack.setOnClickListener(new View.OnClickListener() {
@@ -294,8 +283,17 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             public void onClick(View view) {
                 boolean token_service=prefManager.getTokenService();
 
-                boolean b=prefManager.getSensorDB();
-                if(!b)
+
+
+                boolean b=isMyServiceRunning(NetworkInfo.class);
+                if (!b)
+                {
+                    startService(new Intent(getApplicationContext(), NetworkInfo.class));
+                    // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
+                }
+
+                boolean b1=prefManager.getSensorDB();
+                if(!b1)
                 {
                     prefManager.sensorDB(true);
                 }
@@ -497,13 +495,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
 
-        pDialog = new ProgressDialog(NewSensorWidgetConfigureActivity.this);
-        pDialog.setMax(5);
-        pDialog.setMessage("Please wait...");
-        pDialog.setCancelable(false);
-        pDialog.show();
+      //  pDialog = new ProgressDialog(NewSensorWidgetConfigureActivity.this);
+    //    pDialog.setMax(5);
+    //    pDialog.setMessage("Please wait...");
+  //      pDialog.setCancelable(false);
+  //      pDialog.show();
 
-        AndroidNetworking.get("https://api.telldus.com/oauth2/sensors/list?includeValues=1")
+        AndroidNetworking.get("https://api3.telldus.com/oauth2/sensors/list?includeValues=1")
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accpet", "application/json")
                 .addHeaders("Authorization", "Bearer " + accessToken)
@@ -529,8 +527,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 }
                             }
                             sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
-                         if (pDialog.isShowing())
-                                pDialog.dismiss();
+                      //   if (pDialog.isShowing())
+                      //          pDialog.dismiss();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -538,13 +536,24 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                    @Override
                     public void onError(ANError anError) {
                        Log.v("AnError", anError.toString());
-                       if (pDialog.isShowing()) {
-                           pDialog.dismiss();
+                      // if (pDialog.isShowing()) {
+                        //   pDialog.dismiss();
 
-                       }
+                    //   }
                    }
                 });
     }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 }

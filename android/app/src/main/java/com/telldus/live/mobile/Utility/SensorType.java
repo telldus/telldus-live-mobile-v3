@@ -7,9 +7,6 @@ import android.util.Log;
  */
 
 public enum SensorType {
-
-
-
     temp("1"),
     humidity("2"),
     rrate("4"),

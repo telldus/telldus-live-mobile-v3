@@ -71,7 +71,7 @@
           android:value="${pushSenderId}"/>
         <receiver android:name=".DeviceWidget">
         <service
-            android:name=".ServiceBackground.MyService"
+            android:name=".MyService"
             android:enabled="true" />
 
         <receiver android:name=".BroadcastReceiver.BootCompleteReceiver">
@@ -82,11 +82,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".ServiceBackground.AEScreenOnOffService">
-            <intent-filter>
-                <action android:name="com.androidexample.screenonoff.AEScreenOnOffService" />
-            </intent-filter>
-        </service>
         <!-- <service android:name=".ServiceBackground.UpdateService"></service> -->
         <service android:name=".UpdateSensorService" />
 
@@ -124,6 +119,8 @@
             </intent-filter>
         </activity>
         <service android:name=".ServiceBackground.AccessTokenService"></service>
+
+        <service android:name=".ServiceBackground.NetworkInfo"></service>
     </application>
 
 </manifest>

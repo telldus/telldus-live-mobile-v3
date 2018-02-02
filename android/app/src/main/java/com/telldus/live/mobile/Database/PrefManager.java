@@ -112,6 +112,18 @@ public class PrefManager {
         return pref.getBoolean("sensor_db",false);
     }
 
+    public void DeviceDB(boolean b)
+    {
+        editor.putBoolean("device_db",b);
+        editor.commit();
+        editor.apply();
+    }
+
+    public boolean getDeviceDB()
+    {
+        return pref.getBoolean("device_db",false);
+    }
+
 
 
 
