@@ -27,8 +27,11 @@ import { View, Text, BlockIcon } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
 
-const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle }: Object) => (
-	<View style={[styles.title]}>
+const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive }: Object) => (
+	<View style={[styles.title, {
+		width: tileWidth - 4,
+		height: tileWidth * 0.6,
+	}]}>
 		{icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 		<Text
 			ellipsizeMode="middle"
@@ -41,6 +44,18 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 			]}>
 			{name ? name : '(no name)'}
 		</Text>
+		{info && (<Text
+			ellipsizeMode="middle"
+			numberOfLines={1}
+			style={[
+				styles.name, {
+					fontSize: Math.floor(tileWidth / 10),
+					color: Theme.Core.rowTextColor,
+				},
+			]}>
+			{info}
+		</Text>)
+		}
 	</View>
 );
 
@@ -91,7 +106,6 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center',
 	},
 	title: {
-		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 		borderTopLeftRadius: 2,

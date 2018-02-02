@@ -78,12 +78,12 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 				icon={'device-alt-solid'}
 				iconStyle={{
 					color: '#fff',
-					fontSize: tileWidth / 4.5,
+					fontSize: tileWidth / 4.9,
 				}}
 				iconContainerStyle={[iconContainerStyle, {
-					width: tileWidth / 4,
-					height: tileWidth / 4,
-					borderRadius: tileWidth / 8,
+					width: tileWidth / 4.5,
+					height: tileWidth / 4.5,
+					borderRadius: tileWidth / 9,
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}
