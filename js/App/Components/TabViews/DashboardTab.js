@@ -313,6 +313,7 @@ class DashboardTab extends View {
 				onPress={this.changeDisplayType}
 				intl={screenProps.intl}
 				key={key}
+				isGatewayActive={isGatewayActive}
 			/>;
 		}
 

@@ -120,9 +120,8 @@ export default StyleSheet.create({
 		left: 0,
 		right: 0,
 		flexDirection: 'row',
-		backgroundColor: 'white',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
+		borderBottomLeftRadius: 2,
+		borderBottomRightRadius: 2,
 	},
 	listItemAvatar: {
 		width: 32,

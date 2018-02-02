@@ -30,10 +30,12 @@ import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
+import { formatLastUpdated } from 'Lib';
 import i18n from '../../../Translations/common';
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
+import Theme from 'Theme';
 
 type Props = {
 	item: Object,
@@ -42,6 +44,7 @@ type Props = {
 	style: Object,
 	onPress: () => void,
 	intl: Object,
+	isGatewayActive: boolean,
 };
 
 type State = {
@@ -77,6 +80,8 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 		this.labelGenricMeter = formatMessage(i18n.labelGenricMeter);
 		this.labelLuminance = formatMessage(i18n.labelLuminance);
 
+		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
+
 		this.sensorTypes = getSensorTypes();
 
 		this.getSlideList = this.getSlideList.bind(this);
@@ -93,7 +98,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			if (name === 'humidity') {
 				slideList.push({
 					key: 'humidity',
-					icon: require('../img/sensorIcons/HumidityLargeGray.png'),
+					icon: 'humidity',
 					text: <FormattedNumber value={value} suffix={unit}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
@@ -101,7 +106,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			if (name === 'temp') {
 				slideList.push({
 					key: 'temperature',
-					icon: require('../img/sensorIcons/TemperatureLargeGray.png'),
+					icon: 'temperature',
 					text: <FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}
 						suffix={unit}/>,
 				});
@@ -110,7 +115,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			if (name === 'rrate' || name === 'rtotal') {
 				slideList.push({
 					key: 'rain',
-					icon: require('../img/sensorIcons/RainLargeGray.png'),
+					icon: 'rain',
 					text: (name === 'rrate' && <FormattedNumber value={value} maximumFractionDigits={0}
 						suffix={`${unit}\n`}/> ),
 					text2: (name === 'rtotal' && <FormattedNumber value={value} maximumFractionDigits={0}
@@ -127,7 +132,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				}
 				slideList.push({
 					key: 'wind',
-					icon: require('../img/sensorIcons/WindLargeGray.png'),
+					icon: 'wind',
 					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={1}
 						suffix={`${unit}\n`}/> ),
 					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={1}
@@ -142,7 +147,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			if (name === 'uv') {
 				slideList.push({
 					key: 'uv',
-					icon: require('../img/sensorIcons/UVLargeGray.png'),
+					icon: 'uv',
 					text: <FormattedNumber value={value} maximumFractionDigits={0} suffix={unit}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
@@ -150,7 +155,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			if (name === 'watt') {
 				slideList.push({
 					key: 'watt',
-					icon: require('../img/sensorIcons/WattLargeGray.png'),
+					icon: 'watt',
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;
@@ -158,7 +163,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			if (name === 'luminance') {
 				slideList.push({
 					key: 'luminance',
-					icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
+					icon: 'luminance',
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}
 						useGrouping={false}/>,
 				});
@@ -167,7 +172,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			if (name === 'dewp') {
 				slideList.push({
 					key: 'dewpoint',
-					icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
+					icon: 'humidity',
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
@@ -175,7 +180,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			if (name === 'barpress') {
 				slideList.push({
 					key: 'barometricpressure',
-					icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
+					icon: 'guage',
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
@@ -183,7 +188,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			if (name === 'genmeter') {
 				slideList.push({
 					key: 'genricmeter',
-					icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
+					icon: 'sensor',
 					text: <FormattedNumber value={value} maximumFractionDigits={0} suffix={unit}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
@@ -194,17 +199,22 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 	}
 
 	render() {
-		const { item, tileWidth } = this.props;
+		const { item, tileWidth, isGatewayActive, intl } = this.props;
 		const displayType = this.props.displayType;
 		const { slideList, sensorInfo } = this.getSlideList(item);
 
-		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorInfo}`;
+		const { lastUpdated } = item;
+		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
+		const lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
+
+		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
 		const slides = slideList.map((data) =>
 			<SensorDashboardTileSlide
 				key={data.key}
 				data={data}
-				tileWidth={tileWidth}/>
+				tileWidth={tileWidth}
+				isGatewayActive={isGatewayActive}/>
 		);
 
 		let selectedSlideIndex = 0;
@@ -217,11 +227,26 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			}
 		}
 
+		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerActive;
+
 		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={item.state !== 0}
 				name={item.name}
+				info={lastUpdatedValue}
+				icon={'sensor'}
+				iconStyle={{
+					color: '#fff',
+					fontSize: tileWidth / 4.9,
+				}}
+				iconContainerStyle={[iconContainerStyle, {
+					width: tileWidth / 4.5,
+					height: tileWidth / 4.5,
+					borderRadius: tileWidth / 9,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}
 				type={'sensor'}
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}
@@ -234,8 +259,15 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				<TouchableOpacity
 					onPress={this.props.onPress}
 					activeOpacity={1}
-					style={styles.container}>
-					<View style={styles.body}>
+					style={{
+						width: tileWidth - 4,
+						height: tileWidth * 0.4,
+						flexDirection: 'row',
+					}}>
+					<View style={[styles.body, {
+						width: tileWidth - 4,
+						height: tileWidth * 0.4,
+					}]}>
 						{slides[selectedSlideIndex]}
 					</View>
 				</TouchableOpacity>
@@ -257,10 +289,17 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	body: {
-		flex: 30,
 		flexDirection: 'row',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
+		borderBottomLeftRadius: 2,
+		borderBottomRightRadius: 2,
+		justifyContent: 'flex-start',
+		alignItems: 'center',
+	},
+	itemIconContainerActive: {
+		backgroundColor: Theme.Core.brandPrimary,
+	},
+	itemIconContainerOffline: {
+		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 

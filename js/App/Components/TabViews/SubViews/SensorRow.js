@@ -408,15 +408,16 @@ class SensorRow extends PureComponent<Props, State> {
 	render() {
 		const { sensor, currentTab, currentScreen, appLayout, isGatewayActive, intl } = this.props;
 		const styles = this.getStyles(appLayout, isGatewayActive);
-		const minutesAgo = Math.round(((Date.now() / 1000) - sensor.lastUpdated) / 60);
 		const {
 			data,
 			name,
+			lastUpdated,
 		} = sensor;
+		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
 		let { sensors, sensorInfo } = this.getSensors(data);
-		let lastUpdatedValue = formatLastUpdated(minutesAgo, sensor.lastUpdated, intl.formatMessage);
-		let accessibilityLabel = `${this.labelSensor}, ${name}, ${sensorInfo},${this.labelTimeAgo} ${lastUpdatedValue}`;
+		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
+		let accessibilityLabel = `${this.labelSensor}, ${name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
 
 		let { currentIndex } = this.state;
