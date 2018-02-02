@@ -107,93 +107,102 @@ public class NewAppWidgetConfigureActivity extends Activity {
         super.onCreate(icicle);
         prefManager=new PrefManager(this);
 
+        boolean avail=prefManager.getAvailability();
+        if(!avail) {
 
-        File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
-        if (fileAuth.exists()) {
-            Log.d("File exists?", "Yes");
+            File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
+            if (fileAuth.exists()) {
+                Log.d("File exists?", "Yes");
 
-            //Read text from file
-            StringBuilder text = new StringBuilder();
+                //Read text from file
+                StringBuilder text = new StringBuilder();
 
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(fileAuth));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    text.append(line);
-                    text.append('\n');
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(fileAuth));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        text.append(line);
+                        text.append('\n');
+                    }
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                br.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+
+                try {
+                    JSONObject authInfo = new JSONObject(String.valueOf(text));
+                    accessToken = String.valueOf(authInfo.getString("access_token"));
+                    expiresIn = String.valueOf(authInfo.getString("expires_in"));
+                    tokenType = String.valueOf(authInfo.getString("token_type"));
+                    scope = String.valueOf(authInfo.getString("scope"));
+                    refreshToken = String.valueOf(authInfo.getString("refresh_token"));
+
+
+                    client_ID = String.valueOf(authInfo.getString("client_id"));
+                    client_secret = String.valueOf(authInfo.getString("client_secret"));
+                    grant_Type = String.valueOf(authInfo.getString("grant_type"));
+                    user_name = String.valueOf(authInfo.getString("username"));
+                    password = String.valueOf(authInfo.getString("password"));
+
+
+                    prefManager.timeStampAccessToken(expiresIn);
+                    prefManager.AccessTokenDetails(accessToken, expiresIn);
+                    prefManager.infoAccessToken(client_ID, client_secret, grant_Type, user_name, password, refreshToken);
+
+
+                    Log.d("Auth token", accessToken);
+                    Log.d("Expires in", expiresIn);
+                    Log.d("Token type", tokenType);
+                    Log.d("Scope", scope);
+                    Log.d("Refresh token", refreshToken);
+
+                    createDeviceApi();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
-            try {
-                JSONObject authInfo = new JSONObject(String.valueOf(text));
-                accessToken = String.valueOf(authInfo.getString("access_token"));
-                expiresIn = String.valueOf(authInfo.getString("expires_in"));
-                tokenType = String.valueOf(authInfo.getString("token_type"));
-                scope = String.valueOf(authInfo.getString("scope"));
-                refreshToken = String.valueOf(authInfo.getString("refresh_token"));
 
+            File fileSession = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/session.txt");
+            if (fileSession.exists()) {
+                Log.d("File exists?", "Yes");
+                //Read text from file
+                StringBuilder text = new StringBuilder();
 
-                client_ID=String.valueOf(authInfo.getString("client_id"));
-                client_secret=String.valueOf(authInfo.getString("client_secret"));
-                grant_Type=String.valueOf(authInfo.getString("grant_type"));
-                user_name=String.valueOf(authInfo.getString("username"));
-                password=String.valueOf(authInfo.getString("password"));
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(fileSession));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        text.append(line);
+                        text.append('\n');
+                    }
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+                try {
+                    JSONObject authInfo = new JSONObject(String.valueOf(text));
+                    sesID = String.valueOf(authInfo.getString("sessionId"));
+                    ttl = String.valueOf(authInfo.getString("ttl"));
 
-                prefManager.timeStampAccessToken(expiresIn);
-                prefManager.AccessTokenDetails(accessToken,expiresIn);
-                prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
+                    Log.d("Session ID", sesID);
+                    Log.d("Expires in", ttl);
+                    prefManager.saveSessionID(sesID, ttl);
 
-
-                Log.d("Auth token", accessToken);
-                Log.d("Expires in", expiresIn);
-                Log.d("Token type", tokenType);
-                Log.d("Scope", scope);
-                Log.d("Refresh token", refreshToken);
-
-                createDeviceApi();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                prefManager.checkAvailability(true);
             }
+
+        }
+        else
+        {
+            createDeviceApi();
         }
 
-
-        File fileSession = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/session.txt");
-        if (fileSession.exists()) {
-            Log.d("File exists?", "Yes");
-            //Read text from file
-            StringBuilder text = new StringBuilder();
-
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(fileSession));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    text.append(line);
-                    text.append('\n');
-                }
-                br.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                JSONObject authInfo = new JSONObject(String.valueOf(text));
-                sesID = String.valueOf(authInfo.getString("sessionId"));
-                ttl = String.valueOf(authInfo.getString("ttl"));
-
-                Log.d("Session ID", sesID);
-                Log.d("Expires in", ttl);
-                prefManager.saveSessionID(sesID,ttl);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-     /*   client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
+       /* client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
         client_secret="NUKU6APRAKATRESPECHEX3WECRAPHUCA";
         grant_Type="password";
         user_name="developer@telldus.com";
