@@ -99,7 +99,7 @@ type State = {
 };
 
 const tileMargin = 2;
-const listMargin = 8;
+const listMargin = 12;
 
 class DashboardTab extends View {
 
@@ -377,9 +377,9 @@ class DashboardTab extends View {
 		return {
 			container: {
 				flex: 1,
-				alignItems: 'center',
+				alignItems: isEmpty ? 'center' : 'flex-start',
 				justifyContent: 'center',
-				paddingHorizontal: isEmpty ? 30 : 0,
+				paddingHorizontal: isEmpty ? 30 : 6,
 				paddingTop: 10,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
