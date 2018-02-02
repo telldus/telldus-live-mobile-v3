@@ -56,7 +56,7 @@ type Props = {
 	removeFromDashboard: number => void,
 	addToDashboard: number => void,
 	intl: Object,
-	deviceIds: Array,
+	deviceIds: Array<number>,
 };
 
 class DeviceHiddenRow extends View {
