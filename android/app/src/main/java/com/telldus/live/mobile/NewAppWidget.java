@@ -1,5 +1,6 @@
 package com.telldus.live.mobile;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF="ACTION_OFF";
+    private PendingIntent pendingIntent;
 
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -105,6 +108,7 @@ public class NewAppWidget extends AppWidgetProvider {
             appWidgetManager.updateAppWidget(appWidgetId, views);
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+
     }
 
     protected PendingIntent getPendingSelfIntent(Context context, String action, int id) {
@@ -188,6 +192,7 @@ public class NewAppWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
         MyDBHandler db = new MyDBHandler(context);
+        PrefManager prefManager=new PrefManager(context);
         for (int appWidgetId : appWidgetIds) {
             boolean b=db.delete(appWidgetId);
             if(b)
@@ -196,6 +201,20 @@ public class NewAppWidget extends AppWidgetProvider {
             }else
             {
                 Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
+            }
+            int count=db.CountDeviceWidgetValues();
+
+            if(count>0)
+            {
+                Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
+
+            }else
+            {
+                Toast.makeText(context,"No Device",Toast.LENGTH_SHORT).show();
+                prefManager.DeviceDB(false);
+                prefManager.websocketService(false);
+                context.stopService(new Intent(context, MyService.class));
+
             }
         }
     }

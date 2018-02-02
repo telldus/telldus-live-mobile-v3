@@ -1,18 +1,16 @@
 package com.telldus.live.mobile;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -44,6 +42,7 @@ import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
+import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 
 /**
  * The configuration screen for the {@link NewAppWidget NewAppWidget} AppWidget.
@@ -106,7 +105,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         prefManager=new PrefManager(this);
-
         boolean avail=prefManager.getAvailability();
         if(!avail) {
 
@@ -212,9 +210,9 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
         prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
 
-        prefManager.AccessTokenDetails("c87662c7bcebb21434610519bb7e480e0643ebee","10800");
+        prefManager.AccessTokenDetails("edf6d9d45da954efa6289000c718cce20d0d7976","10800");*/
 
-        createDeviceApi();*/
+      //  createDeviceApi();
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
@@ -280,6 +278,21 @@ public class NewAppWidgetConfigureActivity extends Activity {
             @Override
             public void onClick(View view) {
 
+
+                boolean b=isMyServiceRunning(NetworkInfo.class);
+                if (!b)
+                {
+                    startService(new Intent(getApplicationContext(), NetworkInfo.class));
+                    // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
+                }
+
+                boolean b1=prefManager.getDeviceDB();
+                if(!b1)
+                {
+                    prefManager.DeviceDB(true);
+                }
+
+
                 boolean token_service=prefManager.getTokenService();
                 if(!token_service) {
                     prefManager.TokenService(true);
@@ -297,6 +310,20 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 DeviceInfo mInsert=new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString(),switchStatus);
                 db.addUser(mInsert);
                 NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+
+
+                boolean web_service=prefManager.getWebService();
+                if(!web_service) {
+                    prefManager.websocketService(true);
+                    // Service for Access token
+                    Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
+                    startService(serviceIntent);
+                }else
+                {
+                    Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
+                }
+
+
                 Intent resultValue = new Intent();
                 // Set the results as expected from a 'configure activity'.
                 resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
@@ -337,11 +364,11 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
     void createDeviceApi() {
         accessToken=prefManager.getAccess();
-        pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
-        pDialog.setMax(5);
-        pDialog.setMessage("Please wait...");
-        pDialog.setCancelable(false);
-        pDialog.show();
+    //    pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
+    //    pDialog.setMax(5);
+  //      pDialog.setMessage("Please wait...");
+  //      pDialog.setCancelable(false);
+  //      pDialog.show();
 
         AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
                 .addHeaders("Content-Type", "application/json")
@@ -373,8 +400,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                             }
                             deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                             deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
-                            if (pDialog.isShowing())
-                                pDialog.dismiss();
+                          //  if (pDialog.isShowing())
+                          //      pDialog.dismiss();
                             //  Toast.makeText(getApplicationContext(),deviceStateList.toString(),Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -383,15 +410,26 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
                     @Override
                     public void onError(ANError anError) {
-                        if (pDialog.isShowing())
-                        {
+                    //    if (pDialog.isShowing())
+                      //  {
 
-                            pDialog.dismiss();
+                        //    pDialog.dismiss();
 
 
-                        }
+                        //}
                     }
 
                 });
+    }
+
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

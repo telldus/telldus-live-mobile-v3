@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.ServiceBackground.MyService;
 
 /**
  * Implementation of App Widget functionality.
@@ -87,13 +86,10 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
 
-
         view.setImageViewResource(R.id.iconSensor,src);
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo,sensorHistory);
         view.setTextViewText(R.id.txtSensorValue,sensorValue);
-
-
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, view);
