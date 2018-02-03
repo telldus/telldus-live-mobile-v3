@@ -30,7 +30,7 @@ import HiddenRow from './Sensor/HiddenRow';
 
 import i18n from '../../../Translations/common';
 
-import { formatLastUpdated } from 'Lib';
+import { formatLastUpdated, checkIfLarge } from 'Lib';
 import { utils, actions } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
@@ -44,9 +44,9 @@ const directions = [
 	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 ];
 
-const SensorHumidity = ({ value, unit, label, isLong }) => (
+const SensorHumidity = ({ value, unit, label, isLarge }) => (
 	<View style={Theme.Styles.sensorValue}>
-		{!isLong && (<IconTelldus icon="humidity" style={Theme.Styles.sensorIcon}/>)}
+		{!isLarge && (<IconTelldus icon="humidity" style={Theme.Styles.sensorIcon}/>)}
 		<View style={Theme.Styles.sensorValueCover}>
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<Text style={Theme.Styles.sensorValueText}>
@@ -63,9 +63,9 @@ const SensorHumidity = ({ value, unit, label, isLong }) => (
 	</View>
 );
 
-const SensorTemperature = ({ value, unit, label, isLong }) => (
+const SensorTemperature = ({ value, unit, label, isLarge }) => (
 	<View style={Theme.Styles.sensorValue}>
-		{!isLong && (<IconTelldus icon="temperature" style={Theme.Styles.sensorIcon}/>)}
+		{!isLarge && (<IconTelldus icon="temperature" style={Theme.Styles.sensorIcon}/>)}
 		<View style={Theme.Styles.sensorValueCover}>
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<Text style={Theme.Styles.sensorValueText}>
@@ -82,9 +82,9 @@ const SensorTemperature = ({ value, unit, label, isLong }) => (
 	</View>
 );
 
-const SensorRain = ({value, unit, label, isLong }) => (
+const SensorRain = ({value, unit, label, isLarge }) => (
 	<View style={Theme.Styles.sensorValue}>
-		{!isLong && (<IconTelldus icon="rain" style={Theme.Styles.sensorIcon}/>)}
+		{!isLarge && (<IconTelldus icon="rain" style={Theme.Styles.sensorIcon}/>)}
 		<View style={Theme.Styles.sensorValueCover}>
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<Text style={Theme.Styles.sensorValueText}>
@@ -101,10 +101,10 @@ const SensorRain = ({value, unit, label, isLong }) => (
 	</View>
 );
 
-const SensorWind = ({ name, value, unit, label, isLong }) => {
+const SensorWind = ({ name, value, unit, label, isLarge }) => {
 	return (
 		<View style={Theme.Styles.sensorValue}>
-			{!isLong && (<IconTelldus icon="wind" style={Theme.Styles.sensorIcon}/>)}
+			{!isLarge && (<IconTelldus icon="wind" style={Theme.Styles.sensorIcon}/>)}
 			<View style={Theme.Styles.sensorValueCover}>
 				{
 					name === 'wdir' ?
@@ -130,9 +130,9 @@ const SensorWind = ({ name, value, unit, label, isLong }) => {
 	);
 };
 
-const SensorUV = ({ value, unit, label, isLong }) => (
+const SensorUV = ({ value, unit, label, isLarge }) => (
 	<View style={Theme.Styles.sensorValue}>
-		{!isLong && (<IconTelldus icon="uv" style={Theme.Styles.sensorIcon}/>)}
+		{!isLarge && (<IconTelldus icon="uv" style={Theme.Styles.sensorIcon}/>)}
 		<View style={Theme.Styles.sensorValueCover}>
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<Text style={Theme.Styles.sensorValueText}>
@@ -149,9 +149,9 @@ const SensorUV = ({ value, unit, label, isLong }) => (
 	</View>
 );
 
-const SensorWatt = ({ value, unit, label, isLong }) => (
+const SensorWatt = ({ value, unit, label, isLarge }) => (
 	<View style={Theme.Styles.sensorValue}>
-		{!isLong && (<IconTelldus icon="watt" style={Theme.Styles.sensorIcon}/>)}
+		{!isLarge && (<IconTelldus icon="watt" style={Theme.Styles.sensorIcon}/>)}
 		<View style={Theme.Styles.sensorValueCover}>
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<Text style={Theme.Styles.sensorValueText}>
@@ -168,9 +168,9 @@ const SensorWatt = ({ value, unit, label, isLong }) => (
 	</View>
 );
 
-const SensorLuminance = ({ value, unit, label, isLong }) => (
+const SensorLuminance = ({ value, unit, label, isLarge }) => (
 	<View style={Theme.Styles.sensorValue}>
-		{!isLong && (<IconTelldus icon="luminance" style={Theme.Styles.sensorIcon}/>)}
+		{!isLarge && (<IconTelldus icon="luminance" style={Theme.Styles.sensorIcon}/>)}
 		<View style={Theme.Styles.sensorValueCover}>
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<Text style={Theme.Styles.sensorValueText}>
@@ -187,9 +187,9 @@ const SensorLuminance = ({ value, unit, label, isLong }) => (
 	</View>
 );
 
-const SensorNew = ({ value, unit, label, isLong }) => (
+const SensorNew = ({ value, unit, label, isLarge }) => (
 	<View style={Theme.Styles.sensorValue}>
-		{!isLong && (<IconTelldus icon="humidity" style={Theme.Styles.sensorIcon}/>)}
+		{!isLarge && (<IconTelldus icon="humidity" style={Theme.Styles.sensorIcon}/>)}
 		<View style={Theme.Styles.sensorValueCover}>
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<Text style={Theme.Styles.sensorValueText}>
@@ -302,15 +302,6 @@ class SensorRow extends PureComponent<Props, State> {
 		};
 	}
 
-	checkIfLong(value: string): boolean {
-		const max = 4;
-		let parts = value.split('.');
-		let intLength = parts[0] ? parts[0].replace(/[^0-9]/g, '').length : 0;
-		let fracLength = parts[1] ? parts[1].length : 0;
-		let absLength = fracLength >= 1 ? 1 + intLength : intLength;
-		return (absLength > max);
-	}
-
 	getSensors(data: Object): Object {
 		let sensors = [], sensorInfo = '';
 		for (let key in data) {
@@ -319,20 +310,20 @@ class SensorRow extends PureComponent<Props, State> {
 			let sensorType = this.sensorTypes[values.name];
 			let sensorUnits = getSensorUnits(sensorType);
 			let unit = sensorUnits[scale];
-			let isLong = this.checkIfLong(value.toString());
+			let isLarge = checkIfLarge(value.toString());
 			if (name === 'humidity') {
-				sensors.push(<SensorHumidity value={value} isLong={isLong} unit={unit} key={key} label={this.labelHumidity}/>);
+				sensors.push(<SensorHumidity value={value} isLarge={isLarge} unit={unit} key={key} label={this.labelHumidity}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
 			}
 			if (name === 'temp') {
-				sensors.push(<SensorTemperature value={value} isLong={isLong} unit={unit} key={key} label={this.labelTemperature}/>);
+				sensors.push(<SensorTemperature value={value} isLarge={isLarge} unit={unit} key={key} label={this.labelTemperature}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
 			}
 			if (name === 'rrate' || name === 'rtot') {
 				sensors.push(<SensorRain
 					name={name}
 					value={value}
-					isLong={isLong}
+					isLarge={isLarge}
 					unit={unit}
 					label={name === 'rrate' ? this.labelRainRate : this.labelRainTotal}
 					key={key}/>);
@@ -351,7 +342,7 @@ class SensorRow extends PureComponent<Props, State> {
 				sensors.push(<SensorWind
 					name={name}
 					value={value}
-					isLong={isLong}
+					isLarge={isLarge}
 					unit={unit}
 					label={label}
 					key={key}/>);
@@ -361,13 +352,13 @@ class SensorRow extends PureComponent<Props, State> {
 				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
 			}
 			if (name === 'uv') {
-				sensors.push(<SensorUV value={value} isLong={isLong} key={key} unit={unit} label={this.labelUVIndex}/>);
+				sensors.push(<SensorUV value={value} isLarge={isLarge} key={key} unit={unit} label={this.labelUVIndex}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
 			}
 			if (name === 'watt') {
 				let label = this.labelEnergy;
 				if (scale === '0') {
-					label = isLong ? `${this.labelAccumulated} ${this.labelWatt}` :
+					label = isLarge ? `${this.labelAccumulated} ${this.labelWatt}` :
 						`${this.labelAcc} ${this.labelWatt}`;
 				}
 				if (scale === '2') {
@@ -382,23 +373,23 @@ class SensorRow extends PureComponent<Props, State> {
 				if (scale === '5') {
 					label = this.labelEnergy;// change once confirmed.
 				}
-				sensors.push(<SensorWatt value={value} isLong={isLong} key={key} unit={unit} label={label}/>);
+				sensors.push(<SensorWatt value={value} isLarge={isLarge} key={key} unit={unit} label={label}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;
 			}
 			if (name === 'luminance') {
-				sensors.push(<SensorLuminance value={value} isLong={isLong} key={key} unit={unit} label={this.labelLuminance}/>);
+				sensors.push(<SensorLuminance value={value} isLarge={isLarge} key={key} unit={unit} label={this.labelLuminance}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
 			}
 			if (name === 'dewp') {
-				sensors.push(<SensorNew value={value} isLong={isLong} key={key} unit={unit} label={this.labelDewPoint}/>);
+				sensors.push(<SensorNew value={value} isLarge={isLarge} key={key} unit={unit} label={this.labelDewPoint}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
 			}
 			if (name === 'barpress') {
-				sensors.push(<SensorNew value={value} isLong={isLong} key={key} unit={unit} label={this.labelBarometricPressure}/>);
+				sensors.push(<SensorNew value={value} isLarge={isLarge} key={key} unit={unit} label={this.labelBarometricPressure}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
 			}
 			if (name === 'genmeter') {
-				sensors.push(<SensorNew value={value} isLong={isLong} key={key} unit={unit} label={this.labelGenricMeter}/>);
+				sensors.push(<SensorNew value={value} isLarge={isLarge} key={key} unit={unit} label={this.labelGenricMeter}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
 			}
 		}
