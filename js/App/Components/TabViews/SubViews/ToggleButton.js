@@ -51,16 +51,17 @@ class ToggleButton extends View {
 		const { intl, device, isGatewayActive} = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		const { id, isInState, methodRequested, name } = device;
+		const width = Theme.Core.buttonWidth;
 
 		const onButton = <OnButton id={id} name={name} isInState={isInState} enabled={!!TURNON}
-			style={styles.turnOn} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
+			style={[styles.turnOn, TURNON ? {width} : {width: width * 2}]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
 		const offButton = <OffButton id={id} name={name} isInState={isInState} enabled={!!TURNOFF}
-			style={styles.turnOff} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
+			style={[styles.turnOff, TURNOFF ? {width} : {width: width * 2}]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
 
 		return (
 			<View style={styles.container}>
-				{ offButton }
-				{ onButton }
+				{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+				{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
 			</View>
 		);
 	}
@@ -74,13 +75,11 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	turnOff: {
-		width: Theme.Core.buttonWidth,
 		alignItems: 'center',
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},
 	turnOn: {
-		width: Theme.Core.buttonWidth,
 		alignItems: 'center',
 	},
 });
