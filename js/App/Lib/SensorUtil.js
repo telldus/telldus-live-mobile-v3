@@ -99,6 +99,16 @@ function formatLastUpdated(minutes: number, lastUpdated:number, formatMessage: F
 	}
 }
 
+function checkIfLarge(value: string): boolean {
+	const max = 4;
+	let parts = value.split('.');
+	let intLength = parts[0] ? parts[0].replace(/[^0-9]/g, '').length : 0;
+	let fracLength = parts[1] ? parts[1].length : 0;
+	let absLength = fracLength >= 1 ? 1 + intLength : intLength;
+	return (absLength > max);
+}
+
 module.exports = {
 	formatLastUpdated,
+	checkIfLarge,
 };
