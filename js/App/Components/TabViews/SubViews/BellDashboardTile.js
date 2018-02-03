@@ -44,10 +44,19 @@ type Props = {
 	isGatewayActive: boolean,
 };
 
+type DefaultProps = {
+	command: number,
+}
+
 class BellDashboardTile extends PureComponent<Props, null> {
 	props: Props;
 
+	static defaultProps: DefaultProps = {
+		command: 4,
+	}
+
 	onBell: () => void;
+	labelBellButton: string;
 
 	constructor(props: Props) {
 		super(props);
@@ -119,10 +128,6 @@ class BellDashboardTile extends PureComponent<Props, null> {
 		);
 	}
 }
-
-BellDashboardTile.defaultProps = {
-	command: 4,
-};
 
 const styles = StyleSheet.create({
 	container: {

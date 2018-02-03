@@ -22,7 +22,6 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { View } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
@@ -161,10 +160,5 @@ const styles = StyleSheet.create({
 		backgroundColor: Theme.Core.offlineColor,
 	},
 });
-
-ToggleDashboardTile.propTypes = {
-	item: PropTypes.object,
-	enabled: PropTypes.bool,
-};
 
 module.exports = ToggleDashboardTile;

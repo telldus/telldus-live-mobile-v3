@@ -67,9 +67,22 @@ type State = {
 	onButtonFadeAnim: Object,
 };
 
+type DefaultProps = {
+	commandON: number,
+	commandOFF: number,
+	commandDIM: number,
+}
+
 class DimmerDashboardTile extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
+
+	static defaultProps: DefaultProps = {
+		commandON: 1,
+		commandOFF: 2,
+		commandDIM: 16,
+	}
+
 	parentScrollEnabled: boolean;
 	onValueChangeThrottled: number => void;
 	onTurnOffButtonStart: () => void;
@@ -251,12 +264,6 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		);
 	}
 }
-
-DimmerDashboardTile.defaultProps = {
-	commandON: 1,
-	commandOFF: 2,
-	commandDIM: 16,
-};
 
 const styles = StyleSheet.create({
 	container: {

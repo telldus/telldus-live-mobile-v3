@@ -54,7 +54,33 @@ type State = {
 class SensorDashboardTile extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
+
 	getSlideList : Object => Object;
+
+	labelSensor: string;
+	labelHumidity: string;
+	labelTemperature: string;
+	labelRainRate: string;
+	labelRainTotal: string;
+	labelWindGust: string;
+	labelWindAverage: string;
+	labelWindDirection: string;
+	labelUVIndex: string;
+	labelWatt: string;
+	labelCurrent: string;
+	labelEnergy: string;
+	labelAccumulated: string;
+	labelAcc: string;
+	labelVoltage: string;
+	labelLuminance: string;
+	labelDewPoint: string;
+	labelBarometricPressure: string;
+	labelGenricMeter: string;
+	labelTimeAgo: string;
+	width: number;
+	offline: string;
+
+	sensorTypes: Object;
 
 	constructor(props: Props) {
 		super(props);
