@@ -30,7 +30,7 @@ import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
-import { formatLastUpdated } from 'Lib';
+import { formatLastUpdated, checkIfLarge } from 'Lib';
 import i18n from '../../../Translations/common';
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
@@ -74,11 +74,21 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 		this.labelWindAverage = formatMessage(i18n.labelWindAverage);
 		this.labelWindDirection = formatMessage(i18n.labelWindDirection);
 		this.labelUVIndex = formatMessage(i18n.labelUVIndex);
+
+		this.labelWatt = formatMessage(i18n.labelWatt);
+		this.labelCurrent = formatMessage(i18n.current);
+		this.labelEnergy = formatMessage(i18n.energy);
+		this.labelAccumulated = formatMessage(i18n.accumulated);
+		this.labelAcc = formatMessage(i18n.acc);
+		this.labelVoltage = formatMessage(i18n.voltage);
+
 		this.labelWatt = formatMessage(i18n.labelWatt);
 		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
 		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
 		this.labelGenricMeter = formatMessage(i18n.labelGenricMeter);
 		this.labelLuminance = formatMessage(i18n.labelLuminance);
+
+		this.offline = formatMessage(i18n.offline);
 
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
 
@@ -94,12 +104,16 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			let sensorType = this.sensorTypes[name];
 			let sensorUnits = getSensorUnits(sensorType);
 			let unit = sensorUnits[scale];
+			let isLarge = checkIfLarge(value.toString());
 
 			if (name === 'humidity') {
 				slideList.push({
 					key: 'humidity',
 					icon: 'humidity',
-					text: <FormattedNumber value={value} suffix={unit}/>,
+					label: this.labelHumidity,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
 			}
@@ -107,8 +121,10 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				slideList.push({
 					key: 'temperature',
 					icon: 'temperature',
-					text: <FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}
-						suffix={unit}/>,
+					label: this.labelTemperature,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
 			}
@@ -116,27 +132,30 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				slideList.push({
 					key: 'rain',
 					icon: 'rain',
-					text: (name === 'rrate' && <FormattedNumber value={value} maximumFractionDigits={0}
-						suffix={`${unit}\n`}/> ),
-					text2: (name === 'rtotal' && <FormattedNumber value={value} maximumFractionDigits={0}
-						suffix={unit}/> ),
+					label: name === 'rrate' ? this.labelRainRate : this.labelRainTotal,
+					unit,
+					isLarge,
+					text: (name === 'rrate' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
+					text2: (name === 'rtotal' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
 				});
 				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
 				let rtotalInfo = name === 'rtotal' ? `${this.labelRainTotal} ${value}${unit}` : '';
 				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
 			}
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let directions = '';
+				let directions = '', label = name === 'wgust' ? this.labelWindGust : this.labelWindAverage;
 				if (name === 'wdir') {
 					directions = [...this._windDirection(value)].toString();
+					label = this.labelWindDirection;
 				}
 				slideList.push({
 					key: 'wind',
 					icon: 'wind',
-					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={1}
-						suffix={`${unit}\n`}/> ),
-					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={1}
-						suffix={`${unit}\n`}/> ),
+					label: label,
+					unit,
+					isLarge,
+					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={1}/> ),
+					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={1}/> ),
 					text3: (name === 'wdir' && this._windDirection(value)),
 				});
 				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
@@ -148,15 +167,38 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				slideList.push({
 					key: 'uv',
 					icon: 'uv',
-					text: <FormattedNumber value={value} maximumFractionDigits={0} suffix={unit}/>,
+					label: this.labelUVIndex,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
 			}
 			if (name === 'watt') {
+				let label = this.labelEnergy;
+				if (scale === '0') {
+					label = isLarge ? `${this.labelAccumulated} ${this.labelWatt}` :
+						`${this.labelAcc} ${this.labelWatt}`;
+				}
+				if (scale === '2') {
+					label = this.labelWatt;
+				}
+				if (scale === '3') {
+					label = this.labelEnergy;// change once confirmed.
+				}
+				if (scale === '4') {
+					label = this.labelVoltage;
+				}
+				if (scale === '5') {
+					label = this.labelEnergy;// change once confirmed.
+				}
 				slideList.push({
 					key: 'watt',
 					icon: 'watt',
-					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}/>,
+					label: label,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;
 			}
@@ -164,6 +206,8 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				slideList.push({
 					key: 'luminance',
 					icon: 'luminance',
+					label: this.labelLuminance,
+					isLarge: isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}
 						useGrouping={false}/>,
 				});
@@ -173,7 +217,10 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				slideList.push({
 					key: 'dewpoint',
 					icon: 'humidity',
-					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}/>,
+					label: this.labelDewPoint,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
 			}
@@ -181,7 +228,10 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				slideList.push({
 					key: 'barometricpressure',
 					icon: 'guage',
-					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}/>,
+					label: this.labelBarometricPressure,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
 			}
@@ -189,7 +239,10 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				slideList.push({
 					key: 'genricmeter',
 					icon: 'sensor',
-					text: <FormattedNumber value={value} maximumFractionDigits={0} suffix={unit}/>,
+					label: this.labelGenricMeter,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
 			}

@@ -47,14 +47,30 @@ class SensorDashboardTileSlide extends View {
 						color: '#fff',
 					}}/>
 				</View>
-				<View style={{ flex: 5, justifyContent: 'center', alignItems: 'center' }}>
+				<View style={{ flex: 5, justifyContent: 'center', alignItems: 'flex-start' }}>
+					<View style={{flexDirection: 'row'}}>
+						<Text style={{
+							color: '#fff',
+							fontSize: Math.floor(tileWidth / 8),
+						}}>
+							{data.text && data.text}
+							{data.text2 && data.text2}
+							{data.text3 && data.text3}
+						</Text>
+						<Text style={{
+							color: '#fff',
+							fontSize: Math.floor(tileWidth / 10),
+							textAlignVertical: 'bottom',
+							marginLeft: 2,
+						}}>
+							{data.unit}
+						</Text>
+					</View>
 					<Text style={{
 						color: '#fff',
-						fontSize: Math.floor(tileWidth / 8),
+						fontSize: Math.floor(tileWidth / 10),
 					}}>
-						{data.text && data.text}
-						{data.text2 && data.text2}
-						{data.text3 && data.text3}
+						{data.label}
 					</Text>
 				</View>
 			</View>
