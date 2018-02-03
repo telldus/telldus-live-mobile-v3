@@ -221,7 +221,7 @@ class DeviceRow extends PureComponent<Props, null> {
 				justifyContent: 'center',
 				alignItems: 'center',
 				backgroundColor: '#eeeeee',
-				width: buttonWidth,
+				width: buttonWidth * 2,
 				borderLeftWidth: 1,
 				borderLeftColor: '#ddd',
 			},
