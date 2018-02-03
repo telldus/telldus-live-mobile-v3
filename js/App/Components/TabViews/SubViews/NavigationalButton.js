@@ -29,6 +29,7 @@ import { StyleSheet } from 'react-native';
 import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
+import Theme from 'Theme';
 
 type Props = {
 	device: Object,
@@ -71,8 +72,8 @@ const styles = StyleSheet.create({
 	navigationButton: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: 60,
-		height: 60,
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},

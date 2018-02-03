@@ -53,6 +53,9 @@ export default {
 
 	subtitleColor: '#8e8e93',
 
+	rowHeight: 60,
+	buttonWidth: 60,
+
 	fontSizeBase: 12,
 	titleFontSize: (Platform.OS === 'ios' ) ? 17 : 19,
 	subTitleFontSize: (Platform.OS === 'ios' ) ? 12 : 14,

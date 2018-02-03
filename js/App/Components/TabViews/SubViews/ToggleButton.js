@@ -28,6 +28,8 @@ import { StyleSheet } from 'react-native';
 import OnButton from './OnButton';
 import OffButton from './OffButton';
 
+import Theme from 'Theme';
+
 type Props = {
 	device: Object,
 	enabled: Boolean,
@@ -72,13 +74,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	turnOff: {
-		width: 60,
+		width: Theme.Core.buttonWidth,
 		alignItems: 'center',
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},
 	turnOn: {
-		width: 60,
+		width: Theme.Core.buttonWidth,
 		alignItems: 'center',
 	},
 });

@@ -37,6 +37,8 @@ import {
 	toSliderValue,
 } from 'Lib';
 
+import Theme from 'Theme';
+
 type Props = {
 	device: Object,
 	commandON: number,
@@ -242,31 +244,31 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: 60,
+		height: Theme.Core.rowHeight,
 	},
 	slider: {
 		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: 60,
-		height: 60,
-		left: 60,
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
+		left: Theme.Core.buttonWidth,
 		bottom: 0,
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},
 	turnOff: {
-		width: 60,
-		height: 60,
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},
 	turnOn: {
-		width: 60,
-		height: 60,
-		marginLeft: 60,
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
+		marginLeft: Theme.Core.buttonWidth,
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderLeftWidth: 1,

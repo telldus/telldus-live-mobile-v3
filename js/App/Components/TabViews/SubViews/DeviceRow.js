@@ -169,9 +169,8 @@ class DeviceRow extends PureComponent<Props, null> {
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
-		// let { width, height } = appLayout;
-		// let isPortrait = height > width;
-		let rowHeight = 60;
+		let rowHeight = Theme.Core.rowHeight;
+		let buttonWidth = Theme.Core.buttonWidth;
 
 		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 		let backgroundColor = !isGatewayActive ? Theme.Core.offlineColor : color;
@@ -222,7 +221,7 @@ class DeviceRow extends PureComponent<Props, null> {
 				justifyContent: 'center',
 				alignItems: 'center',
 				backgroundColor: '#eeeeee',
-				width: rowHeight,
+				width: buttonWidth,
 				borderLeftWidth: 1,
 				borderLeftColor: '#ddd',
 			},
