@@ -70,7 +70,7 @@ function Bootstrap(): React.Component {
 				return forceLocale;
 			}
 			let localeIdentifier = DeviceInfo.getDeviceLocale();
-			let parts = localeIdentifier.split('_');
+			let parts = localeIdentifier.includes('-') ? localeIdentifier.split('-') : localeIdentifier.split('_');
 			if (parts.length === 0) {
 				return 'en';
 			}
