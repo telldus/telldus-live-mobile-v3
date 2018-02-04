@@ -33,22 +33,22 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import Theme from 'Theme';
 
 const messages = defineMessages({
-	iconAddPhraseOne: {
-		id: 'accessibilityLabel.sensors.iconAddPhraseOne',
-		defaultMessage: 'add sensor',
-	},
-	iconAddPhraseTwo: {
-		id: 'accessibilityLabel.sensors.iconAddPhraseTwo',
-		defaultMessage: 'to dashboard',
-	},
-	iconRemovePhraseOne: {
-		id: 'accessibilityLabel.sensors.iconRemovePhraseOne',
-		defaultMessage: 'remove sensor',
-	},
-	iconRemovePhraseTwo: {
-		id: 'accessibilityLabel.sensors.iconRemovePhraseTwo',
-		defaultMessage: 'from dashboard',
-	},
+	// iconAddPhraseOne: {
+	// 	id: 'accessibilityLabel.sensors.iconAddPhraseOne',
+	// 	defaultMessage: 'add sensor',
+	// },
+	// iconAddPhraseTwo: {
+	// 	id: 'accessibilityLabel.sensors.iconAddPhraseTwo',
+	// 	defaultMessage: 'to dashboard',
+	// },
+	// iconRemovePhraseOne: {
+	// 	id: 'accessibilityLabel.sensors.iconRemovePhraseOne',
+	// 	defaultMessage: 'remove sensor',
+	// },
+	// iconRemovePhraseTwo: {
+	// 	id: 'accessibilityLabel.sensors.iconRemovePhraseTwo',
+	// 	defaultMessage: 'from dashboard',
+	// },
 });
 
 type Props = {

@@ -33,22 +33,22 @@ import { addToDashboard, removeFromDashboard } from 'Actions';
 import Theme from 'Theme';
 
 const messages = defineMessages({
-	iconAddPhraseOne: {
-		id: 'accessibilityLabel.devices.iconAddPhraseOne',
-		defaultMessage: 'add device',
-	},
-	iconAddPhraseTwo: {
-		id: 'accessibilityLabel.devices.iconAddPhraseTwo',
-		defaultMessage: 'to dashboard',
-	},
-	iconRemovePhraseOne: {
-		id: 'accessibilityLabel.devices.iconRemovePhraseOne',
-		defaultMessage: 'remove device',
-	},
-	iconRemovePhraseTwo: {
-		id: 'accessibilityLabel.devices.iconRemovePhraseTwo',
-		defaultMessage: 'from dashboard',
-	},
+	// iconAddPhraseOne: {
+	// 	id: 'accessibilityLabel.devices.iconAddPhraseOne',
+	// 	defaultMessage: 'add device',
+	// },
+	// iconAddPhraseTwo: {
+	// 	id: 'accessibilityLabel.devices.iconAddPhraseTwo',
+	// 	defaultMessage: 'to dashboard',
+	// },
+	// iconRemovePhraseOne: {
+	// 	id: 'accessibilityLabel.devices.iconRemovePhraseOne',
+	// 	defaultMessage: 'remove device',
+	// },
+	// iconRemovePhraseTwo: {
+	// 	id: 'accessibilityLabel.devices.iconRemovePhraseTwo',
+	// 	defaultMessage: 'from dashboard',
+	// },
 });
 
 type Props = {
