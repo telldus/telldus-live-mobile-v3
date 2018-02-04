@@ -31,22 +31,22 @@ import i18n from '../Translations/common';
 const messages = defineMessages({
 	dayAgo: {
 		id: 'sensor.dayAgo',
-		defaultMessage: 'day ago',
+		defaultMessage: '{value} day ago',
 		description: 'How long ago a sensor was update',
 	},
 	daysAgo: {
 		id: 'sensor.daysAgo',
-		defaultMessage: 'days ago',
+		defaultMessage: '{value} days ago',
 		description: 'How long ago a sensor was update',
 	},
 	hourAgo: {
 		id: 'sensor.hourAgo',
-		defaultMessage: 'hour ago',
+		defaultMessage: '{value} hour ago',
 		description: 'How long ago a sensor was update',
 	},
 	hoursAgo: {
 		id: 'sensor.hoursAgo',
-		defaultMessage: 'hours ago',
+		defaultMessage: '{value} hours ago',
 		description: 'How long ago a sensor was update',
 	},
 	justNow: {
@@ -56,12 +56,12 @@ const messages = defineMessages({
 	},
 	minuteAgo: {
 		id: 'sensor.minuteAgo',
-		defaultMessage: 'minute ago',
+		defaultMessage: '{value} minute ago',
 		description: 'How long ago a sensor was update',
 	},
 	minutesAgo: {
 		id: 'sensor.minutesAgo',
-		defaultMessage: 'minutes ago',
+		defaultMessage: '{value} minutes ago',
 		description: 'How long ago a sensor was update',
 	},
 });
@@ -72,24 +72,24 @@ function formatLastUpdated(minutes: number, lastUpdated:number, formatMessage: F
 		return formatMessage(messages.justNow);
 	}
 	if (minutes === 1) {
-		return `1 ${formatMessage(messages.minuteAgo)}`;
+		return formatMessage(messages.minuteAgo, {value: '1'});
 	}
 	if (minutes < 60) {
-		return `${minutes} ${formatMessage(messages.minutesAgo)}`;
+		return formatMessage(messages.minutesAgo, {value: minutes});
 	}
 	const hours = Math.round(minutes / 60);
 	if (hours === 1) {
-		return `1 ${formatMessage(messages.hourAgo)}`;
+		return formatMessage(messages.hourAgo, {value: '1'});
 	}
 	if (hours < 24) {
-		return `${hours} ${formatMessage(messages.hoursAgo)}`;
+		return formatMessage(messages.hoursAgo, {value: hours});
 	}
 	const days = Math.round(minutes / 60 / 24);
 	if (days === 1) {
-		return `1 ${formatMessage(messages.dayAgo)}`;
+		return formatMessage(messages.dayAgo, {value: '1'});
 	}
 	if (days <= 7) {
-		return `${days} ${formatMessage(messages.daysAgo)}`;
+		return formatMessage(messages.daysAgo, {value: days});
 	}
 	try {
 		return moment.unix(lastUpdated).format('MM-DD-YYYY');
