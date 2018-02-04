@@ -54,6 +54,8 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	appLayout: Object,
+	onSlideActive: () => void,
+	onSlideComplete: () => void,
 };
 
 type State = {
@@ -127,11 +129,13 @@ class DimmerButton extends View {
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
+		this.props.onSlideActive();
 		this.props.saveDimmerInitialState(this.props.device.id, this.props.device.value, this.props.device.isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
 	onSlidingComplete(sliderValue: number) {
+		this.props.onSlideComplete();
 		if (sliderValue > 0) {
 			this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
 		}

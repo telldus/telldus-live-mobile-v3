@@ -102,7 +102,7 @@ class HorizontalSlider extends View {
 			onPanResponderGrant: this.handlePanResponderGrant,
 			onPanResponderMove: this.handlePanResponderMove,
 			onPanResponderRelease: this.handlePanResponderEnd,
-			onPanResponderTerminationRequest: this.handlePanResponderEnd,
+			onPanResponderTerminationRequest: this.handlePanResponderTerminationRequest,
 			onPanResponderTerminate: this.handlePanResponderEnd,
 		});
 	}
@@ -193,6 +193,10 @@ class HorizontalSlider extends View {
 		this.activeSlider = false;
 		clearTimeout(this.longPressTimeout);
 	};
+
+	handlePanResponderTerminationRequest = (e: Object, gestureState: Object) => {
+		return false;
+	}
 
 	handlePanResponderTerminate = (e: Object, gestureState: Object) => {
 		if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {

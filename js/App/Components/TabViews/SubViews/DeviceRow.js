@@ -57,12 +57,23 @@ type Props = {
 	isGatewayActive: boolean,
 };
 
-class DeviceRow extends PureComponent<Props, null> {
+type State = {
+	disableSwipe: boolean,
+};
+
+class DeviceRow extends PureComponent<Props, State> {
 	props: Props;
+	state: State;
 	onSettingsSelected: Object => void;
 	labelButton: string;
 	labelSettings: string;
 	labelGearButton: string;
+	onSlideComplete: () => void;
+	onSlideActive: () => void;
+
+	state = {
+		disableSwipe: false,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -74,6 +85,20 @@ class DeviceRow extends PureComponent<Props, null> {
 		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
 
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
+		this.onSlideActive = this.onSlideActive.bind(this);
+		this.onSlideComplete = this.onSlideComplete.bind(this);
+	}
+
+	onSlideActive() {
+		this.setState({
+			disableSwipe: true,
+		});
+	}
+
+	onSlideComplete() {
+		this.setState({
+			disableSwipe: false,
+		});
 	}
 
 	render() {
@@ -116,6 +141,8 @@ class DeviceRow extends PureComponent<Props, null> {
 				intl={intl}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
+				onSlideActive={this.onSlideActive}
+				onSlideComplete={this.onSlideComplete}
 			/>;
 			icon = 'device-alt-solid';
 		} else if (TURNON || TURNOFF) {
@@ -142,6 +169,7 @@ class DeviceRow extends PureComponent<Props, null> {
 		return (
 			<SwipeRow
 				rightOpenValue={-40}
+				disableLeftSwipe={this.state.disableSwipe}
 				disableRightSwipe={true}>
 				<HiddenRow device={device} intl={intl}/>
 				<ListItem
