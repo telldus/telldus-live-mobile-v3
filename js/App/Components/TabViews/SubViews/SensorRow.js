@@ -240,6 +240,8 @@ class SensorRow extends PureComponent<Props, State> {
 	labelAccumulated: string;
 	labelAcc: string;
 	labelVoltage: string;
+	labelPowerFactor: string;
+	labelPulse: string;
 	labelLuminance: string;
 	labelDewPoint: string;
 	labelBarometricPressure: string;
@@ -279,6 +281,8 @@ class SensorRow extends PureComponent<Props, State> {
 		this.labelAccumulated = formatMessage(i18n.accumulated);
 		this.labelAcc = formatMessage(i18n.acc);
 		this.labelVoltage = formatMessage(i18n.voltage);
+		this.labelPowerFactor = formatMessage(i18n.powerFactor);
+		this.labelPulse = formatMessage(i18n.pulse);
 
 		this.labelLuminance = formatMessage(i18n.labelLuminance);
 		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
@@ -391,13 +395,16 @@ class SensorRow extends PureComponent<Props, State> {
 					label = this.labelWatt;
 				}
 				if (scale === '3') {
-					label = this.labelEnergy;// change once confirmed.
+					label = this.labelPulse;
 				}
 				if (scale === '4') {
 					label = this.labelVoltage;
 				}
 				if (scale === '5') {
-					label = this.labelEnergy;// change once confirmed.
+					label = this.labelCurrent;
+				}
+				if (scale === '6') {
+					label = this.labelPowerFactor;
 				}
 				sensors.push(<SensorWatt value={value} isLarge={isLarge} key={key} unit={unit} label={label}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;

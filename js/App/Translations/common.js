@@ -275,6 +275,14 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.sensors.voltage',
 		defaultMessage: 'Voltage',
 	},
+	powerFactor: {
+		id: 'accessibilityLabel.sensors.powerFactor',
+		defaultMessage: 'Power Factor',
+	},
+	pulse: {
+		id: 'accessibilityLabel.sensors.pulse',
+		defaultMessage: 'Pulse',
+	},
 	labelLuminance: {
 		id: 'accessibilityLabel.sensors.labelLuminance',
 		defaultMessage: 'Luminance',

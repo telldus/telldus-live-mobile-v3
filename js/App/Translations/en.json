@@ -52,6 +52,8 @@
   "accessibilityLabel.sensors.labelWindAverage": "Wind Average",
   "accessibilityLabel.sensors.labelWindDirection": "Wind Direction",
   "accessibilityLabel.sensors.labelWindGust": "Wind Gust",
+  "accessibilityLabel.sensors.powerFactor": "Power Factor",
+  "accessibilityLabel.sensors.pulse": "Pulse",
   "accessibilityLabel.sensors.voltage": "Voltage",
   "accessibilityLabel.sensorsTab": "sensors tab",
   "accessibilityLabel.starIconHideDevices": "Hide, add to dashboard marker, for all devices",
