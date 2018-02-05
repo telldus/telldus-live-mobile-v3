@@ -34,6 +34,8 @@ import DimmerButton from './DimmerButton';
 import { getLabelDevice } from 'Accessibility';
 import HiddenRow from './Device/HiddenRow';
 
+import { getPowerConsumed } from 'Lib';
+
 import i18n from '../../../Translations/common';
 
 import Theme from 'Theme';
@@ -56,6 +58,7 @@ type Props = {
 	appLayout: Object,
 	isGatewayActive: boolean,
 	tab: string,
+	powerConsumed: string | null,
 };
 
 type State = {
@@ -130,7 +133,7 @@ class DeviceRow extends PureComponent<Props, State> {
 
 	render() {
 		let button = null, icon = null;
-		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive } = this.props;
+		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
 		const { isInState } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const {
@@ -214,6 +217,11 @@ class DeviceRow extends PureComponent<Props, State> {
 							<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
 								{device.name ? device.name : '(no name)'}
 							</Text>
+							{powerConsumed && (
+								<Text style = {styles.textPowerConsumed}>
+									{`${powerConsumed} W`}
+								</Text>
+							)}
 						</View>
 					</TouchableOpacity>
 					{button}
@@ -288,13 +296,21 @@ class DeviceRow extends PureComponent<Props, State> {
 				justifyContent: 'center',
 				alignItems: 'center',
 			},
+			textPowerConsumed: {
+				marginLeft: 8,
+				color: Theme.Core.rowTextColor,
+				fontSize: 12,
+				textAlignVertical: 'center',
+			},
 		};
 	}
 }
 
-function mapStateToProps(store: Object): Object {
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.device.clientDeviceId);
 	return {
 		tab: store.navigation.tab,
+		powerConsumed,
 	};
 }
 
