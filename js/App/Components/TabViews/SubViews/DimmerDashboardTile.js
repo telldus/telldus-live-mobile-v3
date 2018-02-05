@@ -22,24 +22,27 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
+import { Animated, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import throttle from 'lodash/throttle';
 
 import { View } from 'BaseComponents';
-import { Animated, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
-import throttle from 'lodash/throttle';
+
 import { getLabelDevice } from 'Accessibility';
-import Theme from 'Theme';
 import {
 	getDimmerValue,
 	toDimmerValue,
 	toSliderValue,
+	getPowerConsumed,
 } from 'Lib';
+
+import Theme from 'Theme';
 
 type Props = {
 	item: Object,
@@ -57,6 +60,7 @@ type Props = {
 	style: Object,
 	intl: Object,
 	isGatewayActive: boolean,
+	powerConsumed: string,
 };
 
 type State = {
@@ -189,9 +193,11 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	}
 
 	render() {
-		const { item, tileWidth, intl, isGatewayActive } = this.props;
+		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
+
+		const info = powerConsumed ? `${powerConsumed} W` : null;
 
 		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
 			style={[styles.turnOn, {marginLeft: ((tileWidth - 4) / 3) - 2}]} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
@@ -235,6 +241,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 			<DashboardShadowTile
 				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
 				name={name}
+				info={info}
 				icon={'device-alt-solid'}
 				iconStyle={{
 					color: '#fff',
@@ -317,4 +324,11 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(DimmerDashboardTile);
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
+	return {
+		powerConsumed,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerDashboardTile);

@@ -433,10 +433,11 @@ const getRows = createSelector(
 	(dashboard, devices, sensors) => parseDashboardForListView(dashboard, devices, sensors)
 );
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
 		gateways: state.gateways,
+		sensorsById: state.sensors.byId,
 		userProfile: getUserProfile(state),
 		tab: state.navigation.tab,
 		dashboard: state.dashboard,

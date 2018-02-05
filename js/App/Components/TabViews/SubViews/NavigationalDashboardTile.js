@@ -20,15 +20,18 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-
 import { StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import { View } from 'BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
+
 import { getLabelDevice } from 'Accessibility';
+import { getPowerConsumed } from 'Lib';
+
 import Theme from 'Theme';
 
 type Props = {
@@ -37,6 +40,7 @@ type Props = {
 	style: Object,
 	intl: Object,
 	isGatewayActive: boolean,
+	powerConsumed: string,
 };
 
 class NavigationalDashboardTile extends PureComponent<Props, null> {
@@ -47,9 +51,12 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 	}
 
 	render() {
-		const { item, tileWidth, intl, isGatewayActive } = this.props;
+		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
 		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
+
+		const info = powerConsumed ? `${powerConsumed} W` : null;
+
 		const upButton = UP ? <UpButton isEnabled={true} style={styles.navigationButton}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id}/> : null;
@@ -70,6 +77,7 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 				item={item}
 				isEnabled={true}
 				name={name}
+				info={info}
 				icon={'curtain'}
 				iconStyle={{
 					color: '#fff',
@@ -117,4 +125,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = NavigationalDashboardTile;
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
+	return {
+		powerConsumed,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(NavigationalDashboardTile);

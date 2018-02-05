@@ -22,12 +22,17 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { View } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+
+import { View } from 'BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
+
 import { getLabelDevice } from 'Accessibility';
+import { getPowerConsumed } from 'Lib';
+
 import Theme from 'Theme';
 
 type Props = {
@@ -38,6 +43,7 @@ type Props = {
 	onTurnOn: number => void,
 	intl: Object,
 	isGatewayActive: boolean,
+	powerConsumed: string,
 };
 
 class ToggleDashboardTile extends PureComponent<Props, null> {
@@ -48,9 +54,11 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 	}
 
 	render() {
-		const { item, tileWidth, intl, isGatewayActive } = this.props;
+		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
 		const { id, name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
+
+		const info = powerConsumed ? `${powerConsumed} W` : null;
 
 		const onButton = <OnButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
 			enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} intl={intl}
@@ -74,6 +82,7 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 				accessibilityLabel={accessibilityLabel}
 				isEnabled={isInState === 'TURNON'}
 				name={name}
+				info={info}
 				icon={'device-alt-solid'}
 				iconStyle={{
 					color: '#fff',
@@ -161,4 +170,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = ToggleDashboardTile;
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
+	return {
+		powerConsumed,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(ToggleDashboardTile);

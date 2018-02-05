@@ -22,15 +22,18 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { View, IconTelldus } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
 import DashboardShadowTile from './DashboardShadowTile';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+
 import i18n from '../../../Translations/common';
 import { getLabelDevice } from 'Accessibility';
+import { getPowerConsumed } from 'Lib';
+
 import Theme from 'Theme';
 
 type Props = {
@@ -42,6 +45,7 @@ type Props = {
 	command: number,
 	intl: Object,
 	isGatewayActive: boolean,
+	powerConsumed: string,
 };
 
 type DefaultProps = {
@@ -74,8 +78,10 @@ class BellDashboardTile extends PureComponent<Props, null> {
 	}
 
 	render() {
-		const { item, tileWidth, intl, isGatewayActive } = this.props;
-		let { methodRequested, name } = this.props.item;
+		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
+		const { methodRequested, name } = this.props.item;
+
+		const info = powerConsumed ? `${powerConsumed} W` : null;
 
 		const accessibilityLabelButton = `${this.labelBellButton}, ${name}`;
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
@@ -88,6 +94,7 @@ class BellDashboardTile extends PureComponent<Props, null> {
 				item={item}
 				isEnabled={true}
 				name={name}
+				info={info}
 				icon={'bell'}
 				iconStyle={{
 					color: '#fff',
@@ -166,4 +173,11 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(BellDashboardTile);
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
+	return {
+		powerConsumed,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(BellDashboardTile);
