@@ -194,7 +194,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 
 		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
-			style={[styles.turnOn, {marginLeft: (tileWidth - 4 - 2) / 3}]} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+			style={[styles.turnOn, {marginLeft: ((tileWidth - 4) / 3) - 2}]} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
 			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>;
 		const offButton = <DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={!!TURNOFF}
 			style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
@@ -205,7 +205,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 					width: (tileWidth - 4) / 3,
 					height: tileWidth * 0.4,
 					bottom: 0,
-					left: (tileWidth - 4 - 2) / 3,
+					left: (tileWidth - 4) / 3,
 				}]}
 				thumbWidth={7}
 				thumbHeight={7}
