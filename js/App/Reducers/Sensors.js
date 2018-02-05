@@ -228,7 +228,8 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 }
 
 export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}) {
-	let [hidden, visible] = _.partition(sensors, (sensor) => {
+	let sortedList = _.sortBy(sensors, 'name');
+	let [hidden, visible] = _.partition(sortedList, (sensor) => {
 		return sensor.ignored;
 	});
 	let visibleList = [], hiddenList = [];

@@ -304,7 +304,8 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 }
 
 export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
-	let [hidden, visible] = _.partition(devices, (device) => {
+	let sortedList = _.sortBy(devices, 'name');
+	let [hidden, visible] = _.partition(sortedList, (device) => {
 		return device.ignored;
 	});
 	let visibleList = [], hiddenList = [];
