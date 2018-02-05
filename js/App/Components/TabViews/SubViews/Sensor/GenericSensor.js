@@ -27,7 +27,17 @@ import { FormattedNumber, Text, View, IconTelldus } from 'BaseComponents';
 
 import Theme from 'Theme';
 
-const GenericSensor = ({ name, value, unit, label, isLarge, icon, formatOptions }) => (
+type sensorProps = {
+	name: string,
+	value: string,
+	unit?: string,
+	icon: string,
+	label?: string,
+	isLarge: boolean,
+	formatOptions?: Object,
+}
+
+const GenericSensor = ({ name, value, unit, icon, label, isLarge, formatOptions }: sensorProps) => (
 	<View style={Theme.Styles.sensorValue}>
 		{!isLarge && (<IconTelldus icon={icon} style={Theme.Styles.sensorIcon}/>)}
 		<View style={Theme.Styles.sensorValueCover}>
