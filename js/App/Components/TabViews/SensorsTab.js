@@ -31,7 +31,6 @@ import { View, IconTelldus } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
-import { toggleEditMode } from 'Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
@@ -41,7 +40,6 @@ import Theme from 'Theme';
 type Props = {
 	rowsAndSections: Object,
 	gatewaysById: Object,
-	editMode: boolean,
 	tab: string,
 	dispatch: Function,
 	appLayout: Object,
@@ -123,10 +121,6 @@ class SensorsTab extends View {
 			hiddenList,
 			makeRowAccessible,
 		});
-
-		if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
-			this.props.dispatch(toggleEditMode('sensorsTab'));
-		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object) {
@@ -306,7 +300,6 @@ function mapStateToProps(store) {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		gatewaysById: store.gateways.byId,
-		editMode: store.tabs.editModeSensorsTab,
 		tab: store.navigation.tab,
 		appLayout: store.App.layout,
 	};

@@ -32,7 +32,6 @@ import { Text, View, TouchableButton, IconTelldus } from 'BaseComponents';
 import { DeviceRow } from 'TabViews_SubViews';
 
 import { getDevices } from 'Actions_Devices';
-import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
@@ -71,7 +70,6 @@ const messages = defineMessages({
 type Props = {
 	rowsAndSections: Object,
 	gateways: Object,
-	editMode: boolean,
 	devices: Object,
 	tab: string,
 	dispatch: Function,
@@ -173,10 +171,6 @@ class DevicesTab extends View {
 			hiddenList,
 			makeRowAccessible,
 		});
-
-		if (nextProps.tab !== 'devicesTab' && nextProps.editMode === true) {
-			this.props.dispatch(toggleEditMode('devicesTab'));
-		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object) {
@@ -487,7 +481,6 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 	return {
 		stackNavigator: ownprops.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(state),
-		editMode: state.tabs.editModeDevicesTab,
 		devices: state.devices,
 		gateways: state.gateways,
 		tab: state.navigation.tab,
