@@ -23,6 +23,7 @@
 
 import React, { PureComponent } from 'react';
 import { TouchableWithoutFeedback, UIManager, LayoutAnimation } from 'react-native';
+import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 
 import { FormattedMessage, FormattedNumber, ListItem, Text, View, BlockIcon, IconTelldus } from 'BaseComponents';
@@ -211,10 +212,12 @@ type Props = {
 	currentScreen: string,
 	appLayout: Object,
 	isGatewayActive: boolean,
+	tab: string,
 };
 
 type State = {
 	currentIndex: number,
+	isOpen: boolean,
 }
 
 class SensorRow extends PureComponent<Props, State> {
@@ -247,9 +250,12 @@ class SensorRow extends PureComponent<Props, State> {
 	sensorTypes: Object;
 	changeDisplayType: (number) => void;
 	LayoutLinear: Object;
+	onRowOpen: () => void;
+	onRowClose: () => void;
 
 	state = {
 		currentIndex: 0,
+		isOpen: false,
 	};
 
 	constructor(props: Props) {
@@ -287,6 +293,9 @@ class SensorRow extends PureComponent<Props, State> {
 		this.onLayout = this.onLayout.bind(this);
 		this.changeDisplayType = this.changeDisplayType.bind(this);
 
+		this.onRowOpen = this.onRowOpen.bind(this);
+		this.onRowClose = this.onRowClose.bind(this);
+
 		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		this.LayoutLinear = {
 			duration: 200,
@@ -298,6 +307,25 @@ class SensorRow extends PureComponent<Props, State> {
 			  type: LayoutAnimation.Types.linear,
 			},
 		};
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { tab } = nextProps;
+		if (tab !== 'sensorsTab' && this.state.isOpen) {
+			this.refs.SwipeRow.closeRow();
+		}
+	}
+
+	onRowOpen() {
+		this.setState({
+			isOpen: true,
+		});
+	}
+
+	onRowClose() {
+		this.setState({
+			isOpen: false,
+		});
 	}
 
 	getSensors(data: Object): Object {
@@ -414,7 +442,10 @@ class SensorRow extends PureComponent<Props, State> {
 		return (
 			<SwipeRow
 				rightOpenValue={-40}
-				disableRightSwipe={true}>
+				disableRightSwipe={true}
+				ref="SwipeRow"
+				onRowOpen={this.onRowOpen}
+				onRowClose={this.onRowClose}>
 				<HiddenRow sensor={sensor} intl={intl}/>
 				<ListItem
 					style={styles.row}
@@ -539,4 +570,10 @@ class SensorRow extends PureComponent<Props, State> {
 	}
 }
 
-module.exports = SensorRow;
+function mapStateToProps(store: Object): Object {
+	return {
+		tab: store.navigation.tab,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(SensorRow);

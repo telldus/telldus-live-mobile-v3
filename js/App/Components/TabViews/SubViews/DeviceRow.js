@@ -22,8 +22,8 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-
 import { TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 
 import { ListItem, Text, View, BlockIcon } from 'BaseComponents';
@@ -55,10 +55,12 @@ type Props = {
 	currentScreen: string,
 	appLayout: Object,
 	isGatewayActive: boolean,
+	tab: string,
 };
 
 type State = {
 	disableSwipe: boolean,
+	isOpen: boolean,
 };
 
 class DeviceRow extends PureComponent<Props, State> {
@@ -68,11 +70,14 @@ class DeviceRow extends PureComponent<Props, State> {
 	labelButton: string;
 	labelSettings: string;
 	labelGearButton: string;
-	onSlideComplete: () => void;
 	onSlideActive: () => void;
+	onSlideComplete: () => void;
+	onRowOpen: () => void;
+	onRowClose: () => void;
 
 	state = {
 		disableSwipe: false,
+		isOpen: false,
 	};
 
 	constructor(props: Props) {
@@ -87,6 +92,16 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 		this.onSlideActive = this.onSlideActive.bind(this);
 		this.onSlideComplete = this.onSlideComplete.bind(this);
+
+		this.onRowOpen = this.onRowOpen.bind(this);
+		this.onRowClose = this.onRowClose.bind(this);
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { tab } = nextProps;
+		if (tab !== 'devicesTab' && this.state.isOpen) {
+			this.refs.SwipeRow.closeRow();
+		}
 	}
 
 	onSlideActive() {
@@ -98,6 +113,18 @@ class DeviceRow extends PureComponent<Props, State> {
 	onSlideComplete() {
 		this.setState({
 			disableSwipe: false,
+		});
+	}
+
+	onRowOpen() {
+		this.setState({
+			isOpen: true,
+		});
+	}
+
+	onRowClose() {
+		this.setState({
+			isOpen: false,
 		});
 	}
 
@@ -170,7 +197,10 @@ class DeviceRow extends PureComponent<Props, State> {
 			<SwipeRow
 				rightOpenValue={-40}
 				disableLeftSwipe={this.state.disableSwipe}
-				disableRightSwipe={true}>
+				disableRightSwipe={true}
+				ref="SwipeRow"
+				onRowOpen={this.onRowOpen}
+				onRowClose={this.onRowClose}>
 				<HiddenRow device={device} intl={intl}/>
 				<ListItem
 					style={styles.row}
@@ -262,4 +292,10 @@ class DeviceRow extends PureComponent<Props, State> {
 	}
 }
 
-module.exports = DeviceRow;
+function mapStateToProps(store: Object): Object {
+	return {
+		tab: store.navigation.tab,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(DeviceRow);
