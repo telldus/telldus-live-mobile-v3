@@ -96,6 +96,7 @@ type State = {
 	dataSource: Array<Object>,
 	settings: boolean,
 	numColumns: number,
+	isRefreshing: boolean,
 };
 
 const tileMargin = 2;
@@ -133,6 +134,7 @@ class DashboardTab extends View {
 			dataSource: this.props.rows,
 			settings: false,
 			numColumns,
+			isRefreshing: false,
 		};
 
 		this.tab = 'Dashboard';
@@ -177,7 +179,20 @@ class DashboardTab extends View {
 	}
 
 	onRefresh() {
-		this.props.dispatch(getDevices());
+		this.setState({
+			isRefreshing: true,
+		});
+		this.props.dispatch(getDevices())
+			.then(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			})
+			.catch(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			});
 	}
 
 	componentDidMount() {
@@ -250,32 +265,31 @@ class DashboardTab extends View {
 	}
 
 	render() {
-		let { appLayout } = this.props;
+		let { appLayout, dashboard } = this.props;
+		let { dataSource, isRefreshing, numColumns, tileWidth } = this.state;
 
 		let style = this.getStyles(appLayout);
 
-		// add to List props: enableEmptySections={true}, to surpress warning
-
-		if (!this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0) {
+		if (!dashboard.deviceIds.length > 0 && !dashboard.sensorIds.length > 0) {
 			return this.noItemsMessage(style);
 		}
 
 		let extraData = {
-			propOne: this.state.tileWidth,
-			propsTwo: appLayout,
+			propOne: tileWidth,
+			propTwo: appLayout,
 		};
 
 		return (
 			<View onLayout={this._onLayout} style={style.container}>
 				<FlatList
 					ref="list"
-					data={this.state.dataSource}
+					data={dataSource}
 					renderItem={this._renderRow}
 					onRefresh={this.onRefresh}
-					numColumns={this.state.numColumns}
-					refreshing={false}
+					numColumns={numColumns}
+					refreshing={isRefreshing}
 					extraData={extraData}
-					key={this.state.numColumns}
+					key={numColumns}
 				/>
 			</View>
 		);
