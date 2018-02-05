@@ -288,13 +288,13 @@ class HorizontalSlider extends View {
 				<View style={[styles.sliderScale, scaleStyle, {
 					height: thumbHeight / 3,
 					width: (containerWidth - (2 * thumbWidth)),
+					marginLeft: thumbWidth,
 				}]} onLayout={this.layoutScale}/>
 				<Animated.View style={[
 					styles.thumb, thumbStyle, {
 						width: thumbWidth,
 						height: thumbHeight,
 						borderRadius: thumbHeight / 2,
-						bottom: (containerHeight - thumbHeight) / 2,
 						left: thumbWidth,
 						transform: [{ translateX: thumbLeft }],
 					},
@@ -332,7 +332,6 @@ const styles = StyleSheet.create({
 	thumb: {
 		flex: 1,
 		position: 'absolute',
-		bottom: 0,
 		justifyContent: 'center',
 		elevation: 2,
 	},
@@ -345,6 +344,7 @@ const styles = StyleSheet.create({
 		color: '#a2a2a2',
 		textAlign: 'center',
 		textAlignVertical: 'center',
+		alignSelf: 'center',
 	},
 });
 

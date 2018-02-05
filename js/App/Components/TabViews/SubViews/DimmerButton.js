@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
 	slider: {
 		position: 'absolute',
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'flex-start',
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
 		left: Theme.Core.buttonWidth,
