@@ -123,7 +123,7 @@ function mapStateToProps(store: Object): Object {
 
 const styles = StyleSheet.create({
 	hiddenRow: {
-		height: 70,
+		height: Theme.Core.rowHeight,
 		width: 60,
 		alignSelf: 'flex-end',
 		justifyContent: 'center',

@@ -38,8 +38,6 @@ const { Dashboard: { getSupportedDisplayTypes } } = actions;
 
 import Theme from 'Theme';
 
-let rowHeight = 70;
-
 const directions = [
 	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 ];
@@ -502,7 +500,7 @@ class SensorRow extends PureComponent<Props, State> {
 				marginBottom: 5,
 				backgroundColor: '#FFFFFF',
 				flexDirection: 'row',
-				height: rowHeight,
+				height: Theme.Core.rowHeight,
 				justifyContent: 'space-between',
 				paddingLeft: 5,
 				alignItems: 'center',
@@ -533,7 +531,7 @@ class SensorRow extends PureComponent<Props, State> {
 			sensorValueCover: {
 				width: Theme.Core.buttonWidth * 2,
 				backgroundColor: backgroundColor,
-				height: rowHeight,
+				height: Theme.Core.rowHeight,
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 			},
