@@ -135,7 +135,7 @@ class DashboardTab extends View {
 			numColumns,
 		};
 
-		this.tab = 'dashboardTab';
+		this.tab = 'Dashboard';
 
 		this._onLayout = this._onLayout.bind(this);
 		this._renderRow = this._renderRow.bind(this);
@@ -197,17 +197,18 @@ class DashboardTab extends View {
 			dataSource: nextProps.rows,
 		});
 
-		if (nextProps.tab !== 'dashboardTab') {
+		let { currentTab } = nextProps.screenProps;
+		if (currentTab !== 'Dashboard') {
 			this.stopSensorTimer();
-			this.tab = nextProps.tab;
-		} else if (nextProps.tab === 'dashboardTab' && this.tab !== 'dashboardTab') {
+			this.tab = currentTab;
+		} else if (currentTab === 'Dashboard' && this.tab !== 'Dashboard') {
 			this.startSensorTimer();
-			this.tab = 'dashboardTab';
+			this.tab = 'Dashboard';
 		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object) {
-		return nextProps.tab === 'dashboardTab';
+		return nextProps.screenProps.currentTab === 'Dashboard';
 	}
 
 	_onLayout = (event) => {

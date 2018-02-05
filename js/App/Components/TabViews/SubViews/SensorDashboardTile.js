@@ -156,7 +156,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 			}
 			if (name === 'rrate' || name === 'rtotal') {
 				slideList.push({
-					key: 'rain',
+					key: `rain${key}`,
 					icon: 'rain',
 					label: name === 'rrate' ? this.labelRainRate : this.labelRainTotal,
 					unit,
@@ -175,7 +175,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					label = this.labelWindDirection;
 				}
 				slideList.push({
-					key: 'wind',
+					key: `wind${key}`,
 					icon: 'wind',
 					label: label,
 					unit,
@@ -219,7 +219,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					label = this.labelEnergy;// change once confirmed.
 				}
 				slideList.push({
-					key: 'watt',
+					key: `watt${key}`,
 					icon: 'watt',
 					label: label,
 					unit,
