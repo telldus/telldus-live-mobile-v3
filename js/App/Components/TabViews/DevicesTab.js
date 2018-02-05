@@ -349,11 +349,12 @@ class DevicesTab extends View {
 	render() {
 
 		let { appLayout, devices } = this.props;
-		let { listEnd, showHiddenList, hiddenList, visibleList, isRefreshing } = this.state;
+		let { listEnd, showHiddenList, hiddenList, visibleList,
+			isRefreshing, makeRowAccessible, addGateway } = this.state;
 
 		let style = this.getStyles(appLayout);
 
-		if (this.state.addGateway) {
+		if (addGateway) {
 			return this.noGatewayMessage(style);
 		}
 
@@ -362,8 +363,8 @@ class DevicesTab extends View {
 		}
 
 		let extraData = {
-			makeRowAccessible: this.state.makeRowAccessible,
-			appLayout: appLayout,
+			makeRowAccessible,
+			appLayout,
 		};
 
 		return (
