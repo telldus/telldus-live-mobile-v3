@@ -34,6 +34,7 @@ import { View, FloatingButton } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
 import { showModal } from 'Actions';
+import { reportError } from 'Analytics';
 import { googleAPIKey } from 'Config';
 
 import i18n from '../../Translations/common';
@@ -206,6 +207,8 @@ class Position extends View {
 				this.setState({
 					isLoading: false,
 				});
+				let log = JSON.stringify(error);
+				reportError(log);
 			});
 	}
 
