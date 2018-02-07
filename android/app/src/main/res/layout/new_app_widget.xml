@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/shape_widget"
-
         android:layout_gravity="center"
         android:gravity="center">
 
@@ -32,9 +31,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/parentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
+            android:visibility="gone"
+
             android:orientation="horizontal">
 
             <LinearLayout
@@ -45,15 +47,7 @@
                 android:layout_marginRight="3dp"
                 android:layout_weight="0.5">
 
-                <!--<TextView-->
-                <!--android:id="@+id/txtDeviceOn"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/ic_device_on"-->
-                <!--android:textColor="@color/orange"-->
-                <!--android:textSize="20sp"/>-->
-
-                <ImageView
+                    <ImageView
                     android:id="@+id/iconOn"
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
@@ -61,8 +55,6 @@
                     android:src="@drawable/on_light"
                     android:padding="8sp"
                     />
-
-
 
             </LinearLayout>
 
@@ -81,15 +73,41 @@
                     android:src="@drawable/off_dark"
                     android:padding="8sp"/>
 
-                <!--<TextView-->
-                <!--android:id="@+id/txtDeviceOff"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:text="@string/ic_device_off"-->
-                <!--android:textColor="@color/orange"-->
-                <!--android:textSize="20sp"/>-->
+
 
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bellLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerInParent="true">
+
+                <ImageView
+                    android:id="@+id/bell"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/bell"/>
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </LinearLayout>
 

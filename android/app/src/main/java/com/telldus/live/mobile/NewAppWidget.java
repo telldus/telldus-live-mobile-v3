@@ -10,6 +10,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -38,6 +42,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF="ACTION_OFF";
+    private static final String ACTION_BELL="ACTION_BELL";
     private PendingIntent pendingIntent;
 
 
@@ -47,9 +52,9 @@ public class NewAppWidget extends AppWidgetProvider {
 
         CharSequence widgetText = "Telldus";
         String transparent;
-
         DeviceInfo widgetID=db.findUser(appWidgetId);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.configurable_device_widget);
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
 
         views.setOnClickPendingIntent(R.id.iconOn,getPendingSelf(context,ACTION_ON,appWidgetId));
         views.setOnClickPendingIntent(R.id.iconOff,getPendingSelf(context,ACTION_OFF,appWidgetId));
@@ -60,19 +65,26 @@ public class NewAppWidget extends AppWidgetProvider {
             String action=widgetID.getState();
             if(action.equals("1"))
             {
+                views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
                 //    Toast.makeText(context,"On",Toast.LENGTH_LONG).show();
                 views.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
                 views.setImageViewResource(R.id.iconOff,R.drawable.off_light);
                 //       ComponentName appWidget = new ComponentName(context, DeviceWidget.class);
 
-
             }
             if(action.equals("2"))
             {
+                views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
                 //  Toast.makeText(context,"OFF",Toast.LENGTH_LONG).show();
                 views.setImageViewResource(R.id.iconOn, R.drawable.on_light);
                 views.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
 
+            }
+            if(action.equals("4"))
+            {
+                Log.v("BELL","*********************************");
+                views.setViewVisibility(R.id.bellLinear,View.VISIBLE);
+                views.setOnClickPendingIntent(R.id.bell,getPendingBELL(context,ACTION_BELL,appWidgetId));
             }
             transparent=widgetID.getTransparent();
             if(transparent.equals("true"))
@@ -83,10 +95,6 @@ public class NewAppWidget extends AppWidgetProvider {
             }
 
         }
-        /*views.setInt(R.id.iconWidget,"setBackgroundColor", Color.TRANSPARENT);
-        views.setInt(R.id.onLayout,"setBackgroundColor", Color.TRANSPARENT);
-        views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);*/
-
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -98,14 +106,15 @@ public class NewAppWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
 
 
-            RemoteViews views=new RemoteViews(context.getPackageName(),R.layout.configurable_device_widget);
+          //  RemoteViews views=new RemoteViews(context.getPackageName(),R.layout.new_app_widget);
 
-            views.setOnClickPendingIntent(R.id.iconOn,getPendingSelfIntent(context,ACTION_ON,appWidgetId));
-            views.setOnClickPendingIntent(R.id.iconOff, getPendingSelfIntent(context, ACTION_OFF,appWidgetId));
+         //   views.setOnClickPendingIntent(R.id.iconOn,getPendingSelfIntent(context,ACTION_ON,appWidgetId));
+           // views.setOnClickPendingIntent(R.id.iconOff, getPendingSelfIntent(context, ACTION_OFF,appWidgetId));
+
 
             //Toast.makeText(context,"Action On-->"+String.valueOf(appWidgetId),Toast.LENGTH_LONG).show();
 
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+            //appWidgetManager.updateAppWidget(appWidgetId, views);
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
 
@@ -124,6 +133,15 @@ public class NewAppWidget extends AppWidgetProvider {
         intent.setAction(action);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
         return PendingIntent.getBroadcast(context, id, intent, 0);
+    }
+
+    private static PendingIntent getPendingBELL(Context context,String action,int id)
+    {
+
+        Intent intent=new Intent(context,NewAppWidget.class);
+        intent.setAction(action);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
+        return PendingIntent.getBroadcast(context,id,intent,0);
     }
 
 
@@ -171,9 +189,19 @@ public class NewAppWidget extends AppWidgetProvider {
                 Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
             }else
             {
-
                 createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off");
             }
+        }
+        if(ACTION_BELL.equals(intent.getAction()))
+        {
+            Log.v("ACTION_BELL","AlarmService");
+            Bundle extras=intent.getExtras();
+            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+
+            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+
+            createDeviceApi(context,id.getDeviceID(),4,wigetID,db,"Bell");
+
         }
     }
 
@@ -221,9 +249,11 @@ public class NewAppWidget extends AppWidgetProvider {
 
     void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action) {
         PrefManager prefManager=new PrefManager(ctx);
-      String  accessToken=prefManager.getAccess();
+        String  accessToken=prefManager.getAccess();
         String str="https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
+
         Log.v("***********",str);
+
         AndroidNetworking.get("https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null")
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accpet", "application/json")
@@ -242,7 +272,7 @@ public class NewAppWidget extends AppWidgetProvider {
                             if(!status.isEmpty()&&status!=null&&action.equals("On"))
                             {
                                 boolean b=db.updateAction("1",wigetID);
-                                RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.configurable_device_widget);
+                                RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
                                 remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
                                 remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_light);
                                 AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
@@ -255,7 +285,7 @@ public class NewAppWidget extends AppWidgetProvider {
                             if(!status.isEmpty()&&status!=null&&action.equals("Off"))
                             {
                                 boolean b=db.updateAction("2",wigetID);
-                                RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.configurable_device_widget);
+                                RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
                                 remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_light);
                                 remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
                                 AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
@@ -263,6 +293,14 @@ public class NewAppWidget extends AppWidgetProvider {
                                 appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
                                 Toast.makeText(ctx,"Turn off "+status,Toast.LENGTH_LONG).show();
+                            }
+
+                            if(!status.isEmpty()&&status!=null&&action.equals("Bell"))
+                            {
+
+
+                                Toast.makeText(ctx,"SuccessFully",Toast.LENGTH_SHORT).show();
+
                             }
 
 
