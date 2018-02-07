@@ -60,21 +60,20 @@ type Props = {
 	actions: Object,
 };
 
-type State = {
-	nextScreen: string,
-};
-
 
 class ChangeLogContainer extends View {
 	props: Props;
-	state: State;
-	onChildDidMount: () => void;
+
 	onPressConfirm: () => void;
 	onPressSkip: () => void;
 
-	state = {
-		nextScreen: '',
-	};
+	h1: string;
+	h2: string;
+	nextButton: string;
+	skipButton: string;
+	doneButton: string;
+
+	appVersion: string;
 
 	constructor(props: Props) {
 		super(props);
@@ -88,21 +87,15 @@ class ChangeLogContainer extends View {
 
 		this.appVersion = DeviceInfo.getVersion();
 
-		this.onChildDidMount = this.onChildDidMount.bind(this);
 		this.onPressConfirm = this.onPressConfirm.bind(this);
 		this.onPressSkip = this.onPressSkip.bind(this);
 	}
 
-	onChildDidMount = (nextScreen?: string) => {
-		this.setState({
-			nextScreen,
-		});
-	};
-
 	onPressConfirm() {
 		let { navigation, screenProps, actions } = this.props;
 		let { Screens, currentScreen } = screenProps;
-		let { nextScreen } = this.state;
+		let nextIndex = Screens.indexOf(currentScreen) + 1;
+		let nextScreen = Screens[nextIndex];
 
 		let isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
 		if (isFinalScreen) {
@@ -133,7 +126,6 @@ class ChangeLogContainer extends View {
 						{React.cloneElement(
 							children,
 							{
-								onDidMount: this.onChildDidMount,
 								...screenProps,
 								styles: styles,
 							},

@@ -26,15 +26,22 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
+import { intlShape, injectIntl } from 'react-intl';
 
-import { View } from 'BaseComponents';
+import { View, Header } from 'BaseComponents';
+
 import ChangeLogContainer from './ChangeLogContainer';
-
 import WizardOne from './WizardOne';
+import WizardTwo from './WizardTwo';
+import WizardThree from './WizardThree';
+import WizardFour from './WizardFour';
+import WizardFive from './WizardFive';
 
 import { getRouteName } from 'Lib';
 
-const renderChangeLogContainer = (navigation, screenProps) => Component => (
+const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
+
+const renderChangeLogContainer = (navigation, screenProps): Function => (Component): Object => (
 	<ChangeLogContainer navigation={navigation} screenProps={screenProps}>
 		<Component/>
 	</ChangeLogContainer>
@@ -42,8 +49,20 @@ const renderChangeLogContainer = (navigation, screenProps) => Component => (
 
 
 const RouteConfigs = {
-	LocationDetected: {
+	WizardOne: {
 		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardOne),
+	},
+	WizardTwo: {
+		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardTwo),
+	},
+	WizardThree: {
+		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardThree),
+	},
+	WizardFour: {
+		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardFour),
+	},
+	WizardFive: {
+		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardFive),
 	},
 };
 
@@ -51,7 +70,7 @@ const StackNavigatorConfig = {
 	initialRouteName: 'WizardOne',
 	navigationOptions: ({navigation}) => {
 		return {
-			header: null,
+			header: <Header style={{alignItems: 'center', justifyContent: 'center'}}/>,
 		};
 	},
 };
@@ -61,6 +80,7 @@ const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
 type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
+	intl: intlShape,
 };
 
 type State = {
@@ -98,11 +118,13 @@ class ChangeLogNavigator extends View {
 	render() {
 
 		let { currentScreen } = this.state;
-		let { appLayout, screenReaderEnabled } = this.props;
+		let { appLayout, screenReaderEnabled, intl } = this.props;
 		let screenProps = {
 			currentScreen,
 			appLayout,
 			screenReaderEnabled,
+			Screens,
+			intl,
 		};
 
 		return (
@@ -118,4 +140,4 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-export default connect(mapStateToProps, null)(ChangeLogNavigator);
+export default connect(mapStateToProps, null)(injectIntl(ChangeLogNavigator));
