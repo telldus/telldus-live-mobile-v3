@@ -200,7 +200,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         }
 
 
-     /*   client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
+        /*client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
         client_secret="NUKU6APRAKATRESPECHEX3WECRAPHUCA";
         grant_Type="password";
         user_name="developer@telldus.com";
@@ -210,9 +210,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
 
         prefManager.saveSessionID("c87662c7bcebb21434610519bb7e480e0643ebee","10800");
-        prefManager.AccessTokenDetails("edf6d9d45da954efa6289000c718cce20d0d7976","10800");*/
+        prefManager.AccessTokenDetails("3b450e2b5ca08615908c313f6ac85f792b9bdd8a","10800");
 
-      //  createSensorApi();
+        createSensorApi();*/
 
         setResult(RESULT_CANCELED);
 
@@ -283,8 +283,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             public void onClick(View view) {
                 boolean token_service=prefManager.getTokenService();
 
-
-
                 boolean b=isMyServiceRunning(NetworkInfo.class);
                 if (!b)
                 {
@@ -316,8 +314,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 //  widgetManager.updateAppWidget(mAppWidgetId, views);
                 NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
-               /* boolean b=isMyServiceRunning(MyService.class);
-                if (!b)
+            /*    boolean b11=isMyServiceRunning(MyService.class);
+                if (!b11)
                 {
                     startService(new Intent(getApplicationContext(), MyService.class));
                     // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
@@ -495,11 +493,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
         Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
 
-      //  pDialog = new ProgressDialog(NewSensorWidgetConfigureActivity.this);
-    //    pDialog.setMax(5);
-    //    pDialog.setMessage("Please wait...");
-  //      pDialog.setCancelable(false);
-  //      pDialog.show();
+     /*   pDialog = new ProgressDialog(NewSensorWidgetConfigureActivity.this);
+        pDialog.setMax(5);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+        pDialog.show();*/
 
         AndroidNetworking.get("https://api3.telldus.com/oauth2/sensors/list?includeValues=1")
                 .addHeaders("Content-Type", "application/json")
@@ -527,8 +525,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 }
                             }
                             sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
-                      //   if (pDialog.isShowing())
-                      //          pDialog.dismiss();
+                        /* if (pDialog.isShowing())
+                                pDialog.dismiss();*/
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -536,10 +534,10 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                    @Override
                     public void onError(ANError anError) {
                        Log.v("AnError", anError.toString());
-                      // if (pDialog.isShowing()) {
-                        //   pDialog.dismiss();
+                      /* if (pDialog.isShowing()) {
+                           pDialog.dismiss();
 
-                    //   }
+                       }*/
                    }
                 });
     }

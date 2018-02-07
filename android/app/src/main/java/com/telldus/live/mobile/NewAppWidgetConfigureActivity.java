@@ -129,6 +129,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
                 try {
                     JSONObject authInfo = new JSONObject(String.valueOf(text));
+
                     accessToken = String.valueOf(authInfo.getString("access_token"));
                     expiresIn = String.valueOf(authInfo.getString("expires_in"));
                     tokenType = String.valueOf(authInfo.getString("token_type"));
@@ -200,7 +201,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
             createDeviceApi();
         }
 
-       /* client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
+     /*   client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
         client_secret="NUKU6APRAKATRESPECHEX3WECRAPHUCA";
         grant_Type="password";
         user_name="developer@telldus.com";
@@ -209,14 +210,12 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
 
         prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
-
-        prefManager.AccessTokenDetails("edf6d9d45da954efa6289000c718cce20d0d7976","10800");*/
-
-      //  createDeviceApi();
+        prefManager.AccessTokenDetails("3b450e2b5ca08615908c313f6ac85f792b9bdd8a","10800");
+        createDeviceApi();*/
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
-        views = new RemoteViews(this.getPackageName(), R.layout.configurable_device_widget);
+        views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
         widgetManager = AppWidgetManager.getInstance(this);
 
         textTest=(TextView)findViewById(R.id.testText);
@@ -277,6 +276,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            //    Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_SHORT).show();
+
 
 
                 boolean b=isMyServiceRunning(NetworkInfo.class);
@@ -364,11 +365,11 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
     void createDeviceApi() {
         accessToken=prefManager.getAccess();
-    //    pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
-    //    pDialog.setMax(5);
-  //      pDialog.setMessage("Please wait...");
-  //      pDialog.setCancelable(false);
-  //      pDialog.show();
+      /*  pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
+        pDialog.setMax(5);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+        pDialog.show();*/
 
         AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
                 .addHeaders("Content-Type", "application/json")
@@ -382,26 +383,25 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         try {
 
                             JSONObject deviceData = new JSONObject(response.toString());
-                            // Log.v("JSON Object",deviceData.toString());
+                             Log.v("JSON Object",deviceData.toString());
                             JSONArray deviceList = deviceData.getJSONArray("device");
+
                             for (int i = 0; i < deviceList.length(); i++) {
                                 JSONObject curObj = deviceList.getJSONObject(i);
                                 String name = curObj.getString("name");
                                 stateID = curObj.getInt("state");
 
-
-                                if (stateID == 1 || stateID == 2) {
+                                if (stateID == 1 || stateID == 2 ||stateID == 4) {
                                     Integer id = curObj.getInt("id");
                                     DeviceID.put(name, id);
                                     nameListItems.add(name);
                                     stateListItems.add(String.valueOf(stateID));
-
                                 }
                             }
                             deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                             deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
-                          //  if (pDialog.isShowing())
-                          //      pDialog.dismiss();
+                          /*  if (pDialog.isShowing())
+                                pDialog.dismiss();*/
                             //  Toast.makeText(getApplicationContext(),deviceStateList.toString(),Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -410,13 +410,13 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
                     @Override
                     public void onError(ANError anError) {
-                    //    if (pDialog.isShowing())
-                      //  {
+                       /* if (pDialog.isShowing())
+                        {
 
-                        //    pDialog.dismiss();
+                            pDialog.dismiss();
 
 
-                        //}
+                        }*/
                     }
 
                 });

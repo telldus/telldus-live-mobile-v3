@@ -24,10 +24,10 @@ public class BootCompleteReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         prefManager=new PrefManager(context);
 
-/*
+
         Intent networkService=new Intent(context, NetworkInfo.class);
         context.startActivity(networkService);
-*/
+
 
         boolean serivce=prefManager.getWebService();
         if(serivce) {
