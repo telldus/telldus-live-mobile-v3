@@ -60,8 +60,9 @@ const messages = defineMessages({
 	},
 	messageNoItemsContent: {
 		id: 'pages.dashboard.messageNoItemsContent',
-		defaultMessage: 'You have not added any devices or sensors to your dashboard yet. Go to devices or sensors tab, click the ' +
-		'start in the top right corner and choose the ones you want to add.',
+		defaultMessage: 'You have not added any devices or sensors to your dashboard yet. ' +
+		'Go to devices or sensors tab, swipe left on the row and click the star to select the ' +
+		'ones you want to add.',
 		description: 'Message title when no items',
 	},
 });
