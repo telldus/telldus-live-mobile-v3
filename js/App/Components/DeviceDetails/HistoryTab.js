@@ -28,7 +28,7 @@ import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import _ from 'lodash';
 import { defineMessages } from 'react-intl';
 
-import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar, Throbber } from 'BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from 'BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
@@ -64,7 +64,7 @@ type Props = {
 
 type State = {
 	hasRefreshed: boolean,
-	rowsAndSections: Array<any> | boolean,
+	rowsAndSections: Array<any>,
 	refreshing: boolean,
 };
 
@@ -96,9 +96,9 @@ class HistoryTab extends View {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			rowsAndSections: false,
+			rowsAndSections: [],
 			hasRefreshed: false,
-			refreshing: false,
+			refreshing: true,
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
@@ -131,6 +131,7 @@ class HistoryTab extends View {
 			if (nextProps.device && nextProps.device.history) {
 				this.setState({
 					rowsAndSections: getRowsAndSections(nextProps.device),
+					refreshing: false,
 				});
 			}
 		} else {
@@ -250,25 +251,10 @@ class HistoryTab extends View {
 
 		let {
 			line,
-			throbberContainer,
-			throbber,
 		} = this.getStyle(appLayout);
 
-		// Loader message when data has not received yet.
-		if (!this.state.rowsAndSections) {
-			return (
-				<View style={styles.containerWhenNoData}>
-					<Throbber
-						throbberContainerStyle={throbberContainer}
-						throbberStyle={throbber}/>
-					<Text style={styles.textWhenNoData}>
-						<FormattedMessage {...messages.loading} style={styles.textWhenNoData}/>...
-					</Text>
-				</View>
-			);
-		}
 		// response received but, no history for the requested device, so empty list message.
-		if (this.state.rowsAndSections && this.state.rowsAndSections.length === 0) {
+		if (!this.state.refreshing && this.state.rowsAndSections.length === 0) {
 			return (
 				<View style={styles.containerWhenNoData}>
 					<Icon name="exclamation-circle" size={20} color="#F06F0C" />
@@ -294,7 +280,9 @@ class HistoryTab extends View {
 						/>
 					  }
 				/>
-				<View style={line}/>
+				{this.state.rowsAndSections.length !== 0 && (
+					<View style={line}/>
+				)}
 				<DeviceHistoryDetails intl={intl} currentTab={currentTab} currentScreen={currentScreen}/>
 			</View>
 		);
@@ -332,13 +320,6 @@ class HistoryTab extends View {
 				elevation: 2,
 				justifyContent: 'center',
 				paddingLeft: 5,
-			},
-			throbberContainer: {
-				top: 20,
-				right: width * 0.5999,
-			},
-			throbber: {
-				fontSize: 24,
 			},
 		};
 	}
