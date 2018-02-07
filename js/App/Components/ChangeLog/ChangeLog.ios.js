@@ -31,11 +31,7 @@ import { intlShape, injectIntl } from 'react-intl';
 import { View, Header } from 'BaseComponents';
 
 import ChangeLogContainer from './ChangeLogContainer';
-import WizardOne from './WizardOne';
-import WizardTwo from './WizardTwo';
-import WizardThree from './WizardThree';
-import WizardFour from './WizardFour';
-import WizardFive from './WizardFive';
+import Wizard from './SubViews/Wizard';
 
 import { getRouteName } from 'Lib';
 
@@ -50,19 +46,19 @@ const renderChangeLogContainer = (navigation, screenProps): Function => (Compone
 
 const RouteConfigs = {
 	WizardOne: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardOne),
+		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
 	},
 	WizardTwo: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardTwo),
+		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
 	},
 	WizardThree: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardThree),
+		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
 	},
 	WizardFour: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardFour),
+		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
 	},
 	WizardFive: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(WizardFive),
+		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
 	},
 };
 
