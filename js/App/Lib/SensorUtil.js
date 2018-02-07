@@ -109,7 +109,7 @@ function checkIfLarge(value: string): boolean {
 	return (absLength > max);
 }
 
-function getPowerConsumed(sensors: Array<Object>, clientDeviceId: number): string | null {
+function getPowerConsumed(sensors: Object, clientDeviceId: number): string | null {
 	let sensor = _.find(sensors, (item) => {
 		return item.sensorId === clientDeviceId;
 	});
