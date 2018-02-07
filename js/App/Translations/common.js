@@ -355,6 +355,10 @@ const messages = defineMessages({
 		id: 'error.addNewLocationFailed',
 		defaultMessage: 'Add new location could not be completed. Please try again',
 	},
+	done: {
+		id: 'button.done',
+		defaultMessage: 'Done',
+	},
 });
 
 export default messages;

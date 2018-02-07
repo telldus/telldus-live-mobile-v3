@@ -24,12 +24,14 @@
 import React from 'react';
 import { AccessibilityInfo } from 'react-native';
 import { connect } from 'react-redux';
+import DeviceInfo from 'react-native-device-info';
 
 import {
 	PreLoginNavigator,
 	AppNavigator,
 	Push,
 } from 'Components';
+import ChangeLogNavigator from 'ChangeLogNavigator';
 import { View } from 'BaseComponents';
 import {
 	setAppLayout,
@@ -37,12 +39,16 @@ import {
 	setAccessibilityInfo,
 } from 'Actions';
 
+import { changeLogAvailable } from 'Config';
+
 class App extends React.Component {
 	onLayout: (Object) => void;
 
 	constructor() {
 		super();
 		this.onLayout = this.onLayout.bind(this);
+
+		this.currentVersion = DeviceInfo.getVersion();
 	}
 
 	componentDidMount() {
@@ -81,6 +87,14 @@ class App extends React.Component {
 	}
 
 	render() {
+		let showChangeLog = changeLogAvailable && (this.props.appVersion !== this.currentVersion);
+		if (showChangeLog) {
+			return (
+				<View onLayout={this.onLayout}>
+					<ChangeLogNavigator />
+				</View>
+			);
+		}
 		let hasNotLoggedIn = ((!this.props.accessToken) || (this.props.accessToken && !this.props.isTokenValid));
 		return (
 			<View onLayout={this.onLayout}>
@@ -100,6 +114,7 @@ function mapStateToProps(store) {
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
 		pushTokenRegistered: store.user.pushTokenRegistered,
+		appVersion: store.App.appVersion,
 	};
 }
 
