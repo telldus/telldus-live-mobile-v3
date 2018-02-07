@@ -78,6 +78,7 @@ const messages = defineMessages({
 type Props = {
 	intl: intlShape,
 	styles: Object,
+	currentScreen: string,
 };
 
 export default class WizardOne extends PureComponent<Props, null> {
@@ -119,11 +120,12 @@ export default class WizardOne extends PureComponent<Props, null> {
 	}
 
 	getScreenData(currentScreen: string): Object {
+		let icon = '', title = '', description = '';
 		switch (currentScreen) {
 			case 'WizardOne':
-				let icon = 'security';
-				let title = this.titleWOne;
-				let description = this.descriptionWOne;
+				icon = 'security';
+				title = this.titleWOne;
+				description = this.descriptionWOne;
 				return { icon, title, description };
 			case 'WizardTwo':
 				icon = 'location';
