@@ -27,72 +27,80 @@ import { defineMessages } from 'react-intl';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
 
-import { View, Icon } from 'BaseComponents';
+import { View, IconTelldus } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from 'Theme';
 
 const messages = defineMessages({
-	// iconAddPhraseOne: {
-	// 	id: 'accessibilityLabel.sensors.iconAddPhraseOne',
-	// 	defaultMessage: 'add sensor',
-	// },
-	// iconAddPhraseTwo: {
-	// 	id: 'accessibilityLabel.sensors.iconAddPhraseTwo',
-	// 	defaultMessage: 'to dashboard',
-	// },
-	// iconRemovePhraseOne: {
-	// 	id: 'accessibilityLabel.sensors.iconRemovePhraseOne',
-	// 	defaultMessage: 'remove sensor',
-	// },
-	// iconRemovePhraseTwo: {
-	// 	id: 'accessibilityLabel.sensors.iconRemovePhraseTwo',
-	// 	defaultMessage: 'from dashboard',
-	// },
+	iconAddPhraseOne: {
+		id: 'accessibilityLabel.devices.iconAddPhraseOne',
+		defaultMessage: 'add device',
+	},
+	iconAddPhraseTwo: {
+		id: 'accessibilityLabel.devices.iconAddPhraseTwo',
+		defaultMessage: 'to dashboard',
+	},
+	iconRemovePhraseOne: {
+		id: 'accessibilityLabel.devices.iconRemovePhraseOne',
+		defaultMessage: 'remove device',
+	},
+	iconRemovePhraseTwo: {
+		id: 'accessibilityLabel.devices.iconRemovePhraseTwo',
+		defaultMessage: 'from dashboard',
+	},
 });
 
 type Props = {
-	sensor: Object,
+	device: Object,
 	removeFromDashboard: number => void,
 	addToDashboard: number => void,
 	intl: Object,
-	editMode: boolean,
+	deviceIds: Array<number>,
 };
 
-class SensorRowHidden extends View {
+class DeviceHiddenRow extends View {
 	props: Props;
 	onStarSelected: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.onStarSelected = this.onStarSelected.bind(this);
-		let { intl, sensor } = props;
-		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
-		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
+		let { intl, device } = props;
+		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
+		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
 	}
 
 	render() {
-		const { isInDashboard } = this.props.sensor;
-		let accessibilityLabel = isInDashboard ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+		const { id } = this.props.device;
+		const { deviceIds } = this.props;
+		const isOnDB = deviceIds.indexOf(id) !== -1;
+
+		let icon = isOnDB ? 'favorite' : 'favorite-outline';
+
+		let accessibilityLabel = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
 		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
 		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
 
 		return (
-			<View style={Theme.Styles.rowBack} importantForAccessibility={importantForAccessibility}>
+			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
 				<TouchableOpacity
 					style={Theme.Styles.rowBackButton}
 					onPress={this.onStarSelected}
 					accessible={this.props.editMode}
 					accessibilityLabel={accessibilityLabel}>
-					<Icon name="star" size={26} style={isInDashboard ? styles.enabled : styles.disabled}/>
+					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 			</View>
 		);
 	}
 
 	onStarSelected() {
-		const { id, isInDashboard } = this.props.sensor;
-		if (isInDashboard) {
+		const { id } = this.props.device;
+		const { deviceIds } = this.props;
+		const isOnDB = deviceIds.indexOf(id) !== -1;
+
+		if (isOnDB) {
 			this.props.removeFromDashboard(id);
 		} else {
 			this.props.addToDashboard(id);
@@ -102,24 +110,30 @@ class SensorRowHidden extends View {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		addToDashboard: id => dispatch(addToDashboard('sensor', id)),
-		removeFromDashboard: id => dispatch(removeFromDashboard('sensor', id)),
+		addToDashboard: id => dispatch(addToDashboard('device', id)),
+		removeFromDashboard: id => dispatch(removeFromDashboard('device', id)),
 	};
 }
 
 function mapStateToProps(store: Object): Object {
 	return {
-		editMode: store.tabs.editModeSensorsTab,
+		deviceIds: store.dashboard.deviceIds,
 	};
 }
 
 const styles = StyleSheet.create({
-	enabled: {
-		color: 'rgba(226, 105, 0, 255)',
+	hiddenRow: {
+		height: Theme.Core.rowHeight,
+		width: Theme.Core.buttonWidth,
+		alignSelf: 'flex-end',
+		justifyContent: 'center',
+		alignItems: 'flex-end',
+		paddingRight: 10,
 	},
-	disabled: {
-		color: 'rgba(241, 217, 196, 255)',
+	favoriteIcon: {
+		fontSize: 28,
+		color: Theme.Core.brandSecondary,
 	},
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SensorRowHidden);
+export default connect(mapStateToProps, mapDispatchToProps)(DeviceHiddenRow);

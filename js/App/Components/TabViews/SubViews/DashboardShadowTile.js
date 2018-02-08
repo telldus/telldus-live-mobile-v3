@@ -23,11 +23,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text } from 'BaseComponents';
+import { View, Text, BlockIcon } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
+import Theme from 'Theme';
 
-const Title = ({ isEnabled, name, tileWidth, type = 'device' }: Object) => (
-	<View style={[styles.title, !isEnabled ? styles.titleDisabled : (type === 'device' ? styles.titleEnabledDevice : styles.titleEnabledSensor)]}>
+const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive }: Object) => (
+	<View style={[styles.title, {
+		width: tileWidth - 4,
+		height: tileWidth * 0.6,
+	}]}>
+		{icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 		<Text
 			ellipsizeMode="middle"
 			numberOfLines={1}
@@ -39,6 +44,18 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device' }: Object) => (
 			]}>
 			{name ? name : '(no name)'}
 		</Text>
+		{info && (<Text
+			ellipsizeMode="middle"
+			numberOfLines={1}
+			style={[
+				styles.name, {
+					fontSize: Math.floor(tileWidth / 10),
+					color: Theme.Core.rowTextColor,
+				},
+			]}>
+			{info}
+		</Text>)
+		}
 	</View>
 );
 
@@ -50,6 +67,7 @@ type Props = {
 	item: string,
 	intl: Object,
 	accessibilityLabel: string,
+	icon?: string,
 };
 
 class DashboardShadowTile extends View {
@@ -66,13 +84,15 @@ class DashboardShadowTile extends View {
 				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, (this.props.hasShadow ? styles.shadow : styles.noShadow)]}>
 				<View style={{
-					flex: 1,
+					flex: 0.994,
+					paddingTop: 3,
+					paddingLeft: 2,
 					flexDirection: 'column',
-					borderRadius: 7,
+					borderRadius: 2,
 					overflow: 'hidden',
 				}}>
-					{this.props.children}
 					<Title {...this.props} />
+					{this.props.children}
 				</View>
 			</View>
 		);
@@ -81,28 +101,19 @@ class DashboardShadowTile extends View {
 
 const styles = StyleSheet.create({
 	name: {
-		padding: 5,
-		color: 'white',
+		color: Theme.Core.rowTextColor,
 		textAlign: 'center',
 		textAlignVertical: 'center',
 	},
 	title: {
-		flex: 13,
 		justifyContent: 'center',
-		borderBottomLeftRadius: 7,
-		borderBottomRightRadius: 7,
-	},
-	titleEnabledDevice: {
-		backgroundColor: '#e56e18',
-	},
-	titleDisabled: {
-		backgroundColor: '#bfbfbf',
-	},
-	titleEnabledSensor: {
-		backgroundColor: '#00255e',
+		alignItems: 'center',
+		borderTopLeftRadius: 2,
+		borderTopRightRadius: 2,
+		backgroundColor: '#ffffff',
 	},
 	shadow: {
-		borderRadius: 7,
+		borderRadius: 2,
 		shadowColor: '#000000',
 		shadowOffset: {
 			width: 0,
@@ -113,14 +124,7 @@ const styles = StyleSheet.create({
 		elevation: 3,
 	},
 	noShadow: {
-		borderRadius: 7,
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 0,
-		shadowOpacity: 1.0,
+		borderRadius: 2,
 		elevation: 0,
 	},
 });

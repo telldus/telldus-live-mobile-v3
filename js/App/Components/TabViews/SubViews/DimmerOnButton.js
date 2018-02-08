@@ -21,12 +21,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, FormattedMessage } from 'BaseComponents';
-import { StyleSheet, Animated } from 'react-native';
+import { View, IconTelldus } from 'BaseComponents';
+import { StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
-let AnimatedFormattedMessage = Animated.createAnimatedComponent(FormattedMessage);
+import Theme from 'Theme';
 
 class DimmerOnButton extends View {
 	constructor(props) {
@@ -37,23 +37,35 @@ class DimmerOnButton extends View {
 		this.fadeIn = this.fadeIn.bind(this);
 		this.fadeOut = this.fadeOut.bind(this);
 
+		this.onPress = this.onPress.bind(this);
+
 		this.labelOnButton = `${props.intl.formatMessage(i18n.on)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
+	onPress() {
+		let { onPress } = this.props;
+		if (onPress) {
+			onPress();
+		}
+	}
+
 	render() {
-		let { isInState, enabled, fontSize, style, methodRequested, name } = this.props;
+		let { isInState, style, methodRequested, name, isGatewayActive, enabled } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
+		let buttonStyle = !isGatewayActive ?
+			(isInState !== 'TURNOFF' ? styles.offline : styles.disabled) : (isInState !== 'TURNOFF' ? styles.enabled : styles.disabled);
+		let iconColor = !isGatewayActive ?
+			(isInState !== 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState !== 'TURNOFF' ? '#fff' : Theme.Core.brandSecondary);
 
 		return (
-			<View
-				style={[style, isInState !== 'TURNOFF' && enabled ? styles.enabled : styles.disabled]}
-				accessibilityLabel={accessibilityLabel}
-				accessible={true}
-				importantForAccessibility={'yes'}>
-				<AnimatedFormattedMessage
-					{...i18n.on}
-					style = {[(isInState !== 'TURNOFF' || methodRequested === 'TURNON') && enabled ? styles.textEnabled : styles.textDisabled, { opacity: this.state.fadeAnim, fontSize: fontSize ? fontSize : 12 }]}
-				/>
+			<View style={[style, buttonStyle]}>
+				<TouchableOpacity
+					disabled={!enabled}
+					onPress={this.onPress}
+					style={styles.button}
+					accessibilityLabel={accessibilityLabel}>
+					<IconTelldus icon="on" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
+				</TouchableOpacity>
 				{
 					methodRequested === 'TURNON' ?
 						<ButtonLoadingIndicator style={styles.dot} />
@@ -74,10 +86,13 @@ class DimmerOnButton extends View {
 
 const styles = StyleSheet.create({
 	enabled: {
-		backgroundColor: '#fafafa',
+		backgroundColor: Theme.Core.brandSecondary,
 	},
 	disabled: {
 		backgroundColor: '#eeeeee',
+	},
+	offline: {
+		backgroundColor: '#a2a2a2',
 	},
 	textEnabled: {
 		textAlign: 'center',

@@ -23,10 +23,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, RoundedCornerShadowView } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import { StyleSheet } from 'react-native';
 import OnButton from './OnButton';
 import OffButton from './OffButton';
+
+import Theme from 'Theme';
 
 type Props = {
 	device: Object,
@@ -34,6 +36,8 @@ type Props = {
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 	intl: Object,
+	isGatewayActive: boolean,
+	appLayout: Object,
 };
 
 class ToggleButton extends View {
@@ -44,40 +48,39 @@ class ToggleButton extends View {
 	}
 
 	render() {
-		const { intl, device } = this.props;
+		const { intl, device, isGatewayActive} = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		const { id, isInState, methodRequested, name } = device;
+		const width = Theme.Core.buttonWidth;
 
-		const onButton = <OnButton id={id} name={name} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} methodRequested={methodRequested} intl={intl}/>;
-		const offButton = <OffButton id={id} name={name} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} intl={intl}/>;
+		const onButton = <OnButton id={id} name={name} isInState={isInState} enabled={!!TURNON}
+			style={[styles.turnOn, TURNON ? {width} : {width: width * 2}]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
+		const offButton = <OffButton id={id} name={name} isInState={isInState} enabled={!!TURNOFF}
+			style={[styles.turnOff, TURNOFF ? {width} : {width: width * 2}]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
 
 		return (
-			<RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
-				{ offButton }
-				{ onButton }
-			</RoundedCornerShadowView>
+			<View style={styles.container}>
+				{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+				{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
+			</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 7,
-		height: 32,
+		flex: 0,
+		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	turnOff: {
-		flex: 1,
-		alignItems: 'stretch',
-		borderTopLeftRadius: 7,
-		borderBottomLeftRadius: 7,
+		alignItems: 'center',
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	turnOn: {
-		flex: 1,
-		alignItems: 'stretch',
-		borderTopRightRadius: 7,
-		borderBottomRightRadius: 7,
+		alignItems: 'center',
 	},
 });
 

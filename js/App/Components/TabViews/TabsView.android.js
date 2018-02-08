@@ -29,7 +29,7 @@ import { defineMessages } from 'react-intl';
 import { intlShape, injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View, Icon, Header } from 'BaseComponents';
+import { View, Header } from 'BaseComponents';
 
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 
@@ -37,7 +37,7 @@ import { SettingsDetailModal } from 'DetailViews';
 import TabBar from './TabBar';
 import i18n from '../../Translations/common';
 import { getUserProfile } from '../../Reducers/User';
-import { syncWithServer, switchTab, toggleEditMode, addNewGateway } from 'Actions';
+import { syncWithServer, switchTab, addNewGateway } from 'Actions';
 import TabViews from 'TabViews';
 import { TabNavigator } from 'react-navigation';
 import Drawer from 'Drawer';
@@ -86,7 +86,7 @@ const RouteConfigs = {
 
 const TabNavigatorConfig = {
 	initialRouteName: 'Dashboard',
-	swipeEnabled: true,
+	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: true,
 	tabBarComponent: TabBar,
@@ -111,7 +111,6 @@ type Props = {
 	gateways: Object,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
-	onToggleEditMode: (string) => void,
 	dispatch: Function,
 	stackNavigator: Object,
 	addNewLocation: () => void,
@@ -132,7 +131,6 @@ class TabsView extends View {
 	onCloseSetting: () => void;
 	onTabSelect: (string) => void;
 	onRequestChangeTab: (number) => void;
-	toggleEditMode: (number) => void;
 	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 	addNewLocation: () => void;
@@ -154,18 +152,6 @@ class TabsView extends View {
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
-
-		this.starButton = {
-			icon: {
-				name: 'star',
-				size: 22,
-				color: '#fff',
-				style: null,
-				iconStyle: null,
-			},
-			onPress: this.toggleEditMode,
-			accessibilityLabel: '',
-		};
 
 		this.menuButton = {
 			icon: {
@@ -193,13 +179,8 @@ class TabsView extends View {
 		this.onOpenDrawer = this.onOpenDrawer.bind(this);
 		this.onTabSelect = this.onTabSelect.bind(this);
 		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
-		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
-	}
-
-	componentDidMount() {
-		Icon.getImageSource('star', 22, 'white').then((source) => this.setState({ starIcon: source }));
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -293,21 +274,6 @@ class TabsView extends View {
 		/>;
 	}
 
-	makeRightButton = (routeName: string, styles: Object): any => {
-		let { editModeDevicesTab, editModeSensorsTab } = this.props;
-		if (routeName === 'Devices') {
-			this.starButton.accessibilityLabel = editModeDevicesTab ? this.starIconHideDevices : this.starIconShowDevices;
-		}
-		if (routeName === 'Sensors') {
-			this.starButton.accessibilityLabel = editModeSensorsTab ? this.starIconHideSensors : this.starIconShowSensors;
-		}
-
-		this.starButton.icon.style = styles.starButtonStyle;
-		this.starButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
-
-		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
-	};
-
 	makeLeftButton = (styles: Object): any => {
 		this.menuButton.icon.style = styles.menuButtonStyle;
 		this.menuButton.icon.iconStyle = styles.menuIconStyle;
@@ -324,24 +290,19 @@ class TabsView extends View {
 	}
 
 	render() {
-		let { appLayout } = this.props;
+		let { appLayout, stackNavigator } = this.props;
+		let { routeName } = this.state;
 		let { currentScreen } = this.props.screenProps;
 		let isPortrait = appLayout.height > appLayout.width;
 		let deviceWidth = isPortrait ? appLayout.width : appLayout.height;
 		let styles = this.getStyles(appLayout);
 
 		let screenProps = {
-			stackNavigator: this.props.stackNavigator,
-			currentTab: this.state.routeName,
+			stackNavigator,
+			currentTab: routeName,
 			currentScreen,
 		};
-		if (!this.state || !this.state.starIcon) {
-			return false;
-		}
 
-		const { routeName } = this.state;
-
-		const rightButton = this.makeRightButton(routeName, styles);
 		const leftButton = this.makeLeftButton(styles);
 		const drawerWidth = this.getDrawerWidth(deviceWidth);
 
@@ -357,7 +318,7 @@ class TabsView extends View {
 				onDrawerClose={this.onCloseDrawer}
 			>
 				<View style={{flex: 1}} >
-					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton} rightButton={rightButton}/>
+					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton}/>
 					<View style={styles.container}>
 						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 						{
@@ -417,10 +378,6 @@ class TabsView extends View {
 			},
 		};
 	}
-
-	toggleEditMode = () => {
-		this.props.onToggleEditMode(this.props.tab);
-	};
 }
 
 function mapStateToProps(store, ownprops) {
@@ -445,7 +402,6 @@ function mapDispatchToProps(dispatch) {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
 		},
-		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
 		addNewLocation: () => {
 			return dispatch(addNewGateway());
 		},

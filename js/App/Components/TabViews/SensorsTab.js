@@ -22,24 +22,24 @@
 'use strict';
 
 import React from 'react';
+import { SectionList, ScrollView, TouchableOpacity, Text, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
-import { List, ListDataSource, View } from 'BaseComponents';
+import { View, IconTelldus } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors } from 'Actions';
-import { toggleEditMode } from 'Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
+import Theme from 'Theme';
 
 type Props = {
 	rowsAndSections: Object,
 	gatewaysById: Object,
-	editMode: boolean,
 	tab: string,
 	dispatch: Function,
 	appLayout: Object,
@@ -47,8 +47,12 @@ type Props = {
 };
 
 type State = {
-	dataSource: Object,
+	visibleList: Array<Object>,
+	hiddenList: Array<Object>,
 	makeRowAccessible: 0 | 1,
+	isRefreshing: boolean,
+	listEnd: boolean,
+	showHiddenList: boolean,
 };
 
 class SensorsTab extends View {
@@ -60,6 +64,9 @@ class SensorsTab extends View {
 	renderRow: (Object) => Object;
 	renderHiddenRow: (Object) => Object;
 	onRefresh: (Object) => void;
+	keyExtractor: (Object) => number;
+	onEndReachedVisibleList: () => void;
+	toggleHiddenList: () => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
@@ -69,27 +76,37 @@ class SensorsTab extends View {
 	constructor(props: Props) {
 		super(props);
 
-		const { sections, sectionIds } = this.props.rowsAndSections;
+		let { visibleList, hiddenList } = props.rowsAndSections;
 
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-			}).cloneWithRowsAndSections(sections, sectionIds),
+			visibleList,
+			hiddenList,
 			makeRowAccessible: 0,
+			isRefreshing: false,
+			listEnd: false,
+			showHiddenList: false,
 		};
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
 		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
+		this.keyExtractor = this.keyExtractor.bind(this);
+
+		this.onEndReachedVisibleList = this.onEndReachedVisibleList.bind(this);
+		this.toggleHiddenList = this.toggleHiddenList.bind(this);
+
+		let { formatMessage } = props.screenProps.intl;
+
+		let hiddenSensors = formatMessage(i18n.hiddenSensors).toLowerCase();
+		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenSensors}`;
+		this.showHidden = `${formatMessage(i18n.show)} ${hiddenSensors}`;
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const { sections, sectionIds } = nextProps.rowsAndSections;
 
 		let { makeRowAccessible } = this.state;
-		let { screenReaderEnabled } = nextProps;
+		let { screenReaderEnabled, rowsAndSections } = nextProps;
 		let { currentScreen, currentTab } = nextProps.screenProps;
 		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
 			makeRowAccessible = 1;
@@ -97,72 +114,135 @@ class SensorsTab extends View {
 			makeRowAccessible = 0;
 		}
 
+		let { visibleList, hiddenList } = rowsAndSections;
+
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+			visibleList,
+			hiddenList,
 			makeRowAccessible,
 		});
+	}
 
-		if (nextProps.tab !== 'sensorsTab' && nextProps.editMode === true) {
-			this.props.dispatch(toggleEditMode('sensorsTab'));
-		}
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+		return nextProps.tab === 'sensorsTab';
 	}
 
 	onRefresh() {
-		this.props.dispatch(getSensors());
+		this.setState({
+			isRefreshing: true,
+		});
+		this.props.dispatch(getSensors())
+			.then(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			}).catch(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			});
 	}
 
-	rowHasChanged(r1, r2) {
-		if (r1 === r2) {
-			return false;
-		}
+	keyExtractor(item) {
+		return item.id;
+	}
+
+	onEndReachedVisibleList() {
+		this.setState({
+			listEnd: true,
+		});
+	}
+
+	toggleHiddenList() {
+		this.setState({
+			showHiddenList: !this.state.showHiddenList,
+		});
+	}
+
+	toggleHiddenListButton(style): Object {
 		return (
-			r1.sensor !== r2.sensor ||
-			r1.inDashboard !== r2.inDashboard ||
-			r1.editMode !== r2.editMode
+			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
+				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}/>
+				<Text style={style.toggleHiddenListText}>
+					{this.state.showHiddenList ?
+						this.hideHidden
+						:
+						this.showHidden
+					}
+				</Text>
+			</TouchableOpacity>
 		);
 	}
 
 	render() {
 
 		let { appLayout } = this.props;
+		let { listEnd, showHiddenList, hiddenList, visibleList, isRefreshing } = this.state;
 
 		let style = this.getStyles(appLayout);
+		let extraData = {
+			makeRowAccessible: this.state.makeRowAccessible,
+			appLayout: appLayout,
+		};
 
 		return (
-			<View style={style.container}>
-				<List
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					renderHiddenRow={this.renderHiddenRow}
+			<ScrollView style={style.container}
+				refreshControl={
+					<RefreshControl
+						refreshing={isRefreshing}
+						onRefresh={this.onRefresh}
+					/>}>
+				<SectionList
+					sections={visibleList}
+					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
-					leftOpenValue={40}
-					editMode={this.props.editMode}
-					onRefresh={this.onRefresh}
-					// adding key to force render list rows, to gain back the accessibilty.
-					key={this.state.makeRowAccessible}
+					initialNumToRender={15}
+					keyExtractor={this.keyExtractor}
+					extraData={extraData}
+					onEndReached={this.onEndReachedVisibleList}
 				/>
-			</View>
+				{listEnd && (
+					<View>
+						{this.toggleHiddenListButton(style)}
+						{showHiddenList ?
+							<SectionList
+								sections={hiddenList}
+								renderItem={this.renderRow}
+								renderSectionHeader={this.renderSectionHeader}
+								keyExtractor={this.keyExtractor}
+								extraData={extraData}
+							/>
+							:
+							<View style={{height: 80}}/>
+						}
+					</View>
+				)
+				}
+			</ScrollView>
 		);
 	}
 
-	renderSectionHeader(sectionData, sectionId) {
+	renderSectionHeader(sectionData) {
 		return (
 			<DeviceHeader
-				sectionData={sectionData}
-				sectionId={sectionId}
-				gateway={this.props.gatewaysById[sectionId]}
+				gateway={sectionData.section.key}
 			/>
 		);
 	}
 
 	renderRow(row) {
-		let { intl, currentTab, currentScreen } = this.props.screenProps;
+		let { screenProps, gatewaysById } = this.props;
+		let { intl, currentTab, currentScreen } = screenProps;
+		let isGatewayActive = gatewaysById[row.item.clientId].online;
 
 		return (
-			<SensorRow {...row}
+			<SensorRow
+				sensor={row.item}
 				intl={intl}
+				appLayout={this.props.appLayout}
 				currentTab={currentTab}
-				currentScreen={currentScreen}/>
+				currentScreen={currentScreen}
+				isGatewayActive={isGatewayActive}/>
 		);
 	}
 
@@ -184,22 +264,35 @@ class SensorsTab extends View {
 				flex: 1,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
+			toggleHiddenListButton: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginVertical: 10,
+				paddingVertical: 10,
+			},
+			toggleHiddenListIcon: {
+				marginTop: 4,
+				fontSize: 34,
+				color: Theme.Core.rowTextColor,
+			},
+			toggleHiddenListText: {
+				marginLeft: 6,
+				fontSize: 16,
+				textAlign: 'center',
+				color: Theme.Core.rowTextColor,
+			},
 		};
 	}
 }
 
 const getRowsAndSections = createSelector(
 	[
-		({ sensors }) => sensors,
-		({ gateways }) => gateways,
-		({ tabs }) => tabs.editModeSensorsTab,
+		({ sensors }) => sensors.byId,
+		({ gateways }) => gateways.byId,
 	],
-	(sensors, gateways, editMode) => {
-		const { sections, sectionIds } = parseSensorsForListView(sensors, gateways, editMode);
-		return {
-			sections,
-			sectionIds,
-		};
+	(sensors, gateways) => {
+		return parseSensorsForListView(sensors, gateways);
 	}
 );
 
@@ -207,7 +300,6 @@ function mapStateToProps(store) {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		gatewaysById: store.gateways.byId,
-		editMode: store.tabs.editModeSensorsTab,
 		tab: store.navigation.tab,
 		appLayout: store.App.layout,
 	};

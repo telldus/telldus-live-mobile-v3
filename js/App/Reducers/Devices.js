@@ -30,6 +30,8 @@ import { methods } from '../../Config.js';
 
 import getPowerParts from '../Lib/getPowerParts';
 
+import _ from 'lodash';
+
 export function getSupportedMethods(methodsAggregate: number): Object {
 	const methodNumbers = getPowerParts(methodsAggregate);
 	const methodHashmap = methodNumbers.reduce((memo, methodNumber) => {
@@ -286,36 +288,31 @@ export default combineReducers({
 	didFetch,
 });
 
-export function parseDevicesForListView(devices:Object = {}, gateways:Object = {}, editMode:boolean = false) {
-	const sections = devices.allIds.reduce((acc, deviceId) => {
-		acc[devices.byId[deviceId].clientId] = [];
-		return acc;
-	}, {});
-	const sectionIds = Object.keys(sections).map(id => parseInt(id, 10));
-
-	devices.allIds.forEach(deviceId => {
-		const device = devices.byId[deviceId];
-		sections[device.clientId].push({
-			device,
-			editMode,
+function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
+	let result = _.groupBy(paramOne, items => {
+		let gateway = gateways[items.clientId].name;
+		return gateway;
+	});
+	result = _.reduce(result, (acc, next, index) => {
+		acc.push({
+			key: index,
+			data: next,
 		});
-	});
+		return acc;
+	}, []);
+	return result;
+}
 
-	sectionIds.sort((a, b) => {
-		// might be that devices get rendered before gateways are fetched
-		const gatewayA = gateways.byId[a] ? gateways.byId[a].name : a;
-		const gatewayB = gateways.byId[b] ? gateways.byId[b].name : b;
-
-		if (gatewayA < gatewayB) {
-			return -1;
-		}
-		if (gatewayA > gatewayB) {
-			return 1;
-		}
-		return 0;
+export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
+	let sortedList = _.sortBy(devices, 'name');
+	let [hidden, visible] = _.partition(sortedList, (device) => {
+		return device.ignored;
 	});
-	return {
-		sections,
-		sectionIds,
-	};
+	let visibleList = [], hiddenList = [];
+	let isGatwaysEmpty = _.isEmpty(gateways);
+	if (!isGatwaysEmpty) {
+		visibleList = prepareSectionRow(visible, gateways);
+		hiddenList = prepareSectionRow(hidden, gateways);
+	}
+	return { visibleList, hiddenList };
 }

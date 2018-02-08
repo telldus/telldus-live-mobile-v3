@@ -29,7 +29,6 @@ import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import {getGatewayInfo} from 'Actions';
 import {View, FormattedMessage, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
@@ -66,7 +65,6 @@ type Props = {
 	navigation: Object,
 	dispatch: Function,
 	onDidMount: Function,
-	getGatewayInfo: (param: Object, string) => Promise<any>;
 	actions: Object,
 	intl: intlShape.isRequired,
 	appLayout: Object,
@@ -166,7 +164,7 @@ class LocationActivationManual extends View {
 				isLoading: true,
 			});
 			let param = {code: this.state.activationCode};
-			this.props.getGatewayInfo(param, 'timezone').then(response => {
+			this.props.actions.getGatewayInfo(param, 'timezone').then(response => {
 				if (response.id) {
 					let clientInfo = {
 						clientId: response.id,
@@ -266,9 +264,6 @@ class LocationActivationManual extends View {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		getGatewayInfo: (param: Object, extras: string) => {
-			return dispatch(getGatewayInfo(param, extras));
-		},
 		dispatch,
 	};
 }

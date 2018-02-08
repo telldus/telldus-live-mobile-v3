@@ -32,8 +32,20 @@ export default StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 	},
+	sectionHeaderNew: {
+		backgroundColor: 'transparent',
+		height: 26,
+		flexDirection: 'column',
+		justifyContent: 'center',
+	},
 	sectionHeaderText: {
 		color: Core.brandPrimary,
+		fontSize: 14,
+		marginLeft: 16,
+		fontWeight: '500',
+	},
+	sectionHeaderTextNew: {
+		color: Core.sectionTextColor,
 		fontSize: 14,
 		marginLeft: 16,
 		fontWeight: '500',
@@ -73,15 +85,33 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 	},
 	sensorValue: {
-		width: 85,
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
 		alignItems: 'center',
-		paddingRight: 12,
+		paddingLeft: 10,
 	},
 	sensorIcon: {
-		height: 26,
-		width: 26,
+		fontSize: 40,
+		color: '#fff',
+		marginTop: 5,
+	},
+	deviceActionIcon: {
+		fontSize: 30,
+	},
+	sensorValueCover: {
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+	},
+	sensorValueText: {
+		fontSize: 18,
+		color: '#ffffff',
+	},
+	sensorValueLabelText: {
+		fontSize: 13,
+		color: '#ffffff',
+		marginLeft: 3,
+		paddingTop: 3,
+		textAlignVertical: 'bottom',
 	},
 	sensorTileItem: {
 		position: 'absolute',
@@ -90,9 +120,8 @@ export default StyleSheet.create({
 		left: 0,
 		right: 0,
 		flexDirection: 'row',
-		backgroundColor: 'white',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
+		borderBottomLeftRadius: 2,
+		borderBottomRightRadius: 2,
 	},
 	listItemAvatar: {
 		width: 32,

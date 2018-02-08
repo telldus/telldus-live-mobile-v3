@@ -46,7 +46,15 @@ export default {
 	fadedInverseTextColor: '#C3D1E6',
 	textColor: '#000000',
 
+	sectionTextColor: '#8e8e93',
+	rowTextColor: '#8e8e93',
+
+	offlineColor: '#b5b5b5',
+
 	subtitleColor: '#8e8e93',
+
+	rowHeight: 60,
+	buttonWidth: 60,
 
 	fontSizeBase: 12,
 	titleFontSize: (Platform.OS === 'ios' ) ? 17 : 19,

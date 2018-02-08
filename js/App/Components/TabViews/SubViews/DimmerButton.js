@@ -24,11 +24,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, RoundedCornerShadowView } from 'BaseComponents';
+import { View } from 'BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import VerticalSlider from './VerticalSlider';
+import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import {
@@ -36,6 +36,8 @@ import {
 	toDimmerValue,
 	toSliderValue,
 } from 'Lib';
+
+import Theme from 'Theme';
 
 type Props = {
 	device: Object,
@@ -50,6 +52,10 @@ type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (number, number) => void,
 	intl: Object,
+	isGatewayActive: boolean,
+	appLayout: Object,
+	onSlideActive: () => void,
+	onSlideComplete: () => void,
 };
 
 type State = {
@@ -123,11 +129,13 @@ class DimmerButton extends View {
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
+		this.props.onSlideActive();
 		this.props.saveDimmerInitialState(this.props.device.id, this.props.device.value, this.props.device.isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
 	onSlidingComplete(sliderValue: number) {
+		this.props.onSlideComplete();
 		if (sliderValue > 0) {
 			this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
 		}
@@ -167,7 +175,7 @@ class DimmerButton extends View {
 	}
 
 	render() {
-		const { device, intl } = this.props;
+		const { device, intl, isGatewayActive } = this.props;
 		const { isInState, name, supportedMethods, methodRequested } = device;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 		const onButton = (
@@ -175,10 +183,12 @@ class DimmerButton extends View {
 				ref={'onButton'}
 				style={styles.turnOn}
 				isInState={isInState}
+				onPress={this.onTurnOn}
 				name={name}
 				enabled={!!TURNON}
 				methodRequested={methodRequested}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
 			/>
 		);
 		const offButton = (
@@ -186,29 +196,22 @@ class DimmerButton extends View {
 				ref={'offButton'}
 				style={styles.turnOff}
 				isInState={isInState}
+				onPress={this.onTurnOff}
 				name={name}
 				enabled={!!TURNOFF}
 				methodRequested={methodRequested}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
 			/>
 		);
 		const slider = DIM ? (
-			<VerticalSlider
-				style={[
-					styles.slider,
-					{
-						width: this.state.buttonWidth,
-						height: this.state.buttonHeight,
-						left: 0,
-						bottom: 0,
-					},
-				]}
-				thumbWidth={this.state.buttonWidth / 5}
-				thumbHeight={9}
-				fontSize={7}
+			<HorizontalSlider
+				style={styles.slider}
+				thumbWidth={10}
+				thumbHeight={10}
+				fontSize={9}
 				item={device}
 				value={toSliderValue(this.state.value)}
-				sensitive={4}
 				setScrollEnabled={this.props.setScrollEnabled}
 				onSlidingStart={this.onSlidingStart}
 				onSlidingComplete={this.onSlidingComplete}
@@ -217,18 +220,18 @@ class DimmerButton extends View {
 				onLeftEnd={this.onTurnOffButtonEnd}
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
-				onLeft={this.onTurnOff}
-				onRight={this.onTurnOn}
 				intl={intl}
+				isInState={isInState}
+				isGatewayActive={isGatewayActive}
 			/>
 		) : null;
 
 		return (
-			<RoundedCornerShadowView onLayout={this.layoutView} style={styles.container}>
+			<View onLayout={this.layoutView} style={styles.container}>
 				{ offButton }
 				{ onButton }
 				{ slider }
-			</RoundedCornerShadowView>
+			</View>
 		);
 	}
 }
@@ -241,29 +244,39 @@ DimmerButton.defaultProps = {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 7,
-		width: 88,
-		height: 32,
+		flex: 0,
+		flexDirection: 'row',
 		justifyContent: 'center',
-		alignItems: 'stretch',
+		alignItems: 'center',
+		height: Theme.Core.rowHeight,
 	},
 	slider: {
-		flex: 1,
 		position: 'absolute',
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
+		left: Theme.Core.buttonWidth,
+		bottom: 0,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	turnOff: {
-		flex: 1,
-		alignItems: 'stretch',
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
+		alignItems: 'center',
 		justifyContent: 'center',
-		borderTopLeftRadius: 7,
-		borderBottomLeftRadius: 7,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	turnOn: {
-		flex: 1,
-		alignItems: 'stretch',
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
+		marginLeft: Theme.Core.buttonWidth,
+		alignItems: 'center',
 		justifyContent: 'center',
-		borderTopRightRadius: 7,
-		borderBottomRightRadius: 7,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 });
 

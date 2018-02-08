@@ -24,13 +24,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
-import { Dimensions } from 'react-native';
+import { Dimensions, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Text, List, ListDataSource, View } from 'BaseComponents';
+import { Text, View } from 'BaseComponents';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
 import { defineMessages } from 'react-intl';
@@ -60,8 +60,9 @@ const messages = defineMessages({
 	},
 	messageNoItemsContent: {
 		id: 'pages.dashboard.messageNoItemsContent',
-		defaultMessage: 'You have not added any devices or sensors to your dashboard yet. Go to devices or sensors tab, click the ' +
-		'start in the top right corner and choose the ones you want to add.',
+		defaultMessage: 'You have not added any devices or sensors to your dashboard yet. ' +
+		'Go to devices or sensors tab, swipe left on the row and click the star to select the ' +
+		'ones you want to add.',
 		description: 'Message title when no items',
 	},
 });
@@ -93,12 +94,14 @@ type Props = {
 type State = {
 	tileWidth: number,
 	listWidth: number,
-	dataSource: Object,
+	dataSource: Array<Object>,
 	settings: boolean,
+	numColumns: number,
+	isRefreshing: boolean,
 };
 
-const tileMargin = 8;
-const listMargin = 8;
+const tileMargin = 2;
+const listMargin = 12;
 
 class DashboardTab extends View {
 
@@ -125,18 +128,17 @@ class DashboardTab extends View {
 	constructor(props: Props) {
 		super(props);
 		const { width } = Dimensions.get('window');
-		const tileWidth: number = this.calculateTileWidth(width);
-
+		const { tileWidth, numColumns } = this.calculateTileWidth(width);
 		this.state = {
 			tileWidth,
 			listWidth: 0,
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-			}).cloneWithRows(this.props.rows),
+			dataSource: this.props.rows,
 			settings: false,
+			numColumns,
+			isRefreshing: false,
 		};
 
-		this.tab = 'dashboardTab';
+		this.tab = 'Dashboard';
 
 		this._onLayout = this._onLayout.bind(this);
 		this._renderRow = this._renderRow.bind(this);
@@ -178,7 +180,20 @@ class DashboardTab extends View {
 	}
 
 	onRefresh() {
-		this.props.dispatch(getDevices());
+		this.setState({
+			isRefreshing: true,
+		});
+		this.props.dispatch(getDevices())
+			.then(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			})
+			.catch(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			});
 	}
 
 	componentDidMount() {
@@ -195,38 +210,44 @@ class DashboardTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
+			dataSource: nextProps.rows,
 		});
 
-		if (nextProps.tab !== 'dashboardTab') {
+		let { currentTab } = nextProps.screenProps;
+		if (currentTab !== 'Dashboard') {
 			this.stopSensorTimer();
-			this.tab = nextProps.tab;
-		} else if (nextProps.tab === 'dashboardTab' && this.tab !== 'dashboardTab') {
+			this.tab = currentTab;
+		} else if (currentTab === 'Dashboard' && this.tab !== 'Dashboard') {
 			this.startSensorTimer();
-			this.tab = 'dashboardTab';
+			this.tab = 'Dashboard';
 		}
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+		return nextProps.screenProps.currentTab === 'Dashboard';
+	}
+
 	_onLayout = (event) => {
-		const tileWidth = this.calculateTileWidth(event.nativeEvent.layout.width);
+		const { tileWidth, numColumns } = this.calculateTileWidth(event.nativeEvent.layout.width);
 		if (tileWidth !== this.state.tileWidth) {
 			this.setState({
 				tileWidth,
+				numColumns,
 			});
 		}
 	};
 
-	calculateTileWidth(listWidth: number): number {
+	calculateTileWidth(listWidth: number): Object {
 		listWidth -= listMargin;
 		const { appLayout } = this.props;
 		const isPortrait = appLayout.height > appLayout.width;
 		if (listWidth <= 0) {
-			return 0;
+			return {tileWidth: 0, numColumns: 0};
 		}
 		const baseTileSize = listWidth > (isPortrait ? 400 : 800) ? 133 : 100;
 		const tilesPerRow = Math.floor(listWidth / baseTileSize);
 		const tileWidth = tilesPerRow === 0 ? baseTileSize : Math.floor(listWidth / tilesPerRow);
-		return tileWidth;
+		return { tileWidth, numColumns: tilesPerRow };
 	}
 
 	noItemsMessage(style: Object) {
@@ -245,113 +266,128 @@ class DashboardTab extends View {
 	}
 
 	render() {
-
-		let { appLayout } = this.props;
+		let { appLayout, dashboard } = this.props;
+		let { dataSource, isRefreshing, numColumns, tileWidth } = this.state;
 
 		let style = this.getStyles(appLayout);
 
-		// add to List props: enableEmptySections={true}, to surpress warning
-
-		if (!this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0) {
+		if (!dashboard.deviceIds.length > 0 && !dashboard.sensorIds.length > 0) {
 			return this.noItemsMessage(style);
 		}
 
+		let extraData = {
+			propOne: tileWidth,
+			propTwo: appLayout,
+		};
+
 		return (
 			<View onLayout={this._onLayout} style={style.container}>
-				<List
+				<FlatList
 					ref="list"
-					contentContainerStyle={{
-						flexDirection: 'row',
-						flexWrap: 'wrap',
-					}}
-					key={this.state.tileWidth}
-					dataSource={this.state.dataSource}
-					renderRow={this._renderRow(this.state.tileWidth)}
-					pageSize={100}
+					data={dataSource}
+					renderItem={this._renderRow}
 					onRefresh={this.onRefresh}
+					numColumns={numColumns}
+					refreshing={isRefreshing}
+					extraData={extraData}
+					key={numColumns}
 				/>
 			</View>
 		);
 	}
 
-	_renderRow(tileWidth) {
-		let { screenProps } = this.props;
-		tileWidth -= tileMargin;
-		return (row, secId, rowId, rowMap) => {
-			if (row.objectType !== 'sensor' && row.objectType !== 'device') {
-				return <Text>unknown device or sensor</Text>;
-			}
-			if (!row.childObject) {
-				return <Text>Unknown device or sensor</Text>;
-			}
+	_renderRow(row: Object): Object {
+		let { screenProps, gateways } = this.props;
+		let { tileWidth } = this.state;
+		let { data, objectType } = row.item;
+		let isGatewayActive = gateways.byId[data.clientId].online;
+		tileWidth -= (2 * tileMargin);
+		let key = data.id;
+		if (objectType !== 'sensor' && objectType !== 'device') {
+			return <Text key={key}>unknown device or sensor</Text>;
+		}
+		if (!data) {
+			return <Text key={key}>Unknown device or sensor</Text>;
+		}
 
-			let tileStyle = {
-				flexDirection: 'row',
-				justifyContent: 'flex-start',
-				alignItems: 'center',
-				width: tileWidth - tileMargin,
-				height: tileWidth - tileMargin,
-				marginTop: tileMargin,
-				marginLeft: tileMargin,
-				borderRadius: 2,
-			};
-
-			if (row.objectType === 'sensor') {
-				return <SensorDashboardTile
-					style={tileStyle}
-					tileWidth={tileWidth}
-					item={row.childObject}
-					onPress={this.changeDisplayType}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			const deviceType = getDeviceType(row.childObject.supportedMethods);
-
-			if (deviceType === 'TOGGLE') {
-				return <ToggleDashboardTile
-					item={row.childObject}
-					tileWidth={tileWidth}
-					style={tileStyle}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			if (deviceType === 'DIMMER') {
-				return <DimmerDashboardTile
-					item={row.childObject}
-					tileWidth={tileWidth}
-					style={tileStyle}
-					setScrollEnabled={this.setScrollEnabled}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			if (deviceType === 'BELL') {
-				return <BellDashboardTile
-					item={row.childObject}
-					tileWidth={tileWidth}
-					style={tileStyle}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			if (deviceType === 'NAVIGATIONAL') {
-				return <NavigationalDashboardTile
-					item={row.childObject}
-					tileWidth={tileWidth}
-					style={tileStyle}
-					intl={screenProps.intl}
-				/>;
-			}
-
-			return <ToggleDashboardTile
-				style={tileStyle}
-				item={row.childObject}
-				tileWidth={tileWidth}
-				intl={screenProps.intl}
-			/>;
+		let tileStyle = {
+			flexDirection: 'column',
+			justifyContent: 'flex-start',
+			alignItems: 'flex-start',
+			width: tileWidth - (2 * tileMargin),
+			height: tileWidth - (2 * tileMargin),
+			marginHorizontal: tileMargin,
+			marginVertical: tileMargin,
+			borderRadius: 2,
 		};
+
+		if (objectType === 'sensor') {
+			return <SensorDashboardTile
+				style={tileStyle}
+				tileWidth={tileWidth}
+				item={data}
+				onPress={this.changeDisplayType}
+				intl={screenProps.intl}
+				key={key}
+				isGatewayActive={isGatewayActive}
+			/>;
+		}
+
+		const deviceType = getDeviceType(data.supportedMethods);
+
+		if (deviceType === 'TOGGLE') {
+			return <ToggleDashboardTile
+				item={data}
+				tileWidth={tileWidth}
+				style={tileStyle}
+				intl={screenProps.intl}
+				key={key}
+				isGatewayActive={isGatewayActive}
+			/>;
+		}
+
+		if (deviceType === 'DIMMER') {
+			return <DimmerDashboardTile
+				item={data}
+				tileWidth={tileWidth}
+				style={tileStyle}
+				setScrollEnabled={this.setScrollEnabled}
+				intl={screenProps.intl}
+				key={key}
+				isGatewayActive={isGatewayActive}
+			/>;
+		}
+
+		if (deviceType === 'BELL') {
+			return <BellDashboardTile
+				item={data}
+				tileWidth={tileWidth}
+				style={tileStyle}
+				intl={screenProps.intl}
+				key={key}
+				isGatewayActive={isGatewayActive}
+			/>;
+		}
+
+		if (deviceType === 'NAVIGATIONAL') {
+			return <NavigationalDashboardTile
+				item={data}
+				tileWidth={tileWidth}
+				style={tileStyle}
+				intl={screenProps.intl}
+				key={key}
+				isGatewayActive={isGatewayActive}
+			/>;
+		}
+
+		return <ToggleDashboardTile
+			style={tileStyle}
+			item={data}
+			tileWidth={tileWidth}
+			intl={screenProps.intl}
+			key={key}
+			isGatewayActive={isGatewayActive}
+		/>;
 	}
 
 	getStyles(appLayout: Object): Object {
@@ -365,7 +401,8 @@ class DashboardTab extends View {
 				flex: 1,
 				alignItems: isEmpty ? 'center' : 'flex-start',
 				justifyContent: 'center',
-				paddingHorizontal: isEmpty ? 30 : 0,
+				paddingHorizontal: isEmpty ? 30 : 6,
+				paddingTop: 10,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
@@ -397,10 +434,11 @@ const getRows = createSelector(
 	(dashboard, devices, sensors) => parseDashboardForListView(dashboard, devices, sensors)
 );
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
 		gateways: state.gateways,
+		sensorsById: state.sensors.byId,
 		userProfile: getUserProfile(state),
 		tab: state.navigation.tab,
 		dashboard: state.dashboard,

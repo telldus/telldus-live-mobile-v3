@@ -20,29 +20,10 @@
 // @flow
 
 'use strict';
+// Jobs actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { Jobs } = actions;
 
-import type { ThunkAction } from './Types';
-
-import {LiveApi} from 'LiveApi';
-
-function getJobs(): ThunkAction {
-	return (dispatch, getState) => {
-		const payload = {
-			url: '/scheduler/jobList',
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then(response => {
-			dispatch({
-				type: 'RECEIVED_JOBS',
-				payload: {
-					...payload,
-					...response,
-				},
-			});
-		});
-	};
-}
-
-module.exports = { getJobs };
+module.exports = {
+	...Jobs,
+};

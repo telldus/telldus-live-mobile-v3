@@ -27,28 +27,28 @@ import { defineMessages } from 'react-intl';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
 
-import { View, Icon } from 'BaseComponents';
+import { View, IconTelldus } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from 'Theme';
 
 const messages = defineMessages({
-	// iconAddPhraseOne: {
-	// 	id: 'accessibilityLabel.sensors.iconAddPhraseOne',
-	// 	defaultMessage: 'add sensor',
-	// },
-	// iconAddPhraseTwo: {
-	// 	id: 'accessibilityLabel.sensors.iconAddPhraseTwo',
-	// 	defaultMessage: 'to dashboard',
-	// },
-	// iconRemovePhraseOne: {
-	// 	id: 'accessibilityLabel.sensors.iconRemovePhraseOne',
-	// 	defaultMessage: 'remove sensor',
-	// },
-	// iconRemovePhraseTwo: {
-	// 	id: 'accessibilityLabel.sensors.iconRemovePhraseTwo',
-	// 	defaultMessage: 'from dashboard',
-	// },
+	iconAddPhraseOne: {
+		id: 'accessibilityLabel.sensors.iconAddPhraseOne',
+		defaultMessage: 'add sensor',
+	},
+	iconAddPhraseTwo: {
+		id: 'accessibilityLabel.sensors.iconAddPhraseTwo',
+		defaultMessage: 'to dashboard',
+	},
+	iconRemovePhraseOne: {
+		id: 'accessibilityLabel.sensors.iconRemovePhraseOne',
+		defaultMessage: 'remove sensor',
+	},
+	iconRemovePhraseTwo: {
+		id: 'accessibilityLabel.sensors.iconRemovePhraseTwo',
+		defaultMessage: 'from dashboard',
+	},
 });
 
 type Props = {
@@ -56,10 +56,10 @@ type Props = {
 	removeFromDashboard: number => void,
 	addToDashboard: number => void,
 	intl: Object,
-	editMode: boolean,
+	sensorIds: Array<number>,
 };
 
-class SensorRowHidden extends View {
+class SensorHiddenRow extends View {
 	props: Props;
 	onStarSelected: () => void;
 
@@ -72,27 +72,35 @@ class SensorRowHidden extends View {
 	}
 
 	render() {
-		const { isInDashboard } = this.props.sensor;
-		let accessibilityLabel = isInDashboard ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+		const { id } = this.props.sensor;
+		const { sensorIds } = this.props;
+		const isOnDB = sensorIds.indexOf(id) !== -1;
+
+		let icon = isOnDB ? 'favorite' : 'favorite-outline';
+
+		let accessibilityLabel = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
 		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
 		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
 
 		return (
-			<View style={Theme.Styles.rowBack} importantForAccessibility={importantForAccessibility}>
+			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
 				<TouchableOpacity
 					style={Theme.Styles.rowBackButton}
 					onPress={this.onStarSelected}
 					accessible={this.props.editMode}
 					accessibilityLabel={accessibilityLabel}>
-					<Icon name="star" size={26} style={isInDashboard ? styles.enabled : styles.disabled}/>
+					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 			</View>
 		);
 	}
 
 	onStarSelected() {
-		const { id, isInDashboard } = this.props.sensor;
-		if (isInDashboard) {
+		const { id } = this.props.sensor;
+		const { sensorIds } = this.props;
+		const isOnDB = sensorIds.indexOf(id) !== -1;
+
+		if (isOnDB) {
 			this.props.removeFromDashboard(id);
 		} else {
 			this.props.addToDashboard(id);
@@ -109,17 +117,23 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		editMode: store.tabs.editModeSensorsTab,
+		sensorIds: store.dashboard.sensorIds,
 	};
 }
 
 const styles = StyleSheet.create({
-	enabled: {
-		color: 'rgba(226, 105, 0, 255)',
+	hiddenRow: {
+		height: Theme.Core.rowHeight,
+		width: 60,
+		alignSelf: 'flex-end',
+		justifyContent: 'center',
+		alignItems: 'flex-end',
+		paddingRight: 10,
 	},
-	disabled: {
-		color: 'rgba(241, 217, 196, 255)',
+	favoriteIcon: {
+		fontSize: 28,
+		color: Theme.Core.brandSecondary,
 	},
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SensorRowHidden);
+export default connect(mapStateToProps, mapDispatchToProps)(SensorHiddenRow);

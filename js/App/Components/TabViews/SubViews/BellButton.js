@@ -24,11 +24,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
+import { View, Icon } from 'BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import i18n from '../../../Translations/common';
+import Theme from 'Theme';
 
 type Props = {
 	device: Object,
@@ -37,6 +38,8 @@ type Props = {
 	style: Object,
 	command: number,
 	intl: Object,
+	isGatewayActive: boolean,
+	appLayout: Object,
 };
 
 class BellButton extends View {
@@ -57,13 +60,15 @@ class BellButton extends View {
 	}
 
 	render() {
-		let { methodRequested, name } = this.props.device;
+		let { device, isGatewayActive } = this.props;
+		let { methodRequested, name } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
+		let iconColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
 
 		return (
-			<RoundedCornerShadowView style={this.props.style}>
+			<View style={this.props.style}>
 				<TouchableOpacity onPress={this.onBell} style={styles.bell} accessibilityLabel={accessibilityLabel}>
-					<Icon name="bell" size={22} color="orange" />
+					<Icon name="bell" size={22} color={iconColor} />
 				</TouchableOpacity>
 				{
 					methodRequested === 'BELL' ?
@@ -71,7 +76,7 @@ class BellButton extends View {
 						:
 						null
 				}
-			</RoundedCornerShadowView>
+			</View>
 		);
 	}
 }

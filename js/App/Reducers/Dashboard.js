@@ -182,14 +182,16 @@ export function parseDashboardForListView(dashboard:Object = {}, devices:Object 
 	const deviceItems = dashboard.deviceIds.map(deviceId => {
 		return {
 			objectType: 'device',
-			childObject: devices.byId[deviceId],
+			data: devices.byId[deviceId],
+			key: deviceId,
 		};
 	});
 
 	const sensorItems = dashboard.sensorIds.map(sensorId => {
 		return {
 			objectType: 'sensor',
-			childObject: sensors.byId[sensorId],
+			data: sensors.byId[sensorId],
+			key: sensorId,
 		};
 	});
 

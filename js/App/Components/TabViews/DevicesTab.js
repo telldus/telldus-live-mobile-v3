@@ -22,18 +22,16 @@
 'use strict';
 
 import React from 'react';
-import { Image, TouchableOpacity, Linking } from 'react-native';
-import PropTypes from 'prop-types';
+import { Image, TouchableOpacity, Linking, SectionList, ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
-import { List, ListDataSource, Text, View, TouchableButton } from 'BaseComponents';
-import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
+import { Text, View, TouchableButton, IconTelldus } from 'BaseComponents';
+import { DeviceRow } from 'TabViews_SubViews';
 
 import { getDevices } from 'Actions_Devices';
-import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
@@ -72,7 +70,6 @@ const messages = defineMessages({
 type Props = {
 	rowsAndSections: Object,
 	gateways: Object,
-	editMode: boolean,
 	devices: Object,
 	tab: string,
 	dispatch: Function,
@@ -83,11 +80,15 @@ type Props = {
 };
 
 type State = {
-	dataSource: Object,
+	visibleList: Array<Object>,
+	hiddenList: Array<Object>,
 	deviceId: number,
 	dimmer: boolean,
 	addGateway: boolean,
 	makeRowAccessible: 0 | 1,
+	isRefreshing: boolean,
+	listEnd: boolean,
+	showHiddenList: boolean,
 };
 
 class DevicesTab extends View {
@@ -98,12 +99,13 @@ class DevicesTab extends View {
 	onCloseSelected: () => void;
 	openDeviceDetail: (number) => void;
 	setScrollEnabled: (boolean) => void;
-	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	renderSectionHeader: (sectionData: Object) => Object;
 	renderRow: (Object) => Object;
-	renderHiddenRow: (Object) => Object;
 	onRefresh: () => void;
 	onPressAddLocation: () => void;
 	onPressAddDevice: () => void;
+	onEndReachedVisibleList: () => void;
+	toggleHiddenList: () => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
@@ -113,40 +115,48 @@ class DevicesTab extends View {
 	constructor(props: Props) {
 		super(props);
 
-		const { sections, sectionIds } = this.props.rowsAndSections;
+		let { visibleList, hiddenList } = props.rowsAndSections;
 
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-			}).cloneWithRowsAndSections(sections, sectionIds),
+			visibleList,
+			hiddenList,
 			deviceId: -1,
 			dimmer: false,
 			addGateway: false,
 			makeRowAccessible: 0,
+			isRefreshing: false,
+			listEnd: false,
+			showHiddenList: false,
 		};
 		this.onCloseSelected = this.onCloseSelected.bind(this);
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
-		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.onPressAddLocation = this.onPressAddLocation.bind(this);
 		this.onPressAddDevice = this.onPressAddDevice.bind(this);
 
+		this.onEndReachedVisibleList = this.onEndReachedVisibleList.bind(this);
+		this.toggleHiddenList = this.toggleHiddenList.bind(this);
+
+		let { formatMessage } = props.screenProps.intl;
+
+		let hiddenDevices = formatMessage(i18n.hiddenDevices).toLowerCase();
+		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenDevices}`;
+		this.showHidden = `${formatMessage(i18n.show)} ${hiddenDevices}`;
+
 		this.url = 'http://live.telldus.com/';
-		this.noDeviceTitle = props.screenProps.intl.formatMessage(messages.messageNoDeviceTitle);
-		this.noGatewayTitle = props.screenProps.intl.formatMessage(messages.messageNoGatewayTitle);
-		this.noDeviceContent = props.screenProps.intl.formatMessage(messages.messageNoDeviceContent);
-		this.noGatewayContent = props.screenProps.intl.formatMessage(messages.messageNoGatewayContent);
+		this.noDeviceTitle = formatMessage(messages.messageNoDeviceTitle);
+		this.noGatewayTitle = formatMessage(messages.messageNoGatewayTitle);
+		this.noDeviceContent = formatMessage(messages.messageNoDeviceContent);
+		this.noGatewayContent = formatMessage(messages.messageNoGatewayContent);
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const { sections, sectionIds } = nextProps.rowsAndSections;
 
 		let { makeRowAccessible } = this.state;
-		let { screenReaderEnabled } = nextProps;
+		let { screenReaderEnabled, rowsAndSections } = nextProps;
 		let { currentScreen, currentTab } = nextProps.screenProps;
 		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Devices') {
 			makeRowAccessible = 1;
@@ -154,45 +164,17 @@ class DevicesTab extends View {
 			makeRowAccessible = 0;
 		}
 
+		let { visibleList, hiddenList } = rowsAndSections;
+
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+			visibleList,
+			hiddenList,
 			makeRowAccessible,
 		});
-
-		if (nextProps.tab !== 'devicesTab' && nextProps.editMode === true) {
-			this.props.dispatch(toggleEditMode('devicesTab'));
-		}
 	}
 
-	rowHasChanged(r1, r2) {
-		if (r1 === r2) {
-			return false;
-		}
-		return (
-			r1.device !== r2.device ||
-			r1.inDashboard !== r2.inDashboard ||
-			r1.editMode !== r2.editMode
-		);
-	}
-
-	renderRow(row) {
-		let { intl, currentTab, currentScreen } = this.props.screenProps;
-		return (
-			<DeviceRow {...row}
-			           onSettingsSelected={this.openDeviceDetail}
-					   setScrollEnabled={this.setScrollEnabled}
-					   intl={intl}
-					   currentTab={currentTab}
-					   currentScreen={currentScreen}
-			/>
-		);
-	}
-
-	renderHiddenRow(row) {
-		let { screenProps } = this.props;
-		return (
-			<DeviceRowHidden {...row} intl={screenProps.intl}/>
-		);
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+		return nextProps.tab === 'devicesTab';
 	}
 
 	openDeviceDetail(device) {
@@ -209,19 +191,53 @@ class DevicesTab extends View {
 		}
 	}
 
-	renderSectionHeader(sectionData, sectionId) {
-		const gateway = this.props.gateways.byId[sectionId];
+	renderSectionHeader(sectionData: Object): Object {
 		return (
-			<View style={Theme.Styles.sectionHeader}>
-				<Text style={Theme.Styles.sectionHeaderText}>
-					{(gateway && gateway.name) ? gateway.name : ''}
+			<View style={Theme.Styles.sectionHeaderNew}>
+				<Text style={Theme.Styles.sectionHeaderTextNew}>
+					{sectionData.section.key}
 				</Text>
 			</View>
 		);
 	}
 
+	renderRow(row) {
+		let { screenProps, gateways } = this.props;
+		let { intl, currentTab, currentScreen } = screenProps;
+		let isGatewayActive = gateways.byId[row.item.clientId].online;
+
+		return (
+			<DeviceRow
+				device={row.item}
+				onSettingsSelected={this.openDeviceDetail}
+				setScrollEnabled={this.setScrollEnabled}
+				intl={intl}
+				appLayout={this.props.appLayout}
+				currentTab={currentTab}
+				currentScreen={currentScreen}
+				isGatewayActive={isGatewayActive}
+			/>
+		);
+	}
+
 	onRefresh() {
-		this.props.dispatch(getDevices());
+		this.setState({
+			isRefreshing: true,
+		});
+		this.props.dispatch(getDevices())
+			.then(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			}).catch(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			});
+	}
+
+	keyExtractor(item) {
+		return item.id;
 	}
 
 	getType(deviceId) {
@@ -261,6 +277,18 @@ class DevicesTab extends View {
 				}
 			  }).catch(err => console.error('An error occurred', err));
 		}
+	}
+
+	onEndReachedVisibleList() {
+		this.setState({
+			listEnd: true,
+		});
+	}
+
+	toggleHiddenList() {
+		this.setState({
+			showHiddenList: !this.state.showHiddenList,
+		});
 	}
 
 	noDeviceMessage(style: Object) {
@@ -303,13 +331,30 @@ class DevicesTab extends View {
 		);
 	}
 
+	toggleHiddenListButton(style): Object {
+		return (
+			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
+				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}/>
+				<Text style={style.toggleHiddenListText}>
+					{this.state.showHiddenList ?
+						this.hideHidden
+						:
+						this.showHidden
+					}
+				</Text>
+			</TouchableOpacity>
+		);
+	}
+
 	render() {
 
 		let { appLayout, devices } = this.props;
+		let { listEnd, showHiddenList, hiddenList, visibleList,
+			isRefreshing, makeRowAccessible, addGateway } = this.state;
 
 		let style = this.getStyles(appLayout);
 
-		if (this.state.addGateway) {
+		if (addGateway) {
 			return this.noGatewayMessage(style);
 		}
 
@@ -317,21 +362,45 @@ class DevicesTab extends View {
 			return this.noDeviceMessage(style);
 		}
 
+		let extraData = {
+			makeRowAccessible,
+			appLayout,
+		};
+
 		return (
-			<View style={style.container}>
-				<List
-					ref="list"
-					dataSource={this.state.dataSource}
-					renderHiddenRow={this.renderHiddenRow}
-					renderRow={this.renderRow}
+			<ScrollView style={style.container}
+				refreshControl={
+					<RefreshControl
+						refreshing={isRefreshing}
+						onRefresh={this.onRefresh}
+					/>}
+			>
+				<SectionList
+					sections={visibleList}
+					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
-					leftOpenValue={40}
-					editMode={this.props.editMode}
-					onRefresh={this.onRefresh}
-					// adding key to force render list rows, to gain back the accessibilty.
-					key={this.state.makeRowAccessible}
+					keyExtractor={this.keyExtractor}
+					extraData={extraData}
+					onEndReached={this.onEndReachedVisibleList}
 				/>
-			</View>
+				{listEnd && (
+					<View>
+						{this.toggleHiddenListButton(style)}
+						{showHiddenList ?
+							<SectionList
+								sections={hiddenList}
+								renderItem={this.renderRow}
+								renderSectionHeader={this.renderSectionHeader}
+								keyExtractor={this.keyExtractor}
+								extraData={extraData}
+							/>
+							:
+							<View style={{height: 80}}/>
+						}
+					</View>
+				)
+				}
+			</ScrollView>
 		);
 	}
 
@@ -343,8 +412,6 @@ class DevicesTab extends View {
 		return {
 			container: {
 				flex: 1,
-				alignItems: 'center',
-				justifyContent: 'center',
 				paddingHorizontal: !this.props.devices.allIds.length > 0 ? 30 : 0,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
@@ -379,34 +446,42 @@ class DevicesTab extends View {
 				height: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 				width: isPortrait ? Math.floor(width * 0.03) : Math.floor(height * 0.03),
 			},
+			toggleHiddenListButton: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginVertical: 10,
+				paddingVertical: 10,
+			},
+			toggleHiddenListIcon: {
+				marginTop: 4,
+				fontSize: 34,
+				color: Theme.Core.rowTextColor,
+			},
+			toggleHiddenListText: {
+				marginLeft: 6,
+				fontSize: 16,
+				textAlign: 'center',
+				color: Theme.Core.rowTextColor,
+			},
 		};
 	}
 }
 
-DevicesTab.propTypes = {
-	rowsAndSections: PropTypes.object,
-};
-
 const getRowsAndSections = createSelector(
 	[
-		({ devices }) => devices,
-		({ gateways }) => gateways,
-		({ tabs }) => tabs.editModeDevicesTab,
+		({ devices }) => devices.byId,
+		({ gateways }) => gateways.byId,
 	],
-	(devices, gateways, editMode) => {
-		const { sections, sectionIds } = parseDevicesForListView(devices, gateways, editMode);
-		return {
-			sections,
-			sectionIds,
-		};
+	(devices, gateways) => {
+		return parseDevicesForListView(devices, gateways);
 	}
 );
 
-function mapStateToProps(state, ownprops) {
+function mapStateToProps(state: Object, ownprops: Object): Object {
 	return {
 		stackNavigator: ownprops.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(state),
-		editMode: state.tabs.editModeDevicesTab,
 		devices: state.devices,
 		gateways: state.gateways,
 		tab: state.navigation.tab,

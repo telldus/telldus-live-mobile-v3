@@ -221,43 +221,83 @@ const messages = defineMessages({
 	},
 	labelHumidity: {
 		id: 'accessibilityLabel.sensors.labelHumidity',
-		defaultMessage: 'humidity',
+		defaultMessage: 'Humidity',
 	},
 	labelTemperature: {
 		id: 'accessibilityLabel.sensors.labelTemperature',
-		defaultMessage: 'temperature',
+		defaultMessage: 'Temperature',
 	},
 	labelRainRate: {
 		id: 'accessibilityLabel.sensors.labelRainRate',
-		defaultMessage: 'rain rate',
+		defaultMessage: 'Rain Rate',
 	},
 	labelRainTotal: {
 		id: 'accessibilityLabel.sensors.labelRainTotal',
-		defaultMessage: 'rain total',
+		defaultMessage: 'Rain Total',
 	},
 	labelWindGust: {
 		id: 'accessibilityLabel.sensors.labelWindGust',
-		defaultMessage: 'wind gust',
+		defaultMessage: 'Wind Gust',
 	},
 	labelWindAverage: {
 		id: 'accessibilityLabel.sensors.labelWindAverage',
-		defaultMessage: 'wind average',
+		defaultMessage: 'Wind Average',
 	},
 	labelWindDirection: {
 		id: 'accessibilityLabel.sensors.labelWindDirection',
-		defaultMessage: 'wind direction',
+		defaultMessage: 'Wind Direction',
 	},
 	labelUVIndex: {
 		id: 'accessibilityLabel.sensors.labelUVIndex',
-		defaultMessage: 'UV index',
+		defaultMessage: 'UV Index',
 	},
 	labelWatt: {
 		id: 'accessibilityLabel.sensors.labelWatt',
-		defaultMessage: 'power',
+		defaultMessage: 'Power',
+	},
+	current: {
+		id: 'accessibilityLabel.sensors.current',
+		defaultMessage: 'Current',
+	},
+	energy: {
+		id: 'accessibilityLabel.sensors.energy',
+		defaultMessage: 'Energy',
+	},
+	accumulated: {
+		id: 'accessibilityLabel.sensors.Accumulated',
+		defaultMessage: 'Accumulated',
+	},
+	acc: {
+		id: 'accessibilityLabel.sensors.acc',
+		defaultMessage: 'Acc.',
+	},
+	voltage: {
+		id: 'accessibilityLabel.sensors.voltage',
+		defaultMessage: 'Voltage',
+	},
+	powerFactor: {
+		id: 'accessibilityLabel.sensors.powerFactor',
+		defaultMessage: 'Power Factor',
+	},
+	pulse: {
+		id: 'accessibilityLabel.sensors.pulse',
+		defaultMessage: 'Pulse',
 	},
 	labelLuminance: {
 		id: 'accessibilityLabel.sensors.labelLuminance',
-		defaultMessage: 'luminance',
+		defaultMessage: 'Luminance',
+	},
+	labelDewPoint: {
+		id: 'accessibilityLabel.sensors.labelDewPoint',
+		defaultMessage: 'Dew Point',
+	},
+	labelBarometricPressure: {
+		id: 'accessibilityLabel.sensors.labelBarometricPressure',
+		defaultMessage: 'Barometric Pressure',
+	},
+	labelGenricMeter: {
+		id: 'accessibilityLabel.sensors.labelGenricMeter',
+		defaultMessage: 'Genric Meter',
 	},
 	labelTimeAgo: {
 		id: 'accessibilityLabel.sensors.labelTimeAgo',
@@ -358,6 +398,31 @@ const messages = defineMessages({
 	done: {
 		id: 'button.done',
 		defaultMessage: 'Done',
+	},
+	offline: {
+		id: 'gateway.offline',
+		defaultMessage: 'Offline',
+	},
+	show: {
+		id: 'text.show',
+		defaultMessage: 'Show',
+	},
+	hide: {
+		id: 'text.hide',
+		defaultMessage: 'Hide',
+	},
+	hiddenDevices: {
+		id: 'text.hiddenDevices',
+		defaultMessage: 'Hidden devices',
+	},
+	hiddenSensors: {
+		id: 'text.hiddenSensors',
+		defaultMessage: 'Hidden sensors',
+	},
+	noName: {
+		id: 'noName',
+		defaultMessage: 'no name',
+		description: 'Used when an item does not have a name',
 	},
 });
 

@@ -21,19 +21,23 @@
 
 'use strict';
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { SwipeRow } from 'react-native-swipe-list-view';
 
-import { Container, ListItem, Text, View, Icon } from 'BaseComponents';
+import { ListItem, Text, View, BlockIcon } from 'BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
 import { getLabelDevice } from 'Accessibility';
+import HiddenRow from './Device/HiddenRow';
+
+import { getPowerConsumed } from 'Lib';
 
 import i18n from '../../../Translations/common';
 
-import { StyleSheet } from 'react-native';
 import Theme from 'Theme';
 
 type Props = {
@@ -51,11 +55,33 @@ type Props = {
 	intl: Object,
 	currentTab: string,
 	currentScreen: string,
+	appLayout: Object,
+	isGatewayActive: boolean,
+	tab: string,
+	powerConsumed: string | null,
 };
 
-class DeviceRow extends View {
+type State = {
+	disableSwipe: boolean,
+	isOpen: boolean,
+};
+
+class DeviceRow extends PureComponent<Props, State> {
 	props: Props;
+	state: State;
 	onSettingsSelected: Object => void;
+	labelButton: string;
+	labelSettings: string;
+	labelGearButton: string;
+	onSlideActive: () => void;
+	onSlideComplete: () => void;
+	onRowOpen: () => void;
+	onRowClose: () => void;
+
+	state = {
+		disableSwipe: false,
+		isOpen: false,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -67,11 +93,49 @@ class DeviceRow extends View {
 		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
 
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
+		this.onSlideActive = this.onSlideActive.bind(this);
+		this.onSlideComplete = this.onSlideComplete.bind(this);
+
+		this.onRowOpen = this.onRowOpen.bind(this);
+		this.onRowClose = this.onRowClose.bind(this);
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		let { tab } = nextProps;
+		if (tab !== 'devicesTab' && this.state.isOpen) {
+			this.refs.SwipeRow.closeRow();
+		}
+	}
+
+	onSlideActive() {
+		this.setState({
+			disableSwipe: true,
+		});
+	}
+
+	onSlideComplete() {
+		this.setState({
+			disableSwipe: false,
+		});
+	}
+
+	onRowOpen() {
+		this.setState({
+			isOpen: true,
+		});
+	}
+
+	onRowClose() {
+		this.setState({
+			isOpen: false,
+		});
 	}
 
 	render() {
-		let button = null;
-		const { device, intl, currentTab, currentScreen } = this.props;
+		let button = null, icon = null;
+		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
+		const { isInState } = device;
+		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const {
 			TURNON,
 			TURNOFF,
@@ -87,101 +151,167 @@ class DeviceRow extends View {
 				device={device}
 				style={styles.bell}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
 			/>;
+			icon = 'bell';
 		} else if (UP || DOWN || STOP) {
 			button = <NavigationalButton
 				device={device}
 				style={styles.navigation}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
 			/>;
+			icon = 'curtain';
 		} else if (DIM) {
 			button = <DimmerButton
 				device={device}
 				setScrollEnabled={this.props.setScrollEnabled}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
+				onSlideActive={this.onSlideActive}
+				onSlideComplete={this.onSlideComplete}
 			/>;
+			icon = 'device-alt-solid';
 		} else if (TURNON || TURNOFF) {
 			button = <ToggleButton
 				device={device}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
 			/>;
+			icon = 'device-alt-solid';
 		} else {
 			button = <ToggleButton
 				device={device}
 				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
 			/>;
+			icon = 'device-alt-solid';
 		}
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
 		let accessibilityLabel = getLabelDevice(intl.formatMessage, device);
 		let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 
 		return (
-			<ListItem
-				style={Theme.Styles.rowFront}
-				accessible={accessible}
-				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-				accessibilityLabel={accessible ? accessibilityLabel : ''}>
-				<Container style={styles.container}>
-					{button}
-					<View style={styles.name}>
-						<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
-							{device.name ? device.name : '(no name)'}
-						</Text>
-					</View>
-					<TouchableOpacity
-						style={styles.gear}
-						accessibilityLabel={accessibilityLabelGearButton}
-						onPress={this.onSettingsSelected}>
-						<Icon
-							name="gear"
-							size={26}
-							color="#bbbbbb"
-						/>
+			<SwipeRow
+				rightOpenValue={-40}
+				disableLeftSwipe={this.state.disableSwipe}
+				disableRightSwipe={true}
+				ref="SwipeRow"
+				onRowOpen={this.onRowOpen}
+				onRowClose={this.onRowClose}>
+				<HiddenRow device={device} intl={intl}/>
+				<ListItem
+					style={styles.row}
+					accessible={accessible}
+					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+					accessibilityLabel={accessible ? accessibilityLabel : ''}>
+					<TouchableOpacity onPress={this.onSettingsSelected}
+						style={styles.touchableContainer} accessibilityLabel={accessibilityLabelGearButton}>
+						<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
+						<View style={styles.name}>
+							<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
+								{device.name ? device.name : '(no name)'}
+							</Text>
+							{powerConsumed && (
+								<Text style = {styles.textPowerConsumed}>
+									{`${powerConsumed} W`}
+								</Text>
+							)}
+						</View>
 					</TouchableOpacity>
-				</Container>
-			</ListItem>
+					{button}
+				</ListItem>
+			</SwipeRow>
 		);
 	}
 
 	onSettingsSelected() {
 		this.props.onSettingsSelected(this.props.device);
 	}
+
+	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
+		let rowHeight = Theme.Core.rowHeight;
+		let buttonWidth = Theme.Core.buttonWidth;
+
+		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+		let backgroundColor = !isGatewayActive ? Theme.Core.offlineColor : color;
+
+		return {
+			touchableContainer: {
+				flex: 1,
+				flexDirection: 'row',
+				alignItems: 'center',
+				height: rowHeight,
+			},
+			row: {
+				marginHorizontal: 12,
+				marginBottom: 5,
+				backgroundColor: '#FFFFFF',
+				flexDirection: 'row',
+				height: rowHeight,
+				justifyContent: 'space-between',
+				paddingLeft: 5,
+				alignItems: 'center',
+				borderRadius: 2,
+				...Theme.Core.shadow,
+			},
+			name: {
+				flex: 20,
+				justifyContent: 'center',
+			},
+			text: {
+				marginLeft: 8,
+				color: Theme.Core.rowTextColor,
+				fontSize: 15,
+				textAlignVertical: 'center',
+			},
+			deviceIcon: {
+				fontSize: 18,
+				color: '#fff',
+			},
+			iconContainerStyle: {
+				backgroundColor: backgroundColor,
+				borderRadius: 25,
+				width: 25,
+				height: 25,
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginHorizontal: 5,
+			},
+			bell: {
+				justifyContent: 'center',
+				alignItems: 'center',
+				backgroundColor: '#eeeeee',
+				width: buttonWidth * 2,
+				borderLeftWidth: 1,
+				borderLeftColor: '#ddd',
+			},
+			navigation: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			textPowerConsumed: {
+				marginLeft: 8,
+				color: Theme.Core.rowTextColor,
+				fontSize: 12,
+				textAlignVertical: 'center',
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	container: {
-		marginLeft: 2,
-		flexDirection: 'row',
-		alignItems: 'stretch',
-	},
-	name: {
-		flex: 20,
-		justifyContent: 'center',
-	},
-	text: {
-		marginLeft: 8,
-		color: 'rgba(0,0,0,0.87)',
-		fontSize: 16,
-		textAlignVertical: 'center',
-	},
-	gear: {
-		flex: 2.5,
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginRight: 8,
-	},
-	bell: {
-		flex: 7,
-		height: 32,
-		justifyContent: 'center',
-		alignItems: 'stretch',
-	},
-	navigation: {
-		flex: 7,
-		height: 32,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-});
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.device.clientDeviceId);
+	return {
+		tab: store.navigation.tab,
+		powerConsumed,
+	};
+}
 
-module.exports = DeviceRow;
+module.exports = connect(mapStateToProps, null)(DeviceRow);

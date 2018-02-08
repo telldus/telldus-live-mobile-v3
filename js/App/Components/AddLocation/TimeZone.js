@@ -37,6 +37,7 @@ import {
 	FloatingButton,
 } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
+import { reportError } from 'Analytics';
 
 import i18n from '../../Translations/common';
 const messages = defineMessages({
@@ -152,12 +153,16 @@ class TimeZone extends View<void, Props, State> {
 			});
 			actions.activateGateway(clientInfo)
 				.then(response => {
-					if (response) {
-						this.props.navigation.navigate('Success', {clientInfo});
-					}
+					this.props.navigation.navigate('Success', {clientInfo});
 					this.setState({
 						isLoading: false,
 					});
+				}).catch(error => {
+					this.setState({
+						isLoading: false,
+					});
+					let log = JSON.stringify(error);
+					reportError(log);
 				});
 		} else {
 			this.props.navigation.navigate('Position', {clientInfo});

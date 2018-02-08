@@ -33,7 +33,9 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import { View, FloatingButton } from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
-import {activateGateway, showModal} from 'Actions';
+import { showModal } from 'Actions';
+import { reportError } from 'Analytics';
+import { googleAPIKey } from 'Config';
 
 import i18n from '../../Translations/common';
 const messages = defineMessages({
@@ -192,7 +194,7 @@ class Position extends View {
 		});
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.cordinates = { ...this.state.coordinate };
-		this.props.activateGateway(clientInfo)
+		this.props.actions.activateGateway(clientInfo)
 			.then(response => {
 				this.props.navigation.navigate('Success', {clientInfo});
 				this.setState({
@@ -205,12 +207,14 @@ class Position extends View {
 				this.setState({
 					isLoading: false,
 				});
+				let log = JSON.stringify(error);
+				reportError(log);
 			});
 	}
 
 	onEndEditing() {
 		if (this.state.address !== '') {
-			this.props.actions.getGeoCodePosition(this.state.address).then(response => {
+			this.props.actions.getGeoCodePosition(this.state.address, googleAPIKey).then(response => {
 				if (response.status && response.status === 'OK' && response.results[0]) {
 					let { location, viewport } = response.results[0].geometry;
 					let latitude = location.lat, longitude = location.lng;
@@ -372,16 +376,8 @@ class Position extends View {
 
 function mapDispatchToProps(dispatch): Object {
 	return {
-		activateGateway: (clientInfo) => {
-			return dispatch(activateGateway(clientInfo));
-		},
 		dispatch,
 	};
 }
 
-function mapStateToProps(store, ownProps) {
-	return {
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Position);
+export default connect(null, mapDispatchToProps)(Position);
