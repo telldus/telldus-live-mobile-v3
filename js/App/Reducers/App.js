@@ -30,6 +30,7 @@ export type State = {
 	orientation: string,
 	layout: Object,
 	screenReaderEnabled: boolean,
+	appVersion: null | string,
 };
 
 const initialState = {
@@ -39,6 +40,7 @@ const initialState = {
 	orientation: '',
 	layout: {},
 	screenReaderEnabled: false,
+	appVersion: null,
 };
 
 export default function reduceApp(state: State = initialState, action: Action): State {
@@ -86,6 +88,12 @@ export default function reduceApp(state: State = initialState, action: Action): 
 		return {
 			...state,
 			screenReaderEnabled: action.payload,
+		};
+	}
+	if (action.type === 'SET_APP_VERSION') {
+		return {
+			...state,
+			appVersion: action.payload,
 		};
 	}
 	return state;

@@ -79,4 +79,10 @@ module.exports = {
 			}
 		);
 	},
+	setAppVersion: (appVersion: string): ThunkAction => dispatch => {
+		return dispatch({
+			type: 'SET_APP_VERSION',
+			payload: appVersion,
+		});
+	},
 };
