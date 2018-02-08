@@ -28,8 +28,9 @@ import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { View, Header } from 'BaseComponents';
+import { View } from 'BaseComponents';
 
+import { NavigationHeader } from 'DDSubViews';
 import ChangeLogContainer from './ChangeLogContainer';
 import Wizard from './SubViews/Wizard';
 
@@ -66,7 +67,7 @@ const StackNavigatorConfig = {
 	initialRouteName: 'WizardOne',
 	navigationOptions: ({navigation}) => {
 		return {
-			header: <Header style={{alignItems: 'center', justifyContent: 'center'}}/>,
+			header: <NavigationHeader showLeftIcon={false}/>,
 		};
 	},
 };
