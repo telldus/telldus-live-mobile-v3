@@ -43,12 +43,9 @@ const messages = defineMessages({
 		description: 'The error messgage to show, when a device action cannot be performed',
 	},
 });
-import Theme from 'Theme';
 
 import { View } from 'BaseComponents';
-import Platform from 'Platform';
 import TabsView from 'TabsView';
-import StatusBar from 'StatusBar';
 import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
 import { NavigationHeader } from 'DDSubViews';
@@ -133,12 +130,6 @@ class AppNavigator extends View {
 	}
 
 	componentDidMount() {
-		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
-		if (Platform.OS === 'android' && StatusBar) {
-			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
-		}
-
 		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 		// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 		// and results in generating multiple tokens.

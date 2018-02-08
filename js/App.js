@@ -25,6 +25,8 @@ import React from 'react';
 import { AccessibilityInfo } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
+import Platform from 'Platform';
+import StatusBar from 'StatusBar';
 
 import {
 	PreLoginNavigator,
@@ -39,6 +41,7 @@ import {
 	setAccessibilityInfo,
 } from 'Actions';
 
+import Theme from 'Theme';
 import { changeLogAvailable } from 'Config';
 
 class App extends React.Component {
@@ -59,6 +62,12 @@ class App extends React.Component {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
 		});
+
+		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
+		if (Platform.OS === 'android' && StatusBar) {
+			StatusBar.setTranslucent(true);
+			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
+		}
 	}
 
 	componentDidUpdate() {
