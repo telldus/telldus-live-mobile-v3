@@ -111,6 +111,54 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/updownarrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerInParent="true">
+
+                    <ImageView
+                        android:id="@+id/uparrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:background="@drawable/uparrow"/>
+                    <ImageView
+                        android:id="@+id/downarrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/downarrow"/>
+                    <ImageView
+                        android:id="@+id/stopicon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/stop"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

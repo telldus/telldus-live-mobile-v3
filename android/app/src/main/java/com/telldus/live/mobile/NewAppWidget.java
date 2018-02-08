@@ -1,6 +1,5 @@
 package com.telldus.live.mobile;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -8,12 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -22,13 +17,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -43,6 +32,10 @@ public class NewAppWidget extends AppWidgetProvider {
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF="ACTION_OFF";
     private static final String ACTION_BELL="ACTION_BELL";
+    private static final String ACTION_UP = "ACTION_UP";
+    private static final String ACTION_DOWN = "ACTION_DOWN";
+    private static final String ACTION_STOP = "ACTION_STOP";
+
     private PendingIntent pendingIntent;
 
 
@@ -86,6 +79,15 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.bellLinear,View.VISIBLE);
                 views.setOnClickPendingIntent(R.id.bell,getPendingBELL(context,ACTION_BELL,appWidgetId));
             }
+            if (action.equals("128")|| action.equals("256")|| action.equals("512"))
+            {
+                views.setViewVisibility(R.id.updownarrow,View.VISIBLE);
+                views.setOnClickPendingIntent(R.id.uparrow,getPendingBELL(context,ACTION_UP,appWidgetId));
+                views.setOnClickPendingIntent(R.id.downarrow,getPendingBELL(context,ACTION_DOWN,appWidgetId));
+                views.setOnClickPendingIntent(R.id.stopicon,getPendingBELL(context,ACTION_STOP,appWidgetId));
+            }
+
+
             transparent=widgetID.getTransparent();
             if(transparent.equals("true"))
             {
@@ -137,7 +139,6 @@ public class NewAppWidget extends AppWidgetProvider {
 
     private static PendingIntent getPendingBELL(Context context,String action,int id)
     {
-
         Intent intent=new Intent(context,NewAppWidget.class);
         intent.setAction(action);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
@@ -199,9 +200,36 @@ public class NewAppWidget extends AppWidgetProvider {
             int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 
             DeviceInfo id=db.getSinlgeDeviceID(wigetID);
-
             createDeviceApi(context,id.getDeviceID(),4,wigetID,db,"Bell");
 
+        }
+        if (ACTION_UP.equals(intent.getAction()))
+        {
+            //Toast.makeText(context, "Clicked Up", Toast.LENGTH_LONG).show();
+
+            Bundle extras=intent.getExtras();
+            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+
+            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+            createDeviceApi(context,id.getDeviceID(),128,wigetID,db,"UDS");
+        }
+        if (ACTION_DOWN.equals(intent.getAction()))
+        {
+            //Toast.makeText(context, "Clicked Down", Toast.LENGTH_LONG).show();
+            Bundle extras=intent.getExtras();
+            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+
+            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+            createDeviceApi(context,id.getDeviceID(),256,wigetID,db,"UDS");
+        }
+        if (ACTION_STOP.equals(intent.getAction()))
+        {
+           // Toast.makeText(context, "Clicked Stop", Toast.LENGTH_LONG).show();
+            Bundle extras=intent.getExtras();
+            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+
+            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+            createDeviceApi(context,id.getDeviceID(),512,wigetID,db,"UDS");
         }
     }
 
@@ -301,6 +329,10 @@ public class NewAppWidget extends AppWidgetProvider {
 
                                 Toast.makeText(ctx,"SuccessFully",Toast.LENGTH_SHORT).show();
 
+                            }
+                            if(!status.isEmpty()&&status!=null&&action.equals("UDS"))
+                            {
+                                Toast.makeText(ctx,"Success",Toast.LENGTH_LONG).show();
                             }
 
 

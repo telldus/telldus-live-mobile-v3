@@ -201,7 +201,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
             createDeviceApi();
         }
 
-     /*   client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
+      /* client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
         client_secret="NUKU6APRAKATRESPECHEX3WECRAPHUCA";
         grant_Type="password";
         user_name="developer@telldus.com";
@@ -210,8 +210,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
 
         prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
-        prefManager.AccessTokenDetails("3b450e2b5ca08615908c313f6ac85f792b9bdd8a","10800");
-        createDeviceApi();*/
+        prefManager.AccessTokenDetails("620c862b11a879968eb4cf4c2187d6256c1e96e6","10800");
+        createDeviceApi(); */
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
@@ -391,7 +391,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 String name = curObj.getString("name");
                                 stateID = curObj.getInt("state");
 
-                                if (stateID == 1 || stateID == 2 ||stateID == 4) {
+                                if (stateID == 1 || stateID == 2 ||stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512) {
                                     Integer id = curObj.getInt("id");
                                     DeviceID.put(name, id);
                                     nameListItems.add(name);
