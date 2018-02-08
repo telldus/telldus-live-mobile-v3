@@ -25,7 +25,9 @@
 import moment from 'moment';
 import { reportException } from 'Analytics';
 import { defineMessages } from 'react-intl';
-import _ from 'lodash';
+
+import { utils } from 'live-shared-data';
+const { sensorUtils } = utils;
 
 import i18n from '../Translations/common';
 
@@ -109,21 +111,8 @@ function checkIfLarge(value: string): boolean {
 	return (absLength > max);
 }
 
-function getPowerConsumed(sensors: Object, clientDeviceId: number): string | null {
-	let sensor = _.find(sensors, (item) => {
-		return item.sensorId === clientDeviceId;
-	});
-	if (sensor && sensor.data && !_.isEmpty(sensor.data)) {
-		let data = _.find(sensor.data, (item) => {
-			return item.name === 'watt' && item.scale === '2';
-		});
-		return data ? data.value : null;
-	}
-	return null;
-}
-
 module.exports = {
 	formatLastUpdated,
 	checkIfLarge,
-	getPowerConsumed,
+	...sensorUtils,
 };
