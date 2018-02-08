@@ -35,11 +35,16 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	intl: intlShape.isRequired,
+	showLeftIcon?: boolean,
 };
 
 class NavigationHeader extends View {
 
 	goBack: () => void;
+
+	static defaultProps = {
+		showLeftIcon: true,
+	}
 
 	constructor(props: Props) {
 		super(props);
@@ -68,7 +73,7 @@ class NavigationHeader extends View {
 	}
 
 	render() {
-		let { appLayout } = this.props;
+		let { appLayout, showLeftIcon } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceHeight = isPortrait ? height : width;
@@ -77,11 +82,11 @@ class NavigationHeader extends View {
 			return <View style={styles.emptyHeader}/>;
 		}
 
-		let leftIcon = {
+		let leftIcon = showLeftIcon ? {
 			component: this.getLeftIcon(),
 			onPress: this.goBack,
 			accessibilityLabel: this.labelLeftIcon,
-		};
+		} : null;
 		return (
 			<Header leftButton={leftIcon} style={{height: deviceHeight * 0.1111}}/>
 		);
