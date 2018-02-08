@@ -33,7 +33,6 @@ import Tabs from './Tabs';
 import LiveApi from './LiveApi';
 import Websockets from './Websockets';
 import Modal from './Modal';
-import App from './App';
 import { reducers } from 'live-shared-data';
 
 const config = {
@@ -48,6 +47,5 @@ module.exports = persistCombineReducers(config, {
 	liveApi: LiveApi,
 	websockets: Websockets,
 	modal: Modal,
-	App: App,
 	...reducers,
 });
