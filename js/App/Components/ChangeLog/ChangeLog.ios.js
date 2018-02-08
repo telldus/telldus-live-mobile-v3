@@ -24,12 +24,14 @@
 'use strict';
 
 import React from 'react';
+import { Easing, Animated } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { View, Header } from 'BaseComponents';
+import { View } from 'BaseComponents';
 
+import { NavigationHeader } from 'DDSubViews';
 import ChangeLogContainer from './ChangeLogContainer';
 import Wizard from './SubViews/Wizard';
 
@@ -66,9 +68,33 @@ const StackNavigatorConfig = {
 	initialRouteName: 'WizardOne',
 	navigationOptions: ({navigation}) => {
 		return {
-			header: <Header style={{alignItems: 'center', justifyContent: 'center'}}/>,
+			header: <NavigationHeader showLeftIcon={false}/>,
 		};
 	},
+	transitionConfig: () => ({
+		transitionSpec: {
+		  duration: 600,
+		  easing: Easing.out(Easing.poly(4)),
+		  timing: Animated.timing,
+		},
+		screenInterpolator: sceneProps => {
+		  const { layout, position, scene } = sceneProps;
+		  const { index } = scene;
+
+		  const width = layout.initWidth;
+		  const translateX = position.interpolate({
+				inputRange: [index - 1, index, index + 1],
+				outputRange: [width, 0, 0],
+		  });
+
+		  const opacity = position.interpolate({
+				inputRange: [index - 1, index - 0.99, index],
+				outputRange: [0, 1, 1],
+		  });
+
+		  return { opacity, transform: [{ translateX }] };
+		},
+	  }),
 };
 
 const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
