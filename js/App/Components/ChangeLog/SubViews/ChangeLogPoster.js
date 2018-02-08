@@ -33,9 +33,6 @@ type Props = {
 	h1: string,
 	h2: string,
 	appLayout: Object,
-	screenProps: Object,
-	navigation: Object,
-	intl: Object,
 };
 
 class ChangeLogPoster extends View {
