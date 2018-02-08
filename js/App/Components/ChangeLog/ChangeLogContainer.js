@@ -31,21 +31,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { View, TouchableButton, StyleSheet, Text } from 'BaseComponents';
-import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Theme from 'Theme';
 
 import { setAppVersion } from 'Actions';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
-	headerOne: {
-		id: 'changeLog.headerOne',
-		defaultMessage: 'Explore new features',
-	},
-	headerTwo: {
-		id: 'changeLog.headerTwo',
-		defaultMessage: 'New in version 3.5',
-	},
 	skipButton: {
 		id: 'changeLog.button.skipButton',
 		defaultMessage: 'skip this',
@@ -67,8 +58,6 @@ class ChangeLogContainer extends View {
 	onPressConfirm: () => void;
 	onPressSkip: () => void;
 
-	h1: string;
-	h2: string;
 	nextButton: string;
 	skipButton: string;
 	doneButton: string;
@@ -79,8 +68,6 @@ class ChangeLogContainer extends View {
 		super(props);
 		let { formatMessage } = props.screenProps.intl;
 
-		this.h1 = formatMessage(messages.headerOne);
-		this.h2 = formatMessage(messages.headerTwo);
 		this.nextButton = formatMessage(i18n.next);
 		this.skipButton = formatMessage(messages.skipButton).toUpperCase();
 		this.doneButton = formatMessage(i18n.done);
@@ -111,16 +98,14 @@ class ChangeLogContainer extends View {
 	}
 
 	render(): Object {
-		const { children, screenProps, navigation } = this.props;
+		const { children, screenProps } = this.props;
 		const { Screens, currentScreen } = screenProps;
-		const { h1, h2 } = this;
 
 		const isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
 		const buttonConfirm = isFinalScreen ? this.doneButton : this.nextButton;
 
 		return (
 			<View style={{flex: 1}}>
-				<ChangeLogPoster h1={h1} h2={h2} screenProps={screenProps} navigation={navigation}/>
 				<ScrollView>
 					<View style={{flex: 1, paddingHorizontal: 10, paddingTop: 10}}>
 						{React.cloneElement(

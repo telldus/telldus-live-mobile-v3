@@ -27,12 +27,13 @@ import React from 'react';
 import { Easing, Animated } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 import { View } from 'BaseComponents';
 
 import { NavigationHeader } from 'DDSubViews';
 import ChangeLogContainer from './ChangeLogContainer';
+import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 
 import { getRouteName } from 'Lib';
@@ -68,7 +69,7 @@ const StackNavigatorConfig = {
 	initialRouteName: 'WizardOne',
 	navigationOptions: ({navigation}) => {
 		return {
-			header: <NavigationHeader showLeftIcon={false}/>,
+			header: null,
 		};
 	},
 	transitionConfig: () => ({
@@ -99,6 +100,17 @@ const StackNavigatorConfig = {
 
 const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
 
+const messages = defineMessages({
+	headerOne: {
+		id: 'changeLog.headerOne',
+		defaultMessage: 'Explore new features',
+	},
+	headerTwo: {
+		id: 'changeLog.headerTwo',
+		defaultMessage: 'New in version 3.5',
+	},
+});
+
 type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
@@ -111,9 +123,11 @@ type State = {
 
 
 class ChangeLogNavigator extends View {
-
 	props: Props;
 	state: State;
+
+	h1: string;
+	h2: string;
 
 	onNavigationStateChange: () => void;
 
@@ -123,6 +137,11 @@ class ChangeLogNavigator extends View {
 		this.state = {
 			currentScreen: 'WizardOne',
 		};
+
+		let { formatMessage } = props.intl;
+
+		this.h1 = formatMessage(messages.headerOne);
+		this.h2 = formatMessage(messages.headerTwo);
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
@@ -148,9 +167,14 @@ class ChangeLogNavigator extends View {
 			Screens,
 			intl,
 		};
+		let { h1, h2 } = this;
 
 		return (
-			<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			<View>
+				<NavigationHeader showLeftIcon={false}/>
+				<ChangeLogPoster h1={h1} h2={h2}/>
+				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			</View>
 		);
 	}
 }
