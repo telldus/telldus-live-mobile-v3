@@ -52,7 +52,7 @@ const messages = defineMessages({
 	},
 	wizardThreeDescription: {
 		id: 'changeLog.wizardThree.description',
-		defaultMessage: 'Click on a device to see extended information and history for that device. You ' +
+		defaultMessage: 'Click the icon on the right side of the device to see extended information and history for that device. You ' +
 		'can see what location it is connected to and when it was controlled and from what platform.',
 	},
 	WizardFourTitle: {

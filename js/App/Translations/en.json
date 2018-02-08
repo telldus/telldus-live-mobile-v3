@@ -112,7 +112,7 @@
   "changeLog.wizardFive.title": "Support for multiple languages",
   "changeLog.wizardOne.description": "If you don't have an account already you can now do that in the app without the need of a computer.",
   "changeLog.wizardOne.title": "Create account to get started",
-  "changeLog.wizardThree.description": "Click on a device to see extended information and history for that device. You can see what location it is connected to and when it was controlled and from what platform.",
+  "changeLog.wizardThree.description": "Click the icon on the right side of the device to see extended information and history for that device. You can see what location it is connected to and when it was controlled and from what platform.",
   "changeLog.wizardThree.title": "Updated device details and device history",
   "days.friday": "Friday",
   "days.monday": "Monday",
