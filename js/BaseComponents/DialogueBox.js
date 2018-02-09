@@ -204,7 +204,7 @@ class DialogueBox extends Component<Props, null> {
 		return (
 			<View style={styles.notificationModalFooter}>
 				{this.props.showNegative ?
-					<TouchableOpacity style={styles.notificationModalFooterTextCover}
+					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {marginRight: 10}]}
 						onPress={this.onPressNegative}
 						accessibilityLabel={accessibilityLabelNegative}>
 						<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>
