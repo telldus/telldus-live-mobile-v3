@@ -65,6 +65,12 @@ export const messages = defineMessages({
 		defaultMessage: 'Select geographic position',
 		description: 'Secondary Header for the Position Screen',
 	},
+	confirmDelete: {
+		id: 'location.message.confirmDelete',
+		defaultMessage: 'Are you sure you want to delete this location? This action will remove all ' +
+		'settings for this location.',
+		description: 'Confirmation message on deleting location',
+	},
 	geoPosition: {
 		id: 'addNewLocation.geoPosition',
 		defaultMessage: 'Geographic Position',

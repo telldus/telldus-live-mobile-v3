@@ -58,6 +58,7 @@ class Details extends View {
 	labelLong: string;
 	labelIP: string;
 	labelSoftware: string;
+	confirmMessage: string;
 
 	constructor(props: Props) {
 		super(props);
@@ -70,6 +71,8 @@ class Details extends View {
 		this.labelLong = formatMessage(commonMessages.long);
 		this.labelIP = formatMessage(commonMessages.ip).toUpperCase();
 		this.labelSoftware = formatMessage(commonMessages.software);
+
+		this.confirmMessage = formatMessage(commonMessages.confirmDelete);
 
 		this.onEditName = this.onEditName.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
@@ -94,9 +97,7 @@ class Details extends View {
 
 	onPressRemoveLocation() {
 		let { actions } = this.props;
-		let message = 'Are you sure you want to delete this location? This action will remove all devices ' +
-		'connected to this location.';
-		actions.showModal(message, 'DELETE_LOCATION');
+		actions.showModal(this.confirmMessage, 'DELETE_LOCATION');
 	}
 
 	render(): Object {
