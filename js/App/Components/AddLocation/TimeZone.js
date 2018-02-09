@@ -151,6 +151,7 @@ class TimeZone extends View<void, Props, State> {
 			this.setState({
 				isLoading: true,
 			});
+			clientInfo.coordinates = {};
 			actions.activateGateway(clientInfo)
 				.then(response => {
 					this.props.navigation.navigate('Success', {clientInfo});
