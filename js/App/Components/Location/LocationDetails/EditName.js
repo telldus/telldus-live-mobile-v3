@@ -136,9 +136,6 @@ class LocationName extends View {
 	}
 
 	onNameSubmit() {
-		if (this.state.isKeyboardShown) {
-			Keyboard.dismiss();
-		}
 		let { navigation, actions, intl } = this.props;
 		let { locationName } = this.state;
 		if (locationName !== '') {
@@ -146,6 +143,9 @@ class LocationName extends View {
 				isLoading: true,
 			});
 			actions.setName(navigation.state.params.id, locationName).then(() => {
+				if (this.state.isKeyboardShown) {
+					Keyboard.dismiss();
+				}
 				this.setState({
 					isLoading: false,
 				});

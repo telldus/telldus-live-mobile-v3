@@ -203,7 +203,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 					alignItems: 'center',
 				}}>
 
-					<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+					<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 						<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
 							<LocationPoster h1={h1} h2={h2} infoButton={infoButton}
 								screenProps={screenProps} intl={intl} navigation={navigation}
