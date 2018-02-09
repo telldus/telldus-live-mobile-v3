@@ -65,7 +65,7 @@ class LocationName extends View {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			locationName: '',
+			locationName: props.navigation.state.params.name,
 			isKeyboardShown: false,
 			isLoading: false,
 		};
@@ -179,7 +179,7 @@ class LocationName extends View {
 					<TextInput
 						style={styles.textField}
 						onChangeText={this.onLocationNameChange}
-						autoCapitalize="none"
+						autoCapitalize="sentences"
 						autoCorrect={false}
 						autoFocus={true}
 						underlineColorAndroid="#e26901"

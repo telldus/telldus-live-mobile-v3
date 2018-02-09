@@ -79,7 +79,7 @@ class Details extends View {
 
 	onEditName() {
 		const { navigation, location } = this.props;
-		navigation.navigate('EditName', {id: location.id});
+		navigation.navigate('EditName', {id: location.id, name: location.name});
 	}
 
 	onEditTimeZone() {
