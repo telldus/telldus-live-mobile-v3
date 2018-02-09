@@ -185,7 +185,7 @@
     "settings.addNewLocation": "Lägg till ny plats",
     "settings.connectedLocations": "Anslutna platser",
     "settings.pushEnabled": "Enheten är registrerad för push-notifikationer.",
-    "settings.pushRegister": "Registrerar för push-notifikationer",
+    "settings.pushRegister": "Omregistrera telefonen för push-notifikationer",
     "settings.pushRegisterFailed": "Misslyckades att registrera för push. Försök igen",
     "settings.pushRegisterSuccess": "Denna telefonen är nu registrerad för push",
     "settings.pushRegisters": "Registrerar för push",
