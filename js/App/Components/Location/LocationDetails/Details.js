@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
 		color: Theme.Core.rowTextColor,
 		fontSize: 14,
 		textAlign: 'right',
-		paddingRight: 5,
+		paddingRight: 10,
 	},
 });
 
