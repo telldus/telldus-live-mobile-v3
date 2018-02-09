@@ -189,7 +189,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		const { modalHeader, positiveText, showNegative, onPressPositive, onPressNegative } = this.getModalData(modalExtras);
 		const { params } = screenProps.rootNavigator.state;
 
-		let width = appLayout.height > appLayout.width ? appLayout.width : appLayout.height;
+		let width = appLayout.width;
 		let padding = width * 0.027777;
 		let paddingHorizontal = screenProps.currentScreen === 'EditTimeZoneCity' || screenProps.currentScreen === 'EditTimeZoneContinent' ? 0 : padding;
 		let showPosterHeader = screenProps.currentScreen === 'Details' ? false : true;
