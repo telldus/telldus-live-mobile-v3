@@ -134,10 +134,11 @@ function activateGateway(clientInfo: Object): ThunkAction {
 		};
 		return LiveApi(payload).then(response => {
 			if (response.status === 'success') {
+				let { longitude, latitude } = clientInfo.coordinates;
 				Promise.all([
 					dispatch(setName(clientInfo.clientId, clientInfo.name)),
 					dispatch(setTimezone(clientInfo.clientId, clientInfo.timezone)),
-					dispatch(setCoordinates(clientInfo.clientId, ...clientInfo.cordinates)),
+					dispatch(setCoordinates(clientInfo.clientId, longitude, latitude)),
 				]).then(val => {
 					dispatch(getAppData());
 					dispatch(getGateways());
