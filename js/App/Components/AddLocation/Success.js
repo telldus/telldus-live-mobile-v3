@@ -167,7 +167,7 @@ class Success extends View<void, Props, State> {
 						<View style={styles.imageTitleContainer}>
 							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
 							<Icon name="check-circle" size={44} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
-							<View style={{flex: 1, flexWarp: 'wrap'}}>
+							<View style={{flex: 1, flexWrap: 'wrap'}}>
 								<Text style={styles.messageTitle}>
 									{this.title}
 								</Text>
