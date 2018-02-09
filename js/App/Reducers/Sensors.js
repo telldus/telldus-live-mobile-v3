@@ -214,8 +214,8 @@ export default combineReducers({
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let result = _.groupBy(paramOne, items => {
-		let gateway = gateways[items.clientId].name;
-		return gateway;
+		let gateway = gateways[items.clientId];
+		return gateway && gateway.name;
 	});
 	result = _.reduce(result, (acc, next, index) => {
 		acc.push({
