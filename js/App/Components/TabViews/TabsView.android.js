@@ -134,6 +134,7 @@ class TabsView extends View {
 	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 	addNewLocation: () => void;
+	onPressGateway: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -181,6 +182,7 @@ class TabsView extends View {
 		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
+		this.onPressGateway = this.onPressGateway.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -242,6 +244,10 @@ class TabsView extends View {
 		this.setState({ drawer: false });
 	}
 
+	onPressGateway(location: Object) {
+		this.props.stackNavigator.navigate('LocationDetails', {location, renderRootHeader: true});
+	}
+
 	onRequestChangeTab(index) {
 		this.setState({ index });
 		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
@@ -271,6 +277,7 @@ class TabsView extends View {
 			onOpenSetting={this.onOpenSetting}
 			appLayout={appLayout}
 			isOpen={this.state.drawer}
+			onPressGateway={this.onPressGateway}
 		/>;
 	}
 

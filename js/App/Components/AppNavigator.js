@@ -50,6 +50,7 @@ import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
 import { NavigationHeader } from 'DDSubViews';
 import AddLocationNavigator from 'AddLocationNavigator';
+import LocationDetailsNavigator from 'LocationDetailsNavigator';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
@@ -70,6 +71,22 @@ const RouteConfigs = {
 	},
 	AddLocation: {
 		screen: AddLocationNavigator,
+		navigationOptions: ({navigation}: Object): Object => {
+			let {state} = navigation;
+			let renderRootHeader = state.params && state.params.renderRootHeader;
+			if (renderRootHeader) {
+				return {
+					header: <NavigationHeader navigation={navigation}/>,
+				};
+			}
+			return {
+				header: null,
+			};
+		},
+
+	},
+	LocationDetails: {
+		screen: LocationDetailsNavigator,
 		navigationOptions: ({navigation}: Object): Object => {
 			let {state} = navigation;
 			let renderRootHeader = state.params && state.params.renderRootHeader;

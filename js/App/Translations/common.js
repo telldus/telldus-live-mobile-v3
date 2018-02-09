@@ -424,6 +424,18 @@ const messages = defineMessages({
 		defaultMessage: 'no name',
 		description: 'Used when an item does not have a name',
 	},
+	name: {
+		id: 'name',
+		defaultMessage: 'Name',
+	},
+	delete: {
+		id: 'delete',
+		defaultMessage: 'Delete',
+	},
+	location: {
+		id: 'location',
+		defaultMessage: 'Location',
+	},
 });
 
 export default messages;

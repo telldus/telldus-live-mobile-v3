@@ -29,6 +29,7 @@ import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import { FormattedMessage, Text, View, Icon, Image } from 'BaseComponents';
+import Gateway from './Gateway';
 import i18n from '../../Translations/common';
 import { hasStatusBar } from 'Lib';
 
@@ -50,23 +51,6 @@ const AddLocation = ({onPress, styles}) => {
 				<Icon name="plus-circle" size={20} color="#e26901"/>
 				<FormattedMessage {...messages.addNewLocation} style={styles.addNewLocationText}/>
 			</TouchableOpacity>
-		</View>
-	);
-};
-
-const Gateway = ({ name, online, websocketOnline, styles }) => {
-	let locationSrc;
-	if (!online) {
-		locationSrc = require('../TabViews/img/tabIcons/location-red.png');
-	} else if (!websocketOnline) {
-		locationSrc = require('../TabViews/img/tabIcons/location-orange.png');
-	} else {
-		locationSrc = require('../TabViews/img/tabIcons/location-green.png');
-	}
-	return (
-		<View style={styles.gatewayContainer}>
-			<Image style={styles.gatewayIcon} source={locationSrc}/>
-			<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
 		</View>
 	);
 };
@@ -113,12 +97,13 @@ type Props = {
 	onOpenSetting: Function,
 	addNewLocation: Function,
 	appLayout: Object,
+	onPressGateway: () => void,
 };
 
 export default class Drawer extends View<Props, null> {
 	props: Props;
 	render(): Object {
-		let { gateways, userProfile, onOpenSetting, addNewLocation, appLayout } = this.props;
+		let { gateways, userProfile, onOpenSetting, addNewLocation, appLayout, onPressGateway } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
@@ -132,7 +117,7 @@ export default class Drawer extends View<Props, null> {
 				}}>
 					<ConnectedLocations styles={styles}/>
 					{gateways.allIds.map((id, index) => {
-						return (<Gateway {...gateways.byId[id]} key={index} styles={styles}/>);
+						return (<Gateway gateway={gateways.byId[id]} key={index} styles={styles} onPressGateway={onPressGateway}/>);
 					})}
 					<AddLocation onPress={addNewLocation} styles={styles}/>
 					<SettingsButton onPress={onOpenSetting} styles={styles}/>
