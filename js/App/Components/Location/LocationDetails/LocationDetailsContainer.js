@@ -268,6 +268,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			posterText: {
 				fontSize: 14,
 				color: '#fff',
+				marginTop: 5,
 			},
 			posterIconContainer: {
 				backgroundColor: '#fff',
