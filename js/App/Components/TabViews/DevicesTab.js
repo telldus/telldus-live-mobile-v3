@@ -204,7 +204,7 @@ class DevicesTab extends View {
 	renderRow(row) {
 		let { screenProps, gateways } = this.props;
 		let { intl, currentTab, currentScreen } = screenProps;
-		let isGatewayActive = gateways.byId[row.item.clientId].online;
+		let isGatewayActive = gateways.byId[row.item.clientId] && gateways.byId[row.item.clientId].online;
 
 		return (
 			<DeviceRow
