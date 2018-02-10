@@ -263,7 +263,7 @@ class GeoPosition extends View {
 		const width = appLayout.width;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const padding = width * 0.068;
+		const padding = width * 0.15;
 
 		return {
 			container: {
