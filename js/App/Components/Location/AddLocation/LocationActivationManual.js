@@ -29,44 +29,56 @@ import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import {View, FloatingButton} from 'BaseComponents';
+import {View, FormattedMessage, FloatingButton} from 'BaseComponents';
 import { LabelBox } from 'AddNewLocation_SubViews';
 
-import i18n from '../../Translations/common';
+import i18n from '../../../Translations/common';
 const messages = defineMessages({
 	label: {
-		id: 'addNewLocation.locationName.label',
-		defaultMessage: 'Name',
-		description: 'Label for the field Location Name',
+		id: 'addNewLocation.activateManual.label',
+		defaultMessage: 'Activation Code',
+		description: 'Label for the field Location Manual Activate Field',
+	},
+	headerOne: {
+		id: 'addNewLocation.activateManual.headerOne',
+		defaultMessage: 'Select Location',
+		description: 'Main header for the Location Manual Activate Screen',
 	},
 	headerTwo: {
-		id: 'addNewLocation.locationName.headerTwo',
-		defaultMessage: 'Setup your TellStick to start',
-		description: 'Secondary header Text for the Location Detected Screen',
+		id: 'addNewLocation.activateManual.headerTwo',
+		defaultMessage: 'Enter Activation Code',
+		description: 'Secondary header for the Location Manual Activate Screen',
 	},
-	invalidLocationName: {
-		id: 'addNewLocation.locationName.invalidLocationName',
-		defaultMessage: 'Location name can not be empty',
-		description: 'Local validation text when Location name field is left empty',
+	invalidActivationCode: {
+		id: 'addNewLocation.activateManual.invalidActivationCode',
+		defaultMessage: 'The activation code you entered is invalid. Please check that it is entered correctly.',
+		description: 'Local Validation text when Activation Code is Invalid',
+	},
+	bodyContent: {
+		id: 'addNewLocation.activateManual.bodyContent',
+		defaultMessage: 'Activate your TellStick by typing the activation code. The activation code ' +
+		'is written on the label on the bottom of your TellStick.',
+		description: 'The body content for the Location Manual Activate Screen',
 	},
 });
-
 type Props = {
 	navigation: Object,
-	intl: intlShape.isRequired,
+	dispatch: Function,
 	onDidMount: Function,
 	actions: Object,
+	intl: intlShape.isRequired,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	dialogueOpen: boolean,
+	currentScreen: string,
 }
 
-class LocationName extends View {
+class LocationActivationManual extends View {
 	props: Props;
 
-	onLocationNameChange: (string) => void;
-	onNameSubmit: () => void;
+	onActivationCodeChange: (string) => void;
+	onActivationCodeSubmit: () => void;
 
 	keyboardDidShow: () => void;
 	keyboardDidHide: () => void;
@@ -74,24 +86,23 @@ class LocationName extends View {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			locationName: '',
+			activationCode: '',
 			isKeyboardShown: false,
 			isLoading: false,
 		};
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `2. ${formatMessage(messages.label)}`;
+		this.h1 = `1. ${formatMessage(messages.headerOne)}`;
 		this.h2 = formatMessage(messages.headerTwo);
 		this.label = formatMessage(messages.label);
 
-		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
-		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+		this.invalidActivationCode = formatMessage(messages.invalidActivationCode);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
-		this.onLocationNameChange = this.onLocationNameChange.bind(this);
-		this.onNameSubmit = this.onNameSubmit.bind(this);
+		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
+		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);
 
 		this.keyboardDidShow = this.keyboardDidShow.bind(this);
 		this.keyboardDidHide = this.keyboardDidHide.bind(this);
@@ -111,7 +122,7 @@ class LocationName extends View {
 
 	componentWillReceiveProps(nextProps: Object) {
 		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'LocationName' && this.props.currentScreen !== 'LocationName';
+		let shouldAnnounce = currentScreen === 'LocationActivationManual' && this.props.currentScreen !== 'LocationActivationManual';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -130,7 +141,7 @@ class LocationName extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.currentScreen === 'LocationName';
+		return nextProps.currentScreen === 'LocationActivationManual';
 	}
 
 	componentWillUnmount() {
@@ -138,23 +149,47 @@ class LocationName extends View {
 		this.keyboardDidHideListener.remove();
 	}
 
-	onLocationNameChange(locationName) {
+	onActivationCodeChange(activationCode: string) {
 		this.setState({
-			locationName,
+			activationCode,
 		});
 	}
 
-	onNameSubmit() {
+	onActivationCodeSubmit() {
 		if (this.state.isKeyboardShown) {
 			Keyboard.dismiss();
 		}
-		if (this.state.locationName !== '') {
-			let clientInfo = this.props.navigation.state.params.clientInfo;
-			clientInfo.name = this.state.locationName;
-			this.props.navigation.navigate('TimeZone', {clientInfo});
+		if (this.state.activationCode.length === 10) {
+			this.setState({
+				isLoading: true,
+			});
+			let param = {code: this.state.activationCode};
+			this.props.actions.getGatewayInfo(param, 'timezone').then(response => {
+				if (response.id) {
+					let clientInfo = {
+						clientId: response.id,
+						uuid: response.uuid,
+						type: response.type,
+						timezone: response.timezone,
+						autoDetected: true,
+					};
+					this.props.navigation.navigate('LocationName', {clientInfo});
+				} else {
+					this.props.actions.showModal(response, 'ERROR');
+				}
+				this.setState({
+					isLoading: false,
+				});
+			}).catch(error => {
+				let message = error.message ? (error.message === 'Invalid activation code' ? this.invalidActivationCode : error.message) :
+					error.error ? error.error : 'Unknown Error';
+				this.props.actions.showModal(message, 'ERROR');
+				this.setState({
+					isLoading: false,
+				});
+			});
 		} else {
-			let message = this.props.intl.formatMessage(messages.invalidLocationName);
-			this.props.actions.showModal(message);
+			this.props.actions.showModal(this.invalidActivationCode, 'ERROR');
 		}
 	}
 
@@ -162,7 +197,7 @@ class LocationName extends View {
 		let { appLayout, dialogueOpen, currentScreen } = this.props;
 		const styles = this.getStyle(appLayout);
 
-		let importantForAccessibility = !dialogueOpen && currentScreen === 'LocationName' ? 'no' : 'no-hide-descendants';
+		let importantForAccessibility = !dialogueOpen && currentScreen === 'LocationActivationManual' ? 'no' : 'no-hide-descendants';
 
 		return (
 			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
@@ -173,18 +208,19 @@ class LocationName extends View {
 					appLayout={appLayout}>
 					<TextInput
 						style={styles.textField}
-						onChangeText={this.onLocationNameChange}
-						autoCapitalize="none"
+						onChangeText={this.onActivationCodeChange}
+						autoCapitalize="characters"
 						autoCorrect={false}
 						autoFocus={true}
 						underlineColorAndroid="#e26901"
-						defaultValue={this.state.locationName}
+						defaultValue={this.state.activationCode}
 					/>
+					<FormattedMessage style={styles.textBody} {...messages.bodyContent}/>
 				</LabelBox>
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
-					onPress={this.onNameSubmit}
-					imageSource={require('../TabViews/img/right-arrow-key.png')}
+					onPress={this.onActivationCodeSubmit}
+					imageSource={this.state.isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
 					showThrobber={this.state.isLoading}
 				/>
 			</View>
@@ -198,12 +234,24 @@ class LocationName extends View {
 		const padding = width * 0.068;
 
 		return {
+			textBody: {
+				color: '#A59F9A',
+				marginTop: 10,
+				textAlign: 'left',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				paddingLeft: 2,
+			},
 			textField: {
 				height: 50,
 				width: width - padding,
 				paddingLeft: 35,
 				color: '#A59F9A',
-				fontSize: 20,
+				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+			},
+			locationIcon: {
+				position: 'absolute',
+				top: 35,
+				left: 8,
 			},
 			buttonStyle: {
 				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
@@ -220,4 +268,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(LocationName);
+export default connect(null, mapDispatchToProps)(LocationActivationManual);

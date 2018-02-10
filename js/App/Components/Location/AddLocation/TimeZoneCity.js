@@ -24,14 +24,13 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import {View, List, ListDataSource} from 'BaseComponents';
-import { ListRow } from 'AddNewLocation_SubViews';
+import { View } from 'BaseComponents';
+import CitiesList from '../Common/CitiesList';
 
-import i18n from '../../Translations/common';
+import i18n from '../../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.timeZoneCity.headerOne',
@@ -47,31 +46,20 @@ const messages = defineMessages({
 
 type Props = {
 	navigation: Object,
-	activateGateway: (clientInfo: Object) => void,
 	intl: intlShape.isRequired,
 	onDidMount: Function,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
-}
-const listDataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-});
+};
 
 class TimeZoneCity extends View {
-	renderRow:(string) => void;
-	parseDataForList:(string) => void;
 	onCityChoose: () => void;
 
 	props: Props;
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			dataSource: this.parseDataForList(props.navigation.state.params.cities),
-		};
-		this.renderRow = this.renderRow.bind(this);
-		this.parseDataForList = this.parseDataForList.bind(this);
 		this.onCityChoose = this.onCityChoose.bind(this);
 
 		let { formatMessage } = props.intl;
@@ -104,38 +92,20 @@ class TimeZoneCity extends View {
 		return nextProps.currentScreen === 'TimeZoneCity';
 	}
 
-	parseDataForList(data) {
-		return listDataSource.cloneWithRows(data);
-	}
-
-	onCityChoose(city) {
+	onCityChoose(city: string) {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.timezone = `${clientInfo.continent}/${city}`;
 		clientInfo.autoDetected = false;
 		this.props.navigation.navigate('TimeZone', {clientInfo});
 	}
 
-	renderRow(item) {
-		item = item.split('/');
-		item = item[1];
+	render(): Object {
 		return (
-			<ListRow item={item} appLayout={this.props.appLayout} onPress={this.onCityChoose}/>
-		);
-	}
-
-	render() {
-
-		return (
-			<View style={{flex: 1}}>
-				<List
-					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					key={this.props.appLayout.width}
-				/>
-			</View>
+			<CitiesList
+				{...this.props}
+				onSubmit={this.onCityChoose}/>
 		);
 	}
 }
 
-export default connect()(TimeZoneCity);
+export default TimeZoneCity;

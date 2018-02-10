@@ -31,7 +31,7 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import { View, TouchableButton } from 'BaseComponents';
 import { Clients } from 'AddNewLocation_SubViews';
 
-import i18n from '../../Translations/common';
+import i18n from '../../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.locationDetected.headerOne',

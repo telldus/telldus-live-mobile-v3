@@ -30,7 +30,7 @@ import DeviceInfo from 'react-native-device-info';
 
 import { View, Text, Poster, RoundedInfoButton } from 'BaseComponents';
 
-import i18n from '../../../Translations/common';
+import i18n from '../../../../Translations/common';
 import Theme from 'Theme';
 
 type InfoButton = {

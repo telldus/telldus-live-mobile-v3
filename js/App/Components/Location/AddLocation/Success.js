@@ -38,9 +38,9 @@ import {
 	TouchableButton,
 } from 'BaseComponents';
 
-import getLocationImageUrl from '../../Lib/getLocationImageUrl';
+import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 
-import i18n from '../../Translations/common';
+import i18n from '../../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.success.headerOne',

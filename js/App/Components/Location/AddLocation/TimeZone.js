@@ -39,7 +39,7 @@ import {
 import { LabelBox } from 'AddNewLocation_SubViews';
 import { reportError } from 'Analytics';
 
-import i18n from '../../Translations/common';
+import i18n from '../../../Translations/common';
 const messages = defineMessages({
 	headerOne: {
 		id: 'addNewLocation.timeZone.headerOne',
@@ -209,7 +209,7 @@ class TimeZone extends View<void, Props, State> {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onTimeZoneSubmit}
-					imageSource={this.state.isLoading ? false : require('../TabViews/img/right-arrow-key.png')}
+					imageSource={this.state.isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
 					showThrobber={this.state.isLoading}
 				/>
 			</View>

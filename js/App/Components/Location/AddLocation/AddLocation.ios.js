@@ -108,7 +108,7 @@ const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
 
 function renderHeader(): Object {
 	return (
-		<Image style={{ height: 110, width: 130, marginHorizontal: deviceWidth * 0.18 }} resizeMode={'contain'} source={require('../TabViews/img/telldus-logo.png')}/>
+		<Image style={{ height: 110, width: 130, marginHorizontal: deviceWidth * 0.18 }} resizeMode={'contain'} source={require('../../TabViews/img/telldus-logo.png')}/>
 	);
 }
 

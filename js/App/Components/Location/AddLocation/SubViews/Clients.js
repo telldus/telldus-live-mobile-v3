@@ -27,8 +27,8 @@ import React from 'react';
 import { View, Icon } from 'BaseComponents';
 import { defineMessages } from 'react-intl';
 
-import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
-import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDetail';
+import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
+import DeviceLocationDetail from '../../../DeviceDetails/SubViews/DeviceLocationDetail';
 
 const messages = defineMessages({
 	locationDetected: {
