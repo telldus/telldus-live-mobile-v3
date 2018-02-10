@@ -24,13 +24,12 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
-import { TextInput, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import {View, FloatingButton} from 'BaseComponents';
-import LabelBox from '../Common/LabelBox';
+import { View } from 'BaseComponents';
+import Name from '../Common/Name';
 
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';
@@ -51,22 +50,21 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	dialogueOpen: boolean,
-}
+};
+
+type State = {
+	isLoading: boolean,
+};
 
 class LocationName extends View {
 	props: Props;
+	state: State;
 
-	onLocationNameChange: (string) => void;
 	onNameSubmit: () => void;
-
-	keyboardDidShow: () => void;
-	keyboardDidHide: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			locationName: props.navigation.state.params.name,
-			isKeyboardShown: false,
 			isLoading: false,
 		};
 
@@ -74,25 +72,18 @@ class LocationName extends View {
 
 		this.h1 = `${formatMessage(i18n.name)}`;
 		this.h2 = formatMessage(messages.headerTwo);
-		this.label = formatMessage(i18n.name);
 
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
-		this.onLocationNameChange = this.onLocationNameChange.bind(this);
 		this.onNameSubmit = this.onNameSubmit.bind(this);
-
-		this.keyboardDidShow = this.keyboardDidShow.bind(this);
-		this.keyboardDidHide = this.keyboardDidHide.bind(this);
 	}
 
 	componentDidMount() {
 		const { h1, h2 } = this;
 		this.props.onDidMount(h1, h2);
-		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow);
-		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide);
 
 		let { screenReaderEnabled } = this.props;
 		if (screenReaderEnabled) {
@@ -108,44 +99,18 @@ class LocationName extends View {
 		}
 	}
 
-	keyboardDidShow() {
-		this.setState({
-			isKeyboardShown: true,
-		});
-	}
-
-	keyboardDidHide() {
-		this.setState({
-			isKeyboardShown: false,
-		});
-	}
-
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.currentScreen === 'EditName';
 	}
 
-	componentWillUnmount() {
-		this.keyboardDidShowListener.remove();
-		this.keyboardDidHideListener.remove();
-	}
-
-	onLocationNameChange(locationName) {
-		this.setState({
-			locationName,
-		});
-	}
-
-	onNameSubmit() {
+	onNameSubmit(locationName: string) {
 		let { navigation, actions, intl } = this.props;
-		let { locationName } = this.state;
 		if (locationName !== '') {
 			this.setState({
 				isLoading: true,
 			});
 			actions.setName(navigation.state.params.id, locationName).then(() => {
-				if (this.state.isKeyboardShown) {
-					Keyboard.dismiss();
-				}
+				Keyboard.dismiss();
 				this.setState({
 					isLoading: false,
 				});
@@ -164,65 +129,13 @@ class LocationName extends View {
 	}
 
 	render() {
-		let { appLayout, dialogueOpen, currentScreen } = this.props;
-		const styles = this.getStyle(appLayout);
-
-		let importantForAccessibility = !dialogueOpen && currentScreen === 'EditName' ? 'no' : 'no-hide-descendants';
-
 		return (
-			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
-				<LabelBox
-					containerStyle={{marginBottom: 10}}
-					label={this.label}
-					showIcon={true}
-					appLayout={appLayout}>
-					<TextInput
-						style={styles.textField}
-						onChangeText={this.onLocationNameChange}
-						autoCapitalize="sentences"
-						autoCorrect={false}
-						autoFocus={true}
-						underlineColorAndroid="#e26901"
-						defaultValue={this.state.locationName}
-					/>
-				</LabelBox>
-				<FloatingButton
-					buttonStyle={styles.buttonStyle}
-					onPress={this.onNameSubmit}
-					imageSource={this.state.isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
-					showThrobber={this.state.isLoading}
-				/>
-			</View>
+			<Name
+				{...this.props}
+				isLoading={this.state.isLoading}
+				onSubmit={this.onNameSubmit}/>
 		);
 	}
-
-	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		const isPortrait = height > width;
-		const padding = width * 0.15;
-
-		return {
-			textField: {
-				height: 50,
-				width: width - padding,
-				paddingLeft: 35,
-				color: '#A59F9A',
-				fontSize: 20,
-			},
-			buttonStyle: {
-				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
-				elevation: 10,
-				shadowOpacity: 0.99,
-			},
-		};
-	}
 }
 
-function mapDispatchToProps(dispatch) {
-	return {
-		dispatch,
-	};
-}
-
-export default connect(null, mapDispatchToProps)(LocationName);
+export default LocationName;

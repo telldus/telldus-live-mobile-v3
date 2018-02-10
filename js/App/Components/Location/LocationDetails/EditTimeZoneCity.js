@@ -24,12 +24,11 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import {View, List, ListDataSource} from 'BaseComponents';
-import { ListRow } from 'AddNewLocation_SubViews';
+import { View } from 'BaseComponents';
+import CitiesList from '../Common/CitiesList';
 
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';
@@ -43,10 +42,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
-}
-const listDataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-});
+};
 
 class EditTimeZoneCity extends View {
 	renderRow:(string) => void;
@@ -57,11 +53,6 @@ class EditTimeZoneCity extends View {
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			dataSource: this.parseDataForList(props.navigation.state.params.cities),
-		};
-		this.renderRow = this.renderRow.bind(this);
-		this.parseDataForList = this.parseDataForList.bind(this);
 		this.onCityChoose = this.onCityChoose.bind(this);
 
 		let { formatMessage } = props.intl;
@@ -94,11 +85,7 @@ class EditTimeZoneCity extends View {
 		return nextProps.currentScreen === 'EditTimeZoneCity';
 	}
 
-	parseDataForList(data) {
-		return listDataSource.cloneWithRows(data);
-	}
-
-	onCityChoose(city) {
+	onCityChoose(city: string) {
 		let { navigation, actions } = this.props;
 		let continent = navigation.state.params.continent;
 		let timezone = `${continent}/${city}`;
@@ -110,27 +97,13 @@ class EditTimeZoneCity extends View {
 		});
 	}
 
-	renderRow(item) {
-		item = item.split('/');
-		item = item[1];
-		return (
-			<ListRow item={item} appLayout={this.props.appLayout} onPress={this.onCityChoose}/>
-		);
-	}
-
 	render() {
-
 		return (
-			<View style={{flex: 1}}>
-				<List
-					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					key={this.props.appLayout.width}
-				/>
-			</View>
+			<CitiesList
+				{...this.props}
+				onSubmit={this.onCityChoose}/>
 		);
 	}
 }
 
-export default connect()(EditTimeZoneCity);
+export default EditTimeZoneCity;

@@ -24,22 +24,16 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 import { intlShape } from 'react-intl';
-import uniqBy from 'lodash/uniqBy';
 import differenceWith from 'lodash/differenceWith';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import timeZone from '../../../Lib/TimeZone';
-import {View, List, ListDataSource} from 'BaseComponents';
-import { ListRow } from 'AddNewLocation_SubViews';
+import { View } from 'BaseComponents';
+import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';
-
-const listDataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
-});
 
 type Props = {
 	navigation: Object,
@@ -52,16 +46,12 @@ type Props = {
 }
 
 class EditTimeZoneContinent extends View {
-	renderRow:(string) => void;
 	onContinentChoose:(string) => void;
 
 	props: Props;
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			dataSource: listDataSource.cloneWithRows(this.parseDataForList(timeZone)),
-		};
 
 		let { formatMessage } = props.intl;
 
@@ -70,7 +60,6 @@ class EditTimeZoneContinent extends View {
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
-		this.renderRow = this.renderRow.bind(this);
 		this.onContinentChoose = this.onContinentChoose.bind(this);
 	}
 
@@ -96,14 +85,7 @@ class EditTimeZoneContinent extends View {
 		return nextProps.currentScreen === 'EditTimeZoneContinent';
 	}
 
-	parseDataForList(data) {
-		return uniqBy(data, value => {
-			let items = value.split('/');
-			return items[0];
-		});
-	}
-
-	onContinentChoose(continent) {
+	onContinentChoose(continent: string) {
 		let { actions, navigation } = this.props;
 		if (continent === 'UTC') {
 			actions.setTimezone(navigation.state.params.id, continent).then(() => {
@@ -122,27 +104,13 @@ class EditTimeZoneContinent extends View {
 		}
 	}
 
-	renderRow(item) {
-		item = item.split('/');
-		item = item[0];
-		return (
-			<ListRow item={item} onPress={this.onContinentChoose} appLayout={this.props.appLayout}/>
-		);
-	}
-
 	render() {
-
 		return (
-			<View style={{flex: 1}}>
-				<List
-					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					key={this.props.appLayout.width}
-				/>
-			</View>
+			<ContinentsList
+				{...this.props}
+				onSubmit={this.onContinentChoose}/>
 		);
 	}
 }
 
-export default connect()(EditTimeZoneContinent);
+export default EditTimeZoneContinent;

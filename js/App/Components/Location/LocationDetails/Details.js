@@ -80,6 +80,10 @@ class Details extends View {
 		this.onPressRemoveLocation = this.onPressRemoveLocation.bind(this);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.currentScreen === 'Details';
+	}
+
 	onEditName() {
 		const { navigation, location } = this.props;
 		navigation.navigate('EditName', {id: location.id, name: location.name});
@@ -100,8 +104,14 @@ class Details extends View {
 		actions.showModal(this.confirmMessage, 'DELETE_LOCATION');
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { containerWidth, location } = this.props;
+
+		if (!location) {
+			return null;
+		}
+
+
 		const { name, type, ip, version, timezone, latitude, longitude } = location;
 		const image = getLocationImageUrl(type);
 
