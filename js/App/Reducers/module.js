@@ -25,7 +25,7 @@
 
 import { persistCombineReducers } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
-import { localStorageKey } from 'Config';
+// import { localStorageKey } from 'Config';
 
 import Navigation from './Navigation';
 import User from './User';
@@ -36,7 +36,7 @@ import Modal from './Modal';
 import { reducers } from 'live-shared-data';
 
 const config = {
-	key: localStorageKey,
+	key: 'tellduslive',
 	storage: AsyncStorage,
 };
 
