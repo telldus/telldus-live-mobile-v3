@@ -25,7 +25,7 @@
 
 import React from 'react';
 import { TextInput, Keyboard } from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
 
 import { View, FloatingButton } from 'BaseComponents';
@@ -34,13 +34,7 @@ import { LabelBox } from 'AddNewLocation_SubViews';
 import { googleAPIKey } from 'Config';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	label: {
-		id: 'addNewLocation.position.label',
-		defaultMessage: 'Address',
-		description: 'Label for the Address field',
-	},
-});
+import { messages } from '../Common/messages';
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -97,7 +91,7 @@ class GeoPosition extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.label = formatMessage(messages.label);
+		this.label = formatMessage(messages.labelPosition);
 
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;

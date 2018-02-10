@@ -175,6 +175,7 @@
   "location.ip": "ip",
   "location.lat": "lat",
   "location.long": "long",
+  "location.message.confirmDelete": "Are you sure you want to delete this location? This action will remove all settings for this location.",
   "location.software": "Software",
   "modal.deleteScheduleDialogue": "Are you sure you want to delete the schedule ?",
   "modal.deleteScheduleDialogueHeader": "DELETE",

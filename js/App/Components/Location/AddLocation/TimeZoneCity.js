@@ -24,25 +24,14 @@
 'use strict';
 
 import React from 'react';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View } from 'BaseComponents';
 import CitiesList from '../Common/CitiesList';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerOne: {
-		id: 'addNewLocation.timeZoneCity.headerOne',
-		defaultMessage: 'Time Zone',
-		description: 'Main header for the Select City Screen',
-	},
-	headerTwo: {
-		id: 'addNewLocation.timeZoneCity.headerTwo',
-		defaultMessage: 'Select City',
-		description: 'Secondary header for the Select City Screen',
-	},
-});
+import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	navigation: Object,
@@ -64,8 +53,8 @@ class TimeZoneCity extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `3. ${formatMessage(messages.headerOne)}`;
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h1 = `3. ${formatMessage(commonMessages.headerOneTimeZoneCity)}`;
+		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneCity);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 	}

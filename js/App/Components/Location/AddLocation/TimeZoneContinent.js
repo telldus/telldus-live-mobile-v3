@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import differenceWith from 'lodash/differenceWith';
 import { announceForAccessibility } from 'react-native-accessibility';
 
@@ -33,18 +33,7 @@ import { View } from 'BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerOne: {
-		id: 'addNewLocation.timeZoneContinent.headerOne',
-		defaultMessage: 'Time Zone',
-		description: 'Main header for the Select Continent Screen',
-	},
-	headerTwo: {
-		id: 'addNewLocation.timeZoneContinent.headerTwo',
-		defaultMessage: 'Select Continent',
-		description: 'Secondary header for the Select Continent Screen',
-	},
-});
+import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	navigation: Object,
@@ -65,8 +54,8 @@ class TimeZoneContinent extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `3. ${formatMessage(messages.headerOne)}`;
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h1 = `3. ${formatMessage(commonMessages.headerOneTimeZoneContinent)}`;
+		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneContinent);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 

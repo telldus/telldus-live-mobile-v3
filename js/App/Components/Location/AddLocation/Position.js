@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View } from 'BaseComponents';
@@ -33,23 +33,7 @@ import GeoPosition from '../Common/GeoPosition';
 import { reportError } from 'Analytics';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	label: {
-		id: 'addNewLocation.position.label',
-		defaultMessage: 'Address',
-		description: 'Label for the Address field',
-	},
-	headerOne: {
-		id: 'addNewLocation.position.headerOne',
-		defaultMessage: 'Position',
-		description: 'Main Header for the Position Screen',
-	},
-	headerTwo: {
-		id: 'addNewLocation.position.headerTwo',
-		defaultMessage: 'Select geographic position',
-		description: 'Secondary Header for the Position Screen',
-	},
-});
+import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -81,8 +65,8 @@ class Position extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `4. ${formatMessage(messages.headerOne)}`;
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h1 = `4. ${formatMessage(commonMessages.headerOnePosition)}`;
+		this.h2 = formatMessage(commonMessages.headerTwoPosition);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
