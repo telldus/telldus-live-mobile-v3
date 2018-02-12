@@ -91,7 +91,7 @@ class Details extends View {
 
 	onEditTimeZone() {
 		let { navigation, location } = this.props;
-		navigation.navigate('EditTimeZoneContinent', {id: location.id});
+		navigation.navigate('EditTimeZoneContinent', {id: location.id, timezone: location.timezone});
 	}
 
 	onEditGeoPosition() {

@@ -75,6 +75,7 @@ export default class ListRow extends View {
 				justifyContent: 'center',
 			},
 			text: {
+				fontSize: 14,
 				marginLeft: 10,
 				color: '#A59F9A',
 			},

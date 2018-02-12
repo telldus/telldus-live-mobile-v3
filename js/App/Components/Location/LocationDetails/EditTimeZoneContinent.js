@@ -24,12 +24,13 @@
 'use strict';
 
 import React from 'react';
+import { ScrollView, TouchableOpacity } from 'react-native';
 import { intlShape } from 'react-intl';
 import differenceWith from 'lodash/differenceWith';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import timeZone from '../../../Lib/TimeZone';
-import { View } from 'BaseComponents';
+import { View, Text } from 'BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';
@@ -45,22 +46,44 @@ type Props = {
 	actions: Object,
 }
 
-class EditTimeZoneContinent extends View {
-	onContinentChoose:(string) => void;
+type State = {
+	timezone: string,
+};
 
+class EditTimeZoneContinent extends View {
 	props: Props;
+	state: State;
+
+	labelAutodetect: string;
+	h1: string;
+	h2: string;
+	labelMessageToAnnounce: string;
+
+	onContinentChoose:(string) => void;
+	onPressAutodetect:() => void;
+	onPressAutodetected:() => void;
 
 	constructor(props: Props) {
 		super(props);
+
+		const { navigation } = props;
+		const { timezone } = navigation.state.params;
+
+		this.state = {
+			timezone,
+		};
 
 		let { formatMessage } = props.intl;
 
 		this.h1 = `${formatMessage(commonMessages.headerOneTimeZoneContinent)}`;
 		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneContinent);
+		this.labelAutodetect = formatMessage(commonMessages.autodetect);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.onContinentChoose = this.onContinentChoose.bind(this);
+		this.onPressAutodetect = this.onPressAutodetect.bind(this);
+		this.onPressAutodetected = this.onPressAutodetected.bind(this);
 	}
 
 	componentDidMount() {
@@ -104,12 +127,55 @@ class EditTimeZoneContinent extends View {
 		}
 	}
 
+	onPressAutodetect() {
+	}
+
+	onPressAutodetected() {
+	}
+
 	render() {
+		const { appLayout, navigation } = this.props;
+		const { timezone } = navigation.state.params;
+		const styles = this.getStyle(appLayout);
+
 		return (
-			<ContinentsList
-				{...this.props}
-				onSubmit={this.onContinentChoose}/>
+			<ScrollView style={{paddingTop: 20}}>
+				<TouchableOpacity onPress={this.onPressAutodetect} style={styles.rowItems}>
+					<Text style={styles.text}>
+						{this.labelAutodetect}
+					</Text>
+				</TouchableOpacity>
+				{!!timezone && (
+					<TouchableOpacity onPress={this.onPressAutodetected} style={styles.rowItems}>
+						<Text style={styles.text}>
+							{this.state.timezone}
+						</Text>
+					</TouchableOpacity>
+				)}
+				<ContinentsList
+					{...this.props}
+					onSubmit={this.onContinentChoose}/>
+			</ScrollView>
 		);
+	}
+
+	getStyle(appLayout: Object): Object {
+		const width = appLayout.width;
+
+		return {
+			rowItems: {
+				width: width,
+				height: 50,
+				backgroundColor: '#ffffff',
+				marginTop: 2,
+				justifyContent: 'center',
+			},
+			text: {
+				fontSize: 14,
+				marginLeft: 10,
+				color: '#A59F9A',
+			},
+		};
 	}
 }
 

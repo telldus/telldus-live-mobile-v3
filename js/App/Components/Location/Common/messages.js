@@ -91,4 +91,8 @@ export const messages = defineMessages({
 		id: 'location.long',
 		defaultMessage: 'long',
 	},
+	autodetect: {
+		id: 'location.autodetect',
+		defaultMessage: 'Autodetect',
+	},
 });

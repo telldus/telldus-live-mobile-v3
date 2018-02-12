@@ -172,6 +172,7 @@
   "incommingSignal": "Incomming signal",
   "loading": "Loading",
   "location": "Location",
+  "location.autodetect": "Autodetect",
   "location.ip": "ip",
   "location.lat": "lat",
   "location.long": "long",
