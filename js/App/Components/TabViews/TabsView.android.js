@@ -340,7 +340,8 @@ class TabsView extends View {
 
 		return {
 			header: isPortrait ? {
-				height: deviceHeight * 0.1111,
+				height: deviceHeight * 0.05,
+				alignItems: 'flex-end',
 			} : {
 				transform: [{rotateZ: '-90deg'}],
 				position: 'absolute',
