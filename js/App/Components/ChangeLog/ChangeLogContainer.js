@@ -102,7 +102,7 @@ class ChangeLogContainer extends View {
 
 		let isFirstScreen = Screens.indexOf(currentScreen) === 0;
 		if (!isFirstScreen) {
-			navigation.navigate(prevScreen);	
+			navigation.navigate(prevScreen);
 		}
 	}
 
