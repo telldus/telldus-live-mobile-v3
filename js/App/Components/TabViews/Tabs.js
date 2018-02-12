@@ -182,7 +182,7 @@ export default class Tabs extends View {
 					transform: [{rotateZ: '-90deg'}],
 				},
 			labelStyle: {
-				paddingHorizontal: isPortrait ? height * 0.0666 : 0,
+				paddingHorizontal: isPortrait ? height * 0.0333 : 0,
 				paddingVertical: isPortrait ? 15 : 0,
 				color: '#fff',
 				fontSize: isPortrait ? width * 0.0333 : height * 0.0333,
