@@ -49,6 +49,7 @@ type Props = {
 	accessible: boolean,
 	accessibilityLabel?: string,
 	intl: intlShape.isRequired,
+	iconStyle?: Object | number,
 };
 
 class FloatingButton extends Component<Props, null> {
@@ -85,7 +86,8 @@ class FloatingButton extends Component<Props, null> {
 	}
 
 	render(): Object {
-		let { buttonStyle, onPress, imageSource, showThrobber, appLayout, accessible, accessibilityLabel } = this.props;
+		let { buttonStyle, onPress, imageSource, showThrobber,
+			appLayout, accessible, accessibilityLabel, iconStyle } = this.props;
 		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
 		const { container, button, icon, throbber } = this._getStyle(appLayout);
@@ -95,7 +97,7 @@ class FloatingButton extends Component<Props, null> {
 				<View style={button}>
 					{!!imageSource &&
 					(
-						<Image source={imageSource} style={icon} resizeMode="contain"/>
+						<Image source={imageSource} style={[icon, iconStyle]} resizeMode="contain"/>
 					)
 					}
 					{!!showThrobber &&
