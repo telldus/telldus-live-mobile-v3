@@ -30,7 +30,7 @@ import DeviceInfo from 'react-native-device-info';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { View, TouchableButton, StyleSheet, Text } from 'BaseComponents';
+import { View, FloatingButton, StyleSheet, Text } from 'BaseComponents';
 import Theme from 'Theme';
 
 import { setAppVersion } from 'Actions';
@@ -55,7 +55,8 @@ type Props = {
 class ChangeLogContainer extends View {
 	props: Props;
 
-	onPressConfirm: () => void;
+	onPressNext: () => void;
+	onPressPrev: () => void;
 	onPressSkip: () => void;
 
 	nextButton: string;
@@ -74,11 +75,12 @@ class ChangeLogContainer extends View {
 
 		this.appVersion = DeviceInfo.getVersion();
 
-		this.onPressConfirm = this.onPressConfirm.bind(this);
+		this.onPressNext = this.onPressNext.bind(this);
+		this.onPressPrev = this.onPressPrev.bind(this);
 		this.onPressSkip = this.onPressSkip.bind(this);
 	}
 
-	onPressConfirm() {
+	onPressNext() {
 		let { navigation, screenProps, actions } = this.props;
 		let { Screens, currentScreen } = screenProps;
 		let nextIndex = Screens.indexOf(currentScreen) + 1;
@@ -92,6 +94,18 @@ class ChangeLogContainer extends View {
 		}
 	}
 
+	onPressPrev() {
+		let { navigation, screenProps } = this.props;
+		let { Screens, currentScreen } = screenProps;
+		let prevIndex = Screens.indexOf(currentScreen) - 1;
+		let prevScreen = Screens[prevIndex];
+
+		let isFirstScreen = Screens.indexOf(currentScreen) === 0;
+		if (!isFirstScreen) {
+			navigation.navigate(prevScreen);	
+		}
+	}
+
 	onPressSkip() {
 		let { actions } = this.props;
 		actions.setAppVersion(this.appVersion);
@@ -99,10 +113,9 @@ class ChangeLogContainer extends View {
 
 	render(): Object {
 		const { children, screenProps } = this.props;
-		const { Screens, currentScreen } = screenProps;
+		const { appLayout } = screenProps;
 
-		const isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
-		const buttonConfirm = isFinalScreen ? this.doneButton : this.nextButton;
+		let { stepIndicatorCover, floatingButtonLeft } = this.getStyles(appLayout);
 
 		return (
 			<View style={{flex: 1}}>
@@ -116,36 +129,60 @@ class ChangeLogContainer extends View {
 							},
 						)}
 					</View>
-					<View style={styles.stepIndicatorCover}>
+					<View style={styles.buttonCover}>
+						<Text style={styles.textSkip} onPress={this.onPressSkip}>
+							{this.skipButton}
+						</Text>
+					</View>
+					<View style={stepIndicatorCover}>
+						<FloatingButton
+							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							onPress={this.onPressPrev}
+							buttonStyle={floatingButtonLeft}
+							iconStyle={styles.buttonIconStyle}/>
 						{screenProps.Screens.map((screen, index) => {
 							let backgroundColor = screenProps.Screens[index] === screenProps.currentScreen ?
 								Theme.Core.brandSecondary : '#00000080';
 							return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
 						})
 						}
-					</View>
-					<View style={styles.buttonCover}>
-						<TouchableButton text={buttonConfirm} onPress={this.onPressConfirm}/>
-						<Text style={styles.textSkip} onPress={this.onPressSkip}>
-							{this.skipButton}
-						</Text>
+						<FloatingButton
+							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							onPress={this.onPressNext}
+							buttonStyle={{bottom: 0}}/>
 					</View>
 				</ScrollView>
 			</View>
 		);
 	}
+
+	getStyles(appLayout: Object) {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const buttonSize = deviceWidth * 0.134666667;
+
+		return {
+			stepIndicatorCover: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginBottom: 10,
+				height: buttonSize,
+			},
+			floatingButtonLeft: {
+				left: deviceWidth * 0.034666667,
+				bottom: 0,
+			},
+		};
+	}
 }
 
 const styles = StyleSheet.create({
-	stepIndicatorCover: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginVertical: 10,
-	},
 	buttonCover: {
 		alignItems: 'center',
 		justifyContent: 'center',
+		marginTop: 10,
 	},
 	textSkip: {
 		paddingVertical: 10,
@@ -182,6 +219,9 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		color: '#00000080',
 		textAlign: 'left',
+	},
+	buttonIconStyle: {
+		transform: [{rotateZ: '180deg'}],
 	},
 });
 
