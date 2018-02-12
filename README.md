@@ -15,8 +15,9 @@ All commands are assumed to be ran from project root.
 
 ### General
 
-- install [nodejs >= 6](https://nodejs.org/en/)
-- install local deps: `npm i`
+- install [nodejs > 8](https://nodejs.org/en/)
+- install [yarn](https://yarnpkg.com/en/)
+- install local deps: `yarn install`
 - install global deps: `npm install -g react-native-cli`
 - install [fastlane](https://docs.fastlane.tools/#choose-your-installation-method)
 
@@ -164,6 +165,13 @@ To make development quick React Native comes with a Launch Packager which is run
 **Known issues:**
 
 - when using Geny motion it is possible the app starts crashing unexpectedly after having run for a minute or two. When running `adb logcat`, this crash occurs because part of the app gets wrongfully garbage collected. It always seems to have something to do with `OkHttp` which is the low level HTTP lib RN uses. The log often contains other system warnings and errors about its connection status, so it's very likely a GenyMotion/VMWare issue. The only thing that has been proven to work is to restart your computer (which likely resets an underlying service, maybe VMWare).
+- There seem to happen build failure due to multiple dex files <br/>
+:app:dexDebug
+Unknown source file : UNEXPECTED TOP-LEVEL EXCEPTION:
+Unknown source file : com.android.dex.DexException: Multiple dex files define Lcom/google/android/gms/R$attr; <br/>
+In case of above error, please clean and try rebuild. From root of the project execute command<br/>
+`cd android && ./gradlew clean`
+
 
 ### Debugging
 
@@ -351,6 +359,17 @@ For example:
 
 // etc
 ```
+
+### Styling
+
+There can be situation where device dimension is required to set style attributes for a component. The 'Dimensions' API provided by react-native cannot be relied during certain cases.
+- The app's layout dimensions can be access from redux store, use this where ever possible for styling, instead of 'Dimesions' API.<br/>
+Eg: <br/>
+```const {layout} = store.App;
+const {height, width} = layout;
+```
+
+one limitation is, the layout dimensions can be used only in inline style, not while creating style sheet object using 'StyleSheet' API.
 
 ## `google-services.json`
 
