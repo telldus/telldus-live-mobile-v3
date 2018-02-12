@@ -29,7 +29,7 @@ import { intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
 
 import { View, FloatingButton } from 'BaseComponents';
-import { LabelBox } from 'AddNewLocation_SubViews';
+import LabelBox from './LabelBox';
 
 import { googleAPIKey } from 'Config';
 

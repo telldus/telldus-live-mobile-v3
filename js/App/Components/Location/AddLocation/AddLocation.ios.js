@@ -26,9 +26,9 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 
-import { View, Image, Dimensions } from 'BaseComponents';
+import { View } from 'BaseComponents';
+import { NavigationHeader } from 'DDSubViews';
 import AddLocationContainer from './AddLocationContainer';
 
 import LocationDetected from './LocationDetected';
@@ -40,11 +40,9 @@ import TimeZone from './TimeZone';
 import Success from './Success';
 import Position from './Position';
 
-import { getRouteName, hasStatusBar } from 'Lib';
+import { getRouteName } from 'Lib';
 
-import Theme from 'Theme';
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+const initialRouteName = 'LocationDetected';
 
 const renderAddLocationContainer = (navigation, screenProps) => Component => (
 	<AddLocationContainer navigation={navigation} screenProps={screenProps}>
@@ -81,7 +79,7 @@ const RouteConfigs = {
 };
 
 const StackNavigatorConfig = {
-	initialRouteName: 'LocationDetected',
+	initialRouteName,
 	headerMode: 'float',
 	initialRouteParams: {renderHeader: false},
 	navigationOptions: ({navigation}) => {
@@ -89,13 +87,7 @@ const StackNavigatorConfig = {
 		let renderStackHeader = state.routeName !== 'LocationDetected';
 		if (renderStackHeader) {
 			return {
-				headerStyle: {
-					marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-					backgroundColor: Theme.Core.brandPrimary,
-					height: deviceHeight * 0.1,
-				},
-				headerTintColor: '#ffffff',
-				headerTitle: renderHeader(),
+				header: <NavigationHeader navigation={navigation}/>,
 			};
 		}
 		return {
@@ -106,15 +98,10 @@ const StackNavigatorConfig = {
 
 const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
 
-function renderHeader(): Object {
-	return (
-		<Image style={{ height: 110, width: 130, marginHorizontal: deviceWidth * 0.18 }} resizeMode={'contain'} source={require('../../TabViews/img/telldus-logo.png')}/>
-	);
-}
-
 type Props = {
 	navigation: Object,
 	appLayout: Object,
+	screenReaderEnabled: boolean,
 };
 
 type State = {
@@ -159,11 +146,13 @@ class AddLocationNavigator extends View {
 	render() {
 
 		let { currentScreen } = this.state;
-		let { appLayout, navigation } = this.props;
+		let { appLayout, navigation, screenReaderEnabled } = this.props;
 		let screenProps = {
 			currentScreen,
 			rootNavigator: navigation,
-			appLayout: appLayout,
+			appLayout,
+			screenReaderEnabled,
+			initialRouteName,
 		};
 
 		return (
@@ -175,6 +164,7 @@ class AddLocationNavigator extends View {
 function mapStateToProps(state, ownProps) {
 	return {
 		appLayout: state.App.layout,
+		screenReaderEnabled: state.App.screenReaderEnabled,
 	};
 }
 

@@ -30,7 +30,7 @@ import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import {View, FormattedMessage, FloatingButton} from 'BaseComponents';
-import { LabelBox } from 'AddNewLocation_SubViews';
+import LabelBox from '../Common/LabelBox';
 
 import i18n from '../../../Translations/common';
 const messages = defineMessages({
@@ -231,7 +231,7 @@ class LocationActivationManual extends View {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
-		const padding = width * 0.068;
+		const padding = width * 0.15;
 
 		return {
 			textBody: {

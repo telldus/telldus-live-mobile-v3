@@ -30,7 +30,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { View, DialogueBox, Text, RoundedInfoButton } from 'BaseComponents';
-import { AddLocationPoster } from 'AddNewLocation_SubViews';
+import LocationPoster from '../Common/LocationPoster';
 
 import * as modalActions from 'Actions_Modal';
 import * as gatewayActions from 'Actions_Gateways';
@@ -238,7 +238,8 @@ class AddLocationContainer extends View<null, Props, State> {
 
 					<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 						<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-							<AddLocationPoster h1={h1} h2={h2} infoButton={infoButton} screenProps={screenProps} intl={intl} navigation={navigation}/>
+							<LocationPoster h1={h1} h2={h2} infoButton={infoButton}
+								screenProps={screenProps} intl={intl} navigation={navigation}/>
 							<View style={[styles.style, {paddingHorizontal: padding}]}>
 								{React.cloneElement(
 									children,

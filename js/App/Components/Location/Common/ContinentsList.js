@@ -28,7 +28,7 @@ import uniqBy from 'lodash/uniqBy';
 
 import timeZone from '../../../Lib/TimeZone';
 import {View, List, ListDataSource} from 'BaseComponents';
-import { ListRow } from 'AddNewLocation_SubViews';
+import ListRow from './SubViews/ListRow';
 
 const listDataSource = new ListDataSource({
 	rowHasChanged: (r1, r2) => r1 !== r2,

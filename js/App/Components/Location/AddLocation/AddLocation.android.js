@@ -42,6 +42,8 @@ import Position from './Position';
 
 import { getRouteName } from 'Lib';
 
+const initialRouteName = 'LocationDetected';
+
 const renderAddLocationContainer = (navigation, screenProps) => Component => (
 	<AddLocationContainer navigation={navigation} screenProps={screenProps}>
 		<Component/>
@@ -77,7 +79,7 @@ const RouteConfigs = {
 };
 
 const StackNavigatorConfig = {
-	initialRouteName: 'LocationDetected',
+	initialRouteName,
 	headerMode: 'float',
 	initialRouteParams: {renderHeader: false},
 	navigationOptions: ({navigation}) => {
@@ -150,6 +152,7 @@ class AddLocationNavigator extends View {
 			rootNavigator: navigation,
 			appLayout,
 			screenReaderEnabled,
+			initialRouteName,
 		};
 
 		return (

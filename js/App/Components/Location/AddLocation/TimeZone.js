@@ -36,7 +36,7 @@ import {
 	Icon,
 	FloatingButton,
 } from 'BaseComponents';
-import { LabelBox } from 'AddNewLocation_SubViews';
+import LabelBox from '../Common/LabelBox';
 import { reportError } from 'Analytics';
 
 import i18n from '../../../Translations/common';
