@@ -23,7 +23,7 @@
 
 'use strict';
 
-import { googleAPIKey } from 'Config';
+import { googleMapsAPIKey } from 'Config';
 
 import type { ThunkAction } from './Types';
 import { getWebsocketAddress } from 'Actions_Websockets';
@@ -231,7 +231,7 @@ function getGeoCodePosition(address: string): ThunkAction {
 		const url = format({
 			pathname: googleUrl,
 			query: {
-				key: googleAPIKey,
+				key: googleMapsAPIKey,
 				address,
 			},
 		});
