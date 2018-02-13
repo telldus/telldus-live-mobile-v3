@@ -162,7 +162,8 @@ class Success extends View<void, Props, State> {
 
 		return (
 			<View style={{flex: 1}}>
-				<ScrollView>
+				<ScrollView contentContainerStyle={{alignItems: 'center',
+					justifyContent: 'center'}}>
 					<View style={[styles.itemsContainer, styles.shadow]}>
 						<View style={styles.imageTitleContainer}>
 							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
@@ -200,16 +201,17 @@ class Success extends View<void, Props, State> {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
+		const padding = width * 0.06;
 
 		return {
 			itemsContainer: {
-				flex: 1,
 				flexDirection: 'column',
 				marginTop: 20,
 				paddingVertical: 20,
 				paddingRight: 20,
+				paddingleft: 2,
 				alignItems: 'flex-start',
-				width: width - 20,
+				width: width - padding,
 			},
 			shadow: {
 				borderRadius: 4,

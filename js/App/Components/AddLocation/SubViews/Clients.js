@@ -84,9 +84,9 @@ export default class Clients extends View {
 		const accessibilityLabel = `${this.boxTitle}, ${this.props.client.type}`;
 
 		return (
-			<View style={{flex: 1}} accessible={true} accessibilityLabel={accessibilityLabel}>
+			<View style={{alignItems: 'center', justifyContent: 'center'}} accessible={true} accessibilityLabel={accessibilityLabel}>
 				<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData} accessible={false} style={{marginTop: 20}}/>
+				<DeviceLocationDetail {...locationData} accessible={false} style={styles.locationDetails}/>
 			</View>
 		);
 	}
@@ -94,9 +94,14 @@ export default class Clients extends View {
 	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
-		let isPortrait = height > width;
+		const isPortrait = height > width;
+		const padding = width * 0.06;
 
 		return {
+			locationDetails: {
+				marginVertical: 10,
+				width: width - padding,
+			},
 			arrow: {
 				position: 'absolute',
 				top: isPortrait ? height * 0.12 : width * 0.12,

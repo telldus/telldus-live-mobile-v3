@@ -195,7 +195,7 @@ class LocationName extends View {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
-		const padding = width * 0.068;
+		const padding = width * 0.13;
 
 		return {
 			textField: {

@@ -154,6 +154,7 @@ class LocationDetected extends View {
 			},
 			itemsContainer: {
 				justifyContent: 'center',
+				paddingTop: 10,
 			},
 			button: {
 				marginVertical: 20,

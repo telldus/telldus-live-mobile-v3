@@ -318,7 +318,7 @@ class Position extends View {
 		const width = appLayout.width;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const padding = width * 0.068;
+		const padding = width * 0.13;
 
 		return {
 			container: {

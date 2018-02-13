@@ -214,24 +214,25 @@ class TimeZone extends View<void, Props, State> {
 	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
-		let isPortrait = height > width;
+		const isPortrait = height > width;
+		const padding = width * 0.13;
 
 		return {
 			timeZoneContainer: {
 				flexDirection: 'row',
 				justifyContent: 'flex-start',
 				marginTop: 10,
-				width: width - 40,
+				width: width - padding,
 			},
 			timeZone: {
 				color: '#00000099',
-				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+				fontSize: 20,
 				paddingLeft: 2,
 				marginRight: 10,
 			},
 			hint: {
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: 13,
 				paddingLeft: 2,
 			},
 			buttonStyle: {

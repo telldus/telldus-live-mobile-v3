@@ -233,22 +233,23 @@ class LocationActivationManual extends View {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
-		const padding = width * 0.068;
+		const padding = width * 0.13;
 
 		return {
 			textBody: {
 				color: '#A59F9A',
 				marginTop: 10,
 				textAlign: 'left',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: 13,
 				paddingLeft: 2,
+				width: width - padding,
 			},
 			textField: {
 				height: 50,
 				width: width - padding,
 				paddingLeft: 35,
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+				fontSize: 20,
 			},
 			locationIcon: {
 				position: 'absolute',
