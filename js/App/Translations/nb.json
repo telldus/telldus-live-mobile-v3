@@ -52,6 +52,7 @@
     "accessibilityLabel.sensors.labelWindAverage": "Vind gjennomsnitt",
     "accessibilityLabel.sensors.labelWindDirection": "Vindretning",
     "accessibilityLabel.sensors.labelWindGust": "Vindkast",
+    "accessibilityLabel.sensors.powerFactor": "Effektfaktor",
     "accessibilityLabel.sensors.pulse": "Puls",
     "accessibilityLabel.sensors.voltage": "Spenning",
     "accessibilityLabel.sensorsTab": "sensorer",
