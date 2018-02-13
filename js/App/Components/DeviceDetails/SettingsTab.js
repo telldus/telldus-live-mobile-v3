@@ -140,7 +140,7 @@ class SettingsTab extends View {
 			ShowOnDashCover: {
 				backgroundColor: '#fff',
 				height: isPortrait ? height * 0.09 : width * 0.09,
-				marginTop: 25,
+				marginVertical: 25,
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
