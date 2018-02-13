@@ -15,8 +15,8 @@ module.exports = {
     testPassword: '',
     forceLocale: '',
     pushSenderId: '${PUSH_SENDER_ID}',
-    pushServiceId: ${PUSH_SERVICE_ID_ANDROID}
-    googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}',
+    pushServiceId: ${PUSH_SERVICE_ID_ANDROID},
+    googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}'
 };
 EOF
 
