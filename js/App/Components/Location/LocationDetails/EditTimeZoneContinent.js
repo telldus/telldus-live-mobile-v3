@@ -44,10 +44,11 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
+	rootNavigator: Object,
 }
 
 type State = {
-	timezone: string,
+	autodetectedTimezone: string,
 };
 
 class EditTimeZoneContinent extends View {
@@ -67,10 +68,9 @@ class EditTimeZoneContinent extends View {
 		super(props);
 
 		const { navigation } = props;
-		const { timezone } = navigation.state.params;
-
+		const { autodetectedTimezone } = navigation.state.params;
 		this.state = {
-			timezone,
+			autodetectedTimezone,
 		};
 
 		let { formatMessage } = props.intl;
@@ -97,10 +97,18 @@ class EditTimeZoneContinent extends View {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
+		let { screenReaderEnabled, currentScreen, navigation } = nextProps;
 		let shouldAnnounce = currentScreen === 'EditTimeZoneContinent' && this.props.currentScreen !== 'EditTimeZoneContinent';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
+		}
+		if (currentScreen === 'EditTimeZoneContinent') {
+			const { autodetectedTimezone } = navigation.state.params;
+			if (autodetectedTimezone && (autodetectedTimezone !== this.state.autodetectedTimezone)) {
+				this.setState({
+					autodetectedTimezone,
+				});
+			}
 		}
 	}
 
@@ -134,8 +142,8 @@ class EditTimeZoneContinent extends View {
 	}
 
 	render() {
-		const { appLayout, navigation } = this.props;
-		const { timezone } = navigation.state.params;
+		const { appLayout } = this.props;
+		const { autodetectedTimezone } = this.state;
 		const styles = this.getStyle(appLayout);
 
 		return (
@@ -145,10 +153,10 @@ class EditTimeZoneContinent extends View {
 						{this.labelAutodetect}
 					</Text>
 				</TouchableOpacity>
-				{!!timezone && (
+				{!!autodetectedTimezone && (
 					<TouchableOpacity onPress={this.onPressAutodetected} style={styles.rowItems}>
 						<Text style={styles.text}>
-							{this.state.timezone}
+							{autodetectedTimezone}
 						</Text>
 					</TouchableOpacity>
 				)}

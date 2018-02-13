@@ -80,6 +80,17 @@ class Details extends View {
 		this.onPressRemoveLocation = this.onPressRemoveLocation.bind(this);
 	}
 
+	componentDidMount() {
+		const { actions, location, navigation } = this.props;
+		let { id } = location, extras = 'timezoneAutodetect';
+		actions.getGatewayInfo({id}, extras).then(response => {
+			let { autodetectedTimezone } = response;
+			let { params } = navigation.state;
+			let newParams = { ...params, autodetectedTimezone };
+			navigation.setParams(newParams);
+		});
+	}
+
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.currentScreen === 'Details';
 	}
@@ -91,7 +102,9 @@ class Details extends View {
 
 	onEditTimeZone() {
 		let { navigation, location } = this.props;
-		navigation.navigate('EditTimeZoneContinent', {id: location.id, timezone: location.timezone});
+		let { params } = navigation.state;
+		let newParams = { ...params, id: location.id, timezone: location.timezone };
+		navigation.navigate('EditTimeZoneContinent', newParams);
 	}
 
 	onEditGeoPosition() {
