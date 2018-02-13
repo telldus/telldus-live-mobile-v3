@@ -79,10 +79,10 @@ module.exports = {
 			}
 		);
 	},
-	setAppVersion: (appVersion: string): ThunkAction => dispatch => {
+	setChangeLogVersion: (changeLogVersion: string): ThunkAction => dispatch => {
 		return dispatch({
-			type: 'SET_APP_VERSION',
-			payload: appVersion,
+			type: 'SET_CHANGELOG_VERSION',
+			payload: changeLogVersion,
 		});
 	},
 };
