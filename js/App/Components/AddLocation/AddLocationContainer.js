@@ -236,7 +236,7 @@ class AddLocationContainer extends View<null, Props, State> {
 					alignItems: 'center',
 				}}>
 
-					<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+					<ScrollView keyboardShouldPersistTaps={'always'} style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 						<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
 							<AddLocationPoster h1={h1} h2={h2} infoButton={infoButton} screenProps={screenProps} intl={intl} navigation={navigation}/>
 							<View style={[styles.style, {paddingHorizontal: padding}]}>

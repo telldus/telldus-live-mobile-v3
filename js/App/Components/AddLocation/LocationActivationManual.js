@@ -158,9 +158,6 @@ class LocationActivationManual extends View {
 	}
 
 	onActivationCodeSubmit() {
-		if (this.state.isKeyboardShown) {
-			Keyboard.dismiss();
-		}
 		if (this.state.activationCode.length === 10) {
 			this.setState({
 				isLoading: true,
@@ -168,6 +165,9 @@ class LocationActivationManual extends View {
 			let param = {code: this.state.activationCode};
 			this.props.getGatewayInfo(param, 'timezone').then(response => {
 				if (response.id) {
+					if (this.state.isKeyboardShown) {
+						Keyboard.dismiss();
+					}
 					let clientInfo = {
 						clientId: response.id,
 						uuid: response.uuid,

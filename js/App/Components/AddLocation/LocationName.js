@@ -145,12 +145,12 @@ class LocationName extends View {
 	}
 
 	onNameSubmit() {
-		if (this.state.isKeyboardShown) {
-			Keyboard.dismiss();
-		}
 		if (this.state.locationName !== '') {
 			let clientInfo = this.props.navigation.state.params.clientInfo;
 			clientInfo.name = this.state.locationName;
+			if (this.state.isKeyboardShown) {
+				Keyboard.dismiss();
+			}
 			this.props.navigation.navigate('TimeZone', {clientInfo});
 		} else {
 			let message = this.props.intl.formatMessage(messages.invalidLocationName);
