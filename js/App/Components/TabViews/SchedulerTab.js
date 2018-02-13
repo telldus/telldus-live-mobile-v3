@@ -256,6 +256,7 @@ function mapStateToProps(store) {
 		rowsAndSections: getRowsAndSections(store),
 		devices: store.devices,
 		appLayout: store.App.layout,
+		tab: store.navigation.tab,
 	};
 }
 
