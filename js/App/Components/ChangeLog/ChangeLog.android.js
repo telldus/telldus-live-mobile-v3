@@ -157,15 +157,15 @@ class ChangeLogNavigator extends View {
 
 
 	render() {
-
 		let { currentScreen } = this.state;
-		let { appLayout, screenReaderEnabled, intl } = this.props;
+		let { appLayout, screenReaderEnabled, intl, changeLogVersion } = this.props;
 		let screenProps = {
 			currentScreen,
 			appLayout,
 			screenReaderEnabled,
 			Screens,
 			intl,
+			changeLogVersion,
 		};
 		let { h1, h2 } = this;
 

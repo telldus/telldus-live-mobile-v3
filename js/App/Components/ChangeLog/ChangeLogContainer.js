@@ -26,14 +26,13 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { intlShape, defineMessages } from 'react-intl';
-import DeviceInfo from 'react-native-device-info';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { View, FloatingButton, StyleSheet, Text } from 'BaseComponents';
 import Theme from 'Theme';
 
-import { setAppVersion } from 'Actions';
+import { setChangeLogVersion } from 'Actions';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
@@ -73,7 +72,7 @@ class ChangeLogContainer extends View {
 		this.skipButton = formatMessage(messages.skipButton).toUpperCase();
 		this.doneButton = formatMessage(i18n.done);
 
-		this.appVersion = DeviceInfo.getVersion();
+		this.changeLogVersion = props.screenProps.changeLogVersion;
 
 		this.onPressNext = this.onPressNext.bind(this);
 		this.onPressPrev = this.onPressPrev.bind(this);
@@ -88,7 +87,7 @@ class ChangeLogContainer extends View {
 
 		let isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
 		if (isFinalScreen) {
-			actions.setAppVersion(this.appVersion);
+			actions.setChangeLogVersion(this.changeLogVersion);
 		} else {
 			navigation.navigate(nextScreen);
 		}
@@ -108,7 +107,7 @@ class ChangeLogContainer extends View {
 
 	onPressSkip() {
 		let { actions } = this.props;
-		actions.setAppVersion(this.appVersion);
+		actions.setChangeLogVersion(this.changeLogVersion);
 	}
 
 	render(): Object {
@@ -228,7 +227,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({setAppVersion}, dispatch),
+			...bindActionCreators({setChangeLogVersion}, dispatch),
 		},
 	}
 );
