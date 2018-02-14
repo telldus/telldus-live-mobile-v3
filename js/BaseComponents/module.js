@@ -60,7 +60,6 @@ import I18n from './I18n';
 import Gravatar from './Gravatar';
 import TouchableButton from './TouchableButton';
 import Modal from './Modal';
-import ScreenContainer from './ScreenContainer';
 import Poster from './Poster';
 import IconTelldus from './IconTelldus';
 import BlockIcon from './BlockIcon';
@@ -123,7 +122,6 @@ module.exports = {
 	Tabs: ScrollableTabView,
 	TouchableButton: TouchableButton,
 	Modal: Modal,
-	ScreenContainer: ScreenContainer,
 	Poster: Poster,
 	IconTelldus: IconTelldus,
 	BlockIcon: BlockIcon,
