@@ -86,13 +86,13 @@ class AddLocationPoster extends View {
 	}
 
 	render(): Object {
-		const { h1, h2, infoButton, appLayout } = this.props;
+		const { h1, h2, infoButton, appLayout, screenProps } = this.props;
 		const styles = this.getStyle(appLayout);
 		const isPortrait = appLayout.height > appLayout.width;
 
 		return (
 			<Poster>
-				{(!this.isTablet) && (!isPortrait) &&
+				{(!this.isTablet) && (!isPortrait) && screenProps.currentScreen !== 'Success' &&
 						<TouchableOpacity
 							style={styles.backButtonLand}
 							onPress={this.goBack}
