@@ -112,7 +112,8 @@ class ChangeLogContainer extends View {
 
 	render(): Object {
 		const { children, screenProps } = this.props;
-		const { appLayout } = screenProps;
+		const { appLayout, Screens, currentScreen } = screenProps;
+		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
 
 		let { stepIndicatorCover, floatingButtonLeft } = this.getStyles(appLayout);
 
@@ -134,13 +135,14 @@ class ChangeLogContainer extends View {
 						</Text>
 					</View>
 					<View style={stepIndicatorCover}>
-						<FloatingButton
+						{!isFirstScreen && (<FloatingButton
 							imageSource={require('../TabViews/img/right-arrow-key.png')}
 							onPress={this.onPressPrev}
 							buttonStyle={floatingButtonLeft}
 							iconStyle={styles.buttonIconStyle}/>
-						{screenProps.Screens.map((screen, index) => {
-							let backgroundColor = screenProps.Screens[index] === screenProps.currentScreen ?
+						)}
+						{Screens.map((screen, index) => {
+							let backgroundColor = Screens[index] === currentScreen ?
 								Theme.Core.brandSecondary : '#00000080';
 							return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
 						})
