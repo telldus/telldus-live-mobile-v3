@@ -107,7 +107,7 @@ class AddLocationContainer extends View<null, Props, State> {
 	};
 
 	static defaultProps: DefaultProps = {
-		source: require('../TabViews/img/telldus-geometric-header-bg.png'),
+		source: require('../TabViews/img/telldus-geometric-bg-750.png'),
 	};
 
 	state = {
