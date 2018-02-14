@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -36,7 +36,7 @@ import icon_settings from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_settings);
 
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
-import { Text, View } from 'BaseComponents';
+import { Text, View, Poster } from 'BaseComponents';
 import { getWindowDimensions } from 'Lib';
 import i18n from '../../Translations/common';
 
@@ -46,6 +46,7 @@ type Props = {
 	stackNavigator: Object,
 	intl: intlShape.isRequired,
 	appLayout: Object,
+	screenProps: Object,
 };
 
 type State = {
@@ -111,7 +112,7 @@ class DeviceDetailsTabsView extends View {
 		let isPortrait = appLayout.height > appLayout.width;
 
 		let {
-			poster,
+			posterCover,
 			iconBackground,
 			deviceIcon,
 			textDeviceName,
@@ -119,22 +120,24 @@ class DeviceDetailsTabsView extends View {
 
 		return (
 			<View style={styles.container}>
-				<ImageBackground style={poster} resizeMode={'cover'} source={require('../TabViews/img/telldus-geometric-header-bg.png')}>
-					{(!this.isTablet) && (!isPortrait) &&
-						<TouchableOpacity
-							style={styles.backButtonLand}
-							onPress={this.goBack}
-							accessibilityLabel={this.labelLeftIcon}>
-							<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff"/>
-						</TouchableOpacity>
-					}
-					<View style={iconBackground}>
-						<CustomIcon name="icon_device_alt" size={deviceIcon.size} color={'#F06F0C'} />
+				<Poster>
+					<View style={posterCover}>
+						{(!this.isTablet) && (!isPortrait) &&
+							<TouchableOpacity
+								style={styles.backButtonLand}
+								onPress={this.goBack}
+								accessibilityLabel={this.labelLeftIcon}>
+								<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff"/>
+							</TouchableOpacity>
+						}
+						<View style={iconBackground}>
+							<CustomIcon name="icon_device_alt" size={deviceIcon.size} color={'#F06F0C'} />
+						</View>
+						<Text style={textDeviceName}>
+							{this.props.device.name}
+						</Text>
 					</View>
-					<Text style={textDeviceName}>
-						{this.props.device.name}
-					</Text>
-				</ImageBackground>
+				</Poster>
 				<View style={{flex: 1}}>
 					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
@@ -148,12 +151,14 @@ class DeviceDetailsTabsView extends View {
 		let isPortrait = height > width;
 
 		return {
-			poster: {
-				height: height * 0.2,
-				width: width,
+			posterCover: {
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				bottom: 0,
+				right: 0,
 				alignItems: 'center',
 				justifyContent: 'center',
-				flexDirection: isPortrait ? 'column' : 'row',
 			},
 			iconBackground: {
 				backgroundColor: '#fff',

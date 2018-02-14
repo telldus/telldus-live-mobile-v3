@@ -31,10 +31,15 @@ type Props = {
 	children?: any,
 	source?: number,
 	appLayout: Object,
+	source750: number,
+	source1500: number,
+	source3000: number
 };
 
 type DefaultProps = {
-	source: number,
+	source750: number,
+	source1500: number,
+	source3000: number
 };
 
 class Poster extends Component<Props, null> {
@@ -46,28 +51,49 @@ class Poster extends Component<Props, null> {
 	};
 
 	static defaultProps: DefaultProps = {
-		source: require('../App/Components/TabViews/img/telldus-geometric-header-bg.png'),
+		source750: require('../App/Components/TabViews/img/telldus-geometric-bg-750.png'),
+		source1500: require('../App/Components/TabViews/img/telldus-geometric-bg-1500.png'),
+		source3000: require('../App/Components/TabViews/img/telldus-geometric-bg-3000.png'),
 	};
 
 	constructor(props: Props) {
 		super(props);
 	}
 
-	render(): Object {
-		const { children, source, appLayout } = this.props;
-		const { image, mask } = this._getStyle(appLayout);
+	getImageSource(height: number): number {
+		let { source750, source1500, source3000 } = this.props;
+		switch (height) {
+			case height > 700 && height < 1400:
+				return source1500;
+			case height >= 1400:
+				return source3000;
+			default:
+				return source750;
+		}
+	}
 
+	render(): Object {
+		const { children, appLayout, source } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+
+		let imageSource = source;
+		if (!imageSource) {
+			imageSource = this.getImageSource(deviceHeight);
+		}
+
+		const { image, mask } = this._getStyle(appLayout);
 		return (
 			<View style={mask}>
-				<Image source={source} style={image}/>
+				<Image source={imageSource} style={image}/>
 				{!!children && children}
 			</View>
 		);
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
 		return {
