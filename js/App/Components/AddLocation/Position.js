@@ -35,7 +35,7 @@ import { LabelBox } from 'AddNewLocation_SubViews';
 
 import { showModal } from 'Actions';
 import { reportError } from 'Analytics';
-import { googleAPIKey } from 'Config';
+import { googleMapsAPIKey } from 'Config';
 
 import i18n from '../../Translations/common';
 const messages = defineMessages({
@@ -193,7 +193,7 @@ class Position extends View {
 			isLoading: true,
 		});
 		let clientInfo = this.props.navigation.state.params.clientInfo;
-		clientInfo.cordinates = { ...this.state.coordinate };
+		clientInfo.coordinates = { ...this.state.coordinate };
 		this.props.actions.activateGateway(clientInfo)
 			.then(response => {
 				this.props.navigation.navigate('Success', {clientInfo});
@@ -214,7 +214,7 @@ class Position extends View {
 
 	onEndEditing() {
 		if (this.state.address !== '') {
-			this.props.actions.getGeoCodePosition(this.state.address, googleAPIKey).then(response => {
+			this.props.actions.getGeoCodePosition(this.state.address, googleMapsAPIKey).then(response => {
 				if (response.status && response.status === 'OK' && response.results[0]) {
 					let { location, viewport } = response.results[0].geometry;
 					let latitude = location.lat, longitude = location.lng;
