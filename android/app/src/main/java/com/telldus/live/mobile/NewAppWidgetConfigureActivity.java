@@ -201,7 +201,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
             createDeviceApi();
         }
 
-      /* client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
+     /*  client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
         client_secret="NUKU6APRAKATRESPECHEX3WECRAPHUCA";
         grant_Type="password";
         user_name="developer@telldus.com";
@@ -210,8 +210,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
 
         prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
-        prefManager.AccessTokenDetails("620c862b11a879968eb4cf4c2187d6256c1e96e6","10800");
-        createDeviceApi(); */
+        prefManager.AccessTokenDetails("33d607e1ddc41188287a8ebbe03923dc550e2800","10800");
+        createDeviceApi();*/
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
@@ -348,7 +348,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
                             //    deviceHint.setText(null);
                                 deviceStateVal[0] = (String) deviceStateList[which];
-                                //   Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_LONG).show();
+                                   Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_LONG).show();
                                 ad.dismiss();
 
 
@@ -391,7 +391,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 String name = curObj.getString("name");
                                 stateID = curObj.getInt("state");
 
-                                if (stateID == 1 || stateID == 2 ||stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512) {
+                                if (stateID == 1 || stateID == 2 ||stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512 || stateID == 16) {
                                     Integer id = curObj.getInt("id");
                                     DeviceID.put(name, id);
                                     nameListItems.add(name);
