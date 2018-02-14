@@ -3,8 +3,6 @@ package com.telldus.live.mobile.Database;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.ArrayList;
-
 /**
  * Created by Lincoln on 05/05/16.
  */
@@ -194,5 +192,16 @@ public class PrefManager {
     }
 
 
+
+    public void setDimmer(String dimmer)
+    {
+        editor.putString("dimmer",dimmer);
+        editor.commit();
+        editor.apply();
+    }
+    public String getDimmer()
+    {
+        return pref.getString("dimmer","0");
+    }
 
 }

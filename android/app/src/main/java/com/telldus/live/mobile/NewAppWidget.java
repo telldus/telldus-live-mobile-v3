@@ -35,8 +35,11 @@ public class NewAppWidget extends AppWidgetProvider {
     private static final String ACTION_UP = "ACTION_UP";
     private static final String ACTION_DOWN = "ACTION_DOWN";
     private static final String ACTION_STOP = "ACTION_STOP";
+    private static final String ACTION_TRIM = "ACTION_TRIM";
 
     private PendingIntent pendingIntent;
+
+
 
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -85,6 +88,18 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setOnClickPendingIntent(R.id.uparrow,getPendingBELL(context,ACTION_UP,appWidgetId));
                 views.setOnClickPendingIntent(R.id.downarrow,getPendingBELL(context,ACTION_DOWN,appWidgetId));
                 views.setOnClickPendingIntent(R.id.stopicon,getPendingBELL(context,ACTION_STOP,appWidgetId));
+            }
+            if (action.equals("16"))
+            {
+                views.setViewVisibility(R.id.uibtns, View.VISIBLE);
+                Toast.makeText(context,"seekbar",Toast.LENGTH_LONG).show();
+                views.setViewVisibility(R.id.btna, View.VISIBLE);
+                views.setViewVisibility(R.id.btnb, View.INVISIBLE);
+                views.setViewVisibility(R.id.btnc, View.INVISIBLE);
+                views.setOnClickPendingIntent(R.id.btna,getPendingBELL(context,ACTION_TRIM,appWidgetId));
+                views.setOnClickPendingIntent(R.id.btnb,getPendingBELL(context,ACTION_TRIM,appWidgetId));
+                views.setOnClickPendingIntent(R.id.btnc,getPendingBELL(context,ACTION_TRIM,appWidgetId));
+
             }
 
 
@@ -231,6 +246,32 @@ public class NewAppWidget extends AppWidgetProvider {
             DeviceInfo id=db.getSinlgeDeviceID(wigetID);
             createDeviceApi(context,id.getDeviceID(),512,wigetID,db,"UDS");
         }
+        if (ACTION_TRIM.equals(intent.getAction()))
+        {
+
+            PrefManager prefManager=new PrefManager(context);
+            String status=prefManager.getDimmer();
+            String  accessToken=prefManager.getAccess();
+            Bundle extras=intent.getExtras();
+            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+
+            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+            if(status.equals("0"))
+            {
+
+               createAPIDIMMER(id.getDeviceID(),0,accessToken,"0",wigetID,context,prefManager);
+
+            }
+            if(status.equals("50"))
+            {
+                createAPIDIMMER(id.getDeviceID(),50,accessToken,"50",wigetID,context,prefManager);
+            }
+            if(status.equals("100"))
+            {
+                createAPIDIMMER(id.getDeviceID(),100,accessToken,"100",wigetID,context,prefManager);
+            }
+
+        }
     }
 
 
@@ -274,6 +315,62 @@ public class NewAppWidget extends AppWidgetProvider {
             }
         }
     }
+
+
+    void createAPIDIMMER(int deviceid, int value, String accessToken, final String action, final int wigetID,
+                         final Context ctx, final PrefManager prefManager)
+    {
+        String str="https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+16+"&value="+value;
+
+            AndroidNetworking.get(str)
+                    .addHeaders("Content-Type", "application/json")
+                    .addHeaders("Accpet", "application/json")
+                    .addHeaders("Authorization", "Bearer " + accessToken)
+                    .setPriority(Priority.LOW)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            String status=response.optString("status");
+                            String error=response.optString("error");
+                            RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
+                            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
+                            if(!status.isEmpty()&&status!=null&&action.equals("0")) {
+
+                                remoteViews.setTextViewText(R.id.btna,"50");
+                                prefManager.setDimmer("50");
+                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+
+                            }
+                            if(!status.isEmpty()&&status!=null&&action.equals("50")) {
+
+                                remoteViews.setTextViewText(R.id.btna,"100");
+                                prefManager.setDimmer("100");
+                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                            }
+                            if(!status.isEmpty()&&status!=null&&action.equals("100")) {
+
+                                remoteViews.setTextViewText(R.id.btna,"0");
+                                prefManager.setDimmer("0");
+                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                            }
+
+                            if(!error.isEmpty()&&error!=null)
+                            {
+
+                                Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                        }
+                    });
+    }
+
 
     void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action) {
         PrefManager prefManager=new PrefManager(ctx);
@@ -334,7 +431,6 @@ public class NewAppWidget extends AppWidgetProvider {
                             {
                                 Toast.makeText(ctx,"Success",Toast.LENGTH_LONG).show();
                             }
-
 
                             if(!error.isEmpty()&&error!=null)
                             {
