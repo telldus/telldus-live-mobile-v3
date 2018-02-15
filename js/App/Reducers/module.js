@@ -25,18 +25,17 @@
 
 import { persistCombineReducers } from 'redux-persist';
 import { AsyncStorage } from 'react-native';
-// import { localStorageKey } from 'Config';
+import { localStorageKey } from 'Config';
 
 import Navigation from './Navigation';
 import User from './User';
 import Tabs from './Tabs';
 import LiveApi from './LiveApi';
-import Websockets from './Websockets';
 import Modal from './Modal';
 import { reducers } from 'live-shared-data';
 
 const config = {
-	key: 'tellduslive',
+	key: localStorageKey,
 	storage: AsyncStorage,
 };
 
@@ -45,7 +44,6 @@ module.exports = persistCombineReducers(config, {
 	user: User,
 	tabs: Tabs,
 	liveApi: LiveApi,
-	websockets: Websockets,
 	modal: Modal,
 	...reducers,
 });
