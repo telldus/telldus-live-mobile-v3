@@ -16,27 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Lib
  */
+
+// @flow
 
 'use strict';
 
-import getRouteName from './getRouteName';
-import getDeviceWidth from './getDeviceWidth';
-import getDeviceHeight from './getDeviceHeight';
-import getWindowDimensions from './getWindowDimensions';
-import hasStatusBar from './hasStatusBar';
-import Dimmer from './Dimmer';
-import SensorUtils from './SensorUtils';
-import DeviceUtils from './DeviceUtils';
+import { utils } from 'live-shared-data';
+const { deviceUtils } = utils;
 
 module.exports = {
-	getRouteName,
-	getDeviceWidth,
-	getDeviceHeight,
-	getWindowDimensions,
-	hasStatusBar,
-	...Dimmer,
-	...SensorUtils,
-	...DeviceUtils,
+	...deviceUtils,
 };
