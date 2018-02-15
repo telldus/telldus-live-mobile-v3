@@ -136,9 +136,24 @@ class EditTimeZoneContinent extends View {
 	}
 
 	onPressAutodetect() {
+		const { actions, navigation } = this.props;
+		actions.setTimezone(navigation.state.params.id, '').then(() => {
+			actions.getGateways();
+			navigation.goBack();
+		}).catch(() => {
+			actions.showModal('Error setting time zone');
+		});
 	}
 
 	onPressAutodetected() {
+		const { actions, navigation } = this.props;
+		const { autodetectedTimezone } = this.state;
+		actions.setTimezone(navigation.state.params.id, autodetectedTimezone).then(() => {
+			actions.getGateways();
+			navigation.goBack();
+		}).catch(() => {
+			actions.showModal('Error setting time zone');
+		});
 	}
 
 	render() {
