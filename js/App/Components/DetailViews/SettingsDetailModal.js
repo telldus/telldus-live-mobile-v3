@@ -245,7 +245,7 @@ class SettingsDetailModal extends View {
 							}
 							<Text style={styles.versionInfo} accessible={buttonAccessible}
 								importantForAccessibility={importantForAccessibility}>
-								Telldus Live! mobile{'\n'}
+								{'Telldus Live! mobile '}
 								<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
 							</Text>
 							<TouchableButton
@@ -354,8 +354,6 @@ class SettingsDetailModal extends View {
 				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
 				textAlign: 'center',
 				textAlignVertical: 'center',
-				width: 200,
-				height: 45,
 				marginVertical: 20,
 			},
 			gear: {
