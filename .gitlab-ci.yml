@@ -66,10 +66,6 @@ ios:
       - TelldusLiveApp.ipa
       - TelldusLiveApp.app.dSYM.zip
     expire_in: '1 mos'
-  only:
-    - tags
-    - master
-    - /^v\d+\.\d+.*$/ # Version branches
   script:
     - yarn install --quiet
     - cd ios
