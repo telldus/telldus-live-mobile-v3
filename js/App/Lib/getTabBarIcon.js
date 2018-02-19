@@ -18,7 +18,8 @@
  */
 
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, Dimensions } from 'react-native';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 const icons = {
 	dashboard: {
@@ -45,11 +46,12 @@ const icons = {
 
 export default function getTabBarIcon(focused, tintColor, sourceName) {
 	const icon = icons[sourceName];
-
+	let {height, width} = Dimensions.get('window');
+	let isPortrait = height > width;
 	return (
 		<Image
 			source={focused ? icon.active : icon.inactive}
-			style={{ tintColor }}
+			style={{ tintColor, ...ifIphoneX({marginTop: isPortrait ? 60 : 5}) }}
 		/>
 	);
 }

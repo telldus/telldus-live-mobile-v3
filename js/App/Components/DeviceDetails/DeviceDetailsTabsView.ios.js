@@ -24,21 +24,25 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 import { TabNavigator } from 'react-navigation';
+import { NavigationHeader } from 'DDSubViews';
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_settings);
+const ViewX = isIphoneX() ? SafeAreaView : View;
 
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
 import { Text, View, Poster } from 'BaseComponents';
 import { getWindowDimensions } from 'Lib';
 import i18n from '../../Translations/common';
+import Theme from 'Theme';
 
 type Props = {
 	dispatch: Function,
@@ -101,7 +105,7 @@ class DeviceDetailsTabsView extends View {
 	}
 
 	render() {
-		let { appLayout } = this.props;
+		let { appLayout, stackNavigator } = this.props;
 		let { currentScreen } = this.props.screenProps;
 		let screenProps = {
 			device: this.props.device,
@@ -119,7 +123,8 @@ class DeviceDetailsTabsView extends View {
 		} = this.getStyles(appLayout);
 
 		return (
-			<View style={styles.container}>
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+				<NavigationHeader navigation={stackNavigator}/>
 				<Poster>
 					<View style={posterCover}>
 						{(!this.isTablet) && (!isPortrait) &&
@@ -141,7 +146,7 @@ class DeviceDetailsTabsView extends View {
 				<View style={{flex: 1}}>
 					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
-			</View>
+			</ViewX>
 		);
 	}
 
@@ -217,7 +222,7 @@ const Tabs = TabNavigator(
 				shadowColor: '#000000',
 				shadowOpacity: 1.0,
 				elevation: 2,
-				height: getWindowDimensions().height * 0.085,
+				...ifIphoneX({ height: getWindowDimensions().height * 0.025 }, {height: getWindowDimensions().height * 0.085}),
 				alignItems: 'center',
 				justifyContent: 'center',
 			},

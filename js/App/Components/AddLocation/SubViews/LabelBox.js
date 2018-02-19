@@ -24,6 +24,7 @@
 'use strict';
 
 import React from 'react';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import {
 	View,
@@ -55,6 +56,10 @@ class LabelBox extends View {
 
 		return {
 			container: {
+				...ifIphoneX({position: 'absolute',
+					right: 20,
+					left: 20,
+					top: 5}),
 				alignItems: 'center',
 				justifyContent: 'center',
 			},

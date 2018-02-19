@@ -71,7 +71,7 @@ ios:
     - master
     - /^v\d+\.\d+.*$/ # Version branches
   script:
-    - npm install --quiet
+    - yarn install --quiet
     - cd ios
     - ./buildGitlabRunner.sh
 

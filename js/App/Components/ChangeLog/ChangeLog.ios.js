@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { Easing, Animated } from 'react-native';
+import { Easing, Animated, SafeAreaView } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -37,7 +37,9 @@ import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 
 import { getRouteName } from 'Lib';
-
+import Theme from 'Theme';
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
+const ViewX = isIphoneX() ? SafeAreaView : View;
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
 
 const renderChangeLogContainer = (navigation, screenProps): Function => (Component): Object => (
@@ -170,11 +172,11 @@ class ChangeLogNavigator extends View {
 		let { h1, h2 } = this;
 
 		return (
-			<View>
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
 				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
-			</View>
+			</ViewX>
 		);
 	}
 }

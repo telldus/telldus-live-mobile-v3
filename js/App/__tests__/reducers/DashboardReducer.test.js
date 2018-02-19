@@ -6,7 +6,7 @@ describe('Test Dashboard reducers', ()=>{
 
 	it('check dashboard reducers ', () => {
 
-		const state = [{childObject: 'deviceId4', objectType: 'device'}, {childObject: 'sensorId3', objectType: 'sensor'}];
+		const state = [{key: 3, data: 'deviceId4', objectType: 'device'}, {data: 'sensorId3', key: 2, objectType: 'sensor'}];
 
 		const dashboard = {
 			deviceIds: [3],

@@ -22,15 +22,18 @@
 'use strict';
 
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, SafeAreaView} from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
-
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 import { FormattedMessage, View, DialogueBox } from 'BaseComponents';
 import { FormContainerComponent, LoginForm, SessionLocked } from 'PreLoginScreen_SubViews';
 
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
+import Theme from 'Theme';
+
+const ViewX = isIphoneX() ? SafeAreaView : View;
 
 const messages = defineMessages({
 	needAccount: {
@@ -146,40 +149,42 @@ class LoginScreen extends View {
 			headerText, notificationHeader, positiveText,
 			onPressPositive, onPressNegative, showPositive, showNegative} = this.getRelativeData();
 		return (
-			<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
-				{this.props.accessToken && !this.props.isTokenValid ?
-					<SessionLocked onPressLogout={this.state.onPressLogout} dialogueOpen={this.props.showModal}/>
-					:
-					<LoginForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
-				}
-				{this.props.accessToken && !this.props.isTokenValid ?
-					null
-					:
-					<View style={styles.otherLinks}>
-						<TouchableOpacity style={{height: 25}}
-							onPress={this.onForgotPassword}
-							accessibilityLabel={this.labelForgotPassword}>
-							<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb', fontSize: 13 }}/>
-						</TouchableOpacity>
-						<TouchableOpacity style={{height: 25, paddingLeft: 5 }}
-							onPress={this.onNeedAccount}
-							accessibilityLabel={this.labelNeedAccount}>
-							<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5, fontSize: 13 }}/>
-						</TouchableOpacity>
-						<View style={{ height: 10 }}/>
-					</View>
-				}
-				<DialogueBox
-					showDialogue={this.props.showModal}
-					header={notificationHeader}
-					text={this.props.validationMessage}
-					showPositive={showPositive}
-					showNegative={showNegative}
-					positiveText={positiveText}
-					onPressPositive={onPressPositive}
-					onPressNegative={onPressNegative}/>
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+				<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
+					{this.props.accessToken && !this.props.isTokenValid ?
+						<SessionLocked onPressLogout={this.state.onPressLogout} dialogueOpen={this.props.showModal}/>
+						:
+						<LoginForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
+					}
+					{this.props.accessToken && !this.props.isTokenValid ?
+						null
+						:
+						<View style={styles.otherLinks}>
+							<TouchableOpacity style={{height: 25}}
+								onPress={this.onForgotPassword}
+								accessibilityLabel={this.labelForgotPassword}>
+								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb', fontSize: 13 }}/>
+							</TouchableOpacity>
+							<TouchableOpacity style={{height: 25, paddingLeft: 5 }}
+								onPress={this.onNeedAccount}
+								accessibilityLabel={this.labelNeedAccount}>
+								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5, fontSize: 13 }}/>
+							</TouchableOpacity>
+							<View style={{ height: 10 }}/>
+						</View>
+					}
+					<DialogueBox
+						showDialogue={this.props.showModal}
+						header={notificationHeader}
+						text={this.props.validationMessage}
+						showPositive={showPositive}
+						showNegative={showNegative}
+						positiveText={positiveText}
+						onPressPositive={onPressPositive}
+						onPressNegative={onPressNegative}/>
 
-			</FormContainerComponent>
+				</FormContainerComponent>
+			</ViewX>
 		);
 	}
 

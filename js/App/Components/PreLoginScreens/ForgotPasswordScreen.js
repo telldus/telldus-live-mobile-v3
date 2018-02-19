@@ -23,14 +23,17 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, SafeAreaView } from 'react-native';
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
 import { FormattedMessage, View } from 'BaseComponents';
 import {FormContainerComponent, ForgotPasswordForm} from 'PreLoginScreen_SubViews';
 
 import i18n from './../../Translations/common';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import Theme from 'Theme';
 
+const ViewX = isIphoneX() ? SafeAreaView : View;
 const messages = defineMessages({
 	backToLogin: {
 		id: 'user.backToLogin',
@@ -79,15 +82,17 @@ class ForgotPasswordScreen extends View {
 		let styles = this.getStyles(appLayout);
 
 		return (
-			<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)} formContainerStyle={styles.formContainer}>
-				<ForgotPasswordForm appLayout={appLayout}/>
-				<View style={{ height: 10 }}/>
-				<TouchableOpacity style={{height: 25}}
-					onPress={this.goBackToLogin}
-					accessibilityLabel={this.labelBackToLogin}>
-					<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
-				</TouchableOpacity>
-			</FormContainerComponent>
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+				<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)} formContainerStyle={styles.formContainer}>
+					<ForgotPasswordForm appLayout={appLayout}/>
+					<View style={{ height: 10 }}/>
+					<TouchableOpacity style={{height: 25}}
+						onPress={this.goBackToLogin}
+						accessibilityLabel={this.labelBackToLogin}>
+						<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
+					</TouchableOpacity>
+				</FormContainerComponent>
+			</ViewX>
 		);
 	}
 

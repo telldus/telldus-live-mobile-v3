@@ -30,6 +30,7 @@ export default {
 	brandDanger: '#d9534f',
 	brandWarning: '#f0ad4e',
 	brandSidebar: '#252932',
+	iPhoneXbg: '#eae7f0',
 	iconFamily: 'Ionicons',
 	get fonts() {
 		return {

@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Text, Poster, RoundedInfoButton } from 'BaseComponents';
 
@@ -120,11 +121,23 @@ class AddLocationPoster extends View {
 
 		return {
 			hContainer: {
-				position: 'absolute',
-				right: isPortrait ? width * 0.124 : height * 0.124,
-				top: isPortrait ? width * 0.088 : height * 0.088,
-				flex: 1,
-				alignItems: 'flex-end',
+				...ifIphoneX({
+					position: 'absolute',
+					right: 10,
+					top: 10,
+					left: 10,
+					bottom: 10,
+					flex: 1,
+					alignItems: 'center',
+					justifyContent: 'center',
+				},
+				{
+					position: 'absolute',
+					right: isPortrait ? width * 0.124 : height * 0.124,
+					top: isPortrait ? width * 0.088 : height * 0.088,
+					flex: 1,
+					alignItems: 'flex-end',
+				}),
 			},
 			h: {
 				color: '#fff',

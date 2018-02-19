@@ -24,12 +24,14 @@
 'use strict';
 
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Image, Dimensions } from 'BaseComponents';
 import AddLocationContainer from './AddLocationContainer';
+import { NavigationHeader } from 'DDSubViews';
 
 import LocationDetected from './LocationDetected';
 import LocationActivationManual from './LocationActivationManual';
@@ -45,7 +47,8 @@ import { getRouteName, hasStatusBar } from 'Lib';
 import Theme from 'Theme';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
-
+const ViewX = isIphoneX() ? SafeAreaView : View;
+const isPortrait = deviceHeight > deviceWidth;
 const renderAddLocationContainer = (navigation, screenProps) => Component => (
 	<AddLocationContainer navigation={navigation} screenProps={screenProps}>
 		<Component/>
@@ -87,12 +90,12 @@ const StackNavigatorConfig = {
 	navigationOptions: ({navigation}) => {
 		let {state} = navigation;
 		let renderStackHeader = state.routeName !== 'LocationDetected';
-		if (renderStackHeader) {
+		if (renderStackHeader && isPortrait) {
 			return {
 				headerStyle: {
 					marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 					backgroundColor: Theme.Core.brandPrimary,
-					height: deviceHeight * 0.1,
+					...ifIphoneX({ height: 10, paddingBottom: 40, paddingTop: 10 }, {height: deviceHeight * 0.1}),
 				},
 				headerTintColor: '#ffffff',
 				headerTitle: renderHeader(),
@@ -167,7 +170,12 @@ class AddLocationNavigator extends View {
 		};
 
 		return (
-			<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+				{this.props.navigation.state.params.renderRootHeader &&
+				<NavigationHeader navigation={navigation} />
+				}
+				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			</ViewX>
 		);
 	}
 }

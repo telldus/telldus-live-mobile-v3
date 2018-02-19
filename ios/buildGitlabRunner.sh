@@ -12,7 +12,7 @@ module.exports = {
     testPassword: '',
     forceLocale: '',
     pushSenderId: '',
-    pushServiceId: ${PUSH_SERVICE_ID_IOS}
+    pushServiceId: '${PUSH_SERVICE_ID_IOS}',
 };
 EOF
 
