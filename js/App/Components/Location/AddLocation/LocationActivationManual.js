@@ -165,7 +165,7 @@ class LocationActivationManual extends View {
 			});
 			let param = {code: this.state.activationCode};
 			this.props.actions.getGatewayInfo(param, 'timezone').then(response => {
-				if (response.id) {
+				if (response && response.activated === false) {
 					let clientInfo = {
 						clientId: response.id,
 						uuid: response.uuid,
@@ -174,6 +174,8 @@ class LocationActivationManual extends View {
 						autoDetected: true,
 					};
 					this.props.navigation.navigate('LocationName', {clientInfo});
+				} else if (response && response.activated === true) {
+					this.props.actions.showModal('This Gateway has already been activated', 'ERROR');
 				} else {
 					this.props.actions.showModal(response, 'ERROR');
 				}
