@@ -31,14 +31,16 @@ import i18n from '../../../Translations/common';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import { getLabelDevice } from 'Accessibility';
 
-const UpButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
+import Theme from 'Theme';
+
+const UpButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel, isActive }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}
 		accessibilityLabel={accessibilityLabel}>
 		<Icon name="caret-up"
 		      size={42}
-		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
+		      style={isEnabled ? (isActive ? styles.buttonActive : styles.buttonEnabled) : styles.buttonDisabled}
 		/>
 		{
 			methodRequested === 'UP' ?
@@ -49,14 +51,14 @@ const UpButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) =
 	</TouchableOpacity>
 );
 
-const DownButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
+const DownButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel, isActive }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}
 		accessibilityLabel={accessibilityLabel}>
 		<Icon name="caret-down"
 		      size={42}
-		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
+		      style={isEnabled ? (isActive ? styles.buttonActive : styles.buttonEnabled) : styles.buttonDisabled}
 		/>
 		{
 			methodRequested === 'DOWN' ?
@@ -67,14 +69,14 @@ const DownButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel })
 	</TouchableOpacity>
 );
 
-const StopButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel }) => (
+const StopButton = ({ isEnabled, onPress, methodRequested, accessibilityLabel, isActive }) => (
 	<TouchableOpacity
 		style={styles.navigationButton}
 		onPress={onPress}
 		accessibilityLabel={accessibilityLabel}>
 		<Icon name="stop"
 		      size={30}
-		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
+		      style={isEnabled ? (isActive ? styles.buttonActive : styles.buttonEnabled) : styles.buttonDisabled}
 		/>
 		{
 			methodRequested === 'STOP' ?
@@ -136,11 +138,14 @@ class NavigationalDashboardTile extends View {
 
 	render() {
 		const { item, tileWidth, intl } = this.props;
-		const { name, supportedMethods } = item;
+		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} accessibilityLabel={`${this.labelUpButton}, ${name}`}/> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} accessibilityLabel={`${this.labelDownButton}, ${name}`}/> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} accessibilityLabel={`${this.labelStopButton}, ${name}`}/> : null;
+		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested}
+			accessibilityLabel={`${this.labelUpButton}, ${name}`} isActive={isInState === 'UP'}/> : null;
+		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested}
+			accessibilityLabel={`${this.labelDownButton}, ${name}`} isActive={isInState === 'DOWN'}/> : null;
+		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested}
+			accessibilityLabel={`${this.labelStopButton}, ${name}`} isActive={isInState === 'STOP'}/> : null;
 
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
@@ -187,6 +192,9 @@ const styles = StyleSheet.create({
 	},
 	buttonDisabled: {
 		color: '#eeeeee',
+	},
+	buttonActive: {
+		color: Theme.Core.brandSecondary,
 	},
 	dot: {
 		position: 'absolute',
