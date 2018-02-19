@@ -24,7 +24,6 @@
 import React from 'react';
 import { AccessibilityInfo } from 'react-native';
 import { connect } from 'react-redux';
-import DeviceInfo from 'react-native-device-info';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
 
@@ -42,7 +41,7 @@ import {
 } from 'Actions';
 
 import Theme from 'Theme';
-import { changeLogAvailable } from 'Config';
+const changeLogVersion = '3.5';
 
 class App extends React.Component {
 	onLayout: (Object) => void;
@@ -50,8 +49,6 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.onLayout = this.onLayout.bind(this);
-
-		this.currentVersion = DeviceInfo.getVersion();
 	}
 
 	componentDidMount() {
@@ -96,11 +93,11 @@ class App extends React.Component {
 	}
 
 	render() {
-		let showChangeLog = changeLogAvailable && (this.props.appVersion !== this.currentVersion);
+		let showChangeLog = changeLogVersion !== this.props.prevChangeLogVersion;
 		if (showChangeLog) {
 			return (
 				<View onLayout={this.onLayout}>
-					<ChangeLogNavigator />
+					<ChangeLogNavigator changeLogVersion={changeLogVersion}/>
 				</View>
 			);
 		}
@@ -123,7 +120,7 @@ function mapStateToProps(store) {
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
 		pushTokenRegistered: store.user.pushTokenRegistered,
-		appVersion: store.App.appVersion,
+		prevChangeLogVersion: store.App.changeLogVersion,
 	};
 }
 

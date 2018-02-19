@@ -347,7 +347,8 @@ class TabsView extends View {
 
 		return {
 			header: isPortrait ? {
-				height: deviceHeight * 0.1111,
+				height: deviceHeight * 0.05,
+				alignItems: 'flex-end',
 			} : {
 				transform: [{rotateZ: '-90deg'}],
 				position: 'absolute',
@@ -363,14 +364,15 @@ class TabsView extends View {
 			buttonSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			menuButtonStyle: isPortrait ? null : {
 				position: 'absolute',
-				left: deviceHeight * 0.8999,
+				left: undefined,
+				right: 50,
 				top: deviceHeight * 0.03666,
 				paddingTop: 0,
 				paddingHorizontal: 0,
 			},
 			starButtonStyle: isPortrait ? null : {
 				position: 'absolute',
-				right: deviceHeight * 0.5333,
+				right: height - 50,
 				top: deviceHeight * 0.03666,
 				paddingTop: 0,
 				paddingHorizontal: 0,

@@ -31,7 +31,6 @@ import Navigation from './Navigation';
 import User from './User';
 import Tabs from './Tabs';
 import LiveApi from './LiveApi';
-import Websockets from './Websockets';
 import Modal from './Modal';
 import { reducers } from 'live-shared-data';
 
@@ -45,7 +44,6 @@ module.exports = persistCombineReducers(config, {
 	user: User,
 	tabs: Tabs,
 	liveApi: LiveApi,
-	websockets: Websockets,
 	modal: Modal,
 	...reducers,
 });

@@ -26,14 +26,13 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { intlShape, defineMessages } from 'react-intl';
-import DeviceInfo from 'react-native-device-info';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { View, TouchableButton, StyleSheet, Text } from 'BaseComponents';
+import { View, FloatingButton, StyleSheet, Text } from 'BaseComponents';
 import Theme from 'Theme';
 
-import { setAppVersion } from 'Actions';
+import { setChangeLogVersion } from 'Actions';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
@@ -55,7 +54,8 @@ type Props = {
 class ChangeLogContainer extends View {
 	props: Props;
 
-	onPressConfirm: () => void;
+	onPressNext: () => void;
+	onPressPrev: () => void;
 	onPressSkip: () => void;
 
 	nextButton: string;
@@ -72,13 +72,14 @@ class ChangeLogContainer extends View {
 		this.skipButton = formatMessage(messages.skipButton).toUpperCase();
 		this.doneButton = formatMessage(i18n.done);
 
-		this.appVersion = DeviceInfo.getVersion();
+		this.changeLogVersion = props.screenProps.changeLogVersion;
 
-		this.onPressConfirm = this.onPressConfirm.bind(this);
+		this.onPressNext = this.onPressNext.bind(this);
+		this.onPressPrev = this.onPressPrev.bind(this);
 		this.onPressSkip = this.onPressSkip.bind(this);
 	}
 
-	onPressConfirm() {
+	onPressNext() {
 		let { navigation, screenProps, actions } = this.props;
 		let { Screens, currentScreen } = screenProps;
 		let nextIndex = Screens.indexOf(currentScreen) + 1;
@@ -86,23 +87,35 @@ class ChangeLogContainer extends View {
 
 		let isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
 		if (isFinalScreen) {
-			actions.setAppVersion(this.appVersion);
+			actions.setChangeLogVersion(this.changeLogVersion);
 		} else {
 			navigation.navigate(nextScreen);
 		}
 	}
 
+	onPressPrev() {
+		let { navigation, screenProps } = this.props;
+		let { Screens, currentScreen } = screenProps;
+		let prevIndex = Screens.indexOf(currentScreen) - 1;
+		let prevScreen = Screens[prevIndex];
+
+		let isFirstScreen = Screens.indexOf(currentScreen) === 0;
+		if (!isFirstScreen) {
+			navigation.navigate(prevScreen);
+		}
+	}
+
 	onPressSkip() {
 		let { actions } = this.props;
-		actions.setAppVersion(this.appVersion);
+		actions.setChangeLogVersion(this.changeLogVersion);
 	}
 
 	render(): Object {
 		const { children, screenProps } = this.props;
-		const { Screens, currentScreen } = screenProps;
+		const { appLayout, Screens, currentScreen } = screenProps;
+		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
 
-		const isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
-		const buttonConfirm = isFinalScreen ? this.doneButton : this.nextButton;
+		let { stepIndicatorCover, floatingButtonLeft } = this.getStyles(appLayout);
 
 		return (
 			<View style={{flex: 1}}>
@@ -116,36 +129,61 @@ class ChangeLogContainer extends View {
 							},
 						)}
 					</View>
-					<View style={styles.stepIndicatorCover}>
-						{screenProps.Screens.map((screen, index) => {
-							let backgroundColor = screenProps.Screens[index] === screenProps.currentScreen ?
+					<View style={styles.buttonCover}>
+						<Text style={styles.textSkip} onPress={this.onPressSkip}>
+							{this.skipButton}
+						</Text>
+					</View>
+					<View style={stepIndicatorCover}>
+						{!isFirstScreen && (<FloatingButton
+							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							onPress={this.onPressPrev}
+							buttonStyle={floatingButtonLeft}
+							iconStyle={styles.buttonIconStyle}/>
+						)}
+						{Screens.map((screen, index) => {
+							let backgroundColor = Screens[index] === currentScreen ?
 								Theme.Core.brandSecondary : '#00000080';
 							return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
 						})
 						}
-					</View>
-					<View style={styles.buttonCover}>
-						<TouchableButton text={buttonConfirm} onPress={this.onPressConfirm}/>
-						<Text style={styles.textSkip} onPress={this.onPressSkip}>
-							{this.skipButton}
-						</Text>
+						<FloatingButton
+							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							onPress={this.onPressNext}
+							buttonStyle={{bottom: 0}}/>
 					</View>
 				</ScrollView>
 			</View>
 		);
 	}
+
+	getStyles(appLayout: Object) {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const buttonSize = deviceWidth * 0.134666667;
+
+		return {
+			stepIndicatorCover: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginBottom: 10,
+				height: buttonSize,
+			},
+			floatingButtonLeft: {
+				left: deviceWidth * 0.034666667,
+				bottom: 0,
+			},
+		};
+	}
 }
 
 const styles = StyleSheet.create({
-	stepIndicatorCover: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginVertical: 10,
-	},
 	buttonCover: {
 		alignItems: 'center',
 		justifyContent: 'center',
+		marginTop: 10,
 	},
 	textSkip: {
 		paddingVertical: 10,
@@ -183,12 +221,15 @@ const styles = StyleSheet.create({
 		color: '#00000080',
 		textAlign: 'left',
 	},
+	buttonIconStyle: {
+		transform: [{rotateZ: '180deg'}],
+	},
 });
 
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({setAppVersion}, dispatch),
+			...bindActionCreators({setChangeLogVersion}, dispatch),
 		},
 	}
 );

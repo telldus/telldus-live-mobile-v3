@@ -110,14 +110,14 @@ class DeviceLocationDetail extends View {
 		return {
 			locationImageContainer: {
 				height: isPortrait ? height * 0.16 : width * 0.16,
-				width: width * 0.28,
+				width: width * 0.25,
 				justifyContent: 'center',
 				alignItems: 'flex-start',
 			},
 			locationTextContainer: {
 				height: isPortrait ? height * 0.16 : width * 0.16,
-				width: width * 0.53,
-				marginRight: width * 0.09,
+				width: width * 0.58,
+				marginRight: width * 0.15,
 				justifyContent: 'center',
 				alignItems: 'flex-start',
 			},
@@ -128,11 +128,11 @@ class DeviceLocationDetail extends View {
 			},
 			textLocation: {
 				color: '#A59F9A',
-				fontSize: isPortrait ? width * 0.047 : height * 0.047,
+				fontSize: 14,
 			},
 			textHSH: {
 				color: '#F06F0C',
-				fontSize: isPortrait ? width * 0.060 : height * 0.060,
+				fontSize: 19,
 			},
 		};
 	}

@@ -27,7 +27,8 @@ import getDeviceHeight from './getDeviceHeight';
 import getWindowDimensions from './getWindowDimensions';
 import hasStatusBar from './hasStatusBar';
 import Dimmer from './Dimmer';
-import SensorUtil from './SensorUtil';
+import SensorUtils from './SensorUtils';
+import DeviceUtils from './DeviceUtils';
 
 module.exports = {
 	getRouteName,
@@ -36,5 +37,6 @@ module.exports = {
 	getWindowDimensions,
 	hasStatusBar,
 	...Dimmer,
-	...SensorUtil,
+	...SensorUtils,
+	...DeviceUtils,
 };

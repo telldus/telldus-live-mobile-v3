@@ -31,7 +31,7 @@ import MapView from 'react-native-maps';
 import { View, FloatingButton } from 'BaseComponents';
 import LabelBox from './LabelBox';
 
-import { googleAPIKey } from 'Config';
+import { googleMapsAPIKey } from 'Config';
 
 import i18n from '../../../Translations/common';
 import { messages } from '../Common/messages';
@@ -149,7 +149,7 @@ class GeoPosition extends View {
 
 	onEndEditing() {
 		if (this.state.address !== '') {
-			this.props.actions.getGeoCodePosition(this.state.address, googleAPIKey).then(response => {
+			this.props.actions.getGeoCodePosition(this.state.address, googleMapsAPIKey).then(response => {
 				if (response.status && response.status === 'OK' && response.results[0]) {
 					let { location, viewport } = response.results[0].geometry;
 					let latitude = location.lat, longitude = location.lng;

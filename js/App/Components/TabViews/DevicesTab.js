@@ -293,7 +293,7 @@ class DevicesTab extends View {
 
 	noDeviceMessage(style: Object) {
 		return (
-			<View style={style.container}>
+			<View style={style.noItemsContainer}>
 				<Text style={style.noItemsTitle}>
 					{this.noDeviceTitle}
 				</Text>
@@ -314,7 +314,7 @@ class DevicesTab extends View {
 
 	noGatewayMessage(style: Object) {
 		return (
-			<View style={style.container}>
+			<View style={style.noItemsContainer}>
 				<Text style={style.noItemsTitle}>
 					{this.noGatewayTitle}
 				</Text>
@@ -410,6 +410,14 @@ class DevicesTab extends View {
 		let isPortrait = height > width;
 
 		return {
+			noItemsContainer: {
+				flex: 1,
+				alignItems: 'center',
+				justifyContent: 'center',
+				paddingHorizontal: 30,
+				paddingTop: 10,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+			},
 			container: {
 				flex: 1,
 				paddingHorizontal: !this.props.devices.allIds.length > 0 ? 30 : 0,

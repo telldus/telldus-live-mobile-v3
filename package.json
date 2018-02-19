@@ -17,11 +17,12 @@
     "color": "~2.0.0",
     "global": "^4.3.1",
     "intl": "^1.2.5",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#175268c27ca3c42ff76ff7e086622dc68b19b944",
     "lodash": "~4.17.4",
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.14",
     "react": "16.0.0",
+    "react-dom": "^16.2.0",
     "react-intl": "^2.4.0",
     "react-mixin": "^3.0.5",
     "react-native": "^0.50.1",
@@ -47,9 +48,9 @@
     "redux": "~3.7.2",
     "redux-logger": "~3.0.6",
     "redux-persist": "^5.4.0",
-    "redux-thunk": "~2.2.0",
     "reselect": "^3.0.1",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -66,9 +67,13 @@
     "eslint-plugin-react": "^7.2.1",
     "fetch-mock": "^5.12.2",
     "flow-bin": "^0.57.3",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^21.2.1",
     "prompt": "^1.0.0",
-    "react-intl-translations-manager": "^5.0.0"
+    "react-intl-translations-manager": "^5.0.0",
+    "react-test-renderer": "^16.2.0",
+    "redux-mock-store": "^1.3.0",
+    "redux-thunk": "^2.2.0"
   },
   "engines": {
     "node": ">=5.0",
@@ -76,6 +81,9 @@
   },
   "jest": {
     "preset": "react-native",
+    "moduleNameMapper": {
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
+    },
     "setupFiles": [
       "<rootDir>/js/Utils/jest.js"
     ],

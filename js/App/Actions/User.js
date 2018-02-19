@@ -28,6 +28,7 @@ import { publicKey, privateKey, apiServer } from 'Config';
 
 import { format } from 'url';
 import { reportError } from 'Analytics';
+import { Answers } from 'react-native-fabric';
 
 /*
  * registers the app at the telldus server for receiving push notification, with push token and other device information.
@@ -139,12 +140,14 @@ export const RegisterUser = (email: String, firstName: String, lastName: String)
 			if (responseData.error) {
 				throw responseData;
 			}
+			Answers.logSignUp('Email', true);
 			dispatch({
 				type: 'USER_REGISTER',
 				accessToken: responseData,
 			});
 			return responseData;
 		}).catch(e => {
+			Answers.logSignUp('Email', false);
 			throw e;
 		});
 };

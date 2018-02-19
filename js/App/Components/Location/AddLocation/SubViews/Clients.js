@@ -100,7 +100,7 @@ export default class Clients extends View {
 			arrow: {
 				position: 'absolute',
 				top: isPortrait ? height * 0.12 : width * 0.12,
-				left: width * 0.823,
+				left: width * 0.845,
 				elevation: 3,
 			},
 		};

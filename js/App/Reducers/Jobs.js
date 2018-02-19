@@ -23,81 +23,11 @@
 
 'use strict';
 
-import type { Action } from 'Actions_Types';
-import { REHYDRATE } from 'redux-persist';
-
 import moment from 'moment-timezone';
 
 import filter from 'lodash/filter';
 import range from 'lodash/range';
 import mapValues from 'lodash/mapValues';
-
-export type State = ?Object;
-
-const initialState = [];
-const jobInitialState = {};
-
-function getWeekDaysAsIterable(weekdays: String) {
-	let weekDaysArray = weekdays.split(','), iterable = [];
-	if (weekDaysArray.length === 1 && weekDaysArray[0] === '') {
-		iterable = false;
-	} else {
-		iterable = weekDaysArray.map(day => parseInt(day, 10));
-	}
-	return iterable;
-}
-
-function reduceJob(state: Object = jobInitialState, action: Action): State {
-	switch (action.type) {
-		case 'RECEIVED_JOBS':
-			let newJob = {
-				id: parseInt(state.id, 10),
-				deviceId: parseInt(state.deviceId, 10),
-				method: parseInt(state.method, 10),
-				methodValue: parseInt(state.methodValue, 10),
-				nextRunTime: parseInt(state.nextRunTime, 10),
-				type: state.type,
-				hour: parseInt(state.hour, 10),
-				minute: parseInt(state.minute, 10),
-				offset: parseInt(state.offset, 0),
-				randomInterval: parseInt(state.randomInterval, 10),
-				retries: parseInt(state.retries, 10),
-				retryInterval: parseInt(state.retryInterval, 10),
-				reps: parseInt(state.reps, 10),
-				active: !!state.active,
-				weekdays: getWeekDaysAsIterable(state.weekdays),
-			};
-			return newJob;
-		default:
-			return state;
-	}
-}
-
-export default function reduceJobs(state: Array<Object> = initialState, action: Object): Array<Object> {
-	if (action.type === REHYDRATE) {
-		console.log('rehydrating jobs');
-		if (action.payload && action.payload.jobs) {
-			return [
-				...state,
-				...action.payload.jobs,
-			];
-		}
-		return [...state];
-	}
-	if (action.type === 'RECEIVED_JOBS') {
-		return action.payload.job
-		             .filter(jobState => jobState.active)
-		             .map(jobState =>
-			             // TODO: pass in received state as action.payload (see gateways reducer)
-			             reduceJob(jobState, action)
-		             );
-	}
-	if (action.type === 'LOGGED_OUT') {
-		return [];
-	}
-
-	return state;
-}
 
 export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}): {sections:Object, sectionIds:Array<Object>} {
 	if (!jobs || !jobs.length) {

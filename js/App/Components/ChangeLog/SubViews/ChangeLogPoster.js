@@ -73,7 +73,7 @@ class ChangeLogPoster extends View {
 		return {
 			hContainer: {
 				position: 'absolute',
-				right: isPortrait ? width * 0.124 : height * 0.124,
+				right: isPortrait ? width * 0.1 : height * 0.1,
 				top: isPortrait ? width * 0.088 : height * 0.088,
 				flex: 1,
 				alignItems: 'flex-end',
@@ -84,7 +84,7 @@ class ChangeLogPoster extends View {
 				fontFamily: Theme.Core.fonts.robotoLight,
 			},
 			h1: {
-				fontSize: isPortrait ? width * 0.085333333 : height * 0.085333333,
+				fontSize: isPortrait ? width * 0.08 : height * 0.08,
 			},
 			h2: {
 				fontSize: isPortrait ? width * 0.053333333 : height * 0.053333333,
