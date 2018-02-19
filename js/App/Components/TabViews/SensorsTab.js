@@ -30,7 +30,7 @@ import Platform from 'Platform';
 import { View, IconTelldus } from 'BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
-import { getSensors } from 'Actions';
+import { getSensors, setIgnoreSensor, showGlobalError } from 'Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
@@ -67,6 +67,7 @@ class SensorsTab extends View {
 	keyExtractor: (Object) => number;
 	onEndReachedVisibleList: () => void;
 	toggleHiddenList: () => void;
+	setIgnoreSensor: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
@@ -95,6 +96,7 @@ class SensorsTab extends View {
 
 		this.onEndReachedVisibleList = this.onEndReachedVisibleList.bind(this);
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
+		this.setIgnoreSensor = this.setIgnoreSensor.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
 
@@ -156,6 +158,24 @@ class SensorsTab extends View {
 	toggleHiddenList() {
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
+		});
+	}
+
+	setIgnoreSensor(sensor: Object) {
+		let ignore = sensor.ignored ? 0 : 1;
+		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res) => {
+			let message = sensor.ignored ?
+				'Successfully removed from hidden list' : 'Successfully added to hidden list';
+			let payload = {
+				customMessage: message,
+			};
+			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(getSensors());
+		}).catch(err => {
+			let payload = {
+				customMessage: err.message ? err.message : null,
+			};
+			this.props.dispatch(showGlobalError(payload));
 		});
 	}
 
@@ -242,7 +262,8 @@ class SensorsTab extends View {
 				appLayout={this.props.appLayout}
 				currentTab={currentTab}
 				currentScreen={currentScreen}
-				isGatewayActive={isGatewayActive}/>
+				isGatewayActive={isGatewayActive}
+				setIgnoreSensor={this.setIgnoreSensor}/>
 		);
 	}
 

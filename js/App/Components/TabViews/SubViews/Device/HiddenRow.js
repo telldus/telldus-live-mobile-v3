@@ -27,7 +27,7 @@ import { defineMessages } from 'react-intl';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
 
-import { View, IconTelldus } from 'BaseComponents';
+import { View, IconTelldus, Icon } from 'BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from 'Theme';
@@ -57,42 +57,25 @@ type Props = {
 	addToDashboard: number => void,
 	intl: Object,
 	deviceIds: Array<number>,
+	onPressSettings: () => void,
+	onSetIgnoreDevice: () => void,
 };
 
 class DeviceHiddenRow extends View {
 	props: Props;
 	onStarSelected: () => void;
+	onPressSettings: () => void;
 
 	constructor(props: Props) {
 		super(props);
+
 		this.onStarSelected = this.onStarSelected.bind(this);
+		this.onPressSettings = this.onPressSettings.bind(this);
+		this.onSetIgnoreDevice = this.onSetIgnoreDevice.bind(this);
+
 		let { intl, device } = props;
 		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
 		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
-	}
-
-	render() {
-		const { id } = this.props.device;
-		const { deviceIds } = this.props;
-		const isOnDB = deviceIds.indexOf(id) !== -1;
-
-		let icon = isOnDB ? 'favorite' : 'favorite-outline';
-
-		let accessibilityLabel = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
-		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
-		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
-
-		return (
-			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
-				<TouchableOpacity
-					style={Theme.Styles.rowBackButton}
-					onPress={this.onStarSelected}
-					accessible={this.props.editMode}
-					accessibilityLabel={accessibilityLabel}>
-					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
-				</TouchableOpacity>
-			</View>
-		);
 	}
 
 	onStarSelected() {
@@ -105,6 +88,59 @@ class DeviceHiddenRow extends View {
 		} else {
 			this.props.addToDashboard(id);
 		}
+	}
+
+	onPressSettings() {
+		let { onPressSettings } = this.props;
+		if (onPressSettings) {
+			onPressSettings();
+		}
+	}
+
+	onSetIgnoreDevice() {
+		let { onSetIgnoreDevice } = this.props;
+		if (onSetIgnoreDevice) {
+			onSetIgnoreDevice();
+		}
+	}
+
+	render() {
+		const { id, ignored } = this.props.device;
+		const { deviceIds } = this.props;
+		const isOnDB = deviceIds.indexOf(id) !== -1;
+
+		let icon = isOnDB ? 'favorite' : 'favorite-outline';
+		let iconHide = ignored ? 'hidden-toggled' : 'hidden';
+
+		let accessibilityLabel = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
+		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
+
+		return (
+			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
+				<TouchableOpacity
+					style={Theme.Styles.hiddenRowItem}
+					onPress={this.onSetIgnoreDevice}
+					accessible={this.props.editMode}
+					accessibilityLabel={accessibilityLabel}>
+					<IconTelldus icon={iconHide} style={styles.favoriteIcon}/>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={Theme.Styles.hiddenRowItem}
+					onPress={this.onStarSelected}
+					accessible={this.props.editMode}
+					accessibilityLabel={accessibilityLabel}>
+					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={Theme.Styles.hiddenRowItem}
+					onPress={this.onPressSettings}
+					accessible={this.props.editMode}
+					accessibilityLabel={accessibilityLabel}>
+					<Icon name={'gear'} style={styles.favoriteIcon}/>
+				</TouchableOpacity>
+			</View>
+		);
 	}
 }
 
@@ -123,12 +159,13 @@ function mapStateToProps(store: Object): Object {
 
 const styles = StyleSheet.create({
 	hiddenRow: {
+		flexDirection: 'row',
 		height: Theme.Core.rowHeight,
-		width: Theme.Core.buttonWidth,
+		width: Theme.Core.buttonWidth * 3,
 		alignSelf: 'flex-end',
 		justifyContent: 'center',
-		alignItems: 'flex-end',
-		paddingRight: 10,
+		alignItems: 'center',
+		marginRight: 12,
 	},
 	favoriteIcon: {
 		fontSize: 28,

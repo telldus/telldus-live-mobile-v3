@@ -31,14 +31,13 @@ import Platform from 'Platform';
 import { Text, View, TouchableButton, IconTelldus } from 'BaseComponents';
 import { DeviceRow } from 'TabViews_SubViews';
 
-import { getDevices } from 'Actions_Devices';
+import { getDevices, setIgnoreDevice } from 'Actions_Devices';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 import { parseDevicesForListView } from 'Reducers_Devices';
-import { addNewGateway } from 'Actions';
-
+import { addNewGateway, showGlobalError } from 'Actions';
 import i18n from '../../Translations/common';
 import Theme from 'Theme';
 
@@ -106,6 +105,7 @@ class DevicesTab extends View {
 	onPressAddDevice: () => void;
 	onEndReachedVisibleList: () => void;
 	toggleHiddenList: () => void;
+	setIgnoreDevice: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
@@ -136,6 +136,7 @@ class DevicesTab extends View {
 		this.onRefresh = this.onRefresh.bind(this);
 		this.onPressAddLocation = this.onPressAddLocation.bind(this);
 		this.onPressAddDevice = this.onPressAddDevice.bind(this);
+		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
 
 		this.onEndReachedVisibleList = this.onEndReachedVisibleList.bind(this);
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
@@ -191,6 +192,24 @@ class DevicesTab extends View {
 		}
 	}
 
+	setIgnoreDevice(device: Object) {
+		let ignore = device.ignored ? 0 : 1;
+		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res) => {
+			let message = device.ignored ?
+				'Successfully removed from hidden list' : 'Successfully added to hidden list';
+			let payload = {
+				customMessage: message,
+			};
+			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(getDevices());
+		}).catch(err => {
+			let payload = {
+				customMessage: err.message ? err.message : null,
+			};
+			this.props.dispatch(showGlobalError(payload));
+		});
+	}
+
 	renderSectionHeader(sectionData: Object): Object {
 		return (
 			<View style={Theme.Styles.sectionHeaderNew}>
@@ -216,6 +235,7 @@ class DevicesTab extends View {
 				currentTab={currentTab}
 				currentScreen={currentScreen}
 				isGatewayActive={isGatewayActive}
+				setIgnoreDevice={this.setIgnoreDevice}
 			/>
 		);
 	}

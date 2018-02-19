@@ -52,6 +52,7 @@ type Props = {
 	appLayout: Object,
 	isGatewayActive: boolean,
 	tab: string,
+	setIgnoreSensor: () => void,
 };
 
 type State = {
@@ -93,6 +94,7 @@ class SensorRow extends PureComponent<Props, State> {
 	LayoutLinear: Object;
 	onRowOpen: () => void;
 	onRowClose: () => void;
+	onSetIgnoreSensor: (Object) => void;
 
 	state = {
 		currentIndex: 0,
@@ -135,6 +137,7 @@ class SensorRow extends PureComponent<Props, State> {
 
 		this.onLayout = this.onLayout.bind(this);
 		this.changeDisplayType = this.changeDisplayType.bind(this);
+		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
 
 		this.onRowOpen = this.onRowOpen.bind(this);
 		this.onRowClose = this.onRowClose.bind(this);
@@ -169,6 +172,10 @@ class SensorRow extends PureComponent<Props, State> {
 		this.setState({
 			isOpen: false,
 		});
+	}
+
+	onSetIgnoreSensor() {
+		this.props.setIgnoreSensor(this.props.sensor);
 	}
 
 	getSensors(data: Object): Object {
@@ -297,12 +304,12 @@ class SensorRow extends PureComponent<Props, State> {
 
 		return (
 			<SwipeRow
-				rightOpenValue={-40}
+				rightOpenValue={-Theme.Core.buttonWidth * 2}
 				disableRightSwipe={true}
 				ref="SwipeRow"
 				onRowOpen={this.onRowOpen}
 				onRowClose={this.onRowClose}>
-				<HiddenRow sensor={sensor} intl={intl}/>
+				<HiddenRow sensor={sensor} intl={intl} onSetIgnoreSensor={this.onSetIgnoreSensor}/>
 				<ListItem
 					style={styles.row}
 					onLayout={this.onLayout}
