@@ -65,6 +65,7 @@ class DeviceHiddenRow extends View {
 	props: Props;
 	onStarSelected: () => void;
 	onPressSettings: () => void;
+	onSetIgnoreDevice: () => void;
 
 	constructor(props: Props) {
 		super(props);

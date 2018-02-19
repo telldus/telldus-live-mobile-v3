@@ -52,7 +52,7 @@ type Props = {
 	appLayout: Object,
 	isGatewayActive: boolean,
 	tab: string,
-	setIgnoreSensor: () => void,
+	setIgnoreSensor: (Object) => void,
 };
 
 type State = {
@@ -94,7 +94,7 @@ class SensorRow extends PureComponent<Props, State> {
 	LayoutLinear: Object;
 	onRowOpen: () => void;
 	onRowClose: () => void;
-	onSetIgnoreSensor: (Object) => void;
+	onSetIgnoreSensor: () => void;
 
 	state = {
 		currentIndex: 0,

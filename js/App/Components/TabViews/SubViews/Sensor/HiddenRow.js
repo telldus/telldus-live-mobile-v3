@@ -57,6 +57,7 @@ type Props = {
 	addToDashboard: number => void,
 	intl: Object,
 	sensorIds: Array<number>,
+	onSetIgnoreSensor: () => void,
 };
 
 class SensorHiddenRow extends View {
