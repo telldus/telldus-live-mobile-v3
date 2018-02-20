@@ -67,6 +67,7 @@
   "addNewLocation.activateManual.headerTwo": "Enter Activation Code",
   "addNewLocation.activateManual.invalidActivationCode": "The activation code you entered is invalid. Please check that it is entered correctly.",
   "addNewLocation.activateManual.label": "Activation Code",
+  "addNewLocation.activateManual.messageAlreadyActivated": "This Gateway has already been activated.",
   "addNewLocation.editLocationName.headerTwo": "Change name for your location",
   "addNewLocation.geoPosition": "Geographic Position",
   "addNewLocation.locationDetected": "Location Detected",

@@ -60,6 +60,11 @@ const messages = defineMessages({
 		'is written on the label on the bottom of your TellStick.',
 		description: 'The body content for the Location Manual Activate Screen',
 	},
+	messageAlreadyActivated: {
+		id: 'addNewLocation.activateManual.messageAlreadyActivated',
+		defaultMessage: 'This Gateway has already been activated.',
+		description: 'The Dialogue message when the gateway is already activated',
+	},
 });
 type Props = {
 	navigation: Object,
@@ -100,6 +105,7 @@ class LocationActivationManual extends View {
 		this.invalidActivationCode = formatMessage(messages.invalidActivationCode);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
+		this.messageAlreadyActivated = formatMessage(messages.messageAlreadyActivated);
 
 		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
 		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);
@@ -175,7 +181,7 @@ class LocationActivationManual extends View {
 					};
 					this.props.navigation.navigate('LocationName', {clientInfo});
 				} else if (response && response.activated === true) {
-					this.props.actions.showModal('This Gateway has already been activated', 'ERROR');
+					this.props.actions.showModal(this.messageAlreadyActivated, 'ERROR');
 				} else {
 					this.props.actions.showModal(response, 'ERROR');
 				}
