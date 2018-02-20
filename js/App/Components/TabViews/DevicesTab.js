@@ -147,6 +147,9 @@ class DevicesTab extends View {
 		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenDevices}`;
 		this.showHidden = `${formatMessage(i18n.show)} ${hiddenDevices}`;
 
+		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
+
 		this.url = 'http://live.telldus.com/';
 		this.noDeviceTitle = formatMessage(messages.messageNoDeviceTitle);
 		this.noGatewayTitle = formatMessage(messages.messageNoGatewayTitle);
@@ -196,7 +199,7 @@ class DevicesTab extends View {
 		let ignore = device.ignored ? 0 : 1;
 		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res) => {
 			let message = device.ignored ?
-				'Successfully removed from hidden list' : 'Successfully added to hidden list';
+				this.removedFromHiddenList : this.addedToHiddenList;
 			let payload = {
 				customMessage: message,
 			};

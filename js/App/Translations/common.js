@@ -440,6 +440,14 @@ const messages = defineMessages({
 		id: 'please',
 		defaultMessage: 'Please',
 	},
+	addedToHiddenList: {
+		id: 'addedToHiddenList',
+		defaultMessage: 'Successfully added to hidden list',
+	},
+	removedFromHiddenList: {
+		id: 'removedFromHiddenList',
+		defaultMessage: 'Successfully removed from hidden list',
+	},
 });
 
 export default messages;

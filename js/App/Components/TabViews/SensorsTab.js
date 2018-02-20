@@ -100,6 +100,9 @@ class SensorsTab extends View {
 
 		let { formatMessage } = props.screenProps.intl;
 
+		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
+
 		let hiddenSensors = formatMessage(i18n.hiddenSensors).toLowerCase();
 		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenSensors}`;
 		this.showHidden = `${formatMessage(i18n.show)} ${hiddenSensors}`;
@@ -165,7 +168,7 @@ class SensorsTab extends View {
 		let ignore = sensor.ignored ? 0 : 1;
 		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res) => {
 			let message = sensor.ignored ?
-				'Successfully removed from hidden list' : 'Successfully added to hidden list';
+				this.removedFromHiddenList : this.addedToHiddenList;
 			let payload = {
 				customMessage: message,
 			};
