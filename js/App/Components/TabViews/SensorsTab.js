@@ -84,7 +84,7 @@ class SensorsTab extends View {
 			hiddenList,
 			makeRowAccessible: 0,
 			isRefreshing: false,
-			listEnd: false,
+			listEnd: visibleList.length === 0 ? true : false,
 			showHiddenList: false,
 		};
 
@@ -110,7 +110,7 @@ class SensorsTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 
-		let { makeRowAccessible } = this.state;
+		let { makeRowAccessible, listEnd } = this.state;
 		let { screenReaderEnabled, rowsAndSections } = nextProps;
 		let { currentScreen, currentTab } = nextProps.screenProps;
 		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
@@ -125,6 +125,7 @@ class SensorsTab extends View {
 			visibleList,
 			hiddenList,
 			makeRowAccessible,
+			listEnd: visibleList.length === 0 ? true : listEnd,
 		});
 	}
 

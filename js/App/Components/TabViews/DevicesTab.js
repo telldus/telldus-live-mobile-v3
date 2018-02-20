@@ -125,7 +125,7 @@ class DevicesTab extends View {
 			addGateway: false,
 			makeRowAccessible: 0,
 			isRefreshing: false,
-			listEnd: false,
+			listEnd: visibleList.length === 0 ? true : false,
 			showHiddenList: false,
 		};
 		this.onCloseSelected = this.onCloseSelected.bind(this);
@@ -159,7 +159,7 @@ class DevicesTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 
-		let { makeRowAccessible } = this.state;
+		let { makeRowAccessible, listEnd } = this.state;
 		let { screenReaderEnabled, rowsAndSections } = nextProps;
 		let { currentScreen, currentTab } = nextProps.screenProps;
 		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Devices') {
@@ -174,6 +174,7 @@ class DevicesTab extends View {
 			visibleList,
 			hiddenList,
 			makeRowAccessible,
+			listEnd: visibleList.length === 0 ? true : listEnd,
 		});
 	}
 
@@ -374,7 +375,7 @@ class DevicesTab extends View {
 		let { appLayout, devices } = this.props;
 		let { listEnd, showHiddenList, hiddenList, visibleList,
 			isRefreshing, makeRowAccessible, addGateway } = this.state;
-
+		console.log('TEST hiddenList, visibleList', hiddenList, visibleList);
 		let style = this.getStyles(appLayout);
 
 		if (addGateway) {
