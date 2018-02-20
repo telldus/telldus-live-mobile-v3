@@ -31,7 +31,7 @@ import MapView from 'react-native-maps';
 import { View, FloatingButton } from 'BaseComponents';
 import LabelBox from './LabelBox';
 
-import { googleMapsAPIKey } from 'Config';
+import { googleMapsAPIKey } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
 import { messages } from '../Common/messages';

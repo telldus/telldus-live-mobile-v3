@@ -25,8 +25,7 @@
 
 import axios from 'axios';
 import type { Action, ThunkAction } from './Types';
-import { apiServer } from 'Config';
-import { publicKey, privateKey, authenticationTimeOut } from 'Config';
+import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
 import { Answers } from 'react-native-fabric';
 
 import {LiveApi} from 'LiveApi';

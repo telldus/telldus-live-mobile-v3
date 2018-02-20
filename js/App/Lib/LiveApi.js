@@ -23,7 +23,7 @@
 
 'use strict';
 
-import { apiServer, publicKey, privateKey } from 'Config';
+import { apiServer, publicKey, privateKey } from '../../Config';
 
 // TODO: fix this pattern, pass store via component tree
 import { getStore } from '../Store/ConfigureStore';

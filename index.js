@@ -20,6 +20,6 @@
 'use strict';
 
 import { AppRegistry } from 'react-native';
-import Bootstrap from 'Bootstrap';
+import Bootstrap from './js/Bootstrap';
 
 AppRegistry.registerComponent('TelldusLiveApp', Bootstrap);
