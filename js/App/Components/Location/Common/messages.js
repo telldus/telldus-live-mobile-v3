@@ -95,4 +95,20 @@ export const messages = defineMessages({
 		id: 'location.autodetect',
 		defaultMessage: 'Autodetect',
 	},
+	failureEditName: {
+		id: 'location.failureEditName',
+		defaultMessage: 'Name could not be set',
+	},
+	failureEditGeoPosition: {
+		id: 'location.failureEditGeoPosition',
+		defaultMessage: 'Position could not be set',
+	},
+	failureEditTimezone: {
+		id: 'location.failureEditTimezone',
+		defaultMessage: 'Time zone could not be set',
+	},
+	failureRemoveLocation: {
+		id: 'location.failureRemoveLocation',
+		defaultMessage: 'Location could not be removed',
+	},
 });

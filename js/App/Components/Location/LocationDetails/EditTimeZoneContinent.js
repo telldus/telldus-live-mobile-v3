@@ -80,6 +80,7 @@ class EditTimeZoneContinent extends View {
 		this.labelAutodetect = formatMessage(commonMessages.autodetect);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
+		this.onSetTimezoneError = `${formatMessage(commonMessages.failureEditTimezone)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.onContinentChoose = this.onContinentChoose.bind(this);
 		this.onPressAutodetect = this.onPressAutodetect.bind(this);
@@ -123,7 +124,7 @@ class EditTimeZoneContinent extends View {
 				actions.getGateways();
 				navigation.goBack();
 			}).catch(() => {
-				actions.showModal('Error setting time zone');
+				actions.showModal(this.onSetTimezoneError);
 			});
 		} else {
 			let data = differenceWith(timeZone, [continent], (v1, v2) => {
@@ -141,7 +142,7 @@ class EditTimeZoneContinent extends View {
 			actions.getGateways();
 			navigation.goBack();
 		}).catch(() => {
-			actions.showModal('Error setting time zone');
+			actions.showModal(this.onSetTimezoneError);
 		});
 	}
 
@@ -152,7 +153,7 @@ class EditTimeZoneContinent extends View {
 			actions.getGateways();
 			navigation.goBack();
 		}).catch(() => {
-			actions.showModal('Error setting time zone');
+			actions.showModal(this.onSetTimezoneError);
 		});
 	}
 

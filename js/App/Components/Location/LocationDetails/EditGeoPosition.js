@@ -31,7 +31,6 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import { View } from 'BaseComponents';
 import GeoPosition from '../Common/GeoPosition';
 
-
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';
 
@@ -68,6 +67,7 @@ class EditGeoPosition extends View {
 		this.h2 = formatMessage(commonMessages.headerTwoPosition);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
+		this.onSetGeoPositionError = `${formatMessage(commonMessages.failureEditGeoPosition)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.onSubmit = this.onSubmit.bind(this);
 	}
@@ -108,7 +108,7 @@ class EditGeoPosition extends View {
 			this.setState({
 				isLoading: false,
 			});
-			actions.showModal('Error setting geo position');
+			actions.showModal(this.onSetGeoPositionError);
 		});
 	}
 

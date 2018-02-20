@@ -61,6 +61,7 @@ class EditTimeZoneCity extends View {
 		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneCity);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
+		this.onSetTimezoneError = `${formatMessage(commonMessages.failureEditTimezone)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 	}
 
 	componentDidMount() {
@@ -93,7 +94,7 @@ class EditTimeZoneCity extends View {
 			actions.getGateways();
 			navigation.navigate('Details');
 		}).catch(() => {
-			actions.showModal('Error setting time zone');
+			actions.showModal(this.onSetTimezoneError);
 		});
 	}
 

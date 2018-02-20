@@ -75,6 +75,7 @@ class LocationName extends View {
 
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+		this.onSetNameError = `${formatMessage(commonMessages.failureEditName)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
@@ -120,7 +121,7 @@ class LocationName extends View {
 				this.setState({
 					isLoading: false,
 				});
-				actions.showModal('ERROR');
+				actions.showModal(this.onSetNameError);
 			});
 		} else {
 			let message = intl.formatMessage(commonMessages.invalidLocationName);

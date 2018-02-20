@@ -436,6 +436,10 @@ const messages = defineMessages({
 		id: 'location',
 		defaultMessage: 'Location',
 	},
+	please: {
+		id: 'please',
+		defaultMessage: 'Please',
+	},
 });
 
 export default messages;
