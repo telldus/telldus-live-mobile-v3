@@ -61,7 +61,7 @@ export default class IconTelldus extends Component<Props, null> {
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]}>
+			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]} allowFontScaling={false}>
 				{icon}
 			</Text>
 		);
