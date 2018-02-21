@@ -33,7 +33,7 @@ import { View, Header } from '../../../BaseComponents';
 
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 
-import { SettingsDetailModal } from 'DetailViews';
+import { SettingsDetailModal } from '../DetailViews';
 import TabBar from './TabBar';
 import i18n from '../../Translations/common';
 import { getUserProfile } from '../../Reducers/User';

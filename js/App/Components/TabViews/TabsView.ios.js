@@ -34,7 +34,7 @@ import TabViews from 'TabViews';
 
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
-import { SettingsDetailModal } from 'DetailViews';
+import { SettingsDetailModal } from '../DetailViews';
 
 const RouteConfigs = {
 	Dashboard: {
