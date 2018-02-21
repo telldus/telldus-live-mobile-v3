@@ -9,7 +9,7 @@ const mockStore = configureStore(middlewares);
 
 import SettingsDetailModal from '../../Components/DetailViews/SettingsDetailModal';
 import { logoutFromTelldus } from 'Actions';
-import { registerPushToken, unregisterPushToken } from 'Actions_User';
+import { registerPushToken, unregisterPushToken } from '../../Actions/User';
 
 describe('<SettingsDetailModal />', () => {
 

@@ -25,7 +25,7 @@ const DeviceInfo = require('react-native-device-info');
 const PushNotification = require('react-native-push-notification');
 import { Alert, Platform } from 'react-native';
 import { pushSenderId, pushServiceId } from '../../Config';
-import { registerPushToken } from 'Actions_User';
+import { registerPushToken } from '../Actions/User';
 
 const Push = {
 	configure: (store) => {
