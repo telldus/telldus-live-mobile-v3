@@ -48,7 +48,7 @@ import { View } from '../../BaseComponents';
 import TabsView from 'TabsView';
 import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetails from './DeviceDetails/DeviceDetails';
-import { NavigationHeader } from 'DDSubViews';
+import { NavigationHeader } from './DeviceDetails/SubViews';
 import AddLocationNavigator from 'AddLocationNavigator';
 import LocationDetailsNavigator from 'LocationDetailsNavigator';
 

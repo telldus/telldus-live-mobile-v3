@@ -30,7 +30,7 @@ import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 import { View } from '../../../BaseComponents';
 
-import { NavigationHeader } from 'DDSubViews';
+import { NavigationHeader } from '../DeviceDetails/SubViews';
 import ChangeLogContainer from './ChangeLogContainer';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';

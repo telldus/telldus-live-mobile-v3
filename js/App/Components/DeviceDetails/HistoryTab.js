@@ -29,7 +29,7 @@ import _ from 'lodash';
 import { defineMessages } from 'react-intl';
 
 import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../BaseComponents';
-import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
+import { DeviceHistoryDetails, HistoryRow } from './SubViews';
 import { getDeviceHistory } from '../../Actions/Devices';
 import { hideModal } from '../../Actions/Modal';
 import i18n from '../../Translations/common';

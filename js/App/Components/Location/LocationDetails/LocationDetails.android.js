@@ -28,7 +28,7 @@ import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { View } from '../../../../BaseComponents';
-import { NavigationHeader } from 'DDSubViews';
+import { NavigationHeader } from '../../DeviceDetails/SubViews';
 import LocationDetailsContainer from './LocationDetailsContainer';
 
 import Details from './Details';

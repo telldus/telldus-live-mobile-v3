@@ -38,7 +38,7 @@ import {
 	BellDeviceDetail,
 	DimmerDeviceDetail,
 	NavigationalDeviceDetail,
-} from 'DDSubViews';
+} from './SubViews';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({

@@ -28,7 +28,7 @@ import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { View } from '../../../../BaseComponents';
-import { NavigationHeader } from 'DDSubViews';
+import { NavigationHeader } from '../../DeviceDetails/SubViews';
 import AddLocationContainer from './AddLocationContainer';
 
 import LocationDetected from './LocationDetected';
@@ -87,7 +87,7 @@ const StackNavigatorConfig = {
 		let renderStackHeader = state.routeName !== 'LocationDetected';
 		if (renderStackHeader) {
 			return {
-				header: <NavigationHeader navigation={navigation}/>,
+				header: <NavigationHeader navigation={navigation} showLeftIcon={state.routeName !== 'Success'}/>,
 			};
 		}
 		return {
