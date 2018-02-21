@@ -36,7 +36,7 @@ import Theme from '../../Theme';
 
 import moment from 'moment-timezone';
 
-import { parseJobsForListView } from 'Reducers_Jobs';
+import { parseJobsForListView } from '../../Reducers/Jobs';
 
 const messages = defineMessages({
 	friday: {
