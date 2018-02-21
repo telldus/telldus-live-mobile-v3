@@ -34,7 +34,7 @@ import LocationPoster from '../Common/LocationPoster';
 
 import * as modalActions from 'Actions_Modal';
 import * as gatewayActions from 'Actions_Gateways';
-import * as appDataActions from 'Actions_AppData';
+import * as appDataActions from '../../../Actions/AppData';
 
 import { messages as commonMessages } from '../Common/messages';
 import i18n from '../../../Translations/common';
