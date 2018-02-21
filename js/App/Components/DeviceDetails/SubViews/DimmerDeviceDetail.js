@@ -29,7 +29,7 @@ import Slider from 'react-native-slider';
 
 const deviceHeight = Dimensions.get('window').height;
 
-import { setDimmerValue, saveDimmerInitialState } from 'Actions_Dimmer';
+import { setDimmerValue, saveDimmerInitialState } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import { FormattedMessage, RoundedCornerShadowView, Text, View } from '../../../../BaseComponents';
 import { OnButton, OffButton } from 'TabViews_SubViews';

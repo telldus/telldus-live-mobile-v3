@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 
 import { View } from '../../../../BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
-import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';

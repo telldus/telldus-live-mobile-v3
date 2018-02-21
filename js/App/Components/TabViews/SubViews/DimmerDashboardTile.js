@@ -28,7 +28,7 @@ import throttle from 'lodash/throttle';
 
 import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
-import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
