@@ -37,7 +37,7 @@ import {
 	FloatingButton,
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
-import { reportError } from 'Analytics';
+import { reportError } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 const messages = defineMessages({

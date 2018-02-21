@@ -30,7 +30,7 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import { View } from '../../../../BaseComponents';
 import GeoPosition from '../Common/GeoPosition';
 
-import { reportError } from 'Analytics';
+import { reportError } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';

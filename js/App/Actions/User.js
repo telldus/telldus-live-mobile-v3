@@ -27,7 +27,7 @@ import {LiveApi} from 'LiveApi';
 import { publicKey, privateKey, apiServer } from '../../Config';
 
 import { format } from 'url';
-import { reportError } from 'Analytics';
+import { reportError } from '../Lib';
 import { Answers } from 'react-native-fabric';
 
 /*

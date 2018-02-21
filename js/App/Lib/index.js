@@ -30,6 +30,7 @@ import Dimmer from './Dimmer';
 import SensorUtils from './SensorUtils';
 import DeviceUtils from './DeviceUtils';
 import Accessibility from './Accessibility';
+import Analytics from './Analytics';
 
 module.exports = {
 	getRouteName,
@@ -41,4 +42,5 @@ module.exports = {
 	...SensorUtils,
 	...DeviceUtils,
 	...Accessibility,
+	...Analytics,
 };
