@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule DeviceDetailsTabsView
  */
 
 // @flow
@@ -35,7 +34,9 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_settings);
 
-import DeviceDetailsTabView from 'DeviceDetailsTabView';
+import History from './HistoryTab';
+import Overview from './OverviewTab';
+import Settings from './SettingsTab';
 import { Text, View, Poster } from '../../../BaseComponents';
 import { getWindowDimensions } from '../../Lib';
 import i18n from '../../Translations/common';
@@ -53,7 +54,7 @@ type State = {
 	currentTab: string,
 };
 
-class DeviceDetailsTabsView extends View {
+class DeviceDetails extends View {
 	props: Props;
 	state: State;
 
@@ -197,13 +198,13 @@ const styles = StyleSheet.create({
 const Tabs = TabNavigator(
 	{
 		Overview: {
-			screen: DeviceDetailsTabView.Overview,
+			screen: Overview,
 		},
 		History: {
-			screen: DeviceDetailsTabView.History,
+			screen: History,
 		},
 		Settings: {
-			screen: DeviceDetailsTabView.Settings,
+			screen: Settings,
 		},
 	},
 	{
@@ -251,4 +252,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(DeviceDetailsTabsView));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(DeviceDetails));

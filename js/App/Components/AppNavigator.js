@@ -47,7 +47,7 @@ const messages = defineMessages({
 import { View } from '../../BaseComponents';
 import TabsView from 'TabsView';
 import { DimmerPopup } from 'TabViews_SubViews';
-import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
+import DeviceDetails from './DeviceDetails/DeviceDetails';
 import { NavigationHeader } from 'DDSubViews';
 import AddLocationNavigator from 'AddLocationNavigator';
 import LocationDetailsNavigator from 'LocationDetailsNavigator';
@@ -62,7 +62,7 @@ const RouteConfigs = {
 		},
 	},
 	DeviceDetails: {
-		screen: DeviceDetailsTabsView,
+		screen: DeviceDetails,
 		navigationOptions: ({navigation}: Object): Object => {
 			return {
 				header: <NavigationHeader navigation={navigation}/>,
