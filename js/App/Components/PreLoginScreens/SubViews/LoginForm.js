@@ -28,7 +28,7 @@ import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { TouchableButton, View } from '../../../../BaseComponents';
-import { loginToTelldus, showModal } from 'Actions';
+import { loginToTelldus, showModal } from '../../../Actions';
 import { testUsername, testPassword } from '../../../../Config';
 
 import i18n from '../../../Translations/common';

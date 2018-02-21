@@ -29,7 +29,7 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import { View, Header } from '../../../BaseComponents';
 
-import { toggleEditMode, syncWithServer, switchTab } from 'Actions';
+import { toggleEditMode, syncWithServer, switchTab } from '../../Actions';
 import TabViews from 'TabViews';
 
 import { getUserProfile } from '../../Reducers/User';

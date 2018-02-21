@@ -37,7 +37,7 @@ import {
 	setAppLayout,
 	setAccessibilityListener,
 	setAccessibilityInfo,
-} from 'Actions';
+} from './App/Actions';
 
 import Theme from './App/Theme';
 const changeLogVersion = '3.5';

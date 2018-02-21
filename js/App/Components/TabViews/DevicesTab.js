@@ -37,7 +37,7 @@ import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
-import { addNewGateway, showGlobalError } from 'Actions';
+import { addNewGateway, showGlobalError } from '../../Actions';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 

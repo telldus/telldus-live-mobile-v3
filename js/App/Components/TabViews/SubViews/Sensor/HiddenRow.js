@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 
-import { addToDashboard, removeFromDashboard } from 'Actions';
+import { addToDashboard, removeFromDashboard } from '../../../../Actions';
 
 import { View, IconTelldus } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';

@@ -28,7 +28,7 @@ import { defineMessages } from 'react-intl';
 import { View, Icon } from '../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { addToDashboard, removeFromDashboard } from 'Actions';
+import { addToDashboard, removeFromDashboard } from '../../../Actions';
 
 import Theme from '../../../Theme';
 

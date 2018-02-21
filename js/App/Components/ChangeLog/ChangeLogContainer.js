@@ -32,7 +32,7 @@ import { connect } from 'react-redux';
 import { View, FloatingButton, StyleSheet, Text } from '../../../BaseComponents';
 import Theme from '../../Theme';
 
-import { setChangeLogVersion } from 'Actions';
+import { setChangeLogVersion } from '../../Actions';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({

@@ -34,7 +34,7 @@ import {
 	TouchableButton,
 	DialogueBox,
 } from '../../../BaseComponents';
-import { logoutFromTelldus } from 'Actions';
+import { logoutFromTelldus } from '../../Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 

@@ -30,7 +30,7 @@ import Platform from 'Platform';
 import { View, IconTelldus } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
-import { getSensors, setIgnoreSensor, showGlobalError } from 'Actions';
+import { getSensors, setIgnoreSensor, showGlobalError } from '../../Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';

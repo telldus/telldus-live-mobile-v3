@@ -32,7 +32,7 @@ import i18n from '../../Translations/common';
 
 import { LearnButton } from 'TabViews_SubViews';
 
-import { addToDashboard, removeFromDashboard } from 'Actions';
+import { addToDashboard, removeFromDashboard } from '../../Actions';
 
 const messages = defineMessages({
 	showOnDashborad: {

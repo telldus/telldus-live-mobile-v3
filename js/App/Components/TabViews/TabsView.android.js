@@ -37,7 +37,7 @@ import { SettingsDetailModal } from 'DetailViews';
 import TabBar from './TabBar';
 import i18n from '../../Translations/common';
 import { getUserProfile } from '../../Reducers/User';
-import { syncWithServer, switchTab, addNewGateway } from 'Actions';
+import { syncWithServer, switchTab, addNewGateway } from '../../Actions';
 import TabViews from 'TabViews';
 import { TabNavigator } from 'react-navigation';
 import Drawer from 'Drawer';

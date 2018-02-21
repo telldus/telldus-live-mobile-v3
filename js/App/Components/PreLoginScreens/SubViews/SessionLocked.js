@@ -32,7 +32,7 @@ import {
 } from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
-import { logoutFromTelldus } from 'Actions';
+import { logoutFromTelldus } from '../../../Actions';
 import { unregisterPushToken } from '../../../Actions/User';
 import { refreshAccessToken } from '../../../Lib';
 

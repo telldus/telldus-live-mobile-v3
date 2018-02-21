@@ -8,7 +8,7 @@ const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
 import SettingsTab from '../../Components/DeviceDetails/SettingsTab';
-import { addToDashboard, removeFromDashboard } from 'Actions';
+import { addToDashboard, removeFromDashboard } from '../../Actions';
 import { deviceSetState } from '../../Actions/Devices';
 import { LearnButton } from 'TabViews_SubViews';
 

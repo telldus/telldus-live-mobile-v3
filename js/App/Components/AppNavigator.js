@@ -33,7 +33,7 @@ import {
 	syncLiveApiOnForeground,
 	getAppData,
 	getGateways,
-} from 'Actions';
+} from '../Actions';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 const messages = defineMessages({
