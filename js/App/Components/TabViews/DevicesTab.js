@@ -375,7 +375,6 @@ class DevicesTab extends View {
 		let { appLayout, devices } = this.props;
 		let { listEnd, showHiddenList, hiddenList, visibleList,
 			isRefreshing, makeRowAccessible, addGateway } = this.state;
-		console.log('TEST hiddenList, visibleList', hiddenList, visibleList);
 		let style = this.getStyles(appLayout);
 
 		if (addGateway) {
