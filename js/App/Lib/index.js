@@ -30,7 +30,7 @@ import Dimmer from './Dimmer';
 import SensorUtils from './SensorUtils';
 import DeviceUtils from './DeviceUtils';
 import Accessibility from './Accessibility';
-import Analytics from './Analytics';
+import * as Analytics from './Analytics';
 import * as LiveApi from './LiveApi';
 
 module.exports = {
