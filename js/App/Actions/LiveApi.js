@@ -27,7 +27,7 @@ import type { ThunkAction } from './Types';
 import { getGateways } from './Gateways';
 import { getJobs } from './Jobs';
 import { getDevices } from './Devices';
-import { getSensors } from 'Actions_Sensors';
+import { getSensors } from './Sensors';
 
 import { AppState } from 'react-native';
 
