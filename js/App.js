@@ -30,7 +30,7 @@ import {
 	PreLoginNavigator,
 	AppNavigator,
 	Push,
-} from 'Components';
+} from './App/Components';
 import ChangeLogNavigator from 'ChangeLogNavigator';
 import { View } from './BaseComponents';
 import {
