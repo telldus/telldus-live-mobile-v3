@@ -31,7 +31,7 @@ import {
 	AppNavigator,
 	Push,
 } from './App/Components';
-import ChangeLogNavigator from 'ChangeLogNavigator';
+import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
 import { View } from './BaseComponents';
 import {
 	setAppLayout,

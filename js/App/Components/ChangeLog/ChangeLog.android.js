@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule ChangeLogNavigator
  */
 
 // @flow
@@ -115,6 +114,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	intl: intlShape,
+	changeLogVersion?: string,
 };
 
 type State = {
