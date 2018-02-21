@@ -32,7 +32,7 @@ import _ from 'lodash';
 import { View, DialogueBox, Text, RoundedInfoButton } from '../../../../BaseComponents';
 import LocationPoster from '../Common/LocationPoster';
 
-import * as modalActions from 'Actions_Modal';
+import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
 
 const messages = defineMessages({

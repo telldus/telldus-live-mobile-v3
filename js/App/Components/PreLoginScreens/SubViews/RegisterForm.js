@@ -31,7 +31,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, TouchableButton } from '../../../../BaseComponents';
 
 import { RegisterUser } from 'Actions_User';
-import { showModal } from 'Actions_Modal';
+import { showModal } from '../../../Actions/Modal';
 
 import i18n from '../../../Translations/common';
 

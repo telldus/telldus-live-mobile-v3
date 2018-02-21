@@ -25,7 +25,7 @@ import React, {Component} from 'react';
 import { Animated, Easing } from 'react-native';
 
 import { connect } from 'react-redux';
-import { clearData } from 'Actions_Modal';
+import { clearData } from '../App/Actions/Modal';
 
 import Theme from '../App/Theme';
 
