@@ -29,7 +29,7 @@ import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, TouchableButton } from '../../../../BaseComponents';
-import { Clients } from 'AddNewLocation_SubViews';
+import { Clients } from './SubViews';
 
 import i18n from '../../../Translations/common';
 const messages = defineMessages({

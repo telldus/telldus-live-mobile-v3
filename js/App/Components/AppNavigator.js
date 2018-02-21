@@ -49,7 +49,7 @@ import TabsView from 'TabsView';
 import { DimmerPopup } from 'TabViews_SubViews';
 import DeviceDetails from './DeviceDetails/DeviceDetails';
 import { NavigationHeader } from './DeviceDetails/SubViews';
-import AddLocationNavigator from 'AddLocationNavigator';
+import AddLocationNavigator from './Location/AddLocation/AddLocation';
 import LocationDetailsNavigator from 'LocationDetailsNavigator';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
