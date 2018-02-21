@@ -29,7 +29,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
 import Theme from '../../../../Theme';
 
 type Props = {

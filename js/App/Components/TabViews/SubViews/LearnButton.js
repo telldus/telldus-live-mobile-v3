@@ -23,7 +23,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { View, TouchableButton } from '../../../../BaseComponents';
-import { deviceSetState } from 'Actions_Devices';
+import { deviceSetState } from '../../../Actions/Devices';
 import i18n from '../../../Translations/common';
 
 class LearnButton extends View {

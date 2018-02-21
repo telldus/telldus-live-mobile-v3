@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 
 import { View, IconTelldus } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';

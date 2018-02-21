@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';

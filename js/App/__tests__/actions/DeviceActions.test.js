@@ -1,4 +1,4 @@
-import { deviceSetState, requestDeviceAction, getDeviceInfo } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction, getDeviceInfo } from '../../Actions/Devices';
 import { configureStore } from '../../Store/ConfigureStore';
 
 import fetchMock from 'fetch-mock';

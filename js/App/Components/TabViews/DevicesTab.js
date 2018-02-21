@@ -31,7 +31,7 @@ import Platform from 'Platform';
 import { Text, View, TouchableButton, IconTelldus } from '../../../BaseComponents';
 import { DeviceRow } from 'TabViews_SubViews';
 
-import { getDevices, setIgnoreDevice } from 'Actions_Devices';
+import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';

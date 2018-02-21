@@ -31,7 +31,7 @@ import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Text, View } from '../../../BaseComponents';
-import { getDevices } from 'Actions_Devices';
+import { getDevices } from '../../Actions/Devices';
 import { changeSensorDisplayType } from '../../Actions/Dashboard';
 import { defineMessages } from 'react-intl';
 

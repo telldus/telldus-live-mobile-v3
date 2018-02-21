@@ -10,7 +10,7 @@ const mockStore = configureStore(middlewares);
 import OverviewTab from '../../Components/DeviceDetails/OverviewTab';
 import { DimmerDeviceDetail } from 'SubViews';
 import { setDimmerValue, saveDimmerInitialState } from 'Actions_Dimmer';
-import { requestDeviceAction } from 'Actions_Devices';
+import { requestDeviceAction } from '../../Actions/Devices';
 
 
 describe('<OverviewTab />', () => {
