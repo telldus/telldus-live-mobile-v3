@@ -32,13 +32,21 @@ import i18n from '../../Translations/common';
 
 import { LearnButton } from '../TabViews/SubViews';
 
-import { addToDashboard, removeFromDashboard } from '../../Actions';
+import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
+import { addToDashboard, removeFromDashboard, showGlobalError } from '../../Actions';
+
+import Theme from '../../Theme';
 
 const messages = defineMessages({
 	showOnDashborad: {
 		id: 'showOnDashboard',
 		defaultMessage: 'Show on dashboard',
 		description: 'Select if this item should be shown on the dashboard',
+	},
+	hideFromList: {
+		id: 'hideFromList',
+		defaultMessage: 'Hide from device list',
+		description: 'Select if this item should be shown on the device list',
 	},
 });
 
@@ -49,9 +57,11 @@ type Props = {
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
 	appLayout: Object,
+	screenProps: Object,
 };
 
 type State = {
+	isHidden: boolean,
 };
 
 
@@ -60,10 +70,21 @@ class SettingsTab extends View {
 	state: State;
 
 	onValueChange: number => void;
+	setIgnoreDevice: (boolean) => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.onValueChange = this.onValueChange.bind(this);
+		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
+
+		this.state = {
+			isHidden: props.device.ignored,
+		};
+
+		let { formatMessage } = props.screenProps.intl;
+
+		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
 	}
 
 	static navigationOptions = ({ navigation }) => ({
@@ -87,6 +108,39 @@ class SettingsTab extends View {
 		}
 	}
 
+	setIgnoreDevice(value: boolean) {
+		let { device } = this.props;
+		let ignore = device.ignored ? 0 : 1;
+		this.setState({
+			isHidden: value,
+		});
+		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res) => {
+			let message = device.ignored ?
+				this.removedFromHiddenList : this.addedToHiddenList;
+			let payload = {
+				customMessage: message,
+			};
+			this.props.dispatch(getDevices());
+			this.props.dispatch(showGlobalError(payload));
+		}).catch(err => {
+			let payload = {
+				customMessage: err.message ? err.message : null,
+			};
+			this.setState({
+				isHidden: device.ignored,
+			});
+			this.props.dispatch(showGlobalError(payload));
+		});
+	}
+
+	componentWillReceiveProps(nextProps: Object) {
+		if (this.props.device.ignored !== nextProps.device.ignored) {
+			this.setState({
+				isHidden: nextProps.device.ignored,
+			});
+		}
+	}
+
 	shouldComponentUpdate(nextProps, nextState) {
 		return nextProps.screenProps.currentTab === 'Settings';
 	}
@@ -100,15 +154,16 @@ class SettingsTab extends View {
 			textShowOnDash,
 			dashSwitchCover,
 			dashSwitch,
+			learn,
 		} = this.getStyle(appLayout);
 
-		const device = this.props.device;
+		const { device } = this.props;
 		const { LEARN } = device.supportedMethods;
 
 		let learnButton = null;
 
 		if (LEARN) {
-			learnButton = <LearnButton id={device.id} style={styles.learn} />;
+			learnButton = <LearnButton id={device.id} style={learn} />;
 		}
 		return (
 			<View style={styles.container}>
@@ -126,6 +181,20 @@ class SettingsTab extends View {
 						/>
 					</View>
 				</View>
+				<View style={ShowOnDashCover}>
+					<View style={textShowOnDashCover}>
+						<Text style={textShowOnDash}>
+							<FormattedMessage {...messages.hideFromList} style={textShowOnDash}/>
+						</Text>
+					</View>
+					<View style={dashSwitchCover}>
+						<Switch
+							style={dashSwitch}
+							onValueChange={this.setIgnoreDevice}
+							value={this.state.isHidden}
+						/>
+					</View>
+				</View>
 				{learnButton}
 			</View>
 		);
@@ -140,18 +209,19 @@ class SettingsTab extends View {
 			ShowOnDashCover: {
 				backgroundColor: '#fff',
 				height: isPortrait ? height * 0.09 : width * 0.09,
-				marginVertical: 25,
+				marginTop: 8,
 				flexDirection: 'row',
 				alignItems: 'center',
-				justifyContent: 'center',
+				justifyContent: 'space-between',
+				marginHorizontal: 10,
+				paddingHorizontal: 20,
+				...Theme.Core.shadow,
 			},
 			textShowOnDashCover: {
-				width: width * 0.5,
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 			},
 			dashSwitchCover: {
-				width: width * 0.5,
 				alignItems: 'flex-end',
 				justifyContent: 'center',
 			},
@@ -160,13 +230,13 @@ class SettingsTab extends View {
 			},
 			textShowOnDash: {
 				color: '#8A8682',
-				fontSize: isPortrait ? width * 0.047 : height * 0.047,
+				fontSize: 15,
 				marginLeft: 8,
 				justifyContent: 'center',
 			},
 			learn: {
 				marginHorizontal: width * 0.25,
-				marginVertical: 25,
+				marginVertical: 15,
 			},
 		};
 	}
@@ -179,6 +249,7 @@ SettingsTab.propTypes = {
 const styles = StyleSheet.create({
 	container: {
 		flex: 0,
+		paddingTop: 15,
 	},
 });
 

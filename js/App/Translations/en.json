@@ -171,6 +171,7 @@
   "form.register.fieldEmptyPostfix": "seems to be missing in your form. Please check that it is entered correctly.",
   "gateway.offline": "Offline",
   "group": "Group",
+  "hideFromList": "Hide from device list",
   "history": "History",
   "incommingSignal": "Incomming signal",
   "loading": "Loading",
