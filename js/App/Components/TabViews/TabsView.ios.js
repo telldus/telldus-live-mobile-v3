@@ -30,7 +30,7 @@ import { intlShape, injectIntl } from 'react-intl';
 import { View, Header } from '../../../BaseComponents';
 
 import { toggleEditMode, syncWithServer, switchTab } from '../../Actions';
-import TabViews from 'TabViews';
+import TabViews from './index';
 
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
