@@ -40,7 +40,7 @@ import TimeZone from './TimeZone';
 import Success from './Success';
 import Position from './Position';
 
-import { getRouteName } from 'Lib';
+import { getRouteName } from '../../../Lib';
 
 const initialRouteName = 'LocationDetected';
 

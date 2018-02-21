@@ -35,7 +35,7 @@ import {
 	getDimmerValue,
 	toDimmerValue,
 	toSliderValue,
-} from 'Lib';
+} from '../../../Lib';
 
 import Theme from '../../../Theme';
 

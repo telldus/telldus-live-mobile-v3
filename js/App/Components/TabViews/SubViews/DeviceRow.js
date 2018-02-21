@@ -34,7 +34,7 @@ import DimmerButton from './DimmerButton';
 import { getLabelDevice } from '../../../Lib';
 import HiddenRow from './Device/HiddenRow';
 
-import { getPowerConsumed } from 'Lib';
+import { getPowerConsumed } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';

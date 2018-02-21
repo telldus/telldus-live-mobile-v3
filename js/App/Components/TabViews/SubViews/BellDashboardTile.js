@@ -32,7 +32,7 @@ import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
 import { getLabelDevice } from '../../../Lib';
-import { getPowerConsumed } from 'Lib';
+import { getPowerConsumed } from '../../../Lib';
 
 import Theme from '../../../Theme';
 

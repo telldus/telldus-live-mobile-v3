@@ -32,7 +32,7 @@ import GenericSensor from './Sensor/GenericSensor';
 
 import i18n from '../../../Translations/common';
 
-import { formatLastUpdated, checkIfLarge } from 'Lib';
+import { formatLastUpdated, checkIfLarge } from '../../../Lib';
 import { utils, actions } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;

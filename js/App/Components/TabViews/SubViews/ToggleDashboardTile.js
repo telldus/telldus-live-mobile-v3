@@ -31,7 +31,7 @@ import OffButton from './OffButton';
 import OnButton from './OnButton';
 
 import { getLabelDevice } from '../../../Lib';
-import { getPowerConsumed } from 'Lib';
+import { getPowerConsumed } from '../../../Lib';
 
 import Theme from '../../../Theme';
 

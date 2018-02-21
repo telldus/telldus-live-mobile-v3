@@ -40,7 +40,7 @@ import {
 	toDimmerValue,
 	toSliderValue,
 	getPowerConsumed,
-} from 'Lib';
+} from '../../../Lib';
 
 import Theme from '../../../Theme';
 

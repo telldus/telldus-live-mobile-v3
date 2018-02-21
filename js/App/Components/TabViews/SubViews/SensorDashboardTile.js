@@ -30,7 +30,7 @@ import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
-import { formatLastUpdated, checkIfLarge } from 'Lib';
+import { formatLastUpdated, checkIfLarge } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;

@@ -36,7 +36,7 @@ import { OnButton, OffButton } from 'TabViews_SubViews';
 import i18n from '../../../Translations/common';
 import {
 	toDimmerValue,
-} from 'Lib';
+} from '../../../Lib';
 
 type Props = {
 	commandON: number,

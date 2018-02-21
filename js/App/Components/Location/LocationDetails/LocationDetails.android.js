@@ -37,7 +37,7 @@ import EditTimeZoneContinent from './EditTimeZoneContinent';
 import EditTimeZoneCity from './EditTimeZoneCity';
 import EditGeoPosition from './EditGeoPosition';
 
-import { getRouteName } from 'Lib';
+import { getRouteName } from '../../../Lib';
 
 const initialRouteName = 'Details';
 

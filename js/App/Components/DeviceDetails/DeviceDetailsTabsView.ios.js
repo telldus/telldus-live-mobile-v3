@@ -37,7 +37,7 @@ const CustomIcon = createIconSetFromIcoMoon(icon_settings);
 
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
 import { Text, View, Poster } from '../../../BaseComponents';
-import { getWindowDimensions } from 'Lib';
+import { getWindowDimensions } from '../../Lib';
 import i18n from '../../Translations/common';
 
 type Props = {

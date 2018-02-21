@@ -36,7 +36,7 @@ import ChangeLogContainer from './ChangeLogContainer';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 
-import { getRouteName } from 'Lib';
+import { getRouteName } from '../../Lib';
 
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
 
