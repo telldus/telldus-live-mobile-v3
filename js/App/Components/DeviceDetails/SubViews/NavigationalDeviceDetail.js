@@ -28,7 +28,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const deviceHeight = Dimensions.get('window').height;
 
-import { NavigationalButton } from 'TabViews_SubViews';
+import { NavigationalButton } from '../../TabViews/SubViews';
 
 type Props = {
 	device: Object,

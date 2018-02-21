@@ -23,7 +23,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { RoundedCornerShadowView, View } from '../../../../BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
-import { OnButton, OffButton } from 'TabViews_SubViews';
+import { OnButton, OffButton } from '../../TabViews/SubViews';
 
 const deviceHeight = Dimensions.get('window').height;
 

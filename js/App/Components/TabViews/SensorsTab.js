@@ -28,7 +28,7 @@ import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
 import { View, IconTelldus } from '../../../BaseComponents';
-import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
+import { DeviceHeader, SensorRow, SensorRowHidden } from './SubViews';
 
 import { getSensors, setIgnoreSensor, showGlobalError } from '../../Actions';
 

@@ -46,7 +46,7 @@ import {
 	BellDashboardTile,
 	ToggleDashboardTile,
 	SensorDashboardTile,
-} from 'TabViews_SubViews';
+} from './SubViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';

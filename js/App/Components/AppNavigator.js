@@ -46,7 +46,7 @@ const messages = defineMessages({
 
 import { View } from '../../BaseComponents';
 import TabsView from 'TabsView';
-import { DimmerPopup } from 'TabViews_SubViews';
+import { DimmerPopup } from './TabViews/SubViews';
 import DeviceDetails from './DeviceDetails/DeviceDetails';
 import { NavigationHeader } from './DeviceDetails/SubViews';
 import AddLocationNavigator from './Location/AddLocation/AddLocation';

@@ -32,7 +32,7 @@ const deviceHeight = Dimensions.get('window').height;
 import { setDimmerValue, saveDimmerInitialState } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import { FormattedMessage, RoundedCornerShadowView, Text, View } from '../../../../BaseComponents';
-import { OnButton, OffButton } from 'TabViews_SubViews';
+import { OnButton, OffButton } from '../../TabViews/SubViews';
 import i18n from '../../../Translations/common';
 import {
 	toDimmerValue,

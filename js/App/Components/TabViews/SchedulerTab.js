@@ -30,7 +30,7 @@ import i18n from '../../Translations/common';
 import Platform from 'Platform';
 
 import { List, ListDataSource, Text, View } from '../../../BaseComponents';
-import { JobRow } from 'TabViews_SubViews';
+import { JobRow } from './SubViews';
 import { getJobs } from '../../Actions';
 import Theme from '../../Theme';
 

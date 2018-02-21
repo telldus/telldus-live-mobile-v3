@@ -30,7 +30,7 @@ import { StyleSheet, Switch } from 'react-native';
 import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 
-import { LearnButton } from 'TabViews_SubViews';
+import { LearnButton } from '../TabViews/SubViews';
 
 import { addToDashboard, removeFromDashboard } from '../../Actions';
 
