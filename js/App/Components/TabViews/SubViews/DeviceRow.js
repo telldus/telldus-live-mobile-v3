@@ -31,7 +31,7 @@ import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
-import { getLabelDevice } from 'Accessibility';
+import { getLabelDevice } from '../../../Lib';
 import HiddenRow from './Device/HiddenRow';
 
 import { getPowerConsumed } from 'Lib';

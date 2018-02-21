@@ -34,7 +34,7 @@ import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 
-import { getLabelDevice } from 'Accessibility';
+import { getLabelDevice } from '../../../Lib';
 import {
 	getDimmerValue,
 	toDimmerValue,

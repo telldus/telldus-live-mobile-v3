@@ -30,7 +30,7 @@ import DashboardShadowTile from './DashboardShadowTile';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
 
-import { getLabelDevice } from 'Accessibility';
+import { getLabelDevice } from '../../../Lib';
 import { getPowerConsumed } from 'Lib';
 
 import Theme from '../../../Theme';

@@ -29,7 +29,7 @@ import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
 
-import { getLabelDevice } from 'Accessibility';
+import { getLabelDevice } from '../../../Lib';
 import { getPowerConsumed } from 'Lib';
 
 import Theme from '../../../Theme';
