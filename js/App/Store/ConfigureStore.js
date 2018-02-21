@@ -23,7 +23,7 @@ import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import promise from './Promise';
 import array from './Array';
-import reducers from 'Reducers';
+import reducers from '../Reducers';
 import { createLogger } from 'redux-logger';
 import { persistStore } from 'redux-persist';
 import {LiveApi} from 'LiveApi';
