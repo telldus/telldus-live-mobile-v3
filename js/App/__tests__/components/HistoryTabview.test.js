@@ -9,7 +9,7 @@ const mockStore = configureStore(middlewares);
 const store = mockStore({});
 
 import HistoryTab from '../../Components/DeviceDetails/HistoryTab';
-import { DeviceHistoryDetails, HistoryRow } from 'SubViews';
+import { DeviceHistoryDetails, HistoryRow } from '../../Components/DeviceDetails/SubViews';
 import { hideModal } from '../../Actions/Modal';
 
 
