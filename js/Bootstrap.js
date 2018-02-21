@@ -32,7 +32,7 @@ import DeviceInfo from 'react-native-device-info';
 import App from './App';
 import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
-import * as Translations from 'Translations';
+import * as Translations from './App/Translations';
 import { forceLocale } from './Config';
 
 function Bootstrap(): React.Component {
