@@ -35,7 +35,7 @@ import {
 	Text,
 	Icon,
 	FloatingButton,
-} from 'BaseComponents';
+} from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import { reportError } from 'Analytics';
 

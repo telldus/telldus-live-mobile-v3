@@ -27,7 +27,7 @@ import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import { NavigationHeader } from 'DDSubViews';
 import AddLocationContainer from './AddLocationContainer';
 

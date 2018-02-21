@@ -23,7 +23,7 @@ import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';

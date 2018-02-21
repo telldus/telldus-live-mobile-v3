@@ -30,7 +30,7 @@ import Subscribable from 'Subscribable';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Text, View } from 'BaseComponents';
+import { Text, View } from '../../../BaseComponents';
 import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
 import { defineMessages } from 'react-intl';

@@ -29,7 +29,7 @@ import {
 	View,
 	Text,
 	IconTelldus,
-} from 'BaseComponents';
+} from '../../../../BaseComponents';
 
 import Theme from 'Theme';
 

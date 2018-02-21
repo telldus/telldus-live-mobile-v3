@@ -28,7 +28,7 @@ import { TouchableOpacity, ScrollView } from 'react-native';
 import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
-import { FormattedMessage, Text, View, Icon, Image } from 'BaseComponents';
+import { FormattedMessage, Text, View, Icon, Image } from '../../../BaseComponents';
 import Gateway from './Gateway';
 import i18n from '../../Translations/common';
 import { hasStatusBar } from 'Lib';

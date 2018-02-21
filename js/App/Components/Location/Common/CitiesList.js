@@ -25,7 +25,7 @@
 
 import React from 'react';
 
-import {View, List, ListDataSource} from 'BaseComponents';
+import {View, List, ListDataSource} from '../../../../BaseComponents';
 import ListRow from './SubViews/ListRow';
 
 type Props = {

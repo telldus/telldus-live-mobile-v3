@@ -30,7 +30,7 @@ import { Dimensions, TouchableWithoutFeedback } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
-import { List, ListDataSource, View, StyleSheet } from 'BaseComponents';
+import { List, ListDataSource, View, StyleSheet } from '../../../BaseComponents';
 import DeviceLocationDetail from './../DeviceDetails/SubViews/DeviceLocationDetail';
 import { getGateways } from 'Actions';
 

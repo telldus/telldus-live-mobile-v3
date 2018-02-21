@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 import { BellButton } from 'TabViews_SubViews';
 

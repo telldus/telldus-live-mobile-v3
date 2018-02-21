@@ -25,7 +25,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { View, TabBar } from 'BaseComponents';
+import { View, TabBar } from '../../../BaseComponents';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 const deviceWidth = Dimensions.get('window').width;
 import { defineMessages } from 'react-intl';

@@ -28,7 +28,7 @@ import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
-import { Text, View, TouchableButton, IconTelldus } from 'BaseComponents';
+import { Text, View, TouchableButton, IconTelldus } from '../../../BaseComponents';
 import { DeviceRow } from 'TabViews_SubViews';
 
 import { getDevices, setIgnoreDevice } from 'Actions_Devices';

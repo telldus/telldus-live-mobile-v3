@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
 
 import StopButton from './Navigational/StopButton';

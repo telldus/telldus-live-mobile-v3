@@ -26,7 +26,7 @@ import { TouchableWithoutFeedback, UIManager, LayoutAnimation } from 'react-nati
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 
-import { FormattedMessage, ListItem, Text, View, BlockIcon } from 'BaseComponents';
+import { FormattedMessage, ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
 import GenericSensor from './Sensor/GenericSensor';
 

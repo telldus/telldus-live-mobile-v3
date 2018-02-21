@@ -26,7 +26,7 @@ import React from 'react';
 import { Image, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
-import { View, Text, TouchableButton, StyleSheet, FormattedNumber, Icon } from 'BaseComponents';
+import { View, Text, TouchableButton, StyleSheet, FormattedNumber, Icon } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 
 import Theme from 'Theme';

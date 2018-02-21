@@ -28,7 +28,7 @@ import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import _ from 'lodash';
 import { defineMessages } from 'react-intl';
 
-import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from 'BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';

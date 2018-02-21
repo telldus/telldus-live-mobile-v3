@@ -26,7 +26,7 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 
-import { ListItem, Text, View, BlockIcon } from 'BaseComponents';
+import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';

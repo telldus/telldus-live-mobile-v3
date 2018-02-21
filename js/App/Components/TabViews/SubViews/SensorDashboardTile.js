@@ -24,7 +24,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { FormattedNumber, View } from 'BaseComponents';
+import { FormattedNumber, View } from '../../../../BaseComponents';
 
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';

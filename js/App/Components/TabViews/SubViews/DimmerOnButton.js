@@ -21,7 +21,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, IconTelldus } from 'BaseComponents';
+import { View, IconTelldus } from '../../../../BaseComponents';
 import { StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 

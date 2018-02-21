@@ -26,7 +26,7 @@
 import React from 'react';
 import {TouchableOpacity, Text} from 'react-native';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../../BaseComponents';
 
 type Props = {
 	item: string,

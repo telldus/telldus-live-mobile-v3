@@ -29,7 +29,7 @@ import { defineMessages } from 'react-intl';
 import { intlShape, injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View, Header } from 'BaseComponents';
+import { View, Header } from '../../../BaseComponents';
 
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 

@@ -26,7 +26,7 @@ import { Animated, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';

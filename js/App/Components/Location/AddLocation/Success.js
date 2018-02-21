@@ -36,7 +36,7 @@ import {
 	Image,
 	Icon,
 	TouchableButton,
-} from 'BaseComponents';
+} from '../../../../BaseComponents';
 
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 

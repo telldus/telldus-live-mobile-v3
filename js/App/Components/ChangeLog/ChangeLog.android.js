@@ -29,7 +29,7 @@ import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../BaseComponents';
 
 import { NavigationHeader } from 'DDSubViews';
 import ChangeLogContainer from './ChangeLogContainer';

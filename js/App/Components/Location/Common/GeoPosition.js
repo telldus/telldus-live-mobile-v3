@@ -28,7 +28,7 @@ import { TextInput, Keyboard } from 'react-native';
 import { intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
 
-import { View, FloatingButton } from 'BaseComponents';
+import { View, FloatingButton } from '../../../../BaseComponents';
 import LabelBox from './LabelBox';
 
 import { googleMapsAPIKey } from '../../../../Config';

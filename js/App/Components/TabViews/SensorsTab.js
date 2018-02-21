@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
-import { View, IconTelldus } from 'BaseComponents';
+import { View, IconTelldus } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 
 import { getSensors, setIgnoreSensor, showGlobalError } from 'Actions';

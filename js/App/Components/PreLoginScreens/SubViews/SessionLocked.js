@@ -29,7 +29,7 @@ import {
 	Text,
 	View,
 	TouchableButton,
-} from 'BaseComponents';
+} from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
 import { logoutFromTelldus } from 'Actions';

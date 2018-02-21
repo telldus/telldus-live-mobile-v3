@@ -27,7 +27,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { View, Header } from 'BaseComponents';
+import { View, Header } from '../../../BaseComponents';
 
 import { toggleEditMode, syncWithServer, switchTab } from 'Actions';
 import TabViews from 'TabViews';

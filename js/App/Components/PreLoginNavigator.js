@@ -25,7 +25,7 @@ import { StackNavigator } from 'react-navigation';
 import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
 
-import { View } from 'BaseComponents';
+import { View } from '../../BaseComponents';
 import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from 'PreLoginScreens';
 
 const RouteConfigs = {

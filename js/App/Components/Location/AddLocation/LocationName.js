@@ -28,7 +28,7 @@ import { Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import Name from '../Common/Name';
 
 import i18n from '../../../Translations/common';

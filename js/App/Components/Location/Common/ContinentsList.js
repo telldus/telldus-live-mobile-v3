@@ -27,7 +27,7 @@ import React from 'react';
 import uniqBy from 'lodash/uniqBy';
 
 import timeZone from '../../../Lib/TimeZone';
-import {View, List, ListDataSource} from 'BaseComponents';
+import {View, List, ListDataSource} from '../../../../BaseComponents';
 import ListRow from './SubViews/ListRow';
 
 const listDataSource = new ListDataSource({

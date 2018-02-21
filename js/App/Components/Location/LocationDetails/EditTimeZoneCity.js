@@ -27,7 +27,7 @@ import React from 'react';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import CitiesList from '../Common/CitiesList';
 
 import i18n from '../../../Translations/common';

@@ -25,7 +25,7 @@ import React, { PureComponent } from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { View, IconTelldus } from 'BaseComponents';
+import { View, IconTelldus } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';

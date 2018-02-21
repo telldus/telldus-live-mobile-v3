@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { View, Text } from 'BaseComponents';
+import { View, Text } from '../../../../BaseComponents';
 
 import Theme from 'Theme';
 

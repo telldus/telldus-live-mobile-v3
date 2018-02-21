@@ -27,7 +27,7 @@ import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { View, Header, StyleSheet } from 'BaseComponents';
+import { View, Header, StyleSheet } from '../../../../BaseComponents';
 import { hasStatusBar } from 'Lib';
 import i18n from '../../../Translations/common';
 

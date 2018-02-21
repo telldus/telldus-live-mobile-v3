@@ -32,7 +32,7 @@ import {
 	Push,
 } from 'Components';
 import ChangeLogNavigator from 'ChangeLogNavigator';
-import { View } from 'BaseComponents';
+import { View } from './BaseComponents';
 import {
 	setAppLayout,
 	setAccessibilityListener,

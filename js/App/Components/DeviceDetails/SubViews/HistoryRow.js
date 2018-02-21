@@ -30,7 +30,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from '../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { FormattedMessage, Text, View, ListRow } from 'BaseComponents';
+import { FormattedMessage, Text, View, ListRow } from '../../../../BaseComponents';
 import { getDeviceStateMethod } from 'Lib';
 import i18n from '../../../Translations/common';
 import {

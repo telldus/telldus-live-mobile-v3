@@ -30,7 +30,7 @@ import differenceWith from 'lodash/differenceWith';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import timeZone from '../../../Lib/TimeZone';
-import { View, Text } from 'BaseComponents';
+import { View, Text } from '../../../../BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';

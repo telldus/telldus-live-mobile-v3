@@ -33,7 +33,7 @@ import {
 	Icon,
 	TouchableButton,
 	DialogueBox,
-} from 'BaseComponents';
+} from '../../../BaseComponents';
 import { logoutFromTelldus } from 'Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');

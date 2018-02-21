@@ -25,7 +25,7 @@
 import React, { PureComponent } from 'react';
 import { intlShape, defineMessages } from 'react-intl';
 
-import { View, Text, IconTelldus } from 'BaseComponents';
+import { View, Text, IconTelldus } from '../../../../BaseComponents';
 
 const messages = defineMessages({
 	wizardOneTitle: {

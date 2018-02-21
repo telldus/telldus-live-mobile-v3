@@ -27,7 +27,7 @@ import React from 'react';
 import { TextInput, Keyboard } from 'react-native';
 import { intlShape } from 'react-intl';
 
-import {View, FloatingButton} from 'BaseComponents';
+import {View, FloatingButton} from '../../../../BaseComponents';
 import LabelBox from './LabelBox';
 
 import i18n from '../../../Translations/common';

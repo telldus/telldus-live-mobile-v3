@@ -29,7 +29,7 @@ import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import {View, FormattedMessage, FloatingButton} from 'BaseComponents';
+import {View, FormattedMessage, FloatingButton} from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 
 import i18n from '../../../Translations/common';
