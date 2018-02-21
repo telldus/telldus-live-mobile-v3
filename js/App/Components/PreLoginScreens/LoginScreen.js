@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { FormattedMessage, View, DialogueBox } from '../../../BaseComponents';
-import { FormContainerComponent, LoginForm, SessionLocked } from 'PreLoginScreen_SubViews';
+import { FormContainerComponent, LoginForm, SessionLocked } from './SubViews';
 
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
