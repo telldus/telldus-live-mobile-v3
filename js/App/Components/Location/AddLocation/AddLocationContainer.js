@@ -33,7 +33,7 @@ import { View, DialogueBox, Text, RoundedInfoButton } from '../../../../BaseComp
 import LocationPoster from '../Common/LocationPoster';
 
 import * as modalActions from 'Actions_Modal';
-import * as gatewayActions from 'Actions_Gateways';
+import * as gatewayActions from '../../../Actions/Gateways';
 
 const messages = defineMessages({
 	dialogueHeader: {

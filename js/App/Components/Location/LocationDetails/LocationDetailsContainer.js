@@ -33,7 +33,7 @@ import { View, DialogueBox, Text, BlockIcon } from '../../../../BaseComponents';
 import LocationPoster from '../Common/LocationPoster';
 
 import * as modalActions from 'Actions_Modal';
-import * as gatewayActions from 'Actions_Gateways';
+import * as gatewayActions from '../../../Actions/Gateways';
 import * as appDataActions from '../../../Actions/AppData';
 
 import { messages as commonMessages } from '../Common/messages';

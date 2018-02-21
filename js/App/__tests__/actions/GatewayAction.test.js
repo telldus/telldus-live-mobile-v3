@@ -1,4 +1,4 @@
-import { addNewGateway } from 'Actions_Gateways';
+import { addNewGateway } from '../../Actions/Gateways';
 import { configureStore } from '../../Store/ConfigureStore';
 
 jest.useFakeTimers();
