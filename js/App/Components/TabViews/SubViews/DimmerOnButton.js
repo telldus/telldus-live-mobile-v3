@@ -26,7 +26,7 @@ import { StyleSheet, Animated, TouchableOpacity } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 class DimmerOnButton extends View {
 	constructor(props) {

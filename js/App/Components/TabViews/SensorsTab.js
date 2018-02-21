@@ -35,7 +35,7 @@ import { getSensors, setIgnoreSensor, showGlobalError } from 'Actions';
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 type Props = {
 	rowsAndSections: Object,

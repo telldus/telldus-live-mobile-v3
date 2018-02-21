@@ -29,7 +29,7 @@ import { connect } from 'react-redux';
 import { View, Text, TouchableButton, StyleSheet, FormattedNumber, Icon } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';

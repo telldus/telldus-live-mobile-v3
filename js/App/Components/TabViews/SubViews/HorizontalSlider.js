@@ -26,7 +26,7 @@ import { Text, View } from '../../../../BaseComponents';
 import { PanResponder, Animated, StyleSheet, Vibration, Platform } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 function getSliderLabel(value:number, intl: intlShape):string {
 	return value.toString();

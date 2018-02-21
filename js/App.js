@@ -39,7 +39,7 @@ import {
 	setAccessibilityInfo,
 } from 'Actions';
 
-import Theme from 'Theme';
+import Theme from './App/Theme';
 const changeLogVersion = '3.5';
 
 class App extends React.Component {

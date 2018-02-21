@@ -26,7 +26,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 import { View } from '../../../BaseComponents';
 import Tabs from './Tabs';

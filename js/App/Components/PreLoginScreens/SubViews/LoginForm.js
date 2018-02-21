@@ -34,7 +34,7 @@ import { testUsername, testPassword } from '../../../../Config';
 import i18n from '../../../Translations/common';
 import {defineMessages} from 'react-intl';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 const messages = defineMessages({
 	fieldEmpty: {

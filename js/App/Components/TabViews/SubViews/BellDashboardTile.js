@@ -34,7 +34,7 @@ import i18n from '../../../Translations/common';
 import { getLabelDevice } from 'Accessibility';
 import { getPowerConsumed } from 'Lib';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,

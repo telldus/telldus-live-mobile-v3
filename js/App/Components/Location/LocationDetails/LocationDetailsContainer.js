@@ -38,7 +38,7 @@ import * as appDataActions from 'Actions_AppData';
 
 import { messages as commonMessages } from '../Common/messages';
 import i18n from '../../../Translations/common';
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	navigation: Object,

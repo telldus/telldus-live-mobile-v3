@@ -27,7 +27,7 @@ import { Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { clearData } from 'Actions_Modal';
 
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 type Props = {
 	dispatch: Function,

@@ -39,7 +39,7 @@ import { parseGatewaysForListView } from '../../Reducers/Gateways';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 const messages = defineMessages({
 	gateways: {

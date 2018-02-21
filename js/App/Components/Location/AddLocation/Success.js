@@ -29,7 +29,7 @@ import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 import {
 	View,
 	Text,

@@ -25,7 +25,7 @@
 
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 import { View, Text } from '../../../BaseComponents';

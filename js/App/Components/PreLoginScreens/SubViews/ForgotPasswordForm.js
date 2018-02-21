@@ -31,7 +31,7 @@ import { View, TouchableButton } from '../../../../BaseComponents';
 import i18n from '../../../Translations/common';
 import { intlShape, injectIntl } from 'react-intl';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 
 type Props = {

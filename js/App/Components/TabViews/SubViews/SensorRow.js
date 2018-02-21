@@ -38,7 +38,7 @@ const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
 const { Dashboard: { getSupportedDisplayTypes } } = actions;
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 const directions = [
 	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',

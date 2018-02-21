@@ -37,7 +37,7 @@ import {
 	toSliderValue,
 } from 'Lib';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,

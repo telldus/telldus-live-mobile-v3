@@ -30,7 +30,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
 import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import Theme from 'Theme';
+import Theme from '../../../../Theme';
 
 type Props = {
 	commandDown: number,

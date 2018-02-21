@@ -29,7 +29,7 @@ import { StyleSheet } from 'react-native';
 import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,

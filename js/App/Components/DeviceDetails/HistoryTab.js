@@ -33,7 +33,7 @@ import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
 import { getDeviceHistory } from 'Actions_Devices';
 import { hideModal } from 'Actions_Modal';
 import i18n from '../../Translations/common';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 const messages = defineMessages({
 	historyHeader: {

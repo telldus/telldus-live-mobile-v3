@@ -21,7 +21,7 @@
 
 import React from 'react';
 import { FormattedMessage, ListItem, Text, View } from '../../../../BaseComponents';
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 import { defineMessages } from 'react-intl';
 import i18n from '../../../Translations/common';
 

@@ -30,7 +30,7 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import View from './View';
 import Text from './Text';
 import Modal from './Modal';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
 const messages = defineMessages({

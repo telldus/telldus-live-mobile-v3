@@ -28,7 +28,7 @@ import View from './View';
 import FormattedTime from './FormattedTime';
 import BlockIcon from './BlockIcon';
 import RowWithTriangle from './RowWithTriangle';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 type Props = {
 	children: any,

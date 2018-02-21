@@ -29,7 +29,7 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
 import Throbber from './Throbber';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
 type DefaultProps = {

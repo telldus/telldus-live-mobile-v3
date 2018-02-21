@@ -25,7 +25,7 @@ import React from 'react';
 
 import { FormattedNumber, Text, View, IconTelldus } from '../../../../../BaseComponents';
 
-import Theme from 'Theme';
+import Theme from '../../../../Theme';
 
 type sensorProps = {
 	name: string,

@@ -38,7 +38,7 @@ import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 import {
 	DimmerDashboardTile,

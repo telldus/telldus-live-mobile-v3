@@ -33,7 +33,7 @@ import OnButton from './OnButton';
 import { getLabelDevice } from 'Accessibility';
 import { getPowerConsumed } from 'Lib';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,

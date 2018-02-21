@@ -28,7 +28,7 @@ import { StyleSheet } from 'react-native';
 import OnButton from './OnButton';
 import OffButton from './OffButton';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,

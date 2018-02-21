@@ -31,7 +31,7 @@ import {
 	IconTelldus,
 } from '../../../../BaseComponents';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 class LabelBox extends View {
 	render() {

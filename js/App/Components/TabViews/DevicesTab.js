@@ -39,7 +39,7 @@ import getTabBarIcon from '../../Lib/getTabBarIcon';
 import { parseDevicesForListView } from 'Reducers_Devices';
 import { addNewGateway, showGlobalError } from 'Actions';
 import i18n from '../../Translations/common';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 const messages = defineMessages({
 	messageNoDeviceTitle: {

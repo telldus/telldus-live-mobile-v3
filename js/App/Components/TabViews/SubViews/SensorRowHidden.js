@@ -30,7 +30,7 @@ import { addToDashboard, removeFromDashboard } from 'Actions';
 import { View, Icon } from '../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 const messages = defineMessages({
 	// iconAddPhraseOne: {

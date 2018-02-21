@@ -35,7 +35,7 @@ import i18n from '../../../Translations/common';
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
