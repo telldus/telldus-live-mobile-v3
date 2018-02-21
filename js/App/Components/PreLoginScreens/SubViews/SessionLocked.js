@@ -34,7 +34,7 @@ import {
 import i18n from '../../../Translations/common';
 import { logoutFromTelldus } from 'Actions';
 import { unregisterPushToken } from 'Actions_User';
-import { refreshAccessToken } from 'LiveApi';
+import { refreshAccessToken } from '../../../Lib';
 
 const messages = defineMessages({
 	sessionLockedBodyParaOne: {

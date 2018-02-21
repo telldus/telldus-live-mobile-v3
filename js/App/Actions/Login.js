@@ -28,7 +28,7 @@ import type { Action, ThunkAction } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
 import { Answers } from 'react-native-fabric';
 
-import {LiveApi} from 'LiveApi';
+import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
 const loginToTelldus = (username:string, password:string): ThunkAction => (dispatch, getState) => {

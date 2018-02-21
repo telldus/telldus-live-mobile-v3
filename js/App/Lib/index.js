@@ -31,6 +31,7 @@ import SensorUtils from './SensorUtils';
 import DeviceUtils from './DeviceUtils';
 import Accessibility from './Accessibility';
 import Analytics from './Analytics';
+import * as LiveApi from './LiveApi';
 
 module.exports = {
 	getRouteName,
@@ -43,4 +44,5 @@ module.exports = {
 	...DeviceUtils,
 	...Accessibility,
 	...Analytics,
+	...LiveApi,
 };

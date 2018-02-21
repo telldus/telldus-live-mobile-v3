@@ -26,7 +26,7 @@ import array from './Array';
 import reducers from '../Reducers';
 import { createLogger } from 'redux-logger';
 import { persistStore } from 'redux-persist';
-import {LiveApi} from 'LiveApi';
+import { LiveApi } from '../Lib/LiveApi';
 import TelldusWebsocket from '../Lib/Socket';
 
 let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
