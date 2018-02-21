@@ -28,7 +28,7 @@ import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../C
 import { Answers } from 'react-native-fabric';
 
 import {LiveApi} from '../Lib/LiveApi';
-import { destroyAllConnections } from 'Actions_Websockets';
+import { destroyAllConnections } from '../Actions/Websockets';
 
 const loginToTelldus = (username:string, password:string): ThunkAction => (dispatch, getState) => {
 	return axios({
