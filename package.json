@@ -39,6 +39,7 @@
     "react-native-scrollable-tab-view": "^0.8.0",
     "react-native-simple-toast": "0.0.7",
     "react-native-slider": "^0.11.0",
+    "react-native-sqlite-storage": "^3.3.4",
     "react-native-swipe-list-view": "^1.0.5",
     "react-native-uuid": "^1.4.9",
     "react-native-vector-icons": "^4.4.2",

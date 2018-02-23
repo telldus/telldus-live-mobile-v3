@@ -43,6 +43,7 @@ import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import io.fabric.sdk.android.Fabric;
+import org.pgsqlite.SQLitePluginPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -56,6 +57,7 @@ public class MainApplication extends Application implements ReactApplication {
 		protected List<ReactPackage> getPackages() {
 			return Arrays.<ReactPackage>asList(
 				new FabricPackage(),
+				new SQLitePluginPackage(),
 				new RNDeviceInfo(),
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
