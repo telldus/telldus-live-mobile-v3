@@ -9,7 +9,6 @@ const mockStore = configureStore(middlewares);
 
 import SettingsTab from '../../Components/DeviceDetails/SettingsTab';
 import { addToDashboard, removeFromDashboard } from 'Actions';
-import { deviceSetState } from 'Actions_Devices';
 import { LearnButton } from 'TabViews_SubViews';
 
 
@@ -77,12 +76,6 @@ describe('LearnButton', () => {
 		expect(wrapper.find(LearnButton).length).toBe(1);
 		const screen = wrapper.props().children.type.displayName;
 		expect(screen).toEqual('Connect(LearnButton)');
-	});
-
-	it(' check deviceSetState action on dispatching ', () => {
-		store.dispatch(deviceSetState());
-		let action = store.getActions();
-		expect(action).toEqual([]);
 	});
 
 });

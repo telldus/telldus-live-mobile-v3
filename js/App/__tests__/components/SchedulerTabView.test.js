@@ -2,16 +2,26 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { shallow } from 'enzyme';
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-const middlewares = [thunk];
-const mockStore = configureStore(middlewares);
-const store = mockStore({});
-
+import { configureStore } from '../../Store/ConfigureStore';
 import SchedulerTab from '../../Components/TabViews/SchedulerTab';
 import { getJobs } from 'Actions';
 
 describe('<SchedulerTab />', () => {
+
+	let store;
+	let accessToken = {access_token: 'bajs', refresh_token: 'bajs'};
+
+	beforeEach(() => {
+		store = configureStore();
+		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
+		store.dispatch({type: 'RECEIVED_DEVICES', payload: {
+			device: [{
+				id: '1',
+				methods: 3,
+				state: 2,
+			}],
+		}});
+	});
 
 	let wrapper;
 	  beforeEach(()=>{
@@ -32,8 +42,8 @@ describe('<SchedulerTab />', () => {
 
 	it(' check getjobs action on dispatching ', () => {
 		store.dispatch(getJobs());
-		let action = store.getActions();
-		 expect(action).toEqual([]);
+		let state = store.getState();
+		 expect(state.App.active).toEqual(true);
 	});
 
 });
