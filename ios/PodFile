@@ -4,6 +4,7 @@ target 'TelldusLiveApp' do
   react_native_path = "../node_modules/react-native"
   pod "yoga", :path => "#{react_native_path}/ReactCommon/yoga"
   pod 'React', :subspecs => [
+    'BatchedBridge',
     'Core',
   ], :path => react_native_path
   pod 'Fabric'
