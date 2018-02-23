@@ -34,7 +34,7 @@ const database_size = 200000;
 
 export default class TelldusLocalStorage {
 
-	constructor(data: Object) {
+	constructor() {
 	}
 
 	loadDatabase = () => {
