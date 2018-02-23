@@ -53,30 +53,26 @@ export default class TelldusLocalStorage {
 	}
 
 	createTable = (tx: Object, data: Object) => {
-		// tx.executeSql('DROP TABLE IF EXISTS Device_History;');
 
 		let insertQuery = this.prepareInserQueryDeviceHistory(data);
 
 		return tx.sqlBatch([
 			'CREATE TABLE IF NOT EXISTS Device_History( '
+			+ 'id INTEGER PRIMARY KEY AUTOINCREMENT, '
 			+ 'ts INTEGER, '
 			+ 'deviceId INTEGER, '
 			+ 'state INTEGER, '
 			+ 'stateValue INTEGER, '
 			+ 'origin VARCHAR(150), '
 			+ 'successStatus INTEGER, '
-			+ 'batteryLow VARCHAR(50), '
-			+ 'tamper VARCHAR(50), '
-			+ 'alarms VARCHAR(50), '
-			+ 'thermostatModeChanges VARCHAR(50), '
-			+ 'thermostatSetPointChanges VARCHAR(50), '
-			+ 'wakeup VARCHAR(50), '
 			+ 'title VARCHAR(50), '
 			+ 'description VARCHAR(150), '
 			+ 'color VARCHAR(50), '
 			+ 'icon VARCHAR(50), '
-			+ 'class VARCHAR(50),'
-			+ 'PRIMARY KEY (ts, deviceId, state, origin)); ',
+			+ 'class VARCHAR(50)'
+			+ '); ',
+			['CREATE UNIQUE INDEX IF NOT EXISTS IndexIdXdevice ON Device_History(ts, deviceId, state, origin);'],
+			['CREATE INDEX IF NOT EXISTS IndexDeviceId ON Device_History(deviceId);'],
 			...insertQuery,
 		  ]);
 	}
@@ -84,15 +80,16 @@ export default class TelldusLocalStorage {
 	prepareInserQueryDeviceHistory(data: Object) {
 		let query = [];
 		for (let key in data.history) {
-			let { ts = 0, state = '', stateValue = '', origin = '', successStatus = '',
-				batteryLow = '', tamper = '', alarms = '', thermostatModeChanges = '',
-				thermostatSetPointChanges = '', wakeup = '', title = '',
-				description = '', color = '', icon = '' } = data.history[key];
-			let deviceClass = data.history[key] && data.history[key].class ? data.history[key].class : '';
+			let { ts = 0, state = '', stateValue = '', origin = '', successStatus = '', title = '',
+				description = '', color = '', icon = '', deviceClass = '' } = data.history[key];
 			origin = 'Telldus Live! mobile - Development';
 			query.push(`${'REPLACE INTO Device_History '
-			+ '(ts, deviceId, state, stateValue, origin, successStatus, batteryLow, tamper, '
-			+ 'alarms, thermostatModeChanges, thermostatSetPointChanges, wakeup, title, description, color, icon, class) '
+			+ '( ts, '
+			+ 'deviceId, state,'
+			+ 'stateValue, origin, '
+			+ 'successStatus, title, '
+			+ 'description, color, '
+			+ 'icon, class) '
 			+ 'VALUES ('}`
 			+ `${ts}, `
 			+ `${data.deviceId}, `
@@ -100,12 +97,6 @@ export default class TelldusLocalStorage {
 			+ `${stateValue}, `
 			+ `"${origin}"` + ', '
 			+ `${successStatus}, `
-			+ `"${batteryLow}"` + ', '
-			+ `"${tamper}"` + ', '
-			+ `"${alarms}"` + ', '
-			+ `"${thermostatModeChanges}"` + ', '
-			+ `"${thermostatSetPointChanges}"` + ', '
-			+ `"${wakeup}"` + ', '
 			+ `"${title}"` + ', '
 			+ `"${description}"` + ', '
 			+ `"${color}"` + ', '
