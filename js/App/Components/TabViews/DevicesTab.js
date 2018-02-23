@@ -31,7 +31,8 @@ import Platform from 'Platform';
 import { Text, View, TouchableButton, IconTelldus } from '../../../BaseComponents';
 import { DeviceRow } from './SubViews';
 
-import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
+import { getDevices, setIgnoreDevice, getDeviceHistory } from '../../Actions/Devices';
+import { storeDeviceHistory } from '../../Actions/LocalStorage';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
@@ -183,6 +184,15 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device) {
+		this.props.dispatch(getDeviceHistory(device)).then(response => {
+			if (response.history && response.history.length !== 0) {
+				let data = {
+					history: response.history,
+					deviceId: device.id,
+				};
+				storeDeviceHistory(data);
+			}
+		});
 		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
 	}
 

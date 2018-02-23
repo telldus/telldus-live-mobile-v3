@@ -31,6 +31,7 @@ import { defineMessages } from 'react-intl';
 import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
 import { getDeviceHistory } from '../../Actions/Devices';
+import { getDeviceHistory as getDeviceHistoryFromLocal, storeDeviceHistory } from '../../Actions/LocalStorage';
 import { hideModal } from '../../Actions/Modal';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
@@ -129,10 +130,10 @@ class HistoryTab extends View {
 				});
 			}
 			if (nextProps.device && nextProps.device.history) {
-				this.setState({
-					rowsAndSections: getRowsAndSections(nextProps.device),
-					refreshing: false,
-				});
+				// this.setState({
+				// 	rowsAndSections: getRowsAndSections(nextProps.device),
+				// 	refreshing: false,
+				// });
 			}
 		} else {
 			this.setState({
@@ -147,16 +148,38 @@ class HistoryTab extends View {
 	}
 
 	refreshHistoryData() {
+		getDeviceHistoryFromLocal().then(data => {
+			if (data && data.length !== 0) {
+				let rowsAndSections = parseHistoryForSectionList(data);
+				this.setState({
+					rowsAndSections,
+					refreshing: false,
+				});
+			}
+		});
 		let that = this;
 		this.delayRefreshHistoryData = setTimeout(() => {
 			that.setState({
 				refreshing: true,
 			});
 			that.props.dispatch(getDeviceHistory(that.props.device))
-				.then(() => {
-					that.setState({
-						refreshing: false,
-					});
+				.then((response) => {
+					if (response.history && response.history.length !== 0) {
+						let data = {
+							history: response.history,
+							deviceId: that.props.device.id,
+						};
+						storeDeviceHistory(data);
+						let rowsAndSections = parseHistoryForSectionList(response.history);
+						that.setState({
+							rowsAndSections,
+							refreshing: false,
+						});
+					} else {
+						that.setState({
+							refreshing: false,
+						});
+					}
 				}).catch(() => {
 					that.setState({
 						refreshing: false,
