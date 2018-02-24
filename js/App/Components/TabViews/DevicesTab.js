@@ -32,7 +32,7 @@ import { Text, View, TouchableButton, IconTelldus } from '../../../BaseComponent
 import { DeviceRow } from './SubViews';
 
 import { getDevices, setIgnoreDevice, getDeviceHistory } from '../../Actions/Devices';
-import { storeDeviceHistory } from '../../Actions/LocalStorage';
+import { storeDeviceHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
@@ -184,7 +184,17 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device) {
-		this.props.dispatch(getDeviceHistory(device)).then(response => {
+		getLatestTimestamp('device', device.id).then(res => {
+			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
+			this.fetchHistoryData(device, prevTimestamp);
+		}).catch(error => {
+			this.fetchHistoryData(device, null);
+		});
+		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
+	}
+
+	fetchHistoryData(device, prevTimestamp) {
+		this.props.dispatch(getDeviceHistory(device, prevTimestamp)).then(response => {
 			if (response.history && response.history.length !== 0) {
 				let data = {
 					history: response.history,
@@ -193,7 +203,6 @@ class DevicesTab extends View {
 				storeDeviceHistory(data);
 			}
 		});
-		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
 	}
 
 	onCloseSelected() {
