@@ -39,6 +39,7 @@ import Overview from './OverviewTab';
 import Settings from './SettingsTab';
 import { Text, View, Poster } from '../../../BaseComponents';
 import { getWindowDimensions } from '../../Lib';
+import { closeDatabase } from '../../Actions/LocalStorage';
 import i18n from '../../Translations/common';
 
 type Props = {
@@ -99,6 +100,10 @@ class DeviceDetails extends View {
 		this.setState({
 			currentTab: currentScreen,
 		});
+	}
+
+	componentWillUnmount() {
+		closeDatabase();
 	}
 
 	render() {
