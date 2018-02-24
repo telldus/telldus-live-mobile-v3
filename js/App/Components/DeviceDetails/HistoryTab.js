@@ -131,12 +131,6 @@ class HistoryTab extends View {
 					hasRefreshed: true,
 				});
 			}
-			if (nextProps.device && nextProps.device.history) {
-				// this.setState({
-				// 	rowsAndSections: getRowsAndSections(nextProps.device),
-				// 	refreshing: false,
-				// });
-			}
 		} else {
 			this.setState({
 				hasRefreshed: false,
