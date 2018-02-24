@@ -30,6 +30,7 @@ const database_name = 'tellduslocalstorage.db';
 const database_version = '1.0';
 const database_displayname = 'TelldusDB';
 const database_size = 200000;
+let db;
 
 
 export default class TelldusLocalStorage {
@@ -39,6 +40,7 @@ export default class TelldusLocalStorage {
 
 	loadDatabase = () => {
 		return SQLite.openDatabase(database_name, database_version, database_displayname, database_size).then((DB) => {
+			db = DB;
 			return DB;
 		}).catch((error) => {
 			throw error;
@@ -47,16 +49,16 @@ export default class TelldusLocalStorage {
 
 	storeDeviceHistory(data: Object) {
 		return this.loadDatabase().then(DB => {
-			return this.createTable(DB, data);
+			return this.createTable(data);
 		}).catch(error => {
 		});
 	}
 
-	createTable = (tx: Object, data: Object) => {
+	createTable = (data: Object) => {
 
 		let insertQuery = this.prepareInserQueryDeviceHistory(data);
 
-		return tx.sqlBatch([
+		return db.sqlBatch([
 			'CREATE TABLE IF NOT EXISTS Device_History( '
 			+ 'id INTEGER PRIMARY KEY AUTOINCREMENT, '
 			+ 'ts INTEGER, '
@@ -108,14 +110,14 @@ export default class TelldusLocalStorage {
 
 	getDeviceHistory() {
 		return this.loadDatabase().then(DB => {
-			return this.queryDeviceHistory(DB);
+			return this.queryDeviceHistory();
 		}).catch(error => {
 			throw error;
 		});
 	}
 
-	queryDeviceHistory = (tx: Object) => {
-		return tx.executeSql('SELECT * FROM Device_History').then(([results]) => {
+	queryDeviceHistory = () => {
+		return db.executeSql('SELECT * FROM Device_History ORDER BY ts DESC').then(([results]) => {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
 				let row = results.rows.item(i);
@@ -125,6 +127,37 @@ export default class TelldusLocalStorage {
 		}).catch((error) => {
 			throw error;
 		});
+	}
+
+	getLatestTimestamp = (type: string, id: number): any => {
+		let tableName;
+		if (type === 'device') {
+			tableName = 'Device_History';
+		} else if (type === 'sensor') {
+			tableName = 'Sensor_History';
+		}
+		return this.loadDatabase().then(DB => {
+			return this.queryLatestTimestamp(tableName, id);
+		}).catch(error => {
+			throw error;
+		});
+	}
+
+	queryLatestTimestamp = (tableName: string, id: number) => {
+		return db.executeSql(`SELECT MAX(ts) as tsMax from ${tableName} WHERE ${id} = deviceId`).then(([results]) => {
+			if (results.rows && results.rows.item(0)) {
+				return results.rows.item(0);
+			}
+			return null;
+		}).catch(error => {
+			throw error;
+		});
+	}
+
+	closeDatabase = () => {
+		if (db) {
+			db.close();
+		}
 	}
 
 }

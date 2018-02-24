@@ -33,3 +33,13 @@ export function getDeviceHistory() {
 	let localStorage = new TelldusLocalStorage();
 	return localStorage.getDeviceHistory();
 }
+
+export function getLatestTimestamp(type: string, id: number) {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.getLatestTimestamp(type, id);
+}
+
+export function closeDatabase() {
+	let localStorage = new TelldusLocalStorage();
+	localStorage.closeDatabase();
+}
