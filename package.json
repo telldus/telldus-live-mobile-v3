@@ -17,7 +17,7 @@
     "color": "~2.0.0",
     "global": "^4.3.1",
     "intl": "^1.2.5",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#7c9f5fb39fbe23bbfb50cb260ebfe36e54aa0c36",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#5ddc87605b9fccf2ce7ab77c40b204759f17d617",
     "lodash": "~4.17.4",
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.14",
