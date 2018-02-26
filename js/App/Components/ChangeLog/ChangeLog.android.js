@@ -23,12 +23,11 @@
 'use strict';
 
 import React from 'react';
-import { Easing, Animated } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import { View } from '../../../BaseComponents';
+import { View, FloatingButton, Text, StyleSheet } from '../../../BaseComponents';
 
 import { NavigationHeader } from '../DeviceDetails/SubViews';
 import ChangeLogContainer from './ChangeLogContainer';
@@ -36,6 +35,10 @@ import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 
 import { getRouteName } from '../../Lib';
+import Theme from '../../Theme';
+import i18n from '../../Translations/common';
+
+import { setChangeLogVersion } from '../../Actions';
 
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
 
@@ -71,30 +74,6 @@ const StackNavigatorConfig = {
 			header: null,
 		};
 	},
-	transitionConfig: () => ({
-		transitionSpec: {
-		  duration: 600,
-		  easing: Easing.out(Easing.poly(4)),
-		  timing: Animated.timing,
-		},
-		screenInterpolator: sceneProps => {
-		  const { layout, position, scene } = sceneProps;
-		  const { index } = scene;
-
-		  const width = layout.initWidth;
-		  const translateX = position.interpolate({
-				inputRange: [index - 1, index, index + 1],
-				outputRange: [width, 0, 0],
-		  });
-
-		  const opacity = position.interpolate({
-				inputRange: [index - 1, index - 0.99, index],
-				outputRange: [0, 1, 1],
-		  });
-
-		  return { opacity, transform: [{ translateX }] };
-		},
-	  }),
 };
 
 const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
@@ -108,6 +87,10 @@ const messages = defineMessages({
 		id: 'changeLog.headerTwo',
 		defaultMessage: 'New in version 3.5',
 	},
+	skipButton: {
+		id: 'changeLog.button.skipButton',
+		defaultMessage: 'skip this',
+	},
 });
 
 type Props = {
@@ -115,6 +98,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	intl: intlShape,
 	changeLogVersion?: string,
+	dispatch: Function,
 };
 
 type State = {
@@ -129,13 +113,22 @@ class ChangeLogNavigator extends View {
 	h1: string;
 	h2: string;
 
+	nextButton: string;
+	skipButton: string;
+	doneButton: string;
+
 	onNavigationStateChange: () => void;
+
+	onPressNext: () => void;
+	onPressPrev: () => void;
+	onPressSkip: () => void;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			currentScreen: 'WizardOne',
+			nextScreen: 'WizardOne',
 		};
 
 		let { formatMessage } = props.intl;
@@ -143,7 +136,15 @@ class ChangeLogNavigator extends View {
 		this.h1 = formatMessage(messages.headerOne);
 		this.h2 = formatMessage(messages.headerTwo);
 
+		this.nextButton = formatMessage(i18n.next);
+		this.skipButton = formatMessage(messages.skipButton).toUpperCase();
+		this.doneButton = formatMessage(i18n.done);
+
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+
+		this.onPressNext = this.onPressNext.bind(this);
+		this.onPressPrev = this.onPressPrev.bind(this);
+		this.onPressSkip = this.onPressSkip.bind(this);
 	}
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
@@ -155,9 +156,43 @@ class ChangeLogNavigator extends View {
 		}
 	}
 
+	onPressNext() {
+		let { dispatch, changeLogVersion } = this.props;
+		let { currentScreen } = this.state;
+		let nextIndex = Screens.indexOf(currentScreen) + 1;
+		let nextScreen = Screens[nextIndex];
+
+		let isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
+		if (isFinalScreen) {
+			dispatch(setChangeLogVersion(changeLogVersion));
+		} else {
+			this.setState({
+				nextScreen,
+			});
+		}
+	}
+
+	onPressPrev() {
+		let { currentScreen } = this.state;
+		let prevIndex = Screens.indexOf(currentScreen) - 1;
+		let prevScreen = Screens[prevIndex];
+
+		let isFirstScreen = Screens.indexOf(currentScreen) === 0;
+		if (!isFirstScreen) {
+			this.setState({
+				nextScreen: prevScreen,
+			});
+		}
+	}
+
+	onPressSkip() {
+		let { dispatch, changeLogVersion } = this.props;
+		dispatch(setChangeLogVersion(changeLogVersion));
+	}
+
 
 	render() {
-		let { currentScreen } = this.state;
+		let { currentScreen, nextScreen } = this.state;
 		let { appLayout, screenReaderEnabled, intl, changeLogVersion } = this.props;
 		let screenProps = {
 			currentScreen,
@@ -166,18 +201,115 @@ class ChangeLogNavigator extends View {
 			Screens,
 			intl,
 			changeLogVersion,
+			nextScreen,
 		};
 		let { h1, h2 } = this;
 
+		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
+
+		let { stepIndicatorCover, floatingButtonLeft } = this.getStyles(appLayout);
+
 		return (
-			<View>
+			<View style={{flex: 1, backgroundColor: '#EFEFF4'}}>
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
 				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+				<View style={styles.buttonCover}>
+					<Text style={styles.textSkip} onPress={this.onPressSkip}>
+						{this.skipButton}
+					</Text>
+				</View>
+				<View style={stepIndicatorCover}>
+					{!isFirstScreen && (<FloatingButton
+						imageSource={require('../TabViews/img/right-arrow-key.png')}
+						onPress={this.onPressPrev}
+						buttonStyle={floatingButtonLeft}
+						iconStyle={styles.buttonIconStyle}/>
+					)}
+					{Screens.map((screen, index) => {
+						let backgroundColor = Screens[index] === currentScreen ?
+							Theme.Core.brandSecondary : '#00000080';
+						return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
+					})
+					}
+					<FloatingButton
+						imageSource={require('../TabViews/img/right-arrow-key.png')}
+						onPress={this.onPressNext}
+						buttonStyle={{bottom: 0}}/>
+				</View>
 			</View>
 		);
 	}
+
+	getStyles(appLayout: Object) {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const buttonSize = deviceWidth * 0.134666667;
+
+		return {
+			stepIndicatorCover: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginBottom: 10,
+				height: buttonSize,
+				backgroundColor: '#EFEFF4',
+			},
+			floatingButtonLeft: {
+				left: deviceWidth * 0.034666667,
+				bottom: 0,
+			},
+		};
+	}
 }
+
+const styles = StyleSheet.create({
+	buttonCover: {
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: '#EFEFF4',
+	},
+	textSkip: {
+		paddingVertical: 10,
+		color: Theme.Core.brandSecondary,
+		textAlign: 'center',
+	},
+	stepIndicator: {
+		height: 10,
+		width: 10,
+		borderRadius: 5,
+		marginLeft: 7,
+	},
+	container: {
+		...Theme.Core.shadow,
+		backgroundColor: '#fff',
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingHorizontal: 15,
+		paddingVertical: 15,
+	},
+	icon: {
+		fontSize: 100,
+		color: Theme.Core.brandSecondary,
+	},
+	title: {
+		fontSize: 20,
+		color: '#00000090',
+		textAlign: 'center',
+		paddingHorizontal: 10,
+		marginVertical: 10,
+	},
+	description: {
+		fontSize: 14,
+		color: '#00000080',
+		textAlign: 'left',
+	},
+	buttonIconStyle: {
+		transform: [{rotateZ: '180deg'}],
+	},
+});
 
 function mapStateToProps(state, ownProps) {
 	return {
@@ -186,4 +318,10 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-export default connect(mapStateToProps, null)(injectIntl(ChangeLogNavigator));
+function mapDispatchToProps(state: Object, dispatch: Function): Object {
+	return {
+		dispatch,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ChangeLogNavigator));
