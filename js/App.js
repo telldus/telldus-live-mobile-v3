@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule App
  */
 
 'use strict';
@@ -31,16 +30,16 @@ import {
 	PreLoginNavigator,
 	AppNavigator,
 	Push,
-} from 'Components';
-import ChangeLogNavigator from 'ChangeLogNavigator';
-import { View } from 'BaseComponents';
+} from './App/Components';
+import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
+import { View } from './BaseComponents';
 import {
 	setAppLayout,
 	setAccessibilityListener,
 	setAccessibilityInfo,
-} from 'Actions';
+} from './App/Actions';
 
-import Theme from 'Theme';
+import Theme from './App/Theme';
 const changeLogVersion = '3.5';
 
 class App extends React.Component {

@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule TabsView
  */
 
 // @flow
@@ -27,14 +26,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { View, Header } from 'BaseComponents';
+import { View, Header } from '../../../BaseComponents';
 
-import { toggleEditMode, syncWithServer, switchTab } from 'Actions';
-import TabViews from 'TabViews';
+import { toggleEditMode, syncWithServer, switchTab } from '../../Actions';
+import TabViews from './index';
 
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
-import { SettingsDetailModal } from 'DetailViews';
+import { SettingsDetailModal } from '../DetailViews';
 
 const RouteConfigs = {
 	Dashboard: {

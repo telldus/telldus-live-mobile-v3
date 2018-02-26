@@ -25,7 +25,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import View from './View';
 import IconTelldus from './IconTelldus';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 type DefaultProps = {
 	color: string,

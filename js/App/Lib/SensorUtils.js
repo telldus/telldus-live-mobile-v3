@@ -23,7 +23,7 @@
 'use strict';
 
 import moment from 'moment';
-import { reportException } from 'Analytics';
+import { reportException } from './Analytics';
 import { defineMessages } from 'react-intl';
 
 import { utils } from 'live-shared-data';

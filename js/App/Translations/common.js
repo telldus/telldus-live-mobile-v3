@@ -424,6 +424,30 @@ const messages = defineMessages({
 		defaultMessage: 'no name',
 		description: 'Used when an item does not have a name',
 	},
+	name: {
+		id: 'name',
+		defaultMessage: 'Name',
+	},
+	delete: {
+		id: 'delete',
+		defaultMessage: 'Delete',
+	},
+	location: {
+		id: 'location',
+		defaultMessage: 'Location',
+	},
+	please: {
+		id: 'please',
+		defaultMessage: 'Please',
+	},
+	addedToHiddenList: {
+		id: 'addedToHiddenList',
+		defaultMessage: 'Successfully added to hidden list',
+	},
+	removedFromHiddenList: {
+		id: 'removedFromHiddenList',
+		defaultMessage: 'Successfully removed from hidden list',
+	},
 });
 
 export default messages;

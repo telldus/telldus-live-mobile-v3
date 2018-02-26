@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Bootstrap
  */
 
 'use strict';
@@ -30,11 +29,11 @@ import { Provider } from 'react-redux';
 import { Crashlytics } from 'react-native-fabric';
 import DeviceInfo from 'react-native-device-info';
 
-import App from 'App';
+import App from './App';
 import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
-import * as Translations from 'Translations';
-import { forceLocale } from 'Config';
+import * as Translations from './App/Translations';
+import { forceLocale } from './Config';
 
 function Bootstrap(): React.Component {
 

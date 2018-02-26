@@ -26,19 +26,18 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 
-import { ListItem, Text, View, BlockIcon } from 'BaseComponents';
+import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
-import { getLabelDevice } from 'Accessibility';
+import { getLabelDevice } from '../../../Lib';
 import HiddenRow from './Device/HiddenRow';
 
-import { getPowerConsumed } from 'Lib';
-
+import { getPowerConsumed } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	onBell: (number) => void,
@@ -59,6 +58,7 @@ type Props = {
 	isGatewayActive: boolean,
 	tab: string,
 	powerConsumed: string | null,
+	setIgnoreDevice: (Object) => void;
 };
 
 type State = {
@@ -77,6 +77,7 @@ class DeviceRow extends PureComponent<Props, State> {
 	onSlideComplete: () => void;
 	onRowOpen: () => void;
 	onRowClose: () => void;
+	onSetIgnoreDevice: () => void;
 
 	state = {
 		disableSwipe: false,
@@ -95,6 +96,7 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 		this.onSlideActive = this.onSlideActive.bind(this);
 		this.onSlideComplete = this.onSlideComplete.bind(this);
+		this.onSetIgnoreDevice = this.onSetIgnoreDevice.bind(this);
 
 		this.onRowOpen = this.onRowOpen.bind(this);
 		this.onRowClose = this.onRowClose.bind(this);
@@ -129,6 +131,14 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.setState({
 			isOpen: false,
 		});
+	}
+
+	onSettingsSelected() {
+		this.props.onSettingsSelected(this.props.device);
+	}
+
+	onSetIgnoreDevice() {
+		this.props.setIgnoreDevice(this.props.device);
 	}
 
 	render() {
@@ -198,13 +208,14 @@ class DeviceRow extends PureComponent<Props, State> {
 
 		return (
 			<SwipeRow
-				rightOpenValue={-40}
+				rightOpenValue={-Theme.Core.buttonWidth * 3}
 				disableLeftSwipe={this.state.disableSwipe}
 				disableRightSwipe={true}
 				ref="SwipeRow"
 				onRowOpen={this.onRowOpen}
 				onRowClose={this.onRowClose}>
-				<HiddenRow device={device} intl={intl}/>
+				<HiddenRow device={device} intl={intl} onPressSettings={this.onSettingsSelected}
+					onSetIgnoreDevice={this.onSetIgnoreDevice}/>
 				<ListItem
 					style={styles.row}
 					accessible={accessible}
@@ -228,10 +239,6 @@ class DeviceRow extends PureComponent<Props, State> {
 				</ListItem>
 			</SwipeRow>
 		);
-	}
-
-	onSettingsSelected() {
-		this.props.onSettingsSelected(this.props.device);
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {

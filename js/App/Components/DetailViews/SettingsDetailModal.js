@@ -33,13 +33,13 @@ import {
 	Icon,
 	TouchableButton,
 	DialogueBox,
-} from 'BaseComponents';
-import { logoutFromTelldus } from 'Actions';
+} from '../../../BaseComponents';
+import { logoutFromTelldus } from '../../Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 
 import { pushServiceId } from '../../../Config';
-import { registerPushToken, unregisterPushToken } from 'Actions_User';
+import { registerPushToken, unregisterPushToken } from '../../Actions/User';
 
 import i18n from './../../Translations/common';
 

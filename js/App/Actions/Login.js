@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_Login
  */
 
 // @flow
@@ -25,12 +24,11 @@
 
 import axios from 'axios';
 import type { Action, ThunkAction } from './Types';
-import { apiServer } from 'Config';
-import { publicKey, privateKey, authenticationTimeOut } from 'Config';
+import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
 import { Answers } from 'react-native-fabric';
 
-import {LiveApi} from 'LiveApi';
-import { destroyAllConnections } from 'Actions_Websockets';
+import {LiveApi} from '../Lib/LiveApi';
+import { destroyAllConnections } from '../Actions/Websockets';
 
 const loginToTelldus = (username:string, password:string): ThunkAction => (dispatch, getState) => {
 	return axios({

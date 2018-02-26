@@ -9,7 +9,7 @@ const mockStore = configureStore(middlewares);
 const store = mockStore({});
 
 import SchedulerTab from '../../Components/TabViews/SchedulerTab';
-import { getJobs } from 'Actions';
+import { getJobs } from '../../Actions';
 
 describe('<SchedulerTab />', () => {
 

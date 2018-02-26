@@ -25,7 +25,7 @@ import React from 'react';
 import typeof { Children as Children} from 'react';
 import { KeyboardAvoidingView, ScrollView } from 'react-native';
 
-import { BackgroundImage, View, Image, H1 } from 'BaseComponents';
+import { BackgroundImage, View, Image, H1 } from '../../../../BaseComponents';
 import StyleSheet from 'StyleSheet';
 
 type Props = {

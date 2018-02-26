@@ -9,7 +9,7 @@ const mockStore = configureStore(middlewares);
 const store = mockStore({});
 
 import DashboardTab from '../../Components/TabViews/DashboardTab';
-import { getDevices } from 'Actions_Devices';
+import { getDevices } from '../../Actions/Devices';
 
 
 describe('<DashboardTab />', () => {

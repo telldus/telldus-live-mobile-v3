@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Push
  */
 
 'use strict';
@@ -25,7 +24,7 @@ const DeviceInfo = require('react-native-device-info');
 const PushNotification = require('react-native-push-notification');
 import { Alert, Platform } from 'react-native';
 import { pushSenderId, pushServiceId } from '../../Config';
-import { registerPushToken } from 'Actions_User';
+import { registerPushToken } from '../Actions/User';
 
 const Push = {
 	configure: (store) => {

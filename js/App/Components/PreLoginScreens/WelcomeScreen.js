@@ -25,8 +25,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, Text, TouchableButton } from 'BaseComponents';
-import {FormContainerComponent} from 'PreLoginScreen_SubViews';
+import { FormattedMessage, View, Text, TouchableButton } from '../../../BaseComponents';
+import {FormContainerComponent} from './SubViews';
 
 const messages = defineMessages({
 	welcomeHeader: {

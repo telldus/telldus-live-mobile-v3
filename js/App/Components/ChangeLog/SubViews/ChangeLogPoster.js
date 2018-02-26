@@ -25,9 +25,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { View, Text, Poster } from 'BaseComponents';
+import { View, Text, Poster } from '../../../../BaseComponents';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	h1: string,

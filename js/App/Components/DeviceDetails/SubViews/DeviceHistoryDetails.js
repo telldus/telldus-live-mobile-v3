@@ -30,7 +30,7 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
 
-import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from 'BaseComponents';
+import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from '../../../../BaseComponents';
 import i18n from '../../../Translations/common';
 
 import { states, statusMessage } from '../../../../Config';

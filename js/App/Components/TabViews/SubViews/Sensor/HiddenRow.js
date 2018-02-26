@@ -25,12 +25,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 
-import { addToDashboard, removeFromDashboard } from 'Actions';
+import { addToDashboard, removeFromDashboard } from '../../../../Actions';
 
-import { View, IconTelldus } from 'BaseComponents';
+import { View, IconTelldus } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import Theme from 'Theme';
+import Theme from '../../../../Theme';
 
 const messages = defineMessages({
 	iconAddPhraseOne: {
@@ -57,42 +57,23 @@ type Props = {
 	addToDashboard: number => void,
 	intl: Object,
 	sensorIds: Array<number>,
+	onSetIgnoreSensor: () => void,
 };
 
 class SensorHiddenRow extends View {
 	props: Props;
 	onStarSelected: () => void;
+	onSetIgnoreSensor: () => void;
 
 	constructor(props: Props) {
 		super(props);
+
 		this.onStarSelected = this.onStarSelected.bind(this);
+		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
+
 		let { intl, sensor } = props;
 		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
 		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
-	}
-
-	render() {
-		const { id } = this.props.sensor;
-		const { sensorIds } = this.props;
-		const isOnDB = sensorIds.indexOf(id) !== -1;
-
-		let icon = isOnDB ? 'favorite' : 'favorite-outline';
-
-		let accessibilityLabel = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
-		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
-		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
-
-		return (
-			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
-				<TouchableOpacity
-					style={Theme.Styles.rowBackButton}
-					onPress={this.onStarSelected}
-					accessible={this.props.editMode}
-					accessibilityLabel={accessibilityLabel}>
-					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
-				</TouchableOpacity>
-			</View>
-		);
 	}
 
 	onStarSelected() {
@@ -105,6 +86,45 @@ class SensorHiddenRow extends View {
 		} else {
 			this.props.addToDashboard(id);
 		}
+	}
+
+	onSetIgnoreSensor() {
+		let { onSetIgnoreSensor } = this.props;
+		if (onSetIgnoreSensor) {
+			onSetIgnoreSensor();
+		}
+	}
+
+	render() {
+		const { id, ignored } = this.props.sensor;
+		const { sensorIds } = this.props;
+		const isOnDB = sensorIds.indexOf(id) !== -1;
+
+		let icon = isOnDB ? 'favorite' : 'favorite-outline';
+		let iconHide = ignored ? 'hidden-toggled' : 'hidden';
+
+		let accessibilityLabel = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
+		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
+
+		return (
+			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
+				<TouchableOpacity
+					style={Theme.Styles.hiddenRowItem}
+					onPress={this.onSetIgnoreSensor}
+					accessible={this.props.editMode}
+					accessibilityLabel={accessibilityLabel}>
+					<IconTelldus icon={iconHide} style={styles.favoriteIcon}/>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={Theme.Styles.hiddenRowItem}
+					onPress={this.onStarSelected}
+					accessible={this.props.editMode}
+					accessibilityLabel={accessibilityLabel}>
+					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
+				</TouchableOpacity>
+			</View>
+		);
 	}
 }
 
@@ -123,12 +143,13 @@ function mapStateToProps(store: Object): Object {
 
 const styles = StyleSheet.create({
 	hiddenRow: {
+		flexDirection: 'row',
 		height: Theme.Core.rowHeight,
-		width: 60,
+		width: Theme.Core.buttonWidth * 2,
 		alignSelf: 'flex-end',
 		justifyContent: 'center',
-		alignItems: 'flex-end',
-		paddingRight: 10,
+		alignItems: 'center',
+		marginRight: 12,
 	},
 	favoriteIcon: {
 		fontSize: 28,

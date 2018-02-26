@@ -27,15 +27,15 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
-import { View, IconTelldus } from 'BaseComponents';
-import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
+import { View, IconTelldus } from '../../../BaseComponents';
+import { DeviceHeader, SensorRow, SensorRowHidden } from './SubViews';
 
-import { getSensors } from 'Actions';
+import { getSensors, setIgnoreSensor, showGlobalError } from '../../Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 type Props = {
 	rowsAndSections: Object,
@@ -67,6 +67,7 @@ class SensorsTab extends View {
 	keyExtractor: (Object) => number;
 	onEndReachedVisibleList: () => void;
 	toggleHiddenList: () => void;
+	setIgnoreSensor: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
@@ -83,7 +84,7 @@ class SensorsTab extends View {
 			hiddenList,
 			makeRowAccessible: 0,
 			isRefreshing: false,
-			listEnd: false,
+			listEnd: visibleList.length === 0 ? true : false,
 			showHiddenList: false,
 		};
 
@@ -95,8 +96,12 @@ class SensorsTab extends View {
 
 		this.onEndReachedVisibleList = this.onEndReachedVisibleList.bind(this);
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
+		this.setIgnoreSensor = this.setIgnoreSensor.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
+
+		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
 
 		let hiddenSensors = formatMessage(i18n.hiddenSensors).toLowerCase();
 		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenSensors}`;
@@ -105,7 +110,7 @@ class SensorsTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 
-		let { makeRowAccessible } = this.state;
+		let { makeRowAccessible, listEnd } = this.state;
 		let { screenReaderEnabled, rowsAndSections } = nextProps;
 		let { currentScreen, currentTab } = nextProps.screenProps;
 		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
@@ -120,6 +125,7 @@ class SensorsTab extends View {
 			visibleList,
 			hiddenList,
 			makeRowAccessible,
+			listEnd: visibleList.length === 0 ? true : listEnd,
 		});
 	}
 
@@ -156,6 +162,24 @@ class SensorsTab extends View {
 	toggleHiddenList() {
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
+		});
+	}
+
+	setIgnoreSensor(sensor: Object) {
+		let ignore = sensor.ignored ? 0 : 1;
+		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res) => {
+			let message = sensor.ignored ?
+				this.removedFromHiddenList : this.addedToHiddenList;
+			let payload = {
+				customMessage: message,
+			};
+			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(getSensors());
+		}).catch(err => {
+			let payload = {
+				customMessage: err.message ? err.message : null,
+			};
+			this.props.dispatch(showGlobalError(payload));
 		});
 	}
 
@@ -242,7 +266,8 @@ class SensorsTab extends View {
 				appLayout={this.props.appLayout}
 				currentTab={currentTab}
 				currentScreen={currentScreen}
-				isGatewayActive={isGatewayActive}/>
+				isGatewayActive={isGatewayActive}
+				setIgnoreSensor={this.setIgnoreSensor}/>
 		);
 	}
 

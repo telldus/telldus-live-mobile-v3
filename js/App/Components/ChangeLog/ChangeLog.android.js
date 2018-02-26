@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule ChangeLogNavigator
  */
 
 // @flow
@@ -29,14 +28,14 @@ import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../BaseComponents';
 
-import { NavigationHeader } from 'DDSubViews';
+import { NavigationHeader } from '../DeviceDetails/SubViews';
 import ChangeLogContainer from './ChangeLogContainer';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 
-import { getRouteName } from 'Lib';
+import { getRouteName } from '../../Lib';
 
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
 
@@ -115,6 +114,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	intl: intlShape,
+	changeLogVersion?: string,
 };
 
 type State = {

@@ -23,9 +23,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, BlockIcon } from 'BaseComponents';
+import { View, Text, BlockIcon } from '../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive }: Object) => (
 	<View style={[styles.title, {

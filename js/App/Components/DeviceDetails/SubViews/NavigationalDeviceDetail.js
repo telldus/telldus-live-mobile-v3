@@ -23,12 +23,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 
 const deviceHeight = Dimensions.get('window').height;
 
-import { NavigationalButton } from 'TabViews_SubViews';
+import { NavigationalButton } from '../../TabViews/SubViews';
 
 type Props = {
 	device: Object,

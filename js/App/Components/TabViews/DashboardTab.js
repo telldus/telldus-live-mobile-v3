@@ -30,15 +30,15 @@ import Subscribable from 'Subscribable';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Text, View } from 'BaseComponents';
-import { getDevices } from 'Actions_Devices';
-import { changeSensorDisplayType } from 'Actions_Dashboard';
+import { Text, View } from '../../../BaseComponents';
+import { getDevices } from '../../Actions/Devices';
+import { changeSensorDisplayType } from '../../Actions/Dashboard';
 import { defineMessages } from 'react-intl';
 
 import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 import {
 	DimmerDashboardTile,
@@ -46,7 +46,7 @@ import {
 	BellDashboardTile,
 	ToggleDashboardTile,
 	SensorDashboardTile,
-} from 'TabViews_SubViews';
+} from './SubViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';

@@ -25,8 +25,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 
-import { FormattedMessage, View } from 'BaseComponents';
-import {FormContainerComponent, ForgotPasswordForm} from 'PreLoginScreen_SubViews';
+import { FormattedMessage, View } from '../../../BaseComponents';
+import {FormContainerComponent, ForgotPasswordForm} from './SubViews';
 
 import i18n from './../../Translations/common';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';

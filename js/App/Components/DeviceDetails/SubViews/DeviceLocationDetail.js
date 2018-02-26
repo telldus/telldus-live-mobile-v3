@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Text, View } from 'BaseComponents';
+import { Text, View } from '../../../../BaseComponents';
 import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
 
 type Props = {

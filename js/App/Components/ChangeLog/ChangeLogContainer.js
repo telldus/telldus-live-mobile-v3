@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule ChangeLogContainer
  */
 
 // @flow
@@ -29,10 +28,10 @@ import { intlShape, defineMessages } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { View, FloatingButton, StyleSheet, Text } from 'BaseComponents';
-import Theme from 'Theme';
+import { View, FloatingButton, StyleSheet, Text } from '../../../BaseComponents';
+import Theme from '../../Theme';
 
-import { setChangeLogVersion } from 'Actions';
+import { setChangeLogVersion } from '../../Actions';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({

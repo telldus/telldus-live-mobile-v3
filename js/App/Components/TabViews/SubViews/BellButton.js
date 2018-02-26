@@ -24,12 +24,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Icon } from 'BaseComponents';
+import { View, Icon } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import i18n from '../../../Translations/common';
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,

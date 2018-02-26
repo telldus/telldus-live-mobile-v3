@@ -26,7 +26,7 @@ import { Image } from 'react-native';
 import { connect } from 'react-redux';
 import View from './View';
 import Row from './Row';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 type Props = {
 	children?: any,

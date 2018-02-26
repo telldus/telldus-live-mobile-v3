@@ -24,10 +24,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
-import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from '../../../Actions/Dimmer';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
@@ -35,9 +35,9 @@ import {
 	getDimmerValue,
 	toDimmerValue,
 	toSliderValue,
-} from 'Lib';
+} from '../../../Lib';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,

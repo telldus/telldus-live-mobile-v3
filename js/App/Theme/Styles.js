@@ -84,6 +84,12 @@ export default StyleSheet.create({
 		// flex: 1,
 		justifyContent: 'center',
 	},
+	hiddenRowItem: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: Core.rowHeight,
+		width: Core.buttonWidth,
+	},
 	sensorValue: {
 		flexDirection: 'row',
 		justifyContent: 'flex-start',

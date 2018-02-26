@@ -21,7 +21,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, View } from 'BaseComponents';
+import { Icon, View } from '../../../../BaseComponents';
 import { Animated } from 'react-native';
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);

@@ -28,19 +28,19 @@ import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
-import { Text, View, TouchableButton, IconTelldus } from 'BaseComponents';
-import { DeviceRow } from 'TabViews_SubViews';
+import { Text, View, TouchableButton, IconTelldus } from '../../../BaseComponents';
+import { DeviceRow } from './SubViews';
 
-import { getDevices } from 'Actions_Devices';
+import { getDevices, setIgnoreDevice, getDeviceHistory } from '../../Actions/Devices';
+import { storeDeviceHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 
-import { parseDevicesForListView } from 'Reducers_Devices';
-import { addNewGateway } from 'Actions';
-
+import { parseDevicesForListView } from '../../Reducers/Devices';
+import { addNewGateway, showGlobalError } from '../../Actions';
 import i18n from '../../Translations/common';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 const messages = defineMessages({
 	messageNoDeviceTitle: {
@@ -106,6 +106,7 @@ class DevicesTab extends View {
 	onPressAddDevice: () => void;
 	onEndReachedVisibleList: () => void;
 	toggleHiddenList: () => void;
+	setIgnoreDevice: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
@@ -125,7 +126,7 @@ class DevicesTab extends View {
 			addGateway: false,
 			makeRowAccessible: 0,
 			isRefreshing: false,
-			listEnd: false,
+			listEnd: visibleList.length === 0 ? true : false,
 			showHiddenList: false,
 		};
 		this.onCloseSelected = this.onCloseSelected.bind(this);
@@ -136,6 +137,7 @@ class DevicesTab extends View {
 		this.onRefresh = this.onRefresh.bind(this);
 		this.onPressAddLocation = this.onPressAddLocation.bind(this);
 		this.onPressAddDevice = this.onPressAddDevice.bind(this);
+		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
 
 		this.onEndReachedVisibleList = this.onEndReachedVisibleList.bind(this);
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
@@ -146,6 +148,9 @@ class DevicesTab extends View {
 		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenDevices}`;
 		this.showHidden = `${formatMessage(i18n.show)} ${hiddenDevices}`;
 
+		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
+
 		this.url = 'http://live.telldus.com/';
 		this.noDeviceTitle = formatMessage(messages.messageNoDeviceTitle);
 		this.noGatewayTitle = formatMessage(messages.messageNoGatewayTitle);
@@ -155,7 +160,7 @@ class DevicesTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 
-		let { makeRowAccessible } = this.state;
+		let { makeRowAccessible, listEnd } = this.state;
 		let { screenReaderEnabled, rowsAndSections } = nextProps;
 		let { currentScreen, currentTab } = nextProps.screenProps;
 		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Devices') {
@@ -170,6 +175,7 @@ class DevicesTab extends View {
 			visibleList,
 			hiddenList,
 			makeRowAccessible,
+			listEnd: visibleList.length === 0 ? true : listEnd,
 		});
 	}
 
@@ -178,7 +184,25 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device) {
+		getLatestTimestamp('device', device.id).then(res => {
+			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
+			this.fetchHistoryData(device, prevTimestamp);
+		}).catch(error => {
+			this.fetchHistoryData(device, null);
+		});
 		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
+	}
+
+	fetchHistoryData(device, prevTimestamp) {
+		this.props.dispatch(getDeviceHistory(device, prevTimestamp)).then(response => {
+			if (response.history && response.history.length !== 0) {
+				let data = {
+					history: response.history,
+					deviceId: device.id,
+				};
+				storeDeviceHistory(data);
+			}
+		});
 	}
 
 	onCloseSelected() {
@@ -189,6 +213,24 @@ class DevicesTab extends View {
 		if (this.refs.list && this.refs.list.setScrollEnabled) {
 			this.refs.list.setScrollEnabled(enable);
 		}
+	}
+
+	setIgnoreDevice(device: Object) {
+		let ignore = device.ignored ? 0 : 1;
+		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res) => {
+			let message = device.ignored ?
+				this.removedFromHiddenList : this.addedToHiddenList;
+			let payload = {
+				customMessage: message,
+			};
+			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(getDevices());
+		}).catch(err => {
+			let payload = {
+				customMessage: err.message ? err.message : null,
+			};
+			this.props.dispatch(showGlobalError(payload));
+		});
 	}
 
 	renderSectionHeader(sectionData: Object): Object {
@@ -204,7 +246,7 @@ class DevicesTab extends View {
 	renderRow(row) {
 		let { screenProps, gateways } = this.props;
 		let { intl, currentTab, currentScreen } = screenProps;
-		let isGatewayActive = gateways.byId[row.item.clientId].online;
+		let isGatewayActive = gateways.byId[row.item.clientId] && gateways.byId[row.item.clientId].online;
 
 		return (
 			<DeviceRow
@@ -216,6 +258,7 @@ class DevicesTab extends View {
 				currentTab={currentTab}
 				currentScreen={currentScreen}
 				isGatewayActive={isGatewayActive}
+				setIgnoreDevice={this.setIgnoreDevice}
 			/>
 		);
 	}
@@ -351,7 +394,6 @@ class DevicesTab extends View {
 		let { appLayout, devices } = this.props;
 		let { listEnd, showHiddenList, hiddenList, visibleList,
 			isRefreshing, makeRowAccessible, addGateway } = this.state;
-
 		let style = this.getStyles(appLayout);
 
 		if (addGateway) {

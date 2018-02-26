@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule TabsView
  */
 
 // @flow
@@ -29,18 +28,18 @@ import { defineMessages } from 'react-intl';
 import { intlShape, injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View, Header } from 'BaseComponents';
+import { View, Header } from '../../../BaseComponents';
 
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 
-import { SettingsDetailModal } from 'DetailViews';
+import { SettingsDetailModal } from '../DetailViews';
 import TabBar from './TabBar';
 import i18n from '../../Translations/common';
 import { getUserProfile } from '../../Reducers/User';
-import { syncWithServer, switchTab, addNewGateway } from 'Actions';
-import TabViews from 'TabViews';
+import { syncWithServer, switchTab, addNewGateway } from '../../Actions';
+import TabViews from './index';
 import { TabNavigator } from 'react-navigation';
-import Drawer from 'Drawer';
+import Drawer from '../Drawer/Drawer';
 
 const messages = defineMessages({
 	menuIcon: {
@@ -134,6 +133,7 @@ class TabsView extends View {
 	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 	addNewLocation: () => void;
+	onPressGateway: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -181,6 +181,7 @@ class TabsView extends View {
 		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
+		this.onPressGateway = this.onPressGateway.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -242,6 +243,10 @@ class TabsView extends View {
 		this.setState({ drawer: false });
 	}
 
+	onPressGateway(location: Object) {
+		this.props.stackNavigator.navigate('LocationDetails', {location, renderRootHeader: true});
+	}
+
 	onRequestChangeTab(index) {
 		this.setState({ index });
 		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
@@ -271,6 +276,7 @@ class TabsView extends View {
 			onOpenSetting={this.onOpenSetting}
 			appLayout={appLayout}
 			isOpen={this.state.drawer}
+			onPressGateway={this.onPressGateway}
 		/>;
 	}
 
