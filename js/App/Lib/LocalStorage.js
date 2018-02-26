@@ -58,7 +58,7 @@ export default class TelldusLocalStorage {
 
 	createTable = (data: Object): Promise<any> => {
 
-		let insertQuery = this.prepareInserQueryDeviceHistory(data);
+		let insertQuery = this.prepareInsertQueryDeviceHistory(data);
 
 		return db.sqlBatch([
 			'CREATE TABLE IF NOT EXISTS DeviceHistory( '
@@ -81,7 +81,7 @@ export default class TelldusLocalStorage {
 		  ]);
 	}
 
-	prepareInserQueryDeviceHistory(data: Object): Array<string> {
+	prepareInsertQueryDeviceHistory(data: Object): Array<string> {
 		let query = [];
 		for (let key in data.history) {
 			let { ts = 0, state = '', stateValue = '', origin = '', successStatus = '', title = '',
