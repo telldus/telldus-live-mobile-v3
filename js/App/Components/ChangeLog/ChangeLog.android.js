@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { Animated } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -33,6 +34,7 @@ import { NavigationHeader } from '../DeviceDetails/SubViews';
 import ChangeLogContainer from './ChangeLogContainer';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
+const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
 
 import { getRouteName } from '../../Lib';
 import Theme from '../../Theme';
@@ -145,6 +147,8 @@ class ChangeLogNavigator extends View {
 		this.onPressNext = this.onPressNext.bind(this);
 		this.onPressPrev = this.onPressPrev.bind(this);
 		this.onPressSkip = this.onPressSkip.bind(this);
+
+		this.animatedX = new Animated.Value(0);
 	}
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
@@ -157,7 +161,7 @@ class ChangeLogNavigator extends View {
 	}
 
 	onPressNext() {
-		let { dispatch, changeLogVersion } = this.props;
+		let { dispatch, changeLogVersion, appLayout } = this.props;
 		let { currentScreen } = this.state;
 		let nextIndex = Screens.indexOf(currentScreen) + 1;
 		let nextScreen = Screens[nextIndex];
@@ -167,12 +171,22 @@ class ChangeLogNavigator extends View {
 			dispatch(setChangeLogVersion(changeLogVersion));
 		} else {
 			this.setState({
-				nextScreen,
+				currentScreen: nextScreen,
 			});
+			this.animatedX.setValue(-appLayout.width);
+			this.startAnimation(0);
 		}
 	}
 
+	startAnimation(value) {
+		Animated.timing(this.animatedX, {
+			toValue: value,
+			duration: 500,
+		}).start();
+	}
+
 	onPressPrev() {
+		let { appLayout } = this.props;
 		let { currentScreen } = this.state;
 		let prevIndex = Screens.indexOf(currentScreen) - 1;
 		let prevScreen = Screens[prevIndex];
@@ -180,8 +194,10 @@ class ChangeLogNavigator extends View {
 		let isFirstScreen = Screens.indexOf(currentScreen) === 0;
 		if (!isFirstScreen) {
 			this.setState({
-				nextScreen: prevScreen,
+				currentScreen: prevScreen,
 			});
+			this.animatedX.setValue(appLayout.width);
+			this.startAnimation(0);
 		}
 	}
 
@@ -209,11 +225,21 @@ class ChangeLogNavigator extends View {
 
 		let { stepIndicatorCover, floatingButtonLeft } = this.getStyles(appLayout);
 
+		let inputRange = (appLayout && appLayout.width) ? [-appLayout.width, 0] : [-100, 0];
+		let outputRange = (appLayout && appLayout.width) ? [appLayout.width, 0] : [-100, 0];
+
+		const animatedX = this.animatedX.interpolate({
+			inputRange,
+			outputRange,
+			extrapolateLeft: 'clamp',
+			useNativeDriver: true,
+		  });
+
 		return (
 			<View style={{flex: 1, backgroundColor: '#EFEFF4'}}>
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
-				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+				<AnimatedWizard intl={intl} currentScreen={currentScreen} styles={styles} animatedX={animatedX}/>
 				<View style={styles.buttonCover}>
 					<Text style={styles.textSkip} onPress={this.onPressSkip}>
 						{this.skipButton}
@@ -281,14 +307,18 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		marginLeft: 7,
 	},
+	buttonIconStyle: {
+		transform: [{rotateZ: '180deg'}],
+	},
 	container: {
 		...Theme.Core.shadow,
 		backgroundColor: '#fff',
-		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 		paddingHorizontal: 15,
 		paddingVertical: 15,
+		marginHorizontal: 10,
+		marginVertical: 10,
 	},
 	icon: {
 		fontSize: 100,
@@ -306,9 +336,6 @@ const styles = StyleSheet.create({
 		color: '#00000080',
 		textAlign: 'left',
 	},
-	buttonIconStyle: {
-		transform: [{rotateZ: '180deg'}],
-	},
 });
 
 function mapStateToProps(state, ownProps) {
@@ -318,7 +345,7 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-function mapDispatchToProps(state: Object, dispatch: Function): Object {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};
