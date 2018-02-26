@@ -31,7 +31,7 @@
     "accessibilityLabel.schedulerTab": "onglet planificateur",
     "accessibilityLabel.screen": "écran",
     "accessibilityLabel.sensors.Accumulated": "Accumulé",
-    "accessibilityLabel.sensors.acc": "",
+    "accessibilityLabel.sensors.acc": "Acc.",
     "accessibilityLabel.sensors.current": "Actuel",
     "accessibilityLabel.sensors.energy": "Énergie",
     "accessibilityLabel.sensors.iconAddPhraseOne": "ajouter un capteur",
