@@ -24,17 +24,17 @@
 import TelldusLocalStorage from '../Lib/LocalStorage';
 
 
-export function storeDeviceHistory(data: Object) {
+export function storeDeviceHistory(data: Object): Promise<any> {
 	let localStorage = new TelldusLocalStorage();
 	return localStorage.storeDeviceHistory(data);
 }
 
-export function getDeviceHistory(id: number) {
+export function getDeviceHistory(id: number): Promise<any> {
 	let localStorage = new TelldusLocalStorage();
 	return localStorage.getDeviceHistory(id);
 }
 
-export function getLatestTimestamp(type: string, id: number) {
+export function getLatestTimestamp(type: string, id: number): Promise<any> {
 	let localStorage = new TelldusLocalStorage();
 	return localStorage.getLatestTimestamp(type, id);
 }

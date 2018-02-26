@@ -38,7 +38,7 @@ export default class TelldusLocalStorage {
 	constructor() {
 	}
 
-	loadDatabase = () => {
+	loadDatabase = (): Promise<any> => {
 		return SQLite.openDatabase(database_name, database_version, database_displayname, database_size).then((DB) => {
 			db = DB;
 			return DB;
@@ -47,14 +47,15 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	storeDeviceHistory(data: Object) {
+	storeDeviceHistory(data: Object): Promise<any> {
 		return this.loadDatabase().then(DB => {
 			return this.createTable(data);
 		}).catch(error => {
+			throw error;
 		});
 	}
 
-	createTable = (data: Object) => {
+	createTable = (data: Object): Promise<any> => {
 
 		let insertQuery = this.prepareInserQueryDeviceHistory(data);
 
@@ -79,7 +80,7 @@ export default class TelldusLocalStorage {
 		  ]);
 	}
 
-	prepareInserQueryDeviceHistory(data: Object) {
+	prepareInserQueryDeviceHistory(data: Object): Array<string> {
 		let query = [];
 		for (let key in data.history) {
 			let { ts = 0, state = '', stateValue = '', origin = '', successStatus = '', title = '',
@@ -108,7 +109,7 @@ export default class TelldusLocalStorage {
 		return query;
 	}
 
-	getDeviceHistory(id: number) {
+	getDeviceHistory(id: number): Promise<any> {
 		return this.loadDatabase().then(DB => {
 			return this.queryDeviceHistory(id);
 		}).catch(error => {
@@ -116,7 +117,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	queryDeviceHistory = (id: number) => {
+	queryDeviceHistory = (id: number): Promise<any> => {
 		return db.executeSql(`SELECT * FROM Device_History WHERE ${id} = deviceId ORDER BY ts DESC`).then(([results]) => {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
@@ -129,7 +130,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	getLatestTimestamp = (type: string, id: number): any => {
+	getLatestTimestamp = (type: string, id: number): Promise<any> => {
 		let tableName;
 		if (type === 'device') {
 			tableName = 'Device_History';
@@ -143,7 +144,7 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	queryLatestTimestamp = (tableName: string, id: number) => {
+	queryLatestTimestamp = (tableName: string, id: number): Promise<any> => {
 		return db.executeSql(`SELECT MAX(ts) as tsMax from ${tableName} WHERE ${id} = deviceId`).then(([results]) => {
 			if (results.rows && results.rows.item(0)) {
 				return results.rows.item(0);
