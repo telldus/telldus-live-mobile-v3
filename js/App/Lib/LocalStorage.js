@@ -50,13 +50,13 @@ export default class TelldusLocalStorage {
 
 	storeDeviceHistory(data: Object): Promise<any> {
 		return this.loadDatabase().then(DB => {
-			return this.createTable(data);
+			return this.populateDataDeviceHistory(data);
 		}).catch(error => {
 			throw error;
 		});
 	}
 
-	createTable = (data: Object): Promise<any> => {
+	populateDataDeviceHistory = (data: Object): Promise<any> => {
 
 		let insertQuery = this.prepareInsertQueryDeviceHistory(data);
 
