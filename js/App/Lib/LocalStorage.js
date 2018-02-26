@@ -85,7 +85,7 @@ export default class TelldusLocalStorage {
 		for (let key in data.history) {
 			let { ts = 0, state = '', stateValue = '', origin = '', successStatus = '', title = '',
 				description = '', color = '', icon = '', deviceClass = '' } = data.history[key];
-			origin = 'Telldus Live! mobile - Development';
+
 			query.push(`${'REPLACE INTO Device_History '
 			+ '( ts, '
 			+ 'deviceId, state,'
