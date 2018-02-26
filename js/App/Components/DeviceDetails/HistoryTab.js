@@ -88,7 +88,8 @@ class HistoryTab extends View {
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			let {state} = navigation;
-			state.params.actionOnHistoryTabPress();
+			let onPress = (state.params && state.params.actionOnHistoryTabPress) ? state.params.actionOnHistoryTabPress : () => {};
+			onPress();
 			navigation.navigate('History');
 		},
 	});
