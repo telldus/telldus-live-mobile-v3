@@ -22,7 +22,8 @@
 'use strict';
 
 import SQLite from 'react-native-sqlite-storage';
-SQLite.DEBUG(true);
+let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
+SQLite.DEBUG(isDebuggingInChrome);
 SQLite.enablePromise(true);
 
 
