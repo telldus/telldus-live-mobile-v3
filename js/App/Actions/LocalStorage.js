@@ -29,9 +29,9 @@ export function storeDeviceHistory(data: Object) {
 	return localStorage.storeDeviceHistory(data);
 }
 
-export function getDeviceHistory() {
+export function getDeviceHistory(id: number) {
 	let localStorage = new TelldusLocalStorage();
-	return localStorage.getDeviceHistory();
+	return localStorage.getDeviceHistory(id);
 }
 
 export function getLatestTimestamp(type: string, id: number) {

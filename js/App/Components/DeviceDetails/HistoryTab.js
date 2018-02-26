@@ -145,7 +145,7 @@ class HistoryTab extends View {
 	}
 
 	getDataFromLocal() {
-		getDeviceHistoryFromLocal().then(data => {
+		getDeviceHistoryFromLocal(this.props.device.id).then(data => {
 			if (data && data.length !== 0) {
 				let rowsAndSections = parseHistoryForSectionList(data);
 				this.setState({

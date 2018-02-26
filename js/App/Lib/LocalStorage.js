@@ -108,16 +108,16 @@ export default class TelldusLocalStorage {
 		return query;
 	}
 
-	getDeviceHistory() {
+	getDeviceHistory(id: number) {
 		return this.loadDatabase().then(DB => {
-			return this.queryDeviceHistory();
+			return this.queryDeviceHistory(id);
 		}).catch(error => {
 			throw error;
 		});
 	}
 
-	queryDeviceHistory = () => {
-		return db.executeSql('SELECT * FROM Device_History ORDER BY ts DESC').then(([results]) => {
+	queryDeviceHistory = (id: number) => {
+		return db.executeSql(`SELECT * FROM Device_History WHERE ${id} = deviceId ORDER BY ts DESC`).then(([results]) => {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
 				let row = results.rows.item(i);
