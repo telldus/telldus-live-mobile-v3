@@ -171,7 +171,7 @@
     "location.failureRemoveLocation": "Plasseringen kunne ikke fjernes",
     "location.ip": "ip",
     "location.lat": "breddegrad",
-    "location.long": "lengdegrad",
+    "location.long": "lengde",
     "location.message.confirmDelete": "Er du sikker på at du vil slette denne plasseringen? Denne handlingen fjerner alle innstillinger for denne plasseringen.",
     "location.software": "Programvare",
     "modal.deleteScheduleDialogue": "Er du sikker på at du vil slette den planlagte hendelsen?",
