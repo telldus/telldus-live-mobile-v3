@@ -40,7 +40,7 @@
     "accessibilityLabel.sensors.iconRemovePhraseTwo": "depuis le tableau de bord",
     "accessibilityLabel.sensors.labelBarometricPressure": "Pression barométrique",
     "accessibilityLabel.sensors.labelDewPoint": "Point de rosée",
-    "accessibilityLabel.sensors.labelGenricMeter": "",
+    "accessibilityLabel.sensors.labelGenricMeter": "Mètre Genric",
     "accessibilityLabel.sensors.labelHumidity": "Humidité",
     "accessibilityLabel.sensors.labelLuminance": "Éclairage",
     "accessibilityLabel.sensors.labelRainRate": "Taux de pluie",
