@@ -115,6 +115,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	intl: intlShape,
+	changeLogVersion: string,
 };
 
 type State = {
