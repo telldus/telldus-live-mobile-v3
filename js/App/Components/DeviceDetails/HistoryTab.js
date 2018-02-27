@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-// import { createSelector } from 'reselect';
 import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import _ from 'lodash';
 import { defineMessages } from 'react-intl';
@@ -402,16 +401,6 @@ const parseHistoryForSectionList = (data): Array<any> => {
 	}, []);
 	return result;
 };
-
-// const getRowsAndSections = createSelector(
-// 	[
-// 		({ history }) => history.data,
-// 	],
-// 	(history) => {
-// 		let deviceHistory = parseHistoryForSectionList(history);
-// 		return deviceHistory;
-// 	}
-// );
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
