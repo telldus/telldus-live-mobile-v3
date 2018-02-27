@@ -30,6 +30,7 @@ import {
 	Text,
 	IconTelldus,
 } from 'BaseComponents';
+import Theme from 'Theme';
 
 class LabelBox extends View {
 	render() {
@@ -66,16 +67,8 @@ class LabelBox extends View {
 				alignItems: 'flex-start',
 			},
 			shadow: {
+				...Theme.Core.shadow,
 				borderRadius: 4,
-				backgroundColor: '#fff',
-				shadowColor: '#000000',
-				shadowOffset: {
-					width: 0,
-					height: 0,
-				},
-				shadowRadius: 1,
-				shadowOpacity: 1.0,
-				elevation: 2,
 			},
 			label: {
 				color: '#e26901',
