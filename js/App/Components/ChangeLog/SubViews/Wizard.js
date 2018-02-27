@@ -79,6 +79,8 @@ type Props = {
 	intl: intlShape,
 	styles: Object,
 	currentScreen: string,
+	animatedX: Object,
+	animatedOpacity: Object,
 };
 
 export default class WizardOne extends PureComponent<Props, null> {
