@@ -25,6 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from 'BaseComponents';
 import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
+import Theme from 'Theme';
 
 type Props = {
 	title?: any,
@@ -152,16 +153,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	shadow: {
-		borderRadius: 4,
-		backgroundColor: '#fff',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
+		...Theme.Core.shadow,
 	},
 });
 
