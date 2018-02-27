@@ -208,6 +208,7 @@ const Tabs = TabNavigator(
 	},
 	{
 		initialRouteName: 'Overview',
+		tabBarPosition: 'top',
 		tabBarOptions: {
 			indicatorStyle: {
 				backgroundColor: '#fff',
