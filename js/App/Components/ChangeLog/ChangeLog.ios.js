@@ -74,6 +74,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	intl: intlShape,
 	dispatch: Function,
+	changeLogVersion: string,
 };
 
 type State = {
@@ -97,6 +98,13 @@ class ChangeLogNavigator extends View {
 	onPressNext: () => void;
 	onPressPrev: () => void;
 	onPressSkip: () => void;
+
+	animatedX: Object;
+	animatedOpacity: Object;
+
+	startAnimationX: (number) => void;
+	startAnimationParallel: (number) => void;
+	startAnimationOpacity: () => void;
 
 	constructor(props: Props) {
 		super(props);
