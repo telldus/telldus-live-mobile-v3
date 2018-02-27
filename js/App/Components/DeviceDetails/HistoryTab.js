@@ -345,16 +345,9 @@ class HistoryTab extends View {
 			sectionHeader: {
 				height: isPortrait ? height * 0.04 : width * 0.04,
 				backgroundColor: '#ffffff',
-				shadowColor: '#000000',
-				shadowOffset: {
-					width: 0,
-					height: 2,
-				},
-				shadowRadius: 1,
-				shadowOpacity: 1.0,
-				elevation: 2,
 				justifyContent: 'center',
 				paddingLeft: 5,
+				...Theme.Core.shadow,
 			},
 		};
 	}
