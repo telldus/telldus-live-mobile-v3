@@ -23,15 +23,13 @@
 'use strict';
 
 import React from 'react';
-import { Animated } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { Animated, LayoutAnimation, UIManager } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 import { View, FloatingButton, Text, StyleSheet } from '../../../BaseComponents';
 
 import { NavigationHeader } from '../DeviceDetails/SubViews';
-import ChangeLogContainer from './ChangeLogContainer';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
@@ -42,43 +40,18 @@ import i18n from '../../Translations/common';
 
 import { setChangeLogVersion } from '../../Actions';
 
+const CustomLayoutAnimation = {
+	duration: 200,
+	create: {
+	  type: LayoutAnimation.Types.linear,
+	  property: LayoutAnimation.Properties.opacity,
+	},
+	update: {
+	  type: LayoutAnimation.Types.linear,
+	},
+};
+
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
-
-const renderChangeLogContainer = (navigation, screenProps): Function => (Component): Object => (
-	<ChangeLogContainer navigation={navigation} screenProps={screenProps}>
-		<Component/>
-	</ChangeLogContainer>
-);
-
-
-const RouteConfigs = {
-	WizardOne: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
-	},
-	WizardTwo: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
-	},
-	WizardThree: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
-	},
-	WizardFour: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
-	},
-	WizardFive: {
-		screen: ({ navigation, screenProps }) => renderChangeLogContainer(navigation, screenProps)(Wizard),
-	},
-};
-
-const StackNavigatorConfig = {
-	initialRouteName: 'WizardOne',
-	navigationOptions: ({navigation}) => {
-		return {
-			header: null,
-		};
-	},
-};
-
-const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
 
 const messages = defineMessages({
 	headerOne: {
@@ -130,7 +103,6 @@ class ChangeLogNavigator extends View {
 
 		this.state = {
 			currentScreen: 'WizardOne',
-			nextScreen: 'WizardOne',
 		};
 
 		let { formatMessage } = props.intl;
@@ -148,7 +120,13 @@ class ChangeLogNavigator extends View {
 		this.onPressPrev = this.onPressPrev.bind(this);
 		this.onPressSkip = this.onPressSkip.bind(this);
 
+		this.startAnimationX = this.startAnimationX.bind(this);
+		this.startAnimationOpacity = this.startAnimationOpacity.bind(this);
+		this.startAnimationParallel = this.startAnimationParallel.bind(this);
+
 		this.animatedX = new Animated.Value(0);
+		this.animatedOpacity = new Animated.Value(1);
+		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 	}
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
@@ -173,15 +151,31 @@ class ChangeLogNavigator extends View {
 			this.setState({
 				currentScreen: nextScreen,
 			});
+			LayoutAnimation.configureNext(CustomLayoutAnimation);
 			this.animatedX.setValue(-appLayout.width);
-			this.startAnimation(0);
+			this.animatedOpacity.setValue(0);
+			this.startAnimationParallel(0);
 		}
 	}
 
-	startAnimation(value) {
+	startAnimationParallel(value: number) {
+		Animated.parallel([
+			this.startAnimationX(value),
+			this.startAnimationOpacity(),
+		]).start();
+	}
+
+	startAnimationX(value: number) {
 		Animated.timing(this.animatedX, {
 			toValue: value,
-			duration: 500,
+			duration: 300,
+		}).start();
+	}
+
+	startAnimationOpacity() {
+		Animated.timing(this.animatedOpacity, {
+			toValue: 1,
+			duration: 300,
 		}).start();
 	}
 
@@ -196,8 +190,10 @@ class ChangeLogNavigator extends View {
 			this.setState({
 				currentScreen: prevScreen,
 			});
+			LayoutAnimation.configureNext(CustomLayoutAnimation);
 			this.animatedX.setValue(appLayout.width);
-			this.startAnimation(0);
+			this.animatedOpacity.setValue(0);
+			this.startAnimationParallel(0);
 		}
 	}
 
@@ -208,38 +204,39 @@ class ChangeLogNavigator extends View {
 
 
 	render() {
-		let { currentScreen, nextScreen } = this.state;
-		let { appLayout, screenReaderEnabled, intl, changeLogVersion } = this.props;
-		let screenProps = {
-			currentScreen,
-			appLayout,
-			screenReaderEnabled,
-			Screens,
-			intl,
-			changeLogVersion,
-			nextScreen,
-		};
+		let { currentScreen } = this.state;
+		let { appLayout, intl } = this.props;
+		let { width } = appLayout;
 		let { h1, h2 } = this;
 
 		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
 
 		let { stepIndicatorCover, floatingButtonLeft } = this.getStyles(appLayout);
 
-		let inputRange = (appLayout && appLayout.width) ? [-appLayout.width, 0] : [-100, 0];
-		let outputRange = (appLayout && appLayout.width) ? [appLayout.width, 0] : [-100, 0];
+		let inputRange = width ? [-width, 0] : [-100, 0];
+		let outputRange = width ? [width, 0] : [-100, 0];
+
+		let inputRangeOpacity = width ? [-width, -width / 2, 0] : [-100, -50, 0];
 
 		const animatedX = this.animatedX.interpolate({
 			inputRange,
 			outputRange,
 			extrapolateLeft: 'clamp',
 			useNativeDriver: true,
-		  });
+		});
+
+		const animatedOpacity = this.animatedOpacity.interpolate({
+			inputRange: inputRangeOpacity,
+			outputRange: [0, 0, 1],
+			extrapolateLeft: 'clamp',
+			useNativeDriver: true,
+		});
 
 		return (
 			<View style={{flex: 1, backgroundColor: '#EFEFF4'}}>
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
-				<AnimatedWizard intl={intl} currentScreen={currentScreen} styles={styles} animatedX={animatedX}/>
+				<AnimatedWizard intl={intl} currentScreen={currentScreen} styles={styles} animatedX={animatedX} animatedOpacity={animatedOpacity}/>
 				<View style={styles.buttonCover}>
 					<Text style={styles.textSkip} onPress={this.onPressSkip}>
 						{this.skipButton}

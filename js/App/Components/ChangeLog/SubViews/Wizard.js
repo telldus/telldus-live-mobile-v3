@@ -156,11 +156,11 @@ export default class WizardOne extends PureComponent<Props, null> {
 	}
 
 	render(): Object {
-		const { styles, currentScreen, animatedX } = this.props;
+		const { styles, currentScreen, animatedX, animatedOpacity } = this.props;
 		const { icon, title, description } = this.getScreenData(currentScreen);
 
 		return (
-			<View style={[styles.container, {transform: [{
+			<View style={[styles.container, {opacity: animatedOpacity, transform: [{
 				translateX: animatedX,
 			}]}]}>
 				<IconTelldus icon={icon} style={styles.icon}/>
