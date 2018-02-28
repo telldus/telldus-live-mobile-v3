@@ -116,16 +116,22 @@ class GatewaysTab extends View {
 
 	renderRow({ name, type, online, websocketOnline }) {
 		let { appLayout } = this.props;
+		let height = appLayout.height;
+		let width = appLayout.width;
+		let isPortrait = height > width;
+		let rowHeight = isPortrait ? height * 0.14 : width * 0.14;
+
 		let locationImageUrl = getLocationImageUrl(type);
 		let locationData = {
 			image: locationImageUrl,
 			H1: name,
 			H2: type,
 		};
+
 		return (
 			<View style={styles.rowItemsCover}>
 				<Image source={require('../TabViews/img/right-arrow-key.png')} tintColor="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData} style={{ width: (appLayout.width - 20), marginVertical: 5 }}/>
+				<DeviceLocationDetail {...locationData} style={{ width: (appLayout.width - 20), height: rowHeight, marginVertical: 5 }}/>
 			</View>
 		);
 	}
@@ -183,7 +189,9 @@ const styles = StyleSheet.create({
 		zIndex: 1,
 		tintColor: '#A59F9A90',
 		right: 25,
-		top: '45%',
+		top: '40%',
+		height: 28,
+		width: 12,
 	},
 });
 
