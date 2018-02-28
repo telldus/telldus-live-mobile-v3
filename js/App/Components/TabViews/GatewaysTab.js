@@ -125,7 +125,7 @@ class GatewaysTab extends View {
 		return (
 			<View style={styles.rowItemsCover}>
 				<Image source={require('../TabViews/img/right-arrow-key.png')} tintColor="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData} style={{ width: (appLayout.width - 20) }}/>
+				<DeviceLocationDetail {...locationData} style={{ width: (appLayout.width - 20), marginVertical: 5 }}/>
 			</View>
 		);
 	}
@@ -177,7 +177,6 @@ const styles = StyleSheet.create({
 	rowItemsCover: {
 		flexDirection: 'column',
 		alignItems: 'center',
-		marginBottom: 5,
 	},
 	arrow: {
 		position: 'absolute',
