@@ -314,6 +314,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 		}
 
 		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerActive;
+		let background = slideList.length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
 
 		return (
 			<DashboardShadowTile
@@ -353,6 +354,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					<View style={[styles.body, {
 						width: tileWidth,
 						height: tileWidth * 0.4,
+						backgroundColor: background,
 					}]}>
 						{slides[selectedSlideIndex]}
 					</View>
