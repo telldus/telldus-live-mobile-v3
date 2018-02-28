@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { View, Icon } from 'BaseComponents';
+import { View, Image } from 'BaseComponents';
 import { defineMessages } from 'react-intl';
 
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
@@ -85,7 +85,7 @@ export default class Clients extends View {
 
 		return (
 			<View style={{alignItems: 'center', justifyContent: 'center'}} accessible={true} accessibilityLabel={accessibilityLabel}>
-				<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow}/>
+				<Image source={require('../../TabViews/img/right-arrow-key.png')} style={styles.arrow}/>
 				<DeviceLocationDetail {...locationData} accessible={false} style={styles.locationDetails}/>
 			</View>
 		);
@@ -107,6 +107,8 @@ export default class Clients extends View {
 				top: isPortrait ? height * 0.12 : width * 0.12,
 				left: width * 0.845,
 				elevation: 3,
+				zIndex: 1,
+				tintColor: '#A59F9A90',
 			},
 		};
 	}
