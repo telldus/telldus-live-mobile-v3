@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { View, Icon } from '../../../../../BaseComponents';
+import { View, Image } from '../../../../../BaseComponents';
 import { defineMessages } from 'react-intl';
 
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
@@ -84,9 +84,9 @@ export default class Clients extends View {
 		const accessibilityLabel = `${this.boxTitle}, ${this.props.client.type}`;
 
 		return (
-			<View style={{flex: 1}} accessible={true} accessibilityLabel={accessibilityLabel}>
-				<Icon name="angle-right" size={44} color="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData} accessible={false} style={{marginTop: 20}}/>
+			<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} accessible={true} accessibilityLabel={accessibilityLabel}>
+				<Image source={require('../../../TabViews/img/right-arrow-key.png')} style={styles.arrow}/>
+				<DeviceLocationDetail {...locationData} accessible={false} style={styles.locationDetails}/>
 			</View>
 		);
 	}
@@ -95,6 +95,7 @@ export default class Clients extends View {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		let isPortrait = height > width;
+		const padding = width * 0.06;
 
 		return {
 			arrow: {
@@ -102,6 +103,12 @@ export default class Clients extends View {
 				top: isPortrait ? height * 0.12 : width * 0.12,
 				left: width * 0.845,
 				elevation: 3,
+				zIndex: 1,
+				tintColor: '#A59F9A90',
+			},
+			locationDetails: {
+				marginVertical: 10,
+				width: width - padding,
 			},
 		};
 	}
