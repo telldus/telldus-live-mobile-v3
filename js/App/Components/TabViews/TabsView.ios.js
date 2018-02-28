@@ -75,6 +75,7 @@ type Props = {
 	onToggleEditMode: (string) => void,
 	dispatch: Function,
 	stackNavigator: Object,
+	screenProps: Object,
 };
 
 type Tab = {
@@ -154,8 +155,8 @@ class TabsView extends View {
 	};
 
 	render() {
-		let screenProps = { stackNavigator: this.props.stackNavigator };
 		const { routeName } = this.state.tab;
+		let { currentScreen } = this.props.screenProps;
 
 		let rightButton;
 
@@ -166,6 +167,12 @@ class TabsView extends View {
 		} else {
 			rightButton = null;
 		}
+
+		let screenProps = {
+			stackNavigator: this.props.stackNavigator,
+			currentTab: routeName,
+			currentScreen,
+		};
 
 		return (
 			<View>
