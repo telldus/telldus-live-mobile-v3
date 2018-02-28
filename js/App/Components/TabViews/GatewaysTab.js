@@ -26,14 +26,13 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 
-import { List, ListDataSource, View, StyleSheet, FloatingButton, Image } from '../../../BaseComponents';
-import DeviceLocationDetail from './../DeviceDetails/SubViews/DeviceLocationDetail';
+import { List, ListDataSource, View, FloatingButton } from '../../../BaseComponents';
+import { GatewayRow } from './SubViews';
 import { getGateways, addNewGateway } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
 import getTabBarIcon from '../../Lib/getTabBarIcon';
-import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
 import i18n from '../../Translations/common';
 
@@ -48,7 +47,6 @@ const messages = defineMessages({
 type Props = {
 	rows: Array<Object>,
 	dispatch: Function,
-	appLayout: Object,
 	addNewLocation: () => Promise<any>,
 	screenProps: Object,
 };
@@ -114,25 +112,9 @@ class GatewaysTab extends View {
 		this.props.dispatch(getGateways());
 	}
 
-	renderRow({ name, type, online, websocketOnline }) {
-		let { appLayout } = this.props;
-		let height = appLayout.height;
-		let width = appLayout.width;
-		let isPortrait = height > width;
-		let rowHeight = isPortrait ? height * 0.14 : width * 0.14;
-
-		let locationImageUrl = getLocationImageUrl(type);
-		let locationData = {
-			image: locationImageUrl,
-			H1: name,
-			H2: type,
-		};
-
+	renderRow(item: Object): Object {
 		return (
-			<View style={styles.rowItemsCover}>
-				<Image source={require('../TabViews/img/right-arrow-key.png')} tintColor="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData} style={{ width: (appLayout.width - 20), height: rowHeight, marginVertical: 5 }}/>
-			</View>
+			<GatewayRow location={item} stackNavigator={this.props.screenProps.stackNavigator}/>
 		);
 	}
 
@@ -179,22 +161,6 @@ class GatewaysTab extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	rowItemsCover: {
-		flexDirection: 'column',
-		alignItems: 'center',
-	},
-	arrow: {
-		position: 'absolute',
-		zIndex: 1,
-		tintColor: '#A59F9A90',
-		right: 25,
-		top: '40%',
-		height: 28,
-		width: 12,
-	},
-});
-
 const getRows = createSelector(
 	[
 		({ gateways }) => gateways,
@@ -205,7 +171,6 @@ const getRows = createSelector(
 function mapStateToProps(state, props) {
 	return {
 		rows: getRows(state),
-		appLayout: state.App.layout,
 	};
 }
 

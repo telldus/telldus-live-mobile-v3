@@ -27,6 +27,7 @@ import DeviceRow from './DeviceRow';
 import DeviceRowHidden from './DeviceRowHidden';
 import SensorRow from './SensorRow';
 import SensorRowHidden from './SensorRowHidden';
+import GatewayRow from './GatewayRow';
 import DashboardShadowTile from './DashboardShadowTile';
 import BellDashboardTile from './BellDashboardTile';
 import GenericDashboardTile from './GenericDashboardTile';
@@ -72,4 +73,5 @@ module.exports = {
 	DimmerOffButton: DimmerOffButton,
 	DimmerOnButton: DimmerOnButton,
 	LearnButton: LearnButton,
+	GatewayRow: GatewayRow,
 };
