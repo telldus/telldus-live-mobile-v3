@@ -22,11 +22,12 @@
 'use strict';
 
 import React from 'react';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 
-import { List, ListDataSource, View, FloatingButton } from '../../../BaseComponents';
+import { View, FloatingButton } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
 import { getGateways, addNewGateway } from '../../Actions';
 
@@ -55,6 +56,7 @@ type State = {
 	dataSource: Object,
 	settings: boolean,
 	isLoading: boolean,
+	isRefreshing: boolean,
 };
 
 type renderRowProps = {
@@ -83,11 +85,10 @@ class GatewaysTab extends View {
 		let { formatMessage } = props.screenProps.intl;
 
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-			}).cloneWithRows(this.props.rows),
+			dataSource: this.props.rows,
 			settings: false,
 			isLoading: false,
+			isRefreshing: false,
 		};
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
@@ -100,12 +101,8 @@ class GatewaysTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
+			dataSource: nextProps.rows,
 		});
-	}
-
-	rowHasChanged(r1, r2) {
-		return r1 !== r2;
 	}
 
 	onRefresh() {
@@ -114,8 +111,12 @@ class GatewaysTab extends View {
 
 	renderRow(item: Object): Object {
 		return (
-			<GatewayRow location={item} stackNavigator={this.props.screenProps.stackNavigator}/>
+			<GatewayRow location={item.item} stackNavigator={this.props.screenProps.stackNavigator}/>
 		);
+	}
+
+	keyExtractor(item: Object) {
+		return item.index;
 	}
 
 	addLocation() {
@@ -146,11 +147,13 @@ class GatewaysTab extends View {
 	render() {
 		return (
 			<View style={{flex: 1}}>
-				<List
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
+				<FlatList
+					data={this.state.dataSource}
+					renderItem={this.renderRow}
 					onRefresh={this.onRefresh}
+					refreshing={this.state.isRefreshing}
 					style={{paddingTop: 10}}
+					keyExtractor={this.keyExtractor}
 				/>
 				<FloatingButton
 					onPress={this.addLocation}
