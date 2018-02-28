@@ -82,7 +82,7 @@ class DashboardShadowTile extends View {
 			<View
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}
-				style={[this.props.style, Theme.Core.shadow, {elevation: 4}]}>
+				style={[this.props.style, Theme.Core.shadow, {elevation: 3}]}>
 				<View style={{
 					flexDirection: 'column',
 					borderRadius: 2,
