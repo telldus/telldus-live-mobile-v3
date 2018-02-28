@@ -346,12 +346,12 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					onPress={this.props.onPress}
 					activeOpacity={1}
 					style={{
-						width: tileWidth - 4,
+						width: tileWidth,
 						height: tileWidth * 0.4,
 						flexDirection: 'row',
 					}}>
 					<View style={[styles.body, {
-						width: tileWidth - 4,
+						width: tileWidth,
 						height: tileWidth * 0.4,
 					}]}>
 						{slides[selectedSlideIndex]}

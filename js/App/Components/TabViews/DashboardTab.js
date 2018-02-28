@@ -312,8 +312,8 @@ class DashboardTab extends View {
 
 		let tileStyle = {
 			flexDirection: 'column',
-			justifyContent: 'flex-start',
-			alignItems: 'flex-start',
+			justifyContent: 'center',
+			alignItems: 'center',
 			width: tileWidth - (2 * tileMargin),
 			height: tileWidth - (2 * tileMargin),
 			marginHorizontal: tileMargin,

@@ -119,7 +119,12 @@ class BellDashboardTile extends PureComponent<Props, null> {
 				}>
 				<TouchableOpacity
 					onPress={this.onBell}
-					style={[styles.container, {width: tileWidth - 4, height: tileWidth * 0.4}]}
+					style={[styles.container, {
+						width: tileWidth,
+						height: tileWidth * 0.4,
+						justifyContent: 'center',
+						alignItems: 'center',
+					}]}
 					accessibilityLabel={accessibilityLabelButton}>
 					<View style={styles.body}>
 					  <IconTelldus icon="bell" size={32} color={iconColor} />

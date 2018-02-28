@@ -95,9 +95,10 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
 				<View style={{
-					width: tileWidth - 4,
+					width: tileWidth,
 					height: tileWidth * 0.4,
 					flexDirection: 'row',
+					justifyContent: 'center',
 				}}>
 					{ upButton }
 					{ downButton }

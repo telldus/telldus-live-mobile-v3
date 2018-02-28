@@ -100,9 +100,11 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 				hasShadow={!!TURNON || !!TURNOFF}
 				style={style}>
 				<View style={{
-					width: tileWidth - 4,
+					width: tileWidth,
 					height: tileWidth * 0.4,
 					flexDirection: 'row',
+					justifyContent: 'center',
+					alignItems: 'center',
 				}}>
 					{ offButton }
 					{ onButton }

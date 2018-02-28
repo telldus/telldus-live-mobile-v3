@@ -29,7 +29,7 @@ import Theme from '../../../Theme';
 
 const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive }: Object) => (
 	<View style={[styles.title, {
-		width: tileWidth - 4,
+		width: tileWidth,
 		height: tileWidth * 0.6,
 	}]}>
 		{icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
@@ -82,14 +82,13 @@ class DashboardShadowTile extends View {
 			<View
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}
-				style={[this.props.style, (this.props.hasShadow ? styles.shadow : styles.noShadow)]}>
+				style={[this.props.style, Theme.Core.shadow, {elevation: 4}]}>
 				<View style={{
-					flex: 0.994,
-					paddingTop: 3,
-					paddingLeft: 2,
 					flexDirection: 'column',
 					borderRadius: 2,
 					overflow: 'hidden',
+					justifyContent: 'center',
+					alignItems: 'center',
 				}}>
 					<Title {...this.props} />
 					{this.props.children}
@@ -111,17 +110,6 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 2,
 		borderTopRightRadius: 2,
 		backgroundColor: '#ffffff',
-	},
-	shadow: {
-		borderRadius: 2,
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 3,
-		shadowOpacity: 1.0,
-		elevation: 3,
 	},
 	noShadow: {
 		borderRadius: 2,
