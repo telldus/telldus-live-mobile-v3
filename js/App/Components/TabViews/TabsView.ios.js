@@ -118,15 +118,6 @@ class TabsView extends View {
 			},
 			onPress: this.onOpenSetting,
 		};
-
-		this.starButton = {
-			icon: {
-				name: 'star',
-				size: 22,
-				color: '#fff',
-			},
-			onPress: this.onToggleEditMode,
-		};
 	}
 
 	onNavigationStateChange = (prevState, newState) => {
@@ -158,14 +149,10 @@ class TabsView extends View {
 		const { routeName } = this.state.tab;
 		let { currentScreen } = this.props.screenProps;
 
-		let rightButton;
+		let rightButton = null;
 
 		if (routeName === 'Dashboard') {
 			rightButton = this.settingsButton;
-		} else if (routeName === 'Devices' || routeName === 'Sensors') {
-			rightButton = this.starButton;
-		} else {
-			rightButton = null;
 		}
 
 		let screenProps = {
