@@ -53,7 +53,7 @@ type Props = {
 };
 
 type State = {
-	dataSource: Object,
+	dataSource: Array<Object>,
 	settings: boolean,
 	isLoading: boolean,
 	isRefreshing: boolean,
