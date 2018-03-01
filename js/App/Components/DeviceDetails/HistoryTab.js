@@ -268,6 +268,8 @@ class HistoryTab extends View {
 		return (
 			<View style={styles.container}>
 				<SectionList
+					style={{flex: 1}}
+					contentContainerStyle={{flexGrow: 1}}
 					sections={this.state.rowsAndSections}
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
