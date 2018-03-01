@@ -100,6 +100,7 @@ class SettingsTab extends View {
 			textShowOnDash,
 			dashSwitchCover,
 			dashSwitch,
+			learn,
 		} = this.getStyle(appLayout);
 
 		const device = this.props.device;
@@ -108,7 +109,7 @@ class SettingsTab extends View {
 		let learnButton = null;
 
 		if (LEARN) {
-			learnButton = <LearnButton id={device.id} style={styles.learn} />;
+			learnButton = <LearnButton id={device.id} style={learn} />;
 		}
 		return (
 			<View style={styles.container}>
@@ -169,7 +170,7 @@ class SettingsTab extends View {
 			},
 			learn: {
 				marginHorizontal: width * 0.25,
-				marginVertical: 25,
+				marginVertical: 15,
 			},
 		};
 	}
