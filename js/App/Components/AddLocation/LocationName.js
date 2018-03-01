@@ -208,7 +208,6 @@ class LocationName extends View {
 			buttonStyle: {
 				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
 				elevation: 10,
-				shadowOpacity: 0.99,
 			},
 		};
 	}
