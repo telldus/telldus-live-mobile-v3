@@ -143,20 +143,30 @@ class HistoryTab extends View {
 		return key;
 	}
 
-	getDataFromLocal() {
+	getDataFromLocal(refreshing: boolean = false) {
 		getDeviceHistoryFromLocal(this.props.device.id).then(data => {
 			if (data && data.length !== 0) {
 				let rowsAndSections = parseHistoryForSectionList(data);
 				this.setState({
 					rowsAndSections,
-					refreshing: false,
+					refreshing,
+				});
+			} else {
+				this.setState({
+					rowsAndSections: [],
+					refreshing,
 				});
 			}
+		}).catch(() => {
+			this.setState({
+				rowsAndSections: [],
+				refreshing,
+			});
 		});
 	}
 
 	refreshHistoryData() {
-		this.getDataFromLocal();
+		this.getDataFromLocal(true);
 		let that = this;
 		let { device } = this.props;
 		this.delayRefreshHistoryData = setTimeout(() => {
@@ -181,25 +191,15 @@ class HistoryTab extends View {
 						deviceId: this.props.device.id,
 					};
 					storeDeviceHistory(data).then(() => {
-						this.getDataFromLocal();
-						this.setState({
-							refreshing: false,
-						});
+						this.getDataFromLocal(false);
 					}).catch(() => {
-						this.getDataFromLocal();
-						this.setState({
-							refreshing: false,
-						});
+						this.getDataFromLocal(false);
 					});
 				} else {
-					this.setState({
-						refreshing: false,
-					});
+					this.getDataFromLocal(false);
 				}
 			}).catch(() => {
-				this.setState({
-					refreshing: false,
-				});
+				this.getDataFromLocal(false);
 			});
 	}
 
@@ -220,7 +220,6 @@ class HistoryTab extends View {
 			default:
 				return '';
 		}
-
 	}
 
 	renderRow(item: Object) {
