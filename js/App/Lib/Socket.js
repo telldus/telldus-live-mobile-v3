@@ -40,6 +40,7 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 // open the connection again when it goes to the front easily.
 
 import { AppState } from 'react-native';
+import { reportException } from './Analytics';
 
 export default class TelldusWebsocket {
 	gatewayId: string;
@@ -51,6 +52,7 @@ export default class TelldusWebsocket {
 	onerror: Function;
 	onclose: Function;
 	onopen: Function;
+	reportException: (Error) => void;
 
 	constructor(gatewayId:string, websocketUrl:string) {
 		this.gatewayId = gatewayId;
@@ -144,5 +146,9 @@ export default class TelldusWebsocket {
 			console.log('app in background, closing socket connection');
 			this.close();
 		}
+	}
+
+	reportException(e: Error) {
+		reportException(e);
 	}
 }
