@@ -143,9 +143,10 @@ const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'column',
 		backgroundColor: '#fff',
-		paddingLeft: 10,
-		paddingRight: 10,
-		paddingTop: 10,
+		paddingHorizontal: 10,
+		paddingVertical: 10,
+		marginVertical: 10,
+		justifyContent: 'center',
 	},
 	imageHeaderContainer: {
 		justifyContent: 'flex-start',
