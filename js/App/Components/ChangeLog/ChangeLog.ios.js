@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { Animated, LayoutAnimation } from 'react-native';
+import { Animated, LayoutAnimation, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
@@ -252,30 +252,32 @@ class ChangeLogNavigator extends View {
 			<View style={{flex: 1, backgroundColor: '#EFEFF4'}}>
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
-				<AnimatedWizard intl={intl} currentScreen={currentScreen} styles={styles} animatedX={animatedX} animatedOpacity={animatedOpacity}/>
-				<View style={styles.buttonCover}>
-					<Text style={styles.textSkip} onPress={this.onPressSkip}>
-						{this.skipButton}
-					</Text>
-				</View>
-				<View style={stepIndicatorCover}>
-					{!isFirstScreen && (<FloatingButton
-						imageSource={require('../TabViews/img/right-arrow-key.png')}
-						onPress={this.onPressPrev}
-						buttonStyle={floatingButtonLeft}
-						iconStyle={styles.buttonIconStyle}/>
-					)}
-					{Screens.map((screen, index) => {
-						let backgroundColor = Screens[index] === currentScreen ?
-							Theme.Core.brandSecondary : '#00000080';
-						return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
-					})
-					}
-					<FloatingButton
-						imageSource={require('../TabViews/img/right-arrow-key.png')}
-						onPress={this.onPressNext}
-						buttonStyle={{bottom: 0}}/>
-				</View>
+				<ScrollView>
+					<AnimatedWizard intl={intl} currentScreen={currentScreen} styles={styles} animatedX={animatedX} animatedOpacity={animatedOpacity}/>
+					<View style={styles.buttonCover}>
+						<Text style={styles.textSkip} onPress={this.onPressSkip}>
+							{this.skipButton}
+						</Text>
+					</View>
+					<View style={stepIndicatorCover}>
+						{!isFirstScreen && (<FloatingButton
+							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							onPress={this.onPressPrev}
+							buttonStyle={floatingButtonLeft}
+							iconStyle={styles.buttonIconStyle}/>
+						)}
+						{Screens.map((screen, index) => {
+							let backgroundColor = Screens[index] === currentScreen ?
+								Theme.Core.brandSecondary : '#00000080';
+							return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
+						})
+						}
+						<FloatingButton
+							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							onPress={this.onPressNext}
+							buttonStyle={{bottom: 0}}/>
+					</View>
+				</ScrollView>
 			</View>
 		);
 	}
