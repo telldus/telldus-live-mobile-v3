@@ -122,8 +122,6 @@ class BellDashboardTile extends PureComponent<Props, null> {
 					style={[styles.container, {
 						width: tileWidth,
 						height: tileWidth * 0.4,
-						justifyContent: 'center',
-						alignItems: 'center',
 					}]}
 					accessibilityLabel={accessibilityLabelButton}>
 					<View style={styles.body}>
