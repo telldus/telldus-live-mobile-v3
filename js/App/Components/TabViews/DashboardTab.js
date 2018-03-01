@@ -263,6 +263,7 @@ class DashboardTab extends View {
 					contentContainerStyle={{
 						flexDirection: 'row',
 						flexWrap: 'wrap',
+						paddingLeft: tileMargin / 2,
 					}}
 					key={this.state.tileWidth}
 					dataSource={this.state.dataSource}
@@ -292,7 +293,7 @@ class DashboardTab extends View {
 				width: tileWidth - tileMargin,
 				height: tileWidth - tileMargin,
 				marginTop: tileMargin,
-				marginLeft: tileMargin,
+				marginHorizontal: tileMargin / 2,
 				borderRadius: 2,
 			};
 
