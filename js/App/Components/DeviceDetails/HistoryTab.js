@@ -357,7 +357,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingTop: 2,
-		backgroundColor: '#eeeeef',
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		justifyContent: 'flex-start',
@@ -366,7 +365,6 @@ const styles = StyleSheet.create({
 	containerWhenNoData: {
 		flex: 1,
 		paddingTop: 20,
-		backgroundColor: '#eeeeef',
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
