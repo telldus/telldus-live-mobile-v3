@@ -33,7 +33,7 @@ import i18n from '../../Translations/common';
 import { LearnButton } from 'TabViews_SubViews';
 
 import { addToDashboard, removeFromDashboard } from 'Actions';
-
+import Theme from 'Theme';
 const messages = defineMessages({
 	showOnDashborad: {
 		id: 'showOnDashboard',
@@ -140,18 +140,21 @@ class SettingsTab extends View {
 			ShowOnDashCover: {
 				backgroundColor: '#fff',
 				height: isPortrait ? height * 0.09 : width * 0.09,
-				marginVertical: 25,
+				marginTop: 8,
 				flexDirection: 'row',
 				alignItems: 'center',
-				justifyContent: 'center',
+				justifyContent: 'space-between',
+				marginHorizontal: 10,
+				paddingHorizontal: 20,
+				...Theme.Core.shadow,
+				borderRadius: 2,
+
 			},
 			textShowOnDashCover: {
-				width: width * 0.5,
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 			},
 			dashSwitchCover: {
-				width: width * 0.5,
 				alignItems: 'flex-end',
 				justifyContent: 'center',
 			},
