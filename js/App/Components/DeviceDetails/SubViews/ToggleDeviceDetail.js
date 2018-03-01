@@ -26,6 +26,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { OnButton, OffButton } from '../../TabViews/SubViews';
 
 const deviceHeight = Dimensions.get('window').height;
+import Theme from '../../../Theme';
 
 const ToggleButton = ({ device, intl }) => {
 	return (
@@ -85,16 +86,8 @@ const styles = StyleSheet.create({
 		height: (deviceHeight * 0.2),
 	},
 	shadow: {
-		borderRadius: 4,
-		backgroundColor: '#fff',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
+		borderRadius: 2,
+		...Theme.Core.shadow,
 	},
 	toggleContainer: {
 		flexDirection: 'row',

@@ -37,6 +37,7 @@ import i18n from '../../../Translations/common';
 import {
 	toDimmerValue,
 } from '../../../Lib';
+import Theme from '../../../Theme';
 
 type Props = {
 	commandON: number,
@@ -219,18 +220,11 @@ const styles = StyleSheet.create({
 	dimmerContainer: {
 		marginTop: 20,
 		height: (deviceHeight * 0.28),
+		backgroundColor: '#fff',
 	},
 	shadow: {
-		borderRadius: 4,
-		backgroundColor: '#fff',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
+		borderRadius: 2,
+		...Theme.Core.shadow,
 	},
 });
 

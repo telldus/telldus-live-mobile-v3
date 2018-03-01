@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	shadow: {
+		borderRadius: 2,
 		...Theme.Core.shadow,
-		borderRadius: 4,
 	},
 });
 
