@@ -40,15 +40,17 @@ import i18n from '../../Translations/common';
 
 import { setChangeLogVersion } from '../../Actions';
 
-const CustomLayoutAnimation = {
-	duration: 200,
-	create: {
+const CustomLayoutAnimation = (duration: number = 200): Object => {
+	return {
+		duration,
+		create: {
 	  type: LayoutAnimation.Types.linear,
 	  property: LayoutAnimation.Properties.opacity,
-	},
-	update: {
+		},
+		update: {
 	  type: LayoutAnimation.Types.linear,
-	},
+		},
+	};
 };
 
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
@@ -154,11 +156,14 @@ class ChangeLogNavigator extends View {
 		let isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
 		if (isFinalScreen) {
 			dispatch(setChangeLogVersion(changeLogVersion));
+			let customLayoutAnimation = CustomLayoutAnimation(500);
+			LayoutAnimation.configureNext(customLayoutAnimation);
 		} else {
 			this.setState({
 				currentScreen: nextScreen,
 			});
-			LayoutAnimation.configureNext(CustomLayoutAnimation);
+			let customLayoutAnimation = CustomLayoutAnimation();
+			LayoutAnimation.configureNext(customLayoutAnimation);
 			this.animatedX.setValue(-appLayout.width);
 			this.animatedOpacity.setValue(0);
 			this.startAnimationParallel(0);
@@ -197,7 +202,8 @@ class ChangeLogNavigator extends View {
 			this.setState({
 				currentScreen: prevScreen,
 			});
-			LayoutAnimation.configureNext(CustomLayoutAnimation);
+			let customLayoutAnimation = CustomLayoutAnimation();
+			LayoutAnimation.configureNext(customLayoutAnimation);
 			this.animatedX.setValue(appLayout.width);
 			this.animatedOpacity.setValue(0);
 			this.startAnimationParallel(0);
@@ -206,7 +212,10 @@ class ChangeLogNavigator extends View {
 
 	onPressSkip() {
 		let { dispatch, changeLogVersion } = this.props;
+		let customLayoutAnimation = CustomLayoutAnimation(500);
+
 		dispatch(setChangeLogVersion(changeLogVersion));
+		LayoutAnimation.configureNext(customLayoutAnimation);
 	}
 
 
@@ -311,31 +320,6 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		marginLeft: 7,
 	},
-	container: {
-		...Theme.Core.shadow,
-		backgroundColor: '#fff',
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingHorizontal: 15,
-		paddingVertical: 15,
-	},
-	icon: {
-		fontSize: 100,
-		color: Theme.Core.brandSecondary,
-	},
-	title: {
-		fontSize: 20,
-		color: '#00000090',
-		textAlign: 'center',
-		paddingHorizontal: 10,
-		marginVertical: 10,
-	},
-	description: {
-		fontSize: 14,
-		color: '#00000080',
-		textAlign: 'left',
-	},
 	buttonIconStyle: {
 		transform: [{rotateZ: '180deg'}],
 	},
@@ -374,10 +358,11 @@ function mapStateToProps(state, ownProps) {
 	};
 }
 
-function mapDispatchToProps(state: Object, dispatch: Function): Object {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ChangeLogNavigator));
+

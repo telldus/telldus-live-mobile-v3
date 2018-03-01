@@ -40,15 +40,17 @@ import i18n from '../../Translations/common';
 
 import { setChangeLogVersion } from '../../Actions';
 
-const CustomLayoutAnimation = {
-	duration: 200,
-	create: {
+const CustomLayoutAnimation = (duration: number = 200): Object => {
+	return {
+		duration,
+		create: {
 	  type: LayoutAnimation.Types.linear,
 	  property: LayoutAnimation.Properties.opacity,
-	},
-	update: {
+		},
+		update: {
 	  type: LayoutAnimation.Types.linear,
-	},
+		},
+	};
 };
 
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
@@ -155,11 +157,14 @@ class ChangeLogNavigator extends View {
 		let isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
 		if (isFinalScreen) {
 			dispatch(setChangeLogVersion(changeLogVersion));
+			let customLayoutAnimation = CustomLayoutAnimation(500);
+			LayoutAnimation.configureNext(customLayoutAnimation);
 		} else {
 			this.setState({
 				currentScreen: nextScreen,
 			});
-			LayoutAnimation.configureNext(CustomLayoutAnimation);
+			let customLayoutAnimation = CustomLayoutAnimation();
+			LayoutAnimation.configureNext(customLayoutAnimation);
 			this.animatedX.setValue(-appLayout.width);
 			this.animatedOpacity.setValue(0);
 			this.startAnimationParallel(0);
@@ -198,7 +203,8 @@ class ChangeLogNavigator extends View {
 			this.setState({
 				currentScreen: prevScreen,
 			});
-			LayoutAnimation.configureNext(CustomLayoutAnimation);
+			let customLayoutAnimation = CustomLayoutAnimation();
+			LayoutAnimation.configureNext(customLayoutAnimation);
 			this.animatedX.setValue(appLayout.width);
 			this.animatedOpacity.setValue(0);
 			this.startAnimationParallel(0);
@@ -207,7 +213,10 @@ class ChangeLogNavigator extends View {
 
 	onPressSkip() {
 		let { dispatch, changeLogVersion } = this.props;
+		let customLayoutAnimation = CustomLayoutAnimation(500);
+
 		dispatch(setChangeLogVersion(changeLogVersion));
+		LayoutAnimation.configureNext(customLayoutAnimation);
 	}
 
 
@@ -357,3 +366,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ChangeLogNavigator));
+
