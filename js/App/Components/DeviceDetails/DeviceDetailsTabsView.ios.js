@@ -38,6 +38,7 @@ const CustomIcon = createIconSetFromIcoMoon(icon_settings);
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
 import { Text, View, Poster } from 'BaseComponents';
 import { getWindowDimensions } from 'Lib';
+import Theme from 'Theme';
 import i18n from '../../Translations/common';
 
 type Props = {
@@ -215,9 +216,7 @@ const Tabs = TabNavigator(
 			},
 			style: {
 				backgroundColor: '#fff',
-				shadowColor: '#000000',
-				shadowOpacity: 1.0,
-				elevation: 2,
+				...Theme.Core.shadow,
 				height: getWindowDimensions().height * 0.085,
 				alignItems: 'center',
 				justifyContent: 'center',

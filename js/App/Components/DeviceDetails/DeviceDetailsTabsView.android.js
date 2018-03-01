@@ -40,6 +40,7 @@ import { Text, View, Poster } from 'BaseComponents';
 import { getWindowDimensions } from 'Lib';
 import { hideModal } from 'Actions_Modal';
 import i18n from '../../Translations/common';
+import Theme from 'Theme';
 
 type Props = {
 	dispatch: Function,
@@ -239,9 +240,7 @@ const Tabs = TabNavigator(
 			},
 			style: {
 				backgroundColor: '#fff',
-				shadowColor: '#000000',
-				shadowOpacity: 1.0,
-				elevation: 2,
+				...Theme.Core.shadow,
 				height: getWindowDimensions().height * 0.085,
 				alignItems: 'center',
 				justifyContent: 'center',
