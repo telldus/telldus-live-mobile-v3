@@ -106,8 +106,8 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 					justifyContent: 'center',
 					alignItems: 'center',
 				}}>
-					{ offButton }
-					{ onButton }
+					{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+					{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
 				</View>
 			</DashboardShadowTile>
 		);
