@@ -297,7 +297,7 @@ class ChangeLogNavigator extends View {
 				justifyContent: 'center',
 				marginBottom: 10,
 				height: buttonSize,
-				backgroundColor: '#EFEFF4',
+				...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1, backgroundColor: '#EFEFF4' }),
 			},
 			floatingButtonLeft: {
 				left: deviceWidth * 0.034666667,
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
 	buttonCover: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: '#EFEFF4',
+		...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1, backgroundColor: '#EFEFF4' })
 	},
 	textSkip: {
 		paddingVertical: 10,
