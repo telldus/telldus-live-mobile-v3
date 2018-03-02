@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule TabsView
  */
 
 // @flow
@@ -28,15 +27,18 @@ import { SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
-import { View, Header } from 'BaseComponents';
-import Theme from 'Theme';
 
-import { toggleEditMode, syncWithServer, switchTab } from 'Actions';
-import TabViews from 'TabViews';
+import { View, Header } from '../../../BaseComponents';
+
+import { toggleEditMode, syncWithServer, switchTab } from '../../Actions';
+import TabViews from './index';
 
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
-import { SettingsDetailModal } from 'DetailViews';
+import { SettingsDetailModal } from '../DetailViews';
+
+import Theme from '../../Theme';
+
 const ViewX = isIphoneX() ? SafeAreaView : View;
 
 const RouteConfigs = {
@@ -82,6 +84,7 @@ type Props = {
 	onToggleEditMode: (string) => void,
 	dispatch: Function,
 	stackNavigator: Object,
+	screenProps: Object,
 };
 
 type Tab = {
@@ -124,15 +127,6 @@ class TabsView extends View {
 			},
 			onPress: this.onOpenSetting,
 		};
-
-		this.starButton = {
-			icon: {
-				name: 'star',
-				size: 22,
-				color: '#fff',
-			},
-			onPress: this.onToggleEditMode,
-		};
 	}
 
 	onNavigationStateChange = (prevState, newState) => {
@@ -161,18 +155,20 @@ class TabsView extends View {
 	};
 
 	render() {
-		let screenProps = { stackNavigator: this.props.stackNavigator };
 		const { routeName } = this.state.tab;
+		let { currentScreen } = this.props.screenProps;
 
-		let rightButton;
+		let rightButton = null;
 
 		if (routeName === 'Dashboard') {
 			rightButton = this.settingsButton;
-		} else if (routeName === 'Devices' || routeName === 'Sensors') {
-			rightButton = this.starButton;
-		} else {
-			rightButton = null;
 		}
+
+		let screenProps = {
+			stackNavigator: this.props.stackNavigator,
+			currentTab: routeName,
+			currentScreen,
+		};
 
 		return (
 			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>

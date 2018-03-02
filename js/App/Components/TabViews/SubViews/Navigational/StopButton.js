@@ -24,13 +24,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, View } from 'BaseComponents';
+import { Icon, View } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import Theme from 'Theme';
+import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
+import Theme from '../../../../Theme';
 
 type Props = {
 	device: Object,

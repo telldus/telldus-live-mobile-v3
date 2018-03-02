@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_AppData
  */
 
 // @flow
@@ -29,11 +28,6 @@ const {Devices: {getDevices}} = actions;
 const {Sensors: {getSensors}} = actions;
 const {Jobs: {getJobs}} = actions;
 const {Websockets: {authenticateSession, connectToGateways}} = actions;
-
-// import { authenticateSession, connectToGateways } from 'Actions_Websockets';
-// import { getJobs } from './Jobs';
-// import { getDevices } from 'Actions_Devices';
-// import { getSensors } from 'Actions_Sensors';
 
 function getAppData(): ThunkAction {
 	return (dispatch, getState) => {

@@ -23,7 +23,7 @@
 
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 export default class Base extends Component<Object, void> {
 

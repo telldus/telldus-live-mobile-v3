@@ -25,16 +25,16 @@ import React, { PureComponent } from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { View, IconTelldus } from 'BaseComponents';
+import { View, IconTelldus } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
-import { getLabelDevice } from 'Accessibility';
-import { getPowerConsumed } from 'Lib';
+import { getLabelDevice } from '../../../Lib';
+import { getPowerConsumed } from '../../../Lib';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
@@ -119,7 +119,10 @@ class BellDashboardTile extends PureComponent<Props, null> {
 				}>
 				<TouchableOpacity
 					onPress={this.onBell}
-					style={[styles.container, {width: tileWidth - 4, height: tileWidth * 0.4}]}
+					style={[styles.container, {
+						width: tileWidth,
+						height: tileWidth * 0.4,
+					}]}
 					accessibilityLabel={accessibilityLabelButton}>
 					<View style={styles.body}>
 					  <IconTelldus icon="bell" size={32} color={iconColor} />

@@ -26,23 +26,23 @@ import { Animated, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
-import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from '../../../Actions/Dimmer';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 
-import { getLabelDevice } from 'Accessibility';
+import { getLabelDevice } from '../../../Lib';
 import {
 	getDimmerValue,
 	toDimmerValue,
 	toSliderValue,
 	getPowerConsumed,
-} from 'Lib';
+} from '../../../Lib';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
@@ -200,7 +200,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const info = powerConsumed ? `${powerConsumed} W` : null;
 
 		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
-			style={[styles.turnOn, {marginLeft: ((tileWidth - 4) / 3) - 2}]} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+			style={[styles.turnOn, {marginLeft: (tileWidth / 3) - 2}]} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
 			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>;
 		const offButton = <DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={!!TURNOFF}
 			style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
@@ -208,10 +208,10 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const slider = DIM ?
 			<HorizontalSlider
 				style={[styles.slider, {
-					width: (tileWidth - 4) / 3,
+					width: tileWidth / 3,
 					height: tileWidth * 0.4,
 					bottom: 0,
-					left: (tileWidth - 4) / 3,
+					left: tileWidth / 3,
 				}]}
 				thumbWidth={7}
 				thumbHeight={7}
@@ -259,9 +259,10 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
 				<View style={{
-					width: tileWidth - 4,
+					width: tileWidth,
 					height: tileWidth * 0.4,
 					flexDirection: 'row',
+					justifyContent: 'center',
 				}} onLayout={this.layoutView}>
 					{ offButton }
 					{ onButton }

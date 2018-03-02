@@ -25,15 +25,15 @@ import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
 
-import { getLabelDevice } from 'Accessibility';
-import { getPowerConsumed } from 'Lib';
+import { getLabelDevice } from '../../../Lib';
+import { getPowerConsumed } from '../../../Lib';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
@@ -100,12 +100,14 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 				hasShadow={!!TURNON || !!TURNOFF}
 				style={style}>
 				<View style={{
-					width: tileWidth - 4,
+					width: tileWidth,
 					height: tileWidth * 0.4,
 					flexDirection: 'row',
+					justifyContent: 'center',
+					alignItems: 'center',
 				}}>
-					{ offButton }
-					{ onButton }
+					{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+					{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
 				</View>
 			</DashboardShadowTile>
 		);

@@ -8,9 +8,9 @@ const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
 import OverviewTab from '../../Components/DeviceDetails/OverviewTab';
-import DimmerDeviceDetail from '../../Components/DeviceDetails/SubViews/DimmerDeviceDetail';
-import { setDimmerValue, saveDimmerInitialState } from 'Actions_Dimmer';
-import { requestDeviceAction } from 'Actions_Devices';
+import { DimmerDeviceDetail } from '../../Components/DeviceDetails/SubViews';
+import { setDimmerValue, saveDimmerInitialState } from '../../Actions/Dimmer';
+import { requestDeviceAction } from '../../Actions/Devices';
 
 
 describe('<OverviewTab />', () => {

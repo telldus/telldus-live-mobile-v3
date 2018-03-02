@@ -21,7 +21,7 @@
 
 'use strict';
 
-import type { Action } from 'Actions_Types';
+import type { Action } from '../Actions/Types';
 export type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab';
 
 type State = {

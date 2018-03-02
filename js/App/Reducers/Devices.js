@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Reducers_Devices
  */
 
 // @flow
@@ -27,8 +26,8 @@ import _ from 'lodash';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let result = _.groupBy(paramOne, items => {
-		let gateway = gateways[items.clientId].name;
-		return gateway;
+		let gateway = gateways[items.clientId];
+		return gateway && gateway.name;
 	});
 	result = _.reduce(result, (acc, next, index) => {
 		acc.push({

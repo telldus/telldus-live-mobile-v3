@@ -23,16 +23,16 @@ import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
 
-import { getLabelDevice } from 'Accessibility';
-import { getPowerConsumed } from 'Lib';
+import { getLabelDevice } from '../../../Lib';
+import { getPowerConsumed } from '../../../Lib';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
@@ -95,9 +95,10 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
 				<View style={{
-					width: tileWidth - 4,
+					width: tileWidth,
 					height: tileWidth * 0.4,
 					flexDirection: 'row',
+					justifyContent: 'center',
 				}}>
 					{ upButton }
 					{ downButton }

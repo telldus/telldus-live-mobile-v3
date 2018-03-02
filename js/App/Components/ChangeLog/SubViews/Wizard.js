@@ -25,7 +25,7 @@
 import React, { PureComponent } from 'react';
 import { intlShape, defineMessages } from 'react-intl';
 
-import { View, Text, IconTelldus } from 'BaseComponents';
+import { View, Text, IconTelldus } from '../../../../BaseComponents';
 
 const messages = defineMessages({
 	wizardOneTitle: {
@@ -79,6 +79,8 @@ type Props = {
 	intl: intlShape,
 	styles: Object,
 	currentScreen: string,
+	animatedX: Object,
+	animatedOpacity: Object,
 };
 
 export default class WizardOne extends PureComponent<Props, null> {
@@ -156,11 +158,13 @@ export default class WizardOne extends PureComponent<Props, null> {
 	}
 
 	render(): Object {
-		const { styles, currentScreen } = this.props;
+		const { styles, currentScreen, animatedX, animatedOpacity } = this.props;
 		const { icon, title, description } = this.getScreenData(currentScreen);
 
 		return (
-			<View style={styles.container}>
+			<View style={[styles.container, {opacity: animatedOpacity, transform: [{
+				translateX: animatedX,
+			}]}]}>
 				<IconTelldus icon={icon} style={styles.icon}/>
 				<Text style={styles.title}>
 					{title}

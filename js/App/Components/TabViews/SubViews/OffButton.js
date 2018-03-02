@@ -22,13 +22,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, IconTelldus } from 'BaseComponents';
+import { View, IconTelldus } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	requestDeviceAction: (id: number, command: number, value?: number) => void,

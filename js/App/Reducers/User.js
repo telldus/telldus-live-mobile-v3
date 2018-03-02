@@ -21,7 +21,7 @@
 
 'use strict';
 
-import type { Action } from 'Actions_Types';
+import type { Action } from '../Actions/Types';
 import { Crashlytics } from 'react-native-fabric';
 
 import { createSelector } from 'reselect';

@@ -34,7 +34,7 @@ import {
 	syncLiveApiOnForeground,
 	getAppData,
 	getGateways,
-} from 'Actions';
+} from '../Actions';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 const messages = defineMessages({
@@ -45,12 +45,13 @@ const messages = defineMessages({
 	},
 });
 
-import { View } from 'BaseComponents';
-import TabsView from 'TabsView';
-import { DimmerPopup } from 'TabViews_SubViews';
-import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
-import { NavigationHeader } from 'DDSubViews';
-import AddLocationNavigator from 'AddLocationNavigator';
+import { View } from '../../BaseComponents';
+import TabsView from './TabViews/TabsView';
+import { DimmerPopup } from './TabViews/SubViews';
+import DeviceDetails from './DeviceDetails/DeviceDetails';
+import { NavigationHeader } from './DeviceDetails/SubViews';
+import AddLocationNavigator from './Location/AddLocation/AddLocation';
+import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails';
 
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
@@ -62,7 +63,7 @@ const RouteConfigs = {
 		},
 	},
 	DeviceDetails: {
-		screen: DeviceDetailsTabsView,
+		screen: DeviceDetails,
 		navigationOptions: ({navigation}: Object): Object => {
 			return {
 				header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
@@ -77,6 +78,22 @@ const RouteConfigs = {
 			if (renderRootHeader) {
 				return {
 					header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
+				};
+			}
+			return {
+				header: null,
+			};
+		},
+
+	},
+	LocationDetails: {
+		screen: LocationDetailsNavigator,
+		navigationOptions: ({navigation}: Object): Object => {
+			let {state} = navigation;
+			let renderRootHeader = state.params && state.params.renderRootHeader;
+			if (renderRootHeader) {
+				return {
+					header: <NavigationHeader navigation={navigation}/>,
 				};
 			}
 			return {

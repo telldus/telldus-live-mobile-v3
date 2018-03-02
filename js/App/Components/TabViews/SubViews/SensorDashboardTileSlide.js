@@ -22,9 +22,9 @@
 'use strict';
 
 import React from 'react';
-import { Text, View, IconTelldus } from 'BaseComponents';
+import { Text, View, IconTelldus } from '../../../../BaseComponents';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	tileWidth: number,

@@ -27,14 +27,14 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { TouchableButton, View } from 'BaseComponents';
-import { loginToTelldus, showModal } from 'Actions';
-import { testUsername, testPassword } from 'Config';
+import { TouchableButton, View } from '../../../../BaseComponents';
+import { loginToTelldus, showModal } from '../../../Actions';
+import { testUsername, testPassword } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
 import {defineMessages} from 'react-intl';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 const messages = defineMessages({
 	fieldEmpty: {

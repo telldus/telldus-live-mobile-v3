@@ -27,7 +27,7 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import i18n from '../App/Translations/common';
 import Text from './Text';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 type Props = {
 	style?: Object | number | Array<any>,

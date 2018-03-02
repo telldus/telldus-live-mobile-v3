@@ -24,18 +24,18 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { FormattedNumber, View } from 'BaseComponents';
+import { FormattedNumber, View } from '../../../../BaseComponents';
 
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 
-import { formatLastUpdated, checkIfLarge } from 'Lib';
+import { formatLastUpdated, checkIfLarge } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
@@ -314,6 +314,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 		}
 
 		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerActive;
+		let background = slideList.length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
 
 		return (
 			<DashboardShadowTile
@@ -346,13 +347,14 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					onPress={this.props.onPress}
 					activeOpacity={1}
 					style={{
-						width: tileWidth - 4,
+						width: tileWidth,
 						height: tileWidth * 0.4,
 						flexDirection: 'row',
 					}}>
 					<View style={[styles.body, {
-						width: tileWidth - 4,
+						width: tileWidth,
 						height: tileWidth * 0.4,
+						backgroundColor: background,
 					}]}>
 						{slides[selectedSlideIndex]}
 					</View>

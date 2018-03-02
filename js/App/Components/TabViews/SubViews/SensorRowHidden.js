@@ -25,12 +25,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 
-import { addToDashboard, removeFromDashboard } from 'Actions';
+import { addToDashboard, removeFromDashboard } from '../../../Actions';
 
-import { View, Icon } from 'BaseComponents';
+import { View, Icon } from '../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 const messages = defineMessages({
 	// iconAddPhraseOne: {

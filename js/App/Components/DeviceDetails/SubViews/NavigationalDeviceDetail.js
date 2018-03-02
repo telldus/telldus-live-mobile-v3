@@ -23,12 +23,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import { StyleSheet, Dimensions } from 'react-native';
 
 const deviceHeight = Dimensions.get('window').height;
 
-import { NavigationalButton } from 'TabViews_SubViews';
+import { NavigationalButton } from '../../TabViews/SubViews';
+import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,
@@ -78,16 +79,8 @@ const styles = StyleSheet.create({
 		height: (deviceHeight * 0.2),
 	},
 	shadow: {
-		borderRadius: 4,
-		backgroundColor: '#fff',
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 1,
-		shadowOpacity: 1.0,
-		elevation: 2,
+		borderRadius: 2,
+		...Theme.Core.shadow,
 	},
 	navigation: {
 		flexDirection: 'row',

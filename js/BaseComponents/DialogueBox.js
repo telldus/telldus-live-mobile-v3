@@ -30,7 +30,7 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import View from './View';
 import Text from './Text';
 import Modal from './Modal';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
 const messages = defineMessages({
@@ -204,7 +204,7 @@ class DialogueBox extends Component<Props, null> {
 		return (
 			<View style={styles.notificationModalFooter}>
 				{this.props.showNegative ?
-					<TouchableOpacity style={styles.notificationModalFooterTextCover}
+					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {marginRight: 10}]}
 						onPress={this.onPressNegative}
 						accessibilityLabel={accessibilityLabelNegative}>
 						<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>

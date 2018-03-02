@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import { configureStore } from '../../Store/ConfigureStore';
 
 import GatewaysTab from '../../Components/TabViews/GatewaysTab';
-import { getGateways } from 'Actions';
+import { getGateways } from '../../Actions';
 
 describe('<GatewaysTab />', () => {
 	let store;

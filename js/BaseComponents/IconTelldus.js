@@ -25,7 +25,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dimensions } from 'react-native';
 import Text from './Text';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -61,7 +61,7 @@ export default class IconTelldus extends Component<Props, null> {
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]}>
+			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]} allowFontScaling={false}>
 				{icon}
 			</Text>
 		);

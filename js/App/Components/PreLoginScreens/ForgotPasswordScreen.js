@@ -26,12 +26,12 @@ import { connect } from 'react-redux';
 import { TouchableOpacity, SafeAreaView } from 'react-native';
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
-import { FormattedMessage, View } from 'BaseComponents';
-import {FormContainerComponent, ForgotPasswordForm} from 'PreLoginScreen_SubViews';
+import { FormattedMessage, View } from '../../../BaseComponents';
+import {FormContainerComponent, ForgotPasswordForm} from './SubViews';
 
 import i18n from './../../Translations/common';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
-import Theme from 'Theme';
+import Theme from './../../Theme';
 
 const ViewX = isIphoneX() ? SafeAreaView : View;
 const messages = defineMessages({

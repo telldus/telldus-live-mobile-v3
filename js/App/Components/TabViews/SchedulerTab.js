@@ -29,14 +29,14 @@ import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 import Platform from 'Platform';
 
-import { List, ListDataSource, Text, View } from 'BaseComponents';
-import { JobRow } from 'TabViews_SubViews';
-import { getJobs } from 'Actions';
-import Theme from 'Theme';
+import { List, ListDataSource, Text, View } from '../../../BaseComponents';
+import { JobRow } from './SubViews';
+import { getJobs } from '../../Actions';
+import Theme from '../../Theme';
 
 import moment from 'moment-timezone';
 
-import { parseJobsForListView } from 'Reducers_Jobs';
+import { parseJobsForListView } from '../../Reducers/Jobs';
 
 const messages = defineMessages({
 	friday: {

@@ -9,7 +9,7 @@ const mockStore = configureStore(middlewares);
 const store = mockStore({});
 
 import SensorsTab from '../../Components/TabViews/SensorsTab';
-import { toggleEditMode } from 'Actions';
+import { toggleEditMode } from '../../Actions';
 
 
 describe('<SensorsTab />', () => {

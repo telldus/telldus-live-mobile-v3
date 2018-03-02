@@ -21,7 +21,7 @@
 
 'use strict';
 
-import type { Action } from 'Actions_Types';
+import type { Action } from '../Actions/Types';
 import { REHYDRATE } from 'redux-persist';
 
 const initialState = {

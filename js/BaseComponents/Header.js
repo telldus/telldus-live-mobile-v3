@@ -27,8 +27,8 @@ import PropTypes from 'prop-types';
 import { Platform, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import { hasStatusBar } from 'Lib';
 import { isIphoneX } from 'react-native-iphone-x-helper';
+import { hasStatusBar } from '../App/Lib';
 
 import Base from './Base';
 import computeProps from './computeProps';

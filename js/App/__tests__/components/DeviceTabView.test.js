@@ -9,7 +9,7 @@ const mockStore = configureStore(middlewares);
 const store = mockStore({});
 
 import DevicesTab from '../../Components/TabViews/DevicesTab';
-import { toggleEditMode } from 'Actions';
+import { toggleEditMode } from '../../Actions';
 
 
 describe('<DevicesTab />', () => {

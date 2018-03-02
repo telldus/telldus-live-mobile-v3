@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 import { shallow } from 'enzyme';
 import { configureStore } from '../../Store/ConfigureStore';
 import SchedulerTab from '../../Components/TabViews/SchedulerTab';
-import { getJobs } from 'Actions';
+import { getJobs } from '../../Actions';
 
 describe('<SchedulerTab />', () => {
 

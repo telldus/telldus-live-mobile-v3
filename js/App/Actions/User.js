@@ -16,18 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_User
  */
 
 'use strict';
 
 import type { ThunkAction } from './types';
 
-import {LiveApi} from 'LiveApi';
-import { publicKey, privateKey, apiServer } from 'Config';
+import {LiveApi} from '../Lib';
+import { publicKey, privateKey, apiServer } from '../../Config';
 
 import { format } from 'url';
-import { reportError } from 'Analytics';
+import { reportError } from '../Lib';
 import { Answers } from 'react-native-fabric';
 
 /*

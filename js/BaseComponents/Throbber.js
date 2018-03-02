@@ -25,7 +25,7 @@ import {Animated, StyleSheet} from 'react-native';
 
 import View from './View';
 import IconTelldus from './IconTelldus';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 const AnimatedIconTelldus = Animated.createAnimatedComponent(IconTelldus);
 
 type Props = {

@@ -16,14 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule LiveApi
  */
 
 // @flow
 
 'use strict';
 
-import { apiServer, publicKey, privateKey } from 'Config';
+import { apiServer, publicKey, privateKey } from '../../Config';
 
 // TODO: fix this pattern, pass store via component tree
 import { getStore } from '../Store/ConfigureStore';

@@ -23,17 +23,17 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import _ from 'lodash';
 import { defineMessages } from 'react-intl';
 
-import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from 'BaseComponents';
-import { DeviceHistoryDetails, HistoryRow } from 'DDSubViews';
-import { getDeviceHistory } from 'Actions_Devices';
-import { hideModal } from 'Actions_Modal';
+import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../BaseComponents';
+import { DeviceHistoryDetails, HistoryRow } from './SubViews';
+import { getDeviceHistory } from '../../Actions/Devices';
+import { getDeviceHistory as getDeviceHistoryFromLocal, storeDeviceHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
+import { hideModal } from '../../Actions/Modal';
 import i18n from '../../Translations/common';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 const messages = defineMessages({
 	historyHeader: {
@@ -77,6 +77,7 @@ class HistoryTab extends View {
 	renderRow: (Object, String) => void;
 	closeHistoryDetailsModal: () => void;
 	_onRefresh: () => void;
+	fetchHistoryData: (Object, number | null) => void;
 
 	static navigationOptions = ({ navigation }) => ({
 		tabBarLabel: ({ tintColor }) => (
@@ -88,7 +89,8 @@ class HistoryTab extends View {
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			let {state} = navigation;
-			state.params.actionOnHistoryTabPress();
+			let onPress = (state.params && state.params.actionOnHistoryTabPress) ? state.params.actionOnHistoryTabPress : () => {};
+			onPress();
 			navigation.navigate('History');
 		},
 	});
@@ -105,6 +107,7 @@ class HistoryTab extends View {
 		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
 
 		this._onRefresh = this._onRefresh.bind(this);
+		this.fetchHistoryData = this.fetchHistoryData.bind(this);
 	}
 
 	componentDidMount() {
@@ -128,12 +131,6 @@ class HistoryTab extends View {
 					hasRefreshed: true,
 				});
 			}
-			if (nextProps.device && nextProps.device.history) {
-				this.setState({
-					rowsAndSections: getRowsAndSections(nextProps.device),
-					refreshing: false,
-				});
-			}
 		} else {
 			this.setState({
 				hasRefreshed: false,
@@ -146,23 +143,64 @@ class HistoryTab extends View {
 		return key;
 	}
 
+	getDataFromLocal(refreshing: boolean = false) {
+		getDeviceHistoryFromLocal(this.props.device.id).then(data => {
+			if (data && data.length !== 0) {
+				let rowsAndSections = parseHistoryForSectionList(data);
+				this.setState({
+					rowsAndSections,
+					refreshing,
+				});
+			} else {
+				this.setState({
+					rowsAndSections: [],
+					refreshing,
+				});
+			}
+		}).catch(() => {
+			this.setState({
+				rowsAndSections: [],
+				refreshing,
+			});
+		});
+	}
+
 	refreshHistoryData() {
+		this.getDataFromLocal(true);
 		let that = this;
+		let { device } = this.props;
 		this.delayRefreshHistoryData = setTimeout(() => {
 			that.setState({
 				refreshing: true,
 			});
-			that.props.dispatch(getDeviceHistory(that.props.device))
-				.then(() => {
-					that.setState({
-						refreshing: false,
-					});
-				}).catch(() => {
-					that.setState({
-						refreshing: false,
-					});
-				});
+			getLatestTimestamp('device', device.id).then(res => {
+				let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
+				that.fetchHistoryData(device, prevTimestamp);
+			}).catch(error => {
+				that.fetchHistoryData(device, null);
+			});
 		}, 2000);
+	}
+
+	fetchHistoryData(device, prevTimestamp) {
+		this.props.dispatch(getDeviceHistory(this.props.device, prevTimestamp))
+			.then((response) => {
+				if (response.history && response.history.length !== 0) {
+					let data = {
+						history: response.history,
+						deviceId: this.props.device.id,
+					};
+					storeDeviceHistory(data).then(() => {
+						this.getDataFromLocal(false);
+					}).catch(() => {
+						this.getDataFromLocal(false);
+					});
+				} else {
+					this.getDataFromLocal(false);
+				}
+			}).catch(() => {
+				this.getDataFromLocal(false);
+			});
 	}
 
 	getIcon(deviceState) {
@@ -182,7 +220,6 @@ class HistoryTab extends View {
 			default:
 				return '';
 		}
-
 	}
 
 	renderRow(item: Object) {
@@ -232,16 +269,13 @@ class HistoryTab extends View {
 		this.setState({
 			refreshing: true,
 		});
-		this.props.dispatch(getDeviceHistory(this.props.device))
-			.then(() => {
-				this.setState({
-					refreshing: false,
-				});
-			}).catch(() => {
-				this.setState({
-					refreshing: false,
-				});
-			});
+		let { device } = this.props;
+		getLatestTimestamp('device', device.id).then(res => {
+			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
+			this.fetchHistoryData(device, prevTimestamp);
+		}).catch(error => {
+			this.fetchHistoryData(device, null);
+		});
 	}
 
 	render() {
@@ -267,6 +301,8 @@ class HistoryTab extends View {
 		return (
 			<View style={styles.container}>
 				<SectionList
+					style={{flex: 1}}
+					contentContainerStyle={{flexGrow: 1}}
 					sections={this.state.rowsAndSections}
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
@@ -310,16 +346,9 @@ class HistoryTab extends View {
 			sectionHeader: {
 				height: isPortrait ? height * 0.04 : width * 0.04,
 				backgroundColor: '#ffffff',
-				shadowColor: '#000000',
-				shadowOffset: {
-					width: 0,
-					height: 2,
-				},
-				shadowRadius: 1,
-				shadowOpacity: 1.0,
-				elevation: 2,
 				justifyContent: 'center',
 				paddingLeft: 5,
+				...Theme.Core.shadow,
 			},
 		};
 	}
@@ -330,7 +359,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingTop: 2,
-		backgroundColor: '#eeeeef',
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		justifyContent: 'flex-start',
@@ -339,7 +367,6 @@ const styles = StyleSheet.create({
 	containerWhenNoData: {
 		flex: 1,
 		paddingTop: 20,
-		backgroundColor: '#eeeeef',
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
@@ -366,16 +393,6 @@ const parseHistoryForSectionList = (data): Array<any> => {
 	}, []);
 	return result;
 };
-
-const getRowsAndSections = createSelector(
-	[
-		({ history }) => history.data,
-	],
-	(history) => {
-		let deviceHistory = parseHistoryForSectionList(history);
-		return deviceHistory;
-	}
-);
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {

@@ -22,24 +22,20 @@
 'use strict';
 
 import React from 'react';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
-import { Dimensions, TouchableWithoutFeedback } from 'react-native';
 
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
-
-import { List, ListDataSource, View, StyleSheet } from 'BaseComponents';
-import DeviceLocationDetail from './../DeviceDetails/SubViews/DeviceLocationDetail';
-import { getGateways } from 'Actions';
+import { View, FloatingButton } from '../../../BaseComponents';
+import { GatewayRow } from './SubViews';
+import { getGateways, addNewGateway } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
 import getTabBarIcon from '../../Lib/getTabBarIcon';
-import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
-import Theme from 'Theme';
+import i18n from '../../Translations/common';
 
 const messages = defineMessages({
 	gateways: {
@@ -52,11 +48,15 @@ const messages = defineMessages({
 type Props = {
 	rows: Array<Object>,
 	dispatch: Function,
+	addNewLocation: () => Promise<any>,
+	screenProps: Object,
 };
 
 type State = {
-	dataSource: Object,
-	settings: false,
+	dataSource: Array<Object>,
+	settings: boolean,
+	isLoading: boolean,
+	isRefreshing: boolean,
 };
 
 type renderRowProps = {
@@ -82,12 +82,17 @@ class GatewaysTab extends View {
 	constructor(props: Props) {
 		super(props);
 
+		let { formatMessage } = props.screenProps.intl;
+
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-			}).cloneWithRows(this.props.rows),
+			dataSource: this.props.rows,
 			settings: false,
+			isLoading: false,
+			isRefreshing: false,
 		};
+
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
@@ -96,78 +101,68 @@ class GatewaysTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
+			dataSource: nextProps.rows,
 		});
-	}
-
-	rowHasChanged(r1, r2) {
-		return r1 !== r2;
 	}
 
 	onRefresh() {
 		this.props.dispatch(getGateways());
 	}
 
-	renderRow({ name, type, online, websocketOnline }) {
-		let locationImageUrl = getLocationImageUrl(type);
-		let locationData = {
-			image: locationImageUrl,
-			H1: name,
-			H2: type,
-		};
+	renderRow(item: Object): Object {
 		return (
-			<View style={styles.rowItemsCover}>
-				<DeviceLocationDetail {...locationData}/>
-			</View>
+			<GatewayRow location={item.item} stackNavigator={this.props.screenProps.stackNavigator}/>
 		);
 	}
 
+	keyExtractor(item: Object) {
+		return item.id;
+	}
+
 	addLocation() {
+		this.setState({
+			isLoading: true,
+		});
+		this.props.addNewLocation()
+			.then(response => {
+				this.props.screenProps.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
+				this.setState({
+					isLoading: false,
+				});
+			}).catch(error => {
+				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
+				this.setState({
+					isLoading: false,
+				});
+				this.props.dispatch({
+					type: 'GLOBAL_ERROR_SHOW',
+					payload: {
+						source: 'Add_Location',
+						customMessage: message,
+					},
+				});
+			});
 	}
 
 	render() {
 		return (
-			<View style={{marginTop: 10}}>
-				<List
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
+			<View style={{flex: 1}}>
+				<FlatList
+					data={this.state.dataSource}
+					renderItem={this.renderRow}
 					onRefresh={this.onRefresh}
+					refreshing={this.state.isRefreshing}
+					style={{paddingTop: 10}}
+					keyExtractor={this.keyExtractor}
 				/>
-				<TouchableWithoutFeedback onPress={this.addLocation}>
-					<View style={[styles.addButtonCover, styles.shadow]} />
-				</TouchableWithoutFeedback>
+				<FloatingButton
+					onPress={this.addLocation}
+					imageSource={this.state.isLoading ? false : require('../TabViews/img/iconPlus.png')}
+					showThrobber={this.state.isLoading}/>
 			</View>
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-	rowItemsCover: {
-		flex: 1,
-		flexDirection: 'column',
-		alignItems: 'center',
-		marginBottom: 5,
-	},
-	addButtonCover: {
-		position: 'absolute',
-		backgroundColor: Theme.Core.brandSecondary,
-		height: 60,
-		width: 60,
-		borderRadius: 60,
-		top: deviceHeight * 0.6,
-		left: deviceWidth * 0.78,
-	},
-	shadow: {
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 60,
-		shadowOpacity: 1.0,
-		elevation: 15,
-	},
-});
 
 const getRows = createSelector(
 	[
@@ -182,4 +177,13 @@ function mapStateToProps(state, props) {
 	};
 }
 
-module.exports = connect(mapStateToProps)(GatewaysTab);
+function mapDispatchToProps(dispatch) {
+	return {
+		addNewLocation: () => {
+			return dispatch(addNewGateway());
+		},
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(GatewaysTab);

@@ -30,12 +30,12 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_history from '../../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_history);
 
-import { FormattedMessage, Text, View, ListRow } from 'BaseComponents';
-import { getDeviceStateMethod } from 'Lib';
+import { FormattedMessage, Text, View, ListRow } from '../../../../BaseComponents';
+import { getDeviceStateMethod } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import {
 	toSliderValue,
-} from 'Lib';
+} from '../../../Lib';
 
 type Props = {
 	item: Object,
@@ -285,7 +285,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 				borderBottomLeftRadius: 3,
 			},
 			roundIconStyle: {
-				fontSize: width * 0.067777777,
+				fontSize: Math.floor(width * 0.066777777),
 				color: '#d32f2f',
 			},
 			rowContainerStyle: {

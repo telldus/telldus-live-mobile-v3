@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { View } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 
 type Props = {
