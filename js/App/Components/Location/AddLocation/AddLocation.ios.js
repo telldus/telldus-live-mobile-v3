@@ -23,7 +23,6 @@
 'use strict';
 
 import React from 'react';
-import { Platform } from 'react-native';
 import { StackNavigator, SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
