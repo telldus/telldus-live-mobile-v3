@@ -64,6 +64,7 @@ class LabelBox extends View {
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 				...Theme.Core.shadow,
+				borderRadius: 2,
 			},
 			label: {
 				color: '#e26901',
