@@ -85,7 +85,9 @@ export default class Clients extends View {
 
 		return (
 			<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} accessible={true} accessibilityLabel={accessibilityLabel}>
-				<Image source={require('../../../TabViews/img/right-arrow-key.png')} style={styles.arrow}/>
+				<View style={styles.arrow}>
+					<Image source={require('../../../TabViews/img/right-arrow-key.png')} style={{tintColor: '#A59F9A90'}}/>
+				</View>
 				<DeviceLocationDetail {...locationData} accessible={false} style={styles.locationDetails}/>
 			</View>
 		);
@@ -104,7 +106,6 @@ export default class Clients extends View {
 				left: width * 0.845,
 				elevation: 3,
 				zIndex: 1,
-				tintColor: '#A59F9A90',
 			},
 			locationDetails: {
 				marginVertical: 10,
