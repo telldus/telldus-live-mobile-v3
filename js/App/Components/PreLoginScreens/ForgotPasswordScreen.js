@@ -82,7 +82,7 @@ class ForgotPasswordScreen extends View {
 		let styles = this.getStyles(appLayout);
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
 				<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)} formContainerStyle={styles.formContainer}>
 					<ForgotPasswordForm appLayout={appLayout}/>
 					<View style={{ height: 10 }}/>

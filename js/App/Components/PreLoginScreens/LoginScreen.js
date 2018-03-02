@@ -150,7 +150,7 @@ class LoginScreen extends View {
 			headerText, notificationHeader, positiveText,
 			onPressPositive, onPressNegative, showPositive, showNegative} = this.getRelativeData();
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
 				<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
 					{this.props.accessToken && !this.props.isTokenValid ?
 						<SessionLocked onPressLogout={this.state.onPressLogout} dialogueOpen={this.props.showModal}/>
