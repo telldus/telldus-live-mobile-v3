@@ -171,14 +171,16 @@ class TabsView extends View {
 		};
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
-				<Header rightButton={rightButton}/>
-				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
-				{
-					this.state.settings ? (
-						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
-					) : null
-				}
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+					<Header rightButton={rightButton}/>
+					<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
+					{
+						this.state.settings ? (
+							<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
+						) : null
+					}
+				</View>
 			</ViewX>
 		);
 	}

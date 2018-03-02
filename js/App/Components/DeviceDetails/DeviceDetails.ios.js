@@ -154,28 +154,30 @@ class DeviceDetails extends View {
 		} = this.getStyles(appLayout);
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
-				<NavigationHeader navigation={stackNavigator}/>
-				<Poster>
-					<View style={posterCover}>
-						{(!this.isTablet) && (!isPortrait) &&
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+					<NavigationHeader navigation={stackNavigator}/>
+					<Poster>
+						<View style={posterCover}>
+							{(!this.isTablet) && (!isPortrait) &&
 							<TouchableOpacity
 								style={styles.backButtonLand}
 								onPress={this.goBack}
 								accessibilityLabel={this.labelLeftIcon}>
 								<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff"/>
 							</TouchableOpacity>
-						}
-						<View style={iconBackground}>
-							<CustomIcon name="icon_device_alt" size={deviceIcon.size} color={'#F06F0C'} />
+							}
+							<View style={iconBackground}>
+								<CustomIcon name="icon_device_alt" size={deviceIcon.size} color={'#F06F0C'} />
+							</View>
+							<Text style={textDeviceName}>
+								{this.props.device.name}
+							</Text>
 						</View>
-						<Text style={textDeviceName}>
-							{this.props.device.name}
-						</Text>
+					</Poster>
+					<View style={{flex: 1}}>
+						<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 					</View>
-				</Poster>
-				<View style={{flex: 1}}>
-					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
 			</ViewX>
 		);

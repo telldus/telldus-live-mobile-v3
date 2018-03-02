@@ -159,11 +159,13 @@ class AddLocationNavigator extends View {
 		};
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
-				{this.props.navigation.state.params.renderRootHeader &&
-				<NavigationHeader navigation={navigation} />
-				}
-				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+					{this.props.navigation.state.params.renderRootHeader &&
+					<NavigationHeader navigation={navigation} />
+					}
+					<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+				</View>
 			</ViewX>
 		);
 	}
