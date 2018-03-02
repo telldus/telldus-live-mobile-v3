@@ -90,7 +90,7 @@ const StackNavigatorConfig = {
 		let renderStackHeader = state.routeName !== 'LocationDetected';
 		if (renderStackHeader) {
 			return {
-				header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation} showLeftIcon={state.routeName !== 'Success'}/>,
+				header: <NavigationHeader navigation={navigation} showLeftIcon={state.routeName !== 'Success'}/>,
 			};
 		}
 		return {
