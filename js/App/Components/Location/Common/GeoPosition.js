@@ -303,7 +303,6 @@ class GeoPosition extends View {
 			  buttonStyle: {
 				  right: deviceWidth * 0.053333333,
 				  elevation: 10,
-				  shadowOpacity: 0.99,
 			  },
 		};
 	}
