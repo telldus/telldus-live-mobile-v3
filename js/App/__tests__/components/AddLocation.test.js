@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-import AddLocationContainer from '../../Components/AddLocation/AddLocationContainer';
+import AddLocationContainer from '../../Components/Location/AddLocation/AddLocationContainer';
 import * as modalActions from '../../Actions/Modal';
 
 describe('<AddLocationContainer />', () => {
