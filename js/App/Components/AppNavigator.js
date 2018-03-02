@@ -93,7 +93,7 @@ const RouteConfigs = {
 			let renderRootHeader = state.params && state.params.renderRootHeader;
 			if (renderRootHeader) {
 				return {
-					header: <NavigationHeader navigation={navigation}/>,
+					header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
 				};
 			}
 			return {
