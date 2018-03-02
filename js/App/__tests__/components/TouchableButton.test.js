@@ -22,7 +22,7 @@ describe('<TouchableButton />', () => {
 
 	it('should shallow BackgroundImage', () => {
 		expect(wrapper.find(TouchableButton).length).toBe(1);
-		expect( wrapper.props().children.type.displayName).toEqual('InjectIntl(TouchableButton)');
+		expect( wrapper.props().children.type.displayName).toEqual('Connect(InjectIntl(TouchableButton))');
 	});
 
 });

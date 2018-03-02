@@ -2,16 +2,28 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { shallow } from 'enzyme';
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-const middlewares = [thunk];
-const mockStore = configureStore(middlewares);
-const store = mockStore({});
+import { configureStore } from '../../Store/ConfigureStore';
 
 import GatewaysTab from '../../Components/TabViews/GatewaysTab';
 import { getGateways } from '../../Actions';
 
 describe('<GatewaysTab />', () => {
+	let store;
+	let accessToken = {access_token: 'bajs', refresh_token: 'bajs'};
+
+	beforeEach(() => {
+		store = configureStore();
+		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
+		store.dispatch({type: 'RECEIVED_DEVICES', payload: {
+			device: [{
+				id: '1',
+				methods: 3,
+				state: 2,
+			}],
+		}});
+	});
+
+
 	let wrapper;
 	beforeEach(()=>{
 		wrapper = shallow(
@@ -31,10 +43,8 @@ describe('<GatewaysTab />', () => {
 
 	it(' check toggleEditMode action on dispatching ', () => {
 		store.dispatch(getGateways('tellduslive'));
-		let action = store.getActions();
 		let state = store.getState();
-		expect(action).toEqual([]);
-		expect(state).toEqual({});
+		expect(state.gateways.toActivate.checkIfGatewaysEmpty).toEqual(false);
 	});
 
 });

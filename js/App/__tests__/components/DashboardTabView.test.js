@@ -9,7 +9,6 @@ const mockStore = configureStore(middlewares);
 const store = mockStore({});
 
 import DashboardTab from '../../Components/TabViews/DashboardTab';
-import { getDevices } from '../../Actions/Devices';
 
 
 describe('<DashboardTab />', () => {
@@ -29,11 +28,4 @@ describe('<DashboardTab />', () => {
 		const Tab = wrapper.props().children.type.displayName;
 		expect(Tab).toEqual('Connect(DashboardTab)');
 	});
-
-	it(' check changeSensorDisplayType action on dispatching ', () => {
-		store.dispatch(getDevices());
-		let action = store.getActions();
-		expect(action).toEqual([]);
-	});
-
 });
