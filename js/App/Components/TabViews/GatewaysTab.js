@@ -116,7 +116,7 @@ class GatewaysTab extends View {
 	}
 
 	keyExtractor(item: Object) {
-		return item.index;
+		return item.id;
 	}
 
 	addLocation() {
