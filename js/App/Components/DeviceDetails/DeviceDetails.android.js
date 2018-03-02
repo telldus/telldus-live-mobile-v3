@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -42,6 +42,7 @@ import { getWindowDimensions } from '../../Lib';
 import { closeDatabase } from '../../Actions/LocalStorage';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
+import { hideModal } from '../../Actions';
 
 type Props = {
 	dispatch: Function,
@@ -50,6 +51,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	screenProps: Object,
+	isModalOpen: boolean,
 };
 
 type State = {
@@ -63,6 +65,7 @@ class DeviceDetails extends View {
 	goBack: () => void;
 	onNavigationStateChange: (Object, Object) => void;
 	getRouteName: (Object) => void;
+	handleBackPress: () => boolean;
 
 	constructor(props: Props) {
 		super(props);
@@ -71,6 +74,7 @@ class DeviceDetails extends View {
 		};
 		this.goBack = this.goBack.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+		this.handleBackPress = this.handleBackPress.bind(this);
 
 		this.isTablet = DeviceInfo.isTablet();
 
@@ -82,6 +86,27 @@ class DeviceDetails extends View {
 
 	goBack() {
 		this.props.stackNavigator.goBack();
+	}
+
+	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+	}
+
+	componentWillUnmount() {
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+	}
+
+	handleBackPress(): boolean {
+		let { isModalOpen, dispatch } = this.props;
+		if (isModalOpen) {
+			dispatch(hideModal());
+			return true;
+		}
+		if (this.state.currentTab === 'Overview') {
+			this.goBack();
+			return true;
+		}
+		return false;
 	}
 
 	getRouteName(navigationState) {
@@ -249,6 +274,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		stackNavigator: ownProps.navigation,
 		device: store.devices.byId[ownProps.navigation.state.params.id],
 		appLayout: store.App.layout,
+		isModalOpen: store.modal.openModal,
 	};
 }
 function mapDispatchToProps(dispatch: Function): Object {
