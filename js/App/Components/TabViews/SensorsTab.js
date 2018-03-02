@@ -51,7 +51,6 @@ type State = {
 	hiddenList: Array<Object>,
 	makeRowAccessible: 0 | 1,
 	isRefreshing: boolean,
-	listEnd: boolean,
 	showHiddenList: boolean,
 };
 
@@ -65,7 +64,6 @@ class SensorsTab extends View {
 	renderHiddenRow: (Object) => Object;
 	onRefresh: (Object) => void;
 	keyExtractor: (Object) => number;
-	onEndReachedVisibleList: () => void;
 	toggleHiddenList: () => void;
 	setIgnoreSensor: (Object) => void;
 
@@ -84,7 +82,6 @@ class SensorsTab extends View {
 			hiddenList,
 			makeRowAccessible: 0,
 			isRefreshing: false,
-			listEnd: visibleList.length === 0 ? true : false,
 			showHiddenList: false,
 		};
 
@@ -94,7 +91,6 @@ class SensorsTab extends View {
 		this.onRefresh = this.onRefresh.bind(this);
 		this.keyExtractor = this.keyExtractor.bind(this);
 
-		this.onEndReachedVisibleList = this.onEndReachedVisibleList.bind(this);
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
 		this.setIgnoreSensor = this.setIgnoreSensor.bind(this);
 
@@ -110,7 +106,7 @@ class SensorsTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 
-		let { makeRowAccessible, listEnd } = this.state;
+		let { makeRowAccessible } = this.state;
 		let { screenReaderEnabled, rowsAndSections } = nextProps;
 		let { currentScreen, currentTab } = nextProps.screenProps;
 		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
@@ -125,7 +121,6 @@ class SensorsTab extends View {
 			visibleList,
 			hiddenList,
 			makeRowAccessible,
-			listEnd: visibleList.length === 0 ? true : listEnd,
 		});
 	}
 
@@ -151,12 +146,6 @@ class SensorsTab extends View {
 
 	keyExtractor(item) {
 		return item.id;
-	}
-
-	onEndReachedVisibleList() {
-		this.setState({
-			listEnd: true,
-		});
 	}
 
 	toggleHiddenList() {
@@ -201,7 +190,7 @@ class SensorsTab extends View {
 	render() {
 
 		let { appLayout } = this.props;
-		let { listEnd, showHiddenList, hiddenList, visibleList, isRefreshing } = this.state;
+		let { showHiddenList, hiddenList, visibleList, isRefreshing } = this.state;
 
 		let style = this.getStyles(appLayout);
 		let extraData = {
@@ -223,25 +212,21 @@ class SensorsTab extends View {
 					initialNumToRender={15}
 					keyExtractor={this.keyExtractor}
 					extraData={extraData}
-					onEndReached={this.onEndReachedVisibleList}
 				/>
-				{listEnd && (
-					<View>
-						{this.toggleHiddenListButton(style)}
-						{showHiddenList ?
-							<SectionList
-								sections={hiddenList}
-								renderItem={this.renderRow}
-								renderSectionHeader={this.renderSectionHeader}
-								keyExtractor={this.keyExtractor}
-								extraData={extraData}
-							/>
-							:
-							<View style={{height: 80}}/>
-						}
-					</View>
-				)
-				}
+				<View>
+					{this.toggleHiddenListButton(style)}
+					{showHiddenList ?
+						<SectionList
+							sections={hiddenList}
+							renderItem={this.renderRow}
+							renderSectionHeader={this.renderSectionHeader}
+							keyExtractor={this.keyExtractor}
+							extraData={extraData}
+						/>
+						:
+						<View style={{height: 80}}/>
+					}
+				</View>
 			</ScrollView>
 		);
 	}

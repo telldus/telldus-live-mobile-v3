@@ -87,7 +87,6 @@ type State = {
 	addGateway: boolean,
 	makeRowAccessible: 0 | 1,
 	isRefreshing: boolean,
-	listEnd: boolean,
 	showHiddenList: boolean,
 };
 
@@ -104,7 +103,6 @@ class DevicesTab extends View {
 	onRefresh: () => void;
 	onPressAddLocation: () => void;
 	onPressAddDevice: () => void;
-	onEndReachedVisibleList: () => void;
 	toggleHiddenList: () => void;
 	setIgnoreDevice: (Object) => void;
 
@@ -126,7 +124,6 @@ class DevicesTab extends View {
 			addGateway: false,
 			makeRowAccessible: 0,
 			isRefreshing: false,
-			listEnd: visibleList.length === 0 ? true : false,
 			showHiddenList: false,
 		};
 		this.onCloseSelected = this.onCloseSelected.bind(this);
@@ -139,7 +136,6 @@ class DevicesTab extends View {
 		this.onPressAddDevice = this.onPressAddDevice.bind(this);
 		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
 
-		this.onEndReachedVisibleList = this.onEndReachedVisibleList.bind(this);
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
@@ -160,7 +156,7 @@ class DevicesTab extends View {
 
 	componentWillReceiveProps(nextProps) {
 
-		let { makeRowAccessible, listEnd } = this.state;
+		let { makeRowAccessible } = this.state;
 		let { screenReaderEnabled, rowsAndSections } = nextProps;
 		let { currentScreen, currentTab } = nextProps.screenProps;
 		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Devices') {
@@ -175,7 +171,6 @@ class DevicesTab extends View {
 			visibleList,
 			hiddenList,
 			makeRowAccessible,
-			listEnd: visibleList.length === 0 ? true : listEnd,
 		});
 	}
 
@@ -322,12 +317,6 @@ class DevicesTab extends View {
 		}
 	}
 
-	onEndReachedVisibleList() {
-		this.setState({
-			listEnd: true,
-		});
-	}
-
 	toggleHiddenList() {
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
@@ -392,7 +381,7 @@ class DevicesTab extends View {
 	render() {
 
 		let { appLayout, devices } = this.props;
-		let { listEnd, showHiddenList, hiddenList, visibleList,
+		let { showHiddenList, hiddenList, visibleList,
 			isRefreshing, makeRowAccessible, addGateway } = this.state;
 		let style = this.getStyles(appLayout);
 
@@ -423,25 +412,21 @@ class DevicesTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					keyExtractor={this.keyExtractor}
 					extraData={extraData}
-					onEndReached={this.onEndReachedVisibleList}
 				/>
-				{listEnd && (
-					<View>
-						{this.toggleHiddenListButton(style)}
-						{showHiddenList ?
-							<SectionList
-								sections={hiddenList}
-								renderItem={this.renderRow}
-								renderSectionHeader={this.renderSectionHeader}
-								keyExtractor={this.keyExtractor}
-								extraData={extraData}
-							/>
-							:
-							<View style={{height: 80}}/>
-						}
-					</View>
-				)
-				}
+				<View>
+					{this.toggleHiddenListButton(style)}
+					{showHiddenList ?
+						<SectionList
+							sections={hiddenList}
+							renderItem={this.renderRow}
+							renderSectionHeader={this.renderSectionHeader}
+							keyExtractor={this.keyExtractor}
+							extraData={extraData}
+						/>
+						:
+						<View style={{height: 80}}/>
+					}
+				</View>
 			</ScrollView>
 		);
 	}
