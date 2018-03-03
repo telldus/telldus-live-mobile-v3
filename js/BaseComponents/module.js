@@ -71,6 +71,7 @@ import HeaderTitle from './HeaderTitle';
 import ListRow from './ListRow';
 import RowWithTriangle from './RowWithTriangle';
 import TabBar from './TabBar';
+import SafeAreaViewComponent from './SafeAreaView';
 
 import {
 	AppState,
@@ -130,6 +131,7 @@ module.exports = {
 	RoundedInfoButton: RoundedInfoButton,
 	DialogueBox: DialogueBox,
 	HeaderTitle: HeaderTitle,
+	SafeAreaView: SafeAreaViewComponent,
 	ListRow,
 	RowWithTriangle,
 	TabBar,
