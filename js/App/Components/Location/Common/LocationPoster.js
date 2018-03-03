@@ -171,6 +171,7 @@ class LocationDetailsPoster extends View {
 				backgroundColor: 'transparent',
 				left: 10,
 				top: 10,
+				zIndex: 1,
 			},
 			iconLeft: {
 				paddingVertical: 10,
