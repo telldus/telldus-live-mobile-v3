@@ -208,12 +208,13 @@ class DeviceRow extends PureComponent<Props, State> {
 
 		return (
 			<SwipeRow
+				ref="SwipeRow"
 				rightOpenValue={-Theme.Core.buttonWidth * 3}
 				disableLeftSwipe={this.state.disableSwipe}
 				disableRightSwipe={true}
-				ref="SwipeRow"
 				onRowOpen={this.onRowOpen}
-				onRowClose={this.onRowClose}>
+				onRowClose={this.onRowClose}
+				recalculateHiddenLayout={true}>
 				<HiddenRow device={device} intl={intl} onPressSettings={this.onSettingsSelected}
 					onSetIgnoreDevice={this.onSetIgnoreDevice}/>
 				<ListItem

@@ -304,11 +304,12 @@ class SensorRow extends PureComponent<Props, State> {
 
 		return (
 			<SwipeRow
+				ref="SwipeRow"
 				rightOpenValue={-Theme.Core.buttonWidth * 2}
 				disableRightSwipe={true}
-				ref="SwipeRow"
 				onRowOpen={this.onRowOpen}
-				onRowClose={this.onRowClose}>
+				onRowClose={this.onRowClose}
+				recalculateHiddenLayout={true}>
 				<HiddenRow sensor={sensor} intl={intl} onSetIgnoreSensor={this.onSetIgnoreSensor}/>
 				<ListItem
 					style={styles.row}
