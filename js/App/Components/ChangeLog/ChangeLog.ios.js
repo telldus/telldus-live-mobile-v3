@@ -23,19 +23,18 @@
 'use strict';
 
 import React from 'react';
-import { Animated, LayoutAnimation, ScrollView, SafeAreaView } from 'react-native';
+import { Animated, LayoutAnimation, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import { View, FloatingButton, Text, StyleSheet } from '../../../BaseComponents';
+import { View, FloatingButton, Text, StyleSheet, SafeAreaView } from '../../../BaseComponents';
 
 import { NavigationHeader } from '../DeviceDetails/SubViews';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
 
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
-const ViewX = isIphoneX() ? SafeAreaView : View;
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
 
 import { getRouteName } from '../../Lib';
@@ -251,38 +250,36 @@ class ChangeLogNavigator extends View {
 		});
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor: '#EFEFF4' }) }}>
-				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1, backgroundColor: '#EFEFF4' }) }}>
-					<NavigationHeader showLeftIcon={false}/>
-					<ChangeLogPoster h1={h1} h2={h2}/>
-					<ScrollView>
-						<AnimatedWizard intl={intl} currentScreen={currentScreen} styles={styles} animatedX={animatedX} animatedOpacity={animatedOpacity}/>
-						<View style={styles.buttonCover}>
-							<Text style={styles.textSkip} onPress={this.onPressSkip}>
-								{this.skipButton}
-							</Text>
-						</View>
-						<View style={stepIndicatorCover}>
-							{!isFirstScreen && (<FloatingButton
-								imageSource={require('../TabViews/img/right-arrow-key.png')}
-								onPress={this.onPressPrev}
-								buttonStyle={floatingButtonLeft}
-								iconStyle={styles.buttonIconStyle}/>
-							)}
-							{Screens.map((screen, index) => {
-								let backgroundColor = Screens[index] === currentScreen ?
-									Theme.Core.brandSecondary : '#00000080';
-								return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
-							})
-							}
-							<FloatingButton
-								imageSource={require('../TabViews/img/right-arrow-key.png')}
-								onPress={this.onPressNext}
-								buttonStyle={{bottom: 0}}/>
-						</View>
-					</ScrollView>
-				</View>
-			</ViewX>
+			<SafeAreaView>
+				<NavigationHeader showLeftIcon={false}/>
+				<ChangeLogPoster h1={h1} h2={h2}/>
+				<ScrollView>
+					<AnimatedWizard intl={intl} currentScreen={currentScreen} styles={styles} animatedX={animatedX} animatedOpacity={animatedOpacity}/>
+					<View style={styles.buttonCover}>
+						<Text style={styles.textSkip} onPress={this.onPressSkip}>
+							{this.skipButton}
+						</Text>
+					</View>
+					<View style={stepIndicatorCover}>
+						{!isFirstScreen && (<FloatingButton
+							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							onPress={this.onPressPrev}
+							buttonStyle={floatingButtonLeft}
+							iconStyle={styles.buttonIconStyle}/>
+						)}
+						{Screens.map((screen, index) => {
+							let backgroundColor = Screens[index] === currentScreen ?
+								Theme.Core.brandSecondary : '#00000080';
+							return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
+						})
+						}
+						<FloatingButton
+							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							onPress={this.onPressNext}
+							buttonStyle={{bottom: 0}}/>
+					</View>
+				</ScrollView>
+			</SafeAreaView>
 		);
 	}
 
@@ -299,7 +296,7 @@ class ChangeLogNavigator extends View {
 				justifyContent: 'center',
 				marginBottom: 10,
 				height: buttonSize,
-				...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1, backgroundColor: '#EFEFF4' }),
+				...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
 			},
 			floatingButtonLeft: {
 				left: deviceWidth * 0.034666667,
@@ -313,7 +310,7 @@ const styles = StyleSheet.create({
 	buttonCover: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1, backgroundColor: '#EFEFF4' }),
+		...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
 	},
 	textSkip: {
 		paddingVertical: 10,

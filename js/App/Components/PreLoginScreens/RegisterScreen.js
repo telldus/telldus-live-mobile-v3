@@ -22,18 +22,14 @@
 'use strict';
 
 import React from 'react';
-import {TouchableOpacity, SafeAreaView} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
-import { FormattedMessage, View, DialogueBox } from '../../../BaseComponents';
+import { FormattedMessage, View, DialogueBox, SafeAreaView } from '../../../BaseComponents';
 import {FormContainerComponent, RegisterForm} from './SubViews';
 
 import i18n from './../../Translations/common';
-import Theme from './../../Theme';
-
-const ViewX = isIphoneX() ? SafeAreaView : View;
 const messages = defineMessages({
 	createAccount: {
 		id: 'user.createAccount',
@@ -110,7 +106,7 @@ class RegisterScreen extends View {
 		let styles = this.getStyles(appLayout);
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+			<SafeAreaView>
 				<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)} formContainerStyle={styles.formContainer}>
 					<RegisterForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
 					<TouchableOpacity style={{height: 25}}
@@ -126,7 +122,7 @@ class RegisterScreen extends View {
 						showNegative={false}
 						onPressPositive={this.closeModal}/>
 				</FormContainerComponent>
-			</ViewX>
+			</SafeAreaView>
 		);
 	}
 

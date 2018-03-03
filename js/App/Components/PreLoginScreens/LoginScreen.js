@@ -22,19 +22,15 @@
 'use strict';
 
 import React from 'react';
-import {TouchableOpacity, SafeAreaView} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
-import { FormattedMessage, View, DialogueBox } from '../../../BaseComponents';
+import { FormattedMessage, View, DialogueBox, SafeAreaView } from '../../../BaseComponents';
 import { FormContainerComponent, LoginForm, SessionLocked } from './SubViews';
 
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
-import Theme from './../../Theme';
-
-const ViewX = isIphoneX() ? SafeAreaView : View;
 
 const messages = defineMessages({
 	needAccount: {
@@ -150,7 +146,7 @@ class LoginScreen extends View {
 			headerText, notificationHeader, positiveText,
 			onPressPositive, onPressNegative, showPositive, showNegative} = this.getRelativeData();
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+			<SafeAreaView>
 				<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
 					{this.props.accessToken && !this.props.isTokenValid ?
 						<SessionLocked onPressLogout={this.state.onPressLogout} dialogueOpen={this.props.showModal}/>
@@ -185,7 +181,7 @@ class LoginScreen extends View {
 						onPressNegative={onPressNegative}/>
 
 				</FormContainerComponent>
-			</ViewX>
+			</SafeAreaView>
 		);
 	}
 

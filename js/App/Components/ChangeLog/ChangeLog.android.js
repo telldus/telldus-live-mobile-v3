@@ -250,7 +250,7 @@ class ChangeLogNavigator extends View {
 		});
 
 		return (
-			<View style={{flex: 1, backgroundColor: '#EFEFF4'}}>
+			<View style={{flex: 1}}>
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
 				<ScrollView>
@@ -296,7 +296,6 @@ class ChangeLogNavigator extends View {
 				justifyContent: 'center',
 				marginBottom: 10,
 				height: buttonSize,
-				backgroundColor: '#EFEFF4',
 			},
 			floatingButtonLeft: {
 				left: deviceWidth * 0.034666667,
@@ -310,7 +309,6 @@ const styles = StyleSheet.create({
 	buttonCover: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: '#EFEFF4',
 	},
 	textSkip: {
 		paddingVertical: 10,

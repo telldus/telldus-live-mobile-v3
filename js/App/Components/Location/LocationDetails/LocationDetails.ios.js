@@ -23,12 +23,10 @@
 'use strict';
 
 import React from 'react';
-import { SafeAreaView } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
-import { View } from '../../../../BaseComponents';
+import { View, SafeAreaView } from '../../../../BaseComponents';
 import { NavigationHeader } from '../../DeviceDetails/SubViews';
 import LocationDetailsContainer from './LocationDetailsContainer';
 
@@ -39,9 +37,6 @@ import EditTimeZoneCity from './EditTimeZoneCity';
 import EditGeoPosition from './EditGeoPosition';
 
 import { getRouteName } from '../../../Lib';
-import Theme from '../../../Theme';
-
-const ViewX = isIphoneX() ? SafeAreaView : View;
 const initialRouteName = 'Details';
 
 const renderLocationDetailsContainer = (navigation, screenProps) => Component => (
@@ -147,14 +142,12 @@ class LocationDetailsNavigator extends View {
 		};
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
-				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
-					{this.props.navigation.state.params.renderRootHeader &&
+			<SafeAreaView>
+				{this.props.navigation.state.params.renderRootHeader &&
 						<NavigationHeader navigation={navigation} />
-					}
-					<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
-				</View>
-			</ViewX>
+				}
+				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			</SafeAreaView>
 		);
 	}
 }

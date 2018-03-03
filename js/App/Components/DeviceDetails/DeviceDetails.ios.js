@@ -23,24 +23,23 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 import { TabNavigator } from 'react-navigation';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_settings);
-const ViewX = isIphoneX() ? SafeAreaView : View;
 
 import { NavigationHeader } from './SubViews';
 import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
-import { Text, View, Poster } from '../../../BaseComponents';
+import { Text, View, Poster, SafeAreaView } from '../../../BaseComponents';
 import { getWindowDimensions } from '../../Lib';
 import { closeDatabase } from '../../Actions/LocalStorage';
 import i18n from '../../Translations/common';
@@ -129,32 +128,30 @@ class DeviceDetails extends View {
 		} = this.getStyles(appLayout);
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
-				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
-					<NavigationHeader navigation={stackNavigator}/>
-					<Poster>
-						<View style={posterCover}>
-							{(!this.isTablet) && (!isPortrait) &&
+			<SafeAreaView>
+				<NavigationHeader navigation={stackNavigator}/>
+				<Poster>
+					<View style={posterCover}>
+						{(!this.isTablet) && (!isPortrait) &&
 							<TouchableOpacity
 								style={styles.backButtonLand}
 								onPress={this.goBack}
 								accessibilityLabel={this.labelLeftIcon}>
 								<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff"/>
 							</TouchableOpacity>
-							}
-							<View style={iconBackground}>
-								<CustomIcon name="icon_device_alt" size={deviceIcon.size} color={'#F06F0C'} />
-							</View>
-							<Text style={textDeviceName}>
-								{this.props.device.name}
-							</Text>
+						}
+						<View style={iconBackground}>
+							<CustomIcon name="icon_device_alt" size={deviceIcon.size} color={'#F06F0C'} />
 						</View>
-					</Poster>
-					<View style={{flex: 1}}>
-						<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
+						<Text style={textDeviceName}>
+							{this.props.device.name}
+						</Text>
 					</View>
+				</Poster>
+				<View style={{flex: 1}}>
+					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
-			</ViewX>
+			</SafeAreaView>
 		);
 	}
 

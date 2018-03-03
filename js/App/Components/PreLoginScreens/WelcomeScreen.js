@@ -23,15 +23,11 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { SafeAreaView } from 'react-native';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
-import Theme from '../../Theme';
 
-import { FormattedMessage, View, Text, TouchableButton } from '../../../BaseComponents';
+import { FormattedMessage, View, Text, TouchableButton, SafeAreaView } from '../../../BaseComponents';
 import { FormContainerComponent } from './SubViews';
 
-const ViewX = isIphoneX() ? SafeAreaView : View;
 const messages = defineMessages({
 	welcomeHeader: {
 		id: 'user.welcome',
@@ -79,7 +75,7 @@ class WelcomeScreen extends View {
 		let styles = this.getStyles(appLayout);
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+			<SafeAreaView>
 				<FormContainerComponent headerText={this.props.intl.formatMessage(messages.welcomeHeader)} formContainerStyle={styles.formContainer}>
 					<Text style={styles.textBody}><FormattedMessage {...messages.accountCreated} style={styles.textBody}/></Text>
 					<Text style={styles.textBody}><FormattedMessage {...messages.confirmMessage} style={styles.textBody}/></Text>
@@ -89,7 +85,7 @@ class WelcomeScreen extends View {
 						text={messages.welcomeButton}
 					/>
 				</FormContainerComponent>
-			</ViewX>
+			</SafeAreaView>
 		);
 	}
 

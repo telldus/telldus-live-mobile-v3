@@ -23,12 +23,11 @@
 'use strict';
 
 import React from 'react';
-import { SafeAreaView } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, Header } from '../../../BaseComponents';
+import { View, Header, SafeAreaView } from '../../../BaseComponents';
 
 import { toggleEditMode, syncWithServer, switchTab } from '../../Actions';
 import TabViews from './index';
@@ -36,10 +35,6 @@ import TabViews from './index';
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
 import { SettingsDetailModal } from '../DetailViews';
-
-import Theme from '../../Theme';
-
-const ViewX = isIphoneX() ? SafeAreaView : View;
 
 const RouteConfigs = {
 	Dashboard: {
@@ -171,17 +166,15 @@ class TabsView extends View {
 		};
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
-				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
-					<Header rightButton={rightButton}/>
-					<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
-					{
-						this.state.settings ? (
-							<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
-						) : null
-					}
-				</View>
-			</ViewX>
+			<SafeAreaView>
+				<Header rightButton={rightButton}/>
+				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
+				{
+					this.state.settings ? (
+						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
+					) : null
+				}
+			</SafeAreaView>
 		);
 	}
 }
