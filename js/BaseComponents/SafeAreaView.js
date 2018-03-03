@@ -29,16 +29,23 @@ import View from './View';
 
 const ViewX = isIphoneX() ? SafeAreaView : View;
 
-export default class SafeAreaViewComponent extends View {
-	render() {
-		let { children, ...properties } = this.props;
+type Props = {
+	children: Object | Array<Object>,
+};
+
+export default class SafeAreaViewComponent extends React.Component<Props, null> {
+	props: Props;
+
+	render(): Object {
+		let { children, ...otherProperties } = this.props;
+
 		return (
 			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
 				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
 					{
 						React.Children.map(children, (child) => {
 							if (React.isValidElement(child)) {
-								return React.cloneElement(child, properties);
+								return React.cloneElement(child, otherProperties);
 							}
 							return null;
 						})
