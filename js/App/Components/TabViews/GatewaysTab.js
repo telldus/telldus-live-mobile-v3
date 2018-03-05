@@ -163,8 +163,7 @@ class GatewaysTab extends View {
 	render() {
 		let { appLayout } = this.props;
 		return (
-			<View style={{flex: 1, alignItems: 'center',
-				justifyContent: 'center'}}>
+			<View style={{flex: 1}}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
@@ -183,7 +182,7 @@ class GatewaysTab extends View {
 
 const styles = StyleSheet.create({
 	rowItemsCover: {
-		flexDirection: 'column',
+		flex: 1,
 		alignItems: 'center',
 	},
 });
