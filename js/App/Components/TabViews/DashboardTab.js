@@ -35,7 +35,6 @@ import { getDevices } from 'Actions_Devices';
 import { changeSensorDisplayType } from 'Actions_Dashboard';
 import { defineMessages } from 'react-intl';
 
-import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
 import { getUserProfile } from '../../Reducers/User';
 import Theme from 'Theme';
@@ -49,7 +48,6 @@ import {
 } from 'TabViews_SubViews';
 
 import getDeviceType from '../../Lib/getDeviceType';
-import getTabBarIcon from '../../Lib/getTabBarIcon';
 import reactMixin from 'react-mixin';
 
 const messages = defineMessages({
@@ -116,11 +114,6 @@ class DashboardTab extends View {
 	changeDisplayType: () => void;
 	onRefresh: () => void;
 	_renderRow: (number) => Object;
-
-	static navigationOptions = ({navigation, screenProps}) => ({
-		title: screenProps.intl.formatMessage(i18n.dashboard),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'dashboard'),
-	});
 
 	constructor(props: Props) {
 		super(props);

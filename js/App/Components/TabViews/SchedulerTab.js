@@ -26,7 +26,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
-import i18n from '../../Translations/common';
 import Platform from 'Platform';
 
 import { List, ListDataSource, Text, View } from 'BaseComponents';
@@ -95,8 +94,6 @@ type Props = {
 type State = {
 	dataSource: Object,
 };
-
-import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 class SchedulerTab extends View {
 
@@ -226,11 +223,6 @@ class SchedulerTab extends View {
 		};
 	}
 }
-
-SchedulerTab.navigationOptions = ({navigation, screenProps}) => ({
-	title: screenProps.intl.formatMessage(i18n.scheduler),
-	tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
-});
 
 SchedulerTab.propTypes = {
 	rowsAndSections: PropTypes.object,

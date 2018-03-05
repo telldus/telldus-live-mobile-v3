@@ -32,9 +32,7 @@ import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
 import { getSensors } from 'Actions';
 import { toggleEditMode } from 'Actions';
 
-import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 type Props = {
 	rowsAndSections: Object,
@@ -60,11 +58,6 @@ class SensorsTab extends View {
 	renderRow: (Object) => Object;
 	renderHiddenRow: (Object) => Object;
 	onRefresh: (Object) => void;
-
-	static navigationOptions = ({navigation, screenProps}) => ({
-		title: screenProps.intl.formatMessage(i18n.sensors),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'sensors'),
-	});
 
 	constructor(props: Props) {
 		super(props);

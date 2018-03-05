@@ -24,7 +24,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { defineMessages } from 'react-intl';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import { List, ListDataSource, View, StyleSheet, FloatingButton } from 'BaseComponents';
@@ -33,18 +32,9 @@ import { getGateways, addNewGateway } from 'Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
-import getTabBarIcon from '../../Lib/getTabBarIcon';
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
 import i18n from '../../Translations/common';
-
-const messages = defineMessages({
-	gateways: {
-		id: 'pages.gateways',
-		defaultMessage: 'Gateways',
-		description: 'The gateways tab',
-	},
-});
 
 type Props = {
 	rows: Array<Object>,
@@ -74,11 +64,6 @@ class GatewaysTab extends View {
 	renderRow: (renderRowProps) => Object;
 	onRefresh: () => void;
 	addLocation: () => void;
-
-	static navigationOptions = ({navigation, screenProps}) => ({
-		title: screenProps.intl.formatMessage(messages.gateways),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'gateways'),
-	});
 
 	constructor(props: Props) {
 		super(props);

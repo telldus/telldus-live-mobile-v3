@@ -36,7 +36,6 @@ import { getDevices } from 'Actions_Devices';
 import { toggleEditMode } from 'Actions';
 
 import getDeviceType from '../../Lib/getDeviceType';
-import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 import { parseDevicesForListView } from 'Reducers_Devices';
 import { addNewGateway } from 'Actions';
@@ -104,11 +103,6 @@ class DevicesTab extends View {
 	onRefresh: () => void;
 	onPressAddLocation: () => void;
 	onPressAddDevice: () => void;
-
-	static navigationOptions = ({navigation, screenProps}) => ({
-		title: screenProps.intl.formatMessage(i18n.devices),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'devices'),
-	});
 
 	constructor(props: Props) {
 		super(props);
