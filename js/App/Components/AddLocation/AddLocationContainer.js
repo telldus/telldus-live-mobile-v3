@@ -149,6 +149,9 @@ class AddLocationContainer extends View<null, Props, State> {
 			screenProps.rootNavigator.goBack();
 			return true;
 		}
+		if (screenProps.currentScreen === 'Success') {
+			return true;
+		}
 		navigation.dispatch({ type: 'Navigation/BACK'});
 		return true;
 	}
