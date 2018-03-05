@@ -26,9 +26,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
-import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Header, SafeAreaView } from 'BaseComponents';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 import { toggleEditMode, syncWithServer, switchTab } from 'Actions';
 import TabViews from 'TabViews';
@@ -37,21 +37,50 @@ import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
 import { SettingsDetailModal } from 'DetailViews';
 
+import i18n from '../../Translations/common';
+
+const renderContainer = (navigation, screenProps) => Component => (
+	<SafeAreaView>
+		<Header rightButton={screenProps.rightButton}/>
+		<Component navigation={navigation} screenProps={screenProps}/>
+	</SafeAreaView>
+);
+
 const RouteConfigs = {
 	Dashboard: {
-		screen: TabViews.Dashboard,
+		screen: ({ navigation, screenProps }) => renderContainer(navigation, screenProps)(TabViews.Dashboard),
+		navigationOptions: ({navigation, screenProps}) => ({
+			title: screenProps.intl.formatMessage(i18n.dashboard),
+			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'dashboard'),
+		}),
 	},
 	Devices: {
-		screen: TabViews.Devices,
+		screen: ({ navigation, screenProps }) => renderContainer(navigation, screenProps)(TabViews.Devices),
+		navigationOptions: ({navigation, screenProps}) => ({
+			title: screenProps.intl.formatMessage(i18n.devices),
+			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'devices'),
+		}),
 	},
 	Sensors: {
-		screen: TabViews.Sensors,
+		screen: ({ navigation, screenProps }) => renderContainer(navigation, screenProps)(TabViews.Sensors),
+		navigationOptions: ({navigation, screenProps}) => ({
+			title: screenProps.intl.formatMessage(i18n.sensors),
+			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'sensors'),
+		}),
 	},
 	Scheduler: {
-		screen: TabViews.Scheduler,
+		screen: ({ navigation, screenProps }) => renderContainer(navigation, screenProps)(TabViews.Scheduler),
+		navigationOptions: ({navigation, screenProps}) => ({
+			title: screenProps.intl.formatMessage(i18n.scheduler),
+			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
+		}),
 	},
 	Gateways: {
-		screen: TabViews.Gateways,
+		screen: ({ navigation, screenProps }) => renderContainer(navigation, screenProps)(TabViews.Gateways),
+		navigationOptions: ({navigation, screenProps}) => ({
+			title: screenProps.intl.formatMessage(i18n.gateways),
+			tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'gateways'),
+		}),
 	},
 };
 
@@ -63,7 +92,15 @@ const TabNavigatorConfig = {
 	tabBarOptions: {
 		activeTintColor: '#e26901',
 		style: {
-			...ifIphoneX({height: 20}),
+			justifyContent: 'center',
+			alignItens: 'center',
+		},
+		tabStyle: {
+			justifyContent: 'center',
+			alignItens: 'center',
+		},
+		labelStyle: {
+			fontSize: 13,
 		},
 	},
 };
@@ -159,7 +196,6 @@ class TabsView extends View {
 	};
 
 	render() {
-		let screenProps = { stackNavigator: this.props.stackNavigator };
 		const { routeName } = this.state.tab;
 
 		let rightButton;
@@ -172,16 +208,20 @@ class TabsView extends View {
 			rightButton = null;
 		}
 
+		let screenProps = {
+			stackNavigator: this.props.stackNavigator,
+			rightButton: rightButton,
+		};
+
 		return (
-			<SafeAreaView>
-				<Header rightButton={rightButton}/>
+			<View style={{flex: 1}}>
 				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 				{
 					this.state.settings ? (
 						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
 					) : null
 				}
-			</SafeAreaView>
+			</View>
 		);
 	}
 }

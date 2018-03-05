@@ -61,6 +61,11 @@ const messages = defineMessages({
 		id: 'pages.dashboard',
 		defaultMessage: 'Dashboard',
 	},
+	gateways: {
+		id: 'pages.gateways',
+		defaultMessage: 'Gateways',
+		description: 'The gateways tab',
+	},
 	devices: {
 		id: 'pages.devices',
 		defaultMessage: 'Devices',
