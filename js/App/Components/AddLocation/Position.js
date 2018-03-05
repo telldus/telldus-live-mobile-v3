@@ -319,7 +319,7 @@ class Position extends View {
 		const width = appLayout.width;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const padding = (isIphoneX && !isPortrait) ? width * 0.1585 : width * 0.11;
+		const padding = isIphoneX() ? (!isPortrait ? width * 0.1585 : width * 0.11) : width * 0.13;
 
 		return {
 			container: {

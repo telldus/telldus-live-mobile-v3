@@ -196,7 +196,7 @@ class LocationName extends View {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
-		const padding = (isIphoneX && !isPortrait) ? width * 0.1585 : width * 0.11;
+		const padding = isIphoneX() ? (!isPortrait ? width * 0.1585 : width * 0.11) : width * 0.13;
 
 		return {
 			textField: {

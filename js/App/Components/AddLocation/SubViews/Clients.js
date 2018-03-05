@@ -86,7 +86,10 @@ export default class Clients extends View {
 
 		return (
 			<View style={{alignItems: 'center', justifyContent: 'center'}} accessible={true} accessibilityLabel={accessibilityLabel}>
-				<Image source={require('../../TabViews/img/right-arrow-key.png')} style={styles.arrow}/>
+				<View style={styles.arrow}>
+					<Image source={require('../../TabViews/img/right-arrow-key.png')} style={{tintColor: '#A59F9A90'}}/>
+				</View>
+
 				<DeviceLocationDetail {...locationData} accessible={false} style={styles.locationDetails}/>
 			</View>
 		);
@@ -96,7 +99,7 @@ export default class Clients extends View {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
-		const padding = (isIphoneX && !isPortrait) ? width * 0.1 : width * 0.055;
+		const padding = isIphoneX() ? (!isPortrait ? width * 0.1 : width * 0.055) : width * 0.07;
 
 		return {
 			locationDetails: {
@@ -109,7 +112,6 @@ export default class Clients extends View {
 				left: width * 0.845,
 				elevation: 3,
 				zIndex: 1,
-				tintColor: '#A59F9A90',
 			},
 		};
 	}
