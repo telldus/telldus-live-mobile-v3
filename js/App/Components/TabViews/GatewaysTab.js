@@ -25,9 +25,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
-import { ifIphoneX } from 'react-native-iphone-x-helper';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
-import { List, ListDataSource, View, StyleSheet, FloatingButton, Image } from 'BaseComponents';
+import { List, ListDataSource, View, StyleSheet, FloatingButton } from 'BaseComponents';
 import DeviceLocationDetail from './../DeviceDetails/SubViews/DeviceLocationDetail';
 import { getGateways, addNewGateway } from 'Actions';
 
@@ -119,6 +119,9 @@ class GatewaysTab extends View {
 		let { appLayout } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
+		let rowWidth = isIphoneX() ? (isPortrait ? width - 20 : width - 125 ) : width - 20;
+		let rowHeight = isPortrait ? height * 0.13 : width * 0.13;
+
 		let locationImageUrl = getLocationImageUrl(type);
 		let locationData = {
 			image: locationImageUrl,
@@ -127,8 +130,7 @@ class GatewaysTab extends View {
 		};
 		return (
 			<View style={styles.rowItemsCover}>
-				<Image source={require('../TabViews/img/right-arrow-key.png')} tintColor="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData} style={{...ifIphoneX(isPortrait ? {width: (appLayout.width - 20)} : { width: (appLayout.width - 120) }, {width: (appLayout.width - 20)})}}/>
+				<DeviceLocationDetail {...locationData} style={{ height: rowHeight, width: rowWidth, marginVertical: 5 }}/>
 			</View>
 		);
 	}
@@ -183,14 +185,6 @@ const styles = StyleSheet.create({
 	rowItemsCover: {
 		flexDirection: 'column',
 		alignItems: 'center',
-		marginBottom: 5,
-	},
-	arrow: {
-		position: 'absolute',
-		zIndex: 1,
-		tintColor: '#A59F9A90',
-		right: 25,
-		top: '45%',
 	},
 });
 
