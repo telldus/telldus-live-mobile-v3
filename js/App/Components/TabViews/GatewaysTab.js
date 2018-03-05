@@ -25,6 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import { List, ListDataSource, View, StyleSheet, FloatingButton, Image } from 'BaseComponents';
 import DeviceLocationDetail from './../DeviceDetails/SubViews/DeviceLocationDetail';
@@ -116,6 +117,8 @@ class GatewaysTab extends View {
 
 	renderRow({ name, type, online, websocketOnline }) {
 		let { appLayout } = this.props;
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
 		let locationImageUrl = getLocationImageUrl(type);
 		let locationData = {
 			image: locationImageUrl,
@@ -125,7 +128,7 @@ class GatewaysTab extends View {
 		return (
 			<View style={styles.rowItemsCover}>
 				<Image source={require('../TabViews/img/right-arrow-key.png')} tintColor="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData} style={{ width: (appLayout.width - 20) }}/>
+				<DeviceLocationDetail {...locationData} style={{...ifIphoneX(isPortrait ? {width: (appLayout.width - 20)} : { width: (appLayout.width - 120) }, {width: (appLayout.width - 20)})}}/>
 			</View>
 		);
 	}
@@ -156,13 +159,16 @@ class GatewaysTab extends View {
 	}
 
 	render() {
+		let { appLayout } = this.props;
 		return (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1, alignItems: 'center',
+				justifyContent: 'center'}}>
 				<List
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
 					onRefresh={this.onRefresh}
 					style={{paddingTop: 10}}
+					key={appLayout.width}
 				/>
 				<FloatingButton
 					onPress={this.addLocation}

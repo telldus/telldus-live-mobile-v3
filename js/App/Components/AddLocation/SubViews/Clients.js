@@ -26,6 +26,7 @@
 import React from 'react';
 import { View, Image } from 'BaseComponents';
 import { defineMessages } from 'react-intl';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDetail';
@@ -95,7 +96,7 @@ export default class Clients extends View {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
-		const padding = width * 0.06;
+		const padding = (isIphoneX && !isPortrait) ? width * 0.1 : width * 0.055;
 
 		return {
 			locationDetails: {

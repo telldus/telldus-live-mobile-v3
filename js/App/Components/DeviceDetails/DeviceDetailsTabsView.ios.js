@@ -30,13 +30,15 @@ import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 import { TabNavigator } from 'react-navigation';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_settings);
 
 import DeviceDetailsTabView from 'DeviceDetailsTabView';
-import { Text, View, Poster } from 'BaseComponents';
+import { NavigationHeader } from 'DDSubViews';
+import { Text, View, Poster, SafeAreaView } from 'BaseComponents';
 import { getWindowDimensions } from 'Lib';
 import Theme from 'Theme';
 import i18n from '../../Translations/common';
@@ -102,7 +104,7 @@ class DeviceDetailsTabsView extends View {
 	}
 
 	render() {
-		let { appLayout } = this.props;
+		let { appLayout, stackNavigator } = this.props;
 		let { currentScreen } = this.props.screenProps;
 		let screenProps = {
 			device: this.props.device,
@@ -120,7 +122,8 @@ class DeviceDetailsTabsView extends View {
 		} = this.getStyles(appLayout);
 
 		return (
-			<View style={styles.container}>
+			<SafeAreaView>
+				<NavigationHeader navigation={stackNavigator}/>
 				<Poster>
 					<View style={posterCover}>
 						{(!this.isTablet) && (!isPortrait) &&
@@ -142,7 +145,7 @@ class DeviceDetailsTabsView extends View {
 				<View style={{flex: 1}}>
 					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
-			</View>
+			</SafeAreaView>
 		);
 	}
 
@@ -182,9 +185,6 @@ class DeviceDetailsTabsView extends View {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
 	backButtonLand: {
 		position: 'absolute',
 		alignItems: 'flex-start',
@@ -217,7 +217,7 @@ const Tabs = TabNavigator(
 			style: {
 				backgroundColor: '#fff',
 				...Theme.Core.shadow,
-				height: getWindowDimensions().height * 0.085,
+				...ifIphoneX({ height: getWindowDimensions().height * 0.025 }, {height: getWindowDimensions().height * 0.085}),
 				alignItems: 'center',
 				justifyContent: 'center',
 			},

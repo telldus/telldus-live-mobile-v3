@@ -26,10 +26,10 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 
-import { View, Image, Dimensions } from 'BaseComponents';
+import { View, Dimensions, SafeAreaView } from 'BaseComponents';
 import AddLocationContainer from './AddLocationContainer';
+import { NavigationHeader } from 'DDSubViews';
 
 import LocationDetected from './LocationDetected';
 import LocationActivationManual from './LocationActivationManual';
@@ -40,11 +40,10 @@ import TimeZone from './TimeZone';
 import Success from './Success';
 import Position from './Position';
 
-import { getRouteName, hasStatusBar } from 'Lib';
-
-import Theme from 'Theme';
+import { getRouteName } from 'Lib';
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
+const isPortrait = deviceHeight > deviceWidth;
 
 const renderAddLocationContainer = (navigation, screenProps) => Component => (
 	<AddLocationContainer navigation={navigation} screenProps={screenProps}>
@@ -87,15 +86,9 @@ const StackNavigatorConfig = {
 	navigationOptions: ({navigation}) => {
 		let {state} = navigation;
 		let renderStackHeader = state.routeName !== 'LocationDetected';
-		if (renderStackHeader) {
+		if (renderStackHeader && isPortrait) {
 			return {
-				headerStyle: {
-					marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-					backgroundColor: Theme.Core.brandPrimary,
-					height: deviceHeight * 0.1,
-				},
-				headerTintColor: '#ffffff',
-				headerTitle: renderHeader(),
+				header: <NavigationHeader navigation={navigation} />,
 			};
 		}
 		return {
@@ -105,12 +98,6 @@ const StackNavigatorConfig = {
 };
 
 const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
-
-function renderHeader(): Object {
-	return (
-		<Image style={{ height: 110, width: 130, marginHorizontal: deviceWidth * 0.18 }} resizeMode={'contain'} source={require('../TabViews/img/telldus-logo.png')}/>
-	);
-}
 
 type Props = {
 	navigation: Object,
@@ -167,7 +154,12 @@ class AddLocationNavigator extends View {
 		};
 
 		return (
-			<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			<SafeAreaView>
+				{this.props.navigation.state.params.renderRootHeader &&
+				<NavigationHeader navigation={navigation} />
+				}
+				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			</SafeAreaView>
 		);
 	}
 }

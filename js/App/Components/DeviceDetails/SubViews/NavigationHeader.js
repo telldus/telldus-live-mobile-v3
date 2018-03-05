@@ -26,6 +26,7 @@ import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { intlShape, injectIntl } from 'react-intl';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Header, StyleSheet } from 'BaseComponents';
 import { hasStatusBar } from 'Lib';
@@ -88,7 +89,7 @@ class NavigationHeader extends View {
 			accessibilityLabel: this.labelLeftIcon,
 		} : null;
 		return (
-			<Header leftButton={leftIcon} style={{height: deviceHeight * 0.1111}}/>
+			<Header leftButton={leftIcon} style={{height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )}}/>
 		);
 	}
 }

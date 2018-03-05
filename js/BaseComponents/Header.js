@@ -27,6 +27,7 @@ import PropTypes from 'prop-types';
 import { Platform, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 import { hasStatusBar } from 'Lib';
 
 import Base from './Base';
@@ -68,7 +69,7 @@ class HeaderComponent extends Base {
 		this.deviceWidth = height > width ? width : height;
 
 		this.paddingHorizontal = 15;
-		this.paddingTop = (Platform.OS === 'ios') ? 15 : 0;
+		this.paddingTop = (Platform.OS === 'ios') ? (isIphoneX() ? 0 : 15) : 0;
 
 		return {
 			navbar: {

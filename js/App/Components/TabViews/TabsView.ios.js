@@ -26,8 +26,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, Header } from 'BaseComponents';
+import { View, Header, SafeAreaView } from 'BaseComponents';
 
 import { toggleEditMode, syncWithServer, switchTab } from 'Actions';
 import TabViews from 'TabViews';
@@ -61,6 +62,9 @@ const TabNavigatorConfig = {
 	animationEnabled: false,
 	tabBarOptions: {
 		activeTintColor: '#e26901',
+		style: {
+			...ifIphoneX({height: 20}),
+		},
 	},
 };
 
@@ -169,7 +173,7 @@ class TabsView extends View {
 		}
 
 		return (
-			<View>
+			<SafeAreaView>
 				<Header rightButton={rightButton}/>
 				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 				{
@@ -177,7 +181,7 @@ class TabsView extends View {
 						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
 					) : null
 				}
-			</View>
+			</SafeAreaView>
 		);
 	}
 }

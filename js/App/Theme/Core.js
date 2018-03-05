@@ -31,6 +31,7 @@ export default {
 	brandWarning: '#f0ad4e',
 	brandSidebar: '#252932',
 	iconFamily: 'Ionicons',
+	iPhoneXbg: '#eae7f0',
 	get fonts() {
 		return {
 			telldusIconFont: 'telldusicons',

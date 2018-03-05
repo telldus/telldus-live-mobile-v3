@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'React';
+import { Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
@@ -64,7 +65,7 @@ const RouteConfigs = {
 		screen: DeviceDetailsTabsView,
 		navigationOptions: ({navigation}: Object): Object => {
 			return {
-				header: <NavigationHeader navigation={navigation}/>,
+				header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
 			};
 		},
 	},
@@ -75,7 +76,7 @@ const RouteConfigs = {
 			let renderRootHeader = state.params && state.params.renderRootHeader;
 			if (renderRootHeader) {
 				return {
-					header: <NavigationHeader navigation={navigation}/>,
+					header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
 				};
 			}
 			return {

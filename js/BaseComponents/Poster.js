@@ -25,6 +25,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Image } from 'react-native';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 import View from './View';
 
 type Props = {
@@ -100,13 +101,13 @@ class Poster extends Component<Props, null> {
 			image: {
 				flex: 1,
 				height: undefined,
-				width: width,
+				...ifIphoneX({width: '100%'}, {width: width}),
 				resizeMode: 'cover',
 			},
 			mask: {
 				borderWidth: 0,
 				height: isPortrait ? width * 0.333333333 : height * 0.333333333,
-				width: width,
+				...ifIphoneX({width: '100%'}, {width: width}),
 				overflow: 'hidden',
 			},
 		};

@@ -27,8 +27,9 @@ import React from 'react';
 import { Animated, LayoutAnimation, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, FloatingButton, Text, StyleSheet } from 'BaseComponents';
+import { View, FloatingButton, Text, StyleSheet, SafeAreaView } from 'BaseComponents';
 
 import { NavigationHeader } from 'DDSubViews';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
@@ -249,7 +250,7 @@ class ChangeLogNavigator extends View {
 		});
 
 		return (
-			<View style={{flex: 1, backgroundColor: '#EFEFF4'}}>
+			<SafeAreaView>
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
 				<ScrollView>
@@ -278,7 +279,7 @@ class ChangeLogNavigator extends View {
 							buttonStyle={{bottom: 0}}/>
 					</View>
 				</ScrollView>
-			</View>
+			</SafeAreaView>
 		);
 	}
 
@@ -295,7 +296,7 @@ class ChangeLogNavigator extends View {
 				justifyContent: 'center',
 				marginBottom: 10,
 				height: buttonSize,
-				backgroundColor: '#EFEFF4',
+				...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
 			},
 			floatingButtonLeft: {
 				left: deviceWidth * 0.034666667,
@@ -309,7 +310,7 @@ const styles = StyleSheet.create({
 	buttonCover: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: '#EFEFF4',
+		...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
 	},
 	textSkip: {
 		paddingVertical: 10,

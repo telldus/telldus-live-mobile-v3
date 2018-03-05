@@ -24,7 +24,7 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native';
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
-import Theme from '../App/Theme';
+import Theme from 'Theme';
 import View from './View';
 
 const ViewX = isIphoneX() ? SafeAreaView : View;

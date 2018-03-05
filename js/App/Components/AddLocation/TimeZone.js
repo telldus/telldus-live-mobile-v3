@@ -28,6 +28,7 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import {
 	View,
@@ -215,7 +216,7 @@ class TimeZone extends View<void, Props, State> {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
-		const padding = width * 0.13;
+		const padding = (isIphoneX && !isPortrait) ? width * 0.1585 : width * 0.11;
 
 		return {
 			timeZoneContainer: {

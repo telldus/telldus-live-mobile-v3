@@ -25,7 +25,7 @@ import React from 'react';
 import typeof { Children as Children} from 'react';
 import { KeyboardAvoidingView, ScrollView } from 'react-native';
 
-import { BackgroundImage, View, Image, H1 } from 'BaseComponents';
+import { BackgroundImage, View, Image, H1, SafeAreaView } from 'BaseComponents';
 import StyleSheet from 'StyleSheet';
 
 type Props = {
@@ -35,32 +35,34 @@ type Props = {
 }
 
 const FormContainerComponent = (props: Props) => (
-	<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-		<ScrollView
-			keyboardDismissMode= "interactive">
-			<KeyboardAvoidingView behavior="padding" contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}>
-				<View style={{alignItems: 'center', justifyContent: 'center'}}>
-					<Image
-						source={require('./../img/telldusLogoBlack.png')}
-						style={{
-							marginTop: 60,
-							marginBottom: 60,
-						}}
-					/>
-				</View>
-				<View style={[styles.container, props.formContainerStyle]} >
-					<H1 style={{
-						margin: 10,
-						color: '#ffffff80',
-						textAlign: 'center',
-					}}>
-						{props.headerText}
-					</H1>
-					{props.children}
-				</View>
-			</KeyboardAvoidingView>
-		</ScrollView>
-	</BackgroundImage>
+	<SafeAreaView>
+		<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+			<ScrollView
+				keyboardDismissMode= "interactive">
+				<KeyboardAvoidingView behavior="padding" contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}>
+					<View style={{alignItems: 'center', justifyContent: 'center'}}>
+						<Image
+							source={require('./../img/telldusLogoBlack.png')}
+							style={{
+								marginTop: 60,
+								marginBottom: 60,
+							}}
+						/>
+					</View>
+					<View style={[styles.container, props.formContainerStyle]} >
+						<H1 style={{
+							margin: 10,
+							color: '#ffffff80',
+							textAlign: 'center',
+						}}>
+							{props.headerText}
+						</H1>
+						{props.children}
+					</View>
+				</KeyboardAvoidingView>
+			</ScrollView>
+		</BackgroundImage>
+	</SafeAreaView>
 );
 
 export default FormContainerComponent;

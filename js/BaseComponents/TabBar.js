@@ -24,6 +24,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import View from './View';
 import FormattedMessage from './FormattedMessage';
@@ -56,7 +57,7 @@ class TabBar extends Component<Props, null> {
 		const width = isPortrait ? appLayout.height : appLayout.width;
 
 		return (
-			<View style={{flexDirection: 'row', alignItems: 'center'}} accessibilityLabel={accessibilityLabel}>
+			<View style={{flexDirection: 'row', alignItems: 'center', ...ifIphoneX({marginTop: 30})}} accessibilityLabel={accessibilityLabel}>
 				<CustomIcon name={icon} size={width * 0.08} color={tintColor}/>
 				<FormattedMessage {...label} style={{color: tintColor, fontSize: width * 0.035, paddingLeft: 5}}/>
 			</View>
