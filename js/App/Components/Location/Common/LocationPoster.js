@@ -27,7 +27,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
-import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Text, Poster, RoundedInfoButton } from '../../../../BaseComponents';
 
