@@ -432,9 +432,8 @@ class DevicesTab extends View {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
 
 		return {
 			noItemsContainer: {
