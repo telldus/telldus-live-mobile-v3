@@ -261,6 +261,7 @@ class DialogueBox extends Component<Props, null> {
 			entryDuration,
 			exitDuration,
 			appLayout,
+			showOverlay,
 		} = this.props;
 		let styles = this.getStyles(appLayout);
 
@@ -273,6 +274,7 @@ class DialogueBox extends Component<Props, null> {
 				entryDuration={entryDuration}
 				exitDuration={exitDuration}
 				showModal={showDialogue}
+				showOverlay={showOverlay}
 				onOpened={this.onModalOpened}>
 				{this.renderHeader(styles)}
 				{this.renderBody(styles)}

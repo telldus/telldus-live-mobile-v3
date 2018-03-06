@@ -23,6 +23,7 @@
 
 import React, {Component} from 'react';
 import { Animated, Easing } from 'react-native';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import { connect } from 'react-redux';
 import { clearData } from 'Actions_Modal';
@@ -285,9 +286,7 @@ class Modal extends Component<Props, void> {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-
+		let { height, width } = appLayout;
 		return {
 			modalContainer: {
 				flex: 1,
@@ -298,8 +297,7 @@ class Modal extends Component<Props, void> {
 				justifyContent: 'center',
 			},
 			overlayLayout: {
-				width: width,
-				height: height,
+				...ifIphoneX({width: '100%', height: '100%'}, {width, height}),
 			},
 			modal: {
 				position: 'absolute',
