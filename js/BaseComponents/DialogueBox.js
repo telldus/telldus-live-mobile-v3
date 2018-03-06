@@ -71,6 +71,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	accessibilityLabel?: string,
+	showOverlay?: boolean,
 };
 
 type defaultProps = {
