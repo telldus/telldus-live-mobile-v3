@@ -56,6 +56,10 @@ export default {
 	inputFontSize: 15,
 	inputLineHeight: 24,
 
+	locationOnline: '#9CCC65',
+	locationOffline: '#F44336',
+	locationNoLiveUpdates: '#FF9800',
+
 	get fontSizeH1() {
 		return this.fontSizeBase * 1.8;
 	},

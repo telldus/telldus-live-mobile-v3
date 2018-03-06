@@ -359,6 +359,18 @@ const messages = defineMessages({
 		id: 'button.done',
 		defaultMessage: 'Done',
 	},
+	online: {
+		id: 'gateway.online',
+		defaultMessage: 'Online',
+	},
+	offline: {
+		id: 'gateway.offline',
+		defaultMessage: 'Offline',
+	},
+	noLiveUpdates: {
+		id: 'gateway.noLiveUpdates',
+		defaultMessage: 'Live updates not available',
+	},
 });
 
 export default messages;

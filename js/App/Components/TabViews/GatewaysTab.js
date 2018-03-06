@@ -27,7 +27,7 @@ import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 
-import { List, ListDataSource, View, StyleSheet, FloatingButton } from 'BaseComponents';
+import { List, ListDataSource, View, StyleSheet, FloatingButton, Text } from 'BaseComponents';
 import DeviceLocationDetail from './../DeviceDetails/SubViews/DeviceLocationDetail';
 import { getGateways, addNewGateway } from 'Actions';
 
@@ -37,6 +37,8 @@ import getTabBarIcon from '../../Lib/getTabBarIcon';
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
 import i18n from '../../Translations/common';
+
+import Theme from 'Theme';
 
 const messages = defineMessages({
 	gateways: {
@@ -74,6 +76,9 @@ class GatewaysTab extends View {
 	renderRow: (renderRowProps) => Object;
 	onRefresh: () => void;
 	addLocation: () => void;
+	online: string;
+	offline: string;
+	noLiveUpdates: string;
 
 	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(messages.gateways),
@@ -96,6 +101,10 @@ class GatewaysTab extends View {
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 
+		this.online = formatMessage(i18n.online);
+		this.offline = formatMessage(i18n.offline);
+		this.noLiveUpdates = formatMessage(i18n.noLiveUpdates);
+
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.addLocation = this.addLocation.bind(this);
@@ -115,18 +124,53 @@ class GatewaysTab extends View {
 		this.props.dispatch(getGateways());
 	}
 
-	renderRow({ name, type, online, websocketOnline }) {
+	getLocationStatus(online, websocketOnline) {
+		let { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
+		if (!online) {
+			return (
+				<View style={styles.statusInfoCover}>
+					<View style={[styles.statusInfo, { backgroundColor: locationOffline}]}/>
+					<Text style={styles.statusText}>
+						{this.offline}
+					</Text>
+				</View>
+			);
+		} else if (!websocketOnline) {
+			return (
+				<View style={styles.statusInfoCover}>
+					<View style={[styles.statusInfo, { backgroundColor: locationNoLiveUpdates}]}/>
+					<Text style={styles.statusText}>
+						{this.noLiveUpdates}
+					</Text>
+				</View>
+			);
+		}
+		return (
+			<View style={styles.statusInfoCover}>
+				<View style={[styles.statusInfo, { backgroundColor: locationOnline}]}/>
+				<Text style={styles.statusText}>
+					{this.online}
+				</Text>
+			</View>
+		);
+	}
+
+	renderRow(location) {
+		let { name, type, online, websocketOnline } = location;
 		let { appLayout } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let rowWidth = isIphoneX() ? (isPortrait ? width - 20 : width - 125 ) : width - 20;
 		let rowHeight = isPortrait ? height * 0.13 : width * 0.13;
 
+		let info = this.getLocationStatus(online, websocketOnline);
+
 		let locationImageUrl = getLocationImageUrl(type);
 		let locationData = {
 			image: locationImageUrl,
 			H1: name,
 			H2: type,
+			info,
 		};
 		return (
 			<View style={styles.rowItemsCover}>
@@ -184,6 +228,24 @@ const styles = StyleSheet.create({
 	rowItemsCover: {
 		flex: 1,
 		alignItems: 'center',
+	},
+	statusInfoCover: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	statusInfo: {
+		width: 10,
+		height: 10,
+		borderRadius: 5,
+		marginTop: 3,
+		marginRight: 5,
+	},
+	statusText: {
+		fontSize: 13,
+		textAlignVertical: 'center',
+		color: '#A59F9A',
+		marginTop: 2,
 	},
 });
 
