@@ -23,6 +23,7 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Image } from '../../../../BaseComponents';
 import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDetail';
@@ -60,7 +61,9 @@ render(): Object {
 	let { name, type } = location;
 	let { height, width } = appLayout;
 	let isPortrait = height > width;
-	let rowHeight = isPortrait ? height * 0.14 : width * 0.14;
+	let rowWidth = isIphoneX() ? (isPortrait ? width - 20 : width - 125 ) : width - 20;
+	let rowHeight = isPortrait ? height * 0.13 : width * 0.13;
+
 
 	let locationImageUrl = getLocationImageUrl(type);
 	let locationData = {
@@ -76,7 +79,7 @@ render(): Object {
 			<Image source={require('../../TabViews/img/right-arrow-key.png')} tintColor="#A59F9A90" style={styles.arrow}/>
 			<DeviceLocationDetail {...locationData}
 				style={{
-					width: (appLayout.width - 20),
+					width: rowWidth,
 					height: rowHeight,
 					marginVertical: 5,
 				}}
