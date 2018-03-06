@@ -191,8 +191,9 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		const { modalHeader, positiveText, showNegative, onPressPositive, onPressNegative } = this.getModalData(modalExtras);
 		const { params } = screenProps.rootNavigator.state;
 
-		let width = appLayout.width;
-		let padding = width * 0.027777;
+		let { width, height } = appLayout;
+		let deviceWidth = height > width ? width : height;
+		let padding = screenProps.currentScreen === 'Details' ? width * 0.027777 : deviceWidth * 0.027777;
 		let paddingHorizontal = screenProps.currentScreen === 'EditTimeZoneCity' || screenProps.currentScreen === 'EditTimeZoneContinent' ? 0 : padding;
 		let showPosterHeader = screenProps.currentScreen === 'Details' ? false : true;
 		let customPosterHeader = screenProps.currentScreen === 'Details' ? <CustomPosterHeader {...params.location} styles={styles}/> : null;
@@ -249,8 +250,8 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		return {
 			style: {
 				flex: 1,
-				alignItems: 'center',
-				justifyContent: 'center',
+				// alignItems: 'center',
+				// justifyContent: 'center',
 			},
 			infoButtonContainer: {
 				position: 'relative',

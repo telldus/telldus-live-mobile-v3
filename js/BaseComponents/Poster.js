@@ -101,7 +101,7 @@ class Poster extends Component<Props, null> {
 			image: {
 				flex: 1,
 				height: undefined,
-				width: width,
+				...ifIphoneX({width: '100%'}, {width: width}),
 				resizeMode: 'cover',
 			},
 			mask: {

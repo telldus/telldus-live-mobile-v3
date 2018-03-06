@@ -25,6 +25,7 @@
 import React from 'react';
 import { Image, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Text, TouchableButton, StyleSheet, FormattedNumber, Icon } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
@@ -41,6 +42,7 @@ type Props = {
 	location: Object,
 	actions: Object,
 	intl: Object,
+	appLayout: Object,
 };
 
 class Details extends View {
@@ -118,7 +120,9 @@ class Details extends View {
 	}
 
 	render(): Object | null {
-		const { containerWidth, location } = this.props;
+		const { containerWidth, location, appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
 
 		if (!location) {
 			return null;
@@ -127,6 +131,8 @@ class Details extends View {
 
 		const { name, type, ip, version, timezone, latitude, longitude } = location;
 		const image = getLocationImageUrl(type);
+		const labelWidth = isIphoneX() ? (!isPortrait ? containerWidth * 0.345 : containerWidth * 0.3755) : containerWidth * 0.36;
+		const valueWidth = isIphoneX() ? (!isPortrait ? containerWidth * 0.495 : containerWidth * 0.5255) : containerWidth * 0.51;
 
 		return (
 			<View style={{flex: 1}}>
@@ -145,28 +151,28 @@ class Details extends View {
 					</View>
 				</LabelBox>
 				<TouchableOpacity style={styles.infoTwoContainerStyle} onPress={this.onEditName}>
-					<Text style={[styles.textLabel, {width: containerWidth * 0.36}]}>
+					<Text style={[styles.textLabel, {width: labelWidth}]}>
 						{this.labelName}
 					</Text>
-					<Text style={[styles.textValue, {width: containerWidth * 0.51}]} numberOfLines={1}>
+					<Text style={[styles.textValue, {width: valueWidth}]} numberOfLines={1}>
 						{name}
 					</Text>
 					<Icon name="angle-right" size={40} color="#A59F9A90"/>
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.infoTwoContainerStyle} onPress={this.onEditTimeZone}>
-					<Text style={[styles.textLabel, {width: containerWidth * 0.36}]}>
+					<Text style={[styles.textLabel, {width: labelWidth}]}>
 						{this.labelTimeZone}
 					</Text>
-					<Text style={[styles.textValue, {width: containerWidth * 0.51}]}>
+					<Text style={[styles.textValue, {width: valueWidth}]}>
 						{timezone}
 					</Text>
 					<Icon name="angle-right" size={40} color="#A59F9A90"/>
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.infoTwoContainerStyle} onPress={this.onEditGeoPosition}>
-					<Text style={[styles.textLabel, {width: containerWidth * 0.36}]}>
+					<Text style={[styles.textLabel, {width: labelWidth}]}>
 						{this.labelGeoPosition}
 					</Text>
-					<Text style={[styles.textValue, {width: containerWidth * 0.51}]}>{`${this.labelLat}: `}
+					<Text style={[styles.textValue, {width: valueWidth}]}>{`${this.labelLat}: `}
 						<FormattedNumber value={latitude} maximumFractionDigits={3} style={styles.textValue}/>
 						{` ${this.labelLong}: `}
 						<FormattedNumber value={longitude} maximumFractionDigits={3} style={styles.textValue}/>
@@ -222,6 +228,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	let id = ownProps.rootNavigator.state.params.location.id;
 	return {
 		location: store.gateways.byId[id],
+		appLayout: store.App.layout,
 	};
 }
 

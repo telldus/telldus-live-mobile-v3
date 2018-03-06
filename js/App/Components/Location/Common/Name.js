@@ -26,6 +26,7 @@
 import React from 'react';
 import { TextInput, Keyboard } from 'react-native';
 import { intlShape } from 'react-intl';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import {View, FloatingButton} from '../../../../BaseComponents';
 import LabelBox from './LabelBox';
@@ -147,10 +148,9 @@ class Name extends View {
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const padding = width * 0.15;
+		const padding = isIphoneX() ? (!isPortrait ? width * 0.1585 : width * 0.11) : width * 0.15;
 
 		return {
 			textField: {

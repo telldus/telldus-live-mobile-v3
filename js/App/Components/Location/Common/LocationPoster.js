@@ -129,29 +129,16 @@ class LocationDetailsPoster extends View {
 	}
 
 	getStyle = (appLayout: Object): Object => {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
 		return {
 			hContainer: {
-				...ifIphoneX({
-					position: 'absolute',
-					right: 10,
-					top: 10,
-					left: 10,
-					bottom: 10,
-					flex: 1,
-					alignItems: 'center',
-					justifyContent: 'center',
-				},
-				{
-					position: 'absolute',
-					right: isPortrait ? width * 0.124 : height * 0.124,
-					top: isPortrait ? width * 0.088 : height * 0.088,
-					flex: 1,
-					alignItems: 'flex-end',
-				}),
+				position: 'absolute',
+				right: isPortrait ? width * 0.124 : height * 0.124,
+				top: isPortrait ? width * 0.088 : height * 0.088,
+				flex: 1,
+				alignItems: 'flex-end',
 			},
 			h: {
 				color: '#fff',

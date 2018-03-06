@@ -26,6 +26,7 @@
 import React from 'react';
 import { View, Image } from '../../../../../BaseComponents';
 import { defineMessages } from 'react-intl';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
 import DeviceLocationDetail from '../../../DeviceDetails/SubViews/DeviceLocationDetail';
@@ -94,16 +95,16 @@ export default class Clients extends View {
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
-		const padding = width * 0.06;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const padding = isIphoneX() ? (!isPortrait ? width * 0.1 : width * 0.055) : width * 0.06;
+		const iconLeft = isIphoneX() ? (!isPortrait ? width * 0.82 : width * 0.845) : width * 0.845;
 
 		return {
 			arrow: {
 				position: 'absolute',
 				top: isPortrait ? height * 0.12 : width * 0.12,
-				left: width * 0.845,
+				left: iconLeft,
 				elevation: 3,
 				zIndex: 1,
 			},

@@ -28,6 +28,7 @@ import { connect } from 'react-redux';
 import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import {View, FormattedMessage, FloatingButton} from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
@@ -236,10 +237,9 @@ class LocationActivationManual extends View {
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const padding = width * 0.15;
+		const padding = isIphoneX() ? (!isPortrait ? width * 0.1585 : width * 0.11) : width * 0.15;
 
 		return {
 			textBody: {
