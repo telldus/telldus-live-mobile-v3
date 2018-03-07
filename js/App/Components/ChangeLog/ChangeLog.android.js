@@ -250,7 +250,7 @@ class ChangeLogNavigator extends View {
 		});
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1, backgroundColor: '#EFEFF4'}}>
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
 				<ScrollView>
