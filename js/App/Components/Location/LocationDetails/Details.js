@@ -29,6 +29,7 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Text, TouchableButton, StyleSheet, FormattedNumber, Icon } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
+import Status from '../../TabViews/SubViews/Gateway/Status';
 
 import Theme from '../../../Theme';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
@@ -119,6 +120,12 @@ class Details extends View {
 		actions.showModal(this.confirmMessage, 'DELETE_LOCATION');
 	}
 
+	getLocationStatus(online, websocketOnline) {
+		return (
+			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} />
+		);
+	}
+
 	render(): Object | null {
 		const { containerWidth, location, appLayout } = this.props;
 		const { height, width } = appLayout;
@@ -129,25 +136,28 @@ class Details extends View {
 		}
 
 
-		const { name, type, ip, version, timezone, latitude, longitude } = location;
+		const { name, type, ip, version, timezone, latitude, longitude, online, websocketOnline } = location;
 		const image = getLocationImageUrl(type);
 		const labelWidth = isIphoneX() ? (!isPortrait ? containerWidth * 0.345 : containerWidth * 0.3755) : containerWidth * 0.36;
 		const valueWidth = isIphoneX() ? (!isPortrait ? containerWidth * 0.495 : containerWidth * 0.5255) : containerWidth * 0.51;
+
+		let info = this.getLocationStatus(online, websocketOnline);
 
 		return (
 			<View style={{flex: 1}}>
 				<LabelBox containerStyle={styles.infoOneContainerStyle}>
 					<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: image, isStatic: true }} />
-					<View>
+					<View style={{flex: 1, alignItems: 'flex-start', flexWrap: 'wrap'}}>
 						<Text style={[styles.textName]}>
 							{type}
 						</Text>
-						<Text style={{color: Theme.Core.rowTextColor}}>
+						<Text style={styles.locationInfo}>
 							{`${this.labelIP}: ${ip}`}
 						</Text>
-						<Text style={{color: Theme.Core.rowTextColor}}>
+						<Text style={styles.locationInfo}>
 							{`${this.labelSoftware}: v${version}`}
 						</Text>
+						{info && (info)}
 					</View>
 				</LabelBox>
 				<TouchableOpacity style={styles.infoTwoContainerStyle} onPress={this.onEditName}>
@@ -197,6 +207,7 @@ const styles = StyleSheet.create({
 	infoOneContainerStyle: {
 		flexDirection: 'row',
 		alignItems: 'center',
+		flex: 1,
 	},
 	infoTwoContainerStyle: {
 		flex: 1,
@@ -221,6 +232,10 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		textAlign: 'right',
 		paddingRight: 10,
+	},
+	locationInfo: {
+		fontSize: 14,
+		color: Theme.Core.rowTextColor,
 	},
 });
 

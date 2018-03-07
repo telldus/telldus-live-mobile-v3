@@ -110,8 +110,9 @@ class GatewaysTab extends View {
 	}
 
 	renderRow(item: Object): Object {
+		let { stackNavigator, intl } = this.props.screenProps;
 		return (
-			<GatewayRow location={item.item} stackNavigator={this.props.screenProps.stackNavigator}/>
+			<GatewayRow location={item.item} stackNavigator={stackNavigator} intl={intl}/>
 		);
 	}
 
