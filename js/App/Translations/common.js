@@ -456,6 +456,30 @@ const messages = defineMessages({
 		id: 'removedFromHiddenList',
 		defaultMessage: 'Successfully removed from hidden list',
 	},
+	helpViewHiddenRow: {
+		id: 'accessibilityLabel.helpViewHiddenRow',
+		defaultMessage: 'Swipe left using two fingers to view more options',
+	},
+	helpCloseHiddenRow: {
+		id: 'accessibilityLabel.helpCloseHiddenRow',
+		defaultMessage: 'Swipe right using two fingers to close options',
+	},
+	move: {
+		id: 'accessibilityLabel.move',
+		defaultMessage: 'Move',
+	},
+	remove: {
+		id: 'accessibilityLabel.remove',
+		defaultMessage: 'Remove',
+	},
+	fromHiddenList: {
+		id: 'accessibilityLabel.fromHiddenList',
+		defaultMessage: 'from hidden list',
+	},
+	toHiddenList: {
+		id: 'accessibilityLabel.toHiddenList',
+		defaultMessage: 'to hidden list',
+	},
 });
 
 export default messages;

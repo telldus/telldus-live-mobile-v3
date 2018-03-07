@@ -69,10 +69,14 @@ type State = {
 class DeviceRow extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
-	onSettingsSelected: Object => void;
+
 	labelButton: string;
 	labelSettings: string;
 	labelGearButton: string;
+	helpViewHiddenRow: string;
+	helpCloseHiddenRow: string;
+
+	onSettingsSelected: Object => void;
 	onSlideActive: () => void;
 	onSlideComplete: () => void;
 	onRowOpen: () => void;
@@ -92,6 +96,9 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.labelButton = formatMessage(i18n.button);
 		this.labelSettings = formatMessage(i18n.settingsHeader);
 		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
+
+		this.helpViewHiddenRow = formatMessage(i18n.helpViewHiddenRow);
+		this.helpCloseHiddenRow = formatMessage(i18n.helpCloseHiddenRow);
 
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 		this.onSlideActive = this.onSlideActive.bind(this);
@@ -143,6 +150,7 @@ class DeviceRow extends PureComponent<Props, State> {
 
 	render() {
 		let button = null, icon = null;
+		let { isOpen } = this.state;
 		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
 		const { isInState } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -203,8 +211,11 @@ class DeviceRow extends PureComponent<Props, State> {
 			icon = 'device-alt-solid';
 		}
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
-		let accessibilityLabel = getLabelDevice(intl.formatMessage, device);
-		let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
+		let accessibilityLabel = `${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
+
+		accessibilityLabel = isOpen ? `${getLabelDevice(intl.formatMessage, device)}. ${this.helpCloseHiddenRow}` :
+			`${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
+		// let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 
 		return (
 			<SwipeRow
@@ -216,14 +227,15 @@ class DeviceRow extends PureComponent<Props, State> {
 				onRowClose={this.onRowClose}
 				recalculateHiddenLayout={true}>
 				<HiddenRow device={device} intl={intl} onPressSettings={this.onSettingsSelected}
-					onSetIgnoreDevice={this.onSetIgnoreDevice}/>
+					onSetIgnoreDevice={this.onSetIgnoreDevice} isOpen={isOpen}/>
 				<ListItem
-					style={styles.row}
-					accessible={accessible}
-					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-					accessibilityLabel={accessible ? accessibilityLabel : ''}>
-					<TouchableOpacity onPress={this.onSettingsSelected}
-						style={styles.touchableContainer} accessibilityLabel={accessibilityLabelGearButton}>
+					style={styles.row}>
+					<TouchableOpacity
+						onPress={this.onSettingsSelected}
+						style={styles.touchableContainer}
+						accessible={accessible}
+						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+						accessibilityLabel={accessibilityLabel}>
 						<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
 						<View style={styles.name}>
 							<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>

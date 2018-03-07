@@ -31,6 +31,7 @@ import { View, IconTelldus, Icon } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from '../../../../Theme';
+import i18n from '../../../../Translations/common';
 
 const messages = defineMessages({
 	iconAddPhraseOne: {
@@ -59,6 +60,7 @@ type Props = {
 	deviceIds: Array<number>,
 	onPressSettings: () => void,
 	onSetIgnoreDevice: () => void,
+	isOpen: boolean,
 };
 
 class DeviceHiddenRow extends View {
@@ -75,8 +77,22 @@ class DeviceHiddenRow extends View {
 		this.onSetIgnoreDevice = this.onSetIgnoreDevice.bind(this);
 
 		let { intl, device } = props;
-		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
-		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${device.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
+		let { formatMessage } = intl;
+		this.iconAddAccessibilityLabel = `${formatMessage(messages.iconAddPhraseOne)}, ${device.name}, ${formatMessage(messages.iconAddPhraseTwo)}`;
+		this.iconRemoveAccessibilityLabel = `${formatMessage(messages.iconRemovePhraseOne)}, ${device.name}, ${formatMessage(messages.iconRemovePhraseTwo)}`;
+
+		this.labelButton = formatMessage(i18n.button);
+		this.labelSettings = formatMessage(i18n.settingsHeader);
+		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
+		this.labelGearButtonAccessibilityLabel = `${this.labelGearButton}, ${device.name}`;
+
+		this.labelHidePhraseOne = `${formatMessage(i18n.move)} ${formatMessage(i18n.labelDevice)}`;
+		this.labelHidePhraseTwo = `${formatMessage(i18n.toHiddenList)}`;
+		this.labelHide = `${this.labelHidePhraseOne} ${device.name} ${this.labelHidePhraseTwo}`;
+
+		this.labelUnHidePhraseOne = `${formatMessage(i18n.remove)} ${formatMessage(i18n.labelDevice)}`;
+		this.labelUnHidePhraseTwo = `${formatMessage(i18n.fromHiddenList)}`;
+		this.labelUnHide = `${this.labelUnHidePhraseOne} ${device.name} ${this.labelUnHidePhraseTwo}`;
 	}
 
 	onStarSelected() {
@@ -106,38 +122,43 @@ class DeviceHiddenRow extends View {
 	}
 
 	render() {
-		const { id, ignored } = this.props.device;
-		const { deviceIds } = this.props;
+		const { deviceIds, isOpen, device } = this.props;
+		const { id, ignored } = device;
 		const isOnDB = deviceIds.indexOf(id) !== -1;
 
 		let icon = isOnDB ? 'favorite' : 'favorite-outline';
 		let iconHide = ignored ? 'hidden-toggled' : 'hidden';
 
-		let accessibilityLabel = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
-		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
-		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
+		let accessibilityLabelFavorite = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+		accessibilityLabelFavorite = isOpen ? accessibilityLabelFavorite : '';
+
+		let accessibilityLabelSettings = isOpen ? this.labelGearButtonAccessibilityLabel : '';
+
+		let accessibilityLabelSetIgnore = ignored ? this.labelUnHide : this.labelHide;
+
+		let importantForAccessibility = isOpen ? 'yes' : 'no-hide-descendants';
 
 		return (
 			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onSetIgnoreDevice}
-					accessible={this.props.editMode}
-					accessibilityLabel={accessibilityLabel}>
+					accessible={isOpen}
+					accessibilityLabel={accessibilityLabelSetIgnore}>
 					<IconTelldus icon={iconHide} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onStarSelected}
-					accessible={this.props.editMode}
-					accessibilityLabel={accessibilityLabel}>
+					accessible={isOpen}
+					accessibilityLabel={accessibilityLabelFavorite}>
 					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onPressSettings}
-					accessible={this.props.editMode}
-					accessibilityLabel={accessibilityLabel}>
+					accessible={isOpen}
+					accessibilityLabel={accessibilityLabelSettings}>
 					<Icon name={'gear'} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 			</View>

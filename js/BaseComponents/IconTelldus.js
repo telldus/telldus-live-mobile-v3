@@ -32,6 +32,8 @@ const deviceWidth = Dimensions.get('window').width;
 type DefaultProps = {
 	color: string,
 	size: number,
+	accessible: boolean,
+	importantForAccessibility: string,
 };
 
 type Props = {
@@ -39,6 +41,8 @@ type Props = {
 	size?: number,
 	color?: string,
 	style?: Object | number,
+	accessible?: boolean,
+	importantForAccessibility: string,
 };
 
 export default class IconTelldus extends Component<Props, null> {
@@ -54,14 +58,19 @@ export default class IconTelldus extends Component<Props, null> {
 	static defaultProps: DefaultProps = {
 		color: '#999',
 		size: deviceWidth * 0.04,
+		accessible: true,
+		importantForAccessibility: 'yes',
 	};
 
 	render(): Object {
-		const { icon, style } = this.props;
+		const { icon, style, accessible, importantForAccessibility } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]} allowFontScaling={false}>
+			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]}
+				allowFontScaling={false}
+				importantForAccessibility={importantForAccessibility}
+				accessible={accessible}>
 				{icon}
 			</Text>
 		);

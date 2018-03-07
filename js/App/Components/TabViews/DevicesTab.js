@@ -366,8 +366,9 @@ class DevicesTab extends View {
 	toggleHiddenListButton(style): Object {
 		return (
 			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
-				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}/>
-				<Text style={style.toggleHiddenListText}>
+				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
+					importantForAccessibility="no" accessible={false}/>
+				<Text style={style.toggleHiddenListText} accessible={true}>
 					{this.state.showHiddenList ?
 						this.hideHidden
 						:
