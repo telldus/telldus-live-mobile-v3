@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 
 import { View } from '../../../../BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
-import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from '../../../Actions/Dimmer';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
@@ -56,6 +56,8 @@ type Props = {
 	appLayout: Object,
 	onSlideActive: () => void,
 	onSlideComplete: () => void,
+	screenReaderEnabled: boolean,
+	showDimmerStep: (number) => void;
 };
 
 type State = {
@@ -81,6 +83,7 @@ class DimmerButton extends View {
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
 	onTurnOffButtonEnd: () => void;
+	showDimmerStep: (number) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -106,6 +109,7 @@ class DimmerButton extends View {
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
+		this.showDimmerStep = this.showDimmerStep.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -174,8 +178,12 @@ class DimmerButton extends View {
 		this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
 	}
 
+	showDimmerStep(id: number) {
+		this.props.showDimmerStep(id);
+	}
+
 	render() {
-		const { device, intl, isGatewayActive } = this.props;
+		const { device, intl, isGatewayActive, screenReaderEnabled } = this.props;
 		const { isInState, name, supportedMethods, methodRequested } = device;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 		const onButton = (
@@ -223,6 +231,8 @@ class DimmerButton extends View {
 				intl={intl}
 				isInState={isInState}
 				isGatewayActive={isGatewayActive}
+				screenReaderEnabled={screenReaderEnabled}
+				showDimmerStep={this.showDimmerStep}
 			/>
 		) : null;
 
@@ -292,7 +302,16 @@ function mapDispatchToProps(dispatch) {
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
 		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
 		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		showDimmerStep: (id: number) => {
+			dispatch(showDimmerStep(id));
+		},
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(DimmerButton);
+function mapStateToProps(store: Object, dispatch: Function): Object {
+	return {
+		screenReaderEnabled: store.App.screenReaderEnabled,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerButton);

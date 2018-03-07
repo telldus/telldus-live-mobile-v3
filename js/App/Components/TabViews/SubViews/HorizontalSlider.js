@@ -22,11 +22,13 @@
 'use strict';
 
 import React from 'react';
-import { Text, View } from '../../../../BaseComponents';
-import { PanResponder, Animated, StyleSheet, Vibration, Platform } from 'react-native';
+import { PanResponder, Animated, StyleSheet, Vibration, Platform, TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
+import { Text, View } from '../../../../BaseComponents';
+
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 function getSliderLabel(value:number, intl: intlShape):string {
 	return value.toString();
@@ -53,6 +55,8 @@ type Props = {
 	intl: intlShape.isRequired,
 	isGatewayActive: boolean,
 	isInState: string,
+	screenReaderEnabled: boolean,
+	showDimmerStep: (number) => void;
 };
 
 type State = {
@@ -65,6 +69,7 @@ type State = {
 	maximumValue: number,
 	step: number,
 	displayedValue: string,
+	DimmerStep: boolean,
 };
 
 class HorizontalSlider extends View {
@@ -74,6 +79,10 @@ class HorizontalSlider extends View {
 	activeSlider: boolean;
 	layoutView: Object => void;
 	layoutScale: Object => void;
+	onPressDimmer: () => void;
+
+	labelPhraseOne: string;
+	labelPhraseTwo: string;
 
 	constructor(props: Props) {
 		super(props);
@@ -88,11 +97,17 @@ class HorizontalSlider extends View {
 			maximumValue: 100,
 			step: 1,
 			displayedValue: getSliderLabel(this.props.value, this.props.intl),
+			DimmerStep: false,
 		};
 		this.activeSlider = false;
 
 		this.layoutView = this.layoutView.bind(this);
 		this.layoutScale = this.layoutScale.bind(this);
+		this.onPressDimmer = this.onPressDimmer.bind(this);
+
+		let { formatMessage } = this.props.intl;
+		this.labelPhraseOne = formatMessage(i18n.dimLevel);
+		this.labelPhraseTwo = formatMessage(i18n.messageControlDimStep);
 	}
 
 	componentWillMount() {
@@ -269,9 +284,16 @@ class HorizontalSlider extends View {
 		this.setState({ displayedValue: getSliderLabel(val, this.props.intl) });
 	}
 
+	onPressDimmer() {
+		let { showDimmerStep, item } = this.props;
+		if (showDimmerStep) {
+			showDimmerStep(item.id);
+		}
+	}
+
 	render() {
-		const { minimumValue, maximumValue, value, containerHeight, containerWidth, scaleWidth } = this.state;
-		const { thumbWidth, thumbHeight, isGatewayActive, isInState } = this.props;
+		const { minimumValue, maximumValue, value, containerHeight, containerWidth, scaleWidth, displayedValue } = this.state;
+		const { thumbWidth, thumbHeight, isGatewayActive, isInState, screenReaderEnabled } = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
@@ -283,8 +305,22 @@ class HorizontalSlider extends View {
 			(isInState === 'TURNOFF' ? styles.enabledOff : styles.enabled);
 		let styleBackground = styles.disabled;
 
+		let accessibilityLabel = `${this.labelPhraseOne} ${displayedValue}% , ${this.labelPhraseTwo}`;
+
+		let Parent = View;
+		let parentProps = {
+			...this.panResponder.panHandlers,
+		};
+		if (screenReaderEnabled) {
+			Parent = TouchableOpacity;
+			parentProps = {
+				disabled: !screenReaderEnabled,
+				onPress: this.onPressDimmer,
+			};
+		}
+
 		return (
-			<View style={[this.props.style, styleBackground]} onLayout={this.layoutView} {...this.panResponder.panHandlers}>
+			<Parent style={[this.props.style, styleBackground]} onLayout={this.layoutView} {...parentProps} accessibilityLabel={accessibilityLabel}>
 				<View style={[styles.sliderScale, scaleStyle, {
 					height: thumbHeight / 3,
 					width: (containerWidth - (2 * thumbWidth)),
@@ -306,9 +342,9 @@ class HorizontalSlider extends View {
 						fontSize: this.props.fontSize,
 						bottom: (containerHeight - thumbHeight) / 3.8,
 					}]}>
-					{this.state.displayedValue}%
+					{displayedValue}%
 				</Text>
-			</View>
+			</Parent>
 		);
 	}
 }

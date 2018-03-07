@@ -52,7 +52,9 @@ import DeviceDetails from './DeviceDetails/DeviceDetails';
 import { NavigationHeader } from './DeviceDetails/SubViews';
 import AddLocationNavigator from './Location/AddLocation/AddLocation';
 import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails';
+import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 
+import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
 const RouteConfigs = {
@@ -131,6 +133,7 @@ class AppNavigator extends View {
 	state: State;
 
 	onNavigationStateChange: (Object) => void;
+	onDoneDimming: (Object) => void;
 
 	constructor() {
 		super();
@@ -140,6 +143,7 @@ class AppNavigator extends View {
 		};
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+		this.onDoneDimming = this.onDoneDimming.bind(this);
 	}
 
 	componentWillMount() {
@@ -179,19 +183,34 @@ class AppNavigator extends View {
 		this.setState({ currentScreen: currentState.routes[index].routeName });
 	}
 
+	onDoneDimming() {
+		this.props.dispatch(hideDimmerStep());
+	}
+
 	render() {
 		let { currentScreen } = this.state;
+		let { intl, dimmer } = this.props;
 		let screenProps = {
 			currentScreen,
 		};
+		let { show, name, value, showStep, deviceStep } = dimmer;
+		let importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
 		return (
-			<View>
-				<Navigator onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
-				<DimmerPopup
-					isVisible={this.props.dimmer.show}
-					name={this.props.dimmer.name}
-					value={this.props.dimmer.value / 255}
+			<View style={{flex: 1}}>
+				<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
+					<Navigator onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps} />
+					<DimmerPopup
+						isVisible={show}
+						name={name}
+						value={value / 255}
+					/>
+				</View>
+				<DimmerStep
+					showModal={showStep}
+					deviceId={deviceStep}
+					onDoneDimming={this.onDoneDimming}
+					intl={intl}
 				/>
 			</View>
 		);

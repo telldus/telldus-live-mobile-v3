@@ -28,7 +28,7 @@ import throttle from 'lodash/throttle';
 
 import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
-import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from '../../../Actions/Dimmer';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
@@ -61,6 +61,8 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	powerConsumed: string,
+	screenReaderEnabled: boolean,
+	showDimmerStep: (number) => void;
 };
 
 type State = {
@@ -99,6 +101,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	onSlidingStart: (name:string, sliderValue:number) => void;
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
+	showDimmerStep: (number) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -127,6 +130,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
+		this.showDimmerStep = this.showDimmerStep.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -192,8 +196,12 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		this.props.requestDeviceAction(this.props.item.id, this.props.commandOFF);
 	}
 
+	showDimmerStep(id: number) {
+		this.props.showDimmerStep(id);
+	}
+
 	render() {
-		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
+		const { item, tileWidth, intl, isGatewayActive, powerConsumed, screenReaderEnabled } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 
@@ -229,6 +237,8 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 				intl={intl}
 				isInState={isInState}
 				isGatewayActive={isGatewayActive}
+				screenReaderEnabled={screenReaderEnabled}
+				showDimmerStep={this.showDimmerStep}
 			/> :
 			null;
 
@@ -322,6 +332,9 @@ function mapDispatchToProps(dispatch) {
 		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
 		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
 		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		showDimmerStep: (id: number) => {
+			dispatch(showDimmerStep(id));
+		},
 	};
 }
 
@@ -329,6 +342,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
 	return {
 		powerConsumed,
+		screenReaderEnabled: store.App.screenReaderEnabled,
 	};
 }
 

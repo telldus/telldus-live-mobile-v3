@@ -480,6 +480,14 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.toHiddenList',
 		defaultMessage: 'to hidden list',
 	},
+	dimLevel: {
+		id: 'accessibilityLabel.dimLevel',
+		defaultMessage: 'Dim level',
+	},
+	messageControlDimStep: {
+		id: 'accessibilityLabel.messageControlDimStep',
+		defaultMessage: 'Double tap to control',
+	},
 });
 
 export default messages;
