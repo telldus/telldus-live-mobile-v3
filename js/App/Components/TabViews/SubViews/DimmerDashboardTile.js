@@ -299,13 +299,13 @@ const styles = StyleSheet.create({
 	},
 	turnOff: {
 		flex: 1,
-		alignItems: 'center',
+		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderBottomLeftRadius: 2,
 	},
 	turnOn: {
 		flex: 1,
-		alignItems: 'center',
+		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderBottomRightRadius: 2,
 	},

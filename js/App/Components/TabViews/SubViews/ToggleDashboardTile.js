@@ -117,12 +117,12 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 const styles = StyleSheet.create({
 	turnOffButtonContainer: {
 		flex: 1,
-		alignItems: 'center',
+		alignItems: 'stretch',
 		borderBottomLeftRadius: 2,
 	},
 	turnOnButtonContainer: {
 		flex: 1,
-		alignItems: 'center',
+		alignItems: 'stretch',
 		borderBottomRightRadius: 2,
 	},
 	button: {
