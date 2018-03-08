@@ -31,6 +31,7 @@ import { View, IconTelldus } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from '../../../../Theme';
+import i18n from '../../../../Translations/common';
 
 const messages = defineMessages({
 	iconAddPhraseOne: {
@@ -58,6 +59,7 @@ type Props = {
 	intl: Object,
 	sensorIds: Array<number>,
 	onSetIgnoreSensor: () => void,
+	isOpen: boolean,
 };
 
 class SensorHiddenRow extends View {
@@ -72,8 +74,18 @@ class SensorHiddenRow extends View {
 		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
 
 		let { intl, sensor } = props;
+		let { formatMessage } = intl;
+
 		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
 		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
+
+		this.labelHidePhraseOne = `${formatMessage(i18n.move)} ${formatMessage(i18n.labelSensor)}`;
+		this.labelHidePhraseTwo = `${formatMessage(i18n.toHiddenList)}`;
+		this.labelHide = `${this.labelHidePhraseOne} ${sensor.name} ${this.labelHidePhraseTwo}`;
+
+		this.labelUnHidePhraseOne = `${formatMessage(i18n.remove)} ${formatMessage(i18n.labelSensor)}`;
+		this.labelUnHidePhraseTwo = `${formatMessage(i18n.fromHiddenList)}`;
+		this.labelUnHide = `${this.labelUnHidePhraseOne} ${sensor.name} ${this.labelUnHidePhraseTwo}`;
 	}
 
 	onStarSelected() {
@@ -96,31 +108,32 @@ class SensorHiddenRow extends View {
 	}
 
 	render() {
-		const { id, ignored } = this.props.sensor;
-		const { sensorIds } = this.props;
+		const { sensorIds, sensor, isOpen } = this.props;
+		const { id, ignored } = sensor;
 		const isOnDB = sensorIds.indexOf(id) !== -1;
 
 		let icon = isOnDB ? 'favorite' : 'favorite-outline';
 		let iconHide = ignored ? 'hidden-toggled' : 'hidden';
 
-		let accessibilityLabel = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
-		accessibilityLabel = this.props.editMode ? accessibilityLabel : '';
-		let importantForAccessibility = this.props.editMode ? 'yes' : 'no-hide-descendants';
+		let importantForAccessibility = isOpen ? 'yes' : 'no-hide-descendants';
+		let accessibilityLabelFavorite = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
+		accessibilityLabelFavorite = isOpen ? accessibilityLabelFavorite : '';
+		let accessibilityLabelSetIgnore = ignored ? this.labelUnHide : this.labelHide;
 
 		return (
 			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onSetIgnoreSensor}
-					accessible={this.props.editMode}
-					accessibilityLabel={accessibilityLabel}>
+					accessible={isOpen}
+					accessibilityLabel={accessibilityLabelSetIgnore}>
 					<IconTelldus icon={iconHide} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onStarSelected}
-					accessible={this.props.editMode}
-					accessibilityLabel={accessibilityLabel}>
+					accessible={isOpen}
+					accessibilityLabel={accessibilityLabelFavorite}>
 					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 			</View>

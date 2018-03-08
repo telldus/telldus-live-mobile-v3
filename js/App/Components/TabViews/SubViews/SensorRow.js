@@ -64,7 +64,6 @@ class SensorRow extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
 
-	onLayout: (Object) => void;
 	labelSensor: string;
 	labelHumidity: string;
 	labelTemperature: string;
@@ -90,6 +89,10 @@ class SensorRow extends PureComponent<Props, State> {
 	width: number;
 	offline: string;
 	sensorTypes: Object;
+	helpViewHiddenRow: string;
+	helpCloseHiddenRow: string;
+
+	onLayout: (Object) => void;
 	changeDisplayType: (number) => void;
 	LayoutLinear: Object;
 	onRowOpen: () => void;
@@ -132,6 +135,9 @@ class SensorRow extends PureComponent<Props, State> {
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
 
 		this.offline = formatMessage(i18n.offline);
+
+		this.helpViewHiddenRow = formatMessage(i18n.helpViewHiddenRow);
+		this.helpCloseHiddenRow = formatMessage(i18n.helpCloseHiddenRow);
 
 		this.sensorTypes = getSensorTypes();
 
@@ -232,30 +238,36 @@ class SensorRow extends PureComponent<Props, State> {
 				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
 			}
 			if (name === 'watt') {
-				let label = this.labelEnergy;
+				let label = this.labelEnergy, labelWatt = this.labelEnergy;
 				if (scale === '0') {
 					label = isLarge ? `${this.labelAccumulated} ${this.labelWatt}` :
 						`${this.labelAcc} ${this.labelWatt}`;
+					labelWatt = `${this.labelAccumulated} ${this.labelWatt}`;
 				}
 				if (scale === '2') {
 					label = this.labelWatt;
+					labelWatt = this.labelWatt;
 				}
 				if (scale === '3') {
 					label = this.labelPulse;
+					labelWatt = this.labelPulse;
 				}
 				if (scale === '4') {
 					label = this.labelVoltage;
+					labelWatt = this.labelVoltage;
 				}
 				if (scale === '5') {
 					label = this.labelCurrent;
+					labelWatt = this.labelCurrent;
 				}
 				if (scale === '6') {
 					label = this.labelPowerFactor;
+					labelWatt = this.labelPowerFactor;
 				}
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
 					icon={'watt'} label={label} isLarge={isLarge} key={key}
 					formatOptions={{maximumFractionDigits: 1}}/>);
-				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
 			}
 			if (name === 'luminance') {
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
@@ -297,10 +309,12 @@ class SensorRow extends PureComponent<Props, State> {
 
 		let { sensors, sensorInfo } = this.getSensors(data);
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
-		let accessibilityLabel = `${this.labelSensor}, ${name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
-		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
+		let { currentIndex, isOpen } = this.state;
 
-		let { currentIndex } = this.state;
+		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
+		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
+		let accessibilityLabelPhraseTwo = isOpen ? this.helpCloseHiddenRow : this.helpViewHiddenRow;
+		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
 
 		return (
 			<SwipeRow
@@ -310,15 +324,16 @@ class SensorRow extends PureComponent<Props, State> {
 				onRowOpen={this.onRowOpen}
 				onRowClose={this.onRowClose}
 				recalculateHiddenLayout={true}>
-				<HiddenRow sensor={sensor} intl={intl} onSetIgnoreSensor={this.onSetIgnoreSensor}/>
+				<HiddenRow sensor={sensor} intl={intl}
+					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}/>
 				<ListItem
 					style={styles.row}
 					onLayout={this.onLayout}
 					accessible={accessible}
 					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 					accessibilityLabel={accessible ? accessibilityLabel : ''}>
-					<TouchableWithoutFeedback style={styles.container}>
-						<View style={styles.container}>
+					<TouchableWithoutFeedback style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
+						<View style={styles.container} importantForAccessibility="no-hide-descendants">
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 							<View>
 								<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
@@ -345,8 +360,8 @@ class SensorRow extends PureComponent<Props, State> {
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
-					<TouchableWithoutFeedback onPress={this.changeDisplayType} style={styles.sensorValueCover}>
-						<View style={styles.sensorValueCover}>
+					<TouchableWithoutFeedback onPress={this.changeDisplayType} accessible={false} style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
+						<View style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
 							{sensors[currentIndex] && (
 								sensors[currentIndex]
 							)}
