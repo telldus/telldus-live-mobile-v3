@@ -285,7 +285,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 				borderBottomLeftRadius: 3,
 			},
 			roundIconStyle: {
-				fontSize: Math.floor(width * 0.0667777777),
+				fontSize: isPortrait ? Math.floor(width * 0.0667777777) : Math.floor(height * 0.0667777777),
 				color: '#d32f2f',
 			},
 			rowContainerStyle: {
