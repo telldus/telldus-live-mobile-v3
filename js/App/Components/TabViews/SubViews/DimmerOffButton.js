@@ -109,6 +109,11 @@ const styles = StyleSheet.create({
 		top: 3,
 		left: 3,
 	},
+	button: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 });
 
 DimmerOffButton.propTypes = {

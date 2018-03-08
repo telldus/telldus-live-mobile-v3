@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
 	turnOff: {
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		alignItems: 'center',
+		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
 		marginLeft: Theme.Core.buttonWidth,
-		alignItems: 'center',
+		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',

@@ -75,12 +75,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	turnOff: {
-		alignItems: 'center',
+		alignItems: 'stretch',
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},
 	turnOn: {
-		alignItems: 'center',
+		alignItems: 'stretch',
 	},
 });
 

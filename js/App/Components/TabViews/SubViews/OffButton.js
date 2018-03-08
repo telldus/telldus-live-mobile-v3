@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
 	button: {
 		flex: 1,
 		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	buttonText: {
 		textAlign: 'center',
