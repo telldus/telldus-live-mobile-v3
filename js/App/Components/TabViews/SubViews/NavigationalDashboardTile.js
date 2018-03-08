@@ -59,13 +59,13 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 
 		const upButton = UP ? <UpButton isEnabled={true} style={styles.navigationButton}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
-			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id}/> : null;
+			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id} name={name}/> : null;
 		const downButton = DOWN ? <DownButton isEnabled={true} style={styles.navigationButton}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
-			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id}/> : null;
+			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id} name={name}/> : null;
 		const stopButton = STOP ? <StopButton isEnabled={true} style={styles.navigationButton}
 			methodRequested={item.methodRequested} iconSize={20} isGatewayActive={isGatewayActive}
-			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id}/> : null;
+			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id} name={name}/> : null;
 
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 

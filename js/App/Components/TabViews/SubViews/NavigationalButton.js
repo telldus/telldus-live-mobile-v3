@@ -49,20 +49,20 @@ class NavigationalButton extends View {
 	render() {
 
 		let { device, isGatewayActive, intl, style } = this.props;
-		const { supportedMethods, methodRequested, isInState, id } = device;
+		const { supportedMethods, methodRequested, isInState, id, name } = device;
 		const { UP, DOWN, STOP } = supportedMethods;
 
 		return (
 			<View style={style}>
 				<UpButton supportedMethod={UP} methodRequested={methodRequested} intl={intl}
 					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={styles.navigationButton}/>
+					id={id} style={styles.navigationButton} name={name}/>
 				<DownButton supportedMethod={DOWN} methodRequested={methodRequested} intl={intl}
 					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={styles.navigationButton}/>
+					id={id} style={styles.navigationButton} name={name}/>
 				<StopButton supportedMethod={STOP} methodRequested={methodRequested} intl={intl}
 					iconSize={20} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={styles.navigationButton}/>
+					id={id} style={styles.navigationButton} name={name}/>
 			</View>
 		);
 	}
