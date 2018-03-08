@@ -21,24 +21,20 @@
 
 'use strict';
 
-import React, { PropTypes } from 'React';
+import React from 'React';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Image, Dimensions } from 'react-native';
+import { Platform } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 import Toast from 'react-native-simple-toast';
 import {
-	getGateways,
-	getSensors,
-	getJobs,
 	getUserProfile,
 	appStart,
 	appState,
 	syncLiveApiOnForeground,
-} from 'Actions';
-import { authenticateSession, connectToGateways } from 'Actions_Websockets';
-import { hideToast } from 'Actions_App';
-import { getDevices } from 'Actions_Devices';
+	getAppData,
+	getGateways,
+} from '../Actions';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import { resetSchedule } from 'Actions_Schedule';
 import ScheduleNavigator from 'ScheduleNavigator';
@@ -46,23 +42,21 @@ import ScheduleNavigator from 'ScheduleNavigator';
 const messages = defineMessages({
 	errortoast: {
 		id: 'errortoast',
-		defaultMessage: 'Action Currently Unavailable',
+		defaultMessage: 'Action could not be completed.',
 		description: 'The error messgage to show, when a device action cannot be performed',
 	},
 });
 
-const deviceHeight = Dimensions.get('window').height;
-let deviceWidth = Dimensions.get('window').width;
-import Theme from 'Theme';
+import { View } from '../../BaseComponents';
+import TabsView from './TabViews/TabsView';
+import { DimmerPopup } from './TabViews/SubViews';
+import DeviceDetails from './DeviceDetails/DeviceDetails';
+import { NavigationHeader } from './DeviceDetails/SubViews';
+import AddLocationNavigator from './Location/AddLocation/AddLocation';
+import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails';
+import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 
-import { View } from 'BaseComponents';
-import Platform from 'Platform';
-import TabsView from 'TabsView';
-import StatusBar from 'StatusBar';
-import Orientation from 'react-native-orientation';
-import { DimmerPopup } from 'TabViews_SubViews';
-import DeviceDetailsTabsView from 'DeviceDetailsTabsView';
-
+import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
 const RouteConfigs = {
@@ -73,38 +67,53 @@ const RouteConfigs = {
 		},
 	},
 	DeviceDetails: {
-		screen: DeviceDetailsTabsView,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
+		screen: DeviceDetails,
+		navigationOptions: ({navigation}: Object): Object => {
+			return {
+				header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
+			};
 		},
 	},
 	Schedule: {
 		screen: ScheduleNavigator,
-		navigationOptions: {
-			headerStyle: {
-				marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: Theme.Core.brandPrimary,
-				height: deviceHeight * 0.1,
-			},
-			headerTintColor: '#ffffff',
-			headerTitle: renderStackHeader(),
+		navigationOptions: ({navigation}: Object): Object => {
+			return {
+				header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
+			};
 		},
 	},
+	AddLocation: {
+		screen: AddLocationNavigator,
+		navigationOptions: ({navigation}: Object): Object => {
+			let {state} = navigation;
+			let renderRootHeader = state.params && state.params.renderRootHeader;
+			if (renderRootHeader) {
+				return {
+					header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
+				};
+			}
+			return {
+				header: null,
+			};
+		},
+	},
+	LocationDetails: {
+		screen: LocationDetailsNavigator,
+		navigationOptions: ({navigation}: Object): Object => {
+			let {state} = navigation;
+			let renderRootHeader = state.params && state.params.renderRootHeader;
+			if (renderRootHeader) {
+				return {
+					header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
+				};
+			}
+			return {
+				header: null,
+			};
+		},
+
+	},
 };
-
-function renderStackHeader(): React$Element<any> {
-	return (
-		<Image style={{ height: 110, width: 130, marginLeft: (deviceWidth * 0.2) }} resizeMode={'contain'} source={require('./TabViews/img/telldus-logo.png')}/>
-	);
-}
-
-
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',
@@ -126,7 +135,7 @@ type Props = {
 };
 
 type State = {
-	specificOrientation: Object,
+	currentScreen: string,
 };
 
 class AppNavigator extends View {
@@ -134,21 +143,18 @@ class AppNavigator extends View {
 	props: Props;
 	state: State;
 
-	_updateSpecificOrientation: (Object) => void;
+	onNavigationStateChange: (Object) => void;
+	onDoneDimming: (Object) => void;
 
 	constructor() {
 		super();
 
-		if (Platform.OS !== 'android') {
-			const init = Orientation.getInitialOrientation();
+		this.state = {
+			currentScreen: 'Tabs',
+		};
 
-			this.state = {
-				specificOrientation: init,
-			};
-
-			Orientation.unlockAllOrientations();
-			Orientation.addSpecificOrientationListener(this._updateSpecificOrientation);
-		}
+		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+		this.onDoneDimming = this.onDoneDimming.bind(this);
 	}
 
 	componentWillMount() {
@@ -157,50 +163,65 @@ class AppNavigator extends View {
 	}
 
 	componentDidMount() {
-		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
-		if (Platform.OS === 'android' && StatusBar) {
-			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
-		}
-
-		this.props.dispatch(getUserProfile());
-		this.props.dispatch(authenticateSession());
-		this.props.dispatch(connectToGateways());
-		this.props.dispatch(syncLiveApiOnForeground());
-
-		this.props.dispatch(getDevices());
-		this.props.dispatch(getGateways());
-		this.props.dispatch(getSensors());
-		this.props.dispatch(getJobs());
-		this.props.dispatch(resetSchedule());
+		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
+		// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
+		// and results in generating multiple tokens.
+		this.props.dispatch(getUserProfile()).then(() => {
+			this.props.dispatch(syncLiveApiOnForeground());
+			this.props.dispatch(getGateways());
+			this.props.dispatch(getAppData());
+			this.props.dispatch(resetSchedule());
+		});
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.toastVisible) {
-			let message = nextProps.toastMessage ? nextProps.toastMessage : this.props.intl.formatMessage(messages.errortoast);
-			this._showToast(message, nextProps.toastDuration, nextProps.toastPosition);
+			let { formatMessage } = this.props.intl;
+			let message = nextProps.toastMessage ? nextProps.toastMessage : formatMessage(messages.errortoast);
+			this._showToast(message);
 		}
 	}
 
-	_showToast(message: string, duration: string, position: string) {
-		Toast.showWithGravity(message, Toast[duration], Toast[position]);
-		this.props.dispatch(hideToast());
+	_showToast(message: string) {
+		Toast.showWithGravity(message, Toast.SHORT, Toast.TOP);
+		this.props.dispatch({
+			type: 'GLOBAL_ERROR_HIDE',
+		});
 	}
 
-	_updateSpecificOrientation = (specificOrientation: string) => {
-		if (Platform.OS !== 'android') {
-			this.setState({ specificOrientation });
-		}
-	};
+	onNavigationStateChange(prevState: Object, currentState: Object) {
+		const index = currentState.index;
+		this.setState({ currentScreen: currentState.routes[index].routeName });
+	}
 
-	render(): React$Element<any> {
+	onDoneDimming() {
+		this.props.dispatch(hideDimmerStep());
+	}
+
+	render(): Object {
+		let { currentScreen } = this.state;
+		let { intl, dimmer } = this.props;
+		let screenProps = {
+			currentScreen,
+		};
+		let { show, name, value, showStep, deviceStep } = dimmer;
+		let importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
+
 		return (
-			<View>
-				<Navigator/>
-				<DimmerPopup
-					isVisible={this.props.dimmer.show}
-					name={this.props.dimmer.name}
-					value={this.props.dimmer.value / 255}
+			<View style={{flex: 1}}>
+				<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
+					<Navigator onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps} />
+					<DimmerPopup
+						isVisible={show}
+						name={name}
+						value={value / 255}
+					/>
+				</View>
+				<DimmerStep
+					showModal={showStep}
+					deviceId={deviceStep}
+					onDoneDimming={this.onDoneDimming}
+					intl={intl}
 				/>
 			</View>
 		);
@@ -224,4 +245,10 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps)(injectIntl(AppNavigator));
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(AppNavigator));

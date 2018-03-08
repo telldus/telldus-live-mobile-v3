@@ -32,23 +32,16 @@ import {
 	View,
 	Icon,
 	TouchableButton,
-	Dimensions,
-} from 'BaseComponents';
-import { DialogueBox } from 'BaseComponents';
-import { StyleSheet } from 'react-native';
-import { logoutFromTelldus } from 'Actions';
-import type { Dispatch } from 'Actions_Types';
+	DialogueBox,
+} from '../../../BaseComponents';
+import { logoutFromTelldus } from '../../Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 
-import Theme from 'Theme';
 import { pushServiceId } from '../../../Config';
-import { registerPushToken, unregisterPushToken } from 'Actions_User';
+import { registerPushToken, unregisterPushToken } from '../../Actions/User';
 
 import i18n from './../../Translations/common';
-
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
 
 const messages = defineMessages({
 	pushEnabled: {
@@ -58,13 +51,23 @@ const messages = defineMessages({
 	},
 	pushRegister: {
 		id: 'settings.pushRegister',
-		defaultMessage: 'Register for push notifications',
+		defaultMessage: 'Re-register for push',
 		description: 'Message in the settings window shown if the app was not registered for push notifications, in settings view',
 	},
 	pushRegisters: {
 		id: 'settings.pushRegisters',
-		defaultMessage: 'Registers for push notifications',
+		defaultMessage: 'Registering for push',
 		description: 'Message in the settings window shown when registrating for push notifications',
+	},
+	pushRegisterSuccess: {
+		id: 'settings.pushRegisterSuccess',
+		defaultMessage: 'This phone is now registered for push',
+		description: 'Message to show when token registered successfully',
+	},
+	pushRegisterFailed: {
+		id: 'settings.pushRegisterFailed',
+		defaultMessage: 'Failed to register for push. Please try again',
+		description: 'Message to show when token register failed',
 	},
 	version: {
 		id: 'version',
@@ -72,19 +75,19 @@ const messages = defineMessages({
 	},
 });
 
-const Header = ({ onPress }: Object): React$Element<any> => (
+const Header = ({ onPress, styles, buttonAccessibilityLabel }) => (
 	<View style={styles.header}>
 		<Icon name="gear" size={26} color="white"
 		      style={styles.gear}/>
 		<Text ellipsizeMode="middle" style={styles.textHeaderTitle}>
 			<FormattedMessage {...i18n.settingsHeader} style={styles.textHeaderTitle}/>
 		</Text>
-		<Icon name="close" size={26} color="white" style={{ flex: 1 }} onPress={onPress}/>
+		<Icon name="close" size={26} color="white" style={{ flex: 1 }} accessibilityLabel={buttonAccessibilityLabel} onPress={onPress}/>
 	</View>
 );
 
-const StatusView = (): React$Element<any> => (
-	<Text style={styles.statusText}>
+const StatusView = ({styles, accessible, importantForAccessibility}) => (
+	<Text style={styles.statusText} accessible={accessible} importantForAccessibility={importantForAccessibility}>
 		<FormattedMessage {...messages.pushEnabled} style={styles.statusText} />
 	</Text>
 );
@@ -93,19 +96,20 @@ type Props = {
 	dispatch: Function,
 	isVisible: boolean,
 	onClose: () => void,
-	onLogout: (string, (string) => void) => void,
-	onSubmitPushToken: (string, (string) => void) => void,
-	pushToken: string,
-	pushTokenRegistered: boolean,
-	notificationText: string,
+	onLogout: (string, Function) => void,
+	onSubmitPushToken: (string) => Promise<any>,
+	user: Object,
 	validationMessage: string,
 	showModal: boolean,
 	intl: intlShape.isRequired,
+	appLayout: Object,
 };
 
 
 type State = {
 	isVisible: boolean,
+	isPushSubmitLoading: boolean,
+	isLogoutLoading: boolean,
 };
 
 class SettingsDetailModal extends View {
@@ -119,7 +123,7 @@ class SettingsDetailModal extends View {
 	onConfirmLogout: () => void;
 	closeModal: () => void;
 
-	constructor(props: Props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			isVisible: this.props.isVisible,
@@ -133,7 +137,13 @@ class SettingsDetailModal extends View {
 		this.updateModalVisiblity = this.updateModalVisiblity.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 
-		this.confirmMessage = this.props.intl.formatMessage(i18n.contentLogoutConfirm);
+		let { formatMessage } = this.props.intl;
+
+		this.confirmMessage = formatMessage(i18n.contentLogoutConfirm);
+		this.labelButton = formatMessage(i18n.button);
+		this.labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelLogOut = `${formatMessage(i18n.labelLogOut)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
+		this.labelCloseSettings = `${formatMessage(i18n.labelClose)} ${formatMessage(i18n.settingsHeader)}. ${this.labelButtondefaultDescription}`;
 	}
 
 	logout() {
@@ -150,7 +160,7 @@ class SettingsDetailModal extends View {
 		this.setState({
 			isLogoutLoading: true,
 		});
-		this.props.onLogout(this.props.pushToken, this.postLoadMethod);
+		this.props.onLogout(this.props.user.pushToken, this.postLoadMethod);
 	}
 
 	closeModal() {
@@ -159,7 +169,7 @@ class SettingsDetailModal extends View {
 		});
 	}
 
-	postLoadMethod(type: string) {
+	postLoadMethod(type) {
 		if (type === 'REG_TOKEN') {
 			this.setState({
 				isPushSubmitLoading: false,
@@ -176,12 +186,14 @@ class SettingsDetailModal extends View {
 		this.props.onClose();
 	}
 
-	getRelativeData(): Object {
-		let notificationHeader = `${this.props.intl.formatMessage(i18n.logout)}?`, showPositive = true,
-			showNegative = true, positiveText = this.props.intl.formatMessage(i18n.logout).toUpperCase(),
+	getRelativeData() {
+		let { formatMessage } = this.props.intl;
+
+		let notificationHeader = `${formatMessage(i18n.logout)}?`, showPositive = true,
+			showNegative = true, positiveText = formatMessage(i18n.logout).toUpperCase(),
 			onPressPositive = this.onConfirmLogout, onPressNegative = this.closeModal;
-		let submitButText = this.state.isPushSubmitLoading ? messages.pushRegisters : messages.pushRegister;
-		let logoutButText = this.state.isLogoutLoading ? i18n.loggingout : i18n.logout;
+		let submitButText = this.state.isPushSubmitLoading ? `${formatMessage(messages.pushRegisters)}...` : formatMessage(messages.pushRegister);
+		let logoutButText = this.state.isLogoutLoading ? formatMessage(i18n.loggingout) : formatMessage(i18n.logout);
 		let version = DeviceInfo.getVersion();
 
 		return {
@@ -197,7 +209,7 @@ class SettingsDetailModal extends View {
 		};
 	}
 
-	render(): Object {
+	render() {
 		let {
 			notificationHeader,
 			showPositive,
@@ -209,40 +221,53 @@ class SettingsDetailModal extends View {
 			logoutButText,
 			version,
 		} = this.getRelativeData();
+		let { appLayout, showModal } = this.props;
+		let { isLogoutLoading, isPushSubmitLoading } = this.state;
+		let styles = this.getStyles(appLayout);
+
+		let buttonAccessible = !isLogoutLoading && !isPushSubmitLoading && !showModal;
+		let importantForAccessibility = showModal ? 'no-hide-descendants' : 'yes';
 
 		return (
 			<Modal isVisible={this.state.isVisible} onModalHide={this.updateModalVisiblity}>
 				<Container style={styles.container}>
-					<Header onPress={this.props.onClose}/>
+					<Header onPress={this.props.onClose} styles={styles} buttonAccessibilityLabel={this.labelCloseSettings}/>
 					<View style={styles.body}>
-						{ this.props.notificationText ?
-							<Text style={styles.notification}>{this.props.notificationText}</Text>
-							:
-							null
-						}
-						<Text style={styles.versionInfo}>
-							Telldus Live! mobile{'\n'}
-							<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
-						</Text>
-						{this.props.pushToken && !this.props.pushTokenRegistered ?
+						<View style={styles.body}>
+							{ this.props.user.notificationText ?
+								<Text style={styles.notification}
+									accessible={buttonAccessible}
+									importantForAccessibility={importantForAccessibility}>
+									{this.props.user.notificationText}
+								</Text>
+								:
+								null
+							}
+							<Text style={styles.versionInfo} accessible={buttonAccessible}
+								importantForAccessibility={importantForAccessibility}>
+								{'Telldus Live! mobile '}
+								<FormattedMessage {...messages.version} style={styles.versionInfo}/> {version}
+							</Text>
 							<TouchableButton
-								style={Theme.Styles.submitButton}
+								style={styles.pushSubmitButton}
+								labelStyle={{fontSize: 12}}
 								onPress={this.submitPushToken}
 								text={submitButText}
-								postScript={this.state.isPushSubmitLoading ? '...' : null}
+								accessible={buttonAccessible}
 							/>
-							:
-							<StatusView/>
-						}
-						<View style={{height: 20}} />
-						<TouchableButton
-							style={Theme.Styles.submitButton}
-							onPress={this.logout}
-							text={logoutButText}
-							postScript={this.state.isLogoutLoading ? '...' : null}
-						/>
+							<StatusView styles={styles}
+								accessible={buttonAccessible}
+								importantForAccessibility={importantForAccessibility}/>
+							<View style={{height: 20}} />
+							<TouchableButton
+								onPress={this.logout}
+								text={logoutButText}
+								postScript={this.state.isLogoutLoading ? '...' : null}
+								accessibilityLabel={this.labelLogOut}
+								accessible={buttonAccessible}
+							/>
+						</View>
 						<DialogueBox
-							style={styles.modal}
 							showDialogue={this.props.showModal}
 							header={notificationHeader}
 							text={this.props.validationMessage}
@@ -250,7 +275,7 @@ class SettingsDetailModal extends View {
 							showNegative={showNegative}
 							positiveText={positiveText}
 							onPressPositive={onPressPositive}
-							onPressNegative={onPressNegative} />
+							onPressNegative={onPressNegative}/>
 					</View>
 				</Container>
 			</Modal>
@@ -261,87 +286,112 @@ class SettingsDetailModal extends View {
 		this.setState({
 			isPushSubmitLoading: true,
 		});
-		this.props.onSubmitPushToken(this.props.pushToken, this.postLoadMethod);
+		let { formatMessage } = this.props.intl;
+		this.props.onSubmitPushToken(this.props.user.pushToken).then(response => {
+			let message = formatMessage(messages.pushRegisterSuccess);
+			this.showToast(message);
+		}).catch((err) => {
+			console.log(err);
+			let message = formatMessage(messages.pushRegisterFailed);
+			this.showToast(message);
+		});
+
+	}
+
+	showToast(message: string) {
+		this.props.dispatch({
+			type: 'GLOBAL_ERROR_SHOW',
+			payload: {
+				source: 'settings',
+				customMessage: message,
+			},
+		});
+		this.setState({
+			isPushSubmitLoading: false,
+		});
+	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+
+		return {
+			container: {
+				flex: 1,
+				backgroundColor: 'white',
+				margin: 10,
+			},
+			header: {
+				height: 46,
+				backgroundColor: '#1a355b',
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			textHeaderTitle: {
+				marginLeft: 8,
+				color: 'white',
+				fontSize: 18,
+				fontWeight: 'bold',
+				flex: 8,
+			},
+			body: {
+				flex: 10,
+				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			statusText: {
+				justifyContent: 'center',
+				alignItems: 'center',
+				color: '#1a355b',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				textAlign: 'center',
+				textAlignVertical: 'center',
+			},
+			versionInfo: {
+				color: '#1a355b',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				textAlign: 'center',
+				textAlignVertical: 'center',
+				marginVertical: 20,
+			},
+			gear: {
+				flex: 1,
+				marginLeft: 8,
+			},
+			notification: {
+				padding: 7,
+				marginTop: 10,
+				marginLeft: 100,
+				marginRight: 100,
+
+				borderColor: '#f00',
+				borderWidth: 1,
+				borderRadius: 3,
+
+				fontSize: isPortrait ? Math.floor(width * 0.041) : Math.floor(height * 0.041),
+				color: '#1a355b',
+				textAlign: 'center',
+				backgroundColor: '#ff000033',
+			},
+			pushSubmitButton: {
+				width: isPortrait ? width * 0.55 : height * 0.55,
+			},
+		};
 	}
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: 'white',
-		margin: 10,
-	},
-	header: {
-		height: 46,
-		backgroundColor: '#1a355b',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	textHeaderTitle: {
-		marginLeft: 8,
-		color: 'white',
-		fontSize: 18,
-		fontWeight: 'bold',
-		flex: 8,
-	},
-	body: {
-		flex: 10,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	statusText: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		color: '#1a355b',
-		fontSize: 14,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-	},
-	versionInfo: {
-		color: '#1a355b',
-		fontSize: 14,
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		width: 200,
-		height: 45,
-		marginVertical: 20,
-	},
-	gear: {
-		flex: 1,
-		marginLeft: 8,
-	},
-	notification: {
-		padding: 7,
-		marginTop: 10,
-		marginLeft: 100,
-		marginRight: 100,
-
-		borderColor: '#f00',
-		borderWidth: 1,
-		borderRadius: 3,
-
-		fontSize: 13,
-		color: '#1a355b',
-		textAlign: 'center',
-		backgroundColor: '#ff000033',
-	},
-	modal: {
-		top: deviceHeight * 0.2,
-	},
-});
-
-function mapStateToProps(store: Object): Object {
+function mapStateToProps(store) {
 	return {
-		pushToken: store.user.pushToken,
-		pushTokenRegistered: store.user.pushTokenRegistered,
-		notificationText: store.user.notificationText,
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
+		appLayout: store.App.layout,
+		user: store.user,
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch, ownProps: Object): Object {
+function mapDispatchToProps(dispatch, ownProps) {
 	return {
 		onClose: () => {
 			dispatch({
@@ -353,13 +403,10 @@ function mapDispatchToProps(dispatch: Dispatch, ownProps: Object): Object {
 			});
 			ownProps.onClose();
 		},
-		onSubmitPushToken: (token: string, callback: (string) => void) => {
-			dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId))
-				.then(() => {
-					callback('REG_TOKEN');
-				});
+		onSubmitPushToken: (token) => {
+			return dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 		},
-		onLogout: (token: string, callback: (string) => void) => {
+		onLogout: (token, callback) => {
 			dispatch(unregisterPushToken(token)).then(() => {
 				dispatch(logoutFromTelldus());
 				callback('LOGOUT');

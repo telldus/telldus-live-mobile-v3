@@ -16,46 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_Gateways
  */
 
 // @flow
 
 'use strict';
+// Gateways actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { Gateways } = actions;
 
-import type { ThunkAction, Dispatch } from './Types';
-import { getWebsocketAddress } from 'Actions_Websockets';
-
-import {LiveApi} from 'LiveApi';
-import { format } from 'url';
-
-function getGateways(): ThunkAction {
-	return (dispatch: Dispatch, getState: Function): Promise<any> => {
-		const url = format({
-			pathname: '/clients/list',
-			query: {
-				extras: 'timezone,suntime,tzoffset',
-			},
-		});
-		const payload = {
-			url,
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then((response: Object) => {
-			dispatch({
-				type: 'RECEIVED_GATEWAYS',
-				payload: {
-					...payload,
-					...response,
-				},
-			});
-			response.client.forEach((gateway: Object) => {
-				dispatch(getWebsocketAddress(gateway.id));
-			});
-		});
-	};
-}
-
-module.exports = { getGateways };
+module.exports = {
+	...Gateways,
+};

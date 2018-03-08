@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_Types
  */
 // @flow
 'use strict';
@@ -77,15 +76,19 @@ export type Action =
 
 	| { type: 'TOAST_SHOW', payload: Object }
 	| { type: 'TOAST_HIDE' }
+	| { type: 'APP_ORIENTATION', value: string }
+	| { type: 'APP_LAYOUT', payload: Object }
+	| { type: 'ACCESSIBILITY_INFO', payload: boolean }
+	| { type: 'SET_CHANGELOG_VERSION', payload: string }
+
+	| { type: 'GLOBAL_ERROR_SHOW', payload: Object }
+	| { type: 'GLOBAL_ERROR_HIDE' }
 
 	| { type: 'REQUEST_TURNON', payload: Object }
 	| { type: 'REQUEST_TURNOFF', payload: Object }
 
-	| { type: 'REQUEST_MODAL_OPEN', payload: Object }
 	| { type: 'REQUEST_MODAL_CLOSE', payload?: Object }
-	| { type: 'REQUEST_MODAL_CLEAR_DATA' }
 
-	| { type: 'REQUEST_DEVICE_ACTION', payload: Object }
 	| { type: 'USER_REGISTER', accessToken: Object }
 	| { type: 'SCHEDULE_SELECT_DEVICE', payload: Object }
 	| { type: 'SCHEDULE_RESET' }
@@ -94,6 +97,9 @@ export type Action =
 	| { type: 'SCHEDULE_SELECT_TIME', payload: Object }
 	| { type: 'SCHEDULE_SELECT_DAYS', payload: Object }
 	| { type: 'SCHEDULE_SET_ACTIVE_STATE', payload: Object }
+
+	| { type: 'ADD_GATEWAY_REQUEST', payload: Object }
+	| { type: 'ADD_GATEWAY_DECLINE' }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

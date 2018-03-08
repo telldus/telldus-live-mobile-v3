@@ -98,7 +98,7 @@ type Props = {
 
 	editMode: boolean,
 	slideDuration: number,
-	children?: Object,
+	children?: any,
 	onRowPress: () => void,
 };
 
@@ -158,7 +158,7 @@ const DIRECTIONAL_DISTANCE_CHANGE_THRESHOLD = 2;
  <View style={visibleRowStyle} />
  </SwipeRow>
  */
-class SwipeRow extends Component {
+class SwipeRow extends Component<Props, State> {
 	props: Props;
 	static defaultProps: DefaultProps;
 	state: State;

@@ -16,55 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_Sensors
  */
 
 // @flow
 
 'use strict';
-
-import type { ThunkAction, Action, Dispatch } from './Types';
-
-import {LiveApi} from 'LiveApi';
-
-function getSensors(): ThunkAction {
-	return (dispatch: Dispatch, getState: Function): Promise<any> => {
-		const payload = {
-			url: '/sensors/list?includeValues=1',
-			requestParams: {
-				method: 'GET',
-			},
-		};
-		return LiveApi(payload).then((response: Object) => {
-			dispatch({
-				type: 'RECEIVED_SENSORS',
-				payload: {
-					...payload,
-					...response,
-				},
-			});
-		}
-		);
-	};
-}
-
-function processWebsocketMessageForSensor(action: string, data: Object): Action {
-	switch (action) {
-		case 'value':
-			return {
-				type: 'SENSOR_UPDATE_VALUE',
-				payload: data,
-			};
-		default:
-	}
-
-	return {
-		type: 'SENSOR_WEBSOCKET_UNHANDLED',
-		payload: data,
-	};
-}
+// Sensors actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { Sensors } = actions;
 
 module.exports = {
-	getSensors,
-	processWebsocketMessageForSensor,
+	...Sensors,
 };

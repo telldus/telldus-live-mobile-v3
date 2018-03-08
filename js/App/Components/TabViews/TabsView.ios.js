@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule TabsView
  */
 
 // @flow
@@ -26,15 +25,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, Header } from 'BaseComponents';
+import { View, Header, SafeAreaView } from '../../../BaseComponents';
 
-import { switchTab, syncWithServer, toggleEditMode } from 'Actions';
-import TabViews from 'TabViews';
+import { toggleEditMode, syncWithServer, switchTab } from '../../Actions';
+import TabViews from './index';
 
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
-import { SettingsDetailModal } from 'DetailViews';
+import { SettingsDetailModal } from '../DetailViews';
 
 const RouteConfigs = {
 	Dashboard: {
@@ -61,6 +61,9 @@ const TabNavigatorConfig = {
 	animationEnabled: false,
 	tabBarOptions: {
 		activeTintColor: '#e26901',
+		style: {
+			...ifIphoneX({height: 20}),
+		},
 	},
 };
 
@@ -72,10 +75,11 @@ type Props = {
 	userIcon: boolean,
 	userProfile: Object,
 	dashboard: Object,
-	onTabSelect: (tab: string) => void,
-	onToggleEditMode: (tab: string) => void,
+	onTabSelect: (string) => void,
+	onToggleEditMode: (string) => void,
 	dispatch: Function,
 	stackNavigator: Object,
+	screenProps: Object,
 };
 
 type Tab = {
@@ -88,22 +92,25 @@ type State = {
 	settings: boolean,
 };
 
-class TabsView extends View<null, Props, State> {
+class TabsView extends View {
+	props: Props;
+	state: State;
 
 	onNavigationStateChange: (Object, Object) => void;
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
 	onToggleEditMode: () => void;
-	state = {
-		tab: {
-			index: 0,
-			routeName: 'Dashboard',
-		},
-		settings: false,
-	};
 
 	constructor(props: Props) {
 		super(props);
+
+		this.state = {
+			tab: {
+				index: 0,
+				routeName: 'Dashboard',
+			},
+			settings: false,
+		};
 
 		this.tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab', 'gatewaysTab'];
 
@@ -115,21 +122,12 @@ class TabsView extends View<null, Props, State> {
 			},
 			onPress: this.onOpenSetting,
 		};
-
-		this.starButton = {
-			icon: {
-				name: 'star',
-				size: 22,
-				color: '#fff',
-			},
-			onPress: this.onToggleEditMode,
-		};
 	}
 
-	onNavigationStateChange = (prevState: Object, newState: Object) => {
+	onNavigationStateChange = (prevState, newState) => {
 		const index = newState.index;
 
-		const tab: Tab = {
+		const tab = {
 			index,
 			routeName: newState.routes[index].routeName,
 		};
@@ -147,18 +145,28 @@ class TabsView extends View<null, Props, State> {
 	};
 
 	onToggleEditMode = () => {
-		const tab: string = this.tabNames[this.state.tab.index];
+		const tab = this.tabNames[this.state.tab.index];
 		this.props.onToggleEditMode(tab);
 	};
 
-	render(): React$Element<any> {
-		let screenProps = { stackNavigator: this.props.stackNavigator };
+	render() {
 		const { routeName } = this.state.tab;
+		let { currentScreen } = this.props.screenProps;
 
-		const rightButton = this._defineRightButton(routeName);
+		let rightButton = null;
+
+		if (routeName === 'Dashboard') {
+			rightButton = this.settingsButton;
+		}
+
+		let screenProps = {
+			stackNavigator: this.props.stackNavigator,
+			currentTab: routeName,
+			currentScreen,
+		};
 
 		return (
-			<View>
+			<SafeAreaView>
 				<Header rightButton={rightButton}/>
 				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 				{
@@ -166,46 +174,29 @@ class TabsView extends View<null, Props, State> {
 						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
 					) : null
 				}
-			</View>
+			</SafeAreaView>
 		);
 	}
-
-	_defineRightButton = (routeName: string): Object | null => {
-		let rightButton: Object | null = null;
-
-		if (routeName === 'Dashboard') {
-			rightButton = this.settingsButton;
-		}
-		if (routeName === 'Devices' || routeName === 'Sensors') {
-			rightButton = this.starButton;
-		}
-
-		return rightButton;
-	};
-
 }
 
-const mapStateToProps = (store: Object, ownProps: Object): Object => {
+function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
 		stackNavigator: ownProps.navigation,
 		tab: store.navigation.tab,
 		userIcon: false,
 		userProfile: getUserProfile(store),
 	};
-};
+}
 
-const mapDispatchToProps = (dispatch: Function): Object => {
+function mapDispatchToProps(dispatch) {
 	return {
-		onTabSelect: (tab: string) => {
-			// $FlowFixMe
+		onTabSelect: (tab) => {
 			dispatch(syncWithServer(tab));
-			// $FlowFixMe
 			dispatch(switchTab(tab));
 		},
-		// $FlowFixMe
-		onToggleEditMode: (tab: string): void => dispatch(toggleEditMode(tab)),
+		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
 		dispatch,
 	};
-};
+}
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(TabsView));

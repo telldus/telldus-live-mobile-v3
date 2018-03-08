@@ -22,38 +22,36 @@
 'use strict';
 
 import React from 'react';
+import { SectionList, ScrollView, TouchableOpacity, Text, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { defineMessages } from 'react-intl';
+import Platform from 'Platform';
 
-import { List, ListDataSource, View } from 'BaseComponents';
-import { DeviceHeader, SensorRow, SensorRowHidden } from 'TabViews_SubViews';
+import { View, IconTelldus } from '../../../BaseComponents';
+import { DeviceHeader, SensorRow, SensorRowHidden } from './SubViews';
 
-import { getSensors } from 'Actions';
+import { getSensors, setIgnoreSensor, showGlobalError } from '../../Actions';
 
+import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getTabBarIcon } from 'Lib';
-import type { Dispatch } from 'Actions_Types';
-
-const messages = defineMessages({
-	sensors: {
-		id: 'pages.sensors',
-		defaultMessage: 'Sensors',
-		description: 'The sensors tab',
-	},
-});
+import getTabBarIcon from '../../Lib/getTabBarIcon';
+import Theme from '../../Theme';
 
 type Props = {
 	rowsAndSections: Object,
 	gatewaysById: Object,
-	editMode: boolean,
 	tab: string,
-	dispatch: Dispatch,
-	stackNavigator: Object,
+	dispatch: Function,
+	appLayout: Object,
+	screenProps: Object,
 };
 
 type State = {
-	dataSource: Object,
+	visibleList: Array<Object>,
+	hiddenList: Array<Object>,
+	makeRowAccessible: 0 | 1,
+	isRefreshing: boolean,
+	showHiddenList: boolean,
 };
 
 class SensorsTab extends View {
@@ -63,126 +61,261 @@ class SensorsTab extends View {
 
 	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
 	renderRow: (Object) => Object;
+	renderHiddenRow: (Object) => Object;
 	onRefresh: (Object) => void;
+	keyExtractor: (Object) => number;
+	toggleHiddenList: () => void;
+	setIgnoreSensor: (Object) => void;
 
-	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
-		title: screenProps.intl.formatMessage(messages.sensors),
-		tabBarIcon: ({ focused, tintColor }: Object): React$Element<any> => getTabBarIcon(focused, tintColor, 'sensors'),
+	static navigationOptions = ({navigation, screenProps}) => ({
+		title: screenProps.intl.formatMessage(i18n.sensors),
+		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'sensors'),
 	});
 
 	constructor(props: Props) {
 		super(props);
 
-		const { sections, sectionIds } = this.props.rowsAndSections;
+		let { visibleList, hiddenList } = props.rowsAndSections;
 
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-				sectionHeaderHasChanged: (s1: Object, s2: Object): boolean => s1 !== s2,
-			}).cloneWithRowsAndSections(sections, sectionIds),
+			visibleList,
+			hiddenList,
+			makeRowAccessible: 0,
+			isRefreshing: false,
+			showHiddenList: false,
 		};
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
+		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
+		this.keyExtractor = this.keyExtractor.bind(this);
+
+		this.toggleHiddenList = this.toggleHiddenList.bind(this);
+		this.setIgnoreSensor = this.setIgnoreSensor.bind(this);
+
+		let { formatMessage } = props.screenProps.intl;
+
+		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
+
+		let hiddenSensors = formatMessage(i18n.hiddenSensors).toLowerCase();
+		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenSensors}`;
+		this.showHidden = `${formatMessage(i18n.show)} ${hiddenSensors}`;
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		const { sections, sectionIds } = nextProps.rowsAndSections;
+	componentWillReceiveProps(nextProps) {
+
+		let { makeRowAccessible } = this.state;
+		let { screenReaderEnabled, rowsAndSections } = nextProps;
+		let { currentScreen, currentTab } = nextProps.screenProps;
+		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
+			makeRowAccessible = 1;
+		} else {
+			makeRowAccessible = 0;
+		}
+
+		let { visibleList, hiddenList } = rowsAndSections;
 
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+			visibleList,
+			hiddenList,
+			makeRowAccessible,
 		});
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.tab === 'sensorsTab' || nextProps.editMode !== this.props.editMode;
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+		return nextProps.tab === 'sensorsTab';
 	}
 
 	onRefresh() {
-		this.props.dispatch(getSensors());
+		this.setState({
+			isRefreshing: true,
+		});
+		this.props.dispatch(getSensors())
+			.then(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			}).catch(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			});
 	}
 
-	rowHasChanged(r1: Object, r2: Object): boolean {
-		if (r1 === r2) {
-			return false;
-		}
+	keyExtractor(item) {
+		return item.id;
+	}
+
+	toggleHiddenList() {
+		this.setState({
+			showHiddenList: !this.state.showHiddenList,
+		});
+	}
+
+	setIgnoreSensor(sensor: Object) {
+		let ignore = sensor.ignored ? 0 : 1;
+		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res) => {
+			let message = sensor.ignored ?
+				this.removedFromHiddenList : this.addedToHiddenList;
+			let payload = {
+				customMessage: message,
+			};
+			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(getSensors());
+		}).catch(err => {
+			let payload = {
+				customMessage: err.message ? err.message : null,
+			};
+			this.props.dispatch(showGlobalError(payload));
+		});
+	}
+
+	toggleHiddenListButton(style): Object {
 		return (
-			r1.sensor !== r2.sensor ||
-			r1.inDashboard !== r2.inDashboard ||
-			r1.editMode !== r2.editMode
+			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
+				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}/>
+				<Text style={style.toggleHiddenListText}>
+					{this.state.showHiddenList ?
+						this.hideHidden
+						:
+						this.showHidden
+					}
+				</Text>
+			</TouchableOpacity>
 		);
 	}
 
-	render(): React$Element<any> {
+	render() {
+
+		let { appLayout } = this.props;
+		let { showHiddenList, hiddenList, visibleList, isRefreshing } = this.state;
+
+		let style = this.getStyles(appLayout);
+		let extraData = {
+			makeRowAccessible: this.state.makeRowAccessible,
+			appLayout: appLayout,
+		};
+
 		return (
-			<View>
-				<List
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					renderHiddenRow={this.renderHiddenRow}
+			<ScrollView style={style.container}
+				refreshControl={
+					<RefreshControl
+						refreshing={isRefreshing}
+						onRefresh={this.onRefresh}
+					/>}>
+				<SectionList
+					sections={visibleList}
+					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
-					leftOpenValue={40}
-					editMode={this.props.editMode}
-					onRefresh={this.onRefresh}
+					initialNumToRender={15}
+					keyExtractor={this.keyExtractor}
+					extraData={extraData}
 				/>
-			</View>
+				<View>
+					{this.toggleHiddenListButton(style)}
+					{showHiddenList ?
+						<SectionList
+							sections={hiddenList}
+							renderItem={this.renderRow}
+							renderSectionHeader={this.renderSectionHeader}
+							keyExtractor={this.keyExtractor}
+							extraData={extraData}
+						/>
+						:
+						<View style={{height: 80}}/>
+					}
+				</View>
+			</ScrollView>
 		);
 	}
 
-	renderSectionHeader(sectionData: Object, sectionId: number): React$Element<any> {
+	renderSectionHeader(sectionData) {
 		return (
 			<DeviceHeader
-				sectionData={sectionData}
-				sectionId={sectionId}
-				gateway={this.props.gatewaysById[sectionId]}
+				gateway={sectionData.section.key}
 			/>
 		);
 	}
 
-	renderRow(row: Object): React$Element<any> {
+	renderRow(row) {
+		let { screenProps, gatewaysById } = this.props;
+		let { intl, currentTab, currentScreen } = screenProps;
+		let isGatewayActive = gatewaysById[row.item.clientId].online;
+
 		return (
-			<SensorRow {...row}/>
+			<SensorRow
+				sensor={row.item}
+				intl={intl}
+				appLayout={this.props.appLayout}
+				currentTab={currentTab}
+				currentScreen={currentScreen}
+				isGatewayActive={isGatewayActive}
+				setIgnoreSensor={this.setIgnoreSensor}/>
 		);
 	}
 
-	renderHiddenRow(row: Object): React$Element<any> {
+	renderHiddenRow(row) {
+		let { screenProps } = this.props;
+
 		return (
-			<SensorRowHidden {...row}/>
+			<SensorRowHidden {...row} intl={screenProps.intl}/>
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			container: {
+				flex: 1,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+			},
+			toggleHiddenListButton: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginVertical: 10,
+				paddingVertical: 10,
+			},
+			toggleHiddenListIcon: {
+				marginTop: 4,
+				fontSize: 34,
+				color: Theme.Core.rowTextColor,
+			},
+			toggleHiddenListText: {
+				marginLeft: 6,
+				fontSize: 16,
+				textAlign: 'center',
+				color: Theme.Core.rowTextColor,
+			},
+		};
 	}
 }
-
-SensorsTab.propTypes = {
-	rowsAndSections: React.PropTypes.object,
-};
 
 const getRowsAndSections = createSelector(
 	[
-		({ sensors }: Object): Object => sensors,
-		({ gateways }: Object): Object => gateways,
-		({ tabs }: Object): Object => tabs.editModeSensorsTab,
+		({ sensors }) => sensors.byId,
+		({ gateways }) => gateways.byId,
 	],
-	(sensors: Object, gateways: Object, editMode: any): Object => {
-		const { sections, sectionIds } = parseSensorsForListView(sensors, gateways, editMode);
-		return {
-			sections,
-			sectionIds,
-		};
+	(sensors, gateways) => {
+		return parseSensorsForListView(sensors, gateways);
 	}
 );
 
-function mapStateToProps(store: Object, ownProps: Object): Object {
+function mapStateToProps(store) {
 	return {
-		stackNavigator: ownProps.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(store),
 		gatewaysById: store.gateways.byId,
-		editMode: store.tabs.editModeSensorsTab,
 		tab: store.navigation.tab,
+		appLayout: store.App.layout,
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch): Object {
+function mapDispatchToProps(dispatch) {
 	return {
 		dispatch,
 	};

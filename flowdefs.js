@@ -5,6 +5,18 @@
 declare module 'AnimatedImplementation' {
 	declare var exports: any;
 }
+declare module 'react-native' {
+	declare var exports: any;
+}
+declare module 'StyleSheetValidation' {
+	declare var exports: any;
+}
+declare module 'ListView' {
+	declare var exports: any;
+}
+declare module 'Slider' {
+	declare var exports: any;
+}
 declare module 'MessageQueue' {
 	declare var exports: any;
 }

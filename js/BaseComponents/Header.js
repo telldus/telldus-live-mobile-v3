@@ -22,7 +22,14 @@
 'use strict';
 
 import React from 'react';
-import { Platform, Image, Dimensions, Text, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Platform, Image, Text, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { isIphoneX } from 'react-native-iphone-x-helper';
+import { hasStatusBar } from '../App/Lib';
+
 import Base from './Base';
 import computeProps from './computeProps';
 import Button from './Button';
@@ -31,19 +38,18 @@ import Title from './Title';
 import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
 import _ from 'lodash';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
-import Theme from 'Theme';
 
 type Props = {
 	children: Object,
+	logoStyle: Object | number,
 	rounded: number,
 	searchBar: ?Object,
 	rightButton: Object,
 	leftButton: Object,
+	appLayout: Object,
 };
 
-export default class HeaderComponent extends Base {
+class HeaderComponent extends Base {
 
 	deviceWidth: number;
 	paddingHorizontal: number;
@@ -57,11 +63,13 @@ export default class HeaderComponent extends Base {
 	renderLeftButton: (Object) => Object;
 	renderButtonContent: (Object) => Object;
 
-	getInitialStyle(): Object {
-		this.deviceWidth = Dimensions.get('window').width;
+	getInitialStyle() {
+		let { appLayout } = this.props;
+		let { height, width } = appLayout;
+		this.deviceWidth = height > width ? width : height;
 
 		this.paddingHorizontal = 15;
-		this.paddingTop = (Platform.OS === 'ios') ? 15 : 0;
+		this.paddingTop = (Platform.OS === 'ios') ? (isIphoneX() ? 0 : 15) : 0;
 
 		return {
 			navbar: {
@@ -79,7 +87,7 @@ export default class HeaderComponent extends Base {
 				backgroundColor: this.getTheme().toolbarDefaultBg,
 			},
 			logoImage: {
-				width: this.deviceWidth * 0.277333333,
+				width: this.deviceWidth * 0.307333333,
 				height: this.deviceWidth * 0.046666667,
 			},
 			iosToolbarSearch: {
@@ -106,28 +114,10 @@ export default class HeaderComponent extends Base {
 				paddingTop: this.paddingTop,
 				paddingHorizontal: this.paddingHorizontal,
 			},
-			backButton: {
-				wrapper: {
-					width: this.deviceWidth * 0.130666667 + 3,
-					height: this.deviceWidth * 0.036 + 3,
-					flexDirection: 'row',
-					alignItems: 'center',
-				},
-				image: {
-					width: this.deviceWidth * 0.022666667,
-					height: this.deviceWidth * 0.036,
-				},
-				text: {
-					color: '#fff',
-					marginLeft: this.deviceWidth * 0.026666667,
-					fontSize: this.deviceWidth * 0.037333333,
-					fontFamily: Theme.Core.fonts.robotoLight,
-				},
-			},
 		};
 	}
 
-	prepareRootProps(): Object {
+	prepareRootProps() {
 
 		let defaultProps = {
 			style: this.getInitialStyle().navbar,
@@ -137,12 +127,12 @@ export default class HeaderComponent extends Base {
 
 	}
 
-	renderChildren(): any {
+	renderChildren() {
 		if (!this.props.children) {
 			return (
 				<Image
-					source={require('../App/Components/TabViews/img/telldus-logo@3x.png')}
-					style={this.getInitialStyle().logoImage}
+					source={require('../App/Components/TabViews/img/telldus-logo3.png')}
+					style={[this.getInitialStyle().logoImage, this.props.logoStyle]}
 				/>
 			);
 		} else if (!Array.isArray(this.props.children)) {
@@ -152,35 +142,31 @@ export default class HeaderComponent extends Base {
 			let childrenArray = React.Children.toArray(this.props.children);
 
 			let buttons = [];
-			buttons = _.remove(childrenArray, (item: Object): boolean => {
+			buttons = _.remove(childrenArray, (item) => {
 				if (item.type === Button) {
 					return true;
 				}
-				return false;
 			});
 
 			let title = [];
-			title = _.remove(childrenArray, (item: Object): boolean => {
+			title = _.remove(childrenArray, (item) => {
 				if (item.type === Title) {
 					return true;
 				}
-				return false;
 			});
 
 			let subtitle = [];
-			subtitle = _.remove(childrenArray, (item: Object): boolean => {
+			subtitle = _.remove(childrenArray, (item) => {
 				if (item.type === Subtitle) {
 					return true;
 				}
-				return false;
 			});
 
 			let input = [];
-			input = _.remove(childrenArray, (item: Object): boolean => {
+			input = _.remove(childrenArray, (item) => {
 				if (item.type === InputGroup) {
 					return true;
 				}
-				return false;
 			});
 
 			if (this.props.searchBar) {
@@ -318,23 +304,29 @@ export default class HeaderComponent extends Base {
 		}
 	}
 
-	renderButtonContent = (button: Object): any => {
+	renderButtonContent = (button: Object) => {
 		if (button.image) {
 			return <Image source={button.image}/>;
 		}
 		if (button.icon) {
-			const { name, size, color } = button.icon;
-			return <Icon name={name} size={size} color={color}/>;
+			const { name, size, color, iconStyle } = button.icon;
+			return <Icon name={name} size={size} color={color} style={iconStyle}/>;
 		}
 		if (button.title) {
 			return <Text>{button.title}</Text>;
 		}
+		if (button.component) {
+			return button.component;
+		}
 	};
 
-	renderRightButton = (rightButton: Object): React$Element<any> => {
+	renderRightButton = (rightButton: Object) => {
+		let { accessibilityLabel, icon } = rightButton;
+		let style = icon ? icon.style : null;
 		return (
 			<TouchableOpacity
 				onPress={rightButton.onPress}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.getInitialStyle().headerButton,
 					{
@@ -342,6 +334,7 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						right: 0,
 					},
+					style,
 				]}
 			>
 				{this.renderButtonContent(rightButton)}
@@ -349,10 +342,13 @@ export default class HeaderComponent extends Base {
 		);
 	};
 
-	renderLeftButton = (leftButton: Object): React$Element<any> => {
+	renderLeftButton = (leftButton: Object) => {
+		let { accessibilityLabel, icon } = leftButton;
+		let style = icon ? icon.style : null;
 		return (
 			<TouchableOpacity
 				onPress={leftButton.onPress}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.getInitialStyle().headerButton,
 					{
@@ -360,6 +356,7 @@ export default class HeaderComponent extends Base {
 						backgroundColor: 'transparent',
 						left: 0,
 					},
+					style,
 				]}
 			>
 				{this.renderButtonContent(leftButton)}
@@ -367,13 +364,13 @@ export default class HeaderComponent extends Base {
 		);
 	};
 
-	render(): React$Element<any> {
+	render() {
 		const { leftButton, rightButton } = this.props;
 
 		return (
 			<View style={{ flex: 0 }}>
 				{
-					Platform.OS === 'android' ? (
+					Platform.OS === 'android' && hasStatusBar() ? (
 						<View style={this.getInitialStyle().statusBar}/>
 					) : null
 				}
@@ -388,9 +385,17 @@ export default class HeaderComponent extends Base {
 }
 
 HeaderComponent.propTypes = {
-	children: React.PropTypes.object,
-	rounded: React.PropTypes.number,
-	searchBar: React.PropTypes.object,
-	rightButton: React.PropTypes.object,
-	leftButton: React.PropTypes.object,
+	children: PropTypes.object,
+	rounded: PropTypes.number,
+	searchBar: PropTypes.object,
+	rightButton: PropTypes.object,
+	leftButton: PropTypes.object,
 };
+
+function mapStateToProps(store: Object): Object {
+	return {
+		appLayout: store.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(HeaderComponent);

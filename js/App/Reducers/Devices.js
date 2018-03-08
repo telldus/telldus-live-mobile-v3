@@ -16,295 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Reducers_Devices
  */
 
 // @flow
 
 'use strict';
-import type { Action } from 'Actions_Types';
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
 
-import { methods } from '../../Config.js';
+import _ from 'lodash';
 
-import getPowerParts from '../Lib/getPowerParts';
-
-export function getSupportedMethods(methodsAggregate: number): Object {
-	const methodNumbers = getPowerParts(methodsAggregate);
-	const methodHashmap = methodNumbers.reduce((memo: Object, methodNumber: number): Object => {
-		memo[methods[methodNumber]] = true;
-		return memo;
-	}, {});
-
-	return methodHashmap;
-}
-
-export function getDeviceStateMethod(deviceStateNumber: number): string {
-	return methods[parseInt(deviceStateNumber, 10)];
-}
-
-function reduceDevice(state: Object = {}, action: Action): Object {
-	switch (action.type) {
-		case REHYDRATE:
-			return {
-				...state,
-				methodRequested: '',
-			};
-
-		case 'RECEIVED_DEVICES':
-			// TODO: nothing seems to be reduced here?
-			return {
-				// properties originated from server
-				clientId: parseInt(state.client, 10),
-				id: parseInt(state.id, 10),
-				type: state.type,
-				name: state.name,
-				value: state.statevalue,
-				ignored: Boolean(state.ignored),
-				isErrorMessage: false,
-				// clientDeviceId: parseInt(state.clientDeviceId, 10),
-				// editable: Boolean(state.editable),
-				// state: parseInt(state.state, 10),
-				// online: Boolean(state.online),
-				// ignored: Boolean(state.ignored),
-				// methods: state.methods,
-				// protocol: state.protocol,
-
-				// properties originated on client
-				// isInDashboard: state.isInDashboard, // TODO: uncomment as soon as reduceDevice correctly reduces
-				isInState: getDeviceStateMethod(state.state),
-				supportedMethods: getSupportedMethods(state.methods),
-			};
-
-		case 'DEVICE_SET_STATE':
-			return {
-				...state,
-				isInState: getDeviceStateMethod(action.payload.method),
-				value: action.payload.value,
-				methodRequested: '',
-			};
-
-		case 'REQUEST_DEVICE_ACTION':
-			return {
-				...state,
-				methodRequested: getDeviceStateMethod(action.payload.method),
-				isErrorMessage: false,
-			};
-
-		case 'SET_DIMMER_VALUE':
-			return {
-				...state,
-				isInState: 'DIM', // otherwise DimmerButton will render with state TURNOFF
-				value: action.payload.value,
-			};
-
-		case 'ADD_TO_DASHBOARD':
-			return {
-				...state,
-				isInDashboard: true,
-			};
-
-		case 'REMOVE_FROM_DASHBOARD':
-			return {
-				...state,
-				isInDashboard: false,
-			};
-
-		case 'REQUEST_TURNON':
-			return {
-				...state,
-				methodRequested: 'TURNON',
-				isErrorMessage: false,
-			};
-
-		case 'REQUEST_TURNOFF':
-			return {
-				...state,
-				methodRequested: 'TURNOFF',
-				isErrorMessage: false,
-			};
-		case 'DEVICE_UNREACHABLE':
-			return {
-				...state,
-				isErrorMessage: action.payload.message,
-			};
-		case 'DEVICE_RESET_STATE':
-			return {
-				...state,
-				isErrorMessage: false,
-				methodRequested: '',
-				isInState: action.payload.state,
-				value: action.payload.value,
-			};
-
-		case 'DEVICE_HISTORY':
-			/* currently not checking if old data present or not.
-			   should change as, fetch using timestamp and if there are more timestamps/intervals
-			   those subsequest results must be appended to the previous[latest data with respect to time] ones. */
-
-			/* sorting the data w.r.t. date (latest first). */
-			let data = action.payload.history.sort((a: Object, b: Object): number => {
-				return b.ts - a.ts;
-			});
-			return {
-				...state,
-				history: {
-					timestamp: action.payload.timestamp,
-					data,
-				},
-			};
-
-		default:
-			return state;
-	}
-}
-
-function byId(state: Object = {}, action: Object): Object {
-	if (action.type === REHYDRATE) {
-		if (action.payload.devices && action.payload.devices.byId) {
-			console.log('rehydrating devices.byId');
-			let devices = Object.keys(action.payload.devices.byId).map((k: number): Object => action.payload.devices.byId[k]);
-			return devices.reduce((acc: Object, deviceState: Object): Object => {
-				acc[deviceState.id] = {
-					...state[deviceState.id],
-					...reduceDevice(deviceState, action),
-				};
-				return acc;
-			}, {});
-		}
-		return { ...state };
-	}
-	if (action.type === 'RECEIVED_DEVICES') {
-		return action.payload.device.reduce((acc: Object, deviceState: Object): Object => {
-			acc[deviceState.id] = {
-				...state[deviceState.id],
-				// TODO: pass in received state as action.payload (see gateways reducer)
-				...reduceDevice(deviceState, action),
-			};
-			return acc;
-		}, {});
-	}
-	if (action.type === 'DEVICE_SET_STATE') {
-		return {
-			...state,
-			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
-		};
-	}
-	if (action.type === 'REQUEST_DEVICE_ACTION') {
-		return {
-			...state,
-			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
-		};
-	}
-	if (action.type === 'SET_DIMMER_VALUE') {
-		return {
-			...state,
-			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
-		};
-	}
-	if (action.type === 'ADD_TO_DASHBOARD' && action.kind === 'device') {
-		return {
-			...state,
-			[action.id]: reduceDevice(state[action.id], action),
-		};
-	}
-	if (action.type === 'REMOVE_FROM_DASHBOARD' && action.kind === 'device') {
-		return {
-			...state,
-			[action.id]: reduceDevice(state[action.id], action),
-		};
-	}
-	if (action.type === 'LOGGED_OUT') {
-		return {};
-	}
-	if (action.type === 'REQUEST_TURNON' || action.type === 'REQUEST_TURNOFF') {
-		return {
-			...state,
-			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
-		};
-	}
-	if (action.type === 'DEVICE_HISTORY') {
-		return {
-			...state,
-			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
-		};
-	}
-	if (action.type === 'DEVICE_UNREACHABLE') {
-		return {
-			...state,
-			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
-		};
-	}
-	if (action.type === 'DEVICE_RESET_STATE') {
-		return {
-			...state,
-			[action.payload.deviceId]: reduceDevice(state[action.payload.deviceId], action),
-		};
-	}
-
-	return state;
-}
-
-const allIds = (state: Array<Object> = [], action: Object): Array<Object> => {
-	if (action.type === REHYDRATE) {
-		if (action.payload.devices && action.payload.devices.allIds) {
-			console.log('rehydrating devices.allIds');
-			return [
-				...state,
-				...action.payload.devices.allIds,
-			];
-		}
-		return [...state];
-	}
-	if (action.type === 'RECEIVED_DEVICES') {
-		// overwrites entire state
-		// exclude ignored devices
-		return action.payload.device
-		             .filter((deviceState: Object): boolean => !deviceState.ignored)
-		             .map((deviceState: Object): number => deviceState.id);
-	}
-	if (action.type === 'LOGGED_OUT') {
-		return [];
-	}
-	return state;
-};
-
-export default combineReducers({
-	allIds,
-	byId,
-});
-
-export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}, editMode: boolean = false): Object {
-	const sections = devices.allIds.reduce((acc: Object, deviceId: string): Object => {
-		acc[devices.byId[deviceId].clientId] = [];
-		return acc;
-	}, {});
-	const sectionIds = Object.keys(sections).map((id: string): number => parseInt(id, 10));
-
-	devices.allIds.forEach((deviceId: number) => {
-		const device = devices.byId[deviceId];
-		sections[device.clientId].push({
-			device,
-			editMode,
+function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
+	let result = _.groupBy(paramOne, items => {
+		let gateway = gateways[items.clientId];
+		return gateway && gateway.name;
+	});
+	result = _.reduce(result, (acc, next, index) => {
+		acc.push({
+			key: index,
+			data: next,
 		});
-	});
+		return acc;
+	}, []);
+	return result;
+}
 
-	sectionIds.sort((a: number, b: number): number => {
-		// might be that devices get rendered before gateways are fetched
-		const gatewayA = gateways.byId[a] ? gateways.byId[a].name : a;
-		const gatewayB = gateways.byId[b] ? gateways.byId[b].name : b;
-
-		if (gatewayA < gatewayB) {
-			return -1;
-		}
-		if (gatewayA > gatewayB) {
-			return 1;
-		}
-		return 0;
+export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
+	let sortedList = _.sortBy(devices, 'name');
+	let [hidden, visible] = _.partition(sortedList, (device) => {
+		return device.ignored;
 	});
-	return {
-		sections,
-		sectionIds,
-	};
+	let visibleList = [], hiddenList = [];
+	let isGatwaysEmpty = _.isEmpty(gateways);
+	if (!isGatwaysEmpty) {
+		visibleList = prepareSectionRow(visible, gateways);
+		hiddenList = prepareSectionRow(hidden, gateways);
+	}
+	return { visibleList, hiddenList };
 }

@@ -22,9 +22,9 @@
 'use strict';
 
 import React from 'react';
-import { View, Text } from 'BaseComponents';
+import { View, Text } from '../../../../BaseComponents';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	gateway: Object,
@@ -32,9 +32,9 @@ type Props = {
 
 export default ({ gateway }: Props ): Object => {
 	return (
-		<View style={Theme.Styles.sectionHeader}>
-			<Text style={Theme.Styles.sectionHeaderText}>
-				{(gateway && gateway.name) ? gateway.name : ''}
+		<View style={Theme.Styles.sectionHeaderNew}>
+			<Text style={Theme.Styles.sectionHeaderTextNew}>
+				{gateway}
 			</Text>
 		</View>
 	);

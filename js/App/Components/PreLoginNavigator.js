@@ -22,12 +22,11 @@
 'use strict';
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import StatusBar from 'StatusBar';
 import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
 
-import { View } from 'BaseComponents';
-import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from 'PreLoginScreens';
+import { View } from '../../BaseComponents';
+import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from './PreLoginScreens';
 
 const RouteConfigs = {
 	Login: {
@@ -84,11 +83,6 @@ class PreLoginNavigator extends View {
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
 	componentDidMount() {
-		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('default');
-		if (Platform.OS === 'android' && StatusBar) {
-			StatusBar.setTranslucent(true);
-			StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
-		}
 		if (Platform.OS !== 'android') {
 			Orientation.lockToPortrait();
 		}

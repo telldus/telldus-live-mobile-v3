@@ -28,13 +28,14 @@ import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, TouchableButton } from 'BaseComponents';
+import { View, TouchableButton } from '../../../../BaseComponents';
 
-import {RegisterUser} from 'Actions_User';
+import { RegisterUser } from '../../../Actions/User';
+import { showModal } from '../../../Actions/Modal';
 
 import i18n from '../../../Translations/common';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 const messages = defineMessages({
 	emailAddressNotMatchHeader: {
@@ -49,7 +50,7 @@ const messages = defineMessages({
 	},
 	emailAddressNotMatchBody: {
 		id: 'user.emailAddressNotMatchBody',
-		defaultMessage: 'Email addresses don\'t match. Please Check your entered email address.',
+		defaultMessage: 'Email addresses don\'t match. Please check your entered email address.',
 		description: 'Validation Message Body when Emails don\'t match',
 	},
 	emailNotValidBody: {
@@ -71,7 +72,9 @@ type Props = {
 	showModal: boolean,
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
-};
+	appLayout: Object,
+	dialogueOpen: boolean,
+}
 
 class RegisterForm extends View {
 
@@ -100,6 +103,11 @@ class RegisterForm extends View {
 		this.onConfirmEmailChange = this.onConfirmEmailChange.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 		this.postSubmit = this.postSubmit.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 	}
 
 	postSubmit() {
@@ -133,6 +141,9 @@ class RegisterForm extends View {
 	}
 
 	onFormSubmit() {
+		let { dispatch, intl, validationMessage, onFormSubmit } = this.props;
+		let { formatMessage } = intl;
+
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
 		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
 			let isConfirmEmailValid = this.validateEmail(cem);
@@ -142,54 +153,60 @@ class RegisterForm extends View {
 					this.setState({
 						isLoading: true,
 					});
-					this.props.onFormSubmit(em, fn, ln, this.postSubmit);
+					onFormSubmit(em, fn, ln, this.postSubmit)
+						.then(response => {
+							this.postSubmit();
+						})
+						.catch(err => {
+							this.postSubmit();
+							this.handleRegisterError(err);
+						});
 				} else {
-					let message = this.props.intl.formatMessage(messages.emailAddressNotMatchBody);
-					let header = this.props.intl.formatMessage(messages.emailAddressNotMatchHeader);
-					this.showModal(message, header);
+					let message = formatMessage(messages.emailAddressNotMatchBody);
+					let header = formatMessage(messages.emailAddressNotMatchHeader);
+					dispatch(showModal(message, header));
 				}
 			} else {
-				let message = this.props.intl.formatMessage(messages.emailNotValidBody);
-				let header = this.props.intl.formatMessage(messages.emailNotValidHeader);
-				this.showModal(message, header);
+				let message = formatMessage(messages.emailNotValidBody);
+				let header = formatMessage(messages.emailNotValidHeader);
+				dispatch(showModal(message, header));
 			}
 		} else {
-			let postF = this.props.intl.formatMessage(messages.fieldEmptyPostfix);
-			let message = fn === '' ? `${this.props.intl.formatMessage(i18n.firstName)} ${postF}`
-				: ln === '' ? `${this.props.intl.formatMessage(i18n.lastName)} ${postF}`
-					: em === '' ? `${this.props.intl.formatMessage(i18n.emailAddress)} ${postF}`
-						: cem === '' ? `${this.props.intl.formatMessage(i18n.confirmEmailAddress)} ${postF}`
-							: this.props.validationMessage;
-			this.showModal(message);
+			let postF = formatMessage(messages.fieldEmptyPostfix);
+			let message = fn === '' ? `${formatMessage(i18n.firstName)} ${postF}`
+				: ln === '' ? `${formatMessage(i18n.lastName)} ${postF}`
+					: em === '' ? `${formatMessage(i18n.emailAddress)} ${postF}`
+						: cem === '' ? `${formatMessage(i18n.confirmEmailAddress)} ${postF}`
+							: validationMessage;
+			dispatch(showModal(message));
 		}
 	}
 
-	showModal(data: any, extras: any = false) {
-		this.props.dispatch({
-			type: 'REQUEST_MODAL_OPEN',
-			payload: {
-				data,
-				extras,
-			},
-		});
+	handleRegisterError(error: Object) {
+		let { dispatch } = this.props;
+		let data = !error.error_description && error.message === 'Network request failed' ?
+			this.networkFailed : error.error_description ?
+				error.error_description : error.error ? error.error : this.unknownError;
+		dispatch(showModal(data));
 	}
 
 	validateEmail(email: string): boolean {
 		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 		let emailValid = pattern.test(email);
-		if (!emailValid) {
-			this.showModal('Invalid Email');
-		}
 		return emailValid;
 	}
 
-	render(): Object {
+	render() {
+		let { appLayout, dialogueOpen } = this.props;
+		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
+		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
+
 		return (
-			<View>
+			<View importantForAccessibility={importantForAccessibility}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onFirstNameChange}
 						placeholder={this.props.intl.formatMessage(i18n.firstName)}
 						autoCapitalize="none"
@@ -203,7 +220,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onLastNameChange}
 						placeholder={this.props.intl.formatMessage(i18n.lastName)}
 						autoCapitalize="none"
@@ -217,7 +234,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onEmailChange}
 						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 						keyboardType="email-address"
@@ -232,7 +249,7 @@ class RegisterForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
 						onChangeText={this.onConfirmEmailChange}
 						placeholder={this.props.intl.formatMessage(i18n.confirmEmailAddress)}
 						keyboardType="email-address"
@@ -245,10 +262,10 @@ class RegisterForm extends View {
 					/>
 				</View>
 				<TouchableButton
-					style={Theme.Styles.submitButton}
 					onPress={this.props.showModal ? null : this.onFormSubmit}
 					text={this.state.isLoading ? i18n.registering : i18n.register}
 					postScript={this.state.isLoading ? '...' : null}
+					accessible={buttonAccessible}
 				/>
 			</View>
 		);
@@ -257,10 +274,8 @@ class RegisterForm extends View {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onFormSubmit: (email: string, firstName: string, LastName: string, callback: () => void) => {
-			dispatch(RegisterUser(email, firstName, LastName)).then((res: Object) => {
-				callback();
-			});
+		onFormSubmit: (email: string, firstName: string, LastName: string) => {
+			return dispatch(RegisterUser(email, firstName, LastName));
 		},
 		dispatch,
 	};

@@ -25,7 +25,7 @@ import {Animated, StyleSheet} from 'react-native';
 
 import View from './View';
 import IconTelldus from './IconTelldus';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 const AnimatedIconTelldus = Animated.createAnimatedComponent(IconTelldus);
 
 type Props = {
@@ -34,7 +34,7 @@ type Props = {
 	throbSpeed?: number,
 };
 
-export default class Throbber extends Component {
+export default class Throbber extends Component<Props, null> {
 	props: Props;
 
 	animatedValue: Object;

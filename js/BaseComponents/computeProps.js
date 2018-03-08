@@ -21,7 +21,7 @@
 
 
 import _ from 'lodash';
-import ReactNativePropRegistry from 'react-native/Libraries/Renderer/src/renderers/native/ReactNativePropRegistry';
+import ReactNativePropRegistry from 'react-native/Libraries/Renderer/shims/ReactNativePropRegistry';
 
 module.exports = function (incomingProps: Object, defaultProps: Object): Object {
 	// External props has a higher precedence

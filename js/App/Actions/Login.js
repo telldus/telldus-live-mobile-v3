@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_Login
  */
 
 // @flow
@@ -25,12 +24,11 @@
 
 import axios from 'axios';
 import type { Action, ThunkAction, Dispatch } from './Types';
-import { apiServer } from 'Config';
-import { publicKey, privateKey, authenticationTimeOut } from 'Config';
+import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
 import { Answers } from 'react-native-fabric';
 
-import {LiveApi} from 'LiveApi';
-import { destroyAllConnections } from 'Actions_Websockets';
+import {LiveApi} from '../Lib/LiveApi';
+import { destroyAllConnections } from '../Actions/Websockets';
 
 const loginToTelldus = (username: string, password: string): ThunkAction => (dispatch: Dispatch, getState: Function): Promise<any> => {
 	return axios({
@@ -56,36 +54,17 @@ const loginToTelldus = (username: string, password: string): ThunkAction => (dis
 					type: 'RECEIVED_ACCESS_TOKEN',
 					accessToken: response.data,
 				});
+				return response;
 			}
-			return response;
+			throw response;
 		})
 		.catch((error: Object): Object => {
 			Answers.logLogin('Password', false);
-			if (error.response) {
-				let errorMessage = error.response.data.error_description ?
-					error.response.data.error_description : error.response.data.error ?
-						error.response.data.error : 'Unknown Error, Please try again later.';
-				dispatch(showLoginError(errorMessage));
-			} else if (error.request) {
-				let errorMessage = !error.status && error.request._timedOut ? 'Timed out, try again?' : 'Network request failed. Check your internet connection';
-				dispatch(showLoginError(errorMessage));
-			} else {
-				dispatch(showLoginError(error.message));
-			}
-			return error;
+			throw error;
 		});
 };
 
-function showLoginError(errorMessage: string): Action {
-	return {
-		type: 'REQUEST_MODAL_OPEN',
-		payload: {
-			data: errorMessage,
-		},
-	};
-}
-
-function updateAccessToken(accessToken: Object): Action {
+function updateAccessToken(accessToken:Object): Action {
 	return {
 		type: 'RECEIVED_ACCESS_TOKEN',
 		accessToken: accessToken,

@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_User
  */
 
 // @flow
@@ -25,10 +24,12 @@
 
 import type { ThunkAction, Dispatch } from './Types';
 
-import {LiveApi} from 'LiveApi';
-import { publicKey, privateKey, apiServer } from 'Config';
+import {LiveApi} from '../Lib';
+import { publicKey, privateKey, apiServer } from '../../Config';
 
 import { format } from 'url';
+import { reportError } from '../Lib';
+import { Answers } from 'react-native-fabric';
 
 /*
  * registers the app at the telldus server for receiving push notification, with push token and other device information.
@@ -62,8 +63,12 @@ export const registerPushToken = (token: string, name: string, model: string, ma
 					...response,
 				},
 			});
+			return response;
 		}
-	}).catch((e: Object) => {
+		throw response;
+	}).catch(e => {
+		let log = JSON.stringify(e);
+		reportError(log);
 		if (e === 'TypeError: Network request failed') {
 			dispatch({
 				type: 'ERROR',
@@ -73,6 +78,7 @@ export const registerPushToken = (token: string, name: string, model: string, ma
 				},
 			});
 		}
+		throw e;
 	});
 };
 
@@ -135,20 +141,14 @@ export const RegisterUser = (email: string, firstName: string, lastName: string)
 			if (responseData.error) {
 				throw responseData;
 			}
+			Answers.logSignUp('Email', true);
 			dispatch({
 				type: 'USER_REGISTER',
 				accessToken: responseData,
 			});
-		}).catch((e: Object): string => {
-			let data = !e.error_description && e.message === 'Network request failed' ?
-				'Network request failed. Check your internet connection' : e.error_description ?
-					e.error_description : e.error ? e.error : 'Unknown Error, Please try again later.';
-			dispatch({
-				type: 'REQUEST_MODAL_OPEN',
-				payload: {
-					data,
-				},
-			});
-			return data;
+			return responseData;
+		}).catch(e => {
+			Answers.logSignUp('Email', false);
+			throw e;
 		});
 };

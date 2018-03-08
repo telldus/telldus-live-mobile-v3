@@ -33,13 +33,13 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" relation="greaterThanOrEqual" secondItem="sj6-WD-cxW" secondAttribute="bottom" constant="240" id="C8T-sz-rOY"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="iK7-8z-2oa" secondAttribute="bottom" id="FyH-TW-3Xv"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="iK7-8z-2oa" secondAttribute="bottom" constant="-34" id="FyH-TW-3Xv"/>
                             <constraint firstItem="sj6-WD-cxW" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" multiplier="1/2" constant="20" id="Nra-Iw-aBU"/>
-                            <constraint firstItem="iK7-8z-2oa" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-16" id="UHq-v6-VDS"/>
+                            <constraint firstItem="iK7-8z-2oa" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-64" id="UHq-v6-VDS"/>
                             <constraint firstItem="sj6-WD-cxW" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ZV1-So-Suw"/>
                             <constraint firstItem="sj6-WD-cxW" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="1/3" id="lSH-Lz-fXM"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="iK7-8z-2oa" secondAttribute="trailing" constant="-16" id="wyA-Ln-azv"/>
-                            <constraint firstItem="iK7-8z-2oa" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-20" id="ydZ-Tl-G57"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="iK7-8z-2oa" secondAttribute="trailing" constant="-64" id="wyA-Ln-azv"/>
+                            <constraint firstItem="iK7-8z-2oa" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-44" id="ydZ-Tl-G57"/>
                         </constraints>
                     </view>
                 </viewController>

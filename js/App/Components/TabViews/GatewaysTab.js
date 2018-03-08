@@ -22,18 +22,20 @@
 'use strict';
 
 import React from 'react';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 
-import { Image, List, ListDataSource, ListItem, Text, View } from 'BaseComponents';
-import { getGateways } from 'Actions';
+import { View, FloatingButton } from '../../../BaseComponents';
+import { GatewayRow } from './SubViews';
+import { getGateways, addNewGateway } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
-import type { Dispatch } from 'Actions_Types';
 
-import Theme from 'Theme';
-import { getTabBarIcon } from 'Lib';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
+
+import i18n from '../../Translations/common';
 
 const messages = defineMessages({
 	gateways: {
@@ -45,12 +47,16 @@ const messages = defineMessages({
 
 type Props = {
 	rows: Array<Object>,
-	dispatch: Dispatch,
+	dispatch: Function,
+	addNewLocation: () => Promise<any>,
+	screenProps: Object,
 };
 
 type State = {
-	dataSource: Object,
-	settings: false,
+	dataSource: Array<Object>,
+	settings: boolean,
+	isLoading: boolean,
+	isRefreshing: boolean,
 };
 
 type renderRowProps = {
@@ -66,74 +72,94 @@ class GatewaysTab extends View {
 
 	renderRow: (renderRowProps) => Object;
 	onRefresh: () => void;
+	addLocation: () => void;
 
-	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
+	static navigationOptions = ({navigation, screenProps}) => ({
 		title: screenProps.intl.formatMessage(messages.gateways),
-		tabBarIcon: ({ focused, tintColor }: Object): React$Element<any> => getTabBarIcon(focused, tintColor, 'gateways'),
+		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'gateways'),
 	});
 
 	constructor(props: Props) {
 		super(props);
 
+		let { formatMessage } = props.screenProps.intl;
+
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-			}).cloneWithRows(this.props.rows),
+			dataSource: this.props.rows,
 			settings: false,
+			isLoading: false,
+			isRefreshing: false,
 		};
+
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
+		this.addLocation = this.addLocation.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
+	componentWillReceiveProps(nextProps) {
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRows(nextProps.rows),
+			dataSource: nextProps.rows,
 		});
-	}
-
-	rowHasChanged(r1: Object, r2: Object): boolean {
-		return r1 !== r2;
 	}
 
 	onRefresh() {
 		this.props.dispatch(getGateways());
 	}
 
-	renderRow({ name, online, websocketOnline }: Object): any {
-		let locationSrc;
-		if (!online) {
-			locationSrc = require('./img/tabIcons/location-red.png');
-		} else if (!websocketOnline) {
-			locationSrc = require('./img/tabIcons/location-orange.png');
-		} else {
-			locationSrc = require('./img/tabIcons/location-green.png');
-		}
+	renderRow(item: Object): Object {
+		let { stackNavigator, intl } = this.props.screenProps;
 		return (
-			<ListItem style={Theme.Styles.gatewayRowFront}>
-				<View style={Theme.Styles.listItemAvatar}>
-					<Image source={locationSrc}/>
-				</View>
-				<Text style={{
-					color: 'rgba(0,0,0,0.87)',
-					fontSize: 16,
-					opacity: name ? 1 : 0.5,
-					marginBottom: 2,
-				}}>
-					{name ? name : '(no name)'}
-				</Text>
-			</ListItem>
+			<GatewayRow location={item.item} stackNavigator={stackNavigator} intl={intl}/>
 		);
 	}
 
-	render(): React$Element<any> {
+	keyExtractor(item: Object) {
+		return item.id;
+	}
+
+	addLocation() {
+		this.setState({
+			isLoading: true,
+		});
+		this.props.addNewLocation()
+			.then(response => {
+				this.props.screenProps.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
+				this.setState({
+					isLoading: false,
+				});
+			}).catch(error => {
+				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
+				this.setState({
+					isLoading: false,
+				});
+				this.props.dispatch({
+					type: 'GLOBAL_ERROR_SHOW',
+					payload: {
+						source: 'Add_Location',
+						customMessage: message,
+					},
+				});
+			});
+	}
+
+	render() {
 		return (
-			<View>
-				<List
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
+			<View style={{flex: 1}}>
+				<FlatList
+					data={this.state.dataSource}
+					renderItem={this.renderRow}
 					onRefresh={this.onRefresh}
+					refreshing={this.state.isRefreshing}
+					style={{paddingTop: 10}}
+					keyExtractor={this.keyExtractor}
 				/>
+				<FloatingButton
+					onPress={this.addLocation}
+					imageSource={this.state.isLoading ? false : require('../TabViews/img/iconPlus.png')}
+					showThrobber={this.state.isLoading}/>
 			</View>
 		);
 	}
@@ -141,15 +167,24 @@ class GatewaysTab extends View {
 
 const getRows = createSelector(
 	[
-		({ gateways }: Object): Object => gateways,
+		({ gateways }) => gateways,
 	],
-	(gateways: Object): Array<Object> => parseGatewaysForListView(gateways)
+	(gateways) => parseGatewaysForListView(gateways)
 );
 
-function mapStateToProps(state: Object, props: Object): Object {
+function mapStateToProps(state, props) {
 	return {
 		rows: getRows(state),
 	};
 }
 
-module.exports = connect(mapStateToProps)(GatewaysTab);
+function mapDispatchToProps(dispatch) {
+	return {
+		addNewLocation: () => {
+			return dispatch(addNewGateway());
+		},
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(GatewaysTab);

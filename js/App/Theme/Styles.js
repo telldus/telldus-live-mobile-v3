@@ -17,10 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import Core from './Core';
-
-const deviceWidth = Dimensions.get('window').width;
 
 const listItemHeight = 56;
 const listItemWidth = 30;
@@ -34,8 +32,20 @@ export default StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 	},
+	sectionHeaderNew: {
+		backgroundColor: 'transparent',
+		height: 26,
+		flexDirection: 'column',
+		justifyContent: 'center',
+	},
 	sectionHeaderText: {
 		color: Core.brandPrimary,
+		fontSize: 14,
+		marginLeft: 16,
+		fontWeight: '500',
+	},
+	sectionHeaderTextNew: {
+		color: Core.sectionTextColor,
 		fontSize: 14,
 		marginLeft: 16,
 		fontWeight: '500',
@@ -74,12 +84,40 @@ export default StyleSheet.create({
 		// flex: 1,
 		justifyContent: 'center',
 	},
-	sensorValue: {
-		width: 108,
-		flexDirection: 'row',
-		justifyContent: 'space-around',
+	hiddenRowItem: {
+		justifyContent: 'center',
 		alignItems: 'center',
-		paddingRight: 12,
+		height: Core.rowHeight,
+		width: Core.buttonWidth,
+	},
+	sensorValue: {
+		flexDirection: 'row',
+		justifyContent: 'flex-start',
+		alignItems: 'center',
+		paddingLeft: 10,
+	},
+	sensorIcon: {
+		fontSize: 40,
+		color: '#fff',
+		marginTop: 5,
+	},
+	deviceActionIcon: {
+		fontSize: 30,
+	},
+	sensorValueCover: {
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+	},
+	sensorValueText: {
+		fontSize: 18,
+		color: '#ffffff',
+	},
+	sensorValueLabelText: {
+		fontSize: 13,
+		color: '#ffffff',
+		marginLeft: 3,
+		paddingTop: 3,
+		textAlignVertical: 'bottom',
 	},
 	sensorTileItem: {
 		position: 'absolute',
@@ -88,9 +126,8 @@ export default StyleSheet.create({
 		left: 0,
 		right: 0,
 		flexDirection: 'row',
-		backgroundColor: 'white',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
+		borderBottomLeftRadius: 2,
+		borderBottomRightRadius: 2,
 	},
 	listItemAvatar: {
 		width: 32,
@@ -105,7 +142,6 @@ export default StyleSheet.create({
 
 	textFieldCover: {
 		height: 50,
-		width: deviceWidth * 0.7,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -117,7 +153,6 @@ export default StyleSheet.create({
 		borderRadius: 3,
 
 		height: 40,
-		width: deviceWidth * 0.7,
 		fontSize: 14,
 		color: '#ffffff80',
 		textAlign: 'left',

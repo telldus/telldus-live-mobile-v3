@@ -24,10 +24,11 @@ import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import promise from './Promise';
 import array from './Array';
-import reducers from 'Reducers';
+import reducers from '../Reducers';
 import { createLogger } from 'redux-logger';
-import { persistStore, autoRehydrate } from 'redux-persist';
-import { AsyncStorage } from 'react-native';
+import { persistStore } from 'redux-persist';
+import { LiveApi } from '../Lib/LiveApi';
+import TelldusWebsocket from '../Lib/Socket';
 
 let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
@@ -37,12 +38,17 @@ let logger = createLogger({
 	duration: true,
 });
 
-let createTheStore = applyMiddleware(thunk, promise, array, logger)(createStore);
+const store = createStore(
+	reducers,
+	undefined,
+	applyMiddleware(thunk.withExtraArgument({LiveApi, TelldusWebsocket}), promise, array, logger),
+);
 
 let _store;
-export function configureStore(onComplete ?: () => void): Object {
-	const store = autoRehydrate()(createTheStore)(reducers);
-	persistStore(store, { storage: AsyncStorage }, onComplete);
+export function configureStore(onComplete: ?() => void) {
+
+	persistStore(store, null, onComplete);
+
 	if (isDebuggingInChrome) {
 		window.store = store;
 	}

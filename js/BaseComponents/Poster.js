@@ -21,20 +21,29 @@
 
 'use strict';
 
-import React, { PropTypes, Component } from 'react';
-import { Dimensions, Image } from 'react-native';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Image } from 'react-native';
 import View from './View';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 type Props = {
 	children?: any,
 	source?: number,
+	appLayout: Object,
+	source750: number,
+	source1500: number,
+	source3000: number,
 };
 
 type DefaultProps = {
-	source: number,
+	source750: number,
+	source1500: number,
+	source3000: number,
 };
 
-export default class Poster extends Component {
+class Poster extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {
@@ -43,42 +52,73 @@ export default class Poster extends Component {
 	};
 
 	static defaultProps: DefaultProps = {
-		source: require('./img/telldus-geometric-header-bg.png'),
+		source750: require('../App/Components/TabViews/img/telldus-geometric-bg-750.png'),
+		source1500: require('../App/Components/TabViews/img/telldus-geometric-bg-1500.png'),
+		source3000: require('../App/Components/TabViews/img/telldus-geometric-bg-3000.png'),
 	};
 
 	constructor(props: Props) {
 		super(props);
 	}
 
-	render(): React$Element<any> {
-		const { children, source } = this.props;
-		const { image, mask } = this._getStyle();
+	getImageSource(height: number): number {
+		let { source750, source1500, source3000 } = this.props;
+		switch (height) {
+			case height > 700 && height < 1400:
+				return source1500;
+			case height >= 1400:
+				return source3000;
+			default:
+				return source750;
+		}
+	}
 
+	render(): Object {
+		const { children, appLayout, source } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+
+		let imageSource = source;
+		if (!imageSource) {
+			imageSource = this.getImageSource(deviceHeight);
+		}
+
+		const { image, mask } = this._getStyle(appLayout);
 		return (
 			<View style={mask}>
-				<Image source={source} style={image}/>
+				<Image source={imageSource} style={image}/>
 				{!!children && children}
 			</View>
 		);
 	}
 
-	_getStyle = (): Object => {
-		const deviceWidth = Dimensions.get('window').width;
+	_getStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
 
 		return {
 			image: {
 				flex: 1,
 				height: undefined,
-				width: deviceWidth,
+				...ifIphoneX({width: '100%'}, {width: width}),
 				resizeMode: 'cover',
 			},
 			mask: {
 				borderWidth: 0,
-				height: deviceWidth * 0.333333333,
-				width: deviceWidth,
+				height: isPortrait ? width * 0.333333333 : height * 0.333333333,
+				...ifIphoneX({width: '100%'}, {width: width}),
 				overflow: 'hidden',
 			},
 		};
 	};
 
 }
+
+function mapStateToProps(state, ownProps) {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(Poster);

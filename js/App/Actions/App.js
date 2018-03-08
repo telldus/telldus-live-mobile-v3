@@ -16,33 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_App
  */
 
 // @flow
 
 'use strict';
+// Device actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { App } = actions;
 
-import type { Action } from './Types';
-
-type Duration = 'SHORT' | 'LONG';
-type POSITION = 'TOP' | 'CENTER' | 'BOTTOM';
-
-const showToast = (source?: string = '', message?: string, duration?: Duration = 'SHORT', position: POSITION = 'TOP'): Action => ({
-	type: 'TOAST_SHOW',
-	payload: {
-		source,
-		message,
-		duration,
-		position,
-	},
-});
-
-const hideToast = (): Action => ({
-	type: 'TOAST_HIDE',
-});
 
 module.exports = {
-	showToast,
-	hideToast,
+	...App,
 };

@@ -21,24 +21,31 @@
 
 'use strict';
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Dimensions } from 'react-native';
 import Text from './Text';
-import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
+import Theme from '../App/Theme';
+
+const deviceWidth = Dimensions.get('window').width;
 
 type DefaultProps = {
 	color: string,
 	size: number,
+	accessible: boolean,
+	importantForAccessibility: string,
 };
 
 type Props = {
-	icon: string,
+	icon?: string,
 	size?: number,
 	color?: string,
 	style?: Object | number,
+	accessible?: boolean,
+	importantForAccessibility: string,
 };
 
-export default class IconTelldus extends Component {
+export default class IconTelldus extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {
@@ -50,15 +57,20 @@ export default class IconTelldus extends Component {
 
 	static defaultProps: DefaultProps = {
 		color: '#999',
-		size: getDeviceWidth() * 0.04,
+		size: deviceWidth * 0.04,
+		accessible: true,
+		importantForAccessibility: 'yes',
 	};
 
-	render(): React$Element<any> {
-		const { icon, style } = this.props;
+	render(): Object {
+		const { icon, style, accessible, importantForAccessibility } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]}>
+			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]}
+				allowFontScaling={false}
+				importantForAccessibility={importantForAccessibility}
+				accessible={accessible}>
 				{icon}
 			</Text>
 		);

@@ -22,18 +22,15 @@
 'use strict';
 
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import type { Dispatch } from 'Actions_Types';
-import { FormattedMessage, View, Dimensions, DialogueBox } from 'BaseComponents';
-import { FormContainerComponent, LoginForm, SessionLocked } from 'PreLoginScreen_SubViews';
+import { FormattedMessage, View, DialogueBox, SafeAreaView } from '../../../BaseComponents';
+import { FormContainerComponent, LoginForm, SessionLocked } from './SubViews';
 
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
-
-import StyleSheet from 'StyleSheet';
 
 const messages = defineMessages({
 	needAccount: {
@@ -49,13 +46,14 @@ const messages = defineMessages({
 });
 
 type Props = {
-		dispatch: Dispatch,
+		dispatch: Function,
 		screenProps: Object,
 		navigation: Object,
-		loginToTelldus: (string, string) => void,
+		loginToTelldus: Function,
 		validationMessage: string,
 		showModal: boolean,
 		intl: intlShape.isRequired,
+		appLayout: Object,
 };
 
 type State = {
@@ -85,6 +83,16 @@ class LoginScreen extends View {
 
 		this.closeModal = this.closeModal.bind(this);
 		this.onPressPositive = this.onPressPositive.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.forgotPassword = formatMessage(i18n.forgotPassword);
+		this.needAccount = formatMessage(messages.needAccount);
+
+		this.labelLink = formatMessage(i18n.labelLink);
+		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+		this.labelForgotPassword = `${this.labelLink} ${this.forgotPassword} ${this.labelButtondefaultDescription}`;
+		this.labelNeedAccount = `${this.labelLink} ${this.needAccount} ${this.labelButtondefaultDescription}`;
 	}
 
 	closeModal() {
@@ -100,14 +108,14 @@ class LoginScreen extends View {
 		});
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
 		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
 			return false;
 		}
 		return true;
 	}
 
-	getRelativeData(): Object {
+	getRelativeData() {
 		let headerText = this.props.intl.formatMessage(i18n.login), notificationHeader = false,
 			positiveText = false, onPressPositive = this.closeModal, onPressNegative = false,
 			showNegative = false, showPositive = true;
@@ -130,39 +138,68 @@ class LoginScreen extends View {
 		};
 	}
 
-	render(): Object {
+	render() {
+		let { appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		let {
 			headerText, notificationHeader, positiveText,
 			onPressPositive, onPressNegative, showPositive, showNegative} = this.getRelativeData();
 		return (
-			<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
-				{this.props.accessToken && !this.props.isTokenValid ?
-					<SessionLocked onPressLogout={this.state.onPressLogout} />
-					:
-					<View>
-						<LoginForm />
+			<SafeAreaView>
+				<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
+					{this.props.accessToken && !this.props.isTokenValid ?
+						<SessionLocked onPressLogout={this.state.onPressLogout} dialogueOpen={this.props.showModal}/>
+						:
+						<LoginForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
+					}
+					{this.props.accessToken && !this.props.isTokenValid ?
+						null
+						:
 						<View style={styles.otherLinks}>
-							<TouchableOpacity style={{height: 25}} onPress={this.onForgotPassword}>
-								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb' }}/>
+							<TouchableOpacity style={{height: 25}}
+								onPress={this.onForgotPassword}
+								accessibilityLabel={this.labelForgotPassword}>
+								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb', fontSize: 13 }}/>
 							</TouchableOpacity>
-							<TouchableOpacity style={{height: 25, paddingLeft: 5 }} onPress={this.onNeedAccount}>
-								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5 }}/>
+							<TouchableOpacity style={{height: 25, paddingLeft: 5 }}
+								onPress={this.onNeedAccount}
+								accessibilityLabel={this.labelNeedAccount}>
+								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5, fontSize: 13 }}/>
 							</TouchableOpacity>
+							<View style={{ height: 10 }}/>
 						</View>
-						<View style={{ height: 10 }}/>
-					</View>
-				}
-				<DialogueBox
-					showDialogue={this.props.showModal}
-					header={notificationHeader}
-					text={this.props.validationMessage}
-					showPositive={showPositive}
-					showNegative={showNegative}
-					positiveText={positiveText}
-					onPressPositive={onPressPositive}
-					onPressNegative={onPressNegative}/>
-			</FormContainerComponent>
+					}
+					<DialogueBox
+						showDialogue={this.props.showModal}
+						header={notificationHeader}
+						text={this.props.validationMessage}
+						showPositive={showPositive}
+						showNegative={showNegative}
+						positiveText={positiveText}
+						onPressPositive={onPressPositive}
+						onPressNegative={onPressNegative}/>
+
+				</FormContainerComponent>
+			</SafeAreaView>
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const width = appLayout.width;
+
+		return {
+			otherLinks: {
+				flexDirection: 'row',
+				flexWrap: 'wrap',
+				marginTop: 15,
+				justifyContent: 'center',
+				marginHorizontal: 10,
+			},
+			formContainer: {
+				width: width,
+			},
+		};
 	}
 
 	onNeedAccount() {
@@ -176,29 +213,18 @@ class LoginScreen extends View {
 	}
 }
 
-const styles = StyleSheet.create({
-	otherLinks: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		marginTop: 15,
-		marginHorizontal: 10,
-	},
-	formContainer: {
-		height: Dimensions.get('window').height * 0.50,
-	},
-});
-
-function mapStateToProps(store: Object): Object {
+function mapStateToProps(store) {
 	return {
 		tab: store.navigation.tab,
 		accessToken: store.user.accessToken,
 		isTokenValid: store.user.isTokenValid,
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
+		appLayout: store.App.layout,
 	};
 }
 
-function dispatchToProps(dispatch: Dispatch): Object {
+function dispatchToProps(dispatch) {
 	return {
 		dispatch,
 	};

@@ -22,7 +22,7 @@
 'use strict';
 
 import { NavigatorIOS } from 'react-native';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 class NavigatorIOSComponent extends NavigatorIOS {
 }

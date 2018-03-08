@@ -25,12 +25,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { StyleSheet } from 'react-native';
-
-import { FormattedMessage, View, Text, TouchableButton } from 'BaseComponents';
-import {FormContainerComponent} from 'PreLoginScreen_SubViews';
-
-import type { Dispatch } from 'Actions_Types';
+import { FormattedMessage, View, Text, TouchableButton, SafeAreaView } from '../../../BaseComponents';
+import { FormContainerComponent } from './SubViews';
 
 const messages = defineMessages({
 	welcomeHeader: {
@@ -56,7 +52,8 @@ type Props = {
 	onPressOK: Function,
 	registeredCredential: any,
 	intl: intlShape.isRequired,
-};
+	appLayout: Object,
+}
 
 class WelcomeScreen extends View {
 
@@ -73,45 +70,51 @@ class WelcomeScreen extends View {
 		this.props.onPressOK(this.props.registeredCredential);
 	}
 
-	render(): React$Element<any> {
+	render() {
+		let { appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		return (
-			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.welcomeHeader)}>
-				<Text style={styles.textBody}><FormattedMessage {...messages.accountCreated} style={styles.textBody}/></Text>
-				<Text style={styles.textBody}><FormattedMessage {...messages.confirmMessage} style={styles.textBody}/></Text>
-				<TouchableButton
-					style={styles.formSubmit}
-					onPress={this.onPressOK}
-					text={messages.welcomeButton}
-				/>
-			</FormContainerComponent>
+			<SafeAreaView>
+				<FormContainerComponent headerText={this.props.intl.formatMessage(messages.welcomeHeader)} formContainerStyle={styles.formContainer}>
+					<Text style={styles.textBody}><FormattedMessage {...messages.accountCreated} style={styles.textBody}/></Text>
+					<Text style={styles.textBody}><FormattedMessage {...messages.confirmMessage} style={styles.textBody}/></Text>
+					<TouchableButton
+						style={{marginTop: 20}}
+						onPress={this.onPressOK}
+						text={messages.welcomeButton}
+					/>
+				</FormContainerComponent>
+			</SafeAreaView>
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+
+		return {
+			textBody: {
+				color: '#ffffff80',
+				marginTop: 20,
+				textAlign: 'center',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+		};
 	}
 }
 
-const styles = StyleSheet.create({
-	textBody: {
-		color: '#ffffff80',
-		marginTop: 20,
-		textAlign: 'center',
-		fontSize: 13,
-	},
-	formSubmit: {
-		height: 50,
-		width: 180,
-		marginTop: 20,
-		borderRadius: 50,
-	},
-});
-
-function mapStateToProps(store: Object): Object {
+function mapStateToProps(store) {
 	return {
 		registeredCredential: store.user.registeredCredential,
+		appLayout: store.App.layout,
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch): Object {
+function mapDispatchToProps(dispatch) {
 	return {
-		onPressOK: (accessToken: Object) => {
+		onPressOK: (accessToken) => {
 			dispatch({
 				type: 'RECEIVED_ACCESS_TOKEN',
 				accessToken,

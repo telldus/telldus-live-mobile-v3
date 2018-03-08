@@ -16,132 +16,90 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
-// @flow
 
 'use strict';
 
-import React from 'react';
+import React, { PureComponent } from 'react';
+import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { View, Icon } from 'BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
+import StopButton from './Navigational/StopButton';
+import UpButton from './Navigational/UpButton';
+import DownButton from './Navigational/DownButton';
 
-import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+import { getLabelDevice } from '../../../Lib';
+import { getPowerConsumed } from '../../../Lib';
 
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import type { Dispatch } from 'Actions_Types';
-
-const UpButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element<any> => (
-	<TouchableOpacity
-		style={styles.navigationButton}
-		onPress={onPress}>
-		<Icon name="caret-up"
-		      size={42}
-		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
-		/>
-		{
-			methodRequested === 'UP' ?
-				<ButtonLoadingIndicator style={styles.dot} />
-				:
-				null
-		}
-	</TouchableOpacity>
-);
-
-const DownButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element<any> => (
-	<TouchableOpacity
-		style={styles.navigationButton}
-		onPress={onPress}>
-		<Icon name="caret-down"
-		      size={42}
-		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
-		/>
-		{
-			methodRequested === 'DOWN' ?
-				<ButtonLoadingIndicator style={styles.dot} />
-				:
-				null
-		}
-	</TouchableOpacity>
-);
-
-const StopButton = ({ isEnabled, onPress, methodRequested }: Object): React$Element<any> => (
-	<TouchableOpacity
-		style={styles.navigationButton}
-		onPress={onPress}>
-		<Icon name="stop"
-		      size={30}
-		      style={isEnabled ? styles.buttonEnabled : styles.buttonDisabled}
-		/>
-		{
-			methodRequested === 'STOP' ?
-				<ButtonLoadingIndicator style={styles.dot} />
-				:
-				null
-		}
-	</TouchableOpacity>
-);
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
 	tileWidth: number,
-	onUp: number => void,
-	onDown: number => void,
-	onStop: number => void,
 	style: Object,
-	commandUp: number,
-	commandDown: number,
-	commandStop: number,
-	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
+	intl: Object,
+	isGatewayActive: boolean,
+	powerConsumed: string,
 };
 
-class NavigationalDashboardTile extends View {
+class NavigationalDashboardTile extends PureComponent<Props, null> {
 	props: Props;
-
-	onUp: (number) => void;
-	onDown: (number) => void;
-	onStop: (number) => void;
 
 	constructor(props: Props) {
 		super(props);
-
-		this.onUp = this.onUp.bind(this);
-		this.onDown = this.onDown.bind(this);
-		this.onStop = this.onStop.bind(this);
 	}
 
-	onUp() {
-		this.props.requestDeviceAction(this.props.item.id, this.props.commandUp);
-		this.props.deviceSetState(this.props.item.id, this.props.commandUp);
-	}
-	onDown() {
-		this.props.requestDeviceAction(this.props.item.id, this.props.commandDown);
-		this.props.deviceSetState(this.props.item.id, this.props.commandDown);
-	}
-	onStop() {
-		this.props.requestDeviceAction(this.props.item.id, this.props.commandStop);
-		this.props.deviceSetState(this.props.item.id, this.props.commandStop);
-	}
-
-	render(): React$Element<any> {
-		const { item, tileWidth } = this.props;
-		const { name, supportedMethods } = item;
+	render() {
+		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
+		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
-		const upButton = UP ? <UpButton isEnabled={true} onPress={this.onUp} methodRequested={item.methodRequested} /> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} onPress={this.onDown} methodRequested={item.methodRequested} /> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} onPress={this.onStop} methodRequested={item.methodRequested} /> : null;
+
+		const info = powerConsumed ? `${powerConsumed} W` : null;
+
+		const upButton = UP ? <UpButton isEnabled={true} style={styles.navigationButton}
+			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
+			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id} name={name}/> : null;
+		const downButton = DOWN ? <DownButton isEnabled={true} style={styles.navigationButton}
+			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
+			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id} name={name}/> : null;
+		const stopButton = STOP ? <StopButton isEnabled={true} style={styles.navigationButton}
+			methodRequested={item.methodRequested} iconSize={20} isGatewayActive={isGatewayActive}
+			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id} name={name}/> : null;
+
+		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
+
+		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={true}
 				name={name}
+				info={info}
+				icon={'curtain'}
+				iconStyle={{
+					color: '#fff',
+					fontSize: tileWidth / 4.9,
+				}}
+				iconContainerStyle={[iconContainerStyle, {
+					width: tileWidth / 4.5,
+					height: tileWidth / 4.5,
+					borderRadius: tileWidth / 9,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}
 				type={'device'}
 				tileWidth={tileWidth}
+				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
-				<View style={styles.body}>
+				<View style={{
+					width: tileWidth,
+					height: tileWidth * 0.4,
+					flexDirection: 'row',
+					justifyContent: 'center',
+				}}>
 					{ upButton }
 					{ downButton }
 					{ stopButton }
@@ -151,47 +109,28 @@ class NavigationalDashboardTile extends View {
 	}
 }
 
-NavigationalDashboardTile.defaultProps = {
-	commandUp: 128,
-	commandDown: 256,
-	commandStop: 512,
-};
-
 const styles = StyleSheet.create({
-	body: {
-		flex: 30,
-		flexDirection: 'row',
-		backgroundColor: 'white',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
-	},
 	navigationButton: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-	buttonEnabled: {
-		color: '#1a355b',
+	itemIconContainerOn: {
+		backgroundColor: Theme.Core.brandSecondary,
 	},
-	buttonDisabled: {
-		color: '#eeeeee',
+	itemIconContainerOff: {
+		backgroundColor: Theme.Core.brandPrimary,
 	},
-	dot: {
-		position: 'absolute',
-		top: 3,
-		left: 3,
+	itemIconContainerOffline: {
+		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 
-function mapDispatchToProps(dispatch: Dispatch): Object {
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
 	return {
-		deviceSetState: (id: number, command: number, value?: number) => {
-			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
-		},
+		powerConsumed,
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(NavigationalDashboardTile);
+module.exports = connect(mapStateToProps, null)(NavigationalDashboardTile);

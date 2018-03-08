@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule TabsView
  */
 
 // @flow
@@ -24,20 +23,50 @@
 'use strict';
 
 import React from 'react';
-import { Dimensions } from 'react-native';
 import { connect } from 'react-redux';
+import { defineMessages } from 'react-intl';
 import { intlShape, injectIntl } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View, Icon } from 'BaseComponents';
+import { View, Header } from '../../../BaseComponents';
 
-import Theme from 'Theme';
+import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 
-import { SettingsDetailModal } from 'DetailViews';
-
+import { SettingsDetailModal } from '../DetailViews';
+import TabBar from './TabBar';
+import i18n from '../../Translations/common';
 import { getUserProfile } from '../../Reducers/User';
-import { syncWithServer, switchTab, toggleEditMode } from 'Actions';
-import TabViews from 'TabViews';
+import { syncWithServer, switchTab, addNewGateway } from '../../Actions';
+import TabViews from './index';
 import { TabNavigator } from 'react-navigation';
+import Drawer from '../Drawer/Drawer';
+
+const messages = defineMessages({
+	menuIcon: {
+		id: 'accessibilityLabel.menuIcon',
+		defaultMessage: 'Menu',
+	},
+	messageCloseMenu: {
+		id: 'accessibilityLabel.messageCloseMenu',
+		defaultMessage: 'swipe left, using three fingers to close',
+	},
+	starIconShowDevices: {
+		id: 'accessibilityLabel.starIconShowDevices',
+		defaultMessage: 'Show, add to dashboard marker, for all devices',
+	},
+	starIconHideDevices: {
+		id: 'accessibilityLabel.starIconHideDevices',
+		defaultMessage: 'Hide, add to dashboard marker, for all devices',
+	},
+	starIconShowSensors: {
+		id: 'accessibilityLabel.starIconShowSensors',
+		defaultMessage: 'Show, add to dashboard marker, for all sensors',
+	},
+	starIconHideSensors: {
+		id: 'accessibilityLabel.starIconHideSensors',
+		defaultMessage: 'Hide, add to dashboard marker, for all sensors',
+	},
+});
 
 const RouteConfigs = {
 	Dashboard: {
@@ -56,24 +85,17 @@ const RouteConfigs = {
 
 const TabNavigatorConfig = {
 	initialRouteName: 'Dashboard',
-	swipeEnabled: true,
+	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: true,
+	tabBarComponent: TabBar,
+	tabBarPosition: 'top',
 	tabBarOptions: {
 		activeTintColor: '#fff',
 		indicatorStyle: {
 			backgroundColor: '#fff',
 		},
 		scrollEnabled: true,
-		labelStyle: {
-			fontSize: Dimensions.get('window').width / 35,
-		},
-		tabStyle: {
-			width: Dimensions.get('window').width / 2.8,
-		},
-		style: {
-			backgroundColor: Theme.Core.brandPrimary,
-		},
 	},
 };
 
@@ -84,11 +106,14 @@ type Props = {
 	dashboard: Object,
 	tab: string,
 	userProfile: Object,
+	isAppActive: boolean,
 	gateways: Object,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
 	dispatch: Function,
 	stackNavigator: Object,
+	addNewLocation: () => void,
+	screenReaderEnabled: boolean,
 };
 
 type State = {
@@ -100,116 +125,293 @@ class TabsView extends View {
 	props: Props;
 	state: State;
 
+	renderNavigationView: () => Object;
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
 	onTabSelect: (string) => void;
 	onRequestChangeTab: (number) => void;
-	toggleEditMode: (number) => void;
+	openDrawer: () => void;
 	onNavigationStateChange: (Object, Object) => void;
+	addNewLocation: () => void;
+	onPressGateway: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
 
-		this.state = {
-			settings: false,
-			routeName: '',
+		let { formatMessage } = props.intl;
+
+		this.labelButton = formatMessage(i18n.button);
+		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+
+		this.menuIcon = `${formatMessage(messages.menuIcon)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
+		this.starIconShowDevices = `${formatMessage(messages.starIconShowDevices)}. ${this.labelButtondefaultDescription}`;
+		this.starIconHideDevices = `${formatMessage(messages.starIconHideDevices)}. ${this.labelButtondefaultDescription}`;
+		this.starIconShowSensors = `${formatMessage(messages.starIconShowSensors)}. ${this.labelButtondefaultDescription}`;
+		this.starIconHideSensors = `${formatMessage(messages.starIconHideSensors)}. ${this.labelButtondefaultDescription}`;
+		this.messageCloseMenu = `${formatMessage(messages.messageCloseMenu)}`;
+
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
+
+		this.menuButton = {
+			icon: {
+				name: 'bars',
+				size: 22,
+				color: '#fff',
+				style: null,
+				iconStyle: null,
+			},
+			onPress: this.openDrawer,
+			accessibilityLabel: '',
 		};
+
+		this.state = {
+			drawer: false,
+			settings: false,
+			routeName: 'Dashboard',
+			addingNewLocation: false,
+		};
+
+		this.renderNavigationView = this.renderNavigationView.bind(this);
+		this.onOpenSetting = this.onOpenSetting.bind(this);
+		this.onCloseSetting = this.onCloseSetting.bind(this);
+		this.onCloseDrawer = this.onCloseDrawer.bind(this);
+		this.onOpenDrawer = this.onOpenDrawer.bind(this);
 		this.onTabSelect = this.onTabSelect.bind(this);
 		this.onRequestChangeTab = this.onRequestChangeTab.bind(this);
-		this.toggleEditMode = this.toggleEditMode.bind(this);
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+		this.addNewLocation = this.addNewLocation.bind(this);
+		this.onPressGateway = this.onPressGateway.bind(this);
 	}
 
-	componentDidMount() {
-		Icon.getImageSource('star', 22, 'white').then((source: string): void => this.setState({ starIcon: source }));
-		let {setParams} = this.props.stackNavigator;
-		setParams({
-			openDrawer: this.props.screenProps.openDrawer,
-			toggleEditMode: this.toggleEditMode,
-		});
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation && nextProps.gateways.toActivate.checkIfGatewaysEmpty) {
+			this.addNewLocation();
+		}
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	shouldComponentUpdate(nextProps, nextState) {
 		return nextProps.screenProps.currentScreen === 'Tabs';
 	}
 
-	toggleEditMode() {
-		let {state} = this.props.stackNavigator;
-		this.props.dispatch(toggleEditMode(state.params.currentTab));
+	addNewLocation() {
+		this.props.addNewLocation()
+			.then(response => {
+				if (response.client) {
+					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
+					this.setState({
+						addingNewLocation: true,
+					});
+				}
+			}).catch(error => {
+				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
+				this.props.dispatch({
+					type: 'GLOBAL_ERROR_SHOW',
+					payload: {
+						source: 'Add_Location',
+						customMessage: message,
+					},
+				});
+			});
 	}
 
-	onTabSelect(tab: string) {
+	onTabSelect(tab) {
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
+			if (this.refs.drawer) {
+				this.refs.drawer.closeDrawer();
+			}
 		}
 	}
 
-	onRequestChangeTab(index: number) {
+	onOpenSetting() {
+		this.setState({ settings: true });
+	}
+
+	onCloseSetting() {
+		this.setState({ settings: false });
+	}
+
+	onOpenDrawer() {
+		this.setState({ drawer: true });
+		if (this.props.screenReaderEnabled) {
+			announceForAccessibility(this.messageCloseMenu);
+		}
+	}
+
+	onCloseDrawer() {
+		this.setState({ drawer: false });
+	}
+
+	onPressGateway(location: Object) {
+		this.props.stackNavigator.navigate('LocationDetails', {location, renderRootHeader: true});
+	}
+
+	onRequestChangeTab(index) {
 		this.setState({ index });
 		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
-		let {setParams} = this.props.stackNavigator;
-		setParams({
-			currentTab: tabNames[index],
-		});
 		this.onTabSelect(tabNames[index]);
 	}
 
-	onNavigationStateChange(prevState: Object, currentState: Object) {
+	onNavigationStateChange(prevState, currentState) {
 		const index = currentState.index;
-		if (this.props.editModeDevices || this.props.editModeSensors) {
-			this.toggleEditMode();
-		}
+
 		this.setState({ routeName: currentState.routes[index].routeName });
 		this.onRequestChangeTab(index);
 	}
 
-	makeRightButton = (routeName: string): any => {
-		return (routeName === 'Devices' || routeName === 'Sensors') ? this.starButton : null;
+	openDrawer = () => {
+		this.refs.drawer.openDrawer();
+		this.props.syncGateways();
 	};
 
-	render(): React$Element<any> {
-		if (!this.state || !this.state.starIcon) {
-			return false;
-		}
+	renderNavigationView(): Object {
+		let { appLayout } = this.props;
+
+		return <Drawer
+			gateways={this.props.gateways}
+			addNewLocation={this.addNewLocation}
+			userProfile={this.props.userProfile}
+			theme={this.getTheme()}
+			onOpenSetting={this.onOpenSetting}
+			appLayout={appLayout}
+			isOpen={this.state.drawer}
+			onPressGateway={this.onPressGateway}
+		/>;
+	}
+
+	makeLeftButton = (styles: Object): any => {
+		this.menuButton.icon.style = styles.menuButtonStyle;
+		this.menuButton.icon.iconStyle = styles.menuIconStyle;
+		this.menuButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
+		this.menuButton.accessibilityLabel = this.menuIcon;
+
+		return this.state.drawer ? null : this.menuButton;
+	};
+
+	getDrawerWidth = (deviceWidth: number): number => {
+		let minWidth = 250;
+		let width = deviceWidth * 0.6;
+		return width < minWidth ? minWidth : width;
+	}
+
+	render() {
+		let { appLayout, stackNavigator } = this.props;
+		let { routeName } = this.state;
+		let { currentScreen } = this.props.screenProps;
+		let isPortrait = appLayout.height > appLayout.width;
+		let deviceWidth = isPortrait ? appLayout.width : appLayout.height;
+		let styles = this.getStyles(appLayout);
 
 		let screenProps = {
-			stackNavigator: this.props.stackNavigator,
+			stackNavigator,
+			currentTab: routeName,
+			currentScreen,
 		};
+
+		const leftButton = this.makeLeftButton(styles);
+		const drawerWidth = this.getDrawerWidth(deviceWidth);
+
 		// TODO: Refactor: Split this code to smaller components
 		return (
-			<View style={{ flex: 1 }}>
-				<View>
-					<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
-					{
-						this.props.screenProps.openSetting ? (
-							<SettingsDetailModal isVisible={true} onClose={this.props.screenProps.closeSetting}/>
-						) : null
-					}
+			<DrawerLayoutAndroid
+				ref="drawer"
+				drawerWidth={drawerWidth}
+				drawerPosition={DrawerLayoutAndroid.positions.Left}
+				renderNavigationView={this.renderNavigationView}
+				drawerBackgroundColor={'transparent'}
+				onDrawerOpen={this.onOpenDrawer}
+				onDrawerClose={this.onCloseDrawer}
+			>
+				<View style={{flex: 1}} >
+					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton}/>
+					<View style={styles.container}>
+						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
+						{
+							this.state.settings ? (
+								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
+							) : null
+						}
+					</View>
 				</View>
-			</View>
+			</DrawerLayoutAndroid>
 		);
 	}
 
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		let isPortrait = height > width;
+		let deviceHeight = isPortrait ? height : width;
+
+		return {
+			header: isPortrait ? {
+				height: deviceHeight * 0.05,
+				alignItems: 'flex-end',
+			} : {
+				transform: [{rotateZ: '-90deg'}],
+				position: 'absolute',
+				left: -deviceHeight * 0.4444,
+				top: deviceHeight * 0.4444,
+				width: deviceHeight,
+				height: deviceHeight * 0.1111,
+			},
+			container: {
+				flex: 1,
+				marginLeft: isPortrait ? 0 : deviceHeight * 0.11,
+			},
+			buttonSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			menuButtonStyle: isPortrait ? null : {
+				position: 'absolute',
+				left: undefined,
+				right: 50,
+				top: deviceHeight * 0.03666,
+				paddingTop: 0,
+				paddingHorizontal: 0,
+			},
+			starButtonStyle: isPortrait ? null : {
+				position: 'absolute',
+				right: height - 50,
+				top: deviceHeight * 0.03666,
+				paddingTop: 0,
+				paddingHorizontal: 0,
+			},
+			menuIconStyle: isPortrait ? null : {
+				transform: [{rotateZ: '90deg'}],
+			},
+			logoStyle: isPortrait ? null : {
+				position: 'absolute',
+				left: deviceHeight * 0.6255,
+				top: deviceHeight * 0.0400,
+			},
+		};
+	}
 }
 
-function mapStateToProps(store: Object, ownProps: Object): Object {
+function mapStateToProps(store, ownprops) {
 	return {
-		stackNavigator: ownProps.navigation,
+		stackNavigator: ownprops.navigation,
 		tab: store.navigation.tab,
 		userProfile: getUserProfile(store),
 		dashboard: store.dashboard,
 		gateways: store.gateways,
-		editModeDevices: store.tabs.editModeDevicesTab,
-		editModeSensors: store.tabs.editModeSensorsTab,
+		isAppActive: store.App.active,
+		appLayout: store.App.layout,
+		screenReaderEnabled: store.App.screenReaderEnabled,
+		editModeDevicesTab: store.tabs.editModeDevicesTab,
+		editModeSensorsTab: store.tabs.editModeSensorsTab,
 	};
 }
 
-function mapDispatchToProps(dispatch: Function): Object {
+function mapDispatchToProps(dispatch) {
 	return {
-		syncGateways: (): void => dispatch(syncWithServer('gatewaysTab')),
-		onTabSelect: (tab: string) => {
+		syncGateways: () => dispatch(syncWithServer('gatewaysTab')),
+		onTabSelect: (tab) => {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
+		},
+		addNewLocation: () => {
+			return dispatch(addNewGateway());
 		},
 		dispatch,
 	};

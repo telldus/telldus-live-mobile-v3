@@ -17,41 +17,36 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// @flow
-
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, FormattedMessage } from 'BaseComponents';
+import { View, IconTelldus } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import type { Dispatch } from 'Actions_Types';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 type Props = {
 	requestDeviceAction: (id: number, command: number, value?: number) => void,
 	deviceSetState: (id: number, command: number) => void,
-	isInState: string,
-	enabled: boolean,
-	fontSize: number,
-	methodRequested: string,
-	command: number,
-	id: number,
-	style: Object,
+	intl: Object,
+	name: string,
+	isGatewayActive: boolean,
 };
 
 class OffButton extends View {
 	props: Props;
 
-	onPress: () => void;
-
-	constructor(props: Props) {
+	constructor(props) {
 		super(props);
 		this.onPress = this.onPress.bind(this);
 		this.animationInterval = null;
+
+		this.labelOffButton = `${props.intl.formatMessage(i18n.off)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	onPress() {
@@ -59,12 +54,22 @@ class OffButton extends View {
 		this.props.deviceSetState(this.props.id, this.props.command);
 	}
 
-	render(): React$Element<any> {
-		let { isInState, enabled, fontSize, methodRequested } = this.props;
+	render() {
+		let { isInState, enabled, methodRequested, name, isGatewayActive } = this.props;
+		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
+		let buttonStyle = !isGatewayActive ?
+			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) : (isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
+		let iconColor = !isGatewayActive ?
+			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
+
 		return (
-			<View style={[this.props.style, isInState === 'TURNOFF' ? styles.enabled : styles.disabled]}>
-				<TouchableOpacity disabled={!enabled} onPress={this.onPress} style={styles.button} >
-					<FormattedMessage {...i18n.off} style = {[styles.buttonText, isInState === 'TURNOFF' || methodRequested === 'TURNOFF' ? styles.textEnabled : styles.textDisabled, { fontSize: (fontSize ? fontSize : 12) } ]}/>
+			<View style={[this.props.style, buttonStyle]}>
+				<TouchableOpacity
+					disabled={!enabled}
+					onPress={this.onPress}
+					style={styles.button}
+					accessibilityLabel={accessibilityLabel}>
+					<IconTelldus icon="off" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNOFF' ?
@@ -79,20 +84,24 @@ class OffButton extends View {
 
 const styles = StyleSheet.create({
 	enabled: {
-		backgroundColor: '#fafafa',
+		backgroundColor: Theme.Core.brandPrimary,
 	},
 	disabled: {
 		backgroundColor: '#eeeeee',
 	},
+	offline: {
+		backgroundColor: '#a2a2a2',
+	},
 	textEnabled: {
-		color: 'red',
+		color: '#fff',
 	},
 	textDisabled: {
-		color: '#a2a2a2',
+		color: Theme.Core.brandPrimary,
 	},
 	button: {
 		flex: 1,
 		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	buttonText: {
 		textAlign: 'center',
@@ -119,14 +128,10 @@ OffButton.defaultProps = {
 	command: 2,
 };
 
-function mapDispatchToProps(dispatch: Dispatch): Object {
+function mapDispatchToProps(dispatch) {
 	return {
-		deviceSetState: (id: number, command: number, value?: number) => {
-			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
-		},
+		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
 		dispatch,
 	};
 }

@@ -21,40 +21,28 @@
 
 'use strict';
 
-import React from 'react';
-import { connect } from 'react-redux';
-
-import { View } from 'BaseComponents';
+import React, { PureComponent } from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import DashboardShadowTile from './DashboardShadowTile';
-import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import type { Dispatch } from 'Actions_Types';
-import VerticalSlider from './VerticalSlider';
-import DimmerOffButton from './DimmerOffButton';
-import DimmerOnButton from './DimmerOnButton';
+import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
 
-function getDimmerValue(value: number, isInState: string): number {
-	let newValue = value || 0;
-	if (isInState === 'TURNON') {
-		return 255;
-	}
-	if (isInState === 'TURNOFF') {
-		return 0;
-	}
+import { View } from '../../../../BaseComponents';
+import DashboardShadowTile from './DashboardShadowTile';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import HorizontalSlider from './HorizontalSlider';
+import DimmerOffButton from './DimmerOffButton';
+import DimmerOnButton from './DimmerOnButton';
 
-	newValue = parseInt(newValue, 10);
-	return newValue;
-}
+import { getLabelDevice } from '../../../Lib';
+import {
+	getDimmerValue,
+	toDimmerValue,
+	toSliderValue,
+	getPowerConsumed,
+} from '../../../Lib';
 
-function toDimmerValue(sliderValue: number): number {
-	return Math.round(sliderValue * 255 / 100.0);
-}
-
-function toSliderValue(dimmerValue: number): number {
-	return Math.round(dimmerValue * 100.0 / 255);
-}
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
@@ -63,13 +51,18 @@ type Props = {
 	commandDIM: number,
 	tileWidth: number,
 	onDimmerSlide: number => void,
-	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
-	showDimmerPopup: (name: string, sliderValue: number) => void,
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
+	showDimmerPopup: (name:string, sliderValue:number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (id: number, command: number) => void,
 	setScrollEnabled: boolean,
 	style: Object,
+	intl: Object,
+	isGatewayActive: boolean,
+	powerConsumed: string,
+	screenReaderEnabled: boolean,
+	showDimmerStep: (number) => void;
 };
 
 type State = {
@@ -80,9 +73,22 @@ type State = {
 	onButtonFadeAnim: Object,
 };
 
-class DimmerDashboardTile extends View {
+type DefaultProps = {
+	commandON: number,
+	commandOFF: number,
+	commandDIM: number,
+}
+
+class DimmerDashboardTile extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
+
+	static defaultProps: DefaultProps = {
+		commandON: 1,
+		commandOFF: 2,
+		commandDIM: 16,
+	}
+
 	parentScrollEnabled: boolean;
 	onValueChangeThrottled: number => void;
 	onTurnOffButtonStart: () => void;
@@ -92,9 +98,10 @@ class DimmerDashboardTile extends View {
 	onTurnOn: () => void;
 	onTurnOff: () => void;
 	layoutView: Object => void;
-	onSlidingStart: (name: string, sliderValue: number) => void;
+	onSlidingStart: (name:string, sliderValue:number) => void;
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
+	showDimmerStep: (number) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -123,16 +130,17 @@ class DimmerDashboardTile extends View {
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
+		this.showDimmerStep = this.showDimmerStep.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
+	componentWillReceiveProps(nextProps) {
 		const { value, isInState } = nextProps.item;
 
 		const dimmerValue = getDimmerValue(value, isInState);
 		this.setState({ value: dimmerValue });
 	}
 
-	layoutView(x: Object) {
+	layoutView(x) {
 		let { width, height } = x.nativeEvent.layout;
 		this.setState({
 			bodyWidth: width,
@@ -140,16 +148,16 @@ class DimmerDashboardTile extends View {
 		});
 	}
 
-	onValueChange(sliderValue: number) {
+	onValueChange(sliderValue) {
 		this.onValueChangeThrottled(toDimmerValue(sliderValue));
 	}
 
-	onSlidingStart(name: string, sliderValue: number) {
+	onSlidingStart(name:string, sliderValue:number) {
 		this.props.saveDimmerInitialState(this.props.item.id, this.props.item.value, this.props.item.isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
-	onSlidingComplete(sliderValue: number) {
+	onSlidingComplete(sliderValue:number) {
 		if (sliderValue > 0) {
 			this.props.requestDeviceAction(this.props.item.id, this.props.commandON);
 		}
@@ -188,17 +196,34 @@ class DimmerDashboardTile extends View {
 		this.props.requestDeviceAction(this.props.item.id, this.props.commandOFF);
 	}
 
-	render(): React$Element<any> {
-		const { item, tileWidth } = this.props;
+	showDimmerStep(id: number) {
+		this.props.showDimmerStep(id);
+	}
+
+	render() {
+		const { item, tileWidth, intl, isGatewayActive, powerConsumed, screenReaderEnabled } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 
-		const onButton = <DimmerOnButton ref={'onButton'} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
-		const offButton = <DimmerOffButton ref={'offButton'} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested} />;
+		const info = powerConsumed ? `${powerConsumed} W` : null;
+
+		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
+			style={[styles.turnOn, {marginLeft: (tileWidth / 3) - 2}]} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>;
+		const offButton = <DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={!!TURNOFF}
+			style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOff}/>;
 		const slider = DIM ?
-			<VerticalSlider
-				style={[styles.slider, { width: this.state.bodyWidth, height: this.state.bodyHeight, left: 0, bottom: 0 }]}
-				thumbWidth={this.state.bodyWidth / 5}
+			<HorizontalSlider
+				style={[styles.slider, {
+					width: tileWidth / 3,
+					height: tileWidth * 0.4,
+					bottom: 0,
+					left: tileWidth / 3,
+				}]}
+				thumbWidth={7}
+				thumbHeight={7}
+				fontSize={8}
 				item={item}
 				value={toSliderValue(this.state.value)}
 				setScrollEnabled={this.props.setScrollEnabled}
@@ -209,18 +234,46 @@ class DimmerDashboardTile extends View {
 				onLeftEnd={this.onTurnOffButtonEnd}
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
-				onLeft={this.onTurnOff}
-				onRight={this.onTurnOn}
+				intl={intl}
+				isInState={isInState}
+				isGatewayActive={isGatewayActive}
+				screenReaderEnabled={screenReaderEnabled}
+				showDimmerStep={this.showDimmerStep}
 			/> :
 			null;
+
+		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
+
+		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
+
 		return (
 			<DashboardShadowTile
 				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
 				name={name}
+				info={info}
+				icon={'device-alt-solid'}
+				iconStyle={{
+					color: '#fff',
+					fontSize: tileWidth / 4.9,
+				}}
+				iconContainerStyle={[iconContainerStyle, {
+					width: tileWidth / 4.5,
+					height: tileWidth / 4.5,
+					borderRadius: tileWidth / 9,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}
 				type={'device'}
 				tileWidth={tileWidth}
+				accessibilityLabel={accessibilityLabel}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
-				<View style={styles.body} onLayout={this.layoutView}>
+				<View style={{
+					width: tileWidth,
+					height: tileWidth * 0.4,
+					flexDirection: 'row',
+					justifyContent: 'center',
+				}} onLayout={this.layoutView}>
 					{ offButton }
 					{ onButton }
 					{ slider }
@@ -230,58 +283,67 @@ class DimmerDashboardTile extends View {
 	}
 }
 
-DimmerDashboardTile.defaultProps = {
-	commandON: 1,
-	commandOFF: 2,
-	commandDIM: 16,
-};
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'center',
 	},
-	body: {
-		flex: 30,
-		flexDirection: 'row',
-	},
 	slider: {
-		flex: 1,
 		position: 'absolute',
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		borderRightWidth: 1,
+		borderRightColor: '#ddd',
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	turnOff: {
 		flex: 1,
 		alignItems: 'stretch',
 		justifyContent: 'center',
-		borderTopLeftRadius: 7,
+		borderBottomLeftRadius: 2,
 	},
 	turnOn: {
 		flex: 1,
 		alignItems: 'stretch',
 		justifyContent: 'center',
-		borderTopRightRadius: 7,
+		borderBottomRightRadius: 2,
+	},
+	itemIconContainerOn: {
+		backgroundColor: Theme.Core.brandSecondary,
+	},
+	itemIconContainerOff: {
+		backgroundColor: Theme.Core.brandPrimary,
+	},
+	itemIconContainerOffline: {
+		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 
-function mapDispatchToProps(dispatch: Dispatch): Object {
+function mapDispatchToProps(dispatch) {
 	return {
-		saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => {
-			dispatch(saveDimmerInitialState(deviceId, initalValue, initialState));
-		},
-		showDimmerPopup: (name: string, value: number) => {
+		saveDimmerInitialState: (deviceId, initalValue, initialState) => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
+		showDimmerPopup: (name:string, value:number) => {
 			dispatch(showDimmerPopup(name, value));
 		},
 		hideDimmerPopup: () => {
 			dispatch(hideDimmerPopup());
 		},
-		onDimmerSlide: (id: number): any => (value: number): any => dispatch(setDimmerValue(id, value)),
-		deviceSetState: (id: number, command: number, value?: number) => {
-			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
+		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
+		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		showDimmerStep: (id: number) => {
+			dispatch(showDimmerStep(id));
 		},
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(DimmerDashboardTile);
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
+	return {
+		powerConsumed,
+		screenReaderEnabled: store.App.screenReaderEnabled,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerDashboardTile);

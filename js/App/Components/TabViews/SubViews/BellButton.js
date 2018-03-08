@@ -24,11 +24,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, RoundedCornerShadowView, Icon } from 'BaseComponents';
+import { View, Icon } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import type { Dispatch } from 'Actions_Types';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,
@@ -36,6 +37,9 @@ type Props = {
 	requestDeviceAction: (id: number, command: number) => void,
 	style: Object,
 	command: number,
+	intl: Object,
+	isGatewayActive: boolean,
+	appLayout: Object,
 };
 
 class BellButton extends View {
@@ -47,6 +51,7 @@ class BellButton extends View {
 		super(props);
 
 		this.onBell = this.onBell.bind(this);
+		this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	onBell() {
@@ -54,12 +59,16 @@ class BellButton extends View {
 		this.props.requestDeviceAction(this.props.device.id, this.props.command);
 	}
 
-	render(): React$Element<any> {
-		let {methodRequested} = this.props.device;
+	render() {
+		let { device, isGatewayActive } = this.props;
+		let { methodRequested, name } = device;
+		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
+		let iconColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
+
 		return (
-			<RoundedCornerShadowView style={this.props.style}>
-				<TouchableOpacity onPress={this.onBell} style={styles.bell}>
-					<Icon name="bell" size={22} color="orange" />
+			<View style={this.props.style}>
+				<TouchableOpacity onPress={this.onBell} style={styles.bell} accessibilityLabel={accessibilityLabel}>
+					<Icon name="bell" size={22} color={iconColor} />
 				</TouchableOpacity>
 				{
 					methodRequested === 'BELL' ?
@@ -67,7 +76,7 @@ class BellButton extends View {
 						:
 						null
 				}
-			</RoundedCornerShadowView>
+			</View>
 		);
 	}
 }
@@ -89,7 +98,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch: Dispatch): Object {
+function mapDispatchToProps(dispatch) {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) =>{
 			dispatch(deviceSetState(id, command, value));

@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_AppState
  */
 
 // @flow
@@ -26,6 +25,8 @@
 import type { Action, ThunkAction, Dispatch } from './Types';
 
 import { AppState } from 'react-native';
+import Orientation from 'react-native-orientation';
+import { AccessibilityInfo } from 'react-native';
 
 module.exports = {
 	appStart: (): Action => ({
@@ -43,6 +44,44 @@ module.exports = {
 					type: 'APP_BACKGROUND',
 				});
 			}
+		});
+	},
+	appOrientation: (initialOrientation: string): ThunkAction => dispatch => {
+		Orientation.addOrientationListener((orientation: string) => {
+			return dispatch({
+				type: 'APP_ORIENTATION',
+				value: orientation,
+			});
+		});
+		return dispatch({
+			type: 'APP_ORIENTATION',
+			value: initialOrientation,
+		});
+	},
+	setAppLayout: (layout: Object): ThunkAction => dispatch => {
+		return dispatch({
+			type: 'APP_LAYOUT',
+			payload: layout,
+		});
+	},
+	setAccessibilityInfo: (status: boolean): ThunkAction => dispatch => {
+		return dispatch({
+			type: 'ACCESSIBILITY_INFO',
+			payload: status,
+		});
+	},
+	setAccessibilityListener: (callback: Function): ThunkAction => dispatch => {
+		AccessibilityInfo.addEventListener(
+			'change',
+			(isEnabled: boolean) => {
+				return dispatch(callback(isEnabled));
+			}
+		);
+	},
+	setChangeLogVersion: (changeLogVersion: string): ThunkAction => dispatch => {
+		return dispatch({
+			type: 'SET_CHANGELOG_VERSION',
+			payload: changeLogVersion,
 		});
 	},
 };

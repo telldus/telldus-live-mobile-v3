@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Bootstrap
  */
 
 // @flow
@@ -32,11 +31,11 @@ import { Provider } from 'react-redux';
 import { Crashlytics } from 'react-native-fabric';
 import DeviceInfo from 'react-native-device-info';
 
-import App from 'App';
+import App from './App';
 import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
-import * as Translations from 'Translations';
-import { forceLocale } from 'Config';
+import * as Translations from './App/Translations';
+import { forceLocale } from './Config';
 
 function Bootstrap(): Object {
 
@@ -81,7 +80,7 @@ function Bootstrap(): Object {
 				return forceLocale;
 			}
 			let localeIdentifier = DeviceInfo.getDeviceLocale();
-			let parts = localeIdentifier.split('_');
+			let parts = localeIdentifier.includes('-') ? localeIdentifier.split('-') : localeIdentifier.split('_');
 			if (parts.length === 0) {
 				return 'en';
 			}
@@ -111,5 +110,17 @@ global.LOG = (...args: any): Array<any> => {
 	console.log('\\------------------------------/');
 	return args[args.length - 1];
 };
+// ignoring react-intl errors on missing translated strings[Except the errors in development mode, the behaviour is fine].
+if (process.env.NODE_ENV !== 'production') {
+	const originalConsoleError = console.error;
+	if (console.error === originalConsoleError) {
+		console.error = (...args) => {
+			if (args[0].indexOf('[React Intl] Missing message:') === 0) {
+				return;
+			}
+			originalConsoleError.call(console, ...args);
+		};
+	}
+}
 
 module.exports = Bootstrap;

@@ -22,8 +22,8 @@
 'use strict';
 
 import I18n from 'react-native-i18n';
-import Translations from 'Translations';
-import Config from 'Config';
+import Translations from '../App/Translations';
+import Config from '../Config';
 
 I18n.fallbacks = true;
 I18n.translations = Translations;

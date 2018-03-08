@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { Text, View } from 'BaseComponents';
+import { Text, View } from '../../../../BaseComponents';
 import { PanResponder, Animated, StyleSheet, Vibration, Platform } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
@@ -44,7 +44,7 @@ type Props = {
 	thumbWidth: number,
 	sensitive: number,
 	value: number,
-	onSlidingStart: () => void,
+	onSlidingStart: (string, number) => void,
 	onSlidingComplete: number => void,
 	onValueChange: number => void,
 	onLeftStart: () => void,

@@ -27,14 +27,14 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { TouchableButton, View } from 'BaseComponents';
-import { loginToTelldus } from 'Actions';
-import { testUsername, testPassword } from 'Config';
+import { TouchableButton, View } from '../../../../BaseComponents';
+import { loginToTelldus, showModal } from '../../../Actions';
+import { testUsername, testPassword } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
 import {defineMessages} from 'react-intl';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 const messages = defineMessages({
 	fieldEmpty: {
@@ -50,6 +50,8 @@ type Props = {
 		screenProps: Object,
 		loginToTelldus: Function,
 		intl: intlShape.isRequired,
+		appLayout: Object,
+		dialogueOpen: Object,
 };
 
 type State = {
@@ -62,9 +64,9 @@ class LoginForm extends View {
 	props: Props;
 	state: State;
 
-	onChangeUsername: (username: string) => void;
-	onChangePassword: (password: string) => void;
-	onFormSubmit: (username: string, password: string, callback: () => void) => void;
+	onChangeUsername: (username:string) => void;
+	onChangePassword: (password:string) => void;
+	onFormSubmit: (username: string, password: string) => void;
 	postSubmit: () => void;
 
 	constructor(props: Props) {
@@ -80,15 +82,25 @@ class LoginForm extends View {
 		this.onChangePassword = this.onChangePassword.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 		this.postSubmit = this.postSubmit.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.timedOut = `${formatMessage(i18n.timedOut)}, ${formatMessage(i18n.tryAgain)}?`;
+		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 	}
 
-	render(): Object {
+	render() {
+		let { appLayout, dialogueOpen } = this.props;
+		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
+		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
+
 		return (
-			<View style={{flex: 0}}>
+			<View importantForAccessibility={importantForAccessibility}>
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.85, fontSize: 15 }]}
 						onChangeText={this.onChangeUsername}
 						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 						keyboardType="email-address"
@@ -102,7 +114,7 @@ class LoginForm extends View {
 				<View style={Theme.Styles.textFieldCover}>
 					<Icon name="lock" style={Theme.Styles.iconLock} size={15} color="#ffffff80"/>
 					<TextInput
-						style={Theme.Styles.textField}
+						style={[Theme.Styles.textField, { width: appLayout.width * 0.85, fontSize: 15 }]}
 						onChangeText={this.onChangePassword}
 						placeholder={this.props.intl.formatMessage(i18n.password)}
 						secureTextEntry={true}
@@ -115,10 +127,10 @@ class LoginForm extends View {
 				</View>
 				<View style={{ height: 10 }}/>
 				<TouchableButton
-					style={Theme.Styles.submitButton}
 					onPress={this.onFormSubmit}
 					text={this.state.isLoading ? i18n.loggingin : i18n.login}
 					postScript={this.state.isLoading ? '...' : null}
+					accessible={buttonAccessible}
 				/>
 			</View>
 		);
@@ -139,17 +151,35 @@ class LoginForm extends View {
 	}
 
 	onFormSubmit() {
+		let { intl, dispatch } = this.props;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
-			this.props.loginToTelldus(this.state.username, this.state.password, this.postSubmit);
+			this.props.loginToTelldus(this.state.username, this.state.password, this.postSubmit)
+				.then(res => {
+					this.postSubmit();
+				})
+				.catch(err => {
+					this.postSubmit();
+					this.handleLoginError(err);
+				});
 		} else {
-			let message = this.props.intl.formatMessage(messages.fieldEmpty);
-			this.props.dispatch({
-				type: 'REQUEST_MODAL_OPEN',
-				payload: {
-					data: message,
-				},
-			});
+			let message = intl.formatMessage(messages.fieldEmpty);
+			dispatch(showModal(message));
+		}
+	}
+
+	handleLoginError(error: Object) {
+		let { dispatch } = this.props;
+		if (error.response) {
+			let errorMessage = error.response.data.error_description ?
+				error.response.data.error_description : error.response.data.error ?
+					error.response.data.error : this.unknownError;
+			dispatch(showModal(errorMessage));
+		} else if (error.request) {
+			let errorMessage = !error.status && error.request._timedOut ? this.timedOut : this.networkFailed;
+			dispatch(showModal(errorMessage));
+		} else {
+			dispatch(showModal(error.message));
 		}
 	}
 
@@ -169,10 +199,8 @@ function mapStateToProps(store: Object): Object {
 
 function dispatchToProps(dispatch: Function): Object {
 	return {
-		loginToTelldus: (userName: string, password: string, callback: () => void) => {
-			dispatch(loginToTelldus(userName, password)).then((res: Object) => {
-				callback();
-			});
+		loginToTelldus: (userName: string, password: string) => {
+			return dispatch(loginToTelldus(userName, password));
 		},
 		dispatch,
 	};

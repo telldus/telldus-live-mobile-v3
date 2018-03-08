@@ -22,44 +22,72 @@
 'use strict';
 
 import React from 'react';
+import { Image, TouchableOpacity, Linking, SectionList, ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
+import Platform from 'Platform';
 
-import { List, ListDataSource, Text, View } from 'BaseComponents';
-import { DeviceRow, DeviceRowHidden } from 'TabViews_SubViews';
+import { Text, View, TouchableButton, IconTelldus } from '../../../BaseComponents';
+import { DeviceRow } from './SubViews';
 
-import { getDevices, getDeviceHistory } from 'Actions_Devices';
-import type { Dispatch } from 'Actions_Types';
+import { getDevices, setIgnoreDevice, getDeviceHistory } from '../../Actions/Devices';
+import { storeDeviceHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
 
-import { getDeviceType, getTabBarIcon } from 'Lib';
+import getDeviceType from '../../Lib/getDeviceType';
+import getTabBarIcon from '../../Lib/getTabBarIcon';
 
-import { parseDevicesForListView } from 'Reducers_Devices';
-
-import Theme from 'Theme';
+import { parseDevicesForListView } from '../../Reducers/Devices';
+import { addNewGateway, showGlobalError } from '../../Actions';
+import i18n from '../../Translations/common';
+import Theme from '../../Theme';
 
 const messages = defineMessages({
-	devices: {
-		id: 'pages.devices',
-		defaultMessage: 'Devices',
-		description: 'The devices tab',
+	messageNoDeviceTitle: {
+		id: 'pages.devices.messageNoDeviceTitle',
+		defaultMessage: 'You have not added any devices yet.',
+		description: 'Message title when no devices',
+	},
+	messageNoGatewayTitle: {
+		id: 'pages.devices.messageNoGatewayTitle',
+		defaultMessage: 'You have not added a gateway yet.',
+		description: 'Message title when no gateways',
+	},
+	messageNoDeviceContent: {
+		id: 'pages.devices.messageNoDeviceContent',
+		defaultMessage: 'Currently, adding devices is only possible through our web interface, live.telldus.com. ' +
+		'Click below to open the web interface.',
+		description: 'Message title when no devices',
+	},
+	messageNoGatewayContent: {
+		id: 'pages.devices.messageNoGatewayContent',
+		defaultMessage: 'Before adding devices you need to add a gateway as a location in your account. ' +
+		'Click below if you want to do that now.',
+		description: 'Message content when no gateways',
 	},
 });
 
 type Props = {
 	rowsAndSections: Object,
-	gatewaysById: Object,
-	editMode: boolean,
+	gateways: Object,
 	devices: Object,
 	tab: string,
-	dispatch: Dispatch,
+	dispatch: Function,
 	stackNavigator: Object,
+	screenProps: Object,
+	appLayout: Object,
+	addNewLocation: Function,
 };
 
 type State = {
-	dataSource: Object,
+	visibleList: Array<Object>,
+	hiddenList: Array<Object>,
 	deviceId: number,
 	dimmer: boolean,
+	addGateway: boolean,
+	makeRowAccessible: 0 | 1,
+	isRefreshing: boolean,
+	showHiddenList: boolean,
 };
 
 class DevicesTab extends View {
@@ -70,124 +98,187 @@ class DevicesTab extends View {
 	onCloseSelected: () => void;
 	openDeviceDetail: (number) => void;
 	setScrollEnabled: (boolean) => void;
-	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	renderSectionHeader: (sectionData: Object) => Object;
 	renderRow: (Object) => Object;
-	renderHiddenRow: (Object) => Object;
 	onRefresh: () => void;
+	onPressAddLocation: () => void;
+	onPressAddDevice: () => void;
+	toggleHiddenList: () => void;
+	setIgnoreDevice: (Object) => void;
 
-	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
-		title: screenProps.intl.formatMessage(messages.devices),
-		tabBarIcon: ({ focused, tintColor }: Object): React$Element<any> => getTabBarIcon(focused, tintColor, 'devices'),
+	static navigationOptions = ({navigation, screenProps}) => ({
+		title: screenProps.intl.formatMessage(i18n.devices),
+		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'devices'),
 	});
 
 	constructor(props: Props) {
 		super(props);
 
-		const { sections, sectionIds } = this.props.rowsAndSections;
+		let { visibleList, hiddenList } = props.rowsAndSections;
 
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-				sectionHeaderHasChanged: (s1: Object, s2: Object): boolean => s1 !== s2,
-			}).cloneWithRowsAndSections(sections, sectionIds),
+			visibleList,
+			hiddenList,
 			deviceId: -1,
 			dimmer: false,
+			addGateway: false,
+			makeRowAccessible: 0,
+			isRefreshing: false,
+			showHiddenList: false,
 		};
 		this.onCloseSelected = this.onCloseSelected.bind(this);
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
-		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
+		this.onPressAddLocation = this.onPressAddLocation.bind(this);
+		this.onPressAddDevice = this.onPressAddDevice.bind(this);
+		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
+
+		this.toggleHiddenList = this.toggleHiddenList.bind(this);
+
+		let { formatMessage } = props.screenProps.intl;
+
+		let hiddenDevices = formatMessage(i18n.hiddenDevices).toLowerCase();
+		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenDevices}`;
+		this.showHidden = `${formatMessage(i18n.show)} ${hiddenDevices}`;
+
+		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
+
+		this.url = 'http://live.telldus.com/';
+		this.noDeviceTitle = formatMessage(messages.messageNoDeviceTitle);
+		this.noGatewayTitle = formatMessage(messages.messageNoGatewayTitle);
+		this.noDeviceContent = formatMessage(messages.messageNoDeviceContent);
+		this.noGatewayContent = formatMessage(messages.messageNoGatewayContent);
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		const { sections, sectionIds } = nextProps.rowsAndSections;
+	componentWillReceiveProps(nextProps) {
+
+		let { makeRowAccessible } = this.state;
+		let { screenReaderEnabled, rowsAndSections } = nextProps;
+		let { currentScreen, currentTab } = nextProps.screenProps;
+		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Devices') {
+			makeRowAccessible = 1;
+		} else {
+			makeRowAccessible = 0;
+		}
+
+		let { visibleList, hiddenList } = rowsAndSections;
 
 		this.setState({
-			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
+			visibleList,
+			hiddenList,
+			makeRowAccessible,
 		});
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.tab === 'devicesTab' || nextProps.editMode !== this.props.editMode;
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+		return nextProps.tab === 'devicesTab';
 	}
 
-	rowHasChanged(r1: Object, r2: Object): boolean {
-		if (r1 === r2) {
-			return false;
-		}
-		return (
-			r1.device !== r2.device ||
-			r1.inDashboard !== r2.inDashboard ||
-			r1.editMode !== r2.editMode
-		);
-	}
-
-	render(): React$Element<any> {
-		return (
-			<View style={{ flex: 1 }}>
-				<List
-					ref="list"
-					dataSource={this.state.dataSource}
-					renderHiddenRow={this.renderHiddenRow}
-					renderRow={this.renderRow}
-					renderSectionHeader={this.renderSectionHeader}
-					leftOpenValue={40}
-					editMode={this.props.editMode}
-					onRefresh={this.onRefresh}
-				/>
-			</View>
-		);
-	}
-
-	renderRow(row: Object): React$Element<any> {
-		return (
-			<DeviceRow {...row}
-			           onSettingsSelected={this.openDeviceDetail}
-			           setScrollEnabled={this.setScrollEnabled}
-			/>
-		);
-	}
-
-	renderHiddenRow(row: Object): React$Element<any> {
-		return (
-			<DeviceRowHidden {...row}/>
-		);
-	}
-
-	openDeviceDetail(device: Object) {
-		this.props.dispatch(getDeviceHistory(device));
+	openDeviceDetail(device) {
+		getLatestTimestamp('device', device.id).then(res => {
+			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
+			this.fetchHistoryData(device, prevTimestamp);
+		}).catch(error => {
+			this.fetchHistoryData(device, null);
+		});
 		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
+	}
+
+	fetchHistoryData(device, prevTimestamp) {
+		this.props.dispatch(getDeviceHistory(device, prevTimestamp)).then(response => {
+			if (response.history && response.history.length !== 0) {
+				let data = {
+					history: response.history,
+					deviceId: device.id,
+				};
+				storeDeviceHistory(data);
+			}
+		});
 	}
 
 	onCloseSelected() {
 		this.setState({ deviceId: -1 });
 	}
 
-	setScrollEnabled(enable: boolean) {
+	setScrollEnabled(enable) {
 		if (this.refs.list && this.refs.list.setScrollEnabled) {
 			this.refs.list.setScrollEnabled(enable);
 		}
 	}
 
-	renderSectionHeader(sectionData: Object, sectionId: number): React$Element<any> {
-		const gateway = this.props.gatewaysById[sectionId];
+	setIgnoreDevice(device: Object) {
+		let ignore = device.ignored ? 0 : 1;
+		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res) => {
+			let message = device.ignored ?
+				this.removedFromHiddenList : this.addedToHiddenList;
+			let payload = {
+				customMessage: message,
+			};
+			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(getDevices());
+		}).catch(err => {
+			let payload = {
+				customMessage: err.message ? err.message : null,
+			};
+			this.props.dispatch(showGlobalError(payload));
+		});
+	}
+
+	renderSectionHeader(sectionData: Object): Object {
 		return (
-			<View style={Theme.Styles.sectionHeader}>
-				<Text style={Theme.Styles.sectionHeaderText}>
-					{(gateway && gateway.name) ? gateway.name : ''}
+			<View style={Theme.Styles.sectionHeaderNew}>
+				<Text style={Theme.Styles.sectionHeaderTextNew}>
+					{sectionData.section.key}
 				</Text>
 			</View>
 		);
 	}
 
-	onRefresh() {
-		this.props.dispatch(getDevices());
+	renderRow(row) {
+		let { screenProps, gateways } = this.props;
+		let { intl, currentTab, currentScreen } = screenProps;
+		let isGatewayActive = gateways.byId[row.item.clientId] && gateways.byId[row.item.clientId].online;
+
+		return (
+			<DeviceRow
+				device={row.item}
+				onSettingsSelected={this.openDeviceDetail}
+				setScrollEnabled={this.setScrollEnabled}
+				intl={intl}
+				appLayout={this.props.appLayout}
+				currentTab={currentTab}
+				currentScreen={currentScreen}
+				isGatewayActive={isGatewayActive}
+				setIgnoreDevice={this.setIgnoreDevice}
+			/>
+		);
 	}
 
-	getType(deviceId: number): any {
+	onRefresh() {
+		this.setState({
+			isRefreshing: true,
+		});
+		this.props.dispatch(getDevices())
+			.then(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			}).catch(() => {
+				this.setState({
+					isRefreshing: false,
+				});
+			});
+	}
+
+	keyExtractor(item) {
+		return item.id;
+	}
+
+	getType(deviceId) {
 		const filteredItem = this.props.devices.byId[deviceId];
 		if (!filteredItem) {
 			return null;
@@ -196,41 +287,250 @@ class DevicesTab extends View {
 		const supportedMethods = filteredItem.supportedMethods;
 		return getDeviceType(supportedMethods);
 	}
-}
 
-DevicesTab.propTypes = {
-	rowsAndSections: React.PropTypes.object,
-};
+	onPressAddLocation() {
+		this.props.addNewLocation()
+			.then(response => {
+				if (response.client) {
+					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
+					this.setState({
+						addGateway: false,
+					});
+				}
+			});
+	}
+
+	onPressAddDevice() {
+		if (!this.props.gateways.allIds.length > 0) {
+			this.setState({
+				addGateway: true,
+			});
+		} else {
+			let url = this.url;
+			Linking.canOpenURL(url).then(supported => {
+				if (!supported) {
+				  console.log(`Can't handle url: ${url}`);
+				} else {
+				  return Linking.openURL(url);
+				}
+			  }).catch(err => console.error('An error occurred', err));
+		}
+	}
+
+	toggleHiddenList() {
+		this.setState({
+			showHiddenList: !this.state.showHiddenList,
+		});
+	}
+
+	noDeviceMessage(style: Object) {
+		return (
+			<View style={style.noItemsContainer}>
+				<Text style={style.noItemsTitle}>
+					{this.noDeviceTitle}
+				</Text>
+				<Text style={style.noItemsContent}>
+					{'\n'}
+					{this.noDeviceContent}
+				</Text>
+				<TouchableOpacity style={style.linkCover} onPress={this.onPressAddDevice}>
+					<Image source={require('./img/telldus.png')} style={style.image}/>
+					<Text style={style.link}>
+						live.telldus.com
+					</Text>
+					<Image source={require('./img/right-arrow-key.png')} tintColor={'#BDBDBD'} style={style.rightArrow}/>
+				</TouchableOpacity>
+			</View>
+		);
+	}
+
+	noGatewayMessage(style: Object) {
+		return (
+			<View style={style.noItemsContainer}>
+				<Text style={style.noItemsTitle}>
+					{this.noGatewayTitle}
+				</Text>
+				<Text style={style.noItemsContent}>
+					{'\n'}
+					{this.noGatewayContent}
+					{'\n\n'}
+				</Text>
+				<TouchableButton
+					onPress={this.onPressAddLocation}
+					text={i18n.addLocation}
+				/>
+			</View>
+		);
+	}
+
+	toggleHiddenListButton(style): Object {
+		return (
+			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
+				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
+					importantForAccessibility="no" accessible={false}/>
+				<Text style={style.toggleHiddenListText} accessible={true}>
+					{this.state.showHiddenList ?
+						this.hideHidden
+						:
+						this.showHidden
+					}
+				</Text>
+			</TouchableOpacity>
+		);
+	}
+
+	render() {
+
+		let { appLayout, devices } = this.props;
+		let { showHiddenList, hiddenList, visibleList,
+			isRefreshing, makeRowAccessible, addGateway } = this.state;
+		let style = this.getStyles(appLayout);
+
+		if (addGateway) {
+			return this.noGatewayMessage(style);
+		}
+
+		if (!devices.allIds.length > 0 && devices.didFetch) {
+			return this.noDeviceMessage(style);
+		}
+
+		let extraData = {
+			makeRowAccessible,
+			appLayout,
+		};
+
+		return (
+			<ScrollView style={style.container}
+				refreshControl={
+					<RefreshControl
+						refreshing={isRefreshing}
+						onRefresh={this.onRefresh}
+					/>}
+			>
+				<SectionList
+					sections={visibleList}
+					renderItem={this.renderRow}
+					renderSectionHeader={this.renderSectionHeader}
+					keyExtractor={this.keyExtractor}
+					extraData={extraData}
+				/>
+				<View>
+					{this.toggleHiddenListButton(style)}
+					{showHiddenList ?
+						<SectionList
+							sections={hiddenList}
+							renderItem={this.renderRow}
+							renderSectionHeader={this.renderSectionHeader}
+							keyExtractor={this.keyExtractor}
+							extraData={extraData}
+						/>
+						:
+						<View style={{height: 80}}/>
+					}
+				</View>
+			</ScrollView>
+		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+
+		return {
+			noItemsContainer: {
+				flex: 1,
+				alignItems: 'center',
+				justifyContent: 'center',
+				paddingHorizontal: 30,
+				paddingTop: 10,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+			},
+			container: {
+				flex: 1,
+				paddingHorizontal: !this.props.devices.allIds.length > 0 ? 30 : 0,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+			},
+			noItemsTitle: {
+				textAlign: 'center',
+				color: '#4C4C4C',
+				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
+				paddingTop: 15,
+			},
+			noItemsContent: {
+				textAlign: 'center',
+				color: '#4C4C4C',
+				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+			linkCover: {
+				flexDirection: 'row',
+				marginTop: 20,
+				alignItems: 'center',
+			},
+			image: {
+				height: isPortrait ? Math.floor(width * 0.074) : Math.floor(height * 0.074),
+				width: isPortrait ? Math.floor(width * 0.074) : Math.floor(height * 0.074),
+			},
+			link: {
+				textAlign: 'center',
+				color: '#4C4C4C',
+				marginLeft: 10,
+				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+			},
+			rightArrow: {
+				marginLeft: 5,
+				height: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				width: isPortrait ? Math.floor(width * 0.03) : Math.floor(height * 0.03),
+			},
+			toggleHiddenListButton: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginVertical: 10,
+				paddingVertical: 10,
+			},
+			toggleHiddenListIcon: {
+				marginTop: 4,
+				fontSize: 34,
+				color: Theme.Core.rowTextColor,
+			},
+			toggleHiddenListText: {
+				marginLeft: 6,
+				fontSize: 16,
+				textAlign: 'center',
+				color: Theme.Core.rowTextColor,
+			},
+		};
+	}
+}
 
 const getRowsAndSections = createSelector(
 	[
-		({ devices }: Object): Object => devices,
-		({ gateways }: Object): Object => gateways,
-		({ tabs }: Object): Object => tabs.editModeDevicesTab,
+		({ devices }) => devices.byId,
+		({ gateways }) => gateways.byId,
 	],
-	(devices: Object, gateways: Object, editMode: boolean): Object => {
-		const { sections, sectionIds } = parseDevicesForListView(devices, gateways, editMode);
-		return {
-			sections,
-			sectionIds,
-		};
+	(devices, gateways) => {
+		return parseDevicesForListView(devices, gateways);
 	}
 );
 
-function mapStateToProps(state: Object, ownProps: Object): Object {
+function mapStateToProps(state: Object, ownprops: Object): Object {
 	return {
-		stackNavigator: ownProps.screenProps.stackNavigator,
+		stackNavigator: ownprops.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(state),
-		gatewaysById: state.gateways.byId,
-		editMode: state.tabs.editModeDevicesTab,
 		devices: state.devices,
+		gateways: state.gateways,
 		tab: state.navigation.tab,
+		appLayout: state.App.layout,
+		screenReaderEnabled: state.App.screenReaderEnabled,
 	};
 }
 
-function mapDispatchToProps(dispatch: Dispatch): Object {
+function mapDispatchToProps(dispatch) {
 	return {
 		dispatch,
+		addNewLocation: () => {
+			return dispatch(addNewGateway());
+		},
 	};
 }
 

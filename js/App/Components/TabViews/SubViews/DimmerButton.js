@@ -24,35 +24,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, RoundedCornerShadowView } from 'BaseComponents';
+import { View } from '../../../../BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
-import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue } from 'Actions_Dimmer';
-import { deviceSetState, requestDeviceAction } from 'Actions_Devices';
-import type { Dispatch } from 'Actions_Types';
-import VerticalSlider from './VerticalSlider';
+import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
+import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
+import {
+	getDimmerValue,
+	toDimmerValue,
+	toSliderValue,
+} from '../../../Lib';
 
-function getDimmerValue(value: number, isInState: string): number {
-	let newValue = value || 0;
-	if (isInState === 'TURNON') {
-		return 255;
-	}
-	if (isInState === 'TURNOFF') {
-		return 0;
-	}
-
-	newValue = parseInt(newValue, 10);
-	return newValue;
-}
-
-function toDimmerValue(sliderValue: number): number {
-	return Math.round(sliderValue * 255 / 100.0);
-}
-
-function toSliderValue(dimmerValue: number): number {
-	return Math.round(dimmerValue * 100.0 / 255);
-}
+import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,
@@ -66,6 +51,13 @@ type Props = {
 	setScrollEnabled: boolean,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (number, number) => void,
+	intl: Object,
+	isGatewayActive: boolean,
+	appLayout: Object,
+	onSlideActive: () => void,
+	onSlideComplete: () => void,
+	screenReaderEnabled: boolean,
+	showDimmerStep: (number) => void;
 };
 
 type State = {
@@ -91,6 +83,7 @@ class DimmerButton extends View {
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
 	onTurnOffButtonEnd: () => void;
+	showDimmerStep: (number) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -116,6 +109,7 @@ class DimmerButton extends View {
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
+		this.showDimmerStep = this.showDimmerStep.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -139,11 +133,13 @@ class DimmerButton extends View {
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
+		this.props.onSlideActive();
 		this.props.saveDimmerInitialState(this.props.device.id, this.props.device.value, this.props.device.isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
 	onSlidingComplete(sliderValue: number) {
+		this.props.onSlideComplete();
 		if (sliderValue > 0) {
 			this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
 		}
@@ -182,44 +178,48 @@ class DimmerButton extends View {
 		this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
 	}
 
-	render(): React$Element<any> {
-		const { device } = this.props;
-		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
+	showDimmerStep(id: number) {
+		this.props.showDimmerStep(id);
+	}
+
+	render() {
+		const { device, intl, isGatewayActive, screenReaderEnabled } = this.props;
+		const { isInState, name, supportedMethods, methodRequested } = device;
+		const { TURNON, TURNOFF, DIM } = supportedMethods;
 		const onButton = (
 			<DimmerOnButton
 				ref={'onButton'}
 				style={styles.turnOn}
-				isInState={device.isInState}
+				isInState={isInState}
+				onPress={this.onTurnOn}
+				name={name}
 				enabled={!!TURNON}
-				methodRequested={device.methodRequested}
+				methodRequested={methodRequested}
+				intl={intl}
+				isGatewayActive={isGatewayActive}
 			/>
 		);
 		const offButton = (
 			<DimmerOffButton
 				ref={'offButton'}
 				style={styles.turnOff}
-				isInState={device.isInState}
+				isInState={isInState}
+				onPress={this.onTurnOff}
+				name={name}
 				enabled={!!TURNOFF}
-				methodRequested={device.methodRequested}
+				methodRequested={methodRequested}
+				intl={intl}
+				isGatewayActive={isGatewayActive}
 			/>
 		);
 		const slider = DIM ? (
-			<VerticalSlider
-				style={[
-					styles.slider,
-					{
-						width: this.state.buttonWidth,
-						height: this.state.buttonHeight,
-						left: 0,
-						bottom: 0,
-					},
-				]}
-				thumbWidth={this.state.buttonWidth / 5}
-				thumbHeight={9}
-				fontSize={7}
+			<HorizontalSlider
+				style={styles.slider}
+				thumbWidth={10}
+				thumbHeight={10}
+				fontSize={9}
 				item={device}
 				value={toSliderValue(this.state.value)}
-				sensitive={4}
 				setScrollEnabled={this.props.setScrollEnabled}
 				onSlidingStart={this.onSlidingStart}
 				onSlidingComplete={this.onSlidingComplete}
@@ -228,17 +228,20 @@ class DimmerButton extends View {
 				onLeftEnd={this.onTurnOffButtonEnd}
 				onRightStart={this.onTurnOnButtonStart}
 				onRightEnd={this.onTurnOnButtonEnd}
-				onLeft={this.onTurnOff}
-				onRight={this.onTurnOn}
+				intl={intl}
+				isInState={isInState}
+				isGatewayActive={isGatewayActive}
+				screenReaderEnabled={screenReaderEnabled}
+				showDimmerStep={this.showDimmerStep}
 			/>
 		) : null;
 
 		return (
-			<RoundedCornerShadowView onLayout={this.layoutView} style={styles.container}>
+			<View onLayout={this.layoutView} style={styles.container}>
 				{ offButton }
 				{ onButton }
 				{ slider }
-			</RoundedCornerShadowView>
+			</View>
 		);
 	}
 }
@@ -251,29 +254,39 @@ DimmerButton.defaultProps = {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 7,
-		width: 88,
-		height: 32,
+		flex: 0,
+		flexDirection: 'row',
 		justifyContent: 'center',
-		alignItems: 'stretch',
+		alignItems: 'center',
+		height: Theme.Core.rowHeight,
 	},
 	slider: {
-		flex: 1,
 		position: 'absolute',
+		justifyContent: 'center',
+		alignItems: 'flex-start',
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
+		left: Theme.Core.buttonWidth,
+		bottom: 0,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	turnOff: {
-		flex: 1,
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
 		alignItems: 'stretch',
 		justifyContent: 'center',
-		borderTopLeftRadius: 7,
-		borderBottomLeftRadius: 7,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	turnOn: {
-		flex: 1,
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
+		marginLeft: Theme.Core.buttonWidth,
 		alignItems: 'stretch',
 		justifyContent: 'center',
-		borderTopRightRadius: 7,
-		borderBottomRightRadius: 7,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 });
 
@@ -288,14 +301,19 @@ function mapDispatchToProps(dispatch: Dispatch): Object {
 		hideDimmerPopup: () => {
 			dispatch(hideDimmerPopup());
 		},
-		onDimmerSlide: (id: number): any => (value: number): any => dispatch(setDimmerValue(id, value)),
-		deviceSetState: (id: number, command: number, value?: number) => {
-			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
+		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
+		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		showDimmerStep: (id: number) => {
+			dispatch(showDimmerStep(id));
 		},
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(DimmerButton);
+function mapStateToProps(store: Object, dispatch: Function): Object {
+	return {
+		screenReaderEnabled: store.App.screenReaderEnabled,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerButton);

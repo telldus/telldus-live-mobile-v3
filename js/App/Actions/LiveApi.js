@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Actions_LiveApi
  */
 
 // @flow
@@ -27,8 +26,8 @@ import type { ThunkAction, Dispatch } from './Types';
 
 import { getGateways } from './Gateways';
 import { getJobs } from './Jobs';
-import { getDevices } from 'Actions_Devices';
-import { getSensors } from 'Actions_Sensors';
+import { getDevices } from './Devices';
+import { getSensors } from './Sensors';
 
 import { AppState } from 'react-native';
 

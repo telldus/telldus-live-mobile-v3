@@ -22,16 +22,14 @@
 'use strict';
 
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, DialogueBox } from 'BaseComponents';
-import {FormContainerComponent, RegisterForm} from 'PreLoginScreen_SubViews';
-import type { Dispatch } from 'Actions_Types';
+import { FormattedMessage, View, DialogueBox, SafeAreaView } from '../../../BaseComponents';
+import {FormContainerComponent, RegisterForm} from './SubViews';
 
-import StyleSheet from 'StyleSheet';
-
+import i18n from './../../Translations/common';
 const messages = defineMessages({
 	createAccount: {
 		id: 'user.createAccount',
@@ -47,13 +45,14 @@ const messages = defineMessages({
 
 type Props = {
 	navigation: Object,
-	dispatch: Dispatch,
+	dispatch: Function,
 	validationMessage: string,
 	showModal: boolean,
 	registeredCredential: any,
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
-};
+	appLayout: Object,
+}
 
 class RegisterScreen extends View {
 
@@ -67,6 +66,15 @@ class RegisterScreen extends View {
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
 		this.closeModal = this.closeModal.bind(this);
+
+		let { formatMessage } = props.intl;
+
+		this.alreadyHaveAccount = formatMessage(messages.alreadyHaveAccount);
+
+		this.labelLink = formatMessage(i18n.labelLink);
+		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+
+		this.labelAlreadyHaveAccount = `${this.labelLink} ${this.alreadyHaveAccount} ${this.labelButtondefaultDescription}`;
 	}
 
 	closeModal() {
@@ -86,53 +94,66 @@ class RegisterScreen extends View {
 		}
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	shouldComponentUpdate(nextProps: Object, nextState: Object) {
 		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
 			return false;
 		}
 		return true;
 	}
 
-	render(): React$Element<any> {
+	render() {
+		let { showModal, validationMessage, validationMessageHeader, appLayout } = this.props;
+		let styles = this.getStyles(appLayout);
+
 		return (
-			<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)}>
-				<RegisterForm />
-				<TouchableOpacity style={{height: 25}} onPress={this.goBackToLogin}>
-					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
-				</TouchableOpacity>
-				<DialogueBox
-					showDialogue={this.props.showModal}
-					header={this.props.validationMessageHeader}
-					text={this.props.validationMessage}
-					onOpen= {this.onModalOpen}
-					showPositive={true}
-					showNegative={false}
-					onPressPositive={this.closeModal}
-				/>
-			</FormContainerComponent>
+			<SafeAreaView>
+				<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)} formContainerStyle={styles.formContainer}>
+					<RegisterForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
+					<TouchableOpacity style={{height: 25}}
+						onPress={this.goBackToLogin}
+						accessibilityLabel={this.labelAlreadyHaveAccount}>
+						<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
+					</TouchableOpacity>
+					<DialogueBox
+						showDialogue={showModal}
+						text={validationMessage}
+						header={validationMessageHeader}
+						showPositive={true}
+						showNegative={false}
+						onPressPositive={this.closeModal}/>
+				</FormContainerComponent>
+			</SafeAreaView>
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const width = appLayout.width;
+
+		return {
+			accountExist: {
+				marginTop: 10,
+				color: '#bbb',
+			},
+			formContainer: {
+				width: width,
+			},
+		};
 	}
 }
 
-const styles = StyleSheet.create({
-	accountExist: {
-		marginTop: 10,
-		color: '#bbb',
-	},
-});
-
-function mapDispatchToProps(dispatch: Dispatch): Object {
+function mapDispatchToProps(dispatch) {
 	return {
 		dispatch,
 	};
 }
 
-function mapStateToProps(store: Object): Object {
+function mapStateToProps(store) {
 	return {
 		validationMessage: store.modal.data,
 		validationMessageHeader: store.modal.extras,
 		showModal: store.modal.openModal,
 		registeredCredential: store.user.registeredCredential,
+		appLayout: store.App.layout,
 	};
 }
 

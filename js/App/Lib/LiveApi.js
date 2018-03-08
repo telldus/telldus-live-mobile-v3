@@ -16,15 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule LiveApi
  */
 
 // @flow
 
 'use strict';
 
-import { apiServer, publicKey, privateKey } from 'Config';
-import { updateAccessToken } from 'Actions_Login';
+import { apiServer, publicKey, privateKey } from '../../Config';
+
 // TODO: fix this pattern, pass store via component tree
 import { getStore } from '../Store/ConfigureStore';
 
@@ -39,16 +38,14 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export function LiveApi({ url, requestParams }: {url: string, requestParams: Object}): Promise<any> {
-	return new Promise((resolve: Function, reject: Function): Object => {
-		return doApiCall(url, requestParams).then((response: Object): any => {
+export function LiveApi({ url, requestParams }: {url:string, requestParams:Object}): Promise<any> {
+	return new Promise((resolve, reject) => {
+		return doApiCall(url, requestParams).then(response => {
 			if (!response) {
-				return reject(new Error('unexpected error: response empty', {
-					response,
-				}));
+				return reject(new Error('unexpected error: response empty'));
 			}
 			resolve(response);
-		}).catch((error: Object): any => {
+		}).catch(error => {
 			if (error.message === 'invalid_token' || error.message === 'expired_token') {
 				const store = getStore();
 				const { dispatch } = store;
@@ -61,44 +58,30 @@ export function LiveApi({ url, requestParams }: {url: string, requestParams: Obj
 	});
 }
 
-async function doApiCall(url: string, requestParams: Object): any {
-	let response = await callEndPoint(url, requestParams);
+async function doApiCall(url, requestParams) {
+	let response = await callEndPoint(url, requestParams, null);
 	if (!response.error) {
 		// All is well, so return the data from the API.
 		return response;
 	}
 	if (response.error !== 'invalid_token' && response.error !== 'expired_token') {
 		// An error from the API we cannot recover from
-		throw new Error(
-			response.error,
-			{
-				url,
-				requestParams,
-				response,
-			}
-		);
+		throw new Error(response.error);
 	}
 
 	response = await refreshAccessToken(url, requestParams); // Token has expired, so we'll try to get a new one.
 
-	response = await callEndPoint(url, requestParams); // retry api call
+	response = await callEndPoint(url, requestParams, response); // retry api call
 	if (!response.error) {
 		// All is well, so return the data from the API.
 		return response;
 	}
 
-	throw new Error(
-		response.error,
-		{
-			url,
-			requestParams,
-			response,
-		}
-	);
+	throw new Error(response.error);
 }
 
-async function callEndPoint(url: string, requestParams: Object): any {
-	const accessToken = getStore().getState().user.accessToken;
+async function callEndPoint(url, requestParams, token = null) {
+	const accessToken = token ? token : getStore().getState().user.accessToken;
 	if (!accessToken) {
 		throw new Error('LiveApi: need accessToken');
 	}
@@ -117,7 +100,7 @@ async function callEndPoint(url: string, requestParams: Object): any {
 }
 
 // create new token with refresh token
-export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}): Promise<any> {
+export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}) {
 	const store = getStore();
 	const accessToken = store.getState().user.accessToken;
 	const { dispatch } = store;
@@ -135,14 +118,21 @@ export async function refreshAccessToken(url?: string = '', requestParams?: Obje
 			'refresh_token': accessToken.refresh_token,
 		}),
 	})
-		.then((response: Object): Object => response.json())
-		.then((response: Object): any => {
+		.then(response => response.json())
+		.then(response => {
 			if (response.error) {
 				// We couldn't get a new access token with the refresh_token, so we lock the session.
-				return dispatch({
+				dispatch({
 					type: 'LOCK_SESSION',
 				});
+				return null;
 			}
-			dispatch(updateAccessToken(response));
+			// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
+			// works on exporting 'updateAccessToken' directly(cant be do as there are multiple exports already). need to investigate.
+			dispatch({
+				type: 'RECEIVED_ACCESS_TOKEN',
+				accessToken: response,
+			});
+			return response;
 		});
 }

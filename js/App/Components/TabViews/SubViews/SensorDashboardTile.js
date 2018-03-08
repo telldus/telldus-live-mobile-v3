@@ -21,14 +21,21 @@
 
 'use strict';
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { FormattedNumber, Text, View } from 'BaseComponents';
+import { FormattedNumber, View } from '../../../../BaseComponents';
 
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
 import { TouchableOpacity, StyleSheet } from 'react-native';
+
+import { formatLastUpdated, checkIfLarge } from '../../../Lib';
+import i18n from '../../../Translations/common';
+import { utils } from 'live-shared-data';
+const { sensorUtils } = utils;
+const { getSensorTypes, getSensorUnits } = sensorUtils;
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
@@ -36,16 +43,46 @@ type Props = {
 	displayType: string,
 	style: Object,
 	onPress: () => void,
+	intl: Object,
+	isGatewayActive: boolean,
 };
 
 type State = {
 	currentDisplayType: string,
 };
 
-class SensorDashboardTile extends View {
+class SensorDashboardTile extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
-	getSlideList: Object => Array<Object>;
+
+	getSlideList : Object => Object;
+
+	labelSensor: string;
+	labelHumidity: string;
+	labelTemperature: string;
+	labelRainRate: string;
+	labelRainTotal: string;
+	labelWindGust: string;
+	labelWindAverage: string;
+	labelWindDirection: string;
+	labelUVIndex: string;
+	labelWatt: string;
+	labelCurrent: string;
+	labelEnergy: string;
+	labelAccumulated: string;
+	labelAcc: string;
+	labelVoltage: string;
+	labelPowerFactor: string;
+	labelPulse: string;
+	labelLuminance: string;
+	labelDewPoint: string;
+	labelBarometricPressure: string;
+	labelGenricMeter: string;
+	labelTimeAgo: string;
+	width: number;
+	offline: string;
+
+	sensorTypes: Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -54,82 +91,222 @@ class SensorDashboardTile extends View {
 			currentDisplayType: 'default',
 		};
 
+		let { formatMessage } = this.props.intl;
+
+		this.labelSensor = formatMessage(i18n.labelSensor);
+		this.labelHumidity = formatMessage(i18n.labelHumidity);
+		this.labelTemperature = formatMessage(i18n.labelTemperature);
+		this.labelRainRate = formatMessage(i18n.labelRainRate);
+		this.labelRainTotal = formatMessage(i18n.labelRainTotal);
+		this.labelWindGust = formatMessage(i18n.labelWindGust);
+		this.labelWindAverage = formatMessage(i18n.labelWindAverage);
+		this.labelWindDirection = formatMessage(i18n.labelWindDirection);
+		this.labelUVIndex = formatMessage(i18n.labelUVIndex);
+
+		this.labelWatt = formatMessage(i18n.labelWatt);
+		this.labelCurrent = formatMessage(i18n.current);
+		this.labelEnergy = formatMessage(i18n.energy);
+		this.labelAccumulated = formatMessage(i18n.accumulated);
+		this.labelAcc = formatMessage(i18n.acc);
+		this.labelVoltage = formatMessage(i18n.voltage);
+		this.labelPowerFactor = formatMessage(i18n.powerFactor);
+		this.labelPulse = formatMessage(i18n.pulse);
+
+		this.labelWatt = formatMessage(i18n.labelWatt);
+		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
+		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
+		this.labelGenricMeter = formatMessage(i18n.labelGenricMeter);
+		this.labelLuminance = formatMessage(i18n.labelLuminance);
+
+		this.offline = formatMessage(i18n.offline);
+
+		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
+
+		this.sensorTypes = getSensorTypes();
+
 		this.getSlideList = this.getSlideList.bind(this);
 	}
 
-	getSlideList(item: Object): Array<Object> {
-		let slideList = [];
+	getSlideList(item: Object) : Object {
+		let slideList = [], sensorInfo = '';
+		for (let key in item.data) {
+			let { value, scale, name } = item.data[key];
+			let sensorType = this.sensorTypes[name];
+			let sensorUnits = getSensorUnits(sensorType);
+			let unit = sensorUnits[scale];
+			let isLarge = checkIfLarge(value.toString());
 
-		if (item.humidity) {
-			slideList.push({
-				key: 'humidity',
-				icon: require('../img/sensorIcons/HumidityLargeGray.png'),
-				text: <FormattedNumber value={item.humidity / 100} formatStyle="percent"/>,
-			});
-		}
-		if (item.temperature) {
-			slideList.push({
-				key: 'temperature',
-				icon: require('../img/sensorIcons/TemperatureLargeGray.png'),
-				text: <FormattedNumber value={item.temperature} maximumFractionDigits={1} minimumFractionDigits={1}
-				                       suffix={`${String.fromCharCode(176)}C`}/>,
-			});
-		}
-		if (item.rainRate || item.rainTotal) {
-			slideList.push({
-				key: 'rain',
-				icon: require('../img/sensorIcons/RainLargeGray.png'),
-				text: (item.rainRate && <FormattedNumber value={item.rainRate} maximumFractionDigits={0}
-				                                         suffix={'mm/h\n'}/> ),
-				text2: (item.rainTotal && <FormattedNumber value={item.rainTotal} maximumFractionDigits={0}
-				                                           suffix={'mm'}/> ),
-			});
-		}
-		if (item.windGust || item.windAverage || item.windDirection) {
-			slideList.push({
-				key: 'wind',
-				icon: require('../img/sensorIcons/WindLargeGray.png'),
-				text: (item.windAverage && <FormattedNumber value={item.windAverage} maximumFractionDigits={1}
-				                                            suffix={'m/s\n'}/> ),
-				text2: (item.windGust && <FormattedNumber value={item.windGust} maximumFractionDigits={1}
-				                                          suffix={'m/s*\n'}/> ),
-				text3: (item.windDirection && <Text>{ this._windDirection(item.windDirection) }</Text> ),
-			});
-		}
-		if (item.uv) {
-			slideList.push({
-				key: 'uv',
-				icon: require('../img/sensorIcons/UVLargeGray.png'),
-				text: <FormattedNumber value={item.uv} maximumFractionDigits={0}/>,
-			});
-		}
-		if (item.watt) {
-			slideList.push({
-				key: 'watt',
-				icon: require('../img/sensorIcons/WattLargeGray.png'),
-				text: <FormattedNumber value={item.watt} maximumFractionDigits={1} suffix={' W'}/>,
-			});
-		}
-		if (item.luminance) {
-			slideList.push({
-				key: 'luminance',
-				icon: require('../img/sensorIcons/LuminanceLargeGray.png'),
-				text: <FormattedNumber value={item.luminance} maximumFractionDigits={0} suffix={'lx'}
-				                       useGrouping={false}/>,
-			});
+			if (name === 'humidity') {
+				slideList.push({
+					key: 'humidity',
+					icon: 'humidity',
+					label: this.labelHumidity,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value}/>,
+				});
+				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
+			}
+			if (name === 'temp') {
+				slideList.push({
+					key: 'temperature',
+					icon: 'temperature',
+					label: this.labelTemperature,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}/>,
+				});
+				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
+			}
+			if (name === 'rrate' || name === 'rtotal') {
+				slideList.push({
+					key: `rain${key}`,
+					icon: 'rain',
+					label: name === 'rrate' ? this.labelRainRate : this.labelRainTotal,
+					unit,
+					isLarge,
+					text: (name === 'rrate' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
+					text2: (name === 'rtotal' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
+				});
+				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
+				let rtotalInfo = name === 'rtotal' ? `${this.labelRainTotal} ${value}${unit}` : '';
+				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
+			}
+			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
+				let directions = '', label = name === 'wgust' ? this.labelWindGust : this.labelWindAverage;
+				if (name === 'wdir') {
+					directions = [...this._windDirection(value)].toString();
+					label = this.labelWindDirection;
+				}
+				slideList.push({
+					key: `wind${key}`,
+					icon: 'wind',
+					label: label,
+					unit,
+					isLarge,
+					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={1}/> ),
+					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={1}/> ),
+					text3: (name === 'wdir' && this._windDirection(value)),
+				});
+				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
+				let wavgInfo = name === 'wavg' ? `${this.labelWindAverage} ${value}${unit}` : '';
+				let wdirInfo = name === 'wdir' ? `${this.labelWindDirection} ${directions}` : '';
+				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
+			}
+			if (name === 'uv') {
+				slideList.push({
+					key: 'uv',
+					icon: 'uv',
+					label: this.labelUVIndex,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
+				});
+				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
+			}
+			if (name === 'watt') {
+				let label = this.labelEnergy, labelWatt = this.labelEnergy;
+				if (scale === '0') {
+					label = isLarge ? `${this.labelAccumulated} ${this.labelWatt}` :
+						`${this.labelAcc} ${this.labelWatt}`;
+					labelWatt = `${this.labelAccumulated} ${this.labelWatt}`;
+				}
+				if (scale === '2') {
+					label = this.labelWatt;
+					labelWatt = this.labelWatt;
+				}
+				if (scale === '3') {
+					label = this.labelPulse;
+					labelWatt = this.labelPulse;
+				}
+				if (scale === '4') {
+					label = this.labelVoltage;
+					labelWatt = this.labelVoltage;
+				}
+				if (scale === '5') {
+					label = this.labelCurrent;
+					labelWatt = this.labelCurrent;
+				}
+				if (scale === '6') {
+					label = this.labelPowerFactor;
+					labelWatt = this.labelPowerFactor;
+				}
+				slideList.push({
+					key: `watt${key}`,
+					icon: 'watt',
+					label: label,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
+				});
+				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
+			}
+			if (name === 'luminance') {
+				slideList.push({
+					key: 'luminance',
+					icon: 'luminance',
+					label: this.labelLuminance,
+					isLarge: isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}
+						useGrouping={false}/>,
+				});
+				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
+			}
+			if (name === 'dewp') {
+				slideList.push({
+					key: 'dewpoint',
+					icon: 'humidity',
+					label: this.labelDewPoint,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
+				});
+				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
+			}
+			if (name === 'barpress') {
+				slideList.push({
+					key: 'barometricpressure',
+					icon: 'guage',
+					label: this.labelBarometricPressure,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
+				});
+				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
+			}
+			if (name === 'genmeter') {
+				slideList.push({
+					key: 'genricmeter',
+					icon: 'sensor',
+					label: this.labelGenricMeter,
+					unit,
+					isLarge,
+					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
+				});
+				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
+			}
 		}
 
-		return slideList;
+		return {slideList, sensorInfo};
 	}
 
-	render(): React$Element<any> {
-		const { item, tileWidth } = this.props;
+	render() {
+		const { item, tileWidth, isGatewayActive, intl } = this.props;
 		const displayType = this.props.displayType;
+		const { slideList, sensorInfo } = this.getSlideList(item);
 
-		const slideList = this.getSlideList(item);
+		const { lastUpdated } = item;
+		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
+		const lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 
-		const slides = slideList.map((data: Object): React$Element<any> =>
-			<SensorDashboardTileSlide key={data.key} icon={data.icon} text={data.text} tileWidth={tileWidth}/>
+		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
+
+		const slides = slideList.map((data) =>
+			<SensorDashboardTileSlide
+				key={data.key}
+				data={data}
+				tileWidth={tileWidth}
+				isGatewayActive={isGatewayActive}/>
 		);
 
 		let selectedSlideIndex = 0;
@@ -142,13 +319,30 @@ class SensorDashboardTile extends View {
 			}
 		}
 
+		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerActive;
+		let background = slideList.length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
+
 		return (
 			<DashboardShadowTile
 				item={item}
 				isEnabled={item.state !== 0}
 				name={item.name}
+				info={lastUpdatedValue}
+				icon={'sensor'}
+				iconStyle={{
+					color: '#fff',
+					fontSize: tileWidth / 4.9,
+				}}
+				iconContainerStyle={[iconContainerStyle, {
+					width: tileWidth / 4.5,
+					height: tileWidth / 4.5,
+					borderRadius: tileWidth / 9,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}
 				type={'sensor'}
 				tileWidth={tileWidth}
+				accessibilityLabel={accessibilityLabel}
 				style={[
 					this.props.style, {
 						width: tileWidth,
@@ -158,8 +352,18 @@ class SensorDashboardTile extends View {
 				<TouchableOpacity
 					onPress={this.props.onPress}
 					activeOpacity={1}
-					style={styles.container}>
-					<View style={styles.body}>
+					style={{
+						width: tileWidth,
+						height: tileWidth * 0.4,
+						flexDirection: 'row',
+					}}
+					accessible={false}
+					importantForAccessibility="no-hide-descendants">
+					<View style={[styles.body, {
+						width: tileWidth,
+						height: tileWidth * 0.4,
+						backgroundColor: background,
+					}]}>
 						{slides[selectedSlideIndex]}
 					</View>
 				</TouchableOpacity>
@@ -167,7 +371,7 @@ class SensorDashboardTile extends View {
 		);
 	}
 
-	_windDirection(value: number): string {
+	_windDirection(value) {
 		const directions = [
 			'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 		];
@@ -181,14 +385,21 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	body: {
-		flex: 30,
 		flexDirection: 'row',
-		borderTopLeftRadius: 7,
-		borderTopRightRadius: 7,
+		borderBottomLeftRadius: 2,
+		borderBottomRightRadius: 2,
+		justifyContent: 'flex-start',
+		alignItems: 'center',
+	},
+	itemIconContainerActive: {
+		backgroundColor: Theme.Core.brandPrimary,
+	},
+	itemIconContainerOffline: {
+		backgroundColor: Theme.Core.offlineColor,
 	},
 });
 
-function mapStateToProps(state: Object, { item }: Object): Object {
+function mapStateToProps(state, { item }) {
 	return {
 		displayType: state.dashboard.sensorDisplayTypeById[item.id],
 	};

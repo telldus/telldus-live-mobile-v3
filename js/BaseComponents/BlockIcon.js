@@ -21,10 +21,11 @@
 
 'use strict';
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import View from './View';
 import IconTelldus from './IconTelldus';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 type DefaultProps = {
 	color: string,
@@ -32,7 +33,7 @@ type DefaultProps = {
 };
 
 type Props = {
-	icon: string,
+	icon?: string,
 	size?: number,
 	color?: string,
 	bgColor?: string,
@@ -40,7 +41,7 @@ type Props = {
 	containerStyle?: number | Object | Array<any>,
 };
 
-export default class BlockIcon extends Component {
+export default class BlockIcon extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {
@@ -57,7 +58,7 @@ export default class BlockIcon extends Component {
 		bgColor: Theme.Core.brandPrimary,
 	};
 
-	render(): React$Element<any> {
+	render(): Object {
 		const { style, containerStyle, icon, size, color } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 

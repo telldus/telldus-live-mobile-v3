@@ -21,17 +21,23 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { View, RoundedCornerShadowView } from 'BaseComponents';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View } from '../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
 import OnButton from './OnButton';
 import OffButton from './OffButton';
 
+import Theme from '../../../Theme';
+
 type Props = {
 	device: Object,
-	enabled: boolean,
+	enabled: Boolean,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
+	intl: Object,
+	isGatewayActive: boolean,
+	appLayout: Object,
 };
 
 class ToggleButton extends View {
@@ -41,40 +47,40 @@ class ToggleButton extends View {
 		super(props);
 	}
 
-	render(): React$Element<any> {
-		const { TURNON, TURNOFF } = this.props.device.supportedMethods;
-		const { id, isInState, methodRequested } = this.props.device;
+	render() {
+		const { intl, device, isGatewayActive} = this.props;
+		const { TURNON, TURNOFF } = device.supportedMethods;
+		const { id, isInState, methodRequested, name } = device;
+		const width = Theme.Core.buttonWidth;
 
-		const onButton = <OnButton id={id} isInState={isInState} enabled={!!TURNON} style={styles.turnOn} methodRequested={methodRequested} />;
-		const offButton = <OffButton id={id} isInState={isInState} enabled={!!TURNOFF} style={styles.turnOff} methodRequested={methodRequested} />;
+		const onButton = <OnButton id={id} name={name} isInState={isInState} enabled={!!TURNON}
+			style={[styles.turnOn, TURNON ? {width} : {width: width * 2}]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
+		const offButton = <OffButton id={id} name={name} isInState={isInState} enabled={!!TURNOFF}
+			style={[styles.turnOff, TURNOFF ? {width} : {width: width * 2}]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
 
 		return (
-			<RoundedCornerShadowView style={styles.container} hasShadow={!!TURNON || !!TURNOFF}>
-				{ offButton }
-				{ onButton }
-			</RoundedCornerShadowView>
+			<View style={styles.container}>
+				{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+				{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
+			</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 7,
-		height: 32,
+		flex: 0,
+		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	turnOff: {
-		flex: 1,
 		alignItems: 'stretch',
-		borderTopLeftRadius: 7,
-		borderBottomLeftRadius: 7,
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	turnOn: {
-		flex: 1,
 		alignItems: 'stretch',
-		borderTopRightRadius: 7,
-		borderBottomRightRadius: 7,
 	},
 });
 

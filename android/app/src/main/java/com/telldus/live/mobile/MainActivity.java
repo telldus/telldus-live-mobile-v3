@@ -22,8 +22,11 @@ package com.telldus.live.mobile;
 import com.facebook.react.ReactActivity;
 import android.content.Intent;
 import android.content.res.Configuration;
-public class MainActivity extends ReactActivity {
 
+import com.facebook.react.ReactInstanceManager;
+
+public class MainActivity extends ReactActivity {
+	static String currentLocale;
 	/**
 	 * Returns the name of the main component registered from JavaScript.
 	 * This is used to schedule rendering of the component.
@@ -33,8 +36,21 @@ public class MainActivity extends ReactActivity {
 		return "TelldusLiveApp";
 	}
 
+	@Override
+	public void invokeDefaultOnBackPressed() {
+		moveTaskToBack(true);
+	}
+
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
+		// Reloads the app when ever a change in user's locale is detected.
+		String locale = newConfig.locale.toString();
+		if (!MainActivity.currentLocale.equals(locale)) {
+			MainActivity.currentLocale = locale;
+			final ReactInstanceManager instanceManager = getReactInstanceManager();
+			instanceManager.recreateReactContextInBackground();
+		}
+
 		Intent intent = new Intent("onConfigurationChanged");
 		intent.putExtra("newConfig", newConfig);
 		this.sendBroadcast(intent);

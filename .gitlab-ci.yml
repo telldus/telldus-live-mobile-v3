@@ -27,12 +27,12 @@ jest:
   tags:
     - docker
   script:
-    - echo "module.exports = {}" > config.local.js
+    - echo "module.exports = {localStorageKey:'tellduslive'}" > config.local.js
     - npm install --quiet
     - npm test
 
 android:
-  image: telldus/react-native-android:24
+  image: telldus/react-native-android:26
   stage: build
   cache:
     paths:
@@ -43,8 +43,7 @@ android:
       - android/sourcemap.js
     expire_in: '1 mos'
   script:
-    - npm install --quiet
-    - npm run postinstall
+    - yarn install --quiet
     - cd android
     - ./buildGitlabRunner.sh
   only:
@@ -72,7 +71,7 @@ ios:
     - master
     - /^v\d+\.\d+.*$/ # Version branches
   script:
-    - npm install --quiet
+    - yarn install --quiet
     - cd ios
     - ./buildGitlabRunner.sh
 

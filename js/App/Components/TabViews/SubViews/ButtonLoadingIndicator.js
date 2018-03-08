@@ -19,8 +19,9 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { Icon, View } from 'BaseComponents';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Icon, View } from '../../../../BaseComponents';
 import { Animated } from 'react-native';
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);

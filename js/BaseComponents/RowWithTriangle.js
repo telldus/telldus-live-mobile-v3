@@ -23,17 +23,18 @@
 
 import React, { Component } from 'react';
 import { Image } from 'react-native';
+import { connect } from 'react-redux';
 import View from './View';
 import Row from './Row';
-import { getDeviceWidth } from 'Lib';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
 
 type Props = {
 	children?: any,
 	layout: 'row' | 'column',
 	containerStyle: any,
-	style: Object,
+	style: any,
 	triangleColor: string,
+	appLayout: Object,
 };
 
 type DefaultProps = {
@@ -41,7 +42,7 @@ type DefaultProps = {
 	triangleColor: string,
 };
 
-export default class RowWithTriangle extends Component {
+class RowWithTriangle extends Component<Props, null> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {
@@ -49,7 +50,7 @@ export default class RowWithTriangle extends Component {
 		triangleColor: Theme.Core.brandSecondary,
 	};
 
-	render(): React$Element<any> {
+	render(): Object {
 		const { children, layout, containerStyle, style } = this.props;
 
 		const {
@@ -87,7 +88,7 @@ export default class RowWithTriangle extends Component {
 
 	_getStyle = (): Object => {
 		const { triangleColor } = this.props;
-		const deviceWidth = getDeviceWidth();
+		const deviceWidth = this.props.appLayout.width;
 
 		const triangleWidth = deviceWidth * 0.022666667;
 		const triangleHeight = deviceWidth * 0.025333334;
@@ -96,7 +97,7 @@ export default class RowWithTriangle extends Component {
 			container: {
 				flexDirection: 'row',
 				alignItems: 'center',
-				width: deviceWidth * 0.674666667,
+				width: deviceWidth * 0.673333334,
 			},
 			triangleContainer: {
 				width: triangleWidth,
@@ -128,5 +129,12 @@ export default class RowWithTriangle extends Component {
 			},
 		};
 	};
-
 }
+
+function mapStateToProps(state: Object, ownProps: Object): Object {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(RowWithTriangle);

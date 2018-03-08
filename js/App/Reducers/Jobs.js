@@ -16,21 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule Reducers_Jobs
  */
 
 // @flow
 
 'use strict';
 
-import type { Action } from 'Actions_Types';
-import { REHYDRATE } from 'redux-persist/constants';
-
 import moment from 'moment-timezone';
 
 import filter from 'lodash/filter';
 import range from 'lodash/range';
 import mapValues from 'lodash/mapValues';
+import { REHYDRATE } from 'redux-persist/constants';
 
 export type State = ?Object;
 

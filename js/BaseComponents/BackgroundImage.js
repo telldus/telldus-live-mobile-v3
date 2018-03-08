@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import Image from 'Image';
+import { ImageBackground } from 'react-native';
 
 type Props = {
 	source: number,
@@ -30,13 +30,13 @@ type Props = {
 	style: Object,
 };
 
-export default class BackgroundImage extends Component {
+export default class BackgroundImage extends Component<Props, void> {
 	props: Props;
 
 	render(): React$Element<any> {
 		const { source, children, style, ...props } = this.props;
 		return (
-			<Image source={source}
+			<ImageBackground source={source}
 			       style={{
 				       flex: 1,
 				       width: null,
@@ -44,7 +44,7 @@ export default class BackgroundImage extends Component {
 			       }}
 			       {...props}>
 				{ children }
-			</Image>
+			</ImageBackground>
 		);
 	}
 }

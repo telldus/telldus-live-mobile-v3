@@ -22,11 +22,17 @@
 'use strict';
 
 import React from 'react';
-import { View, Text } from 'BaseComponents';
+import PropTypes from 'prop-types';
+import { View, Text, BlockIcon } from '../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
+import Theme from '../../../Theme';
 
-const Title = ({ isEnabled, name, tileWidth, type = 'device' }: Object): Object => (
-	<View style={[styles.title, !isEnabled ? styles.titleDisabled : (type === 'device' ? styles.titleEnabledDevice : styles.titleEnabledSensor)]}>
+const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive }: Object) => (
+	<View style={[styles.title, {
+		width: tileWidth,
+		height: tileWidth * 0.6,
+	}]}>
+		{icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 		<Text
 			ellipsizeMode="middle"
 			numberOfLines={1}
@@ -38,6 +44,18 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device' }: Object): Object 
 			]}>
 			{name ? name : '(no name)'}
 		</Text>
+		{info && (<Text
+			ellipsizeMode="middle"
+			numberOfLines={1}
+			style={[
+				styles.name, {
+					fontSize: Math.floor(tileWidth / 10),
+					color: Theme.Core.rowTextColor,
+				},
+			]}>
+			{info}
+		</Text>)
+		}
 	</View>
 );
 
@@ -45,26 +63,35 @@ type Props = {
 	hasShadow: boolean,
 	style: Object,
 	children: Object,
-	type: string,
+	type: String,
+	item: string,
+	intl: Object,
+	accessibilityLabel: string,
+	icon?: string,
 };
 
 class DashboardShadowTile extends View {
 	props: Props;
 
-	render(): React$Element<any> {
+	render() {
+		let { accessibilityLabel } = this.props;
+
 		return (
 			// Because of the limitation of react-native so we need 2 nested views to create an rounded corner view
 			// with shadow
 			<View
-				style={[this.props.style, (this.props.hasShadow ? styles.shadow : styles.noShadow)]}>
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}
+				style={[this.props.style, Theme.Core.shadow, {elevation: 3}]}>
 				<View style={{
-					flex: 1,
 					flexDirection: 'column',
-					borderRadius: 7,
+					borderRadius: 2,
 					overflow: 'hidden',
+					justifyContent: 'center',
+					alignItems: 'center',
 				}}>
-					{this.props.children}
 					<Title {...this.props} />
+					{this.props.children}
 				</View>
 			</View>
 		);
@@ -73,55 +100,28 @@ class DashboardShadowTile extends View {
 
 const styles = StyleSheet.create({
 	name: {
-		padding: 5,
-		color: 'white',
+		color: Theme.Core.rowTextColor,
 		textAlign: 'center',
 		textAlignVertical: 'center',
 	},
 	title: {
-		flex: 13,
 		justifyContent: 'center',
-		borderBottomLeftRadius: 7,
-		borderBottomRightRadius: 7,
-	},
-	titleEnabledDevice: {
-		backgroundColor: '#e56e18',
-	},
-	titleDisabled: {
-		backgroundColor: '#bfbfbf',
-	},
-	titleEnabledSensor: {
-		backgroundColor: '#00255e',
-	},
-	shadow: {
-		borderRadius: 7,
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 3,
-		shadowOpacity: 1.0,
-		elevation: 3,
+		alignItems: 'center',
+		borderTopLeftRadius: 2,
+		borderTopRightRadius: 2,
+		backgroundColor: '#ffffff',
 	},
 	noShadow: {
-		borderRadius: 7,
-		shadowColor: '#000000',
-		shadowOffset: {
-			width: 0,
-			height: 0,
-		},
-		shadowRadius: 0,
-		shadowOpacity: 1.0,
+		borderRadius: 2,
 		elevation: 0,
 	},
 });
 
 DashboardShadowTile.propTypes = {
-	hasShadow: React.PropTypes.bool,
-	isEnabled: React.PropTypes.bool,
-	name: React.PropTypes.string,
-	tileWidth: React.PropTypes.number,
+	hasShadow: PropTypes.bool,
+	isEnabled: PropTypes.bool,
+	name: PropTypes.string,
+	tileWidth: PropTypes.number,
 };
 
 DashboardShadowTile.defaultProps = {

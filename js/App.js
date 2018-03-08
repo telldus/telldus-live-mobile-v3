@@ -16,28 +16,65 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @providesModule App
  */
 
 'use strict';
 
 import React from 'react';
+import { AccessibilityInfo } from 'react-native';
 import { connect } from 'react-redux';
+import Platform from 'Platform';
+import StatusBar from 'StatusBar';
 
 import {
 	PreLoginNavigator,
 	AppNavigator,
 	Push,
-} from 'Components';
+} from './App/Components';
+import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
+import { View } from './BaseComponents';
+import {
+	setAppLayout,
+	setAccessibilityListener,
+	setAccessibilityInfo,
+} from './App/Actions';
+
+import Theme from './App/Theme';
+const changeLogVersion = '3.5';
 
 class App extends React.Component {
+	onLayout: (Object) => void;
+
+	constructor() {
+		super();
+		this.onLayout = this.onLayout.bind(this);
+	}
 
 	componentDidMount() {
+		let { dispatch } = this.props;
+
 		this.pushConf();
+		AccessibilityInfo.fetch().done((isEnabled) => {
+			dispatch(setAccessibilityInfo(isEnabled));
+			dispatch(setAccessibilityListener(setAccessibilityInfo));
+		});
+
+		Platform.OS === 'ios' && StatusBar && StatusBar.setBarStyle('light-content');
+		if (Platform.OS === 'android' && StatusBar) {
+			StatusBar.setTranslucent(true);
+			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
+		}
 	}
 
 	componentDidUpdate() {
 		this.pushConf();
+	}
+
+	componentWillUnmount() {
+		AccessibilityInfo.removeEventListener(
+		  'change',
+		  setAccessibilityInfo
+		);
 	}
 
 	/*
@@ -50,12 +87,28 @@ class App extends React.Component {
 		}
 	}
 
+	onLayout(ev: Object) {
+		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+	}
+
 	render() {
-		if ((!this.props.accessToken) || (this.props.accessToken && !this.props.isTokenValid)) {
-			return <PreLoginNavigator />;
+		let showChangeLog = changeLogVersion !== this.props.prevChangeLogVersion;
+		if (showChangeLog) {
+			return (
+				<View onLayout={this.onLayout}>
+					<ChangeLogNavigator changeLogVersion={changeLogVersion}/>
+				</View>
+			);
 		}
+		let hasNotLoggedIn = ((!this.props.accessToken) || (this.props.accessToken && !this.props.isTokenValid));
 		return (
-			<AppNavigator {...this.props}/>
+			<View onLayout={this.onLayout}>
+				{hasNotLoggedIn ?
+					<PreLoginNavigator />
+					:
+					<AppNavigator {...this.props}/>
+				}
+			</View>
 		);
 	}
 }
@@ -65,7 +118,15 @@ function mapStateToProps(store) {
 		accessToken: store.user.accessToken,
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
+		pushTokenRegistered: store.user.pushTokenRegistered,
+		prevChangeLogVersion: store.App.changeLogVersion,
 	};
 }
 
-module.exports = connect(mapStateToProps)(App);
+function mapDispatchToProps(dispatch) {
+	return {
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(App);

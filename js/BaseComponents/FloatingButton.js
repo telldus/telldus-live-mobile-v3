@@ -21,16 +21,19 @@
 
 'use strict';
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Image, Platform, TouchableOpacity } from 'react-native';
+import { intlShape, injectIntl } from 'react-intl';
+
 import View from './View';
 import Throbber from './Throbber';
-import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
+import Theme from '../App/Theme';
+import i18n from '../App/Translations/common';
 
 type DefaultProps = {
 	tabs: boolean,
-	iconSize: number,
 	paddingRight: number,
 };
 
@@ -42,9 +45,17 @@ type Props = {
 	paddingRight: number,
 	showThrobber: boolean,
 	buttonStyle: number | Array<any> | Object,
+	appLayout: Object,
+	accessible: boolean,
+	accessibilityLabel?: string,
+	intl: intlShape.isRequired,
+	iconStyle?: Object | number,
 };
 
-export default class FloatingButton extends Component {
+class FloatingButton extends Component<Props, null> {
+	defaultDescription: string;
+	labelButton: string;
+	defaultLabel: string;
 	props: Props;
 
 	static propTypes = {
@@ -59,22 +70,34 @@ export default class FloatingButton extends Component {
 
 	static defaultProps: DefaultProps = {
 		tabs: false,
-		iconSize: getDeviceWidth() * 0.056,
 		paddingRight: 0,
 		showThrobber: false,
+		accessible: true,
 	};
 
-	render(): React$Element<any> {
-		const { container, button, icon, throbber } = this._getStyle();
+	constructor(props: Props) {
+		super(props);
 
-		const { buttonStyle, onPress, imageSource, showThrobber } = this.props;
+		let { formatMessage } = props.intl;
+
+		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelButton = `${formatMessage(i18n.button)}`;
+		this.defaultLabel = `${formatMessage(i18n.next)} ${this.labelButton}. ${this.defaultDescription}`;
+	}
+
+	render(): Object {
+		let { buttonStyle, onPress, imageSource, showThrobber,
+			appLayout, accessible, accessibilityLabel, iconStyle } = this.props;
+		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
+
+		const { container, button, icon, throbber } = this._getStyle(appLayout);
 
 		return (
-			<TouchableOpacity style={[container, buttonStyle]} onPress={onPress}>
+			<TouchableOpacity style={[container, buttonStyle]} onPress={onPress} accessible={accessible} accessibilityLabel={accessibilityLabel}>
 				<View style={button}>
 					{!!imageSource &&
 					(
-						<Image source={imageSource} style={icon} resizeMode="contain"/>
+						<Image source={imageSource} style={[icon, iconStyle]} resizeMode="contain"/>
 					)
 					}
 					{!!showThrobber &&
@@ -89,11 +112,15 @@ export default class FloatingButton extends Component {
 		);
 	}
 
-	_getStyle = (): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { shadow: themeShadow, brandSecondary } = Theme.Core;
-		const deviceWidth = getDeviceWidth();
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
-		const { tabs, iconSize, paddingRight } = this.props;
+		let { tabs, iconSize, paddingRight } = this.props;
+		iconSize = iconSize ? iconSize : isPortrait ? width * 0.056 : height * 0.056;
 
 		const isIOSTabs = Platform.OS === 'ios' && tabs;
 
@@ -136,3 +163,11 @@ export default class FloatingButton extends Component {
 	};
 
 }
+
+function mapStateToProps(state, ownProps) {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(injectIntl(FloatingButton));

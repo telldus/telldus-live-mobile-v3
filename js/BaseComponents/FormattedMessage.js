@@ -29,15 +29,17 @@ import Text from './Text';
 
 type Props = {
 	style: Object,
+	prefix?: string,
+	postfix?: string,
 };
 
 class FormattedMessageComponent extends Base {
 	props: Props;
 
-	render(): React$Element<any> {
+	render() {
 		return (
-			<FormattedMessage {...this.props}>{(msg: string): React$Element<any> => {
-				return <Text style={this.props.style}>{msg}</Text>;
+			<FormattedMessage {...this.props}>{msg => {
+				return <Text style={this.props.style}>{this.props.prefix}{msg}{this.props.postfix}</Text>;
 			}}
 			</FormattedMessage>
 		);

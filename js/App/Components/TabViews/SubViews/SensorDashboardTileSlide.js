@@ -22,35 +22,55 @@
 'use strict';
 
 import React from 'react';
-import { Image, Text, View } from 'BaseComponents';
+import { Text, View, IconTelldus } from '../../../../BaseComponents';
 
-import Theme from 'Theme';
+import Theme from '../../../Theme';
 
 type Props = {
 	tileWidth: number,
-	icon: string,
-	text: string,
-	text2: string,
-	text3: string,
+	data: Object,
+	isGatewayActive: boolean,
 };
 
 class SensorDashboardTileSlide extends View {
 	props: Props;
 
-	render(): React$Element<any> {
+	render() {
+		let { data, tileWidth, isGatewayActive } = this.props;
+		let containerStyle = isGatewayActive ? {backgroundColor: Theme.Core.brandPrimary} : {backgroundColor: Theme.Core.offlineColor};
+
 		return (
-			<View style={Theme.Styles.sensorTileItem}>
+			<View style={[Theme.Styles.sensorTileItem, containerStyle]}>
 				<View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
-					<Image source={this.props.icon}/>
+					<IconTelldus icon={data.icon} color="#fff" style={{
+						fontSize: tileWidth * 0.3,
+						color: '#fff',
+					}}/>
 				</View>
-				<View style={{ flex: 5, justifyContent: 'center', alignItems: 'center' }}>
+				<View style={{ flex: 5, justifyContent: 'center', alignItems: 'flex-start' }}>
+					<View style={{flexDirection: 'row'}}>
+						<Text style={{
+							color: '#fff',
+							fontSize: Math.floor(tileWidth / 8),
+						}}>
+							{data.text && data.text}
+							{data.text2 && data.text2}
+							{data.text3 && data.text3}
+						</Text>
+						<Text style={{
+							color: '#fff',
+							fontSize: Math.floor(tileWidth / 10),
+							textAlignVertical: 'bottom',
+							marginLeft: 2,
+						}}>
+							{data.unit}
+						</Text>
+					</View>
 					<Text style={{
-						color: '#00255e',
-						fontSize: Math.floor(this.props.tileWidth / 8),
+						color: '#fff',
+						fontSize: Math.floor(tileWidth / 10),
 					}}>
-						{this.props.text && this.props.text}
-						{this.props.text2 && this.props.text2}
-						{this.props.text3 && this.props.text3}
+						{data.label}
 					</Text>
 				</View>
 			</View>

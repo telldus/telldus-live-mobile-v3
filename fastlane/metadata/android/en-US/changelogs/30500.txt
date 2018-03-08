@@ -1,0 +1,11 @@
+- Lock session instead of Logging out if Telldus servers are inaccessible.
+- Fix crash on loading schedules
+- Add Norwegian translation
+- Add French translation
+- Fix name of phone in Telldus Live! for push messages
+- Add push support for iOS
+- use padding attribute instead of position.
+- replace fetch with Axios.
+- New design of device details
+- Add device history
+- Replaces Browser with Webview to display SignUp.

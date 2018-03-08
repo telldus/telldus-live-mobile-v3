@@ -22,27 +22,30 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { TouchableOpacity } from 'react-native';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 import View from './View';
 import Text from './Text';
 import Modal from './Modal';
-import Theme from 'Theme';
+import Theme from '../App/Theme';
+import i18n from '../App/Translations/common';
 
 const messages = defineMessages({
 	defaultHeader: {
-		id: 'notification.defaultHeader',
+		id: 'dialogueBox.defaultHeader',
 		defaultMessage: 'OOPS',
 		description: 'Default Header for the notification component',
 	},
 	defaultPositiveText: {
-		id: 'notification.defaultPositiveText',
+		id: 'dialogueBox.defaultPositiveText',
 		defaultMessage: 'OK',
 		description: 'Default Positive text for the notification component',
 	},
 	defaultNegativeText: {
-		id: 'notification.defaultNegativeText',
+		id: 'dialogueBox.defaultNegativeText',
 		defaultMessage: 'CANCEL',
 		description: 'Default Negative text for the notification component',
 	},
@@ -66,6 +69,9 @@ type Props = {
 	onPressPositive?: () => void,
 	onPressNegative?: () => void,
 	intl: intlShape.isRequired,
+	appLayout: Object,
+	accessibilityLabel?: string,
+	showOverlay?: boolean,
 };
 
 type defaultProps = {
@@ -76,7 +82,7 @@ type defaultProps = {
 	exitDuration: number,
 };
 
-class DialogueBox extends Component {
+class DialogueBox extends Component<Props, null> {
 
 	props: Props;
 
@@ -88,13 +94,46 @@ class DialogueBox extends Component {
 		exitDuration: 100,
 	}
 
+	renderHeader: (Object) => void;
+	renderBody: (Object) => void;
+	renderFooter: (Object) => void;
+
 	onPressPositive: () => void;
 	onPressNegative: () => void;
+	onModalOpened: () => void;
+
+	defaultHeader: string;
+	defaultPositiveText: string;
+	defaultNegativeText: string;
+	labelPress: string;
+	labelToConfirm: string;
+	labelToReturn: string;
+	labelButtondefaultDescription: string;
+	labelButton: string;
+
+	labelDefaultDialoguePhrase: string;
 
 	constructor(props: Props) {
 		super(props);
+		this.renderHeader = this.renderHeader.bind(this);
+		this.renderBody = this.renderBody.bind(this);
+		this.renderFooter = this.renderFooter.bind(this);
+
 		this.onPressPositive = this.onPressPositive.bind(this);
 		this.onPressNegative = this.onPressNegative.bind(this);
+		this.onModalOpened = this.onModalOpened.bind(this);
+
+		this.defaultHeader = `${this.props.intl.formatMessage(messages.defaultHeader)}!`;
+		this.defaultPositiveText = `${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
+		this.defaultNegativeText = `${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
+
+		this.labelButton = `${this.props.intl.formatMessage(i18n.button)}`;
+		this.labelButtondefaultDescription = `${this.props.intl.formatMessage(i18n.defaultDescriptionButton)}`;
+
+		this.labelDefaultDialoguePhrase = `${this.props.intl.formatMessage(i18n.defaultDialoguePhrase)}!`;
+		this.labelPress = `${this.props.intl.formatMessage(i18n.labelPress)}!`;
+		this.labelToConfirm = `${this.props.intl.formatMessage(i18n.labelToConfirm)}!`;
+		this.labelToReturn = `${this.props.intl.formatMessage(i18n.labelToReturn)}!`;
 	}
 
 	onPressNegative() {
@@ -119,6 +158,100 @@ class DialogueBox extends Component {
 		}
 	}
 
+	renderHeader(styles: Object): any {
+		let { header } = this.props;
+		if (header && typeof header === 'object') {
+			return (
+				header
+			);
+		}
+		if (!header) {
+			header = this.defaultHeader;
+		}
+
+		return (
+			<View style={styles.notificationModalHeader}>
+				<Text style={styles.notificationModalHeaderText}>
+					{header}
+				</Text>
+			</View>
+		);
+	}
+
+	renderBody(styles: Object): any {
+		let { text } = this.props;
+		if (text && typeof text === 'object') {
+			return (
+				text
+			);
+		}
+
+		return (
+			<View style={styles.notificationModalBody}>
+				<Text style={styles.notificationModalBodyText}>{text}</Text>
+			</View>
+		);
+	}
+
+	renderFooter(styles: Object): any {
+		let positiveText = this.props.positiveText ? this.props.positiveText :
+			this.defaultPositiveText;
+		let negativeText = this.props.negativeText ? this.props.negativeText :
+			this.defaultNegativeText;
+
+		let accessibilityLabelPositive = `${positiveText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
+		let accessibilityLabelNegative = `${negativeText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
+
+		return (
+			<View style={styles.notificationModalFooter}>
+				{this.props.showNegative ?
+					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {marginRight: 10}]}
+						onPress={this.onPressNegative}
+						accessibilityLabel={accessibilityLabelNegative}>
+						<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>
+					</TouchableOpacity>
+					:
+					null
+				}
+				{this.props.showPositive ?
+					<TouchableOpacity style={styles.notificationModalFooterTextCover}
+						onPress={this.onPressPositive}
+						accessibilityLabel={accessibilityLabelPositive}>
+						<Text style={styles.notificationModalFooterPositiveText}>{positiveText}</Text>
+					</TouchableOpacity>
+					:
+					null
+				}
+			</View>
+		);
+	}
+
+	onModalOpened() {
+		this.announceForAccessibility();
+	}
+
+	announceForAccessibility() {
+		let message = this.getAccessibiltyMessage();
+		announceForAccessibility(message);
+	}
+
+	getAccessibiltyMessage() {
+		let { accessibilityLabel, text, showNegative, showPositive, positiveText, negativeText } = this.props;
+		if (accessibilityLabel) {
+			return accessibilityLabel;
+		}
+
+		let phrase = this.labelDefaultDialoguePhrase;
+		let hasMessage = text && typeof text === 'string';
+
+		let PositiveInfo = showPositive ? (positiveText ? `${positiveText} ${this.labelToConfirm}` : `${this.defaultPositiveText} ${this.labelToConfirm}`) : '';
+		let NegativeInfo = showNegative ? (negativeText ? `${negativeText} ${this.labelToReturn}` : `${this.defaultNegativeText} ${this.labelToReturn}`) : '';
+		let labelButtonInfo = `${this.labelPress}, ${PositiveInfo} ${NegativeInfo}`;
+		let buttonInfo = !showPositive && !showNegative ? '' : labelButtonInfo;
+
+		return hasMessage ? `${phrase}. ${text}. ${buttonInfo}` : '';
+	}
+
 	render(): Object {
 		let {
 			showDialogue,
@@ -128,13 +261,11 @@ class DialogueBox extends Component {
 			exit,
 			entryDuration,
 			exitDuration,
+			appLayout,
+			showOverlay,
 		} = this.props;
-		let header = this.props.header ? this.props.header :
-			`${this.props.intl.formatMessage(messages.defaultHeader)}!`;
-		let positiveText = this.props.positiveText ? this.props.positiveText :
-			`${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
-		let negativeText = this.props.negativeText ? this.props.negativeText :
-			`${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
+		let styles = this.getStyles(appLayout);
+
 		return (
 			<Modal
 				modalStyle={[Theme.Styles.notificationModal, style]}
@@ -143,88 +274,81 @@ class DialogueBox extends Component {
 				exit={exit}
 				entryDuration={entryDuration}
 				exitDuration={exitDuration}
-				showModal={showDialogue}>
-				<View style={styles.notificationModalHeader}>
-					<Text style={styles.notificationModalHeaderText}>
-						{header}
-					</Text>
-				</View>
-				<View style={styles.notificationModalBody}>
-					<Text style={styles.notificationModalBodyText}>{this.props.text}</Text>
-				</View>
-				<View style={styles.notificationModalFooter}>
-					{this.props.showNegative ?
-						<TouchableOpacity style={styles.notificationModalFooterTextCover}
-							onPress={this.onPressNegative}>
-							<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>
-						</TouchableOpacity>
-						:
-						null
-					}
-					{this.props.showPositive ?
-						<TouchableOpacity style={styles.notificationModalFooterTextCover}
-							onPress={this.onPressPositive}>
-							<Text style={styles.notificationModalFooterPositiveText}>{positiveText}</Text>
-						</TouchableOpacity>
-						:
-						null
-					}
-				</View>
+				showModal={showDialogue}
+				showOverlay={showOverlay}
+				onOpened={this.onModalOpened}>
+				{this.renderHeader(styles)}
+				{this.renderBody(styles)}
+				{this.renderFooter(styles)}
 			</Modal>
 		);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+		const deviceWidth = isPortrait ? width : height;
+
+		return {
+			notificationModalHeader: {
+				justifyContent: 'center',
+				alignItems: 'flex-start',
+				paddingLeft: 20,
+				height: deviceHeight * 0.08,
+				width: deviceWidth * 0.75,
+				backgroundColor: '#e26901',
+			},
+			notificationModalHeaderText: {
+				color: '#ffffff',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+			},
+			notificationModalBody: {
+				justifyContent: 'center',
+				alignItems: 'flex-start',
+				paddingLeft: 20,
+				paddingRight: 10,
+				height: deviceHeight * 0.2,
+				width: deviceWidth * 0.75,
+			},
+			notificationModalBodyText: {
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				color: '#6B6969',
+			},
+			notificationModalFooter: {
+				alignItems: 'center',
+				justifyContent: 'flex-end',
+				flexDirection: 'row',
+				paddingRight: 20,
+				height: deviceHeight * 0.08,
+				width: deviceWidth * 0.75,
+			},
+			notificationModalFooterTextCover: {
+				alignItems: 'flex-end',
+				justifyContent: 'center',
+				height: deviceHeight * 0.08,
+				paddingRight: 5,
+				paddingLeft: 5,
+			},
+			notificationModalFooterNegativeText: {
+				color: '#6B6969',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontWeight: 'bold',
+			},
+			notificationModalFooterPositiveText: {
+				color: '#e26901',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontWeight: 'bold',
+			},
+		};
+	}
 }
 
-const styles = StyleSheet.create({
-	notificationModalHeader: {
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingLeft: 20,
-		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.75,
-		backgroundColor: '#e26901',
-	},
-	notificationModalHeaderText: {
-		color: '#ffffff',
-		fontSize: 14,
-	},
-	notificationModalBody: {
-		justifyContent: 'center',
-		alignItems: 'flex-start',
-		paddingLeft: 20,
-		paddingRight: 10,
-		height: Dimensions.get('window').height * 0.2,
-		width: Dimensions.get('window').width * 0.75,
-	},
-	notificationModalBodyText: {
-		fontSize: 14,
-		color: '#6B6969',
-	},
-	notificationModalFooter: {
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-		flexDirection: 'row',
-		paddingRight: 20,
-		height: Dimensions.get('window').height * 0.08,
-		width: Dimensions.get('window').width * 0.75,
-	},
-	notificationModalFooterTextCover: {
-		alignItems: 'flex-end',
-		justifyContent: 'center',
-		height: Dimensions.get('window').height * 0.08,
-		paddingRight: 5,
-		paddingLeft: 5,
-	},
-	notificationModalFooterNegativeText: {
-		color: '#6B6969',
-		fontSize: 14,
-		fontWeight: 'bold',
-	},
-	notificationModalFooterPositiveText: {
-		color: '#e26901',
-		fontSize: 14,
-		fontWeight: 'bold',
-	},
-});
+function mapStateToProps(store: Object): Object {
+	return {
+		appLayout: store.App.layout,
+	};
+}
 
-export default injectIntl(DialogueBox);
+export default connect(mapStateToProps, null)(injectIntl(DialogueBox));

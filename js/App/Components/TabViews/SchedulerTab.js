@@ -69,6 +69,7 @@ type Props = {
 	dispatch: Function,
 	navigation: Object,
 	screenProps: Object,
+	appLayout: Object,
 };
 
 type State = {
@@ -249,6 +250,12 @@ class SchedulerTab extends View<null, Props, State> {
 		if (r1 === r2) {
 			return false;
 		}
+		return sectionName;
+	}
+
+	renderSectionHeader(sectionData, sectionId) {
+		// TODO: move to own Component
+		let sectionName = this.getSectionName(sectionId);
 
 		return (
 			r1.effectiveHour !== r2.effectiveHour ||

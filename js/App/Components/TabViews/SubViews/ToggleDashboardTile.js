@@ -21,12 +21,19 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { View } from 'BaseComponents';
+import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
+
+import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
+
+import { getLabelDevice } from '../../../Lib';
+import { getPowerConsumed } from '../../../Lib';
+
+import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
@@ -34,42 +41,73 @@ type Props = {
 	tileWidth: number,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
+	intl: Object,
+	isGatewayActive: boolean,
+	powerConsumed: string,
 };
 
-class ToggleDashboardTile extends View {
+class ToggleDashboardTile extends PureComponent<Props, null> {
 	props: Props;
 
 	constructor(props: Props) {
 		super(props);
 	}
 
-	render(): React$Element<any> {
-		const { item, tileWidth } = this.props;
+	render() {
+		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
 		const { id, name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
-		const onButton = <OnButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} />;
-		const offButton = <OffButton id={id} isInState={isInState} fontSize={Math.floor(tileWidth / 8)} enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} />;
+		const info = powerConsumed ? `${powerConsumed} W` : null;
+
+		const onButton = <OnButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
+			enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} intl={intl}
+			isGatewayActive={isGatewayActive}/>;
+		const offButton = <OffButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
+			enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} intl={intl}
+			isGatewayActive={isGatewayActive}/>;
 
 		let style = { ...this.props.style };
 		style.width = tileWidth;
 		style.height = tileWidth;
 
+		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
+
+		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
+
 		return (
 			<DashboardShadowTile
 				item={item}
+				accessibilityLabel={accessibilityLabel}
 				isEnabled={isInState === 'TURNON'}
 				name={name}
+				info={info}
+				icon={'device-alt-solid'}
+				iconStyle={{
+					color: '#fff',
+					fontSize: tileWidth / 4.9,
+				}}
+				iconContainerStyle={[iconContainerStyle, {
+					width: tileWidth / 4.5,
+					height: tileWidth / 4.5,
+					borderRadius: tileWidth / 9,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}
 				type={'device'}
 				tileWidth={tileWidth}
 				hasShadow={!!TURNON || !!TURNOFF}
 				style={style}>
 				<View style={{
+					width: tileWidth,
+					height: tileWidth * 0.4,
 					flexDirection: 'row',
-					flex: 30,
+					justifyContent: 'center',
+					alignItems: 'center',
 				}}>
-					{ offButton }
-					{ onButton }
+					{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+					{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
 				</View>
 			</DashboardShadowTile>
 		);
@@ -80,12 +118,12 @@ const styles = StyleSheet.create({
 	turnOffButtonContainer: {
 		flex: 1,
 		alignItems: 'stretch',
-		borderTopLeftRadius: 7,
+		borderBottomLeftRadius: 2,
 	},
 	turnOnButtonContainer: {
 		flex: 1,
 		alignItems: 'stretch',
-		borderTopRightRadius: 7,
+		borderBottomRightRadius: 2,
 	},
 	button: {
 		flex: 1,
@@ -123,11 +161,22 @@ const styles = StyleSheet.create({
 		top: 3,
 		right: 3,
 	},
+	itemIconContainerOn: {
+		backgroundColor: Theme.Core.brandSecondary,
+	},
+	itemIconContainerOff: {
+		backgroundColor: Theme.Core.brandPrimary,
+	},
+	itemIconContainerOffline: {
+		backgroundColor: Theme.Core.offlineColor,
+	},
 });
 
-ToggleDashboardTile.propTypes = {
-	item: PropTypes.object,
-	enabled: PropTypes.bool,
-};
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
+	return {
+		powerConsumed,
+	};
+}
 
-module.exports = ToggleDashboardTile;
+module.exports = connect(mapStateToProps, null)(ToggleDashboardTile);

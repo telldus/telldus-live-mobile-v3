@@ -30,8 +30,8 @@ export default {
 	brandDanger: '#d9534f',
 	brandWarning: '#f0ad4e',
 	brandSidebar: '#252932',
+	iPhoneXbg: '#eae7f0',
 	iconFamily: 'Ionicons',
-
 	get fonts() {
 		return {
 			telldusIconFont: 'telldusicons',
@@ -53,7 +53,15 @@ export default {
 		return this.brandSecondary;
 	},
 
+	sectionTextColor: '#8e8e93',
+	rowTextColor: '#8e8e93',
+
+	offlineColor: '#b5b5b5',
+
 	subtitleColor: '#8e8e93',
+
+	rowHeight: 60,
+	buttonWidth: 60,
 
 	fontSizeBase: 12,
 	titleFontSize: (Platform.OS === 'ios' ) ? 17 : 19,
@@ -61,6 +69,10 @@ export default {
 
 	inputFontSize: 15,
 	inputLineHeight: 24,
+
+	locationOnline: '#9CCC65',
+	locationOffline: '#F44336',
+	locationNoLiveUpdates: '#FF9800',
 
 	get fontSizeH1() {
 		return this.fontSizeBase * 1.8;
