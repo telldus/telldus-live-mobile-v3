@@ -211,6 +211,84 @@
 
        </LinearLayout>
 
+        <LinearLayout
+
+            android:id="@+id/seekbarlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerInParent="true"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
+
+                    <ImageView
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/uibulb1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/emptybulb"/>
+                    <ImageView
+                        android:id="@+id/emptybulb1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/emptybulb"/>
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/uibulb2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bulb1"/>
+                    <ImageView
+                        android:id="@+id/emptybulb2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/emptybulb"/>
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/uibulb3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bulb2"/>
+                    <ImageView
+                        android:id="@+id/emptybulb3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/emptybulb"/>
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/uibulb4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bulb3"/>
+                    <ImageView
+                        android:id="@+id/emptybulb4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/emptybulb"/>
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/uibulb5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bulb4"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

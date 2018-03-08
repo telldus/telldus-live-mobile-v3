@@ -36,6 +36,10 @@ public class NewAppWidget extends AppWidgetProvider {
     private static final String ACTION_DOWN = "ACTION_DOWN";
     private static final String ACTION_STOP = "ACTION_STOP";
     private static final String ACTION_TRIM = "ACTION_TRIM";
+    private static final String ACTION_DIMMERONE = "ACTION_DIMMERONE";
+    private static final String ACTION_DIMMERTWO = "ACTION_DIMMERTWO";
+    private static final String ACTION_DIMMERTHREE = "ACTION_DIMMERTHREE";
+    private static final String ACTION_DIMMERFOUR = "ACTION_DIMMERFOUR";
 
     private PendingIntent pendingIntent;
 
@@ -91,14 +95,28 @@ public class NewAppWidget extends AppWidgetProvider {
             }
             if (action.equals("16"))
             {
-                views.setViewVisibility(R.id.uibtns, View.VISIBLE);
-                Toast.makeText(context,"seekbar",Toast.LENGTH_LONG).show();
-                views.setViewVisibility(R.id.btna, View.VISIBLE);
-                views.setViewVisibility(R.id.btnb, View.INVISIBLE);
-                views.setViewVisibility(R.id.btnc, View.INVISIBLE);
-                views.setOnClickPendingIntent(R.id.btna,getPendingBELL(context,ACTION_TRIM,appWidgetId));
-                views.setOnClickPendingIntent(R.id.btnb,getPendingBELL(context,ACTION_TRIM,appWidgetId));
-                views.setOnClickPendingIntent(R.id.btnc,getPendingBELL(context,ACTION_TRIM,appWidgetId));
+
+                views.setViewVisibility(R.id.seekbarlayout, View.VISIBLE);
+                views.setViewVisibility(R.id.uibulb1, View.VISIBLE);
+                views.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
+                views.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
+                views.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
+                views.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+
+                views.setOnClickPendingIntent(R.id.uibulb1,getPendingBELL(context,ACTION_TRIM,appWidgetId));
+                views.setOnClickPendingIntent(R.id.emptybulb1,getPendingBELL(context,ACTION_DIMMERONE,appWidgetId));
+                views.setOnClickPendingIntent(R.id.emptybulb2,getPendingBELL(context,ACTION_DIMMERTWO,appWidgetId));
+                views.setOnClickPendingIntent(R.id.emptybulb3,getPendingBELL(context,ACTION_DIMMERTHREE,appWidgetId));
+                views.setOnClickPendingIntent(R.id.emptybulb4,getPendingBELL(context,ACTION_DIMMERFOUR,appWidgetId));
+
+//                views.setViewVisibility(R.id.uibtns, View.VISIBLE);
+//                Toast.makeText(context,"seekbar",Toast.LENGTH_LONG).show();
+//                views.setViewVisibility(R.id.btna, View.VISIBLE);
+//                views.setViewVisibility(R.id.btnb, View.INVISIBLE);
+//                views.setViewVisibility(R.id.btnc, View.INVISIBLE);
+//                views.setOnClickPendingIntent(R.id.btna,getPendingBELL(context,ACTION_TRIM,appWidgetId));
+//                views.setOnClickPendingIntent(R.id.btnb,getPendingBELL(context,ACTION_TRIM,appWidgetId));
+//                views.setOnClickPendingIntent(R.id.btnc,getPendingBELL(context,ACTION_TRIM,appWidgetId));
 
             }
 
@@ -254,24 +272,137 @@ public class NewAppWidget extends AppWidgetProvider {
             String  accessToken=prefManager.getAccess();
             Bundle extras=intent.getExtras();
             int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
 
             DeviceInfo id=db.getSinlgeDeviceID(wigetID);
-            if(status.equals("0"))
-            {
 
-               createAPIDIMMER(id.getDeviceID(),0,accessToken,"0",wigetID,context,prefManager);
 
-            }
-            if(status.equals("50"))
-            {
-                createAPIDIMMER(id.getDeviceID(),50,accessToken,"50",wigetID,context,prefManager);
-            }
-            if(status.equals("100"))
-            {
-                createAPIDIMMER(id.getDeviceID(),100,accessToken,"100",wigetID,context,prefManager);
-            }
+            createAPIDIMMER(id.getDeviceID(),0,accessToken,"0",wigetID,context,prefManager);
+
+            Toast.makeText(context,"Dimmer-0",Toast.LENGTH_LONG).show();
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+
+            remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
+            remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+
+
+            appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
         }
+        if (ACTION_DIMMERONE.equals(intent.getAction())) {
+
+            PrefManager prefManager = new PrefManager(context);
+            String status = prefManager.getDimmer();
+            String accessToken = prefManager.getAccess();
+            Bundle extras = intent.getExtras();
+            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+
+
+            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+            createAPIDIMMER(id.getDeviceID(), 25, accessToken, "25", wigetID, context, prefManager);
+
+            Toast.makeText(context,"Dimmer-25",Toast.LENGTH_LONG).show();
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+            remoteViews.setViewVisibility(R.id.emptybulb1, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb2, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
+            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+        }
+        if (ACTION_DIMMERTWO.equals(intent.getAction())) {
+
+            PrefManager prefManager = new PrefManager(context);
+            String status = prefManager.getDimmer();
+            String accessToken = prefManager.getAccess();
+            Bundle extras = intent.getExtras();
+            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+
+
+            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+            createAPIDIMMER(id.getDeviceID(), 50, accessToken, "50", wigetID, context, prefManager);
+
+            Toast.makeText(context,"Dimmer-50",Toast.LENGTH_LONG).show();
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+            remoteViews.setViewVisibility(R.id.emptybulb2, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb3, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
+            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+        }
+        if (ACTION_DIMMERTHREE.equals(intent.getAction())) {
+
+            PrefManager prefManager = new PrefManager(context);
+            String status = prefManager.getDimmer();
+            String accessToken = prefManager.getAccess();
+            Bundle extras = intent.getExtras();
+            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+
+
+            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+            createAPIDIMMER(id.getDeviceID(), 75, accessToken, "75", wigetID, context, prefManager);
+
+            Toast.makeText(context,"Dimmer-75",Toast.LENGTH_LONG).show();
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+            remoteViews.setViewVisibility(R.id.emptybulb3, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb4, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
+            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+        }
+        if (ACTION_DIMMERFOUR.equals(intent.getAction())) {
+
+            PrefManager prefManager = new PrefManager(context);
+            String status = prefManager.getDimmer();
+            String accessToken = prefManager.getAccess();
+            Bundle extras = intent.getExtras();
+            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+
+
+            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+            createAPIDIMMER(id.getDeviceID(), 100, accessToken, "100", wigetID, context, prefManager);
+
+            Toast.makeText(context,"Dimmer-100",Toast.LENGTH_LONG).show();
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+            remoteViews.setViewVisibility(R.id.emptybulb4, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb5, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
+            remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
+            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+
+
+        }
+
     }
 
 
@@ -338,22 +469,52 @@ public class NewAppWidget extends AppWidgetProvider {
                             AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
                             if(!status.isEmpty()&&status!=null&&action.equals("0")) {
 
-                                remoteViews.setTextViewText(R.id.btna,"50");
-                                prefManager.setDimmer("50");
+
+                                remoteViews.setViewVisibility(R.id.uibulb1, View.VISIBLE);
+
+
+                                // remoteViews.setTextViewText(R.id.uibulb1,"0");
+                                prefManager.setDimmer("0");
+                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+
+                            }
+                            if(!status.isEmpty()&&status!=null&&action.equals("25")) {
+
+                                remoteViews.setViewVisibility(R.id.uibulb2, View.VISIBLE);
+
+                                // remoteViews.setTextViewText(R.id.uibulb1,"0");
+                                prefManager.setDimmer("25");
                                 appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("50")) {
 
-                                remoteViews.setTextViewText(R.id.btna,"100");
-                                prefManager.setDimmer("100");
+                                remoteViews.setViewVisibility(R.id.uibulb3, View.VISIBLE);
+
+
+                                // remoteViews.setTextViewText(R.id.uibulb1,"0");
+                                prefManager.setDimmer("50");
                                 appWidgetManager.updateAppWidget(wigetID,remoteViews);
+
+                            }
+                            if(!status.isEmpty()&&status!=null&&action.equals("75")) {
+
+                                remoteViews.setViewVisibility(R.id.uibulb4, View.VISIBLE);
+
+                                // remoteViews.setTextViewText(R.id.uibulb1,"0");
+                                prefManager.setDimmer("75");
+                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("100")) {
 
-                                remoteViews.setTextViewText(R.id.btna,"0");
-                                prefManager.setDimmer("0");
+                                remoteViews.setViewVisibility(R.id.uibulb5, View.VISIBLE);
+
+                                // remoteViews.setTextViewText(R.id.uibulb1,"0");
+                                prefManager.setDimmer("100");
                                 appWidgetManager.updateAppWidget(wigetID,remoteViews);
+
+
                             }
 
                             if(!error.isEmpty()&&error!=null)
