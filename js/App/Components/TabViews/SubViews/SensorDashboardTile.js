@@ -205,25 +205,31 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
 			}
 			if (name === 'watt') {
-				let label = this.labelEnergy;
+				let label = this.labelEnergy, labelWatt = this.labelEnergy;
 				if (scale === '0') {
 					label = isLarge ? `${this.labelAccumulated} ${this.labelWatt}` :
 						`${this.labelAcc} ${this.labelWatt}`;
+					labelWatt = `${this.labelAccumulated} ${this.labelWatt}`;
 				}
 				if (scale === '2') {
 					label = this.labelWatt;
+					labelWatt = this.labelWatt;
 				}
 				if (scale === '3') {
 					label = this.labelPulse;
+					labelWatt = this.labelPulse;
 				}
 				if (scale === '4') {
 					label = this.labelVoltage;
+					labelWatt = this.labelVoltage;
 				}
 				if (scale === '5') {
 					label = this.labelCurrent;
+					labelWatt = this.labelCurrent;
 				}
 				if (scale === '6') {
 					label = this.labelPowerFactor;
+					labelWatt = this.labelPowerFactor;
 				}
 				slideList.push({
 					key: `watt${key}`,
@@ -233,7 +239,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${this.labelWatt} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
 			}
 			if (name === 'luminance') {
 				slideList.push({
@@ -350,7 +356,9 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 						width: tileWidth,
 						height: tileWidth * 0.4,
 						flexDirection: 'row',
-					}}>
+					}}
+					accessible={false}
+					importantForAccessibility="no-hide-descendants">
 					<View style={[styles.body, {
 						width: tileWidth,
 						height: tileWidth * 0.4,
