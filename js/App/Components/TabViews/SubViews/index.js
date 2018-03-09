@@ -24,9 +24,7 @@ import ToggleDashboardTile from './ToggleDashboardTile';
 import SensorDashboardTile from './SensorDashboardTile';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DeviceRow from './DeviceRow';
-import DeviceRowHidden from './DeviceRowHidden';
 import SensorRow from './SensorRow';
-import SensorRowHidden from './SensorRowHidden';
 import GatewayRow from './GatewayRow';
 import DashboardShadowTile from './DashboardShadowTile';
 import BellDashboardTile from './BellDashboardTile';
@@ -50,13 +48,11 @@ import JobsPoster from './JobsPoster';
 
 module.exports = {
 	DeviceRow: DeviceRow,
-	DeviceRowHidden: DeviceRowHidden,
 	ToggleDashboardTile: ToggleDashboardTile,
 	DeviceHeader: DeviceHeader,
 	SensorDashboardTile: SensorDashboardTile,
 	SensorDashboardTileSlide: SensorDashboardTileSlide,
 	SensorRow: SensorRow,
-	SensorRowHidden: SensorRowHidden,
 	DashboardShadowTile: DashboardShadowTile,
 	BellDashboardTile: BellDashboardTile,
 	GenericDashboardTile: GenericDashboardTile,
