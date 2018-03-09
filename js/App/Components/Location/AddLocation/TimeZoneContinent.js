@@ -42,10 +42,10 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
-}
+};
 
 class TimeZoneContinent extends View {
-	onContinentChoose:(string) => void;
+	onContinentChoose: (string) => void;
 
 	props: Props;
 
@@ -90,7 +90,7 @@ class TimeZoneContinent extends View {
 			clientInfo.timezone = continent;
 			this.props.navigation.navigate('Position', {clientInfo});
 		} else {
-			let data = differenceWith(timeZone, [continent], (v1, v2) => {
+			let data = differenceWith(timeZone, [continent], (v1: string, v2: string): boolean => {
 				let items = v1.split('/');
 				let flag = items[0] === v2 ? false : true;
 				return flag;

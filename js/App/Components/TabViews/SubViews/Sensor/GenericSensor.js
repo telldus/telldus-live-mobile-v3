@@ -35,9 +35,9 @@ type sensorProps = {
 	label?: string,
 	isLarge: boolean,
 	formatOptions?: Object,
-}
+};
 
-const GenericSensor = ({ name, value, unit, icon, label, isLarge, formatOptions }: sensorProps) => (
+const GenericSensor = ({ name, value, unit, icon, label, isLarge, formatOptions }: sensorProps): Object => (
 	<View style={Theme.Styles.sensorValue}>
 		{!isLarge && (<IconTelldus icon={icon} style={Theme.Styles.sensorIcon}/>)}
 		<View style={Theme.Styles.sensorValueCover}>

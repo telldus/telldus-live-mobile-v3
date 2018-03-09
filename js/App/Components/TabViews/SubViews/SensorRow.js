@@ -58,7 +58,7 @@ type Props = {
 type State = {
 	currentIndex: number,
 	isOpen: boolean,
-}
+};
 
 class SensorRow extends PureComponent<Props, State> {
 	props: Props;
@@ -217,7 +217,7 @@ class SensorRow extends PureComponent<Props, State> {
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
 				let direction = '', label = name === 'wgust' ? this.labelWindGust : this.labelWindAverage;
 				if (name === 'wdir') {
-					const getWindDirection = sValue => directions[Math.floor(sValue / 22.5)];
+					const getWindDirection = (sValue: number): string => directions[Math.floor(sValue / 22.5)];
 					direction = [...getWindDirection(value)].toString();
 					value = getWindDirection(value);
 					label = this.labelWindDirection;
@@ -297,7 +297,7 @@ class SensorRow extends PureComponent<Props, State> {
 		return {sensors, sensorInfo};
 	}
 
-	render() {
+	render(): Object {
 		const { sensor, currentTab, currentScreen, appLayout, isGatewayActive, intl } = this.props;
 		const styles = this.getStyles(appLayout, isGatewayActive);
 		const {

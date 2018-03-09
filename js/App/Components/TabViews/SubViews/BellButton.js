@@ -59,7 +59,7 @@ class BellButton extends View {
 		this.props.requestDeviceAction(this.props.device.id, this.props.command);
 	}
 
-	render() {
+	render(): Object {
 		let { device, isGatewayActive } = this.props;
 		let { methodRequested, name } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) =>{
 			dispatch(deviceSetState(id, command, value));

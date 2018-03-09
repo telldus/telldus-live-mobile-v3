@@ -120,9 +120,9 @@ class DashboardTab extends View {
 	onRefresh: () => void;
 	_renderRow: (number) => Object;
 
-	static navigationOptions = ({navigation, screenProps}) => ({
+	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.dashboard),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'dashboard'),
+		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'dashboard'),
 	});
 
 	constructor(props: Props) {
@@ -169,11 +169,11 @@ class DashboardTab extends View {
 		this.startSensorTimer();
 	}
 
-	rowHasChanged(r1, r2) {
+	rowHasChanged(r1: Object, r2: Object): boolean {
 		return r1.childObject !== r2.childObject;
 	}
 
-	setScrollEnabled(enable) {
+	setScrollEnabled(enable: boolean) {
 		if (this.refs.list && this.refs.list.setScrollEnabled) {
 			this.refs.list.setScrollEnabled(enable);
 		}
@@ -208,7 +208,7 @@ class DashboardTab extends View {
 		this.stopSensorTimer();
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		this.setState({
 			dataSource: nextProps.rows,
 		});
@@ -223,11 +223,11 @@ class DashboardTab extends View {
 		}
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.screenProps.currentTab === 'Dashboard';
 	}
 
-	_onLayout = (event) => {
+	_onLayout = (event: Object) => {
 		const { tileWidth, numColumns } = this.calculateTileWidth(event.nativeEvent.layout.width);
 		if (tileWidth !== this.state.tileWidth) {
 			this.setState({
@@ -250,7 +250,7 @@ class DashboardTab extends View {
 		return { tileWidth, numColumns: tilesPerRow };
 	}
 
-	noItemsMessage(style: Object) {
+	noItemsMessage(style: Object): Object {
 		return (
 			<View style={style.container}>
 				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
@@ -265,7 +265,7 @@ class DashboardTab extends View {
 		);
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, dashboard } = this.props;
 		let { dataSource, isRefreshing, numColumns, tileWidth } = this.state;
 
@@ -427,11 +427,11 @@ DashboardTab.propTypes = {
 
 const getRows = createSelector(
 	[
-		({ dashboard }) => dashboard,
-		({ devices }) => devices,
-		({ sensors }) => sensors,
+		({ dashboard }: Object): Object => dashboard,
+		({ devices }: Object): Object => devices,
+		({ sensors }: Object): Object => sensors,
 	],
-	(dashboard, devices, sensors) => parseDashboardForListView(dashboard, devices, sensors)
+	(dashboard: Object, devices: Object, sensors: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
@@ -446,9 +446,11 @@ function mapStateToProps(state: Object, props: Object): Object {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onChangeDisplayType: () => dispatch(changeSensorDisplayType()),
+		onChangeDisplayType: () => {
+			dispatch(changeSensorDisplayType());
+		},
 		dispatch,
 	};
 }

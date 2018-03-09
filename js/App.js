@@ -17,7 +17,7 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
+// @flow
 'use strict';
 
 import React from 'react';
@@ -42,7 +42,17 @@ import {
 import Theme from './App/Theme';
 const changeLogVersion = '3.5';
 
-class App extends React.Component {
+type Props = {
+	dispatch: Function,
+	isTokenValid: boolean,
+	accessToken: string,
+	pushTokenRegistered: boolean,
+	prevChangeLogVersion: string,
+};
+
+class App extends React.Component<Props, null> {
+	props: Props;
+
 	onLayout: (Object) => void;
 
 	constructor() {
@@ -54,7 +64,7 @@ class App extends React.Component {
 		let { dispatch } = this.props;
 
 		this.pushConf();
-		AccessibilityInfo.fetch().done((isEnabled) => {
+		AccessibilityInfo.fetch().done((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
 		});
@@ -91,8 +101,9 @@ class App extends React.Component {
 		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
 	}
 
-	render() {
-		let showChangeLog = changeLogVersion !== this.props.prevChangeLogVersion;
+	render(): Object {
+		let { prevChangeLogVersion, accessToken, isTokenValid } = this.props;
+		let showChangeLog = changeLogVersion !== prevChangeLogVersion;
 		if (showChangeLog) {
 			return (
 				<View onLayout={this.onLayout}>
@@ -100,7 +111,7 @@ class App extends React.Component {
 				</View>
 			);
 		}
-		let hasNotLoggedIn = ((!this.props.accessToken) || (this.props.accessToken && !this.props.isTokenValid));
+		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 		return (
 			<View onLayout={this.onLayout}>
 				{hasNotLoggedIn ?
@@ -113,7 +124,7 @@ class App extends React.Component {
 	}
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		accessToken: store.user.accessToken,
 		pushToken: store.user.pushToken,
@@ -123,7 +134,7 @@ function mapStateToProps(store) {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};

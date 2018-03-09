@@ -53,7 +53,7 @@ export const registerPushToken = (token: string, name: string, model: string, ma
 			method: 'GET',
 		},
 	};
-	return LiveApi(payload).then((response: Object) => {
+	return LiveApi(payload).then((response: Object): any => {
 		if ((!response.error) && (response.status === 'success')) {
 			dispatch({
 				type: 'PUSH_TOKEN_REGISTERED',
@@ -66,7 +66,7 @@ export const registerPushToken = (token: string, name: string, model: string, ma
 			return response;
 		}
 		throw response;
-	}).catch(e => {
+	}).catch((e: Object) => {
 		let log = JSON.stringify(e);
 		reportError(log);
 		if (e === 'TypeError: Network request failed') {
@@ -137,7 +137,7 @@ export const RegisterUser = (email: string, firstName: string, lastName: string)
 		}
 	)
 		.then((response: Object): Object => response.json())
-		.then((responseData: Object) => {
+		.then((responseData: Object): any => {
 			if (responseData.error) {
 				throw responseData;
 			}
@@ -147,7 +147,7 @@ export const RegisterUser = (email: string, firstName: string, lastName: string)
 				accessToken: responseData,
 			});
 			return responseData;
-		}).catch(e => {
+		}).catch((e: Object): any => {
 			Answers.logSignUp('Email', false);
 			throw e;
 		});

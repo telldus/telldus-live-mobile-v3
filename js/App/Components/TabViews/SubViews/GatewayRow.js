@@ -47,7 +47,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 	onPressGateway: () => void;
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.onPressGateway = this.onPressGateway.bind(this);
@@ -58,7 +58,7 @@ class GatewayRow extends PureComponent<Props, State> {
 		this.props.stackNavigator.navigate('LocationDetails', {location, renderRootHeader: true});
 	}
 
-	getLocationStatus(online, websocketOnline) {
+	getLocationStatus(online: boolean, websocketOnline: boolean): Object {
 		return (
 			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} />
 		);
@@ -99,7 +99,7 @@ class GatewayRow extends PureComponent<Props, State> {
 		);
 	}
 
-	getStyles(appLayout: Object) :Object {
+	getStyles(appLayout: Object): Object {
 		return {
 			rowItemsCover: {
 				flexDirection: 'column',
@@ -118,7 +118,7 @@ class GatewayRow extends PureComponent<Props, State> {
 	}
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		appLayout: state.App.layout,
 	};

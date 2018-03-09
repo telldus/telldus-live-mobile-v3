@@ -114,7 +114,7 @@ class Name extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, dialogueOpen, currentScreen, isLoading } = this.props;
 		const styles = this.getStyle(appLayout);
 

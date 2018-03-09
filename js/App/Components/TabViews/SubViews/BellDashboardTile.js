@@ -50,7 +50,7 @@ type Props = {
 
 type DefaultProps = {
 	command: number,
-}
+};
 
 class BellDashboardTile extends PureComponent<Props, null> {
 	props: Props;
@@ -77,7 +77,7 @@ class BellDashboardTile extends PureComponent<Props, null> {
 		this.props.requestDeviceAction(this.props.item.id, this.props.command);
 	}
 
-	render() {
+	render(): Object {
 		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
 		const { methodRequested, name } = this.props.item;
 
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) =>{
 			dispatch(deviceSetState(id, command, value));

@@ -220,7 +220,7 @@ class ChangeLogNavigator extends View {
 	}
 
 
-	render() {
+	render(): Object {
 		let { currentScreen } = this.state;
 		let { appLayout, intl } = this.props;
 		let { width } = appLayout;
@@ -267,7 +267,7 @@ class ChangeLogNavigator extends View {
 							buttonStyle={floatingButtonLeft}
 							iconStyle={styles.buttonIconStyle}/>
 						)}
-						{Screens.map((screen, index) => {
+						{Screens.map((screen: string, index: number): Object => {
 							let backgroundColor = Screens[index] === currentScreen ?
 								Theme.Core.brandSecondary : '#00000080';
 							return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
@@ -283,7 +283,7 @@ class ChangeLogNavigator extends View {
 		);
 	}
 
-	getStyles(appLayout: Object) {
+	getStyles(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -352,7 +352,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		appLayout: state.App.layout,
 		screenReaderEnabled: state.App.screenReaderEnabled,

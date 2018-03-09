@@ -64,7 +64,7 @@ const loginToTelldus = (username: string, password: string): ThunkAction => (dis
 		});
 };
 
-function updateAccessToken(accessToken:Object): Action {
+function updateAccessToken(accessToken: Object): Action {
 	return {
 		type: 'RECEIVED_ACCESS_TOKEN',
 		accessToken: accessToken,

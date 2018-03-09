@@ -37,7 +37,7 @@ import Theme from '../../../Theme';
 type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
-}
+};
 
 class ForgotPasswordForm extends View {
 
@@ -64,7 +64,7 @@ class ForgotPasswordForm extends View {
 		});
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		return (
 			<View>

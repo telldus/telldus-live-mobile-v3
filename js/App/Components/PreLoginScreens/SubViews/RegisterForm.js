@@ -74,7 +74,7 @@ type Props = {
 	validationMessageHeader: string,
 	appLayout: Object,
 	dialogueOpen: boolean,
-}
+};
 
 class RegisterForm extends View {
 
@@ -154,10 +154,10 @@ class RegisterForm extends View {
 						isLoading: true,
 					});
 					onFormSubmit(em, fn, ln, this.postSubmit)
-						.then(response => {
+						.then((response: Object) => {
 							this.postSubmit();
 						})
-						.catch(err => {
+						.catch((err: Object) => {
 							this.postSubmit();
 							this.handleRegisterError(err);
 						});
@@ -196,7 +196,7 @@ class RegisterForm extends View {
 		return emailValid;
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, dialogueOpen } = this.props;
 		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
 		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
@@ -274,7 +274,7 @@ class RegisterForm extends View {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onFormSubmit: (email: string, firstName: string, LastName: string) => {
+		onFormSubmit: (email: string, firstName: string, LastName: string): Promise<any> => {
 			return dispatch(RegisterUser(email, firstName, LastName));
 		},
 		dispatch,

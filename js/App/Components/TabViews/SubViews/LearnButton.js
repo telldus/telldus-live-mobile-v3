@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
@@ -27,7 +28,7 @@ import { deviceSetState } from '../../../Actions/Devices';
 import i18n from '../../../Translations/common';
 
 class LearnButton extends View {
-	render() {
+	render(): Object {
 		return (
 			<TouchableButton
 				style={this.props.style}
@@ -42,9 +43,11 @@ LearnButton.defaultProps = {
 	command: 32,
 };
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onLearn: (id, command) => () => dispatch(deviceSetState(id, command)),
+		onLearn: (id: number, command: number) => {
+			dispatch(deviceSetState(id, command));
+		},
 	};
 }
 

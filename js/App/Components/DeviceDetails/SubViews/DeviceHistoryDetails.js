@@ -45,8 +45,16 @@ const messages = defineMessages({
 	},
 });
 
+type Props = {
+	detailsData: Object,
+	appLayout: Object,
+	currentScreen: string,
+	currentTab: string,
+	intl: Object,
+};
+
 class DeviceHistoryDetails extends View {
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		let { formatMessage } = props.intl;
@@ -55,7 +63,7 @@ class DeviceHistoryDetails extends View {
 		this.labelAnnouncementOnClose = `${formatMessage(i18n.announcementOnModalClose)}.`;
 	}
 
-	getPercentage(value: number) {
+	getPercentage(value: number): number {
 		return Math.round(value * 100.0 / 255);
 	}
 
@@ -68,7 +76,7 @@ class DeviceHistoryDetails extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		let { detailsData, appLayout, currentScreen, currentTab } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
@@ -347,7 +355,7 @@ class DeviceHistoryDetails extends View {
 	}
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: Object): Object {
 	return {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,

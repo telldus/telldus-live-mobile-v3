@@ -25,11 +25,11 @@
 import _ from 'lodash';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
-	let result = _.groupBy(paramOne, items => {
+	let result = _.groupBy(paramOne, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];
 		return gateway && gateway.name;
 	});
-	result = _.reduce(result, (acc, next, index) => {
+	result = _.reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
 		acc.push({
 			key: index,
 			data: next,
@@ -41,7 +41,7 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 
 export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
 	let sortedList = _.sortBy(devices, 'name');
-	let [hidden, visible] = _.partition(sortedList, (device) => {
+	let [hidden, visible] = _.partition(sortedList, (device: Object): Object => {
 		return device.ignored;
 	});
 	let visibleList = [], hiddenList = [];

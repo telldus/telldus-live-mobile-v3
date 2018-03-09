@@ -124,7 +124,7 @@ class TabsView extends View {
 		};
 	}
 
-	onNavigationStateChange = (prevState, newState) => {
+	onNavigationStateChange = (prevState: Object, newState: Object) => {
 		const index = newState.index;
 
 		const tab = {
@@ -149,7 +149,7 @@ class TabsView extends View {
 		this.props.onToggleEditMode(tab);
 	};
 
-	render() {
+	render(): Object {
 		const { routeName } = this.state.tab;
 		let { currentScreen } = this.props.screenProps;
 
@@ -188,13 +188,15 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onTabSelect: (tab) => {
+		onTabSelect: (tab: string) => {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
 		},
-		onToggleEditMode: (tab) => dispatch(toggleEditMode(tab)),
+		onToggleEditMode: (tab: string) => {
+			dispatch(toggleEditMode(tab));
+		},
 		dispatch,
 	};
 }

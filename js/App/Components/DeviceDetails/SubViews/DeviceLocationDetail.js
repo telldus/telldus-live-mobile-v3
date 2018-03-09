@@ -29,9 +29,9 @@ import Theme from '../../../Theme';
 
 type Props = {
 	title?: any,
-	image: String,
-	H1: String,
-	H2: String,
+	image: string,
+	H1: string,
+	H2: string,
 	style: any,
 	onPress?: Function,
 	appLayout: Object,
@@ -66,7 +66,7 @@ class DeviceLocationDetail extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 
 		let { title, H1, H2, image, style, appLayout, accessible, info } = this.props;
 

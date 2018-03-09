@@ -67,9 +67,9 @@ class SensorsTab extends View {
 	toggleHiddenList: () => void;
 	setIgnoreSensor: (Object) => void;
 
-	static navigationOptions = ({navigation, screenProps}) => ({
+	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'sensors'),
+		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'sensors'),
 	});
 
 	constructor(props: Props) {
@@ -104,7 +104,7 @@ class SensorsTab extends View {
 		this.showHidden = `${formatMessage(i18n.show)} ${hiddenSensors}`;
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 
 		let { makeRowAccessible } = this.state;
 		let { screenReaderEnabled, rowsAndSections } = nextProps;
@@ -124,7 +124,7 @@ class SensorsTab extends View {
 		});
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.tab === 'sensorsTab';
 	}
 
@@ -144,7 +144,7 @@ class SensorsTab extends View {
 			});
 	}
 
-	keyExtractor(item) {
+	keyExtractor(item: Object): string {
 		return item.id;
 	}
 
@@ -156,7 +156,7 @@ class SensorsTab extends View {
 
 	setIgnoreSensor(sensor: Object) {
 		let ignore = sensor.ignored ? 0 : 1;
-		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res) => {
+		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
 			let message = sensor.ignored ?
 				this.removedFromHiddenList : this.addedToHiddenList;
 			let payload = {
@@ -164,7 +164,7 @@ class SensorsTab extends View {
 			};
 			this.props.dispatch(showGlobalError(payload));
 			this.props.dispatch(getSensors());
-		}).catch(err => {
+		}).catch((err: Object) => {
 			let payload = {
 				customMessage: err.message ? err.message : null,
 			};
@@ -172,7 +172,7 @@ class SensorsTab extends View {
 		});
 	}
 
-	toggleHiddenListButton(style): Object {
+	toggleHiddenListButton(style: Object): Object {
 		return (
 			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
 				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}/>
@@ -187,7 +187,7 @@ class SensorsTab extends View {
 		);
 	}
 
-	render() {
+	render(): Object {
 
 		let { appLayout } = this.props;
 		let { showHiddenList, hiddenList, visibleList, isRefreshing } = this.state;
@@ -231,7 +231,7 @@ class SensorsTab extends View {
 		);
 	}
 
-	renderSectionHeader(sectionData) {
+	renderSectionHeader(sectionData: Object): Object {
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.key}
@@ -239,7 +239,7 @@ class SensorsTab extends View {
 		);
 	}
 
-	renderRow(row) {
+	renderRow(row: Object): Object {
 		let { screenProps, gatewaysById } = this.props;
 		let { intl, currentTab, currentScreen } = screenProps;
 		let isGatewayActive = gatewaysById[row.item.clientId].online;
@@ -256,7 +256,7 @@ class SensorsTab extends View {
 		);
 	}
 
-	renderHiddenRow(row) {
+	renderHiddenRow(row: Object): Object {
 		let { screenProps } = this.props;
 
 		return (
@@ -298,15 +298,15 @@ class SensorsTab extends View {
 
 const getRowsAndSections = createSelector(
 	[
-		({ sensors }) => sensors.byId,
-		({ gateways }) => gateways.byId,
+		({ sensors }: Object): Object => sensors.byId,
+		({ gateways }: Object): Object => gateways.byId,
 	],
-	(sensors, gateways) => {
+	(sensors: Object, gateways: Object): Object => {
 		return parseSensorsForListView(sensors, gateways);
 	}
 );
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		gatewaysById: store.gateways.byId,
@@ -315,7 +315,7 @@ function mapStateToProps(store) {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};

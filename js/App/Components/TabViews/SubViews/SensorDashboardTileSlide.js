@@ -35,7 +35,7 @@ type Props = {
 class SensorDashboardTileSlide extends View {
 	props: Props;
 
-	render() {
+	render(): Object {
 		let { data, tileWidth, isGatewayActive } = this.props;
 		let containerStyle = isGatewayActive ? {backgroundColor: Theme.Core.brandPrimary} : {backgroundColor: Theme.Core.offlineColor};
 

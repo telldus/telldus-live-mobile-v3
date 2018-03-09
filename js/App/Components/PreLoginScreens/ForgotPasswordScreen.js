@@ -42,7 +42,7 @@ type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
 	appLayout: Object,
-}
+};
 
 class ForgotPasswordScreen extends View {
 
@@ -73,7 +73,7 @@ class ForgotPasswordScreen extends View {
 		this.props.navigation.navigate('Login');
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		let styles = this.getStyles(appLayout);
 
@@ -107,7 +107,7 @@ class ForgotPasswordScreen extends View {
 	}
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		appLayout: store.App.layout,
 	};

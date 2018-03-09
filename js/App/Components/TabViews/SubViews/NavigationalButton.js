@@ -46,7 +46,7 @@ class NavigationalButton extends View {
 		super(props);
 	}
 
-	render() {
+	render(): Object {
 
 		let { device, isGatewayActive, intl, style } = this.props;
 		const { supportedMethods, methodRequested, isInState, id, name } = device;

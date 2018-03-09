@@ -108,14 +108,14 @@ class LoginScreen extends View {
 		});
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
 			return false;
 		}
 		return true;
 	}
 
-	getRelativeData() {
+	getRelativeData(): Object {
 		let headerText = this.props.intl.formatMessage(i18n.login), notificationHeader = false,
 			positiveText = false, onPressPositive = this.closeModal, onPressNegative = false,
 			showNegative = false, showPositive = true;
@@ -138,7 +138,7 @@ class LoginScreen extends View {
 		};
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		let styles = this.getStyles(appLayout);
 
@@ -213,7 +213,7 @@ class LoginScreen extends View {
 	}
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		tab: store.navigation.tab,
 		accessToken: store.user.accessToken,
@@ -224,7 +224,7 @@ function mapStateToProps(store) {
 	};
 }
 
-function dispatchToProps(dispatch) {
+function dispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};

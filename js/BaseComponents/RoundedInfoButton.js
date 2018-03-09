@@ -57,7 +57,7 @@ class RoundedInfoButton extends Component<Props, null> {
 		}
 	}
 
-	render() {
+	render(): Object {
 		let infoButtonContainerStyle = {}, infoButtonStyle = {};
 		if (this.props.buttonProps && this.props.buttonProps.infoButtonContainerStyle) {
 			infoButtonContainerStyle = this.props.buttonProps.infoButtonContainerStyle;

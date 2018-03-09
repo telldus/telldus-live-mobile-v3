@@ -75,13 +75,13 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
-}
+};
 
 type State = {
 	timeZone: string,
 	autoDetected: boolean,
 	isLoading: boolean,
-}
+};
 
 class TimeZone extends View<void, Props, State> {
 
@@ -154,12 +154,12 @@ class TimeZone extends View<void, Props, State> {
 			});
 			clientInfo.coordinates = {};
 			actions.activateGateway(clientInfo)
-				.then(response => {
+				.then((response: Object) => {
 					this.props.navigation.navigate('Success', {clientInfo});
 					this.setState({
 						isLoading: false,
 					});
-				}).catch(error => {
+				}).catch((error: Object) => {
 					this.setState({
 						isLoading: false,
 					});
@@ -176,7 +176,7 @@ class TimeZone extends View<void, Props, State> {
 		this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		const styles = this.getStyle(appLayout);
 

@@ -39,28 +39,29 @@ import EditGeoPosition from './EditGeoPosition';
 import { getRouteName } from '../../../Lib';
 const initialRouteName = 'Details';
 
-const renderLocationDetailsContainer = (navigation, screenProps) => Component => (
+type renderContainer = (Object) => Object;
+
+const renderLocationDetailsContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
 	<LocationDetailsContainer navigation={navigation} screenProps={screenProps}>
 		<Component/>
 	</LocationDetailsContainer>
 );
 
-
 const RouteConfigs = {
 	Details: {
-		screen: ({ navigation, screenProps }) => renderLocationDetailsContainer(navigation, screenProps)(Details),
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(Details),
 	},
 	EditName: {
-		screen: ({ navigation, screenProps }) => renderLocationDetailsContainer(navigation, screenProps)(EditName),
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditName),
 	},
 	EditTimeZoneContinent: {
-		screen: ({ navigation, screenProps }) => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneContinent),
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneContinent),
 	},
 	EditTimeZoneCity: {
-		screen: ({ navigation, screenProps }) => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneCity),
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneCity),
 	},
 	EditGeoPosition: {
-		screen: ({ navigation, screenProps }) => renderLocationDetailsContainer(navigation, screenProps)(EditGeoPosition),
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditGeoPosition),
 	},
 };
 
@@ -68,7 +69,7 @@ const StackNavigatorConfig = {
 	initialRouteName,
 	headerMode: 'float',
 	initialRouteParams: {renderHeader: false},
-	navigationOptions: ({navigation}) => {
+	navigationOptions: ({navigation}: Object): Object => {
 		let {state} = navigation;
 		let renderStackHeader = state.routeName !== 'Details';
 		if (renderStackHeader) {
@@ -129,7 +130,7 @@ class LocationDetailsNavigator extends View {
 	}
 
 
-	render() {
+	render(): Object {
 
 		let { currentScreen } = this.state;
 		let { appLayout, navigation, screenReaderEnabled } = this.props;
@@ -152,7 +153,7 @@ class LocationDetailsNavigator extends View {
 	}
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		appLayout: state.App.layout,
 		screenReaderEnabled: state.App.screenReaderEnabled,

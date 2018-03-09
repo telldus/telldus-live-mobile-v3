@@ -27,7 +27,7 @@ import { View, Text, BlockIcon } from '../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
 import Theme from '../../../Theme';
 
-const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive }: Object) => (
+const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive }: Object): Object => (
 	<View style={[styles.title, {
 		width: tileWidth,
 		height: tileWidth * 0.6,
@@ -63,7 +63,7 @@ type Props = {
 	hasShadow: boolean,
 	style: Object,
 	children: Object,
-	type: String,
+	type: string,
 	item: string,
 	intl: Object,
 	accessibilityLabel: string,
@@ -73,7 +73,7 @@ type Props = {
 class DashboardShadowTile extends View {
 	props: Props;
 
-	render() {
+	render(): Object {
 		let { accessibilityLabel } = this.props;
 
 		return (

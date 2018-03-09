@@ -107,7 +107,7 @@ class SensorHiddenRow extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		const { sensorIds, sensor, isOpen } = this.props;
 		const { id, ignored } = sensor;
 		const isOnDB = sensorIds.indexOf(id) !== -1;
@@ -141,10 +141,10 @@ class SensorHiddenRow extends View {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		addToDashboard: id => dispatch(addToDashboard('sensor', id)),
-		removeFromDashboard: id => dispatch(removeFromDashboard('sensor', id)),
+		addToDashboard: (id: number): any => dispatch(addToDashboard('sensor', id)),
+		removeFromDashboard: (id: number): any => dispatch(removeFromDashboard('sensor', id)),
 	};
 }
 

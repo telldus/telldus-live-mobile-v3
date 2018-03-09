@@ -74,9 +74,9 @@ class GatewaysTab extends View {
 	onRefresh: () => void;
 	addLocation: () => void;
 
-	static navigationOptions = ({navigation, screenProps}) => ({
+	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(messages.gateways),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'gateways'),
+		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'gateways'),
 	});
 
 	constructor(props: Props) {
@@ -99,7 +99,7 @@ class GatewaysTab extends View {
 		this.addLocation = this.addLocation.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		this.setState({
 			dataSource: nextProps.rows,
 		});
@@ -116,7 +116,7 @@ class GatewaysTab extends View {
 		);
 	}
 
-	keyExtractor(item: Object) {
+	keyExtractor(item: Object): string {
 		return item.id;
 	}
 
@@ -125,12 +125,12 @@ class GatewaysTab extends View {
 			isLoading: true,
 		});
 		this.props.addNewLocation()
-			.then(response => {
+			.then((response: Object) => {
 				this.props.screenProps.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
 				this.setState({
 					isLoading: false,
 				});
-			}).catch(error => {
+			}).catch((error: Object) => {
 				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
 				this.setState({
 					isLoading: false,
@@ -145,7 +145,7 @@ class GatewaysTab extends View {
 			});
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<View style={{flex: 1}}>
 				<FlatList
@@ -167,20 +167,20 @@ class GatewaysTab extends View {
 
 const getRows = createSelector(
 	[
-		({ gateways }) => gateways,
+		({ gateways }: Object): Object => gateways,
 	],
-	(gateways) => parseGatewaysForListView(gateways)
+	(gateways: Object): Array<any> => parseGatewaysForListView(gateways)
 );
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		addNewLocation: () => {
+		addNewLocation: (): any => {
 			return dispatch(addNewGateway());
 		},
 		dispatch,

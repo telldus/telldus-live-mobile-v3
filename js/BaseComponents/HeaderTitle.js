@@ -32,11 +32,11 @@ type Props = {
 };
 
 class HeaderTitle extends Component<Props, null> {
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		return (
 			<Image style={appLayout.height > appLayout.width ? styles.port : styles.land} resizeMode={'contain'} source={require('../App/Components/TabViews/img/telldus-logo.png')}/>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(store: Object) {
+function mapStateToProps(store: Object): Object {
 	return {
 		appLayout: store.App.layout,
 	};

@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @flow
+ *
  */
+
+// @flow
 
 'use strict';
 import React from 'React';
@@ -62,7 +64,7 @@ class NavigationHeader extends View {
 		this.props.navigation.goBack(null);
 	}
 
-	getLeftIcon() {
+	getLeftIcon(): Object {
 		let { appLayout } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
@@ -73,7 +75,7 @@ class NavigationHeader extends View {
 		);
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, showLeftIcon } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;

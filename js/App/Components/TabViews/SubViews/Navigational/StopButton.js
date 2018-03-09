@@ -65,7 +65,7 @@ class StopButton extends View {
 		this.props.deviceSetState(this.props.id, this.props.commandStop);
 	}
 
-	render() {
+	render(): Object {
 		const noop = function () {
 		};
 
@@ -135,10 +135,10 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		deviceSetState: (id: number, command: number, value?: number): any => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number): any => dispatch(requestDeviceAction(id, command)),
 	};
 }
 

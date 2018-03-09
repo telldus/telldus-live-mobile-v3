@@ -32,10 +32,10 @@ type Props = {
 	item: string,
 	onPress: Function,
 	appLayout: Object,
-}
+};
 
 export default class ListRow extends View {
-	onPress:() => void;
+	onPress: () => void;
 
 	props: Props;
 	constructor(props: Props) {
@@ -50,7 +50,7 @@ export default class ListRow extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		const styles = this.getStyle(appLayout);
 

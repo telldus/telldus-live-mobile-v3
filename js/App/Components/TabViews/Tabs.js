@@ -132,7 +132,7 @@ export default class Tabs extends View {
 		return {};
 	}
 
-	render() {
+	render(): Object {
 		let { tab, screenProps, appLayout } = this.props;
 		let {label, accessibilityLabel} = this.getLabel(tab.routeName);
 

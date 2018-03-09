@@ -43,7 +43,9 @@ import { getRouteName } from '../../../Lib';
 
 const initialRouteName = 'LocationDetected';
 
-const renderAddLocationContainer = (navigation, screenProps) => Component => (
+type renderContainer = (Object) => Object;
+
+const renderAddLocationContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
 	<AddLocationContainer navigation={navigation} screenProps={screenProps}>
 		<Component/>
 	</AddLocationContainer>
@@ -52,28 +54,28 @@ const renderAddLocationContainer = (navigation, screenProps) => Component => (
 
 const RouteConfigs = {
 	LocationDetected: {
-		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(LocationDetected),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationDetected),
 	},
 	LocationActivationManual: {
-		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(LocationActivationManual),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationActivationManual),
 	},
 	LocationName: {
-		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(LocationName),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationName),
 	},
 	TimeZoneContinent: {
-		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(TimeZoneContinent),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZoneContinent),
 	},
 	TimeZoneCity: {
-		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(TimeZoneCity),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZoneCity),
 	},
 	TimeZone: {
-		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(TimeZone),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZone),
 	},
 	Position: {
-		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(Position),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(Position),
 	},
 	Success: {
-		screen: ({ navigation, screenProps }) => renderAddLocationContainer(navigation, screenProps)(Success),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(Success),
 	},
 };
 
@@ -81,7 +83,7 @@ const StackNavigatorConfig = {
 	initialRouteName,
 	headerMode: 'float',
 	initialRouteParams: {renderHeader: false},
-	navigationOptions: ({navigation}) => {
+	navigationOptions: ({navigation}: Object): Object => {
 		let {state} = navigation;
 		let renderStackHeader = state.routeName !== 'LocationDetected';
 		if (renderStackHeader) {
@@ -142,7 +144,7 @@ class AddLocationNavigator extends View {
 	}
 
 
-	render() {
+	render(): Object {
 
 		let { currentScreen } = this.state;
 		let { appLayout, navigation, screenReaderEnabled } = this.props;
@@ -165,7 +167,7 @@ class AddLocationNavigator extends View {
 	}
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		appLayout: state.App.layout,
 		screenReaderEnabled: state.App.screenReaderEnabled,

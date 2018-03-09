@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
@@ -28,8 +29,30 @@ import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
+type Props = {
+	isInState: string,
+	style: Object | number | Array<any>,
+	methodRequested: string,
+	name: string,
+	isGatewayActive: boolean,
+	enabled: boolean,
+	onPress: () => void;
+	intl: Object,
+};
+
+type State = {
+	fadeAnim: Object,
+};
+
 class DimmerOnButton extends View {
-	constructor(props) {
+	props: Props;
+	state: State;
+
+	onPress: () => void;
+	fadeIn: () => void;
+	fadeOut: () => void;
+
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			fadeAnim: new Animated.Value(1),
@@ -49,7 +72,7 @@ class DimmerOnButton extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		let { isInState, style, methodRequested, name, isGatewayActive, enabled } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?

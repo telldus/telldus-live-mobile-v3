@@ -40,18 +40,18 @@ export default class TelldusLocalStorage {
 	}
 
 	loadDatabase = (): Promise<any> => {
-		return SQLite.openDatabase(databaseName, databaseVersion, databaseDisplayName, databaseSize).then((DB) => {
+		return SQLite.openDatabase(databaseName, databaseVersion, databaseDisplayName, databaseSize).then((DB: Object): Object => {
 			db = DB;
 			return DB;
-		}).catch((error) => {
+		}).catch((error: Object) => {
 			throw error;
 		});
 	}
 
 	storeDeviceHistory(data: Object): Promise<any> {
-		return this.loadDatabase().then(DB => {
+		return this.loadDatabase().then((DB: Object): Promise<any> => {
 			return this.populateDataDeviceHistory(data);
-		}).catch(error => {
+		}).catch((error: Object) => {
 			throw error;
 		});
 	}
@@ -111,22 +111,22 @@ export default class TelldusLocalStorage {
 	}
 
 	getDeviceHistory(id: number): Promise<any> {
-		return this.loadDatabase().then(DB => {
+		return this.loadDatabase().then((DB: Object): Promise<any> => {
 			return this.queryDeviceHistory(id);
-		}).catch(error => {
+		}).catch((error: Object) => {
 			throw error;
 		});
 	}
 
 	queryDeviceHistory = (id: number): Promise<any> => {
-		return db.executeSql(`SELECT * FROM DeviceHistory WHERE ${id} = deviceId ORDER BY ts DESC`).then(([results]) => {
+		return db.executeSql(`SELECT * FROM DeviceHistory WHERE ${id} = deviceId ORDER BY ts DESC`).then(([results]: Array<any>): Array<any> => {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
 				let row = results.rows.item(i);
 				data.push(row);
 			}
 			return data;
-		}).catch((error) => {
+		}).catch((error: Object) => {
 			throw error;
 		});
 	}
@@ -138,20 +138,20 @@ export default class TelldusLocalStorage {
 		} else if (type === 'sensor') {
 			tableName = 'SensorHistory';
 		}
-		return this.loadDatabase().then(DB => {
+		return this.loadDatabase().then((DB: Object): Promise<any> => {
 			return this.queryLatestTimestamp(tableName, id);
-		}).catch(error => {
+		}).catch((error: Object) => {
 			throw error;
 		});
 	}
 
 	queryLatestTimestamp = (tableName: string, id: number): Promise<any> => {
-		return db.executeSql(`SELECT MAX(ts) as tsMax from ${tableName} WHERE ${id} = deviceId`).then(([results]) => {
+		return db.executeSql(`SELECT MAX(ts) as tsMax from ${tableName} WHERE ${id} = deviceId`).then(([results]: Array<any>): Array<any> | null => {
 			if (results.rows && results.rows.item(0)) {
 				return results.rows.item(0);
 			}
 			return null;
-		}).catch(error => {
+		}).catch((error: Object) => {
 			throw error;
 		});
 	}

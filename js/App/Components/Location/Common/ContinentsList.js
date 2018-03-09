@@ -31,7 +31,7 @@ import {View, List, ListDataSource} from '../../../../BaseComponents';
 import ListRow from './SubViews/ListRow';
 
 const listDataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
+	rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
 });
 
 type Props = {
@@ -44,8 +44,8 @@ type State = {
 };
 
 class ContinentsList extends View {
-	renderRow:(string) => void;
-	onContinentChoose:(string) => void;
+	renderRow: (string) => void;
+	onContinentChoose: (string) => void;
 
 	props: Props;
 	state: State;
@@ -61,7 +61,7 @@ class ContinentsList extends View {
 	}
 
 	parseDataForList(data: Array<string>): Array<string> {
-		return uniqBy(data, value => {
+		return uniqBy(data, (value: string): string => {
 			let items = value.split('/');
 			return items[0];
 		});

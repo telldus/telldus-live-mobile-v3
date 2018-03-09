@@ -182,7 +182,7 @@ class DimmerButton extends View {
 		this.props.showDimmerStep(id);
 	}
 
-	render() {
+	render(): Object {
 		const { device, intl, isGatewayActive, screenReaderEnabled } = this.props;
 		const { isInState, name, supportedMethods, methodRequested } = device;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
@@ -301,9 +301,9 @@ function mapDispatchToProps(dispatch: Function): Object {
 		hideDimmerPopup: () => {
 			dispatch(hideDimmerPopup());
 		},
-		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		onDimmerSlide: (id: number): any => (value: number): any => dispatch(setDimmerValue(id, value)),
+		deviceSetState: (id: number, command: number, value?: number): any => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number): any => dispatch(requestDeviceAction(id, command)),
 		showDimmerStep: (id: number) => {
 			dispatch(showDimmerStep(id));
 		},

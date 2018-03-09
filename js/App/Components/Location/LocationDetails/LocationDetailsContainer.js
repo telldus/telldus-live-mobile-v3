@@ -64,7 +64,7 @@ export interface ScheduleProps {
 	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void,
 }
 
-const CustomPosterHeader = ({name, styles}) => {
+const CustomPosterHeader = ({name, styles}: Object): Object => {
 	return (
 		<View style={styles.posterCover}>
 			<BlockIcon icon={'location'} style={styles.posterIcon} containerStyle={styles.posterIconContainer}/>
@@ -155,7 +155,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		let { actions, screenProps } = this.props;
 		let { location } = screenProps.rootNavigator.state.params;
 		this.closeModal();
-		actions.removeGateway(location.id).then((res) => {
+		actions.removeGateway(location.id).then((res: Object) => {
 			actions.getAppData();
 			actions.getGateways();
 			screenProps.rootNavigator.goBack();
@@ -164,7 +164,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		});
 	}
 
-	getModalData(extras: any) {
+	getModalData(extras: any): Object {
 		if (extras === 'DELETE_LOCATION') {
 			return {
 				modalHeader: this.labelModalheaderOnDel,

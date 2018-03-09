@@ -87,8 +87,8 @@ class SettingsTab extends View {
 		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
 	}
 
-	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
 				icon="icon_settings"
 				tintColor={tintColor}
@@ -100,7 +100,7 @@ class SettingsTab extends View {
 		},
 	});
 
-	onValueChange(value) {
+	onValueChange(value: boolean) {
 		if (!value) {
 			this.props.onRemoveFromDashboard(this.props.device.id);
 		} else {
@@ -114,7 +114,7 @@ class SettingsTab extends View {
 		this.setState({
 			isHidden: value,
 		});
-		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res) => {
+		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res: Object) => {
 			let message = device.ignored ?
 				this.removedFromHiddenList : this.addedToHiddenList;
 			let payload = {
@@ -122,7 +122,7 @@ class SettingsTab extends View {
 			};
 			this.props.dispatch(getDevices());
 			this.props.dispatch(showGlobalError(payload));
-		}).catch(err => {
+		}).catch((err: Object) => {
 			let payload = {
 				customMessage: err.message ? err.message : null,
 			};
@@ -141,11 +141,11 @@ class SettingsTab extends View {
 		}
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.screenProps.currentTab === 'Settings';
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 
 		let {
@@ -253,14 +253,14 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onAddToDashboard: id => dispatch(addToDashboard('device', id)),
-		onRemoveFromDashboard: id => dispatch(removeFromDashboard('device', id)),
+		onAddToDashboard: (id: number): any => dispatch(addToDashboard('device', id)),
+		onRemoveFromDashboard: (id: number): any => dispatch(removeFromDashboard('device', id)),
 		dispatch,
 	};
 }
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		device: ownProps.screenProps.device,
 		inDashboard: !!state.dashboard.devicesById[ownProps.screenProps.device.id],

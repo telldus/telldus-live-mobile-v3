@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -28,7 +30,7 @@ import { OnButton, OffButton } from '../../TabViews/SubViews';
 const deviceHeight = Dimensions.get('window').height;
 import Theme from '../../../Theme';
 
-const ToggleButton = ({ device, intl }) => {
+const ToggleButton = ({ device, intl }: Object): Object => {
 	return (
 		<RoundedCornerShadowView style={styles.toggleContainer}>
 			<OffButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} intl={intl}/>
@@ -49,7 +51,7 @@ class ToggleDeviceDetailModal extends View {
 		super(props);
 	}
 
-	render() {
+	render(): Object {
 		const { device, intl } = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		let toggleButton = null;

@@ -21,8 +21,8 @@
 
 'use strict';
 
-export function parseDashboardForListView(dashboard:Object = {}, devices:Object = {}, sensors:Object = {}) {
-	const deviceItems = dashboard.deviceIds.map(deviceId => {
+export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}): Array<Object> {
+	const deviceItems = dashboard.deviceIds.map((deviceId: number): Object => {
 		return {
 			objectType: 'device',
 			data: devices.byId[deviceId],

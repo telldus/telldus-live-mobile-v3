@@ -70,7 +70,7 @@ export default class Clients extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		let locationImageUrl = getLocationImageUrl(this.props.client.type);
 		let locationData = {

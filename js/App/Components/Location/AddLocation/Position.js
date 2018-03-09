@@ -48,7 +48,7 @@ type Props = {
 
 type State = {
 	isLoading: boolean,
-}
+};
 
 class Position extends View {
 	props: Props;
@@ -107,12 +107,12 @@ class Position extends View {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
 		clientInfo.coordinates = { latitude, longitude };
 		this.props.actions.activateGateway(clientInfo)
-			.then(response => {
+			.then((response: Object) => {
 				this.props.navigation.navigate('Success', {clientInfo});
 				this.setState({
 					isLoading: false,
 				});
-			}).catch(error => {
+			}).catch((error: Object) => {
 				let message = error.message ? (error.message === 'Network request failed' ? this.networkFailed : error.message) :
 					error.error ? error.error : this.unknownError;
 				this.props.actions.showModal(message);
@@ -124,7 +124,7 @@ class Position extends View {
 			});
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<GeoPosition
 				{...this.props}

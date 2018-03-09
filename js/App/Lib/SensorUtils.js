@@ -70,7 +70,7 @@ const messages = defineMessages({
 });
 
 
-function formatLastUpdated(minutes: number, lastUpdated:number, formatMessage: Function): string {
+function formatLastUpdated(minutes: number, lastUpdated: number, formatMessage: Function): string {
 	if (minutes <= 0) {
 		return formatMessage(messages.justNow);
 	}

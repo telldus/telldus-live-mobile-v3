@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
@@ -37,12 +38,20 @@ type Props = {
 	intl: Object,
 	name: string,
 	isGatewayActive: boolean,
+	style: Object | number | Array<any>,
+	methodRequested: string,
+	isInState: string,
+	enabled: boolean,
+	command: number,
+	id: number,
 };
 
 class OnButton extends View {
 	props: Props;
 
-	constructor(props) {
+	onPress: () => void;
+
+	constructor(props: Props) {
 		super(props);
 		this.onPress = this.onPress.bind(this);
 
@@ -54,7 +63,7 @@ class OnButton extends View {
 		this.props.deviceSetState(this.props.id, this.props.command);
 	}
 
-	render() {
+	render(): Object {
 		let { isInState, enabled, methodRequested, name, isGatewayActive } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
@@ -128,10 +137,14 @@ OnButton.defaultProps = {
 	command: 1,
 };
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		deviceSetState: (id: number, command: number, value?: number) => {
+			dispatch(deviceSetState(id, command, value));
+		},
+		requestDeviceAction: (id: number, command: number) => {
+			dispatch(requestDeviceAction(id, command));
+		},
 	};
 }
 

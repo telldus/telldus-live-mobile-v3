@@ -36,9 +36,9 @@ type Props = {
 class FormattedMessageComponent extends Base {
 	props: Props;
 
-	render() {
+	render(): Object {
 		return (
-			<FormattedMessage {...this.props}>{msg => {
+			<FormattedMessage {...this.props}>{(msg: string): Object => {
 				return <Text style={this.props.style}>{this.props.prefix}{msg}{this.props.postfix}</Text>;
 			}}
 			</FormattedMessage>

@@ -69,7 +69,7 @@ class TouchableButton extends Component<Props, void> {
 	}
 
 
-	render() {
+	render(): Object {
 		let { style, labelStyle, intl, text, preScript, postScript, accessibilityLabel, accessible } = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		let shadow = Theme.Core.shadow;

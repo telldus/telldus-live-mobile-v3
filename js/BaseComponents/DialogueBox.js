@@ -235,7 +235,7 @@ class DialogueBox extends Component<Props, null> {
 		announceForAccessibility(message);
 	}
 
-	getAccessibiltyMessage() {
+	getAccessibiltyMessage(): string {
 		let { accessibilityLabel, text, showNegative, showPositive, positiveText, negativeText } = this.props;
 		if (accessibilityLabel) {
 			return accessibilityLabel;

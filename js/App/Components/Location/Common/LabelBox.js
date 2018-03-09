@@ -34,7 +34,7 @@ import {
 import Theme from '../../../Theme';
 
 class LabelBox extends View {
-	render() {
+	render(): Object {
 		let { containerStyle, label, children, showIcon, appLayout } = this.props;
 		const styles = this.getStyle(appLayout);
 

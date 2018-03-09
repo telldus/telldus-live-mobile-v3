@@ -32,7 +32,7 @@ import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,
-	enabled: Boolean,
+	enabled: boolean,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 	intl: Object,
@@ -47,7 +47,7 @@ class ToggleButton extends View {
 		super(props);
 	}
 
-	render() {
+	render(): Object {
 		const { intl, device, isGatewayActive} = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		const { id, isInState, methodRequested, name } = device;
