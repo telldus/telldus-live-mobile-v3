@@ -21,10 +21,11 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { TouchableOpacity, View } from 'react-native';
-import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
+import Theme from '../App/Theme';
+import { getDeviceWidth } from '../App/Lib';
 
 type DefaultProps = {
 	size: number,

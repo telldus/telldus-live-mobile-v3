@@ -19,7 +19,7 @@
 
 // @flow
 
-import { DAYS } from 'Constants';
+import { DAYS } from '../../Constants';
 
 export const getWeekdays = (): string[] => {
 	return DAYS.slice(0, 5);

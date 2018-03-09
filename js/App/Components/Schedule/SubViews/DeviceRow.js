@@ -21,12 +21,13 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { BlockIcon, Row, View } from 'BaseComponents';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { BlockIcon, Row, View } from '../../../../BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
-import { getDeviceWidth } from 'Lib';
-import Theme from 'Theme';
+import { getDeviceWidth } from '../../../Lib';
+import Theme from '../../../Theme';
 
 type Props = {
 	row: Object,

@@ -21,11 +21,12 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { BlockIcon, Row, View } from 'BaseComponents';
-import Theme from 'Theme';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { BlockIcon, Row, View } from '../../../../BaseComponents';
+import Theme from '../../../Theme';
 import Description from './Description';
-import { capitalize, getDeviceWidth } from 'Lib';
+import { capitalize, getDeviceWidth } from '../../../Lib';
 
 type Props = {
 	type: string,

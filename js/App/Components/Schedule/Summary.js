@@ -21,10 +21,11 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { FloatingButton, View } from 'BaseComponents';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { FloatingButton, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getDeviceWidth, getSelectedDays } from 'Lib';
+import { getDeviceWidth, getSelectedDays } from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow } from 'Schedule_SubViews';
 import { ScrollView } from 'react-native';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';

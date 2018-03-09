@@ -21,13 +21,14 @@
 
 'use strict';
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
 import View from './View';
 import Text from './Text';
 import Slider from 'react-native-slider';
-import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
+import Theme from '../App/Theme';
+import { getDeviceWidth } from '../App/Lib';
 
 type DefaultProps = {
 	minimumTrackTintColor: string,

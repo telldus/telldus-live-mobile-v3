@@ -21,9 +21,10 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { View } from 'BaseComponents';
-import { getDeviceWidth } from 'Lib';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View } from '../../../../BaseComponents';
+import { getDeviceWidth } from '../../../Lib';
 
 type Props = {
 	children: string,

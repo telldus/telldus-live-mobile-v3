@@ -21,8 +21,9 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { List, ListDataSource, View } from 'BaseComponents';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { List, ListDataSource, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { DeviceRow } from 'Schedule_SubViews';
 

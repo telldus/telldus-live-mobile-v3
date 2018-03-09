@@ -21,13 +21,14 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback } from 'react-native';
-import { FloatingButton, Row, Text, View } from 'BaseComponents';
+import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { TimeBlock, TimeSlider } from 'Schedule_SubViews';
-import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
+import Theme from '../../Theme';
+import { getDeviceWidth } from '../../Lib';
 
 const TYPES = ['sunrise', 'sunset', 'time'];
 

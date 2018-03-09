@@ -21,12 +21,13 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Slider from 'react-native-slider';
-import { FloatingButton, Text, View } from 'BaseComponents';
+import { FloatingButton, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
+import Theme from '../../Theme';
+import { getDeviceWidth } from '../../Lib';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,

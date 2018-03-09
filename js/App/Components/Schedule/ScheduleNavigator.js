@@ -28,9 +28,9 @@ import { StackNavigator } from 'react-navigation';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import ScheduleScreen from './ScheduleScreen';
-import { View, Image, Dimensions } from 'BaseComponents';
+import { View, Image, Dimensions } from '../../../BaseComponents';
 
-import {getRouteName} from 'Lib';
+import {getRouteName} from '../../Lib';
 
 import Device from './Device';
 import Action from './Action';
@@ -40,7 +40,7 @@ import Days from './Days';
 import Summary from './Summary';
 import Edit from './Edit';
 
-import Theme from 'Theme';
+import Theme from '../../Theme';
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 

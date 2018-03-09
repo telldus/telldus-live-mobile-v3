@@ -21,20 +21,21 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {BackAndroid} from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { FullPageActivityIndicator, View, Dimensions, DialogueBox } from 'BaseComponents';
+import { FullPageActivityIndicator, View, Dimensions, DialogueBox } from '../../../BaseComponents';
 import { SchedulePoster } from 'Schedule_SubViews';
-import { getDeviceWidth } from 'Lib';
+import { getDeviceWidth } from '../../Lib';
 
 import * as scheduleActions from 'Actions_Schedule';
-import * as modalActions from 'Actions_Modal';
-import { getDevices } from 'Actions_Devices';
-import { showToast } from 'Actions_App';
-import { getJobs } from 'Actions';
+import * as modalActions from '../../Actions/Modal';
+import { getDevices } from '../../Actions/Devices';
+import { showToast } from '../../Actions/App';
+import { getJobs } from '../../Actions';
 import type { Schedule } from 'Reducers_Schedule';
 
 type Props = {

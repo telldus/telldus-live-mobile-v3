@@ -21,11 +21,12 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
-import { Text, View } from 'BaseComponents';
-import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
+import { Text, View } from '../../../../BaseComponents';
+import Theme from '../../../Theme';
+import { getDeviceWidth } from '../../../Lib';
 
 type Props = {
 	day: string,

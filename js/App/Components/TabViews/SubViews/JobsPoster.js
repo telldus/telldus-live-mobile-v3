@@ -21,11 +21,12 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Animated, Image, TouchableOpacity } from 'react-native';
-import { Poster, View } from 'BaseComponents';
-import { getDeviceWidth } from 'Lib';
-import Theme from 'Theme';
+import { Poster, View } from '../../../../BaseComponents';
+import { getDeviceWidth } from '../../../Lib';
+import Theme from '../../../Theme';
 
 type Props = {
 	days: Object[],

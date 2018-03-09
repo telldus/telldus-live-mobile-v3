@@ -21,10 +21,11 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
-import { Text, View } from 'BaseComponents';
-import Theme from 'Theme';
-import { getDeviceWidth } from 'Lib';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Text, View } from '../../../../BaseComponents';
+import Theme from '../../../Theme';
+import { getDeviceWidth } from '../../../Lib';
 
 type DefaultProps = {
 	color: string,

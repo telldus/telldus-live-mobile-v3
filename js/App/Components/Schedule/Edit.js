@@ -21,15 +21,16 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import {View, TouchableButton, Dimensions, Throbber} from 'BaseComponents';
+import {View, TouchableButton, Dimensions, Throbber} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getDeviceWidth, getSelectedDays } from 'Lib';
+import { getDeviceWidth, getSelectedDays } from '../../Lib';
 import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from 'Schedule_SubViews';
-import Theme from 'Theme';
+import Theme from '../../Theme';
 
 interface Props extends ScheduleProps {
 	devices: Object,

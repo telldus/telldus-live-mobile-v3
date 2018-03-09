@@ -21,11 +21,12 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { getDeviceWidth } from 'Lib';
-import { Row, View } from 'BaseComponents';
+import { Row, View } from '../../../../BaseComponents';
 import Day from './Day';
-import { DAYS } from 'Constants';
+import { DAYS } from '../../../../Constants';
 
 type Props = {
 	selectedDays: string[],

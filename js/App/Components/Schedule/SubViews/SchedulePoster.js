@@ -21,10 +21,11 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Dimensions, Image, TouchableOpacity } from 'react-native';
-import { Poster, View, Text } from 'BaseComponents';
-import Theme from 'Theme';
+import { Poster, View, Text } from '../../../../BaseComponents';
+import Theme from '../../../Theme';
 
 type Props = {
 	h1: string,

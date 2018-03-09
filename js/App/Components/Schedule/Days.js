@@ -21,13 +21,14 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { ScheduleProps } from './ScheduleScreen';
 import { CheckButton, DaysRow, Description } from 'Schedule_SubViews';
-import { getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from 'Lib';
-import { CheckboxSolid, FloatingButton, Row, View } from 'BaseComponents';
+import { getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from '../../Lib';
+import { CheckboxSolid, FloatingButton, Row, View } from '../../../BaseComponents';
 import _ from 'lodash';
-import { DAYS } from 'Constants';
+import { DAYS } from '../../../Constants';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,

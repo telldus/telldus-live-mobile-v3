@@ -21,12 +21,13 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
-import { BlockIcon, IconTelldus, Row, View } from 'BaseComponents';
+import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
-import Theme from 'Theme';
-import { capitalize, getDeviceWidth, getSuntime } from 'Lib';
+import Theme from '../../../Theme';
+import { capitalize, getDeviceWidth, getSuntime } from '../../../Lib';
 import type { Schedule } from 'Reducers_Schedule';
 
 type Time = {

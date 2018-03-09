@@ -21,7 +21,8 @@
 
 'use strict';
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 import { createSelector } from 'reselect';
@@ -37,14 +38,14 @@ import {
 	StyleSheet,
 	Text,
 	Icon,
-} from 'BaseComponents';
-import { JobRow, JobsPoster } from 'TabViews_SubViews';
-import { editSchedule, getJobs } from 'Actions';
+} from '../../../BaseComponents';
+import { JobRow, JobsPoster } from './SubViews';
+import { editSchedule, getJobs } from '../../Actions';
 
-import { parseJobsForListView } from 'Reducers_Jobs';
+import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from 'Reducers_Schedule';
 
-import { getDeviceWidth, getTabBarIcon } from 'Lib';
+import { getDeviceWidth, getTabBarIcon } from '../../Lib';
 
 const messages = defineMessages({
 	scheduler: {

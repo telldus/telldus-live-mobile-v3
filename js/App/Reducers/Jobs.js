@@ -27,7 +27,7 @@ import moment from 'moment-timezone';
 import filter from 'lodash/filter';
 import range from 'lodash/range';
 import mapValues from 'lodash/mapValues';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 
 export type State = ?Object;
 
