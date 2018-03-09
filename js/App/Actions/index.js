@@ -37,6 +37,7 @@ import AppDataActions from './AppData';
 import ModalActions from './Modal';
 import WebSocketActions from './Websockets';
 import AppActions from './App';
+import ScheduleActions from './Schedule';
 
 module.exports = {
 	...GatewayActions,
@@ -54,4 +55,5 @@ module.exports = {
 	...ModalActions,
 	...WebSocketActions,
 	...AppActions,
+	...ScheduleActions,
 };

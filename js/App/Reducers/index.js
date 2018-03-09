@@ -31,7 +31,6 @@ import User from './User';
 import Tabs from './Tabs';
 import LiveApi from './LiveApi';
 import Modal from './Modal';
-import Schedule from './Schedule';
 import { reducers } from 'live-shared-data';
 
 const config = {
@@ -45,6 +44,5 @@ module.exports = persistCombineReducers(config, {
 	tabs: Tabs,
 	liveApi: LiveApi,
 	modal: Modal,
-	schedule: Schedule,
 	...reducers,
 });
