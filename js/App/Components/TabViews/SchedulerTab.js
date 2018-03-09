@@ -251,20 +251,13 @@ class SchedulerTab extends View<null, Props, State> {
 		if (r1 === r2) {
 			return false;
 		}
-		return sectionName;
-	}
-
-	renderSectionHeader(sectionData, sectionId) {
-		// TODO: move to own Component
-		let sectionName = this.getSectionName(sectionId);
-
 		return (
 			r1.effectiveHour !== r2.effectiveHour ||
 			r1.effectiveMinute !== r2.effectiveMinute ||
 			r1.method !== r2.method ||
 			r1.deviceId !== r2.deviceId
 		);
-	};
+	}
 
 	_renderRow = (props: Object, sectionId: number, rowId: string): React$Element<JobRow> => {
 		return (

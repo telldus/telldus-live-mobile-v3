@@ -87,7 +87,9 @@ export type Action =
 	| { type: 'REQUEST_TURNON', payload: Object }
 	| { type: 'REQUEST_TURNOFF', payload: Object }
 
+	| { type: 'REQUEST_MODAL_OPEN', payload: Object }
 	| { type: 'REQUEST_MODAL_CLOSE', payload?: Object }
+	| { type: 'REQUEST_MODAL_CLEAR_DATA'}
 
 	| { type: 'USER_REGISTER', accessToken: Object }
 	| { type: 'SCHEDULE_SELECT_DEVICE', payload: Object }

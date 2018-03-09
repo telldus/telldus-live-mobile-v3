@@ -38,7 +38,7 @@ type Props = {
 	children?: any,
 };
 
-export default class HeaderNav extends Component {
+export default class HeaderNav extends Component<Props, null> {
 	props: Props;
 
 	onPress: () => void;

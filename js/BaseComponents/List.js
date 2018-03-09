@@ -265,7 +265,7 @@ class ListComponent extends React.Component<Props, State> {
 		const firstRowId = this.props.dataSource && this.props.dataSource.getRowIDForFlatIndex(0);
 		return (
 			<SwipeRow
-				ref={(row: Object): Object => (this._rows[`${secId}${rowId}`] = row)} // eslint-disable-line react/jsx-no-bind
+				ref={(row: any): any => (this._rows[`${secId}${rowId}`] = row)} // eslint-disable-line react/jsx-no-bind
 				onRowOpen={(_: void): void => this.onRowOpen(secId, rowId, this._rows)} // eslint-disable-line react/jsx-no-bind
 				onRowClose={(_: void): void => this.props.onRowClose && this.props.onRowClose( // eslint-disable-line react/jsx-no-bind
 					secId,

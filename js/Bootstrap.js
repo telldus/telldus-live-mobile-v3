@@ -48,7 +48,7 @@ function Bootstrap(): Object {
 		store: Object,
 	};
 
-	class Root extends React.Component {
+	class Root extends React.Component<null, State> {
 		state: State;
 
 		constructor() {
@@ -114,7 +114,7 @@ global.LOG = (...args: any): Array<any> => {
 if (process.env.NODE_ENV !== 'production') {
 	const originalConsoleError = console.error;
 	if (console.error === originalConsoleError) {
-		console.error = (...args) => {
+		console.error = (...args: Array<any>) => {
 			if (args[0].indexOf('[React Intl] Missing message:') === 0) {
 				return;
 			}

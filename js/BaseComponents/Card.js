@@ -64,7 +64,7 @@ export default class CardComponent extends Base {
 
 	}
 
-	renderChildren(): React$Element<any> {
+	renderChildren(): Array<Object> {
 		let childrenArray = React.Children.map(this.props.children, (child: Object): Object => {
 			return child;
 		});
@@ -72,7 +72,7 @@ export default class CardComponent extends Base {
 		return childrenArray;
 	}
 
-	render(): React$Element<any> {
+	render(): Object {
 		return (
 			<View {...this.prepareRootProps()} >
 				{this.renderChildren()}

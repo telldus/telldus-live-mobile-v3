@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch: Dispatch): Object {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => {
 			dispatch(saveDimmerInitialState(deviceId, initalValue, initialState));

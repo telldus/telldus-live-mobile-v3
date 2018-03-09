@@ -45,7 +45,7 @@ const store = createStore(
 );
 
 let _store;
-export function configureStore(onComplete: ?() => void) {
+export function configureStore(onComplete?: () => void): Object {
 
 	persistStore(store, null, onComplete);
 

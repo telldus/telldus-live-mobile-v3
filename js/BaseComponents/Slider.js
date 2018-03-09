@@ -59,7 +59,7 @@ type State = {
 	value: number,
 };
 
-export default class SliderComponent extends Component {
+export default class SliderComponent extends Component<Props, State> {
 	props: Props;
 	state: State;
 
