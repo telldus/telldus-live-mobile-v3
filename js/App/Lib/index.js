@@ -36,6 +36,7 @@ import capitalize from './capitalize';
 import formatTime from './formatTime';
 import getPowerParts from './getPowerParts';
 import getSuntime from './getSuntime';
+import getTabBarIcon from './getTabBarIcon';
 
 
 module.exports = {
@@ -48,6 +49,7 @@ module.exports = {
 	formatTime,
 	getPowerParts,
 	getSuntime,
+	getTabBarIcon,
 	...Dimmer,
 	...SensorUtils,
 	...DeviceUtils,
