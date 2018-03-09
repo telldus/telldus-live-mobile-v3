@@ -76,10 +76,8 @@ const RouteConfigs = {
 	},
 	Schedule: {
 		screen: ScheduleNavigator,
-		navigationOptions: ({navigation}: Object): Object => {
-			return {
-				header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
-			};
+		navigationOptions: {
+			header: null,
 		},
 	},
 	AddLocation: {

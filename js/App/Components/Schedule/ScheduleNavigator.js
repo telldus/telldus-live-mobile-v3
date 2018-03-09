@@ -17,7 +17,7 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @providesModule ScheduleNavigator
- * 
+ *
  * @flow
  */
 
@@ -28,7 +28,8 @@ import { StackNavigator } from 'react-navigation';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import ScheduleScreen from './ScheduleScreen';
-import { View, Image, Dimensions } from '../../../BaseComponents';
+import { View, Image, Dimensions, SafeAreaView } from '../../../BaseComponents';
+import { NavigationHeader } from '../DeviceDetails/SubViews';
 
 import {getRouteName} from '../../Lib';
 
@@ -146,13 +147,19 @@ class ScheduleNavigator extends View {
 
 	render() {
 		let { currentScreen } = this.state;
+		let { navigation } = this.props;
 		let screenProps = {
 			currentScreen,
-			rootNavigator: this.props.navigation,
+			rootNavigator: navigation,
 		};
 
 		return (
-			<Schedule onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps} />
+			<SafeAreaView>
+				{navigation.state.params.renderRootHeader &&
+				<NavigationHeader navigation={navigation} />
+				}
+				<Schedule onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps} />
+			</SafeAreaView>
 		);
 	}
 }
