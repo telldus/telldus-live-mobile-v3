@@ -16,112 +16,307 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 // @flow
+
 'use strict';
 
 import React from 'react';
-import { FormattedMessage, ListItem, Text, View } from '../../../../BaseComponents';
+import PropTypes from 'prop-types';
+import { TouchableOpacity } from 'react-native';
+import { BlockIcon, IconTelldus, ListRow, View, Text, FormattedTime } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
-import { defineMessages } from 'react-intl';
-import i18n from '../../../Translations/common';
-
-const messages = defineMessages({
-	phraseOne: {
-		id: 'accessibilityLabel.scheduler.phraseOne',
-		defaultMessage: 'schedule for',
-	},
-});
+import { ACTIONS, Description, TextRowWrapper, Title } from 'Schedule_SubViews';
+import { capitalize, getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from '../../../Lib';
+import { DAYS } from '../../../../Constants';
+import _ from 'lodash';
+import type { Schedule } from 'Reducers_Schedule';
 
 type Props = {
+	active: boolean,
 	device: Object,
+	method: number,
 	methodValue: number,
-	method: string,
-	effectiveHour: number,
-	effectiveMinute: number,
-	intl: Object,
-	sectionName: string,
+	effectiveHour: string,
+	effectiveMinute: string,
+	offset: number,
+	randomInterval: number,
+	type: string,
+	weekdays: number[],
+	isFirst: boolean,
+	editJob: (schedule: Schedule) => void,
 };
 
-export default class JobRow extends View {
-	props: Props;
+export default class JobRow extends View<null, Props, null> {
 
-	render() {
-		const { device, methodValue, intl, sectionName, effectiveHour, effectiveMinute} = this.props;
+	static propTypes = {
+		id: PropTypes.number.isRequired,
+		deviceId: PropTypes.number.isRequired,
+		active: PropTypes.bool.isRequired,
+		device: PropTypes.object.isRequired,
+		method: PropTypes.number.isRequired,
+		methodValue: PropTypes.number.isRequired,
+		hour: PropTypes.number.isRequired,
+		effectiveHour: PropTypes.string.isRequired,
+		minute: PropTypes.number.isRequired,
+		effectiveMinute: PropTypes.string.isRequired,
+		offset: PropTypes.number.isRequired,
+		randomInterval: PropTypes.number.isRequired,
+		type: PropTypes.string.isRequired,
+		weekdays: PropTypes.arrayOf(PropTypes.number).isRequired,
+		isFirst: PropTypes.bool.isRequired,
+		editJob: PropTypes.func.isRequired,
+	};
 
-		const methodName = {
-			[1]: 'On',
-			[2]: 'Off',
-			[4]: 'Bell',
-			[16]: 'Dim',
-			[32]: 'Learn',
-			[128]: 'Up',
-			[256]: 'Down',
-			[512]: 'Stop',
+	editJob = () => {
+		const {
+			editJob,
+			id,
+			deviceId,
+			method,
+			methodValue,
+			type,
+			hour,
+			minute,
+			offset,
+			randomInterval,
+			active,
+			weekdays,
+		} = this.props;
+
+		const schedule: Schedule = {
+			id,
+			deviceId,
+			method,
+			methodValue,
+			type,
+			hour,
+			minute,
+			offset,
+			randomInterval,
+			active,
+			weekdays,
 		};
-		if (!device) {
+
+		editJob(schedule);
+	};
+
+	render(): React$Element<any> | null {
+		if (!this.props.device) {
 			return null;
 		}
-		const method = methodName[this.props.method];
-		let value = '', labelAction = '';
-		switch (method) {
-			case 'Dim':
-				value = `${Math.round(methodValue / 255.0 * 100)}%`;
-				labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.dim)} ${value}%`;
-				break;
-			case 'On':
-				value = <FormattedMessage {...i18n.on} style={Theme.Styles.jobRowMethod}/>;
-				labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.turnOn)}`;
-				break;
-			case 'Off':
-				value = <FormattedMessage {...i18n.off} style={Theme.Styles.jobRowMethod}/>;
-				labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.turnOff)}`;
-				break;
-			case 'Bell':
-				value = <FormattedMessage {...i18n.bell} style={Theme.Styles.jobRowMethod}/>;
-				labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.dim)}`;
-				break;
-			case 'Learn':
-				value = <FormattedMessage {...i18n.learn} style={Theme.Styles.jobRowMethod}/>;
-				labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.learn)}`;
-				break;
-			case 'Up':
-				value = <FormattedMessage {...i18n.up} style={Theme.Styles.jobRowMethod}/>;
-				labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.up)}`;
-				break;
-			case 'Down':
-				value = <FormattedMessage {...i18n.down} style={Theme.Styles.jobRowMethod}/>;
-				labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.down)}`;
-				break;
-			case 'Stop':
-				value = <FormattedMessage {...i18n.stop} style={Theme.Styles.jobRowMethod}/>;
-				labelAction = `${intl.formatMessage(i18n.labelAction)} ${intl.formatMessage(i18n.stop)}`;
-				break;
-			default:
-				value = method;
-				labelAction = '';
-		}
 
-		let labelDay = `${intl.formatMessage(messages.phraseOne)} ${sectionName}`;
-		let labelTime = `${intl.formatMessage(i18n.time)} ${effectiveHour}:${effectiveMinute}`;
-		let labelDevice = `${intl.formatMessage(i18n.labelDevice)} ${device.name}`;
-		let accessibilityLabel = `${labelDay}, ${labelTime}, ${labelDevice}, ${labelAction}`;
+		const {
+			type,
+			effectiveHour,
+			effectiveMinute,
+			device,
+			offset,
+			randomInterval,
+			active,
+			isFirst,
+			editJob,
+		} = this.props;
+
+		const {
+			container,
+			textWrapper,
+			title,
+			description,
+			iconOffset,
+			iconRandom,
+			methodIconContainer,
+			roundIcon,
+			time,
+			rowContainer,
+		} = this._getStyle();
+
+		const repeat = this._getRepeatDescription();
+		let date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
+		let timestamp = Date.parse(date);
 
 		return (
-			<ListItem
-				style={Theme.Styles.rowFront}
-				importantForAccessibility={'yes'}
-				accessible={true}
-				accessibilityLabel={accessibilityLabel}>
-				<Text style={{ flex: 5, color: 'orange', fontSize: 16 }}>
-					{`${effectiveHour}:${effectiveMinute}`}
-				</Text>
-				<Text style={{ flex: 20, color: '#1a355c', fontSize: 16, paddingLeft: 6 }}>
-					{device.name}
-				</Text>
-				<Text style={{ flex: 4, color: '#1a355c', fontSize: 16 }}>
-					{value}
-				</Text>
-			</ListItem>
+			<TouchableOpacity
+				style={container}
+				onPress={this.editJob}
+				disabled={!editJob}
+			>
+				<ListRow
+					roundIcon={type}
+					roundIconStyle={roundIcon}
+					time={timestamp}
+					timeFormat= {{
+						hour: 'numeric',
+						minute: 'numeric',
+					}}
+					timeStyle={time}
+					rowContainerStyle={rowContainer}
+					containerStyle={{ opacity: active ? 1 : 0.5 }}
+					triangleColor={methodIconContainer.backgroundColor}
+					isFirst={isFirst}
+				>
+					{this._renderActionIcon()}
+					<TextRowWrapper style={textWrapper}>
+						<Title numberOfLines={1} ellipsizeMode="tail" style={title}>
+							{device.name}
+						</Title>
+						<Description numberOfLines={1} ellipsizeMode="tail" style={description}>
+							{repeat}
+							{type === 'time' && (
+								<FormattedTime
+									value={timestamp}
+									hour="numeric"
+									minute="numeric"
+									style={description}
+								/>)
+							}
+						</Description>
+					</TextRowWrapper>
+					{!!offset && (
+						<IconTelldus
+							icon="offset"
+							style={iconOffset}
+						/>
+					)}
+					{!!randomInterval && (
+						<IconTelldus
+							icon="random"
+							style={iconRandom}
+						/>
+					)}
+				</ListRow>
+			</TouchableOpacity>
 		);
 	}
+
+	_renderActionIcon = (): Object | null => {
+		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
+		const { methodIconContainer, methodIcon } = this._getStyle();
+
+		if (action) {
+			if (action.name === 'Dim') {
+				return (
+					<View style={methodIconContainer}>
+						<Text style={methodIcon}>
+							{`${Math.round(this.props.methodValue / 255 * 100)}%`}
+						</Text>
+					</View>
+				);
+			}
+			return (
+				<BlockIcon
+					icon={action.icon}
+					bgColor={action.bgColor}
+					containerStyle={methodIconContainer}
+					style={methodIcon}
+				/>
+			);
+		}
+
+		return null;
+	};
+
+	_getRepeatDescription = (): string => {
+		const { type, weekdays } = this.props;
+		const selectedDays: string[] = getSelectedDays(weekdays);
+
+		let repeatDays: string = '';
+
+		if (selectedDays.length === DAYS.length) {
+			repeatDays = 'Every day';
+		} else if (_.isEqual(selectedDays, getWeekdays())) {
+			repeatDays = 'Every weekdays';
+		} else if (_.isEqual(selectedDays, getWeekends())) {
+			repeatDays = 'Every weekends';
+		} else {
+			for (let day of selectedDays) {
+				repeatDays += `${day.slice(0, 3).toLowerCase()}, `;
+			}
+			repeatDays = capitalize(repeatDays.slice(0, -2));
+		}
+
+		const repeatTime: string = (type === 'time') ? '' : type;
+
+		return `${repeatDays} at ${repeatTime}`;
+	};
+
+	_getStyle = (): Object => {
+		const { fonts, borderRadiusRow } = Theme.Core;
+		const deviceWidth = getDeviceWidth();
+
+		let backgroundColor;
+		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
+		if (action) {
+			backgroundColor = action.bgColor;
+		}
+
+		return {
+			container: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				paddingHorizontal: deviceWidth * 0.03888888,
+				width: deviceWidth,
+			},
+			line: {
+				backgroundColor: '#929292',
+				height: '100%',
+				width: 1,
+				position: 'absolute',
+				left: deviceWidth * 0.029333333,
+				top: 0,
+				zIndex: -1,
+			},
+			methodIconContainer: {
+				backgroundColor,
+				borderTopLeftRadius: borderRadiusRow,
+				borderBottomLeftRadius: borderRadiusRow,
+				alignItems: 'center',
+				justifyContent: 'center',
+				width: deviceWidth * 0.16,
+			},
+			methodIcon: {
+				color: '#fff',
+				fontSize: action && action.name === 'Dim' ? deviceWidth * 0.04 : deviceWidth * 0.056,
+			},
+			textWrapper: {
+				flex: 1,
+				paddingLeft: deviceWidth * 0.032,
+				paddingRight: deviceWidth * 0.068,
+				width: null,
+			},
+			title: {
+				color: '#707070',
+				fontSize: deviceWidth * 0.04,
+				fontFamily: fonts.robotoRegular,
+				marginBottom: deviceWidth * 0.008,
+			},
+			description: {
+				color: '#707070',
+				fontSize: deviceWidth * 0.032,
+				opacity: 1,
+			},
+			iconOffset: {
+				position: 'absolute',
+				right: deviceWidth * 0.014666667,
+				top: deviceWidth * 0.016,
+			},
+			iconRandom: {
+				position: 'absolute',
+				right: deviceWidth * 0.014666667,
+				bottom: deviceWidth * 0.016,
+			},
+			roundIcon: {
+				color: '#fff',
+				fontSize: deviceWidth * 0.044,
+			},
+			time: {
+				width: deviceWidth * 0.26,
+				textAlign: 'center',
+			},
+			rowContainer: {
+				width: deviceWidth * 0.58666666,
+			},
+		};
+	};
+
 }
