@@ -37,6 +37,7 @@ import formatTime from './formatTime';
 import getPowerParts from './getPowerParts';
 import getSuntime from './getSuntime';
 import getTabBarIcon from './getTabBarIcon';
+import getRelativeDimensions from './getRelativeDimensions';
 
 
 module.exports = {
@@ -50,6 +51,7 @@ module.exports = {
 	getPowerParts,
 	getSuntime,
 	getTabBarIcon,
+	getRelativeDimensions,
 	...Dimmer,
 	...SensorUtils,
 	...DeviceUtils,
