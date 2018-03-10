@@ -115,7 +115,7 @@ export default class SchedulePoster extends View<null, Props, null> {
 		);
 	};
 
-	_getStyle = (appLayout: object): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;

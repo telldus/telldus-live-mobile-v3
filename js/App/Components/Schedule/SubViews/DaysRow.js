@@ -90,7 +90,7 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 		return this.props.selectedDays.includes(day);
 	};
 
-	_getStyle = (appLayout: object): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
