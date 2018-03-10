@@ -24,12 +24,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import _ from 'lodash';
+
 import { BlockIcon, IconTelldus, ListRow, View, Text, FormattedTime } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from 'Schedule_SubViews';
-import { capitalize, getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from '../../../Lib';
+import { capitalize, getSelectedDays, getWeekdays, getWeekends } from '../../../Lib';
 import { DAYS } from '../../../../Constants';
-import _ from 'lodash';
 import type { Schedule } from 'Reducers_Schedule';
 
 type Props = {
@@ -45,9 +47,10 @@ type Props = {
 	weekdays: number[],
 	isFirst: boolean,
 	editJob: (schedule: Schedule) => void,
+	appLayout: Object,
 };
 
-export default class JobRow extends View<null, Props, null> {
+class JobRow extends View<null, Props, null> {
 
 	static propTypes = {
 		id: PropTypes.number.isRequired,
@@ -116,6 +119,7 @@ export default class JobRow extends View<null, Props, null> {
 			active,
 			isFirst,
 			editJob,
+			appLayout,
 		} = this.props;
 
 		const {
@@ -129,7 +133,8 @@ export default class JobRow extends View<null, Props, null> {
 			roundIcon,
 			time,
 			rowContainer,
-		} = this._getStyle();
+			roundIconContainer,
+		} = this._getStyle(appLayout);
 
 		const repeat = this._getRepeatDescription();
 		let date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
@@ -144,6 +149,7 @@ export default class JobRow extends View<null, Props, null> {
 				<ListRow
 					roundIcon={type}
 					roundIconStyle={roundIcon}
+					roundIconContainerStyle={roundIconContainer}
 					time={timestamp}
 					timeFormat= {{
 						hour: 'numeric',
@@ -191,7 +197,7 @@ export default class JobRow extends View<null, Props, null> {
 
 	_renderActionIcon = (): Object | null => {
 		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
-		const { methodIconContainer, methodIcon } = this._getStyle();
+		const { methodIconContainer, methodIcon } = this._getStyle(this.props.appLayout);
 
 		if (action) {
 			if (action.name === 'Dim') {
@@ -240,9 +246,11 @@ export default class JobRow extends View<null, Props, null> {
 		return `${repeatDays} at ${repeatTime}`;
 	};
 
-	_getStyle = (): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { fonts, borderRadiusRow } = Theme.Core;
-		const deviceWidth = getDeviceWidth();
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		let backgroundColor;
 		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
@@ -254,17 +262,8 @@ export default class JobRow extends View<null, Props, null> {
 			container: {
 				flexDirection: 'row',
 				alignItems: 'center',
-				paddingHorizontal: deviceWidth * 0.03888888,
-				width: deviceWidth,
-			},
-			line: {
-				backgroundColor: '#929292',
-				height: '100%',
-				width: 1,
-				position: 'absolute',
-				left: deviceWidth * 0.029333333,
-				top: 0,
-				zIndex: -1,
+				paddingHorizontal: width * 0.03888888,
+				width: width,
 			},
 			methodIconContainer: {
 				backgroundColor,
@@ -272,7 +271,7 @@ export default class JobRow extends View<null, Props, null> {
 				borderBottomLeftRadius: borderRadiusRow,
 				alignItems: 'center',
 				justifyContent: 'center',
-				width: deviceWidth * 0.16,
+				width: width * 0.16,
 			},
 			methodIcon: {
 				color: '#fff',
@@ -280,15 +279,15 @@ export default class JobRow extends View<null, Props, null> {
 			},
 			textWrapper: {
 				flex: 1,
-				paddingLeft: deviceWidth * 0.032,
-				paddingRight: deviceWidth * 0.068,
+				paddingLeft: width * 0.032,
+				paddingRight: width * 0.068,
 				width: null,
 			},
 			title: {
 				color: '#707070',
 				fontSize: deviceWidth * 0.04,
 				fontFamily: fonts.robotoRegular,
-				marginBottom: deviceWidth * 0.008,
+				marginBottom: width * 0.008,
 			},
 			description: {
 				color: '#707070',
@@ -297,26 +296,38 @@ export default class JobRow extends View<null, Props, null> {
 			},
 			iconOffset: {
 				position: 'absolute',
-				right: deviceWidth * 0.014666667,
-				top: deviceWidth * 0.016,
+				right: width * 0.014666667,
+				top: width * 0.016,
 			},
 			iconRandom: {
 				position: 'absolute',
-				right: deviceWidth * 0.014666667,
-				bottom: deviceWidth * 0.016,
+				right: width * 0.014666667,
+				bottom: width * 0.016,
 			},
 			roundIcon: {
 				color: '#fff',
 				fontSize: deviceWidth * 0.044,
 			},
 			time: {
-				width: deviceWidth * 0.26,
+				width: width * 0.26,
 				textAlign: 'center',
+				fontSize: deviceWidth * 0.044,
 			},
 			rowContainer: {
-				width: deviceWidth * 0.58666666,
+				width: width * 0.58666666,
+			},
+			roundIconContainer: {
+				marginLeft: isPortrait ? 0 : width * 0.01788,
 			},
 		};
 	};
 
 }
+
+function mapStateToProps(state: Object): Object {
+	return {
+		appLayout: state.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(JobRow);

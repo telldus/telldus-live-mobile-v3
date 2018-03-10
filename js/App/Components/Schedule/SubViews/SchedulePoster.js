@@ -24,16 +24,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dimensions, Image, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import DeviceInfo from 'react-native-device-info';
+
 import { Poster, View, Text } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	h1: string,
 	h2: string,
 	infoButton?: Object,
+	screenProps: Object,
+	navigation: Object,
+	intl: Object,
 };
 
 export default class SchedulePoster extends View<null, Props, null> {
+
+	goBack: () => void;
 
 	static propTypes = {
 		h1: PropTypes.string.isRequired,
@@ -41,12 +50,43 @@ export default class SchedulePoster extends View<null, Props, null> {
 		infoButton: PropTypes.object,
 	};
 
+	constructor(props: Props) {
+		super(props);
+
+		let { formatMessage } = props.intl;
+
+		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
+
+		this.goBack = this.goBack.bind(this);
+		this.isTablet = DeviceInfo.isTablet();
+	}
+
+	goBack() {
+		let { screenProps, navigation } = this.props;
+		if (screenProps.currentScreen === screenProps.initialRouteName) {
+			screenProps.rootNavigator.goBack();
+		} else {
+			navigation.goBack();
+		}
+	}
+
 	render(): React$Element<any> {
 		const style = this._getStyle();
-		const { h1, h2, infoButton } = this.props;
+		const { h1, h2, infoButton, appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
 
 		return (
 			<Poster>
+				{(!this.isTablet) && (!isPortrait) &&
+						<TouchableOpacity
+							style={style.backButtonLand}
+							onPress={this.goBack}
+							accessibilityLabel={this.labelLeftIcon}>
+							<Icon name="arrow-back" size={width * 0.047} color="#fff" style={style.iconLeft}/>
+						</TouchableOpacity>
+				}
 				<View style={style.hContainer}>
 					<Text style={[style.h, style.h1]}>
 						{h1}
@@ -105,6 +145,18 @@ export default class SchedulePoster extends View<null, Props, null> {
 			roundedInfoButton: {
 				height: roundedInfoButtonSize,
 				width: roundedInfoButtonSize,
+			},
+			backButtonLand: {
+				position: 'absolute',
+				alignItems: 'flex-start',
+				justifyContent: 'center',
+				backgroundColor: 'transparent',
+				left: 10,
+				top: 10,
+				zIndex: 1,
+			},
+			iconLeft: {
+				paddingVertical: 10,
 			},
 		};
 	};

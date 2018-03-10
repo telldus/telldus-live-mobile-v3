@@ -25,12 +25,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Image, TouchableOpacity } from 'react-native';
 import { Poster, View } from '../../../../BaseComponents';
-import { getDeviceWidth } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
 	days: Object[],
 	todayIndex: number,
+	appLayout: Object,
 };
 
 type State = {
@@ -94,7 +94,8 @@ export default class JobsPoster extends View<null, Props, State> {
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 		const newProps = nextProps.todayIndex !== this.props.todayIndex;
 		const newState = nextState.todayIndex !== this.state.todayIndex;
-		return newProps || newState;
+		const appLayout = nextProps.appLayout.width !== this.props.appLayout.width;
+		return newProps || newState || appLayout;
 	}
 
 	render(): React$Element<any> {
@@ -280,13 +281,16 @@ export default class JobsPoster extends View<null, Props, State> {
 	};
 
 	_getDayAnimatedStyle = (index: number): Object => {
-		const deviceWidth = getDeviceWidth();
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const dayWidth = this._getDayWidth(this.props.days[index].day);
 		const dayHeight = deviceWidth * 0.1;
-		const todayWidth = deviceWidth * 0.44;
+		const todayWidth = width * 0.44;
 
-		const todayOffset = deviceWidth * 0.205333333;
+		const todayOffset = width * 0.205333333;
 
 		const dayTop = deviceWidth * 0.117333333;
 		const todayTop = deviceWidth * 0.058666667;
@@ -371,7 +375,10 @@ export default class JobsPoster extends View<null, Props, State> {
 	};
 
 	_getDateAnimatedStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+		const { appLayout } = this.props;
+		const { width } = appLayout;
+		const isPortrait = appLayout.height > width;
+		const deviceWidth = isPortrait ? width : appLayout.height;
 
 		const height = deviceWidth * 0.064;
 
@@ -417,16 +424,19 @@ export default class JobsPoster extends View<null, Props, State> {
 	};
 
 	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		return {
 			daysContainer: {
 				borderWidth: 0,
 				position: 'absolute',
-				left: deviceWidth * 0.076,
+				left: width * 0.076,
 				top: 0,
 				bottom: 0,
-				right: deviceWidth * 0.076,
+				right: width * 0.076,
 				overflow: 'hidden',
 			},
 			dateContainer: {
@@ -434,10 +444,10 @@ export default class JobsPoster extends View<null, Props, State> {
 				alignItems: 'center',
 				justifyContent: 'center',
 				height: deviceWidth * 0.064,
-				width: deviceWidth * 0.44,
+				width: width * 0.44,
 				overflow: 'hidden',
 				position: 'absolute',
-				left: deviceWidth * 0.205333333,
+				left: width * 0.205333333,
 				top: deviceWidth * 0.176,
 			},
 			arrowContainer: {
@@ -463,7 +473,10 @@ export default class JobsPoster extends View<null, Props, State> {
 	};
 
 	_getDayWidth = (day: string): number => {
-		const deviceWidth = getDeviceWidth();
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		switch (day) {
 			case 'Monday':

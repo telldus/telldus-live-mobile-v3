@@ -45,7 +45,7 @@ import { editSchedule, getJobs } from '../../Actions';
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from 'Reducers_Schedule';
 
-import { getDeviceWidth, getTabBarIcon } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 
 const messages = defineMessages({
 	scheduler: {
@@ -104,7 +104,7 @@ class SchedulerTab extends View<null, Props, State> {
 		this.days = this._getDays(props.rowsAndSections);
 
 		this.state = {
-			daysToRender: this._getDaysToRender(props.rowsAndSections.slice(0, 1)),
+			daysToRender: this._getDaysToRender(props.rowsAndSections.slice(0, 1), this.props.appLayout),
 			todayIndex: 0,
 			loading: true,
 		};
@@ -113,13 +113,14 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const daysToRender = this._getDaysToRender(this.props.rowsAndSections);
+		const { rowsAndSections, appLayout } = this.props;
+		const daysToRender = this._getDaysToRender(rowsAndSections, appLayout);
 		this.setState({ daysToRender });
 	}
 
 	componentWillReceiveProps(nextProps: Props) {
-		const { rowsAndSections } = nextProps;
-		const daysToRender = this._getDaysToRender(rowsAndSections);
+		const { rowsAndSections, appLayout } = nextProps;
+		const daysToRender = this._getDaysToRender(rowsAndSections, appLayout);
 		this.setState({ daysToRender });
 	}
 
@@ -164,6 +165,7 @@ class SchedulerTab extends View<null, Props, State> {
 		}
 
 		const { todayIndex, daysToRender } = this.state;
+		const { appLayout } = this.props;
 
 		return (
 			<View>
@@ -171,6 +173,7 @@ class SchedulerTab extends View<null, Props, State> {
 					days={this.days}
 					todayIndex={todayIndex}
 					scroll={this._scroll}
+					appLayout={appLayout}
 				/>
 				<Swiper
 					ref={this._refScroll}
@@ -188,6 +191,22 @@ class SchedulerTab extends View<null, Props, State> {
 				/>
 			</View>
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const { width } = appLayout;
+
+		return {
+			line: {
+				backgroundColor: '#929292',
+				height: '100%',
+				width: 1,
+				position: 'absolute',
+				left: width * 0.069333333,
+				top: 0,
+				zIndex: -1,
+			},
+		};
 	}
 
 	_refScroll = (scroll: any): mixed => {
@@ -213,7 +232,7 @@ class SchedulerTab extends View<null, Props, State> {
 		return days;
 	};
 
-	_getDaysToRender = (dataArray: Object[]): React$Element<any>[] | Object=> {
+	_getDaysToRender = (dataArray: Object[], appLayout: Object): React$Element<any>[] | Object=> {
 		return dataArray.map((section: Object, i: number): Object => {
 
 			let isEmpty = !Object.keys(section).length;
@@ -234,9 +253,10 @@ class SchedulerTab extends View<null, Props, State> {
 				},
 			).cloneWithRows(section);
 
+			const { line } = this.getStyles(appLayout);
 			return (
 				<View style={styles.container} key={i}>
-					<View style={styles.line}/>
+					<View style={line}/>
 					<List
 						dataSource={dataSource}
 						renderRow={this._renderRow}
@@ -290,8 +310,6 @@ const getRowsAndSections = createSelector(
 	},
 );
 
-const deviceWidth = getDeviceWidth();
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -301,15 +319,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		paddingTop: 40,
-	},
-	line: {
-		backgroundColor: '#929292',
-		height: '100%',
-		width: 1,
-		position: 'absolute',
-		left: deviceWidth * 0.069333333,
-		top: 0,
-		zIndex: -1,
 	},
 	textWhenNoData: {
 		marginLeft: 10,
@@ -329,6 +338,7 @@ const mapStateToProps = (store: Object): MapStateToPropsType => {
 		rowsAndSections: getRowsAndSections(store),
 		devices: store.devices,
 		tab: store.navigation.tab,
+		appLayout: store.App.layout,
 	};
 };
 

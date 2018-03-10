@@ -25,10 +25,9 @@
 
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 
 import ScheduleScreen from './ScheduleScreen';
-import { View, Image, Dimensions, SafeAreaView } from '../../../BaseComponents';
+import { View, SafeAreaView } from '../../../BaseComponents';
 import { NavigationHeader } from '../DeviceDetails/SubViews';
 
 import {getRouteName} from '../../Lib';
@@ -41,9 +40,7 @@ import Days from './Days';
 import Summary from './Summary';
 import Edit from './Edit';
 
-import Theme from '../../Theme';
-const deviceWidth = Dimensions.get('window').width;
-const deviceHeight = Dimensions.get('window').height;
+const initialRouteName = 'InitialScreen';
 
 const renderScheduleScreen = (navigation, screenProps) => Component => (
 	<ScheduleScreen navigation={navigation} screenProps={screenProps}>
@@ -77,7 +74,7 @@ const RouteConfigs = {
 };
 
 const StackNavigatorConfig = {
-	initialRouteName: 'InitialScreen',
+	initialRouteName,
 	headerMode: 'float',
 	initialRouteParams: {renderHeader: false},
 	navigationOptions: ({navigation}) => {
@@ -85,13 +82,7 @@ const StackNavigatorConfig = {
 		let renderStackHeader = state.routeName !== 'InitialScreen';
 		if (renderStackHeader) {
 			return {
-				headerStyle: {
-					marginTop: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-					backgroundColor: Theme.Core.brandPrimary,
-					height: deviceHeight * 0.1,
-				},
-				headerTintColor: '#ffffff',
-				headerTitle: renderHeader(),
+				header: <NavigationHeader navigation={navigation} />,
 			};
 		}
 		return {
@@ -101,12 +92,6 @@ const StackNavigatorConfig = {
 };
 
 const Schedule = StackNavigator(RouteConfigs, StackNavigatorConfig);
-
-function renderHeader(): Object {
-	return (
-		<Image style={{ height: 110, width: 130, marginHorizontal: deviceWidth * 0.18 }} resizeMode={'contain'} source={require('../TabViews/img/telldus-logo.png')}/>
-	);
-}
 
 type Props = {
 	navigation: Object,
@@ -151,6 +136,7 @@ class ScheduleNavigator extends View {
 		let screenProps = {
 			currentScreen,
 			rootNavigator: navigation,
+			initialRouteName,
 		};
 
 		return (

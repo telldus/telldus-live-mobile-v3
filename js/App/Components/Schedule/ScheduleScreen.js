@@ -27,6 +27,8 @@ import {BackAndroid} from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import { intlShape, injectIntl } from 'react-intl';
+
 import { FullPageActivityIndicator, View, Dimensions, DialogueBox } from '../../../BaseComponents';
 import { SchedulePoster } from 'Schedule_SubViews';
 import { getDeviceWidth } from '../../Lib';
@@ -45,6 +47,8 @@ type Props = {
 	actions?: Object,
 	devices?: Object,
 	screenProps: Object,
+	intl: intlShape.isRequired,
+	appLayout: Object,
 };
 
 type State = {
@@ -154,7 +158,7 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { children, navigation, actions, devices, schedule, screenProps } = this.props;
+		const { children, navigation, actions, devices, schedule, screenProps, intl, appLayout } = this.props;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style, modal } = this._getStyle();
 		const { dialgueHeader, showNegative, positiveText, onPressPositive, onPressNegative, dialogueContainerStyle} = this.getRelativeData();
@@ -168,7 +172,8 @@ class ScheduleScreen extends View<null, Props, State> {
 					flex: 1,
 					opacity: loading ? 0 : 1,
 				}}>
-					<SchedulePoster h1={h1} h2={h2} infoButton={infoButton}/>
+					<SchedulePoster h1={h1} h2={h2} infoButton={infoButton} screenProps={screenProps} navigation={navigation}
+						intl={intl} appLayout={appLayout}/>
 					<View style={style}>
 						{React.cloneElement(
 							children,
@@ -234,15 +239,17 @@ type mapStateToPropsType = {
 	schedule: Schedule,
 	devices: Object,
 	modal: Object,
+	App: Object,
 };
 
-const mapStateToProps = ({ schedule, devices, modal }: mapStateToPropsType): Object => (
+const mapStateToProps = ({ schedule, devices, modal, App }: mapStateToPropsType): Object => (
 	{
 		schedule,
 		devices,
 		validationMessage: modal.data,
 		showModal: modal.openModal,
 		modalExtras: modal.extras,
+		appLayout: App.layout,
 	}
 );
 
@@ -255,4 +262,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ScheduleScreen));
