@@ -27,7 +27,7 @@ import { ActivityIndicator } from 'react-native';
 import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
 import Theme from '../../../Theme';
-import { capitalize, getDeviceWidth, getSuntime } from '../../../Lib';
+import { capitalize, getSuntime } from '../../../Lib';
 import type { Schedule } from 'Reducers_Schedule';
 
 type Time = {
@@ -40,6 +40,7 @@ type Props = {
 	device: Object,
 	containerStyle?: Object,
 	onPress?: Function,
+	appLayout: Object,
 };
 
 type State = {
@@ -107,14 +108,14 @@ export default class TimeRow extends View<null, Props, State> {
 						alignItems: 'center',
 						justifyContent: 'center',
 					}}
-					containerStyle={[this._getStyle().container, this.props.containerStyle]}
+					containerStyle={[this._getStyle(this.props.appLayout).container, this.props.containerStyle]}
 				>
 					<ActivityIndicator size="large"/>
 				</Row>
 			);
 		}
 
-		const { schedule, containerStyle, onPress } = this.props;
+		const { schedule, containerStyle, onPress, appLayout } = this.props;
 		const { offset, randomInterval, type } = schedule;
 
 		const {
@@ -125,7 +126,7 @@ export default class TimeRow extends View<null, Props, State> {
 			iconRow,
 			icon,
 			description,
-		} = this._getStyle();
+		} = this._getStyle(appLayout);
 
 		const offsetIcon = offset ? 'offset' : null;
 		const randomIcon = randomInterval ? 'random' : null;
@@ -140,13 +141,13 @@ export default class TimeRow extends View<null, Props, State> {
 					style={blockIcon.style}
 				/>
 				<View style={textWrapper}>
-					<Description style={title}>
+					<Description style={title} appLayout={appLayout}>
 						{`${capitalize(type)} ${this._formatTime()}`}
 					</Description>
 					{!!offset && (
 						<View style={iconRow}>
 							<IconTelldus icon={offsetIcon} style={icon}/>
-							<Description style={description}>
+							<Description style={description} appLayout={appLayout}>
 								{`Offset ${offset} min`}
 							</Description>
 						</View>
@@ -154,7 +155,7 @@ export default class TimeRow extends View<null, Props, State> {
 					{!!randomInterval && (
 						<View style={iconRow}>
 							<IconTelldus icon={randomIcon} style={icon}/>
-							<Description style={description}>
+							<Description style={description} appLayout={appLayout}>
 								{`Random interval ${randomInterval} min`}
 							</Description>
 						</View>
@@ -201,9 +202,11 @@ export default class TimeRow extends View<null, Props, State> {
 		return value < 10 ? `0${value}` : value.toString();
 	};
 
-	_getStyle = (): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { offset, randomInterval, type } = this.props.schedule;
-		const deviceWidth = getDeviceWidth();
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const size = deviceWidth * 0.196;
 

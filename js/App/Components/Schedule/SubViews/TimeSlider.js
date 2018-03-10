@@ -23,9 +23,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { IconTelldus, Slider, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
-import { getDeviceWidth } from '../../../Lib';
 import Description from './Description';
 
 type Props = {
@@ -35,6 +35,7 @@ type Props = {
 	maximumValue: number,
 	onValueChange: Function,
 	value: number,
+	appLayout: Object,
 };
 
 type State = {
@@ -78,7 +79,7 @@ export default class TimeSlider extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { description, icon } = this.props;
+		const { description, icon, appLayout } = this.props;
 		const {
 			container,
 			row,
@@ -86,7 +87,7 @@ export default class TimeSlider extends View<null, Props, State> {
 			icon: iconStyle,
 			description: descriptionStyle,
 			marginBottom,
-		} = this._getStyle();
+		} = this._getStyle(appLayout);
 
 		return (
 			<View style={container}>
@@ -100,7 +101,7 @@ export default class TimeSlider extends View<null, Props, State> {
 					]}
 				>
 					<IconTelldus icon={icon} style={iconStyle}/>
-					<Description style={descriptionStyle}>{description}</Description>
+					<Description style={descriptionStyle} appLayout={appLayout}>{description}</Description>
 				</View>
 				<View style={[row, { justifyContent: 'center' }]}>
 					<Slider
@@ -114,8 +115,10 @@ export default class TimeSlider extends View<null, Props, State> {
 		);
 	}
 
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+	_getStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const padding = deviceWidth * 0.026666667;
 		const thumbSize = deviceWidth * 0.085333333;
@@ -144,7 +147,7 @@ export default class TimeSlider extends View<null, Props, State> {
 				track: {
 					borderRadius: 13,
 					height: deviceWidth * 0.034666667,
-					width: deviceWidth * 0.709333333,
+					width: width * 0.709333333,
 				},
 				thumb: {
 					height: thumbSize,

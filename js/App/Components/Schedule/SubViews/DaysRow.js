@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getDeviceWidth } from 'Lib';
+
 import { Row, View } from '../../../../BaseComponents';
 import Day from './Day';
 import { DAYS } from '../../../../Constants';
@@ -34,6 +34,7 @@ type Props = {
 	containerStyle?: Object,
 	editMode?: boolean,
 	onPress?: Function,
+	appLayout: Object,
 };
 
 type DefaultProps = {
@@ -55,8 +56,8 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { containerStyle, onPress } = this.props;
-		const { container, row } = this._getStyle();
+		const { containerStyle, onPress, appLayout } = this.props;
+		const { container, row } = this._getStyle(appLayout);
 
 		return (
 			<Row
@@ -71,6 +72,7 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 	}
 
 	_renderWeekdays = (): Object[] => {
+		const { appLayout } = this.props;
 		return DAYS.map((day: string): Object => {
 			return (
 				<Day
@@ -78,6 +80,7 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 					isSelected={this._isDaySelected(day)}
 					onPress={this.props.onDayPress}
 					key={day}
+					appLayout={appLayout}
 				/>
 			);
 		});
@@ -87,8 +90,10 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 		return this.props.selectedDays.includes(day);
 	};
 
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+	_getStyle = (appLayout: object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		return {
 			container: {

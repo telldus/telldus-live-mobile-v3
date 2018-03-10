@@ -25,7 +25,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
-import { getDeviceWidth } from '../../../Lib';
 
 type DefaultProps = {
 	color: string,
@@ -35,6 +34,7 @@ type Props = {
 	children: string,
 	style?: Object,
 	color?: string,
+	appLayout: Object,
 };
 
 export default class Title extends View<DefaultProps, Props, null> {
@@ -50,8 +50,8 @@ export default class Title extends View<DefaultProps, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { children, style, ...props } = this.props;
-		const defaultStyle = this._getDefaultStyle();
+		const { children, style, appLayout, ...props } = this.props;
+		const defaultStyle = this._getDefaultStyle(appLayout);
 
 		return (
 			<Text {...props} style={[defaultStyle, style]}>
@@ -60,8 +60,10 @@ export default class Title extends View<DefaultProps, Props, null> {
 		);
 	}
 
-	_getDefaultStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+	_getDefaultStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 		return {
 			color: this.props.color,
 			fontFamily: Theme.Core.fonts.sfnsDisplay,

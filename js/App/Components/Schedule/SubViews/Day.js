@@ -26,12 +26,12 @@ import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { Text, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
-import { getDeviceWidth } from '../../../Lib';
 
 type Props = {
 	day: string,
 	isSelected: boolean,
 	onPress?: (index: number) => void,
+	appLayout: Object,
 };
 
 export default class Day extends View<null, Props, null> {
@@ -47,8 +47,8 @@ export default class Day extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { day, onPress } = this.props;
-		const { container, name } = this._getStyle();
+		const { day, onPress, appLayout } = this.props;
+		const { container, name } = this._getStyle(appLayout);
 
 		return (
 			<TouchableOpacity onPress={this.handlePress} disabled={!onPress} style={container}>
@@ -59,8 +59,10 @@ export default class Day extends View<null, Props, null> {
 		);
 	}
 
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+	_getStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 		const { brandSecondary, inactiveGray, fonts } = Theme.Core;
 
 		const size = deviceWidth * 0.101333333;

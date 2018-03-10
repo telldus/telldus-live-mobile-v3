@@ -104,10 +104,11 @@ export default class Device extends View<void, Props, State> {
 	}
 
 	_renderRow = (row: Object): Object => {
+		const { appLayout } = this.props;
 		// TODO: use device description
 		const preparedRow = Object.assign({}, row, { description: '' });
 
-		return <DeviceRow row={preparedRow} onPress={this.selectDevice}/>;
+		return <DeviceRow row={preparedRow} onPress={this.selectDevice} appLayout={appLayout}/>;
 	};
 
 	_shouldReset = (): boolean => {

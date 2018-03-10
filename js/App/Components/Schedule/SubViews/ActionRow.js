@@ -28,7 +28,6 @@ import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
 import Theme from '../../../Theme';
-import { getDeviceWidth } from '../../../Lib';
 
 type ActionType = {
 	name: string,
@@ -37,6 +36,7 @@ type ActionType = {
 	bgColor: string,
 	textColor: string,
 	icon: string,
+	appLayout: Object,
 };
 
 export const ACTIONS: ActionType[] = [
@@ -133,23 +133,23 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			return null;
 		}
 
-		const { onPress, containerStyle } = this.props;
-		const { row, description } = this._getStyle();
+		const { onPress, containerStyle, appLayout } = this.props;
+		const { row, description } = this._getStyle(appLayout);
 
 		return (
 			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}>
 				{this._renderIcon(action)}
-				<TextRowWrapper>
-					<Title color={action.textColor}>{action.name}</Title>
-					<Description style={description}>{action.description}</Description>
+				<TextRowWrapper appLayout={appLayout}>
+					<Title color={action.textColor} appLayout={appLayout}>{action.name}</Title>
+					<Description style={description} appLayout={appLayout}>{action.description}</Description>
 				</TextRowWrapper>
 			</Row>
 		);
 	}
 
 	_renderIcon = (action: ActionType): Object => {
-		const { showValue, methodValue } = this.props;
-		const { dimContainer, dimValue, icon, iconContainer } = this._getStyle();
+		const { showValue, methodValue, appLayout } = this.props;
+		const { dimContainer, dimValue, icon, iconContainer } = this._getStyle(appLayout);
 
 		if (showValue && action.icon === 'dim') {
 			return (
@@ -171,9 +171,11 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 		);
 	};
 
-	_getStyle = (): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { borderRadiusRow } = Theme.Core;
-		const deviceWidth = getDeviceWidth();
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 		const iconContainerWidth = deviceWidth * 0.346666667;
 
 		return {

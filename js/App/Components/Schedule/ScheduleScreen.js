@@ -29,9 +29,9 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FullPageActivityIndicator, View, Dimensions, DialogueBox } from '../../../BaseComponents';
+import { FullPageActivityIndicator, View, DialogueBox } from '../../../BaseComponents';
 import { SchedulePoster } from 'Schedule_SubViews';
-import { getDeviceWidth } from '../../Lib';
+import { getRelativeDimensions } from '../../Lib';
 
 import * as scheduleActions from 'Actions_Schedule';
 import * as modalActions from '../../Actions/Modal';
@@ -66,6 +66,7 @@ export interface ScheduleProps {
 	loading: (loading: boolean) => void,
 	isEditMode: () => boolean,
 	devices: Object,
+	appLayout: Object,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
@@ -160,7 +161,7 @@ class ScheduleScreen extends View<null, Props, State> {
 	render(): React$Element<any> {
 		const { children, navigation, actions, devices, schedule, screenProps, intl, appLayout } = this.props;
 		const { h1, h2, infoButton, loading } = this.state;
-		const { style, modal } = this._getStyle();
+		const { style, modal } = this._getStyle(appLayout);
 		const { dialgueHeader, showNegative, positiveText, onPressPositive, onPressNegative, dialogueContainerStyle} = this.getRelativeData();
 
 		return (
@@ -187,6 +188,7 @@ class ScheduleScreen extends View<null, Props, State> {
 								loading: this.loading,
 								isEditMode: this._isEditMode,
 								...screenProps,
+								appLayout,
 							},
 						)}
 					</View>
@@ -211,9 +213,11 @@ class ScheduleScreen extends View<null, Props, State> {
 		return params && params.editMode;
 	};
 
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
-		const deviceHeight = Dimensions.get('window').height;
+	_getStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const deviceHeight = isPortrait ? height : width;
 		const padding = deviceWidth * 0.033333333;
 
 		let { state } = this.props.screenProps.rootNavigator;
@@ -249,7 +253,7 @@ const mapStateToProps = ({ schedule, devices, modal, App }: mapStateToPropsType)
 		validationMessage: modal.data,
 		showModal: modal.openModal,
 		modalExtras: modal.extras,
-		appLayout: App.layout,
+		appLayout: getRelativeDimensions(App.layout),
 	}
 );
 

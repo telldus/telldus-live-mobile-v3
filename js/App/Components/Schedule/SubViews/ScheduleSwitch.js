@@ -24,13 +24,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch } from 'react-native';
+
 import {Text, View} from '../../../../BaseComponents';
-import { getDeviceWidth } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
 	value: boolean,
 	onValueChange: Function,
+	appLayout: Object,
 };
 
 export default class ScheduleSwitch extends View<null, Props, null> {
@@ -41,8 +42,8 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { value, onValueChange } = this.props;
-		const { container, description } = this._getStyle();
+		const { value, onValueChange, appLayout } = this.props;
+		const { container, description } = this._getStyle(appLayout);
 
 		return (
 			<View style={container}>
@@ -54,8 +55,10 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 		);
 	}
 
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+	_getStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const offsetMiddle = deviceWidth * 0.033333333;
 		const offsetLarge = deviceWidth * 0.04;

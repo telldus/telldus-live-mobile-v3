@@ -26,13 +26,13 @@ import PropTypes from 'prop-types';
 import { BlockIcon, Row, View } from '../../../../BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
-import { getDeviceWidth } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
 	row: Object,
 	onPress?: Function,
 	containerStyle?: Object,
+	appLayout: Object,
 };
 
 export default class DeviceRow extends View<null, Props, null> {
@@ -44,8 +44,8 @@ export default class DeviceRow extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { row, onPress, containerStyle } = this.props;
-		const { row: rowStyle, icon, iconContainer } = this._getStyle();
+		const { row, onPress, containerStyle, appLayout } = this.props;
+		const { row: rowStyle, icon, iconContainer } = this._getStyle(appLayout);
 
 		return (
 			<Row layout="row" row={row} onPress={onPress} style={rowStyle} containerStyle={containerStyle}>
@@ -54,8 +54,8 @@ export default class DeviceRow extends View<null, Props, null> {
 					style={icon}
 					containerStyle={iconContainer}
 				/>
-				<TextRowWrapper>
-					<Title numberOfLines={1} ellipsizeMode="tail">
+				<TextRowWrapper appLayout={appLayout}>
+					<Title numberOfLines={1} ellipsizeMode="tail" appLayout={appLayout}>
 						{row.name}
 					</Title>
 				</TextRowWrapper>
@@ -63,9 +63,11 @@ export default class DeviceRow extends View<null, Props, null> {
 		);
 	}
 
-	_getStyle = (): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { borderRadiusRow } = Theme.Core;
-		const deviceWidth = getDeviceWidth();
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		return {
 			row: {

@@ -27,7 +27,6 @@ import Slider from 'react-native-slider';
 import { FloatingButton, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import Theme from '../../Theme';
-import { getDeviceWidth } from '../../Lib';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -97,7 +96,8 @@ export default class ActionDim extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { container, row, caption, slider } = this._getStyle();
+		const { appLayout } = this.props;
+		const { container, row, caption, slider } = this._getStyle(appLayout);
 
 		const dimValue = this._getDimValue();
 
@@ -116,7 +116,6 @@ export default class ActionDim extends View<null, Props, State> {
 				<FloatingButton
 					onPress={this.selectAction}
 					imageSource={require('./img/right-arrow-key.png')}
-					iconSize={getDeviceWidth() * 0.041333333}
 					paddingRight={this.props.paddingRight}
 				/>
 			</View>
@@ -131,8 +130,10 @@ export default class ActionDim extends View<null, Props, State> {
 		this.setState({ methodValue });
 	};
 
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+	_getStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const thumbSize = deviceWidth * 0.066666667;
 		const padding = deviceWidth * 0.066666667;

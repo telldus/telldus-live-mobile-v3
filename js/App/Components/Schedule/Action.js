@@ -129,7 +129,8 @@ export default class Action extends View<null, ScheduleProps, State> {
 	}
 
 	_renderRow = (method: number): Object => {
-		return <ActionRow method={method} onPress={this._handlePress}/>;
+		const { appLayout } = this.props;
+		return <ActionRow method={method} onPress={this._handlePress} appLayout={appLayout}/>;
 	};
 
 	_handlePress = (row: Object): void => {

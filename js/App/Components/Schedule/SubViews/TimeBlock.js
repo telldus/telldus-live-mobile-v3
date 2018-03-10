@@ -26,12 +26,13 @@ import PropTypes from 'prop-types';
 import { BlockIcon, Row, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import Description from './Description';
-import { capitalize, getDeviceWidth } from '../../../Lib';
+import { capitalize } from '../../../Lib';
 
 type Props = {
 	type: string,
 	onPress: (number) => void,
 	isSelected: boolean,
+	appLayout: Object,
 };
 
 export default class TimeBlock extends View<null, Props, null> {
@@ -43,7 +44,7 @@ export default class TimeBlock extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { type, onPress } = this.props;
+		const { type, onPress, appLayout } = this.props;
 
 		const {
 			container,
@@ -53,7 +54,7 @@ export default class TimeBlock extends View<null, Props, null> {
 			iconColor,
 			iconSize,
 			description,
-		} = this._getStyle();
+		} = this._getStyle(appLayout);
 
 		return (
 			<Row
@@ -69,18 +70,20 @@ export default class TimeBlock extends View<null, Props, null> {
 					bgColor={backgroundColor}
 					containerStyle={iconContainer}
 				/>
-				<Description style={description}>
+				<Description style={description} appLayout={appLayout}>
 					{capitalize(type)}
 				</Description>
 			</Row>
 		);
 	}
 
-	_getStyle = (): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { isSelected, type } = this.props;
 		const { brandSecondary } = Theme.Core;
 
-		const deviceWidth = getDeviceWidth();
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 		const size = deviceWidth * 0.293333333;
 
 		const backgroundColor = isSelected ? brandSecondary : '#fff';

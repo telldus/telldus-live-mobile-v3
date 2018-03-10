@@ -26,9 +26,9 @@ import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import {View, TouchableButton, Dimensions, Throbber} from '../../../BaseComponents';
+import {View, TouchableButton, Throbber} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getDeviceWidth, getSelectedDays } from '../../Lib';
+import { getSelectedDays } from '../../Lib';
 import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from 'Schedule_SubViews';
 import Theme from '../../Theme';
 
@@ -215,15 +215,16 @@ class Edit extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { active, method, methodValue, weekdays } = this.props.schedule;
+		const { appLayout, schedule } = this.props;
+		const { active, method, methodValue, weekdays } = schedule;
 		const { container, row, save, cancel, throbber,
-			throbberContainer, throbberContainerOnSave, throbberContainerOnDelete } = this._getStyle();
+			throbberContainer, throbberContainerOnSave, throbberContainerOnDelete } = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays);
 		const throbberContainerStyle = this.state.isSaving ? throbberContainerOnSave : this.state.isDeleting ? throbberContainerOnDelete : {};
 
 		return (
 			<ScrollView>
-				<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState}/>
+				<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout}/>
 				<View style={container}>
 					<ActionRow
 						method={method}
@@ -231,14 +232,16 @@ class Edit extends View<null, Props, State> {
 						methodValue={methodValue}
 						onPress={this.editAction}
 						containerStyle={row}
+						appLayout={appLayout}
 					/>
 					<TimeRow
 						schedule={this.props.schedule}
 						device={this.device}
 						containerStyle={row}
 						onPress={this.editTime}
+						appLayout={appLayout}
 					/>
-					<DaysRow selectedDays={selectedDays} onPress={this.editDays}/>
+					<DaysRow selectedDays={selectedDays} onPress={this.editDays} appLayout={appLayout}/>
 					<TouchableButton
 						text={messages.confirmAndSave}
 						style={save}
@@ -272,9 +275,11 @@ class Edit extends View<null, Props, State> {
 		return this.props.devices.byId[deviceId];
 	};
 
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
-		const deviceHeight = Dimensions.get('window').height;
+	_getStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const deviceHeight = isPortrait ? height : width;
 
 		const offsetSmall = deviceWidth * 0.026666667;
 		const offsetMiddle = deviceWidth * 0.033333333;

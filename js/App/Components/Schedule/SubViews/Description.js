@@ -25,11 +25,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
-import { getDeviceWidth } from '../../../Lib';
 
 type Props = {
 	children: string | Array<any>,
 	style?: Object,
+	appLayout: Object,
 };
 
 export default class Description extends View<null, Props, null> {
@@ -40,8 +40,8 @@ export default class Description extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { children, style, ...props } = this.props;
-		const defaultStyle = this._getDefaultStyle();
+		const { children, style, appLayout, ...props } = this.props;
+		const defaultStyle = this._getDefaultStyle(appLayout);
 
 		return (
 			<Text {...props} style={[defaultStyle, style]}>
@@ -50,11 +50,14 @@ export default class Description extends View<null, Props, null> {
 		);
 	}
 
-	_getDefaultStyle = (): Object => {
+	_getDefaultStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 		return {
 			color: '#555',
 			fontFamily: Theme.Core.fonts.robotoRegular,
-			fontSize: getDeviceWidth() * 0.04,
+			fontSize: deviceWidth * 0.04,
 			opacity: 0.87,
 		};
 	};

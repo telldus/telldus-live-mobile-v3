@@ -24,11 +24,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from '../../../../BaseComponents';
-import { getDeviceWidth } from '../../../Lib';
 
 type Props = {
 	children: string,
 	style?: Object,
+	appLayout: Object,
 };
 
 export default class TextRowWrapper extends View<null, Props, null> {
@@ -39,8 +39,8 @@ export default class TextRowWrapper extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { children, style } = this.props;
-		const defaultStyle = this._getDefaultStyle();
+		const { children, style, appLayout } = this.props;
+		const defaultStyle = this._getDefaultStyle(appLayout);
 
 		return (
 			<View style={[defaultStyle, style]}>
@@ -49,8 +49,10 @@ export default class TextRowWrapper extends View<null, Props, null> {
 		);
 	}
 
-	_getDefaultStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+	_getDefaultStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		return {
 			justifyContent: 'center',

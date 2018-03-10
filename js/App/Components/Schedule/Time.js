@@ -23,12 +23,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback } from 'react-native';
+import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { TimeBlock, TimeSlider } from 'Schedule_SubViews';
 import Theme from '../../Theme';
-import { getDeviceWidth } from '../../Lib';
 
 const TYPES = ['sunrise', 'sunset', 'time'];
 
@@ -152,42 +151,46 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
+		const { appLayout } = this.props;
 		const { selectedType, randomInterval } = this.state;
-		const { container, row, marginBottom, type } = this._getStyle();
+		const { container, row, marginBottom, type } = this._getStyle(appLayout);
 
 		const shouldRender = !!selectedType;
 
 		return (
-			<View style={container}>
-				<View style={[type.container, { marginBottom }]}>
-					{this._renderTypes(TYPES)}
-				</View>
-				{this._renderTimeRow()}
-				{shouldRender && (
-					<Row containerStyle={row}>
-						<TimeSlider
-							description="Set random intervals between 1 to 1446 minutes"
-							icon="random"
-							minimumValue={0}
-							maximumValue={1446}
-							value={randomInterval}
-							onValueChange={this.setRandomIntervalValue}
+			<ScrollView>
+				<View style={container}>
+					<View style={[type.container, { marginBottom }]}>
+						{this._renderTypes(TYPES)}
+					</View>
+					{this._renderTimeRow()}
+					{shouldRender && (
+						<Row containerStyle={row}>
+							<TimeSlider
+								description="Set random intervals between 1 to 1446 minutes"
+								icon="random"
+								minimumValue={0}
+								maximumValue={1446}
+								value={randomInterval}
+								onValueChange={this.setRandomIntervalValue}
+								appLayout={appLayout}
+							/>
+						</Row>
+					)}
+					{shouldRender && (
+						<FloatingButton
+							onPress={this.selectTime}
+							imageSource={require('./img/right-arrow-key.png')}
+							paddingRight={this.props.paddingRight}
 						/>
-					</Row>
-				)}
-				{shouldRender && (
-					<FloatingButton
-						onPress={this.selectTime}
-						imageSource={require('./img/right-arrow-key.png')}
-						iconSize={getDeviceWidth() * 0.041333333}
-						paddingRight={this.props.paddingRight}
-					/>
-				)}
-			</View>
+					)}
+				</View>
+			</ScrollView>
 		);
 	}
 
 	_renderTimeRow = (): Object | null => {
+		const { appLayout } = this.props;
 		const { selectedType, offset } = this.state;
 
 		if (!selectedType) {
@@ -204,7 +207,8 @@ export default class Time extends View<null, Props, State> {
 			androidTimeValue,
 			androidTimeValueCenterLine,
 			androidTimeCaption,
-		} = this._getStyle();
+			androidTimeMargin,
+		} = this._getStyle(appLayout);
 
 		let timePicker;
 
@@ -227,9 +231,7 @@ export default class Time extends View<null, Props, State> {
 							<View
 								style={[
 									androidTimeValueWrapper,
-									{
-										marginRight: getDeviceWidth() * 0.014666667,
-									},
+									androidTimeMargin,
 								]}
 
 							>
@@ -261,6 +263,7 @@ export default class Time extends View<null, Props, State> {
 				maximumValue={1439}
 				value={offset}
 				onValueChange={this.setTimeOffsetValue}
+				appLayout={appLayout}
 			/>
 		);
 
@@ -306,6 +309,7 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	_renderTypes = (types: string[]): Object[] => {
+		const { appLayout } = this.props;
 		const { selectedType } = this.state;
 
 		return types.map((type: string): Object => {
@@ -317,6 +321,7 @@ export default class Time extends View<null, Props, State> {
 					onPress={this._selectType}
 					isSelected={isSelected}
 					key={type}
+					appLayout={appLayout}
 				/>
 			);
 		});
@@ -328,9 +333,11 @@ export default class Time extends View<null, Props, State> {
 		return date;
 	};
 
-	_getStyle = (): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { brandPrimary, borderRadiusRow } = Theme.Core;
-		const deviceWidth = getDeviceWidth();
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const androidTimeWidth = deviceWidth * 0.213333333;
 		const androidTimeHeight = deviceWidth * 0.177333333;
@@ -396,6 +403,9 @@ export default class Time extends View<null, Props, State> {
 			androidTimeCaption: {
 				color: '#555555',
 				fontSize: deviceWidth * 0.032,
+			},
+			androidTimeMargin: {
+				marginRight: deviceWidth * 0.014666667,
 			},
 		};
 	};

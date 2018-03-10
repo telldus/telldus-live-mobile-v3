@@ -162,11 +162,11 @@ class JobRow extends View<null, Props, null> {
 					isFirst={isFirst}
 				>
 					{this._renderActionIcon()}
-					<TextRowWrapper style={textWrapper}>
-						<Title numberOfLines={1} ellipsizeMode="tail" style={title}>
+					<TextRowWrapper style={textWrapper} appLayout={appLayout}>
+						<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
 							{device.name}
 						</Title>
-						<Description numberOfLines={1} ellipsizeMode="tail" style={description}>
+						<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
 							{repeat}
 							{type === 'time' && (
 								<FormattedTime

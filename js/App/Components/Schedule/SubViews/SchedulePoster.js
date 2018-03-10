@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dimensions, Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 
@@ -38,6 +38,7 @@ type Props = {
 	screenProps: Object,
 	navigation: Object,
 	intl: Object,
+	appLayout: Object,
 };
 
 export default class SchedulePoster extends View<null, Props, null> {
@@ -72,10 +73,10 @@ export default class SchedulePoster extends View<null, Props, null> {
 	}
 
 	render(): React$Element<any> {
-		const style = this._getStyle();
 		const { h1, h2, infoButton, appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const style = this._getStyle(appLayout);
 
 		return (
 			<Poster>
@@ -101,7 +102,8 @@ export default class SchedulePoster extends View<null, Props, null> {
 	}
 
 	_renderInfoButton = (button: Object): Object => {
-		const { roundedInfoButtonContainer, roundedInfoButton } = this._getStyle();
+		const { appLayout } = this.props;
+		const { roundedInfoButtonContainer, roundedInfoButton } = this._getStyle(appLayout);
 
 		return (
 			<TouchableOpacity style={roundedInfoButtonContainer}>
@@ -113,8 +115,10 @@ export default class SchedulePoster extends View<null, Props, null> {
 		);
 	};
 
-	_getStyle = (): Object => {
-		const deviceWidth = Dimensions.get('window').width;
+	_getStyle = (appLayout: object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const roundedInfoButtonSize = deviceWidth * 0.042666667;
 

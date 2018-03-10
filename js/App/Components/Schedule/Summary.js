@@ -25,7 +25,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FloatingButton, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getDeviceWidth, getSelectedDays } from '../../Lib';
+import { getSelectedDays } from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow } from 'Schedule_SubViews';
 import { ScrollView } from 'react-native';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -113,27 +113,29 @@ class Summary extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { schedule, paddingRight } = this.props;
+		const { schedule, paddingRight, appLayout } = this.props;
 		const { method, methodValue, weekdays } = schedule;
-		const { row, iconSize, buttonStyle } = this._getStyle();
+		const { row, iconSize, buttonStyle } = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
 			<View>
 				<ScrollView>
-					<DeviceRow row={this.device} containerStyle={row}/>
+					<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout}/>
 					<ActionRow
 						method={method}
 						showValue={true}
 						methodValue={methodValue}
 						containerStyle={row}
+						appLayout={appLayout}
 					/>
 					<TimeRow
 						schedule={schedule}
 						device={this.device}
 						containerStyle={row}
+						appLayout={appLayout}
 					/>
-					<DaysRow selectedDays={selectedDays}/>
+					<DaysRow selectedDays={selectedDays} appLayout={appLayout}/>
 				</ScrollView>
 				<FloatingButton
 					buttonStyle={buttonStyle}
@@ -152,8 +154,10 @@ class Summary extends View<null, Props, State> {
 		return Object.assign({}, this.props.devices.byId[deviceId], { description: '' });
 	};
 
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+	_getStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		return {
 			row: {

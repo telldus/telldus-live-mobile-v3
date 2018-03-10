@@ -25,13 +25,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { Text, View } from '../../../../BaseComponents';
-import { getDeviceWidth } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
 	children: string,
 	onPress: Function,
 	disabled: boolean,
+	appLayout: Object,
 };
 
 export default class CheckButton extends View<null, Props, null> {
@@ -43,8 +43,8 @@ export default class CheckButton extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { children, onPress, disabled } = this.props;
-		const { container, button, text } = this._getStyle();
+		const { children, onPress, disabled, appLayout } = this.props;
+		const { container, button, text } = this._getStyle(appLayout);
 
 		return (
 			<TouchableOpacity style={container} onPress={onPress} disabled={disabled}>
@@ -57,10 +57,12 @@ export default class CheckButton extends View<null, Props, null> {
 		);
 	}
 
-	_getStyle = (): Object => {
+	_getStyle = (appLayout: Object): Object => {
 		const { disabled } = this.props;
 		const { shadow: themeShadow, fonts, brandSecondary, inactiveGray } = Theme.Core;
-		const deviceWidth = getDeviceWidth();
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const borderRadius = 100;
 		const backgroundColor = disabled ? inactiveGray : brandSecondary;

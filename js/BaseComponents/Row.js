@@ -89,8 +89,10 @@ class Row extends Component<Props, null> {
 
 	_getDefaultStyle = (): Object => {
 		const { borderRadiusRow } = Theme.Core;
-		const { layout } = this.props;
-		const deviceWidth = this.props.appLayout.width;
+		const { layout, appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		const backgroundColor = '#fff';
 

@@ -23,9 +23,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ScrollView } from 'react-native';
+
 import { ScheduleProps } from './ScheduleScreen';
 import { CheckButton, DaysRow, Description } from 'Schedule_SubViews';
-import { getDeviceWidth, getSelectedDays, getWeekdays, getWeekends } from '../../Lib';
+import { getSelectedDays, getWeekdays, getWeekends } from '../../Lib';
 import { CheckboxSolid, FloatingButton, Row, View } from '../../../BaseComponents';
 import _ from 'lodash';
 import { DAYS } from '../../../Constants';
@@ -176,6 +178,7 @@ export default class Days extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
+		const { appLayout } = this.props;
 		const {
 			shouldCheckAll,
 			shouldUncheckAll,
@@ -184,67 +187,71 @@ export default class Days extends View<null, Props, State> {
 			selectedDays,
 		} = this.state;
 
-		const { mainContainer, buttonsContainer, row, rowContainer, checkbox, buttonStyle } = this._getStyle();
+		const { mainContainer, buttonsContainer, row, rowContainer, checkbox, buttonStyle, CheckboxSolidSize, checkBoxBottom } = this._getStyle(appLayout);
 
 		return (
-			<View style={mainContainer}>
-				<DaysRow
-					selectedDays={selectedDays}
-					containerStyle={rowContainer}
-					onDayPress={this.toggleDayState}
-					editMode={true}
-				/>
-				<Row
-					layout="row"
-					onPress={this.toggleWeekdays}
-					style={row}
-					containerStyle={rowContainer}
-				>
-					<CheckboxSolid
+			<ScrollView>
+				<View style={mainContainer}>
+					<DaysRow
+						selectedDays={selectedDays}
+						containerStyle={rowContainer}
+						onDayPress={this.toggleDayState}
+						editMode={true}
+						appLayout={appLayout}
+					/>
+					<Row
+						layout="row"
 						onPress={this.toggleWeekdays}
-						checked={isWeekdaysSelected}
-						style={checkbox}
-					/>
-					<Description>
+						style={row}
+						containerStyle={rowContainer}
+					>
+						<CheckboxSolid
+							onPress={this.toggleWeekdays}
+							checked={isWeekdaysSelected}
+							style={checkbox}
+							size={CheckboxSolidSize}
+						/>
+						<Description appLayout={appLayout}>
 						Weekdays (Monday to Friday)
-					</Description>
-				</Row>
-				<Row
-					layout="row"
-					onPress={this.toggleWeekends}
-					style={row}
-					containerStyle={[
-						rowContainer,
-						{ marginBottom: getDeviceWidth() * 0.068 },
-					]}
-				>
-					<CheckboxSolid
+						</Description>
+					</Row>
+					<Row
+						layout="row"
 						onPress={this.toggleWeekends}
-						checked={isWeekendsSelected}
-						style={checkbox}
-					/>
-					<Description>
+						style={row}
+						containerStyle={[
+							rowContainer,
+							{ marginBottom: checkBoxBottom },
+						]}
+					>
+						<CheckboxSolid
+							onPress={this.toggleWeekends}
+							checked={isWeekendsSelected}
+							style={checkbox}
+							size={CheckboxSolidSize}
+						/>
+						<Description appLayout={appLayout}>
 						Weekends (Saturday & Sunday)
-					</Description>
-				</Row>
-				<View style={[row, buttonsContainer]}>
-					<CheckButton onPress={this.checkAll} disabled={!shouldCheckAll}>
+						</Description>
+					</Row>
+					<View style={[row, buttonsContainer]}>
+						<CheckButton onPress={this.checkAll} disabled={!shouldCheckAll} appLayout={appLayout}>
 						Check all
-					</CheckButton>
-					<CheckButton onPress={this.uncheckAll} disabled={!shouldUncheckAll}>
+						</CheckButton>
+						<CheckButton onPress={this.uncheckAll} disabled={!shouldUncheckAll} appLayout={appLayout}>
 						Uncheck all
-					</CheckButton>
+						</CheckButton>
+					</View>
+					{selectedDays.length > 0 && (
+						<FloatingButton
+							buttonStyle={buttonStyle}
+							onPress={this.selectDays}
+							imageSource={require('./img/right-arrow-key.png')}
+							paddingRight={this.props.paddingRight}
+						/>
+					)}
 				</View>
-				{selectedDays.length > 0 && (
-					<FloatingButton
-						buttonStyle={buttonStyle}
-						onPress={this.selectDays}
-						imageSource={require('./img/right-arrow-key.png')}
-						iconSize={getDeviceWidth() * 0.041333333}
-						paddingRight={this.props.paddingRight}
-					/>
-				)}
-			</View>
+			</ScrollView>
 		);
 	}
 
@@ -270,8 +277,10 @@ export default class Days extends View<null, Props, State> {
 		return isSelected;
 	};
 
-	_getStyle = (): Object => {
-		const deviceWidth = getDeviceWidth();
+	_getStyle = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		return {
 			mainContainer: {
@@ -297,6 +306,8 @@ export default class Days extends View<null, Props, State> {
 				elevation: 4,
 				shadowOpacity: 0.99,
 			},
+			CheckboxSolidSize: deviceWidth * 0.066666667,
+			checkBoxBottom: deviceWidth * 0.068,
 		};
 	};
 }
