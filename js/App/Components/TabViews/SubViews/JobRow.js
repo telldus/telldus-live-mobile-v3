@@ -30,7 +30,7 @@ import _ from 'lodash';
 import { BlockIcon, IconTelldus, ListRow, View, Text, FormattedTime } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from 'Schedule_SubViews';
-import { capitalize, getSelectedDays, getWeekdays, getWeekends } from '../../../Lib';
+import { capitalize, getSelectedDays, getWeekdays, getWeekends, getRelativeDimensions } from '../../../Lib';
 import { DAYS } from '../../../../Constants';
 import type { Schedule } from 'Reducers_Schedule';
 
@@ -326,7 +326,7 @@ class JobRow extends View<null, Props, null> {
 
 function mapStateToProps(state: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 

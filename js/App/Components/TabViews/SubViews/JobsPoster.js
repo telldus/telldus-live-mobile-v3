@@ -24,6 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Image, TouchableOpacity } from 'react-native';
+
 import { Poster, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 

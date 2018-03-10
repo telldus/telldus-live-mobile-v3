@@ -45,7 +45,7 @@ import { editSchedule, getJobs } from '../../Actions';
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from 'Reducers_Schedule';
 
-import { getTabBarIcon } from '../../Lib';
+import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
 
 const messages = defineMessages({
 	scheduler: {
@@ -331,6 +331,7 @@ type MapStateToPropsType = {
 	rowsAndSections: Object[],
 	devices: Object,
 	tab: string,
+	appLayout: Object,
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {
@@ -338,7 +339,7 @@ const mapStateToProps = (store: Object): MapStateToPropsType => {
 		rowsAndSections: getRowsAndSections(store),
 		devices: store.devices,
 		tab: store.navigation.tab,
-		appLayout: store.App.layout,
+		appLayout: getRelativeDimensions(store.App.layout),
 	};
 };
 
