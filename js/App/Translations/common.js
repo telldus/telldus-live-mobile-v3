@@ -93,6 +93,14 @@ const messages = defineMessages({
 		id: 'time',
 		defaultMessage: 'Time',
 	},
+	sunset: {
+		id: 'sunset',
+		defaultMessage: 'Sunset',
+	},
+	sunrise: {
+		id: 'sunrise',
+		defaultMessage: 'Sunrise',
+	},
 	unknown: {
 		id: 'unknown',
 		defaultMessage: 'Unknown',
@@ -214,15 +222,19 @@ const messages = defineMessages({
 	},
 	labelDevice: {
 		id: 'accessibilityLabel.labelDevice',
-		defaultMessage: 'device',
+		defaultMessage: 'Device',
 	},
 	labelSensor: {
 		id: 'accessibilityLabel.labelSensor',
-		defaultMessage: 'sensor',
+		defaultMessage: 'Sensor',
 	},
 	labelSchedule: {
 		id: 'accessibilityLabel.labelSchedule',
 		defaultMessage: 'Schedule',
+	},
+	labelActive: {
+		id: 'accessibilityLabel.labelActive',
+		defaultMessage: 'Active',
 	},
 	labelHumidity: {
 		id: 'accessibilityLabel.sensors.labelHumidity',
@@ -310,7 +322,7 @@ const messages = defineMessages({
 	},
 	labelAction: {
 		id: 'accessibilityLabel.devices.labelAction',
-		defaultMessage: 'action',
+		defaultMessage: 'Action',
 	},
 	defaultDescriptionButton: {
 		id: 'accessibilityLabel.defaultDescriptionButton',
@@ -492,6 +504,50 @@ const messages = defineMessages({
 	messageControlDimStep: {
 		id: 'accessibilityLabel.messageControlDimStep',
 		defaultMessage: 'Double tap to control',
+	},
+	edit: {
+		id: 'accessibilityLabel.edit',
+		defaultMessage: 'Edit',
+	},
+	summary: {
+		id: 'accessibilityLabel.summary',
+		defaultMessage: 'Summary',
+	},
+	weekends: {
+		id: 'accessibilityLabel.weekends',
+		defaultMessage: 'Weekends',
+	},
+	weekdays: {
+		id: 'accessibilityLabel.weekdays',
+		defaultMessage: 'Weekdays',
+	},
+	weekendsDescription: {
+		id: 'accessibilityLabel.weekendsDescription',
+		defaultMessage: 'Saturday & Sunday',
+	},
+	weekdaysDescription: {
+		id: 'accessibilityLabel.weekdaysDescription',
+		defaultMessage: 'Monday to Friday',
+	},
+	posterChooseAction: {
+		id: 'schedule.posterChooseAction',
+		defaultMessage: 'Choose an action to execute',
+	},
+	posterDays: {
+		id: 'schedule.posterDays',
+		defaultMessage: 'Days',
+	},
+	posterChooseDays: {
+		id: 'schedule.posterChooseDays',
+		defaultMessage: 'Choose days for event repeating',
+	},
+	posterChooseDevice: {
+		id: 'schedule.posterChooseDevice',
+		defaultMessage: 'Choose a device',
+	},
+	posterChooseTime: {
+		id: 'schedule.posterChooseTime',
+		defaultMessage: 'Choose a time for the action',
 	},
 });
 

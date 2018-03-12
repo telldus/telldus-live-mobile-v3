@@ -27,11 +27,13 @@ import { Switch } from 'react-native';
 
 import {Text, View} from '../../../../BaseComponents';
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	value: boolean,
 	onValueChange: Function,
 	appLayout: Object,
+	intl: Object,
 };
 
 export default class ScheduleSwitch extends View<null, Props, null> {
@@ -41,6 +43,13 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 		onValueChange: PropTypes.func.isRequired,
 	};
 
+	constructor(props: Props) {
+		super(props);
+		let { formatMessage } = this.props.intl;
+
+		this.label = `${formatMessage(i18n.labelSchedule)} ${formatMessage(i18n.labelActive).toLowerCase()}`;
+	}
+
 	render(): React$Element<any> {
 		const { value, onValueChange, appLayout } = this.props;
 		const { container, description } = this._getStyle(appLayout);
@@ -48,7 +57,7 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 		return (
 			<View style={container}>
 				<Text style={description}>
-					Schedule active
+					{this.label}
 				</Text>
 				<Switch value={value} onValueChange={onValueChange}/>
 			</View>

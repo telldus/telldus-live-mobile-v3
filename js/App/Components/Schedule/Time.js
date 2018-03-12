@@ -24,10 +24,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { defineMessages } from 'react-intl';
+
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { TimeBlock, TimeSlider } from 'Schedule_SubViews';
 import Theme from '../../Theme';
+import i18n from '../../Translations/common';
+
+const messages = defineMessages({
+	descriptionSliderOffset: {
+		id: 'schedule.time.descriptionSliderOffset',
+		defaultMessage: 'Offset the time between {startValue} to {endValue} minutes',
+		description: 'Info about choosing time offset for the schedule',
+	},
+	descriptionSliderInterval: {
+		id: 'schedule.time.descriptionSliderInterval',
+		defaultMessage: 'Set random intervals between {startValue} to {endValue} minutes',
+		description: 'Info about choosing random time interval for the schedule',
+	},
+});
 
 const TYPES = ['sunrise', 'sunset', 'time'];
 
@@ -58,8 +74,12 @@ export default class Time extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.h1 = '3. Time';
-		this.h2 = 'Choose a time for the action';
+		let { formatMessage } = this.props.intl;
+
+		this.h1 = `3. ${formatMessage(i18n.time)}`;
+		this.h2 = formatMessage(i18n.posterChooseTime);
+		this.labelSliderInterval = formatMessage(messages.descriptionSliderInterval, {startValue: 1, endValue: 1446});
+		this.labelSliderOffset = formatMessage(messages.descriptionSliderOffset, {startValue: -1439, endValue: +1439});
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
@@ -167,7 +187,7 @@ export default class Time extends View<null, Props, State> {
 					{shouldRender && (
 						<Row containerStyle={row}>
 							<TimeSlider
-								description="Set random intervals between 1 to 1446 minutes"
+								description={this.labelSliderInterval}
 								icon="random"
 								minimumValue={0}
 								maximumValue={1446}
@@ -257,7 +277,7 @@ export default class Time extends View<null, Props, State> {
 
 		const timeSlider = (
 			<TimeSlider
-				description="Offset the time between -1439 to +1439 minutes"
+				description={this.labelSliderOffset}
 				icon="offset"
 				minimumValue={-1439}
 				maximumValue={1439}
@@ -309,7 +329,7 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	_renderTypes = (types: string[]): Object[] => {
-		const { appLayout } = this.props;
+		const { appLayout, intl } = this.props;
 		const { selectedType } = this.state;
 
 		return types.map((type: string): Object => {
@@ -322,6 +342,7 @@ export default class Time extends View<null, Props, State> {
 					isSelected={isSelected}
 					key={type}
 					appLayout={appLayout}
+					intl={intl}
 				/>
 			);
 		});

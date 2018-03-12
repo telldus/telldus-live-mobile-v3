@@ -31,6 +31,7 @@ import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
 import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from 'Schedule_SubViews';
 import Theme from '../../Theme';
+import i18n from '../../Translations/common';
 
 interface Props extends ScheduleProps {
 	devices: Object,
@@ -68,6 +69,10 @@ const messages = defineMessages({
 		defaultMessage: 'DELETE',
 		description: 'Dialogue box header when user choose to delete schedule.',
 	},
+	posterEditDevice: {
+		id: 'schedule.posterEditDevice',
+		defaultMessage: 'Click the details you want to edit',
+	},
 });
 
 type State = {
@@ -104,12 +109,14 @@ class Edit extends View<null, Props, State> {
 
 		this.device = this._getDeviceById(this.props.schedule.deviceId);
 
-		this.h1 = `Edit ${this.device.name}`;
-		this.h2 = 'Click the details you want to edit';
-		this.messageOnDelete = this.props.intl.formatMessage(messages.deleteScheduleSuccess);
-		this.messageOnUpdate = this.props.intl.formatMessage(messages.updateScheduleSuccess);
-		this.deleteScheduleDialogue = this.props.intl.formatMessage(messages.deleteScheduleDialogue);
-		this.deleteScheduleDialogueHeader = `${this.props.intl.formatMessage(messages.deleteScheduleDialogueHeader)}?`;
+		let { formatMessage } = this.props.intl;
+
+		this.h1 = `${formatMessage(i18n.edit)} ${this.device.name}`;
+		this.h2 = formatMessage(messages.posterEditDevice);
+		this.messageOnDelete = formatMessage(messages.deleteScheduleSuccess);
+		this.messageOnUpdate = formatMessage(messages.updateScheduleSuccess);
+		this.deleteScheduleDialogue = formatMessage(messages.deleteScheduleDialogue);
+		this.deleteScheduleDialogueHeader = `${formatMessage(messages.deleteScheduleDialogueHeader)}?`;
 
 		this.onSaveSchedule = this.onSaveSchedule.bind(this);
 		this.onDeleteSchedule = this.onDeleteSchedule.bind(this);
@@ -215,7 +222,7 @@ class Edit extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { appLayout, schedule } = this.props;
+		const { appLayout, schedule, intl } = this.props;
 		const { active, method, methodValue, weekdays } = schedule;
 		const { container, row, save, cancel, throbber,
 			throbberContainer, throbberContainerOnSave, throbberContainerOnDelete } = this._getStyle(appLayout);
@@ -224,7 +231,7 @@ class Edit extends View<null, Props, State> {
 
 		return (
 			<ScrollView>
-				<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout}/>
+				<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout} intl={intl}/>
 				<View style={container}>
 					<ActionRow
 						method={method}
@@ -233,6 +240,7 @@ class Edit extends View<null, Props, State> {
 						onPress={this.editAction}
 						containerStyle={row}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<TimeRow
 						schedule={this.props.schedule}
@@ -240,6 +248,7 @@ class Edit extends View<null, Props, State> {
 						containerStyle={row}
 						onPress={this.editTime}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<DaysRow selectedDays={selectedDays} onPress={this.editDays} appLayout={appLayout}/>
 					<TouchableButton

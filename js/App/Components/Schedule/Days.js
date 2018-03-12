@@ -24,6 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
+import { defineMessages } from 'react-intl';
 
 import { ScheduleProps } from './ScheduleScreen';
 import { CheckButton, DaysRow, Description } from 'Schedule_SubViews';
@@ -31,7 +32,18 @@ import { getSelectedDays, getWeekdays, getWeekends } from '../../Lib';
 import { CheckboxSolid, FloatingButton, Row, View } from '../../../BaseComponents';
 import _ from 'lodash';
 import { DAYS } from '../../../Constants';
+import i18n from '../../Translations/common';
 
+const messages = defineMessages({
+	checkAll: {
+		id: 'button.checkAll',
+		defaultMessage: 'Check all',
+	},
+	unCheckAll: {
+		id: 'button.unCheckAll',
+		defaultMessage: 'Uncheck all',
+	},
+});
 interface Props extends ScheduleProps {
 	paddingRight: number,
 }
@@ -58,8 +70,14 @@ export default class Days extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.h1 = '4. Days';
-		this.h2 = 'Choose days for event repeating';
+		let { formatMessage } = this.props.intl;
+
+		this.h1 = `4. ${formatMessage(i18n.posterDays)}`;
+		this.h2 = formatMessage(i18n.posterChooseDays);
+		this.labelCheckAll = formatMessage(messages.checkAll);
+		this.labelUncheckAll = formatMessage(messages.unCheckAll);
+		this.labelWeekDays = `${formatMessage(i18n.weekdays)} (${formatMessage(i18n.weekdaysDescription)})`;
+		this.labelWeekEnds = `${formatMessage(i18n.weekends)} (${formatMessage(i18n.weekendsDescription)})`;
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
@@ -212,7 +230,7 @@ export default class Days extends View<null, Props, State> {
 							size={CheckboxSolidSize}
 						/>
 						<Description appLayout={appLayout}>
-						Weekdays (Monday to Friday)
+							{this.labelWeekDays}
 						</Description>
 					</Row>
 					<Row
@@ -231,15 +249,15 @@ export default class Days extends View<null, Props, State> {
 							size={CheckboxSolidSize}
 						/>
 						<Description appLayout={appLayout}>
-						Weekends (Saturday & Sunday)
+							{this.labelWeekEnds}
 						</Description>
 					</Row>
 					<View style={[row, buttonsContainer]}>
 						<CheckButton onPress={this.checkAll} disabled={!shouldCheckAll} appLayout={appLayout}>
-						Check all
+							{this.labelCheckAll}
 						</CheckButton>
 						<CheckButton onPress={this.uncheckAll} disabled={!shouldUncheckAll} appLayout={appLayout}>
-						Uncheck all
+							{this.labelUncheckAll}
 						</CheckButton>
 					</View>
 					{selectedDays.length > 0 && (

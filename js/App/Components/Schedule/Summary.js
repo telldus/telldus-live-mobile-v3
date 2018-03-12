@@ -29,6 +29,7 @@ import { getSelectedDays } from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow } from 'Schedule_SubViews';
 import { ScrollView } from 'react-native';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import i18n from '../../Translations/common';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -45,6 +46,10 @@ const messages = defineMessages({
 		id: 'toast.addScheduleSuccess',
 		defaultMessage: 'Schedule has been added successfully',
 		description: 'The message to show, when a schedule is added successfully',
+	},
+	posterSummary: {
+		id: 'schedule.posterSummary',
+		defaultMessage: 'Please confirm the schedule',
 	},
 });
 
@@ -68,9 +73,11 @@ class Summary extends View<null, Props, State> {
 			isLoading: false,
 		};
 
-		this.h1 = '5. Summary';
-		this.h2 = 'Please confirm the schedule';
-		this.messageOnAdd = this.props.intl.formatMessage(messages.addScheduleSuccess);
+		let { formatMessage } = this.props.intl;
+
+		this.h1 = `5. ${formatMessage(i18n.summary)}`;
+		this.h2 = formatMessage(messages.posterSummary);
+		this.messageOnAdd = formatMessage(messages.addScheduleSuccess);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
@@ -113,7 +120,7 @@ class Summary extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { schedule, paddingRight, appLayout } = this.props;
+		const { schedule, paddingRight, appLayout, intl } = this.props;
 		const { method, methodValue, weekdays } = schedule;
 		const { row, iconSize, buttonStyle } = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays);
@@ -128,12 +135,14 @@ class Summary extends View<null, Props, State> {
 						methodValue={methodValue}
 						containerStyle={row}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<TimeRow
 						schedule={schedule}
 						device={this.device}
 						containerStyle={row}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<DaysRow selectedDays={selectedDays} appLayout={appLayout}/>
 				</ScrollView>

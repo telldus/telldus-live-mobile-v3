@@ -23,10 +23,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { List, ListDataSource, View } from '../../../BaseComponents';
 import type { ScheduleProps } from './ScheduleScreen';
 import { ActionRow } from 'Schedule_SubViews';
 import getDeviceType from '../../Lib/getDeviceType';
+import i18n from '../../Translations/common';
 
 type State = {
 	dataSource: Object,
@@ -46,8 +48,10 @@ export default class Action extends View<null, ScheduleProps, State> {
 	constructor(props: ScheduleProps) {
 		super(props);
 
-		this.h1 = '2. Action';
-		this.h2 = 'Choose an action to execute';
+		let { formatMessage } = this.props.intl;
+
+		this.h1 = `2. ${formatMessage(i18n.labelAction)}`;
+		this.h2 = formatMessage(i18n.posterChooseAction);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
@@ -129,12 +133,15 @@ export default class Action extends View<null, ScheduleProps, State> {
 	}
 
 	_renderRow = (method: number): Object => {
-		const { appLayout } = this.props;
-		return <ActionRow method={method} onPress={this._handlePress} appLayout={appLayout}/>;
+		const { appLayout, intl } = this.props;
+		return <ActionRow method={method} onPress={this._handlePress} appLayout={appLayout} intl={intl}/>;
 	};
 
 	_handlePress = (row: Object): void => {
-		if (row.name === 'Dim') {
+		let { formatMessage } = this.props.intl;
+		let name = formatMessage(row.name);
+
+		if (name === 'Dim') {
 			return this.navigateToDim();
 		}
 		this.selectAction(row.method);

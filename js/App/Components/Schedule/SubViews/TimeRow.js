@@ -24,11 +24,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
+import { defineMessages } from 'react-intl';
+
 import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
 import Theme from '../../../Theme';
-import { capitalize, getSuntime } from '../../../Lib';
+import { getSuntime } from '../../../Lib';
 import type { Schedule } from 'Reducers_Schedule';
+import i18n from '../../../Translations/common';
+
+const messages = defineMessages({
+	descriptionOffset: {
+		id: 'schedule.time.descriptionOffset',
+		defaultMessage: 'Offset {value} min',
+		description: 'Details about time of the schedule',
+	},
+	descriptionInterval: {
+		id: 'schedule.time.descriptionInterval',
+		defaultMessage: 'Random interval {value} min',
+		description: 'Details about interval of the schedule',
+	},
+});
 
 type Time = {
 	hour: number,
@@ -41,6 +57,7 @@ type Props = {
 	containerStyle?: Object,
 	onPress?: Function,
 	appLayout: Object,
+	intl: Object,
 };
 
 type State = {
@@ -115,7 +132,7 @@ export default class TimeRow extends View<null, Props, State> {
 			);
 		}
 
-		const { schedule, containerStyle, onPress, appLayout } = this.props;
+		const { schedule, containerStyle, onPress, appLayout, intl } = this.props;
 		const { offset, randomInterval, type } = schedule;
 
 		const {
@@ -127,9 +144,13 @@ export default class TimeRow extends View<null, Props, State> {
 			icon,
 			description,
 		} = this._getStyle(appLayout);
+		const label = this.getLabel(type);
 
 		const offsetIcon = offset ? 'offset' : null;
 		const randomIcon = randomInterval ? 'random' : null;
+
+		const labelInterval = randomInterval ? intl.formatMessage(messages.descriptionInterval, {value: randomInterval}) : null;
+		const labelOffset = offset ? intl.formatMessage(messages.descriptionOffset, {value: offset}) : null;
 
 		return (
 			<Row layout="row" containerStyle={[container, containerStyle]} onPress={onPress}>
@@ -142,13 +163,13 @@ export default class TimeRow extends View<null, Props, State> {
 				/>
 				<View style={textWrapper}>
 					<Description style={title} appLayout={appLayout}>
-						{`${capitalize(type)} ${this._formatTime()}`}
+						{`${label} ${this._formatTime()}`}
 					</Description>
 					{!!offset && (
 						<View style={iconRow}>
 							<IconTelldus icon={offsetIcon} style={icon}/>
 							<Description style={description} appLayout={appLayout}>
-								{`Offset ${offset} min`}
+								{labelOffset}
 							</Description>
 						</View>
 					)}
@@ -156,7 +177,7 @@ export default class TimeRow extends View<null, Props, State> {
 						<View style={iconRow}>
 							<IconTelldus icon={randomIcon} style={icon}/>
 							<Description style={description} appLayout={appLayout}>
-								{`Random interval ${randomInterval} min`}
+								{labelInterval}
 							</Description>
 						</View>
 					)}
@@ -201,6 +222,16 @@ export default class TimeRow extends View<null, Props, State> {
 	_formatTimeValue = (value: number): string => {
 		return value < 10 ? `0${value}` : value.toString();
 	};
+
+	getLabel(type: string): string {
+		let { formatMessage } = this.props.intl;
+		if (type === 'sunrise') {
+			return formatMessage(i18n.sunrise);
+		} else if (type === 'sunset') {
+			return formatMessage(i18n.sunset);
+		}
+		return formatMessage(i18n.time);
+	}
 
 	_getStyle = (appLayout: Object): Object => {
 		const { offset, randomInterval, type } = this.props.schedule;

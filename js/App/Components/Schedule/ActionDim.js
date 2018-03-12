@@ -24,9 +24,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Slider from 'react-native-slider';
+
 import { FloatingButton, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import Theme from '../../Theme';
+import i18n from '../../Translations/common';
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -50,8 +52,10 @@ export default class ActionDim extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.h1 = '2. Action';
-		this.h2 = 'Choose an action to execute';
+		let { formatMessage } = this.props.intl;
+
+		this.h1 = `2. ${formatMessage(i18n.labelAction)}`;
+		this.h2 = formatMessage(i18n.posterChooseAction);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};

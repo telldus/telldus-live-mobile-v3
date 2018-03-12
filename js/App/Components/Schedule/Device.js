@@ -23,10 +23,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { List, ListDataSource, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { DeviceRow } from 'Schedule_SubViews';
-
+import i18n from '../../Translations/common';
 interface Props extends ScheduleProps {
 	devices: Object,
 	resetSchedule: () => void,
@@ -56,8 +57,10 @@ export default class Device extends View<void, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.h1 = '1. Device';
-		this.h2 = 'Choose a device';
+		let { formatMessage } = this.props.intl;
+
+		this.h1 = `1. ${formatMessage(i18n.labelDevice)}`;
+		this.h2 = formatMessage(i18n.posterChooseDevice);
 	}
 
 	componentWillMount() {

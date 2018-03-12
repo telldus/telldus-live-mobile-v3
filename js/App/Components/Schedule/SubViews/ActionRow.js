@@ -23,11 +23,45 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { defineMessages } from 'react-intl';
+
 import { BlockIcon, Row, Text, View } from '../../../../BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
+
+const messages = defineMessages({
+	onDescription: {
+		id: 'actions.onDescription',
+		defaultMessage: 'Turns the device on',
+	},
+	offDescription: {
+		id: 'actions.offDescription',
+		defaultMessage: 'Turns the device off',
+	},
+	bellDescription: {
+		id: 'actions.bellDescription',
+		defaultMessage: 'Ring the bell',
+	},
+	dimDescription: {
+		id: 'actions.dimDescription',
+		defaultMessage: 'Dims the device',
+	},
+	upDescription: {
+		id: 'actions.upDescription',
+		defaultMessage: 'Turn the device up',
+	},
+	downDescription: {
+		id: 'actions.downDescription',
+		defaultMessage: 'Turn the device down',
+	},
+	stopDescription: {
+		id: 'actions.stopDescription',
+		defaultMessage: 'Stop the device',
+	},
+});
 
 type ActionType = {
 	name: string,
@@ -36,61 +70,60 @@ type ActionType = {
 	bgColor: string,
 	textColor: string,
 	icon: string,
-	appLayout: Object,
 };
 
 export const ACTIONS: ActionType[] = [
 	{
-		name: 'On',
-		description: 'Turns the device on',
+		name: i18n.on,
+		description: messages.onDescription,
 		method: 1,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
 		icon: 'on',
 	},
 	{
-		name: 'Off',
-		description: 'Turns the device off',
+		name: i18n.off,
+		description: messages.offDescription,
 		method: 2,
 		bgColor: '#999',
 		textColor: '#999',
 		icon: 'off',
 	},
 	{
-		name: 'Bell',
-		description: 'Ring the bell',
+		name: i18n.bell,
+		description: messages.bellDescription,
 		method: 4,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
 		icon: 'bell',
 	},
 	{
-		name: 'Dim',
-		description: 'Dims the device',
+		name: i18n.dim,
+		description: messages.dimDescription,
 		method: 16,
 		bgColor: '#e88631',
 		textColor: Theme.Core.brandSecondary,
 		icon: 'dim',
 	},
 	{
-		name: 'Up',
-		description: 'Turn the device up',
+		name: i18n.up,
+		description: messages.upDescription,
 		method: 128,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
 		icon: 'up',
 	},
 	{
-		name: 'Down',
-		description: 'Turn the device down',
+		name: i18n.down,
+		description: messages.downDescription,
 		method: 256,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
 		icon: 'down',
 	},
 	{
-		name: 'Stop',
-		description: 'Stop the device',
+		name: i18n.stop,
+		description: messages.stopDescription,
 		method: 512,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
@@ -109,6 +142,8 @@ type Props = {
 	containerStyle?: Object,
 	showValue?: boolean,
 	methodValue?: number,
+	appLayout: Object,
+	intl: Object,
 };
 
 export default class ActionRow extends View<DefaultProps, Props, null> {
@@ -133,15 +168,15 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			return null;
 		}
 
-		const { onPress, containerStyle, appLayout } = this.props;
+		const { onPress, containerStyle, appLayout, intl } = this.props;
 		const { row, description } = this._getStyle(appLayout);
 
 		return (
 			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}>
 				{this._renderIcon(action)}
 				<TextRowWrapper appLayout={appLayout}>
-					<Title color={action.textColor} appLayout={appLayout}>{action.name}</Title>
-					<Description style={description} appLayout={appLayout}>{action.description}</Description>
+					<Title color={action.textColor} appLayout={appLayout}>{intl.formatMessage(action.name)}</Title>
+					<Description style={description} appLayout={appLayout}>{intl.formatMessage(action.description)}</Description>
 				</TextRowWrapper>
 			</Row>
 		);

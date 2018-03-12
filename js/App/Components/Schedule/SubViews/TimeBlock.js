@@ -26,13 +26,14 @@ import PropTypes from 'prop-types';
 import { BlockIcon, Row, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import Description from './Description';
-import { capitalize } from '../../../Lib';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	type: string,
 	onPress: (number) => void,
 	isSelected: boolean,
 	appLayout: Object,
+	intl: Object,
 };
 
 export default class TimeBlock extends View<null, Props, null> {
@@ -42,6 +43,16 @@ export default class TimeBlock extends View<null, Props, null> {
 		onPress: PropTypes.func.isRequired,
 		isSelected: PropTypes.bool.isRequired,
 	};
+
+	getLabel(type: string): string {
+		let { formatMessage } = this.props.intl;
+		if (type === 'sunrise') {
+			return formatMessage(i18n.sunrise);
+		} else if (type === 'sunset') {
+			return formatMessage(i18n.sunset);
+		}
+		return formatMessage(i18n.time);
+	}
 
 	render(): React$Element<any> {
 		const { type, onPress, appLayout } = this.props;
@@ -55,6 +66,7 @@ export default class TimeBlock extends View<null, Props, null> {
 			iconSize,
 			description,
 		} = this._getStyle(appLayout);
+		const label = this.getLabel(type);
 
 		return (
 			<Row
@@ -71,7 +83,7 @@ export default class TimeBlock extends View<null, Props, null> {
 					containerStyle={iconContainer}
 				/>
 				<Description style={description} appLayout={appLayout}>
-					{capitalize(type)}
+					{label}
 				</Description>
 			</Row>
 		);

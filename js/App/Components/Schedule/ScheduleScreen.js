@@ -66,6 +66,7 @@ export interface ScheduleProps {
 	loading: (loading: boolean) => void,
 	isEditMode: () => boolean,
 	devices: Object,
+	intl: Object,
 	appLayout: Object,
 }
 
@@ -189,6 +190,7 @@ class ScheduleScreen extends View<null, Props, State> {
 								isEditMode: this._isEditMode,
 								...screenProps,
 								appLayout,
+								intl,
 							},
 						)}
 					</View>
