@@ -89,6 +89,7 @@ class HeaderComponent extends Base {
 			logoImage: {
 				width: this.deviceWidth * 0.307333333,
 				height: this.deviceWidth * 0.046666667,
+				resizeMode: 'contain',
 			},
 			iosToolbarSearch: {
 				backgroundColor: this.getTheme().toolbarInputColor,
