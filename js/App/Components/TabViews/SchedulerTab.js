@@ -28,6 +28,7 @@ import { defineMessages } from 'react-intl';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
+import Platform from 'Platform';
 
 import {
 	FloatingButton,
@@ -166,9 +167,10 @@ class SchedulerTab extends View<null, Props, State> {
 
 		const { todayIndex, daysToRender } = this.state;
 		const { appLayout } = this.props;
+		const { swiperContainer } = this.getStyles(appLayout);
 
 		return (
-			<View>
+			<View style={swiperContainer}>
 				<JobsPoster
 					days={this.days}
 					todayIndex={todayIndex}
@@ -194,7 +196,11 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const { width } = appLayout;
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.05) + (height * 0.13) : 0;
+		const marginLeft = (Platform.OS === 'android' && !isPortrait) ? (width * 0.07303) : 0;
 
 		return {
 			line: {
@@ -202,9 +208,13 @@ class SchedulerTab extends View<null, Props, State> {
 				height: '100%',
 				width: 1,
 				position: 'absolute',
-				left: width * 0.069333333,
+				left: (width - headerHeight) * 0.069333333,
 				top: 0,
 				zIndex: -1,
+			},
+			swiperContainer: {
+				flex: 1,
+				marginLeft,
 			},
 		};
 	}

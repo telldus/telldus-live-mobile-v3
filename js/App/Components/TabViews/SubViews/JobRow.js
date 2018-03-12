@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import Platform from 'Platform';
 
 import { BlockIcon, IconTelldus, ListRow, View, Text, FormattedTime } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
@@ -247,10 +248,12 @@ class JobRow extends View<null, Props, null> {
 	};
 
 	_getStyle = (appLayout: Object): Object => {
-		const { fonts, borderRadiusRow } = Theme.Core;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
+		let { fonts, borderRadiusRow } = Theme.Core;
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let deviceWidth = isPortrait ? width : height;
+		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
+		width = width - headerHeight;
 
 		let backgroundColor;
 		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);

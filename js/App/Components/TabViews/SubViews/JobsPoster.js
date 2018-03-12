@@ -24,6 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Image, TouchableOpacity } from 'react-native';
+import Platform from 'Platform';
 
 import { Poster, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
@@ -99,6 +100,13 @@ export default class JobsPoster extends View<null, Props, State> {
 		return newProps || newState || appLayout;
 	}
 
+	getPosterWidth(): number {
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		return (Platform.OS === 'android' && !isPortrait) ? (width - ((width * 0.11) + (height * 0.13))) : width;
+	}
+
 	render(): React$Element<any> {
 		const { showLeftButton, showRightButton } = this.state;
 		const {
@@ -109,9 +117,10 @@ export default class JobsPoster extends View<null, Props, State> {
 			arrow,
 		} = this._getStyle();
 		const image = require('../../../../BaseComponents/img/keyboard-left-arrow-button.png');
+		const posterWidth = this.getPosterWidth();
 
 		return (
-			<Poster>
+			<Poster posterWidth={posterWidth}>
 				<View style={daysContainer}>
 					{this._renderDays()}
 					<View style={dateContainer}>
@@ -286,12 +295,13 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
 
 		const dayWidth = this._getDayWidth(this.props.days[index].day);
 		const dayHeight = deviceWidth * 0.1;
-		const todayWidth = width * 0.44;
+		const todayWidth = (width - headerHeight) * 0.44;
 
-		const todayOffset = width * 0.205333333;
+		const todayOffset = (width - headerHeight) * 0.205333333;
 
 		const dayTop = deviceWidth * 0.117333333;
 		const todayTop = deviceWidth * 0.058666667;
@@ -429,15 +439,16 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
 
 		return {
 			daysContainer: {
 				borderWidth: 0,
 				position: 'absolute',
-				left: width * 0.076,
+				left: (width - headerHeight) * 0.076,
 				top: 0,
 				bottom: 0,
-				right: width * 0.076,
+				right: (width - headerHeight) * 0.076,
 				overflow: 'hidden',
 			},
 			dateContainer: {
@@ -445,10 +456,10 @@ export default class JobsPoster extends View<null, Props, State> {
 				alignItems: 'center',
 				justifyContent: 'center',
 				height: deviceWidth * 0.064,
-				width: width * 0.44,
+				width: (width - headerHeight) * 0.44,
 				overflow: 'hidden',
 				position: 'absolute',
-				left: width * 0.205333333,
+				left: (width - headerHeight) * 0.205333333,
 				top: deviceWidth * 0.176,
 			},
 			arrowContainer: {

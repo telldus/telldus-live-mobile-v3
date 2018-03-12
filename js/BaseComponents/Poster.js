@@ -35,6 +35,7 @@ type Props = {
 	source750: number,
 	source1500: number,
 	source3000: number,
+	posterWidth?: number,
 };
 
 type DefaultProps = {
@@ -94,20 +95,23 @@ class Poster extends Component<Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
+		let { posterWidth } = this.props;
+		console.log('TEST IN posterWidth ONE', posterWidth);
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-
+		posterWidth = posterWidth ? posterWidth : width;
+		console.log('TEST IN posterWidth', posterWidth);
 		return {
 			image: {
 				flex: 1,
 				height: undefined,
-				...ifIphoneX({width: '100%'}, {width: width}),
+				...ifIphoneX({width: '100%'}, {width: posterWidth}),
 				resizeMode: 'cover',
 			},
 			mask: {
 				borderWidth: 0,
 				height: isPortrait ? width * 0.333333333 : height * 0.333333333,
-				...ifIphoneX({width: '100%'}, {width: width}),
+				...ifIphoneX({width: '100%'}, {width: posterWidth}),
 				overflow: 'hidden',
 			},
 		};
