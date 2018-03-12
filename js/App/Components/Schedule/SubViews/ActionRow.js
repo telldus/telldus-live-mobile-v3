@@ -65,65 +65,73 @@ const messages = defineMessages({
 
 type ActionType = {
 	name: string,
-	description: string,
+	description: string | Object,
 	method: number,
 	bgColor: string,
 	textColor: string,
 	icon: string,
+	label: string | Object,
 };
 
 export const ACTIONS: ActionType[] = [
 	{
-		name: i18n.on,
+		name: 'On',
 		description: messages.onDescription,
+		label: i18n.on,
 		method: 1,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
 		icon: 'on',
 	},
 	{
-		name: i18n.off,
+		name: 'Off',
 		description: messages.offDescription,
+		label: i18n.off,
 		method: 2,
 		bgColor: '#999',
 		textColor: '#999',
 		icon: 'off',
 	},
 	{
-		name: i18n.bell,
+		name: 'Bell',
 		description: messages.bellDescription,
+		label: i18n.bell,
 		method: 4,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
 		icon: 'bell',
 	},
 	{
-		name: i18n.dim,
+		name: 'Dim',
 		description: messages.dimDescription,
+		label: i18n.dim,
 		method: 16,
 		bgColor: '#e88631',
 		textColor: Theme.Core.brandSecondary,
 		icon: 'dim',
 	},
 	{
-		name: i18n.up,
+		name: 'Up',
 		description: messages.upDescription,
+		label: i18n.up,
 		method: 128,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
 		icon: 'up',
 	},
 	{
-		name: i18n.down,
+		name: 'Down',
 		description: messages.downDescription,
+		label: i18n.down,
 		method: 256,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
 		icon: 'down',
 	},
 	{
-		name: i18n.stop,
+		name: 'Stop',
 		description: messages.stopDescription,
+		label: i18n.stop,
 		method: 512,
 		bgColor: Theme.Core.brandSecondary,
 		textColor: Theme.Core.brandSecondary,
@@ -175,7 +183,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}>
 				{this._renderIcon(action)}
 				<TextRowWrapper appLayout={appLayout}>
-					<Title color={action.textColor} appLayout={appLayout}>{intl.formatMessage(action.name)}</Title>
+					<Title color={action.textColor} appLayout={appLayout}>{intl.formatMessage(action.label)}</Title>
 					<Description style={description} appLayout={appLayout}>{intl.formatMessage(action.description)}</Description>
 				</TextRowWrapper>
 			</Row>
