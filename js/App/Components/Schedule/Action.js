@@ -138,10 +138,8 @@ export default class Action extends View<null, ScheduleProps, State> {
 	};
 
 	_handlePress = (row: Object): void => {
-		let { formatMessage } = this.props.intl;
-		let name = formatMessage(row.name);
 
-		if (name === 'Dim') {
+		if (row.name === 'Dim') {
 			return this.navigateToDim();
 		}
 		this.selectAction(row.method);
