@@ -25,7 +25,6 @@
 import { actions } from 'live-shared-data';
 const { Devices } = actions;
 
-
 module.exports = {
 	...Devices,
 };

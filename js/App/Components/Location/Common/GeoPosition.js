@@ -54,7 +54,7 @@ type State = {
 	coordinate: Object,
 	latitudeDelta: number,
 	longitudeDelta: number,
-}
+};
 
 class GeoPosition extends View {
 	props: Props;
@@ -150,7 +150,7 @@ class GeoPosition extends View {
 
 	onEndEditing() {
 		if (this.state.address !== '') {
-			this.props.actions.getGeoCodePosition(this.state.address, googleMapsAPIKey).then(response => {
+			this.props.actions.getGeoCodePosition(this.state.address, googleMapsAPIKey).then((response: Object) => {
 				if (response.status && response.status === 'OK' && response.results[0]) {
 					let { location, viewport } = response.results[0].geometry;
 					let latitude = location.lat, longitude = location.lng;
@@ -172,7 +172,7 @@ class GeoPosition extends View {
 						longitudeDelta,
 					});
 				}
-			}).catch(error => {
+			}).catch((error: Object) => {
 				let data = !error.error_description && error.message === 'Network request failed' ?
 					this.networkFailed : error.error_description ?
 						error.error_description : error.error ? error.error : this.unknownError;
@@ -209,7 +209,7 @@ class GeoPosition extends View {
 		});
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, isLoading } = this.props;
 		const styles = this.getStyle(appLayout);
 

@@ -34,8 +34,8 @@ import { AppState } from 'react-native';
 type Tab = 'sensorsTab' | 'schedulerTab' | 'gatewaysTab';
 
 function syncLiveApiOnForeground(): ThunkAction {
-	return dispatch => {
-		AppState.addEventListener('change', appState => {
+	return (dispatch: Function) => {
+		AppState.addEventListener('change', (appState: string) => {
 			if (appState === 'active') {
 				console.log('app active, fetching devices');
 				dispatch(getDevices());
@@ -46,28 +46,28 @@ function syncLiveApiOnForeground(): ThunkAction {
 
 // NOTE: Devices are retrieved upon syncLiveApiOnForeground and via socket messages
 function syncWithServer(nextTab: Tab): ThunkAction {
-	return (dispatch, getState) => {
+	return (dispatch: Function, getState: Function) => {
 		const { liveApi } = getState();
 		if (nextTab === 'sensorsTab' && !liveApi.sensors) {
 			dispatch({
 				type: 'LIVEAPI_REFETCH',
 				endpoint: 'sensors',
 			});
-			return dispatch(getSensors());
+			dispatch(getSensors());
 		}
 		if (nextTab === 'schedulerTab' && !liveApi.jobs) {
 			dispatch({
 				type: 'LIVEAPI_REFETCH',
 				endpoint: 'jobs',
 			});
-			return dispatch(getJobs());
+			dispatch(getJobs());
 		}
 		if (nextTab === 'gatewaysTab' && !liveApi.gateways) {
 			dispatch({
 				type: 'LIVEAPI_REFETCH',
 				endpoint: 'gateways',
 			});
-			return dispatch(getGateways());
+			dispatch(getGateways());
 		}
 	};
 }

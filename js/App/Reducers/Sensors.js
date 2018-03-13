@@ -23,11 +23,11 @@
 import _ from 'lodash';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
-	let result = _.groupBy(paramOne, items => {
+	let result = _.groupBy(paramOne, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];
 		return gateway && gateway.name;
 	});
-	result = _.reduce(result, (acc, next, index) => {
+	result = _.reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
 		acc.push({
 			key: index,
 			data: next,
@@ -37,9 +37,9 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 	return result;
 }
 
-export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}) {
+export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}): Object {
 	let sortedList = _.sortBy(sensors, 'name');
-	let [hidden, visible] = _.partition(sortedList, (sensor) => {
+	let [hidden, visible] = _.partition(sortedList, (sensor: Object): Object => {
 		return sensor.ignored;
 	});
 	let visibleList = [], hiddenList = [];

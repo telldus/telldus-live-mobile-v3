@@ -19,18 +19,19 @@
  */
 // @flow
 'use strict';
+import { REHYDRATE } from 'redux-persist';
 
 export type Action =
 	  { type: 'LOGGED_IN' }
 	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
-	| { type: 'RECEIVED_PUSH_TOKEN', pushToken: String }
+	| { type: 'RECEIVED_PUSH_TOKEN', pushToken: string }
 	| { type: 'RECEIVED_USER_PROFILE', payload: Object }
 	| { type: 'RECEIVED_DEVICES', payload: Object }
 	| { type: 'RECEIVED_GATEWAYS', payload: Object }
 	| { type: 'RECEIVED_SENSORS', payload: Object }
 	| { type: 'RECEIVED_JOBS', payload: Object }
-	| { type: 'PUSH_TOKEN_REGISTERED', token: String, payload: Object }
-	| { type: 'PUSH_TOKEN_UNREGISTERED', token: String, payload: Object }
+	| { type: 'PUSH_TOKEN_REGISTERED', token: string, payload: Object }
+	| { type: 'PUSH_TOKEN_UNREGISTERED', token: string, payload: Object }
 	| { type: 'LOGGED_OUT' }
 	| { type: 'LOCK_SESSION' }
 	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
@@ -39,8 +40,8 @@ export type Action =
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: number }
 	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: number }
 
-	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id:number, displayType: string }
-	| { type: 'SHOW_DIMMER_POPUP', name:string, value:number }
+	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id: number, displayType: string }
+	| { type: 'SHOW_DIMMER_POPUP', name: string, value: number }
 	| { type: 'HIDE_DIMMER_POPUP' }
 	| { type: 'SET_DIMMER_VALUE', payload: Object }
 	| { type: 'DEVICE_SET_STATE', payload: Object }
@@ -56,7 +57,7 @@ export type Action =
 	| { type: 'DEVICE_DOWN', payload: Object }
 	| { type: 'DEVICE_STOP', payload: Object }
 	| { type: 'DEVICE_LEARN', payload: Object }
-	| { type: 'DEVICE_DIM', deviceId:number, payload: Object }
+	| { type: 'DEVICE_DIM', deviceId: number, payload: Object }
 
 	| {type: 'SAVE_DIMMER_INITIAL_STATE', payload: Object}
 
@@ -74,6 +75,8 @@ export type Action =
 	| { type: 'APP_FOREGROUND' }
 	| { type: 'APP_BACKGROUND' }
 
+	| { type: 'TOAST_SHOW', payload: Object }
+	| { type: 'TOAST_HIDE' }
 	| { type: 'APP_ORIENTATION', value: string }
 	| { type: 'APP_LAYOUT', payload: Object }
 	| { type: 'ACCESSIBILITY_INFO', payload: boolean }
@@ -86,14 +89,21 @@ export type Action =
 	| { type: 'REQUEST_TURNOFF', payload: Object }
 
 	| { type: 'REQUEST_MODAL_OPEN', payload: Object }
-	| { type: 'REQUEST_MODAL_CLOSE', payload: Object }
-	| { type: 'REQUEST_MODAL_CLEAR_DATA' }
+	| { type: 'REQUEST_MODAL_CLOSE', payload?: Object }
+	| { type: 'REQUEST_MODAL_CLEAR_DATA'}
 
-	| { type: 'REQUEST_DEVICE_ACTION', payload: Object }
 	| { type: 'USER_REGISTER', accessToken: Object }
+	| { type: 'SCHEDULE_SELECT_DEVICE', payload: Object }
+	| { type: 'SCHEDULE_RESET' }
+	| { type: 'SCHEDULE_EDIT', payload: Object }
+	| { type: 'SCHEDULE_SELECT_ACTION', payload: Object }
+	| { type: 'SCHEDULE_SELECT_TIME', payload: Object }
+	| { type: 'SCHEDULE_SELECT_DAYS', payload: Object }
+	| { type: 'SCHEDULE_SET_ACTIVE_STATE', payload: Object }
 
 	| { type: 'ADD_GATEWAY_REQUEST', payload: Object }
 	| { type: 'ADD_GATEWAY_DECLINE' }
+	| { type: typeof REHYDRATE }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

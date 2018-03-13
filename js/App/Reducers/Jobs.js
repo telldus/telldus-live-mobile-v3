@@ -28,7 +28,7 @@ import filter from 'lodash/filter';
 import range from 'lodash/range';
 import mapValues from 'lodash/mapValues';
 
-export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}): {sections:Object, sectionIds:Array<Object>} {
+export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}): {sections: Object, sectionIds: Array<Object>} {
 	if (!jobs || !jobs.length) {
 		return {
 			sections: {},
@@ -38,12 +38,12 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 
 	const todayInWeek = parseInt(moment().format('d'), 10);
 	const sectionIds = range(0, 8);
-	let sections = sectionIds.reduce((memo, day) => ({
+	let sections = sectionIds.reduce((memo: Object, day: number): Object => ({
 		...memo,
 		[day]: [],
 	}), {});
 
-	jobs.forEach(job => {
+	jobs.forEach((job: Object): any => {
 		let tempDay;
 		const device = devices.byId[job.deviceId];
 		if (!device) {
@@ -78,7 +78,7 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 
 		const now = moment().tz(timezone);
 		if (job.weekdays) {
-			job.weekdays.forEach(day => {
+			job.weekdays.forEach((day: number): Object | void => {
 				if (day !== todayInWeek) {
 					const relativeDay = (7 + day - todayInWeek) % 7; // 7 % 7 = 0
 					return sections[relativeDay].push(job);
@@ -95,8 +95,8 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		}
 	});
 
-	sections = mapValues(sections, _jobs => {
-		_jobs.sort((a, b) => {
+	sections = mapValues(sections, (_jobs: Object): Object => {
+		_jobs.sort((a: Object, b: Object): number | void => {
 			const totalA = parseInt(a.effectiveHour, 10) * 60 + parseInt(a.effectiveMinute, 10);
 			const totalB = parseInt(b.effectiveHour, 10) * 60 + parseInt(b.effectiveMinute, 10);
 			if (totalA === totalB) {
@@ -112,7 +112,7 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		return _jobs;
 	});
 
-	const filteredSectionIds = filter(sectionIds, sectionId => sections[sectionId].length);
+	const filteredSectionIds = filter(sectionIds, (sectionId: number): number => sections[sectionId].length);
 	return {
 		sections,
 		sectionIds: filteredSectionIds,

@@ -46,7 +46,7 @@ type Props = {
 
 type State = {
 	isLoading: boolean,
-}
+};
 
 class EditGeoPosition extends View {
 	props: Props;
@@ -98,7 +98,7 @@ class EditGeoPosition extends View {
 			isLoading: true,
 		});
 		let { actions, navigation } = this.props;
-		actions.setCoordinates(navigation.state.params.id, latitude, longitude).then((res) => {
+		actions.setCoordinates(navigation.state.params.id, latitude, longitude).then((res: Object) => {
 			this.setState({
 				isLoading: false,
 			});
@@ -112,7 +112,7 @@ class EditGeoPosition extends View {
 		});
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<GeoPosition
 				{...this.props}

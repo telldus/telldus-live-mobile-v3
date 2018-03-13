@@ -50,10 +50,10 @@ const messages = defineMessages({
 });
 
 type Props = {
-	refreshAccessToken: () => void;
-	logoutFromTelldus: () => void;
+	refreshAccessToken: () => void,
+	logoutFromTelldus: () => void,
 	intl: intlShape.isRequired,
-	dispatch: Function;
+	dispatch: Function,
 	pushToken: string,
 	onPressLogout: boolean,
 	appLayout: Object,
@@ -162,7 +162,7 @@ class SessionLocked extends View {
 	}
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		tab: store.navigation.tab,
 		pushToken: store.user.pushToken,
@@ -170,10 +170,10 @@ function mapStateToProps(store) {
 		appLayout: store.App.layout,
 	};
 }
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		logoutFromTelldus: (pushToken) => {
-			dispatch(unregisterPushToken(pushToken)).then((res) => {
+		logoutFromTelldus: (pushToken: string) => {
+			dispatch(unregisterPushToken(pushToken)).then((res: Object) => {
 				dispatch(logoutFromTelldus());
 			});
 		},

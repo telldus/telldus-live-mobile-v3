@@ -31,9 +31,9 @@ type Props = {
 };
 
 export default class BackgroundImage extends Component<Props, void> {
-	props : Props;
+	props: Props;
 
-	render() {
+	render(): React$Element<any> {
 		const { source, children, style, ...props } = this.props;
 		return (
 			<ImageBackground source={source}

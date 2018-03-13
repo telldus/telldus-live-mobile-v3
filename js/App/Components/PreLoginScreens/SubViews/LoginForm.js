@@ -55,7 +55,7 @@ type Props = {
 };
 
 type State = {
-		isLoading : boolean,
+		isLoading: boolean,
 		username: string,
 		password: string,
 };
@@ -64,8 +64,8 @@ class LoginForm extends View {
 	props: Props;
 	state: State;
 
-	onChangeUsername: (username:string) => void;
-	onChangePassword: (password:string) => void;
+	onChangeUsername: (username: string) => void;
+	onChangePassword: (password: string) => void;
 	onFormSubmit: (username: string, password: string) => void;
 	postSubmit: () => void;
 
@@ -90,7 +90,7 @@ class LoginForm extends View {
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, dialogueOpen } = this.props;
 		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
 		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
@@ -136,14 +136,14 @@ class LoginForm extends View {
 		);
 	}
 
-	onChangeUsername(username) {
+	onChangeUsername(username: string) {
 		this.setState({
 			username,
 			notificationText: false,
 		});
 	}
 
-	onChangePassword(password) {
+	onChangePassword(password: string) {
 		this.setState({
 			password,
 			notificationText: false,
@@ -155,10 +155,10 @@ class LoginForm extends View {
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
 			this.props.loginToTelldus(this.state.username, this.state.password, this.postSubmit)
-				.then(res => {
+				.then((res: Object) => {
 					this.postSubmit();
 				})
-				.catch(err => {
+				.catch((err: Object) => {
 					this.postSubmit();
 					this.handleLoginError(err);
 				});
@@ -191,15 +191,15 @@ class LoginForm extends View {
 
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		accessToken: store.user.accessToken,
 	};
 }
 
-function dispatchToProps(dispatch) {
+function dispatchToProps(dispatch: Function): Object {
 	return {
-		loginToTelldus: (userName: string, password: string) => {
+		loginToTelldus: (userName: string, password: string): Promise<any> => {
 			return dispatch(loginToTelldus(userName, password));
 		},
 		dispatch,

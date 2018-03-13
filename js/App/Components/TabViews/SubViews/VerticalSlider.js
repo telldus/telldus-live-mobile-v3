@@ -28,7 +28,7 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import i18n from '../../../Translations/common';
 
-function getSliderLabel(value:number, intl: intlShape):string {
+function getSliderLabel(value: number, intl: intlShape): string {
 	if (value === 100) {
 		return intl.formatMessage(i18n.on);
 	}
@@ -209,7 +209,7 @@ class VerticalSlider extends View {
 		clearTimeout(this.longPressTimeout);
 	};
 
-	getThumbBottom(value: number) {
+	getThumbBottom(value: number): number {
 		const ratio = this.getRatio(value);
 		return ratio * (this.state.containerHeight - this.props.thumbHeight);
 	}
@@ -226,7 +226,7 @@ class VerticalSlider extends View {
 		Animated.timing(this.state.value, { toValue: value, duration: 250 }).start();
 	}
 
-	getValue(gestureState: Object) {
+	getValue(gestureState: Object): number {
 		const length = this.state.containerHeight - this.props.thumbHeight;
 		const thumbBottom = this.previousBottom - gestureState.dy / this.props.sensitive;
 		const ratio = thumbBottom / length;
@@ -262,7 +262,7 @@ class VerticalSlider extends View {
 		this.setState({ displayedValue: getSliderLabel(val, this.props.intl) });
 	}
 
-	render() {
+	render(): React$Element<any> {
 		const { minimumValue, maximumValue, value, containerHeight } = this.state;
 		const { thumbWidth, thumbHeight } = this.props;
 		const thumbBottom = value.interpolate({

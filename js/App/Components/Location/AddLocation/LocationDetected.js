@@ -53,7 +53,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
-}
+};
 
 class LocationDetected extends View {
 	props: Props;
@@ -113,20 +113,20 @@ class LocationDetected extends View {
 		this.props.navigation.navigate('LocationActivationManual');
 	}
 
-	renderClient(client: Object, i: number, appLayout: Object) {
+	renderClient(client: Object, i: number, appLayout: Object): Object {
 		return (
 			<Clients key={i} client={client} appLayout={appLayout} onPress={this.onActivateAuto} intl={this.props.intl}/>
 		);
 	}
 
-	render() {
+	render(): Object {
 		let items = [];
 		let { rootNavigator, appLayout } = this.props;
 
 		const styles = this.getStyle(appLayout);
 
 		if (rootNavigator.state.params.clients) {
-			items = rootNavigator.state.params.clients.map((client, i) => {
+			items = rootNavigator.state.params.clients.map((client: Object, i: number): Object => {
 				return this.renderClient(client, i, appLayout);
 			});
 		}

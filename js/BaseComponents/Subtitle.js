@@ -32,7 +32,7 @@ type Props = {
 export default class Subtitle extends Base {
 	props: Props;
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View><Text style={{
 				color: this.getTheme().subtitleColor,

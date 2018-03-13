@@ -32,22 +32,22 @@ module.exports = {
 	appStart: (): Action => ({
 		type: 'APP_START',
 	}),
-	appState: (): ThunkAction => dispatch => {
-		AppState.addEventListener('change', appState => {
+	appState: (): ThunkAction => (dispatch: Function) => {
+		AppState.addEventListener('change', (appState: string) => {
 			if (appState === 'active') {
-				return dispatch({
+				dispatch({
 					type: 'APP_FOREGROUND',
 				});
 			}
 			if (appState === 'background') {
-				return dispatch({
+				dispatch({
 					type: 'APP_BACKGROUND',
 				});
 			}
 		});
 	},
-	appOrientation: (initialOrientation: string): ThunkAction => dispatch => {
-		Orientation.addOrientationListener((orientation: string) => {
+	appOrientation: (initialOrientation: string): ThunkAction => (dispatch: Function): Object => {
+		Orientation.addOrientationListener((orientation: string): Object => {
 			return dispatch({
 				type: 'APP_ORIENTATION',
 				value: orientation,
@@ -58,27 +58,27 @@ module.exports = {
 			value: initialOrientation,
 		});
 	},
-	setAppLayout: (layout: Object): ThunkAction => dispatch => {
+	setAppLayout: (layout: Object): ThunkAction => (dispatch: Function): Object => {
 		return dispatch({
 			type: 'APP_LAYOUT',
 			payload: layout,
 		});
 	},
-	setAccessibilityInfo: (status: boolean): ThunkAction => dispatch => {
+	setAccessibilityInfo: (status: boolean): ThunkAction => (dispatch: Function): Object => {
 		return dispatch({
 			type: 'ACCESSIBILITY_INFO',
 			payload: status,
 		});
 	},
-	setAccessibilityListener: (callback: Function): ThunkAction => dispatch => {
+	setAccessibilityListener: (callback: Function): ?ThunkAction => (dispatch: Function): ?Object => {
 		AccessibilityInfo.addEventListener(
 			'change',
-			(isEnabled: boolean) => {
+			(isEnabled: boolean): Object => {
 				return dispatch(callback(isEnabled));
 			}
 		);
 	},
-	setChangeLogVersion: (changeLogVersion: string): ThunkAction => dispatch => {
+	setChangeLogVersion: (changeLogVersion: string): ThunkAction => (dispatch: Function): Object => {
 		return dispatch({
 			type: 'SET_CHANGELOG_VERSION',
 			payload: changeLogVersion,

@@ -43,7 +43,7 @@ const messages = defineMessages({
 	},
 });
 
-const AddLocation = ({onPress, styles}) => {
+const AddLocation = ({onPress, styles}: Object): Object => {
 	return (
 		<View style={styles.addNewLocationContainer}>
 			<TouchableOpacity onPress={onPress} style={styles.addNewLocationCover}>
@@ -54,7 +54,7 @@ const AddLocation = ({onPress, styles}) => {
 	);
 };
 
-const NavigationHeader = ({ firstName, lastName, styles }) => {
+const NavigationHeader = ({ firstName, lastName, styles }: Object): Object => {
 	return (
 		<View style={styles.navigationHeader}>
 			<Image style={styles.navigationHeaderImage}
@@ -76,14 +76,14 @@ const NavigationHeader = ({ firstName, lastName, styles }) => {
 	);
 };
 
-const ConnectedLocations = ({styles}) => (
+const ConnectedLocations = ({styles}: Object): Object => (
 	<View style={styles.navigationTitle}>
 		<Image source={require('../TabViews/img/tabIcons/router.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
 	</View>
 );
 
-const SettingsButton = ({ onPress, styles }) => (
+const SettingsButton = ({ onPress, styles }: Object): Object => (
 	<TouchableOpacity onPress={onPress} style={styles.navigationTitle}>
 		<Image source={require('../TabViews/img/tabIcons/gear.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
@@ -115,7 +115,7 @@ export default class Drawer extends View<Props, null> {
 					backgroundColor: 'white',
 				}}>
 					<ConnectedLocations styles={styles}/>
-					{gateways.allIds.map((id, index) => {
+					{gateways.allIds.map((id: number, index: number): Object => {
 						return (<Gateway gateway={gateways.byId[id]} key={index} styles={styles} onPressGateway={onPressGateway}/>);
 					})}
 					<AddLocation onPress={addNewLocation} styles={styles}/>

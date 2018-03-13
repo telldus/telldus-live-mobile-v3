@@ -73,8 +73,8 @@ class OverviewTab extends View {
 		this.boxTitle = `${props.screenProps.intl.formatMessage(messages.location)}:`;
 	}
 
-	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
 				icon="icon_home"
 				tintColor={tintColor}
@@ -86,7 +86,7 @@ class OverviewTab extends View {
 		},
 	});
 
-	getType(device) {
+	getType(device: Object): string | null {
 		if (!device) {
 			return null;
 		}
@@ -95,11 +95,11 @@ class OverviewTab extends View {
 		return getDeviceType(supportedMethods);
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.screenProps.currentTab === 'Overview';
 	}
 
-	render() {
+	render(): Object {
 		let { device, screenProps, gateway } = this.props;
 		let deviceId = device.id;
 		let deviceDetail = null;
@@ -150,13 +150,13 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		device: state.devices.byId[ownProps.screenProps.device.id],
 		gateway: state.gateways.byId[ownProps.screenProps.device.clientId],

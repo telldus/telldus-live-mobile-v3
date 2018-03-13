@@ -55,7 +55,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
 
-	getSlideList : Object => Object;
+	getSlideList: Object => Object;
 
 	labelSensor: string;
 	labelHumidity: string;
@@ -127,7 +127,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 		this.getSlideList = this.getSlideList.bind(this);
 	}
 
-	getSlideList(item: Object) : Object {
+	getSlideList(item: Object): Object {
 		let slideList = [], sensorInfo = '';
 		for (let key in item.data) {
 			let { value, scale, name } = item.data[key];
@@ -290,7 +290,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 		return {slideList, sensorInfo};
 	}
 
-	render() {
+	render(): Object {
 		const { item, tileWidth, isGatewayActive, intl } = this.props;
 		const displayType = this.props.displayType;
 		const { slideList, sensorInfo } = this.getSlideList(item);
@@ -301,7 +301,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 
 		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
-		const slides = slideList.map((data) =>
+		const slides = slideList.map((data: Object): Object =>
 			<SensorDashboardTileSlide
 				key={data.key}
 				data={data}
@@ -371,7 +371,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 		);
 	}
 
-	_windDirection(value) {
+	_windDirection(value: number): string {
 		const directions = [
 			'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 		];
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(state, { item }) {
+function mapStateToProps(state: Object, { item }: Object): Object {
 	return {
 		displayType: state.dashboard.sensorDisplayTypeById[item.id],
 	};

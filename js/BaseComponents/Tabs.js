@@ -33,7 +33,7 @@ type Props = {
 export default class TabComponent extends Base {
 	props: Props;
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			tab: {
 				flex: 1,
@@ -41,7 +41,7 @@ export default class TabComponent extends Base {
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let defaultProps = {
 			style: this.getInitialStyle().tab,
@@ -51,7 +51,7 @@ export default class TabComponent extends Base {
 
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<ScrollableTabView {...this.prepareRootProps()} >
 				{this.props.children}

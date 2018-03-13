@@ -43,7 +43,7 @@ export default class SafeAreaViewComponent extends React.Component<Props, null> 
 			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
 				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
 					{
-						React.Children.map(children, (child) => {
+						React.Children.map(children, (child: Object): Object | null => {
 							if (React.isValidElement(child)) {
 								return React.cloneElement(child, otherProperties);
 							}

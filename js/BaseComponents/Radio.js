@@ -17,7 +17,7 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// props
+// @flow
 
 'use strict';
 
@@ -33,13 +33,13 @@ type Props = {
 export default class Radio extends Base {
 	props: Props;
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			radio: {},
 		};
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View >
 				{(Platform.OS === 'ios') ?

@@ -75,7 +75,7 @@ const messages = defineMessages({
 	},
 });
 
-const Header = ({ onPress, styles, buttonAccessibilityLabel }) => (
+const Header = ({ onPress, styles, buttonAccessibilityLabel }: Object): Object => (
 	<View style={styles.header}>
 		<Icon name="gear" size={26} color="white"
 		      style={styles.gear}/>
@@ -86,7 +86,7 @@ const Header = ({ onPress, styles, buttonAccessibilityLabel }) => (
 	</View>
 );
 
-const StatusView = ({styles, accessible, importantForAccessibility}) => (
+const StatusView = ({styles, accessible, importantForAccessibility}: Object): Object => (
 	<Text style={styles.statusText} accessible={accessible} importantForAccessibility={importantForAccessibility}>
 		<FormattedMessage {...messages.pushEnabled} style={styles.statusText} />
 	</Text>
@@ -123,7 +123,7 @@ class SettingsDetailModal extends View {
 	onConfirmLogout: () => void;
 	closeModal: () => void;
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			isVisible: this.props.isVisible,
@@ -169,7 +169,7 @@ class SettingsDetailModal extends View {
 		});
 	}
 
-	postLoadMethod(type) {
+	postLoadMethod(type: string) {
 		if (type === 'REG_TOKEN') {
 			this.setState({
 				isPushSubmitLoading: false,
@@ -186,7 +186,7 @@ class SettingsDetailModal extends View {
 		this.props.onClose();
 	}
 
-	getRelativeData() {
+	getRelativeData(): Object {
 		let { formatMessage } = this.props.intl;
 
 		let notificationHeader = `${formatMessage(i18n.logout)}?`, showPositive = true,
@@ -209,7 +209,7 @@ class SettingsDetailModal extends View {
 		};
 	}
 
-	render() {
+	render(): Object {
 		let {
 			notificationHeader,
 			showPositive,
@@ -287,11 +287,10 @@ class SettingsDetailModal extends View {
 			isPushSubmitLoading: true,
 		});
 		let { formatMessage } = this.props.intl;
-		this.props.onSubmitPushToken(this.props.user.pushToken).then(response => {
+		this.props.onSubmitPushToken(this.props.user.pushToken).then((response: Object) => {
 			let message = formatMessage(messages.pushRegisterSuccess);
 			this.showToast(message);
-		}).catch((err) => {
-			console.log(err);
+		}).catch(() => {
 			let message = formatMessage(messages.pushRegisterFailed);
 			this.showToast(message);
 		});
@@ -382,7 +381,7 @@ class SettingsDetailModal extends View {
 	}
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
@@ -391,7 +390,7 @@ function mapStateToProps(store) {
 	};
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 	return {
 		onClose: () => {
 			dispatch({
@@ -403,10 +402,10 @@ function mapDispatchToProps(dispatch, ownProps) {
 			});
 			ownProps.onClose();
 		},
-		onSubmitPushToken: (token) => {
+		onSubmitPushToken: (token: string): Promise<any> => {
 			return dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 		},
-		onLogout: (token, callback) => {
+		onLogout: (token: string, callback: Function) => {
 			dispatch(unregisterPushToken(token)).then(() => {
 				dispatch(logoutFromTelldus());
 				callback('LOGOUT');

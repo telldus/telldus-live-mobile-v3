@@ -33,7 +33,7 @@ type Props = {
 export default class H1Component extends Base {
 	props: Props;
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let type = {
 			color: this.getTheme().textColor,
@@ -47,7 +47,7 @@ export default class H1Component extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<Text {...this.prepareRootProps()}>{this.props.children}</Text>
 		);

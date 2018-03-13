@@ -30,7 +30,7 @@ import { Text, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
-function getSliderLabel(value:number, intl: intlShape):string {
+function getSliderLabel(value: number, intl: intlShape): string {
 	return value.toString();
 }
 
@@ -209,7 +209,7 @@ class HorizontalSlider extends View {
 		clearTimeout(this.longPressTimeout);
 	};
 
-	handlePanResponderTerminationRequest = (e: Object, gestureState: Object) => {
+	handlePanResponderTerminationRequest = (e: Object, gestureState: Object): boolean => {
 		return false;
 	}
 
@@ -224,7 +224,7 @@ class HorizontalSlider extends View {
 		clearTimeout(this.longPressTimeout);
 	};
 
-	getThumbLeft(value: number) {
+	getThumbLeft(value: number): number {
 		const ratio = this.getRatio(value);
 		return ratio * (this.state.scaleWidth - this.props.thumbWidth);
 	}
@@ -241,7 +241,7 @@ class HorizontalSlider extends View {
 		Animated.timing(this.state.value, { toValue: value, duration: 250 }).start();
 	}
 
-	getValue(gestureState: Object) {
+	getValue(gestureState: Object): number {
 		const length = this.state.scaleWidth - this.props.thumbWidth;
 		const thumbLeft = this.previousLeft + gestureState.dx / this.props.sensitive;
 		const ratio = thumbLeft / length;
@@ -291,7 +291,7 @@ class HorizontalSlider extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		const { minimumValue, maximumValue, value, containerHeight, containerWidth, scaleWidth, displayedValue } = this.state;
 		const { thumbWidth, thumbHeight, isGatewayActive, isInState, screenReaderEnabled } = this.props;
 		const thumbLeft = value.interpolate({

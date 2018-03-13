@@ -45,11 +45,11 @@ type Props = {
 class TabBar extends Component<Props, null> {
 	props: Props;
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 	}
 
-	render() {
+	render(): Object {
 		let { icon, tintColor, label, appLayout, intl, accessibilityLabel } = this.props;
 		let isPortrait = appLayout.width > appLayout.height;
 		accessibilityLabel = intl.formatMessage(accessibilityLabel);

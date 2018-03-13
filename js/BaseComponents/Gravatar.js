@@ -34,20 +34,20 @@ const GRAVATAR_URI = 'https://www.gravatar.com/avatar/';
 
 type Props = {
 	size: number,
-	mask: 'circle'|'square'|'rounded',
+	mask: 'circle' | 'square' | 'rounded',
 	emailAddress: string,
 };
 
 type DefaultProps = {
 	size: number,
-	mask: 'circle'|'square'|'rounded',
+	mask: 'circle' | 'square' | 'rounded',
 };
 
 class Gravatar extends React.Component<Props, void> {
 	props: Props;
 	static defaultProps: DefaultProps;
 
-	_calculateStyle() {
+	_calculateStyle(): Object {
 		const size = {
 			width: this.props.size,
 			height: this.props.size,
@@ -69,7 +69,7 @@ class Gravatar extends React.Component<Props, void> {
 		return { ...size, ...border };
 	}
 
-	render() {
+	render(): React$Element<any> {
 		const uri = `${GRAVATAR_URI + md5(this.props.emailAddress)}?d=mm&s=${this.props.size * 2}`;
 		const style = this._calculateStyle();
 		return (

@@ -87,9 +87,9 @@ class TabBar extends View {
 		);
 	}
 
-	render() {
+	render(): Object {
 		let { navigationState, appLayout } = this.props;
-		let tabs = navigationState.routes.map((tab, index) => {
+		let tabs = navigationState.routes.map((tab: Object, index: number): Object => {
 			return this.renderTabs(tab, index);
 		});
 		let {
@@ -140,7 +140,7 @@ class TabBar extends View {
 	}
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		appLayout: store.App.layout,
 	};

@@ -148,7 +148,7 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.props.setIgnoreDevice(this.props.device);
 	}
 
-	render() {
+	render(): Object {
 		let button = null, icon = null;
 		let { isOpen } = this.state;
 		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;

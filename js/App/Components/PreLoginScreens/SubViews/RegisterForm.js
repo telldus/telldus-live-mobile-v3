@@ -74,7 +74,7 @@ type Props = {
 	validationMessageHeader: string,
 	appLayout: Object,
 	dialogueOpen: boolean,
-}
+};
 
 class RegisterForm extends View {
 
@@ -154,10 +154,10 @@ class RegisterForm extends View {
 						isLoading: true,
 					});
 					onFormSubmit(em, fn, ln, this.postSubmit)
-						.then(response => {
+						.then((response: Object) => {
 							this.postSubmit();
 						})
-						.catch(err => {
+						.catch((err: Object) => {
 							this.postSubmit();
 							this.handleRegisterError(err);
 						});
@@ -190,13 +190,13 @@ class RegisterForm extends View {
 		dispatch(showModal(data));
 	}
 
-	validateEmail(email: string) {
+	validateEmail(email: string): boolean {
 		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 		let emailValid = pattern.test(email);
 		return emailValid;
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, dialogueOpen } = this.props;
 		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
 		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
@@ -272,16 +272,16 @@ class RegisterForm extends View {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onFormSubmit: (email: string, firstName: string, LastName: string) => {
+		onFormSubmit: (email: string, firstName: string, LastName: string): Promise<any> => {
 			return dispatch(RegisterUser(email, firstName, LastName));
 		},
 		dispatch,
 	};
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
 		validationMessageHeader: store.modal.extras,

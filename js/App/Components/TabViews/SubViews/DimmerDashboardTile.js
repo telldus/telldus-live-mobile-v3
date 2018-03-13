@@ -52,7 +52,7 @@ type Props = {
 	tileWidth: number,
 	onDimmerSlide: number => void,
 	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
-	showDimmerPopup: (name:string, sliderValue:number) => void,
+	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	requestDeviceAction: (id: number, command: number) => void,
@@ -77,7 +77,7 @@ type DefaultProps = {
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
-}
+};
 
 class DimmerDashboardTile extends PureComponent<Props, State> {
 	props: Props;
@@ -98,7 +98,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	onTurnOn: () => void;
 	onTurnOff: () => void;
 	layoutView: Object => void;
-	onSlidingStart: (name:string, sliderValue:number) => void;
+	onSlidingStart: (name: string, sliderValue: number) => void;
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
 	showDimmerStep: (number) => void;
@@ -133,14 +133,14 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		this.showDimmerStep = this.showDimmerStep.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		const { value, isInState } = nextProps.item;
 
 		const dimmerValue = getDimmerValue(value, isInState);
 		this.setState({ value: dimmerValue });
 	}
 
-	layoutView(x) {
+	layoutView(x: Object) {
 		let { width, height } = x.nativeEvent.layout;
 		this.setState({
 			bodyWidth: width,
@@ -148,16 +148,16 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		});
 	}
 
-	onValueChange(sliderValue) {
+	onValueChange(sliderValue: number) {
 		this.onValueChangeThrottled(toDimmerValue(sliderValue));
 	}
 
-	onSlidingStart(name:string, sliderValue:number) {
+	onSlidingStart(name: string, sliderValue: number) {
 		this.props.saveDimmerInitialState(this.props.item.id, this.props.item.value, this.props.item.isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
-	onSlidingComplete(sliderValue:number) {
+	onSlidingComplete(sliderValue: number) {
 		if (sliderValue > 0) {
 			this.props.requestDeviceAction(this.props.item.id, this.props.commandON);
 		}
@@ -200,7 +200,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		this.props.showDimmerStep(id);
 	}
 
-	render() {
+	render(): Object {
 		const { item, tileWidth, intl, isGatewayActive, powerConsumed, screenReaderEnabled } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
@@ -320,18 +320,24 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		saveDimmerInitialState: (deviceId, initalValue, initialState) => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
-		showDimmerPopup: (name:string, value:number) => {
+		saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: number) => {
+			dispatch(saveDimmerInitialState(deviceId, initalValue, initialState));
+		},
+		showDimmerPopup: (name: string, value: number) => {
 			dispatch(showDimmerPopup(name, value));
 		},
 		hideDimmerPopup: () => {
 			dispatch(hideDimmerPopup());
 		},
-		onDimmerSlide: id => value => dispatch(setDimmerValue(id, value)),
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		onDimmerSlide: (id: number): any => (value: number): any => dispatch(setDimmerValue(id, value)),
+		deviceSetState: (id: number, command: number, value?: number) => {
+			dispatch(deviceSetState(id, command, value));
+		},
+		requestDeviceAction: (id: number, command: number) => {
+			dispatch(requestDeviceAction(id, command));
+		},
 		showDimmerStep: (id: number) => {
 			dispatch(showDimmerStep(id));
 		},

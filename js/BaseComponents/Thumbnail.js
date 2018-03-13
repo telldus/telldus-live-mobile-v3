@@ -37,7 +37,7 @@ type Props = {
 export default class ThumbnailComponent extends Base {
 	props: Props;
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			thumbnail: {
 				borderRadius: 15,
@@ -48,7 +48,7 @@ export default class ThumbnailComponent extends Base {
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 		let thumbnailStyle = {};
 		if (this.props.circular) {
 			thumbnailStyle.width = this.props.size;
@@ -67,7 +67,7 @@ export default class ThumbnailComponent extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<Image {...this.prepareRootProps()}/>
 		);

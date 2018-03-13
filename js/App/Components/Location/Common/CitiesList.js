@@ -39,12 +39,12 @@ type State = {
 };
 
 const listDataSource = new ListDataSource({
-	rowHasChanged: (r1, r2) => r1 !== r2,
+	rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
 });
 
 class CitiesList extends View {
-	renderRow:(string) => void;
-	parseDataForList:(Array<string>) => Object;
+	renderRow: (string) => void;
+	parseDataForList: (Array<string>) => Object;
 	onCityChoose: () => void;
 
 	props: Props;

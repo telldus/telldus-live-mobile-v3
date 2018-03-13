@@ -60,10 +60,11 @@ type DefaultProps = {
 class DimmerPopup extends Component<Props, State> {
 	props: Props;
 	state: State;
-	static defaultProps : DefaultProps;
-	handleLayout : Object => void;
+	handleLayout: Object => void;
 	setRefs: (any) => mixed;
 	contentRef: Object;
+
+	static defaultProps: DefaultProps;
 
 	constructor(props: Props) {
 		super(props);
@@ -95,7 +96,7 @@ class DimmerPopup extends Component<Props, State> {
 		}
 	}
 
-	componentDidUpdate(prevProps: Props, prevState:State) {
+	componentDidUpdate(prevProps: Props, prevState: State) {
 		// On modal open request, we slide the view up and fade in the backdrop
 		if (this.state.isVisible && !prevState.isVisible) {
 			this.open();
@@ -109,7 +110,7 @@ class DimmerPopup extends Component<Props, State> {
 		this.contentRef[this.props.animationIn](this.props.animationInTiming);
 	}
 
-	close = async () => {
+	close = async (): Promise<any> => {
 		this.contentRef[this.props.animationOut](this.props.animationOutTiming).then(() => {
 			this.setState({ isVisible: false });
 		});
@@ -123,7 +124,7 @@ class DimmerPopup extends Component<Props, State> {
 		this.props.onBackButtonPress();
 	}
 
-	handleLayout(event:Object) {
+	handleLayout(event: Object) {
 		// Here we update the device dimensions in the state if the layout changed (triggering a render)
 		const deviceWidth = Dimensions.get('window').width;
 		const deviceHeight = Dimensions.get('window').height;
@@ -135,11 +136,11 @@ class DimmerPopup extends Component<Props, State> {
 		}
 	}
 
-	setRefs(ref:Object) {
+	setRefs(ref: Object) {
 		this.contentRef = ref;
 	}
 
-	render() {
+	render(): Object | null {
 		const { deviceWidth } = this.state;
 
 		if (!this.state.isVisible) {

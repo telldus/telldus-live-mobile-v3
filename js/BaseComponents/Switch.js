@@ -28,13 +28,13 @@ import computeProps from './computeProps';
 
 export default class SwitchComponent extends Base {
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			switch: {},
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 		let defaultProps = {
 			style: this.getInitialStyle().switch,
 		};
@@ -42,7 +42,7 @@ export default class SwitchComponent extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<Switch {...this.prepareRootProps()}/>
 		);

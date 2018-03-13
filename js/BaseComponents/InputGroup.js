@@ -41,7 +41,7 @@ type Props = {
 export default class InputGroup extends Base {
 	props: Props;
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			textInput: {
 				backgroundColor: 'transparent',
@@ -85,7 +85,7 @@ export default class InputGroup extends Base {
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let type = {
 			paddingLeft: (this.props.borderType === 'rounded' && !this.props.children.type === Icon) ? 15
@@ -107,7 +107,7 @@ export default class InputGroup extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	getIconProps(icon: Icon) {
+	getIconProps(icon: Icon): Object {
 
 		let defaultStyle = {
 			fontSize: (this.props.toolbar || this.props.atoolbar) ? this.getTheme().toolbarIconSize : 27,
@@ -124,7 +124,7 @@ export default class InputGroup extends Base {
 
 		return computeProps(icon.props, defaultProps);
 	}
-	getButtonProps(button: Button) {
+	getButtonProps(button: Button): Object {
 
 		let defaultStyle = {
 			alignSelf: 'center',
@@ -142,31 +142,34 @@ export default class InputGroup extends Base {
 		return computeProps(button.props, defaultProps);
 	}
 
-	renderChildren() {
+	renderChildren(): Array<React$Element<any>> {
 
 		let inputProps = {};
 		let newChildren = [];
 		let childrenArray = React.Children.toArray(this.props.children);
 
 		let iconElement = [];
-		iconElement = _.remove(childrenArray, (item) => {
+		iconElement = _.remove(childrenArray, (item: Object): boolean => {
 			if (item.type === Icon) {
 				return true;
 			}
+			return false;
 		});
 
 		let buttonElement = [];
 
-		buttonElement = _.remove(childrenArray, (item) => {
+		buttonElement = _.remove(childrenArray, (item: Object): boolean => {
 			if (item.type === Button) {
 				return true;
 			}
+			return false;
 		});
 
-		let inp = _.find(childrenArray, (item) => {
+		let inp = _.find(childrenArray, (item: Object): boolean => {
 			if (item && item.type === Input) {
 				return true;
 			}
+			return false;
 		});
 
 		if (inp) {
@@ -238,7 +241,7 @@ export default class InputGroup extends Base {
 		return newChildren;
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View {...this.prepareRootProps()} >
 				{this.renderChildren()}

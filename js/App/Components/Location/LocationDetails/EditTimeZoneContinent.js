@@ -45,7 +45,7 @@ type Props = {
 	currentScreen: string,
 	actions: Object,
 	rootNavigator: Object,
-}
+};
 
 type State = {
 	autodetectedTimezone: string,
@@ -60,9 +60,9 @@ class EditTimeZoneContinent extends View {
 	h2: string;
 	labelMessageToAnnounce: string;
 
-	onContinentChoose:(string) => void;
-	onPressAutodetect:() => void;
-	onPressAutodetected:() => void;
+	onContinentChoose: (string) => void;
+	onPressAutodetect: () => void;
+	onPressAutodetected: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -127,7 +127,7 @@ class EditTimeZoneContinent extends View {
 				actions.showModal(this.onSetTimezoneError);
 			});
 		} else {
-			let data = differenceWith(timeZone, [continent], (v1, v2) => {
+			let data = differenceWith(timeZone, [continent], (v1: string, v2: string): boolean => {
 				let items = v1.split('/');
 				let flag = items[0] === v2 ? false : true;
 				return flag;
@@ -157,7 +157,7 @@ class EditTimeZoneContinent extends View {
 		});
 	}
 
-	render() {
+	render(): Object {
 		const { appLayout } = this.props;
 		const { autodetectedTimezone } = this.state;
 		const styles = this.getStyle(appLayout);

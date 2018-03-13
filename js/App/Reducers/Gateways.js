@@ -19,10 +19,10 @@
 
 // @flow
 
-export function parseGatewaysForListView(gateways:Object = {}) {
-	const rows = gateways.allIds.map(gatewayId => gateways.byId[gatewayId]);
+export function parseGatewaysForListView(gateways: Object = {}): Array<any> {
+	const rows = gateways.allIds.map((gatewayId: number): Array<any> => gateways.byId[gatewayId]);
 
-	rows.sort((a, b) => {
+	rows.sort((a: Object, b: Object): number => {
 		if (a.name < b.name) {
 			return -1;
 		}

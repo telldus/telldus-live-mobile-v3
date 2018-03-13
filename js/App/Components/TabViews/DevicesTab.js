@@ -106,9 +106,9 @@ class DevicesTab extends View {
 	toggleHiddenList: () => void;
 	setIgnoreDevice: (Object) => void;
 
-	static navigationOptions = ({navigation, screenProps}) => ({
+	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
-		tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'devices'),
+		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'devices'),
 	});
 
 	constructor(props: Props) {
@@ -154,7 +154,7 @@ class DevicesTab extends View {
 		this.noGatewayContent = formatMessage(messages.messageNoGatewayContent);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 
 		let { makeRowAccessible } = this.state;
 		let { screenReaderEnabled, rowsAndSections } = nextProps;
@@ -174,22 +174,22 @@ class DevicesTab extends View {
 		});
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.tab === 'devicesTab';
 	}
 
-	openDeviceDetail(device) {
-		getLatestTimestamp('device', device.id).then(res => {
+	openDeviceDetail(device: Object) {
+		getLatestTimestamp('device', device.id).then((res: Object) => {
 			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
 			this.fetchHistoryData(device, prevTimestamp);
-		}).catch(error => {
+		}).catch((error: Object) => {
 			this.fetchHistoryData(device, null);
 		});
 		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
 	}
 
-	fetchHistoryData(device, prevTimestamp) {
-		this.props.dispatch(getDeviceHistory(device, prevTimestamp)).then(response => {
+	fetchHistoryData(device: Object, prevTimestamp: number | null) {
+		this.props.dispatch(getDeviceHistory(device, prevTimestamp)).then((response: Object) => {
 			if (response.history && response.history.length !== 0) {
 				let data = {
 					history: response.history,
@@ -204,7 +204,7 @@ class DevicesTab extends View {
 		this.setState({ deviceId: -1 });
 	}
 
-	setScrollEnabled(enable) {
+	setScrollEnabled(enable: boolean) {
 		if (this.refs.list && this.refs.list.setScrollEnabled) {
 			this.refs.list.setScrollEnabled(enable);
 		}
@@ -212,7 +212,7 @@ class DevicesTab extends View {
 
 	setIgnoreDevice(device: Object) {
 		let ignore = device.ignored ? 0 : 1;
-		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res) => {
+		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res: Object) => {
 			let message = device.ignored ?
 				this.removedFromHiddenList : this.addedToHiddenList;
 			let payload = {
@@ -220,7 +220,7 @@ class DevicesTab extends View {
 			};
 			this.props.dispatch(showGlobalError(payload));
 			this.props.dispatch(getDevices());
-		}).catch(err => {
+		}).catch((err: Object) => {
 			let payload = {
 				customMessage: err.message ? err.message : null,
 			};
@@ -238,7 +238,7 @@ class DevicesTab extends View {
 		);
 	}
 
-	renderRow(row) {
+	renderRow(row: Object): Object {
 		let { screenProps, gateways } = this.props;
 		let { intl, currentTab, currentScreen } = screenProps;
 		let isGatewayActive = gateways.byId[row.item.clientId] && gateways.byId[row.item.clientId].online;
@@ -274,11 +274,11 @@ class DevicesTab extends View {
 			});
 	}
 
-	keyExtractor(item) {
+	keyExtractor(item: Object): number {
 		return item.id;
 	}
 
-	getType(deviceId) {
+	getType(deviceId: number): null | string {
 		const filteredItem = this.props.devices.byId[deviceId];
 		if (!filteredItem) {
 			return null;
@@ -290,7 +290,7 @@ class DevicesTab extends View {
 
 	onPressAddLocation() {
 		this.props.addNewLocation()
-			.then(response => {
+			.then((response: Object) => {
 				if (response.client) {
 					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
 					this.setState({
@@ -307,13 +307,15 @@ class DevicesTab extends View {
 			});
 		} else {
 			let url = this.url;
-			Linking.canOpenURL(url).then(supported => {
+			Linking.canOpenURL(url).then((supported: boolean): any => {
 				if (!supported) {
 				  console.log(`Can't handle url: ${url}`);
 				} else {
 				  return Linking.openURL(url);
 				}
-			  }).catch(err => console.error('An error occurred', err));
+			  }).catch((err: Object) => {
+				  console.error('An error occurred', err);
+			  });
 		}
 	}
 
@@ -323,7 +325,7 @@ class DevicesTab extends View {
 		});
 	}
 
-	noDeviceMessage(style: Object) {
+	noDeviceMessage(style: Object): Object {
 		return (
 			<View style={style.noItemsContainer}>
 				<Text style={style.noItemsTitle}>
@@ -344,7 +346,7 @@ class DevicesTab extends View {
 		);
 	}
 
-	noGatewayMessage(style: Object) {
+	noGatewayMessage(style: Object): Object {
 		return (
 			<View style={style.noItemsContainer}>
 				<Text style={style.noItemsTitle}>
@@ -363,7 +365,7 @@ class DevicesTab extends View {
 		);
 	}
 
-	toggleHiddenListButton(style): Object {
+	toggleHiddenListButton(style: Object): Object {
 		return (
 			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
 				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
@@ -379,7 +381,7 @@ class DevicesTab extends View {
 		);
 	}
 
-	render() {
+	render(): Object {
 
 		let { appLayout, devices } = this.props;
 		let { showHiddenList, hiddenList, visibleList,
@@ -505,10 +507,10 @@ class DevicesTab extends View {
 
 const getRowsAndSections = createSelector(
 	[
-		({ devices }) => devices.byId,
-		({ gateways }) => gateways.byId,
+		({ devices }: Object): Object => devices.byId,
+		({ gateways }: Object): Object => gateways.byId,
 	],
-	(devices, gateways) => {
+	(devices: Object, gateways: Object): Object => {
 		return parseDevicesForListView(devices, gateways);
 	}
 );
@@ -525,10 +527,10 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
-		addNewLocation: () => {
+		addNewLocation: (): Promise<any> => {
 			return dispatch(addNewGateway());
 		},
 	};

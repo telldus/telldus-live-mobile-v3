@@ -30,7 +30,7 @@ import { Answers } from 'react-native-fabric';
 import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from '../Actions/Websockets';
 
-const loginToTelldus = (username:string, password:string): ThunkAction => (dispatch, getState) => {
+const loginToTelldus = (username: string, password: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	return axios({
 		method: 'post',
 		headers: {
@@ -47,7 +47,7 @@ const loginToTelldus = (username:string, password:string): ThunkAction => (dispa
 			'password': password,
 		},
 	  })
-		.then(response => {
+		.then((response: Object): Object => {
 			if (response.status === 200) {
 				Answers.logLogin('Password', true);
 				dispatch({
@@ -58,13 +58,13 @@ const loginToTelldus = (username:string, password:string): ThunkAction => (dispa
 			}
 			throw response;
 		})
-		.catch(error => {
+		.catch((error: Object): Object => {
 			Answers.logLogin('Password', false);
 			throw error;
 		});
 };
 
-function updateAccessToken(accessToken:Object): Action {
+function updateAccessToken(accessToken: Object): Action {
 	return {
 		type: 'RECEIVED_ACCESS_TOKEN',
 		accessToken: accessToken,
@@ -72,14 +72,14 @@ function updateAccessToken(accessToken:Object): Action {
 }
 
 function getUserProfile(): ThunkAction {
-	return (dispatch, getState) => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
 		const payload = {
 			url: '/user/profile',
 			requestParams: {
 				method: 'GET',
 			},
 		};
-		return LiveApi(payload).then(response => dispatch({
+		return LiveApi(payload).then((response: Object): Function => dispatch({
 			type: 'RECEIVED_USER_PROFILE',
 			payload: {
 				...payload,
@@ -91,7 +91,7 @@ function getUserProfile(): ThunkAction {
 
 function logoutFromTelldus(): ThunkAction {
 	destroyAllConnections();
-	return (dispatch) => {
+	return (dispatch: Function): Function => {
 		return dispatch({
 			type: 'LOGGED_OUT',
 		});

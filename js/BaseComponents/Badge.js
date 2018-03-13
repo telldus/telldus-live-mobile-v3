@@ -40,7 +40,7 @@ type Props = {
 export default class BadgeComponent extends Base {
 	props: Props;
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 		let type = {
 			backgroundColor: this.props.primary ? this.getTheme().brandPrimary : this.props.success
 				? this.getTheme().brandSuccess : this.props.info ? this.getTheme().brandInfo : this.props.warning
@@ -57,7 +57,7 @@ export default class BadgeComponent extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View {...this.prepareRootProps()}>
 				<Text style={{

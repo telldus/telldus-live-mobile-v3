@@ -45,8 +45,8 @@ type Props = {
 };
 
 class EditTimeZoneCity extends View {
-	renderRow:(string) => void;
-	parseDataForList:(string) => void;
+	renderRow: (string) => void;
+	parseDataForList: (string) => void;
 	onCityChoose: () => void;
 
 	props: Props;
@@ -98,7 +98,7 @@ class EditTimeZoneCity extends View {
 		});
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<CitiesList
 				{...this.props}

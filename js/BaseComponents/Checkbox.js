@@ -33,7 +33,7 @@ type Props = {
 export default class CheckBox extends Base {
 	props: Props;
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			checkbox: {
 				borderRadius: (Platform.OS === 'ios') ? 13 : 2,
@@ -49,7 +49,7 @@ export default class CheckBox extends Base {
 		};
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View style={this.getInitialStyle().checkbox}>
 				<Icon name={(Platform.OS === 'ios') ? 'ios-checkmark-outline' : 'md-checkmark'} style={{

@@ -30,7 +30,7 @@ const {Jobs: {getJobs}} = actions;
 const {Websockets: {authenticateSession, connectToGateways}} = actions;
 
 function getAppData(): ThunkAction {
-	return (dispatch, getState) => {
+	return (dispatch: Function, getState: Object) => {
 		dispatch(authenticateSession());
 		dispatch(connectToGateways());
 

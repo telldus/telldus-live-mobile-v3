@@ -42,18 +42,18 @@ export default class Base extends Component<Object, void> {
 		foregroundColor: PropTypes.string,
 	};
 
-	getChildContext() {
+	getChildContext(): Object {
 		return {
 			theme: this.props.theme ? this.props.theme : this.getTheme(),
 			foregroundColor: this.props.foregroundColor ? this.props.foregroundColor : this.getTheme().textColor,
 		};
 	}
 
-	getContextForegroundColor() {
+	getContextForegroundColor(): string {
 		return this.context.foregroundColor;
 	}
 
-	getTheme() {
+	getTheme(): Object {
 		return this.props.theme ? this.props.theme : this.context.theme || Theme.Core;
 	}
 

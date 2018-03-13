@@ -32,7 +32,7 @@ type Props = {
 export default class ListItemComponent extends Base {
 	props: Props;
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View style={{
 				padding: (this.props.padder) ? this.getTheme().contentPadding : 0,

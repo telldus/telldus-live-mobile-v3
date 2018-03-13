@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
@@ -32,7 +33,7 @@ import TelldusWebsocket from '../Lib/Socket';
 let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
 let logger = createLogger({
-	predicate: (getState, action) => isDebuggingInChrome,
+	predicate: (getState: () => Object, action: Object): boolean => isDebuggingInChrome,
 	collapsed: true,
 	duration: true,
 });
@@ -44,7 +45,7 @@ const store = createStore(
 );
 
 let _store;
-export function configureStore(onComplete: ?() => void) {
+export function configureStore(onComplete: () => void): Object {
 
 	persistStore(store, null, onComplete);
 
@@ -56,6 +57,6 @@ export function configureStore(onComplete: ?() => void) {
 }
 
 // TODO: should not be needed, remove when LiveApi gets store via component tree
-export function getStore() {
+export function getStore(): Object {
 	return _store;
 }

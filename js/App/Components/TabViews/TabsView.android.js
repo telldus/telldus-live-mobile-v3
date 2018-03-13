@@ -184,26 +184,26 @@ class TabsView extends View {
 		this.onPressGateway = this.onPressGateway.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation && nextProps.gateways.toActivate.checkIfGatewaysEmpty) {
 			this.addNewLocation();
 		}
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.screenProps.currentScreen === 'Tabs';
 	}
 
 	addNewLocation() {
 		this.props.addNewLocation()
-			.then(response => {
+			.then((response: Object) => {
 				if (response.client) {
 					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
 					this.setState({
 						addingNewLocation: true,
 					});
 				}
-			}).catch(error => {
+			}).catch((error: Object) => {
 				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
 				this.props.dispatch({
 					type: 'GLOBAL_ERROR_SHOW',
@@ -215,7 +215,7 @@ class TabsView extends View {
 			});
 	}
 
-	onTabSelect(tab) {
+	onTabSelect(tab: string) {
 		if (this.props.tab !== tab) {
 			this.props.onTabSelect(tab);
 			if (this.refs.drawer) {
@@ -247,13 +247,13 @@ class TabsView extends View {
 		this.props.stackNavigator.navigate('LocationDetails', {location, renderRootHeader: true});
 	}
 
-	onRequestChangeTab(index) {
+	onRequestChangeTab(index: number) {
 		this.setState({ index });
 		const tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab'];
 		this.onTabSelect(tabNames[index]);
 	}
 
-	onNavigationStateChange(prevState, currentState) {
+	onNavigationStateChange(prevState: Object, currentState: Object) {
 		const index = currentState.index;
 
 		this.setState({ routeName: currentState.routes[index].routeName });
@@ -295,7 +295,7 @@ class TabsView extends View {
 		return width < minWidth ? minWidth : width;
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, stackNavigator } = this.props;
 		let { routeName } = this.state;
 		let { currentScreen } = this.props.screenProps;
@@ -388,7 +388,7 @@ class TabsView extends View {
 	}
 }
 
-function mapStateToProps(store, ownprops) {
+function mapStateToProps(store: Object, ownprops: Object): Object {
 	return {
 		stackNavigator: ownprops.navigation,
 		tab: store.navigation.tab,
@@ -403,14 +403,16 @@ function mapStateToProps(store, ownprops) {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		syncGateways: () => dispatch(syncWithServer('gatewaysTab')),
-		onTabSelect: (tab) => {
+		syncGateways: () => {
+			dispatch(syncWithServer('gatewaysTab'));
+		},
+		onTabSelect: (tab: string) => {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
 		},
-		addNewLocation: () => {
+		addNewLocation: (): Function => {
 			return dispatch(addNewGateway());
 		},
 		dispatch,

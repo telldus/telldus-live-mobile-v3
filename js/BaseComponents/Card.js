@@ -28,7 +28,7 @@ import computeProps from './computeProps';
 
 export default class CardComponent extends Base {
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			card: {
 				flex: 1,
@@ -54,7 +54,7 @@ export default class CardComponent extends Base {
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let defaultProps = {
 			style: this.getInitialStyle().card,
@@ -64,15 +64,15 @@ export default class CardComponent extends Base {
 
 	}
 
-	renderChildren() {
-		let childrenArray = React.Children.map(this.props.children, (child) => {
+	renderChildren(): Array<Object> {
+		let childrenArray = React.Children.map(this.props.children, (child: Object): Object => {
 			return child;
 		});
 
 		return childrenArray;
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<View {...this.prepareRootProps()} >
 				{this.renderChildren()}

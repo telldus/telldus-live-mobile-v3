@@ -121,7 +121,7 @@ class DeviceHiddenRow extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		const { deviceIds, isOpen, device } = this.props;
 		const { id, ignored } = device;
 		const isOnDB = deviceIds.indexOf(id) !== -1;
@@ -166,10 +166,10 @@ class DeviceHiddenRow extends View {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		addToDashboard: id => dispatch(addToDashboard('device', id)),
-		removeFromDashboard: id => dispatch(removeFromDashboard('device', id)),
+		addToDashboard: (id: number): any => dispatch(addToDashboard('device', id)),
+		removeFromDashboard: (id: number): any => dispatch(removeFromDashboard('device', id)),
 	};
 }
 

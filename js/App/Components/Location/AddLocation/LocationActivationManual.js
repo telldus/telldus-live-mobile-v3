@@ -78,7 +78,7 @@ type Props = {
 	currentScreen: string,
 	dialogueOpen: boolean,
 	currentScreen: string,
-}
+};
 
 class LocationActivationManual extends View {
 	props: Props;
@@ -171,7 +171,7 @@ class LocationActivationManual extends View {
 				isLoading: true,
 			});
 			let param = {code: this.state.activationCode};
-			this.props.actions.getGatewayInfo(param, 'timezone').then(response => {
+			this.props.actions.getGatewayInfo(param, 'timezone').then((response: Object) => {
 				if (response && response.activated === false) {
 					let clientInfo = {
 						clientId: response.id,
@@ -189,7 +189,7 @@ class LocationActivationManual extends View {
 				this.setState({
 					isLoading: false,
 				});
-			}).catch(error => {
+			}).catch((error: Object) => {
 				let message = error.message ? (error.message === 'Invalid activation code' ? this.invalidActivationCode : error.message) :
 					error.error ? error.error : 'Unknown Error';
 				this.props.actions.showModal(message, 'ERROR');
@@ -202,7 +202,7 @@ class LocationActivationManual extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, dialogueOpen, currentScreen } = this.props;
 		const styles = this.getStyle(appLayout);
 
@@ -269,7 +269,7 @@ class LocationActivationManual extends View {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};

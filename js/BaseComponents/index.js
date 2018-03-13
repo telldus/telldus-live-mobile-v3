@@ -52,23 +52,27 @@ import Card from './Card';
 import Badge from './Badge';
 import Spinner from './Spinner';
 import ProgressBar from './ProgressBar';
-import { Col, Row, Grid } from 'react-native-easy-grid';
 import ScrollableTabView from './Tabs';
 import NavigatorIOS from './NavigatorIOS';
 import I18n from './I18n';
 import Gravatar from './Gravatar';
 import TouchableButton from './TouchableButton';
 import Modal from './Modal';
-import Poster from './Poster';
+import FloatingButton from './FloatingButton';
+import Slider from './Slider';
+import CheckboxSolid from './CheckboxSolid';
 import IconTelldus from './IconTelldus';
 import BlockIcon from './BlockIcon';
-import Throbber from './Throbber';
-import FloatingButton from './FloatingButton';
-import RoundedInfoButton from './RoundedInfoButton';
-import DialogueBox from './DialogueBox';
-import HeaderTitle from './HeaderTitle';
+import Poster from './Poster';
+import Row from './Row';
 import ListRow from './ListRow';
 import RowWithTriangle from './RowWithTriangle';
+import FullPageActivityIndicator from './FullPageActivityIndicator';
+import HeaderNav from './HeaderNav';
+import Throbber from './Throbber';
+import DialogueBox from './DialogueBox';
+import RoundedInfoButton from './RoundedInfoButton';
+import HeaderTitle from './HeaderTitle';
 import TabBar from './TabBar';
 import SafeAreaViewComponent from './SafeAreaView';
 
@@ -105,9 +109,6 @@ module.exports = {
 	H3: H3,
 	View: View,
 	RoundedCornerShadowView: RoundedCornerShadowView,
-	Row: Row,
-	Col: Col,
-	Grid: Grid,
 	InputGroup: InputGroup,
 	Input: Input,
 	Textarea: Textarea,
@@ -122,17 +123,22 @@ module.exports = {
 	Tabs: ScrollableTabView,
 	TouchableButton: TouchableButton,
 	Modal: Modal,
-	Poster: Poster,
-	IconTelldus: IconTelldus,
-	BlockIcon: BlockIcon,
-	Throbber: Throbber,
-	FloatingButton: FloatingButton,
-	RoundedInfoButton: RoundedInfoButton,
-	DialogueBox: DialogueBox,
-	HeaderTitle: HeaderTitle,
-	SafeAreaView: SafeAreaViewComponent,
+	FloatingButton,
+	Slider,
+	CheckboxSolid,
+	IconTelldus,
+	BlockIcon,
+	Poster,
+	Row,
 	ListRow,
 	RowWithTriangle,
+	FullPageActivityIndicator,
+	HeaderNav,
+	Throbber,
+	DialogueBox,
+	RoundedInfoButton: RoundedInfoButton,
+	HeaderTitle: HeaderTitle,
+	SafeAreaView: SafeAreaViewComponent,
 	TabBar,
 
 	AppState: AppState,

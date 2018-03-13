@@ -129,7 +129,7 @@ class LocationName extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<Name
 				{...this.props}

@@ -52,7 +52,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
 	appLayout: Object,
-}
+};
 
 class RegisterScreen extends View {
 
@@ -94,14 +94,14 @@ class RegisterScreen extends View {
 		}
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
 			return false;
 		}
 		return true;
 	}
 
-	render() {
+	render(): Object {
 		let { showModal, validationMessage, validationMessageHeader, appLayout } = this.props;
 		let styles = this.getStyles(appLayout);
 
@@ -141,13 +141,13 @@ class RegisterScreen extends View {
 	}
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
 		validationMessageHeader: store.modal.extras,

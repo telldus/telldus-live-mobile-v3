@@ -38,14 +38,14 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export function LiveApi({ url, requestParams }: {url:string, requestParams:Object}): Promise<any> {
-	return new Promise((resolve, reject) => {
-		return doApiCall(url, requestParams).then(response => {
+export function LiveApi({ url, requestParams }: {url: string, requestParams: Object}): Promise<any> {
+	return new Promise((resolve: Function, reject: Function): Promise<any> => {
+		return doApiCall(url, requestParams).then((response: Object): any => {
 			if (!response) {
 				return reject(new Error('unexpected error: response empty'));
 			}
 			resolve(response);
-		}).catch(error => {
+		}).catch((error: Object): any => {
 			if (error.message === 'invalid_token' || error.message === 'expired_token') {
 				const store = getStore();
 				const { dispatch } = store;
@@ -58,7 +58,7 @@ export function LiveApi({ url, requestParams }: {url:string, requestParams:Objec
 	});
 }
 
-async function doApiCall(url, requestParams) {
+async function doApiCall(url: string, requestParams: Object): any {
 	let response = await callEndPoint(url, requestParams, null);
 	if (!response.error) {
 		// All is well, so return the data from the API.
@@ -80,8 +80,9 @@ async function doApiCall(url, requestParams) {
 	throw new Error(response.error);
 }
 
-async function callEndPoint(url, requestParams, token = null) {
+async function callEndPoint(url: string, requestParams: Object, token: ?Object = null): Object {
 	const accessToken = token ? token : getStore().getState().user.accessToken;
+
 	if (!accessToken) {
 		throw new Error('LiveApi: need accessToken');
 	}
@@ -100,7 +101,7 @@ async function callEndPoint(url, requestParams, token = null) {
 }
 
 // create new token with refresh token
-export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}) {
+export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}): any {
 	const store = getStore();
 	const accessToken = store.getState().user.accessToken;
 	const { dispatch } = store;
@@ -118,8 +119,8 @@ export async function refreshAccessToken(url?: string = '', requestParams?: Obje
 			'refresh_token': accessToken.refresh_token,
 		}),
 	})
-		.then(response => response.json())
-		.then(response => {
+		.then((response: Object): any => response.json())
+		.then((response: Object): any => {
 			if (response.error) {
 				// We couldn't get a new access token with the refresh_token, so we lock the session.
 				dispatch({

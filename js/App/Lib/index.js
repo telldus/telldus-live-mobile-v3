@@ -31,6 +31,14 @@ import DeviceUtils from './DeviceUtils';
 import Accessibility from './Accessibility';
 import * as Analytics from './Analytics';
 import * as LiveApi from './LiveApi';
+import * as daysUtils from './getDays';
+import capitalize from './capitalize';
+import formatTime from './formatTime';
+import getPowerParts from './getPowerParts';
+import getSuntime from './getSuntime';
+import getTabBarIcon from './getTabBarIcon';
+import getRelativeDimensions from './getRelativeDimensions';
+
 
 module.exports = {
 	getRouteName,
@@ -38,10 +46,17 @@ module.exports = {
 	getDeviceHeight,
 	getWindowDimensions,
 	hasStatusBar,
+	capitalize,
+	formatTime,
+	getPowerParts,
+	getSuntime,
+	getTabBarIcon,
+	getRelativeDimensions,
 	...Dimmer,
 	...SensorUtils,
 	...DeviceUtils,
 	...Accessibility,
 	...Analytics,
 	...LiveApi,
+	...daysUtils,
 };

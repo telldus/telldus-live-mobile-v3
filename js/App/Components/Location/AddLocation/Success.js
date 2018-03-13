@@ -89,10 +89,10 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
-}
+};
 
 type State = {
-}
+};
 
 class Success extends View<void, Props, State> {
 
@@ -144,16 +144,18 @@ class Success extends View<void, Props, State> {
 
 	onPressHelp() {
 		let url = this.link;
-		Linking.canOpenURL(url).then(supported => {
+		Linking.canOpenURL(url).then((supported: boolean): any => {
 			if (!supported) {
 			  console.log(`Can't handle url: ${url}`);
 			} else {
 			  return Linking.openURL(url);
 			}
-		  }).catch(err => console.error('An error occurred', err));
+		  }).catch((err: Object) => {
+			  console.error('An error occurred', err);
+		  });
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		const styles = this.getStyle(appLayout);
 

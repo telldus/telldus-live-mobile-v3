@@ -47,14 +47,14 @@ export default class TelldusWebsocket {
 	websocketUrl: string;
 	websocket: Object;
 	send: Object;
-	_onAppStateChange : string => void;
+	_onAppStateChange: string => void;
 	onmessage: Function;
 	onerror: Function;
 	onclose: Function;
 	onopen: Function;
 	reportException: (Error) => void;
 
-	constructor(gatewayId:string, websocketUrl:string) {
+	constructor(gatewayId: string, websocketUrl: string) {
 		this.gatewayId = gatewayId;
 		this.websocketUrl = websocketUrl;
 
@@ -62,7 +62,7 @@ export default class TelldusWebsocket {
 		this._listenForAppStateChange();
 	}
 
-	open() {
+	open(): any {
 		if (this.websocket && this.websocket.readyState === this.websocket.OPEN) {
 			return console.log('socket already open');
 		}
@@ -81,7 +81,7 @@ export default class TelldusWebsocket {
 		this._onAppStateChange = this._onAppStateChange.bind(this);
 	}
 
-	close() {
+	close(): any {
 		if (!this.websocket) {
 			return console.error('there is no websocket to close');
 		}
@@ -124,9 +124,9 @@ export default class TelldusWebsocket {
 		this._addListener('onclose');
 	}
 
-	_addListener(eventType:string) {
-		const noop = event => console.log('nooping', event);
-		this.websocket[eventType] = event => {
+	_addListener(eventType: string) {
+		const noop = (event: string): any => console.log('nooping', event);
+		this.websocket[eventType] = (event: string) => {
 			// $FlowFixMe
 			const fn = this[eventType] || noop;
 			fn(event);
@@ -137,7 +137,7 @@ export default class TelldusWebsocket {
 		AppState.addEventListener('change', this._onAppStateChange);
 	}
 
-	_onAppStateChange(appState) {
+	_onAppStateChange(appState: string) {
 		if (appState === 'active') {
 			console.log('app is active, reopening socket connection');
 			this.open();

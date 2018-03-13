@@ -52,7 +52,7 @@ type Props = {
 type DefaultProps = {
 	commandON: number,
 	commandDIM: number,
-}
+};
 
 class DimmerStep extends View {
 props: Props;
@@ -103,7 +103,7 @@ render(): Object {
 			<View style={styles.container}>
 				<View style={styles.stepCover}>
 					{
-						this.dimLevels.map((value) => {
+						this.dimLevels.map((value: string): Object => {
 							return <Step key={value} value={value}
 								onPressDim={this.onPressDim} intl={intl}
 								importantForAccessibility={importantForAccessibility}/>;
@@ -163,8 +163,8 @@ function mapStateToProps(store: Object): Object {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		deviceSetState: (id: number, command: number, value?: number) => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number) => dispatch(requestDeviceAction(id, command)),
+		deviceSetState: (id: number, command: number, value?: number): any => dispatch(deviceSetState(id, command, value)),
+		requestDeviceAction: (id: number, command: number): any => dispatch(requestDeviceAction(id, command)),
 	};
 }
 

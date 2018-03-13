@@ -53,7 +53,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
-}
+};
 
 class LocationName extends View {
 	props: Props;
@@ -113,7 +113,7 @@ class LocationName extends View {
 		}
 	}
 
-	render() {
+	render(): Object {
 		return (
 			<Name
 				{...this.props}

@@ -101,7 +101,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 		this.props.onOriginPress(this.props.item);
 	}
 
-	getIcon(deviceState) {
+	getIcon(deviceState: string): string | null {
 		switch (deviceState) {
 			case 'TURNON':
 				return 'icon_on';
@@ -123,7 +123,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 	}
 
-	getPercentage(value: number) {
+	getPercentage(value: number): number {
 		return Math.round(value * 100.0 / 255);
 	}
 
@@ -169,7 +169,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 		return accessibilityLabel;
 	}
 
-	render() {
+	render(): Object {
 
 		let { appLayout, intl, isModalOpen, currentScreen, currentTab } = this.props;
 
@@ -334,9 +334,9 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onOriginPress: (data) => {
+		onOriginPress: (data: Object) => {
 			dispatch({
 				type: 'REQUEST_MODAL_OPEN',
 				payload: {

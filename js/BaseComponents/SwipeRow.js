@@ -27,8 +27,9 @@ import React, {
 import {
 	Animated,
 	StyleSheet,
-	View,
 } from 'react-native';
+
+import View from './View';
 
 type Props = {
 	/**
@@ -185,7 +186,7 @@ class SwipeRow extends Component<Props, State> {
 		this.onRowPress = this.onRowPress.bind(this);
 	}
 
-	getPreviewAnimation(toValue:number, delay:number):Object {
+	getPreviewAnimation(toValue: number, delay: number): Object {
 		return Animated.timing(
 			this.state.translateX,
 			{
@@ -196,7 +197,7 @@ class SwipeRow extends Component<Props, State> {
 		);
 	}
 
-	getSlideAnimation(toValue:number, delay:number):Object {
+	getSlideAnimation(toValue: number, delay: number): Object {
 		return Animated.timing(
 			this.state.translateX,
 			{
@@ -207,7 +208,7 @@ class SwipeRow extends Component<Props, State> {
 		);
 	}
 
-	onContentLayout(e:Object) {
+	onContentLayout(e: Object) {
 
 		this.setState({
 			dimensionsSet: !this.props.recalculateHiddenLayout,
@@ -234,12 +235,12 @@ class SwipeRow extends Component<Props, State> {
 		}
 	}
 
-	handleOnMoveShouldSetPanResponder(e:Object, gs:Object) {
+	handleOnMoveShouldSetPanResponder(e: Object, gs: Object): boolean {
 		const { dx } = gs;
 		return Math.abs(dx) > DIRECTIONAL_DISTANCE_CHANGE_THRESHOLD;
 	}
 
-	handlePanResponderMove(e:Object, gestureState:Object) {
+	handlePanResponderMove(e: Object, gestureState: Object) {
 		const { dx, dy } = gestureState;
 		const absDx = Math.abs(dx);
 		const absDy = Math.abs(dy);
@@ -281,7 +282,7 @@ class SwipeRow extends Component<Props, State> {
 		}
 	}
 
-	handlePanResponderEnd(e:Object, gestureState:Object) {
+	handlePanResponderEnd(e: Object, gestureState: Object) {
 		// re-enable scrolling on listView parent
 		if (!this.parentScrollEnabled) {
 			this.parentScrollEnabled = true;
@@ -312,7 +313,7 @@ class SwipeRow extends Component<Props, State> {
 		this.manuallySwipeRow(0);
 	}
 
-	manuallySwipeRow(toValue:number) {
+	manuallySwipeRow(toValue: number) {
 		Animated.spring(
 			this.state.translateX,
 			{
@@ -333,7 +334,7 @@ class SwipeRow extends Component<Props, State> {
 		this.horizontalSwipeGestureBegan = false;
 	}
 
-	renderVisibleContent() {
+	renderVisibleContent(): React$Element<any> | null {
 		// handle touchables
 		if (this.props.children === null || this.props.children === undefined || this.props.children.length < 2) {
 			return null;
@@ -342,7 +343,7 @@ class SwipeRow extends Component<Props, State> {
 		const onPress = this.props.children[1].props.onPress;
 
 		if (onPress) {
-			const newOnPress = _ => {
+			const newOnPress = (_: null) => {
 				this.onRowPress();
 				onPress();
 			};
@@ -362,7 +363,7 @@ class SwipeRow extends Component<Props, State> {
 		);
 	}
 
-	renderRowContent() {
+	renderRowContent(): React$Element<any> {
 		const slideOpenValue = this.props.editMode ? this.props.leftOpenValue : 0;
 
 		return (
@@ -379,7 +380,7 @@ class SwipeRow extends Component<Props, State> {
 		);
 	}
 
-	render() {
+	render(): React$Element<any> {
 		return (
 			<View style={this.props.style ? this.props.style : styles.container}>
 				<View style={[ styles.hidden, { height: this.state.hiddenHeight, width: this.state.hiddenWidth }]}>

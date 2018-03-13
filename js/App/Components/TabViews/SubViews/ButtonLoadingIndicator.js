@@ -17,6 +17,8 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 'use strict';
 
 import React from 'react';
@@ -26,8 +28,13 @@ import { Animated } from 'react-native';
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
+type Props = {
+};
 class ButtonLoadingIndicator extends View {
-	constructor(props) {
+
+	blink: () => void;
+
+	constructor(props: Props) {
 		super(props);
 		this.state = {
 			fadeAnim: new Animated.Value(0),
@@ -44,7 +51,7 @@ class ButtonLoadingIndicator extends View {
 		this.blinking = false;
 	}
 
-	render() {
+	render(): Object {
 		let { style } = this.props;
 
 		return (
@@ -62,7 +69,7 @@ class ButtonLoadingIndicator extends View {
 				toValue: 0,
 				duration: 500,
 			}),
-		]).start(event => {
+		]).start((event: Object) => {
 			if (event.finished && this.blinking) {
 				this.blink();
 			}

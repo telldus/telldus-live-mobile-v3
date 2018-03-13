@@ -36,6 +36,8 @@ import {
 	getGateways,
 } from '../Actions';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { resetSchedule } from 'Actions_Schedule';
+import ScheduleNavigator from 'ScheduleNavigator';
 
 const messages = defineMessages({
 	errortoast: {
@@ -72,6 +74,12 @@ const RouteConfigs = {
 			};
 		},
 	},
+	Schedule: {
+		screen: ScheduleNavigator,
+		navigationOptions: {
+			header: null,
+		},
+	},
 	AddLocation: {
 		screen: AddLocationNavigator,
 		navigationOptions: ({navigation}: Object): Object => {
@@ -86,7 +94,6 @@ const RouteConfigs = {
 				header: null,
 			};
 		},
-
 	},
 	LocationDetails: {
 		screen: LocationDetailsNavigator,
@@ -120,12 +127,14 @@ type Props = {
 	dispatch: Function,
 	toastVisible: boolean,
 	toastMessage: string,
+	toastDuration: string,
+	toastPosition: string,
 	intl: intlShape.isRequired,
 };
 
 type State = {
 	currentScreen: string,
-}
+};
 
 class AppNavigator extends View {
 
@@ -159,10 +168,11 @@ class AppNavigator extends View {
 			this.props.dispatch(syncLiveApiOnForeground());
 			this.props.dispatch(getGateways());
 			this.props.dispatch(getAppData());
+			this.props.dispatch(resetSchedule());
 		});
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.toastVisible) {
 			let { formatMessage } = this.props.intl;
 			let message = nextProps.toastMessage ? nextProps.toastMessage : formatMessage(messages.errortoast);
@@ -177,9 +187,8 @@ class AppNavigator extends View {
 		});
 	}
 
-	onNavigationStateChange(prevState, currentState) {
+	onNavigationStateChange(prevState: Object, currentState: Object) {
 		const index = currentState.index;
-
 		this.setState({ currentScreen: currentState.routes[index].routeName });
 	}
 
@@ -187,7 +196,7 @@ class AppNavigator extends View {
 		this.props.dispatch(hideDimmerStep());
 	}
 
-	render() {
+	render(): Object {
 		let { currentScreen } = this.state;
 		let { intl, dimmer } = this.props;
 		let screenProps = {
@@ -221,19 +230,20 @@ AppNavigator.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 };
 
-
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
-		toastVisible: state.App.errorGlobalShow,
-		toastMessage: state.App.errorGlobalMessage,
+		toastVisible: state.App.showToast,
+		toastMessage: state.App.message,
+		toastDuration: state.App.duration,
+		toastPosition: state.App.position,
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};

@@ -63,7 +63,7 @@ class HeaderComponent extends Base {
 	renderLeftButton: (Object) => Object;
 	renderButtonContent: (Object) => Object;
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		let { appLayout } = this.props;
 		let { height, width } = appLayout;
 		this.deviceWidth = height > width ? width : height;
@@ -117,7 +117,7 @@ class HeaderComponent extends Base {
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let defaultProps = {
 			style: this.getInitialStyle().navbar,
@@ -127,7 +127,7 @@ class HeaderComponent extends Base {
 
 	}
 
-	renderChildren() {
+	renderChildren(): ?Object | ?Array<any> {
 		if (!this.props.children) {
 			return (
 				<Image
@@ -142,28 +142,28 @@ class HeaderComponent extends Base {
 			let childrenArray = React.Children.toArray(this.props.children);
 
 			let buttons = [];
-			buttons = _.remove(childrenArray, (item) => {
+			buttons = _.remove(childrenArray, (item: Object): ?boolean => {
 				if (item.type === Button) {
 					return true;
 				}
 			});
 
 			let title = [];
-			title = _.remove(childrenArray, (item) => {
+			title = _.remove(childrenArray, (item: Object): ?boolean => {
 				if (item.type === Title) {
 					return true;
 				}
 			});
 
 			let subtitle = [];
-			subtitle = _.remove(childrenArray, (item) => {
+			subtitle = _.remove(childrenArray, (item: Object): ?boolean => {
 				if (item.type === Subtitle) {
 					return true;
 				}
 			});
 
 			let input = [];
-			input = _.remove(childrenArray, (item) => {
+			input = _.remove(childrenArray, (item: Object): ?boolean => {
 				if (item.type === InputGroup) {
 					return true;
 				}
@@ -304,7 +304,7 @@ class HeaderComponent extends Base {
 		}
 	}
 
-	renderButtonContent = (button: Object) => {
+	renderButtonContent = (button: Object): ?Object => {
 		if (button.image) {
 			return <Image source={button.image}/>;
 		}
@@ -320,7 +320,7 @@ class HeaderComponent extends Base {
 		}
 	};
 
-	renderRightButton = (rightButton: Object) => {
+	renderRightButton = (rightButton: Object): Object => {
 		let { accessibilityLabel, icon } = rightButton;
 		let style = icon ? icon.style : null;
 		return (
@@ -342,7 +342,7 @@ class HeaderComponent extends Base {
 		);
 	};
 
-	renderLeftButton = (leftButton: Object) => {
+	renderLeftButton = (leftButton: Object): Object => {
 		let { accessibilityLabel, icon } = leftButton;
 		let style = icon ? icon.style : null;
 		return (
@@ -364,7 +364,7 @@ class HeaderComponent extends Base {
 		);
 	};
 
-	render() {
+	render(): Object {
 		const { leftButton, rightButton } = this.props;
 
 		return (

@@ -84,7 +84,7 @@ type State = {
 
 type DefaultProps = {
 	source: number,
-}
+};
 
 export interface ScheduleProps {
 	navigation: Object,

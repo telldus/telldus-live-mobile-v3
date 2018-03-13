@@ -73,14 +73,14 @@ class HistoryTab extends View {
 	state: State;
 
 	refreshHistoryData: () => void;
-	renderSectionHeader: (Object, String) => void;
-	renderRow: (Object, String) => void;
+	renderSectionHeader: (Object, string) => void;
+	renderRow: (Object, string) => void;
 	closeHistoryDetailsModal: () => void;
 	_onRefresh: () => void;
 	fetchHistoryData: (Object, number | null) => void;
 
-	static navigationOptions = ({ navigation }) => ({
-		tabBarLabel: ({ tintColor }) => (
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
 				icon="icon_history"
 				tintColor={tintColor}
@@ -123,7 +123,7 @@ class HistoryTab extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps(nextProps: Object) {
 		if (nextProps.screenProps.currentTab === 'History') {
 			if (!this.state.hasRefreshed) {
 				this.refreshHistoryData();
@@ -138,13 +138,13 @@ class HistoryTab extends View {
 		}
 	}
 
-	keyExtractor(item: Object, index: number) {
+	keyExtractor(item: Object, index: number): string {
 		let key = `${item.ts}${index}`;
 		return key;
 	}
 
 	getDataFromLocal(refreshing: boolean = false) {
-		getDeviceHistoryFromLocal(this.props.device.id).then(data => {
+		getDeviceHistoryFromLocal(this.props.device.id).then((data: Object) => {
 			if (data && data.length !== 0) {
 				let rowsAndSections = parseHistoryForSectionList(data);
 				this.setState({
@@ -173,18 +173,18 @@ class HistoryTab extends View {
 			that.setState({
 				refreshing: true,
 			});
-			getLatestTimestamp('device', device.id).then(res => {
+			getLatestTimestamp('device', device.id).then((res: Object) => {
 				let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
 				that.fetchHistoryData(device, prevTimestamp);
-			}).catch(error => {
+			}).catch(() => {
 				that.fetchHistoryData(device, null);
 			});
 		}, 2000);
 	}
 
-	fetchHistoryData(device, prevTimestamp) {
+	fetchHistoryData(device: Object, prevTimestamp: number) {
 		this.props.dispatch(getDeviceHistory(this.props.device, prevTimestamp))
-			.then((response) => {
+			.then((response: Object) => {
 				if (response.history && response.history.length !== 0) {
 					let data = {
 						history: response.history,
@@ -203,7 +203,7 @@ class HistoryTab extends View {
 			});
 	}
 
-	getIcon(deviceState) {
+	getIcon(deviceState: string): string {
 		switch (deviceState) {
 			case 'TURNON':
 				return 'icon_on';
@@ -222,7 +222,7 @@ class HistoryTab extends View {
 		}
 	}
 
-	renderRow(item: Object) {
+	renderRow(item: Object): Object {
 		let { screenProps } = this.props;
 		let { intl, currentTab, currentScreen } = screenProps;
 
@@ -261,7 +261,7 @@ class HistoryTab extends View {
 		clearTimeout(this.delayRefreshHistoryData);
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.screenProps.currentTab === 'History';
 	}
 
@@ -270,15 +270,15 @@ class HistoryTab extends View {
 			refreshing: true,
 		});
 		let { device } = this.props;
-		getLatestTimestamp('device', device.id).then(res => {
+		getLatestTimestamp('device', device.id).then((res: Object) => {
 			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
 			this.fetchHistoryData(device, prevTimestamp);
-		}).catch(error => {
+		}).catch(() => {
 			this.fetchHistoryData(device, null);
 		});
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout, screenProps } = this.props;
 		let { intl, currentTab, currentScreen } = screenProps;
 		let { brandPrimary } = Theme.Core;
@@ -379,12 +379,12 @@ const styles = StyleSheet.create({
 });
 
 // prepares the row and section data required for the List.
-const parseHistoryForSectionList = (data): Array<any> => {
-	let result = _.groupBy(data, items => {
+const parseHistoryForSectionList = (data: Object): Array<any> => {
+	let result = _.groupBy(data, (items: Object): any => {
 		let date = new Date(items.ts * 1000).toDateString();
 		return date;
 	});
-	result = _.reduce(result, (acc, next, index) => {
+	result = _.reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
 		acc.push({
 			key: index,
 			data: next,

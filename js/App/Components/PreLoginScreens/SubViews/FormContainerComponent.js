@@ -32,9 +32,9 @@ type Props = {
 	headerText: string,
 	children: Children,
 	formContainerStyle?: number | Object,
-}
+};
 
-const FormContainerComponent = (props: Props) => (
+const FormContainerComponent = (props: Props): React$Element<any> => (
 	<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
 		<ScrollView
 			keyboardDismissMode= "interactive">

@@ -53,7 +53,7 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 		super(props);
 	}
 
-	render() {
+	render(): Object {
 		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
 		const { id, name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF } = supportedMethods;

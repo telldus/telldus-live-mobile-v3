@@ -45,7 +45,7 @@ module.exports = function (incomingProps: Object, defaultProps: Object): Object 
 		let computedPropsStyle = {};
 		computedProps.style = {};
 		if (Array.isArray(incomingPropsStyle)) {
-			_.forEach(incomingPropsStyle, (style) => {
+			_.forEach(incomingPropsStyle, (style: string) => {
 				if (typeof style === 'number') {
 					_.merge(computedPropsStyle, ReactNativePropRegistry.getByID(style));
 				} else {

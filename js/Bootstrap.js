@@ -18,6 +18,8 @@
  *
  */
 
+// @flow
+
 'use strict';
 
 import 'intl';
@@ -35,11 +37,20 @@ import { IntlProvider } from 'react-intl';
 import * as Translations from './App/Translations';
 import { forceLocale } from './Config';
 
-function Bootstrap(): React.Component {
+function Bootstrap(): Object {
 
 	console.disableYellowBox = true;
 
-	class Root extends React.Component {
+	type State = {
+		isLoading: boolean,
+		locale: string,
+		messages: string,
+		store: Object,
+	};
+
+	class Root extends React.Component<null, State> {
+		state: State;
+
 		constructor() {
 			super();
 			let locale = this.getLocale();
@@ -64,7 +75,7 @@ function Bootstrap(): React.Component {
 			}
 		}
 
-		getLocale() {
+		getLocale(): string {
 			if (forceLocale) {
 				return forceLocale;
 			}
@@ -76,7 +87,7 @@ function Bootstrap(): React.Component {
 			return parts[0];
 		}
 
-		render() {
+		render(): Provider {
 			if (this.state.isLoading) {
 				return null;
 			}
@@ -93,7 +104,7 @@ function Bootstrap(): React.Component {
 	return Root;
 }
 
-global.LOG = (...args) => {
+global.LOG = (...args: any): Array<any> => {
 	console.log('/------------------------------\\');
 	console.log(...args);
 	console.log('\\------------------------------/');
@@ -103,7 +114,7 @@ global.LOG = (...args) => {
 if (process.env.NODE_ENV !== 'production') {
 	const originalConsoleError = console.error;
 	if (console.error === originalConsoleError) {
-		console.error = (...args) => {
+		console.error = (...args: Array<any>) => {
 			if (args[0].indexOf('[React Intl] Missing message:') === 0) {
 				return;
 			}

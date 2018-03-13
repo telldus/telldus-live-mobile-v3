@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+// @flow
 'use strict';
 
 import React, { PureComponent } from 'react';
@@ -50,7 +50,7 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 		super(props);
 	}
 
-	render() {
+	render(): Object {
 		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
 		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;

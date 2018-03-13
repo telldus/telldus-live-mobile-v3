@@ -35,7 +35,7 @@ type Props = {
 export default class Content extends Base {
 	props: Props;
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let type = {
 			backgroundColor: 'transparent',
@@ -49,7 +49,7 @@ export default class Content extends Base {
 		return computeProps(this.props, defaultProps);
 	}
 
-	render() {
+	render(): React$Element<any> {
 		const contentContainerStyle = this.props.contentContainerStyle || {};
 		contentContainerStyle.padding = (this.props.padder) ? this.getTheme().contentPadding : 0;
 		return (

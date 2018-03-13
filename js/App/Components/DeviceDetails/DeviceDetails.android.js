@@ -64,7 +64,7 @@ class DeviceDetails extends View {
 
 	goBack: () => void;
 	onNavigationStateChange: (Object, Object) => void;
-	getRouteName: (Object) => void;
+	getRouteName: (Object) => string | null;
 	handleBackPress: () => boolean;
 
 	constructor(props: Props) {
@@ -109,7 +109,7 @@ class DeviceDetails extends View {
 		return false;
 	}
 
-	getRouteName(navigationState) {
+	getRouteName(navigationState: Object): string {
 		if (!navigationState) {
 			return null;
 		}
@@ -121,7 +121,7 @@ class DeviceDetails extends View {
 		return route.routeName;
 	}
 
-	onNavigationStateChange(prevState, currentState) {
+	onNavigationStateChange(prevState: Object, currentState: Object) {
 		const currentScreen = this.getRouteName(currentState);
 		this.setState({
 			currentTab: currentScreen,
@@ -132,7 +132,7 @@ class DeviceDetails extends View {
 		closeDatabase();
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		let { currentScreen } = this.props.screenProps;
 		let screenProps = {

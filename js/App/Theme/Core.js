@@ -42,10 +42,16 @@ export default {
 		};
 	},
 
-
 	inverseTextColor: '#ffffff',
 	fadedInverseTextColor: '#C3D1E6',
 	textColor: '#000000',
+	inactiveGray: '#bdbdbd',
+
+	sunriseColor: '#ffa726',
+	sunsetColor: '#ef5350',
+	get timeColor() {
+		return this.brandSecondary;
+	},
 
 	sectionTextColor: '#8e8e93',
 	rowTextColor: '#8e8e93',
@@ -96,7 +102,6 @@ export default {
 	buttonPadding: 6,
 
 	borderRadiusBase: 2,
-
 	borderRadiusRow: 3,
 
 	get borderRadiusLarge() {
@@ -225,5 +230,4 @@ export default {
 			},
 		};
 	},
-
 };

@@ -32,10 +32,12 @@ import TabActions from './Tabs';
 import DashboardActions from './Dashboard';
 import JobActions from './Jobs';
 import AppStateActions from './AppState';
+import Schedule from './Schedule';
 import AppDataActions from './AppData';
 import ModalActions from './Modal';
 import WebSocketActions from './Websockets';
 import AppActions from './App';
+import ScheduleActions from './Schedule';
 
 module.exports = {
 	...GatewayActions,
@@ -48,8 +50,10 @@ module.exports = {
 	...DashboardActions,
 	...JobActions,
 	...AppStateActions,
+	...Schedule,
 	...AppDataActions,
 	...ModalActions,
 	...WebSocketActions,
 	...AppActions,
+	...ScheduleActions,
 };

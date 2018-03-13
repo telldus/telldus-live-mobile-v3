@@ -28,7 +28,7 @@ import computeProps from './computeProps';
 
 export default class Textarea extends Base {
 
-	getInitialStyle() {
+	getInitialStyle(): Object {
 		return {
 			input: {
 				height: this.props.rowSpan * 25,
@@ -40,7 +40,7 @@ export default class Textarea extends Base {
 		};
 	}
 
-	getBorderStyle() {
+	getBorderStyle(): Object {
 		return {
 			underline: {
 				borderTopWidth: 0,
@@ -60,7 +60,7 @@ export default class Textarea extends Base {
 		};
 	}
 
-	prepareRootProps() {
+	prepareRootProps(): Object {
 
 		let defaultProps = {
 			style: this.getInitialStyle().input,
@@ -70,7 +70,7 @@ export default class Textarea extends Base {
 
 	}
 
-	render() {
+	render(): React$Element<any> {
 
 		return (
 			<View style={{

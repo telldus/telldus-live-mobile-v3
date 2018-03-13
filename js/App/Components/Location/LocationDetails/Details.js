@@ -86,7 +86,7 @@ class Details extends View {
 	componentDidMount() {
 		const { actions, location, navigation } = this.props;
 		let { id } = location, extras = 'timezoneAutodetect';
-		actions.getGatewayInfo({id}, extras).then(response => {
+		actions.getGatewayInfo({id}, extras).then((response: Object) => {
 			let { autodetectedTimezone } = response;
 			let { params } = navigation.state;
 			let newParams = { ...params, autodetectedTimezone };
@@ -120,7 +120,7 @@ class Details extends View {
 		actions.showModal(this.confirmMessage, 'DELETE_LOCATION');
 	}
 
-	getLocationStatus(online, websocketOnline) {
+	getLocationStatus(online: boolean, websocketOnline: boolean): Object {
 		return (
 			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} />
 		);

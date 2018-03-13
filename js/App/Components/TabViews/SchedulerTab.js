@@ -22,127 +22,263 @@
 'use strict';
 
 import React from 'react';
+import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
-import i18n from '../../Translations/common';
+import { createSelector } from 'reselect';
+import moment from 'moment';
+import Swiper from 'react-native-swiper';
 import Platform from 'Platform';
 
-import { List, ListDataSource, Text, View } from '../../../BaseComponents';
-import { JobRow } from './SubViews';
-import { getJobs } from '../../Actions';
-import Theme from '../../Theme';
-
-import moment from 'moment-timezone';
+import {
+	FloatingButton,
+	FullPageActivityIndicator,
+	View,
+	StyleSheet,
+	Text,
+	Icon,
+} from '../../../BaseComponents';
+import { JobRow, JobsPoster } from './SubViews';
+import { editSchedule, getJobs } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
+import type { Schedule } from 'Reducers_Schedule';
+
+import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
 
 const messages = defineMessages({
-	friday: {
-		id: 'days.friday',
-		defaultMessage: 'Friday',
+	scheduler: {
+		id: 'pages.scheduler',
+		defaultMessage: 'Scheduler',
+		description: 'The Schedulers tab',
 	},
-	monday: {
-		id: 'days.monday',
-		defaultMessage: 'Monday',
-	},
-	nextWeekday: {
-		id: 'days.nextWeekday',
-		defaultMessage: 'Next {weekday}',
-		description: 'Used by the scheduler to display the day one week from now. Example "Next Wednesday"',
-	},
-	saturday: {
-		id: 'days.saturday',
-		defaultMessage: 'Saturday',
-	},
-	sunday: {
-		id: 'days.sunday',
-		defaultMessage: 'Sunday',
-	},
-	thursday: {
-		id: 'days.thursday',
-		defaultMessage: 'Thursday',
-	},
-	today: {
-		id: 'days.today',
-		defaultMessage: 'Today',
-		description: 'Used by the scheduler to display a header with the schedules running today',
-	},
-	tomorrow: {
-		id: 'days.tomorrow',
-		defaultMessage: 'Tomorrow',
-		description: 'Used by the scheduler to display a header with the schedules running tomorrow',
-	},
-	tuesday: {
-		id: 'days.tuesday',
-		defaultMessage: 'Tuesday',
-	},
-	wednesday: {
-		id: 'days.wednesday',
-		defaultMessage: 'Wednesday',
+	noScheduleMessage: {
+		id: 'schedule.noScheduleMessage',
+		defaultMessage: 'No schedules on this day',
+		description: 'Message when no schedules',
 	},
 });
+
+type NavigationParams = {
+	focused: boolean, tintColor: string,
+};
 
 type Props = {
 	rowsAndSections: Object,
 	devices: Object,
 	dispatch: Function,
+	navigation: Object,
 	screenProps: Object,
 	appLayout: Object,
 };
 
 type State = {
-	dataSource: Object,
+	daysToRender?: React$Element<any>[],
+	todayIndex?: number,
+	isRefreshing: boolean,
+	loading: boolean,
+	days: Array<any>,
 };
 
-import getTabBarIcon from '../../Lib/getTabBarIcon';
+class SchedulerTab extends View<null, Props, State> {
 
-class SchedulerTab extends View {
+	keyExtractor: (Object) => string;
 
-	props: Props;
-	state: State;
+	static propTypes = {
+		rowsAndSections: PropTypes.object,
+		devices: PropTypes.object,
+		dispatch: PropTypes.func,
+		navigation: PropTypes.object,
+		screenProps: PropTypes.object,
+	};
 
-	renderRow: (Object) => Object;
-	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
-	getSectionName: (number) => string;
-	onRefresh: () => void;
+	static navigationOptions = (props: Object): Object => ({
+		title: props.screenProps.intl.formatMessage(messages.scheduler),
+		tabBarIcon: ({ focused, tintColor }: NavigationParams): Object => {
+			return getTabBarIcon(focused, tintColor, 'scheduler');
+		},
+	});
 
 	constructor(props: Props) {
 		super(props);
 
-		const { sections, sectionIds } = this.props.rowsAndSections;
+		this.noScheduleMessage = props.screenProps.intl.formatMessage(messages.noScheduleMessage);
+
+		this.contentOffset = 0;
 
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: this.rowHasChanged,
-				sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-			}).cloneWithRowsAndSections(sections, sectionIds),
+			todayIndex: 0,
+			isRefreshing: false,
+			isLoading: !Object.keys(props.rowsAndSections).length,
 		};
-
-		this.renderRow = this.renderRow.bind(this);
-		this.renderSectionHeader = this.renderSectionHeader.bind(this);
-		this.getSectionName = this.getSectionName.bind(this);
-		this.onRefresh = this.onRefresh.bind(this);
+		this.newSchedule = this.newSchedule.bind(this);
+		this.onIndexChanged = this.onIndexChanged.bind(this);
+		this.keyExtractor = this.keyExtractor.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
-		const { sections, sectionIds } = nextProps.rowsAndSections;
-
-		this.setState({
-			dataSource: this.state.dataSource.cloneWithRowsAndSections(sections, sectionIds),
-		});
-	}
-
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.tab === 'schedulerTab';
 	}
 
-	onRefresh() {
-		this.props.dispatch(getJobs());
+	componentDidMount() {
+		this.refreshJobs();
 	}
 
-	rowHasChanged(r1, r2) {
+	onRefresh = () => {
+		this.setState({
+			isRefreshing: true,
+		});
+		this.refreshJobs();
+	}
+
+	refreshJobs() {
+		this.props.dispatch(getJobs()).then(() => {
+			this.setState({
+				isRefreshing: false,
+				isLoading: false,
+			});
+		}).catch(() => {
+			this.setState({
+				isRefreshing: false,
+				isLoading: false,
+			});
+		});
+	}
+
+	newSchedule = () => {
+		this.props.screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: false});
+	};
+
+	editJob = (schedule: Schedule) => {
+		const { dispatch, screenProps } = this.props;
+
+		dispatch(editSchedule(schedule));
+		screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: true});
+	};
+
+	onIndexChanged = (index: number) => {
+		this.setState({
+			todayIndex: index,
+		});
+	}
+
+	render(): React$Element<any> {
+		const { rowsAndSections, appLayout } = this.props;
+		const { todayIndex, isLoading } = this.state;
+		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
+
+		if (isLoading) {
+			return <FullPageActivityIndicator/>;
+		}
+
+		const { swiperContainer } = this.getStyles(appLayout);
+
+		return (
+			<View style={swiperContainer}>
+				<JobsPoster
+					days={days}
+					todayIndex={todayIndex}
+					scroll={this._scroll}
+					appLayout={appLayout}
+				/>
+				<Swiper
+					ref={this._refScroll}
+					showsButtons={false}
+					loadMinimal={true}
+					loadMinimalSize={0}
+					loop={false}
+					showsPagination={false}
+					onIndexChanged={this.onIndexChanged}>
+					{daysToRender}
+				</Swiper>
+				<FloatingButton
+					onPress={this.newSchedule}
+					imageSource={require('./img/iconPlus.png')}
+				/>
+			</View>
+		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.05) + (height * 0.13) : 0;
+		const marginLeft = (Platform.OS === 'android' && !isPortrait) ? (width * 0.07303) : 0;
+
+		return {
+			line: {
+				backgroundColor: '#929292',
+				height: '100%',
+				width: 1,
+				position: 'absolute',
+				left: (width - headerHeight) * 0.069333333,
+				top: 0,
+				zIndex: -1,
+			},
+			swiperContainer: {
+				flex: 1,
+				marginLeft,
+			},
+		};
+	}
+
+	_refScroll = (scroll: any): mixed => {
+		this.scroll = scroll;
+	};
+
+	_scroll = (days: number) => {
+		this.scroll.scrollBy(days, true);
+	};
+
+	keyExtractor(item: Object): string {
+		return item.id;
+	}
+
+	_getDaysToRender = (dataArray: Object, appLayout: Object): Object => {
+		let days = [], daysToRender = [];
+
+		for (let key in dataArray) {
+			let schedules = dataArray[key];
+
+			let isEmpty = !schedules || schedules.length === 0;
+			if (isEmpty) {
+				daysToRender.push(
+					<View style={[styles.container, styles.containerWhenNoData]} key={key}>
+						<Icon name="exclamation-circle" size={20} color="#F06F0C" />
+						<Text style={styles.textWhenNoData}>
+							{this.noScheduleMessage}
+						</Text>
+					</View>
+				);
+			}
+
+			const { line } = this.getStyles(appLayout);
+			daysToRender.push(
+				<View style={styles.container} key={key}>
+					<View style={line}/>
+					<FlatList
+						data={schedules}
+						renderItem={this._renderRow}
+						onRefresh={this.onRefresh}
+						keyExtractor={this.keyExtractor}
+						refreshing={this.state.isRefreshing}
+					/>
+				</View>
+			);
+
+			const day = moment().add(key, 'days');
+
+			days.push({
+				day: day.format('dddd'),
+				date: day.format('DD MMMM YYYY'),
+			});
+		}
+		return { days, daysToRender };
+	};
+
+	_rowHasChanged = (r1: Object, r2: Object): boolean => {
 		if (r1 === r2) {
 			return false;
 		}
@@ -154,116 +290,63 @@ class SchedulerTab extends View {
 		);
 	}
 
-	render() {
-
-		let { appLayout } = this.props;
-
-		let style = this.getStyles(appLayout);
-
+	_renderRow = (props: Object): React$Element<JobRow> => {
 		return (
-			<View style={style.container}>
-				<List
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					renderSectionHeader={this.renderSectionHeader}
-					onRefresh={this.onRefresh}
-				/>
-			</View>
+			<JobRow {...props.item} editJob={this.editJob} isFirst={props.index === 0}/>
 		);
-	}
-
-	getSectionName(sectionId: number): string {
-		const {formatMessage} = this.props.screenProps.intl;
-		const todayInWeek = parseInt(moment().format('d'), 10);
-		const absoluteDayInWeek = (todayInWeek + sectionId) % 7;
-		const daysInWeek = [messages.sunday, messages.monday, messages.tuesday, messages.wednesday, messages.thursday, messages.friday, messages.saturday];
-
-		let sectionName;
-		if (sectionId === 0) {
-			sectionName = formatMessage(messages.today);
-		} else if (sectionId === 1) {
-			sectionName = formatMessage(messages.tomorrow);
-		} else if (sectionId === 7) {
-			sectionName = formatMessage(messages.nextWeekday, {weekday: formatMessage(daysInWeek[todayInWeek])});
-		} else {
-			sectionName = formatMessage(daysInWeek[absoluteDayInWeek]);
-		}
-		return sectionName;
-	}
-
-	renderSectionHeader(sectionData, sectionId) {
-		// TODO: move to own Component
-		let sectionName = this.getSectionName(sectionId);
-
-		return (
-			<View style={Theme.Styles.sectionHeader}>
-				<Text style={Theme.Styles.sectionHeaderText}>
-					{sectionName}
-				</Text>
-			</View>
-		);
-	}
-
-	renderRow(props, sectionId) {
-		let { screenProps } = this.props;
-		let sectionName = this.getSectionName(sectionId);
-
-		return (
-			<JobRow {...props} intl={screenProps.intl} sectionName={sectionName}/>
-		);
-	}
-
-	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
-
-		return {
-			container: {
-				flex: 1,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
-			},
-		};
-	}
+	};
 }
-
-SchedulerTab.navigationOptions = ({navigation, screenProps}) => ({
-	title: screenProps.intl.formatMessage(i18n.scheduler),
-	tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(focused, tintColor, 'scheduler'),
-});
-
-SchedulerTab.propTypes = {
-	rowsAndSections: PropTypes.object,
-};
 
 const getRowsAndSections = createSelector(
 	[
-		({ jobs }) => jobs,
-		({ gateways }) => gateways,
-		({ devices }) => devices,
+		({ jobs }: { jobs: Object[] }): Object[] => jobs,
+		({ gateways }: { gateways: Object }): Object => gateways,
+		({ devices }: { devices: Object }): Object => devices,
 	],
-	(jobs, gateways, devices) => {
-		const { sections, sectionIds } = parseJobsForListView(jobs, gateways, devices);
-		return {
-			sections,
-			sectionIds,
-		};
-	}
+	(jobs: Object[], gateways: Object, devices: Object): Object => {
+		const { sections } = parseJobsForListView(jobs, gateways, devices);
+
+		return sections;
+	},
 );
 
-function mapStateToProps(store) {
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: '#eeeeef',
+	},
+	containerWhenNoData: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		paddingTop: 40,
+	},
+	textWhenNoData: {
+		marginLeft: 10,
+		color: '#A59F9A',
+		fontSize: 12,
+	},
+});
+
+type MapStateToPropsType = {
+	rowsAndSections: Object[],
+	devices: Object,
+	tab: string,
+	appLayout: Object,
+};
+
+const mapStateToProps = (store: Object): MapStateToPropsType => {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		devices: store.devices,
-		appLayout: store.App.layout,
 		tab: store.navigation.tab,
+		appLayout: getRelativeDimensions(store.App.layout),
 	};
-}
+};
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch: Function): { dispatch: Function } => {
 	return {
 		dispatch,
 	};
-}
+};
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);

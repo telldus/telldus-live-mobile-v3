@@ -53,13 +53,13 @@ type Props = {
 	registeredCredential: any,
 	intl: intlShape.isRequired,
 	appLayout: Object,
-}
+};
 
 class WelcomeScreen extends View {
 
 	props: Props;
 
-	onPressOK: () => void;
+	onPressOK: (string) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -70,7 +70,7 @@ class WelcomeScreen extends View {
 		this.props.onPressOK(this.props.registeredCredential);
 	}
 
-	render() {
+	render(): Object {
 		let { appLayout } = this.props;
 		let styles = this.getStyles(appLayout);
 
@@ -105,16 +105,16 @@ class WelcomeScreen extends View {
 	}
 }
 
-function mapStateToProps(store) {
+function mapStateToProps(store: Object): Object {
 	return {
 		registeredCredential: store.user.registeredCredential,
 		appLayout: store.App.layout,
 	};
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onPressOK: (accessToken) => {
+		onPressOK: (accessToken: string) => {
 			dispatch({
 				type: 'RECEIVED_ACCESS_TOKEN',
 				accessToken,
