@@ -19,6 +19,7 @@
  */
 // @flow
 'use strict';
+import { REHYDRATE } from 'redux-persist';
 
 export type Action =
 	  { type: 'LOGGED_IN' }
@@ -102,6 +103,7 @@ export type Action =
 
 	| { type: 'ADD_GATEWAY_REQUEST', payload: Object }
 	| { type: 'ADD_GATEWAY_DECLINE' }
+	| { type: typeof REHYDRATE }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

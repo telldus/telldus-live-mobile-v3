@@ -22,7 +22,7 @@
 
 'use strict';
 
-import type { ThunkAction, Dispatch } from './Types';
+import type { ThunkAction } from './Types';
 
 import {LiveApi} from '../Lib';
 import { publicKey, privateKey, apiServer } from '../../Config';
@@ -34,7 +34,7 @@ import { Answers } from 'react-native-fabric';
 /*
  * registers the app at the telldus server for receiving push notification, with push token and other device information.
  */
-export const registerPushToken = (token: string, name: string, model: string, manufacturer: string, osVersion: string, deviceId: string, pushServiceId: number ): ThunkAction => (dispatch: Dispatch): Promise<any> => {
+export const registerPushToken = (token: string, name: string, model: string, manufacturer: string, osVersion: string, deviceId: string, pushServiceId: number ): ThunkAction => (dispatch: Function): Promise<any> => {
 	const url = format({
 		pathname: '/user/registerPushToken',
 		query: {
@@ -85,7 +85,7 @@ export const registerPushToken = (token: string, name: string, model: string, ma
 /*
  * unregisters the app at the telldus server from receiving push notification, with the registered push token.
  */
-export const unregisterPushToken = (token: string): ThunkAction => (dispatch: Dispatch): Promise<any> => {
+export const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function): Promise<any> => {
 	const url = format({
 		pathname: '/user/unregisterPushToken',
 		query: {
@@ -122,7 +122,7 @@ export const unregisterPushToken = (token: string): ThunkAction => (dispatch: Di
 	});
 };
 
-export const RegisterUser = (email: string, firstName: string, lastName: string): ThunkAction => (dispatch: Dispatch, getState: Function): Promise<any> => {
+export const RegisterUser = (email: string, firstName: string, lastName: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	let formData = new FormData();
 	formData.append('email', email);
 	formData.append('firstname', firstName);

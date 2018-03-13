@@ -22,7 +22,7 @@
 
 'use strict';
 
-import type { Action, ThunkAction, Dispatch } from './Types';
+import type { Action, ThunkAction } from './Types';
 
 import { AppState } from 'react-native';
 import Orientation from 'react-native-orientation';
@@ -32,7 +32,7 @@ module.exports = {
 	appStart: (): Action => ({
 		type: 'APP_START',
 	}),
-	appState: (): ThunkAction => (dispatch: Dispatch) => {
+	appState: (): ThunkAction => (dispatch: Function) => {
 		AppState.addEventListener('change', (appState: string) => {
 			if (appState === 'active') {
 				dispatch({
