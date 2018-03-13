@@ -83,6 +83,8 @@ type State = {
 
 class SchedulerTab extends View<null, Props, State> {
 
+	keyExtractor: (Object) => string;
+
 	static propTypes = {
 		rowsAndSections: PropTypes.object,
 		devices: PropTypes.object,
@@ -234,7 +236,7 @@ class SchedulerTab extends View<null, Props, State> {
 		return item.id;
 	}
 
-	_getDaysToRender = (dataArray: Object, appLayout: Object, isRefreshing: boolean): Array<Object> => {
+	_getDaysToRender = (dataArray: Object, appLayout: Object): Object => {
 		let days = [], daysToRender = [];
 
 		for (let key in dataArray) {
@@ -301,7 +303,7 @@ const getRowsAndSections = createSelector(
 		({ gateways }: { gateways: Object }): Object => gateways,
 		({ devices }: { devices: Object }): Object => devices,
 	],
-	(jobs: Object[], gateways: Object, devices: Object): Object[] => {
+	(jobs: Object[], gateways: Object, devices: Object): Object => {
 		const { sections } = parseJobsForListView(jobs, gateways, devices);
 
 		return sections;
