@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
@@ -33,8 +34,6 @@ import Platform from 'Platform';
 import {
 	FloatingButton,
 	FullPageActivityIndicator,
-	List,
-	ListDataSource,
 	View,
 	StyleSheet,
 	Text,
@@ -66,7 +65,7 @@ type NavigationParams = {
 };
 
 type Props = {
-	rowsAndSections: Object[],
+	rowsAndSections: Object,
 	devices: Object,
 	dispatch: Function,
 	navigation: Object,
@@ -77,12 +76,15 @@ type Props = {
 type State = {
 	daysToRender?: React$Element<any>[],
 	todayIndex?: number,
+	isRefreshing: boolean,
+	loading: boolean,
+	days: Array<any>,
 };
 
 class SchedulerTab extends View<null, Props, State> {
 
 	static propTypes = {
-		rowsAndSections: PropTypes.arrayOf(PropTypes.object),
+		rowsAndSections: PropTypes.object,
 		devices: PropTypes.object,
 		dispatch: PropTypes.func,
 		navigation: PropTypes.object,
@@ -102,45 +104,44 @@ class SchedulerTab extends View<null, Props, State> {
 		this.noScheduleMessage = props.screenProps.intl.formatMessage(messages.noScheduleMessage);
 
 		this.contentOffset = 0;
-		this.days = this._getDays(props.rowsAndSections);
 
 		this.state = {
-			daysToRender: this._getDaysToRender(props.rowsAndSections.slice(0, 1), this.props.appLayout),
 			todayIndex: 0,
-			loading: true,
+			isRefreshing: false,
+			isLoading: !Object.keys(props.rowsAndSections).length,
 		};
 		this.newSchedule = this.newSchedule.bind(this);
 		this.onIndexChanged = this.onIndexChanged.bind(this);
-	}
-
-	componentDidMount() {
-		const { rowsAndSections, appLayout } = this.props;
-		const daysToRender = this._getDaysToRender(rowsAndSections, appLayout);
-		this.setState({ daysToRender });
-	}
-
-	componentWillReceiveProps(nextProps: Props) {
-		const { rowsAndSections, appLayout } = nextProps;
-		const daysToRender = this._getDaysToRender(rowsAndSections, appLayout);
-		this.setState({ daysToRender });
+		this.keyExtractor = this.keyExtractor.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.tab === 'schedulerTab';
 	}
 
-	componentDidUpdate() {
-		const { loading, daysToRender } = this.state;
-
-		if (loading && daysToRender.length === this.props.rowsAndSections.length) {
-			setTimeout(() => {
-				this.setState({ loading: false });
-			});
-		}
+	componentDidMount() {
+		this.refreshJobs();
 	}
 
 	onRefresh = () => {
-		this.props.dispatch(getJobs());
+		this.setState({
+			isRefreshing: true,
+		});
+		this.refreshJobs();
+	}
+
+	refreshJobs() {
+		this.props.dispatch(getJobs()).then(() => {
+			this.setState({
+				isRefreshing: false,
+				isLoading: false,
+			});
+		}).catch(() => {
+			this.setState({
+				isRefreshing: false,
+				isLoading: false,
+			});
+		});
 	}
 
 	newSchedule = () => {
@@ -161,18 +162,20 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		if (this.state.loading) {
+		const { rowsAndSections, appLayout } = this.props;
+		const { todayIndex, isLoading } = this.state;
+		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
+
+		if (isLoading) {
 			return <FullPageActivityIndicator/>;
 		}
 
-		const { todayIndex, daysToRender } = this.state;
-		const { appLayout } = this.props;
 		const { swiperContainer } = this.getStyles(appLayout);
 
 		return (
 			<View style={swiperContainer}>
 				<JobsPoster
-					days={this.days}
+					days={days}
 					todayIndex={todayIndex}
 					scroll={this._scroll}
 					appLayout={appLayout}
@@ -227,28 +230,20 @@ class SchedulerTab extends View<null, Props, State> {
 		this.scroll.scrollBy(days, true);
 	};
 
-	_getDays = (dataArray: Object[]): Object[] => {
-		const days: Object[] = [];
+	keyExtractor(item: Object): string {
+		return item.id;
+	}
 
-		for (let i = 0; i < dataArray.length; i++) {
-			const day = moment().add(i, 'days');
+	_getDaysToRender = (dataArray: Object, appLayout: Object, isRefreshing: boolean): Array<Object> => {
+		let days = [], daysToRender = [];
 
-			days.push({
-				day: day.format('dddd'),
-				date: day.format('DD MMMM YYYY'),
-			});
-		}
+		for (let key in dataArray) {
+			let schedules = dataArray[key];
 
-		return days;
-	};
-
-	_getDaysToRender = (dataArray: Object[], appLayout: Object): React$Element<any>[] | Object=> {
-		return dataArray.map((section: Object, i: number): Object => {
-
-			let isEmpty = !Object.keys(section).length;
+			let isEmpty = !schedules || schedules.length === 0;
 			if (isEmpty) {
-				return (
-					<View style={[styles.container, styles.containerWhenNoData]} key={i}>
+				daysToRender.push(
+					<View style={[styles.container, styles.containerWhenNoData]} key={key}>
 						<Icon name="exclamation-circle" size={20} color="#F06F0C" />
 						<Text style={styles.textWhenNoData}>
 							{this.noScheduleMessage}
@@ -257,24 +252,28 @@ class SchedulerTab extends View<null, Props, State> {
 				);
 			}
 
-			const dataSource = new ListDataSource(
-				{
-					rowHasChanged: this._rowHasChanged,
-				},
-			).cloneWithRows(section);
-
 			const { line } = this.getStyles(appLayout);
-			return (
-				<View style={styles.container} key={i}>
+			daysToRender.push(
+				<View style={styles.container} key={key}>
 					<View style={line}/>
-					<List
-						dataSource={dataSource}
-						renderRow={this._renderRow}
+					<FlatList
+						data={schedules}
+						renderItem={this._renderRow}
 						onRefresh={this.onRefresh}
+						keyExtractor={this.keyExtractor}
+						refreshing={this.state.isRefreshing}
 					/>
 				</View>
 			);
-		});
+
+			const day = moment().add(key, 'days');
+
+			days.push({
+				day: day.format('dddd'),
+				date: day.format('DD MMMM YYYY'),
+			});
+		}
+		return { days, daysToRender };
 	};
 
 	_rowHasChanged = (r1: Object, r2: Object): boolean => {
@@ -289,9 +288,9 @@ class SchedulerTab extends View<null, Props, State> {
 		);
 	}
 
-	_renderRow = (props: Object, sectionId: number, rowId: string): React$Element<JobRow> => {
+	_renderRow = (props: Object): React$Element<JobRow> => {
 		return (
-			<JobRow {...props} editJob={this.editJob} isFirst={+rowId === 0}/>
+			<JobRow {...props.item} editJob={this.editJob} isFirst={props.index === 0}/>
 		);
 	};
 }
@@ -303,20 +302,9 @@ const getRowsAndSections = createSelector(
 		({ devices }: { devices: Object }): Object => devices,
 	],
 	(jobs: Object[], gateways: Object, devices: Object): Object[] => {
-		const { sections, sectionIds } = parseJobsForListView(jobs, gateways, devices);
+		const { sections } = parseJobsForListView(jobs, gateways, devices);
 
-		const sectionObjects: Object[] = [];
-
-		for (let i = 0; i < sectionIds.length; i++) {
-			sectionObjects.push(
-				sections[i].reduce((acc: Object, cur: Object, j: number): Object => {
-					acc[j] = cur;
-					return acc;
-				}, {}),
-			);
-		}
-
-		return sectionObjects;
+		return sections;
 	},
 );
 
