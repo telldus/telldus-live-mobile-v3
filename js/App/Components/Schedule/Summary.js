@@ -105,13 +105,15 @@ class Summary extends View<null, Props, State> {
 			this.setState({
 				isLoading: false,
 			});
-			if (response.id) {
-				this.resetNavigation();
-				this.props.actions.getJobs();
-				this.props.actions.showToast('schedule', this.messageOnAdd, 'LONG');
-			} else if (response.message) {
-				this.props.actions.showModal(response.message);
-			}
+			this.resetNavigation();
+			this.props.actions.getJobs();
+			this.props.actions.showToast('schedule', this.messageOnAdd, 'LONG');
+		}).catch((error: Object) => {
+			this.setState({
+				isLoading: false,
+			});
+			let message = error.message ? error.message : 'Could not save the shedule. Please try again later.';
+			this.props.actions.showModal(message);
 		});
 	};
 

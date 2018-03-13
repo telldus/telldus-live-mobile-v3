@@ -163,13 +163,15 @@ class Edit extends View<null, Props, State> {
 				this.setState({
 					isSaving: false,
 				});
-				if (response.id) {
-					this.resetNavigation();
-					this.props.actions.getJobs();
-					this.props.actions.showToast('schedule', this.messageOnUpdate, 'LONG');
-				} else if (response.message) {
-					this.props.actions.showModal(response.message);
-				}
+				this.resetNavigation();
+				this.props.actions.getJobs();
+				this.props.actions.showToast('schedule', this.messageOnUpdate, 'LONG');
+			}).catch((error: Object) => {
+				this.setState({
+					isSaving: false,
+				});
+				let message = error.message ? error.message : 'Could not save the shedule. Please try again later.';
+				this.props.actions.showModal(message);
 			});
 		}
 	};
@@ -195,13 +197,16 @@ class Edit extends View<null, Props, State> {
 				isDeleting: false,
 				choseDelete: false,
 			});
-			if (response.status && response.status === 'success') {
-				this.resetNavigation();
-				this.props.actions.getJobs();
-				this.props.actions.showToast('schedule', this.messageOnDelete, 'LONG');
-			} else if (response.message) {
-				this.props.actions.showModal(response.message);
-			}
+			this.resetNavigation();
+			this.props.actions.getJobs();
+			this.props.actions.showToast('schedule', this.messageOnDelete, 'LONG');
+		}).catch((error: Object) => {
+			this.setState({
+				isDeleting: false,
+				choseDelete: false,
+			});
+			let message = error.message ? error.message : 'Could not delete the shedule. Please try again later.';
+			this.props.actions.showModal(message);
 		});
 	}
 
