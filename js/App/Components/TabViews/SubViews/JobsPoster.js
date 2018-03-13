@@ -96,8 +96,9 @@ export default class JobsPoster extends View<null, Props, State> {
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 		const newProps = nextProps.todayIndex !== this.props.todayIndex;
 		const newState = nextState.todayIndex !== this.state.todayIndex;
-		const appLayout = nextProps.appLayout.width !== this.props.appLayout.width;
-		return newProps || newState || appLayout;
+		const newLayout = nextProps.appLayout.width !== this.props.appLayout.width;
+		const newDays = nextProps.days.length !== this.props.days.length;
+		return newProps || newState || newLayout || newDays;
 	}
 
 	getPosterWidth(): number {
