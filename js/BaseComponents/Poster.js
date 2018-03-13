@@ -96,11 +96,10 @@ class Poster extends Component<Props, null> {
 
 	_getStyle = (appLayout: Object): Object => {
 		let { posterWidth } = this.props;
-		console.log('TEST IN posterWidth ONE', posterWidth);
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		posterWidth = posterWidth ? posterWidth : width;
-		console.log('TEST IN posterWidth', posterWidth);
+
 		return {
 			image: {
 				flex: 1,
