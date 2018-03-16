@@ -22,7 +22,6 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 
@@ -70,9 +69,6 @@ class DeviceRow extends PureComponent<Props, State> {
 	props: Props;
 	state: State;
 
-	labelButton: string;
-	labelSettings: string;
-	labelGearButton: string;
 	helpViewHiddenRow: string;
 	helpCloseHiddenRow: string;
 
@@ -92,10 +88,6 @@ class DeviceRow extends PureComponent<Props, State> {
 		super(props);
 
 		let { formatMessage } = props.intl;
-
-		this.labelButton = formatMessage(i18n.button);
-		this.labelSettings = formatMessage(i18n.settingsHeader);
-		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
 
 		this.helpViewHiddenRow = formatMessage(i18n.helpViewHiddenRow);
 		this.helpCloseHiddenRow = formatMessage(i18n.helpCloseHiddenRow);
@@ -152,8 +144,10 @@ class DeviceRow extends PureComponent<Props, State> {
 		let button = null, icon = null;
 		let { isOpen } = this.state;
 		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
-		const { isInState } = device;
+		const { isInState, name } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
+		const deviceName = name ? name : intl.formatMessage(i18n.noName);
+
 		const {
 			TURNON,
 			TURNOFF,
@@ -211,11 +205,8 @@ class DeviceRow extends PureComponent<Props, State> {
 			icon = 'device-alt-solid';
 		}
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
-		let accessibilityLabel = `${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
-
-		accessibilityLabel = isOpen ? `${getLabelDevice(intl.formatMessage, device)}. ${this.helpCloseHiddenRow}` :
+		let accessibilityLabel = isOpen ? `${getLabelDevice(intl.formatMessage, device)}. ${this.helpCloseHiddenRow}` :
 			`${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
-		// let accessibilityLabelGearButton = `${this.labelGearButton}, ${device.name}`;
 
 		return (
 			<SwipeRow
@@ -230,8 +221,7 @@ class DeviceRow extends PureComponent<Props, State> {
 					onSetIgnoreDevice={this.onSetIgnoreDevice} isOpen={isOpen}/>
 				<ListItem
 					style={styles.row}>
-					<TouchableOpacity
-						onPress={this.onSettingsSelected}
+					<View
 						style={styles.touchableContainer}
 						accessible={accessible}
 						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
@@ -239,7 +229,7 @@ class DeviceRow extends PureComponent<Props, State> {
 						<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
 						<View style={styles.name}>
 							<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
-								{device.name ? device.name : '(no name)'}
+								{deviceName}
 							</Text>
 							{powerConsumed && (
 								<Text style = {styles.textPowerConsumed}>
@@ -247,7 +237,7 @@ class DeviceRow extends PureComponent<Props, State> {
 								</Text>
 							)}
 						</View>
-					</TouchableOpacity>
+					</View>
 					{button}
 				</ListItem>
 			</SwipeRow>
