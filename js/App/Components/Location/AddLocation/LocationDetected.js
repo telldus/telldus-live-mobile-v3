@@ -30,6 +30,7 @@ import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, TouchableButton } from '../../../../BaseComponents';
 import { Clients } from './SubViews';
+import { getRelativeDimensions } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 const messages = defineMessages({
@@ -53,6 +54,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	paddingHorizontal: number,
 };
 
 class LocationDetected extends View {
@@ -121,9 +123,9 @@ class LocationDetected extends View {
 
 	render(): Object {
 		let items = [];
-		let { rootNavigator, appLayout } = this.props;
+		let { rootNavigator, appLayout, paddingHorizontal } = this.props;
 
-		const styles = this.getStyle(appLayout);
+		const styles = this.getStyle(appLayout, paddingHorizontal);
 
 		if (rootNavigator.state.params.clients) {
 			items = rootNavigator.state.params.clients.map((client: Object, i: number): Object => {
@@ -146,11 +148,12 @@ class LocationDetected extends View {
 		);
 	}
 
-	getStyle(appLayout: Object): Object {
-
+	getStyle(appLayout: Object, padding: number): Object {
+		let { width } = getRelativeDimensions(appLayout);
 		return {
 			container: {
 				flex: 1,
+				width: width - (2 * padding),
 			},
 			itemsContainer: {
 				justifyContent: 'center',

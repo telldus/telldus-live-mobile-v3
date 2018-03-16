@@ -253,6 +253,7 @@ class AddLocationContainer extends View<null, Props, State> {
 										intl,
 										...screenProps,
 										dialogueOpen: showModal,
+										paddingHorizontal: padding,
 									},
 								)}
 							</View>
