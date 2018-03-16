@@ -343,6 +343,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				type={'sensor'}
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}
+				formatMessage={intl.formatMessage}
 				style={[
 					this.props.style, {
 						width: tileWidth,

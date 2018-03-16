@@ -98,6 +98,7 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 				type={'device'}
 				tileWidth={tileWidth}
 				hasShadow={!!TURNON || !!TURNOFF}
+				formatMessage={intl.formatMessage}
 				style={style}>
 				<View style={{
 					width: tileWidth,

@@ -26,8 +26,9 @@ import PropTypes from 'prop-types';
 import { View, Text, BlockIcon } from '../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
-const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive }: Object): Object => (
+const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive, formatMessage }: Object): Object => (
 	<View style={[styles.title, {
 		width: tileWidth,
 		height: tileWidth * 0.6,
@@ -42,7 +43,7 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 					opacity: name ? 1 : 0.7,
 				},
 			]}>
-			{name ? name : '(no name)'}
+			{name ? name : formatMessage(i18n.noName)}
 		</Text>
 		{info && (<Text
 			ellipsizeMode="middle"

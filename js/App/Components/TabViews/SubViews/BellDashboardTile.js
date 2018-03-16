@@ -111,6 +111,7 @@ class BellDashboardTile extends PureComponent<Props, null> {
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}
 				isGatewayActive={isGatewayActive}
+				formatMessage={intl.formatMessage}
 				style={[
 					this.props.style, {
 						width: tileWidth,

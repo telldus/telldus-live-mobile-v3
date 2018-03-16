@@ -267,6 +267,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 				type={'device'}
 				tileWidth={tileWidth}
 				accessibilityLabel={accessibilityLabel}
+				formatMessage={intl.formatMessage}
 				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
 				<View style={{
 					width: tileWidth,
