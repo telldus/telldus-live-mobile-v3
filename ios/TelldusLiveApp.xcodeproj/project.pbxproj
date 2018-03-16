@@ -22,7 +22,6 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		144028A21EE6907D000945A3 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1440287A1EE69001000945A3 /* libRCTAnimation.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
-		16A723C8508C49DBAFE69817 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 751D000A61774A31BEBBBBB1 /* libAirMaps.a */; };
 		26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26C0E61D205C17B700E9AD6A /* libRNI18n.a */; };
 		26DA5FD62045A28D003FCA91 /* SFNS Display.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26DA5FD22045A28C003FCA91 /* SFNS Display.ttf */; };
 		26DA5FD72045A28D003FCA91 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26DA5FD32045A28C003FCA91 /* Roboto-Light.ttf */; };
@@ -142,13 +141,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
-		};
-		265DB0912058131C003B9B2A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FA797E43F3C74F2999E77A09 /* AirMaps.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 11FA5C511C4A1296003AC2EE;
-			remoteInfo = AirMaps;
 		};
 		265DB0992058131C003B9B2A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -442,7 +434,6 @@
 		67549022A05F434F8B812357 /* libLRDRCTSimpleToast.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libLRDRCTSimpleToast.a; sourceTree = "<group>"; };
 		68822640B42549F2A32DDB65 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		6E20A8C755144668BCAB540B /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
-		751D000A61774A31BEBBBBB1 /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
 		782E9B56DE244FAA94B95591 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTOrientation.xcodeproj; path = "../node_modules/react-native-orientation/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7DFA88390E0247E68C113126 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
@@ -461,7 +452,6 @@
 		DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		DB8C12D469844F34ABBA0A64 /* telldusicons.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = telldusicons.svg; path = ../assets/fonts/telldusicons.svg; sourceTree = "<group>"; };
 		E3C5F7C8FDE3C261C5988FCF /* Pods-TelldusLiveApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.release.xcconfig"; sourceTree = "<group>"; };
-		FA797E43F3C74F2999E77A09 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/lib/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -489,7 +479,6 @@
 				FF46E161818E9B5BE09583C2 /* libPods-TelldusLiveApp.a in Frameworks */,
 				98FA87B1CC964159A5629AFF /* libSMXCrashlytics.a in Frameworks */,
 				BD3450422506459CA03BAFFE /* libLRDRCTSimpleToast.a in Frameworks */,
-				16A723C8508C49DBAFE69817 /* libAirMaps.a in Frameworks */,
 				3FE220D60A2B4250A2DCBB84 /* libRNReactNativeAccessibility.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -606,14 +595,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		265DB08C2058131B003B9B2A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				265DB0922058131C003B9B2A /* libAirMaps.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		265DB08E2058131B003B9B2A /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -640,7 +621,6 @@
 				23630B716BB84A33B8A4D6BD /* libRNI18n.a */,
 				A59E17B346064409AF705800 /* libSMXCrashlytics.a */,
 				67549022A05F434F8B812357 /* libLRDRCTSimpleToast.a */,
-				751D000A61774A31BEBBBBB1 /* libAirMaps.a */,
 				34DA95593A1544E09D95F18F /* libRNReactNativeAccessibility.a */,
 			);
 			name = "Recovered References";
@@ -745,7 +725,6 @@
 				68822640B42549F2A32DDB65 /* RNVectorIcons.xcodeproj */,
 				05015C29790F4F78A389A5F7 /* SMXCrashlytics.xcodeproj */,
 				609A0D1A94684C4DB8A9D337 /* LRDRCTSimpleToast.xcodeproj */,
-				FA797E43F3C74F2999E77A09 /* AirMaps.xcodeproj */,
 				844A2837C32542489912297B /* RNReactNativeAccessibility.xcodeproj */,
 			);
 			name = Libraries;
@@ -874,10 +853,6 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
-				{
-					ProductGroup = 265DB08C2058131B003B9B2A /* Products */;
-					ProjectRef = FA797E43F3C74F2999E77A09 /* AirMaps.xcodeproj */;
-				},
 				{
 					ProductGroup = 409837371F6024DB005E56A9 /* Products */;
 					ProjectRef = 609A0D1A94684C4DB8A9D337 /* LRDRCTSimpleToast.xcodeproj */;
@@ -1056,13 +1031,6 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		265DB0922058131C003B9B2A /* libAirMaps.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libAirMaps.a;
-			remoteRef = 265DB0912058131C003B9B2A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		265DB09A2058131C003B9B2A /* libRCTBlob-tvOS.a */ = {
@@ -1453,7 +1421,6 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-fabric/ios/SMXCrashlytics",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
-					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-accessibility/ios",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
@@ -1495,7 +1462,6 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-fabric/ios/SMXCrashlytics",
 					"$(SRCROOT)/../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast",
-					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-accessibility/ios",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
