@@ -53,7 +53,7 @@ export default function getTabBarIcon(focused, tintColor, sourceName) {
 	return (
 		<Image
 			source={focused ? icon.active : icon.inactive}
-			style={{ tintColor, ...ifIphoneX({marginTop: isPortrait ? 60 : 5}) }}
+			style={{ tintColor, ...ifIphoneX({marginTop: isPortrait ? 80 : 5}) }}
 		/>
 	);
 }
