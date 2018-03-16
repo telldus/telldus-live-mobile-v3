@@ -44,6 +44,7 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import io.fabric.sdk.android.Fabric;
 import org.pgsqlite.SQLitePluginPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -64,7 +65,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new MainReactPackage(),
 				new RNReactNativeAccessibilityPackage(),
 				new MapsPackage(),
-				new ReactNativePushNotificationPackage()
+				new ReactNativePushNotificationPackage(),
+				new RNI18nPackage()
 			);
 		}
 		
