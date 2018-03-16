@@ -34,6 +34,7 @@ import {
 	syncLiveApiOnForeground,
 	getAppData,
 	getGateways,
+	hideToast,
 } from '../Actions';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import { resetSchedule } from 'Actions_Schedule';
@@ -125,10 +126,10 @@ type Props = {
 	accessToken: Object,
 	userProfile: Object,
 	dispatch: Function,
-	toastVisible: boolean,
-	toastMessage: string,
-	toastDuration: string,
-	toastPosition: string,
+	showToast: boolean,
+	messageToast: string,
+	durationToast: string,
+	positionToast: string,
 	intl: intlShape.isRequired,
 };
 
@@ -173,18 +174,17 @@ class AppNavigator extends View {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.toastVisible) {
+		let { showToast, messageToast, durationToast, positionToast } = nextProps;
+		if (showToast) {
 			let { formatMessage } = this.props.intl;
-			let message = nextProps.toastMessage ? nextProps.toastMessage : formatMessage(messages.errortoast);
-			this._showToast(message);
+			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
+			this._showToast(message, durationToast, positionToast);
 		}
 	}
 
-	_showToast(message: string) {
-		Toast.showWithGravity(message, Toast.SHORT, Toast.TOP);
-		this.props.dispatch({
-			type: 'GLOBAL_ERROR_HIDE',
-		});
+	_showToast(message: string, durationToast: any, positionToast: any) {
+		Toast.showWithGravity(message, Toast[durationToast], Toast[positionToast]);
+		this.props.dispatch(hideToast());
 	}
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
@@ -231,15 +231,16 @@ AppNavigator.propTypes = {
 };
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
+	let { showToast, messageToast, durationToast, positionToast } = state.App;
 	return {
 		tab: state.navigation.tab,
 		accessToken: state.user.accessToken,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
-		toastVisible: state.App.showToast,
-		toastMessage: state.App.message,
-		toastDuration: state.App.duration,
-		toastPosition: state.App.position,
+		showToast,
+		messageToast,
+		durationToast,
+		positionToast,
 	};
 }
 

@@ -29,7 +29,7 @@ import { defineMessages } from 'react-intl';
 
 import { View, FloatingButton } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
-import { getGateways, addNewGateway } from '../../Actions';
+import { getGateways, addNewGateway, showToast } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
@@ -135,13 +135,7 @@ class GatewaysTab extends View {
 				this.setState({
 					isLoading: false,
 				});
-				this.props.dispatch({
-					type: 'GLOBAL_ERROR_SHOW',
-					payload: {
-						source: 'Add_Location',
-						customMessage: message,
-					},
-				});
+				this.props.dispatch(showToast(message));
 			});
 	}
 

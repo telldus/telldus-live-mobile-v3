@@ -33,7 +33,7 @@ import i18n from '../../Translations/common';
 import { LearnButton } from '../TabViews/SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
-import { addToDashboard, removeFromDashboard, showGlobalError } from '../../Actions';
+import { addToDashboard, removeFromDashboard, showToast } from '../../Actions';
 
 import Theme from '../../Theme';
 
@@ -117,19 +117,14 @@ class SettingsTab extends View {
 		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res: Object) => {
 			let message = device.ignored ?
 				this.removedFromHiddenList : this.addedToHiddenList;
-			let payload = {
-				customMessage: message,
-			};
 			this.props.dispatch(getDevices());
-			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(showToast(message));
 		}).catch((err: Object) => {
-			let payload = {
-				customMessage: err.message ? err.message : null,
-			};
+			let	message = err.message ? err.message : null;
 			this.setState({
 				isHidden: device.ignored,
 			});
-			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(showToast(message));
 		});
 	}
 

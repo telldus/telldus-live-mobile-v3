@@ -82,8 +82,8 @@ export type Action =
 	| { type: 'ACCESSIBILITY_INFO', payload: boolean }
 	| { type: 'SET_CHANGELOG_VERSION', payload: string }
 
-	| { type: 'GLOBAL_ERROR_SHOW', payload: Object }
-	| { type: 'GLOBAL_ERROR_HIDE' }
+	| { type: 'TOAST_SHOW', payload: Object }
+	| { type: 'TOAST_HIDE' }
 
 	| { type: 'REQUEST_TURNON', payload: Object }
 	| { type: 'REQUEST_TURNOFF', payload: Object }

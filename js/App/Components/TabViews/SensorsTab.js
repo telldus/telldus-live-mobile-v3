@@ -30,7 +30,7 @@ import Platform from 'Platform';
 import { View, IconTelldus } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from './SubViews';
 
-import { getSensors, setIgnoreSensor, showGlobalError } from '../../Actions';
+import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
@@ -159,16 +159,11 @@ class SensorsTab extends View {
 		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
 			let message = sensor.ignored ?
 				this.removedFromHiddenList : this.addedToHiddenList;
-			let payload = {
-				customMessage: message,
-			};
-			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(showToast(message));
 			this.props.dispatch(getSensors());
 		}).catch((err: Object) => {
-			let payload = {
-				customMessage: err.message ? err.message : null,
-			};
-			this.props.dispatch(showGlobalError(payload));
+			let message = err.message ? err.message : null;
+			this.props.dispatch(showToast(message));
 		});
 	}
 

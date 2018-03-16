@@ -34,7 +34,7 @@ import {
 	TouchableButton,
 	DialogueBox,
 } from '../../../BaseComponents';
-import { logoutFromTelldus } from '../../Actions';
+import { logoutFromTelldus, showToast } from '../../Actions';
 import Modal from 'react-native-modal';
 const DeviceInfo = require('react-native-device-info');
 
@@ -298,13 +298,7 @@ class SettingsDetailModal extends View {
 	}
 
 	showToast(message: string) {
-		this.props.dispatch({
-			type: 'GLOBAL_ERROR_SHOW',
-			payload: {
-				source: 'settings',
-				customMessage: message,
-			},
-		});
+		this.props.dispatch(showToast(message));
 		this.setState({
 			isPushSubmitLoading: false,
 		});

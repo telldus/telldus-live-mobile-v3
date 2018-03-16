@@ -38,7 +38,7 @@ import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
-import { addNewGateway, showGlobalError } from '../../Actions';
+import { addNewGateway, showToast } from '../../Actions';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 
@@ -215,16 +215,11 @@ class DevicesTab extends View {
 		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res: Object) => {
 			let message = device.ignored ?
 				this.removedFromHiddenList : this.addedToHiddenList;
-			let payload = {
-				customMessage: message,
-			};
-			this.props.dispatch(showGlobalError(payload));
+			this.props.dispatch(showToast(message));
 			this.props.dispatch(getDevices());
 		}).catch((err: Object) => {
-			let payload = {
-				customMessage: err.message ? err.message : null,
-			};
-			this.props.dispatch(showGlobalError(payload));
+			let message = err.message ? err.message : null;
+			this.props.dispatch(showToast(message));
 		});
 	}
 

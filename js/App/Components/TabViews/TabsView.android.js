@@ -36,7 +36,7 @@ import { SettingsDetailModal } from '../DetailViews';
 import TabBar from './TabBar';
 import i18n from '../../Translations/common';
 import { getUserProfile } from '../../Reducers/User';
-import { syncWithServer, switchTab, addNewGateway } from '../../Actions';
+import { syncWithServer, switchTab, addNewGateway, showToast } from '../../Actions';
 import TabViews from './index';
 import { TabNavigator } from 'react-navigation';
 import Drawer from '../Drawer/Drawer';
@@ -205,13 +205,7 @@ class TabsView extends View {
 				}
 			}).catch((error: Object) => {
 				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
-				this.props.dispatch({
-					type: 'GLOBAL_ERROR_SHOW',
-					payload: {
-						source: 'Add_Location',
-						customMessage: message,
-					},
-				});
+				this.props.dispatch(showToast(message));
 			});
 	}
 
