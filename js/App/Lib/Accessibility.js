@@ -36,7 +36,8 @@ module.exports = {
 		const labelDown = formatMessage(i18n.down);
 		const labelStop = formatMessage(i18n.stop);
 
-		const deviceInfo = `${labelDevice} ${name}`;
+		const deviceName = name ? name : formatMessage(i18n.noName);
+		const deviceInfo = `${labelDevice} ${deviceName}`;
 
 		switch (isInState) {
 			case 'TURNOFF':

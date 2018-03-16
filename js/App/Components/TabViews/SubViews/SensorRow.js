@@ -26,7 +26,7 @@ import { TouchableWithoutFeedback, UIManager, LayoutAnimation } from 'react-nati
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 
-import { FormattedMessage, ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
+import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
 import GenericSensor from './Sensor/GenericSensor';
 
@@ -311,7 +311,8 @@ class SensorRow extends PureComponent<Props, State> {
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 		let { currentIndex, isOpen } = this.state;
 
-		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
+		let sensorName = name ? name : intl.formatMessage(i18n.noName);
+		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
 		let accessibilityLabelPhraseTwo = isOpen ? this.helpCloseHiddenRow : this.helpViewHiddenRow;
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
@@ -339,7 +340,7 @@ class SensorRow extends PureComponent<Props, State> {
 								<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
 									ellipsizeMode="middle"
 									numberOfLines={1}>
-									{sensor.name ? sensor.name : <FormattedMessage {...i18n.noName} /> }
+									{sensorName}
 								</Text>
 								<Text style={[
 									styles.time, {
