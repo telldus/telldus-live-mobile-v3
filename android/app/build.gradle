@@ -187,7 +187,6 @@ dependencies {
     compile project(':react-native-maps')
     compile project(':react-native-fabric')
     compile project(':react-native-i18n')
-    compile project(':react-native-push-notification')
     compile project(':react-native-extra-dimensions-android')
     compile project(':react-native-orientation')
     compile project(':react-native-device-info')
