@@ -144,8 +144,8 @@ class DevicesTab extends View {
 		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenDevices}`;
 		this.showHidden = `${formatMessage(i18n.show)} ${hiddenDevices}`;
 
-		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
-		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
+		this.addedToHiddenList = formatMessage(i18n.deviceAddedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
 
 		this.url = 'http://live.telldus.com/';
 		this.noDeviceTitle = formatMessage(messages.messageNoDeviceTitle);

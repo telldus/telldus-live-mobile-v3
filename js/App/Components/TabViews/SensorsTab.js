@@ -96,8 +96,8 @@ class SensorsTab extends View {
 
 		let { formatMessage } = props.screenProps.intl;
 
-		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
-		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
+		this.addedToHiddenList = formatMessage(i18n.sensorAddedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.sensorRemovedFromHiddenList);
 
 		let hiddenSensors = formatMessage(i18n.hiddenSensors).toLowerCase();
 		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenSensors}`;

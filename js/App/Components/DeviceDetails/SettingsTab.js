@@ -83,8 +83,8 @@ class SettingsTab extends View {
 
 		let { formatMessage } = props.screenProps.intl;
 
-		this.addedToHiddenList = formatMessage(i18n.addedToHiddenList);
-		this.removedFromHiddenList = formatMessage(i18n.removedFromHiddenList);
+		this.addedToHiddenList = formatMessage(i18n.deviceAddedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
 	}
 
 	static navigationOptions = ({ navigation }: Object): Object => ({

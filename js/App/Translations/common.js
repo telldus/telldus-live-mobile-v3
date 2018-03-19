@@ -465,13 +465,21 @@ const messages = defineMessages({
 		id: 'please',
 		defaultMessage: 'Please',
 	},
-	addedToHiddenList: {
-		id: 'addedToHiddenList',
-		defaultMessage: 'Successfully added to hidden list',
+	deviceAddedToHiddenList: {
+		id: 'device.addedToHiddenList',
+		defaultMessage: 'Device is now hidden',
 	},
-	removedFromHiddenList: {
-		id: 'removedFromHiddenList',
-		defaultMessage: 'Successfully removed from hidden list',
+	deviceRemovedFromHiddenList: {
+		id: 'device.removedFromHiddenList',
+		defaultMessage: 'Device is no longer hidden',
+	},
+	sensorAddedToHiddenList: {
+		id: 'sensor.addedToHiddenList',
+		defaultMessage: 'Sensor is now hidden',
+	},
+	sensorRemovedFromHiddenList: {
+		id: 'sensor.removedFromHiddenList',
+		defaultMessage: 'Sensor is no longer hidden',
 	},
 	helpViewHiddenRow: {
 		id: 'accessibilityLabel.helpViewHiddenRow',
