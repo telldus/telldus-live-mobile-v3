@@ -225,13 +225,13 @@ const Tabs = TabNavigator(
 			},
 			style: {
 				backgroundColor: '#fff',
-				...ifIphoneX({ height: getWindowDimensions().height * 0.025 }, {height: getWindowDimensions().height * 0.085}),
+				...ifIphoneX({ height: 40 }, {height: getWindowDimensions().height * 0.085}),
 				...Theme.Core.shadow,
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
 			tabStyle: {
-				width: getWindowDimensions().width / 3,
+				...ifIphoneX({ marginTop: 14 }),
 				alignItems: 'center',
 				justifyContent: 'center',
 			},

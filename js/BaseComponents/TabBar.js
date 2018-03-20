@@ -50,16 +50,13 @@ class TabBar extends Component<Props, null> {
 	}
 
 	render(): Object {
-		let { icon, tintColor, label, appLayout, intl, accessibilityLabel } = this.props;
-		let isPortrait = appLayout.width > appLayout.height;
+		let { icon, tintColor, label, intl, accessibilityLabel } = this.props;
 		accessibilityLabel = intl.formatMessage(accessibilityLabel);
 
-		const width = isPortrait ? appLayout.height : appLayout.width;
-
 		return (
-			<View style={{flexDirection: 'row', alignItems: 'center', ...ifIphoneX({marginTop: 30})}} accessibilityLabel={accessibilityLabel}>
-				<CustomIcon name={icon} size={width * 0.08} color={tintColor}/>
-				<FormattedMessage {...label} style={{color: tintColor, fontSize: width * 0.035, paddingLeft: 5}}/>
+			<View style={{flexDirection: 'row', alignItems: 'center'}} accessibilityLabel={accessibilityLabel}>
+				<CustomIcon name={icon} size={28} color={tintColor}/>
+				<FormattedMessage {...label} style={{color: tintColor, fontSize: 14, paddingLeft: 5, ...ifIphoneX({ marginTop: 2 }) }}/>
 			</View>
 		);
 	}
