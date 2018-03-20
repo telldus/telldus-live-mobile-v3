@@ -29,7 +29,7 @@ import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 import { TabNavigator } from 'react-navigation';
-import { ifIphoneX } from 'react-native-iphone-x-helper';
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
@@ -40,7 +40,7 @@ import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
 import { Text, View, Poster, SafeAreaView } from '../../../BaseComponents';
-import { getWindowDimensions } from '../../Lib';
+import { getWindowDimensions, getRelativeDimensions } from '../../Lib';
 import { closeDatabase } from '../../Actions/LocalStorage';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
@@ -149,6 +149,9 @@ class DeviceDetails extends View {
 					</View>
 				</Poster>
 				<View style={{flex: 1}}>
+					{isIphoneX() && (
+						<View style={{height: 10, backgroundColor: '#fff'}}/>
+					)}
 					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
 			</SafeAreaView>
@@ -156,9 +159,8 @@ class DeviceDetails extends View {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
+		const { height, width } = getRelativeDimensions(appLayout);
+		const isPortrait = height > width;
 
 		return {
 			posterCover: {
@@ -174,13 +176,12 @@ class DeviceDetails extends View {
 				backgroundColor: '#fff',
 				alignItems: 'center',
 				justifyContent: 'center',
-				width: isPortrait ? height * 0.12 : height * 0.10,
-				height: isPortrait ? height * 0.12 : height * 0.10,
-				borderRadius: isPortrait ? height * 0.06 : height * 0.05,
-				marginRight: isPortrait ? 0 : 10,
+				width: isPortrait ? height * 0.12 : width * 0.10,
+				height: isPortrait ? height * 0.12 : width * 0.10,
+				borderRadius: isPortrait ? height * 0.06 : width * 0.05,
 			},
 			deviceIcon: {
-				size: isPortrait ? height * 0.08 : height * 0.06,
+				size: isPortrait ? height * 0.08 : width * 0.06,
 			},
 			textDeviceName: {
 				fontSize: isPortrait ? width * 0.05 : height * 0.05,
@@ -229,6 +230,7 @@ const Tabs = TabNavigator(
 				...Theme.Core.shadow,
 				alignItems: 'center',
 				justifyContent: 'center',
+				borderTopColor: 'transparent',
 			},
 			tabStyle: {
 				...ifIphoneX({ marginTop: 14 }),
