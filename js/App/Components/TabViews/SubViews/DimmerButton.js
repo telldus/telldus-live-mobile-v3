@@ -58,6 +58,9 @@ type Props = {
 	onSlideComplete: () => void,
 	screenReaderEnabled: boolean,
 	showDimmerStep: (number) => void;
+	onButtonStyle: Object | number,
+	offButtonStyle: Object | number,
+	sliderStyle: Object | number,
 };
 
 type State = {
@@ -183,13 +186,13 @@ class DimmerButton extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, screenReaderEnabled } = this.props;
+		const { device, intl, isGatewayActive, screenReaderEnabled, onButtonStyle, offButtonStyle, sliderStyle } = this.props;
 		const { isInState, name, supportedMethods, methodRequested } = device;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 		const onButton = (
 			<DimmerOnButton
 				ref={'onButton'}
-				style={styles.turnOn}
+				style={[styles.turnOn, onButtonStyle]}
 				isInState={isInState}
 				onPress={this.onTurnOn}
 				name={name}
@@ -202,7 +205,7 @@ class DimmerButton extends View {
 		const offButton = (
 			<DimmerOffButton
 				ref={'offButton'}
-				style={styles.turnOff}
+				style={[styles.turnOff, offButtonStyle]}
 				isInState={isInState}
 				onPress={this.onTurnOff}
 				name={name}
@@ -214,7 +217,7 @@ class DimmerButton extends View {
 		);
 		const slider = DIM ? (
 			<HorizontalSlider
-				style={styles.slider}
+				style={[styles.slider, sliderStyle]}
 				thumbWidth={10}
 				thumbHeight={10}
 				fontSize={9}

@@ -40,6 +40,7 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	appLayout: Object,
+	bellButtonStyle: number | Object,
 };
 
 class BellButton extends View {
@@ -60,13 +61,13 @@ class BellButton extends View {
 	}
 
 	render(): Object {
-		let { device, isGatewayActive } = this.props;
+		let { device, isGatewayActive, bellButtonStyle } = this.props;
 		let { methodRequested, name } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
 		let iconColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
 
 		return (
-			<View style={this.props.style}>
+			<View style={[this.props.style, bellButtonStyle]}>
 				<TouchableOpacity onPress={this.onBell} style={styles.bell} accessibilityLabel={accessibilityLabel}>
 					<Icon name="bell" size={22} color={iconColor} />
 				</TouchableOpacity>
@@ -87,7 +88,6 @@ BellButton.defaultProps = {
 
 const styles = StyleSheet.create({
 	bell: {
-		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

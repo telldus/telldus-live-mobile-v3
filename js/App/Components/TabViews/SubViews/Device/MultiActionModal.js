@@ -75,10 +75,22 @@ render(): Object {
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
 							let newStyle = {}, { newButtonStyle } = styles;
+							if (child.key === '4') {
+								newStyle = {
+									bellButtonStyle: newButtonStyle,
+								};
+							}
 							if (child.key === '3') {
 								newStyle = {
 									onButtonStyle: newButtonStyle,
 									offButtonStyle: newButtonStyle,
+								};
+							}
+							if (child.key === '2') {
+								newStyle = {
+									onButtonStyle: newButtonStyle,
+									offButtonStyle: newButtonStyle,
+									sliderStyle: newButtonStyle,
 								};
 							}
 							if (child.key === '1') {

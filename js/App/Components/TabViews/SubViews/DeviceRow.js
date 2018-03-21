@@ -161,8 +161,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				UP: true,
 				DOWN: true,
 				STOP: true,
-				TURNON: true,
-				TURNOFF: true,
+				BELL: true,
 			};
 		}
 
@@ -176,18 +175,6 @@ class DeviceRow extends PureComponent<Props, State> {
 			STOP,
 		} = device.supportedMethods;
 
-		if (BELL) {
-			button.unshift( <BellButton
-				device={device}
-				style={styles.bell}
-				intl={intl}
-				isGatewayActive={isGatewayActive}
-				appLayout={appLayout}
-				key={0}
-			/>
-			);
-			icon = 'bell';
-		}
 		if (UP || DOWN || STOP) {
 			button.unshift( <NavigationalButton
 				device={device}
@@ -226,6 +213,18 @@ class DeviceRow extends PureComponent<Props, State> {
 			);
 			icon = 'device-alt-solid';
 		}
+		if (BELL) {
+			button.unshift( <BellButton
+				device={device}
+				style={styles.bell}
+				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
+				key={4}
+			/>
+			);
+			icon = 'bell';
+		}
 		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
 			button.unshift( <ToggleButton
 				device={device}
@@ -233,7 +232,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				intl={intl}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
-				key={3}
+				key={5}
 			/>
 			);
 			icon = 'device-alt-solid';
@@ -276,8 +275,10 @@ class DeviceRow extends PureComponent<Props, State> {
 						{button.length === 1 ?
 							button[0]
 							:
-							[button[0],
-								<ShowMoreButton onPress={this.onPressMore} name={name} buttons={button} key={5}/>]
+							[
+								button[0],
+								<ShowMoreButton onPress={this.onPressMore} name={name} buttons={button} key={6}/>,
+							]
 						}
 					</ListItem>
 				</SwipeRow>
@@ -367,6 +368,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				width: buttonWidth * 2,
 				borderLeftWidth: 1,
 				borderLeftColor: '#ddd',
+				height: rowHeight,
 			},
 			navigation: {
 				flexDirection: 'row',
