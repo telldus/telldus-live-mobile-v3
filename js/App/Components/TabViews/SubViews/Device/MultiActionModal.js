@@ -60,19 +60,37 @@ render(): Object {
 			isVisible={showModal}
 			style={styles.modal}
 			backdropOpacity={0.60}
+			hideModalContentWhileAnimating={true}
+			onBackdropPress={this.closeModal}
+			onBackButtonPress={this.closeModal}
 			supportedOrientations={['portrait', 'landscape']}>
 			<View style={styles.modalCover}>
 				<DialogueHeader
 					headerText={name}
 					showIcon={true}
 					headerStyle={styles.headerStyle}
-					onPressIcon={this.closeModal}/>
+					onPressIcon={this.closeModal}
+					onPressHeader={this.closeModal}/>
 				<View style={styles.body}>
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
+							let newStyle = {}, { newButtonStyle } = styles;
+							if (child.key === '3') {
+								newStyle = {
+									onButtonStyle: newButtonStyle,
+									offButtonStyle: newButtonStyle,
+								};
+							}
+							if (child.key === '1') {
+								newStyle = {
+									upButtonStyle: newButtonStyle,
+									downButtonStyle: newButtonStyle,
+									stopButtonStyle: newButtonStyle,
+								};
+							}
 							return (
 								<View style={{ paddingTop: 5 }}>
-									{React.cloneElement(child)}
+									{React.cloneElement(child, {...newStyle})}
 								</View>
 							);
 						}
@@ -88,6 +106,7 @@ render(): Object {
 
 
 const padding = 10;
+const buttonPadding = 3;
 const styles = StyleSheet.create({
 	modal: {
 		alignItems: 'center',
@@ -98,7 +117,9 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		justifyContent: 'center',
 		backgroundColor: '#fff',
-		width: (Theme.Core.buttonWidth * 3) + (padding * 2),
+		width: (Theme.Core.buttonWidth * 3) + (padding * 2) + (buttonPadding * 6),
+		borderRadius: 2,
+		overflow: 'hidden',
 	},
 	body: {
 		flexDirection: 'column-reverse',
@@ -114,5 +135,10 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		color: '#000',
+	},
+	newButtonStyle: {
+		marginHorizontal: buttonPadding,
+		borderRadius: 2,
+		...Theme.Core.shadow,
 	},
 });
