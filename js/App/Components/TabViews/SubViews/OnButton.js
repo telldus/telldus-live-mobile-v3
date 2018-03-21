@@ -72,21 +72,19 @@ class OnButton extends View {
 			(isInState === 'TURNON' ? '#fff' : '#a2a2a2') : (isInState === 'TURNON' ? '#fff' : Theme.Core.brandSecondary);
 
 		return (
-			<View style={[this.props.style, buttonStyle]}>
-				<TouchableOpacity
-					disabled={!enabled}
-					onPress={this.onPress}
-					style={styles.button}
-					accessibilityLabel={accessibilityLabel}>
-					<IconTelldus icon="on" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
-				</TouchableOpacity>
+			<TouchableOpacity
+				disabled={!enabled}
+				onPress={this.onPress}
+				style={[this.props.style, buttonStyle]}
+				accessibilityLabel={accessibilityLabel}>
+				<IconTelldus icon="on" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
 				{
 					methodRequested === 'TURNON' ?
 						<ButtonLoadingIndicator style={styles.dot} />
 						:
 						null
 				}
-			</View>
+			</TouchableOpacity>
 		);
 	}
 }
@@ -108,9 +106,8 @@ const styles = StyleSheet.create({
 		color: Theme.Core.brandSecondary,
 	},
 	button: {
-		flex: 1,
+		alignItems: 'stretch',
 		justifyContent: 'center',
-		alignItems: 'center',
 	},
 	buttonText: {
 		textAlign: 'center',

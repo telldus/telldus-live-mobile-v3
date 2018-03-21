@@ -71,21 +71,19 @@ class OffButton extends View {
 			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
 
 		return (
-			<View style={[this.props.style, buttonStyle]}>
-				<TouchableOpacity
-					disabled={!enabled}
-					onPress={this.onPress}
-					style={styles.button}
-					accessibilityLabel={accessibilityLabel}>
-					<IconTelldus icon="off" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
-				</TouchableOpacity>
+			<TouchableOpacity
+				disabled={!enabled}
+				onPress={this.onPress}
+				style={[this.props.style, buttonStyle]}
+				accessibilityLabel={accessibilityLabel}>
+				<IconTelldus icon="off" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
 				{
 					methodRequested === 'TURNOFF' ?
 						<ButtonLoadingIndicator style={styles.dot} />
 						:
 						null
 				}
-			</View>
+			</TouchableOpacity>
 		);
 	}
 }
@@ -107,15 +105,15 @@ const styles = StyleSheet.create({
 		color: Theme.Core.brandPrimary,
 	},
 	button: {
-		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'stretch',
 	},
 	buttonText: {
 		textAlign: 'center',
 		textAlignVertical: 'center',
 	},
 	dot: {
+		zIndex: 3,
 		position: 'absolute',
 		top: 3,
 		left: 3,

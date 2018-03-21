@@ -105,7 +105,6 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 					height: tileWidth * 0.4,
 					flexDirection: 'row',
 					justifyContent: 'center',
-					alignItems: 'center',
 				}}>
 					{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
 					{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
@@ -118,12 +117,14 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 const styles = StyleSheet.create({
 	turnOffButtonContainer: {
 		flex: 1,
-		alignItems: 'stretch',
+		justifyContent: 'center',
+		alignItems: 'center',
 		borderBottomLeftRadius: 2,
 	},
 	turnOnButtonContainer: {
 		flex: 1,
-		alignItems: 'stretch',
+		justifyContent: 'center',
+		alignItems: 'center',
 		borderBottomRightRadius: 2,
 	},
 	button: {
