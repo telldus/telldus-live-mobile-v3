@@ -30,6 +30,7 @@ import Platform from 'Platform';
 
 import { Text, View, TouchableButton, IconTelldus } from '../../../BaseComponents';
 import { DeviceRow } from './SubViews';
+import MultiActionModal from './SubViews/Device/MultiActionModal';
 
 import { getDevices, setIgnoreDevice, getDeviceHistory } from '../../Actions/Devices';
 import { storeDeviceHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
@@ -88,6 +89,8 @@ type State = {
 	makeRowAccessible: 0 | 1,
 	isRefreshing: boolean,
 	showHiddenList: boolean,
+	showMoreActions: boolean,
+	moreActions: Array<Object>,
 };
 
 class DevicesTab extends View {
@@ -105,6 +108,7 @@ class DevicesTab extends View {
 	onPressAddDevice: () => void;
 	toggleHiddenList: () => void;
 	setIgnoreDevice: (Object) => void;
+	onPressMore: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
@@ -125,6 +129,8 @@ class DevicesTab extends View {
 			makeRowAccessible: 0,
 			isRefreshing: false,
 			showHiddenList: false,
+			showMoreActions: false,
+			moreActions: [],
 		};
 		this.onCloseSelected = this.onCloseSelected.bind(this);
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
@@ -137,6 +143,7 @@ class DevicesTab extends View {
 		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
 
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
+		this.onPressMore = this.onPressMore.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
 
@@ -249,8 +256,16 @@ class DevicesTab extends View {
 				currentScreen={currentScreen}
 				isGatewayActive={isGatewayActive}
 				setIgnoreDevice={this.setIgnoreDevice}
+				onPressMore={this.onPressMore}
 			/>
 		);
+	}
+
+	onPressMore(buttons: Array<Object>) {
+		this.setState({
+			showMoreActions: true,
+			moreActions: buttons,
+		});
 	}
 
 	onRefresh() {
@@ -380,7 +395,7 @@ class DevicesTab extends View {
 
 		let { appLayout, devices } = this.props;
 		let { showHiddenList, hiddenList, visibleList,
-			isRefreshing, makeRowAccessible, addGateway } = this.state;
+			isRefreshing, makeRowAccessible, addGateway, showMoreActions, moreActions } = this.state;
 		let style = this.getStyles(appLayout);
 
 		if (addGateway) {
@@ -425,6 +440,10 @@ class DevicesTab extends View {
 						<View style={{height: 80}}/>
 					}
 				</View>
+				<MultiActionModal
+					showModal={showMoreActions}
+					buttons={moreActions}
+				/>
 			</ScrollView>
 		);
 	}

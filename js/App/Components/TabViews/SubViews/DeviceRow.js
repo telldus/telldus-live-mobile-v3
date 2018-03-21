@@ -32,6 +32,7 @@ import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
 import { getLabelDevice } from '../../../Lib';
 import HiddenRow from './Device/HiddenRow';
+import ShowMoreButton from './Device/ShowMoreButton';
 
 import { getPowerConsumed } from '../../../Lib';
 import i18n from '../../../Translations/common';
@@ -58,6 +59,7 @@ type Props = {
 	tab: string,
 	powerConsumed: string | null,
 	setIgnoreDevice: (Object) => void;
+	onPressMore: (Array<Object>) => void;
 };
 
 type State = {
@@ -141,12 +143,21 @@ class DeviceRow extends PureComponent<Props, State> {
 	}
 
 	render(): Object {
-		let button = null, icon = null;
+		let button = [], icon = null;
 		let { isOpen } = this.state;
-		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
+		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed, onPressMore } = this.props;
 		const { isInState, name } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
+		if (name === 'Ceiling') {
+			device.supportedMethods = {
+				UP: true,
+				DOWN: true,
+				STOP: true,
+				TURNON: true,
+				TURNOFF: true,
+			};
+		}
 
 		const {
 			TURNON,
@@ -159,25 +170,31 @@ class DeviceRow extends PureComponent<Props, State> {
 		} = device.supportedMethods;
 
 		if (BELL) {
-			button = <BellButton
+			button.unshift( <BellButton
 				device={device}
 				style={styles.bell}
 				intl={intl}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
-			/>;
+				key={0}
+			/>
+			);
 			icon = 'bell';
-		} else if (UP || DOWN || STOP) {
-			button = <NavigationalButton
+		}
+		if (UP || DOWN || STOP) {
+			button.unshift( <NavigationalButton
 				device={device}
 				style={styles.navigation}
 				intl={intl}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
-			/>;
+				key={1}
+			/>
+			);
 			icon = 'curtain';
-		} else if (DIM) {
-			button = <DimmerButton
+		}
+		if (DIM) {
+			button.unshift( <DimmerButton
 				device={device}
 				setScrollEnabled={this.props.setScrollEnabled}
 				intl={intl}
@@ -185,23 +202,31 @@ class DeviceRow extends PureComponent<Props, State> {
 				appLayout={appLayout}
 				onSlideActive={this.onSlideActive}
 				onSlideComplete={this.onSlideComplete}
-			/>;
+				key={2}
+			/>
+			);
 			icon = 'device-alt-solid';
-		} else if (TURNON || TURNOFF) {
-			button = <ToggleButton
+		}
+		if ((TURNON || TURNOFF) && !DIM) {
+			button.unshift( <ToggleButton
 				device={device}
 				intl={intl}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
-			/>;
+				key={3}
+			/>
+			);
 			icon = 'device-alt-solid';
-		} else {
-			button = <ToggleButton
+		}
+		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
+			button.unshift( <ToggleButton
 				device={device}
 				intl={intl}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
-			/>;
+				key={4}
+			/>
+			);
 			icon = 'device-alt-solid';
 		}
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
@@ -238,7 +263,12 @@ class DeviceRow extends PureComponent<Props, State> {
 							)}
 						</View>
 					</View>
-					{button}
+					{button.length === 1 ?
+						button[0]
+						:
+						[button[0],
+							<ShowMoreButton onPress={onPressMore} buttons={button} key={5}/>]
+					}
 				</ListItem>
 			</SwipeRow>
 		);
