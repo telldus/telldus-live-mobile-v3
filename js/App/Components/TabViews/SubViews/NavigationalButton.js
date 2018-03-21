@@ -37,6 +37,9 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	appLayout: Object,
+	upButtonStyle?: Object | number,
+	downButtonStyle?: Object | number,
+	stopButtonStyle?: Object | number,
 };
 
 class NavigationalButton extends View {
@@ -48,7 +51,7 @@ class NavigationalButton extends View {
 
 	render(): Object {
 
-		let { device, isGatewayActive, intl, style } = this.props;
+		let { device, isGatewayActive, intl, style, upButtonStyle, downButtonStyle, stopButtonStyle } = this.props;
 		const { supportedMethods, methodRequested, isInState, id, name } = device;
 		const { UP, DOWN, STOP } = supportedMethods;
 
@@ -56,13 +59,13 @@ class NavigationalButton extends View {
 			<View style={style}>
 				<UpButton supportedMethod={UP} methodRequested={methodRequested} intl={intl}
 					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={styles.navigationButton} name={name}/>
+					id={id} style={[styles.navigationButton, upButtonStyle]} name={name}/>
 				<DownButton supportedMethod={DOWN} methodRequested={methodRequested} intl={intl}
 					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={styles.navigationButton} name={name}/>
+					id={id} style={[styles.navigationButton, downButtonStyle]} name={name}/>
 				<StopButton supportedMethod={STOP} methodRequested={methodRequested} intl={intl}
 					iconSize={20} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={styles.navigationButton} name={name}/>
+					id={id} style={[styles.navigationButton, stopButtonStyle]} name={name}/>
 			</View>
 		);
 	}

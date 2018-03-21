@@ -38,6 +38,9 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	appLayout: Object,
+	style?: Object | number,
+	onButtonStyle?: Object | number,
+	offButtonStyle?: Object | number,
 };
 
 class ToggleButton extends View {
@@ -48,18 +51,18 @@ class ToggleButton extends View {
 	}
 
 	render(): Object {
-		const { intl, device, isGatewayActive} = this.props;
+		const { intl, device, isGatewayActive, style, onButtonStyle, offButtonStyle } = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		const { id, isInState, methodRequested, name } = device;
 		const width = Theme.Core.buttonWidth;
 
 		const onButton = <OnButton id={id} name={name} isInState={isInState} enabled={!!TURNON}
-			style={[styles.turnOn, TURNON ? {width} : {width: width * 2}]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
+			style={[styles.turnOn, TURNON ? {width} : {width: width * 2}, onButtonStyle]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
 		const offButton = <OffButton id={id} name={name} isInState={isInState} enabled={!!TURNOFF}
-			style={[styles.turnOff, TURNOFF ? {width} : {width: width * 2}]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
+			style={[styles.turnOff, TURNOFF ? {width} : {width: width * 2}, offButtonStyle]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
 
 		return (
-			<View style={styles.container}>
+			<View style={style}>
 				{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
 				{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
 			</View>
@@ -68,12 +71,6 @@ class ToggleButton extends View {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 0,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 	turnOff: {
 		height: Theme.Core.rowHeight,
 		borderLeftWidth: 1,
