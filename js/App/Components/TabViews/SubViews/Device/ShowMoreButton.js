@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
 		height: Theme.Core.rowHeight,
 		justifyContent: 'center',
 		alignItems: 'center',
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	moreButtons: {
 		height: 6,
