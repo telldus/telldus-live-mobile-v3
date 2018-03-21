@@ -24,35 +24,57 @@
 import React from 'react';
 import Modal from 'react-native-modal';
 
-import { View, Text, StyleSheet } from '../../../../../BaseComponents';
+import { View, StyleSheet, DialogueHeader } from '../../../../../BaseComponents';
+import Theme from '../../../../Theme';
 
 type Props = {
     showModal: boolean,
-    buttons: Array<Object>,
+	buttons: Array<Object>,
+	name: string,
+	closeModal: () => void;
 };
 
 export default class MultiActionModal extends View<Props, null> {
 props: Props;
 
+closeModal: () => void;
+
 constructor(props: Props) {
 	super();
+
+	this.closeModal = this.closeModal.bind(this);
+}
+
+closeModal() {
+	let { closeModal } = this.props;
+	if (closeModal) {
+		closeModal();
+	}
 }
 
 render(): Object {
-	let { showModal, buttons } = this.props;
-	console.log('TEST buttons', buttons);
+	let { showModal, buttons, name } = this.props;
+
 	return (
 		<Modal
 			isVisible={showModal}
-			backdropOpacity={0.60}>
+			style={styles.modal}
+			backdropOpacity={0.60}
+			supportedOrientations={['portrait', 'landscape']}>
 			<View style={styles.modalCover}>
-				<Text style={styles.headerText}>
-                    dummy
-				</Text>
+				<DialogueHeader
+					headerText={name}
+					showIcon={true}
+					headerStyle={styles.headerStyle}
+					onPressIcon={this.closeModal}/>
 				<View style={styles.body}>
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
-							return React.cloneElement(child);
+							return (
+								<View style={{ paddingTop: 5 }}>
+									{React.cloneElement(child)}
+								</View>
+							);
 						}
 						return null;
 					})
@@ -65,14 +87,30 @@ render(): Object {
 }
 
 
+const padding = 10;
 const styles = StyleSheet.create({
-	modalCover: {
-		flex: 0,
+	modal: {
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+	modalCover: {
+		flex: 0,
+		alignItems: 'flex-start',
+		justifyContent: 'center',
 		backgroundColor: '#fff',
+		width: (Theme.Core.buttonWidth * 3) + (padding * 2),
 	},
 	body: {
+		flexDirection: 'column-reverse',
+		alignItems: 'flex-start',
+		justifyContent: 'center',
+		paddingVertical: padding,
+		paddingHorizontal: padding,
+	},
+	headerStyle: {
+		paddingVertical: padding,
+		paddingHorizontal: padding,
+		width: '100%',
 	},
 	headerText: {
 		color: '#000',

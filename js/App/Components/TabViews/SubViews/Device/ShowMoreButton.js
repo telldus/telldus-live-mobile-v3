@@ -28,8 +28,7 @@ import { View, StyleSheet } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
 
 type Props = {
-    buttons: Array<Object>,
-    onPress: (Array<Object>) => void;
+	onPress: () => void;
 };
 
 export default class ShowMoreButton extends View<Props, null> {
@@ -44,9 +43,9 @@ constructor(props: Props) {
 }
 
 onPress() {
-	let { buttons, onPress } = this.props;
+	let { onPress } = this.props;
 	if (onPress) {
-		onPress(buttons);
+		onPress();
 	}
 }
 
@@ -67,7 +66,9 @@ const styles = StyleSheet.create({
 	moreButtonsCover: {
 		flexDirection: 'row',
 		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
 		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	moreButtons: {
 		height: 6,

@@ -33,6 +33,7 @@ import DimmerButton from './DimmerButton';
 import { getLabelDevice } from '../../../Lib';
 import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
+import MultiActionModal from './Device/MultiActionModal';
 
 import { getPowerConsumed } from '../../../Lib';
 import i18n from '../../../Translations/common';
@@ -65,6 +66,7 @@ type Props = {
 type State = {
 	disableSwipe: boolean,
 	isOpen: boolean,
+	showMoreActions: boolean,
 };
 
 class DeviceRow extends PureComponent<Props, State> {
@@ -80,10 +82,13 @@ class DeviceRow extends PureComponent<Props, State> {
 	onRowOpen: () => void;
 	onRowClose: () => void;
 	onSetIgnoreDevice: () => void;
+	onPressMore: (Object) => void;
+	closeMoreActions: () => void;
 
 	state = {
 		disableSwipe: false,
 		isOpen: false,
+		showMoreActions: false,
 	};
 
 	constructor(props: Props) {
@@ -101,6 +106,8 @@ class DeviceRow extends PureComponent<Props, State> {
 
 		this.onRowOpen = this.onRowOpen.bind(this);
 		this.onRowClose = this.onRowClose.bind(this);
+		this.onPressMore = this.onPressMore.bind(this);
+		this.closeMoreActions = this.closeMoreActions.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -144,8 +151,8 @@ class DeviceRow extends PureComponent<Props, State> {
 
 	render(): Object {
 		let button = [], icon = null;
-		let { isOpen } = this.state;
-		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed, onPressMore } = this.props;
+		let { isOpen, showMoreActions } = this.state;
+		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
 		const { isInState, name } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
@@ -234,44 +241,64 @@ class DeviceRow extends PureComponent<Props, State> {
 			`${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
 
 		return (
-			<SwipeRow
-				ref="SwipeRow"
-				rightOpenValue={-Theme.Core.buttonWidth * 3}
-				disableLeftSwipe={this.state.disableSwipe}
-				disableRightSwipe={true}
-				onRowOpen={this.onRowOpen}
-				onRowClose={this.onRowClose}
-				recalculateHiddenLayout={true}>
-				<HiddenRow device={device} intl={intl} onPressSettings={this.onSettingsSelected}
-					onSetIgnoreDevice={this.onSetIgnoreDevice} isOpen={isOpen}/>
-				<ListItem
-					style={styles.row}>
-					<View
-						style={styles.touchableContainer}
-						accessible={accessible}
-						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-						accessibilityLabel={accessibilityLabel}>
-						<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
-						<View style={styles.name}>
-							<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
-								{deviceName}
-							</Text>
-							{powerConsumed && (
-								<Text style = {styles.textPowerConsumed}>
-									{`${powerConsumed} W`}
+			<View>
+				<SwipeRow
+					ref="SwipeRow"
+					rightOpenValue={-Theme.Core.buttonWidth * 3}
+					disableLeftSwipe={this.state.disableSwipe}
+					disableRightSwipe={true}
+					onRowOpen={this.onRowOpen}
+					onRowClose={this.onRowClose}
+					recalculateHiddenLayout={true}>
+					<HiddenRow device={device} intl={intl} onPressSettings={this.onSettingsSelected}
+						onSetIgnoreDevice={this.onSetIgnoreDevice} isOpen={isOpen}/>
+					<ListItem
+						style={styles.row}>
+						<View
+							style={styles.touchableContainer}
+							accessible={accessible}
+							importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+							accessibilityLabel={accessibilityLabel}>
+							<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
+							<View style={styles.name}>
+								<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
+									{deviceName}
 								</Text>
-							)}
+								{powerConsumed && (
+									<Text style = {styles.textPowerConsumed}>
+										{`${powerConsumed} W`}
+									</Text>
+								)}
+							</View>
 						</View>
-					</View>
-					{button.length === 1 ?
-						button[0]
-						:
-						[button[0],
-							<ShowMoreButton onPress={onPressMore} buttons={button} key={5}/>]
-					}
-				</ListItem>
-			</SwipeRow>
+						{button.length === 1 ?
+							button[0]
+							:
+							[button[0],
+								<ShowMoreButton onPress={this.onPressMore} name={name} buttons={button} key={5}/>]
+						}
+					</ListItem>
+				</SwipeRow>
+				<MultiActionModal
+					showModal={showMoreActions}
+					buttons={button}
+					name={name}
+					closeModal={this.closeMoreActions}
+				/>
+			</View>
 		);
+	}
+
+	onPressMore(buttons: Array<Object>, name: string) {
+		this.setState({
+			showMoreActions: true,
+		});
+	}
+
+	closeMoreActions() {
+		this.setState({
+			showMoreActions: false,
+		});
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
