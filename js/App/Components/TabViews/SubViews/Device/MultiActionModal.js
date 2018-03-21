@@ -101,7 +101,7 @@ render(): Object {
 								};
 							}
 							return (
-								<View style={{ paddingTop: 5 }}>
+								<View style={{ paddingTop: 10 }}>
 									{React.cloneElement(child, {...newStyle})}
 								</View>
 							);
@@ -118,7 +118,7 @@ render(): Object {
 
 
 const padding = 10;
-const buttonPadding = 3;
+const buttonPadding = 5;
 const styles = StyleSheet.create({
 	modal: {
 		alignItems: 'center',
