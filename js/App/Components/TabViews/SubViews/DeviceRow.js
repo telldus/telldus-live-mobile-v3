@@ -281,12 +281,15 @@ class DeviceRow extends PureComponent<Props, State> {
 						}
 					</ListItem>
 				</SwipeRow>
-				<MultiActionModal
-					showModal={showMoreActions}
-					buttons={button}
-					name={name}
-					closeModal={this.closeMoreActions}
-				/>
+				{
+					button.length !== 1 && (
+						<MultiActionModal
+							showModal={showMoreActions}
+							buttons={button}
+							name={name}
+							closeModal={this.closeMoreActions}
+						/>
+					)}
 			</View>
 		);
 	}
