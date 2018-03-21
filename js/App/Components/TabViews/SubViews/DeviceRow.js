@@ -217,6 +217,7 @@ class DeviceRow extends PureComponent<Props, State> {
 		if ((TURNON || TURNOFF) && !DIM) {
 			button.unshift( <ToggleButton
 				device={device}
+				style={styles.toggle}
 				intl={intl}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
@@ -228,10 +229,11 @@ class DeviceRow extends PureComponent<Props, State> {
 		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
 			button.unshift( <ToggleButton
 				device={device}
+				style={styles.toggle}
 				intl={intl}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
-				key={4}
+				key={3}
 			/>
 			);
 			icon = 'device-alt-solid';
@@ -349,6 +351,11 @@ class DeviceRow extends PureComponent<Props, State> {
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginHorizontal: 5,
+			},
+			toggle: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
 			},
 			bell: {
 				justifyContent: 'center',
