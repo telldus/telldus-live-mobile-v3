@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet } from 'react-native';
+import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 
 import Text from './Text';
 import Icon from './Icon';
@@ -32,7 +32,8 @@ type Props = {
     headerStyle: number | Object | Array<Object>,
     textStyle: number | Object | Array<Object>,
     source: number,
-    onPressIcon?: () => void;
+	onPressIcon?: () => void;
+	onPressHeader?: () => void;
     showIcon?: boolean,
     iconName?: string,
     iconSize?: number,
@@ -57,18 +58,27 @@ static defaultProps: defaultProps = {
 	iconColor: '#fff',
 }
 
-onPress: () => void;
+onPressIcon: () => void;
+onPressHeader: () => void;
 
 constructor(props: Props) {
 	super();
 
-	this.onPress = this.onPress.bind(this);
+	this.onPressIcon = this.onPressIcon.bind(this);
+	this.onPressHeader = this.onPressHeader.bind(this);
 }
 
-onPress() {
+onPressIcon() {
 	let { onPressIcon } = this.props;
 	if (onPressIcon) {
 		onPressIcon();
+	}
+}
+
+onPressHeader() {
+	let { onPressHeader } = this.props;
+	if (onPressHeader) {
+		onPressHeader();
 	}
 }
 
@@ -76,26 +86,30 @@ render(): Object {
 	let { headerText, headerStyle, textStyle, showIcon, iconName, iconSize, iconColor } = this.props;
 
 	return (
-		<ImageBackground style={[styles.header, headerStyle]} source={this.props.source}>
-			<Text style={[styles.text, textStyle]}>
-				{headerText}
-			</Text>
-			{showIcon && (
-				<Icon name={iconName} size={iconSize} color={iconColor} onPress={this.onPress}/>
-			)}
-		</ImageBackground>
+		<TouchableOpacity onPress={this.onPressHeader}>
+			<ImageBackground style={[styles.image, headerStyle]} source={this.props.source}>
+
+				<Text style={[styles.text, textStyle]}>
+					{headerText}
+				</Text>
+				{showIcon && (
+					<Icon name={iconName} size={iconSize} color={iconColor} onPress={this.onPressIcon}/>
+				)}
+
+			</ImageBackground>
+		</TouchableOpacity>
 	);
 }
 }
 
 const styles = StyleSheet.create({
-	header: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
+	image: {
 		height: undefined,
 		width: undefined,
 		resizeMode: 'contain',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'stretch',
 	},
 	text: {
 		color: '#fff',
