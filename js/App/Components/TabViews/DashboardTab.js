@@ -291,6 +291,7 @@ class DashboardTab extends View {
 					refreshing={isRefreshing}
 					extraData={extraData}
 					key={numColumns}
+					style={{width: '100%'}}
 				/>
 			</View>
 		);
@@ -399,7 +400,7 @@ class DashboardTab extends View {
 		return {
 			container: {
 				flex: 1,
-				alignItems: isEmpty ? 'center' : 'flex-start',
+				alignItems: 'center',
 				justifyContent: 'center',
 				paddingHorizontal: isEmpty ? 30 : 6,
 				paddingTop: 10,
