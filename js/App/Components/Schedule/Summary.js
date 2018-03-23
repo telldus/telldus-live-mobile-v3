@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 import { FloatingButton, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
-import { ActionRow, DaysRow, DeviceRow, TimeRow } from 'Schedule_SubViews';
+import { ActionRow, DaysRow, DeviceRow, TimeRow } from './SubViews';
 import { ScrollView } from 'react-native';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';

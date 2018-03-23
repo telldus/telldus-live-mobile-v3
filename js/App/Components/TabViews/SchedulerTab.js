@@ -43,7 +43,7 @@ import { JobRow, JobsPoster } from './SubViews';
 import { editSchedule, getJobs } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
-import type { Schedule } from 'Reducers_Schedule';
+import type { Schedule } from '../../Reducers/Schedule';
 
 import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
 

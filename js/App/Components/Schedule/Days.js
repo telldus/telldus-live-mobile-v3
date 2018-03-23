@@ -27,7 +27,7 @@ import { ScrollView } from 'react-native';
 import { defineMessages } from 'react-intl';
 
 import { ScheduleProps } from './ScheduleScreen';
-import { CheckButton, DaysRow, Description } from 'Schedule_SubViews';
+import { CheckButton, DaysRow, Description } from './SubViews';
 import { getSelectedDays, getWeekdays, getWeekends } from '../../Lib';
 import { CheckboxSolid, FloatingButton, Row, View } from '../../../BaseComponents';
 import _ from 'lodash';

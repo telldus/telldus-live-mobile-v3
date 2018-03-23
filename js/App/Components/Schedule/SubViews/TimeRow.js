@@ -30,7 +30,7 @@ import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
 import Theme from '../../../Theme';
 import { getSuntime } from '../../../Lib';
-import type { Schedule } from 'Reducers_Schedule';
+import type { Schedule } from '../../../Reducers/Schedule';
 import i18n from '../../../Translations/common';
 
 const messages = defineMessages({

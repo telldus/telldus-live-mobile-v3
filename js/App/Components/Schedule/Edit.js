@@ -29,7 +29,7 @@ import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import {View, TouchableButton, Throbber} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
-import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from 'Schedule_SubViews';
+import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from './SubViews';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 

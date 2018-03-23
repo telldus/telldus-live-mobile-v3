@@ -30,10 +30,10 @@ import Platform from 'Platform';
 
 import { BlockIcon, IconTelldus, ListRow, View, Text, FormattedTime } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
-import { ACTIONS, Description, TextRowWrapper, Title } from 'Schedule_SubViews';
+import { ACTIONS, Description, TextRowWrapper, Title } from '../../Schedule/SubViews';
 import { capitalize, getSelectedDays, getWeekdays, getWeekends, getRelativeDimensions } from '../../../Lib';
 import { DAYS } from '../../../../Constants';
-import type { Schedule } from 'Reducers_Schedule';
+import type { Schedule } from '../../../Reducers/Schedule';
 
 type Props = {
 	active: boolean,

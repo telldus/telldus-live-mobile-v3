@@ -28,7 +28,7 @@ import { defineMessages } from 'react-intl';
 
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { TimeBlock, TimeSlider } from 'Schedule_SubViews';
+import { TimeBlock, TimeSlider } from './SubViews';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 

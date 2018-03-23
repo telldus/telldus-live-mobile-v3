@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 
 import { List, ListDataSource, View } from '../../../BaseComponents';
 import type { ScheduleProps } from './ScheduleScreen';
-import { ActionRow } from 'Schedule_SubViews';
+import { ActionRow } from './SubViews';
 import getDeviceType from '../../Lib/getDeviceType';
 import i18n from '../../Translations/common';
 

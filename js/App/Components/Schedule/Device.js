@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 
 import { List, ListDataSource, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { DeviceRow } from 'Schedule_SubViews';
+import { DeviceRow } from './SubViews';
 import i18n from '../../Translations/common';
 interface Props extends ScheduleProps {
 	devices: Object,

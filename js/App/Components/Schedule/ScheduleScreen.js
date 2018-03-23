@@ -30,15 +30,15 @@ import _ from 'lodash';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { FullPageActivityIndicator, View, DialogueBox } from '../../../BaseComponents';
-import { SchedulePoster } from 'Schedule_SubViews';
+import { SchedulePoster } from './SubViews';
 import { getRelativeDimensions } from '../../Lib';
 
-import * as scheduleActions from 'Actions_Schedule';
+import * as scheduleActions from '../../Actions/Schedule';
 import * as modalActions from '../../Actions/Modal';
 import { getDevices } from '../../Actions/Devices';
 import { showToast } from '../../Actions/App';
 import { getJobs } from '../../Actions';
-import type { Schedule } from 'Reducers_Schedule';
+import type { Schedule } from '../../Reducers/Schedule';
 
 type Props = {
 	navigation: Object,
