@@ -416,6 +416,7 @@ class SensorRow extends PureComponent<Props, State> {
 				paddingLeft: 5,
 				alignItems: 'center',
 				borderRadius: 2,
+				overflow: 'hidden',
 				...Theme.Core.shadow,
 			},
 			sensorIcon: {

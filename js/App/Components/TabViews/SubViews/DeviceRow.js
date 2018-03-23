@@ -332,6 +332,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				alignItems: 'center',
 				borderRadius: 2,
 				...Theme.Core.shadow,
+				overflow: 'hidden',
 			},
 			name: {
 				flex: 20,
