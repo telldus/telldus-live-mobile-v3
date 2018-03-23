@@ -24,6 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
+import { defineMessages, intlShape } from 'react-intl';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import Platform from 'Platform';
@@ -34,6 +35,16 @@ import { ACTIONS, Description, TextRowWrapper, Title } from '../../Schedule/SubV
 import { capitalize, getSelectedDays, getWeekdays, getWeekends, getRelativeDimensions } from '../../../Lib';
 import { DAYS } from '../../../../Constants';
 import type { Schedule } from '../../../Reducers/Schedule';
+
+import i18n from '../../../Translations/common';
+
+const messages = defineMessages({
+	phraseOne: {
+		id: 'accessibilityLabel.scheduler.phraseOne',
+		defaultMessage: 'Schedule for',
+	},
+});
+
 
 type Props = {
 	active: boolean,
@@ -49,6 +60,7 @@ type Props = {
 	isFirst: boolean,
 	editJob: (schedule: Schedule) => void,
 	appLayout: Object,
+	intl: intlShape,
 };
 
 class JobRow extends View<null, Props, null> {
@@ -121,6 +133,7 @@ class JobRow extends View<null, Props, null> {
 			isFirst,
 			editJob,
 			appLayout,
+			intl,
 		} = this.props;
 
 		const {
@@ -138,14 +151,23 @@ class JobRow extends View<null, Props, null> {
 		} = this._getStyle(appLayout);
 
 		const repeat = this._getRepeatDescription();
-		let date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
-		let timestamp = Date.parse(date);
+		const date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
+		const timestamp = Date.parse(date);
+
+		const { actionIcon, actionLabel } = this._renderActionIcon();
+
+		const { formatMessage } = intl;
+		const deviceName = device.name ? device.name : formatMessage(i18n.noName);
+		const labelDevice = `${formatMessage(i18n.labelDevice)} ${deviceName}`;
+		const labelAction = `${formatMessage(i18n.labelAction)} ${actionLabel}`;
+		const accessibilityLabel = `${formatMessage(messages.phraseOne)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}`;
 
 		return (
 			<TouchableOpacity
 				style={container}
 				onPress={this.editJob}
 				disabled={!editJob}
+				accessibilityLabel={accessibilityLabel}
 			>
 				<ListRow
 					roundIcon={type}
@@ -162,7 +184,7 @@ class JobRow extends View<null, Props, null> {
 					triangleColor={methodIconContainer.backgroundColor}
 					isFirst={isFirst}
 				>
-					{this._renderActionIcon()}
+					{actionIcon}
 					<TextRowWrapper style={textWrapper} appLayout={appLayout}>
 						<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
 							{device.name}
@@ -196,31 +218,40 @@ class JobRow extends View<null, Props, null> {
 		);
 	}
 
-	_renderActionIcon = (): Object | null => {
-		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
-		const { methodIconContainer, methodIcon } = this._getStyle(this.props.appLayout);
+	_renderActionIcon = (): Object => {
+		const { intl, method, appLayout } = this.props;
+		const { formatMessage } = intl;
+		const action = ACTIONS.find((a: Object): boolean => a.method === method);
+		const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
 
 		if (action) {
 			if (action.name === 'Dim') {
+				const value = `${Math.round(this.props.methodValue / 255 * 100)}%`;
 				return (
-					<View style={methodIconContainer}>
-						<Text style={methodIcon}>
-							{`${Math.round(this.props.methodValue / 255 * 100)}%`}
-						</Text>
-					</View>
+					{
+						actionIcon: <View style={methodIconContainer}>
+							<Text style={methodIcon}>
+								{value}
+							</Text>
+						</View>,
+						actionLabel: `${formatMessage(action.actionLabel)} ${value}`,
+					}
 				);
 			}
 			return (
-				<BlockIcon
-					icon={action.icon}
-					bgColor={action.bgColor}
-					containerStyle={methodIconContainer}
-					style={methodIcon}
-				/>
+				{
+					actionIcon: <BlockIcon
+						icon={action.icon}
+						bgColor={action.bgColor}
+						containerStyle={methodIconContainer}
+						style={methodIcon}
+					/>,
+					actionLabel: formatMessage(action.actionLabel),
+				}
 			);
 		}
 
-		return null;
+		return {};
 	};
 
 	_getRepeatDescription = (): string => {

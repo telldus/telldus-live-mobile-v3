@@ -292,7 +292,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		return (
-			<JobRow {...props.item} editJob={this.editJob} isFirst={props.index === 0}/>
+			<JobRow {...props.item} editJob={this.editJob} isFirst={props.index === 0} intl={this.props.screenProps.intl}/>
 		);
 	};
 }
