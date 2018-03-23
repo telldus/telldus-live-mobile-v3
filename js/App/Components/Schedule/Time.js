@@ -43,6 +43,14 @@ const messages = defineMessages({
 		defaultMessage: 'Set random intervals between {startValue} to {endValue} minutes',
 		description: 'Info about choosing random time interval for the schedule',
 	},
+	editTime: {
+		id: 'schedule.time.editTime',
+		defaultMessage: 'Tap to change time',
+	},
+	editTimeAccessible: {
+		id: 'schedule.time.editTimeAccessible',
+		defaultMessage: 'Double tap to change time',
+	},
 });
 
 const TYPES = ['sunrise', 'sunset', 'time'];
@@ -80,6 +88,10 @@ export default class Time extends View<null, Props, State> {
 		this.h2 = formatMessage(i18n.posterChooseTime);
 		this.labelSliderInterval = formatMessage(messages.descriptionSliderInterval, {startValue: 1, endValue: 1446});
 		this.labelSliderOffset = formatMessage(messages.descriptionSliderOffset, {startValue: -1439, endValue: +1439});
+
+		this.labelEditTime = formatMessage(messages.editTime);
+		this.labelEditTimeAccessible = formatMessage(messages.editTimeAccessible);
+
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
@@ -244,8 +256,11 @@ export default class Time extends View<null, Props, State> {
 				</View>
 			);
 		} else {
+			let hours = this._formatTime(date.getHours());
+			let minutes = this._formatTime(date.getMinutes());
+			let accessibilityLabel = `${hours}:${minutes}, ${this.labelEditTimeAccessible}`;
 			timePicker = (
-				<TouchableWithoutFeedback onPress={this.selectTimeAndroid}>
+				<TouchableWithoutFeedback onPress={this.selectTimeAndroid} accessibilityLabel={accessibilityLabel}>
 					<View style={androidTimeContainer}>
 						<View style={androidTimeValueContainer}>
 							<View
@@ -257,18 +272,18 @@ export default class Time extends View<null, Props, State> {
 							>
 								<View style={androidTimeValueCenterLine}/>
 								<Text style={androidTimeValue}>
-									{this._formatTime(date.getHours())}
+									{hours}
 								</Text>
 							</View>
 							<View style={androidTimeValueWrapper}>
 								<View style={androidTimeValueCenterLine}/>
 								<Text style={androidTimeValue}>
-									{this._formatTime(date.getMinutes())}
+									{minutes}
 								</Text>
 							</View>
 						</View>
 						<Text style={androidTimeCaption}>
-							Tap to change time
+							{this.labelEditTime}
 						</Text>
 					</View>
 				</TouchableWithoutFeedback>

@@ -55,7 +55,7 @@ export default class TimeBlock extends View<null, Props, null> {
 	}
 
 	render(): React$Element<any> {
-		const { type, onPress, appLayout } = this.props;
+		const { type, onPress, appLayout, intl, isSelected } = this.props;
 
 		const {
 			container,
@@ -67,6 +67,8 @@ export default class TimeBlock extends View<null, Props, null> {
 			description,
 		} = this._getStyle(appLayout);
 		const label = this.getLabel(type);
+		const phraseTwo = isSelected ? '' : `, ${intl.formatMessage(i18n.defaultDescriptionButton)}`;
+		const accessibilityLabel = `${label} ${phraseTwo}`;
 
 		return (
 			<Row
@@ -74,6 +76,8 @@ export default class TimeBlock extends View<null, Props, null> {
 				row={{ type }}
 				style={row}
 				containerStyle={container}
+				importantForAccessibility={'yes'}
+				accessibilityLabel={accessibilityLabel}
 			>
 				<BlockIcon
 					icon={type}

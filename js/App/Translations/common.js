@@ -192,6 +192,10 @@ const messages = defineMessages({
 		id: 'button.addLocation',
 		defaultMessage: 'add location',
 	},
+	addSchedule: {
+		id: 'button.addSchedule',
+		defaultMessage: 'Add schedule',
+	},
 	dashboardTab: {
 		id: 'accessibilityLabel.dashboardTab',
 		defaultMessage: 'dashboard tab',
@@ -339,6 +343,10 @@ const messages = defineMessages({
 	labelToConfirm: {
 		id: 'accessibilityLabel.labelToConfirm',
 		defaultMessage: 'to confirm',
+	},
+	confirmButton: {
+		id: 'accessibilityLabel.confirmButton',
+		defaultMessage: 'Confirm button',
 	},
 	labelToReturn: {
 		id: 'accessibilityLabel.labelToReturn',
@@ -556,6 +564,10 @@ const messages = defineMessages({
 	posterChooseTime: {
 		id: 'schedule.posterChooseTime',
 		defaultMessage: 'Choose a time for the action',
+	},
+	activateEdit: {
+		id: 'accessibilityLabel.scheduler.activateEdit',
+		defaultMessage: 'Double tap to edit',
 	},
 });
 

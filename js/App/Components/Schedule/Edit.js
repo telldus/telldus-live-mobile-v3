@@ -233,6 +233,7 @@ class Edit extends View<null, Props, State> {
 			throbberContainer, throbberContainerOnSave, throbberContainerOnDelete } = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays);
 		const throbberContainerStyle = this.state.isSaving ? throbberContainerOnSave : this.state.isDeleting ? throbberContainerOnDelete : {};
+		const labelPostScript = intl.formatMessage(i18n.activateEdit);
 
 		return (
 			<ScrollView>
@@ -246,6 +247,7 @@ class Edit extends View<null, Props, State> {
 						containerStyle={row}
 						appLayout={appLayout}
 						intl={intl}
+						labelPostScript={labelPostScript}
 					/>
 					<TimeRow
 						schedule={this.props.schedule}
@@ -254,17 +256,21 @@ class Edit extends View<null, Props, State> {
 						onPress={this.editTime}
 						appLayout={appLayout}
 						intl={intl}
+						labelPostScript={labelPostScript}
 					/>
-					<DaysRow selectedDays={selectedDays} onPress={this.editDays} appLayout={appLayout}/>
+					<DaysRow selectedDays={selectedDays} onPress={this.editDays} appLayout={appLayout}
+						intl={intl} labelPostScript={labelPostScript}/>
 					<TouchableButton
 						text={messages.confirmAndSave}
 						style={save}
 						onPress={this.onSaveSchedule}
+						accessible={true}
 					/>
 					<TouchableButton
 						text={messages.delete}
 						style={cancel}
 						onPress={this.onDeleteSchedule}
+						accessible={true}
 					/>
 					{!!(this.state.isDeleting || this.state.isSaving) &&
 					(

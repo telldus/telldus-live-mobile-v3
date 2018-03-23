@@ -107,11 +107,11 @@ export default class Device extends View<void, Props, State> {
 	}
 
 	_renderRow = (row: Object): Object => {
-		const { appLayout } = this.props;
+		const { appLayout, intl } = this.props;
 		// TODO: use device description
 		const preparedRow = Object.assign({}, row, { description: '' });
 
-		return <DeviceRow row={preparedRow} onPress={this.selectDevice} appLayout={appLayout}/>;
+		return <DeviceRow row={preparedRow} onPress={this.selectDevice} appLayout={appLayout} intl={intl} labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}/>;
 	};
 
 	_shouldReset = (): boolean => {

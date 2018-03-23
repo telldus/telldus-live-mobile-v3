@@ -85,7 +85,7 @@ export default class Days extends View<null, Props, State> {
 		this.state = {
 			selectedDays: getSelectedDays(props.schedule.weekdays),
 			shouldCheckAll: true,
-			shouldUncheckAll: false,
+			shouldUncheckAll: getSelectedDays(props.schedule.weekdays).length > 0,
 			isWeekdaysSelected: false,
 			isWeekendsSelected: false,
 		};
@@ -196,7 +196,7 @@ export default class Days extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { appLayout } = this.props;
+		const { appLayout, intl } = this.props;
 		const {
 			shouldCheckAll,
 			shouldUncheckAll,
@@ -216,12 +216,15 @@ export default class Days extends View<null, Props, State> {
 						onDayPress={this.toggleDayState}
 						editMode={true}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<Row
 						layout="row"
 						onPress={this.toggleWeekdays}
 						style={row}
 						containerStyle={rowContainer}
+						importantForAccessibility={'yes'}
+						accessibilityLabel={`${this.labelWeekDays}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
 					>
 						<CheckboxSolid
 							onPress={this.toggleWeekdays}
@@ -241,6 +244,8 @@ export default class Days extends View<null, Props, State> {
 							rowContainer,
 							{ marginBottom: checkBoxBottom },
 						]}
+						importantForAccessibility={'yes'}
+						accessibilityLabel={`${this.labelWeekEnds}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
 					>
 						<CheckboxSolid
 							onPress={this.toggleWeekends}
@@ -253,10 +258,10 @@ export default class Days extends View<null, Props, State> {
 						</Description>
 					</Row>
 					<View style={[row, buttonsContainer]}>
-						<CheckButton onPress={this.checkAll} disabled={!shouldCheckAll} appLayout={appLayout}>
+						<CheckButton onPress={this.checkAll} disabled={!shouldCheckAll} appLayout={appLayout} intl={intl}>
 							{this.labelCheckAll}
 						</CheckButton>
-						<CheckButton onPress={this.uncheckAll} disabled={!shouldUncheckAll} appLayout={appLayout}>
+						<CheckButton onPress={this.uncheckAll} disabled={!shouldUncheckAll} appLayout={appLayout} intl={intl}>
 							{this.labelUncheckAll}
 						</CheckButton>
 					</View>

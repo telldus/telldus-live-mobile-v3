@@ -23,10 +23,22 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { defineMessages } from 'react-intl';
 
 import { Row, View } from '../../../../BaseComponents';
 import Day from './Day';
 import { DAYS } from '../../../../Constants';
+
+const messages = defineMessages({
+	phraseOne: {
+		id: 'accessibilityLabel.schedule.daysRow.phraseOne',
+		defaultMessage: 'Active on {value}',
+	},
+	messageNoDays: {
+		id: 'accessibilityLabel.schedule.daysRow.messageNoDays',
+		defaultMessage: 'No days chosen. Please choose a day',
+	},
+});
 
 type Props = {
 	selectedDays: string[],
@@ -35,6 +47,7 @@ type Props = {
 	editMode?: boolean,
 	onPress?: Function,
 	appLayout: Object,
+	intl: Object,
 };
 
 type DefaultProps = {
@@ -59,31 +72,50 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 		const { containerStyle, onPress, appLayout } = this.props;
 		const { container, row } = this._getStyle(appLayout);
 
+		const { days, daysToRender } = this._getWeekdays();
+		const accessibilityLabel = this._getAccessibilityLabel(days);
+
 		return (
 			<Row
 				layout="row"
 				containerStyle={[container, containerStyle]}
 				style={row}
 				onPress={onPress}
+				importantForAccessibility={'yes'}
+				accessibilityLabel={accessibilityLabel}
 			>
-				{this._renderWeekdays()}
+				{daysToRender}
 			</Row>
 		);
 	}
 
-	_renderWeekdays = (): Object[] => {
-		const { appLayout } = this.props;
-		return DAYS.map((day: string): Object => {
-			return (
-				<Day
-					day={day}
-					isSelected={this._isDaySelected(day)}
-					onPress={this.props.onDayPress}
-					key={day}
-					appLayout={appLayout}
-				/>
-			);
+	_getAccessibilityLabel(label: string): string {
+		const { labelPostScript = '', intl } = this.props;
+		const { formatMessage } = intl;
+		if (label && label.length !== 0) {
+			const phraseTwo = `${label}, ${labelPostScript}`;
+			return formatMessage(messages.phraseOne, {value: phraseTwo});
+		}
+		return formatMessage(messages.messageNoDays);
+	}
+
+	_getWeekdays = (): Object => {
+		const { appLayout, intl } = this.props, days = [], daysToRender = [];
+		DAYS.map((day: string) => {
+			const isDaySelected = this._isDaySelected(day);
+			if (isDaySelected) {
+				days.push(day);
+			}
+			daysToRender.push(<Day
+				day={day}
+				isSelected={isDaySelected}
+				onPress={this.props.onDayPress}
+				key={day}
+				appLayout={appLayout}
+				intl={intl}
+			/>);
 		});
+		return { days, daysToRender };
 	};
 
 	_isDaySelected = (day: string): boolean => {

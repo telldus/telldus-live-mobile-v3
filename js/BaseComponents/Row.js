@@ -30,6 +30,7 @@ import Theme from '../App/Theme';
 import Platform from 'Platform';
 
 type DefaultProps = {
+	importantForAccessibility: string,
 };
 
 type Props = {
@@ -40,6 +41,8 @@ type Props = {
 	style?: any,
 	containerStyle?: any,
 	appLayout: Object,
+	importantForAccessibility?: string,
+	accessibilityLabel?: string,
 };
 
 class Row extends Component<Props, null> {
@@ -55,6 +58,7 @@ class Row extends Component<Props, null> {
 	};
 
 	static defaultProps: DefaultProps = {
+		importantForAccessibility: 'no',
 	};
 
 	onPress = () => {
@@ -69,7 +73,7 @@ class Row extends Component<Props, null> {
 	};
 
 	render(): Object {
-		const { children, onPress, style, containerStyle } = this.props;
+		const { children, onPress, style, containerStyle, importantForAccessibility, accessibilityLabel } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
@@ -79,6 +83,8 @@ class Row extends Component<Props, null> {
 				style={[defaultStyle.container, containerStyle]}
 				outlineProvider="bounds"
 				disabled={!onPress}
+				importantForAccessibility={importantForAccessibility}
+				accessibilityLabel={accessibilityLabel}
 			>
 				<View style={[defaultStyle.wrapper, style]}>
 					{children}

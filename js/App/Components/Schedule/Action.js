@@ -134,7 +134,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 	_renderRow = (method: number): Object => {
 		const { appLayout, intl } = this.props;
-		return <ActionRow method={method} onPress={this._handlePress} appLayout={appLayout} intl={intl}/>;
+		return <ActionRow method={method} onPress={this._handlePress} appLayout={appLayout} intl={intl} labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}/>;
 	};
 
 	_handlePress = (row: Object): void => {

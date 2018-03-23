@@ -156,14 +156,14 @@ class DeviceRow extends PureComponent<Props, State> {
 		const { isInState, name } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
-		if (name === 'Ceiling') {
-			device.supportedMethods = {
-				UP: true,
-				DOWN: true,
-				STOP: true,
-				BELL: true,
-			};
-		}
+		// if (name === 'Ceiling') {
+		// 	device.supportedMethods = {
+		// 		UP: true,
+		// 		DOWN: true,
+		// 		STOP: true,
+		// 		BELL: true,
+		// 	};
+		// }
 
 		const {
 			TURNON,

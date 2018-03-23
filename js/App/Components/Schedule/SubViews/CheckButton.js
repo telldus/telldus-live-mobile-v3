@@ -26,12 +26,14 @@ import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { Text, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	children: string,
 	onPress: Function,
 	disabled: boolean,
 	appLayout: Object,
+	intl: Object,
 };
 
 export default class CheckButton extends View<null, Props, null> {
@@ -43,11 +45,12 @@ export default class CheckButton extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { children, onPress, disabled, appLayout } = this.props;
+		const { children, onPress, disabled, appLayout, intl } = this.props;
 		const { container, button, text } = this._getStyle(appLayout);
+		const accessibilityLabel = `${children}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`;
 
 		return (
-			<TouchableOpacity style={container} onPress={onPress} disabled={disabled}>
+			<TouchableOpacity style={container} onPress={onPress} disabled={disabled} accessibilityLabel={accessibilityLabel}>
 				<View style={button}>
 					<Text style={text}>
 						{children.toUpperCase()}

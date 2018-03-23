@@ -71,6 +71,7 @@ type ActionType = {
 	textColor: string,
 	icon: string,
 	label: string | Object,
+	actionLabel: Object,
 };
 
 export const ACTIONS: ActionType[] = [
@@ -159,6 +160,7 @@ type Props = {
 	methodValue?: number,
 	appLayout: Object,
 	intl: Object,
+	labelPostScript?: string,
 };
 
 export default class ActionRow extends View<DefaultProps, Props, null> {
@@ -177,7 +179,8 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	};
 
 	render(): React$Element<any> | null {
-		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
+		const { method, methodValue } = this.props;
+		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 
 		if (!action) {
 			return null;
@@ -186,8 +189,12 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 		const { onPress, containerStyle, appLayout, intl } = this.props;
 		const { row, description } = this._getStyle(appLayout);
 
+		const accessibilityLabel = this._getAccessibilityLabel(method, methodValue, action.actionLabel);
+
 		return (
-			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}>
+			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}
+				importantForAccessibility={'yes'}
+				accessibilityLabel={accessibilityLabel}>
 				{this._renderIcon(action)}
 				<TextRowWrapper appLayout={appLayout}>
 					<Title color={action.textColor} appLayout={appLayout}>{intl.formatMessage(action.label)}</Title>
@@ -220,6 +227,14 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			/>
 		);
 	};
+
+	_getAccessibilityLabel(method: number, methodValue: number, label: Object): string {
+		const { labelPostScript = '', intl } = this.props;
+		const { formatMessage } = intl;
+		const value = methodValue ? `${Math.round(methodValue / 255 * 100)}%` : '';
+		const labelAction = `${formatMessage(label)} ${value}`;
+		return `${formatMessage(i18n.labelAction)}, ${labelAction}, ${labelPostScript}`;
+	}
 
 	_getStyle = (appLayout: Object): Object => {
 		const { borderRadiusRow } = Theme.Core;

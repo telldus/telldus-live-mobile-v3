@@ -130,7 +130,7 @@ class Summary extends View<null, Props, State> {
 		return (
 			<View>
 				<ScrollView>
-					<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout}/>
+					<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
 					<ActionRow
 						method={method}
 						showValue={true}
@@ -146,7 +146,7 @@ class Summary extends View<null, Props, State> {
 						appLayout={appLayout}
 						intl={intl}
 					/>
-					<DaysRow selectedDays={selectedDays} appLayout={appLayout}/>
+					<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
 				</ScrollView>
 				<FloatingButton
 					buttonStyle={buttonStyle}
@@ -155,6 +155,7 @@ class Summary extends View<null, Props, State> {
 					iconSize={iconSize}
 					paddingRight={paddingRight}
 					showThrobber={this.state.isLoading}
+					accessibilityLabel={`${intl.formatMessage(i18n.confirmButton)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
 				/>
 			</View>
 		);

@@ -26,12 +26,14 @@ import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { Text, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	day: string,
 	isSelected: boolean,
 	onPress?: (index: number) => void,
 	appLayout: Object,
+	intl: Object,
 };
 
 export default class Day extends View<null, Props, null> {
@@ -47,11 +49,13 @@ export default class Day extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { day, onPress, appLayout } = this.props;
+		const { day, onPress, appLayout, intl, isSelected } = this.props;
 		const { container, name } = this._getStyle(appLayout);
+		const labelIfActive = isSelected ? `, ${intl.formatMessage(i18n.labelActive)}` : '';
+		const accessibilityLabel = `${day}, ${labelIfActive}`;
 
 		return (
-			<TouchableOpacity onPress={this.handlePress} disabled={!onPress} style={container}>
+			<TouchableOpacity onPress={this.handlePress} disabled={!onPress} style={container} accessibilityLabel={accessibilityLabel}>
 				<Text style={name}>
 					{day.charAt(0).toUpperCase()}
 				</Text>

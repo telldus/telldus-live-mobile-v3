@@ -58,6 +58,7 @@ type Props = {
 	onPress?: Function,
 	appLayout: Object,
 	intl: Object,
+	labelPostScript?: string,
 };
 
 type State = {
@@ -151,9 +152,14 @@ export default class TimeRow extends View<null, Props, State> {
 
 		const labelInterval = randomInterval ? intl.formatMessage(messages.descriptionInterval, {value: randomInterval}) : null;
 		const labelOffset = offset ? intl.formatMessage(messages.descriptionOffset, {value: offset}) : null;
+		const time = this._formatTime();
+
+		const accessibilityLabel = this._getAccessibilityLabel(label, time, labelInterval, labelOffset);
 
 		return (
-			<Row layout="row" containerStyle={[container, containerStyle]} onPress={onPress}>
+			<Row layout="row" containerStyle={[container, containerStyle]} onPress={onPress}
+				importantForAccessibility={'yes'}
+				accessibilityLabel={accessibilityLabel}>
 				<BlockIcon
 					icon={type}
 					size={blockIcon.size}
@@ -163,7 +169,7 @@ export default class TimeRow extends View<null, Props, State> {
 				/>
 				<View style={textWrapper}>
 					<Description style={title} appLayout={appLayout}>
-						{`${label} ${this._formatTime()}`}
+						{`${label} ${time}`}
 					</Description>
 					{!!offset && (
 						<View style={iconRow}>
@@ -184,6 +190,13 @@ export default class TimeRow extends View<null, Props, State> {
 				</View>
 			</Row>
 		);
+	}
+
+	_getAccessibilityLabel(label: string, time: string, interval: string | null, offset: string | null): string {
+		const { labelPostScript = '' } = this.props;
+		const labelInterval = interval ? `, ${interval}` : '';
+		const labelOffset = offset ? `, ${offset}` : '';
+		return `${label} ${time} ${labelInterval} ${labelOffset}, ${labelPostScript}`;
 	}
 
 	// $FlowFixMe
