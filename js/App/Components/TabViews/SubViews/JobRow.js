@@ -160,7 +160,7 @@ class JobRow extends View<null, Props, null> {
 		const deviceName = device.name ? device.name : formatMessage(i18n.noName);
 		const labelDevice = `${formatMessage(i18n.labelDevice)} ${deviceName}`;
 		const labelAction = `${formatMessage(i18n.labelAction)} ${actionLabel}`;
-		const accessibilityLabel = `${formatMessage(messages.phraseOne)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}`;
+		const accessibilityLabel = `${formatMessage(messages.phraseOne)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
 
 		return (
 			<TouchableOpacity

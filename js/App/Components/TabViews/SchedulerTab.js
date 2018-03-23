@@ -46,6 +46,7 @@ import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
 
 import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
+import i18n from '../../Translations/common';
 
 const messages = defineMessages({
 	scheduler: {
@@ -164,7 +165,8 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { rowsAndSections, appLayout } = this.props;
+		const { rowsAndSections, appLayout, screenProps } = this.props;
+		const { formatMessage } = screenProps.intl;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
@@ -195,6 +197,7 @@ class SchedulerTab extends View<null, Props, State> {
 				<FloatingButton
 					onPress={this.newSchedule}
 					imageSource={require('./img/iconPlus.png')}
+					accessibilityLabel={`${formatMessage(i18n.addSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`}
 				/>
 			</View>
 		);
