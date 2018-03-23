@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {BackAndroid} from 'react-native';
+import { BackHandler } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -103,11 +103,11 @@ class ScheduleScreen extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		BackAndroid.addEventListener('hardwareBackPress', this.handleBackPress);
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 	componentWillUnmount() {
-		BackAndroid.removeEventListener('hardwareBackPress', this.handleBackPress);
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 	handleBackPress(): boolean {
