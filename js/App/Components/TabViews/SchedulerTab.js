@@ -233,7 +233,7 @@ class SchedulerTab extends View<null, Props, State> {
 	};
 
 	keyExtractor(item: Object): string {
-		return item.id;
+		return item.id.toString();
 	}
 
 	_getDaysToRender = (dataArray: Object, appLayout: Object): Object => {
