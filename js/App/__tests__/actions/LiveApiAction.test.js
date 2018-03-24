@@ -22,11 +22,13 @@ describe('(LiveApi) syncWithServer', () => {
 		fetchMock.reset();
 		fetchMock.mock('glob:*/oauth2/device/command?id=1&method=1&value=null', '{"status": "success"}', {
 			name: 'deviceCommand',
+			overwriteRoutes: true,
 		});
 		fetchMock.mock('glob:*/oauth2/device/info?id=1&supportedMethods=951', {
 			'state': 2,
 		}, {
 			name: 'deviceInfo',
+			overwriteRoutes: true,
 		});
 	});
 
