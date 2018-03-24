@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow } from '../../../Utils/TelldusTestSuite';
 import Tabs from '../../../BaseComponents/Tabs';
 
 describe('<Tabs />', () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow } from '../../../Utils/TelldusTestSuite';
 import { configureStore } from '../../Store/ConfigureStore';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';

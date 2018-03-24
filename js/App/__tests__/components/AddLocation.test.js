@@ -1,11 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
-import { shallow } from 'enzyme';
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-const middlewares = [thunk];
-const mockStore = configureStore(middlewares);
+import { shallow, mockStore } from '../../../Utils/TelldusTestSuite';
 
 import AddLocationContainer from '../../Components/Location/AddLocation/AddLocationContainer';
 import * as modalActions from '../../Actions/Modal';

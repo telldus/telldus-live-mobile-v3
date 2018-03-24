@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
-import { shallow } from 'enzyme';
+import { shallow } from '../../../Utils/TelldusTestSuite';
 import { configureStore } from '../../Store/ConfigureStore';
 import SchedulerTab from '../../Components/TabViews/SchedulerTab';
 import { getJobs } from '../../Actions';
