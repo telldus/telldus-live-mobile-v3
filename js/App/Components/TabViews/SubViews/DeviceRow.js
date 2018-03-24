@@ -255,31 +255,33 @@ class DeviceRow extends PureComponent<Props, State> {
 						onSetIgnoreDevice={this.onSetIgnoreDevice} isOpen={isOpen}/>
 					<ListItem
 						style={styles.row}>
-						<View
-							style={styles.touchableContainer}
-							accessible={accessible}
-							importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-							accessibilityLabel={accessibilityLabel}>
-							<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
-							<View style={styles.name}>
-								<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
-									{deviceName}
-								</Text>
-								{powerConsumed && (
-									<Text style = {styles.textPowerConsumed}>
-										{`${powerConsumed} W`}
+						<View style={styles.cover}>
+							<View
+								style={styles.touchableContainer}
+								accessible={accessible}
+								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+								accessibilityLabel={accessibilityLabel}>
+								<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
+								<View style={styles.name}>
+									<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
+										{deviceName}
 									</Text>
-								)}
+									{powerConsumed && (
+										<Text style = {styles.textPowerConsumed}>
+											{`${powerConsumed} W`}
+										</Text>
+									)}
+								</View>
 							</View>
+							{button.length === 1 ?
+								button[0]
+								:
+								[
+									button[0],
+									<ShowMoreButton onPress={this.onPressMore} name={name} buttons={button} key={6}/>,
+								]
+							}
 						</View>
-						{button.length === 1 ?
-							button[0]
-							:
-							[
-								button[0],
-								<ShowMoreButton onPress={this.onPressMore} name={name} buttons={button} key={6}/>,
-							]
-						}
 					</ListItem>
 				</SwipeRow>
 				{
@@ -325,14 +327,18 @@ class DeviceRow extends PureComponent<Props, State> {
 				marginHorizontal: 12,
 				marginBottom: 5,
 				backgroundColor: '#FFFFFF',
-				flexDirection: 'row',
 				height: rowHeight,
+				borderRadius: 2,
+				...Theme.Core.shadow,
+			},
+			cover: {
+				flex: 1,
+				overflow: 'hidden',
 				justifyContent: 'space-between',
 				paddingLeft: 5,
 				alignItems: 'center',
+				flexDirection: 'row',
 				borderRadius: 2,
-				...Theme.Core.shadow,
-				overflow: 'hidden',
 			},
 			name: {
 				flex: 20,

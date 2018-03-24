@@ -333,41 +333,43 @@ class SensorRow extends PureComponent<Props, State> {
 					accessible={accessible}
 					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 					accessibilityLabel={accessible ? accessibilityLabel : ''}>
-					<TouchableWithoutFeedback style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
-						<View style={styles.container} importantForAccessibility="no-hide-descendants">
-							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
-							<View>
-								<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
-									ellipsizeMode="middle"
-									numberOfLines={1}>
-									{sensorName}
-								</Text>
-								<Text style={[
-									styles.time, {
-										color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
-										opacity: minutesAgo < 1440 ? 1 : 0.5,
-									},
-								]}>
-									{isGatewayActive ?
-										<Text style={styles.time}>
-											{lastUpdatedValue}
-										</Text>
-										:
-										<Text style={{color: Theme.Core.rowTextColor}}>
-											{this.offline}
-										</Text>
-									}
-								</Text>
+					<View style={styles.cover}>
+						<TouchableWithoutFeedback style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
+							<View style={styles.container} importantForAccessibility="no-hide-descendants">
+								<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
+								<View>
+									<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
+										ellipsizeMode="middle"
+										numberOfLines={1}>
+										{sensorName}
+									</Text>
+									<Text style={[
+										styles.time, {
+											color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+											opacity: minutesAgo < 1440 ? 1 : 0.5,
+										},
+									]}>
+										{isGatewayActive ?
+											<Text style={styles.time}>
+												{lastUpdatedValue}
+											</Text>
+											:
+											<Text style={{color: Theme.Core.rowTextColor}}>
+												{this.offline}
+											</Text>
+										}
+									</Text>
+								</View>
 							</View>
-						</View>
-					</TouchableWithoutFeedback>
-					<TouchableWithoutFeedback onPress={this.changeDisplayType} accessible={false} style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
-						<View style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
-							{sensors[currentIndex] && (
-								sensors[currentIndex]
-							)}
-						</View>
-					</TouchableWithoutFeedback>
+						</TouchableWithoutFeedback>
+						<TouchableWithoutFeedback onPress={this.changeDisplayType} accessible={false} style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
+							<View style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
+								{sensors[currentIndex] && (
+									sensors[currentIndex]
+								)}
+							</View>
+						</TouchableWithoutFeedback>
+					</View>
 				</ListItem>
 			</SwipeRow>
 		);
@@ -410,14 +412,18 @@ class SensorRow extends PureComponent<Props, State> {
 				marginHorizontal: 12,
 				marginBottom: 5,
 				backgroundColor: '#FFFFFF',
-				flexDirection: 'row',
 				height: Theme.Core.rowHeight,
+				borderRadius: 2,
+				...Theme.Core.shadow,
+			},
+			cover: {
+				flex: 1,
+				overflow: 'hidden',
+				borderRadius: 2,
 				justifyContent: 'space-between',
 				paddingLeft: 5,
 				alignItems: 'center',
-				borderRadius: 2,
-				overflow: 'hidden',
-				...Theme.Core.shadow,
+				flexDirection: 'row',
 			},
 			sensorIcon: {
 				fontSize: 16,
