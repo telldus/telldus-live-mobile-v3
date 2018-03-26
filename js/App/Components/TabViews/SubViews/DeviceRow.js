@@ -24,6 +24,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
+import { TouchableOpacity, PixelRatio } from 'react-native';
 
 import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import ToggleButton from './ToggleButton';
@@ -67,6 +68,9 @@ type State = {
 	disableSwipe: boolean,
 	isOpen: boolean,
 	showMoreActions: boolean,
+	showFullName: boolean,
+	coverMaxWidth: number,
+	coverOccupiedWidth: number,
 };
 
 class DeviceRow extends PureComponent<Props, State> {
@@ -84,11 +88,17 @@ class DeviceRow extends PureComponent<Props, State> {
 	onSetIgnoreDevice: () => void;
 	onPressMore: (Object) => void;
 	closeMoreActions: () => void;
+	onShowFullName: () => void;
+	onLayoutDeviceName: (Object) => void;
+	onLayoutCover: (Object) => void;
 
 	state = {
 		disableSwipe: false,
 		isOpen: false,
 		showMoreActions: false,
+		showFullName: false,
+		coverMaxWidth: 0,
+		coverOccupiedWidth: 0,
 	};
 
 	constructor(props: Props) {
@@ -108,6 +118,9 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.onRowClose = this.onRowClose.bind(this);
 		this.onPressMore = this.onPressMore.bind(this);
 		this.closeMoreActions = this.closeMoreActions.bind(this);
+		this.onShowFullName = this.onShowFullName.bind(this);
+		this.onLayoutDeviceName = this.onLayoutDeviceName.bind(this);
+		this.onLayoutCover = this.onLayoutCover.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -149,19 +162,48 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.props.setIgnoreDevice(this.props.device);
 	}
 
+	onShowFullName() {
+		let { showFullName, coverOccupiedWidth, coverMaxWidth } = this.state;
+		if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
+			this.setState({
+				showFullName: !showFullName,
+			});
+		}
+	}
+
+	onLayoutDeviceName(ev: Object) {
+		if (!this.state.showFullName) {
+			let { x, width } = ev.nativeEvent.layout;
+			this.setState({
+				coverOccupiedWidth: width + x + 5,
+			});
+		}
+	}
+
+	onLayoutCover(ev: Object) {
+		if (!this.state.showFullName) {
+			let { width } = ev.nativeEvent.layout;
+			this.setState({
+				coverMaxWidth: width,
+			});
+		}
+	}
+
 	render(): Object {
 		let button = [], icon = null;
-		let { isOpen, showMoreActions } = this.state;
+		let { isOpen, showMoreActions, showFullName } = this.state;
 		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
 		const { isInState, name } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
-		// if (name === 'Ceiling') {
+		const showDeviceIcon = PixelRatio.getPixelSizeForLayoutSize(appLayout.width) >= 750;
+		// if (name === 'Aeon plug') {
 		// 	device.supportedMethods = {
 		// 		UP: true,
 		// 		DOWN: true,
 		// 		STOP: true,
-		// 		BELL: true,
+		// 		TURNON: true,
+		// 		TURNOFF: true,
 		// 	};
 		// }
 
@@ -256,15 +298,16 @@ class DeviceRow extends PureComponent<Props, State> {
 					<ListItem
 						style={styles.row}>
 						<View style={styles.cover}>
-							<View
+							<TouchableOpacity
 								style={styles.touchableContainer}
+								onPress={this.onShowFullName}
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 								accessibilityLabel={accessibilityLabel}>
-								<BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>
-								<View style={styles.name}>
-									<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]}>
-										{deviceName}
+								{showDeviceIcon && <BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>}
+								<View style={styles.name} onLayout={this.onLayoutCover}>
+									<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
+										{deviceName} dummy
 									</Text>
 									{powerConsumed && (
 										<Text style = {styles.textPowerConsumed}>
@@ -272,14 +315,17 @@ class DeviceRow extends PureComponent<Props, State> {
 										</Text>
 									)}
 								</View>
+							</TouchableOpacity>
+							{!showFullName && <View style={styles.buttonsCover}>
+								{button.length === 1 ?
+									button[0]
+									:
+									[
+										button[0],
+										<ShowMoreButton onPress={this.onPressMore} name={name} buttons={button} key={6}/>,
+									]
+								}
 							</View>
-							{button.length === 1 ?
-								button[0]
-								:
-								[
-									button[0],
-									<ShowMoreButton onPress={this.onPressMore} name={name} buttons={button} key={6}/>,
-								]
 							}
 						</View>
 					</ListItem>
@@ -321,7 +367,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				flex: 1,
 				flexDirection: 'row',
 				alignItems: 'center',
-				height: rowHeight,
+				justifyContent: 'space-between',
 			},
 			row: {
 				marginHorizontal: 12,
@@ -340,15 +386,22 @@ class DeviceRow extends PureComponent<Props, State> {
 				flexDirection: 'row',
 				borderRadius: 2,
 			},
+			buttonsCover: {
+				justifyContent: 'space-between',
+				alignItems: 'center',
+				flexDirection: 'row',
+			},
 			name: {
-				flex: 20,
+				flex: 1,
 				justifyContent: 'center',
+				alignItems: 'flex-start',
 			},
 			text: {
-				marginLeft: 8,
 				color: Theme.Core.rowTextColor,
 				fontSize: 15,
 				textAlignVertical: 'center',
+				textAlign: 'left',
+				marginLeft: 6,
 			},
 			deviceIcon: {
 				fontSize: 18,

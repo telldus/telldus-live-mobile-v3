@@ -293,16 +293,15 @@ class HorizontalSlider extends View {
 
 	render(): Object {
 		const { minimumValue, maximumValue, value, containerHeight, containerWidth, scaleWidth, displayedValue } = this.state;
-		const { thumbWidth, thumbHeight, isGatewayActive, isInState, screenReaderEnabled } = this.props;
+		const { thumbWidth, thumbHeight, isGatewayActive, screenReaderEnabled } = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
 		});
 
-		let thumbStyle = !isGatewayActive ? styles.offline :
-			(isInState === 'TURNOFF' ? styles.enabledOff : styles.enabled);
-		let scaleStyle = !isGatewayActive ? styles.offline :
-			(isInState === 'TURNOFF' ? styles.enabledOff : styles.enabled);
+		let thumbStyle = !isGatewayActive ? styles.offline : styles.enabled;
+		let scaleStyle = !isGatewayActive ? styles.offline : styles.enabled;
+		let valueColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
 		let styleBackground = styles.disabled;
 
 		let accessibilityLabel = `${this.labelPhraseOne} ${displayedValue}% , ${this.labelPhraseTwo}`;
@@ -341,6 +340,7 @@ class HorizontalSlider extends View {
 					style = {[styles.thumbText, {
 						fontSize: this.props.fontSize,
 						bottom: (containerHeight - thumbHeight) / 3.8,
+						color: valueColor,
 					}]}>
 					{displayedValue}%
 				</Text>
@@ -377,7 +377,6 @@ const styles = StyleSheet.create({
 	},
 	thumbText: {
 		position: 'absolute',
-		color: '#a2a2a2',
 		textAlign: 'center',
 		textAlignVertical: 'center',
 		alignSelf: 'center',
