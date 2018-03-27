@@ -303,6 +303,7 @@ class HorizontalSlider extends View {
 		let scaleStyle = !isGatewayActive ? styles.offline : styles.enabled;
 		let valueColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
 		let styleBackground = styles.disabled;
+		let bottomValue = (containerHeight / 2) - 15;
 
 		let accessibilityLabel = `${this.labelPhraseOne} ${displayedValue}% , ${this.labelPhraseTwo}`;
 
@@ -339,7 +340,7 @@ class HorizontalSlider extends View {
 					numberOfLines={1}
 					style = {[styles.thumbText, {
 						fontSize: this.props.fontSize,
-						bottom: (containerHeight - thumbHeight) / 3.8,
+						bottom: bottomValue,
 						color: valueColor,
 					}]}>
 					{displayedValue}%
