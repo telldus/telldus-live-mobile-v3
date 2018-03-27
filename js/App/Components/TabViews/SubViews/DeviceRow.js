@@ -313,7 +313,7 @@ class DeviceRow extends PureComponent<Props, State> {
 									</Text>
 									{powerConsumed && (
 										<Text style = {styles.textPowerConsumed}>
-											{`${powerConsumed} W`}
+											{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W`}
 										</Text>
 									)}
 								</View>

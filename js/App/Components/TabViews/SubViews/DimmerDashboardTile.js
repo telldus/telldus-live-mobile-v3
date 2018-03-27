@@ -205,7 +205,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF, DIM } = supportedMethods;
 
-		const info = powerConsumed ? `${powerConsumed} W` : null;
+		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 
 		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
 			style={[styles.turnOn, {marginLeft: (tileWidth / 3) - 2}]} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}

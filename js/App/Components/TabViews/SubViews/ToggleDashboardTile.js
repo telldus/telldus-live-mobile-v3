@@ -58,7 +58,7 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 		const { id, name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
-		const info = powerConsumed ? `${powerConsumed} W` : null;
+		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 
 		const onButton = <OnButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
 			enabled={!!TURNON} style={styles.turnOnButtonContainer} iconStyle={styles.iconStyle} methodRequested={methodRequested} intl={intl}

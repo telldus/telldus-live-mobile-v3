@@ -81,7 +81,7 @@ class BellDashboardTile extends PureComponent<Props, null> {
 		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
 		const { methodRequested, name } = this.props.item;
 
-		const info = powerConsumed ? `${powerConsumed} W` : null;
+		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 
 		const accessibilityLabelButton = `${this.labelBellButton}, ${name}`;
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);

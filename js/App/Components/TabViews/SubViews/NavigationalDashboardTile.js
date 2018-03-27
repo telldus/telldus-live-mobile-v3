@@ -55,7 +55,7 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
 
-		const info = powerConsumed ? `${powerConsumed} W` : null;
+		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 
 		const upButton = UP ? <UpButton isEnabled={true} style={styles.navigationButton}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
