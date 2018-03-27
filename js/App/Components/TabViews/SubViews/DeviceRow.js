@@ -174,8 +174,10 @@ class DeviceRow extends PureComponent<Props, State> {
 	onLayoutDeviceName(ev: Object) {
 		if (!this.state.showFullName) {
 			let { x, width } = ev.nativeEvent.layout;
+			// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
+			const maxRightPadd = 12;
 			this.setState({
-				coverOccupiedWidth: width + x + 5,
+				coverOccupiedWidth: width + x + maxRightPadd,
 			});
 		}
 	}
@@ -307,7 +309,7 @@ class DeviceRow extends PureComponent<Props, State> {
 								{showDeviceIcon && <BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>}
 								<View style={styles.name} onLayout={this.onLayoutCover}>
 									<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
-										{deviceName} dummy
+										{deviceName}
 									</Text>
 									{powerConsumed && (
 										<Text style = {styles.textPowerConsumed}>
@@ -436,7 +438,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				alignItems: 'center',
 			},
 			textPowerConsumed: {
-				marginLeft: 8,
+				marginLeft: 6,
 				color: Theme.Core.rowTextColor,
 				fontSize: 12,
 				textAlignVertical: 'center',
