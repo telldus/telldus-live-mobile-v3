@@ -88,6 +88,7 @@ type State = {
 	makeRowAccessible: 0 | 1,
 	isRefreshing: boolean,
 	showHiddenList: boolean,
+	propsSwipeRow: Object,
 };
 
 class DevicesTab extends View {
@@ -105,6 +106,7 @@ class DevicesTab extends View {
 	onPressAddDevice: () => void;
 	toggleHiddenList: () => void;
 	setIgnoreDevice: (Object) => void;
+	closeVisibleRows: (string) => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
@@ -125,6 +127,10 @@ class DevicesTab extends View {
 			makeRowAccessible: 0,
 			isRefreshing: false,
 			showHiddenList: false,
+			propsSwipeRow: {
+				idToKeepOpen: null,
+				forceClose: false,
+			},
 		};
 		this.onCloseSelected = this.onCloseSelected.bind(this);
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
@@ -137,6 +143,7 @@ class DevicesTab extends View {
 		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
 
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
+		this.closeVisibleRows = this.closeVisibleRows.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
 
@@ -235,6 +242,7 @@ class DevicesTab extends View {
 
 	renderRow(row: Object): Object {
 		let { screenProps, gateways } = this.props;
+		let { propsSwipeRow } = this.state;
 		let { intl, currentTab, currentScreen } = screenProps;
 		let isGatewayActive = gateways.byId[row.item.clientId] && gateways.byId[row.item.clientId].online;
 
@@ -250,8 +258,19 @@ class DevicesTab extends View {
 				isGatewayActive={isGatewayActive}
 				setIgnoreDevice={this.setIgnoreDevice}
 				onPressMore={this.onPressMore}
+				onHiddenRowOpen={this.closeVisibleRows}
+				propsSwipeRow={propsSwipeRow}
 			/>
 		);
+	}
+
+	closeVisibleRows(deviceId: string) {
+		this.setState({
+			propsSwipeRow: {
+				idToKeepOpen: deviceId,
+				forceClose: true,
+			},
+		});
 	}
 
 	onRefresh() {
@@ -381,7 +400,7 @@ class DevicesTab extends View {
 
 		let { appLayout, devices } = this.props;
 		let { showHiddenList, hiddenList, visibleList,
-			isRefreshing, makeRowAccessible, addGateway } = this.state;
+			isRefreshing, makeRowAccessible, addGateway, propsSwipeRow } = this.state;
 		let style = this.getStyles(appLayout);
 
 		if (addGateway) {
@@ -395,6 +414,7 @@ class DevicesTab extends View {
 		let extraData = {
 			makeRowAccessible,
 			appLayout,
+			propsSwipeRow,
 		};
 
 		return (

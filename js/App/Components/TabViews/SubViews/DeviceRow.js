@@ -62,6 +62,8 @@ type Props = {
 	powerConsumed: string | null,
 	setIgnoreDevice: (Object) => void;
 	onPressMore: (Array<Object>) => void;
+	onHiddenRowOpen: (string) => void;
+	propsSwipeRow: Object,
 };
 
 type State = {
@@ -124,8 +126,9 @@ class DeviceRow extends PureComponent<Props, State> {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		let { tab } = nextProps;
-		if (tab !== 'devicesTab' && this.state.isOpen) {
+		let { tab, propsSwipeRow, device } = nextProps;
+		let { idToKeepOpen, forceClose } = propsSwipeRow;
+		if (this.state.isOpen && ((tab !== 'devicesTab') || (forceClose && device.id !== idToKeepOpen))) {
 			this.refs.SwipeRow.closeRow();
 		}
 	}
@@ -146,6 +149,10 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.setState({
 			isOpen: true,
 		});
+		let { onHiddenRowOpen, device } = this.props;
+		if (onHiddenRowOpen) {
+			onHiddenRowOpen(device.id);
+		}
 	}
 
 	onRowClose() {
@@ -163,8 +170,10 @@ class DeviceRow extends PureComponent<Props, State> {
 	}
 
 	onShowFullName() {
-		let { showFullName, coverOccupiedWidth, coverMaxWidth } = this.state;
-		if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
+		let { showFullName, coverOccupiedWidth, coverMaxWidth, isOpen } = this.state;
+		if (isOpen) {
+			this.refs.SwipeRow.closeRow();
+		} else if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
 			this.setState({
 				showFullName: !showFullName,
 			});

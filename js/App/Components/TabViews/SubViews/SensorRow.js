@@ -53,6 +53,8 @@ type Props = {
 	isGatewayActive: boolean,
 	tab: string,
 	setIgnoreSensor: (Object) => void,
+	onHiddenRowOpen: (string) => void;
+	propsSwipeRow: Object,
 };
 
 type State = {
@@ -98,6 +100,7 @@ class SensorRow extends PureComponent<Props, State> {
 	onRowOpen: () => void;
 	onRowClose: () => void;
 	onSetIgnoreSensor: () => void;
+	onPressSensorName: () => void;
 
 	state = {
 		currentIndex: 0,
@@ -147,6 +150,7 @@ class SensorRow extends PureComponent<Props, State> {
 
 		this.onRowOpen = this.onRowOpen.bind(this);
 		this.onRowClose = this.onRowClose.bind(this);
+		this.onPressSensorName = this.onPressSensorName.bind(this);
 
 		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		this.LayoutLinear = {
@@ -162,8 +166,9 @@ class SensorRow extends PureComponent<Props, State> {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		let { tab } = nextProps;
-		if (tab !== 'sensorsTab' && this.state.isOpen) {
+		let { tab, propsSwipeRow, sensor } = nextProps;
+		let { idToKeepOpen, forceClose } = propsSwipeRow;
+		if (this.state.isOpen && (tab !== 'sensorsTab' || (forceClose && sensor.id !== idToKeepOpen)) ) {
 			this.refs.SwipeRow.closeRow();
 		}
 	}
@@ -172,6 +177,10 @@ class SensorRow extends PureComponent<Props, State> {
 		this.setState({
 			isOpen: true,
 		});
+		let { onHiddenRowOpen, sensor } = this.props;
+		if (onHiddenRowOpen) {
+			onHiddenRowOpen(sensor.id);
+		}
 	}
 
 	onRowClose() {
@@ -324,7 +333,9 @@ class SensorRow extends PureComponent<Props, State> {
 				disableRightSwipe={true}
 				onRowOpen={this.onRowOpen}
 				onRowClose={this.onRowClose}
-				recalculateHiddenLayout={true}>
+				recalculateHiddenLayout={true}
+				swipeToOpenPercent={20}
+				directionalDistanceChangeThreshold={0.5}>
 				<HiddenRow sensor={sensor} intl={intl}
 					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}/>
 				<ListItem
@@ -334,7 +345,7 @@ class SensorRow extends PureComponent<Props, State> {
 					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 					accessibilityLabel={accessible ? accessibilityLabel : ''}>
 					<View style={styles.cover}>
-						<TouchableWithoutFeedback style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
+						<TouchableWithoutFeedback onPress={this.onPressSensorName} style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
 							<View style={styles.container} importantForAccessibility="no-hide-descendants">
 								<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 								<View>
@@ -373,6 +384,13 @@ class SensorRow extends PureComponent<Props, State> {
 				</ListItem>
 			</SwipeRow>
 		);
+	}
+
+	onPressSensorName() {
+		let { isOpen } = this.state;
+		if (isOpen) {
+			this.refs.SwipeRow.closeRow();
+		}
 	}
 
 	changeDisplayType(index: number) {

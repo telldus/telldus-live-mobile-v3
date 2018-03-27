@@ -52,6 +52,7 @@ type State = {
 	makeRowAccessible: 0 | 1,
 	isRefreshing: boolean,
 	showHiddenList: boolean,
+	propsSwipeRow: Object,
 };
 
 class SensorsTab extends View {
@@ -66,6 +67,7 @@ class SensorsTab extends View {
 	keyExtractor: (Object) => number;
 	toggleHiddenList: () => void;
 	setIgnoreSensor: (Object) => void;
+	closeVisibleRows: (string) => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
@@ -83,6 +85,10 @@ class SensorsTab extends View {
 			makeRowAccessible: 0,
 			isRefreshing: false,
 			showHiddenList: false,
+			propsSwipeRow: {
+				idToKeepOpen: null,
+				forceClose: false,
+			},
 		};
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
@@ -93,6 +99,7 @@ class SensorsTab extends View {
 
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
 		this.setIgnoreSensor = this.setIgnoreSensor.bind(this);
+		this.closeVisibleRows = this.closeVisibleRows.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
 
@@ -185,12 +192,13 @@ class SensorsTab extends View {
 	render(): Object {
 
 		let { appLayout } = this.props;
-		let { showHiddenList, hiddenList, visibleList, isRefreshing } = this.state;
+		let { showHiddenList, hiddenList, visibleList, isRefreshing, propsSwipeRow, makeRowAccessible } = this.state;
 
 		let style = this.getStyles(appLayout);
 		let extraData = {
-			makeRowAccessible: this.state.makeRowAccessible,
-			appLayout: appLayout,
+			makeRowAccessible,
+			appLayout,
+			propsSwipeRow,
 		};
 
 		return (
@@ -236,6 +244,7 @@ class SensorsTab extends View {
 
 	renderRow(row: Object): Object {
 		let { screenProps, gatewaysById } = this.props;
+		let { propsSwipeRow } = this.state;
 		let { intl, currentTab, currentScreen } = screenProps;
 		let isGatewayActive = gatewaysById[row.item.clientId].online;
 
@@ -247,8 +256,19 @@ class SensorsTab extends View {
 				currentTab={currentTab}
 				currentScreen={currentScreen}
 				isGatewayActive={isGatewayActive}
-				setIgnoreSensor={this.setIgnoreSensor}/>
+				setIgnoreSensor={this.setIgnoreSensor}
+				onHiddenRowOpen={this.closeVisibleRows}
+				propsSwipeRow={propsSwipeRow}/>
 		);
+	}
+
+	closeVisibleRows(sensorId: string) {
+		this.setState({
+			propsSwipeRow: {
+				idToKeepOpen: sensorId,
+				forceClose: true,
+			},
+		});
 	}
 
 	renderHiddenRow(row: Object): Object {
