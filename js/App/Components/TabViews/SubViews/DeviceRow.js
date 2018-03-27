@@ -243,7 +243,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				key={2}
 			/>
 			);
-			icon = 'device-alt-solid';
+			icon = 'device-alt';
 		}
 		if ((TURNON || TURNOFF) && !DIM) {
 			button.unshift( <ToggleButton
@@ -255,7 +255,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				key={3}
 			/>
 			);
-			icon = 'device-alt-solid';
+			icon = 'device-alt';
 		}
 		if (BELL) {
 			button.unshift( <BellButton
@@ -279,7 +279,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				key={5}
 			/>
 			);
-			icon = 'device-alt-solid';
+			icon = 'device-alt';
 		}
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
 		let accessibilityLabel = isOpen ? `${getLabelDevice(intl.formatMessage, device)}. ${this.helpCloseHiddenRow}` :

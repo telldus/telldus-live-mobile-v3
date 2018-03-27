@@ -83,7 +83,7 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 				isEnabled={isInState === 'TURNON'}
 				name={name}
 				info={info}
-				icon={'device-alt-solid'}
+				icon={'device-alt'}
 				iconStyle={{
 					color: '#fff',
 					fontSize: tileWidth / 4.9,

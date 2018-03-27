@@ -252,7 +252,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
 				name={name}
 				info={info}
-				icon={'device-alt-solid'}
+				icon={'device-alt'}
 				iconStyle={{
 					color: '#fff',
 					fontSize: tileWidth / 4.9,
