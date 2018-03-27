@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
 	hiddenRow: {
 		flexDirection: 'row',
 		height: Theme.Core.rowHeight,
-		width: Theme.Core.buttonWidth * 3,
+		width: Theme.Core.buttonWidth * 2,
 		alignSelf: 'flex-end',
 		justifyContent: 'center',
 		alignItems: 'center',

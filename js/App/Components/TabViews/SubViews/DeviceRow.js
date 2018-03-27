@@ -289,7 +289,7 @@ class DeviceRow extends PureComponent<Props, State> {
 			<View>
 				<SwipeRow
 					ref="SwipeRow"
-					rightOpenValue={-Theme.Core.buttonWidth * 3}
+					rightOpenValue={-Theme.Core.buttonWidth * 2}
 					disableLeftSwipe={this.state.disableSwipe}
 					disableRightSwipe={true}
 					onRowOpen={this.onRowOpen}

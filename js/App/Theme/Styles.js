@@ -88,7 +88,7 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		height: Core.rowHeight,
-		width: Core.buttonWidth,
+		width: Core.buttonWidth * (2 / 3),
 	},
 	sensorValue: {
 		flexDirection: 'row',
