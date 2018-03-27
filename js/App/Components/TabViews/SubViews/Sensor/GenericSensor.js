@@ -48,11 +48,13 @@ const GenericSensor = ({ name, value, unit, icon, label, isLarge, formatOptions 
 					</Text>
 					:
 					<View style={{flexDirection: 'row', alignItems: 'center'}}>
-						<Text style={Theme.Styles.sensorValueText}>
-							<FormattedNumber value={value} {...formatOptions}/>
-						</Text>
-						<Text style={Theme.Styles.sensorValueLabelText}>
-							{unit}
+						<Text>
+							<Text style={Theme.Styles.sensorValueText}>
+								<FormattedNumber value={value} {...formatOptions}/>
+							</Text>
+							<Text style={Theme.Styles.sensorValueLabelText}>
+								{unit}
+							</Text>
 						</Text>
 					</View>
 			}
