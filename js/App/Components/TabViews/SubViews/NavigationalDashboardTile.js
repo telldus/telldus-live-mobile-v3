@@ -64,7 +64,7 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id} name={name}/> : null;
 		const stopButton = STOP ? <StopButton isEnabled={true} style={styles.navigationButton}
-			methodRequested={item.methodRequested} iconSize={20} isGatewayActive={isGatewayActive}
+			methodRequested={item.methodRequested} iconSize={16} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id} name={name}/> : null;
 
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);

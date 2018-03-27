@@ -39,6 +39,7 @@ type Props = {
 	name: string,
 	isGatewayActive: boolean,
 	style: Object | number | Array<any>,
+	iconStyle: Object | number | Array<any>,
 	methodRequested: string,
 	isInState: string,
 	enabled: boolean,
@@ -64,7 +65,7 @@ class OnButton extends View {
 	}
 
 	render(): Object {
-		let { isInState, enabled, methodRequested, name, isGatewayActive } = this.props;
+		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNON' ? styles.offline : styles.disabled) : (isInState === 'TURNON' ? styles.enabled : styles.disabled);
@@ -77,7 +78,7 @@ class OnButton extends View {
 				onPress={this.onPress}
 				style={[this.props.style, buttonStyle]}
 				accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="on" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
+				<IconTelldus icon="on" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
 					methodRequested === 'TURNON' ?
 						<ButtonLoadingIndicator style={styles.dot} />

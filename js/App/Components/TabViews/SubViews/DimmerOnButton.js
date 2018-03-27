@@ -32,6 +32,7 @@ import Theme from '../../../Theme';
 type Props = {
 	isInState: string,
 	style: Object | number | Array<any>,
+	iconStyle: Object | number | Array<any>,
 	methodRequested: string,
 	name: string,
 	isGatewayActive: boolean,
@@ -73,7 +74,7 @@ class DimmerOnButton extends View {
 	}
 
 	render(): Object {
-		let { isInState, style, methodRequested, name, isGatewayActive, enabled } = this.props;
+		let { isInState, style, methodRequested, name, isGatewayActive, enabled, iconStyle } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState !== 'TURNOFF' ? styles.offline : styles.disabled) : (isInState !== 'TURNOFF' ? styles.enabled : styles.disabled);
@@ -87,7 +88,7 @@ class DimmerOnButton extends View {
 					onPress={this.onPress}
 					style={styles.button}
 					accessibilityLabel={accessibilityLabel}>
-					<IconTelldus icon="on" style={Theme.Styles.deviceActionIcon} color={iconColor}/>
+					<IconTelldus icon="on" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				</TouchableOpacity>
 				{
 					methodRequested === 'TURNON' ?

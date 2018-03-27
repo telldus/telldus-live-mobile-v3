@@ -208,10 +208,10 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const info = powerConsumed ? `${powerConsumed} W` : null;
 
 		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
-			style={[styles.turnOn, {marginLeft: (tileWidth / 3) - 2}]} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+			style={[styles.turnOn, {marginLeft: (tileWidth / 3) - 2}]} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
 			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>;
 		const offButton = <DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={!!TURNOFF}
-			style={styles.turnOff} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+			style={styles.turnOff} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
 			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOff}/>;
 		const slider = DIM ?
 			<HorizontalSlider
@@ -318,6 +318,9 @@ const styles = StyleSheet.create({
 	},
 	itemIconContainerOffline: {
 		backgroundColor: Theme.Core.offlineColor,
+	},
+	iconStyle: {
+		fontSize: 22,
 	},
 });
 

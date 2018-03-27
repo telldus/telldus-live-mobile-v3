@@ -61,10 +61,10 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 		const info = powerConsumed ? `${powerConsumed} W` : null;
 
 		const onButton = <OnButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
-			enabled={!!TURNON} style={styles.turnOnButtonContainer} methodRequested={methodRequested} intl={intl}
+			enabled={!!TURNON} style={styles.turnOnButtonContainer} iconStyle={styles.iconStyle} methodRequested={methodRequested} intl={intl}
 			isGatewayActive={isGatewayActive}/>;
 		const offButton = <OffButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
-			enabled={!!TURNOFF} style={styles.turnOffButtonContainer} methodRequested={methodRequested} intl={intl}
+			enabled={!!TURNOFF} style={styles.turnOffButtonContainer} iconStyle={styles.iconStyle} methodRequested={methodRequested} intl={intl}
 			isGatewayActive={isGatewayActive}/>;
 
 		let style = { ...this.props.style };
@@ -171,6 +171,9 @@ const styles = StyleSheet.create({
 	},
 	itemIconContainerOffline: {
 		backgroundColor: Theme.Core.offlineColor,
+	},
+	iconStyle: {
+		fontSize: 22,
 	},
 });
 
