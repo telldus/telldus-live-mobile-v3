@@ -41,11 +41,12 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 				styles.name, {
 					fontSize: Math.floor(tileWidth / 8),
 					opacity: name ? 1 : 0.7,
+					marginTop: 3,
 				},
 			]}>
 			{name ? name : formatMessage(i18n.noName)}
 		</Text>
-		{info && (<Text
+		<Text
 			ellipsizeMode="middle"
 			numberOfLines={1}
 			style={[
@@ -55,8 +56,7 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 				},
 			]}>
 			{info}
-		</Text>)
-		}
+		</Text>
 	</View>
 );
 
@@ -111,6 +111,8 @@ const styles = StyleSheet.create({
 		borderTopLeftRadius: 2,
 		borderTopRightRadius: 2,
 		backgroundColor: '#ffffff',
+		paddingHorizontal: 5,
+		paddingVertical: 5,
 	},
 	noShadow: {
 		borderRadius: 2,
