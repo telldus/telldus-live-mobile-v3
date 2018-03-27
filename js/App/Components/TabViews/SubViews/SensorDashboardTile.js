@@ -331,12 +331,12 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				icon={'sensor'}
 				iconStyle={{
 					color: '#fff',
-					fontSize: tileWidth / 4.9,
+					fontSize: tileWidth / 6,
 				}}
 				iconContainerStyle={[iconContainerStyle, {
-					width: tileWidth / 4.5,
-					height: tileWidth / 4.5,
-					borderRadius: tileWidth / 9,
+					width: tileWidth / 4.8,
+					height: tileWidth / 4.8,
+					borderRadius: tileWidth / 9.6,
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}
