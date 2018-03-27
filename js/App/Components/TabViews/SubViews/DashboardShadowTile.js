@@ -32,6 +32,8 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 	<View style={[styles.title, {
 		width: tileWidth,
 		height: tileWidth * 0.6,
+		paddingHorizontal: tileWidth * 0.1,
+		paddingVertical: tileWidth * 0.1,
 	}]}>
 		{icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 		<Text
@@ -106,13 +108,11 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center',
 	},
 	title: {
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 		alignItems: 'center',
 		borderTopLeftRadius: 2,
 		borderTopRightRadius: 2,
 		backgroundColor: '#ffffff',
-		paddingHorizontal: 5,
-		paddingVertical: 5,
 	},
 	noShadow: {
 		borderRadius: 2,
