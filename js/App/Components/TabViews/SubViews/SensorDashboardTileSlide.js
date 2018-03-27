@@ -48,10 +48,11 @@ class SensorDashboardTileSlide extends View {
 					}}/>
 				</View>
 				<View style={{ flex: 5, justifyContent: 'center', alignItems: 'flex-start' }}>
-					<View style={{flexDirection: 'row'}}>
+					<View style={{flexDirection: 'row', alignItems: 'baseline'}}>
 						<Text style={{
 							color: '#fff',
 							fontSize: Math.floor(tileWidth / 8),
+							textAlignVertical: 'bottom',
 						}}>
 							{data.text && data.text}
 							{data.text2 && data.text2}
@@ -59,16 +60,16 @@ class SensorDashboardTileSlide extends View {
 						</Text>
 						<Text style={{
 							color: '#fff',
-							fontSize: Math.floor(tileWidth / 10),
+							fontSize: Math.floor(tileWidth / 14),
 							textAlignVertical: 'bottom',
-							marginLeft: 2,
+							height: Math.floor(tileWidth / 9.22),
 						}}>
 							{data.unit}
 						</Text>
 					</View>
 					<Text style={{
 						color: '#fff',
-						fontSize: Math.floor(tileWidth / 10),
+						fontSize: Math.floor(tileWidth / 12.5),
 					}}>
 						{data.label}
 					</Text>

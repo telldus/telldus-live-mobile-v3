@@ -39,7 +39,7 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 			numberOfLines={1}
 			style={[
 				styles.name, {
-					fontSize: Math.floor(tileWidth / 8),
+					fontSize: Math.floor(tileWidth / 10),
 					opacity: name ? 1 : 0.7,
 					marginTop: 3,
 				},
@@ -51,7 +51,7 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 			numberOfLines={1}
 			style={[
 				styles.name, {
-					fontSize: Math.floor(tileWidth / 10),
+					fontSize: Math.floor(tileWidth / 12),
 					color: Theme.Core.rowTextColor,
 				},
 			]}>
