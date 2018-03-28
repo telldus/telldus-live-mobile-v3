@@ -22,7 +22,7 @@
 // @flow
 
 'use strict';
-import React from 'React';
+import React from 'react';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';

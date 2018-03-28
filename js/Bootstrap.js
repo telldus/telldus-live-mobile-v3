@@ -26,7 +26,7 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 import 'intl/locale-data/jsonp/sv';
 
-import React from 'React';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { Crashlytics } from 'react-native-fabric';
 import DeviceInfo from 'react-native-device-info';
