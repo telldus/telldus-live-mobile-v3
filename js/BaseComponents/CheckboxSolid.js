@@ -41,7 +41,7 @@ type Props = {
 	style?: Object,
 };
 
-export default class CheckboxSolid extends React.Component<DefaultProps, Props, null> {
+export default class CheckboxSolid extends React.Component<Props, null> {
 
 	static propTypes = {
 		onPress: PropTypes.func.isRequired,
@@ -51,7 +51,7 @@ export default class CheckboxSolid extends React.Component<DefaultProps, Props, 
 		style: PropTypes.object,
 	};
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		size: getDeviceWidth() * 0.066666667,
 		disabled: false,
 	};

@@ -37,7 +37,7 @@ type DefaultProps = {
 	size: 'large',
 };
 
-export default class FullPageActivityIndicator extends React.Component<DefaultProps, Props, null> {
+export default class FullPageActivityIndicator extends React.Component<Props, null> {
 
 	static propTypes = {
 		animating: PropTypes.bool,
@@ -45,7 +45,7 @@ export default class FullPageActivityIndicator extends React.Component<DefaultPr
 		size: PropTypes.oneOf(['small', 'large', PropTypes.number]),
 	};
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		size: 'large',
 	};
 
