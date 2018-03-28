@@ -22,8 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { injectIntl } from 'react-intl';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import Base from './Base';
 import Text from './Text';
 

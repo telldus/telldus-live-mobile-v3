@@ -22,8 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { injectIntl } from 'react-intl';
-import {FormattedDate} from 'react-intl';
+import { injectIntl, FormattedDate } from 'react-intl';
 import Text from './Text';
 
 const FormattedDateComponent = (props: Object): React$Element<any> => (
