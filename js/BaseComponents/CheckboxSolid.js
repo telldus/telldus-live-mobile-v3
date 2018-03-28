@@ -23,7 +23,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+
 import Theme from '../App/Theme';
 import { getDeviceWidth } from '../App/Lib';
 
@@ -40,14 +41,14 @@ type Props = {
 	style?: Object,
 };
 
-export default class CheckboxSolid extends View<DefaultProps, Props, null> {
+export default class CheckboxSolid extends React.Component<DefaultProps, Props, null> {
 
 	static propTypes = {
 		onPress: PropTypes.func.isRequired,
 		checked: PropTypes.bool.isRequired,
 		size: PropTypes.number,
 		disabled: PropTypes.bool,
-		style: View.propTypes.style,
+		style: PropTypes.object,
 	};
 
 	static defaultProps = {

@@ -23,7 +23,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
+
+import View from './View';
 
 type Props = {
 	animating?: boolean,
@@ -35,7 +37,7 @@ type DefaultProps = {
 	size: 'large',
 };
 
-export default class FullPageActivityIndicator extends View<DefaultProps, Props, null> {
+export default class FullPageActivityIndicator extends React.Component<DefaultProps, Props, null> {
 
 	static propTypes = {
 		animating: PropTypes.bool,
