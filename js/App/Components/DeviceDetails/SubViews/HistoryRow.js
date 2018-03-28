@@ -185,6 +185,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 			roundIconContainerStyle,
 			statusIconSize,
 			statusValueText,
+			iconBackgroundMaskStyle,
 		} = this.getStyle(appLayout);
 
 		let time = new Date(this.props.item.ts * 1000);
@@ -229,6 +230,8 @@ class HistoryRow extends React.PureComponent<Props, State> {
 					roundIcon={roundIcon}
 					roundIconStyle={roundIconStyle}
 					roundIconContainerStyle={roundIconContainerStyle}
+					iconBackgroundMask={true}
+					iconBackgroundMaskStyle={iconBackgroundMaskStyle}
 					time={time}
 					timeStyle={timeStyle}
 					timeContainerStyle={timeContainerStyle}
@@ -285,10 +288,8 @@ class HistoryRow extends React.PureComponent<Props, State> {
 				borderBottomLeftRadius: 3,
 			},
 			roundIconStyle: {
-				fontSize: isPortrait ? width * 0.077 : height * 0.077,
+				fontSize: isPortrait ? width * 0.0667777777 : height * 0.0667777777,
 				color: '#d32f2f',
-				marginTop: isPortrait ? -(width * 0.005) : -(height * 0.005),
-				marginLeft: isPortrait ? -(width * 0.005) : -(height * 0.005),
 			},
 			rowContainerStyle: {
 				width: isPortrait ? width * 0.55 : width * 0.68,
@@ -308,11 +309,17 @@ class HistoryRow extends React.PureComponent<Props, State> {
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			roundIconContainerStyle: {
-				backgroundColor: this.props.item.successStatus !== 0 ? '#fff' : '#929292',
+				backgroundColor: this.props.item.successStatus !== 0 ? 'transparent' : '#929292',
 				width: isPortrait ? width * 0.0667777777 : height * 0.0667777777,
 				height: isPortrait ? width * 0.0667777777 : height * 0.0667777777,
 				borderRadius: isPortrait ? width * 0.03338888885 : height * 0.03338888885,
-				overflow: 'visible',
+			},
+			iconBackgroundMaskStyle: {
+				backgroundColor: this.props.item.successStatus !== 0 ? '#fff' : '#929292',
+				width: isPortrait ? width * 0.05 : height * 0.05,
+				height: isPortrait ? width * 0.05 : height * 0.05,
+				borderRadius: isPortrait ? width * 0.025 : height * 0.025,
+				position: 'absolute',
 			},
 			statusIconSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
 			statusValueText: {
