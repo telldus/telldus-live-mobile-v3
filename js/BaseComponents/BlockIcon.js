@@ -30,6 +30,7 @@ import Theme from '../App/Theme';
 type DefaultProps = {
 	color: string,
 	bgColor: string,
+	backgroundMask: boolean,
 };
 
 type Props = {
@@ -39,6 +40,8 @@ type Props = {
 	bgColor?: string,
 	style?: number | Object,
 	containerStyle?: number | Object | Array<any>,
+	backgroundMask?: boolean,
+	backgroundMaskStyle?: number | Object | Array<any>,
 };
 
 export default class BlockIcon extends Component<Props, null> {
@@ -51,19 +54,22 @@ export default class BlockIcon extends Component<Props, null> {
 		bgColor: PropTypes.string,
 		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 		containerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
+		backgroundMaskStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
 	};
 
 	static defaultProps: DefaultProps = {
 		color: '#fff',
 		bgColor: Theme.Core.brandPrimary,
+		backgroundMask: false,
 	};
 
 	render(): Object {
-		const { style, containerStyle, icon, size, color } = this.props;
+		const { style, containerStyle, icon, size, color, backgroundMask, backgroundMaskStyle } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
 			<View style={[defaultStyle, containerStyle]}>
+				{backgroundMask && (<View style={backgroundMaskStyle}/>)}
 				<IconTelldus icon={icon} size={size} color={color} style={style}/>
 			</View>
 		);

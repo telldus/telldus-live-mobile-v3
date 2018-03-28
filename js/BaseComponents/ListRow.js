@@ -45,6 +45,8 @@ type Props = {
 	isFirst?: boolean,
 	triangleColor?: string,
 	appLayout: Object,
+	iconBackgroundMask?: boolean,
+	iconBackgroundMaskStyle?: number | Object | Array<any>,
 };
 
 type DefaultProps = {
@@ -99,6 +101,8 @@ class ListRow extends Component<Props, null> {
 			rowStyle,
 			triangleColor,
 			timeFormat,
+			iconBackgroundMask,
+			iconBackgroundMaskStyle,
 		} = this.props;
 
 		const style = this._getStyle();
@@ -109,6 +113,8 @@ class ListRow extends Component<Props, null> {
 					icon={roundIcon}
 					containerStyle={[style.roundIconContainer, roundIconContainerStyle]}
 					style={roundIconStyle}
+					backgroundMask={iconBackgroundMask}
+					backgroundMaskStyle={iconBackgroundMaskStyle}
 				/>
 				{!!time && (
 					<View style={timeContainerStyle}>
