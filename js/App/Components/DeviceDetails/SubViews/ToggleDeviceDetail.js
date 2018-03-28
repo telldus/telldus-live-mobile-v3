@@ -30,11 +30,13 @@ import { OnButton, OffButton } from '../../TabViews/SubViews';
 const deviceHeight = Dimensions.get('window').height;
 import Theme from '../../../Theme';
 
-const ToggleButton = ({ device, intl }: Object): Object => {
+const ToggleButton = ({ device, intl, isGatewayActive }: Object): Object => {
 	return (
 		<RoundedCornerShadowView style={styles.toggleContainer}>
-			<OffButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} intl={intl}/>
-			<OnButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} intl={intl}/>
+			<OffButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOff}
+				methodRequested={device.methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>
+			<OnButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOn}
+				methodRequested={device.methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>
 		</RoundedCornerShadowView>
 	);
 };
@@ -42,6 +44,7 @@ const ToggleButton = ({ device, intl }: Object): Object => {
 type Props = {
 	device: Object,
 	intl: Object,
+	isGatewayActive: boolean,
 };
 
 class ToggleDeviceDetailModal extends View {
@@ -52,12 +55,13 @@ class ToggleDeviceDetailModal extends View {
 	}
 
 	render(): Object {
-		const { device, intl } = this.props;
+		const { device, intl, isGatewayActive } = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		let toggleButton = null;
 
 		if (TURNON || TURNOFF) {
-			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} intl={intl}/>;
+			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn}
+				onTurnOff={this.onTurnOff} intl={intl} isGatewayActive={isGatewayActive}/>;
 		}
 
 		return (
@@ -99,13 +103,15 @@ const styles = StyleSheet.create({
 	},
 	turnOff: {
 		flex: 1,
-		alignItems: 'stretch',
+		alignItems: 'center',
+		justifyContent: 'center',
 		borderTopLeftRadius: 7,
 		borderBottomLeftRadius: 7,
 	},
 	turnOn: {
 		flex: 1,
-		alignItems: 'stretch',
+		alignItems: 'center',
+		justifyContent: 'center',
 		borderTopRightRadius: 7,
 		borderBottomRightRadius: 7,
 	},

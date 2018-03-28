@@ -67,17 +67,16 @@ class BellButton extends View {
 		let iconColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
 
 		return (
-			<View style={[this.props.style, bellButtonStyle]}>
-				<TouchableOpacity onPress={this.onBell} style={styles.bell} accessibilityLabel={accessibilityLabel}>
-					<Icon name="bell" size={22} color={iconColor} />
-				</TouchableOpacity>
+			<TouchableOpacity onPress={this.onBell} style={[styles.bell, this.props.style, bellButtonStyle]} accessibilityLabel={accessibilityLabel}>
+				<Icon name="bell" size={22} color={iconColor} />
+
 				{
 					methodRequested === 'BELL' ?
 						<ButtonLoadingIndicator style={styles.dot} />
 						:
 						null
 				}
-			</View>
+			</TouchableOpacity>
 		);
 	}
 }
@@ -90,6 +89,7 @@ const styles = StyleSheet.create({
 	bell: {
 		justifyContent: 'center',
 		alignItems: 'center',
+		backgroundColor: '#eeeeee',
 	},
 	dot: {
 		position: 'absolute',

@@ -34,6 +34,7 @@ import Theme from '../../../Theme';
 type Props = {
 	device: Object,
 	intl: Object,
+	isGatewayActive: boolean,
 };
 
 class NavigationalDeviceDetailModal extends View {
@@ -44,12 +45,12 @@ class NavigationalDeviceDetailModal extends View {
 	}
 
 	render(): Object {
-		const { device, intl } = this.props;
+		const { device, intl, isGatewayActive } = this.props;
 		const { UP, DOWN, STOP } = device.supportedMethods;
 		let navigationButtons = null;
 
 		if (UP || DOWN || STOP) {
-			navigationButtons = <NavigationalButton device={device} style={styles.navigation} intl={intl}/>;
+			navigationButtons = <NavigationalButton device={device} style={styles.navigation} intl={intl} isGatewayActive={isGatewayActive}/>;
 		}
 
 		return (

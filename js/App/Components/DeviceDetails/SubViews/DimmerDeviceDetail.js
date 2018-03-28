@@ -32,7 +32,7 @@ const deviceHeight = Dimensions.get('window').height;
 import { setDimmerValue, saveDimmerInitialState } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import { FormattedMessage, RoundedCornerShadowView, Text, View } from '../../../../BaseComponents';
-import { OnButton, OffButton } from '../../TabViews/SubViews';
+import { DimmerOnButton, DimmerOffButton } from '../../TabViews/SubViews';
 import i18n from '../../../Translations/common';
 import {
 	toDimmerValue,
@@ -52,16 +52,19 @@ type Props = {
 	onLearn: number => void,
 	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
 	intl: Object,
+	isGatewayActive: boolean,
 };
 
 type State = {
 	dimmerValue: number,
 };
 
-const ToggleButton = ({ device, intl }: Object): Object => (
+const ToggleButton = ({ device, intl, isGatewayActive, onTurnOff, onTurnOn }: Object): Object => (
 	<RoundedCornerShadowView style={styles.toggleContainer}>
-		<OffButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOff} methodRequested={device.methodRequested} intl={intl}/>
-		<OnButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOn} methodRequested={device.methodRequested} intl={intl}/>
+		<DimmerOffButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOff}
+			methodRequested={device.methodRequested} intl={intl} isGatewayActive={isGatewayActive} onPress={onTurnOff}/>
+		<DimmerOnButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOn}
+			methodRequested={device.methodRequested} intl={intl} isGatewayActive={isGatewayActive} onPress={onTurnOn}/>
 	</RoundedCornerShadowView>
 );
 class DimmerDeviceDetailModal extends View {
@@ -73,6 +76,8 @@ class DimmerDeviceDetailModal extends View {
 	onSlidingStart: () => void;
 	onValueChange: (number) => void;
 	onSlidingComplete: (number) => void;
+	onTurnOn: () => void;
+	onTurnOff: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -86,6 +91,8 @@ class DimmerDeviceDetailModal extends View {
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
+		this.onTurnOn = this.onTurnOn.bind(this);
+		this.onTurnOff = this.onTurnOff.bind(this);
 	}
 
 	getDimmerValue(device: Object): number {
@@ -127,6 +134,17 @@ class DimmerDeviceDetailModal extends View {
 		this.props.deviceSetState(this.props.device.id, command, dimValue);
 	}
 
+	onTurnOn() {
+		this.props.deviceSetState(this.props.device.id, this.props.commandON);
+		this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
+	}
+
+	onTurnOff() {
+		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
+		this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
+	}
+
+
 	componentWillReceiveProps(nextProps: Object) {
 		const device = nextProps.device;
 		const dimmerValue = this.getDimmerValue(device);
@@ -138,14 +156,15 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	render(): Object {
-		const { device, intl } = this.props;
+		const { device, intl, isGatewayActive } = this.props;
 		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
 
 		let toggleButton = null;
 		let slider = null;
 
 		if (TURNON || TURNOFF) {
-			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn} onTurnOff={this.onTurnOff} intl={intl}/>;
+			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn}
+				onTurnOff={this.onTurnOff} intl={intl} isGatewayActive={isGatewayActive}/>;
 		}
 
 		if (DIM) {
@@ -207,13 +226,15 @@ const styles = StyleSheet.create({
 	},
 	turnOff: {
 		flex: 1,
-		alignItems: 'stretch',
+		alignItems: 'center',
+		justifyContent: 'center',
 		borderTopLeftRadius: 7,
 		borderBottomLeftRadius: 7,
 	},
 	turnOn: {
 		flex: 1,
-		alignItems: 'stretch',
+		alignItems: 'center',
+		justifyContent: 'center',
 		borderTopRightRadius: 7,
 		borderBottomRightRadius: 7,
 	},

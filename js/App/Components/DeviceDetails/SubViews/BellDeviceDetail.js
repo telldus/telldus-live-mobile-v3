@@ -34,6 +34,7 @@ type Props = {
 	device: Object,
 	onBell: number => void,
 	intl: Object,
+	isGatewayActive: boolean,
 };
 
 class BellDeviceDetailModal extends View {
@@ -47,12 +48,12 @@ class BellDeviceDetailModal extends View {
 		this.props.onBell(this.props.device.id);
 	}
 	render(): Object {
-		const { device, intl } = this.props;
+		const { device, intl, isGatewayActive } = this.props;
 		const { BELL } = device.supportedMethods;
 		let bellButton = null;
 
 		if (BELL) {
-			bellButton = <BellButton device={device} style={styles.bell} intl={intl}/>;
+			bellButton = <BellButton device={device} style={styles.bell} intl={intl} isGatewayActive={isGatewayActive}/>;
 		}
 
 		return (
@@ -87,10 +88,8 @@ const styles = StyleSheet.create({
 	},
 	bell: {
 		height: 36,
-		marginHorizontal: 8,
-		marginVertical: 16,
-		justifyContent: 'center',
-		alignItems: 'center',
+		paddingHorizontal: 30,
+		paddingVertical: 25,
 	},
 });
 

@@ -436,7 +436,7 @@ class DeviceRow extends PureComponent<Props, State> {
 			},
 			bell: {
 				justifyContent: 'center',
-				alignItems: 'stretch',
+				alignItems: 'center',
 				backgroundColor: '#eeeeee',
 				width: buttonWidth * 2,
 				borderLeftWidth: 1,

@@ -110,16 +110,18 @@ class OverviewTab extends View {
 			H1: gateway.name,
 			H2: gateway.type,
 		};
+		const isGatewayActive = gateway && gateway.online;
+
 		if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
 			const deviceType = this.getType(device);
 			if (deviceType === 'TOGGLE') {
-				deviceDetail = <ToggleDeviceDetail device={device} intl={screenProps.intl}/>;
+				deviceDetail = <ToggleDeviceDetail device={device} intl={screenProps.intl} isGatewayActive={isGatewayActive}/>;
 			} else if (deviceType === 'DIMMER') {
-				deviceDetail = <DimmerDeviceDetail device={device} intl={screenProps.intl}/>;
+				deviceDetail = <DimmerDeviceDetail device={device} intl={screenProps.intl} isGatewayActive={isGatewayActive}/>;
 			} else if (deviceType === 'BELL') {
-				deviceDetail = <BellDeviceDetail device={device} intl={screenProps.intl}/>;
+				deviceDetail = <BellDeviceDetail device={device} intl={screenProps.intl} isGatewayActive={isGatewayActive}/>;
 			} else if (deviceType === 'NAVIGATIONAL') {
-				deviceDetail = <NavigationalDeviceDetail device={device} intl={screenProps.intl}/>;
+				deviceDetail = <NavigationalDeviceDetail device={device} intl={screenProps.intl} isGatewayActive={isGatewayActive}/>;
 			} else {
 				deviceDetail = <View style={{ height: 0 }} />;
 			}
