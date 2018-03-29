@@ -74,7 +74,7 @@ render(): Object {
 				<View style={styles.body}>
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
-							let newStyle = {}, { newButtonStyle } = styles;
+							let newStyle = {}, { newButtonStyle, newButtonStyleDim, newButtonStyleDimOn } = styles;
 							if (child.key === '4') {
 								newStyle = {
 									bellButtonStyle: newButtonStyle,
@@ -88,9 +88,9 @@ render(): Object {
 							}
 							if (child.key === '2') {
 								newStyle = {
-									onButtonStyle: newButtonStyle,
+									onButtonStyle: newButtonStyleDimOn,
 									offButtonStyle: newButtonStyle,
-									sliderStyle: newButtonStyle,
+									sliderStyle: newButtonStyleDim,
 								};
 							}
 							if (child.key === '1') {
@@ -150,6 +150,16 @@ const styles = StyleSheet.create({
 	},
 	newButtonStyle: {
 		marginHorizontal: buttonPadding,
+		borderRadius: 2,
+		...Theme.Core.shadow,
+	},
+	newButtonStyleDim: {
+		marginLeft: buttonPadding * 3,
+		borderRadius: 2,
+		...Theme.Core.shadow,
+	},
+	newButtonStyleDimOn: {
+		marginLeft: Theme.Core.buttonWidth + (buttonPadding * 3),
 		borderRadius: 2,
 		...Theme.Core.shadow,
 	},
