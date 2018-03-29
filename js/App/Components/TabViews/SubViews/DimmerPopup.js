@@ -26,6 +26,7 @@ import { Dimensions, Text } from 'react-native';
 import DimmerProgressBar from './DimmerProgressBar';
 import { View, initializeRegistryWithDefinitions } from 'react-native-animatable';
 import * as ANIMATION_DEFINITIONS from 'react-native-animatable/definitions';
+import Theme from '../../../Theme';
 
 initializeRegistryWithDefinitions(ANIMATION_DEFINITIONS);
 
@@ -160,6 +161,7 @@ class DimmerPopup extends Component<Props, State> {
 					borderRadius: 7,
 					alignItems: 'center',
 					justifyContent: 'center',
+					...Theme.Core.shadow,
 				}}>
 				<Text ellipsizeMode="middle"
 				      style={{ color: '#1a355b' }}>

@@ -25,6 +25,7 @@ import React, { Component } from 'react';
 import { Animated, Easing, View, Text, StyleSheet } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
+import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	text: {
-		color: '#1a355b',
+		color: '#1b365d',
 		backgroundColor: 'transparent',
 		textAlign: 'center',
 		textAlignVertical: 'center',
@@ -226,7 +227,7 @@ DimmerProgressBar.defaultProps = {
 	animated: true,
 	borderRadius: 4,
 	borderWidth: 1,
-	color: 'rgba(0, 122, 255, 1)',
+	color: Theme.Core.brandSecondary,
 	height: 6,
 	indeterminate: false,
 	progress: 0,
