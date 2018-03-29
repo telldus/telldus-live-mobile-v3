@@ -34,15 +34,25 @@ type Props = {
 	closeModal: () => void;
 };
 
-export default class MultiActionModal extends View<Props, null> {
+type State = {
+	width?: number,
+};
+
+export default class MultiActionModal extends View<Props, State> {
 props: Props;
 
 closeModal: () => void;
+onLayoutBody: (Object) => void;
+
+state: State = {
+	width: undefined,
+};
 
 constructor(props: Props) {
 	super();
 
 	this.closeModal = this.closeModal.bind(this);
+	this.onLayoutBody = this.onLayoutBody.bind(this);
 }
 
 closeModal() {
@@ -52,8 +62,18 @@ closeModal() {
 	}
 }
 
+onLayoutBody(ev: Object) {
+	let { width } = ev.nativeEvent.layout;
+	if (width !== this.state.width) {
+		this.setState({
+			width,
+		});
+	}
+}
+
 render(): Object {
 	let { showModal, buttons, name } = this.props;
+	let { width } = this.state;
 
 	return (
 		<Modal
@@ -68,10 +88,14 @@ render(): Object {
 				<DialogueHeader
 					headerText={name}
 					showIcon={true}
-					headerStyle={styles.headerStyle}
+					headerStyle={{
+						width,
+						paddingVertical: 10,
+						paddingHorizontal: 10,
+					}}
 					onPressIcon={this.closeModal}
 					onPressHeader={this.closeModal}/>
-				<View style={styles.body}>
+				<View style={styles.body} onLayout={this.onLayoutBody}>
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
 							let newStyle = {}, { newButtonStyle, newButtonStyleDim, newButtonStyleDimOn } = styles;
@@ -101,7 +125,7 @@ render(): Object {
 								};
 							}
 							return (
-								<View style={{ paddingTop: 10 }}>
+								<View style={{ marginTop: 10 }}>
 									{React.cloneElement(child, {...newStyle})}
 								</View>
 							);
@@ -116,11 +140,11 @@ render(): Object {
 }
 }
 
-
-const padding = 10;
-const buttonPadding = 5;
+const buttonPadding = 10;
+const bodyPadding = buttonPadding * 1.5;
 const styles = StyleSheet.create({
 	modal: {
+		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
@@ -129,7 +153,6 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		justifyContent: 'center',
 		backgroundColor: '#fff',
-		width: (Theme.Core.buttonWidth * 3) + (padding * 2) + (buttonPadding * 6),
 		borderRadius: 2,
 		overflow: 'hidden',
 	},
@@ -137,29 +160,26 @@ const styles = StyleSheet.create({
 		flexDirection: 'column-reverse',
 		alignItems: 'flex-start',
 		justifyContent: 'center',
-		paddingVertical: padding,
-		paddingHorizontal: padding,
-	},
-	headerStyle: {
-		paddingVertical: padding,
-		paddingHorizontal: padding,
-		width: '100%',
+		paddingTop: bodyPadding - 10,
+		paddingBottom: bodyPadding,
+		paddingLeft: bodyPadding - 10,
+		paddingRight: bodyPadding,
 	},
 	headerText: {
 		color: '#000',
 	},
 	newButtonStyle: {
-		marginHorizontal: buttonPadding,
+		marginLeft: buttonPadding,
 		borderRadius: 2,
 		...Theme.Core.shadow,
 	},
 	newButtonStyleDim: {
-		marginLeft: buttonPadding * 3,
+		marginLeft: buttonPadding * 2,
 		borderRadius: 2,
 		...Theme.Core.shadow,
 	},
 	newButtonStyleDimOn: {
-		marginLeft: Theme.Core.buttonWidth + (buttonPadding * 3),
+		marginLeft: Theme.Core.buttonWidth + (buttonPadding * 2),
 		borderRadius: 2,
 		...Theme.Core.shadow,
 	},
