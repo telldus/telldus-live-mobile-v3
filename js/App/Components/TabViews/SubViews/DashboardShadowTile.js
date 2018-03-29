@@ -32,8 +32,8 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 	<View style={[styles.title, {
 		width: tileWidth,
 		height: tileWidth * 0.6,
-		paddingHorizontal: tileWidth * 0.1,
-		paddingVertical: tileWidth * 0.1,
+		paddingHorizontal: tileWidth * 0.06,
+		paddingVertical: tileWidth * 0.06,
 	}]}>
 		{icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 		<Text
