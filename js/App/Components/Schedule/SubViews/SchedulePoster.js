@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 
@@ -41,9 +41,14 @@ type Props = {
 	appLayout: Object,
 };
 
-export default class SchedulePoster extends View<null, Props, null> {
+type State = {
+	isHeaderLong: boolean,
+};
+
+export default class SchedulePoster extends View<null, Props, State> {
 
 	goBack: () => void;
+	onLayoutHeaderOne: (Object) => void;
 
 	static propTypes = {
 		h1: PropTypes.string.isRequired,
@@ -56,10 +61,15 @@ export default class SchedulePoster extends View<null, Props, null> {
 
 		let { formatMessage } = props.intl;
 
+		this.state = {
+			isHeaderLong: false,
+		};
+
 		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
 
 		this.goBack = this.goBack.bind(this);
+		this.onLayoutHeaderOne = this.onLayoutHeaderOne.bind(this);
 		this.isTablet = DeviceInfo.isTablet();
 	}
 
@@ -72,11 +82,24 @@ export default class SchedulePoster extends View<null, Props, null> {
 		}
 	}
 
+	onLayoutHeaderOne(ev: Object) {
+		const { width } = this.props.appLayout;
+		const { layout } = ev.nativeEvent;
+		const posterWidth = width * 0.8;
+		const headerWidth = layout.width + layout.x + 5;
+		if (headerWidth >= posterWidth) {
+			this.setState({
+				isHeaderLong: true,
+			});
+		}
+	}
+
 	render(): React$Element<any> {
 		const { h1, h2, infoButton, appLayout } = this.props;
+		const { isHeaderLong } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const style = this._getStyle(appLayout);
+		const style = this._getStyle(appLayout, isHeaderLong);
 
 		return (
 			<Poster>
@@ -89,9 +112,11 @@ export default class SchedulePoster extends View<null, Props, null> {
 						</TouchableOpacity>
 				}
 				<View style={style.hContainer}>
-					<Text style={[style.h, style.h1]}>
-						{h1}
-					</Text>
+					<ScrollView horizontal={true} bounces={false} centerContent={true} showsHorizontalScrollIndicator={false}>
+						<Text style={[style.h, style.h1]} onLayout={this.onLayoutHeaderOne}>
+							{h1}
+						</Text>
+					</ScrollView>
 					<Text style={[style.h, style.h2]}>
 						{h2}
 					</Text>
@@ -115,7 +140,7 @@ export default class SchedulePoster extends View<null, Props, null> {
 		);
 	};
 
-	_getStyle = (appLayout: Object): Object => {
+	_getStyle = (appLayout: Object, isHeaderLong?: boolean = false): Object => {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -129,6 +154,7 @@ export default class SchedulePoster extends View<null, Props, null> {
 				top: deviceWidth * 0.088,
 				flex: 1,
 				alignItems: 'flex-end',
+				width: width * 0.8,
 			},
 			h: {
 				color: '#fff',
@@ -136,10 +162,11 @@ export default class SchedulePoster extends View<null, Props, null> {
 				fontFamily: Theme.Core.fonts.robotoLight,
 			},
 			h1: {
-				fontSize: deviceWidth * 0.085333333,
+				fontSize: isHeaderLong ? deviceWidth * 0.065333333 : deviceWidth * 0.085333333,
 			},
 			h2: {
-				fontSize: deviceWidth * 0.053333333,
+				marginTop: 5,
+				fontSize: isHeaderLong ? deviceWidth * 0.043333333 : deviceWidth * 0.053333333,
 			},
 			roundedInfoButtonContainer: {
 				position: 'absolute',
