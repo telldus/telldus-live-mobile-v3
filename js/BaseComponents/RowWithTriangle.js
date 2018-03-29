@@ -35,6 +35,7 @@ type Props = {
 	style: any,
 	triangleColor: string,
 	appLayout: Object,
+	rowWithTriangleContainerStyle?: number | Object | Array<any>,
 };
 
 type DefaultProps = {
@@ -51,7 +52,7 @@ class RowWithTriangle extends Component<Props, null> {
 	};
 
 	render(): Object {
-		const { children, layout, containerStyle, style } = this.props;
+		const { children, layout, containerStyle, style, rowWithTriangleContainerStyle } = this.props;
 
 		const {
 			container,
@@ -64,7 +65,7 @@ class RowWithTriangle extends Component<Props, null> {
 		} = this._getStyle();
 		let styles = {...row, ...style};
 		return (
-			<View style={container}>
+			<View style={[container, rowWithTriangleContainerStyle]}>
 				<View style={triangleContainer}>
 					<Image
 						source={require('./img/triangle-shadow.png')}

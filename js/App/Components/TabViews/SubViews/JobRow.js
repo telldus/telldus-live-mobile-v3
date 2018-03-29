@@ -149,6 +149,7 @@ class JobRow extends View<null, Props, null> {
 			rowContainer,
 			roundIconContainer,
 		} = this._getStyle(appLayout);
+		const opacity = active ? 1 : 0.5;
 
 		const repeat = this._getRepeatDescription();
 		const date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
@@ -172,15 +173,16 @@ class JobRow extends View<null, Props, null> {
 				<ListRow
 					roundIcon={type}
 					roundIconStyle={roundIcon}
-					roundIconContainerStyle={roundIconContainer}
+					roundIconContainerStyle={[roundIconContainer, { backgroundColor: active ? '#929292' : '#BDBDBD'} ]}
 					time={timestamp}
 					timeFormat= {{
 						hour: 'numeric',
 						minute: 'numeric',
 					}}
 					timeStyle={time}
-					rowContainerStyle={rowContainer}
-					containerStyle={{ opacity: active ? 1 : 0.5 }}
+					timeContainerStyle={{ opacity }}
+					rowContainerStyle={[rowContainer]}
+					rowWithTriangleContainerStyle={{ opacity }}
 					triangleColor={methodIconContainer.backgroundColor}
 					isFirst={isFirst}
 				>

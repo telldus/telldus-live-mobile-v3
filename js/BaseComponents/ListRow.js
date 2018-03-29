@@ -47,6 +47,7 @@ type Props = {
 	appLayout: Object,
 	iconBackgroundMask?: boolean,
 	iconBackgroundMaskStyle?: number | Object | Array<any>,
+	rowWithTriangleContainerStyle?: number | Object | Array<any>,
 };
 
 type DefaultProps = {
@@ -103,6 +104,7 @@ class ListRow extends Component<Props, null> {
 			timeFormat,
 			iconBackgroundMask,
 			iconBackgroundMaskStyle,
+			rowWithTriangleContainerStyle,
 		} = this.props;
 
 		const style = this._getStyle();
@@ -131,6 +133,7 @@ class ListRow extends Component<Props, null> {
 					layout={'row'}
 					triangleColor={triangleColor}
 					containerStyle={rowContainerStyle}
+					rowWithTriangleContainerStyle={rowWithTriangleContainerStyle}
 					style={rowStyle}
 				>
 					{children}
