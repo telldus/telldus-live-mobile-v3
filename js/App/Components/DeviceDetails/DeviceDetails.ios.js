@@ -28,8 +28,7 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
-import { TabNavigator } from 'react-navigation';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
+import { TabNavigator, TabBarTop } from 'react-navigation';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
@@ -40,7 +39,7 @@ import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
 import { Text, View, Poster, SafeAreaView } from '../../../BaseComponents';
-import { getWindowDimensions, getRelativeDimensions } from '../../Lib';
+import { getRelativeDimensions } from '../../Lib';
 import { closeDatabase } from '../../Actions/LocalStorage';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
@@ -117,6 +116,7 @@ class DeviceDetails extends View {
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
 			currentScreen,
+			appLayout,
 		};
 		let isPortrait = appLayout.height > appLayout.width;
 
@@ -149,9 +149,6 @@ class DeviceDetails extends View {
 					</View>
 				</Poster>
 				<View style={{flex: 1}}>
-					{isIphoneX() && (
-						<View style={{height: 10, backgroundColor: '#fff'}}/>
-					)}
 					<Tabs screenProps={screenProps} onNavigationStateChange={this.onNavigationStateChange} />
 				</View>
 			</SafeAreaView>
@@ -159,7 +156,7 @@ class DeviceDetails extends View {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const { height, width } = getRelativeDimensions(appLayout);
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
 		return {
@@ -220,20 +217,29 @@ const Tabs = TabNavigator(
 	{
 		initialRouteName: 'Overview',
 		tabBarPosition: 'top',
+		tabBarComponent: ({ tabStyle, ...rest }: Object): Object => {
+			let { screenProps } = rest, tabWidth = 0;
+			if (screenProps && screenProps.appLayout) {
+				let { width } = screenProps.appLayout;
+				tabWidth = width / 3;
+			}
+			return (
+				<TabBarTop {...rest} tabStyle={{
+					...tabStyle,
+					width: tabWidth,
+				}}/>
+			);
+		},
 		tabBarOptions: {
 			indicatorStyle: {
 				backgroundColor: '#fff',
 			},
 			style: {
 				backgroundColor: '#fff',
-				...ifIphoneX({ height: 40 }, {height: getWindowDimensions().height * 0.085}),
 				...Theme.Core.shadow,
-				alignItems: 'center',
 				justifyContent: 'center',
-				borderTopColor: 'transparent',
 			},
 			tabStyle: {
-				...ifIphoneX({ marginTop: 14 }),
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
@@ -253,7 +259,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
 		stackNavigator: ownProps.navigation,
 		device: store.devices.byId[ownProps.navigation.state.params.id],
-		appLayout: store.App.layout,
+		appLayout: getRelativeDimensions(store.App.layout),
 		isModalOpen: store.modal.openModal,
 	};
 }

@@ -24,7 +24,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
-import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import View from './View';
 import FormattedMessage from './FormattedMessage';
@@ -56,7 +55,7 @@ class TabBar extends Component<Props, null> {
 		return (
 			<View style={{flexDirection: 'row', alignItems: 'center'}} accessibilityLabel={accessibilityLabel}>
 				<CustomIcon name={icon} size={28} color={tintColor}/>
-				<FormattedMessage {...label} style={{color: tintColor, fontSize: 14, paddingLeft: 5, ...ifIphoneX({ marginTop: 2 }) }}/>
+				<FormattedMessage {...label} style={{color: tintColor, fontSize: 14, paddingLeft: 5}}/>
 			</View>
 		);
 	}
