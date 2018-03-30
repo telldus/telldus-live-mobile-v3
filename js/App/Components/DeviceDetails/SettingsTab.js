@@ -34,7 +34,9 @@ import { LearnButton } from '../TabViews/SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 import { addToDashboard, removeFromDashboard, showToast } from '../../Actions';
-
+import {
+	getRelativeDimensions,
+} from '../../Lib';
 import Theme from '../../Theme';
 
 const messages = defineMessages({
@@ -259,7 +261,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		device: ownProps.screenProps.device,
 		inDashboard: !!state.dashboard.devicesById[ownProps.screenProps.device.id],
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 

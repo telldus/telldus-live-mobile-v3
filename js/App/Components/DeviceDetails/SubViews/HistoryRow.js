@@ -35,6 +35,7 @@ import { getDeviceStateMethod } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import {
 	toSliderValue,
+	getRelativeDimensions,
 } from '../../../Lib';
 
 type Props = {
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: store.App.layout,
+		appLayout: getRelativeDimensions(store.App.layout),
 		isModalOpen: store.modal.openModal,
 	};
 }

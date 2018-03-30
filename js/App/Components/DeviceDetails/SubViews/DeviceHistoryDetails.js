@@ -32,7 +32,9 @@ import StatusBar from 'StatusBar';
 
 import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from '../../../../BaseComponents';
 import i18n from '../../../Translations/common';
-
+import {
+	getRelativeDimensions,
+} from '../../../Lib';
 import { states, statusMessage } from '../../../../Config';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
@@ -359,7 +361,7 @@ function mapStateToProps(state: Object): Object {
 	return {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 

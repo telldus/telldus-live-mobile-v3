@@ -34,6 +34,9 @@ import { getDeviceHistory as getDeviceHistoryFromLocal, storeDeviceHistory, getL
 import { hideModal } from '../../Actions/Modal';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
+import {
+	getRelativeDimensions,
+} from '../../Lib';
 
 const messages = defineMessages({
 	historyHeader: {
@@ -404,7 +407,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		deviceHistoryNavigator: ownProps.navigation,
 		device: ownProps.screenProps.device,
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 		showModal: state.modal.openModal,
 	};
 }
