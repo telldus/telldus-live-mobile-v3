@@ -117,7 +117,7 @@ class GatewaysTab extends View {
 	}
 
 	keyExtractor(item: Object): string {
-		return item.id;
+		return item.id.toString();
 	}
 
 	addLocation() {

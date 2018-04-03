@@ -38,7 +38,7 @@ type Props = {
 	size?: number,
 	color?: string,
 	bgColor?: string,
-	style?: number | Object,
+	style?: number | Object | Array<any>,
 	containerStyle?: number | Object | Array<any>,
 	backgroundMask?: boolean,
 	backgroundMaskStyle?: number | Object | Array<any>,
@@ -52,7 +52,7 @@ export default class BlockIcon extends Component<Props, null> {
 		size: PropTypes.number,
 		color: PropTypes.string,
 		bgColor: PropTypes.string,
-		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
 		containerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
 		backgroundMaskStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
 	};

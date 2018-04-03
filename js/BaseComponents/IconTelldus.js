@@ -40,7 +40,7 @@ type Props = {
 	icon?: string,
 	size?: number,
 	color?: string,
-	style?: Object | number,
+	style?: Object | number | Array<any>,
 	accessible?: boolean,
 	importantForAccessibility: string,
 };
@@ -52,7 +52,7 @@ export default class IconTelldus extends Component<Props, null> {
 		icon: PropTypes.string.isRequired,
 		size: PropTypes.number,
 		color: PropTypes.string,
-		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
 	};
 
 	static defaultProps: DefaultProps = {
