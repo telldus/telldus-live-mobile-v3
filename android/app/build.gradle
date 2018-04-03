@@ -192,7 +192,7 @@ dependencies {
     compile project(':react-native-device-info')
     compile project(':react-native-vector-icons')
     compile project(':react-native-push-notification')
-    compile ('com.google.android.gms:play-services-gcm:9.2.0') {
+    compile ('com.google.android.gms:play-services-gcm:10.2.4') {
         force = true;
     }
     compile fileTree(dir: "libs", include: ["*.jar"])
