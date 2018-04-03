@@ -148,6 +148,7 @@ class JobRow extends View<null, Props, null> {
 			time,
 			rowContainer,
 			roundIconContainer,
+			rowWithTriangleContainer,
 		} = this._getStyle(appLayout);
 		const opacity = active ? 1 : 0.5;
 
@@ -182,7 +183,7 @@ class JobRow extends View<null, Props, null> {
 					timeStyle={time}
 					timeContainerStyle={{ opacity }}
 					rowContainerStyle={[rowContainer]}
-					rowWithTriangleContainerStyle={{ opacity }}
+					rowWithTriangleContainerStyle={[rowWithTriangleContainer, { opacity }]}
 					triangleColor={methodIconContainer.backgroundColor}
 					isFirst={isFirst}
 				>
@@ -350,10 +351,14 @@ class JobRow extends View<null, Props, null> {
 				fontSize: deviceWidth * 0.044,
 			},
 			rowContainer: {
-				width: width * 0.58666666,
+				width: width * 0.573999993,
 			},
 			roundIconContainer: {
 				marginLeft: isPortrait ? 0 : width * 0.01788,
+			},
+			rowWithTriangleContainer: {
+				width: width * 0.58666666,
+				justifyContent: 'center',
 			},
 		};
 	};

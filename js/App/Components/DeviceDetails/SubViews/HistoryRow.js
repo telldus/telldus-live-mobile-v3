@@ -187,6 +187,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 			statusIconSize,
 			statusValueText,
 			iconBackgroundMaskStyle,
+			rowWithTriangleContainer,
 		} = this.getStyle(appLayout);
 
 		let time = new Date(this.props.item.ts * 1000);
@@ -239,6 +240,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 					containerStyle={containerStyle}
 					rowContainerStyle={rowContainerStyle}
 					triangleColor={triangleColor}
+					rowWithTriangleContainerStyle={rowWithTriangleContainer}
 					isFirst={this.props.isFirst}
 				>
 
@@ -294,6 +296,10 @@ class HistoryRow extends React.PureComponent<Props, State> {
 			},
 			rowContainerStyle: {
 				width: isPortrait ? width * 0.55 : width * 0.68,
+			},
+			rowWithTriangleContainer: {
+				width: isPortrait ? width * 0.57 : width * 0.70,
+				justifyContent: 'center',
 			},
 			containerStyle: {
 				paddingHorizontal: isPortrait ? width * 0.04 : height * 0.04,
