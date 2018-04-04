@@ -12,3 +12,6 @@ RUN wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x6
     rm -rf /opt/node && \
     mv node-v${NODE_VERSION}-linux-x64 /opt/node && \
     rm node-v${NODE_VERSION}-linux-x64.tar.gz
+
+# Install yarn
+RUN npm install --global yarn
