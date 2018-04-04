@@ -89,6 +89,7 @@ type State = {
 	isRefreshing: boolean,
 	showHiddenList: boolean,
 	propsSwipeRow: Object,
+	scrollEnabled: boolean,
 };
 
 class DevicesTab extends View {
@@ -131,7 +132,9 @@ class DevicesTab extends View {
 				idToKeepOpen: null,
 				forceClose: false,
 			},
+			scrollEnabled: true,
 		};
+
 		this.onCloseSelected = this.onCloseSelected.bind(this);
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
@@ -212,9 +215,9 @@ class DevicesTab extends View {
 	}
 
 	setScrollEnabled(enable: boolean) {
-		if (this.refs.list && this.refs.list.setScrollEnabled) {
-			this.refs.list.setScrollEnabled(enable);
-		}
+		this.setState({
+			scrollEnabled: enable,
+		});
 	}
 
 	setIgnoreDevice(device: Object) {
@@ -400,7 +403,7 @@ class DevicesTab extends View {
 
 		let { appLayout, devices } = this.props;
 		let { showHiddenList, hiddenList, visibleList,
-			isRefreshing, makeRowAccessible, addGateway, propsSwipeRow } = this.state;
+			isRefreshing, makeRowAccessible, addGateway, propsSwipeRow, scrollEnabled } = this.state;
 		let style = this.getStyles(appLayout);
 
 		if (addGateway) {
@@ -419,6 +422,7 @@ class DevicesTab extends View {
 
 		return (
 			<ScrollView style={style.container}
+				scrollEnabled={scrollEnabled}
 				refreshControl={
 					<RefreshControl
 						refreshing={isRefreshing}
@@ -431,6 +435,7 @@ class DevicesTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					keyExtractor={this.keyExtractor}
 					extraData={extraData}
+					scrollEnabled={scrollEnabled}
 				/>
 				<View>
 					{this.toggleHiddenListButton(style)}
@@ -441,6 +446,7 @@ class DevicesTab extends View {
 							renderSectionHeader={this.renderSectionHeader}
 							keyExtractor={this.keyExtractor}
 							extraData={extraData}
+							scrollEnabled={scrollEnabled}
 						/>
 						:
 						<View style={{height: 80}}/>

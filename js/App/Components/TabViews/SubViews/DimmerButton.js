@@ -28,9 +28,10 @@ import { View } from '../../../../BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
-import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
+import HVSliderContainer from './Device/HVSliderContainer';
+import SliderScale from './Device/SliderScale';
 import {
 	getDimmerValue,
 	toDimmerValue,
@@ -188,62 +189,83 @@ class DimmerButton extends View {
 	render(): Object {
 		const { device, intl, isGatewayActive, screenReaderEnabled, onButtonStyle, offButtonStyle, sliderStyle } = this.props;
 		const { isInState, name, supportedMethods, methodRequested } = device;
-		const { TURNON, TURNOFF, DIM } = supportedMethods;
+		const { DIM } = supportedMethods;
+
+		const sliderProps = {
+			thumbWidth: 10,
+			thumbHeight: 10,
+			fontSize: 9,
+			item: device,
+			value: toSliderValue(this.state.value),
+			setScrollEnabled: this.props.setScrollEnabled,
+			onSlidingStart: this.onSlidingStart,
+			onSlidingComplete: this.onSlidingComplete,
+			onValueChange: this.onValueChange,
+			onLeftStart: this.onTurnOffButtonStart,
+			onLeftEnd: this.onTurnOffButtonEnd,
+			onRightStart: this.onTurnOnButtonStart,
+			onRightEnd: this.onTurnOnButtonEnd,
+			intl: intl,
+			isInState: isInState,
+			isGatewayActive: isGatewayActive,
+			screenReaderEnabled: screenReaderEnabled,
+			showDimmerStep: this.showDimmerStep,
+		};
 		const onButton = (
-			<DimmerOnButton
-				ref={'onButton'}
-				style={[styles.turnOn, onButtonStyle]}
-				isInState={isInState}
-				onPress={this.onTurnOn}
-				name={name}
-				enabled={!!TURNON}
-				methodRequested={methodRequested}
-				intl={intl}
-				isGatewayActive={isGatewayActive}
-			/>
+			<HVSliderContainer
+				{...sliderProps}
+				style={onButtonStyle}
+				onPress={this.onTurnOn}>
+				<DimmerOnButton
+					ref={'onButton'}
+					style={[styles.turnOn]}
+					isInState={isInState}
+					onPress={this.onTurnOn}
+					name={name}
+					enabled={false}
+					methodRequested={methodRequested}
+					intl={intl}
+					isGatewayActive={isGatewayActive}
+				/>
+			</HVSliderContainer>
 		);
 		const offButton = (
-			<DimmerOffButton
-				ref={'offButton'}
-				style={[styles.turnOff, offButtonStyle]}
-				isInState={isInState}
-				onPress={this.onTurnOff}
-				name={name}
-				enabled={!!TURNOFF}
-				methodRequested={methodRequested}
-				intl={intl}
-				isGatewayActive={isGatewayActive}
-			/>
+			<HVSliderContainer
+				{...sliderProps}
+				style={offButtonStyle}
+				onPress={this.onTurnOff}>
+				<DimmerOffButton
+					ref={'offButton'}
+					style={[styles.turnOff]}
+					isInState={isInState}
+					onPress={this.onTurnOff}
+					name={name}
+					enabled={false}
+					methodRequested={methodRequested}
+					intl={intl}
+					isGatewayActive={isGatewayActive}
+				/>
+			</HVSliderContainer>
 		);
 		const slider = DIM ? (
-			<HorizontalSlider
-				style={[styles.slider, sliderStyle]}
-				thumbWidth={10}
-				thumbHeight={10}
-				fontSize={9}
-				item={device}
-				value={toSliderValue(this.state.value)}
-				setScrollEnabled={this.props.setScrollEnabled}
-				onSlidingStart={this.onSlidingStart}
-				onSlidingComplete={this.onSlidingComplete}
-				onValueChange={this.onValueChange}
-				onLeftStart={this.onTurnOffButtonStart}
-				onLeftEnd={this.onTurnOffButtonEnd}
-				onRightStart={this.onTurnOnButtonStart}
-				onRightEnd={this.onTurnOnButtonEnd}
-				intl={intl}
-				isInState={isInState}
-				isGatewayActive={isGatewayActive}
-				screenReaderEnabled={screenReaderEnabled}
-				showDimmerStep={this.showDimmerStep}
-			/>
+			<HVSliderContainer
+				{...sliderProps}
+				style={sliderStyle}
+			>
+				<SliderScale
+					style={styles.slider}
+					thumbWidth={10}
+					thumbHeight={10}
+					fontSize={9}
+					isGatewayActive={isGatewayActive}/>
+			</HVSliderContainer>
 		) : null;
 
 		return (
-			<View onLayout={this.layoutView} style={styles.container}>
+			<View style={styles.container}>
 				{ offButton }
-				{ onButton }
 				{ slider }
+				{ onButton }
 			</View>
 		);
 	}
@@ -264,13 +286,10 @@ const styles = StyleSheet.create({
 		height: Theme.Core.rowHeight,
 	},
 	slider: {
-		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		left: Theme.Core.buttonWidth,
-		bottom: 0,
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},
@@ -285,7 +304,6 @@ const styles = StyleSheet.create({
 	turnOn: {
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		marginLeft: Theme.Core.buttonWidth,
 		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderLeftWidth: 1,
