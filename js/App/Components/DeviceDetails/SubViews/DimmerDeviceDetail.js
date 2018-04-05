@@ -226,14 +226,14 @@ const styles = StyleSheet.create({
 	},
 	turnOff: {
 		flex: 1,
-		alignItems: 'center',
+		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderTopLeftRadius: 7,
 		borderBottomLeftRadius: 7,
 	},
 	turnOn: {
 		flex: 1,
-		alignItems: 'center',
+		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderTopRightRadius: 7,
 		borderBottomRightRadius: 7,
