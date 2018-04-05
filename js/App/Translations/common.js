@@ -569,6 +569,10 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.scheduler.activateEdit',
 		defaultMessage: 'Double tap to edit',
 	},
+	moreMethods: {
+		id: 'accessibilityLabel.button.moreMethods',
+		defaultMessage: 'More Methods',
+	},
 });
 
 export default messages;

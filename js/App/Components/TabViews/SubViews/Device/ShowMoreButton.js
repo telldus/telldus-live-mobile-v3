@@ -26,9 +26,12 @@ import { TouchableOpacity } from 'react-native';
 
 import { View, StyleSheet } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
+import i18n from '../../../../Translations/common';
 
 type Props = {
 	onPress: () => void;
+	intl: Object,
+	name: string,
 };
 
 export default class ShowMoreButton extends View<Props, null> {
@@ -37,9 +40,14 @@ props: Props;
 onPress: () => void;
 
 constructor(props: Props) {
-	super();
+	super(props);
 
 	this.onPress = this.onPress.bind(this);
+
+	let { formatMessage } = this.props.intl;
+	this.labelShowMore = formatMessage(i18n.moreMethods);
+	this.labelButton = formatMessage(i18n.button);
+	this.defaultDescriptionButton = formatMessage(i18n.defaultDescriptionButton);
 }
 
 onPress() {
@@ -50,9 +58,11 @@ onPress() {
 }
 
 render(): Object {
+	const { name } = this.props;
+	const accessibilityLabel = `${this.labelShowMore} ${this.labelButton}, ${name}. ${this.defaultDescriptionButton}`;
 
 	return (
-		<TouchableOpacity style={styles.moreButtonsCover} onPress={this.onPress}>
+		<TouchableOpacity style={styles.moreButtonsCover} onPress={this.onPress} accessibilityLabel={accessibilityLabel}>
 			<View style={styles.moreButtons}/>
 			<View style={[styles.moreButtons, {marginHorizontal: 5}]}/>
 			<View style={styles.moreButtons}/>

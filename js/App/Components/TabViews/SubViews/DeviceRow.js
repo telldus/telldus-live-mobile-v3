@@ -397,7 +397,7 @@ class DeviceRow extends PureComponent<Props, State> {
 									:
 									[
 										button[0],
-										<ShowMoreButton onPress={this.onPressMore} name={name} buttons={button} key={6}/>,
+										<ShowMoreButton onPress={this.onPressMore} name={name} buttons={button} key={6} intl={intl}/>,
 									]
 								}
 							</Animated.View>
