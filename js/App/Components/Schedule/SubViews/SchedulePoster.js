@@ -43,12 +43,14 @@ type Props = {
 
 type State = {
 	isHeaderLong: boolean,
+	isHeaderTwoLong: boolean,
 };
 
 export default class SchedulePoster extends View<null, Props, State> {
 
 	goBack: () => void;
 	onLayoutHeaderOne: (Object) => void;
+	onLayoutHeaderTwo: (Object) => void;
 
 	static propTypes = {
 		h1: PropTypes.string.isRequired,
@@ -63,6 +65,7 @@ export default class SchedulePoster extends View<null, Props, State> {
 
 		this.state = {
 			isHeaderLong: false,
+			isHeaderTwoLong: false,
 		};
 
 		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
@@ -70,6 +73,7 @@ export default class SchedulePoster extends View<null, Props, State> {
 
 		this.goBack = this.goBack.bind(this);
 		this.onLayoutHeaderOne = this.onLayoutHeaderOne.bind(this);
+		this.onLayoutHeaderTwo = this.onLayoutHeaderTwo.bind(this);
 		this.isTablet = DeviceInfo.isTablet();
 	}
 
@@ -94,12 +98,24 @@ export default class SchedulePoster extends View<null, Props, State> {
 		}
 	}
 
+	onLayoutHeaderTwo(ev: Object) {
+		const { width } = this.props.appLayout;
+		const { layout } = ev.nativeEvent;
+		const posterWidth = width * 0.8;
+		const headerWidth = layout.width + layout.x + 5;
+		if (headerWidth >= posterWidth) {
+			this.setState({
+				isHeaderTwoLong: true,
+			});
+		}
+	}
+
 	render(): React$Element<any> {
 		const { h1, h2, infoButton, appLayout } = this.props;
-		const { isHeaderLong } = this.state;
+		const { isHeaderLong, isHeaderTwoLong } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const style = this._getStyle(appLayout, isHeaderLong);
+		const style = this._getStyle(appLayout, isHeaderLong, isHeaderTwoLong);
 
 		return (
 			<Poster>
@@ -112,12 +128,12 @@ export default class SchedulePoster extends View<null, Props, State> {
 						</TouchableOpacity>
 				}
 				<View style={style.hContainer}>
-					<ScrollView horizontal={true} bounces={false} centerContent={true} showsHorizontalScrollIndicator={false}>
+					<ScrollView horizontal={true} bounces={false} showsHorizontalScrollIndicator={false}>
 						<Text style={[style.h, style.h1]} onLayout={this.onLayoutHeaderOne}>
 							{h1}
 						</Text>
 					</ScrollView>
-					<Text style={[style.h, style.h2]}>
+					<Text style={[style.h, style.h2]} onLayout={this.onLayoutHeaderTwo}>
 						{h2}
 					</Text>
 				</View>
@@ -140,7 +156,7 @@ export default class SchedulePoster extends View<null, Props, State> {
 		);
 	};
 
-	_getStyle = (appLayout: Object, isHeaderLong?: boolean = false): Object => {
+	_getStyle = (appLayout: Object, isHeaderLong?: boolean = false, isHeaderTwoLong?: boolean = false): Object => {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -166,7 +182,7 @@ export default class SchedulePoster extends View<null, Props, State> {
 			},
 			h2: {
 				marginTop: 5,
-				fontSize: isHeaderLong ? deviceWidth * 0.043333333 : deviceWidth * 0.053333333,
+				fontSize: (isHeaderLong || isHeaderTwoLong) ? deviceWidth * 0.03999999 : deviceWidth * 0.053333333,
 			},
 			roundedInfoButtonContainer: {
 				position: 'absolute',
