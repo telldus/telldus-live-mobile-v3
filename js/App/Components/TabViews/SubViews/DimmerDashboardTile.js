@@ -30,9 +30,10 @@ import { View } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
-import HorizontalSlider from './HorizontalSlider';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
+import HVSliderContainer from './Device/HVSliderContainer';
+import SliderScale from './Device/SliderScale';
 
 import { getLabelDevice } from '../../../Lib';
 import {
@@ -203,43 +204,65 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	render(): Object {
 		const { item, tileWidth, intl, isGatewayActive, powerConsumed, screenReaderEnabled } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
-		const { TURNON, TURNOFF, DIM } = supportedMethods;
+		const { DIM } = supportedMethods;
 
 		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 
-		const onButton = <DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={!!TURNON}
-			style={[styles.turnOn, {marginLeft: (tileWidth / 3) - 2}]} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
-			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>;
-		const offButton = <DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={!!TURNOFF}
-			style={styles.turnOff} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
-			intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOff}/>;
+		const sliderProps = {
+			thumbWidth: 7,
+			thumbHeight: 7,
+			fontSize: 8,
+			item: item,
+			value: toSliderValue(this.state.value),
+			setScrollEnabled: this.props.setScrollEnabled,
+			onSlidingStart: this.onSlidingStart,
+			onSlidingComplete: this.onSlidingComplete,
+			onValueChange: this.onValueChange,
+			onLeftStart: this.onTurnOffButtonStart,
+			onLeftEnd: this.onTurnOffButtonEnd,
+			onRightStart: this.onTurnOnButtonStart,
+			onRightEnd: this.onTurnOnButtonEnd,
+			intl: intl,
+			isInState: isInState,
+			isGatewayActive: isGatewayActive,
+			screenReaderEnabled: screenReaderEnabled,
+			showDimmerStep: this.showDimmerStep,
+		};
+
+		// TODO: refactor writing a higher order component
+		const onButton =
+		<HVSliderContainer
+			{...sliderProps}
+			onPress={this.onTurnOn}
+			style={[styles.turnOn]}>
+			<DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={false}
+				style={[styles.turnOn]} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+				intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>
+		</HVSliderContainer>;
+
+		const offButton =
+		<HVSliderContainer
+			{...sliderProps}
+			style={styles.turnOff}
+			onPress={this.onTurnOff}>
+			<DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={false}
+				style={styles.turnOff} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
+				intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOff}/>
+		</HVSliderContainer>;
+
 		const slider = DIM ?
-			<HorizontalSlider
-				style={[styles.slider, {
-					width: tileWidth / 3,
-					height: tileWidth * 0.4,
-					bottom: 0,
-					left: tileWidth / 3,
-				}]}
-				thumbWidth={7}
-				thumbHeight={7}
-				fontSize={8}
-				item={item}
-				value={toSliderValue(this.state.value)}
-				setScrollEnabled={this.props.setScrollEnabled}
-				onSlidingStart={this.onSlidingStart}
-				onSlidingComplete={this.onSlidingComplete}
-				onValueChange={this.onValueChange}
-				onLeftStart={this.onTurnOffButtonStart}
-				onLeftEnd={this.onTurnOffButtonEnd}
-				onRightStart={this.onTurnOnButtonStart}
-				onRightEnd={this.onTurnOnButtonEnd}
-				intl={intl}
-				isInState={isInState}
-				isGatewayActive={isGatewayActive}
-				screenReaderEnabled={screenReaderEnabled}
-				showDimmerStep={this.showDimmerStep}
-			/> :
+			<HVSliderContainer
+				{...sliderProps}
+				style={styles.sliderContainer}
+				onPress={this.onTurnOff}>
+				<SliderScale
+					style={styles.slider}
+					thumbWidth={7}
+					thumbHeight={7}
+					fontSize={8}
+					isGatewayActive={isGatewayActive}/>
+			</HVSliderContainer>
+			:
 			null;
 
 		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
@@ -276,8 +299,8 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 					justifyContent: 'center',
 				}} onLayout={this.layoutView}>
 					{ offButton }
-					{ onButton }
 					{ slider }
+					{ onButton }
 				</View>
 			</DashboardShadowTile>
 		);
@@ -289,14 +312,18 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 	},
-	slider: {
-		position: 'absolute',
+	sliderContainer: {
+		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'flex-start',
+		alignItems: 'stretch',
 		borderRightWidth: 1,
 		borderRightColor: '#ddd',
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
+	},
+	slider: {
+		justifyContent: 'center',
+		alignItems: 'flex-start',
 	},
 	turnOff: {
 		flex: 1,
