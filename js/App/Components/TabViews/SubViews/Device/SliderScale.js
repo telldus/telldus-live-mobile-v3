@@ -117,7 +117,7 @@ class SliderScale extends View {
 		let thumbStyle = !isGatewayActive ? styles.offline : styles.enabled;
 		let scaleStyle = !isGatewayActive ? styles.offline : styles.enabled;
 		let valueColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
-		let bottomValue = (containerHeight / 2) - 15;
+		let bottomValue = (containerHeight / 2) - (thumbHeight * 2);
 
 		return (
 			<View style={[{flex: 1, justifyContent: 'center'}, style]}>
