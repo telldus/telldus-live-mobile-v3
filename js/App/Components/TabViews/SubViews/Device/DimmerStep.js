@@ -31,7 +31,7 @@ import Step from './Step';
 import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
 
 import Theme from '../../../../Theme';
-
+import i18n from '../../../../Translations/common';
 import {
 	toDimmerValue,
 } from '../../../../Lib';
@@ -70,6 +70,11 @@ constructor(props: Props) {
 
 	this.onPressDone = this.onPressDone.bind(this);
 	this.onPressDim = this.onPressDim.bind(this);
+
+	let { formatMessage } = this.props.intl;
+	this.labelClose = formatMessage(i18n.labelClose).toUpperCase();
+	this.labelButton = formatMessage(i18n.button);
+	this.defaultDescriptionButton = formatMessage(i18n.defaultDescriptionButton);
 }
 
 onPressDone() {
@@ -89,6 +94,7 @@ onPressDim(value: number) {
 render(): Object {
 	let { showModal, intl } = this.props;
 	let importantForAccessibility = showModal ? 'yes' : 'no';
+	let accessibilityLabel = `${this.labelClose} ${this.labelButton}. ${this.defaultDescriptionButton}`;
 
 	return (
 		<Modal
@@ -110,9 +116,9 @@ render(): Object {
 						})
 					}
 				</View>
-				<TouchableOpacity onPress={this.onPressDone} style={styles.buttonCover} importantForAccessibility={importantForAccessibility}>
+				<TouchableOpacity onPress={this.onPressDone} style={styles.buttonCover} accessibilityLabel={accessibilityLabel} importantForAccessibility={importantForAccessibility}>
 					<Text style={styles.textCancel}>
-						CLOSE
+						{this.labelClose}
 					</Text>
 				</TouchableOpacity>
 			</View>
