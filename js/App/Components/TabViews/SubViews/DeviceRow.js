@@ -457,7 +457,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				overflow: 'hidden',
 				justifyContent: 'space-between',
 				paddingLeft: 5,
-				alignItems: 'center',
+				alignItems: 'stretch',
 				flexDirection: 'row',
 				borderRadius: 2,
 			},
