@@ -43,12 +43,6 @@ type Props = {
 	onSlidingStart: (string, number) => void,
 	onSlidingComplete: number => void,
 	onValueChange: number => void,
-	onLeftStart: () => void,
-	onLeftEnd: () => void,
-	onLeft: () => void,
-	onRightStart: () => void,
-	onRightEnd: () => void,
-	onRight: () => void,
 	onPress: () => void;
 	item: Object,
 	fontSize: number,
@@ -143,20 +137,10 @@ class HVSliderContainer extends View {
 
 	handlePanResponderGrant = (e: Object, gestureState: Object) => {
 		this.longPressTimeout = setTimeout(this.startSliding, 500);
-
-		if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
-			this.props.onLeftStart();
-			this.pressOnLeft = true;
-			this.pressOnRight = false;
-		} else {
-			this.props.onRightStart();
-			this.pressOnLeft = false;
-			this.pressOnRight = true;
-		}
 	};
 
 	startSliding = () => {
-		const { item, onLeftEnd, onRightEnd, onSlidingStart } = this.props;
+		const { item, onSlidingStart } = this.props;
 		this.previousLeft = this.getThumbLeft(this.state.value.__getValue());
 		this.previousBottom = this.getThumbBottom(this.state.value.__getValue());
 
@@ -169,9 +153,6 @@ class HVSliderContainer extends View {
 			this.parentScrollEnabled = false;
 			this.props.setScrollEnabled && this.props.setScrollEnabled(false);
 		}
-		onLeftEnd();
-		onRightEnd();
-		this.pressOnLeft = this.pressOnRight = false;
 
 		if (Platform.OS === 'android') {
 			Vibration.vibrate([0, 25]);
@@ -212,9 +193,6 @@ class HVSliderContainer extends View {
 		} else if (!this.hasMoved) {
 			this.props.onPress();
 		}
-		this.pressOnLeft = this.pressOnRight = false;
-		this.props.onLeftEnd();
-		this.props.onRightEnd();
 		this.activeSlider = false;
 		this.hasMoved = false;
 		clearTimeout(this.longPressTimeout);
@@ -225,12 +203,6 @@ class HVSliderContainer extends View {
 	}
 
 	handlePanResponderTerminate = (e: Object, gestureState: Object) => {
-		if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
-			this.props.onLeftEnd();
-		} else {
-			this.props.onRightEnd();
-		}
-
 		this.activeSlider = false;
 		clearTimeout(this.longPressTimeout);
 	};

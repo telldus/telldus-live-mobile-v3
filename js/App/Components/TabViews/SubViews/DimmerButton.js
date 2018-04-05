@@ -201,16 +201,13 @@ class DimmerButton extends View {
 			onSlidingStart: this.onSlidingStart,
 			onSlidingComplete: this.onSlidingComplete,
 			onValueChange: this.onValueChange,
-			onLeftStart: this.onTurnOffButtonStart,
-			onLeftEnd: this.onTurnOffButtonEnd,
-			onRightStart: this.onTurnOnButtonStart,
-			onRightEnd: this.onTurnOnButtonEnd,
 			intl: intl,
 			isInState: isInState,
 			isGatewayActive: isGatewayActive,
 			screenReaderEnabled: screenReaderEnabled,
 			showDimmerStep: this.showDimmerStep,
 		};
+		// TODO: refactor writing a higher order component
 		const onButton = (
 			<HVSliderContainer
 				{...sliderProps}
