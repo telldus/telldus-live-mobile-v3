@@ -98,7 +98,7 @@ render(): Object {
 				<View style={styles.body} onLayout={this.onLayoutBody}>
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
-							let newStyle = {}, { newButtonStyle } = styles;
+							let newStyle = {}, newProps = {}, { newButtonStyle } = styles;
 							if (child.key === '4') {
 								newStyle = {
 									bellButtonStyle: newButtonStyle,
@@ -116,6 +116,9 @@ render(): Object {
 									offButtonStyle: newButtonStyle,
 									sliderStyle: newButtonStyle,
 								};
+								newProps = {
+									showSlider: true,
+								};
 							}
 							if (child.key === '1') {
 								newStyle = {
@@ -126,7 +129,7 @@ render(): Object {
 							}
 							return (
 								<View style={{ marginTop: 10 }}>
-									{React.cloneElement(child, {...newStyle})}
+									{React.cloneElement(child, {...newStyle, ...newProps})}
 								</View>
 							);
 						}

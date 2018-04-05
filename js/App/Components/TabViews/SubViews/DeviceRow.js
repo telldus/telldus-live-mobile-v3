@@ -306,6 +306,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				device={device}
 				setScrollEnabled={this.props.setScrollEnabled}
 				intl={intl}
+				showSlider={!TURNON && !TURNOFF && !BELL && !UP && !DOWN && !STOP}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
 				onSlideActive={this.onSlideActive}

@@ -62,6 +62,7 @@ type Props = {
 	onButtonStyle: Object | number,
 	offButtonStyle: Object | number,
 	sliderStyle: Object | number,
+	showSlider?: boolean,
 };
 
 type State = {
@@ -70,6 +71,13 @@ type State = {
 	value: number,
 	offButtonFadeAnim: Object,
 	onButtonFadeAnim: Object,
+};
+
+type DefaultProps = {
+	showSlider: boolean,
+	commandON: number,
+	commandOFF: number,
+	commandDIM: number,
 };
 
 class DimmerButton extends View {
@@ -88,6 +96,13 @@ class DimmerButton extends View {
 	onValueChange: number => void;
 	onTurnOffButtonEnd: () => void;
 	showDimmerStep: (number) => void;
+
+	static defaultProps: DefaultProps = {
+		showSlider: true,
+		commandON: 1,
+		commandOFF: 2,
+		commandDIM: 16,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -187,7 +202,7 @@ class DimmerButton extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, screenReaderEnabled, onButtonStyle, offButtonStyle, sliderStyle } = this.props;
+		const { device, intl, isGatewayActive, screenReaderEnabled, onButtonStyle, offButtonStyle, sliderStyle, showSlider } = this.props;
 		const { isInState, name, supportedMethods, methodRequested } = device;
 		const { DIM } = supportedMethods;
 
@@ -261,18 +276,12 @@ class DimmerButton extends View {
 		return (
 			<View style={styles.container}>
 				{ offButton }
-				{ slider }
+				{!!showSlider && slider }
 				{ onButton }
 			</View>
 		);
 	}
 }
-
-DimmerButton.defaultProps = {
-	commandON: 1,
-	commandOFF: 2,
-	commandDIM: 16,
-};
 
 const styles = StyleSheet.create({
 	container: {
