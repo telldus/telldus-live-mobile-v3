@@ -57,7 +57,7 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 
 		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 
-		const upButton = UP ? <UpButton isEnabled={true} style={styles.navigationButton}
+		const upButton = UP ? <UpButton isEnabled={true} style={[styles.navigationButton, {borderLeftWidth: 0}]}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id} name={name}/> : null;
 		const downButton = DOWN ? <DownButton isEnabled={true} style={styles.navigationButton}
@@ -115,6 +115,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+		borderLeftWidth: 1,
+		borderLeftColor: '#ddd',
 	},
 	itemIconContainerOn: {
 		backgroundColor: Theme.Core.brandSecondary,
