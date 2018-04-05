@@ -351,13 +351,13 @@ class JobRow extends View<null, Props, null> {
 				fontSize: deviceWidth * 0.044,
 			},
 			rowContainer: {
-				width: width * 0.573999993,
+				width: width * 0.57,
 			},
 			roundIconContainer: {
 				marginLeft: isPortrait ? 0 : width * 0.01788,
 			},
 			rowWithTriangleContainer: {
-				width: width * 0.58666666,
+				width: width * 0.59,
 				justifyContent: 'center',
 			},
 		};
