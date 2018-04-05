@@ -126,6 +126,9 @@ render(): Object {
 									downButtonStyle: newButtonStyle,
 									stopButtonStyle: newButtonStyle,
 								};
+								newProps = {
+									showStopButton: true,
+								};
 							}
 							return (
 								<View style={{ marginTop: 10 }}>

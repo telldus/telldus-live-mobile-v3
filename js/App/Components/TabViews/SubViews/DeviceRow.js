@@ -277,18 +277,6 @@ class DeviceRow extends PureComponent<Props, State> {
 			STOP,
 		} = device.supportedMethods;
 
-		if (UP || DOWN || STOP) {
-			button.unshift( <NavigationalButton
-				device={device}
-				style={styles.navigation}
-				intl={intl}
-				isGatewayActive={isGatewayActive}
-				appLayout={appLayout}
-				key={1}
-			/>
-			);
-			icon = 'curtain';
-		}
 		if (BELL) {
 			button.unshift( <BellButton
 				device={device}
@@ -301,12 +289,25 @@ class DeviceRow extends PureComponent<Props, State> {
 			);
 			icon = 'bell';
 		}
+		if (UP || DOWN || STOP) {
+			button.unshift( <NavigationalButton
+				device={device}
+				style={styles.navigation}
+				intl={intl}
+				showStopButton={!TURNON && !TURNOFF && !BELL && !DIM}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
+				key={1}
+			/>
+			);
+			icon = 'curtain';
+		}
 		if (DIM) {
 			button.unshift( <DimmerButton
 				device={device}
 				setScrollEnabled={this.props.setScrollEnabled}
 				intl={intl}
-				showSlider={!TURNON && !TURNOFF && !BELL && !UP && !DOWN && !STOP}
+				showSlider={!BELL && !UP && !DOWN && !STOP}
 				isGatewayActive={isGatewayActive}
 				appLayout={appLayout}
 				onSlideActive={this.onSlideActive}

@@ -40,10 +40,19 @@ type Props = {
 	upButtonStyle?: Object | number,
 	downButtonStyle?: Object | number,
 	stopButtonStyle?: Object | number,
+	showStopButton?: boolean,
+};
+
+type DefaultProps = {
+	showStopButton: boolean,
 };
 
 class NavigationalButton extends View {
 	props: Props;
+
+	static defaultProps: DefaultProps = {
+		showStopButton: true,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -51,7 +60,7 @@ class NavigationalButton extends View {
 
 	render(): Object {
 
-		let { device, isGatewayActive, intl, style, upButtonStyle, downButtonStyle, stopButtonStyle } = this.props;
+		let { device, isGatewayActive, intl, style, upButtonStyle, downButtonStyle, stopButtonStyle, showStopButton } = this.props;
 		const { supportedMethods, methodRequested, isInState, id, name } = device;
 		const { UP, DOWN, STOP } = supportedMethods;
 
@@ -63,9 +72,10 @@ class NavigationalButton extends View {
 				<DownButton supportedMethod={DOWN} methodRequested={methodRequested} intl={intl}
 					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
 					id={id} style={[styles.navigationButton, downButtonStyle]} name={name}/>
-				<StopButton supportedMethod={STOP} methodRequested={methodRequested} intl={intl}
+				{!!showStopButton && (<StopButton supportedMethod={STOP} methodRequested={methodRequested} intl={intl}
 					iconSize={20} isGatewayActive={isGatewayActive} isInState={isInState}
 					id={id} style={[styles.navigationButton, stopButtonStyle]} name={name}/>
+				)}
 			</View>
 		);
 	}
