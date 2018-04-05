@@ -31,7 +31,7 @@ jest:
     - npm install --quiet
     - npm test
 
-android:
+android: &android-ubuntu
   image: telldus/react-native-android:27
   stage: build
   cache:
@@ -52,6 +52,11 @@ android:
     - /^v\d+\.\d+.*$/ # Version branches
   tags:
     - android
+
+android-alpine:
+  <<: *android-ubuntu
+  image: telldus/react-native-android:27-alpine
+  allow_failure: true
 
 ios:
   stage: build
