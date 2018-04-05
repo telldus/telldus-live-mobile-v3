@@ -57,7 +57,7 @@
     "accessibilityLabel.sensors.labelTimeAgo": "uppdaterad",
     "accessibilityLabel.sensors.labelUVIndex": "UV-index",
     "accessibilityLabel.sensors.labelWatt": "Effekt",
-    "accessibilityLabel.sensors.labelWindAverage": "Vindmedelvärde",
+    "accessibilityLabel.sensors.labelWindAverage": "Vindmedel",
     "accessibilityLabel.sensors.labelWindDirection": "Vindriktning",
     "accessibilityLabel.sensors.labelWindGust": "Vindby",
     "accessibilityLabel.sensors.powerFactor": "Power Factor",
