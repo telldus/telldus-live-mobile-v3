@@ -190,7 +190,7 @@ class HVSliderContainer extends View {
 			if (this.props.onSlidingComplete) {
 				this.props.onSlidingComplete(this.state.value.__getValue());
 			}
-		} else if (!this.hasMoved) {
+		} else if (!this.hasMoved && this.props.onPress) {
 			this.props.onPress();
 		}
 		this.activeSlider = false;

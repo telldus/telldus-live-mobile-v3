@@ -249,8 +249,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const slider = DIM ?
 			<HVSliderContainer
 				{...sliderProps}
-				style={styles.sliderContainer}
-				onPress={this.onTurnOff}>
+				style={styles.sliderContainer}>
 				<SliderScale
 					style={styles.slider}
 					thumbWidth={7}
