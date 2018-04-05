@@ -39,7 +39,7 @@ android: &android-ubuntu
       - node_modules
   artifacts:
     paths:
-      - android/app/build/outputs/apk/app-release.apk
+      - android/app/build/outputs/apk/release/app-release.apk
       - android/sourcemap.js
     expire_in: '1 mos'
   script:

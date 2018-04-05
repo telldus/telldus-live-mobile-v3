@@ -15,6 +15,6 @@ RUN /opt/android-sdk-linux/tools/bin/sdkmanager "platforms;android-26" "build-to
 
 RUN /opt/android-sdk-linux/tools/bin/sdkmanager "platforms;android-27" "build-tools;27.0.3"
 
-RUN apk add --no-cache bash nodejs yarn
+RUN apk add --no-cache bash nodejs openssh-client yarn
 RUN npm install react-native-cli -g
 RUN npm install rnpm -g
