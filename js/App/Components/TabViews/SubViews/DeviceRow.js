@@ -289,6 +289,18 @@ class DeviceRow extends PureComponent<Props, State> {
 			);
 			icon = 'curtain';
 		}
+		if (BELL) {
+			button.unshift( <BellButton
+				device={device}
+				style={styles.bell}
+				intl={intl}
+				isGatewayActive={isGatewayActive}
+				appLayout={appLayout}
+				key={4}
+			/>
+			);
+			icon = 'bell';
+		}
 		if (DIM) {
 			button.unshift( <DimmerButton
 				device={device}
@@ -315,18 +327,6 @@ class DeviceRow extends PureComponent<Props, State> {
 			);
 			icon = 'device-alt';
 		}
-		if (BELL) {
-			button.unshift( <BellButton
-				device={device}
-				style={styles.bell}
-				intl={intl}
-				isGatewayActive={isGatewayActive}
-				appLayout={appLayout}
-				key={4}
-			/>
-			);
-			icon = 'bell';
-		}
 		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
 			button.unshift( <ToggleButton
 				device={device}
@@ -339,6 +339,7 @@ class DeviceRow extends PureComponent<Props, State> {
 			);
 			icon = 'device-alt';
 		}
+
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
 		let accessibilityLabel = isOpen ? `${getLabelDevice(intl.formatMessage, device)}. ${this.helpCloseHiddenRow}` :
 			`${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
