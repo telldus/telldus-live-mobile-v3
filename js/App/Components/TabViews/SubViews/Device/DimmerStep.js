@@ -24,8 +24,9 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import Modal from 'react-native-modal';
 
-import { View, Modal, Text, StyleSheet } from '../../../../../BaseComponents';
+import { View, Text, StyleSheet } from '../../../../../BaseComponents';
 import Step from './Step';
 
 import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
@@ -98,14 +99,8 @@ render(): Object {
 
 	return (
 		<Modal
-			showModal={showModal}
-			entry= {'ZoomIn'}
-			exit= {'ZoomOut'}
-			entryDuration={300}
-			exitDuration={100}
-			modalStyle={styles.modal}
-			modalContainerStyle={styles.modal}
-			showOverlay={false}>
+			isVisible={showModal}
+			backdropOpacity={0.60}>
 			<View style={styles.container}>
 				<View style={styles.stepCover}>
 					{
@@ -116,7 +111,7 @@ render(): Object {
 						})
 					}
 				</View>
-				<TouchableOpacity onPress={this.onPressDone} style={styles.buttonCover} accessibilityLabel={accessibilityLabel} importantForAccessibility={importantForAccessibility}>
+				<TouchableOpacity onPress={this.onPressDone} accessibilityLabel={accessibilityLabel} importantForAccessibility={importantForAccessibility}>
 					<Text style={styles.textCancel}>
 						{this.labelClose}
 					</Text>
@@ -128,17 +123,6 @@ render(): Object {
 }
 
 const styles = StyleSheet.create({
-	modal: {
-		flex: 1,
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		alignItems: 'center',
-		justifyContent: 'center',
-		backgroundColor: '#C3D1E640',
-		paddingHorizontal: 10,
-	},
 	container: {
 		backgroundColor: '#fff',
 		alignItems: 'center',
@@ -157,8 +141,6 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		paddingHorizontal: 10,
 		paddingVertical: 10,
-	},
-	buttonCover: {
 	},
 });
 
