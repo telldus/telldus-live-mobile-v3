@@ -28,7 +28,6 @@ import { intlShape, injectIntl } from 'react-intl';
 import { View } from '../../../../../BaseComponents';
 
 import Theme from '../../../../Theme';
-import i18n from '../../../../Translations/common';
 
 function getSliderLabel(value: number, intl: intlShape): string {
 	return value.toString();
@@ -78,9 +77,6 @@ class HVSliderContainer extends View {
 	layoutView: Object => void;
 	onPressDimmer: () => void;
 
-	labelPhraseOne: string;
-	labelPhraseTwo: string;
-
 	constructor(props: Props) {
 		super(props);
 		this.parentScrollEnabled = true;
@@ -101,10 +97,6 @@ class HVSliderContainer extends View {
 
 		this.layoutView = this.layoutView.bind(this);
 		this.onPressDimmer = this.onPressDimmer.bind(this);
-
-		let { formatMessage } = this.props.intl;
-		this.labelPhraseOne = formatMessage(i18n.dimLevel);
-		this.labelPhraseTwo = formatMessage(i18n.messageControlDimStep);
 	}
 
 	componentWillMount() {

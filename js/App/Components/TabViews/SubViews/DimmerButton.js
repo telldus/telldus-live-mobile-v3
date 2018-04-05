@@ -39,6 +39,7 @@ import {
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	device: Object,
@@ -205,6 +206,7 @@ class DimmerButton extends View {
 		const { device, intl, isGatewayActive, screenReaderEnabled, onButtonStyle, offButtonStyle, sliderStyle, showSlider } = this.props;
 		const { isInState, name, supportedMethods, methodRequested } = device;
 		const { DIM } = supportedMethods;
+		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
 		const sliderProps = {
 			thumbWidth: 10,
@@ -233,7 +235,7 @@ class DimmerButton extends View {
 					style={[styles.turnOn]}
 					isInState={isInState}
 					onPress={this.onTurnOn}
-					name={name}
+					name={deviceName}
 					enabled={false}
 					methodRequested={methodRequested}
 					intl={intl}
@@ -251,7 +253,7 @@ class DimmerButton extends View {
 					style={[styles.turnOff]}
 					isInState={isInState}
 					onPress={this.onTurnOff}
-					name={name}
+					name={deviceName}
 					enabled={false}
 					methodRequested={methodRequested}
 					intl={intl}
@@ -269,7 +271,9 @@ class DimmerButton extends View {
 					thumbWidth={10}
 					thumbHeight={10}
 					fontSize={9}
-					isGatewayActive={isGatewayActive}/>
+					isGatewayActive={isGatewayActive}
+					name={deviceName}
+					importantForAccessibility={'yes'}/>
 			</HVSliderContainer>
 		) : null;
 

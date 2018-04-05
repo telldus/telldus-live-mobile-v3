@@ -55,6 +55,8 @@ type Props = {
 	containerWidth: number,
 	containerHeight: number,
 	displayedValue: string,
+	importantForAccessibility?: string,
+	name?: string,
 };
 
 type State = {
@@ -108,7 +110,8 @@ class SliderScale extends View {
 
 	render(): Object {
 		const { minimumValue, maximumValue, scaleWidth } = this.state;
-		const { thumbWidth, thumbHeight, isGatewayActive, containerHeight, containerWidth, displayedValue, style, value } = this.props;
+		const { thumbWidth, thumbHeight, isGatewayActive, containerHeight, containerWidth, displayedValue,
+			style, value, importantForAccessibility, name = '' } = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
@@ -119,8 +122,12 @@ class SliderScale extends View {
 		let valueColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
 		let bottomValue = (containerHeight / 2) - (thumbHeight * 2);
 
+		let accessibilityLabel = `${this.labelPhraseOne} ${displayedValue}%, ${name}. ${this.labelPhraseTwo}`;
+
 		return (
-			<View style={[{flex: 1, justifyContent: 'center'}, style]}>
+			<View style={[{flex: 1, justifyContent: 'center'}, style]}
+				accessibilityLabel={accessibilityLabel}
+				importantForAccessibility={importantForAccessibility}>
 				<View style={[styles.sliderScale, scaleStyle, {
 					height: thumbHeight / 3,
 					width: (containerWidth - (2 * thumbWidth)),

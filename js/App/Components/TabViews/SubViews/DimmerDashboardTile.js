@@ -35,15 +35,16 @@ import DimmerOnButton from './DimmerOnButton';
 import HVSliderContainer from './Device/HVSliderContainer';
 import SliderScale from './Device/SliderScale';
 
-import { getLabelDevice } from '../../../Lib';
 import {
 	getDimmerValue,
 	toDimmerValue,
 	toSliderValue,
 	getPowerConsumed,
+	getLabelDevice,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	item: Object,
@@ -205,6 +206,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const { item, tileWidth, intl, isGatewayActive, powerConsumed, screenReaderEnabled } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { DIM } = supportedMethods;
+		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
 		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 
@@ -231,7 +233,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 			{...sliderProps}
 			onPress={this.onTurnOn}
 			style={[styles.turnOn]}>
-			<DimmerOnButton ref={'onButton'} name={name} isInState={isInState} enabled={false}
+			<DimmerOnButton ref={'onButton'} name={deviceName} isInState={isInState} enabled={false}
 				style={[styles.turnOn]} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
 				intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>
 		</HVSliderContainer>;
@@ -241,7 +243,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 			{...sliderProps}
 			style={styles.turnOff}
 			onPress={this.onTurnOff}>
-			<DimmerOffButton ref={'offButton'} name={name} isInState={isInState} enabled={false}
+			<DimmerOffButton ref={'offButton'} name={deviceName} isInState={isInState} enabled={false}
 				style={styles.turnOff} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
 				intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOff}/>
 		</HVSliderContainer>;
@@ -255,7 +257,9 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 					thumbWidth={7}
 					thumbHeight={7}
 					fontSize={8}
-					isGatewayActive={isGatewayActive}/>
+					isGatewayActive={isGatewayActive}
+					name={deviceName}
+					importantForAccessibility={'yes'}/>
 			</HVSliderContainer>
 			:
 			null;
