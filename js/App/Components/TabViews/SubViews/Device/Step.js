@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 5,
 	},
 	value: {
+		color: '#fff',
 		fontSize: 15,
 		marginVertical: 10,
 		marginHorizontal: 10,
