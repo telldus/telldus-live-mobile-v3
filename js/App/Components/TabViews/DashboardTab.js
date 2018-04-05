@@ -98,6 +98,7 @@ type State = {
 	settings: boolean,
 	numColumns: number,
 	isRefreshing: boolean,
+	scrollEnabled: boolean,
 };
 
 const tileMargin = 2;
@@ -136,6 +137,7 @@ class DashboardTab extends View {
 			settings: false,
 			numColumns,
 			isRefreshing: false,
+			scrollEnabled: true,
 		};
 
 		this.tab = 'Dashboard';
@@ -174,9 +176,9 @@ class DashboardTab extends View {
 	}
 
 	setScrollEnabled(enable: boolean) {
-		if (this.refs.list && this.refs.list.setScrollEnabled) {
-			this.refs.list.setScrollEnabled(enable);
-		}
+		this.setState({
+			scrollEnabled: enable,
+		});
 	}
 
 	onRefresh() {
@@ -267,7 +269,7 @@ class DashboardTab extends View {
 
 	render(): Object {
 		let { appLayout, dashboard } = this.props;
-		let { dataSource, isRefreshing, numColumns, tileWidth } = this.state;
+		let { dataSource, isRefreshing, numColumns, tileWidth, scrollEnabled } = this.state;
 
 		let style = this.getStyles(appLayout);
 
@@ -292,6 +294,7 @@ class DashboardTab extends View {
 					extraData={extraData}
 					key={numColumns}
 					style={{width: '100%'}}
+					scrollEnabled={scrollEnabled}
 				/>
 			</View>
 		);
