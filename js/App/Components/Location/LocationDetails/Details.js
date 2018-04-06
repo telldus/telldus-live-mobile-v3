@@ -77,6 +77,8 @@ class Details extends View {
 
 		this.confirmMessage = formatMessage(commonMessages.confirmDelete);
 
+		this.labelDelete = formatMessage(i18n.delete);
+
 		this.onEditName = this.onEditName.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
 		this.onEditGeoPosition = this.onEditGeoPosition.bind(this);
@@ -189,7 +191,7 @@ class Details extends View {
 					</Text>
 					<Icon name="angle-right" size={40} color="#A59F9A90"/>
 				</TouchableOpacity>
-				<TouchableButton text={'delete'} style={styles.button} onPress={this.onPressRemoveLocation}/>
+				<TouchableButton text={this.labelDelete} style={styles.button} onPress={this.onPressRemoveLocation}/>
 			</View>
 		);
 	}
