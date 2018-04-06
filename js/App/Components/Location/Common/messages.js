@@ -83,13 +83,13 @@ export const messages = defineMessages({
 		id: 'location.software',
 		defaultMessage: 'Software',
 	},
-	lat: {
-		id: 'location.lat',
-		defaultMessage: 'lat',
+	latitude: {
+		id: 'location.latitude',
+		defaultMessage: 'Latitude',
 	},
-	long: {
-		id: 'location.long',
-		defaultMessage: 'long',
+	longitude: {
+		id: 'location.longitude',
+		defaultMessage: 'Longitude',
 	},
 	autodetect: {
 		id: 'location.autodetect',
