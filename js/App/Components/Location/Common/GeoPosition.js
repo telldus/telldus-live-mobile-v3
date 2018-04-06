@@ -46,19 +46,37 @@ type Props = {
 	currentScreen: string,
 	onSubmit: (number, number) => void;
 	isLoading: boolean,
-	region?: Object,
+	region?: {
+		latitude: number,
+		longitude: number,
+		latitudeDelta: number,
+		longitudeDelta: number,
+	},
+	latitude?: number,
+	longitude?: number,
+	latitudeDelta?: number,
+	longitudeDelta?: number,
 };
 
 type State = {
 	region: Object,
 	address: string,
 	coordinate: Object,
-	latitudeDelta: number,
-	longitudeDelta: number,
+	latitudeDelta?: number,
+	longitudeDelta?: number,
 };
 
 type DefaultProps = {
-	region: Object,
+	region: {
+		latitude: number,
+		longitude: number,
+		latitudeDelta: number,
+		longitudeDelta: number,
+	},
+	latitude: number,
+	longitude: number,
+	latitudeDelta: number,
+	longitudeDelta: number,
 };
 
 class GeoPosition extends View {
@@ -82,12 +100,16 @@ class GeoPosition extends View {
 			latitudeDelta: 0.24442,
 			longitudeDelta: 0.24442,
 		},
+		latitude: 55.70584,
+		longitude: 13.19321,
+		latitudeDelta: 0.24442,
+		longitudeDelta: 0.24442,
 	}
 
 	constructor(props: Props) {
 		super(props);
 		const { region } = props;
-		const {latitude, longitude, latitudeDelta, longitudeDelta} = region;
+		const {latitude, longitude, latitudeDelta, longitudeDelta} = props;
 		this.state = {
 			address: '',
 			isKeyboardShown: false,
