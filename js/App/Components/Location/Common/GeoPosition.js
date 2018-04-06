@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, Keyboard } from 'react-native';
+import { TextInput, Keyboard, InteractionManager } from 'react-native';
 import { intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
 import { isIphoneX } from 'react-native-iphone-x-helper';
@@ -174,11 +174,13 @@ class GeoPosition extends View {
 						latitude,
 						longitude,
 					};
-					this.setState({
-						region,
-						coordinate,
-						latitudeDelta,
-						longitudeDelta,
+					InteractionManager.runAfterInteractions(() => {
+						this.setState({
+							region,
+							coordinate,
+							latitudeDelta,
+							longitudeDelta,
+						});
 					});
 				}
 			}).catch((error: Object) => {
