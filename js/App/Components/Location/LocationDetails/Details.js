@@ -70,8 +70,8 @@ class Details extends View {
 		this.labelName = formatMessage(i18n.name);
 		this.labelTimeZone = formatMessage(commonMessages.headerOneTimeZoneCity);
 		this.labelGeoPosition = formatMessage(commonMessages.geoPosition);
-		this.labelLat = formatMessage(commonMessages.lat);
-		this.labelLong = formatMessage(commonMessages.long);
+		this.labelLat = formatMessage(commonMessages.latitude);
+		this.labelLong = formatMessage(commonMessages.longitude);
 		this.labelIP = formatMessage(commonMessages.ip).toUpperCase();
 		this.labelSoftware = formatMessage(commonMessages.software);
 
@@ -185,11 +185,16 @@ class Details extends View {
 					<Text style={[styles.textLabel, {width: labelWidth}]}>
 						{this.labelGeoPosition}
 					</Text>
-					<Text style={[styles.textValue, {width: valueWidth}]}>{`${this.labelLat}: `}
-						<FormattedNumber value={latitude} maximumFractionDigits={3} style={styles.textValue}/>
-						{` ${this.labelLong}: `}
-						<FormattedNumber value={longitude} maximumFractionDigits={3} style={styles.textValue}/>
-					</Text>
+					<View style={{ flexDirection: 'column', justifyContent: 'center' }}>
+						<Text style={[styles.textValue, {width: valueWidth}]}>
+							{`${this.labelLat}: `}
+							<FormattedNumber value={latitude} maximumFractionDigits={3} style={styles.textValue}/>
+						</Text>
+						<Text style={[styles.textValue, {width: valueWidth}]}>
+							{` ${this.labelLong}: `}
+							<FormattedNumber value={longitude} maximumFractionDigits={3} style={styles.textValue}/>
+						</Text>
+					</View>
 					<Icon name="angle-right" size={40} color="#A59F9A90"/>
 				</TouchableOpacity>
 				<TouchableButton text={this.labelDelete} style={styles.button} onPress={this.onPressRemoveLocation}/>
