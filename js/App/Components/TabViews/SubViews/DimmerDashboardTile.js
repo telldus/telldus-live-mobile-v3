@@ -27,7 +27,6 @@ import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
 
 import { View } from '../../../../BaseComponents';
-import DashboardShadowTile from './DashboardShadowTile';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import DimmerOffButton from './DimmerOffButton';
@@ -39,8 +38,6 @@ import {
 	getDimmerValue,
 	toDimmerValue,
 	toSliderValue,
-	getPowerConsumed,
-	getLabelDevice,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -65,6 +62,11 @@ type Props = {
 	powerConsumed: string,
 	screenReaderEnabled: boolean,
 	showDimmerStep: (number) => void;
+	showSlider?: boolean,
+	containerStyle?: number | Object | Array<any>,
+	offButtonStyle?: number | Object | Array<any>,
+	onButtonStyle?: number | Object | Array<any>,
+	sliderStyle?: number | Object | Array<any>,
 };
 
 type State = {
@@ -79,6 +81,7 @@ type DefaultProps = {
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
+	showSlider: boolean,
 };
 
 class DimmerDashboardTile extends PureComponent<Props, State> {
@@ -89,6 +92,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		commandON: 1,
 		commandOFF: 2,
 		commandDIM: 16,
+		showSlider: true,
 	}
 
 	parentScrollEnabled: boolean;
@@ -203,12 +207,11 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, intl, isGatewayActive, powerConsumed, screenReaderEnabled } = this.props;
+		const { item, tileWidth, intl, isGatewayActive, screenReaderEnabled,
+			showSlider, onButtonStyle, offButtonStyle, sliderStyle, containerStyle } = this.props;
 		const { name, isInState, supportedMethods, methodRequested } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
-
-		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 
 		const sliderProps = {
 			thumbWidth: 7,
@@ -231,8 +234,8 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const onButton =
 		<HVSliderContainer
 			{...sliderProps}
-			onPress={this.onTurnOn}
-			style={[styles.turnOn]}>
+			style={[styles.turnOn, onButtonStyle]}
+			onPress={this.onTurnOn}>
 			<DimmerOnButton ref={'onButton'} name={deviceName} isInState={isInState} enabled={false}
 				style={[styles.turnOn]} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
 				intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>
@@ -241,7 +244,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const offButton =
 		<HVSliderContainer
 			{...sliderProps}
-			style={styles.turnOff}
+			style={[styles.turnOff, offButtonStyle]}
 			onPress={this.onTurnOff}>
 			<DimmerOffButton ref={'offButton'} name={deviceName} isInState={isInState} enabled={false}
 				style={styles.turnOff} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
@@ -251,7 +254,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const slider = DIM ?
 			<HVSliderContainer
 				{...sliderProps}
-				style={styles.sliderContainer}>
+				style={[styles.sliderContainer, sliderStyle]}>
 				<SliderScale
 					style={styles.slider}
 					thumbWidth={7}
@@ -264,44 +267,12 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 			:
 			null;
 
-		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
-
-		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
-			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
-
 		return (
-			<DashboardShadowTile
-				isEnabled={isInState === 'TURNON' || isInState === 'DIM'}
-				name={name}
-				info={info}
-				icon={'device-alt'}
-				iconStyle={{
-					color: '#fff',
-					fontSize: tileWidth / 5.2,
-				}}
-				iconContainerStyle={[iconContainerStyle, {
-					width: tileWidth / 4.8,
-					height: tileWidth / 4.8,
-					borderRadius: tileWidth / 9.6,
-					alignItems: 'center',
-					justifyContent: 'center',
-				}]}
-				type={'device'}
-				tileWidth={tileWidth}
-				accessibilityLabel={accessibilityLabel}
-				formatMessage={intl.formatMessage}
-				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
-				<View style={{
-					width: tileWidth,
-					height: tileWidth * 0.4,
-					flexDirection: 'row',
-					justifyContent: 'center',
-				}} onLayout={this.layoutView}>
-					{ offButton }
-					{ slider }
-					{ onButton }
-				</View>
-			</DashboardShadowTile>
+			<View style={containerStyle}>
+				{ offButton }
+				{!!showSlider && slider }
+				{ onButton }
+			</View>
 		);
 	}
 }
@@ -375,9 +346,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
 	return {
-		powerConsumed,
 		screenReaderEnabled: store.App.screenReaderEnabled,
 	};
 }

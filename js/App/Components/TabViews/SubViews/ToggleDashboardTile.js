@@ -23,27 +23,20 @@
 
 import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
 
 import { View } from '../../../../BaseComponents';
-import DashboardShadowTile from './DashboardShadowTile';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
-
-import { getLabelDevice } from '../../../Lib';
-import { getPowerConsumed } from '../../../Lib';
-
-import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
 	style: Object,
 	tileWidth: number,
-	onTurnOff: number => void,
-	onTurnOn: number => void,
 	intl: Object,
 	isGatewayActive: boolean,
-	powerConsumed: string,
+	containerStyle?: number | Object | Array<any>,
+	offButtonStyle?: number | Object | Array<any>,
+	onButtonStyle?: number | Object | Array<any>,
 };
 
 class ToggleDashboardTile extends PureComponent<Props, null> {
@@ -54,62 +47,26 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
+		const { item, tileWidth, intl, isGatewayActive, containerStyle, onButtonStyle, offButtonStyle } = this.props;
 		const { id, name, isInState, supportedMethods, methodRequested } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
-		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
-
 		const onButton = <OnButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
-			enabled={!!TURNON} style={styles.turnOnButtonContainer} iconStyle={styles.iconStyle} methodRequested={methodRequested} intl={intl}
-			isGatewayActive={isGatewayActive}/>;
+			enabled={!!TURNON} style={[styles.turnOnButtonContainer, onButtonStyle]} iconStyle={styles.iconStyle}
+			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl}/>;
 		const offButton = <OffButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
-			enabled={!!TURNOFF} style={styles.turnOffButtonContainer} iconStyle={styles.iconStyle} methodRequested={methodRequested} intl={intl}
-			isGatewayActive={isGatewayActive}/>;
+			enabled={!!TURNOFF} style={[styles.turnOffButtonContainer, offButtonStyle]} iconStyle={styles.iconStyle}
+			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl}/>;
 
 		let style = { ...this.props.style };
 		style.width = tileWidth;
 		style.height = tileWidth;
 
-		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
-
-		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
-			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
-
 		return (
-			<DashboardShadowTile
-				item={item}
-				accessibilityLabel={accessibilityLabel}
-				isEnabled={isInState === 'TURNON'}
-				name={name}
-				info={info}
-				icon={'device-alt'}
-				iconStyle={{
-					color: '#fff',
-					fontSize: tileWidth / 5.2,
-				}}
-				iconContainerStyle={[iconContainerStyle, {
-					width: tileWidth / 4.8,
-					height: tileWidth / 4.8,
-					borderRadius: tileWidth / 9.6,
-					alignItems: 'center',
-					justifyContent: 'center',
-				}]}
-				type={'device'}
-				tileWidth={tileWidth}
-				hasShadow={!!TURNON || !!TURNOFF}
-				formatMessage={intl.formatMessage}
-				style={style}>
-				<View style={{
-					width: tileWidth,
-					height: tileWidth * 0.4,
-					flexDirection: 'row',
-					justifyContent: 'center',
-				}}>
-					{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
-					{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
-				</View>
-			</DashboardShadowTile>
+			<View style={containerStyle}>
+				{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+				{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
+			</View>
 		);
 	}
 }
@@ -163,25 +120,9 @@ const styles = StyleSheet.create({
 		top: 3,
 		right: 3,
 	},
-	itemIconContainerOn: {
-		backgroundColor: Theme.Core.brandSecondary,
-	},
-	itemIconContainerOff: {
-		backgroundColor: Theme.Core.brandPrimary,
-	},
-	itemIconContainerOffline: {
-		backgroundColor: Theme.Core.offlineColor,
-	},
 	iconStyle: {
 		fontSize: 22,
 	},
 });
 
-function mapStateToProps(store: Object, ownProps: Object): Object {
-	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
-	return {
-		powerConsumed,
-	};
-}
-
-module.exports = connect(mapStateToProps, null)(ToggleDashboardTile);
+module.exports = ToggleDashboardTile;

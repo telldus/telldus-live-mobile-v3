@@ -29,11 +29,11 @@ import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { defineMessages } from 'react-intl';
 
 import { Text, View } from '../../../BaseComponents';
 import { getDevices } from '../../Actions/Devices';
 import { changeSensorDisplayType } from '../../Actions/Dashboard';
-import { defineMessages } from 'react-intl';
 
 import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
@@ -41,14 +41,10 @@ import { getUserProfile } from '../../Reducers/User';
 import Theme from '../../Theme';
 
 import {
-	DimmerDashboardTile,
-	NavigationalDashboardTile,
-	BellDashboardTile,
-	ToggleDashboardTile,
 	SensorDashboardTile,
+	DashboardRow,
 } from './SubViews';
 
-import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
 import reactMixin from 'react-mixin';
 
@@ -337,61 +333,17 @@ class DashboardTab extends View {
 			/>;
 		}
 
-		const deviceType = getDeviceType(data.supportedMethods);
-
-		if (deviceType === 'TOGGLE') {
-			return <ToggleDashboardTile
+		return (
+			<DashboardRow
+				style={tileStyle}
 				item={data}
 				tileWidth={tileWidth}
-				style={tileStyle}
 				intl={screenProps.intl}
 				key={key}
 				isGatewayActive={isGatewayActive}
-			/>;
-		}
-
-		if (deviceType === 'DIMMER') {
-			return <DimmerDashboardTile
-				item={data}
-				tileWidth={tileWidth}
-				style={tileStyle}
 				setScrollEnabled={this.setScrollEnabled}
-				intl={screenProps.intl}
-				key={key}
-				isGatewayActive={isGatewayActive}
-			/>;
-		}
-
-		if (deviceType === 'BELL') {
-			return <BellDashboardTile
-				item={data}
-				tileWidth={tileWidth}
-				style={tileStyle}
-				intl={screenProps.intl}
-				key={key}
-				isGatewayActive={isGatewayActive}
-			/>;
-		}
-
-		if (deviceType === 'NAVIGATIONAL') {
-			return <NavigationalDashboardTile
-				item={data}
-				tileWidth={tileWidth}
-				style={tileStyle}
-				intl={screenProps.intl}
-				key={key}
-				isGatewayActive={isGatewayActive}
-			/>;
-		}
-
-		return <ToggleDashboardTile
-			style={tileStyle}
-			item={data}
-			tileWidth={tileWidth}
-			intl={screenProps.intl}
-			key={key}
-			isGatewayActive={isGatewayActive}
-		/>;
+			/>
+		);
 	}
 
 	getStyles(appLayout: Object): Object {

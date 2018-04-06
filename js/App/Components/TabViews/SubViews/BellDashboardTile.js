@@ -26,13 +26,10 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { View, IconTelldus } from '../../../../BaseComponents';
-import DashboardShadowTile from './DashboardShadowTile';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
-import { getLabelDevice } from '../../../Lib';
-import { getPowerConsumed } from '../../../Lib';
 
 import Theme from '../../../Theme';
 
@@ -46,6 +43,8 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	powerConsumed: string,
+	containerStyle?: number | Object | Array<any>,
+	bellButtonStyle?: number | Object | Array<any>,
 };
 
 type DefaultProps = {
@@ -78,64 +77,28 @@ class BellDashboardTile extends PureComponent<Props, null> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
-		const { methodRequested, name } = this.props.item;
-
-		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
+		const { item, isGatewayActive, containerStyle, bellButtonStyle } = this.props;
+		const { methodRequested, name } = item;
 
 		const accessibilityLabelButton = `${this.labelBellButton}, ${name}`;
-		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
 
-		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
 		let iconColor = isGatewayActive ? Theme.Core.brandSecondary : Theme.Core.offlineColor;
 
 		return (
-			<DashboardShadowTile
-				item={item}
-				isEnabled={true}
-				name={name}
-				info={info}
-				icon={'bell'}
-				iconStyle={{
-					color: '#fff',
-					fontSize: tileWidth / 5.2,
-				}}
-				iconContainerStyle={[iconContainerStyle, {
-					width: tileWidth / 4.8,
-					height: tileWidth / 4.8,
-					borderRadius: tileWidth / 9.6,
-					alignItems: 'center',
-					justifyContent: 'center',
-				}]}
-				type={'device'}
-				tileWidth={tileWidth}
-				accessibilityLabel={accessibilityLabel}
-				isGatewayActive={isGatewayActive}
-				formatMessage={intl.formatMessage}
-				style={[
-					this.props.style, {
-						width: tileWidth,
-						height: tileWidth,
-					}]
-				}>
-				<TouchableOpacity
-					onPress={this.onBell}
-					style={[styles.container, {
-						width: tileWidth,
-						height: tileWidth * 0.4,
-					}]}
-					accessibilityLabel={accessibilityLabelButton}>
-					<View style={styles.body}>
+			<TouchableOpacity
+				onPress={this.onBell}
+				style={[containerStyle, bellButtonStyle]}
+				accessibilityLabel={accessibilityLabelButton}>
+				<View style={styles.body}>
 					  <IconTelldus icon="bell" size={32} color={iconColor} />
-					</View>
-					{
-						methodRequested === 'BELL' ?
-							<ButtonLoadingIndicator style={styles.dot} />
-							:
-							null
-					}
-				</TouchableOpacity>
-			</DashboardShadowTile>
+				</View>
+				{
+					methodRequested === 'BELL' ?
+						<ButtonLoadingIndicator style={styles.dot} />
+						:
+						null
+				}
+			</TouchableOpacity>
 		);
 	}
 }
@@ -177,11 +140,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-function mapStateToProps(store: Object, ownProps: Object): Object {
-	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
-	return {
-		powerConsumed,
-	};
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(BellDashboardTile);
+module.exports = connect(null, mapDispatchToProps)(BellDashboardTile);

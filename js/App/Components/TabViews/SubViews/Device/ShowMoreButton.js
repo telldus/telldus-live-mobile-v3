@@ -32,6 +32,8 @@ type Props = {
 	onPress: () => void;
 	intl: Object,
 	name: string,
+	style: Object | number | Array<any>,
+	dotStyle: Object | number | Array<any>,
 };
 
 export default class ShowMoreButton extends View<Props, null> {
@@ -58,14 +60,14 @@ onPress() {
 }
 
 render(): Object {
-	const { name } = this.props;
+	const { name, style, dotStyle } = this.props;
 	const accessibilityLabel = `${this.labelShowMore} ${this.labelButton}, ${name}. ${this.defaultDescriptionButton}`;
 
 	return (
-		<TouchableOpacity style={styles.moreButtonsCover} onPress={this.onPress} accessibilityLabel={accessibilityLabel}>
-			<View style={styles.moreButtons}/>
-			<View style={[styles.moreButtons, {marginHorizontal: 5}]}/>
-			<View style={styles.moreButtons}/>
+		<TouchableOpacity style={[styles.moreButtonsCover, style]} onPress={this.onPress} accessibilityLabel={accessibilityLabel}>
+			<View style={[styles.moreButtons, dotStyle]}/>
+			<View style={[styles.moreButtons, {marginHorizontal: 5}, dotStyle]}/>
+			<View style={[styles.moreButtons, dotStyle]}/>
 		</TouchableOpacity>
 	);
 }

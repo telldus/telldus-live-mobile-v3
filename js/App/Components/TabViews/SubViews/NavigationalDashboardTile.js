@@ -21,16 +21,11 @@
 
 import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
 
 import { View } from '../../../../BaseComponents';
-import DashboardShadowTile from './DashboardShadowTile';
 import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
-
-import { getLabelDevice } from '../../../Lib';
-import { getPowerConsumed } from '../../../Lib';
 
 import Theme from '../../../Theme';
 
@@ -40,72 +35,50 @@ type Props = {
 	style: Object,
 	intl: Object,
 	isGatewayActive: boolean,
-	powerConsumed: string,
+	containerStyle?: number | Object | Array<any>,
+	showStopButton?: boolean,
+	upButtonStyle?: number | Object | Array<any>,
+	downButtonStyle?: number | Object | Array<any>,
+	stopButtonStyle?: number | Object | Array<any>,
+};
+
+type DefaultProps = {
+	showStopButton: boolean,
 };
 
 class NavigationalDashboardTile extends PureComponent<Props, null> {
 	props: Props;
+
+	static defaultProps: DefaultProps = {
+		showStopButton: true,
+	};
 
 	constructor(props: Props) {
 		super(props);
 	}
 
 	render(): Object {
-		const { item, tileWidth, intl, isGatewayActive, powerConsumed } = this.props;
+		const { item, intl, isGatewayActive, containerStyle, upButtonStyle,
+			downButtonStyle, stopButtonStyle, showStopButton } = this.props;
 		const { name, supportedMethods, isInState } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
 
-		const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
-
-		const upButton = UP ? <UpButton isEnabled={true} style={[styles.navigationButton, {borderLeftWidth: 0}]}
+		const upButton = UP ? <UpButton isEnabled={true} style={[styles.navigationButton, {borderLeftWidth: 0}, upButtonStyle]}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id} name={name}/> : null;
-		const downButton = DOWN ? <DownButton isEnabled={true} style={styles.navigationButton}
+		const downButton = DOWN ? <DownButton isEnabled={true} style={[styles.navigationButton, downButtonStyle]}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id} name={name}/> : null;
-		const stopButton = STOP ? <StopButton isEnabled={true} style={styles.navigationButton}
+		const stopButton = STOP ? <StopButton isEnabled={true} style={[styles.navigationButton, stopButtonStyle]}
 			methodRequested={item.methodRequested} iconSize={16} isGatewayActive={isGatewayActive}
 			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id} name={name}/> : null;
 
-		const accessibilityLabel = getLabelDevice(intl.formatMessage, item);
-
-		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
-			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
-
 		return (
-			<DashboardShadowTile
-				item={item}
-				isEnabled={true}
-				name={name}
-				info={info}
-				icon={'curtain'}
-				iconStyle={{
-					color: '#fff',
-					fontSize: tileWidth / 5.2,
-				}}
-				iconContainerStyle={[iconContainerStyle, {
-					width: tileWidth / 4.8,
-					height: tileWidth / 4.8,
-					borderRadius: tileWidth / 9.6,
-					alignItems: 'center',
-					justifyContent: 'center',
-				}]}
-				type={'device'}
-				tileWidth={tileWidth}
-				accessibilityLabel={accessibilityLabel}
-				formatMessage={intl.formatMessage}
-				style={[this.props.style, { width: tileWidth, height: tileWidth }]}>
-				<View style={{
-					width: tileWidth,
-					height: tileWidth * 0.4,
-					flexDirection: 'row',
-					justifyContent: 'center',
-				}}>
-					{ upButton }
-					{ downButton }
-					{ stopButton }
-				</View>
-			</DashboardShadowTile>
+			<View style={containerStyle}>
+				{ upButton }
+				{ downButton }
+				{!!showStopButton && stopButton }
+			</View>
 		);
 	}
 }
@@ -129,11 +102,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(store: Object, ownProps: Object): Object {
-	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
-	return {
-		powerConsumed,
-	};
-}
-
-module.exports = connect(mapStateToProps, null)(NavigationalDashboardTile);
+module.exports = NavigationalDashboardTile;

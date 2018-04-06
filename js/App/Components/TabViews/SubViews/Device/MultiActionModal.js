@@ -98,16 +98,18 @@ render(): Object {
 				<View style={styles.body} onLayout={this.onLayoutBody}>
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
-							let newStyle = {}, newProps = {}, { newButtonStyle } = styles;
+							let newStyle = {}, newProps = {}, { newButtonStyle, containerStyle } = styles;
 							if (child.key === '4') {
 								newStyle = {
-									bellButtonStyle: newButtonStyle,
+									bellButtonStyle: [newButtonStyle, {width: Theme.Core.buttonWidth * 2}],
+									containerStyle,
 								};
 							}
-							if (child.key === '3') {
+							if (child.key === '3' || child.key === '5') {
 								newStyle = {
 									onButtonStyle: newButtonStyle,
 									offButtonStyle: newButtonStyle,
+									containerStyle,
 								};
 							}
 							if (child.key === '2') {
@@ -115,6 +117,7 @@ render(): Object {
 									onButtonStyle: newButtonStyle,
 									offButtonStyle: newButtonStyle,
 									sliderStyle: newButtonStyle,
+									containerStyle,
 								};
 								newProps = {
 									showSlider: true,
@@ -125,6 +128,7 @@ render(): Object {
 									upButtonStyle: newButtonStyle,
 									downButtonStyle: newButtonStyle,
 									stopButtonStyle: newButtonStyle,
+									containerStyle,
 								};
 								newProps = {
 									showStopButton: true,
@@ -175,8 +179,16 @@ const styles = StyleSheet.create({
 		color: '#000',
 	},
 	newButtonStyle: {
+		flex: 0,
 		marginLeft: buttonPadding,
 		borderRadius: 2,
 		...Theme.Core.shadow,
+		width: Theme.Core.buttonWidth,
+		height: Theme.Core.rowHeight,
+	},
+	containerStyle: {
+		flex: 0,
+		flexDirection: 'row',
+		justifyContent: 'center',
 	},
 });
