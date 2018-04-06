@@ -98,7 +98,7 @@ class EditGeoPosition extends View {
 			isLoading: true,
 		});
 		let { actions, navigation } = this.props;
-		actions.setCoordinates(navigation.state.params.id, latitude, longitude).then((res: Object) => {
+		actions.setCoordinates(navigation.state.params.id, longitude, latitude).then((res: Object) => {
 			this.setState({
 				isLoading: false,
 			});
@@ -113,9 +113,19 @@ class EditGeoPosition extends View {
 	}
 
 	render(): Object {
+		const { navigation } = this.props;
+		const { latitude, longitude } = navigation.state.params;
+		const region = {
+			latitude,
+			longitude,
+			latitudeDelta: 0.74442,
+			longitudeDelta: 0.74442,
+		};
+
 		return (
 			<GeoPosition
 				{...this.props}
+				region={region}
 				isLoading={this.state.isLoading}
 				onSubmit={this.onSubmit}/>
 		);

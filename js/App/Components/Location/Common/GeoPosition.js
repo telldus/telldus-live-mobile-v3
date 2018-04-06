@@ -86,17 +86,18 @@ class GeoPosition extends View {
 
 	constructor(props: Props) {
 		super(props);
-
+		const { region } = props;
+		const {latitude, longitude, latitudeDelta, longitudeDelta} = region;
 		this.state = {
 			address: '',
 			isKeyboardShown: false,
-			region: new MapView.AnimatedRegion(props.region),
+			region: new MapView.AnimatedRegion(region),
 			coordinate: {
-				latitude: 55.70584,
-				longitude: 13.19321,
+				latitude,
+				longitude,
 			},
-			latitudeDelta: 0.24442,
-			longitudeDelta: 0.24442,
+			latitudeDelta,
+			longitudeDelta,
 		};
 
 		let { formatMessage } = props.intl;

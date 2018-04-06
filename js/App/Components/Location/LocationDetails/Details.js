@@ -114,7 +114,8 @@ class Details extends View {
 
 	onEditGeoPosition() {
 		let { navigation, location } = this.props;
-		navigation.navigate('EditGeoPosition', {id: location.id});
+		let { latitude, longitude, id } = location;
+		navigation.navigate('EditGeoPosition', { id, latitude, longitude });
 	}
 
 	onPressRemoveLocation() {
