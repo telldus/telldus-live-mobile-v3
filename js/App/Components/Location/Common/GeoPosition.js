@@ -46,6 +46,7 @@ type Props = {
 	currentScreen: string,
 	onSubmit: (number, number) => void;
 	isLoading: boolean,
+	region?: Object,
 };
 
 type State = {
@@ -54,6 +55,10 @@ type State = {
 	coordinate: Object,
 	latitudeDelta: number,
 	longitudeDelta: number,
+};
+
+type DefaultProps = {
+	region: Object,
 };
 
 class GeoPosition extends View {
@@ -70,18 +75,22 @@ class GeoPosition extends View {
 	keyboardDidShow: () => void;
 	keyboardDidHide: () => void;
 
+	static defaultProps: DefaultProps = {
+		region: {
+			latitude: 55.70584,
+			longitude: 13.19321,
+			latitudeDelta: 0.24442,
+			longitudeDelta: 0.24442,
+		},
+	}
+
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			address: '',
 			isKeyboardShown: false,
-			region: new MapView.AnimatedRegion({
-				latitude: 55.70584,
-				longitude: 13.19321,
-				latitudeDelta: 0.24442,
-				longitudeDelta: 0.24442,
-			}),
+			region: new MapView.AnimatedRegion(props.region),
 			coordinate: {
 				latitude: 55.70584,
 				longitude: 13.19321,
