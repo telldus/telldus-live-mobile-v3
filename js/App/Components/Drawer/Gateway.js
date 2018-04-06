@@ -24,6 +24,7 @@
 
 import React, { PureComponent } from 'react';
 import { TouchableOpacity, Image, Text } from 'react-native';
+import { IconTelldus, View } from '../../../BaseComponents';
 
 type Props = {
 	gateway: Object,
@@ -70,6 +71,9 @@ export default class Gateway extends PureComponent<Props, null> {
 			<TouchableOpacity style={styles.gatewayContainer} onPress={this.onPress}>
 				<Image style={styles.gatewayIcon} source={locationSrc}/>
 				<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
+				<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 10}}>
+					<IconTelldus icon={'settings'} size={25} color={'#bdbdbd'}/>
+				</View>
 			</TouchableOpacity>
 		);
 	}

@@ -27,10 +27,11 @@ import { TouchableOpacity, ScrollView } from 'react-native';
 import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
-import { FormattedMessage, Text, View, Icon, Image } from '../../../BaseComponents';
+import { FormattedMessage, Text, View, Icon, Image, IconTelldus } from '../../../BaseComponents';
 import Gateway from './Gateway';
 import i18n from '../../Translations/common';
 import { hasStatusBar } from '../../Lib';
+import Theme from '../../Theme';
 
 const messages = defineMessages({
 	connectedLocations: {
@@ -78,14 +79,16 @@ const NavigationHeader = ({ firstName, lastName, styles }: Object): Object => {
 
 const ConnectedLocations = ({styles}: Object): Object => (
 	<View style={styles.navigationTitle}>
-		<Image source={require('../TabViews/img/tabIcons/router.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
-		<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
+		<Text>
+			<IconTelldus icon={'location'} size={30} color={Theme.Core.brandPrimary}/>
+			<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
+		</Text>
 	</View>
 );
 
 const SettingsButton = ({ onPress, styles }: Object): Object => (
 	<TouchableOpacity onPress={onPress} style={styles.navigationTitle}>
-		<Image source={require('../TabViews/img/tabIcons/gear.png')} resizeMode={'contain'} style={styles.navigationTitleImage}/>
+		<IconTelldus icon={'settings'} size={36} color={Theme.Core.brandPrimary}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
 	</TouchableOpacity>
 );
@@ -199,7 +202,7 @@ export default class Drawer extends View<Props, null> {
 			gateway: {
 				fontSize: 14,
 				color: 'rgba(110,110,110,255)',
-				marginLeft: 10,
+				marginHorizontal: 10,
 				maxWidth: 220,
 			},
 			gatewayIcon: {
