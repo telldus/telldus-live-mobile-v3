@@ -226,7 +226,7 @@ class GeoPosition extends View {
 							onEndEditing={this.onEndEditing}
 							autoCapitalize="none"
 							autoCorrect={false}
-							autoFocus={true}
+							autoFocus={false}
 							underlineColorAndroid="#e26901"
 							value={this.state.address}/>
 					</LabelBox>
