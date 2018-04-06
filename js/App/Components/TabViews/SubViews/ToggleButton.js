@@ -39,8 +39,8 @@ type Props = {
 	isGatewayActive: boolean,
 	appLayout: Object,
 	style?: Object | number,
-	onButtonStyle?: Object | number,
-	offButtonStyle?: Object | number,
+	offButtonStyle?: number | Object | Array<any>,
+	onButtonStyle?: number | Object | Array<any>,
 };
 
 class ToggleButton extends View {

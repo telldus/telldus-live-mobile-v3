@@ -37,9 +37,9 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	appLayout: Object,
-	upButtonStyle?: Object | number,
-	downButtonStyle?: Object | number,
-	stopButtonStyle?: Object | number,
+	upButtonStyle?: number | Object | Array<any>,
+	downButtonStyle?: number | Object | Array<any>,
+	stopButtonStyle?: number | Object | Array<any>,
 	showStopButton?: boolean,
 };
 

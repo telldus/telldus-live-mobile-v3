@@ -60,9 +60,9 @@ type Props = {
 	onSlideComplete: () => void,
 	screenReaderEnabled: boolean,
 	showDimmerStep: (number) => void;
-	onButtonStyle: Object | number,
-	offButtonStyle: Object | number,
-	sliderStyle: Object | number,
+	offButtonStyle?: number | Object | Array<any>,
+	onButtonStyle?: number | Object | Array<any>,
+	sliderStyle?: number | Object | Array<any>,
 	showSlider?: boolean,
 };
 
