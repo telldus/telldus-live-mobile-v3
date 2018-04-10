@@ -23,6 +23,7 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
+import { Platform } from 'react-native';
 import { intlShape, defineMessages } from 'react-intl';
 
 import { View, Text, IconTelldus, StyleSheet } from '../../../../BaseComponents';
@@ -148,12 +149,12 @@ export default class WizardOne extends PureComponent<Props, null> {
 		const { currentScreen, animatedX, animatedOpacity } = this.props;
 		const { icon, iconTwo, iconThree, iconSize, iconTwoSize, iconThreeSize,
 			title, description } = this.getScreenData(currentScreen);
-
+		// IconTelldus, on setting different font sizes causing alignment issue. So, handling with negative margin.
 		return (
 			<View style={[styles.container, {opacity: animatedOpacity, transform: [{
 				translateX: animatedX,
 			}]}]}>
-				<View style={{flexDirection: 'row'}}>
+				<View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: -16}}>
 					{icon && <IconTelldus icon={icon} style={styles.icon} size={iconSize}/>}
 					{iconTwo && <IconTelldus icon={iconTwo} style={styles.iconTwo} size={iconTwoSize}/>}
 					{iconThree && <IconTelldus icon={iconThree} style={styles.iconThree} size={iconThreeSize}/>}
@@ -171,20 +172,19 @@ export default class WizardOne extends PureComponent<Props, null> {
 const styles = StyleSheet.create({
 	icon: {
 		color: Theme.Core.brandSecondary,
-		textAlign: 'center',
 	},
+	// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
 	iconTwo: {
 		color: Theme.Core.brandSecondary,
 		textAlignVertical: 'center',
-		textAlign: 'center',
-		marginTop: 10,
+		marginTop: Platform.OS === 'ios' ? 10 : 0,
 	},
+	// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
 	iconThree: {
 		color: Theme.Core.brandSecondary,
 		textAlignVertical: 'center',
-		marginTop: 10,
-		textAlign: 'center',
-		marginLeft: 8,
+		marginTop: Platform.OS === 'ios' ? 10 : 0,
+		marginLeft: 12,
 	},
 	container: {
 		...Theme.Core.shadow,
