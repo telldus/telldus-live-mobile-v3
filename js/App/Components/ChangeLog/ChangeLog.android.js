@@ -26,6 +26,7 @@ import React from 'react';
 import { Animated, LayoutAnimation, UIManager, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import DeviceInfo from 'react-native-device-info';
 
 import { View, FloatingButton, Text, StyleSheet } from '../../../BaseComponents';
 
@@ -56,13 +57,13 @@ const CustomLayoutAnimation = (duration: number = 200): Object => {
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour'];
 
 const messages = defineMessages({
-	changeLog36HeaderOne: {
-		id: 'changeLog36.headerOne',
+	changeLogHeaderOne: {
+		id: 'changeLog.headerOne',
 		defaultMessage: 'Explore new features',
 	},
-	changeLog36HeaderTwo: {
-		id: 'changeLog36.headerTwo',
-		defaultMessage: 'New in version 3.6',
+	changeLogHeaderTwo: {
+		id: 'changeLog.headerTwo',
+		defaultMessage: 'New in version',
 	},
 	skipButton: {
 		id: 'changeLog.button.skipButton',
@@ -117,8 +118,9 @@ class ChangeLogNavigator extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = formatMessage(messages.changeLog36HeaderOne);
-		this.h2 = formatMessage(messages.changeLog36HeaderTwo);
+		const appVersion = DeviceInfo.getReadableVersion();
+		this.h1 = formatMessage(messages.changeLogHeaderOne);
+		this.h2 = `${formatMessage(messages.changeLogHeaderTwo)} ${appVersion.substring(0, 3)}`;
 
 		this.nextButton = formatMessage(i18n.next);
 		this.skipButton = formatMessage(messages.skipButton).toUpperCase();

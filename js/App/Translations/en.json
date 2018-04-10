@@ -134,8 +134,6 @@
   "changeLog.WizardTwo.description": "In this version we have also added the functionality to add your location directly in the app. This is done in a step-by-step wizard for easy setup.",
   "changeLog.WizardTwo.title": "Add your location right here in the app",
   "changeLog.button.skipButton": "skip this",
-  "changeLog.headerOne": "Explore new features",
-  "changeLog.headerTwo": "New in version 3.5",
   "changeLog.wizardFive.description": "Enjoy the app in your native language! The language in the app is detected automatically based on the selected language on your device.",
   "changeLog.wizardFive.title": "Support for multiple languages",
   "changeLog.wizardOne.description": "If you don't have an account already you can now do that in the app without the need of a computer.",
