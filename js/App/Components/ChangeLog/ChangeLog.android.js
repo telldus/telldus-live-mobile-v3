@@ -53,16 +53,16 @@ const CustomLayoutAnimation = (duration: number = 200): Object => {
 	};
 };
 
-const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour', 'WizardFive'];
+const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour'];
 
 const messages = defineMessages({
-	headerOne: {
-		id: 'changeLog.headerOne',
+	changeLog36HeaderOne: {
+		id: 'changeLog36.headerOne',
 		defaultMessage: 'Explore new features',
 	},
-	headerTwo: {
-		id: 'changeLog.headerTwo',
-		defaultMessage: 'New in version 3.5',
+	changeLog36HeaderTwo: {
+		id: 'changeLog36.headerTwo',
+		defaultMessage: 'New in version 3.6',
 	},
 	skipButton: {
 		id: 'changeLog.button.skipButton',
@@ -117,8 +117,8 @@ class ChangeLogNavigator extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = formatMessage(messages.headerOne);
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h1 = formatMessage(messages.changeLog36HeaderOne);
+		this.h2 = formatMessage(messages.changeLog36HeaderTwo);
 
 		this.nextButton = formatMessage(i18n.next);
 		this.skipButton = formatMessage(messages.skipButton).toUpperCase();
@@ -227,6 +227,7 @@ class ChangeLogNavigator extends View {
 		let { h1, h2 } = this;
 
 		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
+		const isLastScreen = Screens.indexOf(currentScreen) === Screens.length - 1;
 
 		let { stepIndicatorCover, floatingButtonLeft } = this.getStyles(appLayout);
 
@@ -254,7 +255,7 @@ class ChangeLogNavigator extends View {
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
 				<ScrollView>
-					<AnimatedWizard intl={intl} currentScreen={currentScreen} styles={styles} animatedX={animatedX} animatedOpacity={animatedOpacity}/>
+					<AnimatedWizard intl={intl} currentScreen={currentScreen} animatedX={animatedX} animatedOpacity={animatedOpacity}/>
 					<View style={styles.buttonCover}>
 						<Text style={styles.textSkip} onPress={this.onPressSkip}>
 							{this.skipButton}
@@ -274,7 +275,9 @@ class ChangeLogNavigator extends View {
 						})
 						}
 						<FloatingButton
-							imageSource={require('../TabViews/img/right-arrow-key.png')}
+							imageSource={isLastScreen ? false : require('../TabViews/img/right-arrow-key.png')}
+							iconName={isLastScreen ? 'checkmark' : false}
+							iconStyle={isLastScreen ? styles.checkIconStyle : {}}
 							onPress={this.onPressNext}
 							buttonStyle={{bottom: 0}}/>
 					</View>
@@ -324,31 +327,9 @@ const styles = StyleSheet.create({
 	buttonIconStyle: {
 		transform: [{rotateZ: '180deg'}],
 	},
-	container: {
-		...Theme.Core.shadow,
-		backgroundColor: '#fff',
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingHorizontal: 15,
-		paddingVertical: 15,
-		marginHorizontal: 10,
-		marginVertical: 10,
-	},
-	icon: {
-		fontSize: 100,
-		color: Theme.Core.brandSecondary,
-	},
-	title: {
-		fontSize: 20,
-		color: '#00000090',
-		textAlign: 'center',
-		paddingHorizontal: 10,
-		marginVertical: 10,
-	},
-	description: {
-		fontSize: 14,
-		color: '#00000080',
-		textAlign: 'left',
+	checkIconStyle: {
+		color: '#fff',
+		fontSize: 26,
 	},
 });
 

@@ -25,59 +25,48 @@
 import React, { PureComponent } from 'react';
 import { intlShape, defineMessages } from 'react-intl';
 
-import { View, Text, IconTelldus } from '../../../../BaseComponents';
+import { View, Text, IconTelldus, StyleSheet } from '../../../../BaseComponents';
+import Theme from '../../../Theme';
 
 const messages = defineMessages({
-	wizardOneTitle: {
-		id: 'changeLog.wizardOne.title',
-		defaultMessage: 'Create account to get started',
+	wizardOneTitle36: {
+		id: 'changeLog36.wizardOne.title',
+		defaultMessage: 'Add and edit schedules',
 	},
-	wizardOneDescription: {
-		id: 'changeLog.wizardOne.description',
-		defaultMessage: 'If you don\'t have an account already you can now do that in the app ' +
-		'without the need of a computer.',
+	wizardOneDescription36: {
+		id: 'changeLog6.wizardOne.description',
+		defaultMessage: 'You are now able to add and edit schedules for your devices directly in the app!',
 	},
-	WizardTwoTitle: {
-		id: 'changeLog.WizardTwo.title',
-		defaultMessage: 'Add your location right here in the app',
+	WizardTwoTitle36: {
+		id: 'changeLog36.WizardTwo.title',
+		defaultMessage: 'Location details',
 	},
-	WizardTwoDescription: {
-		id: 'changeLog.WizardTwo.description',
-		defaultMessage: 'In this version we have also added the functionality to add your location directly in ' +
-		'the app. This is done in a step-by-step wizard for easy setup.',
+	WizardTwoDescription36: {
+		id: 'changeLog36.WizardTwo.description',
+		defaultMessage: 'We\'ve also added functionality to edit your location details, such as name, timezone and position.',
 	},
-	wizardThreeTitle: {
-		id: 'changeLog.wizardThree.title',
-		defaultMessage: 'Updated device details and device history',
+	wizardThreeTitle36: {
+		id: 'changeLog36.wizardThree.title',
+		defaultMessage: 'Updated design',
 	},
-	wizardThreeDescription: {
-		id: 'changeLog.wizardThree.description',
-		defaultMessage: 'Click on a device to see extended information and history for that device. You ' +
-		'can see what location it is connected to and when it was controlled and from what platform.',
+	wizardThreeDescription36: {
+		id: 'changeLog36.wizardThree.description',
+		defaultMessage: 'The design of the dashboard, device list and sensor list has been updated to make the ' +
+		'interface more clear. The active state has a colored background and a white icon to be easily distinguishable.',
 	},
-	WizardFourTitle: {
-		id: 'changeLog.WizardFour.title',
-		defaultMessage: 'Dim your device by holding and dragging',
+	WizardFourTitle36: {
+		id: 'changeLog36.WizardFour.title',
+		defaultMessage: 'Swipe to see more',
 	},
-	WizardFourDescription: {
-		id: 'changeLog.WizardFour.description',
-		defaultMessage: 'You can easily dim your dimmable devices directly from the device list by holding ' +
-		'and dragging the action button up or down. Drag up to dim up and down to dim to a lower value.',
-	},
-	wizardFiveTitle: {
-		id: 'changeLog.wizardFive.title',
-		defaultMessage: 'Support for multiple languages',
-	},
-	wizardFiveDescription: {
-		id: 'changeLog.wizardFive.description',
-		defaultMessage: 'Enjoy the app in your native language! The language in the app is detected ' +
-		'automatically based on the selected language on your device.',
+	WizardFourDescription36: {
+		id: 'changeLog36.WizardFour.description',
+		defaultMessage: 'To add sensors or devices to the dashboard or hide it from the list, swipe it to the left ' +
+		'and then tap the icons. it\'s also here you can access device settings, including overview, history and settings.',
 	},
 });
 
 type Props = {
 	intl: intlShape,
-	styles: Object,
 	currentScreen: string,
 	animatedX: Object,
 	animatedOpacity: Object,
@@ -105,67 +94,70 @@ export default class WizardOne extends PureComponent<Props, null> {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(messages.wizardOneTitle);
-		this.descriptionWOne = formatMessage(messages.wizardOneDescription);
+		this.titleWOne = formatMessage(messages.wizardOneTitle36);
+		this.descriptionWOne = formatMessage(messages.wizardOneDescription36);
 
-		this.titleWTwo = formatMessage(messages.WizardTwoTitle);
-		this.descriptionWTwo = formatMessage(messages.WizardTwoDescription);
+		this.titleWTwo = formatMessage(messages.WizardTwoTitle36);
+		this.descriptionWTwo = formatMessage(messages.WizardTwoDescription36);
 
-		this.titleWThree = formatMessage(messages.wizardThreeTitle);
-		this.descriptionWThree = formatMessage(messages.wizardThreeDescription);
+		this.titleWThree = formatMessage(messages.wizardThreeTitle36);
+		this.descriptionWThree = formatMessage(messages.wizardThreeDescription36);
 
-		this.titleWFour = formatMessage(messages.WizardFourTitle);
-		this.descriptionWFour = formatMessage(messages.WizardFourDescription);
-
-		this.titleWFive = formatMessage(messages.wizardFiveTitle);
-		this.descriptionWFive = formatMessage(messages.wizardFiveDescription);
+		this.titleWFour = formatMessage(messages.WizardFourTitle36);
+		this.descriptionWFour = formatMessage(messages.WizardFourDescription36);
 	}
 
 	getScreenData(currentScreen: string): Object {
-		let icon = '', title = '', description = '';
+		let icon = '', iconTwo = '', iconThree = '', iconSize = 100, iconTwoSize = 100, iconThreeSize = 100,
+			title = '', description = '';
 		switch (currentScreen) {
 			case 'WizardOne':
-				icon = 'security';
+				icon = 'time';
 				title = this.titleWOne;
 				description = this.descriptionWOne;
-				return { icon, title, description };
+				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
 			case 'WizardTwo':
 				icon = 'location';
 				title = this.titleWTwo;
 				description = this.descriptionWTwo;
-				return { icon, title, description };
+				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
 			case 'WizardThree':
-				icon = 'device-alt-solid';
+				icon = 'buttononoff';
+				iconSize = 110;
 				title = this.titleWThree;
 				description = this.descriptionWThree;
-				return { icon, title, description };
+				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
 			case 'WizardFour':
-				icon = 'dim-assist';
+				icon = 'hidden';
+				iconTwo = 'favorite-outline';
+				iconTwoSize = 70;
+				iconThree = 'settings';
+				iconThreeSize = 70;
 				title = this.titleWFour;
 				description = this.descriptionWFour;
-				return { icon, title, description };
-			case 'WizardFive':
-				icon = 'language';
-				title = this.titleWFive;
-				description = this.descriptionWFive;
-				return { icon, title, description };
+				return { icon, iconTwo, iconSize, iconTwoSize, iconThreeSize, iconThree, title, description };
 			default:
-				icon = 'security';
+				icon = 'time';
 				title = this.titleWOne;
 				description = this.descriptionWOne;
-				return { icon, title, description };
+				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
 		}
 	}
 
 	render(): Object {
-		const { styles, currentScreen, animatedX, animatedOpacity } = this.props;
-		const { icon, title, description } = this.getScreenData(currentScreen);
+		const { currentScreen, animatedX, animatedOpacity } = this.props;
+		const { icon, iconTwo, iconThree, iconSize, iconTwoSize, iconThreeSize,
+			title, description } = this.getScreenData(currentScreen);
 
 		return (
 			<View style={[styles.container, {opacity: animatedOpacity, transform: [{
 				translateX: animatedX,
 			}]}]}>
-				<IconTelldus icon={icon} style={styles.icon}/>
+				<View style={{flexDirection: 'row'}}>
+					{icon && <IconTelldus icon={icon} style={styles.icon} size={iconSize}/>}
+					{iconTwo && <IconTelldus icon={iconTwo} style={styles.iconTwo} size={iconTwoSize}/>}
+					{iconThree && <IconTelldus icon={iconThree} style={styles.iconThree} size={iconThreeSize}/>}
+				</View>
 				<Text style={styles.title}>
 					{title}
 				</Text>
@@ -176,4 +168,45 @@ export default class WizardOne extends PureComponent<Props, null> {
 		);
 	}
 }
+const styles = StyleSheet.create({
+	icon: {
+		color: Theme.Core.brandSecondary,
+		textAlign: 'center',
+	},
+	iconTwo: {
+		color: Theme.Core.brandSecondary,
+		textAlignVertical: 'center',
+		textAlign: 'center',
+		marginTop: 10,
+	},
+	iconThree: {
+		color: Theme.Core.brandSecondary,
+		textAlignVertical: 'center',
+		marginTop: 10,
+		textAlign: 'center',
+		marginLeft: 8,
+	},
+	container: {
+		...Theme.Core.shadow,
+		backgroundColor: '#fff',
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingHorizontal: 15,
+		paddingVertical: 15,
+		marginHorizontal: 10,
+		marginVertical: 10,
+	},
+	title: {
+		fontSize: 20,
+		color: '#00000090',
+		textAlign: 'center',
+		paddingHorizontal: 10,
+		marginVertical: 10,
+	},
+	description: {
+		fontSize: 14,
+		color: '#00000080',
+		textAlign: 'left',
+	},
+});
 
