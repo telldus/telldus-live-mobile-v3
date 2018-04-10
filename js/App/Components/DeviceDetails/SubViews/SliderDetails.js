@@ -31,8 +31,7 @@ const deviceHeight = Dimensions.get('window').height;
 
 import { setDimmerValue, saveDimmerInitialState } from '../../../Actions/Dimmer';
 import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
-import { FormattedMessage, RoundedCornerShadowView, Text, View } from '../../../../BaseComponents';
-import { DimmerOnButton, DimmerOffButton } from '../../TabViews/SubViews';
+import { FormattedMessage, Text, View } from '../../../../BaseComponents';
 import i18n from '../../../Translations/common';
 import {
 	toDimmerValue,
@@ -53,21 +52,14 @@ type Props = {
 	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
 	intl: Object,
 	isGatewayActive: boolean,
+	style: Object | number | Array<any>,
 };
 
 type State = {
 	dimmerValue: number,
 };
 
-const ToggleButton = ({ device, intl, isGatewayActive, onTurnOff, onTurnOn }: Object): Object => (
-	<RoundedCornerShadowView style={styles.toggleContainer}>
-		<DimmerOffButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOff}
-			methodRequested={device.methodRequested} intl={intl} isGatewayActive={isGatewayActive} onPress={onTurnOff}/>
-		<DimmerOnButton id={device.id} isInState={device.isInState} name={device.name} fontSize={16} style={styles.turnOn}
-			methodRequested={device.methodRequested} intl={intl} isGatewayActive={isGatewayActive} onPress={onTurnOn}/>
-	</RoundedCornerShadowView>
-);
-class DimmerDeviceDetailModal extends View {
+class SliderDetails extends View {
 	props: Props;
 	state: State;
 	onTurnOn: () => void;
@@ -156,16 +148,12 @@ class DimmerDeviceDetailModal extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive } = this.props;
-		const { TURNON, TURNOFF, DIM } = device.supportedMethods;
-
-		let toggleButton = null;
+		const { device, intl, isGatewayActive, style } = this.props;
+		const { DIM } = device.supportedMethods;
+		const minimumTrackTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';
+		const maximumTrackTintColor = isGatewayActive ? 'rgba(219, 219, 219, 255)' : '#e5e5e5';
+		const thumbTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';
 		let slider = null;
-
-		if (TURNON || TURNOFF) {
-			toggleButton = <ToggleButton device={device} onTurnOn={this.onTurnOn}
-				onTurnOff={this.onTurnOff} intl={intl} isGatewayActive={isGatewayActive}/>;
-		}
 
 		if (DIM) {
 			slider = <Slider minimumValue={0} maximumValue={100} step={1} value={this.state.dimmerValue}
@@ -173,9 +161,9 @@ class DimmerDeviceDetailModal extends View {
 				                 marginHorizontal: 8,
 				                 marginVertical: 8,
 			                 }}
-			                 minimumTrackTintColor="rgba(0,150,136,255)"
-			                 maximumTrackTintColor="rgba(219,219,219,255)"
-			                 thumbTintColor="rgba(0,150,136,255)"
+			                 minimumTrackTintColor={minimumTrackTintColor}
+			                 maximumTrackTintColor={maximumTrackTintColor}
+			                 thumbTintColor={thumbTintColor}
 			                 onValueChange={this.onValueChange}
 							 onSlidingStart={this.onSlidingStart}
 			                 onSlidingComplete={this.onSlidingComplete}
@@ -184,25 +172,22 @@ class DimmerDeviceDetailModal extends View {
 		}
 
 		return (
-			<View style={styles.container}>
-				<View style={[styles.shadow, styles.dimmerContainer]}>
-					<Text style={styles.textDimmingLevel}>
-						<FormattedMessage {...i18n.dimmingLevel} style={styles.textDimmingLevel} />: {this.state.dimmerValue}%
-					</Text>
-					{slider}
-					{toggleButton}
-				</View>
+			<View style={[styles.container, style]}>
+				<Text style={styles.textDimmingLevel}>
+					<FormattedMessage {...i18n.dimmingLevel} style={styles.textDimmingLevel} />: {this.state.dimmerValue}%
+				</Text>
+				{slider}
 			</View>
 		);
 	}
 
 }
 
-DimmerDeviceDetailModal.propTypes = {
+SliderDetails.propTypes = {
 	device: PropTypes.object.isRequired,
 };
 
-DimmerDeviceDetailModal.defaultProps = {
+SliderDetails.defaultProps = {
 	commandON: 1,
 	commandOFF: 2,
 	commandDIM: 16,
@@ -210,7 +195,7 @@ DimmerDeviceDetailModal.defaultProps = {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 0,
+		flex: 1,
 	},
 	textDimmingLevel: {
 		color: '#1a355b',
@@ -258,4 +243,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(DimmerDeviceDetailModal);
+module.exports = connect(null, mapDispatchToProps)(SliderDetails);

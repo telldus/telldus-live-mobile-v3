@@ -33,11 +33,8 @@ import { defineMessages } from 'react-intl';
 import getDeviceType from '../../Lib/getDeviceType';
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 import {
+	DeviceActionDetails,
 	DeviceLocationDetail,
-	ToggleDeviceDetail,
-	BellDeviceDetail,
-	DimmerDeviceDetail,
-	NavigationalDeviceDetail,
 } from './SubViews';
 import i18n from '../../Translations/common';
 
@@ -101,8 +98,6 @@ class OverviewTab extends View {
 
 	render(): Object {
 		let { device, screenProps, gateway } = this.props;
-		let deviceId = device.id;
-		let deviceDetail = null;
 		const locationImageUrl = getLocationImageUrl(gateway.type);
 		const locationData = {
 			title: this.boxTitle,
@@ -110,25 +105,23 @@ class OverviewTab extends View {
 			H1: gateway.name,
 			H2: gateway.type,
 		};
+		const {
+			TURNON,
+			TURNOFF,
+			BELL,
+			DIM,
+			UP,
+			DOWN,
+			STOP,
+		} = device.supportedMethods;
+		const hasActions = TURNON || TURNOFF || BELL || DIM || UP || DOWN || STOP;
 		const isGatewayActive = gateway && gateway.online;
 
-		if (deviceId && Number.isInteger(deviceId) && deviceId > 0) {
-			const deviceType = this.getType(device);
-			if (deviceType === 'TOGGLE') {
-				deviceDetail = <ToggleDeviceDetail device={device} intl={screenProps.intl} isGatewayActive={isGatewayActive}/>;
-			} else if (deviceType === 'DIMMER') {
-				deviceDetail = <DimmerDeviceDetail device={device} intl={screenProps.intl} isGatewayActive={isGatewayActive}/>;
-			} else if (deviceType === 'BELL') {
-				deviceDetail = <BellDeviceDetail device={device} intl={screenProps.intl} isGatewayActive={isGatewayActive}/>;
-			} else if (deviceType === 'NAVIGATIONAL') {
-				deviceDetail = <NavigationalDeviceDetail device={device} intl={screenProps.intl} isGatewayActive={isGatewayActive}/>;
-			} else {
-				deviceDetail = <View style={{ height: 0 }} />;
-			}
-		}
 		return (
 			<ScrollView contentContainerStyle={styles.itemsContainer}>
-				{deviceDetail}
+				{hasActions && (
+					<DeviceActionDetails device={device} intl={screenProps.intl} appLayout={screenProps.appLayout} isGatewayActive={isGatewayActive}/>
+				)}
 				<DeviceLocationDetail {...locationData} style={{marginTop: 10}}/>
 			</ScrollView>
 		);

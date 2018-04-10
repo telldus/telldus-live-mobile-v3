@@ -21,21 +21,15 @@
 'use strict';
 
 import DeviceLocationDetail from './DeviceLocationDetail';
-import ToggleDeviceDetail from './ToggleDeviceDetail';
-import BellDeviceDetail from './BellDeviceDetail';
-import DimmerDeviceDetail from './DimmerDeviceDetail';
-import NavigationalDeviceDetail from './NavigationalDeviceDetail';
 import DeviceHistoryDetails from './DeviceHistoryDetails';
 import HistoryRow from './HistoryRow';
 import NavigationHeader from './NavigationHeader';
+import DeviceActionDetails from './DeviceActionDetails';
 
 module.exports = {
 	DeviceLocationDetail,
-	ToggleDeviceDetail,
-	BellDeviceDetail,
-	DimmerDeviceDetail,
-	NavigationalDeviceDetail,
 	DeviceHistoryDetails,
 	HistoryRow,
 	NavigationHeader,
+	DeviceActionDetails,
 };
