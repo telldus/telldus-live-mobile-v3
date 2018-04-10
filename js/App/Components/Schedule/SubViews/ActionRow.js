@@ -51,11 +51,11 @@ const messages = defineMessages({
 	},
 	upDescription: {
 		id: 'actions.upDescription',
-		defaultMessage: 'Turn the device up',
+		defaultMessage: 'Send up to the device',
 	},
 	downDescription: {
 		id: 'actions.downDescription',
-		defaultMessage: 'Turn the device down',
+		defaultMessage: 'Send down to the device',
 	},
 	stopDescription: {
 		id: 'actions.stopDescription',
