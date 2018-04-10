@@ -28,6 +28,7 @@ import { Image, Platform, TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
+import IconTelldus from './IconTelldus';
 import Throbber from './Throbber';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
@@ -50,6 +51,7 @@ type Props = {
 	accessibilityLabel?: string,
 	intl: intlShape.isRequired,
 	iconStyle?: Object | number,
+	iconName?: string,
 };
 
 class FloatingButton extends Component<Props, null> {
@@ -86,7 +88,7 @@ class FloatingButton extends Component<Props, null> {
 	}
 
 	render(): Object {
-		let { buttonStyle, onPress, imageSource, showThrobber,
+		let { buttonStyle, onPress, imageSource, iconName, showThrobber,
 			appLayout, accessible, accessibilityLabel, iconStyle } = this.props;
 		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
@@ -99,6 +101,11 @@ class FloatingButton extends Component<Props, null> {
 					(
 						<Image source={imageSource} style={[icon, iconStyle]} resizeMode="contain"/>
 					)
+					}
+					{!!iconName &&
+						(
+							<IconTelldus icon={iconName} style={iconStyle}/>
+						)
 					}
 					{!!showThrobber &&
 					(
