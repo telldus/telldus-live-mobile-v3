@@ -234,7 +234,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const onButton =
 		<HVSliderContainer
 			{...sliderProps}
-			style={[styles.turnOn, onButtonStyle]}
+			style={[styles.buttonContainerStyle, onButtonStyle]}
 			onPress={this.onTurnOn}>
 			<DimmerOnButton ref={'onButton'} name={deviceName} isInState={isInState} enabled={false}
 				style={[styles.turnOn]} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
@@ -244,7 +244,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		const offButton =
 		<HVSliderContainer
 			{...sliderProps}
-			style={[styles.turnOff, offButtonStyle]}
+			style={[styles.buttonContainerStyle, offButtonStyle]}
 			onPress={this.onTurnOff}>
 			<DimmerOffButton ref={'offButton'} name={deviceName} isInState={isInState} enabled={false}
 				style={styles.turnOff} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
@@ -295,15 +295,21 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 	},
-	turnOff: {
+	buttonContainerStyle: {
 		flex: 1,
 		alignItems: 'stretch',
 		justifyContent: 'center',
 		borderBottomLeftRadius: 2,
 	},
+	turnOff: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderBottomLeftRadius: 2,
+	},
 	turnOn: {
 		flex: 1,
-		alignItems: 'stretch',
+		alignItems: 'center',
 		justifyContent: 'center',
 		borderBottomRightRadius: 2,
 	},

@@ -60,6 +60,7 @@ type Props = {
 	onSlideComplete: () => void,
 	screenReaderEnabled: boolean,
 	showDimmerStep: (number) => void;
+	style?: number | Object | Array<any>,
 	offButtonStyle?: number | Object | Array<any>,
 	onButtonStyle?: number | Object | Array<any>,
 	sliderStyle?: number | Object | Array<any>,
@@ -203,7 +204,8 @@ class DimmerButton extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, screenReaderEnabled, onButtonStyle, offButtonStyle, sliderStyle, showSlider } = this.props;
+		const { device, intl, isGatewayActive, screenReaderEnabled, showSlider,
+			style, onButtonStyle, offButtonStyle, sliderStyle } = this.props;
 		const { isInState, name, supportedMethods, methodRequested } = device;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
@@ -228,11 +230,11 @@ class DimmerButton extends View {
 		const onButton = (
 			<HVSliderContainer
 				{...sliderProps}
-				style={onButtonStyle}
+				style={[styles.buttonContainerStyle, onButtonStyle]}
 				onPress={this.onTurnOn}>
 				<DimmerOnButton
 					ref={'onButton'}
-					style={[styles.turnOn]}
+					style={[styles.buttonStyle]}
 					isInState={isInState}
 					onPress={this.onTurnOn}
 					name={deviceName}
@@ -246,11 +248,11 @@ class DimmerButton extends View {
 		const offButton = (
 			<HVSliderContainer
 				{...sliderProps}
-				style={offButtonStyle}
+				style={[styles.buttonContainerStyle, offButtonStyle]}
 				onPress={this.onTurnOff}>
 				<DimmerOffButton
 					ref={'offButton'}
-					style={[styles.turnOff]}
+					style={[styles.buttonStyle]}
 					isInState={isInState}
 					onPress={this.onTurnOff}
 					name={deviceName}
@@ -278,7 +280,7 @@ class DimmerButton extends View {
 		) : null;
 
 		return (
-			<View style={styles.container}>
+			<View style={[styles.container, style]}>
 				{ offButton }
 				{!!showSlider && slider }
 				{ onButton }
@@ -303,19 +305,14 @@ const styles = StyleSheet.create({
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},
-	turnOff: {
-		width: Theme.Core.buttonWidth,
-		height: Theme.Core.rowHeight,
-		alignItems: 'stretch',
+	buttonStyle: {
+		flex: 1,
+		alignItems: 'center',
 		justifyContent: 'center',
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
-	turnOn: {
+	buttonContainerStyle: {
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
-		alignItems: 'stretch',
-		justifyContent: 'center',
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},

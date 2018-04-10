@@ -82,20 +82,18 @@ class DimmerOffButton extends View {
 			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
 
 		return (
-			<View style={[style, buttonStyle]}>
-				<TouchableOpacity
-					disabled={!enabled}
-					onPress={this.onPress}
-					style={styles.button}
-					accessibilityLabel={accessibilityLabel}>
-					<IconTelldus icon="off" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
-				</TouchableOpacity>
+			<TouchableOpacity
+				disabled={!enabled}
+				onPress={this.onPress}
+				style={[style, buttonStyle]}
+				accessibilityLabel={accessibilityLabel}>
+				<IconTelldus icon="off" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
 					methodRequested === 'TURNOFF' ?
 						<ButtonLoadingIndicator style={styles.dot} />
 						: null
 				}
-			</View>
+			</TouchableOpacity>
 		);
 	}
 
