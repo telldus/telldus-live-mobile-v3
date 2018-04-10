@@ -43,7 +43,7 @@ const messages = defineMessages({
 	},
 	WizardTwoDescription36: {
 		id: 'changeLog36.WizardTwo.description',
-		defaultMessage: 'We\'ve also added functionality to edit your location details, such as name, timezone and position.',
+		defaultMessage: 'We\'ve also added functionality to edit your location details, such as name, time zone and position.',
 	},
 	wizardThreeTitle36: {
 		id: 'changeLog36.wizardThree.title',
@@ -60,7 +60,7 @@ const messages = defineMessages({
 	},
 	WizardFourDescription36: {
 		id: 'changeLog36.WizardFour.description',
-		defaultMessage: 'To add sensors or devices to the dashboard or hide it from the list, swipe it to the left ' +
+		defaultMessage: 'To add devices or sensors to the dashboard or hide it from the list, swipe it to the left ' +
 		'and then tap the icons. it\'s also here you can access device settings, including overview, history and settings.',
 	},
 });
