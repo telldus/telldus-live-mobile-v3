@@ -73,6 +73,7 @@
     "accessibilityLabel.weekdaysDescription": "Måndag till Fredag",
     "accessibilityLabel.weekends": "Helger",
     "accessibilityLabel.weekendsDescription": "Lördag & Söndag",
+    "actions.bellDescription": "Ring i klockan",
     "actions.dimDescription": "Dimma enheten",
     "actions.offDescription": "Stänger av enheten",
     "actions.onDescription": "Sätter på enheten",
