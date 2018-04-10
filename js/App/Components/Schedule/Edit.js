@@ -165,7 +165,7 @@ class Edit extends View<null, Props, State> {
 				});
 				this.resetNavigation();
 				this.props.actions.getJobs();
-				this.props.actions.showToast('schedule', this.messageOnUpdate, 'LONG');
+				this.props.actions.showToast(this.messageOnUpdate, 'LONG');
 			}).catch((error: Object) => {
 				this.setState({
 					isSaving: false,
@@ -199,7 +199,7 @@ class Edit extends View<null, Props, State> {
 			});
 			this.resetNavigation();
 			this.props.actions.getJobs();
-			this.props.actions.showToast('schedule', this.messageOnDelete, 'LONG');
+			this.props.actions.showToast(this.messageOnDelete, 'LONG');
 		}).catch((error: Object) => {
 			this.setState({
 				isDeleting: false,

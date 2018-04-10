@@ -107,7 +107,7 @@ class Summary extends View<null, Props, State> {
 			});
 			this.resetNavigation();
 			this.props.actions.getJobs();
-			this.props.actions.showToast('schedule', this.messageOnAdd, 'LONG');
+			this.props.actions.showToast(this.messageOnAdd, 'LONG');
 		}).catch((error: Object) => {
 			this.setState({
 				isLoading: false,
