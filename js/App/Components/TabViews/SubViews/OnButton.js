@@ -68,9 +68,9 @@ class OnButton extends View {
 		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
-			(isInState === 'TURNON' ? styles.offline : styles.disabled) : (isInState === 'TURNON' ? styles.enabled : styles.disabled);
+			(isInState !== 'TURNOFF' ? styles.offline : styles.disabled) : (isInState !== 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
-			(isInState === 'TURNON' ? '#fff' : '#a2a2a2') : (isInState === 'TURNON' ? '#fff' : Theme.Core.brandSecondary);
+			(isInState !== 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState !== 'TURNOFF' ? '#fff' : Theme.Core.brandSecondary);
 
 		return (
 			<TouchableOpacity
