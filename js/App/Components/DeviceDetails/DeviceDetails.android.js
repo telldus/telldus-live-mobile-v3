@@ -140,6 +140,7 @@ class DeviceDetails extends View {
 			currentTab: this.state.currentTab,
 			intl: this.props.intl,
 			currentScreen,
+			appLayout,
 		};
 		let isPortrait = appLayout.height > appLayout.width;
 
