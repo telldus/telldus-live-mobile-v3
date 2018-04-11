@@ -54,10 +54,20 @@ const messages = defineMessages({
 		defaultMessage: 'Schedule has been updated successfully',
 		description: 'The message to show, when a schedule is updated and saved successfully',
 	},
+	updateScheduleFailure: {
+		id: 'toast.updateScheduleFailure',
+		defaultMessage: 'Could not save the shedule. Please try again later',
+		description: 'The message to show, when a schedule is update fail',
+	},
 	deleteScheduleSuccess: {
 		id: 'toast.deleteScheduleSuccess',
 		defaultMessage: 'Schedule has been deleted successfully',
 		description: 'The message to show, when a schedule is deleted successfully',
+	},
+	deleteScheduleFailure: {
+		id: 'toast.deleteScheduleFailure',
+		defaultMessage: 'Could not delete the shedule. Please try again later',
+		description: 'The message to show, when a schedule is failed',
 	},
 	deleteScheduleDialogue: {
 		id: 'modal.deleteScheduleDialogue',
@@ -118,6 +128,9 @@ class Edit extends View<null, Props, State> {
 		this.deleteScheduleDialogue = formatMessage(messages.deleteScheduleDialogue);
 		this.deleteScheduleDialogueHeader = `${formatMessage(messages.deleteScheduleDialogueHeader)}?`;
 
+		this.messageOnDeleteFail = formatMessage(messages.deleteScheduleFailure);
+		this.messageOnUpdateFail = formatMessage(messages.updateScheduleFailure);
+
 		this.onSaveSchedule = this.onSaveSchedule.bind(this);
 		this.onDeleteSchedule = this.onDeleteSchedule.bind(this);
 
@@ -170,7 +183,7 @@ class Edit extends View<null, Props, State> {
 				this.setState({
 					isSaving: false,
 				});
-				let message = error.message ? error.message : 'Could not save the shedule. Please try again later.';
+				let message = error.message ? error.message : this.messageOnUpdateFail;
 				this.props.actions.showModal(message);
 			});
 		}
@@ -205,7 +218,7 @@ class Edit extends View<null, Props, State> {
 				isDeleting: false,
 				choseDelete: false,
 			});
-			let message = error.message ? error.message : 'Could not delete the shedule. Please try again later.';
+			let message = error.message ? error.message : this.messageOnDeleteFail;
 			this.props.actions.showModal(message);
 		});
 	}

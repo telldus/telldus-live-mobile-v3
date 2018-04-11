@@ -67,7 +67,7 @@ const messages = defineMessages({
 		defaultMessage: 'New in version',
 	},
 	skipButton: {
-		id: 'changeLog36.button.skipButton',
+		id: 'changeLog.button.skipButton',
 		defaultMessage: 'skip this',
 	},
 });
