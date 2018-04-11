@@ -195,7 +195,7 @@
     "error.tryAgain": "nochmal versuchen",
     "error.unknownError": "Unbekannter Fehler, versuchen Sie es später erneut",
     "errortoast": "Aktion kann momentan nicht ausgeführt werden.",
-    "event": "Event",
+    "event": "Ereignis",
     "form.login.fieldEmpty": "Etwas scheint in ihrem Formular zu fehlen. Bitte prüfen Sie, das Email und Passwort korrekt eingegeben wurden.",
     "form.register.fieldEmptyPostfix": "scheint in ihrem Formular zu fehlen. Bitte überprüfen Sie, ob es korrekt eingegeben wurde.",
     "gateway.noLiveUpdates": "Echtzeit-Updates sind nicht verfügbar",
