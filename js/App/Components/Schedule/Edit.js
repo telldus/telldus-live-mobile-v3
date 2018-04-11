@@ -237,8 +237,8 @@ class Edit extends View<null, Props, State> {
 
 		return (
 			<ScrollView>
-				<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout} intl={intl}/>
 				<View style={container}>
+					<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout} intl={intl}/>
 					<ActionRow
 						method={method}
 						showValue={true}

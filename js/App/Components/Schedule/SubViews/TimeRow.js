@@ -252,7 +252,7 @@ export default class TimeRow extends View<null, Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const size = deviceWidth * 0.196;
+		const size = deviceWidth * 0.136;
 
 		return {
 			container: {
@@ -263,7 +263,7 @@ export default class TimeRow extends View<null, Props, State> {
 				size,
 				color: Theme.Core[`${type}Color`],
 				style: {
-					width: deviceWidth * 0.2156,
+					width: deviceWidth * 0.1556,
 				},
 			},
 			textWrapper: {

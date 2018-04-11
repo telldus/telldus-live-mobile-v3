@@ -81,7 +81,7 @@ export default class DeviceRow extends View<null, Props, null> {
 				fontSize: deviceWidth * 0.149333333,
 			},
 			iconContainer: {
-				width: deviceWidth * 0.346666667,
+				width: deviceWidth * 0.286666667,
 				borderTopLeftRadius: borderRadiusRow,
 				borderBottomLeftRadius: borderRadiusRow,
 			},

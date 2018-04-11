@@ -241,7 +241,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const iconContainerWidth = deviceWidth * 0.346666667;
+		const iconContainerWidth = deviceWidth * 0.286666667;
 
 		return {
 			row: {

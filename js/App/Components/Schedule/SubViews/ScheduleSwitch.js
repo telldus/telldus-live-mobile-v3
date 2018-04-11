@@ -23,9 +23,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch } from 'react-native';
 
-import {Text, View} from '../../../../BaseComponents';
+import {Text, View, Switch} from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -71,6 +70,7 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 
 		const offsetMiddle = deviceWidth * 0.033333333;
 		const offsetLarge = deviceWidth * 0.04;
+		const { borderRadiusRow } = Theme.Core;
 
 		return {
 			container: {
@@ -78,13 +78,12 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 				alignItems: 'center',
 				justifyContent: 'space-between',
 				backgroundColor: '#fff',
-				borderTopWidth: 1,
-				borderBottomWidth: 1,
-				borderColor: '#c8c7cc',
 				paddingHorizontal: offsetMiddle,
 				paddingVertical: deviceWidth * 0.02,
 				marginVertical: offsetLarge,
+				borderRadius: borderRadiusRow,
 				width: '100%',
+				...Theme.Core.shadow,
 			},
 			description: {
 				color: '#5c5c5c',
