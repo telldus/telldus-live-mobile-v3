@@ -31,6 +31,7 @@ type Props = {
 	onValueChange: (boolean) => void;
 	thumbTintColor?: any,
 	onTintColor?: any,
+	style?: number | Object | Array<any>,
 };
 
 type DefaultProps = {
@@ -60,9 +61,9 @@ export default class SwitchComponent extends Base {
 	}
 
 	render(): React$Element<any> {
-		const { thumbTintColor, onTintColor, value } = this.props;
+		const { thumbTintColor, onTintColor, value, style } = this.props;
 		return (
-			<Switch value={value} onValueChange={this.onValueChange}
+			<Switch value={value} onValueChange={this.onValueChange} style={style}
 				thumbTintColor={thumbTintColor} onTintColor={onTintColor}/>
 		);
 	}

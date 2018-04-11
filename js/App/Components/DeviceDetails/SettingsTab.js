@@ -25,8 +25,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { FormattedMessage, Text, View, TabBar } from '../../../BaseComponents';
-import { StyleSheet, Switch } from 'react-native';
+import { FormattedMessage, Text, View, TabBar, Switch } from '../../../BaseComponents';
+import { StyleSheet } from 'react-native';
 import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 
