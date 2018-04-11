@@ -229,7 +229,7 @@ class Edit extends View<null, Props, State> {
 	render(): React$Element<any> {
 		const { appLayout, schedule, intl } = this.props;
 		const { active, method, methodValue, weekdays } = schedule;
-		const { container, row, save, cancel, throbber,
+		const { container, row, save, cancel, throbber, buttonStyle, labelStyle,
 			throbberContainer, throbberContainerOnSave, throbberContainerOnDelete } = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays);
 		const throbberContainerStyle = this.state.isSaving ? throbberContainerOnSave : this.state.isDeleting ? throbberContainerOnDelete : {};
@@ -260,25 +260,29 @@ class Edit extends View<null, Props, State> {
 					/>
 					<DaysRow selectedDays={selectedDays} onPress={this.editDays} appLayout={appLayout}
 						intl={intl} labelPostScript={labelPostScript}/>
-					<TouchableButton
-						text={messages.confirmAndSave}
-						style={save}
-						onPress={this.onSaveSchedule}
-						accessible={true}
-					/>
-					<TouchableButton
-						text={messages.delete}
-						style={cancel}
-						onPress={this.onDeleteSchedule}
-						accessible={true}
-					/>
-					{!!(this.state.isDeleting || this.state.isSaving) &&
+					<View style={{flex: 1, alignSelf: 'stretch'}}>
+						<TouchableButton
+							text={messages.confirmAndSave}
+							style={[buttonStyle, save]}
+							labelStyle={labelStyle}
+							onPress={this.onSaveSchedule}
+							accessible={true}
+						/>
+						<TouchableButton
+							text={messages.delete}
+							style={[buttonStyle, cancel]}
+							labelStyle={labelStyle}
+							onPress={this.onDeleteSchedule}
+							accessible={true}
+						/>
+						{!!(this.state.isDeleting || this.state.isSaving) &&
 					(
 						<Throbber
 							throbberContainerStyle={[throbberContainer, throbberContainerStyle]}
 							throbberStyle={throbber}
 						/>
 					)}
+					</View>
 				</View>
 			</ScrollView>
 		);
@@ -299,7 +303,6 @@ class Edit extends View<null, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const deviceHeight = isPortrait ? height : width;
 
 		const offsetSmall = deviceWidth * 0.026666667;
 		const offsetMiddle = deviceWidth * 0.033333333;
@@ -314,23 +317,30 @@ class Edit extends View<null, Props, State> {
 				marginBottom: offsetSmall,
 			},
 			save: {
-				marginTop: 10,
 				backgroundColor: Theme.Core.brandSecondary,
 			},
 			cancel: {
-				marginTop: 10,
 				backgroundColor: Theme.Core.brandDanger,
+			},
+			buttonStyle: {
+				height: 50,
+				width: 180,
+				borderRadius: 25,
+				marginTop: 10,
+			},
+			labelStyle: {
+				fontSize: 13,
 			},
 			throbberContainer: {
 				right: -(deviceWidth * 0.12),
 			},
 			throbberContainerOnDelete: {
-				top: deviceHeight * 0.65,
-				left: deviceWidth * 0.65,
+				top: 82,
+				right: width * 0.1,
 			},
 			throbberContainerOnSave: {
-				top: deviceHeight * 0.53,
-				left: deviceWidth * 0.65,
+				top: 22,
+				right: width * 0.1,
 			},
 			throbber: {
 				fontSize: 30,
