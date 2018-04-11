@@ -24,27 +24,46 @@
 import React from 'react';
 import { Switch } from 'react-native';
 import Base from './Base';
-import computeProps from './computeProps';
+import Theme from '../App/Theme';
+
+type Props = {
+	value: number,
+	onValueChange: (boolean) => void;
+	thumbTintColor?: any,
+	onTintColor?: any,
+};
+
+type DefaultProps = {
+	thumbTintColor: any,
+	onTintColor: any,
+};
 
 export default class SwitchComponent extends Base {
+	props: Props;
+	onValueChange: (boolean) => void;
 
-	getInitialStyle(): Object {
-		return {
-			switch: {},
-		};
+	static defaultProps: DefaultProps = {
+		thumbTintColor: Theme.Core.brandSecondary,
+		onTintColor: '#e2690150',
 	}
 
-	prepareRootProps(): Object {
-		let defaultProps = {
-			style: this.getInitialStyle().switch,
-		};
+	constructor(props: Props) {
+		super();
+		this.onValueChange = this.onValueChange.bind(this);
+	}
 
-		return computeProps(this.props, defaultProps);
+	onValueChange(value: boolean) {
+		let { onValueChange } = this.props;
+		if (onValueChange) {
+			onValueChange(value);
+		}
 	}
 
 	render(): React$Element<any> {
+		const { thumbTintColor, onTintColor, value } = this.props;
 		return (
-			<Switch {...this.prepareRootProps()}/>
+			<Switch value={value} onValueChange={this.onValueChange}
+				thumbTintColor={thumbTintColor} onTintColor={onTintColor}/>
 		);
 	}
 }
