@@ -32,16 +32,12 @@ import { View } from '../../../../BaseComponents';
 import Name from '../Common/Name';
 
 import i18n from '../../../Translations/common';
+import { messages as commonMessages } from '../Common/messages';
 const messages = defineMessages({
 	headerTwo: {
 		id: 'addNewLocation.locationName.headerTwo',
 		defaultMessage: 'Setup your TellStick to start',
 		description: 'Secondary header Text for the Location Detected Screen',
-	},
-	invalidLocationName: {
-		id: 'addNewLocation.locationName.invalidLocationName',
-		defaultMessage: 'Location name can not be empty',
-		description: 'Local validation text when Location name field is left empty',
 	},
 });
 
@@ -108,7 +104,7 @@ class LocationName extends View {
 			clientInfo.name = locationName;
 			this.props.navigation.navigate('TimeZone', {clientInfo});
 		} else {
-			let message = this.props.intl.formatMessage(messages.invalidLocationName);
+			let message = this.props.intl.formatMessage(commonMessages.invalidLocationName);
 			this.props.actions.showModal(message);
 		}
 	}
