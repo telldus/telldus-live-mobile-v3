@@ -54,7 +54,7 @@
   "accessibilityLabel.sensors.iconRemovePhraseTwo": "from dashboard",
   "accessibilityLabel.sensors.labelBarometricPressure": "Barometric Pressure",
   "accessibilityLabel.sensors.labelDewPoint": "Dew Point",
-  "accessibilityLabel.sensors.labelGenricMeter": "Genric Meter",
+  "accessibilityLabel.sensors.labelGenericMeter": "Generic Meter",
   "accessibilityLabel.sensors.labelHumidity": "Humidity",
   "accessibilityLabel.sensors.labelLuminance": "Luminance",
   "accessibilityLabel.sensors.labelRainRate": "Rain Rate",

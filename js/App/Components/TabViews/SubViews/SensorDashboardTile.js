@@ -77,7 +77,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 	labelLuminance: string;
 	labelDewPoint: string;
 	labelBarometricPressure: string;
-	labelGenricMeter: string;
+	labelGenericMeter: string;
 	labelTimeAgo: string;
 	width: number;
 	offline: string;
@@ -115,7 +115,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 		this.labelWatt = formatMessage(i18n.labelWatt);
 		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
 		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
-		this.labelGenricMeter = formatMessage(i18n.labelGenricMeter);
+		this.labelGenericMeter = formatMessage(i18n.labelGenericMeter);
 		this.labelLuminance = formatMessage(i18n.labelLuminance);
 
 		this.offline = formatMessage(i18n.offline);
@@ -278,12 +278,12 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				slideList.push({
 					key: 'genricmeter',
 					icon: 'sensor',
-					label: this.labelGenricMeter,
+					label: this.labelGenericMeter,
 					unit,
 					isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${this.labelGenericMeter} ${value}${unit}`;
 			}
 		}
 

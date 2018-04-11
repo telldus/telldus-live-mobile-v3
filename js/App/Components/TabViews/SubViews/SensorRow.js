@@ -86,7 +86,7 @@ class SensorRow extends PureComponent<Props, State> {
 	labelLuminance: string;
 	labelDewPoint: string;
 	labelBarometricPressure: string;
-	labelGenricMeter: string;
+	labelGenericMeter: string;
 	labelTimeAgo: string;
 	width: number;
 	offline: string;
@@ -134,7 +134,7 @@ class SensorRow extends PureComponent<Props, State> {
 		this.labelLuminance = formatMessage(i18n.labelLuminance);
 		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
 		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
-		this.labelGenricMeter = formatMessage(i18n.labelGenricMeter);
+		this.labelGenericMeter = formatMessage(i18n.labelGenericMeter);
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
 
 		this.offline = formatMessage(i18n.offline);
@@ -298,9 +298,9 @@ class SensorRow extends PureComponent<Props, State> {
 			}
 			if (name === 'genmeter') {
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'sensor'} label={this.labelGenricMeter} isLarge={isLarge} key={key}
+					icon={'sensor'} label={this.labelGenericMeter} isLarge={isLarge} key={key}
 					formatOptions={{maximumFractionDigits: 1}}/>);
-				sensorInfo = `${sensorInfo}, ${this.labelGenricMeter} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${this.labelGenericMeter} ${value}${unit}`;
 			}
 		}
 		return {sensors, sensorInfo};

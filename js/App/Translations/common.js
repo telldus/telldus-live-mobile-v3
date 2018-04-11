@@ -316,9 +316,9 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.sensors.labelBarometricPressure',
 		defaultMessage: 'Barometric Pressure',
 	},
-	labelGenricMeter: {
-		id: 'accessibilityLabel.sensors.labelGenricMeter',
-		defaultMessage: 'Genric Meter',
+	labelGenericMeter: {
+		id: 'accessibilityLabel.sensors.labelGenericMeter',
+		defaultMessage: 'Generic Meter',
 	},
 	labelTimeAgo: {
 		id: 'accessibilityLabel.sensors.labelTimeAgo',
