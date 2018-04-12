@@ -109,7 +109,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 	}
 
 	getScreenData(currentScreen: string): Object {
-		let icon = '', iconTwo = '', iconThree = '', iconSize = 100, iconTwoSize = 100, iconThreeSize = 100,
+		let icon = null, iconTwo = null, iconThree = null, iconSize = 100, iconTwoSize = 100, iconThreeSize = 100,
 			title = '', description = '';
 		switch (currentScreen) {
 			case 'WizardOne':
@@ -154,7 +154,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 			<View style={[styles.container, {opacity: animatedOpacity, transform: [{
 				translateX: animatedX,
 			}]}]}>
-				<View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: -16}}>
+				<View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: iconTwo ? -16 : 0}}>
 					{icon && <IconTelldus icon={icon} style={styles.icon} size={iconSize}/>}
 					{iconTwo && <IconTelldus icon={iconTwo} style={styles.iconTwo} size={iconTwoSize}/>}
 					{iconThree && <IconTelldus icon={iconThree} style={styles.iconThree} size={iconThreeSize}/>}
@@ -172,12 +172,14 @@ export default class WizardOne extends PureComponent<Props, null> {
 const styles = StyleSheet.create({
 	icon: {
 		color: Theme.Core.brandSecondary,
+		textAlign: 'center',
 	},
 	// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
 	iconTwo: {
 		color: Theme.Core.brandSecondary,
 		textAlignVertical: 'center',
 		marginTop: Platform.OS === 'ios' ? 10 : 0,
+		textAlign: 'center',
 	},
 	// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
 	iconThree: {
@@ -185,6 +187,7 @@ const styles = StyleSheet.create({
 		textAlignVertical: 'center',
 		marginTop: Platform.OS === 'ios' ? 10 : 0,
 		marginLeft: 12,
+		textAlign: 'center',
 	},
 	container: {
 		...Theme.Core.shadow,
@@ -200,7 +203,6 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		color: '#00000090',
 		textAlign: 'center',
-		paddingHorizontal: 10,
 		marginVertical: 10,
 	},
 	description: {
