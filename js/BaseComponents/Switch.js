@@ -27,7 +27,7 @@ import Base from './Base';
 import Theme from '../App/Theme';
 
 type Props = {
-	value: number,
+	value: boolean,
 	onValueChange: (boolean) => void;
 	thumbTintColor?: any,
 	onTintColor?: any,
@@ -48,7 +48,7 @@ export default class SwitchComponent extends Base {
 	static defaultProps: DefaultProps = {
 		thumbTintColor: Theme.Core.brandSecondary,
 		onTintColor: '#e2690150',
-		tintColor: Theme.Core.inactiveSwitch,
+		tintColor: Theme.Core.inactiveSwitchBackground,
 	}
 
 	constructor(props: Props) {
@@ -64,10 +64,12 @@ export default class SwitchComponent extends Base {
 	}
 
 	render(): React$Element<any> {
-		const { thumbTintColor, onTintColor, tintColor, value, style } = this.props;
+		const { onTintColor, tintColor, value, style } = this.props;
+		const dynamicThumbTintColor = value ? Theme.Core.brandSecondary : Theme.Core.inactiveSwitch;
+
 		return (
 			<Switch value={value} onValueChange={this.onValueChange} style={style}
-				thumbTintColor={thumbTintColor} onTintColor={onTintColor} tintColor={tintColor}/>
+				thumbTintColor={dynamicThumbTintColor} onTintColor={onTintColor} tintColor={tintColor}/>
 		);
 	}
 }
