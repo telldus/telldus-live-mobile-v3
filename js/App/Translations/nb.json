@@ -235,6 +235,7 @@
     "schedule.noScheduleMessage": "Ingen tidsplaner på denne dagen",
     "schedule.posterChooseAction": "Velg en handling som skal utføres",
     "schedule.posterSummary": "Vennligst bekreft tidsplanen",
+    "schedule.time.descriptionOffset": "",
     "schedule.time.descriptionSliderInterval": "Angi tilfeldige intervaller mellom {startValue} til {endValue} minutter",
     "scheduler": "Planlegging",
     "sensor.dayAgo": "{value} dag siden",
