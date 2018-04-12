@@ -71,8 +71,8 @@ export default class Gateway extends PureComponent<Props, null> {
 			<TouchableOpacity style={styles.gatewayContainer} onPress={this.onPress}>
 				<Image style={styles.gatewayIcon} source={locationSrc}/>
 				<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
-				<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 10}}>
-					<IconTelldus icon={'settings'} size={25} color={'#bdbdbd'}/>
+				<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 10, justifyContent: 'center'}}>
+					<IconTelldus icon={'settings'} size={24} color={'#bdbdbd'}/>
 				</View>
 			</TouchableOpacity>
 		);
