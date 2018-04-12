@@ -104,6 +104,7 @@ class Modal extends Component<Props, void> {
 	}
 
 	animationSlideInY(duration?: number) {
+		this.animatedScale.setValue(1);
 		Animated.parallel([
 			this.startSlideInY(duration),
 			this._startOpacity(duration),
@@ -130,7 +131,11 @@ class Modal extends Component<Props, void> {
 			{
 				toValue: this.props.startValue,
 				duration: 500,
-			}).start();
+			}).start((event: Object) => {
+			if (event.finished) {
+				this.animatedScale.setValue(0.01);
+			}
+		});
 	}
 
 	_startScale(duration?: number) {
@@ -259,13 +264,13 @@ class Modal extends Component<Props, void> {
 				inputRange: [0, 1],
 				outputRange: [0, 1],
 			});
-			animatedProps = {scale: scaleAnim};
+			animatedProps = [{scale: scaleAnim}];
 		} else if (entry === 'SlideInY' && exit === 'SlideOutY') {
 			let YAnimatedValue = this.animatedYValue.interpolate({
 				inputRange: [startValue, endValue],
 				outputRange: [startValue, endValue],
 			});
-			animatedProps = {translateY: YAnimatedValue};
+			animatedProps = [{translateY: YAnimatedValue}, {scale: this.animatedScale}];
 		}
 		let opacityAnim = this.animatedOpacity.interpolate({
 			inputRange: [0, 0.2, 0.5, 1],
@@ -273,10 +278,10 @@ class Modal extends Component<Props, void> {
 		});
 		let overlayProps = showOverlay ? styles.overlayLayout : null;
 		return (
-			<Animated.View style={[ styles.modalContainer, modalContainerStyle, overlayProps, {transform: [animatedProps],
+			<Animated.View style={[ styles.modalContainer, modalContainerStyle, overlayProps, {transform: animatedProps,
 				opacity: opacityAnim,
 			}]}>
-				<Animated.View style={[ styles.modal, modalStyle, {transform: [animatedProps],
+				<Animated.View style={[ styles.modal, modalStyle, {transform: animatedProps,
 					opacity: opacityAnim,
 				}]}>
 					{children}
