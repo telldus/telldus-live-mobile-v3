@@ -31,12 +31,14 @@ type Props = {
 	onValueChange: (boolean) => void;
 	thumbTintColor?: any,
 	onTintColor?: any,
+	tintColor?: any,
 	style?: number | Object | Array<any>,
 };
 
 type DefaultProps = {
 	thumbTintColor: any,
 	onTintColor: any,
+	tintColor: any,
 };
 
 export default class SwitchComponent extends Base {
@@ -46,6 +48,7 @@ export default class SwitchComponent extends Base {
 	static defaultProps: DefaultProps = {
 		thumbTintColor: Theme.Core.brandSecondary,
 		onTintColor: '#e2690150',
+		tintColor: Theme.Core.inactiveSwitch,
 	}
 
 	constructor(props: Props) {
@@ -61,10 +64,10 @@ export default class SwitchComponent extends Base {
 	}
 
 	render(): React$Element<any> {
-		const { thumbTintColor, onTintColor, value, style } = this.props;
+		const { thumbTintColor, onTintColor, tintColor, value, style } = this.props;
 		return (
 			<Switch value={value} onValueChange={this.onValueChange} style={style}
-				thumbTintColor={thumbTintColor} onTintColor={onTintColor}/>
+				thumbTintColor={thumbTintColor} onTintColor={onTintColor} tintColor={tintColor}/>
 		);
 	}
 }

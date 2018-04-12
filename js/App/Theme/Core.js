@@ -46,6 +46,7 @@ export default {
 	fadedInverseTextColor: '#C3D1E6',
 	textColor: '#000000',
 	inactiveGray: '#bdbdbd',
+	inactiveSwitch: '#cccccc',
 
 	sunriseColor: '#ffa726',
 	sunsetColor: '#ef5350',
