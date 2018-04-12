@@ -177,8 +177,8 @@ class DeviceHistoryDetails extends View {
 				entry= "SlideInY"
 				exit= "SlideOutY"
 				showOverlay= {false}
-				entryDuration= {300}
-				exitDuration= {100}
+				entryDuration= {1000}
+				exitDuration= {1000}
 				startValue= {-startValue}
 				endValue= {0}
 				showModal={this.props.showDetails}>

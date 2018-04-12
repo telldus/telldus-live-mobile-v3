@@ -122,7 +122,7 @@ class Modal extends Component<Props, void> {
 		Animated.timing(this.animatedYValue,
 			{
 				toValue: this.props.endValue,
-				duration: 500,
+				duration,
 			}).start();
 	}
 
@@ -130,7 +130,7 @@ class Modal extends Component<Props, void> {
 		Animated.timing(this.animatedYValue,
 			{
 				toValue: this.props.startValue,
-				duration: 500,
+				duration,
 			}).start((event: Object) => {
 			if (event.finished) {
 				this.animatedScale.setValue(0.01);
@@ -277,6 +277,17 @@ class Modal extends Component<Props, void> {
 			outputRange: [0, 0.5, 1, 1],
 		});
 		let overlayProps = showOverlay ? styles.overlayLayout : null;
+
+		if (!showOverlay) {
+			return (
+				<Animated.View style={[ styles.modal, modalStyle, {transform: animatedProps,
+					opacity: opacityAnim,
+				}]}>
+					{children}
+				</Animated.View>
+			);
+		}
+
 		return (
 			<Animated.View style={[ styles.modalContainer, modalContainerStyle, overlayProps, {transform: animatedProps,
 				opacity: opacityAnim,
@@ -294,15 +305,15 @@ class Modal extends Component<Props, void> {
 		let { height, width } = appLayout;
 		return {
 			modalContainer: {
-				flex: 1,
+				flex: 0,
 				position: 'absolute',
 				elevation: 8,
-				backgroundColor: '#00000060',
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
 			overlayLayout: {
 				...ifIphoneX({width: '100%', height: '100%'}, {width, height}),
+				backgroundColor: '#00000060',
 			},
 			modal: {
 				position: 'absolute',
