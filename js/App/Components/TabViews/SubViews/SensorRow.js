@@ -465,7 +465,7 @@ class SensorRow extends PureComponent<Props, State> {
 				flexDirection: 'row',
 			},
 			sensorValueCover: {
-				width: Theme.Core.buttonWidth * 2,
+				width: (Theme.Core.buttonWidth * 2) + 12,
 				backgroundColor: backgroundColor,
 				height: Theme.Core.rowHeight,
 				alignItems: 'flex-start',
