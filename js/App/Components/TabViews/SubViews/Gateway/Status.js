@@ -30,7 +30,8 @@ import i18n from '../../../../Translations/common';
 type Props = {
     online: boolean,
     websocketOnline: boolean,
-    intl: Object,
+	intl: Object,
+	textStyle?: number | Object | Array<any>,
 };
 
 export default class GatewayStatus extends View<Props, null> {
@@ -52,13 +53,13 @@ constructor(props: Props) {
 
 render(): Object {
 	let { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
-	let { online, websocketOnline } = this.props;
+	let { online, websocketOnline, textStyle } = this.props;
 
 	if (!online) {
 		return (
 			<View style={styles.statusInfoCover}>
 				<View style={[styles.statusInfo, { backgroundColor: locationOffline}]}/>
-				<Text style={styles.statusText}>
+				<Text style={[styles.statusText, textStyle]}>
 					{this.offline}
 				</Text>
 			</View>
@@ -67,7 +68,7 @@ render(): Object {
 		return (
 			<View style={styles.statusInfoCover}>
 				<View style={[styles.statusInfo, { backgroundColor: locationNoLiveUpdates}]}/>
-				<Text style={styles.statusText}>
+				<Text style={[styles.statusText, textStyle]}>
 					{this.noLiveUpdates}
 				</Text>
 			</View>
@@ -76,7 +77,7 @@ render(): Object {
 	return (
 		<View style={styles.statusInfoCover}>
 			<View style={[styles.statusInfo, { backgroundColor: locationOnline}]}/>
-			<Text style={styles.statusText}>
+			<Text style={[styles.statusText, textStyle]}>
 				{this.online}
 			</Text>
 		</View>
