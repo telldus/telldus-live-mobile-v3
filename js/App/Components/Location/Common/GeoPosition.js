@@ -28,6 +28,7 @@ import { TextInput, Keyboard, InteractionManager } from 'react-native';
 import { intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
 import { isIphoneX } from 'react-native-iphone-x-helper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { View, FloatingButton } from '../../../../BaseComponents';
 import LabelBox from './LabelBox';
@@ -56,6 +57,7 @@ type Props = {
 	longitude?: number,
 	latitudeDelta?: number,
 	longitudeDelta?: number,
+	isSearchLoading?: boolean,
 };
 
 type State = {
@@ -64,6 +66,7 @@ type State = {
 	coordinate: Object,
 	latitudeDelta?: number,
 	longitudeDelta?: number,
+	isSearchLoading: boolean,
 };
 
 type DefaultProps = {
@@ -120,6 +123,7 @@ class GeoPosition extends View {
 			},
 			latitudeDelta,
 			longitudeDelta,
+			isSearchLoading: false,
 		};
 
 		let { formatMessage } = props.intl;
@@ -182,6 +186,9 @@ class GeoPosition extends View {
 
 	onEndEditing() {
 		if (this.state.address !== '') {
+			this.setState({
+				isSearchLoading: true,
+			});
 			this.props.actions.getGeoCodePosition(this.state.address, googleMapsAPIKey).then((response: Object) => {
 				if (response.status && response.status === 'OK' && response.results[0]) {
 					let { location, viewport } = response.results[0].geometry;
@@ -197,6 +204,9 @@ class GeoPosition extends View {
 						latitude,
 						longitude,
 					};
+					this.setState({
+						isSearchLoading: false,
+					});
 					InteractionManager.runAfterInteractions(() => {
 						this.setState({
 							region,
@@ -205,12 +215,19 @@ class GeoPosition extends View {
 							longitudeDelta,
 						});
 					});
+				} else {
+					this.setState({
+						isSearchLoading: false,
+					});
 				}
 			}).catch((error: Object) => {
 				let data = !error.error_description && error.message === 'Network request failed' ?
 					this.networkFailed : error.error_description ?
 						error.error_description : error.error ? error.error : this.unknownError;
 				this.props.actions.showModal(data);
+				this.setState({
+					isSearchLoading: false,
+				});
 			});
 		}
 	}
@@ -249,40 +266,44 @@ class GeoPosition extends View {
 
 		return (
 			<View style={styles.container}>
-				<View style={styles.body}>
-					<LabelBox
-						label={this.label}
-						showIcon={true}
-						appLayout={appLayout}>
-						<TextInput
-							style={styles.address}
-							onChangeText={this.onAddressChange}
-							onEndEditing={this.onEndEditing}
-							autoCapitalize="none"
-							autoCorrect={false}
-							autoFocus={false}
-							underlineColorAndroid="#e26901"
-							value={this.state.address}/>
-					</LabelBox>
-					<View style={styles.mapViewCover} accessible={false} importantForAccessibility="no-hide-descendants">
-						<MapView.Animated
-							style={styles.map}
-							ref={this._refs}
-							region={this.state.region}
-						>
-							<MapView.Marker.Animated
-								draggable
-								coordinate={this.state.coordinate}
-								onDragEnd={this.onDragEnd}/>
-						</MapView.Animated>
-					</View>
+				<LabelBox
+					label={this.label}
+					showIcon={true}
+					appLayout={appLayout}>
+					<TextInput
+						style={styles.address}
+						onChangeText={this.onAddressChange}
+						onEndEditing={this.onEndEditing}
+						autoCapitalize="none"
+						autoCorrect={false}
+						autoFocus={false}
+						underlineColorAndroid="#e26901"
+						value={this.state.address}/>
+				</LabelBox>
+				<View style={styles.mapViewCover} accessible={false} importantForAccessibility="no-hide-descendants">
+					<MapView.Animated
+						style={styles.map}
+						ref={this._refs}
+						region={this.state.region}
+					>
+						<MapView.Marker.Animated
+							draggable
+							coordinate={this.state.coordinate}
+							onDragEnd={this.onDragEnd}/>
+					</MapView.Animated>
 					<FloatingButton
-						buttonStyle={styles.buttonStyle}
+						buttonStyle={styles.submitButtonStyle}
 						onPress={this.onSubmit}
 						imageSource={isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
 						showThrobber={isLoading}
 					/>
 				</View>
+				<FloatingButton
+					buttonStyle={styles.searchButtonStyle}
+					onPress={this.onEndEditing}
+					customComponent={this.state.isSearchLoading ? false : <Icon name="search" size={18} color="#fff"/>}
+					showThrobber={this.state.isSearchLoading}
+				/>
 			</View>
 		);
 	}
@@ -312,7 +333,7 @@ class GeoPosition extends View {
 			  },
 			  address: {
 				  height: 50,
-				  width: width - padding,
+				  width: width - padding - 30,
 				  paddingLeft: 35,
 				  color: '#A59F9A',
 				  fontSize: Math.floor(deviceWidth * 0.06),
@@ -334,10 +355,19 @@ class GeoPosition extends View {
 			  h2: {
 				  fontSize: deviceWidth * 0.053333333,
 			  },
-			  buttonStyle: {
-				  right: deviceWidth * 0.053333333,
-				  elevation: 10,
+			  searchButtonStyle: {
+				right: deviceWidth * 0.053333333,
+				elevation: 10,
+				bottom: undefined,
+				top: 55,
+				height: 30,
+				width: 30,
+				borderRadius: 15,
 			  },
+			  submitButtonStyle: {
+				right: deviceWidth * 0.053333333,
+				elevation: 10,
+			},
 		};
 	}
 }
