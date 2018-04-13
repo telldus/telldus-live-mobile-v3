@@ -79,15 +79,12 @@ const NavigationHeader = ({ firstName, lastName, styles }: Object): Object => {
 
 const ConnectedLocations = ({styles}: Object): Object => (
 	<View style={styles.navigationTitle}>
-		<Text>
-			<IconTelldus icon={'location'} size={30} color={Theme.Core.brandPrimary}/>
-			<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
-		</Text>
+		<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
 	</View>
 );
 
 const SettingsButton = ({ onPress, styles }: Object): Object => (
-	<TouchableOpacity onPress={onPress} style={styles.navigationTitle}>
+	<TouchableOpacity onPress={onPress} style={[styles.navigationTitle, {marginLeft: 12}]}>
 		<IconTelldus icon={'settings'} size={36} color={Theme.Core.brandPrimary}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
 	</TouchableOpacity>
@@ -119,7 +116,7 @@ export default class Drawer extends View<Props, null> {
 				}}>
 					<ConnectedLocations styles={styles}/>
 					{gateways.allIds.map((id: number, index: number): Object => {
-						return (<Gateway gateway={gateways.byId[id]} key={index} styles={styles} onPressGateway={onPressGateway}/>);
+						return (<Gateway gateway={gateways.byId[id]} key={index} appLayout={appLayout} onPressGateway={onPressGateway}/>);
 					})}
 					<AddLocation onPress={addNewLocation} styles={styles}/>
 					<SettingsButton onPress={onOpenSetting} styles={styles}/>
@@ -173,7 +170,6 @@ export default class Drawer extends View<Props, null> {
 				height: 30,
 				marginLeft: 10,
 				marginTop: 20,
-				marginBottom: 10,
 			},
 			navigationTextTitle: {
 				color: 'rgba(26,53,92,255)',
@@ -192,30 +188,13 @@ export default class Drawer extends View<Props, null> {
 				color: 'white',
 				fontSize: 18,
 			},
-			gatewayContainer: {
-				marginLeft: 10,
-				height: 20,
-				flexDirection: 'row',
-				marginTop: 10,
-				marginBottom: 10,
-			},
-			gateway: {
-				fontSize: 14,
-				color: 'rgba(110,110,110,255)',
-				marginHorizontal: 10,
-				maxWidth: 220,
-			},
-			gatewayIcon: {
-				width: 20,
-				height: 20,
-			},
 			addNewLocationCover: {
 				flexDirection: 'row',
 			},
 			addNewLocationContainer: {
 				borderBottomWidth: 1,
 				borderBottomColor: '#eeeeef',
-				marginLeft: 10,
+				marginLeft: 16,
 				marginRight: 10,
 				marginTop: 10,
 				height: 40,

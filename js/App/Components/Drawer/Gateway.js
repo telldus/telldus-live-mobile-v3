@@ -23,16 +23,22 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { TouchableOpacity, Image, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { intlShape, injectIntl } from 'react-intl';
+
 import { IconTelldus, View } from '../../../BaseComponents';
+import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
+import Status from '../TabViews/SubViews/Gateway/Status';
+import { getLocationImageUrl, getDrawerWidth } from '../../Lib';
 
 type Props = {
 	gateway: Object,
-	styles: Object,
 	onPressGateway: (Object) => void,
+	intl: intlShape,
+	appLayout: Object,
 };
 
-export default class Gateway extends PureComponent<Props, null> {
+class Gateway extends PureComponent<Props, null> {
 	props: Props;
 
 	offline: number;
@@ -55,26 +61,100 @@ export default class Gateway extends PureComponent<Props, null> {
 		onPressGateway(gateway);
 	}
 
+	getLocationStatus(online: boolean, websocketOnline: boolean): Object {
+		return (
+			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} textStyle={{fontSize: 10}}/>
+		);
+	}
+
 	render(): Object {
-		let { styles, gateway } = this.props;
-		let { name, online, websocketOnline } = gateway;
-		let locationSrc;
-		if (!online) {
-			locationSrc = this.offline;
-		} else if (!websocketOnline) {
-			locationSrc = this.socketOffline;
-		} else {
-			locationSrc = this.online;
-		}
+		const { gateway, appLayout } = this.props;
+		const { name, online, websocketOnline, type } = gateway;
+		const { width, height } = appLayout;
+		const deviceWidth = height > width ? width : height;
+		const drawerWidth = getDrawerWidth(deviceWidth);
+		const {
+			image,
+			descriptionContainer,
+			gatewayContainer,
+			detailsContainer,
+			h1Style,
+			h2Style,
+			iconSettingsContainer,
+		} = this.getStyles(drawerWidth);
+
+		const info = this.getLocationStatus(online, websocketOnline);
+		const locationImageUrl = getLocationImageUrl(type);
+		const locationData = {
+			image: locationImageUrl,
+			H1: name,
+			H2: type,
+			info,
+		};
 
 		return (
-			<TouchableOpacity style={styles.gatewayContainer} onPress={this.onPress}>
-				<Image style={styles.gatewayIcon} source={locationSrc}/>
-				<Text style={styles.gateway} ellipsizeMode="middle" numberOfLines={1}>{name}</Text>
-				<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 10, justifyContent: 'center'}}>
+			<TouchableOpacity style={gatewayContainer} onPress={this.onPress}>
+				<LocationDetails {...locationData}
+					style={detailsContainer}
+					imageStyle={image}
+					descriptionContainerStyle={descriptionContainer}
+					h1Style={h1Style}
+					h2Style={h2Style}/>
+				<View style={iconSettingsContainer}>
 					<IconTelldus icon={'settings'} size={24} color={'#bdbdbd'}/>
 				</View>
 			</TouchableOpacity>
 		);
 	}
+	getStyles(drawerWidth: number): Object {
+		return {
+			gatewayContainer: {
+				alignItems: 'center',
+				justifyContent: 'center',
+				flexDirection: 'row',
+				marginVertical: 10,
+			},
+			detailsContainer: {
+				width: drawerWidth,
+				height: drawerWidth * 0.22,
+				paddingHorizontal: 10,
+				paddingVertical: 0,
+				marginVertical: 0,
+				elevation: 0,
+				shadowColor: '#000',
+				shadowRadius: 0,
+				shadowOpacity: 0,
+				shadowOffset: {
+					width: 0,
+					height: 0,
+				},
+			},
+			image: {
+				width: drawerWidth * 0.22,
+				height: drawerWidth * 0.22,
+				resizeMode: 'stretch',
+				marginRight: 10,
+			},
+			descriptionContainer: {
+				flex: 1,
+				height: drawerWidth * 0.22,
+				marginRight: 0,
+			},
+			h1Style: {
+				fontSize: 14,
+			},
+			h2Style: {
+				fontSize: 11,
+			},
+			iconSettingsContainer: {
+				width: 30,
+				justifyContent: 'center',
+				position: 'absolute',
+				right: 5,
+				bottom: 2,
+			},
+		};
+	}
 }
+
+export default injectIntl(Gateway);
