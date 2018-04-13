@@ -75,7 +75,7 @@ class LocationDetails extends View {
 	render(): Object {
 
 		let { title, H1, H2, image, style, appLayout, accessible, info,
-			imageStyle, descriptionContainerStyle, h1Style, h2Style } = this.props;
+			imageStyle, descriptionContainerStyle, h1Style, h2Style, onPress } = this.props;
 
 		let {
 			locationTextContainer,
@@ -93,7 +93,7 @@ class LocationDetails extends View {
 				}
 				<View style={styles.imageHeaderContainer}>
 					<Image style={[locationImage, imageStyle]} source={{ uri: image, isStatic: true }} />
-					<TouchableWithoutFeedback onPress={this.onPress} accessible={accessible}>
+					<TouchableWithoutFeedback disabled={!onPress} onPress={this.onPress} accessible={accessible}>
 						<View style={[locationTextContainer, descriptionContainerStyle]}>
 							<Text numberOfLines={1} style={[textHSH, h1Style]}>
 								{!!H1 && H1}
