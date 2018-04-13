@@ -30,6 +30,7 @@ import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View } from '../../../../BaseComponents';
 import GeoPosition from '../Common/GeoPosition';
+import { googleMapsAPIKey } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';
@@ -46,6 +47,10 @@ type Props = {
 
 type State = {
 	isLoading: boolean,
+	latitude: number,
+	longitude: number,
+	latitudeDelta: number,
+	longitudeDelta: number,
 };
 
 class EditGeoPosition extends View {
@@ -56,9 +61,15 @@ class EditGeoPosition extends View {
 
 	constructor(props: Props) {
 		super(props);
+		const { navigation } = this.props;
+		const { latitude, longitude } = navigation.state.params;
 
 		this.state = {
 			isLoading: false,
+			latitude,
+			longitude,
+			latitudeDelta: 0.74442,
+			longitudeDelta: 0.74442,
 		};
 
 		let { formatMessage } = props.intl;
@@ -70,6 +81,7 @@ class EditGeoPosition extends View {
 		this.onSetGeoPositionError = `${formatMessage(commonMessages.failureEditGeoPosition)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.onSubmit = this.onSubmit.bind(this);
+		this.getGeoCodeInfo(latitude, longitude);
 	}
 
 	componentDidMount() {
@@ -80,6 +92,29 @@ class EditGeoPosition extends View {
 		if (screenReaderEnabled) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
+	}
+
+	getDeltas(viewport: Object): Object {
+		let { northeast, southwest } = viewport;
+		let longitudeDelta = northeast.lng - southwest.lng, latitudeDelta = northeast.lat - southwest.lat;
+		return {longitudeDelta, latitudeDelta};
+	}
+
+	getGeoCodeInfo(lat: number, lng: number) {
+		let latitude = parseFloat(lat).toFixed(7);
+		let latitude1 = parseFloat(latitude);
+		let longitude = parseFloat(lng).toFixed(7);
+		let longitude1 = parseFloat(longitude);
+		this.props.actions.getGeoCodeInfoUsingLatLng(latitude1, longitude1, googleMapsAPIKey).then((response: Object) => {
+			if (response.status && response.status === 'OK' && response.results[0]) {
+				let { viewport } = response.results[0].geometry;
+				let { longitudeDelta, latitudeDelta } = this.getDeltas(viewport);
+				this.setState({
+					latitudeDelta,
+					longitudeDelta,
+				});
+			}
+		});
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -113,19 +148,25 @@ class EditGeoPosition extends View {
 	}
 
 	render(): Object {
-		const { navigation } = this.props;
-		const { latitude, longitude } = navigation.state.params;
+		const {
+			latitude,
+			longitude,
+			latitudeDelta,
+			longitudeDelta,
+		} = this.state;
+
 		const region = {
 			latitude,
 			longitude,
-			latitudeDelta: 0.74442,
-			longitudeDelta: 0.74442,
+			latitudeDelta,
+			longitudeDelta,
 		};
 
 		return (
 			<GeoPosition
 				{...this.props}
 				region={region}
+				{...region}
 				isLoading={this.state.isLoading}
 				onSubmit={this.onSubmit}/>
 		);
