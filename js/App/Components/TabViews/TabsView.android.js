@@ -40,6 +40,7 @@ import { syncWithServer, switchTab, addNewGateway, showToast } from '../../Actio
 import TabViews from './index';
 import { TabNavigator } from 'react-navigation';
 import Drawer from '../Drawer/Drawer';
+import { getDrawerWidth } from '../../Lib';
 
 const messages = defineMessages({
 	menuIcon: {
@@ -283,12 +284,6 @@ class TabsView extends View {
 		return this.state.drawer ? null : this.menuButton;
 	};
 
-	getDrawerWidth = (deviceWidth: number): number => {
-		let minWidth = 250;
-		let width = deviceWidth * 0.6;
-		return width < minWidth ? minWidth : width;
-	}
-
 	render(): Object {
 		let { appLayout, stackNavigator } = this.props;
 		let { routeName } = this.state;
@@ -304,7 +299,7 @@ class TabsView extends View {
 		};
 
 		const leftButton = this.makeLeftButton(styles);
-		const drawerWidth = this.getDrawerWidth(deviceWidth);
+		const drawerWidth = getDrawerWidth(deviceWidth);
 
 		// TODO: Refactor: Split this code to smaller components
 		return (

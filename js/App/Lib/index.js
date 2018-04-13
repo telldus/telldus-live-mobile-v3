@@ -40,6 +40,8 @@ import getTabBarIcon from './getTabBarIcon';
 import getRelativeDimensions from './getRelativeDimensions';
 import getDeviceType from './getDeviceType';
 import TelldusWebsocket from './Socket';
+import getDrawerWidth from './getDrawerWidth';
+import getLocationImageUrl from './getLocationImageUrl';
 
 
 module.exports = {
@@ -63,4 +65,6 @@ module.exports = {
 	...daysUtils,
 	getDeviceType,
 	TelldusWebsocket,
+	getDrawerWidth,
+	getLocationImageUrl,
 };
