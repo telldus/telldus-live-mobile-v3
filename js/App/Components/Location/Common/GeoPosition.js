@@ -61,6 +61,7 @@ type Props = {
 };
 
 type State = {
+	isKeyboardShown: boolean,
 	region: Object,
 	address: string,
 	coordinate: Object,
@@ -185,11 +186,17 @@ class GeoPosition extends View {
 	}
 
 	onEndEditing() {
-		if (this.state.address !== '') {
+		let { address, isKeyboardShown } = this.state;
+		if (address !== '') {
 			this.setState({
 				isSearchLoading: true,
 			});
-			this.props.actions.getGeoCodePosition(this.state.address, googleMapsAPIKey).then((response: Object) => {
+			if (isKeyboardShown) {
+				InteractionManager.runAfterInteractions(() => {
+					Keyboard.dismiss();
+				});
+			}
+			this.props.actions.getGeoCodePosition(address, googleMapsAPIKey).then((response: Object) => {
 				if (response.status && response.status === 'OK' && response.results[0]) {
 					let { location, viewport } = response.results[0].geometry;
 					let latitude = location.lat, longitude = location.lng;
