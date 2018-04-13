@@ -52,6 +52,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	iconStyle?: Object | number,
 	iconName?: string,
+	customComponent?: Object,
 };
 
 class FloatingButton extends Component<Props, null> {
@@ -89,7 +90,7 @@ class FloatingButton extends Component<Props, null> {
 
 	render(): Object {
 		let { buttonStyle, onPress, imageSource, iconName, showThrobber,
-			appLayout, accessible, accessibilityLabel, iconStyle } = this.props;
+			appLayout, accessible, accessibilityLabel, iconStyle, customComponent } = this.props;
 		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
 		const { container, button, icon, throbber } = this._getStyle(appLayout);
@@ -106,6 +107,9 @@ class FloatingButton extends Component<Props, null> {
 						(
 							<IconTelldus icon={iconName} style={iconStyle}/>
 						)
+					}
+					{
+						!!customComponent && customComponent
 					}
 					{!!showThrobber &&
 					(
