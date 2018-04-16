@@ -2,16 +2,22 @@ let exec = require('child-process-promise').exec;
 let fs = require('fs');
 
 let changelog = '';
+const regex = /changelogs?\s?:/i;
 
 exec('git describe --abbrev=0')
 	.then(({stdout}) => exec(`git log ${stdout.trim()}..HEAD`))
 	.then(result => (result.stdout.split('\n')))  // Split lines
 	.then(lines => lines.map(line => line.trim()))  // Trim them
-	.then(lines => lines.filter(line => line.toLowerCase().startsWith('changelog:')))  // Filter changelog rows
-	.then(lines => lines.map(line => line.substr(10).trim()))  // Strip the changelog prefix
+	.then(lines => lines.filter(line => regex.exec(line)))  // Filter changelog rows
+	.then(lines => lines.map(line => {
+		// Strip the changelog prefix
+		let m = regex.exec(line);
+		return line.substr(m[0].length).trim();
+	}))
 	.then(changes => changes.map(line => `- ${line}`))  // Prepend "-" to each row
 	.then(changes => changes.join('\n'))
 	.then(changes => {
+		// Store changes
 		changelog = changes;
 	})
 	.then(() => {
