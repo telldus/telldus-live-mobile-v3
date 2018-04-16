@@ -1,5 +1,6 @@
 let exec = require('child-process-promise').exec;
 let fs = require('fs');
+let ExternalEditor = require('external-editor');
 
 let changelog = '';
 const regex = /changelogs?\s?:/i;
@@ -19,6 +20,10 @@ exec('git describe --abbrev=0')
 	.then(changes => {
 		// Store changes
 		changelog = changes;
+	})
+	.then(() => {
+		// Let the user edit the changelog before commiting
+		changelog = ExternalEditor.edit(changelog);
 	})
 	.then(() => {
 		// Generate changelog for Android

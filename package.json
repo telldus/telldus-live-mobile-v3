@@ -15,6 +15,7 @@
     "axios": "^0.18.0",
     "blueimp-md5": "^2.10.0",
     "color": "~3.0.0",
+    "external-editor": "^2.2.0",
     "global": "^4.3.2",
     "intl": "^1.2.5",
     "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#4159a7119ded9dd63e272a12adfdeed835a2ab1d",
