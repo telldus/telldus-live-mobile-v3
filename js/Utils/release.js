@@ -5,7 +5,7 @@ let changelog = '';
 const regex = /changelogs?\s?:/i;
 
 exec('git describe --abbrev=0')
-	.then(({stdout}) => exec(`git log ${stdout.trim()}..HEAD`))
+	.then(({stdout}) => exec(`git log ${stdout.trim()}..HEAD`, {maxBuffer: 1024 * 500}))
 	.then(result => (result.stdout.split('\n')))  // Split lines
 	.then(lines => lines.map(line => line.trim()))  // Trim them
 	.then(lines => lines.filter(line => regex.exec(line)))  // Filter changelog rows
