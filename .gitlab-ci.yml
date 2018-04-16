@@ -96,7 +96,7 @@ google_play:
   script:
     - echo ${GOOGLE_KEY} > play_key.json
     - bundle install
-    - fastlane supply --apk android/app/build/outputs/apk/app-release.apk --track alpha
+    - fastlane supply --apk android/app/build/outputs/apk/release/app-release.apk --track alpha
 
 testflight:
   stage: release
