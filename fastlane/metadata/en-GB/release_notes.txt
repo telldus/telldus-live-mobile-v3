@@ -1,4 +1,4 @@
-Add/edit schedules
-Location details
-Updated design
+- Add/edit schedules
+- Location details
+- Updated design
 
