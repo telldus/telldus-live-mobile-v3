@@ -315,7 +315,7 @@ class SensorRow extends PureComponent<Props, State> {
 			lastUpdated,
 		} = sensor;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
-		
+
 		let { sensors, sensorInfo } = this.getSensors(data);
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 		let { currentIndex, isOpen } = this.state;
