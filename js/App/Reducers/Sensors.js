@@ -38,8 +38,14 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 }
 
 export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}): Object {
-	let sortedList = _.sortBy(sensors, 'name');
-	let [hidden, visible] = _.partition(sortedList, (sensor: Object): Object => {
+	let [NamesBegWithSpecialChars, NamesBegWithText] = _.partition(sensors, (sensor: Object): any => {
+		let { name } = sensor;
+		let specialChars = "~`!#$%^&*+=-_[]\\\';,/{}|\":<>?";
+		return name && specialChars.indexOf(name.charAt(0)) !== -1;
+	});
+	let sortedList = _.sortBy(NamesBegWithText, 'name');
+	let combinedList = NamesBegWithSpecialChars.concat(sortedList);
+	let [hidden, visible] = _.partition(combinedList, (sensor: Object): Object => {
 		return sensor.ignored;
 	});
 	let visibleList = [], hiddenList = [];
