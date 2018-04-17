@@ -43,6 +43,18 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.scheduler.phraseOne',
 		defaultMessage: 'Schedule for',
 	},
+	repeatDays: {
+		id: 'scheduler.repeatDays',
+		defaultMessage: 'Every day at {value}',
+	},
+	repeatWeekdays: {
+		id: 'scheduler.repeatWeekdays',
+		defaultMessage: 'Every weekdays at {value}',
+	},
+	repeatWeekends: {
+		id: 'scheduler.repeatWeekends',
+		defaultMessage: 'Every weekends at {value}',
+	},
 });
 
 
@@ -258,17 +270,19 @@ class JobRow extends View<null, Props, null> {
 	};
 
 	_getRepeatDescription = (): string => {
-		const { type, weekdays } = this.props;
+		const { type, weekdays, intl } = this.props;
+		const { formatMessage } = intl;
 		const selectedDays: string[] = getSelectedDays(weekdays);
+		const repeatTime: string = (type === 'time') ? '' : type;
 
 		let repeatDays: string = '';
 
 		if (selectedDays.length === DAYS.length) {
-			repeatDays = 'Every day';
+			repeatDays = formatMessage(messages.repeatDays, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekdays())) {
-			repeatDays = 'Every weekdays';
+			repeatDays = formatMessage(messages.repeatWeekdays, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekends())) {
-			repeatDays = 'Every weekends';
+			repeatDays = formatMessage(messages.repeatWeekends, { value: repeatTime });
 		} else {
 			for (let day of selectedDays) {
 				repeatDays += `${day.slice(0, 3).toLowerCase()}, `;
@@ -276,9 +290,7 @@ class JobRow extends View<null, Props, null> {
 			repeatDays = capitalize(repeatDays.slice(0, -2));
 		}
 
-		const repeatTime: string = (type === 'time') ? '' : type;
-
-		return `${repeatDays} at ${repeatTime}`;
+		return repeatDays;
 	};
 
 	_getStyle = (appLayout: Object): Object => {

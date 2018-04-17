@@ -241,6 +241,8 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_getDaysToRender = (dataArray: Object, appLayout: Object): Object => {
 		let days = [], daysToRender = [];
+		let { screenProps } = this.props;
+		let { formatDate } = screenProps.intl;
 
 		for (let key in dataArray) {
 			let schedules = dataArray[key];
@@ -272,10 +274,15 @@ class SchedulerTab extends View<null, Props, State> {
 			);
 
 			const day = moment().add(key, 'days');
-
+			const weekday = formatDate(day, {weekday: 'long'});
+			const date = formatDate(day, {
+				day: '2-digit',
+				month: 'long',
+				year: 'numeric',
+			});
 			days.push({
-				day: day.format('dddd'),
-				date: day.format('DD MMMM YYYY'),
+				day: weekday,
+				date: date,
 			});
 		}
 		return { days, daysToRender };
