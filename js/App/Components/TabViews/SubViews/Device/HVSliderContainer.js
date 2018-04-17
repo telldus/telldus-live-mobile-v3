@@ -102,6 +102,7 @@ class HVSliderContainer extends View {
 	componentWillMount() {
 		this.panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
+			onStartShouldSetPanResponderCapture: this.handleStartShouldSetPanResponderCapture,
 			onMoveShouldSetPanResponder: this.handleMoveShouldSetPanResponder,
 			onPanResponderGrant: this.handlePanResponderGrant,
 			onPanResponderMove: this.handlePanResponderMove,
@@ -116,6 +117,11 @@ class HVSliderContainer extends View {
 		this.setCurrentValueAnimate(newValue);
 		this.onValueChange(newValue);
 	}
+
+	handleStartShouldSetPanResponderCapture = (e: Object, /* gestureState: Object */): boolean => {
+		// Should we become active when the user presses down on the thumb, preventing any child node?
+		return true;
+	};
 
 	handleStartShouldSetPanResponder = (e: Object, /* gestureState: Object */): boolean => {
 		// Should we become active when the user presses down on the thumb?
