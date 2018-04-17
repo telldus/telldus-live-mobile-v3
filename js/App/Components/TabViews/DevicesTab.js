@@ -90,6 +90,7 @@ type State = {
 	showHiddenList: boolean,
 	propsSwipeRow: Object,
 	scrollEnabled: boolean,
+	showRefresh: boolean,
 };
 
 class DevicesTab extends View {
@@ -133,6 +134,7 @@ class DevicesTab extends View {
 				forceClose: false,
 			},
 			scrollEnabled: true,
+			showRefresh: false,
 		};
 
 		this.onCloseSelected = this.onCloseSelected.bind(this);
@@ -217,6 +219,8 @@ class DevicesTab extends View {
 	setScrollEnabled(enable: boolean) {
 		this.setState({
 			scrollEnabled: enable,
+			isRefreshing: false,
+			showRefresh: enable,
 		});
 	}
 
@@ -403,7 +407,7 @@ class DevicesTab extends View {
 
 		let { appLayout, devices } = this.props;
 		let { showHiddenList, hiddenList, visibleList,
-			isRefreshing, makeRowAccessible, addGateway, propsSwipeRow, scrollEnabled } = this.state;
+			isRefreshing, makeRowAccessible, addGateway, propsSwipeRow, scrollEnabled, showRefresh } = this.state;
 		let style = this.getStyles(appLayout);
 
 		if (addGateway) {
@@ -425,6 +429,7 @@ class DevicesTab extends View {
 				scrollEnabled={scrollEnabled}
 				refreshControl={
 					<RefreshControl
+						enabled={showRefresh}
 						refreshing={isRefreshing}
 						onRefresh={this.onRefresh}
 					/>}

@@ -24,7 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
-import { Dimensions, FlatList } from 'react-native';
+import { Dimensions, FlatList, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import Subscribable from 'Subscribable';
 import Platform from 'Platform';
@@ -95,6 +95,7 @@ type State = {
 	numColumns: number,
 	isRefreshing: boolean,
 	scrollEnabled: boolean,
+	showRefresh: boolean,
 };
 
 const tileMargin = 2;
@@ -134,6 +135,7 @@ class DashboardTab extends View {
 			numColumns,
 			isRefreshing: false,
 			scrollEnabled: true,
+			showRefresh: true,
 		};
 
 		this.tab = 'Dashboard';
@@ -174,6 +176,8 @@ class DashboardTab extends View {
 	setScrollEnabled(enable: boolean) {
 		this.setState({
 			scrollEnabled: enable,
+			isRefreshing: false,
+			showRefresh: enable,
 		});
 	}
 
@@ -265,7 +269,7 @@ class DashboardTab extends View {
 
 	render(): Object {
 		let { appLayout, dashboard } = this.props;
-		let { dataSource, isRefreshing, numColumns, tileWidth, scrollEnabled } = this.state;
+		let { dataSource, isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		let style = this.getStyles(appLayout);
 
@@ -284,9 +288,14 @@ class DashboardTab extends View {
 					ref="list"
 					data={dataSource}
 					renderItem={this._renderRow}
-					onRefresh={this.onRefresh}
+					refreshControl={
+						<RefreshControl
+							enabled={showRefresh}
+							refreshing={isRefreshing}
+							onRefresh={this.onRefresh}
+						/>
+					}
 					numColumns={numColumns}
-					refreshing={isRefreshing}
 					extraData={extraData}
 					key={numColumns}
 					style={{width: '100%'}}
