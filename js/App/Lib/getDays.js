@@ -20,6 +20,7 @@
 // @flow
 
 import { DAYS } from '../../Constants';
+import moment from 'moment';
 
 export const getWeekdays = (): string[] => {
 	return DAYS.slice(0, 5);
@@ -28,12 +29,23 @@ export const getWeekdays = (): string[] => {
 export const getWeekends = (): string[] => {
 	return DAYS.slice(5, 8);
 };
-
-export const getSelectedDays = (storedSelectedDays: number[]): string[] => {
+// If passed 'formatDate' function from 'intl', will return formatted/translated weekdays.
+export const getSelectedDays = (storedSelectedDays: number[], formatDate?: Function | null = null): string[] => {
 	const selectedDays: string[] = [];
-
-	for (let i = 0; i < storedSelectedDays.length; i++) {
-		selectedDays.push(DAYS[storedSelectedDays[i] - 1]);
+	if (formatDate) {
+		for (let i = 0; i < storedSelectedDays.length; i++) {
+			let item = DAYS[storedSelectedDays[i] - 1];
+			let indexOfItem = DAYS.indexOf(item);
+			if (DAYS[storedSelectedDays[i] - 1]) {
+				const day = moment().add((indexOfItem - 1), 'days');
+				const weekday = formatDate(day, {weekday: 'long'});
+				selectedDays.push(weekday);
+			}
+		}
+	} else {
+		for (let i = 0; i < storedSelectedDays.length; i++) {
+			selectedDays.push(DAYS[storedSelectedDays[i] - 1]);
+		}
 	}
 
 	return selectedDays;
