@@ -188,10 +188,9 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 
 - we use semver (major.minor.path) and the Android version is derived from that (`3.2.10` => `30210`)
 - when releasing a new app, always update the version
-- Change the version in `package.json`
-- Add the bump to git: `git add -p packages.json`
-- Run the release script: `npm run release`
+- Run the release script: `npm run release`. This will prompt for the new version number.
 - Check that the new commit and tag made by the release script is ok before pushing
+
 ### Android
 
 

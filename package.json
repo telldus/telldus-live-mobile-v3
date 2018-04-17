@@ -1,6 +1,6 @@
 {
   "name": "TelldusLiveApp",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "private": true,
   "scripts": {
     "lint": "eslint js",
@@ -15,6 +15,7 @@
     "axios": "^0.18.0",
     "blueimp-md5": "^2.10.0",
     "color": "~3.0.0",
+    "external-editor": "^2.2.0",
     "global": "^4.3.2",
     "intl": "^1.2.5",
     "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#3963519e2622a3284e838522f9277c2638911e73",
