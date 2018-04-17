@@ -278,7 +278,7 @@ class SensorRow extends PureComponent<Props, State> {
 					formatOptions={{maximumFractionDigits: 1}}/>);
 				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
 			}
-			if (name === 'luminance') {
+			if (name === 'lum') {
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
 					icon={'luminance'} label={this.labelLuminance} isLarge={isLarge} key={key}
 					formatOptions={{maximumFractionDigits: 0}}/>);
@@ -315,7 +315,7 @@ class SensorRow extends PureComponent<Props, State> {
 			lastUpdated,
 		} = sensor;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
-
+		
 		let { sensors, sensorInfo } = this.getSensors(data);
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 		let { currentIndex, isOpen } = this.state;

@@ -241,7 +241,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				});
 				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
 			}
-			if (name === 'luminance') {
+			if (name === 'lum') {
 				slideList.push({
 					key: 'luminance',
 					icon: 'luminance',
