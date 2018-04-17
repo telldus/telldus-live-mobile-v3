@@ -271,12 +271,11 @@ class JobRow extends View<null, Props, null> {
 
 	_getRepeatDescription = (): string => {
 		const { type, weekdays, intl } = this.props;
-		const { formatMessage } = intl;
-		const selectedDays: string[] = getSelectedDays(weekdays);
-		const repeatTime: string = (type === 'time') ? '' : type;
+		const { formatMessage, formatDate } = intl;
+		const selectedDays: string[] = getSelectedDays(weekdays, formatDate);
+		const repeatTime: string = (type === 'time') ? '' : this.getRepeatTime(type);
 
 		let repeatDays: string = '';
-
 		if (selectedDays.length === DAYS.length) {
 			repeatDays = formatMessage(messages.repeatDays, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekdays())) {
@@ -292,6 +291,16 @@ class JobRow extends View<null, Props, null> {
 
 		return repeatDays;
 	};
+
+	getRepeatTime(type: string): string {
+		let { formatMessage } = this.props.intl;
+		if (type === 'sunrise') {
+			return formatMessage(i18n.sunrise);
+		} else if (type === 'sunset') {
+			return formatMessage(i18n.sunset);
+		}
+		return formatMessage(i18n.time);
+	}
 
 	_getStyle = (appLayout: Object): Object => {
 		let { fonts, borderRadiusRow } = Theme.Core;
