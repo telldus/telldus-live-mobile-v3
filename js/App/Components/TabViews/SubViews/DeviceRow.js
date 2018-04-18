@@ -362,7 +362,7 @@ class DeviceRow extends PureComponent<Props, State> {
 					onRowClose={this.onRowClose}
 					recalculateHiddenLayout={true}
 					swipeToOpenPercent={20}
-					directionalDistanceChangeThreshold={0.5}>
+					directionalDistanceChangeThreshold={2}>
 					<HiddenRow device={device} intl={intl} onPressSettings={this.onSettingsSelected}
 						onSetIgnoreDevice={this.onSetIgnoreDevice} isOpen={isOpen}/>
 					<ListItem

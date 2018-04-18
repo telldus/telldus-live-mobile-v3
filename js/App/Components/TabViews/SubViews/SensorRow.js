@@ -335,7 +335,7 @@ class SensorRow extends PureComponent<Props, State> {
 				onRowClose={this.onRowClose}
 				recalculateHiddenLayout={true}
 				swipeToOpenPercent={20}
-				directionalDistanceChangeThreshold={0.5}>
+				directionalDistanceChangeThreshold={2}>
 				<HiddenRow sensor={sensor} intl={intl}
 					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}/>
 				<ListItem
