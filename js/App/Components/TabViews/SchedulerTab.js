@@ -248,28 +248,29 @@ class SchedulerTab extends View<null, Props, State> {
 			let schedules = dataArray[key];
 
 			let isEmpty = !schedules || schedules.length === 0;
-			if (isEmpty) {
-				daysToRender.push(
-					<View style={[styles.container, styles.containerWhenNoData]} key={key}>
-						<Icon name="exclamation-circle" size={20} color="#F06F0C" />
-						<Text style={styles.textWhenNoData}>
-							{this.noScheduleMessage}
-						</Text>
-					</View>
-				);
-			}
 
 			const { line } = this.getStyles(appLayout);
 			daysToRender.push(
 				<View style={styles.container} key={key}>
-					<View style={line}/>
-					<FlatList
-						data={schedules}
-						renderItem={this._renderRow}
-						onRefresh={this.onRefresh}
-						keyExtractor={this.keyExtractor}
-						refreshing={this.state.isRefreshing}
-					/>
+					{isEmpty ?
+						<View style={styles.containerWhenNoData}>
+							<Icon name="exclamation-circle" size={20} color="#F06F0C" />
+							<Text style={styles.textWhenNoData}>
+								{this.noScheduleMessage}
+							</Text>
+						</View>
+						:
+						<View style={styles.container}>
+							<View style={line}/>
+							<FlatList
+								data={schedules}
+								renderItem={this._renderRow}
+								onRefresh={this.onRefresh}
+								keyExtractor={this.keyExtractor}
+								refreshing={this.state.isRefreshing}
+							/>
+						</View>
+					}
 				</View>
 			);
 
@@ -280,6 +281,7 @@ class SchedulerTab extends View<null, Props, State> {
 				month: 'long',
 				year: 'numeric',
 			});
+
 			days.push({
 				day: weekday,
 				date: date,
