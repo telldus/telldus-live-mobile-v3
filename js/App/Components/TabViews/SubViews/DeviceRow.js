@@ -75,6 +75,7 @@ type State = {
 	coverMaxWidth: number,
 	coverOccupiedWidth: number,
 	nameWidth?: number,
+	hideButtons: boolean,
 };
 
 class DeviceRow extends PureComponent<Props, State> {
@@ -107,6 +108,7 @@ class DeviceRow extends PureComponent<Props, State> {
 		coverMaxWidth: 0,
 		coverOccupiedWidth: 0,
 		nameWidth: undefined,
+		hideButtons: false,
 	};
 
 	constructor(props: Props) {
@@ -189,12 +191,14 @@ class DeviceRow extends PureComponent<Props, State> {
 				let { appLayout } = this.props;
 				this.startOnShowAnimation();
 				this.setState({
+					showFullName: true,
 					nameWidth: appLayout.width - (2 * paddingHorizontal),
 				});
 			} else {
 				this.setState({
 					showFullName: false,
 					nameWidth: undefined,
+					hideButtons: false,
 				});
 				this.startOnHideAnimation();
 			}
@@ -222,7 +226,7 @@ class DeviceRow extends PureComponent<Props, State> {
 		  }).start((event: Object) => {
 			if (event.finished) {
 				this.setState({
-					showFullName: true,
+					hideButtons: true,
 				});
 			}
 		});
@@ -260,7 +264,7 @@ class DeviceRow extends PureComponent<Props, State> {
 
 	render(): Object {
 		let button = [], icon = null;
-		let { isOpen, showMoreActions, showFullName, nameWidth } = this.state;
+		let { isOpen, showMoreActions, hideButtons, nameWidth } = this.state;
 		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
 		const { isInState, name } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -386,7 +390,7 @@ class DeviceRow extends PureComponent<Props, State> {
 									)}
 								</View>
 							</TouchableOpacity>
-							{!showFullName && (<Animated.View style={[styles.buttonsCover, {
+							{!hideButtons && (<Animated.View style={[styles.buttonsCover, {
 								transform: [{
 									translateX: interpolatedX,
 								}],
