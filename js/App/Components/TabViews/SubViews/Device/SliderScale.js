@@ -111,27 +111,33 @@ class SliderScale extends View {
 	render(): Object {
 		const { minimumValue, maximumValue, scaleWidth } = this.state;
 		const { thumbWidth, thumbHeight, isGatewayActive, containerHeight, containerWidth, displayedValue,
-			style, value, importantForAccessibility, name = '' } = this.props;
+			style, value, importantForAccessibility, name = '', isInState } = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
 		});
 
-		let thumbStyle = !isGatewayActive ? styles.offline : styles.enabled;
-		let scaleStyle = !isGatewayActive ? styles.offline : styles.enabled;
-		let valueColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
+		let thumbStyle = !isGatewayActive ? styles.offline :
+			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
+		let scaleStyle = !isGatewayActive ? styles.offline :
+			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
+		let valueColor = !isGatewayActive ? '#a2a2a2' :
+			isInState === 'DIM' ? '#fff' : Theme.Core.brandSecondary;
+		let backgroundStyle = isInState === 'DIM' ? styles.enabled : styles.disabled;
+
 		let bottomValue = (containerHeight / 2) - (thumbHeight * 2);
 
 		let accessibilityLabel = `${this.labelPhraseOne} ${displayedValue}%, ${name}. ${this.labelPhraseTwo}`;
 
 		return (
-			<View style={[{flex: 1, justifyContent: 'center'}, style]}
+			<View style={[{flex: 1, justifyContent: 'center'}, backgroundStyle, style]}
 				accessibilityLabel={accessibilityLabel}
 				importantForAccessibility={importantForAccessibility}>
 				<View style={[styles.sliderScale, scaleStyle, {
 					height: thumbHeight / 3,
 					width: (containerWidth - (2 * thumbWidth)),
 					marginLeft: thumbWidth,
+					borderRadius: thumbHeight / 6,
 				}]} onLayout={this.layoutScale}/>
 				<Animated.View style={[
 					styles.thumb, thumbStyle, {

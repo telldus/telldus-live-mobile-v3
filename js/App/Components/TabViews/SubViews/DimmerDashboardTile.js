@@ -261,6 +261,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 					thumbHeight={7}
 					fontSize={8}
 					isGatewayActive={isGatewayActive}
+					isInState={isInState}
 					name={deviceName}
 					importantForAccessibility={'yes'}/>
 			</HVSliderContainer>

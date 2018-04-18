@@ -274,6 +274,7 @@ class DimmerButton extends View {
 					thumbHeight={10}
 					fontSize={9}
 					isGatewayActive={isGatewayActive}
+					isInState={isInState}
 					name={deviceName}
 					importantForAccessibility={'yes'}/>
 			</HVSliderContainer>
