@@ -259,6 +259,7 @@
     "removedFromHiddenList": "Vellykket fjernet fra skjult liste",
     "saturday": "Lørdag",
     "schedule.noScheduleMessage": "Ingen tidsplaner på denne dagen",
+    "schedule.noUpcommingSchedule": "Ingen kommende tidsplaner på denne dagen",
     "schedule.posterChooseAction": "Velg en handling som skal utføres",
     "schedule.posterChooseDays": "Velg dager for gjentatt gjentakelse",
     "schedule.posterChooseDevice": "Velg en enhet",
