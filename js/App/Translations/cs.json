@@ -266,6 +266,7 @@
     "schedule.time.editTimeAccessible": "Dvojitým klepnutím změňte čas",
     "scheduler": "Plán",
     "scheduler.repeatDays": "Každý den v {value}",
+    "scheduler.repeatWeekday": "Denně v {value}",
     "scheduler.repeatWeekdays": "Každý pracovní den v {value}",
     "scheduler.repeatWeekends": "Každý víkend v {value}",
     "sensor.addedToHiddenList": "Snímač je nyní skryt",
