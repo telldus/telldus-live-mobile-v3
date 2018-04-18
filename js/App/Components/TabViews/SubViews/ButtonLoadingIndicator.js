@@ -27,6 +27,7 @@ import { Icon, View } from '../../../../BaseComponents';
 import { Animated } from 'react-native';
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
+import Theme from '../../../Theme';
 
 type Props = {
 };
@@ -55,7 +56,7 @@ class ButtonLoadingIndicator extends View {
 		let { style } = this.props;
 
 		return (
-			<AnimatedIcon name="circle" size={10} color="orange" style={[style, { opacity: this.state.fadeAnim }]} />
+			<AnimatedIcon name="circle" size={10} color={Theme.Core.brandSecondary} style={[style, { opacity: this.state.fadeAnim }]} />
 		);
 	}
 
