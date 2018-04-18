@@ -270,7 +270,7 @@ export default class Days extends View<null, Props, State> {
 							buttonStyle={buttonStyle}
 							onPress={this.selectDays}
 							imageSource={require('./img/right-arrow-key.png')}
-							paddingRight={this.props.paddingRight}
+							paddingRight={this.props.paddingRight - 2}
 						/>
 					)}
 				</View>
