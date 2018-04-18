@@ -239,6 +239,7 @@
     "please": "Ole hyvä",
     "removedFromHiddenList": "Piilotettu lista poistettu",
     "schedule.noScheduleMessage": "Ei ajastuksia tälle päivälle",
+    "schedule.noUpcommingSchedule": "Ei ajatuksia tälle viikonpäivälle",
     "schedule.posterChooseAction": "Valitse suoritettava toiminto",
     "schedule.posterChooseDays": "Valitse päivien lukumäärä milloin tapahtuma toistetaan",
     "schedule.posterChooseDevice": "Valitse laite",
