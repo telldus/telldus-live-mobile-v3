@@ -47,13 +47,13 @@ const messages = defineMessages({
 		id: 'scheduler.repeatDays',
 		defaultMessage: 'Every day at {value}',
 	},
-	repeatWeekdays: {
-		id: 'scheduler.repeatWeekdays',
-		defaultMessage: 'Every weekdays at {value}',
+	repeatWeekday: {
+		id: 'scheduler.repeatWeekday',
+		defaultMessage: 'Weekdays at {value}',
 	},
-	repeatWeekends: {
-		id: 'scheduler.repeatWeekends',
-		defaultMessage: 'Every weekends at {value}',
+	repeatWeekend: {
+		id: 'scheduler.repeatWeekend',
+		defaultMessage: 'Weekends at {value}',
 	},
 });
 
@@ -279,9 +279,9 @@ class JobRow extends View<null, Props, null> {
 		if (selectedDays.length === DAYS.length) {
 			repeatDays = formatMessage(messages.repeatDays, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekdays())) {
-			repeatDays = formatMessage(messages.repeatWeekdays, { value: repeatTime });
+			repeatDays = formatMessage(messages.repeatWeekday, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekends())) {
-			repeatDays = formatMessage(messages.repeatWeekends, { value: repeatTime });
+			repeatDays = formatMessage(messages.repeatWeekend, { value: repeatTime });
 		} else {
 			for (let day of selectedDays) {
 				repeatDays += `${day.slice(0, 3).toLowerCase()}, `;
