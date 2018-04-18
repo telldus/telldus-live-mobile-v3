@@ -35,9 +35,8 @@ export const getSelectedDays = (storedSelectedDays: number[], formatDate?: Funct
 	if (formatDate) {
 		for (let i = 0; i < storedSelectedDays.length; i++) {
 			let item = DAYS[storedSelectedDays[i] - 1];
-			let indexOfItem = DAYS.indexOf(item);
-			if (DAYS[storedSelectedDays[i] - 1]) {
-				const day = moment().add((indexOfItem - 1), 'days');
+			if (item) {
+				let day = moment().weekday(storedSelectedDays[i]);
 				const weekday = formatDate(day, {weekday: 'long'});
 				selectedDays.push(weekday);
 			}
