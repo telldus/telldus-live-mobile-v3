@@ -24,13 +24,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
+import Modal from 'react-native-modal';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import View from './View';
 import Text from './Text';
-import Modal from './Modal';
-import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
 const messages = defineMessages({
@@ -55,9 +54,6 @@ const messages = defineMessages({
 type Props = {
 	showDialogue?: boolean,
 	style?: number | Object | Array<any>,
-	dialogueContainerStyle?: Array<any> | number | Object,
-	entry?: string,
-	exit?: string,
 	entryDuration?: number,
 	exitDuration?: number,
 	text: string,
@@ -71,7 +67,6 @@ type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	accessibilityLabel?: string,
-	showOverlay?: boolean,
 };
 
 type defaultProps = {
@@ -256,30 +251,27 @@ class DialogueBox extends Component<Props, null> {
 		let {
 			showDialogue,
 			style,
-			dialogueContainerStyle,
-			entry,
-			exit,
 			entryDuration,
 			exitDuration,
 			appLayout,
-			showOverlay,
 		} = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
 			<Modal
-				modalStyle={[Theme.Styles.notificationModal, style]}
-				modalContainerStyle={dialogueContainerStyle}
-				entry={entry}
-				exit={exit}
-				entryDuration={entryDuration}
-				exitDuration={exitDuration}
-				showModal={showDialogue}
-				showOverlay={showOverlay}
-				onOpened={this.onModalOpened}>
-				{this.renderHeader(styles)}
-				{this.renderBody(styles)}
-				{this.renderFooter(styles)}
+				style={styles.modal}
+				backdropOpacity={0.60}
+				isVisible={showDialogue}
+				animationInTiming={entryDuration}
+				animationOutTiming={exitDuration}
+				hideModalContentWhileAnimating={true}
+				onModalShow={this.onModalOpened}
+				supportedOrientations={['portrait', 'landscape']}>
+				<View style={[styles.container, style]}>
+					{this.renderHeader(styles)}
+					{this.renderBody(styles)}
+					{this.renderFooter(styles)}
+				</View>
 			</Modal>
 		);
 	}
@@ -292,6 +284,16 @@ class DialogueBox extends Component<Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 
 		return {
+			modal: {
+				flex: 1,
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			container: {
+				backgroundColor: '#fff',
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
 			notificationModalHeader: {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
