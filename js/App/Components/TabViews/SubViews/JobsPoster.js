@@ -333,20 +333,19 @@ export default class JobsPoster extends View<null, Props, State> {
 			beforeYesterday: {
 				container: {
 					...day.container,
-					left: this._interpolate(0 - 2 * dayWidth, 0 - dayWidth, 0),
 				},
 				text: day.text,
 			},
 			yesterday: {
 				container: {
 					...day.container,
-					width: this._interpolate(dayWidth, dayWidth, todayWidth),
 					left: this._interpolate(0 - dayWidth, 0, todayOffset),
 					top: this._interpolate(dayTop, dayTop, todayTop),
 				},
 				text: {
 					...day.text,
 					fontSize: this._interpolate(dayFontSize, dayFontSize, todayFontSize),
+					marginHorizontal: 5,
 				},
 			},
 			today: {
@@ -365,7 +364,6 @@ export default class JobsPoster extends View<null, Props, State> {
 			tomorrow: {
 				container: {
 					...day.container,
-					width: this._interpolate(todayWidth, dayWidth, dayWidth),
 					left: null,
 					right: this._interpolate(todayOffset, 0, 0 - dayWidth),
 					top: this._interpolate(todayTop, dayTop, dayTop),
@@ -373,13 +371,12 @@ export default class JobsPoster extends View<null, Props, State> {
 				text: {
 					...day.text,
 					fontSize: this._interpolate(todayFontSize, dayFontSize, dayFontSize),
+					marginHorizontal: 5,
 				},
 			},
 			afterTomorrow: {
 				container: {
 					...day.container,
-					left: null,
-					right: this._interpolate(0, 0 - dayWidth, 0 - 2 * dayWidth),
 				},
 				text: day.text,
 			},
