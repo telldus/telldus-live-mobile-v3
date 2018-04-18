@@ -123,7 +123,7 @@ class SliderScale extends View {
 			isInState === 'DIM' ? styles.enabledBackground : styles.enabled;
 		let valueColor = !isGatewayActive ? '#a2a2a2' :
 			isInState === 'DIM' ? '#fff' : Theme.Core.brandSecondary;
-		let backgroundStyle = isInState === 'DIM' ? styles.enabled : styles.disabled;
+		let backgroundStyle = isGatewayActive && isInState === 'DIM' ? styles.enabled : styles.disabled;
 
 		let bottomValue = (containerHeight / 2) - (thumbHeight * 2);
 
