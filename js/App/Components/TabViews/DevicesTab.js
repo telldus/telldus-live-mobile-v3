@@ -134,7 +134,7 @@ class DevicesTab extends View {
 				forceClose: false,
 			},
 			scrollEnabled: true,
-			showRefresh: false,
+			showRefresh: true,
 		};
 
 		this.onCloseSelected = this.onCloseSelected.bind(this);
