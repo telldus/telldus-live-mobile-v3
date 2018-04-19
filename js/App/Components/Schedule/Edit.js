@@ -249,7 +249,7 @@ class Edit extends View<null, Props, State> {
 		const labelPostScript = intl.formatMessage(i18n.activateEdit);
 
 		return (
-			<ScrollView>
+			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 				<View style={container}>
 					<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout} intl={intl}/>
 					<ActionRow

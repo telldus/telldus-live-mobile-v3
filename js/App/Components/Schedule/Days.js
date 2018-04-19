@@ -208,7 +208,7 @@ export default class Days extends View<null, Props, State> {
 		const { mainContainer, buttonsContainer, row, rowContainer, checkbox, buttonStyle, CheckboxSolidSize, checkBoxBottom } = this._getStyle(appLayout);
 
 		return (
-			<ScrollView>
+			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 				<View style={mainContainer}>
 					<DaysRow
 						selectedDays={selectedDays}

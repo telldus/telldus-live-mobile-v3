@@ -128,8 +128,8 @@ class Summary extends View<null, Props, State> {
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
-			<View>
-				<ScrollView>
+			<View style={{flex: 1}}>
+				<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 					<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
 					<ActionRow
 						method={method}
