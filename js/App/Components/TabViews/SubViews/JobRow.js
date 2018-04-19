@@ -338,7 +338,7 @@ class JobRow extends View<null, Props, null> {
 			textWrapper: {
 				flex: 1,
 				paddingLeft: width * 0.032,
-				paddingRight: width * 0.068,
+				paddingRight: width * 0.032,
 				width: null,
 			},
 			title: {
