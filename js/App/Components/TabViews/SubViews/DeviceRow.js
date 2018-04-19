@@ -264,7 +264,7 @@ class DeviceRow extends PureComponent<Props, State> {
 
 	render(): Object {
 		let button = [], icon = null;
-		let { isOpen, showMoreActions, hideButtons, nameWidth } = this.state;
+		let { isOpen, showMoreActions, hideButtons, nameWidth, coverOccupiedWidth, coverMaxWidth } = this.state;
 		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
 		const { isInState, name } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -374,6 +374,7 @@ class DeviceRow extends PureComponent<Props, State> {
 						<View style={styles.cover}>
 							<TouchableOpacity
 								style={[styles.touchableContainer]}
+								disabled={coverOccupiedWidth < coverMaxWidth}
 								onPress={this.onShowFullName}
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
