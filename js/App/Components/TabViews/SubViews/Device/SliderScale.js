@@ -26,6 +26,7 @@ import { Animated, StyleSheet } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { Text, View } from '../../../../../BaseComponents';
+import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
@@ -57,6 +58,7 @@ type Props = {
 	displayedValue: string,
 	importantForAccessibility?: string,
 	name?: string,
+	methodRequested: string,
 };
 
 type State = {
@@ -111,7 +113,7 @@ class SliderScale extends View {
 	render(): Object {
 		const { minimumValue, maximumValue, scaleWidth } = this.state;
 		const { thumbWidth, thumbHeight, isGatewayActive, containerHeight, containerWidth, displayedValue,
-			style, value, importantForAccessibility, name = '', isInState } = this.props;
+			style, value, importantForAccessibility, name = '', isInState, methodRequested } = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
@@ -158,6 +160,11 @@ class SliderScale extends View {
 					}]}>
 					{displayedValue}%
 				</Text>
+				{
+					methodRequested === 'DIM' ?
+						<ButtonLoadingIndicator style={styles.dot} color={'#fff'}/>
+						: null
+				}
 			</View>
 		);
 	}
@@ -194,6 +201,11 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		textAlignVertical: 'center',
 		alignSelf: 'center',
+	},
+	dot: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
 	},
 });
 
