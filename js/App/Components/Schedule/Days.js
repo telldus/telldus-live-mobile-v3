@@ -327,7 +327,7 @@ export default class Days extends View<null, Props, State> {
 			},
 			buttonStyle: {
 				elevation: 4,
-				shadowOpacity: 0.99,
+				shadowOpacity: 0.5,
 			},
 			CheckboxSolidSize: deviceWidth * 0.066666667,
 			checkBoxBottom: deviceWidth * 0.068,

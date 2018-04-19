@@ -140,11 +140,12 @@ class FloatingButton extends Component<Props, null> {
 		const offsetRight = deviceWidth * 0.034666667 - paddingRight;
 
 		const shadow = Object.assign({}, themeShadow, {
-			shadowOpacity: 0.5,
+			shadowOpacity: 0.35,
 			shadowOffset: {
 				...themeShadow.shadowOffset,
 				height: 2,
 			},
+			elevation: 5,
 		});
 
 		return {
