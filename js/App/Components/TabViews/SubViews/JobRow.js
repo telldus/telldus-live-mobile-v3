@@ -234,14 +234,15 @@ class JobRow extends View<null, Props, null> {
 	}
 
 	_renderActionIcon = (): Object => {
-		const { intl, method, appLayout } = this.props;
+		const { intl, method, appLayout, methodValue } = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 		const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
 
 		if (action) {
 			if (action.name === 'Dim') {
-				const value = `${Math.round(this.props.methodValue / 255 * 100)}%`;
+				const roundVal = Math.round(methodValue / 255 * 100);
+				const value = `${roundVal}%`;
 				return (
 					{
 						actionIcon: <View style={methodIconContainer}>
@@ -304,6 +305,7 @@ class JobRow extends View<null, Props, null> {
 
 	_getStyle = (appLayout: Object): Object => {
 		let { fonts, borderRadiusRow } = Theme.Core;
+		let { active, method, methodValue } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
@@ -311,9 +313,14 @@ class JobRow extends View<null, Props, null> {
 		width = width - headerHeight;
 
 		let backgroundColor;
-		const action = ACTIONS.find((a: Object): boolean => a.method === this.props.method);
+		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 		if (action) {
-			backgroundColor = action.bgColor;
+			let showDarkBG = false;
+			if (action.name === 'Dim') {
+				let roundVal = Math.round(methodValue / 255 * 100);
+				showDarkBG = roundVal >= 50 && roundVal < 100;
+			}
+			backgroundColor = active ? (showDarkBG ? action.bgColorDark : action.bgColor) : '#bdbdbd';
 		}
 
 		return {

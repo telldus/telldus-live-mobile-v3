@@ -72,6 +72,7 @@ type ActionType = {
 	icon: string,
 	label: string | Object,
 	actionLabel: Object,
+	bgColorDark?: string,
 };
 
 export const ACTIONS: ActionType[] = [
@@ -91,7 +92,7 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.off,
 		actionLabel: i18n.turnOff,
 		method: 2,
-		bgColor: '#999',
+		bgColor: Theme.Core.brandPrimary,
 		textColor: '#999',
 		icon: 'off',
 	},
@@ -111,7 +112,8 @@ export const ACTIONS: ActionType[] = [
 		label: i18n.dim,
 		actionLabel: i18n.dim,
 		method: 16,
-		bgColor: '#e88631',
+		bgColor: '#EEA567',
+		bgColorDark: '#EA8F41',
 		textColor: Theme.Core.brandSecondary,
 		icon: 'dim',
 	},
@@ -209,10 +211,16 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 		const { dimContainer, dimValue, icon, iconContainer } = this._getStyle(appLayout);
 
 		if (showValue && action.icon === 'dim') {
+			const roundVal = Math.round(methodValue / 255 * 100);
+			const value = `${roundVal}%`;
+			let backgroundColor = action.bgColor;
+			if (roundVal >= 50 && roundVal < 100) {
+				backgroundColor = action.bgColorDark;
+			}
 			return (
-				<View style={[dimContainer, { backgroundColor: action.bgColor }]}>
+				<View style={[dimContainer, { backgroundColor }]}>
 					<Text style={dimValue}>
-						{`${Math.round(methodValue / 255 * 100)}%`}
+						{value}
 					</Text>
 				</View>
 			);
