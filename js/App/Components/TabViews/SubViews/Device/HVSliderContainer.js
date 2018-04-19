@@ -97,6 +97,8 @@ class HVSliderContainer extends View {
 
 		this.layoutView = this.layoutView.bind(this);
 		this.onPressDimmer = this.onPressDimmer.bind(this);
+
+		this.buttonOpacity = new Animated.Value(1);
 	}
 
 	componentWillMount() {
@@ -135,10 +137,17 @@ class HVSliderContainer extends View {
 
 	handlePanResponderGrant = (e: Object, gestureState: Object) => {
 		this.longPressTimeout = setTimeout(this.startSliding, 500);
+		let { screenReaderEnabled, onPress } = this.props;
+		if (onPress && !screenReaderEnabled) {
+			this.onPressIn();
+		}
 	};
 
 	startSliding = () => {
-		const { item, onSlidingStart } = this.props;
+		let { screenReaderEnabled, onPress, item, onSlidingStart } = this.props;
+		if (onPress && !screenReaderEnabled) {
+			this.buttonOpacity.setValue(1);
+		}
 		this.previousLeft = this.getThumbLeft(this.state.value.__getValue());
 		this.previousBottom = this.getThumbBottom(this.state.value.__getValue());
 
@@ -176,6 +185,7 @@ class HVSliderContainer extends View {
 	};
 
 	handlePanResponderEnd = (e: Object, gestureState: Object) => {
+		let { screenReaderEnabled, onPress } = this.props;
 		if (this.activeSlider) {
 			// re-enable scrolling on listView parent
 			if (!this.parentScrollEnabled) {
@@ -188,9 +198,13 @@ class HVSliderContainer extends View {
 			if (this.props.onSlidingComplete) {
 				this.props.onSlidingComplete(this.state.value.__getValue());
 			}
-		} else if (!this.hasMoved && this.props.onPress) {
-			this.props.onPress();
+		} else if (!this.hasMoved && onPress) {
+			onPress();
 		}
+		if (onPress && !screenReaderEnabled) {
+			this.onPressOut();
+		}
+
 		this.activeSlider = false;
 		this.hasMoved = false;
 		clearTimeout(this.longPressTimeout);
@@ -306,7 +320,7 @@ class HVSliderContainer extends View {
 
 		let styleBackground = styles.disabled;
 
-		let Parent = View;
+		let Parent = Animated.View;
 		let parentProps = {
 			...this.panResponder.panHandlers,
 		};
@@ -319,7 +333,7 @@ class HVSliderContainer extends View {
 		}
 
 		return (
-			<Parent style={[this.props.style, styleBackground]} onLayout={this.layoutView} {...parentProps} accessibilityLabel={accessibilityLabel}>
+			<Parent style={[this.props.style, styleBackground, {opacity: this.buttonOpacity}]} onLayout={this.layoutView} {...parentProps} accessibilityLabel={accessibilityLabel}>
 				{
 					React.Children.map(children, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
@@ -336,6 +350,28 @@ class HVSliderContainer extends View {
 			</Parent>
 		);
 	}
+
+	onPressIn = () => {
+		Animated.timing(
+			this.buttonOpacity,
+			{
+				toValue: 0.2,
+				duration: 10,
+				useNativeDriver: true,
+			},
+		).start();
+	};
+
+	onPressOut = () => {
+		Animated.timing(
+			this.buttonOpacity,
+			{
+				toValue: 1,
+				duration: 10,
+				useNativeDriver: true,
+			},
+		).start();
+	};
 }
 
 const styles = StyleSheet.create({
