@@ -164,15 +164,19 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	}
 
 	onSlidingComplete(sliderValue: number) {
-		if (sliderValue > 0) {
-			this.props.requestDeviceAction(this.props.item.id, this.props.commandON);
+		let { item, commandON, commandOFF, commandDIM } = this.props;
+		if (sliderValue === 100) {
+			this.props.requestDeviceAction(item.id, commandON);
+		}
+		if ((sliderValue > 0) && (sliderValue < 100)) {
+			this.props.requestDeviceAction(item.id, commandDIM);
 		}
 		if (sliderValue === 0) {
-			this.props.requestDeviceAction(this.props.item.id, this.props.commandOFF);
+			this.props.requestDeviceAction(item.id, commandOFF);
 		}
 		let dimValue = toDimmerValue(sliderValue);
-		let command = dimValue === 0 ? this.props.commandOFF : this.props.commandDIM;
-		this.props.deviceSetState(this.props.item.id, command, dimValue);
+		let command = dimValue === 0 ? commandOFF : commandDIM;
+		this.props.deviceSetState(item.id, command, dimValue);
 		this.props.hideDimmerPopup();
 	}
 
@@ -261,6 +265,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 					thumbHeight={7}
 					fontSize={8}
 					isGatewayActive={isGatewayActive}
+					methodRequested={methodRequested}
 					isInState={isInState}
 					name={deviceName}
 					importantForAccessibility={'yes'}/>
