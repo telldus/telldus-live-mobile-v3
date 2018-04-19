@@ -30,8 +30,18 @@ const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 import Theme from '../../../Theme';
 
 type Props = {
+	color?: string,
+	style?: Object | number | Array<any>,
+};
+
+type DefaultProps = {
+	color: string,
 };
 class ButtonLoadingIndicator extends View {
+	props: Props;
+	static defaultProps: DefaultProps = {
+		color: Theme.Core.brandSecondary,
+	};
 
 	blink: () => void;
 
@@ -53,10 +63,10 @@ class ButtonLoadingIndicator extends View {
 	}
 
 	render(): Object {
-		let { style } = this.props;
+		let { style, color } = this.props;
 
 		return (
-			<AnimatedIcon name="circle" size={10} color={Theme.Core.brandSecondary} style={[style, { opacity: this.state.fadeAnim }]} />
+			<AnimatedIcon name="circle" size={10} color={color} style={[style, { opacity: this.state.fadeAnim }]} />
 		);
 	}
 
