@@ -37,7 +37,7 @@ type Props = {
 const FormContainerComponent = (props: Props): React$Element<any> => (
 	<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
 		<ScrollView
-			keyboardDismissMode= "interactive">
+			keyboardShouldPersistTaps={'always'}>
 			<KeyboardAvoidingView behavior="padding" contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}>
 				<View style={{alignItems: 'center', justifyContent: 'center'}}>
 					<Image
