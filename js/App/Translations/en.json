@@ -223,7 +223,7 @@
   "pages.scheduler": "Scheduler",
   "pages.sensors": "Sensors",
   "please": "Please",
-  "schedule.noScheduleMessage": "No schedules on this day",
+  "schedule.noUpcommingSchedule": "No upcoming schedules on this day",
   "schedule.posterChooseAction": "Choose an action to execute",
   "schedule.posterChooseDays": "Choose days for event repeating",
   "schedule.posterChooseDevice": "Choose a device",

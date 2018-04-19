@@ -54,9 +54,9 @@ const messages = defineMessages({
 		defaultMessage: 'Scheduler',
 		description: 'The Schedulers tab',
 	},
-	noScheduleMessage: {
-		id: 'schedule.noScheduleMessage',
-		defaultMessage: 'No schedules on this day',
+	noUpcommingSchedule: {
+		id: 'schedule.noUpcommingSchedule',
+		defaultMessage: 'No upcoming schedules on this day',
 		description: 'Message when no schedules',
 	},
 });
@@ -104,7 +104,7 @@ class SchedulerTab extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.noScheduleMessage = props.screenProps.intl.formatMessage(messages.noScheduleMessage);
+		this.noScheduleMessage = props.screenProps.intl.formatMessage(messages.noUpcommingSchedule);
 
 		this.contentOffset = 0;
 
