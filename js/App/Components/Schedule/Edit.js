@@ -320,11 +320,19 @@ class Edit extends View<null, Props, State> {
 		const offsetSmall = deviceWidth * 0.026666667;
 		const offsetMiddle = deviceWidth * 0.033333333;
 
+		const { shadow: themeShadow } = Theme.Core;
+		const shadow = Object.assign({}, themeShadow, {
+			shadowOpacity: 0.5,
+			shadowOffset: {
+				...themeShadow.shadowOffset,
+				height: 2,
+			},
+		});
+
 		return {
 			container: {
 				paddingHorizontal: offsetMiddle,
 				alignItems: 'center',
-				marginBottom: offsetSmall,
 			},
 			row: {
 				marginBottom: offsetSmall,
@@ -334,12 +342,14 @@ class Edit extends View<null, Props, State> {
 			},
 			cancel: {
 				backgroundColor: Theme.Core.brandDanger,
+				marginBottom: offsetSmall,
 			},
 			buttonStyle: {
 				height: 50,
 				width: 180,
 				borderRadius: 25,
 				marginTop: 10,
+				...shadow,
 			},
 			labelStyle: {
 				fontSize: 13,
