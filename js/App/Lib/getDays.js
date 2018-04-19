@@ -22,11 +22,29 @@
 import { DAYS } from '../../Constants';
 import moment from 'moment';
 
-export const getWeekdays = (): string[] => {
+export const getWeekdays = (formatDate: Function): string[] => {
+	let weekDays = [];
+	if (formatDate) {
+		for (let i = 1; i < 6; i++) {
+			let day = moment().weekday(i);
+			const weekday = formatDate(day, {weekday: 'long'});
+			weekDays.push(weekday);
+		}
+		return weekDays;
+	}
 	return DAYS.slice(0, 5);
 };
 
-export const getWeekends = (): string[] => {
+export const getWeekends = (formatDate: Function): string[] => {
+	let weekends = [];
+	if (formatDate) {
+		for (let i = 6; i < 8; i++) {
+			let day = moment().weekday(i);
+			const weekday = formatDate(day, {weekday: 'long'});
+			weekends.push(weekday);
+		}
+		return weekends;
+	}
 	return DAYS.slice(5, 8);
 };
 // If passed 'formatDate' function from 'intl', will return formatted/translated weekdays.
