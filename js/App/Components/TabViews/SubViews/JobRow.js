@@ -278,9 +278,9 @@ class JobRow extends View<null, Props, null> {
 		let repeatDays: string = '';
 		if (selectedDays.length === DAYS.length) {
 			repeatDays = formatMessage(messages.repeatDays, { value: repeatTime });
-		} else if (_.isEqual(selectedDays, getWeekdays())) {
+		} else if (_.isEqual(selectedDays, getWeekdays(formatDate))) {
 			repeatDays = formatMessage(messages.repeatWeekday, { value: repeatTime });
-		} else if (_.isEqual(selectedDays, getWeekends())) {
+		} else if (_.isEqual(selectedDays, getWeekends(formatDate))) {
 			repeatDays = formatMessage(messages.repeatWeekend, { value: repeatTime });
 		} else {
 			for (let day of selectedDays) {
