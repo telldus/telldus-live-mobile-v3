@@ -23,6 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import orderBy from 'lodash/orderBy';
 
 import { List, ListDataSource, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
@@ -51,7 +52,7 @@ export default class Device extends View<void, Props, State> {
 	state = {
 		dataSource: new ListDataSource({
 			rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
-		}).cloneWithRows(this.props.devices.byId),
+		}).cloneWithRows(orderBy(this.props.devices.byId, [(device: Object): any => device.name.toLowerCase()], ['asc'])),
 	};
 
 	constructor(props: Props) {
