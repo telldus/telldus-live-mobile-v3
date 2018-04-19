@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { TouchableWithoutFeedback, UIManager, LayoutAnimation } from 'react-native';
+import { TouchableOpacity, UIManager, LayoutAnimation, Animated } from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 
@@ -39,6 +39,7 @@ const { getSensorTypes, getSensorUnits } = sensorUtils;
 const { Dashboard: { getSupportedDisplayTypes } } = actions;
 
 import Theme from '../../../Theme';
+const paddingHorizontal = 12;
 
 const directions = [
 	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
@@ -60,6 +61,11 @@ type Props = {
 type State = {
 	currentIndex: number,
 	isOpen: boolean,
+	showFullName: boolean,
+	coverMaxWidth: number,
+	coverOccupiedWidth: number,
+	nameWidth?: number,
+	hideButtons: boolean,
 };
 
 class SensorRow extends PureComponent<Props, State> {
@@ -102,9 +108,20 @@ class SensorRow extends PureComponent<Props, State> {
 	onSetIgnoreSensor: () => void;
 	onPressSensorName: () => void;
 
+	hideButtons: () => void;
+	showButtons: () => void;
+	onLayoutDeviceName: (Object) => void;
+	onLayoutCover: (Object) => void;
+	animatedX: any;
+
 	state = {
 		currentIndex: 0,
 		isOpen: false,
+		showFullName: false,
+		coverMaxWidth: 0,
+		coverOccupiedWidth: 0,
+		nameWidth: undefined,
+		hideButtons: false,
 	};
 
 	constructor(props: Props) {
@@ -152,6 +169,14 @@ class SensorRow extends PureComponent<Props, State> {
 		this.onRowClose = this.onRowClose.bind(this);
 		this.onPressSensorName = this.onPressSensorName.bind(this);
 
+		this.onLayoutDeviceName = this.onLayoutDeviceName.bind(this);
+		this.onLayoutCover = this.onLayoutCover.bind(this);
+
+		this.animatedX = new Animated.Value(0);
+
+		this.hideButtons = this.hideButtons.bind(this);
+		this.showButtons = this.showButtons.bind(this);
+
 		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		this.LayoutLinear = {
 			duration: 200,
@@ -191,6 +216,63 @@ class SensorRow extends PureComponent<Props, State> {
 
 	onSetIgnoreSensor() {
 		this.props.setIgnoreSensor(this.props.sensor);
+	}
+
+	startOnShowAnimation() {
+		Animated.parallel([
+			this.hideButtons(),
+		]).start();
+	}
+
+	startOnHideAnimation() {
+		Animated.parallel([
+			this.showButtons(),
+		]).start();
+	}
+
+	hideButtons() {
+		let { appLayout } = this.props;
+		Animated.spring(this.animatedX, {
+			duration: 5000,
+			toValue: appLayout.width,
+			useNativeDriver: true,
+		  }).start((event: Object) => {
+			if (event.finished) {
+				this.setState({
+					hideButtons: true,
+				});
+			}
+		});
+	}
+
+	showButtons() {
+		let { appLayout } = this.props;
+		this.animatedX.setValue(appLayout.width);
+		Animated.spring(this.animatedX, {
+			duration: 5000,
+			toValue: 0,
+			useNativeDriver: true,
+		  }).start();
+	}
+
+	onLayoutDeviceName(ev: Object) {
+		if (!this.state.showFullName) {
+			let { x, width } = ev.nativeEvent.layout;
+			// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
+			const maxRightPadd = 12;
+			this.setState({
+				coverOccupiedWidth: width + x + maxRightPadd,
+			});
+		}
+	}
+
+	onLayoutCover(ev: Object) {
+		if (!this.state.showFullName) {
+			let { width } = ev.nativeEvent.layout;
+			this.setState({
+				coverMaxWidth: width,
+			});
+		}
 	}
 
 	getSensors(data: Object): Object {
@@ -318,13 +400,18 @@ class SensorRow extends PureComponent<Props, State> {
 
 		let { sensors, sensorInfo } = this.getSensors(data);
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
-		let { currentIndex, isOpen } = this.state;
+		let { currentIndex, isOpen, coverOccupiedWidth, coverMaxWidth, hideButtons, nameWidth } = this.state;
 
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
 		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
 		let accessibilityLabelPhraseTwo = isOpen ? this.helpCloseHiddenRow : this.helpViewHiddenRow;
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
+
+		const interpolatedX = this.animatedX.interpolate({
+			inputRange: [0, appLayout.width],
+			outputRange: [0, appLayout.width],
+		});
 
 		return (
 			<SwipeRow
@@ -345,41 +432,48 @@ class SensorRow extends PureComponent<Props, State> {
 					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 					accessibilityLabel={accessible ? accessibilityLabel : ''}>
 					<View style={styles.cover}>
-						<TouchableWithoutFeedback onPress={this.onPressSensorName} style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
-							<View style={styles.container} importantForAccessibility="no-hide-descendants">
-								<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
-								<View>
-									<Text style={[styles.name, { opacity: sensor.name ? 1 : 0.5 }]}
-										ellipsizeMode="middle"
-										numberOfLines={1}>
-										{sensorName}
-									</Text>
-									<Text style={[
-										styles.time, {
-											color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
-											opacity: minutesAgo < 1440 ? 1 : 0.5,
-										},
-									]}>
-										{isGatewayActive ?
-											<Text style={styles.time}>
-												{lastUpdatedValue}
-											</Text>
-											:
-											<Text style={{color: Theme.Core.rowTextColor}}>
-												{this.offline}
-											</Text>
-										}
-									</Text>
+						<TouchableOpacity onPress={this.onPressSensorName} disabled={coverOccupiedWidth < coverMaxWidth}
+							style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
+							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
+							<View style={styles.name} onLayout={this.onLayoutCover}>
+								<Text style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5, width: nameWidth }]}
+									ellipsizeMode="middle"
+									numberOfLines={1}
+									onLayout={this.onLayoutDeviceName}>
+									{sensorName}
+								</Text>
+								<Text style={[
+									styles.time, {
+										color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+										opacity: minutesAgo < 1440 ? 1 : 0.5,
+									},
+								]}>
+									{isGatewayActive ?
+										<Text style={styles.time}>
+											{lastUpdatedValue}
+										</Text>
+										:
+										<Text style={{color: Theme.Core.rowTextColor}}>
+											{this.offline}
+										</Text>
+									}
+								</Text>
+							</View>
+						</TouchableOpacity>
+						{!hideButtons && (
+							<TouchableOpacity onPress={this.changeDisplayType} accessible={false}
+								style={[styles.sensorValueCover, {
+									transform: [{
+										translateX: interpolatedX,
+									}],
+								}]} importantForAccessibility="no-hide-descendants">
+								<View style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
+									{sensors[currentIndex] && (
+										sensors[currentIndex]
+									)}
 								</View>
-							</View>
-						</TouchableWithoutFeedback>
-						<TouchableWithoutFeedback onPress={this.changeDisplayType} accessible={false} style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
-							<View style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
-								{sensors[currentIndex] && (
-									sensors[currentIndex]
-								)}
-							</View>
-						</TouchableWithoutFeedback>
+							</TouchableOpacity>
+						)}
 					</View>
 				</ListItem>
 			</SwipeRow>
@@ -387,9 +481,25 @@ class SensorRow extends PureComponent<Props, State> {
 	}
 
 	onPressSensorName() {
-		let { isOpen } = this.state;
+		let { showFullName, coverOccupiedWidth, coverMaxWidth, isOpen } = this.state;
 		if (isOpen) {
 			this.refs.SwipeRow.closeRow();
+		} else if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
+			if (!showFullName) {
+				let { appLayout } = this.props;
+				this.startOnShowAnimation();
+				this.setState({
+					showFullName: true,
+					nameWidth: appLayout.width - (2 * paddingHorizontal),
+				});
+			} else {
+				this.setState({
+					showFullName: false,
+					nameWidth: undefined,
+					hideButtons: false,
+				});
+				this.startOnHideAnimation();
+			}
 		}
 	}
 
@@ -422,6 +532,11 @@ class SensorRow extends PureComponent<Props, State> {
 				marginTop: 5,
 			},
 			name: {
+				flex: 1,
+				justifyContent: 'center',
+				alignItems: 'flex-start',
+			},
+			nameText: {
 				color: Theme.Core.rowTextColor,
 				fontSize: 15,
 				marginBottom: 2,
