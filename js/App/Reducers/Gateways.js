@@ -18,24 +18,13 @@
  */
 
 // @flow
-import partition from 'lodash/partition';
+import orderBy from 'lodash/orderBy';
 
 export function parseGatewaysForListView(gateways: Object = {}): Array<any> {
 	const list = gateways.allIds.map((gatewayId: number): Array<any> => gateways.byId[gatewayId]);
-	const [NamesBegWithSpecialChars, NamesBegWithText] = partition(list, (gateway: Object): any => {
+	const orderedList = orderBy(list, [(gateway: Object): any => {
 		let { name } = gateway;
-		let specialChars = "~`!#$%^&*+=-_[]\\\';,/{}|\":<>?";
-		return name && specialChars.indexOf(name.charAt(0)) !== -1;
-	});
-	NamesBegWithText.sort((a: Object, b: Object): number => {
-		if (a.name < b.name) {
-			return -1;
-		}
-		if (a.name > b.name) {
-			return 1;
-		}
-		return 0;
-	});
-	const combinedList = NamesBegWithSpecialChars.concat(NamesBegWithText);
-	return combinedList;
+		return name ? name.toLowerCase() : null;
+	}], ['asc']);
+	return orderedList;
 }

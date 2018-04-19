@@ -22,14 +22,18 @@
 
 'use strict';
 
-import _ from 'lodash';
+import groupBy from 'lodash/groupBy';
+import orderBy from 'lodash/orderBy';
+import reduce from 'lodash/reduce';
+import partition from 'lodash/partition';
+import isEmpty from 'lodash/isEmpty';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
-	let result = _.groupBy(paramOne, (items: Object): Array<any> => {
+	let result = groupBy(paramOne, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];
 		return gateway && gateway.name;
 	});
-	result = _.reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
+	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
 		acc.push({
 			key: index,
 			data: next,
@@ -40,18 +44,15 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 }
 
 export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
-	let [NamesBegWithSpecialChars, NamesBegWithText] = _.partition(devices, (device: Object): any => {
+	let orderedList = orderBy(devices, [(device: Object): any => {
 		let { name } = device;
-		let specialChars = "~`!#$%^&*+=-_[]\\\';,/{}|\":<>?";
-		return name && specialChars.indexOf(name.charAt(0)) !== -1;
-	});
-	let sortedList = _.sortBy(NamesBegWithText, 'name');
-	let combinedList = NamesBegWithSpecialChars.concat(sortedList);
-	let [hidden, visible] = _.partition(combinedList, (device: Object): Object => {
+		return name ? name.toLowerCase() : null;
+	}], ['asc']);
+	let [hidden, visible] = partition(orderedList, (device: Object): Object => {
 		return device.ignored;
 	});
 	let visibleList = [], hiddenList = [];
-	let isGatwaysEmpty = _.isEmpty(gateways);
+	let isGatwaysEmpty = isEmpty(gateways);
 	if (!isGatwaysEmpty) {
 		visibleList = prepareSectionRow(visible, gateways);
 		hiddenList = prepareSectionRow(hidden, gateways);
