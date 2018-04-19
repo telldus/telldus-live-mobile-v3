@@ -28,6 +28,7 @@ import Platform from 'Platform';
 
 import { Poster, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
+import { capitalize } from '../../../Lib';
 
 type Props = {
 	days: Object[],
@@ -173,7 +174,7 @@ export default class JobsPoster extends View<null, Props, State> {
 					key={`${day.day}${i}`}
 				>
 					<Animated.Text style={animation.text}>
-						{day.day}
+						{capitalize(day.day)}
 					</Animated.Text>
 				</Animated.View>
 			);
