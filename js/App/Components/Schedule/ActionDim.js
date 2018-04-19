@@ -68,13 +68,13 @@ export default class ActionDim extends View<null, Props, State> {
 		this.sliderConfig = {
 			minimumValue: 0,
 			maximumValue: this.maximumValue,
-			value: methodValue,
+			value: methodValue ? methodValue : 0,
 			onValueChange: this._setMethodValue,
 			minimumTrackTintColor: this.sliderColor,
 		};
 
 		this.state = {
-			methodValue,
+			methodValue: methodValue ? methodValue : 0,
 		};
 	}
 
