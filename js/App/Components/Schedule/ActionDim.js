@@ -120,7 +120,7 @@ export default class ActionDim extends View<null, Props, State> {
 				<FloatingButton
 					onPress={this.selectAction}
 					imageSource={require('./img/right-arrow-key.png')}
-					paddingRight={this.props.paddingRight}
+					paddingRight={this.props.paddingRight - 2}
 				/>
 			</View>
 		);
