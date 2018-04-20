@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from '../../../../BaseComponents';
-import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Theme from '../../../Theme';
 import {
 	getRelativeDimensions,
@@ -81,7 +81,8 @@ class DeviceLocationDetail extends View {
 		} = this.getStyle(appLayout);
 
 		return (
-			<View style={[styles.shadow, styles.container, style]}>
+			<TouchableOpacity style={[styles.shadow, styles.container, style]} accessible={accessible}
+				onPress={this.onPress}>
 				{!!title && (
 					<Text style={[textLocation, {marginLeft: 10}]}>
 						{title}
@@ -91,21 +92,19 @@ class DeviceLocationDetail extends View {
 					<View style={locationImageContainer}>
 						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
 					</View>
-					<TouchableWithoutFeedback onPress={this.onPress} accessible={accessible}>
-						<View style={locationTextContainer}>
-							<Text numberOfLines={1} style={textHSH}>
-								{!!H1 && H1}
-							</Text>
-							<Text numberOfLines={1} style={textLocation}>
-								{!!H2 && H2}
-							</Text>
-							{info && (
-								info
-							)}
-						</View>
-					</TouchableWithoutFeedback>
+					<View style={locationTextContainer}>
+						<Text numberOfLines={1} style={textHSH}>
+							{!!H1 && H1}
+						</Text>
+						<Text numberOfLines={1} style={textLocation}>
+							{!!H2 && H2}
+						</Text>
+						{info && (
+							info
+						)}
+					</View>
 				</View>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 
