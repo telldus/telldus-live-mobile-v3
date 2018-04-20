@@ -27,12 +27,34 @@ import { View, TouchableButton } from '../../../../BaseComponents';
 import { deviceSetState } from '../../../Actions/Devices';
 import i18n from '../../../Translations/common';
 
-class LearnButton extends View {
+type Props = {
+	id: string,
+	command: number,
+	style?: Object | number | Array<any>,
+	onLearn: (string, number) => void;
+};
+
+class LearnButton extends View<Props, null> {
+	props: Props;
+	onLearn: () => void;
+
+	constructor(props: Props) {
+		super(props);
+		this.onLearn = this.onLearn.bind(this);
+	}
+
+	onLearn() {
+		let { onLearn, id, command } = this.props;
+		if (onLearn) {
+			onLearn(id, command);
+		}
+	}
+
 	render(): Object {
 		return (
 			<TouchableButton
 				style={this.props.style}
-				onPress={this.props.onLearn(this.props.id, this.props.command)}
+				onPress={this.onLearn}
 				text={i18n.learn}
 			/>
 		);
