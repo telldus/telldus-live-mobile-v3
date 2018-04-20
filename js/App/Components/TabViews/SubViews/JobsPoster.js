@@ -25,10 +25,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Image, TouchableOpacity } from 'react-native';
 import Platform from 'Platform';
+import moment from 'moment';
 
 import { Poster, View } from '../../../../BaseComponents';
+import Weekdays from './Jobs/Weekdays';
 import Theme from '../../../Theme';
-import { capitalize } from '../../../Lib';
 
 type Props = {
 	days: Object[],
@@ -43,6 +44,8 @@ type State = {
 };
 
 export default class JobsPoster extends View<null, Props, State> {
+
+	onLayout: (number, number) => void;
 
 	static propTypes = {
 		days: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -60,7 +63,12 @@ export default class JobsPoster extends View<null, Props, State> {
 			todayIndex: props.todayIndex,
 			showLeftButton: false,
 			showRightButton: true,
+			daysLayout: {},
 		};
+
+		this.daysLayout = {};
+		this.weekDaysLayout = {};
+		this.onLayout = this.onLayout.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps: Props) {
@@ -79,7 +87,7 @@ export default class JobsPoster extends View<null, Props, State> {
 
 			const config = {
 				toValue: this.scrollRight ? 0 : 2,
-				duration: 400,
+				duration: 600,
 			};
 
 			Animated
@@ -169,14 +177,13 @@ export default class JobsPoster extends View<null, Props, State> {
 			}
 
 			return (
-				<Animated.View
-					style={[animation.container, simulateClick]}
-					key={`${day.day}${i}`}
-				>
-					<Animated.Text style={animation.text}>
-						{capitalize(day.day)}
-					</Animated.Text>
-				</Animated.View>
+				<Weekdays
+					key={i}
+					i={i}
+					day={day}
+					animation={animation}
+					simulateClick={simulateClick}
+					onLayout={this.onLayout}/>
 			);
 		});
 	};
@@ -299,10 +306,9 @@ export default class JobsPoster extends View<null, Props, State> {
 		const deviceWidth = isPortrait ? width : height;
 		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
 
-		const dayWidth = this._getDayWidth(this.props.days[index].day);
+		const dayWidth = this._getDayWidth(index);
 		const dayHeight = deviceWidth * 0.1;
 		const todayWidth = (width - headerHeight) * 0.44;
-
 		const todayOffset = (width - headerHeight) * 0.205333333;
 
 		const dayTop = deviceWidth * 0.117333333;
@@ -326,6 +332,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				color: '#fff',
 				fontSize: dayFontSize,
 				fontFamily: Theme.Core.fonts.robotoLight,
+				textAlign: 'center',
 			},
 		};
 
@@ -334,25 +341,31 @@ export default class JobsPoster extends View<null, Props, State> {
 			beforeYesterday: {
 				container: {
 					...day.container,
+					left: dayWidth ?
+						this._interpolate(0 - 2 * dayWidth, 0 - dayWidth, 0)
+						:
+						0,
 				},
 				text: day.text,
 			},
 			yesterday: {
 				container: {
 					...day.container,
-					left: this._interpolate(0 - dayWidth, 0, todayOffset),
+					left: dayWidth ?
+						this._interpolate(0 - dayWidth, 0, todayOffset)
+						:
+						0,
 					top: this._interpolate(dayTop, dayTop, todayTop),
 				},
 				text: {
 					...day.text,
 					fontSize: this._interpolate(dayFontSize, dayFontSize, todayFontSize),
-					marginHorizontal: 5,
+					width: dayWidth ? this._interpolate(dayWidth, dayWidth, todayWidth) : undefined,
 				},
 			},
 			today: {
 				container: {
 					...day.container,
-					width: this._interpolate(dayWidth, todayWidth, dayWidth),
 					left: this.scrollRight ? this._interpolate(0, todayOffset, 100) : null,
 					right: this.scrollRight ? null : this._interpolate(100, todayOffset, 0),
 					top: this._interpolate(dayTop, todayTop, dayTop),
@@ -360,24 +373,32 @@ export default class JobsPoster extends View<null, Props, State> {
 				text: {
 					...day.text,
 					fontSize: this._interpolate(dayFontSize, todayFontSize, dayFontSize),
+					width: dayWidth ? this._interpolate(dayWidth, todayWidth, dayWidth) : todayWidth,
 				},
 			},
 			tomorrow: {
 				container: {
 					...day.container,
 					left: null,
-					right: this._interpolate(todayOffset, 0, 0 - dayWidth),
+					right: dayWidth ?
+						this._interpolate(todayOffset, 0, 0 - dayWidth)
+						:
+						0,
 					top: this._interpolate(todayTop, dayTop, dayTop),
 				},
 				text: {
 					...day.text,
 					fontSize: this._interpolate(todayFontSize, dayFontSize, dayFontSize),
-					marginHorizontal: 5,
+					width: dayWidth ? this._interpolate(todayWidth, dayWidth, dayWidth) : undefined,
 				},
 			},
 			afterTomorrow: {
 				container: {
 					...day.container,
+					right: dayWidth ?
+						this._interpolate(0, 0 - dayWidth, 0 - 2 * dayWidth)
+						:
+						0,
 				},
 				text: day.text,
 			},
@@ -483,34 +504,32 @@ export default class JobsPoster extends View<null, Props, State> {
 		};
 	};
 
-	_getDayWidth = (day: string): number => {
-		const { appLayout } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
+	_getDayWidth = (i: number): any => {
+		const { daysLayout } = this.state;
+		const { formatDate } = this.props.intl;
+		const day = moment().weekday(i);
+		const weekday = formatDate(day, {weekday: 'long'});
 
-		switch (day) {
-			case 'Monday':
-				return deviceWidth * 0.132;
-
-			case 'Tuesday':
-				return deviceWidth * 0.137333333;
-
-			case 'Wednesday':
-				return deviceWidth * 0.189333333;
-
-			case 'Thursday':
-				return deviceWidth * 0.153333333;
-
-			case 'Friday':
-				return deviceWidth * 0.1;
-
-			case 'Saturday':
-				return deviceWidth * 0.145333333;
-
-			default:
-				return deviceWidth * 0.121333333;
-		}
+		return daysLayout[weekday] ? daysLayout[weekday] : false;
 	};
+
+	onLayout(width: number, i: number) {
+		const { todayIndex } = this.state;
+		if (!this.daysLayout[i] && i !== todayIndex) {
+			this.daysLayout[i] = width;
+
+			const { formatDate } = this.props.intl;
+			const day = moment().weekday(i);
+			const weekday = formatDate(day, {weekday: 'long'});
+			this.weekDaysLayout[weekday] = width;
+
+			let length = Object.keys(this.weekDaysLayout).length;
+			if (length > 5) {
+				this.setState({
+					daysLayout: this.weekDaysLayout,
+				});
+			}
+		}
+	}
 
 }

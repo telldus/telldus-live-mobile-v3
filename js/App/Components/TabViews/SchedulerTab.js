@@ -183,6 +183,7 @@ class SchedulerTab extends View<null, Props, State> {
 					todayIndex={todayIndex}
 					scroll={this._scroll}
 					appLayout={appLayout}
+					intl={screenProps.intl}
 				/>
 				<Swiper
 					ref={this._refScroll}
