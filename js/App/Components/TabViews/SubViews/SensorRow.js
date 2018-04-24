@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { TouchableOpacity, UIManager, LayoutAnimation, Animated } from 'react-native';
+import { TouchableOpacity, UIManager, LayoutAnimation, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 
@@ -64,8 +64,7 @@ type State = {
 	showFullName: boolean,
 	coverMaxWidth: number,
 	coverOccupiedWidth: number,
-	nameWidth?: number,
-	hideButtons: boolean,
+	buttonsWidth?: number,
 };
 
 class SensorRow extends PureComponent<Props, State> {
@@ -108,11 +107,12 @@ class SensorRow extends PureComponent<Props, State> {
 	onSetIgnoreSensor: () => void;
 	onPressSensorName: () => void;
 
-	hideButtons: () => void;
-	showButtons: () => void;
 	onLayoutDeviceName: (Object) => void;
 	onLayoutCover: (Object) => void;
+	onLayoutButtons: (Object) => void;
 	animatedX: any;
+	animatedWidth: any;
+	isAnimating: boolean;
 
 	state = {
 		currentIndex: 0,
@@ -120,8 +120,7 @@ class SensorRow extends PureComponent<Props, State> {
 		showFullName: false,
 		coverMaxWidth: 0,
 		coverOccupiedWidth: 0,
-		nameWidth: undefined,
-		hideButtons: false,
+		buttonsWidth: undefined,
 	};
 
 	constructor(props: Props) {
@@ -171,11 +170,11 @@ class SensorRow extends PureComponent<Props, State> {
 
 		this.onLayoutDeviceName = this.onLayoutDeviceName.bind(this);
 		this.onLayoutCover = this.onLayoutCover.bind(this);
+		this.onLayoutButtons = this.onLayoutButtons.bind(this);
 
-		this.animatedX = new Animated.Value(0);
-
-		this.hideButtons = this.hideButtons.bind(this);
-		this.showButtons = this.showButtons.bind(this);
+		this.animatedWidth = null;
+		this.animatedScaleX = new Animated.Value(1);
+		this.isAnimating = false;
 
 		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		this.LayoutLinear = {
@@ -218,41 +217,85 @@ class SensorRow extends PureComponent<Props, State> {
 		this.props.setIgnoreSensor(this.props.sensor);
 	}
 
-	startOnShowAnimation() {
-		Animated.parallel([
-			this.hideButtons(),
-		]).start();
-	}
-
-	startOnHideAnimation() {
-		Animated.parallel([
-			this.showButtons(),
-		]).start();
-	}
-
-	hideButtons() {
-		let { appLayout } = this.props;
-		Animated.spring(this.animatedX, {
-			duration: 5000,
-			toValue: appLayout.width,
-			useNativeDriver: true,
-		  }).start((event: Object) => {
-			if (event.finished) {
+	onPressSensorName() {
+		let { showFullName, coverOccupiedWidth, coverMaxWidth, isOpen } = this.state;
+		if (isOpen) {
+			this.refs.SwipeRow.closeRow();
+		} else if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
+			if (!showFullName) {
+				this.isAnimating = true;
 				this.setState({
-					hideButtons: true,
+					showFullName: true,
+				}, () => {
+					this.showFullName(200, 10, Easing.linear());
+				});
+			} else {
+				this.isAnimating = true;
+				this.setState({
+					showFullName: false,
+				}, () => {
+					this.hideFullName(200, 10, Easing.linear());
 				});
 			}
-		});
+		}
 	}
 
-	showButtons() {
-		let { appLayout } = this.props;
-		this.animatedX.setValue(appLayout.width);
-		Animated.spring(this.animatedX, {
-			duration: 5000,
+	showFullName(duration: number, delay: number, easing: any) {
+		Animated.parallel([
+			this.reduceButtons(duration, delay, easing),
+			this.scaleDown(duration, delay, easing),
+		]).start();
+	}
+
+	hideFullName(duration: number, delay: number, easing: any) {
+		Animated.parallel([
+			this.expandButtons(duration, delay, easing),
+			this.scaleUp(duration, delay, easing),
+		]).start();
+	}
+
+	scaleDown(duration: number, delay: number, easing: any) {
+		Animated.timing(this.animatedScaleX, {
+			duration,
+			delay,
 			toValue: 0,
-			useNativeDriver: true,
+			easing,
 		  }).start();
+	}
+
+	scaleUp(duration: number, delay: number, easing: any) {
+		Animated.timing(this.animatedScaleX, {
+			duration,
+			delay,
+			toValue: 1,
+			easing,
+		  }).start();
+	}
+
+	reduceButtons(duration: number, delay: number, easing: any) {
+		Animated.timing(this.animatedWidth, {
+			duration,
+			delay,
+			toValue: 0,
+			easing,
+		  }).start(({finished}: Object) => {
+			  if (finished) {
+				this.isAnimating = false;
+			  }
+		  });
+	}
+
+	expandButtons(duration: number, delay: number, easing: any) {
+		Animated.timing(this.animatedWidth, {
+			duration,
+			delay,
+			toValue: this.state.buttonsWidth,
+			easing,
+		  }).start(({finished}: Object) => {
+			if (finished) {
+			  this.isAnimating = false;
+			}
+		});
 	}
 
 	onLayoutDeviceName(ev: Object) {
@@ -271,6 +314,16 @@ class SensorRow extends PureComponent<Props, State> {
 			let { width } = ev.nativeEvent.layout;
 			this.setState({
 				coverMaxWidth: width,
+			});
+		}
+	}
+
+	onLayoutButtons(ev: Object) {
+		let { buttonsWidth } = this.state;
+		if (!buttonsWidth) {
+			this.animatedWidth = new Animated.Value(ev.nativeEvent.layout.width);
+			this.setState({
+				buttonsWidth: ev.nativeEvent.layout.width,
 			});
 		}
 	}
@@ -400,7 +453,7 @@ class SensorRow extends PureComponent<Props, State> {
 
 		let { sensors, sensorInfo } = this.getSensors(data);
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
-		let { currentIndex, isOpen, coverOccupiedWidth, coverMaxWidth, hideButtons, nameWidth } = this.state;
+		let { currentIndex, isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
 
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
 		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
@@ -408,9 +461,9 @@ class SensorRow extends PureComponent<Props, State> {
 		let accessibilityLabelPhraseTwo = isOpen ? this.helpCloseHiddenRow : this.helpViewHiddenRow;
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
 
-		const interpolatedX = this.animatedX.interpolate({
-			inputRange: [0, appLayout.width],
-			outputRange: [0, appLayout.width],
+		const interpolatedScale = this.animatedScaleX.interpolate({
+			inputRange: [0, 0.5, 1],
+			outputRange: [0, 1, 1],
 		});
 
 		return (
@@ -436,7 +489,7 @@ class SensorRow extends PureComponent<Props, State> {
 							style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 							<View style={styles.name} onLayout={this.onLayoutCover}>
-								<Text style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5, width: nameWidth }]}
+								<Text style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5 }]}
 									ellipsizeMode="middle"
 									numberOfLines={1}
 									onLayout={this.onLayoutDeviceName}>
@@ -460,47 +513,24 @@ class SensorRow extends PureComponent<Props, State> {
 								</Text>
 							</View>
 						</TouchableOpacity>
-						{!hideButtons && (
-							<TouchableOpacity onPress={this.changeDisplayType} accessible={false}
-								style={[styles.sensorValueCover, {
-									transform: [{
-										translateX: interpolatedX,
-									}],
-								}]} importantForAccessibility="no-hide-descendants">
-								<View style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
-									{sensors[currentIndex] && (
-										sensors[currentIndex]
-									)}
-								</View>
-							</TouchableOpacity>
-						)}
+						<TouchableOpacity onPress={this.changeDisplayType} accessible={false}
+							onLayout={this.onLayoutButtons}
+							style={[styles.sensorValueCover, {
+								width: this.animatedWidth,
+								transform: [{
+									scaleX: interpolatedScale,
+								}],
+							}]} importantForAccessibility="no-hide-descendants">
+							<View style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
+								{sensors[currentIndex] && (
+									sensors[currentIndex]
+								)}
+							</View>
+						</TouchableOpacity>
 					</View>
 				</ListItem>
 			</SwipeRow>
 		);
-	}
-
-	onPressSensorName() {
-		let { showFullName, coverOccupiedWidth, coverMaxWidth, isOpen } = this.state;
-		if (isOpen) {
-			this.refs.SwipeRow.closeRow();
-		} else if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
-			if (!showFullName) {
-				let { appLayout } = this.props;
-				this.startOnShowAnimation();
-				this.setState({
-					showFullName: true,
-					nameWidth: appLayout.width - (2 * paddingHorizontal),
-				});
-			} else {
-				this.setState({
-					showFullName: false,
-					nameWidth: undefined,
-					hideButtons: false,
-				});
-				this.startOnHideAnimation();
-			}
-		}
 	}
 
 	changeDisplayType(index: number) {

@@ -24,7 +24,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
-import { TouchableOpacity, PixelRatio, Animated } from 'react-native';
+import { TouchableOpacity, PixelRatio, Animated, Easing } from 'react-native';
 
 import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import ToggleButton from './ToggleButton';
@@ -74,8 +74,7 @@ type State = {
 	showFullName: boolean,
 	coverMaxWidth: number,
 	coverOccupiedWidth: number,
-	nameWidth?: number,
-	hideButtons: boolean,
+	buttonsWidth?: number,
 };
 
 class DeviceRow extends PureComponent<Props, State> {
@@ -94,11 +93,12 @@ class DeviceRow extends PureComponent<Props, State> {
 	onPressMore: (Object) => void;
 	closeMoreActions: () => void;
 	onShowFullName: () => void;
-	hideButtons: () => void;
-	showButtons: () => void;
 	onLayoutDeviceName: (Object) => void;
 	onLayoutCover: (Object) => void;
+	onLayoutButtons: (Object) => void;
 	animatedX: any;
+	animatedWidth: any;
+	isAnimating: boolean;
 
 	state = {
 		disableSwipe: false,
@@ -107,8 +107,7 @@ class DeviceRow extends PureComponent<Props, State> {
 		showFullName: false,
 		coverMaxWidth: 0,
 		coverOccupiedWidth: 0,
-		nameWidth: undefined,
-		hideButtons: false,
+		buttonsWidth: undefined,
 	};
 
 	constructor(props: Props) {
@@ -131,11 +130,11 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.onShowFullName = this.onShowFullName.bind(this);
 		this.onLayoutDeviceName = this.onLayoutDeviceName.bind(this);
 		this.onLayoutCover = this.onLayoutCover.bind(this);
+		this.onLayoutButtons = this.onLayoutButtons.bind(this);
 
-		this.animatedX = new Animated.Value(0);
-
-		this.hideButtons = this.hideButtons.bind(this);
-		this.showButtons = this.showButtons.bind(this);
+		this.animatedWidth = null;
+		this.animatedScaleX = new Animated.Value(1);
+		this.isAnimating = false;
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -188,62 +187,83 @@ class DeviceRow extends PureComponent<Props, State> {
 			this.refs.SwipeRow.closeRow();
 		} else if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
 			if (!showFullName) {
-				let { appLayout } = this.props;
-				this.startOnShowAnimation();
+				this.isAnimating = true;
 				this.setState({
 					showFullName: true,
-					nameWidth: appLayout.width - (2 * paddingHorizontal),
+				}, () => {
+					this.showFullName(200, 10, Easing.linear());
 				});
 			} else {
+				this.isAnimating = true;
 				this.setState({
 					showFullName: false,
-					nameWidth: undefined,
-					hideButtons: false,
+				}, () => {
+					this.hideFullName(200, 10, Easing.linear());
 				});
-				this.startOnHideAnimation();
 			}
 		}
 	}
 
-	startOnShowAnimation() {
+	showFullName(duration: number, delay: number, easing: any) {
 		Animated.parallel([
-			this.hideButtons(),
+			this.reduceButtons(duration, delay, easing),
+			this.scaleDown(duration, delay, easing),
 		]).start();
 	}
 
-	startOnHideAnimation() {
+	hideFullName(duration: number, delay: number, easing: any) {
 		Animated.parallel([
-			this.showButtons(),
+			this.expandButtons(duration, delay, easing),
+			this.scaleUp(duration, delay, easing),
 		]).start();
 	}
 
-	hideButtons() {
-		let { appLayout } = this.props;
-		Animated.spring(this.animatedX, {
-			duration: 5000,
-			toValue: appLayout.width,
-			useNativeDriver: true,
-		  }).start((event: Object) => {
-			if (event.finished) {
-				this.setState({
-					hideButtons: true,
-				});
+	scaleDown(duration: number, delay: number, easing: any) {
+		Animated.timing(this.animatedScaleX, {
+			duration,
+			delay,
+			toValue: 0,
+			easing,
+		  }).start();
+	}
+
+	scaleUp(duration: number, delay: number, easing: any) {
+		Animated.timing(this.animatedScaleX, {
+			duration,
+			delay,
+			toValue: 1,
+			easing,
+		  }).start();
+	}
+
+	reduceButtons(duration: number, delay: number, easing: any) {
+		Animated.timing(this.animatedWidth, {
+			duration,
+			delay,
+			toValue: 0,
+			easing,
+		  }).start(({finished}: Object) => {
+			  if (finished) {
+				this.isAnimating = false;
 			}
 		});
 	}
 
-	showButtons() {
-		let { appLayout } = this.props;
-		this.animatedX.setValue(appLayout.width);
-		Animated.spring(this.animatedX, {
-			duration: 5000,
-			toValue: 0,
-			useNativeDriver: true,
-		  }).start();
+	expandButtons(duration: number, delay: number, easing: any) {
+		Animated.timing(this.animatedWidth, {
+			duration,
+			delay,
+			toValue: this.state.buttonsWidth,
+			easing,
+		  }).start(({finished}: Object) => {
+			if (finished) {
+			  this.isAnimating = false;
+			}
+		});
 	}
 
 	onLayoutDeviceName(ev: Object) {
-		if (!this.state.showFullName) {
+		if (!this.state.showFullName && !this.isAnimating) {
 			let { x, width } = ev.nativeEvent.layout;
 			// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
 			const maxRightPadd = 12;
@@ -254,7 +274,7 @@ class DeviceRow extends PureComponent<Props, State> {
 	}
 
 	onLayoutCover(ev: Object) {
-		if (!this.state.showFullName) {
+		if (!this.state.showFullName && !this.isAnimating) {
 			let { width } = ev.nativeEvent.layout;
 			this.setState({
 				coverMaxWidth: width,
@@ -262,9 +282,19 @@ class DeviceRow extends PureComponent<Props, State> {
 		}
 	}
 
+	onLayoutButtons(ev: Object) {
+		let { buttonsWidth } = this.state;
+		if (!buttonsWidth) {
+			this.animatedWidth = new Animated.Value(ev.nativeEvent.layout.width);
+			this.setState({
+				buttonsWidth: ev.nativeEvent.layout.width,
+			});
+		}
+	}
+
 	render(): Object {
 		let button = [], icon = null;
-		let { isOpen, showMoreActions, hideButtons, nameWidth, coverOccupiedWidth, coverMaxWidth } = this.state;
+		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
 		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
 		const { isInState, name } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -346,14 +376,14 @@ class DeviceRow extends PureComponent<Props, State> {
 			icon = 'device-alt';
 		}
 
+		const interpolatedScale = this.animatedScaleX.interpolate({
+			inputRange: [0, 0.5, 1],
+			outputRange: [0, 1, 1],
+		});
+
 		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
 		let accessibilityLabel = isOpen ? `${getLabelDevice(intl.formatMessage, device)}. ${this.helpCloseHiddenRow}` :
 			`${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
-
-		const interpolatedX = this.animatedX.interpolate({
-			inputRange: [0, appLayout.width],
-			outputRange: [0, appLayout.width],
-		});
 
 		return (
 			<View>
@@ -381,7 +411,7 @@ class DeviceRow extends PureComponent<Props, State> {
 								accessibilityLabel={accessibilityLabel}>
 								{showDeviceIcon && <BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>}
 								<View style={styles.name} onLayout={this.onLayoutCover}>
-									<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5, width: nameWidth }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
+									<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
 										{deviceName}
 									</Text>
 									{powerConsumed && (
@@ -391,12 +421,13 @@ class DeviceRow extends PureComponent<Props, State> {
 									)}
 								</View>
 							</TouchableOpacity>
-							{!hideButtons && (<Animated.View style={[styles.buttonsCover, {
+							<Animated.View style={[styles.buttonsCover, {
+								width: this.animatedWidth,
 								transform: [{
-									translateX: interpolatedX,
+									scaleX: interpolatedScale,
 								}],
 							},
-							]}>
+							]} onLayout={this.onLayoutButtons}>
 								{button.length === 1 ?
 									button[0]
 									:
@@ -406,7 +437,6 @@ class DeviceRow extends PureComponent<Props, State> {
 									]
 								}
 							</Animated.View>
-							)}
 						</View>
 					</ListItem>
 				</SwipeRow>
