@@ -217,6 +217,9 @@ const Tabs = TabNavigator(
 	{
 		initialRouteName: 'Overview',
 		tabBarPosition: 'top',
+		swipeEnabled: false,
+		lazy: true,
+		animationEnabled: true,
 		tabBarComponent: ({ tabStyle, ...rest }: Object): Object => {
 			let { screenProps } = rest, tabWidth = 0;
 			if (screenProps && screenProps.appLayout) {
@@ -243,9 +246,6 @@ const Tabs = TabNavigator(
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
-			swipeEnabled: true,
-			lazy: true,
-			animationEnabled: true,
 			upperCaseLabel: false,
 			scrollEnabled: true,
 			activeTintColor: '#F06F0C',

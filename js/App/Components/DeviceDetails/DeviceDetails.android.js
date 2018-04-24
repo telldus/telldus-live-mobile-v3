@@ -242,6 +242,9 @@ const Tabs = TabNavigator(
 	{
 		initialRouteName: 'Overview',
 		tabBarPosition: 'top',
+		swipeEnabled: false,
+		lazy: true,
+		animationEnabled: true,
 		tabBarOptions: {
 			indicatorStyle: {
 				backgroundColor: '#fff',
@@ -258,9 +261,6 @@ const Tabs = TabNavigator(
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
-			swipeEnabled: true,
-			lazy: true,
-			animationEnabled: true,
 			upperCaseLabel: false,
 			scrollEnabled: true,
 			activeTintColor: '#F06F0C',
