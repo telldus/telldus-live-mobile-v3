@@ -25,6 +25,7 @@ import React, { PureComponent } from 'react';
 import { TouchableOpacity, UIManager, LayoutAnimation, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
@@ -512,7 +513,7 @@ class SensorRow extends PureComponent<Props, State> {
 								</Text>
 							</View>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={this.changeDisplayType} accessible={false}
+						<AnimatedTouchable onPress={this.changeDisplayType} accessible={false}
 							onLayout={this.onLayoutButtons}
 							style={[styles.sensorValueCover, {
 								width: this.animatedWidth,
@@ -525,7 +526,7 @@ class SensorRow extends PureComponent<Props, State> {
 									sensors[currentIndex]
 								)}
 							</View>
-						</TouchableOpacity>
+						</AnimatedTouchable>
 					</View>
 				</ListItem>
 			</SwipeRow>
