@@ -36,29 +36,32 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 		paddingVertical: tileWidth * 0.06,
 	}]}>
 		{icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
-		<Text
-			ellipsizeMode="middle"
-			numberOfLines={1}
-			style={[
-				styles.name, {
-					fontSize: Math.floor(tileWidth / 10),
-					opacity: name ? 1 : 0.7,
-					marginTop: 3,
-				},
-			]}>
-			{name ? name : formatMessage(i18n.noName)}
-		</Text>
-		<Text
-			ellipsizeMode="middle"
-			numberOfLines={1}
-			style={[
-				styles.name, {
-					fontSize: Math.floor(tileWidth / 12),
-					color: Theme.Core.rowTextColor,
-				},
-			]}>
-			{info}
-		</Text>
+		<View style={styles.textCover}>
+			<Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style={[
+					styles.name, {
+						fontSize: Math.floor(tileWidth / 10),
+						opacity: name ? 1 : 0.7,
+					},
+				]}>
+				{name ? name : formatMessage(i18n.noName)}
+			</Text>
+			{info &&
+			(<Text
+				ellipsizeMode="middle"
+				numberOfLines={1}
+				style={[
+					styles.name, {
+						fontSize: Math.floor(tileWidth / 12),
+						color: Theme.Core.rowTextColor,
+					},
+				]}>
+				{info}
+			</Text>
+			)}
+		</View>
 	</View>
 );
 
@@ -117,6 +120,12 @@ const styles = StyleSheet.create({
 	noShadow: {
 		borderRadius: 2,
 		elevation: 0,
+	},
+	textCover: {
+		flex: 1,
+		marginTop: 3,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 });
 
