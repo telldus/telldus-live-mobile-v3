@@ -31,7 +31,7 @@ import mapValues from 'lodash/mapValues';
 export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}): {sections: Object, sectionIds: Array<Object>} {
 	if (!jobs || !jobs.length) {
 		return {
-			sections: {},
+			sections: {'0': [], '1': [], '2': [], '3': [], '4': [], '5': [], '6': []},
 			sectionIds: [],
 		};
 	}
