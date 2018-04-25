@@ -267,6 +267,10 @@ class DashboardTab extends View {
 		);
 	}
 
+	handleOnStartShouldSetResponder(ev: Object): boolean {
+		return false;
+	}
+
 	render(): Object {
 		let { appLayout, dashboard } = this.props;
 		let { dataSource, isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
@@ -300,6 +304,7 @@ class DashboardTab extends View {
 					key={numColumns}
 					style={{width: '100%'}}
 					scrollEnabled={scrollEnabled}
+					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 				/>
 			</View>
 		);

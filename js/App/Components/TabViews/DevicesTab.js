@@ -403,6 +403,10 @@ class DevicesTab extends View {
 		);
 	}
 
+	handleOnStartShouldSetResponder(ev: Object): boolean {
+		return false;
+	}
+
 	render(): Object {
 
 		let { appLayout, devices } = this.props;
@@ -433,6 +437,7 @@ class DevicesTab extends View {
 						refreshing={isRefreshing}
 						onRefresh={this.onRefresh}
 					/>}
+				onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 			>
 				<SectionList
 					sections={visibleList}
@@ -441,6 +446,7 @@ class DevicesTab extends View {
 					keyExtractor={this.keyExtractor}
 					extraData={extraData}
 					scrollEnabled={scrollEnabled}
+					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 				/>
 				<View>
 					{this.toggleHiddenListButton(style)}
@@ -452,6 +458,7 @@ class DevicesTab extends View {
 							keyExtractor={this.keyExtractor}
 							extraData={extraData}
 							scrollEnabled={scrollEnabled}
+							onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 						/>
 						:
 						<View style={{height: 80}}/>
