@@ -41,13 +41,14 @@ class SensorDashboardTileSlide extends View {
 
 		return (
 			<View style={[Theme.Styles.sensorTileItem, containerStyle]}>
-				<View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
+				{!data.isLarge && (<View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
 					<IconTelldus icon={data.icon} color="#fff" style={{
 						fontSize: tileWidth * 0.3,
 						color: '#fff',
 					}}/>
 				</View>
-				<View style={{ flex: 5, justifyContent: 'center', alignItems: 'flex-start' }}>
+				)}
+				<View style={{ flex: 5, justifyContent: 'center', alignItems: 'flex-start', marginLeft: data.isLarge ? tileWidth * 0.1 : 0 }}>
 					<View style={{flexDirection: 'row', alignItems: 'baseline'}}>
 						<Text>
 							<Text style={{
