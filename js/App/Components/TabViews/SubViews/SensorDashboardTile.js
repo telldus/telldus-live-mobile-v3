@@ -154,7 +154,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					label: this.labelTemperature,
 					unit,
 					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={1} minimumFractionDigits={1}/>,
+					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1} minimumFractionDigits={isLarge ? 0 : 1}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
 			}
@@ -184,8 +184,8 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					label: label,
 					unit,
 					isLarge,
-					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={1}/> ),
-					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={1}/> ),
+					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/> ),
+					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/> ),
 					text3: (name === 'wdir' && this._windDirection(value)),
 				});
 				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
@@ -237,7 +237,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					label: label,
 					unit,
 					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
+					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
 			}
@@ -247,7 +247,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					icon: 'luminance',
 					label: this.labelLuminance,
 					isLarge: isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={1} suffix={unit}
+					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1} suffix={unit}
 						useGrouping={false}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
@@ -259,7 +259,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					label: this.labelDewPoint,
 					unit,
 					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
+					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
 			}
@@ -270,7 +270,7 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 					label: this.labelBarometricPressure,
 					unit,
 					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={1}/>,
+					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
 			}

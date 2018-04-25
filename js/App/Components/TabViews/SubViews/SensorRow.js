@@ -345,7 +345,7 @@ class SensorRow extends PureComponent<Props, State> {
 			if (name === 'temp') {
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
 					icon={'temperature'} label={this.labelTemperature} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 1, minimumFractionDigits: 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1, minimumFractionDigits: isLarge ? 0 : 1}}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
 			}
 			if (name === 'rrate' || name === 'rtot') {
@@ -368,7 +368,7 @@ class SensorRow extends PureComponent<Props, State> {
 				}
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
 					icon={'wind'} isLarge={isLarge} label={label} key={key}
-					formatOptions={{maximumFractionDigits: 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
 
 				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
 				let wavgInfo = name === 'wavg' ? `${this.labelWindAverage} ${value}${unit}` : '';
@@ -410,7 +410,7 @@ class SensorRow extends PureComponent<Props, State> {
 				}
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
 					icon={'watt'} label={label} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
 				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
 			}
 			if (name === 'lum') {
@@ -422,19 +422,19 @@ class SensorRow extends PureComponent<Props, State> {
 			if (name === 'dewp') {
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
 					icon={'humidity'} label={this.labelDewPoint} key={key} isLarge={isLarge}
-					formatOptions={{maximumFractionDigits: 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
 			}
 			if (name === 'barpress') {
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
 					icon={'guage'} label={this.labelBarometricPressure} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
 			}
 			if (name === 'genmeter') {
 				sensors.push(<GenericSensor name={name} value={value} unit={unit}
 					icon={'sensor'} label={this.labelGenericMeter} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
 				sensorInfo = `${sensorInfo}, ${this.labelGenericMeter} ${value}${unit}`;
 			}
 		}
@@ -570,6 +570,7 @@ class SensorRow extends PureComponent<Props, State> {
 				color: Theme.Core.rowTextColor,
 				fontSize: 15,
 				marginBottom: 2,
+				marginRight: 4,
 			},
 			row: {
 				marginHorizontal: 12,

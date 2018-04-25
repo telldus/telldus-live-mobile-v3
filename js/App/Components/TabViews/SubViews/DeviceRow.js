@@ -512,6 +512,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				textAlignVertical: 'center',
 				textAlign: 'left',
 				marginLeft: 6,
+				marginRight: 4,
 			},
 			deviceIcon: {
 				fontSize: 18,
