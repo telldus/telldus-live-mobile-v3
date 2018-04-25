@@ -2,7 +2,7 @@ import {parseJobsForListView} from '../../Reducers/Jobs.js';
 
 jest.useFakeTimers();
 
-const initialState = { sectionIds: [], sections: {'0': [], '1': [], '2': [], '3': [], '4': [], '5': [], '6': []} };
+const initialState = { sectionIds: [], sections: {'0': [], '1': [], '2': [], '3': [], '4': [], '5': [], '6': [], '7': []} };
 
 describe('Test jobs reducers', ()=>{
 

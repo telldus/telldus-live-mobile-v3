@@ -57,7 +57,7 @@ render(): Object {
 			key={`${day.day}${i}`}
 			onLayout={this.onLayout}
 		>
-			<Animated.Text style={animation.text}>
+			<Animated.Text style={animation.text} numberOfLines={1}>
 				{capitalize(day.day)}
 			</Animated.Text>
 		</Animated.View>
