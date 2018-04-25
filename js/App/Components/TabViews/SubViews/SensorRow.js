@@ -39,7 +39,6 @@ const { getSensorTypes, getSensorUnits } = sensorUtils;
 const { Dashboard: { getSupportedDisplayTypes } } = actions;
 
 import Theme from '../../../Theme';
-const paddingHorizontal = 12;
 
 const directions = [
 	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
@@ -110,9 +109,9 @@ class SensorRow extends PureComponent<Props, State> {
 	onLayoutDeviceName: (Object) => void;
 	onLayoutCover: (Object) => void;
 	onLayoutButtons: (Object) => void;
-	animatedX: any;
 	animatedWidth: any;
 	isAnimating: boolean;
+	animatedScaleX: any;
 
 	state = {
 		currentIndex: 0,

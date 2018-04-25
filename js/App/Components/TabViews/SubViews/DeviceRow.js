@@ -96,9 +96,9 @@ class DeviceRow extends PureComponent<Props, State> {
 	onLayoutDeviceName: (Object) => void;
 	onLayoutCover: (Object) => void;
 	onLayoutButtons: (Object) => void;
-	animatedX: any;
 	animatedWidth: any;
 	isAnimating: boolean;
+	animatedScaleX: any;
 
 	state = {
 		disableSwipe: false,
