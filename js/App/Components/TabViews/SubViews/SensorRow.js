@@ -514,6 +514,7 @@ class SensorRow extends PureComponent<Props, State> {
 							</View>
 						</TouchableOpacity>
 						<AnimatedTouchable onPress={this.changeDisplayType} accessible={false}
+							disabled={sensors.length <= 1}
 							onLayout={this.onLayoutButtons}
 							style={[styles.sensorValueCover, {
 								width: this.animatedWidth,
