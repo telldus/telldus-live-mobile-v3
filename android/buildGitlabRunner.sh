@@ -3,6 +3,9 @@
 # Exit on error
 set -e
 
+# Set the dir internally to allow caching
+export GRADLE_USER_HOME="$(pwd)/gradle"
+
 # Prepare files
 cat > ../config.local.js <<EOF
 module.exports = {
