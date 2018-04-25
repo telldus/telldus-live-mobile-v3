@@ -33,6 +33,8 @@ function getSliderLabel(value: number, intl: intlShape): string {
 	return value.toString();
 }
 
+const threshold = 3;
+
 type Props = {
 	setScrollEnabled: boolean => void,
 	thumbHeight: number,
@@ -94,6 +96,8 @@ class HVSliderContainer extends View {
 		};
 		this.activeSlider = false;
 		this.hasMoved = false;
+		this.pageX = null;
+		this.pageY = null;
 
 		this.layoutView = this.layoutView.bind(this);
 		this.onPressDimmer = this.onPressDimmer.bind(this);
@@ -120,8 +124,11 @@ class HVSliderContainer extends View {
 		this.onValueChange(newValue);
 	}
 
-	handleStartShouldSetPanResponderCapture = (e: Object, /* gestureState: Object */): boolean => {
+	handleStartShouldSetPanResponderCapture = (e: Object, gestureState: Object): boolean => {
 		// Should we become active when the user presses down on the thumb, preventing any child node?
+		const { pageX, pageY } = e.nativeEvent;
+		this.pageX = pageX;
+		this.pageY = pageY;
 		return true;
 	};
 
@@ -167,8 +174,21 @@ class HVSliderContainer extends View {
 	};
 
 	handlePanResponderMove = (e: Object, gestureState: Object) => {
-		const { dx, dy } = 	gestureState;
-		if (dx !== 0 || dy !== 0) {
+		const { dx, dy } = gestureState;
+		const { pageX, pageY } = e.nativeEvent;
+		const absDx = Math.abs(dx);
+		const absDy = Math.abs(dy);
+
+		const XDist = Math.abs(this.pageX - pageX);
+		const YDist = Math.abs(this.pageY - pageY);
+		this.pageX = pageX;
+		this.pageY = pageY;
+
+		/** Generally check dx and dy !== 0 is enough to distinguish a motion and tap.
+		** There seem to occur an issue in some samsung and sony devices, where dx and dy having non-zero values on tap.
+		** Because of that using a threshold value, and explicitly calculating distance using pageX and pageY.
+		*/
+		if ((XDist > threshold || YDist > threshold) && (absDx > threshold || absDy > threshold)) {
 			this.hasMoved = true;
 		}
 		if (this.activeSlider) {
@@ -207,6 +227,8 @@ class HVSliderContainer extends View {
 
 		this.activeSlider = false;
 		this.hasMoved = false;
+		this.pageX = null;
+		this.pageY = null;
 		clearTimeout(this.longPressTimeout);
 	};
 
@@ -215,7 +237,10 @@ class HVSliderContainer extends View {
 	}
 
 	handlePanResponderTerminate = (e: Object, gestureState: Object) => {
+		this.hasMoved = false;
 		this.activeSlider = false;
+		this.pageX = null;
+		this.pageY = null;
 		clearTimeout(this.longPressTimeout);
 	};
 
