@@ -67,8 +67,9 @@ function generateAndStoreRSAKey(onSuccess: (Object) => void) {
 				keychainService: 'TelldusKeychain',
 			});
 			onSuccess({pemPub, pemPvt});
+		} else {
+			onSuccess({pemPub: null, pemPvt: null});
 		}
-		onSuccess({pemPub: null, pemPvt: null});
 	});
 }
 
