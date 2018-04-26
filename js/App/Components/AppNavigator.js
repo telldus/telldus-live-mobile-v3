@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import { Platform } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import Toast from 'react-native-simple-toast';
+
 import {
 	getUserProfile,
 	appStart,
@@ -36,7 +37,9 @@ import {
 	getGateways,
 	hideToast,
 	resetSchedule,
+	getTokenForLocalControl,
 } from '../Actions';
+import { getRSAKey } from '../Lib';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 import { View } from '../../BaseComponents';
@@ -131,6 +134,7 @@ type Props = {
 	durationToast: string,
 	positionToast: string,
 	intl: intlShape.isRequired,
+	gateways: Object,
 };
 
 type State = {
@@ -144,6 +148,7 @@ class AppNavigator extends View {
 
 	onNavigationStateChange: (Object) => void;
 	onDoneDimming: (Object) => void;
+	configureLocalControl: () => void;
 
 	constructor() {
 		super();
@@ -154,6 +159,9 @@ class AppNavigator extends View {
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.onDoneDimming = this.onDoneDimming.bind(this);
+
+		this.timeOutConfigureLocalControl = null;
+		this.configureLocalControl = this.configureLocalControl.bind(this);
 	}
 
 	componentWillMount() {
@@ -170,16 +178,72 @@ class AppNavigator extends View {
 			this.props.dispatch(getGateways());
 			this.props.dispatch(getAppData());
 			this.props.dispatch(resetSchedule());
+
+			const that = this;
+			this.timeOutConfigureLocalControl = setTimeout(() => {
+				that.configureLocalControl();
+			}, 5000);
+		});
+	}
+	/**
+	 * Request for token to control gateways locally, if gateway is online.
+	 */
+	configureLocalControl() {
+		const { gateways, dispatch } = this.props;
+		getRSAKey(({ pemPub }: Object) => {
+			if (pemPub) {
+				for (let key in gateways) {
+					const gateway = gateways[key];
+					const { id, websocketOnline } = gateway;
+					if (websocketOnline) {
+						dispatch(getTokenForLocalControl(id, pemPub));
+					}
+				}
+			}
 		});
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		let { showToast, messageToast, durationToast, positionToast } = nextProps;
+		let { showToast, messageToast, durationToast, positionToast, gateways } = nextProps;
 		if (showToast) {
 			let { formatMessage } = this.props.intl;
 			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
 			this._showToast(message, durationToast, positionToast);
 		}
+
+		/**
+		* Checking if any gateways failed to configure local control during app start,
+		* because websocket failed to stay connected.
+		* If the previous connected state was 'false' and new state is 'true' and key is missing,
+		* then if socket is online will try to get a token for local control.
+		*/
+		this.updateLocalControl(gateways);
+	}
+
+	updateLocalControl(gateways: Object) {
+		const { dispatch } = this.props;
+		// TODO, since this is root component, getRSAKey function will be called very frequently which will
+		// result in fetching keys from local. Need to check performance and resource utilisation.
+		getRSAKey(({ pemPub }: Object) => {
+			for (let index in gateways) {
+				const gateway = gateways[index];
+				const prevGateway = this.props.gateways[index];
+				if (prevGateway) {
+					const { localKey, websocketConnected, websocketOnline } = gateway;
+					const { websocketConnected: prevWebsocketConnected } = prevGateway;
+					if (websocketOnline && !prevWebsocketConnected && websocketConnected) {
+						const { key } = localKey;
+						if (!key) {
+							dispatch(getTokenForLocalControl(gateway.id, pemPub));
+						}
+					}
+				}
+			}
+		});
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.timeOutConfigureLocalControl);
 	}
 
 	_showToast(message: string, durationToast: any, positionToast: any) {
@@ -237,6 +301,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		accessToken: state.user.accessToken,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
+		gateways: state.gateways.byId,
 		showToast,
 		messageToast,
 		durationToast,
