@@ -21,10 +21,67 @@
 // @flow
 
 'use strict';
+import { format } from 'url';
+
+import {LiveApi} from '../Lib/LiveApi';
+import type { ThunkAction, Action } from './Types';
+
 // Gateways actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Gateways } = actions;
 
+
+function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		let formData = new FormData();
+		formData.append('id', id);
+		formData.append('publicKey', publicKey);
+		const url = format({
+			pathname: '/client/requestLocalKey',
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'POST',
+				body: formData,
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			},
+		};
+		return LiveApi(payload).then((response: Object): Object => {
+			if (response && response.uuid) {
+				dispatch(localControlSuccess(id, response.uuid));
+				return response;
+			}
+			throw response;
+		}).catch((err: Object) => {
+			dispatch(localControlError(id));
+			throw err;
+		});
+	};
+}
+
+const localControlSuccess = (gatewayId: string, uuid: string): Action => {
+	return {
+		type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_SUCCESS',
+		payload: {
+			gatewayId,
+			uuid,
+		},
+	};
+};
+
+const localControlError = (gatewayId: string): Action => {
+	return {
+		type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_ERROR',
+		payload: {
+			gatewayId,
+		},
+	};
+};
+
 module.exports = {
 	...Gateways,
+	getTokenForLocalControl,
 };
