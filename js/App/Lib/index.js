@@ -42,6 +42,7 @@ import getDeviceType from './getDeviceType';
 import TelldusWebsocket from './Socket';
 import getDrawerWidth from './getDrawerWidth';
 import getLocationImageUrl from './getLocationImageUrl';
+import * as RSA from './RSA';
 
 
 module.exports = {
@@ -67,4 +68,5 @@ module.exports = {
 	TelldusWebsocket,
 	getDrawerWidth,
 	getLocationImageUrl,
+	...RSA,
 };
