@@ -181,6 +181,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-sensitive-info')
     compile project(':react-native-accessibility')
     compile project(':react-native-maps')
     compile project(':react-native-fabric')
