@@ -103,6 +103,8 @@ export type Action =
 
 	| { type: 'ADD_GATEWAY_REQUEST', payload: Object }
 	| { type: 'ADD_GATEWAY_DECLINE' }
+	| { type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_SUCCESS', payload: Object }
+	| { type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_ERROR', payload: Object }
 	| { type: typeof REHYDRATE }
 	;
 
