@@ -21,6 +21,7 @@
 
 'use strict';
 
+import chunk from 'lodash/chunk';
 import SQLite from 'react-native-sqlite-storage';
 let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 SQLite.DEBUG(isDebuggingInChrome);
@@ -32,7 +33,7 @@ const databaseVersion = '1.0';
 const databaseDisplayName = 'TelldusDB';
 const databaseSize = 200000;
 let db;
-
+const maxSize = 200;
 
 export default class TelldusLocalStorage {
 
@@ -50,15 +51,34 @@ export default class TelldusLocalStorage {
 
 	storeDeviceHistory(data: Object): Promise<any> {
 		return this.loadDatabase().then((DB: Object): Promise<any> => {
-			return this.populateDataDeviceHistory(data);
+			let { history, deviceId } = data;
+			let length = history.length;
+			/**
+			 * In some Android devices having too many local references accumulated, without being cleared, causes
+			 * app to crash. To solve that splitting the history array to chunks with maximum size of 200.
+			 * Doing so the variables created in methods populateDataDeviceHistory and prepareInsertQueryDeviceHistory
+			 * through looping is reduced.
+			 */
+			if (length > maxSize) {
+				let historyChunks = chunk(history, maxSize);
+				let count = 0;
+				for (let i = 0; i < historyChunks.length; i++) {
+					this.populateDataDeviceHistory(historyChunks[i], deviceId);
+					count = i;
+				}
+				return count;
+			}
+			this.populateDataDeviceHistory(history, deviceId);
+			return 0;
+
 		}).catch((error: Object) => {
 			throw error;
 		});
 	}
 
-	populateDataDeviceHistory = (data: Object): Promise<any> => {
+	populateDataDeviceHistory = (data: Object, deviceId: string): Promise<any> => {
 
-		let insertQuery = this.prepareInsertQueryDeviceHistory(data);
+		let insertQuery = this.prepareInsertQueryDeviceHistory(data, deviceId);
 
 		return db.sqlBatch([
 			'CREATE TABLE IF NOT EXISTS DeviceHistory( '
@@ -81,11 +101,11 @@ export default class TelldusLocalStorage {
 		  ]);
 	}
 
-	prepareInsertQueryDeviceHistory(data: Object): Array<string> {
+	prepareInsertQueryDeviceHistory(history: Object, deviceId: string): Array<string> {
 		let query = [];
-		for (let key in data.history) {
+		for (let key in history) {
 			let { ts = 0, state = '', stateValue = '', origin = '', successStatus = '', title = '',
-				description = '', color = '', icon = '', deviceClass = '' } = data.history[key];
+				description = '', color = '', icon = '', deviceClass = '' } = history[key];
 
 			query.push(`${'REPLACE INTO DeviceHistory '
 			+ '( ts, '
@@ -96,7 +116,7 @@ export default class TelldusLocalStorage {
 			+ 'icon, class) '
 			+ 'VALUES ('}`
 			+ `${ts}, `
-			+ `${data.deviceId}, `
+			+ `${deviceId}, `
 			+ `${state}, `
 			+ `${stateValue}, `
 			+ `"${origin}"` + ', '
