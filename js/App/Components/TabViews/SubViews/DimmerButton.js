@@ -161,18 +161,20 @@ class DimmerButton extends View {
 
 	onSlidingComplete(sliderValue: number) {
 		let { device, commandON, commandOFF, commandDIM } = this.props;
+		let command = commandDIM;
 		this.props.onSlideComplete();
 		if (sliderValue === 100) {
 			this.props.requestDeviceAction(device.id, commandON);
+			command = commandON;
 		}
 		if ((sliderValue > 0) && (sliderValue < 100)) {
 			this.props.requestDeviceAction(device.id, commandDIM);
 		}
 		if (sliderValue === 0) {
 			this.props.requestDeviceAction(device.id, commandOFF);
+			command = commandOFF;
 		}
 		let dimValue = toDimmerValue(sliderValue);
-		let command = dimValue === 0 ? commandOFF : commandDIM;
 		this.props.deviceSetState(device.id, command, dimValue);
 		this.props.hideDimmerPopup();
 	}

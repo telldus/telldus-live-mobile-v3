@@ -165,17 +165,19 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 
 	onSlidingComplete(sliderValue: number) {
 		let { item, commandON, commandOFF, commandDIM } = this.props;
+		let command = commandDIM;
 		if (sliderValue === 100) {
 			this.props.requestDeviceAction(item.id, commandON);
+			command = commandON;
 		}
 		if ((sliderValue > 0) && (sliderValue < 100)) {
 			this.props.requestDeviceAction(item.id, commandDIM);
 		}
 		if (sliderValue === 0) {
 			this.props.requestDeviceAction(item.id, commandOFF);
+			command = commandOFF;
 		}
 		let dimValue = toDimmerValue(sliderValue);
-		let command = dimValue === 0 ? commandOFF : commandDIM;
 		this.props.deviceSetState(item.id, command, dimValue);
 		this.props.hideDimmerPopup();
 	}
