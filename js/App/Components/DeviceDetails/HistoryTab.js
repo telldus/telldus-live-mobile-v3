@@ -69,6 +69,7 @@ type State = {
 	hasRefreshed: boolean,
 	rowsAndSections: Array<any>,
 	refreshing: boolean,
+	hasLoaded: boolean,
 };
 
 class HistoryTab extends View {
@@ -80,7 +81,8 @@ class HistoryTab extends View {
 	renderRow: (Object, string) => void;
 	closeHistoryDetailsModal: () => void;
 	_onRefresh: () => void;
-	fetchHistoryData: (Object, number | null) => void;
+	getHistoryDataFromAPI: (Object, number | null) => void;
+	getHistoryDataWithLatestTimestamp: () => void;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -104,13 +106,15 @@ class HistoryTab extends View {
 			rowsAndSections: [],
 			hasRefreshed: false,
 			refreshing: true,
+			hasLoaded: false,
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
 
 		this._onRefresh = this._onRefresh.bind(this);
-		this.fetchHistoryData = this.fetchHistoryData.bind(this);
+		this.getHistoryDataFromAPI = this.getHistoryDataFromAPI.bind(this);
+		this.getHistoryDataWithLatestTimestamp = this.getHistoryDataWithLatestTimestamp.bind(this);
 	}
 
 	componentDidMount() {
@@ -118,12 +122,48 @@ class HistoryTab extends View {
 		setParams({
 			actionOnHistoryTabPress: this.closeHistoryDetailsModal,
 		});
+		this.getHistoryData(false, true, this.getHistoryDataWithLatestTimestamp());
 	}
 
 	closeHistoryDetailsModal() {
 		if (this.props.showModal) {
 			this.props.dispatch(hideModal());
 		}
+	}
+
+	/**
+	 * 
+	 * @hasLoaded : Determines if data loading has been complete(incase when no data in local, API fetch makes loading complete)
+	 * Used to determine if data is empty or not, if empty show message.
+	 * @refreshing : Used to update the refreshControl state.
+	 * @callBackWhenNoData : A callback function to be called when no data found local(Usually function that fetches data
+	 * from the API)
+	 */
+	getHistoryData(hasLoaded: boolean = false, refreshing: boolean = false, callBackWhenNoData: Function = () => {}) {
+		getDeviceHistoryFromLocal(this.props.device.id).then((data: Object) => {
+			if (data && data.length !== 0) {
+				let rowsAndSections = parseHistoryForSectionList(data);
+				this.setState({
+					rowsAndSections,
+					hasLoaded: true,
+					refreshing: false,
+				});
+			} else {
+				this.setState({
+					rowsAndSections: [],
+					hasLoaded,
+					refreshing,
+				});
+				callBackWhenNoData();
+			}
+		}).catch(() => {
+			this.setState({
+				rowsAndSections: [],
+				hasLoaded,
+				refreshing,
+			});
+			callBackWhenNoData();
+		});
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -146,46 +186,28 @@ class HistoryTab extends View {
 		return key;
 	}
 
-	getDataFromLocal(refreshing: boolean = false) {
-		getDeviceHistoryFromLocal(this.props.device.id).then((data: Object) => {
-			if (data && data.length !== 0) {
-				let rowsAndSections = parseHistoryForSectionList(data);
-				this.setState({
-					rowsAndSections,
-					refreshing,
-				});
-			} else {
-				this.setState({
-					rowsAndSections: [],
-					refreshing,
-				});
-			}
-		}).catch(() => {
-			this.setState({
-				rowsAndSections: [],
-				refreshing,
-			});
-		});
-	}
-
 	refreshHistoryData() {
-		this.getDataFromLocal(true);
 		let that = this;
-		let { device } = this.props;
 		this.delayRefreshHistoryData = setTimeout(() => {
 			that.setState({
 				refreshing: true,
 			});
-			getLatestTimestamp('device', device.id).then((res: Object) => {
-				let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
-				that.fetchHistoryData(device, prevTimestamp);
-			}).catch(() => {
-				that.fetchHistoryData(device, null);
-			});
+			that.getHistoryDataWithLatestTimestamp();
 		}, 2000);
 	}
 
-	fetchHistoryData(device: Object, prevTimestamp: number) {
+	getHistoryDataWithLatestTimestamp() {
+		let { device } = this.props;
+		getLatestTimestamp('device', device.id).then((res: Object) => {
+			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
+			this.getHistoryDataFromAPI(device, prevTimestamp);
+		}).catch(() => {
+			this.getHistoryDataFromAPI(device, null);
+		});
+	}
+
+	getHistoryDataFromAPI(device: Object, prevTimestamp: number) {
+		let noop = () => {};
 		this.props.dispatch(getDeviceHistory(this.props.device, prevTimestamp))
 			.then((response: Object) => {
 				if (response.history && response.history.length !== 0) {
@@ -194,15 +216,15 @@ class HistoryTab extends View {
 						deviceId: this.props.device.id,
 					};
 					storeDeviceHistory(data).then(() => {
-						this.getDataFromLocal(false);
+						this.getHistoryData(true, false, noop);
 					}).catch(() => {
-						this.getDataFromLocal(false);
+						this.getHistoryData(true, false, noop);
 					});
 				} else {
-					this.getDataFromLocal(false);
+					this.getHistoryData(true, false, noop);
 				}
 			}).catch(() => {
-				this.getDataFromLocal(false);
+				this.getHistoryData(true, false, noop);
 			});
 	}
 
@@ -272,17 +294,12 @@ class HistoryTab extends View {
 		this.setState({
 			refreshing: true,
 		});
-		let { device } = this.props;
-		getLatestTimestamp('device', device.id).then((res: Object) => {
-			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
-			this.fetchHistoryData(device, prevTimestamp);
-		}).catch(() => {
-			this.fetchHistoryData(device, null);
-		});
+		this.getHistoryDataWithLatestTimestamp();
 	}
 
 	render(): Object {
 		let { appLayout, screenProps } = this.props;
+		let { hasLoaded, refreshing, rowsAndSections } = this.state;
 		let { intl, currentTab, currentScreen } = screenProps;
 		let { brandPrimary } = Theme.Core;
 
@@ -291,7 +308,7 @@ class HistoryTab extends View {
 		} = this.getStyle(appLayout);
 
 		// response received but, no history for the requested device, so empty list message.
-		if (!this.state.refreshing && this.state.rowsAndSections.length === 0) {
+		if (!refreshing && hasLoaded && rowsAndSections.length === 0) {
 			return (
 				<View style={styles.containerWhenNoData}>
 					<Icon name="exclamation-circle" size={20} color="#F06F0C" />
