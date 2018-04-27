@@ -31,8 +31,7 @@ import Platform from 'Platform';
 import { Text, View, TouchableButton, IconTelldus } from '../../../BaseComponents';
 import { DeviceRow } from './SubViews';
 
-import { getDevices, setIgnoreDevice, getDeviceHistory } from '../../Actions/Devices';
-import { storeDeviceHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
+import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getTabBarIcon from '../../Lib/getTabBarIcon';
@@ -191,25 +190,7 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device: Object) {
-		getLatestTimestamp('device', device.id).then((res: Object) => {
-			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
-			this.fetchHistoryData(device, prevTimestamp);
-		}).catch((error: Object) => {
-			this.fetchHistoryData(device, null);
-		});
 		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
-	}
-
-	fetchHistoryData(device: Object, prevTimestamp: number | null) {
-		this.props.dispatch(getDeviceHistory(device, prevTimestamp)).then((response: Object) => {
-			if (response.history && response.history.length !== 0) {
-				let data = {
-					history: response.history,
-					deviceId: device.id,
-				};
-				storeDeviceHistory(data);
-			}
-		});
 	}
 
 	onCloseSelected() {
