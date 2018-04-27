@@ -52,6 +52,12 @@ const GenericSensor = ({ name, value, unit, icon, label, isLarge, formatOptions 
 							<Text style={Theme.Styles.sensorValueText}>
 								<FormattedNumber value={value} {...formatOptions}/>
 							</Text>
+							{/** {'\n\n'}
+							  *	A workaround to add space between the two Texts which are children of the same parent Text node.
+							  */}
+							<Text style={{fontSize: 8, color: 'transparent'}} allowFontScaling={false}>
+								!
+							</Text>
 							<Text style={Theme.Styles.sensorValueLabelText}>
 								{unit}
 							</Text>
