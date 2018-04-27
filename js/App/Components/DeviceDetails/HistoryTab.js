@@ -132,7 +132,7 @@ class HistoryTab extends View {
 	}
 
 	/**
-	 * 
+	 *
 	 * @hasLoaded : Determines if data loading has been complete(incase when no data in local, API fetch makes loading complete)
 	 * Used to determine if data is empty or not, if empty show message.
 	 * @refreshing : Used to update the refreshControl state.
