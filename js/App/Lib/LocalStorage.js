@@ -50,7 +50,7 @@ export default class TelldusLocalStorage {
 	}
 
 	storeDeviceHistory(data: Object): Promise<any> {
-		return this.loadDatabase().then((DB: Object): Promise<any> => {
+		return this.loadDatabase().then((DB: Object): any => {
 			let { history, deviceId } = data;
 			let length = history.length;
 			/**
