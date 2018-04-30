@@ -23,6 +23,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
 import com.reactlibrary.RNReactNativeAccessibilityPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
@@ -63,6 +64,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
+				new RNSensitiveInfoPackage(),
 				new RNReactNativeAccessibilityPackage(),
 				new MapsPackage(),
 				new ReactNativePushNotificationPackage(),

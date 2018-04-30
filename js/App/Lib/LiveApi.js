@@ -82,18 +82,24 @@ async function doApiCall(url: string, requestParams: Object): any {
 
 async function callEndPoint(url: string, requestParams: Object, token: ?Object = null): Object {
 	const accessToken = token ? token : getStore().getState().user.accessToken;
+	let params = {};
 
 	if (!accessToken) {
 		throw new Error('LiveApi: need accessToken');
 	}
 
-	const params = Object.assign({}, requestParams, {
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-			'Authorization': `Bearer ${accessToken.access_token}`,
-		},
-	});
+	if (requestParams.headers) {
+		const headers = { ...requestParams.headers, 'Authorization': `Bearer ${accessToken.access_token}` };
+		params = { ...requestParams, headers };
+	} else {
+		params = Object.assign({}, requestParams, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${accessToken.access_token}`,
+			},
+		});
+	}
 
 	let response = await fetch(`${apiServer}/oauth2${url}`, params);
 	response = await response.text();
