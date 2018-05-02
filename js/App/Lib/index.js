@@ -43,6 +43,7 @@ import TelldusWebsocket from './Socket';
 import getDrawerWidth from './getDrawerWidth';
 import getLocationImageUrl from './getLocationImageUrl';
 import * as RSA from './RSA';
+import scheduleUtils from './scheduleUtils';
 
 
 module.exports = {
@@ -69,4 +70,5 @@ module.exports = {
 	getDrawerWidth,
 	getLocationImageUrl,
 	...RSA,
+	...scheduleUtils,
 };
