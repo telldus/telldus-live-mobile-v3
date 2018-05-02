@@ -38,6 +38,7 @@ import {
 	hideToast,
 	resetSchedule,
 	getTokenForLocalControl,
+	autoDetectLocalTellStick,
 } from '../Actions';
 import { getRSAKey } from '../Lib';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -187,9 +188,11 @@ class AppNavigator extends View {
 	}
 	/**
 	 * Request for token to control gateways locally, if gateway is online.
+	 * Also send UDP package to the broadcast IP to detect gateways connected in the same LAN.
 	 */
 	configureLocalControl() {
 		const { gateways, dispatch } = this.props;
+		dispatch(autoDetectLocalTellStick());
 		getRSAKey(({ pemPub }: Object) => {
 			if (pemPub) {
 				for (let key in gateways) {
