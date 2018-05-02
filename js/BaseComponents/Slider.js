@@ -60,6 +60,7 @@ type Props = {
 type State = {
 	containerSize: Object,
 	value: number,
+	displayValue: any,
 };
 
 export default class SliderComponent extends Component<Props, State> {
