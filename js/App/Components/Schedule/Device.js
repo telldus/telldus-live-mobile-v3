@@ -112,7 +112,13 @@ export default class Device extends View<void, Props, State> {
 		// TODO: use device description
 		const preparedRow = Object.assign({}, row, { description: '' });
 
-		return <DeviceRow row={preparedRow} onPress={this.selectDevice} appLayout={appLayout} intl={intl} labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}/>;
+		return <DeviceRow row={preparedRow} onPress={this.selectDevice} appLayout={appLayout}
+			intl={intl} labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}
+			containerStyle = {{
+				flex: 1,
+				alignItems: 'stretch',
+				justifyContent: 'space-between',
+			}}/>;
 	};
 
 	_shouldReset = (): boolean => {
