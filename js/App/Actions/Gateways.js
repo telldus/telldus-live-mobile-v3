@@ -23,12 +23,18 @@
 'use strict';
 import { format } from 'url';
 
+import { Platform } from 'react-native';
 import {LiveApi} from '../Lib/LiveApi';
 import type { ThunkAction, Action } from './Types';
 
 // Gateways actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Gateways } = actions;
+
+import dgram from 'dgram';
+const socket: Object = dgram.createSocket('udp4');
+const broardcastAddress = '255.255.255.255';
+const broardcastPort = 30303;
 
 
 function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
@@ -63,6 +69,46 @@ function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
 	};
 }
 
+function autoDetectLocalTellStick(): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
+		let aPort = randomPort();
+		socket.bind(aPort, (err: any) => {
+			if (err) {
+				throw err;
+			}
+			if (Platform.OS !== 'android') {
+				socket.setBroadcast(true);
+			}
+		});
+		socket.once('listening', () => {
+			let buf = toByteArray('D');
+			socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
+				if (err) {
+					throw err;
+				}
+			});
+		});
+
+		socket.on('message', (msg: any, rinfo: Object) => {
+			// let str = String.fromCharCode.apply(null, new Uint8Array(msg));
+			dispatch(autoDetectLocalTellStickSuccess(rinfo));
+		});
+	};
+}
+
+function toByteArray(obj: string): any {
+	let uint = new Uint8Array(obj.length);
+	for (let i = 0, l = obj.length; i < l; i++) {
+	          uint[i] = obj.charCodeAt(i);
+	}
+	return new Uint8Array(uint);
+}
+
+function randomPort(): number {
+	// eslint-disable-next-line
+	return Math.random() * 60536 | 0 + 5000; // 60536-65536
+}
+
 const localControlSuccess = (gatewayId: string, uuid: string): Action => {
 	return {
 		type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_SUCCESS',
@@ -82,7 +128,17 @@ const localControlError = (gatewayId: string): Action => {
 	};
 };
 
+const autoDetectLocalTellStickSuccess = (tellStickInfo: Object): Action => {
+	return {
+		type: 'GATEWAY_AUTO_DETECT_LOCAL_SUCCESS',
+		payload: {
+			tellStickInfo,
+		},
+	};
+};
+
 module.exports = {
 	...Gateways,
 	getTokenForLocalControl,
+	autoDetectLocalTellStick,
 };
