@@ -25,6 +25,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { IconTelldus, Slider, View } from '../../../../BaseComponents';
+import { getHoursAndMinutes } from '../../../Lib';
 import Theme from '../../../Theme';
 import Description from './Description';
 
@@ -61,6 +62,8 @@ export default class TimeSlider extends View<null, Props, State> {
 		this.sliderConfig = {
 			minimumValue: props.minimumValue,
 			maximumValue: props.maximumValue,
+			minDisplayValue: '00h 00min',
+			maxDisplayValue: '24h 00min',
 			minimumTrackTintColor: sliderColor,
 			maximumTrackTintColor: sliderColor,
 			onValueChange: this.onValueChange,
@@ -80,6 +83,7 @@ export default class TimeSlider extends View<null, Props, State> {
 
 	render(): React$Element<any> {
 		const { description, icon, appLayout } = this.props;
+		const { value } = this.state;
 		const {
 			container,
 			row,
@@ -106,7 +110,9 @@ export default class TimeSlider extends View<null, Props, State> {
 				<View style={[row, { justifyContent: 'center' }]}>
 					<Slider
 						{...this.sliderConfig}
-						value={this.state.value}
+						value={value}
+						valueStyle={{width: undefined}}
+						methodFormatDisplayValue={getHoursAndMinutes}
 						trackStyle={slider.track}
 						thumbStyle={slider.thumb}
 					/>

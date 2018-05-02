@@ -29,19 +29,19 @@ import { defineMessages } from 'react-intl';
 import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
 import Theme from '../../../Theme';
-import { getSuntime } from '../../../Lib';
+import { getSuntime, getHoursAndMinutes } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 import i18n from '../../../Translations/common';
 
 const messages = defineMessages({
 	descriptionOffset: {
 		id: 'schedule.time.descriptionOffset',
-		defaultMessage: 'Offset {value} min',
+		defaultMessage: 'Offset {value}',
 		description: 'Details about time of the schedule',
 	},
 	descriptionInterval: {
 		id: 'schedule.time.descriptionInterval',
-		defaultMessage: 'Random interval {value} min',
+		defaultMessage: 'Random interval {value}',
 		description: 'Details about interval of the schedule',
 	},
 });
@@ -150,8 +150,8 @@ export default class TimeRow extends View<null, Props, State> {
 		const offsetIcon = offset ? 'offset' : null;
 		const randomIcon = randomInterval ? 'random' : null;
 
-		const labelInterval = randomInterval ? intl.formatMessage(messages.descriptionInterval, {value: randomInterval}) : null;
-		const labelOffset = offset ? intl.formatMessage(messages.descriptionOffset, {value: offset}) : null;
+		const labelInterval = randomInterval ? intl.formatMessage(messages.descriptionInterval, {value: getHoursAndMinutes(randomInterval)}) : null;
+		const labelOffset = offset ? intl.formatMessage(messages.descriptionOffset, {value: getHoursAndMinutes(offset)}) : null;
 		const time = this._formatTime();
 
 		const accessibilityLabel = this._getAccessibilityLabel(label, time, labelInterval, labelOffset);

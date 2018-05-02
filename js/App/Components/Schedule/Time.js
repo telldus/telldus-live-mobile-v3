@@ -29,18 +29,19 @@ import { defineMessages } from 'react-intl';
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { TimeBlock, TimeSlider } from './SubViews';
+import { getHoursAndMinutes } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
 	descriptionSliderOffset: {
 		id: 'schedule.time.descriptionSliderOffset',
-		defaultMessage: 'Offset the time between {startValue} to {endValue} minutes',
+		defaultMessage: 'Offset the time between {startValue} to {endValue}',
 		description: 'Info about choosing time offset for the schedule',
 	},
 	descriptionSliderInterval: {
 		id: 'schedule.time.descriptionSliderInterval',
-		defaultMessage: 'Set random intervals between {startValue} to {endValue} minutes',
+		defaultMessage: 'Set random intervals between {startValue} to {endValue}',
 		description: 'Info about choosing random time interval for the schedule',
 	},
 	editTime: {
@@ -86,8 +87,8 @@ export default class Time extends View<null, Props, State> {
 
 		this.h1 = `3. ${formatMessage(i18n.time)}`;
 		this.h2 = formatMessage(i18n.posterChooseTime);
-		this.labelSliderInterval = formatMessage(messages.descriptionSliderInterval, {startValue: 1, endValue: 1446});
-		this.labelSliderOffset = formatMessage(messages.descriptionSliderOffset, {startValue: -1439, endValue: +1439});
+		this.labelSliderInterval = formatMessage(messages.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
+		this.labelSliderOffset = formatMessage(messages.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
 
 		this.labelEditTime = formatMessage(messages.editTime);
 		this.labelEditTimeAccessible = formatMessage(messages.editTimeAccessible);
@@ -202,7 +203,7 @@ export default class Time extends View<null, Props, State> {
 								description={this.labelSliderInterval}
 								icon="random"
 								minimumValue={0}
-								maximumValue={1446}
+								maximumValue={1440}
 								value={randomInterval}
 								onValueChange={this.setRandomIntervalValue}
 								appLayout={appLayout}
