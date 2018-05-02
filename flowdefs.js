@@ -26,6 +26,9 @@ declare module 'react-navigation' {
 declare module 'react-native-tab-view' {
 	declare module.exports: any;
 }
+declare module 'react-native-udp' {
+	declare module.exports: any;
+}
 declare module '../../local-cli/bundle/assetPathUtils' {
 	declare module.exports: any;
 }
