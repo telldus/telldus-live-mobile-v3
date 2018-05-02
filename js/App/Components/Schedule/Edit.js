@@ -241,12 +241,13 @@ class Edit extends View<null, Props, State> {
 
 	render(): React$Element<any> {
 		const { appLayout, schedule, intl } = this.props;
+		const { formatMessage, formatDate } = intl;
 		const { active, method, methodValue, weekdays } = schedule;
 		const { container, row, save, cancel, throbber, buttonStyle, labelStyle,
 			throbberContainer, throbberContainerOnSave, throbberContainerOnDelete } = this._getStyle(appLayout);
-		const selectedDays = getSelectedDays(weekdays);
+		const selectedDays = getSelectedDays(weekdays, formatDate);
 		const throbberContainerStyle = this.state.isSaving ? throbberContainerOnSave : this.state.isDeleting ? throbberContainerOnDelete : {};
-		const labelPostScript = intl.formatMessage(i18n.activateEdit);
+		const labelPostScript = formatMessage(i18n.activateEdit);
 
 		return (
 			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>

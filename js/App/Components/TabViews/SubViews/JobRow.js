@@ -32,8 +32,8 @@ import Platform from 'Platform';
 import { BlockIcon, IconTelldus, ListRow, View, Text, FormattedTime } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from '../../Schedule/SubViews';
-import { capitalize, getSelectedDays, getWeekdays, getWeekends, getRelativeDimensions } from '../../../Lib';
-import { DAYS } from '../../../../Constants';
+import { capitalize, getSelectedDays, getWeekdays, getWeekends,
+	getRelativeDimensions, getTranslatableDays } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 
 import i18n from '../../../Translations/common';
@@ -275,6 +275,7 @@ class JobRow extends View<null, Props, null> {
 		const { formatMessage, formatDate } = intl;
 		const selectedDays: string[] = getSelectedDays(weekdays, formatDate);
 		const repeatTime: string = (type === 'time') ? '' : this.getRepeatTime(type);
+		const DAYS = getTranslatableDays(formatDate);
 
 		let repeatDays: string = '';
 		if (selectedDays.length === DAYS.length) {

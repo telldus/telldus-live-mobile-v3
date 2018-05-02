@@ -27,7 +27,7 @@ import { defineMessages } from 'react-intl';
 
 import { Row, View } from '../../../../BaseComponents';
 import Day from './Day';
-import { DAYS } from '../../../../Constants';
+import { getTranslatableDays } from '../../../Lib';
 
 const messages = defineMessages({
 	phraseOne: {
@@ -68,6 +68,13 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 		editMode: false,
 	};
 
+	constructor(props: Props) {
+		super(props);
+
+		let { formatDate } = this.props.intl;
+		this.days = getTranslatableDays(formatDate);
+	}
+
 	render(): React$Element<any> {
 		const { containerStyle, onPress, appLayout } = this.props;
 		const { container, row } = this._getStyle(appLayout);
@@ -101,7 +108,7 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 
 	_getWeekdays = (): Object => {
 		const { appLayout, intl } = this.props, days = [], daysToRender = [];
-		DAYS.map((day: string) => {
+		this.days.map((day: string) => {
 			const isDaySelected = this._isDaySelected(day);
 			if (isDaySelected) {
 				days.push(day);

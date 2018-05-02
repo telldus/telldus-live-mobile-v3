@@ -123,9 +123,10 @@ class Summary extends View<null, Props, State> {
 
 	render(): React$Element<any> {
 		const { schedule, paddingRight, appLayout, intl } = this.props;
+		const { formatDate } = intl;
 		const { method, methodValue, weekdays } = schedule;
 		const { row, iconSize, buttonStyle, iconContainerStyle } = this._getStyle(appLayout);
-		const selectedDays = getSelectedDays(weekdays);
+		const selectedDays = getSelectedDays(weekdays, formatDate);
 
 		return (
 			<View style={{flex: 1}}>

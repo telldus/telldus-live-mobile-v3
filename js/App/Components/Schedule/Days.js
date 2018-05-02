@@ -28,10 +28,9 @@ import { defineMessages } from 'react-intl';
 
 import { ScheduleProps } from './ScheduleScreen';
 import { CheckButton, DaysRow, Description } from './SubViews';
-import { getSelectedDays, getWeekdays, getWeekends } from '../../Lib';
+import { getSelectedDays, getWeekdays, getWeekends, getTranslatableDays } from '../../Lib';
 import { CheckboxSolid, FloatingButton, Row, View } from '../../../BaseComponents';
 import _ from 'lodash';
-import { DAYS } from '../../../Constants';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
@@ -70,7 +69,9 @@ export default class Days extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		let { formatMessage } = this.props.intl;
+		let { formatMessage, formatDate } = this.props.intl;
+
+		this.days = getTranslatableDays(formatDate);
 
 		this.h1 = `4. ${formatMessage(i18n.posterDays)}`;
 		this.h2 = formatMessage(i18n.posterChooseDays);
@@ -83,9 +84,9 @@ export default class Days extends View<null, Props, State> {
 		};
 
 		this.state = {
-			selectedDays: getSelectedDays(props.schedule.weekdays),
+			selectedDays: getSelectedDays(props.schedule.weekdays, formatDate),
 			shouldCheckAll: true,
-			shouldUncheckAll: getSelectedDays(props.schedule.weekdays).length > 0,
+			shouldUncheckAll: getSelectedDays(props.schedule.weekdays, formatDate).length > 0,
 			isWeekdaysSelected: false,
 			isWeekendsSelected: false,
 		};
@@ -114,7 +115,7 @@ export default class Days extends View<null, Props, State> {
 		this.setState({
 			selectedDays: newSelectedWeekdays,
 			shouldUncheckAll: !!newSelectedWeekdays.length,
-			shouldCheckAll: newSelectedWeekdays.length !== DAYS.length,
+			shouldCheckAll: newSelectedWeekdays.length !== this.days.length,
 			isWeekdaysSelected: this._isSelected('weekdays', newSelectedWeekdays),
 			isWeekendsSelected: this._isSelected('weekends', newSelectedWeekdays),
 		});
@@ -123,7 +124,7 @@ export default class Days extends View<null, Props, State> {
 	checkAll = () => {
 		if (this.state.shouldCheckAll) {
 			this.setState({
-				selectedDays: DAYS,
+				selectedDays: this.days,
 				shouldCheckAll: false,
 				shouldUncheckAll: true,
 				isWeekdaysSelected: false,
@@ -148,8 +149,9 @@ export default class Days extends View<null, Props, State> {
 		if (this._isSelected('weekdays')) {
 			this.uncheckAll();
 		} else {
+			let { formatDate } = this.props.intl;
 			this.setState({
-				selectedDays: getWeekdays(),
+				selectedDays: getWeekdays(formatDate),
 				shouldUncheckAll: true,
 				shouldCheckAll: true,
 				isWeekdaysSelected: true,
@@ -162,8 +164,9 @@ export default class Days extends View<null, Props, State> {
 		if (this._isSelected('weekends')) {
 			this.uncheckAll();
 		} else {
+			let { formatDate } = this.props.intl;
 			this.setState({
-				selectedDays: getWeekends(),
+				selectedDays: getWeekends(formatDate),
 				shouldUncheckAll: true,
 				shouldCheckAll: true,
 				isWeekdaysSelected: false,
@@ -179,7 +182,7 @@ export default class Days extends View<null, Props, State> {
 		const { selectedDays } = this.state;
 
 		for (let i = 0; i < selectedDays.length; i++) {
-			const selectedDayIndex = DAYS.indexOf(selectedDays[i]);
+			const selectedDayIndex = this.days.indexOf(selectedDays[i]);
 
 			if (selectedDayIndex > -1) {
 				selectedDaysIndexes.push(selectedDayIndex + 1);
@@ -284,16 +287,17 @@ export default class Days extends View<null, Props, State> {
 
 	_isSelected = (days: string, selectedDays?: string[] = this.state.selectedDays): boolean => {
 		let isSelected: boolean = false;
+		let { formatDate } = this.props.intl;
 
 		if (days === 'weekdays') {
 			if (selectedDays.length === 5) {
-				isSelected = _.isEqual(selectedDays, getWeekdays());
+				isSelected = _.isEqual(selectedDays, getWeekdays(formatDate));
 			}
 		}
 
 		if (days === 'weekends') {
 			if (selectedDays.length === 2) {
-				isSelected = _.isEqual(selectedDays, getWeekends());
+				isSelected = _.isEqual(selectedDays, getWeekends(formatDate));
 			}
 		}
 

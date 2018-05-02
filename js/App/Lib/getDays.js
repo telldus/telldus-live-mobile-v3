@@ -67,3 +67,13 @@ export const getSelectedDays = (storedSelectedDays: number[], formatDate?: Funct
 
 	return selectedDays;
 };
+
+export const getTranslatableDays = (formatDate: Function): string[] => {
+	let weekDays = [];
+	for (let i = 1; i <= 7; i++) {
+		let day = moment().weekday(i);
+		const weekday = formatDate(day, {weekday: 'long'});
+		weekDays.push(weekday);
+	}
+	return weekDays;
+};
