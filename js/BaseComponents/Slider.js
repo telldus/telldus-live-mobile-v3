@@ -42,8 +42,11 @@ type DefaultProps = {
 
 type Props = {
 	value: number,
+	methodFormatDisplayValue?: Function,
 	minimumValue: number,
 	maximumValue: number,
+	minDisplayValue?: any,
+	maxDisplayValue?: any,
 	minimumTrackTintColor: string,
 	maximumTrackTintColor: string,
 	onValueChange: Function,
@@ -90,16 +93,30 @@ export default class SliderComponent extends Component<Props, State> {
 		valueStyle: {},
 	};
 
-	state = {
-		containerSize: {
-			width: this.props.trackStyle.width,
-			height: this.props.trackStyle.height,
-		},
-		value: typeof this.props.value === 'number' ? this.props.value : this.props.minimumValue,
-	};
+	constructor(props: Props) {
+		super(props);
+		let { methodFormatDisplayValue, value: propValue } = this.props;
+		let value = typeof propValue === 'number' ? this.props.value : this.props.minimumValue;
+		let displayValue = methodFormatDisplayValue ? methodFormatDisplayValue(value) : value;
+
+		this.state = {
+			containerSize: {
+				width: this.props.trackStyle.width,
+				height: this.props.trackStyle.height,
+			},
+			value,
+			displayValue,
+		};
+	}
 
 	onValueChange = (value: number) => {
-		this.setState({ value });
+		let { methodFormatDisplayValue } = this.props;
+		let displayValue = value;
+		if (methodFormatDisplayValue) {
+			displayValue = methodFormatDisplayValue(value);
+		}
+
+		this.setState({ value, displayValue });
 		this.props.onValueChange(value);
 	};
 
@@ -110,7 +127,7 @@ export default class SliderComponent extends Component<Props, State> {
 
 		return (
 			<View style={container} onLayout={this._setTrackWidth}>
-				{this._renderValue(showValue, this.state.value)}
+				{this._renderValue(showValue, this.state.displayValue)}
 				<Slider
 					{...sliderProps}
 					onValueChange={this.onValueChange}
@@ -162,11 +179,13 @@ export default class SliderComponent extends Component<Props, State> {
 	};
 
 	_getTextWidth = (fontSize: number): number => {
-		const { minimumValue, maximumValue } = this.props;
+		const { minimumValue, minDisplayValue, maximumValue, maxDisplayValue } = this.props;
+		const min = minDisplayValue ? minDisplayValue : minimumValue;
+		const max = maxDisplayValue ? maxDisplayValue : maximumValue;
 
 		const maxSymbols = Math.max(
-			minimumValue.toString().length,
-			maximumValue.toString().length,
+			min.toString().length,
+			max.toString().length,
 		);
 
 		return maxSymbols * fontSize;
