@@ -163,6 +163,7 @@ type Props = {
 	appLayout: Object,
 	intl: Object,
 	labelPostScript?: string,
+	iconContainerStyle?: Array<any> | Object | number,
 };
 
 export default class ActionRow extends View<DefaultProps, Props, null> {
@@ -207,7 +208,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	}
 
 	_renderIcon = (action: ActionType): Object => {
-		const { showValue, methodValue, appLayout } = this.props;
+		const { showValue, methodValue, appLayout, iconContainerStyle } = this.props;
 		const { dimContainer, dimValue, icon, iconContainer } = this._getStyle(appLayout);
 
 		if (showValue && action.icon === 'dim') {
@@ -218,7 +219,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 				backgroundColor = action.bgColorDark;
 			}
 			return (
-				<View style={[dimContainer, { backgroundColor }]}>
+				<View style={[dimContainer, { backgroundColor }, iconContainerStyle]}>
 					<Text style={dimValue}>
 						{value}
 					</Text>
@@ -231,7 +232,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 				icon={action.icon}
 				bgColor={action.bgColor}
 				style={icon}
-				containerStyle={iconContainer}
+				containerStyle={[iconContainer, iconContainerStyle]}
 			/>
 		);
 	};

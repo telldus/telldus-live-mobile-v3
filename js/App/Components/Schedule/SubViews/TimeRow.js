@@ -144,6 +144,7 @@ export default class TimeRow extends View<null, Props, State> {
 			iconRow,
 			icon,
 			description,
+			timeStyle,
 		} = this._getStyle(appLayout);
 		const label = this.getLabel(type);
 
@@ -160,16 +161,21 @@ export default class TimeRow extends View<null, Props, State> {
 			<Row layout="row" containerStyle={[container, containerStyle]} onPress={onPress}
 				importantForAccessibility={'yes'}
 				accessibilityLabel={accessibilityLabel}>
-				<BlockIcon
-					icon={type}
-					size={blockIcon.size}
-					color={blockIcon.color}
-					bgColor="transparent"
-					style={blockIcon.style}
-				/>
+				<View style={{alignItems: 'center', justifyContent: 'center'}}>
+					<BlockIcon
+						icon={type}
+						size={blockIcon.size}
+						color={blockIcon.color}
+						bgColor="transparent"
+						style={blockIcon.style}
+					/>
+					<Description style={timeStyle} appLayout={appLayout}>
+						{`${time}`}
+					</Description>
+				</View>
 				<View style={textWrapper}>
 					<Description style={title} appLayout={appLayout}>
-						{`${label} ${time}`}
+						{`${label}`}
 					</Description>
 					{!!offset && (
 						<View style={iconRow}>
@@ -229,7 +235,7 @@ export default class TimeRow extends View<null, Props, State> {
 		const hour = this._formatTimeValue(time.hour);
 		const minute = this._formatTimeValue(time.minute);
 
-		return `(${hour}:${minute})`;
+		return `${hour}:${minute}`;
 	};
 
 	_formatTimeValue = (value: number): string => {
@@ -264,6 +270,7 @@ export default class TimeRow extends View<null, Props, State> {
 				color: Theme.Core[`${type}Color`],
 				style: {
 					width: deviceWidth * 0.1556,
+					textAlign: 'center',
 				},
 			},
 			textWrapper: {
@@ -282,6 +289,9 @@ export default class TimeRow extends View<null, Props, State> {
 				marginRight: deviceWidth * 0.016,
 			},
 			description: {
+				fontSize: deviceWidth * 0.036,
+			},
+			timeStyle: {
 				fontSize: deviceWidth * 0.036,
 			},
 		};

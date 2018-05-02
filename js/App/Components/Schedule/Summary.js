@@ -124,39 +124,42 @@ class Summary extends View<null, Props, State> {
 	render(): React$Element<any> {
 		const { schedule, paddingRight, appLayout, intl } = this.props;
 		const { method, methodValue, weekdays } = schedule;
-		const { row, iconSize, buttonStyle } = this._getStyle(appLayout);
+		const { row, iconSize, buttonStyle, iconContainerStyle } = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays);
 
 		return (
 			<View style={{flex: 1}}>
 				<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
-					<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
-					<ActionRow
-						method={method}
-						showValue={true}
-						methodValue={methodValue}
-						containerStyle={row}
-						appLayout={appLayout}
-						intl={intl}
+					<View style={{flex: 1, marginBottom: 54}}>
+						<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
+						<ActionRow
+							method={method}
+							showValue={true}
+							methodValue={methodValue}
+							containerStyle={row}
+							iconContainerStyle={iconContainerStyle}
+							appLayout={appLayout}
+							intl={intl}
+						/>
+						<TimeRow
+							schedule={schedule}
+							device={this.device}
+							containerStyle={row}
+							appLayout={appLayout}
+							intl={intl}
+						/>
+						<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
+					</View>
+					<FloatingButton
+						buttonStyle={buttonStyle}
+						onPress={this.saveSchedule}
+						imageSource={this.state.isLoading ? false : require('./img/check.png')}
+						iconSize={iconSize}
+						paddingRight={paddingRight - 2}
+						showThrobber={this.state.isLoading}
+						accessibilityLabel={`${intl.formatMessage(i18n.confirmButton)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
 					/>
-					<TimeRow
-						schedule={schedule}
-						device={this.device}
-						containerStyle={row}
-						appLayout={appLayout}
-						intl={intl}
-					/>
-					<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
 				</ScrollView>
-				<FloatingButton
-					buttonStyle={buttonStyle}
-					onPress={this.saveSchedule}
-					imageSource={this.state.isLoading ? false : require('./img/check.png')}
-					iconSize={iconSize}
-					paddingRight={paddingRight}
-					showThrobber={this.state.isLoading}
-					accessibilityLabel={`${intl.formatMessage(i18n.confirmButton)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
-				/>
 			</View>
 		);
 	}
@@ -178,7 +181,10 @@ class Summary extends View<null, Props, State> {
 			iconSize: deviceWidth * 0.050666667,
 			buttonStyle: {
 				elevation: 4,
-				shadowOpacity: 0.99,
+				shadowOpacity: 0.50,
+			},
+			iconContainerStyle: {
+				width: deviceWidth * 0.226666667,
 			},
 		};
 	};

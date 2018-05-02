@@ -46,8 +46,8 @@ export default class DeviceRow extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> {
-		const { row, onPress, appLayout, intl, labelPostScript = '' } = this.props;
-		const { row: rowStyle, containerStyle, icon, iconContainer, descriptionContainer } = this._getStyle(appLayout);
+		const { row, onPress, appLayout, intl, labelPostScript = '', containerStyle } = this.props;
+		const { row: rowStyle, icon, iconContainer, descriptionContainer } = this._getStyle(appLayout);
 		const deviceName = row.name ? row.name : intl.formatMessage(i18n.noName);
 		const accessibilityLabel = `${deviceName}, ${labelPostScript}`;
 
@@ -77,11 +77,6 @@ export default class DeviceRow extends View<null, Props, null> {
 			row: {
 				flex: 1,
 				alignItems: 'stretch',
-			},
-			containerStyle: {
-				flex: 1,
-				alignItems: 'stretch',
-				justifyContent: 'space-between',
 			},
 			icon: {
 				fontSize: deviceWidth * 0.149333333,

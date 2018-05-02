@@ -265,15 +265,15 @@ export default class Days extends View<null, Props, State> {
 							{this.labelUncheckAll}
 						</CheckButton>
 					</View>
-					{selectedDays.length > 0 && (
-						<FloatingButton
-							buttonStyle={buttonStyle}
-							onPress={this.selectDays}
-							imageSource={require('./img/right-arrow-key.png')}
-							paddingRight={this.props.paddingRight - 2}
-						/>
-					)}
 				</View>
+				{selectedDays.length > 0 && (
+					<FloatingButton
+						buttonStyle={buttonStyle}
+						onPress={this.selectDays}
+						imageSource={require('./img/right-arrow-key.png')}
+						paddingRight={this.props.paddingRight - 2}
+					/>
+				)}
 			</ScrollView>
 		);
 	}
@@ -309,6 +309,7 @@ export default class Days extends View<null, Props, State> {
 			mainContainer: {
 				flex: 1,
 				justifyContent: 'flex-start',
+				marginBottom: 56,
 			},
 			buttonsContainer: {
 				flexDirection: 'row',
