@@ -23,6 +23,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.RNRSA.RNRSAPackage;
 import com.tradle.react.UdpSocketsModule;
 import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
 import com.reactlibrary.RNReactNativeAccessibilityPackage;
@@ -65,6 +66,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
+				new RNRSAPackage(),
 				new UdpSocketsModule(),
 				new RNSensitiveInfoPackage(),
 				new RNReactNativeAccessibilityPackage(),
