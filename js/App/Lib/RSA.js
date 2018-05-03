@@ -25,11 +25,13 @@ import { RSA } from 'react-native-rsa-native';
 import SInfo from 'react-native-sensitive-info';
 
 /**
- * Fetches RSA key if present in the local, if not generates one.
+ * Fetches RSA key if present in the local, if not and if @generate is not set to 'false' then generates one.
+ * @generate : boolean value that decides if keys has to be generated if not present in local.
+ * default value is true
  * @onSuccess : callback function that will be called with resultant public and private keys
  * as an Object, in PEM format as first argument.
  */
-function getRSAKey(onSuccess: (Object) => void): any {
+function getRSAKey(generate: boolean = true, onSuccess: (Object) => void): any {
 	SInfo.getAllItems({
 		sharedPreferencesName: 'TelldusSharedPrefs',
 		keychainService: 'TelldusKeychain'}).then((values: any) => {
@@ -37,10 +39,12 @@ function getRSAKey(onSuccess: (Object) => void): any {
 			let { pemPub: pemPubS, pemPvt: pemPvtS } = values;
 			if (pemPubS && pemPvtS) {
 				onSuccess({pemPub: pemPubS, pemPvt: pemPvtS});
-			} else {
+			} else if (generate) {
 				generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
 					onSuccess({pemPub, pemPvt});
 				});
+			} else {
+				onSuccess({pemPub: null, pemPvt: null});
 			}
 		} else {
 			let keys = values[0];
@@ -55,10 +59,12 @@ function getRSAKey(onSuccess: (Object) => void): any {
 					}
 				});
 				onSuccess(data);
-			} else {
+			} else if (generate) {
 				generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
 					onSuccess({pemPub, pemPvt});
 				});
+			} else {
+				onSuccess({pemPub: null, pemPvt: null});
 			}
 		}
 	});

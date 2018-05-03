@@ -193,12 +193,13 @@ class AppNavigator extends View {
 	configureLocalControl() {
 		const { gateways, dispatch } = this.props;
 		dispatch(autoDetectLocalTellStick());
-		getRSAKey(({ pemPub }: Object) => {
+		getRSAKey(true, ({ pemPub }: Object) => {
 			if (pemPub) {
-				for (let key in gateways) {
-					const gateway = gateways[key];
-					const { id, websocketOnline } = gateway;
-					if (websocketOnline) {
+				for (let index in gateways) {
+					const gateway = gateways[index];
+					const { id, websocketOnline, websocketConnected, localKey } = gateway;
+					const { key } = localKey;
+					if (websocketOnline && websocketConnected && !key) {
 						dispatch(getTokenForLocalControl(id, pemPub));
 					}
 				}
@@ -227,17 +228,19 @@ class AppNavigator extends View {
 		const { dispatch } = this.props;
 		// TODO, since this is root component, getRSAKey function will be called very frequently which will
 		// result in fetching keys from local. Need to check performance and resource utilisation.
-		getRSAKey(({ pemPub }: Object) => {
-			for (let index in gateways) {
-				const gateway = gateways[index];
-				const prevGateway = this.props.gateways[index];
-				if (prevGateway) {
-					const { localKey, websocketConnected, websocketOnline } = gateway;
-					const { websocketConnected: prevWebsocketConnected } = prevGateway;
-					if (websocketOnline && !prevWebsocketConnected && websocketConnected) {
-						const { key } = localKey;
-						if (!key) {
-							dispatch(getTokenForLocalControl(gateway.id, pemPub));
+		getRSAKey(false, ({ pemPub }: Object) => {
+			if (pemPub) {
+				for (let index in gateways) {
+					const gateway = gateways[index];
+					const prevGateway = this.props.gateways[index];
+					if (prevGateway) {
+						const { localKey, websocketConnected, websocketOnline } = gateway;
+						const { websocketConnected: prevWebsocketConnected } = prevGateway;
+						if (websocketOnline && !prevWebsocketConnected && websocketConnected) {
+							const { key } = localKey;
+							if (!key) {
+								dispatch(getTokenForLocalControl(gateway.id, pemPub));
+							}
 						}
 					}
 				}
