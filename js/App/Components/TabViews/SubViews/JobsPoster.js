@@ -395,10 +395,11 @@ export default class JobsPoster extends View<null, Props, State> {
 			afterTomorrow: {
 				container: {
 					...day.container,
+					left: null,
 					right: dayWidth ?
 						this._interpolate(0, 0 - dayWidth, 0 - 2 * dayWidth)
 						:
-						0,
+						-50,
 				},
 				text: day.text,
 			},
