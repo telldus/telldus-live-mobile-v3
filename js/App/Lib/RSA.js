@@ -20,7 +20,8 @@
 // @flow
 
 'use strict';
-const forge = require('node-forge');
+import { Platform } from 'react-native';
+import { RSA } from 'react-native-rsa-native';
 import SInfo from 'react-native-sensitive-info';
 
 /**
@@ -32,45 +33,55 @@ function getRSAKey(onSuccess: (Object) => void): any {
 	SInfo.getAllItems({
 		sharedPreferencesName: 'TelldusSharedPrefs',
 		keychainService: 'TelldusKeychain'}).then((values: any) => {
-		let keys = values[0];
-		if (keys && keys.length >= 2) {
-			const data = {};
-			keys.map((key: Object) => {
-				if (key.key === 'pemPub') {
-					data.pemPub = key.value;
-				}
-				if (key.key === 'pemPvt') {
-					data.pemPvt = key.value;
-				}
-			});
-			onSuccess(data);
+		if (Platform.OS === 'android') {
+			let { pemPub: pemPubS, pemPvt: pemPvtS } = values;
+			if (pemPubS && pemPvtS) {
+				onSuccess({pemPub: pemPubS, pemPvt: pemPvtS});
+			} else {
+				generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
+					onSuccess({pemPub, pemPvt});
+				});
+			}
 		} else {
-			generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
-				onSuccess({pemPub, pemPvt});
-			});
+			let keys = values[0];
+			if (keys && keys.length >= 2) {
+				let data = {};
+				keys.map((key: Object) => {
+					if (key.key === 'pemPub') {
+						data.pemPub = key.value;
+					}
+					if (key.key === 'pemPvt') {
+						data.pemPvt = key.value;
+					}
+				});
+				onSuccess(data);
+			} else {
+				generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
+					onSuccess({pemPub, pemPvt});
+				});
+			}
 		}
 	});
 }
 
 function generateAndStoreRSAKey(onSuccess: (Object) => void) {
-	const rsa = forge.pki.rsa;
-	rsa.generateKeyPair({bits: 2048, workers: 2}, (err: any, keypair: Object) => {
-		if (!err && keypair.publicKey && keypair.privateKey) {
-			const pemPub = forge.pki.publicKeyToPem(keypair.publicKey);
-			const pemPvt = forge.pki.privateKeyToPem(keypair.privateKey);
-			SInfo.setItem('pemPub', pemPub, {
-				sharedPreferencesName: 'TelldusSharedPrefs',
-				keychainService: 'TelldusKeychain',
-			});
-			SInfo.setItem('pemPvt', pemPvt, {
-				sharedPreferencesName: 'TelldusSharedPrefs',
-				keychainService: 'TelldusKeychain',
-			});
-			onSuccess({pemPub, pemPvt});
-		} else {
-			onSuccess({pemPub: null, pemPvt: null});
-		}
-	});
+	RSA.generateKeys(2048) // set key size
+		.then((keypair: Object) => {
+			const { public: pemPub, private: pemPvt } = keypair;
+			if (pemPub && pemPvt) {
+				SInfo.setItem('pemPub', pemPub, {
+					sharedPreferencesName: 'TelldusSharedPrefs',
+					keychainService: 'TelldusKeychain',
+				});
+				SInfo.setItem('pemPvt', pemPvt, {
+					sharedPreferencesName: 'TelldusSharedPrefs',
+					keychainService: 'TelldusKeychain',
+				});
+				onSuccess({pemPub, pemPvt});
+			} else {
+				onSuccess({pemPub: null, pemPvt: null});
+			}
+		});
 }
 
 module.exports = {
