@@ -34,7 +34,6 @@ import TabViews from './index';
 
 import { getUserProfile } from '../../Reducers/User';
 import { TabNavigator } from 'react-navigation';
-import { SettingsDetailModal } from '../DetailViews';
 
 const RouteConfigs = {
 	Dashboard: {
@@ -136,11 +135,12 @@ class TabsView extends View {
 	};
 
 	onOpenSetting = () => {
-		this.setState({ settings: true });
+		// this.setState({ settings: true });
+		this.props.stackNavigator.navigate('Settings');
 	};
 
 	onCloseSetting = () => {
-		this.setState({ settings: false });
+		// this.setState({ settings: false });
 	};
 
 	onToggleEditMode = () => {
@@ -164,11 +164,6 @@ class TabsView extends View {
 			<SafeAreaView>
 				<Header leftButton={leftButton}/>
 				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
-				{
-					this.state.settings ? (
-						<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
-					) : null
-				}
 			</SafeAreaView>
 		);
 	}

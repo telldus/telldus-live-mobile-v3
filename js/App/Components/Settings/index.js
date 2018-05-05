@@ -19,8 +19,8 @@
  */
 
 'use strict';
-import SettingsDetailModal from './SettingsDetailModal';
+import SettingsScreen from './SettingsScreen';
 
 module.exports = {
-	SettingsDetailModal,
+	SettingsScreen,
 };

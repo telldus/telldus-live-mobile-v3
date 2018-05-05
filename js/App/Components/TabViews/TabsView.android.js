@@ -32,7 +32,6 @@ import { View, Header } from '../../../BaseComponents';
 
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 
-import { SettingsDetailModal } from '../DetailViews';
 import TabBar from './TabBar';
 import i18n from '../../Translations/common';
 import { getUserProfile } from '../../Reducers/User';
@@ -113,7 +112,7 @@ type Props = {
 	onTabSelect: (string) => void,
 	dispatch: Function,
 	stackNavigator: Object,
-	addNewLocation: () => void,
+	addNewLocation: () => any,
 	screenReaderEnabled: boolean,
 };
 
@@ -220,7 +219,7 @@ class TabsView extends View {
 	}
 
 	onOpenSetting() {
-		this.setState({ settings: true });
+		this.props.stackNavigator.navigate('Settings');
 	}
 
 	onCloseSetting() {
@@ -316,11 +315,6 @@ class TabsView extends View {
 					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton}/>
 					<View style={styles.container}>
 						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
-						{
-							this.state.settings ? (
-								<SettingsDetailModal isVisible={true} onClose={this.onCloseSetting}/>
-							) : null
-						}
 					</View>
 				</View>
 			</DrawerLayoutAndroid>

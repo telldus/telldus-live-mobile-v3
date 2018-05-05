@@ -573,6 +573,18 @@ const messages = defineMessages({
 		id: 'accessibilityLabel.button.moreMethods',
 		defaultMessage: 'More Methods',
 	},
+	version: {
+		id: 'version',
+		defaultMessage: 'Version',
+	},
+	yes: {
+		id: 'yes',
+		defaultMessage: 'Yes',
+	},
+	no: {
+		id: 'no',
+		defaultMessage: 'No',
+	},
 });
 
 export default messages;

@@ -52,6 +52,7 @@ import AddLocationNavigator from './Location/AddLocation/AddLocation';
 import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
+import { SettingsScreen } from './Settings';
 
 import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
@@ -67,6 +68,12 @@ const messages = defineMessages({
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
+		navigationOptions: {
+			header: null,
+		},
+	},
+	Settings: {
+		screen: SettingsScreen,
 		navigationOptions: {
 			header: null,
 		},
