@@ -110,6 +110,27 @@ class MyComp extends Component {
 export injectIntl(MyComp)
 ```
 
+### Styling
+
+There can be situation where device dimension is required to set style attributes for a component. The 'Dimensions' API provided by react-native cannot be relied during certain cases.
+- The app's layout dimensions can be accessed from redux store, use this where ever possible for styling, instead of 'Dimensions' API.<br/>
+
+**Example:**
+```javascript
+const {layout} = store.App;
+const {height, width} = layout;
+```
+
+one limitation is, the layout dimensions can be used only in inline style, not while creating style sheet object using 'StyleSheet' API.
+
+### Shared Code
+
+- Already the App shares some code/data with the Web. It is required like other dependencies, and you can find it in the `package.json` file by the name 'live-shared-data'.
+Instructions on how to integrate and use the repo for development can be found [here](https://code.telldus.com/telldus/live-shared-data).
+
+- During development, try to keep the shareable code in the repo `live-shared-data`. Feel free to ask the maintainer if you are not sure that it could be shared.
+
+
 ### Local config
 
 You'll need to add `config.local.js` in the root of your project. It's not to be checked in (ignored by git).
@@ -359,17 +380,6 @@ For example:
 
 // etc
 ```
-
-### Styling
-
-There can be situation where device dimension is required to set style attributes for a component. The 'Dimensions' API provided by react-native cannot be relied during certain cases.
-- The app's layout dimensions can be access from redux store, use this where ever possible for styling, instead of 'Dimesions' API.<br/>
-Eg: <br/>
-```const {layout} = store.App;
-const {height, width} = layout;
-```
-
-one limitation is, the layout dimensions can be used only in inline style, not while creating style sheet object using 'StyleSheet' API.
 
 ## `google-services.json`
 
