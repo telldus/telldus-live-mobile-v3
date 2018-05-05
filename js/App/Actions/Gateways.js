@@ -32,7 +32,6 @@ import { actions } from 'live-shared-data';
 const { Gateways } = actions;
 
 import dgram from 'dgram';
-const socket: Object = dgram.createSocket('udp4');
 const broardcastAddress = '255.255.255.255';
 const broardcastPort = 30303;
 
@@ -71,7 +70,9 @@ function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
 
 function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
-		let aPort = randomPort();
+		const socket: Object = dgram.createSocket('udp4');
+		const aPort = randomPort();
+
 		socket.bind(aPort, (err: any) => {
 			if (err) {
 				throw err;
