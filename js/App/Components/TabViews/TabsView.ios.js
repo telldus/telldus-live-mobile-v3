@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, Header, SafeAreaView } from '../../../BaseComponents';
+import { View, Header, SafeAreaView, IconTelldus } from '../../../BaseComponents';
 
 import { toggleEditMode, syncWithServer, switchTab } from '../../Actions';
 import TabViews from './index';
@@ -115,11 +115,10 @@ class TabsView extends View {
 		this.tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab', 'gatewaysTab'];
 
 		this.settingsButton = {
-			icon: {
-				name: 'gear',
-				size: 22,
+			component: <IconTelldus icon={'settings'} style={{
+				fontSize: 20,
 				color: '#fff',
-			},
+			}}/>,
 			onPress: this.onOpenSetting,
 		};
 	}
@@ -153,11 +152,7 @@ class TabsView extends View {
 		const { routeName } = this.state.tab;
 		let { currentScreen } = this.props.screenProps;
 
-		let rightButton = null;
-
-		if (routeName === 'Dashboard') {
-			rightButton = this.settingsButton;
-		}
+		let leftButton = this.settingsButton;
 
 		let screenProps = {
 			stackNavigator: this.props.stackNavigator,
@@ -167,7 +162,7 @@ class TabsView extends View {
 
 		return (
 			<SafeAreaView>
-				<Header rightButton={rightButton}/>
+				<Header leftButton={leftButton}/>
 				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 				{
 					this.state.settings ? (
