@@ -25,7 +25,7 @@
 import React from 'react';
 import { Animated, LayoutAnimation, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 
 import { View, FloatingButton, Text, StyleSheet, SafeAreaView } from '../../../BaseComponents';
@@ -41,6 +41,7 @@ const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour'];
 import { getRouteName } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
+import messages from './SubViews/messages';
 
 import { setChangeLogVersion } from '../../Actions';
 
@@ -56,21 +57,6 @@ const CustomLayoutAnimation = (duration: number = 200): Object => {
 		},
 	};
 };
-
-const messages = defineMessages({
-	changeLogHeaderOne: {
-		id: 'changeLog.headerOne',
-		defaultMessage: 'Explore new features',
-	},
-	changeLogHeaderTwo: {
-		id: 'changeLog.headerTwo',
-		defaultMessage: 'New in version',
-	},
-	skipButton: {
-		id: 'changeLog.button.skipButton',
-		defaultMessage: 'skip this',
-	},
-});
 
 type Props = {
 	appLayout: Object,
