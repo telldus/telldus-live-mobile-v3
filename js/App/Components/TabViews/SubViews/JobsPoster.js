@@ -522,7 +522,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			const { formatDate } = this.props.intl;
 			const day = moment().weekday(i);
 			const weekday = formatDate(day, {weekday: 'long'});
-			this.weekDaysLayout[weekday] = width;
+			this.weekDaysLayout[weekday] = width + 5;
 
 			let length = Object.keys(this.weekDaysLayout).length;
 			if (length > 5) {
