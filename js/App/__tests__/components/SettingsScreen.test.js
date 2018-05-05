@@ -3,11 +3,11 @@ import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { shallow, mockStore } from '../../../Utils/TelldusTestSuite';
 
-import SettingsDetailModal from '../../Components/DetailViews/SettingsDetailModal';
+import SettingsScreen from '../../Components/Settings/SettingsScreen';
 import { logoutFromTelldus } from '../../Actions';
 import { registerPushToken, unregisterPushToken } from '../../Actions/User';
 
-describe('<SettingsDetailModal />', () => {
+describe('<SettingsScreen />', () => {
 
 	let wrapper, store;
 	beforeEach(()=>{
@@ -15,17 +15,17 @@ describe('<SettingsDetailModal />', () => {
 		wrapper = shallow(
 			<Provider store={store}>
 				<IntlProvider>
-					<SettingsDetailModal />
+					<SettingsScreen />
 				</IntlProvider>
 			</Provider>
 		);
 		expect(wrapper).toBeTruthy();
 	});
 
-	it('should shallow SettingsDetailModal', () => {
-		expect(wrapper.find(SettingsDetailModal).length).toBe(1);
+	it('should shallow SettingsScreen', () => {
+		expect(wrapper.find(SettingsScreen).length).toBe(1);
 		const screen = wrapper.props().children.type.displayName;
-		expect(screen).toEqual('Connect(InjectIntl(SettingsDetailModal))');
+		expect(screen).toEqual('Connect(InjectIntl(SettingsScreen))');
 	});
 
 	it(' check logoutFromTelldus action on dispatching ', () => {
