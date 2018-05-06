@@ -56,7 +56,7 @@
     "accessibilityLabel.sensors.labelDewPoint": "Duggpunkt",
     "accessibilityLabel.sensors.labelGenericMeter": "Generisk Meter",
     "accessibilityLabel.sensors.labelGenricMeter": "Generisk Meter",
-    "accessibilityLabel.sensors.labelHumidity": "Fuktighet",
+    "accessibilityLabel.sensors.labelHumidity": "Luft fuktighet",
     "accessibilityLabel.sensors.labelLuminance": "Luminans",
     "accessibilityLabel.sensors.labelRainRate": "Regnandel",
     "accessibilityLabel.sensors.labelRainTotal": "Total nedbørsmengde",
