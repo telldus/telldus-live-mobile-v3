@@ -28,7 +28,6 @@ import com.tradle.react.UdpSocketsModule;
 import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
 import com.reactlibrary.RNReactNativeAccessibilityPackage;
 import com.airbnb.android.react.maps.MapsPackage;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -71,7 +70,6 @@ public class MainApplication extends Application implements ReactApplication {
 				new RNSensitiveInfoPackage(),
 				new RNReactNativeAccessibilityPackage(),
 				new MapsPackage(),
-				new ReactNativePushNotificationPackage(),
 				new RNI18nPackage()
 			);
 		}
