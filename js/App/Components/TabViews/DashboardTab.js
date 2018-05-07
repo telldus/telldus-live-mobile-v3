@@ -26,7 +26,6 @@ import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
 import { Dimensions, FlatList, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
-import Subscribable from 'Subscribable';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { defineMessages } from 'react-intl';
@@ -46,7 +45,6 @@ import {
 } from './SubViews';
 
 import getTabBarIcon from '../../Lib/getTabBarIcon';
-import reactMixin from 'react-mixin';
 
 const messages = defineMessages({
 	messageNoItemsTitle: {
@@ -147,7 +145,6 @@ class DashboardTab extends View {
 		this.stopSensorTimer = this.stopSensorTimer.bind(this);
 		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
-		this.mixins = [Subscribable.Mixin];
 
 		this.noItemsTitle = props.screenProps.intl.formatMessage(messages.messageNoItemsTitle);
 		this.noItemsContent = props.screenProps.intl.formatMessage(messages.messageNoItemsContent);
@@ -424,7 +421,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 		dispatch,
 	};
 }
-
-reactMixin(DashboardTab.prototype, Subscribable.Mixin);
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(DashboardTab);
