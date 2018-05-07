@@ -47,6 +47,7 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import io.fabric.sdk.android.Fabric;
 import org.pgsqlite.SQLitePluginPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -70,7 +71,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new RNSensitiveInfoPackage(),
 				new RNReactNativeAccessibilityPackage(),
 				new MapsPackage(),
-				new RNI18nPackage()
+				new RNI18nPackage(),
+				new FIRMessagingPackage()
 			);
 		}
 		

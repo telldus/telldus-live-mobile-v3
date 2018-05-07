@@ -36,6 +36,7 @@
     "react-native-easy-grid": "^0.1.17",
     "react-native-extra-dimensions-android": "^0.21",
     "react-native-fabric": "^0.5.1",
+    "react-native-fcm": "^14.2.0",
     "react-native-i18n": "^2.0.12",
     "react-native-iphone-x-helper": "^1.0.2",
     "react-native-maps": "^0.21.0",

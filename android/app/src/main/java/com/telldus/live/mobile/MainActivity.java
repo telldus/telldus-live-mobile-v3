@@ -41,6 +41,12 @@ public class MainActivity extends ReactActivity {
 		moveTaskToBack(true);
 	}
 
+	@Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		// Reloads the app when ever a change in user's locale is detected.
