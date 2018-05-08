@@ -247,8 +247,8 @@
     "schedule.posterDays": "Dni",
     "schedule.posterEditDevice": "Kliknij szczegóły, które chcesz edytować",
     "schedule.posterSummary": "Proszę potwierdzić harmonogram",
-    "schedule.time.descriptionInterval": "Losowa przerwa {value} min",
-    "schedule.time.descriptionOffset": "Wyrównanie {value} min",
+    "schedule.time.descriptionInterval": "Losowa przerwa {value}",
+    "schedule.time.descriptionOffset": "Wyrównanie {value}",
     "schedule.time.descriptionSliderInterval": "Ustaw losowe przerwy pomiędzy minutami {startValue} i {endValue}",
     "schedule.time.descriptionSliderOffset": "Wyrównaj czas pomiędzy minutami {startValue} i {endValue}",
     "schedule.time.editTime": "Stuknij, by zmienić czas",
@@ -310,5 +310,5 @@
     "user.sessionLockedBodyParaOne": "Z jakiegoś powodu nie możemy teraz połączyć się z Twoim kontem.",
     "user.sessionLockedBodyParaTwo": "Upewnij się, że Twoje połączenie internetowe działa i spróbuj jeszcze raz, stukając przycisk ponowienia poniżej.",
     "user.welcome": "Witamy w Telldus",
-    "version": "wersja"
+    "version": "Wersja"
 }
