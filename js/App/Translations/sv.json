@@ -271,7 +271,7 @@
     "schedule.posterDays": "Dagar",
     "schedule.posterEditDevice": "Tryck på de detaljer du vill redigera",
     "schedule.posterSummary": "Bekräfta schemaläggningen",
-    "schedule.time.descriptionInterval": "Slumpmässigt intervall {value} min",
+    "schedule.time.descriptionInterval": "Slumpintervall {value} min",
     "schedule.time.descriptionOffset": "Förskjutning {value} min",
     "schedule.time.descriptionSliderInterval": "Välj slupmässigt intervall mellan {startValue} och {endValue} minuter",
     "schedule.time.descriptionSliderOffset": "Förskjut tiden mellan {startValue} och {endValue} minuter",
