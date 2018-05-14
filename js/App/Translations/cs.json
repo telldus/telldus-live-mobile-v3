@@ -193,6 +193,8 @@
     "deviceSettings.location": "Umístění",
     "deviceSettings.noRecentActivity": "Žádná nedávná aktivita",
     "deviceSettings.overviewHeader": "Přehled",
+    "dialogue.headerOnHide": "Skrýt tento {type}?",
+    "dialogue.messageOnHide": "Opravdu chcete skrýt tento {type}?",
     "dialogueBox.defaultHeader": "OOPS",
     "dialogueBox.defaultNegativeText": "ZRUŠIT",
     "dialogueBox.defaultPositiveText": "OK",
