@@ -28,7 +28,7 @@ import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
-import { Text, View, TouchableButton, IconTelldus } from '../../../BaseComponents';
+import { Text, View, TouchableButton, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
 import { DeviceRow } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
@@ -90,6 +90,8 @@ type State = {
 	propsSwipeRow: Object,
 	scrollEnabled: boolean,
 	showRefresh: boolean,
+	showConfirmDialogue: boolean,
+	deviceToHide: Object,
 };
 
 class DevicesTab extends View {
@@ -108,6 +110,8 @@ class DevicesTab extends View {
 	toggleHiddenList: () => void;
 	setIgnoreDevice: (Object) => void;
 	closeVisibleRows: (string) => void;
+	onDismissDialogueHide: () => void;
+	onConfirmDialogueHide: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
@@ -134,6 +138,8 @@ class DevicesTab extends View {
 			},
 			scrollEnabled: true,
 			showRefresh: true,
+			showConfirmDialogue: false,
+			deviceToHide: {},
 		};
 
 		this.onCloseSelected = this.onCloseSelected.bind(this);
@@ -148,6 +154,8 @@ class DevicesTab extends View {
 
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
 		this.closeVisibleRows = this.closeVisibleRows.bind(this);
+		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
+		this.onConfirmDialogueHide = this.onConfirmDialogueHide.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
 
@@ -163,6 +171,11 @@ class DevicesTab extends View {
 		this.noGatewayTitle = formatMessage(messages.messageNoGatewayTitle);
 		this.noDeviceContent = formatMessage(messages.messageNoDeviceContent);
 		this.noGatewayContent = formatMessage(messages.messageNoGatewayContent);
+
+		const labelDevice = formatMessage(i18n.labelDevice).toLowerCase();
+		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelDevice });
+		this.messageOnHide = formatMessage(i18n.messageOnHide, { type: labelDevice });
+		this.labelHide = formatMessage(i18n.hide).toUpperCase();
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -207,14 +220,34 @@ class DevicesTab extends View {
 
 	setIgnoreDevice(device: Object) {
 		let ignore = device.ignored ? 0 : 1;
-		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res: Object) => {
-			let message = device.ignored ?
-				this.removedFromHiddenList : this.addedToHiddenList;
-			this.props.dispatch(showToast(message));
-			this.props.dispatch(getDevices());
-		}).catch((err: Object) => {
-			let message = err.message ? err.message : null;
-			this.props.dispatch(showToast(message));
+		if (!device.ignored && !this.state.showConfirmDialogue) {
+			this.setState({
+				showConfirmDialogue: true,
+				deviceToHide: device,
+			});
+		} else {
+			this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res: Object) => {
+				let message = device.ignored ?
+					this.removedFromHiddenList : this.addedToHiddenList;
+				this.props.dispatch(showToast(message));
+				this.props.dispatch(getDevices());
+			}).catch((err: Object) => {
+				let message = err.message ? err.message : null;
+				this.props.dispatch(showToast(message));
+			});
+		}
+	}
+
+	onConfirmDialogueHide() {
+		this.setIgnoreDevice(this.state.deviceToHide);
+		this.setState({
+			showConfirmDialogue: false,
+		});
+	}
+
+	onDismissDialogueHide() {
+		this.setState({
+			showConfirmDialogue: false,
 		});
 	}
 
@@ -392,7 +425,8 @@ class DevicesTab extends View {
 
 		let { appLayout, devices } = this.props;
 		let { showHiddenList, hiddenList, visibleList,
-			isRefreshing, makeRowAccessible, addGateway, propsSwipeRow, scrollEnabled, showRefresh } = this.state;
+			isRefreshing, makeRowAccessible, addGateway, propsSwipeRow,
+			scrollEnabled, showRefresh, showConfirmDialogue } = this.state;
 		let style = this.getStyles(appLayout);
 
 		if (addGateway) {
@@ -445,6 +479,28 @@ class DevicesTab extends View {
 						<View style={{height: 80}}/>
 					}
 				</View>
+				<DialogueBox
+					showDialogue={showConfirmDialogue}
+					header={
+						<DialogueHeader
+							headerText={this.headerOnHide}
+							showIcon={false}
+							headerStyle={style.dialogueHeaderStyle}
+							textStyle={style.dialogueHeaderTextStyle}/>
+					}
+					text={
+						<View style={style.dialogueBodyStyle}>
+							<Text style={style.dialogueBodyTextStyle}>
+								{this.messageOnHide}
+							</Text>
+						</View>
+					}
+					showNegative={true}
+					onPressNegative={this.onDismissDialogueHide}
+					showPositive={true}
+					positiveText={this.labelHide}
+					onPressPositive={this.onConfirmDialogueHide}
+				/>
 			</ScrollView>
 		);
 	}
@@ -452,6 +508,7 @@ class DevicesTab extends View {
 	getStyles(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		return {
 			noItemsContainer: {
@@ -515,6 +572,23 @@ class DevicesTab extends View {
 				fontSize: 16,
 				textAlign: 'center',
 				color: Theme.Core.rowTextColor,
+			},
+			dialogueHeaderStyle: {
+				paddingVertical: 10,
+				paddingHorizontal: 20,
+				width: deviceWidth * 0.75,
+			},
+			dialogueHeaderTextStyle: {
+				fontSize: 13,
+			},
+			dialogueBodyStyle: {
+				paddingHorizontal: 20,
+				paddingVertical: 10,
+				width: deviceWidth * 0.75,
+			},
+			dialogueBodyTextStyle: {
+				fontSize: 13,
+				color: '#6B6969',
 			},
 		};
 	}
