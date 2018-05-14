@@ -204,6 +204,8 @@
     "deviceSettings.locationDetected": "Platsen borttagen",
     "deviceSettings.noRecentActivity": "Ingen historik",
     "deviceSettings.overviewHeader": "Översikt",
+    "dialogue.headerOnHide": "Dölja {type}?",
+    "dialogue.messageOnHide": "Är du säker att du vill dölja denna {type}?",
     "dialogueBox.defaultHeader": "OOPS",
     "dialogueBox.defaultNegativeText": "AVBRYT",
     "dialogueBox.defaultPositiveText": "OK",
