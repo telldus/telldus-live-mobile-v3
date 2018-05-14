@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
-import { View, IconTelldus } from '../../../BaseComponents';
+import { View, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from './SubViews';
 
 import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
@@ -53,6 +53,8 @@ type State = {
 	isRefreshing: boolean,
 	showHiddenList: boolean,
 	propsSwipeRow: Object,
+	showConfirmDialogue: boolean,
+	sensorToHide: Object,
 };
 
 class SensorsTab extends View {
@@ -68,6 +70,8 @@ class SensorsTab extends View {
 	toggleHiddenList: () => void;
 	setIgnoreSensor: (Object) => void;
 	closeVisibleRows: (string) => void;
+	onDismissDialogueHide: () => void;
+	onConfirmDialogueHide: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
@@ -89,6 +93,8 @@ class SensorsTab extends View {
 				idToKeepOpen: null,
 				forceClose: false,
 			},
+			showConfirmDialogue: false,
+			sensorToHide: {},
 		};
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
@@ -100,6 +106,8 @@ class SensorsTab extends View {
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
 		this.setIgnoreSensor = this.setIgnoreSensor.bind(this);
 		this.closeVisibleRows = this.closeVisibleRows.bind(this);
+		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
+		this.onConfirmDialogueHide = this.onConfirmDialogueHide.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
 
@@ -109,6 +117,11 @@ class SensorsTab extends View {
 		let hiddenSensors = formatMessage(i18n.hiddenSensors).toLowerCase();
 		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenSensors}`;
 		this.showHidden = `${formatMessage(i18n.show)} ${hiddenSensors}`;
+
+		const labelSensor = formatMessage(i18n.labelSensor).toLowerCase();
+		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelSensor });
+		this.messageOnHide = formatMessage(i18n.messageOnHide, { type: labelSensor });
+		this.labelHide = formatMessage(i18n.hide).toUpperCase();
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -163,14 +176,34 @@ class SensorsTab extends View {
 
 	setIgnoreSensor(sensor: Object) {
 		let ignore = sensor.ignored ? 0 : 1;
-		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
-			let message = sensor.ignored ?
-				this.removedFromHiddenList : this.addedToHiddenList;
-			this.props.dispatch(showToast(message));
-			this.props.dispatch(getSensors());
-		}).catch((err: Object) => {
-			let message = err.message ? err.message : null;
-			this.props.dispatch(showToast(message));
+		if (!sensor.ignored && !this.state.showConfirmDialogue) {
+			this.setState({
+				showConfirmDialogue: true,
+				sensorToHide: sensor,
+			});
+		} else {
+			this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
+				let message = sensor.ignored ?
+					this.removedFromHiddenList : this.addedToHiddenList;
+				this.props.dispatch(showToast(message));
+				this.props.dispatch(getSensors());
+			}).catch((err: Object) => {
+				let message = err.message ? err.message : null;
+				this.props.dispatch(showToast(message));
+			});
+		}
+	}
+
+	onConfirmDialogueHide() {
+		this.setIgnoreSensor(this.state.sensorToHide);
+		this.setState({
+			showConfirmDialogue: false,
+		});
+	}
+
+	onDismissDialogueHide() {
+		this.setState({
+			showConfirmDialogue: false,
 		});
 	}
 
@@ -192,7 +225,8 @@ class SensorsTab extends View {
 	render(): Object {
 
 		let { appLayout } = this.props;
-		let { showHiddenList, hiddenList, visibleList, isRefreshing, propsSwipeRow, makeRowAccessible } = this.state;
+		let { showHiddenList, hiddenList, visibleList, isRefreshing,
+			propsSwipeRow, makeRowAccessible, showConfirmDialogue } = this.state;
 
 		let style = this.getStyles(appLayout);
 		let extraData = {
@@ -230,6 +264,28 @@ class SensorsTab extends View {
 						<View style={{height: 80}}/>
 					}
 				</View>
+				<DialogueBox
+					showDialogue={showConfirmDialogue}
+					header={
+						<DialogueHeader
+							headerText={this.headerOnHide}
+							showIcon={false}
+							headerStyle={style.dialogueHeaderStyle}
+							textStyle={style.dialogueHeaderTextStyle}/>
+					}
+					text={
+						<View style={style.dialogueBodyStyle}>
+							<Text style={style.dialogueBodyTextStyle}>
+								{this.messageOnHide}
+							</Text>
+						</View>
+					}
+					showNegative={true}
+					onPressNegative={this.onDismissDialogueHide}
+					showPositive={true}
+					positiveText={this.labelHide}
+					onPressPositive={this.onConfirmDialogueHide}
+				/>
 			</ScrollView>
 		);
 	}
@@ -282,7 +338,8 @@ class SensorsTab extends View {
 	getStyles(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
-		let isPortrait = height > width;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		return {
 			container: {
@@ -306,6 +363,23 @@ class SensorsTab extends View {
 				fontSize: 16,
 				textAlign: 'center',
 				color: Theme.Core.rowTextColor,
+			},
+			dialogueHeaderStyle: {
+				paddingVertical: 10,
+				paddingHorizontal: 20,
+				width: deviceWidth * 0.75,
+			},
+			dialogueHeaderTextStyle: {
+				fontSize: 13,
+			},
+			dialogueBodyStyle: {
+				paddingHorizontal: 20,
+				paddingVertical: 10,
+				width: deviceWidth * 0.75,
+			},
+			dialogueBodyTextStyle: {
+				fontSize: 13,
+				color: '#6B6969',
 			},
 		};
 	}

@@ -171,6 +171,8 @@
   "deviceSettings.location": "Location",
   "deviceSettings.noRecentActivity": "No recent activity",
   "deviceSettings.overviewHeader": "Overview",
+  "dialogue.headerOnHide": "Hide this {type}?",
+  "dialogue.messageOnHide": "Are you sure you want to hide this {type}?",
   "dialogueBox.defaultHeader": "OOPS",
   "dialogueBox.defaultNegativeText": "CANCEL",
   "dialogueBox.defaultPositiveText": "OK",

@@ -585,6 +585,14 @@ const messages = defineMessages({
 		id: 'no',
 		defaultMessage: 'No',
 	},
+	messageOnHide: {
+		id: 'dialogue.messageOnHide',
+		defaultMessage: 'Are you sure you want to hide this {type}?',
+	},
+	headerOnHide: {
+		id: 'dialogue.headerOnHide',
+		defaultMessage: 'Hide this {type}?',
+	},
 });
 
 export default messages;
