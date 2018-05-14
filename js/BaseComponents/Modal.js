@@ -254,7 +254,7 @@ class Modal extends Component<Props, void> {
 	}
 
 	render(): Object {
-		let animatedProps = {};
+		let animatedProps = [];
 		let { showOverlay, modalContainerStyle, modalStyle, children,
 			entry, exit, startValue, endValue, appLayout } = this.props;
 		let styles = this.getStyles(appLayout);
