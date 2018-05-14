@@ -258,10 +258,10 @@
     "schedule.posterDays": "Dny",
     "schedule.posterEditDevice": "Klikněte na detaily, které chcete upravit",
     "schedule.posterSummary": "Prosím potvrďte plán",
-    "schedule.time.descriptionInterval": "Náhodný interval {value} min",
-    "schedule.time.descriptionOffset": "Vypnuto v {value} min",
-    "schedule.time.descriptionSliderInterval": "Nastavte náhodné intervaly mezi {startValue} a {endValue} minutami",
-    "schedule.time.descriptionSliderOffset": "Čas vypnutí mezi {startValue} a {endValue} minutami",
+    "schedule.time.descriptionInterval": "Náhodný interval {value}",
+    "schedule.time.descriptionOffset": "Vypnuto v {value}",
+    "schedule.time.descriptionSliderInterval": "Nastavte náhodné intervaly mezi {startValue} a {endValue}",
+    "schedule.time.descriptionSliderOffset": "Čas vypnutí mezi {startValue} a {endValue}",
     "schedule.time.editTime": "Klepnutím změňte čas",
     "schedule.time.editTimeAccessible": "Dvojitým klepnutím změňte čas",
     "scheduler": "Plán",
@@ -328,5 +328,5 @@
     "user.sessionLockedBodyParaOne": "Z nějakého důvodu nemůžeme Váš účet právě teď připojit.",
     "user.sessionLockedBodyParaTwo": "Ujistěte se, že vaše připojení k internetu funguje a zkuste znovu poklepáním na tlačítko opakování.",
     "user.welcome": "Vítejte v Telldus",
-    "version": "verze"
+    "version": "Verze"
 }

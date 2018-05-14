@@ -242,10 +242,10 @@
     "schedule.posterDays": "Jours",
     "schedule.posterEditDevice": "Cliquez sur les détails que vous souhaitez modifier",
     "schedule.posterSummary": "Veuillez confirmer la planification",
-    "schedule.time.descriptionInterval": "Intervalle aléatoire {value} min",
-    "schedule.time.descriptionOffset": "Décalage {value} min",
-    "schedule.time.descriptionSliderInterval": "Définir des intervalles aléatoires entre {startValue} et {endValue} minutes",
-    "schedule.time.descriptionSliderOffset": "Décaler le délai entre {startValue} et {endValue} minutes",
+    "schedule.time.descriptionInterval": "Intervalle aléatoire {value}",
+    "schedule.time.descriptionOffset": "Décalage {value}",
+    "schedule.time.descriptionSliderInterval": "Définir des intervalles aléatoires entre {startValue} et {endValue}",
+    "schedule.time.descriptionSliderOffset": "Décaler le délai entre {startValue} et {endValue}",
     "scheduler": "Plan.",
     "sensor.dayAgo": "{value} jours plus tôt",
     "sensor.daysAgo": "{value} jours plus tôt",
@@ -299,5 +299,5 @@
     "user.sessionLockedBodyParaOne": "Pour une raison inconnue, nous ne pouvons pas connecter votre compte pour le moment.",
     "user.sessionLockedBodyParaTwo": "Assurez-vous que votre connexion Internet fonctionne et réessayez en appuyant sur le bouton ci-dessous.",
     "user.welcome": "Bienvenue sur Telldus",
-    "version": "version"
+    "version": "Version"
 }
