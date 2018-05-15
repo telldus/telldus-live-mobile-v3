@@ -25,7 +25,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
-import { ifIphoneX } from 'react-native-iphone-x-helper';
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Header, SafeAreaView, IconTelldus } from '../../../BaseComponents';
 
@@ -79,6 +79,7 @@ type Props = {
 	dispatch: Function,
 	stackNavigator: Object,
 	screenProps: Object,
+	appLayout: Object,
 };
 
 type Tab = {
@@ -113,9 +114,16 @@ class TabsView extends View {
 
 		this.tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab', 'gatewaysTab'];
 
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+		const size = Math.floor(deviceHeight * 0.03);
+
+		let fontSize = size < 20 ? 20 : size;
 		this.settingsButton = {
 			component: <IconTelldus icon={'settings'} style={{
-				fontSize: 20,
+				fontSize,
 				color: '#fff',
 			}}/>,
 			onPress: this.onOpenSetting,
@@ -150,6 +158,7 @@ class TabsView extends View {
 
 	render(): Object {
 		const { routeName } = this.state.tab;
+		const { appLayout } = this.props;
 		let { currentScreen } = this.props.screenProps;
 
 		let leftButton = this.settingsButton;
@@ -160,9 +169,13 @@ class TabsView extends View {
 			currentScreen,
 		};
 
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let deviceHeight = isPortrait ? height : width;
+
 		return (
 			<SafeAreaView>
-				<Header leftButton={leftButton}/>
+				<Header leftButton={leftButton} style={{height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )}}/>
 				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 			</SafeAreaView>
 		);
@@ -175,6 +188,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		tab: store.navigation.tab,
 		userIcon: false,
 		userProfile: getUserProfile(store),
+		appLayout: store.App.layout,
 	};
 }
 
