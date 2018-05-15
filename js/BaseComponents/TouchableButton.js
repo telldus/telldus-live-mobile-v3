@@ -107,9 +107,10 @@ class TouchableButton extends Component<Props, void> {
 		return {
 			buttonContainer: {
 				backgroundColor: Theme.Core.btnPrimaryBg,
-				height: isPortrait ? width * 0.13 : height * 0.13,
+				paddingVertical: 18,
 				width: isPortrait ? width * 0.5 : height * 0.5,
-				borderRadius: isPortrait ? width * 0.13 : height * 0.13,
+				maxWidth: 250,
+				borderRadius: 30,
 				alignSelf: 'center',
 				alignItems: 'center',
 				justifyContent: 'center',

@@ -138,7 +138,7 @@ class FloatingButton extends Component<Props, null> {
 		const isIOSTabs = Platform.OS === 'ios' && tabs;
 
 		let buttonSize = deviceWidth * 0.134666667;
-		buttonSize = buttonSize > maxIconSize ? maxButtonSize : buttonSize;
+		buttonSize = buttonSize > maxButtonSize ? maxButtonSize : buttonSize;
 		const offsetBottom = deviceWidth * 0.046666667 + (isIOSTabs ? 50 : 0);
 		const offsetRight = deviceWidth * 0.034666667 - paddingRight;
 
