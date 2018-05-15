@@ -246,7 +246,7 @@ class LocationActivationManual extends View {
 				color: '#A59F9A',
 				marginTop: 10,
 				textAlign: 'left',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: 16,
 				paddingLeft: 2,
 			},
 			textField: {
@@ -254,7 +254,7 @@ class LocationActivationManual extends View {
 				width: width - padding,
 				paddingLeft: 35,
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+				fontSize: 20,
 			},
 			locationIcon: {
 				position: 'absolute',

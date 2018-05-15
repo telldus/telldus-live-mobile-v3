@@ -343,7 +343,7 @@ class GeoPosition extends View {
 				  width: width - padding - 30,
 				  paddingLeft: 35,
 				  color: '#A59F9A',
-				  fontSize: Math.floor(deviceWidth * 0.06),
+				  fontSize: 20,
 			  },
 			  hContainer: {
 				  position: 'absolute',
