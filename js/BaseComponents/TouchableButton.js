@@ -99,13 +99,17 @@ class TouchableButton extends Component<Props, void> {
 	}
 
 	getStyle = (): Object => {
+		let { appLayout } = this.props;
+		const width = appLayout.width;
+		const height = appLayout.height;
+		const isPortrait = height > width;
 
 		return {
 			buttonContainer: {
 				backgroundColor: Theme.Core.btnPrimaryBg,
-				padding: 20,
-				minWidth: 150,
-				borderRadius: 30,
+				height: isPortrait ? width * 0.13 : height * 0.13,
+				width: isPortrait ? width * 0.5 : height * 0.5,
+				borderRadius: isPortrait ? width * 0.13 : height * 0.13,
 				alignSelf: 'center',
 				alignItems: 'center',
 				justifyContent: 'center',
