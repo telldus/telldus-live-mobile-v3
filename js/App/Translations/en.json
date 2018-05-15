@@ -196,6 +196,8 @@
   "hideFromList": "Hide from device list",
   "history": "History",
   "incommingSignal": "Incomming signal",
+  "label.eula": "End User Licence Agreement",
+  "label.iAgree": "I Agree",
   "loading": "Loading",
   "location": "Location",
   "location.autodetect": "Autodetect",
@@ -305,6 +307,7 @@
   "user.sessionLockedBodyParaOne": "For some reason we can't connect your account right now.",
   "user.sessionLockedBodyParaTwo": "Make sure that your internet connection is working and retry by tapping the retry button below.",
   "user.welcome": "Welcome to Telldus",
+  "userAgreementHeaderPhrase": "Please accept our updated {eula} to continue using the app",
   "version": "Version",
   "yes": "Yes"
 }

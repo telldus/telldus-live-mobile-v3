@@ -32,6 +32,7 @@ import {
 	Push,
 } from './App/Components';
 import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
+import UserAgreement from './App/Components/UserAgreement/UserAgreement';
 import { View } from './BaseComponents';
 import {
 	setAppLayout,
@@ -48,6 +49,7 @@ type Props = {
 	accessToken: string,
 	pushTokenRegistered: boolean,
 	prevChangeLogVersion: string,
+	eula?: number,
 };
 
 class App extends React.Component<Props, null> {
@@ -102,22 +104,28 @@ class App extends React.Component<Props, null> {
 	}
 
 	render(): Object {
-		let { prevChangeLogVersion, accessToken, isTokenValid } = this.props;
+		let { prevChangeLogVersion, accessToken, isTokenValid, eula } = this.props;
+
 		let showChangeLog = changeLogVersion !== prevChangeLogVersion;
 		if (showChangeLog) {
 			return (
 				<View onLayout={this.onLayout}>
 					<ChangeLogNavigator changeLogVersion={changeLogVersion}/>
+					<UserAgreement showModal={!eula} onLayout={this.onLayout}/>
 				</View>
 			);
 		}
+
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 		return (
 			<View onLayout={this.onLayout}>
 				{hasNotLoggedIn ?
 					<PreLoginNavigator />
 					:
-					<AppNavigator {...this.props}/>
+					<View style={{flex: 1}}>
+						<AppNavigator {...this.props}/>
+						<UserAgreement showModal={!eula} onLayout={this.onLayout}/>
+					</View>
 				}
 			</View>
 		);
@@ -125,11 +133,19 @@ class App extends React.Component<Props, null> {
 }
 
 function mapStateToProps(store: Object): Object {
+	let {
+		accessToken,
+		pushToken,
+		isTokenValid,
+		pushTokenRegistered,
+		eula,
+	} = store.user;
 	return {
-		accessToken: store.user.accessToken,
-		pushToken: store.user.pushToken,
-		isTokenValid: store.user.isTokenValid,
-		pushTokenRegistered: store.user.pushTokenRegistered,
+		accessToken,
+		pushToken,
+		isTokenValid,
+		pushTokenRegistered,
+		eula,
 		prevChangeLogVersion: store.App.changeLogVersion,
 	};
 }

@@ -593,6 +593,18 @@ const messages = defineMessages({
 		id: 'dialogue.headerOnHide',
 		defaultMessage: 'Hide this {type}?',
 	},
+	userAgreementHeaderPhrase: {
+		id: 'userAgreementHeaderPhrase',
+		defaultMessage: 'Please accept our updated {eula} to continue using the app',
+	},
+	eula: {
+		id: 'label.eula',
+		defaultMessage: 'End User Licence Agreement',
+	},
+	iAgree: {
+		id: 'label.iAgree',
+		defaultMessage: 'I Agree',
+	},
 });
 
 export default messages;
