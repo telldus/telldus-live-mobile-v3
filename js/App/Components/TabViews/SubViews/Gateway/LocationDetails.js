@@ -114,7 +114,14 @@ class LocationDetails extends View {
 	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
-		let isPortrait = height > width;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		let textHSHSize = Math.floor(deviceWidth * 0.054);
+		textHSHSize = textHSHSize > 25 ? 25 : textHSHSize;
+
+		let textLocationSize = Math.floor(deviceWidth * 0.045);
+		textLocationSize = textLocationSize > 19 ? 19 : textLocationSize;
 
 		return {
 			locationTextContainer: {
@@ -132,11 +139,11 @@ class LocationDetails extends View {
 			},
 			textLocation: {
 				color: '#A59F9A',
-				fontSize: 14,
+				fontSize: textLocationSize,
 			},
 			textHSH: {
 				color: '#F06F0C',
-				fontSize: 19,
+				fontSize: textHSHSize,
 			},
 		};
 	}
