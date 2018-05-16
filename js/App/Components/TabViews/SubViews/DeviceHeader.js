@@ -28,12 +28,24 @@ import Theme from '../../../Theme';
 
 type Props = {
 	gateway: Object,
+	appLayout: Object,
 };
 
-export default ({ gateway }: Props ): Object => {
+export default ({ gateway, appLayout }: Props ): Object => {
+	let { height, width } = appLayout;
+	let isPortrait = height > width;
+	let deviceWidth = isPortrait ? width : height;
+
+	let {
+		maxSizeRowTextOne,
+	} = Theme.Core;
+
+	let nameFontSize = Math.floor(deviceWidth * 0.047);
+	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
+
 	return (
-		<View style={Theme.Styles.sectionHeaderNew}>
-			<Text style={Theme.Styles.sectionHeaderTextNew}>
+		<View style={Theme.Styles.sectionHeader}>
+			<Text style={[Theme.Styles.sectionHeaderText, { fontSize: nameFontSize }]}>
 				{gateway}
 			</Text>
 		</View>

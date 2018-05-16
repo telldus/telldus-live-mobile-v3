@@ -294,6 +294,7 @@ class SensorsTab extends View {
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.key}
+				appLayout={this.props.appLayout}
 			/>
 		);
 	}
@@ -341,6 +342,12 @@ class SensorsTab extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		let hiddenListTextFontSize = Math.floor(deviceWidth * 0.049);
+		hiddenListTextFontSize = hiddenListTextFontSize > 25 ? 25 : hiddenListTextFontSize;
+
+		let hiddenListIconFontSize = Math.floor(deviceWidth * 0.088);
+		hiddenListIconFontSize = hiddenListIconFontSize > 50 ? 50 : hiddenListIconFontSize;
+
 		return {
 			container: {
 				flex: 1,
@@ -355,12 +362,12 @@ class SensorsTab extends View {
 			},
 			toggleHiddenListIcon: {
 				marginTop: 4,
-				fontSize: 34,
+				fontSize: hiddenListIconFontSize,
 				color: Theme.Core.rowTextColor,
 			},
 			toggleHiddenListText: {
 				marginLeft: 6,
-				fontSize: 16,
+				fontSize: hiddenListTextFontSize,
 				textAlign: 'center',
 				color: Theme.Core.rowTextColor,
 			},

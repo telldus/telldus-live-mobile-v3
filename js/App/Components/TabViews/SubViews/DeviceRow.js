@@ -25,6 +25,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity, PixelRatio, Animated, Easing } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
 import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import ToggleButton from './ToggleButton';
@@ -99,6 +100,7 @@ class DeviceRow extends PureComponent<Props, State> {
 	animatedWidth: any;
 	isAnimating: boolean;
 	animatedScaleX: any;
+	isTablet: boolean;
 
 	state = {
 		disableSwipe: false,
@@ -135,6 +137,8 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.animatedWidth = null;
 		this.animatedScaleX = new Animated.Value(1);
 		this.isAnimating = false;
+
+		this.isTablet = DeviceInfo.isTablet();
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -385,6 +389,8 @@ class DeviceRow extends PureComponent<Props, State> {
 		let accessibilityLabel = isOpen ? `${getLabelDevice(intl.formatMessage, device)}. ${this.helpCloseHiddenRow}` :
 			`${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
 
+		const nameInfo = this.getNameInfo(device, deviceName, powerConsumed, styles);
+
 		return (
 			<View>
 				<SwipeRow
@@ -410,16 +416,7 @@ class DeviceRow extends PureComponent<Props, State> {
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 								accessibilityLabel={accessibilityLabel}>
 								{showDeviceIcon && <BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>}
-								<View style={styles.name} onLayout={this.onLayoutCover}>
-									<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
-										{deviceName}
-									</Text>
-									{powerConsumed && (
-										<Text style = {styles.textPowerConsumed}>
-											{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W`}
-										</Text>
-									)}
-								</View>
+								{nameInfo}
 							</TouchableOpacity>
 							<Animated.View style={[styles.buttonsCover, {
 								width: this.animatedWidth,
@@ -453,6 +450,30 @@ class DeviceRow extends PureComponent<Props, State> {
 		);
 	}
 
+	getNameInfo(device: Object, deviceName: string, powerConsumed: string | null, styles: Object): Object {
+		let { intl } = this.props;
+		let { name, nameTablet, textPowerConsumed, textPowerConsumedTablet } = styles;
+		let coverStyle = name;
+		let textPowerStyle = textPowerConsumed;
+		if (this.isTablet) {
+			coverStyle = nameTablet;
+			textPowerStyle = textPowerConsumedTablet;
+		}
+
+		return (
+			<View style={coverStyle} onLayout={this.onLayoutCover}>
+				<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
+					{deviceName}
+				</Text>
+				{powerConsumed && (
+					<Text style = {textPowerStyle}>
+						{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W`}
+					</Text>
+				)}
+			</View>
+		);
+	}
+
 	onPressMore(buttons: Array<Object>, name: string) {
 		this.setState({
 			showMoreActions: true,
@@ -466,8 +487,22 @@ class DeviceRow extends PureComponent<Props, State> {
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
-		let rowHeight = Theme.Core.rowHeight;
-		let buttonWidth = Theme.Core.buttonWidth;
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let deviceWidth = isPortrait ? width : height;
+
+		let {
+			rowHeight,
+			maxSizeRowTextOne,
+			maxSizeRowTextTwo,
+			buttonWidth,
+		} = Theme.Core;
+
+		let nameFontSize = Math.floor(deviceWidth * 0.047);
+		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
+
+		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
 		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 		let backgroundColor = !isGatewayActive ? Theme.Core.offlineColor : color;
@@ -506,9 +541,15 @@ class DeviceRow extends PureComponent<Props, State> {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
 			},
+			nameTablet: {
+				flex: 1,
+				justifyContent: 'space-between',
+				alignItems: 'flex-start',
+				flexDirection: 'row',
+			},
 			text: {
 				color: Theme.Core.rowTextColor,
-				fontSize: 15,
+				fontSize: nameFontSize,
 				textAlignVertical: 'center',
 				textAlign: 'left',
 				marginLeft: 6,
@@ -549,7 +590,14 @@ class DeviceRow extends PureComponent<Props, State> {
 			textPowerConsumed: {
 				marginLeft: 6,
 				color: Theme.Core.rowTextColor,
-				fontSize: 12,
+				fontSize: infoFontSize,
+				textAlignVertical: 'center',
+			},
+			textPowerConsumedTablet: {
+				marginRight: 6,
+				marginTop: infoFontSize * 0.411,
+				color: Theme.Core.rowTextColor,
+				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 			},
 		};

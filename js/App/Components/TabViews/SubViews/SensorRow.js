@@ -25,6 +25,7 @@ import React, { PureComponent } from 'react';
 import { TouchableOpacity, UIManager, LayoutAnimation, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
+import DeviceInfo from 'react-native-device-info';
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
@@ -113,6 +114,7 @@ class SensorRow extends PureComponent<Props, State> {
 	animatedWidth: any;
 	isAnimating: boolean;
 	animatedScaleX: any;
+	isTablet: boolean;
 
 	state = {
 		currentIndex: 0,
@@ -175,6 +177,8 @@ class SensorRow extends PureComponent<Props, State> {
 		this.animatedWidth = null;
 		this.animatedScaleX = new Animated.Value(1);
 		this.isAnimating = false;
+
+		this.isTablet = DeviceInfo.isTablet();
 
 		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		this.LayoutLinear = {
@@ -466,6 +470,8 @@ class SensorRow extends PureComponent<Props, State> {
 			outputRange: [0, 1, 1],
 		});
 
+		const nameInfo = this.getNameInfo(sensor, sensorName, minutesAgo, lastUpdatedValue, isGatewayActive, styles);
+
 		return (
 			<SwipeRow
 				ref="SwipeRow"
@@ -488,30 +494,7 @@ class SensorRow extends PureComponent<Props, State> {
 						<TouchableOpacity onPress={this.onPressSensorName} disabled={coverOccupiedWidth < coverMaxWidth}
 							style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
-							<View style={styles.name} onLayout={this.onLayoutCover}>
-								<Text style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5 }]}
-									ellipsizeMode="middle"
-									numberOfLines={1}
-									onLayout={this.onLayoutDeviceName}>
-									{sensorName}
-								</Text>
-								<Text style={[
-									styles.time, {
-										color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
-										opacity: minutesAgo < 1440 ? 1 : 0.5,
-									},
-								]}>
-									{isGatewayActive ?
-										<Text style={styles.time}>
-											{lastUpdatedValue}
-										</Text>
-										:
-										<Text style={{color: Theme.Core.rowTextColor}}>
-											{this.offline}
-										</Text>
-									}
-								</Text>
-							</View>
+							{nameInfo}
 						</TouchableOpacity>
 						<AnimatedTouchable onPress={this.changeDisplayType} accessible={false}
 							disabled={sensors.length <= 1}
@@ -534,6 +517,45 @@ class SensorRow extends PureComponent<Props, State> {
 		);
 	}
 
+	getNameInfo(sensor: Object, sensorName: string, minutesAgo: number, lastUpdatedValue: string, isGatewayActive: boolean, styles: Object): Object {
+		let { name, nameTablet, time, timeTablet } = styles;
+		let coverStyle = name;
+		let textInfoStyle = time;
+		if (this.isTablet) {
+			coverStyle = nameTablet;
+			textInfoStyle = timeTablet;
+		}
+		return (
+			<View style={coverStyle} onLayout={this.onLayoutCover}>
+				<Text style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5 }]}
+					ellipsizeMode="middle"
+					numberOfLines={1}
+					onLayout={this.onLayoutDeviceName}>
+					{sensorName}
+				</Text>
+				{isGatewayActive ?
+					<Text style={[
+						textInfoStyle, {
+							color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+							opacity: minutesAgo < 1440 ? 1 : 0.5,
+						},
+					]}>
+						{lastUpdatedValue}
+					</Text>
+					:
+					<Text style={[
+						textInfoStyle, {
+							color: Theme.Core.rowTextColor,
+							opacity: minutesAgo < 1440 ? 1 : 0.5,
+						},
+					]}>
+						{this.offline}
+					</Text>
+				}
+			</View>
+		);
+	}
+
 	changeDisplayType(index: number) {
 		let { data } = this.props.sensor;
 		let { currentIndex } = this.state;
@@ -551,6 +573,22 @@ class SensorRow extends PureComponent<Props, State> {
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean): Object {
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let deviceWidth = isPortrait ? width : height;
+
+		let {
+			rowHeight,
+			maxSizeRowTextOne,
+			maxSizeRowTextTwo,
+			buttonWidth,
+		} = Theme.Core;
+
+		let nameFontSize = Math.floor(deviceWidth * 0.047);
+		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
+
+		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
 		let backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
 
@@ -567,9 +605,15 @@ class SensorRow extends PureComponent<Props, State> {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
 			},
+			nameTablet: {
+				flex: 1,
+				justifyContent: 'space-between',
+				alignItems: 'flex-start',
+				flexDirection: 'row',
+			},
 			nameText: {
 				color: Theme.Core.rowTextColor,
-				fontSize: 15,
+				fontSize: nameFontSize,
 				marginBottom: 2,
 				marginRight: 4,
 			},
@@ -577,7 +621,7 @@ class SensorRow extends PureComponent<Props, State> {
 				marginHorizontal: 12,
 				marginBottom: 5,
 				backgroundColor: '#FFFFFF',
-				height: Theme.Core.rowHeight,
+				height: rowHeight,
 				borderRadius: 2,
 				...Theme.Core.shadow,
 			},
@@ -603,8 +647,16 @@ class SensorRow extends PureComponent<Props, State> {
 				marginHorizontal: 5,
 			},
 			time: {
-				fontSize: 12,
 				color: Theme.Core.rowTextColor,
+				fontSize: infoFontSize,
+				textAlignVertical: 'center',
+			},
+			timeTablet: {
+				marginRight: 6,
+				marginTop: infoFontSize * 0.411,
+				color: Theme.Core.rowTextColor,
+				fontSize: infoFontSize,
+				textAlignVertical: 'center',
 			},
 			scrollView: {
 				alignSelf: 'stretch',
@@ -612,9 +664,9 @@ class SensorRow extends PureComponent<Props, State> {
 				flexDirection: 'row',
 			},
 			sensorValueCover: {
-				width: (Theme.Core.buttonWidth * 2) + 6,
+				width: (buttonWidth * 2) + 6,
 				backgroundColor: backgroundColor,
-				height: Theme.Core.rowHeight,
+				height: rowHeight,
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 			},
