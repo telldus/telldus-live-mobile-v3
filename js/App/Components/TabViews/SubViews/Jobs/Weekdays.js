@@ -32,7 +32,7 @@ type Props = {
     i: number,
     animation: any,
     simulateClick: any,
-    onLayout: (number, number) => void;
+    onLayout: (number, number, string) => void;
 };
 
 export default class Weekdays extends View<Props, null> {
@@ -45,8 +45,8 @@ constructor(props: Props) {
 }
 
 onLayout(ev: Object) {
-	const { onLayout, i } = this.props;
-	onLayout(ev.nativeEvent.layout.width, i);
+	const { onLayout, i, day } = this.props;
+	onLayout(ev.nativeEvent.layout.width, i, day.day);
 }
 
 render(): Object {
