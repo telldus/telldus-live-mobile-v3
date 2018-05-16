@@ -25,6 +25,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import {
 	Text,
@@ -33,6 +34,7 @@ import {
 	TouchableButton,
 	DialogueBox,
 	Header,
+	SafeAreaView,
 } from '../../../BaseComponents';
 import InfoBlock from './InfoBlock';
 import { logoutFromTelldus, showToast } from '../../Actions';
@@ -260,59 +262,61 @@ render(): Object {
 	let importantForAccessibility = showModal ? 'no-hide-descendants' : 'yes';
 
 	return (
-		<View style={styles.container}>
-			<Header leftButton={this.backButton} style={styles.header}/>
-			<ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1}}>
-				<Poster>
-					<View style={styles.posterItemsContainer}>
-						<Text style={[styles.h, styles.h1]}>
-							{this.headerOne}
+		<SafeAreaView>
+			<View style={styles.container}>
+				<Header leftButton={this.backButton} style={styles.header}/>
+				<ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1}}>
+					<Poster>
+						<View style={styles.posterItemsContainer}>
+							<Text style={[styles.h, styles.h1]}>
+								{this.headerOne}
+							</Text>
+							<Text style={[styles.h, styles.h2]}>
+								{this.headerTwo}
+							</Text>
+						</View>
+					</Poster>
+					<View style={styles.body} importantForAccessibility={importantForAccessibility}>
+						<InfoBlock
+							title={this.titleAppInfo}
+							label={this.labelVersion}
+							value={version}/>
+						<InfoBlock
+							title={this.titlePush}
+							label={this.labelPush}
+							value={pushTokenRegistered ? this.valueYes : this.valueNo}
+						/>
+						<Text onPress={this.submitPushToken} style={styles.buttonResubmit}>
+							{submitButText}
 						</Text>
-						<Text style={[styles.h, styles.h2]}>
-							{this.headerTwo}
-						</Text>
+						<InfoBlock
+							title={this.titleUserInfo}
+							label={this.labelLoggedUser}
+							value={email}
+						/>
+						<TouchableButton
+							onPress={this.logout}
+							text={logoutButText}
+							postScript={this.state.isLogoutLoading ? '...' : null}
+							accessibilityLabel={this.labelLogOut}
+							accessible={buttonAccessible}
+							style={{
+								marginTop: 5,
+							}}
+						/>
+						<DialogueBox
+							showDialogue={this.props.showModal}
+							header={notificationHeader}
+							text={this.props.validationMessage}
+							showPositive={showPositive}
+							showNegative={showNegative}
+							positiveText={positiveText}
+							onPressPositive={onPressPositive}
+							onPressNegative={onPressNegative}/>
 					</View>
-				</Poster>
-				<View style={styles.body} importantForAccessibility={importantForAccessibility}>
-					<InfoBlock
-						title={this.titleAppInfo}
-						label={this.labelVersion}
-						value={version}/>
-					<InfoBlock
-						title={this.titlePush}
-						label={this.labelPush}
-						value={pushTokenRegistered ? this.valueYes : this.valueNo}
-					/>
-					<Text onPress={this.submitPushToken} style={styles.buttonResubmit}>
-						{submitButText}
-					</Text>
-					<InfoBlock
-						title={this.titleUserInfo}
-						label={this.labelLoggedUser}
-						value={email}
-					/>
-					<TouchableButton
-						onPress={this.logout}
-						text={logoutButText}
-						postScript={this.state.isLogoutLoading ? '...' : null}
-						accessibilityLabel={this.labelLogOut}
-						accessible={buttonAccessible}
-						style={{
-							marginTop: 5,
-						}}
-					/>
-					<DialogueBox
-						showDialogue={this.props.showModal}
-						header={notificationHeader}
-						text={this.props.validationMessage}
-						showPositive={showPositive}
-						showNegative={showNegative}
-						positiveText={positiveText}
-						onPressPositive={onPressPositive}
-						onPressNegative={onPressNegative}/>
-				</View>
-			</ScrollView>
-		</View>
+				</ScrollView>
+			</View>
+		</SafeAreaView>
 	);
 }
 
@@ -349,7 +353,7 @@ getStyles(appLayout: Object): Object {
 			flex: 1,
 		},
 		header: {
-			height: deviceHeight * 0.11,
+			height: isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.11,
 		},
 		posterItemsContainer: {
 			flex: 1,
