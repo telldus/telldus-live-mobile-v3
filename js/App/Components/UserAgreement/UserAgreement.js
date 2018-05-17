@@ -24,8 +24,9 @@ import React from 'react';
 import { TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, Text, StyleSheet, Poster } from '../../../BaseComponents';
+import { View, Text, StyleSheet, Poster, SafeAreaView } from '../../../BaseComponents';
 import { NavigationHeader } from '../DeviceDetails/SubViews';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -34,6 +35,7 @@ type Props = {
 	showModal: boolean,
 	intl: intlShape,
 	onLayout: (Object) => void;
+	appLayout: Object,
 };
 
 class UserAgreement extends View<Props, null> {
@@ -55,7 +57,9 @@ class UserAgreement extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { showModal } = this.props;
+		const { showModal, appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
 
 		return (
 			<Modal
@@ -64,31 +68,33 @@ class UserAgreement extends View<Props, null> {
 				animationType={'slide'}
 				presentationStyle={'fullScreen'}
 				supportedOrientations={['portrait', 'landscape']}>
-				<View style={styles.modalContainer} onLayout={this.props.onLayout}>
-					<NavigationHeader showLeftIcon={false}/>
-					<Poster>
-						<View style={styles.posterItems}>
-							<Text style={styles.headerText}>
-								{this.header}
+				<SafeAreaView>
+					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
+						<NavigationHeader showLeftIcon={false}/>
+						<Poster>
+							<View style={styles.posterItems}>
+								<Text style={styles.headerText}>
+									{this.header}
+								</Text>
+							</View>
+						</Poster>
+						<ScrollView contentContainerStyle={styles.contentContainerStyle}>
+							<Text style={styles.titleText}>
+								{this.eula}
 							</Text>
-						</View>
-					</Poster>
-					<ScrollView contentContainerStyle={styles.contentContainerStyle}>
-						<Text style={styles.titleText}>
-							{this.eula}
-						</Text>
-						<Text>
+							<Text>
 							Lorem ipsum
-						</Text>
-					</ScrollView>
-					<View style={styles.footer}>
-						<TouchableOpacity style={styles.footerItem} onPress={this.onAgree}>
-							<Text style={styles.footerText}>
-								{this.footer}
 							</Text>
-						</TouchableOpacity>
+						</ScrollView>
+						<View style={[styles.footer, isIphoneX && isPortrait ? { bottom: 30 } : { bottom: 0 }]}>
+							<TouchableOpacity style={styles.footerItem} onPress={this.onAgree}>
+								<Text style={styles.footerText}>
+									{this.footer}
+								</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
-				</View>
+				</SafeAreaView>
 			</Modal>
 		);
 	}
@@ -123,7 +129,6 @@ const styles = StyleSheet.create({
 	},
 	footer: {
 		position: 'absolute',
-		bottom: 0,
 		alignItems: 'flex-end',
 		justifyContent: 'center',
 		width: '100%',
@@ -146,4 +151,10 @@ function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(injectIntl(UserAgreement));
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	return {
+		appLayout: store.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(UserAgreement));
