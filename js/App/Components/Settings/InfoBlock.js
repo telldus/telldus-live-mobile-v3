@@ -31,16 +31,16 @@ import {
 
 import Theme from '../../Theme';
 
-const InfoBlock = ({title, label, value}: Object): Object => (
+const InfoBlock = ({title, label, value, fontSize}: Object): Object => (
 	<View style={styles.blockContainer}>
-		<Text style={styles.titleStyle}>
+		<Text style={[styles.titleStyle, {fontSize}]}>
 			{title}
 		</Text>
 		<View style={styles.infoCover}>
-			<Text style={[styles.infoStyle, styles.infoLabel]}>
+			<Text style={[styles.infoLabel, {fontSize}]}>
 				{label}
 			</Text>
-			<Text style={[styles.infoStyle, styles.infoValue]}>
+			<Text style={[ styles.infoValue, {fontSize}]}>
 				{value}
 			</Text>
 		</View>
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
 	},
 	titleStyle: {
 		marginBottom: 5,
-		fontSize: 14,
 		color: '#b5b5b5',
 	},
 	infoCover: {
@@ -66,9 +65,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		...Theme.Core.shadow,
 		padding: 15,
-	},
-	infoStyle: {
-		fontSize: 14,
 	},
 	infoLabel: {
 		color: '#000',

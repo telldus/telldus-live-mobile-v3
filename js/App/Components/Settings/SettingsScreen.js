@@ -160,10 +160,16 @@ constructor(props: Props) {
 	this.valueYes = formatMessage(i18n.yes);
 	this.valueNo = formatMessage(i18n.no);
 
+	const { appLayout } = this.props;
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceHeight = isPortrait ? height : width;
+	const size = Math.floor(deviceHeight * 0.035);
+
 	this.backButton = {
 		icon: {
 			name: 'angle-left',
-			size: 24,
+			size,
 			color: '#fff',
 			style: null,
 			iconStyle: null,
@@ -287,7 +293,9 @@ render(): Object {
 						<InfoBlock
 							title={this.titleAppInfo}
 							label={this.labelVersion}
-							value={version}/>
+							value={version}
+							fontSize={styles.fontSize}
+						/>
 						<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
 							{this.labelWhatsNew}
 						</Text>
@@ -295,6 +303,7 @@ render(): Object {
 							title={this.titlePush}
 							label={this.labelPush}
 							value={pushTokenRegistered ? this.valueYes : this.valueNo}
+							fontSize={styles.fontSize}
 						/>
 						<Text onPress={this.submitPushToken} style={styles.buttonResubmit}>
 							{submitButText}
@@ -303,6 +312,7 @@ render(): Object {
 							title={this.titleUserInfo}
 							label={this.labelLoggedUser}
 							value={email}
+							fontSize={styles.fontSize}
 						/>
 						<TouchableButton
 							onPress={this.logout}
@@ -311,7 +321,7 @@ render(): Object {
 							accessibilityLabel={this.labelLogOut}
 							accessible={buttonAccessible}
 							style={{
-								marginTop: 5,
+								marginTop: styles.fontSize / 2,
 							}}
 						/>
 						<DialogueBox
@@ -353,12 +363,14 @@ showToast(message: string) {
 }
 
 getStyles(appLayout: Object): Object {
-	const height = appLayout.height;
-	const width = appLayout.width;
+	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceHeight = isPortrait ? height : width;
+	const deviceWidth = isPortrait ? width : height;
+	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	return {
+		fontSize,
 		container: {
 			flex: 1,
 		},
@@ -377,17 +389,17 @@ getStyles(appLayout: Object): Object {
 			color: '#fff',
 		},
 		h1: {
-			fontSize: 30,
+			fontSize: Math.floor(deviceWidth * 0.08),
 		},
 		h2: {
-			fontSize: 20,
+			fontSize: Math.floor(deviceWidth * 0.053333333),
 		},
 		buttonResubmit: {
-			fontSize: 14,
+			fontSize: Math.floor(deviceWidth * 0.045),
 			color: Theme.Core.brandSecondary,
 			alignSelf: 'center',
 			paddingVertical: 5,
-			marginBottom: 5,
+			marginBottom: fontSize / 2,
 		},
 		body: {
 			flex: 1,
