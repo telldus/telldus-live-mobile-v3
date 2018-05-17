@@ -593,6 +593,10 @@ const messages = defineMessages({
 		id: 'dialogue.headerOnHide',
 		defaultMessage: 'Hide this {type}?',
 	},
+	labelWhatsNew: {
+		id: 'settings.labelWhatsNew',
+		defaultMessage: 'What\'s new in this version?',
+	},
 });
 
 export default messages;

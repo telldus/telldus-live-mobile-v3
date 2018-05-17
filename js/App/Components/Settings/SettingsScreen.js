@@ -124,6 +124,7 @@ updateModalVisiblity: () => void;
 onConfirmLogout: () => void;
 closeModal: () => void;
 onCloseSettings: () => void;
+onPressWhatsNew: () => void;
 
 constructor(props: Props) {
 	super(props);
@@ -140,6 +141,7 @@ constructor(props: Props) {
 	this.updateModalVisiblity = this.updateModalVisiblity.bind(this);
 	this.closeModal = this.closeModal.bind(this);
 	this.onCloseSettings = this.onCloseSettings.bind(this);
+	this.onPressWhatsNew = this.onPressWhatsNew.bind(this);
 
 	let { formatMessage } = this.props.intl;
 
@@ -171,6 +173,7 @@ constructor(props: Props) {
 	};
 	this.headerOne = formatMessage(i18n.settingsHeader);
 	this.headerTwo = formatMessage(messages.headerTwoSettings);
+	this.labelWhatsNew = formatMessage(i18n.labelWhatsNew);
 }
 
 onCloseSettings() {
@@ -215,6 +218,10 @@ postLoadMethod(type: string) {
 
 updateModalVisiblity() {
 	this.props.onClose();
+}
+
+onPressWhatsNew() {
+	this.props.navigation.navigate('ChangeLog', { invokedByUser: true });
 }
 
 getRelativeData(): Object {
@@ -281,6 +288,9 @@ render(): Object {
 							title={this.titleAppInfo}
 							label={this.labelVersion}
 							value={version}/>
+						<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
+							{this.labelWhatsNew}
+						</Text>
 						<InfoBlock
 							title={this.titlePush}
 							label={this.labelPush}

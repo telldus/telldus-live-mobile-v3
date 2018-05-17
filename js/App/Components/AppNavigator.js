@@ -53,6 +53,7 @@ import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { SettingsScreen } from './Settings';
+import ChangeLog from './ChangeLog/ChangeLog';
 
 import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
@@ -74,6 +75,12 @@ const RouteConfigs = {
 	},
 	Settings: {
 		screen: SettingsScreen,
+		navigationOptions: {
+			header: null,
+		},
+	},
+	ChangeLog: {
+		screen: ChangeLog,
 		navigationOptions: {
 			header: null,
 		},
