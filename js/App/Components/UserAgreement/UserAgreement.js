@@ -86,7 +86,7 @@ class UserAgreement extends View<Props, null> {
 							Lorem ipsum
 							</Text>
 						</ScrollView>
-						<View style={[styles.footer, isIphoneX && isPortrait ? { bottom: 30 } : { bottom: 0 }]}>
+						<View style={[styles.footer, isIphoneX() && isPortrait ? { bottom: 30 } : { bottom: 0 }]}>
 							<TouchableOpacity style={styles.footerItem} onPress={this.onAgree}>
 								<Text style={styles.footerText}>
 									{this.footer}
