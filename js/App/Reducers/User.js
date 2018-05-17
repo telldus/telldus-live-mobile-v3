@@ -102,6 +102,13 @@ export default function reduceUser(state: State = initialState, action: Action):
 			notificationText: action.message.error_description,
 		};
 	}
+	if (action.type === 'ACCEPT_EULA_SUCCESS') {
+		let userProfile = { ...state.userProfile, eula: action.version };
+		return {
+			...state,
+			userProfile,
+		};
+	}
 	return state;
 }
 
@@ -111,5 +118,6 @@ export const getUserProfile = createSelector(
 		firstname: '',
 		lastname: '',
 		email: '',
+		eula: 0,
 	},
 );

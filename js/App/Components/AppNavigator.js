@@ -39,6 +39,7 @@ import {
 	resetSchedule,
 	getTokenForLocalControl,
 	autoDetectLocalTellStick,
+	setAppLayout,
 } from '../Actions';
 import { getRSAKey } from '../Lib';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -54,6 +55,7 @@ import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { SettingsScreen } from './Settings';
 import ChangeLog from './ChangeLog/ChangeLog';
+import UserAgreement from './UserAgreement/UserAgreement';
 
 import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
@@ -164,6 +166,7 @@ class AppNavigator extends View {
 	onNavigationStateChange: (Object) => void;
 	onDoneDimming: (Object) => void;
 	configureLocalControl: () => void;
+	onLayout: (Object) => void;
 
 	constructor() {
 		super();
@@ -177,6 +180,7 @@ class AppNavigator extends View {
 
 		this.timeOutConfigureLocalControl = null;
 		this.configureLocalControl = this.configureLocalControl.bind(this);
+		this.onLayout = this.onLayout.bind(this);
 	}
 
 	componentWillMount() {
@@ -280,9 +284,13 @@ class AppNavigator extends View {
 		this.props.dispatch(hideDimmerStep());
 	}
 
+	onLayout(ev: Object) {
+		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+	}
+
 	render(): Object {
 		let { currentScreen } = this.state;
-		let { intl, dimmer } = this.props;
+		let { intl, dimmer, userProfile } = this.props;
 		let screenProps = {
 			currentScreen,
 		};
@@ -305,6 +313,7 @@ class AppNavigator extends View {
 					onDoneDimming={this.onDoneDimming}
 					intl={intl}
 				/>
+				<UserAgreement showModal={!userProfile.eula} onLayout={this.onLayout}/>
 			</View>
 		);
 	}
@@ -316,16 +325,18 @@ AppNavigator.propTypes = {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	let { showToast, messageToast, durationToast, positionToast } = state.App;
+	let { accessToken } = state.user;
+
 	return {
-		tab: state.navigation.tab,
-		accessToken: state.user.accessToken,
-		userProfile: getUserProfileSelector(state),
-		dimmer: state.dimmer,
-		gateways: state.gateways.byId,
+		accessToken,
 		showToast,
 		messageToast,
 		durationToast,
 		positionToast,
+		userProfile: getUserProfileSelector(state),
+		dimmer: state.dimmer,
+		gateways: state.gateways.byId,
+		tab: state.navigation.tab,
 	};
 }
 

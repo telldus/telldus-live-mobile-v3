@@ -23,6 +23,7 @@
 import React from 'react';
 import { TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 
@@ -30,17 +31,33 @@ import { View, Text, StyleSheet, Poster, SafeAreaView } from '../../../BaseCompo
 import { NavigationHeader } from '../DeviceDetails/SubViews';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
+import {
+	getEULA,
+	acceptEULA,
+} from '../../Actions';
 
 type Props = {
 	showModal: boolean,
 	intl: intlShape,
 	onLayout: (Object) => void;
 	appLayout: Object,
+	getEULA: any,
+	acceptEULA: any,
 };
 
-class UserAgreement extends View<Props, null> {
+type State = {
+	eulaContent: string | null,
+	eulaVersion: number | null,
+};
+
+class UserAgreement extends View<Props, State> {
 	props: Props;
 	onAgree: () => void;
+
+	state: State = {
+		eulaContent: null,
+		eulaVersion: null,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -52,14 +69,44 @@ class UserAgreement extends View<Props, null> {
 		this.onAgree = this.onAgree.bind(this);
 	}
 
-	onAgree() {
-		// TODO once the EULA enpoints are released call 'acceptEULA' with required parameters.
+	componentDidMount() {
+		this.props.getEULA().then((res: Object) => {
+			const { text: eulaContent, version: eulaVersion } = res;
+			if (eulaContent && eulaVersion) {
+				this.setState({
+					eulaContent,
+					eulaVersion,
+				});
+			} else {
+				this.setState({
+					eulaContent: null,
+					eulaVersion: null,
+				});
+			}
+		}).catch(() => {
+			this.setState({
+				eulaContent: null,
+				eulaVersion: null,
+			});
+		});
 	}
 
-	render(): Object {
+	onAgree() {
+		let { eulaVersion } = this.state;
+		this.props.acceptEULA(eulaVersion);
+	}
+
+	render(): Object | null {
 		const { showModal, appLayout } = this.props;
+		const { eulaContent } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+
+		if (!eulaContent) {
+			return null;
+		}
+
+		const styles = this.getStyles(appLayout);
 
 		return (
 			<Modal
@@ -71,20 +118,25 @@ class UserAgreement extends View<Props, null> {
 				<SafeAreaView>
 					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
 						<NavigationHeader showLeftIcon={false}/>
-						<Poster>
-							<View style={styles.posterItems}>
-								<Text style={styles.headerText}>
-									{this.header}
+						<ScrollView
+							style={styles.scrollView}
+							contentContainerStyle={styles.SVContentContainerStyle}>
+							<Poster>
+								<View style={styles.posterItems}>
+									<Text style={styles.headerText}>
+										{this.header}
+									</Text>
+								</View>
+							</Poster>
+							<View style={styles.contentContainerStyle}>
+								<Text style={styles.titleText}>
+									{this.eula}
+								</Text>
+								<Text/>
+								<Text style={styles.body}>
+									{eulaContent}
 								</Text>
 							</View>
-						</Poster>
-						<ScrollView contentContainerStyle={styles.contentContainerStyle}>
-							<Text style={styles.titleText}>
-								{this.eula}
-							</Text>
-							<Text>
-							Lorem ipsum
-							</Text>
 						</ScrollView>
 						<View style={[styles.footer, isIphoneX() && isPortrait ? { bottom: 30 } : { bottom: 0 }]}>
 							<TouchableOpacity style={styles.footerItem} onPress={this.onAgree}>
@@ -98,56 +150,79 @@ class UserAgreement extends View<Props, null> {
 			</Modal>
 		);
 	}
-}
 
-const styles = StyleSheet.create({
-	modalContainer: {
-		flex: 1,
-		backgroundColor: '#fff',
-	},
-	posterItems: {
-		position: 'absolute',
-		top: 0,
-		bottom: 0,
-		left: 0,
-		right: 0,
-		alignItems: 'center',
-		justifyContent: 'center',
-		paddingHorizontal: 20,
-	},
-	contentContainerStyle: {
-		paddingHorizontal: 15,
-		paddingVertical: 20,
-	},
-	headerText: {
-		fontSize: 18,
-		color: '#fff',
-		textAlign: 'center',
-	},
-	titleText: {
-		fontSize: 20,
-	},
-	footer: {
-		position: 'absolute',
-		alignItems: 'flex-end',
-		justifyContent: 'center',
-		width: '100%',
-		borderTopWidth: StyleSheet.hairlineWidth,
-		borderTopColor: '#00000040',
-	},
-	footerItem: {
-		padding: 15,
-	},
-	footerText: {
-		fontSize: 14,
-		color: Theme.Core.brandSecondary,
-		fontWeight: 'bold',
-	},
-});
+	getStyles(appLayout: Object): Object {
+		const height = appLayout.height;
+		const width = appLayout.width;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const footerHeight = Math.floor(deviceWidth * 0.13);
+
+		return {
+			modalContainer: {
+				flex: 1,
+				backgroundColor: '#fff',
+			},
+			posterItems: {
+				position: 'absolute',
+				top: 0,
+				bottom: 0,
+				left: 0,
+				right: 0,
+				alignItems: 'center',
+				justifyContent: 'center',
+				paddingHorizontal: 20,
+			},
+			scrollView: {
+				flex: 1,
+				marginBottom: footerHeight,
+			},
+			SVContentContainerStyle: {
+				flexGrow: 1,
+			},
+			contentContainerStyle: {
+				paddingHorizontal: 15,
+				paddingVertical: 20,
+			},
+			headerText: {
+				fontSize: Math.floor(deviceWidth * 0.047),
+				color: '#fff',
+				textAlign: 'center',
+			},
+			titleText: {
+				fontSize: Math.floor(deviceWidth * 0.055),
+			},
+			body: {
+				fontSize: Math.floor(deviceWidth * 0.033),
+			},
+			footer: {
+				position: 'absolute',
+				alignItems: 'flex-end',
+				justifyContent: 'center',
+				width: '100%',
+				borderTopWidth: StyleSheet.hairlineWidth,
+				borderTopColor: '#00000040',
+				backgroundColor: '#fff',
+				height: footerHeight,
+				maxHeight: 100,
+			},
+			footerItem: {
+				padding: 10,
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			footerText: {
+				fontSize: Math.floor(deviceWidth * 0.04),
+				color: Theme.Core.brandSecondary,
+				fontWeight: 'bold',
+			},
+		};
+	}
+}
 
 function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 	return {
-		dispatch,
+		...bindActionCreators({ getEULA, acceptEULA }, dispatch),
 	};
 }
 
