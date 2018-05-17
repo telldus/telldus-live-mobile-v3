@@ -99,10 +99,14 @@ class TouchableButton extends Component<Props, void> {
 	}
 
 	getStyle = (): Object => {
-		let { appLayout } = this.props;
-		const width = appLayout.width;
-		const height = appLayout.height;
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const maxFontSize = 26;
+
+		let fontSize = deviceWidth * 0.04;
+		fontSize = fontSize > maxFontSize ? maxFontSize : fontSize;
 
 		return {
 			buttonContainer: {
@@ -110,14 +114,14 @@ class TouchableButton extends Component<Props, void> {
 				paddingVertical: 18,
 				width: isPortrait ? width * 0.5 : height * 0.5,
 				maxWidth: 250,
-				borderRadius: 30,
+				borderRadius: 18 + fontSize,
 				alignSelf: 'center',
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
 			buttonLabel: {
 				color: '#ffffff',
-				fontSize: Theme.Core.btnTextSize,
+				fontSize,
 
 				textAlign: 'center',
 				textAlignVertical: 'center',
