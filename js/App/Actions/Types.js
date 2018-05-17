@@ -107,6 +107,9 @@ export type Action =
 	| { type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_ERROR', payload: Object }
 	| { type: 'GATEWAY_AUTO_DETECT_LOCAL_SUCCESS', payload: Object }
 	| { type: typeof REHYDRATE }
+
+	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
+	| { type: 'ACCEPT_EULA_ERROR' }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

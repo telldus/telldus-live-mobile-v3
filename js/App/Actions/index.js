@@ -38,6 +38,7 @@ import ModalActions from './Modal';
 import WebSocketActions from './Websockets';
 import AppActions from './App';
 import ScheduleActions from './Schedule';
+import UserActions from './User';
 
 module.exports = {
 	...GatewayActions,
@@ -56,4 +57,5 @@ module.exports = {
 	...WebSocketActions,
 	...AppActions,
 	...ScheduleActions,
+	...UserActions,
 };

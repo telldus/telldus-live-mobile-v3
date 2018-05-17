@@ -21,20 +21,22 @@
 // @flow
 
 'use strict';
+import { Answers } from 'react-native-fabric';
+import { format } from 'url';
+
+// User actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { User } = actions;
 
 import type { ThunkAction } from './Types';
-
-import {LiveApi} from '../Lib';
 import { publicKey, privateKey, apiServer } from '../../Config';
+import { LiveApi, reportError } from '../Lib';
 
-import { format } from 'url';
-import { reportError } from '../Lib';
-import { Answers } from 'react-native-fabric';
 
 /*
  * registers the app at the telldus server for receiving push notification, with push token and other device information.
  */
-export const registerPushToken = (token: string, name: string, model: string, manufacturer: string, osVersion: string, deviceId: string, pushServiceId: number ): ThunkAction => (dispatch: Function): Promise<any> => {
+const registerPushToken = (token: string, name: string, model: string, manufacturer: string, osVersion: string, deviceId: string, pushServiceId: number ): ThunkAction => (dispatch: Function): Promise<any> => {
 	const url = format({
 		pathname: '/user/registerPushToken',
 		query: {
@@ -85,7 +87,7 @@ export const registerPushToken = (token: string, name: string, model: string, ma
 /*
  * unregisters the app at the telldus server from receiving push notification, with the registered push token.
  */
-export const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function): Promise<any> => {
+const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function): Promise<any> => {
 	const url = format({
 		pathname: '/user/unregisterPushToken',
 		query: {
@@ -122,7 +124,7 @@ export const unregisterPushToken = (token: string): ThunkAction => (dispatch: Fu
 	});
 };
 
-export const RegisterUser = (email: string, firstName: string, lastName: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
+const RegisterUser = (email: string, firstName: string, lastName: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	let formData = new FormData();
 	formData.append('email', email);
 	formData.append('firstname', firstName);
@@ -151,4 +153,12 @@ export const RegisterUser = (email: string, firstName: string, lastName: string)
 			Answers.logSignUp('Email', false);
 			throw e;
 		});
+};
+
+
+module.exports = {
+	...User,
+	registerPushToken,
+	RegisterUser,
+	unregisterPushToken,
 };
