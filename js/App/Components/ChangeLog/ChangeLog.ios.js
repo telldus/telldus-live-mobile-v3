@@ -227,7 +227,7 @@ class ChangeLogNavigator extends View {
 		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
 		const isLastScreen = Screens.indexOf(currentScreen) === Screens.length - 1;
 
-		let { stepIndicatorCover, floatingButtonLeft } = this.getStyles(appLayout);
+		let { stepIndicatorCover, floatingButtonLeft, checkIconStyle, textSkip, stepIndicator } = this.getStyles(appLayout);
 
 		let inputRange = width ? [-width, 0] : [-100, 0];
 		let outputRange = width ? [width, 0] : [-100, 0];
@@ -253,9 +253,14 @@ class ChangeLogNavigator extends View {
 				<NavigationHeader showLeftIcon={false}/>
 				<ChangeLogPoster h1={h1} h2={h2}/>
 				<ScrollView>
-					<AnimatedWizard intl={intl} currentScreen={currentScreen} animatedX={animatedX} animatedOpacity={animatedOpacity}/>
+					<AnimatedWizard
+						intl={intl}
+						currentScreen={currentScreen}
+						animatedX={animatedX}
+						animatedOpacity={animatedOpacity}
+						appLayout={appLayout}/>
 					<View style={styles.buttonCover}>
-						<Text style={styles.textSkip} onPress={this.onPressSkip}>
+						<Text style={textSkip} onPress={this.onPressSkip}>
 							{this.skipButton}
 						</Text>
 					</View>
@@ -269,13 +274,13 @@ class ChangeLogNavigator extends View {
 						{Screens.map((screen: string, index: number): Object => {
 							let backgroundColor = Screens[index] === currentScreen ?
 								Theme.Core.brandSecondary : '#00000080';
-							return <View style={[styles.stepIndicator, { backgroundColor }]} key={index}/>;
+							return <View style={[stepIndicator, { backgroundColor }, !index && {marginLeft: 0 }]} key={index}/>;
 						})
 						}
 						<FloatingButton
 							imageSource={isLastScreen ? false : require('../TabViews/img/right-arrow-key.png')}
 							iconName={isLastScreen ? 'checkmark' : false}
-							iconStyle={isLastScreen ? styles.checkIconStyle : {}}
+							iconStyle={isLastScreen ? checkIconStyle : {}}
 							onPress={this.onPressNext}
 							buttonStyle={{bottom: 0}}/>
 					</View>
@@ -289,6 +294,11 @@ class ChangeLogNavigator extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const buttonSize = deviceWidth * 0.134666667;
+		const stepIndicatorSize = Math.floor(deviceWidth * 0.033);
+		const maxIconSize = 40;
+
+		let iconSize = Math.floor(deviceWidth * 0.07);
+		iconSize = iconSize > maxIconSize ? maxIconSize : iconSize;
 
 		return {
 			stepIndicatorCover: {
@@ -299,9 +309,25 @@ class ChangeLogNavigator extends View {
 				height: buttonSize,
 				...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
 			},
+			stepIndicator: {
+				height: stepIndicatorSize,
+				width: stepIndicatorSize,
+				borderRadius: stepIndicatorSize / 2,
+				marginLeft: stepIndicatorSize * 0.7,
+			},
 			floatingButtonLeft: {
 				left: deviceWidth * 0.034666667,
 				bottom: 0,
+			},
+			checkIconStyle: {
+				color: '#fff',
+				fontSize: iconSize,
+			},
+			textSkip: {
+				paddingVertical: 10,
+				color: Theme.Core.brandSecondary,
+				textAlign: 'center',
+				fontSize: Math.floor(deviceWidth * 0.039),
 			},
 		};
 	}
@@ -313,23 +339,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
 	},
-	textSkip: {
-		paddingVertical: 10,
-		color: Theme.Core.brandSecondary,
-		textAlign: 'center',
-	},
-	stepIndicator: {
-		height: 10,
-		width: 10,
-		borderRadius: 5,
-		marginLeft: 7,
-	},
 	buttonIconStyle: {
 		transform: [{rotateZ: '180deg'}],
-	},
-	checkIconStyle: {
-		color: '#fff',
-		fontSize: 26,
 	},
 });
 

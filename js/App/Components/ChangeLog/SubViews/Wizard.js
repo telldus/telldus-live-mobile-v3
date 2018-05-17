@@ -71,6 +71,7 @@ type Props = {
 	currentScreen: string,
 	animatedX: Object,
 	animatedOpacity: Object,
+	appLayout: Object,
 };
 
 export default class WizardOne extends PureComponent<Props, null> {
@@ -108,9 +109,9 @@ export default class WizardOne extends PureComponent<Props, null> {
 		this.descriptionWFour = formatMessage(messages.WizardFourDescription36);
 	}
 
-	getScreenData(currentScreen: string): Object {
-		let icon = null, iconTwo = null, iconThree = null, iconSize = 100, iconTwoSize = 100, iconThreeSize = 100,
-			title = '', description = '';
+	getScreenData(currentScreen: string, deviceWidth: number): Object {
+		let icon = null, iconTwo = null, iconThree = null, iconSize = Math.floor(deviceWidth * 0.315),
+			iconTwoSize = Math.floor(deviceWidth * 0.315), iconThreeSize = Math.floor(deviceWidth * 0.315), title = '', description = '';
 		switch (currentScreen) {
 			case 'WizardOne':
 				icon = 'time';
@@ -124,16 +125,16 @@ export default class WizardOne extends PureComponent<Props, null> {
 				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
 			case 'WizardThree':
 				icon = 'buttononoff';
-				iconSize = 110;
+				iconSize = Math.floor(deviceWidth * 0.345);
 				title = this.titleWThree;
 				description = this.descriptionWThree;
 				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
 			case 'WizardFour':
 				icon = 'hidden';
 				iconTwo = 'favorite-outline';
-				iconTwoSize = 70;
+				iconTwoSize = Math.floor(deviceWidth * 0.22);
 				iconThree = 'settings';
-				iconThreeSize = 70;
+				iconThreeSize = Math.floor(deviceWidth * 0.22);
 				title = this.titleWFour;
 				description = this.descriptionWFour;
 				return { icon, iconTwo, iconSize, iconTwoSize, iconThreeSize, iconThree, title, description };
@@ -146,12 +147,18 @@ export default class WizardOne extends PureComponent<Props, null> {
 	}
 
 	render(): Object {
-		const { currentScreen, animatedX, animatedOpacity } = this.props;
+		const { currentScreen, animatedX, animatedOpacity, appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 		const { icon, iconTwo, iconThree, iconSize, iconTwoSize, iconThreeSize,
-			title, description } = this.getScreenData(currentScreen);
+			title, description } = this.getScreenData(currentScreen, deviceWidth);
+
+		const { container, titleStyle, descriptionStyle } = this.getStyles(appLayout);
+
 		// IconTelldus, on setting different font sizes causing alignment issue. So, handling with negative margin.
 		return (
-			<View style={[styles.container, {opacity: animatedOpacity, transform: [{
+			<View style={[container, {opacity: animatedOpacity, transform: [{
 				translateX: animatedX,
 			}]}]}>
 				<View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: iconTwo ? -16 : 0}}>
@@ -159,14 +166,45 @@ export default class WizardOne extends PureComponent<Props, null> {
 					{iconTwo && <IconTelldus icon={iconTwo} style={styles.iconTwo} size={iconTwoSize}/>}
 					{iconThree && <IconTelldus icon={iconThree} style={styles.iconThree} size={iconThreeSize}/>}
 				</View>
-				<Text style={styles.title}>
+				<Text style={titleStyle}>
 					{title}
 				</Text>
-				<Text style={styles.description}>
+				<Text style={descriptionStyle}>
 					{description}
 				</Text>
 			</View>
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const titleFontSize = Math.floor(deviceWidth * 0.052);
+
+		return {
+			container: {
+				...Theme.Core.shadow,
+				backgroundColor: '#fff',
+				justifyContent: 'center',
+				alignItems: 'center',
+				paddingHorizontal: titleFontSize,
+				paddingVertical: titleFontSize,
+				marginHorizontal: 10,
+				marginVertical: 10,
+			},
+			titleStyle: {
+				fontSize: titleFontSize,
+				color: '#00000090',
+				textAlign: 'center',
+				marginVertical: 10,
+			},
+			descriptionStyle: {
+				fontSize: Math.floor(deviceWidth * 0.042),
+				color: '#00000080',
+				textAlign: 'left',
+			},
+		};
 	}
 }
 const styles = StyleSheet.create({
@@ -188,27 +226,6 @@ const styles = StyleSheet.create({
 		marginTop: Platform.OS === 'ios' ? 10 : 0,
 		marginLeft: 12,
 		textAlign: 'center',
-	},
-	container: {
-		...Theme.Core.shadow,
-		backgroundColor: '#fff',
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingHorizontal: 15,
-		paddingVertical: 15,
-		marginHorizontal: 10,
-		marginVertical: 10,
-	},
-	title: {
-		fontSize: 20,
-		color: '#00000090',
-		textAlign: 'center',
-		marginVertical: 10,
-	},
-	description: {
-		fontSize: 14,
-		color: '#00000080',
-		textAlign: 'left',
 	},
 });
 
