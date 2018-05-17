@@ -231,13 +231,13 @@ class TimeZone extends View<void, Props, State> {
 			},
 			timeZone: {
 				color: '#00000099',
-				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
+				fontSize: 20,
 				paddingLeft: 2,
 				marginRight: 10,
 			},
 			hint: {
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: 16,
 				paddingLeft: 2,
 			},
 			buttonStyle: {

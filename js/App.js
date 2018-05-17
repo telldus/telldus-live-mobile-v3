@@ -108,9 +108,19 @@ class App extends React.Component<Props, null> {
 
 		let showChangeLog = changeLogVersion !== prevChangeLogVersion;
 		if (showChangeLog) {
+			// Same 'ChangeLogNavigator' is used as a navigator screen in post-login navigator,
+			// So passing a property 'navigation' with key `state', just to reduce the conditional
+			// check done inside the 'ChangeLogNavigator' to handle two situations.
+			const navigation = {
+				state: {
+					params: null,
+				},
+			};
 			return (
 				<View onLayout={this.onLayout}>
-					<ChangeLogNavigator changeLogVersion={changeLogVersion}/>
+					<ChangeLogNavigator
+						changeLogVersion={changeLogVersion}
+						navigation={navigation}/>
 					<UserAgreement showModal={!eula} onLayout={this.onLayout}/>
 				</View>
 			);

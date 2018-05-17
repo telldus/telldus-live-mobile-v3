@@ -29,7 +29,7 @@ import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
 import { Text, View, TouchableButton, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
-import { DeviceRow } from './SubViews';
+import { DeviceRow, DeviceHeader } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
@@ -253,11 +253,10 @@ class DevicesTab extends View {
 
 	renderSectionHeader(sectionData: Object): Object {
 		return (
-			<View style={Theme.Styles.sectionHeaderNew}>
-				<Text style={Theme.Styles.sectionHeaderTextNew}>
-					{sectionData.section.key}
-				</Text>
-			</View>
+			<DeviceHeader
+				gateway={sectionData.section.key}
+				appLayout={this.props.appLayout}
+			/>
 		);
 	}
 
@@ -510,6 +509,13 @@ class DevicesTab extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		let hiddenListTextFontSize = Math.floor(deviceWidth * 0.049);
+		hiddenListTextFontSize = hiddenListTextFontSize > 25 ? 25 : hiddenListTextFontSize;
+
+		let hiddenListIconFontSize = Math.floor(deviceWidth * 0.088);
+		hiddenListIconFontSize = hiddenListIconFontSize > 50 ? 50 : hiddenListIconFontSize;
+
+
 		return {
 			noItemsContainer: {
 				flex: 1,
@@ -564,12 +570,12 @@ class DevicesTab extends View {
 			},
 			toggleHiddenListIcon: {
 				marginTop: 4,
-				fontSize: 34,
+				fontSize: hiddenListIconFontSize,
 				color: Theme.Core.rowTextColor,
 			},
 			toggleHiddenListText: {
 				marginLeft: 6,
-				fontSize: 16,
+				fontSize: hiddenListTextFontSize,
 				textAlign: 'center',
 				color: Theme.Core.rowTextColor,
 			},

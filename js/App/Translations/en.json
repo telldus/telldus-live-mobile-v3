@@ -259,6 +259,7 @@
   "settings": "Settings",
   "settings.addNewLocation": "Add New Location",
   "settings.connectedLocations": "Connected Locations",
+  "settings.labelWhatsNew": "What's new in this version?",
   "settings.pushReRegister": "Re-register phone for push notifications",
   "settings.pushRegisterFailed": "Failed to register for push. Please try again",
   "settings.pushRegisterSuccess": "This phone is now registered for push",

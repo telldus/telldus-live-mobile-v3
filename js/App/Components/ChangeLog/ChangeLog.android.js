@@ -64,6 +64,7 @@ type Props = {
 	changeLogVersion?: string,
 	dispatch: Function,
 	changeLogVersion: string,
+	navigation: Object,
 };
 
 type State = {
@@ -137,16 +138,21 @@ class ChangeLogNavigator extends View {
 	}
 
 	onPressNext() {
-		let { dispatch, changeLogVersion, appLayout } = this.props;
+		let { dispatch, changeLogVersion, appLayout, navigation } = this.props;
 		let { currentScreen } = this.state;
 		let nextIndex = Screens.indexOf(currentScreen) + 1;
 		let nextScreen = Screens[nextIndex];
 
 		let isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
 		if (isFinalScreen) {
-			dispatch(setChangeLogVersion(changeLogVersion));
-			let customLayoutAnimation = CustomLayoutAnimation(500);
-			LayoutAnimation.configureNext(customLayoutAnimation);
+			let { params } = navigation.state;
+			if (params && params.invokedByUser) {
+				navigation.goBack();
+			} else {
+				dispatch(setChangeLogVersion(changeLogVersion));
+				let customLayoutAnimation = CustomLayoutAnimation(500);
+				LayoutAnimation.configureNext(customLayoutAnimation);
+			}
 		} else {
 			this.setState({
 				currentScreen: nextScreen,
@@ -200,11 +206,16 @@ class ChangeLogNavigator extends View {
 	}
 
 	onPressSkip() {
-		let { dispatch, changeLogVersion } = this.props;
-		let customLayoutAnimation = CustomLayoutAnimation(500);
+		let { dispatch, changeLogVersion, navigation } = this.props;
+		let { params } = navigation.state;
+		if (params && params.invokedByUser) {
+			navigation.goBack();
+		} else {
+			let customLayoutAnimation = CustomLayoutAnimation(500);
 
-		dispatch(setChangeLogVersion(changeLogVersion));
-		LayoutAnimation.configureNext(customLayoutAnimation);
+			dispatch(setChangeLogVersion(changeLogVersion));
+			LayoutAnimation.configureNext(customLayoutAnimation);
+		}
 	}
 
 

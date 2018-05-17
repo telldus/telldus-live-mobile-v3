@@ -605,6 +605,10 @@ const messages = defineMessages({
 		id: 'label.iAgree',
 		defaultMessage: 'I Agree',
 	},
+	labelWhatsNew: {
+		id: 'settings.labelWhatsNew',
+		defaultMessage: 'What\'s new in this version?',
+	},
 });
 
 export default messages;

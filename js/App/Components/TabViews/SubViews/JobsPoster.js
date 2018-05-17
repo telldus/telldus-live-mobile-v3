@@ -25,7 +25,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Image, TouchableOpacity } from 'react-native';
 import Platform from 'Platform';
-import moment from 'moment';
 
 import { Poster, View } from '../../../../BaseComponents';
 import Weekdays from './Jobs/Weekdays';
@@ -45,7 +44,7 @@ type State = {
 
 export default class JobsPoster extends View<null, Props, State> {
 
-	onLayout: (number, number) => void;
+	onLayout: (number, number, string) => void;
 
 	static propTypes = {
 		days: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -66,7 +65,6 @@ export default class JobsPoster extends View<null, Props, State> {
 			daysLayout: {},
 		};
 
-		this.daysLayout = {};
 		this.weekDaysLayout = {};
 		this.onLayout = this.onLayout.bind(this);
 	}
@@ -165,7 +163,7 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { todayIndex } = this.state;
 
 		return this.props.days.map((day: Object, i: number): React$Element<Animated.View> => {
-			const animation = this._getDayAnimation(i);
+			const animation = this._getDayAnimation(i, day.day);
 
 			let simulateClick = {};
 
@@ -248,9 +246,9 @@ export default class JobsPoster extends View<null, Props, State> {
 		).start();
 	};
 
-	_getDayAnimation = (index: number): Object => {
+	_getDayAnimation = (index: number, weekday: string): Object => {
 		const { todayIndex } = this.state;
-		const animatedStyle = this._getDayAnimatedStyle(index);
+		const animatedStyle = this._getDayAnimatedStyle(index, weekday);
 
 		switch (index) {
 			case todayIndex - 2:
@@ -299,14 +297,14 @@ export default class JobsPoster extends View<null, Props, State> {
 		});
 	};
 
-	_getDayAnimatedStyle = (index: number): Object => {
+	_getDayAnimatedStyle = (index: number, weekday: string): Object => {
 		const { appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
 
-		const dayWidth = this._getDayWidth(index);
+		const dayWidth = this._getDayWidth(weekday);
 		const dayHeight = deviceWidth * 0.1;
 		const todayWidth = (width - headerHeight) * 0.44;
 		const todayOffset = (width - headerHeight) * 0.205333333;
@@ -356,11 +354,11 @@ export default class JobsPoster extends View<null, Props, State> {
 						:
 						0,
 					top: this._interpolate(dayTop, dayTop, todayTop),
+					width: dayWidth ? this._interpolate(dayWidth, dayWidth, todayWidth) : undefined,
 				},
 				text: {
 					...day.text,
 					fontSize: this._interpolate(dayFontSize, dayFontSize, todayFontSize),
-					width: dayWidth ? this._interpolate(dayWidth, dayWidth, todayWidth) : undefined,
 				},
 			},
 			today: {
@@ -369,11 +367,11 @@ export default class JobsPoster extends View<null, Props, State> {
 					left: this.scrollRight ? this._interpolate(0, todayOffset, 100) : null,
 					right: this.scrollRight ? null : this._interpolate(100, todayOffset, 0),
 					top: this._interpolate(dayTop, todayTop, dayTop),
+					width: dayWidth ? this._interpolate(dayWidth, todayWidth, dayWidth) : todayWidth,
 				},
 				text: {
 					...day.text,
 					fontSize: this._interpolate(dayFontSize, todayFontSize, dayFontSize),
-					width: dayWidth ? this._interpolate(dayWidth, todayWidth, dayWidth) : todayWidth,
 				},
 			},
 			tomorrow: {
@@ -385,21 +383,21 @@ export default class JobsPoster extends View<null, Props, State> {
 						:
 						0,
 					top: this._interpolate(todayTop, dayTop, dayTop),
+					width: dayWidth ? this._interpolate(todayWidth, dayWidth, dayWidth) : undefined,
 				},
 				text: {
 					...day.text,
 					fontSize: this._interpolate(todayFontSize, dayFontSize, dayFontSize),
-					width: dayWidth ? this._interpolate(todayWidth, dayWidth, dayWidth) : undefined,
 				},
 			},
 			afterTomorrow: {
 				container: {
 					...day.container,
-					left: null,
+					left: dayWidth ? null : '100%',
 					right: dayWidth ?
 						this._interpolate(0, 0 - dayWidth, 0 - 2 * dayWidth)
 						:
-						-50,
+						null,
 				},
 				text: day.text,
 			},
@@ -505,25 +503,15 @@ export default class JobsPoster extends View<null, Props, State> {
 		};
 	};
 
-	_getDayWidth = (i: number): any => {
+	_getDayWidth = (weekday: string): any => {
 		const { daysLayout } = this.state;
-		const { formatDate } = this.props.intl;
-		const day = moment().weekday(i);
-		const weekday = formatDate(day, {weekday: 'long'});
-
 		return daysLayout[weekday] ? daysLayout[weekday] : false;
 	};
 
-	onLayout(width: number, i: number) {
+	onLayout(width: number, i: number, weekday: string) {
 		const { todayIndex } = this.state;
-		if (!this.daysLayout[i] && i !== todayIndex) {
-			this.daysLayout[i] = width;
-
-			const { formatDate } = this.props.intl;
-			const day = moment().weekday(i);
-			const weekday = formatDate(day, {weekday: 'long'});
+		if (!this.weekDaysLayout[weekday] && i !== todayIndex) {
 			this.weekDaysLayout[weekday] = width + 5;
-
 			let length = Object.keys(this.weekDaysLayout).length;
 			if (length > 5) {
 				this.setState({

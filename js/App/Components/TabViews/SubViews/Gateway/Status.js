@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
 
@@ -32,9 +33,10 @@ type Props = {
     websocketOnline: boolean,
 	intl: Object,
 	textStyle?: number | Object | Array<any>,
+	appLayout: Object,
 };
 
-export default class GatewayStatus extends View<Props, null> {
+class GatewayStatus extends View<Props, null> {
 props: Props;
 
 online: string;
@@ -53,13 +55,17 @@ constructor(props: Props) {
 
 render(): Object {
 	let { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
-	let { online, websocketOnline, textStyle } = this.props;
+	let { online, websocketOnline, textStyle, appLayout } = this.props;
+	let {
+		statusText,
+		statusInfo,
+	} = this.getStyles(appLayout);
 
 	if (!online) {
 		return (
 			<View style={styles.statusInfoCover}>
-				<View style={[styles.statusInfo, { backgroundColor: locationOffline}]}/>
-				<Text style={[styles.statusText, textStyle]}>
+				<View style={[statusInfo, { backgroundColor: locationOffline}]}/>
+				<Text style={[statusText, textStyle]}>
 					{this.offline}
 				</Text>
 			</View>
@@ -67,8 +73,8 @@ render(): Object {
 	} else if (!websocketOnline) {
 		return (
 			<View style={styles.statusInfoCover}>
-				<View style={[styles.statusInfo, { backgroundColor: locationNoLiveUpdates}]}/>
-				<Text style={[styles.statusText, textStyle]}>
+				<View style={[statusInfo, { backgroundColor: locationNoLiveUpdates}]}/>
+				<Text style={[statusText, textStyle]}>
 					{this.noLiveUpdates}
 				</Text>
 			</View>
@@ -76,12 +82,42 @@ render(): Object {
 	}
 	return (
 		<View style={styles.statusInfoCover}>
-			<View style={[styles.statusInfo, { backgroundColor: locationOnline}]}/>
-			<Text style={[styles.statusText, textStyle]}>
+			<View style={[statusInfo, { backgroundColor: locationOnline}]}/>
+			<Text style={[statusText, textStyle]}>
 				{this.online}
 			</Text>
 		</View>
 	);
+}
+
+getStyles(appLayout: Object): Object {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	let textLocationSize = Math.floor(deviceWidth * 0.042);
+	textLocationSize = textLocationSize > 18 ? 18 : textLocationSize;
+
+	let statusInfoSize = Math.floor(deviceWidth * 0.038);
+	statusInfoSize = statusInfoSize > 15 ? 15 : statusInfoSize;
+
+	let fontSize = textLocationSize;
+
+	return {
+		statusInfo: {
+			width: statusInfoSize,
+			height: statusInfoSize,
+			borderRadius: statusInfoSize / 2,
+			marginTop: 3,
+			marginRight: 5,
+		},
+		statusText: {
+			fontSize,
+			textAlignVertical: 'center',
+			color: '#A59F9A',
+			marginTop: 2,
+		},
+	};
 }
 }
 
@@ -91,17 +127,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
-	statusInfo: {
-		width: 10,
-		height: 10,
-		borderRadius: 5,
-		marginTop: 3,
-		marginRight: 5,
-	},
-	statusText: {
-		fontSize: 13,
-		textAlignVertical: 'center',
-		color: '#A59F9A',
-		marginTop: 2,
-	},
 });
+
+function mapStateToProps(store: Object): Object {
+	return {
+		appLayout: store.App.layout,
+	};
+}
+
+export default connect(mapStateToProps, null)(GatewayStatus);

@@ -64,6 +64,8 @@ export default {
 
 	rowHeight: 60,
 	buttonWidth: 60,
+	maxSizeRowTextOne: 24,
+	maxSizeRowTextTwo: 18,
 
 	fontSizeBase: 12,
 	titleFontSize: (Platform.OS === 'ios' ) ? 17 : 19,
