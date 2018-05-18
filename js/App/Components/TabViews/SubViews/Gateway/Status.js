@@ -96,10 +96,10 @@ getStyles(appLayout: Object): Object {
 	const deviceWidth = isPortrait ? width : height;
 
 	let textLocationSize = Math.floor(deviceWidth * 0.042);
-	textLocationSize = textLocationSize > 18 ? 18 : textLocationSize;
+	textLocationSize = textLocationSize > 28 ? 28 : textLocationSize;
 
 	let statusInfoSize = Math.floor(deviceWidth * 0.038);
-	statusInfoSize = statusInfoSize > 15 ? 15 : statusInfoSize;
+	statusInfoSize = statusInfoSize > 25 ? 25 : statusInfoSize;
 
 	let fontSize = textLocationSize;
 

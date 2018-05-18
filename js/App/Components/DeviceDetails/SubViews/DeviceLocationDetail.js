@@ -114,10 +114,10 @@ class DeviceLocationDetail extends View {
 		const deviceWidth = isPortrait ? width : height;
 
 		let textHSHSize = Math.floor(deviceWidth * 0.054);
-		textHSHSize = textHSHSize > 25 ? 25 : textHSHSize;
+		textHSHSize = textHSHSize > 35 ? 35 : textHSHSize;
 
 		let textLocationSize = Math.floor(deviceWidth * 0.045);
-		textLocationSize = textLocationSize > 19 ? 19 : textLocationSize;
+		textLocationSize = textLocationSize > 29 ? 29 : textLocationSize;
 
 		return {
 			locationImageContainer: {
