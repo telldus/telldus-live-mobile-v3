@@ -39,6 +39,7 @@ import * as appDataActions from '../../../Actions/AppData';
 import { messages as commonMessages } from '../Common/messages';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
+import { getRelativeDimensions } from '../../../Lib';
 
 type Props = {
 	navigation: Object,
@@ -199,45 +200,40 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		let customPosterHeader = screenProps.currentScreen === 'Details' ? <CustomPosterHeader {...params.location} styles={styles}/> : null;
 
 		return (
-			<View>
-				<View style={{
-					flex: 1,
-					opacity: 1,
-					alignItems: 'center',
-				}}>
-
-					<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
-						<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-							<LocationPoster h1={h1} h2={h2} infoButton={infoButton}
-								screenProps={screenProps} intl={intl} navigation={navigation}
-								showHeader={showPosterHeader} customHeader={customPosterHeader}/>
-							<View style={[styles.style, {paddingHorizontal}]}>
-								{React.cloneElement(
-									children,
-									{
-										onDidMount: this.onChildDidMount,
-										navigation,
-										actions,
-										intl,
-										...screenProps,
-										dialogueOpen: showModal,
-										containerWidth: width - (2 * paddingHorizontal),
-									},
-								)}
-							</View>
-						</KeyboardAvoidingView>
-					</ScrollView>
-					<DialogueBox
-						dialogueContainerStyle={{elevation: 0}}
-						header={modalHeader}
-						showDialogue={showModal}
-						text={validationMessage}
-						showPositive={true}
-						showNegative={showNegative}
-						positiveText={positiveText}
-						onPressPositive={onPressPositive}
-						onPressNegative={onPressNegative}/>
-				</View>
+			<View style={{
+				flex: 1,
+			}}>
+				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
+					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
+						<LocationPoster h1={h1} h2={h2} infoButton={infoButton}
+							screenProps={screenProps} intl={intl} navigation={navigation}
+							showHeader={showPosterHeader} customHeader={customPosterHeader}/>
+						<View style={[styles.style, {paddingHorizontal}]}>
+							{React.cloneElement(
+								children,
+								{
+									onDidMount: this.onChildDidMount,
+									navigation,
+									actions,
+									intl,
+									...screenProps,
+									dialogueOpen: showModal,
+									containerWidth: width - (2 * paddingHorizontal),
+								},
+							)}
+						</View>
+					</KeyboardAvoidingView>
+				</ScrollView>
+				<DialogueBox
+					dialogueContainerStyle={{elevation: 0}}
+					header={modalHeader}
+					showDialogue={showModal}
+					text={validationMessage}
+					showPositive={true}
+					showNegative={showNegative}
+					positiveText={positiveText}
+					onPressPositive={onPressPositive}
+					onPressNegative={onPressNegative}/>
 			</View>
 		);
 	}
@@ -250,8 +246,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		return {
 			style: {
 				flex: 1,
-				// alignItems: 'center',
-				// justifyContent: 'center',
 			},
 			infoButtonContainer: {
 				position: 'relative',
@@ -269,7 +263,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 				right: 0,
 			},
 			posterText: {
-				fontSize: 14,
+				fontSize: isPortrait ? width * 0.053333333 : height * 0.053333333,
 				color: '#fff',
 				marginTop: 5,
 			},
@@ -294,7 +288,7 @@ const mapStateToProps = (store: Object): Object => (
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
-		appLayout: store.App.layout,
+		appLayout: getRelativeDimensions(store.App.layout),
 	}
 );
 
