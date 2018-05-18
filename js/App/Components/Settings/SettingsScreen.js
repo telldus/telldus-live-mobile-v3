@@ -35,8 +35,8 @@ import {
 	DialogueBox,
 	Header,
 	SafeAreaView,
+	TitledInfoBlock,
 } from '../../../BaseComponents';
-import InfoBlock from './InfoBlock';
 import { logoutFromTelldus, showToast } from '../../Actions';
 const DeviceInfo = require('react-native-device-info');
 
@@ -290,7 +290,7 @@ render(): Object {
 						</View>
 					</Poster>
 					<View style={styles.body} importantForAccessibility={importantForAccessibility}>
-						<InfoBlock
+						<TitledInfoBlock
 							title={this.titleAppInfo}
 							label={this.labelVersion}
 							value={version}
@@ -299,7 +299,7 @@ render(): Object {
 						<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
 							{this.labelWhatsNew}
 						</Text>
-						<InfoBlock
+						<TitledInfoBlock
 							title={this.titlePush}
 							label={this.labelPush}
 							value={pushTokenRegistered ? this.valueYes : this.valueNo}
@@ -308,7 +308,7 @@ render(): Object {
 						<Text onPress={this.submitPushToken} style={styles.buttonResubmit}>
 							{submitButText}
 						</Text>
-						<InfoBlock
+						<TitledInfoBlock
 							title={this.titleUserInfo}
 							label={this.labelLoggedUser}
 							value={email}

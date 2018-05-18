@@ -25,13 +25,16 @@
 import React from 'react';
 import { Image, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, Text, TouchableButton, StyleSheet, FormattedNumber, Icon } from '../../../../BaseComponents';
+import {
+	View, Text, TouchableButton, StyleSheet,
+	FormattedNumber, Icon, TitledInfoBlock,
+} from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
 
 import Theme from '../../../Theme';
+import { getRelativeDimensions } from '../../../Lib';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';
@@ -133,6 +136,10 @@ class Details extends View {
 		const { containerWidth, location, appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const fontSize = Math.floor(deviceWidth * 0.045);
+		const iconSize = Math.floor(deviceWidth * 0.08);
+		const padding = width * 0.027777;
 
 		if (!location) {
 			return null;
@@ -141,65 +148,117 @@ class Details extends View {
 
 		const { name, type, ip, version, timezone, latitude, longitude, online, websocketOnline } = location;
 		const image = getLocationImageUrl(type);
-		const labelWidth = isIphoneX() ? (!isPortrait ? containerWidth * 0.345 : containerWidth * 0.3755) : containerWidth * 0.36;
-		const valueWidth = isIphoneX() ? (!isPortrait ? containerWidth * 0.495 : containerWidth * 0.5255) : containerWidth * 0.51;
+		const {
+			locationImage, textName, locationInfo,
+			infoOneContainerStyle, boxItemsCover,
+		} = this.getStyles(appLayout);
+		const labelWidth = containerWidth * 0.36;
 
 		let info = this.getLocationStatus(online, websocketOnline);
 
 		return (
-			<View style={{flex: 1}}>
-				<LabelBox containerStyle={styles.infoOneContainerStyle}>
-					<Image resizeMode={'contain'} style={styles.locationImage} source={{ uri: image, isStatic: true }} />
-					<View style={{flex: 1, alignItems: 'flex-start', flexWrap: 'wrap'}}>
-						<Text style={[styles.textName]}>
+			<View style={{flex: 1, paddingTop: padding}}>
+				<LabelBox containerStyle={infoOneContainerStyle}>
+					<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
+					<View style={boxItemsCover}>
+						<Text style={[textName]}>
 							{type}
 						</Text>
-						<Text style={styles.locationInfo}>
+						<Text style={locationInfo}>
 							{`${this.labelIP}: ${ip}`}
 						</Text>
-						<Text style={styles.locationInfo}>
+						<Text style={locationInfo}>
 							{`${this.labelSoftware}: v${version}`}
 						</Text>
 						{info && (info)}
 					</View>
 				</LabelBox>
-				<TouchableOpacity style={styles.infoTwoContainerStyle} onPress={this.onEditName}>
-					<Text style={[styles.textLabel, {width: labelWidth}]}>
-						{this.labelName}
-					</Text>
-					<Text style={[styles.textValue, {width: valueWidth}]} numberOfLines={1}>
-						{name}
-					</Text>
-					<Icon name="angle-right" size={40} color="#A59F9A90"/>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.infoTwoContainerStyle} onPress={this.onEditTimeZone}>
-					<Text style={[styles.textLabel, {width: labelWidth}]}>
-						{this.labelTimeZone}
-					</Text>
-					<Text style={[styles.textValue, {width: valueWidth}]}>
-						{timezone}
-					</Text>
-					<Icon name="angle-right" size={40} color="#A59F9A90"/>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.infoTwoContainerStyle} onPress={this.onEditGeoPosition}>
-					<Text style={[styles.textLabel, {width: labelWidth}]}>
+				<TitledInfoBlock
+					label={this.labelName}
+					value={name}
+					icon={'angle-right'}
+					iconColor="#A59F9A90"
+					blockContainerStyle={{
+						marginTop: padding,
+						marginBottom: padding,
+					}}
+					valueTextStyle={{
+						marginRight: 20,
+					}}
+					onPress={this.onEditName}
+				/>
+				<TitledInfoBlock
+					label={this.labelTimeZone}
+					value={timezone}
+					icon={'angle-right'}
+					iconColor="#A59F9A90"
+					blockContainerStyle={{
+						marginBottom: padding,
+					}}
+					valueTextStyle={{
+						marginRight: 20,
+					}}
+					onPress={this.onEditTimeZone}
+				/>
+				<TouchableOpacity style={[styles.infoTwoContainerStyle, {
+					padding: fontSize,
+					marginBottom: padding,
+				}]} onPress={this.onEditGeoPosition}>
+					<Text style={[styles.textLabel, {fontSize, width: labelWidth}]}>
 						{this.labelGeoPosition}
 					</Text>
-					<View style={{ flexDirection: 'column', justifyContent: 'center' }}>
-						<Text style={[styles.textValue, {width: valueWidth}]}>
+					<View style={{ flexDirection: 'column', justifyContent: 'center', marginRight: 20 }}>
+						<Text style={[styles.textValue, {fontSize}]}>
 							{`${this.labelLat}: `}
 							<FormattedNumber value={latitude} maximumFractionDigits={3} style={styles.textValue}/>
 						</Text>
-						<Text style={[styles.textValue, {width: valueWidth}]}>
+						<Text style={[styles.textValue, {fontSize}]}>
 							{` ${this.labelLong}: `}
 							<FormattedNumber value={longitude} maximumFractionDigits={3} style={styles.textValue}/>
 						</Text>
 					</View>
-					<Icon name="angle-right" size={40} color="#A59F9A90"/>
+					<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
 				</TouchableOpacity>
 				<TouchableButton text={this.labelDelete} style={styles.button} onPress={this.onPressRemoveLocation}/>
 			</View>
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const deviceHeight = isPortrait ? height : width;
+
+		return {
+			infoOneContainerStyle: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'flex-start',
+				flex: 1,
+				marginBottom: 0,
+				marginTop: 0,
+				padding: deviceWidth * 0.045,
+			},
+			boxItemsCover: {
+				flex: 1,
+				alignItems: 'flex-start',
+				flexWrap: 'wrap',
+				padding: deviceWidth * 0.02,
+			},
+			locationImage: {
+				width: deviceWidth * 0.22,
+				height: deviceHeight * 0.12,
+			},
+			textName: {
+				color: Theme.Core.brandSecondary,
+				fontSize: Math.floor(deviceWidth * 0.053333333),
+			},
+			locationInfo: {
+				fontSize: Math.floor(deviceWidth * 0.045),
+				color: Theme.Core.rowTextColor,
+			},
+		};
 	}
 }
 
@@ -208,42 +267,23 @@ const styles = StyleSheet.create({
 		backgroundColor: Theme.Core.brandDanger,
 		marginVertical: 20,
 	},
-	locationImage: {
-		height: 80,
-		width: 100,
-	},
-	infoOneContainerStyle: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		flex: 1,
-	},
 	infoTwoContainerStyle: {
-		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		backgroundColor: '#fff',
-		marginTop: 15,
-		padding: 10,
 		...Theme.Core.shadow,
-	},
-	textName: {
-		color: Theme.Core.brandSecondary,
-		fontSize: 20,
 	},
 	textLabel: {
 		color: '#000',
-		fontSize: 14,
 	},
 	textValue: {
 		color: Theme.Core.rowTextColor,
-		fontSize: 14,
 		textAlign: 'right',
-		paddingRight: 10,
 	},
-	locationInfo: {
-		fontSize: 14,
-		color: Theme.Core.rowTextColor,
+	nextIcon: {
+		position: 'absolute',
+		right: 10,
 	},
 });
 
@@ -251,7 +291,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	let id = ownProps.rootNavigator.state.params.location.id;
 	return {
 		location: store.gateways.byId[id],
-		appLayout: store.App.layout,
+		appLayout: getRelativeDimensions(store.App.layout),
 	};
 }
 
