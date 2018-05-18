@@ -183,6 +183,8 @@
     "deviceSettings.location": "Sijainti",
     "deviceSettings.noRecentActivity": "Ei viimeaikaista toimintaa",
     "deviceSettings.overviewHeader": "Yleisnäkymä",
+    "dialogue.headerOnHide": "Piilota tämä {type}?",
+    "dialogue.messageOnHide": "Oletko varma, että haluat piilottaa tämän {type}?",
     "dialogueBox.defaultHeader": "OHO",
     "dialogueBox.defaultNegativeText": "PERUUTA",
     "dialogueBox.defaultPositiveText": "OK",
@@ -206,6 +208,8 @@
     "hideFromList": "Piilota laitelistasta",
     "history": "Historia",
     "incommingSignal": "sisääntuleva signaali",
+    "label.eula": "Loppukäyttäjän käyttöoikeussopimus",
+    "label.iAgree": "Hyväksyn",
     "loading": "Lataa",
     "location": "Sijainti",
     "location.autodetect": "Löydä automaattisesti",
@@ -273,6 +277,7 @@
     "settings": "Asetukset",
     "settings.addNewLocation": "Lisää uusi Sijainti",
     "settings.connectedLocations": "Yhteys sijainteihin",
+    "settings.labelWhatsNew": "Mitä uutta tässä versiossa?",
     "settings.pushEnabled": "Laite on rekisteröity Push-viestejä varten.",
     "settings.pushReRegister": "Uudelleenrekisteröi puhelin push-ilmoituksia varten",
     "settings.pushRegister": "Rekisteröi uudestaan Push-viestejä varten",
@@ -323,6 +328,7 @@
     "user.sessionLockedBodyParaOne": "Jostain syystä yhdistäminen tilillesi ei onnistu juuri nyt.",
     "user.sessionLockedBodyParaTwo": "Varmista, että internet-yhteytesi toimii ja yritä uudelleen napauttamalla alla olevaa Uudestaan -painiketta.",
     "user.welcome": "Tervetuloa Telldus palveluun",
+    "userAgreementHeaderPhrase": "Hyväksy päivitetty {eula} jatkaaksesi sovelluksen käyttämistä",
     "version": "Versio",
     "yes": "Kyllä"
 }
