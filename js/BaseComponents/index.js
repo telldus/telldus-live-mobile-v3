@@ -76,6 +76,7 @@ import HeaderTitle from './HeaderTitle';
 import TabBar from './TabBar';
 import SafeAreaViewComponent from './SafeAreaView';
 import DialogueHeader from './DialogueHeader';
+import TitledInfoBlock from './TitledInfoBlock';
 
 import {
 	AppState,
@@ -142,6 +143,7 @@ module.exports = {
 	SafeAreaView: SafeAreaViewComponent,
 	TabBar,
 	DialogueHeader,
+	TitledInfoBlock,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
