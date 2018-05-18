@@ -26,6 +26,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { isIphoneX } from 'react-native-iphone-x-helper';
+import Markdown from 'react-native-markdown-renderer';
 
 import { View, Text, StyleSheet, Poster, SafeAreaView } from '../../../BaseComponents';
 import { NavigationHeader } from '../DeviceDetails/SubViews';
@@ -114,6 +115,7 @@ class UserAgreement extends View<Props, State> {
 				transparent={false}
 				animationType={'slide'}
 				presentationStyle={'fullScreen'}
+				onRequestClose={null}
 				supportedOrientations={['portrait', 'landscape']}>
 				<SafeAreaView>
 					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
@@ -129,13 +131,10 @@ class UserAgreement extends View<Props, State> {
 								</View>
 							</Poster>
 							<View style={styles.contentContainerStyle}>
-								<Text style={styles.titleText}>
-									{this.eula}
-								</Text>
 								<Text/>
-								<Text style={styles.body}>
+								<Markdown style={styles.markupStyle}>
 									{eulaContent}
-								</Text>
+								</Markdown>
 							</View>
 						</ScrollView>
 						<View style={[styles.footer, isIphoneX() && isPortrait ? { bottom: 30 } : { bottom: 0 }]}>
@@ -215,6 +214,14 @@ class UserAgreement extends View<Props, State> {
 				fontSize: Math.floor(deviceWidth * 0.04),
 				color: Theme.Core.brandSecondary,
 				fontWeight: 'bold',
+			},
+			markupStyle: {
+				heading: {
+					color: '#000000',
+				},
+				text: {
+					color: '#000000',
+				},
 			},
 		};
 	}
