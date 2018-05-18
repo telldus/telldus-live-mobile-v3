@@ -154,7 +154,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 		const { icon, iconTwo, iconThree, iconSize, iconTwoSize, iconThreeSize,
 			title, description } = this.getScreenData(currentScreen, deviceWidth);
 
-		const { container, titleStyle, descriptionStyle } = this.getStyles(appLayout);
+		const { container, titleStyle, descriptionStyle, iconTwoStyle, iconThreeStyle } = this.getStyles(appLayout);
 
 		// IconTelldus, on setting different font sizes causing alignment issue. So, handling with negative margin.
 		return (
@@ -163,8 +163,8 @@ export default class WizardOne extends PureComponent<Props, null> {
 			}]}]}>
 				<View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: iconTwo ? -16 : 0}}>
 					{icon && <IconTelldus icon={icon} style={styles.icon} size={iconSize}/>}
-					{iconTwo && <IconTelldus icon={iconTwo} style={styles.iconTwo} size={iconTwoSize}/>}
-					{iconThree && <IconTelldus icon={iconThree} style={styles.iconThree} size={iconThreeSize}/>}
+					{iconTwo && <IconTelldus icon={iconTwo} style={iconTwoStyle} size={iconTwoSize}/>}
+					{iconThree && <IconTelldus icon={iconThree} style={iconThreeStyle} size={iconThreeSize}/>}
 				</View>
 				<Text style={titleStyle}>
 					{title}
@@ -182,6 +182,8 @@ export default class WizardOne extends PureComponent<Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 		const titleFontSize = Math.floor(deviceWidth * 0.052);
 
+		const iconFontSize = Math.floor(deviceWidth * 0.22);
+
 		return {
 			container: {
 				...Theme.Core.shadow,
@@ -192,6 +194,21 @@ export default class WizardOne extends PureComponent<Props, null> {
 				paddingVertical: titleFontSize,
 				marginHorizontal: 10,
 				marginVertical: 10,
+			},
+			// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
+			iconTwoStyle: {
+				color: Theme.Core.brandSecondary,
+				textAlignVertical: 'center',
+				marginTop: Platform.OS === 'ios' ? iconFontSize * 0.18 : 0,
+				textAlign: 'center',
+			},
+			// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
+			iconThreeStyle: {
+				color: Theme.Core.brandSecondary,
+				textAlignVertical: 'center',
+				marginTop: Platform.OS === 'ios' ? iconFontSize * 0.18 : 0,
+				marginLeft: iconFontSize * 0.18,
+				textAlign: 'center',
 			},
 			titleStyle: {
 				fontSize: titleFontSize,
@@ -210,21 +227,6 @@ export default class WizardOne extends PureComponent<Props, null> {
 const styles = StyleSheet.create({
 	icon: {
 		color: Theme.Core.brandSecondary,
-		textAlign: 'center',
-	},
-	// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
-	iconTwo: {
-		color: Theme.Core.brandSecondary,
-		textAlignVertical: 'center',
-		marginTop: Platform.OS === 'ios' ? 10 : 0,
-		textAlign: 'center',
-	},
-	// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
-	iconThree: {
-		color: Theme.Core.brandSecondary,
-		textAlignVertical: 'center',
-		marginTop: Platform.OS === 'ios' ? 10 : 0,
-		marginLeft: 12,
 		textAlign: 'center',
 	},
 });
