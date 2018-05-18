@@ -1,36 +1,23 @@
 PODS:
-  - Crashlytics (3.7.0):
-    - Fabric (~> 1.6.3)
-  - Fabric (1.6.7)
-  - React/Core (0.42.3):
-    - React/cxxreact
-    - Yoga (= 0.42.3.React)
-  - React/cxxreact (0.42.3):
-    - React/jschelpers
-  - React/jschelpers (0.42.3)
-  - React/RCTPushNotification (0.42.3):
-    - React/Core
-  - Yoga (0.42.3.React)
+  - Alamofire (4.7.2)
+  - Realm (3.5.0):
+    - Realm/Headers (= 3.5.0)
+  - Realm/Headers (3.5.0)
+  - RealmSwift (3.5.0):
+    - Realm (= 3.5.0)
+  - SwiftyJSON (4.1.0)
 
 DEPENDENCIES:
-  - Crashlytics
-  - Fabric
-  - React/Core (from `../node_modules/react-native`)
-  - React/RCTPushNotification (from `../node_modules/react-native`)
-  - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
-
-EXTERNAL SOURCES:
-  React:
-    :path: ../node_modules/react-native
-  Yoga:
-    :path: ../node_modules/react-native/ReactCommon/yoga
+  - Alamofire
+  - RealmSwift
+  - SwiftyJSON
 
 SPEC CHECKSUMS:
-  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
-  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
-  React: 35e039680feacd0563677d49ba410112d2748559
-  Yoga: 86ce777665c8259b94ef8dbea76b84634237f4ea
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  Realm: 0378021c424e4e2bd6a0e63b27881e929d9b9ad1
+  RealmSwift: 3322562622fda2ad596985ead4d8d8be30cf838c
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
-PODFILE CHECKSUM: c1b00a5c6116223d908f15b37448973308f4cdea
+PODFILE CHECKSUM: 0c0db75a8cd9daf9e4bee20ec49bc7ec4661dcc3
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.4.0

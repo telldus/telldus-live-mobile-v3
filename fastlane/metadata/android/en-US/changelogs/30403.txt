@@ -1,2 +1,0 @@
-- Show error message when controling a device fails
-- Fix dimmer slider being a bit unresponseive

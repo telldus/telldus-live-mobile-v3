@@ -1,4 +1,0 @@
-- Fix for controlling devices on Samsung, Sony and other Android phones.
-- Fix schedules showing on wrong day
-- Other small fixes
-

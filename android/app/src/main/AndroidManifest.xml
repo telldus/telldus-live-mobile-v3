@@ -1,69 +1,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.telldus.live.mobile">
+    package="com.telldusdevicewidget">
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <permission
-        android:name="com.telldus.live.mobile.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="com.telldus.live.mobile.permission.C2D_MESSAGE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
       android:name=".MainApplication"
-      android:allowBackup="false"
-      android:largeHeap="true"
       android:label="@string/app_name"
-      android:icon="@mipmap/ic_launchers"
+      android:icon="@mipmap/ic_launcher"
+      android:allowBackup="false"
       android:theme="@style/AppTheme">
-        <meta-data
-          android:name="com.google.android.geo.API_KEY"
-          android:value="${googleMapsAPIKey}"/>
-        <activity
-          android:name=".MainActivity"
-          android:label="@string/app_name"
-      		android:launchMode="singleTop"
-          android:theme="@style/SplashTheme"
-      		android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|layoutDirection|locale">
-          <intent-filter>
-              <action android:name="android.intent.action.MAIN" />
-              <category android:name="android.intent.category.LAUNCHER" />
-          </intent-filter>
-        </activity>
+      <activity
+        android:name=".MainActivity"
+        android:label="@string/app_name"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+        android:windowSoftInputMode="adjustResize">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+      </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-        <receiver
-          android:name="com.google.android.gms.gcm.GcmReceiver"
-          android:exported="true"
-          android:permission="com.google.android.c2dm.permission.SEND" >
-          <intent-filter>
-              <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-              <category android:name="com.telldus.live.mobile" />
-          </intent-filter>
-        </receiver>
-
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-          <intent-filter>
-              <action android:name="android.intent.action.BOOT_COMPLETED" />
-          </intent-filter>
-        </receiver>
-        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
-        <service
-          android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
-          android:exported="false" >
-          <intent-filter>
-              <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-          </intent-filter>
-        </service>
-        <meta-data
-          android:name="io.fabric.ApiKey"
-          android:value="6ddcb9201beba571821a466b7b634103262d6903"
-        />
     </application>
 
 </manifest>
