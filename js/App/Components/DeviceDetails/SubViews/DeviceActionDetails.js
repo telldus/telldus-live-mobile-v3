@@ -23,7 +23,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Dimensions } from 'react-native';
 
 import { View } from '../../../../BaseComponents';
 import {
@@ -37,10 +36,7 @@ import DownButton from '../../TabViews/SubViews/Navigational/DownButton';
 import StopButton from '../../TabViews/SubViews/Navigational/StopButton';
 
 import Theme from '../../../Theme';
-const deviceWidth = Dimensions.get('window').width;
-const outerPadding = (deviceWidth * 0.02233) * 2;
-const buttonPadding = 10;
-const bodyPadding = buttonPadding * 1.5;
+
 
 type Props = {
 	device: Object,
@@ -69,7 +65,7 @@ class DeviceActionDetails extends View {
 			STOP,
 		} = device.supportedMethods;
 		const buttons = [];
-		const { buttonStyle, buttonsContainer } = this.getStyles(appLayout);
+		const { container, shadow, buttonStyle, buttonsContainer } = this.getStyles(appLayout);
 
 		if (UP) {
 			buttons.push(
@@ -113,9 +109,13 @@ class DeviceActionDetails extends View {
 		const newButtonStyle = buttons.length > 4 ? buttonStyle : {...buttonStyle, flex: 1};
 
 		return (
-			<View style={[styles.container, styles.shadow, containerStyle]}>
+			<View style={[container, shadow, containerStyle]}>
 				{DIM && (
-					<SliderDetails device={device} intl={intl} isGatewayActive={isGatewayActive}/>
+					<SliderDetails
+						device={device}
+						intl={intl}
+						isGatewayActive={isGatewayActive}
+						appLayout={appLayout}/>
 				)}
 				<View style={{flex: 1, alignItems: 'stretch'}}>
 					<View style={buttonsContainer}>
@@ -134,8 +134,28 @@ class DeviceActionDetails extends View {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const { width } = appLayout;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const outerPadding = deviceWidth * Theme.Core.paddingFactor * 2;
+		const buttonPadding = 10;
+		const bodyPadding = buttonPadding * 1.5;
+
 		return {
+			container: {
+				flex: 1,
+				alignItems: 'stretch',
+				justifyContent: 'center',
+				backgroundColor: '#fff',
+				paddingTop: bodyPadding - 10,
+				paddingBottom: bodyPadding,
+				paddingLeft: bodyPadding - buttonPadding,
+				paddingRight: bodyPadding,
+			},
+			shadow: {
+				borderRadius: 2,
+				...Theme.Core.shadow,
+			},
 			buttonsContainer: {
 				flex: 1,
 				flexDirection: 'row',
@@ -159,22 +179,5 @@ class DeviceActionDetails extends View {
 DeviceActionDetails.propTypes = {
 	device: PropTypes.object.isRequired,
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		alignItems: 'stretch',
-		justifyContent: 'center',
-		backgroundColor: '#fff',
-		paddingTop: bodyPadding - 10,
-		paddingBottom: bodyPadding,
-		paddingLeft: bodyPadding - buttonPadding,
-		paddingRight: bodyPadding,
-	},
-	shadow: {
-		borderRadius: 2,
-		...Theme.Core.shadow,
-	},
-});
 
 module.exports = DeviceActionDetails;

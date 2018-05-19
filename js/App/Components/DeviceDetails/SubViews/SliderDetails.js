@@ -53,6 +53,7 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	style: Object | number | Array<any>,
+	appLayout?: Object,
 };
 
 type State = {
@@ -148,11 +149,16 @@ class SliderDetails extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, style } = this.props;
+		const { device, intl, isGatewayActive, style, appLayout } = this.props;
 		const { DIM } = device.supportedMethods;
 		const minimumTrackTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';
 		const maximumTrackTintColor = isGatewayActive ? 'rgba(219, 219, 219, 255)' : '#e5e5e5';
 		const thumbTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';
+
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const fontSize = deviceWidth * 0.032;
 		let slider = null;
 
 		if (DIM) {
@@ -173,8 +179,8 @@ class SliderDetails extends View {
 
 		return (
 			<View style={[styles.container, style]}>
-				<Text style={styles.textDimmingLevel}>
-					<FormattedMessage {...i18n.dimmingLevel} style={styles.textDimmingLevel} />: {this.state.dimmerValue}%
+				<Text style={[styles.textDimmingLevel, {fontSize}]}>
+					<FormattedMessage {...i18n.dimmingLevel} style={[styles.textDimmingLevel, {fontSize}]} />: {this.state.dimmerValue}%
 				</Text>
 				{slider}
 			</View>

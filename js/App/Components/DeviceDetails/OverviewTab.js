@@ -26,8 +26,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { View, TabBar } from '../../../BaseComponents';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
-const deviceWidth = Dimensions.get('window').width;
+import { ScrollView } from 'react-native';
 import { defineMessages } from 'react-intl';
 
 import getDeviceType from '../../Lib/getDeviceType';
@@ -37,6 +36,7 @@ import {
 	DeviceLocationDetail,
 } from './SubViews';
 import i18n from '../../Translations/common';
+import Theme from '../../Theme';
 
 const messages = defineMessages({
 	overviewHeader: {
@@ -97,7 +97,8 @@ class OverviewTab extends View {
 	}
 
 	render(): Object {
-		let { device, screenProps, gateway } = this.props;
+		const { device, screenProps, gateway } = this.props;
+		const { appLayout, intl } = screenProps;
 		const locationImageUrl = getLocationImageUrl(gateway.type);
 		const locationData = {
 			title: this.boxTitle,
@@ -117,33 +118,51 @@ class OverviewTab extends View {
 		const hasActions = TURNON || TURNOFF || BELL || DIM || UP || DOWN || STOP;
 		const isGatewayActive = gateway && gateway.online;
 
+		const styles = this.getStyles(appLayout);
+
 		return (
 			<ScrollView contentContainerStyle={styles.itemsContainer}>
 				{hasActions && (
-					<DeviceActionDetails device={device} intl={screenProps.intl} appLayout={screenProps.appLayout} isGatewayActive={isGatewayActive}/>
+					<DeviceActionDetails
+						device={device}
+						intl={intl}
+						appLayout={appLayout}
+						isGatewayActive={isGatewayActive}
+						containerStyle={styles.actionDetails}/>
 				)}
-				<DeviceLocationDetail {...locationData} style={{marginTop: 10}}/>
+				<DeviceLocationDetail {...locationData} style={styles.LocationDetail}/>
 			</ScrollView>
 		);
 	}
 
+	getStyles(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		return {
+			container: {
+				flex: 0,
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			itemsContainer: {
+				justifyContent: 'center',
+				marginHorizontal: deviceWidth * Theme.Core.paddingFactor,
+			},
+			LocationDetail: {
+				marginTop: deviceWidth * Theme.Core.paddingFactor,
+			},
+			actionDetails: {
+				marginTop: deviceWidth * Theme.Core.paddingFactor,
+			},
+		};
+	}
 }
 
 OverviewTab.propTypes = {
 	device: PropTypes.object.isRequired,
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 0,
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-	itemsContainer: {
-		justifyContent: 'center',
-		marginHorizontal: deviceWidth * 0.02233,
-	},
-});
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
