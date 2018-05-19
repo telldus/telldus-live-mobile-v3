@@ -26,7 +26,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { FormattedMessage, Text, View, TabBar, Switch } from '../../../BaseComponents';
-import { StyleSheet } from 'react-native';
 import { defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
 
@@ -146,11 +145,10 @@ class SettingsTab extends View {
 		let { appLayout } = this.props;
 
 		let {
+			container,
 			ShowOnDashCover,
 			textShowOnDashCover,
 			textShowOnDash,
-			dashSwitchCover,
-			dashSwitch,
 			learn,
 		} = this.getStyle(appLayout);
 
@@ -163,20 +161,17 @@ class SettingsTab extends View {
 			learnButton = <LearnButton id={device.id} style={learn} />;
 		}
 		return (
-			<View style={styles.container}>
+			<View style={container}>
 				<View style={ShowOnDashCover}>
 					<View style={textShowOnDashCover}>
 						<Text style={textShowOnDash}>
 							<FormattedMessage {...messages.showOnDashborad} style={textShowOnDash}/>
 						</Text>
 					</View>
-					<View style={dashSwitchCover}>
-						<Switch
-							style={dashSwitch}
-							onValueChange={this.onValueChange}
-							value={this.props.inDashboard}
-						/>
-					</View>
+					<Switch
+						onValueChange={this.onValueChange}
+						value={this.props.inDashboard}
+					/>
 				</View>
 				<View style={ShowOnDashCover}>
 					<View style={textShowOnDashCover}>
@@ -184,13 +179,10 @@ class SettingsTab extends View {
 							<FormattedMessage {...messages.hideFromList} style={textShowOnDash}/>
 						</Text>
 					</View>
-					<View style={dashSwitchCover}>
-						<Switch
-							style={dashSwitch}
-							onValueChange={this.setIgnoreDevice}
-							value={this.state.isHidden}
-						/>
-					</View>
+					<Switch
+						onValueChange={this.setIgnoreDevice}
+						value={this.state.isHidden}
+					/>
 				</View>
 				{learnButton}
 			</View>
@@ -200,34 +192,31 @@ class SettingsTab extends View {
 	getStyle(appLayout: Object): Object {
 		const height = appLayout.height;
 		const width = appLayout.width;
-		let isPortrait = height > width;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const fontSize = deviceWidth * 0.04;
 
 		return {
+			container: {
+				flex: 0,
+				paddingHorizontal: deviceWidth * Theme.Core.paddingFactor,
+			},
 			ShowOnDashCover: {
 				backgroundColor: '#fff',
-				height: isPortrait ? height * 0.09 : width * 0.09,
-				marginTop: 8,
+				padding: fontSize,
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'space-between',
-				marginHorizontal: 10,
-				paddingHorizontal: 20,
+				marginTop: deviceWidth * Theme.Core.paddingFactor,
 				...Theme.Core.shadow,
 			},
 			textShowOnDashCover: {
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 			},
-			dashSwitchCover: {
-				alignItems: 'flex-end',
-				justifyContent: 'center',
-			},
-			dashSwitch: {
-				height: isPortrait ? height * 0.06 : width * 0.06,
-			},
 			textShowOnDash: {
 				color: '#8A8682',
-				fontSize: 15,
+				fontSize,
 				marginLeft: 8,
 				justifyContent: 'center',
 			},
@@ -242,13 +231,6 @@ class SettingsTab extends View {
 SettingsTab.propTypes = {
 	device: PropTypes.object.isRequired,
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 0,
-		paddingTop: 15,
-	},
-});
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
