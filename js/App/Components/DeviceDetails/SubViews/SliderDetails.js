@@ -53,7 +53,7 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	style: Object | number | Array<any>,
-	appLayout?: Object,
+	appLayout: Object,
 };
 
 type State = {

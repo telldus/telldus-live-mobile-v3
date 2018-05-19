@@ -188,7 +188,7 @@ class ChangeLogNavigator extends View {
 		});
 	}
 
-	render(): Object {
+	render(): Object | null {
 		let { currentScreen } = this.state;
 		let { appLayout, intl, showChangeLog, onLayout } = this.props;
 		let { width } = appLayout;

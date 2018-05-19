@@ -51,6 +51,7 @@ const initialState = {
 export default function reduceUser(state: State = initialState, action: Action): State {
 	if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.user) {
 		return {
+			...state,
 			...action.payload.user,
 			showChangeLog: false,
 		};

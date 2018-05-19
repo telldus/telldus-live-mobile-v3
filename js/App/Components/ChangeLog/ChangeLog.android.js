@@ -184,7 +184,7 @@ class ChangeLogNavigator extends View {
 		}).start();
 	}
 
-	onPressPrev(): Object {
+	onPressPrev(): Object | null {
 		let { appLayout } = this.props;
 		let { currentScreen } = this.state;
 		let prevIndex = Screens.indexOf(currentScreen) - 1;
