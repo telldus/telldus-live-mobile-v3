@@ -102,6 +102,9 @@ export default {
 	get iconSizeSmall() {
 		return this.iconFontSize * 0.6;
 	},
+	get paddingFactor() {
+		return 0.027777;
+	},
 
 	buttonPadding: 6,
 
