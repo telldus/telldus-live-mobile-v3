@@ -115,7 +115,7 @@ class UserAgreement extends View<Props, State> {
 				transparent={false}
 				animationType={'slide'}
 				presentationStyle={'fullScreen'}
-				onRequestClose={null}
+				onRequestClose={this.noOP}
 				supportedOrientations={['portrait', 'landscape']}>
 				<SafeAreaView>
 					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
@@ -224,6 +224,9 @@ class UserAgreement extends View<Props, State> {
 				},
 			},
 		};
+	}
+
+	noOP() {
 	}
 }
 
