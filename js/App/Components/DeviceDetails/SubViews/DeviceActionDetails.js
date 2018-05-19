@@ -46,7 +46,8 @@ type Props = {
 	device: Object,
 	intl: Object,
     isGatewayActive: boolean,
-    appLayout: Object,
+	appLayout: Object,
+	containerStyle?: Object | Array<any> | number,
 };
 
 class DeviceActionDetails extends View {
@@ -57,7 +58,7 @@ class DeviceActionDetails extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, appLayout } = this.props;
+		const { device, intl, isGatewayActive, appLayout, containerStyle } = this.props;
 		const {
 			TURNON,
 			TURNOFF,
@@ -112,7 +113,7 @@ class DeviceActionDetails extends View {
 		const newButtonStyle = buttons.length > 4 ? buttonStyle : {...buttonStyle, flex: 1};
 
 		return (
-			<View style={[styles.container, styles.shadow]}>
+			<View style={[styles.container, styles.shadow, containerStyle]}>
 				{DIM && (
 					<SliderDetails device={device} intl={intl} isGatewayActive={isGatewayActive}/>
 				)}
@@ -165,7 +166,6 @@ const styles = StyleSheet.create({
 		alignItems: 'stretch',
 		justifyContent: 'center',
 		backgroundColor: '#fff',
-		marginTop: 20,
 		paddingTop: bodyPadding - 10,
 		paddingBottom: bodyPadding,
 		paddingLeft: bodyPadding - buttonPadding,
