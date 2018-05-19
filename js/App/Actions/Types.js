@@ -110,6 +110,9 @@ export type Action =
 
 	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
 	| { type: 'ACCEPT_EULA_ERROR' }
+
+	| { type: 'SHOW_CHANGE_LOG' }
+	| { type: 'HIDE_CHANGE_LOG' }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

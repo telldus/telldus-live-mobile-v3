@@ -34,6 +34,7 @@ export type State = {
 	pushTokenRegistered: any,
 	notificationText: any,
 	registeredCredential: any,
+	showChangeLog: boolean,
 };
 
 const initialState = {
@@ -44,9 +45,16 @@ const initialState = {
 	pushTokenRegistered: false,
 	notificationText: false,
 	registeredCredential: false,
+	showChangeLog: false,
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
+	if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.user) {
+		return {
+			...action.payload.user,
+			showChangeLog: false,
+		};
+	}
 	if (action.type === 'USER_REGISTER') {
 		return {
 			...state,
@@ -107,6 +115,18 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			userProfile,
+		};
+	}
+	if (action.type === 'SHOW_CHANGE_LOG') {
+		return {
+			...state,
+			showChangeLog: true,
+		};
+	}
+	if (action.type === 'HIDE_CHANGE_LOG') {
+		return {
+			...state,
+			showChangeLog: false,
 		};
 	}
 	return state;

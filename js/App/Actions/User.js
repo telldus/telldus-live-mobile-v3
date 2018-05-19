@@ -28,7 +28,7 @@ import { format } from 'url';
 import { actions } from 'live-shared-data';
 const { User } = actions;
 
-import type { ThunkAction } from './Types';
+import type { ThunkAction, Action } from './Types';
 import { publicKey, privateKey, apiServer } from '../../Config';
 import { LiveApi, reportError } from '../Lib';
 
@@ -155,10 +155,24 @@ const RegisterUser = (email: string, firstName: string, lastName: string): Thunk
 		});
 };
 
+const showChangeLog = (): Action => {
+	return {
+		type: 'SHOW_CHANGE_LOG',
+	};
+};
+
+const hideChangeLog = (): Action => {
+	return {
+		type: 'HIDE_CHANGE_LOG',
+	};
+};
+
 
 module.exports = {
 	...User,
 	registerPushToken,
 	RegisterUser,
 	unregisterPushToken,
+	showChangeLog,
+	hideChangeLog,
 };
