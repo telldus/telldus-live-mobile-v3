@@ -28,6 +28,7 @@ import PropTypes from 'prop-types';
 import { View, Text, Poster } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
+import { getRelativeDimensions } from '../../../Lib';
 
 type Props = {
 	h1: string,
@@ -66,8 +67,7 @@ class ChangeLogPoster extends View {
 	}
 
 	getStyle = (appLayout: Object): Object => {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
 		return {
@@ -95,7 +95,7 @@ class ChangeLogPoster extends View {
 
 function mapStateToProps(state: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 
