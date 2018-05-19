@@ -41,7 +41,7 @@ import { logoutFromTelldus, showToast } from '../../Actions';
 const DeviceInfo = require('react-native-device-info');
 
 import { pushServiceId } from '../../../Config';
-import { registerPushToken, unregisterPushToken } from '../../Actions/User';
+import { registerPushToken, unregisterPushToken, showChangeLog } from '../../Actions/User';
 
 import i18n from './../../Translations/common';
 import Theme from '../../Theme';
@@ -227,7 +227,7 @@ updateModalVisiblity() {
 }
 
 onPressWhatsNew() {
-	this.props.navigation.navigate('ChangeLog', { invokedByUser: true });
+	this.props.dispatch(showChangeLog());
 }
 
 getRelativeData(): Object {

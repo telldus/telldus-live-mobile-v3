@@ -54,7 +54,6 @@ import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { SettingsScreen } from './Settings';
-import ChangeLog from './ChangeLog/ChangeLog';
 import UserAgreement from './UserAgreement/UserAgreement';
 
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -77,12 +76,6 @@ const RouteConfigs = {
 	},
 	Settings: {
 		screen: SettingsScreen,
-		navigationOptions: {
-			header: null,
-		},
-	},
-	ChangeLog: {
-		screen: ChangeLog,
 		navigationOptions: {
 			header: null,
 		},

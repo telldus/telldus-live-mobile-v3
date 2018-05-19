@@ -48,6 +48,7 @@ type Props = {
 	accessToken: string,
 	pushTokenRegistered: boolean,
 	prevChangeLogVersion: string,
+	forceShowChangeLog: boolean,
 };
 
 class App extends React.Component<Props, null> {
@@ -102,35 +103,24 @@ class App extends React.Component<Props, null> {
 	}
 
 	render(): Object {
-		let { prevChangeLogVersion, accessToken, isTokenValid } = this.props;
+		let { prevChangeLogVersion, accessToken, isTokenValid, forceShowChangeLog } = this.props;
 
-		let showChangeLog = changeLogVersion !== prevChangeLogVersion;
-		if (showChangeLog) {
-			// Same 'ChangeLogNavigator' is used as a navigator screen in post-login navigator,
-			// So passing a property 'navigation' with key `state', just to reduce the conditional
-			// check done inside the 'ChangeLogNavigator' to handle two situations.
-			const navigation = {
-				state: {
-					params: null,
-				},
-			};
-			return (
-				<View onLayout={this.onLayout}>
-					<ChangeLogNavigator
-						changeLogVersion={changeLogVersion}
-						navigation={navigation}/>
-				</View>
-			);
-		}
+		let showChangeLog = (changeLogVersion !== prevChangeLogVersion) || forceShowChangeLog;
 
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
+
 		return (
-			<View onLayout={this.onLayout}>
+			<View style={{flex: 1}} onLayout={this.onLayout}>
 				{hasNotLoggedIn ?
 					<PreLoginNavigator />
 					:
 					<AppNavigator {...this.props}/>
 				}
+				<ChangeLogNavigator
+					changeLogVersion={changeLogVersion}
+					showChangeLog={showChangeLog}
+					forceShowChangeLog={forceShowChangeLog}
+					onLayout={this.onLayout}/>
 			</View>
 		);
 	}
@@ -142,13 +132,19 @@ function mapStateToProps(store: Object): Object {
 		pushToken,
 		isTokenValid,
 		pushTokenRegistered,
+		showChangeLog: forceShowChangeLog,
 	} = store.user;
+	let {
+		changeLogVersion: prevChangeLogVersion,
+	} = store.App;
+
 	return {
 		accessToken,
 		pushToken,
 		isTokenValid,
 		pushTokenRegistered,
-		prevChangeLogVersion: store.App.changeLogVersion,
+		prevChangeLogVersion,
+		forceShowChangeLog,
 	};
 }
 

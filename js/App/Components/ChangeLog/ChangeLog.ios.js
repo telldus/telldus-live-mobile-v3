@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { Animated, LayoutAnimation, ScrollView } from 'react-native';
+import { Animated, ScrollView, Modal } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
@@ -38,25 +38,12 @@ const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour'];
 
-import { getRouteName } from '../../Lib';
+import { getRelativeDimensions } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import messages from './SubViews/messages';
 
-import { setChangeLogVersion } from '../../Actions';
-
-const CustomLayoutAnimation = (duration: number = 200): Object => {
-	return {
-		duration,
-		create: {
-	  type: LayoutAnimation.Types.linear,
-	  property: LayoutAnimation.Properties.opacity,
-		},
-		update: {
-	  type: LayoutAnimation.Types.linear,
-		},
-	};
-};
+import { setChangeLogVersion, hideChangeLog } from '../../Actions';
 
 type Props = {
 	appLayout: Object,
@@ -64,7 +51,9 @@ type Props = {
 	intl: intlShape,
 	changeLogVersion?: string,
 	dispatch: Function,
-	navigation: Object,
+	showChangeLog: boolean,
+	forceShowChangeLog: boolean,
+	onLayout: (Object) => void,
 };
 
 type State = {
@@ -82,8 +71,6 @@ class ChangeLogNavigator extends View {
 	nextButton: string;
 	skipButton: string;
 	doneButton: string;
-
-	onNavigationStateChange: () => void;
 
 	onPressNext: () => void;
 	onPressPrev: () => void;
@@ -113,8 +100,6 @@ class ChangeLogNavigator extends View {
 		this.skipButton = formatMessage(messages.skipButton).toUpperCase();
 		this.doneButton = formatMessage(i18n.done);
 
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-
 		this.onPressNext = this.onPressNext.bind(this);
 		this.onPressPrev = this.onPressPrev.bind(this);
 		this.onPressSkip = this.onPressSkip.bind(this);
@@ -127,37 +112,26 @@ class ChangeLogNavigator extends View {
 		this.animatedOpacity = new Animated.Value(1);
 	}
 
-	onNavigationStateChange(prevState: Object, currentState: Object) {
-		const currentScreen = getRouteName(currentState);
-		if (this.state.currentScreen !== currentScreen) {
-			this.setState({
-				currentScreen,
-			});
-		}
-	}
-
 	onPressNext() {
-		let { dispatch, changeLogVersion, appLayout, navigation } = this.props;
+		let { dispatch, changeLogVersion, appLayout, forceShowChangeLog } = this.props;
 		let { currentScreen } = this.state;
 		let nextIndex = Screens.indexOf(currentScreen) + 1;
 		let nextScreen = Screens[nextIndex];
 
 		let isFinalScreen = Screens.indexOf(currentScreen) === (Screens.length - 1);
 		if (isFinalScreen) {
-			let { params } = navigation.state;
-			if (params && params.invokedByUser) {
-				navigation.goBack();
+			if (forceShowChangeLog) {
+				dispatch(hideChangeLog());
 			} else {
 				dispatch(setChangeLogVersion(changeLogVersion));
-				let customLayoutAnimation = CustomLayoutAnimation(500);
-				LayoutAnimation.configureNext(customLayoutAnimation);
 			}
+			this.setState({
+				currentScreen: Screens[0],
+			});
 		} else {
 			this.setState({
 				currentScreen: nextScreen,
 			});
-			let customLayoutAnimation = CustomLayoutAnimation();
-			LayoutAnimation.configureNext(customLayoutAnimation);
 			this.animatedX.setValue(-appLayout.width);
 			this.animatedOpacity.setValue(0);
 			this.startAnimationParallel(0);
@@ -196,8 +170,6 @@ class ChangeLogNavigator extends View {
 			this.setState({
 				currentScreen: prevScreen,
 			});
-			let customLayoutAnimation = CustomLayoutAnimation();
-			LayoutAnimation.configureNext(customLayoutAnimation);
 			this.animatedX.setValue(appLayout.width);
 			this.animatedOpacity.setValue(0);
 			this.startAnimationParallel(0);
@@ -205,24 +177,26 @@ class ChangeLogNavigator extends View {
 	}
 
 	onPressSkip() {
-		let { dispatch, changeLogVersion, navigation } = this.props;
-		let { params } = navigation.state;
-		if (params && params.invokedByUser) {
-			navigation.goBack();
+		let { dispatch, changeLogVersion, forceShowChangeLog } = this.props;
+		if (forceShowChangeLog) {
+			dispatch(hideChangeLog());
 		} else {
-			let customLayoutAnimation = CustomLayoutAnimation(500);
-
 			dispatch(setChangeLogVersion(changeLogVersion));
-			LayoutAnimation.configureNext(customLayoutAnimation);
 		}
+		this.setState({
+			currentScreen: Screens[0],
+		});
 	}
-
 
 	render(): Object {
 		let { currentScreen } = this.state;
-		let { appLayout, intl } = this.props;
+		let { appLayout, intl, showChangeLog, onLayout } = this.props;
 		let { width } = appLayout;
 		let { h1, h2 } = this;
+
+		if (!width) {
+			return null;
+		}
 
 		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
 		const isLastScreen = Screens.indexOf(currentScreen) === Screens.length - 1;
@@ -238,54 +212,62 @@ class ChangeLogNavigator extends View {
 			inputRange,
 			outputRange,
 			extrapolateLeft: 'clamp',
-			useNativeDriver: true,
 		});
 
 		const animatedOpacity = this.animatedOpacity.interpolate({
 			inputRange: inputRangeOpacity,
 			outputRange: [0, 0, 1],
 			extrapolateLeft: 'clamp',
-			useNativeDriver: true,
 		});
 
 		return (
-			<SafeAreaView>
-				<NavigationHeader showLeftIcon={false}/>
-				<ChangeLogPoster h1={h1} h2={h2}/>
-				<ScrollView>
-					<AnimatedWizard
-						intl={intl}
-						currentScreen={currentScreen}
-						animatedX={animatedX}
-						animatedOpacity={animatedOpacity}
-						appLayout={appLayout}/>
-					<View style={styles.buttonCover}>
-						<Text style={textSkip} onPress={this.onPressSkip}>
-							{this.skipButton}
-						</Text>
-					</View>
-					<View style={stepIndicatorCover}>
-						{!isFirstScreen && (<FloatingButton
-							imageSource={require('../TabViews/img/right-arrow-key.png')}
-							onPress={this.onPressPrev}
-							buttonStyle={floatingButtonLeft}
-							iconStyle={styles.buttonIconStyle}/>
-						)}
-						{Screens.map((screen: string, index: number): Object => {
-							let backgroundColor = Screens[index] === currentScreen ?
-								Theme.Core.brandSecondary : '#00000080';
-							return <View style={[stepIndicator, { backgroundColor }, !index && {marginLeft: 0 }]} key={index}/>;
-						})
-						}
-						<FloatingButton
-							imageSource={isLastScreen ? false : require('../TabViews/img/right-arrow-key.png')}
-							iconName={isLastScreen ? 'checkmark' : false}
-							iconStyle={isLastScreen ? checkIconStyle : {}}
-							onPress={this.onPressNext}
-							buttonStyle={{bottom: 0}}/>
-					</View>
-				</ScrollView>
-			</SafeAreaView>
+			<Modal
+				visible={showChangeLog}
+				transparent={false}
+				animationType={'slide'}
+				presentationStyle={'fullScreen'}
+				onRequestClose={this.noOP}
+				supportedOrientations={['portrait', 'landscape']}>
+				<View style={{flex: 1}} onLayout={onLayout}>
+					<SafeAreaView>
+						<NavigationHeader showLeftIcon={false}/>
+						<ChangeLogPoster h1={h1} h2={h2}/>
+						<ScrollView>
+							<AnimatedWizard
+								intl={intl}
+								currentScreen={currentScreen}
+								animatedX={animatedX}
+								animatedOpacity={animatedOpacity}
+								appLayout={appLayout}/>
+							<View style={styles.buttonCover}>
+								<Text style={textSkip} onPress={this.onPressSkip}>
+									{this.skipButton}
+								</Text>
+							</View>
+							<View style={stepIndicatorCover}>
+								{!isFirstScreen && (<FloatingButton
+									imageSource={require('../TabViews/img/right-arrow-key.png')}
+									onPress={this.onPressPrev}
+									buttonStyle={floatingButtonLeft}
+									iconStyle={styles.buttonIconStyle}/>
+								)}
+								{Screens.map((screen: string, index: number): Object => {
+									let backgroundColor = Screens[index] === currentScreen ?
+										Theme.Core.brandSecondary : '#00000080';
+									return <View style={[stepIndicator, { backgroundColor }, !index && {marginLeft: 0 }]} key={index}/>;
+								})
+								}
+								<FloatingButton
+									imageSource={isLastScreen ? false : require('../TabViews/img/right-arrow-key.png')}
+									iconName={isLastScreen ? 'checkmark' : false}
+									iconStyle={isLastScreen ? checkIconStyle : {}}
+									onPress={this.onPressNext}
+									buttonStyle={{bottom: 0}}/>
+							</View>
+						</ScrollView>
+					</SafeAreaView>
+				</View>
+			</Modal>
 		);
 	}
 
@@ -331,6 +313,9 @@ class ChangeLogNavigator extends View {
 			},
 		};
 	}
+
+	noOP() {
+	}
 }
 
 const styles = StyleSheet.create({
@@ -346,7 +331,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 		screenReaderEnabled: state.App.screenReaderEnabled,
 	};
 }
