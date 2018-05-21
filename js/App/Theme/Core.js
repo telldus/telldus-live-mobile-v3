@@ -66,6 +66,7 @@ export default {
 	buttonWidth: 60,
 	maxSizeRowTextOne: 24,
 	maxSizeRowTextTwo: 18,
+	maxSizeTextButton: 26,
 
 	fontSizeBase: 12,
 	titleFontSize: (Platform.OS === 'ios' ) ? 17 : 19,
@@ -102,6 +103,7 @@ export default {
 	get iconSizeSmall() {
 		return this.iconFontSize * 0.6;
 	},
+
 	get paddingFactor() {
 		return 0.027777;
 	},

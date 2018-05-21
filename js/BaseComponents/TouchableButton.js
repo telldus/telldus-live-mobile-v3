@@ -103,7 +103,7 @@ class TouchableButton extends Component<Props, void> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const maxFontSize = 26;
+		const maxFontSize = Theme.Core.maxSizeTextButton;
 
 		let fontSize = deviceWidth * 0.04;
 		fontSize = fontSize > maxFontSize ? maxFontSize : fontSize;
