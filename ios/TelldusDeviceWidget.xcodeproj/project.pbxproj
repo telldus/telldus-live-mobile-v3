@@ -613,7 +613,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-0deoders.TelldusDeviceWidget.TelldusDeviceLive";
+				PRODUCT_BUNDLE_IDENTIFIER = widget.TelldusDeviceWidget.TelldusDeviceLive;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -635,7 +635,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "-0deoders.TelldusDeviceWidget.TelldusDeviceLive";
+				PRODUCT_BUNDLE_IDENTIFIER = widget.TelldusDeviceWidget.TelldusDeviceLive;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
