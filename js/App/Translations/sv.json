@@ -299,6 +299,7 @@
     "settings": "Inställningar",
     "settings.addNewLocation": "Lägg till ny plats",
     "settings.connectedLocations": "Anslutna platser",
+    "settings.labelWhatsNew": "Vad är nytt i denna versionen?",
     "settings.pushEnabled": "Enheten är registrerad för push-notifikationer.",
     "settings.pushReRegister": "Omregistrera enheten för push-notiser",
     "settings.pushRegister": "Omregistrera telefonen för push-notifikationer",
@@ -351,6 +352,7 @@
     "user.sessionLockedBodyParaOne": "Av någon anledning går det inte att ansluta till ditt konto just nu.",
     "user.sessionLockedBodyParaTwo": "Kontrollera din internetanslutning och tryck sedan på försök igen.",
     "user.welcome": "Välkommen till Telldus",
+    "userAgreementHeaderPhrase": "Vänligen acceptera vår uppdaterade {eula} för att fortsätta använda appen",
     "version": "Version",
     "yes": "Ja"
 }
