@@ -188,12 +188,6 @@ class UserAgreement extends View<Props, State> {
 				color: '#fff',
 				textAlign: 'center',
 			},
-			titleText: {
-				fontSize: Math.floor(deviceWidth * 0.055),
-			},
-			body: {
-				fontSize: Math.floor(deviceWidth * 0.033),
-			},
 			footer: {
 				position: 'absolute',
 				alignItems: 'flex-end',
@@ -201,7 +195,7 @@ class UserAgreement extends View<Props, State> {
 				width: '100%',
 				borderTopWidth: StyleSheet.hairlineWidth,
 				borderTopColor: '#00000040',
-				backgroundColor: '#fff',
+				backgroundColor: '#FAFAFA',
 				height: footerHeight,
 				maxHeight: 100,
 			},
@@ -217,10 +211,13 @@ class UserAgreement extends View<Props, State> {
 			},
 			markupStyle: {
 				heading: {
-					color: '#000000',
+					color: Theme.Core.eulaContentColor,
 				},
 				text: {
-					color: '#000000',
+					color: Theme.Core.eulaContentColor,
+				},
+				heading1: {
+					fontSize: 28,
 				},
 			},
 		};
