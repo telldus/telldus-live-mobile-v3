@@ -23,7 +23,6 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, Image } from '../../../../BaseComponents';
 import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDetail';
