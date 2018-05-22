@@ -31,9 +31,6 @@ import { View, TouchableButton, H1 } from '../../../../BaseComponents';
 import i18n from '../../../Translations/common';
 import { intlShape, injectIntl } from 'react-intl';
 
-import Theme from '../../../Theme';
-
-
 type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
@@ -67,7 +64,7 @@ class ForgotPasswordForm extends View {
 	}
 
 	render(): Object {
-		let { appLayout, headerText, styles } = this.props;
+		let { headerText, styles } = this.props;
 		return (
 			<View style={styles.formCover}>
 				<H1 style={styles.headerTextStyle}>

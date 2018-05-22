@@ -35,8 +35,6 @@ import { showModal } from '../../../Actions/Modal';
 
 import i18n from '../../../Translations/common';
 
-import Theme from '../../../Theme';
-
 const messages = defineMessages({
 	emailAddressNotMatchHeader: {
 		id: 'user.emailAddressNotMatchHeader',
@@ -199,7 +197,7 @@ class RegisterForm extends View {
 	}
 
 	render(): Object {
-		let { appLayout, dialogueOpen, headerText, styles } = this.props;
+		let { dialogueOpen, headerText, styles } = this.props;
 		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
 		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
 
