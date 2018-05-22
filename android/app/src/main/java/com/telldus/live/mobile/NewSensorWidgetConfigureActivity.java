@@ -8,6 +8,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -247,6 +248,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
 
         mSensorBack=(RelativeLayout)findViewById(R.id.sensorBack);
+
+        Typeface title = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+        Typeface subtitle = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+        testText.setTypeface(title);
+        chooseSettingSensor.setTypeface(subtitle);
 
         mSensorBack.setOnClickListener(new View.OnClickListener() {
             @Override
