@@ -482,7 +482,7 @@ class SensorRow extends PureComponent<Props, State> {
 				recalculateHiddenLayout={true}
 				swipeToOpenPercent={20}
 				directionalDistanceChangeThreshold={2}>
-				<HiddenRow sensor={sensor} intl={intl}
+				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
 					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}/>
 				<ListItem
 					style={styles.row}
@@ -592,6 +592,8 @@ class SensorRow extends PureComponent<Props, State> {
 
 		let backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
 
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+
 		return {
 			container: {
 				flex: 1,
@@ -618,12 +620,21 @@ class SensorRow extends PureComponent<Props, State> {
 				marginRight: 4,
 			},
 			row: {
-				marginHorizontal: 12,
-				marginBottom: 5,
+				marginHorizontal: padding,
+				marginBottom: padding / 2,
 				backgroundColor: '#FFFFFF',
 				height: rowHeight,
 				borderRadius: 2,
 				...Theme.Core.shadow,
+			},
+			hiddenRow: {
+				flexDirection: 'row',
+				height: Theme.Core.rowHeight,
+				width: Theme.Core.buttonWidth * 2,
+				alignSelf: 'flex-end',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginRight: padding,
 			},
 			cover: {
 				flex: 1,

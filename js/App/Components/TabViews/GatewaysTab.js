@@ -33,10 +33,10 @@ import { getGateways, addNewGateway, showToast } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
-import getTabBarIcon from '../../Lib/getTabBarIcon';
+import { getRelativeDimensions, getTabBarIcon } from '../../Lib';
+import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
-
 const messages = defineMessages({
 	gateways: {
 		id: 'pages.gateways',
@@ -50,6 +50,7 @@ type Props = {
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
 	screenProps: Object,
+	appLayout: Object,
 };
 
 type State = {
@@ -63,6 +64,7 @@ type renderRowProps = {
 	name: string,
 	online: boolean,
 	websocketOnline: boolean,
+	appLayout: Object,
 };
 
 class GatewaysTab extends View {
@@ -139,7 +141,16 @@ class GatewaysTab extends View {
 			});
 	}
 
+	getPadding(): number {
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		return deviceWidth * Theme.Core.paddingFactor;
+	}
+
 	render(): Object {
+		const padding = this.getPadding();
 		return (
 			<View style={{flex: 1}}>
 				<FlatList
@@ -147,8 +158,10 @@ class GatewaysTab extends View {
 					renderItem={this.renderRow}
 					onRefresh={this.onRefresh}
 					refreshing={this.state.isRefreshing}
-					style={{paddingTop: 10}}
 					keyExtractor={this.keyExtractor}
+					contentContainerStyle={{
+						marginVertical: padding - (padding / 4),
+					}}
 				/>
 				<FloatingButton
 					onPress={this.addLocation}
@@ -169,6 +182,7 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
+		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 

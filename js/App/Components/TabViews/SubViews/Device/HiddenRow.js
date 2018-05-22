@@ -61,6 +61,7 @@ type Props = {
 	onPressSettings: () => void,
 	onSetIgnoreDevice: () => void,
 	isOpen: boolean,
+	style: Object,
 };
 
 class DeviceHiddenRow extends View {
@@ -122,7 +123,7 @@ class DeviceHiddenRow extends View {
 	}
 
 	render(): Object {
-		const { deviceIds, isOpen, device } = this.props;
+		const { deviceIds, isOpen, device, style } = this.props;
 		const { id, ignored } = device;
 		const isOnDB = deviceIds.indexOf(id) !== -1;
 
@@ -139,7 +140,7 @@ class DeviceHiddenRow extends View {
 		let importantForAccessibility = isOpen ? 'yes' : 'no-hide-descendants';
 
 		return (
-			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
+			<View style={style} importantForAccessibility={importantForAccessibility}>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onSetIgnoreDevice}
@@ -180,15 +181,6 @@ function mapStateToProps(store: Object): Object {
 }
 
 const styles = StyleSheet.create({
-	hiddenRow: {
-		flexDirection: 'row',
-		height: Theme.Core.rowHeight,
-		width: Theme.Core.buttonWidth * 2,
-		alignSelf: 'flex-end',
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginRight: 12,
-	},
 	favoriteIcon: {
 		fontSize: 28,
 		color: Theme.Core.brandSecondary,

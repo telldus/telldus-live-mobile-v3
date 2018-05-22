@@ -31,6 +31,9 @@ import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDet
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
 
+import { getRelativeDimensions } from '../../../Lib';
+import Theme from '../../../Theme';
+
 type Props = {
     location: Object,
     stackNavigator: Object,
@@ -68,10 +71,6 @@ class GatewayRow extends PureComponent<Props, State> {
 	render(): Object {
 		let { location, appLayout } = this.props;
 		let { name, type, online, websocketOnline } = location;
-		let { height, width } = appLayout;
-		let isPortrait = height > width;
-		let rowWidth = isIphoneX() ? (isPortrait ? width - 20 : width - 125 ) : width - 20;
-		let rowHeight = isPortrait ? height * 0.13 : width * 0.13;
 
 		let info = this.getLocationStatus(online, websocketOnline);
 
@@ -89,30 +88,39 @@ class GatewayRow extends PureComponent<Props, State> {
 			<View style={styles.rowItemsCover}>
 				<Image source={require('../../TabViews/img/right-arrow-key.png')} tintColor="#A59F9A90" style={styles.arrow}/>
 				<DeviceLocationDetail {...locationData}
-					style={{
-						width: rowWidth,
-						height: rowHeight,
-						marginVertical: 5,
-					}}
+					style={styles.locationDetails}
 					onPress={this.onPressGateway}/>
 			</View>
 		);
 	}
 
 	getStyles(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const rowWidth = width - (padding * 2);
+		const rowHeight = deviceWidth * 0.23;
+
 		return {
 			rowItemsCover: {
 				flexDirection: 'column',
 				alignItems: 'center',
 			},
+			locationDetails: {
+				width: rowWidth,
+				height: rowHeight,
+				marginVertical: padding / 4,
+			},
 			arrow: {
 				position: 'absolute',
 				zIndex: 1,
 				tintColor: '#A59F9A90',
-				right: 25,
+				right: padding * 2,
 				top: '40%',
-				height: 28,
-				width: 12,
+				height: rowHeight * 0.25,
+				width: rowHeight * 0.25,
 			},
 		};
 	}
@@ -120,7 +128,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 

@@ -41,7 +41,6 @@ import { getPowerConsumed } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
-const paddingHorizontal = 12;
 
 type Props = {
 	onBell: (number) => void,
@@ -403,8 +402,9 @@ class DeviceRow extends PureComponent<Props, State> {
 					recalculateHiddenLayout={true}
 					swipeToOpenPercent={20}
 					directionalDistanceChangeThreshold={2}>
-					<HiddenRow device={device} intl={intl} onPressSettings={this.onSettingsSelected}
-						onSetIgnoreDevice={this.onSetIgnoreDevice} isOpen={isOpen}/>
+					<HiddenRow device={device} intl={intl} style={styles.hiddenRow}
+						onPressSettings={this.onSettingsSelected} onSetIgnoreDevice={this.onSetIgnoreDevice}
+						isOpen={isOpen}/>
 					<ListItem
 						style={styles.row}>
 						<View style={styles.cover}>
@@ -507,6 +507,8 @@ class DeviceRow extends PureComponent<Props, State> {
 		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 		let backgroundColor = !isGatewayActive ? Theme.Core.offlineColor : color;
 
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+
 		return {
 			touchableContainer: {
 				flex: 1,
@@ -515,12 +517,21 @@ class DeviceRow extends PureComponent<Props, State> {
 				justifyContent: 'space-between',
 			},
 			row: {
-				marginHorizontal: paddingHorizontal,
-				marginBottom: 5,
+				marginHorizontal: padding,
+				marginBottom: padding / 2,
 				backgroundColor: '#FFFFFF',
 				height: rowHeight,
 				borderRadius: 2,
 				...Theme.Core.shadow,
+			},
+			hiddenRow: {
+				flexDirection: 'row',
+				height: Theme.Core.rowHeight,
+				width: Theme.Core.buttonWidth * 2,
+				alignSelf: 'flex-end',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginRight: padding,
 			},
 			cover: {
 				flex: 1,

@@ -60,6 +60,7 @@ type Props = {
 	sensorIds: Array<number>,
 	onSetIgnoreSensor: () => void,
 	isOpen: boolean,
+	style: Object,
 };
 
 class SensorHiddenRow extends View {
@@ -108,7 +109,7 @@ class SensorHiddenRow extends View {
 	}
 
 	render(): Object {
-		const { sensorIds, sensor, isOpen } = this.props;
+		const { sensorIds, sensor, isOpen, style } = this.props;
 		const { id, ignored } = sensor;
 		const isOnDB = sensorIds.indexOf(id) !== -1;
 
@@ -121,7 +122,7 @@ class SensorHiddenRow extends View {
 		let accessibilityLabelSetIgnore = ignored ? this.labelUnHide : this.labelHide;
 
 		return (
-			<View style={styles.hiddenRow} importantForAccessibility={importantForAccessibility}>
+			<View style={style} importantForAccessibility={importantForAccessibility}>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onSetIgnoreSensor}
@@ -155,15 +156,6 @@ function mapStateToProps(store: Object): Object {
 }
 
 const styles = StyleSheet.create({
-	hiddenRow: {
-		flexDirection: 'row',
-		height: Theme.Core.rowHeight,
-		width: Theme.Core.buttonWidth * 2,
-		alignSelf: 'flex-end',
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginRight: 12,
-	},
 	favoriteIcon: {
 		fontSize: 28,
 		color: Theme.Core.brandSecondary,

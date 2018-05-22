@@ -44,7 +44,7 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import getTabBarIcon from '../../Lib/getTabBarIcon';
+import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
 
 const messages = defineMessages({
 	messageNoItemsTitle: {
@@ -95,8 +95,6 @@ type State = {
 	scrollEnabled: boolean,
 	showRefresh: boolean,
 };
-
-const tileMargin = 2;
 
 class DashboardTab extends View {
 
@@ -239,8 +237,7 @@ class DashboardTab extends View {
 		const { appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
-		const margin = this.getPadding(deviceWidth) * 2;
+		const margin = this.getPadding() * 2;
 
 		listWidth -= margin;
 
@@ -316,6 +313,7 @@ class DashboardTab extends View {
 		let { tileWidth } = this.state;
 		let { data, objectType } = row.item;
 		let isGatewayActive = gateways.byId[data.clientId].online;
+		let tileMargin = this.getPadding() / 4;
 		tileWidth -= (2 * tileMargin);
 		let key = data.id;
 		if (objectType !== 'sensor' && objectType !== 'device') {
@@ -361,17 +359,20 @@ class DashboardTab extends View {
 		);
 	}
 
-	getPadding(deviceWidth: number): number {
+	getPadding(): number {
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 		return deviceWidth * Theme.Core.paddingFactor;
 	}
 
 	getStyles(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
 		const isEmpty = !this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0;
 
-		const padding = this.getPadding(deviceWidth);
+		const padding = this.getPadding();
 
 		return {
 			container: {
@@ -418,7 +419,7 @@ function mapStateToProps(state: Object, props: Object): Object {
 		userProfile: getUserProfile(state),
 		tab: state.navigation.tab,
 		dashboard: state.dashboard,
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 

@@ -33,8 +33,7 @@ import { DeviceRow, DeviceHeader } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import getDeviceType from '../../Lib/getDeviceType';
-import getTabBarIcon from '../../Lib/getTabBarIcon';
+import { getRelativeDimensions, getDeviceType, getTabBarIcon } from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast } from '../../Actions';
@@ -515,7 +514,6 @@ class DevicesTab extends View {
 		let hiddenListIconFontSize = Math.floor(deviceWidth * 0.088);
 		hiddenListIconFontSize = hiddenListIconFontSize > 50 ? 50 : hiddenListIconFontSize;
 
-
 		return {
 			noItemsContainer: {
 				flex: 1,
@@ -617,7 +615,7 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 		devices: state.devices,
 		gateways: state.gateways,
 		tab: state.navigation.tab,
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 		screenReaderEnabled: state.App.screenReaderEnabled,
 	};
 }
