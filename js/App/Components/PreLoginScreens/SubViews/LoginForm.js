@@ -27,14 +27,12 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { TouchableButton, View } from '../../../../BaseComponents';
+import { TouchableButton, View, H1 } from '../../../../BaseComponents';
 import { loginToTelldus, showModal } from '../../../Actions';
 import { testUsername, testPassword } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
 import {defineMessages} from 'react-intl';
-
-import Theme from '../../../Theme';
 
 const messages = defineMessages({
 	fieldEmpty: {
@@ -52,6 +50,8 @@ type Props = {
 		intl: intlShape.isRequired,
 		appLayout: Object,
 		dialogueOpen: Object,
+		styles: Object,
+		headerText: string,
 };
 
 type State = {
@@ -91,39 +91,52 @@ class LoginForm extends View {
 	}
 
 	render(): Object {
-		let { appLayout, dialogueOpen } = this.props;
+		let { dialogueOpen, styles, headerText } = this.props;
 		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
 		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
 
 		return (
-			<View importantForAccessibility={importantForAccessibility}>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
-					<TextInput
-						style={[Theme.Styles.textField, { width: appLayout.width * 0.85, fontSize: 15 }]}
-						onChangeText={this.onChangeUsername}
-						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
-						keyboardType="email-address"
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						defaultValue={this.state.username}
-					/>
-				</View>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="lock" style={Theme.Styles.iconLock} size={15} color="#ffffff80"/>
-					<TextInput
-						style={[Theme.Styles.textField, { width: appLayout.width * 0.85, fontSize: 15 }]}
-						onChangeText={this.onChangePassword}
-						placeholder={this.props.intl.formatMessage(i18n.password)}
-						secureTextEntry={true}
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						defaultValue={this.state.password}
-					/>
+			<View
+				importantForAccessibility={importantForAccessibility}
+				style={styles.formCover}>
+				<H1 style={styles.headerTextStyle}>
+					{headerText}
+				</H1>
+				<View style={styles.fieldsContainerStyle}>
+					<View style={styles.fieldsPairContainerStyle}>
+						<View style={styles.textFieldIconContainer}>
+							<View style={[styles.textFieldIconCover, styles.textFieldIconCoverOne]}>
+								<Icon name="email" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
+								<TextInput
+									style={styles.textFieldStyle}
+									onChangeText={this.onChangeUsername}
+									placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
+									keyboardType="email-address"
+									autoCapitalize="none"
+									autoCorrect={false}
+									placeholderTextColor="#ffffff80"
+									underlineColorAndroid="#ffffff80"
+									defaultValue={this.state.username}
+								/>
+							</View>
+						</View>
+						<View style={styles.textFieldIconContainer}>
+							<View style={styles.textFieldIconCover}>
+								<Icon name="lock" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
+								<TextInput
+									style={styles.textFieldStyle}
+									onChangeText={this.onChangePassword}
+									placeholder={this.props.intl.formatMessage(i18n.password)}
+									secureTextEntry={true}
+									autoCapitalize="none"
+									autoCorrect={false}
+									placeholderTextColor="#ffffff80"
+									underlineColorAndroid="#ffffff80"
+									defaultValue={this.state.password}
+								/>
+							</View>
+						</View>
+					</View>
 				</View>
 				<View style={{ height: 10 }}/>
 				<TouchableButton

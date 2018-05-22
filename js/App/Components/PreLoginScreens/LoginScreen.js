@@ -26,9 +26,10 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, DialogueBox, SafeAreaView } from '../../../BaseComponents';
-import { FormContainerComponent, LoginForm, SessionLocked } from './SubViews';
+import { FormattedMessage, View, DialogueBox } from '../../../BaseComponents';
+import { LoginForm, SessionLocked } from './SubViews';
 
+import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 import {defineMessages} from 'react-intl';
 
@@ -54,6 +55,7 @@ type Props = {
 		showModal: boolean,
 		intl: intlShape.isRequired,
 		appLayout: Object,
+		styles: Object,
 };
 
 type State = {
@@ -139,54 +141,68 @@ class LoginScreen extends View {
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		let { appLayout, styles: commonStyles } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		let {
 			headerText, notificationHeader, positiveText,
 			onPressPositive, onPressNegative, showPositive, showNegative} = this.getRelativeData();
 		return (
-			<SafeAreaView>
-				<FormContainerComponent headerText={headerText} formContainerStyle={styles.formContainer}>
-					{this.props.accessToken && !this.props.isTokenValid ?
-						<SessionLocked onPressLogout={this.state.onPressLogout} dialogueOpen={this.props.showModal}/>
-						:
-						<LoginForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
-					}
-					{this.props.accessToken && !this.props.isTokenValid ?
-						null
-						:
-						<View style={styles.otherLinks}>
-							<TouchableOpacity style={{height: 25}}
-								onPress={this.onForgotPassword}
-								accessibilityLabel={this.labelForgotPassword}>
-								<FormattedMessage {...i18n.forgotPassword} style={{ color: '#bbb', fontSize: 13 }}/>
-							</TouchableOpacity>
-							<TouchableOpacity style={{height: 25, paddingLeft: 5 }}
-								onPress={this.onNeedAccount}
-								accessibilityLabel={this.labelNeedAccount}>
-								<FormattedMessage {...messages.needAccount} style={{ color: '#bbb', paddingLeft: 5, fontSize: 13 }}/>
-							</TouchableOpacity>
-							<View style={{ height: 10 }}/>
-						</View>
-					}
-					<DialogueBox
-						showDialogue={this.props.showModal}
-						header={notificationHeader}
-						text={this.props.validationMessage}
-						showPositive={showPositive}
-						showNegative={showNegative}
-						positiveText={positiveText}
-						onPressPositive={onPressPositive}
-						onPressNegative={onPressNegative}/>
-
-				</FormContainerComponent>
-			</SafeAreaView>
+			<View style={{
+				flex: 1,
+				alignItems: 'stretch',
+			}}>
+				{this.props.accessToken && !this.props.isTokenValid ?
+					<SessionLocked
+						onPressLogout={this.state.onPressLogout}
+						dialogueOpen={this.props.showModal}
+						headerText={headerText}
+						styles={commonStyles}/>
+					:
+					<LoginForm
+						appLayout={appLayout}
+						dialogueOpen={this.props.showModal}
+						headerText={headerText}
+						styles={commonStyles}/>
+				}
+				{this.props.accessToken && !this.props.isTokenValid ?
+					null
+					:
+					<View style={styles.otherLinks}>
+						<TouchableOpacity
+							onPress={this.onForgotPassword}
+							accessibilityLabel={this.labelForgotPassword}>
+							<FormattedMessage {...i18n.forgotPassword} style={styles.textLink}/>
+						</TouchableOpacity>
+						<TouchableOpacity
+							onPress={this.onNeedAccount}
+							accessibilityLabel={this.labelNeedAccount}>
+							<FormattedMessage {...messages.needAccount} style={[ styles.textLink, { paddingLeft: 5 }]}/>
+						</TouchableOpacity>
+						<View style={{ height: 10 }}/>
+					</View>
+				}
+				<DialogueBox
+					showDialogue={this.props.showModal}
+					header={notificationHeader}
+					text={this.props.validationMessage}
+					showPositive={showPositive}
+					showNegative={showNegative}
+					positiveText={positiveText}
+					onPressPositive={onPressPositive}
+					onPressNegative={onPressNegative}/>
+			</View>
 		);
 	}
 
 	getStyles(appLayout: Object): Object {
-		const width = appLayout.width;
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let deviceWidth = isPortrait ? width : height;
+
+		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		let maxFontSize = Theme.Core.maxSizeTextButton - 2;
+		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
 
 		return {
 			otherLinks: {
@@ -196,8 +212,11 @@ class LoginScreen extends View {
 				justifyContent: 'center',
 				marginHorizontal: 10,
 			},
-			formContainer: {
-				width: width,
+			textLink: {
+				color: '#bbb',
+				fontSize: infoFontSize,
+				marginHorizontal: infoFontSize * 0.2,
+				marginVertical: infoFontSize * 0.8,
 			},
 		};
 	}
@@ -220,7 +239,6 @@ function mapStateToProps(store: Object): Object {
 		isTokenValid: store.user.isTokenValid,
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
-		appLayout: store.App.layout,
 	};
 }
 

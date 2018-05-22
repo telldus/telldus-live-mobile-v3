@@ -25,8 +25,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, Text, TouchableButton, SafeAreaView } from '../../../BaseComponents';
-import { FormContainerComponent } from './SubViews';
+import { FormattedMessage, View, Text, TouchableButton, H1 } from '../../../BaseComponents';
+import Theme from '../../Theme';
 
 const messages = defineMessages({
 	welcomeHeader: {
@@ -53,6 +53,7 @@ type Props = {
 	registeredCredential: any,
 	intl: intlShape.isRequired,
 	appLayout: Object,
+	styles: Object,
 };
 
 class WelcomeScreen extends View {
@@ -71,35 +72,43 @@ class WelcomeScreen extends View {
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		let { appLayout, styles: commonStyles, intl } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
-			<SafeAreaView>
-				<FormContainerComponent headerText={this.props.intl.formatMessage(messages.welcomeHeader)} formContainerStyle={styles.formContainer}>
-					<Text style={styles.textBody}><FormattedMessage {...messages.accountCreated} style={styles.textBody}/></Text>
-					<Text style={styles.textBody}><FormattedMessage {...messages.confirmMessage} style={styles.textBody}/></Text>
-					<TouchableButton
-						style={{marginTop: 20}}
-						onPress={this.onPressOK}
-						text={messages.welcomeButton}
-					/>
-				</FormContainerComponent>
-			</SafeAreaView>
+			<View style={{flex: 1, alignItems: 'center'}}>
+				<H1 style={commonStyles.headerTextStyle}>
+					{intl.formatMessage(messages.welcomeHeader)}
+				</H1>
+				<Text style={styles.textBody}><FormattedMessage {...messages.accountCreated} style={styles.textBody}/></Text>
+				<Text style={styles.textBody}><FormattedMessage {...messages.confirmMessage} style={styles.textBody}/></Text>
+				<TouchableButton
+					style={styles.button}
+					onPress={this.onPressOK}
+					text={messages.welcomeButton}
+				/>
+			</View>
 		);
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		let deviceWidth = isPortrait ? width : height;
+
+		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		let maxFontSize = Theme.Core.maxSizeTextButton - 2;
+		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
 
 		return {
 			textBody: {
 				color: '#ffffff80',
-				marginTop: 20,
+				marginTop: infoFontSize,
 				textAlign: 'center',
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				fontSize: infoFontSize,
+			},
+			button: {
+				marginVertical: infoFontSize,
 			},
 		};
 	}
@@ -108,7 +117,6 @@ class WelcomeScreen extends View {
 function mapStateToProps(store: Object): Object {
 	return {
 		registeredCredential: store.user.registeredCredential,
-		appLayout: store.App.layout,
 	};
 }
 

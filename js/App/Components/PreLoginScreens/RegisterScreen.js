@@ -26,9 +26,10 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, DialogueBox, SafeAreaView } from '../../../BaseComponents';
-import {FormContainerComponent, RegisterForm} from './SubViews';
+import { FormattedMessage, View, DialogueBox } from '../../../BaseComponents';
+import { RegisterForm } from './SubViews';
 
+import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 const messages = defineMessages({
 	createAccount: {
@@ -52,6 +53,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
 	appLayout: Object,
+	styles: Object,
 };
 
 class RegisterScreen extends View {
@@ -102,40 +104,53 @@ class RegisterScreen extends View {
 	}
 
 	render(): Object {
-		let { showModal, validationMessage, validationMessageHeader, appLayout } = this.props;
+		let { showModal, validationMessage, validationMessageHeader, appLayout, intl, styles: commonStyles } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
-			<SafeAreaView>
-				<FormContainerComponent headerText={this.props.intl.formatMessage(messages.createAccount)} formContainerStyle={styles.formContainer}>
-					<RegisterForm appLayout={appLayout} dialogueOpen={this.props.showModal}/>
-					<TouchableOpacity style={{height: 25}}
-						onPress={this.goBackToLogin}
-						accessibilityLabel={this.labelAlreadyHaveAccount}>
-						<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
-					</TouchableOpacity>
-					<DialogueBox
-						showDialogue={showModal}
-						text={validationMessage}
-						header={validationMessageHeader}
-						showPositive={true}
-						showNegative={false}
-						onPressPositive={this.closeModal}/>
-				</FormContainerComponent>
-			</SafeAreaView>
+			<View style={{
+				flex: 1,
+				alignItems: 'stretch',
+			}}>
+				<RegisterForm
+					appLayout={appLayout}
+					dialogueOpen={this.props.showModal}
+					headerText={intl.formatMessage(messages.createAccount)}
+					styles={commonStyles}/>
+				<TouchableOpacity
+					onPress={this.goBackToLogin}
+					accessibilityLabel={this.labelAlreadyHaveAccount}
+					style={{
+						alignSelf: 'center',
+					}}>
+					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
+				</TouchableOpacity>
+				<DialogueBox
+					showDialogue={showModal}
+					text={validationMessage}
+					header={validationMessageHeader}
+					showPositive={true}
+					showNegative={false}
+					onPressPositive={this.closeModal}/>
+			</View>
 		);
 	}
 
 	getStyles(appLayout: Object): Object {
-		const width = appLayout.width;
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let deviceWidth = isPortrait ? width : height;
+
+		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		let maxFontSize = Theme.Core.maxSizeTextButton - 2;
+		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
 
 		return {
 			accountExist: {
-				marginTop: 10,
+				fontSize: infoFontSize,
+				marginHorizontal: infoFontSize * 0.2,
+				marginVertical: infoFontSize * 0.8,
 				color: '#bbb',
-			},
-			formContainer: {
-				width: width,
 			},
 		};
 	}
@@ -153,7 +168,6 @@ function mapStateToProps(store: Object): Object {
 		validationMessageHeader: store.modal.extras,
 		showModal: store.modal.openModal,
 		registeredCredential: store.user.registeredCredential,
-		appLayout: store.App.layout,
 	};
 }
 

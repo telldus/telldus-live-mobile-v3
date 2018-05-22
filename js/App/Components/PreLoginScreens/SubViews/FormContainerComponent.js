@@ -22,56 +22,176 @@
 'use strict';
 
 import React from 'react';
-import typeof { Children as Children} from 'react';
-import { KeyboardAvoidingView, ScrollView } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { connect } from 'react-redux';
+import DeviceInfo from 'react-native-device-info';
 
-import { BackgroundImage, View, Image, H1 } from '../../../../BaseComponents';
-import StyleSheet from 'StyleSheet';
+import { BackgroundImage, View, Image } from '../../../../BaseComponents';
+
+import { getRelativeDimensions } from '../../../Lib';
+import Theme from '../../../Theme';
 
 type Props = {
-	headerText: string,
-	children: Children,
-	formContainerStyle?: number | Object,
+	children: any,
+	appLayout: Object,
+	navigation: Object,
+	screenProps: Object,
 };
 
-const FormContainerComponent = (props: Props): React$Element<any> => (
-	<BackgroundImage source={require('./../img/home5.jpg')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-		<ScrollView
-			keyboardShouldPersistTaps={'always'}>
-			<KeyboardAvoidingView behavior="padding" contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}>
-				<View style={{alignItems: 'center', justifyContent: 'center'}}>
-					<Image
-						source={require('./../img/telldusLogoBlack.png')}
-						style={{
-							marginTop: 60,
-							marginBottom: 60,
-						}}
-					/>
-				</View>
-				<View style={[styles.container, props.formContainerStyle]} >
-					<H1 style={{
-						margin: 10,
-						color: '#ffffff80',
-						textAlign: 'center',
-					}}>
-						{props.headerText}
-					</H1>
-					{props.children}
-				</View>
-			</KeyboardAvoidingView>
-		</ScrollView>
-	</BackgroundImage>
-);
+class FormContainerComponent extends View<Props, null> {
+	props: Props;
 
-export default FormContainerComponent;
+	isTablet: boolean;
 
-const styles = StyleSheet.create({
-	container: {
-		backgroundColor: '#00000099',
-		padding: 10,
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-});
+	constructor(props: Props) {
+		super(props);
+
+		this.isTablet = DeviceInfo.isTablet();
+		this.background = require('./../img/home5.jpg');
+		this.logo = require('./../img/telldusLogoBlack.png');
+	}
+
+	render(): Object {
+		const {
+			navigation,
+			screenProps,
+			children,
+			appLayout,
+		} = this.props;
+
+		const styles = this.getStyles(appLayout);
+
+		return (
+			<BackgroundImage source={this.background} style={styles.container}>
+				<ScrollView
+					keyboardShouldPersistTaps={'always'}
+					style={{ flex: 1 }}
+					contentContainerStyle={styles.contentContainerStyle}>
+					<KeyboardAvoidingView
+						behavior="padding"
+						style={{ justifyContent: 'center', alignItems: 'center' }}
+						contentContainerStyle={{ paddingTop: 20, justifyContent: 'center' }}>
+						<Image
+							source={this.logo}
+							style={styles.logoStyle}
+						/>
+						<View style={styles.formContainer}>
+							{React.cloneElement(
+								children,
+								{
+									isTablet: this.isTablet,
+									appLayout,
+									navigation,
+									screenProps,
+									styles,
+								},
+							)}
+						</View>
+					</KeyboardAvoidingView>
+				</ScrollView>
+			</BackgroundImage>
+		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let deviceWidth = isPortrait ? width : height;
+		let deviceHeight = isPortrait ? height : width;
+
+		let headerFontSize = Math.floor(deviceWidth * 0.05);
+		let maxFontSize = Theme.Core.maxSizeTextButton + 4;
+		headerFontSize = headerFontSize > maxFontSize ? maxFontSize : headerFontSize;
+
+		let textFieldFontSize = Math.floor(deviceWidth * 0.04);
+		let maxTextFieldFontSize = Theme.Core.maxSizeTextButton - 4;
+		textFieldFontSize = textFieldFontSize > maxTextFieldFontSize ? maxTextFieldFontSize : textFieldFontSize;
+
+		return {
+			container: {
+				flex: 1,
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			contentContainerStyle: {
+				flexGrow: 1,
+				alignItems: 'center',
+			},
+			logoStyle: {
+				marginTop: deviceHeight * 0.16,
+				marginBottom: deviceHeight * 0.08,
+			},
+			formContainer: {
+				backgroundColor: '#00000099',
+				padding: 10,
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'stretch',
+				width,
+			},
+			headerTextStyle: {
+				margin: headerFontSize * 0.5,
+				fontSize: headerFontSize,
+				color: '#ffffff80',
+				textAlign: 'center',
+			},
+			formCover: {
+				flex: 1,
+				alignItems: 'stretch',
+			},
+			fieldsContainerStyle: {
+				flex: 1,
+				alignItems: 'stretch',
+				padding: headerFontSize,
+			},
+			fieldsPairContainerStyle: {
+				flex: 1,
+				flexDirection: this.isTablet ? 'row' : 'column',
+				alignItems: this.isTablet ? 'flex-end' : 'flex-start',
+				justifyContent: 'center',
+			},
+			textFieldIconContainer: {
+				flex: 1,
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			textFieldIconCover: {
+				flex: 0,
+				flexDirection: 'row',
+				alignItems: 'flex-end',
+				justifyContent: 'center',
+			},
+			textFieldIconCoverOne: {
+				justifyContent: this.isTablet ? 'flex-end' : 'center',
+			},
+			textFieldStyle: {
+				paddingLeft: 12 + textFieldFontSize,
+				width: this.isTablet ? width * 0.4 : width * 0.8,
+				paddingTop: textFieldFontSize,
+				minWidth: 200,
+				borderRadius: 3,
+
+				fontSize: textFieldFontSize,
+				color: '#ffffff80',
+				textAlign: 'left',
+				textAlignVertical: 'bottom',
+			},
+			iconStyle: {
+				position: 'absolute',
+				bottom: Platform.OS === 'android' ? 10 : 0,
+				left: Platform.OS === 'android' ? 3 : 0,
+			},
+			iconSize: textFieldFontSize,
+		};
+	}
+}
+
+function mapStateToProps(store: Object): Object {
+	return {
+		appLayout: getRelativeDimensions(store.App.layout),
+	};
+}
+
+export default connect(mapStateToProps, null)(FormContainerComponent);
 

@@ -25,9 +25,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 
-import { FormattedMessage, View, SafeAreaView } from '../../../BaseComponents';
-import {FormContainerComponent, ForgotPasswordForm} from './SubViews';
+import { FormattedMessage, View } from '../../../BaseComponents';
+import { ForgotPasswordForm } from './SubViews';
 
+import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 const messages = defineMessages({
@@ -42,6 +43,7 @@ type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
 	appLayout: Object,
+	styles: Object,
 };
 
 class ForgotPasswordScreen extends View {
@@ -74,43 +76,46 @@ class ForgotPasswordScreen extends View {
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		let { appLayout, intl, styles: commonStyles } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
-			<SafeAreaView>
-				<FormContainerComponent headerText={this.props.intl.formatMessage(i18n.forgotPassword)} formContainerStyle={styles.formContainer}>
-					<ForgotPasswordForm appLayout={appLayout}/>
-					<View style={{ height: 10 }}/>
-					<TouchableOpacity style={{height: 25}}
-						onPress={this.goBackToLogin}
-						accessibilityLabel={this.labelBackToLogin}>
-						<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
-					</TouchableOpacity>
-				</FormContainerComponent>
-			</SafeAreaView>
+			<View style={{flex: 1, alignItems: 'stretch'}}>
+				<ForgotPasswordForm
+					appLayout={appLayout}
+					headerText={intl.formatMessage(i18n.forgotPassword)}
+					styles={commonStyles}/>
+				<View style={{ height: 10 }}/>
+				<TouchableOpacity
+					onPress={this.goBackToLogin}
+					accessibilityLabel={this.labelBackToLogin}
+					style={{
+						alignSelf: 'center',
+					}}>
+					<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
+				</TouchableOpacity>
+			</View>
 		);
 	}
 
 	getStyles(appLayout: Object): Object {
-		const width = appLayout.width;
+		let { height, width } = appLayout;
+		let isPortrait = height > width;
+		let deviceWidth = isPortrait ? width : height;
+
+		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		let maxFontSize = Theme.Core.maxSizeTextButton - 2;
+		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
 
 		return {
 			accountExist: {
-				marginTop: 10,
+				fontSize: infoFontSize,
+				marginHorizontal: infoFontSize * 0.2,
+				marginVertical: infoFontSize * 0.8,
 				color: '#bbb',
-			},
-			formContainer: {
-				width: width,
 			},
 		};
 	}
 }
 
-function mapStateToProps(store: Object): Object {
-	return {
-		appLayout: store.App.layout,
-	};
-}
-
-export default connect(mapStateToProps, null)(injectIntl(ForgotPasswordScreen));
+export default connect(null, null)(injectIntl(ForgotPasswordScreen));

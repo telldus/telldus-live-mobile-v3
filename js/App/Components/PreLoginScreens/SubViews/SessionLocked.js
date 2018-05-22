@@ -29,12 +29,14 @@ import {
 	Text,
 	View,
 	TouchableButton,
+	H1,
 } from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
 import { logoutFromTelldus } from '../../../Actions';
 import { unregisterPushToken } from '../../../Actions/User';
 import { refreshAccessToken } from '../../../Lib';
+import Theme from '../../../Theme';
 
 const messages = defineMessages({
 	sessionLockedBodyParaOne: {
@@ -58,6 +60,8 @@ type Props = {
 	onPressLogout: boolean,
 	appLayout: Object,
 	dialogueOpen: boolean,
+	styles: Object,
+	headerText: string,
 };
 
 class SessionLocked extends View {
@@ -108,7 +112,7 @@ class SessionLocked extends View {
 	}
 
 	render(): Object {
-		let { appLayout, dialogueOpen } = this.props;
+		let { appLayout, dialogueOpen, headerText, styles: commonStyles} = this.props;
 		let styles = this.getStyles(appLayout);
 
 		let buttonOneLabel = this.state.isLogginIn ? `${this.buttonOneOne}...` : this.buttonOne;
@@ -119,6 +123,9 @@ class SessionLocked extends View {
 
 		return (
 			<View style={styles.bodyCover} accessible={!dialogueOpen}>
+				<H1 style={commonStyles.headerTextStyle}>
+					{headerText}
+				</H1>
 				<View accessibilityLiveRegion="assertive">
 					<Text style={styles.contentText}>
 						{this.bodyOne}
@@ -145,9 +152,13 @@ class SessionLocked extends View {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		let deviceWidth = isPortrait ? width : height;
+
+		let infoFontSize = Math.floor(deviceWidth * 0.039);
+		let maxFontSize = Theme.Core.maxSizeTextButton - 2;
+		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
 
 		return {
 			bodyCover: {
@@ -156,7 +167,7 @@ class SessionLocked extends View {
 			contentText: {
 				color: '#ffffff80',
 				textAlign: 'center',
-				fontSize: isPortrait ? 13 : 13,
+				fontSize: infoFontSize,
 			},
 		};
 	}

@@ -26,7 +26,7 @@ import { TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, TouchableButton } from '../../../../BaseComponents';
+import { View, TouchableButton, H1 } from '../../../../BaseComponents';
 
 import i18n from '../../../Translations/common';
 import { intlShape, injectIntl } from 'react-intl';
@@ -37,6 +37,8 @@ import Theme from '../../../Theme';
 type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
+	styles: Object,
+	headerText: string,
 };
 
 class ForgotPasswordForm extends View {
@@ -65,23 +67,32 @@ class ForgotPasswordForm extends View {
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		let { appLayout, headerText, styles } = this.props;
 		return (
-			<View>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
-					<TextInput
-						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
-						onChangeText={this.onEmailChange}
-						onBlur={this.onEmailBlur}
-						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
-						keyboardType="email-address"
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						defaultValue={this.state.email}
-					/>
+			<View style={styles.formCover}>
+				<H1 style={styles.headerTextStyle}>
+					{headerText}
+				</H1>
+				<View style={styles.fieldsContainerStyle}>
+					<View style={styles.fieldsPairContainerStyle}>
+						<View style={styles.textFieldIconContainer}>
+							<View style={[styles.textFieldIconCover, {justifyContent: 'center'}]}>
+								<Icon name="email" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
+								<TextInput
+									style={styles.textFieldStyle}
+									onChangeText={this.onEmailChange}
+									onBlur={this.onEmailBlur}
+									placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
+									keyboardType="email-address"
+									autoCapitalize="none"
+									autoCorrect={false}
+									placeholderTextColor="#ffffff80"
+									underlineColorAndroid="#ffffff80"
+									defaultValue={this.state.email}
+								/>
+							</View>
+						</View>
+					</View>
 				</View>
 				<View style={{ height: 10 }}/>
 				<TouchableButton

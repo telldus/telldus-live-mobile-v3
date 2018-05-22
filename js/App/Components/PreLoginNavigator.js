@@ -25,30 +25,39 @@ import { StackNavigator } from 'react-navigation';
 import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
 
-import { View } from '../../BaseComponents';
+import { View, SafeAreaView } from '../../BaseComponents';
 import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from './PreLoginScreens';
+import { FormContainerComponent } from './PreLoginScreens/SubViews';
+
+type renderContainer = (Object) => Object;
+
+const renderFormContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
+	<FormContainerComponent navigation={navigation} screenProps={screenProps}>
+		<Component/>
+	</FormContainerComponent>
+);
 
 const RouteConfigs = {
 	Login: {
-		screen: LoginScreen,
+		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(LoginScreen),
 		navigationOptions: {
 			header: null,
 		},
 	},
 	ForgotPassword: {
-		screen: ForgotPasswordScreen,
+		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(ForgotPasswordScreen),
 		navigationOptions: {
 			header: null,
 		},
 	},
 	Register: {
-		screen: RegisterScreen,
+		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(RegisterScreen),
 		navigationOptions: {
 			header: null,
 		},
 	},
 	Welcome: {
-		screen: WelcomeScreen,
+		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(WelcomeScreen),
 		navigationOptions: {
 			header: null,
 		},
@@ -117,10 +126,12 @@ class PreLoginNavigator extends View {
 	render(): React$Element<any> {
 		let screenProps = {currentScreen: this.state.currentScreen};
 		return (
-			<Navigator
-				onNavigationStateChange={this.onNavigationStateChange}
-				screenProps={screenProps}
-			/>
+			<SafeAreaView>
+				<Navigator
+					onNavigationStateChange={this.onNavigationStateChange}
+					screenProps={screenProps}
+				/>
+			</SafeAreaView>
 		);
 	}
 }

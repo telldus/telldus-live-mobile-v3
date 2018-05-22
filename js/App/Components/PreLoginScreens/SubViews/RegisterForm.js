@@ -28,7 +28,7 @@ import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, TouchableButton } from '../../../../BaseComponents';
+import { View, TouchableButton, H1 } from '../../../../BaseComponents';
 
 import { RegisterUser } from '../../../Actions/User';
 import { showModal } from '../../../Actions/Modal';
@@ -74,6 +74,8 @@ type Props = {
 	validationMessageHeader: string,
 	appLayout: Object,
 	dialogueOpen: boolean,
+	styles: Object,
+	headerText: string,
 };
 
 class RegisterForm extends View {
@@ -197,69 +199,88 @@ class RegisterForm extends View {
 	}
 
 	render(): Object {
-		let { appLayout, dialogueOpen } = this.props;
+		let { appLayout, dialogueOpen, headerText, styles } = this.props;
 		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
 		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
 
 		return (
-			<View importantForAccessibility={importantForAccessibility}>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
-					<TextInput
-						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
-						onChangeText={this.onFirstNameChange}
-						placeholder={this.props.intl.formatMessage(i18n.firstName)}
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						editable={!this.props.showModal}
-						defaultValue={this.state.firstName}
-					/>
-				</View>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="account" style={Theme.Styles.iconAccount} size={18} color="#ffffff80"/>
-					<TextInput
-						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
-						onChangeText={this.onLastNameChange}
-						placeholder={this.props.intl.formatMessage(i18n.lastName)}
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						editable={!this.props.showModal}
-						defaultValue={this.state.lastName}
-					/>
-				</View>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
-					<TextInput
-						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
-						onChangeText={this.onEmailChange}
-						placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
-						keyboardType="email-address"
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						editable={!this.props.showModal}
-						defaultValue={this.state.email}
-					/>
-				</View>
-				<View style={Theme.Styles.textFieldCover}>
-					<Icon name="email" style={Theme.Styles.iconEmail} size={14} color="#ffffff80"/>
-					<TextInput
-						style={[Theme.Styles.textField, { width: appLayout.width * 0.7 }]}
-						onChangeText={this.onConfirmEmailChange}
-						placeholder={this.props.intl.formatMessage(i18n.confirmEmailAddress)}
-						keyboardType="email-address"
-						autoCapitalize="none"
-						autoCorrect={false}
-						placeholderTextColor="#ffffff80"
-						underlineColorAndroid="#ffffff80"
-						editable={!this.props.showModal}
-						defaultValue={this.state.confirmEmail}
-					/>
+			<View
+				importantForAccessibility={importantForAccessibility}
+				style={styles.formCover}>
+				<H1 style={styles.headerTextStyle}>
+					{headerText}
+				</H1>
+				<View style={styles.fieldsContainerStyle}>
+					<View style={styles.fieldsPairContainerStyle}>
+						<View style={styles.textFieldIconContainer}>
+							<View style={[styles.textFieldIconCover, styles.textFieldIconCoverOne]}>
+								<Icon name="account" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
+								<TextInput
+									style={styles.textFieldStyle}
+									onChangeText={this.onFirstNameChange}
+									placeholder={this.props.intl.formatMessage(i18n.firstName)}
+									autoCapitalize="none"
+									autoCorrect={false}
+									placeholderTextColor="#ffffff80"
+									underlineColorAndroid="#ffffff80"
+									editable={!this.props.showModal}
+									defaultValue={this.state.firstName}
+								/>
+							</View>
+						</View>
+						<View style={styles.textFieldIconContainer}>
+							<View style={styles.textFieldIconCover}>
+								<Icon name="account" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
+								<TextInput
+									style={styles.textFieldStyle}
+									onChangeText={this.onLastNameChange}
+									placeholder={this.props.intl.formatMessage(i18n.lastName)}
+									autoCapitalize="none"
+									autoCorrect={false}
+									placeholderTextColor="#ffffff80"
+									underlineColorAndroid="#ffffff80"
+									editable={!this.props.showModal}
+									defaultValue={this.state.lastName}
+								/>
+							</View>
+						</View>
+					</View>
+					<View style={styles.fieldsPairContainerStyle}>
+						<View style={styles.textFieldIconContainer}>
+							<View style={[styles.textFieldIconCover, styles.textFieldIconCoverOne]}>
+								<Icon name="email" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
+								<TextInput
+									style={styles.textFieldStyle}
+									onChangeText={this.onEmailChange}
+									placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
+									keyboardType="email-address"
+									autoCapitalize="none"
+									autoCorrect={false}
+									placeholderTextColor="#ffffff80"
+									underlineColorAndroid="#ffffff80"
+									editable={!this.props.showModal}
+									defaultValue={this.state.email}
+								/>
+							</View>
+						</View>
+						<View style={styles.textFieldIconContainer}>
+							<View style={styles.textFieldIconCover}>
+								<Icon name="email" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
+								<TextInput
+									style={styles.textFieldStyle}
+									onChangeText={this.onConfirmEmailChange}
+									placeholder={this.props.intl.formatMessage(i18n.confirmEmailAddress)}
+									keyboardType="email-address"
+									autoCapitalize="none"
+									autoCorrect={false}
+									placeholderTextColor="#ffffff80"
+									underlineColorAndroid="#ffffff80"
+									editable={!this.props.showModal}
+									defaultValue={this.state.confirmEmail}
+								/>
+							</View>
+						</View>
+					</View>
 				</View>
 				<TouchableButton
 					onPress={this.props.showModal ? null : this.onFormSubmit}
