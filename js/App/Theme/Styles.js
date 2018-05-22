@@ -124,38 +124,6 @@ export default StyleSheet.create({
 		alignItems: 'center',
 	},
 
-	textFieldCover: {
-		height: 50,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	textField: {
-		paddingLeft: 35,
-		paddingTop: 10,
-		minWidth: 200,
-		borderRadius: 3,
-
-		height: 40,
-		fontSize: 14,
-		color: '#ffffff80',
-		textAlign: 'left',
-	},
-	iconEmail: {
-		top: 20,
-		left: 3,
-		position: 'absolute',
-	},
-	iconAccount: {
-		top: 15,
-		left: 2,
-		position: 'absolute',
-	},
-	iconLock: {
-		top: 18,
-		left: 2,
-		position: 'absolute',
-	},
 	submitButton: {
 		height: 50,
 		width: 180,
