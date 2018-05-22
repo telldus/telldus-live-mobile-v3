@@ -97,7 +97,6 @@ type State = {
 };
 
 const tileMargin = 2;
-const listMargin = 12;
 
 class DashboardTab extends View {
 
@@ -237,9 +236,14 @@ class DashboardTab extends View {
 	};
 
 	calculateTileWidth(listWidth: number): Object {
-		listWidth -= listMargin;
 		const { appLayout } = this.props;
-		const isPortrait = appLayout.height > appLayout.width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const margin = this.getPadding(deviceWidth) * 2;
+
+		listWidth -= margin;
+
 		if (listWidth <= 0) {
 			return {tileWidth: 0, numColumns: 0};
 		}
@@ -357,19 +361,24 @@ class DashboardTab extends View {
 		);
 	}
 
+	getPadding(deviceWidth: number): number {
+		return deviceWidth * Theme.Core.paddingFactor;
+	}
+
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
-		let isEmpty = !this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const isEmpty = !this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0;
+
+		const padding = this.getPadding(deviceWidth);
 
 		return {
 			container: {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
-				paddingHorizontal: isEmpty ? 30 : 6,
-				paddingTop: 10,
+				padding: isEmpty ? 30 : padding,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
