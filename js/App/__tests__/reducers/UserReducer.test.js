@@ -1,15 +1,5 @@
-import reducer from '../../Reducers/User.js';
+import reducer, { initialState } from '../../Reducers/User.js';
 jest.useFakeTimers();
-
-const initialState = {
-	accessToken: false,
-	isTokenValid: false,
-	userProfile: false,
-	pushToken: false,
-	pushTokenRegistered: false,
-	notificationText: false,
-	registeredCredential: false,
-};
 
 describe('Test User reducers', ()=>{
 

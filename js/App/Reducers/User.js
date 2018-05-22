@@ -37,7 +37,7 @@ export type State = {
 	showChangeLog: boolean,
 };
 
-const initialState = {
+export const initialState = {
 	accessToken: false,
 	isTokenValid: false,
 	userProfile: false,
