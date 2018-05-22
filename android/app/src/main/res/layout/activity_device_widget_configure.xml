@@ -46,6 +46,11 @@
 
     </RelativeLayout>
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -56,21 +61,22 @@
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_weight="0.21"
-            android:background="@drawable/header">
+            android:background="@drawable/headerimage">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_centerInParent="true">
+                android:layout_centerVertical="true">
 
             <TextView
                 android:id="@+id/testText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add device widget"
-                android:textSize="27sp"
-                android:layout_marginStart="20dp"
+                android:textSize="33sp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="27sp"
                 android:textColor="@color/white"
 
                 />
@@ -81,8 +87,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Choose settings for your widget"
-                android:textSize="18sp"
-                android:textColor="@color/white"/>
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:paddingLeft="15sp"
+                />
             </LinearLayout>
         </RelativeLayout>
 
@@ -223,5 +232,8 @@
         </LinearLayout>
 
     </LinearLayout>
+
+</ScrollView>
+
 
 </LinearLayout>
