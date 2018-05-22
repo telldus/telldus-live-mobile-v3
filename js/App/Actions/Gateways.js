@@ -91,8 +91,16 @@ function autoDetectLocalTellStick(): ThunkAction {
 		});
 
 		socket.on('message', (msg: any, rinfo: Object) => {
-			// let str = String.fromCharCode.apply(null, new Uint8Array(msg));
-			dispatch(autoDetectLocalTellStickSuccess(rinfo));
+			let str = String.fromCharCode.apply(null, new Uint8Array(msg));
+			let items = str.split(':');
+			let gatewayInfo = {
+				product: items[0] ? items[0] : null,
+				macAddress: items[1] ? items[1] : null,
+				activationCode: items[2] ? items[2] : null,
+				firmwareVersion: items[3] ? items[3] : null,
+				uuid: items[4] ? items[4] : null,
+			};
+			dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
 		});
 	};
 }
@@ -129,12 +137,14 @@ const localControlError = (gatewayId: string): Action => {
 	};
 };
 
-const autoDetectLocalTellStickSuccess = (tellStickInfo: Object): Action => {
+const autoDetectLocalTellStickSuccess = (tellStickInfo: Object, routeInfo: Object): Action => {
+	let payload: Object = {
+		...tellStickInfo,
+		...routeInfo,
+	};
 	return {
 		type: 'GATEWAY_AUTO_DETECT_LOCAL_SUCCESS',
-		payload: {
-			tellStickInfo,
-		},
+		payload,
 	};
 };
 
