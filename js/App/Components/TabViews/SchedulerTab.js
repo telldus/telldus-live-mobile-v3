@@ -205,11 +205,15 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
 		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.05) + (height * 0.13) : 0;
 		const marginLeft = (Platform.OS === 'android' && !isPortrait) ? (width * 0.07303) : 0;
+
+		const fontSizeNoData = deviceWidth * 0.03;
+		const iconSize = deviceWidth * 0.05;
 
 		return {
 			line: {
@@ -225,6 +229,12 @@ class SchedulerTab extends View<null, Props, State> {
 				flex: 1,
 				marginLeft,
 			},
+			textWhenNoData: {
+				marginLeft: 10 + (fontSizeNoData * 0.5),
+				color: '#A59F9A',
+				fontSize: fontSizeNoData,
+			},
+			iconSize,
 		};
 	}
 
@@ -250,13 +260,13 @@ class SchedulerTab extends View<null, Props, State> {
 
 			let isEmpty = !schedules || schedules.length === 0;
 
-			const { line } = this.getStyles(appLayout);
+			const { line, textWhenNoData, iconSize } = this.getStyles(appLayout);
 			daysToRender.push(
 				<View style={styles.container} key={key}>
 					{isEmpty ?
 						<View style={styles.containerWhenNoData}>
-							<Icon name="exclamation-circle" size={20} color="#F06F0C" />
-							<Text style={styles.textWhenNoData}>
+							<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+							<Text style={textWhenNoData}>
 								{this.noScheduleMessage}
 							</Text>
 						</View>
@@ -331,12 +341,8 @@ const styles = StyleSheet.create({
 	containerWhenNoData: {
 		flexDirection: 'row',
 		justifyContent: 'center',
-		paddingTop: 40,
-	},
-	textWhenNoData: {
-		marginLeft: 10,
-		color: '#A59F9A',
-		fontSize: 12,
+		alignItems: 'center',
+		marginTop: 20,
 	},
 });
 
