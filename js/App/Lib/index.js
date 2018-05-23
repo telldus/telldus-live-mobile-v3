@@ -23,7 +23,6 @@
 import getRouteName from './getRouteName';
 import getDeviceWidth from './getDeviceWidth';
 import getDeviceHeight from './getDeviceHeight';
-import getWindowDimensions from './getWindowDimensions';
 import hasStatusBar from './hasStatusBar';
 import Dimmer from './Dimmer';
 import SensorUtils from './SensorUtils';
@@ -50,7 +49,6 @@ module.exports = {
 	getRouteName,
 	getDeviceWidth,
 	getDeviceHeight,
-	getWindowDimensions,
 	hasStatusBar,
 	capitalize,
 	formatTime,
