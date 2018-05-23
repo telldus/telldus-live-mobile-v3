@@ -137,7 +137,6 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 		return {
 			container: {
 				height: null,
-				marginBottom: 0,
 			},
 			row: {
 				alignItems: 'center',

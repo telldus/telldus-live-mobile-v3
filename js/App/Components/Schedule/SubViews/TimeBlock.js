@@ -100,7 +100,8 @@ export default class TimeBlock extends View<null, Props, null> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const size = deviceWidth * 0.293333333;
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const size = (deviceWidth - (padding * 3)) * 0.3333;
 
 		const backgroundColor = isSelected ? brandSecondary : '#fff';
 		const iconColor = isSelected ? '#fff' : Theme.Core[`${type}Color`];

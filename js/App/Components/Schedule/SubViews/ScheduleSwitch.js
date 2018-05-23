@@ -69,8 +69,9 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 
 		const offsetMiddle = deviceWidth * 0.033333333;
-		const offsetLarge = deviceWidth * 0.04;
 		const { borderRadiusRow } = Theme.Core;
+
+		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
 			container: {
@@ -80,7 +81,7 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 				backgroundColor: '#fff',
 				paddingHorizontal: offsetMiddle,
 				paddingVertical: deviceWidth * 0.02,
-				marginVertical: offsetLarge,
+				marginVertical: padding / 4,
 				borderRadius: borderRadiusRow,
 				width: '100%',
 				...Theme.Core.shadow,

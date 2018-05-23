@@ -32,6 +32,7 @@ import { intlShape, injectIntl } from 'react-intl';
 import { FullPageActivityIndicator, View, DialogueBox } from '../../../BaseComponents';
 import { SchedulePoster } from './SubViews';
 import { getRelativeDimensions } from '../../Lib';
+import Theme from '../../Theme';
 
 import * as scheduleActions from '../../Actions/Schedule';
 import * as modalActions from '../../Actions/Modal';
@@ -220,7 +221,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const deviceHeight = isPortrait ? height : width;
-		const padding = deviceWidth * 0.033333333;
+		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		let { state } = this.props.screenProps.rootNavigator;
 
@@ -230,7 +231,7 @@ class ScheduleScreen extends View<null, Props, State> {
 			style: {
 				flex: 1,
 				paddingHorizontal: notEdit ? padding : 0,
-				paddingTop: padding,
+				paddingVertical: padding - (padding / 4),
 			},
 			modal: {
 				alignSelf: 'center',

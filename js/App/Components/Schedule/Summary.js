@@ -30,7 +30,7 @@ import { ActionRow, DaysRow, DeviceRow, TimeRow } from './SubViews';
 import { ScrollView } from 'react-native';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import i18n from '../../Translations/common';
-
+import Theme from '../../Theme';
 interface Props extends ScheduleProps {
 	paddingRight: number,
 	devices: Object,
@@ -125,13 +125,13 @@ class Summary extends View<null, Props, State> {
 		const { schedule, paddingRight, appLayout, intl } = this.props;
 		const { formatDate } = intl;
 		const { method, methodValue, weekdays } = schedule;
-		const { row, iconSize, buttonStyle, iconContainerStyle } = this._getStyle(appLayout);
+		const { container, row, iconSize, buttonStyle, iconContainerStyle } = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
 
 		return (
 			<View style={{flex: 1}}>
 				<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
-					<View style={{flex: 1, marginBottom: 54}}>
+					<View style={container}>
 						<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
 						<ActionRow
 							method={method}
@@ -171,13 +171,24 @@ class Summary extends View<null, Props, State> {
 	};
 
 	_getStyle = (appLayout: Object): Object => {
+		const { paddingFactor, maxSizeFloatingButton } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const padding = deviceWidth * paddingFactor;
+
+		let buttonSize = deviceWidth * 0.134666667;
+		buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
+		let buttonBottom = deviceWidth * 0.066666667;
+
 		return {
+			container: {
+				flex: 1,
+				marginBottom: (buttonSize / 2) + buttonBottom,
+			},
 			row: {
-				marginBottom: deviceWidth * 0.025333333,
+				marginBottom: padding / 4,
 			},
 			iconSize: deviceWidth * 0.050666667,
 			buttonStyle: {

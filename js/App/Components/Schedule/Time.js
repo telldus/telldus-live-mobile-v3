@@ -371,7 +371,7 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	_getStyle = (appLayout: Object): Object => {
-		const { brandPrimary, borderRadiusRow } = Theme.Core;
+		const { brandPrimary, borderRadiusRow, maxSizeFloatingButton } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -379,13 +379,19 @@ export default class Time extends View<null, Props, State> {
 		const androidTimeWidth = deviceWidth * 0.213333333;
 		const androidTimeHeight = deviceWidth * 0.177333333;
 		const androidTimeColor = brandPrimary;
-		const marginBottom = deviceWidth * 0.025333333;
+
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const marginBottom = padding / 4;
+
+		let buttonSize = deviceWidth * 0.134666667;
+		buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
+		let buttonBottom = deviceWidth * 0.066666667;
 
 		return {
 			container: {
 				flex: 1,
 				justifyContent: 'flex-start',
-				marginBottom: 48,
+				marginBottom: (buttonSize / 2) + buttonBottom,
 			},
 			row: {
 				marginBottom,

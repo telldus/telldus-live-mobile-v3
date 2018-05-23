@@ -31,6 +31,7 @@ import { CheckButton, DaysRow, Description } from './SubViews';
 import { getSelectedDays, getWeekdays, getWeekends, getTranslatableDays } from '../../Lib';
 import { CheckboxSolid, FloatingButton, Row, View } from '../../../BaseComponents';
 import _ from 'lodash';
+import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
@@ -305,15 +306,22 @@ export default class Days extends View<null, Props, State> {
 	};
 
 	_getStyle = (appLayout: Object): Object => {
+		const { paddingFactor, maxSizeFloatingButton } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const padding = deviceWidth * paddingFactor;
+
+		let buttonSize = deviceWidth * 0.134666667;
+		buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
+		let buttonBottom = deviceWidth * 0.066666667;
 
 		return {
 			mainContainer: {
 				flex: 1,
 				justifyContent: 'flex-start',
-				marginBottom: 56,
+				marginBottom: (buttonSize / 2) + buttonBottom,
 			},
 			buttonsContainer: {
 				flexDirection: 'row',
@@ -325,7 +333,7 @@ export default class Days extends View<null, Props, State> {
 				paddingVertical: deviceWidth * 0.037333333,
 			},
 			rowContainer: {
-				marginBottom: deviceWidth * 0.028,
+				marginVertical: padding / 4,
 			},
 			checkbox: {
 				marginRight: deviceWidth * 0.05,

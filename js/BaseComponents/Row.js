@@ -101,12 +101,13 @@ class Row extends Component<Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 
 		const backgroundColor = '#fff';
+		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
 			container: {
 				backgroundColor,
 				flexDirection: 'row',
-				marginBottom: deviceWidth * 0.006666667,
+				marginVertical: padding / 4,
 				height: deviceWidth * 0.209333333,
 				...Theme.Core.shadow,
 				borderRadius: borderRadiusRow,

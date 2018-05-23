@@ -272,8 +272,14 @@ class Edit extends View<null, Props, State> {
 						intl={intl}
 						labelPostScript={labelPostScript}
 					/>
-					<DaysRow selectedDays={selectedDays} onPress={this.editDays} appLayout={appLayout}
-						intl={intl} labelPostScript={labelPostScript}/>
+					<DaysRow
+						selectedDays={selectedDays}
+						onPress={this.editDays}
+						appLayout={appLayout}
+						intl={intl}
+						labelPostScript={labelPostScript}
+						containerStyle={row}
+					/>
 					<View style={{flex: 1, alignSelf: 'stretch'}}>
 						<TouchableButton
 							text={messages.confirmAndSave}
@@ -318,9 +324,6 @@ class Edit extends View<null, Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const offsetSmall = deviceWidth * 0.026666667;
-		const offsetMiddle = deviceWidth * 0.033333333;
-
 		const { shadow: themeShadow } = Theme.Core;
 		const shadow = Object.assign({}, themeShadow, {
 			shadowOpacity: 0.5,
@@ -330,30 +333,37 @@ class Edit extends View<null, Props, State> {
 			},
 		});
 
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+
+		const fontSizeButtonLabel = deviceWidth * 0.03;
+		const buttonWidth = deviceWidth * 0.3;
+		const paddingVertical = fontSizeButtonLabel * 0.9;
+		const buttonHeight = (paddingVertical * 2) + fontSizeButtonLabel;
+
 		return {
 			container: {
-				paddingHorizontal: offsetMiddle,
+				paddingHorizontal: padding,
 				alignItems: 'center',
 			},
 			row: {
-				marginBottom: offsetSmall,
+				marginVertical: padding / 4,
 			},
 			save: {
 				backgroundColor: Theme.Core.brandSecondary,
 			},
 			cancel: {
 				backgroundColor: Theme.Core.brandDanger,
-				marginBottom: offsetSmall,
 			},
 			buttonStyle: {
-				height: 50,
-				width: 180,
-				borderRadius: 25,
-				marginTop: 10,
+				width: buttonWidth,
+				borderRadius: buttonHeight / 2,
+				marginVertical: padding / 4,
+				maxWidth: undefined,
+				paddingVertical: fontSizeButtonLabel * 0.9,
 				...shadow,
 			},
 			labelStyle: {
-				fontSize: 13,
+				fontSize: fontSizeButtonLabel,
 			},
 			throbberContainer: {
 				right: -(deviceWidth * 0.12),
