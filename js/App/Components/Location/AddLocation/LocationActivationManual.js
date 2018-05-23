@@ -239,22 +239,23 @@ class LocationActivationManual extends View {
 	getStyle(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const padding = isIphoneX() ? (!isPortrait ? width * 0.1585 : width * 0.11) : width * 0.15;
+		const deviceWidth = isPortrait ? width : height;
+		const fontSize = deviceWidth * 0.06;
 
 		return {
 			textBody: {
 				color: '#A59F9A',
-				marginTop: 10,
 				textAlign: 'left',
-				fontSize: 16,
+				fontSize: deviceWidth * 0.038,
 				paddingLeft: 2,
 			},
 			textField: {
-				height: 50,
-				width: width - padding,
-				paddingLeft: 35,
+				width: deviceWidth * 0.8,
+				paddingLeft: 35 + fontSize,
 				color: '#A59F9A',
-				fontSize: 20,
+				fontSize,
+				marginTop: 10 + fontSize,
+				marginBottom: fontSize,
 			},
 			locationIcon: {
 				position: 'absolute',

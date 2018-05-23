@@ -177,41 +177,39 @@ class TimeZone extends View<void, Props, State> {
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		const { appLayout } = this.props;
+		const { isLoading, timeZone, autoDetected } = this.state;
 		const styles = this.getStyle(appLayout);
 
-		let timeZoneInfo = `${this.label}, ${this.state.timeZone}, ${this.state.autoDetected ? this.labelHint : ''}`;
+		let timeZoneInfo = `${this.label}, ${timeZone}, ${autoDetected ? this.labelHint : ''}`;
 		let accessibilityLabel = `${timeZoneInfo}. ${this.labelHintChangeTimeZone}.`;
 
 		return (
 			<View style={{flex: 1}}>
 				<LabelBox
-					label={this.label}
 					showIcon={false}
 					appLayout={appLayout}>
-					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 0}} accessibilityLabel={accessibilityLabel}>
+					<Text style={styles.label}>
+						{this.label}
+					</Text>
+					<TouchableOpacity onPress={this.onEditTimeZone} style={{flex: 1}} accessibilityLabel={accessibilityLabel}>
 						<View style={styles.timeZoneContainer}>
 							<Text style={styles.timeZone}>
-								{this.state.timeZone}
+								{timeZone}
 							</Text>
-							<Icon name="pencil" size={16} color="#A59F9A" style={{marginTop: 7}}/>
+							<Icon name="pencil" size={styles.iconSize} color="#A59F9A" style={styles.iconStyle}/>
 						</View>
-						{this.state.autoDetected ?
-							<Text style={styles.hint}>
-							(
-								<FormattedMessage {...messages.hint} style={styles.hint}/>
-							)
-							</Text>
-							:
-							null
+						{autoDetected && (
+							<FormattedMessage {...messages.hint} style={styles.hint} prefix="(" postfix=")"/>
+						)
 						}
 					</TouchableOpacity>
 				</LabelBox>
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onTimeZoneSubmit}
-					imageSource={this.state.isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
-					showThrobber={this.state.isLoading}
+					imageSource={isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
+					showThrobber={isLoading}
 				/>
 			</View>
 		);
@@ -220,29 +218,41 @@ class TimeZone extends View<void, Props, State> {
 	getStyle(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const padding = isIphoneX() ? (!isPortrait ? width * 0.1585 : width * 0.11) : width * 0.15;
+		const deviceWidth = isPortrait ? width : height;
+		const fontSizeTZ = deviceWidth * 0.06;
+		const fontSizeTZHint = deviceWidth * 0.038;
+
+		const fontSizeLabel = deviceWidth * 0.045;
 
 		return {
 			timeZoneContainer: {
 				flexDirection: 'row',
 				justifyContent: 'flex-start',
-				marginTop: 10,
-				width: width - padding,
+				alignItems: 'center',
+				width: deviceWidth * 0.8,
+				marginTop: fontSizeTZ * 0.5,
+				marginBottom: fontSizeTZHint * 0.15,
 			},
 			timeZone: {
 				color: '#00000099',
-				fontSize: 20,
-				paddingLeft: 2,
-				marginRight: 10,
+				fontSize: fontSizeTZ,
+				marginRight: fontSizeTZ * 0.5,
 			},
 			hint: {
 				color: '#A59F9A',
-				fontSize: 16,
-				paddingLeft: 2,
+				fontSize: fontSizeTZHint,
 			},
 			buttonStyle: {
 				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
 				elevation: 10,
+			},
+			iconStyle: {
+
+			},
+			iconSize: deviceWidth * 0.038,
+			label: {
+				color: '#e26901',
+				fontSize: fontSizeLabel,
 			},
 		};
 	}

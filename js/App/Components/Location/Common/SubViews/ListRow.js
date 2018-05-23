@@ -64,19 +64,23 @@ export default class ListRow extends View {
 	}
 
 	getStyle(appLayout: Object): Object {
-		const width = appLayout.width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const fontSize = deviceWidth * 0.035;
 
 		return {
 			rowItems: {
 				width: width,
-				height: 50,
 				backgroundColor: '#ffffff',
 				marginTop: 2,
 				justifyContent: 'center',
 			},
 			text: {
-				fontSize: 14,
-				marginLeft: 10,
+				fontSize,
+				marginLeft: 10 + (fontSize * 0.2),
+				paddingVertical: 10 + (fontSize * 0.2),
 				color: '#A59F9A',
 			},
 		};

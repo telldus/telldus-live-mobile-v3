@@ -39,7 +39,7 @@ import TimeZone from './TimeZone';
 import Success from './Success';
 import Position from './Position';
 
-import { getRouteName } from '../../../Lib';
+import { getRouteName, getRelativeDimensions } from '../../../Lib';
 
 const initialRouteName = 'LocationDetected';
 
@@ -169,7 +169,7 @@ class AddLocationNavigator extends View {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 		screenReaderEnabled: state.App.screenReaderEnabled,
 	};
 }

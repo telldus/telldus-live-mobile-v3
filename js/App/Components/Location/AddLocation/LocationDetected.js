@@ -30,7 +30,6 @@ import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, TouchableButton } from '../../../../BaseComponents';
 import { Clients } from './SubViews';
-import { getRelativeDimensions } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 const messages = defineMessages({
@@ -149,17 +148,16 @@ class LocationDetected extends View {
 	}
 
 	getStyle(appLayout: Object, padding: number): Object {
-		let { width } = getRelativeDimensions(appLayout);
+
 		return {
 			container: {
 				flex: 1,
-				width: width - (2 * padding),
+				marginVertical: padding,
 			},
 			itemsContainer: {
 				justifyContent: 'center',
 			},
 			button: {
-				marginVertical: 20,
 				alignSelf: 'center',
 			},
 		};

@@ -119,7 +119,7 @@ class GatewayRow extends PureComponent<Props, State> {
 				right: padding * 2,
 				top: '40%',
 				height: rowHeight * 0.25,
-				width: rowHeight * 0.25,
+				width: rowHeight * 0.2,
 			},
 		};
 	}

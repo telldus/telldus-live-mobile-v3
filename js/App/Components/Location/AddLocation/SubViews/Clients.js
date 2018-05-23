@@ -26,7 +26,8 @@
 import React from 'react';
 import { View, Image } from '../../../../../BaseComponents';
 import { defineMessages } from 'react-intl';
-import { isIphoneX } from 'react-native-iphone-x-helper';
+
+import Theme from '../../../../Theme';
 
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
 import DeviceLocationDetail from '../../../DeviceDetails/SubViews/DeviceLocationDetail';
@@ -87,7 +88,7 @@ export default class Clients extends View {
 		return (
 			<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} accessible={true} accessibilityLabel={accessibilityLabel}>
 				<View style={styles.arrow}>
-					<Image source={require('../../../TabViews/img/right-arrow-key.png')} style={{tintColor: '#A59F9A90'}}/>
+					<Image source={require('../../../TabViews/img/right-arrow-key.png')} style={styles.image}/>
 				</View>
 				<DeviceLocationDetail {...locationData} accessible={false} style={styles.locationDetails}/>
 			</View>
@@ -97,20 +98,28 @@ export default class Clients extends View {
 	getStyle(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const padding = isIphoneX() ? (!isPortrait ? width * 0.1 : width * 0.055) : width * 0.06;
-		const iconLeft = isIphoneX() ? (!isPortrait ? width * 0.82 : width * 0.845) : width * 0.845;
+		const deviceWidth = isPortrait ? width : height;
+
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const iconRight = padding * 2;
 
 		return {
 			arrow: {
 				position: 'absolute',
-				top: isPortrait ? height * 0.12 : width * 0.12,
-				left: iconLeft,
+				top: isPortrait ? height * 0.11 : width * 0.11,
+				right: iconRight,
 				elevation: 3,
 				zIndex: 1,
 			},
+			image: {
+				tintColor: '#A59F9A90',
+				height: deviceWidth * 0.05,
+				width: deviceWidth * 0.04,
+			},
 			locationDetails: {
-				marginVertical: 10,
-				width: width - padding,
+				marginVertical: undefined,
+				marginBottom: padding / 2,
+				width: width - (padding * 2) - 3,
 			},
 		};
 	}

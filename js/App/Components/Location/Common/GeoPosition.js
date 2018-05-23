@@ -27,11 +27,11 @@ import React from 'react';
 import { TextInput, Keyboard, InteractionManager } from 'react-native';
 import { intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { View, FloatingButton } from '../../../../BaseComponents';
 import LabelBox from './LabelBox';
+import Theme from '../../../Theme';
 
 import { googleMapsAPIKey } from '../../../../Config';
 
@@ -308,7 +308,7 @@ class GeoPosition extends View {
 				<FloatingButton
 					buttonStyle={styles.searchButtonStyle}
 					onPress={this.onEndEditing}
-					customComponent={this.state.isSearchLoading ? false : <Icon name="search" size={18} color="#fff"/>}
+					customComponent={this.state.isSearchLoading ? false : <Icon name="search" size={styles.searchIconSize} color="#fff"/>}
 					showThrobber={this.state.isSearchLoading}
 				/>
 			</View>
@@ -319,7 +319,9 @@ class GeoPosition extends View {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const padding = isIphoneX() ? (!isPortrait ? width * 0.1585 : width * 0.11) : width * 0.15;
+		const fontSize = deviceWidth * 0.06;
+
+		const searchIconSize = deviceWidth * 0.09;
 
 		return {
 			container: {
@@ -330,7 +332,7 @@ class GeoPosition extends View {
 			  },
 			  mapViewCover: {
 				  flex: 1,
-				  marginTop: 10,
+				  marginTop: (deviceWidth * Theme.Core.paddingFactor) / 2,
 				  borderRadius: 4,
 				  overflow: 'hidden',
 			  },
@@ -339,11 +341,12 @@ class GeoPosition extends View {
 				overflow: 'hidden',
 			  },
 			  address: {
-				  height: 50,
-				  width: width - padding - 30,
-				  paddingLeft: 35,
-				  color: '#A59F9A',
-				  fontSize: 20,
+				width: deviceWidth * 0.75,
+				paddingLeft: 35 + fontSize,
+				color: '#A59F9A',
+				fontSize,
+				marginTop: 10 + fontSize,
+				marginBottom: fontSize,
 			  },
 			  hContainer: {
 				  position: 'absolute',
@@ -366,15 +369,16 @@ class GeoPosition extends View {
 				right: deviceWidth * 0.053333333,
 				elevation: 10,
 				bottom: undefined,
-				top: 55,
-				height: 30,
-				width: 30,
-				borderRadius: 15,
+				top: 10 + (searchIconSize * 1.8),
+				height: searchIconSize,
+				width: searchIconSize,
+				borderRadius: searchIconSize / 2,
 			  },
 			  submitButtonStyle: {
 				right: deviceWidth * 0.053333333,
 				elevation: 10,
 			},
+			searchIconSize: deviceWidth * 0.053333333,
 		};
 	}
 }

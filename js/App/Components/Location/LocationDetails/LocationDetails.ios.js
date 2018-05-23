@@ -36,7 +36,7 @@ import EditTimeZoneContinent from './EditTimeZoneContinent';
 import EditTimeZoneCity from './EditTimeZoneCity';
 import EditGeoPosition from './EditGeoPosition';
 
-import { getRouteName } from '../../../Lib';
+import { getRouteName, getRelativeDimensions } from '../../../Lib';
 const initialRouteName = 'Details';
 
 type renderContainer = (Object) => Object;
@@ -155,7 +155,7 @@ class LocationDetailsNavigator extends View {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 		screenReaderEnabled: state.App.screenReaderEnabled,
 	};
 }

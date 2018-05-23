@@ -24,7 +24,7 @@
 'use strict';
 
 import React from 'react';
-
+import { Platform } from 'react-native';
 import {
 	View,
 	Text,
@@ -46,7 +46,7 @@ class LabelBox extends View {
 					</Text>
 				}
 				{!!showIcon &&
-					<IconTelldus icon={'location'} size={30} color={'#A59F9A'} style={styles.icon}/>
+					<IconTelldus icon={'location'} size={styles.iconSize} color={'#A59F9A'} style={styles.icon}/>
 				}
 				{!!children && children}
 			</View>
@@ -54,27 +54,36 @@ class LabelBox extends View {
 	}
 
 	getStyle(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const fontSize = Math.floor(deviceWidth * 0.045);
+		const iconSize = Math.floor(deviceWidth * 0.09);
 
 		return {
 			container: {
 				flexDirection: 'column',
 				backgroundColor: '#fff',
-				marginTop: 15,
-				padding: 10,
+				marginTop: deviceWidth * Theme.Core.paddingFactor,
+				padding: deviceWidth * 0.05,
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 				...Theme.Core.shadow,
 				borderRadius: 2,
 			},
 			label: {
+				position: 'absolute',
 				color: '#e26901',
-				fontSize: 15,
-				paddingLeft: 2,
+				fontSize,
+				top: deviceWidth * 0.04,
+				left: 18 + (fontSize * 0.5),
 			},
+			iconSize,
 			icon: {
 				position: 'absolute',
-				top: 40,
-				left: 8,
+				top: 10 + (Platform.OS === 'android' ? deviceWidth * 0.125 : deviceWidth * 0.1),
+				left: 15 + (fontSize * 0.5),
 			},
 		};
 	}

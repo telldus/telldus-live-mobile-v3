@@ -31,6 +31,8 @@ import _ from 'lodash';
 
 import { View, DialogueBox, Text, RoundedInfoButton } from '../../../../BaseComponents';
 import LocationPoster from '../Common/LocationPoster';
+import { getRelativeDimensions } from '../../../Lib';
+import Theme from '../../../Theme';
 
 import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
@@ -225,56 +227,55 @@ class AddLocationContainer extends View<null, Props, State> {
 		const { children, navigation, actions, screenProps, intl,
 			showModal, appLayout } = this.props;
 		const { h1, h2, infoButton } = this.state;
-		const styles = this.getStyle(appLayout);
-		let width = appLayout.height > appLayout.width ? appLayout.width : appLayout.height;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
 
-		let padding = screenProps.currentScreen === 'TimeZoneCity' || screenProps.currentScreen === 'TimeZoneContinent' ? 0 : (width * 0.027777);
+		const deviceWidth = isPortrait ? width : height;
+
+		const styles = this.getStyle(appLayout);
+
+		let padding = screenProps.currentScreen === 'TimeZoneCity'
+			|| screenProps.currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * Theme.Core.paddingFactor);
 		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
 
 		return (
-			<View>
-				<View style={{
-					flex: 1,
-					opacity: 1,
-					alignItems: 'center',
-				}}>
-
-					<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
-						<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-							<LocationPoster h1={h1} h2={h2} infoButton={infoButton}
-								screenProps={screenProps} intl={intl} navigation={navigation}/>
-							<View style={[styles.style, {paddingHorizontal: padding}]}>
-								{React.cloneElement(
-									children,
-									{
-										onDidMount: this.onChildDidMount,
-										navigation,
-										actions,
-										intl,
-										...screenProps,
-										dialogueOpen: showModal,
-										paddingHorizontal: padding,
-									},
-								)}
-							</View>
-						</KeyboardAvoidingView>
-					</ScrollView>
-					<DialogueBox
-						dialogueContainerStyle={{elevation: 0}}
-						header={dialogueHeader}
-						showDialogue={showModal}
-						text={validationMessage}
-						showPositive={true}
-						positiveText={positiveText}
-						onPressPositive={this.closeModal}/>
-				</View>
+			<View style={{
+				flex: 1,
+			}}>
+				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
+					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
+						<LocationPoster h1={h1} h2={h2} infoButton={infoButton}
+							screenProps={screenProps} intl={intl} navigation={navigation}/>
+						<View style={[styles.style, {paddingHorizontal: padding}]}>
+							{React.cloneElement(
+								children,
+								{
+									onDidMount: this.onChildDidMount,
+									navigation,
+									actions,
+									intl,
+									...screenProps,
+									dialogueOpen: showModal,
+									paddingHorizontal: padding,
+								},
+							)}
+						</View>
+					</KeyboardAvoidingView>
+				</ScrollView>
+				<DialogueBox
+					dialogueContainerStyle={{elevation: 0}}
+					header={dialogueHeader}
+					showDialogue={showModal}
+					text={validationMessage}
+					showPositive={true}
+					positiveText={positiveText}
+					onPressPositive={this.closeModal}/>
 			</View>
 		);
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
 		return {
@@ -322,7 +323,7 @@ const mapStateToProps = (store: Object): Object => (
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
-		appLayout: store.App.layout,
+		appLayout: getRelativeDimensions(store.App.layout),
 	}
 );
 

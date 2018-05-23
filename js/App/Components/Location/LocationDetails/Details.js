@@ -158,7 +158,7 @@ class Details extends View {
 
 		return (
 			<View style={{flex: 1, paddingVertical: padding}}>
-				<LabelBox containerStyle={infoOneContainerStyle}>
+				<LabelBox containerStyle={infoOneContainerStyle} appLayout={appLayout}>
 					<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
 					<View style={boxItemsCover}>
 						<Text style={[textName]}>
