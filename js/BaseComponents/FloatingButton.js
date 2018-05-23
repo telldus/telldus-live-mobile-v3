@@ -124,12 +124,12 @@ class FloatingButton extends Component<Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const { shadow: themeShadow, brandSecondary } = Theme.Core;
+		const { shadow: themeShadow, brandSecondary, maxSizeFloatingButton } = Theme.Core;
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const maxIconSize = 40, maxButtonSize = 80;
+		const maxIconSize = 40;
 
 		let { tabs, iconSize, paddingRight } = this.props;
 		iconSize = iconSize ? iconSize : isPortrait ? width * 0.056 : height * 0.056;
@@ -138,7 +138,7 @@ class FloatingButton extends Component<Props, null> {
 		const isIOSTabs = Platform.OS === 'ios' && tabs;
 
 		let buttonSize = deviceWidth * 0.134666667;
-		buttonSize = buttonSize > maxButtonSize ? maxButtonSize : buttonSize;
+		buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
 		const offsetBottom = deviceWidth * 0.046666667 + (isIOSTabs ? 50 : 0);
 		const offsetRight = deviceWidth * 0.034666667 - paddingRight;
 

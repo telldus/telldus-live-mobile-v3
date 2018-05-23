@@ -64,9 +64,12 @@ export default {
 	subtitleColor: '#8e8e93',
 
 	rowHeight: 60,
-	buttonWidth: 60,
+
 	maxSizeRowTextOne: 24,
 	maxSizeRowTextTwo: 18,
+
+	buttonWidth: 60,
+	maxSizeFloatingButton: 80,
 	maxSizeTextButton: 26,
 
 	fontSizeBase: 12,
