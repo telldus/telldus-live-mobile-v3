@@ -8,6 +8,8 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,7 +56,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     // private EditText etUrl;
     private Button btAdd,button_cancel;
     private View btSelectSensor, btSelectDisplayItem;
-    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint,chooseSettingSensor,testText;
+    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint,chooseSettingSensor,testText,sensorText,settingText,valueText;
     private ImageView imgSensorType;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
@@ -241,18 +243,25 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         sensorDataHint = (TextView) findViewById(R.id.txtSensorDataHint);
         imgSensorType = (ImageView) findViewById(R.id.imgSensorType);
         btAdd = (Button) findViewById(R.id.btAdd);
+        button_cancel=(Button)findViewById(R.id.button_cancel);
         switch_background=(Switch)findViewById(R.id.switch_background);
-
         chooseSettingSensor=(TextView)findViewById(R.id.chooseSettingSensor);
         testText=(TextView)findViewById(R.id.testTextSensor);
-
-
         mSensorBack=(RelativeLayout)findViewById(R.id.sensorBack);
+        settingText = (TextView)findViewById(R.id.settingText);
+        valueText = (TextView)findViewById(R.id.valueText);
+        sensorText = (TextView)findViewById(R.id.sensorText);
 
-        Typeface title = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-        Typeface subtitle = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-        testText.setTypeface(title);
-        chooseSettingSensor.setTypeface(subtitle);
+        switch_background.getThumbDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+       switch_background.getTrackDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+
+
+        Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+        Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+          testText.setTypeface(titleFont);
+          chooseSettingSensor.setTypeface(titleFont);
+          
+
 
         mSensorBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +269,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 finish();
             }
         });
-        button_cancel=(Button)findViewById(R.id.button_cancel);
+
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,9 +285,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 if(isChecked)
                 {
                     transparent="true";
-                }else
+                    switch_background.getThumbDrawable().setColorFilter(isChecked ? getResources().getColor(R.color.lightblue) : Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                    switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                  }else
                 {
                     transparent="false";
+                    switch_background.getThumbDrawable().setColorFilter(isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                    switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.DKGRAY : Color.WHITE, PorterDuff.Mode.MULTIPLY);
 
                 }
             }

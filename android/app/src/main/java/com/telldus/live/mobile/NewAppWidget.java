@@ -127,6 +127,9 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setInt(R.id.iconWidget,"setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.onLayout,"setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);
+                views.setInt(R.id.bellWidget, "setBackgroundColor", Color.TRANSPARENT);
+                views.setInt(R.id.updownarrowwidget, "setBackgroundColor", Color.TRANSPARENT);
+                views.setInt(R.id.dimmerWidget, "setBackgroundColor", Color.TRANSPARENT);
             }
 
         }
