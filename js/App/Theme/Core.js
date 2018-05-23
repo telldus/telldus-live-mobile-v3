@@ -108,6 +108,13 @@ export default {
 		return this.iconFontSize * 0.6;
 	},
 
+	/**
+	 * Common factor using which screen's margin from device's edges is set. Also inter-component space is
+	 * is 50% of calculated screen margin.
+	 *
+	 * Screen margin in the app is calculated by multiplying the 'paddingFactor' with 'width'(portrait) and
+	 * height(landscape) from 'appLayout'.
+	 */
 	get paddingFactor() {
 		return 0.027777;
 	},
