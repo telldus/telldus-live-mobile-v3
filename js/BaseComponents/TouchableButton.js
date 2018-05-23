@@ -28,6 +28,7 @@ import { intlShape, injectIntl } from 'react-intl';
 import i18n from '../App/Translations/common';
 import Text from './Text';
 import Theme from '../App/Theme';
+import { getRelativeDimensions } from '../App/Lib';
 
 type Props = {
 	style?: Object | number | Array<any>,
@@ -99,20 +100,21 @@ class TouchableButton extends Component<Props, void> {
 	}
 
 	getStyle = (): Object => {
+		const { maxSizeTextButton, btnPrimaryBg } = Theme.Core;
 		const { appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const maxFontSize = Theme.Core.maxSizeTextButton;
+		const maxFontSize = maxSizeTextButton;
 
 		let fontSize = deviceWidth * 0.04;
 		fontSize = fontSize > maxFontSize ? maxFontSize : fontSize;
 
 		return {
 			buttonContainer: {
-				backgroundColor: Theme.Core.btnPrimaryBg,
+				backgroundColor: btnPrimaryBg,
 				paddingVertical: 18,
-				width: isPortrait ? width * 0.5 : height * 0.5,
+				width: deviceWidth * 0.5,
 				maxWidth: 250,
 				borderRadius: 18 + fontSize,
 				alignSelf: 'center',
@@ -133,7 +135,7 @@ class TouchableButton extends Component<Props, void> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 
