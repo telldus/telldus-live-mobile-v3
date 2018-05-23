@@ -118,7 +118,7 @@ class OverviewTab extends View {
 		const hasActions = TURNON || TURNOFF || BELL || DIM || UP || DOWN || STOP;
 		const isGatewayActive = gateway && gateway.online;
 
-		const styles = this.getStyles(appLayout);
+		const styles = this.getStyles(appLayout, hasActions);
 
 		return (
 			<ScrollView contentContainerStyle={styles.itemsContainer}>
@@ -135,10 +135,12 @@ class OverviewTab extends View {
 		);
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles(appLayout: Object, hasActions: boolean): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
 			container: {
@@ -148,13 +150,13 @@ class OverviewTab extends View {
 			},
 			itemsContainer: {
 				justifyContent: 'center',
-				marginHorizontal: deviceWidth * Theme.Core.paddingFactor,
+				margin: padding,
 			},
 			LocationDetail: {
-				marginTop: deviceWidth * Theme.Core.paddingFactor,
+				marginTop: hasActions ? (padding / 2) : 0,
 			},
 			actionDetails: {
-				marginTop: deviceWidth * Theme.Core.paddingFactor,
+				marginTop: 0,
 			},
 		};
 	}

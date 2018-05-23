@@ -221,15 +221,23 @@ const Tabs = TabNavigator(
 		lazy: true,
 		animationEnabled: true,
 		tabBarComponent: ({ tabStyle, ...rest }: Object): Object => {
-			let { screenProps } = rest, tabWidth = 0;
+			let { screenProps } = rest,
+				tabWidth = 0, fontSize = 0, paddingVertical = 0;
 			if (screenProps && screenProps.appLayout) {
-				let { width } = screenProps.appLayout;
+				const { width, height } = screenProps.appLayout;
+				const isPortrait = height > width;
+				const deviceWidth = isPortrait ? width : height;
+
 				tabWidth = width / 3;
+				fontSize = deviceWidth * 0.03;
+				paddingVertical = 10 + (fontSize * 0.5);
 			}
 			return (
 				<TabBarTop {...rest} tabStyle={{
 					...tabStyle,
 					width: tabWidth,
+					fontSize,
+					paddingVertical,
 				}}/>
 			);
 		},

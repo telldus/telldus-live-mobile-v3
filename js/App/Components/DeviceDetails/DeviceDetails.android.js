@@ -28,7 +28,7 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
-import { TabNavigator } from 'react-navigation';
+import { TabNavigator, TabBarTop } from 'react-navigation';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
@@ -38,11 +38,11 @@ import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
 import { Text, View, Poster } from '../../../BaseComponents';
-import { getWindowDimensions } from '../../Lib';
 import { closeDatabase } from '../../Actions/LocalStorage';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 import { hideModal } from '../../Actions';
+import { getRelativeDimensions } from '../../Lib';
 
 type Props = {
 	dispatch: Function,
@@ -245,6 +245,27 @@ const Tabs = TabNavigator(
 		swipeEnabled: false,
 		lazy: true,
 		animationEnabled: true,
+		tabBarComponent: ({ tabStyle, ...rest }: Object): Object => {
+			let { screenProps } = rest,
+				tabWidth = 0, fontSize = 0, paddingVertical = 0;
+			if (screenProps && screenProps.appLayout) {
+				const { width, height } = screenProps.appLayout;
+				const isPortrait = height > width;
+				const deviceWidth = isPortrait ? width : height;
+
+				tabWidth = width / 3;
+				fontSize = deviceWidth * 0.03;
+				paddingVertical = 10 + (fontSize * 0.5);
+			}
+			return (
+				<TabBarTop {...rest} tabStyle={{
+					...tabStyle,
+					width: tabWidth,
+					fontSize,
+					paddingVertical,
+				}}/>
+			);
+		},
 		tabBarOptions: {
 			indicatorStyle: {
 				backgroundColor: '#fff',
@@ -252,12 +273,9 @@ const Tabs = TabNavigator(
 			style: {
 				backgroundColor: '#fff',
 				...Theme.Core.shadow,
-				height: getWindowDimensions().height * 0.085,
-				alignItems: 'center',
 				justifyContent: 'center',
 			},
 			tabStyle: {
-				width: getWindowDimensions().width / 3,
 				alignItems: 'center',
 				justifyContent: 'center',
 			},
@@ -274,7 +292,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
 		stackNavigator: ownProps.navigation,
 		device: store.devices.byId[ownProps.navigation.state.params.id],
-		appLayout: store.App.layout,
+		appLayout: getRelativeDimensions(store.App.layout),
 		isModalOpen: store.modal.openModal,
 	};
 }

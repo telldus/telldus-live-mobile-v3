@@ -194,12 +194,16 @@ class SettingsTab extends View {
 		const width = appLayout.width;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const fontSize = deviceWidth * 0.04;
 
 		return {
 			container: {
 				flex: 0,
-				paddingHorizontal: deviceWidth * Theme.Core.paddingFactor,
+				paddingHorizontal: padding,
+				paddingBottom: padding,
+				paddingTop: padding / 2,
 			},
 			ShowOnDashCover: {
 				backgroundColor: '#fff',
@@ -207,7 +211,7 @@ class SettingsTab extends View {
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'space-between',
-				marginTop: deviceWidth * Theme.Core.paddingFactor,
+				marginTop: padding / 2,
 				...Theme.Core.shadow,
 			},
 			textShowOnDashCover: {
@@ -222,7 +226,7 @@ class SettingsTab extends View {
 			},
 			learn: {
 				marginHorizontal: width * 0.25,
-				marginVertical: 15,
+				marginVertical: padding / 2,
 			},
 		};
 	}

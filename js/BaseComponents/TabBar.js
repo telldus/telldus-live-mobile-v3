@@ -27,6 +27,7 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
 import FormattedMessage from './FormattedMessage';
+import { getRelativeDimensions } from '../App/Lib';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_home from '../App/Components/TabViews/img/selection.json';
@@ -49,21 +50,48 @@ class TabBar extends Component<Props, null> {
 	}
 
 	render(): Object {
-		let { icon, tintColor, label, intl, accessibilityLabel } = this.props;
+		let { icon, tintColor, label, intl, accessibilityLabel, appLayout } = this.props;
 		accessibilityLabel = intl.formatMessage(accessibilityLabel);
 
+		const {
+			iconSize,
+			container,
+			labelStyle,
+		} = this.getStyles(appLayout);
+
 		return (
-			<View style={{flexDirection: 'row', alignItems: 'center'}} accessibilityLabel={accessibilityLabel}>
-				<CustomIcon name={icon} size={28} color={tintColor}/>
-				<FormattedMessage {...label} style={{color: tintColor, fontSize: 14, paddingLeft: 5}}/>
+			<View style={container} accessibilityLabel={accessibilityLabel}>
+				<CustomIcon name={icon} size={iconSize} color={tintColor}/>
+				<FormattedMessage {...label} style={[labelStyle, {color: tintColor}]}/>
 			</View>
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const { width, height } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const iconSize = deviceWidth * 0.05;
+		const fontSize = deviceWidth * 0.03;
+
+		return {
+			container: {
+				flexDirection: 'row',
+				alignItems: 'center',
+			},
+			iconSize,
+			labelStyle: {
+				fontSize,
+				paddingLeft: 5 + (fontSize * 0.2),
+			},
+		};
 	}
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 

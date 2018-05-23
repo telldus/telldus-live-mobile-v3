@@ -305,15 +305,17 @@ class HistoryTab extends View {
 
 		let {
 			line,
+			textWhenNoData,
+			iconSize,
 		} = this.getStyle(appLayout);
 
 		// response received but, no history for the requested device, so empty list message.
 		if (!refreshing && hasLoaded && rowsAndSections.length === 0) {
 			return (
 				<View style={styles.containerWhenNoData}>
-					<Icon name="exclamation-circle" size={20} color="#F06F0C" />
-					<Text style={styles.textWhenNoData}>
-						<FormattedMessage {...messages.noRecentActivity} style={styles.textWhenNoData}/>...
+					<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+					<Text style={textWhenNoData}>
+						<FormattedMessage {...messages.noRecentActivity} style={textWhenNoData}/>...
 					</Text>
 				</View>
 			);
@@ -345,9 +347,13 @@ class HistoryTab extends View {
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const fontSizeNoData = Math.floor(deviceWidth * 0.03);
+		const fontSizeSectionText = Math.floor(deviceWidth * 0.04);
+		const iconSize = Math.floor(deviceWidth * 0.06);
 
 		return {
 			line: {
@@ -355,21 +361,27 @@ class HistoryTab extends View {
 				height: '100%',
 				width: 1,
 				position: 'absolute',
-				left: isPortrait ? width * 0.071333333 : height * 0.071333333,
+				left: deviceWidth * 0.071333333,
 				top: 0,
 				zIndex: -1,
 			},
 			sectionHeaderText: {
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				fontSize: fontSizeSectionText,
 			},
 			sectionHeader: {
-				height: isPortrait ? height * 0.04 : width * 0.04,
+				paddingVertical: fontSizeSectionText * 0.5,
 				backgroundColor: '#ffffff',
 				justifyContent: 'center',
-				paddingLeft: 5,
+				paddingLeft: 5 + (fontSizeSectionText * 0.2),
 				...Theme.Core.shadow,
 			},
+			textWhenNoData: {
+				marginLeft: 10 + (fontSizeNoData * 0.2),
+				color: '#A59F9A',
+				fontSize: fontSizeNoData,
+			},
+			iconSize,
 		};
 	}
 
@@ -385,16 +397,10 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 	},
 	containerWhenNoData: {
-		flex: 1,
 		paddingTop: 20,
 		flexDirection: 'row',
 		justifyContent: 'center',
-		alignItems: 'flex-start',
-	},
-	textWhenNoData: {
-		marginLeft: 10,
-		color: '#A59F9A',
-		fontSize: 12,
+		alignItems: 'center',
 	},
 });
 
