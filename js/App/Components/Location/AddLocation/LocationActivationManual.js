@@ -28,7 +28,6 @@ import { connect } from 'react-redux';
 import { TextInput, Keyboard } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import {View, FormattedMessage, FloatingButton} from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';

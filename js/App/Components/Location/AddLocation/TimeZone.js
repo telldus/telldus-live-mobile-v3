@@ -28,7 +28,6 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import {
 	View,
