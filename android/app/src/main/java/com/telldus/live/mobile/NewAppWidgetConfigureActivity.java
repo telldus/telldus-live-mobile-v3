@@ -8,6 +8,8 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -71,7 +73,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     //    private EditText etUrl;
     private Button btAdd,btnCan;
     private View btSelectDevice;
-    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest;
+    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest,deviceText,settingText;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
@@ -224,23 +226,30 @@ public class NewAppWidgetConfigureActivity extends Activity {
         deviceName = (TextView) findViewById(R.id.txtDeviceName);
         deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
         backDevice=(ImageView)findViewById(R.id.backdevice);
-
         mBackLayout=(RelativeLayout)findViewById(R.id.deviceBack);
+        btnCan=(Button)findViewById(R.id.btn_cancel);
+        switch_background=(Switch)findViewById(R.id.switch_background);
+        btAdd = (Button) findViewById(R.id.btAdd);
+        btSelectDevice = (View) findViewById(R.id.btSelectDevice);
+        deviceText = (TextView)findViewById(R.id.deviceText);
+        settingText = (TextView)findViewById(R.id.settingText);
+
+        switch_background.getThumbDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+       switch_background.getTrackDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+
         mBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        btnCan=(Button)findViewById(R.id.btn_cancel);
+
         btnCan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
-        switch_background=(Switch)findViewById(R.id.switch_background);
 
         switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -249,9 +258,13 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 if(isChecked)
                 {
                     switchStatus="true";
+                    switch_background.getThumbDrawable().setColorFilter(isChecked ? getResources().getColor(R.color.lightblue) : Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                    switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
                 }else
                 {
                     switchStatus="false";
+                    switch_background.getThumbDrawable().setColorFilter(isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                    switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.DKGRAY : Color.WHITE, PorterDuff.Mode.MULTIPLY);
 
                 }
             }
@@ -272,8 +285,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
     //    Toast.makeText(getApplicationContext(),String.valueOf(mAppWidgetId),Toast.LENGTH_LONG).show();
         final String[] deviceStateVal = {"0"};
 
-
-        btAdd = (Button) findViewById(R.id.btAdd);
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -334,8 +345,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
             }
         });
 
-
-        btSelectDevice = (View) findViewById(R.id.btSelectDevice);
         btSelectDevice.setOnClickListener(new View.OnClickListener() {
             public int checkedItem;
             AlertDialog ad;
@@ -358,10 +367,12 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 ad = builder.show();//   builder.show();
             }
         });
-        Typeface title = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-                Typeface subtitle = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-                textTest.setTypeface(title);
-                chooseSetting.setTypeface(subtitle);
+
+        Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+        Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+          textTest.setTypeface(titleFont);
+          chooseSetting.setTypeface(titleFont);
+          
 
     }
 
