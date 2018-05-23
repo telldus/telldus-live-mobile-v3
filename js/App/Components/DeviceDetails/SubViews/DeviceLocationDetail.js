@@ -73,6 +73,7 @@ class DeviceLocationDetail extends View {
 		let { title, H1, H2, image, style, appLayout, accessible, info } = this.props;
 
 		let {
+			container,
 			locationImageContainer,
 			locationTextContainer,
 			locationImage,
@@ -81,7 +82,7 @@ class DeviceLocationDetail extends View {
 		} = this.getStyle(appLayout);
 
 		return (
-			<TouchableOpacity style={[styles.shadow, styles.container, style]} accessible={accessible}
+			<TouchableOpacity style={[styles.shadow, container, style]} accessible={accessible}
 				onPress={this.onPress}>
 				{!!title && (
 					<Text style={[textLocation, {marginLeft: 10}]}>
@@ -120,6 +121,12 @@ class DeviceLocationDetail extends View {
 		textLocationSize = textLocationSize > 29 ? 29 : textLocationSize;
 
 		return {
+			container: {
+				flexDirection: 'column',
+				backgroundColor: '#fff',
+				padding: textHSHSize,
+				justifyContent: 'center',
+			},
 			locationImageContainer: {
 				height: isPortrait ? height * 0.16 : width * 0.16,
 				width: width * 0.25,
@@ -151,14 +158,6 @@ class DeviceLocationDetail extends View {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flexDirection: 'column',
-		backgroundColor: '#fff',
-		paddingHorizontal: 10,
-		paddingVertical: 10,
-		marginVertical: 10,
-		justifyContent: 'center',
-	},
 	imageHeaderContainer: {
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
