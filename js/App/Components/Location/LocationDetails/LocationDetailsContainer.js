@@ -194,7 +194,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 
 		let { width, height } = appLayout;
 		let deviceWidth = height > width ? width : height;
-		let padding = screenProps.currentScreen === 'Details' ? width * 0.027777 : deviceWidth * 0.027777;
+		let padding = screenProps.currentScreen === 'Details' ? width * Theme.Core.paddingFactor : deviceWidth * Theme.Core.paddingFactor;
 		let paddingHorizontal = screenProps.currentScreen === 'EditTimeZoneCity' || screenProps.currentScreen === 'EditTimeZoneContinent' ? 0 : padding;
 		let showPosterHeader = screenProps.currentScreen === 'Details' ? false : true;
 		let customPosterHeader = screenProps.currentScreen === 'Details' ? <CustomPosterHeader {...params.location} styles={styles}/> : null;

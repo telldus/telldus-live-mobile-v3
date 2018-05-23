@@ -139,7 +139,7 @@ class Details extends View {
 		const deviceWidth = isPortrait ? width : height;
 		const fontSize = Math.floor(deviceWidth * 0.045);
 		const iconSize = Math.floor(deviceWidth * 0.08);
-		const padding = width * 0.027777;
+		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		if (!location) {
 			return null;
@@ -157,7 +157,7 @@ class Details extends View {
 		let info = this.getLocationStatus(online, websocketOnline);
 
 		return (
-			<View style={{flex: 1, paddingTop: padding}}>
+			<View style={{flex: 1, paddingVertical: padding}}>
 				<LabelBox containerStyle={infoOneContainerStyle}>
 					<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
 					<View style={boxItemsCover}>
@@ -179,8 +179,8 @@ class Details extends View {
 					icon={'angle-right'}
 					iconColor="#A59F9A90"
 					blockContainerStyle={{
-						marginTop: padding,
-						marginBottom: padding,
+						marginTop: padding / 2,
+						marginBottom: padding / 2,
 					}}
 					valueTextStyle={{
 						marginRight: 20,
@@ -193,7 +193,7 @@ class Details extends View {
 					icon={'angle-right'}
 					iconColor="#A59F9A90"
 					blockContainerStyle={{
-						marginBottom: padding,
+						marginBottom: padding / 2,
 					}}
 					valueTextStyle={{
 						marginRight: 20,
@@ -202,7 +202,7 @@ class Details extends View {
 				/>
 				<TouchableOpacity style={[styles.infoTwoContainerStyle, {
 					padding: fontSize,
-					marginBottom: padding,
+					marginBottom: padding / 2,
 				}]} onPress={this.onEditGeoPosition}>
 					<Text style={[styles.textLabel, {fontSize, width: labelWidth}]}>
 						{this.labelGeoPosition}
@@ -230,21 +230,22 @@ class Details extends View {
 		const deviceWidth = isPortrait ? width : height;
 		const deviceHeight = isPortrait ? height : width;
 
+		const fontSizeName = Math.floor(deviceWidth * 0.053333333);
+
 		return {
 			infoOneContainerStyle: {
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'flex-start',
-				flex: 1,
+				flex: 0,
 				marginBottom: 0,
 				marginTop: 0,
-				padding: deviceWidth * 0.045,
+				padding: fontSizeName * 0.6,
 			},
 			boxItemsCover: {
 				flex: 1,
 				alignItems: 'flex-start',
-				flexWrap: 'wrap',
-				padding: deviceWidth * 0.02,
+				padding: fontSizeName * 0.3,
 			},
 			locationImage: {
 				width: deviceWidth * 0.22,
@@ -252,7 +253,7 @@ class Details extends View {
 			},
 			textName: {
 				color: Theme.Core.brandSecondary,
-				fontSize: Math.floor(deviceWidth * 0.053333333),
+				fontSize: fontSizeName,
 			},
 			locationInfo: {
 				fontSize: Math.floor(deviceWidth * 0.045),
@@ -265,7 +266,6 @@ class Details extends View {
 const styles = StyleSheet.create({
 	button: {
 		backgroundColor: Theme.Core.brandDanger,
-		marginVertical: 20,
 	},
 	infoTwoContainerStyle: {
 		flexDirection: 'row',
