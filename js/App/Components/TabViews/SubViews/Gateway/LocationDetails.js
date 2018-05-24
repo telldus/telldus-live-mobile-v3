@@ -125,15 +125,15 @@ class LocationDetails extends View {
 
 		return {
 			locationTextContainer: {
-				height: isPortrait ? height * 0.16 : width * 0.16,
-				width: width * 0.58,
-				marginRight: width * 0.15,
+				height: deviceWidth * 0.16,
+				width: deviceWidth * 0.58,
+				marginRight: deviceWidth * 0.15,
 				justifyContent: 'center',
 				alignItems: 'flex-start',
 			},
 			locationImage: {
-				width: isPortrait ? width * 0.22 : height * 0.22,
-				height: isPortrait ? height * 0.12 : width * 0.12,
+				width: deviceWidth * 0.25,
+				height: deviceWidth * 0.28,
 				alignSelf: 'flex-start',
 				resizeMode: 'contain',
 			},

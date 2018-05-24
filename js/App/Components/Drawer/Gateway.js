@@ -61,9 +61,10 @@ class Gateway extends PureComponent<Props, null> {
 		onPressGateway(gateway);
 	}
 
-	getLocationStatus(online: boolean, websocketOnline: boolean): Object {
+	getLocationStatus(online: boolean, websocketOnline: boolean, statusStyle: any, statusInfoStyle: any): Object {
 		return (
-			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} textStyle={{fontSize: 10}}/>
+			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl}
+				textStyle={statusStyle} statusInfoStyle={statusInfoStyle}/>
 		);
 	}
 
@@ -81,9 +82,12 @@ class Gateway extends PureComponent<Props, null> {
 			h1Style,
 			h2Style,
 			iconSettingsContainer,
+			statusStyle,
+			iconSize,
+			statusInfoStyle,
 		} = this.getStyles(drawerWidth);
 
-		const info = this.getLocationStatus(online, websocketOnline);
+		const info = this.getLocationStatus(online, websocketOnline, statusStyle, statusInfoStyle);
 		const locationImageUrl = getLocationImageUrl(type);
 		const locationData = {
 			image: locationImageUrl,
@@ -101,22 +105,30 @@ class Gateway extends PureComponent<Props, null> {
 					h1Style={h1Style}
 					h2Style={h2Style}/>
 				<View style={iconSettingsContainer}>
-					<IconTelldus icon={'settings'} size={24} color={'#bdbdbd'}/>
+					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
 				</View>
 			</TouchableOpacity>
 		);
 	}
 	getStyles(drawerWidth: number): Object {
+
+		const fontSizeH1 = Math.floor(drawerWidth * 0.048);
+		const fontSizeH2 = Math.floor(drawerWidth * 0.042);
+		const fontSizeH3 = Math.floor(drawerWidth * 0.038);
+		const iconSize = Math.floor(drawerWidth * 0.088);
+
 		return {
+			iconSize,
 			gatewayContainer: {
-				alignItems: 'center',
+				alignItems: 'flex-end',
 				justifyContent: 'center',
 				flexDirection: 'row',
-				marginVertical: 10,
+				marginTop: 5 + (fontSizeH1 * 0.6),
 			},
 			detailsContainer: {
 				width: drawerWidth,
-				height: drawerWidth * 0.22,
+				height: undefined,
+				justifyContent: 'flex-end',
 				paddingHorizontal: 10,
 				paddingVertical: 0,
 				marginVertical: 0,
@@ -141,17 +153,25 @@ class Gateway extends PureComponent<Props, null> {
 				marginRight: 0,
 			},
 			h1Style: {
-				fontSize: 14,
+				fontSize: fontSizeH1,
 			},
 			h2Style: {
-				fontSize: 11,
+				fontSize: fontSizeH2,
+			},
+			statusStyle: {
+				fontSize: fontSizeH3,
+			},
+			statusInfoStyle: {
+				width: fontSizeH3,
+				height: fontSizeH3,
+				borderRadius: fontSizeH3 / 2,
 			},
 			iconSettingsContainer: {
-				width: 30,
+				width: iconSize + 15,
 				justifyContent: 'center',
 				position: 'absolute',
 				right: 5,
-				bottom: 2,
+				bottom: drawerWidth * 0.04,
 			},
 		};
 	}

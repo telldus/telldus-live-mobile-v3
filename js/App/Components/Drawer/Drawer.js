@@ -30,7 +30,7 @@ import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { FormattedMessage, Text, View, Icon, Image, IconTelldus } from '../../../BaseComponents';
 import Gateway from './Gateway';
 import i18n from '../../Translations/common';
-import { hasStatusBar } from '../../Lib';
+import { hasStatusBar, getDrawerWidth } from '../../Lib';
 import Theme from '../../Theme';
 
 const messages = defineMessages({
@@ -48,7 +48,7 @@ const AddLocation = ({onPress, styles}: Object): Object => {
 	return (
 		<View style={styles.addNewLocationContainer}>
 			<TouchableOpacity onPress={onPress} style={styles.addNewLocationCover}>
-				<Icon name="plus-circle" size={20} color="#e26901"/>
+				<Icon name="plus-circle" size={styles.iconAddLocSize} color="#e26901"/>
 				<FormattedMessage {...messages.addNewLocation} style={styles.addNewLocationText}/>
 			</TouchableOpacity>
 		</View>
@@ -85,7 +85,7 @@ const ConnectedLocations = ({styles}: Object): Object => (
 
 const SettingsButton = ({ onPress, styles }: Object): Object => (
 	<TouchableOpacity onPress={onPress} style={[styles.navigationTitle, {marginLeft: 12}]}>
-		<IconTelldus icon={'settings'} size={36} color={Theme.Core.brandPrimary}/>
+		<IconTelldus icon={'settings'} size={styles.settingsIconSize} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
 	</TouchableOpacity>
 );
@@ -126,10 +126,18 @@ export default class Drawer extends View<Props, null> {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
-		let deviceHeight = isPortrait ? height : width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+		const deviceWidth = isPortrait ? width : height;
+		const drawerWidth = getDrawerWidth(deviceWidth);
+
+		const fontSizeHeader = Math.floor(drawerWidth * 0.072);
+		const fontSizeRow = Math.floor(drawerWidth * 0.062);
+		const fontSizeAddLocText = Math.floor(drawerWidth * 0.049);
+
+		const ImageWidth = Math.floor(drawerWidth * 0.18);
+		const ImageHeight = Math.floor(drawerWidth * 0.186);
 
 		return {
 			navigationHeader: {
@@ -145,40 +153,36 @@ export default class Drawer extends View<Props, null> {
 				paddingLeft: 10,
 			},
 			navigationHeaderImage: {
-				width: 55,
-				height: 57,
+				width: ImageWidth,
+				height: ImageHeight,
 				padding: 5,
 			},
 			navigationHeaderText: {
 				color: '#e26901',
-				fontSize: 22,
+				fontSize: fontSizeHeader,
 				marginLeft: 10,
-				marginTop: 4,
 				zIndex: 3,
-				alignItems: 'flex-end',
+				textAlignVertical: 'bottom',
 			},
 			navigationHeaderTextCover: {
 				flex: 1,
 				flexDirection: 'row',
 				flexWrap: 'wrap',
-				height: 64,
 				justifyContent: 'flex-start',
 				alignItems: 'flex-end',
 			},
 			navigationTitle: {
 				flexDirection: 'row',
-				height: 30,
+				marginVertical: 5 + (fontSizeRow * 0.5),
 				marginLeft: 10,
-				marginTop: 20,
+				alignItems: 'center',
 			},
+			iconAddLocSize: fontSizeAddLocText * 1.2,
+			settingsIconSize: fontSizeRow * 1.6,
 			navigationTextTitle: {
 				color: 'rgba(26,53,92,255)',
-				fontSize: 18,
+				fontSize: fontSizeRow,
 				marginLeft: 10,
-			},
-			navigationTitleImage: {
-				width: 28,
-				height: 28,
 			},
 			settingsButton: {
 				padding: 6,
@@ -186,22 +190,22 @@ export default class Drawer extends View<Props, null> {
 			},
 			settingsText: {
 				color: 'white',
-				fontSize: 18,
+				fontSize: fontSizeRow,
 			},
 			addNewLocationCover: {
 				flexDirection: 'row',
+				alignItems: 'center',
 			},
 			addNewLocationContainer: {
 				borderBottomWidth: 1,
 				borderBottomColor: '#eeeeef',
 				marginLeft: 16,
 				marginRight: 10,
-				marginTop: 10,
-				height: 40,
+				marginVertical: 5 + (fontSizeAddLocText * 0.5),
 				justifyContent: 'flex-start',
 			},
 			addNewLocationText: {
-				fontSize: 14,
+				fontSize: fontSizeAddLocText,
 				color: '#e26901',
 				marginLeft: 10,
 			},
