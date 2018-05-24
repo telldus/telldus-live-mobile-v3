@@ -34,6 +34,7 @@ type Props = {
 	intl: Object,
 	textStyle?: number | Object | Array<any>,
 	appLayout: Object,
+	statusInfoStyle?: number | Object | Array<any>,
 };
 
 class GatewayStatus extends View<Props, null> {
@@ -55,7 +56,7 @@ constructor(props: Props) {
 
 render(): Object {
 	let { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
-	let { online, websocketOnline, textStyle, appLayout } = this.props;
+	let { online, websocketOnline, textStyle, appLayout, statusInfoStyle } = this.props;
 	let {
 		statusText,
 		statusInfo,
@@ -64,7 +65,7 @@ render(): Object {
 	if (!online) {
 		return (
 			<View style={styles.statusInfoCover}>
-				<View style={[statusInfo, { backgroundColor: locationOffline}]}/>
+				<View style={[statusInfo, { backgroundColor: locationOffline}, statusInfoStyle]}/>
 				<Text style={[statusText, textStyle]}>
 					{this.offline}
 				</Text>
@@ -73,7 +74,7 @@ render(): Object {
 	} else if (!websocketOnline) {
 		return (
 			<View style={styles.statusInfoCover}>
-				<View style={[statusInfo, { backgroundColor: locationNoLiveUpdates}]}/>
+				<View style={[statusInfo, { backgroundColor: locationNoLiveUpdates}, statusInfoStyle]}/>
 				<Text style={[statusText, textStyle]}>
 					{this.noLiveUpdates}
 				</Text>
@@ -82,7 +83,7 @@ render(): Object {
 	}
 	return (
 		<View style={styles.statusInfoCover}>
-			<View style={[statusInfo, { backgroundColor: locationOnline}]}/>
+			<View style={[statusInfo, { backgroundColor: locationOnline}, statusInfoStyle]}/>
 			<Text style={[statusText, textStyle]}>
 				{this.online}
 			</Text>
