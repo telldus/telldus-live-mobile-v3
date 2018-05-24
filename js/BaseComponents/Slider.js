@@ -123,6 +123,7 @@ export default class SliderComponent extends Component<Props, State> {
 
 	render(): React$Element<any> {
 		const { showValue, ...sliderProps } = this.props;
+		const { height } = sliderProps.thumbStyle;
 
 		const { container } = this._getMainStyles();
 
@@ -132,6 +133,10 @@ export default class SliderComponent extends Component<Props, State> {
 				<Slider
 					{...sliderProps}
 					onValueChange={this.onValueChange}
+					style={{
+						flex: 1,
+						marginTop: height * 0.6,
+					}}
 				/>
 			</View>
 		);
