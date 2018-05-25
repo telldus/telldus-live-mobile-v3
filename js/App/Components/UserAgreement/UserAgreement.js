@@ -25,10 +25,11 @@ import { TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { intlShape, injectIntl } from 'react-intl';
-import { isIphoneX } from 'react-native-iphone-x-helper';
+import { SafeAreaView } from 'react-navigation'; // Using SafeAreaView from react-navigation, this fix issue https://github.com/facebook/react-native/issues/18177.
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 import Markdown from 'react-native-markdown-renderer';
 
-import { View, Text, StyleSheet, Poster, SafeAreaView } from '../../../BaseComponents';
+import { View, Text, StyleSheet, Poster } from '../../../BaseComponents';
 import { NavigationHeader } from '../DeviceDetails/SubViews';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -36,6 +37,8 @@ import {
 	getEULA,
 	acceptEULA,
 } from '../../Actions';
+
+const ViewX = isIphoneX() ? SafeAreaView : View;
 
 type Props = {
 	showModal: boolean,
@@ -100,8 +103,6 @@ class UserAgreement extends View<Props, State> {
 	render(): Object | null {
 		const { showModal, appLayout } = this.props;
 		const { eulaContent } = this.state;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
 
 		if (!eulaContent) {
 			return null;
@@ -117,7 +118,7 @@ class UserAgreement extends View<Props, State> {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.noOP}
 				supportedOrientations={['portrait', 'landscape']}>
-				<SafeAreaView>
+				<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
 					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
 						<NavigationHeader showLeftIcon={false}/>
 						<ScrollView
@@ -137,7 +138,7 @@ class UserAgreement extends View<Props, State> {
 								</Markdown>
 							</View>
 						</ScrollView>
-						<View style={[styles.footer, isIphoneX() && isPortrait ? { bottom: 30 } : { bottom: 0 }]}>
+						<View style={styles.footer}>
 							<TouchableOpacity style={styles.footerItem} onPress={this.onAgree}>
 								<Text style={styles.footerText}>
 									{this.footer}
@@ -145,14 +146,13 @@ class UserAgreement extends View<Props, State> {
 							</TouchableOpacity>
 						</View>
 					</View>
-				</SafeAreaView>
+				</ViewX>
 			</Modal>
 		);
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const footerHeight = Math.floor(deviceWidth * 0.13);
@@ -198,6 +198,7 @@ class UserAgreement extends View<Props, State> {
 				backgroundColor: '#FAFAFA',
 				height: footerHeight,
 				maxHeight: 100,
+				bottom: 0,
 			},
 			footerItem: {
 				padding: 10,
