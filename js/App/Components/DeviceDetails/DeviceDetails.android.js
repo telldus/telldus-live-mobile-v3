@@ -245,7 +245,7 @@ const Tabs = TabNavigator(
 		swipeEnabled: false,
 		lazy: true,
 		animationEnabled: true,
-		tabBarComponent: ({ tabStyle, ...rest }: Object): Object => {
+		tabBarComponent: ({ tabStyle, labelStyle, ...rest }: Object): Object => {
 			let { screenProps } = rest,
 				tabWidth = 0, fontSize = 0, paddingVertical = 0;
 			if (screenProps && screenProps.appLayout) {
@@ -258,12 +258,18 @@ const Tabs = TabNavigator(
 				paddingVertical = 10 + (fontSize * 0.5);
 			}
 			return (
-				<TabBarTop {...rest} tabStyle={{
-					...tabStyle,
-					width: tabWidth,
-					fontSize,
-					paddingVertical,
-				}}/>
+				<TabBarTop {...rest}
+					tabStyle={{
+						...tabStyle,
+						width: tabWidth,
+						fontSize,
+						paddingVertical,
+					}}
+					labelStyle={{
+						...labelStyle,
+						fontSize,
+					}}
+				/>
 			);
 		},
 		tabBarOptions: {
