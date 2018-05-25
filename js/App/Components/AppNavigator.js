@@ -24,7 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Platform } from 'react-native';
+import { Platform, NetInfo } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import Toast from 'react-native-simple-toast';
 
@@ -158,7 +158,8 @@ class AppNavigator extends View {
 
 	onNavigationStateChange: (Object) => void;
 	onDoneDimming: (Object) => void;
-	configureLocalControl: () => void;
+	autoDetectLocalTellStick: () => void;
+	handleConnectivityChange: () => void;
 	onLayout: (Object) => void;
 
 	constructor() {
@@ -172,8 +173,9 @@ class AppNavigator extends View {
 		this.onDoneDimming = this.onDoneDimming.bind(this);
 
 		this.timeOutConfigureLocalControl = null;
-		this.configureLocalControl = this.configureLocalControl.bind(this);
+		this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
 		this.onLayout = this.onLayout.bind(this);
+		this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
 	}
 
 	componentWillMount() {
@@ -185,37 +187,38 @@ class AppNavigator extends View {
 		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 		// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 		// and results in generating multiple tokens.
-		this.props.dispatch(getUserProfile()).then(() => {
-			this.props.dispatch(syncLiveApiOnForeground());
-			this.props.dispatch(getGateways());
-			this.props.dispatch(getAppData());
-			this.props.dispatch(resetSchedule());
+		const { dispatch } = this.props;
+		dispatch(getUserProfile()).then(() => {
+			dispatch(syncLiveApiOnForeground());
+			dispatch(getGateways());
+			dispatch(getAppData());
+			dispatch(resetSchedule());
 
-			const that = this;
-			this.timeOutConfigureLocalControl = setTimeout(() => {
-				that.configureLocalControl();
-			}, 5000);
+			// Auto discover TellStick's that support local control.
+			this.autoDetectLocalTellStick();
 		});
+
+		NetInfo.addEventListener(
+			'connectionChange',
+			this.handleConnectivityChange,
+		);
 	}
-	/**
-	 * Request for token to control gateways locally, if gateway is online.
-	 * Also send UDP package to the broadcast IP to detect gateways connected in the same LAN.
-	 */
-	configureLocalControl() {
-		const { gateways, dispatch } = this.props;
-		dispatch(autoDetectLocalTellStick());
-		getRSAKey(true, ({ pemPub }: Object) => {
-			if (pemPub) {
-				for (let index in gateways) {
-					const gateway = gateways[index];
-					const { id, websocketOnline, websocketConnected, localKey } = gateway;
-					const { key } = localKey;
-					if (websocketOnline && websocketConnected && !key) {
-						dispatch(getTokenForLocalControl(id, pemPub));
-					}
+
+	handleConnectivityChange(connectionInfo: Object) {
+		const { type } = connectionInfo;
+
+		// When user's connection change, auto discover TellStick and update it's ip address.
+		if (type && type !== 'none') {
+			this.autoDetectLocalTellStick();
 				}
 			}
-		});
+
+	// Sends UDP package to the broadcast IP to detect gateways connected in the same LAN.
+	autoDetectLocalTellStick() {
+		const { dispatch } = this.props;
+		this.timeOutConfigureLocalControl = setTimeout(() => {
+			dispatch(autoDetectLocalTellStick());
+		}, 5000);
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -226,33 +229,20 @@ class AppNavigator extends View {
 			this._showToast(message, durationToast, positionToast);
 		}
 
-		/**
-		* Checking if any gateways failed to configure local control during app start,
-		* because websocket failed to stay connected.
-		* If the previous connected state was 'false' and new state is 'true' and key is missing,
-		* then if socket is online will try to get a token for local control.
-		*/
-		this.updateLocalControl(gateways);
+		// Request for token to control device locally.
+		this.getTokenForLocalControl(gateways);
 	}
 
-	updateLocalControl(gateways: Object) {
+	getTokenForLocalControl(gateways: Object) {
 		const { dispatch } = this.props;
-		// TODO, since this is root component, getRSAKey function will be called very frequently which will
-		// result in fetching keys from local. Need to check performance and resource utilisation.
-		getRSAKey(false, ({ pemPub }: Object) => {
+		getRSAKey(true, ({ pemPub }: Object) => {
 			if (pemPub) {
 				for (let index in gateways) {
 					const gateway = gateways[index];
-					const prevGateway = this.props.gateways[index];
-					if (prevGateway) {
-						const { localKey, websocketConnected, websocketOnline } = gateway;
-						const { websocketConnected: prevWebsocketConnected } = prevGateway;
-						if (websocketOnline && !prevWebsocketConnected && websocketConnected) {
-							const { key } = localKey;
-							if (!key) {
-								dispatch(getTokenForLocalControl(gateway.id, pemPub));
-							}
-						}
+					const { id, websocketOnline, websocketConnected, localKey } = gateway;
+					const { key, supportLocal } = localKey;
+					if (websocketOnline && websocketConnected && supportLocal && !key) {
+						dispatch(getTokenForLocalControl(id, pemPub));
 					}
 				}
 			}
@@ -261,6 +251,10 @@ class AppNavigator extends View {
 
 	componentWillUnmount() {
 		clearTimeout(this.timeOutConfigureLocalControl);
+		NetInfo.removeEventListener(
+			'connectionChange',
+			this.handleConnectivityChange,
+		);
 	}
 
 	_showToast(message: string, durationToast: any, positionToast: any) {
