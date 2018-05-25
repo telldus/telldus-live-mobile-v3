@@ -257,7 +257,7 @@ class ChangeLogNavigator extends View {
 				onRequestClose={this.onRequestClose}
 				supportedOrientations={['portrait', 'landscape']}>
 				<View style={{flex: 1, backgroundColor: '#EFEFF4'}} onLayout={onLayout}>
-					<NavigationHeader showLeftIcon={false}/>
+					<NavigationHeader showLeftIcon={false} topMargin={false}/>
 					<ChangeLogPoster h1={h1} h2={h2}/>
 					<ScrollView>
 						<AnimatedWizard

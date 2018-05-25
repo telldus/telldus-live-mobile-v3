@@ -39,14 +39,21 @@ type Props = {
 	appLayout: Object,
 	intl: intlShape.isRequired,
 	showLeftIcon?: boolean,
+	topMargin?: boolean,
+};
+
+type DefaultProps = {
+	topMargin: boolean,
+	showLeftIcon: boolean,
 };
 
 class NavigationHeader extends View {
 
 	goBack: () => void;
 
-	static defaultProps = {
+	static defaultProps: DefaultProps = {
 		showLeftIcon: true,
+		topMargin: true,
 	}
 
 	constructor(props: Props) {
@@ -76,13 +83,19 @@ class NavigationHeader extends View {
 	}
 
 	render(): Object {
-		let { appLayout, showLeftIcon } = this.props;
+		let { appLayout, showLeftIcon, topMargin } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceHeight = isPortrait ? height : width;
 
-		if (appLayout.height < appLayout.width && !this.isTablet) {
-			return <View style={styles.emptyHeader}/>;
+		const statusBarHeight = topMargin && hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0;
+
+		if (height < width && !this.isTablet) {
+			return <View style={{
+				marginTop: statusBarHeight,
+				height: 0,
+				width: 0,
+			}}/>;
 		}
 
 		let leftIcon = showLeftIcon ? {
@@ -97,11 +110,6 @@ class NavigationHeader extends View {
 }
 
 const styles = StyleSheet.create({
-	emptyHeader: {
-		marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-		height: 0,
-		width: 0,
-	},
 	iconLeft: {
 		paddingVertical: 10,
 	},
