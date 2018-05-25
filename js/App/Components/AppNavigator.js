@@ -210,8 +210,8 @@ class AppNavigator extends View {
 		// When user's connection change, auto discover TellStick and update it's ip address.
 		if (type && type !== 'none') {
 			this.autoDetectLocalTellStick();
-				}
-			}
+		}
+	}
 
 	// Sends UDP package to the broadcast IP to detect gateways connected in the same LAN.
 	autoDetectLocalTellStick() {
