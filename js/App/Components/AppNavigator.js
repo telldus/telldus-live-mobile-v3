@@ -40,6 +40,7 @@ import {
 	getTokenForLocalControl,
 	autoDetectLocalTellStick,
 	setAppLayout,
+	resetLocalControlIP,
 } from '../Actions';
 import { getRSAKey } from '../Lib';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -176,6 +177,7 @@ class AppNavigator extends View {
 		this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
 		this.onLayout = this.onLayout.bind(this);
 		this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
+		getRSAKey(true);
 	}
 
 	componentWillMount() {
@@ -205,9 +207,13 @@ class AppNavigator extends View {
 	}
 
 	handleConnectivityChange(connectionInfo: Object) {
+		const { dispatch } = this.props;
 		const { type } = connectionInfo;
 
-		// When user's connection change, auto discover TellStick and update it's ip address.
+		// When ever user's connection change reset the previously auto-discovered ip address, before it is auto-discovered and updated again.
+		dispatch(resetLocalControlIP());
+
+		// When user's connection change and if it there is connection to internet, auto-discover TellStick and update it's ip address.
 		if (type && type !== 'none') {
 			this.autoDetectLocalTellStick();
 		}
@@ -235,7 +241,7 @@ class AppNavigator extends View {
 
 	getTokenForLocalControl(gateways: Object) {
 		const { dispatch } = this.props;
-		getRSAKey(true, ({ pemPub }: Object) => {
+		getRSAKey(false, ({ pemPub }: Object) => {
 			if (pemPub) {
 				for (let index in gateways) {
 					const gateway = gateways[index];
