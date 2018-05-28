@@ -246,7 +246,7 @@ class SensorsTab extends View {
 		let { screenProps, gatewaysById } = this.props;
 		let { propsSwipeRow } = this.state;
 		let { intl, currentTab, currentScreen } = screenProps;
-		let isGatewayActive = gatewaysById[row.item.clientId].online;
+		let isGatewayActive = gatewaysById[row.item.clientId] && gatewaysById[row.item.clientId].online;
 
 		return (
 			<SensorRow
