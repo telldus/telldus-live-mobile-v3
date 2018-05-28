@@ -133,11 +133,14 @@
                     android:background="@drawable/shape_left"
                     android:gravity="center">
 
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:padding="10dp"
-                        android:src="@drawable/sensor"/>
+                    <TextView
+                          android:id="@+id/tvIcon1"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:gravity="center"
+                          android:textSize="40sp"
+                          android:textColor="#FFFFFF"
+                          android:text="@string/sensor"/>
 
                 </LinearLayout>
 
@@ -147,27 +150,29 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.62"
                     android:background="@drawable/shape_right"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_gravity="center">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/txtSensorName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:layout_marginLeft="10dp"
                         android:text="Select sensor"
                         android:textSize="22sp"
-                        android:textColor="@color/orange"/>
+                        android:layout_gravity="center"
+                        android:textColor="@color/orange"
+                        android:layout_marginLeft="25sp"
+                        android:layout_marginRight="10sp"/>
 
                     <TextView
                         android:id="@+id/txtSensorHint"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:text="Tap to select sensor"
                         android:textSize="12sp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="23sp"
                         android:textColor="@color/darkGray"/>
 
                 </LinearLayout>
@@ -196,45 +201,49 @@
                     android:background="@drawable/shape_left"
                     android:gravity="center">
 
-                    <ImageView
-                        android:id="@+id/imgSensorType"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:padding="10dp"
-                        android:src="@drawable/temperature"/>
+                    <TextView
+                         android:id="@+id/imgSensorType"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:gravity="center"
+                         android:textSize="40sp"
+                         android:textColor="#FFFFFF"
+                         android:text="@string/temperature"/>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btSelectDisplayItem"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.62"
-                    android:background="@drawable/shape_right"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_gravity="center">
+                      android:id="@+id/btSelectDisplayItem"
+                      android:layout_width="0dip"
+                      android:layout_height="match_parent"
+                      android:layout_weight="0.62"
+                      android:background="@drawable/shape_right"
+                      android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/txtSensorDataName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Select data item"
-                        android:textSize="22sp"
-                        android:textColor="@color/orange"/>
+                      <TextView
+                          android:id="@+id/txtSensorDataName"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_marginTop="16dp"
+                          android:text="Select data item"
+                          android:textSize="22sp"
+                          android:textColor="@color/orange"
+                          android:layout_marginLeft="25sp"
+                          android:layout_marginRight="10sp"
+                          android:layout_gravity="center"/>
 
-                    <TextView
-                        android:id="@+id/txtSensorDataHint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:text="Tap to change value to display"
-                        android:textSize="12sp"
-                        android:layout_marginLeft="3dp"
-                        android:textColor="@color/darkGray"/>
+                      <TextView
+                          android:id="@+id/txtSensorDataHint"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_marginBottom="16dp"
+                          android:text="Tap to change value to display"
+                          android:textSize="12sp"
+                          android:layout_marginLeft="23sp"
+                          android:textColor="@color/darkGray"
+                          android:layout_gravity="center"/>
 
-                </LinearLayout>
+                  </LinearLayout>
 
             </LinearLayout>
 

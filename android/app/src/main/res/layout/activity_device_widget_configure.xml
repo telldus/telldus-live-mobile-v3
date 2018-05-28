@@ -124,11 +124,14 @@
                     android:background="@drawable/shape_left"
                     android:gravity="center">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="20dp"
-                        android:src="@drawable/device_alt"/>
+                    <TextView
+                      android:id="@+id/tvIcon1"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="center"
+                      android:textColor="#FFFFFF"
+                      android:textSize="50sp"
+                      android:text="@string/device"/>
 
                 </LinearLayout>
 
@@ -143,19 +146,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:padding="10dp"
                         android:layout_centerInParent="true">
 
-                    <TextView
+                   <TextView
                         android:id="@+id/txtDeviceName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Select device"
                         android:textSize="25sp"
                         android:textColor="@color/orange"/>
 
-                    <TextView
+                  <TextView
                         android:id="@+id/txtDeviceHint"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Tap to select device"
                         android:textSize="15sp"

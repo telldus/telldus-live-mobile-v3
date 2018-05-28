@@ -73,7 +73,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     //    private EditText etUrl;
     private Button btAdd,btnCan;
     private View btSelectDevice;
-    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest,deviceText,settingText;
+    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest,deviceText,settingText,tvIcon1;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
@@ -235,7 +235,12 @@ public class NewAppWidgetConfigureActivity extends Activity {
         settingText = (TextView)findViewById(R.id.settingText);
 
         switch_background.getThumbDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-       switch_background.getTrackDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+        switch_background.getTrackDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+
+        Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+        tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
+        tvIcon1.setTypeface(iconFont);
+
 
         mBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -372,7 +377,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
         Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
           textTest.setTypeface(titleFont);
           chooseSetting.setTypeface(titleFont);
-          
+
 
     }
 
