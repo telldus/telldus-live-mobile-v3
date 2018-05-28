@@ -56,8 +56,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     // private EditText etUrl;
     private Button btAdd,button_cancel;
     private View btSelectSensor, btSelectDisplayItem;
-    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint,chooseSettingSensor,testText,sensorText,settingText,valueText;
-    private ImageView imgSensorType;
+    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint,chooseSettingSensor,testText,sensorText,settingText,valueText,tvIcon1,imgSensorType;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
     private ProgressDialog pDialog;
@@ -224,6 +223,12 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         // activity stuffs
         setContentView(R.layout.activity_sensor_widget_configure);
 
+        Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+        tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
+        imgSensorType = (TextView) findViewById(R.id.imgSensorType);
+        tvIcon1.setTypeface(iconFont);
+        imgSensorType.setTypeface(iconFont);
+
 
         widgetManager = AppWidgetManager.getInstance(this);
         views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
@@ -241,7 +246,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         sensorHint = (TextView) findViewById(R.id.txtSensorHint);
         sensorDataName = (TextView) findViewById(R.id.txtSensorDataName);
         sensorDataHint = (TextView) findViewById(R.id.txtSensorDataHint);
-        imgSensorType = (ImageView) findViewById(R.id.imgSensorType);
+        imgSensorType = (TextView) findViewById(R.id.imgSensorType);
         btAdd = (Button) findViewById(R.id.btAdd);
         button_cancel=(Button)findViewById(R.id.button_cancel);
         switch_background=(Switch)findViewById(R.id.switch_background);
@@ -260,7 +265,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
           testText.setTypeface(titleFont);
           chooseSettingSensor.setTypeface(titleFont);
-          
+
 
 
         mSensorBack.setOnClickListener(new View.OnClickListener() {
