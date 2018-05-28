@@ -106,6 +106,7 @@ export type Action =
 	| { type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_SUCCESS', payload: Object }
 	| { type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_ERROR', payload: Object }
 	| { type: 'GATEWAY_AUTO_DETECT_LOCAL_SUCCESS', payload: Object }
+	| { type: 'GATEWAY_RESET_LOCAL_CONTROL_IP'}
 	| { type: typeof REHYDRATE }
 
 	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
