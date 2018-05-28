@@ -38,32 +38,40 @@ function getRSAKey(generate: boolean = true, onSuccess: (Object) => void): any {
 		if (Platform.OS === 'android') {
 			let { pemPub: pemPubS, pemPvt: pemPvtS } = values;
 			if (pemPubS && pemPvtS) {
-				onSuccess({pemPub: pemPubS, pemPvt: pemPvtS});
+				if (onSuccess) {
+					onSuccess({pemPub: pemPubS, pemPvt: pemPvtS});
+				}
 			} else if (generate) {
 				generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
-					onSuccess({pemPub, pemPvt});
+					if (onSuccess) {
+						onSuccess({pemPub, pemPvt});
+					}
 				});
-			} else {
+			} else if (onSuccess) {
 				onSuccess({pemPub: null, pemPvt: null});
 			}
 		} else {
 			let keys = values[0];
 			if (keys && keys.length >= 2) {
-				let data = {};
-				keys.map((key: Object) => {
-					if (key.key === 'pemPub') {
-						data.pemPub = key.value;
-					}
-					if (key.key === 'pemPvt') {
-						data.pemPvt = key.value;
-					}
-				});
-				onSuccess(data);
+				if (onSuccess) {
+					let data = {};
+					keys.map((key: Object) => {
+						if (key.key === 'pemPub') {
+							data.pemPub = key.value;
+						}
+						if (key.key === 'pemPvt') {
+							data.pemPvt = key.value;
+						}
+					});
+					onSuccess(data);
+				}
 			} else if (generate) {
 				generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
-					onSuccess({pemPub, pemPvt});
+					if (onSuccess) {
+						onSuccess({pemPub, pemPvt});
+					}
 				});
-			} else {
+			} else if (onSuccess) {
 				onSuccess({pemPub: null, pemPvt: null});
 			}
 		}
@@ -83,8 +91,10 @@ function generateAndStoreRSAKey(onSuccess: (Object) => void) {
 					sharedPreferencesName: 'TelldusSharedPrefs',
 					keychainService: 'TelldusKeychain',
 				});
-				onSuccess({pemPub, pemPvt});
-			} else {
+				if (onSuccess) {
+					onSuccess({pemPub, pemPvt});
+				}
+			} else if (onSuccess) {
 				onSuccess({pemPub: null, pemPvt: null});
 			}
 		});
