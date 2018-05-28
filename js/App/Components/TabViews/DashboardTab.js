@@ -312,7 +312,7 @@ class DashboardTab extends View {
 		let { screenProps, gateways } = this.props;
 		let { tileWidth } = this.state;
 		let { data, objectType } = row.item;
-		let isGatewayActive = gateways.byId[data.clientId].online;
+		let isGatewayActive = gateways.byId[data.clientId] && gateways.byId[data.clientId].online;
 		let tileMargin = this.getPadding() / 4;
 		tileWidth -= (2 * tileMargin);
 		let key = data.id;
