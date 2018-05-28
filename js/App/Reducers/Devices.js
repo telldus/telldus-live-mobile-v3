@@ -44,16 +44,17 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 }
 
 export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
-	let orderedList = orderBy(devices, [(device: Object): any => {
-		let { name } = device;
-		return name ? name.toLowerCase() : null;
-	}], ['asc']);
-	let [hidden, visible] = partition(orderedList, (device: Object): Object => {
-		return device.ignored;
-	});
 	let visibleList = [], hiddenList = [];
 	let isGatwaysEmpty = isEmpty(gateways);
-	if (!isGatwaysEmpty) {
+	let isDevicesEmpty = isEmpty(devices);
+	if (!isGatwaysEmpty && !isDevicesEmpty) {
+		let orderedList = orderBy(devices, [(device: Object): any => {
+			let { name } = device;
+			return name ? name.toLowerCase() : null;
+		}], ['asc']);
+		let [hidden, visible] = partition(orderedList, (device: Object): Object => {
+			return device.ignored;
+		});
 		visibleList = prepareSectionRow(visible, gateways);
 		hiddenList = prepareSectionRow(hidden, gateways);
 	}
