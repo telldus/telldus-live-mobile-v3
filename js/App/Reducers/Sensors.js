@@ -42,16 +42,17 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 }
 
 export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}): Object {
-	let orderedList = orderBy(sensors, [(sensor: Object): any => {
-		let { name } = sensor;
-		return name ? name.toLowerCase() : null;
-	}], ['asc']);
-	let [hidden, visible] = partition(orderedList, (sensor: Object): Object => {
-		return sensor.ignored;
-	});
 	let visibleList = [], hiddenList = [];
 	let isGatwaysEmpty = isEmpty(gateways);
-	if (!isGatwaysEmpty) {
+	let isSensorsEmpty = isEmpty(sensors);
+	if (!isGatwaysEmpty && !isSensorsEmpty) {
+		let orderedList = orderBy(sensors, [(sensor: Object): any => {
+			let { name } = sensor;
+			return name ? name.toLowerCase() : null;
+		}], ['asc']);
+		let [hidden, visible] = partition(orderedList, (sensor: Object): Object => {
+			return sensor.ignored;
+		});
 		visibleList = prepareSectionRow(visible, gateways);
 		hiddenList = prepareSectionRow(hidden, gateways);
 	}
