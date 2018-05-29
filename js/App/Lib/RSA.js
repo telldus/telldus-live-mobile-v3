@@ -23,6 +23,7 @@
 import { Platform } from 'react-native';
 import { RSA } from 'react-native-rsa-native';
 import SInfo from 'react-native-sensitive-info';
+const forge = require('node-forge');
 
 /**
  * Fetches RSA key if present in the local, if not and if @generate is not set to 'false' then generates one.
@@ -100,7 +101,19 @@ function generateAndStoreRSAKey(onSuccess: (Object) => void) {
 		});
 }
 
+function decryptLocalControlToken(encrypted: string, onSuccess: (string) => void) {
+	getRSAKey(false, ({ pemPvt }: Object) => {
+		const privateKey = forge.pki.privateKeyFromPem(pemPvt);
+		const decoded64 = forge.util.decode64(encrypted);
+		const token = privateKey.decrypt(decoded64, 'RSA-OAEP', {
+			md: forge.md.sha256.create(),
+		});
+		onSuccess(token);
+	});
+}
+
 module.exports = {
 	getRSAKey,
 	generateAndStoreRSAKey,
+	decryptLocalControlToken,
 };
