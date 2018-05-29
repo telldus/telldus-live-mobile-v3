@@ -23,66 +23,122 @@
 'use strict';
 
 import { format } from 'url';
-let forge = require('node-forge');
 
+import { supportedMethods, methods } from '../../Config';
 import type { ThunkAction } from './Types';
-import { LocalApi, getRSAKey } from '../Lib';
+import { LocalApi } from '../Lib';
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Devices } = actions;
 const { deviceSetState: deviceSetStateShared, ...otherActions } = Devices;
+const { deviceSetStateSuccess } = otherActions;
+
+let setStateTimeout = {};
+let setStateInterval = {};
+
+function deviceSetState(deviceId: number, state: number, stateValue: number | null = null): ThunkAction {
+	return (dispatch: Function, getState: Function): any => {
+		const { gateways, devices } = getState();
+		const { clientId, clientDeviceId } = devices.byId[deviceId];
+		const { localKey } = gateways.byId[clientId];
+		const { address, key: token } = localKey;
+		if (address && token) {
+			clearTimers(clientDeviceId);
+			const url = format({
+				pathname: '/device/command',
+				query: {
+					id: clientDeviceId,
+					method: methods[state].toLowerCase(),
+					// method: state,
+					value: stateValue,
+				},
+			});
+			const payload = {
+				address,
+				url,
+				requestParams: {
+					method: 'GET',
+				},
+				token,
+			};
+			return LocalApi(payload).then((response: Object): any => {
+				clearTimers(clientDeviceId);
+				const { status } = response;
+				if (status && status === 'success') {
+					// Every 1sec for the very next 10secs of action success, keep checking device state
+					// by calling device/info.
+					setStateTimeout[clientDeviceId] = setTimeout(() => {
+						if (setStateInterval[clientDeviceId]) {
+							clearInterval(setStateInterval[clientDeviceId]);
+						}
+					}, 10000);
+					setStateInterval[clientDeviceId] = setInterval(() => {
+						const { devices: deviceLat } = getState();
+						const { isInState } = deviceLat.byId[deviceId];
+						const nextState = methods[state];
+						// Incase if websocket updated the state do not go for device/info call.
+						if (nextState === isInState) {
+							clearTimers(clientDeviceId);
+						} else {
+							dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state));
+						}
+					}, 1000);
+					return response;
+				}
+				throw response;
+			}).catch((): any => {
+				return dispatch(deviceSetStateShared(deviceId, state, stateValue));
+			});
+		}
+		return dispatch(deviceSetStateShared(deviceId, state, stateValue));
+	};
+}
+
+function clearTimers(id: number) {
+	if (setStateTimeout[id]) {
+		clearTimeout(setStateTimeout[id]);
+	}
+	if (setStateInterval[id]) {
+		clearInterval(setStateInterval[id]);
+	}
+}
+
+function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: string, token: string, requestState: number): ThunkAction {
+	return (dispatch: Function, getState: Function): any => {
+		const url = format({
+			pathname: '/device/info',
+			query: {
+				id: clientDeviceId,
+				supportedMethods,
+			},
+		});
+		const payload = {
+			address,
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+			token,
+		};
+		return LocalApi(payload).then((response: Object): any => {
+			// clear time interval when new state is equal to requested state.
+			if (requestState === response.state) {
+				const data = {
+					deviceId,
+					value: response.statevalue,
+					method: response.state,
+				};
+				dispatch(deviceSetStateSuccess(data));
+				clearTimers(clientDeviceId);
+			}
+			return response;
+		}).catch((err: Object): any => {
+			throw err;
+		});
+	};
+}
 
 module.exports = {
 	...otherActions,
 	deviceSetState,
 };
-
-function deviceSetState(deviceId: number, state: number, stateValue: number | null = null): ThunkAction {
-	return (dispatch: Function, getState: Function): any => {
-		const { gateways, devices } = getState();
-		const { clientId } = devices.byId[deviceId];
-		const { localKey } = gateways.byId[clientId];
-		const { address, key } = localKey;
-
-		if (address && key) {
-			getRSAKey(false, ({ pemPvt }: Object): ThunkAction => {
-				const privateKey = forge.pki.privateKeyFromPem(pemPvt);
-				const decoded64 = forge.util.decode64(key);
-				const token = privateKey.decrypt(decoded64, 'RSA-OAEP', {
-					md: forge.md.sha256.create(),
-				});
-				// console.log('TEST IN token', token);
-
-				if (token) {
-					const url = format({
-						pathname: '/device/command',
-						query: {
-							id: deviceId,
-							method: state,
-							value: stateValue,
-						},
-					});
-					const payload = {
-						address,
-						url,
-						requestParams: {
-							method: 'GET',
-						},
-						token,
-					};
-					return LocalApi(payload).then((response: Object): any => {
-						// console.log('TEST response', response);
-						return response;
-					}).catch((err: Object): any => {
-						console.log('err', err);
-						return dispatch(deviceSetStateShared(deviceId, state, stateValue));
-					});
-				}
-				// console.log('TEST gateways.byId[clientId]', gateways.byId[clientId]);
-				return dispatch(deviceSetStateShared(deviceId, state, stateValue));
-			});
-		} else {
-			return dispatch(deviceSetStateShared(deviceId, state, stateValue));
-		}
-	};
-}
