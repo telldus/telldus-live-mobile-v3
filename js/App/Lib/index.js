@@ -43,6 +43,7 @@ import getDrawerWidth from './getDrawerWidth';
 import getLocationImageUrl from './getLocationImageUrl';
 import * as RSA from './RSA';
 import scheduleUtils from './scheduleUtils';
+import * as LocalApi from './LocalApi';
 
 
 module.exports = {
@@ -69,4 +70,5 @@ module.exports = {
 	getLocationImageUrl,
 	...RSA,
 	...scheduleUtils,
+	...LocalApi,
 };
