@@ -41,6 +41,7 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 
 import { AppState } from 'react-native';
 import { reportException } from './Analytics';
+import { decryptLocalControlToken } from './RSA';
 
 export default class TelldusWebsocket {
 	gatewayId: string;
@@ -150,5 +151,9 @@ export default class TelldusWebsocket {
 
 	reportException(e: Error) {
 		reportException(e);
+	}
+
+	decryptLocalControlToken(encrypted: string, onSuccess: (string) => void) {
+		decryptLocalControlToken(encrypted, onSuccess);
 	}
 }
