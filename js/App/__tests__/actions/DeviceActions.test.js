@@ -2,6 +2,7 @@ import { deviceSetState, requestDeviceAction } from '../../Actions/Devices';
 import { configureStore } from '../../Store/ConfigureStore';
 
 import fetchMock from 'fetch-mock';
+import moment from 'moment';
 
 jest.useFakeTimers();
 
@@ -12,11 +13,36 @@ describe('Test device actions', ()=>{
 	beforeEach(() => {
 		store = configureStore();
 		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
+		store.dispatch({type: 'RECEIVED_GATEWAYS', payload: {
+			client: [{
+				id: '1',
+				uuid: null,
+				name: null,
+				websocketAddress: {
+					address: null,
+					instance: null,
+					port: null,
+				},
+				websocketOnline: false,
+				websocketConnected: false,
+				localKey: {
+					key: null,
+					ttl: moment().add('days', 30),
+					uuid: null,
+					address: null,
+					port: null,
+					macAddress: null,
+					supportLocal: false,
+				},
+			}],
+		}});
 		store.dispatch({type: 'RECEIVED_DEVICES', payload: {
 			device: [{
 				id: '1',
 				methods: 3,
 				state: 2,
+				client: '1',
+				clientDeviceId: '1',
 			}],
 		}});
 		fetchMock.reset();
