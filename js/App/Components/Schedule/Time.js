@@ -184,7 +184,7 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { appLayout } = this.props;
+		const { appLayout, intl } = this.props;
 		const { selectedType, randomInterval } = this.state;
 		const { container, row, marginBottom, type } = this._getStyle(appLayout);
 
@@ -207,6 +207,7 @@ export default class Time extends View<null, Props, State> {
 								value={randomInterval}
 								onValueChange={this.setRandomIntervalValue}
 								appLayout={appLayout}
+								intl={intl}
 							/>
 						</Row>
 					)}
@@ -223,7 +224,7 @@ export default class Time extends View<null, Props, State> {
 	}
 
 	_renderTimeRow = (): Object | null => {
-		const { appLayout } = this.props;
+		const { appLayout, intl } = this.props;
 		const { selectedType, offset } = this.state;
 
 		if (!selectedType) {
@@ -300,6 +301,7 @@ export default class Time extends View<null, Props, State> {
 				value={offset}
 				onValueChange={this.setTimeOffsetValue}
 				appLayout={appLayout}
+				intl={intl}
 			/>
 		);
 

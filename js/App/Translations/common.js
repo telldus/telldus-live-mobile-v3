@@ -609,6 +609,10 @@ const messages = defineMessages({
 		id: 'settings.labelWhatsNew',
 		defaultMessage: 'What\'s new in this version?',
 	},
+	minutes: {
+		id: 'label.minutes',
+		defaultMessage: 'Minutes',
+	},
 });
 
 export default messages;

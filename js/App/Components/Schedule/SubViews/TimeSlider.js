@@ -23,11 +23,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { IconTelldus, Slider, View } from '../../../../BaseComponents';
 import { getHoursAndMinutes } from '../../../Lib';
 import Theme from '../../../Theme';
 import Description from './Description';
+import TimeField from './TimeField';
+import { TouchableOpacity } from 'react-native';
 
 type Props = {
 	description: string,
@@ -37,10 +40,12 @@ type Props = {
 	onValueChange: Function,
 	value: number,
 	appLayout: Object,
+	intl: Object,
 };
 
 type State = {
 	value: number,
+	isEditing: boolean,
 };
 
 export default class TimeSlider extends View<null, Props, State> {
@@ -53,6 +58,9 @@ export default class TimeSlider extends View<null, Props, State> {
 		onValueChange: PropTypes.func.isRequired,
 		value: PropTypes.number,
 	};
+
+	onEdit: () => void;
+	onEndEdit: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -73,7 +81,23 @@ export default class TimeSlider extends View<null, Props, State> {
 
 		this.state = {
 			value: typeof props.value === 'number' ? props.value : props.minimumValue,
+			isEditing: false,
 		};
+
+		this.onEdit = this.onEdit.bind(this);
+		this.onEndEdit = this.onEndEdit.bind(this);
+	}
+
+	onEdit() {
+		this.setState({
+			isEditing: true,
+		});
+	}
+
+	onEndEdit() {
+		this.setState({
+			isEditing: false,
+		});
 	}
 
 	onValueChange = (value: number) => {
@@ -82,8 +106,8 @@ export default class TimeSlider extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { description, icon, appLayout } = this.props;
-		const { value } = this.state;
+		const { description, icon, appLayout, intl } = this.props;
+		const { value, isEditing } = this.state;
 		const {
 			container,
 			row,
@@ -91,6 +115,8 @@ export default class TimeSlider extends View<null, Props, State> {
 			icon: iconStyle,
 			description: descriptionStyle,
 			marginBottom,
+			iconEditStyle,
+			iconEditSize,
 		} = this._getStyle(appLayout);
 
 		return (
@@ -101,21 +127,40 @@ export default class TimeSlider extends View<null, Props, State> {
 						{
 							justifyContent: 'flex-start',
 							marginBottom,
+							flex: 1,
 						},
 					]}
 				>
 					<IconTelldus icon={icon} style={iconStyle}/>
 					<Description style={descriptionStyle} appLayout={appLayout}>{description}</Description>
+					{isEditing ?
+						<TouchableOpacity onPress={this.onEndEdit} style={iconEditStyle}>
+							<IconTelldus icon={'checkmark'} size={iconEditSize} color={Theme.Core.brandSecondary}/>
+						</TouchableOpacity>
+						:
+						<TouchableOpacity onPress={this.onEdit} style={iconEditStyle}>
+							<Icon name={'edit'} size={iconEditSize} color={Theme.Core.brandSecondary}/>
+						</TouchableOpacity>
+					}
 				</View>
 				<View style={[row, { justifyContent: 'center' }]}>
-					<Slider
-						{...this.sliderConfig}
-						value={value}
-						valueStyle={{width: undefined}}
-						methodFormatDisplayValue={getHoursAndMinutes}
-						trackStyle={slider.track}
-						thumbStyle={slider.thumb}
-					/>
+					{isEditing ?
+						<TimeField
+							appLayout={appLayout}
+							value={value.toString()}
+							intl={intl}
+							icon={icon}
+							onValueChange={this.onValueChange}/>
+						:
+						<Slider
+							{...this.sliderConfig}
+							value={value}
+							valueStyle={{width: undefined}}
+							methodFormatDisplayValue={getHoursAndMinutes}
+							trackStyle={slider.track}
+							thumbStyle={slider.thumb}
+						/>
+					}
 				</View>
 			</View>
 		);
@@ -132,6 +177,8 @@ export default class TimeSlider extends View<null, Props, State> {
 
 		const shadow = Object.assign({}, Theme.Core.shadow, { shadowOpacity: 0.4 });
 
+		const iconRight = deviceWidth * 0.022666667;
+
 		return {
 			container: {
 				paddingHorizontal: padding,
@@ -144,7 +191,7 @@ export default class TimeSlider extends View<null, Props, State> {
 				alignItems: 'center',
 			},
 			icon: {
-				marginRight: deviceWidth * 0.022666667,
+				marginRight: iconRight,
 			},
 			description: {
 				fontSize: deviceWidth * 0.032,
@@ -164,6 +211,13 @@ export default class TimeSlider extends View<null, Props, State> {
 				},
 			},
 			marginBottom,
+			iconEditSize: deviceWidth * 0.044,
+			iconEditStyle: {
+				flex: 0,
+				position: 'absolute',
+				right: iconRight,
+				padding: 5,
+			},
 		};
 	};
 
