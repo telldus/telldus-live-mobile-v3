@@ -26,7 +26,7 @@ import { format } from 'url';
 
 import { supportedMethods, methods } from '../../Config';
 import type { ThunkAction } from './Types';
-import { LocalApi } from '../Lib';
+import { LocalApi, hasTokenExpired, refreshLocalControlToken } from '../Lib';
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Devices } = actions;
@@ -41,8 +41,10 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 		const { gateways, devices } = getState();
 		const { clientId, clientDeviceId } = devices.byId[deviceId];
 		const { localKey } = gateways.byId[clientId];
-		const { address, key: token } = localKey;
-		if (address && token) {
+		const { address, key: token, ttl } = localKey;
+		const tokenExpired = hasTokenExpired(ttl);
+
+		if (address && token && !tokenExpired) {
 			clearTimers(clientDeviceId);
 			const url = format({
 				pathname: '/device/command',
@@ -65,6 +67,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				clearTimers(clientDeviceId);
 				const { status } = response;
 				if (status && status === 'success') {
+
 					// Every 1sec for the very next 10secs of action success, keep checking device state
 					// by calling device/info.
 					setStateTimeout[clientDeviceId] = setTimeout(() => {
@@ -72,10 +75,12 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 							clearInterval(setStateInterval[clientDeviceId]);
 						}
 					}, 10000);
+
 					setStateInterval[clientDeviceId] = setInterval(() => {
 						const { devices: deviceLat } = getState();
 						const { isInState } = deviceLat.byId[deviceId];
 						const nextState = methods[state];
+
 						// Incase if websocket updated the state do not go for device/info call.
 						if (nextState === isInState) {
 							clearTimers(clientDeviceId);
@@ -89,6 +94,11 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 			}).catch((): any => {
 				return dispatch(deviceSetStateShared(deviceId, state, stateValue));
 			});
+		} else if (tokenExpired) {
+
+			// if tokenExpired refreshes the token, do not `return` from this block, as
+			// device has to be controlled using LiveApi(the block below).
+			dispatch(refreshLocalControlToken(clientId));
 		}
 		return dispatch(deviceSetStateShared(deviceId, state, stateValue));
 	};
