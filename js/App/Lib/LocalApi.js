@@ -21,17 +21,11 @@
 // @flow
 
 'use strict';
+import moment from 'moment';
 
-/*
- * When the user authenticates (logging in) the app receives two tokens.
- * One access token and one refresh token. The access token is only valid for a short time. A couple of hours or so.
- * When the access token expires it must be refreshed using the refresh token.
- *
- * Since it is currently not possible to know when it expires the app tries to use it until it receives an error.
- * When it receives the error it refreshes the access token and then retries the original call.
- *
- * The validity of the refresh token is about a year or so and will be renewed when used.
- */
+import { getRSAKey } from './RSA';
+import { getTokenForLocalControl } from '../Actions/Gateways';
+import type { ThunkAction } from '../Actions/Types';
 
 function LocalApi({ address, url, requestParams, token }: {address: string, url: string, requestParams: Object, token: string}): Promise<any> {
 	return new Promise((resolve: Function, reject: Function): Promise<any> => {
@@ -41,8 +35,6 @@ function LocalApi({ address, url, requestParams, token }: {address: string, url:
 			}
 			resolve(response);
 		}).catch((error: Object): any => {
-			// if (error.message === 'invalid_token' || error.message === 'expired_token') {
-			// }
 			reject(error);
 		});
 	});
@@ -54,18 +46,6 @@ async function doApiCall(address: string, url: string, requestParams: Object, to
 		// All is well, so return the data from the API.
 		return response;
 	}
-	// if (response.error !== 'invalid_token' && response.error !== 'expired_token') {
-	// 	// An error from the API we cannot recover from
-	// 	throw new Error(response.error);
-	// }
-
-	// response = await refreshAccessToken(url, requestParams); // Token has expired, so we'll try to get a new one.
-
-	// response = await callEndPoint(url, requestParams, response); // retry api call
-	// if (!response.error) {
-	// 	// All is well, so return the data from the API.
-	// 	return response;
-	// }
 
 	throw new Error(response.error);
 }
@@ -94,45 +74,33 @@ async function callEndPoint(address: string, url: string, requestParams: Object,
 	return JSON.parse(response);
 }
 
-// create new token with refresh token
-// async function refreshAccessToken(url?: string = '', requestParams?: Object = {}): any {
-// 	const store = getStore();
-// 	const accessToken = store.getState().user.accessToken;
-// 	const { dispatch } = store;
+/**
+ *
+ * @id - The gateway ID, for which token has to be refreshed.
+ *
+ * This method requests for a new local control token, and the token is recieved through socket.
+ * Upon successful receival it is decrypted and stored in the redux store.
+ *
+ */
+function refreshLocalControlToken(id: number): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		return getRSAKey(false, ({ pemPub }: Object): any => {
+			if (pemPub) {
+				return dispatch(getTokenForLocalControl(id, pemPub));
+			}
+		});
+	};
+}
 
-// 	return fetch(`${apiServer}/oauth2/accessToken`, {
-// 		method: 'POST',
-// 		headers: {
-// 			'Accept': 'application/json',
-// 			'Content-Type': 'application/json',
-// 		},
-// 		body: JSON.stringify({
-// 			'client_id': publicKey,
-// 			'client_secret': privateKey,
-// 			'grant_type': 'refresh_token',
-// 			'refresh_token': accessToken.refresh_token,
-// 		}),
-// 	})
-// 		.then((response: Object): any => response.json())
-// 		.then((response: Object): any => {
-// 			if (response.error) {
-// 				// We couldn't get a new access token with the refresh_token, so we lock the session.
-// 				dispatch({
-// 					type: 'LOCK_SESSION',
-// 				});
-// 				return null;
-// 			}
-// 			// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
-// 			// works on exporting 'updateAccessToken' directly(cant be do as there are multiple exports already). need to investigate.
-// 			dispatch({
-// 				type: 'RECEIVED_ACCESS_TOKEN',
-// 				accessToken: response,
-// 			});
-// 			return response;
-// 		});
-// }
-
+function hasTokenExpired(ttl: number): boolean {
+	const now = moment();
+	const expDate = moment.unix(ttl);
+	const hasExpired = now.isSameOrAfter(expDate);
+	return hasExpired;
+}
 
 module.exports = {
 	LocalApi,
+	refreshLocalControlToken,
+	hasTokenExpired,
 };
