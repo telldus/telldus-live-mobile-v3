@@ -41,6 +41,8 @@ type Props = {
 	value: number,
 	appLayout: Object,
 	intl: Object,
+	toggleEdit?: (string) => void,
+	type?: string,
 };
 
 type State = {
@@ -89,15 +91,23 @@ export default class TimeSlider extends View<null, Props, State> {
 	}
 
 	onEdit() {
+		const { toggleEdit, type } = this.props;
 		this.setState({
 			isEditing: true,
 		});
+		if (toggleEdit && type) {
+			toggleEdit(type);
+		}
 	}
 
 	onEndEdit() {
+		const { toggleEdit, type } = this.props;
 		this.setState({
 			isEditing: false,
 		});
+		if (toggleEdit && type) {
+			toggleEdit(type);
+		}
 	}
 
 	onValueChange = (value: number) => {
@@ -106,7 +116,7 @@ export default class TimeSlider extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { description, icon, appLayout, intl } = this.props;
+		const { description, icon, appLayout, intl, minimumValue, maximumValue } = this.props;
 		const { value, isEditing } = this.state;
 		const {
 			container,
@@ -150,6 +160,8 @@ export default class TimeSlider extends View<null, Props, State> {
 							value={value.toString()}
 							intl={intl}
 							icon={icon}
+							min={minimumValue}
+							max={maximumValue}
 							onValueChange={this.onValueChange}/>
 						:
 						<Slider

@@ -31,7 +31,9 @@ type Props = {
     intl: Object,
     icon: string,
     value: string,
-    onValueChange: (number) => void,
+	onValueChange: (number) => void,
+	max: number,
+	min: number,
 };
 
 type State = {
@@ -55,13 +57,28 @@ constructor(props: Props) {
 }
 
 onEdit(value: string) {
-	this.setState({
-		value,
-	});
-	const newValue = value === '' ? 0 : parseInt(value, 10);
-	const { onValueChange } = this.props;
-	if (onValueChange) {
-		onValueChange(newValue);
+	const { onValueChange, max, min } = this.props;
+
+	let newValue = value === '' ? 0 : parseInt(value, 10);
+	let acceptValue = (newValue <= max) && (newValue >= min);
+
+	if (value === '-') {
+		acceptValue = true;
+		newValue = 0;
+	}
+
+	if (acceptValue) {
+		this.setState({
+			value,
+		});
+		if (onValueChange) {
+			onValueChange(newValue);
+		}
+	} else {
+		const { value: prevValue } = this.state;
+		this.setState({
+			value: prevValue,
+		});
 	}
 }
 

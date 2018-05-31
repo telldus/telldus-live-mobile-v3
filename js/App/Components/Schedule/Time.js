@@ -65,11 +65,14 @@ type State = {
 	randomInterval: number,
 	offset: number,
 	date: Date,
+	offsetEdit: boolean,
+	intervalEdit: boolean,
 };
 
 export default class Time extends View<null, Props, State> {
 
 	selectTimeAndroid: Function;
+	toggleEdit: (string) => void;
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -90,6 +93,9 @@ export default class Time extends View<null, Props, State> {
 		this.labelSliderInterval = formatMessage(messages.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
 		this.labelSliderOffset = formatMessage(messages.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
 
+		this.labelSliderIntervalEdit = formatMessage(messages.descriptionSliderInterval, {startValue: '0min', endValue: '1440min'});
+		this.labelSliderOffsetEdit = formatMessage(messages.descriptionSliderOffset, {startValue: '-1439min', endValue: '1439min'});
+
 		this.labelEditTime = formatMessage(messages.editTime);
 		this.labelEditTimeAccessible = formatMessage(messages.editTimeAccessible);
 
@@ -104,9 +110,12 @@ export default class Time extends View<null, Props, State> {
 			randomInterval,
 			offset,
 			date: this._createDate(hour, minute),
+			offsetEdit: false,
+			intervalEdit: false,
 		};
 
 		this.selectTimeAndroid = this.selectTimeAndroid.bind(this);
+		this.toggleEdit = this.toggleEdit.bind(this);
 	}
 
 	componentDidMount() {
@@ -129,6 +138,20 @@ export default class Time extends View<null, Props, State> {
 			this.setState({ offset });
 		}
 	};
+
+	toggleEdit(type: string) {
+		const { offsetEdit, intervalEdit } = this.state;
+		if (type === 'OFFSET') {
+			this.setState({
+				offsetEdit: !offsetEdit,
+			});
+		}
+		if (type === 'INTERVAL') {
+			this.setState({
+				intervalEdit: !intervalEdit,
+			});
+		}
+	}
 
 	// eslint-disable-next-line flowtype/require-return-type
 	selectTimeAndroid = async () => {
@@ -185,7 +208,7 @@ export default class Time extends View<null, Props, State> {
 
 	render(): React$Element<any> {
 		const { appLayout, intl } = this.props;
-		const { selectedType, randomInterval } = this.state;
+		const { selectedType, randomInterval, intervalEdit } = this.state;
 		const { container, row, marginBottom, type } = this._getStyle(appLayout);
 
 		const shouldRender = !!selectedType;
@@ -200,7 +223,7 @@ export default class Time extends View<null, Props, State> {
 					{shouldRender && (
 						<Row containerStyle={row}>
 							<TimeSlider
-								description={this.labelSliderInterval}
+								description={intervalEdit ? this.labelSliderIntervalEdit : this.labelSliderInterval}
 								icon="random"
 								minimumValue={0}
 								maximumValue={1440}
@@ -208,6 +231,8 @@ export default class Time extends View<null, Props, State> {
 								onValueChange={this.setRandomIntervalValue}
 								appLayout={appLayout}
 								intl={intl}
+								type="INTERVAL"
+								toggleEdit={this.toggleEdit}
 							/>
 						</Row>
 					)}
@@ -231,7 +256,7 @@ export default class Time extends View<null, Props, State> {
 			return null;
 		}
 
-		const { date } = this.state;
+		const { date, offsetEdit } = this.state;
 		const {
 			row,
 			iosTimeContainer,
@@ -294,7 +319,7 @@ export default class Time extends View<null, Props, State> {
 
 		const timeSlider = (
 			<TimeSlider
-				description={this.labelSliderOffset}
+				description={offsetEdit ? this.labelSliderOffsetEdit : this.labelSliderOffset}
 				icon="offset"
 				minimumValue={-1439}
 				maximumValue={1439}
@@ -302,6 +327,8 @@ export default class Time extends View<null, Props, State> {
 				onValueChange={this.setTimeOffsetValue}
 				appLayout={appLayout}
 				intl={intl}
+				type="OFFSET"
+				toggleEdit={this.toggleEdit}
 			/>
 		);
 
