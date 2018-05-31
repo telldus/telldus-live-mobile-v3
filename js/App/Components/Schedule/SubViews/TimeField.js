@@ -62,6 +62,7 @@ onEdit(value: string) {
 	let newValue = value === '' ? 0 : parseInt(value, 10);
 	let acceptValue = (newValue <= max) && (newValue >= min);
 
+	// A work around to accept negative values, 'parseInt' return 'NaN' on giving hyphen(-).
 	if (value === '-') {
 		acceptValue = true;
 		newValue = 0;
