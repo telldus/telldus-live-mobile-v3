@@ -174,6 +174,7 @@ class AppNavigator extends View {
 		this.onDoneDimming = this.onDoneDimming.bind(this);
 
 		this.timeOutConfigureLocalControl = null;
+		this.timeOutGetLocalControlToken = null;
 		this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
 		this.onLayout = this.onLayout.bind(this);
 		this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
@@ -228,7 +229,7 @@ class AppNavigator extends View {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		let { showToast, messageToast, durationToast, positionToast, gateways } = nextProps;
+		let { showToast, messageToast, durationToast, positionToast } = nextProps;
 		if (showToast) {
 			let { formatMessage } = this.props.intl;
 			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
@@ -236,27 +237,31 @@ class AppNavigator extends View {
 		}
 
 		// Request for token to control device locally.
-		this.getTokenForLocalControl(gateways);
+		this.getTokenForLocalControl();
 	}
 
-	getTokenForLocalControl(gateways: Object) {
-		const { dispatch } = this.props;
-		getRSAKey(false, ({ pemPub }: Object) => {
-			if (pemPub) {
-				for (let index in gateways) {
-					const gateway = gateways[index];
-					const { id, websocketOnline, websocketConnected, localKey } = gateway;
-					const { key, supportLocal, uuid } = localKey;
-					if (websocketOnline && websocketConnected && supportLocal && !key && !uuid) {
-						dispatch(getTokenForLocalControl(id, pemPub));
+	getTokenForLocalControl() {
+		const that = this;
+		this.timeOutGetLocalControlToken = setTimeout(() => {
+			const { dispatch, gateways } = that.props;
+			getRSAKey(false, ({ pemPub }: Object) => {
+				if (pemPub) {
+					for (let index in gateways) {
+						const gateway = gateways[index];
+						const { id, websocketOnline, websocketConnected, localKey } = gateway;
+						const { key, supportLocal, uuid } = localKey;
+						if (websocketOnline && websocketConnected && supportLocal && !key && !uuid) {
+							dispatch(getTokenForLocalControl(id, pemPub));
+						}
 					}
 				}
-			}
-		});
+			});
+		}, 5000);
 	}
 
 	componentWillUnmount() {
 		clearTimeout(this.timeOutConfigureLocalControl);
+		clearTimeout(this.timeOutGetLocalControlToken);
 		NetInfo.removeEventListener(
 			'connectionChange',
 			this.handleConnectivityChange,
