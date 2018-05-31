@@ -29,9 +29,10 @@ import type { ThunkAction } from './Types';
 import { LocalApi, hasTokenExpired, refreshLocalControlToken } from '../Lib';
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
-const { Devices } = actions;
+const { Devices, App } = actions;
 const { deviceSetState: deviceSetStateShared, ...otherActions } = Devices;
-const { deviceSetStateSuccess } = otherActions;
+const { deviceSetStateSuccess, deviceResetState } = otherActions;
+const { showToast } = App;
 
 let setStateTimeout = {};
 let setStateInterval = {};
@@ -50,8 +51,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				pathname: '/device/command',
 				query: {
 					id: clientDeviceId,
-					method: methods[state].toLowerCase(),
-					// method: state,
+					method: state,
 					value: stateValue,
 				},
 			});
@@ -63,6 +63,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				},
 				token,
 			};
+
 			return LocalApi(payload).then((response: Object): any => {
 				clearTimers(clientDeviceId);
 				const { status } = response;
@@ -74,6 +75,9 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 						if (setStateInterval[clientDeviceId]) {
 							clearInterval(setStateInterval[clientDeviceId]);
 						}
+						// Final device/info call, to reset the device state.
+						// Will be called after 10secs, that means device action has not been success yet(setStateTimeout not cleared).
+						dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, true));
 					}, 10000);
 
 					setStateInterval[clientDeviceId] = setInterval(() => {
@@ -85,7 +89,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 						if (nextState === isInState) {
 							clearTimers(clientDeviceId);
 						} else {
-							dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state));
+							dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, false));
 						}
 					}, 1000);
 					return response;
@@ -113,7 +117,7 @@ function clearTimers(id: number) {
 	}
 }
 
-function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: string, token: string, requestState: number): ThunkAction {
+function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: string, token: string, requestState: number, reset: boolean): ThunkAction {
 	return (dispatch: Function, getState: Function): any => {
 		const url = format({
 			pathname: '/device/info',
@@ -131,6 +135,7 @@ function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: s
 			token,
 		};
 		return LocalApi(payload).then((response: Object): any => {
+
 			// clear time interval when new state is equal to requested state.
 			if (requestState === response.state) {
 				const data = {
@@ -140,9 +145,35 @@ function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: s
 				};
 				dispatch(deviceSetStateSuccess(data));
 				clearTimers(clientDeviceId);
+			} else if (reset) {
+				const newState = methods[parseInt(response.state, 10)];
+				const data = {
+					deviceId,
+					value: response.statevalue,
+					state: newState,
+				};
+				dispatch(showToast());
+				dispatch(deviceResetState(data));
+				clearTimers(clientDeviceId);
 			}
 			return response;
 		}).catch((err: Object): any => {
+
+			// Incase if no response came through socket and the final device/info call to reset state throws error
+			// the action indicator will keep flashing for ever. So reseting the state with it's own state here.
+			if (reset) {
+				let { devices } = getState();
+				let device = devices.byId[deviceId];
+				let { isInState, value } = device;
+				const data = {
+					deviceId,
+					value,
+					state: isInState,
+				};
+				dispatch(showToast());
+				dispatch(deviceResetState(data));
+				clearTimers(clientDeviceId);
+			}
 			throw err;
 		});
 	};
