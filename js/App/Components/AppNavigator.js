@@ -256,7 +256,7 @@ class AppNavigator extends View {
 					}
 				}
 			});
-		}, 5000);
+		}, 15000);
 	}
 
 	componentWillUnmount() {
