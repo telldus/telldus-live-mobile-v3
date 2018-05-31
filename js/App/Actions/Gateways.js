@@ -24,7 +24,8 @@
 import { format } from 'url';
 
 import { Platform } from 'react-native';
-import {LiveApi} from '../Lib/LiveApi';
+import { LiveApi } from '../Lib/LiveApi';
+import { reportException } from '../Lib';
 import type { ThunkAction, Action } from './Types';
 
 // Gateways actions that are shared by both Web and Mobile.
@@ -72,15 +73,18 @@ function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
 		const socket: Object = dgram.createSocket('udp4');
 		const aPort = randomPort();
-
-		socket.bind(aPort, (err: any) => {
-			if (err) {
-				throw err;
-			}
-			if (Platform.OS !== 'android') {
-				socket.setBroadcast(true);
-			}
-		});
+		try {
+			socket.bind(aPort, (err: any) => {
+				if (err) {
+					throw err;
+				}
+				if (Platform.OS !== 'android') {
+					socket.setBroadcast(true);
+				}
+			});
+		} catch (err) {
+			reportException(err);
+		}
 		socket.once('listening', () => {
 			let buf = toByteArray('D');
 			socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
