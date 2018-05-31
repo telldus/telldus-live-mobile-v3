@@ -6,7 +6,11 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.SystemClock;
 import android.text.format.DateUtils;
 import android.widget.RemoteViews;
@@ -25,6 +29,7 @@ public class NewSensorWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
+        String iconName="";
         CharSequence widgetText = "Sensor widget";
         String sensorHistory="Last updated 20 mins ago";
         CharSequence sensorValue="22";
@@ -44,24 +49,31 @@ public class NewSensorWidget extends AppWidgetProvider {
             if(widgetType.equals("wgust")||widgetType.equals("wavg")||widgetType.equals("wdir"))
             {
                 src=R.drawable.wind;
+                iconName = "wind";
             }else if(widgetType.equals("watt"))
             {
                 src=R.drawable.watt;
+                iconName = "watt";
             } else if (widgetType.equals("temp"))
             {
                 src=R.drawable.temperature;
+                iconName = "temperature";
             }else if(widgetType.equals("humidity"))
             {
                 src=R.drawable.humidity;
+                iconName = "humidity";
             }else if(widgetType.equals("lum"))
             {
                 src=R.drawable.luminance;
+                iconName = "luminance";
             }else if(widgetType.equals("rrate")|| widgetType.equals("rtot"))
             {
                 src=R.drawable.rain;
+                iconName = "rain";
             }else if(widgetType.equals("uv"))
             {
                 src=R.drawable.uv;
+                iconName = "uv";
             }
 
             long time = Long.parseLong(sensorHistory);
@@ -86,13 +98,31 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
 
-        view.setImageViewResource(R.id.iconSensor,src);
+        view.setImageViewBitmap(R.id.iconSensor, buildUpdate(iconName, context));
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo,sensorHistory);
         view.setTextViewText(R.id.txtSensorValue,sensorValue);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, view);
+    }
+
+    public static Bitmap buildUpdate(String time,Context context)
+    {
+        Bitmap myBitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_8888);
+        Canvas myCanvas = new Canvas(myBitmap);
+        Paint paint = new Paint();
+        Typeface iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
+
+        paint.setAntiAlias(true);
+        paint.setSubpixelText(true);
+        paint.setTypeface(iconFont);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(65);
+        paint.setTextAlign(Paint.Align.CENTER);
+        myCanvas.drawText(time, 80, 60, paint);
+        return myBitmap;
     }
 
     @Override
