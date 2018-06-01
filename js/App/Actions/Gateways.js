@@ -25,7 +25,7 @@ import { format } from 'url';
 
 import { Platform } from 'react-native';
 import { LiveApi } from '../Lib/LiveApi';
-import { reportException } from '../Lib';
+import { reportException } from '../Lib/Analytics';
 import type { ThunkAction, Action } from './Types';
 
 // Gateways actions that are shared by both Web and Mobile.
