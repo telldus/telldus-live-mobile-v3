@@ -19,7 +19,7 @@
  */
 
 module.exports = {
-	supportedMethods: 951,
+	supportedMethods: 1975,
 	methods: {
 		1: 'TURNON',
 		2: 'TURNOFF',
@@ -31,7 +31,7 @@ module.exports = {
 		128: 'UP',
 		256: 'DOWN',
 		512: 'STOP',
-		1024: 'RGBW',
+		1024: 'RGB',
 		2048: 'THERMOSTAT',
 	},
 	states: {
@@ -45,7 +45,7 @@ module.exports = {
 		128: 'Up',
 		256: 'Down',
 		512: 'Stop',
-		1024: 'RGBW',
+		1024: 'RGB',
 		2048: 'Thermostat',
 	},
 	statusMessage: {
