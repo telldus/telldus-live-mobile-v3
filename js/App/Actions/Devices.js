@@ -68,30 +68,31 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				clearTimers(clientDeviceId);
 				const { status } = response;
 				if (status && status === 'success') {
-
+					if (state !== 32) {
 					// Every 1sec for the very next 10secs of action success, keep checking device state
 					// by calling device/info.
-					setStateTimeout[clientDeviceId] = setTimeout(() => {
-						if (setStateInterval[clientDeviceId]) {
-							clearInterval(setStateInterval[clientDeviceId]);
-						}
-						// Final device/info call, to reset the device state.
-						// Will be called after 10secs, that means device action has not been success yet(setStateTimeout not cleared).
-						dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, true));
-					}, 10000);
+						setStateTimeout[clientDeviceId] = setTimeout(() => {
+							if (setStateInterval[clientDeviceId]) {
+								clearInterval(setStateInterval[clientDeviceId]);
+							}
+							// Final device/info call, to reset the device state.
+							// Will be called after 10secs, that means device action has not been success yet(setStateTimeout not cleared).
+							dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, true));
+						}, 10000);
 
-					setStateInterval[clientDeviceId] = setInterval(() => {
-						const { devices: deviceLat } = getState();
-						const { isInState } = deviceLat.byId[deviceId];
-						const nextState = methods[state];
+						setStateInterval[clientDeviceId] = setInterval(() => {
+							const { devices: deviceLat } = getState();
+							const { isInState } = deviceLat.byId[deviceId];
+							const nextState = methods[state];
 
-						// Incase if websocket updated the state do not go for device/info call.
-						if (nextState === isInState) {
-							clearTimers(clientDeviceId);
-						} else {
-							dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, false));
-						}
-					}, 1000);
+							// Incase if websocket updated the state do not go for device/info call.
+							if (nextState === isInState) {
+								clearTimers(clientDeviceId);
+							} else {
+								dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, false));
+							}
+						}, 1000);
+					}
 					return response;
 				}
 				throw response;
