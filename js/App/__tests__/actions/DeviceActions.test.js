@@ -1,5 +1,6 @@
 import { deviceSetState, requestDeviceAction } from '../../Actions/Devices';
 import { configureStore } from '../../Store/ConfigureStore';
+import { supportedMethods } from '../../../Config';
 
 import fetchMock from 'fetch-mock';
 import moment from 'moment';
@@ -50,7 +51,7 @@ describe('Test device actions', ()=>{
 			name: 'deviceCommand',
 			overwriteRoutes: true,
 		});
-		fetchMock.mock('glob:*/oauth2/device/info?id=1&supportedMethods=951', {
+		fetchMock.mock(`glob:*/oauth2/device/info?id=1&supportedMethods=${supportedMethods}`, {
 			'state': 2,
 		}, {
 			name: 'deviceInfo',
