@@ -99,7 +99,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 			}).catch((): any => {
 				return dispatch(deviceSetStateShared(deviceId, state, stateValue));
 			});
-		} else if (tokenExpired) {
+		} else if (ttl && tokenExpired) {
 
 			// if tokenExpired refreshes the token, do not `return` from this block, as
 			// device has to be controlled using LiveApi(the block below).
