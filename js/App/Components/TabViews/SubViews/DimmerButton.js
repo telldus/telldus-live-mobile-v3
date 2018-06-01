@@ -109,7 +109,8 @@ class DimmerButton extends View {
 	constructor(props: Props) {
 		super(props);
 
-		const value = getDimmerValue(this.props.device.value, this.props.device.isInState);
+		const { stateValues, isInState } = this.props.device;
+		const value = getDimmerValue(stateValues.DIM, isInState);
 		this.parentScrollEnabled = true;
 		this.state = {
 			buttonWidth: 0,
@@ -134,7 +135,8 @@ class DimmerButton extends View {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		const dimmerValue = getDimmerValue(nextProps.device.value, nextProps.device.isInState);
+		const { stateValues, isInState } = nextProps.device;
+		const dimmerValue = getDimmerValue(stateValues.DIM, isInState);
 		this.setState({ value: dimmerValue });
 	}
 
@@ -154,8 +156,10 @@ class DimmerButton extends View {
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
+		const { stateValues, isInState, id } = this.props.device;
+
 		this.props.onSlideActive();
-		this.props.saveDimmerInitialState(this.props.device.id, this.props.device.value, this.props.device.isInState);
+		this.props.saveDimmerInitialState(id, stateValues.DIM, isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
