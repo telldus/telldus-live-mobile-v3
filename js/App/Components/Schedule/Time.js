@@ -214,7 +214,7 @@ export default class Time extends View<null, Props, State> {
 		const shouldRender = !!selectedType;
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps={'always'}>
 				<View style={container}>
 					<View style={[type.container, { marginBottom }]}>
 						{this._renderTypes(TYPES)}
