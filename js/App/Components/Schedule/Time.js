@@ -23,7 +23,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback, ScrollView,
+	LayoutAnimation, UIManager } from 'react-native';
 import { defineMessages } from 'react-intl';
 
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
@@ -116,6 +117,24 @@ export default class Time extends View<null, Props, State> {
 
 		this.selectTimeAndroid = this.selectTimeAndroid.bind(this);
 		this.toggleEdit = this.toggleEdit.bind(this);
+		if (Platform.OS === 'android') {
+			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+		}
+		this.animationConfig = {
+			duration: 300,
+			create: {
+				type: LayoutAnimation.Types.linear,
+				property: LayoutAnimation.Properties.scaleXY,
+			},
+			update: {
+				type: LayoutAnimation.Types.linear,
+				property: LayoutAnimation.Properties.scaleXY,
+			},
+			delete: {
+				type: LayoutAnimation.Types.linear,
+				property: LayoutAnimation.Properties.opacity,
+			},
+		};
 	}
 
 	componentDidMount() {
@@ -141,6 +160,7 @@ export default class Time extends View<null, Props, State> {
 
 	toggleEdit(type: string) {
 		const { offsetEdit, intervalEdit } = this.state;
+		LayoutAnimation.configureNext(this.animationConfig);
 		if (type === 'OFFSET') {
 			this.setState({
 				offsetEdit: !offsetEdit,
@@ -424,7 +444,7 @@ export default class Time extends View<null, Props, State> {
 			},
 			row: {
 				marginBottom,
-				height: null,
+				height: deviceWidth * 0.309333333,
 			},
 			marginBottom,
 			type: {

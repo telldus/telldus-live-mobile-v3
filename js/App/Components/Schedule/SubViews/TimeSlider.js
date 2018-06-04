@@ -137,7 +137,6 @@ export default class TimeSlider extends View<null, Props, State> {
 						{
 							justifyContent: 'flex-start',
 							marginBottom,
-							flex: 1,
 						},
 					]}
 				>
@@ -193,9 +192,7 @@ export default class TimeSlider extends View<null, Props, State> {
 
 		return {
 			container: {
-				paddingHorizontal: padding,
-				paddingTop: padding,
-				paddingBottom: padding * 1.65,
+				padding: padding,
 				width: '100%',
 			},
 			row: {

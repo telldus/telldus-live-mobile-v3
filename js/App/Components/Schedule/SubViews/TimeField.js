@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, Platform } from 'react-native';
+import { TextInput, Platform, InteractionManager } from 'react-native';
 
 import { View, Text, IconTelldus } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
@@ -43,6 +43,7 @@ type State = {
 export default class TimeField extends View<Props, State> {
 props: Props
 onEdit: (string) => void;
+setRef: (any) => void;
 
 constructor(props: Props) {
 	super(props);
@@ -54,6 +55,17 @@ constructor(props: Props) {
 		value: value === '0' ? '' : value,
 	};
 	this.onEdit = this.onEdit.bind(this);
+	this.setRef = this.setRef.bind(this);
+}
+
+componentDidMount() {
+	InteractionManager.runAfterInteractions(() => {
+		this.input.focus();
+	});
+}
+
+setRef(ref: any) {
+	this.input = ref;
 }
 
 onEdit(value: string) {
@@ -103,12 +115,13 @@ render(): Object {
 			<TextInput
 				style={inputStyle}
 				underlineColorAndroid={Theme.Core.brandSecondary}
-				autoFocus
+				autoFocus={false}
 				value={value}
 				onChangeText={this.onEdit}
 				autoCapitalize="none"
 				autoCorrect={false}
-				keyboardType="numeric"/>
+				keyboardType="numeric"
+				ref={this.setRef}/>
 		</View>
 	);
 }
@@ -128,7 +141,6 @@ getStyles(appLayout: Object): Object {
 			marginLeft: deviceWidth * 0.045,
 		},
 		inputStyle: {
-			flex: 1,
 			fontSize: inputFontSize,
 			paddingLeft: 5 + (inputFontSize * 2.5),
 			color: '#000000',
@@ -142,7 +154,7 @@ getStyles(appLayout: Object): Object {
 		labelStyle: {
 			fontSize: labelFontSize,
 			color: Theme.Core.brandSecondary,
-			marginBottom: 5 + (inputFontSize * 0.2),
+			marginBottom: Platform.OS === 'android' ? 0 : inputFontSize,
 		},
 	};
 }
