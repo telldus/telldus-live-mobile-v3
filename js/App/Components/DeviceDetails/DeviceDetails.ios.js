@@ -101,7 +101,7 @@ class DeviceDetails extends View {
 	}
 
 	goBack() {
-		this.props.stackNavigator.goBack();
+		this.props.navigation.goBack();
 	}
 
 	componentWillUnmount() {
@@ -109,7 +109,7 @@ class DeviceDetails extends View {
 	}
 
 	render(): Object {
-		let { appLayout, stackNavigator } = this.props;
+		let { appLayout, navigation } = this.props;
 		let { currentScreen } = this.props.screenProps;
 		let screenProps = {
 			device: this.props.device,
@@ -129,7 +129,7 @@ class DeviceDetails extends View {
 
 		return (
 			<SafeAreaView>
-				<NavigationHeader navigation={stackNavigator}/>
+				<NavigationHeader navigation={navigation}/>
 				<Poster>
 					<View style={posterCover}>
 						{(!this.isTablet) && (!isPortrait) &&

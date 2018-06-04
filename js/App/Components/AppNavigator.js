@@ -49,7 +49,6 @@ import { View } from '../../BaseComponents';
 import TabsView from './TabViews/TabsView';
 import { DimmerPopup } from './TabViews/SubViews';
 import DeviceDetails from './DeviceDetails/DeviceDetails';
-import { NavigationHeader } from './DeviceDetails/SubViews';
 import AddLocationNavigator from './Location/AddLocation/AddLocation';
 import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
@@ -83,10 +82,8 @@ const RouteConfigs = {
 	},
 	DeviceDetails: {
 		screen: DeviceDetails,
-		navigationOptions: ({navigation}: Object): Object => {
-			return {
-				header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
-			};
+		navigationOptions: {
+			header: null,
 		},
 	},
 	Schedule: {
@@ -97,34 +94,15 @@ const RouteConfigs = {
 	},
 	AddLocation: {
 		screen: AddLocationNavigator,
-		navigationOptions: ({navigation}: Object): Object => {
-			let {state} = navigation;
-			let renderRootHeader = state.params && state.params.renderRootHeader;
-			if (renderRootHeader) {
-				return {
-					header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
-				};
-			}
-			return {
-				header: null,
-			};
+		navigationOptions: {
+			header: null,
 		},
 	},
 	LocationDetails: {
 		screen: LocationDetailsNavigator,
-		navigationOptions: ({navigation}: Object): Object => {
-			let {state} = navigation;
-			let renderRootHeader = state.params && state.params.renderRootHeader;
-			if (renderRootHeader) {
-				return {
-					header: Platform.OS === 'ios' ? null : <NavigationHeader navigation={navigation}/>,
-				};
-			}
-			return {
-				header: null,
-			};
+		navigationOptions: {
+			header: null,
 		},
-
 	},
 };
 

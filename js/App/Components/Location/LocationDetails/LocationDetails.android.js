@@ -144,7 +144,12 @@ class LocationDetailsNavigator extends View {
 		};
 
 		return (
-			<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			<View style={{flex: 1}}>
+				{navigation.state.params.renderRootHeader &&
+					<NavigationHeader navigation={navigation} />
+				}
+				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+			</View>
 		);
 	}
 }

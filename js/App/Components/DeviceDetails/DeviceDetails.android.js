@@ -34,6 +34,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
 const CustomIcon = createIconSetFromIcoMoon(icon_settings);
 
+import { NavigationHeader } from './SubViews';
 import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
@@ -85,7 +86,7 @@ class DeviceDetails extends View {
 	}
 
 	goBack() {
-		this.props.stackNavigator.goBack();
+		this.props.navigation.goBack();
 	}
 
 	componentDidMount() {
@@ -133,7 +134,7 @@ class DeviceDetails extends View {
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		let { appLayout, navigation } = this.props;
 		let { currentScreen } = this.props.screenProps;
 		let screenProps = {
 			device: this.props.device,
@@ -153,6 +154,7 @@ class DeviceDetails extends View {
 
 		return (
 			<View style={styles.container}>
+				<NavigationHeader navigation={navigation}/>
 				<Poster>
 					<View style={posterCover}>
 						{(!this.isTablet) && (!isPortrait) &&
@@ -262,7 +264,6 @@ const Tabs = TabNavigator(
 					tabStyle={{
 						...tabStyle,
 						width: tabWidth,
-						fontSize,
 						paddingVertical,
 					}}
 					labelStyle={{
