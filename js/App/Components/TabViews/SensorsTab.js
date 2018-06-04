@@ -26,6 +26,7 @@ import { SectionList, ScrollView, TouchableOpacity, Text, RefreshControl } from 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
+import isEqual from 'lodash/isEqual';
 
 import { View, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow, SensorRowHidden } from './SubViews';
@@ -39,7 +40,6 @@ import Theme from '../../Theme';
 
 type Props = {
 	rowsAndSections: Object,
-	gatewaysById: Object,
 	tab: string,
 	dispatch: Function,
 	appLayout: Object,
@@ -145,7 +145,12 @@ class SensorsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.tab === 'sensorsTab';
+		const { tab } = nextProps;
+
+		const isStateEqual = isEqual(this.state, nextState);
+		const isPropsEqual = isEqual(this.props, nextProps);
+
+		return (tab === 'sensorsTab') && (!isStateEqual || !isPropsEqual);
 	}
 
 	onRefresh() {
@@ -300,19 +305,20 @@ class SensorsTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		let { screenProps, gatewaysById } = this.props;
-		let { propsSwipeRow } = this.state;
-		let { intl, currentTab, currentScreen } = screenProps;
-		let isGatewayActive = gatewaysById[row.item.clientId] && gatewaysById[row.item.clientId].online;
+		const { screenProps, gatewaysById, appLayout } = this.props;
+		const { propsSwipeRow } = this.state;
+		const { intl, currentTab, currentScreen } = screenProps;
+		const { item } = row;
+		const { isOnline } = item;
 
 		return (
 			<SensorRow
-				sensor={row.item}
+				sensor={item}
 				intl={intl}
-				appLayout={this.props.appLayout}
+				appLayout={appLayout}
 				currentTab={currentTab}
 				currentScreen={currentScreen}
-				isGatewayActive={isGatewayActive}
+				isGatewayActive={isOnline}
 				setIgnoreSensor={this.setIgnoreSensor}
 				onHiddenRowOpen={this.closeVisibleRows}
 				propsSwipeRow={propsSwipeRow}/>
@@ -337,8 +343,7 @@ class SensorsTab extends View {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
@@ -405,7 +410,6 @@ const getRowsAndSections = createSelector(
 function mapStateToProps(store: Object): Object {
 	return {
 		rowsAndSections: getRowsAndSections(store),
-		gatewaysById: store.gateways.byId,
 		tab: store.navigation.tab,
 		appLayout: getRelativeDimensions(store.App.layout),
 	};

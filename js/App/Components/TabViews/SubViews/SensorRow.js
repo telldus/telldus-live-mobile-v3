@@ -21,11 +21,12 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { TouchableOpacity, UIManager, LayoutAnimation, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import DeviceInfo from 'react-native-device-info';
+import isEqual from 'lodash/isEqual';
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
@@ -68,7 +69,7 @@ type State = {
 	buttonsWidth?: number,
 };
 
-class SensorRow extends PureComponent<Props, State> {
+class SensorRow extends View<Props, State> {
 	props: Props;
 	state: State;
 
@@ -199,6 +200,14 @@ class SensorRow extends PureComponent<Props, State> {
 		if (this.state.isOpen && (tab !== 'sensorsTab' || (forceClose && sensor.id !== idToKeepOpen)) ) {
 			this.refs.SwipeRow.closeRow();
 		}
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const isStateEqual = isEqual(this.state, nextState);
+		const isPropsEqual = isEqual(this.props, nextProps);
+
+		return (!isStateEqual || !isPropsEqual);
 	}
 
 	onRowOpen() {

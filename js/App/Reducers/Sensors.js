@@ -29,6 +29,7 @@ import isEmpty from 'lodash/isEmpty';
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let result = groupBy(paramOne, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];
+		items.isOnline = gateway.online;
 		return gateway && gateway.name;
 	});
 	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
