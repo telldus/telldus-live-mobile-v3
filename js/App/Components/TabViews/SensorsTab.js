@@ -305,7 +305,7 @@ class SensorsTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, gatewaysById, appLayout } = this.props;
+		const { screenProps, appLayout } = this.props;
 		const { propsSwipeRow } = this.state;
 		const { intl, currentTab, currentScreen } = screenProps;
 		const { item } = row;

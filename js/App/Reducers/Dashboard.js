@@ -24,7 +24,7 @@
 export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}): Array<Object> {
 	const deviceItems = dashboard.deviceIds.map((deviceId: number): Object => {
 		let device = devices.byId[deviceId];
-		let { clientId } = device ;
+		let { clientId } = device;
 		let gateway = gateways.byId[clientId];
 		let data = { ...device, isOnline: gateway.online };
 
