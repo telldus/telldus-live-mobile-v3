@@ -26,6 +26,7 @@
 #import <Crashlytics/Crashlytics.h>
 
 #import "Orientation.h"
+#import "WidgetViewController.h"
 
 @implementation AppDelegate
 
@@ -35,11 +36,12 @@
 	[Fabric with:@[[Crashlytics class]]];
 
 	jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-
+  
 	RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
 								moduleName:@"TelldusLiveApp"
 								initialProperties:nil
 								launchOptions:launchOptions];
+  
 	rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
 	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -47,7 +49,25 @@
 	rootViewController.view = rootView;
 	self.window.rootViewController = rootViewController;
 	[self.window makeKeyAndVisible];
+  
+  NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+  NSLog(@"%@",[paths objectAtIndex:0]);
+
 	return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  
+  if ([url.scheme isEqual: @"Widget"]) {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Storyboard" bundle:nil];
+    WidgetViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"WidgetViewController"];
+    self.window.rootViewController = vc;
+  } else {
+    
+  }
+  
+  [self.window makeKeyAndVisible];
+  return YES;
 }
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
@@ -80,4 +100,11 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
 	[RCTPushNotificationManager didReceiveLocalNotification:notification];
 }
+
+- (NSURL *)applicationDocumentsDirectory
+{
+//  NSLog(@"---rahul--- %@", NSFileManager.defaultManager.)
+  return [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"group.com.telldus.TodayWidgetDemo"];
+}
+
 @end

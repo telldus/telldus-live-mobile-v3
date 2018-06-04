@@ -25,6 +25,7 @@ import { AccessibilityInfo } from 'react-native';
 import { connect } from 'react-redux';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
+import userDefaults from 'react-native-user-defaults';
 
 import {
 	PreLoginNavigator,
@@ -62,7 +63,7 @@ class App extends React.Component<Props, null> {
 	}
 
 	componentDidMount() {
-		let { dispatch } = this.props;
+		let { dispatch, accessToken } = this.props;
 
 		this.pushConf();
 		AccessibilityInfo.fetch().done((isEnabled: boolean) => {
@@ -75,6 +76,8 @@ class App extends React.Component<Props, null> {
 			StatusBar.setTranslucent(true);
 			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
+
+		userDefaults.set("accessToken", accessToken, "group.com.telldus.TokenUserDefaults");
 	}
 
 	componentDidUpdate() {
@@ -83,8 +86,8 @@ class App extends React.Component<Props, null> {
 
 	componentWillUnmount() {
 		AccessibilityInfo.removeEventListener(
-		  'change',
-		  setAccessibilityInfo
+			'change',
+			setAccessibilityInfo
 		);
 	}
 
@@ -110,17 +113,17 @@ class App extends React.Component<Props, null> {
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 
 		return (
-			<View style={{flex: 1}} onLayout={this.onLayout}>
+			<View style={{ flex: 1 }} onLayout={this.onLayout}>
 				{hasNotLoggedIn ?
 					<PreLoginNavigator />
 					:
-					<AppNavigator {...this.props}/>
+					<AppNavigator {...this.props} />
 				}
 				<ChangeLogNavigator
 					changeLogVersion={changeLogVersion}
 					showChangeLog={showChangeLog}
 					forceShowChangeLog={forceShowChangeLog}
-					onLayout={this.onLayout}/>
+					onLayout={this.onLayout} />
 			</View>
 		);
 	}

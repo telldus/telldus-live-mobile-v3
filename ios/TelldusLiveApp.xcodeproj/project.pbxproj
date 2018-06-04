@@ -51,6 +51,25 @@
 		BD3450422506459CA03BAFFE /* libLRDRCTSimpleToast.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67549022A05F434F8B812357 /* libLRDRCTSimpleToast.a */; };
 		CAAD62D4956A49EA96EC30FA /* libRCTOrientation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 598B9ECEAE4E41CCAF3F07D3 /* libRCTOrientation.a */; };
 		D2986F407B4048AC96288B60 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 150121A613CD46DD95BDC072 /* FontAwesome.ttf */; };
+		D93B80C420C51265006D4B53 /* WidgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D94153FA20BBEB2600795B11 /* WidgetViewController.m */; };
+		D94153C420BBE92600795B11 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D94153C320BBE92600795B11 /* Storyboard.storyboard */; };
+		D94153FB20BBEB2600795B11 /* WidgetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D94153FA20BBEB2600795B11 /* WidgetViewController.m */; };
+		D94153FE20BBEB6A00795B11 /* Widget.m in Sources */ = {isa = PBXBuildFile; fileRef = D94153FD20BBEB6A00795B11 /* Widget.m */; };
+		D941540020BBEC9B00795B11 /* WidgetDA.m in Sources */ = {isa = PBXBuildFile; fileRef = D94153FF20BBEC9B00795B11 /* WidgetDA.m */; };
+		D941540420BBED2E00795B11 /* WidgetEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = D941540320BBED2E00795B11 /* WidgetEntity.m */; };
+		D941540B20BBEE8C00795B11 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D941540A20BBEE8C00795B11 /* NotificationCenter.framework */; };
+		D941540F20BBEE8C00795B11 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D941540E20BBEE8C00795B11 /* TodayViewController.m */; };
+		D941541220BBEE8C00795B11 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D941541020BBEE8C00795B11 /* MainInterface.storyboard */; };
+		D941541620BBEE8C00795B11 /* TelldusLiveWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D941540920BBEE8C00795B11 /* TelldusLiveWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D941541E20BBF12C00795B11 /* WidgetCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D941541D20BBF12C00795B11 /* WidgetCollectionViewCell.m */; };
+		D941542120BBF28D00795B11 /* AddWidgetCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D941542020BBF28D00795B11 /* AddWidgetCollectionViewCell.m */; };
+		D941542220BBF36400795B11 /* WidgetDA.m in Sources */ = {isa = PBXBuildFile; fileRef = D94153FF20BBEC9B00795B11 /* WidgetDA.m */; };
+		D941542320BBF37700795B11 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		D941542820BC6C1F00795B11 /* WidgetEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = D941540320BBED2E00795B11 /* WidgetEntity.m */; };
+		D941542920BC6C3300795B11 /* Widget.m in Sources */ = {isa = PBXBuildFile; fileRef = D94153FD20BBEB6A00795B11 /* Widget.m */; };
+		D941542C20BC7B2900795B11 /* TodayWidget.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D941542A20BC7B2900795B11 /* TodayWidget.xcdatamodeld */; };
+		D941542D20BC7B2900795B11 /* TodayWidget.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D941542A20BC7B2900795B11 /* TodayWidget.xcdatamodeld */; };
+		D9AEB89A20C2B96E00D34C98 /* libRCTUserDefaults.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9AEB89920C2B95300D34C98 /* libRCTUserDefaults.a */; };
 		DC98AE9FD1CA4A448FC5C87D /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 93967CC4C9724316AFF74B50 /* Foundation.ttf */; };
 		DD7823359AB84A89988A5D47 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DFFF079D6FE74233BAB019F1 /* Roboto-Light.ttf */; };
 		E01A717BB6604D8D8C4C0CA0 /* telldusicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA4E203FFC8849A6989EDD54 /* telldusicons.ttf */; };
@@ -423,7 +442,35 @@
 			remoteGlobalIDString = 358F4ED71D1E81A9004DF814;
 			remoteInfo = RCTBlob;
 		};
+		D941541420BBEE8C00795B11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D941540820BBEE8C00795B11;
+			remoteInfo = TelldusLiveWidget;
+		};
+		D9AEB89820C2B95300D34C98 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9AEB89420C2B95300D34C98 /* RCTUserDefaults.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTUserDefaults;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D941541A20BBEE8C00795B11 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				D941541620BBEE8C00795B11 /* TelldusLiveWidget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -486,6 +533,29 @@
 		B5E8B17FC3BC433DA0620A43 /* libRNSensitiveInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSensitiveInfo.a; sourceTree = "<group>"; };
 		B604CB39C11F43B48FD5A634 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		BD4E8D787A68404D96264B38 /* libUdpSockets.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libUdpSockets.a; sourceTree = "<group>"; };
+		D94153C320BBE92600795B11 /* Storyboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
+		D94153F920BBEB2500795B11 /* WidgetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WidgetViewController.h; sourceTree = "<group>"; };
+		D94153FA20BBEB2600795B11 /* WidgetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WidgetViewController.m; sourceTree = "<group>"; };
+		D94153FC20BBEB5F00795B11 /* Widget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Widget.h; sourceTree = "<group>"; };
+		D94153FD20BBEB6A00795B11 /* Widget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Widget.m; sourceTree = "<group>"; };
+		D94153FF20BBEC9B00795B11 /* WidgetDA.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WidgetDA.m; sourceTree = "<group>"; };
+		D941540120BBECA500795B11 /* WidgetDA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WidgetDA.h; sourceTree = "<group>"; };
+		D941540220BBED2500795B11 /* WidgetEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WidgetEntity.h; sourceTree = "<group>"; };
+		D941540320BBED2E00795B11 /* WidgetEntity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WidgetEntity.m; sourceTree = "<group>"; };
+		D941540920BBEE8C00795B11 /* TelldusLiveWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TelldusLiveWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D941540A20BBEE8C00795B11 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		D941540D20BBEE8C00795B11 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
+		D941540E20BBEE8C00795B11 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
+		D941541120BBEE8C00795B11 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		D941541320BBEE8C00795B11 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D941541B20BBEF8600795B11 /* SharedFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharedFile.h; sourceTree = "<group>"; };
+		D941541C20BBF12C00795B11 /* WidgetCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WidgetCollectionViewCell.h; sourceTree = "<group>"; };
+		D941541D20BBF12C00795B11 /* WidgetCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WidgetCollectionViewCell.m; sourceTree = "<group>"; };
+		D941541F20BBF28D00795B11 /* AddWidgetCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddWidgetCollectionViewCell.h; sourceTree = "<group>"; };
+		D941542020BBF28D00795B11 /* AddWidgetCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddWidgetCollectionViewCell.m; sourceTree = "<group>"; };
+		D941542420BBF7E700795B11 /* TelldusLiveWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TelldusLiveWidget.entitlements; sourceTree = "<group>"; };
+		D941542B20BC7B2900795B11 /* TodayWidget.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TodayWidget.xcdatamodel; sourceTree = "<group>"; };
+		D9AEB89420C2B95300D34C98 /* RCTUserDefaults.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTUserDefaults.xcodeproj; path = "../node_modules/react-native-user-defaults/RCTUserDefaults.xcodeproj"; sourceTree = "<group>"; };
 		DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		DB8C12D469844F34ABBA0A64 /* telldusicons.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = telldusicons.svg; path = ../assets/fonts/telldusicons.svg; sourceTree = "<group>"; };
 		DFFF079D6FE74233BAB019F1 /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
@@ -499,6 +569,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9AEB89A20C2B96E00D34C98 /* libRCTUserDefaults.a in Frameworks */,
 				26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -523,6 +594,14 @@
 				6849A4E963DC4D8985BFE7C3 /* libRNSensitiveInfo.a in Frameworks */,
 				1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */,
 				7008063F35A94AD09D95F9DD /* libRNRSA.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D941540620BBEE8C00795B11 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D941540B20BBEE8C00795B11 /* NotificationCenter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -599,9 +678,19 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				D94153F920BBEB2500795B11 /* WidgetViewController.h */,
+				D94153FA20BBEB2600795B11 /* WidgetViewController.m */,
+				D94153FF20BBEC9B00795B11 /* WidgetDA.m */,
+				D941540120BBECA500795B11 /* WidgetDA.h */,
+				D941540220BBED2500795B11 /* WidgetEntity.h */,
+				D941540320BBED2E00795B11 /* WidgetEntity.m */,
+				D94153FC20BBEB5F00795B11 /* Widget.h */,
+				D94153FD20BBEB6A00795B11 /* Widget.m */,
+				D941542A20BC7B2900795B11 /* TodayWidget.xcdatamodeld */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				D94153C320BBE92600795B11 /* Storyboard.storyboard */,
 			);
 			name = TelldusLiveApp;
 			sourceTree = "<group>";
@@ -760,6 +849,7 @@
 			isa = PBXGroup;
 			children = (
 				9E4E10C72947027C61D0AB0E /* libPods-TelldusLiveApp.a */,
+				D941540A20BBEE8C00795B11 /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -776,6 +866,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				D9AEB89420C2B95300D34C98 /* RCTUserDefaults.xcodeproj */,
 				26C0E617205C17B600E9AD6A /* RNI18n.xcodeproj */,
 				4098375B1F6024ED005E56A9 /* RCTPushNotification.xcodeproj */,
 				144028731EE69000000945A3 /* RCTAnimation.xcodeproj */,
@@ -817,6 +908,7 @@
 			children = (
 				13B07FAE1A68108700A75B9A /* TelldusLiveApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				D941540C20BBEE8C00795B11 /* TelldusLiveWidget */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				978DD6CDC2824ACE99408D92 /* Resources */,
 				35B6E1CA58815496FB5B4C7C /* Pods */,
@@ -832,6 +924,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */,
+				D941540920BBEE8C00795B11 /* TelldusLiveWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -873,6 +966,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D941540C20BBEE8C00795B11 /* TelldusLiveWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D941542420BBF7E700795B11 /* TelldusLiveWidget.entitlements */,
+				D941540D20BBEE8C00795B11 /* TodayViewController.h */,
+				D941541C20BBF12C00795B11 /* WidgetCollectionViewCell.h */,
+				D941541F20BBF28D00795B11 /* AddWidgetCollectionViewCell.h */,
+				D941542020BBF28D00795B11 /* AddWidgetCollectionViewCell.m */,
+				D941541D20BBF12C00795B11 /* WidgetCollectionViewCell.m */,
+				D941540E20BBEE8C00795B11 /* TodayViewController.m */,
+				D941541020BBEE8C00795B11 /* MainInterface.storyboard */,
+				D941541B20BBEF8600795B11 /* SharedFile.h */,
+				D941541320BBEE8C00795B11 /* Info.plist */,
+			);
+			path = TelldusLiveWidget;
+			sourceTree = "<group>";
+		};
+		D9AEB89520C2B95300D34C98 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D9AEB89920C2B95300D34C98 /* libRCTUserDefaults.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -888,15 +1006,34 @@
 				4C7F49FBFC42A30B5B74A457 /* [CP] Embed Pods Frameworks */,
 				75919A3A010EF31D89777050 /* [CP] Copy Pods Resources */,
 				408824E71F1010CF007B3FF4 /* Fabric */,
+				D941541A20BBEE8C00795B11 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D941541520BBEE8C00795B11 /* PBXTargetDependency */,
 			);
 			name = TelldusLiveApp;
 			productName = "Hello World";
 			productReference = 13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D941540820BBEE8C00795B11 /* TelldusLiveWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D941541720BBEE8C00795B11 /* Build configuration list for PBXNativeTarget "TelldusLiveWidget" */;
+			buildPhases = (
+				D941540520BBEE8C00795B11 /* Sources */,
+				D941540620BBEE8C00795B11 /* Frameworks */,
+				D941540720BBEE8C00795B11 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TelldusLiveWidget;
+			productName = TelldusLiveWidget;
+			productReference = D941540920BBEE8C00795B11 /* TelldusLiveWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -909,10 +1046,23 @@
 				ORGANIZATIONNAME = "Telldus Technologies AB";
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = M2879GJ5VD;
+						DevelopmentTeam = 4948QT4N84;
 						DevelopmentTeamName = "Mark Andrews";
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+					D941540820BBEE8C00795B11 = {
+						CreatedOnToolsVersion = 9.3.1;
+						DevelopmentTeam = 4948QT4N84;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
 							};
 						};
@@ -980,6 +1130,10 @@
 					ProjectRef = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
 				},
 				{
+					ProductGroup = D9AEB89520C2B95300D34C98 /* Products */;
+					ProjectRef = D9AEB89420C2B95300D34C98 /* RCTUserDefaults.xcodeproj */;
+				},
+				{
 					ProductGroup = 00C302E01ABCB9EE00DB3ED1 /* Products */;
 					ProjectRef = 00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */;
 				},
@@ -1027,6 +1181,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* TelldusLiveApp */,
+				D941540820BBEE8C00795B11 /* TelldusLiveWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -1396,6 +1551,13 @@
 			remoteRef = ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		D9AEB89920C2B95300D34C98 /* libRCTUserDefaults.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTUserDefaults.a;
+			remoteRef = D9AEB89820C2B95300D34C98 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1408,6 +1570,7 @@
 				F833995608B34A6AA1968135 /* Entypo.ttf in Resources */,
 				26DA5FD82045A28D003FCA91 /* Roboto-Medium.ttf in Resources */,
 				28061C46E49841668FDE1C6C /* EvilIcons.ttf in Resources */,
+				D94153C420BBE92600795B11 /* Storyboard.storyboard in Resources */,
 				DC98AE9FD1CA4A448FC5C87D /* Foundation.ttf in Resources */,
 				26DA5FD92045A28D003FCA91 /* Roboto-Regular.ttf in Resources */,
 				0150E3FA26654BE1804A1F66 /* Ionicons.ttf in Resources */,
@@ -1426,6 +1589,15 @@
 				794DAA9AEBAE4A7291C53EB5 /* Roboto-Regular.ttf in Resources */,
 				59F114B4AC654FA7AAF457B4 /* SFNS Display.ttf in Resources */,
 				AD9B7A84CF90483DA832A7FB /* telldusicons.woff in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D941540720BBEE8C00795B11 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D941541220BBEE8C00795B11 /* MainInterface.storyboard in Resources */,
+				D941542320BBF37700795B11 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1496,13 +1668,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TelldusLiveApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1513,11 +1688,50 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				D941540020BBEC9B00795B11 /* WidgetDA.m in Sources */,
+				D941540420BBED2E00795B11 /* WidgetEntity.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				D941542C20BC7B2900795B11 /* TodayWidget.xcdatamodeld in Sources */,
+				D94153FB20BBEB2600795B11 /* WidgetViewController.m in Sources */,
+				D94153FE20BBEB6A00795B11 /* Widget.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D941540520BBEE8C00795B11 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D941541E20BBF12C00795B11 /* WidgetCollectionViewCell.m in Sources */,
+				D941542820BC6C1F00795B11 /* WidgetEntity.m in Sources */,
+				D941540F20BBEE8C00795B11 /* TodayViewController.m in Sources */,
+				D941542220BBF36400795B11 /* WidgetDA.m in Sources */,
+				D93B80C420C51265006D4B53 /* WidgetViewController.m in Sources */,
+				D941542D20BC7B2900795B11 /* TodayWidget.xcdatamodeld in Sources */,
+				D941542120BBF28D00795B11 /* AddWidgetCollectionViewCell.m in Sources */,
+				D941542920BC6C3300795B11 /* Widget.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D941541520BBEE8C00795B11 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D941540820BBEE8C00795B11 /* TelldusLiveWidget */;
+			targetProxy = D941541420BBEE8C00795B11 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D941541020BBEE8C00795B11 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D941541120BBEE8C00795B11 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -1526,9 +1740,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TelldusLiveApp/TelldusLiveApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = M2879GJ5VD;
+				DEVELOPMENT_TEAM = 4948QT4N84;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
@@ -1555,7 +1770,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.mobile;
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1568,8 +1783,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TelldusLiveApp/TelldusLiveApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M2879GJ5VD;
+				DEVELOPMENT_TEAM = 4948QT4N84;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
@@ -1596,7 +1812,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.mobile;
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1686,6 +1902,73 @@
 			};
 			name = Release;
 		};
+		D941541820BBEE8C00795B11 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = TelldusLiveWidget/TelldusLiveWidget.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 4948QT4N84;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TelldusLiveWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.mobile.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D941541920BBEE8C00795B11 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = TelldusLiveWidget/TelldusLiveWidget.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 4948QT4N84;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TelldusLiveWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.mobile.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1707,7 +1990,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		D941541720BBEE8C00795B11 /* Build configuration list for PBXNativeTarget "TelldusLiveWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D941541820BBEE8C00795B11 /* Debug */,
+				D941541920BBEE8C00795B11 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D941542A20BC7B2900795B11 /* TodayWidget.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D941542B20BC7B2900795B11 /* TodayWidget.xcdatamodel */,
+			);
+			currentVersion = D941542B20BC7B2900795B11 /* TodayWidget.xcdatamodel */;
+			path = TodayWidget.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }
