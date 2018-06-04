@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
+import isEqual from 'lodash/isEqual';
 
 import { Text, View, TouchableButton, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
 import { DeviceRow, DeviceHeader } from './SubViews';
@@ -67,7 +68,7 @@ const messages = defineMessages({
 
 type Props = {
 	rowsAndSections: Object,
-	gateways: Object,
+	gateways: Array<any>,
 	devices: Object,
 	tab: string,
 	dispatch: Function,
@@ -198,7 +199,12 @@ class DevicesTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.tab === 'devicesTab';
+		const { tab } = nextProps;
+
+		const isStateEqual = isEqual(this.state, nextState);
+		const isPropsEqual = isEqual(this.props, nextProps);
+
+		return (tab === 'devicesTab') && (!isStateEqual || !isPropsEqual);
 	}
 
 	openDeviceDetail(device: Object) {
@@ -260,21 +266,22 @@ class DevicesTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		let { screenProps, gateways } = this.props;
-		let { propsSwipeRow } = this.state;
-		let { intl, currentTab, currentScreen } = screenProps;
-		let isGatewayActive = gateways.byId[row.item.clientId] && gateways.byId[row.item.clientId].online;
+		const { screenProps, appLayout } = this.props;
+		const { propsSwipeRow } = this.state;
+		const { intl, currentTab, currentScreen } = screenProps;
+		const { item } = row;
+		const { isOnline } = item;
 
 		return (
 			<DeviceRow
-				device={row.item}
+				device={item}
 				onSettingsSelected={this.openDeviceDetail}
 				setScrollEnabled={this.setScrollEnabled}
 				intl={intl}
-				appLayout={this.props.appLayout}
+				appLayout={appLayout}
 				currentTab={currentTab}
 				currentScreen={currentScreen}
-				isGatewayActive={isGatewayActive}
+				isGatewayActive={isOnline}
 				setIgnoreDevice={this.setIgnoreDevice}
 				onPressMore={this.onPressMore}
 				onHiddenRowOpen={this.closeVisibleRows}
@@ -335,7 +342,7 @@ class DevicesTab extends View {
 	}
 
 	onPressAddDevice() {
-		if (!this.props.gateways.allIds.length > 0) {
+		if (!(this.props.gateways.length > 0)) {
 			this.setState({
 				addGateway: true,
 			});
@@ -613,7 +620,7 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 		stackNavigator: ownprops.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(state),
 		devices: state.devices,
-		gateways: state.gateways,
+		gateways: state.gateways.allIds,
 		tab: state.navigation.tab,
 		appLayout: getRelativeDimensions(state.App.layout),
 		screenReaderEnabled: state.App.screenReaderEnabled,
