@@ -24,6 +24,7 @@
 
 import React from 'react';
 import { TouchableOpacity, ScrollView } from 'react-native';
+import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
@@ -99,7 +100,7 @@ type Props = {
 	onPressGateway: () => void,
 };
 
-export default class Drawer extends View<Props, null> {
+class Drawer extends View<Props, null> {
 	props: Props;
 	render(): Object {
 		let { gateways, userProfile, onOpenSetting, addNewLocation, appLayout, onPressGateway } = this.props;
@@ -212,3 +213,10 @@ export default class Drawer extends View<Props, null> {
 		};
 	}
 }
+
+function mapStateToProps(store: Object): Object {
+	return {
+		gateways: store.gateways,
+	};
+}
+export default connect(mapStateToProps, null)(Drawer);

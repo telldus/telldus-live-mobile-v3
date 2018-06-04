@@ -185,7 +185,7 @@ class TabsView extends View {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.gateways.allIds.length === 0 && !this.state.addingNewLocation && nextProps.gateways.toActivate.checkIfGatewaysEmpty) {
+		if (nextProps.gateways.length === 0 && !this.state.addingNewLocation && nextProps.gatewaysToActivate.checkIfGatewaysEmpty) {
 			this.addNewLocation();
 		}
 	}
@@ -260,12 +260,11 @@ class TabsView extends View {
 	};
 
 	renderNavigationView(): Object {
-		let { appLayout } = this.props;
+		let { appLayout, userProfile } = this.props;
 
 		return <Drawer
-			gateways={this.props.gateways}
 			addNewLocation={this.addNewLocation}
-			userProfile={this.props.userProfile}
+			userProfile={userProfile}
 			theme={this.getTheme()}
 			onOpenSetting={this.onOpenSetting}
 			appLayout={appLayout}
@@ -275,30 +274,30 @@ class TabsView extends View {
 	}
 
 	makeLeftButton = (styles: Object): any => {
+		const { screenReaderEnabled, drawer } = this.state;
 		this.menuButton.icon.style = styles.menuButtonStyle;
 		this.menuButton.icon.iconStyle = styles.menuIconStyle;
 		this.menuButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
 		this.menuButton.accessibilityLabel = this.menuIcon;
 
-		return this.state.drawer ? null : this.menuButton;
+		return (drawer && screenReaderEnabled) ? null : this.menuButton;
 	};
 
 	render(): Object {
-		let { appLayout, stackNavigator } = this.props;
-		let { routeName } = this.state;
+		let { appLayout, stackNavigator, intl } = this.props;
+		let { routeName: currentTab, drawer } = this.state;
 		let { currentScreen } = this.props.screenProps;
-		let isPortrait = appLayout.height > appLayout.width;
-		let deviceWidth = isPortrait ? appLayout.width : appLayout.height;
 		let styles = this.getStyles(appLayout);
 
 		let screenProps = {
+			currentTab,
 			stackNavigator,
-			currentTab: routeName,
 			currentScreen,
+			drawer,
 		};
 
 		const leftButton = this.makeLeftButton(styles);
-		const drawerWidth = getDrawerWidth(deviceWidth);
+		const drawerWidth = getDrawerWidth(styles.deviceWidth);
 
 		// TODO: Refactor: Split this code to smaller components
 		return (
@@ -314,7 +313,7 @@ class TabsView extends View {
 				<View style={{flex: 1}} >
 					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton}/>
 					<View style={styles.container}>
-						<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
+						<Tabs screenProps={{...screenProps, intl}} onNavigationStateChange={this.onNavigationStateChange}/>
 					</View>
 				</View>
 			</DrawerLayoutAndroid>
@@ -322,12 +321,13 @@ class TabsView extends View {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
-		let deviceHeight = isPortrait ? height : width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+		const deviceWidth = isPortrait ? width : height;
 
 		return {
+			deviceWidth,
 			header: isPortrait ? {
 				height: deviceHeight * 0.05,
 				alignItems: 'flex-end',
@@ -372,15 +372,19 @@ class TabsView extends View {
 }
 
 function mapStateToProps(store: Object, ownprops: Object): Object {
+	const { allIds, toActivate } = store.gateways;
+	const { active, layout, screenReaderEnabled } = store.App;
+
 	return {
 		stackNavigator: ownprops.navigation,
 		tab: store.navigation.tab,
 		userProfile: getUserProfile(store),
 		dashboard: store.dashboard,
-		gateways: store.gateways,
-		isAppActive: store.App.active,
-		appLayout: store.App.layout,
-		screenReaderEnabled: store.App.screenReaderEnabled,
+		gateways: allIds,
+		gatewaysToActivate: toActivate,
+		isAppActive: active,
+		appLayout: layout,
+		screenReaderEnabled: screenReaderEnabled,
 		editModeDevicesTab: store.tabs.editModeDevicesTab,
 		editModeSensorsTab: store.tabs.editModeSensorsTab,
 	};
