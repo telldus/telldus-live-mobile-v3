@@ -29,7 +29,7 @@ import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
 
 type Props = {
-	onPress: () => void;
+	onPress: () => void,
 	intl: Object,
 	name: string,
 	style: Object | number | Array<any>,

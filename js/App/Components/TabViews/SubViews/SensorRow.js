@@ -55,7 +55,7 @@ type Props = {
 	isGatewayActive: boolean,
 	tab: string,
 	setIgnoreSensor: (Object) => void,
-	onHiddenRowOpen: (string) => void;
+	onHiddenRowOpen: (string) => void,
 	propsSwipeRow: Object,
 };
 

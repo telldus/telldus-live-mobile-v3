@@ -45,7 +45,7 @@ type Props = {
 	iconSize?: number,
 	iconColor?: string,
 	iconStyle?: number | Array<any> | Object,
-	onPress?: () => void;
+	onPress?: () => void,
 };
 
 class TitledInfoBlock extends PureComponent<Props, null> {

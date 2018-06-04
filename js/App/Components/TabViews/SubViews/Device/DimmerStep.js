@@ -39,7 +39,7 @@ import {
 
 type Props = {
     showModal: boolean,
-	onDoneDimming: () => void;
+	onDoneDimming: () => void,
 	deviceId: number,
 	commandON?: number,
 	commandDIM?: number,

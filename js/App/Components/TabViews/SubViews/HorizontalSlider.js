@@ -56,7 +56,7 @@ type Props = {
 	isGatewayActive: boolean,
 	isInState: string,
 	screenReaderEnabled: boolean,
-	showDimmerStep: (number) => void;
+	showDimmerStep: (number) => void,
 };
 
 type State = {

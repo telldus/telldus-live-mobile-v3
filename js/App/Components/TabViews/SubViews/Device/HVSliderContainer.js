@@ -44,7 +44,7 @@ type Props = {
 	onSlidingStart: (string, number) => void,
 	onSlidingComplete: number => void,
 	onValueChange: number => void,
-	onPress: () => void;
+	onPress: () => void,
 	item: Object,
 	fontSize: number,
 	style: Object,
@@ -52,7 +52,7 @@ type Props = {
 	isGatewayActive: boolean,
 	isInState: string,
 	screenReaderEnabled: boolean,
-	showDimmerStep: (number) => void;
+	showDimmerStep: (number) => void,
 	accessibilityLabel?: string,
 	children?: Object | Array<any>,
 };

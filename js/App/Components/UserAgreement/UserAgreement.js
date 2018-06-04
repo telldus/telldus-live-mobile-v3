@@ -43,7 +43,7 @@ const ViewX = isIphoneX() ? SafeAreaView : View;
 type Props = {
 	showModal: boolean,
 	intl: intlShape,
-	onLayout: (Object) => void;
+	onLayout: (Object) => void,
 	appLayout: Object,
 	getEULA: any,
 	acceptEULA: any,

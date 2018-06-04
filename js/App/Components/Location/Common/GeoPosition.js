@@ -45,7 +45,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
-	onSubmit: (number, number) => void;
+	onSubmit: (number, number) => void,
 	isLoading: boolean,
 	region?: {
 		latitude: number,

@@ -50,7 +50,7 @@ type Props = {
 	commandDIM: number,
 	tileWidth: number,
 	onDimmerSlide: number => void,
-	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void;
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
@@ -61,7 +61,7 @@ type Props = {
 	isGatewayActive: boolean,
 	powerConsumed: string,
 	screenReaderEnabled: boolean,
-	showDimmerStep: (number) => void;
+	showDimmerStep: (number) => void,
 	showSlider?: boolean,
 	containerStyle?: number | Object | Array<any>,
 	offButtonStyle?: number | Object | Array<any>,

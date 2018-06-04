@@ -31,7 +31,7 @@ type Props = {
     showModal: boolean,
 	buttons: Array<Object>,
 	name: string,
-	closeModal: () => void;
+	closeModal: () => void,
 };
 
 type State = {

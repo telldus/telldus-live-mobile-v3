@@ -40,7 +40,7 @@ type Props = {
 	hideOnBack: boolean,
 	style: Object,
 	name: string,
-	onBackButtonPress: () => void;
+	onBackButtonPress: () => void,
 };
 
 type State = {

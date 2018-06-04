@@ -36,7 +36,7 @@ type Props = {
 	name: string,
 	isGatewayActive: boolean,
 	enabled: boolean,
-	onPress: () => void;
+	onPress: () => void,
 	intl: Object,
 	iconStyle: Object | number | Array<any>,
 };

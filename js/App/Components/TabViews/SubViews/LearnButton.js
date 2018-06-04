@@ -31,7 +31,7 @@ type Props = {
 	id: string,
 	command: number,
 	style?: Object | number | Array<any>,
-	onLearn: (string, number) => void;
+	onLearn: (string, number) => void,
 };
 
 class LearnButton extends View<Props, null> {

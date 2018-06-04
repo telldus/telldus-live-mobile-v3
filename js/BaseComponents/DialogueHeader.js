@@ -32,8 +32,8 @@ type Props = {
     headerStyle: number | Object | Array<Object>,
     textStyle: number | Object | Array<Object>,
     source: number,
-	onPressIcon?: () => void;
-	onPressHeader?: () => void;
+	onPressIcon?: () => void,
+	onPressHeader?: () => void,
     showIcon?: boolean,
     iconName?: string,
     iconSize?: number,

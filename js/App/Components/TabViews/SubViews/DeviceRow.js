@@ -61,9 +61,9 @@ type Props = {
 	isGatewayActive: boolean,
 	tab: string,
 	powerConsumed: string | null,
-	setIgnoreDevice: (Object) => void;
-	onPressMore: (Array<Object>) => void;
-	onHiddenRowOpen: (string) => void;
+	setIgnoreDevice: (Object) => void,
+	onPressMore: (Array<Object>) => void,
+	onHiddenRowOpen: (string) => void,
 	propsSwipeRow: Object,
 };
 
