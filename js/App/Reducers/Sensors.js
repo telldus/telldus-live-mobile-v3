@@ -27,9 +27,12 @@ import partition from 'lodash/partition';
 import isEmpty from 'lodash/isEmpty';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
-	let result = groupBy(paramOne, (items: Object): Array<any> => {
+	let modifiedData = paramOne.map((item: Object, index: number): Object => {
+		let gateway = gateways[item.clientId];
+		return { ...item, isOnline: gateway.online };
+	});
+	let result = groupBy(modifiedData, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];
-		items.isOnline = gateway.online;
 		return gateway && gateway.name;
 	});
 	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
