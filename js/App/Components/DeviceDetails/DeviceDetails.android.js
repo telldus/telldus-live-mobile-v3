@@ -53,6 +53,7 @@ type Props = {
 	appLayout: Object,
 	screenProps: Object,
 	isModalOpen: boolean,
+	navigation: Object,
 };
 
 type State = {

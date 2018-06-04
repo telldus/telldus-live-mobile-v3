@@ -24,7 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Platform, NetInfo } from 'react-native';
+import { NetInfo } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import Toast from 'react-native-simple-toast';
 

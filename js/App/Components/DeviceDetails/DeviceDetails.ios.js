@@ -51,6 +51,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	screenProps: Object,
+	navigation: Object,
 };
 
 type State = {
