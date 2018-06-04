@@ -98,12 +98,13 @@ class DeviceDetails extends View {
 	}
 
 	handleBackPress(): boolean {
-		let { isModalOpen, dispatch } = this.props;
+		let { isModalOpen, dispatch, screenProps } = this.props;
+		let { currentScreen } = screenProps;
 		if (isModalOpen) {
 			dispatch(hideModal());
 			return true;
 		}
-		if (this.state.currentTab === 'Overview') {
+		if (this.state.currentTab === 'Overview' && currentScreen === 'DeviceDetails') {
 			this.goBack();
 			return true;
 		}
