@@ -29,6 +29,7 @@ import { connect } from 'react-redux';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { defineMessages } from 'react-intl';
+import isEqual from 'lodash/isEqual';
 
 import { Text, View } from '../../../BaseComponents';
 import { getDevices } from '../../Actions/Devices';
@@ -63,7 +64,6 @@ const messages = defineMessages({
 
 type Props = {
 	rows: Array<Object>,
-	gateways: Object,
 	userProfile: Object,
 	navigation: Object,
 	dashboard: Object,
@@ -220,7 +220,13 @@ class DashboardTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentTab === 'Dashboard';
+		const { screenProps } = nextProps;
+		const { currentTab } = screenProps;
+
+		const isStateEqual = isEqual(this.state, nextState);
+		const isPropsEqual = isEqual(this.props, nextProps);
+
+		return (currentTab === 'Dashboard') && (!isStateEqual || !isPropsEqual);
 	}
 
 	_onLayout = (event: Object) => {
@@ -309,10 +315,9 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(row: Object): Object {
-		let { screenProps, gateways } = this.props;
+		let { screenProps } = this.props;
 		let { tileWidth } = this.state;
 		let { data, objectType } = row.item;
-		let isGatewayActive = gateways.byId[data.clientId] && gateways.byId[data.clientId].online;
 		let tileMargin = this.getPadding() / 4;
 		tileWidth -= (2 * tileMargin);
 		let key = data.id;
@@ -322,6 +327,7 @@ class DashboardTab extends View {
 		if (!data) {
 			return <Text key={key}>Unknown device or sensor</Text>;
 		}
+		let { isOnline } = data;
 
 		let tileStyle = {
 			flexDirection: 'column',
@@ -342,7 +348,7 @@ class DashboardTab extends View {
 				onPress={this.changeDisplayType}
 				intl={screenProps.intl}
 				key={key}
-				isGatewayActive={isGatewayActive}
+				isGatewayActive={isOnline}
 			/>;
 		}
 
@@ -353,7 +359,7 @@ class DashboardTab extends View {
 				tileWidth={tileWidth}
 				intl={screenProps.intl}
 				key={key}
-				isGatewayActive={isGatewayActive}
+				isGatewayActive={isOnline}
 				setScrollEnabled={this.setScrollEnabled}
 			/>
 		);
@@ -407,15 +413,14 @@ const getRows = createSelector(
 		({ dashboard }: Object): Object => dashboard,
 		({ devices }: Object): Object => devices,
 		({ sensors }: Object): Object => sensors,
+		({ gateways }: Object): Object => gateways,
 	],
-	(dashboard: Object, devices: Object, sensors: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors)
+	(dashboard: Object, devices: Object, sensors: Object, gateways: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
-		gateways: state.gateways,
-		sensorsById: state.sensors.byId,
 		userProfile: getUserProfile(state),
 		tab: state.navigation.tab,
 		dashboard: state.dashboard,

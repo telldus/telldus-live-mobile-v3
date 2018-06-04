@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import isEqual from 'lodash/isEqual';
 
 import { View } from '../../../../BaseComponents';
 import ShowMoreButton from './Device/ShowMoreButton';
@@ -70,6 +71,13 @@ constructor(props: Props) {
 
 	this.onPressMore = this.onPressMore.bind(this);
 	this.closeMoreActions = this.closeMoreActions.bind(this);
+}
+
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const isStateEqual = isEqual(this.state, nextState);
+	const isPropsEqual = isEqual(this.props, nextProps);
+
+	return !isStateEqual || !isPropsEqual;
 }
 
 getButtonsInfo(item: Object, styles: Object): Object {

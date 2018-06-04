@@ -21,14 +21,17 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import isEqual from 'lodash/isEqual';
 
-import { FormattedNumber, View } from '../../../../BaseComponents';
-
+import {
+	FormattedNumber,
+	View,
+} from '../../../../BaseComponents';
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
-import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import { formatLastUpdated, checkIfLarge } from '../../../Lib';
 import i18n from '../../../Translations/common';
@@ -51,7 +54,7 @@ type State = {
 	currentDisplayType: string,
 };
 
-class SensorDashboardTile extends PureComponent<Props, State> {
+class SensorDashboardTile extends View<Props, State> {
 	props: Props;
 	state: State;
 
@@ -125,6 +128,13 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 		this.sensorTypes = getSensorTypes();
 
 		this.getSlideList = this.getSlideList.bind(this);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const isStateEqual = isEqual(this.state, nextState);
+		const isPropsEqual = isEqual(this.props, nextProps);
+
+		return !isStateEqual || !isPropsEqual;
 	}
 
 	getSlideList(item: Object): Object {
