@@ -64,7 +64,6 @@ class SensorsTab extends View {
 
 	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
 	renderRow: (Object) => Object;
-	renderHiddenRow: (Object) => Object;
 	onRefresh: (Object) => void;
 	keyExtractor: (Object) => number;
 	toggleHiddenList: () => void;
@@ -99,7 +98,6 @@ class SensorsTab extends View {
 
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
-		this.renderHiddenRow = this.renderHiddenRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.keyExtractor = this.keyExtractor.bind(this);
 
@@ -332,14 +330,6 @@ class SensorsTab extends View {
 				forceClose: true,
 			},
 		});
-	}
-
-	renderHiddenRow(row: Object): Object {
-		let { screenProps } = this.props;
-
-		return (
-			<SensorRowHidden {...row} intl={screenProps.intl}/>
-		);
 	}
 
 	getStyles(appLayout: Object): Object {
