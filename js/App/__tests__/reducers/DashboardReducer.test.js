@@ -5,8 +5,16 @@ jest.useFakeTimers();
 describe('Test Dashboard reducers', ()=>{
 
 	it('check dashboard reducers ', () => {
-
-		const state = [{key: 3, data: 'deviceId4', objectType: 'device'}, {data: 'sensorId3', key: 2, objectType: 'sensor'}];
+		const device = { 3: {
+			clientId: 1,
+			id: 3,
+			isOnline: true,
+		}};
+		const sensor = { 2: {
+			clientId: 1,
+			id: 2,
+			isOnline: true,
+		}};
 
 		const dashboard = {
 			deviceIds: [3],
@@ -14,14 +22,27 @@ describe('Test Dashboard reducers', ()=>{
 		};
 
 		const devices = {
-			byId: ['deviceId1', 'deviceId2', 'deviceId3', 'deviceId4'],
+			byId: device,
 		};
 		const sensors = {
-			byId: ['sensorId1', 'sensorId2', 'sensorId3', 'sensorId4'],
+			byId: sensor,
+		};
+		const gateways = {
+			byId: { 1: {
+				id: 1,
+				online: true,
+			}},
 		};
 
+		const state = [{
+			key: 3, data: device[3], objectType: 'device',
+		},
+		{
+			data: sensor[2], key: 2, objectType: 'sensor',
+		}];
 
-		expect(parseDashboardForListView(dashboard, devices, sensors)).toEqual(state);
+
+		expect(parseDashboardForListView(dashboard, devices, sensors, gateways)).toEqual(state);
 	});
 
 });
