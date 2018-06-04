@@ -29,7 +29,7 @@ import Platform from 'Platform';
 import isEqual from 'lodash/isEqual';
 
 import { View, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
-import { DeviceHeader, SensorRow, SensorRowHidden } from './SubViews';
+import { DeviceHeader, SensorRow } from './SubViews';
 
 import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
 
