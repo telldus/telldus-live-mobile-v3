@@ -22,24 +22,23 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, UIManager, LayoutAnimation, Animated, Easing } from 'react-native';
+import { TouchableOpacity, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import DeviceInfo from 'react-native-device-info';
 import isEqual from 'lodash/isEqual';
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
 import GenericSensor from './Sensor/GenericSensor';
+import TypeBlock from './Sensor/TypeBlock';
 
 import i18n from '../../../Translations/common';
 
 import { formatLastUpdated, checkIfLarge } from '../../../Lib';
-import { utils, actions } from 'live-shared-data';
+import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
-const { Dashboard: { getSupportedDisplayTypes } } = actions;
 
 import Theme from '../../../Theme';
 
@@ -58,10 +57,10 @@ type Props = {
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
 	propsSwipeRow: Object,
+	defaultType?: string,
 };
 
 type State = {
-	currentIndex: number,
 	isOpen: boolean,
 	showFullName: boolean,
 	coverMaxWidth: number,
@@ -102,7 +101,6 @@ class SensorRow extends View<Props, State> {
 	helpCloseHiddenRow: string;
 
 	onLayout: (Object) => void;
-	changeDisplayType: (number) => void;
 	LayoutLinear: Object;
 	onRowOpen: () => void;
 	onRowClose: () => void;
@@ -118,7 +116,6 @@ class SensorRow extends View<Props, State> {
 	isTablet: boolean;
 
 	state = {
-		currentIndex: 0,
 		isOpen: false,
 		showFullName: false,
 		coverMaxWidth: 0,
@@ -164,7 +161,6 @@ class SensorRow extends View<Props, State> {
 		this.sensorTypes = getSensorTypes();
 
 		this.onLayout = this.onLayout.bind(this);
-		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
 
 		this.onRowOpen = this.onRowOpen.bind(this);
@@ -180,18 +176,6 @@ class SensorRow extends View<Props, State> {
 		this.isAnimating = false;
 
 		this.isTablet = DeviceInfo.isTablet();
-
-		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-		this.LayoutLinear = {
-			duration: 200,
-			create: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.opacity,
-			  },
-			update: {
-			  type: LayoutAnimation.Types.linear,
-			},
-		};
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
@@ -342,7 +326,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	getSensors(data: Object): Object {
-		let sensors = [], sensorInfo = '';
+		let sensors = {}, sensorInfo = '';
 		for (let key in data) {
 			let values = data[key];
 			let { value, scale, name } = values;
@@ -351,21 +335,21 @@ class SensorRow extends View<Props, State> {
 			let unit = sensorUnits[scale];
 			let isLarge = checkIfLarge(value.toString());
 			if (name === 'humidity') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'humidity'} label={this.labelHumidity} isLarge={isLarge} key={key}/>);
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
+					icon={'humidity'} label={this.labelHumidity} isLarge={isLarge} key={key}/>;
 				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
 			}
 			if (name === 'temp') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
 					icon={'temperature'} label={this.labelTemperature} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1, minimumFractionDigits: isLarge ? 0 : 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1, minimumFractionDigits: isLarge ? 0 : 1}}/>;
 				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
 			}
 			if (name === 'rrate' || name === 'rtot') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
 					icon={'rain'} label={name === 'rrate' ? this.labelRainRate : this.labelRainTotal}
 					isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 0}}/>);
+					formatOptions={{maximumFractionDigits: 0}}/>;
 
 				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
 				let rtotalInfo = name === 'rtot' ? `${this.labelRainTotal} ${value}${unit}` : '';
@@ -379,9 +363,9 @@ class SensorRow extends View<Props, State> {
 					value = getWindDirection(value);
 					label = this.labelWindDirection;
 				}
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
 					icon={'wind'} isLarge={isLarge} label={label} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
 
 				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
 				let wavgInfo = name === 'wavg' ? `${this.labelWindAverage} ${value}${unit}` : '';
@@ -389,9 +373,9 @@ class SensorRow extends View<Props, State> {
 				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
 			}
 			if (name === 'uv') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
 					icon={'uv'} label={this.labelUVIndex} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 0}}/>);
+					formatOptions={{maximumFractionDigits: 0}}/>;
 				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
 			}
 			if (name === 'watt') {
@@ -421,33 +405,33 @@ class SensorRow extends View<Props, State> {
 					label = this.labelPowerFactor;
 					labelWatt = this.labelPowerFactor;
 				}
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
 					icon={'watt'} label={label} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
 				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
 			}
 			if (name === 'lum') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
 					icon={'luminance'} label={this.labelLuminance} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 0}}/>);
+					formatOptions={{maximumFractionDigits: 0}}/>;
 				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
 			}
 			if (name === 'dewp') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
 					icon={'humidity'} label={this.labelDewPoint} key={key} isLarge={isLarge}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
 				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
 			}
 			if (name === 'barpress') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
 					icon={'guage'} label={this.labelBarometricPressure} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
 				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
 			}
 			if (name === 'genmeter') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
+				sensors[key] = <GenericSensor name={name} value={value} unit={unit}
 					icon={'sensor'} label={this.labelGenericMeter} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
 				sensorInfo = `${sensorInfo}, ${this.labelGenericMeter} ${value}${unit}`;
 			}
 		}
@@ -461,12 +445,14 @@ class SensorRow extends View<Props, State> {
 			data,
 			name,
 			lastUpdated,
+			id,
 		} = sensor;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
 		let { sensors, sensorInfo } = this.getSensors(data);
+
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
-		let { currentIndex, isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
+		let { isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
 
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
 		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
@@ -505,21 +491,17 @@ class SensorRow extends View<Props, State> {
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 							{nameInfo}
 						</TouchableOpacity>
-						<AnimatedTouchable onPress={this.changeDisplayType} accessible={false}
-							disabled={sensors.length <= 1}
+						<TypeBlock
+							sensors={sensors}
+							id={id}
 							onLayout={this.onLayoutButtons}
 							style={[styles.sensorValueCover, {
 								width: this.animatedWidth,
 								transform: [{
 									scaleX: interpolatedScale,
 								}],
-							}]} importantForAccessibility="no-hide-descendants">
-							<View style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
-								{sensors[currentIndex] && (
-									sensors[currentIndex]
-								)}
-							</View>
-						</AnimatedTouchable>
+							}]}
+							valueCoverStyle={styles.sensorValueCover}/>
 					</View>
 				</ListItem>
 			</SwipeRow>
@@ -563,18 +545,6 @@ class SensorRow extends View<Props, State> {
 				}
 			</View>
 		);
-	}
-
-	changeDisplayType(index: number) {
-		let { data } = this.props.sensor;
-		let { currentIndex } = this.state;
-		let displayTypes = getSupportedDisplayTypes(data);
-		let nextIndex = currentIndex + 1;
-		nextIndex = nextIndex > (displayTypes.length - 1) ? 0 : nextIndex;
-		LayoutAnimation.configureNext(this.LayoutLinear);
-		this.setState({
-			currentIndex: nextIndex,
-		});
 	}
 
 	onLayout(event: Object) {
@@ -694,7 +664,7 @@ class SensorRow extends View<Props, State> {
 	}
 }
 
-function mapStateToProps(store: Object): Object {
+function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
 		tab: store.navigation.tab,
 	};
