@@ -41,6 +41,7 @@ export type Action =
 	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: number }
 
 	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id: number, displayType: string }
+	| { type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE', id: number, displayType: string }
 	| { type: 'SHOW_DIMMER_POPUP', name: string, value: number }
 	| { type: 'HIDE_DIMMER_POPUP' }
 	| { type: 'SET_DIMMER_VALUE', payload: Object }
