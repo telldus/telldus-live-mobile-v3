@@ -60,18 +60,18 @@ class GatewayRow extends PureComponent<Props, State> {
 		this.props.stackNavigator.navigate('LocationDetails', {location, renderRootHeader: true});
 	}
 
-	getLocationStatus(online: boolean, websocketOnline: boolean): Object {
+	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
 		return (
-			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} />
+			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} localKey={localKey}/>
 		);
 	}
 
 
 	render(): Object {
 		let { location, appLayout } = this.props;
-		let { name, type, online, websocketOnline } = location;
+		let { name, type, online, websocketOnline, localKey } = location;
 
-		let info = this.getLocationStatus(online, websocketOnline);
+		let info = this.getLocationStatus(online, websocketOnline, localKey);
 
 		let locationImageUrl = getLocationImageUrl(type);
 		let locationData = {
@@ -100,7 +100,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const rowWidth = width - (padding * 2);
-		const rowHeight = deviceWidth * 0.23;
+		const rowHeight = deviceWidth * 0.27;
 
 		return {
 			rowItemsCover: {

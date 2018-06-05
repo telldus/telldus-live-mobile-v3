@@ -61,16 +61,16 @@ class Gateway extends PureComponent<Props, null> {
 		onPressGateway(gateway);
 	}
 
-	getLocationStatus(online: boolean, websocketOnline: boolean, statusStyle: any, statusInfoStyle: any): Object {
+	getLocationStatus(online: boolean, websocketOnline: boolean, statusStyle: any, statusInfoStyle: any, localKey: Object): Object {
 		return (
 			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl}
-				textStyle={statusStyle} statusInfoStyle={statusInfoStyle}/>
+				textStyle={statusStyle} statusInfoStyle={statusInfoStyle} localKey={localKey}/>
 		);
 	}
 
 	render(): Object {
 		const { gateway, appLayout } = this.props;
-		const { name, online, websocketOnline, type } = gateway;
+		const { name, online, websocketOnline, type, localKey } = gateway;
 		const { width, height } = appLayout;
 		const deviceWidth = height > width ? width : height;
 		const drawerWidth = getDrawerWidth(deviceWidth);
@@ -87,7 +87,7 @@ class Gateway extends PureComponent<Props, null> {
 			statusInfoStyle,
 		} = this.getStyles(drawerWidth);
 
-		const info = this.getLocationStatus(online, websocketOnline, statusStyle, statusInfoStyle);
+		const info = this.getLocationStatus(online, websocketOnline, statusStyle, statusInfoStyle, localKey);
 		const locationImageUrl = getLocationImageUrl(type);
 		const locationData = {
 			image: locationImageUrl,

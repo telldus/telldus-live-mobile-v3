@@ -35,6 +35,7 @@ type Props = {
 	textStyle?: number | Object | Array<any>,
 	appLayout: Object,
 	statusInfoStyle?: number | Object | Array<any>,
+	localKey: Object,
 };
 
 class GatewayStatus extends View<Props, null> {
@@ -56,7 +57,9 @@ constructor(props: Props) {
 
 render(): Object {
 	let { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
-	let { online, websocketOnline, textStyle, appLayout, statusInfoStyle } = this.props;
+	let { online, websocketOnline, textStyle, appLayout, statusInfoStyle, localKey = {}} = this.props;
+	let { address, key } = localKey;
+	let supportLocal = address && key;
 	let {
 		statusText,
 		statusInfo,
@@ -64,28 +67,43 @@ render(): Object {
 
 	if (!online) {
 		return (
-			<View style={styles.statusInfoCover}>
-				<View style={[statusInfo, { backgroundColor: locationOffline}, statusInfoStyle]}/>
+			<View style={{flexDirection: 'column'}}>
+				<View style={styles.statusInfoCover}>
+					<View style={[statusInfo, { backgroundColor: locationOffline}, statusInfoStyle]}/>
+					<Text style={[statusText, textStyle]}>
+						{this.offline}
+					</Text>
+				</View>
 				<Text style={[statusText, textStyle]}>
-					{this.offline}
+					{supportLocal ? 'local' : 'cloud'}
 				</Text>
 			</View>
 		);
 	} else if (!websocketOnline) {
 		return (
-			<View style={styles.statusInfoCover}>
-				<View style={[statusInfo, { backgroundColor: locationNoLiveUpdates}, statusInfoStyle]}/>
+			<View style={{flexDirection: 'column'}}>
+				<View style={styles.statusInfoCover}>
+					<View style={[statusInfo, { backgroundColor: locationNoLiveUpdates}, statusInfoStyle]}/>
+					<Text style={[statusText, textStyle]}>
+						{this.noLiveUpdates}
+					</Text>
+				</View>
 				<Text style={[statusText, textStyle]}>
-					{this.noLiveUpdates}
+					{supportLocal ? 'local' : 'cloud'}
 				</Text>
 			</View>
 		);
 	}
 	return (
-		<View style={styles.statusInfoCover}>
-			<View style={[statusInfo, { backgroundColor: locationOnline}, statusInfoStyle]}/>
+		<View style={{flexDirection: 'column'}}>
+			<View style={styles.statusInfoCover}>
+				<View style={[statusInfo, { backgroundColor: locationOnline}, statusInfoStyle]}/>
+				<Text style={[statusText, textStyle]}>
+					{this.online}
+				</Text>
+			</View>
 			<Text style={[statusText, textStyle]}>
-				{this.online}
+				{supportLocal ? 'local' : 'cloud'}
 			</Text>
 		</View>
 	);
