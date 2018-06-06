@@ -17,5 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *cnclBtnLbl;
 
 @property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
+@property (strong, nonatomic) IBOutlet UILabel *devicefontimage;
 
 @end

@@ -46,12 +46,15 @@
   _selectDevices.inputView = _picker;
   _selectDevices.inputAccessoryView = toolBar;
   
-  [self getAllDevices];
+  [self getAllDevices];  
+  _devicefontimage.text = @"device-alt";
+  _devicefontimage.textColor = UIColor.whiteColor;
+ 
 }
 
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  [_navBar setBarTintColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0]];
+ [_navBar setBarTintColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0]];
   
   UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
   [imageView setContentMode:UIViewContentModeScaleAspectFit];
@@ -88,8 +91,7 @@
   
   NSLog(@"--->>%@", _accessToken);
   NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString: @"https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1"] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
-  [request setHTTPMethod:@"GET"];
-  
+  [request setHTTPMethod:@"GET"];  
   [request setValue:_accessToken forHTTPHeaderField:@"Authorization"];
   [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
   [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -149,5 +151,4 @@
     _selectedDevice = [self.devices objectAtIndex:row];
   }
 }
-
 @end
