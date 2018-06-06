@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Animated, Image, TouchableOpacity } from 'react-native';
+import { Animated, Image, TouchableOpacity, PanResponder } from 'react-native';
 import Platform from 'Platform';
 
 import { Poster, View } from '../../../../BaseComponents';
@@ -40,11 +40,14 @@ type State = {
 	todayIndex?: number,
 	showLeftButton?: boolean,
 	showRightButton?: boolean,
+	dragDir?: string,
 };
 
 export default class JobsPoster extends View<null, Props, State> {
 
 	onLayout: (number, number, string) => void;
+	_panResponder: Object;
+	distMoved: number;
 
 	static propTypes = {
 		days: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -63,10 +66,146 @@ export default class JobsPoster extends View<null, Props, State> {
 			showLeftButton: false,
 			showRightButton: true,
 			daysLayout: {},
+			dragDir: undefined,
 		};
-
+		// weekdays animation ranges from value (1 -> 0) while dragging/sliding left(visiting yesterday)
+		// weekdays animation ranges from value (1 -> 2) while dragging/sliding right(visiting tomorrow)
+		// so the animating range is 1.
+		this.animLeftVal = 0;
+		this.animMidVal = 1;
+		this.animRightVal = 2;
+		this.animationRange = this.animRightVal - this.animMidVal;
 		this.weekDaysLayout = {};
 		this.onLayout = this.onLayout.bind(this);
+		this.distMoved = 0;
+		this.finalValue = null;
+	}
+
+	componentWillMount() {
+		this._panResponder = PanResponder.create({
+			// Ask to be the responder:
+			onStartShouldSetPanResponder: this.onStartShouldSetPanResponderHandler.bind(this),
+			onMoveShouldSetPanResponder: this.onMoveShouldSetPanResponderHandler.bind(this),
+			onMoveShouldSetPanResponderCapture: this.onMoveShouldSetPanResponderCapturerHandler.bind(this),
+			onPanResponderGrant: this.onPanResponderGrantHandler.bind(this),
+			onPanResponderMove: this.onPanResponderMoveHandler.bind(this),
+			onPanResponderTerminationRequest: this.onPanResponderTerminationRequestHandler.bind(this),
+			onPanResponderRelease: this.onPanResponderReleaseHandler.bind(this),
+			onPanResponderTerminate: this.onPanResponderTerminateHandler.bind(this),
+		  });
+	}
+
+	onStartShouldSetPanResponderHandler(event: Object, gestureState: Object): boolean {
+		return false;
+	}
+
+	onMoveShouldSetPanResponderHandler(event: Object, gestureState: Object): boolean {
+		return true;
+	}
+
+	onMoveShouldSetPanResponderCapturerHandler(event: Object, gestureState: Object): boolean {
+		return true;
+	}
+
+	onPanResponderGrantHandler(event: Object, gestureState: Object) {
+		const { moveX } = gestureState;
+		this.moveX = moveX;
+		this.distMoved = 0;
+	}
+
+	onPanResponderMoveHandler(event: Object, gestureState: Object) {
+		const { dx, moveX } = gestureState;
+		if (dx !== 0) {
+			const distX = moveX - this.moveX;
+			this.moveX = moveX;
+			this.distMoved = this.getRange(dx);
+			if (distX < 0) {
+				let toVal = this.animMidVal + this.distMoved;
+				toVal = toVal <= this.animLeftVal ? this.animLeftVal : toVal;
+				if (toVal < this.animMidVal) {
+					// Doing setState only to cause a re-render and make the 'this.scrollRight' value reflect at weekdays animation method.
+					this.scrollRight = true;
+					this.setState({
+						dragDir: 'right',
+					});
+				}
+				this.finalValue = toVal;
+				let config = {
+					toValue: toVal,
+					duration: 10,
+				};
+				this.animate(config);
+			}
+			if (distX > 0) {
+				let toVal = this.animMidVal + this.distMoved;
+				toVal = toVal >= this.animRightVal ? this.animRightVal : toVal;
+				if (toVal >= this.animMidVal) {
+					// Doing setState only to cause a re-render and make the 'this.scrollRight' value reflect at weekdays animation method.
+					this.scrollRight = false;
+					this.setState({
+						dragDir: 'left',
+					});
+				}
+				this.finalValue = toVal;
+				let config = {
+					toValue: toVal,
+					duration: 10,
+				};
+				this.animate(config);
+			}
+		}
+	}
+	// Calculates percentage of distance moved with respect to poster width and convert it to animation range[1-0 or 1-2]
+	getRange(dx: number): number {
+		const { appLayout } = this.props;
+		const { width } = appLayout;
+		const percentMoved = dx * (100 / width);
+		return this.animationRange * (percentMoved / 100);
+	}
+
+	animate(config: Object) {
+		Animated
+			.timing(this.scrollDays, config)
+			.start();
+	}
+
+	onPanResponderTerminationRequestHandler(event: Object, gestureState: Object): boolean {
+		return false;
+	}
+
+	onPanResponderReleaseHandler(event: Object, gestureState: Object) {
+		let { todayIndex } = this.state;
+		// On dragging left more than half, scroll to tomorrow.
+		if (this.finalValue && this.finalValue <= 0.5 && todayIndex <= 6) {
+			this._scrollToTomorrow();
+
+			// On dragging right more than half, scroll to yesterday.
+		} else if (this.finalValue && this.finalValue >= 1.5 && todayIndex !== 0) {
+			this._scrollToYesterday();
+
+			// Animate back to previous state.
+		} else {
+			let config = {
+				toValue: 1,
+				duration: 400,
+			};
+			Animated
+				.timing(this.scrollDays, config)
+				.start();
+		}
+		this.distMoved = 0;
+		this.setState({
+			dragDir: undefined,
+		});
+		this.finalValue = null;
+	}
+
+	onPanResponderTerminateHandler(event: Object, gestureState: Object) {
+		this.distMoved = 0;
+		this.setState({
+			dragDir: undefined,
+		});
+		this.finalValue = null;
 	}
 
 	componentWillReceiveProps(nextProps: Props) {
@@ -105,7 +244,8 @@ export default class JobsPoster extends View<null, Props, State> {
 		const newState = nextState.todayIndex !== this.state.todayIndex;
 		const newLayout = nextProps.appLayout.width !== this.props.appLayout.width;
 		const newDays = nextProps.days.length !== this.props.days.length;
-		return newProps || newState || newLayout || newDays;
+		const onDragChange = nextState.dragDir !== this.state.dragDir;
+		return newProps || newState || newLayout || newDays || onDragChange;
 	}
 
 	getPosterWidth(): number {
@@ -129,7 +269,7 @@ export default class JobsPoster extends View<null, Props, State> {
 
 		return (
 			<Poster posterWidth={posterWidth}>
-				<View style={daysContainer}>
+				<View style={daysContainer} {...this._panResponder.panHandlers}>
 					{this._renderDays()}
 					<View style={dateContainer}>
 						{this._renderDate()}
