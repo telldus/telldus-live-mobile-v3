@@ -28,6 +28,8 @@ import { AppState } from 'react-native';
 import Orientation from 'react-native-orientation';
 import { AccessibilityInfo } from 'react-native';
 
+import { resetLocalControlIP } from './Gateways';
+
 module.exports = {
 	appStart: (): Action => ({
 		type: 'APP_START',
@@ -43,6 +45,7 @@ module.exports = {
 				dispatch({
 					type: 'APP_BACKGROUND',
 				});
+				dispatch(resetLocalControlIP());
 			}
 		});
 	},
