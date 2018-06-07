@@ -27,6 +27,7 @@ import { Animated, ScrollView, Modal } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import { View, FloatingButton, Text, StyleSheet, SafeAreaView } from '../../../BaseComponents';
 
@@ -35,9 +36,8 @@ import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
 
-import { ifIphoneX } from 'react-native-iphone-x-helper';
-const Screens = ['WizardOne', 'WizardTwo', 'WizardThree', 'WizardFour'];
 
+import Screens from './SubViews/Screens';
 import { getRelativeDimensions } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -57,7 +57,7 @@ type Props = {
 };
 
 type State = {
-	currentScreen: string,
+	currentScreen: number,
 };
 
 
@@ -87,7 +87,7 @@ class ChangeLogNavigator extends View {
 		super(props);
 
 		this.state = {
-			currentScreen: 'WizardOne',
+			currentScreen: 1,
 		};
 
 		let { formatMessage } = props.intl;
@@ -251,7 +251,7 @@ class ChangeLogNavigator extends View {
 									buttonStyle={floatingButtonLeft}
 									iconStyle={styles.buttonIconStyle}/>
 								)}
-								{Screens.map((screen: string, index: number): Object => {
+								{Screens.map((screen: number, index: number): Object => {
 									let backgroundColor = Screens[index] === currentScreen ?
 										Theme.Core.brandSecondary : '#00000080';
 									return <View style={[stepIndicator, { backgroundColor }, !index && {marginLeft: 0 }]} key={index}/>;

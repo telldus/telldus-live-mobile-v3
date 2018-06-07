@@ -30,45 +30,30 @@ import { View, Text, IconTelldus, StyleSheet } from '../../../../BaseComponents'
 import Theme from '../../../Theme';
 
 const messages = defineMessages({
-	wizardOneTitle36: {
-		id: 'changeLog36.wizardOne.title',
-		defaultMessage: 'Add and edit schedules',
+	wizardOneTitle37: {
+		id: 'changeLog37.wizardOne.title',
+		defaultMessage: 'Local control',
 	},
-	wizardOneDescription36: {
-		id: 'changeLog6.wizardOne.description',
-		defaultMessage: 'You are now able to add and edit schedules for your devices directly in the app!',
+	wizardOneDescription37: {
+		id: 'changeLog37.wizardOne.description',
+		defaultMessage: 'In this version we have added support for local control of your devices even if the connection '
+			+ 'to the cloud is lost. This works for TellStick Net v2 and TellStick Znet/Znet v2 and the phone needs to be connected '
+			+ 'to the same local network as the gateway.',
 	},
-	WizardTwoTitle36: {
-		id: 'changeLog36.WizardTwo.title',
-		defaultMessage: 'Location details',
+	WizardTwoTitle37: {
+		id: 'changeLog37.WizardTwo.title',
+		defaultMessage: 'New settings screen',
 	},
-	WizardTwoDescription36: {
-		id: 'changeLog36.WizardTwo.description',
-		defaultMessage: 'We\'ve also added functionality to edit your location details, such as name, time zone and position.',
-	},
-	wizardThreeTitle36: {
-		id: 'changeLog36.wizardThree.title',
-		defaultMessage: 'Updated design',
-	},
-	wizardThreeDescription36: {
-		id: 'changeLog36.wizardThree.description',
-		defaultMessage: 'The design of the dashboard, device list and sensor list has been updated to make the ' +
-		'interface more clear. The active state has a colored background and a white icon to be easily distinguishable.',
-	},
-	WizardFourTitle36: {
-		id: 'changeLog36.WizardFour.title',
-		defaultMessage: 'Swipe to see more',
-	},
-	WizardFourDescription36: {
-		id: 'changeLog36.WizardFour.description',
-		defaultMessage: 'To add devices or sensors to the dashboard or hide it from the list, swipe it to the left ' +
-		'and then tap the icons. it\'s also here you can access device settings, including overview, history and settings.',
+	WizardTwoDescription37: {
+		id: 'changeLog37.WizardTwo.description',
+		defaultMessage: 'There is also an updated settings screen to provide a better overview. The highlighted features of the '
+			+ 'installed version can be accessed from that screen as well if you wish to view them again.',
 	},
 });
 
 type Props = {
 	intl: intlShape,
-	currentScreen: string,
+	currentScreen: number,
 	animatedX: Object,
 	animatedOpacity: Object,
 	appLayout: Object,
@@ -96,40 +81,34 @@ export default class WizardOne extends PureComponent<Props, null> {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(messages.wizardOneTitle36);
-		this.descriptionWOne = formatMessage(messages.wizardOneDescription36);
+		this.titleWOne = formatMessage(messages.wizardOneTitle37);
+		this.descriptionWOne = formatMessage(messages.wizardOneDescription37);
 
-		this.titleWTwo = formatMessage(messages.WizardTwoTitle36);
-		this.descriptionWTwo = formatMessage(messages.WizardTwoDescription36);
-
-		this.titleWThree = formatMessage(messages.wizardThreeTitle36);
-		this.descriptionWThree = formatMessage(messages.wizardThreeDescription36);
-
-		this.titleWFour = formatMessage(messages.WizardFourTitle36);
-		this.descriptionWFour = formatMessage(messages.WizardFourDescription36);
+		this.titleWTwo = formatMessage(messages.WizardTwoTitle37);
+		this.descriptionWTwo = formatMessage(messages.WizardTwoDescription37);
 	}
 
-	getScreenData(currentScreen: string, deviceWidth: number): Object {
+	getScreenData(currentScreen: number, deviceWidth: number): Object {
 		let icon = null, iconTwo = null, iconThree = null, iconSize = Math.floor(deviceWidth * 0.315),
 			iconTwoSize = Math.floor(deviceWidth * 0.315), iconThreeSize = Math.floor(deviceWidth * 0.315), title = '', description = '';
 		switch (currentScreen) {
-			case 'WizardOne':
-				icon = 'time';
+			case 1:
+				icon = 'localcontrol';
 				title = this.titleWOne;
 				description = this.descriptionWOne;
 				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
-			case 'WizardTwo':
-				icon = 'location';
+			case 2:
+				icon = 'settings';
 				title = this.titleWTwo;
 				description = this.descriptionWTwo;
 				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
-			case 'WizardThree':
+			case 3:
 				icon = 'buttononoff';
 				iconSize = Math.floor(deviceWidth * 0.345);
 				title = this.titleWThree;
 				description = this.descriptionWThree;
 				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
-			case 'WizardFour':
+			case 4:
 				icon = 'hidden';
 				iconTwo = 'favorite-outline';
 				iconTwoSize = Math.floor(deviceWidth * 0.22);
