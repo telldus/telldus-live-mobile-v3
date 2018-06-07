@@ -258,6 +258,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	render(): React$Element<any> {
 		const { showLeftButton, showRightButton } = this.state;
 		const {
+			container,
 			daysContainer,
 			dateContainer,
 			arrowContainer,
@@ -269,32 +270,34 @@ export default class JobsPoster extends View<null, Props, State> {
 
 		return (
 			<Poster posterWidth={posterWidth}>
-				<View style={daysContainer} {...this._panResponder.panHandlers}>
-					{this._renderDays()}
-					<View style={dateContainer}>
-						{this._renderDate()}
+				<View style={container} {...this._panResponder.panHandlers}>
+					<View style={daysContainer}>
+						{this._renderDays()}
+						<View style={dateContainer}>
+							{this._renderDate()}
+						</View>
 					</View>
+					{showLeftButton && (
+						<TouchableOpacity
+							onPress={this._scrollToYesterday}
+							onPressIn={this._leftButtonPressIn}
+							onPressOut={this._leftButtonPressOut}
+							style={arrowContainer}
+						>
+							<Image source={image} style={arrow}/>
+						</TouchableOpacity>
+					)}
+					{showRightButton && (
+						<TouchableOpacity
+							onPress={this._scrollToTomorrow}
+							onPressIn={this._rightButtonPressIn}
+							onPressOut={this._rightButtonPressOut}
+							style={[arrowContainer, arrowContainerRight]}
+						>
+							<Image source={image} style={arrow}/>
+						</TouchableOpacity>
+					)}
 				</View>
-				{showLeftButton && (
-					<TouchableOpacity
-						onPress={this._scrollToYesterday}
-						onPressIn={this._leftButtonPressIn}
-						onPressOut={this._leftButtonPressOut}
-						style={arrowContainer}
-					>
-						<Image source={image} style={arrow}/>
-					</TouchableOpacity>
-				)}
-				{showRightButton && (
-					<TouchableOpacity
-						onPress={this._scrollToTomorrow}
-						onPressIn={this._rightButtonPressIn}
-						onPressOut={this._rightButtonPressOut}
-						style={[arrowContainer, arrowContainerRight]}
-					>
-						<Image source={image} style={arrow}/>
-					</TouchableOpacity>
-				)}
 			</Poster>
 		);
 	}
@@ -601,6 +604,14 @@ export default class JobsPoster extends View<null, Props, State> {
 		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
 
 		return {
+			container: {
+				flex: 1,
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				right: 0,
+				bottom: 0,
+			},
 			daysContainer: {
 				borderWidth: 0,
 				position: 'absolute',
