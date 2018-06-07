@@ -160,7 +160,7 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { appLayout } = this.props;
 		const { width } = appLayout;
 		const percentMoved = dx * (100 / width);
-		return this.animationRange * (percentMoved / 100);
+		return (this.animationRange * (percentMoved / 100)) * 1.5;
 	}
 
 	animate(config: Object) {
