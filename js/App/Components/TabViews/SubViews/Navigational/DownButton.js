@@ -29,13 +29,12 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
-import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
+import { deviceSetState } from '../../../../Actions/Devices';
 import Theme from '../../../../Theme';
 
 type Props = {
 	commandDown: number,
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
 	intl: Object,
 	isGatewayActive: boolean,
 	isInState: boolean,
@@ -45,6 +44,7 @@ type Props = {
 	id: number,
 	iconSize: number,
 	style: Object | Array<any> | number,
+	local: boolean,
 };
 
 class DownButton extends View {
@@ -61,7 +61,6 @@ class DownButton extends View {
 	}
 
 	onDown() {
-		this.props.requestDeviceAction(this.props.id, this.props.commandDown);
 		this.props.deviceSetState(this.props.id, this.props.commandDown);
 	}
 
@@ -70,14 +69,14 @@ class DownButton extends View {
 		};
 
 		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style } = this.props;
+			name, methodRequested, iconSize, style, local } = this.props;
 
 
 		let downButtonStyle = !isGatewayActive ?
 			(isInState === 'DOWN' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'DOWN' ? styles.enabledBackground : styles.disabledBackground);
 		let downIconColor = !isGatewayActive ?
 			(isInState === 'DOWN' ? '#fff' : '#a2a2a2') : (isInState === 'DOWN' ? '#fff' : Theme.Core.brandSecondary);
-
+		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<TouchableOpacity
@@ -91,7 +90,7 @@ class DownButton extends View {
 				/>
 				{
 					methodRequested === 'DOWN' ?
-						<ButtonLoadingIndicator style={styles.dot} />
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
 				}
@@ -133,7 +132,6 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number): any => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number): any => dispatch(requestDeviceAction(id, command)),
 	};
 }
 

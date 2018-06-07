@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { View } from '../../../../BaseComponents';
 import { Animated, StyleSheet } from 'react-native';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
-import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import { deviceSetState } from '../../../Actions/Devices';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import HVSliderContainer from './Device/HVSliderContainer';
@@ -52,7 +52,6 @@ type Props = {
 	hideDimmerPopup: () => void,
 	setScrollEnabled: boolean,
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (number, number) => void,
 	intl: Object,
 	isGatewayActive: boolean,
 	appLayout: Object,
@@ -168,14 +167,9 @@ class DimmerButton extends View {
 		let command = commandDIM;
 		this.props.onSlideComplete();
 		if (sliderValue === 100) {
-			this.props.requestDeviceAction(device.id, commandON);
 			command = commandON;
 		}
-		if ((sliderValue > 0) && (sliderValue < 100)) {
-			this.props.requestDeviceAction(device.id, commandDIM);
-		}
 		if (sliderValue === 0) {
-			this.props.requestDeviceAction(device.id, commandOFF);
 			command = commandOFF;
 		}
 		let dimValue = toDimmerValue(sliderValue);
@@ -201,12 +195,10 @@ class DimmerButton extends View {
 
 	onTurnOn() {
 		this.props.deviceSetState(this.props.device.id, this.props.commandON);
-		this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
 	}
 
 	onTurnOff() {
 		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
-		this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
 	}
 
 	showDimmerStep(id: number) {
@@ -216,7 +208,7 @@ class DimmerButton extends View {
 	render(): Object {
 		const { device, intl, isGatewayActive, screenReaderEnabled, showSlider,
 			style, onButtonStyle, offButtonStyle, sliderStyle } = this.props;
-		const { isInState, name, supportedMethods, methodRequested } = device;
+		const { isInState, name, supportedMethods, methodRequested, local } = device;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
@@ -252,6 +244,7 @@ class DimmerButton extends View {
 					methodRequested={methodRequested}
 					intl={intl}
 					isGatewayActive={isGatewayActive}
+					local={local}
 				/>
 			</HVSliderContainer>
 		);
@@ -270,6 +263,7 @@ class DimmerButton extends View {
 					methodRequested={methodRequested}
 					intl={intl}
 					isGatewayActive={isGatewayActive}
+					local={local}
 				/>
 			</HVSliderContainer>
 		);
@@ -287,7 +281,8 @@ class DimmerButton extends View {
 					methodRequested={methodRequested}
 					isInState={isInState}
 					name={deviceName}
-					importantForAccessibility={'yes'}/>
+					importantForAccessibility={'yes'}
+					local={local}/>
 			</HVSliderContainer>
 		) : null;
 
@@ -343,7 +338,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 		},
 		onDimmerSlide: (id: number): any => (value: number): any => dispatch(setDimmerValue(id, value)),
 		deviceSetState: (id: number, command: number, value?: number): any => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number): any => dispatch(requestDeviceAction(id, command)),
 		showDimmerStep: (id: number) => {
 			dispatch(showDimmerStep(id));
 		},

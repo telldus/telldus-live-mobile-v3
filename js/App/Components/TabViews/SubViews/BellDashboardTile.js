@@ -26,7 +26,7 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { View, IconTelldus } from '../../../../BaseComponents';
-import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
@@ -35,7 +35,6 @@ import Theme from '../../../Theme';
 
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
 	item: Object,
 	tileWidth: number,
 	style: Object,
@@ -73,7 +72,6 @@ class BellDashboardTile extends PureComponent<Props, null> {
 
 	onBell() {
 		this.props.deviceSetState(this.props.item.id, this.props.command);
-		this.props.requestDeviceAction(this.props.item.id, this.props.command);
 	}
 
 	render(): Object {
@@ -133,9 +131,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) =>{
 			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
 		},
 	};
 }

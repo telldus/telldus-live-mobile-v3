@@ -24,14 +24,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 type Props = {
-	requestDeviceAction: (id: number, command: number, value?: number) => void,
 	deviceSetState: (id: number, command: number) => void,
 	intl: Object,
 	name: string,
@@ -43,6 +42,7 @@ type Props = {
 	enabled: boolean,
 	command: number,
 	id: number,
+	local: boolean,
 };
 
 class OffButton extends View {
@@ -59,17 +59,17 @@ class OffButton extends View {
 	}
 
 	onPress() {
-		this.props.requestDeviceAction(this.props.id, this.props.command);
 		this.props.deviceSetState(this.props.id, this.props.command);
 	}
 
 	render(): Object {
-		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle } = this.props;
+		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle, local } = this.props;
 		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) : (isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
+		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<TouchableOpacity
@@ -80,7 +80,7 @@ class OffButton extends View {
 				<IconTelldus icon="off" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
 					methodRequested === 'TURNOFF' ?
-						<ButtonLoadingIndicator style={styles.dot} />
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
 				}
@@ -139,9 +139,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) => {
 			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
 		},
 		dispatch,
 	};

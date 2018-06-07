@@ -29,7 +29,7 @@ import Modal from 'react-native-modal';
 import { View, Text, StyleSheet } from '../../../../../BaseComponents';
 import Step from './Step';
 
-import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
+import { deviceSetState } from '../../../../Actions/Devices';
 
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
@@ -44,7 +44,6 @@ type Props = {
 	commandON?: number,
 	commandDIM?: number,
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
 	commandON: number,
 	commandDIM: number,
 	intl: Object,
@@ -88,7 +87,6 @@ onPressDone() {
 onPressDim(value: number) {
 	let { deviceId, commandDIM } = this.props;
 	let dimValue = toDimmerValue(value);
-	this.props.requestDeviceAction(deviceId, this.props.commandON);
 	this.props.deviceSetState(deviceId, commandDIM, dimValue);
 }
 
@@ -152,7 +150,6 @@ function mapStateToProps(store: Object): Object {
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number): any => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number): any => dispatch(requestDeviceAction(id, command)),
 	};
 }
 

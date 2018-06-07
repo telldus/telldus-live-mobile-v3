@@ -28,7 +28,7 @@ import throttle from 'lodash/throttle';
 
 import { View } from '../../../../BaseComponents';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
-import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import { deviceSetState } from '../../../Actions/Devices';
 import DimmerOffButton from './DimmerOffButton';
 import DimmerOnButton from './DimmerOnButton';
 import HVSliderContainer from './Device/HVSliderContainer';
@@ -54,7 +54,6 @@ type Props = {
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
 	setScrollEnabled: boolean,
 	style: Object,
 	intl: Object,
@@ -167,14 +166,9 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		let { item, commandON, commandOFF, commandDIM } = this.props;
 		let command = commandDIM;
 		if (sliderValue === 100) {
-			this.props.requestDeviceAction(item.id, commandON);
 			command = commandON;
 		}
-		if ((sliderValue > 0) && (sliderValue < 100)) {
-			this.props.requestDeviceAction(item.id, commandDIM);
-		}
 		if (sliderValue === 0) {
-			this.props.requestDeviceAction(item.id, commandOFF);
 			command = commandOFF;
 		}
 		let dimValue = toDimmerValue(sliderValue);
@@ -200,12 +194,10 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 
 	onTurnOn() {
 		this.props.deviceSetState(this.props.item.id, this.props.commandON);
-		this.props.requestDeviceAction(this.props.item.id, this.props.commandON);
 	}
 
 	onTurnOff() {
 		this.props.deviceSetState(this.props.item.id, this.props.commandOFF);
-		this.props.requestDeviceAction(this.props.item.id, this.props.commandOFF);
 	}
 
 	showDimmerStep(id: number) {
@@ -215,7 +207,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	render(): Object {
 		const { item, tileWidth, intl, isGatewayActive, screenReaderEnabled,
 			showSlider, onButtonStyle, offButtonStyle, sliderStyle, containerStyle } = this.props;
-		const { name, isInState, supportedMethods, methodRequested } = item;
+		const { name, isInState, supportedMethods, methodRequested, local } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
@@ -244,7 +236,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 			onPress={this.onTurnOn}>
 			<DimmerOnButton ref={'onButton'} name={deviceName} isInState={isInState} enabled={false}
 				style={[styles.turnOn]} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
-				intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn}/>
+				intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOn} local={local}/>
 		</HVSliderContainer>;
 
 		const offButton =
@@ -254,7 +246,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 			onPress={this.onTurnOff}>
 			<DimmerOffButton ref={'offButton'} name={deviceName} isInState={isInState} enabled={false}
 				style={styles.turnOff} iconStyle={styles.iconStyle} fontSize={Math.floor(tileWidth / 8)} methodRequested={methodRequested}
-				intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOff}/>
+				intl={intl} isGatewayActive={isGatewayActive} onPress={this.onTurnOff} local={local}/>
 		</HVSliderContainer>;
 
 		const slider = DIM ?
@@ -268,6 +260,7 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 					fontSize={8}
 					isGatewayActive={isGatewayActive}
 					methodRequested={methodRequested}
+					local={local}
 					isInState={isInState}
 					name={deviceName}
 					importantForAccessibility={'yes'}/>
@@ -349,9 +342,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 		onDimmerSlide: (id: number): any => (value: number): any => dispatch(setDimmerValue(id, value)),
 		deviceSetState: (id: number, command: number, value?: number) => {
 			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
 		},
 		showDimmerStep: (id: number) => {
 			dispatch(showDimmerStep(id));

@@ -30,7 +30,7 @@ import Slider from 'react-native-slider';
 const deviceHeight = Dimensions.get('window').height;
 
 import { setDimmerValue, saveDimmerInitialState } from '../../../Actions/Dimmer';
-import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import { deviceSetState } from '../../../Actions/Devices';
 import { FormattedMessage, Text, View } from '../../../../BaseComponents';
 import i18n from '../../../Translations/common';
 import {
@@ -45,7 +45,6 @@ type Props = {
 	device: Object,
 	locationData: Object,
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (number, number) => void,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 	onLearn: number => void,
@@ -116,12 +115,6 @@ class SliderDetails extends View {
 	}
 
 	onSlidingComplete(sliderValue: number) {
-		if (sliderValue > 0) {
-			this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
-		}
-		if (sliderValue === 0) {
-			this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
-		}
 		this.setState({
 			isControlling: false,
 		});
@@ -132,12 +125,10 @@ class SliderDetails extends View {
 
 	onTurnOn() {
 		this.props.deviceSetState(this.props.device.id, this.props.commandON);
-		this.props.requestDeviceAction(this.props.device.id, this.props.commandON);
 	}
 
 	onTurnOff() {
 		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
-		this.props.requestDeviceAction(this.props.device.id, this.props.commandOFF);
 	}
 
 
@@ -247,7 +238,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		onDimmerSlide: (id: number, value: number): any => dispatch(setDimmerValue(id, value)),
 		deviceSetState: (id: number, command: number, value: number): any => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number): any => dispatch(requestDeviceAction(id, command)),
 		saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: number): any => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
 	};
 }

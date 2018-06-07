@@ -59,6 +59,7 @@ type Props = {
 	importantForAccessibility?: string,
 	name?: string,
 	methodRequested: string,
+	local: boolean,
 };
 
 type State = {
@@ -113,7 +114,7 @@ class SliderScale extends View {
 	render(): Object {
 		const { minimumValue, maximumValue, scaleWidth } = this.state;
 		const { thumbWidth, thumbHeight, isGatewayActive, containerHeight, containerWidth, displayedValue,
-			style, value, importantForAccessibility, name = '', isInState, methodRequested } = this.props;
+			style, value, importantForAccessibility, name = '', isInState, methodRequested, local } = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
@@ -126,6 +127,7 @@ class SliderScale extends View {
 		let valueColor = !isGatewayActive ? '#a2a2a2' :
 			isInState === 'DIM' ? '#fff' : Theme.Core.brandSecondary;
 		let backgroundStyle = isGatewayActive && isInState === 'DIM' ? styles.enabled : styles.disabled;
+		let dotColor = local ? Theme.Core.brandPrimary : '#fff';
 
 		let bottomValue = (containerHeight / 2) - (thumbHeight * 2);
 
@@ -162,7 +164,7 @@ class SliderScale extends View {
 				</Text>
 				{
 					methodRequested === 'DIM' ?
-						<ButtonLoadingIndicator style={styles.dot} color={'#fff'}/>
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						: null
 				}
 			</View>

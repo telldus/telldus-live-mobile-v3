@@ -53,13 +53,15 @@ class ToggleButton extends View {
 	render(): Object {
 		const { intl, device, isGatewayActive, style, onButtonStyle, offButtonStyle } = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
-		const { id, isInState, methodRequested, name } = device;
+		const { id, isInState, methodRequested, name, local } = device;
 		const width = Theme.Core.buttonWidth;
 
 		const onButton = <OnButton id={id} name={name} isInState={isInState} enabled={!!TURNON}
-			style={[styles.turnOn, TURNON ? {width} : {width: width * 2}, onButtonStyle]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
+			style={[styles.turnOn, TURNON ? {width} : {width: width * 2}, onButtonStyle]}
+			methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive} local={local}/>;
 		const offButton = <OffButton id={id} name={name} isInState={isInState} enabled={!!TURNOFF}
-			style={[styles.turnOff, TURNOFF ? {width} : {width: width * 2}, offButtonStyle]} methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive}/>;
+			style={[styles.turnOff, TURNOFF ? {width} : {width: width * 2}, offButtonStyle]}
+			methodRequested={methodRequested} intl={intl} isGatewayActive={isGatewayActive} local={local}/>;
 
 		return (
 			<View style={style}>

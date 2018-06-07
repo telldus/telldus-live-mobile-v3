@@ -61,20 +61,20 @@ class NavigationalButton extends View {
 	render(): Object {
 
 		let { device, isGatewayActive, intl, style, upButtonStyle, downButtonStyle, stopButtonStyle, showStopButton } = this.props;
-		const { supportedMethods, methodRequested, isInState, id, name } = device;
+		const { supportedMethods, methodRequested, isInState, id, name, local } = device;
 		const { UP, DOWN, STOP } = supportedMethods;
 
 		return (
 			<View style={style}>
 				<UpButton supportedMethod={UP} methodRequested={methodRequested} intl={intl}
 					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={[styles.navigationButton, upButtonStyle]} name={name}/>
+					id={id} style={[styles.navigationButton, upButtonStyle]} name={name} local={local}/>
 				<DownButton supportedMethod={DOWN} methodRequested={methodRequested} intl={intl}
 					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={[styles.navigationButton, downButtonStyle]} name={name}/>
+					id={id} style={[styles.navigationButton, downButtonStyle]} name={name} local={local}/>
 				{!!showStopButton && (<StopButton supportedMethod={STOP} methodRequested={methodRequested} intl={intl}
 					iconSize={20} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={[styles.navigationButton, stopButtonStyle]} name={name}/>
+					id={id} style={[styles.navigationButton, stopButtonStyle]} name={name} local={local}/>
 				)}
 			</View>
 		);

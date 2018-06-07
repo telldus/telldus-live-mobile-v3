@@ -60,18 +60,18 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 	render(): Object {
 		const { item, intl, isGatewayActive, containerStyle, upButtonStyle,
 			downButtonStyle, stopButtonStyle, showStopButton } = this.props;
-		const { name, supportedMethods, isInState } = item;
+		const { name, supportedMethods, isInState, local } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
 
 		const upButton = UP ? <UpButton isEnabled={true} style={[styles.navigationButton, {borderLeftWidth: 0}, upButtonStyle]}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
-			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id} name={name}/> : null;
+			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id} name={name} local={local}/> : null;
 		const downButton = DOWN ? <DownButton isEnabled={true} style={[styles.navigationButton, downButtonStyle]}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
-			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id} name={name}/> : null;
+			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id} name={name} local={local}/> : null;
 		const stopButton = STOP ? <StopButton isEnabled={true} style={[styles.navigationButton, stopButtonStyle]}
 			methodRequested={item.methodRequested} iconSize={16} isGatewayActive={isGatewayActive}
-			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id} name={name}/> : null;
+			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id} name={name} local={local}/> : null;
 
 		return (
 			<View style={containerStyle}>

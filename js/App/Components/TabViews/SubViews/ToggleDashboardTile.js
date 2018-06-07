@@ -48,15 +48,15 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 
 	render(): Object {
 		const { item, tileWidth, intl, isGatewayActive, containerStyle, onButtonStyle, offButtonStyle } = this.props;
-		const { id, name, isInState, supportedMethods, methodRequested } = item;
+		const { id, name, isInState, supportedMethods, methodRequested, local } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
 		const onButton = <OnButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
 			enabled={!!TURNON} style={[styles.turnOnButtonContainer, onButtonStyle]} iconStyle={styles.iconStyle}
-			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl}/>;
+			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl} local={local}/>;
 		const offButton = <OffButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
 			enabled={!!TURNOFF} style={[styles.turnOffButtonContainer, offButtonStyle]} iconStyle={styles.iconStyle}
-			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl}/>;
+			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl} local={local}/>;
 
 		let style = { ...this.props.style };
 		style.width = tileWidth;

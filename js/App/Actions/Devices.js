@@ -31,7 +31,7 @@ import { LocalApi, hasTokenExpired, refreshLocalControlToken } from '../Lib';
 import { actions } from 'live-shared-data';
 const { Devices, App } = actions;
 const { deviceSetState: deviceSetStateShared, ...otherActions } = Devices;
-const { deviceSetStateSuccess, deviceResetState } = otherActions;
+const { deviceSetStateSuccess, deviceResetState, requestDeviceAction } = otherActions;
 const { showToast } = App;
 
 let setStateTimeout = {};
@@ -46,6 +46,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 		const tokenExpired = hasTokenExpired(ttl);
 
 		if (address && token && !tokenExpired) {
+			dispatch(requestDeviceAction(deviceId, state, true));
 			clearTimers(clientDeviceId);
 			const url = format({
 				pathname: '/device/command',
@@ -97,6 +98,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				}
 				throw response;
 			}).catch((): any => {
+				dispatch(requestDeviceAction(deviceId, state, false));
 				return dispatch(deviceSetStateShared(deviceId, state, stateValue));
 			});
 		} else if (ttl && tokenExpired) {
@@ -105,6 +107,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 			// device has to be controlled using LiveApi(the block below).
 			dispatch(refreshLocalControlToken(clientId));
 		}
+		dispatch(requestDeviceAction(deviceId, state, false));
 		return dispatch(deviceSetStateShared(deviceId, state, stateValue));
 	};
 }

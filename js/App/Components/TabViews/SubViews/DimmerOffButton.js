@@ -39,6 +39,7 @@ type Props = {
 	onPress: () => void,
 	intl: Object,
 	iconStyle: Object | number | Array<any>,
+	local: boolean,
 };
 
 type State = {
@@ -74,12 +75,13 @@ class DimmerOffButton extends View {
 	}
 
 	render(): Object {
-		let { isInState, style, methodRequested, name, isGatewayActive, iconStyle } = this.props;
+		let { isInState, style, methodRequested, name, isGatewayActive, iconStyle, local } = this.props;
 		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) : (isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
+		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<View
@@ -89,7 +91,7 @@ class DimmerOffButton extends View {
 				<IconTelldus icon="off" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
 					methodRequested === 'TURNOFF' ?
-						<ButtonLoadingIndicator style={styles.dot} />
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						: null
 				}
 			</View>

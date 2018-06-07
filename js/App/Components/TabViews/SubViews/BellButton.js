@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 
 import { View, Icon } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
@@ -34,13 +34,13 @@ import Theme from '../../../Theme';
 type Props = {
 	device: Object,
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
 	style: Object,
 	command: number,
 	intl: Object,
 	isGatewayActive: boolean,
 	appLayout: Object,
 	bellButtonStyle: number | Object,
+	local: boolean,
 };
 
 class BellButton extends View {
@@ -57,14 +57,14 @@ class BellButton extends View {
 
 	onBell() {
 		this.props.deviceSetState(this.props.device.id, this.props.command);
-		this.props.requestDeviceAction(this.props.device.id, this.props.command);
 	}
 
 	render(): Object {
 		let { device, isGatewayActive, bellButtonStyle } = this.props;
-		let { methodRequested, name } = device;
+		let { methodRequested, name, local } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
 		let iconColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
+		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<TouchableOpacity onPress={this.onBell} style={[styles.bell, this.props.style, bellButtonStyle]} accessibilityLabel={accessibilityLabel}>
@@ -72,7 +72,7 @@ class BellButton extends View {
 
 				{
 					methodRequested === 'BELL' ?
-						<ButtonLoadingIndicator style={styles.dot} />
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
 				}
@@ -102,9 +102,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) =>{
 			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
 		},
 	};
 }
