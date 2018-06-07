@@ -139,6 +139,6 @@ export const getUserProfile = createSelector(
 		firstname: '',
 		lastname: '',
 		email: '',
-		eula: 0,
+		eula: 1,
 	},
 );
