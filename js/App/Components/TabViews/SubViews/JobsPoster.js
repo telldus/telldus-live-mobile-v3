@@ -611,6 +611,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				left: 0,
 				right: 0,
 				bottom: 0,
+				borderWidth: 0,
 			},
 			daysContainer: {
 				borderWidth: 0,
