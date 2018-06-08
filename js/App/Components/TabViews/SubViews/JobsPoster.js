@@ -160,7 +160,7 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { appLayout } = this.props;
 		const { width } = appLayout;
 		const percentMoved = dx * (100 / width);
-		return (this.animationRange * (percentMoved / 100)) * 1.5;
+		return (this.animationRange * (percentMoved / 100)) * 4.0;
 	}
 
 	animate(config: Object) {
@@ -175,12 +175,12 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	onPanResponderReleaseHandler(event: Object, gestureState: Object) {
 		let { todayIndex } = this.state;
-		// On dragging left more than half, scroll to tomorrow.
-		if (this.finalValue && this.finalValue <= 0.5 && todayIndex <= 6) {
+		// On dragging left more than 40%, scroll to tomorrow.
+		if (this.finalValue !== null && this.finalValue <= 0.4 && todayIndex <= 6) {
 			this._scrollToTomorrow();
 
-			// On dragging right more than half, scroll to yesterday.
-		} else if (this.finalValue && this.finalValue >= 1.5 && todayIndex !== 0) {
+			// On dragging right more than 40%, scroll to yesterday.
+		} else if (this.finalValue !== null && this.finalValue >= 1.4 && todayIndex !== 0) {
 			this._scrollToYesterday();
 
 			// Animate back to previous state.
