@@ -58,8 +58,8 @@ constructor(props: Props) {
 render(): Object {
 	let { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
 	let { online, websocketOnline, textStyle, appLayout, statusInfoStyle, localKey = {}} = this.props;
-	let { address, key } = localKey;
-	let supportLocal = address && key;
+	let { address, key, ttl } = localKey;
+	let supportLocal = address && key && ttl;
 	let {
 		statusText,
 		statusInfo,

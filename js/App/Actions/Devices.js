@@ -45,7 +45,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 		const { address, key: token, ttl } = localKey;
 		const tokenExpired = hasTokenExpired(ttl);
 
-		if (address && token && !tokenExpired) {
+		if (address && token && ttl && !tokenExpired) {
 			dispatch(requestDeviceAction(deviceId, state, true));
 			clearTimers(clientDeviceId);
 			const url = format({
