@@ -93,6 +93,9 @@ function refreshLocalControlToken(id: number): ThunkAction {
 }
 
 function hasTokenExpired(ttl: number): boolean {
+	if (!ttl) {
+		return true;
+	}
 	const now = moment();
 	const expDate = moment.unix(ttl);
 	const hasExpired = now.isSameOrAfter(expDate);
