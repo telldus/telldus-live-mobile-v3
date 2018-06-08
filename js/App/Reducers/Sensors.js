@@ -30,7 +30,10 @@ import { combineReducers } from 'redux';
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let modifiedData = paramOne.map((item: Object, index: number): Object => {
 		let gateway = gateways[item.clientId];
-		return { ...item, isOnline: gateway.online };
+		if (gateway) {
+			return { ...item, isOnline: gateway.online };
+		}
+		return { ...item, isOnline: false };
 	});
 	let result = groupBy(modifiedData, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];

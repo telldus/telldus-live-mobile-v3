@@ -26,7 +26,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 		let device = devices.byId[deviceId];
 		let { clientId } = device;
 		let gateway = gateways.byId[clientId];
-		let data = { ...device, isOnline: gateway.online };
+		let data = gateway ? { ...device, isOnline: gateway.online } : { ...device, isOnline: false };
 
 		return {
 			objectType: 'device',
@@ -39,7 +39,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 		let sensor = sensors.byId[sensorId];
 		let { clientId } = sensor;
 		let gateway = gateways.byId[clientId];
-		let data = { ...sensor, isOnline: gateway.online };
+		let data = gateway ? { ...sensor, isOnline: gateway.online } : { ...sensor, isOnline: false };
 
 		return {
 			objectType: 'sensor',
