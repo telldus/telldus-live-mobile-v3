@@ -25,6 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
+import { hasTokenExpired } from '../../../../Lib';
 
 import i18n from '../../../../Translations/common';
 
@@ -59,7 +60,8 @@ render(): Object {
 	let { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
 	let { online, websocketOnline, textStyle, appLayout, statusInfoStyle, localKey = {}} = this.props;
 	let { address, key, ttl } = localKey;
-	let supportLocal = address && key && ttl;
+	let tokenExpired = hasTokenExpired(ttl);
+	let supportLocal = address && key && ttl && !tokenExpired;
 	let {
 		statusText,
 		statusInfo,
