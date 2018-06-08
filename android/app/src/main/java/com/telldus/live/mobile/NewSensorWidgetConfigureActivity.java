@@ -8,11 +8,15 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -31,11 +35,11 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,6 +104,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private String grant_Type;
     private String user_name;
     private String password;
+    Typeface iconFont;
+
 
 
     @Override
@@ -223,11 +229,12 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         // activity stuffs
         setContentView(R.layout.activity_sensor_widget_configure);
 
-        Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+        iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
         imgSensorType = (TextView) findViewById(R.id.imgSensorType);
         tvIcon1.setTypeface(iconFont);
-        imgSensorType.setTypeface(iconFont);
+
+
 
 
         widgetManager = AppWidgetManager.getInstance(this);
@@ -246,27 +253,38 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         sensorHint = (TextView) findViewById(R.id.txtSensorHint);
         sensorDataName = (TextView) findViewById(R.id.txtSensorDataName);
         sensorDataHint = (TextView) findViewById(R.id.txtSensorDataHint);
-        imgSensorType = (TextView) findViewById(R.id.imgSensorType);
+
         btAdd = (Button) findViewById(R.id.btAdd);
         button_cancel=(Button)findViewById(R.id.button_cancel);
         switch_background=(Switch)findViewById(R.id.switch_background);
         chooseSettingSensor=(TextView)findViewById(R.id.chooseSettingSensor);
         testText=(TextView)findViewById(R.id.testTextSensor);
-        mSensorBack=(RelativeLayout)findViewById(R.id.sensorBack);
         settingText = (TextView)findViewById(R.id.settingText);
         valueText = (TextView)findViewById(R.id.valueText);
         sensorText = (TextView)findViewById(R.id.sensorText);
 
-        switch_background.getThumbDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-       switch_background.getTrackDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
 
+
+        mSensorBack=(RelativeLayout)findViewById(R.id.sensorBack);
+        switch_background.getThumbDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
 
         Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
         Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
-          testText.setTypeface(titleFont);
-          chooseSettingSensor.setTypeface(titleFont);
+        testText.setTypeface(titleFont);
+        chooseSettingSensor.setTypeface(titleFont);
+        sensorName.setTypeface(subtitleFont);
+        sensorDataName.setTypeface(subtitleFont);
+        sensorHint.setTypeface(subtitleFont);
+        sensorDataHint.setTypeface(subtitleFont);
+        settingText.setTypeface(subtitleFont);
+        valueText.setTypeface(subtitleFont);
+        sensorText.setTypeface(subtitleFont);
+        btAdd.setTypeface(subtitleFont);
+        button_cancel.setTypeface(subtitleFont);
+        switch_background.setTypeface(subtitleFont);
 
-
+        switch_background.getThumbDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+        switch_background.getTrackDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
 
         mSensorBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,7 +292,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 finish();
             }
         });
-
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -292,12 +309,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     transparent="true";
                     switch_background.getThumbDrawable().setColorFilter(isChecked ? getResources().getColor(R.color.lightblue) : Color.WHITE, PorterDuff.Mode.MULTIPLY);
                     switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
-                  }else
+                }else
                 {
                     transparent="false";
                     switch_background.getThumbDrawable().setColorFilter(isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
                     switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.DKGRAY : Color.WHITE, PorterDuff.Mode.MULTIPLY);
-
                 }
             }
         });
@@ -334,7 +350,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         sensorDataName.getText().toString(),id,senValue,lastUp,transparent);
                 database.addSensor(mSensorInfo);
                 views.setTextViewText(R.id.txtSensorType, sensorName.getText());
-                views.setImageViewResource(R.id.iconSensor, R.drawable.sensor);
+              //  views.setImageViewResource(R.id.iconSensor, R.drawable.sensor);
                 //  widgetManager.updateAppWidget(mAppWidgetId, views);
                 NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
@@ -378,8 +394,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 //refersh datatype
-                                sensorDataName.setText("Select data item");
+                                sensorDataName.setText("Select value");
                                 sensorDataHint.setText("Tap to change value to display");
+
+                                imgSensorType.setText("");
+                                imgSensorType.setTypeface(iconFont);
+                                imgSensorType.setBackgroundResource(R.drawable.penscg);
+
 
                                 sensorName.setText(sensorNameList[which]);
 
@@ -498,7 +519,53 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 sensorDataName.setText(sensorDataList[i]);
 
                                 try {
+                                    String iconName="";
                                    senValue = searchObject.getString(String.valueOf(sensorDataList[i]));
+
+                                    if(sensorDataList[i].equals("wgust")||sensorDataList[i].equals("wavg")||sensorDataList[i].equals("wdir"))
+                                    {
+
+                                        iconName = "wind";
+
+
+                                    }else if(sensorDataList[i].equals("watt"))
+                                    {
+
+                                        iconName = "watt";
+
+                                    } else if (sensorDataList[i].equals("temp"))
+                                    {
+
+                                        iconName = "temperature";
+
+                                    }else if(sensorDataList[i].equals("humidity"))
+                                    {
+
+                                        iconName = "humidity";
+
+
+                                    }else if(sensorDataList[i].equals("lum"))
+                                    {
+
+                                        iconName = "luminance";
+
+                                    }else if(sensorDataList[i].equals("rrate")|| sensorDataList[i].equals("rtot"))
+                                    {
+
+                                        iconName = "rain";
+
+                                    }else if(sensorDataList[i].equals("uv"))
+                                    {
+
+                                        iconName = "uv";
+
+                                    }
+                                    imgSensorType.setText(iconName);
+                                    imgSensorType.setTextSize(50f);
+                                    imgSensorType.setBackground(null);
+                                    imgSensorType.setTypeface(iconFont);
+                                   // imgSensorType.setImageBitmap(buildUpdate(iconName,getApplicationContext()));
+
 
                                 }catch (Exception ex)
                                 {
@@ -511,6 +578,27 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 ad1=builder.show();
             }
         });
+    }
+
+
+    public static Bitmap buildUpdate(String time, Context context)
+    {
+        Bitmap myBitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_8888);
+        Canvas myCanvas = new Canvas(myBitmap);
+        Paint paint = new Paint();
+
+        // Typeface iconFont = Typeface.createFromAsset(context.getAssets(),"fonts/Comfortaa_Thin.ttf");
+        Typeface iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
+
+        paint.setAntiAlias(true);
+        paint.setSubpixelText(true);
+        paint.setTypeface(iconFont);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(65);
+        paint.setTextAlign(Paint.Align.CENTER);
+        myCanvas.drawText(time, 80, 60, paint);
+        return myBitmap;
     }
     void createSensorApi() {
         accessToken=prefManager.getAccess();
