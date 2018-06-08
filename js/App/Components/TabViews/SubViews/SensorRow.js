@@ -501,7 +501,9 @@ class SensorRow extends View<Props, State> {
 									scaleX: interpolatedScale,
 								}],
 							}]}
-							valueCoverStyle={styles.sensorValueCover}/>
+							valueCoverStyle={styles.sensorValueCover}
+							dotCoverStyle={styles.dotCoverStyle}
+							dotStyle={styles.dotStyle}/>
 					</View>
 				</ListItem>
 			</SwipeRow>
@@ -572,6 +574,8 @@ class SensorRow extends View<Props, State> {
 		let backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const widthValueBlock = (buttonWidth * 2) + 6;
+		const dotSize = widthValueBlock * 0.05;
 
 		return {
 			container: {
@@ -654,11 +658,25 @@ class SensorRow extends View<Props, State> {
 				flexDirection: 'row',
 			},
 			sensorValueCover: {
-				width: (buttonWidth * 2) + 6,
+				width: widthValueBlock,
 				backgroundColor: backgroundColor,
 				height: rowHeight,
 				alignItems: 'flex-start',
 				justifyContent: 'center',
+			},
+			dotCoverStyle: {
+				width: '100%',
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				position: 'absolute',
+				bottom: 2 + (dotSize * 0.2),
+			},
+			dotStyle: {
+				width: dotSize,
+				height: dotSize,
+				borderRadius: dotSize / 2,
+				marginLeft: 2 + (dotSize * 0.2),
 			},
 		};
 	}

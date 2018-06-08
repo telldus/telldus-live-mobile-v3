@@ -30,10 +30,13 @@ import {
 } from '../../../../../BaseComponents';
 import { changeDefaultDisplayType } from '../../../../Actions';
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+import Theme from '../../../../Theme';
 
 type Props = {
     style: Array<any> | number | Object,
-    valueCoverStyle: Array<any> | number | Object,
+	valueCoverStyle: Array<any> | number | Object,
+	dotStyle: Object,
+	dotCoverStyle: Array<any> | number | Object,
     sensors: Object,
     defaultType?: string,
     onLayout: Function,
@@ -89,10 +92,10 @@ getDefaultType(sensors: Object): string {
 }
 
 render(): Object {
-	const { style, sensors, valueCoverStyle } = this.props;
-	let defaultSensor = null, totalTypes = this.getSupportedDisplayTypes(sensors);
+	const { style, sensors, valueCoverStyle, dotCoverStyle, dotStyle } = this.props;
+	let defaultType = null, defaultSensor = null, totalTypes = this.getSupportedDisplayTypes(sensors);
 	if (totalTypes.length > 0) {
-		const defaultType = this.getDefaultType(sensors);
+		defaultType = this.getDefaultType(sensors);
 		defaultSensor = sensors[defaultType];
 	}
 
@@ -108,6 +111,27 @@ render(): Object {
 				style={valueCoverStyle}
 				importantForAccessibility="no-hide-descendants">
 				{defaultSensor}
+				{totalTypes.length > 1 && (
+					<View style={dotCoverStyle}>
+						{
+							totalTypes.map((key: string, index: number): Object => {
+								const { backgroundColor: BG = '#fff', marginLeft: PL = 0, ...otherStyles } = dotStyle;
+								let backgroundColor = BG, marginLeft = PL;
+								if (key === defaultType) {
+									backgroundColor = Theme.Core.brandSecondary;
+								}
+								if (index === 0) {
+									marginLeft = 0;
+								}
+								return <View style={[{
+									...otherStyles,
+									backgroundColor,
+									marginLeft,
+								}]} key={key}/>;
+							})
+						}
+					</View>
+				)}
 			</View>
 		</AnimatedTouchable>
 	);
