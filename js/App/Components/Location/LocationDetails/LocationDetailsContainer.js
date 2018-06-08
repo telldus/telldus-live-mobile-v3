@@ -157,8 +157,9 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		let { location } = screenProps.rootNavigator.state.params;
 		this.closeModal();
 		actions.removeGateway(location.id).then((res: Object) => {
-			actions.getAppData();
-			actions.getGateways();
+			actions.getGateways().then(() => {
+				actions.getAppData();
+			});
 			screenProps.rootNavigator.goBack();
 		}).catch(() => {
 			actions.showModal(this.onRemoveLocationError);
