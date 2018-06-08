@@ -26,6 +26,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
+import DeviceInfo from 'react-native-device-info';
 
 import { View, Header, SafeAreaView, IconTelldus } from '../../../BaseComponents';
 
@@ -62,6 +63,9 @@ const TabNavigatorConfig = {
 		activeTintColor: '#e26901',
 		style: {
 			...ifIphoneX({height: 20}),
+		},
+		labelStyle: {
+			fontSize: DeviceInfo.isTablet() ? 18 : 12,
 		},
 	},
 };
