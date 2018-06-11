@@ -354,7 +354,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
             public int checkedItem;
             AlertDialog ad;
             public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(NewAppWidgetConfigureActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(NewAppWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                 builder.setTitle(R.string.pick_device)
                         .setSingleChoiceItems(deviceNameList, checkedItem, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

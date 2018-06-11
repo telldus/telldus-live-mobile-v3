@@ -4,7 +4,7 @@
     android:initialKeyguardLayout="@layout/new_app_widget"
     android:initialLayout="@layout/new_app_widget"
     android:minHeight="40dp"
-    android:minWidth="110dp"
+    android:minWidth="210dp"
     android:previewImage="@drawable/deviceprev1"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"

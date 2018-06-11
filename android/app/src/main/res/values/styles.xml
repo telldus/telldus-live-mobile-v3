@@ -12,5 +12,8 @@
 			<item name="colorPrimaryDark">@color/blue</item>
 			<item name="colorAccent">@color/colorAccent</item>
 	</style>
+	<style name="MaterialThemeDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/orange</item>
+    </style>
 
 </resources>

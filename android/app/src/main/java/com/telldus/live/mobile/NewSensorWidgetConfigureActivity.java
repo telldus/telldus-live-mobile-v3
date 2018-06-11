@@ -50,6 +50,7 @@ import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
+import com.telldus.live.mobile.Utility.Sensor;
 
 /**
  * The configuration screen for the {@link NewSensorWidget NewSensorWidget} AppWidget.
@@ -347,7 +348,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 }
 
                 SensorInfo mSensorInfo=new SensorInfo(mAppWidgetId,sensorName.getText().toString(),
-                        sensorDataName.getText().toString(),id,senValue,lastUp,transparent);
+                        Sensor.getValueLang(sensorDataName.getText().toString()),id,senValue,lastUp,transparent);
                 database.addSensor(mSensorInfo);
                 views.setTextViewText(R.id.txtSensorType, sensorName.getText());
               //  views.setImageViewResource(R.id.iconSensor, R.drawable.sensor);
@@ -387,7 +388,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                 builder.setTitle(R.string.pick_sensor)
                         .setSingleChoiceItems(sensorNameList, checkedItem, new DialogInterface.OnClickListener() {
                             @Override
@@ -448,47 +449,57 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                             Log.v("Watt",watt);
 
                                             if(watt!=null&!watt.equals(""))
-                                            {
-                                                sensorValue.add("watt");
-                                            }
+                                             {
+                                                 if(!sensorValue.contains("Watt"))
+                                                 sensorValue.add(Sensor.getStringValueFromLang("watt"));
+                                             }
 
-                                            if(temp!=null && !temp.equals(""))
-                                            {
-                                                sensorValue.add("temp");
-                                            }
-                                            if(hum!=null && !hum.equals(""))
-                                            {
-                                                sensorValue.add("humidity");
+                                             if(temp!=null && !temp.equals(""))
+                                             {
+                                                 if(!sensorValue.contains("Temperature"))
+                                                 sensorValue.add(Sensor.getStringValueFromLang("temp"));
+                                             }
+                                             if(hum!=null && !hum.equals(""))
+                                             {
+                                                 if(!sensorValue.contains("Humidity"))
+                                                 sensorValue.add(Sensor.getStringValueFromLang("humidity"));
 
-                                            }
-                                            if(luminance!=null && !luminance.equals(""))
-                                            {
-                                                sensorValue.add("lum");
-                                            }
-                                            if(uv!=null&& !uv.equals(""))
-                                            {
-                                                sensorValue.add("uv");
-                                            }
-                                            if(rainRate!=null&& !rainRate.equals(""))
-                                            {
-                                                sensorValue.add("rrate");
-                                            }
-                                            if(rainTotal!=null&& !rainTotal.equals(""))
-                                            {
-                                                sensorValue.add("rtot");
-                                            }
-                                            if(windDirection!=null&& !windDirection.equals(""))
-                                            {
-                                                sensorValue.add("wdir");
-                                            }
-                                            if(windAvg!=null&& !windAvg.equals(""))
-                                            {
-                                                sensorValue.add("wavg");
-                                            }
-                                            if(windGust!=null&& !windGust.equals(""))
-                                            {
-                                                sensorValue.add("wgust");
-                                            }
+                                             }
+                                             if(luminance!=null && !luminance.equals(""))
+                                             {
+                                                 if(!sensorValue.contains("Luminance"))
+                                                     sensorValue.add(Sensor.getStringValueFromLang("lum"));
+                                             }
+                                             if(uv!=null&& !uv.equals(""))
+                                             {
+                                                 if(!sensorValue.contains("Uv"))
+                                                     sensorValue.add(Sensor.getStringValueFromLang("uv"));
+                                             }
+                                             if(rainRate!=null&& !rainRate.equals(""))
+                                             {
+                                                 if(!sensorValue.contains("Rain_rate"))
+                                                     sensorValue.add(Sensor.getStringValueFromLang("rrate"));
+                                             }
+                                             if(rainTotal!=null&& !rainTotal.equals(""))
+                                             {
+                                                 if(!sensorValue.contains("Rain_total"))
+                                                     sensorValue.add(Sensor.getStringValueFromLang("rtot"));
+                                             }
+                                             if(windDirection!=null&& !windDirection.equals(""))
+                                             {
+                                                 if(!sensorValue.contains("Wind_direction"))
+                                                     sensorValue.add(Sensor.getStringValueFromLang("wdir"));
+                                             }
+                                             if(windAvg!=null&& !windAvg.equals(""))
+                                             {
+                                                 if(!sensorValue.contains("Wind_average"))
+                                                     sensorValue.add(Sensor.getStringValueFromLang("wavg"));
+                                             }
+                                             if(windGust!=null&& !windGust.equals(""))
+                                             {
+                                                 if(!sensorValue.contains("Wgust"))
+                                                     sensorValue.add(Sensor.getStringValueFromLang("wgust"));
+                                             }
 
                                             sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
                                         }
@@ -511,7 +522,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                 builder.setTitle(R.string.pick_sensor_data)
                         .setSingleChoiceItems(sensorDataList, checkedItem, new DialogInterface.OnClickListener() {
                             @Override
@@ -519,51 +530,56 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 sensorDataName.setText(sensorDataList[i]);
 
                                 try {
-                                    String iconName="";
-                                   senValue = searchObject.getString(String.valueOf(sensorDataList[i]));
+                                  String iconName="";
+                                  String sensorIcon=sensorDataList[i].toString();
+                                  String str=Sensor.getValueLang(sensorIcon);
+                                  Log.i("sensorIcon",Sensor.getValueLang(sensorIcon));
 
-                                    if(sensorDataList[i].equals("wgust")||sensorDataList[i].equals("wavg")||sensorDataList[i].equals("wdir"))
-                                    {
-
-                                        iconName = "wind";
-
-
-                                    }else if(sensorDataList[i].equals("watt"))
-                                    {
-
-                                        iconName = "watt";
-
-                                    } else if (sensorDataList[i].equals("temp"))
-                                    {
-
-                                        iconName = "temperature";
-
-                                    }else if(sensorDataList[i].equals("humidity"))
-                                    {
-
-                                        iconName = "humidity";
+                                  senValue = searchObject.getString(str);
 
 
-                                    }else if(sensorDataList[i].equals("lum"))
-                                    {
+                                  if(str.equals("wgust")||str.equals("wavg")||str.equals("wdir"))
+                                  {
 
-                                        iconName = "luminance";
+                                      iconName = "wind";
 
-                                    }else if(sensorDataList[i].equals("rrate")|| sensorDataList[i].equals("rtot"))
-                                    {
 
-                                        iconName = "rain";
+                                  }else if(str.equals("watt"))
+                                  {
 
-                                    }else if(sensorDataList[i].equals("uv"))
-                                    {
+                                      iconName = "watt";
 
-                                        iconName = "uv";
+                                  } else if (str.equals("temp"))
+                                  {
 
-                                    }
-                                    imgSensorType.setText(iconName);
-                                    imgSensorType.setTextSize(50f);
-                                    imgSensorType.setBackground(null);
-                                    imgSensorType.setTypeface(iconFont);
+                                      iconName = "temperature";
+
+                                  }else if(str.equals("humidity"))
+                                  {
+
+                                      iconName = "humidity";
+
+
+                                  }else if(str.equals("lum"))
+                                  {
+
+                                      iconName = "luminance";
+
+                                  }else if(str.equals("rrate")|| str.equals("rtot"))
+                                  {
+
+                                      iconName = "rain";
+
+                                  }else if(str.equals("uv"))
+                                  {
+
+                                      iconName = "uv";
+
+                                  }
+                                  imgSensorType.setText(iconName);
+                                  imgSensorType.setTextSize(50f);
+                                  imgSensorType.setBackground(null);
+                                  imgSensorType.setTypeface(iconFont);
                                    // imgSensorType.setImageBitmap(buildUpdate(iconName,getApplicationContext()));
 
 

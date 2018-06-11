@@ -11,6 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -29,17 +34,17 @@ import com.telldus.live.mobile.Model.DeviceInfo;
  */
 public class NewAppWidget extends AppWidgetProvider {
 
-    private static final String ACTION_ON = "ACTION_ON";
+  private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF="ACTION_OFF";
     private static final String ACTION_BELL="ACTION_BELL";
     private static final String ACTION_UP = "ACTION_UP";
     private static final String ACTION_DOWN = "ACTION_DOWN";
     private static final String ACTION_STOP = "ACTION_STOP";
-    private static final String ACTION_TRIM = "ACTION_TRIM";
-    private static final String ACTION_DIMMERONE = "ACTION_DIMMERONE";
-    private static final String ACTION_DIMMERTWO = "ACTION_DIMMERTWO";
-    private static final String ACTION_DIMMERTHREE = "ACTION_DIMMERTHREE";
-    private static final String ACTION_DIMMERFOUR = "ACTION_DIMMERFOUR";
+    private static final String DIMMER_OFF = "ACTION_TRIM";
+    private static final String DIMMER_ON = "ACTION_DIMMERONE";
+    private static final String DIMMER_25 = "ACTION_DIMMERTWO";
+    private static final String DIMMER_50 = "ACTION_DIMMERTHREE";
+    private static final String DIMMER_75 = "ACTION_DIMMERFOUR";
 
     private PendingIntent pendingIntent;
 
@@ -96,19 +101,19 @@ public class NewAppWidget extends AppWidgetProvider {
             if (action.equals("16"))
             {
 
-                views.setViewVisibility(R.id.seekbarlayout, View.VISIBLE);
-                views.setViewVisibility(R.id.uibulb1, View.VISIBLE);
-                views.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
-                views.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
-                views.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
-                views.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+              views.setViewVisibility(R.id.seekbarlayout, View.VISIBLE);
 
-                views.setOnClickPendingIntent(R.id.uibulb1,getPendingBELL(context,ACTION_TRIM,appWidgetId));
-                views.setOnClickPendingIntent(R.id.emptybulb1,getPendingBELL(context,ACTION_DIMMERONE,appWidgetId));
-                views.setOnClickPendingIntent(R.id.emptybulb2,getPendingBELL(context,ACTION_DIMMERTWO,appWidgetId));
-                views.setOnClickPendingIntent(R.id.emptybulb3,getPendingBELL(context,ACTION_DIMMERTHREE,appWidgetId));
-                views.setOnClickPendingIntent(R.id.emptybulb4,getPendingBELL(context,ACTION_DIMMERFOUR,appWidgetId));
+              views.setImageViewBitmap(R.id.dimmerOn, buildUpdate("ondark", context,"#E26901",70,70));
+              views.setImageViewBitmap(R.id.dimmerOff, buildUpdate("offdark", context,"#1A365D",70,80));
+              views.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
+              views.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
+              views.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
 
+              views.setOnClickPendingIntent(R.id.dimmerOff,getPendingBELL(context,DIMMER_OFF,appWidgetId));
+              views.setOnClickPendingIntent(R.id.dimmerOn,getPendingBELL(context,DIMMER_ON,appWidgetId));
+              views.setOnClickPendingIntent(R.id.dimmer25,getPendingBELL(context,DIMMER_25,appWidgetId));
+              views.setOnClickPendingIntent(R.id.dimmer50,getPendingBELL(context,DIMMER_50,appWidgetId));
+              views.setOnClickPendingIntent(R.id.dimmer75,getPendingBELL(context,DIMMER_75,appWidgetId));
 //                views.setViewVisibility(R.id.uibtns, View.VISIBLE);
 //                Toast.makeText(context,"seekbar",Toast.LENGTH_LONG).show();
 //                views.setViewVisibility(R.id.btna, View.VISIBLE);
@@ -189,223 +194,318 @@ public class NewAppWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
 
 
-        if (ACTION_ON.equals(intent.getAction())) {
-            String accessToken="";
-            String expiresIn;
-            String tokenType;
-            String scope;
-            String refreshToken;
+          if (ACTION_ON.equals(intent.getAction())) {
+              String accessToken="";
+              String expiresIn;
+              String tokenType;
+              String scope;
+              String refreshToken;
 
-            Bundle extras=intent.getExtras();
-            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-            DeviceInfo widgetID=db.getSinlgeDeviceID(wigetID);
+              Bundle extras=intent.getExtras();
+              int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+              DeviceInfo widgetID=db.getSinlgeDeviceID(wigetID);
 
-            String state=widgetID.getState();
-            if(state.equals("1"))
-            {
-                Toast.makeText(context,"Already Turned on",Toast.LENGTH_LONG).show();
-            }else
-            {
-               createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On");
-            }
+              String state=widgetID.getState();
+              if(state.equals("1"))
+              {
+                  Toast.makeText(context,"Already Turned on",Toast.LENGTH_LONG).show();
+              }else
+              {
+                 createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On");
+              }
 
-        }
-        if(ACTION_OFF.equals(intent.getAction()))
-        {
-            // DeviceInfo widgetID=db.findUser(appWidgetId);
-
-
-            Bundle extras=intent.getExtras();
-            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
-
-            String state=id.getState();
-            if(state.equals("2"))
-            {
-                Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
-            }else
-            {
-                createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off");
-            }
-        }
-        if(ACTION_BELL.equals(intent.getAction()))
-        {
-            Log.v("ACTION_BELL","AlarmService");
-            Bundle extras=intent.getExtras();
-            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
-            createDeviceApi(context,id.getDeviceID(),4,wigetID,db,"Bell");
-
-        }
-        if (ACTION_UP.equals(intent.getAction()))
-        {
-            //Toast.makeText(context, "Clicked Up", Toast.LENGTH_LONG).show();
-
-            Bundle extras=intent.getExtras();
-            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
-            createDeviceApi(context,id.getDeviceID(),128,wigetID,db,"UDS");
-        }
-        if (ACTION_DOWN.equals(intent.getAction()))
-        {
-            //Toast.makeText(context, "Clicked Down", Toast.LENGTH_LONG).show();
-            Bundle extras=intent.getExtras();
-            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
-            createDeviceApi(context,id.getDeviceID(),256,wigetID,db,"UDS");
-        }
-        if (ACTION_STOP.equals(intent.getAction()))
-        {
-           // Toast.makeText(context, "Clicked Stop", Toast.LENGTH_LONG).show();
-            Bundle extras=intent.getExtras();
-            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
-            createDeviceApi(context,id.getDeviceID(),512,wigetID,db,"UDS");
-        }
-        if (ACTION_TRIM.equals(intent.getAction()))
-        {
-
-            PrefManager prefManager=new PrefManager(context);
-            String status=prefManager.getDimmer();
-            String  accessToken=prefManager.getAccess();
-            Bundle extras=intent.getExtras();
-            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
-
-            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+          }
+          if(ACTION_OFF.equals(intent.getAction()))
+          {
+              // DeviceInfo widgetID=db.findUser(appWidgetId);
 
 
-            createAPIDIMMER(id.getDeviceID(),0,accessToken,"0",wigetID,context,prefManager);
+              Bundle extras=intent.getExtras();
+              int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 
-            Toast.makeText(context,"Dimmer-0",Toast.LENGTH_LONG).show();
+              DeviceInfo id=db.getSinlgeDeviceID(wigetID);
 
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+              String state=id.getState();
+              if(state.equals("2"))
+              {
+                  Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
+              }else
+              {
+                  createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off");
+              }
+          }
+          if(ACTION_BELL.equals(intent.getAction()))
+          {
+              Log.v("ACTION_BELL","AlarmService");
+              Bundle extras=intent.getExtras();
+              int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 
-            remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
-            remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+              DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+              createDeviceApi(context,id.getDeviceID(),4,wigetID,db,"Bell");
 
+          }
+          if (ACTION_UP.equals(intent.getAction()))
+          {
+              //Toast.makeText(context, "Clicked Up", Toast.LENGTH_LONG).show();
 
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+              Bundle extras=intent.getExtras();
+              int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 
-        }
-        if (ACTION_DIMMERONE.equals(intent.getAction())) {
+              DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+              createDeviceApi(context,id.getDeviceID(),128,wigetID,db,"UDS");
+          }
+          if (ACTION_DOWN.equals(intent.getAction()))
+          {
+              //Toast.makeText(context, "Clicked Down", Toast.LENGTH_LONG).show();
+              Bundle extras=intent.getExtras();
+              int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 
-            PrefManager prefManager = new PrefManager(context);
-            String status = prefManager.getDimmer();
-            String accessToken = prefManager.getAccess();
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+              DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+              createDeviceApi(context,id.getDeviceID(),256,wigetID,db,"UDS");
+          }
+          if (ACTION_STOP.equals(intent.getAction()))
+          {
+             // Toast.makeText(context, "Clicked Stop", Toast.LENGTH_LONG).show();
+              Bundle extras=intent.getExtras();
+              int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 
-
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
-            createAPIDIMMER(id.getDeviceID(), 25, accessToken, "25", wigetID, context, prefManager);
-
-            Toast.makeText(context,"Dimmer-25",Toast.LENGTH_LONG).show();
-
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-            remoteViews.setViewVisibility(R.id.emptybulb1, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb2, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
-        }
-        if (ACTION_DIMMERTWO.equals(intent.getAction())) {
-
-            PrefManager prefManager = new PrefManager(context);
-            String status = prefManager.getDimmer();
-            String accessToken = prefManager.getAccess();
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
-
-
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
-            createAPIDIMMER(id.getDeviceID(), 50, accessToken, "50", wigetID, context, prefManager);
-
-            Toast.makeText(context,"Dimmer-50",Toast.LENGTH_LONG).show();
-
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-            remoteViews.setViewVisibility(R.id.emptybulb2, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb3, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
-        }
-        if (ACTION_DIMMERTHREE.equals(intent.getAction())) {
-
-            PrefManager prefManager = new PrefManager(context);
-            String status = prefManager.getDimmer();
-            String accessToken = prefManager.getAccess();
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+              DeviceInfo id=db.getSinlgeDeviceID(wigetID);
+              createDeviceApi(context,id.getDeviceID(),512,wigetID,db,"UDS");
+          }
+          if (DIMMER_OFF.equals(intent.getAction()))
+          {
 
 
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
-            createAPIDIMMER(id.getDeviceID(), 75, accessToken, "75", wigetID, context, prefManager);
+              PrefManager prefManager=new PrefManager(context);
+              String status=prefManager.getDimmer();
+              String  accessToken=prefManager.getAccess();
+              Bundle extras=intent.getExtras();
+              int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+              AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
 
-            Toast.makeText(context,"Dimmer-75",Toast.LENGTH_LONG).show();
-
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-            remoteViews.setViewVisibility(R.id.emptybulb3, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb4, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
-        }
-        if (ACTION_DIMMERFOUR.equals(intent.getAction())) {
-
-            PrefManager prefManager = new PrefManager(context);
-            String status = prefManager.getDimmer();
-            String accessToken = prefManager.getAccess();
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+              DeviceInfo id=db.getSinlgeDeviceID(wigetID);
 
 
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
-            createAPIDIMMER(id.getDeviceID(), 100, accessToken, "100", wigetID, context, prefManager);
+              createAPIDIMMER(id.getDeviceID(),2,accessToken,"0",wigetID,context,prefManager);
 
-            Toast.makeText(context,"Dimmer-100",Toast.LENGTH_LONG).show();
+              Toast.makeText(context,"Dimmer-0",Toast.LENGTH_LONG).show();
 
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-            remoteViews.setViewVisibility(R.id.emptybulb4, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb5, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
-            remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+              RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+
+              remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor", Color.parseColor("#E26901"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#FFFFFF",70,80));
+
+              remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#E26901",70,70));
+              remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
+
+              remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
 
 
-        }
 
+
+             /* remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
+              remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+  */
+
+              appWidgetManager.updateAppWidget(wigetID,remoteViews);
+
+          }
+          if (DIMMER_25.equals(intent.getAction())) {
+
+              PrefManager prefManager = new PrefManager(context);
+              String status = prefManager.getDimmer();
+              String accessToken = prefManager.getAccess();
+              Bundle extras = intent.getExtras();
+              int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+              AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+
+
+              DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+              createAPIDIMMER(id.getDeviceID(), 25, accessToken, "25", wigetID, context, prefManager);
+
+              Toast.makeText(context,"Dimmer-25",Toast.LENGTH_LONG).show();
+
+              RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+
+              remoteViews.setInt(R.id.dimmer25,"setBackgroundColor", Color.parseColor("#E26901"));
+              remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#FFFFFF",60,80));
+
+              remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#1A365D",70,80));
+              remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#E26901",70,70));
+
+              remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#FFFFFF"));
+              remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
+
+
+
+            /*  remoteViews.setViewVisibility(R.id.emptybulb1, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb2, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
+            */  appWidgetManager.updateAppWidget(wigetID,remoteViews);
+          }
+          if (DIMMER_50.equals(intent.getAction())) {
+
+              PrefManager prefManager = new PrefManager(context);
+              String status = prefManager.getDimmer();
+              String accessToken = prefManager.getAccess();
+              Bundle extras = intent.getExtras();
+              int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+              AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+
+
+              DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+              createAPIDIMMER(id.getDeviceID(), 50, accessToken, "50", wigetID, context, prefManager);
+
+              Toast.makeText(context,"Dimmer-50",Toast.LENGTH_LONG).show();
+
+              RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+
+              remoteViews.setInt(R.id.dimmer50,"setBackgroundColor", Color.parseColor("#E26901"));
+              remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#FFFFFF",60,80));
+
+              remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#1A365D",70,80));
+              remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#E26901",70,70));
+
+
+              remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#FFFFFF"));
+
+             /* remoteViews.setViewVisibility(R.id.emptybulb2, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb3, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
+             */ appWidgetManager.updateAppWidget(wigetID,remoteViews);
+          }
+          if (DIMMER_75.equals(intent.getAction())) {
+
+              PrefManager prefManager = new PrefManager(context);
+              String status = prefManager.getDimmer();
+              String accessToken = prefManager.getAccess();
+              Bundle extras = intent.getExtras();
+              int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+              AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+
+
+              DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+              createAPIDIMMER(id.getDeviceID(), 75, accessToken, "75", wigetID, context, prefManager);
+
+              Toast.makeText(context,"Dimmer-75",Toast.LENGTH_LONG).show();
+
+              RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+
+
+              remoteViews.setInt(R.id.dimmer75,"setBackgroundColor", Color.parseColor("#E26901"));
+              remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#FFFFFF",60,80));
+
+              remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#1A365D",70,80));
+              remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#E26901",70,70));
+
+              remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#FFFFFF"));
+              remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
+
+             /* remoteViews.setViewVisibility(R.id.emptybulb3, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb4, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb4, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb5, View.GONE);
+             */ appWidgetManager.updateAppWidget(wigetID,remoteViews);
+          }
+          if (DIMMER_ON.equals(intent.getAction())) {
+
+              PrefManager prefManager = new PrefManager(context);
+              String status = prefManager.getDimmer();
+              String accessToken = prefManager.getAccess();
+              Bundle extras = intent.getExtras();
+              int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+              AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
+
+
+              DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+              createAPIDIMMER(id.getDeviceID(), 1, accessToken, "100", wigetID, context, prefManager);
+
+              Toast.makeText(context,"Dimmer-100",Toast.LENGTH_LONG).show();
+
+              RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+
+
+
+              remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor", Color.parseColor("#E26901"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#FFFFFF",70,70));
+
+              remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#1A365D",70,80));
+              remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
+              remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
+              remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
+              remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
+
+
+              /*remoteViews.setViewVisibility(R.id.emptybulb4, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb5, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb1, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb2, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.emptybulb3, View.VISIBLE);
+              remoteViews.setViewVisibility(R.id.uibulb2, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb3, View.GONE);
+              remoteViews.setViewVisibility(R.id.uibulb4, View.GONE);
+              */appWidgetManager.updateAppWidget(wigetID,remoteViews);
+
+          }
     }
 
 
@@ -473,7 +573,7 @@ public class NewAppWidget extends AppWidgetProvider {
                             if(!status.isEmpty()&&status!=null&&action.equals("0")) {
 
 
-                                remoteViews.setViewVisibility(R.id.uibulb1, View.VISIBLE);
+                              //  remoteViews.setViewVisibility(R.id.uibulb1, View.VISIBLE);
 
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
@@ -483,7 +583,7 @@ public class NewAppWidget extends AppWidgetProvider {
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("25")) {
 
-                                remoteViews.setViewVisibility(R.id.uibulb2, View.VISIBLE);
+                            //    remoteViews.setViewVisibility(R.id.uibulb2, View.VISIBLE);
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
                                 prefManager.setDimmer("25");
@@ -492,7 +592,7 @@ public class NewAppWidget extends AppWidgetProvider {
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("50")) {
 
-                                remoteViews.setViewVisibility(R.id.uibulb3, View.VISIBLE);
+                              //  remoteViews.setViewVisibility(R.id.uibulb3, View.VISIBLE);
 
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
@@ -502,7 +602,7 @@ public class NewAppWidget extends AppWidgetProvider {
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("75")) {
 
-                                remoteViews.setViewVisibility(R.id.uibulb4, View.VISIBLE);
+                              //  remoteViews.setViewVisibility(R.id.uibulb4, View.VISIBLE);
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
                                 prefManager.setDimmer("75");
@@ -511,7 +611,7 @@ public class NewAppWidget extends AppWidgetProvider {
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("100")) {
 
-                                remoteViews.setViewVisibility(R.id.uibulb5, View.VISIBLE);
+                            //    remoteViews.setViewVisibility(R.id.uibulb5, View.VISIBLE);
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
                                 prefManager.setDimmer("100");
@@ -620,5 +720,26 @@ public class NewAppWidget extends AppWidgetProvider {
 
                     }
                 });
+
+    }
+
+    public static Bitmap buildUpdate(String fontNmae, Context context,String color,float y,float x)
+    {
+        Bitmap myBitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_4444);
+        Canvas myCanvas = new Canvas(myBitmap);
+        Paint paint = new Paint();
+
+        // Typeface iconFont = Typeface.createFromAsset(context.getAssets(),"fonts/Comfortaa_Thin.ttf");
+        Typeface iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
+
+        paint.setAntiAlias(true);
+        paint.setSubpixelText(true);
+        paint.setTypeface(iconFont);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.parseColor(color));
+        paint.setTextSize(65);
+        paint.setTextAlign(Paint.Align.CENTER);
+        myCanvas.drawText(fontNmae, x, y, paint);
+        return myBitmap;
     }
 }
