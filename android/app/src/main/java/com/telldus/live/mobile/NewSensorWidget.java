@@ -15,6 +15,10 @@ import android.os.SystemClock;
 import android.text.format.DateUtils;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import android.util.Log;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -84,9 +88,16 @@ public class NewSensorWidget extends AppWidgetProvider {
                     // if timestamp given in seconds, convert to millis
                     time *= 1000;
                 }
-                CharSequence timeSpanString=  DateUtils.getRelativeTimeSpanString(time, now,
+                /*CharSequence timeSpanString=  DateUtils.getRelativeTimeSpanString(time, now,
                         0L, DateUtils.FORMAT_ABBREV_ALL);
-                sensorHistory = "Last updated "+String.valueOf(timeSpanString);
+                */
+
+            Date date=new Date(time);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
+
+            Log.i("sensorHistory","--->"+formatter.format(date)+"'''''''''''"+date);
+            sensorHistory = formatter.format(date);
 
             //  Toast.makeText(context,sensorHistory,Toast.LENGTH_LONG).show();
             if(transparent.equals("true"))
@@ -121,7 +132,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         paint.setColor(Color.WHITE);
         paint.setTextSize(65);
         paint.setTextAlign(Paint.Align.CENTER);
-        myCanvas.drawText(time, 80, 60, paint);
+        myCanvas.drawText(time, 30, 70, paint);
         return myBitmap;
     }
 

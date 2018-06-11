@@ -214,7 +214,7 @@
        </LinearLayout>
 
         <LinearLayout
-
+            android:visibility="gone"
             android:id="@+id/seekbarlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -224,68 +224,144 @@
             <RelativeLayout
                 android:id="@+id/dimmerWidget"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white">
+                android:background="@color/white"
+                android:layout_height="wrap_content">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50sp"
                     android:orientation="horizontal"
-                    android:layout_centerInParent="true"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp">
+                    android:layout_centerInParent="true">
+
+            <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/dimmerOff"
+                        android:layout_width="47dp"
+                        android:layout_gravity="center"
+                        android:layout_height="match_parent" />
+            </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
 
                     <ImageView
-                        android:layout_marginLeft="5dp"
-                        android:id="@+id/uibulb1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/emptybulb"/>
-                    <ImageView
-                        android:id="@+id/emptybulb1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/emptybulb"/>
-                    <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/uibulb2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bulb1"/>
-                    <ImageView
-                        android:id="@+id/emptybulb2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/emptybulb"/>
-                    <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/uibulb3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bulb2"/>
-                    <ImageView
-                        android:id="@+id/emptybulb3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/emptybulb"/>
-                    <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/uibulb4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bulb3"/>
-                    <ImageView
-                        android:id="@+id/emptybulb4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/emptybulb"/>
-                    <ImageView
-                        android:visibility="gone"
-                        android:id="@+id/uibulb5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bulb4"
-                        />
+                        android:id="@+id/dimmer25"
+                        android:layout_width="47dp"
+                        android:layout_height="match_parent" />
 
+                        <TextView
+                            android:id="@+id/txtDimmer25"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="25%"
+                            android:textSize="10sp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/orange"
+                            android:layout_marginTop="10dp"
+                            android:textStyle="bold"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+
+                    <ImageView
+                        android:id="@+id/dimmer50"
+                        android:layout_width="47dp"
+                        android:layout_height="match_parent" />
+                        <TextView
+                            android:id="@+id/txtDimmer50"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="50%"
+                            android:textSize="10sp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/orange"
+                            android:layout_marginTop="10dp"
+                            android:textStyle="bold"/>
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/dimmer75"
+                        android:layout_width="47dp"
+                        android:layout_height="match_parent" />
+                        <TextView
+                            android:id="@+id/txtDimmer75"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="75%"
+                            android:textSize="10sp"
+                            android:layout_gravity="center"
+                            android:textColor="@color/orange"
+                            android:layout_marginTop="10dp"
+                            android:textStyle="bold"/>
+
+                    </FrameLayout>
+                    <ImageView
+                        android:id="@+id/dimmerOn"
+                        android:layout_width="47dp"
+                        android:layout_height="match_parent" />
+
+
+                    <!-- <ImageView
+                         android:layout_marginLeft="5dp"
+                         android:id="@+id/uibulb1"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/emptybulb"/>
+                     <ImageView
+                         android:id="@+id/emptybulb1"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/emptybulb"/>
+                     <ImageView
+                         android:visibility="gone"
+                         android:id="@+id/uibulb2"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/bulb1"/>
+                     <ImageView
+                         android:id="@+id/emptybulb2"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/emptybulb"/>
+                     <ImageView
+                         android:visibility="gone"
+                         android:id="@+id/uibulb3"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/bulb2"/>
+                     <ImageView
+                         android:id="@+id/emptybulb3"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/emptybulb"/>
+                     <ImageView
+                         android:visibility="gone"
+                         android:id="@+id/uibulb4"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/bulb3"/>
+                     <ImageView
+                         android:id="@+id/emptybulb4"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/emptybulb"/>
+                     <ImageView
+                         android:visibility="gone"
+                         android:id="@+id/uibulb5"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:background="@drawable/bulb4"
+                         />
+ -->
                 </LinearLayout>
 
             </RelativeLayout>

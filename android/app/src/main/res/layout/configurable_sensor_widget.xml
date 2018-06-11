@@ -22,6 +22,7 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:gravity="center"
+                android:maxLines="1"
                 android:layout_centerInParent="true"
                 android:textColor="#FFFFFF"/>
 
@@ -34,25 +35,47 @@
             android:background="@drawable/shape_blue"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/iconSensor"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:src="@drawable/humidity"/>-->
+
                 <ImageView
                 android:id="@+id/iconSensor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity="left|center"
+
+                    />
+              <!--  <TextView
+                    android:visibility="gone"
+                    android:id="@+id/icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="#FFFFFF"
+                    android:text="@string/watt"/>
+-->
 
                 <LinearLayout
+                    android:layout_gravity="end|center"
                     android:layout_width="wrap_content"
+                    android:layout_marginEnd="10dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:orientation="horizontal">
 
                 <TextView
@@ -61,15 +84,20 @@
                     android:layout_height="wrap_content"
                     android:textSize="17sp"
                     android:text="56"
+                    android:maxLines="1"
+                    android:layout_gravity="center"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="%"
-                    android:textSize="15sp"
+                    android:maxLines="1"
+                    android:layout_gravity="center"
+                    android:textSize="13sp"
                     android:textStyle="bold"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF"
+                    />
 
             </LinearLayout>
                     <TextView
@@ -78,9 +106,10 @@
                         android:layout_height="wrap_content"
                         android:text="5 min ago "
                         android:layout_gravity="center"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="#FFFFFF"
+                        android:textSize="10sp"/>
             </LinearLayout>
-            </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
 
     </LinearLayout>
