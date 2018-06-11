@@ -25,6 +25,7 @@ import { format } from 'url';
 
 import { Platform } from 'react-native';
 import { LiveApi } from '../Lib/LiveApi';
+import { getRSAKey } from '../Lib/RSA';
 import { reportException } from '../Lib/Analytics';
 import type { ThunkAction, Action } from './Types';
 
@@ -113,6 +114,20 @@ function autoDetectLocalTellStick(): ThunkAction {
 				uuid: items[4] ? items[4] : null,
 			};
 			dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
+
+			let { gateways: { byId: gateways } } = getState();
+			for (let key in gateways) {
+				let item = gateways[key];
+				let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
+				let { key: token } = localKey;
+				if (items[4] && uuid && (items[4] === uuid)) {
+					getRSAKey(false, ({ pemPub }: Object) => {
+						if (pemPub && websocketOnline && websocketConnected && !token) {
+							dispatch(getTokenForLocalControl(id, pemPub));
+						}
+					});
+				}
+			}
 		});
 	};
 }

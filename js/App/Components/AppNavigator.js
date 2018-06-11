@@ -215,7 +215,7 @@ class AppNavigator extends View {
 		}
 
 		// Request for token to control device locally.
-		this.getTokenForLocalControl();
+		// this.getTokenForLocalControl();
 	}
 
 	getTokenForLocalControl() {
