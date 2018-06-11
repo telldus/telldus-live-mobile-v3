@@ -194,7 +194,7 @@ class AppNavigator extends View {
 
 		// When user's connection change and if it there is connection to internet, auto-discover TellStick and update it's ip address.
 		if (type && type !== 'none') {
-			this.autoDetectLocalTellStick();
+			dispatch(autoDetectLocalTellStick());
 		}
 	}
 
