@@ -33,6 +33,8 @@ import { actions } from 'live-shared-data';
 const { Gateways } = actions;
 
 import dgram from 'dgram';
+
+let socket: Object = {};
 const broardcastAddress = '255.255.255.255';
 const broardcastPort = 30303;
 
@@ -71,19 +73,25 @@ function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
 
 function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
-		const socket: Object = dgram.createSocket('udp4');
+		if (socket._id && socket._id > 0) {
+			socket.close();
+		}
+		socket = dgram.createSocket('udp4');
 		const aPort = randomPort();
-		try {
-			socket.bind(aPort, (err: any) => {
-				if (err) {
-					throw err;
-				}
-				if (Platform.OS !== 'android') {
-					socket.setBroadcast(true);
-				}
-			});
-		} catch (err) {
-			reportException(err);
+		if (socket._state === 0) {
+			try {
+				// $FlowFixMe
+				socket.bind(aPort, (err: string) => {
+					if (err) {
+						throw err;
+					}
+					if (Platform.OS !== 'android') {
+						socket.setBroadcast(true);
+					}
+				});
+			} catch (err) {
+				reportException(err);
+			}
 		}
 		socket.once('listening', () => {
 			let buf = toByteArray('D');
