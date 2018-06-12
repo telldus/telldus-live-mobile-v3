@@ -265,6 +265,12 @@ Changelog: Fix a crash on startup
 
 If you are not sure if your commit should be included in the changelog or not, ask the maintainer first!
 
+### Commit messages
+
+Please read these guidelines:  
+https://chris.beams.io/posts/git-commit/
+
+
 ## Logging
 
 ## Redux
