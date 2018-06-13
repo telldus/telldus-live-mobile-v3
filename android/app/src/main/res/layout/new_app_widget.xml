@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:id="@+id/iconWidget"
-        android:layout_width="match_parent"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/shape_widget"
@@ -34,35 +34,13 @@
             android:id="@+id/parentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:visibility="gone"
-
             android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/onLayout"
-                android:layout_width="0dip"
-                android:layout_height="40sp"
-                android:background="@color/white"
-                android:layout_marginRight="3dp"
-                android:layout_weight="0.5">
-
-                    <ImageView
-                    android:id="@+id/iconOn"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/on_light"
-                    android:padding="8sp"
-                    />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/offLinear"
                 android:layout_width="0dip"
                 android:layout_height="40sp"
-                android:background="@color/white"
                 android:layout_weight="0.5">
 
                 <ImageView
@@ -70,12 +48,26 @@
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/off_dark"
                     android:padding="8sp"/>
+            </LinearLayout>
 
 
+            <LinearLayout
+                android:id="@+id/onLayout"
+                android:layout_width="0dip"
+                android:layout_height="40sp"
+                android:layout_weight="0.5">
+
+                    <ImageView
+                    android:id="@+id/iconOn"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8sp"
+                    />
 
             </LinearLayout>
+
 
         </LinearLayout>
 
@@ -83,7 +75,6 @@
             android:id="@+id/bellLinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:visibility="gone"
             android:orientation="horizontal">
 
@@ -116,7 +107,6 @@
             android:id="@+id/updownarrow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:orientation="horizontal"
             android:visibility="gone">
 
@@ -216,14 +206,13 @@
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/seekbarlayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:id="@+id/dimmerWidget"
-                android:layout_width="match_parent"
+                android:layout_width="180dp"
                 android:background="@color/white"
                 android:layout_height="wrap_content">
                 <LinearLayout
@@ -237,7 +226,7 @@
             android:layout_height="match_parent">
                     <ImageView
                         android:id="@+id/dimmerOff"
-                        android:layout_width="47dp"
+                        android:layout_width="36dp"
                         android:layout_gravity="center"
                         android:layout_height="match_parent" />
             </FrameLayout>
@@ -248,7 +237,7 @@
 
                     <ImageView
                         android:id="@+id/dimmer25"
-                        android:layout_width="47dp"
+                        android:layout_width="36dp"
                         android:layout_height="match_parent" />
 
                         <TextView
@@ -271,7 +260,7 @@
 
                     <ImageView
                         android:id="@+id/dimmer50"
-                        android:layout_width="47dp"
+                        android:layout_width="36dp"
                         android:layout_height="match_parent" />
                         <TextView
                             android:id="@+id/txtDimmer50"
@@ -290,7 +279,7 @@
                         android:layout_height="match_parent">
                     <ImageView
                         android:id="@+id/dimmer75"
-                        android:layout_width="47dp"
+                        android:layout_width="36dp"
                         android:layout_height="match_parent" />
                         <TextView
                             android:id="@+id/txtDimmer75"
@@ -306,62 +295,10 @@
                     </FrameLayout>
                     <ImageView
                         android:id="@+id/dimmerOn"
-                        android:layout_width="47dp"
+                        android:layout_width="36dp"
                         android:layout_height="match_parent" />
 
 
-                    <!-- <ImageView
-                         android:layout_marginLeft="5dp"
-                         android:id="@+id/uibulb1"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:background="@drawable/emptybulb"/>
-                     <ImageView
-                         android:id="@+id/emptybulb1"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:background="@drawable/emptybulb"/>
-                     <ImageView
-                         android:visibility="gone"
-                         android:id="@+id/uibulb2"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:background="@drawable/bulb1"/>
-                     <ImageView
-                         android:id="@+id/emptybulb2"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:background="@drawable/emptybulb"/>
-                     <ImageView
-                         android:visibility="gone"
-                         android:id="@+id/uibulb3"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:background="@drawable/bulb2"/>
-                     <ImageView
-                         android:id="@+id/emptybulb3"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:background="@drawable/emptybulb"/>
-                     <ImageView
-                         android:visibility="gone"
-                         android:id="@+id/uibulb4"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:background="@drawable/bulb3"/>
-                     <ImageView
-                         android:id="@+id/emptybulb4"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:background="@drawable/emptybulb"/>
-                     <ImageView
-                         android:visibility="gone"
-                         android:id="@+id/uibulb5"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:background="@drawable/bulb4"
-                         />
- -->
                 </LinearLayout>
 
             </RelativeLayout>

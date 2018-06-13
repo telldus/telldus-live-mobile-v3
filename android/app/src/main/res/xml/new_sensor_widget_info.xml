@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="com.telldus.live.mobile.NewSensorWidgetConfigureActivity"
-    android:initialKeyguardLayout="@layout/new_sensor_widget"
-    android:initialLayout="@layout/new_sensor_widget"
+    android:initialKeyguardLayout="@layout/configurable_sensor_widget"
+    android:initialLayout="@layout/configurable_sensor_widget"
     android:minHeight="40dp"
     android:minWidth="110dp"
     android:previewImage="@drawable/wddsen1"

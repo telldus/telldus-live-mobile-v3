@@ -70,20 +70,26 @@ public class NewAppWidget extends AppWidgetProvider {
             String action=widgetID.getState();
             if(action.equals("1"))
             {
-                views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
-                //    Toast.makeText(context,"On",Toast.LENGTH_LONG).show();
-                views.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
-                views.setImageViewResource(R.id.iconOff,R.drawable.off_light);
-                //       ComponentName appWidget = new ComponentName(context, DeviceWidget.class);
+              views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
 
+            //  views.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
+            //  views.setImageViewResource(R.id.iconOff,R.drawable.off_light);
+              views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",context,"#FFFFFF",80,70));
+              views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#1A365D",80,70));
+              views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#E26901"));
+              views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             }
             if(action.equals("2"))
             {
-                views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
-                //  Toast.makeText(context,"OFF",Toast.LENGTH_LONG).show();
-                views.setImageViewResource(R.id.iconOn, R.drawable.on_light);
-                views.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
-
+              views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
+              //  Toast.makeText(context,"OFF",Toast.LENGTH_LONG).show();
+            /*  views.setImageViewResource(R.id.iconOn, R.drawable.on_light);
+              views.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
+*/
+              views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",context,"#E26901",80,70));
+              views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#FFFFFF",80,70));
+              views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+              views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#1A365D"));
             }
             if(action.equals("4"))
             {
@@ -578,7 +584,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
                                 prefManager.setDimmer("0");
-                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                            //    appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("25")) {
@@ -587,7 +593,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
                                 prefManager.setDimmer("25");
-                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                            //    appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("50")) {
@@ -597,7 +603,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
                                 prefManager.setDimmer("50");
-                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                            //    appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("75")) {
@@ -606,7 +612,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
                                 prefManager.setDimmer("75");
-                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                            //    appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
                             }
                             if(!status.isEmpty()&&status!=null&&action.equals("100")) {
@@ -615,7 +621,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
                                 // remoteViews.setTextViewText(R.id.uibulb1,"0");
                                 prefManager.setDimmer("100");
-                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                            //    appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
 
                             }
@@ -660,28 +666,38 @@ public class NewAppWidget extends AppWidgetProvider {
 
                             if(!status.isEmpty()&&status!=null&&action.equals("On"))
                             {
-                                boolean b=db.updateAction("1",wigetID);
-                                RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
-                                remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
-                                remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_light);
-                                AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                                //   appWidgetManager.updateAppWidget(appWidget, remoteViews);
-                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                              boolean b=db.updateAction("1",wigetID);
+                              RemoteViews views = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
+                           //   remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
+                           //   remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_light);
+                              AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
+                              //   appWidgetManager.updateAppWidget(appWidget, remoteViews);
+                             // appWidgetManager.updateAppWidget(wigetID,views);
+                              views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",ctx,"#E26901",80,70));
+                              views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",ctx,"#FFFFFF",80,70));
+                              views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+                              views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#1A365D"));
+                              appWidgetManager.updateAppWidget(wigetID,views);
 
-                                Toast.makeText(ctx,"Turn on  "+status,Toast.LENGTH_LONG).show();
+                              Toast.makeText(ctx,"Turn on  "+status,Toast.LENGTH_LONG).show();
                             }
 
                             if(!status.isEmpty()&&status!=null&&action.equals("Off"))
                             {
-                                boolean b=db.updateAction("2",wigetID);
-                                RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
-                                remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_light);
-                                remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
-                                AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                                //   appWidgetManager.updateAppWidget(appWidget, remoteViews);
-                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
+                              boolean b=db.updateAction("2",wigetID);
+                              RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
+                           //   remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_light);
+                           //   remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
+                              remoteViews.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",ctx,"#FFFFFF",80,70));
+                              remoteViews.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",ctx,"#1A365D",80,70));
+                              remoteViews.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#E26901"));
+                              remoteViews.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
 
-                                Toast.makeText(ctx,"Turn off "+status,Toast.LENGTH_LONG).show();
+                              AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
+                              //   appWidgetManager.updateAppWidget(appWidget, remoteViews);
+                              appWidgetManager.updateAppWidget(wigetID,remoteViews);
+
+                              Toast.makeText(ctx,"Turn off "+status,Toast.LENGTH_LONG).show();
                             }
 
                             if(!status.isEmpty()&&status!=null&&action.equals("Bell"))
@@ -737,7 +753,7 @@ public class NewAppWidget extends AppWidgetProvider {
         paint.setTypeface(iconFont);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.parseColor(color));
-        paint.setTextSize(65);
+        paint.setTextSize(85);
         paint.setTextAlign(Paint.Align.CENTER);
         myCanvas.drawText(fontNmae, x, y, paint);
         return myBitmap;
