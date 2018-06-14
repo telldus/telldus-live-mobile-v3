@@ -234,6 +234,8 @@
     "location.failureEditTimezone": "Časové pásmo nelze nastavit",
     "location.failureRemoveLocation": "Umístění nelze odstranit",
     "location.ip": "ip",
+    "location.ipLocal": "Místní IP",
+    "location.ipPublic": "Veřejná IP",
     "location.latitude": "Zeměpisná šířka",
     "location.longitude": "Zeměpisná délka",
     "location.message.confirmDelete": "Opravdu chcete tuto polohu smazat? Tato akce odstraní všechna nastavení pro toto místo.",
