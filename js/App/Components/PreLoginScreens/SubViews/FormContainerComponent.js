@@ -63,32 +63,34 @@ class FormContainerComponent extends View<Props, null> {
 
 		return (
 			<BackgroundImage source={this.background} style={styles.container}>
-				<ScrollView
-					keyboardShouldPersistTaps={'always'}
-					style={{ flex: 1 }}
-					contentContainerStyle={styles.contentContainerStyle}>
-					<KeyboardAvoidingView
-						behavior="padding"
-						style={{ justifyContent: 'center', alignItems: 'center' }}
-						contentContainerStyle={{ paddingTop: 20, justifyContent: 'center' }}>
-						<Image
-							source={this.logo}
-							style={styles.logoStyle}
-						/>
-						<View style={styles.formContainer}>
-							{React.cloneElement(
-								children,
-								{
-									isTablet: this.isTablet,
-									appLayout,
-									navigation,
-									screenProps,
-									styles,
-								},
-							)}
-						</View>
-					</KeyboardAvoidingView>
-				</ScrollView>
+				{appLayout.width && (
+					<ScrollView
+						keyboardShouldPersistTaps={'always'}
+						style={{ flex: 1 }}
+						contentContainerStyle={styles.contentContainerStyle}>
+						<KeyboardAvoidingView
+							behavior="padding"
+							style={{ justifyContent: 'center', alignItems: 'center' }}
+							contentContainerStyle={{ paddingTop: 20, justifyContent: 'center' }}>
+							<Image
+								source={this.logo}
+								style={styles.logoStyle}
+							/>
+							<View style={styles.formContainer}>
+								{React.cloneElement(
+									children,
+									{
+										isTablet: this.isTablet,
+										appLayout,
+										navigation,
+										screenProps,
+										styles,
+									},
+								)}
+							</View>
+						</KeyboardAvoidingView>
+					</ScrollView>
+				)}
 			</BackgroundImage>
 		);
 	}
