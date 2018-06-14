@@ -223,6 +223,8 @@
     "location.failureEditTimezone": "Aikavyöhykkeen asetus ei onnistunut",
     "location.failureRemoveLocation": "Sijaintia ei voitu poistaa",
     "location.ip": "ip",
+    "location.ipLocal": "Paikallinen IP",
+    "location.ipPublic": "Julkinen IP",
     "location.lat": "lat.",
     "location.latitude": "Leveysaste",
     "location.long": "long.",
