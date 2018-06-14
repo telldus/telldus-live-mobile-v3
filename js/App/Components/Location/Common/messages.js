@@ -79,6 +79,14 @@ export const messages = defineMessages({
 		id: 'location.ip',
 		defaultMessage: 'ip',
 	},
+	ipLocal: {
+		id: 'location.ipLocal',
+		defaultMessage: 'Local IP',
+	},
+	ipPublic: {
+		id: 'location.ipPublic',
+		defaultMessage: 'Public IP',
+	},
 	software: {
 		id: 'location.software',
 		defaultMessage: 'Software',

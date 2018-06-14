@@ -62,7 +62,8 @@ class Details extends View {
 	labelGeoPosition: string;
 	labelLat: string;
 	labelLong: string;
-	labelIP: string;
+	labelIPPublic: string;
+	labelIPLocal: string;
 	labelSoftware: string;
 	confirmMessage: string;
 
@@ -75,7 +76,8 @@ class Details extends View {
 		this.labelGeoPosition = formatMessage(commonMessages.geoPosition);
 		this.labelLat = formatMessage(commonMessages.latitude);
 		this.labelLong = formatMessage(commonMessages.longitude);
-		this.labelIP = formatMessage(commonMessages.ip).toUpperCase();
+		this.labelIPPublic = formatMessage(commonMessages.ipPublic);
+		this.labelIPLocal = formatMessage(commonMessages.ipLocal);
 		this.labelSoftware = formatMessage(commonMessages.software);
 
 		this.confirmMessage = formatMessage(commonMessages.confirmDelete);
@@ -126,9 +128,9 @@ class Details extends View {
 		actions.showModal(this.confirmMessage, 'DELETE_LOCATION');
 	}
 
-	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
+	getLocationStatus(online: boolean, websocketOnline: boolean): Object {
 		return (
-			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} localKey={localKey}/>
+			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl}/>
 		);
 	}
 
@@ -147,6 +149,7 @@ class Details extends View {
 
 
 		const { name, type, ip, version, timezone, latitude, longitude, online, websocketOnline, localKey } = location;
+		const { address, key } = localKey;
 		const image = getLocationImageUrl(type);
 		const {
 			locationImage, textName, locationInfo,
@@ -154,7 +157,7 @@ class Details extends View {
 		} = this.getStyles(appLayout);
 		const labelWidth = containerWidth * 0.36;
 
-		let info = this.getLocationStatus(online, websocketOnline, localKey);
+		let info = this.getLocationStatus(online, websocketOnline);
 
 		return (
 			<View style={{flex: 1, paddingVertical: padding}}>
@@ -165,8 +168,15 @@ class Details extends View {
 							{type}
 						</Text>
 						<Text style={locationInfo}>
-							{`${this.labelIP}: ${ip}`}
+							{`${this.labelIPPublic}: ${ip}`}
 						</Text>
+						{
+							(address && key) && (
+								<Text style={locationInfo}>
+									{`${this.labelIPLocal}: ${address}`}
+								</Text>
+							)
+						}
 						<Text style={locationInfo}>
 							{`${this.labelSoftware}: v${version}`}
 						</Text>

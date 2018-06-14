@@ -203,6 +203,8 @@
   "location.failureEditTimezone": "Time zone could not be set",
   "location.failureRemoveLocation": "Location could not be removed",
   "location.ip": "ip",
+  "location.ipLocal": "Local IP",
+  "location.ipPublic": "Public IP",
   "location.latitude": "Latitude",
   "location.longitude": "Longitude",
   "location.message.confirmDelete": "Are you sure you want to delete this location? This action will remove all settings for this location.",
