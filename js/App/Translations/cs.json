@@ -279,6 +279,7 @@
     "schedule.time.editTime": "Klepnutím změňte čas",
     "schedule.time.editTimeAccessible": "Dvojitým klepnutím změňte čas",
     "scheduler": "Plán",
+    "scheduler.now": "Nyní",
     "scheduler.repeatDays": "Každý den v {value}",
     "scheduler.repeatWeekday": "Denně v {value}",
     "scheduler.repeatWeekdays": "Každý pracovní den v {value}",
