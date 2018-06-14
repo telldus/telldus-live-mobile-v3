@@ -16,4 +16,17 @@
         <item name="colorAccent">@color/orange</item>
     </style>
 
+		<style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#e26901</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#e26901
+        </item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#A6A6A6
+        </item>
+    </style>
+
 </resources>
