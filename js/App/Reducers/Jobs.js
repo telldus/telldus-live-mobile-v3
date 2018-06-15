@@ -75,24 +75,24 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		job.effectiveMinute = tempDay.format('mm');
 		job.device = device;
 		job.gateway = gateway;
-		job.expired = false;
 
 		const now = moment().tz(timezone);
 		if (job.weekdays) {
 			job.weekdays.forEach((day: number): Object | void => {
+				let nonMutantJob = { ...job, expired: false };
 				if (day !== todayInWeek) {
 					const relativeDay = (7 + day - todayInWeek) % 7; // 7 % 7 = 0
-					return sections[relativeDay].push(job);
+					return sections[relativeDay].push(nonMutantJob);
 				}
 
 				const nowInMinutes = now.hours() * 60 + now.minutes();
-				const jobInMinutes = parseInt(job.effectiveHour, 10) * 60 + parseInt(job.effectiveMinute, 10);
+				const jobInMinutes = parseInt(nonMutantJob.effectiveHour, 10) * 60 + parseInt(nonMutantJob.effectiveMinute, 10);
 				if (jobInMinutes >= nowInMinutes) {
-					sections[0].push(job); // today
+					sections[0].push(nonMutantJob); // today
 				} else {
-					sections[7].push(job); // today, next week
-					job.expired = true;
-					sections[0].push(job); // the expired jobs
+					sections[7].push(nonMutantJob); // today, next week
+					nonMutantJob = { ...nonMutantJob, expired: true };
+					sections[0].push(nonMutantJob); // the expired jobs
 				}
 			});
 		}
