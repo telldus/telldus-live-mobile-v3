@@ -420,6 +420,7 @@ class JobRow extends View<null, Props, null> {
 				width: timeWidth,
 				textAlign: 'center',
 				fontSize: deviceWidth * 0.044,
+				color: '#707070',
 			},
 			rowContainer: {
 				width: rowWidth,
