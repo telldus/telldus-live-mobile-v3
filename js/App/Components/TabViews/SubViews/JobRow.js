@@ -29,11 +29,25 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import Platform from 'Platform';
 
-import { BlockIcon, IconTelldus, ListRow, View, Text, FormattedTime } from '../../../../BaseComponents';
+import {
+	BlockIcon,
+	IconTelldus,
+	ListRow,
+	View,
+	Text,
+	FormattedTime,
+} from '../../../../BaseComponents';
+import NowRow from './Jobs/NowRow';
 import Theme from '../../../Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from '../../Schedule/SubViews';
-import { capitalize, getSelectedDays, getWeekdays, getWeekends,
-	getRelativeDimensions, getTranslatableDays } from '../../../Lib';
+import {
+	capitalize,
+	getSelectedDays,
+	getWeekdays,
+	getWeekends,
+	getRelativeDimensions,
+	getTranslatableDays,
+} from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 
 import i18n from '../../../Translations/common';
@@ -73,6 +87,7 @@ type Props = {
 	editJob: (schedule: Schedule) => void,
 	appLayout: Object,
 	intl: intlShape,
+	showNow: boolean,
 };
 
 class JobRow extends View<null, Props, null> {
@@ -146,6 +161,7 @@ class JobRow extends View<null, Props, null> {
 			editJob,
 			appLayout,
 			intl,
+			showNow,
 		} = this.props;
 
 		const {
@@ -161,6 +177,8 @@ class JobRow extends View<null, Props, null> {
 			rowContainer,
 			roundIconContainer,
 			rowWithTriangleContainer,
+			lineStyle,
+			rowWithTriangleContainerNow,
 		} = this._getStyle(appLayout);
 		const opacity = active ? 1 : 0.5;
 
@@ -177,59 +195,73 @@ class JobRow extends View<null, Props, null> {
 		const accessibilityLabel = `${formatMessage(messages.phraseOne)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
 
 		return (
-			<TouchableOpacity
-				style={container}
-				onPress={this.editJob}
-				disabled={!editJob}
-				accessibilityLabel={accessibilityLabel}
-			>
-				<ListRow
-					roundIcon={type}
-					roundIconStyle={roundIcon}
-					roundIconContainerStyle={[roundIconContainer, { backgroundColor: active ? '#929292' : '#BDBDBD'} ]}
-					time={timestamp}
-					timeFormat= {{
-						hour: 'numeric',
-						minute: 'numeric',
-					}}
-					timeStyle={time}
-					timeContainerStyle={{ opacity }}
-					rowContainerStyle={[rowContainer]}
-					rowWithTriangleContainerStyle={[rowWithTriangleContainer, { opacity }]}
-					triangleColor={methodIconContainer.backgroundColor}
-					isFirst={isFirst}
+			<View>
+				<TouchableOpacity
+					style={container}
+					onPress={this.editJob}
+					disabled={!editJob}
+					accessibilityLabel={accessibilityLabel}
 				>
-					{actionIcon}
-					<TextRowWrapper style={textWrapper} appLayout={appLayout}>
-						<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
-							{device.name}
-						</Title>
-						<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
-							{repeat}
-							{type === 'time' && (
-								<FormattedTime
-									value={timestamp}
-									hour="numeric"
-									minute="numeric"
-									style={description}
-								/>)
-							}
-						</Description>
-					</TextRowWrapper>
-					{!!offset && (
-						<IconTelldus
-							icon="offset"
-							style={iconOffset}
+					<ListRow
+						roundIcon={type}
+						roundIconStyle={roundIcon}
+						roundIconContainerStyle={[roundIconContainer, { backgroundColor: active ? '#929292' : '#BDBDBD'} ]}
+						time={timestamp}
+						timeFormat= {{
+							hour: 'numeric',
+							minute: 'numeric',
+						}}
+						timeStyle={time}
+						timeContainerStyle={{ opacity }}
+						rowContainerStyle={[rowContainer]}
+						rowWithTriangleContainerStyle={[rowWithTriangleContainer, { opacity }]}
+						triangleColor={methodIconContainer.backgroundColor}
+						isFirst={isFirst}
+					>
+						{actionIcon}
+						<TextRowWrapper style={textWrapper} appLayout={appLayout}>
+							<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
+								{device.name}
+							</Title>
+							<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
+								{repeat}
+								{type === 'time' && (
+									<FormattedTime
+										value={timestamp}
+										hour="numeric"
+										minute="numeric"
+										style={description}
+									/>)
+								}
+							</Description>
+						</TextRowWrapper>
+						{!!offset && (
+							<IconTelldus
+								icon="offset"
+								style={iconOffset}
+							/>
+						)}
+						{!!randomInterval && (
+							<IconTelldus
+								icon="random"
+								style={iconRandom}
+							/>
+						)}
+					</ListRow>
+				</TouchableOpacity>
+				{showNow && (
+					<View
+						style={container}
+					>
+						<NowRow
+							roundIconContainerStyle={roundIconContainer}
+							rowWithTriangleContainerStyle={rowWithTriangleContainerNow}
+							textStyle={time}
+							lineStyle={lineStyle}
 						/>
-					)}
-					{!!randomInterval && (
-						<IconTelldus
-							icon="random"
-							style={iconRandom}
-						/>
-					)}
-				</ListRow>
-			</TouchableOpacity>
+					</View>
+				)}
+			</View>
 		);
 	}
 
@@ -313,6 +345,10 @@ class JobRow extends View<null, Props, null> {
 		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
 		width = width - headerHeight;
 
+		const timeWidth = width * 0.26;
+		const rowWidth = width * 0.57;
+		const rowWithTriangleWidth = width * 0.59;
+
 		let backgroundColor;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 		if (action) {
@@ -330,6 +366,7 @@ class JobRow extends View<null, Props, null> {
 				alignItems: 'center',
 				paddingHorizontal: width * 0.03888888,
 				width: width,
+				backgroundColor: 'transparent',
 			},
 			methodIconContainer: {
 				backgroundColor,
@@ -375,18 +412,28 @@ class JobRow extends View<null, Props, null> {
 				fontSize: deviceWidth * 0.044,
 			},
 			time: {
-				width: width * 0.26,
+				width: timeWidth,
 				textAlign: 'center',
 				fontSize: deviceWidth * 0.044,
 			},
 			rowContainer: {
-				width: width * 0.57,
+				width: rowWidth,
 			},
 			roundIconContainer: {
 				marginLeft: isPortrait ? 0 : width * 0.01788,
 			},
 			rowWithTriangleContainer: {
-				width: width * 0.59,
+				width: rowWithTriangleWidth,
+				justifyContent: 'center',
+			},
+			lineStyle: {
+				height: 1 + (deviceWidth * 0.005),
+				width: '100%',
+				backgroundColor: Theme.Core.brandPrimary,
+			},
+			rowWithTriangleContainerNow: {
+				width: rowWithTriangleWidth + timeWidth,
+				height: deviceWidth * 0.082,
 				justifyContent: 'center',
 			},
 		};

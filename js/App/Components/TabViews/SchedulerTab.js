@@ -253,6 +253,7 @@ class SchedulerTab extends View<null, Props, State> {
 	_getDaysToRender = (dataArray: Object, appLayout: Object): Object => {
 		let days = [], daysToRender = [];
 		let { screenProps } = this.props;
+		let { todayIndex } = this.state;
 		let { formatDate } = screenProps.intl;
 
 		for (let key in dataArray) {
@@ -279,6 +280,11 @@ class SchedulerTab extends View<null, Props, State> {
 								onRefresh={this.onRefresh}
 								keyExtractor={this.keyExtractor}
 								refreshing={this.state.isRefreshing}
+								// To re-render the list to update row style on different weekdays(today screen will have different row design
+								// if there is any expired schedule)
+								extraData={{
+									todayIndex,
+								}}
 							/>
 						</View>
 					}
@@ -314,8 +320,17 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	_renderRow = (props: Object): React$Element<JobRow> => {
+		// Trying to identify if&where the 'Now' row has to be inserted.
+		const { rowsAndSections } = this.props;
+		const { todayIndex } = this.state;
+		const { item } = props;
+		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
+		const lengthExpired = expiredJobs.length;
+		const lastExpired = lengthExpired === 0 ? null : expiredJobs[lengthExpired - 1];
+		const showNow = ((todayIndex === 0) && lastExpired && (lastExpired.id === item.id));
+
 		return (
-			<JobRow {...props.item} editJob={this.editJob} isFirst={props.index === 0} intl={this.props.screenProps.intl}/>
+			<JobRow {...item} showNow={showNow} editJob={this.editJob} isFirst={props.index === 0} intl={this.props.screenProps.intl}/>
 		);
 	};
 }

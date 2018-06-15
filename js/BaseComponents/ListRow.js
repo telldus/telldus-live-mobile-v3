@@ -48,6 +48,8 @@ type Props = {
 	iconBackgroundMask?: boolean,
 	iconBackgroundMaskStyle?: number | Object | Array<any>,
 	rowWithTriangleContainerStyle?: number | Object | Array<any>,
+	triangleContainerStyle?: number | Object | Array<any>,
+	triangleStyle?: number | Object | Array<any>,
 };
 
 type DefaultProps = {
@@ -105,6 +107,8 @@ class ListRow extends Component<Props, null> {
 			iconBackgroundMask,
 			iconBackgroundMaskStyle,
 			rowWithTriangleContainerStyle,
+			triangleStyle,
+			triangleContainerStyle,
 		} = this.props;
 
 		const style = this._getStyle();
@@ -134,6 +138,8 @@ class ListRow extends Component<Props, null> {
 					triangleColor={triangleColor}
 					containerStyle={rowContainerStyle}
 					rowWithTriangleContainerStyle={rowWithTriangleContainerStyle}
+					triangleStyle={triangleStyle}
+					triangleContainerStyle={triangleContainerStyle}
 					style={rowStyle}
 				>
 					{children}

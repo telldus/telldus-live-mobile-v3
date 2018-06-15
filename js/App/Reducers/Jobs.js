@@ -75,6 +75,7 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		job.effectiveMinute = tempDay.format('mm');
 		job.device = device;
 		job.gateway = gateway;
+		job.expired = false;
 
 		const now = moment().tz(timezone);
 		if (job.weekdays) {
@@ -90,6 +91,8 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 					sections[0].push(job); // today
 				} else {
 					sections[7].push(job); // today, next week
+					job.expired = true;
+					sections[0].push(job); // the expired jobs
 				}
 			});
 		}
