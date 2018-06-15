@@ -92,6 +92,7 @@ type Props = {
 	appLayout: Object,
 	intl: intlShape,
 	showNow: boolean,
+	expired: boolean,
 };
 
 class JobRow extends View<null, Props, null> {
@@ -166,6 +167,7 @@ class JobRow extends View<null, Props, null> {
 			appLayout,
 			intl,
 			showNow,
+			expired,
 		} = this.props;
 
 		const {
@@ -185,6 +187,7 @@ class JobRow extends View<null, Props, null> {
 			rowWithTriangleContainerNow,
 		} = this._getStyle(appLayout);
 		const opacity = active ? 1 : 0.5;
+		const color = !active ? '#BDBDBD' : (expired ? '#999999' : '#929292');
 
 		const repeat = this._getRepeatDescription();
 		const date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
@@ -209,7 +212,7 @@ class JobRow extends View<null, Props, null> {
 					<ListRow
 						roundIcon={type}
 						roundIconStyle={roundIcon}
-						roundIconContainerStyle={[roundIconContainer, { backgroundColor: active ? '#929292' : '#BDBDBD'} ]}
+						roundIconContainerStyle={[roundIconContainer, { backgroundColor: color } ]}
 						time={timestamp}
 						timeFormat= {{
 							hour: 'numeric',
@@ -271,7 +274,7 @@ class JobRow extends View<null, Props, null> {
 	}
 
 	_renderActionIcon = (): Object => {
-		const { intl, method, appLayout, methodValue } = this.props;
+		const { intl, method, appLayout, methodValue, expired, active } = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 		const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
@@ -295,7 +298,7 @@ class JobRow extends View<null, Props, null> {
 				{
 					actionIcon: <BlockIcon
 						icon={action.icon}
-						bgColor={action.bgColor}
+						bgColor={expired ? '#999999' : action.bgColor}
 						containerStyle={methodIconContainer}
 						style={methodIcon}
 					/>,
@@ -343,7 +346,7 @@ class JobRow extends View<null, Props, null> {
 
 	_getStyle = (appLayout: Object): Object => {
 		let { fonts, borderRadiusRow } = Theme.Core;
-		let { active, method, methodValue } = this.props;
+		let { active, method, methodValue, expired } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
@@ -362,7 +365,7 @@ class JobRow extends View<null, Props, null> {
 				let roundVal = Math.round(methodValue / 255 * 100);
 				showDarkBG = roundVal >= 50 && roundVal < 100;
 			}
-			backgroundColor = active ? (showDarkBG ? action.bgColorDark : action.bgColor) : '#bdbdbd';
+			backgroundColor = !active ? '#bdbdbd' : (expired ? '#999999' : (showDarkBG ? action.bgColorDark : action.bgColor));
 		}
 
 		return {
