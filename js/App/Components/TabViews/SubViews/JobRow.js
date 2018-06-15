@@ -274,7 +274,7 @@ class JobRow extends View<null, Props, null> {
 	}
 
 	_renderActionIcon = (): Object => {
-		const { intl, method, appLayout, methodValue, expired, active } = this.props;
+		const { intl, method, appLayout, methodValue, expired } = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 		const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
