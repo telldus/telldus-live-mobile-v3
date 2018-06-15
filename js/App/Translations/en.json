@@ -243,6 +243,7 @@
   "schedule.time.editTime": "Tap to change time",
   "schedule.time.editTimeAccessible": "Double tap to change time",
   "scheduler": "Scheduler",
+  "scheduler.now": "Now",
   "scheduler.repeatDays": "Every day at {value}",
   "scheduler.repeatWeekday": "Weekdays at {value}",
   "scheduler.repeatWeekend": "Weekends at {value}",

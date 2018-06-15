@@ -27,6 +27,7 @@ import { ListRow, View, Text, StyleSheet } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
 
 type Props = {
+	text: string,
     roundIconContainerStyle?: number | Object | Array<any>,
     rowWithTriangleContainerStyle?: number | Object | Array<any>,
     textStyle?: number | Object | Array<any>,
@@ -36,6 +37,7 @@ type Props = {
 export default class NowRow extends View<Props, null> {
 	render(): Object {
 		const {
+			text,
 			roundIconContainerStyle,
 			rowWithTriangleContainerStyle,
 			textStyle,
@@ -61,7 +63,7 @@ export default class NowRow extends View<Props, null> {
 			>
 				<View style={styles.cover}>
 					<Text style={textStyle}>
-						Now
+						{text}
 					</Text>
 					<View style={lineStyle}/>
 				</View>

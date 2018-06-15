@@ -69,6 +69,10 @@ const messages = defineMessages({
 		id: 'scheduler.repeatWeekend',
 		defaultMessage: 'Weekends at {value}',
 	},
+	now: {
+		id: 'scheduler.now',
+		defaultMessage: 'Now',
+	},
 });
 
 
@@ -254,6 +258,7 @@ class JobRow extends View<null, Props, null> {
 						style={container}
 					>
 						<NowRow
+							text={formatMessage(messages.now)}
 							roundIconContainerStyle={roundIconContainer}
 							rowWithTriangleContainerStyle={rowWithTriangleContainerNow}
 							textStyle={time}
