@@ -83,14 +83,20 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 
 						setStateInterval[clientDeviceId] = setInterval(() => {
 							const { devices: deviceLat } = getState();
-							const { isInState } = deviceLat.byId[deviceId];
-							const nextState = methods[state];
+							const device = deviceLat.byId[deviceId];
+							if (device) {
+								const { isInState } = device;
+								const nextState = methods[state];
 
-							// Incase if websocket updated the state do not go for device/info call.
-							if (nextState === isInState) {
-								clearTimers(clientDeviceId);
+								// Incase if websocket updated the state do not go for device/info call.
+								if (nextState === isInState) {
+									clearTimers(clientDeviceId);
+								} else {
+									dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, false));
+								}
 							} else {
-								dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, false));
+								// clear timers and do nothing if the device is not available(LOGOUT can cause list to be reset)
+								clearTimers(clientDeviceId);
 							}
 						}, 1000);
 					}
@@ -165,9 +171,9 @@ function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: s
 
 			// Incase if no response came through socket and the final device/info call to reset state throws error
 			// the action indicator will keep flashing for ever. So reseting the state with it's own state here.
-			if (reset) {
-				let { devices } = getState();
-				let device = devices.byId[deviceId];
+			let { devices } = getState();
+			let device = devices.byId[deviceId];
+			if (reset && device) {
 				let { isInState, value } = device;
 				const data = {
 					deviceId,
