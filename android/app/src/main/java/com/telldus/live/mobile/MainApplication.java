@@ -23,12 +23,6 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
-import com.RNRSA.RNRSAPackage;
-import com.tradle.react.UdpSocketsModule;
-import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
-import com.reactlibrary.RNReactNativeAccessibilityPackage;
-import com.airbnb.android.react.maps.MapsPackage;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -48,6 +42,14 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import io.fabric.sdk.android.Fabric;
 import org.pgsqlite.SQLitePluginPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+import com.RNRSA.RNRSAPackage;
+import com.tradle.react.UdpSocketsModule;
+import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
+import com.reactlibrary.RNReactNativeAccessibilityPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -66,12 +68,14 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
+				new RNFirebasePackage(),
+				new RNFirebaseMessagingPackage(),
+				new RNFirebaseNotificationsPackage(),
 				new RNRSAPackage(),
 				new UdpSocketsModule(),
 				new RNSensitiveInfoPackage(),
 				new RNReactNativeAccessibilityPackage(),
 				new MapsPackage(),
-				new ReactNativePushNotificationPackage(),
 				new RNI18nPackage()
 			);
 		}
