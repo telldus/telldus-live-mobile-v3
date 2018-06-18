@@ -55,6 +55,7 @@ class App extends React.Component<Props, null> {
 	props: Props;
 
 	onLayout: (Object) => void;
+	onNotification: any;
 
 	constructor() {
 		super();
@@ -75,6 +76,10 @@ class App extends React.Component<Props, null> {
 			StatusBar.setTranslucent(true);
 			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
+
+		// Push notification listener.
+		// TODO : Remove conditional check once push in IOS is enabled and same method is present.
+		this.onNotification = Push.onNotification ? Push.onNotification() : null;
 	}
 
 	componentDidUpdate() {
@@ -86,6 +91,11 @@ class App extends React.Component<Props, null> {
 		  'change',
 		  setAccessibilityInfo
 		);
+		// TODO : Remove conditional check once push in IOS is enabled and same method is present.
+		if (this.onNotification) {
+			// Remove Push notification listener.
+			this.onNotification();
+		}
 	}
 
 	/*
@@ -93,8 +103,9 @@ class App extends React.Component<Props, null> {
 	 * remote push notifications.
 	 */
 	pushConf() {
+		const { dispatch, ...otherProps } = this.props;
 		if (this.props.accessToken) {
-			Push.configure(this.props);
+			dispatch(Push.configure(otherProps));
 		}
 	}
 
