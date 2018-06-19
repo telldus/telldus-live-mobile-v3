@@ -484,7 +484,10 @@ class SensorRow extends View<Props, State> {
 					onLayout={this.onLayout}
 					accessible={accessible}
 					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-					accessibilityLabel={accessible ? accessibilityLabel : ''}>
+					accessibilityLabel={accessible ? accessibilityLabel : ''}
+					// By passing onPress to visible content of 'SwipeRow', prevents it from
+					// being placed inside a touchable.
+					onPress={this.noOp}>
 					<View style={styles.cover}>
 						<TouchableOpacity onPress={this.onPressSensorName} disabled={coverOccupiedWidth < coverMaxWidth}
 							style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
@@ -679,6 +682,9 @@ class SensorRow extends View<Props, State> {
 				marginLeft: 2 + (dotSize * 0.2),
 			},
 		};
+	}
+
+	noOp() {
 	}
 }
 
