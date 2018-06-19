@@ -384,62 +384,62 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
 
     void createDeviceApi() {
-      accessToken=prefManager.getAccess();
-    /*  pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
-      pDialog.setMax(5);
-      pDialog.setMessage("Please wait...");
-      pDialog.setCancelable(false);
-      pDialog.show();*/
+        accessToken=prefManager.getAccess();
+      /*  pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
+        pDialog.setMax(5);
+        pDialog.setMessage("Please wait...");
+        pDialog.setCancelable(false);
+        pDialog.show();*/
 
-      AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
-              .addHeaders("Content-Type", "application/json")
-              .addHeaders("Accpet", "application/json")
-              .addHeaders("Authorization", "Bearer " + accessToken)
-              .setPriority(Priority.LOW)
-              .build()
-              .getAsJSONObject(new JSONObjectRequestListener() {
-                  @Override
-                  public void onResponse(JSONObject response) {
-                      try {
+        AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
+                .addHeaders("Content-Type", "application/json")
+                .addHeaders("Accpet", "application/json")
+                .addHeaders("Authorization", "Bearer " + accessToken)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
 
-                          JSONObject deviceData = new JSONObject(response.toString());
-                           Log.v("JSON Object",deviceData.toString());
-                          JSONArray deviceList = deviceData.getJSONArray("device");
+                            JSONObject deviceData = new JSONObject(response.toString());
+                             Log.v("JSON Object",deviceData.toString());
+                            JSONArray deviceList = deviceData.getJSONArray("device");
 
-                          for (int i = 0; i < deviceList.length(); i++) {
-                              JSONObject curObj = deviceList.getJSONObject(i);
-                              String name = curObj.getString("name");
-                              stateID = curObj.getInt("state");
+                            for (int i = 0; i < deviceList.length(); i++) {
+                                JSONObject curObj = deviceList.getJSONObject(i);
+                                String name = curObj.getString("name");
+                                stateID = curObj.getInt("state");
 
-                              if (/*stateID == 1 || stateID == 2 ||*/stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512 || stateID == 16) {
-                                  Integer id = curObj.getInt("id");
-                                  DeviceID.put(name, id);
-                                  nameListItems.add(name);
-                                  stateListItems.add(String.valueOf(stateID));
-                              }
-                          }
-                          deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
-                          deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
-                        /*  if (pDialog.isShowing())
-                              pDialog.dismiss();*/
-                          //  Toast.makeText(getApplicationContext(),deviceStateList.toString(),Toast.LENGTH_LONG).show();
-                      } catch (JSONException e) {
-                          e.printStackTrace();
-                      };
-                  }
+                                if (stateID == 1 || stateID == 2 ||stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512 || stateID == 16) {
+                                    Integer id = curObj.getInt("id");
+                                    DeviceID.put(name, id);
+                                    nameListItems.add(name);
+                                    stateListItems.add(String.valueOf(stateID));
+                                }
+                            }
+                            deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                            deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
+                          /*  if (pDialog.isShowing())
+                                pDialog.dismiss();*/
+                            //  Toast.makeText(getApplicationContext(),deviceStateList.toString(),Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        };
+                    }
 
-                  @Override
-                  public void onError(ANError anError) {
-                     /* if (pDialog.isShowing())
-                      {
+                    @Override
+                    public void onError(ANError anError) {
+                       /* if (pDialog.isShowing())
+                        {
 
-                          pDialog.dismiss();
+                            pDialog.dismiss();
 
 
-                      }*/
-                  }
+                        }*/
+                    }
 
-              });
+                });
     }
 
 

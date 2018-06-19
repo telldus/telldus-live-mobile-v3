@@ -13,7 +13,7 @@
 
     <padding
         android:left="5dp"
-        android:top="0dp"
+        android:top="5dp"
         android:right="0dp"
         android:bottom="0dp">
     </padding>
