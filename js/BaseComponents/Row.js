@@ -31,6 +31,7 @@ import Platform from 'Platform';
 
 type DefaultProps = {
 	importantForAccessibility: string,
+	accessible: boolean,
 };
 
 type Props = {
@@ -43,6 +44,7 @@ type Props = {
 	appLayout: Object,
 	importantForAccessibility?: string,
 	accessibilityLabel?: string,
+	accessible?: boolean,
 };
 
 class Row extends Component<Props, null> {
@@ -59,6 +61,7 @@ class Row extends Component<Props, null> {
 
 	static defaultProps: DefaultProps = {
 		importantForAccessibility: 'no',
+		accessible: false,
 	};
 
 	onPress = () => {
@@ -73,12 +76,12 @@ class Row extends Component<Props, null> {
 	};
 
 	render(): Object {
-		const { children, onPress, style, containerStyle, importantForAccessibility, accessibilityLabel } = this.props;
+		const { children, onPress, style, containerStyle, importantForAccessibility, accessibilityLabel, accessible } = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
 			<TouchableOpacity
-				accessible={false}
+				accessible={accessible}
 				onPress={this.onPress}
 				style={[defaultStyle.container, containerStyle]}
 				outlineProvider="bounds"
