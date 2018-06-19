@@ -84,6 +84,7 @@ const Push = {
 				});
 		};
 	},
+	// Remote notification listerner. Returns a function that clears the listener.
 	onNotification: (): any => {
 		return firebase.notifications().onNotification((notification: Notification): any => {
 			// Remote Notification received when app is in foreground is handled here.
