@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/widget_margin">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/iconWidgetSensor"
@@ -23,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:text="Outdoor Temp."
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:gravity="center"
                 android:maxLines="1"
                 android:layout_centerInParent="true"
@@ -39,7 +38,7 @@
             android:orientation="horizontal">
 
             <FrameLayout
-                android:layout_width="110dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
@@ -53,7 +52,7 @@
 
                 <ImageView
                 android:id="@+id/iconSensor"
-                android:layout_width="65dp"
+                android:layout_width="85dp"
                 android:layout_height="50dp"
                 android:layout_gravity="left|center"
 
@@ -71,8 +70,8 @@
                 <LinearLayout
                     android:layout_gravity="end|center"
                     android:layout_width="wrap_content"
-                    android:layout_marginEnd="10dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="13dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -85,7 +84,7 @@
                     android:id="@+id/txtSensorValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13sp"
+                    android:textSize="16sp"
                     android:text="56"
                     android:maxLines="1"
                     android:layout_gravity="center"
@@ -97,7 +96,7 @@
                     android:text="%"
                     android:maxLines="1"
                     android:layout_gravity="center"
-                    android:textSize="13sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
                     />
@@ -110,7 +109,7 @@
                         android:text="5 min ago "
                         android:layout_gravity="center"
                         android:textColor="#FFFFFF"
-                        android:textSize="8sp"/>
+                        android:textSize="13sp"/>
             </LinearLayout>
             </FrameLayout>
         </LinearLayout>
