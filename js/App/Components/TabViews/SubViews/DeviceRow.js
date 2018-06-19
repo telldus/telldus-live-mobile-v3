@@ -406,7 +406,11 @@ class DeviceRow extends PureComponent<Props, State> {
 						onPressSettings={this.onSettingsSelected} onSetIgnoreDevice={this.onSetIgnoreDevice}
 						isOpen={isOpen}/>
 					<ListItem
-						style={styles.row}>
+						style={styles.row}
+						// Fixes issue controlling device in IOS, in accessibility mode
+						// By passing onPress to visible content of 'SwipeRow', prevents it from
+						// being placed inside a touchable.
+						onPress={this.noOp}>
 						<View style={styles.cover}>
 							<TouchableOpacity
 								style={[styles.touchableContainer]}
@@ -612,6 +616,9 @@ class DeviceRow extends PureComponent<Props, State> {
 				textAlignVertical: 'center',
 			},
 		};
+	}
+
+	noOp() {
 	}
 }
 
