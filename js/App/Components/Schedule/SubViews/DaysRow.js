@@ -88,6 +88,7 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 				containerStyle={[container, containerStyle]}
 				style={row}
 				onPress={onPress}
+				accessible={true}
 				importantForAccessibility={'yes'}
 				accessibilityLabel={accessibilityLabel}
 			>

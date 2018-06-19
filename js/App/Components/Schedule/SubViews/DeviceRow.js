@@ -52,7 +52,7 @@ export default class DeviceRow extends View<null, Props, null> {
 		const accessibilityLabel = `${deviceName}, ${labelPostScript}`;
 
 		return (
-			<Row layout="row" row={row} onPress={onPress} style={rowStyle} containerStyle={containerStyle} accessibilityLabel={accessibilityLabel}>
+			<Row layout="row" row={row} onPress={onPress} style={rowStyle} containerStyle={containerStyle} accessible={true} accessibilityLabel={accessibilityLabel}>
 				<BlockIcon
 					icon="device-alt"
 					style={icon}

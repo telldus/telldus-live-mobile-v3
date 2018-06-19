@@ -227,6 +227,7 @@ export default class Days extends View<null, Props, State> {
 						onPress={this.toggleWeekdays}
 						style={row}
 						containerStyle={rowContainer}
+						accessible={true}
 						importantForAccessibility={'yes'}
 						accessibilityLabel={`${this.labelWeekDays}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
 					>
@@ -248,6 +249,7 @@ export default class Days extends View<null, Props, State> {
 							rowContainer,
 							{ marginBottom: checkBoxBottom },
 						]}
+						accessible={true}
 						importantForAccessibility={'yes'}
 						accessibilityLabel={`${this.labelWeekEnds}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
 					>

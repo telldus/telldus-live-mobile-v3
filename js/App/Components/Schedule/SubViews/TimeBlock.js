@@ -76,6 +76,7 @@ export default class TimeBlock extends View<null, Props, null> {
 				row={{ type }}
 				style={row}
 				containerStyle={container}
+				accessible={true}
 				importantForAccessibility={'yes'}
 				accessibilityLabel={accessibilityLabel}
 			>

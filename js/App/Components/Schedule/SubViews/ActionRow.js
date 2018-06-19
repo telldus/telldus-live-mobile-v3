@@ -196,6 +196,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 
 		return (
 			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}
+				accessible={true}	
 				importantForAccessibility={'yes'}
 				accessibilityLabel={accessibilityLabel}>
 				{this._renderIcon(action)}
