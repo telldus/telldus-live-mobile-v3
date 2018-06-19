@@ -267,14 +267,15 @@ public void FetchWebAddress()
 
                                 if(b)
                                 {
-                                    int widgetIDs[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewAppWidget.class));
-                                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(getApplicationContext());
+                                  int widgetIDsOnOff[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewOnOffWidget.class));
+                                  AppWidgetManager onOffWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
 
-                                    for(int id : widgetIDs) {
-                                        AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(id, R.id.never);
+                                  for(int id : widgetIDsOnOff) {
+                                      AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(id, R.id.never);
 
-                                        NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,id);
-                                    }
+                                      NewOnOffWidget.updateAppWidget(getApplicationContext(),onOffWidgetManager,id);
+
+                                  }
                                 }
 
                             }
