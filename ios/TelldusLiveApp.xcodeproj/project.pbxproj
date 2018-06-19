@@ -24,10 +24,6 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD4E8D787A68404D96264B38 /* libUdpSockets.a */; };
 		26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26C0E61D205C17B700E9AD6A /* libRNI18n.a */; };
-		26DA5FD62045A28D003FCA91 /* SFNS Display.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26DA5FD22045A28C003FCA91 /* SFNS Display.ttf */; };
-		26DA5FD72045A28D003FCA91 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26DA5FD32045A28C003FCA91 /* Roboto-Light.ttf */; };
-		26DA5FD82045A28D003FCA91 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26DA5FD42045A28D003FCA91 /* Roboto-Medium.ttf */; };
-		26DA5FD92045A28D003FCA91 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26DA5FD52045A28D003FCA91 /* Roboto-Regular.ttf */; };
 		28061C46E49841668FDE1C6C /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F593D0DBCA743F4997FEAF8 /* EvilIcons.ttf */; };
 		30E6894E35F74445A4F6F35B /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1D49054AB364C649FCD5506 /* Zocial.ttf */; };
 		34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */; };
@@ -911,6 +907,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = M2879GJ5VD;
 						DevelopmentTeamName = "Mark Andrews";
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -1406,19 +1403,15 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				D2986F407B4048AC96288B60 /* FontAwesome.ttf in Resources */,
 				F833995608B34A6AA1968135 /* Entypo.ttf in Resources */,
-				26DA5FD82045A28D003FCA91 /* Roboto-Medium.ttf in Resources */,
 				28061C46E49841668FDE1C6C /* EvilIcons.ttf in Resources */,
 				DC98AE9FD1CA4A448FC5C87D /* Foundation.ttf in Resources */,
-				26DA5FD92045A28D003FCA91 /* Roboto-Regular.ttf in Resources */,
 				0150E3FA26654BE1804A1F66 /* Ionicons.ttf in Resources */,
-				26DA5FD72045A28D003FCA91 /* Roboto-Light.ttf in Resources */,
 				044C3D662ED641A9992CF8FF /* MaterialCommunityIcons.ttf in Resources */,
 				A17FFBC3ED7A45A28EE23A2E /* MaterialIcons.ttf in Resources */,
 				36DB5485CDAA4D30BC3A8AE2 /* Octicons.ttf in Resources */,
 				8A0C59785D134F67BFBC177A /* SimpleLineIcons.ttf in Resources */,
 				40D7C76A1F73AB9C0078E086 /* LaunchScreen.storyboard in Resources */,
 				30E6894E35F74445A4F6F35B /* Zocial.ttf in Resources */,
-				26DA5FD62045A28D003FCA91 /* SFNS Display.ttf in Resources */,
 				E01A717BB6604D8D8C4C0CA0 /* telldusicons.ttf in Resources */,
 				68CC7CCADF574C7AB546E29B /* telldusicons.svg in Resources */,
 				DD7823359AB84A89988A5D47 /* Roboto-Light.ttf in Resources */,
