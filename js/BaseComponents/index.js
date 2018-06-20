@@ -77,6 +77,7 @@ import TabBar from './TabBar';
 import SafeAreaViewComponent from './SafeAreaView';
 import DialogueHeader from './DialogueHeader';
 import TitledInfoBlock from './TitledInfoBlock';
+import CheckBoxIconText from './CheckBoxIconText';
 
 import {
 	AppState,
@@ -144,6 +145,7 @@ module.exports = {
 	TabBar,
 	DialogueHeader,
 	TitledInfoBlock,
+	CheckBoxIconText,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
