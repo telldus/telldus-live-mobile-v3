@@ -78,6 +78,13 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		justifyContent: 'flex-start',
 		backgroundColor: 'transparent',
+		elevation: 0,
+		shadowColor: '#fff',
+		shadowOpacity: 0,
+		shadowOffset: {
+			height: 0,
+			width: 0,
+		},
 	},
 	triangleStyle: {
 		height: 0,
