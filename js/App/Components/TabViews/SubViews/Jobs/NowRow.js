@@ -46,7 +46,7 @@ export default class NowRow extends View<Props, null> {
 
 		return (
 			<ListRow
-				roundIcon={null}
+				roundIcon={''}
 				roundIconContainerStyle={[roundIconContainerStyle, {
 					backgroundColor: Theme.Core.brandPrimary,
 				}]}
