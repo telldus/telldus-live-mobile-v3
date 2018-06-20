@@ -23,12 +23,12 @@
 'use strict';
 
 import moment from 'moment-timezone';
-
+import { combineReducers } from 'redux';
 import filter from 'lodash/filter';
 import range from 'lodash/range';
 import mapValues from 'lodash/mapValues';
 
-export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}): {sections: Object, sectionIds: Array<Object>} {
+export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object = {}, devices: Object = {}, userOptions: Object): {sections: Object, sectionIds: Array<Object>} {
 	if (!jobs || !jobs.length) {
 		return {
 			sections: {'0': [], '1': [], '2': [], '3': [], '4': [], '5': [], '6': [], '7': []},
@@ -77,7 +77,9 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		job.gateway = gateway;
 
 		const now = moment().tz(timezone);
-		if (job.weekdays) {
+		const { showInactive } = userOptions;
+		const showJobs = showInactive || (!showInactive && job.active);
+		if (job.weekdays && showJobs) {
 			job.weekdays.forEach((day: number): Object | void => {
 				let nonMutantJob = { ...job, expired: false };
 				if (day !== todayInWeek) {
@@ -121,3 +123,35 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		sectionIds: filteredSectionIds,
 	};
 }
+
+export type StateUserOptions = {
+	showInactive: boolean,
+};
+export const initialState = {
+	showInactive: true,
+};
+
+const userOptions = (state: StateUserOptions = initialState, action: Object): StateUserOptions => {
+	if (action.type === 'persist/REHYDRATE') {
+		if (action.payload && action.payload.jobsList && action.payload.jobsList.userOptions) {
+			console.log('rehydrating userOptions');
+			return {
+				...state,
+				...action.payload.jobsList.userOptions,
+			};
+		}
+		return { ...state };
+	}
+	if (action.type === 'TOGGLE_INACTIVE_VISIBILITY') {
+		const { showInactive } = action.payload;
+		return {
+			...state,
+			showInactive,
+		};
+	}
+	return state;
+};
+
+export default combineReducers({
+	userOptions,
+});

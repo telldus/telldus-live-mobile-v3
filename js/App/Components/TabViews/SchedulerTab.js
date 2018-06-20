@@ -40,7 +40,7 @@ import {
 	Icon,
 } from '../../../BaseComponents';
 import { JobRow, JobsPoster } from './SubViews';
-import { editSchedule, getJobs } from '../../Actions';
+import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
@@ -85,6 +85,7 @@ type State = {
 class SchedulerTab extends View<null, Props, State> {
 
 	keyExtractor: (Object) => string;
+	onToggleVisibility: (boolean) => void;
 
 	static propTypes = {
 		rowsAndSections: PropTypes.object,
@@ -116,6 +117,7 @@ class SchedulerTab extends View<null, Props, State> {
 		this.newSchedule = this.newSchedule.bind(this);
 		this.onIndexChanged = this.onIndexChanged.bind(this);
 		this.keyExtractor = this.keyExtractor.bind(this);
+		this.onToggleVisibility = this.onToggleVisibility.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -164,6 +166,11 @@ class SchedulerTab extends View<null, Props, State> {
 		});
 	}
 
+	onToggleVisibility(show: boolean) {
+		const { dispatch } = this.props;
+		dispatch(toggleInactive(show));
+	}
+
 	render(): React$Element<any> {
 		const { rowsAndSections, appLayout, screenProps } = this.props;
 		const { formatMessage } = screenProps.intl;
@@ -184,6 +191,7 @@ class SchedulerTab extends View<null, Props, State> {
 					scroll={this._scroll}
 					appLayout={appLayout}
 					intl={screenProps.intl}
+					onToggleVisibility={this.onToggleVisibility}
 				/>
 				<Swiper
 					ref={this._refScroll}
@@ -340,9 +348,10 @@ const getRowsAndSections = createSelector(
 		({ jobs }: { jobs: Object[] }): Object[] => jobs,
 		({ gateways }: { gateways: Object }): Object => gateways,
 		({ devices }: { devices: Object }): Object => devices,
+		({ jobsList }: { jobsList: Object }): Object => jobsList.userOptions,
 	],
-	(jobs: Object[], gateways: Object, devices: Object): Object => {
-		const { sections } = parseJobsForListView(jobs, gateways, devices);
+	(jobs: Object[], gateways: Object, devices: Object, userOptions: Object): Object => {
+		const { sections } = parseJobsForListView(jobs, gateways, devices, userOptions);
 
 		return sections;
 	},

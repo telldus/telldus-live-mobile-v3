@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 import { Animated, Image, TouchableOpacity, PanResponder } from 'react-native';
 import Platform from 'Platform';
 
-import { Poster, View } from '../../../../BaseComponents';
+import { Poster, View, CheckBoxIconText } from '../../../../BaseComponents';
 import Weekdays from './Jobs/Weekdays';
 import Theme from '../../../Theme';
 
@@ -34,6 +34,7 @@ type Props = {
 	days: Object[],
 	todayIndex: number,
 	appLayout: Object,
+	onToggleVisibility: (boolean) => void,
 };
 
 type State = {
@@ -41,6 +42,7 @@ type State = {
 	showLeftButton?: boolean,
 	showRightButton?: boolean,
 	dragDir?: string,
+	showInactive: boolean,
 };
 
 export default class JobsPoster extends View<null, Props, State> {
@@ -48,6 +50,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	onLayout: (number, number, string) => void;
 	_panResponder: Object;
 	distMoved: number;
+	onToggleVisibilty: (boolean) => void;
 
 	static propTypes = {
 		days: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -67,6 +70,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			showRightButton: true,
 			daysLayout: {},
 			dragDir: undefined,
+			showInactive: true,
 		};
 		// weekdays animation ranges from value (1 -> 0) while dragging/sliding left(visiting yesterday)
 		// weekdays animation ranges from value (1 -> 2) while dragging/sliding right(visiting tomorrow)
@@ -79,6 +83,8 @@ export default class JobsPoster extends View<null, Props, State> {
 		this.onLayout = this.onLayout.bind(this);
 		this.distMoved = 0;
 		this.finalValue = null;
+
+		this.onToggleVisibilty = this.onToggleVisibilty.bind(this);
 	}
 
 	componentWillMount() {
@@ -215,7 +221,7 @@ export default class JobsPoster extends View<null, Props, State> {
 		if (newTodayIndex !== todayIndex) {
 			this.scrollRight = newTodayIndex > todayIndex;
 
-			const updateButtonsVisibility: State = {
+			const updateButtonsVisibility = {
 				showLeftButton: newTodayIndex > 0,
 				showRightButton: newTodayIndex < (this.props.days.length - 1),
 			};
@@ -245,7 +251,8 @@ export default class JobsPoster extends View<null, Props, State> {
 		const newLayout = nextProps.appLayout.width !== this.props.appLayout.width;
 		const newDays = nextProps.days.length !== this.props.days.length;
 		const onDragChange = nextState.dragDir !== this.state.dragDir;
-		return newProps || newState || newLayout || newDays || onDragChange;
+		const showInactiveChange = nextState.showInactive !== this.state.showInactive;
+		return newProps || newState || newLayout || newDays || onDragChange || showInactiveChange;
 	}
 
 	getPosterWidth(): number {
@@ -255,8 +262,18 @@ export default class JobsPoster extends View<null, Props, State> {
 		return (Platform.OS === 'android' && !isPortrait) ? (width - ((width * 0.11) + (height * 0.13))) : width;
 	}
 
+	onToggleVisibilty() {
+		const { showInactive } = this.state;
+		const { onToggleVisibility } = this.props;
+		this.setState({
+			showInactive: !showInactive,
+		}, () => {
+			onToggleVisibility(this.state.showInactive);
+		});
+	}
+
 	render(): React$Element<any> {
-		const { showLeftButton, showRightButton } = this.state;
+		const { showLeftButton, showRightButton, showInactive } = this.state;
 		const {
 			container,
 			daysContainer,
@@ -297,6 +314,14 @@ export default class JobsPoster extends View<null, Props, State> {
 							<Image source={image} style={arrow}/>
 						</TouchableOpacity>
 					)}
+					<CheckBoxIconText
+						style={{
+							marginBottom: 5,
+						}}
+						onToggleCheckBox={this.onToggleVisibilty}
+						isChecked={showInactive}
+						text={'Show inactive'}
+					/>
 				</View>
 			</Poster>
 		);
@@ -612,6 +637,8 @@ export default class JobsPoster extends View<null, Props, State> {
 				right: 0,
 				bottom: 0,
 				borderWidth: 0,
+				alignItems: 'center',
+				justifyContent: 'flex-end',
 			},
 			daysContainer: {
 				borderWidth: 0,

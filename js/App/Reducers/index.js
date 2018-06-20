@@ -32,6 +32,7 @@ import Tabs from './Tabs';
 import LiveApi from './LiveApi';
 import Modal from './Modal';
 import sensorsList from './Sensors';
+import jobsList from './Jobs';
 import { reducers } from 'live-shared-data';
 
 const config = {
@@ -47,4 +48,5 @@ module.exports = persistCombineReducers(config, {
 	modal: Modal,
 	sensorsList,
 	...reducers,
+	jobsList,
 });
