@@ -115,6 +115,8 @@ export type Action =
 
 	| { type: 'SHOW_CHANGE_LOG' }
 	| { type: 'HIDE_CHANGE_LOG' }
+
+	| { type: 'TOGGLE_INACTIVE_VISIBILITY', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

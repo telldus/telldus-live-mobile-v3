@@ -24,6 +24,18 @@
 import { actions } from 'live-shared-data';
 const { Jobs } = actions;
 
+import type { Action } from './Types';
+
+function toggleInactive(showInactive: boolean): Action {
+	return {
+		type: 'TOGGLE_INACTIVE_VISIBILITY',
+		payload: {
+			showInactive,
+		},
+	};
+}
+
 module.exports = {
 	...Jobs,
+	toggleInactive,
 };
