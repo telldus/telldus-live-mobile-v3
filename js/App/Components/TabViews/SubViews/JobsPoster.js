@@ -139,7 +139,9 @@ export default class JobsPoster extends View<null, Props, State> {
 			this.distMoved = this.getRange(dx);
 			if (distX < 0) {
 				let toVal = this.animMidVal + this.distMoved;
+				// Prevent animation range from going beyond it's left & right limits.
 				toVal = toVal <= this.animLeftVal ? this.animLeftVal : toVal;
+				toVal = toVal >= this.animRightVal ? this.animRightVal : toVal;
 				if (toVal < this.animMidVal) {
 					// Doing setState only to cause a re-render and make the 'this.scrollRight' value reflect at weekdays animation method.
 					this.scrollRight = true;
@@ -156,7 +158,9 @@ export default class JobsPoster extends View<null, Props, State> {
 			}
 			if (distX > 0) {
 				let toVal = this.animMidVal + this.distMoved;
+				// Prevent animation range from going beyond it's left & right limits.
 				toVal = toVal >= this.animRightVal ? this.animRightVal : toVal;
+				toVal = toVal <= this.animLeftVal ? this.animLeftVal : toVal;
 				if (toVal >= this.animMidVal) {
 					// Doing setState only to cause a re-render and make the 'this.scrollRight' value reflect at weekdays animation method.
 					this.scrollRight = false;
