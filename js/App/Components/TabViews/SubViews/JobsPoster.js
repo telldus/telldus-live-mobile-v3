@@ -25,16 +25,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Image, TouchableOpacity, PanResponder } from 'react-native';
 import Platform from 'Platform';
+import { defineMessages } from 'react-intl';
 
 import { Poster, View, CheckBoxIconText } from '../../../../BaseComponents';
 import Weekdays from './Jobs/Weekdays';
 import Theme from '../../../Theme';
+
+const messages = defineMessages({
+	checkBoxText: {
+		id: 'jobsposter.checkBoxText',
+		defaultMessage: 'Show inactive',
+	},
+});
 
 type Props = {
 	days: Object[],
 	todayIndex: number,
 	appLayout: Object,
 	onToggleVisibility: (boolean) => void,
+	intl: Object,
 };
 
 type State = {
@@ -85,6 +94,9 @@ export default class JobsPoster extends View<null, Props, State> {
 		this.finalValue = null;
 
 		this.onToggleVisibilty = this.onToggleVisibilty.bind(this);
+
+		const { formatMessage } = props.intl;
+		this.checkBoxText = formatMessage(messages.checkBoxText);
 	}
 
 	componentWillMount() {
@@ -320,7 +332,7 @@ export default class JobsPoster extends View<null, Props, State> {
 						}}
 						onToggleCheckBox={this.onToggleVisibilty}
 						isChecked={showInactive}
-						text={'Show inactive'}
+						text={this.checkBoxText}
 					/>
 				</View>
 			</Poster>
