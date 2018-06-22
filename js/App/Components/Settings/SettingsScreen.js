@@ -96,7 +96,7 @@ type Props = {
 	dispatch: Function,
 	isVisible: boolean,
 	onClose: () => void,
-	onLogout: (string, Function) => void,
+	onLogout: (string) => void,
 	onSubmitPushToken: (string) => Promise<any>,
 	user: Object,
 	validationMessage: string,
@@ -118,7 +118,6 @@ props: Props;
 state: State;
 
 logout: () => void;
-postLoadMethod: () => void;
 submitPushToken: () => void;
 updateModalVisiblity: () => void;
 onConfirmLogout: () => void;
@@ -136,7 +135,6 @@ constructor(props: Props) {
 
 	this.logout = this.logout.bind(this);
 	this.onConfirmLogout = this.onConfirmLogout.bind(this);
-	this.postLoadMethod = this.postLoadMethod.bind(this);
 	this.submitPushToken = this.submitPushToken.bind(this);
 	this.updateModalVisiblity = this.updateModalVisiblity.bind(this);
 	this.closeModal = this.closeModal.bind(this);
@@ -200,26 +198,13 @@ onConfirmLogout() {
 	this.setState({
 		isLogoutLoading: true,
 	});
-	this.props.onLogout(this.props.user.pushToken, this.postLoadMethod);
+	this.props.onLogout(this.props.user.pushToken);
 }
 
 closeModal() {
 	this.props.dispatch({
 		type: 'REQUEST_MODAL_CLOSE',
 	});
-}
-
-postLoadMethod(type: string) {
-	if (type === 'REG_TOKEN') {
-		this.setState({
-			isPushSubmitLoading: false,
-		});
-	}
-	if (type === 'LOGOUT') {
-		this.setState({
-			isLogoutLoading: false,
-		});
-	}
 }
 
 updateModalVisiblity() {
@@ -436,10 +421,9 @@ function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 		onSubmitPushToken: (token: string): Promise<any> => {
 			return dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 		},
-		onLogout: (token: string, callback: Function) => {
+		onLogout: (token: string) => {
 			dispatch(unregisterPushToken(token)).then(() => {
 				dispatch(logoutFromTelldus());
-				callback('LOGOUT');
 			});
 		},
 		dispatch,

@@ -167,10 +167,7 @@ class LoginForm extends View {
 		let { intl, dispatch } = this.props;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
-			this.props.loginToTelldus(this.state.username, this.state.password, this.postSubmit)
-				.then((res: Object) => {
-					this.postSubmit();
-				})
+			this.props.loginToTelldus(this.state.username, this.state.password)
 				.catch((err: Object) => {
 					this.postSubmit();
 					this.handleLoginError(err);
