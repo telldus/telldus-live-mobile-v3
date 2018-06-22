@@ -122,5 +122,15 @@ if (process.env.NODE_ENV !== 'production') {
 		};
 	}
 }
+// Fixes a warning! https://github.com/facebook/react-native/issues/18868
+// Can be removed once upgraded to RNv0.56
+global.__old_console_warn = global.__old_console_warn || console.warn;
+global.console.warn = (str: string): any => {
+	let tst = `${str || ''}`;
+	if (tst.startsWith('Warning: isMounted(...) is deprecated')) {
+		return;
+	}
+	return global.__old_console_warn.apply(console, [str]);
+};
 
 module.exports = Bootstrap;
