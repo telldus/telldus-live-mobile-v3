@@ -13,7 +13,7 @@ describe('<Title />', () => {
 	});
 
 	it('should shallow Title', () => {
-		expect(wrapper.find('View').length).toBe(1);
+		expect(wrapper.find('[id="titleView"]').length).toBe(1);
 	});
 
 });
