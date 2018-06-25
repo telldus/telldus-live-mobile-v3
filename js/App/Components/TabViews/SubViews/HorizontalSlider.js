@@ -108,9 +108,7 @@ class HorizontalSlider extends View {
 		let { formatMessage } = this.props.intl;
 		this.labelPhraseOne = formatMessage(i18n.dimLevel);
 		this.labelPhraseTwo = formatMessage(i18n.messageControlDimStep);
-	}
 
-	componentWillMount() {
 		this.panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
 			onMoveShouldSetPanResponder: this.handleMoveShouldSetPanResponder,

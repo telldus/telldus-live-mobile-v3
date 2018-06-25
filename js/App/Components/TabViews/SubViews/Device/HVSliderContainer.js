@@ -103,9 +103,7 @@ class HVSliderContainer extends View {
 		this.onPressDimmer = this.onPressDimmer.bind(this);
 
 		this.buttonOpacity = new Animated.Value(1);
-	}
 
-	componentWillMount() {
 		this.panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
 			onStartShouldSetPanResponderCapture: this.handleStartShouldSetPanResponderCapture,

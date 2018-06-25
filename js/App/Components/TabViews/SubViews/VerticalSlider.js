@@ -91,9 +91,7 @@ class VerticalSlider extends View {
 		this.activeSlider = false;
 
 		this.layoutView = this.layoutView.bind(this);
-	}
 
-	componentWillMount() {
 		this.panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
 			onMoveShouldSetPanResponder: this.handleMoveShouldSetPanResponder,

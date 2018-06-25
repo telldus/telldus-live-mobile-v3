@@ -97,9 +97,7 @@ export default class JobsPoster extends View<null, Props, State> {
 
 		const { formatMessage } = props.intl;
 		this.checkBoxText = formatMessage(messages.checkBoxText);
-	}
 
-	componentWillMount() {
 		this._panResponder = PanResponder.create({
 			// Ask to be the responder:
 			onStartShouldSetPanResponder: this.onStartShouldSetPanResponderHandler.bind(this),
@@ -110,7 +108,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			onPanResponderTerminationRequest: this.onPanResponderTerminationRequestHandler.bind(this),
 			onPanResponderRelease: this.onPanResponderReleaseHandler.bind(this),
 			onPanResponderTerminate: this.onPanResponderTerminateHandler.bind(this),
-		  });
+		});
 	}
 
 	onStartShouldSetPanResponderHandler(event: Object, gestureState: Object): boolean {
