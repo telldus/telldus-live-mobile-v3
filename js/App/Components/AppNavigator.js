@@ -159,12 +159,9 @@ class AppNavigator extends View {
 		getRSAKey(true);
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.props.dispatch(appStart());
 		this.props.dispatch(appState());
-	}
-
-	componentDidMount() {
 		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 		// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 		// and results in generating multiple tokens.
