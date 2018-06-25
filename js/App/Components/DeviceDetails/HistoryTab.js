@@ -100,7 +100,7 @@ class HistoryTab extends View {
 		},
 	});
 
-	static getDerivedStateFromProps(props: Object, state: Object): Object {
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 		const { screenProps } = props;
 		if (screenProps.currentTab !== 'History') {
 			return {
