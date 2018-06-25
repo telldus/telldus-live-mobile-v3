@@ -70,7 +70,7 @@ class DimmerPopup extends Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			isVisible: false,
+			isVisible: props.isVisible,
 			deviceWidth: Dimensions.get('window').width,
 			deviceHeight: Dimensions.get('window').height,
 		};
@@ -81,12 +81,6 @@ class DimmerPopup extends Component<Props, State> {
 
 	componentWillReceiveProps(nextProps: Props) {
 		if (!this.state.isVisible && nextProps.isVisible) {
-			this.setState({ isVisible: true });
-		}
-	}
-
-	componentWillMount() {
-		if (this.props.isVisible) {
 			this.setState({ isVisible: true });
 		}
 	}
