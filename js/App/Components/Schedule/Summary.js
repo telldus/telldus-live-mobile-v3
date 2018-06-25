@@ -69,11 +69,13 @@ class Summary extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
+		const { schedule, intl } = this.props;
+
 		this.state = {
 			isLoading: false,
 		};
 
-		let { formatMessage } = this.props.intl;
+		let { formatMessage } = intl;
 
 		this.h1 = `5. ${formatMessage(i18n.summary)}`;
 		this.h2 = formatMessage(messages.posterSummary);
@@ -81,10 +83,7 @@ class Summary extends View<null, Props, State> {
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
-	}
-
-	componentWillMount() {
-		this.device = this._getDeviceById(this.props.schedule.deviceId);
+		this.device = this._getDeviceById(schedule.deviceId);
 	}
 
 	componentDidMount() {
