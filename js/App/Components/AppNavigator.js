@@ -37,7 +37,6 @@ import {
 	getGateways,
 	hideToast,
 	resetSchedule,
-	getTokenForLocalControl,
 	autoDetectLocalTellStick,
 	setAppLayout,
 	resetLocalControlIP,
@@ -214,36 +213,6 @@ class AppNavigator extends View {
 		this.timeOutConfigureLocalControl = setTimeout(() => {
 			dispatch(autoDetectLocalTellStick());
 		}, 15000);
-	}
-
-	getTokenForLocalControl() {
-		const that = this;
-		/**
-		* Two important things about Local Control!
-		* 1. If a device support local control and by any chance if it missed
-		* sending token or app failed to receive token(socket fail), should be tried and fetched on next call.
-		* 2. Try not to request for token unnecessarily. (Since function is called from 'componentWillReceiveProps',
-		* it will be called quite frequently in short gap.)
-		*
-		* Upon token request it will take some time for the token to receive through the socket. During that time gap
-		* this method will get called from 'componentWillReceiveProps' during any state change, and can result in
-		* issue (2). Because of that timeout is crucial.
-		*/
-		this.timeOutGetLocalControlToken = setTimeout(() => {
-			const { dispatch, gateways } = that.props;
-			getRSAKey(false, ({ pemPub }: Object) => {
-				if (pemPub) {
-					for (let index in gateways) {
-						const gateway = gateways[index];
-						const { id, websocketOnline, websocketConnected, localKey } = gateway;
-						const { key, supportLocal } = localKey;
-						if (websocketOnline && websocketConnected && supportLocal && !key) {
-							dispatch(getTokenForLocalControl(id, pemPub));
-						}
-					}
-				}
-			});
-		}, 35000);
 	}
 
 	componentWillUnmount() {
