@@ -59,6 +59,21 @@ type State = {
 	dimmerValue: number,
 };
 
+function getDimmerValue(device: Object): number {
+	if (device !== null) {
+		const { stateValues, isInState } = device;
+		const value = stateValues.DIM;
+		if (isInState === 'TURNON') {
+			return 100;
+		} else if (isInState === 'TURNOFF') {
+			return 0;
+		} else if (isInState === 'DIM') {
+			return Math.round(value * 100.0 / 255);
+		}
+	}
+	return 0;
+}
+
 class SliderDetails extends View {
 	props: Props;
 	state: State;
@@ -71,10 +86,25 @@ class SliderDetails extends View {
 	onTurnOn: () => void;
 	onTurnOff: () => void;
 
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
+		const { device } = props;
+		const dimmerValue = getDimmerValue(device);
+
+		// '!state.isControlling' Will make sure while controlling it never renders with previous value.
+		// Other two checks will make sure re-render(value update) happens only when device set/reset happens and there is a
+		// change in the value.
+		if (!state.isControlling && state.dimmerValue !== dimmerValue && device.methodRequested === '') {
+			return {
+				dimmerValue,
+			};
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 
-		const dimmerValue: number = this.getDimmerValue(this.props.device);
+		const dimmerValue: number = getDimmerValue(this.props.device);
 
 		this.state = {
 			dimmerValue,
@@ -85,21 +115,6 @@ class SliderDetails extends View {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onTurnOn = this.onTurnOn.bind(this);
 		this.onTurnOff = this.onTurnOff.bind(this);
-	}
-
-	getDimmerValue(device: Object): number {
-		if (device !== null) {
-			const { stateValues, isInState } = device;
-			const value = stateValues.DIM;
-			if (isInState === 'TURNON') {
-				return 100;
-			} else if (isInState === 'TURNOFF') {
-				return 0;
-			} else if (isInState === 'DIM') {
-				return Math.round(value * 100.0 / 255);
-			}
-		}
-		return 0;
 	}
 
 	onSlidingStart() {
@@ -129,17 +144,6 @@ class SliderDetails extends View {
 
 	onTurnOff() {
 		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
-	}
-
-
-	componentWillReceiveProps(nextProps: Object) {
-		const device = nextProps.device;
-		const dimmerValue = this.getDimmerValue(device);
-		if (this.state.dimmerValue !== dimmerValue && !this.state.isControlling) {
-			this.setState({ dimmerValue });
-		}
-
-		this.setState({ request: 'none' });
 	}
 
 	render(): Object {
@@ -237,7 +241,9 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		onDimmerSlide: (id: number, value: number): any => dispatch(setDimmerValue(id, value)),
-		deviceSetState: (id: number, command: number, value: number): any => dispatch(deviceSetState(id, command, value)),
+		deviceSetState: (id: number, command: number, value: number): any => {
+			return dispatch(deviceSetState(id, command, value));
+		},
 		saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: number): any => dispatch(saveDimmerInitialState(deviceId, initalValue, initialState)),
 	};
 }
