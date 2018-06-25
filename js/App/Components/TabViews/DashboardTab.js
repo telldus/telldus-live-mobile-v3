@@ -118,6 +118,17 @@ class DashboardTab extends View {
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'dashboard'),
 	});
 
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
+		const isRowEqual = isEqual(state.dataSource, props.rows);
+		if (!isRowEqual) {
+			return {
+				dataSource: props.rows,
+			};
+		}
+
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 		const { width } = Dimensions.get('window');
@@ -134,6 +145,7 @@ class DashboardTab extends View {
 		};
 
 		this.tab = 'Dashboard';
+		this.timer = null;
 
 		this._onLayout = this._onLayout.bind(this);
 		this._renderRow = this._renderRow.bind(this);
@@ -155,6 +167,7 @@ class DashboardTab extends View {
 
 	stopSensorTimer() {
 		clearInterval(this.timer);
+		this.timer = null;
 	}
 
 	changeDisplayType() {
@@ -196,27 +209,11 @@ class DashboardTab extends View {
 		if (!this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0) {
 			this.props.navigation.navigate('Devices');
 		}
-
 		this.startSensorTimer();
 	}
 
 	componentWillUnmount() {
 		this.stopSensorTimer();
-	}
-
-	componentWillReceiveProps(nextProps: Object) {
-		this.setState({
-			dataSource: nextProps.rows,
-		});
-
-		let { currentTab } = nextProps.screenProps;
-		if (currentTab !== 'Dashboard') {
-			this.stopSensorTimer();
-			this.tab = currentTab;
-		} else if (currentTab === 'Dashboard' && this.tab !== 'Dashboard') {
-			this.startSensorTimer();
-			this.tab = 'Dashboard';
-		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -225,6 +222,12 @@ class DashboardTab extends View {
 
 		const isStateEqual = isEqual(this.state, nextState);
 		const isPropsEqual = isEqual(this.props, nextProps);
+		if (currentTab !== 'Dashboard' && this.timer) {
+			this.stopSensorTimer();
+		}
+		if (currentTab === 'Dashboard' && !this.timer) {
+			this.startSensorTimer();
+		}
 
 		return (currentTab === 'Dashboard') && (!isStateEqual || !isPropsEqual);
 	}
