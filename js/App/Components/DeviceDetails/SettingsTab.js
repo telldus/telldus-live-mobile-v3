@@ -73,6 +73,19 @@ class SettingsTab extends View {
 	onValueChange: number => void;
 	setIgnoreDevice: (boolean) => void;
 
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): Object => (
+			<TabBar
+				icon="icon_settings"
+				tintColor={tintColor}
+				label={i18n.settingsHeader}
+				accessibilityLabel={i18n.deviceSettingsTab}/>
+		),
+		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
+			navigation.navigate('Settings');
+		},
+	});
+
 	constructor(props: Props) {
 		super(props);
 		this.onValueChange = this.onValueChange.bind(this);
@@ -87,19 +100,6 @@ class SettingsTab extends View {
 		this.addedToHiddenList = formatMessage(i18n.deviceAddedToHiddenList);
 		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
 	}
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="icon_settings"
-				tintColor={tintColor}
-				label={i18n.settingsHeader}
-				accessibilityLabel={i18n.deviceSettingsTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate('Settings');
-		},
-	});
 
 	onValueChange(value: boolean) {
 		if (!value) {
@@ -127,14 +127,6 @@ class SettingsTab extends View {
 			});
 			this.props.dispatch(showToast(message));
 		});
-	}
-
-	componentWillReceiveProps(nextProps: Object) {
-		if (this.props.device.ignored !== nextProps.device.ignored) {
-			this.setState({
-				isHidden: nextProps.device.ignored,
-			});
-		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

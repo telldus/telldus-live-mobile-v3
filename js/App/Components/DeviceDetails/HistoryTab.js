@@ -100,6 +100,16 @@ class HistoryTab extends View {
 		},
 	});
 
+	static getDerivedStateFromProps(props: Object, state: Object): Object {
+		const { screenProps } = props;
+		if (screenProps.currentTab !== 'History') {
+			return {
+				hasRefreshed: false,
+			};
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
@@ -166,17 +176,13 @@ class HistoryTab extends View {
 		});
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.screenProps.currentTab === 'History') {
-			if (!this.state.hasRefreshed) {
-				this.refreshHistoryData();
-				this.setState({
-					hasRefreshed: true,
-				});
-			}
-		} else {
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { screenProps } = this.props;
+		const { hasRefreshed } = this.state;
+		if (screenProps.currentTab === 'History' && !hasRefreshed) {
+			this.refreshHistoryData();
 			this.setState({
-				hasRefreshed: false,
+				hasRefreshed: true,
 			});
 		}
 	}
