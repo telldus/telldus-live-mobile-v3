@@ -64,6 +64,19 @@ class EditTimeZoneContinent extends View {
 	onPressAutodetect: () => void;
 	onPressAutodetected: () => void;
 
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
+		let { currentScreen, navigation } = props;
+		if (currentScreen === 'EditTimeZoneContinent') {
+			const { autodetectedTimezone } = navigation.state.params;
+			if (autodetectedTimezone && (autodetectedTimezone !== state.autodetectedTimezone)) {
+				return {
+					autodetectedTimezone,
+				};
+			}
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 
@@ -97,19 +110,11 @@ class EditTimeZoneContinent extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen, navigation } = nextProps;
-		let shouldAnnounce = currentScreen === 'EditTimeZoneContinent' && this.props.currentScreen !== 'EditTimeZoneContinent';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'EditTimeZoneContinent' && prevProps.currentScreen !== 'EditTimeZoneContinent';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
-		}
-		if (currentScreen === 'EditTimeZoneContinent') {
-			const { autodetectedTimezone } = navigation.state.params;
-			if (autodetectedTimezone && (autodetectedTimezone !== this.state.autodetectedTimezone)) {
-				this.setState({
-					autodetectedTimezone,
-				});
-			}
 		}
 	}
 

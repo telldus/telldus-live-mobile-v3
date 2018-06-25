@@ -124,9 +124,9 @@ class TimeZone extends View<void, Props, State> {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'TimeZone' && this.props.currentScreen !== 'TimeZone';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'TimeZone' && prevProps.currentScreen !== 'TimeZone';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}

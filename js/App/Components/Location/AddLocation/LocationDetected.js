@@ -87,9 +87,9 @@ class LocationDetected extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'LocationDetected' && this.props.currentScreen !== 'LocationDetected';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'LocationDetected' && prevProps.currentScreen !== 'LocationDetected';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}

@@ -85,9 +85,9 @@ class LocationName extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'LocationName' && this.props.currentScreen !== 'LocationName';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'LocationName' && prevProps.currentScreen !== 'LocationName';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}

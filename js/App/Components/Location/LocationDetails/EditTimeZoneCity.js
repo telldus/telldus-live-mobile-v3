@@ -74,9 +74,9 @@ class EditTimeZoneCity extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'EditTimeZoneCity' && this.props.currentScreen !== 'EditTimeZoneCity';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'EditTimeZoneCity' && prevProps.currentScreen !== 'EditTimeZoneCity';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}

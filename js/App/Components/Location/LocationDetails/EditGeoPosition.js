@@ -117,9 +117,9 @@ class EditGeoPosition extends View {
 		});
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'EditGeoPosition' && this.props.currentScreen !== 'EditGeoPosition';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'EditGeoPosition' && prevProps.currentScreen !== 'EditGeoPosition';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}

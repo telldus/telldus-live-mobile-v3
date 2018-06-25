@@ -72,9 +72,9 @@ class TimeZoneContinent extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'TimeZoneContinent' && this.props.currentScreen !== 'TimeZoneContinent';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'TimeZoneContinent' && prevProps.currentScreen !== 'TimeZoneContinent';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
