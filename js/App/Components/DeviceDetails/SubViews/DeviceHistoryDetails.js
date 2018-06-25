@@ -69,11 +69,19 @@ class DeviceHistoryDetails extends View {
 		return Math.round(value * 100.0 / 255);
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.showDetails && !this.props.showDetails) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { width } = nextProps.appLayout;
+		const { width: prevWidth } = this.props.appLayout;
+		const visibilityChange = nextProps.showDetails !== this.props.showDetails;
+		const layoutChange = width !== prevWidth;
+		return visibilityChange || layoutChange;
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		if (this.props.showDetails && !prevProps.showDetails) {
 			announceForAccessibility(this.labelAnnouncementOnOpen);
 		}
-		if (this.props.showDetails && !nextProps.showDetails) {
+		if (prevProps.showDetails && !this.props.showDetails) {
 			announceForAccessibility(this.labelAnnouncementOnClose);
 		}
 	}
