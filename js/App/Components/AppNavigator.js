@@ -141,6 +141,19 @@ class AppNavigator extends View {
 	handleConnectivityChange: () => void;
 	onLayout: (Object) => void;
 
+	static getDerivedStateFromProps(props: Object, state: Object): null {
+		let { showToast, messageToast, durationToast, positionToast, intl, dispatch } = props;
+		if (showToast) {
+			let { formatMessage } = intl;
+			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
+			Toast.showWithGravity(message, Toast[durationToast], Toast[positionToast]);
+			dispatch(hideToast());
+		}
+
+		// Return null to indicate no change to state.
+		return null;
+	}
+
 	constructor() {
 		super();
 
@@ -201,18 +214,6 @@ class AppNavigator extends View {
 		this.timeOutConfigureLocalControl = setTimeout(() => {
 			dispatch(autoDetectLocalTellStick());
 		}, 15000);
-	}
-
-	componentWillReceiveProps(nextProps: Object) {
-		let { showToast, messageToast, durationToast, positionToast } = nextProps;
-		if (showToast) {
-			let { formatMessage } = this.props.intl;
-			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
-			this._showToast(message, durationToast, positionToast);
-		}
-
-		// Request for token to control device locally.
-		// this.getTokenForLocalControl();
 	}
 
 	getTokenForLocalControl() {
