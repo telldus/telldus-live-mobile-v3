@@ -89,7 +89,7 @@ export default class TimeRow extends View<null, Props, State> {
 		};
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		const { schedule, device } = this.props;
 
 		if (schedule.type !== 'time') {

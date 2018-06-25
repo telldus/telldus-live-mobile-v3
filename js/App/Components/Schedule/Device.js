@@ -62,9 +62,6 @@ export default class Device extends View<void, Props, State> {
 
 		this.h1 = `1. ${formatMessage(i18n.labelDevice)}`;
 		this.h2 = formatMessage(i18n.posterChooseDevice);
-	}
-
-	componentWillMount() {
 		if (this._shouldReset()) {
 			this.props.navigation.goBack(null);
 		}
