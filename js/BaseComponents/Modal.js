@@ -238,7 +238,7 @@ class Modal extends Component<Props, State> {
 		}
 	}
 
-	handleAnimationEntryType(type?: string): (?number) => void {
+	handleAnimationEntryType(type?: string): (any) => void {
 		switch (type) {
 			case 'ZoomIn':
 				return this.animationZoomIn;
@@ -249,7 +249,7 @@ class Modal extends Component<Props, State> {
 		}
 	}
 
-	handleAnimationExitType(type?: string): (?number) => void {
+	handleAnimationExitType(type?: string): (any) => void {
 		switch (type) {
 			case 'ZoomOut':
 				return this.animationZoomOut;
