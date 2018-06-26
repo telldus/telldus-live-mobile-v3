@@ -118,6 +118,26 @@ class DevicesTab extends View {
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'devices'),
 	});
 
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
+		let { makeRowAccessible: prevMakeRowAccessible, visibleList: prevVisibleList, hiddenList: prevHiddenList } = state;
+		let { screenReaderEnabled, rowsAndSections, screenProps } = props;
+		let { currentScreen, currentTab } = screenProps;
+		let makeRowAccessible = 0;
+		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Devices') {
+			makeRowAccessible = 1;
+		}
+		const isRowsEqual = isEqual(rowsAndSections, {visibleList: prevVisibleList, hiddenList: prevHiddenList});
+		if (!isRowsEqual || prevMakeRowAccessible !== makeRowAccessible) {
+			let { visibleList, hiddenList } = rowsAndSections;
+			return {
+				visibleList,
+				hiddenList,
+				makeRowAccessible,
+			};
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 
@@ -176,26 +196,6 @@ class DevicesTab extends View {
 		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelDevice });
 		this.messageOnHide = formatMessage(i18n.messageOnHide, { type: labelDevice });
 		this.labelHide = formatMessage(i18n.hide).toUpperCase();
-	}
-
-	componentWillReceiveProps(nextProps: Object) {
-
-		let { makeRowAccessible } = this.state;
-		let { screenReaderEnabled, rowsAndSections } = nextProps;
-		let { currentScreen, currentTab } = nextProps.screenProps;
-		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Devices') {
-			makeRowAccessible = 1;
-		} else {
-			makeRowAccessible = 0;
-		}
-
-		let { visibleList, hiddenList } = rowsAndSections;
-
-		this.setState({
-			visibleList,
-			hiddenList,
-			makeRowAccessible,
-		});
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

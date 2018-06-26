@@ -26,6 +26,7 @@ import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
+import isEqual from 'lodash/isEqual';
 
 import { View, FloatingButton } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
@@ -81,6 +82,16 @@ class GatewaysTab extends View {
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'gateways'),
 	});
 
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
+		const isRowsEqual = isEqual(state.dataSource, props.rows);
+		if (!isRowsEqual) {
+			return {
+				dataSource: props.rows,
+			};
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 
@@ -99,12 +110,6 @@ class GatewaysTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.addLocation = this.addLocation.bind(this);
-	}
-
-	componentWillReceiveProps(nextProps: Object) {
-		this.setState({
-			dataSource: nextProps.rows,
-		});
 	}
 
 	onRefresh() {
