@@ -27,14 +27,15 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 import DeviceInfo from 'react-native-device-info';
+import { TabNavigator } from 'react-navigation';
 
 import { View, Header, SafeAreaView, IconTelldus } from '../../../BaseComponents';
 
-import { toggleEditMode, syncWithServer, switchTab } from '../../Actions';
+import { toggleEditMode, syncWithServer, switchTab, addNewGateway, showToast } from '../../Actions';
 import TabViews from './index';
 
 import { getUserProfile } from '../../Reducers/User';
-import { TabNavigator } from 'react-navigation';
+import i18n from '../../Translations/common';
 
 const RouteConfigs = {
 	Dashboard: {
@@ -84,6 +85,8 @@ type Props = {
 	stackNavigator: Object,
 	screenProps: Object,
 	appLayout: Object,
+	gateways: Array<any>,
+	gatewaysToActivate: Object,
 };
 
 type Tab = {
@@ -94,6 +97,8 @@ type Tab = {
 type State = {
 	tab: Tab,
 	settings: boolean,
+	routeName: string,
+	addingNewLocation: boolean,
 };
 
 class TabsView extends View {
@@ -114,6 +119,7 @@ class TabsView extends View {
 				routeName: 'Dashboard',
 			},
 			settings: false,
+			addingNewLocation: false,
 		};
 
 		this.tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab', 'gatewaysTab'];
@@ -132,6 +138,38 @@ class TabsView extends View {
 			}}/>,
 			onPress: this.onOpenSetting,
 		};
+
+		let { formatMessage } = props.intl;
+
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
+
+		this.addNewLocation = this.addNewLocation.bind(this);
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { gateways, gatewaysToActivate } = this.props;
+		if (gateways.length === 0 && !this.state.addingNewLocation && gatewaysToActivate.checkIfGatewaysEmpty) {
+			this.addNewLocation();
+		}
+	}
+
+	addNewLocation() {
+		this.setState({
+			addingNewLocation: true,
+		});
+		this.props.addNewLocation()
+			.then((response: Object) => {
+				if (response.client) {
+					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
+				}
+			}).catch((error: Object) => {
+				this.setState({
+					addingNewLocation: false,
+				});
+				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
+				this.props.dispatch(showToast(message));
+			});
 	}
 
 	onNavigationStateChange = (prevState: Object, newState: Object) => {
@@ -187,12 +225,15 @@ class TabsView extends View {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
+	const { allIds, toActivate } = store.gateways;
 	return {
 		stackNavigator: ownProps.navigation,
 		tab: store.navigation.tab,
 		userIcon: false,
 		userProfile: getUserProfile(store),
 		appLayout: store.App.layout,
+		gateways: allIds,
+		gatewaysToActivate: toActivate,
 	};
 }
 
@@ -204,6 +245,9 @@ function mapDispatchToProps(dispatch: Function): Object {
 		},
 		onToggleEditMode: (tab: string) => {
 			dispatch(toggleEditMode(tab));
+		},
+		addNewLocation: (): Function => {
+			return dispatch(addNewGateway());
 		},
 		dispatch,
 	};
