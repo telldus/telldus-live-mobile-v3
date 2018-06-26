@@ -87,6 +87,7 @@ type Props = {
 	appLayout: Object,
 	gateways: Array<any>,
 	gatewaysToActivate: Object,
+	addNewLocation: () => Promise<any>;
 };
 
 type Tab = {
@@ -97,7 +98,6 @@ type Tab = {
 type State = {
 	tab: Tab,
 	settings: boolean,
-	routeName: string,
 	addingNewLocation: boolean,
 };
 
@@ -109,6 +109,7 @@ class TabsView extends View {
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
 	onToggleEditMode: () => void;
+	addNewLocation: () => void;
 
 	constructor(props: Props) {
 		super(props);

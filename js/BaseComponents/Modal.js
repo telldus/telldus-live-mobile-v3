@@ -54,6 +54,14 @@ type State = {
 	showModal: boolean,
 };
 
+type DefaultProps = {
+	entryDuration: number,
+	exitDuration: number,
+	startValue: number,
+	endValue: number,
+	showOverlay: boolean,
+};
+
 class Modal extends Component<Props, State> {
 	animationZoomOut: (duration?: number) => void;
 	animationZoomIn: (duration?: number) => void;
@@ -65,7 +73,13 @@ class Modal extends Component<Props, State> {
 	animatedOpacity: any;
 	animatedYValue: any;
 
-	static defaultProps: Object;
+	static defaultProps: DefaultProps = {
+		entryDuration: 500,
+		exitDuration: 500,
+		startValue: 0,
+		endValue: 100,
+		showOverlay: true,
+	};
 	props: Props;
 	state: State;
 
@@ -224,7 +238,7 @@ class Modal extends Component<Props, State> {
 		}
 	}
 
-	handleAnimationEntryType(type?: string): (number) => void {
+	handleAnimationEntryType(type?: string): (?number) => void {
 		switch (type) {
 			case 'ZoomIn':
 				return this.animationZoomIn;
@@ -235,7 +249,7 @@ class Modal extends Component<Props, State> {
 		}
 	}
 
-	handleAnimationExitType(type?: string): (number) => void {
+	handleAnimationExitType(type?: string): (?number) => void {
 		switch (type) {
 			case 'ZoomOut':
 				return this.animationZoomOut;
@@ -358,14 +372,6 @@ class Modal extends Component<Props, State> {
 		};
 	}
 }
-
-Modal.defaultProps = {
-	entryDuration: 500,
-	exitDuration: 500,
-	startValue: 0,
-	endValue: 100,
-	showOverlay: true,
-};
 
 function mapStateToProps(store: Object): Object {
 	return {

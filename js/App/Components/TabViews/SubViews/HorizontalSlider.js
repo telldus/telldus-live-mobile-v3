@@ -139,7 +139,7 @@ class HorizontalSlider extends View {
 		// value retrieved using this.state.value.__getValue() does not seem to work at al places, say: 'startSliding'
 		// Hence using listener to get the value
 		this.dimValue = this.state.value.__getValue();
-		this.state.value.addListener(({value}: number) => {
+		this.state.value.addListener(({value}: Object) => {
 			this.dimValue = value;
 		});
 	}
