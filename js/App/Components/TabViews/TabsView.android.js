@@ -119,6 +119,8 @@ type Props = {
 type State = {
 	settings: boolean,
 	starIcon: Object,
+	routeName: string,
+	addingNewLocation: boolean,
 };
 
 class TabsView extends View {
@@ -184,8 +186,9 @@ class TabsView extends View {
 		this.onPressGateway = this.onPressGateway.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.gateways.length === 0 && !this.state.addingNewLocation && nextProps.gatewaysToActivate.checkIfGatewaysEmpty) {
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { gateways, gatewaysToActivate } = this.props;
+		if (gateways.length === 0 && !this.state.addingNewLocation && gatewaysToActivate.checkIfGatewaysEmpty) {
 			this.addNewLocation();
 		}
 	}
@@ -195,15 +198,19 @@ class TabsView extends View {
 	}
 
 	addNewLocation() {
+		this.setState({
+			addingNewLocation: true,
+			addNewGateway: false,
+		});
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
 					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
-					this.setState({
-						addingNewLocation: true,
-					});
 				}
 			}).catch((error: Object) => {
+				this.setState({
+					addingNewLocation: false,
+				});
 				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
 				this.props.dispatch(showToast(message));
 			});
