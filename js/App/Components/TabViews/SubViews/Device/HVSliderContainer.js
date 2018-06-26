@@ -79,6 +79,24 @@ class HVSliderContainer extends View {
 	layoutView: Object => void;
 	onPressDimmer: () => void;
 
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
+		const { value, intl } = props;
+		const { displayedValue: prevDisplayedValue, value: prevValue } = state;
+		const nextDisplayedValue = getSliderLabel(value, intl);
+		if (prevDisplayedValue !== nextDisplayedValue) {
+			Animated.timing(prevValue, {
+				toValue: value,
+				duration: 250,
+				useNativeDriver: true,
+			}).start();
+			return {
+				displayedValue: nextDisplayedValue,
+			};
+		}
+
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 		this.parentScrollEnabled = true;
@@ -114,12 +132,12 @@ class HVSliderContainer extends View {
 			onPanResponderTerminationRequest: this.handlePanResponderTerminationRequest,
 			onPanResponderTerminate: this.handlePanResponderEnd,
 		});
-	}
-
-	componentWillReceiveProps(nextProps: Props) {
-		const newValue = nextProps.value;
-		this.setCurrentValueAnimate(newValue);
-		this.onValueChange(newValue);
+		// value retrieved using this.state.value.__getValue() does not seem to work at al places, say: 'startSliding'
+		// Hence using listener to get the value
+		this.dimValue = this.state.value.__getValue();
+		this.state.value.addListener(({value}: number) => {
+			this.dimValue = value;
+		});
 	}
 
 	handleStartShouldSetPanResponderCapture = (e: Object, gestureState: Object): boolean => {
@@ -153,11 +171,11 @@ class HVSliderContainer extends View {
 		if (onPress && !screenReaderEnabled) {
 			this.buttonOpacity.setValue(1);
 		}
-		this.previousLeft = this.getThumbLeft(this.state.value.__getValue());
-		this.previousBottom = this.getThumbBottom(this.state.value.__getValue());
+		this.previousLeft = this.getThumbLeft(this.dimValue);
+		this.previousBottom = this.getThumbBottom(this.dimValue);
 
 		if (onSlidingStart) {
-			onSlidingStart(item.name, this.state.value.__getValue());
+			onSlidingStart(item.name, this.dimValue);
 		}
 		this.activeSlider = true;
 		if (this.parentScrollEnabled) {
@@ -194,11 +212,11 @@ class HVSliderContainer extends View {
 			this.setCurrentValue(this.getValue(gestureState));
 
 			if (this.props.onValueChange) {
-				this.props.onValueChange(this.state.value.__getValue());
+				this.props.onValueChange(this.dimValue);
 			}
 
 			// update the progress text
-			this.onValueChange(this.state.value.__getValue());
+			this.onValueChange(this.dimValue);
 		}
 	};
 
@@ -214,7 +232,7 @@ class HVSliderContainer extends View {
 			this.setCurrentValue(this.getValue(gestureState));
 
 			if (this.props.onSlidingComplete) {
-				this.props.onSlidingComplete(this.state.value.__getValue());
+				this.props.onSlidingComplete(this.dimValue);
 			}
 		} else if (!this.hasMoved && onPress) {
 			onPress();
@@ -261,7 +279,11 @@ class HVSliderContainer extends View {
 	}
 
 	setCurrentValueAnimate(value: number) {
-		Animated.timing(this.state.value, { toValue: value, duration: 250 }).start();
+		Animated.timing(this.state.value, {
+			toValue: value,
+			duration: 250,
+			useNativeDriver: true,
+		}).start();
 	}
 
 	getValue(gestureState: Object): number {
