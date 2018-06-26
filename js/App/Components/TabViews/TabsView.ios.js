@@ -87,7 +87,7 @@ type Props = {
 	appLayout: Object,
 	gateways: Array<any>,
 	gatewaysToActivate: Object,
-	addNewLocation: () => Promise<any>;
+	addNewLocation: () => Promise<any>,
 };
 
 type Tab = {
