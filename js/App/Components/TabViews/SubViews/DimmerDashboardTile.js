@@ -108,6 +108,17 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	onValueChange: number => void;
 	showDimmerStep: (number) => void;
 
+	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+		const { stateValues, isInState } = props.item;
+		const dimmerValue = getDimmerValue(stateValues.DIM, isInState);
+		if (state.value !== dimmerValue) {
+			return {
+				value: dimmerValue,
+			};
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 		const { item, onDimmerSlide } = this.props;
@@ -136,13 +147,6 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
-	}
-
-	componentWillReceiveProps(nextProps: Object) {
-		const { stateValues, isInState } = nextProps.item;
-
-		const dimmerValue = getDimmerValue(stateValues.DIM, isInState);
-		this.setState({ value: dimmerValue });
 	}
 
 	layoutView(x: Object) {

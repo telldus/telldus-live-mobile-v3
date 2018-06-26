@@ -67,6 +67,15 @@ class DimmerPopup extends Component<Props, State> {
 
 	static defaultProps: DefaultProps;
 
+	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+		if (!state.isVisible && props.isVisible) {
+			return {
+				isVisible: true,
+			};
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
@@ -77,12 +86,6 @@ class DimmerPopup extends Component<Props, State> {
 
 		this.handleLayout = this.handleLayout.bind(this);
 		this.setRefs = this.setRefs.bind(this);
-	}
-
-	componentWillReceiveProps(nextProps: Props) {
-		if (!this.state.isVisible && nextProps.isVisible) {
-			this.setState({ isVisible: true });
-		}
 	}
 
 	componentDidMount() {
