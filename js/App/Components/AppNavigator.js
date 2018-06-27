@@ -140,19 +140,6 @@ class AppNavigator extends View {
 	handleConnectivityChange: () => void;
 	onLayout: (Object) => void;
 
-	static getDerivedStateFromProps(props: Object, state: Object): null {
-		let { showToast, messageToast, durationToast, positionToast, intl, dispatch } = props;
-		if (showToast) {
-			let { formatMessage } = intl;
-			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
-			Toast.showWithGravity(message, Toast[durationToast], Toast[positionToast]);
-			dispatch(hideToast());
-		}
-
-		// Return null to indicate no change to state.
-		return null;
-	}
-
 	constructor() {
 		super();
 
@@ -192,6 +179,15 @@ class AppNavigator extends View {
 			'connectionChange',
 			this.handleConnectivityChange,
 		);
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { showToast, messageToast, durationToast, positionToast, intl } = this.props;
+		if (showToast && !prevProps.showToast) {
+			let { formatMessage } = intl;
+			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
+			this._showToast(message, durationToast, positionToast);
+		}
 	}
 
 	handleConnectivityChange(connectionInfo: Object) {

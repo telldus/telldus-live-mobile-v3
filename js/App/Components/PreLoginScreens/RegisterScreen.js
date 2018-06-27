@@ -56,28 +56,12 @@ type Props = {
 	styles: Object,
 };
 
-type State = {
-	navigated: boolean,
-};
-
 class RegisterScreen extends View {
 
 	props: Props;
-	state: State;
 
 	goBackToLogin: () => void;
 	closeModal: () => void;
-
-	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
-		const { screenProps, registeredCredential, navigation } = props;
-		if (registeredCredential && screenProps.currentScreen !== 'Welcome' && !state.navigated) {
-			navigation.navigate('Welcome');
-			return {
-				navigated: true,
-			};
-		}
-		return null;
-	}
 
 	constructor(props: Props) {
 		super(props);
@@ -86,9 +70,6 @@ class RegisterScreen extends View {
 		this.closeModal = this.closeModal.bind(this);
 
 		let { formatMessage } = props.intl;
-		this.state = {
-			navigated: false,
-		};
 
 		this.alreadyHaveAccount = formatMessage(messages.alreadyHaveAccount);
 
@@ -96,6 +77,13 @@ class RegisterScreen extends View {
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
 
 		this.labelAlreadyHaveAccount = `${this.labelLink} ${this.alreadyHaveAccount} ${this.labelButtondefaultDescription}`;
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { screenProps, registeredCredential, navigation } = this.props;
+		if (registeredCredential && screenProps.currentScreen !== 'Welcome') {
+			navigation.navigate('Welcome');
+		}
 	}
 
 	closeModal() {

@@ -76,24 +76,6 @@ class VerticalSlider extends View {
 	activeSlider: boolean;
 	layoutView: Object => void;
 
-	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const { value, intl } = props;
-		const { displayedValue: prevDisplayedValue, value: prevValue } = state;
-		const nextDisplayedValue = getSliderLabel(value, intl);
-		if (prevDisplayedValue !== nextDisplayedValue) {
-			Animated.timing(prevValue, {
-				toValue: value,
-				duration: 250,
-				useNativeDriver: true,
-			}).start();
-			return {
-				displayedValue: nextDisplayedValue,
-			};
-		}
-
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 		this.parentScrollEnabled = true;
@@ -280,6 +262,22 @@ class VerticalSlider extends View {
 
 	onValueChange(val: number) {
 		this.setState({ displayedValue: getSliderLabel(val, this.props.intl) });
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { value, intl } = this.props;
+		const { displayedValue: prevDisplayedValue, value: prevValue } = prevState;
+		const nextDisplayedValue = getSliderLabel(value, intl);
+		if (prevDisplayedValue !== nextDisplayedValue) {
+			Animated.timing(prevValue, {
+				toValue: value,
+				duration: 250,
+				useNativeDriver: true,
+			}).start();
+			this.setState({
+				displayedValue: nextDisplayedValue,
+			});
+		}
 	}
 
 	render(): React$Element<any> {
