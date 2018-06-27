@@ -54,6 +54,7 @@ type Props = {
 	validationMessageHeader: string,
 	appLayout: Object,
 	styles: Object,
+	screenProps: Object,
 };
 
 class RegisterScreen extends View {

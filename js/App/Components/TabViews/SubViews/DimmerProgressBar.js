@@ -133,7 +133,7 @@ class DimmerProgressBar extends Component<Props, State> {
 
 	componentDidMount() {
 		if (this.props.indeterminate) {
-			this.animate(this.state.animationValue);
+			animate(this.state.animationValue);
 		}
 	}
 

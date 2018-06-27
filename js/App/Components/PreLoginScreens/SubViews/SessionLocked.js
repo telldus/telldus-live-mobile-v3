@@ -52,8 +52,8 @@ const messages = defineMessages({
 });
 
 type Props = {
-	refreshAccessToken: () => void,
-	logoutFromTelldus: () => void,
+	refreshAccessToken: () => Promise<any>,
+	logoutFromTelldus: () => Promise<any>,
 	intl: intlShape.isRequired,
 	dispatch: Function,
 	pushToken: string,
