@@ -71,6 +71,7 @@ class LoginScreen extends View {
 	onNeedAccount: () => void;
 	closeModal: () => void;
 	onPressPositive: () => void;
+	toggleOnPressLogout: (boolean) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -85,6 +86,7 @@ class LoginScreen extends View {
 
 		this.closeModal = this.closeModal.bind(this);
 		this.onPressPositive = this.onPressPositive.bind(this);
+		this.toggleOnPressLogout = this.toggleOnPressLogout.bind(this);
 
 		let { formatMessage } = props.intl;
 
@@ -105,8 +107,12 @@ class LoginScreen extends View {
 
 	onPressPositive() {
 		this.closeModal();
+		this.toggleOnPressLogout(true);
+	}
+
+	toggleOnPressLogout(onPressLogout: boolean) {
 		this.setState({
-			onPressLogout: true,
+			onPressLogout,
 		});
 	}
 
@@ -157,6 +163,7 @@ class LoginScreen extends View {
 						onPressLogout={this.state.onPressLogout}
 						dialogueOpen={this.props.showModal}
 						headerText={headerText}
+						toggleOnPressLogout={this.toggleOnPressLogout}
 						styles={commonStyles}/>
 					:
 					<LoginForm
