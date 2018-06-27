@@ -113,17 +113,6 @@ class DeviceRow extends PureComponent<Props, State> {
 		buttonsWidth: undefined,
 	};
 
-	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
-		let { tab, propsSwipeRow, device } = props;
-		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (state.isOpen && (tab !== 'devicesTab' || (forceClose && device.id !== idToKeepOpen)) ) {
-			return {
-				forceClose: true,
-			};
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 
@@ -154,9 +143,10 @@ class DeviceRow extends PureComponent<Props, State> {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const { forceClose } = this.state;
-		const { forceClose: prevForceClose } = prevState;
-		if (!prevForceClose && forceClose) {
+		let { tab, propsSwipeRow, device } = this.props;
+		const { isOpen } = this.state;
+		let { idToKeepOpen, forceClose } = propsSwipeRow;
+		if (isOpen && (tab !== 'devicesTab' || (forceClose && device.id !== idToKeepOpen)) ) {
 			this.refs.SwipeRow.closeRow();
 		}
 	}
