@@ -62,6 +62,7 @@ type Props = {
 
 type State = {
 	isOpen: boolean,
+	forceClose: boolean,
 	showFullName: boolean,
 	coverMaxWidth: number,
 	coverOccupiedWidth: number,
@@ -117,11 +118,23 @@ class SensorRow extends View<Props, State> {
 
 	state = {
 		isOpen: false,
+		forceClose: false,
 		showFullName: false,
 		coverMaxWidth: 0,
 		coverOccupiedWidth: 0,
 		buttonsWidth: undefined,
 	};
+
+	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+		let { tab, propsSwipeRow, sensor } = props;
+		let { idToKeepOpen, forceClose } = propsSwipeRow;
+		if (state.isOpen && (tab !== 'sensorsTab' || (forceClose && sensor.id !== idToKeepOpen)) ) {
+			return {
+				forceClose: true,
+			};
+		}
+		return null;
+	}
 
 	constructor(props: Props) {
 		super(props);
@@ -178,10 +191,10 @@ class SensorRow extends View<Props, State> {
 		this.isTablet = DeviceInfo.isTablet();
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { tab, propsSwipeRow, sensor } = nextProps;
-		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (this.state.isOpen && (tab !== 'sensorsTab' || (forceClose && sensor.id !== idToKeepOpen)) ) {
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { forceClose } = this.state;
+		const { forceClose: prevForceClose } = prevState;
+		if (!prevForceClose && forceClose) {
 			this.refs.SwipeRow.closeRow();
 		}
 	}
@@ -197,6 +210,7 @@ class SensorRow extends View<Props, State> {
 	onRowOpen() {
 		this.setState({
 			isOpen: true,
+			forceClose: false,
 		});
 		let { onHiddenRowOpen, sensor } = this.props;
 		if (onHiddenRowOpen) {
@@ -207,6 +221,7 @@ class SensorRow extends View<Props, State> {
 	onRowClose() {
 		this.setState({
 			isOpen: false,
+			forceClose: false,
 		});
 	}
 

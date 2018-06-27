@@ -70,6 +70,7 @@ type Props = {
 type State = {
 	disableSwipe: boolean,
 	isOpen: boolean,
+	forceClose: boolean,
 	showMoreActions: boolean,
 	showFullName: boolean,
 	coverMaxWidth: number,
@@ -104,12 +105,24 @@ class DeviceRow extends PureComponent<Props, State> {
 	state = {
 		disableSwipe: false,
 		isOpen: false,
+		forceClose: false,
 		showMoreActions: false,
 		showFullName: false,
 		coverMaxWidth: 0,
 		coverOccupiedWidth: 0,
 		buttonsWidth: undefined,
 	};
+
+	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+		let { tab, propsSwipeRow, device } = props;
+		let { idToKeepOpen, forceClose } = propsSwipeRow;
+		if (state.isOpen && (tab !== 'devicesTab' || (forceClose && device.id !== idToKeepOpen)) ) {
+			return {
+				forceClose: true,
+			};
+		}
+		return null;
+	}
 
 	constructor(props: Props) {
 		super(props);
@@ -140,10 +153,10 @@ class DeviceRow extends PureComponent<Props, State> {
 		this.isTablet = DeviceInfo.isTablet();
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { tab, propsSwipeRow, device } = nextProps;
-		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (this.state.isOpen && ((tab !== 'devicesTab') || (forceClose && device.id !== idToKeepOpen))) {
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { forceClose } = this.state;
+		const { forceClose: prevForceClose } = prevState;
+		if (!prevForceClose && forceClose) {
 			this.refs.SwipeRow.closeRow();
 		}
 	}
@@ -163,6 +176,7 @@ class DeviceRow extends PureComponent<Props, State> {
 	onRowOpen() {
 		this.setState({
 			isOpen: true,
+			forceClose: false,
 		});
 		let { onHiddenRowOpen, device } = this.props;
 		if (onHiddenRowOpen) {
@@ -173,6 +187,7 @@ class DeviceRow extends PureComponent<Props, State> {
 	onRowClose() {
 		this.setState({
 			isOpen: false,
+			forceClose: false,
 		});
 	}
 
