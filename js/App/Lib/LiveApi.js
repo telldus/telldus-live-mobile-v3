@@ -132,7 +132,7 @@ export async function refreshAccessToken(url?: string = '', requestParams?: Obje
 				dispatch({
 					type: 'LOCK_SESSION',
 				});
-				return null;
+				throw response;
 			}
 			// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
 			// works on exporting 'updateAccessToken' directly(cant be do as there are multiple exports already). need to investigate.
@@ -141,5 +141,7 @@ export async function refreshAccessToken(url?: string = '', requestParams?: Obje
 				accessToken: response,
 			});
 			return response;
+		}).catch((err: any) => {
+			throw err;
 		});
 }
