@@ -228,19 +228,22 @@ export default class JobsPoster extends View<null, Props, State> {
 		this.finalValue = null;
 	}
 
-	componentWillReceiveProps(nextProps: Props) {
+	componentDidUpdate(prevProps: Props, prevState: Object) {
 		const { todayIndex } = this.state;
-		const newTodayIndex = nextProps.todayIndex;
-
+		const { todayIndex: newTodayIndex } = this.props;
 		if (newTodayIndex !== todayIndex) {
 			this.scrollRight = newTodayIndex > todayIndex;
+			const dragDir = newTodayIndex > todayIndex ? 'right' : 'left';
 
 			const updateButtonsVisibility = {
 				showLeftButton: newTodayIndex > 0,
 				showRightButton: newTodayIndex < (this.props.days.length - 1),
 			};
 
-			this.setState(updateButtonsVisibility);
+			this.setState({
+				...updateButtonsVisibility,
+				dragDir,
+			});
 
 			const config = {
 				toValue: this.scrollRight ? 0 : 2,
