@@ -69,6 +69,7 @@ render(): Object {
 	} = this.getStyles(appLayout, supportLocal);
 
 	if (!online) {
+		icon = 'cloudcontrol';
 		return (
 			<View style={styles.statusInfoCover}>
 				<IconTelldus icon={icon} style={{...statusInfo, color: locationOffline, ...statusInfoStyle}}/>
