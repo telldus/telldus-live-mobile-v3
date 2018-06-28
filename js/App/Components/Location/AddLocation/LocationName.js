@@ -102,7 +102,7 @@ class LocationName extends View {
 			Keyboard.dismiss();
 			let clientInfo = this.props.navigation.state.params.clientInfo;
 			clientInfo.name = locationName;
-			this.props.navigation.navigate('TimeZone', {clientInfo});
+			this.props.navigation.push('TimeZone', {clientInfo});
 		} else {
 			let message = this.props.intl.formatMessage(commonMessages.invalidLocationName);
 			this.props.actions.showModal(message);

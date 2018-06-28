@@ -139,7 +139,7 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		this.props.rootNavigator.navigate('Tabs');
+		this.props.rootNavigator.push('Tabs');
 	}
 
 	onPressHelp() {

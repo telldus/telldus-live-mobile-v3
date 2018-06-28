@@ -104,7 +104,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		if (isEditMode()) {
 			navigation.goBack();
 		} else {
-			navigation.navigate('Time');
+			navigation.push('Time');
 		}
 	};
 
@@ -112,14 +112,14 @@ export default class Action extends View<null, ScheduleProps, State> {
 		const { navigation, isEditMode } = this.props;
 
 		if (isEditMode()) {
-			navigation.navigate('ActionDim',
+			navigation.push('ActionDim',
 				{
 					actionKey: navigation.state.key,
 					editMode: true,
 				},
 			);
 		} else {
-			navigation.navigate('ActionDim');
+			navigation.push('ActionDim');
 		}
 	};
 

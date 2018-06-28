@@ -154,7 +154,7 @@ class TimeZone extends View<void, Props, State> {
 			clientInfo.coordinates = {};
 			actions.activateGateway(clientInfo)
 				.then((response: Object) => {
-					this.props.navigation.navigate('Success', {clientInfo});
+					this.props.navigation.push('Success', {clientInfo});
 					this.setState({
 						isLoading: false,
 					});
@@ -166,13 +166,13 @@ class TimeZone extends View<void, Props, State> {
 					reportError(log);
 				});
 		} else {
-			this.props.navigation.navigate('Position', {clientInfo});
+			this.props.navigation.push('Position', {clientInfo});
 		}
 	}
 
 	onEditTimeZone() {
 		let clientInfo = this.props.navigation.state.params.clientInfo;
-		this.props.navigation.navigate('TimeZoneContinent', {clientInfo});
+		this.props.navigation.push('TimeZoneContinent', {clientInfo});
 	}
 
 	render(): Object {

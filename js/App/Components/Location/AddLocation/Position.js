@@ -108,7 +108,7 @@ class Position extends View {
 		clientInfo.coordinates = { latitude, longitude };
 		this.props.actions.activateGateway(clientInfo)
 			.then((response: Object) => {
-				this.props.navigation.navigate('Success', {clientInfo});
+				this.props.navigation.push('Success', {clientInfo});
 				this.setState({
 					isLoading: false,
 				});

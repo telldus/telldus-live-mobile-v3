@@ -37,7 +37,7 @@ import i18n from '../../Translations/common';
 import { getUserProfile } from '../../Reducers/User';
 import { syncWithServer, switchTab, addNewGateway, showToast } from '../../Actions';
 import TabViews from './index';
-import { TabNavigator } from 'react-navigation';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import Drawer from '../Drawer/Drawer';
 import { getDrawerWidth } from '../../Lib';
 
@@ -99,7 +99,7 @@ const TabNavigatorConfig = {
 	},
 };
 
-const Tabs = TabNavigator(RouteConfigs, TabNavigatorConfig);
+const Tabs = createMaterialTopTabNavigator(RouteConfigs, TabNavigatorConfig);
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -205,7 +205,7 @@ class TabsView extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
+					this.props.stackNavigator.push('AddLocation', {clients: response.client, renderRootHeader: true});
 				}
 			}).catch((error: Object) => {
 				this.setState({
@@ -226,7 +226,7 @@ class TabsView extends View {
 	}
 
 	onOpenSetting() {
-		this.props.stackNavigator.navigate('Settings');
+		this.props.stackNavigator.push('Settings');
 	}
 
 	onCloseSetting() {
@@ -245,7 +245,7 @@ class TabsView extends View {
 	}
 
 	onPressGateway(location: Object) {
-		this.props.stackNavigator.navigate('LocationDetails', {location, renderRootHeader: true});
+		this.props.stackNavigator.push('LocationDetails', {location, renderRootHeader: true});
 	}
 
 	onRequestChangeTab(index: number) {

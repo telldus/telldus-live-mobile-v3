@@ -208,7 +208,7 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device: Object) {
-		this.props.stackNavigator.navigate('DeviceDetails', { id: device.id });
+		this.props.stackNavigator.push('DeviceDetails', { id: device.id });
 	}
 
 	onCloseSelected() {
@@ -333,7 +333,7 @@ class DevicesTab extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
+					this.props.stackNavigator.push('AddLocation', {clients: response.client, renderRootHeader: true});
 					this.setState({
 						addGateway: false,
 					});

@@ -107,20 +107,20 @@ class Details extends View {
 
 	onEditName() {
 		const { navigation, location } = this.props;
-		navigation.navigate('EditName', {id: location.id, name: location.name});
+		navigation.push('EditName', {id: location.id, name: location.name});
 	}
 
 	onEditTimeZone() {
 		let { navigation, location } = this.props;
 		let { params } = navigation.state;
 		let newParams = { ...params, id: location.id, timezone: location.timezone };
-		navigation.navigate('EditTimeZoneContinent', newParams);
+		navigation.push('EditTimeZoneContinent', newParams);
 	}
 
 	onEditGeoPosition() {
 		let { navigation, location } = this.props;
 		let { latitude, longitude, id } = location;
-		navigation.navigate('EditGeoPosition', { id, latitude, longitude });
+		navigation.push('EditGeoPosition', { id, latitude, longitude });
 	}
 
 	onPressRemoveLocation() {

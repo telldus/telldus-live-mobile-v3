@@ -222,7 +222,7 @@ export default class Time extends View<null, Props, State> {
 		if (isEditMode()) {
 			navigation.goBack();
 		} else {
-			navigation.navigate('Days');
+			navigation.push('Days');
 		}
 	};
 

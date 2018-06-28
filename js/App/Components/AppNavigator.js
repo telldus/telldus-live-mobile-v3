@@ -25,7 +25,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NetInfo } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import Toast from 'react-native-simple-toast';
 
 import {
@@ -109,7 +109,7 @@ const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',
 };
 
-const Navigator = StackNavigator(RouteConfigs, StackNavigatorConfig);
+const Navigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
 
 type Props = {
 	dimmer: Object,

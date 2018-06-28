@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 import DeviceInfo from 'react-native-device-info';
-import { TabNavigator } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import { View, Header, SafeAreaView, IconTelldus } from '../../../BaseComponents';
 
@@ -71,7 +71,7 @@ const TabNavigatorConfig = {
 	},
 };
 
-const Tabs = TabNavigator(RouteConfigs, TabNavigatorConfig);
+const Tabs = createBottomTabNavigator(RouteConfigs, TabNavigatorConfig);
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -162,7 +162,7 @@ class TabsView extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					this.props.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
+					this.props.stackNavigator.push('AddLocation', {clients: response.client, renderRootHeader: true});
 				}
 			}).catch((error: Object) => {
 				this.setState({
@@ -187,7 +187,7 @@ class TabsView extends View {
 
 	onOpenSetting = () => {
 		// this.setState({ settings: true });
-		this.props.stackNavigator.navigate('Settings');
+		this.props.stackNavigator.push('Settings');
 	};
 
 	onCloseSetting = () => {

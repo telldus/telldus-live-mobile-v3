@@ -28,7 +28,7 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
-import { TabNavigator, TabBarTop } from 'react-navigation';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_settings from '../TabViews/img/selection.json';
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const Tabs = TabNavigator(
+const Tabs = createMaterialTopTabNavigator(
 	{
 		Overview: {
 			screen: Overview,
@@ -262,7 +262,7 @@ const Tabs = TabNavigator(
 				paddingVertical = 10 + (fontSize * 0.5);
 			}
 			return (
-				<TabBarTop {...rest}
+				<MaterialTopTabBar {...rest}
 					tabStyle={{
 						...tabStyle,
 						width: tabWidth,

@@ -83,7 +83,7 @@ class RegisterScreen extends View {
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		const { screenProps, registeredCredential, navigation } = this.props;
 		if (registeredCredential && screenProps.currentScreen !== 'Welcome') {
-			navigation.navigate('Welcome');
+			navigation.push('Welcome');
 		}
 	}
 
@@ -95,7 +95,7 @@ class RegisterScreen extends View {
 
 	goBackToLogin() {
 		this.closeModal();
-		this.props.navigation.navigate('Login');
+		this.props.navigation.push('Login');
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

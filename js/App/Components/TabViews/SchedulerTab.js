@@ -150,14 +150,14 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	newSchedule = () => {
-		this.props.screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: false});
+		this.props.screenProps.stackNavigator.push('Schedule', {renderRootHeader: true, editMode: false});
 	};
 
 	editJob = (schedule: Schedule) => {
 		const { dispatch, screenProps } = this.props;
 
 		dispatch(editSchedule(schedule));
-		screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: true});
+		screenProps.stackNavigator.push('Schedule', {renderRootHeader: true, editMode: true});
 	};
 
 	onIndexChanged = (index: number) => {

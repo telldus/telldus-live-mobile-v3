@@ -21,7 +21,7 @@
 
 'use strict';
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
 
@@ -68,7 +68,7 @@ const StackNavigatorConfig = {
 	initialRouteName: 'Login',
 };
 
-const Navigator = StackNavigator(RouteConfigs, StackNavigatorConfig);
+const Navigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
 
 type Props = {
 };

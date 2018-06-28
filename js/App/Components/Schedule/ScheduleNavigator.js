@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import ScheduleScreen from './ScheduleScreen';
 import { View, SafeAreaView } from '../../../BaseComponents';
@@ -90,7 +90,7 @@ const StackNavigatorConfig = {
 	},
 };
 
-const Schedule = StackNavigator(RouteConfigs, StackNavigatorConfig);
+const Schedule = createStackNavigator(RouteConfigs, StackNavigatorConfig);
 
 type Props = {
 	navigation: Object,

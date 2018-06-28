@@ -230,12 +230,12 @@ class LoginScreen extends View {
 
 	onNeedAccount() {
 		this.closeModal();
-		this.props.navigation.navigate('Register');
+		this.props.navigation.push('Register');
 	}
 
 	onForgotPassword() {
 		this.closeModal();
-		this.props.navigation.navigate('ForgotPassword');
+		this.props.navigation.push('ForgotPassword');
 	}
 }
 

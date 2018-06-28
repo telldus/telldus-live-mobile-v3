@@ -54,7 +54,7 @@
     "react-native-udp": "^2.3.1",
     "react-native-uuid": "^1.4.9",
     "react-native-vector-icons": "^4.6.0",
-    "react-navigation": "^1.5.2",
+    "react-navigation": "~2.5.5",
     "react-redux": "~5.0.7",
     "reconnecting-websocket": "^4.0.0-rc5",
     "redux": "~4.0.0",

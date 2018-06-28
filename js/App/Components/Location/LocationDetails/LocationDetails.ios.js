@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { View, SafeAreaView } from '../../../../BaseComponents';
@@ -83,7 +83,7 @@ const StackNavigatorConfig = {
 	},
 };
 
-const Stack = StackNavigator(RouteConfigs, StackNavigatorConfig);
+const Stack = createStackNavigator(RouteConfigs, StackNavigatorConfig);
 
 type Props = {
 	navigation: Object,
