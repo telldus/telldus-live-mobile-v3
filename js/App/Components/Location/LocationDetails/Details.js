@@ -128,9 +128,9 @@ class Details extends View {
 		actions.showModal(this.confirmMessage, 'DELETE_LOCATION');
 	}
 
-	getLocationStatus(online: boolean, websocketOnline: boolean): Object {
+	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
 		return (
-			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl}/>
+			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} localKey={localKey}/>
 		);
 	}
 
@@ -157,7 +157,7 @@ class Details extends View {
 		} = this.getStyles(appLayout);
 		const labelWidth = containerWidth * 0.36;
 
-		let info = this.getLocationStatus(online, websocketOnline);
+		let info = this.getLocationStatus(online, websocketOnline, localKey);
 
 		return (
 			<View style={{flex: 1, paddingVertical: padding}}>
