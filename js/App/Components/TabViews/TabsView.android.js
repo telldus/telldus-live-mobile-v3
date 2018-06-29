@@ -22,24 +22,11 @@
 
 'use strict';
 
-import React from 'react';
-import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
-import { intlShape, injectIntl } from 'react-intl';
-import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View, Header } from '../../../BaseComponents';
-
-import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 
 import TabBar from './TabBar';
-import i18n from '../../Translations/common';
-import { getUserProfile } from '../../Reducers/User';
-import { syncWithServer, switchTab, addNewGateway, showToast } from '../../Actions';
 import TabViews from './index';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import Drawer from '../Drawer/Drawer';
-import { getDrawerWidth } from '../../Lib';
 
 // const messages = defineMessages({
 // 	menuIcon: {

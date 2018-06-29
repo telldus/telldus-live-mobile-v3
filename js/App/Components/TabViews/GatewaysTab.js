@@ -52,6 +52,7 @@ type Props = {
 	addNewLocation: () => Promise<any>,
 	screenProps: Object,
 	appLayout: Object,
+	navigation: Object,
 };
 
 type State = {

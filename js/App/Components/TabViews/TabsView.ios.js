@@ -22,20 +22,13 @@
 
 'use strict';
 
-import React from 'react';
-import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 import DeviceInfo from 'react-native-device-info';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import { View, Header, SafeAreaView, IconTelldus } from '../../../BaseComponents';
 
-import { toggleEditMode, syncWithServer, switchTab, addNewGateway, showToast } from '../../Actions';
 import TabViews from './index';
 
-import { getUserProfile } from '../../Reducers/User';
-import i18n from '../../Translations/common';
 
 const RouteConfigs = {
 	Dashboard: {
@@ -73,33 +66,33 @@ const TabNavigatorConfig = {
 
 const TabsView = createBottomTabNavigator(RouteConfigs, TabNavigatorConfig);
 
-type Props = {
-	intl: intlShape.isRequired,
-	tab: string,
-	userIcon: boolean,
-	userProfile: Object,
-	dashboard: Object,
-	onTabSelect: (string) => void,
-	onToggleEditMode: (string) => void,
-	dispatch: Function,
-	stackNavigator: Object,
-	screenProps: Object,
-	appLayout: Object,
-	gateways: Array<any>,
-	gatewaysToActivate: Object,
-	addNewLocation: () => Promise<any>,
-};
+// type Props = {
+// 	intl: intlShape.isRequired,
+// 	tab: string,
+// 	userIcon: boolean,
+// 	userProfile: Object,
+// 	dashboard: Object,
+// 	onTabSelect: (string) => void,
+// 	onToggleEditMode: (string) => void,
+// 	dispatch: Function,
+// 	stackNavigator: Object,
+// 	screenProps: Object,
+// 	appLayout: Object,
+// 	gateways: Array<any>,
+// 	gatewaysToActivate: Object,
+// 	addNewLocation: () => Promise<any>,
+// };
 
-type Tab = {
-	index: number,
-	routeName: string,
-};
+// type Tab = {
+// 	index: number,
+// 	routeName: string,
+// };
 
-type State = {
-	tab: Tab,
-	settings: boolean,
-	addingNewLocation: boolean,
-};
+// type State = {
+// 	tab: Tab,
+// 	settings: boolean,
+// 	addingNewLocation: boolean,
+// };
 
 // class TabsView extends View {
 // 	props: Props;

@@ -76,6 +76,7 @@ type Props = {
 	screenProps: Object,
 	appLayout: Object,
 	addNewLocation: Function,
+	navigation: Object,
 };
 
 type State = {

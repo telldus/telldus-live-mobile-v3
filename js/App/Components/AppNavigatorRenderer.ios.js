@@ -91,6 +91,7 @@ type Props = {
 	gatewaysallIds: Array<any>,
 	gatewaysToActivate: Object,
 	addNewLocation: () => Promise<any>,
+	onNavigationStateChange: (string) => void,
 };
 
 type State = {
@@ -259,7 +260,7 @@ class AppNavigator extends View {
 		const currentScreen = getRouteName(currentState);
 		this.setState({ currentScreen });
 
-		this.props.onNavigationalStateChange(currentScreen);
+		this.props.onNavigationStateChange(currentScreen);
 	}
 
 	onDoneDimming() {
@@ -355,7 +356,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onNavigationalStateChange: (tab: string) => {
+		onNavigationStateChange: (tab: string) => {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
 		},

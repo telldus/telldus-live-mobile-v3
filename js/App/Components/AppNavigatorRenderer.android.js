@@ -116,7 +116,7 @@ type Props = {
 	isAppActive: boolean,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
-	onNavigationalStateChange: (string) => void,
+	onNavigationStateChange: (string) => void,
 	addNewLocation: () => any,
 	screenReaderEnabled: boolean,
 };
@@ -190,7 +190,6 @@ class AppNavigator extends View {
 		this.onCloseSetting = this.onCloseSetting.bind(this);
 		this.onCloseDrawer = this.onCloseDrawer.bind(this);
 		this.onOpenDrawer = this.onOpenDrawer.bind(this);
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
 		this.onPressGateway = this.onPressGateway.bind(this);
 
@@ -341,7 +340,7 @@ class AppNavigator extends View {
 		const currentScreen = getRouteName(currentState);
 		this.setState({ currentScreen });
 
-		this.props.onNavigationalStateChange(currentScreen);
+		this.props.onNavigationStateChange(currentScreen);
 	}
 
 	onDoneDimming() {
@@ -532,7 +531,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 		syncGateways: () => {
 			dispatch(syncWithServer('gatewaysTab'));
 		},
-		onNavigationalStateChange: (tab: string) => {
+		onNavigationStateChange: (tab: string) => {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
 		},

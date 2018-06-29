@@ -124,12 +124,12 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let {navigation, screenProps} = this.props;
+		let {navigation} = this.props;
 		// if (screenProps.currentScreen === 'Details') {
 		// 	screenProps.rootNavigator.goBack();
 		// 	return true;
 		// }
-		navigation.goBack();
+		navigation.pop();
 		return true;
 	}
 
@@ -153,14 +153,14 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	};
 
 	onConfirmRemoveLocation() {
-		let { actions, screenProps, navigation } = this.props;
+		let { actions, navigation } = this.props;
 		let { location } = navigation.state.params;
 		this.closeModal();
 		actions.removeGateway(location.id).then((res: Object) => {
 			actions.getGateways().then(() => {
 				actions.getAppData();
 			});
-			navigation.goBack();
+			navigation.pop();
 		}).catch(() => {
 			actions.showModal(this.onRemoveLocationError);
 		});

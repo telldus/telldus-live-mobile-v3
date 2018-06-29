@@ -38,6 +38,7 @@ type Props = {
     stackNavigator: Object,
 	appLayout: Object,
 	intl: Object,
+	navigation: Object,
 };
 
 type State = {
