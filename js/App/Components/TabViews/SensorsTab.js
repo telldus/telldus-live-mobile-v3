@@ -148,7 +148,7 @@ class SensorsTab extends View {
 		const isStateEqual = isEqual(this.state, nextState);
 		const isPropsEqual = isEqual(this.props, nextProps);
 
-		return (tab === 'sensorsTab') && (!isStateEqual || !isPropsEqual);
+		return (tab === 'Sensors') && (!isStateEqual || !isPropsEqual);
 	}
 
 	onRefresh() {

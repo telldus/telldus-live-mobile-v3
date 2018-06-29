@@ -68,7 +68,7 @@ class NavigationHeader extends View {
 	}
 
 	goBack() {
-		this.props.navigation.goBack(null);
+		this.props.navigation.pop();
 	}
 
 	getLeftIcon(): Object {

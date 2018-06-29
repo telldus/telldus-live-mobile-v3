@@ -87,12 +87,12 @@ class LocationDetailsPoster extends View {
 	};
 
 	goBack() {
-		let { screenProps, navigation } = this.props;
-		if (screenProps.currentScreen === screenProps.initialRouteName) {
-			screenProps.rootNavigator.goBack();
-		} else {
-			navigation.goBack();
-		}
+		let { navigation } = this.props;
+		// if (screenProps.currentScreen === screenProps.initialRouteName) {
+		// 	screenProps.rootNavigator.goBack();
+		// } else {
+		navigation.pop();
+		// }
 	}
 
 	render(): Object {

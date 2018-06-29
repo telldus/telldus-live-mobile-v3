@@ -117,9 +117,10 @@ class GatewaysTab extends View {
 	}
 
 	renderRow(item: Object): Object {
-		let { stackNavigator, intl } = this.props.screenProps;
+		const { navigation, screenProps } = this.props;
+		const { intl } = screenProps;
 		return (
-			<GatewayRow location={item.item} stackNavigator={stackNavigator} intl={intl}/>
+			<GatewayRow location={item.item} navigation={navigation} intl={intl}/>
 		);
 	}
 
@@ -133,7 +134,7 @@ class GatewaysTab extends View {
 		});
 		this.props.addNewLocation()
 			.then((response: Object) => {
-				this.props.screenProps.stackNavigator.push('AddLocation', {clients: response.client, renderRootHeader: true});
+				this.props.navigation.push('AddLocation', {clients: response.client, renderRootHeader: true});
 				this.setState({
 					isLoading: false,
 				});

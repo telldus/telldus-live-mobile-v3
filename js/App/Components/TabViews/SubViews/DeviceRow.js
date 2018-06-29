@@ -146,7 +146,7 @@ class DeviceRow extends PureComponent<Props, State> {
 		let { tab, propsSwipeRow, device } = this.props;
 		const { isOpen } = this.state;
 		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (isOpen && (tab !== 'devicesTab' || (forceClose && device.id !== idToKeepOpen)) ) {
+		if (isOpen && (tab !== 'Devices' || (forceClose && device.id !== idToKeepOpen)) ) {
 			this.refs.SwipeRow.closeRow();
 		}
 	}

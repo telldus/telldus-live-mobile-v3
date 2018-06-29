@@ -204,11 +204,12 @@ class DevicesTab extends View {
 		const isStateEqual = isEqual(this.state, nextState);
 		const isPropsEqual = isEqual(this.props, nextProps);
 
-		return (tab === 'devicesTab') && (!isStateEqual || !isPropsEqual);
+		return (tab === 'Devices') && (!isStateEqual || !isPropsEqual);
 	}
 
 	openDeviceDetail(device: Object) {
-		this.props.stackNavigator.push('DeviceDetails', { id: device.id });
+		// this.props.stackNavigator.push('DeviceDetails', { id: device.id });
+		this.props.navigation.push('DeviceDetails', { id: device.id });
 	}
 
 	onCloseSelected() {

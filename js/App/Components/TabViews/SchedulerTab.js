@@ -121,7 +121,7 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.tab === 'schedulerTab';
+		return nextProps.tab === 'Scheduler';
 	}
 
 	componentDidMount() {

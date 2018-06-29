@@ -20,7 +20,7 @@
 
 'use strict';
 
-import AppNavigator from './AppNavigator';
+import AppNavigator from './AppNavigatorRenderer';
 import PreLoginNavigator from './PreLoginNavigator';
 import Push from './Push';
 

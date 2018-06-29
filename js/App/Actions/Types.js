@@ -34,7 +34,8 @@ export type Action =
 	| { type: 'PUSH_TOKEN_UNREGISTERED', token: string, payload: Object }
 	| { type: 'LOGGED_OUT' }
 	| { type: 'LOCK_SESSION' }
-	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
+	// | { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
+	| { type: 'SWITCH_TAB', tab: 'Dashboard' | 'Devices' | 'Sensors' | 'Scheduler' | 'Gateways' }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: number }

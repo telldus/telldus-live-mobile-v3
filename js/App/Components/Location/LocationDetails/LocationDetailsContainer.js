@@ -125,11 +125,11 @@ class LocationDetailsContainer extends View<null, Props, State> {
 
 	handleBackPress(): boolean {
 		let {navigation, screenProps} = this.props;
-		if (screenProps.currentScreen === 'Details') {
-			screenProps.rootNavigator.goBack();
-			return true;
-		}
-		navigation.dispatch({ type: 'Navigation/BACK'});
+		// if (screenProps.currentScreen === 'Details') {
+		// 	screenProps.rootNavigator.goBack();
+		// 	return true;
+		// }
+		navigation.goBack();
 		return true;
 	}
 
@@ -153,14 +153,14 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	};
 
 	onConfirmRemoveLocation() {
-		let { actions, screenProps } = this.props;
-		let { location } = screenProps.rootNavigator.state.params;
+		let { actions, screenProps, navigation } = this.props;
+		let { location } = navigation.state.params;
 		this.closeModal();
 		actions.removeGateway(location.id).then((res: Object) => {
 			actions.getGateways().then(() => {
 				actions.getAppData();
 			});
-			screenProps.rootNavigator.goBack();
+			navigation.goBack();
 		}).catch(() => {
 			actions.showModal(this.onRemoveLocationError);
 		});
@@ -191,7 +191,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		const { h1, h2, infoButton } = this.state;
 		const styles = this.getStyle(appLayout);
 		const { modalHeader, positiveText, showNegative, onPressPositive, onPressNegative } = this.getModalData(modalExtras);
-		const { params } = screenProps.rootNavigator.state;
+		const { params } = navigation.state;
 
 		let { width, height } = appLayout;
 		let deviceWidth = height > width ? width : height;

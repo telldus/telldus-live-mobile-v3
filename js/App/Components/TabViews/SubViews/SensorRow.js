@@ -184,7 +184,7 @@ class SensorRow extends View<Props, State> {
 		let { tab, propsSwipeRow, sensor } = this.props;
 		const { isOpen } = this.state;
 		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (isOpen && (tab !== 'sensorsTab' || (forceClose && sensor.id !== idToKeepOpen)) ) {
+		if (isOpen && (tab !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen)) ) {
 			this.refs.SwipeRow.closeRow();
 		}
 	}

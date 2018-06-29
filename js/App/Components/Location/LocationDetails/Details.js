@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let id = ownProps.rootNavigator.state.params.location.id;
+	let id = ownProps.navigation.state.params.location.id;
 	return {
 		location: store.gateways.byId[id],
 		appLayout: getRelativeDimensions(store.App.layout),

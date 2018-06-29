@@ -24,9 +24,7 @@
 
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
-import { connect } from 'react-redux';
 
-import { View } from '../../../../BaseComponents';
 import { NavigationHeader } from '../../DeviceDetails/SubViews';
 import LocationDetailsContainer from './LocationDetailsContainer';
 
@@ -35,8 +33,6 @@ import EditName from './EditName';
 import EditTimeZoneContinent from './EditTimeZoneContinent';
 import EditTimeZoneCity from './EditTimeZoneCity';
 import EditGeoPosition from './EditGeoPosition';
-
-import { getRouteName } from '../../../Lib';
 
 const initialRouteName = 'Details';
 
@@ -71,94 +67,94 @@ const StackNavigatorConfig = {
 	headerMode: 'float',
 	initialRouteParams: {renderHeader: false},
 	navigationOptions: ({navigation}: Object): Object => {
-		let {state} = navigation;
-		let renderStackHeader = state.routeName !== 'Details';
-		if (renderStackHeader) {
-			return {
-				header: <NavigationHeader navigation={navigation}/>,
-			};
-		}
+		// let {state} = navigation;
+		// let renderStackHeader = state.routeName !== 'Details';
+		// if (renderStackHeader) {
 		return {
-			header: null,
+			header: <NavigationHeader navigation={navigation}/>,
 		};
+		// }
+		// return {
+		// 	header: null,
+		// };
 	},
 };
 
-const Stack = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const LocationDetailsNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
 
-type Props = {
-	navigation: Object,
-	appLayout: Object,
-	screenReaderEnabled: boolean,
-};
+// type Props = {
+// 	navigation: Object,
+// 	appLayout: Object,
+// 	screenReaderEnabled: boolean,
+// };
 
-type State = {
-	currentScreen: string,
-};
-
-
-class LocationDetailsNavigator extends View {
-
-	props: Props;
-	state: State;
-
-	onNavigationStateChange: () => void;
-
-	constructor(props: Props) {
-		super(props);
-
-		this.state = {
-			currentScreen: 'Details',
-		};
-
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-	}
-
-	onNavigationStateChange(prevState: Object, currentState: Object) {
-		const currentScreen = getRouteName(currentState);
-		if (this.state.currentScreen !== currentScreen) {
-			this.setState({
-				currentScreen,
-			});
-			let {navigation} = this.props;
-			if (currentScreen === 'Details' && !navigation.state.params.renderRootHeader) {
-				navigation.setParams({renderRootHeader: true});
-			}
-			if (currentScreen !== 'Details' && navigation.state.params.renderRootHeader) {
-				navigation.setParams({renderRootHeader: false});
-			}
-		}
-	}
+// type State = {
+// 	currentScreen: string,
+// };
 
 
-	render(): Object {
+// class LocationDetailsNavigator extends View {
 
-		let { currentScreen } = this.state;
-		let { appLayout, navigation, screenReaderEnabled } = this.props;
-		let screenProps = {
-			currentScreen,
-			rootNavigator: navigation,
-			appLayout,
-			screenReaderEnabled,
-			initialRouteName,
-		};
+// 	props: Props;
+// 	state: State;
 
-		return (
-			<View style={{flex: 1}}>
-				{navigation.state.params.renderRootHeader &&
-					<NavigationHeader navigation={navigation} />
-				}
-				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
-			</View>
-		);
-	}
-}
+// 	onNavigationStateChange: () => void;
 
-function mapStateToProps(state: Object, ownProps: Object): Object {
-	return {
-		appLayout: state.App.layout,
-		screenReaderEnabled: state.App.screenReaderEnabled,
-	};
-}
+// 	constructor(props: Props) {
+// 		super(props);
 
-export default connect(mapStateToProps, null)(LocationDetailsNavigator);
+// 		this.state = {
+// 			currentScreen: 'Details',
+// 		};
+
+// 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
+// 	}
+
+// 	onNavigationStateChange(prevState: Object, currentState: Object) {
+// 		const currentScreen = getRouteName(currentState);
+// 		if (this.state.currentScreen !== currentScreen) {
+// 			this.setState({
+// 				currentScreen,
+// 			});
+// 			let {navigation} = this.props;
+// 			if (currentScreen === 'Details' && !navigation.state.params.renderRootHeader) {
+// 				navigation.setParams({renderRootHeader: true});
+// 			}
+// 			if (currentScreen !== 'Details' && navigation.state.params.renderRootHeader) {
+// 				navigation.setParams({renderRootHeader: false});
+// 			}
+// 		}
+// 	}
+
+
+// 	render(): Object {
+
+// 		let { currentScreen } = this.state;
+// 		let { appLayout, navigation, screenReaderEnabled } = this.props;
+// 		let screenProps = {
+// 			currentScreen,
+// 			rootNavigator: navigation,
+// 			appLayout,
+// 			screenReaderEnabled,
+// 			initialRouteName,
+// 		};
+
+// 		return (
+// 			<View style={{flex: 1}}>
+// 				{navigation.state.params.renderRootHeader &&
+// 					<NavigationHeader navigation={navigation} />
+// 				}
+// 				<Stack onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps}/>
+// 			</View>
+// 		);
+// 	}
+// }
+
+// function mapStateToProps(state: Object, ownProps: Object): Object {
+// 	return {
+// 		appLayout: state.App.layout,
+// 		screenReaderEnabled: state.App.screenReaderEnabled,
+// 	};
+// }
+
+export default LocationDetailsNavigator;
