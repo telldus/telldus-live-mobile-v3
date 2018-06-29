@@ -421,9 +421,11 @@ function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 		onSubmitPushToken: (token: string): Promise<any> => {
 			return dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 		},
-		onLogout: (token: string) => {
-			dispatch(unregisterPushToken(token)).then(() => {
-				dispatch(logoutFromTelldus());
+		onLogout: (token: string): Promise<any> => {
+			return dispatch(unregisterPushToken(token)).then((): Promise<any> => {
+				return dispatch(logoutFromTelldus());
+			}).catch((): Promise<any> => {
+				return dispatch(logoutFromTelldus());
 			});
 		},
 		dispatch,

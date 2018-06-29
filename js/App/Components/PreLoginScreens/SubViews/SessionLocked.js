@@ -219,6 +219,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 		logoutFromTelldus: (pushToken: string): Promise<any> => {
 			return dispatch(unregisterPushToken(pushToken)).then((res: Object): Promise<any> => {
 				return dispatch(logoutFromTelldus());
+			}).catch((): Promise<any> => {
+				return dispatch(logoutFromTelldus());
 			});
 		},
 		refreshAccessToken: (): Promise<any> => {
