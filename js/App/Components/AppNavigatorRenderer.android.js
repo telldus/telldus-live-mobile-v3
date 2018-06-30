@@ -190,6 +190,7 @@ class AppNavigator extends View {
 		this.onCloseSetting = this.onCloseSetting.bind(this);
 		this.onCloseDrawer = this.onCloseDrawer.bind(this);
 		this.onOpenDrawer = this.onOpenDrawer.bind(this);
+		this.openDrawer = this.openDrawer.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
 		this.onPressGateway = this.onPressGateway.bind(this);
 
