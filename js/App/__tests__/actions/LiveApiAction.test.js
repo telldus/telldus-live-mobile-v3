@@ -36,7 +36,7 @@ describe('(LiveApi) syncWithServer', () => {
 	it('check syncWithServer', () => {
 		store = configureStore();
 		// Send new status through websocket connection
-		store.dispatch(syncWithServer('sensorsTab'));
+		store.dispatch(syncWithServer('Sensors'));
 		expect(store.getState().liveApi.sensors).toBe(true);
 	});
 
