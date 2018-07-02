@@ -190,7 +190,7 @@ class Edit extends View<null, Props, State> {
 	};
 
 	resetNavigation = () => {
-		this.props.rootNavigator.goBack();
+		this.props.navigation.pop();
 	}
 
 	onDeleteCancel = () => {
@@ -309,9 +309,6 @@ class Edit extends View<null, Props, State> {
 	}
 
 	_navigate = (routeName: string) => {
-		this.props.rootNavigator.setParams({
-			renderRootHeader: false,
-		});
 		this.props.navigation.push(routeName, { editMode: true });
 	};
 

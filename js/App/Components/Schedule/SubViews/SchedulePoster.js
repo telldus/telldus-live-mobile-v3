@@ -78,12 +78,8 @@ export default class SchedulePoster extends View<null, Props, State> {
 	}
 
 	goBack() {
-		let { screenProps, navigation } = this.props;
-		if (screenProps.currentScreen === screenProps.initialRouteName) {
-			screenProps.rootNavigator.goBack();
-		} else {
-			navigation.goBack();
-		}
+		let { navigation } = this.props;
+		navigation.pop();
 	}
 
 	onLayoutHeaderOne(ev: Object) {

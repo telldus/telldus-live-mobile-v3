@@ -62,9 +62,6 @@ export default class Device extends View<void, Props, State> {
 
 		this.h1 = `1. ${formatMessage(i18n.labelDevice)}`;
 		this.h2 = formatMessage(i18n.posterChooseDevice);
-		if (this._shouldReset()) {
-			this.props.navigation.goBack(null);
-		}
 	}
 
 	componentDidMount() {
@@ -86,12 +83,9 @@ export default class Device extends View<void, Props, State> {
 	};
 
 	selectDevice = (row: Object) => {
-		const { actions, navigation, rootNavigator } = this.props;
+		const { actions, navigation } = this.props;
 		navigation.push('Action');
 		actions.selectDevice(row.id);
-		rootNavigator.setParams({
-			renderRootHeader: false,
-		});
 	};
 
 	render(): React$Element<List> {

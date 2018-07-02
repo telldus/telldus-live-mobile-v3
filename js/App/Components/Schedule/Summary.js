@@ -23,24 +23,17 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ScrollView } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
+import { intlShape, injectIntl, defineMessages } from 'react-intl';
+
 import { FloatingButton, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow } from './SubViews';
-import { ScrollView } from 'react-native';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
-import i18n from '../../Translations/common';
 import Theme from '../../Theme';
-interface Props extends ScheduleProps {
-	paddingRight: number,
-	devices: Object,
-	intl: intlShape.isRequired,
-}
 
-type State = {
-	isLoading: boolean,
-};
-
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	addScheduleSuccess: {
 		id: 'toast.addScheduleSuccess',
@@ -52,6 +45,16 @@ const messages = defineMessages({
 		defaultMessage: 'Please confirm the schedule',
 	},
 });
+
+interface Props extends ScheduleProps {
+	paddingRight: number,
+	devices: Object,
+	intl: intlShape.isRequired,
+}
+
+type State = {
+	isLoading: boolean,
+};
 
 class Summary extends View<null, Props, State> {
 
@@ -104,9 +107,9 @@ class Summary extends View<null, Props, State> {
 			this.setState({
 				isLoading: false,
 			});
-			this.resetNavigation();
 			this.props.actions.getJobs();
 			this.props.actions.showToast(this.messageOnAdd, 'LONG');
+			this.resetNavigation();
 		}).catch((error: Object) => {
 			this.setState({
 				isLoading: false,
@@ -117,7 +120,13 @@ class Summary extends View<null, Props, State> {
 	};
 
 	resetNavigation = () => {
-		this.props.rootNavigator.goBack();
+		const { navigation } = this.props;
+		// There are issue while RESETTING the route and navigating/popping back(cannot set params and so) https://github.com/react-navigation/react-navigation/issues/2404
+		// Also we do not have to push the screen on top of the stack once again, so 'navigate' seem to be the best option.
+		const action = NavigationActions.navigate({
+			routeName: 'Scheduler',
+		});
+		navigation.dispatch(action);
 	}
 
 	render(): React$Element<any> {

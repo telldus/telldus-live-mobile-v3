@@ -112,12 +112,8 @@ class ScheduleScreen extends View<null, Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let {navigation, screenProps} = this.props;
-		if (screenProps.currentScreen === 'InitialScreen') {
-			screenProps.rootNavigator.goBack();
-			return true;
-		}
-		navigation.dispatch({ type: 'Navigation/BACK'});
+		let { navigation } = this.props;
+		navigation.pop();
 		return true;
 	}
 
@@ -223,9 +219,10 @@ class ScheduleScreen extends View<null, Props, State> {
 		const deviceHeight = isPortrait ? height : width;
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		let { state } = this.props.screenProps.rootNavigator;
+		// let { state } = this.props.screenProps.rootNavigator; REMOVE
+		const { state } = this.props.navigation;
 
-		const notEdit = (this.props.screenProps.currentScreen === 'InitialScreen' && !state.params.editMode)
+		const notEdit = (this.props.screenProps.currentScreen === 'InitialScreen' && (!state.params || !state.params.editMode))
 			|| this.props.screenProps.currentScreen !== 'InitialScreen';
 		return {
 			style: {
