@@ -33,7 +33,7 @@ TELLDUS_REACT_NATIVE_LOCAL_KEY_PASSWORD=${ANDROID_KEY_PASSWORD}
 GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
 EOF
 
-echo "${GOOGLE_SERVICES_JSON}" > app/google-services.json
+echo "${GOOGLE_SERVICES}" > app/google-services.json
 
 # Add deploy key to be able to fetch android keystore
 if [ "${DEPLOY_KEY}" != "" ]; then
