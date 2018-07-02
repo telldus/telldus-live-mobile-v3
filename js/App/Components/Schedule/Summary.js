@@ -24,7 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { NavigationActions } from 'react-navigation';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 import { FloatingButton, View } from '../../../BaseComponents';
