@@ -392,10 +392,6 @@ class AppNavigator extends View {
 		let screenProps = {
 			currentScreen: CS,
 			currentTab: CS, // TODO: Remove once MAIN tabs are all refactored.
-			stackNavigator: { // TODO: Remove once all Navigators are refactored and 'stackNavigator' is no more required
-				navigate,
-				push: navigate,
-			},
 			intl,
 			drawer,
 			appLayout,
