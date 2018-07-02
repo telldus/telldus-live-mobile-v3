@@ -139,7 +139,7 @@ class AppNavigator extends View {
 	autoDetectLocalTellStick: () => void;
 	handleConnectivityChange: () => void;
 	onLayout: (Object) => void;
-	setNavigatorRef: (Object) => void;
+	setNavigatorRef: (any) => void;
 
 	renderNavigationView: () => Object;
 	onOpenSetting: () => void;
@@ -352,7 +352,7 @@ class AppNavigator extends View {
 		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
 	}
 
-	setNavigatorRef(navigatorRef: Object) {
+	setNavigatorRef(navigatorRef: any) {
 		setTopLevelNavigator(navigatorRef);
 	}
 
