@@ -35,7 +35,6 @@ import Theme from '../../../Theme';
 
 type Props = {
     location: Object,
-    stackNavigator: Object,
 	appLayout: Object,
 	intl: Object,
 	navigation: Object,

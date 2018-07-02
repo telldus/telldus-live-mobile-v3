@@ -48,7 +48,6 @@ import { getRelativeDimensions } from '../../Lib';
 type Props = {
 	dispatch: Function,
 	device: Object,
-	stackNavigator: Object,
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	screenProps: Object,
@@ -299,7 +298,6 @@ const Tabs = createMaterialTopTabNavigator(
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
-		stackNavigator: ownProps.navigation,
 		device: store.devices.byId[ownProps.navigation.state.params.id],
 		appLayout: getRelativeDimensions(store.App.layout),
 		isModalOpen: store.modal.openModal,

@@ -72,7 +72,6 @@ type Props = {
 	devices: Object,
 	tab: string,
 	dispatch: Function,
-	stackNavigator: Object,
 	screenProps: Object,
 	appLayout: Object,
 	addNewLocation: Function,
@@ -209,7 +208,6 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device: Object) {
-		// this.props.stackNavigator.push('DeviceDetails', { id: device.id });
 		this.props.navigation.push('DeviceDetails', { id: device.id });
 	}
 
@@ -335,7 +333,7 @@ class DevicesTab extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					this.props.stackNavigator.push('AddLocation', {clients: response.client, renderRootHeader: true});
+					this.props.navigation.push('AddLocation', {clients: response.client, renderRootHeader: true});
 					this.setState({
 						addGateway: false,
 					});
@@ -619,7 +617,6 @@ const getRowsAndSections = createSelector(
 
 function mapStateToProps(state: Object, ownprops: Object): Object {
 	return {
-		stackNavigator: ownprops.screenProps.stackNavigator,
 		rowsAndSections: getRowsAndSections(state),
 		devices: state.devices,
 		gateways: state.gateways.allIds,
