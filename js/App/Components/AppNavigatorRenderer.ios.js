@@ -286,6 +286,7 @@ class AppNavigator extends View {
 				push: navigate,
 			},
 			intl,
+			appLayout,
 		};
 		let { show, name, value, showStep, deviceStep } = dimmer;
 		let importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
