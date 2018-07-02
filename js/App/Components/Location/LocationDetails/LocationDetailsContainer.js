@@ -125,10 +125,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 
 	handleBackPress(): boolean {
 		let {navigation} = this.props;
-		// if (screenProps.currentScreen === 'Details') {
-		// 	screenProps.rootNavigator.goBack();
-		// 	return true;
-		// }
 		navigation.pop();
 		return true;
 	}

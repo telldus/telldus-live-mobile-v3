@@ -44,7 +44,6 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
-	rootNavigator: Object,
 };
 
 type State = {

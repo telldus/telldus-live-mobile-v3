@@ -85,7 +85,6 @@ type Props = {
 	intl: intlShape.isRequired,
 	navigation: Object,
 	onDidMount: Function,
-	rootNavigator: Object,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
@@ -139,7 +138,7 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		this.props.rootNavigator.push('Tabs');
+		this.props.navigation.navigate('Tabs');
 	}
 
 	onPressHelp() {

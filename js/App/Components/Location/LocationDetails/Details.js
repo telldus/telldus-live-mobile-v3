@@ -40,7 +40,6 @@ import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
-	rootNavigator: Object,
 	containerWidth: number,
 	navigation: Object,
 	location: Object,
