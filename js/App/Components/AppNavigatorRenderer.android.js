@@ -67,6 +67,7 @@ import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
 import i18n from '../Translations/common';
+// TODO : Remove unused strings!
 const messages = defineMessages({
 	errortoast: {
 		id: 'errortoast',
