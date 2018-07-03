@@ -58,6 +58,7 @@ export default {
 	sectionTextColor: '#8e8e93',
 	rowTextColor: '#8e8e93',
 	eulaContentColor: '#555555',
+	inactiveTintColor: '#A59F9A',
 
 	offlineColor: '#b5b5b5',
 

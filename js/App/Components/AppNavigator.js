@@ -25,7 +25,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import { SettingsScreen } from './Settings';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
-import DeviceDetails from './DeviceDetails/DeviceDetails';
+import DeviceDetailsNavigator from './DeviceDetails/DeviceDetailsNavigator';
 import AddLocationNavigator from './Location/AddLocation/AddLocation';
 import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails';
 import TabsView from './TabViews/TabsView';
@@ -46,7 +46,7 @@ const RouteConfigs = {
 		},
 	},
 	DeviceDetails: {
-		screen: DeviceDetails,
+		screen: DeviceDetailsNavigator,
 		navigationOptions: (props: Object): Object => {
 			return {
 				header: <DeviceDetailsHeaderPoster {...props}/>,

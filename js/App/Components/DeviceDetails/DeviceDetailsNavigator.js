@@ -30,7 +30,7 @@ import Overview from './OverviewTab';
 import Settings from './SettingsTab';
 import Theme from '../../Theme';
 
-const DeviceDetails = createMaterialTopTabNavigator(
+const DeviceDetailsNavigator = createMaterialTopTabNavigator(
 	{
 		Overview: {
 			screen: Overview,
@@ -89,11 +89,11 @@ const DeviceDetails = createMaterialTopTabNavigator(
 			},
 			upperCaseLabel: false,
 			scrollEnabled: true,
-			activeTintColor: '#F06F0C',
-			inactiveTintColor: '#A59F9A',
+			activeTintColor: Theme.Core.brandSecondary,
+			inactiveTintColor: Theme.Core.inactiveTintColor,
 			showIcon: false,
 		},
 	}
 );
 
-export default DeviceDetails;
+export default DeviceDetailsNavigator;
