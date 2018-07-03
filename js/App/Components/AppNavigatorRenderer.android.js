@@ -391,7 +391,6 @@ class AppNavigator extends View {
 		let { intl, dimmer, userProfile, appLayout } = this.props;
 		let screenProps = {
 			currentScreen: CS,
-			currentTab: CS, // TODO: Remove once MAIN tabs are all refactored.
 			intl,
 			drawer,
 			appLayout,
