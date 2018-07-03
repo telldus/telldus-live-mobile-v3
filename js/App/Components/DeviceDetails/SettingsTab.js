@@ -126,7 +126,7 @@ class SettingsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentTab === 'Settings';
+		return nextProps.screenProps.currentScreen === 'Settings';
 	}
 
 	render(): Object {

@@ -42,22 +42,14 @@ type Props = {
 	navigation: Object,
 };
 
-type State = {
-	currentTab: string,
-};
-
 class DeviceDetailsHeader extends View {
 	props: Props;
-	state: State;
 
 	goBack: () => void;
 	handleBackPress: () => boolean;
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			currentTab: 'Overview',
-		};
 		this.goBack = this.goBack.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
 
@@ -88,7 +80,7 @@ class DeviceDetailsHeader extends View {
 			hideModalProp();
 			return true;
 		}
-		if (this.state.currentTab === 'Overview' && currentScreen === 'DeviceDetails') {
+		if (currentScreen === 'Overview') {
 			this.goBack();
 			return true;
 		}

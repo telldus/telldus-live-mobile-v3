@@ -47,7 +47,6 @@ type Props = {
 	intl: Object,
 	isModalOpen: boolean,
 	currentScreen: string,
-	currentTab: string,
 };
 
 type State = {
@@ -172,7 +171,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 	render(): Object {
 
-		let { appLayout, intl, isModalOpen, currentScreen, currentTab } = this.props;
+		let { appLayout, intl, isModalOpen, currentScreen } = this.props;
 
 		let {
 			locationCover,
@@ -217,7 +216,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 		let accessibilityLabel = this.accessibilityLabel(deviceState);
 		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
-		let accessible = !isModalOpen && currentTab === 'History' && currentScreen === 'DeviceDetails';
+		let accessible = !isModalOpen && currentScreen === 'History';
 
 		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';

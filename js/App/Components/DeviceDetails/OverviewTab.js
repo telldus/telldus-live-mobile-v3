@@ -93,7 +93,7 @@ class OverviewTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentTab === 'Overview';
+		return nextProps.screenProps.currentScreen === 'Overview';
 	}
 
 	render(): Object {

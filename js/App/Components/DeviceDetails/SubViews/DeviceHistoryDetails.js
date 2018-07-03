@@ -51,7 +51,6 @@ type Props = {
 	detailsData: Object,
 	appLayout: Object,
 	currentScreen: string,
-	currentTab: string,
 	intl: Object,
 };
 
@@ -87,7 +86,7 @@ class DeviceHistoryDetails extends View {
 	}
 
 	render(): Object {
-		let { detailsData, appLayout, currentScreen, currentTab } = this.props;
+		let { detailsData, appLayout, currentScreen } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
 
@@ -176,7 +175,7 @@ class DeviceHistoryDetails extends View {
 			}
 		}
 
-		let accessible = currentTab === 'History' && currentScreen === 'DeviceDetails';
+		let accessible = currentScreen === 'History';
 
 		return (
 			<Modal

@@ -56,7 +56,6 @@ type Props = {
 	rowsAndSections: Array<any> | boolean,
 	screenProps: Object,
 	currentScreen: string,
-	currentTab: string,
 	showModal: boolean,
 	navigation: Object,
 };
@@ -98,7 +97,7 @@ class HistoryTab extends View {
 
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 		const { screenProps } = props;
-		if (screenProps.currentTab !== 'History') {
+		if (screenProps.currentScreen !== 'History') {
 			return {
 				hasRefreshed: false,
 			};
@@ -175,7 +174,7 @@ class HistoryTab extends View {
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		const { screenProps } = this.props;
 		const { hasRefreshed } = this.state;
-		if (screenProps.currentTab === 'History' && !hasRefreshed) {
+		if (screenProps.currentScreen === 'History' && !hasRefreshed) {
 			this.refreshHistoryData();
 			this.setState({
 				hasRefreshed: true,
@@ -251,13 +250,13 @@ class HistoryTab extends View {
 
 	renderRow(item: Object): Object {
 		let { screenProps } = this.props;
-		let { intl, currentTab, currentScreen } = screenProps;
+		let { intl, currentScreen } = screenProps;
 
 		return (
 			<HistoryRow id={item.index}
 				item={item.item} section={item.section.key}
 				intl={intl} isFirst={+item.index === 0}
-				currentTab={currentTab} currentScreen={currentScreen}
+				currentScreen={currentScreen}
 			/>
 		);
 	}
@@ -289,7 +288,7 @@ class HistoryTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentTab === 'History';
+		return nextProps.screenProps.currentScreen === 'History';
 	}
 
 	_onRefresh() {
@@ -302,7 +301,7 @@ class HistoryTab extends View {
 	render(): Object {
 		let { screenProps } = this.props;
 		let { hasLoaded, refreshing, rowsAndSections } = this.state;
-		let { intl, currentTab, currentScreen, appLayout } = screenProps;
+		let { intl, currentScreen, appLayout } = screenProps;
 		let { brandPrimary } = Theme.Core;
 
 		let {
@@ -343,7 +342,7 @@ class HistoryTab extends View {
 				{this.state.rowsAndSections.length !== 0 && (
 					<View style={line}/>
 				)}
-				<DeviceHistoryDetails intl={intl} currentTab={currentTab} currentScreen={currentScreen}/>
+				<DeviceHistoryDetails intl={intl} currentScreen={currentScreen}/>
 			</View>
 		);
 	}
