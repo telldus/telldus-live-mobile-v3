@@ -30,7 +30,7 @@ import AddLocationNavigator from './Location/AddLocation/AddLocation';
 import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails';
 import TabsView from './TabViews/TabsView';
 
-import DeviceDetailsHeader from './DeviceDetails/DeviceDetailsHeader';
+import { DeviceDetailsHeaderPoster } from './DeviceDetails/SubViews';
 
 const RouteConfigs = {
 	Tabs: {
@@ -49,7 +49,7 @@ const RouteConfigs = {
 		screen: DeviceDetails,
 		navigationOptions: (props: Object): Object => {
 			return {
-				header: <DeviceDetailsHeader {...props}/>,
+				header: <DeviceDetailsHeaderPoster {...props}/>,
 			};
 		},
 	},
