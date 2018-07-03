@@ -127,7 +127,7 @@ const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function)
 	});
 };
 
-const RegisterUser = (email: string, firstName: string, lastName: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
+const registerUser = (email: string, firstName: string, lastName: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	let formData = new FormData();
 	formData.append('email', email);
 	formData.append('firstname', firstName);
@@ -174,7 +174,7 @@ const hideChangeLog = (): Action => {
 module.exports = {
 	...User,
 	registerPushToken,
-	RegisterUser,
+	registerUser,
 	unregisterPushToken,
 	showChangeLog,
 	hideChangeLog,

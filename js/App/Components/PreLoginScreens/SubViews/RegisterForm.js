@@ -30,7 +30,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { View, TouchableButton, H1 } from '../../../../BaseComponents';
 
-import { RegisterUser } from '../../../Actions/User';
+import { registerUser } from '../../../Actions/User';
 import { showModal } from '../../../Actions/Modal';
 
 import i18n from '../../../Translations/common';
@@ -294,7 +294,7 @@ class RegisterForm extends View {
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		onFormSubmit: (email: string, firstName: string, LastName: string): Promise<any> => {
-			return dispatch(RegisterUser(email, firstName, LastName));
+			return dispatch(registerUser(email, firstName, LastName));
 		},
 		dispatch,
 	};
