@@ -22,7 +22,7 @@
 // @flow
 
 'use strict';
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
@@ -49,9 +49,13 @@ type DefaultProps = {
 	showLeftIcon: boolean,
 };
 
-class NavigationHeader extends View {
+class NavigationHeader extends PureComponent<Props, null> {
+	props: Props;
 
 	goBack: () => void;
+	isTablet: boolean;
+	defaultDescription: string;
+	labelLeftIcon: string;
 
 	static defaultProps: DefaultProps = {
 		showLeftIcon: true,
