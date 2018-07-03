@@ -75,6 +75,11 @@ const RouteConfigs = {
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',
+	cardStyle: {
+		shadowColor: 'transparent',
+		shadowOpacity: 0,
+		elevation: 0,
+	},
 };
 
 const Navigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
