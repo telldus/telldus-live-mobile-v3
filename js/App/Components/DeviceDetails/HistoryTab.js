@@ -58,6 +58,7 @@ type Props = {
 	currentScreen: string,
 	currentTab: string,
 	showModal: boolean,
+	navigation: Object,
 };
 
 type State = {
