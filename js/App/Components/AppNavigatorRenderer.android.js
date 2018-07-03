@@ -419,7 +419,7 @@ class AppNavigator extends View {
 			>{showHeader && (
 					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton}/>
 				)}
-				<View style={styles.container} importantForAccessibility={importantForAccessibility}>
+				<View style={showHeader ? styles.container : {flex: 1}} importantForAccessibility={importantForAccessibility}>
 					<Navigator
 						ref={this.setNavigatorRef}
 						onNavigationStateChange={this.onNavigationStateChange}
