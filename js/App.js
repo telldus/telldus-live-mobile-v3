@@ -28,7 +28,7 @@ import StatusBar from 'StatusBar';
 
 import {
 	PreLoginNavigator,
-	AppNavigator,
+	AppNavigatorRenderer,
 	Push,
 } from './App/Components';
 import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
@@ -125,7 +125,7 @@ class App extends React.Component<Props, null> {
 				{hasNotLoggedIn ?
 					<PreLoginNavigator />
 					:
-					<AppNavigator {...this.props}/>
+					<AppNavigatorRenderer {...this.props}/>
 				}
 				<ChangeLogNavigator
 					changeLogVersion={changeLogVersion}

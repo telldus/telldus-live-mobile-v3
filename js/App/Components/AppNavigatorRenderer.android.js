@@ -130,7 +130,7 @@ type State = {
 	addingNewLocation: boolean,
 };
 
-class AppNavigator extends View {
+class AppNavigatorRenderer extends View {
 
 	props: Props;
 	state: State;
@@ -492,10 +492,6 @@ class AppNavigator extends View {
 	}
 }
 
-AppNavigator.propTypes = {
-	dispatch: PropTypes.func.isRequired,
-};
-
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { showToast: showToastBool, messageToast, durationToast, positionToast, layout,
 		screenReaderEnabled, active } = state.App;
@@ -540,4 +536,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(AppNavigator));
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(AppNavigatorRenderer));
