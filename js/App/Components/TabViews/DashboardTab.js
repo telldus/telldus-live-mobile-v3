@@ -218,18 +218,18 @@ class DashboardTab extends View {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { screenProps } = nextProps;
-		const { currentTab } = screenProps;
+		const { currentScreen } = screenProps;
 
 		const isStateEqual = isEqual(this.state, nextState);
 		const isPropsEqual = isEqual(this.props, nextProps);
-		if (currentTab !== 'Dashboard' && this.timer) {
+		if (currentScreen !== 'Dashboard' && this.timer) {
 			this.stopSensorTimer();
 		}
-		if (currentTab === 'Dashboard' && !this.timer) {
+		if (currentScreen === 'Dashboard' && !this.timer) {
 			this.startSensorTimer();
 		}
 
-		return (currentTab === 'Dashboard') && (!isStateEqual || !isPropsEqual);
+		return (currentScreen === 'Dashboard') && (!isStateEqual || !isPropsEqual);
 	}
 
 	_onLayout = (event: Object) => {

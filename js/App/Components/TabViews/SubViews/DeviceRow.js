@@ -55,7 +55,6 @@ type Props = {
 	device: Object,
 	setScrollEnabled: boolean,
 	intl: Object,
-	currentTab: string,
 	currentScreen: string,
 	appLayout: Object,
 	isGatewayActive: boolean,
@@ -303,7 +302,7 @@ class DeviceRow extends PureComponent<Props, State> {
 	render(): Object {
 		let button = [], icon = null;
 		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
-		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
+		const { device, intl, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
 		const { isInState, name } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
@@ -389,7 +388,7 @@ class DeviceRow extends PureComponent<Props, State> {
 			outputRange: [0, 1, 1],
 		});
 
-		let accessible = currentTab === 'Devices' && currentScreen === 'Tabs';
+		let accessible = currentScreen === 'Devices';
 		let accessibilityLabel = isOpen ? `${getLabelDevice(intl.formatMessage, device)}. ${this.helpCloseHiddenRow}` :
 			`${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
 

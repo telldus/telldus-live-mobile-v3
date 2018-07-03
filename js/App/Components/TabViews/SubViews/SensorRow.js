@@ -49,7 +49,6 @@ const directions = [
 type Props = {
 	sensor: Object,
 	intl: Object,
-	currentTab: string,
 	currentScreen: string,
 	appLayout: Object,
 	isGatewayActive: boolean,
@@ -444,7 +443,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { sensor, currentTab, currentScreen, appLayout, isGatewayActive, intl } = this.props;
+		const { sensor, currentScreen, appLayout, isGatewayActive, intl } = this.props;
 		const styles = this.getStyles(appLayout, isGatewayActive);
 		const {
 			data,
@@ -461,7 +460,7 @@ class SensorRow extends View<Props, State> {
 
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
 		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
-		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
+		let accessible = currentScreen === 'Sensors';
 		let accessibilityLabelPhraseTwo = isOpen ? this.helpCloseHiddenRow : this.helpViewHiddenRow;
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
 

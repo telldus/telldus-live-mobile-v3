@@ -80,9 +80,9 @@ class SensorsTab extends View {
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 		let { makeRowAccessible: prevMakeRowAccessible, visibleList: prevVisibleList, hiddenList: prevHiddenList } = state;
 		let { screenReaderEnabled, rowsAndSections, screenProps } = props;
-		let { currentScreen, currentTab } = screenProps;
+		let { currentScreen } = screenProps;
 		let makeRowAccessible = 0;
-		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
+		if (screenReaderEnabled && currentScreen === 'Sensors') {
 			makeRowAccessible = 1;
 		}
 		const isRowsEqual = isEqual(rowsAndSections, {visibleList: prevVisibleList, hiddenList: prevHiddenList});
@@ -305,7 +305,7 @@ class SensorsTab extends View {
 	renderRow(row: Object): Object {
 		const { screenProps, appLayout } = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, currentTab, currentScreen } = screenProps;
+		const { intl, currentScreen } = screenProps;
 		const { item } = row;
 		const { isOnline } = item;
 
@@ -314,7 +314,6 @@ class SensorsTab extends View {
 				sensor={item}
 				intl={intl}
 				appLayout={appLayout}
-				currentTab={currentTab}
 				currentScreen={currentScreen}
 				isGatewayActive={isOnline}
 				setIgnoreSensor={this.setIgnoreSensor}
