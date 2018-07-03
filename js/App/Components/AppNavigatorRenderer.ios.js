@@ -210,7 +210,7 @@ class AppNavigator extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					navigate('AddLocation', {clients: response.client, renderRootHeader: true});
+					navigate('AddLocation', {clients: response.client});
 				}
 			}).catch((error: Object) => {
 				this.setState({

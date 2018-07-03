@@ -65,7 +65,6 @@ const RouteConfigs = {
 const StackNavigatorConfig = {
 	initialRouteName,
 	headerMode: 'float',
-	initialRouteParams: {renderHeader: false},
 	navigationOptions: ({navigation}: Object): Object => {
 		return {
 			header: <NavigationHeader navigation={navigation}/>,

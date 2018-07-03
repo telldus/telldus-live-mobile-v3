@@ -332,7 +332,7 @@ class DevicesTab extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					this.props.navigation.push('AddLocation', {clients: response.client, renderRootHeader: true});
+					this.props.navigation.push('AddLocation', {clients: response.client});
 					this.setState({
 						addGateway: false,
 					});

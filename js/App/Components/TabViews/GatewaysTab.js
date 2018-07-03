@@ -135,7 +135,7 @@ class GatewaysTab extends View {
 		});
 		this.props.addNewLocation()
 			.then((response: Object) => {
-				this.props.navigation.push('AddLocation', {clients: response.client, renderRootHeader: true});
+				this.props.navigation.push('AddLocation', {clients: response.client});
 				this.setState({
 					isLoading: false,
 				});
