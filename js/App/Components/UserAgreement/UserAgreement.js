@@ -29,8 +29,7 @@ import { SafeAreaView } from 'react-navigation'; // Using SafeAreaView from reac
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 import Markdown from 'react-native-markdown-renderer';
 
-import { View, Text, StyleSheet, Poster } from '../../../BaseComponents';
-import { NavigationHeader } from '../DeviceDetails/SubViews';
+import { View, Text, StyleSheet, Poster, NavigationHeader } from '../../../BaseComponents';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import {

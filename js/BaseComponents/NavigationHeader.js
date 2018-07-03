@@ -23,6 +23,7 @@
 
 'use strict';
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
@@ -30,9 +31,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { intlShape, injectIntl } from 'react-intl';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, Header, StyleSheet } from '../../../../BaseComponents';
-import { hasStatusBar } from '../../../Lib';
-import i18n from '../../../Translations/common';
+import View from './View';
+import Header from './Header';
+import { hasStatusBar } from '../App/Lib';
+import i18n from '../App/Translations/common';
 
 type Props = {
 	navigation: Object,

@@ -25,7 +25,7 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
-import { NavigationHeader } from '../../DeviceDetails/SubViews';
+import { NavigationHeader } from '../../../../BaseComponents';
 import AddLocationContainer from './AddLocationContainer';
 
 import LocationDetected from './LocationDetected';

@@ -28,8 +28,7 @@ import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 
-import NavigationHeader from './NavigationHeader';
-import { Text, View, Poster, IconTelldus } from '../../../../BaseComponents';
+import { Text, View, Poster, IconTelldus, NavigationHeader } from '../../../../BaseComponents';
 import { closeDatabase } from '../../../Actions/LocalStorage';
 import i18n from '../../../Translations/common';
 import { hideModal } from '../../../Actions';

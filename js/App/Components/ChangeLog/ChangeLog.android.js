@@ -28,9 +28,8 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 
-import { View, FloatingButton, Text, StyleSheet } from '../../../BaseComponents';
+import { View, FloatingButton, Text, StyleSheet, NavigationHeader } from '../../../BaseComponents';
 
-import { NavigationHeader } from '../DeviceDetails/SubViews';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 const AnimatedWizard = Animated.createAnimatedComponent(Wizard);

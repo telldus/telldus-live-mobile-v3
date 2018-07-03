@@ -78,6 +78,7 @@ import SafeAreaViewComponent from './SafeAreaView';
 import DialogueHeader from './DialogueHeader';
 import TitledInfoBlock from './TitledInfoBlock';
 import CheckBoxIconText from './CheckBoxIconText';
+import NavigationHeader from './NavigationHeader';
 
 import {
 	AppState,
@@ -146,6 +147,7 @@ module.exports = {
 	DialogueHeader,
 	TitledInfoBlock,
 	CheckBoxIconText,
+	NavigationHeader,
 
 	AppState: AppState,
 	Dimensions: Dimensions,

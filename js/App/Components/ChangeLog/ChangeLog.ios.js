@@ -29,9 +29,8 @@ import { intlShape, injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, FloatingButton, Text, StyleSheet, SafeAreaView } from '../../../BaseComponents';
+import { View, FloatingButton, Text, StyleSheet, SafeAreaView, NavigationHeader } from '../../../BaseComponents';
 
-import { NavigationHeader } from '../DeviceDetails/SubViews';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
