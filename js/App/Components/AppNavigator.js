@@ -26,8 +26,8 @@ import { createStackNavigator } from 'react-navigation';
 import { SettingsScreen } from './Settings';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import DeviceDetailsNavigator from './DeviceDetails/DeviceDetailsNavigator';
-import AddLocationNavigator from './Location/AddLocation/AddLocation';
-import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails';
+import AddLocationNavigator from './Location/AddLocation/AddLocationNavigator';
+import LocationDetailsNavigator from './Location/LocationDetails/LocationDetailsNavigator';
 import TabsView from './TabViews/TabsView';
 
 import { DeviceDetailsHeaderPoster } from './DeviceDetails/SubViews';
