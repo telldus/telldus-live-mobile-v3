@@ -103,7 +103,6 @@ const messages = defineMessages({
 type Props = {
 	dimmer: Object,
 	tab: string,
-	accessToken: Object,
 	userProfile: Object,
 	dispatch: Function,
 	showToast: boolean,
@@ -111,10 +110,7 @@ type Props = {
 	durationToast: string,
 	positionToast: string,
 	intl: intlShape.isRequired,
-	gateways: Object,
-	gatewaysallIds: Array<any>,
-	dashboard: Object,
-	isAppActive: boolean,
+	gatewaysAllIds: Array<any>,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
 	onNavigationStateChange: (string) => void,
@@ -292,13 +288,13 @@ class AppNavigatorRenderer extends View {
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		let { showToast: showToastBool, messageToast, durationToast, positionToast, intl,
-			gatewaysallIds, gatewaysToActivate } = this.props;
+			gatewaysAllIds, gatewaysToActivate } = this.props;
 		if (showToastBool && !prevProps.showToast) {
 			let { formatMessage } = intl;
 			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
 			this._showToast(message, durationToast, positionToast);
 		}
-		if (gatewaysallIds.length === 0 && !this.state.addingNewLocation && gatewaysToActivate.checkIfGatewaysEmpty) {
+		if (gatewaysAllIds.length === 0 && !this.state.addingNewLocation && gatewaysToActivate.checkIfGatewaysEmpty) {
 			this.addNewLocation();
 		}
 	}
@@ -377,7 +373,8 @@ class AppNavigatorRenderer extends View {
 	}
 
 	makeLeftButton(styles: Object): any {
-		const { screenReaderEnabled, drawer } = this.state;
+		const { drawer } = this.state;
+		const { screenReaderEnabled } = this.props;
 		this.menuButton.icon.style = styles.menuButtonStyle;
 		this.menuButton.icon.iconStyle = styles.menuIconStyle;
 		this.menuButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
@@ -494,29 +491,22 @@ class AppNavigatorRenderer extends View {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { showToast: showToastBool, messageToast, durationToast, positionToast, layout,
-		screenReaderEnabled, active } = state.App;
-	const { accessToken } = state.user;
+		screenReaderEnabled } = state.App;
 	const { allIds, toActivate } = state.gateways;
 
 	return {
-		accessToken,
 		showToast: showToastBool,
 		messageToast,
 		durationToast,
 		positionToast,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
-		gateways: state.gateways.byId,
 		tab: state.navigation.tab,
 		appLayout: getRelativeDimensions(layout),
 
-		dashboard: state.dashboard,
-		gatewaysallIds: allIds,
+		gatewaysAllIds: allIds,
 		gatewaysToActivate: toActivate,
-		isAppActive: active,
-		screenReaderEnabled: screenReaderEnabled,
-		editModeDevicesTab: state.tabs.editModeDevicesTab,
-		editModeSensorsTab: state.tabs.editModeSensorsTab,
+		screenReaderEnabled,
 	};
 }
 

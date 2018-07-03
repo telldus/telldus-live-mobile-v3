@@ -74,8 +74,6 @@ const messages = defineMessages({
 
 type Props = {
 	dimmer: Object,
-	tab: string,
-	accessToken: Object,
 	userProfile: Object,
 	dispatch: Function,
 	showToast: boolean,
@@ -83,10 +81,6 @@ type Props = {
 	durationToast: string,
 	positionToast: string,
 	intl: intlShape.isRequired,
-	gateways: Object,
-
-	userIcon: boolean,
-	dashboard: Object,
 	appLayout: Object,
 	gatewaysallIds: Array<any>,
 	gatewaysToActivate: Object,
@@ -325,22 +319,16 @@ class AppNavigatorRenderer extends View {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { showToast: showToastBool, messageToast, durationToast, positionToast, layout } = state.App;
-	const { accessToken } = state.user;
 	const { allIds, toActivate } = state.gateways;
 
 	return {
-		accessToken,
 		showToast: showToastBool,
 		messageToast,
 		durationToast,
 		positionToast,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
-		gateways: state.gateways.byId,
-		tab: state.navigation.tab,
 		appLayout: getRelativeDimensions(layout),
-
-		userIcon: false,
 		gatewaysallIds: allIds,
 		gatewaysToActivate: toActivate,
 	};
