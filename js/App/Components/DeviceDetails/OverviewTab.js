@@ -173,9 +173,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
+	const id = ownProps.navigation.getParam('id', null);
+	const device = state.devices.byId[id];
+	const { clientId } = device;
+
 	return {
-		device: state.devices.byId[ownProps.screenProps.device.id],
-		gateway: state.gateways.byId[ownProps.screenProps.device.clientId],
+		device: state.devices.byId[id],
+		gateway: state.gateways.byId[clientId],
 	};
 }
 

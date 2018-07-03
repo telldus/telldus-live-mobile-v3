@@ -416,7 +416,8 @@ class AppNavigator extends View {
 				drawerBackgroundColor={'transparent'}
 				onDrawerOpen={this.onOpenDrawer}
 				onDrawerClose={this.onCloseDrawer}
-			>{showHeader && (
+			>
+				{showHeader && (
 					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}} importantForAccessibility={importantForAccessibility}>

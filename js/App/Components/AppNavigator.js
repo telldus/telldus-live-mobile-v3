@@ -20,6 +20,7 @@
 // @flow
 
 'use strict';
+import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
 import { SettingsScreen } from './Settings';
@@ -28,6 +29,8 @@ import DeviceDetails from './DeviceDetails/DeviceDetails';
 import AddLocationNavigator from './Location/AddLocation/AddLocation';
 import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails';
 import TabsView from './TabViews/TabsView';
+
+import DeviceDetailsHeader from './DeviceDetails/DeviceDetailsHeader';
 
 const RouteConfigs = {
 	Tabs: {
@@ -44,8 +47,10 @@ const RouteConfigs = {
 	},
 	DeviceDetails: {
 		screen: DeviceDetails,
-		navigationOptions: {
-			header: null,
+		navigationOptions: (props: Object): Object => {
+			return {
+				header: <DeviceDetailsHeader {...props}/>,
+			};
 		},
 	},
 	Schedule: {

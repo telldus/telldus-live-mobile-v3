@@ -33,9 +33,6 @@ import { LearnButton } from '../TabViews/SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 import { addToDashboard, removeFromDashboard, showToast } from '../../Actions';
-import {
-	getRelativeDimensions,
-} from '../../Lib';
 import Theme from '../../Theme';
 
 const messages = defineMessages({
@@ -57,7 +54,6 @@ type Props = {
 	inDashboard: boolean,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
-	appLayout: Object,
 	screenProps: Object,
 };
 
@@ -134,7 +130,7 @@ class SettingsTab extends View {
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		let { appLayout } = this.props.screenProps;
 
 		let {
 			container,
@@ -182,8 +178,7 @@ class SettingsTab extends View {
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
@@ -236,10 +231,11 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 function mapStateToProps(state: Object, ownProps: Object): Object {
+	const id = ownProps.navigation.getParam('id', null);
+	const device = state.devices.byId[id];
 	return {
-		device: ownProps.screenProps.device,
-		inDashboard: !!state.dashboard.devicesById[ownProps.screenProps.device.id],
-		appLayout: getRelativeDimensions(state.App.layout),
+		device,
+		inDashboard: !!state.dashboard.devicesById[id],
 	};
 }
 

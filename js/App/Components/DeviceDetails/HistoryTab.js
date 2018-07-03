@@ -34,9 +34,6 @@ import { getDeviceHistory as getDeviceHistoryFromLocal, storeDeviceHistory, getL
 import { hideModal } from '../../Actions/Modal';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
-import {
-	getRelativeDimensions,
-} from '../../Lib';
 
 const messages = defineMessages({
 	historyHeader: {
@@ -56,8 +53,6 @@ const messages = defineMessages({
 type Props = {
 	dispatch: Function,
 	device: Object,
-	deviceHistoryNavigator: Object,
-	appLayout: Object,
 	rowsAndSections: Array<any> | boolean,
 	screenProps: Object,
 	currentScreen: string,
@@ -128,7 +123,7 @@ class HistoryTab extends View {
 	}
 
 	componentDidMount() {
-		let {setParams} = this.props.deviceHistoryNavigator;
+		let {setParams} = this.props.navigation;
 		setParams({
 			actionOnHistoryTabPress: this.closeHistoryDetailsModal,
 		});
@@ -267,7 +262,7 @@ class HistoryTab extends View {
 	}
 
 	renderSectionHeader(item: Object): Object {
-		let { appLayout } = this.props;
+		let { appLayout } = this.props.screenProps;
 
 		let {
 			sectionHeader,
@@ -304,9 +299,9 @@ class HistoryTab extends View {
 	}
 
 	render(): Object {
-		let { appLayout, screenProps } = this.props;
+		let { screenProps } = this.props;
 		let { hasLoaded, refreshing, rowsAndSections } = this.state;
-		let { intl, currentTab, currentScreen } = screenProps;
+		let { intl, currentTab, currentScreen, appLayout } = screenProps;
 		let { brandPrimary } = Theme.Core;
 
 		let {
@@ -433,10 +428,11 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
+	const id = ownProps.navigation.getParam('id', null);
+	const device = state.devices.byId[id];
+
 	return {
-		deviceHistoryNavigator: ownProps.navigation,
-		device: ownProps.screenProps.device,
-		appLayout: getRelativeDimensions(state.App.layout),
+		device,
 		showModal: state.modal.openModal,
 	};
 }
