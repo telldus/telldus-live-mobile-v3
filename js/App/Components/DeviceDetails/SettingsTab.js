@@ -23,11 +23,11 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { FormattedMessage, Text, View, TabBar, Switch } from '../../../BaseComponents';
 import { defineMessages } from 'react-intl';
-import i18n from '../../Translations/common';
 
 import { LearnButton } from '../TabViews/SubViews';
 
@@ -35,6 +35,7 @@ import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 import { addToDashboard, removeFromDashboard, showToast } from '../../Actions';
 import Theme from '../../Theme';
 
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	showOnDashborad: {
 		id: 'showOnDashboard',
@@ -149,31 +150,33 @@ class SettingsTab extends View {
 			learnButton = <LearnButton id={device.id} style={learn} />;
 		}
 		return (
-			<View style={container}>
-				<View style={ShowOnDashCover}>
-					<View style={textShowOnDashCover}>
-						<Text style={textShowOnDash}>
-							<FormattedMessage {...messages.showOnDashborad} style={textShowOnDash}/>
-						</Text>
+			<ScrollView>
+				<View style={container}>
+					<View style={ShowOnDashCover}>
+						<View style={textShowOnDashCover}>
+							<Text style={textShowOnDash}>
+								<FormattedMessage {...messages.showOnDashborad} style={textShowOnDash}/>
+							</Text>
+						</View>
+						<Switch
+							onValueChange={this.onValueChange}
+							value={this.props.inDashboard}
+						/>
 					</View>
-					<Switch
-						onValueChange={this.onValueChange}
-						value={this.props.inDashboard}
-					/>
-				</View>
-				<View style={ShowOnDashCover}>
-					<View style={textShowOnDashCover}>
-						<Text style={textShowOnDash}>
-							<FormattedMessage {...messages.hideFromList} style={textShowOnDash}/>
-						</Text>
+					<View style={ShowOnDashCover}>
+						<View style={textShowOnDashCover}>
+							<Text style={textShowOnDash}>
+								<FormattedMessage {...messages.hideFromList} style={textShowOnDash}/>
+							</Text>
+						</View>
+						<Switch
+							onValueChange={this.setIgnoreDevice}
+							value={this.state.isHidden}
+						/>
 					</View>
-					<Switch
-						onValueChange={this.setIgnoreDevice}
-						value={this.state.isHidden}
-					/>
+					{learnButton}
 				</View>
-				{learnButton}
-			</View>
+			</ScrollView>
 		);
 	}
 
