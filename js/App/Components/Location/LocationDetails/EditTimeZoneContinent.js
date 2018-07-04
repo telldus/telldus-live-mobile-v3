@@ -122,9 +122,9 @@ class EditTimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent: string) {
-		let { actions, navigation } = this.props;
+		const { actions, navigation } = this.props;
+		const id = navigation.getParam('id', null);
 		if (continent === 'UTC') {
-			const id = navigation.getParam('id', null);
 			actions.setTimezone(id, continent).then(() => {
 				actions.getGateways();
 				navigation.goBack();
