@@ -121,12 +121,13 @@ class LocationDetected extends View {
 
 	render(): Object {
 		let items = [];
-		let { navigation, appLayout, paddingHorizontal } = this.props;
+		const { navigation, appLayout, paddingHorizontal } = this.props;
 
 		const styles = this.getStyle(appLayout, paddingHorizontal);
 
-		if (navigation.state.params.clients) {
-			items = navigation.state.params.clients.map((client: Object, i: number): Object => {
+		const clients = navigation.getParam('clients', null);
+		if (clients) {
+			items = clients.map((client: Object, i: number): Object => {
 				return this.renderClient(client, i, appLayout);
 			});
 		}

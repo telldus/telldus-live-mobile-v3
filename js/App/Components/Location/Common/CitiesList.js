@@ -53,7 +53,7 @@ class CitiesList extends View {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			dataSource: this.parseDataForList(props.navigation.state.params.cities),
+			dataSource: this.parseDataForList(props.navigation.getParam('cities', {})),
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.parseDataForList = this.parseDataForList.bind(this);

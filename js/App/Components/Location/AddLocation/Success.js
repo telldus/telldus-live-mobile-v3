@@ -155,11 +155,11 @@ class Success extends View<void, Props, State> {
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		const { appLayout, navigation } = this.props;
 		const styles = this.getStyle(appLayout);
 
-		let clientInfo = this.props.navigation.state.params.clientInfo;
-		let locationImageUrl = getLocationImageUrl(clientInfo.type);
+		const clientInfo = navigation.getParam('clientInfo', {});
+		const locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (
 			<View style={{flex: 1}}>

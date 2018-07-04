@@ -88,8 +88,8 @@ class HistoryTab extends View {
 				accessibilityLabel={i18n.deviceHistoryTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			let {state} = navigation;
-			let onPress = (state.params && state.params.actionOnHistoryTabPress) ? state.params.actionOnHistoryTabPress : () => {};
+			const noOp = () => {};
+			const onPress = navigation.getParam('actionOnHistoryTabPress', noOp);
 			onPress();
 			navigation.navigate('History');
 		},
