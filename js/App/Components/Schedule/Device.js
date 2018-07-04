@@ -112,9 +112,4 @@ export default class Device extends View<void, Props, State> {
 			}}/>;
 	};
 
-	_shouldReset = (): boolean => {
-		const { params } = this.props.navigation.state;
-		return params && params.reset;
-	};
-
 }
