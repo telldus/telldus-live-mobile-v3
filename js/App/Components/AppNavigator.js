@@ -36,12 +36,23 @@ const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
 		navigationOptions: {
+			// In addition to 'header: null' If header style is not manually set so, it cause some empty space to show in iPhoneX
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
 			header: null,
 		},
 	},
 	Settings: {
 		screen: SettingsScreen,
 		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
 			header: null,
 		},
 	},
@@ -56,18 +67,33 @@ const RouteConfigs = {
 	Schedule: {
 		screen: ScheduleNavigator,
 		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
 			header: null,
 		},
 	},
 	AddLocation: {
 		screen: AddLocationNavigator,
 		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
 			header: null,
 		},
 	},
 	LocationDetails: {
 		screen: LocationDetailsNavigator,
 		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
 			header: null,
 		},
 	},
