@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NetInfo } from 'react-native';
 import Toast from 'react-native-simple-toast';
