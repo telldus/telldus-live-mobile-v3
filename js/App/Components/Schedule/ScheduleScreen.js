@@ -208,8 +208,9 @@ class ScheduleScreen extends View<null, Props, State> {
 	}
 
 	_isEditMode = (): boolean => {
-		const { params } = this.props.navigation.state;
-		return params && params.editMode;
+		const { navigation } = this.props;
+		const editMode = navigation.getParam('editMode', false);
+		return editMode;
 	};
 
 	_getStyle = (appLayout: Object): Object => {
@@ -219,9 +220,10 @@ class ScheduleScreen extends View<null, Props, State> {
 		const deviceHeight = isPortrait ? height : width;
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		const { state } = this.props.navigation;
+		const { navigation } = this.props;
+		const editMode = navigation.getParam('editMode', false);
 
-		const notEdit = (this.props.screenProps.currentScreen === 'InitialScreen' && (!state.params || !state.params.editMode))
+		const notEdit = (this.props.screenProps.currentScreen === 'InitialScreen' && (!editMode))
 			|| this.props.screenProps.currentScreen !== 'InitialScreen';
 		return {
 			style: {

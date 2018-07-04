@@ -110,7 +110,8 @@ class LocationName extends View {
 			this.setState({
 				isLoading: true,
 			});
-			actions.setName(navigation.state.params.id, locationName).then(() => {
+			const id = navigation.getParam('id', null);
+			actions.setName(id, locationName).then(() => {
 				Keyboard.dismiss();
 				this.setState({
 					isLoading: false,

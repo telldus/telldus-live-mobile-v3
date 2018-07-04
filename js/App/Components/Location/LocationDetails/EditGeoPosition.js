@@ -62,7 +62,8 @@ class EditGeoPosition extends View {
 	constructor(props: Props) {
 		super(props);
 		const { navigation } = this.props;
-		const { latitude, longitude } = navigation.state.params;
+		const longitude = navigation.getParam('longitude', null);
+		const latitude = navigation.getParam('latitude', null);
 
 		this.state = {
 			isLoading: false,
@@ -132,8 +133,9 @@ class EditGeoPosition extends View {
 		this.setState({
 			isLoading: true,
 		});
-		let { actions, navigation } = this.props;
-		actions.setCoordinates(navigation.state.params.id, longitude, latitude).then((res: Object) => {
+		const { actions, navigation } = this.props;
+		const id = navigation.getParam('id', null);
+		actions.setCoordinates(id, longitude, latitude).then((res: Object) => {
 			this.setState({
 				isLoading: false,
 			});

@@ -47,7 +47,7 @@ const renderScheduleScreen = (navigation, screenProps) => Component => (
 const RouteConfigs = {
 	InitialScreen: {
 		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(
-			navigation.state.params && navigation.state.params.editMode ?
+			navigation.getParam('editMode', false) ?
 				Edit
 				:
 				Device),

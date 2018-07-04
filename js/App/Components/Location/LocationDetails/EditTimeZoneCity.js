@@ -87,10 +87,11 @@ class EditTimeZoneCity extends View {
 	}
 
 	onCityChoose(city: string) {
-		let { navigation, actions } = this.props;
-		let continent = navigation.state.params.continent;
-		let timezone = `${continent}/${city}`;
-		actions.setTimezone(navigation.state.params.id, timezone).then(() => {
+		const { navigation, actions } = this.props;
+		const id = navigation.getParam('id', null);
+		const continent = navigation.getParam('continent', null);
+		const timezone = `${continent}/${city}`;
+		actions.setTimezone(id, timezone).then(() => {
 			actions.getGateways();
 			navigation.push('Details');
 		}).catch(() => {

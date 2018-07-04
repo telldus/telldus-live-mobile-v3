@@ -149,8 +149,8 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	};
 
 	onConfirmRemoveLocation() {
-		let { actions, navigation } = this.props;
-		let { location } = navigation.state.params;
+		const { actions, navigation } = this.props;
+		const location = navigation.getParam('location', {id: null});
 		this.closeModal();
 		actions.removeGateway(location.id).then((res: Object) => {
 			actions.getGateways().then(() => {
@@ -187,14 +187,14 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		const { h1, h2, infoButton } = this.state;
 		const styles = this.getStyle(appLayout);
 		const { modalHeader, positiveText, showNegative, onPressPositive, onPressNegative } = this.getModalData(modalExtras);
-		const { params } = navigation.state;
+		const location = navigation.getParam('location', {});
 
 		let { width, height } = appLayout;
 		let deviceWidth = height > width ? width : height;
 		let padding = screenProps.currentScreen === 'Details' ? width * Theme.Core.paddingFactor : deviceWidth * Theme.Core.paddingFactor;
 		let paddingHorizontal = screenProps.currentScreen === 'EditTimeZoneCity' || screenProps.currentScreen === 'EditTimeZoneContinent' ? 0 : padding;
 		let showPosterHeader = screenProps.currentScreen === 'Details' ? false : true;
-		let customPosterHeader = screenProps.currentScreen === 'Details' ? <CustomPosterHeader {...params.location} styles={styles}/> : null;
+		let customPosterHeader = screenProps.currentScreen === 'Details' ? <CustomPosterHeader {...location} styles={styles}/> : null;
 
 		return (
 			<View style={{

@@ -66,7 +66,7 @@ class EditTimeZoneContinent extends View {
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 		let { currentScreen, navigation } = props;
 		if (currentScreen === 'EditTimeZoneContinent') {
-			const { autodetectedTimezone } = navigation.state.params;
+			const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
 			if (autodetectedTimezone && (autodetectedTimezone !== state.autodetectedTimezone)) {
 				return {
 					autodetectedTimezone,
@@ -80,7 +80,7 @@ class EditTimeZoneContinent extends View {
 		super(props);
 
 		const { navigation } = props;
-		const { autodetectedTimezone } = navigation.state.params;
+		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
 		this.state = {
 			autodetectedTimezone,
 		};
@@ -124,7 +124,8 @@ class EditTimeZoneContinent extends View {
 	onContinentChoose(continent: string) {
 		let { actions, navigation } = this.props;
 		if (continent === 'UTC') {
-			actions.setTimezone(navigation.state.params.id, continent).then(() => {
+			const id = navigation.getParam('id', null);
+			actions.setTimezone(id, continent).then(() => {
 				actions.getGateways();
 				navigation.goBack();
 			}).catch(() => {
@@ -136,13 +137,14 @@ class EditTimeZoneContinent extends View {
 				let flag = items[0] === v2 ? false : true;
 				return flag;
 			});
-			navigation.push('EditTimeZoneCity', {cities: data, continent, id: navigation.state.params.id});
+			navigation.push('EditTimeZoneCity', {cities: data, continent, id});
 		}
 	}
 
 	onPressAutodetect() {
 		const { actions, navigation } = this.props;
-		actions.setTimezone(navigation.state.params.id, '').then(() => {
+		const id = navigation.getParam('id', null);
+		actions.setTimezone(id, '').then(() => {
 			actions.getGateways();
 			navigation.goBack();
 		}).catch(() => {
@@ -153,7 +155,8 @@ class EditTimeZoneContinent extends View {
 	onPressAutodetected() {
 		const { actions, navigation } = this.props;
 		const { autodetectedTimezone } = this.state;
-		actions.setTimezone(navigation.state.params.id, autodetectedTimezone).then(() => {
+		const id = navigation.getParam('id', null);
+		actions.setTimezone(id, autodetectedTimezone).then(() => {
 			actions.getGateways();
 			navigation.goBack();
 		}).catch(() => {
