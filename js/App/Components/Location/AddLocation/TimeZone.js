@@ -77,8 +77,6 @@ type Props = {
 };
 
 type State = {
-	timeZone: string,
-	autoDetected: boolean,
 	isLoading: boolean,
 };
 
@@ -93,10 +91,7 @@ class TimeZone extends View<void, Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		let {timeZone, autoDetected} = this.getTimeZone();
 		this.state = {
-			timeZone,
-			autoDetected,
 			isLoading: false,
 		};
 
@@ -147,7 +142,6 @@ class TimeZone extends View<void, Props, State> {
 	onTimeZoneSubmit() {
 		let { screenReaderEnabled, actions, navigation } = this.props;
 		let clientInfo = navigation.getParam('clientInfo', {});
-		clientInfo.timezone = this.state.timeZone;
 		if (screenReaderEnabled) {
 			this.setState({
 				isLoading: true,
@@ -179,7 +173,8 @@ class TimeZone extends View<void, Props, State> {
 
 	render(): Object {
 		const { appLayout } = this.props;
-		const { isLoading, timeZone, autoDetected } = this.state;
+		const { isLoading } = this.state;
+		const {timeZone, autoDetected} = this.getTimeZone();
 		const styles = this.getStyle(appLayout);
 
 		let timeZoneInfo = `${this.label}, ${timeZone}, ${autoDetected ? this.labelHint : ''}`;
