@@ -285,7 +285,7 @@ const mapStateToProps = (store: Object): Object => (
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: getRelativeDimensions(store.app.layout),
 	}
 );
 

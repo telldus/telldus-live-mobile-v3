@@ -355,7 +355,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
-		screenReaderEnabled: store.App.screenReaderEnabled,
+		screenReaderEnabled: store.app.screenReaderEnabled,
 	};
 }
 

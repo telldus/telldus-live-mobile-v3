@@ -146,7 +146,7 @@ getStyles(appLayout: Object): Object {
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: getRelativeDimensions(store.app.layout),
 	};
 }
 

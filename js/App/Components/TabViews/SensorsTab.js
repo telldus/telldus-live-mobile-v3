@@ -400,7 +400,7 @@ function mapStateToProps(store: Object): Object {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		tab: store.navigation.tab,
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: getRelativeDimensions(store.app.layout),
 	};
 }
 

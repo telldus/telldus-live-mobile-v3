@@ -150,14 +150,14 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	newSchedule = () => {
-		this.props.navigation.push('Schedule', { editMode: false });
+		this.props.navigation.navigate('Schedule', { editMode: false });
 	};
 
 	editJob = (schedule: Schedule) => {
 		const { dispatch, navigation } = this.props;
 
 		dispatch(editSchedule(schedule));
-		navigation.push('Schedule', { editMode: true });
+		navigation.navigate('Schedule', { editMode: true });
 	};
 
 	onIndexChanged = (index: number) => {
@@ -382,7 +382,7 @@ const mapStateToProps = (store: Object): MapStateToPropsType => {
 		rowsAndSections: getRowsAndSections(store),
 		devices: store.devices,
 		tab: store.navigation.tab,
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: getRelativeDimensions(store.app.layout),
 	};
 };
 

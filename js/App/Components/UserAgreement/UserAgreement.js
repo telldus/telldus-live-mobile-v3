@@ -235,7 +235,7 @@ function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 

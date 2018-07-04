@@ -57,7 +57,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 	onPressGateway() {
 		let { location } = this.props;
-		this.props.navigation.push('LocationDetails', {location});
+		this.props.navigation.navigate('LocationDetails', {location});
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
@@ -127,7 +127,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: getRelativeDimensions(state.app.layout),
 	};
 }
 

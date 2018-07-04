@@ -398,7 +398,7 @@ function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 		user: store.user,
 	};
 }

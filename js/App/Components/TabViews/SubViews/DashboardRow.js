@@ -260,7 +260,7 @@ getStyles(appLayout: Object, tileWidth: number): Object {
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 		powerConsumed,
 	};
 }

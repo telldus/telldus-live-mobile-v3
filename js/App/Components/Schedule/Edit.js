@@ -309,7 +309,7 @@ class Edit extends View<null, Props, State> {
 	}
 
 	_navigate = (routeName: string) => {
-		this.props.navigation.push(routeName, { editMode: true });
+		this.props.navigation.navigate(routeName, { editMode: true });
 	};
 
 	_getDeviceById = (deviceId: number): Object => {

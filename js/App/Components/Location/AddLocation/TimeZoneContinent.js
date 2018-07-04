@@ -89,7 +89,7 @@ class TimeZoneContinent extends View {
 		let clientInfo = navigation.getParam('clientInfo', {});
 		if (continent === 'UTC') {
 			clientInfo.timezone = continent;
-			navigation.push('Position', {clientInfo});
+			navigation.navigate('Position', {clientInfo});
 		} else {
 			let data = differenceWith(timeZone, [continent], (v1: string, v2: string): boolean => {
 				let items = v1.split('/');
@@ -97,7 +97,7 @@ class TimeZoneContinent extends View {
 				return flag;
 			});
 			clientInfo.continent = continent;
-			navigation.push('TimeZoneCity', {cities: data, clientInfo});
+			navigation.navigate('TimeZoneCity', {cities: data, clientInfo});
 		}
 	}
 

@@ -368,7 +368,7 @@ function mapStateToProps(state: Object): Object {
 	return {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: getRelativeDimensions(state.app.layout),
 	};
 }
 

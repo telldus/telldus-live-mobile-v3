@@ -244,17 +244,17 @@ type mapStateToPropsType = {
 	schedule: Schedule,
 	devices: Object,
 	modal: Object,
-	App: Object,
+	app: Object,
 };
 
-const mapStateToProps = ({ schedule, devices, modal, App }: mapStateToPropsType): Object => (
+const mapStateToProps = ({ schedule, devices, modal, app }: mapStateToPropsType): Object => (
 	{
 		schedule,
 		devices,
 		validationMessage: modal.data,
 		showModal: modal.openModal,
 		modalExtras: modal.extras,
-		appLayout: getRelativeDimensions(App.layout),
+		appLayout: getRelativeDimensions(app.layout),
 	}
 );
 

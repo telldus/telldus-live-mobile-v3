@@ -135,7 +135,7 @@ class TouchableButton extends Component<Props, void> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: getRelativeDimensions(state.app.layout),
 	};
 }
 

@@ -208,7 +208,7 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device: Object) {
-		this.props.navigation.push('DeviceDetails', { id: device.id });
+		this.props.navigation.navigate('DeviceDetails', { id: device.id });
 	}
 
 	onCloseSelected() {
@@ -332,7 +332,7 @@ class DevicesTab extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					this.props.navigation.push('AddLocation', {clients: response.client});
+					this.props.navigation.navigate('AddLocation', {clients: response.client});
 					this.setState({
 						addGateway: false,
 					});
@@ -620,8 +620,8 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 		devices: state.devices,
 		gateways: state.gateways.allIds,
 		tab: state.navigation.tab,
-		appLayout: getRelativeDimensions(state.App.layout),
-		screenReaderEnabled: state.App.screenReaderEnabled,
+		appLayout: getRelativeDimensions(state.app.layout),
+		screenReaderEnabled: state.app.screenReaderEnabled,
 	};
 }
 

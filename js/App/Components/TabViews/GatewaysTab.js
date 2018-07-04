@@ -135,7 +135,7 @@ class GatewaysTab extends View {
 		});
 		this.props.addNewLocation()
 			.then((response: Object) => {
-				this.props.navigation.push('AddLocation', {clients: response.client});
+				this.props.navigation.navigate('AddLocation', {clients: response.client});
 				this.setState({
 					isLoading: false,
 				});
@@ -189,7 +189,7 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: getRelativeDimensions(state.app.layout),
 	};
 }
 

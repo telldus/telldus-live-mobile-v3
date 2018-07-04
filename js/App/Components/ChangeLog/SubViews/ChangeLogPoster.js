@@ -95,7 +95,7 @@ class ChangeLogPoster extends View {
 
 function mapStateToProps(state: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: getRelativeDimensions(state.app.layout),
 	};
 }
 

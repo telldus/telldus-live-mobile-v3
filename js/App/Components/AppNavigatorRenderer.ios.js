@@ -317,7 +317,7 @@ class AppNavigatorRenderer extends View {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const { showToast: showToastBool, messageToast, durationToast, positionToast, layout } = state.App;
+	const { showToast: showToastBool, messageToast, durationToast, positionToast, layout } = state.app;
 	const { allIds, toActivate } = state.gateways;
 
 	return {

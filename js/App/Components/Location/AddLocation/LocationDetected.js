@@ -106,11 +106,11 @@ class LocationDetected extends View {
 			timezone: client.timezone,
 			autoDetected: client.timezoneAutodetected,
 		};
-		this.props.navigation.push('LocationName', {clientInfo});
+		this.props.navigation.navigate('LocationName', {clientInfo});
 	}
 
 	onActivateManual() {
-		this.props.navigation.push('LocationActivationManual');
+		this.props.navigation.navigate('LocationActivationManual');
 	}
 
 	renderClient(client: Object, i: number, appLayout: Object): Object {

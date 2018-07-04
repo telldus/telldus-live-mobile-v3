@@ -137,7 +137,7 @@ class EditTimeZoneContinent extends View {
 				let flag = items[0] === v2 ? false : true;
 				return flag;
 			});
-			navigation.push('EditTimeZoneCity', {cities: data, continent, id});
+			navigation.navigate('EditTimeZoneCity', {cities: data, continent, id});
 		}
 	}
 

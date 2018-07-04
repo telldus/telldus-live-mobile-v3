@@ -349,8 +349,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
-		screenReaderEnabled: state.App.screenReaderEnabled,
+		appLayout: getRelativeDimensions(state.app.layout),
+		screenReaderEnabled: state.app.screenReaderEnabled,
 	};
 }
 

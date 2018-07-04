@@ -191,7 +191,7 @@ class FormContainerComponent extends View<Props, null> {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: getRelativeDimensions(store.app.layout),
 	};
 }
 

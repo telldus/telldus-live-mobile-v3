@@ -109,7 +109,7 @@ class Position extends View {
 		clientInfo.coordinates = { latitude, longitude };
 		actions.activateGateway(clientInfo)
 			.then((response: Object) => {
-				navigation.push('Success', {clientInfo});
+				navigation.navigate('Success', {clientInfo});
 				this.setState({
 					isLoading: false,
 				});

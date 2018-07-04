@@ -349,7 +349,7 @@ class DialogueBox extends Component<Props, null> {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 

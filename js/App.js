@@ -147,7 +147,7 @@ function mapStateToProps(store: Object): Object {
 	} = store.user;
 	let {
 		changeLogVersion: prevChangeLogVersion,
-	} = store.App;
+	} = store.app;
 
 	return {
 		accessToken,
