@@ -47,6 +47,10 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 	goBack: () => void;
 	handleBackPress: () => boolean;
 
+	noName: string;
+	defaultDescription: string;
+	labelLeftIcon: string;
+
 	constructor(props: Props) {
 		super(props);
 		this.goBack = this.goBack.bind(this);
@@ -58,6 +62,8 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 
 		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
+
+		this.noName = formatMessage(i18n.noName);
 	}
 
 	goBack() {
@@ -103,6 +109,8 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 			textDeviceName,
 		} = this.getStyles(appLayout);
 
+		const deviceName = device.name ? device.name : this.noName;
+
 		return (
 			<View style={styles.container}>
 				<NavigationHeader navigation={navigation}/>
@@ -120,7 +128,7 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 							<IconTelldus icon="device-alt" style={deviceIcon} />
 						</View>
 						<Text style={textDeviceName}>
-							{device.name}
+							{deviceName}
 						</Text>
 					</View>
 				</Poster>
