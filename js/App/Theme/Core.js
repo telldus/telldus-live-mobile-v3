@@ -60,6 +60,10 @@ export default {
 	eulaContentColor: '#555555',
 	inactiveTintColor: '#A59F9A',
 
+	rippleColor: '#efefef',
+	rippleOpacity: 0.9,
+	rippleDuration: 600,
+
 	offlineColor: '#b5b5b5',
 
 	subtitleColor: '#8e8e93',

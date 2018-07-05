@@ -27,6 +27,7 @@ import { TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import Ripple from 'react-native-material-ripple';
 
 import { FormattedMessage, Text, View, Icon, Image, IconTelldus } from '../../../BaseComponents';
 import Gateway from './Gateway';
@@ -47,12 +48,15 @@ const messages = defineMessages({
 
 const AddLocation = ({onPress, styles}: Object): Object => {
 	return (
-		<View style={styles.addNewLocationContainer}>
-			<TouchableOpacity onPress={onPress} style={styles.addNewLocationCover}>
-				<Icon name="plus-circle" size={styles.iconAddLocSize} color="#e26901"/>
-				<FormattedMessage {...messages.addNewLocation} style={styles.addNewLocationText}/>
-			</TouchableOpacity>
-		</View>
+		<Ripple
+			rippleColor={Theme.rippleColor}
+			rippleOpacity={Theme.rippleOpacity}
+			rippleDuration={Theme.rippleDuration}
+			style={styles.addNewLocationContainer}
+			onPress={onPress}>
+			<Icon name="plus-circle" size={styles.iconAddLocSize} color="#e26901"/>
+			<FormattedMessage {...messages.addNewLocation} style={styles.addNewLocationText}/>
+		</Ripple>
 	);
 };
 
@@ -85,10 +89,16 @@ const ConnectedLocations = ({styles}: Object): Object => (
 );
 
 const SettingsButton = ({ onPress, styles }: Object): Object => (
-	<TouchableOpacity onPress={onPress} style={[styles.navigationTitle, {marginLeft: 12}]}>
+	<Ripple
+		rippleColor={Theme.rippleColor}
+		rippleOpacity={Theme.rippleOpacity}
+		rippleDuration={Theme.rippleDuration}
+		style={styles.settingsCover}
+		onPress={onPress}>
 		<IconTelldus icon={'settings'} size={styles.settingsIconSize} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
-	</TouchableOpacity>
+	</Ripple>
+
 );
 
 type Props = {
@@ -178,6 +188,12 @@ class Drawer extends View<Props, null> {
 				marginLeft: 10,
 				alignItems: 'center',
 			},
+			settingsCover: {
+				flexDirection: 'row',
+				paddingVertical: 5 + (fontSizeRow * 0.5),
+				marginLeft: 12,
+				alignItems: 'center',
+			},
 			iconAddLocSize: fontSizeAddLocText * 1.2,
 			settingsIconSize: fontSizeRow * 1.6,
 			navigationTextTitle: {
@@ -193,11 +209,8 @@ class Drawer extends View<Props, null> {
 				color: 'white',
 				fontSize: fontSizeRow,
 			},
-			addNewLocationCover: {
-				flexDirection: 'row',
-				alignItems: 'center',
-			},
 			addNewLocationContainer: {
+				flexDirection: 'row',
 				borderBottomWidth: 1,
 				borderBottomColor: '#eeeeef',
 				marginLeft: 16,

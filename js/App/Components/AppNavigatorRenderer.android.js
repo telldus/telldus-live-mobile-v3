@@ -247,6 +247,9 @@ class AppNavigatorRenderer extends View {
 			addingNewLocation: true,
 			addNewGateway: false,
 		});
+		if (this.state.drawer) {
+			this.closeDrawer();
+		}
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
@@ -272,15 +275,21 @@ class AppNavigatorRenderer extends View {
 		}
 	}
 
+	closeDrawer() {
+		this.refs.drawer.closeDrawer();
+	}
+
 	onCloseDrawer() {
 		this.setState({ drawer: false });
 	}
 
 	onPressGateway(location: Object) {
+		this.closeDrawer();
 		navigate('LocationDetails', {location});
 	}
 
 	onOpenSetting() {
+		this.closeDrawer();
 		navigate('Settings');
 	}
 
