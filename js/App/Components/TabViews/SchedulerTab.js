@@ -45,7 +45,7 @@ import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
 
-import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
@@ -382,7 +382,7 @@ const mapStateToProps = (store: Object): MapStateToPropsType => {
 		rowsAndSections: getRowsAndSections(store),
 		devices: store.devices,
 		tab: store.navigation.tab,
-		appLayout: getRelativeDimensions(store.app.layout),
+		appLayout: store.app.layout,
 	};
 };
 

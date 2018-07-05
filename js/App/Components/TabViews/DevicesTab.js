@@ -34,7 +34,7 @@ import { DeviceRow, DeviceHeader } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import { getRelativeDimensions, getDeviceType, getTabBarIcon } from '../../Lib';
+import { getDeviceType, getTabBarIcon } from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast } from '../../Actions';
@@ -620,7 +620,7 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 		devices: state.devices,
 		gateways: state.gateways.allIds,
 		tab: state.navigation.tab,
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 		screenReaderEnabled: state.app.screenReaderEnabled,
 	};
 }

@@ -126,12 +126,10 @@ class PreLoginNavigator extends View {
 	render(): React$Element<any> {
 		let screenProps = {currentScreen: this.state.currentScreen};
 		return (
-			<SafeAreaView>
-				<Navigator
-					onNavigationStateChange={this.onNavigationStateChange}
-					screenProps={screenProps}
-				/>
-			</SafeAreaView>
+			<Navigator
+				onNavigationStateChange={this.onNavigationStateChange}
+				screenProps={screenProps}
+			/>
 		);
 	}
 }

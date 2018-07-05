@@ -35,7 +35,6 @@ import Wizard from './SubViews/Wizard';
 const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
 
 import Screens from './SubViews/Screens';
-import { getRelativeDimensions } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import messages from './SubViews/messages';
@@ -349,7 +348,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 		screenReaderEnabled: state.app.screenReaderEnabled,
 	};
 }

@@ -47,7 +47,6 @@ import {
 } from '../Actions';
 import {
 	getRSAKey,
-	getRelativeDimensions,
 	setTopLevelNavigator,
 	navigate,
 	getDrawerWidth,
@@ -501,7 +500,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
 		tab: state.navigation.tab,
-		appLayout: getRelativeDimensions(layout),
+		appLayout: layout,
 
 		gatewaysAllIds: allIds,
 		gatewaysToActivate: toActivate,

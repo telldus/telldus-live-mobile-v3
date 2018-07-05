@@ -34,7 +34,7 @@ import { getGateways, addNewGateway, showToast } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
-import { getRelativeDimensions, getTabBarIcon } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -189,7 +189,7 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 	};
 }
 

@@ -31,7 +31,6 @@ import _ from 'lodash';
 
 import { View, DialogueBox, Text, RoundedInfoButton } from '../../../../BaseComponents';
 import LocationPoster from '../Common/LocationPoster';
-import { getRelativeDimensions } from '../../../Lib';
 import Theme from '../../../Theme';
 
 import * as modalActions from '../../../Actions/Modal';
@@ -319,7 +318,7 @@ const mapStateToProps = (store: Object): Object => (
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
-		appLayout: getRelativeDimensions(store.app.layout),
+		appLayout: store.app.layout,
 	}
 );
 

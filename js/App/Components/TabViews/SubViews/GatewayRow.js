@@ -30,7 +30,6 @@ import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDet
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
 
-import { getRelativeDimensions } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -127,7 +126,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 	};
 }
 

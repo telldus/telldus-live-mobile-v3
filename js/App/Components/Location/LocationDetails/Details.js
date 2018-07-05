@@ -34,7 +34,6 @@ import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
 
 import Theme from '../../../Theme';
-import { getRelativeDimensions } from '../../../Lib';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';
@@ -300,7 +299,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	let { id } = ownProps.navigation.getParam('location', {id: null});
 	return {
 		location: store.gateways.byId[id],
-		appLayout: getRelativeDimensions(store.app.layout),
+		appLayout: store.app.layout,
 	};
 }
 

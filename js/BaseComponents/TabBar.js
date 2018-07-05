@@ -27,7 +27,6 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
 import FormattedMessage from './FormattedMessage';
-import { getRelativeDimensions } from '../App/Lib';
 
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import icon_home from '../App/Components/TabViews/img/selection.json';
@@ -91,7 +90,7 @@ class TabBar extends Component<Props, null> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 	};
 }
 

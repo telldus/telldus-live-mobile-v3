@@ -28,7 +28,6 @@ import DeviceInfo from 'react-native-device-info';
 
 import { BackgroundImage, View, Image } from '../../../../BaseComponents';
 
-import { getRelativeDimensions } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -191,7 +190,7 @@ class FormContainerComponent extends View<Props, null> {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(store.app.layout),
+		appLayout: store.app.layout,
 	};
 }
 

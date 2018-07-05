@@ -31,7 +31,6 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import { FullPageActivityIndicator, View, DialogueBox } from '../../../BaseComponents';
 import { SchedulePoster } from './SubViews';
-import { getRelativeDimensions } from '../../Lib';
 import Theme from '../../Theme';
 
 import * as scheduleActions from '../../Actions/Schedule';
@@ -254,7 +253,7 @@ const mapStateToProps = ({ schedule, devices, modal, app }: mapStateToPropsType)
 		validationMessage: modal.data,
 		showModal: modal.openModal,
 		modalExtras: modal.extras,
-		appLayout: getRelativeDimensions(app.layout),
+		appLayout: app.layout,
 	}
 );
 

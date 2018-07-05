@@ -32,7 +32,7 @@ import {
 	Push,
 } from './App/Components';
 import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
-import { View } from './BaseComponents';
+import { SafeAreaView } from './BaseComponents';
 import {
 	setAppLayout,
 	setAccessibilityListener,
@@ -121,7 +121,7 @@ class App extends React.Component<Props, null> {
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 
 		return (
-			<View style={{flex: 1}} onLayout={this.onLayout}>
+			<SafeAreaView onLayout={this.onLayout}>
 				{hasNotLoggedIn ?
 					<PreLoginNavigator />
 					:
@@ -132,7 +132,7 @@ class App extends React.Component<Props, null> {
 					showChangeLog={showChangeLog}
 					forceShowChangeLog={forceShowChangeLog}
 					onLayout={this.onLayout}/>
-			</View>
+			</SafeAreaView>
 		);
 	}
 }

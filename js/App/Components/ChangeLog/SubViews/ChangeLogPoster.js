@@ -28,7 +28,6 @@ import PropTypes from 'prop-types';
 import { View, Text, Poster } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
-import { getRelativeDimensions } from '../../../Lib';
 
 type Props = {
 	h1: string,
@@ -95,7 +94,7 @@ class ChangeLogPoster extends View {
 
 function mapStateToProps(state: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 	};
 }
 

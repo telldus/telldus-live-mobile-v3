@@ -26,9 +26,6 @@ import { connect } from 'react-redux';
 import { Text, View } from '../../../../BaseComponents';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Theme from '../../../Theme';
-import {
-	getRelativeDimensions,
-} from '../../../Lib';
 type Props = {
 	title?: any,
 	image: string,
@@ -171,7 +168,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(store.app.layout),
+		appLayout: store.app.layout,
 	};
 }
 

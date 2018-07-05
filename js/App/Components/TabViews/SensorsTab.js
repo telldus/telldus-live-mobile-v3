@@ -35,7 +35,7 @@ import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getRelativeDimensions, getTabBarIcon } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {
@@ -400,7 +400,7 @@ function mapStateToProps(store: Object): Object {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		tab: store.navigation.tab,
-		appLayout: getRelativeDimensions(store.app.layout),
+		appLayout: store.app.layout,
 	};
 }
 

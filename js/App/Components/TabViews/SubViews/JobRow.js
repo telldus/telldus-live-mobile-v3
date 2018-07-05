@@ -45,7 +45,6 @@ import {
 	getSelectedDays,
 	getWeekdays,
 	getWeekends,
-	getRelativeDimensions,
 	getTranslatableDays,
 } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
@@ -452,7 +451,7 @@ class JobRow extends View<null, Props, null> {
 
 function mapStateToProps(state: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 	};
 }
 

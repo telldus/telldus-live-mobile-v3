@@ -46,14 +46,13 @@ import {
 } from '../Actions';
 import {
 	getRSAKey,
-	getRelativeDimensions,
 	setTopLevelNavigator,
 	navigate,
 	getRouteName,
 } from '../Lib';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import { View, Header, IconTelldus, SafeAreaView } from '../../BaseComponents';
+import { View, Header, IconTelldus } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import { DimmerPopup } from './TabViews/SubViews';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
@@ -289,7 +288,7 @@ class AppNavigatorRenderer extends View {
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
 
 		return (
-			<SafeAreaView>
+			<View style={{flex: 1}}>
 				{showHeader && (
 					<Header leftButton={leftButton} style={{height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )}}/>
 				)}
@@ -311,7 +310,7 @@ class AppNavigatorRenderer extends View {
 					intl={intl}
 				/>
 				<UserAgreement showModal={!userProfile.eula} onLayout={this.onLayout}/>
-			</SafeAreaView>
+			</View>
 		);
 	}
 }
@@ -327,7 +326,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		positionToast,
 		userProfile: getUserProfileSelector(state),
 		dimmer: state.dimmer,
-		appLayout: getRelativeDimensions(layout),
+		appLayout: layout,
 		gatewaysallIds: allIds,
 		gatewaysToActivate: toActivate,
 	};

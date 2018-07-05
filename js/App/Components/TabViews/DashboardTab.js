@@ -45,7 +45,7 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 
 const messages = defineMessages({
 	messageNoItemsTitle: {
@@ -427,7 +427,7 @@ function mapStateToProps(state: Object, props: Object): Object {
 		userProfile: getUserProfile(state),
 		tab: state.navigation.tab,
 		dashboard: state.dashboard,
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 	};
 }
 

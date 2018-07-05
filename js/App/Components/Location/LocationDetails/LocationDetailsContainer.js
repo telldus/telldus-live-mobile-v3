@@ -39,7 +39,6 @@ import * as appDataActions from '../../../Actions/AppData';
 import { messages as commonMessages } from '../Common/messages';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
-import { getRelativeDimensions } from '../../../Lib';
 
 type Props = {
 	navigation: Object,
@@ -285,7 +284,7 @@ const mapStateToProps = (store: Object): Object => (
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
-		appLayout: getRelativeDimensions(store.app.layout),
+		appLayout: store.app.layout,
 	}
 );
 

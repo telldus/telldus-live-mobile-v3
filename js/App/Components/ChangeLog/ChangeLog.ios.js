@@ -37,7 +37,6 @@ const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
 
 
 import Screens from './SubViews/Screens';
-import { getRelativeDimensions } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import messages from './SubViews/messages';
@@ -227,45 +226,43 @@ class ChangeLogNavigator extends View {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.noOP}
 				supportedOrientations={['portrait', 'landscape']}>
-				<View style={{flex: 1}} onLayout={onLayout}>
-					<SafeAreaView>
-						<NavigationHeader showLeftIcon={false}/>
-						<ChangeLogPoster h1={h1} h2={h2}/>
-						<ScrollView>
-							<AnimatedWizard
-								intl={intl}
-								currentScreen={currentScreen}
-								animatedX={animatedX}
-								animatedOpacity={animatedOpacity}
-								appLayout={appLayout}/>
-							<View style={styles.buttonCover}>
-								<Text style={textSkip} onPress={this.onPressSkip}>
-									{this.skipButton}
-								</Text>
-							</View>
-							<View style={stepIndicatorCover}>
-								{!isFirstScreen && (<FloatingButton
-									imageSource={require('../TabViews/img/right-arrow-key.png')}
-									onPress={this.onPressPrev}
-									buttonStyle={floatingButtonLeft}
-									iconStyle={styles.buttonIconStyle}/>
-								)}
-								{Screens.map((screen: number, index: number): Object => {
-									let backgroundColor = Screens[index] === currentScreen ?
-										Theme.Core.brandSecondary : '#00000080';
-									return <View style={[stepIndicator, { backgroundColor }, !index && {marginLeft: 0 }]} key={index}/>;
-								})
-								}
-								<FloatingButton
-									imageSource={isLastScreen ? false : require('../TabViews/img/right-arrow-key.png')}
-									iconName={isLastScreen ? 'checkmark' : false}
-									iconStyle={isLastScreen ? checkIconStyle : {}}
-									onPress={this.onPressNext}
-									buttonStyle={{bottom: 0}}/>
-							</View>
-						</ScrollView>
-					</SafeAreaView>
-				</View>
+				<SafeAreaView onLayout={onLayout}>
+					<NavigationHeader showLeftIcon={false}/>
+					<ChangeLogPoster h1={h1} h2={h2}/>
+					<ScrollView>
+						<AnimatedWizard
+							intl={intl}
+							currentScreen={currentScreen}
+							animatedX={animatedX}
+							animatedOpacity={animatedOpacity}
+							appLayout={appLayout}/>
+						<View style={styles.buttonCover}>
+							<Text style={textSkip} onPress={this.onPressSkip}>
+								{this.skipButton}
+							</Text>
+						</View>
+						<View style={stepIndicatorCover}>
+							{!isFirstScreen && (<FloatingButton
+								imageSource={require('../TabViews/img/right-arrow-key.png')}
+								onPress={this.onPressPrev}
+								buttonStyle={floatingButtonLeft}
+								iconStyle={styles.buttonIconStyle}/>
+							)}
+							{Screens.map((screen: number, index: number): Object => {
+								let backgroundColor = Screens[index] === currentScreen ?
+									Theme.Core.brandSecondary : '#00000080';
+								return <View style={[stepIndicator, { backgroundColor }, !index && {marginLeft: 0 }]} key={index}/>;
+							})
+							}
+							<FloatingButton
+								imageSource={isLastScreen ? false : require('../TabViews/img/right-arrow-key.png')}
+								iconName={isLastScreen ? 'checkmark' : false}
+								iconStyle={isLastScreen ? checkIconStyle : {}}
+								onPress={this.onPressNext}
+								buttonStyle={{bottom: 0}}/>
+						</View>
+					</ScrollView>
+				</SafeAreaView>
 			</Modal>
 		);
 	}
@@ -330,7 +327,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 		screenReaderEnabled: state.app.screenReaderEnabled,
 	};
 }

@@ -32,7 +32,6 @@ import { View, Text, Poster, RoundedInfoButton } from '../../../../BaseComponent
 
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
-import { getRelativeDimensions } from '../../../Lib';
 
 type InfoButton = {
 	onPress?: Function,
@@ -165,7 +164,7 @@ class LocationDetailsPoster extends View {
 
 function mapStateToProps(state: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.app.layout),
+		appLayout: state.app.layout,
 	};
 }
 
