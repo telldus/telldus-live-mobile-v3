@@ -31,7 +31,7 @@ const ViewX = isIphoneX() ? SafeAreaView : View;
 
 type Props = {
 	children: Object | Array<Object>,
-	onLayout: (Object) => void;
+	onLayout: (Object) => void,
 };
 
 export default class SafeAreaViewComponent extends React.Component<Props, null> {
