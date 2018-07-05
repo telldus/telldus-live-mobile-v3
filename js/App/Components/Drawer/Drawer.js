@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';

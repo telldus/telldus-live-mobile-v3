@@ -25,7 +25,7 @@ import { createStackNavigator } from 'react-navigation';
 import Orientation from 'react-native-orientation';
 import Platform from 'Platform';
 
-import { View, SafeAreaView } from '../../BaseComponents';
+import { View } from '../../BaseComponents';
 import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from './PreLoginScreens';
 import { FormContainerComponent } from './PreLoginScreens/SubViews';
 
