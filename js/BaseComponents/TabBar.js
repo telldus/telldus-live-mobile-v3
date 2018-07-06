@@ -31,7 +31,7 @@ import FormattedMessage from './FormattedMessage';
 
 type Props = {
 	icon: string,
-	tintColor: number | string,
+	tintColor: string,
 	label: any,
 	appLayout: Object,
 	intl: intlShape.isRequired,
