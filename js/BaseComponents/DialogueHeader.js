@@ -51,7 +51,7 @@ type defaultProps = {
 export default class DialogueHeader extends Component<Props, null> {
 props: Props;
 static defaultProps: defaultProps = {
-	source: require('./img/telldus-geometric-header-bg.png'),
+	source: require('../App/Components/TabViews/img/telldus-geometric-bg-750.png'),
 	showIcon: false,
 	iconName: 'times-circle',
 	iconSize: 12,
