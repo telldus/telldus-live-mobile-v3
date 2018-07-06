@@ -73,7 +73,7 @@ class OverviewTab extends View {
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
-				icon="icon_home"
+				icon="home"
 				tintColor={tintColor}
 				label={messages.overviewHeader}
 				accessibilityLabel={i18n.deviceOverviewTab}/>

@@ -26,11 +26,8 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
+import IconTelldus from './IconTelldus';
 import FormattedMessage from './FormattedMessage';
-
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_home from '../App/Components/TabViews/img/selection.json';
-const CustomIcon = createIconSetFromIcoMoon(icon_home);
 
 type Props = {
 	icon: string,
@@ -60,7 +57,7 @@ class TabBar extends Component<Props, null> {
 
 		return (
 			<View style={container} accessibilityLabel={accessibilityLabel}>
-				<CustomIcon name={icon} size={iconSize} color={tintColor}/>
+				<IconTelldus icon={icon} size={iconSize} color={tintColor}/>
 				<FormattedMessage {...label} style={[labelStyle, {color: tintColor}]}/>
 			</View>
 		);

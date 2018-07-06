@@ -42,17 +42,10 @@ type Props = {
 class Gateway extends PureComponent<Props, null> {
 	props: Props;
 
-	offline: number;
-	socketOffline: number;
-	online: number;
 	onPress: () => void;
 
 	constructor(props: Props) {
 		super();
-
-		this.offline = require('../TabViews/img/tabIcons/location-red.png');
-		this.socketOffline = require('../TabViews/img/tabIcons/location-orange.png');
-		this.online = require('../TabViews/img/tabIcons/location-green.png');
 
 		this.onPress = this.onPress.bind(this);
 	}

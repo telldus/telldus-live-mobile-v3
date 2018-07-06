@@ -73,7 +73,7 @@ class SettingsTab extends View {
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
-				icon="icon_settings"
+				icon="settings"
 				tintColor={tintColor}
 				label={i18n.settingsHeader}
 				accessibilityLabel={i18n.deviceSettingsTab}/>

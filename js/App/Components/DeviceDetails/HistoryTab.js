@@ -82,7 +82,7 @@ class HistoryTab extends View {
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
-				icon="icon_history"
+				icon="history"
 				tintColor={tintColor}
 				label={messages.historyHeader}
 				accessibilityLabel={i18n.deviceHistoryTab}/>
