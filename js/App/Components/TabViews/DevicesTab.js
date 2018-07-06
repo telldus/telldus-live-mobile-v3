@@ -380,7 +380,7 @@ class DevicesTab extends View {
 					<Text style={style.link}>
 						live.telldus.com
 					</Text>
-					<Image source={require('./img/right-arrow-key.png')} tintColor={'#BDBDBD'} style={style.rightArrow}/>
+					<Image source={require('./img/right-arrow-key.png')} style={style.rightArrow}/>
 				</TouchableOpacity>
 			</View>
 		);
@@ -556,6 +556,7 @@ class DevicesTab extends View {
 			},
 			link: {
 				textAlign: 'center',
+				textAlignVertical: 'center',
 				color: '#4C4C4C',
 				marginLeft: 10,
 				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
@@ -564,6 +565,7 @@ class DevicesTab extends View {
 				marginLeft: 5,
 				height: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 				width: isPortrait ? Math.floor(width * 0.03) : Math.floor(height * 0.03),
+				tintColor: '#e26901',
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',
