@@ -133,7 +133,7 @@ class Summary extends View<null, Props, State> {
 		const { schedule, paddingRight, appLayout, intl } = this.props;
 		const { formatDate } = intl;
 		const { method, methodValue, weekdays } = schedule;
-		const { container, row, iconSize, buttonStyle, iconContainerStyle } = this._getStyle(appLayout);
+		const { container, row, iconSize, buttonStyle, iconStyle, iconContainerStyle } = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
 
 		return (
@@ -161,8 +161,9 @@ class Summary extends View<null, Props, State> {
 					</View>
 					<FloatingButton
 						buttonStyle={buttonStyle}
+						iconStyle={iconStyle}
 						onPress={this.saveSchedule}
-						imageSource={this.state.isLoading ? false : require('./img/check.png')}
+						iconName={this.state.isLoading ? false : 'checkmark'}
 						iconSize={iconSize}
 						paddingRight={paddingRight - 2}
 						showThrobber={this.state.isLoading}
@@ -202,6 +203,10 @@ class Summary extends View<null, Props, State> {
 			buttonStyle: {
 				elevation: 4,
 				shadowOpacity: 0.50,
+			},
+			iconStyle: {
+				fontSize: deviceWidth * 0.050666667,
+				color: '#fff',
 			},
 			iconContainerStyle: {
 				width: deviceWidth * 0.226666667,
