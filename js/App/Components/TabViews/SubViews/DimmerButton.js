@@ -22,10 +22,11 @@
 'use strict';
 
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import throttle from 'lodash/throttle';
 
 import { View } from '../../../../BaseComponents';
-import { StyleSheet } from 'react-native';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
 import { deviceSetState } from '../../../Actions/Devices';
 import DimmerOffButton from './DimmerOffButton';
@@ -95,6 +96,10 @@ class DimmerButton extends View {
 		super(props);
 
 		this.parentScrollEnabled = true;
+		const { device, onDimmerSlide } = this.props;
+		this.onValueChangeThrottled = throttle(onDimmerSlide(device.id), 200, {
+			trailing: true,
+		});
 
 		this.onTurnOn = this.onTurnOn.bind(this);
 		this.onTurnOff = this.onTurnOff.bind(this);
@@ -105,10 +110,7 @@ class DimmerButton extends View {
 	}
 
 	onValueChange(sliderValue: number) {
-		let fn = this.props.onDimmerSlide(this.props.device.id);
-		if (fn) {
-			fn(toDimmerValue(sliderValue));
-		}
+		this.onValueChangeThrottled(toDimmerValue(sliderValue));
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
