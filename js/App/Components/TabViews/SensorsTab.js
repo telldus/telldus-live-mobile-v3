@@ -44,6 +44,7 @@ type Props = {
 	dispatch: Function,
 	appLayout: Object,
 	screenProps: Object,
+	screenReaderEnabled: boolean,
 };
 
 type State = {
@@ -379,10 +380,12 @@ const getRowsAndSections = createSelector(
 );
 
 function mapStateToProps(store: Object): Object {
+	const { layout: appLayout, screenReaderEnabled } = store.app;
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		tab: store.navigation.tab,
-		appLayout: store.app.layout,
+		appLayout,
+		screenReaderEnabled,
 	};
 }
 
