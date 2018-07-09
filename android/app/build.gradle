@@ -128,7 +128,7 @@ android {
     defaultConfig {
         applicationId "com.telldus.live.mobile"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 26
         versionCode readVersionCode()
         versionName readVersion()
         multiDexEnabled true
