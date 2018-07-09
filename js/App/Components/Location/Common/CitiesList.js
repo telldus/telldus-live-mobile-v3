@@ -67,7 +67,7 @@ class CitiesList extends View {
 		);
 	}
 
-	keyExtractor(item: Object): number {
+	keyExtractor(item: string): string {
 		return item;
 	}
 

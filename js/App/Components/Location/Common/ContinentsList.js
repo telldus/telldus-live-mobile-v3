@@ -74,7 +74,7 @@ class ContinentsList extends View {
 		);
 	}
 
-	keyExtractor(item: Object): number {
+	keyExtractor(item: string): string {
 		return item;
 	}
 

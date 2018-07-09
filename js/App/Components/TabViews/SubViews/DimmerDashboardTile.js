@@ -75,7 +75,7 @@ type DefaultProps = {
 	showSlider: boolean,
 };
 
-class DimmerDashboardTile extends PureComponent<Props, State> {
+class DimmerDashboardTile extends PureComponent<Props, void> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {
@@ -89,7 +89,6 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	onValueChangeThrottled: number => void;
 	onTurnOn: () => void;
 	onTurnOff: () => void;
-	layoutView: Object => void;
 	onSlidingStart: (name: string, sliderValue: number) => void;
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
@@ -106,19 +105,10 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 
 		this.onTurnOn = this.onTurnOn.bind(this);
 		this.onTurnOff = this.onTurnOff.bind(this);
-		this.layoutView = this.layoutView.bind(this);
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
-	}
-
-	layoutView(x: Object) {
-		let { width, height } = x.nativeEvent.layout;
-		this.setState({
-			bodyWidth: width,
-			bodyHeight: height,
-		});
 	}
 
 	onValueChange(sliderValue: number) {
