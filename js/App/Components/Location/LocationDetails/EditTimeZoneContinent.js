@@ -46,13 +46,8 @@ type Props = {
 	actions: Object,
 };
 
-type State = {
-	autodetectedTimezone: string,
-};
-
 class EditTimeZoneContinent extends View {
 	props: Props;
-	state: State;
 
 	labelAutodetect: string;
 	h1: string;
@@ -63,27 +58,8 @@ class EditTimeZoneContinent extends View {
 	onPressAutodetect: () => void;
 	onPressAutodetected: () => void;
 
-	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		let { currentScreen, navigation } = props;
-		if (currentScreen === 'EditTimeZoneContinent') {
-			const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
-			if (autodetectedTimezone && (autodetectedTimezone !== state.autodetectedTimezone)) {
-				return {
-					autodetectedTimezone,
-				};
-			}
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
-
-		const { navigation } = props;
-		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
-		this.state = {
-			autodetectedTimezone,
-		};
 
 		let { formatMessage } = props.intl;
 
@@ -153,7 +129,7 @@ class EditTimeZoneContinent extends View {
 
 	onPressAutodetected() {
 		const { actions, navigation } = this.props;
-		const { autodetectedTimezone } = this.state;
+		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
 		const id = navigation.getParam('id', null);
 		actions.setTimezone(id, autodetectedTimezone).then(() => {
 			actions.getGateways();
@@ -164,8 +140,8 @@ class EditTimeZoneContinent extends View {
 	}
 
 	render(): Object {
-		const { appLayout } = this.props;
-		const { autodetectedTimezone } = this.state;
+		const { appLayout, navigation } = this.props;
+		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
 		const styles = this.getStyle(appLayout);
 
 		return (
