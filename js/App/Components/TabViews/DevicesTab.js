@@ -79,12 +79,9 @@ type Props = {
 };
 
 type State = {
-	visibleList: Array<Object>,
-	hiddenList: Array<Object>,
 	deviceId: number,
 	dimmer: boolean,
 	addGateway: boolean,
-	makeRowAccessible: 0 | 1,
 	isRefreshing: boolean,
 	showHiddenList: boolean,
 	propsSwipeRow: Object,
@@ -118,38 +115,13 @@ class DevicesTab extends View {
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'devices'),
 	});
 
-	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		let { makeRowAccessible: prevMakeRowAccessible, visibleList: prevVisibleList, hiddenList: prevHiddenList } = state;
-		let { screenReaderEnabled, rowsAndSections, screenProps } = props;
-		let { currentScreen } = screenProps;
-		let makeRowAccessible = 0;
-		if (screenReaderEnabled && currentScreen === 'Devices') {
-			makeRowAccessible = 1;
-		}
-		const isRowsEqual = isEqual(rowsAndSections, {visibleList: prevVisibleList, hiddenList: prevHiddenList});
-		if (!isRowsEqual || prevMakeRowAccessible !== makeRowAccessible) {
-			let { visibleList, hiddenList } = rowsAndSections;
-			return {
-				visibleList,
-				hiddenList,
-				makeRowAccessible,
-			};
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 
-		let { visibleList, hiddenList } = props.rowsAndSections;
-
 		this.state = {
-			visibleList,
-			hiddenList,
 			deviceId: -1,
 			dimmer: false,
 			addGateway: false,
-			makeRowAccessible: 0,
 			isRefreshing: false,
 			showHiddenList: false,
 			propsSwipeRow: {
@@ -427,10 +399,18 @@ class DevicesTab extends View {
 
 	render(): Object {
 
-		let { appLayout, devices } = this.props;
-		let { showHiddenList, hiddenList, visibleList,
-			isRefreshing, makeRowAccessible, addGateway, propsSwipeRow,
-			scrollEnabled, showRefresh, showConfirmDialogue } = this.state;
+		let { appLayout, devices, rowsAndSections, screenProps, screenReaderEnabled } = this.props;
+		let {
+			showHiddenList,
+			isRefreshing,
+			addGateway,
+			propsSwipeRow,
+			scrollEnabled,
+			showRefresh,
+			showConfirmDialogue,
+		} = this.state;
+		let { visibleList, hiddenList } = rowsAndSections;
+
 		let style = this.getStyles(appLayout);
 
 		if (addGateway) {
@@ -441,6 +421,10 @@ class DevicesTab extends View {
 			return this.noDeviceMessage(style);
 		}
 
+		let makeRowAccessible = 0;
+		if (screenReaderEnabled && screenProps.currentScreen === 'Devices') {
+			makeRowAccessible = 1;
+		}
 		let extraData = {
 			makeRowAccessible,
 			appLayout,

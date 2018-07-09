@@ -88,7 +88,6 @@ type Props = {
 type State = {
 	tileWidth: number,
 	listWidth: number,
-	dataSource: Array<Object>,
 	settings: boolean,
 	numColumns: number,
 	isRefreshing: boolean,
@@ -118,17 +117,6 @@ class DashboardTab extends View {
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'dashboard'),
 	});
 
-	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const isRowEqual = isEqual(state.dataSource, props.rows);
-		if (!isRowEqual) {
-			return {
-				dataSource: props.rows,
-			};
-		}
-
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 		const { width } = Dimensions.get('window');
@@ -136,7 +124,6 @@ class DashboardTab extends View {
 		this.state = {
 			tileWidth,
 			listWidth: 0,
-			dataSource: this.props.rows,
 			settings: false,
 			numColumns,
 			isRefreshing: false,
@@ -279,8 +266,8 @@ class DashboardTab extends View {
 	}
 
 	render(): Object {
-		let { appLayout, dashboard } = this.props;
-		let { dataSource, isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
+		let { appLayout, dashboard, rows } = this.props;
+		let { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		let style = this.getStyles(appLayout);
 
@@ -297,7 +284,7 @@ class DashboardTab extends View {
 			<View onLayout={this._onLayout} style={style.container}>
 				<FlatList
 					ref="list"
-					data={dataSource}
+					data={rows}
 					renderItem={this._renderRow}
 					refreshControl={
 						<RefreshControl

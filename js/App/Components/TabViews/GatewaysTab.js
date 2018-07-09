@@ -26,7 +26,6 @@ import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
-import isEqual from 'lodash/isEqual';
 
 import { View, FloatingButton } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
@@ -56,7 +55,6 @@ type Props = {
 };
 
 type State = {
-	dataSource: Array<Object>,
 	settings: boolean,
 	isLoading: boolean,
 	isRefreshing: boolean,
@@ -83,23 +81,12 @@ class GatewaysTab extends View {
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'gateways'),
 	});
 
-	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const isRowsEqual = isEqual(state.dataSource, props.rows);
-		if (!isRowsEqual) {
-			return {
-				dataSource: props.rows,
-			};
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 
 		let { formatMessage } = props.screenProps.intl;
 
 		this.state = {
-			dataSource: this.props.rows,
 			settings: false,
 			isLoading: false,
 			isRefreshing: false,
@@ -158,10 +145,12 @@ class GatewaysTab extends View {
 
 	render(): Object {
 		const padding = this.getPadding();
+		const { rows } = this.props;
+
 		return (
 			<View style={{flex: 1}}>
 				<FlatList
-					data={this.state.dataSource}
+					data={rows}
 					renderItem={this.renderRow}
 					onRefresh={this.onRefresh}
 					refreshing={this.state.isRefreshing}
