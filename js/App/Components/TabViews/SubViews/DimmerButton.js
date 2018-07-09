@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { View } from '../../../../BaseComponents';
-import { Animated, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { saveDimmerInitialState, showDimmerPopup, hideDimmerPopup, setDimmerValue, showDimmerStep } from '../../../Actions/Dimmer';
 import { deviceSetState } from '../../../Actions/Devices';
 import DimmerOffButton from './DimmerOffButton';
@@ -66,14 +66,6 @@ type Props = {
 	showSlider?: boolean,
 };
 
-type State = {
-	buttonWidth: number,
-	buttonHeight: number,
-	value: number,
-	offButtonFadeAnim: Object,
-	onButtonFadeAnim: Object,
-};
-
 type DefaultProps = {
 	showSlider: boolean,
 	commandON: number,
@@ -83,19 +75,13 @@ type DefaultProps = {
 
 class DimmerButton extends View {
 	props: Props;
-	state: State;
+
 	parentScrollEnabled: boolean;
-	onTurnOffButtonStart: () => void;
-	onTurnOnButtonEnd: () => void;
-	onTurnOnButtonStart: () => void;
-	onTurnOnButtonEnd: () => void;
 	onTurnOn: () => void;
 	onTurnOff: () => void;
-	layoutView: Object => void;
 	onSlidingStart: (name: string, sliderValue: number) => void;
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
-	onTurnOffButtonEnd: () => void;
 	showDimmerStep: (number) => void;
 
 	static defaultProps: DefaultProps = {
@@ -105,51 +91,17 @@ class DimmerButton extends View {
 		commandDIM: 16,
 	};
 
-	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
-		const { stateValues, isInState } = props.device;
-		const dimmerValue = getDimmerValue(stateValues.DIM, isInState);
-		if (state.value !== dimmerValue) {
-			return {
-				value: dimmerValue,
-			};
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 
-		const { stateValues, isInState } = this.props.device;
-		const value = getDimmerValue(stateValues.DIM, isInState);
 		this.parentScrollEnabled = true;
-		this.state = {
-			buttonWidth: 0,
-			buttonHeight: 0,
-			value,
-			offButtonFadeAnim: new Animated.Value(1),
-			onButtonFadeAnim: new Animated.Value(1),
 
-		};
-
-		this.onTurnOffButtonStart = this.onTurnOffButtonStart.bind(this);
-		this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
-		this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
-		this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
 		this.onTurnOn = this.onTurnOn.bind(this);
 		this.onTurnOff = this.onTurnOff.bind(this);
-		this.layoutView = this.layoutView.bind(this);
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
-	}
-
-	layoutView(x: Object) {
-		let { width, height } = x.nativeEvent.layout;
-		this.setState({
-			buttonWidth: width,
-			buttonHeight: height,
-		});
 	}
 
 	onValueChange(sliderValue: number) {
@@ -182,22 +134,6 @@ class DimmerButton extends View {
 		this.props.hideDimmerPopup();
 	}
 
-	onTurnOffButtonStart() {
-		this.refs.offButton.fadeOut();
-	}
-
-	onTurnOffButtonEnd() {
-		this.refs.offButton.fadeIn();
-	}
-
-	onTurnOnButtonStart() {
-		this.refs.onButton.fadeOut();
-	}
-
-	onTurnOnButtonEnd() {
-		this.refs.onButton.fadeIn();
-	}
-
 	onTurnOn() {
 		this.props.deviceSetState(this.props.device.id, this.props.commandON);
 	}
@@ -211,27 +147,31 @@ class DimmerButton extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, screenReaderEnabled, showSlider,
-			style, onButtonStyle, offButtonStyle, sliderStyle } = this.props;
-		const { isInState, name, supportedMethods, methodRequested, local } = device;
+		const {
+			device: item, intl, isGatewayActive,
+			screenReaderEnabled, showSlider,
+			style, onButtonStyle, offButtonStyle,
+			sliderStyle, setScrollEnabled } = this.props;
+		const { isInState, name, supportedMethods, methodRequested, local, stateValues } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
+		const value = getDimmerValue(stateValues.DIM, isInState);
 
 		const sliderProps = {
 			thumbWidth: 10,
 			thumbHeight: 10,
 			fontSize: 9,
-			item: device,
-			value: toSliderValue(this.state.value),
-			setScrollEnabled: this.props.setScrollEnabled,
+			value: toSliderValue(value),
 			onSlidingStart: this.onSlidingStart,
 			onSlidingComplete: this.onSlidingComplete,
 			onValueChange: this.onValueChange,
-			intl: intl,
-			isInState: isInState,
-			isGatewayActive: isGatewayActive,
-			screenReaderEnabled: screenReaderEnabled,
 			showDimmerStep: this.showDimmerStep,
+			item,
+			intl,
+			isInState,
+			isGatewayActive,
+			screenReaderEnabled,
+			setScrollEnabled,
 		};
 		// TODO: refactor writing a higher order component
 		const onButton = (

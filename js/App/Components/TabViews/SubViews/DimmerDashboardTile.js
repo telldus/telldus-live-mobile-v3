@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
 
@@ -68,14 +68,6 @@ type Props = {
 	sliderStyle?: number | Object | Array<any>,
 };
 
-type State = {
-	bodyWidth: number,
-	bodyHeight: number,
-	value: number,
-	offButtonFadeAnim: Object,
-	onButtonFadeAnim: Object,
-};
-
 type DefaultProps = {
 	commandON: number,
 	commandOFF: number,
@@ -85,7 +77,6 @@ type DefaultProps = {
 
 class DimmerDashboardTile extends PureComponent<Props, State> {
 	props: Props;
-	state: State;
 
 	static defaultProps: DefaultProps = {
 		commandON: 1,
@@ -96,10 +87,6 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 
 	parentScrollEnabled: boolean;
 	onValueChangeThrottled: number => void;
-	onTurnOffButtonStart: () => void;
-	onTurnOffButtonEnd: () => void;
-	onTurnOnButtonStart: () => void;
-	onTurnOnButtonEnd: () => void;
 	onTurnOn: () => void;
 	onTurnOff: () => void;
 	layoutView: Object => void;
@@ -108,38 +95,15 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	onValueChange: number => void;
 	showDimmerStep: (number) => void;
 
-	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
-		const { stateValues, isInState } = props.item;
-		const dimmerValue = getDimmerValue(stateValues.DIM, isInState);
-		if (state.value !== dimmerValue) {
-			return {
-				value: dimmerValue,
-			};
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 		const { item, onDimmerSlide } = this.props;
-		const { stateValues, isInState } = item;
 		this.parentScrollEnabled = true;
-		this.state = {
-			bodyWidth: 0,
-			bodyHeight: 0,
-			value: getDimmerValue(stateValues.DIM, isInState),
-			offButtonFadeAnim: new Animated.Value(1),
-			onButtonFadeAnim: new Animated.Value(1),
-		};
 
 		this.onValueChangeThrottled = throttle(onDimmerSlide(item.id), 200, {
 			trailing: true,
 		});
 
-		this.onTurnOffButtonStart = this.onTurnOffButtonStart.bind(this);
-		this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
-		this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
-		this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
 		this.onTurnOn = this.onTurnOn.bind(this);
 		this.onTurnOff = this.onTurnOff.bind(this);
 		this.layoutView = this.layoutView.bind(this);
@@ -180,22 +144,6 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		this.props.hideDimmerPopup();
 	}
 
-	onTurnOffButtonStart() {
-		this.refs.offButton.fadeOut();
-	}
-
-	onTurnOffButtonEnd() {
-		this.refs.offButton.fadeIn();
-	}
-
-	onTurnOnButtonStart() {
-		this.refs.onButton.fadeOut();
-	}
-
-	onTurnOnButtonEnd() {
-		this.refs.onButton.fadeIn();
-	}
-
 	onTurnOn() {
 		this.props.deviceSetState(this.props.item.id, this.props.commandON);
 	}
@@ -209,27 +157,32 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, intl, isGatewayActive, screenReaderEnabled,
-			showSlider, onButtonStyle, offButtonStyle, sliderStyle, containerStyle } = this.props;
-		const { name, isInState, supportedMethods, methodRequested, local } = item;
+		const {
+			item, tileWidth, intl, isGatewayActive,
+			screenReaderEnabled, showSlider, onButtonStyle,
+			offButtonStyle, sliderStyle, containerStyle,
+			setScrollEnabled,
+		} = this.props;
+		const { name, isInState, supportedMethods, methodRequested, local, stateValues } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
+		const value = getDimmerValue(stateValues.DIM, isInState);
 
 		const sliderProps = {
 			thumbWidth: 7,
 			thumbHeight: 7,
 			fontSize: 8,
-			item: item,
-			value: toSliderValue(this.state.value),
-			setScrollEnabled: this.props.setScrollEnabled,
+			value: toSliderValue(value),
 			onSlidingStart: this.onSlidingStart,
 			onSlidingComplete: this.onSlidingComplete,
 			onValueChange: this.onValueChange,
-			intl: intl,
-			isInState: isInState,
-			isGatewayActive: isGatewayActive,
-			screenReaderEnabled: screenReaderEnabled,
 			showDimmerStep: this.showDimmerStep,
+			item,
+			setScrollEnabled,
+			intl,
+			isInState,
+			isGatewayActive,
+			screenReaderEnabled,
 		};
 
 		// TODO: refactor writing a higher order component
