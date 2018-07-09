@@ -134,8 +134,7 @@ class EditTimeZoneContinent extends View {
 		} else {
 			let data = differenceWith(timeZone, [continent], (v1: string, v2: string): boolean => {
 				let items = v1.split('/');
-				let flag = items[0] === v2 ? false : true;
-				return flag;
+				return !(items[0] === v2);
 			});
 			navigation.navigate('EditTimeZoneCity', {cities: data, continent, id});
 		}
