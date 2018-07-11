@@ -160,7 +160,7 @@ class DeviceHiddenRow extends View {
 					onPress={this.onPressSettings}
 					accessible={isOpen}
 					accessibilityLabel={accessibilityLabelSettings}>
-					<Icon name={'gear'} style={styles.favoriteIcon}/>
+					<IconTelldus icon={'settings'} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 			</View>
 		);
