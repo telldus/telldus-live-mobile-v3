@@ -39,10 +39,6 @@ import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 
 const messages = defineMessages({
-	overviewHeader: {
-		id: 'deviceSettings.overviewHeader',
-		defaultMessage: 'Overview',
-	},
 	location: {
 		id: 'deviceSettings.location',
 		defaultMessage: 'Location',
@@ -75,7 +71,7 @@ class OverviewTab extends View {
 			<TabBar
 				icon="home"
 				tintColor={tintColor}
-				label={messages.overviewHeader}
+				label={i18n.overviewHeader}
 				accessibilityLabel={i18n.deviceOverviewTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {

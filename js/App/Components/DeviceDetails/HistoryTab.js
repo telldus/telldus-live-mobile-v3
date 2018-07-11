@@ -36,10 +36,6 @@ import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 
 const messages = defineMessages({
-	historyHeader: {
-		id: 'history',
-		defaultMessage: 'History',
-	},
 	loading: {
 		id: 'loading',
 		defaultMessage: 'Loading',
@@ -84,7 +80,7 @@ class HistoryTab extends View {
 			<TabBar
 				icon="history"
 				tintColor={tintColor}
-				label={messages.historyHeader}
+				label={i18n.historyHeader}
 				accessibilityLabel={i18n.deviceHistoryTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {

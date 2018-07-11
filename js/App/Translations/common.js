@@ -613,6 +613,14 @@ const messages = defineMessages({
 		id: 'label.minutes',
 		defaultMessage: 'Minutes',
 	},
+	historyHeader: {
+		id: 'history',
+		defaultMessage: 'History',
+	},
+	overviewHeader: {
+		id: 'deviceSettings.overviewHeader',
+		defaultMessage: 'Overview',
+	},
 });
 
 export default messages;
