@@ -57,6 +57,7 @@ type Props = {
 	onHiddenRowOpen: (string) => void,
 	propsSwipeRow: Object,
 	defaultType?: string,
+	onSettingsSelected: Object => void,
 };
 
 type State = {
@@ -106,6 +107,7 @@ class SensorRow extends View<Props, State> {
 	onRowClose: () => void;
 	onSetIgnoreSensor: () => void;
 	onPressSensorName: () => void;
+	onSettingsSelected: (Object) => void;
 
 	onLayoutDeviceName: (Object) => void;
 	onLayoutCover: (Object) => void;
@@ -177,6 +179,8 @@ class SensorRow extends View<Props, State> {
 		this.isAnimating = false;
 
 		this.isTablet = DeviceInfo.isTablet();
+
+		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
@@ -239,6 +243,10 @@ class SensorRow extends View<Props, State> {
 				});
 			}
 		}
+	}
+
+	onSettingsSelected() {
+		this.props.onSettingsSelected(this.props.sensor);
 	}
 
 	showFullName(duration: number, delay: number, easing: any) {
@@ -482,7 +490,8 @@ class SensorRow extends View<Props, State> {
 				swipeToOpenPercent={20}
 				directionalDistanceChangeThreshold={2}>
 				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
-					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}/>
+					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}
+					onPressSettings={this.onSettingsSelected}/>
 				<ListItem
 					style={styles.row}
 					onLayout={this.onLayout}

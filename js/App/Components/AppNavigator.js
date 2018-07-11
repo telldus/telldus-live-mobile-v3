@@ -25,12 +25,14 @@ import { createStackNavigator } from 'react-navigation';
 
 import { SettingsScreen } from './Settings';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
+import SensorDetailsNavigator from './SensorDetails/SensorDetailsNavigator';
 import DeviceDetailsNavigator from './DeviceDetails/DeviceDetailsNavigator';
 import AddLocationNavigator from './Location/AddLocation/AddLocationNavigator';
 import LocationDetailsNavigator from './Location/LocationDetails/LocationDetailsNavigator';
 import TabsView from './TabViews/TabsView';
 
 import { DeviceDetailsHeaderPoster } from './DeviceDetails/SubViews';
+import { SensorDetailsHeaderPoster } from './SensorDetails/SubViews';
 
 const RouteConfigs = {
 	Tabs: {
@@ -61,6 +63,14 @@ const RouteConfigs = {
 		navigationOptions: (props: Object): Object => {
 			return {
 				header: <DeviceDetailsHeaderPoster {...props}/>,
+			};
+		},
+	},
+	SensorDetails: {
+		screen: SensorDetailsNavigator,
+		navigationOptions: (props: Object): Object => {
+			return {
+				header: <SensorDetailsHeaderPoster {...props}/>,
 			};
 		},
 	},

@@ -69,6 +69,7 @@ class SensorsTab extends View {
 	closeVisibleRows: (string) => void;
 	onDismissDialogueHide: () => void;
 	onConfirmDialogueHide: () => void;
+	openSensorDetail: (number) => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
@@ -113,6 +114,8 @@ class SensorsTab extends View {
 		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelSensor });
 		this.messageOnHide = formatMessage(i18n.messageOnHide, { type: labelSensor });
 		this.labelHide = formatMessage(i18n.hide).toUpperCase();
+
+		this.openSensorDetail = this.openSensorDetail.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -168,6 +171,10 @@ class SensorsTab extends View {
 				this.props.dispatch(showToast(message));
 			});
 		}
+	}
+
+	openSensorDetail(sensor: Object) {
+		this.props.navigation.navigate('SensorDetails', { id: sensor.id });
 	}
 
 	onConfirmDialogueHide() {
@@ -301,7 +308,8 @@ class SensorsTab extends View {
 				isGatewayActive={isOnline}
 				setIgnoreSensor={this.setIgnoreSensor}
 				onHiddenRowOpen={this.closeVisibleRows}
-				propsSwipeRow={propsSwipeRow}/>
+				propsSwipeRow={propsSwipeRow}
+				onSettingsSelected={this.openSensorDetail}/>
 		);
 	}
 
