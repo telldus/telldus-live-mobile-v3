@@ -181,6 +181,9 @@ class DevicesTab extends View {
 	}
 
 	openDeviceDetail(device: Object) {
+		// Passing only the id(not whole device object) through navigation param, again the device properties
+		// are retrived inside 'DeviceDetails' by matching 'id' with device data from store
+		// It is important to use data from store directly(not through navigation param) to get updates(socket and other)
 		this.props.navigation.navigate('DeviceDetails', { id: device.id });
 	}
 
