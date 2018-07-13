@@ -25,10 +25,16 @@ import BatteryInfo from './BatteryInfo';
 import SensorBlock from './SensorBlock';
 import SensorDetailsHeaderPoster from './SensorDetailsHeaderPoster';
 import SensorTypes from './SensorTypes';
+import GraphValuesDropDown from './GraphValuesDropDown';
+import SensorHistoryLineChart from './SensorHistoryLineChart';
+import ChartLegend from './ChartLegend';
 
 module.exports = {
 	BatteryInfo,
 	SensorBlock,
 	SensorDetailsHeaderPoster,
 	SensorTypes,
+	GraphValuesDropDown,
+	SensorHistoryLineChart,
+	ChartLegend,
 };
