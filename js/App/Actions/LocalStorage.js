@@ -22,16 +22,32 @@
 'use strict';
 
 import TelldusLocalStorage from '../Lib/LocalStorage';
+import type SensorHistoryQueryParams from '../Lib/LocalStorage';
 
 
-export function storeDeviceHistory(data: Object): Promise<any> {
+export function storeHistory(type: string, data: Object): Promise<any> {
 	let localStorage = new TelldusLocalStorage();
-	return localStorage.storeDeviceHistory(data);
+	if (type === 'device') {
+		return localStorage.storeDeviceHistory(data);
+	}
+	if (type === 'sensor') {
+		return localStorage.storeSensorHistory(data);
+	}
 }
 
-export function getDeviceHistory(id: number): Promise<any> {
+export function getHistory(type: string, queryParam: number | SensorHistoryQueryParams): Promise<any> {
 	let localStorage = new TelldusLocalStorage();
-	return localStorage.getDeviceHistory(id);
+	if (type === 'device') {
+		return localStorage.getDeviceHistory(queryParam);
+	}
+	if (type === 'sensor') {
+		return localStorage.getSensorHistory(queryParam);
+	}
+}
+
+export function getSensorTypes(id: number, formatMessage: Function): Promise<any> {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.getSensorTypes(id, formatMessage);
 }
 
 export function getLatestTimestamp(type: string, id: number): Promise<any> {

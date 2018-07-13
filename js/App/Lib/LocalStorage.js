@@ -27,6 +27,8 @@ let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 SQLite.DEBUG(isDebuggingInChrome);
 SQLite.enablePromise(true);
 
+import { getSensorIconLabelUnit } from './SensorUtils';
+
 
 const databaseName = 'tellduslocalstorage.db';
 const databaseVersion = '1.0';
@@ -35,6 +37,11 @@ const databaseSize = 200000;
 let db;
 const maxSize = 200;
 
+export type SensorHistoryQueryParams = {
+	id: number,
+	type: string,
+	scale: string,
+};
 export default class TelldusLocalStorage {
 
 	constructor() {
@@ -151,22 +158,146 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	getLatestTimestamp = (type: string, id: number): Promise<any> => {
-		let tableName;
-		if (type === 'device') {
-			tableName = 'DeviceHistory';
-		} else if (type === 'sensor') {
-			tableName = 'SensorHistory';
-		}
-		return this.loadDatabase().then((DB: Object): Promise<any> => {
-			return this.queryLatestTimestamp(tableName, id);
+	// SENSOR
+
+	storeSensorHistory(data: Object): Promise<any> {
+		return this.loadDatabase().then((DB: Object): any => {
+			let { history, sensorId } = data;
+			let length = history.length;
+			/**
+			 * In some Android devices having too many local references accumulated, without being cleared, causes
+			 * app to crash. To solve that splitting the history array to chunks with maximum size of 200.
+			 * Doing so the variables created in methods populateDataSensorHistory and prepareInsertQuerySensorHistory
+			 * through looping is reduced.
+			 */
+			if (length > maxSize) {
+				let historyChunks = chunk(history, maxSize);
+				let count = 0;
+				for (let i = 0; i < historyChunks.length; i++) {
+					this.populateDataSensorHistory(historyChunks[i], sensorId);
+					count = i;
+				}
+				return count;
+			}
+			this.populateDataSensorHistory(history, sensorId);
+			return 0;
+
 		}).catch((error: Object) => {
 			throw error;
 		});
 	}
 
-	queryLatestTimestamp = (tableName: string, id: number): Promise<any> => {
-		return db.executeSql(`SELECT MAX(ts) as tsMax from ${tableName} WHERE ${id} = deviceId`).then(([results]: Array<any>): Array<any> | null => {
+	populateDataSensorHistory = (data: Object, sensorId: string): Promise<any> => {
+
+		let insertQuery = this.prepareInsertQuerySensorHistory(data, sensorId);
+		return db.sqlBatch([
+			'CREATE TABLE IF NOT EXISTS SensorHistory( '
+			+ 'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+			+ 'ts INTEGER, '
+			+ 'sensorId INTEGER, '
+			+ 'type VARCHAR(150), '
+			+ 'value VARCHAR(100), '
+			+ 'scale VARCHAR(50)'
+			+ '); ',
+			['CREATE UNIQUE INDEX IF NOT EXISTS IndexIdXSensor ON SensorHistory(ts, sensorId, type, scale);'],
+			['CREATE INDEX IF NOT EXISTS IndexSensorId ON SensorHistory(sensorId);'],
+			...insertQuery,
+		  ]);
+	}
+
+	prepareInsertQuerySensorHistory(history: Object, sensorId: string): Array<string> {
+		let query = [];
+		for (let key in history) {
+			let { ts = 0, data = [] } = history[key];
+			data.map((item: Object, index: number) => {
+				let { name, value, scale } = item;
+
+				query.push(`${'REPLACE INTO SensorHistory '
+					+ '( ts, '
+					+ 'sensorId,'
+					+ 'type, '
+					+ 'value, '
+					+ 'scale) '
+					+ 'VALUES ('}`
+					+ `${ts}, `
+					+ `${sensorId}, `
+					+ `"${name}", `
+					+ `"${value}", `
+					+ `"${scale}"`
+					+ ')');
+
+			});
+		}
+		return query;
+	}
+
+	getSensorHistory(queryParams: SensorHistoryQueryParams): Promise<any> {
+		return this.loadDatabase().then((DB: Object): Promise<any> => {
+			return this.querySensorHistory(queryParams);
+		}).catch((error: Object) => {
+			throw error;
+		});
+	}
+
+	querySensorHistory = ({ id, type, scale }: SensorHistoryQueryParams): Promise<any> => {
+		return db.executeSql(`SELECT ts, value FROM SensorHistory WHERE ${id} = sensorId AND "${type}" = type`
+		+ ` AND "${scale}" = scale ORDER BY ts DESC LIMIT 20`).then(([results]: Array<any>): Array<any> => {
+			let len = results.rows.length, data = [];
+			for (let i = 0; i < len; i++) {
+				let { value, ts } = results.rows.item(i);
+				let row = { ts, value: parseInt(value, 10) };
+				data.push(row);
+			}
+			return data;
+		}).catch((error: Object) => {
+			throw error;
+		});
+	}
+
+	getSensorTypes = (id: number, formatMessage: Function): Promise<any> => {
+		return this.loadDatabase().then((DB: Object): Promise<any> => {
+			return this.querySensorTypes(id, formatMessage);
+		}).catch((error: Object) => {
+			throw error;
+		});
+	}
+
+	querySensorTypes = (id: number, formatMessage?: Function): Promise<any> => {
+		return db.executeSql(`SELECT DISTINCT type, scale FROM SensorHistory WHERE ${id} = sensorId`).then(([results]: Array<any>): Array<any> => {
+			let len = results.rows.length, data = [];
+			for (let i = 0; i < len; i++) {
+				const { type, scale } = results.rows.item(i);
+				const { label, unit, icon } = getSensorIconLabelUnit(type, scale, formatMessage);
+				const postFix = unit ? ` (${unit})` : '';
+				let row = { type, scale, value: `${label}${postFix}`, icon};
+				data.push(row);
+			}
+			return data;
+		}).catch((error: Object) => {
+			throw error;
+		});
+	}
+
+
+	// COMMON
+	getLatestTimestamp = (type: string, id: number): Promise<any> => {
+		let tableName, uniqueParam;
+		if (type === 'device') {
+			tableName = 'DeviceHistory';
+			uniqueParam = 'deviceId';
+		} else if (type === 'sensor') {
+			tableName = 'SensorHistory';
+			uniqueParam = 'sensorId';
+		}
+		return this.loadDatabase().then((DB: Object): Promise<any> => {
+			return this.queryLatestTimestamp(tableName, uniqueParam, id);
+		}).catch((error: Object) => {
+			throw error;
+		});
+	}
+
+	queryLatestTimestamp = (tableName: string, uniqueParam: string, id: number): Promise<any> => {
+		return db.executeSql(`SELECT MAX(ts) as tsMax from ${tableName} WHERE ${id} = ${uniqueParam}`).then(([results]: Array<any>): Array<any> | null => {
 			if (results.rows && results.rows.item(0)) {
 				return results.rows.item(0);
 			}

@@ -621,6 +621,14 @@ const messages = defineMessages({
 		id: 'deviceSettings.overviewHeader',
 		defaultMessage: 'Overview',
 	},
+	loading: {
+		id: 'loading',
+		defaultMessage: 'Loading',
+	},
+	noRecentActivity: {
+		id: 'deviceSettings.noRecentActivity',
+		defaultMessage: 'No recent activity',
+	},
 });
 
 export default messages;

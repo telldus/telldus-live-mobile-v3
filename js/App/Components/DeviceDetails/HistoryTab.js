@@ -30,21 +30,10 @@ import { defineMessages } from 'react-intl';
 import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
 import { getDeviceHistory } from '../../Actions/Devices';
-import { getDeviceHistory as getDeviceHistoryFromLocal, storeDeviceHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
+import { getHistory, storeHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
 import { hideModal } from '../../Actions/Modal';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
-
-const messages = defineMessages({
-	loading: {
-		id: 'loading',
-		defaultMessage: 'Loading',
-	},
-	noRecentActivity: {
-		id: 'deviceSettings.noRecentActivity',
-		defaultMessage: 'No recent activity',
-	},
-});
 
 type Props = {
 	dispatch: Function,
@@ -141,7 +130,7 @@ class HistoryTab extends View {
 	 * from the API)
 	 */
 	getHistoryData(hasLoaded: boolean = false, refreshing: boolean = false, callBackWhenNoData: Function = () => {}) {
-		getDeviceHistoryFromLocal(this.props.device.id).then((data: Object) => {
+		getHistory('device', this.props.device.id).then((data: Object) => {
 			if (data && data.length !== 0) {
 				let rowsAndSections = parseHistoryForSectionList(data);
 				this.setState({
@@ -212,7 +201,7 @@ class HistoryTab extends View {
 						history: response.history,
 						deviceId: this.props.device.id,
 					};
-					storeDeviceHistory(data).then(() => {
+					storeHistory('device', data).then(() => {
 						this.getHistoryData(true, false, noop);
 					}).catch(() => {
 						this.getHistoryData(true, false, noop);
@@ -312,7 +301,7 @@ class HistoryTab extends View {
 				<View style={styles.containerWhenNoData}>
 					<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
 					<Text style={textWhenNoData}>
-						<FormattedMessage {...messages.noRecentActivity} style={textWhenNoData}/>...
+						<FormattedMessage {...i18n.noRecentActivity} style={textWhenNoData}/>...
 					</Text>
 				</View>
 			);
