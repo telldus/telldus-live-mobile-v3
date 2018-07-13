@@ -33,6 +33,7 @@ import com.telldus.live.mobile.MainActivity;
 import java.util.Arrays;
 import java.util.List;
 
+import com.horcrux.svg.SvgPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
@@ -68,6 +69,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
+				new SvgPackage(),
 				new RNFirebasePackage(),
 				new RNFirebaseMessagingPackage(),
 				new RNFirebaseNotificationsPackage(),
@@ -79,7 +81,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new RNI18nPackage()
 			);
 		}
-		
+
 		@Override
 		protected String getJSMainModuleName() {
 			return "index";
