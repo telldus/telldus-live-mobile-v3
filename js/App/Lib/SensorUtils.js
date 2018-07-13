@@ -220,6 +220,11 @@ function getSensorIconLabelUnit(name: string, scale: number, formatMessage?: Fun
 			unit,
 		};
 	}
+	return {
+		icon: '',
+		label: '',
+		unit: '',
+	};
 }
 
 module.exports = {

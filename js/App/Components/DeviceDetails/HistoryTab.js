@@ -25,7 +25,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import _ from 'lodash';
-import { defineMessages } from 'react-intl';
 
 import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';

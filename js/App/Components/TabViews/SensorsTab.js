@@ -45,6 +45,7 @@ type Props = {
 	appLayout: Object,
 	screenProps: Object,
 	screenReaderEnabled: boolean,
+	navigation: Object,
 };
 
 type State = {

@@ -28,6 +28,11 @@ import { View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 
 type Props = {
+	value: number,
+	appLayout: Object,
+	style: any,
+	padding: number,
+    borderWidth: number,
 };
 
 type DefaultProps = {
@@ -36,8 +41,8 @@ type DefaultProps = {
 };
 
 type State = {
-    height?: number,
-    width?: number,
+    height: number,
+    width: number,
 };
 
 export default class Battery extends View<Props, State> {
@@ -55,8 +60,8 @@ constructor(props: Props) {
 	super(props);
 
 	this.state = {
-		height: undefined,
-		width: undefined,
+		height: 1,
+		width: 1,
 	};
 
 	this.onLayout = this.onLayout.bind(this);

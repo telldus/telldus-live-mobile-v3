@@ -22,10 +22,10 @@
 'use strict';
 
 import TelldusLocalStorage from '../Lib/LocalStorage';
-import type SensorHistoryQueryParams from '../Lib/LocalStorage';
+import type { SensorHistoryQueryParams } from '../Lib/LocalStorage';
 
 
-export function storeHistory(type: string, data: Object): Promise<any> {
+export function storeHistory(type: string, data: Object): Promise<any> | any {
 	let localStorage = new TelldusLocalStorage();
 	if (type === 'device') {
 		return localStorage.storeDeviceHistory(data);
@@ -34,8 +34,8 @@ export function storeHistory(type: string, data: Object): Promise<any> {
 		return localStorage.storeSensorHistory(data);
 	}
 }
-
-export function getHistory(type: string, queryParam: number | SensorHistoryQueryParams): Promise<any> {
+// $FlowFixMe
+export function getHistory(type: string, queryParam: number | SensorHistoryQueryParams): Promise<any> | any {
 	let localStorage = new TelldusLocalStorage();
 	if (type === 'device') {
 		return localStorage.getDeviceHistory(queryParam);

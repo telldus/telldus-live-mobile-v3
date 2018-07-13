@@ -27,7 +27,6 @@ import moment from 'moment';
 import { View } from '../../../../BaseComponents';
 import SensorBlock from './SensorBlock';
 
-import { formatLastUpdated } from '../../../Lib';
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
@@ -39,12 +38,15 @@ const directions = [
 ];
 
 type Props = {
+	appLayout: Object,
+	sensor: Object,
+	intl: Object,
 };
 
 type State = {
 };
 
-export default class SensorTypes extends View {
+export default class SensorTypes extends View<Props, State> {
 	props: Props;
 	state: State;
 	constructor(props: Props) {
@@ -82,14 +84,14 @@ export default class SensorTypes extends View {
 		this.sensorTypes = getSensorTypes();
 	}
 
-	getSensors(): Object {
+	getSensors(): Array<Object> {
 		const { appLayout, sensor } = this.props;
 		const { data } = sensor;
 
 		let sensors = [], sensorInfo = '';
-		Object.values(data).forEach((values: Object, index: number) => {
+		Object.values(data).forEach((values: any, index: number) => {
 			let { value, scale, name, lastUpdated } = values;
-			let sensorType = this.sensorTypes[values.name];
+			let sensorType = this.sensorTypes[name];
 			let sensorUnits = getSensorUnits(sensorType);
 			let unit = sensorUnits[scale];
 

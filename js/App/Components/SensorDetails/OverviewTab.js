@@ -34,12 +34,15 @@ import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 type Props = {
+	sensor: Object,
+	screenProps: Object,
+	gateway: Object,
 };
 
 type State = {
 };
 
-class OverviewTab extends View {
+class OverviewTab extends View<Props, State> {
 	props: Props;
 	state: State;
 	constructor(props: Props) {
