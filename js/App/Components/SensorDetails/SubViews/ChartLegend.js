@@ -53,6 +53,7 @@ render(): Object {
 				const { icon, onPress, value, color } = item;
 				return (
 					<Ripple
+						key={index}
 						rippleColor={Theme.rippleColor}
 						rippleOpacity={Theme.rippleOpacity}
 						rippleDuration={Theme.rippleDuration}
