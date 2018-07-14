@@ -38,7 +38,7 @@ type Props = {
     align: 'left' | 'right',
     label: string,
     date: any,
-    onPress: () => void,
+    onPress: (number) => void,
     propToUpdateIndex: number,
 };
 

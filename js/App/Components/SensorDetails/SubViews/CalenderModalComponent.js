@@ -45,7 +45,6 @@ type Props = {
 
 type DefaultProps = {
 	isVisible: boolean,
-	current: any,
 };
 
 export default class CalenderModalComponent extends View<Props, null> {
