@@ -84,6 +84,7 @@ constructor(props: Props) {
 	};
 
 	this.onPressPositive = this.onPressPositive.bind(this);
+	this.onPressNegative = this.onPressNegative.bind(this);
 	this.onDayPress = this.onDayPress.bind(this);
 }
 
