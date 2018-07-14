@@ -26,12 +26,19 @@ import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { View, TabBar, FormattedMessage, Icon, Text } from '../../../BaseComponents';
-import { GraphValuesDropDown, SensorHistoryLineChart } from './SubViews';
+import {
+	GraphValuesDropDown,
+	SensorHistoryLineChart,
+	DateBlock,
+	CalenderModalComponent,
+} from './SubViews';
 
 import { getSensorHistory } from '../../Actions/Sensors';
 import { getHistory, storeHistory, getLatestTimestamp, getSensorTypes } from '../../Actions/LocalStorage';
 
 import type { SensorHistoryQueryParams } from '../../Lib/LocalStorage';
+import { utils } from 'live-shared-data';
+const { getHistoryTimestamp } = utils;
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -52,6 +59,9 @@ type State = {
 	chartDataTwo: Array<any>,
 	listOne?: Array<string>,
 	listTwo?: Array<string>,
+	showCalender: boolean,
+	timestamp: Object,
+	propToUpdate: 1 | 2,
 };
 
 class HistoryTab extends View {
@@ -62,6 +72,10 @@ class HistoryTab extends View {
 	getHistoryDataWithLatestTimestamp: () => void;
 	onValueChangeOne: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
 	onValueChangeTwo: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
+
+	onPressShowCalender: () => void;
+	onPressPositive: (any) => void;
+	onPressNegative: () => void;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -98,6 +112,9 @@ class HistoryTab extends View {
 			chartDataTwo: [],
 			listOne: [],
 			listTwo: [],
+			showCalender: false,
+			timestamp: getHistoryTimestamp(),
+			propToUpdate: 1,
 		};
 
 		this.getHistoryDataFromAPI = this.getHistoryDataFromAPI.bind(this);
@@ -105,6 +122,10 @@ class HistoryTab extends View {
 
 		this.onValueChangeOne = this.onValueChangeOne.bind(this);
 		this.onValueChangeTwo = this.onValueChangeTwo.bind(this);
+
+		this.onPressShowCalender = this.onPressShowCalender.bind(this);
+		this.onPressPositive = this.onPressPositive.bind(this);
+		this.onPressNegative = this.onPressNegative.bind(this);
 	}
 
 	componentDidMount() {
@@ -254,6 +275,30 @@ class HistoryTab extends View {
 		this.getSensorTypeHistory(true, true, queryParams, 2);
 	}
 
+	onPressShowCalender(index: number) {
+		this.setState({
+			showCalender: true,
+			propToUpdate: index,
+		});
+	}
+
+	onPressPositive(date: any) {
+		const { propToUpdate, timestamp } = this.state;
+		const updatedTimestamp = propToUpdate === 1 ? { fromTimestamp: date } : { toTimestamp: date };
+		const newTimestamp = { ...timestamp, ...updatedTimestamp };
+
+		this.setState({
+			showCalender: false,
+			timestamp: newTimestamp,
+		});
+	}
+
+	onPressNegative() {
+		this.setState({
+			showCalender: false,
+		});
+	}
+
 	render(): Object | null {
 		const {
 			selectedOne,
@@ -264,9 +309,13 @@ class HistoryTab extends View {
 			chartDataTwo,
 			refreshing,
 			hasLoaded,
+			showCalender,
+			timestamp,
+			propToUpdate,
 		} = this.state;
 		const { screenProps } = this.props;
 		const { appLayout } = screenProps;
+		const { fromTimestamp, toTimestamp} = timestamp;
 
 		const {
 			containerWhenNoData,
@@ -290,9 +339,28 @@ class HistoryTab extends View {
 				</View>
 			);
 		}
+
 		return (
 			<ScrollView>
 				<View style={containerStyle}>
+					<View style={{
+						flexDirection: 'row',
+					}}>
+						<DateBlock
+							appLayout={appLayout}
+							align={'left'}
+							label={'From:'}
+							onPress={this.onPressShowCalender}
+							date={fromTimestamp}
+							propToUpdateIndex={1}/>
+						<DateBlock
+							appLayout={appLayout}
+							align={'right'}
+							label={'To:'}
+							onPress={this.onPressShowCalender}
+							date={toTimestamp}
+							propToUpdateIndex={2}/>
+					</View>
 					<SensorHistoryLineChart
 						chartDataOne={chartDataOne}
 						chartDataTwo={chartDataTwo}
@@ -308,6 +376,12 @@ class HistoryTab extends View {
 						onValueChangeTwo={this.onValueChangeTwo}
 						appLayout={appLayout}/>
 				</View>
+				<CalenderModalComponent
+					isVisible={showCalender}
+					current={propToUpdate === 1 ? fromTimestamp : toTimestamp}
+					onPressPositive={this.onPressPositive}
+					onPressNegative={this.onPressNegative}
+					appLayout={appLayout}/>
 			</ScrollView>
 		);
 	}

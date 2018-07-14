@@ -28,6 +28,8 @@ import SensorTypes from './SensorTypes';
 import GraphValuesDropDown from './GraphValuesDropDown';
 import SensorHistoryLineChart from './SensorHistoryLineChart';
 import ChartLegend from './ChartLegend';
+import DateBlock from './DateBlock';
+import CalenderModalComponent from './CalenderModalComponent';
 
 module.exports = {
 	BatteryInfo,
@@ -37,4 +39,6 @@ module.exports = {
 	GraphValuesDropDown,
 	SensorHistoryLineChart,
 	ChartLegend,
+	DateBlock,
+	CalenderModalComponent,
 };
