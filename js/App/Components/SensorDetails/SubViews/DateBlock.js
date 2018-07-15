@@ -82,6 +82,8 @@ render(): Object {
 		iconContainerStyle,
 		iconSize,
 		dateContainerStyle,
+		labelStyle,
+		dateStyle,
 	} = this.getStyle(appLayout, align);
 
 	return (
@@ -95,10 +97,10 @@ render(): Object {
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
 			<View style={dateContainerStyle}>
-				<Text>
+				<Text style={labelStyle}>
 					{label}
 				</Text>
-				<FormattedDate value={moment.unix(date)}/>
+				<FormattedDate value={moment.unix(date)} style={dateStyle}/>
 			</View>
 			{align === 'right' && (<View style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
@@ -112,13 +114,15 @@ getStyle(appLayout: Object, align: Align): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { paddingFactor, brandSecondary } = Theme.Core;
+	const { paddingFactor, brandSecondary, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const outerPadding = padding * 2;
 
 	const iconContainerSize = deviceWidth * 0.18;
 	const iconSize = deviceWidth * 0.08;
+	const fontSizeLabel = deviceWidth * 0.035;
+	const fontSizeDate = deviceWidth * 0.049;
 
 	return {
 		blockContainerStyle: {
@@ -137,10 +141,17 @@ getStyle(appLayout: Object, align: Align): Object {
 			justifyContent: 'center',
 			alignItems: 'center',
 			margin: padding,
+			...shadow,
 		},
 		iconSize,
 		dateContainerStyle: {
 			alignItems: align === 'left' ? 'flex-start' : 'flex-end',
+		},
+		labelStyle: {
+			fontSize: fontSizeLabel,
+		},
+		dateStyle: {
+			fontSize: fontSizeDate,
 		},
 	};
 }

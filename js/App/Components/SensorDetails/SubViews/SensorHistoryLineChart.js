@@ -107,6 +107,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			colors,
 			colorsScatter,
 			anchors,
+			chartLineStyle,
 		} = this.getStyle(appLayout);
 
 		const legendData = [{
@@ -126,10 +127,19 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				<VictoryChart
 					theme={VictoryTheme.material}
 					width={chartWidth} height={chartHeight}
-					padding={{left: 0, top: 25, right: 0, bottom: 25}}
+					padding={{left: 0, top: 25, right: 0, bottom: 30}}
 				>
 					<VictoryAxis
-							tickFormat={(x: number): number => moment.unix(x).format('HH')} // eslint-disable-line
+						orientation={'bottom'}
+						tickFormat={(x: number): number => moment.unix(x).format('HH')} // eslint-disable-line
+						style={{
+							parent: {
+								border: '0px',
+							},
+							axis: chartLineStyle,
+							tickLabels: { fill: Theme.Core.inactiveTintColor },
+							grid: chartLineStyle,
+						}}
 					/>
 					{chartData.map((d: Array<Object>, i: number): Object | null => {
 						if (!d) {
@@ -146,9 +156,10 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 								key={i}
 								offsetX={xOffsets[i]}
 								style={{
-									axis: { stroke: Theme.Core.inactiveTintColor },
+									axis: chartLineStyle,
 									ticks: { padding: tickPadding[i] },
 									tickLabels: { fill: Theme.Core.inactiveTintColor, textAnchor: anchors[i] },
+									grid: chartLineStyle,
 								}}
 								// Use normalized tickValues (0 - 1)
 								tickValues={[0.25, 0.5, 0.75, 1]}
@@ -171,7 +182,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 						return [<VictoryLine
 							data={d}
 							interpolation={'natural'}
-							style={{ data: { stroke: colors[i], strokeDasharray: [1, 2] } }}
+							style={{ data: { stroke: colors[i] } }}
 							// normalize data
 							y={(datum: Object): number => {// eslint-disable-line
 								return datum.value === 0 ? 0 : datum.value / maxima[i];
@@ -199,7 +210,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { paddingFactor, brandDanger, brandInfo } = Theme.Core;
+		const { paddingFactor, brandDanger, brandInfo, shadow, inactiveTintColor } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
@@ -211,6 +222,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				backgroundColor: '#fff',
 				marginLeft: padding / 2,
 				width: chartWidth,
+				...shadow,
+				marginBottom: padding,
 			},
 			chartWidth,
 			chartHeight,
@@ -220,6 +233,14 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			anchors: ['start', 'start'],
 			colors: [brandDanger, brandInfo],
 			colorsScatter: [brandDanger, brandInfo],
+			chartLineStyle: {
+				strokeDasharray: '',
+				strokeWidth: 0.9,
+				strokeOpacity: 0.25,
+				fill: inactiveTintColor,
+				stroke: inactiveTintColor,
+				pointerEvents: 'painted',
+			},
 		};
 	}
 }
