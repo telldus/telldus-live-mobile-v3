@@ -191,7 +191,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 						/>,
 						<VictoryScatter
 							data={d}
-							size={1}
+							size={3.5}
 							y={(datum: Object): number => {// eslint-disable-line
 								return datum.value === 0 ? 0 : datum.value / maxima[i];
 							}}
