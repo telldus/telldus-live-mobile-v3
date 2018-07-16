@@ -162,7 +162,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 									grid: chartLineStyle,
 								}}
 								// Use normalized tickValues (0 - 1)
-								tickValues={[0.25, 0.5, 0.75, 1]}
+								tickValues={[0, 0.5, 1]}
 								// Re-scale ticks by multiplying by correct maxima
 								tickFormat={(t: number): number => t * maxima[i]} // eslint-disable-line
 							/>
