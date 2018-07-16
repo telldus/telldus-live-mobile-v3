@@ -76,6 +76,7 @@ class HistoryTab extends View {
 	onPressShowCalender: () => void;
 	onPressPositive: (any) => void;
 	onPressNegative: () => void;
+	delayRefreshHistoryData: any;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -126,10 +127,18 @@ class HistoryTab extends View {
 		this.onPressShowCalender = this.onPressShowCalender.bind(this);
 		this.onPressPositive = this.onPressPositive.bind(this);
 		this.onPressNegative = this.onPressNegative.bind(this);
+
+		this.delayRefreshHistoryData = null;
 	}
 
 	componentDidMount() {
-		this.getHistoryData(false, true, this.getHistoryDataWithLatestTimestamp());
+		// 'didMount' is called right when the tab navigator is opened(when being in overview tab itself)
+		// the conditional check here is to prevent the history related query from happening when being in
+		// overview tab, which can result in delay to open history tab if the query is running in the background.
+		// Data fetch/query is handled at 'didUpdate' method.
+		if (this.props.screenProps.currentScreen === 'History') {
+			this.getHistoryData(false, true, this.getHistoryDataWithLatestTimestamp());
+		}
 	}
 
 	/**
@@ -247,6 +256,36 @@ class HistoryTab extends View {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.screenProps.currentScreen === 'History';
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { screenProps } = this.props;
+		const { hasRefreshed, hasLoaded } = this.state;
+		if (screenProps.currentScreen === 'History' && !hasRefreshed) {
+			// If data fetch did not happen inside 'didMount' do it here
+			if (!hasLoaded) {
+				this.getHistoryDataWithLatestTimestamp();
+			}
+			// Whether data is fetched or not, do refresh the data, after timeout, once on each tab visit!
+			this.refreshHistoryData();
+			this.setState({
+				hasRefreshed: true,
+			});
+		}
+	}
+
+	refreshHistoryData() {
+		let that = this;
+		this.delayRefreshHistoryData = setTimeout(() => {
+			that.setState({
+				refreshing: true,
+			});
+			that.getHistoryDataWithLatestTimestamp();
+		}, 4000);
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.delayRefreshHistoryData);
 	}
 
 	onValueChangeOne(itemValue: string, itemIndex: number, data: Array<Object>) {
