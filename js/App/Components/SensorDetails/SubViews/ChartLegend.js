@@ -22,14 +22,18 @@
 
 'use strict';
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 import Ripple from 'react-native-material-ripple';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { View, Text, IconTelldus } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 
 type Props = {
     legendData: Array<any>,
-    appLayout: Object,
+	appLayout: Object,
+	onPressToggleView: () => void,
+	fullscreen: boolean,
 };
 
 export default class ChartLegend extends View<Props, null> {
@@ -39,12 +43,15 @@ constructor(props: Props) {
 }
 
 render(): Object {
-	const { legendData, appLayout } = this.props;
+	const { legendData, appLayout, onPressToggleView, fullscreen } = this.props;
+	const { rowTextColor, rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
 	const {
 		containerStyle,
 		labelContainerStyle,
 		iconStyle,
 		labelStyle,
+		fontSizeFullscreenIcon,
+		fullscreenIconStyle,
 	} = this.getStyles(appLayout);
 
 	return (
@@ -54,9 +61,9 @@ render(): Object {
 				return (
 					<Ripple
 						key={index}
-						rippleColor={Theme.rippleColor}
-						rippleOpacity={Theme.rippleOpacity}
-						rippleDuration={Theme.rippleDuration}
+						rippleColor={rippleColor}
+						rippleOpacity={rippleOpacity}
+						rippleDuration={rippleDuration}
 						style={labelContainerStyle}
 						onPress={onPress}>
 						<IconTelldus icon={icon} style={{...iconStyle, color}}/>
@@ -66,8 +73,10 @@ render(): Object {
 					</Ripple>
 				);
 			})
-
 			}
+			<TouchableOpacity onPress={onPressToggleView} style={fullscreenIconStyle}>
+				<Icon name={fullscreen ? 'fullscreen-exit' : 'fullscreen'} size={fontSizeFullscreenIcon} color={rowTextColor}/>
+			</TouchableOpacity>
 		</View>
 	);
 }
@@ -79,6 +88,7 @@ getStyles(appLayout: Object): Object {
 
 	const fontSizeLabel = deviceWidth * 0.044;
 	const fontSizeIcon = deviceWidth * 0.06;
+	const fontSizeFullscreenIcon = deviceWidth * 0.07;
 
 	return {
 		containerStyle: {
@@ -100,6 +110,14 @@ getStyles(appLayout: Object): Object {
 		labelStyle: {
 			fontSize: fontSizeLabel,
 		},
+		fullscreenIconStyle: {
+			flex: 0,
+			padding: 5,
+			position: 'absolute',
+			right: 10,
+			top: -8,
+		},
+		fontSizeFullscreenIcon,
 	};
 }
 }

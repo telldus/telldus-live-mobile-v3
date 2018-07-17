@@ -21,14 +21,15 @@
 
 'use strict';
 import React from 'react';
+import { Modal } from 'react-native';
 import {
 	VictoryChart,
 	VictoryAxis,
 	VictoryLine,
 	VictoryTheme,
-	VictoryScatter,
 } from 'victory-native';
 import moment from 'moment';
+import Orientation from 'react-native-orientation';
 
 import { View } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
@@ -40,6 +41,9 @@ type Props = {
 	selectedOne: Object,
 	selectedTwo: Object,
 	appLayout: Object,
+	landscape: boolean,
+	fullscreen: boolean,
+	onPressToggleView: () => void,
 };
 
 type State = {
@@ -83,7 +87,15 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		return { domainX };
 	}
 
-	render(): Object | null {
+	componentDidUpdate(prevProps: Object) {
+		if (!prevProps.landscape && this.props.landscape) {
+			Orientation.lockToLandscape();
+		} else if (prevProps.landscape && !this.props.landscape) {
+			Orientation.unlockAllOrientations();
+		}
+	}
+
+	renderChart(): Object | null {
 		const { showOne, showTwo } = this.state;
 		const {
 			chartDataOne,
@@ -91,6 +103,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			selectedOne,
 			selectedTwo,
 			appLayout,
+			fullscreen,
+			onPressToggleView,
 		} = this.props;
 		if (chartDataOne.length === 0 && chartDataOne.length === 0) {
 			return null;
@@ -134,7 +148,11 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 		return (
 			<View style={containerStyle}>
-				<ChartLegend legendData={legendData} appLayout={appLayout}/>
+				<ChartLegend
+					legendData={legendData}
+					appLayout={appLayout}
+					fullscreen={fullscreen}
+					onPressToggleView={onPressToggleView}/>
 				<VictoryChart
 					theme={VictoryTheme.material}
 					width={chartWidth} height={chartHeight}
@@ -210,7 +228,34 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		);
 	}
 
+	render(): Object {
+		const { fullscreen } = this.props;
+		const chart = this.renderChart();
+		if (!fullscreen) {
+			return chart;
+		}
+		return (
+			<Modal
+				isVisible={fullscreen}
+				transparent={false}
+				backdropColor={'#fff'}
+				animationType={'slide'}
+				presentationStyle={'fullScreen'}
+				onRequestClose={this.noOP}
+				supportedOrientations={['landscape']}>
+					<View style={{
+						flex: 1,
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}>
+						{chart}
+					</View>
+			</Modal>
+		);
+	}
+
 	getStyle(appLayout: Object): Object {
+		const { fullscreen } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -219,8 +264,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
-		const chartWidth = deviceWidth - outerPadding;
-		const chartHeight = chartWidth * 0.8;
+		const chartWidth = fullscreen ? (height - outerPadding) : (deviceWidth - outerPadding);
+		const chartHeight = fullscreen ? deviceWidth - 50 : chartWidth * 0.8;
 
 		return {
 			containerStyle: {
@@ -248,5 +293,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				pointerEvents: 'painted',
 			},
 		};
+	}
+
+	noOP() {
 	}
 }

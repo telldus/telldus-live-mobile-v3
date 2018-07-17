@@ -61,6 +61,7 @@ type State = {
 	showCalender: boolean,
 	timestamp: Object,
 	propToUpdate: 1 | 2,
+	fullscreen: boolean,
 };
 
 class HistoryTab extends View {
@@ -75,6 +76,9 @@ class HistoryTab extends View {
 	onPressShowCalender: () => void;
 	onPressPositive: (any) => void;
 	onPressNegative: () => void;
+
+	onPressToggleView: () => void;
+
 	delayRefreshHistoryData: any;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
@@ -114,6 +118,7 @@ class HistoryTab extends View {
 			showCalender: false,
 			timestamp: getHistoryTimestamp(),
 			propToUpdate: 1,
+			fullscreen: false,
 		};
 
 		this.getHistoryDataFromAPI = this.getHistoryDataFromAPI.bind(this);
@@ -125,6 +130,8 @@ class HistoryTab extends View {
 		this.onPressShowCalender = this.onPressShowCalender.bind(this);
 		this.onPressPositive = this.onPressPositive.bind(this);
 		this.onPressNegative = this.onPressNegative.bind(this);
+
+		this.onPressToggleView = this.onPressToggleView.bind(this);
 
 		this.delayRefreshHistoryData = null;
 	}
@@ -352,6 +359,13 @@ class HistoryTab extends View {
 		});
 	}
 
+	onPressToggleView() {
+		const { fullscreen } = this.state;
+		this.setState({
+			fullscreen: !fullscreen,
+		});
+	}
+
 	render(): Object | null {
 		const {
 			selectedOne,
@@ -363,6 +377,7 @@ class HistoryTab extends View {
 			showCalender,
 			timestamp,
 			propToUpdate,
+			fullscreen,
 		} = this.state;
 		const { screenProps } = this.props;
 		const { appLayout } = screenProps;
@@ -403,6 +418,8 @@ class HistoryTab extends View {
 						selectedOne={selectedOne}
 						selectedTwo={selectedTwo}
 						timestamp={timestamp}
+						fullscreen={fullscreen}
+						onPressToggleView={this.onPressToggleView}
 						appLayout={appLayout}/>
 					<GraphValuesDropDown
 						selectedOne={selectedOne}
