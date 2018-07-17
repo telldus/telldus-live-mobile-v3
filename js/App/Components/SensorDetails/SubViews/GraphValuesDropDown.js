@@ -32,8 +32,7 @@ import Theme from '../../../Theme';
 type Props = {
     selectedOne: Object,
 	selectedTwo: Object,
-	listOne: Array<string>,
-    listTwo: Array<string>,
+	list: Array<string>,
     onValueChangeOne: (string, number) => void,
 	onValueChangeTwo: (string, number) => void,
 	appLayout: Object,
@@ -51,6 +50,9 @@ class GraphValuesDropDown extends View<Props, State> {
 	onPressPickerOne: () => void;
 	onPressPickerTwo: () => void;
 
+	propsExtractorOne: (Object, number) => Object;
+	propsExtractorTwo: (Object, number) => Object;
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
@@ -60,6 +62,8 @@ class GraphValuesDropDown extends View<Props, State> {
 		this.renderBaseTwo = this.renderBaseTwo.bind(this);
 		this.onPressPickerOne = this.onPressPickerOne.bind(this);
 		this.onPressPickerTwo = this.onPressPickerTwo.bind(this);
+		this.propsExtractorTwo = this.propsExtractorTwo.bind(this);
+		this.propsExtractorOne = this.propsExtractorOne.bind(this);
 	}
 
 	renderBaseOne(items: Object): Object {
@@ -99,6 +103,34 @@ class GraphValuesDropDown extends View<Props, State> {
 		this.refs.listTwo.focus();
 	}
 
+	propsExtractorOne(item: Object, index: number): Object {
+		const { selectedTwo } = this.props;
+		if (selectedTwo.value === item.value) {
+			return {
+				...item,
+				disabled: true,
+			};
+		}
+		return {
+			...item,
+			disabled: false,
+		};
+	}
+
+	propsExtractorTwo(item: Object, index: number): Object {
+		const { selectedOne } = this.props;
+		if (selectedOne.value === item.value) {
+			return {
+				...item,
+				disabled: true,
+			};
+		}
+		return {
+			...item,
+			disabled: false,
+		};
+	}
+
 	renderBaseTwo(items: Object): Object {
 		const { data, title } = items;
 		const { appLayout } = this.props;
@@ -129,16 +161,19 @@ class GraphValuesDropDown extends View<Props, State> {
 		);
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const {
 			selectedOne,
 			selectedTwo,
-			listOne,
-			listTwo,
+			list,
 			onValueChangeOne,
 			onValueChangeTwo,
 			appLayout,
 		} = this.props;
+
+		if (list.length <= 2) {
+			return null;
+		}
 
 		const {
 			dropDownContainerStyle,
@@ -147,40 +182,44 @@ class GraphValuesDropDown extends View<Props, State> {
 			fontSize,
 			rowTextColor,
 			dropDownHeaderStyle,
+			brandDanger,
+			brandInfo,
 		} = this.getStyle(appLayout);
 
 		return (
 			<View style={dropDownContainerStyle}>
 				<Text style={dropDownHeaderStyle}>Graph Values</Text>
 				<View style={dropDownListsContainerStyle}>
-					{listOne.length > 1 && (
-						<Dropdown
-							ref={'listOne'}
-							data={listOne}
-							value={selectedOne.value}
-							onChangeText={onValueChangeOne}
-							renderBase={this.renderBaseOne}
-							containerStyle={pickerContainerStyle}
-							fontSize={fontSize}
-							baseColor={'#000'}
-							itemColor={'#000'}
-							selectedItemColor={rowTextColor}
-							dropdownOffset={{top: -50, left: 0}}
-						/>)}
-					{listTwo.length > 1 && (
-						<Dropdown
-							ref={'listTwo'}
-							data={listTwo}
-							value={selectedTwo.value}
-							onChangeText={onValueChangeTwo}
-							renderBase={this.renderBaseTwo}
-							containerStyle={pickerContainerStyle}
-							fontSize={fontSize}
-							baseColor={'#000'}
-							itemColor={'#000'}
-							selectedItemColor={rowTextColor}
-							dropdownOffset={{top: -50, left: 0}}
-						/>)}
+					<Dropdown
+						ref={'listOne'}
+						data={list}
+						value={selectedOne.value}
+						onChangeText={onValueChangeOne}
+						renderBase={this.renderBaseOne}
+						containerStyle={pickerContainerStyle}
+						fontSize={fontSize}
+						baseColor={'#000'}
+						itemColor={'#000'}
+						disabledItemColor={rowTextColor}
+						selectedItemColor={brandDanger}
+						dropdownOffset={{top: -50, left: 0}}
+						propsExtractor={this.propsExtractorOne}
+					/>
+					<Dropdown
+						ref={'listTwo'}
+						data={list}
+						value={selectedTwo.value}
+						onChangeText={onValueChangeTwo}
+						renderBase={this.renderBaseTwo}
+						containerStyle={pickerContainerStyle}
+						fontSize={fontSize}
+						baseColor={'#000'}
+						itemColor={'#000'}
+						disabledItemColor={rowTextColor}
+						selectedItemColor={brandInfo}
+						dropdownOffset={{top: -50, left: 0}}
+						propsExtractor={this.propsExtractorTwo}
+					/>
 				</View>
 			</View>
 		);
@@ -191,7 +230,7 @@ class GraphValuesDropDown extends View<Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { shadow, paddingFactor, rowTextColor, inactiveTintColor } = Theme.Core;
+		const { shadow, paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
@@ -239,8 +278,6 @@ class GraphValuesDropDown extends View<Props, State> {
 				color: rowTextColor,
 				marginRight: (fontSizeText * 0.4),
 			},
-			fontSize: fontSizeText,
-			rowTextColor,
 			leftIconStyle: {
 				fontSize: fontSizeLeftIcon,
 				color: rowTextColor,
@@ -250,6 +287,10 @@ class GraphValuesDropDown extends View<Props, State> {
 				fontSize: fontSizeRightIcon,
 				color: rowTextColor,
 			},
+			brandInfo,
+			rowTextColor,
+			brandDanger,
+			fontSize: fontSizeText,
 		};
 	}
 
