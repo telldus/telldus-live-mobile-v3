@@ -44,6 +44,7 @@ type Props = {
 	landscape: boolean,
 	fullscreen: boolean,
 	onPressToggleView: () => void,
+	timestamp: Object,
 };
 
 type State = {
@@ -200,7 +201,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 						);
 					}
 					)}
-					{chartData.map((d: Array<Object>, i: number): Array<Object> | null => {
+					{chartData.map((d: Array<Object>, i: number): any => {
 						if (!d) {
 							return null;
 						}
@@ -228,7 +229,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		);
 	}
 
-	render(): Object {
+	render(): any {
 		const { fullscreen } = this.props;
 		const chart = this.renderChart();
 		if (!fullscreen) {
@@ -243,13 +244,13 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.noOP}
 				supportedOrientations={['landscape']}>
-					<View style={{
-						flex: 1,
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}>
-						{chart}
-					</View>
+				<View style={{
+					flex: 1,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}>
+					{chart}
+				</View>
 			</Modal>
 		);
 	}
