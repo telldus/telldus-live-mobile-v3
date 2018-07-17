@@ -75,6 +75,14 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		});
 	}
 
+	getTickConfigX(): Object {
+		const { fromTimestamp, toTimestamp } = this.props.timestamp;
+		const from = moment.unix(fromTimestamp);
+		const to = moment.unix(toTimestamp);
+		const domainX = Math.abs(from.diff(to, 'days'));
+		return { domainX };
+	}
+
 	render(): Object | null {
 		const { showOne, showTwo } = this.state;
 		const {
@@ -108,7 +116,10 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			colorsScatter,
 			anchors,
 			chartLineStyle,
+			domainPadding,
 		} = this.getStyle(appLayout);
+
+		const { domainX } = this.getTickConfigX();
 
 		const legendData = [{
 			...selectedOne,
@@ -128,10 +139,10 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 					theme={VictoryTheme.material}
 					width={chartWidth} height={chartHeight}
 					padding={{left: 0, top: 25, right: 0, bottom: 30}}
+					domainPadding={{ y: domainPadding }}
 				>
 					<VictoryAxis
 						orientation={'bottom'}
-						tickFormat={(x: number): number => moment.unix(x).format('HH')} // eslint-disable-line
 						style={{
 							parent: {
 								border: '0px',
@@ -140,6 +151,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 							tickLabels: { fill: Theme.Core.inactiveTintColor },
 							grid: chartLineStyle,
 						}}
+						tickCount={domainX}
+						tickFormat={(x: number): number => moment.unix(x).format('E')} // eslint-disable-line
 					/>
 					{chartData.map((d: Array<Object>, i: number): Object | null => {
 						if (!d) {
@@ -179,7 +192,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 						if (!showTwo && i === 1) {
 							return null;
 						}
-						return [<VictoryLine
+						return (<VictoryLine
+							key={i}
 							data={d}
 							interpolation={'natural'}
 							style={{ data: { stroke: colors[i] } }}
@@ -188,16 +202,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 								return datum.value === 0 ? 0 : datum.value / maxima[i];
 							}}
 							x={(datum: Object): number => datum.ts} // eslint-disable-line
-						/>,
-						<VictoryScatter
-							data={d}
-							size={3.5}
-							y={(datum: Object): number => {// eslint-disable-line
-								return datum.value === 0 ? 0 : datum.value / maxima[i];
-							}}
-							x={(datum: Object): number => datum.ts} // eslint-disable-line
-							style={{ data: { fill: colorsScatter[i]} }}
-						/>];
+						/>);
 					}
 					)}
 				</VictoryChart>
@@ -233,6 +238,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			anchors: ['start', 'start'],
 			colors: [brandDanger, brandInfo],
 			colorsScatter: [brandDanger, brandInfo],
+			domainPadding: chartWidth * 0.05,
 			chartLineStyle: {
 				strokeDasharray: '',
 				strokeWidth: 0.9,
