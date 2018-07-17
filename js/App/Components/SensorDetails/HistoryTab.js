@@ -33,7 +33,7 @@ import {
 	CalenderModalComponent,
 } from './SubViews';
 
-import { getSensorHistory } from '../../Actions/Sensors';
+import { getSensorsHistoryWeb } from '../../Actions/Sensors';
 import { getHistory, storeHistory, getLatestTimestamp, getSensorTypes } from '../../Actions/LocalStorage';
 
 import type { SensorHistoryQueryParams } from '../../Lib/LocalStorage';
@@ -68,7 +68,7 @@ class HistoryTab extends View {
 	props: Props;
 	state: State;
 
-	getHistoryDataFromAPI: (Object, number | null) => void;
+	getHistoryDataFromAPI: (number, number | null) => void;
 	getHistoryDataWithLatestTimestamp: () => void;
 	onValueChangeOne: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
 	onValueChangeTwo: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
@@ -183,12 +183,15 @@ class HistoryTab extends View {
 	}
 
 	getSensorTypeHistory(hasLoaded: boolean, refreshing: boolean, queryParams: SensorHistoryQueryParams, list: 1 | 2) {
-		getHistory('sensor', queryParams).then((data: Object) => {
+		const { timestamp } = this.state;
+		const { fromTimestamp: from, toTimestamp: to } = timestamp;
+		const params = { ...queryParams, from, to };
+		getHistory('sensor', params).then((data: Object) => {
 			const { chartDataOne, chartDataTwo } = this.state;
 			if (data && data.length !== 0) {
 				this.setState({
-					chartDataOne: list === 1 ? data : chartDataOne,
-					chartDataTwo: list === 2 ? data : chartDataTwo,
+					chartDataOne: list === 1 ? data.slice(0, 20) : chartDataOne,
+					chartDataTwo: list === 2 ? data.slice(0, 20) : chartDataTwo,
 					hasLoaded: true,
 					refreshing: false,
 				});
@@ -221,25 +224,37 @@ class HistoryTab extends View {
 
 
 	getHistoryDataWithLatestTimestamp() {
-		let { sensor } = this.props;
-		getLatestTimestamp('sensor', sensor.id).then((res: Object) => {
-			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : null;
-			this.getHistoryDataFromAPI(sensor, prevTimestamp);
+		const { sensor } = this.props;
+		const { timestamp } = this.state;
+		const { fromTimestamp } = timestamp;
+		const { id } = sensor;
+		getLatestTimestamp('sensor', id).then((res: Object) => {
+			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : fromTimestamp;
+			this.getHistoryDataFromAPI(id, prevTimestamp);
 		}).catch(() => {
-			this.getHistoryDataFromAPI(sensor, null);
+			this.getHistoryDataFromAPI(id, fromTimestamp);
 		});
 	}
 
-	getHistoryDataFromAPI(sensor: Object, prevTimestamp: number) {
+	getHistoryDataFromAPI(id: number, from: number) {
 		let noop = () => {};
 		const { dispatch } = this.props;
-		dispatch(getSensorHistory(sensor.id, prevTimestamp))
+		const { timestamp } = this.state;
+		const { toTimestamp: to } = timestamp;
+		const params = {
+			id,
+			from,
+			to,
+			includeKey: 0,
+			includeUnit: 0,
+		};
+		dispatch(getSensorsHistoryWeb(params))
 			.then((response: Object) => {
 				const { history } = response;
 				if (history && history.length !== 0) {
 					let data = {
 						history,
-						sensorId: sensor.id,
+						sensorId: id,
 					};
 					storeHistory('sensor', data).then(() => {
 						this.getHistoryData(true, false, noop);
@@ -295,10 +310,11 @@ class HistoryTab extends View {
 		});
 		this.setState({
 			selectedOne,
+		}, () => {
+			// $FlowFixMe
+			let queryParams = { ...selectedOne, id: sensor.id };
+			this.getSensorTypeHistory(true, true, queryParams, 1);
 		});
-		// $FlowFixMe
-		let queryParams = { ...selectedOne, id: sensor.id };
-		this.getSensorTypeHistory(true, true, queryParams, 1);
 	}
 
 	onValueChangeTwo(itemValue: string, itemIndex: number, data: Array<Object>) {
@@ -308,10 +324,11 @@ class HistoryTab extends View {
 		});
 		this.setState({
 			selectedTwo,
+		}, () => {
+			// $FlowFixMe
+			let queryParams = { ...selectedTwo, id: sensor.id };
+			this.getSensorTypeHistory(true, true, queryParams, 2);
 		});
-		// $FlowFixMe
-		let queryParams = { ...selectedTwo, id: sensor.id };
-		this.getSensorTypeHistory(true, true, queryParams, 2);
 	}
 
 	onPressShowCalender(index: number) {
@@ -329,6 +346,10 @@ class HistoryTab extends View {
 		this.setState({
 			showCalender: false,
 			timestamp: newTimestamp,
+		}, () => {
+			const { sensor } = this.props;
+			const { fromTimestamp: from } = newTimestamp;
+			this.getHistoryDataFromAPI(sensor.id, from);
 		});
 	}
 

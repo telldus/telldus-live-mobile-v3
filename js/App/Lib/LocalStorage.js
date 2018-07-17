@@ -41,6 +41,8 @@ export type SensorHistoryQueryParams = {
 	id: number,
 	type: string,
 	scale: string,
+	from: string,
+	to: string,
 };
 export default class TelldusLocalStorage {
 
@@ -239,9 +241,9 @@ export default class TelldusLocalStorage {
 		});
 	}
 
-	querySensorHistory = ({ id, type, scale }: SensorHistoryQueryParams): Promise<any> => {
+	querySensorHistory = ({ id, type, scale, from, to }: SensorHistoryQueryParams): Promise<any> => {
 		return db.executeSql(`SELECT ts, value FROM SensorHistory WHERE ${id} = sensorId AND "${type}" = type`
-		+ ` AND "${scale}" = scale ORDER BY ts DESC LIMIT 20`).then(([results]: Array<any>): Array<any> => {
+		+ ` AND "${scale}" = scale AND ts >= ${from} AND ts <= ${to} ORDER BY ts DESC`).then(([results]: Array<any>): Array<any> => {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
 				let { value, ts } = results.rows.item(i);
