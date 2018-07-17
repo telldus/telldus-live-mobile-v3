@@ -190,8 +190,8 @@ class HistoryTab extends View {
 			const { chartDataOne, chartDataTwo } = this.state;
 			if (data && data.length !== 0) {
 				this.setState({
-					chartDataOne: list === 1 ? data.slice(0, 20) : chartDataOne,
-					chartDataTwo: list === 2 ? data.slice(0, 20) : chartDataTwo,
+					chartDataOne: list === 1 ? data : chartDataOne,
+					chartDataTwo: list === 2 ? data : chartDataTwo,
 					hasLoaded: true,
 					refreshing: false,
 				});
