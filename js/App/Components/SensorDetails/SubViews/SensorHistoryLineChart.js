@@ -179,7 +179,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 							grid: chartLineStyle,
 						}}
 						tickValues={pages}
-						tickFormat={(x: number): number => `${pages.indexOf(x) + 1}/${domainX}`} // eslint-disable-line
+						tickFormat={(x: number): string => `${pages.indexOf(x) + 1}/${domainX}`} // eslint-disable-line
 					/>
 					{chartData.map((d: Array<Object>, i: number): Object | null => {
 						if (!d) {
