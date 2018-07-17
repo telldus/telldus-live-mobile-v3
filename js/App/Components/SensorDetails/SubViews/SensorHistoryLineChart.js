@@ -85,7 +85,14 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		const from = moment.unix(fromTimestamp);
 		const to = moment.unix(toTimestamp);
 		const domainX = Math.abs(from.diff(to, 'days'));
-		return { domainX };
+
+		let pages = [], day = from;
+		pages.push(fromTimestamp);
+		for (let i = 1; i < domainX; i++) {
+			let d = day.add(1, 'd');
+			pages.push(d.unix());
+		}
+		return { domainX, pages };
 	}
 
 	componentDidUpdate(prevProps: Object) {
@@ -135,7 +142,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			chartPadding,
 		} = this.getStyle(appLayout);
 
-		const { domainX } = this.getTickConfigX();
+		const { domainX, pages } = this.getTickConfigX();
 
 		const legendData = [{
 			...selectedOne,
@@ -159,7 +166,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 					theme={VictoryTheme.material}
 					width={chartWidth} height={chartHeight}
 					padding={chartPadding}
-					domainPadding={{ y: domainPadding }}
+					domainPadding={{ y: domainPadding, x: 20 }}
 				>
 					<VictoryAxis
 						orientation={'bottom'}
@@ -171,8 +178,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 							tickLabels: { fill: Theme.Core.inactiveTintColor },
 							grid: chartLineStyle,
 						}}
-						tickCount={domainX}
-						tickFormat={(x: number): number => moment.unix(x).format('E')} // eslint-disable-line
+						tickValues={pages}
+						tickFormat={(x: number): number => `${pages.indexOf(x) + 1}/${domainX}`} // eslint-disable-line
 					/>
 					{chartData.map((d: Array<Object>, i: number): Object | null => {
 						if (!d) {
