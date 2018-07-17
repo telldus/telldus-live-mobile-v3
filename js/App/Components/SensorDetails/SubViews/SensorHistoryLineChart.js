@@ -132,6 +132,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			anchors,
 			chartLineStyle,
 			domainPadding,
+			chartPadding,
 		} = this.getStyle(appLayout);
 
 		const { domainX } = this.getTickConfigX();
@@ -157,7 +158,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				<VictoryChart
 					theme={VictoryTheme.material}
 					width={chartWidth} height={chartHeight}
-					padding={{left: 0, top: 25, right: 0, bottom: 30}}
+					padding={chartPadding}
 					domainPadding={{ y: domainPadding }}
 				>
 					<VictoryAxis
@@ -266,16 +267,30 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
 		const chartWidth = fullscreen ? (height - outerPadding) : (deviceWidth - outerPadding);
-		const chartHeight = fullscreen ? deviceWidth - 50 : chartWidth * 0.8;
+		const domainPadding = chartWidth * 0.05;
+
+		const top = 25, bottom = 30;
+		const chartPadding = {
+			left: 0, top, right: 0, bottom,
+		};
+
+		const chartHeight = fullscreen ? deviceWidth - (top + bottom) : chartWidth * 0.8;
 
 		return {
-			containerStyle: {
-				backgroundColor: '#fff',
-				marginLeft: padding / 2,
-				width: chartWidth,
-				...shadow,
-				marginBottom: padding,
-			},
+			containerStyle: fullscreen ?
+				{
+					backgroundColor: '#fff',
+					width: chartWidth,
+					...shadow,
+				}
+				:
+				{
+					backgroundColor: '#fff',
+					marginLeft: padding / 2,
+					width: chartWidth,
+					...shadow,
+					marginBottom: padding,
+				},
 			chartWidth,
 			chartHeight,
 			padding,
@@ -284,7 +299,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			anchors: ['start', 'start'],
 			colors: [brandDanger, brandInfo],
 			colorsScatter: [brandDanger, brandInfo],
-			domainPadding: chartWidth * 0.05,
+			chartPadding,
+			domainPadding,
 			chartLineStyle: {
 				strokeDasharray: '',
 				strokeWidth: 0.9,
