@@ -102,7 +102,7 @@ export default class SensorBlock extends View<Props, null> {
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
-		const blockFullWidth = deviceWidth - outerPadding;
+		const blockFullWidth = width - outerPadding;
 
 		const iconSize = deviceWidth * 0.16;
 		const labelFontSize = deviceWidth * 0.031;

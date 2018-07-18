@@ -72,7 +72,7 @@ export default class BatteryInfo extends View {
 				flexDirection: 'row',
 				justifyContent: 'space-between',
 				alignItems: 'center',
-				width: deviceWidth - outerPadding,
+				width: width - outerPadding,
 				padding: 5 + (textFontSize * 0.5),
 				...shadow,
 				backgroundColor: '#fff',

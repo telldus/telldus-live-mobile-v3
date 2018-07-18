@@ -273,7 +273,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
-		const chartWidth = fullscreen ? (height - outerPadding) : (deviceWidth - outerPadding);
+		const chartWidth = width - outerPadding;
 		const domainPadding = chartWidth * 0.05;
 
 		const top = 25, bottom = 30;

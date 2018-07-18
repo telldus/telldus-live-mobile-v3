@@ -131,7 +131,7 @@ getStyle(appLayout: Object, align: Align): Object {
 			alignItems: 'center',
 			marginLeft: padding / 2,
 			marginBottom: padding,
-			width: (deviceWidth - (outerPadding + padding)) / 2,
+			width: (width - (outerPadding + padding)) / 2,
 		},
 		iconContainerStyle: {
 			height: iconContainerSize,
