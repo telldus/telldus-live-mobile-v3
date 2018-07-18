@@ -184,7 +184,10 @@ class GraphValuesDropDown extends View<Props, State> {
 			dropDownHeaderStyle,
 			brandDanger,
 			brandInfo,
+			itemPadding,
+			itemCount,
 		} = this.getStyle(appLayout);
+		const dropDownPosition = list.length + 1;
 
 		return (
 			<View style={dropDownContainerStyle}>
@@ -198,11 +201,13 @@ class GraphValuesDropDown extends View<Props, State> {
 						renderBase={this.renderBaseOne}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
+						itemCount={itemCount}
+						itemPadding={itemPadding}
 						baseColor={'#000'}
 						itemColor={'#000'}
 						disabledItemColor={rowTextColor}
 						selectedItemColor={brandDanger}
-						dropdownOffset={{top: -50, left: 0}}
+						dropdownPosition={dropDownPosition}
 						propsExtractor={this.propsExtractorOne}
 					/>
 					<Dropdown
@@ -213,11 +218,13 @@ class GraphValuesDropDown extends View<Props, State> {
 						renderBase={this.renderBaseTwo}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
+						itemCount={itemCount}
+						itemPadding={itemPadding}
 						baseColor={'#000'}
 						itemColor={'#000'}
 						disabledItemColor={rowTextColor}
 						selectedItemColor={brandInfo}
-						dropdownOffset={{top: -50, left: 0}}
+						dropdownPosition={dropDownPosition}
 						propsExtractor={this.propsExtractorTwo}
 					/>
 				</View>
@@ -240,6 +247,9 @@ class GraphValuesDropDown extends View<Props, State> {
 		const fontSizeText = deviceWidth * 0.04;
 		const fontSizeLeftIcon = deviceWidth * 0.057;
 		const fontSizeRightIcon = deviceWidth * 0.04;
+
+		const itemCount = 4;
+		const itemPadding = 8;
 
 		return {
 			dropDownContainerStyle: {
@@ -291,10 +301,10 @@ class GraphValuesDropDown extends View<Props, State> {
 			rowTextColor,
 			brandDanger,
 			fontSize: fontSizeText,
+			itemCount,
+			itemPadding,
 		};
 	}
-
 }
-
 
 module.exports = GraphValuesDropDown;
