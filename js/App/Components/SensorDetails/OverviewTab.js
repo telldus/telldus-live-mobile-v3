@@ -103,6 +103,7 @@ class OverviewTab extends View<Props, State> {
 		const deviceWidth = isPortrait ? width : height;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const labelFontSize = deviceWidth * 0.031;
 
 		return {
 			contentContainerStyle: {
@@ -110,6 +111,8 @@ class OverviewTab extends View<Props, State> {
 				paddingVertical: padding,
 			},
 			LocationDetailsStyle: {
+				flex: 0,
+				padding: 5 + (labelFontSize * 0.4),
 				marginHorizontal: padding,
 				marginBottom: padding / 2,
 			},

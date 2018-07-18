@@ -66,6 +66,7 @@ export default class BatteryInfo extends View {
 		const outerPadding = padding * 2;
 
 		const textFontSize = deviceWidth * 0.05;
+		const labelFontSize = deviceWidth * 0.031;
 
 		return {
 			containerStyle: {
@@ -73,7 +74,7 @@ export default class BatteryInfo extends View {
 				justifyContent: 'space-between',
 				alignItems: 'center',
 				width: width - outerPadding,
-				padding: 5 + (textFontSize * 0.5),
+				padding: 15 + (labelFontSize * 0.4),
 				...shadow,
 				backgroundColor: '#fff',
 				borderRadius: 2,
