@@ -108,13 +108,13 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		const to = moment.unix(toTimestamp);
 		const domainX = Math.abs(from.diff(to, 'days'));
 
-		let pages = [], day = from;
-		pages.push(fromTimestamp);
+		let ticks = [], day = from;
+		ticks.push(fromTimestamp);
 		for (let i = 1; i < domainX; i++) {
 			let d = day.add(1, 'd');
-			pages.push(d.unix());
+			ticks.push(d.unix());
 		}
-		return { domainX, pages };
+		return { ticks };
 	}
 
 	onPressToggleView() {
@@ -184,7 +184,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			chartPadding,
 		} = this.getStyle(appLayout);
 
-		const { domainX, pages } = this.getTickConfigX();
+		const { ticks } = this.getTickConfigX();
 
 		const legendData = [{
 			...selectedOne,
@@ -220,8 +220,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 							tickLabels: { fill: Theme.Core.inactiveTintColor },
 							grid: chartLineStyle,
 						}}
-						tickValues={pages}
-						tickFormat={(x: number): string => `${pages.indexOf(x) + 1}/${domainX}`} // eslint-disable-line
+						tickValues={ticks}
+						tickFormat={(tick: number): string => `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`} // eslint-disable-line
 					/>
 					{chartData.map((d: Array<Object>, i: number): Object | null => {
 						if (!d) {
