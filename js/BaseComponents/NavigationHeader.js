@@ -23,7 +23,7 @@
 
 'use strict';
 import React, { PureComponent } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
@@ -109,8 +109,14 @@ class NavigationHeader extends PureComponent<Props, null> {
 			onPress: this.goBack,
 			accessibilityLabel: this.labelLeftIcon,
 		} : null;
+
 		return (
-			<Header leftButton={leftIcon} style={{height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )}}/>
+			<Header leftButton={leftIcon} style={{
+				height: Platform.OS === 'android' ?
+					deviceHeight * 0.08
+					:
+					(isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 ),
+			}}/>
 		);
 	}
 }
