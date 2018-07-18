@@ -33,7 +33,7 @@ import {
 	CalenderModalComponent,
 } from './SubViews';
 
-import { getSensorsHistoryWeb } from '../../Actions/Sensors';
+import { getSensorHistory } from '../../Actions/Sensors';
 import { getHistory, storeHistory, getLatestTimestamp, getSensorTypes } from '../../Actions/LocalStorage';
 
 import type { SensorHistoryQueryParams } from '../../Lib/LocalStorage';
@@ -236,7 +236,7 @@ class HistoryTab extends View {
 			includeKey: 0,
 			includeUnit: 0,
 		};
-		dispatch(getSensorsHistoryWeb(params))
+		dispatch(getSensorHistory(params))
 			.then((response: Object) => {
 				const { history } = response;
 				if (history && history.length !== 0) {
