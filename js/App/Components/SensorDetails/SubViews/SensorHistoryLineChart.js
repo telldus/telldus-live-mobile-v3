@@ -42,14 +42,13 @@ type Props = {
 	selectedTwo: Object,
 	appLayout: Object,
 	landscape: boolean,
-	fullscreen: boolean,
-	onPressToggleView: () => void,
 	timestamp: Object,
 };
 
 type State = {
 	showOne: boolean,
 	showTwo: boolean,
+	fullscreen: Object,
 };
 
 export default class SensorHistoryLineChart extends View<Props, State> {
@@ -57,16 +56,38 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 	toggleOne: () => void;
 	toggleTwo: () => void;
+	onPressToggleView: () => void;
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			showOne: true,
 			showTwo: true,
+			fullscreen: {
+				show: false,
+				force: false,
+			},
 		};
 		this.toggleOne = this.toggleOne.bind(this);
 		this.toggleTwo = this.toggleTwo.bind(this);
+		this._orientationDidChange = this._orientationDidChange.bind(this);
+
+		this.onPressToggleView = this.onPressToggleView.bind(this);
+		Orientation.addOrientationListener(this._orientationDidChange);
 	}
+
+	_orientationDidChange(orientation: any) {
+		const { show, force } = this.state.fullscreen;
+		// Hide fullscreen when switching back to PORTRAIT alone is handled here
+		// Show fullscreen in LANDSCAPE is handled in componentDidUpdate
+		if (orientation === 'PORTRAIT' && show && !force) {
+			this.setFullscreenState(false, false);
+		}
+	}
+
+	componentWillUnmount() {
+		Orientation.removeOrientationListener(this._orientationDidChange);
+	  }
 
 	toggleTwo() {
 		this.setState({
@@ -95,24 +116,44 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		return { domainX, pages };
 	}
 
-	componentDidUpdate(prevProps: Object) {
-		if (!prevProps.landscape && this.props.landscape) {
-			Orientation.lockToLandscape();
-		} else if (prevProps.landscape && !this.props.landscape) {
-			Orientation.unlockAllOrientations();
+	onPressToggleView() {
+		const { show } = this.state.fullscreen;
+		const force = !show ? true : false;
+		this.setFullscreenState(!show, force);
+	}
+
+	setFullscreenState(show: boolean, force: boolean = false) {
+		this.setState({
+			fullscreen: {
+				show,
+				force,
+			},
+		});
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { fullscreen } = this.state;
+		const { appLayout } = this.props;
+		const { width, height } = appLayout;
+		// Show full screen on LANDSCAPE alone is handled here!
+		// This is to wait for the appLayout to change and update the style and chart together
+		// else the x-axis, tick and line are not getting updated.
+		if ((width !== prevProps.appLayout.width) && !fullscreen.show) {
+			if (width > height) {
+				this.setFullscreenState(true, false);
+			}
 		}
 	}
 
 	renderChart(): Object | null {
-		const { showOne, showTwo } = this.state;
+		const { showOne, showTwo, fullscreen } = this.state;
+		const { show } = fullscreen;
 		const {
 			chartDataOne,
 			chartDataTwo,
 			selectedOne,
 			selectedTwo,
 			appLayout,
-			fullscreen,
-			onPressToggleView,
 		} = this.props;
 		if (chartDataOne.length === 0 && chartDataOne.length === 0) {
 			return null;
@@ -160,8 +201,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				<ChartLegend
 					legendData={legendData}
 					appLayout={appLayout}
-					fullscreen={fullscreen}
-					onPressToggleView={onPressToggleView}/>
+					fullscreen={show}
+					onPressToggleView={this.onPressToggleView}/>
 				<VictoryChart
 					theme={VictoryTheme.material}
 					width={chartWidth} height={chartHeight}
@@ -222,7 +263,6 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 						return (<VictoryLine
 							key={i}
 							data={d}
-							interpolation={'natural'}
 							style={{ data: { stroke: colors[i] } }}
 							// normalize data
 							y={(datum: Object): number => {// eslint-disable-line
@@ -238,14 +278,14 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	render(): any {
-		const { fullscreen } = this.props;
+		const { show } = this.state.fullscreen;
 		const chart = this.renderChart();
-		if (!fullscreen) {
+		if (!show) {
 			return chart;
 		}
 		return (
 			<Modal
-				isVisible={fullscreen}
+				isVisible={show}
 				transparent={false}
 				backdropColor={'#fff'}
 				animationType={'slide'}
@@ -264,7 +304,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	getStyle(appLayout: Object): Object {
-		const { fullscreen } = this.props;
+		const { show, force } = this.state.fullscreen;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -273,7 +313,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
-		const chartWidth = width - outerPadding;
+		const chartWidth = (show && force && isPortrait) ? height - outerPadding : width - outerPadding;
 		const domainPadding = chartWidth * 0.05;
 
 		const top = 25, bottom = 30;
@@ -281,10 +321,10 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			left: 0, top, right: 0, bottom,
 		};
 
-		const chartHeight = fullscreen ? deviceWidth - (top + bottom) : chartWidth * 0.8;
+		const chartHeight = show ? deviceWidth - (top + bottom) : chartWidth * 0.8;
 
 		return {
-			containerStyle: fullscreen ?
+			containerStyle: show ?
 				{
 					backgroundColor: '#fff',
 					width: chartWidth,
