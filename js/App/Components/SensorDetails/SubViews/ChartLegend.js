@@ -52,28 +52,31 @@ render(): Object {
 		labelStyle,
 		fontSizeFullscreenIcon,
 		fullscreenIconStyle,
+		legendsContainerStyle,
 	} = this.getStyles(appLayout);
 
 	return (
 		<View style={containerStyle}>
-			{legendData.map((item: Object, index: number): Object => {
-				const { icon, onPress, value, color } = item;
-				return (
-					<Ripple
-						key={index}
-						rippleColor={rippleColor}
-						rippleOpacity={rippleOpacity}
-						rippleDuration={rippleDuration}
-						style={labelContainerStyle}
-						onPress={onPress}>
-						<IconTelldus icon={icon} style={{...iconStyle, color}}/>
-						<Text style={[labelStyle, {color}]}>
-							{value}
-						</Text>
-					</Ripple>
-				);
-			})
-			}
+			<View style={legendsContainerStyle}>
+				{legendData.map((item: Object, index: number): Object => {
+					const { icon, onPress, value, color } = item;
+					return (
+						<Ripple
+							key={index}
+							rippleColor={rippleColor}
+							rippleOpacity={rippleOpacity}
+							rippleDuration={rippleDuration}
+							style={labelContainerStyle}
+							onPress={onPress}>
+							<IconTelldus icon={icon} style={{...iconStyle, color}}/>
+							<Text style={[labelStyle, {color}]} numberOfLines={1}>
+								{value}
+							</Text>
+						</Ripple>
+					);
+				})
+				}
+			</View>
 			<TouchableOpacity onPress={onPressToggleView} style={fullscreenIconStyle}>
 				<Icon name={fullscreen ? 'fullscreen-exit' : 'fullscreen'} size={fontSizeFullscreenIcon} color={rowTextColor}/>
 			</TouchableOpacity>
@@ -86,7 +89,7 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const fontSizeLabel = deviceWidth * 0.044;
+	const fontSizeLabel = deviceWidth * 0.038;
 	const fontSizeIcon = deviceWidth * 0.06;
 	const fontSizeFullscreenIcon = deviceWidth * 0.07;
 
@@ -97,10 +100,16 @@ getStyles(appLayout: Object): Object {
 			marginTop: 20,
 			marginLeft: 10,
 		},
-		labelContainerStyle: {
-			flex: 0,
+		legendsContainerStyle: {
+			flex: 1,
 			flexDirection: 'row',
-			justifyContent: 'space-between',
+			marginRight: fontSizeFullscreenIcon,
+		},
+		labelContainerStyle: {
+			flex: 1,
+			flexDirection: 'row',
+			justifyContent: 'flex-start',
+			alignItems: 'center',
 			marginRight: 10,
 		},
 		iconStyle: {
@@ -108,13 +117,14 @@ getStyles(appLayout: Object): Object {
 			marginRight: 5,
 		},
 		labelStyle: {
+			flex: 1,
 			fontSize: fontSizeLabel,
 		},
 		fullscreenIconStyle: {
 			flex: 0,
 			padding: 5,
 			position: 'absolute',
-			right: 10,
+			right: 1,
 			top: -8,
 		},
 		fontSizeFullscreenIcon,
