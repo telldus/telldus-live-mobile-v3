@@ -85,12 +85,13 @@ render(): Object {
 		labelStyle,
 		dateStyle,
 	} = this.getStyle(appLayout, align);
+	const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
 
 	return (
 		<Ripple
-			rippleColor={Theme.rippleColor}
-			rippleOpacity={Theme.rippleOpacity}
-			rippleDuration={Theme.rippleDuration}
+			rippleColor={rippleColor}
+			rippleOpacity={rippleOpacity}
+			rippleDuration={rippleDuration}
 			style={blockContainerStyle}
 			onPress={this.onPress}>
 			{align === 'left' && (<View style={iconContainerStyle}>

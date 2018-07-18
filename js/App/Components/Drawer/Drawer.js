@@ -49,9 +49,9 @@ const messages = defineMessages({
 const AddLocation = ({onPress, styles}: Object): Object => {
 	return (
 		<Ripple
-			rippleColor={Theme.rippleColor}
-			rippleOpacity={Theme.rippleOpacity}
-			rippleDuration={Theme.rippleDuration}
+			rippleColor={Theme.Core.rippleColor}
+			rippleOpacity={Theme.Core.rippleOpacity}
+			rippleDuration={Theme.Core.rippleDuration}
 			style={styles.addNewLocationContainer}
 			onPress={onPress}>
 			<Icon name="plus-circle" size={styles.iconAddLocSize} color="#e26901"/>
@@ -90,9 +90,9 @@ const ConnectedLocations = ({styles}: Object): Object => (
 
 const SettingsButton = ({ onPress, styles }: Object): Object => (
 	<Ripple
-		rippleColor={Theme.rippleColor}
-		rippleOpacity={Theme.rippleOpacity}
-		rippleDuration={Theme.rippleDuration}
+		rippleColor={Theme.Core.rippleColor}
+		rippleOpacity={Theme.Core.rippleOpacity}
+		rippleDuration={Theme.Core.rippleDuration}
 		style={styles.settingsCover}
 		onPress={onPress}>
 		<IconTelldus icon={'settings'} size={styles.settingsIconSize} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>

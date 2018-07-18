@@ -76,14 +76,16 @@ class GraphValuesDropDown extends View<Props, State> {
 			leftIconStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
+		const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
 		const {icon} = data.find((item: Object): boolean => {
 			return item.value === title;
 		});
+
 		return (
 			<Ripple
-				rippleColor={Theme.rippleColor}
-				rippleOpacity={Theme.rippleOpacity}
-				rippleDuration={Theme.rippleDuration}
+				rippleColor={rippleColor}
+				rippleOpacity={rippleOpacity}
+				rippleDuration={rippleDuration}
 				style={pickerBaseCoverStyle}
 				onPress={this.onPressPickerOne}>
 				<IconTelldus icon={icon} style={leftIconStyle}/>
@@ -141,15 +143,16 @@ class GraphValuesDropDown extends View<Props, State> {
 			leftIconStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
+		const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
 		const {icon} = data.find((item: Object): boolean => {
 			return item.value === title;
 		});
 
 		return (
 			<Ripple
-				rippleColor={Theme.rippleColor}
-				rippleOpacity={Theme.rippleOpacity}
-				rippleDuration={Theme.rippleDuration}
+				rippleColor={rippleColor}
+				rippleOpacity={rippleOpacity}
+				rippleDuration={rippleDuration}
 				style={pickerBaseCoverStyle}
 				onPress={this.onPressPickerTwo}>
 				<IconTelldus icon={icon} style={leftIconStyle}/>
