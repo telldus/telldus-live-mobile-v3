@@ -56,9 +56,10 @@ class DeviceLocationDetail extends View {
 	}
 
 	onPress() {
-		if (this.props.onPress) {
-			if (typeof this.props.onPress === 'function') {
-				this.props.onPress();
+		const { onPress } = this.props;
+		if (onPress) {
+			if (typeof onPress === 'function') {
+				onPress();
 			} else {
 				console.warn('Invalid Prop Passed : onPress expects a Function.');
 			}
@@ -67,7 +68,7 @@ class DeviceLocationDetail extends View {
 
 	render(): Object {
 
-		let { title, H1, H2, image, style, appLayout, accessible, info } = this.props;
+		let { title, H1, H2, image, style, appLayout, accessible, info, onPress } = this.props;
 
 		let {
 			container,
@@ -79,7 +80,10 @@ class DeviceLocationDetail extends View {
 		} = this.getStyle(appLayout);
 
 		return (
-			<TouchableOpacity style={[styles.shadow, container, style]} accessible={accessible}
+			<TouchableOpacity
+				style={[styles.shadow, container, style]}
+				accessible={accessible}
+				disabled={!onPress}
 				onPress={this.onPress}>
 				{!!title && (
 					<Text style={[textLocation, {marginLeft: 10}]}>
@@ -125,13 +129,10 @@ class DeviceLocationDetail extends View {
 				justifyContent: 'center',
 			},
 			locationImageContainer: {
-				height: isPortrait ? height * 0.16 : width * 0.16,
-				width: width * 0.25,
 				justifyContent: 'center',
 				alignItems: 'flex-start',
 			},
 			locationTextContainer: {
-				height: isPortrait ? height * 0.16 : width * 0.16,
 				width: width * 0.58,
 				marginRight: width * 0.15,
 				justifyContent: 'center',
@@ -157,7 +158,7 @@ class DeviceLocationDetail extends View {
 const styles = StyleSheet.create({
 	imageHeaderContainer: {
 		justifyContent: 'flex-start',
-		alignItems: 'flex-start',
+		alignItems: 'center',
 		flexDirection: 'row',
 	},
 	shadow: {
