@@ -57,6 +57,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	toggleOne: () => void;
 	toggleTwo: () => void;
 	onPressToggleView: () => void;
+	_orientationDidChange: (string) => void;
 	constructor(props: Props) {
 		super(props);
 
@@ -76,7 +77,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		Orientation.addOrientationListener(this._orientationDidChange);
 	}
 
-	_orientationDidChange(orientation: any) {
+	_orientationDidChange(orientation: string) {
 		const { show, force } = this.state.fullscreen;
 		// Hide fullscreen when switching back to PORTRAIT alone is handled here
 		// Show fullscreen in LANDSCAPE is handled in componentDidUpdate
