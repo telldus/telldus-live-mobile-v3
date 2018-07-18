@@ -108,6 +108,7 @@ class SensorRow extends View<Props, State> {
 	onSetIgnoreSensor: () => void;
 	onPressSensorName: () => void;
 	onSettingsSelected: (Object) => void;
+	closeSwipeRow: () => void;
 
 	onLayoutDeviceName: (Object) => void;
 	onLayoutCover: (Object) => void;
@@ -181,6 +182,7 @@ class SensorRow extends View<Props, State> {
 		this.isTablet = DeviceInfo.isTablet();
 
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
+		this.closeSwipeRow = this.closeSwipeRow.bind(this);
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
@@ -188,7 +190,7 @@ class SensorRow extends View<Props, State> {
 		const { isOpen } = this.state;
 		let { idToKeepOpen, forceClose } = propsSwipeRow;
 		if (isOpen && (tab !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen)) ) {
-			this.refs.SwipeRow.closeRow();
+			this.closeSwipeRow();
 		}
 	}
 
@@ -225,7 +227,7 @@ class SensorRow extends View<Props, State> {
 	onPressSensorName() {
 		let { showFullName, coverOccupiedWidth, coverMaxWidth, isOpen } = this.state;
 		if (isOpen) {
-			this.refs.SwipeRow.closeRow();
+			this.closeSwipeRow();
 		} else if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
 			if (!showFullName) {
 				this.isAnimating = true;
@@ -243,6 +245,11 @@ class SensorRow extends View<Props, State> {
 				});
 			}
 		}
+	}
+
+
+	closeSwipeRow() {
+		this.refs.SwipeRow.closeRow();
 	}
 
 	onSettingsSelected() {
@@ -502,7 +509,7 @@ class SensorRow extends View<Props, State> {
 					// being placed inside a touchable.
 					onPress={this.noOp}>
 					<View style={styles.cover}>
-						<TouchableOpacity onPress={this.onPressSensorName} disabled={coverOccupiedWidth < coverMaxWidth}
+						<TouchableOpacity onPress={this.onPressSensorName} disabled={!isOpen && coverOccupiedWidth < coverMaxWidth}
 							style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 							{nameInfo}
@@ -510,6 +517,8 @@ class SensorRow extends View<Props, State> {
 						<TypeBlock
 							sensors={sensors}
 							id={id}
+							isOpen={isOpen}
+							closeSwipeRow={this.closeSwipeRow}
 							onLayout={this.onLayoutButtons}
 							style={[styles.sensorValueCover, {
 								width: this.animatedWidth,

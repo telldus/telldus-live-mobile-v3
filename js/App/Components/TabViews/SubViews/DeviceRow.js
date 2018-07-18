@@ -418,7 +418,7 @@ class DeviceRow extends PureComponent<Props, State> {
 						<View style={styles.cover}>
 							<TouchableOpacity
 								style={[styles.touchableContainer]}
-								disabled={coverOccupiedWidth < coverMaxWidth}
+								disabled={!isOpen && coverOccupiedWidth < coverMaxWidth}
 								onPress={this.onShowFullName}
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
