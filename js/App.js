@@ -25,6 +25,8 @@ import { AccessibilityInfo } from 'react-native';
 import { connect } from 'react-redux';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
+import { LocaleConfig } from 'react-native-calendars';
+import { injectIntl } from 'react-intl';
 
 import {
 	PreLoginNavigator,
@@ -38,6 +40,10 @@ import {
 	setAccessibilityListener,
 	setAccessibilityInfo,
 } from './App/Actions';
+import {
+	getTranslatableDayNames,
+	getTranslatableMonthNames,
+} from './App/Lib';
 
 import Theme from './App/Theme';
 const changeLogVersion = '3.7';
@@ -49,6 +55,8 @@ type Props = {
 	pushTokenRegistered: boolean,
 	prevChangeLogVersion: string,
 	forceShowChangeLog: boolean,
+	intl: Object,
+	locale: string,
 };
 
 class App extends React.Component<Props, null> {
@@ -56,10 +64,14 @@ class App extends React.Component<Props, null> {
 
 	onLayout: (Object) => void;
 	onNotification: any;
+	setCalenderLocale: () => void;
 
-	constructor() {
-		super();
+	constructor(props: Props) {
+		super(props);
 		this.onLayout = this.onLayout.bind(this);
+		this.setCalenderLocale = this.setCalenderLocale.bind(this);
+
+		this.setCalenderLocale();
 	}
 
 	componentDidMount() {
@@ -80,6 +92,18 @@ class App extends React.Component<Props, null> {
 		// Push notification listener.
 		// TODO : Remove conditional check once push in IOS is enabled and same method is present.
 		this.onNotification = Push.onNotification ? Push.onNotification() : null;
+	}
+
+	setCalenderLocale() {
+		const { intl, locale } = this.props;
+		const { formatDate } = intl;
+		LocaleConfig.locales[locale] = {
+			monthNames: getTranslatableMonthNames(formatDate, 'long'),
+			monthNamesShort: getTranslatableMonthNames(formatDate, 'short'),
+			dayNames: getTranslatableDayNames(formatDate, 'long'),
+			dayNamesShort: getTranslatableDayNames(formatDate, 'short'),
+		};
+		LocaleConfig.defaultLocale = locale;
 	}
 
 	componentDidUpdate() {
@@ -165,4 +189,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(App);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(App));
