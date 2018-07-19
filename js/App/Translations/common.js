@@ -641,6 +641,18 @@ const messages = defineMessages({
 		id: 'label.to',
 		defaultMessage: 'To',
 	},
+	labelStoreHistory: {
+		id: 'label.storeHistory',
+		defaultMessage: 'Store history',
+	},
+	toastStoreHistory: {
+		id: 'toast.storeHistory',
+		defaultMessage: 'History for this sensor will now be stored',
+	},
+	toastStoreNotHistory: {
+		id: 'toast.storeNotHistory',
+		defaultMessage: 'History for this sensor will no longer be stored',
+	},
 });
 
 export default messages;

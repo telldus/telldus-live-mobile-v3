@@ -24,12 +24,19 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-
-import { FormattedMessage, Text, View, TabBar, Switch } from '../../../BaseComponents';
 import { defineMessages } from 'react-intl';
 
-import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
-import { addToDashboard, removeFromDashboard, showToast } from '../../Actions';
+import { View, TabBar } from '../../../BaseComponents';
+import { SettingsRow } from './SubViews';
+
+import {
+	addToDashboard,
+	removeFromDashboard,
+	showToast,
+	setKeepHistory,
+	getSensors,
+	setIgnoreSensor,
+} from '../../Actions';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -57,6 +64,7 @@ type Props = {
 
 type State = {
 	isHidden: boolean,
+	keepHistory: boolean,
 };
 
 
@@ -65,7 +73,8 @@ class SettingsTab extends View {
 	state: State;
 
 	onValueChange: number => void;
-	setIgnoreDevice: (boolean) => void;
+	setIgnoreSensor: (boolean) => void;
+	setKeepHistory: (boolean) => void;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -83,16 +92,21 @@ class SettingsTab extends View {
 	constructor(props: Props) {
 		super(props);
 		this.onValueChange = this.onValueChange.bind(this);
-		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
+		this.setIgnoreSensor = this.setIgnoreSensor.bind(this);
+		this.setKeepHistory = this.setKeepHistory.bind(this);
 
 		this.state = {
 			isHidden: props.sensor.ignored,
+			keepHistory: props.sensor.keepHistory,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
 
 		this.addedToHiddenList = formatMessage(i18n.deviceAddedToHiddenList);
 		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
+
+		this.toastStoreHistory = formatMessage(i18n.toastStoreHistory);
+		this.toastStoreNotHistory = formatMessage(i18n.toastStoreNotHistory);
 	}
 
 	onValueChange(value: boolean) {
@@ -103,16 +117,16 @@ class SettingsTab extends View {
 		}
 	}
 
-	setIgnoreDevice(value: boolean) {
+	setIgnoreSensor(value: boolean) {
 		let { sensor } = this.props;
 		let ignore = sensor.ignored ? 0 : 1;
 		this.setState({
 			isHidden: value,
 		});
-		this.props.dispatch(setIgnoreDevice(sensor.id, ignore)).then((res: Object) => {
+		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
 			let message = sensor.ignored ?
 				this.removedFromHiddenList : this.addedToHiddenList;
-			this.props.dispatch(getDevices());
+			this.props.dispatch(getSensors());
 			this.props.dispatch(showToast(message));
 		}).catch((err: Object) => {
 			let	message = err.message ? err.message : null;
@@ -123,45 +137,61 @@ class SettingsTab extends View {
 		});
 	}
 
+	setKeepHistory(value: boolean) {
+		let { sensor } = this.props;
+		let keepHistory = sensor.keepHistory ? 0 : 1;
+		this.setState({
+			keepHistory: value,
+		});
+		this.props.dispatch(setKeepHistory(sensor.id, keepHistory)).then((res: Object) => {
+			let message = sensor.keepHistory ?
+				this.toastStoreNotHistory : this.toastStoreHistory;
+			this.props.dispatch(getSensors());
+			this.props.dispatch(showToast(message));
+		}).catch((err: Object) => {
+			let	message = err.message ? err.message : null;
+			this.setState({
+				keepHistory: sensor.keepHistory,
+			});
+			this.props.dispatch(showToast(message));
+		});
+	}
+
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.screenProps.currentScreen === 'Settings';
 	}
 
 	render(): Object {
-		let { appLayout } = this.props.screenProps;
+		const { keepHistory, isHidden } = this.state;
+		const { inDashboard } = this.props;
+		const { appLayout, intl } = this.props.screenProps;
+		const { formatMessage } = intl;
 
-		let {
+		const {
 			container,
-			ShowOnDashCover,
-			textShowOnDashCover,
-			textShowOnDash,
 		} = this.getStyle(appLayout);
 
 		return (
 			<ScrollView>
 				<View style={container}>
-					<View style={ShowOnDashCover}>
-						<View style={textShowOnDashCover}>
-							<Text style={textShowOnDash}>
-								<FormattedMessage {...messages.showOnDashborad} style={textShowOnDash}/>
-							</Text>
-						</View>
-						<Switch
-							onValueChange={this.onValueChange}
-							value={this.props.inDashboard}
-						/>
-					</View>
-					<View style={ShowOnDashCover}>
-						<View style={textShowOnDashCover}>
-							<Text style={textShowOnDash}>
-								<FormattedMessage {...messages.hideFromList} style={textShowOnDash}/>
-							</Text>
-						</View>
-						<Switch
-							onValueChange={this.setIgnoreDevice}
-							value={this.state.isHidden}
-						/>
-					</View>
+					<SettingsRow
+						label={formatMessage(messages.showOnDashborad)}
+						onValueChange={this.onValueChange}
+						value={inDashboard}
+						appLayout={appLayout}
+					/>
+					<SettingsRow
+						label={formatMessage(messages.hideFromList)}
+						onValueChange={this.setIgnoreSensor}
+						value={isHidden}
+						appLayout={appLayout}
+					/>
+					<SettingsRow
+						label={formatMessage(i18n.labelStoreHistory)}
+						onValueChange={this.setKeepHistory}
+						value={keepHistory}
+						appLayout={appLayout}
+					/>
 				</View>
 			</ScrollView>
 		);
@@ -173,7 +203,6 @@ class SettingsTab extends View {
 		const deviceWidth = isPortrait ? width : height;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
-		const fontSize = deviceWidth * 0.04;
 
 		return {
 			container: {
@@ -181,29 +210,6 @@ class SettingsTab extends View {
 				paddingHorizontal: padding,
 				paddingBottom: padding,
 				paddingTop: padding / 2,
-			},
-			ShowOnDashCover: {
-				backgroundColor: '#fff',
-				padding: fontSize,
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'space-between',
-				marginTop: padding / 2,
-				...Theme.Core.shadow,
-			},
-			textShowOnDashCover: {
-				alignItems: 'flex-start',
-				justifyContent: 'center',
-			},
-			textShowOnDash: {
-				color: '#8A8682',
-				fontSize,
-				marginLeft: 8,
-				justifyContent: 'center',
-			},
-			learn: {
-				marginHorizontal: width * 0.25,
-				marginVertical: padding / 2,
 			},
 		};
 	}
@@ -221,7 +227,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const sensor = state.sensors.byId[id];
 	return {
 		sensor,
-		inDashboard: !!state.dashboard.devicesById[id],
+		inDashboard: !!state.dashboard.sensorsById[id],
 	};
 }
 
