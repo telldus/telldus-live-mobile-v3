@@ -653,6 +653,21 @@ const messages = defineMessages({
 		id: 'toast.storeNotHistory',
 		defaultMessage: 'History for this sensor will no longer be stored',
 	},
+	defaultHeader: {
+		id: 'dialogueBox.defaultHeader',
+		defaultMessage: 'OOPS',
+		description: 'Default Header for the notification component',
+	},
+	defaultPositiveText: {
+		id: 'dialogueBox.defaultPositiveText',
+		defaultMessage: 'OK',
+		description: 'Default Positive text for the notification component',
+	},
+	defaultNegativeText: {
+		id: 'dialogueBox.defaultNegativeText',
+		defaultMessage: 'CANCEL',
+		description: 'Default Negative text for the notification component',
+	},
 });
 
 export default messages;

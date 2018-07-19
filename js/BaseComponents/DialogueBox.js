@@ -25,30 +25,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import View from './View';
 import Text from './Text';
 import i18n from '../App/Translations/common';
-
-const messages = defineMessages({
-	defaultHeader: {
-		id: 'dialogueBox.defaultHeader',
-		defaultMessage: 'OOPS',
-		description: 'Default Header for the notification component',
-	},
-	defaultPositiveText: {
-		id: 'dialogueBox.defaultPositiveText',
-		defaultMessage: 'OK',
-		description: 'Default Positive text for the notification component',
-	},
-	defaultNegativeText: {
-		id: 'dialogueBox.defaultNegativeText',
-		defaultMessage: 'CANCEL',
-		description: 'Default Negative text for the notification component',
-	},
-});
 
 
 type Props = {
@@ -118,9 +100,9 @@ class DialogueBox extends Component<Props, null> {
 		this.onPressNegative = this.onPressNegative.bind(this);
 		this.onModalOpened = this.onModalOpened.bind(this);
 
-		this.defaultHeader = `${this.props.intl.formatMessage(messages.defaultHeader)}!`;
-		this.defaultPositiveText = `${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
-		this.defaultNegativeText = `${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
+		this.defaultHeader = `${this.props.intl.formatMessage(i18n.defaultHeader)}!`;
+		this.defaultPositiveText = `${this.props.intl.formatMessage(i18n.defaultPositiveText)}`;
+		this.defaultNegativeText = `${this.props.intl.formatMessage(i18n.defaultNegativeText)}`;
 
 		this.labelButton = `${this.props.intl.formatMessage(i18n.button)}`;
 		this.labelButtondefaultDescription = `${this.props.intl.formatMessage(i18n.defaultDescriptionButton)}`;
