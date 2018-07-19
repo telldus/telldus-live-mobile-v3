@@ -30,6 +30,7 @@ import SensorHistoryLineChart from './SensorHistoryLineChart';
 import ChartLegend from './ChartLegend';
 import DateBlock from './DateBlock';
 import CalenderModalComponent from './CalenderModalComponent';
+import SettingsRow from './SettingsRow';
 
 module.exports = {
 	BatteryInfo,
@@ -41,4 +42,5 @@ module.exports = {
 	ChartLegend,
 	DateBlock,
 	CalenderModalComponent,
+	SettingsRow,
 };
