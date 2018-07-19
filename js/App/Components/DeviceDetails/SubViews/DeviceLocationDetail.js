@@ -36,6 +36,7 @@ type Props = {
 	appLayout: Object,
 	accessible?: boolean,
 	info?: Object,
+	infoContainerStyle?: any,
 };
 
 type State = {
@@ -68,7 +69,7 @@ class DeviceLocationDetail extends View {
 
 	render(): Object {
 
-		let { title, H1, H2, image, style, appLayout, accessible, info, onPress } = this.props;
+		let { title, H1, H2, image, style, appLayout, accessible, info, onPress, infoContainerStyle } = this.props;
 
 		let {
 			container,
@@ -94,7 +95,7 @@ class DeviceLocationDetail extends View {
 					<View style={locationImageContainer}>
 						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
 					</View>
-					<View style={locationTextContainer}>
+					<View style={[locationTextContainer, infoContainerStyle]}>
 						<Text numberOfLines={1} style={textHSH}>
 							{!!H1 && H1}
 						</Text>
@@ -137,6 +138,7 @@ class DeviceLocationDetail extends View {
 				marginRight: width * 0.15,
 				justifyContent: 'center',
 				alignItems: 'flex-start',
+				marginTop: 10,
 			},
 			locationImage: {
 				width: isPortrait ? width * 0.22 : height * 0.22,
