@@ -419,7 +419,8 @@ class HistoryTab extends View {
 					current={propToUpdate === 1 ? fromTimestamp : toTimestamp}
 					onPressPositive={this.onPressPositive}
 					onPressNegative={this.onPressNegative}
-					appLayout={appLayout}/>
+					appLayout={appLayout}
+					intl={intl}/>
 			</ScrollView>
 		);
 	}

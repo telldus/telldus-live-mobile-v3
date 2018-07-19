@@ -33,6 +33,7 @@ import {
 	Text,
 	FormattedDate,
 } from '../../../../BaseComponents';
+import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -41,6 +42,7 @@ type Props = {
 	onPressPositive: (any) => void,
 	onPressNegative: () => void,
 	appLayout: Object,
+	intl: Object,
 };
 
 type DefaultProps = {
@@ -85,6 +87,10 @@ constructor(props: Props) {
 	this.onPressPositive = this.onPressPositive.bind(this);
 	this.onPressNegative = this.onPressNegative.bind(this);
 	this.onDayPress = this.onDayPress.bind(this);
+
+	const { formatMessage } = props.intl;
+	this.ok = formatMessage(i18n.defaultPositiveText);
+	this.cancel = formatMessage(i18n.defaultNegativeText);
 }
 
 onPressPositive() {
@@ -158,12 +164,12 @@ render(): Object {
 				<View style={footerStyle}>
 					<TouchableOpacity onPress={this.onPressNegative}>
 						<Text style={negativeLabelStyle}>
-					CANCEL
+							{this.cancel}
 						</Text>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={this.onPressPositive}>
 						<Text style={positiveLabelStyle}>
-					OK
+							{this.ok}
 						</Text>
 					</TouchableOpacity>
 				</View>
