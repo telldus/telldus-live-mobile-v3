@@ -86,12 +86,16 @@ class OverviewTab extends View<Props, State> {
 			contentContainerStyle,
 			LocationDetailsStyle,
 			batterInfoStyle,
+			infoContainerStyle,
 		} = this.getStyles(appLayout);
 
 		return (
 			<ScrollView style={{flex: 1}} contentContainerStyle={contentContainerStyle}>
 				<SensorTypes sensor={sensor} intl={intl} appLayout={appLayout}/>
-				<DeviceLocationDetail {...locationData} style={LocationDetailsStyle}/>
+				<DeviceLocationDetail
+					{...locationData}
+					style={LocationDetailsStyle}
+					infoContainerStyle={infoContainerStyle}/>
 				{battery && (<BatteryInfo battery={battery} appLayout={appLayout} style={batterInfoStyle}/>)}
 			</ScrollView>
 		);
@@ -118,6 +122,11 @@ class OverviewTab extends View<Props, State> {
 			},
 			batterInfoStyle: {
 				marginHorizontal: padding,
+			},
+			infoContainerStyle: {
+				flex: 1,
+				marginRight: 0,
+				width: undefined,
 			},
 		};
 	}
