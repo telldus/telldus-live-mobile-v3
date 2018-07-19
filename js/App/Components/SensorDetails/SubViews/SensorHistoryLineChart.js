@@ -58,6 +58,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	toggleTwo: () => void;
 	onPressToggleView: () => void;
 	_orientationDidChange: (string) => void;
+	onRequestClose: () => void;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -72,6 +74,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		this.toggleOne = this.toggleOne.bind(this);
 		this.toggleTwo = this.toggleTwo.bind(this);
 		this._orientationDidChange = this._orientationDidChange.bind(this);
+		this.onRequestClose = this.onRequestClose.bind(this);
 
 		this.onPressToggleView = this.onPressToggleView.bind(this);
 		Orientation.addOrientationListener(this._orientationDidChange);
@@ -144,6 +147,10 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				this.setFullscreenState(true, false);
 			}
 		}
+	}
+
+	onRequestClose() {
+		this.setFullscreenState(false, false);
 	}
 
 	renderChart(): Object | null {
@@ -291,7 +298,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				backdropColor={'#fff'}
 				animationType={'slide'}
 				presentationStyle={'fullScreen'}
-				onRequestClose={this.noOP}
+				onRequestClose={this.onRequestClose}
 				supportedOrientations={['landscape']}>
 				<View style={{
 					flex: 1,
@@ -358,8 +365,5 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				pointerEvents: 'painted',
 			},
 		};
-	}
-
-	noOP() {
 	}
 }
