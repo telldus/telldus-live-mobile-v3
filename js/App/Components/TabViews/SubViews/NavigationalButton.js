@@ -41,6 +41,8 @@ type Props = {
 	downButtonStyle?: number | Object | Array<any>,
 	stopButtonStyle?: number | Object | Array<any>,
 	showStopButton?: boolean,
+	isOpen: boolean,
+	closeSwipeRow: () => void,
 };
 
 type DefaultProps = {
@@ -60,21 +62,50 @@ class NavigationalButton extends View {
 
 	render(): Object {
 
-		let { device, isGatewayActive, intl, style, upButtonStyle, downButtonStyle, stopButtonStyle, showStopButton } = this.props;
+		let {
+			device,
+			isGatewayActive,
+			intl,
+			style,
+			upButtonStyle,
+			downButtonStyle,
+			stopButtonStyle,
+			showStopButton,
+			isOpen,
+			closeSwipeRow,
+		} = this.props;
 		const { supportedMethods, methodRequested, isInState, id, name, local } = device;
 		const { UP, DOWN, STOP } = supportedMethods;
 
+		const sharedProps = {
+			id,
+			name,
+			isInState,
+			methodRequested,
+			isGatewayActive,
+			local,
+			isOpen,
+			closeSwipeRow,
+			intl,
+		};
+
 		return (
 			<View style={style}>
-				<UpButton supportedMethod={UP} methodRequested={methodRequested} intl={intl}
-					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={[styles.navigationButton, upButtonStyle]} name={name} local={local}/>
-				<DownButton supportedMethod={DOWN} methodRequested={methodRequested} intl={intl}
-					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={[styles.navigationButton, downButtonStyle]} name={name} local={local}/>
-				{!!showStopButton && (<StopButton supportedMethod={STOP} methodRequested={methodRequested} intl={intl}
-					iconSize={20} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={[styles.navigationButton, stopButtonStyle]} name={name} local={local}/>
+				<UpButton
+					{...sharedProps}
+					supportedMethod={UP}
+					iconSize={30}
+					style={[styles.navigationButton, upButtonStyle]}/>
+				<DownButton
+					{...sharedProps}
+					supportedMethod={DOWN}
+					iconSize={30}
+					style={[styles.navigationButton, downButtonStyle]}/>
+				{!!showStopButton && (<StopButton
+					{...sharedProps}
+					supportedMethod={STOP}
+					iconSize={20}
+					style={[styles.navigationButton, stopButtonStyle]}/>
 				)}
 			</View>
 		);

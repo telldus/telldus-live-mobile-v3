@@ -41,6 +41,8 @@ type Props = {
 	appLayout: Object,
 	bellButtonStyle: number | Object,
 	local: boolean,
+	isOpen: boolean,
+	closeSwipeRow: () => void,
 };
 
 class BellButton extends View {
@@ -56,7 +58,12 @@ class BellButton extends View {
 	}
 
 	onBell() {
-		this.props.deviceSetState(this.props.device.id, this.props.command);
+		const { command, device, isOpen, closeSwipeRow } = this.props;
+		if (isOpen && closeSwipeRow) {
+			closeSwipeRow();
+			return;
+		}
+		this.props.deviceSetState(device.id, command);
 	}
 
 	render(): Object {

@@ -65,6 +65,8 @@ type Props = {
 	onButtonStyle?: number | Object | Array<any>,
 	sliderStyle?: number | Object | Array<any>,
 	showSlider?: boolean,
+	isOpen: boolean,
+	closeSwipeRow: () => void,
 };
 
 type DefaultProps = {
@@ -137,10 +139,20 @@ class DimmerButton extends View {
 	}
 
 	onTurnOn() {
+		const { isOpen, closeSwipeRow } = this.props;
+		if (isOpen && closeSwipeRow) {
+			closeSwipeRow();
+			return;
+		}
 		this.props.deviceSetState(this.props.device.id, this.props.commandON);
 	}
 
 	onTurnOff() {
+		const { isOpen, closeSwipeRow } = this.props;
+		if (isOpen && closeSwipeRow) {
+			closeSwipeRow();
+			return;
+		}
 		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
 	}
 
@@ -150,10 +162,19 @@ class DimmerButton extends View {
 
 	render(): Object {
 		const {
-			device: item, intl, isGatewayActive,
-			screenReaderEnabled, showSlider,
-			style, onButtonStyle, offButtonStyle,
-			sliderStyle, setScrollEnabled } = this.props;
+			device: item,
+			intl,
+			isGatewayActive,
+			screenReaderEnabled,
+			showSlider,
+			style,
+			onButtonStyle,
+			offButtonStyle,
+			sliderStyle,
+			setScrollEnabled,
+			isOpen,
+			closeSwipeRow,
+		} = this.props;
 		const { isInState, name, supportedMethods, methodRequested, local, stateValues } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
@@ -175,6 +196,15 @@ class DimmerButton extends View {
 			screenReaderEnabled,
 			setScrollEnabled,
 		};
+		const sharedProps = {
+			isInState,
+			methodRequested,
+			intl,
+			isGatewayActive,
+			local,
+			name: deviceName,
+			enabled: false,
+		};
 		// TODO: refactor writing a higher order component
 		const onButton = (
 			<HVSliderContainer
@@ -184,14 +214,8 @@ class DimmerButton extends View {
 				<DimmerOnButton
 					ref={'onButton'}
 					style={[styles.buttonStyle]}
-					isInState={isInState}
 					onPress={this.onTurnOn}
-					name={deviceName}
-					enabled={false}
-					methodRequested={methodRequested}
-					intl={intl}
-					isGatewayActive={isGatewayActive}
-					local={local}
+					{...sharedProps}
 				/>
 			</HVSliderContainer>
 		);
@@ -203,14 +227,8 @@ class DimmerButton extends View {
 				<DimmerOffButton
 					ref={'offButton'}
 					style={[styles.buttonStyle]}
-					isInState={isInState}
 					onPress={this.onTurnOff}
-					name={deviceName}
-					enabled={false}
-					methodRequested={methodRequested}
-					intl={intl}
-					isGatewayActive={isGatewayActive}
-					local={local}
+					{...sharedProps}
 				/>
 			</HVSliderContainer>
 		);
@@ -218,18 +236,16 @@ class DimmerButton extends View {
 			<HVSliderContainer
 				{...sliderProps}
 				style={sliderStyle}
+				onPress={isOpen ? closeSwipeRow : null}
 			>
 				<SliderScale
 					style={styles.slider}
 					thumbWidth={10}
 					thumbHeight={10}
 					fontSize={9}
-					isGatewayActive={isGatewayActive}
-					methodRequested={methodRequested}
-					isInState={isInState}
-					name={deviceName}
+					{...sharedProps}
 					importantForAccessibility={'yes'}
-					local={local}/>
+				/>
 			</HVSliderContainer>
 		) : null;
 

@@ -43,6 +43,8 @@ type Props = {
 	command: number,
 	id: number,
 	local: boolean,
+	isOpen: boolean,
+	closeSwipeRow: () => void,
 };
 
 class OffButton extends View {
@@ -59,7 +61,12 @@ class OffButton extends View {
 	}
 
 	onPress() {
-		this.props.deviceSetState(this.props.id, this.props.command);
+		const { command, id, isOpen, closeSwipeRow } = this.props;
+		if (isOpen && closeSwipeRow) {
+			closeSwipeRow();
+			return;
+		}
+		this.props.deviceSetState(id, command);
 	}
 
 	render(): Object {
