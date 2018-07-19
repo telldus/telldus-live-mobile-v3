@@ -23,10 +23,11 @@
 
 import React from 'react';
 
-import { View, Text } from '../../../../BaseComponents';
+import { View, Text, FormattedMessage } from '../../../../BaseComponents';
 import Battery from './Battery';
 
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 export default class BatteryInfo extends View {
 	render(): Object {
@@ -40,9 +41,7 @@ export default class BatteryInfo extends View {
 
 		return (
 			<View style={[containerStyle, style]}>
-				<Text style={labelStyle}>
-            Battery
-				</Text>
+				<FormattedMessage {...i18n.labelBattery} style={labelStyle}/>
 				<View style={{
 					flexDirection: 'row',
 				}}>

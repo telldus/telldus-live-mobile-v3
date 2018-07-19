@@ -366,7 +366,8 @@ class HistoryTab extends View {
 			propToUpdate,
 		} = this.state;
 		const { screenProps } = this.props;
-		const { appLayout } = screenProps;
+		const { appLayout, intl } = screenProps;
+		const { formatMessage } = intl;
 		const { fromTimestamp, toTimestamp} = timestamp;
 
 		const {
@@ -386,14 +387,14 @@ class HistoryTab extends View {
 						<DateBlock
 							appLayout={appLayout}
 							align={'left'}
-							label={'From:'}
+							label={`${formatMessage(i18n.labelFrom)}:`}
 							onPress={this.onPressShowCalender}
 							date={fromTimestamp}
 							propToUpdateIndex={1}/>
 						<DateBlock
 							appLayout={appLayout}
 							align={'right'}
-							label={'To:'}
+							label={`${formatMessage(i18n.labelTo)}:`}
 							onPress={this.onPressShowCalender}
 							date={toTimestamp}
 							propToUpdateIndex={2}/>

@@ -24,8 +24,9 @@
 import React from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
 import Ripple from 'react-native-material-ripple';
+import {defineMessages} from 'react-intl';
 
-import { View, Text, IconTelldus } from '../../../../BaseComponents';
+import { View, Text, IconTelldus, FormattedMessage } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
 
@@ -40,6 +41,13 @@ type Props = {
 
 type State = {
 };
+
+const messages = defineMessages({
+	labelGraphValues: {
+		id: 'label.graphValues',
+		defaultMessage: 'Graph Values',
+	},
+});
 
 class GraphValuesDropDown extends View<Props, State> {
 	props: Props;
@@ -194,7 +202,7 @@ class GraphValuesDropDown extends View<Props, State> {
 
 		return (
 			<View style={dropDownContainerStyle}>
-				<Text style={dropDownHeaderStyle}>Graph Values</Text>
+				<FormattedMessage {...messages.labelGraphValues} style={dropDownHeaderStyle}/>
 				<View style={dropDownListsContainerStyle}>
 					<Dropdown
 						ref={'listOne'}

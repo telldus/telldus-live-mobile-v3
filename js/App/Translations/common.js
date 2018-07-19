@@ -629,6 +629,18 @@ const messages = defineMessages({
 		id: 'deviceSettings.noRecentActivity',
 		defaultMessage: 'No recent activity',
 	},
+	labelBattery: {
+		id: 'label.battery',
+		defaultMessage: 'Battery',
+	},
+	labelFrom: {
+		id: 'label.from',
+		defaultMessage: 'From',
+	},
+	labelTo: {
+		id: 'label.to',
+		defaultMessage: 'To',
+	},
 });
 
 export default messages;
