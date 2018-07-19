@@ -21,7 +21,7 @@
 
 'use strict';
 import React from 'react';
-import { Modal } from 'react-native';
+import { Modal, Platform } from 'react-native';
 import {
 	VictoryChart,
 	VictoryAxis,
@@ -29,7 +29,7 @@ import {
 	VictoryTheme,
 } from 'victory-native';
 import moment from 'moment';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-orientation-locker';
 
 import { View } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
@@ -123,6 +123,16 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	onPressToggleView() {
 		const { show } = this.state.fullscreen;
 		const force = !show ? true : false;
+
+		// Modal property 'supportedOrientations' is not supported in Android.
+		// So, forcing landscape on show fullscreen and unlock on hide.
+		// [IOS cannot be handled this way because it has issue when unlocking all orientation]
+		if (Platform.OS === 'android' && !show) {
+			Orientation.lockToLandscapeRight();
+		}
+		if (Platform.OS === 'android' && show) {
+			Orientation.unlockAllOrientations();
+		}
 		this.setFullscreenState(!show, force);
 	}
 
@@ -137,12 +147,13 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		const { fullscreen } = this.state;
+		const { show } = fullscreen;
 		const { appLayout } = this.props;
 		const { width, height } = appLayout;
 		// Show full screen on LANDSCAPE alone is handled here!
 		// This is to wait for the appLayout to change and update the style and chart together
 		// else the x-axis, tick and line are not getting updated.
-		if ((width !== prevProps.appLayout.width) && !fullscreen.show) {
+		if ((width !== prevProps.appLayout.width) && !show) {
 			if (width > height) {
 				this.setFullscreenState(true, false);
 			}
@@ -321,7 +332,9 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
-		const chartWidth = (show && force && isPortrait) ? height - outerPadding : width - outerPadding;
+		// In Android, on force show full screen orientation is locked to 'LANDSCAPE'
+		// So use 'height' on in IOS
+		const chartWidth = (Platform.OS === 'ios' && show && force && isPortrait) ? height - outerPadding : width - outerPadding;
 		const domainPadding = chartWidth * 0.05;
 
 		const top = 25, bottom = 30;
