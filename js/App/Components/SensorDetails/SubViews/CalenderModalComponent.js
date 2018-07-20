@@ -26,6 +26,7 @@ import { TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Modal from 'react-native-modal';
 import moment from 'moment';
+import isEqual from 'lodash/isEqual';
 
 import {
 	View,
@@ -57,16 +58,16 @@ static defaultProps: DefaultProps = {
 
 static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 	const { isVisible, current } = props;
-	if ((current !== state.current) && !state.isVisible) {
-		return {
-			current,
-			isVisible,
-		};
-	}
 	if (isVisible !== state.isVisible) {
 		return {
 			isVisible,
 			current,
+		};
+	}
+	if ((current !== state.current) && !state.isVisible) {
+		return {
+			current,
+			isVisible,
 		};
 	}
 	return null;
@@ -109,7 +110,8 @@ onPressNegative() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextState !== this.state;
+	const isStateEqual = isEqual(this.state, nextState);
+	return !isStateEqual;
 }
 
 onDayPress(day: Object) {
