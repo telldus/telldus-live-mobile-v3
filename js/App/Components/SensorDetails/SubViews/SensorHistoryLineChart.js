@@ -30,6 +30,7 @@ import {
 } from 'victory-native';
 import moment from 'moment';
 import Orientation from 'react-native-orientation-locker';
+import isEqual from 'lodash/isEqual';
 
 import { View } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
@@ -41,7 +42,6 @@ type Props = {
 	selectedOne: Object,
 	selectedTwo: Object,
 	appLayout: Object,
-	landscape: boolean,
 	timestamp: Object,
 };
 
@@ -49,6 +49,7 @@ type State = {
 	showOne: boolean,
 	showTwo: boolean,
 	fullscreen: Object,
+	orientation: any,
 };
 
 export default class SensorHistoryLineChart extends View<Props, State> {
@@ -70,6 +71,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				show: false,
 				force: false,
 			},
+			orientation: undefined,
 		};
 		this.toggleOne = this.toggleOne.bind(this);
 		this.toggleTwo = this.toggleTwo.bind(this);
@@ -80,18 +82,42 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		Orientation.addOrientationListener(this._orientationDidChange);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+		const isLayoutEqual = isEqual(nextProps.appLayout, this.props.appLayout);
+		if (!isLayoutEqual) {
+			return true;
+		}
+		const isDataOneEqual = isEqual(nextProps.chartDataOne, this.props.chartDataOne);
+		if (!isDataOneEqual) {
+			return true;
+		}
+		const isDataTwoEqual = isEqual(nextProps.chartDataTwo, this.props.chartDataTwo);
+		if (!isDataTwoEqual) {
+			return true;
+		}
+		return false;
+	}
+
 	_orientationDidChange(orientation: string) {
 		const { show, force } = this.state.fullscreen;
 		// Hide fullscreen when switching back to PORTRAIT alone is handled here
 		// Show fullscreen in LANDSCAPE is handled in componentDidUpdate
 		if (orientation === 'PORTRAIT' && show && !force) {
-			this.setFullscreenState(false, false);
+			this.setFullscreenState(false, false, orientation);
+		} else {
+			this.setState({
+				orientation: orientation,
+			});
 		}
 	}
 
 	componentWillUnmount() {
 		Orientation.removeOrientationListener(this._orientationDidChange);
-	  }
+	}
 
 	toggleTwo() {
 		this.setState({
@@ -121,13 +147,17 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	onPressToggleView() {
-		const { show } = this.state.fullscreen;
+		const { fullscreen, orientation } = this.state;
+		const { show } = fullscreen;
 		const force = !show ? true : false;
 
 		// Modal property 'supportedOrientations' is not supported in Android.
 		// So, forcing landscape on show fullscreen and unlock on hide.
 		// [IOS cannot be handled this way because it has issue when unlocking all orientation]
-		if (Platform.OS === 'android' && !show) {
+		if (Platform.OS === 'android' && !show && (!orientation || orientation !== 'LANDSCAPE-LEFT')) {
+			Orientation.lockToLandscapeLeft();
+		}
+		if (Platform.OS === 'android' && !show && orientation === 'LANDSCAPE-LEFT') {
 			Orientation.lockToLandscapeRight();
 		}
 		if (Platform.OS === 'android' && show) {
@@ -136,12 +166,13 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		this.setFullscreenState(!show, force);
 	}
 
-	setFullscreenState(show: boolean, force: boolean = false) {
+	setFullscreenState(show: boolean, force: boolean = false, orientation?: string = this.state.orientation) {
 		this.setState({
 			fullscreen: {
 				show,
 				force,
 			},
+			orientation,
 		});
 	}
 
@@ -162,6 +193,9 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 	onRequestClose() {
 		this.setFullscreenState(false, false);
+		if (Platform.OS === 'android') {
+			Orientation.unlockAllOrientations();
+		}
 	}
 
 	renderChart(): Object | null {
@@ -297,11 +331,16 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	render(): any {
-		const { show } = this.state.fullscreen;
+		const { fullscreen, orientation } = this.state;
+		const { show } = fullscreen;
 		const chart = this.renderChart();
 		if (!show) {
 			return chart;
 		}
+
+		const supportedOrientations = (!orientation || orientation !== 'LANDSCAPE-RIGHT') ? 'landscape-right' :
+			(orientation === 'LANDSCAPE-RIGHT' ? 'landscape-left' : 'landscape');
+
 		return (
 			<Modal
 				isVisible={show}
@@ -310,7 +349,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				animationType={'slide'}
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.onRequestClose}
-				supportedOrientations={['landscape']}>
+				supportedOrientations={[supportedOrientations]}>
 				<View style={{
 					flex: 1,
 					alignItems: 'center',
@@ -334,7 +373,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		const outerPadding = padding * 2;
 		// In Android, on force show full screen orientation is locked to 'LANDSCAPE'
 		// So use 'height' on in IOS
-		const chartWidth = (Platform.OS === 'ios' && show && force && isPortrait) ? height - outerPadding : width - outerPadding;
+		const chartWidth = (show && force && isPortrait) ? height - outerPadding : width - outerPadding;
 		const domainPadding = chartWidth * 0.05;
 
 		const top = 25, bottom = 30;
