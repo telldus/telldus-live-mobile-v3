@@ -109,7 +109,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		// Hide fullscreen when switching back to PORTRAIT alone is handled here
 		// Show fullscreen in LANDSCAPE is handled in componentDidUpdate
 		if (orientation === 'PORTRAIT' && show && !force) {
-			this.setFullscreenState(false, false, orientation);
+			this.setFullscreenState(false, false, false, orientation);
 		} else {
 			this.setState({
 				orientation: orientation,
