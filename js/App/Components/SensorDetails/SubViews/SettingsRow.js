@@ -30,7 +30,7 @@ type Props = {
     value: boolean,
     label: string,
     appLayout: Object,
-    onValueChange: (boolean) => void;
+    onValueChange: (boolean) => void,
 };
 
 
