@@ -141,7 +141,8 @@ render(): Object {
 
 	return (
 		<Modal
-			isVisible={isVisible}>
+			isVisible={isVisible}
+			hideModalContentWhileAnimating={true}>
 			<View style={containerStyle}>
 				<Poster posterWidth={posterWidth}>
 					<View style={posterItemsStyle}>
