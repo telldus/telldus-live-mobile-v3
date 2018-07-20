@@ -24,7 +24,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, SectionList, RefreshControl } from 'react-native';
-import _ from 'lodash';
+import reduce from 'lodash/reduce';
+import groupBy from 'lodash/groupBy';
 
 import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
@@ -391,11 +392,11 @@ const styles = StyleSheet.create({
 
 // prepares the row and section data required for the List.
 const parseHistoryForSectionList = (data: Object): Array<any> => {
-	let result = _.groupBy(data, (items: Object): any => {
+	let result = groupBy(data, (items: Object): any => {
 		let date = new Date(items.ts * 1000).toDateString();
 		return date;
 	});
-	result = _.reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
+	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
 		acc.push({
 			key: index,
 			data: next,
