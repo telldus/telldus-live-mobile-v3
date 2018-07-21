@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet } from '../../../../../BaseComponents';
+import { View, Text, StyleSheet, IconTelldus } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
 import { hasTokenExpired } from '../../../../Lib';
 
@@ -62,56 +62,43 @@ render(): Object {
 	let { address, key, ttl } = localKey;
 	let tokenExpired = hasTokenExpired(ttl);
 	let supportLocal = address && key && ttl && !tokenExpired;
+	let icon = supportLocal ? 'localcontrol' : 'cloudcontrol';
 	let {
 		statusText,
 		statusInfo,
-	} = this.getStyles(appLayout);
+	} = this.getStyles(appLayout, supportLocal);
 
 	if (!online) {
+		icon = 'cloudcontrol';
 		return (
-			<View style={{flexDirection: 'column'}}>
-				<View style={styles.statusInfoCover}>
-					<View style={[statusInfo, { backgroundColor: locationOffline}, statusInfoStyle]}/>
-					<Text style={[statusText, textStyle]}>
-						{this.offline}
-					</Text>
-				</View>
+			<View style={styles.statusInfoCover}>
+				<IconTelldus icon={icon} style={{...statusInfo, color: locationOffline, ...statusInfoStyle}}/>
 				<Text style={[statusText, textStyle]}>
-					{supportLocal ? 'local' : 'cloud'}
+					{this.offline}
 				</Text>
 			</View>
 		);
 	} else if (!websocketOnline) {
 		return (
-			<View style={{flexDirection: 'column'}}>
-				<View style={styles.statusInfoCover}>
-					<View style={[statusInfo, { backgroundColor: locationNoLiveUpdates}, statusInfoStyle]}/>
-					<Text style={[statusText, textStyle]}>
-						{this.noLiveUpdates}
-					</Text>
-				</View>
+			<View style={styles.statusInfoCover}>
+				<IconTelldus icon={icon} style={{...statusInfo, color: locationNoLiveUpdates, ...statusInfoStyle}}/>
 				<Text style={[statusText, textStyle]}>
-					{supportLocal ? 'local' : 'cloud'}
+					{this.noLiveUpdates}
 				</Text>
 			</View>
 		);
 	}
 	return (
-		<View style={{flexDirection: 'column'}}>
-			<View style={styles.statusInfoCover}>
-				<View style={[statusInfo, { backgroundColor: locationOnline}, statusInfoStyle]}/>
-				<Text style={[statusText, textStyle]}>
-					{this.online}
-				</Text>
-			</View>
+		<View style={styles.statusInfoCover}>
+			<IconTelldus icon={icon} style={{...statusInfo, color: locationOnline, ...statusInfoStyle}}/>
 			<Text style={[statusText, textStyle]}>
-				{supportLocal ? 'local' : 'cloud'}
+				{this.online}
 			</Text>
 		</View>
 	);
 }
 
-getStyles(appLayout: Object): Object {
+getStyles(appLayout: Object, supportLocal: boolean): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -119,24 +106,19 @@ getStyles(appLayout: Object): Object {
 	let textLocationSize = Math.floor(deviceWidth * 0.042);
 	textLocationSize = textLocationSize > 28 ? 28 : textLocationSize;
 
-	let statusInfoSize = Math.floor(deviceWidth * 0.038);
-	statusInfoSize = statusInfoSize > 25 ? 25 : statusInfoSize;
+	let statusInfoSize = Math.floor(deviceWidth * 0.055);
+	statusInfoSize = statusInfoSize > 28 ? 28 : statusInfoSize;
 
 	let fontSize = textLocationSize;
 
 	return {
 		statusInfo: {
-			width: statusInfoSize,
-			height: statusInfoSize,
-			borderRadius: statusInfoSize / 2,
-			marginTop: 3,
+			fontSize: statusInfoSize,
 			marginRight: 5,
 		},
 		statusText: {
 			fontSize,
-			textAlignVertical: 'center',
 			color: '#A59F9A',
-			marginTop: 2,
 		},
 	};
 }
@@ -146,7 +128,6 @@ const styles = StyleSheet.create({
 	statusInfoCover: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'center',
 	},
 });
 

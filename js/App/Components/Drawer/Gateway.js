@@ -162,9 +162,7 @@ class Gateway extends PureComponent<Props, null> {
 				fontSize: fontSizeH3,
 			},
 			statusInfoStyle: {
-				width: fontSizeH3,
-				height: fontSizeH3,
-				borderRadius: fontSizeH3 / 2,
+				fontSize: fontSizeH3 * 2,
 			},
 			iconSettingsContainer: {
 				width: iconSize + 15,
