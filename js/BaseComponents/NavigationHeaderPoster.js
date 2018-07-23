@@ -23,9 +23,10 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
+import { StyleSheet, TouchableOpacity, BackHandler, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import Text from './Text';
 import View from './View';
@@ -164,7 +165,11 @@ render(): Object {
 							style={styles.backButtonLand}
 							onPress={this.goBack}
 							accessibilityLabel={this.labelLeftIcon}>
-							<Icon name="arrow-back" size={width * 0.047} color="#fff"/>
+							{Platform.OS === 'ios' ?
+								<FontAwesome name="angle-left" size={width * 0.047} color="#fff"/>
+								:
+								<Icon name="arrow-back" size={width * 0.047} color="#fff"/>
+							}
 						</TouchableOpacity>
 					)}
 					{!!infoButton && this._renderInfoButton(infoButton)}

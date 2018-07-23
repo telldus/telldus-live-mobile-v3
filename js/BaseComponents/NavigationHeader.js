@@ -27,7 +27,8 @@ import { StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { intlShape, injectIntl } from 'react-intl';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 
@@ -82,9 +83,14 @@ class NavigationHeader extends PureComponent<Props, null> {
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let size = isPortrait ? width * 0.06 : height * 0.06;
+		if (Platform.OS === 'ios') {
+			return (
+				<FontAwesome name={'angle-left'} size={size} color="#fff" style={styles.iconLeft}/>
+			);
+		}
 
 		return (
-			<Icon name="arrow-back" size={size} color="#fff" style={styles.iconLeft}/>
+			<MaterialIcons name={'arrow-back'} size={size} color="#fff" style={styles.iconLeft}/>
 		);
 	}
 
