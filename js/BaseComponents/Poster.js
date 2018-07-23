@@ -63,7 +63,7 @@ class Poster extends Component<Props, null> {
 		super(props);
 	}
 
-	getImageSource(height: number): number {
+	getImageSource(height: number): number | Object {
 		let { source750, source1500, source3000 } = this.props;
 		switch (height) {
 			case height > 700 && height < 1400:

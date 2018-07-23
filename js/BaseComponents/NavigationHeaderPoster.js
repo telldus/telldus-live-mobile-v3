@@ -63,7 +63,7 @@ type DefaultProps = {
 	showLeftIcon: boolean,
 };
 
-class NavigationHeaderPoster extends View<Props, null> {
+class NavigationHeaderPoster extends React.Component<Props, null> {
 props: Props;
 
 static defaultProps: DefaultProps = {
@@ -78,6 +78,7 @@ handleBackPress: () => boolean;
 noName: string;
 defaultDescription: string;
 labelLeftIcon: string;
+isTablet: boolean;
 
 constructor(props: Props) {
 	super(props);
@@ -186,7 +187,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 	const topWhenRight = adjustItems ? posterHeight * 0.25 : posterHeight * 0.25;
 
 	const fontSizeH1 = posterHeight * 0.30;
-	const fontSizeH2 = adjustItems ? (icon ? posterHeight * 0.22 : posterHeight * 0.2) : posterHeight * 0.15;
+	const fontSizeH2 = adjustItems ? (icon ? posterHeight * 0.24 : posterHeight * 0.2) : posterHeight * 0.15;
 
 	return {
 		posterCover: {

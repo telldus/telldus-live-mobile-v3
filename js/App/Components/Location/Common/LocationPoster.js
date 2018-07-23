@@ -41,6 +41,7 @@ type Props = {
 	intl: Object,
 	icon: string,
 	showLeftIcon?: boolean,
+	align: 'center' | 'right',
 };
 
 type DefaultProps = {
