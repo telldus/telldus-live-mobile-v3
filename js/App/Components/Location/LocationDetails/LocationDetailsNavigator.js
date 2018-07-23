@@ -64,10 +64,10 @@ const RouteConfigs = {
 
 const StackNavigatorConfig = {
 	initialRouteName,
-	headerMode: 'float',
+	headerMode: 'none',
 	navigationOptions: ({navigation}: Object): Object => {
 		return {
-			header: <NavigationHeader navigation={navigation}/>,
+			header: null,
 		};
 	},
 };

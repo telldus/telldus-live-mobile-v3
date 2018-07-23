@@ -77,11 +77,10 @@ const RouteConfigs = {
 
 const StackNavigatorConfig = {
 	initialRouteName,
-	headerMode: 'float',
+	headerMode: 'none',
 	navigationOptions: ({navigation}: Object): Object => {
-		let {state} = navigation;
 		return {
-			header: <NavigationHeader navigation={navigation} showLeftIcon={state.routeName !== 'Success'}/>,
+			header: null,
 		};
 	},
 };

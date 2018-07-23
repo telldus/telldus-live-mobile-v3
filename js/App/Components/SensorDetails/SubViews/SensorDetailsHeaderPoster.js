@@ -23,12 +23,9 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import DeviceInfo from 'react-native-device-info';
 
-import { Text, View, Poster, IconTelldus, NavigationHeader } from '../../../../BaseComponents';
+import { View, NavigationHeaderPoster } from '../../../../BaseComponents';
 import { closeDatabase } from '../../../Actions/LocalStorage';
 import i18n from '../../../Translations/common';
 import { hideModal } from '../../../Actions';
@@ -44,38 +41,21 @@ type Props = {
 class SensorDetailsHeaderPoster extends View<Props, null> {
 	props: Props;
 
-	goBack: () => void;
 	handleBackPress: () => boolean;
 
 	noName: string;
-	defaultDescription: string;
-	labelLeftIcon: string;
 
 	constructor(props: Props) {
 		super(props);
-		this.goBack = this.goBack.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
 
-		this.isTablet = DeviceInfo.isTablet();
-
 		let { formatMessage } = props.screenProps.intl;
-
-		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
-		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
 
 		this.noName = formatMessage(i18n.noName);
 	}
 
 	goBack() {
 		this.props.navigation.goBack();
-	}
-
-	componentDidMount() {
-		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-	}
-
-	componentWillUnmount() {
-		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 	handleBackPress(): boolean {
@@ -98,92 +78,22 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 
 	render(): Object {
 		const { navigation, sensor, screenProps } = this.props;
-		const { appLayout } = screenProps;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-
-		const {
-			posterCover,
-			iconBackground,
-			sensorIcon,
-			textSensorName,
-		} = this.getStyles(appLayout);
+		const { appLayout, intl } = screenProps;
 
 		const sensorName = sensor.name ? sensor.name : this.noName;
 
 		return (
-			<View style={styles.container}>
-				<NavigationHeader navigation={navigation}/>
-				<Poster>
-					<View style={posterCover}>
-						{(!this.isTablet) && (!isPortrait) &&
-							<TouchableOpacity
-								style={styles.backButtonLand}
-								onPress={this.goBack}
-								accessibilityLabel={this.labelLeftIcon}>
-								<Icon name="arrow-back" size={width * 0.047} color="#fff"/>
-							</TouchableOpacity>
-						}
-						<View style={iconBackground}>
-							<IconTelldus icon="device-alt" style={sensorIcon} />
-						</View>
-						<Text style={textSensorName}>
-							{sensorName}
-						</Text>
-					</View>
-				</Poster>
-			</View>
+			<NavigationHeaderPoster
+				icon={'sensor'}
+				h2={sensorName}
+				appLayout={appLayout}
+				intl={intl}
+				navigation={navigation}
+				handleBackPress={this.handleBackPress}
+			/>
 		);
 	}
-
-	getStyles(appLayout: Object): Object {
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-
-		return {
-			posterCover: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				bottom: 0,
-				right: 0,
-				alignItems: 'center',
-				justifyContent: 'center',
-			},
-			iconBackground: {
-				backgroundColor: '#fff',
-				alignItems: 'center',
-				justifyContent: 'center',
-				width: isPortrait ? height * 0.12 : height * 0.10,
-				height: isPortrait ? height * 0.12 : height * 0.10,
-				borderRadius: isPortrait ? height * 0.06 : height * 0.05,
-				marginRight: isPortrait ? 0 : 10,
-			},
-			sensorIcon: {
-				fontSize: isPortrait ? height * 0.08 : height * 0.06,
-				color: '#F06F0C',
-			},
-			textSensorName: {
-				fontSize: isPortrait ? width * 0.05 : height * 0.05,
-				color: '#fff',
-			},
-		};
-	}
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 0,
-	},
-	backButtonLand: {
-		position: 'absolute',
-		alignItems: 'flex-start',
-		justifyContent: 'center',
-		backgroundColor: 'transparent',
-		left: 10,
-		top: 10,
-	},
-});
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);

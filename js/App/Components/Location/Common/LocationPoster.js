@@ -22,16 +22,8 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import DeviceInfo from 'react-native-device-info';
 
-import { View, Text, Poster, RoundedInfoButton } from '../../../../BaseComponents';
-
-import i18n from '../../../Translations/common';
-import Theme from '../../../Theme';
+import { View, NavigationHeaderPoster } from '../../../../BaseComponents';
 
 type InfoButton = {
 	onPress?: Function,
@@ -47,125 +39,42 @@ type Props = {
 	screenProps: Object,
 	navigation: Object,
 	intl: Object,
-	headerContainerStyle: Object | number,
-	showHeader?: boolean,
-	customHeader?: Object | null,
+	icon: string,
+	showLeftIcon?: boolean,
 };
 
-class LocationDetailsPoster extends View {
+type DefaultProps = {
+	showLeftIcon: boolean,
+};
+
+class LocationPoster extends View<Props, null> {
 	props: Props;
 	goBack: () => void;
 
-	static propTypes = {
-		h1: PropTypes.string,
-		h2: PropTypes.string,
-		infoButton: PropTypes.object,
-	};
-
-	static defaultProps = {
-		showHeader: true,
-		customHeader: null,
+	static defaultProps: DefaultProps = {
+		showLeftIcon: true,
 	};
 
 	constructor(props: Props) {
 		super(props);
-		this._renderInfoButton = this._renderInfoButton.bind(this);
-		this.goBack = this.goBack.bind(this);
-		this.isTablet = DeviceInfo.isTablet();
-
-		let { formatMessage } = props.intl;
-
-		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
-		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
-	}
-
-	_renderInfoButton = (button: Object): Object => {
-		return (
-			<RoundedInfoButton buttonProps={button}/>
-		);
-	};
-
-	goBack() {
-		let { navigation } = this.props;
-		navigation.pop();
 	}
 
 	render(): Object {
-		const { h1, h2, infoButton, appLayout, showHeader, headerContainerStyle, customHeader, screenProps } = this.props;
-		const styles = this.getStyle(appLayout);
-		const isPortrait = appLayout.height > appLayout.width;
+		const { h1, h2, icon, infoButton, appLayout, navigation, intl, align, showLeftIcon } = this.props;
 
 		return (
-			<Poster>
-				{(!this.isTablet) && (!isPortrait) && screenProps.currentScreen !== 'Success' &&
-						<TouchableOpacity
-							style={styles.backButtonLand}
-							onPress={this.goBack}
-							accessibilityLabel={this.labelLeftIcon}>
-							<Icon name="arrow-back" size={appLayout.width * 0.047} color="#fff" style={styles.iconLeft}/>
-						</TouchableOpacity>
-				}
-				{!!showHeader &&
-				<View style={[styles.hContainer, headerContainerStyle]}>
-					<Text style={[styles.h, styles.h1]}>
-						{!!h1 && h1}
-					</Text>
-					<Text style={[styles.h, styles.h2]}>
-						{!!h2 && h2}
-					</Text>
-				</View>
-				}
-				{customHeader && React.isValidElement(customHeader) &&
-					customHeader
-				}
-				{!!infoButton && this._renderInfoButton(infoButton)}
-			</Poster>
+			<NavigationHeaderPoster
+				icon={icon}
+				h1={h1}
+				h2={h2}
+				infoButton={infoButton}
+				align={align}
+				appLayout={appLayout}
+				intl={intl}
+				navigation={navigation}
+				showLeftIcon={showLeftIcon}/>
 		);
 	}
-
-	getStyle = (appLayout: Object): Object => {
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-
-		return {
-			hContainer: {
-				position: 'absolute',
-				right: isPortrait ? width * 0.124 : height * 0.124,
-				top: isPortrait ? width * 0.088 : height * 0.088,
-				flex: 1,
-				alignItems: 'flex-end',
-			},
-			h: {
-				color: '#fff',
-				backgroundColor: 'transparent',
-				fontFamily: Theme.Core.fonts.robotoLight,
-			},
-			h1: {
-				fontSize: isPortrait ? width * 0.085333333 : height * 0.085333333,
-			},
-			h2: {
-				fontSize: isPortrait ? width * 0.053333333 : height * 0.053333333,
-			},
-			backButtonLand: {
-				position: 'absolute',
-				alignItems: 'flex-start',
-				justifyContent: 'center',
-				backgroundColor: 'transparent',
-				left: 10,
-				top: 10,
-				zIndex: 1,
-			},
-			iconLeft: {
-				paddingVertical: 10,
-			},
-		};
-	}
 }
 
-function mapStateToProps(state: Object): Object {
-	return {
-		appLayout: state.app.layout,
-	};
-}
-
-export default connect(mapStateToProps, null)(LocationDetailsPoster);
+export default LocationPoster;
