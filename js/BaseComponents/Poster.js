@@ -32,16 +32,17 @@ type Props = {
 	children?: any,
 	source?: number,
 	appLayout: Object,
-	source750: number,
-	source1500: number,
-	source3000: number,
+	source750: number | Object,
+	source1500: number | Object,
+	source3000: number | Object,
 	posterWidth?: number,
+	posterHeight?: number,
 };
 
 type DefaultProps = {
-	source750: number,
-	source1500: number,
-	source3000: number,
+	source750: number | Object,
+	source1500: number | Object,
+	source3000: number | Object,
 };
 
 class Poster extends Component<Props, null> {
@@ -53,9 +54,9 @@ class Poster extends Component<Props, null> {
 	};
 
 	static defaultProps: DefaultProps = {
-		source750: 'telldus_geometric_bg_750',
-		source1500: 'telldus_geometric_bg_1500',
-		source3000: 'telldus_geometric_bg_3000',
+		source750: { uri: 'telldus_geometric_bg_750'},
+		source1500: { uri: 'telldus_geometric_bg_1500'},
+		source3000: { uri: 'telldus_geometric_bg_3000'},
 	};
 
 	constructor(props: Props) {
@@ -88,28 +89,30 @@ class Poster extends Component<Props, null> {
 		const { image, mask } = this._getStyle(appLayout);
 		return (
 			<View style={mask}>
-				<Image source={{uri: imageSource}} style={image}/>
+				<Image source={imageSource} style={image}/>
 				{!!children && children}
 			</View>
 		);
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		let { posterWidth } = this.props;
+		let { posterWidth, posterHeight } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
 		posterWidth = posterWidth ? posterWidth : width;
+		posterHeight = posterHeight ? posterHeight : deviceWidth * 0.333333333;
 
 		return {
 			image: {
-				flex: 1,
-				height: undefined,
+				height: posterHeight,
 				...ifIphoneX({width: '100%'}, {width: posterWidth}),
 				resizeMode: 'cover',
 			},
 			mask: {
 				borderWidth: 0,
-				height: isPortrait ? width * 0.333333333 : height * 0.333333333,
+				height: posterHeight,
 				...ifIphoneX({width: '100%'}, {width: posterWidth}),
 				overflow: 'hidden',
 			},
