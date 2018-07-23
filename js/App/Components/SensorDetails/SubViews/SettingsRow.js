@@ -30,24 +30,34 @@ type Props = {
     value: boolean,
     label: string,
     appLayout: Object,
-    onValueChange: (boolean) => void,
+	onValueChange: (boolean) => void,
+	type?: 'switch' | 'text',
+};
+
+type DefaultProps = {
+	type: 'switch' | 'text',
 };
 
 
 class SettingsRow extends View<Props, null> {
 	props: Props;
 
+	static defaultProps: DefaultProps = {
+		type: 'switch',
+	}
+
 	constructor(props: Props) {
 		super(props);
 	}
 
 	render(): Object {
-		let { appLayout, label, value, onValueChange } = this.props;
+		let { appLayout, label, value, onValueChange, type } = this.props;
 
 		let {
 			ShowOnDashCover,
 			textShowOnDashCover,
 			textShowOnDash,
+			valueText,
 		} = this.getStyle(appLayout);
 
 		return (
@@ -57,10 +67,16 @@ class SettingsRow extends View<Props, null> {
 						{label}
 					</Text>
 				</View>
-				<Switch
-					onValueChange={onValueChange}
-					value={value}
-				/>
+				{type === 'switch' ?
+					<Switch
+						onValueChange={onValueChange}
+						value={value}
+					/>
+					:
+					<Text style={valueText}>
+						{value}
+					</Text>
+				}
 			</View>
 		);
 	}
@@ -70,7 +86,9 @@ class SettingsRow extends View<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const { inactiveTintColor, paddingFactor } = Theme.Core;
+
+		const padding = deviceWidth * paddingFactor;
 		const fontSize = deviceWidth * 0.04;
 
 		return {
@@ -88,7 +106,7 @@ class SettingsRow extends View<Props, null> {
 				justifyContent: 'center',
 			},
 			textShowOnDash: {
-				color: '#8A8682',
+				color: '#000',
 				fontSize,
 				marginLeft: 8,
 				justifyContent: 'center',
@@ -96,6 +114,10 @@ class SettingsRow extends View<Props, null> {
 			learn: {
 				marginHorizontal: width * 0.25,
 				marginVertical: padding / 2,
+			},
+			valueText: {
+				fontSize,
+				color: inactiveTintColor,
 			},
 		};
 	}

@@ -26,7 +26,7 @@ import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 
-import { View, TabBar } from '../../../BaseComponents';
+import { View, TabBar, Text } from '../../../BaseComponents';
 import { SettingsRow } from './SubViews';
 
 import {
@@ -163,12 +163,14 @@ class SettingsTab extends View {
 
 	render(): Object {
 		const { keepHistory, isHidden } = this.state;
-		const { inDashboard } = this.props;
+		const { inDashboard, sensor } = this.props;
+		const { model, protocol, id } = sensor;
 		const { appLayout, intl } = this.props.screenProps;
 		const { formatMessage } = intl;
 
 		const {
 			container,
+			infoHeaderText,
 		} = this.getStyle(appLayout);
 
 		return (
@@ -192,6 +194,27 @@ class SettingsTab extends View {
 						value={keepHistory}
 						appLayout={appLayout}
 					/>
+					<Text style={infoHeaderText}>
+						{formatMessage(i18n.labelTechnicalInfo)}
+					</Text>
+					<SettingsRow
+						type={'text'}
+						label={formatMessage(i18n.labelProtocol)}
+						value={protocol}
+						appLayout={appLayout}
+					/>
+					<SettingsRow
+						type={'text'}
+						label={formatMessage(i18n.labelModel)}
+						value={model}
+						appLayout={appLayout}
+					/>
+					<SettingsRow
+						type={'text'}
+						label={`${formatMessage(i18n.labelSensor)} ${formatMessage(i18n.labelId)}`}
+						value={id}
+						appLayout={appLayout}
+					/>
 				</View>
 			</ScrollView>
 		);
@@ -202,7 +225,10 @@ class SettingsTab extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const { inactiveTintColor, paddingFactor } = Theme.Core;
+
+		const padding = deviceWidth * paddingFactor;
+		const fontSize = deviceWidth * 0.04;
 
 		return {
 			container: {
@@ -210,6 +236,11 @@ class SettingsTab extends View {
 				paddingHorizontal: padding,
 				paddingBottom: padding,
 				paddingTop: padding / 2,
+			},
+			infoHeaderText: {
+				fontSize,
+				color: inactiveTintColor,
+				marginTop: padding,
 			},
 		};
 	}

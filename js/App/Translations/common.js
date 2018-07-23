@@ -668,6 +668,22 @@ const messages = defineMessages({
 		defaultMessage: 'CANCEL',
 		description: 'Default Negative text for the notification component',
 	},
+	labelTechnicalInfo: {
+		id: 'label.technicalInfo',
+		defaultMessage: 'Technical information',
+	},
+	labelProtocol: {
+		id: 'label.protocol',
+		defaultMessage: 'Protocol',
+	},
+	labelModel: {
+		id: 'label.model',
+		defaultMessage: 'Model',
+	},
+	labelId: {
+		id: 'label.id',
+		defaultMessage: 'ID',
+	},
 });
 
 export default messages;
