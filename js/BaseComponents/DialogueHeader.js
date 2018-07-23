@@ -31,7 +31,7 @@ type Props = {
     headerText: string,
     headerStyle: number | Object | Array<Object>,
     textStyle: number | Object | Array<Object>,
-    source: number,
+    source: Object | number,
 	onPressIcon?: () => void,
 	onPressHeader?: () => void,
     showIcon?: boolean,
@@ -41,7 +41,7 @@ type Props = {
 };
 
 type defaultProps = {
-    source: number,
+    source: Object | number,
     showIcon?: boolean,
     iconName?: string,
     iconSize?: number,
@@ -51,7 +51,7 @@ type defaultProps = {
 export default class DialogueHeader extends Component<Props, null> {
 props: Props;
 static defaultProps: defaultProps = {
-	source: require('../App/Components/TabViews/img/telldus-geometric-bg-750.png'),
+	source: {uri: 'telldus_geometric_bg_750'},
 	showIcon: false,
 	iconName: 'times-circle',
 	iconSize: 12,

@@ -53,9 +53,9 @@ class Poster extends Component<Props, null> {
 	};
 
 	static defaultProps: DefaultProps = {
-		source750: require('../App/Components/TabViews/img/telldus-geometric-bg-750.png'),
-		source1500: require('../App/Components/TabViews/img/telldus-geometric-bg-1500.png'),
-		source3000: require('../App/Components/TabViews/img/telldus-geometric-bg-3000.png'),
+		source750: 'telldus_geometric_bg_750',
+		source1500: 'telldus_geometric_bg_1500',
+		source3000: 'telldus_geometric_bg_3000',
 	};
 
 	constructor(props: Props) {
@@ -88,7 +88,7 @@ class Poster extends Component<Props, null> {
 		const { image, mask } = this._getStyle(appLayout);
 		return (
 			<View style={mask}>
-				<Image source={imageSource} style={image}/>
+				<Image source={{uri: imageSource}} style={image}/>
 				{!!children && children}
 			</View>
 		);

@@ -72,7 +72,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	showModal: boolean,
 	validationMessage: any,
-	source: number,
+	source: Object | number,
 	appLayout: Object,
 };
 
@@ -84,7 +84,7 @@ type State = {
 };
 
 type DefaultProps = {
-	source: number,
+	source: Object | number,
 };
 
 export interface ScheduleProps {
@@ -104,11 +104,11 @@ class AddLocationContainer extends View<null, Props, State> {
 		screenProps: PropTypes.object,
 		showModal: PropTypes.bool,
 		validationMessage: PropTypes.any,
-		source: PropTypes.number,
+		source: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 	};
 
 	static defaultProps: DefaultProps = {
-		source: require('../../TabViews/img/telldus-geometric-bg-750.png'),
+		source: {uri: 'telldus_geometric_bg_750'},
 	};
 
 	state = {
