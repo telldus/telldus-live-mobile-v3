@@ -142,14 +142,6 @@ render(): Object {
 		<View style={styles.container}>
 			<NavigationHeader navigation={navigation} showLeftIcon={showLeftIcon}/>
 			<Poster posterHeight={posterHeight}>
-				{adjustItems && showBackButton && (
-					<TouchableOpacity
-						style={styles.backButtonLand}
-						onPress={this.goBack}
-						accessibilityLabel={this.labelLeftIcon}>
-						<Icon name="arrow-back" size={width * 0.047} color="#fff"/>
-					</TouchableOpacity>
-				)}
 				<View style={[posterCover, posterCoverStyle]}>
 					<View style={posterItemsContainer}>
 						{!!icon && (
@@ -166,6 +158,14 @@ render(): Object {
 							</Text>
 						)}
 					</View>
+					{adjustItems && showBackButton && (
+						<TouchableOpacity
+							style={styles.backButtonLand}
+							onPress={this.goBack}
+							accessibilityLabel={this.labelLeftIcon}>
+							<Icon name="arrow-back" size={width * 0.047} color="#fff"/>
+						</TouchableOpacity>
+					)}
 					{!!infoButton && this._renderInfoButton(infoButton)}
 				</View>
 			</Poster>
