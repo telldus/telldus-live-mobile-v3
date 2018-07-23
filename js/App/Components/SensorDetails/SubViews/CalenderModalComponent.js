@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Modal from 'react-native-modal';
 import moment from 'moment';
@@ -142,8 +142,9 @@ render(): Object {
 	return (
 		<Modal
 			isVisible={isVisible}
-			hideModalContentWhileAnimating={true}>
-			<View style={containerStyle}>
+			hideModalContentWhileAnimating={true}
+			supportedOrientations={['portrait', 'landscape']}>
+			<ScrollView tyle={{flex: 1}} contentContainerStyle={containerStyle}>
 				<Poster posterWidth={posterWidth}>
 					<View style={posterItemsStyle}>
 						<FormattedDate
@@ -176,7 +177,7 @@ render(): Object {
 						</Text>
 					</TouchableOpacity>
 				</View>
-			</View>
+			</ScrollView>
 		</Modal>
 	);
 }
@@ -194,7 +195,7 @@ getStyle(appLayout: Object): Object {
 
 	return {
 		containerStyle: {
-			flex: 1,
+			flexGrow: 1,
 			justifyContent: 'center',
 		},
 		posterWidth: '100%',
