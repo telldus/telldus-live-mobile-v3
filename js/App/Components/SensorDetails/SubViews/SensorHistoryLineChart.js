@@ -72,7 +72,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				show: false,
 				force: false,
 			},
-			orientation: undefined,
+			orientation: Orientation.getInitialOrientation(),
 			isLoading: false,
 		};
 		this.toggleOne = this.toggleOne.bind(this);
@@ -167,7 +167,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			// Modal property 'supportedOrientations' is not supported in Android.
 			// So, forcing landscape on show fullscreen and unlock on hide.
 			// [IOS cannot be handled this way because it has issue when unlocking all orientation]
-			if (Platform.OS === 'android' && !show && (!orientation || orientation !== 'LANDSCAPE-LEFT')) {
+			if (Platform.OS === 'android' && !show && (orientation === 'PORTRAIT' || orientation === 'LANDSCAPE-RIGHT')) {
 				Orientation.lockToLandscapeLeft();
 			}
 			if (Platform.OS === 'android' && !show && orientation === 'LANDSCAPE-LEFT') {
@@ -356,7 +356,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			return chart;
 		}
 
-		const supportedOrientations = (!orientation || orientation !== 'LANDSCAPE-RIGHT') ? 'landscape-right' :
+		const supportedOrientations = (orientation === 'PORTRAIT' || orientation === 'LANDSCAPE-LEFT') ? 'landscape-right' :
 			(orientation === 'LANDSCAPE-RIGHT' ? 'landscape-left' : 'landscape');
 
 		const {
