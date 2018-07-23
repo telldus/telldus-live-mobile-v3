@@ -157,20 +157,26 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		const force = !show ? true : false;
 
 		const isLoading = (Platform.OS === 'android' && isPortrait) ? true : false;
-		this.setFullscreenState(!show, force, isLoading);
-
-		// Modal property 'supportedOrientations' is not supported in Android.
-		// So, forcing landscape on show fullscreen and unlock on hide.
-		// [IOS cannot be handled this way because it has issue when unlocking all orientation]
-		if (Platform.OS === 'android' && !show && (!orientation || orientation !== 'LANDSCAPE-LEFT')) {
-			Orientation.lockToLandscapeLeft();
-		}
-		if (Platform.OS === 'android' && !show && orientation === 'LANDSCAPE-LEFT') {
-			Orientation.lockToLandscapeRight();
-		}
-		if (Platform.OS === 'android' && show) {
-			Orientation.unlockAllOrientations();
-		}
+		this.setState({
+			fullscreen: {
+				show: !show,
+				force,
+			},
+			isLoading,
+		}, () => {
+			// Modal property 'supportedOrientations' is not supported in Android.
+			// So, forcing landscape on show fullscreen and unlock on hide.
+			// [IOS cannot be handled this way because it has issue when unlocking all orientation]
+			if (Platform.OS === 'android' && !show && (!orientation || orientation !== 'LANDSCAPE-LEFT')) {
+				Orientation.lockToLandscapeLeft();
+			}
+			if (Platform.OS === 'android' && !show && orientation === 'LANDSCAPE-LEFT') {
+				Orientation.lockToLandscapeRight();
+			}
+			if (Platform.OS === 'android' && show) {
+				Orientation.unlockAllOrientations();
+			}
+		});
 	}
 
 	setFullscreenState(show: boolean, force: boolean = false, isLoading: boolean, orientation?: string = this.state.orientation) {
@@ -342,6 +348,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	render(): any {
+		const { appLayout } = this.props;
 		const { fullscreen, orientation, isLoading } = this.state;
 		const { show } = fullscreen;
 		const chart = this.renderChart();
@@ -351,6 +358,10 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 		const supportedOrientations = (!orientation || orientation !== 'LANDSCAPE-RIGHT') ? 'landscape-right' :
 			(orientation === 'LANDSCAPE-RIGHT' ? 'landscape-left' : 'landscape');
+
+		const {
+			containerStyle,
+		} = this.getStyle(appLayout);
 
 		return (
 			<Modal
@@ -367,12 +378,14 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 					justifyContent: 'center',
 				}}>
 					{isLoading ?
-						<Text style={{
-							fontSize: 16,
-							color: '#000',
-						}}>
+						<View style={containerStyle}>
+							<Text style={{
+								fontSize: 16,
+								color: '#000',
+							}}>
 						Loading...
-						</Text>
+							</Text>
+						</View>
 						:
 						chart
 					}
@@ -409,6 +422,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 					backgroundColor: '#fff',
 					width: chartWidth,
 					...shadow,
+					alignItems: 'center',
+					justifyContent: 'center',
 				}
 				:
 				{
