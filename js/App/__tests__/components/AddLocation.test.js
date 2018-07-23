@@ -24,7 +24,7 @@ describe('<AddLocationContainer />', () => {
 	it('should shallow AddLocationContainer', () => {
 		expect(wrapper.find(AddLocationContainer).length).toBe(1);
 		const screen = wrapper.props().children.type.displayName;
-		expect(screen).toEqual('Connect(InjectIntl(AddLocationContainer))');
+		expect(screen).toEqual('Connect(AddLocationContainer)');
 	});
 
 	it(' check addToDashboard action on dispatching ', () => {
