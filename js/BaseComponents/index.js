@@ -79,6 +79,7 @@ import DialogueHeader from './DialogueHeader';
 import TitledInfoBlock from './TitledInfoBlock';
 import CheckBoxIconText from './CheckBoxIconText';
 import NavigationHeader from './NavigationHeader';
+import NavigationHeaderPoster from './NavigationHeaderPoster';
 
 import {
 	AppState,
@@ -148,6 +149,7 @@ module.exports = {
 	TitledInfoBlock,
 	CheckBoxIconText,
 	NavigationHeader,
+	NavigationHeaderPoster,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
