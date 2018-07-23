@@ -25,7 +25,6 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
-import { NavigationHeader } from '../../../../BaseComponents';
 import LocationDetailsContainer from './LocationDetailsContainer';
 
 import Details from './Details';
