@@ -268,7 +268,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		}];
 
 		return (
-			<View style={containerStyle}>
+			<View style={containerStyle} pointerEvents="none">
 				<ChartLegend
 					legendData={legendData}
 					appLayout={appLayout}
