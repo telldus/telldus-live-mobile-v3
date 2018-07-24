@@ -29,8 +29,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FullPageActivityIndicator, View, DialogueBox } from '../../../BaseComponents';
-import { SchedulePoster } from './SubViews';
+import { FullPageActivityIndicator, View, DialogueBox, NavigationHeaderPoster } from '../../../BaseComponents';
 import Theme from '../../Theme';
 
 import * as scheduleActions from '../../Actions/Schedule';
@@ -170,8 +169,12 @@ class ScheduleScreen extends View<null, Props, State> {
 					flex: 1,
 					opacity: loading ? 0 : 1,
 				}}>
-					<SchedulePoster h1={h1} h2={h2} infoButton={infoButton} screenProps={screenProps} navigation={navigation}
-						intl={intl} appLayout={appLayout}/>
+					<NavigationHeaderPoster
+						h1={h1} h2={h2}
+						infoButton={infoButton}
+						align={'right'}
+						navigation={navigation}
+						{...screenProps}/>
 					<View style={style}>
 						{React.cloneElement(
 							children,

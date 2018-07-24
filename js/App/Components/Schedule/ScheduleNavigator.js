@@ -71,11 +71,11 @@ const RouteConfigs = {
 
 const StackNavigatorConfig = {
 	initialRouteName,
-	headerMode: 'float',
-	navigationOptions: ({navigation}) => {
-		return {
-			header: <NavigationHeader navigation={navigation} />,
-		};
+	headerMode: 'none',
+	cardStyle: {
+		shadowColor: 'transparent',
+		shadowOpacity: 0,
+		elevation: 0,
 	},
 };
 
