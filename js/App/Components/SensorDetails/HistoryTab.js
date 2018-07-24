@@ -405,7 +405,8 @@ class HistoryTab extends View {
 						selectedOne={selectedOne}
 						selectedTwo={selectedTwo}
 						timestamp={timestamp}
-						appLayout={appLayout}/>
+						appLayout={appLayout}
+						showCalender={showCalender}/>
 					<GraphValuesDropDown
 						selectedOne={selectedOne}
 						selectedTwo={selectedTwo}
