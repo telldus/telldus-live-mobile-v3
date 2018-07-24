@@ -164,16 +164,17 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			},
 			isLoading,
 		}, () => {
+			const { show: currShow } = this.state.fullscreen;
 			// Modal property 'supportedOrientations' is not supported in Android.
 			// So, forcing landscape on show fullscreen and unlock on hide.
 			// [IOS cannot be handled this way because it has issue when unlocking all orientation]
-			if (Platform.OS === 'android' && !show && (orientation === 'PORTRAIT' || orientation === 'LANDSCAPE-RIGHT')) {
+			if (Platform.OS === 'android' && currShow && (orientation === 'PORTRAIT' || orientation === 'LANDSCAPE-RIGHT')) {
 				Orientation.lockToLandscapeLeft();
 			}
-			if (Platform.OS === 'android' && !show && orientation === 'LANDSCAPE-LEFT') {
+			if (Platform.OS === 'android' && currShow && orientation === 'LANDSCAPE-LEFT') {
 				Orientation.lockToLandscapeRight();
 			}
-			if (Platform.OS === 'android' && show) {
+			if (Platform.OS === 'android' && !currShow) {
 				Orientation.unlockAllOrientations();
 			}
 		});
@@ -368,10 +369,11 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 				isVisible={show}
 				transparent={false}
 				backdropColor={'#fff'}
-				animationType={'slide'}
+				animationType={'none'}
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.onRequestClose}
-				supportedOrientations={[supportedOrientations]}>
+				supportedOrientations={[supportedOrientations]}
+				hardwareAccelerated={true}>
 				<View style={{
 					flex: 1,
 					alignItems: 'center',
