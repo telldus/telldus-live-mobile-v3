@@ -26,7 +26,6 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
 import ScheduleScreen from './ScheduleScreen';
-import { NavigationHeader } from '../../../BaseComponents';
 
 import Device from './Device';
 import Action from './Action';
