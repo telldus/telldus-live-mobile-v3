@@ -120,8 +120,8 @@ getStyle(appLayout: Object, align: Align): Object {
 	const padding = deviceWidth * paddingFactor;
 	const outerPadding = padding * 2;
 
-	const iconContainerSize = deviceWidth * 0.18;
-	const iconSize = deviceWidth * 0.08;
+	const iconContainerSize = deviceWidth * 0.12;
+	const iconSize = deviceWidth * 0.05;
 	const fontSizeLabel = deviceWidth * 0.035;
 	const fontSizeDate = deviceWidth * 0.049;
 
