@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity, BackHandler, Platform } from 'react-native';
+import { StyleSheet, TouchableOpacity, BackHandler, Platform, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -34,6 +34,8 @@ import Poster from './Poster';
 import BlockIcon from './BlockIcon';
 import NavigationHeader from './NavigationHeader';
 import RoundedInfoButton from './RoundedInfoButton';
+
+import Theme from '../App/Theme';
 
 import i18n from '../App/Translations/common';
 
@@ -64,8 +66,14 @@ type DefaultProps = {
 	showLeftIcon: boolean,
 };
 
-class NavigationHeaderPoster extends React.Component<Props, null> {
+type State = {
+	isHeaderLong: boolean,
+	isHeaderTwoLong: boolean,
+};
+
+class NavigationHeaderPoster extends React.Component<Props, State> {
 props: Props;
+state: State;
 
 static defaultProps: DefaultProps = {
 	showBackButton: true,
@@ -75,6 +83,8 @@ static defaultProps: DefaultProps = {
 
 goBack: () => void;
 handleBackPress: () => boolean;
+onLayoutHeaderOne: (Object) => void;
+onLayoutHeaderTwo: (Object) => void;
 
 noName: string;
 defaultDescription: string;
@@ -83,8 +93,11 @@ isTablet: boolean;
 
 constructor(props: Props) {
 	super(props);
-	this.goBack = this.goBack.bind(this);
-	this.handleBackPress = this.handleBackPress.bind(this);
+
+	this.state = {
+		isHeaderLong: false,
+		isHeaderTwoLong: false,
+	};
 
 	this.isTablet = DeviceInfo.isTablet();
 
@@ -94,6 +107,12 @@ constructor(props: Props) {
 	this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
 
 	this.noName = formatMessage(i18n.noName);
+
+	this.goBack = this.goBack.bind(this);
+	this.handleBackPress = this.handleBackPress.bind(this);
+
+	this.onLayoutHeaderOne = this.onLayoutHeaderOne.bind(this);
+	this.onLayoutHeaderTwo = this.onLayoutHeaderTwo.bind(this);
 }
 
 goBack() {
@@ -117,6 +136,30 @@ handleBackPress(): boolean {
 	return false;
 }
 
+onLayoutHeaderOne(ev: Object) {
+	const { width } = this.props.appLayout;
+	const { layout } = ev.nativeEvent;
+	const posterWidth = width * 0.8;
+	const headerWidth = layout.width + layout.x + 5;
+	if (headerWidth >= posterWidth) {
+		this.setState({
+			isHeaderLong: true,
+		});
+	}
+}
+
+onLayoutHeaderTwo(ev: Object) {
+	const { width } = this.props.appLayout;
+	const { layout } = ev.nativeEvent;
+	const posterWidth = width * 0.8;
+	const headerWidth = layout.width + layout.x + 5;
+	if (headerWidth >= posterWidth) {
+		this.setState({
+			isHeaderTwoLong: true,
+		});
+	}
+}
+
 _renderInfoButton = (button: Object): Object => {
 	return (
 		<RoundedInfoButton buttonProps={button}/>
@@ -124,7 +167,16 @@ _renderInfoButton = (button: Object): Object => {
 };
 
 render(): Object {
-	const { navigation, h1, h2, icon, appLayout, showBackButton, posterCoverStyle, infoButton, showLeftIcon } = this.props;
+	const {
+		navigation,
+		h1, h2,
+		icon,
+		appLayout,
+		showBackButton,
+		posterCoverStyle,
+		infoButton,
+		showLeftIcon,
+	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 
@@ -150,12 +202,15 @@ render(): Object {
 							<BlockIcon icon={icon} style={iconStyle} containerStyle={iconBackground}/>
 						)}
 						{!!h1 && (
-							<Text style={h1Style}>
-								{h1}
-							</Text>
+							<ScrollView
+								horizontal={true} bounces={false} showsHorizontalScrollIndicator={false}>
+								<Text style={h1Style} onLayout={this.onLayoutHeaderOne}>
+									{h1}
+								</Text>
+							</ScrollView>
 						)}
 						{!!h2 && (
-							<Text style={h2Style}>
+							<Text style={h2Style} onLayout={this.onLayoutHeaderTwo}>
 								{h2}
 							</Text>
 						)}
@@ -180,6 +235,7 @@ render(): Object {
 }
 
 getStyles(appLayout: Object, adjustItems: boolean): Object {
+	const { isHeaderLong, isHeaderTwoLong } = this.state;
 	const { align, icon, h1 } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -189,10 +245,20 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 	const iconBackgroundSize = posterHeight * 0.6;
 	const fontSizeIcon = posterHeight * 0.4;
 
-	const fontSizeH1 = adjustItems ? posterHeight * 0.30 : posterHeight * 0.25;
-	const fontSizeH2 = adjustItems ? (icon ? posterHeight * 0.24 : posterHeight * 0.2)
+	const fontSizeH1 = adjustItems ? posterHeight * 0.42
 		:
-		(h1 ? posterHeight * 0.13 : posterHeight * 0.15);
+		(isHeaderLong ? posterHeight * 0.2
+			:
+			posterHeight * 0.23);
+	const fontSizeH2 = adjustItems ? (icon ? posterHeight * 0.29
+		:
+		posterHeight * 0.25)
+		:
+		(h1 ? ((isHeaderLong || isHeaderTwoLong) ? posterHeight * 0.13
+			:
+			posterHeight * 0.15)
+			:
+			posterHeight * 0.17);
 
 	return {
 		posterCover: {
@@ -216,6 +282,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			:
 			{
 				flex: 1,
+				width: width * 0.8,
 				position: 'absolute',
 				right: deviceWidth * 0.124,
 				alignItems: 'flex-end',
@@ -236,10 +303,12 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			color: '#F06F0C',
 		},
 		h1Style: {
+			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: fontSizeH1,
 			color: '#fff',
 		},
 		h2Style: {
+			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: fontSizeH2,
 			color: '#fff',
 		},
