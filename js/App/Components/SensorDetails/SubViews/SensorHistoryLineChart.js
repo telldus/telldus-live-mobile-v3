@@ -269,82 +269,84 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		}];
 
 		return (
-			<View style={containerStyle} pointerEvents="none">
+			<View style={containerStyle}>
 				<ChartLegend
 					legendData={legendData}
 					appLayout={appLayout}
 					fullscreen={show}
 					onPressToggleView={this.onPressToggleView}/>
-				<VictoryChart
-					theme={VictoryTheme.material}
-					width={chartWidth} height={chartHeight}
-					padding={chartPadding}
-					domainPadding={{ y: domainPadding, x: 20 }}
-				>
-					<VictoryAxis
-						orientation={'bottom'}
-						style={{
-							parent: {
-								border: '0px',
-							},
-							axis: chartLineStyle,
-							tickLabels: { fill: Theme.Core.inactiveTintColor },
-							grid: chartLineStyle,
-						}}
-						tickValues={ticks}
-						tickFormat={(tick: number): string => `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`} // eslint-disable-line
-					/>
-					{chartData.map((d: Array<Object>, i: number): Object | null => {
-						if (!d) {
-							return null;
-						}
-						if (!showOne && i === 0) {
-							return null;
-						}
-						if (!showTwo && i === 1) {
-							return null;
-						}
-						return (
-							<VictoryAxis dependentAxis
-								key={i}
-								offsetX={xOffsets[i]}
-								style={{
-									axis: chartLineStyle,
-									ticks: { padding: tickPadding[i] },
-									tickLabels: { fill: Theme.Core.inactiveTintColor, textAnchor: anchors[i] },
-									grid: chartLineStyle,
-								}}
-								// Use normalized tickValues (0 - 1)
-								tickValues={[0, 0.5, 1]}
-								// Re-scale ticks by multiplying by correct maxima
-								tickFormat={(t: number): number => t * maxima[i]} // eslint-disable-line
-							/>
-						);
-					}
-					)}
-					{chartData.map((d: Array<Object>, i: number): any => {
-						if (!d) {
-							return null;
-						}
-						if (!showOne && i === 0) {
-							return null;
-						}
-						if (!showTwo && i === 1) {
-							return null;
-						}
-						return (<VictoryLine
-							key={i}
-							data={d}
-							style={{ data: { stroke: colors[i] } }}
-							// normalize data
-							y={(datum: Object): number => {// eslint-disable-line
-								return datum.value === 0 ? 0 : datum.value / maxima[i];
+				<View style={{flex: 0}} pointerEvents="none">
+					<VictoryChart
+						theme={VictoryTheme.material}
+						width={chartWidth} height={chartHeight}
+						padding={chartPadding}
+						domainPadding={{ y: domainPadding, x: 20 }}
+					>
+						<VictoryAxis
+							orientation={'bottom'}
+							style={{
+								parent: {
+									border: '0px',
+								},
+								axis: chartLineStyle,
+								tickLabels: { fill: Theme.Core.inactiveTintColor },
+								grid: chartLineStyle,
 							}}
+							tickValues={ticks}
+						tickFormat={(tick: number): string => `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`} // eslint-disable-line
+						/>
+						{chartData.map((d: Array<Object>, i: number): Object | null => {
+							if (!d) {
+								return null;
+							}
+							if (!showOne && i === 0) {
+								return null;
+							}
+							if (!showTwo && i === 1) {
+								return null;
+							}
+							return (
+								<VictoryAxis dependentAxis
+									key={i}
+									offsetX={xOffsets[i]}
+									style={{
+										axis: chartLineStyle,
+										ticks: { padding: tickPadding[i] },
+										tickLabels: { fill: Theme.Core.inactiveTintColor, textAnchor: anchors[i] },
+										grid: chartLineStyle,
+									}}
+									// Use normalized tickValues (0 - 1)
+									tickValues={[0, 0.5, 1]}
+									// Re-scale ticks by multiplying by correct maxima
+								tickFormat={(t: number): number => t * maxima[i]} // eslint-disable-line
+								/>
+							);
+						}
+						)}
+						{chartData.map((d: Array<Object>, i: number): any => {
+							if (!d) {
+								return null;
+							}
+							if (!showOne && i === 0) {
+								return null;
+							}
+							if (!showTwo && i === 1) {
+								return null;
+							}
+							return (<VictoryLine
+								key={i}
+								data={d}
+								style={{ data: { stroke: colors[i] } }}
+								// normalize data
+							y={(datum: Object): number => {// eslint-disable-line
+									return datum.value === 0 ? 0 : datum.value / maxima[i];
+								}}
 							x={(datum: Object): number => datum.ts} // eslint-disable-line
-						/>);
-					}
-					)}
-				</VictoryChart>
+							/>);
+						}
+						)}
+					</VictoryChart>
+				</View>
 			</View>
 		);
 	}
