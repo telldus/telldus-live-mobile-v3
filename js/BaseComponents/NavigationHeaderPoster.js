@@ -180,7 +180,7 @@ render(): Object {
 }
 
 getStyles(appLayout: Object, adjustItems: boolean): Object {
-	const { align, icon } = this.props;
+	const { align, icon, h1 } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -189,10 +189,10 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 	const iconBackgroundSize = posterHeight * 0.6;
 	const fontSizeIcon = posterHeight * 0.4;
 
-	const topWhenRight = adjustItems ? posterHeight * 0.25 : posterHeight * 0.25;
-
-	const fontSizeH1 = posterHeight * 0.30;
-	const fontSizeH2 = adjustItems ? (icon ? posterHeight * 0.24 : posterHeight * 0.2) : posterHeight * 0.15;
+	const fontSizeH1 = adjustItems ? posterHeight * 0.30 : posterHeight * 0.25;
+	const fontSizeH2 = adjustItems ? (icon ? posterHeight * 0.24 : posterHeight * 0.2)
+		:
+		(h1 ? posterHeight * 0.13 : posterHeight * 0.15);
 
 	return {
 		posterCover: {
@@ -217,9 +217,8 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			{
 				flex: 1,
 				position: 'absolute',
-				top: align === 'center' ? 0 : topWhenRight,
-				right: align === 'center' ? 0 : deviceWidth * 0.124,
-				alignItems: align === 'right' ? 'flex-end' : 'center',
+				right: deviceWidth * 0.124,
+				alignItems: 'flex-end',
 				justifyContent: 'center',
 				flexDirection: 'column',
 			},
