@@ -119,6 +119,7 @@ getStyle(appLayout: Object, align: Align): Object {
 
 	const padding = deviceWidth * paddingFactor;
 	const outerPadding = padding * 2;
+	const innerPadding = padding / 2;
 
 	const iconContainerSize = deviceWidth * 0.12;
 	const iconSize = deviceWidth * 0.05;
@@ -132,7 +133,7 @@ getStyle(appLayout: Object, align: Align): Object {
 			alignItems: 'center',
 			marginLeft: padding / 2,
 			marginBottom: padding,
-			width: (width - (outerPadding + padding)) / 2,
+			width: (width - (outerPadding + innerPadding)) / 2,
 		},
 		iconContainerStyle: {
 			height: iconContainerSize,
@@ -141,7 +142,9 @@ getStyle(appLayout: Object, align: Align): Object {
 			backgroundColor: brandSecondary,
 			justifyContent: 'center',
 			alignItems: 'center',
-			margin: padding,
+			marginVertical: padding,
+			marginLeft: align === 'left' ? 0 : padding,
+			marginRight: align === 'left' ? padding : 0,
 			...shadow,
 		},
 		iconSize,
