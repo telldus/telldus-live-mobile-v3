@@ -29,8 +29,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { View, DialogueBox, Text, RoundedInfoButton } from '../../../../BaseComponents';
-import LocationPoster from '../Common/LocationPoster';
+import {
+	View,
+	DialogueBox,
+	Text,
+	RoundedInfoButton,
+	NavigationHeaderPoster,
+} from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 
 import * as modalActions from '../../../Actions/Modal';
@@ -239,13 +244,13 @@ class AddLocationContainer extends View<null, Props, State> {
 			}}>
 				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-						<LocationPoster
+						<NavigationHeaderPoster
 							h1={h1} h2={h2}
 							infoButton={infoButton}
 							showLeftIcon={currentScreen !== 'Success'}
 							align={'right'}
-							{...screenProps}
-							navigation={navigation}/>
+							navigation={navigation}
+							{...screenProps}/>
 						<View style={[styles.style, {paddingHorizontal: padding}]}>
 							{React.cloneElement(
 								children,

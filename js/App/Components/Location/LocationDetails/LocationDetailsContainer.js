@@ -28,8 +28,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { View, DialogueBox } from '../../../../BaseComponents';
-import LocationPoster from '../Common/LocationPoster';
+import { View, DialogueBox, NavigationHeaderPoster } from '../../../../BaseComponents';
 
 import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
@@ -208,7 +207,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			}}>
 				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-						<LocationPoster {...posterData}/>
+						<NavigationHeaderPoster {...posterData}/>
 						<View style={[styles.style, {paddingHorizontal}]}>
 							{React.cloneElement(
 								children,
