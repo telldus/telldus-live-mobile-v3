@@ -29,7 +29,7 @@ import GraphValuesDropDown from './GraphValuesDropDown';
 import SensorHistoryLineChart from './SensorHistoryLineChart';
 import ChartLegend from './ChartLegend';
 import DateBlock from './DateBlock';
-import CalenderModalComponent from './CalenderModalComponent';
+import CalendarModalComponent from './CalendarModalComponent';
 import SettingsRow from './SettingsRow';
 
 module.exports = {
@@ -41,6 +41,6 @@ module.exports = {
 	SensorHistoryLineChart,
 	ChartLegend,
 	DateBlock,
-	CalenderModalComponent,
+	CalendarModalComponent,
 	SettingsRow,
 };

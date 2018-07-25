@@ -50,7 +50,7 @@ type DefaultProps = {
 	isVisible: boolean,
 };
 
-export default class CalenderModalComponent extends View<Props, null> {
+export default class CalendarModalComponent extends View<Props, null> {
 props: Props;
 static defaultProps: DefaultProps = {
 	isVisible: false,

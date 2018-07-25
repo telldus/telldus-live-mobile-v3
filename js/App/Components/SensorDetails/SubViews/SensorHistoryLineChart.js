@@ -43,7 +43,7 @@ type Props = {
 	selectedTwo: Object,
 	appLayout: Object,
 	timestamp: Object,
-	showCalender: boolean,
+	showCalendar: boolean,
 };
 
 type State = {
@@ -195,12 +195,12 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		const { fullscreen, isLoading } = this.state;
 		const { show, force } = fullscreen;
-		const { appLayout, showCalender } = this.props;
+		const { appLayout, showCalendar } = this.props;
 		const { width, height } = appLayout;
 		// Show full screen on LANDSCAPE alone is handled here!
 		// This is to wait for the appLayout to change and update the style and chart together
 		// else the x-axis, tick and line are not getting updated.
-		if ((width !== prevProps.appLayout.width && !showCalender)) {
+		if ((width !== prevProps.appLayout.width && !showCalendar)) {
 			if (width > height && !show) {
 				this.setFullscreenState(true, false, false);
 			}

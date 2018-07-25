@@ -64,14 +64,14 @@ class App extends React.Component<Props, null> {
 
 	onLayout: (Object) => void;
 	onNotification: any;
-	setCalenderLocale: () => void;
+	setCalendarLocale: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.onLayout = this.onLayout.bind(this);
-		this.setCalenderLocale = this.setCalenderLocale.bind(this);
+		this.setCalendarLocale = this.setCalendarLocale.bind(this);
 
-		this.setCalenderLocale();
+		this.setCalendarLocale();
 	}
 
 	componentDidMount() {
@@ -94,7 +94,7 @@ class App extends React.Component<Props, null> {
 		this.onNotification = Push.onNotification ? Push.onNotification() : null;
 	}
 
-	setCalenderLocale() {
+	setCalendarLocale() {
 		const { intl, locale } = this.props;
 		const { formatDate } = intl;
 		LocaleConfig.locales[locale] = {

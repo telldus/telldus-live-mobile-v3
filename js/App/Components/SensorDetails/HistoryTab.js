@@ -30,7 +30,7 @@ import {
 	GraphValuesDropDown,
 	SensorHistoryLineChart,
 	DateBlock,
-	CalenderModalComponent,
+	CalendarModalComponent,
 } from './SubViews';
 
 import { getSensorHistory } from '../../Actions/Sensors';
@@ -58,7 +58,7 @@ type State = {
 	chartDataOne: Array<any>,
 	chartDataTwo: Array<any>,
 	list?: Array<string>,
-	showCalender: boolean,
+	showCalendar: boolean,
 	timestamp: Object,
 	propToUpdate: 1 | 2,
 };
@@ -72,7 +72,7 @@ class HistoryTab extends View {
 	onValueChangeOne: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
 	onValueChangeTwo: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
 
-	onPressShowCalender: () => void;
+	onPressShowCalendar: () => void;
 	onPressPositive: (any) => void;
 	onPressNegative: () => void;
 
@@ -112,7 +112,7 @@ class HistoryTab extends View {
 			chartDataOne: [],
 			chartDataTwo: [],
 			list: [],
-			showCalender: false,
+			showCalendar: false,
 			timestamp: getHistoryTimestamp(),
 			propToUpdate: 1,
 		};
@@ -123,7 +123,7 @@ class HistoryTab extends View {
 		this.onValueChangeOne = this.onValueChangeOne.bind(this);
 		this.onValueChangeTwo = this.onValueChangeTwo.bind(this);
 
-		this.onPressShowCalender = this.onPressShowCalender.bind(this);
+		this.onPressShowCalendar = this.onPressShowCalendar.bind(this);
 		this.onPressPositive = this.onPressPositive.bind(this);
 		this.onPressNegative = this.onPressNegative.bind(this);
 
@@ -325,9 +325,9 @@ class HistoryTab extends View {
 		}
 	}
 
-	onPressShowCalender(index: number) {
+	onPressShowCalendar(index: number) {
 		this.setState({
-			showCalender: true,
+			showCalendar: true,
 			propToUpdate: index,
 		});
 	}
@@ -338,7 +338,7 @@ class HistoryTab extends View {
 		const newTimestamp = { ...timestamp, ...updatedTimestamp };
 
 		this.setState({
-			showCalender: false,
+			showCalendar: false,
 			timestamp: newTimestamp,
 		}, () => {
 			const { sensor } = this.props;
@@ -349,7 +349,7 @@ class HistoryTab extends View {
 
 	onPressNegative() {
 		this.setState({
-			showCalender: false,
+			showCalendar: false,
 		});
 	}
 
@@ -361,7 +361,7 @@ class HistoryTab extends View {
 			chartDataOne,
 			chartDataTwo,
 			hasLoaded,
-			showCalender,
+			showCalendar,
 			timestamp,
 			propToUpdate,
 		} = this.state;
@@ -388,14 +388,14 @@ class HistoryTab extends View {
 							appLayout={appLayout}
 							align={'left'}
 							label={`${formatMessage(i18n.labelFrom)}:`}
-							onPress={this.onPressShowCalender}
+							onPress={this.onPressShowCalendar}
 							date={fromTimestamp}
 							propToUpdateIndex={1}/>
 						<DateBlock
 							appLayout={appLayout}
 							align={'right'}
 							label={`${formatMessage(i18n.labelTo)}:`}
-							onPress={this.onPressShowCalender}
+							onPress={this.onPressShowCalendar}
 							date={toTimestamp}
 							propToUpdateIndex={2}/>
 					</View>
@@ -406,7 +406,7 @@ class HistoryTab extends View {
 						selectedTwo={selectedTwo}
 						timestamp={timestamp}
 						appLayout={appLayout}
-						showCalender={showCalender}/>
+						showCalendar={showCalendar}/>
 					<GraphValuesDropDown
 						selectedOne={selectedOne}
 						selectedTwo={selectedTwo}
@@ -415,8 +415,8 @@ class HistoryTab extends View {
 						onValueChangeTwo={this.onValueChangeTwo}
 						appLayout={appLayout}/>
 				</View>
-				<CalenderModalComponent
-					isVisible={showCalender}
+				<CalendarModalComponent
+					isVisible={showCalendar}
 					current={propToUpdate === 1 ? fromTimestamp : toTimestamp}
 					onPressPositive={this.onPressPositive}
 					onPressNegative={this.onPressNegative}
