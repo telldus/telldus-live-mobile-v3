@@ -264,6 +264,8 @@ export default class TelldusLocalStorage {
 		});
 	}
 
+	// 'formatMessage' is passed in this manner and data 'row' is manipulated this manner to avoid
+	// an extra iteration over the data again after query.
 	querySensorTypes = (id: number, formatMessage?: Function): Promise<any> => {
 		return db.executeSql(`SELECT DISTINCT type, scale FROM SensorHistory WHERE ${id} = sensorId`).then(([results]: Array<any>): Array<any> => {
 			let len = results.rows.length, data = [];
