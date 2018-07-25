@@ -27,6 +27,7 @@ import { Calendar } from 'react-native-calendars';
 import Modal from 'react-native-modal';
 import moment from 'moment';
 import isEqual from 'lodash/isEqual';
+import DeviceInfo from 'react-native-device-info';
 
 import {
 	View,
@@ -34,6 +35,8 @@ import {
 	Text,
 	FormattedDate,
 } from '../../../../BaseComponents';
+import CalendarDay from './CalendarDay';
+
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
@@ -56,6 +59,8 @@ static defaultProps: DefaultProps = {
 	isVisible: false,
 };
 
+isTablet: boolean;
+
 static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 	const { isVisible, current } = props;
 	if (isVisible !== state.isVisible) {
@@ -77,6 +82,8 @@ onPressPositive: () => void;
 onPressNegative: () => void;
 onDayPress: (Object) => void;
 
+renderDay: (Object) => void;
+
 constructor(props: Props) {
 	super(props);
 
@@ -84,10 +91,13 @@ constructor(props: Props) {
 		current: props.current,
 		isVisible: props.isVisible,
 	};
+	this.isTablet = DeviceInfo.isTablet();
 
 	this.onPressPositive = this.onPressPositive.bind(this);
 	this.onPressNegative = this.onPressNegative.bind(this);
 	this.onDayPress = this.onDayPress.bind(this);
+
+	this.renderDay = this.renderDay.bind(this);
 
 	const { formatMessage } = props.intl;
 	this.ok = formatMessage(i18n.defaultPositiveText);
@@ -111,13 +121,27 @@ onPressNegative() {
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	const isStateEqual = isEqual(this.state, nextState);
-	return !isStateEqual;
+	const isLayoutEqual = isEqual(this.props.appLayout, nextProps.appLayout);
+	return !isStateEqual || !isLayoutEqual;
 }
 
 onDayPress(day: Object) {
 	this.setState({
 		current: day.timestamp / 1000,
 	});
+}
+
+renderDay({date, state, marking}: Object): Object {
+	const props = {
+		date,
+		state,
+		marking,
+		onDayPress: this.onDayPress,
+		appLayout: this.props.appLayout,
+	};
+	return (
+		<CalendarDay {...props} />
+	);
 }
 
 render(): Object {
@@ -129,6 +153,7 @@ render(): Object {
 	const {
 		containerStyle,
 		posterWidth,
+		posterHeight,
 		posterItemsStyle,
 		posterTextOneStyle,
 		posterTextTwoStyle,
@@ -145,7 +170,7 @@ render(): Object {
 			hideModalContentWhileAnimating={true}
 			supportedOrientations={['portrait', 'landscape']}>
 			<ScrollView tyle={{flex: 1}} contentContainerStyle={containerStyle}>
-				<Poster posterWidth={posterWidth}>
+				<Poster posterWidth={posterWidth} posterHeight={posterHeight}>
 					<View style={posterItemsStyle}>
 						<FormattedDate
 							value={moment.unix(current)}
@@ -163,7 +188,7 @@ render(): Object {
 					markedDates={{
 						[date]: {selected: true, marked: false},
 					}}
-					onDayPress={this.onDayPress}
+					dayComponent={this.renderDay}
 					theme={calendarTheme}/>
 				<View style={footerStyle}>
 					<TouchableOpacity onPress={this.onPressNegative}>
@@ -189,9 +214,14 @@ getStyle(appLayout: Object): Object {
 
 	const { brandSecondary, eulaContentColor, offlineColor } = Theme.Core;
 
-	const fontSizePosterTextOne = deviceWidth * 0.06;
-	const fontSizePosterTextTwo = deviceWidth * 0.1;
-	const fontSizeFooterText = deviceWidth * 0.05;
+	const adjustCelendar = !this.isTablet && !isPortrait;
+
+	const posterHeight = adjustCelendar ? deviceWidth * 0.12 : deviceWidth * 0.333;
+
+	const fontSizePosterTextOne = posterHeight * 0.2;
+	const fontSizePosterTextTwo = posterHeight * 0.3;
+	const fontSizeFooterText = adjustCelendar ? deviceWidth * 0.03 : deviceWidth * 0.05;
+	const footerPadding = adjustCelendar ? fontSizeFooterText * 0.5 : fontSizeFooterText;
 
 	return {
 		containerStyle: {
@@ -199,10 +229,17 @@ getStyle(appLayout: Object): Object {
 			justifyContent: 'center',
 		},
 		posterWidth: '100%',
+		posterHeight,
 		posterItemsStyle: {
+			flex: 1,
 			position: 'absolute',
-			left: 15,
-			bottom: 15,
+			left: 0,
+			right: 0,
+			top: 0,
+			bottom: 0,
+			paddingLeft: 15,
+			justifyContent: 'center',
+			alignItems: 'flex-start',
 		},
 		posterTextOneStyle: {
 			fontSize: fontSizePosterTextOne,
@@ -219,12 +256,21 @@ getStyle(appLayout: Object): Object {
 			todayTextColor: '#00adf5',
 			arrowColor: '#000',
 			monthTextColor: '#000',
+			'stylesheet.calendar.main': {
+				week: {
+				  marginTop: 0,
+				  marginBottom: 0,
+				  flexDirection: 'row',
+				  justifyContent: 'space-around',
+				},
+			},
 		},
 		footerStyle: {
 			flexDirection: 'row',
 			backgroundColor: '#fff',
 			justifyContent: 'flex-end',
-			paddingVertical: 20,
+			paddingVertical: footerPadding,
+			paddingRight: adjustCelendar ? 10 : 0,
 		},
 		positiveLabelStyle: {
 			color: brandSecondary,
