@@ -358,9 +358,9 @@ class HistoryTab extends View {
 		const { toTimestamp } = timestamp;
 		if (index === 1) {
 			const to = moment.unix(toTimestamp);
-			return to.subtract(1, 'd').format('YYYY MM DD');
+			return to.subtract(1, 'd').format('YYYY-MM-DD');
 		}
-		return moment().format('YYYY MM DD');
+		return moment().format('YYYY-MM-DD');
 	}
 
 	render(): Object | null {

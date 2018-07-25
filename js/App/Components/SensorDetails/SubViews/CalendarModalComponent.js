@@ -47,7 +47,7 @@ type Props = {
 	onPressNegative: () => void,
 	appLayout: Object,
 	intl: Object,
-	maxDate: number,
+	maxDate: string,
 };
 
 type DefaultProps = {
