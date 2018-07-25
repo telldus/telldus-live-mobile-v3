@@ -135,6 +135,7 @@ class SettingsTab extends View {
 
 		let {
 			container,
+			switchStyle,
 			ShowOnDashCover,
 			textShowOnDashCover,
 			textShowOnDash,
@@ -161,6 +162,7 @@ class SettingsTab extends View {
 						<Switch
 							onValueChange={this.onValueChange}
 							value={this.props.inDashboard}
+							style={switchStyle}
 						/>
 					</View>
 					<View style={ShowOnDashCover}>
@@ -204,6 +206,9 @@ class SettingsTab extends View {
 				marginTop: padding / 2,
 				...Theme.Core.shadow,
 			},
+			switchStyle: {
+				justifyContent: 'flex-end',
+			},
 			textShowOnDashCover: {
 				alignItems: 'flex-start',
 				justifyContent: 'center',
@@ -211,7 +216,6 @@ class SettingsTab extends View {
 			textShowOnDash: {
 				color: '#8A8682',
 				fontSize,
-				marginLeft: 8,
 				justifyContent: 'center',
 			},
 			learn: {

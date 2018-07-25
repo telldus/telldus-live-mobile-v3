@@ -55,6 +55,7 @@ class SettingsRow extends View<Props, null> {
 
 		let {
 			ShowOnDashCover,
+			switchStyle,
 			textShowOnDashCover,
 			textShowOnDash,
 			valueText,
@@ -71,6 +72,7 @@ class SettingsRow extends View<Props, null> {
 					<Switch
 						onValueChange={onValueChange}
 						value={value}
+						style={switchStyle}
 					/>
 					:
 					<Text style={valueText}>
@@ -101,6 +103,9 @@ class SettingsRow extends View<Props, null> {
 				marginTop: padding / 2,
 				...Theme.Core.shadow,
 			},
+			switchStyle: {
+				justifyContent: 'flex-end',
+			},
 			textShowOnDashCover: {
 				alignItems: 'flex-start',
 				justifyContent: 'center',
@@ -108,12 +113,7 @@ class SettingsRow extends View<Props, null> {
 			textShowOnDash: {
 				color: '#000',
 				fontSize,
-				marginLeft: 8,
 				justifyContent: 'center',
-			},
-			learn: {
-				marginHorizontal: width * 0.25,
-				marginVertical: padding / 2,
 			},
 			valueText: {
 				fontSize,
