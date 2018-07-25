@@ -22,14 +22,16 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 
 import { View, TabBar } from '../../../BaseComponents';
 import { DeviceLocationDetail } from '../DeviceDetails/SubViews';
 import { SensorTypes, BatteryInfo } from './SubViews';
 
+import { getSensorInfo } from '../../Actions';
 import { getLocationImageUrl } from '../../Lib';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -37,21 +39,18 @@ type Props = {
 	sensor: Object,
 	screenProps: Object,
 	gateway: Object,
+	getSensorInfo: (id: number, includeUnit: 1 | 0) => Promise<any>,
 };
 
 type State = {
+	isRefreshing: boolean,
 };
 
 class OverviewTab extends View<Props, State> {
 	props: Props;
 	state: State;
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-		};
 
-		this.boxTitle = `${props.screenProps.intl.formatMessage(i18n.location)}:`;
-	}
+	onRefresh: () => void;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -66,11 +65,39 @@ class OverviewTab extends View<Props, State> {
 		},
 	});
 
+	constructor(props: Props) {
+		super(props);
+		this.state = {
+			isRefreshing: false,
+		};
+
+		this.onRefresh = this.onRefresh.bind(this);
+
+		this.boxTitle = `${props.screenProps.intl.formatMessage(i18n.location)}:`;
+	}
+
+	onRefresh() {
+		this.setState({
+			isRefreshing: true,
+		});
+		const { id } = this.props.sensor;
+		this.props.getSensorInfo(id, 0).then(() => {
+			this.setState({
+				isRefreshing: false,
+			});
+		}).catch(() => {
+			this.setState({
+				isRefreshing: false,
+			});
+		});
+	}
+
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.screenProps.currentScreen === 'Overview';
 	}
 
 	render(): Object {
+		const { isRefreshing } = this.state;
 		const { sensor, screenProps, gateway } = this.props;
 		const { battery } = sensor;
 		const { intl, appLayout } = screenProps;
@@ -90,7 +117,15 @@ class OverviewTab extends View<Props, State> {
 		} = this.getStyles(appLayout);
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={contentContainerStyle}>
+			<ScrollView
+				style={{flex: 1}}
+				contentContainerStyle={contentContainerStyle}
+				refreshControl={
+					<RefreshControl
+						refreshing={isRefreshing}
+						onRefresh={this.onRefresh}
+					/>
+				}>
 				<SensorTypes sensor={sensor} intl={intl} appLayout={appLayout}/>
 				<DeviceLocationDetail
 					{...locationData}
@@ -134,7 +169,9 @@ class OverviewTab extends View<Props, State> {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		dispatch,
+		getSensorInfo: (id: number, includeUnit: 1 | 0): Promise<any> => {
+			return dispatch(getSensorInfo(id, includeUnit));
+		},
 	};
 }
 
