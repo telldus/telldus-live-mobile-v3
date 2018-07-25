@@ -24,6 +24,7 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { View, TabBar } from '../../../BaseComponents';
 import {
@@ -353,6 +354,15 @@ class HistoryTab extends View {
 		});
 	}
 
+	getMaxDate(index: number, timestamp: Object): string {
+		const { toTimestamp } = timestamp;
+		if (index === 1) {
+			const to = moment.unix(toTimestamp);
+			return to.subtract(1, 'd').format('YYYY MM DD');
+		}
+		return moment().format('YYYY MM DD');
+	}
+
 	render(): Object | null {
 		const {
 			selectedOne,
@@ -377,6 +387,8 @@ class HistoryTab extends View {
 		if (!hasLoaded) {
 			return null;
 		}
+
+		const maxDate = this.getMaxDate(propToUpdate, timestamp);
 
 		return (
 			<ScrollView>
@@ -418,6 +430,7 @@ class HistoryTab extends View {
 				<CalendarModalComponent
 					isVisible={showCalendar}
 					current={propToUpdate === 1 ? fromTimestamp : toTimestamp}
+					maxDate={maxDate}
 					onPressPositive={this.onPressPositive}
 					onPressNegative={this.onPressNegative}
 					appLayout={appLayout}

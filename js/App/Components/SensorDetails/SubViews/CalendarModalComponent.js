@@ -47,6 +47,7 @@ type Props = {
 	onPressNegative: () => void,
 	appLayout: Object,
 	intl: Object,
+	maxDate: number,
 };
 
 type DefaultProps = {
@@ -122,7 +123,8 @@ onPressNegative() {
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	const isStateEqual = isEqual(this.state, nextState);
 	const isLayoutEqual = isEqual(this.props.appLayout, nextProps.appLayout);
-	return !isStateEqual || !isLayoutEqual;
+	const isMaxDateEqual = nextProps.maxDate === this.props.maxDate;
+	return !isStateEqual || !isLayoutEqual || isMaxDateEqual;
 }
 
 onDayPress(day: Object) {
@@ -148,6 +150,7 @@ render(): Object {
 	const { current, isVisible } = this.state;
 	const {
 		appLayout,
+		maxDate,
 	} = this.props;
 
 	const {
@@ -188,6 +191,7 @@ render(): Object {
 					markedDates={{
 						[date]: {selected: true, marked: false},
 					}}
+					maxDate={maxDate}
 					dayComponent={this.renderDay}
 					theme={calendarTheme}
 					firstDay={1}/>
