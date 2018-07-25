@@ -237,9 +237,6 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		if (chartDataTwo.length !== 0) {
 			chartData.push(chartDataTwo);
 		}
-		let maxima = chartData.map((dataset: Array<any>): any => {
-			return Math.max(...dataset.map((d: Object): any => d.value));
-		});
 
 		const {
 			containerStyle,
@@ -315,10 +312,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 										tickLabels: { fill: Theme.Core.inactiveTintColor, textAnchor: anchors[i] },
 										grid: chartLineStyle,
 									}}
-									// Use normalized tickValues (0 - 1)
-									tickValues={[0, 0.5, 1]}
-									// Re-scale ticks by multiplying by correct maxima
-								tickFormat={(t: number): number => t * maxima[i]} // eslint-disable-line
+									tickCount={3}
 								/>
 							);
 						}
@@ -338,9 +332,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 								data={d}
 								style={{ data: { stroke: colors[i] } }}
 								// normalize data
-							y={(datum: Object): number => {// eslint-disable-line
-									return datum.value === 0 ? 0 : datum.value / maxima[i];
-								}}
+							y={(datum: Object): number => datum.value} // eslint-disable-line
 							x={(datum: Object): number => datum.ts} // eslint-disable-line
 							/>);
 						}
