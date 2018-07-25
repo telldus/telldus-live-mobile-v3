@@ -169,7 +169,7 @@ render(): Object {
 			isVisible={isVisible}
 			hideModalContentWhileAnimating={true}
 			supportedOrientations={['portrait', 'landscape']}>
-			<ScrollView tyle={{flex: 1}} contentContainerStyle={containerStyle}>
+			<ScrollView style={{flex: 1}} contentContainerStyle={containerStyle}>
 				<Poster posterWidth={posterWidth} posterHeight={posterHeight}>
 					<View style={posterItemsStyle}>
 						<FormattedDate
@@ -189,7 +189,8 @@ render(): Object {
 						[date]: {selected: true, marked: false},
 					}}
 					dayComponent={this.renderDay}
-					theme={calendarTheme}/>
+					theme={calendarTheme}
+					firstDay={1}/>
 				<View style={footerStyle}>
 					<TouchableOpacity onPress={this.onPressNegative}>
 						<Text style={negativeLabelStyle}>
