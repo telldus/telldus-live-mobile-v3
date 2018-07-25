@@ -35,7 +35,7 @@ import Theme from '../../../Theme';
 type Props = {
     date: Object,
     state: string,
-    onDayPress: (Object) => void;
+    onDayPress: (Object) => void,
     marking: Object,
     appLayout: Object,
 };
