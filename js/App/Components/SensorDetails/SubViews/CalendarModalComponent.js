@@ -171,7 +171,8 @@ render(): Object {
 		<Modal
 			isVisible={isVisible}
 			hideModalContentWhileAnimating={true}
-			supportedOrientations={['portrait', 'landscape']}>
+			supportedOrientations={['portrait', 'landscape']}
+			onRequestClose={this.onPressNegative}>
 			<ScrollView style={{flex: 1}} contentContainerStyle={containerStyle}>
 				<Poster posterWidth={posterWidth} posterHeight={posterHeight}>
 					<View style={posterItemsStyle}>
