@@ -411,7 +411,9 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			left: 0, top, right: 0, bottom,
 		};
 
-		const chartHeight = show ? deviceWidth - (top + bottom) : chartWidth * 0.8;
+		const chartHeight = show ? deviceWidth - (top + bottom + outerPadding)
+			:
+			isPortrait ? chartWidth * 0.8 : chartWidth * 0.4;
 
 		return {
 			containerStyle: show ?
