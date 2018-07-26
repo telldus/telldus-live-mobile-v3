@@ -124,7 +124,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	const isStateEqual = isEqual(this.state, nextState);
 	const isLayoutEqual = isEqual(this.props.appLayout, nextProps.appLayout);
 	const isMaxDateEqual = nextProps.maxDate === this.props.maxDate;
-	return !isStateEqual || !isLayoutEqual || isMaxDateEqual;
+	return (nextState.isVisible || this.state.isVisible) && (!isStateEqual || !isLayoutEqual || isMaxDateEqual);
 }
 
 onDayPress(day: Object) {
