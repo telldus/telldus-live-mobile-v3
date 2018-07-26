@@ -48,6 +48,7 @@ type Props = {
 	appLayout: Object,
 	intl: Object,
 	maxDate: string,
+	propToUpdate: 1 | 2,
 };
 
 type DefaultProps = {
@@ -128,8 +129,30 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 onDayPress(day: Object) {
+	const { propToUpdate } = this.props;
+
+	// The received timestamp is in GMT also start of the day timestamp in milliseconds
+	let { timestamp } = day;
+	timestamp = timestamp / 1000;
+
+	// Converting UTC start of the day[SOD] timestap to user's locale SOD
+	let selectedTimestamp = moment.unix(timestamp).startOf('day').unix();
+
+	// While choosing 'to' date
+	if (propToUpdate === 2) {
+		const todayDate = moment().format('YYYY-MM-DD');
+		const timestampAsDate = moment.unix(timestamp).format('YYYY-MM-DD');
+
+		// Use end of the day[EOD] timestamp, also moment converts UTC to user's locale
+		selectedTimestamp = moment.unix(timestamp).endOf('day').unix();
+
+		// If 'to' date is today then use 'now/current time' timestamp
+		if (timestampAsDate === todayDate) {
+			selectedTimestamp = parseInt(moment().format('X'), 10);
+		}
+	}
 	this.setState({
-		current: day.timestamp / 1000,
+		current: selectedTimestamp,
 	});
 }
 
