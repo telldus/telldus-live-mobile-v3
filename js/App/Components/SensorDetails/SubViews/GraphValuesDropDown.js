@@ -252,7 +252,7 @@ class GraphValuesDropDown extends View<Props, State> {
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
-		const innerPadding = outerPadding / 2;
+		const innerPadding = padding / 2;
 		const pickerItemsWidth = (width - (outerPadding + innerPadding)) / 2;
 
 		const fontSizeText = deviceWidth * 0.04;
