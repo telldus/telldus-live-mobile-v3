@@ -50,7 +50,7 @@ type Props = {
     h2: string,
 	icon: string,
     navigation: Object,
-    handleBackPress: () => void,
+    handleBackPress: () => boolean,
     intl: Object,
     appLayout: Object,
     showBackButton?: boolean,
@@ -130,8 +130,7 @@ componentWillUnmount() {
 handleBackPress(): boolean {
 	let { handleBackPress } = this.props;
 	if (handleBackPress) {
-		handleBackPress();
-		return true;
+		return handleBackPress();
 	}
 	return false;
 }
