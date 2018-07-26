@@ -28,13 +28,10 @@ import { connect } from 'react-redux';
 import { View, NavigationHeaderPoster } from '../../../../BaseComponents';
 import { closeDatabase } from '../../../Actions/LocalStorage';
 import i18n from '../../../Translations/common';
-import { hideModal } from '../../../Actions';
 
 type Props = {
-	hideModal: () => Function,
 	sensor: Object,
 	screenProps: Object,
-	isModalOpen: boolean,
 	navigation: Object,
 };
 
@@ -59,12 +56,8 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 	}
 
 	handleBackPress(): boolean {
-		let { isModalOpen, hideModal: hideModalProp, screenProps } = this.props;
+		let { screenProps } = this.props;
 		let { currentScreen } = screenProps;
-		if (isModalOpen) {
-			hideModalProp();
-			return true;
-		}
 		if (currentScreen === 'Overview') {
 			this.goBack();
 			return true;
@@ -100,13 +93,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const sensor = store.sensors.byId[id];
 	return {
 		sensor,
-		isModalOpen: store.modal.openModal,
-	};
-}
-function mapDispatchToProps(dispatch: Function): Object {
-	return {
-		hideModal: (): Function => dispatch(hideModal()),
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SensorDetailsHeaderPoster);
+export default connect(mapStateToProps, null)(SensorDetailsHeaderPoster);
