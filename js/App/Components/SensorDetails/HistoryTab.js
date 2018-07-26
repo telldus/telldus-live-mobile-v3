@@ -357,8 +357,7 @@ class HistoryTab extends View {
 	getMaxDate(index: number, timestamp: Object): string {
 		const { toTimestamp } = timestamp;
 		if (index === 1) {
-			const to = moment.unix(toTimestamp);
-			return to.subtract(1, 'd').format('YYYY-MM-DD');
+			return moment.unix(toTimestamp).format('YYYY-MM-DD');
 		}
 		return moment().format('YYYY-MM-DD');
 	}
@@ -430,6 +429,8 @@ class HistoryTab extends View {
 				<CalendarModalComponent
 					isVisible={showCalendar}
 					current={propToUpdate === 1 ? fromTimestamp : toTimestamp}
+					timestamp={timestamp}
+					propToUpdate={propToUpdate}
 					maxDate={maxDate}
 					onPressPositive={this.onPressPositive}
 					onPressNegative={this.onPressNegative}
