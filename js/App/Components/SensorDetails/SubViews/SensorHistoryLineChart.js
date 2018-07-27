@@ -27,6 +27,7 @@ import {
 	VictoryAxis,
 	VictoryLine,
 	VictoryTheme,
+	VictoryScatter,
 } from 'victory-native';
 import moment from 'moment';
 import Orientation from 'react-native-orientation-locker';
@@ -326,6 +327,18 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 							}
 							if (!showTwo && i === 1) {
 								return null;
+							}
+							if (d.length === 1) {
+								return (
+									<VictoryScatter
+										key={i}
+										data={d}
+										style={{ data: { fill: colors[i] } }}
+
+										y={(datum: Object): number => datum.value} // eslint-disable-line
+										x={(datum: Object): number => datum.ts} // eslint-disable-line
+									/>
+								);
 							}
 							return (<VictoryLine
 								key={i}
