@@ -45,11 +45,17 @@ type Props = {
 	appLayout: Object,
 	timestamp: Object,
 	showCalendar: boolean,
+	showOne: boolean,
+	showTwo: boolean,
+	onToggleChartData: (Object) => void,
+};
+
+type DefaultProps = {
+	showOne: boolean,
+	showTwo: boolean,
 };
 
 type State = {
-	showOne: boolean,
-	showTwo: boolean,
 	fullscreen: Object,
 	orientation: any,
 	isLoading: boolean,
@@ -57,6 +63,11 @@ type State = {
 
 export default class SensorHistoryLineChart extends View<Props, State> {
 	props: Props;
+	state: State;
+	static defaultProps: DefaultProps = {
+		showOne: true,
+		showTwo: true,
+	};
 
 	toggleOne: () => void;
 	toggleTwo: () => void;
@@ -68,8 +79,6 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		super(props);
 
 		this.state = {
-			showOne: true,
-			showTwo: true,
 			fullscreen: {
 				show: false,
 				force: false,
@@ -89,6 +98,10 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const isStateEqual = isEqual(this.state, nextState);
 		if (!isStateEqual) {
+			return true;
+		}
+		const { showOne, showTwo } = this.props;
+		if (showOne !== nextProps.showOne || showTwo !== nextProps.showTwo) {
 			return true;
 		}
 		const isLayoutEqual = isEqual(nextProps.appLayout, this.props.appLayout);
@@ -124,15 +137,19 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	toggleTwo() {
-		this.setState({
-			showTwo: !this.state.showTwo,
-		});
+		const { showTwo, onToggleChartData } = this.props;
+		const settings = {
+			showTwo: !showTwo,
+		};
+		onToggleChartData(settings);
 	}
 
 	toggleOne() {
-		this.setState({
-			showOne: !this.state.showOne,
-		});
+		const { showOne, onToggleChartData } = this.props;
+		const settings = {
+			showOne: !showOne,
+		};
+		onToggleChartData(settings);
 	}
 
 	getTickConfigX(): Object {
@@ -219,7 +236,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	renderChart(): Object | null {
-		const { showOne, showTwo, fullscreen } = this.state;
+		const { fullscreen } = this.state;
 		const { show } = fullscreen;
 		const {
 			chartDataOne,
@@ -227,6 +244,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			selectedOne,
 			selectedTwo,
 			appLayout,
+			showOne,
+			showTwo,
 		} = this.props;
 		if (chartDataOne.length === 0 && chartDataOne.length === 0) {
 			return null;

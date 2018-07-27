@@ -34,7 +34,7 @@ import {
 	CalendarModalComponent,
 } from './SubViews';
 
-import { getSensorHistory } from '../../Actions/Sensors';
+import { getSensorHistory, changeDefaultHistorySettings } from '../../Actions/Sensors';
 import { getHistory, storeHistory, getLatestTimestamp, getSensorTypes } from '../../Actions/LocalStorage';
 
 import type { SensorHistoryQueryParams } from '../../Lib/LocalStorage';
@@ -48,14 +48,16 @@ type Props = {
 	screenProps: Object,
 	sensor: Object,
 	dispatch: Function,
+	selectedOne: Object | null,
+	selectedTwo: Object | null,
+	showOne: boolean,
+	showTwo: boolean,
 };
 
 type State = {
 	hasRefreshed: boolean,
 	refreshing: boolean,
 	hasLoaded: boolean,
-	selectedOne: Object | null,
-	selectedTwo: Object | null,
 	chartDataOne: Array<any>,
 	chartDataTwo: Array<any>,
 	list?: Array<string>,
@@ -76,6 +78,8 @@ class HistoryTab extends View {
 	onPressShowCalendar: () => void;
 	onPressPositive: (any) => void;
 	onPressNegative: () => void;
+
+	onToggleChartData: (Object) => void;
 
 	delayRefreshHistoryData: any;
 
@@ -108,8 +112,6 @@ class HistoryTab extends View {
 			hasRefreshed: false,
 			refreshing: true,
 			hasLoaded: false,
-			selectedOne: null,
-			selectedTwo: null,
 			chartDataOne: [],
 			chartDataTwo: [],
 			list: [],
@@ -127,6 +129,8 @@ class HistoryTab extends View {
 		this.onPressShowCalendar = this.onPressShowCalendar.bind(this);
 		this.onPressPositive = this.onPressPositive.bind(this);
 		this.onPressNegative = this.onPressNegative.bind(this);
+
+		this.onToggleChartData = this.onToggleChartData.bind(this);
 
 		this.delayRefreshHistoryData = null;
 	}
@@ -150,11 +154,11 @@ class HistoryTab extends View {
 	 * from the API)
 	 */
 	getHistoryData(hasLoaded: boolean = false, refreshing: boolean = false, callBackWhenNoData: Function = () => {}) {
-		const { sensor, screenProps } = this.props;
+		const { sensor, screenProps, dispatch } = this.props;
 		const { formatMessage } = screenProps.intl;
 		getSensorTypes(sensor.id, formatMessage).then((types: any) => {
 			if (types && types.length !== 0) {
-				const { selectedOne: selectedOnePrev, selectedTwo: selectedTwoPrev } = this.state;
+				const { selectedOne: selectedOnePrev, selectedTwo: selectedTwoPrev } = this.props;
 				const selectedOne = selectedOnePrev ? selectedOnePrev : types[0];
 				const selectedTwo = selectedTwoPrev ? selectedTwoPrev : (types[1] ? types[1] : null);
 				if (selectedOne) {
@@ -167,10 +171,13 @@ class HistoryTab extends View {
 					let queryParams = { ...selectedTwo, id: sensor.id };
 					this.getSensorTypeHistory(hasLoaded, refreshing, queryParams, 2);
 				}
-				this.setState({
-					list: types,
+				const settings = {
 					selectedOne,
 					selectedTwo,
+				};
+				dispatch(changeDefaultHistorySettings(sensor.id, settings));
+				this.setState({
+					list: types,
 				});
 			} else {
 				callBackWhenNoData();
@@ -292,37 +299,50 @@ class HistoryTab extends View {
 		clearTimeout(this.delayRefreshHistoryData);
 	}
 
+	onToggleChartData(settings: Object) {
+		const { sensor, dispatch } = this.props;
+		dispatch(changeDefaultHistorySettings(sensor.id, settings));
+	}
+
 	onValueChangeOne(itemValue: string, itemIndex: number, data: Array<Object>) {
-		const { selectedTwo } = this.state;
+		const { selectedTwo } = this.props;
 		if (selectedTwo && selectedTwo.value !== itemValue) {
-			let { sensor } = this.props;
+			const { sensor, dispatch } = this.props;
 			const selectedOne = data.find((item: Object): boolean => {
 				return item.value === itemValue;
 			});
-			this.setState({
+			const settings = {
 				selectedOne,
-			}, () => {
-				// $FlowFixMe
-				let queryParams = { ...selectedOne, id: sensor.id };
-				this.getSensorTypeHistory(true, true, queryParams, 1);
-			});
+			};
+			dispatch(changeDefaultHistorySettings(sensor.id, settings));
+
+			// $FlowFixMe
+			const queryParams = {
+				...selectedOne,
+				id: sensor.id,
+			};
+			this.getSensorTypeHistory(true, true, queryParams, 1);
 		}
 	}
 
 	onValueChangeTwo(itemValue: string, itemIndex: number, data: Array<Object>) {
-		const { selectedOne } = this.state;
+		const { selectedOne } = this.props;
 		if (selectedOne && selectedOne.value !== itemValue) {
-			let { sensor } = this.props;
+			const { sensor, dispatch } = this.props;
 			const selectedTwo = data.find((item: Object): boolean => {
 				return item.value === itemValue;
 			});
-			this.setState({
+			const settings = {
 				selectedTwo,
-			}, () => {
-				// $FlowFixMe
-				let queryParams = { ...selectedTwo, id: sensor.id };
-				this.getSensorTypeHistory(true, true, queryParams, 2);
-			});
+			};
+			dispatch(changeDefaultHistorySettings(sensor.id, settings));
+
+			// $FlowFixMe
+			const queryParams = {
+				...selectedTwo,
+				id: sensor.id,
+			};
+			this.getSensorTypeHistory(true, true, queryParams, 2);
 		}
 	}
 
@@ -364,8 +384,13 @@ class HistoryTab extends View {
 
 	render(): Object | null {
 		const {
+			screenProps,
 			selectedOne,
 			selectedTwo,
+			showTwo,
+			showOne,
+		} = this.props;
+		const {
 			list,
 			chartDataOne,
 			chartDataTwo,
@@ -374,7 +399,7 @@ class HistoryTab extends View {
 			timestamp,
 			propToUpdate,
 		} = this.state;
-		const { screenProps } = this.props;
+
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
 		const { fromTimestamp, toTimestamp} = timestamp;
@@ -388,6 +413,14 @@ class HistoryTab extends View {
 		}
 
 		const maxDate = this.getMaxDate(propToUpdate, timestamp);
+		const chartProps = {
+			chartDataOne,
+			chartDataTwo,
+			selectedOne,
+			selectedTwo,
+			showTwo,
+			showOne,
+		};
 
 		return (
 			<ScrollView>
@@ -411,13 +444,11 @@ class HistoryTab extends View {
 							propToUpdateIndex={2}/>
 					</View>
 					<SensorHistoryLineChart
-						chartDataOne={chartDataOne}
-						chartDataTwo={chartDataTwo}
-						selectedOne={selectedOne}
-						selectedTwo={selectedTwo}
+						{...chartProps}
 						timestamp={timestamp}
 						appLayout={appLayout}
-						showCalendar={showCalendar}/>
+						showCalendar={showCalendar}
+						onToggleChartData={this.onToggleChartData}/>
 					<GraphValuesDropDown
 						selectedOne={selectedOne}
 						selectedTwo={selectedTwo}
@@ -462,6 +493,19 @@ class HistoryTab extends View {
 
 }
 
+function prepareDefaultSettings(defaultSettings?: Object): Object {
+	let settings = {
+		selectedOne: null,
+		selectedTwo: null,
+		showOne: true,
+		showTwo: true,
+	};
+	if (!defaultSettings) {
+		return settings;
+	}
+	return { ...settings, ...defaultSettings.historySettings };
+}
+
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
@@ -471,9 +515,21 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const sensor = state.sensors.byId[id];
+	const { defaultSensorSettings } = state.sensorsList;
+	const defaultSettings = defaultSensorSettings[id];
+	const {
+		selectedOne = null,
+		selectedTwo = null,
+		showOne = true,
+		showTwo = true,
+	} = prepareDefaultSettings(defaultSettings);
 
 	return {
 		sensor,
+		selectedOne,
+		selectedTwo,
+		showOne,
+		showTwo,
 	};
 }
 
