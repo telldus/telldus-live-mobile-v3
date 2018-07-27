@@ -43,6 +43,7 @@ export type Action =
 
 	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id: number, displayType: string }
 	| { type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE', id: number, displayType: string }
+	| { type: 'CHANGE_SENSOR_DEFAULT_HISTORY_SETTINGS', id: number, newSettings: Object }
 	| { type: 'SHOW_DIMMER_POPUP', name: string, value: number }
 	| { type: 'HIDE_DIMMER_POPUP' }
 	| { type: 'SET_DIMMER_VALUE', payload: Object }

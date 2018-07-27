@@ -90,6 +90,42 @@ const defaultTypeById = (state: Object = {}, action: Object): State => {
 	return state;
 };
 
+const defaultSensorSettings = (state: Object = {}, action: Object): State => {
+	if (action.type === 'persist/REHYDRATE') {
+		if (action.payload && action.payload.sensorsList && action.payload.sensorsList.defaultSensorSettings) {
+			console.log('rehydrating sensorsList.defaultSensorSettings');
+			return {
+				...state,
+				...action.payload.sensorsList.defaultSensorSettings,
+			};
+		}
+		return { ...state };
+	}
+	if (action.type === 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE') {
+		const { id, displayType } = action;
+		return {
+			...state,
+			[id]: {
+				displayType,
+			},
+		};
+	}
+	if (action.type === 'CHANGE_SENSOR_DEFAULT_HISTORY_SETTINGS') {
+		const { id, historySettings: newSettings } = action;
+		let { historySettings } = state[id] ? state[id] : {};
+		historySettings = { ...historySettings, ...newSettings };
+
+		return {
+			...state,
+			[id]: {
+				historySettings,
+			},
+		};
+	}
+	return state;
+};
+
 export default combineReducers({
 	defaultTypeById,
+	defaultSensorSettings,
 });
