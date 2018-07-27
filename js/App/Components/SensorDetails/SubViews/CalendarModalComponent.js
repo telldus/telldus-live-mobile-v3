@@ -49,6 +49,7 @@ type Props = {
 	intl: Object,
 	maxDate: string,
 	propToUpdate: 1 | 2,
+	timestamp: Object,
 };
 
 type DefaultProps = {
@@ -169,6 +170,29 @@ renderDay({date, state, marking}: Object): Object {
 	);
 }
 
+getMarkedDates(current: number): Object {
+	let { timestamp, propToUpdate } = this.props, markedDates = {};
+	let { fromTimestamp, toTimestamp } = timestamp;
+	let startDate = moment.unix(fromTimestamp).format('YYYY-MM-DD'), endDate = moment.unix(toTimestamp).format('YYYY-MM-DD');
+	if (propToUpdate === 1) {
+		startDate = moment.unix(current).format('YYYY-MM-DD');
+	} else {
+		endDate = moment.unix(current).format('YYYY-MM-DD');
+	}
+
+	markedDates[startDate] = {marked: true};
+	const diff = moment(endDate).diff(moment(startDate), 'days');
+	if (diff <= 0) {
+		return markedDates;
+	}
+	let temp = startDate;
+	for (let i = 0; i < diff; i++) {
+		temp = moment(temp).add(1, 'd').format('YYYY-MM-DD');
+		markedDates[temp] = {marked: true};
+	}
+	return markedDates;
+}
+
 render(): Object {
 	const { current, isVisible } = this.state;
 	const {
@@ -188,7 +212,9 @@ render(): Object {
 		positiveLabelStyle,
 		negativeLabelStyle,
 	} = this.getStyle(appLayout);
-	const date = moment.unix(current).format('YYYY-MM-DD');
+
+	const currentMark = moment.unix(current).format('YYYY-MM-DD');
+	const markedDates = this.getMarkedDates(current);
 
 	return (
 		<Modal
@@ -213,7 +239,8 @@ render(): Object {
 				</Poster>
 				<Calendar
 					markedDates={{
-						[date]: {selected: true, marked: false},
+						...markedDates,
+						[currentMark]: { selected: true },
 					}}
 					maxDate={maxDate}
 					dayComponent={this.renderDay}

@@ -96,14 +96,14 @@ getStyle(appLayout: Object): Object {
 	const isPortrait = height > width;
 
 	const { state, marking } = this.props;
-	const { selected } = marking;
-	const { brandInfo, inactiveGray, brandSecondary } = Theme.Core;
+	const { selected, marked } = marking;
+	const { brandInfo, inactiveGray, brandSecondary, brandPrimary } = Theme.Core;
 
 	const adjustDay = !this.isTablet && !isPortrait;
 
 	const circularContainerSize = adjustDay ? 18 : 24;
 
-	const textColor = selected ? '#fff'
+	const textColor = selected || marked ? '#fff'
 		:
 		(state === 'disabled' ? inactiveGray
 			:
@@ -112,7 +112,8 @@ getStyle(appLayout: Object): Object {
 				'#2d4150')
 		);
 
-	const backgroundColor = selected ? brandSecondary : 'transparent';
+	const backgroundColor = selected || marked ? brandSecondary : 'transparent';
+	const borderColor = selected ? brandPrimary : 'transparent';
 
 	return {
 		container: {
@@ -129,6 +130,8 @@ getStyle(appLayout: Object): Object {
 			alignItems: 'center',
 			justifyContent: 'center',
 			overflow: 'hidden',
+			borderWidth: 1,
+			borderColor,
 		},
 		dayText: {
 			fontSize: adjustDay ? 11 : 14,
