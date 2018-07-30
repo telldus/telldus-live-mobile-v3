@@ -61,7 +61,7 @@ type State = {
 	hasLoaded: boolean,
 	chartDataOne: Array<any>,
 	chartDataTwo: Array<any>,
-	list?: Array<string>,
+	list: Array<string>,
 	showCalendar: boolean,
 	timestamp: Object,
 	propToUpdate: 1 | 2,
