@@ -75,6 +75,12 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	_orientationDidChange: (string) => void;
 	onRequestClose: () => void;
 
+	getY: (Object) => number;
+	getX: (Object) => number;
+	formatXTick: (number) => string;
+	renderAxis: (Object, number) => Object;
+	renderLine: (Object, number) => Object;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -93,6 +99,12 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 		this.onPressToggleView = this.onPressToggleView.bind(this);
 		Orientation.addOrientationListener(this._orientationDidChange);
+
+		this.getY = this.getY.bind(this);
+		this.getX = this.getX.bind(this);
+		this.formatXTick = this.formatXTick.bind(this);
+		this.renderAxis = this.renderAxis.bind(this);
+		this.renderLine = this.renderLine.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -235,6 +247,96 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		}
 	}
 
+	getY(data: Object): number {
+		return data.value;
+	}
+
+	getX(data: Object): number {
+		return data.ts;
+	}
+
+	formatXTick(tick: number): string {
+		return `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`;
+	}
+
+	renderAxis(d: Object, i: number): null | Object {
+		const {
+			showOne,
+			showTwo,
+		} = this.props;
+
+		if (!d) {
+			return null;
+		}
+		if (!showOne && i === 0) {
+			return null;
+		}
+		if (!showTwo && i === 1) {
+			return null;
+		}
+
+		const {
+			xOffsets,
+			tickPadding,
+			anchors,
+			chartLineStyle,
+		} = this.getStyle();
+
+		return (
+			<VictoryAxis dependentAxis
+				key={i}
+				offsetX={xOffsets[i]}
+				style={{
+					axis: chartLineStyle,
+					ticks: { padding: tickPadding[i] },
+					tickLabels: { fill: Theme.Core.inactiveTintColor, textAnchor: anchors[i] },
+					grid: chartLineStyle,
+				}}
+				tickCount={3}
+			/>
+		);
+	}
+
+	renderLine(d: Object, i: number): null | Object {
+		const {
+			showOne,
+			showTwo,
+		} = this.props;
+
+		if (!d) {
+			return null;
+		}
+		if (!showOne && i === 0) {
+			return null;
+		}
+		if (!showTwo && i === 1) {
+			return null;
+		}
+
+		const {
+			colors,
+		} = this.getStyle();
+
+		if (d.length === 1) {
+			return (
+				<VictoryScatter
+					key={i}
+					data={d}
+					style={{ data: { fill: colors[i] } }}
+					y={this.getY}
+					x={this.getX}
+				/>
+			);
+		}
+		return (<VictoryLine
+			key={i}
+			data={d}
+			style={{ data: { stroke: colors[i] } }}
+			y={this.getY}
+			x={this.getX}
+		/>);
+	}
+
 	renderChart(): Object | null {
 		const { fullscreen } = this.state;
 		const { show } = fullscreen;
@@ -262,15 +364,11 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 			containerStyle,
 			chartWidth,
 			chartHeight,
-			xOffsets,
-			tickPadding,
-			colors,
 			colorsScatter,
-			anchors,
 			chartLineStyle,
 			domainPadding,
 			chartPadding,
-		} = this.getStyle(appLayout);
+		} = this.getStyle();
 
 		const { ticks } = this.getTickConfigX();
 
@@ -310,65 +408,10 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 								grid: chartLineStyle,
 							}}
 							tickValues={ticks}
-						tickFormat={(tick: number): string => `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`} // eslint-disable-line
+							tickFormat={this.formatXTick}
 						/>
-						{chartData.map((d: Array<Object>, i: number): Object | null => {
-							if (!d) {
-								return null;
-							}
-							if (!showOne && i === 0) {
-								return null;
-							}
-							if (!showTwo && i === 1) {
-								return null;
-							}
-							return (
-								<VictoryAxis dependentAxis
-									key={i}
-									offsetX={xOffsets[i]}
-									style={{
-										axis: chartLineStyle,
-										ticks: { padding: tickPadding[i] },
-										tickLabels: { fill: Theme.Core.inactiveTintColor, textAnchor: anchors[i] },
-										grid: chartLineStyle,
-									}}
-									tickCount={3}
-								/>
-							);
-						}
-						)}
-						{chartData.map((d: Array<Object>, i: number): any => {
-							if (!d) {
-								return null;
-							}
-							if (!showOne && i === 0) {
-								return null;
-							}
-							if (!showTwo && i === 1) {
-								return null;
-							}
-							if (d.length === 1) {
-								return (
-									<VictoryScatter
-										key={i}
-										data={d}
-										style={{ data: { fill: colors[i] } }}
-
-										y={(datum: Object): number => datum.value} // eslint-disable-line
-										x={(datum: Object): number => datum.ts} // eslint-disable-line
-									/>
-								);
-							}
-							return (<VictoryLine
-								key={i}
-								data={d}
-								style={{ data: { stroke: colors[i] } }}
-								// normalize data
-							y={(datum: Object): number => datum.value} // eslint-disable-line
-							x={(datum: Object): number => datum.ts} // eslint-disable-line
-							/>);
-						}
-						)}
+						{chartData.map(this.renderAxis)}
+						{chartData.map(this.renderLine)}
 					</VictoryChart>
 				</View>
 			</View>
@@ -376,7 +419,6 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	render(): any {
-		const { appLayout } = this.props;
 		const { fullscreen, orientation, isLoading } = this.state;
 		const { show } = fullscreen;
 		const chart = this.renderChart();
@@ -389,7 +431,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 
 		const {
 			containerStyle,
-		} = this.getStyle(appLayout);
+		} = this.getStyle();
 
 		return (
 			<Modal
@@ -423,8 +465,9 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		);
 	}
 
-	getStyle(appLayout: Object): Object {
+	getStyle(): Object {
 		const { show, force } = this.state.fullscreen;
+		const { appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
