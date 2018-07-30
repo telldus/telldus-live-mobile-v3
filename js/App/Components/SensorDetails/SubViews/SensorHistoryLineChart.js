@@ -38,8 +38,8 @@ import ChartLegend from './ChartLegend';
 import Theme from '../../../Theme';
 
 type Props = {
-	chartDataOne: Array<any>,
-	chartDataTwo: Array<any>,
+	chartDataOne: Array<Object>,
+	chartDataTwo: Array<Object>,
 	selectedOne: Object,
 	selectedTwo: Object,
 	appLayout: Object,
@@ -78,8 +78,8 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 	getY: (Object) => number;
 	getX: (Object) => number;
 	formatXTick: (number) => string;
-	renderAxis: (Object, number) => Object;
-	renderLine: (Object, number) => Object;
+	renderAxis: (Array<Object>, number) => Object;
+	renderLine: (Array<Object>, number) => Object;
 
 	constructor(props: Props) {
 		super(props);
@@ -259,7 +259,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		return `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`;
 	}
 
-	renderAxis(d: Object, i: number): null | Object {
+	renderAxis(d: Array<Object>, i: number): null | Object {
 		const {
 			showOne,
 			showTwo,
@@ -297,7 +297,7 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		);
 	}
 
-	renderLine(d: Object, i: number): null | Object {
+	renderLine(d: Array<Object>, i: number): null | Object {
 		const {
 			showOne,
 			showTwo,
