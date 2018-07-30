@@ -37,6 +37,7 @@ import {
 import { getSensorHistory, changeDefaultHistorySettings } from '../../Actions/Sensors';
 import { getHistory, storeHistory, getLatestTimestamp, getSensorTypes } from '../../Actions/LocalStorage';
 
+import shouldUpdate from '../../Lib/shouldUpdate';
 import type { SensorHistoryQueryParams } from '../../Lib/LocalStorage';
 import { utils } from 'live-shared-data';
 const { getHistoryTimestamp } = utils;
@@ -266,7 +267,32 @@ class HistoryTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentScreen === 'History';
+		const { screenProps } = nextProps;
+		const { appLayout, currentScreen } = screenProps;
+		if (currentScreen === 'History') {
+			const { chartDataOne, chartDataTwo, list, ...others } = this.state;
+			if (!nextState.hasLoaded) {
+				return true;
+			}
+			const stateChange = shouldUpdate(others, nextState, ['hasRefreshed', 'refreshing', 'hasLoaded', 'showCalendar', 'timestamp', 'propToUpdate']);
+			if (stateChange) {
+				return stateChange;
+			}
+			if ((chartDataOne.length !== nextState.chartDataOne.length) ||
+			(chartDataTwo.length !== nextState.chartDataTwo.length) ||
+			(list.length !== nextState.list.length)) {
+				return true;
+			}
+			if (appLayout.width !== this.props.screenProps.appLayout.width) {
+				return true;
+			}
+			const propsChange = shouldUpdate(this.props, nextProps, ['sensor', 'selectedOne', 'selectedTwo', 'showOne', 'showTwo']);
+			if (propsChange) {
+				return propsChange;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
