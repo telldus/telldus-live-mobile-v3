@@ -80,7 +80,6 @@ type Props = {
 };
 
 type State = {
-	deviceId: number,
 	dimmer: boolean,
 	addGateway: boolean,
 	isRefreshing: boolean,
@@ -97,7 +96,6 @@ class DevicesTab extends View {
 	props: Props;
 	state: State;
 
-	onCloseSelected: () => void;
 	openDeviceDetail: (number) => void;
 	setScrollEnabled: (boolean) => void;
 	renderSectionHeader: (sectionData: Object) => Object;
@@ -120,7 +118,6 @@ class DevicesTab extends View {
 		super(props);
 
 		this.state = {
-			deviceId: -1,
 			dimmer: false,
 			addGateway: false,
 			isRefreshing: false,
@@ -135,7 +132,6 @@ class DevicesTab extends View {
 			deviceToHide: {},
 		};
 
-		this.onCloseSelected = this.onCloseSelected.bind(this);
 		this.openDeviceDetail = this.openDeviceDetail.bind(this);
 		this.setScrollEnabled = this.setScrollEnabled.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
@@ -185,10 +181,6 @@ class DevicesTab extends View {
 		// are retrived inside 'DeviceDetails' by matching 'id' with device data from store
 		// It is important to use data from store directly(not through navigation param) to get updates(socket and other)
 		this.props.navigation.navigate('DeviceDetails', { id: device.id });
-	}
-
-	onCloseSelected() {
-		this.setState({ deviceId: -1 });
 	}
 
 	setScrollEnabled(enable: boolean) {
