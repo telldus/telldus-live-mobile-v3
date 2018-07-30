@@ -171,6 +171,7 @@ renderDay({date, state, marking}: Object): Object {
 }
 
 getMarkedDates(current: number): Object {
+	let currentMark = moment.unix(current).format('YYYY-MM-DD');
 	let { timestamp, propToUpdate } = this.props, markedDates = {};
 	let { fromTimestamp, toTimestamp } = timestamp;
 	let startDate = moment.unix(fromTimestamp).format('YYYY-MM-DD'), endDate = moment.unix(toTimestamp).format('YYYY-MM-DD');
@@ -180,15 +181,21 @@ getMarkedDates(current: number): Object {
 		endDate = moment.unix(current).format('YYYY-MM-DD');
 	}
 
-	markedDates[startDate] = {marked: true};
+	markedDates[startDate] = {marked: true, startingDay: true, selected: currentMark === startDate};
 	const diff = moment(endDate).diff(moment(startDate), 'days');
 	if (diff <= 0) {
+		if (moment(currentMark).isBefore(startDate)) {
+			markedDates[currentMark] = {marked: true, selected: true, endingDay: true};
+		}
+		if (startDate === currentMark) {
+			markedDates[startDate] = {marked: true, startingDay: true, selected: true, endingDay: true};
+		}
 		return markedDates;
 	}
 	let temp = startDate;
 	for (let i = 0; i < diff; i++) {
 		temp = moment(temp).add(1, 'd').format('YYYY-MM-DD');
-		markedDates[temp] = {marked: true};
+		markedDates[temp] = {marked: true, endingDay: i === (diff - 1), selected: temp === currentMark};
 	}
 	return markedDates;
 }
@@ -213,7 +220,6 @@ render(): Object {
 		negativeLabelStyle,
 	} = this.getStyle(appLayout);
 
-	const currentMark = moment.unix(current).format('YYYY-MM-DD');
 	const markedDates = this.getMarkedDates(current);
 
 	return (
@@ -240,7 +246,6 @@ render(): Object {
 				<Calendar
 					markedDates={{
 						...markedDates,
-						[currentMark]: { selected: true },
 					}}
 					maxDate={maxDate}
 					dayComponent={this.renderDay}

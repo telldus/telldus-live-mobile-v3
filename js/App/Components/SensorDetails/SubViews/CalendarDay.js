@@ -73,6 +73,7 @@ render(): Object {
 	const {
 		container,
 		circularContainer,
+		periodCover,
 		dayText,
 	} = this.getStyle(appLayout);
 	return (
@@ -82,10 +83,12 @@ render(): Object {
 			rippleDuration={rippleDuration}
 			style={container}
 			onPress={this.onDayPress}>
-			<View style={circularContainer}>
-				<Text style={dayText}>
-					{day}
-				</Text>
+			<View style={periodCover}>
+				<View style={circularContainer}>
+					<Text style={dayText}>
+						{day}
+					</Text>
+				</View>
 			</View>
 		</Ripple>
 	);
@@ -96,8 +99,8 @@ getStyle(appLayout: Object): Object {
 	const isPortrait = height > width;
 
 	const { state, marking } = this.props;
-	const { selected, marked } = marking;
-	const { brandInfo, inactiveGray, brandSecondary, brandPrimary } = Theme.Core;
+	const { selected, marked, startingDay, endingDay } = marking;
+	const { brandInfo, inactiveGray, brandSecondary } = Theme.Core;
 
 	const adjustDay = !this.isTablet && !isPortrait;
 
@@ -113,14 +116,14 @@ getStyle(appLayout: Object): Object {
 		);
 
 	const backgroundColor = selected || marked ? brandSecondary : 'transparent';
-	const borderColor = selected ? brandPrimary : 'transparent';
+	const borderColor = selected ? '#fff' : 'transparent';
 
 	return {
 		container: {
-			alignItems: 'center',
+			flex: 1,
+			alignItems: 'stretch',
 			justifyContent: 'center',
 			alignSelf: 'center',
-			padding: adjustDay ? 3 : 12,
 		},
 		circularContainer: {
 			height: circularContainerSize,
@@ -132,6 +135,19 @@ getStyle(appLayout: Object): Object {
 			overflow: 'hidden',
 			borderWidth: 1,
 			borderColor,
+		},
+		periodCover: {
+			height: circularContainerSize,
+			width: '100%',
+			backgroundColor,
+			alignItems: 'center',
+			justifyContent: 'center',
+			overflow: 'hidden',
+			padding: adjustDay ? 3 : 12,
+			borderTopLeftRadius: startingDay ? circularContainerSize / 2 : 0,
+			borderBottomLeftRadius: startingDay ? circularContainerSize / 2 : 0,
+			borderTopRightRadius: endingDay ? circularContainerSize / 2 : 0,
+			borderBottomRightRadius: endingDay ? circularContainerSize / 2 : 0,
 		},
 		dayText: {
 			fontSize: adjustDay ? 11 : 14,
