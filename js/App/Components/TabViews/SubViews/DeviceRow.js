@@ -26,13 +26,14 @@ import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity, PixelRatio, Animated, Easing } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import isEqual from 'lodash/isEqual';
 
 import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
-import { getLabelDevice } from '../../../Lib';
+import { getLabelDevice, shouldUpdate } from '../../../Lib';
 import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
 import MultiActionModal from './Device/MultiActionModal';
@@ -43,6 +44,15 @@ import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 type Props = {
+	device: Object,
+	setScrollEnabled: boolean,
+	intl: Object,
+	currentScreen: string,
+	appLayout: Object,
+	isGatewayActive: boolean,
+	tab: string,
+	powerConsumed: string | null,
+	propsSwipeRow: Object,
 	onBell: (number) => void,
 	onDown: (number) => void,
 	onUp: (number) => void,
@@ -52,18 +62,9 @@ type Props = {
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
 	onSettingsSelected: (Object) => void,
-	device: Object,
-	setScrollEnabled: boolean,
-	intl: Object,
-	currentScreen: string,
-	appLayout: Object,
-	isGatewayActive: boolean,
-	tab: string,
-	powerConsumed: string | null,
 	setIgnoreDevice: (Object) => void,
 	onPressMore: (Array<Object>) => void,
 	onHiddenRowOpen: (string) => void,
-	propsSwipeRow: Object,
 };
 
 type State = {
@@ -141,6 +142,35 @@ class DeviceRow extends PureComponent<Props, State> {
 
 		this.isTablet = DeviceInfo.isTablet();
 		this.closeSwipeRow = this.closeSwipeRow.bind(this);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+
+		const { propsSwipeRow, tab, ...otherProps } = this.props;// eslint-disable-line
+		const { propsSwipeRow: nextPropsSwipeRow, tab: nextTab, ...nextOtherProps } = nextProps;
+		const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
+		const { device } = otherProps;
+
+		if (forceClose && this.state.isOpen && idToKeepOpen !== device.id) {
+			return true;
+		}
+
+		if (nextTab !== 'Devices' && this.state.isOpen) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(otherProps, nextOtherProps, [
+			'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
+		]);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {

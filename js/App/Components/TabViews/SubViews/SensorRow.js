@@ -35,7 +35,7 @@ import TypeBlock from './Sensor/TypeBlock';
 
 import i18n from '../../../Translations/common';
 
-import { formatLastUpdated, checkIfLarge } from '../../../Lib';
+import { formatLastUpdated, checkIfLarge, shouldUpdate } from '../../../Lib';
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
 const { getSensorTypes, getSensorUnits } = sensorUtils;
@@ -53,10 +53,10 @@ type Props = {
 	appLayout: Object,
 	isGatewayActive: boolean,
 	tab: string,
-	setIgnoreSensor: (Object) => void,
-	onHiddenRowOpen: (string) => void,
 	propsSwipeRow: Object,
 	defaultType?: string,
+	setIgnoreSensor: (Object) => void,
+	onHiddenRowOpen: (string) => void,
 	onSettingsSelected: Object => void,
 };
 
@@ -185,6 +185,35 @@ class SensorRow extends View<Props, State> {
 		this.closeSwipeRow = this.closeSwipeRow.bind(this);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+
+		const { propsSwipeRow, tab, ...otherProps } = this.props;// eslint-disable-line
+		const { propsSwipeRow: nextPropsSwipeRow, tab: nextTab, ...nextOtherProps } = nextProps;
+		const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
+		const { sensor } = otherProps;
+
+		if (forceClose && this.state.isOpen && idToKeepOpen !== sensor.id) {
+			return true;
+		}
+
+		if (nextTab !== 'Sensors' && this.state.isOpen) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(otherProps, nextOtherProps, [
+			'appLayout', 'sensor', 'isGatewayActive', 'defaultType',
+		]);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
+	}
+
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		let { tab, propsSwipeRow, sensor } = this.props;
 		const { isOpen } = this.state;
@@ -192,14 +221,6 @@ class SensorRow extends View<Props, State> {
 		if (isOpen && (tab !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen)) ) {
 			this.closeSwipeRow();
 		}
-	}
-
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-
-		const isStateEqual = isEqual(this.state, nextState);
-		const isPropsEqual = isEqual(this.props, nextProps);
-
-		return (!isStateEqual || !isPropsEqual);
 	}
 
 	onRowOpen() {
