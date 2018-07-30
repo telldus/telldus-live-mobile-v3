@@ -164,7 +164,7 @@ class SettingsTab extends View {
 	render(): Object {
 		const { keepHistory, isHidden } = this.state;
 		const { inDashboard, sensor } = this.props;
-		const { model, protocol, id } = sensor;
+		const { model, protocol, sensorId } = sensor;
 		const { appLayout, intl } = this.props.screenProps;
 		const { formatMessage } = intl;
 
@@ -212,7 +212,7 @@ class SettingsTab extends View {
 					<SettingsRow
 						type={'text'}
 						label={`${formatMessage(i18n.labelSensor)} ${formatMessage(i18n.labelId)}`}
-						value={id}
+						value={sensorId}
 						appLayout={appLayout}
 					/>
 				</View>
