@@ -169,11 +169,19 @@ class DevicesTab extends View {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { tab } = nextProps;
-
-		const isStateEqual = isEqual(this.state, nextState);
-		const isPropsEqual = isEqual(this.props, nextProps);
-
-		return (tab === 'Devices') && (!isStateEqual || !isPropsEqual);
+		if (tab === 'Devices') {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+			// TODO: remove unnecessary keys, as this can be expensive
+			const isPropsEqual = isEqual(this.props, nextProps);
+			if (!isPropsEqual) {
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	openDeviceDetail(device: Object) {
