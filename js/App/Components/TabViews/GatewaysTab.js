@@ -26,6 +26,7 @@ import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
+import isEqual from 'lodash/isEqual';
 
 import { View, FloatingButton } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
@@ -33,7 +34,7 @@ import { getGateways, addNewGateway, showToast } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
-import { getTabBarIcon } from '../../Lib';
+import { getTabBarIcon, shouldUpdate } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -47,15 +48,13 @@ const messages = defineMessages({
 
 type Props = {
 	rows: Array<Object>,
+	screenProps: Object,
+	navigation: Object,
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
-	screenProps: Object,
-	appLayout: Object,
-	navigation: Object,
 };
 
 type State = {
-	settings: boolean,
 	isLoading: boolean,
 	isRefreshing: boolean,
 };
@@ -87,7 +86,6 @@ class GatewaysTab extends View {
 		let { formatMessage } = props.screenProps.intl;
 
 		this.state = {
-			settings: false,
 			isLoading: false,
 			isRefreshing: false,
 		};
@@ -98,6 +96,29 @@ class GatewaysTab extends View {
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 		this.addLocation = this.addLocation.bind(this);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { screenProps } = nextProps;
+		const { currentScreen, appLayout } = screenProps;
+		if (currentScreen === 'Gateways') {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+
+			const { appLayout: prevLayout } = this.props.screenProps;
+			if (appLayout.width !== prevLayout.width) {
+				return true;
+			}
+
+			const propsChange = shouldUpdate(this.props, nextProps, ['rows']);
+			if (propsChange) {
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	onRefresh() {
@@ -136,7 +157,7 @@ class GatewaysTab extends View {
 	}
 
 	getPadding(): number {
-		const { appLayout } = this.props;
+		const { appLayout } = this.props.screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -178,7 +199,6 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
-		appLayout: state.app.layout,
 	};
 }
 

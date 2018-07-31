@@ -35,17 +35,15 @@ import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getTabBarIcon } from '../../Lib';
+import { getTabBarIcon, shouldUpdate } from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {
 	rowsAndSections: Object,
-	tab: string,
-	dispatch: Function,
-	appLayout: Object,
 	screenProps: Object,
 	screenReaderEnabled: boolean,
 	navigation: Object,
+	dispatch: Function,
 };
 
 type State = {
@@ -120,15 +118,23 @@ class SensorsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { tab } = nextProps;
-		if (tab === 'Sensors') {
+		const { screenProps } = nextProps;
+		const { currentScreen, appLayout } = screenProps;
+		if (currentScreen === 'Sensors') {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
 			}
-			// TODO: remove unnecessary keys, as this can be expensive
-			const isPropsEqual = isEqual(this.props, nextProps);
-			if (!isPropsEqual) {
+
+			const { appLayout: prevLayout } = this.props.screenProps;
+			if (appLayout.width !== prevLayout.width) {
+				return true;
+			}
+
+			// TODO: 'rowsAndSections' can be large and deeply nested, can be expensive.
+			// If possible Simplify!(pass current rowsAndSections and next rowsAndSections and check change in any unique key)
+			const propsChange = shouldUpdate(this.props, nextProps, ['rowsAndSections']);
+			if (propsChange) {
 				return true;
 			}
 			return false;
@@ -216,22 +222,23 @@ class SensorsTab extends View {
 
 	render(): Object {
 
-		let { appLayout, rowsAndSections, screenReaderEnabled, screenProps } = this.props;
-		let {
+		const { rowsAndSections, screenReaderEnabled, screenProps } = this.props;
+		const { appLayout } = screenProps;
+		const {
 			showHiddenList,
 			isRefreshing,
 			propsSwipeRow,
 			showConfirmDialogue,
 		} = this.state;
-		let { visibleList, hiddenList } = rowsAndSections;
+		const { visibleList, hiddenList } = rowsAndSections;
 
-		let style = this.getStyles(appLayout);
+		const style = this.getStyles(appLayout);
 
 		let makeRowAccessible = 0;
 		if (screenReaderEnabled && screenProps.currentScreen === 'Sensors') {
 			makeRowAccessible = 1;
 		}
-		let extraData = {
+		const extraData = {
 			makeRowAccessible,
 			appLayout,
 			propsSwipeRow,
@@ -296,15 +303,15 @@ class SensorsTab extends View {
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.key}
-				appLayout={this.props.appLayout}
+				appLayout={this.props.screenProps.appLayout}
 			/>
 		);
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, appLayout } = this.props;
+		const { screenProps } = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, currentScreen } = screenProps;
+		const { intl, currentScreen, appLayout } = screenProps;
 		const { item } = row;
 		const { isOnline } = item;
 
@@ -397,11 +404,9 @@ const getRowsAndSections = createSelector(
 );
 
 function mapStateToProps(store: Object): Object {
-	const { layout: appLayout, screenReaderEnabled } = store.app;
+	const { screenReaderEnabled } = store.app;
 	return {
 		rowsAndSections: getRowsAndSections(store),
-		tab: store.navigation.tab,
-		appLayout,
 		screenReaderEnabled,
 	};
 }

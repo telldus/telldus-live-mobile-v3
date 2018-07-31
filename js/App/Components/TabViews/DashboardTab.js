@@ -37,7 +37,6 @@ import { changeSensorDisplayType } from '../../Actions/Dashboard';
 
 import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
-import { getUserProfile } from '../../Reducers/User';
 import Theme from '../../Theme';
 
 import {
@@ -45,7 +44,7 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { getTabBarIcon } from '../../Lib';
+import { getTabBarIcon, shouldUpdate } from '../../Lib';
 
 const messages = defineMessages({
 	messageNoItemsTitle: {
@@ -64,14 +63,12 @@ const messages = defineMessages({
 
 type Props = {
 	rows: Array<Object>,
-	userProfile: Object,
+	isDBEmpty: boolean,
+	screenProps: Object,
 	navigation: Object,
-	dashboard: Object,
-	tab: string,
+	navigation: Object,
 	onChangeDisplayType: () => void,
-	dashboard: Object,
 	dispatch: Function,
-	navigation: Object,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
 	onDim: (number) => void,
@@ -80,9 +77,6 @@ type Props = {
 	onUp: (number) => void,
 	onDown: (number) => void,
 	onStop: (number) => void,
-	events: Object,
-	screenProps: Object,
-	appLayout: Object,
 };
 
 type State = {
@@ -100,7 +94,6 @@ class DashboardTab extends View {
 	props: Props;
 	state: State;
 
-	tab: string;
 	_onLayout: (Object) => void;
 	setScrollEnabled: (boolean) => void;
 	onSlidingStart: (name: string, value: number) => void;
@@ -131,7 +124,6 @@ class DashboardTab extends View {
 			showRefresh: true,
 		};
 
-		this.tab = 'Dashboard';
 		this.timer = null;
 
 		this._onLayout = this._onLayout.bind(this);
@@ -193,8 +185,9 @@ class DashboardTab extends View {
 	}
 
 	componentDidMount() {
-		if (!this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0) {
-			this.props.navigation.navigate('Devices');
+		const { isDBEmpty, navigation } = this.props;
+		if (isDBEmpty) {
+			navigation.navigate('Devices');
 		}
 		this.startSensorTimer();
 	}
@@ -205,7 +198,7 @@ class DashboardTab extends View {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { screenProps } = nextProps;
-		const { currentScreen } = screenProps;
+		const { currentScreen, appLayout } = screenProps;
 
 		if (currentScreen !== 'Dashboard' && this.timer) {
 			this.stopSensorTimer();
@@ -218,9 +211,16 @@ class DashboardTab extends View {
 			if (!isStateEqual) {
 				return true;
 			}
-			// TODO: remove unnecessary keys, as this can be expensive
-			const isPropsEqual = isEqual(this.props, nextProps);
-			if (!isPropsEqual) {
+
+			const { appLayout: prevLayout } = this.props.screenProps;
+			if (appLayout.width !== prevLayout.width) {
+				return true;
+			}
+
+			// TODO: 'rows' can be large and deeply nested, can be expensive.
+			// If possible Simplify!(pass current rows and next rows and check change in any unique key)
+			const propsChange = shouldUpdate(this.props, nextProps, ['isDBEmpty', 'rows']);
+			if (propsChange) {
 				return true;
 			}
 			return false;
@@ -239,7 +239,7 @@ class DashboardTab extends View {
 	};
 
 	calculateTileWidth(listWidth: number): Object {
-		const { appLayout } = this.props;
+		const { appLayout } = this.props.screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const margin = this.getPadding() * 2;
@@ -275,16 +275,17 @@ class DashboardTab extends View {
 	}
 
 	render(): Object {
-		let { appLayout, dashboard, rows } = this.props;
-		let { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
+		const { screenProps, isDBEmpty, rows } = this.props;
+		const { appLayout } = screenProps;
+		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
-		let style = this.getStyles(appLayout);
+		const style = this.getStyles(appLayout);
 
-		if (!dashboard.deviceIds.length > 0 && !dashboard.sensorIds.length > 0) {
+		if (isDBEmpty) {
 			return this.noItemsMessage(style);
 		}
 
-		let extraData = {
+		const extraData = {
 			propOne: tileWidth,
 			propTwo: appLayout,
 		};
@@ -314,12 +315,12 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(row: Object): Object {
-		let { screenProps } = this.props;
+		const { screenProps } = this.props;
 		let { tileWidth } = this.state;
-		let { data, objectType } = row.item;
-		let tileMargin = this.getPadding() / 4;
+		const { data, objectType } = row.item;
+		const tileMargin = this.getPadding() / 4;
 		tileWidth -= (2 * tileMargin);
-		let key = data.id;
+		const key = data.id;
 		if (objectType !== 'sensor' && objectType !== 'device') {
 			return <Text key={key}>unknown device or sensor</Text>;
 		}
@@ -365,7 +366,7 @@ class DashboardTab extends View {
 	}
 
 	getPadding(): number {
-		const { appLayout } = this.props;
+		const { appLayout } = this.props.screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -375,7 +376,7 @@ class DashboardTab extends View {
 	getStyles(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const isEmpty = !this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0;
+		const { isDBEmpty } = this.props;
 
 		const padding = this.getPadding();
 
@@ -384,7 +385,7 @@ class DashboardTab extends View {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
-				padding: isEmpty ? 30 : padding,
+				padding: isDBEmpty ? 30 : padding,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
@@ -418,12 +419,10 @@ const getRows = createSelector(
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
+	const { deviceIds = [], sensorIds = []} = state.dashboard;
 	return {
 		rows: getRows(state),
-		userProfile: getUserProfile(state),
-		tab: state.navigation.tab,
-		dashboard: state.dashboard,
-		appLayout: state.app.layout,
+		isDBEmpty: (deviceIds.length === 0) && (sensorIds.length === 0),
 	};
 }
 

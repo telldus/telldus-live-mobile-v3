@@ -34,7 +34,7 @@ import { DeviceRow, DeviceHeader } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import { getDeviceType, getTabBarIcon } from '../../Lib';
+import { getTabBarIcon, shouldUpdate } from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast } from '../../Actions';
@@ -69,14 +69,13 @@ const messages = defineMessages({
 type Props = {
 	rowsAndSections: Object,
 	gateways: Array<any>,
-	devices: Object,
-	tab: string,
+	devices: Array<any>,
+	devicesDidFetch: boolean,
 	dispatch: Function,
 	screenProps: Object,
-	appLayout: Object,
-	addNewLocation: Function,
 	navigation: Object,
 	screenReaderEnabled: boolean,
+	addNewLocation: Function,
 };
 
 type State = {
@@ -168,15 +167,23 @@ class DevicesTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { tab } = nextProps;
-		if (tab === 'Devices') {
+		const { screenProps } = nextProps;
+		const { currentScreen, appLayout } = screenProps;
+		if (currentScreen === 'Devices') {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
 			}
-			// TODO: remove unnecessary keys, as this can be expensive
-			const isPropsEqual = isEqual(this.props, nextProps);
-			if (!isPropsEqual) {
+
+			const { appLayout: prevLayout } = this.props.screenProps;
+			if (appLayout.width !== prevLayout.width) {
+				return true;
+			}
+
+			// TODO: 'rowsAndSections' can be large and deeply nested, can be expensive.
+			// If possible Simplify!(pass current rowsAndSections and next rowsAndSections and check change in any unique key)
+			const propsChange = shouldUpdate(this.props, nextProps, ['devicesDidFetch', 'screenReaderEnabled', 'gateways', 'devices', 'rowsAndSections']);
+			if (propsChange) {
 				return true;
 			}
 			return false;
@@ -236,13 +243,14 @@ class DevicesTab extends View {
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.key}
-				appLayout={this.props.appLayout}
+				appLayout={this.props.screenProps.appLayout}
 			/>
 		);
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, appLayout } = this.props;
+		const { screenProps } = this.props;
+		const { appLayout } = screenProps;
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen } = screenProps;
 		const { item } = row;
@@ -292,16 +300,6 @@ class DevicesTab extends View {
 
 	keyExtractor(item: Object): number {
 		return item.id;
-	}
-
-	getType(deviceId: number): null | string {
-		const filteredItem = this.props.devices.byId[deviceId];
-		if (!filteredItem) {
-			return null;
-		}
-
-		const supportedMethods = filteredItem.supportedMethods;
-		return getDeviceType(supportedMethods);
 	}
 
 	onPressAddLocation() {
@@ -403,8 +401,9 @@ class DevicesTab extends View {
 
 	render(): Object {
 
-		let { appLayout, devices, rowsAndSections, screenProps, screenReaderEnabled } = this.props;
-		let {
+		const { devices, devicesDidFetch, rowsAndSections, screenProps, screenReaderEnabled } = this.props;
+		const { appLayout } = screenProps;
+		const {
 			showHiddenList,
 			isRefreshing,
 			addGateway,
@@ -413,15 +412,15 @@ class DevicesTab extends View {
 			showRefresh,
 			showConfirmDialogue,
 		} = this.state;
-		let { visibleList, hiddenList } = rowsAndSections;
+		const { visibleList, hiddenList } = rowsAndSections;
 
-		let style = this.getStyles(appLayout);
+		const style = this.getStyles(appLayout);
 
 		if (addGateway) {
 			return this.noGatewayMessage(style);
 		}
 
-		if (!devices.allIds.length > 0 && devices.didFetch) {
+		if (devices.length === 0 && devicesDidFetch) {
 			return this.noDeviceMessage(style);
 		}
 
@@ -429,7 +428,7 @@ class DevicesTab extends View {
 		if (screenReaderEnabled && screenProps.currentScreen === 'Devices') {
 			makeRowAccessible = 1;
 		}
-		let extraData = {
+		const extraData = {
 			makeRowAccessible,
 			appLayout,
 			propsSwipeRow,
@@ -519,7 +518,7 @@ class DevicesTab extends View {
 			},
 			container: {
 				flex: 1,
-				paddingHorizontal: !this.props.devices.allIds.length > 0 ? 30 : 0,
+				paddingHorizontal: this.props.devices.length === 0 ? 30 : 0,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
 			noItemsTitle: {
@@ -605,13 +604,12 @@ const getRowsAndSections = createSelector(
 );
 
 function mapStateToProps(state: Object, ownprops: Object): Object {
-	const { layout: appLayout, screenReaderEnabled } = state.app;
+	const { screenReaderEnabled } = state.app;
 	return {
 		rowsAndSections: getRowsAndSections(state),
-		devices: state.devices,
+		devices: state.devices.allIds,
+		devicesDidFetch: state.devices.didFetch,
 		gateways: state.gateways.allIds,
-		tab: state.navigation.tab,
-		appLayout,
 		screenReaderEnabled,
 	};
 }

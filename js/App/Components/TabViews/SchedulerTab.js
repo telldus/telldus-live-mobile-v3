@@ -30,6 +30,7 @@ import { createSelector } from 'reselect';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
 import Platform from 'Platform';
+import isEqual from 'lodash/isEqual';
 
 import {
 	FloatingButton,
@@ -45,7 +46,7 @@ import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
 
-import { getTabBarIcon } from '../../Lib';
+import { getTabBarIcon, shouldUpdate } from '../../Lib';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
@@ -67,19 +68,15 @@ type NavigationParams = {
 
 type Props = {
 	rowsAndSections: Object,
-	devices: Object,
-	dispatch: Function,
 	navigation: Object,
 	screenProps: Object,
-	appLayout: Object,
+	dispatch: Function,
 };
 
 type State = {
-	daysToRender?: React$Element<any>[],
 	todayIndex?: number,
 	isRefreshing: boolean,
 	loading: boolean,
-	days: Array<any>,
 };
 
 class SchedulerTab extends View<null, Props, State> {
@@ -89,7 +86,6 @@ class SchedulerTab extends View<null, Props, State> {
 
 	static propTypes = {
 		rowsAndSections: PropTypes.object,
-		devices: PropTypes.object,
 		dispatch: PropTypes.func,
 		navigation: PropTypes.object,
 		screenProps: PropTypes.object,
@@ -121,7 +117,27 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.tab === 'Scheduler';
+		const { screenProps } = nextProps;
+		const { currentScreen, appLayout } = screenProps;
+		if (currentScreen === 'Scheduler') {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+
+			const { appLayout: prevLayout } = this.props.screenProps;
+			if (appLayout.width !== prevLayout.width) {
+				return true;
+			}
+			// TODO: 'rowsAndSections' can be large and deeply nested, can be expensive.
+			// If possible Simplify!(pass current rowsAndSections and next rowsAndSections and check change in any unique key)
+			const propsChange = shouldUpdate(this.props, nextProps, ['rowsAndSections']);
+			if (propsChange) {
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	componentDidMount() {
@@ -172,8 +188,9 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { rowsAndSections, appLayout, screenProps } = this.props;
-		const { formatMessage } = screenProps.intl;
+		const { rowsAndSections, screenProps } = this.props;
+		const { appLayout, intl } = screenProps;
+		const { formatMessage } = intl;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
@@ -329,7 +346,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
-		const { rowsAndSections } = this.props;
+		const { rowsAndSections, screenProps } = this.props;
 		const { todayIndex } = this.state;
 		const { item } = props;
 		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
@@ -338,7 +355,7 @@ class SchedulerTab extends View<null, Props, State> {
 		const showNow = ((todayIndex === 0) && lastExpired && (lastExpired.id === item.id));
 
 		return (
-			<JobRow {...item} showNow={showNow} editJob={this.editJob} isFirst={props.index === 0} intl={this.props.screenProps.intl}/>
+			<JobRow {...item} showNow={showNow} editJob={this.editJob} isFirst={props.index === 0} intl={screenProps.intl}/>
 		);
 	};
 }
@@ -372,17 +389,11 @@ const styles = StyleSheet.create({
 
 type MapStateToPropsType = {
 	rowsAndSections: Object[],
-	devices: Object,
-	tab: string,
-	appLayout: Object,
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {
 	return {
 		rowsAndSections: getRowsAndSections(store),
-		devices: store.devices,
-		tab: store.navigation.tab,
-		appLayout: store.app.layout,
 	};
 };
 
