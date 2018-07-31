@@ -28,6 +28,7 @@ import {
 	VictoryLine,
 	VictoryTheme,
 	VictoryScatter,
+	VictoryZoomContainer,
 } from 'victory-native';
 import moment from 'moment';
 import Orientation from 'react-native-orientation-locker';
@@ -398,12 +399,15 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 					appLayout={appLayout}
 					fullscreen={show}
 					onPressToggleView={this.onPressToggleView}/>
-				<View style={{flex: 0}} pointerEvents="none">
+				<View style={{flex: 0}}>
 					<VictoryChart
 						theme={VictoryTheme.material}
 						width={chartWidth} height={chartHeight}
 						padding={chartPadding}
 						domainPadding={{ y: domainPadding, x: 20 }}
+						containerComponent={
+							<VictoryZoomContainer/>
+						}
 					>
 						<VictoryAxis
 							orientation={'bottom'}
