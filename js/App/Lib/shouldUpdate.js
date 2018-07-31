@@ -24,7 +24,7 @@ import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 
 /**
- * 
+ *
  * @param {Object} a : List of objects, Either 'this.props' or 'nextProps'(opp. 'b')
  * @param {Object} b : List of objects, Either 'this.props' or 'nextProps'(opp. 'a')
  * @param {Array<any>} paths : Array of 'keys' in 'a' and 'b' to be checked for equality.
