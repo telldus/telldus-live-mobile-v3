@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity, PixelRatio, Animated, Easing } from 'react-native';
@@ -78,7 +78,7 @@ type State = {
 	buttonsWidth?: number,
 };
 
-class DeviceRow extends PureComponent<Props, State> {
+class DeviceRow extends View<Props, State> {
 	props: Props;
 	state: State;
 
