@@ -106,10 +106,15 @@
     "setupFiles": [
       "<rootDir>/js/Utils/jest.js"
     ],
-    "testEnvironment": "jsdom",
+    "testEnvironment": "node",
     "transform": {
       "^.+\\.jsx$": "babel-jest",
       "^.+\\.js$": "babel-jest"
+    },
+    "globals": {
+      "window": {
+        "navigator": {}
+      }
     }
   },
   "rnpm": {
