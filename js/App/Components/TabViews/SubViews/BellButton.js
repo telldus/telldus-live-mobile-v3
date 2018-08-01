@@ -28,21 +28,23 @@ import { View, Icon } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+
+import { shouldUpdate } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 type Props = {
-	device: Object,
-	deviceSetState: (id: number, command: number, value?: number) => void,
-	style: Object,
 	command: number,
-	intl: Object,
-	isGatewayActive: boolean,
-	appLayout: Object,
-	bellButtonStyle: number | Object,
-	local: boolean,
+
+	device: Object,
 	isOpen: boolean,
+
+	isGatewayActive: boolean,
+	intl: Object,
+	style: Object,
+	bellButtonStyle: number | Object,
 	closeSwipeRow: () => void,
+	deviceSetState: (id: number, command: number, value?: number) => void,
 };
 
 class BellButton extends View {
@@ -55,6 +57,22 @@ class BellButton extends View {
 
 		this.onBell = this.onBell.bind(this);
 		this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { isOpen, ...others } = this.props;
+		const { isOpenN, ...othersN } = nextProps;
+		if (isOpen !== isOpenN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['device']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	onBell() {

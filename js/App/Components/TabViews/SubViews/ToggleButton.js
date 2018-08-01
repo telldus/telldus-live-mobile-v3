@@ -23,26 +23,28 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from '../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
+
+import { View } from '../../../../BaseComponents';
 import OnButton from './OnButton';
 import OffButton from './OffButton';
 
+import { shouldUpdate } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
 	device: Object,
 	enabled: boolean,
-	onTurnOff: number => void,
-	onTurnOn: number => void,
-	intl: Object,
 	isGatewayActive: boolean,
-	appLayout: Object,
+	isOpen: boolean,
+
+	intl: Object,
 	style?: Object | number,
 	offButtonStyle?: number | Object | Array<any>,
 	onButtonStyle?: number | Object | Array<any>,
-	isOpen: boolean,
 	closeSwipeRow: () => void,
+	onTurnOff: number => void,
+	onTurnOn: number => void,
 };
 
 class ToggleButton extends View {
@@ -50,6 +52,22 @@ class ToggleButton extends View {
 
 	constructor(props: Props) {
 		super(props);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { enabled, isOpen, ...others } = this.props;
+		const { enabled: enabledN, isOpen: isOpenN, ...othersN } = nextProps;
+		if (enabled !== enabledN || isOpen !== isOpenN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['device']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	render(): Object {

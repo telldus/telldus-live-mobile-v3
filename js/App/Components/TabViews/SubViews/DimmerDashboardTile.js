@@ -38,34 +38,36 @@ import {
 	getDimmerValue,
 	toDimmerValue,
 	toSliderValue,
+	shouldUpdate,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	item: Object,
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
+
+	item: Object,
 	tileWidth: number,
+	showSlider?: boolean,
+	setScrollEnabled: boolean,
+	screenReaderEnabled: boolean,
+
+	style: Object,
+	intl: Object,
+	isGatewayActive: boolean,
+	showDimmerStep: (number) => void,
+	containerStyle?: number | Object | Array<any>,
+	offButtonStyle?: number | Object | Array<any>,
+	onButtonStyle?: number | Object | Array<any>,
+	sliderStyle?: number | Object | Array<any>,
 	onDimmerSlide: number => void,
 	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	setScrollEnabled: boolean,
-	style: Object,
-	intl: Object,
-	isGatewayActive: boolean,
-	powerConsumed: string,
-	screenReaderEnabled: boolean,
-	showDimmerStep: (number) => void,
-	showSlider?: boolean,
-	containerStyle?: number | Object | Array<any>,
-	offButtonStyle?: number | Object | Array<any>,
-	onButtonStyle?: number | Object | Array<any>,
-	sliderStyle?: number | Object | Array<any>,
 };
 
 type DefaultProps = {
@@ -109,6 +111,22 @@ class DimmerDashboardTile extends PureComponent<Props, void> {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { tileWidth, setScrollEnabled, ...others } = this.props;
+		const { tileWidth: tileWidthN, setScrollEnabled: setScrollEnabledN, ...othersN } = nextProps;
+		if (tileWidth !== tileWidthN || setScrollEnabled !== setScrollEnabledN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['item', 'showSlider', 'screenReaderEnabled']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	onValueChange(sliderValue: number) {

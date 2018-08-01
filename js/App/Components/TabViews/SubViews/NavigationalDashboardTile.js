@@ -19,7 +19,7 @@
 // @flow
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { View } from '../../../../BaseComponents';
@@ -27,16 +27,19 @@ import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
 
+import { shouldUpdate } from '../../../Lib';
+
 import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
 	tileWidth: number,
+	showStopButton?: boolean,
+
 	style: Object,
 	intl: Object,
 	isGatewayActive: boolean,
 	containerStyle?: number | Object | Array<any>,
-	showStopButton?: boolean,
 	upButtonStyle?: number | Object | Array<any>,
 	downButtonStyle?: number | Object | Array<any>,
 	stopButtonStyle?: number | Object | Array<any>,
@@ -46,7 +49,7 @@ type DefaultProps = {
 	showStopButton: boolean,
 };
 
-class NavigationalDashboardTile extends PureComponent<Props, null> {
+class NavigationalDashboardTile extends View<Props, null> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {
@@ -55,6 +58,22 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 
 	constructor(props: Props) {
 		super(props);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { showStopButton, ...others } = this.props;
+		const { showStopButton: showStopButtonN, ...othersN } = nextProps;
+		if (showStopButton !== showStopButtonN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['item']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	render(): Object {

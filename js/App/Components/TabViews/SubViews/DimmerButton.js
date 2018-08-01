@@ -37,36 +37,38 @@ import {
 	getDimmerValue,
 	toDimmerValue,
 	toSliderValue,
+	shouldUpdate,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	device: Object,
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
-	onDimmerSlide: number => void,
-	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
-	showDimmerPopup: (name: string, sliderValue: number) => void,
-	hideDimmerPopup: () => void,
+
+	device: Object,
+	showSlider?: boolean,
+	isOpen: boolean,
+	screenReaderEnabled: boolean,
 	setScrollEnabled: boolean,
-	deviceSetState: (id: number, command: number, value?: number) => void,
+
 	intl: Object,
 	isGatewayActive: boolean,
-	appLayout: Object,
 	onSlideActive: () => void,
 	onSlideComplete: () => void,
-	screenReaderEnabled: boolean,
 	showDimmerStep: (number) => void,
 	style?: number | Object | Array<any>,
 	offButtonStyle?: number | Object | Array<any>,
 	onButtonStyle?: number | Object | Array<any>,
 	sliderStyle?: number | Object | Array<any>,
-	showSlider?: boolean,
-	isOpen: boolean,
 	closeSwipeRow: () => void,
+	onDimmerSlide: number => void,
+	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
+	showDimmerPopup: (name: string, sliderValue: number) => void,
+	hideDimmerPopup: () => void,
+	deviceSetState: (id: number, command: number, value?: number) => void,
 };
 
 type DefaultProps = {
@@ -76,7 +78,7 @@ type DefaultProps = {
 	commandDIM: number,
 };
 
-class DimmerButton extends View {
+class DimmerButton extends View<Props, null> {
 	props: Props;
 
 	parentScrollEnabled: boolean;
@@ -109,6 +111,22 @@ class DimmerButton extends View {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { isOpen, setScrollEnabled, ...others } = this.props;
+		const { isOpen: isOpenN, setScrollEnabled: setScrollEnabledN, ...othersN } = nextProps;
+		if (isOpen !== isOpenN || setScrollEnabled !== setScrollEnabledN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['device', 'showSlider', 'screenReaderEnabled']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	onValueChange(sliderValue: number) {

@@ -21,29 +21,48 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { View } from '../../../../BaseComponents';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
 
+import { shouldUpdate } from '../../../Lib';
+
 type Props = {
 	item: Object,
-	style: Object,
 	tileWidth: number,
+
 	intl: Object,
 	isGatewayActive: boolean,
+	style: Object,
 	containerStyle?: number | Object | Array<any>,
 	offButtonStyle?: number | Object | Array<any>,
 	onButtonStyle?: number | Object | Array<any>,
 };
 
-class ToggleDashboardTile extends PureComponent<Props, null> {
+class ToggleDashboardTile extends View<Props, null> {
 	props: Props;
 
 	constructor(props: Props) {
 		super(props);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { tileWidth, ...others } = this.props;
+		const { tileWidth: tileWidthN, ...othersN } = nextProps;
+		if (tileWidth !== tileWidthN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['item']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	render(): Object {

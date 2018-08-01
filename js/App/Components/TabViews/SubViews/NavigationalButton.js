@@ -22,26 +22,27 @@
 'use strict';
 
 import React from 'react';
-
-import { View } from '../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
 
+import { View } from '../../../../BaseComponents';
 import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
 import Theme from '../../../Theme';
 
+import { shouldUpdate } from '../../../Lib';
+
 type Props = {
 	device: Object,
-	style: Object,
-	intl: Object,
+	showStopButton?: boolean,
+	isOpen: boolean,
+
 	isGatewayActive: boolean,
-	appLayout: Object,
 	upButtonStyle?: number | Object | Array<any>,
 	downButtonStyle?: number | Object | Array<any>,
 	stopButtonStyle?: number | Object | Array<any>,
-	showStopButton?: boolean,
-	isOpen: boolean,
+	style: Object,
+	intl: Object,
 	closeSwipeRow: () => void,
 };
 
@@ -58,6 +59,22 @@ class NavigationalButton extends View {
 
 	constructor(props: Props) {
 		super(props);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { isOpen, showStopButton, ...others } = this.props;
+		const { isOpen: isOpenN, showStopButton: showStopButtonN, ...othersN } = nextProps;
+		if (isOpen !== isOpenN || showStopButton !== showStopButtonN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['device']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	render(): Object {
