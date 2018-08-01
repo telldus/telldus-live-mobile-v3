@@ -32,7 +32,7 @@ import {
 } from 'victory-native';
 import moment from 'moment';
 import Orientation from 'react-native-orientation-locker';
-import isEqual from 'lodash/isEqual';
+const isEqual = require('react-fast-compare');
 
 import { View, Text } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';

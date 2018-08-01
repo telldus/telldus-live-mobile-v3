@@ -26,7 +26,7 @@ import { TouchableOpacity, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Modal from 'react-native-modal';
 import moment from 'moment';
-import isEqual from 'lodash/isEqual';
+const isEqual = require('react-fast-compare');
 import DeviceInfo from 'react-native-device-info';
 
 import {

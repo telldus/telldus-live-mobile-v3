@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity, PixelRatio, Animated, Easing } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import isEqual from 'lodash/isEqual';
+const isEqual = require('react-fast-compare');
 
 import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
 import ToggleButton from './ToggleButton';

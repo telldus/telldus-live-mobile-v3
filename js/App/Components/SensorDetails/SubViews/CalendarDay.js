@@ -23,7 +23,7 @@
 
 import React from 'react';
 import Ripple from 'react-native-material-ripple';
-import isEqual from 'lodash/isEqual';
+const isEqual = require('react-fast-compare');
 import DeviceInfo from 'react-native-device-info';
 
 import {

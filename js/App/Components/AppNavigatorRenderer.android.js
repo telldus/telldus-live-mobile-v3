@@ -27,7 +27,7 @@ import { NetInfo } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
-import isEqual from 'lodash/isEqual';
+const isEqual = require('react-fast-compare');
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 import { View, Header, IconTelldus } from '../../BaseComponents';

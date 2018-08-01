@@ -27,7 +27,7 @@ import { NetInfo } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
-import isEqual from 'lodash/isEqual';
+const isEqual = require('react-fast-compare');
 
 import { View, Header, IconTelldus } from '../../BaseComponents';
 import Navigator from './AppNavigator';
