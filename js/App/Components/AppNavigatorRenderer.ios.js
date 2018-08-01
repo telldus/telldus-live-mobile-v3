@@ -26,6 +26,14 @@ import { connect } from 'react-redux';
 import { NetInfo } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { isIphoneX } from 'react-native-iphone-x-helper';
+import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import isEqual from 'lodash/isEqual';
+
+import { View, Header, IconTelldus } from '../../BaseComponents';
+import Navigator from './AppNavigator';
+import { DimmerPopup } from './TabViews/SubViews';
+import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
+import UserAgreement from './UserAgreement/UserAgreement';
 
 import {
 	getUserProfile,
@@ -44,22 +52,15 @@ import {
 	showToast,
 	switchTab,
 } from '../Actions';
+import { hideDimmerStep } from '../Actions/Dimmer';
+import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import {
 	getRSAKey,
 	setTopLevelNavigator,
 	navigate,
 	getRouteName,
+	shouldUpdate,
 } from '../Lib';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
-
-import { View, Header, IconTelldus } from '../../BaseComponents';
-import Navigator from './AppNavigator';
-import { DimmerPopup } from './TabViews/SubViews';
-import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
-import UserAgreement from './UserAgreement/UserAgreement';
-
-import { hideDimmerStep } from '../Actions/Dimmer';
-import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
 import i18n from '../Translations/common';
 const messages = defineMessages({
@@ -72,27 +73,27 @@ const messages = defineMessages({
 
 type Props = {
 	dimmer: Object,
-	userProfile: Object,
-	dispatch: Function,
+	showEULA: boolean,
 	showToast: boolean,
 	messageToast: string,
 	durationToast: string,
 	positionToast: string,
-	intl: intlShape.isRequired,
 	appLayout: Object,
-	gatewaysallIds: Array<any>,
-	gatewaysToActivate: Object,
+	screenReaderEnabled: boolean,
+	addNewGatewayBool: boolean,
+
+	intl: intlShape.isRequired,
+	dispatch: Function,
 	addNewLocation: () => Promise<any>,
 	onNavigationStateChange: (string) => void,
 };
 
 type State = {
 	currentScreen: string,
-	settings: boolean,
 	addingNewLocation: boolean,
 };
 
-class AppNavigatorRenderer extends View {
+class AppNavigatorRenderer extends View<Props, State> {
 
 	props: Props;
 	state: State;
@@ -112,8 +113,7 @@ class AppNavigatorRenderer extends View {
 		super(props);
 
 		this.state = {
-			currentScreen: 'Tabs',
-			settings: false,
+			currentScreen: 'Dashboard',
 			addingNewLocation: false,
 		};
 
@@ -146,7 +146,7 @@ class AppNavigatorRenderer extends View {
 			onPress: this.onOpenSetting,
 		};
 
-		let { formatMessage } = props.intl;
+		const { formatMessage } = props.intl;
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
@@ -177,22 +177,48 @@ class AppNavigatorRenderer extends View {
 		);
 	}
 
-	onOpenSetting() {
-		navigate('Settings');
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+
+		const { appLayout, showEULA, showToast: showToastBool, ...others } = this.props;
+		const { appLayout: appLayoutN, showEULA: showEULAN, showToast: showToastN, ...othersN } = nextProps;
+		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['dimmer']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		let { showToast: showToastBool, messageToast, durationToast, positionToast, intl,
-			gatewaysallIds, gatewaysToActivate } = this.props;
+		const {
+			showToast: showToastBool,
+			messageToast,
+			durationToast,
+			positionToast,
+			intl,
+			addNewGatewayBool,
+		} = this.props;
 		if (showToastBool && !prevProps.showToast) {
-			let { formatMessage } = intl;
-			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
+			const { formatMessage } = intl;
+			const message = messageToast ? messageToast : formatMessage(messages.errortoast);
 			this._showToast(message, durationToast, positionToast);
 		}
 
-		if (gatewaysallIds.length === 0 && !this.state.addingNewLocation && gatewaysToActivate.checkIfGatewaysEmpty) {
+		if (addNewGatewayBool && !this.state.addingNewLocation) {
 			this.addNewLocation();
 		}
+	}
+
+	onOpenSetting() {
+		navigate('Settings');
 	}
 
 	addNewLocation() {
@@ -268,21 +294,21 @@ class AppNavigatorRenderer extends View {
 	}
 
 	render(): Object {
-		let { currentScreen: CS } = this.state;
-		let { intl, dimmer, userProfile, appLayout } = this.props;
-		let screenProps = {
+		const { currentScreen: CS } = this.state;
+		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
+		const screenProps = {
 			currentScreen: CS,
 			intl,
 			appLayout,
 		};
-		let { show, name, value, showStep, deviceStep } = dimmer;
-		let importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
+		const { show, name, value, showStep, deviceStep } = dimmer;
+		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-		let leftButton = this.settingsButton;
+		const leftButton = this.settingsButton;
 
-		let { height, width } = appLayout;
-		let isPortrait = height > width;
-		let deviceHeight = isPortrait ? height : width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
 
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
@@ -303,32 +329,43 @@ class AppNavigatorRenderer extends View {
 						value={value / 255}
 					/>
 				</View>
-				<DimmerStep
-					showModal={showStep}
-					deviceId={deviceStep}
-					onDoneDimming={this.onDoneDimming}
-					intl={intl}
-				/>
-				<UserAgreement showModal={!userProfile.eula} onLayout={this.onLayout}/>
+				{screenReaderEnabled && (
+					<DimmerStep
+						showModal={showStep}
+						deviceId={deviceStep}
+						onDoneDimming={this.onDoneDimming}
+						intl={intl}
+					/>
+				)}
+				<UserAgreement showModal={showEULA} onLayout={this.onLayout}/>
 			</View>
 		);
 	}
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const { showToast: showToastBool, messageToast, durationToast, positionToast, layout } = state.app;
-	const { allIds, toActivate } = state.gateways;
-
-	return {
+	const {
 		showToast: showToastBool,
 		messageToast,
 		durationToast,
 		positionToast,
-		userProfile: getUserProfileSelector(state),
+		layout,
+		screenReaderEnabled,
+	} = state.app;
+	const { allIds, toActivate } = state.gateways;
+
+	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
+
+	return {
+		addNewGatewayBool,
+		screenReaderEnabled,
+		messageToast,
+		durationToast,
+		positionToast,
+		showToast: showToastBool,
+		showEULA: !getUserProfileSelector(state).eula,
 		dimmer: state.dimmer,
 		appLayout: layout,
-		gatewaysallIds: allIds,
-		gatewaysToActivate: toActivate,
 	};
 }
 

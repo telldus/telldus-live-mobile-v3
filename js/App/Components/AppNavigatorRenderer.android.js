@@ -27,6 +27,15 @@ import { NetInfo } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
+import isEqual from 'lodash/isEqual';
+import { intlShape, injectIntl, defineMessages } from 'react-intl';
+
+import { View, Header, IconTelldus } from '../../BaseComponents';
+import Navigator from './AppNavigator';
+import { DimmerPopup } from './TabViews/SubViews';
+import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
+import UserAgreement from './UserAgreement/UserAgreement';
+import Drawer from './Drawer/Drawer';
 
 import {
 	getUserProfile,
@@ -45,24 +54,16 @@ import {
 	syncWithServer,
 	switchTab,
 } from '../Actions';
+import { hideDimmerStep } from '../Actions/Dimmer';
+import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import {
 	getRSAKey,
 	setTopLevelNavigator,
 	navigate,
 	getDrawerWidth,
 	getRouteName,
+	shouldUpdate,
 } from '../Lib';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
-
-import { View, Header, IconTelldus } from '../../BaseComponents';
-import Navigator from './AppNavigator';
-import { DimmerPopup } from './TabViews/SubViews';
-import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
-import UserAgreement from './UserAgreement/UserAgreement';
-import Drawer from './Drawer/Drawer';
-
-import { hideDimmerStep } from '../Actions/Dimmer';
-import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
 import i18n from '../Translations/common';
 // TODO : Remove unused strings!
@@ -100,31 +101,29 @@ const messages = defineMessages({
 
 type Props = {
 	dimmer: Object,
-	tab: string,
-	userProfile: Object,
-	dispatch: Function,
+	showEULA: boolean,
 	showToast: boolean,
 	messageToast: string,
 	durationToast: string,
 	positionToast: string,
+	screenReaderEnabled: boolean,
+	addNewGatewayBool: boolean,
 	intl: intlShape.isRequired,
-	gatewaysAllIds: Array<any>,
+
+	dispatch: Function,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
 	onNavigationStateChange: (string) => void,
 	addNewLocation: () => any,
-	screenReaderEnabled: boolean,
 };
 
 type State = {
 	currentScreen: string,
-	settings: boolean,
-	starIcon: Object,
-	routeName: string,
+	drawer: boolean,
 	addingNewLocation: boolean,
 };
 
-class AppNavigatorRenderer extends View {
+class AppNavigatorRenderer extends View<Props, State> {
 
 	props: Props;
 	state: State;
@@ -138,7 +137,6 @@ class AppNavigatorRenderer extends View {
 
 	renderNavigationView: () => Object;
 	onOpenSetting: () => void;
-	onCloseSetting: () => void;
 	openDrawer: () => void;
 	addNewLocation: () => void;
 	onPressGateway: (Object) => void;
@@ -147,14 +145,12 @@ class AppNavigatorRenderer extends View {
 		super(props);
 
 		this.state = {
-			currentScreen: 'Tabs',
+			currentScreen: 'Dashboard',
 			drawer: false,
-			settings: false,
-			routeName: 'Dashboard',
 			addingNewLocation: false,
 		};
 
-		let { formatMessage } = props.intl;
+		const { formatMessage } = props.intl;
 
 		this.labelButton = formatMessage(i18n.button);
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
@@ -182,7 +178,6 @@ class AppNavigatorRenderer extends View {
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
-		this.onCloseSetting = this.onCloseSetting.bind(this);
 		this.onCloseDrawer = this.onCloseDrawer.bind(this);
 		this.onOpenDrawer = this.onOpenDrawer.bind(this);
 		this.openDrawer = this.openDrawer.bind(this);
@@ -242,6 +237,45 @@ class AppNavigatorRenderer extends View {
 		);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+
+		const { appLayout, showEULA, showToast: showToastBool, ...others } = this.props;
+		const { appLayout: appLayoutN, showEULAN, showToast: showToastN, ...othersN } = nextProps;
+		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['dimmer']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const {
+			showToast: showToastBool,
+			messageToast,
+			durationToast,
+			positionToast,
+			intl,
+			addNewGatewayBool,
+		} = this.props;
+		if (showToastBool && !prevProps.showToast) {
+			const { formatMessage } = intl;
+			const message = messageToast ? messageToast : formatMessage(messages.errortoast);
+			this._showToast(message, durationToast, positionToast);
+		}
+		if (addNewGatewayBool && !this.state.addingNewLocation) {
+			this.addNewLocation();
+		}
+	}
+
 	addNewLocation() {
 		this.setState({
 			addingNewLocation: true,
@@ -262,10 +296,6 @@ class AppNavigatorRenderer extends View {
 				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
 				this.props.dispatch(showToast(message));
 			});
-	}
-
-	onCloseSetting() {
-		this.setState({ settings: false });
 	}
 
 	onOpenDrawer() {
@@ -291,19 +321,6 @@ class AppNavigatorRenderer extends View {
 	onOpenSetting() {
 		this.closeDrawer();
 		navigate('Settings');
-	}
-
-	componentDidUpdate(prevProps: Object, prevState: Object) {
-		let { showToast: showToastBool, messageToast, durationToast, positionToast, intl,
-			gatewaysAllIds, gatewaysToActivate } = this.props;
-		if (showToastBool && !prevProps.showToast) {
-			let { formatMessage } = intl;
-			let message = messageToast ? messageToast : formatMessage(messages.errortoast);
-			this._showToast(message, durationToast, positionToast);
-		}
-		if (gatewaysAllIds.length === 0 && !this.state.addingNewLocation && gatewaysToActivate.checkIfGatewaysEmpty) {
-			this.addNewLocation();
-		}
 	}
 
 	handleConnectivityChange(connectionInfo: Object) {
@@ -366,12 +383,10 @@ class AppNavigatorRenderer extends View {
 	}
 
 	renderNavigationView(): Object {
-		let { appLayout, userProfile } = this.props;
+		const { appLayout} = this.props;
 
 		return <Drawer
 			addNewLocation={this.addNewLocation}
-			userProfile={userProfile}
-			theme={this.getTheme()}
 			onOpenSetting={this.onOpenSetting}
 			appLayout={appLayout}
 			isOpen={this.state.drawer}
@@ -391,18 +406,18 @@ class AppNavigatorRenderer extends View {
 	}
 
 	render(): Object {
-		let { currentScreen: CS, drawer } = this.state;
-		let { intl, dimmer, userProfile, appLayout } = this.props;
-		let screenProps = {
+		const { currentScreen: CS, drawer } = this.state;
+		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
+		const screenProps = {
 			currentScreen: CS,
 			intl,
 			drawer,
 			appLayout,
 		};
-		let { show, name, value, showStep, deviceStep } = dimmer;
-		let importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
+		const { show, name, value, showStep, deviceStep } = dimmer;
+		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-		let styles = this.getStyles(appLayout);
+		const styles = this.getStyles(appLayout);
 
 		const leftButton = this.makeLeftButton(styles);
 		const drawerWidth = getDrawerWidth(styles.deviceWidth);
@@ -434,13 +449,15 @@ class AppNavigatorRenderer extends View {
 						value={value / 255}
 					/>
 				</View>
-				<DimmerStep
-					showModal={showStep}
-					deviceId={deviceStep}
-					onDoneDimming={this.onDoneDimming}
-					intl={intl}
-				/>
-				<UserAgreement showModal={!userProfile.eula} onLayout={this.onLayout}/>
+				{screenReaderEnabled && (
+					<DimmerStep
+						showModal={showStep}
+						deviceId={deviceStep}
+						onDoneDimming={this.onDoneDimming}
+						intl={intl}
+					/>
+				)}
+				<UserAgreement showModal={showEULA} onLayout={this.onLayout}/>
 			</DrawerLayoutAndroid>
 		);
 	}
@@ -497,23 +514,28 @@ class AppNavigatorRenderer extends View {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const { showToast: showToastBool, messageToast, durationToast, positionToast, layout,
-		screenReaderEnabled } = state.app;
-	const { allIds, toActivate } = state.gateways;
-
-	return {
+	const {
 		showToast: showToastBool,
 		messageToast,
 		durationToast,
 		positionToast,
-		userProfile: getUserProfileSelector(state),
-		dimmer: state.dimmer,
-		tab: state.navigation.tab,
-		appLayout: layout,
-
-		gatewaysAllIds: allIds,
-		gatewaysToActivate: toActivate,
+		layout,
 		screenReaderEnabled,
+	} = state.app;
+	const { allIds, toActivate } = state.gateways;
+
+	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
+
+	return {
+		addNewGatewayBool,
+		screenReaderEnabled,
+		messageToast,
+		durationToast,
+		positionToast,
+		showToast: showToastBool,
+		showEULA: !getUserProfileSelector(state).eula,
+		dimmer: state.dimmer,
+		appLayout: layout,
 	};
 }
 
