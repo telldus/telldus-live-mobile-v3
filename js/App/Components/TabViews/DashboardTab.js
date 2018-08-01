@@ -322,14 +322,13 @@ class DashboardTab extends View {
 		const { data, objectType } = row.item;
 		const tileMargin = this.getPadding() / 4;
 		tileWidth -= (2 * tileMargin);
-		const key = data.id;
+
 		if (objectType !== 'sensor' && objectType !== 'device') {
-			return <Text key={key}>unknown device or sensor</Text>;
+			return <Text key={data.id}>unknown device or sensor</Text>;
 		}
 		if (!data) {
-			return <Text key={key}>Unknown device or sensor</Text>;
+			return <Text key={data.id}>Unknown device or sensor</Text>;
 		}
-		let { isOnline } = data;
 
 		let tileStyle = {
 			flexDirection: 'column',
@@ -344,27 +343,25 @@ class DashboardTab extends View {
 
 		if (objectType === 'sensor') {
 			return <SensorDashboardTile
+				key={data.id}
+				item={data}
+				isGatewayActive={data.isOnline}
 				style={tileStyle}
 				tileWidth={tileWidth}
-				item={data}
-				onPress={this.changeDisplayType}
 				intl={screenProps.intl}
-				key={key}
-				isGatewayActive={isOnline}
+				onPress={this.changeDisplayType}
 			/>;
 		}
 
-		return (
-			<DashboardRow
-				style={tileStyle}
-				item={data}
-				tileWidth={tileWidth}
-				intl={screenProps.intl}
-				key={key}
-				isGatewayActive={isOnline}
-				setScrollEnabled={this.setScrollEnabled}
-			/>
-		);
+		return <DashboardRow
+			key={data.id}
+			item={data}
+			isGatewayActive={data.isOnline}
+			style={tileStyle}
+			tileWidth={tileWidth}
+			intl={screenProps.intl}
+			setScrollEnabled={this.setScrollEnabled}
+		/>;
 	}
 
 	getPadding(): number {
