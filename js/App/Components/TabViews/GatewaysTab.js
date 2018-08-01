@@ -26,7 +26,6 @@ import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
-import isEqual from 'lodash/isEqual';
 
 import { View, FloatingButton } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
@@ -34,7 +33,7 @@ import { getGateways, addNewGateway, showToast } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
-import { getTabBarIcon, shouldUpdate } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -99,30 +98,8 @@ class GatewaysTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps } = nextProps;
-		const { currentScreen, appLayout } = screenProps;
-		if (currentScreen === 'Gateways') {
-			if (this.props.currentScreen !== 'Gateways') {
-				return true;
-			}
-
-			const isStateEqual = isEqual(this.state, nextState);
-			if (!isStateEqual) {
-				return true;
-			}
-
-			const { appLayout: prevLayout } = this.props.screenProps;
-			if (appLayout.width !== prevLayout.width) {
-				return true;
-			}
-
-			const propsChange = shouldUpdate(this.props, nextProps, ['rows']);
-			if (propsChange) {
-				return true;
-			}
-			return false;
-		}
-		return false;
+		const { currentScreen } = nextProps.screenProps;
+		return currentScreen === 'Gateways';
 	}
 
 	onRefresh() {

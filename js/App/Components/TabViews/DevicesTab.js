@@ -27,14 +27,13 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
-import isEqual from 'lodash/isEqual';
 
 import { Text, View, TouchableButton, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
 import { DeviceRow, DeviceHeader } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import { getTabBarIcon, shouldUpdate } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast } from '../../Actions';
@@ -167,32 +166,8 @@ class DevicesTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps } = nextProps;
-		const { currentScreen, appLayout } = screenProps;
-		if (currentScreen === 'Devices') {
-			if (this.props.currentScreen !== 'Devices') {
-				return true;
-			}
-
-			const isStateEqual = isEqual(this.state, nextState);
-			if (!isStateEqual) {
-				return true;
-			}
-
-			const { appLayout: prevLayout } = this.props.screenProps;
-			if (appLayout.width !== prevLayout.width) {
-				return true;
-			}
-
-			// TODO: 'rowsAndSections' can be large and deeply nested, can be expensive.
-			// If possible Simplify!(pass current rowsAndSections and next rowsAndSections and check change in any unique key)
-			const propsChange = shouldUpdate(this.props, nextProps, ['devicesDidFetch', 'screenReaderEnabled', 'gateways', 'devices', 'rowsAndSections']);
-			if (propsChange) {
-				return true;
-			}
-			return false;
-		}
-		return false;
+		const { currentScreen } = nextProps.screenProps;
+		return currentScreen === 'Devices';
 	}
 
 	openDeviceDetail(device: Object) {

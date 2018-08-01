@@ -30,7 +30,6 @@ import { createSelector } from 'reselect';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
 import Platform from 'Platform';
-import isEqual from 'lodash/isEqual';
 
 import {
 	FloatingButton,
@@ -46,7 +45,7 @@ import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
 
-import { getTabBarIcon, shouldUpdate } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
@@ -117,31 +116,8 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps } = nextProps;
-		const { currentScreen, appLayout } = screenProps;
-		if (currentScreen === 'Scheduler') {
-			if (this.props.currentScreen !== 'Scheduler') {
-				return true;
-			}
-
-			const isStateEqual = isEqual(this.state, nextState);
-			if (!isStateEqual) {
-				return true;
-			}
-
-			const { appLayout: prevLayout } = this.props.screenProps;
-			if (appLayout.width !== prevLayout.width) {
-				return true;
-			}
-			// TODO: 'rowsAndSections' can be large and deeply nested, can be expensive.
-			// If possible Simplify!(pass current rowsAndSections and next rowsAndSections and check change in any unique key)
-			const propsChange = shouldUpdate(this.props, nextProps, ['rowsAndSections']);
-			if (propsChange) {
-				return true;
-			}
-			return false;
-		}
-		return false;
+		const { currentScreen } = nextProps.screenProps;
+		return currentScreen === 'Scheduler';
 	}
 
 	componentDidMount() {

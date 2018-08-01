@@ -29,7 +29,6 @@ import { connect } from 'react-redux';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { defineMessages } from 'react-intl';
-import isEqual from 'lodash/isEqual';
 
 import { Text, View } from '../../../BaseComponents';
 import { getDevices } from '../../Actions/Devices';
@@ -44,7 +43,7 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { getTabBarIcon, shouldUpdate } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 
 const messages = defineMessages({
 	messageNoItemsTitle: {
@@ -197,37 +196,14 @@ class DashboardTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps } = nextProps;
-		const { currentScreen, appLayout } = screenProps;
+		const { currentScreen } = nextProps.screenProps;
 		if (currentScreen !== 'Dashboard' && this.timer) {
 			this.stopSensorTimer();
 		}
 		if (currentScreen === 'Dashboard' && !this.timer) {
 			this.startSensorTimer();
 		}
-		if (currentScreen === 'Dashboard') {
-			if (this.props.currentScreen !== 'Dashboard') {
-				return true;
-			}
-			const isStateEqual = isEqual(this.state, nextState);
-			if (!isStateEqual) {
-				return true;
-			}
-
-			const { appLayout: prevLayout } = this.props.screenProps;
-			if (appLayout.width !== prevLayout.width) {
-				return true;
-			}
-
-			// TODO: 'rows' can be large and deeply nested, can be expensive.
-			// If possible Simplify!(pass current rows and next rows and check change in any unique key)
-			const propsChange = shouldUpdate(this.props, nextProps, ['isDBEmpty', 'rows']);
-			if (propsChange) {
-				return true;
-			}
-			return false;
-		}
-		return false;
+		return currentScreen === 'Dashboard';
 	}
 
 	_onLayout = (event: Object) => {

@@ -26,7 +26,6 @@ import { SectionList, ScrollView, TouchableOpacity, Text, RefreshControl } from 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
-import isEqual from 'lodash/isEqual';
 
 import { View, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
@@ -35,7 +34,7 @@ import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getTabBarIcon, shouldUpdate } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {
@@ -118,32 +117,8 @@ class SensorsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps } = nextProps;
-		const { currentScreen, appLayout } = screenProps;
-		if (currentScreen === 'Sensors') {
-			if (this.props.currentScreen !== 'Sensors') {
-				return true;
-			}
-
-			const isStateEqual = isEqual(this.state, nextState);
-			if (!isStateEqual) {
-				return true;
-			}
-
-			const { appLayout: prevLayout } = this.props.screenProps;
-			if (appLayout.width !== prevLayout.width) {
-				return true;
-			}
-
-			// TODO: 'rowsAndSections' can be large and deeply nested, can be expensive.
-			// If possible Simplify!(pass current rowsAndSections and next rowsAndSections and check change in any unique key)
-			const propsChange = shouldUpdate(this.props, nextProps, ['rowsAndSections']);
-			if (propsChange) {
-				return true;
-			}
-			return false;
-		}
-		return false;
+		const { currentScreen } = nextProps.screenProps;
+		return currentScreen === 'Sensors';
 	}
 
 	onRefresh() {
