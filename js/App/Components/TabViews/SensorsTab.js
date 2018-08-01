@@ -121,6 +121,10 @@ class SensorsTab extends View {
 		const { screenProps } = nextProps;
 		const { currentScreen, appLayout } = screenProps;
 		if (currentScreen === 'Sensors') {
+			if (this.props.currentScreen !== 'Sensors') {
+				return true;
+			}
+
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;

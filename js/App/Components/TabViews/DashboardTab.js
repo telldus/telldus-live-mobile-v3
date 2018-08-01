@@ -199,7 +199,6 @@ class DashboardTab extends View {
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { screenProps } = nextProps;
 		const { currentScreen, appLayout } = screenProps;
-
 		if (currentScreen !== 'Dashboard' && this.timer) {
 			this.stopSensorTimer();
 		}
@@ -207,6 +206,9 @@ class DashboardTab extends View {
 			this.startSensorTimer();
 		}
 		if (currentScreen === 'Dashboard') {
+			if (this.props.currentScreen !== 'Dashboard') {
+				return true;
+			}
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;

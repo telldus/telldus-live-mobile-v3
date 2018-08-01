@@ -170,6 +170,10 @@ class DevicesTab extends View {
 		const { screenProps } = nextProps;
 		const { currentScreen, appLayout } = screenProps;
 		if (currentScreen === 'Devices') {
+			if (this.props.currentScreen !== 'Devices') {
+				return true;
+			}
+
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;

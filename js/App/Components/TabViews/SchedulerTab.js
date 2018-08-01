@@ -120,6 +120,10 @@ class SchedulerTab extends View<null, Props, State> {
 		const { screenProps } = nextProps;
 		const { currentScreen, appLayout } = screenProps;
 		if (currentScreen === 'Scheduler') {
+			if (this.props.currentScreen !== 'Scheduler') {
+				return true;
+			}
+
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;

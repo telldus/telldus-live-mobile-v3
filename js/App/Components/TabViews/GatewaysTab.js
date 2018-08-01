@@ -102,6 +102,10 @@ class GatewaysTab extends View {
 		const { screenProps } = nextProps;
 		const { currentScreen, appLayout } = screenProps;
 		if (currentScreen === 'Gateways') {
+			if (this.props.currentScreen !== 'Gateways') {
+				return true;
+			}
+
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
