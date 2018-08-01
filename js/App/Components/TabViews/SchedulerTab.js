@@ -336,18 +336,6 @@ class SchedulerTab extends View<null, Props, State> {
 		return { days, daysToRender };
 	};
 
-	_rowHasChanged = (r1: Object, r2: Object): boolean => {
-		if (r1 === r2) {
-			return false;
-		}
-		return (
-			r1.effectiveHour !== r2.effectiveHour ||
-			r1.effectiveMinute !== r2.effectiveMinute ||
-			r1.method !== r2.method ||
-			r1.deviceId !== r2.deviceId
-		);
-	}
-
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
 		const { rowsAndSections, screenProps } = this.props;
