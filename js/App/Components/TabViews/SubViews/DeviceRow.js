@@ -486,6 +486,7 @@ class DeviceRow extends View<Props, State> {
 							showModal={showMoreActions}
 							buttons={button}
 							name={name}
+							item={device}
 							closeModal={this.closeMoreActions}
 						/>
 					)}

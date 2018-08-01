@@ -208,6 +208,7 @@ render(): Object {
 						showModal={showMoreActions}
 						buttons={buttons}
 						name={deviceName}
+						item={item}
 						closeModal={this.closeMoreActions}
 					/>
 				)}
