@@ -75,7 +75,7 @@ onLayoutBody(ev: Object) {
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	const { showModal } = this.props;
-	const { width } = this.props;
+	const { width } = this.state;
 	if (showModal !== nextProps.showModal) {
 		return true;
 	}

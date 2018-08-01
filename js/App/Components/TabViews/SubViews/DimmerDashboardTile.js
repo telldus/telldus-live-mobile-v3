@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
@@ -77,7 +77,7 @@ type DefaultProps = {
 	showSlider: boolean,
 };
 
-class DimmerDashboardTile extends PureComponent<Props, void> {
+class DimmerDashboardTile extends View<Props, void> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {

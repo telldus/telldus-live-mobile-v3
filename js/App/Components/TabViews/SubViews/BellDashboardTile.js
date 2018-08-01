@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -52,7 +52,7 @@ type DefaultProps = {
 	command: number,
 };
 
-class BellDashboardTile extends PureComponent<Props, null> {
+class BellDashboardTile extends View<Props, null> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {
