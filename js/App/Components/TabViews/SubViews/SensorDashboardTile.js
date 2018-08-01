@@ -24,7 +24,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import isEqual from 'lodash/isEqual';
 
 import {
 	FormattedNumber,
@@ -33,7 +32,7 @@ import {
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
 
-import { formatLastUpdated, checkIfLarge } from '../../../Lib';
+import { formatLastUpdated, checkIfLarge, shouldUpdate } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
@@ -44,19 +43,15 @@ type Props = {
 	item: Object,
 	tileWidth: number,
 	displayType: string,
+
 	style: Object,
 	onPress: () => void,
 	intl: Object,
 	isGatewayActive: boolean,
 };
 
-type State = {
-	currentDisplayType: string,
-};
-
-class SensorDashboardTile extends View<Props, State> {
+class SensorDashboardTile extends View<Props, null> {
 	props: Props;
-	state: State;
 
 	getSlideList: Object => Object;
 
@@ -89,10 +84,6 @@ class SensorDashboardTile extends View<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-
-		this.state = {
-			currentDisplayType: 'default',
-		};
 
 		let { formatMessage } = this.props.intl;
 
@@ -131,10 +122,7 @@ class SensorDashboardTile extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const isStateEqual = isEqual(this.state, nextState);
-		const isPropsEqual = isEqual(this.props, nextProps);
-
-		return !isStateEqual || !isPropsEqual;
+		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item']);
 	}
 
 	getSlideList(item: Object): Object {
