@@ -117,7 +117,7 @@ class HistoryTab extends View {
 			chartDataTwo: [],
 			list: [],
 			showCalendar: false,
-			timestamp: getHistoryTimestamp(),
+			timestamp: getHistoryTimestamp(3),
 			propToUpdate: 1,
 		};
 
@@ -414,6 +414,7 @@ class HistoryTab extends View {
 			selectedTwo,
 			showTwo,
 			showOne,
+			sensorId,
 		} = this.props;
 		const {
 			list,
@@ -445,6 +446,7 @@ class HistoryTab extends View {
 			selectedTwo,
 			showTwo,
 			showOne,
+			sensorId,
 		};
 
 		return (
