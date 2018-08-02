@@ -47,7 +47,7 @@ import i18n from '../../Translations/common';
 
 type Props = {
 	screenProps: Object,
-	sensor: Object,
+	sensorId: number,
 	dispatch: Function,
 	selectedOne: Object | null,
 	selectedTwo: Object | null,
@@ -155,28 +155,28 @@ class HistoryTab extends View {
 	 * from the API)
 	 */
 	getHistoryData(hasLoaded: boolean = false, refreshing: boolean = false, callBackWhenNoData: Function = () => {}) {
-		const { sensor, screenProps, dispatch } = this.props;
+		const { sensorId, screenProps, dispatch } = this.props;
 		const { formatMessage } = screenProps.intl;
-		getSensorTypes(sensor.id, formatMessage).then((types: any) => {
+		getSensorTypes(sensorId, formatMessage).then((types: any) => {
 			if (types && types.length !== 0) {
 				const { selectedOne: selectedOnePrev, selectedTwo: selectedTwoPrev } = this.props;
 				const selectedOne = selectedOnePrev ? selectedOnePrev : types[0];
 				const selectedTwo = selectedTwoPrev ? selectedTwoPrev : (types[1] ? types[1] : null);
 				if (selectedOne) {
 					// $FlowFixMe
-					let queryParams = { ...selectedOne, id: sensor.id };
+					let queryParams = { ...selectedOne, id: sensorId };
 					this.getSensorTypeHistory(hasLoaded, refreshing, queryParams, 1);
 				}
 				if (selectedTwo) {
 					// $FlowFixMe
-					let queryParams = { ...selectedTwo, id: sensor.id };
+					let queryParams = { ...selectedTwo, id: sensorId };
 					this.getSensorTypeHistory(hasLoaded, refreshing, queryParams, 2);
 				}
 				const settings = {
 					selectedOne,
 					selectedTwo,
 				};
-				dispatch(changeDefaultHistorySettings(sensor.id, settings));
+				dispatch(changeDefaultHistorySettings(sensorId, settings));
 				this.setState({
 					list: types,
 				});
@@ -221,15 +221,14 @@ class HistoryTab extends View {
 	}
 
 	getHistoryDataWithLatestTimestamp() {
-		const { sensor } = this.props;
+		const { sensorId } = this.props;
 		const { timestamp } = this.state;
 		const { fromTimestamp } = timestamp;
-		const { id } = sensor;
-		getLatestTimestamp('sensor', id).then((res: Object) => {
+		getLatestTimestamp('sensor', sensorId).then((res: Object) => {
 			let prevTimestamp = res.tsMax ? (res.tsMax + 1) : fromTimestamp;
-			this.getHistoryDataFromAPI(id, prevTimestamp);
+			this.getHistoryDataFromAPI(sensorId, prevTimestamp);
 		}).catch(() => {
-			this.getHistoryDataFromAPI(id, fromTimestamp);
+			this.getHistoryDataFromAPI(sensorId, fromTimestamp);
 		});
 	}
 
@@ -286,7 +285,7 @@ class HistoryTab extends View {
 			if (appLayout.width !== this.props.screenProps.appLayout.width) {
 				return true;
 			}
-			const propsChange = shouldUpdate(this.props, nextProps, ['sensor', 'selectedOne', 'selectedTwo', 'showOne', 'showTwo']);
+			const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'showOne', 'showTwo']);
 			if (propsChange) {
 				return propsChange;
 			}
@@ -326,26 +325,26 @@ class HistoryTab extends View {
 	}
 
 	onToggleChartData(settings: Object) {
-		const { sensor, dispatch } = this.props;
-		dispatch(changeDefaultHistorySettings(sensor.id, settings));
+		const { sensorId, dispatch } = this.props;
+		dispatch(changeDefaultHistorySettings(sensorId, settings));
 	}
 
 	onValueChangeOne(itemValue: string, itemIndex: number, data: Array<Object>) {
 		const { selectedTwo } = this.props;
 		if (selectedTwo && selectedTwo.value !== itemValue) {
-			const { sensor, dispatch } = this.props;
+			const { sensorId, dispatch } = this.props;
 			const selectedOne = data.find((item: Object): boolean => {
 				return item.value === itemValue;
 			});
 			const settings = {
 				selectedOne,
 			};
-			dispatch(changeDefaultHistorySettings(sensor.id, settings));
+			dispatch(changeDefaultHistorySettings(sensorId, settings));
 
 			// $FlowFixMe
 			const queryParams = {
 				...selectedOne,
-				id: sensor.id,
+				id: sensorId,
 			};
 			this.getSensorTypeHistory(true, true, queryParams, 1);
 		}
@@ -354,19 +353,19 @@ class HistoryTab extends View {
 	onValueChangeTwo(itemValue: string, itemIndex: number, data: Array<Object>) {
 		const { selectedOne } = this.props;
 		if (selectedOne && selectedOne.value !== itemValue) {
-			const { sensor, dispatch } = this.props;
+			const { sensorId, dispatch } = this.props;
 			const selectedTwo = data.find((item: Object): boolean => {
 				return item.value === itemValue;
 			});
 			const settings = {
 				selectedTwo,
 			};
-			dispatch(changeDefaultHistorySettings(sensor.id, settings));
+			dispatch(changeDefaultHistorySettings(sensorId, settings));
 
 			// $FlowFixMe
 			const queryParams = {
 				...selectedTwo,
-				id: sensor.id,
+				id: sensorId,
 			};
 			this.getSensorTypeHistory(true, true, queryParams, 2);
 		}
@@ -388,9 +387,9 @@ class HistoryTab extends View {
 			showCalendar: false,
 			timestamp: newTimestamp,
 		}, () => {
-			const { sensor } = this.props;
+			const { sensorId } = this.props;
 			const { fromTimestamp: from } = newTimestamp;
-			this.getHistoryDataFromAPI(sensor.id, from);
+			this.getHistoryDataFromAPI(sensorId, from);
 		});
 	}
 
@@ -544,7 +543,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
-	const sensor = state.sensors.byId[id];
 	const { defaultSensorSettings } = state.sensorsList;
 	const defaultSettings = defaultSensorSettings[id];
 	const {
@@ -555,7 +553,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	} = prepareDefaultSettings(defaultSettings);
 
 	return {
-		sensor,
+		sensorId: id,
 		selectedOne,
 		selectedTwo,
 		showOne,
