@@ -22,6 +22,8 @@
 'use strict';
 import React from 'react';
 import { Modal, Platform } from 'react-native';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import {
 	VictoryChart,
 	VictoryAxis,
@@ -48,6 +50,8 @@ type Props = {
 	showCalendar: boolean,
 	showOne: boolean,
 	showTwo: boolean,
+	liveData: Object,
+
 	onToggleChartData: (Object) => void,
 };
 
@@ -62,7 +66,7 @@ type State = {
 	isLoading: boolean,
 };
 
-export default class SensorHistoryLineChart extends View<Props, State> {
+class SensorHistoryLineChart extends View<Props, State> {
 	props: Props;
 	state: State;
 	static defaultProps: DefaultProps = {
@@ -125,6 +129,11 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		const { timestamp } = this.props;
 		const isTimestampEqual = isEqual(timestamp, nextProps.timestamp);
 		if (!isTimestampEqual) {
+			return true;
+		}
+		const { liveData } = this.props;
+		const isLiveDataEqual = isEqual(liveData, nextProps.liveData);
+		if (!isLiveDataEqual) {
 			return true;
 		}
 		const isLayoutEqual = nextProps.appLayout.width === this.props.appLayout.width;
@@ -348,26 +357,47 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		/>);
 	}
 
+	getUpdatedData(currentData: Array<Object>, { ts, value }: Object): Array<Object> {
+		const { ts: tsCurrLat } = currentData[0];
+		if (ts > tsCurrLat) {
+			return currentData.unshift({ ts, value });
+		}
+		return currentData;
+	}
+
 	renderChart(): Object | null {
 		const { fullscreen } = this.state;
 		const { show } = fullscreen;
 		const {
-			chartDataOne,
-			chartDataTwo,
 			selectedOne,
 			selectedTwo,
 			appLayout,
 			showOne,
 			showTwo,
+			liveData,
+		} = this.props;
+
+		let {
+			chartDataOne,
+			chartDataTwo,
 		} = this.props;
 		if (chartDataOne.length === 0 && chartDataOne.length === 0) {
 			return null;
 		}
+
 		let chartData = [];
 		if (chartDataOne.length !== 0) {
+			if (liveData.tsOne) {
+				const { tsOne, vOne } = liveData;
+				chartDataOne = this.getUpdatedData(chartDataOne, { ts: tsOne, value: vOne });
+			}
 			chartData.unshift(chartDataOne);
 		}
 		if (chartDataTwo.length !== 0) {
+			if (liveData.tsTwo) {
+				const { tsTwo, vTwo } = liveData;
+				chartDataTwo = this.getUpdatedData(chartDataTwo, { ts: tsTwo, value: vTwo });
+			}
 			chartData.push(chartDataTwo);
 		}
 
@@ -542,3 +572,70 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		};
 	}
 }
+
+function getNewData(data: Object, toTimestamp: number, selectedData: Object): any {
+	const today = moment().format('YYYY-MM-DD');
+	const toDay = moment.unix(toTimestamp).format('YYYY-MM-DD');
+	if (today !== toDay) {
+		return {
+			tsOne: null,
+			vOne: null,
+			tsTwo: null,
+			vTwo: null,
+		};
+	}
+
+	const { scale: scale1, type: type1, scale2, type2 } = selectedData;
+	let tsOne = null, vOne: null, tsTwo = null, vTwo: null;
+	for (let key in data) {
+		const { name, scale, lastUpdated, value } = data[key];
+		if (name === type1 && scale === scale1) {
+			tsOne = lastUpdated;
+			vOne = parseInt(value, 10);
+		}
+		if (name === type2 && scale === scale2) {
+			tsTwo = lastUpdated;
+			vTwo = parseInt(value, 10);
+		}
+	}
+
+	if (!tsOne && !tsTwo) {
+		return {
+			tsOne: null,
+			vOne: null,
+			tsTwo: null,
+			vTwo: null,
+		};
+	}
+
+	return {
+		tsOne,
+		vOne,
+		tsTwo,
+		vTwo,
+	};
+}
+
+const checkForNewData = createSelector(
+	[
+		({ data }: Object): Object => data,
+		({ toTimestamp }: Object): number => toTimestamp,
+		({ selectedData }: Object): Object => selectedData,
+	],
+	(data: Object, toTimestamp: number, selectedData: Object): Array<any> => getNewData(data, toTimestamp, selectedData)
+);
+
+function mapStateToProps(state: Object, ownProps: Object): Object {
+	const { sensors: { byId }} = state;
+	const { timestamp, sensorId, selectedOne, selectedTwo } = ownProps;
+	const sensor = byId[sensorId];
+	const { scale: scale1, type: type1 } = selectedOne;
+	const { scale: scale2, type: type2 } = selectedTwo;
+	const selectedData = { scale1, type1, scale2, type2 };
+
+	return {
+		liveData: checkForNewData({...sensor, ...timestamp, selectedData}),
+	};
+}
+
+export default connect(mapStateToProps, null)(SensorHistoryLineChart);
