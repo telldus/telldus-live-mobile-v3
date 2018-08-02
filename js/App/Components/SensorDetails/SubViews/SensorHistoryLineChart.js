@@ -117,12 +117,14 @@ export default class SensorHistoryLineChart extends View<Props, State> {
 		if (showOne !== nextProps.showOne || showTwo !== nextProps.showTwo) {
 			return true;
 		}
-		const { selectedTwo, selectedOne } = this.props;
-		if (selectedOne !== nextProps.selectedOne || selectedTwo !== nextProps.selectedTwo) {
+		const { selectedOne, selectedTwo } = this.props;
+		const isSelectedEqual = isEqual(selectedOne, nextProps.selectedOne) && isEqual(selectedTwo, nextProps.selectedTwo);
+		if (!isSelectedEqual) {
 			return true;
 		}
 		const { timestamp } = this.props;
-		if (timestamp !== nextProps.timestamp) {
+		const isTimestampEqual = isEqual(timestamp, nextProps.timestamp);
+		if (!isTimestampEqual) {
 			return true;
 		}
 		const isLayoutEqual = nextProps.appLayout.width === this.props.appLayout.width;
