@@ -360,7 +360,8 @@ class SensorHistoryLineChart extends View<Props, State> {
 	getUpdatedData(currentData: Array<Object>, { ts, value }: Object): Array<Object> {
 		const { ts: tsCurrLat } = currentData[0];
 		if (ts > tsCurrLat) {
-			return currentData.unshift({ ts, value });
+			currentData.unshift({ ts, value });
+			return currentData;
 		}
 		return currentData;
 	}
@@ -586,7 +587,7 @@ function getNewData(data: Object, toTimestamp: number, selectedData: Object): an
 	}
 
 	const { scale: scale1, type: type1, scale2, type2 } = selectedData;
-	let tsOne = null, vOne: null, tsTwo = null, vTwo: null;
+	let tsOne = null, vOne = null, tsTwo = null, vTwo = null;
 	for (let key in data) {
 		const { name, scale, lastUpdated, value } = data[key];
 		if (name === type1 && scale === scale1) {
