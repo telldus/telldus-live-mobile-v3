@@ -32,11 +32,13 @@ import {
 import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
 
-import { formatLastUpdated, checkIfLarge, shouldUpdate } from '../../../Lib';
+import {
+	formatLastUpdated,
+	checkIfLarge,
+	shouldUpdate,
+	getSensorIconLabelUnit,
+} from '../../../Lib';
 import i18n from '../../../Translations/common';
-import { utils } from 'live-shared-data';
-const { sensorUtils } = utils;
-const { getSensorTypes, getSensorUnits } = sensorUtils;
 import Theme from '../../../Theme';
 
 type Props = {
@@ -85,38 +87,16 @@ class SensorDashboardTile extends View<Props, null> {
 	constructor(props: Props) {
 		super(props);
 
-		let { formatMessage } = this.props.intl;
+		const { formatMessage } = this.props.intl;
 
 		this.labelSensor = formatMessage(i18n.labelSensor);
-		this.labelHumidity = formatMessage(i18n.labelHumidity);
-		this.labelTemperature = formatMessage(i18n.labelTemperature);
-		this.labelRainRate = formatMessage(i18n.labelRainRate);
-		this.labelRainTotal = formatMessage(i18n.labelRainTotal);
-		this.labelWindGust = formatMessage(i18n.labelWindGust);
-		this.labelWindAverage = formatMessage(i18n.labelWindAverage);
-		this.labelWindDirection = formatMessage(i18n.labelWindDirection);
-		this.labelUVIndex = formatMessage(i18n.labelUVIndex);
 
 		this.labelWatt = formatMessage(i18n.labelWatt);
-		this.labelCurrent = formatMessage(i18n.current);
-		this.labelEnergy = formatMessage(i18n.energy);
-		this.labelAccumulated = formatMessage(i18n.accumulated);
 		this.labelAcc = formatMessage(i18n.acc);
-		this.labelVoltage = formatMessage(i18n.voltage);
-		this.labelPowerFactor = formatMessage(i18n.powerFactor);
-		this.labelPulse = formatMessage(i18n.pulse);
-
-		this.labelWatt = formatMessage(i18n.labelWatt);
-		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
-		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
-		this.labelGenericMeter = formatMessage(i18n.labelGenericMeter);
-		this.labelLuminance = formatMessage(i18n.labelLuminance);
 
 		this.offline = formatMessage(i18n.offline);
 
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
-
-		this.sensorTypes = getSensorTypes();
 
 		this.getSlideList = this.getSlideList.bind(this);
 	}
@@ -127,161 +107,117 @@ class SensorDashboardTile extends View<Props, null> {
 
 	getSlideList(item: Object): Object {
 		let slideList = [], sensorInfo = '';
+		const { formatMessage } = this.props.intl;
+
 		for (let key in item.data) {
-			let { value, scale, name } = item.data[key];
-			let sensorType = this.sensorTypes[name];
-			let sensorUnits = getSensorUnits(sensorType);
-			let unit = sensorUnits[scale];
-			let isLarge = checkIfLarge(value.toString());
+			const { value, scale, name } = item.data[key];
+			const isLarge = checkIfLarge(value.toString());
+
+			const { label, unit, icon } = getSensorIconLabelUnit(name, scale, formatMessage);
+
+			let sharedProps = {
+				unit,
+				label,
+				icon,
+				isLarge,
+			};
 
 			if (name === 'humidity') {
 				slideList.push({
+					...sharedProps,
 					key: 'humidity',
-					icon: 'humidity',
-					label: this.labelHumidity,
-					unit,
-					isLarge,
 					text: <FormattedNumber value={value}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'temp') {
 				slideList.push({
+					...sharedProps,
 					key: 'temperature',
-					icon: 'temperature',
-					label: this.labelTemperature,
-					unit,
-					isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1} minimumFractionDigits={isLarge ? 0 : 1}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'rrate' || name === 'rtotal') {
 				slideList.push({
+					...sharedProps,
 					key: `rain${key}`,
-					icon: 'rain',
-					label: name === 'rrate' ? this.labelRainRate : this.labelRainTotal,
-					unit,
-					isLarge,
 					text: (name === 'rrate' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
 					text2: (name === 'rtotal' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
 				});
-				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
-				let rtotalInfo = name === 'rtotal' ? `${this.labelRainTotal} ${value}${unit}` : '';
+				let rrateInfo = name === 'rrate' ? `${label} ${value}${unit}` : '';
+				let rtotalInfo = name === 'rtotal' ? `${label} ${value}${unit}` : '';
 				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
 			}
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let directions = '', label = name === 'wgust' ? this.labelWindGust : this.labelWindAverage;
+				let directions = '';
 				if (name === 'wdir') {
 					directions = [...this._windDirection(value)].toString();
-					label = this.labelWindDirection;
 				}
 				slideList.push({
+					...sharedProps,
 					key: `wind${key}`,
-					icon: 'wind',
-					label: label,
-					unit,
-					isLarge,
 					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/> ),
 					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/> ),
 					text3: (name === 'wdir' && this._windDirection(value)),
 				});
-				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
-				let wavgInfo = name === 'wavg' ? `${this.labelWindAverage} ${value}${unit}` : '';
-				let wdirInfo = name === 'wdir' ? `${this.labelWindDirection} ${directions}` : '';
+				let wgustInfo = name === 'wgust' ? `${label} ${value}${unit}` : '';
+				let wavgInfo = name === 'wavg' ? `${label} ${value}${unit}` : '';
+				let wdirInfo = name === 'wdir' ? `${label} ${directions}` : '';
 				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
 			}
 			if (name === 'uv') {
 				slideList.push({
+					...sharedProps,
 					key: 'uv',
-					icon: 'uv',
-					label: this.labelUVIndex,
-					unit,
-					isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'watt') {
-				let label = this.labelEnergy, labelWatt = this.labelEnergy;
 				if (scale === '0') {
-					label = isLarge ? `${this.labelAccumulated} ${this.labelWatt}` :
-						`${this.labelAcc} ${this.labelWatt}`;
-					labelWatt = `${this.labelAccumulated} ${this.labelWatt}`;
-				}
-				if (scale === '2') {
-					label = this.labelWatt;
-					labelWatt = this.labelWatt;
-				}
-				if (scale === '3') {
-					label = this.labelPulse;
-					labelWatt = this.labelPulse;
-				}
-				if (scale === '4') {
-					label = this.labelVoltage;
-					labelWatt = this.labelVoltage;
-				}
-				if (scale === '5') {
-					label = this.labelCurrent;
-					labelWatt = this.labelCurrent;
-				}
-				if (scale === '6') {
-					label = this.labelPowerFactor;
-					labelWatt = this.labelPowerFactor;
+					sharedProps = { ...sharedProps, label: isLarge ? label :
+						`${this.labelAcc} ${this.labelWatt}` };
 				}
 				slideList.push({
+					...sharedProps,
 					key: `watt${key}`,
-					icon: 'watt',
-					label: label,
-					unit,
-					isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'lum') {
 				slideList.push({
+					...sharedProps,
 					key: 'luminance',
-					icon: 'luminance',
-					label: this.labelLuminance,
-					isLarge: isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1} suffix={unit}
 						useGrouping={false}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'dewp') {
 				slideList.push({
+					...sharedProps,
 					key: 'dewpoint',
-					icon: 'humidity',
-					label: this.labelDewPoint,
-					unit,
-					isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'barpress') {
 				slideList.push({
+					...sharedProps,
 					key: 'barometricpressure',
-					icon: 'guage',
-					label: this.labelBarometricPressure,
-					unit,
-					isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'genmeter') {
 				slideList.push({
+					...sharedProps,
 					key: 'genricmeter',
-					icon: 'sensor',
-					label: this.labelGenericMeter,
-					unit,
-					isLarge,
 					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
 				});
-				sensorInfo = `${sensorInfo}, ${this.labelGenericMeter} ${value}${unit}`;
+				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 		}
 
