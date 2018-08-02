@@ -41,7 +41,9 @@ type Props = {
     defaultType?: string,
     onLayout: Function,
     changeDefaultDisplayType: Function,
-    id: number,
+	id: number,
+	isOpen: boolean,
+	closeSwipeRow: () => void,
 };
 
 class TypeBlock extends View<Props, null> {
@@ -67,7 +69,11 @@ constructor(props: Props) {
 }
 
 changeDisplayType() {
-	const { sensors, id } = this.props;
+	const { sensors, id, isOpen, closeSwipeRow } = this.props;
+	if (isOpen && closeSwipeRow) {
+		closeSwipeRow();
+		return;
+	}
 	const totalTypes = this.getSupportedDisplayTypes(sensors);
 	const defaultType = this.getDefaultType(sensors);
 	const max = totalTypes.length;
@@ -138,9 +144,17 @@ render(): Object {
 }
 }
 
+function prepareDefaultDisplayType(defaultSettings: Object): string | null {
+	if (!defaultSettings || !defaultSettings.displayType) {
+		return null;
+	}
+	return defaultSettings.displayType;
+}
+
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { defaultTypeById } = store.sensorsList;
-	const defaultType = defaultTypeById[ownProps.id];
+	const { defaultSensorSettings } = store.sensorsList;
+	const defaultSettings = defaultSensorSettings[ownProps.id];
+	const defaultType = prepareDefaultDisplayType(defaultSettings);
 	return {
 		defaultType,
 	};

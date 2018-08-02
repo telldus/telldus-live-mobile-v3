@@ -69,27 +69,45 @@ export function parseSensorsForListView(sensors: Object = {}, gateways: Object =
 
 export type State = ?Object;
 
-const defaultTypeById = (state: Object = {}, action: Object): State => {
+const defaultSensorSettings = (state: Object = {}, action: Object): State => {
 	if (action.type === 'persist/REHYDRATE') {
-		if (action.payload && action.payload.sensorsList && action.payload.sensorsList.defaultTypeById) {
-			console.log('rehydrating sensorsList.defaultTypeById');
+		if (action.payload && action.payload.sensorsList && action.payload.sensorsList.defaultSensorSettings) {
+			console.log('rehydrating sensorsList.defaultSensorSettings');
 			return {
 				...state,
-				...action.payload.sensorsList.defaultTypeById,
+				...action.payload.sensorsList.defaultSensorSettings,
 			};
 		}
-		return { ...state };
+		return state;
 	}
 	if (action.type === 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE') {
 		const { id, displayType } = action;
+		const allSettings = state[id] ? state[id] : {};
+
 		return {
 			...state,
-			[id]: displayType,
+			[id]: {
+				...allSettings,
+				displayType,
+			},
+		};
+	}
+	if (action.type === 'CHANGE_SENSOR_DEFAULT_HISTORY_SETTINGS') {
+		const { id, historySettings: newSettings } = action;
+		let { historySettings, ...others } = state[id] ? state[id] : {};
+		historySettings = { ...historySettings, ...newSettings };
+
+		return {
+			...state,
+			[id]: {
+				...others,
+				historySettings,
+			},
 		};
 	}
 	return state;
 };
 
 export default combineReducers({
-	defaultTypeById,
+	defaultSensorSettings,
 });

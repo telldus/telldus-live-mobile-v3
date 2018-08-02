@@ -85,18 +85,18 @@ class TimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent: string) {
-		let clientInfo = this.props.navigation.state.params.clientInfo;
+		const { navigation } = this.props;
+		let clientInfo = navigation.getParam('clientInfo', {});
 		if (continent === 'UTC') {
 			clientInfo.timezone = continent;
-			this.props.navigation.push('Position', {clientInfo});
+			navigation.navigate('Position', {clientInfo});
 		} else {
 			let data = differenceWith(timeZone, [continent], (v1: string, v2: string): boolean => {
 				let items = v1.split('/');
-				let flag = items[0] === v2 ? false : true;
-				return flag;
+				return !(items[0] === v2);
 			});
 			clientInfo.continent = continent;
-			this.props.navigation.push('TimeZoneCity', {cities: data, clientInfo});
+			navigation.navigate('TimeZoneCity', {cities: data, clientInfo});
 		}
 	}
 

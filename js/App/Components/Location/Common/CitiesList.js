@@ -24,8 +24,13 @@
 'use strict';
 
 import React from 'react';
+import {
+	FlatList,
+} from 'react-native';
 
-import {View, List, ListDataSource} from '../../../../BaseComponents';
+import {
+	View,
+} from '../../../../BaseComponents';
 import ListRow from './SubViews/ListRow';
 
 type Props = {
@@ -34,34 +39,18 @@ type Props = {
 	navigation: Object,
 };
 
-type State = {
-	dataSource: Object,
-};
-
-const listDataSource = new ListDataSource({
-	rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
-});
-
 class CitiesList extends View {
-	renderRow: (string) => void;
-	parseDataForList: (Array<string>) => Object;
-	onCityChoose: () => void;
-
 	props: Props;
-	state: State;
+
+	renderRow: (string) => void;
+	onCityChoose: () => void;
+	keyExtractor: (Object) => number;
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			dataSource: this.parseDataForList(props.navigation.state.params.cities),
-		};
 		this.renderRow = this.renderRow.bind(this);
-		this.parseDataForList = this.parseDataForList.bind(this);
 		this.onCityChoose = this.onCityChoose.bind(this);
-	}
-
-	parseDataForList(data: Array<string>): Object {
-		return listDataSource.cloneWithRows(data);
+		this.keyExtractor = this.keyExtractor.bind(this);
 	}
 
 	onCityChoose(city: string) {
@@ -71,23 +60,30 @@ class CitiesList extends View {
 		}
 	}
 
-	renderRow(item: Object): Object {
+	renderRow({item}: Object): Object {
 		item = item.split('/');
-		item = item[1];
 		return (
-			<ListRow item={item} appLayout={this.props.appLayout} onPress={this.onCityChoose}/>
+			<ListRow item={item[1]} appLayout={this.props.appLayout} onPress={this.onCityChoose}/>
 		);
 	}
 
+	keyExtractor(item: string): string {
+		return item;
+	}
+
 	render(): Object {
+		const { navigation, appLayout } = this.props;
+		const data = navigation.getParam('cities', []);
 
 		return (
 			<View style={{flex: 1}}>
-				<List
+				<FlatList
 					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					key={this.props.appLayout.width}
+					data={data}
+					renderItem={this.renderRow}
+					numColumns={1}
+					keyExtractor={this.keyExtractor}
+					extraData={appLayout.width}
 				/>
 			</View>
 		);

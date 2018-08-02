@@ -39,10 +39,6 @@ import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 
 const messages = defineMessages({
-	overviewHeader: {
-		id: 'deviceSettings.overviewHeader',
-		defaultMessage: 'Overview',
-	},
 	location: {
 		id: 'deviceSettings.location',
 		defaultMessage: 'Location',
@@ -73,9 +69,9 @@ class OverviewTab extends View {
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
-				icon="icon_home"
+				icon="home"
 				tintColor={tintColor}
-				label={messages.overviewHeader}
+				label={i18n.overviewHeader}
 				accessibilityLabel={i18n.deviceOverviewTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
@@ -93,7 +89,7 @@ class OverviewTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentTab === 'Overview';
+		return nextProps.screenProps.currentScreen === 'Overview';
 	}
 
 	render(): Object {
@@ -173,9 +169,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
+	const id = ownProps.navigation.getParam('id', null);
+	const device = state.devices.byId[id];
+	const { clientId } = device;
+
 	return {
-		device: state.devices.byId[ownProps.screenProps.device.id],
-		gateway: state.gateways.byId[ownProps.screenProps.device.clientId],
+		device: state.devices.byId[id],
+		gateway: state.gateways.byId[clientId],
 	};
 }
 

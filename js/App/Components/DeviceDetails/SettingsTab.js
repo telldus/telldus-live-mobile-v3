@@ -23,21 +23,19 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { FormattedMessage, Text, View, TabBar, Switch } from '../../../BaseComponents';
 import { defineMessages } from 'react-intl';
-import i18n from '../../Translations/common';
 
 import { LearnButton } from '../TabViews/SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 import { addToDashboard, removeFromDashboard, showToast } from '../../Actions';
-import {
-	getRelativeDimensions,
-} from '../../Lib';
 import Theme from '../../Theme';
 
+import i18n from '../../Translations/common';
 const messages = defineMessages({
 	showOnDashborad: {
 		id: 'showOnDashboard',
@@ -57,7 +55,6 @@ type Props = {
 	inDashboard: boolean,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
-	appLayout: Object,
 	screenProps: Object,
 };
 
@@ -76,7 +73,7 @@ class SettingsTab extends View {
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
-				icon="icon_settings"
+				icon="settings"
 				tintColor={tintColor}
 				label={i18n.settingsHeader}
 				accessibilityLabel={i18n.deviceSettingsTab}/>
@@ -130,14 +127,15 @@ class SettingsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentTab === 'Settings';
+		return nextProps.screenProps.currentScreen === 'Settings';
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		let { appLayout } = this.props.screenProps;
 
 		let {
 			container,
+			switchStyle,
 			ShowOnDashCover,
 			textShowOnDashCover,
 			textShowOnDash,
@@ -153,37 +151,39 @@ class SettingsTab extends View {
 			learnButton = <LearnButton id={device.id} style={learn} />;
 		}
 		return (
-			<View style={container}>
-				<View style={ShowOnDashCover}>
-					<View style={textShowOnDashCover}>
-						<Text style={textShowOnDash}>
-							<FormattedMessage {...messages.showOnDashborad} style={textShowOnDash}/>
-						</Text>
+			<ScrollView>
+				<View style={container}>
+					<View style={ShowOnDashCover}>
+						<View style={textShowOnDashCover}>
+							<Text style={textShowOnDash}>
+								<FormattedMessage {...messages.showOnDashborad} style={textShowOnDash}/>
+							</Text>
+						</View>
+						<Switch
+							onValueChange={this.onValueChange}
+							value={this.props.inDashboard}
+							style={switchStyle}
+						/>
 					</View>
-					<Switch
-						onValueChange={this.onValueChange}
-						value={this.props.inDashboard}
-					/>
-				</View>
-				<View style={ShowOnDashCover}>
-					<View style={textShowOnDashCover}>
-						<Text style={textShowOnDash}>
-							<FormattedMessage {...messages.hideFromList} style={textShowOnDash}/>
-						</Text>
+					<View style={ShowOnDashCover}>
+						<View style={textShowOnDashCover}>
+							<Text style={textShowOnDash}>
+								<FormattedMessage {...messages.hideFromList} style={textShowOnDash}/>
+							</Text>
+						</View>
+						<Switch
+							onValueChange={this.setIgnoreDevice}
+							value={this.state.isHidden}
+						/>
 					</View>
-					<Switch
-						onValueChange={this.setIgnoreDevice}
-						value={this.state.isHidden}
-					/>
+					{learnButton}
 				</View>
-				{learnButton}
-			</View>
+			</ScrollView>
 		);
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
@@ -206,6 +206,9 @@ class SettingsTab extends View {
 				marginTop: padding / 2,
 				...Theme.Core.shadow,
 			},
+			switchStyle: {
+				justifyContent: 'flex-end',
+			},
 			textShowOnDashCover: {
 				alignItems: 'flex-start',
 				justifyContent: 'center',
@@ -213,7 +216,6 @@ class SettingsTab extends View {
 			textShowOnDash: {
 				color: '#8A8682',
 				fontSize,
-				marginLeft: 8,
 				justifyContent: 'center',
 			},
 			learn: {
@@ -236,10 +238,11 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 function mapStateToProps(state: Object, ownProps: Object): Object {
+	const id = ownProps.navigation.getParam('id', null);
+	const device = state.devices.byId[id];
 	return {
-		device: ownProps.screenProps.device,
-		inDashboard: !!state.dashboard.devicesById[ownProps.screenProps.device.id],
-		appLayout: getRelativeDimensions(state.App.layout),
+		device,
+		inDashboard: !!state.dashboard.devicesById[id],
 	};
 }
 

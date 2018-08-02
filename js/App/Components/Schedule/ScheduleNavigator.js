@@ -26,10 +26,6 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
 import ScheduleScreen from './ScheduleScreen';
-import { View, SafeAreaView } from '../../../BaseComponents';
-import { NavigationHeader } from '../DeviceDetails/SubViews';
-
-import {getRouteName} from '../../Lib';
 
 import Device from './Device';
 import Action from './Action';
@@ -50,7 +46,7 @@ const renderScheduleScreen = (navigation, screenProps) => Component => (
 const RouteConfigs = {
 	InitialScreen: {
 		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(
-			screenProps.rootNavigator.state.params.editMode ?
+			navigation.getParam('editMode', false) ?
 				Edit
 				:
 				Device),
@@ -74,79 +70,14 @@ const RouteConfigs = {
 
 const StackNavigatorConfig = {
 	initialRouteName,
-	headerMode: 'float',
-	initialRouteParams: {renderHeader: false},
-	navigationOptions: ({navigation}) => {
-		let {state} = navigation;
-		let renderStackHeader = state.routeName !== 'InitialScreen';
-		if (renderStackHeader) {
-			return {
-				header: <NavigationHeader navigation={navigation} />,
-			};
-		}
-		return {
-			header: null,
-		};
+	headerMode: 'none',
+	cardStyle: {
+		shadowColor: 'transparent',
+		shadowOpacity: 0,
+		elevation: 0,
 	},
 };
 
-const Schedule = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const ScheduleNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
 
-type Props = {
-	navigation: Object,
-};
-
-type State = {
-	currentScreen: string,
-};
-
-class ScheduleNavigator extends View {
-	props: Props;
-	state: State;
-
-	onNavigationStateChange: () => void;
-
-	constructor(props: Props) {
-		super(props);
-
-		this.state = {
-			currentScreen: 'InitialScreen',
-		};
-
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-	}
-
-	onNavigationStateChange(prevState: Object, currentState: Object) {
-		const currentScreen = getRouteName(currentState);
-		if (this.state.currentScreen !== currentScreen) {
-			this.setState({
-				currentScreen,
-			});
-			let {navigation} = this.props;
-			if (currentScreen === 'InitialScreen' && !navigation.state.params.renderRootHeader) {
-				navigation.setParams({renderRootHeader: true});
-			}
-		}
-	}
-
-	render() {
-		let { currentScreen } = this.state;
-		let { navigation } = this.props;
-		let screenProps = {
-			currentScreen,
-			rootNavigator: navigation,
-			initialRouteName,
-		};
-
-		return (
-			<SafeAreaView>
-				{navigation.state.params.renderRootHeader &&
-				<NavigationHeader navigation={navigation} />
-				}
-				<Schedule onNavigationStateChange={this.onNavigationStateChange} screenProps={screenProps} />
-			</SafeAreaView>
-		);
-	}
-}
-
-module.exports = ScheduleNavigator;
+export default ScheduleNavigator;

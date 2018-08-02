@@ -45,7 +45,6 @@ import {
 	getSelectedDays,
 	getWeekdays,
 	getWeekends,
-	getRelativeDimensions,
 	getTranslatableDays,
 } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
@@ -78,7 +77,6 @@ const messages = defineMessages({
 
 type Props = {
 	active: boolean,
-	device: Object,
 	method: number,
 	methodValue?: number,
 	effectiveHour: string,
@@ -101,7 +99,6 @@ class JobRow extends View<null, Props, null> {
 		id: PropTypes.number.isRequired,
 		deviceId: PropTypes.number.isRequired,
 		active: PropTypes.bool.isRequired,
-		device: PropTypes.object.isRequired,
 		method: PropTypes.number.isRequired,
 		methodValue: PropTypes.number,
 		hour: PropTypes.number.isRequired,
@@ -150,15 +147,12 @@ class JobRow extends View<null, Props, null> {
 	};
 
 	render(): React$Element<any> | null {
-		if (!this.props.device) {
-			return null;
-		}
 
 		const {
 			type,
 			effectiveHour,
 			effectiveMinute,
-			device,
+			deviceName: dName,
 			offset,
 			randomInterval,
 			active,
@@ -196,7 +190,7 @@ class JobRow extends View<null, Props, null> {
 		const { actionIcon, actionLabel } = this._renderActionIcon();
 
 		const { formatMessage } = intl;
-		const deviceName = device.name ? device.name : formatMessage(i18n.noName);
+		const deviceName = dName ? dName : formatMessage(i18n.noName);
 		const labelDevice = `${formatMessage(i18n.labelDevice)} ${deviceName}`;
 		const labelAction = `${formatMessage(i18n.labelAction)} ${actionLabel}`;
 		const accessibilityLabel = `${formatMessage(messages.phraseOne)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
@@ -228,7 +222,7 @@ class JobRow extends View<null, Props, null> {
 						{actionIcon}
 						<TextRowWrapper style={textWrapper} appLayout={appLayout}>
 							<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
-								{device.name}
+								{deviceName}
 							</Title>
 							<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
 								{repeat}
@@ -452,7 +446,7 @@ class JobRow extends View<null, Props, null> {
 
 function mapStateToProps(state: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: state.app.layout,
 	};
 }
 

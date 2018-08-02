@@ -34,13 +34,11 @@ import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
 
 import Theme from '../../../Theme';
-import { getRelativeDimensions } from '../../../Lib';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import i18n from '../../../Translations/common';
 import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
-	rootNavigator: Object,
 	containerWidth: number,
 	navigation: Object,
 	location: Object,
@@ -107,20 +105,20 @@ class Details extends View {
 
 	onEditName() {
 		const { navigation, location } = this.props;
-		navigation.push('EditName', {id: location.id, name: location.name});
+		navigation.navigate('EditName', {id: location.id, name: location.name});
 	}
 
 	onEditTimeZone() {
 		let { navigation, location } = this.props;
 		let { params } = navigation.state;
 		let newParams = { ...params, id: location.id, timezone: location.timezone };
-		navigation.push('EditTimeZoneContinent', newParams);
+		navigation.navigate('EditTimeZoneContinent', newParams);
 	}
 
 	onEditGeoPosition() {
 		let { navigation, location } = this.props;
 		let { latitude, longitude, id } = location;
-		navigation.push('EditGeoPosition', { id, latitude, longitude });
+		navigation.navigate('EditGeoPosition', { id, latitude, longitude });
 	}
 
 	onPressRemoveLocation() {
@@ -298,10 +296,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let id = ownProps.rootNavigator.state.params.location.id;
+	let { id } = ownProps.navigation.getParam('location', {id: null});
 	return {
 		location: store.gateways.byId[id],
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: store.app.layout,
 	};
 }
 

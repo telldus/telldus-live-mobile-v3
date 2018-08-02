@@ -24,13 +24,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BackHandler, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { intlShape, injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { View, DialogueBox, Text, BlockIcon } from '../../../../BaseComponents';
-import LocationPoster from '../Common/LocationPoster';
+import { View, DialogueBox, NavigationHeaderPoster } from '../../../../BaseComponents';
 
 import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
@@ -39,17 +37,14 @@ import * as appDataActions from '../../../Actions/AppData';
 import { messages as commonMessages } from '../Common/messages';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
-import { getRelativeDimensions } from '../../../Lib';
 
 type Props = {
 	navigation: Object,
 	children: Object,
 	actions?: Object,
 	screenProps: Object,
-	intl: intlShape.isRequired,
 	showModal: boolean,
 	validationMessage: any,
-	appLayout: Object,
 };
 
 type State = {
@@ -57,23 +52,6 @@ type State = {
 	h2: string,
 	infoButton: null | Object,
 	loading: boolean,
-};
-
-export interface ScheduleProps {
-	navigation: Object,
-	actions: Object,
-	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void,
-}
-
-const CustomPosterHeader = ({name, styles}: Object): Object => {
-	return (
-		<View style={styles.posterCover}>
-			<BlockIcon icon={'location'} style={styles.posterIcon} containerStyle={styles.posterIconContainer}/>
-			<Text style={styles.posterText}>
-				{name}
-			</Text>
-		</View>
-	);
 };
 
 class LocationDetailsContainer extends View<null, Props, State> {
@@ -105,7 +83,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			onPress: this.goBack,
 		};
 
-		let { formatMessage } = props.intl;
+		let { formatMessage } = props.screenProps.intl;
 		this.labelDelete = formatMessage(i18n.delete).toUpperCase();
 		this.labelModalheaderOnDel = `${formatMessage(i18n.delete)} ${formatMessage(i18n.location)}?`;
 		this.onRemoveLocationError = `${formatMessage(commonMessages.failureRemoveLocation)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
@@ -124,12 +102,8 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let {navigation, screenProps} = this.props;
-		if (screenProps.currentScreen === 'Details') {
-			screenProps.rootNavigator.goBack();
-			return true;
-		}
-		navigation.dispatch({ type: 'Navigation/BACK'});
+		let {navigation} = this.props;
+		navigation.pop();
 		return true;
 	}
 
@@ -153,14 +127,14 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	};
 
 	onConfirmRemoveLocation() {
-		let { actions, screenProps } = this.props;
-		let { location } = screenProps.rootNavigator.state.params;
+		const { actions, navigation } = this.props;
+		const location = navigation.getParam('location', {id: null});
 		this.closeModal();
 		actions.removeGateway(location.id).then((res: Object) => {
 			actions.getGateways().then(() => {
 				actions.getAppData();
 			});
-			screenProps.rootNavigator.goBack();
+			navigation.pop();
 		}).catch(() => {
 			actions.showModal(this.onRemoveLocationError);
 		});
@@ -186,19 +160,46 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	}
 
 	render(): Object {
-		const { children, navigation, actions, screenProps, intl,
-			showModal, appLayout, validationMessage, modalExtras } = this.props;
+		const {
+			children,
+			actions,
+			screenProps,
+			showModal,
+			validationMessage,
+			modalExtras,
+			navigation,
+		} = this.props;
+		const {
+			appLayout,
+			currentScreen,
+		} = screenProps;
 		const { h1, h2, infoButton } = this.state;
 		const styles = this.getStyle(appLayout);
 		const { modalHeader, positiveText, showNegative, onPressPositive, onPressNegative } = this.getModalData(modalExtras);
-		const { params } = screenProps.rootNavigator.state;
+		const location = navigation.getParam('location', {});
 
 		let { width, height } = appLayout;
 		let deviceWidth = height > width ? width : height;
-		let padding = screenProps.currentScreen === 'Details' ? width * Theme.Core.paddingFactor : deviceWidth * Theme.Core.paddingFactor;
-		let paddingHorizontal = screenProps.currentScreen === 'EditTimeZoneCity' || screenProps.currentScreen === 'EditTimeZoneContinent' ? 0 : padding;
-		let showPosterHeader = screenProps.currentScreen === 'Details' ? false : true;
-		let customPosterHeader = screenProps.currentScreen === 'Details' ? <CustomPosterHeader {...params.location} styles={styles}/> : null;
+		let padding = currentScreen === 'Details' ? width * Theme.Core.paddingFactor : deviceWidth * Theme.Core.paddingFactor;
+		let paddingHorizontal = currentScreen === 'EditTimeZoneCity' || currentScreen === 'EditTimeZoneContinent' ? 0 : padding;
+		let sharedProps = {
+			...screenProps,
+			infoButton,
+			navigation,
+		};
+		let posterData = currentScreen === 'Details' ?
+			{
+				...sharedProps,
+				icon: 'location',
+				h2: location.name,
+				align: 'center',
+			} :
+			{
+				...sharedProps,
+				h1,
+				h2,
+				align: 'right',
+			};
 
 		return (
 			<View style={{
@@ -206,18 +207,15 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			}}>
 				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-						<LocationPoster h1={h1} h2={h2} infoButton={infoButton}
-							screenProps={screenProps} intl={intl} navigation={navigation}
-							showHeader={showPosterHeader} customHeader={customPosterHeader}/>
+						<NavigationHeaderPoster {...posterData}/>
 						<View style={[styles.style, {paddingHorizontal}]}>
 							{React.cloneElement(
 								children,
 								{
 									onDidMount: this.onChildDidMount,
-									navigation,
 									actions,
-									intl,
 									...screenProps,
+									navigation,
 									dialogueOpen: showModal,
 									containerWidth: width - (2 * paddingHorizontal),
 								},
@@ -289,7 +287,6 @@ const mapStateToProps = (store: Object): Object => (
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
-		appLayout: getRelativeDimensions(store.App.layout),
 	}
 );
 
@@ -301,4 +298,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(LocationDetailsContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(LocationDetailsContainer);

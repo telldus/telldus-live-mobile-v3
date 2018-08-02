@@ -98,14 +98,15 @@ class LocationName extends View {
 	}
 
 	onNameSubmit(locationName: string) {
+		const { navigation, intl, actions } = this.props;
 		if (locationName !== '') {
 			Keyboard.dismiss();
-			let clientInfo = this.props.navigation.state.params.clientInfo;
+			let clientInfo = navigation.getParam('clientInfo', {});
 			clientInfo.name = locationName;
-			this.props.navigation.push('TimeZone', {clientInfo});
+			navigation.navigate('TimeZone', {clientInfo});
 		} else {
-			let message = this.props.intl.formatMessage(commonMessages.invalidLocationName);
-			this.props.actions.showModal(message);
+			let message = intl.formatMessage(commonMessages.invalidLocationName);
+			actions.showModal(message);
 		}
 	}
 

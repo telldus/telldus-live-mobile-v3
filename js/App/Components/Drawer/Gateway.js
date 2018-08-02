@@ -23,13 +23,14 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
+import Ripple from 'react-native-material-ripple';
 
 import { IconTelldus, View } from '../../../BaseComponents';
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
 import { getLocationImageUrl, getDrawerWidth } from '../../Lib';
+import Theme from '../../Theme';
 
 type Props = {
 	gateway: Object,
@@ -41,17 +42,10 @@ type Props = {
 class Gateway extends PureComponent<Props, null> {
 	props: Props;
 
-	offline: number;
-	socketOffline: number;
-	online: number;
 	onPress: () => void;
 
 	constructor(props: Props) {
 		super();
-
-		this.offline = require('../TabViews/img/tabIcons/location-red.png');
-		this.socketOffline = require('../TabViews/img/tabIcons/location-orange.png');
-		this.online = require('../TabViews/img/tabIcons/location-green.png');
 
 		this.onPress = this.onPress.bind(this);
 	}
@@ -86,6 +80,7 @@ class Gateway extends PureComponent<Props, null> {
 			iconSize,
 			statusInfoStyle,
 		} = this.getStyles(drawerWidth);
+		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
 		const info = this.getLocationStatus(online, websocketOnline, statusStyle, statusInfoStyle, localKey);
 		const locationImageUrl = getLocationImageUrl(type);
@@ -97,7 +92,12 @@ class Gateway extends PureComponent<Props, null> {
 		};
 
 		return (
-			<TouchableOpacity style={gatewayContainer} onPress={this.onPress}>
+			<Ripple
+				rippleColor={rippleColor}
+				rippleOpacity={rippleOpacity}
+				rippleDuration={rippleDuration}
+				style={gatewayContainer}
+				onPress={this.onPress}>
 				<LocationDetails {...locationData}
 					style={detailsContainer}
 					imageStyle={image}
@@ -107,7 +107,7 @@ class Gateway extends PureComponent<Props, null> {
 				<View style={iconSettingsContainer}>
 					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
 				</View>
-			</TouchableOpacity>
+			</Ripple>
 		);
 	}
 	getStyles(drawerWidth: number): Object {

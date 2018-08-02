@@ -94,7 +94,7 @@ function Bootstrap(): Object {
 			return (
 				<Provider store={this.state.store}>
 					<IntlProvider locale={this.state.locale} messages={this.state.messages}>
-						<App />
+						<App locale={this.state.locale}/>
 					</IntlProvider>
 				</Provider>
 			);

@@ -34,7 +34,6 @@ import {
 	TouchableButton,
 	DialogueBox,
 	Header,
-	SafeAreaView,
 	TitledInfoBlock,
 } from '../../../BaseComponents';
 import { logoutFromTelldus, showToast } from '../../Actions';
@@ -260,68 +259,66 @@ render(): Object {
 	let importantForAccessibility = showModal ? 'no-hide-descendants' : 'yes';
 
 	return (
-		<SafeAreaView>
-			<View style={styles.container}>
-				<Header leftButton={this.backButton} style={styles.header}/>
-				<ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1}}>
-					<Poster>
-						<View style={styles.posterItemsContainer}>
-							<Text style={[styles.h, styles.h1]}>
-								{this.headerOne}
-							</Text>
-							<Text style={[styles.h, styles.h2]}>
-								{this.headerTwo}
-							</Text>
-						</View>
-					</Poster>
-					<View style={styles.body} importantForAccessibility={importantForAccessibility}>
-						<TitledInfoBlock
-							title={this.titleAppInfo}
-							label={this.labelVersion}
-							value={version}
-							fontSize={styles.fontSize}
-						/>
-						<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
-							{this.labelWhatsNew}
+		<View style={styles.container}>
+			<Header leftButton={this.backButton} style={styles.header}/>
+			<ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1}}>
+				<Poster>
+					<View style={styles.posterItemsContainer}>
+						<Text style={[styles.h, styles.h1]}>
+							{this.headerOne}
 						</Text>
-						<TitledInfoBlock
-							title={this.titlePush}
-							label={this.labelPush}
-							value={pushTokenRegistered ? this.valueYes : this.valueNo}
-							fontSize={styles.fontSize}
-						/>
-						<Text onPress={this.submitPushToken} style={styles.buttonResubmit}>
-							{submitButText}
+						<Text style={[styles.h, styles.h2]}>
+							{this.headerTwo}
 						</Text>
-						<TitledInfoBlock
-							title={this.titleUserInfo}
-							label={this.labelLoggedUser}
-							value={email}
-							fontSize={styles.fontSize}
-						/>
-						<TouchableButton
-							onPress={this.logout}
-							text={logoutButText}
-							postScript={this.state.isLogoutLoading ? '...' : null}
-							accessibilityLabel={this.labelLogOut}
-							accessible={buttonAccessible}
-							style={{
-								marginTop: styles.fontSize / 2,
-							}}
-						/>
-						<DialogueBox
-							showDialogue={this.props.showModal}
-							header={notificationHeader}
-							text={this.props.validationMessage}
-							showPositive={showPositive}
-							showNegative={showNegative}
-							positiveText={positiveText}
-							onPressPositive={onPressPositive}
-							onPressNegative={onPressNegative}/>
 					</View>
-				</ScrollView>
-			</View>
-		</SafeAreaView>
+				</Poster>
+				<View style={styles.body} importantForAccessibility={importantForAccessibility}>
+					<TitledInfoBlock
+						title={this.titleAppInfo}
+						label={this.labelVersion}
+						value={version}
+						fontSize={styles.fontSize}
+					/>
+					<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
+						{this.labelWhatsNew}
+					</Text>
+					<TitledInfoBlock
+						title={this.titlePush}
+						label={this.labelPush}
+						value={pushTokenRegistered ? this.valueYes : this.valueNo}
+						fontSize={styles.fontSize}
+					/>
+					<Text onPress={this.submitPushToken} style={styles.buttonResubmit}>
+						{submitButText}
+					</Text>
+					<TitledInfoBlock
+						title={this.titleUserInfo}
+						label={this.labelLoggedUser}
+						value={email}
+						fontSize={styles.fontSize}
+					/>
+					<TouchableButton
+						onPress={this.logout}
+						text={logoutButText}
+						postScript={this.state.isLogoutLoading ? '...' : null}
+						accessibilityLabel={this.labelLogOut}
+						accessible={buttonAccessible}
+						style={{
+							marginTop: styles.fontSize / 2,
+						}}
+					/>
+					<DialogueBox
+						showDialogue={this.props.showModal}
+						header={notificationHeader}
+						text={this.props.validationMessage}
+						showPositive={showPositive}
+						showNegative={showNegative}
+						positiveText={positiveText}
+						onPressPositive={onPressPositive}
+						onPressNegative={onPressNegative}/>
+				</View>
+			</ScrollView>
+		</View>
 	);
 }
 
@@ -401,7 +398,7 @@ function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 		user: store.user,
 	};
 }
@@ -421,9 +418,11 @@ function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 		onSubmitPushToken: (token: string): Promise<any> => {
 			return dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 		},
-		onLogout: (token: string) => {
-			dispatch(unregisterPushToken(token)).then(() => {
-				dispatch(logoutFromTelldus());
+		onLogout: (token: string): Promise<any> => {
+			return dispatch(unregisterPushToken(token)).then((): Promise<any> => {
+				return dispatch(logoutFromTelldus());
+			}).catch((): Promise<any> => {
+				return dispatch(logoutFromTelldus());
 			});
 		},
 		dispatch,

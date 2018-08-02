@@ -22,10 +22,10 @@
 'use strict';
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-orientation-locker';
 import Platform from 'Platform';
 
-import { View, SafeAreaView } from '../../BaseComponents';
+import { View } from '../../BaseComponents';
 import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from './PreLoginScreens';
 import { FormContainerComponent } from './PreLoginScreens/SubViews';
 
@@ -126,12 +126,10 @@ class PreLoginNavigator extends View {
 	render(): React$Element<any> {
 		let screenProps = {currentScreen: this.state.currentScreen};
 		return (
-			<SafeAreaView>
-				<Navigator
-					onNavigationStateChange={this.onNavigationStateChange}
-					screenProps={screenProps}
-				/>
-			</SafeAreaView>
+			<Navigator
+				onNavigationStateChange={this.onNavigationStateChange}
+				screenProps={screenProps}
+			/>
 		);
 	}
 }

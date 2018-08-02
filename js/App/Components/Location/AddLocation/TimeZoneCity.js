@@ -82,10 +82,11 @@ class TimeZoneCity extends View {
 	}
 
 	onCityChoose(city: string) {
-		let clientInfo = this.props.navigation.state.params.clientInfo;
+		const { navigation } = this.props;
+		let clientInfo = navigation.getParam('clientInfo', {});
 		clientInfo.timezone = `${clientInfo.continent}/${city}`;
 		clientInfo.autoDetected = false;
-		this.props.navigation.push('TimeZone', {clientInfo});
+		navigation.navigate('TimeZone', {clientInfo});
 	}
 
 	render(): Object {

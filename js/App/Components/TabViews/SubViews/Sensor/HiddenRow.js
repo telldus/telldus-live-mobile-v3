@@ -61,18 +61,21 @@ type Props = {
 	onSetIgnoreSensor: () => void,
 	isOpen: boolean,
 	style: Object,
+	onPressSettings: () => void,
 };
 
 class SensorHiddenRow extends View {
 	props: Props;
 	onStarSelected: () => void;
 	onSetIgnoreSensor: () => void;
+	onPressSettings: () => void;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.onStarSelected = this.onStarSelected.bind(this);
 		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
+		this.onPressSettings = this.onPressSettings.bind(this);
 
 		let { intl, sensor } = props;
 		let { formatMessage } = intl;
@@ -87,6 +90,11 @@ class SensorHiddenRow extends View {
 		this.labelUnHidePhraseOne = `${formatMessage(i18n.remove)} ${formatMessage(i18n.labelSensor)}`;
 		this.labelUnHidePhraseTwo = `${formatMessage(i18n.fromHiddenList)}`;
 		this.labelUnHide = `${this.labelUnHidePhraseOne} ${sensor.name} ${this.labelUnHidePhraseTwo}`;
+
+		this.labelButton = formatMessage(i18n.button);
+		this.labelSettings = formatMessage(i18n.settingsHeader);
+		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
+		this.labelGearButtonAccessibilityLabel = `${this.labelGearButton}, ${sensor.name}`;
 	}
 
 	onStarSelected() {
@@ -108,6 +116,13 @@ class SensorHiddenRow extends View {
 		}
 	}
 
+	onPressSettings() {
+		let { onPressSettings } = this.props;
+		if (onPressSettings) {
+			onPressSettings();
+		}
+	}
+
 	render(): Object {
 		const { sensorIds, sensor, isOpen, style } = this.props;
 		const { id, ignored } = sensor;
@@ -120,6 +135,8 @@ class SensorHiddenRow extends View {
 		let accessibilityLabelFavorite = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
 		accessibilityLabelFavorite = isOpen ? accessibilityLabelFavorite : '';
 		let accessibilityLabelSetIgnore = ignored ? this.labelUnHide : this.labelHide;
+
+		let accessibilityLabelSettings = isOpen ? this.labelGearButtonAccessibilityLabel : '';
 
 		return (
 			<View style={style} importantForAccessibility={importantForAccessibility}>
@@ -136,6 +153,13 @@ class SensorHiddenRow extends View {
 					accessible={isOpen}
 					accessibilityLabel={accessibilityLabelFavorite}>
 					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={Theme.Styles.hiddenRowItem}
+					onPress={this.onPressSettings}
+					accessible={isOpen}
+					accessibilityLabel={accessibilityLabelSettings}>
+					<IconTelldus icon={'settings'} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 			</View>
 		);

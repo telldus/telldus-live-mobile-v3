@@ -32,16 +32,17 @@ type Props = {
 	children?: any,
 	source?: number,
 	appLayout: Object,
-	source750: number,
-	source1500: number,
-	source3000: number,
+	source750: number | Object,
+	source1500: number | Object,
+	source3000: number | Object,
 	posterWidth?: number,
+	posterHeight?: number,
 };
 
 type DefaultProps = {
-	source750: number,
-	source1500: number,
-	source3000: number,
+	source750: number | Object,
+	source1500: number | Object,
+	source3000: number | Object,
 };
 
 class Poster extends Component<Props, null> {
@@ -53,16 +54,16 @@ class Poster extends Component<Props, null> {
 	};
 
 	static defaultProps: DefaultProps = {
-		source750: require('../App/Components/TabViews/img/telldus-geometric-bg-750.png'),
-		source1500: require('../App/Components/TabViews/img/telldus-geometric-bg-1500.png'),
-		source3000: require('../App/Components/TabViews/img/telldus-geometric-bg-3000.png'),
+		source750: { uri: 'telldus_geometric_bg_750'},
+		source1500: { uri: 'telldus_geometric_bg_1500'},
+		source3000: { uri: 'telldus_geometric_bg_3000'},
 	};
 
 	constructor(props: Props) {
 		super(props);
 	}
 
-	getImageSource(height: number): number {
+	getImageSource(height: number): number | Object {
 		let { source750, source1500, source3000 } = this.props;
 		switch (height) {
 			case height > 700 && height < 1400:
@@ -95,21 +96,23 @@ class Poster extends Component<Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		let { posterWidth } = this.props;
+		let { posterWidth, posterHeight } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
 		posterWidth = posterWidth ? posterWidth : width;
+		posterHeight = posterHeight ? posterHeight : deviceWidth * 0.333333333;
 
 		return {
 			image: {
-				flex: 1,
-				height: undefined,
+				height: posterHeight,
 				...ifIphoneX({width: '100%'}, {width: posterWidth}),
 				resizeMode: 'cover',
 			},
 			mask: {
 				borderWidth: 0,
-				height: isPortrait ? width * 0.333333333 : height * 0.333333333,
+				height: posterHeight,
 				...ifIphoneX({width: '100%'}, {width: posterWidth}),
 				overflow: 'hidden',
 			},
@@ -120,7 +123,7 @@ class Poster extends Component<Props, null> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: state.app.layout,
 	};
 }
 

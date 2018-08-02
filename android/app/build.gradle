@@ -128,7 +128,7 @@ android {
     defaultConfig {
         applicationId "com.telldus.live.mobile"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 26
         versionCode readVersionCode()
         versionName readVersion()
         multiDexEnabled true
@@ -182,6 +182,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-orientation-locker')
+    implementation project(':react-native-svg')
     implementation(project(':react-native-firebase')) {
         exclude group: "com.google.firebase"
     }
@@ -199,7 +201,6 @@ dependencies {
     implementation project(':react-native-fabric')
     implementation project(':react-native-i18n')
     implementation project(':react-native-extra-dimensions-android')
-    implementation project(':react-native-orientation')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:23.0.1"

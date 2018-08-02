@@ -375,7 +375,7 @@ class Modal extends Component<Props, State> {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 

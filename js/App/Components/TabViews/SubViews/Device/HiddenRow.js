@@ -27,7 +27,7 @@ import { defineMessages } from 'react-intl';
 
 import { addToDashboard, removeFromDashboard } from '../../../../Actions';
 
-import { View, IconTelldus, Icon } from '../../../../../BaseComponents';
+import { View, IconTelldus } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from '../../../../Theme';
@@ -160,7 +160,7 @@ class DeviceHiddenRow extends View {
 					onPress={this.onPressSettings}
 					accessible={isOpen}
 					accessibilityLabel={accessibilityLabelSettings}>
-					<Icon name={'gear'} style={styles.favoriteIcon}/>
+					<IconTelldus icon={'settings'} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 			</View>
 		);

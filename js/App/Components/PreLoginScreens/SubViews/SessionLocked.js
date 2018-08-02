@@ -211,13 +211,15 @@ function mapStateToProps(store: Object): Object {
 		tab: store.navigation.tab,
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		logoutFromTelldus: (pushToken: string): Promise<any> => {
 			return dispatch(unregisterPushToken(pushToken)).then((res: Object): Promise<any> => {
+				return dispatch(logoutFromTelldus());
+			}).catch((): Promise<any> => {
 				return dispatch(logoutFromTelldus());
 			});
 		},

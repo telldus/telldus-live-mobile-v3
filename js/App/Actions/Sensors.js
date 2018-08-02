@@ -34,7 +34,16 @@ const changeDefaultDisplayType = (id: number, displayType: string): Action => {
 	};
 };
 
+const changeDefaultHistorySettings = (id: number, historySettings: Object): Action => {
+	return {
+		type: 'CHANGE_SENSOR_DEFAULT_HISTORY_SETTINGS',
+		id,
+		historySettings,
+	};
+};
+
 module.exports = {
 	...Sensors,
 	changeDefaultDisplayType,
+	changeDefaultHistorySettings,
 };

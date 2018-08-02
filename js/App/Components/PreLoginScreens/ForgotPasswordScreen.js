@@ -72,7 +72,7 @@ class ForgotPasswordScreen extends View {
 	}
 
 	goBackToLogin() {
-		this.props.navigation.push('Login');
+		this.props.navigation.navigate('Login');
 	}
 
 	render(): Object {

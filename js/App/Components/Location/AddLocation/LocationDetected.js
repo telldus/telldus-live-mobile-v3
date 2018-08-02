@@ -48,7 +48,6 @@ const messages = defineMessages({
 type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
-	rootNavigator: Object,
 	onDidMount: Function,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
@@ -107,11 +106,11 @@ class LocationDetected extends View {
 			timezone: client.timezone,
 			autoDetected: client.timezoneAutodetected,
 		};
-		this.props.navigation.push('LocationName', {clientInfo});
+		this.props.navigation.navigate('LocationName', {clientInfo});
 	}
 
 	onActivateManual() {
-		this.props.navigation.push('LocationActivationManual');
+		this.props.navigation.navigate('LocationActivationManual');
 	}
 
 	renderClient(client: Object, i: number, appLayout: Object): Object {
@@ -122,12 +121,13 @@ class LocationDetected extends View {
 
 	render(): Object {
 		let items = [];
-		let { rootNavigator, appLayout, paddingHorizontal } = this.props;
+		const { navigation, appLayout, paddingHorizontal } = this.props;
 
 		const styles = this.getStyle(appLayout, paddingHorizontal);
 
-		if (rootNavigator.state.params.clients) {
-			items = rootNavigator.state.params.clients.map((client: Object, i: number): Object => {
+		const clients = navigation.getParam('clients', null);
+		if (clients) {
+			items = clients.map((client: Object, i: number): Object => {
 				return this.renderClient(client, i, appLayout);
 			});
 		}

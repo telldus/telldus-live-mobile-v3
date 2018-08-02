@@ -45,6 +45,8 @@ type Props = {
 	iconSize: number,
 	style: Object | Array<any> | number,
 	local: boolean,
+	isOpen: boolean,
+	closeSwipeRow: () => void,
 };
 
 class UpButton extends View {
@@ -61,7 +63,12 @@ class UpButton extends View {
 	}
 
 	onUp() {
-		this.props.deviceSetState(this.props.id, this.props.commandUp);
+		const { commandUp, id, isOpen, closeSwipeRow } = this.props;
+		if (isOpen && closeSwipeRow) {
+			closeSwipeRow();
+			return;
+		}
+		this.props.deviceSetState(id, commandUp);
 	}
 
 	render(): Object {

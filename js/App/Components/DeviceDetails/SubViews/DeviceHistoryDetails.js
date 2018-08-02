@@ -32,9 +32,6 @@ import StatusBar from 'StatusBar';
 
 import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from '../../../../BaseComponents';
 import i18n from '../../../Translations/common';
-import {
-	getRelativeDimensions,
-} from '../../../Lib';
 import { states, statusMessage } from '../../../../Config';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
@@ -51,7 +48,6 @@ type Props = {
 	detailsData: Object,
 	appLayout: Object,
 	currentScreen: string,
-	currentTab: string,
 	intl: Object,
 };
 
@@ -87,7 +83,7 @@ class DeviceHistoryDetails extends View {
 	}
 
 	render(): Object {
-		let { detailsData, appLayout, currentScreen, currentTab } = this.props;
+		let { detailsData, appLayout, currentScreen } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
 
@@ -176,7 +172,7 @@ class DeviceHistoryDetails extends View {
 			}
 		}
 
-		let accessible = currentTab === 'History' && currentScreen === 'DeviceDetails';
+		let accessible = currentScreen === 'History';
 
 		return (
 			<Modal
@@ -369,7 +365,7 @@ function mapStateToProps(state: Object): Object {
 	return {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: state.app.layout,
 	};
 }
 

@@ -26,7 +26,6 @@ import { SectionList, ScrollView, TouchableOpacity, Text, RefreshControl } from 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
-import isEqual from 'lodash/isEqual';
 
 import { View, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
@@ -35,21 +34,18 @@ import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getRelativeDimensions, getTabBarIcon } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {
 	rowsAndSections: Object,
-	tab: string,
-	dispatch: Function,
-	appLayout: Object,
 	screenProps: Object,
+	screenReaderEnabled: boolean,
+	navigation: Object,
+	dispatch: Function,
 };
 
 type State = {
-	visibleList: Array<Object>,
-	hiddenList: Array<Object>,
-	makeRowAccessible: 0 | 1,
 	isRefreshing: boolean,
 	showHiddenList: boolean,
 	propsSwipeRow: Object,
@@ -71,41 +67,17 @@ class SensorsTab extends View {
 	closeVisibleRows: (string) => void;
 	onDismissDialogueHide: () => void;
 	onConfirmDialogueHide: () => void;
+	openSensorDetail: (number) => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'sensors'),
 	});
 
-	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		let { makeRowAccessible: prevMakeRowAccessible, visibleList: prevVisibleList, hiddenList: prevHiddenList } = state;
-		let { screenReaderEnabled, rowsAndSections, screenProps } = props;
-		let { currentScreen, currentTab } = screenProps;
-		let makeRowAccessible = 0;
-		if (screenReaderEnabled && currentScreen === 'Tabs' && currentTab === 'Sensors') {
-			makeRowAccessible = 1;
-		}
-		const isRowsEqual = isEqual(rowsAndSections, {visibleList: prevVisibleList, hiddenList: prevHiddenList});
-		if (!isRowsEqual || prevMakeRowAccessible !== makeRowAccessible) {
-			let { visibleList, hiddenList } = rowsAndSections;
-			return {
-				visibleList,
-				hiddenList,
-				makeRowAccessible,
-			};
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 
-		let { visibleList, hiddenList } = props.rowsAndSections;
-
 		this.state = {
-			visibleList,
-			hiddenList,
-			makeRowAccessible: 0,
 			isRefreshing: false,
 			showHiddenList: false,
 			propsSwipeRow: {
@@ -140,15 +112,13 @@ class SensorsTab extends View {
 		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelSensor });
 		this.messageOnHide = formatMessage(i18n.messageOnHide, { type: labelSensor });
 		this.labelHide = formatMessage(i18n.hide).toUpperCase();
+
+		this.openSensorDetail = this.openSensorDetail.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { tab } = nextProps;
-
-		const isStateEqual = isEqual(this.state, nextState);
-		const isPropsEqual = isEqual(this.props, nextProps);
-
-		return (tab === 'sensorsTab') && (!isStateEqual || !isPropsEqual);
+		const { currentScreen } = nextProps.screenProps;
+		return currentScreen === 'Sensors';
 	}
 
 	onRefresh() {
@@ -197,6 +167,10 @@ class SensorsTab extends View {
 		}
 	}
 
+	openSensorDetail(sensor: Object) {
+		this.props.navigation.navigate('SensorDetails', { id: sensor.id });
+	}
+
 	onConfirmDialogueHide() {
 		this.setIgnoreSensor(this.state.sensorToHide);
 		this.setState({
@@ -227,12 +201,23 @@ class SensorsTab extends View {
 
 	render(): Object {
 
-		let { appLayout } = this.props;
-		let { showHiddenList, hiddenList, visibleList, isRefreshing,
-			propsSwipeRow, makeRowAccessible, showConfirmDialogue } = this.state;
+		const { rowsAndSections, screenReaderEnabled, screenProps } = this.props;
+		const { appLayout } = screenProps;
+		const {
+			showHiddenList,
+			isRefreshing,
+			propsSwipeRow,
+			showConfirmDialogue,
+		} = this.state;
+		const { visibleList, hiddenList } = rowsAndSections;
 
-		let style = this.getStyles(appLayout);
-		let extraData = {
+		const style = this.getStyles(appLayout);
+
+		let makeRowAccessible = 0;
+		if (screenReaderEnabled && screenProps.currentScreen === 'Sensors') {
+			makeRowAccessible = 1;
+		}
+		const extraData = {
 			makeRowAccessible,
 			appLayout,
 			propsSwipeRow,
@@ -297,15 +282,15 @@ class SensorsTab extends View {
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.key}
-				appLayout={this.props.appLayout}
+				appLayout={this.props.screenProps.appLayout}
 			/>
 		);
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, appLayout } = this.props;
+		const { screenProps } = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, currentTab, currentScreen } = screenProps;
+		const { intl, currentScreen, appLayout } = screenProps;
 		const { item } = row;
 		const { isOnline } = item;
 
@@ -314,12 +299,12 @@ class SensorsTab extends View {
 				sensor={item}
 				intl={intl}
 				appLayout={appLayout}
-				currentTab={currentTab}
 				currentScreen={currentScreen}
 				isGatewayActive={isOnline}
 				setIgnoreSensor={this.setIgnoreSensor}
 				onHiddenRowOpen={this.closeVisibleRows}
-				propsSwipeRow={propsSwipeRow}/>
+				propsSwipeRow={propsSwipeRow}
+				onSettingsSelected={this.openSensorDetail}/>
 		);
 	}
 
@@ -398,10 +383,10 @@ const getRowsAndSections = createSelector(
 );
 
 function mapStateToProps(store: Object): Object {
+	const { screenReaderEnabled } = store.app;
 	return {
 		rowsAndSections: getRowsAndSections(store),
-		tab: store.navigation.tab,
-		appLayout: getRelativeDimensions(store.App.layout),
+		screenReaderEnabled,
 	};
 }
 

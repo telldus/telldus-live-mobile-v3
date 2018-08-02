@@ -77,8 +77,6 @@ type Props = {
 };
 
 type State = {
-	timeZone: string,
-	autoDetected: boolean,
 	isLoading: boolean,
 };
 
@@ -93,10 +91,7 @@ class TimeZone extends View<void, Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		let {timeZone, autoDetected} = this.getTimeZone();
 		this.state = {
-			timeZone,
-			autoDetected,
 			isLoading: false,
 		};
 
@@ -137,16 +132,16 @@ class TimeZone extends View<void, Props, State> {
 	}
 
 	getTimeZone(): Object {
-		let clientInfo = this.props.navigation.state.params.clientInfo;
+		let { navigation } = this.props;
+		let clientInfo = navigation.getParam('clientInfo', {});
 		let timeZone = clientInfo.timezone;
 		let autoDetected = clientInfo.autoDetected;
 		return {timeZone, autoDetected};
 	}
 
 	onTimeZoneSubmit() {
-		let clientInfo = this.props.navigation.state.params.clientInfo;
-		clientInfo.timezone = this.state.timeZone;
-		let { screenReaderEnabled, actions } = this.props;
+		let { screenReaderEnabled, actions, navigation } = this.props;
+		let clientInfo = navigation.getParam('clientInfo', {});
 		if (screenReaderEnabled) {
 			this.setState({
 				isLoading: true,
@@ -154,7 +149,7 @@ class TimeZone extends View<void, Props, State> {
 			clientInfo.coordinates = {};
 			actions.activateGateway(clientInfo)
 				.then((response: Object) => {
-					this.props.navigation.push('Success', {clientInfo});
+					navigation.navigate('Success', {clientInfo});
 					this.setState({
 						isLoading: false,
 					});
@@ -166,18 +161,20 @@ class TimeZone extends View<void, Props, State> {
 					reportError(log);
 				});
 		} else {
-			this.props.navigation.push('Position', {clientInfo});
+			navigation.navigate('Position', {clientInfo});
 		}
 	}
 
 	onEditTimeZone() {
-		let clientInfo = this.props.navigation.state.params.clientInfo;
-		this.props.navigation.push('TimeZoneContinent', {clientInfo});
+		let { navigation } = this.props;
+		let clientInfo = navigation.getParam('clientInfo', {});
+		navigation.navigate('TimeZoneContinent', {clientInfo});
 	}
 
 	render(): Object {
 		const { appLayout } = this.props;
-		const { isLoading, timeZone, autoDetected } = this.state;
+		const { isLoading } = this.state;
+		const {timeZone, autoDetected} = this.getTimeZone();
 		const styles = this.getStyle(appLayout);
 
 		let timeZoneInfo = `${this.label}, ${timeZone}, ${autoDetected ? this.labelHint : ''}`;

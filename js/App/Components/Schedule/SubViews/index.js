@@ -26,7 +26,6 @@ import Day from './Day';
 import DaysRow from './DaysRow';
 import Description from './Description';
 import DeviceRow from './DeviceRow';
-import SchedulePoster from './SchedulePoster';
 import TextRowWrapper from './TextRowWrapper';
 import TimeBlock from './TimeBlock';
 import TimeRow from './TimeRow';
@@ -42,7 +41,6 @@ module.exports = {
 	DaysRow,
 	Description,
 	DeviceRow,
-	SchedulePoster,
 	TextRowWrapper,
 	TimeBlock,
 	TimeRow,

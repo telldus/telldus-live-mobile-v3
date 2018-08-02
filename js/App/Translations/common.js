@@ -613,6 +613,77 @@ const messages = defineMessages({
 		id: 'label.minutes',
 		defaultMessage: 'Minutes',
 	},
+	historyHeader: {
+		id: 'history',
+		defaultMessage: 'History',
+	},
+	overviewHeader: {
+		id: 'deviceSettings.overviewHeader',
+		defaultMessage: 'Overview',
+	},
+	loading: {
+		id: 'loading',
+		defaultMessage: 'Loading',
+	},
+	noRecentActivity: {
+		id: 'deviceSettings.noRecentActivity',
+		defaultMessage: 'No recent activity',
+	},
+	labelBattery: {
+		id: 'label.battery',
+		defaultMessage: 'Battery',
+	},
+	labelFrom: {
+		id: 'label.from',
+		defaultMessage: 'From',
+	},
+	labelTo: {
+		id: 'label.to',
+		defaultMessage: 'To',
+	},
+	labelStoreHistory: {
+		id: 'label.storeHistory',
+		defaultMessage: 'Store history',
+	},
+	toastStoreHistory: {
+		id: 'toast.storeHistory',
+		defaultMessage: 'History for this sensor will now be stored',
+	},
+	toastStoreNotHistory: {
+		id: 'toast.storeNotHistory',
+		defaultMessage: 'History for this sensor will no longer be stored',
+	},
+	defaultHeader: {
+		id: 'dialogueBox.defaultHeader',
+		defaultMessage: 'OOPS',
+		description: 'Default Header for the notification component',
+	},
+	defaultPositiveText: {
+		id: 'dialogueBox.defaultPositiveText',
+		defaultMessage: 'OK',
+		description: 'Default Positive text for the notification component',
+	},
+	defaultNegativeText: {
+		id: 'dialogueBox.defaultNegativeText',
+		defaultMessage: 'CANCEL',
+		description: 'Default Negative text for the notification component',
+	},
+	labelTechnicalInfo: {
+		id: 'label.technicalInfo',
+		defaultMessage: 'Technical information',
+	},
+	labelProtocol: {
+		id: 'label.protocol',
+		defaultMessage: 'Protocol',
+	},
+	labelModel: {
+		id: 'label.model',
+		defaultMessage: 'Model',
+	},
+	labelId: {
+		id: 'label.id',
+		defaultMessage: 'ID',
+	},
 });
 
 export default messages;

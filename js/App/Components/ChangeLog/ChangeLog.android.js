@@ -28,15 +28,13 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 
-import { View, FloatingButton, Text, StyleSheet } from '../../../BaseComponents';
+import { View, FloatingButton, Text, StyleSheet, NavigationHeader } from '../../../BaseComponents';
 
-import { NavigationHeader } from '../DeviceDetails/SubViews';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
 const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
 
 import Screens from './SubViews/Screens';
-import { getRelativeDimensions } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import messages from './SubViews/messages';
@@ -350,8 +348,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
-		screenReaderEnabled: state.App.screenReaderEnabled,
+		appLayout: state.app.layout,
+		screenReaderEnabled: state.app.screenReaderEnabled,
 	};
 }
 

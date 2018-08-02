@@ -30,14 +30,13 @@ import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDet
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
 
-import { getRelativeDimensions } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
     location: Object,
-    stackNavigator: Object,
 	appLayout: Object,
 	intl: Object,
+	navigation: Object,
 };
 
 type State = {
@@ -57,7 +56,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 	onPressGateway() {
 		let { location } = this.props;
-		this.props.stackNavigator.push('LocationDetails', {location, renderRootHeader: true});
+		this.props.navigation.navigate('LocationDetails', {location});
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
@@ -127,7 +126,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: state.app.layout,
 	};
 }
 

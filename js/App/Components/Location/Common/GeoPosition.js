@@ -24,13 +24,12 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, Keyboard, InteractionManager } from 'react-native';
+import { Keyboard, InteractionManager } from 'react-native';
 import { intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-import { View, FloatingButton } from '../../../../BaseComponents';
-import LabelBox from './LabelBox';
+import { View, FloatingButton, IconTelldus, Text } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 
 import { googleMapsAPIKey } from '../../../../Config';
@@ -68,6 +67,7 @@ type State = {
 	latitudeDelta?: number,
 	longitudeDelta?: number,
 	isSearchLoading: boolean,
+	showList: boolean,
 };
 
 type DefaultProps = {
@@ -88,7 +88,6 @@ class GeoPosition extends View {
 	state: State;
 
 	onAddressChange: () => void;
-	onEndEditing: () => void;
 	_refs: (Object | any) => mixed;
 	onSubmit: () => void;
 	onDragEnd: (Object) => void;
@@ -96,6 +95,9 @@ class GeoPosition extends View {
 
 	keyboardDidShow: () => void;
 	keyboardDidHide: () => void;
+
+	onChooseAddress: (Object, Object) => void;
+	renderLeftButton: () => Object;
 
 	static defaultProps: DefaultProps = {
 		region: {
@@ -125,6 +127,7 @@ class GeoPosition extends View {
 			latitudeDelta,
 			longitudeDelta,
 			isSearchLoading: false,
+			showList: false,
 		};
 
 		let { formatMessage } = props.intl;
@@ -135,13 +138,15 @@ class GeoPosition extends View {
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 
 		this.onAddressChange = this.onAddressChange.bind(this);
-		this.onEndEditing = this.onEndEditing.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
 		this._refs = this._refs.bind(this);
 		this.onDragEnd = this.onDragEnd.bind(this);
 
 		this.keyboardDidShow = this.keyboardDidShow.bind(this);
 		this.keyboardDidHide = this.keyboardDidHide.bind(this);
+
+		this.onChooseAddress = this.onChooseAddress.bind(this);
+		this.renderLeftButton = this.renderLeftButton.bind(this);
 	}
 
 	componentDidMount() {
@@ -159,7 +164,6 @@ class GeoPosition extends View {
 		this.setState({
 			isKeyboardShown: false,
 		});
-		this.onEndEditing();
 	}
 
 	componentWillUnmount() {
@@ -182,60 +186,6 @@ class GeoPosition extends View {
 		let { latitude, longitude } = this.state.coordinate;
 		if (onSubmit) {
 			onSubmit(latitude, longitude);
-		}
-	}
-
-	onEndEditing() {
-		let { address, isKeyboardShown } = this.state;
-		if (address !== '') {
-			this.setState({
-				isSearchLoading: true,
-			});
-			if (isKeyboardShown) {
-				InteractionManager.runAfterInteractions(() => {
-					Keyboard.dismiss();
-				});
-			}
-			this.props.actions.getGeoCodePosition(address, googleMapsAPIKey).then((response: Object) => {
-				if (response.status && response.status === 'OK' && response.results[0]) {
-					let { location, viewport } = response.results[0].geometry;
-					let latitude = location.lat, longitude = location.lng;
-					let { longitudeDelta, latitudeDelta } = this.getDeltas(viewport);
-					let region = new MapView.AnimatedRegion({
-						latitude,
-						longitude,
-						latitudeDelta,
-						longitudeDelta,
-					});
-					let coordinate = {
-						latitude,
-						longitude,
-					};
-					this.setState({
-						isSearchLoading: false,
-					});
-					InteractionManager.runAfterInteractions(() => {
-						this.setState({
-							region,
-							coordinate,
-							latitudeDelta,
-							longitudeDelta,
-						});
-					});
-				} else {
-					this.setState({
-						isSearchLoading: false,
-					});
-				}
-			}).catch((error: Object) => {
-				let data = !error.error_description && error.message === 'Network request failed' ?
-					this.networkFailed : error.error_description ?
-						error.error_description : error.error ? error.error : this.unknownError;
-				this.props.actions.showModal(data);
-				this.setState({
-					isSearchLoading: false,
-				});
-			});
 		}
 	}
 
@@ -267,26 +217,97 @@ class GeoPosition extends View {
 		});
 	}
 
+	onChooseAddress(data: Object, details: Object) {
+		let { isKeyboardShown } = this.state;
+		if (isKeyboardShown) {
+			InteractionManager.runAfterInteractions(() => {
+				Keyboard.dismiss();
+			});
+		}
+		const { geometry } = details;
+		if (geometry && geometry.location) {
+			let { location, viewport } = geometry;
+			let latitude = location.lat, longitude = location.lng;
+			let { longitudeDelta, latitudeDelta } = this.getDeltas(viewport);
+			let region = new MapView.AnimatedRegion({
+				latitude,
+				longitude,
+				latitudeDelta,
+				longitudeDelta,
+			});
+			let coordinate = {
+				latitude,
+				longitude,
+			};
+			this.setState({
+				region,
+				coordinate,
+				latitudeDelta,
+				longitudeDelta,
+			});
+		} else {
+			this.props.actions.showModal(this.unknownError);
+		}
+		this.setState({
+			showList: false,
+		});
+	}
+
+	onChangeTextCity() {
+		this.setState({
+			showList: true,
+		});
+	}
+
 	render(): Object {
-		let { appLayout, isLoading } = this.props;
-		const styles = this.getStyle(appLayout);
+		const { isLoading } = this.props;
+		const { showList } = this.state;
+		const styles = this.getStyle();
 
 		return (
 			<View style={styles.container}>
-				<LabelBox
-					label={this.label}
-					showIcon={true}
-					appLayout={appLayout}>
-					<TextInput
-						style={styles.address}
-						onChangeText={this.onAddressChange}
-						onEndEditing={this.onEndEditing}
-						autoCapitalize="none"
-						autoCorrect={false}
-						autoFocus={false}
-						underlineColorAndroid="#e26901"
-						value={this.state.address}/>
-				</LabelBox>
+				<GooglePlacesAutocomplete
+					placeholder=""
+					minLength={2} // minimum length of text to search
+					autoFocus={false}
+					onChangeText={this.onChangeTextCity}
+					listViewDisplayed={showList}
+					returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+					fetchDetails={true}
+					onPress={this.onChooseAddress}
+
+					query={{
+						// available options: https://developers.google.com/places/web-service/autocomplete
+						key: googleMapsAPIKey,
+						language: 'en', // language of the results
+						types: '(cities)', // default: 'geocode'
+					}}
+
+					nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+					GooglePlacesSearchQuery={{
+						// available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+						rankby: 'distance',
+					}}
+
+					filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
+
+					debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+
+					styles= {{
+						textInput: styles.textInput,
+						textInputContainer: styles.textInputContainer,
+						description: {
+							fontWeight: 'bold',
+							color: '#000',
+						},
+						container: styles.searchBoxContainer,
+					}}
+					underlineColorAndroid="#e26901"
+					renderLeftButton={this.renderLeftButton}
+				/>
+				<Text style={styles.labelStyle}>
+					{this.label}
+				</Text>
 				<View style={styles.mapViewCover} accessible={false} importantForAccessibility="no-hide-descendants">
 					<MapView.Animated
 						style={styles.map}
@@ -305,67 +326,118 @@ class GeoPosition extends View {
 						showThrobber={isLoading}
 					/>
 				</View>
-				<FloatingButton
-					buttonStyle={styles.searchButtonStyle}
-					onPress={this.onEndEditing}
-					customComponent={this.state.isSearchLoading ? false : <Icon name="search" size={styles.searchIconSize} color="#fff"/>}
-					showThrobber={this.state.isSearchLoading}
-				/>
 			</View>
 		);
 	}
 
-	getStyle(appLayout: Object): Object {
+	renderLeftButton(): Object {
+		const { iconSize, iconStyle } = this.getStyle();
+
+		return (
+			<IconTelldus icon={'location'} size={iconSize} color={'#A59F9A'} style={iconStyle}/>
+		);
+	}
+
+	getStyle(): Object {
+		const { appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const fontSize = deviceWidth * 0.06;
 
 		const searchIconSize = deviceWidth * 0.09;
+		const fontSizeLabel = Math.floor(deviceWidth * 0.045);
+
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const labelBoxPadding = deviceWidth * 0.07;
 
 		return {
 			container: {
 				flex: 1,
-			  },
-			  body: {
-				  flex: 1,
-			  },
-			  mapViewCover: {
-				  flex: 1,
-				  marginTop: (deviceWidth * Theme.Core.paddingFactor) / 2,
-				  borderRadius: 4,
-				  overflow: 'hidden',
-			  },
-			  map: {
+			},
+			body: {
+				flex: 1,
+			},
+			mapViewCover: {
+				flex: 1,
+				marginTop: padding / 2,
+				borderRadius: 4,
+				overflow: 'hidden',
+			},
+			map: {
 				flex: 1,
 				overflow: 'hidden',
-			  },
-			  address: {
+			},
+			labelStyle: {
+				position: 'absolute',
+				color: '#e26901',
+				fontSize: fontSizeLabel,
+				top: labelBoxPadding,
+				left: labelBoxPadding,
+				elevation: 5,
+			},
+			searchBoxContainer: {
+				flex: 0,
+				backgroundColor: '#fff',
+				marginTop: deviceWidth * Theme.Core.paddingFactor,
+				padding: labelBoxPadding,
+				justifyContent: 'center',
+				...Theme.Core.shadow,
+				borderRadius: 2,
+			},
+			textInputContainer: {
+				width: '100%',
+				borderTopWidth: 0,
+				borderBottomWidth: 0,
+				backgroundColor: 'transparent',
+				marginTop: labelBoxPadding * 0.8,
+			},
+			textInput: {
+				paddingLeft: labelBoxPadding + 15,
+				color: '#A59F9A',
+				fontSize,
+
+				// override default styles.
+				height: undefined,
+				borderRadius: 0,
+				paddingTop: 0,
+				paddingBottom: 0,
+				paddingRight: 0,
+				marginTop: 0,
+				marginLeft: 0,
+				marginRight: 0,
+			},
+			iconStyle: {
+				position: 'absolute',
+				elevation: 5,
+				zIndex: 3,
+			},
+			address: {
 				width: deviceWidth * 0.75,
 				paddingLeft: 35 + fontSize,
 				color: '#A59F9A',
 				fontSize,
 				marginTop: 10 + fontSize,
 				marginBottom: fontSize,
-			  },
-			  hContainer: {
+			},
+			hContainer: {
 				  position: 'absolute',
 				  right: deviceWidth * 0.124,
 				  top: deviceWidth * 0.088,
 				  flex: 1,
 				  alignItems: 'flex-end',
-			  },
-			  h: {
+			},
+			h: {
 				  color: '#fff',
 				  backgroundColor: 'transparent',
-			  },
-			  h1: {
+			},
+			h1: {
 				  fontSize: deviceWidth * 0.085333333,
-			  },
-			  h2: {
+			},
+			h2: {
 				  fontSize: deviceWidth * 0.053333333,
-			  },
-			  searchButtonStyle: {
+			},
+			searchButtonStyle: {
 				right: deviceWidth * 0.053333333,
 				elevation: 10,
 				bottom: undefined,
@@ -373,12 +445,13 @@ class GeoPosition extends View {
 				height: searchIconSize,
 				width: searchIconSize,
 				borderRadius: searchIconSize / 2,
-			  },
-			  submitButtonStyle: {
+			},
+			submitButtonStyle: {
 				right: deviceWidth * 0.053333333,
 				elevation: 10,
 			},
 			searchIconSize: deviceWidth * 0.053333333,
+			iconSize: Math.floor(deviceWidth * 0.09),
 		};
 	}
 }

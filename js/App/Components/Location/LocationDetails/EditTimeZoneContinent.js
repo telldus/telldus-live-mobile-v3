@@ -44,16 +44,10 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
-	rootNavigator: Object,
-};
-
-type State = {
-	autodetectedTimezone: string,
 };
 
 class EditTimeZoneContinent extends View {
 	props: Props;
-	state: State;
 
 	labelAutodetect: string;
 	h1: string;
@@ -64,27 +58,8 @@ class EditTimeZoneContinent extends View {
 	onPressAutodetect: () => void;
 	onPressAutodetected: () => void;
 
-	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		let { currentScreen, navigation } = props;
-		if (currentScreen === 'EditTimeZoneContinent') {
-			const { autodetectedTimezone } = navigation.state.params;
-			if (autodetectedTimezone && (autodetectedTimezone !== state.autodetectedTimezone)) {
-				return {
-					autodetectedTimezone,
-				};
-			}
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
-
-		const { navigation } = props;
-		const { autodetectedTimezone } = navigation.state.params;
-		this.state = {
-			autodetectedTimezone,
-		};
 
 		let { formatMessage } = props.intl;
 
@@ -123,9 +98,10 @@ class EditTimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent: string) {
-		let { actions, navigation } = this.props;
+		const { actions, navigation } = this.props;
+		const id = navigation.getParam('id', null);
 		if (continent === 'UTC') {
-			actions.setTimezone(navigation.state.params.id, continent).then(() => {
+			actions.setTimezone(id, continent).then(() => {
 				actions.getGateways();
 				navigation.goBack();
 			}).catch(() => {
@@ -134,16 +110,16 @@ class EditTimeZoneContinent extends View {
 		} else {
 			let data = differenceWith(timeZone, [continent], (v1: string, v2: string): boolean => {
 				let items = v1.split('/');
-				let flag = items[0] === v2 ? false : true;
-				return flag;
+				return !(items[0] === v2);
 			});
-			navigation.push('EditTimeZoneCity', {cities: data, continent, id: navigation.state.params.id});
+			navigation.navigate('EditTimeZoneCity', {cities: data, continent, id});
 		}
 	}
 
 	onPressAutodetect() {
 		const { actions, navigation } = this.props;
-		actions.setTimezone(navigation.state.params.id, '').then(() => {
+		const id = navigation.getParam('id', null);
+		actions.setTimezone(id, '').then(() => {
 			actions.getGateways();
 			navigation.goBack();
 		}).catch(() => {
@@ -153,8 +129,9 @@ class EditTimeZoneContinent extends View {
 
 	onPressAutodetected() {
 		const { actions, navigation } = this.props;
-		const { autodetectedTimezone } = this.state;
-		actions.setTimezone(navigation.state.params.id, autodetectedTimezone).then(() => {
+		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
+		const id = navigation.getParam('id', null);
+		actions.setTimezone(id, autodetectedTimezone).then(() => {
 			actions.getGateways();
 			navigation.goBack();
 		}).catch(() => {
@@ -163,8 +140,8 @@ class EditTimeZoneContinent extends View {
 	}
 
 	render(): Object {
-		const { appLayout } = this.props;
-		const { autodetectedTimezone } = this.state;
+		const { appLayout, navigation } = this.props;
+		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
 		const styles = this.getStyle(appLayout);
 
 		return (

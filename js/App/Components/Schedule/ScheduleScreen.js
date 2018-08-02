@@ -29,9 +29,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FullPageActivityIndicator, View, DialogueBox } from '../../../BaseComponents';
-import { SchedulePoster } from './SubViews';
-import { getRelativeDimensions } from '../../Lib';
+import { FullPageActivityIndicator, View, DialogueBox, NavigationHeaderPoster } from '../../../BaseComponents';
 import Theme from '../../Theme';
 
 import * as scheduleActions from '../../Actions/Schedule';
@@ -112,12 +110,8 @@ class ScheduleScreen extends View<null, Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let {navigation, screenProps} = this.props;
-		if (screenProps.currentScreen === 'InitialScreen') {
-			screenProps.rootNavigator.goBack();
-			return true;
-		}
-		navigation.dispatch({ type: 'Navigation/BACK'});
+		let { navigation } = this.props;
+		navigation.pop();
 		return true;
 	}
 
@@ -175,8 +169,12 @@ class ScheduleScreen extends View<null, Props, State> {
 					flex: 1,
 					opacity: loading ? 0 : 1,
 				}}>
-					<SchedulePoster h1={h1} h2={h2} infoButton={infoButton} screenProps={screenProps} navigation={navigation}
-						intl={intl} appLayout={appLayout}/>
+					<NavigationHeaderPoster
+						h1={h1} h2={h2}
+						infoButton={infoButton}
+						align={'right'}
+						navigation={navigation}
+						{...screenProps}/>
 					<View style={style}>
 						{React.cloneElement(
 							children,
@@ -212,8 +210,9 @@ class ScheduleScreen extends View<null, Props, State> {
 	}
 
 	_isEditMode = (): boolean => {
-		const { params } = this.props.navigation.state;
-		return params && params.editMode;
+		const { navigation } = this.props;
+		const editMode = navigation.getParam('editMode', false);
+		return editMode;
 	};
 
 	_getStyle = (appLayout: Object): Object => {
@@ -223,9 +222,10 @@ class ScheduleScreen extends View<null, Props, State> {
 		const deviceHeight = isPortrait ? height : width;
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		let { state } = this.props.screenProps.rootNavigator;
+		const { navigation } = this.props;
+		const editMode = navigation.getParam('editMode', false);
 
-		const notEdit = (this.props.screenProps.currentScreen === 'InitialScreen' && !state.params.editMode)
+		const notEdit = (this.props.screenProps.currentScreen === 'InitialScreen' && (!editMode))
 			|| this.props.screenProps.currentScreen !== 'InitialScreen';
 		return {
 			style: {
@@ -246,17 +246,17 @@ type mapStateToPropsType = {
 	schedule: Schedule,
 	devices: Object,
 	modal: Object,
-	App: Object,
+	app: Object,
 };
 
-const mapStateToProps = ({ schedule, devices, modal, App }: mapStateToPropsType): Object => (
+const mapStateToProps = ({ schedule, devices, modal, app }: mapStateToPropsType): Object => (
 	{
 		schedule,
 		devices,
 		validationMessage: modal.data,
 		showModal: modal.openModal,
 		modalExtras: modal.extras,
-		appLayout: getRelativeDimensions(App.layout),
+		appLayout: app.layout,
 	}
 );
 

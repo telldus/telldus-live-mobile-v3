@@ -58,6 +58,11 @@ export default {
 	sectionTextColor: '#8e8e93',
 	rowTextColor: '#8e8e93',
 	eulaContentColor: '#555555',
+	inactiveTintColor: '#A59F9A',
+
+	rippleColor: '#efefef',
+	rippleOpacity: 0.9,
+	rippleDuration: 600,
 
 	offlineColor: '#b5b5b5',
 

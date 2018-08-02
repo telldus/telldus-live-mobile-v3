@@ -26,7 +26,6 @@ import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
-import isEqual from 'lodash/isEqual';
 
 import { View, FloatingButton } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
@@ -34,7 +33,7 @@ import { getGateways, addNewGateway, showToast } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
-import { getRelativeDimensions, getTabBarIcon } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -48,15 +47,13 @@ const messages = defineMessages({
 
 type Props = {
 	rows: Array<Object>,
+	screenProps: Object,
+	navigation: Object,
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
-	screenProps: Object,
-	appLayout: Object,
 };
 
 type State = {
-	dataSource: Array<Object>,
-	settings: boolean,
 	isLoading: boolean,
 	isRefreshing: boolean,
 };
@@ -82,24 +79,12 @@ class GatewaysTab extends View {
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'gateways'),
 	});
 
-	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const isRowsEqual = isEqual(state.dataSource, props.rows);
-		if (!isRowsEqual) {
-			return {
-				dataSource: props.rows,
-			};
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 
 		let { formatMessage } = props.screenProps.intl;
 
 		this.state = {
-			dataSource: this.props.rows,
-			settings: false,
 			isLoading: false,
 			isRefreshing: false,
 		};
@@ -112,14 +97,20 @@ class GatewaysTab extends View {
 		this.addLocation = this.addLocation.bind(this);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { currentScreen } = nextProps.screenProps;
+		return currentScreen === 'Gateways';
+	}
+
 	onRefresh() {
 		this.props.dispatch(getGateways());
 	}
 
 	renderRow(item: Object): Object {
-		let { stackNavigator, intl } = this.props.screenProps;
+		const { navigation, screenProps } = this.props;
+		const { intl } = screenProps;
 		return (
-			<GatewayRow location={item.item} stackNavigator={stackNavigator} intl={intl}/>
+			<GatewayRow location={item.item} navigation={navigation} intl={intl}/>
 		);
 	}
 
@@ -133,7 +124,7 @@ class GatewaysTab extends View {
 		});
 		this.props.addNewLocation()
 			.then((response: Object) => {
-				this.props.screenProps.stackNavigator.push('AddLocation', {clients: response.client, renderRootHeader: true});
+				this.props.navigation.navigate('AddLocation', {clients: response.client});
 				this.setState({
 					isLoading: false,
 				});
@@ -147,7 +138,7 @@ class GatewaysTab extends View {
 	}
 
 	getPadding(): number {
-		const { appLayout } = this.props;
+		const { appLayout } = this.props.screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -156,10 +147,12 @@ class GatewaysTab extends View {
 
 	render(): Object {
 		const padding = this.getPadding();
+		const { rows } = this.props;
+
 		return (
 			<View style={{flex: 1}}>
 				<FlatList
-					data={this.state.dataSource}
+					data={rows}
 					renderItem={this.renderRow}
 					onRefresh={this.onRefresh}
 					refreshing={this.state.isRefreshing}
@@ -187,7 +180,6 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
-		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 

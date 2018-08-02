@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import isEqual from 'lodash/isEqual';
 
 import { View } from '../../../../BaseComponents';
 import ShowMoreButton from './Device/ShowMoreButton';
@@ -34,7 +33,7 @@ import NavigationalDashboardTile from './NavigationalDashboardTile';
 import BellDashboardTile from './BellDashboardTile';
 import ToggleDashboardTile from './ToggleDashboardTile';
 
-import { getLabelDevice, getPowerConsumed } from '../../../Lib';
+import { getLabelDevice, getPowerConsumed, shouldUpdate } from '../../../Lib';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -43,10 +42,9 @@ type Props = {
     tileWidth: number,
     intl: Object,
     powerConsumed?: number,
-    appLayout: Object,
-    setScrollEnabled: (boolean) => void,
-    isGatewayActive: boolean,
+	appLayout: Object,
     style: Object,
+    setScrollEnabled: (boolean) => void,
 };
 
 type State = {
@@ -74,15 +72,28 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	const isStateEqual = isEqual(this.state, nextState);
-	const isPropsEqual = isEqual(this.props, nextProps);
+	const { showMoreActions } = this.state;
+	if (showMoreActions !== nextState.showMoreActions) {
+		return true;
+	}
 
-	return !isStateEqual || !isPropsEqual;
+	const { tileWidth, ...others } = this.props;
+	const { tileWidth: tileWidthN, ...othersN } = nextProps;
+	if (tileWidth !== tileWidthN) {
+		return true;
+	}
+
+	const propsChange = shouldUpdate(others, othersN, ['item', 'powerConsumed']);
+	if (propsChange) {
+		return true;
+	}
+
+	return false;
 }
 
 getButtonsInfo(item: Object, styles: Object): Object {
-	let { supportedMethods, isInState } = item, buttons = [], buttonsInfo = [];
-	let { tileWidth, setScrollEnabled, isGatewayActive } = this.props;
+	let { supportedMethods, isInState, isOnline } = item, buttons = [], buttonsInfo = [];
+	let { tileWidth, setScrollEnabled } = this.props;
 	const {
 		TURNON,
 		TURNOFF,
@@ -94,7 +105,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	} = supportedMethods;
 
 	if (BELL) {
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
 
 		buttons.unshift(<BellDashboardTile key={4} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
 		buttonsInfo.unshift({
@@ -106,7 +117,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	if (UP || DOWN || STOP) {
 		const showStopButton = !TURNON && !TURNOFF && !BELL && !DIM;
 		const width = showStopButton ? tileWidth : tileWidth * (2 / 3);
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'STOP' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		buttons.unshift(<NavigationalDashboardTile key={1} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}
@@ -120,7 +131,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	if (DIM) {
 		const showSlider = !BELL && !UP && !DOWN && !STOP;
 		const width = showSlider ? tileWidth : tileWidth * (2 / 3);
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		buttons.unshift(<DimmerDashboardTile key={2} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}
@@ -134,7 +145,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	if ((TURNON || TURNOFF) && !DIM) {
 		const showMoreButtons = BELL || UP || DOWN || STOP;
 		const width = !showMoreButtons ? tileWidth : tileWidth * (2 / 3);
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		buttons.unshift(<ToggleDashboardTile key={3} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
@@ -145,7 +156,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	}
 
 	if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		buttons.unshift(<ToggleDashboardTile key={5} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
@@ -208,6 +219,7 @@ render(): Object {
 						showModal={showMoreActions}
 						buttons={buttons}
 						name={deviceName}
+						item={item}
 						closeModal={this.closeMoreActions}
 					/>
 				)}
@@ -260,7 +272,7 @@ getStyles(appLayout: Object, tileWidth: number): Object {
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 		powerConsumed,
 	};
 }

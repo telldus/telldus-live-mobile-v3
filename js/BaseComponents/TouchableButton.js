@@ -28,7 +28,6 @@ import { intlShape, injectIntl } from 'react-intl';
 import i18n from '../App/Translations/common';
 import Text from './Text';
 import Theme from '../App/Theme';
-import { getRelativeDimensions } from '../App/Lib';
 
 type Props = {
 	style?: Object | number | Array<any>,
@@ -135,7 +134,7 @@ class TouchableButton extends Component<Props, void> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: state.app.layout,
 	};
 }
 
