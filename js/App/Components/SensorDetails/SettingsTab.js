@@ -25,6 +25,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
+const isEqual = require('react-fast-compare');
 
 import { View, TabBar, Text } from '../../../BaseComponents';
 import { SettingsRow } from './SubViews';
@@ -37,19 +38,15 @@ import {
 	getSensors,
 	setIgnoreSensor,
 } from '../../Actions';
+import { shouldUpdate } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 const messages = defineMessages({
-	showOnDashborad: {
-		id: 'showOnDashboard',
-		defaultMessage: 'Show on dashboard',
-		description: 'Select if this item should be shown on the dashboard',
-	},
 	hideFromList: {
-		id: 'hideFromList',
-		defaultMessage: 'Hide from device list',
-		description: 'Select if this item should be shown on the device list',
+		id: 'sensor.hideFromList',
+		defaultMessage: 'Hide from sensor list',
+		description: 'Select if this item should be shown on the sensor list',
 	},
 });
 
@@ -57,9 +54,10 @@ type Props = {
 	dispatch: Function,
 	sensor: Object,
 	inDashboard: boolean,
+
+	screenProps: Object,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
-	screenProps: Object,
 };
 
 type State = {
@@ -100,13 +98,37 @@ class SettingsTab extends View {
 			keepHistory: props.sensor.keepHistory,
 		};
 
-		let { formatMessage } = props.screenProps.intl;
+		const { formatMessage } = props.screenProps.intl;
 
 		this.addedToHiddenList = formatMessage(i18n.deviceAddedToHiddenList);
 		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
 
 		this.toastStoreHistory = formatMessage(i18n.toastStoreHistory);
 		this.toastStoreNotHistory = formatMessage(i18n.toastStoreNotHistory);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
+		const { currentScreen, appLayout } = screenPropsN;
+		if (currentScreen === 'Settings') {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+
+			const { screenProps, inDashboard, ...others } = this.props;
+			if ((screenProps.appLayout.width !== appLayout.width) || (inDashboardN !== inDashboard)) {
+				return true;
+			}
+
+			const propsChange = shouldUpdate(others, othersN, ['sensor']);
+			if (propsChange) {
+				return true;
+			}
+
+			return false;
+		}
+		return false;
 	}
 
 	onValueChange(value: boolean) {
@@ -157,8 +179,13 @@ class SettingsTab extends View {
 		});
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentScreen === 'Settings';
+	formatProtocol(protocol: string): string {
+		switch (protocol) {
+			case 'zwave':
+				return 'Z-Wave';
+			default:
+				return protocol;
+		}
 	}
 
 	render(): Object {
@@ -177,7 +204,7 @@ class SettingsTab extends View {
 			<ScrollView>
 				<View style={container}>
 					<SettingsRow
-						label={formatMessage(messages.showOnDashborad)}
+						label={formatMessage(i18n.showOnDashborad)}
 						onValueChange={this.onValueChange}
 						value={inDashboard}
 						appLayout={appLayout}
@@ -200,7 +227,7 @@ class SettingsTab extends View {
 					<SettingsRow
 						type={'text'}
 						label={formatMessage(i18n.labelProtocol)}
-						value={protocol}
+						value={this.formatProtocol(protocol)}
 						appLayout={appLayout}
 					/>
 					<SettingsRow
