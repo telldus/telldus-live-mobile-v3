@@ -27,6 +27,7 @@ import { StyleSheet, TouchableOpacity, BackHandler, Platform, ScrollView } from 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+const isEqual = require('react-fast-compare');
 
 import Text from './Text';
 import View from './View';
@@ -34,6 +35,8 @@ import Poster from './Poster';
 import BlockIcon from './BlockIcon';
 import NavigationHeader from './NavigationHeader';
 import RoundedInfoButton from './RoundedInfoButton';
+
+import { shouldUpdate } from '../App/Lib';
 
 import Theme from '../App/Theme';
 
@@ -49,15 +52,16 @@ type Props = {
     h1: string,
     h2: string,
 	icon: string,
-    navigation: Object,
-    handleBackPress: () => boolean,
-    intl: Object,
     appLayout: Object,
     showBackButton?: boolean,
-    posterCoverStyle?: Array<any> | Object | number,
     align?: 'right' | 'center',
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
+
+	navigation: Object,
+    handleBackPress: () => boolean,
+    intl: Object,
+	posterCoverStyle?: Array<any> | Object | number,
 };
 
 type DefaultProps = {
@@ -123,6 +127,26 @@ componentDidMount() {
 	BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 }
 
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const isStateEqual = isEqual(this.state, nextState);
+	if (!isStateEqual) {
+		return true;
+	}
+
+	const { appLayout, h1, h2, ...others } = this.props;
+	const { appLayout: appLayoutN, h1: h1N, h2: h2N, ...othersN} = nextProps;
+	if (appLayout.width !== appLayoutN.width || h1 !== h1N || h2 !== h2N) {
+		return true;
+	}
+
+	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton']);
+	if (propsChange) {
+		return true;
+	}
+
+	return false;
+}
+
 componentWillUnmount() {
 	BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 }
@@ -180,7 +204,7 @@ render(): Object {
 	const isPortrait = height > width;
 
 	const adjustItems = !this.isTablet && !isPortrait;
-
+	console.log('TEST IN NHP');
 	const {
 		posterCover,
 		iconBackground,

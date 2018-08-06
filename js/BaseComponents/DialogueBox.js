@@ -35,11 +35,12 @@ import i18n from '../App/Translations/common';
 
 type Props = {
 	showDialogue?: boolean,
-	style?: number | Object | Array<any>,
-	entryDuration?: number,
-	exitDuration?: number,
+	appLayout: Object,
+
 	text: string,
 	header?: string,
+	entryDuration?: number,
+	exitDuration?: number,
 	showPositive: boolean,
 	showNegative: boolean,
 	positiveText?: string,
@@ -47,8 +48,8 @@ type Props = {
 	onPressPositive?: () => void,
 	onPressNegative?: () => void,
 	intl: intlShape.isRequired,
-	appLayout: Object,
 	accessibilityLabel?: string,
+	style?: number | Object | Array<any>,
 };
 
 type defaultProps = {
@@ -111,6 +112,19 @@ class DialogueBox extends Component<Props, null> {
 		this.labelPress = `${this.props.intl.formatMessage(i18n.labelPress)}!`;
 		this.labelToConfirm = `${this.props.intl.formatMessage(i18n.labelToConfirm)}!`;
 		this.labelToReturn = `${this.props.intl.formatMessage(i18n.labelToReturn)}!`;
+	}
+
+	shouldComponentUpdate(nextProps: Object): boolean {
+		const { showDialogue, appLayout } = this.props;
+		if (showDialogue !== nextProps.showDialogue) {
+			return true;
+		}
+
+		if (appLayout.width !== nextProps.appLayout.width) {
+			return true;
+		}
+
+		return false;
 	}
 
 	onPressNegative() {
