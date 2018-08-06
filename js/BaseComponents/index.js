@@ -79,6 +79,7 @@ import CheckBoxIconText from './CheckBoxIconText';
 import NavigationHeader from './NavigationHeader';
 import NavigationHeaderPoster from './NavigationHeaderPoster';
 import SettingsRow from './SettingsRow';
+import LocationDetails from './LocationDetails';
 
 import {
 	AppState,
@@ -149,6 +150,7 @@ module.exports = {
 	NavigationHeader,
 	NavigationHeaderPoster,
 	SettingsRow,
+	LocationDetails,
 
 	AppState: AppState,
 	Dimensions: Dimensions,

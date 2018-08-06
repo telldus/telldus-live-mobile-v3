@@ -20,14 +20,12 @@
 
 'use strict';
 
-import DeviceLocationDetail from './DeviceLocationDetail';
 import DeviceHistoryDetails from './DeviceHistoryDetails';
 import HistoryRow from './HistoryRow';
 import DeviceActionDetails from './DeviceActionDetails';
 import DeviceDetailsHeaderPoster from './DeviceDetailsHeaderPoster';
 
 module.exports = {
-	DeviceLocationDetail,
 	DeviceHistoryDetails,
 	HistoryRow,
 	DeviceActionDetails,

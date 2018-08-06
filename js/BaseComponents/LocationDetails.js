@@ -21,11 +21,13 @@
 
 'use strict';
 
-import React from 'react';
-import { connect } from 'react-redux';
-import { Text, View } from '../../../../BaseComponents';
+import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
-import Theme from '../../../Theme';
+import { connect } from 'react-redux';
+
+import Text from './Text';
+import View from './View';
+import Theme from '../App/Theme';
 type Props = {
 	title?: any,
 	image: string,
@@ -39,19 +41,14 @@ type Props = {
 	infoContainerStyle?: any,
 };
 
-type State = {
-};
 
-class DeviceLocationDetail extends View {
+class LocationDetails extends Component<Props, null> {
 	props: Props;
-	state: State;
 
 	onPress: () => void;
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-		};
 
 		this.onPress = this.onPress.bind(this);
 	}
@@ -69,9 +66,9 @@ class DeviceLocationDetail extends View {
 
 	render(): Object {
 
-		let { title, H1, H2, image, style, appLayout, accessible, info, onPress, infoContainerStyle } = this.props;
+		const { title, H1, H2, image, style, appLayout, accessible, info, onPress, infoContainerStyle } = this.props;
 
-		let {
+		const {
 			container,
 			locationImageContainer,
 			locationTextContainer,
@@ -175,4 +172,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(DeviceLocationDetail);
+module.exports = connect(mapStateToProps, null)(LocationDetails);

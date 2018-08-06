@@ -24,13 +24,12 @@
 'use strict';
 
 import React from 'react';
-import { View, Image } from '../../../../../BaseComponents';
+import { View, Image, LocationDetails } from '../../../../../BaseComponents';
 import { defineMessages } from 'react-intl';
 
 import Theme from '../../../../Theme';
 
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
-import DeviceLocationDetail from '../../../DeviceDetails/SubViews/DeviceLocationDetail';
 
 const messages = defineMessages({
 	locationDetected: {
@@ -90,7 +89,7 @@ export default class Clients extends View {
 				<View style={styles.arrow}>
 					<Image source={require('../../../TabViews/img/right-arrow-key.png')} style={styles.image}/>
 				</View>
-				<DeviceLocationDetail {...locationData} accessible={false} style={styles.locationDetails}/>
+				<LocationDetails {...locationData} accessible={false} style={styles.locationDetails}/>
 			</View>
 		);
 	}

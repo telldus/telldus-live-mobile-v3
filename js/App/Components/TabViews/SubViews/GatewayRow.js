@@ -24,8 +24,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { View, Image } from '../../../../BaseComponents';
-import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDetail';
+import { View, Image, LocationDetails } from '../../../../BaseComponents';
 
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
@@ -85,7 +84,7 @@ class GatewayRow extends PureComponent<Props, State> {
 		return (
 			<View style={styles.rowItemsCover}>
 				<Image source={require('../../TabViews/img/right-arrow-key.png')} tintColor="#A59F9A90" style={styles.arrow}/>
-				<DeviceLocationDetail {...locationData}
+				<LocationDetails {...locationData}
 					style={styles.locationDetails}
 					onPress={this.onPressGateway}/>
 			</View>

@@ -28,13 +28,12 @@ import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 import { defineMessages } from 'react-intl';
 
-import { View, TabBar } from '../../../BaseComponents';
+import { View, TabBar, LocationDetails } from '../../../BaseComponents';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 import {
 	DeviceActionDetails,
-	DeviceLocationDetail,
 } from './SubViews';
 import Theme from '../../Theme';
 
@@ -140,7 +139,7 @@ class OverviewTab extends View<Props, null> {
 						isGatewayActive={isGatewayActive}
 						containerStyle={styles.actionDetails}/>
 				)}
-				<DeviceLocationDetail {...locationData} style={styles.LocationDetail}/>
+				<LocationDetails {...locationData} style={styles.LocationDetail}/>
 			</ScrollView>
 		);
 	}

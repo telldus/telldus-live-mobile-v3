@@ -26,8 +26,7 @@ import { ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
-import { View, TabBar } from '../../../BaseComponents';
-import { DeviceLocationDetail } from '../DeviceDetails/SubViews';
+import { View, TabBar, LocationDetails } from '../../../BaseComponents';
 import { SensorTypes, BatteryInfo } from './SubViews';
 
 import { getSensorInfo } from '../../Actions';
@@ -151,7 +150,7 @@ class OverviewTab extends View<Props, State> {
 					/>
 				}>
 				<SensorTypes sensor={sensor} intl={intl} appLayout={appLayout}/>
-				<DeviceLocationDetail
+				<LocationDetails
 					{...locationData}
 					style={LocationDetailsStyle}
 					infoContainerStyle={infoContainerStyle}/>
