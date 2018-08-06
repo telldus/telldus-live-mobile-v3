@@ -99,8 +99,8 @@ class SettingsTab extends View {
 
 		const { formatMessage } = props.screenProps.intl;
 
-		this.addedToHiddenList = formatMessage(i18n.deviceAddedToHiddenList);
-		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
+		this.addedToHiddenList = formatMessage(i18n.sensorAddedToHiddenList);
+		this.removedFromHiddenList = formatMessage(i18n.sensorRemovedFromHiddenList);
 
 		this.toastStoreHistory = formatMessage(i18n.toastStoreHistory);
 		this.toastStoreNotHistory = formatMessage(i18n.toastStoreNotHistory);
@@ -139,18 +139,18 @@ class SettingsTab extends View {
 	}
 
 	setIgnoreSensor(value: boolean) {
-		let { sensor } = this.props;
-		let ignore = sensor.ignored ? 0 : 1;
+		const { sensor } = this.props;
+		const ignore = sensor.ignored ? 0 : 1;
 		this.setState({
 			isHidden: value,
 		});
 		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
-			let message = sensor.ignored ?
+			const message = !value ?
 				this.removedFromHiddenList : this.addedToHiddenList;
 			this.props.dispatch(getSensors());
 			this.props.dispatch(showToast(message));
 		}).catch((err: Object) => {
-			let	message = err.message ? err.message : null;
+			const	message = err.message ? err.message : null;
 			this.setState({
 				isHidden: sensor.ignored,
 			});
@@ -159,18 +159,18 @@ class SettingsTab extends View {
 	}
 
 	setKeepHistory(value: boolean) {
-		let { sensor } = this.props;
-		let keepHistory = sensor.keepHistory ? 0 : 1;
+		const { sensor } = this.props;
+		const keepHistory = sensor.keepHistory ? 0 : 1;
 		this.setState({
 			keepHistory: value,
 		});
 		this.props.dispatch(setKeepHistory(sensor.id, keepHistory)).then((res: Object) => {
-			let message = sensor.keepHistory ?
+			const message = !value ?
 				this.toastStoreNotHistory : this.toastStoreHistory;
 			this.props.dispatch(getSensors());
 			this.props.dispatch(showToast(message));
 		}).catch((err: Object) => {
-			let	message = err.message ? err.message : null;
+			const	message = err.message ? err.message : null;
 			this.setState({
 				keepHistory: sensor.keepHistory,
 			});
