@@ -131,7 +131,7 @@ class OverviewTab extends View<Props, null> {
 		const styles = this.getStyles(appLayout, hasActions);
 
 		return (
-			<ScrollView contentContainerStyle={styles.itemsContainer}>
+			<ScrollView style={{flex: 1}} contentContainerStyle={styles.itemsContainer}>
 				{hasActions && (
 					<DeviceActionDetails
 						device={device}
@@ -153,20 +153,20 @@ class OverviewTab extends View<Props, null> {
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
-			container: {
-				flex: 0,
-				alignItems: 'center',
-				justifyContent: 'center',
-			},
 			itemsContainer: {
-				justifyContent: 'center',
-				margin: padding,
+				flexGrow: 1,
+				marginTop: padding,
 			},
 			LocationDetail: {
+				flex: 0,
 				marginTop: hasActions ? (padding / 2) : 0,
+				marginBottom: padding,
+				marginHorizontal: padding,
 			},
 			actionDetails: {
+				flex: 0,
 				marginTop: 0,
+				marginHorizontal: padding,
 			},
 		};
 	}
