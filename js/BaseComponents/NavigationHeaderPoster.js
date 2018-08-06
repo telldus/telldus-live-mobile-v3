@@ -204,7 +204,7 @@ render(): Object {
 	const isPortrait = height > width;
 
 	const adjustItems = !this.isTablet && !isPortrait;
-	console.log('TEST IN NHP');
+
 	const {
 		posterCover,
 		iconBackground,
