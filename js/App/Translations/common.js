@@ -684,6 +684,11 @@ const messages = defineMessages({
 		id: 'label.id',
 		defaultMessage: 'ID',
 	},
+	showOnDashborad: {
+		id: 'label.showOnDashboard',
+		defaultMessage: 'Show on dashboard',
+		description: 'Select if this item should be shown on the dashboard',
+	},
 });
 
 export default messages;

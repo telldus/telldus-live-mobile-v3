@@ -37,11 +37,6 @@ import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 const messages = defineMessages({
-	showOnDashborad: {
-		id: 'showOnDashboard',
-		defaultMessage: 'Show on dashboard',
-		description: 'Select if this item should be shown on the dashboard',
-	},
 	hideFromList: {
 		id: 'hideFromList',
 		defaultMessage: 'Hide from device list',
@@ -156,7 +151,7 @@ class SettingsTab extends View {
 					<View style={ShowOnDashCover}>
 						<View style={textShowOnDashCover}>
 							<Text style={textShowOnDash}>
-								<FormattedMessage {...messages.showOnDashborad} style={textShowOnDash}/>
+								<FormattedMessage {...i18n.showOnDashborad} style={textShowOnDash}/>
 							</Text>
 						</View>
 						<Switch
