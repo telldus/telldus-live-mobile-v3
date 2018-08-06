@@ -53,7 +53,7 @@ class SettingsRow extends Component<Props, null> {
 		super(props);
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	shouldComponentUpdate(nextProps: Object): boolean {
 		const { appLayout, value } = this.props;
 		const { appLayout: appLayoutN, value: valueN } = nextProps;
 		return appLayout.width !== appLayoutN.width || value !== valueN;
