@@ -21,17 +21,20 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 
-import { Text, View, Switch } from '../../../../BaseComponents';
-import Theme from '../../../Theme';
+import Text from './Text';
+import View from './View';
+import Switch from './Switch';
+import Theme from '../App/Theme';
 
 type Props = {
     value: boolean,
     label: string,
-    appLayout: Object,
-	onValueChange: (boolean) => void,
+	appLayout: Object,
+
 	type?: 'switch' | 'text',
+	onValueChange: (boolean) => void,
 };
 
 type DefaultProps = {
@@ -39,7 +42,7 @@ type DefaultProps = {
 };
 
 
-class SettingsRow extends View<Props, null> {
+class SettingsRow extends Component<Props, null> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {
@@ -48,6 +51,12 @@ class SettingsRow extends View<Props, null> {
 
 	constructor(props: Props) {
 		super(props);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { appLayout, value } = this.props;
+		const { appLayout: appLayoutN, value: valueN } = nextProps;
+		return appLayout.width !== appLayoutN.width || value !== valueN;
 	}
 
 	render(): Object {

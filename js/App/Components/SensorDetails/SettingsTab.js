@@ -27,8 +27,7 @@ import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
-import { View, TabBar, Text } from '../../../BaseComponents';
-import { SettingsRow } from './SubViews';
+import { View, TabBar, Text, SettingsRow } from '../../../BaseComponents';
 
 import {
 	addToDashboard,
