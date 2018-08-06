@@ -24,6 +24,7 @@
 import React from 'react';
 import { ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
+const isEqual = require('react-fast-compare');
 
 import { View, TabBar } from '../../../BaseComponents';
 import { DeviceLocationDetail } from '../DeviceDetails/SubViews';
@@ -37,8 +38,10 @@ import i18n from '../../Translations/common';
 
 type Props = {
 	sensor: Object,
+	gatewayType: string,
+	gatewayName: string,
+
 	screenProps: Object,
-	gateway: Object,
 	getSensorInfo: (id: number, includeUnit: 1 | 0) => Promise<any>,
 };
 
@@ -93,20 +96,41 @@ class OverviewTab extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentScreen === 'Overview';
+		const { screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN } = nextProps;
+		const { currentScreen, appLayout } = screenPropsN;
+		if (currentScreen === 'Overview') {
+
+			const { isRefreshing } = this.state;
+			if (isRefreshing !== nextState.isRefreshing) {
+				return true;
+			}
+
+			const { screenProps, gatewayName, sensor } = this.props;
+			if ((screenProps.appLayout.width !== appLayout.width) || (gatewayName !== gatewayNameN)) {
+				return true;
+			}
+
+			if (!isEqual(sensor, sensorN)) {
+				return true;
+			}
+
+			return false;
+		}
+
+		return false;
 	}
 
 	render(): Object {
 		const { isRefreshing } = this.state;
-		const { sensor, screenProps, gateway } = this.props;
+		const { sensor, screenProps, gatewayName, gatewayType } = this.props;
 		const { battery } = sensor;
 		const { intl, appLayout } = screenProps;
-		const locationImageUrl = getLocationImageUrl(gateway.type);
+		const locationImageUrl = getLocationImageUrl(gatewayType);
 		const locationData = {
 			title: this.boxTitle,
 			image: locationImageUrl,
-			H1: gateway.name,
-			H2: gateway.type,
+			H1: gatewayName,
+			H2: gatewayType,
 		};
 
 		const {
@@ -179,10 +203,12 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const sensor = state.sensors.byId[id];
 	const { clientId } = sensor;
+	const { name: gatewayName, type: gatewayType } = state.gateways.byId[clientId];
 
 	return {
 		sensor,
-		gateway: state.gateways.byId[clientId],
+		gatewayType,
+		gatewayName,
 	};
 }
 
