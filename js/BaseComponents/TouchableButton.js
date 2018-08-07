@@ -113,8 +113,8 @@ class TouchableButton extends Component<Props, void> {
 			buttonContainer: {
 				backgroundColor: btnPrimaryBg,
 				paddingVertical: 18,
-				width: deviceWidth * 0.5,
-				maxWidth: 250,
+				maxWidth: width * 0.9,
+				minWidth: width * 0.5,
 				borderRadius: 18 + fontSize,
 				alignSelf: 'center',
 				alignItems: 'center',
