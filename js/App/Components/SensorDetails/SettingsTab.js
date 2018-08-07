@@ -318,10 +318,11 @@ class SettingsTab extends View {
 	}
 
 	closeModal() {
+		const { dialogueConfig } = this.state;
 		this.setState({
 			dialogueConfig: {
 				show: false,
-				action: null,
+				action: dialogueConfig.action,
 			},
 		});
 	}
@@ -410,33 +411,22 @@ class SettingsTab extends View {
 
 	prepareDialogueConfig({ show, action }: Object): Object {
 		const { formatMessage } = this.props.screenProps.intl;
-		let config = {
-			showDialogue: false,
-			dialogueHeader: `${formatMessage(messages.clearHistory).toUpperCase()}?`,
-			message: formatMessage(messages.messageClearHistory),
-			positiveText: formatMessage(i18n.delete).toUpperCase(),
-			onPressPositive: this.onConfirmClearHistory,
-		};
-		if (!show) {
-			return config;
-		}
 		if (action === 'clearHistory') {
 			return {
-				...config,
-				showDialogue: true,
+				showDialogue: show,
+				dialogueHeader: `${formatMessage(messages.clearHistory).toUpperCase()}?`,
+				message: formatMessage(messages.messageClearHistory),
+				positiveText: formatMessage(i18n.delete).toUpperCase(),
+				onPressPositive: this.onConfirmClearHistory,
 			};
 		}
-		if (action === 'resetMaxMin') {
-			return {
-				...config,
-				showDialogue: true,
-				dialogueHeader: `${formatMessage(messages.resetMaxMin).toUpperCase()}?`,
-				message: formatMessage(messages.messageResetMaxMin),
-				positiveText: formatMessage(i18n.labelReset).toUpperCase(),
-				onPressPositive: this.onConfirmResetMaxMin,
-			};
-		}
-		return config;
+		return {
+			showDialogue: show,
+			dialogueHeader: `${formatMessage(messages.resetMaxMin).toUpperCase()}?`,
+			message: formatMessage(messages.messageResetMaxMin),
+			positiveText: formatMessage(i18n.labelReset).toUpperCase(),
+			onPressPositive: this.onConfirmResetMaxMin,
+		};
 	}
 
 	render(): Object {
