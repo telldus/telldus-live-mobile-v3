@@ -98,6 +98,9 @@ class OverviewTab extends View<Props, State> {
 		const { screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN } = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
 		if (currentScreen === 'Overview') {
+			if (this.props.screenProps.currentScreen !== 'Overview') {
+				return true;
+			}
 
 			const { isRefreshing } = this.state;
 			if (isRefreshing !== nextState.isRefreshing) {

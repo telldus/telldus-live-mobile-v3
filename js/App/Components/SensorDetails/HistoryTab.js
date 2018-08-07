@@ -181,9 +181,23 @@ class HistoryTab extends View {
 					list: types,
 				});
 			} else {
+				this.setState({
+					chartDataOne: [],
+					chartDataTwo: [],
+					list: [],
+					refreshing,
+					hasLoaded,
+				});
 				callBackWhenNoData();
 			}
 		}).catch(() => {
+			this.setState({
+				chartDataOne: [],
+				chartDataTwo: [],
+				list: [],
+				refreshing,
+				hasLoaded,
+			});
 			callBackWhenNoData();
 		});
 	}
@@ -270,25 +284,34 @@ class HistoryTab extends View {
 		const { appLayout, currentScreen } = screenProps;
 		if (currentScreen === 'History') {
 			const { chartDataOne, chartDataTwo, list, ...others } = this.state;
+			if (this.props.screenProps.currentScreen !== 'History') {
+				return true;
+			}
+
 			if (!nextState.hasLoaded) {
 				return true;
 			}
+
 			const stateChange = shouldUpdate(others, nextState, ['hasRefreshed', 'refreshing', 'hasLoaded', 'showCalendar', 'timestamp', 'propToUpdate']);
 			if (stateChange) {
 				return stateChange;
 			}
+
 			if ((chartDataOne.length !== nextState.chartDataOne.length) ||
 			(chartDataTwo.length !== nextState.chartDataTwo.length) ||
 			(list.length !== nextState.list.length)) {
 				return true;
 			}
+
 			if (appLayout.width !== this.props.screenProps.appLayout.width) {
 				return true;
 			}
+
 			const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'showOne', 'showTwo']);
 			if (propsChange) {
 				return propsChange;
 			}
+
 			return false;
 		}
 		return false;
