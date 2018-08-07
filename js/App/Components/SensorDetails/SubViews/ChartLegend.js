@@ -42,7 +42,7 @@ constructor(props: Props) {
 	super(props);
 }
 
-render(): Object {
+render(): Object | null {
 	const { legendData, appLayout, onPressToggleView, fullscreen } = this.props;
 	const { rowTextColor, rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
 	const {
@@ -58,7 +58,7 @@ render(): Object {
 	return (
 		<View style={containerStyle}>
 			<View style={legendsContainerStyle}>
-				{legendData.map((item: Object, index: number): Object => {
+				{legendData.map((item: Object, index: number): Object | null => {
 					const { icon, onPress, value, color } = item;
 					if (!value) {
 						return null;

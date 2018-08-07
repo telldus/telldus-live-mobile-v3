@@ -285,7 +285,7 @@ export default class TelldusLocalStorage {
 
 	// COMMON
 	getLatestTimestamp = (type: string, id: number): Promise<any> => {
-		let tableName, uniqueParam;
+		let tableName = '', uniqueParam = '';
 		if (type === 'device') {
 			tableName = 'DeviceHistory';
 			uniqueParam = 'deviceId';
@@ -312,7 +312,7 @@ export default class TelldusLocalStorage {
 	}
 
 	clearHistory(type: string, id: number): Promise<any> {
-		let tableName, uniqueParam;
+		let tableName = '', uniqueParam = '';
 		if (type === 'device') {
 			tableName = 'DeviceHistory';
 			uniqueParam = 'deviceId';
