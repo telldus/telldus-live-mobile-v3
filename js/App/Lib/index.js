@@ -22,7 +22,6 @@
 
 import getRouteName from './getRouteName';
 import getDeviceWidth from './getDeviceWidth';
-import getDeviceHeight from './getDeviceHeight';
 import hasStatusBar from './hasStatusBar';
 import Dimmer from './Dimmer';
 import SensorUtils from './SensorUtils';
@@ -36,7 +35,6 @@ import formatTime from './formatTime';
 import getPowerParts from './getPowerParts';
 import getSuntime from './getSuntime';
 import getTabBarIcon from './getTabBarIcon';
-import getRelativeDimensions from './getRelativeDimensions';
 import getDeviceType from './getDeviceType';
 import TelldusWebsocket from './Socket';
 import getDrawerWidth from './getDrawerWidth';
@@ -51,14 +49,12 @@ import shouldUpdate from './shouldUpdate';
 module.exports = {
 	getRouteName,
 	getDeviceWidth,
-	getDeviceHeight,
 	hasStatusBar,
 	capitalize,
 	formatTime,
 	getPowerParts,
 	getSuntime,
 	getTabBarIcon,
-	getRelativeDimensions,
 	...Dimmer,
 	...SensorUtils,
 	...DeviceUtils,
