@@ -630,8 +630,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { sensors: { byId }} = state;
 	const { timestamp, sensorId, selectedOne, selectedTwo } = ownProps;
 	const sensor = byId[sensorId];
-	const { scale: scale1, type: type1 } = selectedOne;
-	const { scale: scale2, type: type2 } = selectedTwo;
+	const { scale: scale1, type: type1 } = selectedOne ? selectedOne : {scale: null, type: null};
+	const { scale: scale2, type: type2 } = selectedTwo ? selectedTwo : {scale: null, type: null};
 	const selectedData = { scale1, type1, scale2, type2 };
 
 	return {
