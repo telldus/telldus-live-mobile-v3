@@ -55,6 +55,11 @@ export function getLatestTimestamp(type: string, id: number): Promise<any> {
 	return localStorage.getLatestTimestamp(type, id);
 }
 
+export function clearHistory(type: string, id: number): Promise<any> {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.clearHistory(type, id);
+}
+
 export function closeDatabase() {
 	let localStorage = new TelldusLocalStorage();
 	localStorage.closeDatabase();

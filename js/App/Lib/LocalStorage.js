@@ -311,6 +311,22 @@ export default class TelldusLocalStorage {
 		});
 	}
 
+	clearHistory(type: string, id: number): Promise<any> {
+		let tableName, uniqueParam;
+		if (type === 'device') {
+			tableName = 'DeviceHistory';
+			uniqueParam = 'deviceId';
+		} else if (type === 'sensor') {
+			tableName = 'SensorHistory';
+			uniqueParam = 'sensorId';
+		}
+		return db.executeSql(`DELETE from ${tableName} WHERE ${id} = ${uniqueParam}`).then((res: any): any => {
+			return res;
+		}).catch((error: Object) => {
+			throw error;
+		});
+	}
+
 	closeDatabase = () => {
 		if (db) {
 			db.close();
