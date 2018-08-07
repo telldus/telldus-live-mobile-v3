@@ -22,6 +22,8 @@
 'use strict';
 
 import React, { Component } from 'react';
+import { Image, Platform } from 'react-native';
+import Ripple from 'react-native-material-ripple';
 
 import Text from './Text';
 import View from './View';
@@ -33,24 +35,32 @@ type Props = {
     label: string,
 	appLayout: Object,
 
+	edit?: boolean,
 	type?: 'switch' | 'text',
 	onValueChange: (boolean) => void,
+	onPress: () => void,
 };
 
 type DefaultProps = {
 	type: 'switch' | 'text',
+	edit: boolean,
 };
 
 
 class SettingsRow extends Component<Props, null> {
 	props: Props;
 
+	onPress: () => void;
+
 	static defaultProps: DefaultProps = {
 		type: 'switch',
+		edit: false,
 	}
 
 	constructor(props: Props) {
 		super(props);
+
+		this.onPress = this.onPress.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object): boolean {
@@ -59,34 +69,63 @@ class SettingsRow extends Component<Props, null> {
 		return appLayout.width !== appLayoutN.width || value !== valueN;
 	}
 
-	render(): Object {
-		let { appLayout, label, value, onValueChange, type } = this.props;
+	onPress() {
+		const { onPress } = this.props;
+		if (onPress) {
+			onPress();
+		}
+	}
 
-		let {
+	render(): Object {
+		const { appLayout, label, value, onValueChange, type, onPress, edit } = this.props;
+
+		const {
 			ShowOnDashCover,
+			touchableStyle,
 			switchStyle,
 			textShowOnDashCover,
 			textShowOnDash,
 			valueText,
+			arrowStyle,
 		} = this.getStyle(appLayout);
+		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
 		return (
 			<View style={ShowOnDashCover}>
-				<View style={textShowOnDashCover}>
-					<Text style={textShowOnDash}>
-						{label}
-					</Text>
-				</View>
 				{type === 'switch' ?
-					<Switch
-						onValueChange={onValueChange}
-						value={value}
-						style={switchStyle}
-					/>
+					<View
+						style={touchableStyle}>
+						<View style={textShowOnDashCover}>
+							<Text style={textShowOnDash}>
+								{label}
+							</Text>
+						</View>
+						<Switch
+							onValueChange={onValueChange}
+							value={value}
+							style={switchStyle}
+						/>
+					</View>
 					:
-					<Text style={valueText}>
-						{value}
-					</Text>
+					<Ripple
+						rippleColor={rippleColor}
+						rippleOpacity={rippleOpacity}
+						rippleDuration={rippleDuration}
+						style={touchableStyle}
+						disabled={!onPress}
+						onPress={this.onPress}>
+						<View style={textShowOnDashCover}>
+							<Text style={textShowOnDash}>
+								{label}
+							</Text>
+						</View>
+						<Text style={valueText}>
+							{value}
+						</Text>
+						{edit && (
+							<Image source={require('../App/Components/TabViews/img/right-arrow-key.png')} style={arrowStyle}/>
+						)}
+					</Ripple>
 				}
 			</View>
 		);
@@ -105,12 +144,14 @@ class SettingsRow extends Component<Props, null> {
 		return {
 			ShowOnDashCover: {
 				backgroundColor: '#fff',
+				marginTop: padding / 2,
+				...Theme.Core.shadow,
+			},
+			touchableStyle: {
 				padding: fontSize,
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'space-between',
-				marginTop: padding / 2,
-				...Theme.Core.shadow,
 			},
 			switchStyle: {
 				justifyContent: 'flex-end',
@@ -125,8 +166,17 @@ class SettingsRow extends Component<Props, null> {
 				justifyContent: 'center',
 			},
 			valueText: {
+				flex: 1,
 				fontSize,
 				color: inactiveTintColor,
+				textAlign: 'right',
+				marginVertical: Platform.OS === 'ios' ? 8 : 6,
+			},
+			arrowStyle: {
+				height: fontSize,
+				width: fontSize,
+				tintColor: '#A59F9A90',
+				marginLeft: fontSize,
 			},
 		};
 	}

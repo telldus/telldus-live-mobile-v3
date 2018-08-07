@@ -689,6 +689,18 @@ const messages = defineMessages({
 		defaultMessage: 'Show on dashboard',
 		description: 'Select if this item should be shown on the dashboard',
 	},
+	labelReset: {
+		id: 'label.reset',
+		defaultMessage: 'Reset',
+	},
+	labelMax: {
+		id: 'label.max',
+		defaultMessage: 'Max',
+	},
+	labelMin: {
+		id: 'label.min',
+		defaultMessage: 'Min',
+	},
 });
 
 export default messages;

@@ -22,12 +22,27 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import {
+	ScrollView,
+	UIManager,
+	Platform,
+	LayoutAnimation,
+	BackHandler,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
-import { View, TabBar, Text, SettingsRow } from '../../../BaseComponents';
+import {
+	View,
+	TabBar,
+	Text,
+	SettingsRow,
+	TouchableButton,
+	EditBox,
+	DialogueBox,
+	DialogueHeader,
+} from '../../../BaseComponents';
 
 import {
 	addToDashboard,
@@ -36,8 +51,14 @@ import {
 	setKeepHistory,
 	getSensors,
 	setIgnoreSensor,
+	getSensorInfo,
+	setSensorName,
+	removeSensorHistory,
+	resetSensorMaxMin,
 } from '../../Actions';
+import { clearHistory } from '../../Actions/LocalStorage';
 import { shouldUpdate } from '../../Lib';
+
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -46,6 +67,32 @@ const messages = defineMessages({
 		id: 'sensor.hideFromList',
 		defaultMessage: 'Hide from sensor list',
 		description: 'Select if this item should be shown on the sensor list',
+	},
+	clearHistory: {
+		id: 'sensor.label.clearHistory',
+		defaultMessage: 'Clear sensor history',
+	},
+	resetMaxMin: {
+		id: 'sensor.label.resetmaxMin',
+		defaultMessage: 'Reset Max/Min values',
+	},
+	messageClearHistory: {
+		id: 'sensor.dialogue.messageClearHistory',
+		defaultMessage: 'Are you sure you want to clear sensor history? ' +
+		'This action will delete all history stored for this sensor permanentely.',
+	},
+	messageResetMaxMin: {
+		id: 'sensor.dialogue.messageResetMaxMin',
+		defaultMessage: 'Are you sure you want to reset max/min values? ' +
+		'This action will reset all max/min values for this sensor.',
+	},
+	clearSuccess: {
+		id: 'sensor.message.clearSuccess',
+		defaultMessage: 'Sensor history has been cleared',
+	},
+	resetSuccess: {
+		id: 'sensor.message.resetSuccess',
+		defaultMessage: 'Max/Min for the sensor has been reset',
 	},
 });
 
@@ -62,6 +109,12 @@ type Props = {
 type State = {
 	isHidden: boolean,
 	keepHistory: boolean,
+	editName: boolean,
+	sensorName: string,
+	dialogueConfig: {
+		show: boolean,
+		action: string | null,
+	},
 };
 
 
@@ -72,6 +125,17 @@ class SettingsTab extends View {
 	onValueChange: number => void;
 	setIgnoreSensor: (boolean) => void;
 	setKeepHistory: (boolean) => void;
+
+	editName: () => void;
+	onChangeName: (string) => void;
+	clearHistory: () => void;
+	resetMaxMin: () => void;
+	onConfirmResetMaxMin: () => void;
+	onConfirmClearHistory: () => void;
+	closeModal: () => void;
+	submitName: () => void;
+
+	handleBackPress: () => void;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -95,6 +159,12 @@ class SettingsTab extends View {
 		this.state = {
 			isHidden: props.sensor.ignored,
 			keepHistory: props.sensor.keepHistory,
+			editName: false,
+			sensorName: props.sensor.name,
+			dialogueConfig: {
+				show: false,
+				action: null,
+			},
 		};
 
 		const { formatMessage } = props.screenProps.intl;
@@ -104,6 +174,44 @@ class SettingsTab extends View {
 
 		this.toastStoreHistory = formatMessage(i18n.toastStoreHistory);
 		this.toastStoreNotHistory = formatMessage(i18n.toastStoreNotHistory);
+
+		this.editName = this.editName.bind(this);
+		this.onChangeName = this.onChangeName.bind(this);
+		this.clearHistory = this.clearHistory.bind(this);
+		this.resetMaxMin = this.resetMaxMin.bind(this);
+		this.onConfirmClearHistory = this.onConfirmClearHistory.bind(this);
+		this.onConfirmResetMaxMin = this.onConfirmResetMaxMin.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+		this.submitName = this.submitName.bind(this);
+
+		this.handleBackPress = this.handleBackPress.bind(this);
+
+		if (Platform.OS === 'android') {
+			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+		}
+		this.animationConfig = {
+			duration: 300,
+			create: {
+				type: LayoutAnimation.Types.linear,
+				property: LayoutAnimation.Properties.scaleXY,
+			},
+			update: {
+				type: LayoutAnimation.Types.linear,
+				property: LayoutAnimation.Properties.scaleXY,
+			},
+			delete: {
+				type: LayoutAnimation.Types.linear,
+				property: LayoutAnimation.Properties.opacity,
+			},
+		};
+	}
+
+	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+	}
+
+	componentWillUnmount() {
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -128,6 +236,109 @@ class SettingsTab extends View {
 			return false;
 		}
 		return false;
+	}
+
+	handleBackPress(): boolean {
+		const { editName } = this.state;
+		if (editName) {
+			LayoutAnimation.configureNext(this.animationConfig);
+			this.setState({
+				editName: false,
+				sensorName: this.props.sensor.name,
+			});
+			return true;
+		}
+		return false;
+	}
+
+	editName() {
+		LayoutAnimation.configureNext(this.animationConfig);
+		this.setState({
+			editName: true,
+		});
+	}
+
+	onChangeName(sensorName: string) {
+		this.setState({
+			sensorName,
+		});
+	}
+
+	submitName() {
+		const { dispatch, sensor } = this.props;
+		const { sensorName } = this.state;
+		dispatch(setSensorName(sensor.id, sensorName)).then(() => {
+			LayoutAnimation.configureNext(this.animationConfig);
+			dispatch(getSensorInfo(sensor.id));
+			this.setState({
+				editName: false,
+			});
+		}).catch((err: Object) => {
+			LayoutAnimation.configureNext(this.animationConfig);
+			this.seState({
+				editName: false,
+				sensorName: sensor.name,
+			});
+			const	message = err.message ? err.message : null;
+			dispatch(showToast(message));
+		});
+	}
+
+	clearHistory() {
+		this.setState({
+			dialogueConfig: {
+				show: true,
+				action: 'clearHistory',
+			},
+		});
+	}
+
+	onConfirmClearHistory() {
+		const { dispatch, sensor, screenProps } = this.props;
+		const { formatMessage } = screenProps.intl;
+
+		dispatch(removeSensorHistory(sensor.id)).then(() => {
+			dispatch(showToast(formatMessage(messages.clearSuccess)));
+			this.closeModal();
+			clearHistory('sensor', sensor.id);
+		}).catch((err: Object) => {
+			this.closeModal();
+			const	message = err.message ? err.message : null;
+			dispatch(showToast(message));
+		});
+	}
+
+	resetMaxMin() {
+		this.setState({
+			dialogueConfig: {
+				show: true,
+				action: 'resetMaxMin',
+			},
+		});
+	}
+
+	closeModal() {
+		this.setState({
+			dialogueConfig: {
+				show: false,
+				action: null,
+			},
+		});
+	}
+
+	onConfirmResetMaxMin() {
+		const { dispatch, sensor, screenProps } = this.props;
+		const { formatMessage } = screenProps.intl;
+
+		dispatch(resetSensorMaxMin(sensor.id)).then(() => {
+			dispatch(getSensorInfo(sensor.id));
+			this.closeModal();
+			dispatch(showToast(formatMessage(messages.resetSuccess)));
+		}).catch((err: Object) => {
+			this.closeModal();
+			const	message = err.message ? err.message : null;
+			dispatch(showToast(message));
+		});
 	}
 
 	onValueChange(value: boolean) {
@@ -187,21 +398,103 @@ class SettingsTab extends View {
 		}
 	}
 
+	dialogueHeader({ dialogueHeader, dialogueHeaderStyle, dialogueHeaderTextStyle }: Object): Object {
+		return (
+			<DialogueHeader
+				headerText={dialogueHeader}
+				showIcon={false}
+				headerStyle={dialogueHeaderStyle}
+				dialogueHeaderTextStyle={dialogueHeaderTextStyle}/>
+		);
+	}
+
+	prepareDialogueConfig({ show, action }: Object): Object {
+		const { formatMessage } = this.props.screenProps.intl;
+		let config = {
+			showDialogue: false,
+			dialogueHeader: `${formatMessage(messages.clearHistory).toUpperCase()}?`,
+			message: formatMessage(messages.messageClearHistory),
+			positiveText: formatMessage(i18n.delete).toUpperCase(),
+			onPressPositive: this.onConfirmClearHistory,
+		};
+		if (!show) {
+			return config;
+		}
+		if (action === 'clearHistory') {
+			return {
+				...config,
+				showDialogue: true,
+			};
+		}
+		if (action === 'resetMaxMin') {
+			return {
+				...config,
+				showDialogue: true,
+				dialogueHeader: `${formatMessage(messages.resetMaxMin).toUpperCase()}?`,
+				message: formatMessage(messages.messageResetMaxMin),
+				positiveText: formatMessage(i18n.labelReset).toUpperCase(),
+				onPressPositive: this.onConfirmResetMaxMin,
+			};
+		}
+		return config;
+	}
+
 	render(): Object {
-		const { keepHistory, isHidden } = this.state;
+		const { keepHistory, isHidden, editName, sensorName, dialogueConfig } = this.state;
 		const { inDashboard, sensor } = this.props;
-		const { model, protocol, sensorId } = sensor;
+		const { model, protocol, sensorId, name } = sensor;
 		const { appLayout, intl } = this.props.screenProps;
 		const { formatMessage } = intl;
 
 		const {
 			container,
 			infoHeaderText,
+			buttonStyle,
+			editBoxStyle,
+			dialogueHeaderStyle,
+			dialogueHeaderTextStyle,
 		} = this.getStyle(appLayout);
 
-		return (
-			<ScrollView>
+		if (editName) {
+			return (
 				<View style={container}>
+					<EditBox
+						value={sensorName}
+						icon={'sensor'}
+						label={formatMessage(i18n.name)}
+						onChangeText={this.onChangeName}
+						onSubmitEditing={this.submitName}
+						appLayout={appLayout}
+						containerStyle={editBoxStyle}
+					/>
+				</View>
+			);
+		}
+
+		const {
+			showDialogue,
+			dialogueHeader,
+			message,
+			positiveText,
+			onPressPositive,
+		} = this.prepareDialogueConfig(dialogueConfig);
+		const dialogueHeaderProps = {
+			dialogueHeader,
+			dialogueHeaderStyle,
+			dialogueHeaderTextStyle,
+		};
+
+		return (
+			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+				<View style={container}>
+					<SettingsRow
+						type={'text'}
+						edit={true}
+						onPress={this.editName}
+						label={formatMessage(i18n.name)}
+						value={name}
+						appLayout={appLayout}
+					/>
 					<SettingsRow
 						label={formatMessage(i18n.showOnDashborad)}
 						onValueChange={this.onValueChange}
@@ -220,6 +513,14 @@ class SettingsTab extends View {
 						value={keepHistory}
 						appLayout={appLayout}
 					/>
+					<TouchableButton
+						text={formatMessage(messages.clearHistory).toUpperCase()}
+						onPress={this.clearHistory}
+						style={buttonStyle}/>
+					<TouchableButton
+						text={formatMessage(messages.resetMaxMin).toUpperCase()}
+						onPress={this.resetMaxMin}
+						style={buttonStyle}/>
 					<Text style={infoHeaderText}>
 						{formatMessage(i18n.labelTechnicalInfo)}
 					</Text>
@@ -242,6 +543,16 @@ class SettingsTab extends View {
 						appLayout={appLayout}
 					/>
 				</View>
+				<DialogueBox
+					dialogueContainerStyle={{elevation: 0}}
+					header={this.dialogueHeader(dialogueHeaderProps)}
+					showDialogue={showDialogue}
+					text={message}
+					showPositive={true}
+					showNegative={true}
+					positiveText={positiveText}
+					onPressPositive={onPressPositive}
+					onPressNegative={this.closeModal}/>
 			</ScrollView>
 		);
 	}
@@ -258,7 +569,7 @@ class SettingsTab extends View {
 
 		return {
 			container: {
-				flex: 0,
+				flex: 1,
 				paddingHorizontal: padding,
 				paddingBottom: padding,
 				paddingTop: padding / 2,
@@ -266,7 +577,22 @@ class SettingsTab extends View {
 			infoHeaderText: {
 				fontSize,
 				color: inactiveTintColor,
-				marginTop: padding,
+				marginTop: padding * 2,
+			},
+			editBoxStyle: {
+				marginTop: padding * 2,
+			},
+			buttonStyle: {
+				marginTop: padding * 2,
+				paddingHorizontal: 15,
+			},
+			dialogueHeaderStyle: {
+				paddingVertical: 10,
+				paddingHorizontal: 20,
+				width: deviceWidth * 0.75,
+			},
+			dialogueHeaderTextStyle: {
+				fontSize: 13,
 			},
 		};
 	}
