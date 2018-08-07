@@ -23,9 +23,19 @@
 
 import React from 'react';
 
-import { View, Text, IconTelldus, FormattedNumber, FormattedDate, FormattedTime } from '../../../../BaseComponents';
+import {
+	View,
+	Text,
+	Icon,
+	IconTelldus,
+	FormattedNumber,
+	FormattedDate,
+	FormattedTime,
+	FormattedMessage,
+} from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	name: string,
@@ -33,6 +43,10 @@ type Props = {
 	label: string,
 	value: number,
 	unit: string,
+	max?: string,
+	min?: string,
+	maxTime?: number,
+	minTime?: number,
 	formatOptions: Object,
 	lastUpdated: string,
 	appLayout: Object,
@@ -51,6 +65,10 @@ export default class SensorBlock extends View<Props, null> {
 			formatOptions,
 			lastUpdated,
 			appLayout,
+			max,
+			min,
+			maxTime,
+			minTime,
 		} = this.props;
 		const {
 			containerStyle,
@@ -59,7 +77,9 @@ export default class SensorBlock extends View<Props, null> {
 			labelStyle,
 			valueStyle,
 			updatedInfoStyle,
+			iconSize,
 		} = this.getStyles(appLayout);
+		const { brandSecondary } = Theme.Core;
 
 		return (
 			<View style={containerStyle}>
@@ -88,6 +108,48 @@ export default class SensorBlock extends View<Props, null> {
 						</Text>
 						<FormattedTime value={lastUpdated} style={updatedInfoStyle}/>
 					</Text>
+					{!!max && (
+						<Text style={updatedInfoStyle}>
+							<Icon name={'angle-up'} color={brandSecondary} size={iconSize}/>
+							<Text style={{
+								color: 'transparent',
+								fontSize: 14,
+							}}>
+							!
+							</Text>
+							<FormattedMessage {...i18n.labelMax} style={updatedInfoStyle}/>
+							{`: ${max}${unit}, `}
+							<FormattedDate value={maxTime} style={updatedInfoStyle}/>
+							<Text style={{
+								color: 'transparent',
+								fontSize: 14,
+							}}>
+							!
+							</Text>
+							<FormattedTime value={maxTime} style={updatedInfoStyle}/>
+						</Text>
+					)}
+					{!!min && (
+						<Text style={updatedInfoStyle}>
+							<Icon name={'angle-down'} color={brandSecondary} size={iconSize}/>
+							<Text style={{
+								color: 'transparent',
+								fontSize: 14,
+							}}>
+							!
+							</Text>
+							<FormattedMessage {...i18n.labelMin} style={updatedInfoStyle}/>
+							{`: ${min}${unit}, `}
+							<FormattedDate value={minTime} style={updatedInfoStyle}/>
+							<Text style={{
+								color: 'transparent',
+								fontSize: 14,
+							}}>
+							!
+							</Text>
+							<FormattedTime value={minTime} style={updatedInfoStyle}/>
+						</Text>
+					)}
 				</View>
 			</View>
 		);
@@ -142,6 +204,7 @@ export default class SensorBlock extends View<Props, null> {
 				fontSize: updateInfoFontSize,
 				color: '#000',
 			},
+			iconSize: updateInfoFontSize * 1.5,
 		};
 	}
 }

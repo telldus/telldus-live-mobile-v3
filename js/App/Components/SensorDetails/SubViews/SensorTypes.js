@@ -64,7 +64,7 @@ export default class SensorTypes extends View<Props, State> {
 
 		let sensors = [], sensorInfo = '';
 		Object.values(data).forEach((values: any, index: number) => {
-			const { value, scale, name, lastUpdated } = values;
+			const { value, scale, name, lastUpdated, max, min, maxTime, minTime } = values;
 			const { label, unit, icon } = getSensorIconLabelUnit(name, scale, formatMessage);
 
 			let props = {
@@ -74,6 +74,10 @@ export default class SensorTypes extends View<Props, State> {
 				unit,
 				icon,
 				label,
+				max,
+				min,
+				maxTime,
+				minTime,
 				appLayout,
 				lastUpdated: moment.unix(lastUpdated),
 			};
