@@ -40,8 +40,8 @@ type Props = {
     containerStyle: number | Object | Array<any>,
     label?: string,
     icon?: string,
-    onSubmitEditing: () => void;
-    onChangeText: (string) => void;
+    onSubmitEditing: () => void,
+    onChangeText: (string) => void,
 };
 
 type DefaultProps = {
