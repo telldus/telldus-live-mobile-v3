@@ -60,6 +60,9 @@ render(): Object {
 			<View style={legendsContainerStyle}>
 				{legendData.map((item: Object, index: number): Object => {
 					const { icon, onPress, value, color } = item;
+					if (!value) {
+						return null;
+					}
 					return (
 						<Ripple
 							key={index}
