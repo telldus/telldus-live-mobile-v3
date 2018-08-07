@@ -80,6 +80,7 @@ import NavigationHeader from './NavigationHeader';
 import NavigationHeaderPoster from './NavigationHeaderPoster';
 import SettingsRow from './SettingsRow';
 import LocationDetails from './LocationDetails';
+import EditBox from './EditBox';
 
 import {
 	AppState,
@@ -151,6 +152,7 @@ module.exports = {
 	NavigationHeaderPoster,
 	SettingsRow,
 	LocationDetails,
+	EditBox,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
