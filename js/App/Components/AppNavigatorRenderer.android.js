@@ -68,11 +68,6 @@ import {
 import i18n from '../Translations/common';
 // TODO : Remove unused strings!
 const messages = defineMessages({
-	errortoast: {
-		id: 'errortoast',
-		defaultMessage: 'Action could not be completed.',
-		description: 'The error messgage to show, when a device action cannot be performed',
-	},
 	menuIcon: {
 		id: 'accessibilityLabel.menuIcon',
 		defaultMessage: 'Menu',
@@ -268,7 +263,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		} = this.props;
 		if (showToastBool && !prevProps.showToast) {
 			const { formatMessage } = intl;
-			const message = messageToast ? messageToast : formatMessage(messages.errortoast);
+			const message = messageToast ? messageToast : formatMessage(i18n.errortoast);
 			this._showToast(message, durationToast, positionToast);
 		}
 		if (addNewGatewayBool && !this.state.addingNewLocation) {

@@ -701,6 +701,11 @@ const messages = defineMessages({
 		id: 'label.min',
 		defaultMessage: 'Min',
 	},
+	errortoast: {
+		id: 'errortoast',
+		defaultMessage: 'Action could not be completed.',
+		description: 'The error messgage to show, when a device action cannot be performed',
+	},
 });
 
 export default messages;

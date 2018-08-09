@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 import { NetInfo } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { isIphoneX } from 'react-native-iphone-x-helper';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
 import { View, Header, IconTelldus } from '../../BaseComponents';
@@ -63,13 +63,6 @@ import {
 } from '../Lib';
 
 import i18n from '../Translations/common';
-const messages = defineMessages({
-	errortoast: {
-		id: 'errortoast',
-		defaultMessage: 'Action could not be completed.',
-		description: 'The error messgage to show, when a device action cannot be performed',
-	},
-});
 
 type Props = {
 	dimmer: Object,
@@ -208,7 +201,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		} = this.props;
 		if (showToastBool && !prevProps.showToast) {
 			const { formatMessage } = intl;
-			const message = messageToast ? messageToast : formatMessage(messages.errortoast);
+			const message = messageToast ? messageToast : formatMessage(i18n.errortoast);
 			this._showToast(message, durationToast, positionToast);
 		}
 
