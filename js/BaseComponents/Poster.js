@@ -30,19 +30,14 @@ import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 type Props = {
 	children?: any,
-	source?: number,
+	source?: number | Object,
 	appLayout: Object,
-	source750: number | Object,
-	source1500: number | Object,
-	source3000: number | Object,
 	posterWidth?: number,
 	posterHeight?: number,
 };
 
 type DefaultProps = {
-	source750: number | Object,
-	source1500: number | Object,
-	source3000: number | Object,
+	source: number | Object,
 };
 
 class Poster extends Component<Props, null> {
@@ -54,42 +49,20 @@ class Poster extends Component<Props, null> {
 	};
 
 	static defaultProps: DefaultProps = {
-		source750: { uri: 'telldus_geometric_bg_750'},
-		source1500: { uri: 'telldus_geometric_bg_1500'},
-		source3000: { uri: 'telldus_geometric_bg_3000'},
+		source: { uri: 'telldus_geometric_bg'},
 	};
 
 	constructor(props: Props) {
 		super(props);
 	}
 
-	getImageSource(height: number): number | Object {
-		let { source750, source1500, source3000 } = this.props;
-		switch (height) {
-			case height > 700 && height < 1400:
-				return source1500;
-			case height >= 1400:
-				return source3000;
-			default:
-				return source750;
-		}
-	}
-
 	render(): Object {
 		const { children, appLayout, source } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-
-		let imageSource = source;
-		if (!imageSource) {
-			imageSource = this.getImageSource(deviceHeight);
-		}
 
 		const { image, mask } = this._getStyle(appLayout);
 		return (
 			<View style={mask}>
-				<Image source={imageSource} style={image}/>
+				<Image source={source} style={image}/>
 				{!!children && children}
 			</View>
 		);

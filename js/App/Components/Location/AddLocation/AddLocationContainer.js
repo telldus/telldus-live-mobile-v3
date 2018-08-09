@@ -105,7 +105,7 @@ class AddLocationContainer extends View<null, Props, State> {
 	};
 
 	static defaultProps: DefaultProps = {
-		source: {uri: 'telldus_geometric_bg_750'},
+		source: {uri: 'telldus_geometric_bg'},
 	};
 
 	state = {
