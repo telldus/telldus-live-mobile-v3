@@ -32,6 +32,7 @@ import {
 	SensorHistoryLineChart,
 	DateBlock,
 	CalendarModalComponent,
+	HistoryNotStored,
 } from './SubViews';
 
 import { getSensorHistory, changeDefaultHistorySettings } from '../../Actions/Sensors';
@@ -46,13 +47,15 @@ import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 type Props = {
-	screenProps: Object,
-	sensorId: number,
-	dispatch: Function,
+	keepHistory: boolean,
 	selectedOne: Object | null,
 	selectedTwo: Object | null,
 	showOne: boolean,
 	showTwo: boolean,
+	screenProps: Object,
+
+	sensorId: number,
+	dispatch: Function,
 };
 
 type State = {
@@ -280,7 +283,7 @@ class HistoryTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps } = nextProps;
+		const { screenProps, keepHistory } = nextProps;
 		const { appLayout, currentScreen } = screenProps;
 		if (currentScreen === 'History') {
 			const { chartDataOne, chartDataTwo, list, ...others } = this.state;
@@ -303,7 +306,7 @@ class HistoryTab extends View {
 				return true;
 			}
 
-			if (appLayout.width !== this.props.screenProps.appLayout.width) {
+			if ((appLayout.width !== this.props.screenProps.appLayout.width) || (keepHistory !== this.props.keepHistory)) {
 				return true;
 			}
 
@@ -438,6 +441,7 @@ class HistoryTab extends View {
 			showTwo,
 			showOne,
 			sensorId,
+			keepHistory,
 		} = this.props;
 		const {
 			list,
@@ -455,10 +459,23 @@ class HistoryTab extends View {
 
 		const {
 			containerStyle,
+			deviceWidth,
 		} = this.getStyle(appLayout);
 
 		if (!hasLoaded) {
 			return null;
+		}
+
+		if (!keepHistory) {
+			return (
+				<ScrollView>
+					<View style={containerStyle}>
+						<HistoryNotStored
+							sensorId={sensorId}
+							width={deviceWidth}/>
+					</View>
+				</ScrollView>
+			);
 		}
 
 		const maxDate = this.getMaxDate(propToUpdate, timestamp);
@@ -542,6 +559,7 @@ class HistoryTab extends View {
 				paddingBottom: padding / 2,
 				paddingRight: padding,
 			},
+			deviceWidth,
 		};
 	}
 
@@ -570,6 +588,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const { defaultSensorSettings } = state.sensorsList;
 	const defaultSettings = defaultSensorSettings[id];
+	const { keepHistory } = state.sensors.byId[id];
 	const {
 		selectedOne = null,
 		selectedTwo = null,
@@ -579,6 +598,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	return {
 		sensorId: id,
+		keepHistory,
 		selectedOne,
 		selectedTwo,
 		showOne,
