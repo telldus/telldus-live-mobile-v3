@@ -31,6 +31,7 @@ import ChartLegend from './ChartLegend';
 import DateBlock from './DateBlock';
 import CalendarModalComponent from './CalendarModalComponent';
 import HistoryNotStored from './HistoryNotStored';
+import NoHistory from './NoHistory';
 
 module.exports = {
 	BatteryInfo,
@@ -43,4 +44,5 @@ module.exports = {
 	DateBlock,
 	CalendarModalComponent,
 	HistoryNotStored,
+	NoHistory,
 };
