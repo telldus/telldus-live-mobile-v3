@@ -146,12 +146,15 @@ class SettingsRow extends Component<Props, null> {
 				backgroundColor: '#fff',
 				marginTop: padding / 2,
 				...Theme.Core.shadow,
+				borderRadius: 2,
 			},
 			touchableStyle: {
 				padding: fontSize,
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'space-between',
+				borderRadius: 2,
+				overflow: 'hidden',
 			},
 			switchStyle: {
 				justifyContent: 'flex-end',
