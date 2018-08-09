@@ -228,9 +228,12 @@ class Edit extends View<null, Props, State> {
 			this.setState({
 				choseDelete: true,
 			});
-			let modalExtras = {
+			const { formatMessage } = this.props.intl;
+			const modalExtras = {
 				dialogueHeader: this.deleteScheduleDialogueHeader,
+				showPositive: true,
 				showNegative: true,
+				positiveText: formatMessage(i18n.delete).toUpperCase(),
 				onPressPositive: this.onDeleteConfirm,
 				onPressNegative: this.onDeleteCancel,
 				showBackground: true,
