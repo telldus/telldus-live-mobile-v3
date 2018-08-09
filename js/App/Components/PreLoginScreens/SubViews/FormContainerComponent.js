@@ -46,7 +46,6 @@ class FormContainerComponent extends View<Props, null> {
 		super(props);
 
 		this.isTablet = DeviceInfo.isTablet();
-		this.background = require('./../img/home5.jpg');
 		this.logo = require('./../img/telldusLogoBlack.png');
 	}
 
@@ -61,7 +60,7 @@ class FormContainerComponent extends View<Props, null> {
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<BackgroundImage source={this.background} style={styles.container}>
+			<BackgroundImage source={{uri: 'home'}} style={styles.container}>
 				{appLayout.width && (
 					<ScrollView
 						keyboardShouldPersistTaps={'always'}
