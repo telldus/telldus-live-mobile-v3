@@ -115,6 +115,10 @@ type State = {
 		show: boolean,
 		action: string | null,
 	},
+	switchConf: {
+		transition: boolean,
+		source: string,
+	},
 };
 
 
@@ -150,6 +154,24 @@ class SettingsTab extends View {
 		},
 	});
 
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
+		const { screenProps, sensor } = props;
+		const { switchConf } = state;
+		const { transition, source } = switchConf;
+
+		// This is required to make the 'keepHistory' prop update when changed from history tab
+		// also while toggling switch prevent update in between API response.
+		if (screenProps.currentScreen === 'Settings' &&
+			state.keepHistory !== sensor.keepHistory &&
+			source !== 'keepHistory' && !transition
+		) {
+			return {
+				keepHistory: sensor.keepHistory,
+			};
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 		this.onValueChange = this.onValueChange.bind(this);
@@ -164,6 +186,10 @@ class SettingsTab extends View {
 			dialogueConfig: {
 				show: false,
 				action: null,
+			},
+			switchConf: {
+				transition: false,
+				source: '',
 			},
 		};
 
@@ -218,6 +244,10 @@ class SettingsTab extends View {
 		const { screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
 		if (currentScreen === 'Settings') {
+			if (this.props.screenProps.currentScreen !== 'Settings') {
+				return true;
+			}
+
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
@@ -375,16 +405,30 @@ class SettingsTab extends View {
 		const keepHistory = sensor.keepHistory ? 0 : 1;
 		this.setState({
 			keepHistory: value,
+			switchConf: {
+				transition: true,
+				source: 'keepHistory',
+			},
 		});
 		this.props.dispatch(setKeepHistory(sensor.id, keepHistory)).then((res: Object) => {
 			const message = !value ?
 				this.toastStoreNotHistory : this.toastStoreHistory;
 			this.props.dispatch(getSensors());
 			this.props.dispatch(showToast(message));
+			this.setState({
+				switchConf: {
+					transition: false,
+					source: '',
+				},
+			});
 		}).catch((err: Object) => {
 			const	message = err.message ? err.message : null;
 			this.setState({
 				keepHistory: sensor.keepHistory,
+				switchConf: {
+					transition: false,
+					source: '',
+				},
 			});
 			this.props.dispatch(showToast(message));
 		});
