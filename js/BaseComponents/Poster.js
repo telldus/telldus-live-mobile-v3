@@ -45,7 +45,7 @@ class Poster extends Component<Props, null> {
 
 	static propTypes = {
 		children: PropTypes.any,
-		source: PropTypes.number,
+		source: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 	};
 
 	static defaultProps: DefaultProps = {
