@@ -63,8 +63,8 @@ type Props = {
     width: number,
     sensorId: number,
 
-    actionKeepHistory: (number, number) => Promise<any>,
-    showToast: (string) => void,
+    setKeepHistory: (number, number) => Promise<any>,
+    showToast: (?string) => void,
     getSensorInfo: (number) => Promise<any>,
 };
 
@@ -152,7 +152,7 @@ getStyles(width: number): Object {
 }
 }
 
-function mapDispatchToProps(dispatch: Object, ownProps: Object): Object {
+function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 	return {
 		setKeepHistory: (id: number, keep: number): Promise<any> => {
 			return dispatch(setKeepHistory(id, keep));
