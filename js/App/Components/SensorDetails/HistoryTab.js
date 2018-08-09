@@ -33,6 +33,7 @@ import {
 	DateBlock,
 	CalendarModalComponent,
 	HistoryNotStored,
+	NoHistory,
 } from './SubViews';
 
 import { getSensorHistory, changeDefaultHistorySettings } from '../../Actions/Sensors';
@@ -475,6 +476,13 @@ class HistoryTab extends View {
 							width={deviceWidth}/>
 					</View>
 				</ScrollView>
+			);
+		}
+
+		if (chartDataOne.length === 0 && chartDataTwo.length === 0) {
+			return (
+				<NoHistory
+					width={deviceWidth}/>
 			);
 		}
 
