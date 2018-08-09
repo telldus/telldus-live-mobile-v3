@@ -36,7 +36,7 @@ import moment from 'moment';
 import Orientation from 'react-native-orientation-locker';
 const isEqual = require('react-fast-compare');
 
-import { View, Text } from '../../../../BaseComponents';
+import { View, Text, FullPageActivityIndicator } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
 import Theme from '../../../Theme';
 
@@ -51,6 +51,7 @@ type Props = {
 	showOne: boolean,
 	showTwo: boolean,
 	liveData: Object,
+	isChartLoading: boolean,
 
 	onToggleChartData: (Object) => void,
 };
@@ -117,8 +118,8 @@ class SensorHistoryLineChart extends View<Props, State> {
 		if (!isStateEqual) {
 			return true;
 		}
-		const { showOne, showTwo } = this.props;
-		if (showOne !== nextProps.showOne || showTwo !== nextProps.showTwo) {
+		const { showOne, showTwo, isChartLoading } = this.props;
+		if ((showOne !== nextProps.showOne) || (showTwo !== nextProps.showTwo) || (isChartLoading !== nextProps.isChartLoading)) {
 			return true;
 		}
 		const { selectedOne, selectedTwo } = this.props;
@@ -466,6 +467,20 @@ class SensorHistoryLineChart extends View<Props, State> {
 	render(): any {
 		const { fullscreen, orientation, isLoading } = this.state;
 		const { show } = fullscreen;
+		const { isChartLoading } = this.props;
+
+		const {
+			containerStyle,
+			containerWhenLoading,
+		} = this.getStyle();
+		if (isChartLoading) {
+			return (
+				<View style={containerWhenLoading}>
+					<FullPageActivityIndicator size={'small'}/>
+				</View>
+			);
+		}
+
 		const chart = this.renderChart();
 		if (!show) {
 			return chart;
@@ -474,9 +489,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 		const supportedOrientations = (orientation === 'PORTRAIT' || orientation === 'LANDSCAPE-LEFT') ? 'landscape-right' :
 			(orientation === 'LANDSCAPE-RIGHT' ? 'landscape-left' : 'landscape');
 
-		const {
-			containerStyle,
-		} = this.getStyle();
 
 		return (
 			<Modal
@@ -552,6 +564,16 @@ class SensorHistoryLineChart extends View<Props, State> {
 					...shadow,
 					marginBottom: padding,
 				},
+			containerWhenLoading: {
+				backgroundColor: '#fff',
+				width: chartWidth,
+				...shadow,
+				alignItems: 'center',
+				justifyContent: 'center',
+				height: chartHeight,
+				marginLeft: padding / 2,
+				marginBottom: padding,
+			},
 			chartWidth,
 			chartHeight,
 			padding,

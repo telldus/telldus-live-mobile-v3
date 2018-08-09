@@ -26,7 +26,11 @@ import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import { View, TabBar } from '../../../BaseComponents';
+import {
+	View,
+	TabBar,
+	FullPageActivityIndicator,
+} from '../../../BaseComponents';
 import {
 	GraphValuesDropDown,
 	SensorHistoryLineChart,
@@ -36,8 +40,16 @@ import {
 	NoHistory,
 } from './SubViews';
 
-import { getSensorHistory, changeDefaultHistorySettings } from '../../Actions/Sensors';
-import { getHistory, storeHistory, getLatestTimestamp, getSensorTypes } from '../../Actions/LocalStorage';
+import {
+	getSensorHistory,
+	changeDefaultHistorySettings,
+} from '../../Actions/Sensors';
+import {
+	getHistory,
+	storeHistory,
+	getLatestTimestamp,
+	getSensorTypes,
+} from '../../Actions/LocalStorage';
 
 import shouldUpdate from '../../Lib/shouldUpdate';
 import type { SensorHistoryQueryParams } from '../../Lib/LocalStorage';
@@ -69,6 +81,7 @@ type State = {
 	showCalendar: boolean,
 	timestamp: Object,
 	propToUpdate: 1 | 2,
+	isChartLoading: boolean,
 };
 
 class HistoryTab extends View {
@@ -123,6 +136,7 @@ class HistoryTab extends View {
 			showCalendar: false,
 			timestamp: getHistoryTimestamp(3),
 			propToUpdate: 1,
+			isChartLoading: true,
 		};
 
 		this.getHistoryDataFromAPI = this.getHistoryDataFromAPI.bind(this);
@@ -191,6 +205,7 @@ class HistoryTab extends View {
 					list: [],
 					refreshing,
 					hasLoaded,
+					isChartLoading: false,
 				});
 				callBackWhenNoData();
 			}
@@ -201,6 +216,7 @@ class HistoryTab extends View {
 				list: [],
 				refreshing,
 				hasLoaded,
+				isChartLoading: false,
 			});
 			callBackWhenNoData();
 		});
@@ -218,6 +234,7 @@ class HistoryTab extends View {
 					chartDataTwo: list === 2 ? data : chartDataTwo,
 					hasLoaded: true,
 					refreshing: false,
+					isChartLoading: false,
 				});
 			} else {
 				this.setState({
@@ -225,6 +242,7 @@ class HistoryTab extends View {
 					chartDataTwo,
 					hasLoaded,
 					refreshing,
+					isChartLoading: false,
 				});
 			}
 		}).catch(() => {
@@ -234,6 +252,7 @@ class HistoryTab extends View {
 				chartDataTwo,
 				hasLoaded,
 				refreshing,
+				isChartLoading: false,
 			});
 		});
 	}
@@ -413,6 +432,7 @@ class HistoryTab extends View {
 		this.setState({
 			showCalendar: false,
 			timestamp: newTimestamp,
+			isChartLoading: true,
 		}, () => {
 			const { sensorId } = this.props;
 			const { fromTimestamp: from } = newTimestamp;
@@ -452,6 +472,7 @@ class HistoryTab extends View {
 			showCalendar,
 			timestamp,
 			propToUpdate,
+			isChartLoading,
 		} = this.state;
 
 		const { appLayout, intl } = screenProps;
@@ -464,7 +485,7 @@ class HistoryTab extends View {
 		} = this.getStyle(appLayout);
 
 		if (!hasLoaded) {
-			return null;
+			return <FullPageActivityIndicator size={'small'}/>;
 		}
 
 		if (!keepHistory) {
@@ -479,7 +500,7 @@ class HistoryTab extends View {
 			);
 		}
 
-		if (chartDataOne.length === 0 && chartDataTwo.length === 0) {
+		if (list.length === 0 && chartDataOne.length === 0 && chartDataTwo.length === 0) {
 			return (
 				<NoHistory
 					width={deviceWidth}/>
@@ -495,6 +516,7 @@ class HistoryTab extends View {
 			showTwo,
 			showOne,
 			sensorId,
+			isChartLoading,
 		};
 
 		return (
