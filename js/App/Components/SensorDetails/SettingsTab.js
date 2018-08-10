@@ -49,7 +49,6 @@ import {
 	removeFromDashboard,
 	showToast,
 	setKeepHistory,
-	getSensors,
 	setIgnoreSensor,
 	getSensorInfo,
 	setSensorName,
@@ -389,7 +388,7 @@ class SettingsTab extends View {
 		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
 			const message = !value ?
 				this.removedFromHiddenList : this.addedToHiddenList;
-			this.props.dispatch(getSensors());
+			this.props.dispatch(getSensorInfo(sensor.id));
 			this.props.dispatch(showToast(message));
 		}).catch((err: Object) => {
 			const	message = err.message ? err.message : null;
@@ -413,7 +412,7 @@ class SettingsTab extends View {
 		this.props.dispatch(setKeepHistory(sensor.id, keepHistory)).then((res: Object) => {
 			const message = !value ?
 				this.toastStoreNotHistory : this.toastStoreHistory;
-			this.props.dispatch(getSensors());
+			this.props.dispatch(getSensorInfo(sensor.id));
 			this.props.dispatch(showToast(message));
 			this.setState({
 				switchConf: {
