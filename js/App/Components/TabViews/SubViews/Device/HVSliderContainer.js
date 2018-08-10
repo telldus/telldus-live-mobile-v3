@@ -358,7 +358,7 @@ class HVSliderContainer extends View {
 		}
 
 		return (
-			<Parent style={[this.props.style, styleBackground, {opacity: this.buttonOpacity}]} onLayout={this.layoutView} {...parentProps} accessibilityLabel={accessibilityLabel}>
+			<Parent style={[this.props.style, styleBackground, {opacity: screenReaderEnabled ? undefined : this.buttonOpacity}]} onLayout={this.layoutView} {...parentProps} accessibilityLabel={accessibilityLabel}>
 				{
 					React.Children.map(children, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
