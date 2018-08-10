@@ -542,10 +542,6 @@ class HistoryTab extends View {
 					</View>
 					<SensorHistoryLineChart
 						{...chartProps}
-						// TODO: After loading indicator is implemented, handle the 'loading' state
-						// when timestamp and scale change, pass it as prop and handle inside chart's
-						// shouldComponentUpdate. Else one scale/timestamp change if chart data length
-						// stays the same the chart will not update.
 						timestamp={timestamp}
 						appLayout={appLayout}
 						showCalendar={showCalendar}
