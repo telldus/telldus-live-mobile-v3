@@ -169,7 +169,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	render(): React$Element<any> {
 		const { rowsAndSections, screenProps } = this.props;
-		const { appLayout, intl } = screenProps;
+		const { appLayout, intl, currentScreen } = screenProps;
 		const { formatMessage } = intl;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
@@ -189,6 +189,7 @@ class SchedulerTab extends View<null, Props, State> {
 					appLayout={appLayout}
 					intl={screenProps.intl}
 					onToggleVisibility={this.onToggleVisibility}
+					currentScreen={currentScreen}
 				/>
 				<Swiper
 					ref={this._refScroll}
@@ -315,6 +316,7 @@ class SchedulerTab extends View<null, Props, State> {
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
 		const { rowsAndSections, screenProps } = this.props;
+		const { appLayout, intl } = screenProps;
 		const { todayIndex } = this.state;
 		const { item } = props;
 		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
@@ -323,7 +325,12 @@ class SchedulerTab extends View<null, Props, State> {
 		const showNow = ((todayIndex === 0) && lastExpired && (lastExpired.id === item.id));
 
 		return (
-			<JobRow {...item} showNow={showNow} editJob={this.editJob} isFirst={props.index === 0} intl={screenProps.intl}/>
+			<JobRow {...item}
+				showNow={showNow}
+				editJob={this.editJob}
+				isFirst={props.index === 0}
+				intl={intl}
+				appLayout={appLayout}/>
 		);
 	};
 }

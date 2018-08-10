@@ -25,9 +25,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { defineMessages, intlShape } from 'react-intl';
-import { connect } from 'react-redux';
 import _ from 'lodash';
 import Platform from 'Platform';
+const isEqual = require('react-fast-compare');
 
 import {
 	BlockIcon,
@@ -86,11 +86,12 @@ type Props = {
 	type: string,
 	weekdays: number[],
 	isFirst: boolean,
-	editJob: (schedule: Schedule) => void,
 	appLayout: Object,
-	intl: intlShape,
 	showNow: boolean,
 	expired: boolean,
+
+	intl: intlShape,
+	editJob: (schedule: Schedule) => void,
 };
 
 class JobRow extends View<null, Props, null> {
@@ -112,6 +113,25 @@ class JobRow extends View<null, Props, null> {
 		isFirst: PropTypes.bool.isRequired,
 		editJob: PropTypes.func.isRequired,
 	};
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { appLayout, intl, editJob, weekdays, ...others } = this.props;// eslint-disable-line
+		const newLayout = nextProps.appLayout.width !== appLayout.width;
+		if (newLayout) {
+			return true;
+		}
+		const { appLayout: appLayoutN, intl: intlN, editJob: editJobN, weekdays: weekdaysN, ...othersN } = nextProps;// eslint-disable-line
+
+		if (weekdays.length !== weekdaysN.length) {
+			return true;
+		}
+
+		const propsEqual = isEqual(others, othersN);
+		if (!propsEqual) {
+			return true;
+		}
+		return false;
+	}
 
 	editJob = () => {
 		const {
@@ -444,10 +464,4 @@ class JobRow extends View<null, Props, null> {
 
 }
 
-function mapStateToProps(state: Object): Object {
-	return {
-		appLayout: state.app.layout,
-	};
-}
-
-export default connect(mapStateToProps, null)(JobRow);
+export default JobRow;
