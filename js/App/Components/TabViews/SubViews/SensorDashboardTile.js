@@ -190,7 +190,7 @@ class SensorDashboardTile extends View<Props, null> {
 				slideList.push({
 					...sharedProps,
 					key: 'luminance',
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1} suffix={unit}
+					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}
 						useGrouping={false}/>,
 				});
 				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
