@@ -274,6 +274,7 @@ class Details extends View {
 const styles = StyleSheet.create({
 	button: {
 		backgroundColor: Theme.Core.brandDanger,
+		marginTop: 10,
 	},
 	infoTwoContainerStyle: {
 		flexDirection: 'row',
