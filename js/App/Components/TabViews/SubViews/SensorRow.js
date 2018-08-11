@@ -23,12 +23,18 @@
 
 import React from 'react';
 import { TouchableOpacity, Animated, Easing } from 'react-native';
-import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
+import moment from 'moment';
 
-import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
+import {
+	ListItem,
+	Text,
+	View,
+	BlockIcon,
+	FormattedRelative,
+} from '../../../../BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
 import GenericSensor from './Sensor/GenericSensor';
 import TypeBlock from './Sensor/TypeBlock';
@@ -54,7 +60,6 @@ type Props = {
 	currentScreen: string,
 	appLayout: Object,
 	isGatewayActive: boolean,
-	tab: string,
 	propsSwipeRow: Object,
 	defaultType?: string,
 	setIgnoreSensor: (Object) => void,
@@ -120,6 +125,8 @@ class SensorRow extends View<Props, State> {
 	animatedScaleX: any;
 	isTablet: boolean;
 
+	formatSensorLastUpdate: (string) => string;
+
 	state = {
 		isOpen: false,
 		forceClose: false,
@@ -165,31 +172,36 @@ class SensorRow extends View<Props, State> {
 
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 		this.closeSwipeRow = this.closeSwipeRow.bind(this);
+
+		this.formatSensorLastUpdate = this.formatSensorLastUpdate.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const isStateEqual = isEqual(this.state, nextState);
-		if (!isStateEqual) {
-			return true;
+		const { propsSwipeRow: nextPropsSwipeRow, currentScreen: currentScreenN, ...nextOtherProps } = nextProps;
+		if (currentScreenN === 'Sensors') {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+
+			const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line		
+			const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
+			const { sensor } = otherProps;
+
+			if (forceClose && this.state.isOpen && idToKeepOpen !== sensor.id) {
+				return true;
+			}
+
+			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
+				'appLayout', 'sensor', 'isGatewayActive', 'defaultType',
+			]);
+			if (propsChange) {
+				return true;
+			}
+
+			return false;
 		}
-
-		const { propsSwipeRow, tab, ...otherProps } = this.props;// eslint-disable-line
-		const { propsSwipeRow: nextPropsSwipeRow, tab: nextTab, ...nextOtherProps } = nextProps;
-		const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
-		const { sensor } = otherProps;
-
-		if (forceClose && this.state.isOpen && idToKeepOpen !== sensor.id) {
-			return true;
-		}
-
-		if (nextTab !== 'Sensors' && this.state.isOpen) {
-			return true;
-		}
-
-		const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-			'appLayout', 'sensor', 'isGatewayActive', 'defaultType',
-		]);
-		if (propsChange) {
+		if (currentScreenN !== 'Sensors' && this.state.isOpen) {
 			return true;
 		}
 
@@ -197,10 +209,10 @@ class SensorRow extends View<Props, State> {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		let { tab, propsSwipeRow, sensor } = this.props;
+		const { currentScreen, propsSwipeRow, sensor } = this.props;
 		const { isOpen } = this.state;
-		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (isOpen && (tab !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen)) ) {
+		const { idToKeepOpen, forceClose } = propsSwipeRow;
+		if (isOpen && (currentScreen !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen)) ) {
 			this.closeSwipeRow();
 		}
 	}
@@ -347,6 +359,19 @@ class SensorRow extends View<Props, State> {
 		}
 	}
 
+	formatSensorLastUpdate(time: string): string {
+		const timeAgo = time.replace(/[0-9]/g, '').trim();
+
+		const { formatRelative, formatMessage } = this.props.intl;
+		const now = moment().unix();
+		const secondAgo = formatRelative(moment.unix(now).subtract(1, 'seconds')).replace(/[0-9]/g, '').trim();
+		const secondsAgo = formatRelative(moment.unix(now).subtract(2, 'seconds')).replace(/[0-9]/g, '').trim();
+		if (timeAgo === secondAgo || timeAgo === secondsAgo) {
+			return formatMessage(i18n.justNow);
+		}
+		return time;
+	}
+
 	getSensors(data: Object): Object {
 		let sensors = {}, sensorInfo = '';
 		const { formatMessage } = this.props.intl;
@@ -465,7 +490,7 @@ class SensorRow extends View<Props, State> {
 			outputRange: [0, 1, 1],
 		});
 
-		const nameInfo = this.getNameInfo(sensor, sensorName, minutesAgo, lastUpdatedValue, isGatewayActive, styles);
+		const nameInfo = this.getNameInfo(sensor, sensorName, minutesAgo, lastUpdated, isGatewayActive, styles);
 
 		return (
 			<SwipeRow
@@ -533,14 +558,15 @@ class SensorRow extends View<Props, State> {
 					{sensorName}
 				</Text>
 				{isGatewayActive ?
-					<Text style={[
-						textInfoStyle, {
-							color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
-							opacity: minutesAgo < 1440 ? 1 : 0.5,
-						},
-					]}>
-						{lastUpdatedValue}
-					</Text>
+					<FormattedRelative
+						value={moment.unix(lastUpdatedValue)}
+						formatterFunction={this.formatSensorLastUpdate}
+						textStyle={[
+							textInfoStyle, {
+								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+								opacity: minutesAgo < 1440 ? 1 : 0.5,
+							},
+						]}/>
 					:
 					<Text style={[
 						textInfoStyle, {
@@ -671,12 +697,12 @@ class SensorRow extends View<Props, State> {
 				justifyContent: 'center',
 			},
 			dotCoverStyle: {
+				flex: 1,
 				width: '100%',
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
-				position: 'absolute',
-				bottom: 2 + (dotSize * 0.2),
+				paddingVertical: 3,
 			},
 			dotStyle: {
 				width: dotSize,
@@ -691,10 +717,4 @@ class SensorRow extends View<Props, State> {
 	}
 }
 
-function mapStateToProps(store: Object, ownProps: Object): Object {
-	return {
-		tab: store.navigation.tab,
-	};
-}
-
-module.exports = connect(mapStateToProps, null)(SensorRow);
+module.exports = SensorRow;

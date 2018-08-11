@@ -27,6 +27,7 @@ import 'intl/locale-data/jsonp/en';
 import 'intl/locale-data/jsonp/sv';
 
 import React from 'react';
+import { Text } from 'react-native';
 import { Provider } from 'react-redux';
 import { Crashlytics } from 'react-native-fabric';
 import DeviceInfo from 'react-native-device-info';
@@ -93,7 +94,7 @@ function Bootstrap(): Object {
 			}
 			return (
 				<Provider store={this.state.store}>
-					<IntlProvider locale={this.state.locale} messages={this.state.messages}>
+					<IntlProvider locale={this.state.locale} messages={this.state.messages} textComponent={Text}>
 						<App locale={this.state.locale}/>
 					</IntlProvider>
 				</Provider>
