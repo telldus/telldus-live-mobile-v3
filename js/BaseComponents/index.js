@@ -81,6 +81,7 @@ import NavigationHeaderPoster from './NavigationHeaderPoster';
 import SettingsRow from './SettingsRow';
 import LocationDetails from './LocationDetails';
 import EditBox from './EditBox';
+import FormattedRelative from './FormattedRelative';
 
 import {
 	AppState,
@@ -153,6 +154,7 @@ module.exports = {
 	SettingsRow,
 	LocationDetails,
 	EditBox,
+	FormattedRelative,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
