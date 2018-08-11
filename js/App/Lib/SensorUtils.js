@@ -53,11 +53,6 @@ const messages = defineMessages({
 		defaultMessage: '{value} hours ago',
 		description: 'How long ago a sensor was update',
 	},
-	justNow: {
-		id: 'sensor.justNow',
-		defaultMessage: 'just now',
-		description: 'How long ago a sensor was update',
-	},
 	minuteAgo: {
 		id: 'sensor.minuteAgo',
 		defaultMessage: '{value} minute ago',
@@ -73,7 +68,7 @@ const messages = defineMessages({
 
 function formatLastUpdated(minutes: number, lastUpdated: number, formatMessage: Function): string {
 	if (minutes <= 0) {
-		return formatMessage(messages.justNow);
+		return formatMessage(i18n.justNow);
 	}
 	if (minutes === 1) {
 		return formatMessage(messages.minuteAgo, {value: '1'});

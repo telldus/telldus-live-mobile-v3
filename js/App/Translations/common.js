@@ -706,6 +706,11 @@ const messages = defineMessages({
 		defaultMessage: 'Action could not be completed.',
 		description: 'The error messgage to show, when a device action cannot be performed',
 	},
+	justNow: {
+		id: 'sensor.justNow',
+		defaultMessage: 'just now',
+		description: 'How long ago a sensor was update',
+	},
 });
 
 export default messages;
