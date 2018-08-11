@@ -364,11 +364,17 @@ class SensorRow extends View<Props, State> {
 
 		const { formatRelative, formatMessage } = this.props.intl;
 		const now = moment().unix();
+
+		// 'now' from 'FormattedRelative' matches only when 1 sec is added to moment.unix()
+		// This prevent from showing 'in 1 second' which is illogic!
+		const relNextSec = formatRelative(moment.unix(now).add(1, 'seconds')).replace(/[0-9]/g, '').trim();
+		const relNow = formatRelative(moment.unix(now)).replace(/[0-9]/g, '').trim();
 		const secondAgo = formatRelative(moment.unix(now).subtract(1, 'seconds')).replace(/[0-9]/g, '').trim();
 		const secondsAgo = formatRelative(moment.unix(now).subtract(2, 'seconds')).replace(/[0-9]/g, '').trim();
-		if (timeAgo === secondAgo || timeAgo === secondsAgo) {
+		if (timeAgo === relNextSec || timeAgo === relNow || timeAgo === secondAgo || timeAgo === secondsAgo) {
 			return formatMessage(i18n.justNow);
 		}
+
 		return time;
 	}
 
