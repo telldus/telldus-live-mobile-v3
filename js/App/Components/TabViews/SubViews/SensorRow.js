@@ -37,7 +37,7 @@ import {
 } from '../../../../BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
 import GenericSensor from './Sensor/GenericSensor';
-import TypeBlock from './Sensor/TypeBlock';
+import TypeBlockList from './Sensor/TypeBlockList';
 
 import i18n from '../../../Translations/common';
 
@@ -526,8 +526,9 @@ class SensorRow extends View<Props, State> {
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 							{nameInfo}
 						</TouchableOpacity>
-						<TypeBlock
+						<TypeBlockList
 							sensors={sensors}
+							lastUpdated={lastUpdated}
 							id={id}
 							isOpen={isOpen}
 							closeSwipeRow={this.closeSwipeRow}

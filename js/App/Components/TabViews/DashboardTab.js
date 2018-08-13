@@ -24,7 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
-import { Dimensions, FlatList, RefreshControl } from 'react-native';
+import { Dimensions, FlatList, RefreshControl, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -32,7 +32,7 @@ import { defineMessages } from 'react-intl';
 
 import { Text, View } from '../../../BaseComponents';
 import { getDevices } from '../../Actions/Devices';
-import { changeSensorDisplayType } from '../../Actions/Dashboard';
+import { changeSensorDisplayTypeDB } from '../../Actions/Dashboard';
 
 import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
@@ -43,7 +43,7 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { getTabBarIcon } from '../../Lib';
+import { getTabBarIcon, LayoutAnimations } from '../../Lib';
 
 const messages = defineMessages({
 	messageNoItemsTitle: {
@@ -66,7 +66,7 @@ type Props = {
 	screenProps: Object,
 	navigation: Object,
 	navigation: Object,
-	onChangeDisplayType: () => void,
+	changeSensorDisplayTypeDB: () => void,
 	dispatch: Function,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
@@ -139,7 +139,8 @@ class DashboardTab extends View {
 
 	startSensorTimer() {
 		this.timer = setInterval(() => {
-			this.props.onChangeDisplayType();
+			LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
+			this.props.changeSensorDisplayTypeDB();
 		}, 5000);
 	}
 
@@ -150,7 +151,8 @@ class DashboardTab extends View {
 
 	changeDisplayType() {
 		this.stopSensorTimer();
-		this.props.onChangeDisplayType();
+		LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
+		this.props.changeSensorDisplayTypeDB();
 		this.startSensorTimer();
 	}
 
@@ -403,8 +405,8 @@ function mapStateToProps(state: Object, props: Object): Object {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onChangeDisplayType: () => {
-			dispatch(changeSensorDisplayType());
+		changeSensorDisplayTypeDB: () => {
+			dispatch(changeSensorDisplayTypeDB());
 		},
 		dispatch,
 	};

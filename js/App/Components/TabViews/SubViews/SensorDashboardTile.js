@@ -22,15 +22,14 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import {
-	FormattedNumber,
 	View,
 } from '../../../../BaseComponents';
-import SensorDashboardTileSlide from './SensorDashboardTileSlide';
 import DashboardShadowTile from './DashboardShadowTile';
+import TypeBlockDB from './Sensor/TypeBlockDB';
+import GenericSensor from './Sensor/GenericSensor';
 
 import {
 	formatLastUpdated,
@@ -106,8 +105,16 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	getSlideList(item: Object): Object {
-		let slideList = [], sensorInfo = '';
-		const { formatMessage } = this.props.intl;
+		let slideList = {}, sensorInfo = '';
+		const { intl } = this.props;
+		const { formatMessage } = intl;
+
+		const {
+			iconStyle,
+			valueStyle,
+			unitStyle,
+			labelStyle,
+		} = this.getStyles();
 
 		for (let key in item.data) {
 			const { value, scale, name } = item.data[key];
@@ -116,35 +123,31 @@ class SensorDashboardTile extends View<Props, null> {
 			const { label, unit, icon } = getSensorIconLabelUnit(name, scale, formatMessage);
 
 			let sharedProps = {
+				key,
 				unit,
 				label,
 				icon,
 				isLarge,
+				name,
+				value,
+				iconStyle,
+				valueStyle,
+				unitStyle,
+				labelStyle,
 			};
 
 			if (name === 'humidity') {
-				slideList.push({
-					...sharedProps,
-					key: 'humidity',
-					text: <FormattedNumber value={value}/>,
-				});
+				slideList[key] = <GenericSensor {...sharedProps} />;
 				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'temp') {
-				slideList.push({
-					...sharedProps,
-					key: 'temperature',
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1} minimumFractionDigits={isLarge ? 0 : 1}/>,
-				});
+				slideList[key] = <GenericSensor {...sharedProps}
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1, minimumFractionDigits: isLarge ? 0 : 1}}/>;
 				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'rrate' || name === 'rtotal') {
-				slideList.push({
-					...sharedProps,
-					key: `rain${key}`,
-					text: (name === 'rrate' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
-					text2: (name === 'rtotal' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
-				});
+				slideList[key] = <GenericSensor {...sharedProps}
+					formatOptions={{maximumFractionDigits: 0}}/>;
 				let rrateInfo = name === 'rrate' ? `${label} ${value}${unit}` : '';
 				let rtotalInfo = name === 'rtotal' ? `${label} ${value}${unit}` : '';
 				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
@@ -153,25 +156,18 @@ class SensorDashboardTile extends View<Props, null> {
 				let directions = '';
 				if (name === 'wdir') {
 					directions = [...this._windDirection(value)].toString();
+					sharedProps = { ...sharedProps, value: this._windDirection(value) };
 				}
-				slideList.push({
-					...sharedProps,
-					key: `wind${key}`,
-					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/> ),
-					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/> ),
-					text3: (name === 'wdir' && this._windDirection(value)),
-				});
+				slideList[key] = <GenericSensor {...sharedProps}
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
 				let wgustInfo = name === 'wgust' ? `${label} ${value}${unit}` : '';
 				let wavgInfo = name === 'wavg' ? `${label} ${value}${unit}` : '';
 				let wdirInfo = name === 'wdir' ? `${label} ${directions}` : '';
 				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
 			}
 			if (name === 'uv') {
-				slideList.push({
-					...sharedProps,
-					key: 'uv',
-					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
-				});
+				slideList[key] = <GenericSensor {...sharedProps}
+					formatOptions={{maximumFractionDigits: 0}} />;
 				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'watt') {
@@ -179,44 +175,28 @@ class SensorDashboardTile extends View<Props, null> {
 					sharedProps = { ...sharedProps, label: isLarge ? label :
 						`${this.labelAcc} ${this.labelWatt}` };
 				}
-				slideList.push({
-					...sharedProps,
-					key: `watt${key}`,
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
-				});
+				slideList[key] = <GenericSensor {...sharedProps}
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}} />;
 				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'lum') {
-				slideList.push({
-					...sharedProps,
-					key: 'luminance',
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}
-						useGrouping={false}/>,
-				});
+				slideList[key] = <GenericSensor	{...sharedProps}
+					formatOptions={{maximumFractionDigits: 0, useGrouping: false}} />;
 				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'dewp') {
-				slideList.push({
-					...sharedProps,
-					key: 'dewpoint',
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
-				});
+				slideList[key] = <GenericSensor	{...sharedProps}
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
 				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'barpress') {
-				slideList.push({
-					...sharedProps,
-					key: 'barometricpressure',
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
-				});
+				slideList[key] = <GenericSensor	{...sharedProps}
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}} />;
 				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 			if (name === 'genmeter') {
-				slideList.push({
-					...sharedProps,
-					key: 'genricmeter',
-					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
-				});
+				slideList[key] = <GenericSensor {...sharedProps}
+					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
 				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
 			}
 		}
@@ -226,7 +206,6 @@ class SensorDashboardTile extends View<Props, null> {
 
 	render(): Object {
 		const { item, tileWidth, isGatewayActive, intl } = this.props;
-		const displayType = this.props.displayType;
 		const { slideList, sensorInfo } = this.getSlideList(item);
 
 		const { lastUpdated } = item;
@@ -235,26 +214,13 @@ class SensorDashboardTile extends View<Props, null> {
 
 		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
-		const slides = slideList.map((data: Object): Object =>
-			<SensorDashboardTileSlide
-				key={data.key}
-				data={data}
-				tileWidth={tileWidth}
-				isGatewayActive={isGatewayActive}/>
-		);
-
-		let selectedSlideIndex = 0;
-		if (displayType !== 'default') {
-			for (let i = 0; i < slideList.length; ++i) {
-				if (slideList[i].key === displayType) {
-					selectedSlideIndex = i;
-					break;
-				}
-			}
-		}
-
 		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerActive;
-		let background = slideList.length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
+		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
+		const {
+			sensorValueCover,
+			dotCoverStyle,
+			dotStyle,
+		} = this.getStyles();
 
 		return (
 			<DashboardShadowTile
@@ -284,24 +250,18 @@ class SensorDashboardTile extends View<Props, null> {
 						height: tileWidth,
 					},
 				]}>
-				<TouchableOpacity
-					onPress={this.props.onPress}
-					activeOpacity={1}
-					style={{
-						width: tileWidth,
-						height: tileWidth * 0.4,
-						flexDirection: 'row',
-					}}
-					accessible={false}
-					importantForAccessibility="no-hide-descendants">
-					<View style={[styles.body, {
+				<TypeBlockDB
+					sensors={slideList}
+					id={item.id}
+					lastUpdated={lastUpdated}
+					style={[styles.body, {
 						width: tileWidth,
 						height: tileWidth * 0.4,
 						backgroundColor: background,
-					}]}>
-						{slides[selectedSlideIndex]}
-					</View>
-				</TouchableOpacity>
+					}]}
+					valueCoverStyle={sensorValueCover}
+					dotCoverStyle={dotCoverStyle}
+					dotStyle={dotStyle}/>
 			</DashboardShadowTile>
 		);
 	}
@@ -311,6 +271,50 @@ class SensorDashboardTile extends View<Props, null> {
 			'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
 		];
 		return directions[Math.floor(value / 22.5)];
+	}
+
+	getStyles(): Object {
+		const { tileWidth, isGatewayActive } = this.props;
+
+		const backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
+
+		const dotSize = tileWidth * 0.05;
+
+		return {
+			iconStyle: {
+				fontSize: tileWidth * 0.28,
+			},
+			valueStyle: {
+				fontSize: tileWidth * 0.16,
+			},
+			unitStyle: {
+				fontSize: tileWidth * 0.1,
+			},
+			labelStyle: {
+				fontSize: tileWidth * 0.1,
+			},
+			sensorValueCover: {
+				height: '100%',
+				width: tileWidth,
+				backgroundColor: backgroundColor,
+				alignItems: 'flex-start',
+				justifyContent: 'center',
+			},
+			dotCoverStyle: {
+				flex: 1,
+				width: '100%',
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				paddingVertical: 3,
+			},
+			dotStyle: {
+				width: dotSize,
+				height: dotSize,
+				borderRadius: dotSize / 2,
+				marginLeft: 2 + (dotSize * 0.2),
+			},
+		};
 	}
 }
 
@@ -334,10 +338,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(state: Object, { item }: Object): Object {
-	return {
-		displayType: state.dashboard.sensorDisplayTypeById[item.id],
-	};
-}
-
-module.exports = connect(mapStateToProps)(SensorDashboardTile);
+module.exports = SensorDashboardTile;

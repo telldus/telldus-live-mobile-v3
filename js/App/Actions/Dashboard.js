@@ -21,6 +21,8 @@
 // @flow
 
 'use strict';
+import type { ThunkAction } from './Types';
+
 // Dashboard actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Dashboard } = actions;
@@ -29,7 +31,7 @@ function getSupportedDisplayTypes(data: Object): Array<string> {
 	return Object.keys(data);
 }
 
-const changeSensorDisplayTypeDB = (): ThunkAction => (dispatch: Function, getState: Object) => {
+const changeSensorDisplayTypeDB = (): ThunkAction => (dispatch: Function, getState: Function) => {
 	const { sensors, dashboard, sensorsList } = getState();
 	const { sensorIds } = dashboard;
 	const { defaultSensorSettings } = sensorsList;

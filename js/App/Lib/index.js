@@ -44,6 +44,7 @@ import scheduleUtils from './scheduleUtils';
 import * as LocalApi from './LocalApi';
 import * as NavigationService from './NavigationService';
 import shouldUpdate from './shouldUpdate';
+import * as LayoutAnimations from './LayoutAnimations';
 
 
 module.exports = {
@@ -71,4 +72,5 @@ module.exports = {
 	...LocalApi,
 	...NavigationService,
 	shouldUpdate,
+	LayoutAnimations,
 };

@@ -35,40 +35,55 @@ type sensorProps = {
 	label?: string,
 	isLarge: boolean,
 	formatOptions?: Object,
+	coverStyle?: Object,
+	iconStyle?: Object,
+	valueStyle?: Object,
+	unitStyle?: Object,
+	labelStyle?: Object,
 };
 
-const GenericSensor = ({ name, value, unit, icon, label, isLarge, formatOptions }: sensorProps): Object => (
-	<View style={Theme.Styles.sensorValue}>
-		{!isLarge && (<IconTelldus icon={icon} style={Theme.Styles.sensorIcon}/>)}
-		<View style={Theme.Styles.sensorValueCover}>
-			{
-				name === 'wdir' ?
-					<Text style={Theme.Styles.sensorValueText}>
-						{value}
-					</Text>
-					:
-					<View style={{flexDirection: 'row', alignItems: 'center'}}>
-						<Text>
-							<Text style={Theme.Styles.sensorValueText}>
-								<FormattedNumber value={value} {...formatOptions}/>
-							</Text>
-							{/** {'\n\n'}
+const GenericSensor = ({ name, value, unit, icon, label, isLarge, formatOptions, coverStyle, iconStyle, valueStyle, unitStyle, labelStyle }: sensorProps): Object => {
+	const { sensorValue, sensorValueText, sensorValueLabelText } = Theme.Styles;
+
+	return (
+		<View style={[sensorValue, coverStyle]}>
+			{!isLarge && (
+				<IconTelldus icon={icon} style={{
+					fontSize: 40,
+					color: '#fff',
+					marginTop: 5,
+					...iconStyle}}/>
+			)}
+			<View style={Theme.Styles.sensorValueCover}>
+				{
+					name === 'wdir' ?
+						<Text style={[sensorValueText, valueStyle]}>
+							{value}
+						</Text>
+						:
+						<View style={{flexDirection: 'row', alignItems: 'center'}}>
+							<Text>
+								<Text style={[sensorValueText, valueStyle]}>
+									<FormattedNumber value={value} {...formatOptions}/>
+								</Text>
+								{/** {'\n\n'}
 							  *	A workaround to add space between the two Texts which are children of the same parent Text node.
 							  */}
-							<Text style={{fontSize: 8, color: 'transparent'}} allowFontScaling={false}>
+								<Text style={{fontSize: 8, color: 'transparent'}} allowFontScaling={false}>
 								!
+								</Text>
+								<Text style={[sensorValueLabelText, unitStyle]}>
+									{unit}
+								</Text>
 							</Text>
-							<Text style={Theme.Styles.sensorValueLabelText}>
-								{unit}
-							</Text>
-						</Text>
-					</View>
-			}
-			<Text style={{color: '#ffffff'}}>
-				{label}
-			</Text>
+						</View>
+				}
+				<Text style={[{color: '#ffffff'}, labelStyle]}>
+					{label}
+				</Text>
+			</View>
 		</View>
-	</View>
-);
+	);
+};
 
 export default GenericSensor;
