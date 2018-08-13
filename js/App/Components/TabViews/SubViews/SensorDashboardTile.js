@@ -111,6 +111,7 @@ class SensorDashboardTile extends View<Props, null> {
 
 		const {
 			iconStyle,
+			valueUnitCoverStyle,
 			valueStyle,
 			unitStyle,
 			labelStyle,
@@ -131,6 +132,7 @@ class SensorDashboardTile extends View<Props, null> {
 				name,
 				value,
 				iconStyle,
+				valueUnitCoverStyle,
 				valueStyle,
 				unitStyle,
 				labelStyle,
@@ -278,20 +280,25 @@ class SensorDashboardTile extends View<Props, null> {
 
 		const backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
 
-		const dotSize = tileWidth * 0.05;
+		const dotSize = tileWidth * 0.045;
 
 		return {
 			iconStyle: {
 				fontSize: tileWidth * 0.28,
 			},
+			valueUnitCoverStyle: {
+				height: tileWidth * 0.16,
+			},
 			valueStyle: {
-				fontSize: tileWidth * 0.16,
+				fontSize: tileWidth * 0.14,
+				height: tileWidth * 0.16,
 			},
 			unitStyle: {
-				fontSize: tileWidth * 0.1,
+				fontSize: tileWidth * 0.09,
 			},
 			labelStyle: {
-				fontSize: tileWidth * 0.1,
+				fontSize: tileWidth * 0.09,
+				height: tileWidth * 0.12,
 			},
 			sensorValueCover: {
 				height: '100%',

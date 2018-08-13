@@ -381,6 +381,12 @@ class SensorRow extends View<Props, State> {
 	getSensors(data: Object): Object {
 		let sensors = {}, sensorInfo = '';
 		const { formatMessage } = this.props.intl;
+		const {
+			valueUnitCoverStyle,
+			valueStyle,
+			unitStyle,
+			labelStyle,
+		} = this.getStyles();
 
 		for (let key in data) {
 			const values = data[key];
@@ -397,6 +403,10 @@ class SensorRow extends View<Props, State> {
 				label,
 				icon,
 				isLarge,
+				valueUnitCoverStyle,
+				valueStyle,
+				unitStyle,
+				labelStyle,
 			};
 
 			if (name === 'humidity') {
@@ -470,8 +480,8 @@ class SensorRow extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { sensor, currentScreen, appLayout, isGatewayActive, intl } = this.props;
-		const styles = this.getStyles(appLayout, isGatewayActive);
+		const { sensor, currentScreen, isGatewayActive, intl } = this.props;
+		const styles = this.getStyles();
 		const {
 			data,
 			name,
@@ -592,10 +602,11 @@ class SensorRow extends View<Props, State> {
 		this.width = event.nativeEvent.layout.width;
 	}
 
-	getStyles(appLayout: Object, isGatewayActive: boolean): Object {
-		let { height, width } = appLayout;
-		let isPortrait = height > width;
-		let deviceWidth = isPortrait ? width : height;
+	getStyles(): Object {
+		const { appLayout, isGatewayActive } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
 		let {
 			rowHeight,
@@ -614,7 +625,7 @@ class SensorRow extends View<Props, State> {
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const widthValueBlock = (buttonWidth * 2) + 6;
-		const dotSize = widthValueBlock * 0.05;
+		const dotSize = rowHeight * 0.09;
 
 		return {
 			container: {
@@ -651,8 +662,8 @@ class SensorRow extends View<Props, State> {
 			},
 			hiddenRow: {
 				flexDirection: 'row',
-				height: Theme.Core.rowHeight,
-				width: Theme.Core.buttonWidth * 2,
+				height: rowHeight,
+				width: buttonWidth * 2,
 				alignSelf: 'flex-end',
 				justifyContent: 'center',
 				alignItems: 'center',
@@ -709,13 +720,27 @@ class SensorRow extends View<Props, State> {
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
-				paddingVertical: 3,
+				paddingBottom: 3,
 			},
 			dotStyle: {
 				width: dotSize,
 				height: dotSize,
 				borderRadius: dotSize / 2,
 				marginLeft: 2 + (dotSize * 0.2),
+			},
+			valueUnitCoverStyle: {
+				height: rowHeight * 0.39,
+			},
+			valueStyle: {
+				fontSize: rowHeight * 0.33,
+				height: rowHeight * 0.39,
+			},
+			unitStyle: {
+				fontSize: rowHeight * 0.2,
+			},
+			labelStyle: {
+				fontSize: rowHeight * 0.21,
+				height: rowHeight * 0.3,
 			},
 		};
 	}
