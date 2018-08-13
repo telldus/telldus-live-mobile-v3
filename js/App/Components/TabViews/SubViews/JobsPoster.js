@@ -23,9 +23,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Animated, Image, TouchableOpacity, PanResponder } from 'react-native';
+import { Animated, Image, PanResponder } from 'react-native';
 import Platform from 'Platform';
 import { defineMessages } from 'react-intl';
+import Ripple from 'react-native-material-ripple';
 
 import { Poster, View, CheckBoxIconText } from '../../../../BaseComponents';
 import Weekdays from './Jobs/Weekdays';
@@ -44,6 +45,7 @@ type Props = {
 	appLayout: Object,
 	onToggleVisibility: (boolean) => void,
 	intl: Object,
+	currentScreen: string,
 };
 
 type State = {
@@ -52,6 +54,7 @@ type State = {
 	showRightButton?: boolean,
 	dragDir?: string,
 	showInactive: boolean,
+	daysLayout: Object,
 };
 
 export default class JobsPoster extends View<null, Props, State> {
@@ -70,8 +73,6 @@ export default class JobsPoster extends View<null, Props, State> {
 		super(props);
 
 		this.scrollDays = new Animated.Value(1);
-		this.leftButton = new Animated.Value(1);
-		this.rightButton = new Animated.Value(1);
 
 		this.state = {
 			todayIndex: props.todayIndex,
@@ -101,6 +102,7 @@ export default class JobsPoster extends View<null, Props, State> {
 		this._panResponder = PanResponder.create({
 			// Ask to be the responder:
 			onStartShouldSetPanResponder: this.onStartShouldSetPanResponderHandler.bind(this),
+			onStartShouldSetPanResponderCapture: this.onStartShouldSetPanResponderCapturehHandler.bind(this),
 			onMoveShouldSetPanResponder: this.onMoveShouldSetPanResponderHandler.bind(this),
 			onMoveShouldSetPanResponderCapture: this.onMoveShouldSetPanResponderCapturerHandler.bind(this),
 			onPanResponderGrant: this.onPanResponderGrantHandler.bind(this),
@@ -108,10 +110,15 @@ export default class JobsPoster extends View<null, Props, State> {
 			onPanResponderTerminationRequest: this.onPanResponderTerminationRequestHandler.bind(this),
 			onPanResponderRelease: this.onPanResponderReleaseHandler.bind(this),
 			onPanResponderTerminate: this.onPanResponderTerminateHandler.bind(this),
+			onShouldBlockNativeResponder: this.onShouldBlockNativeResponderHandler.bind(this),
 		});
 	}
 
 	onStartShouldSetPanResponderHandler(event: Object, gestureState: Object): boolean {
+		return false;
+	}
+
+	onStartShouldSetPanResponderCapturehHandler(event: Object, gestureState: Object): boolean {
 		return false;
 	}
 
@@ -190,7 +197,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	}
 
 	onPanResponderTerminationRequestHandler(event: Object, gestureState: Object): boolean {
-		return false;
+		return true;
 	}
 
 	onPanResponderReleaseHandler(event: Object, gestureState: Object) {
@@ -228,6 +235,10 @@ export default class JobsPoster extends View<null, Props, State> {
 		this.finalValue = null;
 	}
 
+	onShouldBlockNativeResponderHandler(event: Object, gestureState: Object): boolean {
+		return false;
+	}
+
 	componentDidUpdate(prevProps: Props, prevState: Object) {
 		const { todayIndex } = this.state;
 		const { todayIndex: newTodayIndex } = this.props;
@@ -263,13 +274,25 @@ export default class JobsPoster extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		const newProps = nextProps.todayIndex !== this.props.todayIndex;
-		const newState = nextState.todayIndex !== this.state.todayIndex;
-		const newLayout = nextProps.appLayout.width !== this.props.appLayout.width;
-		const newDays = nextProps.days.length !== this.props.days.length;
-		const onDragChange = nextState.dragDir !== this.state.dragDir;
-		const showInactiveChange = nextState.showInactive !== this.state.showInactive;
-		return newProps || newState || newLayout || newDays || onDragChange || showInactiveChange;
+		if (nextProps.currentScreen === 'Scheduler') {
+			const { daysLayout } = this.state;
+			if (Object.keys(daysLayout).length !== Object.keys(nextState.daysLayout).length) {
+				return true;
+			}
+			const todayIndexChange = (nextState.todayIndex !== this.state.todayIndex) || (nextProps.todayIndex !== this.props.todayIndex);
+			if (todayIndexChange) {
+				return true;
+			}
+			const newLayout = nextProps.appLayout.width !== this.props.appLayout.width;
+			if (newLayout) {
+				return true;
+			}
+			const newDays = nextProps.days.length !== this.props.days.length;
+			const onDragChange = nextState.dragDir !== this.state.dragDir;
+			const showInactiveChange = nextState.showInactive !== this.state.showInactive;
+			return newDays || onDragChange || showInactiveChange;
+		}
+		return false;
 	}
 
 	getPosterWidth(): number {
@@ -301,36 +324,19 @@ export default class JobsPoster extends View<null, Props, State> {
 		} = this._getStyle();
 		const image = require('../../../../BaseComponents/img/keyboard-left-arrow-button.png');
 		const posterWidth = this.getPosterWidth();
+		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
 		return (
 			<Poster posterWidth={posterWidth}>
-				<View style={container} {...this._panResponder.panHandlers}>
-					<View style={daysContainer}>
-						{this._renderDays()}
-						<View style={dateContainer}>
-							{this._renderDate()}
+				<View style={container} pointerEvents={'box-none'}>
+					<View style={container} {...this._panResponder.panHandlers} pointerEvents={'box-only'}>
+						<View style={daysContainer}>
+							{this._renderDays()}
+							<View style={dateContainer}>
+								{this._renderDate()}
+							</View>
 						</View>
 					</View>
-					{showLeftButton && (
-						<TouchableOpacity
-							onPress={this._scrollToYesterday}
-							onPressIn={this._leftButtonPressIn}
-							onPressOut={this._leftButtonPressOut}
-							style={arrowContainer}
-						>
-							<Image source={image} style={arrow}/>
-						</TouchableOpacity>
-					)}
-					{showRightButton && (
-						<TouchableOpacity
-							onPress={this._scrollToTomorrow}
-							onPressIn={this._rightButtonPressIn}
-							onPressOut={this._rightButtonPressOut}
-							style={[arrowContainer, arrowContainerRight]}
-						>
-							<Image source={image} style={arrow}/>
-						</TouchableOpacity>
-					)}
 					<CheckBoxIconText
 						style={{
 							marginBottom: 5,
@@ -339,25 +345,37 @@ export default class JobsPoster extends View<null, Props, State> {
 						isChecked={showInactive}
 						text={this.checkBoxText}
 					/>
+					{showLeftButton && (
+						<Ripple
+							rippleColor={rippleColor}
+							rippleOpacity={rippleOpacity}
+							rippleDuration={rippleDuration}
+							style={arrowContainer}
+							onPress={this._scrollToYesterday}>
+							<Image source={image} style={arrow}/>
+						</Ripple>
+					)}
+					{showRightButton && (
+						<Ripple
+							rippleColor={rippleColor}
+							rippleOpacity={rippleOpacity}
+							rippleDuration={rippleDuration}
+							style={[arrowContainer, arrowContainerRight]}
+							onPress={this._scrollToTomorrow}>
+							<Image source={image} style={[arrow, {
+								transform: [{rotateZ: '180deg'}],
+							}]}/>
+						</Ripple>
+					)}
 				</View>
 			</Poster>
 		);
 	}
 
 	_renderDays = (): React$Element<Animated.View>[] => {
-		const { todayIndex } = this.state;
 
 		return this.props.days.map((day: Object, i: number): React$Element<Animated.View> => {
 			const animation = this._getDayAnimation(i, day.day);
-
-			let simulateClick = {};
-
-			if (i === todayIndex - 1) {
-				simulateClick = { opacity: this.leftButton };
-			}
-			if (i === todayIndex + 1) {
-				simulateClick = { opacity: this.rightButton };
-			}
 
 			return (
 				<Weekdays
@@ -365,7 +383,6 @@ export default class JobsPoster extends View<null, Props, State> {
 					i={i}
 					day={day}
 					animation={animation}
-					simulateClick={simulateClick}
 					onLayout={this.onLayout}/>
 			);
 		});
@@ -389,46 +406,6 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	_scrollToTomorrow = () => {
 		this.props.scroll(1);
-	};
-
-	_leftButtonPressIn = () => {
-		Animated.timing(
-			this.leftButton,
-			{
-				toValue: 0.2,
-				duration: 10,
-			},
-		).start();
-	};
-
-	_leftButtonPressOut = () => {
-		Animated.timing(
-			this.leftButton,
-			{
-				toValue: 1,
-				duration: 10,
-			},
-		).start();
-	};
-
-	_rightButtonPressIn = () => {
-		Animated.timing(
-			this.rightButton,
-			{
-				toValue: 0.2,
-				duration: 10,
-			},
-		).start();
-	};
-
-	_rightButtonPressOut = () => {
-		Animated.timing(
-			this.rightButton,
-			{
-				toValue: 1,
-				duration: 10,
-			},
-		).start();
 	};
 
 	_getDayAnimation = (index: number, weekday: string): Object => {
@@ -509,6 +486,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				height: dayHeight,
 				top: dayTop,
 				left: '100%',
+				zIndex: -1,
 			},
 			text: {
 				backgroundColor: 'transparent',
@@ -516,6 +494,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				fontSize: dayFontSize,
 				fontFamily: Theme.Core.fonts.robotoLight,
 				textAlign: 'center',
+				zIndex: -1,
 			},
 		};
 
@@ -525,7 +504,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				container: {
 					...day.container,
 					left: dayWidth ?
-						this._interpolate(0 - 2 * dayWidth, 0 - dayWidth, 0)
+						this._interpolate(0 - (2 * dayWidth), 0 - dayWidth, 0)
 						:
 						0,
 				},
@@ -580,7 +559,7 @@ export default class JobsPoster extends View<null, Props, State> {
 					...day.container,
 					left: dayWidth ? null : '100%',
 					right: dayWidth ?
-						this._interpolate(0, 0 - dayWidth, 0 - 2 * dayWidth)
+						this._interpolate(0, 0 - dayWidth, 0 - (2 * dayWidth))
 						:
 						null,
 				},
@@ -639,11 +618,16 @@ export default class JobsPoster extends View<null, Props, State> {
 	};
 
 	_getStyle = (): Object => {
-		const { appLayout } = this.props;
+		const { todayIndex } = this.state;
+		const { appLayout, days } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
+		const prevDay = days[todayIndex - 1];
+		const nextDay = days[todayIndex + 1];
+		const prevDayWidth = prevDay ? this._getDayWidth(prevDay.day) + (width * 0.0555) : undefined;
+		const nextDayWidth = nextDay ? this._getDayWidth(nextDay.day) + (width * 0.0555) : undefined;
 
 		return {
 			container: {
@@ -679,18 +663,19 @@ export default class JobsPoster extends View<null, Props, State> {
 			},
 			arrowContainer: {
 				position: 'absolute',
-				width: deviceWidth * 0.196,
+				width: prevDayWidth ? prevDayWidth : deviceWidth * 0.196,
 				height: deviceWidth * 0.1,
 				left: deviceWidth * 0.026666667,
 				top: deviceWidth * 0.117333333,
 				justifyContent: 'center',
+				borderRadius: 5,
+				zIndex: 3,
 			},
 			arrowContainerRight: {
 				left: null,
 				right: deviceWidth * 0.026666667,
-				transform: [
-					{ scaleX: -1 },
-				],
+				width: nextDayWidth ? nextDayWidth : deviceWidth * 0.196,
+				alignItems: 'flex-end',
 			},
 			arrow: {
 				height: deviceWidth * 0.036,
@@ -701,7 +686,7 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	_getDayWidth = (weekday: string): any => {
 		const { daysLayout } = this.state;
-		return daysLayout[weekday] ? daysLayout[weekday] : false;
+		return daysLayout[weekday] ? daysLayout[weekday] : undefined;
 	};
 
 	onLayout(width: number, i: number, weekday: string) {

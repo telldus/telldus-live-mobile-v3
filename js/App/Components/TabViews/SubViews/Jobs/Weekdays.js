@@ -31,7 +31,6 @@ type Props = {
     day: Object,
     i: number,
     animation: any,
-    simulateClick: any,
     onLayout: (number, number, string) => void,
 };
 
@@ -50,14 +49,15 @@ onLayout(ev: Object) {
 }
 
 render(): Object {
-	let { day, i, animation, simulateClick } = this.props;
+	let { day, i, animation } = this.props;
 	return (
 		<Animated.View
-			style={[animation.container, simulateClick]}
+			style={animation.container}
 			key={`${day.day}${i}`}
 			onLayout={this.onLayout}
+			pointerEvents={'none'}
 		>
-			<Animated.Text style={animation.text} numberOfLines={1}>
+			<Animated.Text style={animation.text} numberOfLines={1} pointerEvents={'none'}>
 				{capitalize(day.day)}
 			</Animated.Text>
 		</Animated.View>
