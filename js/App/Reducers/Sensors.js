@@ -92,6 +92,17 @@ const defaultSensorSettings = (state: Object = {}, action: Object): State => {
 			},
 		};
 	}
+	if (action.type === 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE_DB') {
+		const { id, displayTypeDB } = action;
+		const allSettings = state[id] ? state[id] : {};
+		return {
+			...state,
+			[id]: {
+				...allSettings,
+				displayTypeDB,
+			},
+		};
+	}
 	if (action.type === 'CHANGE_SENSOR_DEFAULT_HISTORY_SETTINGS') {
 		const { id, historySettings: newSettings } = action;
 		let { historySettings, ...others } = state[id] ? state[id] : {};
