@@ -21,7 +21,7 @@
 'use strict';
 
 import React from 'react';
-import { AccessibilityInfo } from 'react-native';
+import { AccessibilityInfo, UIManager } from 'react-native';
 import { connect } from 'react-redux';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
@@ -72,6 +72,7 @@ class App extends React.Component<Props, null> {
 		this.setCalendarLocale = this.setCalendarLocale.bind(this);
 
 		this.setCalendarLocale();
+		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 	}
 
 	componentDidMount() {
