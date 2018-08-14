@@ -692,7 +692,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	onLayout(width: number, i: number, weekday: string) {
 		const { todayIndex } = this.state;
 		if (!this.weekDaysLayout[weekday] && i !== todayIndex) {
-			this.weekDaysLayout[weekday] = width + 5;
+			this.weekDaysLayout[weekday] = width;
 			let length = Object.keys(this.weekDaysLayout).length;
 			if (length > 5) {
 				this.setState({
