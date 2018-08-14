@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, Animated } from 'react-native';
+import { Animated } from 'react-native';
 import Ripple from 'react-native-material-ripple';
 
 import {
