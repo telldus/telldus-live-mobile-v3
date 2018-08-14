@@ -202,10 +202,14 @@ class DashboardTab extends View {
 		if (currentScreen !== 'Dashboard' && this.timer) {
 			this.stopSensorTimer();
 		}
-		if (currentScreen === 'Dashboard' && !this.timer) {
+		return currentScreen === 'Dashboard';
+	}
+
+	componentDidUpdate(prevProps: Object) {
+		const { currentScreen } = this.props.screenProps;
+		if (currentScreen === 'Dashboard' && prevProps.screenProps.currentScreen !== 'Dashboard' && !this.timer) {
 			this.startSensorTimer();
 		}
-		return currentScreen === 'Dashboard';
 	}
 
 	_onLayout = (event: Object) => {

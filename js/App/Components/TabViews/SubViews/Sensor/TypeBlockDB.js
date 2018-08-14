@@ -22,17 +22,12 @@
 'use strict';
 
 import React from 'react';
-import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
 	View,
 } from '../../../../../BaseComponents';
 import TypeBlock from './TypeBlock';
-import { changeSensorDisplayTypeDB } from '../../../../Actions';
-import {
-	LayoutAnimations,
-} from '../../../../Lib';
 
 type Props = {
 	defaultType?: string,
@@ -43,8 +38,8 @@ type Props = {
 	dotStyle: Object,
 	dotCoverStyle: Array<any> | number | Object,
     sensors: Object,
-	changeSensorDisplayTypeDB: Function,
 	id: number,
+	onPress: () => void,
 };
 
 class TypeBlockDB extends View<Props, null> {
@@ -68,8 +63,7 @@ shouldComponentUpdate(nextProps: Object): boolean {
 }
 
 changeDisplayType() {
-	LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
-	this.props.changeSensorDisplayTypeDB();
+	this.props.onPress();
 }
 
 getSupportedDisplayTypes(sensors: Object): Array<string> {
@@ -128,12 +122,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-function mapDispatchToProps(dispatch: Function): Object {
-	return {
-		changeSensorDisplayTypeDB: (): any => {
-			return dispatch(changeSensorDisplayTypeDB());
-		},
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TypeBlockDB);
+export default connect(mapStateToProps, null)(TypeBlockDB);

@@ -209,7 +209,7 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, isGatewayActive, intl } = this.props;
+		const { item, tileWidth, isGatewayActive, intl, onPress } = this.props;
 		const { slideList, sensorInfo } = this.getSlideList(item);
 
 		const { lastUpdated } = item;
@@ -256,6 +256,7 @@ class SensorDashboardTile extends View<Props, null> {
 				]}>
 				<TypeBlockDB
 					sensors={slideList}
+					onPress={onPress}
 					id={item.id}
 					lastUpdated={lastUpdated}
 					style={[styles.body, {
