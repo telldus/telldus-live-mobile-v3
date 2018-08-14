@@ -115,6 +115,7 @@ class SensorDashboardTile extends View<Props, null> {
 			valueStyle,
 			unitStyle,
 			labelStyle,
+			sensorValueCoverStyle,
 		} = this.getStyles();
 
 		for (let key in item.data) {
@@ -136,6 +137,7 @@ class SensorDashboardTile extends View<Props, null> {
 				valueStyle,
 				unitStyle,
 				labelStyle,
+				sensorValueCoverStyle,
 			};
 
 			if (name === 'humidity') {
@@ -276,7 +278,7 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	getStyles(): Object {
-		const { tileWidth, isGatewayActive } = this.props;
+		const { tileWidth, isGatewayActive, item } = this.props;
 
 		const backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
 
@@ -300,6 +302,9 @@ class SensorDashboardTile extends View<Props, null> {
 				fontSize: tileWidth * 0.09,
 				height: tileWidth * 0.12,
 			},
+			sensorValueCoverStyle: {
+				marginBottom: Object.keys(item.data).length <= 1 ? 0 : tileWidth * 0.1,
+			},
 			sensorValueCover: {
 				height: '100%',
 				width: tileWidth,
@@ -308,12 +313,12 @@ class SensorDashboardTile extends View<Props, null> {
 				justifyContent: 'center',
 			},
 			dotCoverStyle: {
-				flex: 1,
+				position: 'absolute',
 				width: '100%',
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
-				paddingVertical: 3,
+				bottom: 3,
 			},
 			dotStyle: {
 				width: dotSize,

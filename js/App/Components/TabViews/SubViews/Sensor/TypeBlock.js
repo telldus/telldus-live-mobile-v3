@@ -23,11 +23,12 @@
 
 import React from 'react';
 import { TouchableOpacity, Animated } from 'react-native';
+import Ripple from 'react-native-material-ripple';
 
 import {
 	View,
 } from '../../../../../BaseComponents';
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedTouchable = Animated.createAnimatedComponent(Ripple);
 import Theme from '../../../../Theme';
 
 type Props = {
@@ -44,7 +45,7 @@ type Props = {
 };
 
 const TypeBlock = ({ style, valueCoverStyle, dotStyle, dotCoverStyle, onLayout, changeDisplayType, totalTypes, defaultSensor, defaultType }: Props): Object => {
-
+	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 	return (
 		<AnimatedTouchable
 			onPress={changeDisplayType}
@@ -52,7 +53,10 @@ const TypeBlock = ({ style, valueCoverStyle, dotStyle, dotCoverStyle, onLayout, 
 			disabled={totalTypes.length <= 1}
 			onLayout={onLayout}
 			style={style}
-			importantForAccessibility="no-hide-descendants">
+			importantForAccessibility="no-hide-descendants"
+			rippleColor={rippleColor}
+			rippleOpacity={rippleOpacity}
+			rippleDuration={rippleDuration}>
 			<View
 				style={valueCoverStyle}
 				importantForAccessibility="no-hide-descendants">

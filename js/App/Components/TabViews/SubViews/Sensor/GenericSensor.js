@@ -41,9 +41,14 @@ type sensorProps = {
 	unitStyle?: Object,
 	labelStyle?: Object,
 	valueUnitCoverStyle?: Object,
+	sensorValueCoverStyle?: Object,
 };
 
-const GenericSensor = ({ name, value, unit, icon, label, isLarge, formatOptions, coverStyle, valueUnitCoverStyle, iconStyle, valueStyle, unitStyle, labelStyle }: sensorProps): Object => {
+const GenericSensor = ({
+	name, value, unit, icon, label, isLarge, formatOptions,
+	coverStyle, valueUnitCoverStyle, sensorValueCoverStyle,
+	iconStyle, valueStyle, unitStyle, labelStyle }: sensorProps): Object => {
+
 	const { sensorValue, sensorValueText, sensorValueLabelText } = Theme.Styles;
 
 	return (
@@ -52,10 +57,9 @@ const GenericSensor = ({ name, value, unit, icon, label, isLarge, formatOptions,
 				<IconTelldus icon={icon} style={{
 					fontSize: 40,
 					color: '#fff',
-					marginTop: 5,
 					...iconStyle}}/>
 			)}
-			<View style={[Theme.Styles.sensorValueCover]}>
+			<View style={[Theme.Styles.sensorValueCover, sensorValueCoverStyle]}>
 				{
 					name === 'wdir' ?
 						<Text style={[sensorValueText, valueStyle]}>

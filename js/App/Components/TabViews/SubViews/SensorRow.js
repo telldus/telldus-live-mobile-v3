@@ -386,6 +386,7 @@ class SensorRow extends View<Props, State> {
 			valueStyle,
 			unitStyle,
 			labelStyle,
+			sensorValueCoverStyle,
 		} = this.getStyles();
 
 		for (let key in data) {
@@ -407,6 +408,7 @@ class SensorRow extends View<Props, State> {
 				valueStyle,
 				unitStyle,
 				labelStyle,
+				sensorValueCoverStyle,
 			};
 
 			if (name === 'humidity') {
@@ -603,7 +605,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	getStyles(): Object {
-		const { appLayout, isGatewayActive } = this.props;
+		const { appLayout, isGatewayActive, sensor } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -707,6 +709,9 @@ class SensorRow extends View<Props, State> {
 				maxWidth: 216,
 				flexDirection: 'row',
 			},
+			sensorValueCoverStyle: {
+				marginBottom: Object.keys(sensor.data).length <= 1 ? 0 : rowHeight * 0.16,
+			},
 			sensorValueCover: {
 				width: widthValueBlock,
 				backgroundColor: backgroundColor,
@@ -715,12 +720,12 @@ class SensorRow extends View<Props, State> {
 				justifyContent: 'center',
 			},
 			dotCoverStyle: {
-				flex: 1,
+				position: 'absolute',
 				width: '100%',
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'center',
-				paddingBottom: 3,
+				bottom: 5,
 			},
 			dotStyle: {
 				width: dotSize,
