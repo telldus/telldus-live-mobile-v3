@@ -459,6 +459,13 @@ export default class JobsPoster extends View<null, Props, State> {
 		});
 	};
 
+	_interpolateFontSize = (...outputRange: any[]): Object => {
+		return this.scrollDays.interpolate({
+			inputRange: [0, 0.5, 1, 1.5, 2],
+			outputRange,
+		});
+	};
+
 	_getDayAnimatedStyle = (index: number, weekday: string): Object => {
 		const { appLayout } = this.props;
 		const { height, width } = appLayout;
@@ -522,7 +529,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				},
 				text: {
 					...day.text,
-					fontSize: this._interpolate(dayFontSize, dayFontSize, todayFontSize),
+					fontSize: this._interpolateFontSize(dayFontSize, dayFontSize, dayFontSize, dayFontSize, todayFontSize),
 				},
 			},
 			today: {
@@ -535,7 +542,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				},
 				text: {
 					...day.text,
-					fontSize: this._interpolate(dayFontSize, todayFontSize, dayFontSize),
+					fontSize: this._interpolateFontSize(dayFontSize, dayFontSize, todayFontSize, dayFontSize, dayFontSize),
 				},
 			},
 			tomorrow: {
@@ -551,7 +558,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				},
 				text: {
 					...day.text,
-					fontSize: this._interpolate(todayFontSize, dayFontSize, dayFontSize),
+					fontSize: this._interpolateFontSize(todayFontSize, dayFontSize, dayFontSize, dayFontSize, dayFontSize),
 				},
 			},
 			afterTomorrow: {
