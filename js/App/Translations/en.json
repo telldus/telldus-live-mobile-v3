@@ -232,6 +232,7 @@
   "pages.dashboard": "Dashboard",
   "pages.dashboard.messageNoItemsContent": "You have not added any devices or sensors to your dashboard yet. Go to devices or sensors tab, swipe left on the row and click the star to select the ones you want to add.",
   "pages.dashboard.messageNoItemsTitle": "Your dashboard is empty.",
+  "pages.dashboard.unknownItem": "Unknown device or sensor",
   "pages.devices": "Devices",
   "pages.devices.messageNoDeviceContent": "Currently, adding devices is only possible through our web interface, live.telldus.com. Click below to open the web interface.",
   "pages.devices.messageNoDeviceTitle": "You have not added any devices yet.",

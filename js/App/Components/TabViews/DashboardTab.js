@@ -58,6 +58,11 @@ const messages = defineMessages({
 		'ones you want to add.',
 		description: 'Message title when no items',
 	},
+	unknownItem: {
+		id: 'pages.dashboard.unknownItem',
+		defaultMessage: 'Unknown device or sensor',
+		description: 'Message when unknown device or senor',
+	},
 });
 
 type Props = {
@@ -298,19 +303,33 @@ class DashboardTab extends View {
 		);
 	}
 
+	renderUnknown(id: number, tileStyle: Object, message: string): Object {
+		return (
+			<View
+				style={[tileStyle,
+					{
+						...Theme.Core.shadow,
+						backgroundColor: '#fff',
+					},
+				]}>
+				<Text
+					style={{
+						color: Theme.Core.eulaContentColor,
+					}}
+					key={id}>
+					{message}
+				</Text>
+			</View>
+		);
+	}
+
 	_renderRow(row: Object): Object {
 		const { screenProps } = this.props;
+		const { intl } = screenProps;
 		let { tileWidth } = this.state;
 		const { data, objectType } = row.item;
 		const tileMargin = this.getPadding() / 4;
 		tileWidth -= (2 * tileMargin);
-
-		if (objectType !== 'sensor' && objectType !== 'device') {
-			return <Text key={data.id}>unknown device or sensor</Text>;
-		}
-		if (!data) {
-			return <Text key={data.id}>Unknown device or sensor</Text>;
-		}
 
 		let tileStyle = {
 			flexDirection: 'column',
@@ -322,6 +341,13 @@ class DashboardTab extends View {
 			marginVertical: tileMargin,
 			borderRadius: 2,
 		};
+
+		if (objectType !== 'sensor' && objectType !== 'device') {
+			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(messages.unknownItem));
+		}
+		if (!data) {
+			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(messages.unknownItem));
+		}
 
 		if (objectType === 'sensor') {
 			return <SensorDashboardTile
