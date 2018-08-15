@@ -246,10 +246,13 @@ class Edit extends View<null, Props, State> {
 		const { appLayout, schedule, intl } = this.props;
 		const { formatMessage, formatDate } = intl;
 		const { active, method, methodValue, weekdays } = schedule;
-		const { container, row, save, cancel, throbber, buttonStyle, labelStyle,
-			throbberContainer, throbberContainerOnSave, throbberContainerOnDelete } = this._getStyle(appLayout);
+		const {
+			container, row, save, cancel, throbber,
+			buttonStyle, labelStyle,
+			throbberContainer,
+			buttonCoverStyle,
+		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
-		const throbberContainerStyle = this.state.isSaving ? throbberContainerOnSave : this.state.isDeleting ? throbberContainerOnDelete : {};
 		const labelPostScript = formatMessage(i18n.activateEdit);
 
 		return (
@@ -283,7 +286,7 @@ class Edit extends View<null, Props, State> {
 						labelPostScript={labelPostScript}
 						containerStyle={row}
 					/>
-					<View style={{flex: 1, alignSelf: 'stretch'}}>
+					<View style={buttonCoverStyle}>
 						<TouchableButton
 							text={messages.confirmAndSave}
 							style={[buttonStyle, save]}
@@ -291,6 +294,15 @@ class Edit extends View<null, Props, State> {
 							onPress={this.onSaveSchedule}
 							accessible={true}
 						/>
+						{this.state.isSaving &&
+							(
+								<Throbber
+									throbberContainerStyle={throbberContainer}
+									throbberStyle={throbber}
+								/>
+							)}
+					</View>
+					<View style={buttonCoverStyle}>
 						<TouchableButton
 							text={messages.delete}
 							style={[buttonStyle, cancel]}
@@ -298,10 +310,10 @@ class Edit extends View<null, Props, State> {
 							onPress={this.onDeleteSchedule}
 							accessible={true}
 						/>
-						{!!(this.state.isDeleting || this.state.isSaving) &&
+						{this.state.isDeleting &&
 					(
 						<Throbber
-							throbberContainerStyle={[throbberContainer, throbberContainerStyle]}
+							throbberContainerStyle={throbberContainer}
 							throbberStyle={throbber}
 						/>
 					)}
@@ -336,8 +348,8 @@ class Edit extends View<null, Props, State> {
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		const fontSizeButtonLabel = deviceWidth * 0.03;
-		const buttonWidth = deviceWidth * 0.3;
-		const paddingVertical = fontSizeButtonLabel * 0.9;
+		const buttonWidth = deviceWidth * 0.38;
+		const paddingVertical = 4 + (fontSizeButtonLabel * 0.9);
 		const buttonHeight = (paddingVertical * 2) + fontSizeButtonLabel;
 
 		return {
@@ -354,12 +366,16 @@ class Edit extends View<null, Props, State> {
 			cancel: {
 				backgroundColor: Theme.Core.brandDanger,
 			},
+			buttonCoverStyle: {
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
 			buttonStyle: {
 				width: buttonWidth,
 				borderRadius: buttonHeight / 2,
 				marginVertical: padding / 4,
 				maxWidth: undefined,
-				paddingVertical: fontSizeButtonLabel * 0.9,
+				paddingVertical,
 				...shadow,
 			},
 			labelStyle: {
@@ -367,14 +383,6 @@ class Edit extends View<null, Props, State> {
 			},
 			throbberContainer: {
 				right: -(deviceWidth * 0.12),
-			},
-			throbberContainerOnDelete: {
-				top: 82,
-				right: width * 0.1,
-			},
-			throbberContainerOnSave: {
-				top: 22,
-				right: width * 0.1,
 			},
 			throbber: {
 				fontSize: 30,
