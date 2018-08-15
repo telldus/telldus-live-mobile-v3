@@ -36,7 +36,7 @@ import moment from 'moment';
 import Orientation from 'react-native-orientation-locker';
 const isEqual = require('react-fast-compare');
 
-import { View, Text, FullPageActivityIndicator } from '../../../../BaseComponents';
+import { View, FullPageActivityIndicator } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
 import Theme from '../../../Theme';
 
@@ -507,12 +507,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 				}}>
 					{isLoading ?
 						<View style={containerStyle}>
-							<Text style={{
-								fontSize: 16,
-								color: '#000',
-							}}>
-						Loading...
-							</Text>
+							<FullPageActivityIndicator size={'small'}/>
 						</View>
 						:
 						chart
