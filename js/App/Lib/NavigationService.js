@@ -38,11 +38,12 @@ function setTopLevelNavigator(navigatorRef: any) {
  * Use this method inside any component that does not have the 'navigation' property, where you want to navigate to any registered
  * screen/route.
  */
-function navigate(routeName: string, params: Object) {
+function navigate(routeName: string, params: Object, key?: any) {
 	_navigator.dispatch(
 		NavigationActions.navigate({
 			routeName,
 			params,
+			key,
 		})
 	);
 }

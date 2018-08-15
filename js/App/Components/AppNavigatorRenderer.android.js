@@ -282,7 +282,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					navigate('AddLocation', {clients: response.client});
+					navigate('AddLocation', {clients: response.client}, 'AddLocation');
 				}
 			}).catch((error: Object) => {
 				this.setState({
@@ -310,12 +310,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	onPressGateway(location: Object) {
 		this.closeDrawer();
-		navigate('LocationDetails', {location});
+		navigate('LocationDetails', {location}, 'LocationDetails');
 	}
 
 	onOpenSetting() {
 		this.closeDrawer();
-		navigate('Settings');
+		navigate('Settings', {}, 'Settings');
 	}
 
 	handleConnectivityChange(connectionInfo: Object) {
