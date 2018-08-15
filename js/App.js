@@ -72,7 +72,9 @@ class App extends React.Component<Props, null> {
 		this.setCalendarLocale = this.setCalendarLocale.bind(this);
 
 		this.setCalendarLocale();
-		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+		if (Platform.OS === 'android') {
+			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+		}
 	}
 
 	componentDidMount() {

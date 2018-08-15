@@ -34,7 +34,25 @@ const SensorChangeDisplay = {
 	},
 };
 
+const linearCUD = (duration?: number = 300): Object => (
+	{
+		duration,
+		create: {
+			type: LayoutAnimation.Types.linear,
+			property: LayoutAnimation.Properties.scaleXY,
+		},
+		update: {
+			type: LayoutAnimation.Types.linear,
+			property: LayoutAnimation.Properties.scaleXY,
+		},
+		delete: {
+			type: LayoutAnimation.Types.linear,
+			property: LayoutAnimation.Properties.opacity,
+		},
+	}
+);
 
 module.exports = {
 	SensorChangeDisplay,
+	linearCUD,
 };

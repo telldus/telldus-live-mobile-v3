@@ -23,14 +23,20 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback, ScrollView,
-	LayoutAnimation, UIManager } from 'react-native';
+import {
+	DatePickerIOS,
+	Platform,
+	TimePickerAndroid,
+	TouchableWithoutFeedback,
+	ScrollView,
+	LayoutAnimation,
+} from 'react-native';
 import { defineMessages } from 'react-intl';
 
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { TimeBlock, TimeSlider } from './SubViews';
-import { getHoursAndMinutes } from '../../Lib';
+import { getHoursAndMinutes, LayoutAnimations } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -117,24 +123,6 @@ export default class Time extends View<null, Props, State> {
 
 		this.selectTimeAndroid = this.selectTimeAndroid.bind(this);
 		this.toggleEdit = this.toggleEdit.bind(this);
-		if (Platform.OS === 'android') {
-			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-		}
-		this.animationConfig = {
-			duration: 300,
-			create: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.scaleXY,
-			},
-			update: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.scaleXY,
-			},
-			delete: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.opacity,
-			},
-		};
 	}
 
 	componentDidMount() {
@@ -160,7 +148,7 @@ export default class Time extends View<null, Props, State> {
 
 	toggleEdit(type: string) {
 		const { offsetEdit, intervalEdit } = this.state;
-		LayoutAnimation.configureNext(this.animationConfig);
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		if (type === 'OFFSET') {
 			this.setState({
 				offsetEdit: !offsetEdit,

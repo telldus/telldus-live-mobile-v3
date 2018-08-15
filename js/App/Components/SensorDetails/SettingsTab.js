@@ -24,8 +24,6 @@
 import React from 'react';
 import {
 	ScrollView,
-	UIManager,
-	Platform,
 	LayoutAnimation,
 	BackHandler,
 } from 'react-native';
@@ -56,7 +54,7 @@ import {
 	resetSensorMaxMin,
 } from '../../Actions';
 import { clearHistory } from '../../Actions/LocalStorage';
-import { shouldUpdate } from '../../Lib';
+import { shouldUpdate, LayoutAnimations } from '../../Lib';
 
 import Theme from '../../Theme';
 
@@ -210,25 +208,6 @@ class SettingsTab extends View {
 		this.submitName = this.submitName.bind(this);
 
 		this.handleBackPress = this.handleBackPress.bind(this);
-
-		if (Platform.OS === 'android') {
-			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-		}
-		this.animationConfig = {
-			duration: 300,
-			create: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.scaleXY,
-			},
-			update: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.scaleXY,
-			},
-			delete: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.opacity,
-			},
-		};
 	}
 
 	componentDidMount() {
@@ -270,7 +249,7 @@ class SettingsTab extends View {
 	handleBackPress(): boolean {
 		const { editName } = this.state;
 		if (editName) {
-			LayoutAnimation.configureNext(this.animationConfig);
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			this.setState({
 				editName: false,
 				sensorName: this.props.sensor.name,
@@ -281,7 +260,7 @@ class SettingsTab extends View {
 	}
 
 	editName() {
-		LayoutAnimation.configureNext(this.animationConfig);
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
 			editName: true,
 		});
@@ -297,13 +276,13 @@ class SettingsTab extends View {
 		const { dispatch, sensor } = this.props;
 		const { sensorName } = this.state;
 		dispatch(setSensorName(sensor.id, sensorName)).then(() => {
-			LayoutAnimation.configureNext(this.animationConfig);
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			dispatch(getSensorInfo(sensor.id));
 			this.setState({
 				editName: false,
 			});
 		}).catch((err: Object) => {
-			LayoutAnimation.configureNext(this.animationConfig);
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			this.seState({
 				editName: false,
 				sensorName: sensor.name,
