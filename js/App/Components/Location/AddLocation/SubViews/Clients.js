@@ -87,7 +87,7 @@ export default class Clients extends View {
 		return (
 			<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} accessible={true} accessibilityLabel={accessibilityLabel}>
 				<View style={styles.arrow}>
-					<Image source={require('../../../TabViews/img/right-arrow-key.png')} style={styles.image}/>
+					<Image source={{uri: 'right_arrow_key'}} style={styles.image}/>
 				</View>
 				<LocationDetails {...locationData} accessible={false} style={styles.locationDetails}/>
 			</View>

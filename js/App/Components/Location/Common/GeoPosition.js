@@ -322,7 +322,7 @@ class GeoPosition extends View {
 					<FloatingButton
 						buttonStyle={styles.submitButtonStyle}
 						onPress={this.onSubmit}
-						imageSource={isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
+						imageSource={isLoading ? false : {uri: 'right_arrow_key'}}
 						showThrobber={isLoading}
 					/>
 				</View>

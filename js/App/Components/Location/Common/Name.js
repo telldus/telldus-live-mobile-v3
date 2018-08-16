@@ -138,7 +138,7 @@ class Name extends View {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onNameSubmit}
-					imageSource={isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
+					imageSource={isLoading ? false : {uri: 'right_arrow_key'}}
 					showThrobber={isLoading}
 				/>
 			</View>

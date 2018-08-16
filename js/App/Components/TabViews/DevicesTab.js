@@ -333,7 +333,7 @@ class DevicesTab extends View {
 					<Text style={style.link}>
 						live.telldus.com
 					</Text>
-					<Image source={require('./img/right-arrow-key.png')} style={style.rightArrow}/>
+					<Image source={{uri: 'right_arrow_key'}} style={style.rightArrow}/>
 				</TouchableOpacity>
 			</View>
 		);

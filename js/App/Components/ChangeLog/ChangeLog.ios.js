@@ -243,7 +243,7 @@ class ChangeLogNavigator extends View {
 						</View>
 						<View style={stepIndicatorCover}>
 							{!isFirstScreen && (<FloatingButton
-								imageSource={require('../TabViews/img/right-arrow-key.png')}
+								imageSource={{uri: 'right_arrow_key'}}
 								onPress={this.onPressPrev}
 								buttonStyle={floatingButtonLeft}
 								iconStyle={styles.buttonIconStyle}/>
@@ -255,7 +255,7 @@ class ChangeLogNavigator extends View {
 							})
 							}
 							<FloatingButton
-								imageSource={isLastScreen ? false : require('../TabViews/img/right-arrow-key.png')}
+								imageSource={isLastScreen ? false : {uri: 'right_arrow_key'}}
 								iconName={isLastScreen ? 'checkmark' : false}
 								iconStyle={isLastScreen ? checkIconStyle : {}}
 								onPress={this.onPressNext}

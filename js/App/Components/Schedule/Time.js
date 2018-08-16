@@ -248,7 +248,7 @@ export default class Time extends View<null, Props, State> {
 				{shouldRender && (
 					<FloatingButton
 						onPress={this.selectTime}
-						imageSource={require('./img/right-arrow-key.png')}
+						imageSource={{uri: 'right_arrow_key'}}
 						paddingRight={this.props.paddingRight - 2}
 					/>
 				)}

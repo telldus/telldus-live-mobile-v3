@@ -228,7 +228,7 @@ class LocationActivationManual extends View {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onActivationCodeSubmit}
-					imageSource={this.state.isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
+					imageSource={this.state.isLoading ? false : {uri: 'right_arrow_key'}}
 					showThrobber={this.state.isLoading}
 				/>
 			</View>

@@ -276,7 +276,7 @@ export default class Days extends View<null, Props, State> {
 					<FloatingButton
 						buttonStyle={buttonStyle}
 						onPress={this.selectDays}
-						imageSource={require('./img/right-arrow-key.png')}
+						imageSource={{uri: 'right_arrow_key'}}
 						paddingRight={this.props.paddingRight - 2}
 					/>
 				)}

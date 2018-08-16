@@ -204,7 +204,7 @@ class TimeZone extends View<void, Props, State> {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onTimeZoneSubmit}
-					imageSource={isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
+					imageSource={isLoading ? false : {uri: 'right_arrow_key'}}
 					showThrobber={isLoading}
 				/>
 			</View>

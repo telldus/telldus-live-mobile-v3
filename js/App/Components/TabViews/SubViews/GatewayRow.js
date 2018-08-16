@@ -83,7 +83,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		return (
 			<View style={styles.rowItemsCover}>
-				<Image source={require('../../TabViews/img/right-arrow-key.png')} tintColor="#A59F9A90" style={styles.arrow}/>
+				<Image source={{uri: 'right_arrow_key'}} tintColor="#A59F9A90" style={styles.arrow}/>
 				<LocationDetails {...locationData}
 					style={styles.locationDetails}
 					onPress={this.onPressGateway}/>

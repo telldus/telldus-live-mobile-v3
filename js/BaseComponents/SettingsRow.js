@@ -123,7 +123,7 @@ class SettingsRow extends Component<Props, null> {
 							{value}
 						</Text>
 						{edit && (
-							<Image source={require('../App/Components/TabViews/img/right-arrow-key.png')} style={arrowStyle}/>
+							<Image source={{uri: 'right_arrow_key'}} style={arrowStyle}/>
 						)}
 					</Ripple>
 				}
