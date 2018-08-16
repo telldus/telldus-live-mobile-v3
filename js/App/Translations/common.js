@@ -70,7 +70,7 @@ const messages = defineMessages({
 		defaultMessage: 'Sensors',
 	},
 	scheduler: {
-		id: 'scheduler',
+		id: 'pages.scheduler',
 		defaultMessage: 'Scheduler',
 	},
 	settingsHeader: {

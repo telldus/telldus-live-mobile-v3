@@ -49,11 +49,6 @@ import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
 import i18n from '../../Translations/common';
 
 const messages = defineMessages({
-	scheduler: {
-		id: 'pages.scheduler',
-		defaultMessage: 'Scheduler',
-		description: 'The Schedulers tab',
-	},
 	noUpcommingSchedule: {
 		id: 'schedule.noUpcommingSchedule',
 		defaultMessage: 'No upcoming schedules on this day',
@@ -96,7 +91,7 @@ class SchedulerTab extends View<null, Props, State> {
 	};
 
 	static navigationOptions = (props: Object): Object => ({
-		title: props.screenProps.intl.formatMessage(messages.scheduler),
+		title: props.screenProps.intl.formatMessage(i18n.scheduler),
 		tabBarIcon: ({ focused, tintColor }: NavigationParams): Object => {
 			return getTabBarIcon(focused, tintColor, 'scheduler');
 		},
