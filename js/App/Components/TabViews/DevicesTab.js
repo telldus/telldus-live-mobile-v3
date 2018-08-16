@@ -329,7 +329,7 @@ class DevicesTab extends View {
 					{this.noDeviceContent}
 				</Text>
 				<TouchableOpacity style={style.linkCover} onPress={this.onPressAddDevice}>
-					<Image source={require('./img/telldus.png')} style={style.image}/>
+					<Image source={{uri: 'telldus'}} style={style.image}/>
 					<Text style={style.link}>
 						live.telldus.com
 					</Text>

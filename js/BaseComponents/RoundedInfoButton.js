@@ -71,7 +71,7 @@ class RoundedInfoButton extends Component<Props, null> {
 		return (
 			<TouchableOpacity style={[styles.roundedInfoButtonContainer, infoButtonContainerStyle]} onPress={this.onPress}>
 				<Image
-					source={require('../App/Components/TabViews/img/rounded-info-button.png')}
+					source={{uri: 'rounded_info_button'}}
 					style={[styles.roundedInfoButton, infoButtonStyle]}
 				/>
 			</TouchableOpacity>

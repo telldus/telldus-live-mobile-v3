@@ -70,11 +70,11 @@ class RowWithTriangle extends Component<Props, null> {
 			<View style={[container, rowWithTriangleContainerStyle]}>
 				<View style={[triangleContainer, triangleContainerStyle]}>
 					<Image
-						source={require('./img/triangle-shadow.png')}
+						source={{uri: 'triangle_shadow'}}
 						style={[triangleCommon, triangleShadow, triangleStyle]}
 					/>
 					<Image
-						source={require('./img/triangle.png')}
+						source={{uri: 'triangle'}}
 						style={[triangleCommon, triangle, triangleStyle]}
 					/>
 				</View>

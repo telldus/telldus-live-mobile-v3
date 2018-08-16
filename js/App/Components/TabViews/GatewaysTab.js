@@ -163,7 +163,7 @@ class GatewaysTab extends View {
 				/>
 				<FloatingButton
 					onPress={this.addLocation}
-					imageSource={this.state.isLoading ? false : require('../TabViews/img/iconPlus.png')}
+					imageSource={this.state.isLoading ? false : {uri: 'icon_plus'}}
 					showThrobber={this.state.isLoading}/>
 			</View>
 		);

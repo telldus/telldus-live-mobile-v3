@@ -132,7 +132,7 @@ class HeaderComponent extends Base {
 		if (!this.props.children) {
 			return (
 				<Image
-					source={require('../App/Components/TabViews/img/telldus-logo3.png')}
+					source={{uri: 'telldus_logo'}}
 					style={[this.getInitialStyle().logoImage, this.props.logoStyle]}
 				/>
 			);

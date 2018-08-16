@@ -203,7 +203,7 @@ class SchedulerTab extends View<null, Props, State> {
 				</Swiper>
 				<FloatingButton
 					onPress={this.newSchedule}
-					imageSource={require('./img/iconPlus.png')}
+					imageSource={{uri: 'icon_plus'}}
 					accessibilityLabel={`${formatMessage(i18n.addSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`}
 				/>
 			</View>

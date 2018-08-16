@@ -322,7 +322,6 @@ export default class JobsPoster extends View<null, Props, State> {
 			arrowContainerRight,
 			arrow,
 		} = this._getStyle();
-		const image = require('../../../../BaseComponents/img/keyboard-left-arrow-button.png');
 		const posterWidth = this.getPosterWidth();
 		const { rippleColor, rippleOpacity } = Theme.Core;
 
@@ -352,7 +351,7 @@ export default class JobsPoster extends View<null, Props, State> {
 							rippleDuration={400}
 							style={arrowContainer}
 							onPress={this._scrollToYesterday}>
-							<Image source={image} style={arrow}/>
+							<Image source={{uri: 'left_arrow_key'}} style={arrow}/>
 						</Ripple>
 					)}
 					{showRightButton && (
@@ -362,7 +361,7 @@ export default class JobsPoster extends View<null, Props, State> {
 							rippleDuration={400}
 							style={[arrowContainer, arrowContainerRight]}
 							onPress={this._scrollToTomorrow}>
-							<Image source={image} style={[arrow, {
+							<Image source={{uri: 'left_arrow_key'}} style={[arrow, {
 								transform: [{rotateZ: '180deg'}],
 							}]}/>
 						</Ripple>

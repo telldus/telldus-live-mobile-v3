@@ -58,7 +58,7 @@ const NavigationHeader = ({ firstName, lastName, styles }: Object): Object => {
 	return (
 		<View style={styles.navigationHeader}>
 			<Image style={styles.navigationHeaderImage}
-		       source={require('../TabViews/img/telldus.png')}
+		       source={{uri: 'telldus'}}
 		       resizeMode={'contain'}/>
 			<View style={styles.navigationHeaderTextCover}>
 				<Text numberOfLines={1} style={styles.navigationHeaderText}>

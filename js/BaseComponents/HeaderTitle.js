@@ -39,7 +39,7 @@ class HeaderTitle extends Component<Props, null> {
 	render(): Object {
 		let { appLayout } = this.props;
 		return (
-			<Image style={appLayout.height > appLayout.width ? styles.port : styles.land} resizeMode={'contain'} source={require('../App/Components/TabViews/img/telldus-logo.png')}/>
+			<Image style={appLayout.height > appLayout.width ? styles.port : styles.land} resizeMode={'contain'} source={{ uri: 'telldus_logo'}}/>
 		);
 	}
 }
