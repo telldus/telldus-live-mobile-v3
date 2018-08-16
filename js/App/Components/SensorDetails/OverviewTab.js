@@ -157,7 +157,9 @@ class OverviewTab extends View<Props, State> {
 					{...locationData}
 					style={LocationDetailsStyle}
 					infoContainerStyle={infoContainerStyle}/>
-				{battery && (<BatteryInfo battery={battery} appLayout={appLayout} style={batterInfoStyle}/>)}
+				{(battery && battery !== 254) && (
+					<BatteryInfo battery={battery} appLayout={appLayout} style={batterInfoStyle}/>
+				)}
 			</ScrollView>
 		);
 	}

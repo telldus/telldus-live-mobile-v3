@@ -30,9 +30,22 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 export default class BatteryInfo extends View {
+
+	getPercentage(battery: number): number {
+		switch (battery) {
+			case 253:
+				return 100;
+			case 254:
+				return battery;
+			case 255:
+				return 0;
+			default:
+				return battery;
+		}
+	}
 	render(): Object {
 		const { battery, style, appLayout } = this.props;
-		const isLowWarning = battery === 254;
+		const percentage = this.getPercentage(battery);
 		const {
 			containerStyle,
 			labelStyle,
@@ -45,11 +58,10 @@ export default class BatteryInfo extends View {
 				<View style={{
 					flexDirection: 'row',
 				}}>
-					<Battery value={isLowWarning ? 0 : battery} appLayout={appLayout}/>
-					{!isLowWarning && (<Text style={valueStyle}>
-						{battery}%
-					</Text>)
-					}
+					<Battery value={percentage} appLayout={appLayout}/>
+					<Text style={valueStyle}>
+						{percentage}%
+					</Text>
 				</View>
 			</View>
 		);
