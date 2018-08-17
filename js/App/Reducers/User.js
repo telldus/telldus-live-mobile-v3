@@ -39,7 +39,7 @@ export type State = {
 
 export const initialState = {
 	accessToken: false,
-	isTokenValid: false,
+	isTokenValid: true,
 	userProfile: false,
 	pushToken: false,
 	pushTokenRegistered: false,
