@@ -32,9 +32,8 @@ jest:
     - npm test
 
 android: &android-ubuntu
-  image: telldus/react-native-android:27
+  image: telldus/react-native-android:27-alpine
   stage: build
-  allow_failure: true
   cache:
     paths:
       - node_modules
@@ -54,11 +53,6 @@ android: &android-ubuntu
     - /^v\d+\.\d+.*$/ # Version branches
   tags:
     - android
-
-android-alpine:
-  <<: *android-ubuntu
-  image: telldus/react-native-android:27-alpine
-  allow_failure: false
 
 ios:
   stage: build
@@ -88,7 +82,7 @@ google_play:
   tags:
     - docker
   dependencies:
-    - android-alpine
+    - android
   environment:
     name: google_play
     url: https://play.google.com/store/apps/details?id=com.telldus.live.mobile.test
