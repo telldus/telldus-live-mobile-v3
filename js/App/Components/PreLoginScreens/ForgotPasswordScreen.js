@@ -25,8 +25,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 
-import { FormattedMessage, View } from '../../../BaseComponents';
+import {
+	FormattedMessage,
+	View,
+	DialogueBox,
+} from '../../../BaseComponents';
 import { ForgotPasswordForm } from './SubViews';
+
+import { hideModal } from '../../Actions/Modal';
 
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
@@ -51,6 +57,7 @@ class ForgotPasswordScreen extends View {
 	props: Props;
 
 	goBackToLogin: () => void;
+	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -60,6 +67,7 @@ class ForgotPasswordScreen extends View {
 		};
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 
 		let { formatMessage } = props.intl;
 
@@ -75,8 +83,12 @@ class ForgotPasswordScreen extends View {
 		this.props.navigation.navigate('Login');
 	}
 
+	closeModal() {
+		this.props.dispatch(hideModal());
+	}
+
 	render(): Object {
-		let { appLayout, intl, styles: commonStyles } = this.props;
+		let { showModal, validationMessage, validationMessageHeader, appLayout, intl, styles: commonStyles } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
@@ -94,6 +106,13 @@ class ForgotPasswordScreen extends View {
 					}}>
 					<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
 				</TouchableOpacity>
+				<DialogueBox
+					showDialogue={showModal}
+					text={validationMessage}
+					header={validationMessageHeader}
+					showPositive={true}
+					showNegative={false}
+					onPressPositive={this.closeModal}/>
 			</View>
 		);
 	}
@@ -118,4 +137,12 @@ class ForgotPasswordScreen extends View {
 	}
 }
 
-export default connect(null, null)(injectIntl(ForgotPasswordScreen));
+function mapStateToProps(store: Object): Object {
+	return {
+		validationMessage: store.modal.data,
+		validationMessageHeader: store.modal.extras,
+		showModal: store.modal.openModal,
+	};
+}
+
+export default connect(mapStateToProps, null)(injectIntl(ForgotPasswordScreen));

@@ -145,6 +145,10 @@ const messages = defineMessages({
 		id: 'button.sendingpassword',
 		defaultMessage: 'SENDING',
 	},
+	labelSending: {
+		id: 'label.sending',
+		defaultMessage: 'SENDING',
+	},
 	retry: {
 		id: 'button.retry',
 		defaultMessage: 'RETRY',
