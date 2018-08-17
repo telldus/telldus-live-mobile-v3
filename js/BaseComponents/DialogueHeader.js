@@ -26,6 +26,7 @@ import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 
 import Text from './Text';
 import Icon from './Icon';
+import capitalize from '../App/Lib/capitalize';
 
 type Props = {
     headerText: string,
@@ -84,6 +85,7 @@ onPressHeader() {
 
 render(): Object {
 	let { headerText, headerStyle, textStyle, showIcon, iconName, iconSize, iconColor } = this.props;
+	headerText = typeof headerText === 'string' ? capitalize(headerText) : headerText;
 
 	return (
 		<TouchableOpacity onPress={this.onPressHeader}>
