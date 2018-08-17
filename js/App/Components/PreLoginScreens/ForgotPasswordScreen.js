@@ -50,9 +50,13 @@ type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	styles: Object,
+	validationMessage?: string,
+	validationMessageHeader?: string,
+	showModal: boolean,
+	dispatch: Function,
 };
 
-class ForgotPasswordScreen extends View {
+class ForgotPasswordScreen extends View<Props, null> {
 
 	props: Props;
 
@@ -61,10 +65,6 @@ class ForgotPasswordScreen extends View {
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			validationMessage: '',
-			formSubmitted: false,
-		};
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
 		this.closeModal = this.closeModal.bind(this);
@@ -137,6 +137,12 @@ class ForgotPasswordScreen extends View {
 	}
 }
 
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		dispatch,
+	};
+}
+
 function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
@@ -145,4 +151,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, null)(injectIntl(ForgotPasswordScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ForgotPasswordScreen));

@@ -66,6 +66,8 @@ type Props = {
 	appLayout: Object,
 	styles: Object,
 	headerText: string,
+	forgotPassword: (string) => Promise<any>,
+	dispatch: Function,
 };
 
 type State = {
@@ -76,6 +78,7 @@ type State = {
 class ForgotPasswordForm extends View<Props, State> {
 
 	props: Props;
+	state: State;
 
 	onEmailChange: (string) => void;
 	onFormSubmit: () => void;
