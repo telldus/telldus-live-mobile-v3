@@ -44,6 +44,7 @@ import getLocationImageUrl from './getLocationImageUrl';
 import * as RSA from './RSA';
 import scheduleUtils from './scheduleUtils';
 import * as LocalApi from './LocalApi';
+import * as UserUtils from './UserUtils';
 
 
 module.exports = {
@@ -71,4 +72,5 @@ module.exports = {
 	...RSA,
 	...scheduleUtils,
 	...LocalApi,
+	...UserUtils,
 };

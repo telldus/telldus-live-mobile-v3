@@ -32,6 +32,7 @@ import { View, TouchableButton, H1 } from '../../../../BaseComponents';
 
 import { RegisterUser } from '../../../Actions/User';
 import { showModal } from '../../../Actions/Modal';
+import { validateEmail } from '../../../Lib/UserUtils';
 
 import i18n from '../../../Translations/common';
 
@@ -146,8 +147,8 @@ class RegisterForm extends View {
 
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
 		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
-			let isConfirmEmailValid = this.validateEmail(cem);
-			let isEmailValid = this.validateEmail(em);
+			let isConfirmEmailValid = validateEmail(cem);
+			let isEmailValid = validateEmail(em);
 			if (isConfirmEmailValid && isEmailValid) {
 				if (em === cem) {
 					this.setState({
