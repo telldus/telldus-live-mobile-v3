@@ -35,27 +35,17 @@ import { showModal } from '../../../Actions/Modal';
 import { validateEmail } from '../../../Lib/UserUtils';
 
 import i18n from '../../../Translations/common';
-
+import sharedMessages from './Messages';
 const messages = defineMessages({
 	emailAddressNotMatchHeader: {
 		id: 'user.emailAddressNotMatchHeader',
 		defaultMessage: 'EMAILS DON\'T MATCH',
 		description: 'Validation Message Header when Emails don\'t match',
 	},
-	emailNotValidHeader: {
-		id: 'user.emailNotValidHeader',
-		defaultMessage: 'INVALID EMAIL ADDRESS',
-		description: 'Validation Message Header when Email address not Valid',
-	},
 	emailAddressNotMatchBody: {
 		id: 'user.emailAddressNotMatchBody',
 		defaultMessage: 'Email addresses don\'t match. Please check your entered email address.',
 		description: 'Validation Message Body when Emails don\'t match',
-	},
-	emailNotValidBody: {
-		id: 'user.emailNotValidBody',
-		defaultMessage: 'The email address you entered is not valid. Please check that your email address is entered correctly.',
-		description: 'Validation Message Body when Email address not Valid',
 	},
 	fieldEmptyPostfix: {
 		id: 'form.register.fieldEmptyPostfix',
@@ -168,8 +158,8 @@ class RegisterForm extends View {
 					dispatch(showModal(message, header));
 				}
 			} else {
-				let message = formatMessage(messages.emailNotValidBody);
-				let header = formatMessage(messages.emailNotValidHeader);
+				let message = formatMessage(sharedMessages.emailNotValidBody);
+				let header = formatMessage(sharedMessages.emailNotValidHeader);
 				dispatch(showModal(message, header));
 			}
 		} else {
@@ -189,12 +179,6 @@ class RegisterForm extends View {
 			this.networkFailed : error.error_description ?
 				error.error_description : error.error ? error.error : this.unknownError;
 		dispatch(showModal(data));
-	}
-
-	validateEmail(email: string): boolean {
-		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-		let emailValid = pattern.test(email);
-		return emailValid;
 	}
 
 	render(): Object {
