@@ -30,6 +30,8 @@ import { announceForAccessibility } from 'react-native-accessibility';
 
 import View from './View';
 import Text from './Text';
+
+import capitalize from '../App/Lib/capitalize';
 import i18n from '../App/Translations/common';
 
 const messages = defineMessages({
@@ -164,6 +166,7 @@ class DialogueBox extends Component<Props, null> {
 			header = this.defaultHeader;
 		}
 
+		header = typeof header === 'string' ? capitalize(header) : header;
 		return (
 			<View style={styles.notificationModalHeader}>
 				<Text style={styles.notificationModalHeaderText}>

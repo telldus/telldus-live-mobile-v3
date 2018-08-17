@@ -117,7 +117,7 @@ class ForgotPasswordForm extends View<Props, State> {
 					const { status } = res;
 					if (status && status === 'success') {
 						const message = formatMessage(messages.successBody, {email});
-						const header = formatMessage(messages.successHeader).toUpperCase();
+						const header = formatMessage(messages.successHeader);
 						dispatch(showModal(message, header));
 					} else {
 						dispatch(showModal(this.unknownError));
@@ -128,7 +128,7 @@ class ForgotPasswordForm extends View<Props, State> {
 				}).catch((error: Object) => {
 					if (error.error && error.error === 'User not found') {
 						const message = formatMessage(messages.failureBody);
-						const header = formatMessage(messages.failureHeader).toUpperCase();
+						const header = formatMessage(messages.failureHeader);
 						dispatch(showModal(message, header));
 					} else {
 						const message = !error.error_description && error.message === 'Network request failed' ?
@@ -142,7 +142,7 @@ class ForgotPasswordForm extends View<Props, State> {
 				});
 			} else {
 				const message = formatMessage(sharedMessages.emailNotValidBody);
-				const header = formatMessage(sharedMessages.emailNotValidHeader).toUpperCase();
+				const header = formatMessage(sharedMessages.emailNotValidHeader);
 				dispatch(showModal(message, header));
 			}
 		} else {
