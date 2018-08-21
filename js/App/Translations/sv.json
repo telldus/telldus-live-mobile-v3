@@ -360,7 +360,7 @@
     "user.forgotPass.failureBody": "Det finns inget konto med den epost-adressen. Vänligen kontrollera att epost-adressen är angiven korrekt.",
     "user.forgotPass.failureHeader": "Användaren hittades inte",
     "user.forgotPass.successBody": "Ett mail med en länk för att återställa lösenordet har skickats till {email}. Vänligen kontrollera mappen för skräp-post om du inte fått mailet inom 10 minuter.",
-    "user.forgotPass.successHeader": "E-post skickat",
+    "user.forgotPass.successHeader": "Mail skickat",
     "user.forgotPassword": "Glömt ditt lösenord?",
     "user.headerSessionLocked": "Tappade anslutningen",
     "user.lastName": "Efternamn",
