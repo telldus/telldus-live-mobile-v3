@@ -18,10 +18,21 @@
  *
  */
 
+// @flow
+
 'use strict';
 
-import configureStore from './ConfigureStore';
-
-module.exports = {
-	configureStore,
-};
+export default function migrations(state: Object): Promise<any> {
+	const { tabs, ...newState } = state;
+	if (tabs) {
+		return Promise.resolve(newState);
+	}
+	const { App } = newState;
+	if (App) {
+		return Promise.resolve({
+			...newState,
+			app: state.App,
+		});
+	}
+	return Promise.resolve(state);
+}

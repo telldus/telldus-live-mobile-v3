@@ -18,36 +18,12 @@
  *
  */
 
-// @flow
-
 'use strict';
 
-import { persistCombineReducers } from 'redux-persist';
-import { AsyncStorage } from 'react-native';
-import { localStorageKey } from '../../Config';
+import configureStore from './ConfigureStore';
+import migrations from './migrations';
 
-import { migrations } from '../Store';
-import Navigation from './Navigation';
-import User from './User';
-import LiveApi from './LiveApi';
-import Modal from './Modal';
-import sensorsList from './Sensors';
-import jobsList from './Jobs';
-import { reducers } from 'live-shared-data';
-
-const config = {
-	key: localStorageKey,
-	storage: AsyncStorage,
-	blacklist: ['dimmer', 'schedule', 'liveApi', 'navigation', 'modal'],
-	migrate: migrations,
+module.exports = {
+	configureStore,
+	migrations,
 };
-
-module.exports = persistCombineReducers(config, {
-	navigation: Navigation,
-	user: User,
-	liveApi: LiveApi,
-	modal: Modal,
-	sensorsList,
-	...reducers,
-	jobsList,
-});
