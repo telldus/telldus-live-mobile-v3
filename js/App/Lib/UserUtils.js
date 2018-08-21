@@ -15,10 +15,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 // @flow
 
-export default function capitalize(string: string): string {
-	return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-}
+'use strict';
+
+const validateEmail = (email: string): boolean => {
+	const pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+	return pattern.test(email);
+};
+
+module.exports = {
+	validateEmail,
+};

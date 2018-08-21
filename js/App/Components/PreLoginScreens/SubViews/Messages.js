@@ -19,6 +19,21 @@
 
 // @flow
 
-export default function capitalize(string: string): string {
-	return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-}
+'use strict';
+import { defineMessages } from 'react-intl';
+
+
+const messages = defineMessages({
+	emailNotValidHeader: {
+		id: 'user.emailNotValidHeader',
+		defaultMessage: 'INVALID EMAIL ADDRESS',
+		description: 'Validation Message Header when Email address not Valid',
+	},
+	emailNotValidBody: {
+		id: 'user.emailNotValidBody',
+		defaultMessage: 'The email address you entered is not valid. Please check that your email address is entered correctly.',
+		description: 'Validation Message Body when Email address not Valid',
+	},
+});
+
+export default messages;

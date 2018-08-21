@@ -32,29 +32,20 @@ import { View, TouchableButton, H1 } from '../../../../BaseComponents';
 
 import { registerUser } from '../../../Actions/User';
 import { showModal } from '../../../Actions/Modal';
+import { validateEmail } from '../../../Lib/UserUtils';
 
 import i18n from '../../../Translations/common';
-
+import sharedMessages from './Messages';
 const messages = defineMessages({
 	emailAddressNotMatchHeader: {
 		id: 'user.emailAddressNotMatchHeader',
 		defaultMessage: 'EMAILS DON\'T MATCH',
 		description: 'Validation Message Header when Emails don\'t match',
 	},
-	emailNotValidHeader: {
-		id: 'user.emailNotValidHeader',
-		defaultMessage: 'INVALID EMAIL ADDRESS',
-		description: 'Validation Message Header when Email address not Valid',
-	},
 	emailAddressNotMatchBody: {
 		id: 'user.emailAddressNotMatchBody',
 		defaultMessage: 'Email addresses don\'t match. Please check your entered email address.',
 		description: 'Validation Message Body when Emails don\'t match',
-	},
-	emailNotValidBody: {
-		id: 'user.emailNotValidBody',
-		defaultMessage: 'The email address you entered is not valid. Please check that your email address is entered correctly.',
-		description: 'Validation Message Body when Email address not Valid',
 	},
 	fieldEmptyPostfix: {
 		id: 'form.register.fieldEmptyPostfix',
@@ -146,8 +137,8 @@ class RegisterForm extends View {
 
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
 		if (fn !== '' && ln !== '' && em !== '' && cem !== '') {
-			let isConfirmEmailValid = this.validateEmail(cem);
-			let isEmailValid = this.validateEmail(em);
+			let isConfirmEmailValid = validateEmail(cem);
+			let isEmailValid = validateEmail(em);
 			if (isConfirmEmailValid && isEmailValid) {
 				if (em === cem) {
 					this.setState({
@@ -167,8 +158,8 @@ class RegisterForm extends View {
 					dispatch(showModal(message, header));
 				}
 			} else {
-				let message = formatMessage(messages.emailNotValidBody);
-				let header = formatMessage(messages.emailNotValidHeader);
+				let message = formatMessage(sharedMessages.emailNotValidBody);
+				let header = formatMessage(sharedMessages.emailNotValidHeader);
 				dispatch(showModal(message, header));
 			}
 		} else {
@@ -188,12 +179,6 @@ class RegisterForm extends View {
 			this.networkFailed : error.error_description ?
 				error.error_description : error.error ? error.error : this.unknownError;
 		dispatch(showModal(data));
-	}
-
-	validateEmail(email: string): boolean {
-		let pattern = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-		let emailValid = pattern.test(email);
-		return emailValid;
 	}
 
 	render(): Object {

@@ -158,6 +158,29 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 		});
 };
 
+const forgotPassword = (email: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
+	let formData = new FormData();
+	formData.append('email', email);
+	formData.append('client_id', publicKey);
+	formData.append('client_secret', privateKey);
+	return fetch(
+		`${apiServer}/oauth2/user/forgotPassword`,
+		{
+			method: 'POST',
+			body: formData,
+		}
+	)
+		.then((response: Object): Object => response.json())
+		.then((responseData: Object): any => {
+			if (responseData.error) {
+				throw responseData;
+			}
+			return responseData;
+		}).catch((e: Object): any => {
+			throw e;
+		});
+};
+
 const showChangeLog = (): Action => {
 	return {
 		type: 'SHOW_CHANGE_LOG',
@@ -178,4 +201,5 @@ module.exports = {
 	unregisterPushToken,
 	showChangeLog,
 	hideChangeLog,
+	forgotPassword,
 };

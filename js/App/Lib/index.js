@@ -45,6 +45,7 @@ import * as LocalApi from './LocalApi';
 import * as NavigationService from './NavigationService';
 import shouldUpdate from './shouldUpdate';
 import * as LayoutAnimations from './LayoutAnimations';
+import * as UserUtils from './UserUtils';
 
 
 module.exports = {
@@ -73,4 +74,5 @@ module.exports = {
 	...NavigationService,
 	shouldUpdate,
 	LayoutAnimations,
+	...UserUtils,
 };

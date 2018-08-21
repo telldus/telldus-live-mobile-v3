@@ -70,7 +70,7 @@ const messages = defineMessages({
 		defaultMessage: 'Sensors',
 	},
 	scheduler: {
-		id: 'scheduler',
+		id: 'pages.scheduler',
 		defaultMessage: 'Scheduler',
 	},
 	settingsHeader: {
@@ -143,6 +143,10 @@ const messages = defineMessages({
 	},
 	sendingpassword: {
 		id: 'button.sendingpassword',
+		defaultMessage: 'SENDING',
+	},
+	labelSending: {
+		id: 'label.sending',
 		defaultMessage: 'SENDING',
 	},
 	retry: {

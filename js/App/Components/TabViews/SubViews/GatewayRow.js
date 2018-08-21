@@ -83,10 +83,12 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		return (
 			<View style={styles.rowItemsCover}>
-				<Image source={{uri: 'right_arrow_key'}} tintColor="#A59F9A90" style={styles.arrow}/>
 				<LocationDetails {...locationData}
 					style={styles.locationDetails}
 					onPress={this.onPressGateway}/>
+				<View style={styles.arrowCover} pointerEvents={'none'}>
+					<Image source={{uri: 'right_arrow_key'}} style={styles.arrow}/>
+				</View>
 			</View>
 		);
 	}
@@ -110,12 +112,15 @@ class GatewayRow extends PureComponent<Props, State> {
 				height: rowHeight,
 				marginVertical: padding / 4,
 			},
-			arrow: {
+			arrowCover: {
+				flex: 0,
 				position: 'absolute',
 				zIndex: 1,
-				tintColor: '#A59F9A90',
 				right: padding * 2,
 				top: '40%',
+			},
+			arrow: {
+				tintColor: '#A59F9A90',
 				height: rowHeight * 0.25,
 				width: rowHeight * 0.2,
 			},

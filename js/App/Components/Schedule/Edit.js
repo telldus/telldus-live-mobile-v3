@@ -347,10 +347,7 @@ class Edit extends View<null, Props, State> {
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		const fontSizeButtonLabel = deviceWidth * 0.03;
-		const buttonWidth = deviceWidth * 0.38;
-		const paddingVertical = 4 + (fontSizeButtonLabel * 0.9);
-		const buttonHeight = (paddingVertical * 2) + fontSizeButtonLabel;
+		const fontSizeButtonLabel = deviceWidth * 0.033;
 
 		return {
 			container: {
@@ -371,11 +368,8 @@ class Edit extends View<null, Props, State> {
 				justifyContent: 'center',
 			},
 			buttonStyle: {
-				width: buttonWidth,
-				borderRadius: buttonHeight / 2,
 				marginVertical: padding / 4,
 				maxWidth: undefined,
-				paddingVertical,
 				...shadow,
 			},
 			labelStyle: {

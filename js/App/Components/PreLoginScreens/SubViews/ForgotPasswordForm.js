@@ -23,48 +23,143 @@
 
 import React from 'react';
 import { TextInput } from 'react-native';
+import { connect } from 'react-redux';
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { View, TouchableButton, H1 } from '../../../../BaseComponents';
 
+import { forgotPassword } from '../../../Actions/User';
+import { validateEmail } from '../../../Lib/UserUtils';
+import { showModal } from '../../../Actions/Modal';
+
 import i18n from '../../../Translations/common';
-import { intlShape, injectIntl } from 'react-intl';
+import sharedMessages from './Messages';
+const messages = defineMessages({
+	successHeader: {
+		id: 'user.forgotPass.successHeader',
+		defaultMessage: 'Email sent',
+	},
+	successBody: {
+		id: 'user.forgotPass.successBody',
+		defaultMessage: 'An email with a link to reset password has been sent to {email}. Please check your spam ' +
+		'folder if you don’t receive the mail within 10 minutes.',
+	},
+	emailEmptyBody: {
+		id: 'user.forgotPass.emailEmptyBody',
+		defaultMessage: 'Seems like you forgot to enter your email. Please enter you email address and try again.',
+	},
+	failureHeader: {
+		id: 'user.forgotPass.failureHeader',
+		defaultMessage: 'User not found',
+	},
+	failureBody: {
+		id: 'user.forgotPass.failureBody',
+		defaultMessage: 'No account found with that email. Please check that the email address is entered correctly.',
+	},
+});
+
 
 type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	styles: Object,
 	headerText: string,
+	forgotPassword: (string) => Promise<any>,
+	dispatch: Function,
 };
 
-class ForgotPasswordForm extends View {
+type State = {
+	email: string,
+	isLoading: boolean,
+};
+
+class ForgotPasswordForm extends View<Props, State> {
 
 	props: Props;
+	state: State;
 
 	onEmailChange: (string) => void;
+	onFormSubmit: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.state = {
 			email: '',
-			isEmailValid: false,
-			validationMessage: '',
-			formSubmitted: false,
+			isLoading: false,
 		};
 
+		const { formatMessage } = props.intl;
+
+		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
+		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+
 		this.onEmailChange = this.onEmailChange.bind(this);
+		this.onFormSubmit = this.onFormSubmit.bind(this);
 	}
 
 	onEmailChange(email: string) {
 		this.setState({
 			email,
-			validationMessage: '',
 		});
 	}
 
+	onFormSubmit() {
+		const { email } = this.state;
+		const { dispatch, intl } = this.props;
+		const { formatMessage } = intl;
+
+		if (email !== '') {
+			const isValid = validateEmail(email);
+			if (isValid) {
+				this.setState({
+					isLoading: true,
+				});
+				this.props.forgotPassword(email).then((res: Object) => {
+					const { status } = res;
+					if (status && status === 'success') {
+						const message = formatMessage(messages.successBody, {email});
+						const header = formatMessage(messages.successHeader);
+						dispatch(showModal(message, header));
+					} else {
+						dispatch(showModal(this.unknownError));
+					}
+					this.setState({
+						isLoading: false,
+					});
+				}).catch((error: Object) => {
+					if (error.error && error.error === 'User not found') {
+						const message = formatMessage(messages.failureBody);
+						const header = formatMessage(messages.failureHeader);
+						dispatch(showModal(message, header));
+					} else {
+						const message = !error.error_description && error.message === 'Network request failed' ?
+							this.networkFailed : error.error_description ?
+								error.error_description : error.error ? error.error : this.unknownError;
+						dispatch(showModal(message));
+					}
+					this.setState({
+						isLoading: false,
+					});
+				});
+			} else {
+				const message = formatMessage(sharedMessages.emailNotValidBody);
+				const header = formatMessage(sharedMessages.emailNotValidHeader);
+				dispatch(showModal(message, header));
+			}
+		} else {
+			const message = formatMessage(messages.emailEmptyBody);
+			dispatch(showModal(message));
+		}
+	}
+
+
 	render(): Object {
-		let { headerText, styles } = this.props;
+		const { headerText, styles, intl } = this.props;
+		const { formatMessage } = intl;
+		const buttonLabel = this.state.isLoading ? `${formatMessage(i18n.labelSending)}...` : formatMessage(i18n.sendpassword);
+
 		return (
 			<View style={styles.formCover}>
 				<H1 style={styles.headerTextStyle}>
@@ -94,12 +189,20 @@ class ForgotPasswordForm extends View {
 				<View style={{ height: 10 }}/>
 				<TouchableButton
 					onPress={this.onFormSubmit}
-					text={this.state.isLoading ? i18n.sendingpassword : i18n.sendpassword}
-					postScript={this.state.isLoading ? '...' : null}
+					text={buttonLabel}
 				/>
 			</View>
 		);
 	}
 }
 
-export default injectIntl(ForgotPasswordForm);
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		forgotPassword: (email: string): Promise<any> => {
+			return dispatch(forgotPassword(email));
+		},
+		dispatch,
+	};
+}
+
+export default connect(null, mapDispatchToProps)(injectIntl(ForgotPasswordForm));
