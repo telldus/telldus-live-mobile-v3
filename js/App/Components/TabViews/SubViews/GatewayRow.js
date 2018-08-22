@@ -36,6 +36,7 @@ type Props = {
 	appLayout: Object,
 	intl: Object,
 	navigation: Object,
+	onPress: (Object) => void,
 };
 
 type State = {
@@ -54,8 +55,12 @@ class GatewayRow extends PureComponent<Props, State> {
 	}
 
 	onPressGateway() {
-		let { location } = this.props;
-		this.props.navigation.navigate('LocationDetails', {location});
+		let { location, onPress } = this.props;
+		if (onPress) {
+			onPress(location);
+		} else {
+			this.props.navigation.navigate('LocationDetails', {location});
+		}
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
