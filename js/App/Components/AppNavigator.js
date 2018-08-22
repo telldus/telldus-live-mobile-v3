@@ -23,6 +23,7 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
+import AddDeviceNavigator from './Device/AddDevice/AddDeviceNavigator';
 import { SettingsScreen } from './Settings';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import SensorDetailsNavigator from './SensorDetails/SensorDetailsNavigator';
@@ -98,6 +99,17 @@ const RouteConfigs = {
 	},
 	LocationDetails: {
 		screen: LocationDetailsNavigator,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	AddDevice: {
+		screen: AddDeviceNavigator,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
