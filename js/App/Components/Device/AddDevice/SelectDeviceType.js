@@ -51,7 +51,11 @@ const availableTypes = {
 };
 
 type Props = {
-    onDidMount: (string, string, ?Object) => void,
+	appLayout: Object,
+
+	onDidMount: (string, string, ?Object) => void,
+	actions: Object,
+	navigation: Object,
 };
 
 type State = {
@@ -97,7 +101,7 @@ getDeviceTypes(): Array<any> {
 	return types;
 }
 
-getDeviceTypesToRender(types: Array<any>, appLayout: Object): Object {
+getDeviceTypesToRender(types: Array<any>, appLayout: Object): Array<Object> {
 	return types.map((type: Object, i: number): Object => {
 		return (
 			<DeviceTypeBlock

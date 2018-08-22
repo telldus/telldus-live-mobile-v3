@@ -42,7 +42,8 @@ type Props = {
     navigation: Object,
     appLayout: Object,
     onDidMount: (string, string, ?Object) => void,
-    actions: Object,
+	actions: Object,
+	intl: Object,
 };
 
 type State = {
@@ -53,7 +54,7 @@ class SelectLocation extends View<Props, State> {
 props: Props;
 state: State;
 
-renderRow: (renderRowProps) => Object;
+renderRow: (Object) => Object;
 onRefresh: () => void;
 onChooseLocation: (Object) => void;
 constructor(props: Props) {

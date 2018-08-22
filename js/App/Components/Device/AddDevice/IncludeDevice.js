@@ -35,6 +35,7 @@ import Theme from '../../../Theme';
 
 
 type Props = {
+	appLayout: Object,
     onDidMount: (string, string, ?Object) => void,
 };
 

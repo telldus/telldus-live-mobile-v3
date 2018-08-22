@@ -40,7 +40,8 @@ type Props = {
     action: string,
     h1: string,
     h2: string,
-    appLayout: Object,
+	appLayout: Object,
+	onPress: (Object) => void,
 };
 
 type State = {
