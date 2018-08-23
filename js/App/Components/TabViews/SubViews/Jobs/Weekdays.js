@@ -56,6 +56,7 @@ render(): Object {
 			style={[animation.container, simulateClick]}
 			key={`${day.day}${i}`}
 			onLayout={this.onLayout}
+			pointerEvents={'none'}
 		>
 			<Animated.Text style={animation.text} numberOfLines={1}>
 				{capitalize(day.day)}

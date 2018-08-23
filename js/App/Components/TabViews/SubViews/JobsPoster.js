@@ -303,11 +303,13 @@ export default class JobsPoster extends View<null, Props, State> {
 
 		return (
 			<Poster posterWidth={posterWidth}>
-				<View style={container} {...this._panResponder.panHandlers}>
-					<View style={daysContainer}>
-						{this._renderDays()}
-						<View style={dateContainer}>
-							{this._renderDate()}
+				<View style={container}>
+					<View style={container} {...this._panResponder.panHandlers} pointerEvents={'box-only'}>
+						<View style={daysContainer}>
+							{this._renderDays()}
+							<View style={dateContainer}>
+								{this._renderDate()}
+							</View>
 						</View>
 					</View>
 					{showLeftButton && (
@@ -327,7 +329,9 @@ export default class JobsPoster extends View<null, Props, State> {
 							onPressOut={this._rightButtonPressOut}
 							style={[arrowContainer, arrowContainerRight]}
 						>
-							<Image source={image} style={arrow}/>
+							<Image source={image} style={[arrow, {
+								transform: [{rotateZ: '180deg'}],
+							}]}/>
 						</TouchableOpacity>
 					)}
 					<CheckBoxIconText
@@ -687,9 +691,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			arrowContainerRight: {
 				left: null,
 				right: deviceWidth * 0.026666667,
-				transform: [
-					{ scaleX: -1 },
-				],
+				alignItems: 'flex-end',
 			},
 			arrow: {
 				height: deviceWidth * 0.036,
