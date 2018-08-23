@@ -30,6 +30,7 @@ import AddDeviceContainer from './AddDeviceContainer';
 import SelectLocation from './SelectLocation';
 import SelectDeviceType from './SelectDeviceType';
 import IncludeDevice from './IncludeDevice';
+import DeviceName from './DeviceName';
 
 const initialRouteName = 'InitialScreen';
 
@@ -56,6 +57,9 @@ const RouteConfigs = {
 	},
 	IncludeDevice: {
 		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(IncludeDevice),
+	},
+	DeviceName: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(DeviceName),
 	},
 };
 
