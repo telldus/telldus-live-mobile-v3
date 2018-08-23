@@ -36,11 +36,15 @@ import Theme from '../../../Theme';
 
 type Props = {
 	appLayout: Object,
-    onDidMount: (string, string, ?Object) => void,
+
+	onDidMount: (string, string, ?Object) => void,
+	navigation: Object,
+	actions: Object,
 };
 
 type State = {
-	timer?: number,
+	timer: number | null,
+	status: string | null,
 };
 
 class IncludeDevice extends View<Props, State> {
@@ -48,11 +52,16 @@ props: Props;
 state: State;
 
 setSocketListeners: () => void;
+
+zwaveId: ?number;
+deviceId: ?number;
+clientDeviceId: ?number;
 constructor(props: Props) {
 	super(props);
 
 	this.state = {
 		timer: null,
+		status: null,
 	};
 
 	this.setSocketListeners = this.setSocketListeners.bind(this);
@@ -63,6 +72,10 @@ constructor(props: Props) {
 	this.setSocketListeners();
 
 	this.inclusionTimer = null;
+	this.zwaveId = null;
+	this.deviceId = null;
+	this.commandClasses = null;
+	this.clientDeviceId = null;
 }
 
 componentDidMount() {
@@ -87,15 +100,109 @@ setSocketListeners() {
 		} catch (e) {
 			message = msg.data;
 		}
+
 		const { module, action, data } = message;
-		if (module && action && module === 'zwave') {
-			if (action === 'addNodeToNetworkStartTimeout') {
+		if (module && action) {
+			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
 				that.inclusionTimer = setInterval(() => {
 					that.runInclusionTimer(data);
 				}, 1000);
 			}
+
+			if (module === 'zwave' && action === 'addNodeToNetwork') {
+				let status = data[0];
+				if (status === 1) {
+					this.setState({
+						status: 'Searching for device',
+					});
+				} else if (status === 2) {
+					this.setState({
+						status: 'Node found',
+					});
+				} else if (status === 3 || status === 4) {
+
+					this.zwaveId = data[1];
+					let commandClasses = data.slice(6);
+					if (commandClasses.indexOf(0xEF) >= 0) {
+						commandClasses = commandClasses.slice(0, commandClasses.indexOf(0xEF));
+					}
+					this.commandClasses = {};
+					for (let i in commandClasses) {
+						this.commandClasses[commandClasses[i]] = null;
+					}
+
+					if (status === 3) {
+						this.setState({
+							status: 'Adding slave',
+						});
+					} else {
+						this.setState({
+							status: 'Adding controller',
+						});
+					}
+				} else if (status === 5) {
+					// Add node protocol done
+					if (!this.zwaveId) {
+						this.zwaveId = data[1];
+					}
+				} else if (status === 6) {
+					// Add node done
+					clearInterval(this.inclusionTimer);
+				} else if (status === 7) {
+					this.setState({
+						status: 'Error : could not enter learn mode',
+					});
+				} else if (status === 0x23) {
+					this.setState({
+						status: 'Error : could not enter learn mode',
+					});
+				}
+			}
+
+			if (module === 'zwave' && action === 'interviewDone' && (this.zwaveId === parseInt(data.node, 10))) {
+				for (let i in this.commandClasses) {
+					if (i === data.cmdClass.toString()) {
+						this.commandClasses[i] = data.data;
+						break;
+					}
+				}
+				this.checkInclusionComplete();
+			}
+
+			if (module === 'device' && action === 'added' && !this.deviceId) {
+				const { clientDeviceId, id } = data;
+				this.deviceId = id;
+				this.clientDeviceId = clientDeviceId;
+			}
 		}
 	};
+}
+
+checkInclusionComplete() {
+	if (!this.commandClasses) {
+		return;
+	}
+	let waiting = 0, complete = 0;
+	for (let i in this.commandClasses) {
+		if (this.commandClasses[i] === null) {
+			++waiting;
+		} else {
+			++complete;
+		}
+	}
+	let percent = parseInt((complete + 1) / (waiting + complete + 1) * 100, 10);
+	this.setState({
+		status: `Including device... (${percent}% done)`,
+	});
+	if (waiting === 0) {
+		this.setState({
+			timer: null,
+			status: 'Device included!',
+		}, () => {
+			this.onInclusionComplete();
+		});
+		clearInterval(this.inclusionTimer);
+	}
 }
 
 runInclusionTimer(data?: number = 60) {
@@ -115,8 +222,13 @@ runInclusionTimer(data?: number = 60) {
 onInclusionComplete() {
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
+	let deviceId = null;
+	if (this.clientDeviceId === this.zwaveId) {
+		deviceId = this.deviceId;
+	}
 	navigation.navigate('DeviceName', {
 		gateway,
+		deviceId,
 	});
 }
 
@@ -130,7 +242,7 @@ clearSocketListeners() {
 }
 
 render(): Object {
-	const { timer } = this.state;
+	const { timer, status } = this.state;
 	const {
 		container,
 		progressContainer,
@@ -171,6 +283,11 @@ When in inclusion mode the device will automatically be included.
 					{!!timer && (
 						<Text style={timerStyle}>
 							{timer} Sec
+						</Text>
+					)}
+					{!!status && (
+						<Text style={timerStyle}>
+							{status}
 						</Text>
 					)}
 				</View>
