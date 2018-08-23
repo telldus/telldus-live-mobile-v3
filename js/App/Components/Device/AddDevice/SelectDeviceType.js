@@ -77,14 +77,12 @@ componentDidMount() {
 }
 
 onChooseType({module, action}: Object) {
-	const { actions, navigation } = this.props;
+	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
-	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
-		module,
-		action,
-	});
 	navigation.navigate('IncludeDevice', {
 		gateway,
+		module,
+		action,
 	});
 }
 
