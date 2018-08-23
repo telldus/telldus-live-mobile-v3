@@ -28,7 +28,15 @@ import { createSelector } from 'reselect';
 import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
-import { Text, View, TouchableButton, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
+import {
+	Text,
+	View,
+	TouchableButton,
+	IconTelldus,
+	DialogueBox,
+	DialogueHeader,
+	FloatingButton,
+} from '../../../BaseComponents';
 import { DeviceRow, DeviceHeader } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
@@ -107,6 +115,8 @@ class DevicesTab extends View {
 	onDismissDialogueHide: () => void;
 	onConfirmDialogueHide: () => void;
 
+	addNewDevice: () => void;
+
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'devices'),
@@ -143,6 +153,7 @@ class DevicesTab extends View {
 		this.closeVisibleRows = this.closeVisibleRows.bind(this);
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 		this.onConfirmDialogueHide = this.onConfirmDialogueHide.bind(this);
+		this.addNewDevice = this.addNewDevice.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
 
@@ -378,6 +389,18 @@ class DevicesTab extends View {
 		return false;
 	}
 
+	addNewDevice() {
+		const { navigation, gateways } = this.props;
+		const gatewaysLen = gateways.length;
+		if (gatewaysLen > 0) {
+			const singleGateway = gatewaysLen === 1;
+			navigation.navigate('AddDevice', {
+				selectLocation: !singleGateway,
+				gateway: singleGateway ? gateways[0] : null,
+			});
+		}
+	}
+
 	render(): Object {
 
 		const { devices, devicesDidFetch, rowsAndSections, screenProps, screenReaderEnabled } = this.props;
@@ -414,64 +437,72 @@ class DevicesTab extends View {
 		};
 
 		return (
-			<ScrollView style={style.container}
-				scrollEnabled={scrollEnabled}
-				refreshControl={
-					<RefreshControl
-						enabled={showRefresh}
-						refreshing={isRefreshing}
-						onRefresh={this.onRefresh}
-					/>}
-				onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-			>
-				<SectionList
-					sections={visibleList}
-					renderItem={this.renderRow}
-					renderSectionHeader={this.renderSectionHeader}
-					keyExtractor={this.keyExtractor}
-					extraData={extraData}
+			<View style={{
+				flex: 1,
+			}}>
+				<ScrollView style={style.container}
 					scrollEnabled={scrollEnabled}
+					refreshControl={
+						<RefreshControl
+							enabled={showRefresh}
+							refreshing={isRefreshing}
+							onRefresh={this.onRefresh}
+						/>}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
+				>
+					<SectionList
+						sections={visibleList}
+						renderItem={this.renderRow}
+						renderSectionHeader={this.renderSectionHeader}
+						keyExtractor={this.keyExtractor}
+						extraData={extraData}
+						scrollEnabled={scrollEnabled}
+						onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
+					/>
+					<View>
+						{this.toggleHiddenListButton(style)}
+						{showHiddenList ?
+							<SectionList
+								sections={hiddenList}
+								renderItem={this.renderRow}
+								renderSectionHeader={this.renderSectionHeader}
+								keyExtractor={this.keyExtractor}
+								extraData={extraData}
+								scrollEnabled={scrollEnabled}
+								onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
+							/>
+							:
+							<View style={{height: 80}}/>
+						}
+					</View>
+					<DialogueBox
+						showDialogue={showConfirmDialogue}
+						header={
+							<DialogueHeader
+								headerText={this.headerOnHide}
+								showIcon={false}
+								headerStyle={style.dialogueHeaderStyle}
+								textStyle={style.dialogueHeaderTextStyle}/>
+						}
+						text={
+							<View style={style.dialogueBodyStyle}>
+								<Text style={style.dialogueBodyTextStyle}>
+									{this.messageOnHide}
+								</Text>
+							</View>
+						}
+						showNegative={true}
+						onPressNegative={this.onDismissDialogueHide}
+						showPositive={true}
+						positiveText={this.labelHide}
+						onPressPositive={this.onConfirmDialogueHide}
+					/>
+				</ScrollView>
+				<FloatingButton
+					onPress={this.addNewDevice}
+					imageSource={{uri: 'icon_plus'}}
 				/>
-				<View>
-					{this.toggleHiddenListButton(style)}
-					{showHiddenList ?
-						<SectionList
-							sections={hiddenList}
-							renderItem={this.renderRow}
-							renderSectionHeader={this.renderSectionHeader}
-							keyExtractor={this.keyExtractor}
-							extraData={extraData}
-							scrollEnabled={scrollEnabled}
-							onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-						/>
-						:
-						<View style={{height: 80}}/>
-					}
-				</View>
-				<DialogueBox
-					showDialogue={showConfirmDialogue}
-					header={
-						<DialogueHeader
-							headerText={this.headerOnHide}
-							showIcon={false}
-							headerStyle={style.dialogueHeaderStyle}
-							textStyle={style.dialogueHeaderTextStyle}/>
-					}
-					text={
-						<View style={style.dialogueBodyStyle}>
-							<Text style={style.dialogueBodyTextStyle}>
-								{this.messageOnHide}
-							</Text>
-						</View>
-					}
-					showNegative={true}
-					onPressNegative={this.onDismissDialogueHide}
-					showPositive={true}
-					positiveText={this.labelHide}
-					onPressPositive={this.onConfirmDialogueHide}
-				/>
-			</ScrollView>
+			</View>
 		);
 	}
 
