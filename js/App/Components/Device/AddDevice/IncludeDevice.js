@@ -39,18 +39,98 @@ type Props = {
     onDidMount: (string, string, ?Object) => void,
 };
 
-class IncludeDevice extends View<Props, null> {
+type State = {
+	timer?: number,
+};
+
+class IncludeDevice extends View<Props, State> {
 props: Props;
+state: State;
+
+setSocketListeners: () => void;
 constructor(props: Props) {
 	super(props);
+
+	this.state = {
+		timer: null,
+	};
+
+	this.setSocketListeners = this.setSocketListeners.bind(this);
+
+	const { actions, navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+	this.websocket = actions.getSocketObject(gateway.id);
+	this.setSocketListeners();
+
+	this.inclusionTimer = null;
 }
 
 componentDidMount() {
-	const { onDidMount } = this.props;
-	onDidMount('2. Device Type', 'Select the type of your device');
+	const { onDidMount, actions, navigation } = this.props;
+	onDidMount('3. Include', 'Include your device');
+
+	const gateway = navigation.getParam('gateway', {});
+	const module = navigation.getParam('module', '');
+	const action = navigation.getParam('action', '');
+	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
+		module,
+		action,
+	});
+}
+
+setSocketListeners() {
+	const that = this;
+	that.websocket.onmessage = (msg: Object) => {
+		let message = {};
+		try {
+			message = JSON.parse(msg.data);
+		} catch (e) {
+			message = msg.data;
+		}
+		const { module, action, data } = message;
+		if (module && action && module === 'zwave') {
+			if (action === 'addNodeToNetworkStartTimeout') {
+				that.inclusionTimer = setInterval(() => {
+					that.runInclusionTimer(data);
+				}, 1000);
+			}
+		}
+	};
+}
+
+runInclusionTimer(data?: number = 60) {
+	const { timer } = this.state;
+	if (timer === null || timer > 0) {
+		this.setState({
+			timer: timer ? timer - 1 : data,
+		});
+	} else {
+		this.setState({
+			timer: null,
+		});
+		clearInterval(this.inclusionTimer);
+	}
+}
+
+onInclusionComplete() {
+	const { navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+	navigation.navigate('DeviceName', {
+		gateway,
+	});
+}
+
+componentWillUnmount() {
+	this.clearSocketListeners();
+	clearInterval(this.inclusionTimer);
+}
+
+clearSocketListeners() {
+	delete this.websocket;
 }
 
 render(): Object {
+	const { timer } = this.state;
 	const {
 		container,
 		progressContainer,
@@ -61,6 +141,7 @@ render(): Object {
 		blockIcontainerStyle,
 		markerTextCover,
 		markerText,
+		timerStyle,
 	} = this.getStyles();
 
 	return (
@@ -87,6 +168,11 @@ Include device by enabling inclusion mode on the device within 60 seconds.
 					<Text style={textStyle}>
 When in inclusion mode the device will automatically be included.
 					</Text>
+					{!!timer && (
+						<Text style={timerStyle}>
+							{timer} Sec
+						</Text>
+					)}
 				</View>
 			</View>
 			<View style={infoContainer}>
@@ -172,6 +258,10 @@ getStyles(): Object {
 			height: undefined,
 			borderRadius: 0,
 			backgroundColor: '#fff',
+		},
+		timerStyle: {
+			fontSize: deviceWidth * 0.045,
+			color: brandSecondary,
 		},
 	};
 }
