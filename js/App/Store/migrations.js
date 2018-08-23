@@ -22,7 +22,7 @@
 
 'use strict';
 
-export default function migrations(state: Object): Promise<any> {
+export default function migrations(state: Object = {}): Promise<any> {
 	const { tabs, ...newState } = state;
 	if (tabs) {
 		return Promise.resolve(newState);
