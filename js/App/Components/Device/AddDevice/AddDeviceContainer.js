@@ -35,7 +35,13 @@ import {
 import Theme from '../../../Theme';
 
 import * as modalActions from '../../../Actions/Modal';
-import { getGateways, sendSocketMessage, getSocketObject } from '../../../Actions';
+import {
+	getGateways,
+	sendSocketMessage,
+	getSocketObject,
+	setDeviceName,
+	getDevices,
+} from '../../../Actions';
 
 type Props = {
 	navigation: Object,
@@ -213,6 +219,8 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getGateways,
 				sendSocketMessage,
 				getSocketObject,
+				setDeviceName,
+				getDevices,
 			}, dispatch),
 		},
 	}

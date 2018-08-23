@@ -27,6 +27,7 @@ import React from 'react';
 import {
 	View,
 	EditBox,
+	FloatingButton,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -37,16 +38,19 @@ type Props = {
     appLayout: Object,
 
     intl: Object,
-    onDidMount: (string, string, ?Object) => void,
+	onDidMount: (string, string, ?Object) => void,
+	actions: Object,
+	navigation: Object,
 };
 
 type State = {
-    deviceName: string,
+	deviceName: string,
+	isLoading: boolean,
 };
 
 class DeviceName extends View<Props, State> {
 props: Props;
-state: Styate;
+state: State;
 
 onChangeName: (string) => void;
 submitName: () => void;
@@ -55,6 +59,7 @@ constructor(props: Props) {
 
 	this.state = {
 		deviceName: '',
+		isLoading: false,
 	};
 	this.onChangeName = this.onChangeName.bind(this);
 	this.submitName = this.submitName.bind(this);
@@ -72,24 +77,50 @@ onChangeName(deviceName: string) {
 }
 
 submitName() {
-
+	this.setState({
+		isLoading: true,
+	});
+	const { actions, navigation } = this.props;
+	const { deviceName } = this.state;
+	const deviceId = navigation.getParam('deviceId', null);
+	if (deviceName !== '') {
+		actions.setDeviceName(deviceId, deviceName).then(() => {
+			actions.getDevices();
+			this.setState({
+				isLoading: false,
+			});
+			navigation.navigate('Devices');
+		}).catch(() => {
+			this.setState({
+				isLoading: false,
+			});
+			navigation.navigate('Devices');
+		});
+	}
 }
 
 render(): Object {
-	const { deviceName } = this.state;
+	const { deviceName, isLoading } = this.state;
 	const { appLayout, intl } = this.props;
 	const {
 		container,
+		iconSize,
 	} = this.getStyles();
+
 	return (
 		<View style={container}>
 			<EditBox
 				value={deviceName}
-				icon={'device'}
+				icon={'device-alt'}
 				label={intl.formatMessage(i18n.name)}
 				onChangeText={this.onChangeName}
 				onSubmitEditing={this.submitName}
-				appLayout={appLayout}
+				appLayout={appLayout}/>
+			<FloatingButton
+				onPress={this.submitName}
+				iconName={this.state.isLoading ? false : 'checkmark'}
+				showThrobber={isLoading}
+				iconSize={iconSize}
 			/>
 		</View>
 	);
@@ -106,8 +137,9 @@ getStyles(): Object {
 	return {
 		container: {
 			flex: 1,
-			padding: padding,
+			paddingVertical: padding,
 		},
+		iconSize: deviceWidth * 0.050666667,
 	};
 }
 }
