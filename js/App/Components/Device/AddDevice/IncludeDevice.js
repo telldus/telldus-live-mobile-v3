@@ -29,6 +29,7 @@ import {
 	Text,
 	Image,
 	BlockIcon,
+	ProgressBarLinear,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -45,6 +46,8 @@ type Props = {
 type State = {
 	timer: number | null,
 	status: string | null,
+	percent: number,
+	width: number,
 };
 
 class IncludeDevice extends View<Props, State> {
@@ -56,12 +59,15 @@ setSocketListeners: () => void;
 zwaveId: ?number;
 deviceId: ?number;
 clientDeviceId: ?number;
+onLayout: (Object) => void;
 constructor(props: Props) {
 	super(props);
 
 	this.state = {
 		timer: null,
 		status: null,
+		percent: 0,
+		width: 0,
 	};
 
 	this.setSocketListeners = this.setSocketListeners.bind(this);
@@ -76,6 +82,8 @@ constructor(props: Props) {
 	this.deviceId = null;
 	this.commandClasses = null;
 	this.clientDeviceId = null;
+
+	this.onLayout = this.onLayout.bind(this);
 }
 
 componentDidMount() {
@@ -113,7 +121,7 @@ setSocketListeners() {
 				let status = data[0];
 				if (status === 1) {
 					this.setState({
-						status: 'Searching for device',
+						status: 'Searching for device... (0% done)',
 					});
 				} else if (status === 2) {
 					this.setState({
@@ -133,11 +141,11 @@ setSocketListeners() {
 
 					if (status === 3) {
 						this.setState({
-							status: 'Adding slave',
+							status: 'Adding slave (0% done)',
 						});
 					} else {
 						this.setState({
-							status: 'Adding controller',
+							status: 'Adding controller (0% done)',
 						});
 					}
 				} else if (status === 5) {
@@ -147,7 +155,7 @@ setSocketListeners() {
 					}
 				} else if (status === 6) {
 					// Add node done
-					clearInterval(this.inclusionTimer);
+					this.clearTimer();
 				} else if (status === 7) {
 					this.setState({
 						status: 'Error : could not enter learn mode',
@@ -193,15 +201,16 @@ checkInclusionComplete() {
 	let percent = parseInt((complete + 1) / (waiting + complete + 1) * 100, 10);
 	this.setState({
 		status: `Including device... (${percent}% done)`,
+		percent,
 	});
 	if (waiting === 0) {
 		this.setState({
 			timer: null,
-			status: 'Device included!',
+			status: 'Device included! (100% done)',
 		}, () => {
 			this.onInclusionComplete();
 		});
-		clearInterval(this.inclusionTimer);
+		this.clearTimer();
 	}
 }
 
@@ -215,7 +224,7 @@ runInclusionTimer(data?: number = 60) {
 		this.setState({
 			timer: null,
 		});
-		clearInterval(this.inclusionTimer);
+		this.clearTimer();
 	}
 }
 
@@ -234,15 +243,28 @@ onInclusionComplete() {
 
 componentWillUnmount() {
 	this.clearSocketListeners();
-	clearInterval(this.inclusionTimer);
+	this.clearTimer();
 }
 
 clearSocketListeners() {
 	delete this.websocket;
 }
 
+clearTimer() {
+	clearInterval(this.inclusionTimer);
+}
+
+onLayout(ev: Object) {
+	let { width } = ev.nativeEvent.layout;
+	if (this.state.width !== width) {
+		this.setState({
+			width,
+		});
+	}
+}
+
 render(): Object {
-	const { timer, status } = this.state;
+	const { timer, status, percent, width } = this.state;
 	const {
 		container,
 		progressContainer,
@@ -254,7 +276,10 @@ render(): Object {
 		markerTextCover,
 		markerText,
 		timerStyle,
+		statusStyle,
 	} = this.getStyles();
+
+	const progress = Math.max(percent / 100, 0);
 
 	return (
 		<View style={container}>
@@ -273,23 +298,26 @@ render(): Object {
 					flex: 1,
 					flexDirection: 'column',
 					flexWrap: 'wrap',
-				}}>
+				}} onLayout={this.onLayout}>
 					<Text style={textStyle}>
 Include device by enabling inclusion mode on the device within 60 seconds.
 					</Text>
 					<Text style={textStyle}>
 When in inclusion mode the device will automatically be included.
 					</Text>
-					{!!timer && (
-						<Text style={timerStyle}>
-							{timer} Sec
-						</Text>
-					)}
-					{!!status && (
-						<Text style={timerStyle}>
-							{status}
-						</Text>
-					)}
+					<Text style={timerStyle}>
+						{timer !== null ? `${timer} Sec` : ''}
+					</Text>
+					<Text style={statusStyle}>
+						{status !== null ? status : ''}
+					</Text>
+					<ProgressBarLinear
+						progress={progress}
+						height={4}
+						width={width}
+						borderWidth={0}
+						borderColor="transparent"
+						unfilledColor={Theme.Core.inactiveSwitchBackground} />
 				</View>
 			</View>
 			<View style={infoContainer}>
@@ -319,9 +347,11 @@ getStyles(): Object {
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeStatus = deviceWidth * 0.03;
 	const blockIconContainerSize = deviceWidth * 0.26;
 
 	return {
+		innerPadding: 5 + (fontSizeText * 0.5),
 		container: {
 			flex: 1,
 			paddingTop: padding,
@@ -379,6 +409,12 @@ getStyles(): Object {
 		timerStyle: {
 			fontSize: deviceWidth * 0.045,
 			color: brandSecondary,
+			marginTop: 4,
+		},
+		statusStyle: {
+			fontSize: fontSizeStatus,
+			color: rowTextColor,
+			marginBottom: 4,
 		},
 	};
 }
