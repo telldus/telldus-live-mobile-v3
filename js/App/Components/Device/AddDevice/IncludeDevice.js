@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -34,6 +35,25 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+const messages = defineMessages({
+	headerTwo: {
+		id: 'zwave.include.headerTwo',
+		defaultMessage: 'Include your device',
+	},
+	messageOne: {
+		id: 'zwave.include.messageOne',
+		defaultMessage: 'Include device by enabling inclusion mode on the device within 60 seconds.',
+	},
+	messageTwo: {
+		id: 'zwave.include.messageTwo',
+		defaultMessage: 'When in inclusion mode the device will automatically be included.',
+	},
+	messageHint: {
+		id: 'zwave.include.messageHint',
+		defaultMessage: 'This is usually done by clicking three times on the button on the device. Refer to the manual of your device on how to enter inclusion mode.',
+	},
+});
 
 type Props = {
 	appLayout: Object,
@@ -41,6 +61,7 @@ type Props = {
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
 	actions: Object,
+	intl: Object,
 };
 
 type State = {
@@ -87,8 +108,9 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
-	const { onDidMount, actions, navigation } = this.props;
-	onDidMount('3. Include', 'Include your device');
+	const { onDidMount, actions, navigation, intl } = this.props;
+	const { formatMessage } = intl;
+	onDidMount(`3. ${formatMessage(i18n.labelInclude)}`, formatMessage(messages.headerTwo));
 
 	const gateway = navigation.getParam('gateway', {});
 	const module = navigation.getParam('module', '');
@@ -101,6 +123,8 @@ componentDidMount() {
 
 setSocketListeners() {
 	const that = this;
+	const { intl } = this.props;
+	const { formatMessage } = intl;
 	that.websocket.onmessage = (msg: Object) => {
 		let message = {};
 		try {
@@ -121,11 +145,11 @@ setSocketListeners() {
 				let status = data[0];
 				if (status === 1) {
 					this.setState({
-						status: 'Searching for device... (0% done)',
+						status: `${formatMessage(i18n.addNodeToNetworkOne)}...`,
 					});
 				} else if (status === 2) {
 					this.setState({
-						status: 'Node found',
+						status: formatMessage(i18n.addNodeToNetworkTwo),
 					});
 				} else if (status === 3 || status === 4) {
 
@@ -141,11 +165,11 @@ setSocketListeners() {
 
 					if (status === 3) {
 						this.setState({
-							status: 'Adding slave (0% done)',
+							status: formatMessage(i18n.addNodeToNetworkThree),
 						});
 					} else {
 						this.setState({
-							status: 'Adding controller (0% done)',
+							status: formatMessage(i18n.addNodeToNetworkFour),
 						});
 					}
 				} else if (status === 5) {
@@ -190,6 +214,9 @@ checkInclusionComplete() {
 	if (!this.commandClasses) {
 		return;
 	}
+
+	const { intl } = this.props;
+	const { formatMessage } = intl;
 	let waiting = 0, complete = 0;
 	for (let i in this.commandClasses) {
 		if (this.commandClasses[i] === null) {
@@ -200,13 +227,13 @@ checkInclusionComplete() {
 	}
 	let percent = parseInt((complete + 1) / (waiting + complete + 1) * 100, 10);
 	this.setState({
-		status: `Including device... (${percent}% done)`,
+		status: `${formatMessage(i18n.labelIncludingDevice)}...`,
 		percent,
 	});
 	if (waiting === 0) {
 		this.setState({
 			timer: null,
-			status: 'Device included! (100% done)',
+			status: `${formatMessage(i18n.labelDeviceIncluded)}!`,
 		}, () => {
 			this.onInclusionComplete();
 		});
@@ -264,6 +291,7 @@ onLayout(ev: Object) {
 }
 
 render(): Object {
+	const { intl } = this.props;
 	const { timer, status, percent, width } = this.state;
 	const {
 		container,
@@ -280,12 +308,14 @@ render(): Object {
 	} = this.getStyles();
 
 	const progress = Math.max(percent / 100, 0);
+	const { formatMessage } = intl;
 
 	return (
 		<View style={container}>
 			<View style={progressContainer}>
 				<View style={{
 					flexDirection: 'column',
+					justifyContent: 'center',
 				}}>
 					<View style={markerTextCover}>
 						<Text style={markerText}>
@@ -300,16 +330,18 @@ render(): Object {
 					flexWrap: 'wrap',
 				}} onLayout={this.onLayout}>
 					<Text style={textStyle}>
-Include device by enabling inclusion mode on the device within 60 seconds.
+						{formatMessage(messages.messageOne)}
 					</Text>
+					<Text/>
 					<Text style={textStyle}>
-When in inclusion mode the device will automatically be included.
+						{formatMessage(messages.messageTwo)}
 					</Text>
+					<Text/>
 					<Text style={timerStyle}>
-						{timer !== null ? `${timer} Sec` : ''}
+						{timer !== null ? `${timer} Sec` : ' '}
 					</Text>
 					<Text style={statusStyle}>
-						{status !== null ? status : ''}
+						{status !== null ? `${status} (${percent}% ${formatMessage(i18n.done).toLowerCase()})` : ' '}
 					</Text>
 					<ProgressBarLinear
 						progress={progress}
@@ -328,7 +360,7 @@ When in inclusion mode the device will automatically be included.
 					flexWrap: 'wrap',
 				}}>
 					<Text style={textStyle}>
-This is usually done by clicking three times on the button on the device. Refer to the manual of your device on how to enter inclusion mode.
+						{formatMessage(messages.messageHint)}
 					</Text>
 				</View>
 			</View>

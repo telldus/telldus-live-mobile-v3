@@ -715,6 +715,50 @@ const messages = defineMessages({
 		defaultMessage: 'just now',
 		description: 'How long ago a sensor was update',
 	},
+	addNodeToNetworkOne: {
+		id: 'device.addNodeToNetworkOne',
+		defaultMessage: 'Searching for device',
+	},
+	addNodeToNetworkTwo: {
+		id: 'device.addNodeToNetworkTwo',
+		defaultMessage: 'Node found',
+	},
+	addNodeToNetworkThree: {
+		id: 'device.addNodeToNetworkThree',
+		defaultMessage: 'Adding slave',
+	},
+	addNodeToNetworkFour: {
+		id: 'device.addNodeToNetworkFour',
+		defaultMessage: 'Adding controller',
+	},
+	labelIncludingDevice: {
+		id: 'device.labelIncludingDevice',
+		defaultMessage: 'Including device',
+	},
+	labelDeviceIncluded: {
+		id: 'device.labelDeviceIncluded',
+		defaultMessage: 'Device included',
+	},
+	labelDeviceType: {
+		id: 'device.labelDeviceType',
+		defaultMessage: 'Device Type',
+	},
+	labelInclude: {
+		id: 'device.labelInclude',
+		defaultMessage: 'Include',
+	},
+	labelSelectLocation: {
+		id: 'labelSelectLocation',
+		defaultMessage: 'Select Location',
+	},
+	infoZWave: {
+		id: 'deviceType.infoZWave',
+		defaultMessage: 'All Z-Wave devices',
+	},
+	infoZWaveSec: {
+		id: 'deviceType.infoZWaveSec',
+		defaultMessage: 'Z-Wave devices for secure inclusion',
+	},
 });
 
 export default messages;

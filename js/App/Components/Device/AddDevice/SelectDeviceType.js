@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -30,25 +31,17 @@ import {
 import {
 	DeviceTypeBlock,
 } from './SubViews';
+import { getAvailableDeviceTypesAndInfo } from '../../../Lib/DeviceUtils';
 
 import Theme from '../../../Theme';
 
-const availableTypes = {
-	'zwave': [
-		{
-			h1: 'Z-Wave',
-			h2: 'All Z-Wave devices',
-			module: 'zwave',
-			action: 'addNodeToNetwork',
-		},
-		{
-			h1: 'Z-Wave Secure',
-			h2: 'Z-Wave devices for secure inclusion',
-			module: 'zwave',
-			action: 'addSecureNodeToNetwork',
-		},
-	],
-};
+import i18n from '../../../Translations/common';
+const messages = defineMessages({
+	headerTwo: {
+		id: 'zwave.deviceType.headerTwo',
+		defaultMessage: 'Select the type of your device',
+	},
+});
 
 type Props = {
 	appLayout: Object,
@@ -56,6 +49,7 @@ type Props = {
 	onDidMount: (string, string, ?Object) => void,
 	actions: Object,
 	navigation: Object,
+	intl: Object,
 };
 
 type State = {
@@ -72,8 +66,9 @@ constructor(props: Props) {
 	this.onChooseType = this.onChooseType.bind(this);
 }
 componentDidMount() {
-	const { onDidMount } = this.props;
-	onDidMount('2. Device Type', 'Select the type of your device');
+	const { onDidMount, intl } = this.props;
+	const { formatMessage } = intl;
+	onDidMount(`2. ${formatMessage(i18n.labelDeviceType)}`, formatMessage(messages.headerTwo));
 }
 
 onChooseType({module, action}: Object) {
@@ -87,13 +82,16 @@ onChooseType({module, action}: Object) {
 }
 
 getDeviceTypes(): Array<any> {
-	const { navigation } = this.props, types = [];
+	const { navigation, intl } = this.props, types = [];
+	const { formatMessage } = intl;
 	const gateway = navigation.getParam('gateway', {});
 	const { transports } = gateway;
 	const transportsAsArray = transports.split(',');
+
 	transportsAsArray.map((ts: string) => {
-		if (availableTypes[ts]) {
-			types.push(...availableTypes[ts]);
+		const availableTypes = getAvailableDeviceTypesAndInfo(formatMessage)[ts];
+		if (availableTypes) {
+			types.push(...availableTypes);
 		}
 	});
 	return types;

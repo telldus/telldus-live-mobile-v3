@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -33,6 +34,12 @@ import {
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
+const messages = defineMessages({
+	headerTwo: {
+		id: 'zwave.name.headerTwo',
+		defaultMessage: 'Choose a name for your device',
+	},
+});
 
 type Props = {
     appLayout: Object,
@@ -66,8 +73,9 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
-	const { onDidMount } = this.props;
-	onDidMount('4. Name', 'Choose a name for your device');
+	const { onDidMount, intl } = this.props;
+	const { formatMessage } = intl;
+	onDidMount(`4. ${formatMessage(i18n.name)}`, formatMessage(messages.headerTwo));
 }
 
 onChangeName(deviceName: string) {
@@ -105,6 +113,7 @@ render(): Object {
 	const {
 		container,
 		iconSize,
+		iconStyle,
 	} = this.getStyles();
 
 	return (
@@ -121,6 +130,7 @@ render(): Object {
 				iconName={this.state.isLoading ? false : 'checkmark'}
 				showThrobber={isLoading}
 				iconSize={iconSize}
+				iconStyle={iconStyle}
 			/>
 		</View>
 	);
@@ -140,6 +150,10 @@ getStyles(): Object {
 			paddingVertical: padding,
 		},
 		iconSize: deviceWidth * 0.050666667,
+		iconStyle: {
+			fontSize: deviceWidth * 0.050666667,
+			color: '#fff',
+		},
 	};
 }
 }

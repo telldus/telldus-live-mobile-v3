@@ -26,6 +26,7 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -35,6 +36,14 @@ import { GatewayRow } from '../../TabViews/SubViews';
 import { parseGatewaysForListView } from '../../../Reducers/Gateways';
 
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
+const messages = defineMessages({
+	headerTwo: {
+		id: 'zwave.selectLocation.headerTwo',
+		defaultMessage: 'Select Location for your device',
+	},
+});
 
 type Props = {
     rows: Array<Object>,
@@ -68,8 +77,9 @@ constructor(props: Props) {
 	this.onChooseLocation = this.onChooseLocation.bind(this);
 }
 componentDidMount() {
-	const { onDidMount } = this.props;
-	onDidMount('Select Location', 'Select Location for your device');
+	const { onDidMount, intl } = this.props;
+	const { formatMessage } = intl;
+	onDidMount(`1. ${formatMessage(i18n.labelSelectLocation)}`, formatMessage(messages.headerTwo));
 }
 
 keyExtractor(item: Object): string {
