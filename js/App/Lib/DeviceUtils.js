@@ -27,7 +27,7 @@ const { deviceUtils } = utils;
 
 import i18n from '../Translations/common';
 
-const getAvailableDeviceTypesAndInfo = (formatMessage: () => string): Object => {
+const getAvailableDeviceTypesAndInfo = (formatMessage: (Object) => string): Object => {
 	return {
 		'zwave': [
 			{
