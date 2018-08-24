@@ -105,12 +105,6 @@ class AddDeviceContainer extends View<Props, State> {
 		return true;
 	}
 
-
-	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		// TODO : Update!
-		return true;
-	}
-
 	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
 		this.setState({
 			h1,
@@ -140,7 +134,7 @@ class AddDeviceContainer extends View<Props, State> {
 			showModal,
 			navigation,
 		} = this.props;
-		const { currentScreen, appLayout } = screenProps;
+		const { appLayout } = screenProps;
 		const { h1, h2, infoButton } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -160,7 +154,6 @@ class AddDeviceContainer extends View<Props, State> {
 					<NavigationHeaderPoster
 						h1={h1} h2={h2}
 						infoButton={infoButton}
-						showLeftIcon={currentScreen !== 'Success'}
 						align={'right'}
 						navigation={navigation}
 						{...screenProps}/>
@@ -191,9 +184,6 @@ class AddDeviceContainer extends View<Props, State> {
 	}
 
 	getStyle(appLayout: Object): Object {
-		// const { height, width } = appLayout;
-		// const isPortrait = height > width;
-
 		return {
 			style: {
 				flex: 1,

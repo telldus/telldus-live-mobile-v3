@@ -46,7 +46,8 @@ const messages = defineMessages({
 });
 
 type Props = {
-    rows: Array<Object>,
+	rows: Array<Object>,
+	currentScreen: string,
 
     navigation: Object,
     appLayout: Object,
@@ -76,10 +77,15 @@ constructor(props: Props) {
 	this.onRefresh = this.onRefresh.bind(this);
 	this.onChooseLocation = this.onChooseLocation.bind(this);
 }
+
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
 	onDidMount(`1. ${formatMessage(i18n.labelSelectLocation)}`, formatMessage(messages.headerTwo));
+}
+
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	return nextProps.currentScreen === 'InitialScreen';
 }
 
 keyExtractor(item: Object): string {

@@ -78,6 +78,10 @@ componentDidMount() {
 	onDidMount(`4. ${formatMessage(i18n.name)}`, formatMessage(messages.headerTwo));
 }
 
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	return nextProps.currentScreen === 'DeviceName';
+}
+
 onChangeName(deviceName: string) {
 	this.setState({
 		deviceName,

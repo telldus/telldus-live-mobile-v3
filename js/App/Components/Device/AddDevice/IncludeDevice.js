@@ -121,6 +121,10 @@ componentDidMount() {
 	});
 }
 
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	return nextProps.currentScreen === 'IncludeDevice';
+}
+
 setSocketListeners() {
 	const that = this;
 	const { intl } = this.props;

@@ -45,6 +45,7 @@ const messages = defineMessages({
 
 type Props = {
 	appLayout: Object,
+	currentScreen: string,
 
 	onDidMount: (string, string, ?Object) => void,
 	actions: Object,
@@ -65,10 +66,24 @@ constructor(props: Props) {
 
 	this.onChooseType = this.onChooseType.bind(this);
 }
+
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
 	onDidMount(`2. ${formatMessage(i18n.labelDeviceType)}`, formatMessage(messages.headerTwo));
+}
+
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const { navigation, currentScreen, appLayout } = nextProps;
+	const { width } = this.props.appLayout;
+	const selectLocation = navigation.getParam('selectLocation', true);
+	if (!selectLocation && currentScreen === 'InitialScreen' && appLayout.width !== width) {
+		return true;
+	}
+	if (currentScreen === 'SelectDeviceType' && appLayout.width !== width) {
+		return true;
+	}
+	return false;
 }
 
 onChooseType({module, action}: Object) {
