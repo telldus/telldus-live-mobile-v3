@@ -252,7 +252,7 @@
     "notification.defaultPositiveText": "OK",
     "origin": "Zdroj/původ",
     "pages.dashboard": "Displej",
-    "pages.dashboard.messageNoItemsContent": "Na svojí plochu prvek jste dosud nepřidali žádná zařízení ani čidla. Přejděte na kartu zařízení nebo snímačů, posuňte prstem na řádku doleva, klikněte na start v pravém horním rohu a vyberte ty, které chcete přidat.",
+    "pages.dashboard.messageNoItemsContent": "",
     "pages.dashboard.messageNoItemsTitle": "Váš panel je prázdný.",
     "pages.devices": "Zařízení",
     "pages.devices.messageNoDeviceContent": "V současné době je možné přidávat zařízení pouze prostřednictvím našeho webového rozhraní live.telldus.com. Kliknutím níže otevřete webové rozhraní.",
