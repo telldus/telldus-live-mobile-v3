@@ -251,7 +251,7 @@
     "notification.defaultPositiveText": "OK",
     "origin": "Kilde",
     "pages.dashboard": "Dashboard",
-    "pages.dashboard.messageNoItemsContent": "Du har ikke lagt til noen enheter eller sensorer til dashboardet ditt enda. Åpne Enhet- eller Sensorfanen, trykk på start i øvre høyre hjørne og velg hvilke du ønsker å legge til.",
+    "pages.dashboard.messageNoItemsContent": "",
     "pages.dashboard.messageNoItemsTitle": "Dashboardet ditt er tomt.",
     "pages.devices": "Enheter",
     "pages.devices.messageNoDeviceContent": "For øyeblikket er det kun mulig å legge til nye enheter via webgrensesnittet, live.telldus.com. Trykk under for å åpne webgrensesnittet.",
