@@ -160,8 +160,10 @@ class DimmerPopup extends Component<Props, State> {
 					justifyContent: 'center',
 					...Theme.Core.shadow,
 				}}>
-				<Text ellipsizeMode="middle"
-				      style={{ color: '#1a355b' }}>
+				<Text
+					ellipsizeMode="middle"
+					allowFontScaling={false}
+				    style={{ color: '#1a355b' }}>
 					{this.props.name}
 				</Text>
 				<DimmerProgressBar

@@ -51,7 +51,10 @@ export default class TextComponent extends Base {
 
 	render(): React$Element<any> {
 		return (
-			<Text {...this.prepareRootProps()}>{this.props.children}</Text>
+			<Text
+				{...this.prepareRootProps()}
+				allowFontScaling={false}
+			>{this.props.children}</Text>
 		);
 	}
 
