@@ -56,6 +56,7 @@ const TabNavigatorConfig = {
 			backgroundColor: '#fff',
 		},
 		scrollEnabled: true,
+		allowFontScaling: false,
 	},
 };
 

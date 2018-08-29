@@ -92,6 +92,7 @@ const DeviceDetailsNavigator = createMaterialTopTabNavigator(
 			activeTintColor: Theme.Core.brandSecondary,
 			inactiveTintColor: Theme.Core.inactiveTintColor,
 			showIcon: false,
+			allowFontScaling: false,
 		},
 	}
 );

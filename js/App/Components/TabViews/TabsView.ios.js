@@ -61,6 +61,7 @@ const TabNavigatorConfig = {
 		labelStyle: {
 			fontSize: DeviceInfo.isTablet() ? 18 : 12,
 		},
+		allowFontScaling: false,
 	},
 };
 
