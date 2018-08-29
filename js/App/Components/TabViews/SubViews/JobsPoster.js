@@ -392,7 +392,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			const animation = this._getDateAnimation(i);
 
 			return (
-				<Animated.Text style={animation} key={day.date}>
+				<Animated.Text style={animation} key={day.date} allowFontScaling={false}>
 					{day.date}
 				</Animated.Text>
 			);

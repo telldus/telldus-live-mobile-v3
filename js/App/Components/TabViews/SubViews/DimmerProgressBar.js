@@ -207,7 +207,8 @@ class DimmerProgressBar extends Component<Props, State> {
 					},
 				]}>
 					<Text ellipsizeMode="middle"
-					      style={styles.text}>
+						  style={styles.text}
+						  allowFontScaling={false}>
 						{progressText}
 					</Text>
 				</View>

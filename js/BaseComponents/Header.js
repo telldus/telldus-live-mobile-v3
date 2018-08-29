@@ -314,7 +314,7 @@ class HeaderComponent extends Base {
 			return <Icon name={name} size={size} color={color} style={iconStyle}/>;
 		}
 		if (button.title) {
-			return <Text>{button.title}</Text>;
+			return <Text allowFontScaling={false}>{button.title}</Text>;
 		}
 		if (button.component) {
 			return button.component;

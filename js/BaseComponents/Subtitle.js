@@ -38,7 +38,8 @@ export default class Subtitle extends Base {
 				color: this.getTheme().subtitleColor,
 				fontSize: this.getTheme().subTitleFontSize,
 				alignSelf: (Platform.OS === 'ios' ) ? 'center' : 'flex-start',
-			}}>{this.props.children}</Text></View>
+			}}
+			allowFontScaling={false}>{this.props.children}</Text></View>
 		);
 	}
 }

@@ -57,7 +57,7 @@ render(): Object {
 			onLayout={this.onLayout}
 			pointerEvents={'none'}
 		>
-			<Animated.Text style={animation.text} numberOfLines={1} pointerEvents={'none'}>
+			<Animated.Text style={animation.text} numberOfLines={1} pointerEvents={'none'} allowFontScaling={false}>
 				{capitalize(day.day)}
 			</Animated.Text>
 		</Animated.View>
