@@ -22,12 +22,12 @@
 'use strict';
 
 import React from 'react';
-import { SectionList, ScrollView, TouchableOpacity, Text, RefreshControl } from 'react-native';
+import { SectionList, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
-import { View, IconTelldus, DialogueBox, DialogueHeader } from '../../../BaseComponents';
+import { View, IconTelldus, DialogueBox, DialogueHeader, Text } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
 
 import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
