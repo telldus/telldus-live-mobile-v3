@@ -29,6 +29,7 @@ import type { ScheduleProps } from './ScheduleScreen';
 import { ActionRow } from './SubViews';
 import getDeviceType from '../../Lib/getDeviceType';
 import i18n from '../../Translations/common';
+import Theme from '../../Theme';
 
 type State = {
 	dataSource: Object,
@@ -140,9 +141,24 @@ export default class Action extends View<null, ScheduleProps, State> {
 		);
 	}
 
-	_renderRow = (method: number): Object => {
+	_renderRow = (method: number, sId: string, rId: string): Object => {
 		const { appLayout, intl } = this.props;
-		return <ActionRow method={method} onPress={this._handlePress} appLayout={appLayout} intl={intl} labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}/>;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+
+		return <ActionRow
+			method={method}
+			onPress={this._handlePress}
+			appLayout={appLayout}
+			intl={intl}
+			labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}
+			containerStyle={{
+				marginVertical: undefined,
+				marginTop: parseInt(rId, 10) === 0 ? padding : 0,
+				marginBottom: padding / 2,
+			}}/>;
 	};
 
 	_handlePress = (row: Object): void => {

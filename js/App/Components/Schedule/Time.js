@@ -432,6 +432,7 @@ export default class Time extends View<null, Props, State> {
 				flex: 1,
 				justifyContent: 'flex-start',
 				marginBottom: (buttonSize / 2) + buttonBottom,
+				paddingVertical: padding - (padding / 4),
 			},
 			row: {
 				marginBottom,

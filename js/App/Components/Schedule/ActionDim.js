@@ -144,12 +144,14 @@ export default class ActionDim extends View<null, Props, State> {
 
 		const thumbSize = deviceWidth * 0.066666667;
 		const padding = deviceWidth * 0.066666667;
+		const outerPadding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
 			container: {
 				flex: 1,
 				flexDirection: 'row',
 				alignItems: 'flex-start',
+				paddingVertical: outerPadding - (outerPadding / 4),
 			},
 			row: {
 				flex: 1,

@@ -358,6 +358,7 @@ class Edit extends View<null, Props, State> {
 		return {
 			container: {
 				paddingHorizontal: padding,
+				paddingVertical: padding - (padding / 4),
 				alignItems: 'center',
 			},
 			row: {

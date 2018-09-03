@@ -231,7 +231,6 @@ class ScheduleScreen extends View<null, Props, State> {
 			style: {
 				flex: 1,
 				paddingHorizontal: notEdit ? padding : 0,
-				paddingVertical: padding - (padding / 4),
 			},
 			modal: {
 				alignSelf: 'center',

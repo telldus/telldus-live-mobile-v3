@@ -327,6 +327,7 @@ export default class Days extends View<null, Props, State> {
 				flex: 1,
 				justifyContent: 'flex-start',
 				marginBottom: (buttonSize / 2) + buttonBottom,
+				paddingVertical: padding - (padding / 4),
 			},
 			buttonsContainer: {
 				flexDirection: 'row',

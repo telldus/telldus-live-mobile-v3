@@ -196,6 +196,7 @@ class Summary extends View<null, Props, State> {
 			container: {
 				flex: 1,
 				marginBottom: (buttonSize / 2) + buttonBottom,
+				paddingVertical: padding - (padding / 4),
 			},
 			row: {
 				marginBottom: padding / 4,
