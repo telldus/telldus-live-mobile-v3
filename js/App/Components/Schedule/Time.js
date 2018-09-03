@@ -30,6 +30,7 @@ import {
 	TouchableWithoutFeedback,
 	ScrollView,
 	LayoutAnimation,
+	KeyboardAvoidingView,
 } from 'react-native';
 import { defineMessages } from 'react-intl';
 
@@ -227,35 +228,38 @@ export default class Time extends View<null, Props, State> {
 
 		return (
 			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps={'always'}>
-				<View style={container}>
-					<View style={[type.container, { marginBottom }]}>
-						{this._renderTypes(TYPES)}
+				<KeyboardAvoidingView
+					behavior="padding">
+					<View style={container}>
+						<View style={[type.container, { marginBottom }]}>
+							{this._renderTypes(TYPES)}
+						</View>
+						{this._renderTimeRow()}
+						{shouldRender && (
+							<Row containerStyle={row}>
+								<TimeSlider
+									description={intervalEdit ? this.labelSliderIntervalEdit : this.labelSliderInterval}
+									icon="random"
+									minimumValue={0}
+									maximumValue={1440}
+									value={randomInterval}
+									onValueChange={this.setRandomIntervalValue}
+									appLayout={appLayout}
+									intl={intl}
+									type="INTERVAL"
+									toggleEdit={this.toggleEdit}
+								/>
+							</Row>
+						)}
 					</View>
-					{this._renderTimeRow()}
 					{shouldRender && (
-						<Row containerStyle={row}>
-							<TimeSlider
-								description={intervalEdit ? this.labelSliderIntervalEdit : this.labelSliderInterval}
-								icon="random"
-								minimumValue={0}
-								maximumValue={1440}
-								value={randomInterval}
-								onValueChange={this.setRandomIntervalValue}
-								appLayout={appLayout}
-								intl={intl}
-								type="INTERVAL"
-								toggleEdit={this.toggleEdit}
-							/>
-						</Row>
+						<FloatingButton
+							onPress={this.selectTime}
+							imageSource={{uri: 'right_arrow_key'}}
+							paddingRight={this.props.paddingRight - 2}
+						/>
 					)}
-				</View>
-				{shouldRender && (
-					<FloatingButton
-						onPress={this.selectTime}
-						imageSource={{uri: 'right_arrow_key'}}
-						paddingRight={this.props.paddingRight - 2}
-					/>
-				)}
+				</KeyboardAvoidingView>
 			</ScrollView>
 		);
 	}
