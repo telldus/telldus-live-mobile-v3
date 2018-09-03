@@ -195,7 +195,10 @@ export default class Days extends View<null, Props, State> {
 		if (isEditMode()) {
 			navigation.goBack();
 		} else {
-			navigation.navigate('Summary');
+			navigation.navigate({
+				routeName: 'Summary',
+				key: 'Summary',
+			});
 		}
 	};
 

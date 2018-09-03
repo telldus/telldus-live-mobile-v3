@@ -67,7 +67,10 @@ class OverviewTab extends View<Props, null> {
 				accessibilityLabel={i18n.deviceOverviewTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate('Overview');
+			navigation.navigate({
+				routeName: 'Overview',
+				key: 'Overview',
+			});
 		},
 	});
 

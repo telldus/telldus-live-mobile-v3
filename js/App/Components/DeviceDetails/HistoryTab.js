@@ -76,7 +76,10 @@ class HistoryTab extends View {
 			const noOp = () => {};
 			const onPress = navigation.getParam('actionOnHistoryTabPress', noOp);
 			onPress();
-			navigation.navigate('History');
+			navigation.navigate({
+				routeName: 'History',
+				key: 'History',
+			});
 		},
 	});
 

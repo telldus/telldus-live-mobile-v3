@@ -193,7 +193,10 @@ class DashboardTab extends View {
 	componentDidMount() {
 		const { isDBEmpty, navigation } = this.props;
 		if (isDBEmpty) {
-			navigation.navigate('Devices');
+			navigation.navigate({
+				routeName: 'Devices',
+				key: 'Devices',
+			});
 		}
 		this.startSensorTimer();
 	}

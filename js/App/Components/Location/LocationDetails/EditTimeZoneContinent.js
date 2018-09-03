@@ -112,7 +112,13 @@ class EditTimeZoneContinent extends View {
 				let items = v1.split('/');
 				return !(items[0] === v2);
 			});
-			navigation.navigate('EditTimeZoneCity', {cities: data, continent, id});
+			navigation.navigate({
+				routeName: 'EditTimeZoneCity',
+				key: 'EditTimeZoneCity',
+				params: {
+					cities: data, continent, id,
+				},
+			});
 		}
 	}
 

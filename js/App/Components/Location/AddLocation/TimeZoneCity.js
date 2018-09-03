@@ -86,7 +86,11 @@ class TimeZoneCity extends View {
 		let clientInfo = navigation.getParam('clientInfo', {});
 		clientInfo.timezone = `${clientInfo.continent}/${city}`;
 		clientInfo.autoDetected = false;
-		navigation.navigate('TimeZone', {clientInfo});
+		navigation.navigate({
+			routeName: 'TimeZone',
+			key: 'TimeZone',
+			params: {clientInfo},
+		});
 	}
 
 	render(): Object {

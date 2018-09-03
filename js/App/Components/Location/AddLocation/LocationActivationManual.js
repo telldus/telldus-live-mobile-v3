@@ -179,7 +179,11 @@ class LocationActivationManual extends View {
 						timezone: response.timezone,
 						autoDetected: true,
 					};
-					this.props.navigation.navigate('LocationName', {clientInfo});
+					this.props.navigation.navigate({
+						routeName: 'LocationName',
+						key: 'LocationName',
+						params: {clientInfo},
+					});
 				} else if (response && response.activated === true) {
 					this.props.actions.showModal(this.messageAlreadyActivated, 'ERROR');
 				} else {

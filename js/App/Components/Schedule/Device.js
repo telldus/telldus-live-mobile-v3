@@ -84,7 +84,10 @@ export default class Device extends View<void, Props, State> {
 
 	selectDevice = (row: Object) => {
 		const { actions, navigation } = this.props;
-		navigation.navigate('Action');
+		navigation.navigate({
+			routeName: 'Action',
+			key: 'Action',
+		});
 		actions.selectDevice(row.id);
 	};
 
