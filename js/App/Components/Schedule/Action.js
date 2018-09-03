@@ -48,16 +48,15 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 	constructor(props: ScheduleProps) {
 		super(props);
-
-		let { formatMessage } = this.props.intl;
-
-		this.h1 = `2. ${formatMessage(i18n.labelAction)}`;
+		const { isEditMode, intl, schedule } = this.props;
+		const { formatMessage } = intl;
+		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : `2. ${formatMessage(i18n.labelAction)}`;
 		this.h2 = formatMessage(i18n.posterChooseAction);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
 
-		let deviceType = this.getType(props.schedule.deviceId), methods = [];
+		let deviceType = this.getType(schedule.deviceId), methods = [];
 		if (deviceType === 'TOGGLE') {
 			methods = [1, 2];
 		}

@@ -93,9 +93,10 @@ export default class Time extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		let { formatMessage } = this.props.intl;
+		const { isEditMode, intl, schedule } = this.props;
+		const { formatMessage } = intl;
 
-		this.h1 = `3. ${formatMessage(i18n.time)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.time) : `3. ${formatMessage(i18n.time)}`;
 		this.h2 = formatMessage(i18n.posterChooseTime);
 		this.labelSliderInterval = formatMessage(messages.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
 		this.labelSliderOffset = formatMessage(messages.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
@@ -110,7 +111,7 @@ export default class Time extends View<null, Props, State> {
 			tmp: true, // TODO: fill with real fields
 		};
 
-		const { type, offset, randomInterval, hour, minute } = props.schedule;
+		const { type, offset, randomInterval, hour, minute } = schedule;
 
 		this.state = {
 			selectedType: type,

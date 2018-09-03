@@ -52,16 +52,17 @@ export default class ActionDim extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		let { formatMessage } = this.props.intl;
+		const { isEditMode, intl, schedule } = this.props;
+		const { formatMessage } = intl;
 
-		this.h1 = `2. ${formatMessage(i18n.labelAction)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : `2. ${formatMessage(i18n.labelAction)}`;
 		this.h2 = formatMessage(i18n.posterChooseAction);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
 
 		this.maximumValue = 255;
-		const { methodValue } = props.schedule;
+		const { methodValue } = schedule;
 
 		this.sliderColor = Theme.Core.brandSecondary;
 
