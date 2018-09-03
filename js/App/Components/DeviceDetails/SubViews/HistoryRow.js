@@ -239,7 +239,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 				>
 
 					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
-						<View style={[statusView, { backgroundColor: '#A59F9A' }]}>
+						<View style={[statusView, { backgroundColor: '#1b365d' }]}>
 							<IconTelldus icon="off" size={statusIconSize} color="#ffffff" />
 						</View>
 						:
