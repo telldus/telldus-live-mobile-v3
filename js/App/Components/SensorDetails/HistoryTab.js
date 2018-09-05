@@ -110,7 +110,10 @@ class HistoryTab extends View {
 				accessibilityLabel={i18n.deviceHistoryTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate('History');
+			navigation.navigate({
+				routeName: 'History',
+				key: 'History',
+			});
 		},
 	});
 

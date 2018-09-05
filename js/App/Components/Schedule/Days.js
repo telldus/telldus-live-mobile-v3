@@ -70,11 +70,12 @@ export default class Days extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		let { formatMessage, formatDate } = this.props.intl;
+		const { isEditMode, intl, schedule } = this.props;
+		const { formatMessage, formatDate } = intl;
 
 		this.days = getTranslatableDays(formatDate);
 
-		this.h1 = `4. ${formatMessage(i18n.posterDays)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.posterDays) : `4. ${formatMessage(i18n.posterDays)}`;
 		this.h2 = formatMessage(i18n.posterChooseDays);
 		this.labelCheckAll = formatMessage(messages.checkAll);
 		this.labelUncheckAll = formatMessage(messages.unCheckAll);
@@ -85,9 +86,9 @@ export default class Days extends View<null, Props, State> {
 		};
 
 		this.state = {
-			selectedDays: getSelectedDays(props.schedule.weekdays, formatDate),
+			selectedDays: getSelectedDays(schedule.weekdays, formatDate),
 			shouldCheckAll: true,
-			shouldUncheckAll: getSelectedDays(props.schedule.weekdays, formatDate).length > 0,
+			shouldUncheckAll: getSelectedDays(schedule.weekdays, formatDate).length > 0,
 			isWeekdaysSelected: false,
 			isWeekendsSelected: false,
 		};
@@ -195,7 +196,10 @@ export default class Days extends View<null, Props, State> {
 		if (isEditMode()) {
 			navigation.goBack();
 		} else {
-			navigation.navigate('Summary');
+			navigation.navigate({
+				routeName: 'Summary',
+				key: 'Summary',
+			});
 		}
 	};
 
@@ -324,6 +328,7 @@ export default class Days extends View<null, Props, State> {
 				flex: 1,
 				justifyContent: 'flex-start',
 				marginBottom: (buttonSize / 2) + buttonBottom,
+				paddingVertical: padding - (padding / 4),
 			},
 			buttonsContainer: {
 				flexDirection: 'row',

@@ -324,7 +324,13 @@ class Edit extends View<null, Props, State> {
 	}
 
 	_navigate = (routeName: string) => {
-		this.props.navigation.navigate(routeName, { editMode: true });
+		this.props.navigation.navigate({
+			routeName,
+			key: routeName,
+			params: {
+				editMode: true,
+			},
+		});
 	};
 
 	_getDeviceById = (deviceId: number): Object => {
@@ -352,6 +358,7 @@ class Edit extends View<null, Props, State> {
 		return {
 			container: {
 				paddingHorizontal: padding,
+				paddingVertical: padding - (padding / 4),
 				alignItems: 'center',
 			},
 			row: {

@@ -124,7 +124,11 @@ class GatewaysTab extends View {
 		});
 		this.props.addNewLocation()
 			.then((response: Object) => {
-				this.props.navigation.navigate('AddLocation', {clients: response.client});
+				this.props.navigation.navigate({
+					routeName: 'AddLocation',
+					key: 'AddLocation',
+					params: { clients: response.client },
+				});
 				this.setState({
 					isLoading: false,
 				});

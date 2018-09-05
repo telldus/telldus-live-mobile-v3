@@ -59,7 +59,11 @@ class GatewayRow extends PureComponent<Props, State> {
 		if (onPress) {
 			onPress(location);
 		} else {
-			this.props.navigation.navigate('LocationDetails', {location});
+			this.props.navigation.navigate({
+				routeName: 'LocationDetails',
+				key: 'LocationDetails',
+				params: { location },
+			});
 		}
 	}
 

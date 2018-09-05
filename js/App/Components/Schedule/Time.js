@@ -30,6 +30,7 @@ import {
 	TouchableWithoutFeedback,
 	ScrollView,
 	LayoutAnimation,
+	KeyboardAvoidingView,
 } from 'react-native';
 import { defineMessages } from 'react-intl';
 
@@ -93,9 +94,10 @@ export default class Time extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		let { formatMessage } = this.props.intl;
+		const { isEditMode, intl, schedule } = this.props;
+		const { formatMessage } = intl;
 
-		this.h1 = `3. ${formatMessage(i18n.time)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.time) : `3. ${formatMessage(i18n.time)}`;
 		this.h2 = formatMessage(i18n.posterChooseTime);
 		this.labelSliderInterval = formatMessage(messages.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
 		this.labelSliderOffset = formatMessage(messages.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
@@ -110,7 +112,7 @@ export default class Time extends View<null, Props, State> {
 			tmp: true, // TODO: fill with real fields
 		};
 
-		const { type, offset, randomInterval, hour, minute } = props.schedule;
+		const { type, offset, randomInterval, hour, minute } = schedule;
 
 		this.state = {
 			selectedType: type,
@@ -210,7 +212,10 @@ export default class Time extends View<null, Props, State> {
 		if (isEditMode()) {
 			navigation.goBack();
 		} else {
-			navigation.navigate('Days');
+			navigation.navigate({
+				routeName: 'Days',
+				key: 'Days',
+			});
 		}
 	};
 
@@ -223,35 +228,38 @@ export default class Time extends View<null, Props, State> {
 
 		return (
 			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps={'always'}>
-				<View style={container}>
-					<View style={[type.container, { marginBottom }]}>
-						{this._renderTypes(TYPES)}
+				<KeyboardAvoidingView
+					behavior="padding">
+					<View style={container}>
+						<View style={[type.container, { marginBottom }]}>
+							{this._renderTypes(TYPES)}
+						</View>
+						{this._renderTimeRow()}
+						{shouldRender && (
+							<Row containerStyle={row}>
+								<TimeSlider
+									description={intervalEdit ? this.labelSliderIntervalEdit : this.labelSliderInterval}
+									icon="random"
+									minimumValue={0}
+									maximumValue={1440}
+									value={randomInterval}
+									onValueChange={this.setRandomIntervalValue}
+									appLayout={appLayout}
+									intl={intl}
+									type="INTERVAL"
+									toggleEdit={this.toggleEdit}
+								/>
+							</Row>
+						)}
 					</View>
-					{this._renderTimeRow()}
 					{shouldRender && (
-						<Row containerStyle={row}>
-							<TimeSlider
-								description={intervalEdit ? this.labelSliderIntervalEdit : this.labelSliderInterval}
-								icon="random"
-								minimumValue={0}
-								maximumValue={1440}
-								value={randomInterval}
-								onValueChange={this.setRandomIntervalValue}
-								appLayout={appLayout}
-								intl={intl}
-								type="INTERVAL"
-								toggleEdit={this.toggleEdit}
-							/>
-						</Row>
+						<FloatingButton
+							onPress={this.selectTime}
+							imageSource={{uri: 'right_arrow_key'}}
+							paddingRight={this.props.paddingRight - 2}
+						/>
 					)}
-				</View>
-				{shouldRender && (
-					<FloatingButton
-						onPress={this.selectTime}
-						imageSource={{uri: 'right_arrow_key'}}
-						paddingRight={this.props.paddingRight - 2}
-					/>
-				)}
+				</KeyboardAvoidingView>
 			</ScrollView>
 		);
 	}
@@ -429,6 +437,7 @@ export default class Time extends View<null, Props, State> {
 				flex: 1,
 				justifyContent: 'flex-start',
 				marginBottom: (buttonSize / 2) + buttonBottom,
+				paddingVertical: padding - (padding / 4),
 			},
 			row: {
 				marginBottom,

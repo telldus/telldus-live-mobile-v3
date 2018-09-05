@@ -138,7 +138,10 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		this.props.navigation.navigate('Tabs');
+		this.props.navigation.navigate({
+			routeName: 'Tabs',
+			key: 'Tabs',
+		});
 	}
 
 	onPressHelp() {

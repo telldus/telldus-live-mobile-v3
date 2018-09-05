@@ -29,6 +29,7 @@ import type { ScheduleProps } from './ScheduleScreen';
 import { ActionRow } from './SubViews';
 import getDeviceType from '../../Lib/getDeviceType';
 import i18n from '../../Translations/common';
+import Theme from '../../Theme';
 
 type State = {
 	dataSource: Object,
@@ -47,16 +48,15 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 	constructor(props: ScheduleProps) {
 		super(props);
-
-		let { formatMessage } = this.props.intl;
-
-		this.h1 = `2. ${formatMessage(i18n.labelAction)}`;
+		const { isEditMode, intl, schedule } = this.props;
+		const { formatMessage } = intl;
+		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : `2. ${formatMessage(i18n.labelAction)}`;
 		this.h2 = formatMessage(i18n.posterChooseAction);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
 
-		let deviceType = this.getType(props.schedule.deviceId), methods = [];
+		let deviceType = this.getType(schedule.deviceId), methods = [];
 		if (deviceType === 'TOGGLE') {
 			methods = [1, 2];
 		}
@@ -104,7 +104,10 @@ export default class Action extends View<null, ScheduleProps, State> {
 		if (isEditMode()) {
 			navigation.goBack();
 		} else {
-			navigation.navigate('Time');
+			navigation.navigate({
+				routeName: 'Time',
+				key: 'Time',
+			});
 		}
 	};
 
@@ -112,14 +115,19 @@ export default class Action extends View<null, ScheduleProps, State> {
 		const { navigation, isEditMode } = this.props;
 
 		if (isEditMode()) {
-			navigation.navigate('ActionDim',
-				{
+			navigation.navigate({
+				routeName: 'ActionDim',
+				key: 'ActionDim',
+				params: {
 					actionKey: navigation.state.key,
 					editMode: true,
 				},
-			);
+			});
 		} else {
-			navigation.navigate('ActionDim');
+			navigation.navigate({
+				routeName: 'ActionDim',
+				key: 'ActionDim',
+			});
 		}
 	};
 
@@ -132,9 +140,24 @@ export default class Action extends View<null, ScheduleProps, State> {
 		);
 	}
 
-	_renderRow = (method: number): Object => {
+	_renderRow = (method: number, sId: string, rId: string): Object => {
 		const { appLayout, intl } = this.props;
-		return <ActionRow method={method} onPress={this._handlePress} appLayout={appLayout} intl={intl} labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}/>;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+
+		return <ActionRow
+			method={method}
+			onPress={this._handlePress}
+			appLayout={appLayout}
+			intl={intl}
+			labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}
+			containerStyle={{
+				marginVertical: undefined,
+				marginTop: parseInt(rId, 10) === 0 ? padding : 0,
+				marginBottom: padding / 2,
+			}}/>;
 	};
 
 	_handlePress = (row: Object): void => {

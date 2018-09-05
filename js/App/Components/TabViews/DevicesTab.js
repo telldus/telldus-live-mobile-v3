@@ -185,7 +185,11 @@ class DevicesTab extends View {
 		// Passing only the id(not whole device object) through navigation param, again the device properties
 		// are retrived inside 'DeviceDetails' by matching 'id' with device data from store
 		// It is important to use data from store directly(not through navigation param) to get updates(socket and other)
-		this.props.navigation.navigate('DeviceDetails', { id: device.id });
+		this.props.navigation.navigate({
+			routeName: 'DeviceDetails',
+			key: 'DeviceDetails',
+			params: { id: device.id },
+		});
 	}
 
 	setScrollEnabled(enable: boolean) {
@@ -296,7 +300,11 @@ class DevicesTab extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					this.props.navigation.navigate('AddLocation', {clients: response.client});
+					this.props.navigation.navigate({
+						routeName: 'AddLocation',
+						key: 'AddLocation',
+						params: { clients: response.client },
+					});
 					this.setState({
 						addGateway: false,
 					});

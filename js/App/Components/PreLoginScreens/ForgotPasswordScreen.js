@@ -80,7 +80,10 @@ class ForgotPasswordScreen extends View<Props, null> {
 	}
 
 	goBackToLogin() {
-		this.props.navigation.navigate('Login');
+		this.props.navigation.navigate({
+			routeName: 'Login',
+			key: 'Login',
+		});
 	}
 
 	closeModal() {

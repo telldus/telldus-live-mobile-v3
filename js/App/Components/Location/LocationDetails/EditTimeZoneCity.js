@@ -93,7 +93,10 @@ class EditTimeZoneCity extends View {
 		const timezone = `${continent}/${city}`;
 		actions.setTimezone(id, timezone).then(() => {
 			actions.getGateways();
-			navigation.navigate('Details');
+			navigation.navigate({
+				routeName: 'Details',
+				key: 'Details',
+			});
 		}).catch(() => {
 			actions.showModal(this.onSetTimezoneError);
 		});

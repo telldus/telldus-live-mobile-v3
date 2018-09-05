@@ -141,14 +141,22 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	newSchedule = () => {
-		this.props.navigation.navigate('Schedule', { editMode: false });
+		this.props.navigation.navigate({
+			routeName: 'Schedule',
+			key: 'Schedule',
+			params: { editMode: false },
+		});
 	};
 
 	editJob = (schedule: Schedule) => {
 		const { dispatch, navigation } = this.props;
 
 		dispatch(editSchedule(schedule));
-		navigation.navigate('Schedule', { editMode: true });
+		navigation.navigate({
+			routeName: 'Schedule',
+			key: 'Schedule',
+			params: { editMode: true },
+		});
 	};
 
 	onIndexChanged = (index: number) => {

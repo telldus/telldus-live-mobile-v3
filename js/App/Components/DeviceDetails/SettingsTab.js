@@ -81,7 +81,10 @@ class SettingsTab extends View {
 				accessibilityLabel={i18n.deviceSettingsTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate('Settings');
+			navigation.navigate({
+				routeName: 'Settings',
+				key: 'Settings',
+			});
 		},
 	});
 

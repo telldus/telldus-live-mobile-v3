@@ -105,7 +105,14 @@ class Details extends View {
 
 	onEditName() {
 		const { navigation, location } = this.props;
-		navigation.navigate('EditName', {id: location.id, name: location.name});
+		navigation.navigate({
+			routeName: 'EditName',
+			key: 'EditName',
+			params: {
+				id: location.id,
+				name: location.name,
+			},
+		});
 	}
 
 	onEditTimeZone() {
@@ -118,7 +125,13 @@ class Details extends View {
 	onEditGeoPosition() {
 		let { navigation, location } = this.props;
 		let { latitude, longitude, id } = location;
-		navigation.navigate('EditGeoPosition', { id, latitude, longitude });
+		navigation.navigate({
+			routeName: 'EditGeoPosition',
+			key: 'EditGeoPosition',
+			params: {
+				id, latitude, longitude,
+			},
+		});
 	}
 
 	onPressRemoveLocation() {
