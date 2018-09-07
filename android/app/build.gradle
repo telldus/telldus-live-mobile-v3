@@ -203,7 +203,7 @@ dependencies {
     implementation project(':react-native-extra-dimensions-android')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:23.0.1"
+    implementation "com.android.support:appcompat-v7:26.1.0"
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
     // https://github.com/facebook/react-native/issues/19259#issuecomment-389064401
     // will need to update here too on upgrading RN.
@@ -229,6 +229,15 @@ dependencies {
         force = true;
     }
     implementation ('com.google.firebase:firebase-messaging:15.0.2') {
+        force = true;
+    }
+    implementation ('com.google.firebase:firebase-auth:16.0.2') {
+        force = true;
+    }
+    implementation(project(":react-native-google-signin")){
+        exclude group: "com.google.android.gms"
+    }
+    implementation ('com.google.android.gms:play-services-auth:15.0.0') {
         force = true;
     }
 }

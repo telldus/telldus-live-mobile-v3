@@ -52,6 +52,8 @@ import com.tradle.react.UdpSocketsModule;
 import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
 import com.reactlibrary.RNReactNativeAccessibilityPackage;
 import com.airbnb.android.react.maps.MapsPackage;
+import io.invertase.firebase.auth.RNFirebaseAuthPackage;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -70,11 +72,13 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
+				new RNGoogleSigninPackage(),
 				new OrientationPackage(),
 				new SvgPackage(),
 				new RNFirebasePackage(),
 				new RNFirebaseMessagingPackage(),
 				new RNFirebaseNotificationsPackage(),
+				new RNFirebaseAuthPackage(),
 				new RNRSAPackage(),
 				new UdpSocketsModule(),
 				new RNSensitiveInfoPackage(),
