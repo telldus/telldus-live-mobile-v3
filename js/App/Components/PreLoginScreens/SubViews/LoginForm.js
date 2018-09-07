@@ -22,14 +22,21 @@
 'use strict';
 
 import React from 'react';
-import { TextInput } from 'react-native';
+import { TextInput, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
+import firebase from 'react-native-firebase';
 
 import { TouchableButton, View, H1 } from '../../../../BaseComponents';
 import { loginToTelldus, showModal } from '../../../Actions';
-import { testUsername, testPassword } from '../../../../Config';
+import {
+	testUsername,
+	testPassword,
+	webClientId,
+	iosClientId,
+} from '../../../../Config';
 
 import i18n from '../../../Translations/common';
 import {defineMessages} from 'react-intl';
@@ -58,6 +65,7 @@ type State = {
 		isLoading: boolean,
 		username: string,
 		password: string,
+		isSigninInProgress: boolean,
 };
 
 class LoginForm extends View {
@@ -68,6 +76,7 @@ class LoginForm extends View {
 	onChangePassword: (password: string) => void;
 	onFormSubmit: (username: string, password: string) => void;
 	postSubmit: () => void;
+	signIn: () => any;
 
 	constructor(props: Props) {
 		super(props);
@@ -76,12 +85,15 @@ class LoginForm extends View {
 			username: testUsername,
 			password: testPassword,
 			isLoading: false,
+			isSigninInProgress: false,
 		};
 
 		this.onChangeUsername = this.onChangeUsername.bind(this);
 		this.onChangePassword = this.onChangePassword.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 		this.postSubmit = this.postSubmit.bind(this);
+		this.signIn = this.signIn.bind(this);
+		this.signOutGoogle = this.signOutGoogle.bind(this);
 
 		let { formatMessage } = props.intl;
 
@@ -89,6 +101,20 @@ class LoginForm extends View {
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 	}
+
+	componentDidMount() {
+		this.configureGoogleSignIn();
+	}
+
+	configureGoogleSignIn() {
+		// TODO: AUTOMATE values of secret key's webClientId, iosClientId and iosReversedClientId for release builds.
+		// iosReversedClientId : used as URL Scheme in info.plist file
+		GoogleSignin.configure({
+			webClientId: webClientId,
+			offlineAccess: true,
+			iosClientId: Platform.OS === 'ios' ? iosClientId : null,
+		});
+	  }
 
 	render(): Object {
 		let { dialogueOpen, styles, headerText } = this.props;
@@ -145,8 +171,58 @@ class LoginForm extends View {
 					postScript={this.state.isLoading ? '...' : null}
 					accessible={buttonAccessible}
 				/>
+				<GoogleSigninButton
+					style={{ width: 200, height: 48, alignSelf: 'center' }}
+					size={GoogleSigninButton.Size.Wide}
+					color={GoogleSigninButton.Color.Dark}
+					onPress={this.signIn}
+					disabled={this.state.isSigninInProgress} />
 			</View>
 		);
+	}
+
+	async signOutGoogle(): any {
+		try {
+			await GoogleSignin.revokeAccess();
+			await GoogleSignin.signOut();
+
+			this.setState({ userInfo: null, error: null });
+		  } catch (error) {
+			this.setState({
+			  error,
+			});
+		  }
+	}
+
+	async signIn(): any {
+		this.setState({ isSigninInProgress: true });
+		try {
+			await GoogleSignin.hasPlayServices();
+			const data = await GoogleSignin.signIn();
+			console.log('TEST GoogleSignin user info', data);
+			// create a new firebase credential with the token
+			const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
+			// login with credential
+			const currentUser = await firebase.auth().signInAndRetrieveDataWithCredential(credential);
+
+			console.log('TEST user credential after signing into firebase', currentUser.user.toJSON());
+			this.setState({
+				data,
+				isSigninInProgress: false,
+			});
+		  } catch (error) {
+			console.log('TEST error', error);
+			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+			  // user cancelled the login flow
+			} else if (error.code === statusCodes.IN_PROGRESS) {
+			  // operation (f.e. sign in) is in progress already
+			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+			  // play services not available or outdated
+			} else {
+			  // some other error happened
+			}
+			this.setState({ isSigninInProgress: false });
+		  }
 	}
 
 	onChangeUsername(username: string) {
