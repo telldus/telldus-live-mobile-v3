@@ -203,6 +203,7 @@ class LoginForm extends View {
 				data,
 				isSigninInProgress: false,
 			});
+			// TODO: complete login once endpoint is ready.
 		  } catch (error) {
 			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
 			  // user cancelled the login flow
