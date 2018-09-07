@@ -13,6 +13,9 @@ module.exports = {
     forceLocale: '',
     pushSenderId: '',
     pushServiceId: '${PUSH_SERVICE_ID_IOS}',
+    webClientId: '${GOOGLE_WEB_CLIENT_ID}',
+	iosClientId: '${GOOGLE_IOS_CLIENT_ID}',
+	iosReversedClientId: '${GOOGLE_IOS_REVERSED_CLIENT_ID}',
 };
 EOF
 
