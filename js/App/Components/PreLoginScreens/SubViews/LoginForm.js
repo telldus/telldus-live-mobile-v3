@@ -27,7 +27,6 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
-import firebase from 'react-native-firebase';
 
 import { TouchableButton, View, H1 } from '../../../../BaseComponents';
 import { loginToTelldus, showModal } from '../../../Actions';
@@ -77,6 +76,7 @@ class LoginForm extends View {
 	onFormSubmit: (username: string, password: string) => void;
 	postSubmit: () => void;
 	signIn: () => any;
+	signOutGoogle: () => any;
 
 	constructor(props: Props) {
 		super(props);
@@ -199,19 +199,11 @@ class LoginForm extends View {
 		try {
 			await GoogleSignin.hasPlayServices();
 			const data = await GoogleSignin.signIn();
-			console.log('TEST GoogleSignin user info', data);
-			// create a new firebase credential with the token
-			const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
-			// login with credential
-			const currentUser = await firebase.auth().signInAndRetrieveDataWithCredential(credential);
-
-			console.log('TEST user credential after signing into firebase', currentUser.user.toJSON());
 			this.setState({
 				data,
 				isSigninInProgress: false,
 			});
 		  } catch (error) {
-			console.log('TEST error', error);
 			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
 			  // user cancelled the login flow
 			} else if (error.code === statusCodes.IN_PROGRESS) {
@@ -240,10 +232,15 @@ class LoginForm extends View {
 	}
 
 	onFormSubmit() {
-		let { intl, dispatch } = this.props;
+		const { intl, dispatch } = this.props;
+		const { username, password } = this.state;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
-			this.props.loginToTelldus(this.state.username, this.state.password)
+			const credential = {
+				username,
+				password,
+			};
+			this.props.loginToTelldus(credential)
 				.catch((err: Object) => {
 					this.postSubmit();
 					this.handleLoginError(err);

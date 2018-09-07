@@ -30,7 +30,16 @@ import { Answers } from 'react-native-fabric';
 import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from '../Actions/Websockets';
 
-const loginToTelldus = (username: string, password: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
+type loginCredential = {
+	username: string,
+	password: string,
+};
+
+type loginCredentialSocial = {
+	idToken: string,
+};
+
+const loginToTelldus = (credential: loginCredential | loginCredentialSocial): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	return axios({
 		method: 'post',
 		headers: {
@@ -43,8 +52,7 @@ const loginToTelldus = (username: string, password: string): ThunkAction => (dis
 			'client_id': publicKey,
 			'client_secret': privateKey,
 			'grant_type': 'password',
-			'username': username,
-			'password': password,
+			...credential,
 		},
 	  })
 		.then((response: Object): Object => {
