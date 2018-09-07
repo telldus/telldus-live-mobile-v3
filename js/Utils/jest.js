@@ -20,3 +20,13 @@ jest.mock('react-native-orientation-locker', () => {
 		unlockAllOrientations: jest.fn(),
 	};
 });
+
+jest.mock('react-native-google-signin', () => {
+	return {
+		statusCodes: {
+			SIGN_IN_CANCELLED: '',
+			IN_PROGRESS: '',
+			PLAY_SERVICES_NOT_AVAILABLE: '',
+		},
+	};
+});
