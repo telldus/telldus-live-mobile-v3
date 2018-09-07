@@ -48,7 +48,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Used to calculate the sunrise and sunset for schedules and events.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
