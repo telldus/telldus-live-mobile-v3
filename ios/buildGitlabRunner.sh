@@ -19,6 +19,8 @@ module.exports = {
 };
 EOF
 
+echo "${GOOGLE_SERVICES_PLIST}" > TelldusLiveApp/GoogleService-Info.plist
+
 cd ..
 react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --sourcemap-output ios/main.jsbundle.map
 
