@@ -25,6 +25,18 @@
 		1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD4E8D787A68404D96264B38 /* libUdpSockets.a */; };
 		267ABE6020F78777006CD1B5 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 267ABE5920F78730006CD1B5 /* libRNSVG.a */; };
 		26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26C0E61D205C17B700E9AD6A /* libRNI18n.a */; };
+		26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC2221424D8A0060DC8E /* AddressBook.framework */; };
+		26D4DC5921424D9B0060DC8E /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DBFB21424C620060DC8E /* libRNGoogleSignin.a */; };
+		26D4DC5B21424DAC0060DC8E /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5A21424DAC0060DC8E /* SafariServices.framework */; };
+		26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */; };
+		26D4DC5F21424DCC0060DC8E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5E21424DCB0060DC8E /* libz.tbd */; };
+		26D4DC6621424E520060DC8E /* GoogleAuthUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC6021424E510060DC8E /* GoogleAuthUtilities.framework */; };
+		26D4DC6721424E520060DC8E /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC6121424E510060DC8E /* GoogleUtilities.framework */; };
+		26D4DC6821424E520060DC8E /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC6221424E510060DC8E /* GoogleAppUtilities.framework */; };
+		26D4DC6921424E520060DC8E /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC6321424E510060DC8E /* GoogleSignIn.framework */; };
+		26D4DC6A21424E520060DC8E /* GoogleNetworkingUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC6421424E520060DC8E /* GoogleNetworkingUtilities.framework */; };
+		26D4DC6B21424E520060DC8E /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC6521424E520060DC8E /* GoogleSymbolUtilities.framework */; };
+		26D4DD542142612A0060DC8E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26D4DD1E214261290060DC8E /* GoogleService-Info.plist */; };
 		28061C46E49841668FDE1C6C /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F593D0DBCA743F4997FEAF8 /* EvilIcons.ttf */; };
 		30E6894E35F74445A4F6F35B /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1D49054AB364C649FCD5506 /* Zocial.ttf */; };
 		34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */; };
@@ -37,6 +49,7 @@
 		68CC7CCADF574C7AB546E29B /* telldusicons.svg in Resources */ = {isa = PBXBuildFile; fileRef = DB8C12D469844F34ABBA0A64 /* telldusicons.svg */; };
 		695CAC4B3F4E464D989EC4D2 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 882834547CB84ED98886796F /* Roboto-Medium.ttf */; };
 		7008063F35A94AD09D95F9DD /* libRNRSA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C59689631C948E3A30CAA55 /* libRNRSA.a */; };
+		77C8DB73263B46C3B3FB785A /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9C6F2CB19749988ABB6BA2 /* libRNFirebase.a */; };
 		794DAA9AEBAE4A7291C53EB5 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E2F044E48EA427F9C4A967C /* Roboto-Regular.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8A0C59785D134F67BFBC177A /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B604CB39C11F43B48FD5A634 /* SimpleLineIcons.ttf */; };
@@ -294,6 +307,27 @@
 			remoteGlobalIDString = 6476C4051EEAA69700B10F51;
 			remoteInfo = "RNI18n-tvOS";
 		};
+		26D4DBFA21424C620060DC8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 26D4DBCD21424C610060DC8E /* RNGoogleSignin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9FD355121D3E4A2900D06170;
+			remoteInfo = RNGoogleSignin;
+		};
+		26D4DC0321424C620060DC8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 267ABE2520F78730006CD1B5 /* RNSVG.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 94DDAC5C1F3D024300EED511;
+			remoteInfo = "RNSVG-tvOS";
+		};
+		26D4DDD8214263A80060DC8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 099B9E1E4A774ADBB29E1124 /* RNFirebase.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNFirebase;
+		};
 		26F1F820209B276400ADBBC0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B4B40A8A593241268FE52652 /* RNRSA.xcodeproj */;
@@ -437,6 +471,7 @@
 		00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTNetwork.xcodeproj; path = "../node_modules/react-native/Libraries/Network/RCTNetwork.xcodeproj"; sourceTree = "<group>"; };
 		00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVibration.xcodeproj; path = "../node_modules/react-native/Libraries/Vibration/RCTVibration.xcodeproj"; sourceTree = "<group>"; };
 		05015C29790F4F78A389A5F7 /* SMXCrashlytics.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SMXCrashlytics.xcodeproj; path = "../node_modules/react-native-fabric/ios/SMXCrashlytics.xcodeproj"; sourceTree = "<group>"; };
+		099B9E1E4A774ADBB29E1124 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TelldusLiveApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -456,6 +491,18 @@
 		267ABE2520F78730006CD1B5 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		26A439EF2100AB5500022896 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTOrientation.xcodeproj; path = "../node_modules/react-native-orientation-locker/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; };
 		26C0E617205C17B600E9AD6A /* RNI18n.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNI18n.xcodeproj; path = "../node_modules/react-native-i18n/ios/RNI18n.xcodeproj"; sourceTree = "<group>"; };
+		26D4DBCD21424C610060DC8E /* RNGoogleSignin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGoogleSignin.xcodeproj; path = "../node_modules/react-native-google-signin/ios/RNGoogleSignin.xcodeproj"; sourceTree = "<group>"; };
+		26D4DC2221424D8A0060DC8E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		26D4DC5A21424DAC0060DC8E /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		26D4DC5E21424DCB0060DC8E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		26D4DC6021424E510060DC8E /* GoogleAuthUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAuthUtilities.framework; path = "../node_modules/react-native-google-signin/ios/GoogleSdk/GoogleAuthUtilities.framework"; sourceTree = "<group>"; };
+		26D4DC6121424E510060DC8E /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleUtilities.framework; path = "../node_modules/react-native-google-signin/ios/GoogleSdk/GoogleUtilities.framework"; sourceTree = "<group>"; };
+		26D4DC6221424E510060DC8E /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAppUtilities.framework; path = "../node_modules/react-native-google-signin/ios/GoogleSdk/GoogleAppUtilities.framework"; sourceTree = "<group>"; };
+		26D4DC6321424E510060DC8E /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = "../node_modules/react-native-google-signin/ios/GoogleSdk/GoogleSignIn.framework"; sourceTree = "<group>"; };
+		26D4DC6421424E520060DC8E /* GoogleNetworkingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleNetworkingUtilities.framework; path = "../node_modules/react-native-google-signin/ios/GoogleSdk/GoogleNetworkingUtilities.framework"; sourceTree = "<group>"; };
+		26D4DC6521424E520060DC8E /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSymbolUtilities.framework; path = "../node_modules/react-native-google-signin/ios/GoogleSdk/GoogleSymbolUtilities.framework"; sourceTree = "<group>"; };
+		26D4DD1E214261290060DC8E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "TelldusLiveApp/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		26DA5FD22045A28C003FCA91 /* SFNS Display.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFNS Display.ttf"; path = "../android/app/src/main/assets/fonts/SFNS Display.ttf"; sourceTree = "<group>"; };
 		26DA5FD32045A28C003FCA91 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Light.ttf"; path = "../android/app/src/main/assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		26DA5FD42045A28D003FCA91 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "../android/app/src/main/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
@@ -467,6 +514,7 @@
 		40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TelldusLiveApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		598B9ECEAE4E41CCAF3F07D3 /* libRCTOrientation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTOrientation.a; sourceTree = "<group>"; };
 		5E2F044E48EA427F9C4A967C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		5F9C6F2CB19749988ABB6BA2 /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFirebase.a; sourceTree = "<group>"; };
 		609A0D1A94684C4DB8A9D337 /* LRDRCTSimpleToast.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = LRDRCTSimpleToast.xcodeproj; path = "../node_modules/react-native-simple-toast/ios/LRDRCTSimpleToast.xcodeproj"; sourceTree = "<group>"; };
 		670987F30A384DE4BDA09FD6 /* RNSensitiveInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSensitiveInfo.xcodeproj; path = "../node_modules/react-native-sensitive-info/ios/RNSensitiveInfo.xcodeproj"; sourceTree = "<group>"; };
 		67549022A05F434F8B812357 /* libLRDRCTSimpleToast.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libLRDRCTSimpleToast.a; sourceTree = "<group>"; };
@@ -504,17 +552,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26D4DC5F21424DCC0060DC8E /* libz.tbd in Frameworks */,
+				26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */,
+				26D4DC5B21424DAC0060DC8E /* SafariServices.framework in Frameworks */,
+				26D4DC5921424D9B0060DC8E /* libRNGoogleSignin.a in Frameworks */,
+				26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */,
 				267ABE6020F78777006CD1B5 /* libRNSVG.a in Frameworks */,
 				26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
+				26D4DC6821424E520060DC8E /* GoogleAppUtilities.framework in Frameworks */,
 				409837641F602515005E56A9 /* libRCTPushNotification.a in Frameworks */,
 				144028A21EE6907D000945A3 /* libRCTAnimation.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
+				26D4DC6A21424E520060DC8E /* GoogleNetworkingUtilities.framework in Frameworks */,
+				26D4DC6721424E520060DC8E /* GoogleUtilities.framework in Frameworks */,
+				26D4DC6621424E520060DC8E /* GoogleAuthUtilities.framework in Frameworks */,
+				26D4DC6B21424E520060DC8E /* GoogleSymbolUtilities.framework in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
+				26D4DC6921424E520060DC8E /* GoogleSignIn.framework in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
@@ -529,6 +588,7 @@
 				6849A4E963DC4D8985BFE7C3 /* libRNSensitiveInfo.a in Frameworks */,
 				1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */,
 				7008063F35A94AD09D95F9DD /* libRNRSA.a in Frameworks */,
+				77C8DB73263B46C3B3FB785A /* libRNFirebase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -600,6 +660,7 @@
 		13B07FAE1A68108700A75B9A /* TelldusLiveApp */ = {
 			isa = PBXGroup;
 			children = (
+				26D4DD1E214261290060DC8E /* GoogleService-Info.plist */,
 				40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */,
 				409837E21F6140AE005E56A9 /* TelldusLiveApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -664,6 +725,7 @@
 			isa = PBXGroup;
 			children = (
 				267ABE5920F78730006CD1B5 /* libRNSVG.a */,
+				26D4DC0421424C620060DC8E /* libRNSVG-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -693,6 +755,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		26D4DBCE21424C610060DC8E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				26D4DBFB21424C620060DC8E /* libRNGoogleSignin.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		26D4DDD5214263A70060DC8E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				26D4DDD9214263A80060DC8E /* libRNFirebase.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		26DA5FD12045A238003FCA91 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -706,6 +784,7 @@
 				B5E8B17FC3BC433DA0620A43 /* libRNSensitiveInfo.a */,
 				BD4E8D787A68404D96264B38 /* libUdpSockets.a */,
 				7C59689631C948E3A30CAA55 /* libRNRSA.a */,
+				5F9C6F2CB19749988ABB6BA2 /* libRNFirebase.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -773,6 +852,16 @@
 		781835ED9F715997196DD9BD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				26D4DC6221424E510060DC8E /* GoogleAppUtilities.framework */,
+				26D4DC6021424E510060DC8E /* GoogleAuthUtilities.framework */,
+				26D4DC6421424E520060DC8E /* GoogleNetworkingUtilities.framework */,
+				26D4DC6321424E510060DC8E /* GoogleSignIn.framework */,
+				26D4DC6521424E520060DC8E /* GoogleSymbolUtilities.framework */,
+				26D4DC6121424E510060DC8E /* GoogleUtilities.framework */,
+				26D4DC5E21424DCB0060DC8E /* libz.tbd */,
+				26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */,
+				26D4DC5A21424DAC0060DC8E /* SafariServices.framework */,
+				26D4DC2221424D8A0060DC8E /* AddressBook.framework */,
 				9E4E10C72947027C61D0AB0E /* libPods-TelldusLiveApp.a */,
 			);
 			name = Frameworks;
@@ -790,6 +879,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				26D4DBCD21424C610060DC8E /* RNGoogleSignin.xcodeproj */,
 				26A439EF2100AB5500022896 /* RCTOrientation.xcodeproj */,
 				267ABE2520F78730006CD1B5 /* RNSVG.xcodeproj */,
 				26C0E617205C17B600E9AD6A /* RNI18n.xcodeproj */,
@@ -814,6 +904,7 @@
 				670987F30A384DE4BDA09FD6 /* RNSensitiveInfo.xcodeproj */,
 				1C903CA954FC4FBB9390E2AA /* UdpSockets.xcodeproj */,
 				B4B40A8A593241268FE52652 /* RNRSA.xcodeproj */,
+				099B9E1E4A774ADBB29E1124 /* RNFirebase.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -900,9 +991,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				4C7F49FBFC42A30B5B74A457 /* [CP] Embed Pods Frameworks */,
-				75919A3A010EF31D89777050 /* [CP] Copy Pods Resources */,
 				408824E71F1010CF007B3FF4 /* Fabric */,
+				B99843B15E0A99117432243F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1010,6 +1100,14 @@
 				{
 					ProductGroup = 4D54D2061D49FE680067EF32 /* Products */;
 					ProjectRef = 25A65B32BEBD4964AC8D3213 /* RNDeviceInfo.xcodeproj */;
+				},
+				{
+					ProductGroup = 26D4DDD5214263A70060DC8E /* Products */;
+					ProjectRef = 099B9E1E4A774ADBB29E1124 /* RNFirebase.xcodeproj */;
+				},
+				{
+					ProductGroup = 26D4DBCE21424C610060DC8E /* Products */;
+					ProjectRef = 26D4DBCD21424C610060DC8E /* RNGoogleSignin.xcodeproj */;
 				},
 				{
 					ProductGroup = 26C0E618205C17B600E9AD6A /* Products */;
@@ -1290,6 +1388,27 @@
 			remoteRef = 26C0E61E205C17B700E9AD6A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		26D4DBFB21424C620060DC8E /* libRNGoogleSignin.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNGoogleSignin.a;
+			remoteRef = 26D4DBFA21424C620060DC8E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		26D4DC0421424C620060DC8E /* libRNSVG-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNSVG-tvOS.a";
+			remoteRef = 26D4DC0321424C620060DC8E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		26D4DDD9214263A80060DC8E /* libRNFirebase.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFirebase.a;
+			remoteRef = 26D4DDD8214263A80060DC8E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		26F1F821209B276400ADBBC0 /* libRNRSA.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1447,6 +1566,7 @@
 				DD7823359AB84A89988A5D47 /* Roboto-Light.ttf in Resources */,
 				695CAC4B3F4E464D989EC4D2 /* Roboto-Medium.ttf in Resources */,
 				794DAA9AEBAE4A7291C53EB5 /* Roboto-Regular.ttf in Resources */,
+				26D4DD542142612A0060DC8E /* GoogleService-Info.plist in Resources */,
 				59F114B4AC654FA7AAF457B4 /* SFNS Display.ttf in Resources */,
 				AD9B7A84CF90483DA832A7FB /* telldusicons.woff in Resources */,
 			);
@@ -1483,49 +1603,42 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" 6ddcb9201beba571821a466b7b634103262d6903 1e0f4b2f91bd434ab1b65e09615545c3454314c8373315d27d42185004889b1d";
 		};
-		4C7F49FBFC42A30B5B74A457 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		75919A3A010EF31D89777050 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		811565FD9DF7088506EC7B92 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TelldusLiveApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B99843B15E0A99117432243F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp-resources.sh",
+				"${PODS_ROOT}/GTMOAuth2/Source/Touch/GTMOAuth2ViewTouch.xib",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GTMOAuth2ViewTouch.nib",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1552,6 +1665,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M2879GJ5VD;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Crashlytics/iOS\"",
+					"\"${PODS_ROOT}/Fabric/iOS\"",
+					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
+					"$(PROJECT_DIR)/../node_modules/react-native-google-signin/ios/GoogleSdk",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
@@ -1564,12 +1686,14 @@
 					"$(SRCROOT)/../node_modules/react-native-sensitive-info/ios/RNSensitiveInfo/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-rsa-native/ios",
+					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
 				);
@@ -1593,6 +1717,15 @@
 				CODE_SIGN_ENTITLEMENTS = TelldusLiveApp/TelldusLiveApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M2879GJ5VD;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Crashlytics/iOS\"",
+					"\"${PODS_ROOT}/Fabric/iOS\"",
+					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
+					"$(PROJECT_DIR)/../node_modules/react-native-google-signin/ios/GoogleSdk",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
@@ -1605,12 +1738,14 @@
 					"$(SRCROOT)/../node_modules/react-native-sensitive-info/ios/RNSensitiveInfo/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-rsa-native/ios",
+					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
 					"\"$(SRCROOT)/TelldusLiveApp\"",
 				);
