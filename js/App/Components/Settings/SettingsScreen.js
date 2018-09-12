@@ -22,10 +22,11 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, PushNotificationIOS, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { isIphoneX } from 'react-native-iphone-x-helper';
+const DeviceInfo = require('react-native-device-info');
 
 import {
 	Text,
@@ -38,7 +39,7 @@ import {
 	TitledInfoBlock,
 } from '../../../BaseComponents';
 import { logoutFromTelldus, showToast } from '../../Actions';
-const DeviceInfo = require('react-native-device-info');
+import { showModal as actionShowModal } from '../../Actions';
 
 import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken, showChangeLog } from '../../Actions/User';
@@ -90,6 +91,14 @@ const messages = defineMessages({
 		id: 'poster.headerTwoSettings',
 		defaultMessage: 'User and app settings',
 	},
+	pushPermissionHeader: {
+		id: 'dialogueBox.pushPermissionHeader',
+		defaultMessage: 'Notifications not allowed',
+	},
+	pushPermissionContent: {
+		id: 'dialogueBox.pushPermissionContent',
+		defaultMessage: 'Notifications are not allowed for this app. Please go to Settings - Notifications to allow notifications',
+	},
 });
 
 type Props = {
@@ -103,7 +112,8 @@ type Props = {
 	showModal: boolean,
 	intl: intlShape.isRequired,
     appLayout: Object,
-    navigation: Object,
+	navigation: Object,
+	modalExtras: any,
 };
 
 
@@ -231,7 +241,8 @@ onPressWhatsNew() {
 }
 
 getRelativeData(): Object {
-	let { formatMessage } = this.props.intl;
+	const { intl, modalExtras } = this.props;
+	const { formatMessage } = intl;
 
 	let notificationHeader = `${formatMessage(i18n.logout)}?`, showPositive = true,
 		showNegative = true, positiveText = formatMessage(i18n.logout).toUpperCase(),
@@ -239,6 +250,14 @@ getRelativeData(): Object {
 	let submitButText = this.state.isPushSubmitLoading ? `${formatMessage(messages.pushRegisters)}...` : formatMessage(messages.pushReRegister);
 	let logoutButText = this.state.isLogoutLoading ? formatMessage(i18n.loggingout) : formatMessage(i18n.labelLogOut);
 	let version = DeviceInfo.getVersion();
+
+	if (modalExtras && modalExtras === 'PUSH_PERMISSION') {
+		notificationHeader = formatMessage(messages.pushPermissionHeader);
+		showPositive = true;
+		positiveText = null;
+		showNegative = false;
+		onPressPositive = this.closeModal;
+	}
 
 	return {
 		notificationHeader,
@@ -341,6 +360,23 @@ render(): Object {
 }
 
 submitPushToken() {
+	if (Platform.OS === 'android') {
+		this.confirmTokenSubmit();
+	} else {
+		PushNotificationIOS.checkPermissions((permissions: Object) => {
+			const { alert, badge, sound } = permissions;
+			if (alert || badge || sound) {
+				this.confirmTokenSubmit();
+			} else {
+				const { dispatch, intl } = this.props;
+				const message = intl.formatMessage(messages.pushPermissionContent);
+				dispatch(actionShowModal(message, 'PUSH_PERMISSION'));
+			}
+		});
+	}
+}
+
+confirmTokenSubmit() {
 	this.setState({
 		isPushSubmitLoading: true,
 	});
@@ -352,7 +388,6 @@ submitPushToken() {
 		let message = formatMessage(messages.pushRegisterFailed);
 		this.showToast(message);
 	});
-
 }
 
 showToast(message: string) {
@@ -416,6 +451,7 @@ function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
 		showModal: store.modal.openModal,
+		modalExtras: store.modal.extras,
 		appLayout: store.App.layout,
 		user: store.user,
 	};
