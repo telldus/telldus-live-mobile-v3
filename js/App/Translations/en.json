@@ -172,6 +172,8 @@
   "dialogueBox.defaultHeader": "OOPS",
   "dialogueBox.defaultNegativeText": "CANCEL",
   "dialogueBox.defaultPositiveText": "OK",
+  "dialogueBox.pushPermissionContent": "Notifications are not allowed for this app. Please go to Settings - Notifications to allow notifications",
+  "dialogueBox.pushPermissionHeader": "Notifications not allowed",
   "dimmingLevel": "Dimming level",
   "error.addNewLocationFailed": "Add new location could not be completed. Please try again",
   "error.failed": "Failed",
