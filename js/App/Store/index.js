@@ -21,7 +21,9 @@
 'use strict';
 
 import configureStore from './ConfigureStore';
+import migrations from './migrations';
 
 module.exports = {
 	configureStore,
+	migrations,
 };

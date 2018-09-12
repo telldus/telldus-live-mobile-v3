@@ -22,33 +22,42 @@
 
 'use strict';
 
-import { persistCombineReducers } from 'redux-persist';
-import { AsyncStorage } from 'react-native';
-import { localStorageKey } from '../../Config';
+export default function migrations(state: Object = {}): Promise<any> {
+	const { gateways } = state;
+	if (gateways) {
+		const newGateways = insertLocalKeyAttribute(gateways);
+		return Promise.resolve({
+			...state,
+			gateways: newGateways,
+		});
+	}
+	return Promise.resolve(state);
+}
 
-import { migrations } from '../Store';
-import Navigation from './Navigation';
-import User from './User';
-import Tabs from './Tabs';
-import LiveApi from './LiveApi';
-import Modal from './Modal';
-import sensorsList from './Sensors';
-import jobsList from './Jobs';
-import { reducers } from 'live-shared-data';
 
-const config = {
-	key: localStorageKey,
-	storage: AsyncStorage,
-	migrate: migrations,
+const insertLocalKeyAttribute = (gateways: Object): Object => {
+	const { byId } = gateways;
+	let newById = {};
+	for (let key in byId) {
+		let gateway = byId[key];
+		if (gateway && !gateway.localKey) {
+			gateway = {
+				...gateway,
+				localKey: {
+					key: null,
+					ttl: null,
+					uuid: null,
+					address: null,
+					port: null,
+					macAddress: null,
+					supportLocal: false,
+				},
+			};
+		}
+		newById[key] = gateway;
+	}
+	return {
+		...gateways,
+		byId: newById,
+	};
 };
-
-module.exports = persistCombineReducers(config, {
-	navigation: Navigation,
-	user: User,
-	tabs: Tabs,
-	liveApi: LiveApi,
-	modal: Modal,
-	sensorsList,
-	...reducers,
-	jobsList,
-});
