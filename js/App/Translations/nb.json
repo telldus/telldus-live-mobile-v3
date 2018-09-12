@@ -204,7 +204,7 @@
     "dialogueBox.defaultNegativeText": "AVBRYT",
     "dialogueBox.defaultPositiveText": "OK",
     "dialogueBox.pushPermissionContent": "Meldinger er ikke tillatt for denne appen. Gå til Innstillinger - Varsler, for å tillate varsler",
-    "dialogueBox.pushPermissionHeader": "Meldinger\\varsler er ikke tillatt",
+    "dialogueBox.pushPermissionHeader": "Varslinger er ikke tillatt",
     "dimmingLevel": "Dimmenivå",
     "error.addNewLocationFailed": "Kunne ikke legge til et nytt sted. Vennligst prøv på nytt",
     "error.failed": "Mislykket",
