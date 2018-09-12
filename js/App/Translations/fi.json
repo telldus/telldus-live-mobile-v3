@@ -192,6 +192,8 @@
     "dialogueBox.defaultHeader": "OHO",
     "dialogueBox.defaultNegativeText": "PERUUTA",
     "dialogueBox.defaultPositiveText": "OK",
+    "dialogueBox.pushPermissionContent": "Ilmoituksia ei ole sallittu tälle sovellukselle. Mene laitteen valikkoon Asetukset - Ilmoitukset, salliaksesi ilmoitukset",
+    "dialogueBox.pushPermissionHeader": "Ilmoituksia ei ole sallittu",
     "dimmingLevel": "Himmennys taso",
     "error.addNewLocationFailed": "Uutta sijaintia ei voitu lisätä. Yritä uudestaan",
     "error.failed": "Epäonnistui",
