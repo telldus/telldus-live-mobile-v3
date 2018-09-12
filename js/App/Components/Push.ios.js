@@ -55,10 +55,10 @@ const Push = {
 		PushNotificationIOS.removeEventListener('notification');
 		PushNotificationIOS.removeEventListener('register');
 	},
-	createLocalNotification: (data: Object) => {
+	createLocalNotification: (notification: Object) => {
 		// 	// On iOS, if the app is in foreground the local notification is not shown.
 		// 	// We use normal alert instead
-		Alert.alert('Telldus Live!', data.message);
+		Alert.alert('Telldus Live!', notification.getMessage());
 	},
 };
 
