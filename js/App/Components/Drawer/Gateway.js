@@ -70,7 +70,7 @@ class Gateway extends PureComponent<Props, null> {
 
 	render(): Object {
 		const { gateway, appLayout } = this.props;
-		const { name, online, websocketOnline, type, localKey } = gateway;
+		const { name, online, websocketOnline, type, localKey = {} } = gateway;
 		const { width, height } = appLayout;
 		const deviceWidth = height > width ? width : height;
 		const drawerWidth = getDrawerWidth(deviceWidth);

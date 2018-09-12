@@ -237,7 +237,7 @@ class AppNavigator extends View {
 				if (pemPub) {
 					for (let index in gateways) {
 						const gateway = gateways[index];
-						const { id, websocketOnline, websocketConnected, localKey } = gateway;
+						const { id, websocketOnline, websocketConnected, localKey = {} } = gateway;
 						const { key, supportLocal } = localKey;
 						if (websocketOnline && websocketConnected && supportLocal && !key) {
 							dispatch(getTokenForLocalControl(id, pemPub));
