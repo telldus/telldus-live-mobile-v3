@@ -89,14 +89,14 @@ class SliderDetails extends View {
 
 	getDimmerValue(device: Object): number {
 		if (device !== null) {
-			const { stateValues, isInState } = device;
-			const value = stateValues.DIM;
+			const { stateValues, isInState, value } = device;
+			const stateValue = stateValues ? stateValues.DIM : value;
 			if (isInState === 'TURNON') {
 				return 100;
 			} else if (isInState === 'TURNOFF') {
 				return 0;
 			} else if (isInState === 'DIM') {
-				return Math.round(value * 100.0 / 255);
+				return Math.round(stateValue * 100.0 / 255);
 			}
 		}
 		return 0;
@@ -106,8 +106,9 @@ class SliderDetails extends View {
 		this.setState({
 			isControlling: true,
 		});
-		const { id, stateValues, isInState } = this.props.device;
-		this.props.saveDimmerInitialState(id, stateValues.DIM, isInState);
+		const { id, stateValues, isInState, value } = this.props.device;
+		const stateValue = stateValues ? stateValues.DIM : value;
+		this.props.saveDimmerInitialState(id, stateValue, isInState);
 	}
 
 	onValueChange(dimmerValue: number) {

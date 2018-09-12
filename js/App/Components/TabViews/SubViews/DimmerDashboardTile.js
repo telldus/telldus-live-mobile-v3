@@ -111,12 +111,13 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		const { item, onDimmerSlide } = this.props;
-		const { stateValues, isInState } = item;
+		const { stateValues, isInState, value } = item;
+		const stateValue = stateValues ? stateValues.DIM : value;
 		this.parentScrollEnabled = true;
 		this.state = {
 			bodyWidth: 0,
 			bodyHeight: 0,
-			value: getDimmerValue(stateValues.DIM, isInState),
+			value: getDimmerValue(stateValue, isInState),
 			offButtonFadeAnim: new Animated.Value(1),
 			onButtonFadeAnim: new Animated.Value(1),
 		};
@@ -139,9 +140,10 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	}
 
 	componentWillReceiveProps(nextProps: Object) {
-		const { stateValues, isInState } = nextProps.item;
+		const { stateValues, isInState, value } = nextProps.item;
+		const stateValue = stateValues ? stateValues.DIM : value;
 
-		const dimmerValue = getDimmerValue(stateValues.DIM, isInState);
+		const dimmerValue = getDimmerValue(stateValue, isInState);
 		this.setState({ value: dimmerValue });
 	}
 
