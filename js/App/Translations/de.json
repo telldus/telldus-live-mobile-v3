@@ -301,6 +301,7 @@
     "user.emailNotValidBody": "Die Email Adresse die Sie eingegeben haben, ist nicht gültig. Bitte prüfen Sie die eingegebene Email Adresse erneut.",
     "user.emailNotValidHeader": "UNGÜLTIGE EMAIL ADRESSE",
     "user.firstName": "Vorname",
+    "user.forgotPass.successBody": "Eine Email mit einem Link, um das Passwort zurückzusetzen, wurde an {email} gesendet. Sollte diese Email nicht binnen 10 Minuten bei ihnen eintreffen, sehen Sie bitten in ihrem Spam Ordner nach.",
     "user.forgotPassword": "Passwort vergessen?",
     "user.headerSessionLocked": "Verbindung verloren",
     "user.lastName": "Nachname",
