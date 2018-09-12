@@ -25,8 +25,6 @@ import React from 'react';
 import { ScrollView, PushNotificationIOS, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 const DeviceInfo = require('react-native-device-info');
 const isEqual = require('react-fast-compare');
 
