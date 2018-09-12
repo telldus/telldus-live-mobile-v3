@@ -76,7 +76,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 	render(): Object {
 		let { location, appLayout } = this.props;
-		let { name, type, online, websocketOnline, localKey } = location;
+		let { name, type, online, websocketOnline, localKey = {} } = location;
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
 

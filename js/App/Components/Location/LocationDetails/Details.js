@@ -159,7 +159,7 @@ class Details extends View {
 		}
 
 
-		const { name, type, ip, version, timezone, latitude, longitude, online, websocketOnline, localKey } = location;
+		const { name, type, ip, version, timezone, latitude, longitude, online, websocketOnline, localKey = {} } = location;
 		const { address, key } = localKey;
 		const image = getLocationImageUrl(type);
 		const {

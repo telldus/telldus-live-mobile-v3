@@ -22,11 +22,13 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, PushNotificationIOS, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { defineMessages } from 'react-intl';
-const isEqual = require('react-fast-compare');
+import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 const DeviceInfo = require('react-native-device-info');
+const isEqual = require('react-fast-compare');
 
 import {
 	Text,
@@ -37,6 +39,8 @@ import {
 	TitledInfoBlock,
 } from '../../../BaseComponents';
 import { logoutFromTelldus, showToast } from '../../Actions';
+import { showModal as actionShowModal } from '../../Actions';
+
 import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken, showChangeLog } from '../../Actions/User';
 import { shouldUpdate } from '../../Lib';
@@ -88,6 +92,14 @@ const messages = defineMessages({
 		id: 'poster.headerTwoSettings',
 		defaultMessage: 'User and app settings',
 	},
+	pushPermissionHeader: {
+		id: 'dialogueBox.pushPermissionHeader',
+		defaultMessage: 'Notifications not allowed',
+	},
+	pushPermissionContent: {
+		id: 'dialogueBox.pushPermissionContent',
+		defaultMessage: 'Notifications are not allowed for this app. Please go to Settings - Notifications to allow notifications',
+	},
 });
 
 type Props = {
@@ -97,6 +109,7 @@ type Props = {
 	pushTokenRegistered: boolean,
 	pushToken: string,
 	email: string,
+	modalExtras: any,
 
 	navigation: Object,
 	dispatch: Function,
@@ -173,7 +186,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['showModal', 'pushTokenRegistered', 'pushToken', 'email']);
+		const propsChange = shouldUpdate(others, othersN, ['showModal', 'pushTokenRegistered', 'pushToken', 'email', 'modalExtras']);
 		if (propsChange) {
 			return true;
 		}
@@ -215,7 +228,8 @@ handleBackPress(): boolean {
 }
 
 getRelativeData(): Object {
-	const { formatMessage } = this.props.screenProps.intl;
+	const { modalExtras, screenProps } = this.props;
+	const { formatMessage } = screenProps.intl;
 
 	let notificationHeader = `${formatMessage(i18n.logout)}?`, showPositive = true,
 		showNegative = true, positiveText = formatMessage(i18n.logout).toUpperCase(),
@@ -223,6 +237,14 @@ getRelativeData(): Object {
 	let submitButText = this.state.isPushSubmitLoading ? `${formatMessage(messages.pushRegisters)}...` : formatMessage(messages.pushReRegister);
 	let logoutButText = this.state.isLogoutLoading ? formatMessage(i18n.loggingout) : formatMessage(i18n.labelLogOut);
 	let version = DeviceInfo.getVersion();
+
+	if (modalExtras && modalExtras === 'PUSH_PERMISSION') {
+		notificationHeader = formatMessage(messages.pushPermissionHeader);
+		showPositive = true;
+		positiveText = null;
+		showNegative = false;
+		onPressPositive = this.closeModal;
+	}
 
 	return {
 		notificationHeader,
@@ -323,6 +345,23 @@ render(): Object {
 }
 
 submitPushToken() {
+	if (Platform.OS === 'android') {
+		this.confirmTokenSubmit();
+	} else {
+		PushNotificationIOS.checkPermissions((permissions: Object) => {
+			const { alert, badge, sound } = permissions;
+			if (alert || badge || sound) {
+				this.confirmTokenSubmit();
+			} else {
+				const { dispatch, screenProps } = this.props;
+				const message = screenProps.intl.formatMessage(messages.pushPermissionContent);
+				dispatch(actionShowModal(message, 'PUSH_PERMISSION'));
+			}
+		});
+	}
+}
+
+confirmTokenSubmit() {
 	this.setState({
 		isPushSubmitLoading: true,
 	});
@@ -334,7 +373,6 @@ submitPushToken() {
 		let message = formatMessage(messages.pushRegisterFailed);
 		this.showToast(message);
 	});
-
 }
 
 showToast(message: string) {
@@ -401,6 +439,7 @@ function mapStateToProps(store: Object): Object {
 		pushTokenRegistered,
 		pushToken,
 		email,
+		modalExtras: store.modal.extras,
 	};
 }
 

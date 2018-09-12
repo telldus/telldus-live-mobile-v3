@@ -119,13 +119,15 @@ function autoDetectLocalTellStick(): ThunkAction {
 			for (let key in gateways) {
 				let item = gateways[key];
 				let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
-				let { key: token } = localKey;
-				if (items[4] && uuid && (items[4] === uuid)) {
-					getRSAKey(false, ({ pemPub }: Object) => {
-						if (pemPub && websocketOnline && websocketConnected && !token) {
-							dispatch(getTokenForLocalControl(id, pemPub));
-						}
-					});
+				if (localKey) {
+					let { key: token } = localKey;
+					if (items[4] && uuid && (items[4] === uuid)) {
+						getRSAKey(false, ({ pemPub }: Object) => {
+							if (pemPub && websocketOnline && websocketConnected && !token) {
+								dispatch(getTokenForLocalControl(id, pemPub));
+							}
+						});
+					}
 				}
 			}
 		});

@@ -41,7 +41,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 	return (dispatch: Function, getState: Function): any => {
 		const { gateways, devices } = getState();
 		const { clientId, clientDeviceId } = devices.byId[deviceId];
-		const { localKey } = gateways.byId[clientId];
+		const { localKey = {} } = gateways.byId[clientId];
 		const { address, key: token, ttl } = localKey;
 		const tokenExpired = hasTokenExpired(ttl);
 

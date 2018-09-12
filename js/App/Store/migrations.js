@@ -23,6 +23,14 @@
 'use strict';
 
 export default function migrations(state: Object = {}): Promise<any> {
+	const { gateways } = state;
+	if (gateways) {
+		const newGateways = insertLocalKeyAttribute(gateways);
+		return Promise.resolve({
+			...state,
+			gateways: newGateways,
+		});
+	}
 	const { tabs, ...newState } = state;
 	if (tabs) {
 		return Promise.resolve(newState);
@@ -36,3 +44,31 @@ export default function migrations(state: Object = {}): Promise<any> {
 	}
 	return Promise.resolve(state);
 }
+
+
+const insertLocalKeyAttribute = (gateways: Object): Object => {
+	const { byId } = gateways;
+	let newById = {};
+	for (let key in byId) {
+		let gateway = byId[key];
+		if (gateway && !gateway.localKey) {
+			gateway = {
+				...gateway,
+				localKey: {
+					key: null,
+					ttl: null,
+					uuid: null,
+					address: null,
+					port: null,
+					macAddress: null,
+					supportLocal: false,
+				},
+			};
+		}
+		newById[key] = gateway;
+	}
+	return {
+		...gateways,
+		byId: newById,
+	};
+};

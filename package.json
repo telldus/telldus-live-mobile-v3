@@ -1,6 +1,6 @@
 {
   "name": "TelldusLiveApp",
-  "version": "3.7.1",
+  "version": "3.7.2",
   "private": true,
   "scripts": {
     "lint": "eslint js",
@@ -21,7 +21,7 @@
     "external-editor": "^3.0.0",
     "global": "^4.3.2",
     "intl": "^1.2.5",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#302a5327ae07fd796f324ad2704da7dd076dbbd9",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#aff103f122f52b1f8791203b7c617dd10bd17d89",
     "lodash": "~4.17.10",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.20",
