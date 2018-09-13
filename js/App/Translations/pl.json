@@ -344,7 +344,7 @@
     "user.sessionLockedBodyParaOne": "Z jakiegoś powodu nie możemy teraz połączyć się z Twoim kontem.",
     "user.sessionLockedBodyParaTwo": "Upewnij się, że Twoje połączenie internetowe działa i spróbuj jeszcze raz, stukając przycisk ponowienia poniżej.",
     "user.welcome": "Witamy w Telldus",
-    "userAgreementHeaderPhrase": "Proszę zaakceptuj zaktualizowany {eula} aby dalej korzystać z aplikacji.",
+    "userAgreementHeaderPhrase": "Proszę zaakceptuj zaktualizowany {eula} aby dalej korzystać z aplikacji",
     "version": "Wersja",
     "yes": "Tak"
 }
