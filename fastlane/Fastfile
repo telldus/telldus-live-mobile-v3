@@ -68,6 +68,12 @@ platform :ios do
     pilot(
       skip_submission: true
     )
+    # This requires the Fabric app. Can be downloaded here:
+    # https://www.fabric.io/downloads/apple
+    upload_symbols_to_crashlytics(
+      dsym_path: "./TelldusLiveApp.app.dSYM.zip",
+      api_token: "6ddcb9201beba571821a466b7b634103262d6903"
+    )
     slack(
       message: "Successfully deployed new version of Telldus Live! mobile to TestFlight.",
       payload: {
