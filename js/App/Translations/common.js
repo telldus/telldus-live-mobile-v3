@@ -715,6 +715,18 @@ const messages = defineMessages({
 		defaultMessage: 'just now',
 		description: 'How long ago a sensor was update',
 	},
+	labelClearCache: {
+		id: 'label.clearCache',
+		defaultMessage: 'Clear cache',
+	},
+	labelClearHistory: {
+		id: 'label.clearHistory',
+		defaultMessage: 'Clear history',
+	},
+	labelResetMaxMin: {
+		id: 'label.resetMaxMin',
+		defaultMessage: 'Reset Max/Min',
+	},
 });
 
 export default messages;
