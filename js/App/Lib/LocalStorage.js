@@ -320,6 +320,9 @@ export default class TelldusLocalStorage {
 			tableName = 'SensorHistory';
 			uniqueParam = 'sensorId';
 		}
+		if (!db) {
+			return Promise.resolve(null);
+		}
 		return db.executeSql(`DELETE from ${tableName} WHERE ${id} = ${uniqueParam}`).then((res: any): any => {
 			return res;
 		}).catch((error: Object) => {
