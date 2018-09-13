@@ -76,7 +76,7 @@ ios:
     - cd ios
     - ./buildGitlabRunner.sh
 
-google_play:
+google_play:  &google_play
   image: ruby:2
   stage: release
   tags:
@@ -93,6 +93,13 @@ google_play:
     - echo ${GOOGLE_KEY} > play_key.json
     - bundle install
     - fastlane supply --apk android/app/build/outputs/apk/release/app-release.apk --track alpha
+
+google_play_fastlane:
+  <<: *google_play
+  script:
+    - echo ${GOOGLE_KEY} > play_key.json
+    - bundle install
+    - fastlane android alpha
 
 testflight:
   stage: release
