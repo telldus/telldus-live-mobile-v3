@@ -213,7 +213,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
 		let accessible = !isModalOpen && currentScreen === 'History';
 
-		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
+		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#1b365d' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
 
 		return (
