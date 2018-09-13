@@ -279,8 +279,9 @@ class DialogueBox extends Component<Props, null> {
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const fontSize = Math.floor(deviceWidth * 0.042);
 
 		return {
 			modal: {
@@ -297,24 +298,21 @@ class DialogueBox extends Component<Props, null> {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
 				paddingLeft: 20,
-				height: deviceHeight * 0.08,
 				width: deviceWidth * 0.75,
 				backgroundColor: '#e26901',
 			},
 			notificationModalHeaderText: {
 				color: '#ffffff',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize,
 			},
 			notificationModalBody: {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
-				paddingLeft: 20,
-				paddingRight: 10,
-				height: deviceHeight * 0.2,
+				padding: 5 + fontSize,
 				width: deviceWidth * 0.75,
 			},
 			notificationModalBodyText: {
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize,
 				color: '#6B6969',
 			},
 			notificationModalFooter: {
@@ -322,24 +320,23 @@ class DialogueBox extends Component<Props, null> {
 				justifyContent: 'flex-end',
 				flexDirection: 'row',
 				paddingRight: 20,
-				height: deviceHeight * 0.08,
 				width: deviceWidth * 0.75,
+				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterTextCover: {
 				alignItems: 'flex-end',
 				justifyContent: 'center',
-				height: deviceHeight * 0.08,
 				paddingRight: 5,
 				paddingLeft: 5,
 			},
 			notificationModalFooterNegativeText: {
 				color: '#6B6969',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize,
 				fontWeight: 'bold',
 			},
 			notificationModalFooterPositiveText: {
 				color: '#e26901',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize,
 				fontWeight: 'bold',
 			},
 		};
