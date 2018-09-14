@@ -22,23 +22,29 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Image, Platform } from 'react-native';
+import { Image, Platform, TouchableOpacity } from 'react-native';
 import Ripple from 'react-native-material-ripple';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Text from './Text';
 import View from './View';
 import Switch from './Switch';
+import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
 
 type Props = {
     value: boolean,
     label: string,
 	appLayout: Object,
+	iconLabelRight?: string,
+	iconValueRight?: string,
 
 	edit?: boolean,
 	type?: 'switch' | 'text',
 	onValueChange: (boolean) => void,
 	onPress: () => void,
+	onPressIconLabelRight: () => void,
+	onPressIconValueRight: () => void,
 };
 
 type DefaultProps = {
@@ -51,6 +57,8 @@ class SettingsRow extends Component<Props, null> {
 	props: Props;
 
 	onPress: () => void;
+	onPressIconValueRight: () => void;
+	onPressIconValueRight: () => void;
 
 	static defaultProps: DefaultProps = {
 		type: 'switch',
@@ -61,6 +69,8 @@ class SettingsRow extends Component<Props, null> {
 		super(props);
 
 		this.onPress = this.onPress.bind(this);
+		this.onPressIconLabelRight = this.onPressIconLabelRight.bind(this);
+		this.onPressIconValueRight = this.onPressIconValueRight.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object): boolean {
@@ -76,8 +86,32 @@ class SettingsRow extends Component<Props, null> {
 		}
 	}
 
+	onPressIconLabelRight() {
+		const { onPressIconLabelRight } = this.props;
+		if (onPressIconLabelRight) {
+			onPressIconLabelRight();
+		}
+	}
+
+	onPressIconValueRight() {
+		const { onPressIconValueRight } = this.props;
+		if (onPressIconValueRight) {
+			onPressIconValueRight();
+		}
+	}
+
 	render(): Object {
-		const { appLayout, label, value, onValueChange, type, onPress, edit } = this.props;
+		const {
+			appLayout,
+			label,
+			value,
+			onValueChange,
+			type,
+			onPress,
+			edit,
+			iconLabelRight,
+			iconValueRight,
+		} = this.props;
 
 		const {
 			ShowOnDashCover,
@@ -87,8 +121,26 @@ class SettingsRow extends Component<Props, null> {
 			textShowOnDash,
 			valueText,
 			arrowStyle,
+			iconLabelRightCover,
+			iconValueRightCover,
+			iconValueRightSize,
+			iconLabelRightStyle,
 		} = this.getStyle(appLayout);
 		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
+
+		let Parent = View, parentProps = {
+			style: touchableStyle,
+		};
+		if (onPress) {
+			Parent = Ripple;
+			parentProps = {
+				rippleColor: rippleColor,
+				rippleOpacity: rippleOpacity,
+				rippleDuration: rippleDuration,
+				style: touchableStyle,
+				onPress: this.onPress,
+			};
+		}
 
 		return (
 			<View style={ShowOnDashCover}>
@@ -107,25 +159,28 @@ class SettingsRow extends Component<Props, null> {
 						/>
 					</View>
 					:
-					<Ripple
-						rippleColor={rippleColor}
-						rippleOpacity={rippleOpacity}
-						rippleDuration={rippleDuration}
-						style={touchableStyle}
-						disabled={!onPress}
-						onPress={this.onPress}>
+					<Parent {...parentProps}>
 						<View style={textShowOnDashCover}>
 							<Text style={textShowOnDash}>
 								{label}
 							</Text>
+							<TouchableOpacity onPress={this.onPressIconLabelRight} style={iconLabelRightCover}>
+								<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
+							</TouchableOpacity>
 						</View>
 						<Text style={valueText}>
 							{value}
 						</Text>
+						{iconValueRight && (
+							<TouchableOpacity onPress={this.onPressIconValueRight} style={iconValueRightCover}>
+								<Icon name={iconValueRight} size={iconValueRightSize} color={Theme.Core.brandSecondary}/>
+							</TouchableOpacity>
+						)}
+						}
 						{edit && (
 							<Image source={{uri: 'right_arrow_key'}} style={arrowStyle}/>
 						)}
-					</Ripple>
+					</Parent>
 				}
 			</View>
 		);
@@ -136,7 +191,7 @@ class SettingsRow extends Component<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { inactiveTintColor, paddingFactor } = Theme.Core;
+		const { inactiveTintColor, paddingFactor, brandSecondary } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const fontSize = deviceWidth * 0.04;
@@ -160,8 +215,9 @@ class SettingsRow extends Component<Props, null> {
 				justifyContent: 'flex-end',
 			},
 			textShowOnDashCover: {
-				alignItems: 'flex-start',
-				justifyContent: 'center',
+				alignItems: 'center',
+				justifyContent: 'flex-start',
+				flexDirection: 'row',
 			},
 			textShowOnDash: {
 				color: '#000',
@@ -180,6 +236,18 @@ class SettingsRow extends Component<Props, null> {
 				width: fontSize,
 				tintColor: '#A59F9A90',
 				marginLeft: fontSize,
+			},
+			iconValueRightSize: fontSize,
+			iconLabelRightCover: {
+				padding: 2,
+			},
+			iconValueRightCover: {
+				padding: 2,
+				marginLeft: 3,
+			},
+			iconLabelRightStyle: {
+				fontSize,
+				color: brandSecondary,
 			},
 		};
 	}
