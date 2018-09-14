@@ -23,11 +23,17 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import { FloatingButton, View } from '../../../BaseComponents';
+import {
+	FloatingButton,
+	View,
+	SettingsRow,
+	Text,
+	IconTelldus,
+} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow } from './SubViews';
@@ -54,11 +60,23 @@ interface Props extends ScheduleProps {
 
 type State = {
 	isLoading: boolean,
+	retries: number,
+	interval: number,
+	repeat: number,
+	showAdvanced: boolean,
 };
 
 class Summary extends View<null, Props, State> {
 
 	state: State;
+
+	toggleAdvanced: () => void;
+	onPressRetriesInfo: () => void;
+	onPressRetriesEdit: () => void;
+	onPressIntervalInfo: () => void;
+	onPressIntervalEdit: () => void;
+	onPressRepeatsInfo: () => void;
+	onPressRepeatsEdit: () => void;
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -76,6 +94,10 @@ class Summary extends View<null, Props, State> {
 
 		this.state = {
 			isLoading: false,
+			retries: 3,
+			interval: 5,
+			repeat: 1,
+			showAdvanced: false,
 		};
 
 		let { formatMessage } = intl;
@@ -87,6 +109,14 @@ class Summary extends View<null, Props, State> {
 			tmp: true, // TODO: fill with real fields
 		};
 		this.device = this._getDeviceById(schedule.deviceId);
+
+		this.toggleAdvanced = this.toggleAdvanced.bind(this);
+		this.onPressRetriesInfo = this.onPressRetriesInfo.bind(this);
+		this.onPressRetriesEdit = this.onPressRetriesEdit.bind(this);
+		this.onPressIntervalInfo = this.onPressIntervalInfo.bind(this);
+		this.onPressIntervalEdit = this.onPressIntervalEdit.bind(this);
+		this.onPressRepeatsInfo = this.onPressRepeatsInfo.bind(this);
+		this.onPressRepeatsEdit = this.onPressRepeatsEdit.bind(this);
 	}
 
 	componentDidMount() {
@@ -130,11 +160,77 @@ class Summary extends View<null, Props, State> {
 		navigation.dispatch(action);
 	}
 
+	toggleAdvanced() {
+		const { showAdvanced } = this.state;
+		this.setState({
+			showAdvanced: !showAdvanced,
+		});
+	}
+
+	onPressRetriesInfo() {
+		const extras = {
+			dialogueHeader: 'Number of retries',
+			showPositive: false,
+			showNegative: false,
+			imageHeader: true,
+			showIconOnHeader: true,
+		};
+		this.props.actions.showModal('Number of retries How many times the schedule will try again if your location is ' +
+		'offline when the schedule should run.If your location is online, the schedule will only run once.', extras);
+	}
+
+	onPressIntervalInfo() {
+		const extras = {
+			dialogueHeader: 'Number of retries',
+			showPositive: false,
+			showNegative: false,
+			imageHeader: true,
+			showIconOnHeader: true,
+		};
+		this.props.actions.showModal('Retry interval The interval, in minutes, between retries if your location is ' +
+		'offline when the schedule should run. The location must come online within \'number of retries\' * \'interval\' for ' +
+		'the schedule to run.', extras);
+	}
+
+	onPressRepeatsInfo() {
+		const extras = {
+			dialogueHeader: 'Number of retries',
+			showPositive: false,
+			showNegative: false,
+			imageHeader: true,
+			showIconOnHeader: true,
+		};
+		this.props.actions.showModal('Repeats Number of times a schedule command will be resent from the location. ' +
+		'Default value is 1 time, but it may be set to a maximum of 10, if the location for example is placed in an ' +
+		'environment with a lot of interference. There will be a 3 second pause between each resend.', extras);
+	}
+
+	onPressRetriesEdit() {
+	}
+
+	onPressIntervalEdit() {
+
+	}
+
+	onPressRepeatsEdit() {
+
+	}
+
 	render(): React$Element<any> {
+		const { retries, interval, repeat, showAdvanced } = this.state;
 		const { schedule, paddingRight, appLayout, intl } = this.props;
-		const { formatDate } = intl;
+		const { formatDate, formatMessage } = intl;
 		const { method, methodValue, weekdays } = schedule;
-		const { container, row, iconSize, buttonStyle, iconStyle, iconContainerStyle } = this._getStyle(appLayout);
+		const {
+			container,
+			row, iconSize,
+			buttonStyle,
+			iconStyle,
+			iconContainerStyle,
+			settingsTextStyle,
+			iconSettingsStyle,
+			toggleAdvancedCover,
+		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
 
 		return (
@@ -159,6 +255,55 @@ class Summary extends View<null, Props, State> {
 							intl={intl}
 						/>
 						<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
+						<TouchableOpacity
+							onPress={this.toggleAdvanced}
+							style={toggleAdvancedCover}>
+							<IconTelldus icon={'settings'} style={iconSettingsStyle}/>
+							<Text style={settingsTextStyle}>
+								{showAdvanced ?
+									formatMessage(i18n.labelHideAdvanced)
+									:
+									formatMessage(i18n.labelShowAdvanced)
+								}
+							</Text>
+						</TouchableOpacity>
+						{showAdvanced && (
+							<View>
+								<SettingsRow
+									type={'text'}
+									edit={false}
+									label={formatMessage(i18n.labelNumberOfRetries)}
+									value={retries}
+									appLayout={appLayout}
+									iconLabelRight={'help'}
+									iconValueRight={'edit'}
+									onPress={false}
+									onPressIconLabelRight={this.onPressRetriesInfo}
+									onPressIconValueRight={this.onPressRetriesEdit}/>
+								<SettingsRow
+									type={'text'}
+									edit={false}
+									label={formatMessage(i18n.labelRetryInterval)}
+									value={interval}
+									appLayout={appLayout}
+									iconLabelRight={'help'}
+									iconValueRight={'edit'}
+									onPress={false}
+									onPressIconLabelRight={this.onPressIntervalInfo}
+									onPressIconValueRight={this.onPressIntervalEdit}/>
+								<SettingsRow
+									type={'text'}
+									edit={false}
+									label={formatMessage(i18n.labelRepeats)}
+									value={repeat}
+									appLayout={appLayout}
+									iconLabelRight={'help'}
+									iconValueRight={'edit'}
+									onPress={false}
+									onPressIconLabelRight={this.onPressRepeatsInfo}
+									onPressIconValueRight={this.onPressRepeatsEdit}/>
+							</View>
+						)}
 					</View>
 					<FloatingButton
 						buttonStyle={buttonStyle}
@@ -181,7 +326,7 @@ class Summary extends View<null, Props, State> {
 	};
 
 	_getStyle = (appLayout: Object): Object => {
-		const { paddingFactor, maxSizeFloatingButton } = Theme.Core;
+		const { paddingFactor, maxSizeFloatingButton, brandSecondary } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -212,6 +357,21 @@ class Summary extends View<null, Props, State> {
 			},
 			iconContainerStyle: {
 				width: deviceWidth * 0.226666667,
+			},
+			toggleAdvancedCover: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				paddingVertical: 4 + padding,
+			},
+			iconSettingsStyle: {
+				fontSize: deviceWidth * 0.040666667,
+				color: brandSecondary,
+				marginRight: 8,
+			},
+			settingsTextStyle: {
+				fontSize: deviceWidth * 0.040666667,
+				color: brandSecondary,
 			},
 		};
 	};

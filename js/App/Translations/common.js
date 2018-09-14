@@ -727,6 +727,26 @@ const messages = defineMessages({
 		id: 'label.resetMaxMin',
 		defaultMessage: 'Reset Max/Min',
 	},
+	labelShowAdvanced: {
+		id: 'label.showAdvanced',
+		defaultMessage: 'Show advanced settings',
+	},
+	labelHideAdvanced: {
+		id: 'label.hideAdvanced',
+		defaultMessage: 'Hide advanced settings',
+	},
+	labelRepeats: {
+		id: 'label.repeats',
+		defaultMessage: 'Repeats',
+	},
+	labelRetryInterval: {
+		id: 'label.retryInterval',
+		defaultMessage: 'Retry interval',
+	},
+	labelNumberOfRetries: {
+		id: 'label.numberOfRetries',
+		defaultMessage: 'Number of retries',
+	},
 });
 
 export default messages;
