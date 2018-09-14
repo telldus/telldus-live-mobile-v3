@@ -57,7 +57,7 @@ class SettingsRow extends Component<Props, null> {
 	props: Props;
 
 	onPress: () => void;
-	onPressIconValueRight: () => void;
+	onPressIconLabelRight: () => void;
 	onPressIconValueRight: () => void;
 
 	static defaultProps: DefaultProps = {
