@@ -55,9 +55,9 @@ class SensorDashboardTileSlide extends View {
 								color: '#fff',
 								fontSize: Math.floor(tileWidth / 8),
 							}}>
-								{data.text && data.text}
-								{data.text2 && data.text2}
-								{data.text3 && data.text3}
+								{!!data.text && data.text}
+								{!!data.text2 && data.text2}
+								{!!data.text3 && data.text3}
 							</Text>
 							<Text style={{
 								color: '#fff',

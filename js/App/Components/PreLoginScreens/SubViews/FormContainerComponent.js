@@ -63,7 +63,7 @@ class FormContainerComponent extends View<Props, null> {
 
 		return (
 			<BackgroundImage source={this.background} style={styles.container}>
-				{appLayout.width && (
+				{!!appLayout.width && (
 					<ScrollView
 						keyboardShouldPersistTaps={'always'}
 						style={{ flex: 1 }}

@@ -35,7 +35,7 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 		paddingHorizontal: tileWidth * 0.06,
 		paddingVertical: tileWidth * 0.06,
 	}]}>
-		{icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
+		{!!icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 		<View style={styles.textCover}>
 			<Text
 				ellipsizeMode="middle"
@@ -48,7 +48,7 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 				]}>
 				{name ? name : formatMessage(i18n.noName)}
 			</Text>
-			{info &&
+			{!!info &&
 			(<Text
 				ellipsizeMode="middle"
 				numberOfLines={1}

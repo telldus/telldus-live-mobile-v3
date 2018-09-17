@@ -100,7 +100,7 @@ class DeviceLocationDetail extends View {
 						<Text numberOfLines={1} style={textLocation}>
 							{!!H2 && H2}
 						</Text>
-						{info && (
+						{!!info && (
 							info
 						)}
 					</View>

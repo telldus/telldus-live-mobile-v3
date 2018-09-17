@@ -110,7 +110,7 @@ class DeviceActionDetails extends View {
 
 		return (
 			<View style={[container, shadow, containerStyle]}>
-				{DIM && (
+				{!!DIM && (
 					<SliderDetails
 						device={device}
 						intl={intl}

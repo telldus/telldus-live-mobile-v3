@@ -120,7 +120,7 @@ class LocationDetailsPoster extends View {
 					</Text>
 				</View>
 				}
-				{customHeader && React.isValidElement(customHeader) &&
+				{!!customHeader && React.isValidElement(customHeader) &&
 					customHeader
 				}
 				{!!infoButton && this._renderInfoButton(infoButton)}

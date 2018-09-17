@@ -141,9 +141,9 @@ export default class WizardOne extends PureComponent<Props, null> {
 				translateX: animatedX,
 			}]}]}>
 				<View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: iconTwo ? -16 : 0}}>
-					{icon && <IconTelldus icon={icon} style={styles.icon} size={iconSize}/>}
-					{iconTwo && <IconTelldus icon={iconTwo} style={iconTwoStyle} size={iconTwoSize}/>}
-					{iconThree && <IconTelldus icon={iconThree} style={iconThreeStyle} size={iconThreeSize}/>}
+					{!!icon && <IconTelldus icon={icon} style={styles.icon} size={iconSize}/>}
+					{!!iconTwo && <IconTelldus icon={iconTwo} style={iconTwoStyle} size={iconTwoSize}/>}
+					{!!iconThree && <IconTelldus icon={iconThree} style={iconThreeStyle} size={iconThreeSize}/>}
 				</View>
 				<Text style={titleStyle}>
 					{title}

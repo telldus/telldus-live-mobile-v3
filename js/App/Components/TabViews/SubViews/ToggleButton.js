@@ -65,8 +65,8 @@ class ToggleButton extends View {
 
 		return (
 			<View style={style}>
-				{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
-				{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
+				{(!!TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+				{(!!TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
 			</View>
 		);
 	}

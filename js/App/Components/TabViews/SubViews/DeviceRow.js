@@ -469,7 +469,7 @@ class DeviceRow extends PureComponent<Props, State> {
 				<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
 					{deviceName}
 				</Text>
-				{powerConsumed && (
+				{!!powerConsumed && (
 					<Text style = {textPowerStyle}>
 						{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W`}
 					</Text>

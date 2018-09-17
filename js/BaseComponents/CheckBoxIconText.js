@@ -90,7 +90,7 @@ render(): Object {
 			style={[style, container]}
 			onPress={this.onToggleCheckBox}>
 			<IconTelldus icon={'checkmark'} style={{ ...checkIconCommon, ...checkIconStyle, ...iconStyle }}/>
-			{text && (
+			{!!text && (
 				<Text style={[textDefaultStyle, textStyle]}>
 					{text}
 				</Text>

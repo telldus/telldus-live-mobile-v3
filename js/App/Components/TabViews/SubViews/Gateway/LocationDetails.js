@@ -101,7 +101,7 @@ class LocationDetails extends View {
 							<Text numberOfLines={1} style={[textLocation, h2Style]}>
 								{!!H2 && H2}
 							</Text>
-							{info && (
+							{!!info && (
 								info
 							)}
 						</View>
