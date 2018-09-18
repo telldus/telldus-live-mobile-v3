@@ -202,7 +202,7 @@ dependencies {
     implementation project(':react-native-orientation')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:23.0.1"
+    implementation "com.android.support:appcompat-v7:26.1.0"
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
     // https://github.com/facebook/react-native/issues/19259#issuecomment-389064401
     // will need to update here too on upgrading RN.
