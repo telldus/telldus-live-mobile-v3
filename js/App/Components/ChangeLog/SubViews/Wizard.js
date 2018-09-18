@@ -23,7 +23,7 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { Platform } from 'react-native';
+import { Platform, Animated } from 'react-native';
 import { intlShape, defineMessages } from 'react-intl';
 
 import { View, Text, IconTelldus, StyleSheet } from '../../../../BaseComponents';
@@ -137,7 +137,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 
 		// IconTelldus, on setting different font sizes causing alignment issue. So, handling with negative margin.
 		return (
-			<View style={[container, {opacity: animatedOpacity, transform: [{
+			<Animated.View style={[container, {opacity: animatedOpacity, transform: [{
 				translateX: animatedX,
 			}]}]}>
 				<View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: iconTwo ? -16 : 0}}>
@@ -151,7 +151,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 				<Text style={descriptionStyle}>
 					{description}
 				</Text>
-			</View>
+			</Animated.View>
 		);
 	}
 

@@ -33,7 +33,6 @@ import { View, FloatingButton, Text, StyleSheet } from '../../../BaseComponents'
 import { NavigationHeader } from '../DeviceDetails/SubViews';
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
-const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
 
 import Screens from './SubViews/Screens';
 import { getRelativeDimensions } from '../../Lib';
@@ -258,7 +257,7 @@ class ChangeLogNavigator extends View {
 					<NavigationHeader showLeftIcon={false} topMargin={false}/>
 					<ChangeLogPoster h1={h1} h2={h2}/>
 					<ScrollView>
-						<AnimatedWizard
+						<Wizard
 							intl={intl}
 							currentScreen={currentScreen}
 							animatedX={animatedX}
