@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -30,13 +29,12 @@ import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import {
 	FloatingButton,
 	View,
-	SettingsRow,
 	Text,
 	IconTelldus,
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
-import { ActionRow, DaysRow, DeviceRow, TimeRow } from './SubViews';
+import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettings } from './SubViews';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -60,9 +58,6 @@ interface Props extends ScheduleProps {
 
 type State = {
 	isLoading: boolean,
-	retries: number,
-	interval: number,
-	repeat: number,
 	showAdvanced: boolean,
 };
 
@@ -71,21 +66,7 @@ class Summary extends View<null, Props, State> {
 	state: State;
 
 	toggleAdvanced: () => void;
-	onPressRetriesInfo: () => void;
-	onPressRetriesEdit: () => void;
-	onPressIntervalInfo: () => void;
-	onPressIntervalEdit: () => void;
-	onPressRepeatsInfo: () => void;
-	onPressRepeatsEdit: () => void;
-
-	static propTypes = {
-		navigation: PropTypes.object,
-		actions: PropTypes.object,
-		onDidMount: PropTypes.func,
-		paddingRight: PropTypes.number,
-		schedule: PropTypes.object,
-		devices: PropTypes.object,
-	};
+	onDoneEditAdvanced: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -94,9 +75,6 @@ class Summary extends View<null, Props, State> {
 
 		this.state = {
 			isLoading: false,
-			retries: 3,
-			interval: 5,
-			repeat: 1,
 			showAdvanced: false,
 		};
 
@@ -111,12 +89,7 @@ class Summary extends View<null, Props, State> {
 		this.device = this._getDeviceById(schedule.deviceId);
 
 		this.toggleAdvanced = this.toggleAdvanced.bind(this);
-		this.onPressRetriesInfo = this.onPressRetriesInfo.bind(this);
-		this.onPressRetriesEdit = this.onPressRetriesEdit.bind(this);
-		this.onPressIntervalInfo = this.onPressIntervalInfo.bind(this);
-		this.onPressIntervalEdit = this.onPressIntervalEdit.bind(this);
-		this.onPressRepeatsInfo = this.onPressRepeatsInfo.bind(this);
-		this.onPressRepeatsEdit = this.onPressRepeatsEdit.bind(this);
+		this.onDoneEditAdvanced = this.onDoneEditAdvanced.bind(this);
 	}
 
 	componentDidMount() {
@@ -133,6 +106,7 @@ class Summary extends View<null, Props, State> {
 			isLoading: true,
 		});
 		let options = this.props.actions.getScheduleOptions(this.props.schedule);
+
 		this.props.actions.saveSchedule(options).then((response: Object) => {
 			this.setState({
 				isLoading: false,
@@ -167,58 +141,13 @@ class Summary extends View<null, Props, State> {
 		});
 	}
 
-	onPressRetriesInfo() {
-		const extras = {
-			dialogueHeader: 'Number of retries',
-			showPositive: false,
-			showNegative: false,
-			imageHeader: true,
-			showIconOnHeader: true,
-		};
-		this.props.actions.showModal('Number of retries How many times the schedule will try again if your location is ' +
-		'offline when the schedule should run.If your location is online, the schedule will only run once.', extras);
-	}
-
-	onPressIntervalInfo() {
-		const extras = {
-			dialogueHeader: 'Number of retries',
-			showPositive: false,
-			showNegative: false,
-			imageHeader: true,
-			showIconOnHeader: true,
-		};
-		this.props.actions.showModal('Retry interval The interval, in minutes, between retries if your location is ' +
-		'offline when the schedule should run. The location must come online within \'number of retries\' * \'interval\' for ' +
-		'the schedule to run.', extras);
-	}
-
-	onPressRepeatsInfo() {
-		const extras = {
-			dialogueHeader: 'Number of retries',
-			showPositive: false,
-			showNegative: false,
-			imageHeader: true,
-			showIconOnHeader: true,
-		};
-		this.props.actions.showModal('Repeats Number of times a schedule command will be resent from the location. ' +
-		'Default value is 1 time, but it may be set to a maximum of 10, if the location for example is placed in an ' +
-		'environment with a lot of interference. There will be a 3 second pause between each resend.', extras);
-	}
-
-	onPressRetriesEdit() {
-	}
-
-	onPressIntervalEdit() {
-
-	}
-
-	onPressRepeatsEdit() {
-
+	onDoneEditAdvanced(settings: Object) {
+		this.props.actions.setAdvancedSettings(settings);
 	}
 
 	render(): React$Element<any> {
-		const { retries, interval, repeat, showAdvanced } = this.state;
-		const { schedule, paddingRight, appLayout, intl } = this.props;
+		const { showAdvanced } = this.state;
+		const { schedule, paddingRight, appLayout, intl, actions } = this.props;
 		const { formatDate, formatMessage } = intl;
 		const { method, methodValue, weekdays } = schedule;
 		const {
@@ -268,41 +197,11 @@ class Summary extends View<null, Props, State> {
 							</Text>
 						</TouchableOpacity>
 						{showAdvanced && (
-							<View>
-								<SettingsRow
-									type={'text'}
-									edit={false}
-									label={formatMessage(i18n.labelNumberOfRetries)}
-									value={retries}
-									appLayout={appLayout}
-									iconLabelRight={'help'}
-									iconValueRight={'edit'}
-									onPress={false}
-									onPressIconLabelRight={this.onPressRetriesInfo}
-									onPressIconValueRight={this.onPressRetriesEdit}/>
-								<SettingsRow
-									type={'text'}
-									edit={false}
-									label={formatMessage(i18n.labelRetryInterval)}
-									value={interval}
-									appLayout={appLayout}
-									iconLabelRight={'help'}
-									iconValueRight={'edit'}
-									onPress={false}
-									onPressIconLabelRight={this.onPressIntervalInfo}
-									onPressIconValueRight={this.onPressIntervalEdit}/>
-								<SettingsRow
-									type={'text'}
-									edit={false}
-									label={formatMessage(i18n.labelRepeats)}
-									value={repeat}
-									appLayout={appLayout}
-									iconLabelRight={'help'}
-									iconValueRight={'edit'}
-									onPress={false}
-									onPressIconLabelRight={this.onPressRepeatsInfo}
-									onPressIconValueRight={this.onPressRepeatsEdit}/>
-							</View>
+							<AdvancedSettings
+								appLayout={appLayout}
+								intl={intl}
+								onPressInfo={actions.showModal}
+								onDoneEditAdvanced={this.onDoneEditAdvanced}/>
 						)}
 					</View>
 					<FloatingButton
