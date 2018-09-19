@@ -194,11 +194,11 @@ class DimmerButton extends View<Props, null> {
 			isOpen,
 			closeSwipeRow,
 		} = this.props;
-		const { isInState, name, supportedMethods, methodRequested, local, stateValues, value } = item;
+		const { isInState, name, supportedMethods, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
-		const stateValue = stateValues ? stateValues.DIM : value;
+		const stateValue = stateValues ? stateValues.DIM : val;
 		const value = getDimmerValue(stateValue, isInState);
 
 		const sliderProps = {
