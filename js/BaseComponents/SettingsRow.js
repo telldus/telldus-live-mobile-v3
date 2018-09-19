@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Image, Platform, TouchableOpacity } from 'react-native';
+import { Image, Platform, TouchableOpacity, TextInput } from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -33,23 +33,30 @@ import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
 
 type Props = {
-    value: boolean,
+    value: any,
     label: string,
 	appLayout: Object,
 	iconLabelRight?: string,
 	iconValueRight?: string,
+	inLineEditActive?: boolean,
 
+	iconValueRightSize?: number,
 	edit?: boolean,
 	type?: 'switch' | 'text',
 	onValueChange: (boolean) => void,
 	onPress: () => void,
 	onPressIconLabelRight: () => void,
 	onPressIconValueRight: () => void,
+	onChangeText?: (string) => void,
+	onSubmitEditing?: () => void,
+	keyboardTypeInLineEdit?: string,
 };
 
 type DefaultProps = {
 	type: 'switch' | 'text',
 	edit: boolean,
+	inLineEditActive: boolean,
+	keyboardTypeInLineEdit: string,
 };
 
 
@@ -60,9 +67,14 @@ class SettingsRow extends Component<Props, null> {
 	onPressIconLabelRight: () => void;
 	onPressIconValueRight: () => void;
 
+	onChangeText: (string) => void;
+	onSubmitEditing: () => void;
+
 	static defaultProps: DefaultProps = {
 		type: 'switch',
 		edit: false,
+		inLineEditActive: false,
+		keyboardTypeInLineEdit: 'numeric',
 	}
 
 	constructor(props: Props) {
@@ -71,12 +83,15 @@ class SettingsRow extends Component<Props, null> {
 		this.onPress = this.onPress.bind(this);
 		this.onPressIconLabelRight = this.onPressIconLabelRight.bind(this);
 		this.onPressIconValueRight = this.onPressIconValueRight.bind(this);
+
+		this.onChangeText = this.onChangeText.bind(this);
+		this.onSubmitEditing = this.onSubmitEditing.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object): boolean {
-		const { appLayout, value } = this.props;
-		const { appLayout: appLayoutN, value: valueN } = nextProps;
-		return appLayout.width !== appLayoutN.width || value !== valueN;
+		const { appLayout, value, inLineEditActive } = this.props;
+		const { appLayout: appLayoutN, value: valueN, inLineEditActive: inLineEditActiveN } = nextProps;
+		return appLayout.width !== appLayoutN.width || value !== valueN || inLineEditActive !== inLineEditActiveN;
 	}
 
 	onPress() {
@@ -100,6 +115,20 @@ class SettingsRow extends Component<Props, null> {
 		}
 	}
 
+	onSubmitEditing() {
+		const { onSubmitEditing } = this.props;
+		if (onSubmitEditing) {
+			onSubmitEditing();
+		}
+	}
+
+	onChangeText(value: string) {
+		const { onChangeText } = this.props;
+		if (onChangeText) {
+			onChangeText(value);
+		}
+	}
+
 	render(): Object {
 		const {
 			appLayout,
@@ -111,6 +140,8 @@ class SettingsRow extends Component<Props, null> {
 			edit,
 			iconLabelRight,
 			iconValueRight,
+			inLineEditActive,
+			keyboardTypeInLineEdit,
 		} = this.props;
 
 		const {
@@ -125,6 +156,8 @@ class SettingsRow extends Component<Props, null> {
 			iconValueRightCover,
 			iconValueRightSize,
 			iconLabelRightStyle,
+			textField,
+			valueCover,
 		} = this.getStyle(appLayout);
 		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
@@ -168,15 +201,30 @@ class SettingsRow extends Component<Props, null> {
 								<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
 							</TouchableOpacity>
 						</View>
-						<Text style={valueText}>
-							{value}
-						</Text>
-						{!!iconValueRight && (
-							<TouchableOpacity onPress={this.onPressIconValueRight} style={iconValueRightCover}>
-								<Icon name={iconValueRight} size={iconValueRightSize} color={Theme.Core.brandSecondary}/>
-							</TouchableOpacity>
-						)}
-						}
+						<View style={valueCover}>
+							{inLineEditActive ?
+								<TextInput
+									value={value ? value.toString() : ''}
+									style={textField}
+									onChangeText={this.onChangeText}
+									onSubmitEditing={this.onSubmitEditing}
+									autoCorrect={false}
+									autoFocus={true}
+									underlineColorAndroid="#e26901"
+									returnKeyType={'done'}
+									keyboardType={keyboardTypeInLineEdit}
+								/>
+								:
+								<Text style={valueText}>
+									{value}
+								</Text>
+							}
+							{!!iconValueRight && (
+								<TouchableOpacity onPress={this.onPressIconValueRight} style={iconValueRightCover}>
+									<Icon name={iconValueRight} size={iconValueRightSize} color={Theme.Core.brandSecondary}/>
+								</TouchableOpacity>
+							)}
+						</View>
 						{edit && (
 							<Image source={{uri: 'right_arrow_key'}} style={arrowStyle}/>
 						)}
@@ -186,7 +234,8 @@ class SettingsRow extends Component<Props, null> {
 		);
 	}
 
-	getStyle(appLayout: Object): Object {
+	getStyle(): Object {
+		const { appLayout, iconValueRightSize } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -224,12 +273,18 @@ class SettingsRow extends Component<Props, null> {
 				fontSize,
 				justifyContent: 'center',
 			},
+			valueCover: {
+				flex: 1,
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'flex-end',
+				paddingVertical: Platform.OS === 'ios' ? 8 : 6,
+			},
 			valueText: {
 				flex: 1,
 				fontSize,
 				color: inactiveTintColor,
 				textAlign: 'right',
-				marginVertical: Platform.OS === 'ios' ? 8 : 6,
 			},
 			arrowStyle: {
 				height: fontSize,
@@ -237,7 +292,7 @@ class SettingsRow extends Component<Props, null> {
 				tintColor: '#A59F9A90',
 				marginLeft: fontSize,
 			},
-			iconValueRightSize: fontSize,
+			iconValueRightSize: iconValueRightSize ? iconValueRightSize : fontSize,
 			iconLabelRightCover: {
 				padding: 2,
 			},
@@ -248,6 +303,14 @@ class SettingsRow extends Component<Props, null> {
 			iconLabelRightStyle: {
 				fontSize,
 				color: brandSecondary,
+			},
+			textField: {
+				flex: 1,
+				color: inactiveTintColor,
+				paddingBottom: 0,
+				paddingTop: 0,
+				fontSize,
+				textAlign: 'right',
 			},
 		};
 	}
