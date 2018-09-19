@@ -256,7 +256,7 @@ class JobRow extends View<null, Props, null> {
 						)}
 					</ListRow>
 				</TouchableOpacity>
-				{showNow && (
+				{!!showNow && (
 					<View
 						style={container}
 					>

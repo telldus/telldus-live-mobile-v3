@@ -376,9 +376,9 @@ class HeaderComponent extends Base {
 					) : null
 				}
 				<View {...this.prepareRootProps()}>
-					{leftButton && this.renderLeftButton(leftButton)}
+					{!!leftButton && this.renderLeftButton(leftButton)}
 					{this.renderChildren()}
-					{rightButton && this.renderRightButton(rightButton)}
+					{!!rightButton && this.renderRightButton(rightButton)}
 				</View>
 			</View>
 		);
