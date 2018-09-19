@@ -131,7 +131,6 @@ class SettingsRow extends Component<Props, null> {
 
 	render(): Object {
 		const {
-			appLayout,
 			label,
 			value,
 			onValueChange,
