@@ -158,7 +158,7 @@ class SettingsRow extends Component<Props, null> {
 			iconLabelRightStyle,
 			textField,
 			valueCover,
-		} = this.getStyle(appLayout);
+		} = this.getStyle();
 		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
 		let Parent = View, parentProps = {

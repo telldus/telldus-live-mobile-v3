@@ -42,9 +42,9 @@ type Props = {
 };
 
 type State = {
-	retries: string,
-	retryInterval: string,
-	reps: string,
+	retries: number,
+	retryInterval: number,
+	reps: number,
 	showAdvanced: boolean,
 	inLineEditActive: 0 | 1 | 2 | 3,
 };
