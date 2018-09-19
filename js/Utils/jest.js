@@ -20,3 +20,5 @@ jest.mock('react-native-orientation-locker', () => {
 		unlockAllOrientations: jest.fn(),
 	};
 });
+
+global.window.addEventListener = () => null;
