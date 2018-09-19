@@ -86,15 +86,15 @@ function autoDetectLocalTellStick(): ThunkAction {
 					if (err) {
 						throw err;
 					}
-					if (Platform.OS !== 'android') {
-						socket.setBroadcast(true);
-					}
 				});
 			} catch (err) {
 				reportException(err);
 			}
 		}
 		socket.once('listening', () => {
+			if (Platform.OS !== 'android') {
+				socket.setBroadcast(true);
+			}
 			let buf = toByteArray('D');
 			socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
 				if (err) {

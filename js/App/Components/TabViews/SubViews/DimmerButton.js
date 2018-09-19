@@ -134,10 +134,11 @@ class DimmerButton extends View<Props, null> {
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
-		const { stateValues, isInState, id } = this.props.device;
+		const { stateValues, isInState, id, value } = this.props.device;
+		const stateValue = stateValues ? stateValues.DIM : value;
 
 		this.props.onSlideActive();
-		this.props.saveDimmerInitialState(id, stateValues.DIM, isInState);
+		this.props.saveDimmerInitialState(id, stateValue, isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
 
@@ -193,10 +194,12 @@ class DimmerButton extends View<Props, null> {
 			isOpen,
 			closeSwipeRow,
 		} = this.props;
-		const { isInState, name, supportedMethods, methodRequested, local, stateValues } = item;
+		const { isInState, name, supportedMethods, methodRequested, local, stateValues, value } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
-		const value = getDimmerValue(stateValues.DIM, isInState);
+
+		const stateValue = stateValues ? stateValues.DIM : value;
+		const value = getDimmerValue(stateValue, isInState);
 
 		const sliderProps = {
 			thumbWidth: 10,

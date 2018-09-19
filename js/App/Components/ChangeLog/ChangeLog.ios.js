@@ -33,7 +33,6 @@ import { View, FloatingButton, Text, StyleSheet, SafeAreaView, NavigationHeader 
 
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
-const AnimatedWizard = Animated.createAnimatedComponent(Wizard);
 
 
 import Screens from './SubViews/Screens';
@@ -199,7 +198,7 @@ class ChangeLogNavigator extends View {
 		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
 		const isLastScreen = Screens.indexOf(currentScreen) === Screens.length - 1;
 
-		let { stepIndicatorCover, floatingButtonLeft, checkIconStyle, textSkip, stepIndicator } = this.getStyles(appLayout);
+		let { stepIndicatorCover, floatingButtonLeft, checkIconStyle, textSkip, stepIndicator, stepIndicatorSize } = this.getStyles(appLayout);
 
 		let inputRange = width ? [-width, 0] : [-100, 0];
 		let outputRange = width ? [width, 0] : [-100, 0];
@@ -230,7 +229,7 @@ class ChangeLogNavigator extends View {
 					<NavigationHeader showLeftIcon={false}/>
 					<ChangeLogPoster h1={h1} h2={h2}/>
 					<ScrollView>
-						<AnimatedWizard
+						<Wizard
 							intl={intl}
 							currentScreen={currentScreen}
 							animatedX={animatedX}
@@ -251,7 +250,10 @@ class ChangeLogNavigator extends View {
 							{Screens.map((screen: number, index: number): Object => {
 								let backgroundColor = Screens[index] === currentScreen ?
 									Theme.Core.brandSecondary : '#00000080';
-								return <View style={[stepIndicator, { backgroundColor }, !index && {marginLeft: 0 }]} key={index}/>;
+								return <View style={[stepIndicator, {
+									backgroundColor,
+									marginLeft: !index ? 0 : stepIndicatorSize * 0.7,
+								}]} key={index}/>;
 							})
 							}
 							<FloatingButton
@@ -291,7 +293,6 @@ class ChangeLogNavigator extends View {
 				height: stepIndicatorSize,
 				width: stepIndicatorSize,
 				borderRadius: stepIndicatorSize / 2,
-				marginLeft: stepIndicatorSize * 0.7,
 			},
 			floatingButtonLeft: {
 				left: deviceWidth * 0.034666667,
@@ -307,6 +308,7 @@ class ChangeLogNavigator extends View {
 				textAlign: 'center',
 				fontSize: Math.floor(deviceWidth * 0.039),
 			},
+			stepIndicatorSize,
 		};
 	}
 
