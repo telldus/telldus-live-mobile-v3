@@ -147,6 +147,9 @@ class JobRow extends View<null, Props, null> {
 			randomInterval,
 			active,
 			weekdays,
+			retries,
+			retryInterval,
+			reps,
 		} = this.props;
 
 		const schedule: Schedule = {
@@ -161,6 +164,9 @@ class JobRow extends View<null, Props, null> {
 			randomInterval,
 			active,
 			weekdays,
+			retries,
+			retryInterval,
+			reps,
 		};
 
 		editJob(schedule);
@@ -234,9 +240,11 @@ class JobRow extends View<null, Props, null> {
 						}}
 						timeStyle={time}
 						timeContainerStyle={{ opacity }}
-						rowContainerStyle={[rowContainer]}
-						rowWithTriangleContainerStyle={[rowWithTriangleContainer, { opacity }]}
+						rowStyle={{ opacity }}
+						rowContainerStyle={rowContainer}
+						rowWithTriangleContainerStyle={rowWithTriangleContainer}
 						triangleColor={methodIconContainer.backgroundColor}
+						triangleContainerStyle={{ opacity }}
 						isFirst={isFirst}
 					>
 						{actionIcon}
@@ -270,7 +278,7 @@ class JobRow extends View<null, Props, null> {
 						)}
 					</ListRow>
 				</TouchableOpacity>
-				{showNow && (
+				{!!showNow && (
 					<View
 						style={container}
 					>

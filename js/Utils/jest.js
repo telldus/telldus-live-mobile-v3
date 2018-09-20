@@ -30,3 +30,5 @@ jest.mock('react-native-google-signin', () => {
 		},
 	};
 });
+
+global.window.addEventListener = () => null;

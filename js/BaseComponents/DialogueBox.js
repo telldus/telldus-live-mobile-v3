@@ -30,6 +30,7 @@ import { announceForAccessibility } from 'react-native-accessibility';
 
 import View from './View';
 import Text from './Text';
+import DialogueHeader from './DialogueHeader';
 
 import capitalize from '../App/Lib/capitalize';
 import i18n from '../App/Translations/common';
@@ -39,8 +40,12 @@ type Props = {
 	showDialogue?: boolean,
 	appLayout: Object,
 
+	showIconOnHeader?: boolean,
+	imageHeader?: boolean,
 	text: string,
 	header?: string,
+	onPressHeader?: () => void,
+	onPressHeaderIcon?: () => void,
 	entryDuration?: number,
 	exitDuration?: number,
 	showPositive: boolean,
@@ -151,21 +156,38 @@ class DialogueBox extends Component<Props, null> {
 		}
 	}
 
+	dialogueImageHeader({ showIconOnHeader, header, onPressHeader, onPressHeaderIcon, dialogueHeaderStyle, notificationModalHeaderText }: Object): Object {
+		return (
+			<DialogueHeader
+				headerText={typeof header === 'string' ? capitalize(header) : header}
+				showIcon={showIconOnHeader}
+				onPressHeader={onPressHeader}
+				headerStyle={dialogueHeaderStyle}
+				onPressIcon={onPressHeaderIcon}
+				textStyle={notificationModalHeaderText}/>
+		);
+	}
+
 	renderHeader(styles: Object): any {
-		let { header } = this.props;
-		if (header && typeof header === 'object') {
+		let { header, showIconOnHeader, imageHeader, onPressHeader, onPressHeaderIcon } = this.props;
+		const { notificationModalHeader, dialogueHeaderStyle, notificationModalHeaderText } = styles;
+
+		if (imageHeader) {
+			return this.dialogueImageHeader({
+				showIconOnHeader, header, onPressHeader, onPressHeaderIcon,
+				dialogueHeaderStyle, notificationModalHeaderText});
+		} else if (header && typeof header === 'object') {
 			return (
 				header
 			);
-		}
-		if (!header) {
+		} else if (!header) {
 			header = this.defaultHeader;
 		}
 
 		header = typeof header === 'string' ? capitalize(header) : header;
 		return (
-			<View style={styles.notificationModalHeader}>
-				<Text style={styles.notificationModalHeaderText}>
+			<View style={notificationModalHeader}>
+				<Text style={notificationModalHeaderText}>
 					{header}
 				</Text>
 			</View>
@@ -188,30 +210,34 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	renderFooter(styles: Object): any {
-		let positiveText = this.props.positiveText ? this.props.positiveText :
+		const { positiveText, negativeText, showNegative, showPositive } = this.props;
+		if (!showNegative && !showPositive) {
+			return null;
+		}
+		let pText = positiveText ? positiveText :
 			this.defaultPositiveText;
-		let negativeText = this.props.negativeText ? this.props.negativeText :
+		let nText = negativeText ? negativeText :
 			this.defaultNegativeText;
 
-		let accessibilityLabelPositive = `${positiveText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
-		let accessibilityLabelNegative = `${negativeText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
+		let accessibilityLabelPositive = `${pText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
+		let accessibilityLabelNegative = `${nText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
 
 		return (
 			<View style={styles.notificationModalFooter}>
-				{this.props.showNegative ?
+				{showNegative ?
 					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {marginRight: 10}]}
 						onPress={this.onPressNegative}
 						accessibilityLabel={accessibilityLabelNegative}>
-						<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>
+						<Text style={styles.notificationModalFooterNegativeText}>{nText}</Text>
 					</TouchableOpacity>
 					:
 					null
 				}
-				{this.props.showPositive ?
+				{showPositive ?
 					<TouchableOpacity style={styles.notificationModalFooterTextCover}
 						onPress={this.onPressPositive}
 						accessibilityLabel={accessibilityLabelPositive}>
-						<Text style={styles.notificationModalFooterPositiveText}>{positiveText}</Text>
+						<Text style={styles.notificationModalFooterPositiveText}>{pText}</Text>
 					</TouchableOpacity>
 					:
 					null
@@ -247,14 +273,13 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	render(): Object {
-		let {
+		const {
 			showDialogue,
 			style,
 			entryDuration,
 			exitDuration,
-			appLayout,
 		} = this.props;
-		let styles = this.getStyles(appLayout);
+		const styles = this.getStyles();
 
 		return (
 			<Modal
@@ -275,12 +300,14 @@ class DialogueBox extends Component<Props, null> {
 		);
 	}
 
-	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+	getStyles(): Object {
+		const { appLayout } = this.props;
+		const { width, height } = appLayout;
 		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const fontSizeHeader = Math.floor(deviceWidth * 0.046);
+		const fontSize = Math.floor(deviceWidth * 0.042);
 
 		return {
 			modal: {
@@ -296,25 +323,28 @@ class DialogueBox extends Component<Props, null> {
 			notificationModalHeader: {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
-				paddingLeft: 20,
-				height: deviceHeight * 0.08,
+				paddingVertical: fontSize,
+				paddingHorizontal: 5 + fontSize,
 				width: deviceWidth * 0.75,
 				backgroundColor: '#e26901',
 			},
+			dialogueHeaderStyle: {
+				paddingVertical: fontSize,
+				paddingHorizontal: 5 + fontSize,
+				width: deviceWidth * 0.75,
+			},
 			notificationModalHeaderText: {
 				color: '#ffffff',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: fontSizeHeader,
 			},
 			notificationModalBody: {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
-				paddingLeft: 20,
-				paddingRight: 10,
-				height: deviceHeight * 0.2,
+				padding: 5 + fontSize,
 				width: deviceWidth * 0.75,
 			},
 			notificationModalBodyText: {
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize,
 				color: '#6B6969',
 			},
 			notificationModalFooter: {
@@ -322,24 +352,23 @@ class DialogueBox extends Component<Props, null> {
 				justifyContent: 'flex-end',
 				flexDirection: 'row',
 				paddingRight: 20,
-				height: deviceHeight * 0.08,
 				width: deviceWidth * 0.75,
+				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterTextCover: {
 				alignItems: 'flex-end',
 				justifyContent: 'center',
-				height: deviceHeight * 0.08,
 				paddingRight: 5,
 				paddingLeft: 5,
 			},
 			notificationModalFooterNegativeText: {
 				color: '#6B6969',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize,
 				fontWeight: 'bold',
 			},
 			notificationModalFooterPositiveText: {
 				color: '#e26901',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize,
 				fontWeight: 'bold',
 			},
 		};

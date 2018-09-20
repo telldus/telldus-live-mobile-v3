@@ -367,7 +367,7 @@ class SwipeRow extends Component<Props, State> {
 		const slideOpenValue = this.props.editMode ? this.props.leftOpenValue : 0;
 
 		return (
-			<View
+			<Animated.View
 				onLayout={this.onContentLayout}
 				style={{
 					transform: [
@@ -376,7 +376,7 @@ class SwipeRow extends Component<Props, State> {
 				}}
 			>
 				{this.renderVisibleContent()}
-			</View>
+			</Animated.View>
 		);
 	}
 

@@ -143,14 +143,31 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	getRelativeData = (): Object => {
-		let {modalExtras} = this.props;
+		const { modalExtras } = this.props;
+		const {
+			dialogueHeader = false,
+			showPositive = false,
+			showNegative = false,
+			positiveText = null,
+			onPressPositive = this.closeModal,
+			onPressNegative = this.closeModal,
+			imageHeader = false,
+			showIconOnHeader = false,
+			onPressHeader = this.closeModal,
+			onPressHeaderIcon = this.closeModal,
+		} = modalExtras;
 		return {
-			dialgueHeader: modalExtras.dialogueHeader ? modalExtras.dialogueHeader : false,
-			showNegative: modalExtras.showNegative ? true : false,
-			positiveText: modalExtras.positiveText ? modalExtras.positiveText : false,
-			onPressPositive: modalExtras.onPressPositive ? modalExtras.onPressPositive : this.closeModal,
-			onPressNegative: modalExtras.onPressNegative ? modalExtras.onPressNegative : this.closeModal,
+			dialogueHeader,
+			showPositive,
+			showNegative,
+			positiveText,
+			onPressPositive,
+			onPressNegative,
 			dialogueContainerStyle: {backgroundColor: '#00000099'},
+			imageHeader,
+			showIconOnHeader,
+			onPressHeader,
+			onPressHeaderIcon,
 		};
 	};
 
@@ -158,7 +175,19 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { children, navigation, actions, devices, schedule, screenProps, intl, appLayout } = this.props;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style, modal } = this._getStyle(appLayout);
-		const { dialgueHeader, showNegative, positiveText, onPressPositive, onPressNegative, dialogueContainerStyle} = this.getRelativeData();
+		const {
+			dialogueHeader,
+			showPositive,
+			showNegative,
+			positiveText,
+			onPressPositive,
+			onPressNegative,
+			dialogueContainerStyle,
+			imageHeader,
+			showIconOnHeader,
+			onPressHeader,
+			onPressHeaderIcon,
+		} = this.getRelativeData();
 
 		return (
 			<View>
@@ -197,13 +226,17 @@ class ScheduleScreen extends View<null, Props, State> {
 						showDialogue={this.props.showModal}
 						modalStyle={modal}
 						dialogueContainerStyle={dialogueContainerStyle}
-						header={dialgueHeader}
+						header={dialogueHeader}
 						text={this.props.validationMessage}
-						showPositive={true}
+						showPositive={showPositive}
 						showNegative={showNegative}
 						positiveText={positiveText}
 						onPressPositive={onPressPositive}
-						onPressNegative={onPressNegative}/>
+						onPressNegative={onPressNegative}
+						imageHeader={imageHeader}
+						showIconOnHeader={showIconOnHeader}
+						onPressHeader={onPressHeader}
+						onPressHeaderIcon={onPressHeaderIcon}/>
 				</View>
 			</View>
 		);

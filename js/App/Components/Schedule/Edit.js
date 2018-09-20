@@ -29,7 +29,7 @@ import { intlShape, injectIntl, defineMessages } from 'react-intl';
 import {View, TouchableButton, Throbber} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
-import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from './SubViews';
+import { ActionRow, DaysRow, ScheduleSwitch, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -99,6 +99,10 @@ class Edit extends View<null, Props, State> {
 	onDeleteSchedule: () => void;
 	onDeleteConfirm: () => void;
 
+	onToggleAdvanced: (boolean) => void;
+	setRefScroll: (any) => void;
+	scrollView: any;
+
 	static propTypes = {
 		navigation: PropTypes.object,
 		actions: PropTypes.object,
@@ -135,6 +139,10 @@ class Edit extends View<null, Props, State> {
 		this.onDeleteSchedule = this.onDeleteSchedule.bind(this);
 
 		this.onDeleteConfirm = this.onDeleteConfirm.bind(this);
+
+		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
+		this.setRefScroll = this.setRefScroll.bind(this);
+		this.scrollView = null;
 	}
 
 	componentDidMount() {
@@ -242,10 +250,20 @@ class Edit extends View<null, Props, State> {
 		}
 	}
 
+	onToggleAdvanced(state: boolean) {
+		if (state && this.scrollView) {
+			this.scrollView.scrollToEnd({animated: true});
+		}
+	}
+
+	setRefScroll(ref: any) {
+		this.scrollView = ref;
+	}
+
 	render(): React$Element<any> {
-		const { appLayout, schedule, intl } = this.props;
+		const { appLayout, schedule, intl, actions } = this.props;
 		const { formatMessage, formatDate } = intl;
-		const { active, method, methodValue, weekdays } = schedule;
+		const { active, method, methodValue, weekdays, retries = 0, retryInterval = 0, reps = 0 } = schedule;
 		const {
 			container, row, save, cancel, throbber,
 			buttonStyle, labelStyle,
@@ -256,7 +274,7 @@ class Edit extends View<null, Props, State> {
 		const labelPostScript = formatMessage(i18n.activateEdit);
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+			<ScrollView ref={this.setRefScroll} style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 				<View style={container}>
 					<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout} intl={intl}/>
 					<ActionRow
@@ -286,6 +304,15 @@ class Edit extends View<null, Props, State> {
 						labelPostScript={labelPostScript}
 						containerStyle={row}
 					/>
+					<AdvancedSettingsBlock
+						appLayout={appLayout}
+						intl={intl}
+						onPressInfo={actions.showModal}
+						onDoneEditAdvanced={actions.setAdvancedSettings}
+						retries={retries}
+						retryInterval={retryInterval}
+						reps={reps}
+						onToggleAdvanced={this.onToggleAdvanced}/>
 					<View style={buttonCoverStyle}>
 						<TouchableButton
 							text={messages.confirmAndSave}
@@ -357,15 +384,16 @@ class Edit extends View<null, Props, State> {
 
 		return {
 			container: {
+				flex: 1,
 				paddingHorizontal: padding,
 				paddingVertical: padding - (padding / 4),
-				alignItems: 'center',
 			},
 			row: {
 				marginVertical: padding / 4,
 			},
 			save: {
 				backgroundColor: Theme.Core.brandSecondary,
+				marginTop: padding / 2,
 			},
 			cancel: {
 				backgroundColor: Theme.Core.brandDanger,
@@ -373,9 +401,9 @@ class Edit extends View<null, Props, State> {
 			buttonCoverStyle: {
 				alignItems: 'center',
 				justifyContent: 'center',
+				marginVertical: padding / 4,
 			},
 			buttonStyle: {
-				marginVertical: padding / 4,
 				maxWidth: undefined,
 				...shadow,
 			},

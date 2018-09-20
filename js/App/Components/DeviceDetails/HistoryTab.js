@@ -379,7 +379,6 @@ class HistoryTab extends View {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 2,
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		justifyContent: 'flex-start',

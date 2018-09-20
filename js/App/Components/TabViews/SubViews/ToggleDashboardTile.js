@@ -83,8 +83,8 @@ class ToggleDashboardTile extends View<Props, null> {
 
 		return (
 			<View style={containerStyle}>
-				{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
-				{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
+				{(!!TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+				{(!!TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
 			</View>
 		);
 	}

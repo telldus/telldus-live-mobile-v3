@@ -73,6 +73,10 @@ const messages = defineMessages({
 		id: 'sensor.label.resetmaxMin',
 		defaultMessage: 'Reset Max/Min values',
 	},
+	clearHistoryCache: {
+		id: 'sensor.label.clearHistoryCache',
+		defaultMessage: 'Clear history cache',
+	},
 	messageClearHistory: {
 		id: 'sensor.dialogue.messageClearHistory',
 		defaultMessage: 'Are you sure you want to clear sensor history? ' +
@@ -83,9 +87,22 @@ const messages = defineMessages({
 		defaultMessage: 'Are you sure you want to reset max/min values? ' +
 		'This action will reset all max/min values for this sensor.',
 	},
+	messageClearCache: {
+		id: 'sensor.dialogue.messageClearCache',
+		defaultMessage: 'Are you sure you want to clear sensor history cache?',
+	},
+	hintHistoryCache: {
+		id: 'sensor.label.hintHistoryCache',
+		defaultMessage: 'History cache is stored on your device to shorten load times. Clear the cache if you want to ' +
+		'reload the values from the database',
+	},
 	clearSuccess: {
 		id: 'sensor.message.clearSuccess',
 		defaultMessage: 'Sensor history has been cleared',
+	},
+	clearCacheSuccess: {
+		id: 'sensor.message.clearCacheSuccess',
+		defaultMessage: 'Sensor history cache cleared',
 	},
 	resetSuccess: {
 		id: 'sensor.message.resetSuccess',
@@ -135,6 +152,8 @@ class SettingsTab extends View {
 	onConfirmClearHistory: () => void;
 	closeModal: () => void;
 	submitName: () => void;
+	clearHistoryCache: () => void;
+	onConfirmClearHistoryCache: () => void;
 
 	handleBackPress: () => void;
 
@@ -209,6 +228,8 @@ class SettingsTab extends View {
 		this.onConfirmResetMaxMin = this.onConfirmResetMaxMin.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 		this.submitName = this.submitName.bind(this);
+		this.clearHistoryCache = this.clearHistoryCache.bind(this);
+		this.onConfirmClearHistoryCache = this.onConfirmClearHistoryCache.bind(this);
 
 		this.handleBackPress = this.handleBackPress.bind(this);
 	}
@@ -292,6 +313,28 @@ class SettingsTab extends View {
 			});
 			const	message = err.message ? err.message : null;
 			dispatch(showToast(message));
+		});
+	}
+
+	clearHistoryCache() {
+		this.setState({
+			dialogueConfig: {
+				show: true,
+				action: 'clearHistoryCache',
+			},
+		});
+	}
+
+	onConfirmClearHistoryCache() {
+		const { dispatch, sensor, screenProps } = this.props;
+		const { formatMessage } = screenProps.intl;
+
+		clearHistory('sensor', sensor.id).then(() => {
+			dispatch(showToast(formatMessage(messages.clearCacheSuccess)));
+			this.closeModal();
+		}).catch(() => {
+			dispatch(showToast(null));
+			this.closeModal();
 		});
 	}
 
@@ -441,15 +484,24 @@ class SettingsTab extends View {
 				showDialogue: show,
 				dialogueHeader: `${formatMessage(messages.clearHistory).toUpperCase()}?`,
 				message: formatMessage(messages.messageClearHistory),
-				positiveText: formatMessage(i18n.delete).toUpperCase(),
+				positiveText: formatMessage(i18n.labelClearHistory).toUpperCase(),
 				onPressPositive: this.onConfirmClearHistory,
+			};
+		}
+		if (action === 'clearHistoryCache') {
+			return {
+				showDialogue: show,
+				dialogueHeader: `${formatMessage(messages.clearHistoryCache).toUpperCase()}?`,
+				message: formatMessage(messages.messageClearCache),
+				positiveText: formatMessage(i18n.labelClearCache).toUpperCase(),
+				onPressPositive: this.onConfirmClearHistoryCache,
 			};
 		}
 		return {
 			showDialogue: show,
 			dialogueHeader: `${formatMessage(messages.resetMaxMin).toUpperCase()}?`,
 			message: formatMessage(messages.messageResetMaxMin),
-			positiveText: formatMessage(i18n.labelReset).toUpperCase(),
+			positiveText: formatMessage(i18n.labelResetMaxMin).toUpperCase(),
 			onPressPositive: this.onConfirmResetMaxMin,
 		};
 	}
@@ -468,6 +520,7 @@ class SettingsTab extends View {
 			editBoxStyle,
 			dialogueHeaderStyle,
 			dialogueHeaderTextStyle,
+			clearCacheHintStyle,
 		} = this.getStyle(appLayout);
 
 		if (editName) {
@@ -536,6 +589,13 @@ class SettingsTab extends View {
 						text={formatMessage(messages.resetMaxMin).toUpperCase()}
 						onPress={this.resetMaxMin}
 						style={buttonStyle}/>
+					<TouchableButton
+						text={formatMessage(messages.clearHistoryCache).toUpperCase()}
+						onPress={this.clearHistoryCache}
+						style={buttonStyle}/>
+					<Text style={clearCacheHintStyle}>
+						{formatMessage(messages.hintHistoryCache)}.
+					</Text>
 					<Text style={infoHeaderText}>
 						{formatMessage(i18n.labelTechnicalInfo)}
 					</Text>
@@ -577,7 +637,7 @@ class SettingsTab extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { inactiveTintColor, paddingFactor } = Theme.Core;
+		const { inactiveTintColor, paddingFactor, eulaContentColor } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const fontSize = deviceWidth * 0.04;
@@ -602,12 +662,19 @@ class SettingsTab extends View {
 				paddingHorizontal: 15,
 			},
 			dialogueHeaderStyle: {
-				paddingVertical: 10,
-				paddingHorizontal: 20,
+				paddingVertical: Math.floor(deviceWidth * 0.042),
+				paddingHorizontal: 5 + Math.floor(deviceWidth * 0.042),
 				width: deviceWidth * 0.75,
 			},
 			dialogueHeaderTextStyle: {
 				fontSize: 13,
+			},
+			clearCacheHintStyle: {
+				fontSize,
+				textAlign: 'center',
+				color: eulaContentColor,
+				marginTop: padding * 2,
+				marginHorizontal: padding * 2,
 			},
 		};
 	}

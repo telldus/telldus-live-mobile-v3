@@ -32,6 +32,8 @@ import TimeRow from './TimeRow';
 import TimeSlider from './TimeSlider';
 import Title from './Title';
 import ScheduleSwitch from './ScheduleSwitch';
+import AdvancedSettings from './AdvancedSettings';
+import AdvancedSettingsBlock from './AdvancedSettingsBlock';
 
 module.exports = {
 	ActionRow,
@@ -47,4 +49,6 @@ module.exports = {
 	TimeSlider,
 	Title,
 	ScheduleSwitch,
+	AdvancedSettings,
+	AdvancedSettingsBlock,
 };

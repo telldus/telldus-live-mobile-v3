@@ -182,7 +182,7 @@ class Details extends View {
 							{`${this.labelIPPublic}: ${ip}`}
 						</Text>
 						{
-							(address && key) && (
+							(!!address && !!key) && (
 								<Text style={locationInfo}>
 									{`${this.labelIPLocal}: ${address}`}
 								</Text>
@@ -191,7 +191,7 @@ class Details extends View {
 						<Text style={locationInfo}>
 							{`${this.labelSoftware}: v${version}`}
 						</Text>
-						{info && (info)}
+						{!!info && (info)}
 					</View>
 				</LabelBox>
 				<TitledInfoBlock

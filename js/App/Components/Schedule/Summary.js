@@ -22,15 +22,17 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
-import { FloatingButton, View } from '../../../BaseComponents';
+import {
+	FloatingButton,
+	View,
+} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
-import { ActionRow, DaysRow, DeviceRow, TimeRow } from './SubViews';
+import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -60,14 +62,9 @@ class Summary extends View<null, Props, State> {
 
 	state: State;
 
-	static propTypes = {
-		navigation: PropTypes.object,
-		actions: PropTypes.object,
-		onDidMount: PropTypes.func,
-		paddingRight: PropTypes.number,
-		schedule: PropTypes.object,
-		devices: PropTypes.object,
-	};
+	onToggleAdvanced: (boolean) => void;
+	setRefScroll: (any) => void;
+	scrollView: any;
 
 	constructor(props: Props) {
 		super(props);
@@ -87,6 +84,10 @@ class Summary extends View<null, Props, State> {
 			tmp: true, // TODO: fill with real fields
 		};
 		this.device = this._getDeviceById(schedule.deviceId);
+
+		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
+		this.setRefScroll = this.setRefScroll.bind(this);
+		this.scrollView = null;
 	}
 
 	componentDidMount() {
@@ -103,6 +104,7 @@ class Summary extends View<null, Props, State> {
 			isLoading: true,
 		});
 		let options = this.props.actions.getScheduleOptions(this.props.schedule);
+
 		this.props.actions.saveSchedule(options).then((response: Object) => {
 			this.setState({
 				isLoading: false,
@@ -130,16 +132,34 @@ class Summary extends View<null, Props, State> {
 		navigation.dispatch(action);
 	}
 
+	onToggleAdvanced(state: boolean) {
+		if (state && this.scrollView) {
+			this.scrollView.scrollToEnd({animated: true});
+		}
+	}
+
+	setRefScroll(ref: any) {
+		this.scrollView = ref;
+	}
+
 	render(): React$Element<any> {
-		const { schedule, paddingRight, appLayout, intl } = this.props;
+		const { schedule, paddingRight, appLayout, intl, actions } = this.props;
 		const { formatDate } = intl;
 		const { method, methodValue, weekdays } = schedule;
-		const { container, row, iconSize, buttonStyle, iconStyle, iconContainerStyle } = this._getStyle(appLayout);
+		const {
+			container,
+			row, iconSize,
+			buttonStyle,
+			iconStyle,
+			iconContainerStyle,
+		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
+
+		const { retries = 0, retryInterval = 0, reps = 0 } = schedule;
 
 		return (
 			<View style={{flex: 1}}>
-				<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+				<ScrollView ref={this.setRefScroll} style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 					<View style={container}>
 						<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
 						<ActionRow
@@ -159,6 +179,15 @@ class Summary extends View<null, Props, State> {
 							intl={intl}
 						/>
 						<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
+						<AdvancedSettingsBlock
+							appLayout={appLayout}
+							intl={intl}
+							onPressInfo={actions.showModal}
+							onDoneEditAdvanced={actions.setAdvancedSettings}
+							retries={retries}
+							retryInterval={retryInterval}
+							reps={reps}
+							onToggleAdvanced={this.onToggleAdvanced}/>
 					</View>
 					<FloatingButton
 						buttonStyle={buttonStyle}
