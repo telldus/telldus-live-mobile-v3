@@ -40,6 +40,7 @@ type Props = {
 	iconValueRight?: string,
 	inLineEditActive?: boolean,
 
+	valuePostfix?: string,
 	iconValueRightSize?: number,
 	edit?: boolean,
 	type?: 'switch' | 'text',
@@ -53,6 +54,7 @@ type Props = {
 };
 
 type DefaultProps = {
+	value: any,
 	type: 'switch' | 'text',
 	edit: boolean,
 	inLineEditActive: boolean,
@@ -71,6 +73,7 @@ class SettingsRow extends Component<Props, null> {
 	onSubmitEditing: () => void;
 
 	static defaultProps: DefaultProps = {
+		value: '',
 		type: 'switch',
 		edit: false,
 		inLineEditActive: false,
@@ -141,6 +144,7 @@ class SettingsRow extends Component<Props, null> {
 			iconValueRight,
 			inLineEditActive,
 			keyboardTypeInLineEdit,
+			valuePostfix,
 		} = this.props;
 
 		const {
@@ -203,7 +207,7 @@ class SettingsRow extends Component<Props, null> {
 						<View style={valueCover}>
 							{inLineEditActive ?
 								<TextInput
-									value={value ? value.toString() : ''}
+									value={value.toString()}
 									style={textField}
 									onChangeText={this.onChangeText}
 									onSubmitEditing={this.onSubmitEditing}
@@ -215,7 +219,7 @@ class SettingsRow extends Component<Props, null> {
 								/>
 								:
 								<Text style={valueText}>
-									{value}
+									{value} {valuePostfix}
 								</Text>
 							}
 							{!!iconValueRight && (
