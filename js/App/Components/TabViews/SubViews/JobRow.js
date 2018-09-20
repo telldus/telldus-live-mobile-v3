@@ -220,9 +220,11 @@ class JobRow extends View<null, Props, null> {
 						}}
 						timeStyle={time}
 						timeContainerStyle={{ opacity }}
-						rowContainerStyle={[rowContainer]}
-						rowWithTriangleContainerStyle={[rowWithTriangleContainer, { opacity }]}
+						rowStyle={{ opacity }}
+						rowContainerStyle={rowContainer}
+						rowWithTriangleContainerStyle={rowWithTriangleContainer}
 						triangleColor={methodIconContainer.backgroundColor}
+						triangleContainerStyle={{ opacity }}
 						isFirst={isFirst}
 					>
 						{actionIcon}
