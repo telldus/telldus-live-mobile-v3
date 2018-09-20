@@ -161,7 +161,7 @@ export default class SliderComponent extends Component<Props, State> {
 
 		const fontSize = this._getValueFontSize();
 		const width = this._getTextWidth(fontSize);
-		const translateX = (thumbStyle.width / 2) + this._getLeftPosition(value) - (width / 4);
+		const translateX = (thumbStyle.width / 2) + this._getLeftPosition(value);
 
 		return {
 			backgroundColor: 'transparent',
