@@ -22,19 +22,17 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
 
 import {
 	FloatingButton,
 	View,
-	Text,
-	IconTelldus,
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
-import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettings } from './SubViews';
+import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -58,15 +56,15 @@ interface Props extends ScheduleProps {
 
 type State = {
 	isLoading: boolean,
-	showAdvanced: boolean,
 };
 
 class Summary extends View<null, Props, State> {
 
 	state: State;
 
-	toggleAdvanced: () => void;
-	onDoneEditAdvanced: (Object) => void;
+	onToggleAdvanced: (boolean) => void;
+	setRefScroll: (any) => void;
+	scrollView: any;
 
 	constructor(props: Props) {
 		super(props);
@@ -75,7 +73,6 @@ class Summary extends View<null, Props, State> {
 
 		this.state = {
 			isLoading: false,
-			showAdvanced: false,
 		};
 
 		let { formatMessage } = intl;
@@ -88,8 +85,9 @@ class Summary extends View<null, Props, State> {
 		};
 		this.device = this._getDeviceById(schedule.deviceId);
 
-		this.toggleAdvanced = this.toggleAdvanced.bind(this);
-		this.onDoneEditAdvanced = this.onDoneEditAdvanced.bind(this);
+		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
+		this.setRefScroll = this.setRefScroll.bind(this);
+		this.scrollView = null;
 	}
 
 	componentDidMount() {
@@ -134,21 +132,19 @@ class Summary extends View<null, Props, State> {
 		navigation.dispatch(action);
 	}
 
-	toggleAdvanced() {
-		const { showAdvanced } = this.state;
-		this.setState({
-			showAdvanced: !showAdvanced,
-		});
+	onToggleAdvanced(state: boolean) {
+		if (state && this.scrollView) {
+			this.scrollView.scrollToEnd({animated: true});
+		}
 	}
 
-	onDoneEditAdvanced(settings: Object) {
-		this.props.actions.setAdvancedSettings(settings);
+	setRefScroll(ref: any) {
+		this.scrollView = ref;
 	}
 
 	render(): React$Element<any> {
-		const { showAdvanced } = this.state;
 		const { schedule, paddingRight, appLayout, intl, actions } = this.props;
-		const { formatDate, formatMessage } = intl;
+		const { formatDate } = intl;
 		const { method, methodValue, weekdays } = schedule;
 		const {
 			container,
@@ -156,17 +152,14 @@ class Summary extends View<null, Props, State> {
 			buttonStyle,
 			iconStyle,
 			iconContainerStyle,
-			settingsTextStyle,
-			iconSettingsStyle,
-			toggleAdvancedCover,
 		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
 
-		const { retries, retryInterval, reps } = schedule;
+		const { retries = 0, retryInterval = 0, reps = 0 } = schedule;
 
 		return (
 			<View style={{flex: 1}}>
-				<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+				<ScrollView ref={this.setRefScroll} style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 					<View style={container}>
 						<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
 						<ActionRow
@@ -186,28 +179,15 @@ class Summary extends View<null, Props, State> {
 							intl={intl}
 						/>
 						<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
-						<TouchableOpacity
-							onPress={this.toggleAdvanced}
-							style={toggleAdvancedCover}>
-							<IconTelldus icon={'settings'} style={iconSettingsStyle}/>
-							<Text style={settingsTextStyle}>
-								{showAdvanced ?
-									formatMessage(i18n.labelHideAdvanced)
-									:
-									formatMessage(i18n.labelShowAdvanced)
-								}
-							</Text>
-						</TouchableOpacity>
-						{showAdvanced && (
-							<AdvancedSettings
-								appLayout={appLayout}
-								intl={intl}
-								onPressInfo={actions.showModal}
-								onDoneEditAdvanced={this.onDoneEditAdvanced}
-								retries={retries}
-								retryInterval={retryInterval}
-								reps={reps}/>
-						)}
+						<AdvancedSettingsBlock
+							appLayout={appLayout}
+							intl={intl}
+							onPressInfo={actions.showModal}
+							onDoneEditAdvanced={actions.setAdvancedSettings}
+							retries={retries}
+							retryInterval={retryInterval}
+							reps={reps}
+							onToggleAdvanced={this.onToggleAdvanced}/>
 					</View>
 					<FloatingButton
 						buttonStyle={buttonStyle}
@@ -230,7 +210,7 @@ class Summary extends View<null, Props, State> {
 	};
 
 	_getStyle = (appLayout: Object): Object => {
-		const { paddingFactor, maxSizeFloatingButton, brandSecondary } = Theme.Core;
+		const { paddingFactor, maxSizeFloatingButton } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -261,21 +241,6 @@ class Summary extends View<null, Props, State> {
 			},
 			iconContainerStyle: {
 				width: deviceWidth * 0.226666667,
-			},
-			toggleAdvancedCover: {
-				flexDirection: 'row',
-				justifyContent: 'center',
-				alignItems: 'center',
-				paddingVertical: 4 + padding,
-			},
-			iconSettingsStyle: {
-				fontSize: deviceWidth * 0.040666667,
-				color: brandSecondary,
-				marginRight: 8,
-			},
-			settingsTextStyle: {
-				fontSize: deviceWidth * 0.040666667,
-				color: brandSecondary,
 			},
 		};
 	};
