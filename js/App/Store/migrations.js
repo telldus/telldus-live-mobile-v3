@@ -40,13 +40,23 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
-	const { gateways } = newState;
+	const { gateways, sensorsList } = newState;
 	if (gateways) {
 		// Insert the attribute/property 'localKey' to each gateways object if not already present.
 		const newGateways = insertLocalKeyAttribute(gateways);
 		newState = {
 			...newState,
 			gateways: newGateways,
+		};
+	}
+
+	if (sensorsList && sensorsList.defaultTypeById) {
+		const defaultSensorSettings = migrateToDefaultSensorSettings(sensorsList.defaultTypeById);
+		newState = {
+			...newState,
+			sensorsList: {
+				defaultSensorSettings,
+			},
 		};
 	}
 
@@ -79,4 +89,17 @@ const insertLocalKeyAttribute = (gateways: Object): Object => {
 		...gateways,
 		byId: newById,
 	};
+};
+
+
+const migrateToDefaultSensorSettings = (defaultTypeById: Object): Object => {
+	let defaultSensorSettings = {};
+	for (let key in defaultTypeById) {
+		defaultSensorSettings[key] = {
+			displayType: defaultTypeById[key],
+			displayTypeDB: null,
+			historySettings: {},
+		};
+	}
+	return defaultSensorSettings;
 };
