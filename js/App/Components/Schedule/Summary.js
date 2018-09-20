@@ -162,6 +162,8 @@ class Summary extends View<null, Props, State> {
 		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
 
+		const { retries, retryInterval, reps } = schedule;
+
 		return (
 			<View style={{flex: 1}}>
 				<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
@@ -201,7 +203,10 @@ class Summary extends View<null, Props, State> {
 								appLayout={appLayout}
 								intl={intl}
 								onPressInfo={actions.showModal}
-								onDoneEditAdvanced={this.onDoneEditAdvanced}/>
+								onDoneEditAdvanced={this.onDoneEditAdvanced}
+								retries={retries}
+								retryInterval={retryInterval}
+								reps={reps}/>
 						)}
 					</View>
 					<FloatingButton

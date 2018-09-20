@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { LayoutAnimation } from 'react-native';
-import { intlShape } from 'react-intl';
+import { intlShape, defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -31,9 +31,44 @@ import {
 } from '../../../../BaseComponents';
 
 import { LayoutAnimations } from '../../../Lib';
+
 import i18n from '../../../Translations/common';
+const messages = defineMessages({
+	retriesInfoPhraseOne: {
+		id: 'dialogue.content.retriesInfo.phraseOne',
+		defaultMessage: 'How many times the schedule will try again if your location is ' +
+		'offline when the schedule should run',
+	},
+	retriesInfoPhraseTwo: {
+		id: 'dialogue.content.retriesInfo.phraseTwo',
+		defaultMessage: 'If your location is online, the schedule will only run once',
+	},
+	intervalInfoPhraseOne: {
+		id: 'dialogue.content.intervalInfo.phraseOne',
+		defaultMessage: 'The interval, in minutes, between retries if your location is ' +
+		'offline when the schedule should run',
+	},
+	intervalInfoPhraseTwo: {
+		id: 'dialogue.content.intervalInfo.phraseTwo',
+		defaultMessage: 'The location must come online within \'number of retries\' * \'interval\' for ' +
+		'the schedule to run',
+	},
+	repeatInfoPhraseOne: {
+		id: 'dialogue.content.repeatInfo.phraseOne',
+		defaultMessage: 'Number of times a schedule command will be resent from the location. ' +
+		'Default value is 1 time, but it may be set to a maximum of 10, if the location for example is placed in an ' +
+		'environment with a lot of interference',
+	},
+	repeatInfoPhraseTwo: {
+		id: 'dialogue.content.repeatInfo.phraseTwo',
+		defaultMessage: 'There will be a 3 second pause between each resend',
+	},
+});
 
 type Props = {
+	retries: number,
+	retryInterval: number,
+	reps: number,
     appLayout: Object,
 
     intl: intlShape.isRequired,
@@ -68,10 +103,12 @@ onDoneEdit: () => void;
 constructor(props: Props) {
 	super(props);
 
+	const { retries = 0, retryInterval = 0, reps = 0 } = this.props;
+
 	this.state = {
-		retries: 3,
-		retryInterval: 5,
-		reps: 1,
+		retries: parseInt(retries, 10),
+		retryInterval: parseInt(retryInterval, 10),
+		reps: parseInt(reps, 10),
 		showAdvanced: false,
 		inLineEditActive: 0,
 	};
@@ -89,41 +126,42 @@ constructor(props: Props) {
 }
 
 onPressRetriesInfo() {
+	const { formatMessage } = this.props.intl;
 	const extras = {
-		dialogueHeader: 'Number of retries',
+		dialogueHeader: formatMessage(i18n.labelNumberOfRetries),
 		showPositive: false,
 		showNegative: false,
 		imageHeader: true,
 		showIconOnHeader: true,
 	};
-	this.props.onPressInfo('Number of retries How many times the schedule will try again if your location is ' +
-'offline when the schedule should run.If your location is online, the schedule will only run once.', extras);
+	const message = `${formatMessage(messages.retriesInfoPhraseOne)}.\n\n${formatMessage(messages.retriesInfoPhraseTwo)}.`;
+	this.props.onPressInfo(message, extras);
 }
 
 onPressIntervalInfo() {
+	const { formatMessage } = this.props.intl;
 	const extras = {
-		dialogueHeader: 'Number of retries',
+		dialogueHeader: formatMessage(i18n.labelRetryInterval),
 		showPositive: false,
 		showNegative: false,
 		imageHeader: true,
 		showIconOnHeader: true,
 	};
-	this.props.onPressInfo('Retry interval The interval, in minutes, between retries if your location is ' +
-'offline when the schedule should run. The location must come online within \'number of retries\' * \'interval\' for ' +
-'the schedule to run.', extras);
+	const message = `${formatMessage(messages.intervalInfoPhraseOne)}.\n\n${formatMessage(messages.intervalInfoPhraseTwo)}.`;
+	this.props.onPressInfo(message, extras);
 }
 
 onPressRepeatsInfo() {
+	const { formatMessage } = this.props.intl;
 	const extras = {
-		dialogueHeader: 'Number of retries',
+		dialogueHeader: formatMessage(i18n.labelRepeats),
 		showPositive: false,
 		showNegative: false,
 		imageHeader: true,
 		showIconOnHeader: true,
 	};
-	this.props.onPressInfo('Repeats Number of times a schedule command will be resent from the location. ' +
-'Default value is 1 time, but it may be set to a maximum of 10, if the location for example is placed in an ' +
-'environment with a lot of interference. There will be a 3 second pause between each resend.', extras);
+	const message = `${formatMessage(messages.repeatInfoPhraseOne)}.\n\n${formatMessage(messages.repeatInfoPhraseTwo)}.`;
+	this.props.onPressInfo(message, extras);
 }
 
 animate() {
@@ -208,6 +246,7 @@ render(): React$Element<any> {
 				inLineEditActive={inLineEditActive === 2}
 				label={formatMessage(i18n.labelRetryInterval)}
 				value={retryInterval}
+				valuePostfix={formatMessage(i18n.minutes).toLowerCase()}
 				appLayout={appLayout}
 				iconLabelRight={'help'}
 				iconValueRight={inLineEditActive === 2 ? 'done' : 'edit'}

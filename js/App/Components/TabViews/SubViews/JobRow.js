@@ -147,6 +147,9 @@ class JobRow extends View<null, Props, null> {
 			randomInterval,
 			active,
 			weekdays,
+			retries,
+			retryInterval,
+			reps,
 		} = this.props;
 
 		const schedule: Schedule = {
@@ -161,6 +164,9 @@ class JobRow extends View<null, Props, null> {
 			randomInterval,
 			active,
 			weekdays,
+			retries,
+			retryInterval,
+			reps,
 		};
 
 		editJob(schedule);
