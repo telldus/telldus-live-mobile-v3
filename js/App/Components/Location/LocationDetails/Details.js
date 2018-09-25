@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity, TouchableWithoutFeedback, Alert, NetInfo } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
@@ -67,6 +67,10 @@ class Details extends View {
 	labelSoftware: string;
 	confirmMessage: string;
 
+	onPressGatewayInfo: () => void;
+	infoPressCount: number;
+	timeoutInfoPress: any;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -88,6 +92,10 @@ class Details extends View {
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
 		this.onEditGeoPosition = this.onEditGeoPosition.bind(this);
 		this.onPressRemoveLocation = this.onPressRemoveLocation.bind(this);
+
+		this.onPressGatewayInfo = this.onPressGatewayInfo.bind(this);
+		this.infoPressCount = 0;
+		this.timeoutInfoPress = null;
 	}
 
 	componentDidMount() {
@@ -105,9 +113,15 @@ class Details extends View {
 		return nextProps.currentScreen === 'Details';
 	}
 
+	componentWillUnmount() {
+		this.infoPressCount = 0;
+		clearTimeout(this.timeoutInfoPress);
+	}
+
 	onEditName() {
 		const { navigation, location } = this.props;
 		navigation.navigate('EditName', {id: location.id, name: location.name});
+		this.infoPressCount = 0;
 	}
 
 	onEditTimeZone() {
@@ -115,17 +129,44 @@ class Details extends View {
 		let { params } = navigation.state;
 		let newParams = { ...params, id: location.id, timezone: location.timezone };
 		navigation.navigate('EditTimeZoneContinent', newParams);
+		this.infoPressCount = 0;
 	}
 
 	onEditGeoPosition() {
 		let { navigation, location } = this.props;
 		let { latitude, longitude, id } = location;
 		navigation.navigate('EditGeoPosition', { id, latitude, longitude });
+		this.infoPressCount = 0;
 	}
 
 	onPressRemoveLocation() {
 		let { actions } = this.props;
 		actions.showModal(this.confirmMessage, 'DELETE_LOCATION');
+		this.infoPressCount = 0;
+	}
+
+	onPressGatewayInfo() {
+		clearTimeout(this.timeoutInfoPress);
+		this.infoPressCount++;
+		if (this.infoPressCount >= 5) {
+			const { location } = this.props;
+			const { online, websocketOnline, localKey = {} } = location;
+			NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
+				this.infoPressCount = 0;
+				const { type, effectiveType } = connectionInfo;
+				const debugData = {
+					online,
+					websocketOnline,
+					...localKey,
+					connectionType: type,
+					connectionEffectiveType: effectiveType,
+				};
+				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
+			});
+		}
+		this.timeoutInfoPress = setTimeout(() => {
+			this.infoPressCount = 0;
+		}, 3000);
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
@@ -163,25 +204,27 @@ class Details extends View {
 			<View style={{flex: 1, paddingVertical: padding}}>
 				<LabelBox containerStyle={infoOneContainerStyle} appLayout={appLayout}>
 					<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
-					<View style={boxItemsCover}>
-						<Text style={[textName]}>
-							{type}
-						</Text>
-						<Text style={locationInfo}>
-							{`${this.labelIPPublic}: ${ip}`}
-						</Text>
-						{
-							(!!address && !!key) && (
-								<Text style={locationInfo}>
-									{`${this.labelIPLocal}: ${address}`}
-								</Text>
-							)
-						}
-						<Text style={locationInfo}>
-							{`${this.labelSoftware}: v${version}`}
-						</Text>
-						{!!info && (info)}
-					</View>
+					<TouchableWithoutFeedback style={{flex: 1}} onPress={this.onPressGatewayInfo}>
+						<View style={boxItemsCover}>
+							<Text style={[textName]}>
+								{type}
+							</Text>
+							<Text style={locationInfo}>
+								{`${this.labelIPPublic}: ${ip}`}
+							</Text>
+							{
+								(!!address && !!key) && (
+									<Text style={locationInfo}>
+										{`${this.labelIPLocal}: ${address}`}
+									</Text>
+								)
+							}
+							<Text style={locationInfo}>
+								{`${this.labelSoftware}: v${version}`}
+							</Text>
+							{!!info && (info)}
+						</View>
+					</TouchableWithoutFeedback>
 				</LabelBox>
 				<TitledInfoBlock
 					label={this.labelName}
