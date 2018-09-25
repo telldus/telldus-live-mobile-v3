@@ -25,12 +25,12 @@ import { NativeModules } from 'react-native';
 import type { ThunkAction } from './Types';
 
 export const configureAndroid = (): ThunkAction => {
-    return (dispatch: Function, getState: Function): any => {
-        const { user } = getState();
-        const { accessToken = {} } = user;
-        if (accessToken) {
-            const { AndroidWidget } = NativeModules;
-            AndroidWidget.configureWidgetData(accessToken, {});
-        }
-    }
-}
+	return (dispatch: Function, getState: Function): any => {
+		const { user } = getState();
+		const { accessToken = {} } = user;
+		if (accessToken) {
+			const { AndroidWidget } = NativeModules;
+			AndroidWidget.configureWidgetData(accessToken, {});
+		}
+	};
+};
