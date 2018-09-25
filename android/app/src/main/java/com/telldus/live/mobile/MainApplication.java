@@ -50,6 +50,7 @@ import com.tradle.react.UdpSocketsModule;
 import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
 import com.reactlibrary.RNReactNativeAccessibilityPackage;
 import com.airbnb.android.react.maps.MapsPackage;
+import com.telldus.live.mobile.WidgetPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -76,7 +77,8 @@ public class MainApplication extends Application implements ReactApplication {
 				new RNSensitiveInfoPackage(),
 				new RNReactNativeAccessibilityPackage(),
 				new MapsPackage(),
-				new RNI18nPackage()
+				new RNI18nPackage(),
+				new WidgetPackage()
 			);
 		}
 		
