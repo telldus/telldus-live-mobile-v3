@@ -59,6 +59,8 @@ import UserAgreement from './UserAgreement/UserAgreement';
 import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 
+import { configureAndroid } from '../Actions/Widget';
+
 const messages = defineMessages({
 	errortoast: {
 		id: 'errortoast',
@@ -162,6 +164,7 @@ class AppNavigator extends View {
 	componentWillMount() {
 		this.props.dispatch(appStart());
 		this.props.dispatch(appState());
+		this.props.dispatch(configureAndroid());
 	}
 
 	componentDidMount() {
