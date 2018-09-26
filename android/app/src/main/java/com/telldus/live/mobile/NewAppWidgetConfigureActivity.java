@@ -82,21 +82,15 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
     private String accessToken;
     private String expiresIn;
-    private String tokenType;
-    private String scope;
     private String refreshToken;
 
     private String client_ID;
     private String client_secret;
-    private String grant_Type;
-    private String user_name;
-    private String password;
 
 
     int stateID;
 
     private String sesID;
-    private String ttl;
     MyDBHandler database=new MyDBHandler(this);
     private PrefManager prefManager;
     private String switchStatus="false";
@@ -109,112 +103,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
         super.onCreate(icicle);
         prefManager=new PrefManager(this);
         boolean avail=prefManager.getAvailability();
-        if(!avail) {
-
-            File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
-            if (fileAuth.exists()) {
-                Log.d("File exists?", "Yes");
-
-                //Read text from file
-                StringBuilder text = new StringBuilder();
-
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(fileAuth));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        text.append(line);
-                        text.append('\n');
-                    }
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    JSONObject authInfo = new JSONObject(String.valueOf(text));
-
-                    accessToken = String.valueOf(authInfo.getString("access_token"));
-                    expiresIn = String.valueOf(authInfo.getString("expires_in"));
-                    tokenType = String.valueOf(authInfo.getString("token_type"));
-                    scope = String.valueOf(authInfo.getString("scope"));
-                    refreshToken = String.valueOf(authInfo.getString("refresh_token"));
-
-
-                    client_ID = String.valueOf(authInfo.getString("client_id"));
-                    client_secret = String.valueOf(authInfo.getString("client_secret"));
-                    grant_Type = String.valueOf(authInfo.getString("grant_type"));
-                    user_name = String.valueOf(authInfo.getString("username"));
-                    password = String.valueOf(authInfo.getString("password"));
-
-
-                    prefManager.timeStampAccessToken(expiresIn);
-                    prefManager.AccessTokenDetails(accessToken, expiresIn);
-                    prefManager.infoAccessToken(client_ID, client_secret, grant_Type, user_name, password, refreshToken);
-
-
-                    Log.d("Auth token", accessToken);
-                    Log.d("Expires in", expiresIn);
-                    Log.d("Token type", tokenType);
-                    Log.d("Scope", scope);
-                    Log.d("Refresh token", refreshToken);
-
-                    createDeviceApi();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-            File fileSession = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/session.txt");
-            if (fileSession.exists()) {
-                Log.d("File exists?", "Yes");
-                //Read text from file
-                StringBuilder text = new StringBuilder();
-
-                try {
-                    BufferedReader br = new BufferedReader(new FileReader(fileSession));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        text.append(line);
-                        text.append('\n');
-                    }
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    JSONObject authInfo = new JSONObject(String.valueOf(text));
-                    sesID = String.valueOf(authInfo.getString("sessionId"));
-                    ttl = String.valueOf(authInfo.getString("ttl"));
-
-                    Log.d("Session ID", sesID);
-                    Log.d("Expires in", ttl);
-                    prefManager.saveSessionID(sesID, ttl);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                prefManager.checkAvailability(true);
-            }
-
-        }
-        else
-        {
-            createDeviceApi();
-        }
-
-     /*  client_ID="XUTEKUFEJUBRUYA8E6UPH3ZUSPERAZUG";
-        client_secret="NUKU6APRAKATRESPECHEX3WECRAPHUCA";
-        grant_Type="password";
-        user_name="developer@telldus.com";
-        password="developer";
-        refreshToken="89342c1e2c06d8e80aee7fed52eb666e62c931d8";
-
-
-        prefManager.infoAccessToken(client_ID,client_secret,grant_Type,user_name,password,refreshToken);
-        prefManager.AccessTokenDetails("33d607e1ddc41188287a8ebbe03923dc550e2800","10800");
-        createDeviceApi();*/
+        createDeviceApi();
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
@@ -375,22 +264,14 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
         Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
         Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
-          textTest.setTypeface(titleFont);
-          chooseSetting.setTypeface(titleFont);
-
-
+        textTest.setTypeface(titleFont);
+        chooseSetting.setTypeface(titleFont);
     }
 
 
 
     void createDeviceApi() {
-      accessToken=prefManager.getAccess();
-    /*  pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
-      pDialog.setMax(5);
-      pDialog.setMessage("Please wait...");
-      pDialog.setCancelable(false);
-      pDialog.show();*/
-
+    accessToken=prefManager.getAccess();
       AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
               .addHeaders("Content-Type", "application/json")
               .addHeaders("Accpet", "application/json")
@@ -403,7 +284,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                       try {
 
                           JSONObject deviceData = new JSONObject(response.toString());
-                           Log.v("JSON Object",deviceData.toString());
                           JSONArray deviceList = deviceData.getJSONArray("device");
 
                           for (int i = 0; i < deviceList.length(); i++) {
@@ -411,7 +291,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                               String name = curObj.getString("name");
                               stateID = curObj.getInt("state");
 
-                              if (/*stateID == 1 || stateID == 2 ||*/stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512 || stateID == 16) {
+                              if (stateID == 1 || stateID == 2 || stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512 || stateID == 16) {
                                   Integer id = curObj.getInt("id");
                                   DeviceID.put(name, id);
                                   nameListItems.add(name);
@@ -420,7 +300,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                           }
                           deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                           deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
-                        /*  if (pDialog.isShowing())
+                          /*  if (pDialog.isShowing())
                               pDialog.dismiss();*/
                           //  Toast.makeText(getApplicationContext(),deviceStateList.toString(),Toast.LENGTH_LONG).show();
                       } catch (JSONException e) {

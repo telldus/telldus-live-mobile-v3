@@ -47,11 +47,10 @@ public class PrefManager {
         return pref.getString("access_date","");
     }
 
-    public void saveSessionID(String id, String ttl) {
+    public void saveSessionID(String id) {
         /*SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();*/
         editor.putString("session", id);
-        editor.putString("ttl", ttl);
         editor.commit();
     }
     public void TokenService(boolean b)
@@ -134,10 +133,6 @@ public class PrefManager {
     {
         return pref.getString("session","");
     }
-    public String getTTl() {
-        //SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        return pref.getString("ttl", "");
-    }
     public String getAccess()
     {
         return pref.getString("accessToken","");
@@ -146,13 +141,10 @@ public class PrefManager {
     {
         return pref.getString("expire","");
     }
-    public void infoAccessToken(String client_id,String client_secret,String grant_type,String user,String pwd,String ref)
+    public void infoAccessToken(String client_id,String client_secret,String ref)
     {
         editor.putString("client_id",client_id);
         editor.putString("client_secret",client_secret);
-        editor.putString("grant_type",grant_type);
-        editor.putString("user_name",user);
-        editor.putString("password",pwd);
         editor.putString("ref_token",ref);
         editor.commit();
     }
@@ -167,14 +159,6 @@ public class PrefManager {
     public String getGrantType()
     {
         return pref.getString("grant_type","");
-    }
-    public String getUsername()
-    {
-        return pref.getString("user_name","");
-    }
-    public String getPassword()
-    {
-        return pref.getString("password","");
     }
     public String refToken()
     {

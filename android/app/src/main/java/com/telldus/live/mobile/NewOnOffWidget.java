@@ -184,8 +184,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
         if (ACTION_ON.equals(intent.getAction())) {
             String accessToken="";
             String expiresIn;
-            String tokenType;
-            String scope;
             String refreshToken;
 
             Bundle extras=intent.getExtras();

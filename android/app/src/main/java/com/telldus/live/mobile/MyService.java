@@ -87,7 +87,7 @@ public class MyService extends Service {
 
         handler = new Handler(  (Looper.getMainLooper()));
         getClientList();
-
+        
     }
 
     void getClientList() {
@@ -509,7 +509,7 @@ public void FetchWebAddress()
                                 // start();
                                 Log.v("JSON Response",response.toString(5));
                                 //CallJSONResponse(uniqueId);
-                               prefManager.saveSessionID(uniq,"123323");
+                               prefManager.saveSessionID(uniq);
 
                               ConnectWebsocketAddress();
 

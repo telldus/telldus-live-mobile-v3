@@ -32,8 +32,6 @@ PrefManager prefManager;
                 .addBodyParameter("client_id",prefManager.getClientID())
                 .addBodyParameter("client_secret",prefManager.getClientSecret())
                 .addBodyParameter("grant_type",prefManager.getGrantType())
-                .addBodyParameter("username",prefManager.getUsername())
-                .addBodyParameter("password",prefManager.getPassword())
                 .setPriority(Priority.LOW)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {

@@ -179,7 +179,6 @@ public class NewSensorWidget extends AppWidgetProvider {
                 context.stopService(new Intent(context, MyService.class));
 
             }
-
         }
     }
 
