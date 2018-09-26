@@ -5,14 +5,16 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableMapKeySetIterator;
 
 import java.lang.System;
 import java.lang.String;
 import android.util.Log;
 
+import com.telldus.live.mobile.Database.PrefManager;
+
 public class WidgetModule extends ReactContextBaseJavaModule {
+
+  private PrefManager prefManager;
 
   public WidgetModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -24,19 +26,19 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void configureWidgetData(ReadableMap configData,ReadableMap sessionData) {
-    ReadableMapKeySetIterator it = configData.keySetIterator();
-    while (it.hasNextKey()) {
-        String key = it.nextKey();
-        switch (configData.getType(key)) {
-            case String:
-            System.out.println("---------------------");
-            System.out.println(configData.getString(key));
-            System.out.println("---------------------");
-            break;
-            default:
-            break;
-        }
-    }
+  public void configureWidgetAuthData(String accessToken, String refreshToken, String expiresIn, String clientId, String clientSecret) {
+    prefManager=new PrefManager(getReactApplicationContext());
+
+    prefManager.timeStampAccessToken(expiresIn);
+    prefManager.AccessTokenDetails(accessToken, expiresIn);
+    prefManager.infoAccessToken(clientId, clientSecret, refreshToken);
+  }
+
+
+  @ReactMethod
+  public void configureWidgetSessionData(String sessionId) {
+    prefManager=new PrefManager(getReactApplicationContext());
+
+    prefManager.saveSessionID(sessionId);
   }
 }

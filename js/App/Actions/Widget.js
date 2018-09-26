@@ -22,15 +22,20 @@
 
 import { NativeModules } from 'react-native';
 
+import { publicKey, privateKey } from '../../Config';
 import type { ThunkAction } from './Types';
 
 export const configureAndroid = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
-		const { user } = getState();
+		const { user, websockets } = getState();
 		const { accessToken = {} } = user;
-		if (accessToken) {
-			const { AndroidWidget } = NativeModules;
-			AndroidWidget.configureWidgetData(accessToken, {});
+		const { access_token = '', refresh_token = '', expires_in = ''} = accessToken; 
+		const { AndroidWidget } = NativeModules;
+		AndroidWidget.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey);
+		
+		const { session } = websockets
+		if (session && session.id) {
+			AndroidWidget.configureWidgetSessionData(session.id);
 		}
 	};
 };
