@@ -28,7 +28,7 @@ import type { Action, ThunkAction } from './Types';
 import { apiServer } from 'Config';
 import { publicKey, privateKey, authenticationTimeOut } from 'Config';
 import { Answers } from 'react-native-fabric';
-import FileSystem from 'react-native-filesystem';
+import RNFS from 'react-native-fs';
 import {LiveApi} from 'LiveApi';
 import { destroyAllConnections } from 'Actions_Websockets';
 
@@ -102,13 +102,23 @@ function showLoginError(errorMessage: string): Action {
 }
 
 async function writeToFile(data) {
-	await FileSystem.writeToFile('auth.txt', data);
-	console.log('Data written successfully!');
+	// await FileSystem.writeToFile('auth.txt', data);
+	// console.log('Data written successfully!');
+var path = RNFS.DocumentDirectoryPath + '/auth.txt';
+
+// write the file
+RNFS.writeFile(path, data, 'utf8')
+  .then((success) => {
+    console.log('FILE WRITTEN!');
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
 }
 
 async function readFile() {
-	const fileContents = await FileSystem.readFile('auth.txt');
-	console.log(`read data from file: ${fileContents}`);
+	// const fileContents = await FileSystem.readFile('auth.txt');
+	// console.log(`read data from file: ${fileContents}`);
 }
 
 function updateAccessToken(accessToken:Object): Action {

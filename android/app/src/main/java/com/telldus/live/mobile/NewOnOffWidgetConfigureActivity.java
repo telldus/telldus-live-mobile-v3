@@ -133,7 +133,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         prefManager=new PrefManager(this);
         boolean avail=prefManager.getAvailability();
         if(!avail) {
-            File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/auth.txt");
+            File fileAuth = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/auth.txt");
             if (fileAuth.exists()) {
                 Log.d("File exists?", "Yes");
 
@@ -186,7 +186,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             }
 
 
-            File fileSession = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/RNFS-BackedUp/session.txt");
+            File fileSession = new File(getApplicationContext().getFilesDir().getAbsolutePath() + "/session.txt");
             if (fileSession.exists()) {
                 Log.d("File exists?", "Yes");
                 //Read text from file

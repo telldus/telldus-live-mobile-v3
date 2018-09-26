@@ -137,8 +137,8 @@ packagingOptions {
        exclude 'META-INF/dependencies.txt'
        exclude 'META-INF/LGPL2.1'
    }
-    compileSdkVersion 24
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.telldus.live.mobile"
@@ -186,16 +186,14 @@ packagingOptions {
 }
 
 dependencies {
-    compile project(':react-native-filesystem')
+    compile project(':react-native-fs')
     compile project(':react-native-maps')
     compile project(':react-native-fabric')
     compile project(':react-native-i18n')
-    compile project(':react-native-push-notification')
     compile project(':react-native-extra-dimensions-android')
     compile project(':react-native-orientation')
     compile project(':react-native-device-info')
     compile project(':react-native-vector-icons')
-    compile project(':react-native-push-notification')
     compile ('com.google.android.gms:play-services-gcm:9.2.0') {
         force = true;
     }
