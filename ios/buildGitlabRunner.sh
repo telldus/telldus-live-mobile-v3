@@ -13,6 +13,7 @@ module.exports = {
     forceLocale: '',
     pushSenderId: '',
     pushServiceId: '${PUSH_SERVICE_ID_IOS}',
+    googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}'
 };
 EOF
 
