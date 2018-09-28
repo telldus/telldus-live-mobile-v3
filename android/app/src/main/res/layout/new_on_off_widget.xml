@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/widget_margin">
+    android:padding="@dimen/widget_margin"
+    android:id="@+id/widget_root">
 
     <LinearLayout
         android:id="@+id/iconWidget"
@@ -29,44 +30,51 @@
                 android:textColor="@color/white"/>
 
         </LinearLayout>
-
         <LinearLayout
-            android:id="@+id/parentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:id="@+id/widget_content_cover">
 
             <LinearLayout
-                android:id="@+id/offLinear"
-                android:layout_width="0dip"
-                android:layout_height="40sp"
-                android:layout_weight="0.5">
+                android:id="@+id/parentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/iconOff"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="8sp"/>
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/offLinear"
+                    android:layout_width="0dip"
+                    android:layout_height="40sp"
+                    android:layout_weight="0.5">
+
+                    <ImageView
+                        android:id="@+id/iconOff"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="8sp"/>
+                </LinearLayout>
 
 
-            <LinearLayout
-                android:id="@+id/onLayout"
-                android:layout_width="0dip"
-                android:layout_height="40sp"
-                android:layout_weight="0.5">
+                <LinearLayout
+                    android:id="@+id/onLayout"
+                    android:layout_width="0dip"
+                    android:layout_height="40sp"
+                    android:layout_weight="0.5">
 
-                <ImageView
-                    android:id="@+id/iconOn"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="8sp"
-                    />
+                    <ImageView
+                        android:id="@+id/iconOn"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="8sp"
+                        />
 
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-</LinearLayout>
     </LinearLayout>
+</LinearLayout>
