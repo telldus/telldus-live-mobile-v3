@@ -22,6 +22,7 @@
 
 'use strict';
 
+import { NativeModules } from 'react-native';
 import axios from 'axios';
 import type { Action, ThunkAction } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
@@ -90,13 +91,16 @@ function getUserProfile(): ThunkAction {
 }
 
 function logoutFromTelldus(): ThunkAction {
+
+	const { AndroidWidget } = NativeModules;
+	AndroidWidget.disableAllWidgets('Telldus Live! Logged Out!!');
 	destroyAllConnections();
+
 	return (dispatch: Function): Function => {
 		return dispatch({
 			type: 'LOGGED_OUT',
 		});
 	};
-
 }
 
 module.exports = {
