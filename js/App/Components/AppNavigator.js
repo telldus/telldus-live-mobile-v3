@@ -41,6 +41,7 @@ import {
 	autoDetectLocalTellStick,
 	setAppLayout,
 	resetLocalControlIP,
+	closeUDPSocket,
 } from '../Actions';
 import { getRSAKey } from '../Lib';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -255,6 +256,7 @@ class AppNavigator extends View {
 			'connectionChange',
 			this.handleConnectivityChange,
 		);
+		closeUDPSocket();
 	}
 
 	_showToast(message: string, durationToast: any, positionToast: any) {

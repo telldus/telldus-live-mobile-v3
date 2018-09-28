@@ -35,9 +35,14 @@ const { Gateways } = actions;
 
 import dgram from 'dgram';
 
-let socket: Object = {};
+let socket: Object | null = null;
 const broardcastAddress = '255.255.255.255';
 const broardcastPort = 30303;
+const STATE = {
+	UNBOUND: 0,
+	BINDING: 1,
+	BOUND: 2,
+};
 
 
 function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
@@ -72,29 +77,27 @@ function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
 	};
 }
 
-function autoDetectLocalTellStick(): ThunkAction {
+function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
-		if (socket._id && socket._id > 0) {
-			socket.close();
+		if (socket && socket._state === STATE.BOUND) {
+			closeUDPSocket();
 		}
 		socket = dgram.createSocket('udp4');
 		const aPort = randomPort();
-		if (socket._state === 0) {
-			try {
-				// $FlowFixMe
-				socket.bind(aPort, (err: string) => {
-					if (err) {
-						throw err;
-					}
-				});
-			} catch (err) {
-				reportException(err);
-			}
+		try {
+			// $FlowFixMe
+			socket.bind(aPort, (err: string) => {
+				if (err) {
+					throw err;
+				}
+				if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
+					socket.setBroadcast(true);
+				}
+			});
+		} catch (err) {
+			reportException(err);
 		}
 		socket.once('listening', () => {
-			if (Platform.OS !== 'android') {
-				socket.setBroadcast(true);
-			}
 			let buf = toByteArray('D');
 			socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
 				if (err) {
@@ -132,6 +135,12 @@ function autoDetectLocalTellStick(): ThunkAction {
 			}
 		});
 	};
+}
+
+function closeUDPSocket() {
+	if (socket && socket.close) {
+		socket.close();
+	}
 }
 
 function toByteArray(obj: string): any {
@@ -188,4 +197,5 @@ module.exports = {
 	getTokenForLocalControl,
 	autoDetectLocalTellStick,
 	resetLocalControlIP,
+	closeUDPSocket,
 };
