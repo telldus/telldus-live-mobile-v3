@@ -35,7 +35,7 @@ const { Gateways } = actions;
 
 import dgram from 'dgram';
 
-let socket: Object | null = null;
+let socket: Object = {};
 const broardcastAddress = '255.255.255.255';
 const broardcastPort = 30303;
 const STATE = {
@@ -79,7 +79,7 @@ function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
 
 function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
-		if (socket && socket._state === STATE.BOUND) {
+		if (socket._state && socket._state === STATE.BOUND) {
 			closeUDPSocket();
 		}
 		socket = dgram.createSocket('udp4');
