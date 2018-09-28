@@ -35,11 +35,11 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +51,7 @@ import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.Utility.Sensor;
+import com.telldus.live.mobile.MainActivity;
 
 /**
  * The configuration screen for the {@link NewSensorWidget NewSensorWidget} AppWidget.
@@ -106,10 +107,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-
         prefManager=new PrefManager(this);
-        boolean avail=prefManager.getAvailability();
+        accessToken = prefManager.getAccess();
+        if (accessToken == "") {
+            Intent launchActivity = new Intent(getApplicationContext(), MainActivity.class);
+            getApplicationContext().startActivity(launchActivity);
+            return;
+        }
         createSensorApi();
 
         setResult(RESULT_CANCELED);
