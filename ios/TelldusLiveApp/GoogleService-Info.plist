@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>***************</string>
 	<key>CLIENT_ID</key>
-	<string>*******************</string>
+	<string>335992541329-dt0d2antleugo6egffukmvfhpfjnhjrp.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>***************</string>
+	<string>com.googleusercontent.apps.335992541329-dt0d2antleugo6egffukmvfhpfjnhjrp</string>
 	<key>API_KEY</key>
 	<string>*****************</string>
 	<key>GCM_SENDER_ID</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:*******:ios:********</string>
+	<string>1:335992541329:ios:c3fa29fd35b7c867</string>
 	<key>DATABASE_URL</key>
 	<string>https://telldus-1111.firebaseio.com</string>
 </dict>
