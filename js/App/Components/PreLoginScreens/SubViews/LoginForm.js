@@ -195,15 +195,26 @@ class LoginForm extends View {
 	}
 
 	async signIn(): any {
+		const { dispatch } = this.props;
 		this.setState({ isSigninInProgress: true });
 		try {
 			await GoogleSignin.hasPlayServices();
 			const data = await GoogleSignin.signIn();
-			this.setState({
-				data,
-				isSigninInProgress: false,
-			});
-			// TODO: complete login once endpoint is ready.
+			const { idToken } = data;
+			if (idToken) {
+				const credential = {
+					idToken,
+				};
+				this.props.loginToTelldus(credential, 'google')
+					.catch((err: Object) => {
+						this.setState({
+							isSigninInProgress: false,
+						});
+						this.handleLoginError(err);
+					});
+			} else {
+				dispatch(showModal(this.unknownError));
+			}
 		  } catch (error) {
 			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
 			  // user cancelled the login flow
@@ -211,8 +222,10 @@ class LoginForm extends View {
 			  // operation (f.e. sign in) is in progress already
 			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
 			  // play services not available or outdated
+			  dispatch(showModal('Please make sure you have the latest version of google play services installed.'));// TODO : Confirm and translate the message string
 			} else {
 			  // some other error happened
+			  dispatch(showModal(this.unknownError));
 			}
 			this.setState({ isSigninInProgress: false });
 		  }

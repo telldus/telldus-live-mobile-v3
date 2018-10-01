@@ -24,7 +24,7 @@
 
 import { NativeModules } from 'react-native';
 import axios from 'axios';
-import type { Action, ThunkAction } from './Types';
+import type { Action, ThunkAction, GrantType } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
 import { Answers } from 'react-native-fabric';
 
@@ -40,7 +40,7 @@ type loginCredentialSocial = {
 	idToken: string,
 };
 
-const loginToTelldus = (credential: loginCredential | loginCredentialSocial): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
+const loginToTelldus = (credential: loginCredential | loginCredentialSocial, grantType?: GrantType = 'password'): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	return axios({
 		method: 'post',
 		headers: {
@@ -52,7 +52,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial): Th
 		data: {
 			'client_id': publicKey,
 			'client_secret': privateKey,
-			'grant_type': 'password',
+			'grant_type': grantType,
 			...credential,
 		},
 	  })
