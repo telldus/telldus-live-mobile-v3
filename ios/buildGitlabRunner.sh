@@ -20,6 +20,12 @@ module.exports = {
 };
 EOF
 
+cat > Release.xcconfig <<EOF
+#include "./Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.release.xcconfig"
+
+GOOGLE_IOS_REVERSED_CLIENT_ID = ${GOOGLE_IOS_REVERSED_CLIENT_ID}
+EOF
+
 echo "${GOOGLE_SERVICES_PLIST}" > TelldusLiveApp/GoogleService-Info.plist
 
 cd ..

@@ -24,6 +24,8 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD4E8D787A68404D96264B38 /* libUdpSockets.a */; };
 		267ABE6020F78777006CD1B5 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 267ABE5920F78730006CD1B5 /* libRNSVG.a */; };
+		26BB28B021622F8F0027C32A /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26BB28AF21622F8F0027C32A /* Debug.xcconfig */; };
+		26BB28B2216230CA0027C32A /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26BB28B1216230CA0027C32A /* Release.xcconfig */; };
 		26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26C0E61D205C17B700E9AD6A /* libRNI18n.a */; };
 		26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC2221424D8A0060DC8E /* AddressBook.framework */; };
 		26D4DC5921424D9B0060DC8E /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DBFB21424C620060DC8E /* libRNGoogleSignin.a */; };
@@ -490,6 +492,8 @@
 		25A65B32BEBD4964AC8D3213 /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
 		267ABE2520F78730006CD1B5 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		26A439EF2100AB5500022896 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTOrientation.xcodeproj; path = "../node_modules/react-native-orientation-locker/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; };
+		26BB28AF21622F8F0027C32A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		26BB28B1216230CA0027C32A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		26C0E617205C17B600E9AD6A /* RNI18n.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNI18n.xcodeproj; path = "../node_modules/react-native-i18n/ios/RNI18n.xcodeproj"; sourceTree = "<group>"; };
 		26D4DBCD21424C610060DC8E /* RNGoogleSignin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGoogleSignin.xcodeproj; path = "../node_modules/react-native-google-signin/ios/RNGoogleSignin.xcodeproj"; sourceTree = "<group>"; };
 		26D4DC2221424D8A0060DC8E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -921,6 +925,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				26BB28B1216230CA0027C32A /* Release.xcconfig */,
+				26BB28AF21622F8F0027C32A /* Debug.xcconfig */,
 				13B07FAE1A68108700A75B9A /* TelldusLiveApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -1551,6 +1557,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				D2986F407B4048AC96288B60 /* FontAwesome.ttf in Resources */,
+				26BB28B021622F8F0027C32A /* Debug.xcconfig in Resources */,
 				F833995608B34A6AA1968135 /* Entypo.ttf in Resources */,
 				28061C46E49841668FDE1C6C /* EvilIcons.ttf in Resources */,
 				DC98AE9FD1CA4A448FC5C87D /* Foundation.ttf in Resources */,
@@ -1564,6 +1571,7 @@
 				E01A717BB6604D8D8C4C0CA0 /* telldusicons.ttf in Resources */,
 				68CC7CCADF574C7AB546E29B /* telldusicons.svg in Resources */,
 				DD7823359AB84A89988A5D47 /* Roboto-Light.ttf in Resources */,
+				26BB28B2216230CA0027C32A /* Release.xcconfig in Resources */,
 				695CAC4B3F4E464D989EC4D2 /* Roboto-Medium.ttf in Resources */,
 				794DAA9AEBAE4A7291C53EB5 /* Roboto-Regular.ttf in Resources */,
 				26D4DD542142612A0060DC8E /* GoogleService-Info.plist in Resources */,
@@ -1658,7 +1666,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6CE961F3EE90A0E326684E5 /* Pods-TelldusLiveApp.debug.xcconfig */;
+			baseConfigurationReference = 26BB28AF21622F8F0027C32A /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TelldusLiveApp/TelldusLiveApp.entitlements;
@@ -1711,7 +1719,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E3C5F7C8FDE3C261C5988FCF /* Pods-TelldusLiveApp.release.xcconfig */;
+			baseConfigurationReference = 26BB28B1216230CA0027C32A /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TelldusLiveApp/TelldusLiveApp.entitlements;
@@ -1763,6 +1771,7 @@
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26BB28AF21622F8F0027C32A /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1808,6 +1817,7 @@
 		};
 		83CBBA211A601CBA00E9B192 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 26BB28B1216230CA0027C32A /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
