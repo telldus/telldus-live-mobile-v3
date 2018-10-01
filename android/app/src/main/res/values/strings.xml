@@ -1,3 +1,11 @@
 <resources>
-	<string name="app_name">Telldus Live! mobile</string>
+	<string name="app_name">Telldus Live! Mobile</string>
+	<string name="appwidget_text">EXAMPLE</string>
+	<string name="configure">Configure</string>
+	<string name="add_widget">Add widget</string>
+	<string name="pick_device">Pick a device</string>
+
+	<string name="pick_sensor">Pick a sensor</string>
+	<string name="pick_sensor_data">Pick a sensor data type</string>
+	<string name="confirm">Confirm &amp; Save</string>
 </resources>

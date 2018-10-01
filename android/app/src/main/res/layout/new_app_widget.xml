@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/widget_margin">
+
+    <LinearLayout
+        android:id="@+id/iconWidget"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/shape_widget"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/txtWidgetTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Light Switch"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:id="@+id/widget_content_cover">
+            <LinearLayout
+                android:id="@+id/parentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/offLinear"
+                    android:layout_width="0dip"
+                    android:layout_height="40sp"
+                    android:layout_weight="0.5">
+
+                    <ImageView
+                        android:id="@+id/iconOff"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="8sp"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/onLayout"
+                    android:layout_width="0dip"
+                    android:layout_height="40sp"
+                    android:layout_weight="0.5">
+
+                        <ImageView
+                        android:id="@+id/iconOn"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="8sp"
+                        />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bellLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+
+                <RelativeLayout
+                    android:id="@+id/bellWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_centerInParent="true">
+
+                    <ImageView
+                        android:id="@+id/bell"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:background="@drawable/bell"/>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/updownarrow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/updownarrowwidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_centerInParent="true">
+
+                        <ImageView
+                            android:id="@+id/uparrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:background="@drawable/uparrow"/>
+                        <ImageView
+                            android:id="@+id/downarrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/downarrow"/>
+                        <ImageView
+                            android:id="@+id/stopicon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginBottom="1dp"
+                            android:layout_marginLeft="15dp"
+                            android:background="@drawable/stop"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/uibtns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_centerInParent="true">
+
+                        <Button
+                            android:id="@+id/btna"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="20dp"
+                            android:background="@color/lightGray"
+                            android:textColor="@color/black"
+                            android:visibility="gone"/>
+                        <Button
+                            android:id="@+id/btnb"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="50"
+                            android:textSize="20dp"
+                            android:textColor="@color/black"
+                            android:visibility="gone"/>
+                        <Button
+                            android:id="@+id/btnc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="100"
+                            android:textSize="20dp"
+                            android:textColor="@color/black"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/seekbarlayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/dimmerWidget"
+                    android:layout_width="180dp"
+                    android:background="@color/white"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50sp"
+                        android:orientation="horizontal"
+                        android:layout_centerInParent="true">
+
+                <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/dimmerOff"
+                            android:layout_width="36dp"
+                            android:layout_gravity="center"
+                            android:layout_height="match_parent" />
+                </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/dimmer25"
+                            android:layout_width="36dp"
+                            android:layout_height="match_parent" />
+
+                            <TextView
+                                android:id="@+id/txtDimmer25"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="25%"
+                                android:textSize="10sp"
+                                android:layout_gravity="center"
+                                android:textColor="@color/orange"
+                                android:layout_marginTop="10dp"
+                                android:textStyle="bold"/>
+
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+
+                        <ImageView
+                            android:id="@+id/dimmer50"
+                            android:layout_width="36dp"
+                            android:layout_height="match_parent" />
+                            <TextView
+                                android:id="@+id/txtDimmer50"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="50%"
+                                android:textSize="10sp"
+                                android:layout_gravity="center"
+                                android:textColor="@color/orange"
+                                android:layout_marginTop="10dp"
+                                android:textStyle="bold"/>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/dimmer75"
+                            android:layout_width="36dp"
+                            android:layout_height="match_parent" />
+                            <TextView
+                                android:id="@+id/txtDimmer75"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="75%"
+                                android:textSize="10sp"
+                                android:layout_gravity="center"
+                                android:textColor="@color/orange"
+                                android:layout_marginTop="10dp"
+                                android:textStyle="bold"/>
+
+                        </FrameLayout>
+                        <ImageView
+                            android:id="@+id/dimmerOn"
+                            android:layout_width="36dp"
+                            android:layout_height="match_parent" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

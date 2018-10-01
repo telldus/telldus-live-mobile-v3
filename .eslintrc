@@ -1,7 +1,6 @@
 {
   "parser": "babel-eslint",
 
-
   "env": {
     "es6": true,
     "jasmine": true
@@ -194,9 +193,7 @@
       "before": false,
       "after": true
     }],                              // Spacing around commas improve readability of a list of items.
-    "no-multi-spaces": [2, {
-      "ignoreEOLComments": true
-    }],                              // Multiple spaces in a row that are not used for indentation are typically mistakes
+    "no-multi-spaces": 2,            // Multiple spaces in a row that are not used for indentation are typically mistakes
     "brace-style": [1, "1tbs"],      // enforce one true brace style (off by default)
     "camelcase": 0,                  // require camel case names
     "consistent-this": 1,            // enforces consistent naming when capturing the current execution context (off by default)

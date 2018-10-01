@@ -54,6 +54,7 @@ import {
 	closeUDPSocket,
 } from '../Actions';
 import { hideDimmerStep } from '../Actions/Dimmer';
+import { configureAndroid } from '../Actions/Widget';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import {
 	getRSAKey,
@@ -151,6 +152,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	componentDidMount() {
 		this.props.dispatch(appStart());
 		this.props.dispatch(appState());
+		this.props.dispatch(configureAndroid());
 		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 		// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 		// and results in generating multiple tokens.

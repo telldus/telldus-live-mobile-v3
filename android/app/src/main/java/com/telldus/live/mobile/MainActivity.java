@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 
 import com.facebook.react.ReactInstanceManager;
+import android.os.Bundle;
 
 public class MainActivity extends ReactActivity {
 	static String currentLocale;
@@ -34,6 +35,11 @@ public class MainActivity extends ReactActivity {
 	@Override
 	protected String getMainComponentName() {
 		return "TelldusLiveApp";
+	}
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+		//	setContentView(R.layout.activity_main);
 	}
 
 	@Override
