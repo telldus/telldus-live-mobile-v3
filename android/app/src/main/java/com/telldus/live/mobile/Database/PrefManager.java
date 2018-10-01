@@ -17,6 +17,7 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package com.telldus.live.mobile.Database;
 
 import android.content.Context;
