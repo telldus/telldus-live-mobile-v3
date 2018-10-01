@@ -1,0 +1,10 @@
+//
+//  Debug.xcconfig
+//  TelldusLiveApp
+//
+//  Created by Rimnesh Fernandez on 01/10/18.
+//  Copyright © 2018 Telldus Technologies AB. All rights reserved.
+//
+#include "./Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.debug.xcconfig"
+
+GOOGLE_IOS_REVERSED_CLIENT_ID = com.googleusercontent.apps.335992541329-dt0d2antleugo6egffukmvfhpfjnhjrp
