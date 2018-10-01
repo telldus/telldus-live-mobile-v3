@@ -37,7 +37,6 @@ import {
 	FloatingButton,
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
-import { reportError } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 const messages = defineMessages({
@@ -161,8 +160,6 @@ class TimeZone extends View<void, Props, State> {
 					this.setState({
 						isLoading: false,
 					});
-					let log = JSON.stringify(error);
-					reportError(log);
 				});
 		} else {
 			navigation.navigate({

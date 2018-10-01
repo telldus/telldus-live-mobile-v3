@@ -51,6 +51,7 @@ import {
 	addNewGateway,
 	showToast,
 	switchTab,
+	closeUDPSocket,
 } from '../Actions';
 import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
@@ -260,6 +261,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			'connectionChange',
 			this.handleConnectivityChange,
 		);
+		closeUDPSocket();
 	}
 
 	_showToast(message: string, durationToast: any, positionToast: any) {

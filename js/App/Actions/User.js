@@ -30,7 +30,7 @@ const { User } = actions;
 
 import type { ThunkAction, Action } from './Types';
 import { publicKey, privateKey, apiServer } from '../../Config';
-import { LiveApi, reportError } from '../Lib';
+import { LiveApi } from '../Lib';
 
 
 /*
@@ -69,8 +69,6 @@ const registerPushToken = (token: string, name: string, model: string, manufactu
 		}
 		throw response;
 	}).catch((e: Object) => {
-		let log = JSON.stringify(e);
-		reportError(log);
 		if (e === 'TypeError: Network request failed') {
 			dispatch({
 				type: 'ERROR',
