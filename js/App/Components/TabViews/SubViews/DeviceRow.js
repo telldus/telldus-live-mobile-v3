@@ -668,7 +668,9 @@ class DeviceRow extends View<Props, State> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.device.clientDeviceId);
+	const { clientDeviceId, clientId } = ownProps.device;
+	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
+
 	return {
 		tab: store.navigation.tab,
 		powerConsumed,
