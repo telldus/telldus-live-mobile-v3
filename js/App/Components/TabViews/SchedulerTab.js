@@ -62,6 +62,7 @@ type NavigationParams = {
 
 type Props = {
 	rowsAndSections: Object,
+	showInactive: boolean,
 	navigation: Object,
 	screenProps: Object,
 	dispatch: Function,
@@ -77,13 +78,6 @@ class SchedulerTab extends View<null, Props, State> {
 
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
-
-	static propTypes = {
-		rowsAndSections: PropTypes.object,
-		dispatch: PropTypes.func,
-		navigation: PropTypes.object,
-		screenProps: PropTypes.object,
-	};
 
 	static navigationOptions = (props: Object): Object => ({
 		title: props.screenProps.intl.formatMessage(i18n.scheduler),
@@ -171,7 +165,7 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { rowsAndSections, screenProps } = this.props;
+		const { rowsAndSections, screenProps, showInactive } = this.props;
 		const { appLayout, intl, currentScreen } = screenProps;
 		const { formatMessage } = intl;
 		const { todayIndex, isLoading } = this.state;
@@ -193,6 +187,7 @@ class SchedulerTab extends View<null, Props, State> {
 					intl={screenProps.intl}
 					onToggleVisibility={this.onToggleVisibility}
 					currentScreen={currentScreen}
+					showInactive={showInactive}
 				/>
 				<Swiper
 					ref={this._refScroll}
@@ -370,8 +365,12 @@ type MapStateToPropsType = {
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {
+	const { jobsList = {} } = store;
+	const { userOptions = {} } = jobsList;
+	const { showInactive = true } = userOptions;
 	return {
 		rowsAndSections: getRowsAndSections(store),
+		showInactive,
 	};
 };
 

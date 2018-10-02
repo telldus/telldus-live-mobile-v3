@@ -46,6 +46,7 @@ type Props = {
 	onToggleVisibility: (boolean) => void,
 	intl: Object,
 	currentScreen: string,
+	showInactive: boolean,
 };
 
 type State = {
@@ -80,7 +81,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			showRightButton: true,
 			daysLayout: {},
 			dragDir: undefined,
-			showInactive: true,
+			showInactive: props.showInactive,
 		};
 		// weekdays animation ranges from value (1 -> 0) while dragging/sliding left(visiting yesterday)
 		// weekdays animation ranges from value (1 -> 2) while dragging/sliding right(visiting tomorrow)
