@@ -31,12 +31,13 @@ import Platform from 'Platform';
 import StatusBar from 'StatusBar';
 
 import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from '../../../../BaseComponents';
-import i18n from '../../../Translations/common';
 import { states, statusMessage } from '../../../../Config';
+
+import { getOriginString } from '../../../Lib';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 
-
+import i18n from '../../../Translations/common';
 const messages = defineMessages({
 	announcementOnDetailsModalOpen: {
 		id: 'accessibilityLabel.announcementOnDetailsModalOpen',
@@ -83,7 +84,7 @@ class DeviceHistoryDetails extends View {
 	}
 
 	render(): Object {
-		let { detailsData, appLayout, currentScreen } = this.props;
+		let { detailsData, appLayout, currentScreen, intl } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
 
@@ -104,19 +105,8 @@ class DeviceHistoryDetails extends View {
 			detailsTextError,
 		} = this.getStyle(appLayout);
 
-		if (origin && origin === 'Scheduler') {
-			originText = <FormattedMessage {...i18n.scheduler} style={detailsText}/>;
-		} else if (origin && origin === 'Incoming signal') {
-			originText = <FormattedMessage {...i18n.incommingSignal} style={detailsText}/>;
-		} else if (origin && origin === 'Unknown') {
-			originText = <FormattedMessage {...i18n.unknown} style={detailsText}/>;
-		} else if (origin && origin.substring(0, 5) === 'Group') {
-			originText = <Text style={detailsText}><FormattedMessage {...i18n.group} style={detailsText}/> {origin.substring(6, (origin.length))}</Text>;
-		} else if (origin && origin.substring(0, 5) === 'Event') {
-			originText = <Text style={detailsText}><FormattedMessage {...i18n.event} style={detailsText}/> {origin.substring(6, (origin.length))}</Text>;
-		} else {
-			originText = origin;
-		}
+		originText = getOriginString(origin, intl.formatMessage);
+
 		if (this.props.detailsData.state) {
 			let state = states[this.props.detailsData.state];
 			textState = state === 'Dim' ? `${state} ${this.getPercentage(stateValue)}%` : state;
