@@ -21,6 +21,7 @@
 // @flow
 
 'use strict';
+import { translations } from 'live-shared-data';
 
 // Activate languages when they have been translated.
 
@@ -40,15 +41,5 @@ import sv from 'react-intl/locale-data/sv';
 addLocaleData([...de, ...en, ...fi, ...fr, ...nb, ...sv]);
 
 module.exports = {
-	// cs: require('./cs.json'),
-	de: require('./de.json'),
-	en: require('./en.json'),
-	fi: require('./fi.json'),
-	fr: require('./fr.json'),
-	nb: require('./nb.json'),
-	// nl: require('./nl.json'),
-	// pl: require('./pl.json'),
-	// ru: require('./ru.json'),
-	sv: require('./sv.json'),
-	// th: require('./th.json'),
+	...translations,
 };
