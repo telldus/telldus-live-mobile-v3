@@ -35,7 +35,6 @@ import Theme from '../../../Theme';
 import { googleMapsAPIKey } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
-import { messages } from '../Common/messages';
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -132,7 +131,7 @@ class GeoPosition extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.label = formatMessage(messages.labelPosition);
+		this.label = formatMessage(i18n.labelPosition);
 
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;

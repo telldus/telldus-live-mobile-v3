@@ -34,7 +34,6 @@ import { View, Text } from '../../../../BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	navigation: Object,
@@ -63,12 +62,12 @@ class EditTimeZoneContinent extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `${formatMessage(commonMessages.headerOneTimeZoneContinent)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneContinent);
-		this.labelAutodetect = formatMessage(commonMessages.autodetect);
+		this.h1 = `${formatMessage(i18n.headerOneTimeZoneContinent)}`;
+		this.h2 = formatMessage(i18n.headerTwoTimeZoneContinent);
+		this.labelAutodetect = formatMessage(i18n.autodetect);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
-		this.onSetTimezoneError = `${formatMessage(commonMessages.failureEditTimezone)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
+		this.onSetTimezoneError = `${formatMessage(i18n.failureEditTimezone)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.onContinentChoose = this.onContinentChoose.bind(this);
 		this.onPressAutodetect = this.onPressAutodetect.bind(this);

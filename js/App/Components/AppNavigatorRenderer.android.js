@@ -28,7 +28,7 @@ import Toast from 'react-native-simple-toast';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import { View, Header, IconTelldus } from '../../BaseComponents';
 import Navigator from './AppNavigator';
@@ -67,33 +67,6 @@ import {
 } from '../Lib';
 
 import i18n from '../Translations/common';
-// TODO : Remove unused strings!
-const messages = defineMessages({
-	menuIcon: {
-		id: 'accessibilityLabel.menuIcon',
-		defaultMessage: 'Menu',
-	},
-	messageCloseMenu: {
-		id: 'accessibilityLabel.messageCloseMenu',
-		defaultMessage: 'swipe left, using three fingers to close',
-	},
-	starIconShowDevices: {
-		id: 'accessibilityLabel.starIconShowDevices',
-		defaultMessage: 'Show, add to dashboard marker, for all devices',
-	},
-	starIconHideDevices: {
-		id: 'accessibilityLabel.starIconHideDevices',
-		defaultMessage: 'Hide, add to dashboard marker, for all devices',
-	},
-	starIconShowSensors: {
-		id: 'accessibilityLabel.starIconShowSensors',
-		defaultMessage: 'Show, add to dashboard marker, for all sensors',
-	},
-	starIconHideSensors: {
-		id: 'accessibilityLabel.starIconHideSensors',
-		defaultMessage: 'Hide, add to dashboard marker, for all sensors',
-	},
-});
 
 type Props = {
 	dimmer: Object,
@@ -151,12 +124,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.labelButton = formatMessage(i18n.button);
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
 
-		this.menuIcon = `${formatMessage(messages.menuIcon)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
-		this.starIconShowDevices = `${formatMessage(messages.starIconShowDevices)}. ${this.labelButtondefaultDescription}`;
-		this.starIconHideDevices = `${formatMessage(messages.starIconHideDevices)}. ${this.labelButtondefaultDescription}`;
-		this.starIconShowSensors = `${formatMessage(messages.starIconShowSensors)}. ${this.labelButtondefaultDescription}`;
-		this.starIconHideSensors = `${formatMessage(messages.starIconHideSensors)}. ${this.labelButtondefaultDescription}`;
-		this.messageCloseMenu = `${formatMessage(messages.messageCloseMenu)}`;
+		this.menuIcon = `${formatMessage(i18n.menuIcon)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
+		this.starIconShowDevices = `${formatMessage(i18n.starIconShowDevices)}. ${this.labelButtondefaultDescription}`;
+		this.starIconHideDevices = `${formatMessage(i18n.starIconHideDevices)}. ${this.labelButtondefaultDescription}`;
+		this.starIconShowSensors = `${formatMessage(i18n.starIconShowSensors)}. ${this.labelButtondefaultDescription}`;
+		this.starIconHideSensors = `${formatMessage(i18n.starIconHideSensors)}. ${this.labelButtondefaultDescription}`;
+		this.messageCloseMenu = `${formatMessage(i18n.messageCloseMenu)}`;
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;

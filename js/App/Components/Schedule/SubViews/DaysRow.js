@@ -23,22 +23,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages } from 'react-intl';
 
 import { Row, View } from '../../../../BaseComponents';
 import Day from './Day';
 import { getTranslatableDays } from '../../../Lib';
 
-const messages = defineMessages({
-	phraseOne: {
-		id: 'accessibilityLabel.schedule.daysRow.phraseOne',
-		defaultMessage: 'Active on {value}',
-	},
-	messageNoDays: {
-		id: 'accessibilityLabel.schedule.daysRow.messageNoDays',
-		defaultMessage: 'No days chosen. Please choose a day',
-	},
-});
+import i18n from '../../../Translations/common';
 
 type Props = {
 	selectedDays: string[],
@@ -102,9 +92,9 @@ export default class DaysRow extends View<DefaultProps, Props, null> {
 		const { formatMessage } = intl;
 		if (label && label.length !== 0) {
 			const phraseTwo = `${label}, ${labelPostScript}`;
-			return formatMessage(messages.phraseOne, {value: phraseTwo});
+			return formatMessage(i18n.phraseOne, {value: phraseTwo});
 		}
-		return formatMessage(messages.messageNoDays);
+		return formatMessage(i18n.messageNoDays);
 	}
 
 	_getWeekdays = (): Object => {

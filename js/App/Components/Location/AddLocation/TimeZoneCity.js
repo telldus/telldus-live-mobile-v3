@@ -31,7 +31,6 @@ import { View } from '../../../../BaseComponents';
 import CitiesList from '../Common/CitiesList';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	navigation: Object,
@@ -53,8 +52,8 @@ class TimeZoneCity extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `3. ${formatMessage(commonMessages.headerOneTimeZoneCity)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneCity);
+		this.h1 = `3. ${formatMessage(i18n.headerOneTimeZoneCity)}`;
+		this.h2 = formatMessage(i18n.headerTwoTimeZoneCity);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 	}

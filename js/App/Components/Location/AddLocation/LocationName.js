@@ -25,21 +25,13 @@
 
 import React from 'react';
 import { Keyboard } from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View } from '../../../../BaseComponents';
 import Name from '../Common/Name';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
-const messages = defineMessages({
-	headerTwo: {
-		id: 'addNewLocation.locationName.headerTwo',
-		defaultMessage: 'Setup your TellStick to start',
-		description: 'Secondary header Text for the Location Detected Screen',
-	},
-});
 
 type Props = {
 	navigation: Object,
@@ -65,7 +57,7 @@ class LocationName extends View {
 		let { formatMessage } = props.intl;
 
 		this.h1 = `2. ${formatMessage(i18n.name)}`;
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h2 = formatMessage(i18n.LNheaderTwo);
 
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
@@ -109,7 +101,7 @@ class LocationName extends View {
 				params: {clientInfo},
 			});
 		} else {
-			let message = intl.formatMessage(commonMessages.invalidLocationName);
+			let message = intl.formatMessage(i18n.invalidLocationName);
 			actions.showModal(message);
 		}
 	}

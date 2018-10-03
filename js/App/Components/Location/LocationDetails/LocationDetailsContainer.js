@@ -34,7 +34,6 @@ import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
 import * as appDataActions from '../../../Actions/AppData';
 
-import { messages as commonMessages } from '../Common/messages';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
@@ -86,7 +85,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		let { formatMessage } = props.screenProps.intl;
 		this.labelDelete = formatMessage(i18n.delete).toUpperCase();
 		this.labelModalheaderOnDel = `${formatMessage(i18n.delete)} ${formatMessage(i18n.location)}?`;
-		this.onRemoveLocationError = `${formatMessage(commonMessages.failureRemoveLocation)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
+		this.onRemoveLocationError = `${formatMessage(i18n.failureRemoveLocation)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);

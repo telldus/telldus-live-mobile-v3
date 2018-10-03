@@ -33,7 +33,6 @@ import GeoPosition from '../Common/GeoPosition';
 import { googleMapsAPIKey } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -75,11 +74,11 @@ class EditGeoPosition extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `${formatMessage(commonMessages.headerOnePosition)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoPosition);
+		this.h1 = `${formatMessage(i18n.headerOnePosition)}`;
+		this.h2 = formatMessage(i18n.headerTwoPosition);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
-		this.onSetGeoPositionError = `${formatMessage(commonMessages.failureEditGeoPosition)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
+		this.onSetGeoPositionError = `${formatMessage(i18n.failureEditGeoPosition)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.onSubmit = this.onSubmit.bind(this);
 		this.getGeoCodeInfo(latitude, longitude);

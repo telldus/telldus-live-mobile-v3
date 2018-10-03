@@ -25,21 +25,13 @@
 
 import React from 'react';
 import { Keyboard } from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View } from '../../../../BaseComponents';
 import Name from '../Common/Name';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
-const messages = defineMessages({
-	headerTwo: {
-		id: 'addNewLocation.editLocationName.headerTwo',
-		defaultMessage: 'Change name for your location',
-		description: 'Secondary header Text for the Edit name Screen',
-	},
-});
 
 type Props = {
 	navigation: Object,
@@ -71,11 +63,11 @@ class LocationName extends View {
 		let { formatMessage } = props.intl;
 
 		this.h1 = `${formatMessage(i18n.name)}`;
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h2 = formatMessage(i18n.LENheaderTwo);
 
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
-		this.onSetNameError = `${formatMessage(commonMessages.failureEditName)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
+		this.onSetNameError = `${formatMessage(i18n.failureEditName)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
@@ -125,7 +117,7 @@ class LocationName extends View {
 				actions.showModal(this.onSetNameError);
 			});
 		} else {
-			let message = intl.formatMessage(commonMessages.invalidLocationName);
+			let message = intl.formatMessage(i18n.invalidLocationName);
 			actions.showModal(message);
 		}
 	}

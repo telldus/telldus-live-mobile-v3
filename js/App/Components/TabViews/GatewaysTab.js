@@ -25,7 +25,6 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { defineMessages } from 'react-intl';
 
 import { View, FloatingButton } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
@@ -37,13 +36,6 @@ import { getTabBarIcon } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
-const messages = defineMessages({
-	gateways: {
-		id: 'pages.gateways',
-		defaultMessage: 'Gateways',
-		description: 'The gateways tab',
-	},
-});
 
 type Props = {
 	rows: Array<Object>,
@@ -75,7 +67,7 @@ class GatewaysTab extends View {
 	addLocation: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
-		title: screenProps.intl.formatMessage(messages.gateways),
+		title: screenProps.intl.formatMessage(i18n.gateways),
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'gateways'),
 	});
 

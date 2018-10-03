@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 
 import { addToDashboard, removeFromDashboard } from '../../../../Actions';
 
@@ -32,25 +31,6 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
-
-const messages = defineMessages({
-	iconAddPhraseOne: {
-		id: 'accessibilityLabel.sensors.iconAddPhraseOne',
-		defaultMessage: 'add sensor',
-	},
-	iconAddPhraseTwo: {
-		id: 'accessibilityLabel.sensors.iconAddPhraseTwo',
-		defaultMessage: 'to dashboard',
-	},
-	iconRemovePhraseOne: {
-		id: 'accessibilityLabel.sensors.iconRemovePhraseOne',
-		defaultMessage: 'remove sensor',
-	},
-	iconRemovePhraseTwo: {
-		id: 'accessibilityLabel.sensors.iconRemovePhraseTwo',
-		defaultMessage: 'from dashboard',
-	},
-});
 
 type Props = {
 	sensor: Object,
@@ -80,8 +60,8 @@ class SensorHiddenRow extends View {
 		let { intl, sensor } = props;
 		let { formatMessage } = intl;
 
-		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
-		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
+		this.iconAddAccessibilityLabel = `${intl.formatMessage(i18n.iconAddPhraseOneS)}, ${sensor.name}, ${intl.formatMessage(i18n.iconAddPhraseTwoS)}`;
+		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(i18n.iconRemovePhraseOneS)}, ${sensor.name}, ${intl.formatMessage(i18n.iconRemovePhraseTwoS)}`;
 
 		this.labelHidePhraseOne = `${formatMessage(i18n.move)} ${formatMessage(i18n.labelSensor)}`;
 		this.labelHidePhraseTwo = `${formatMessage(i18n.toHiddenList)}`;

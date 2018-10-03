@@ -24,7 +24,6 @@
 import React from 'react';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
@@ -46,14 +45,6 @@ import type { Schedule } from '../../Reducers/Schedule';
 
 import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
-
-const messages = defineMessages({
-	noUpcommingSchedule: {
-		id: 'schedule.noUpcommingSchedule',
-		defaultMessage: 'No upcoming schedules on this day',
-		description: 'Message when no schedules',
-	},
-});
 
 type NavigationParams = {
 	focused: boolean, tintColor: string,
@@ -88,7 +79,7 @@ class SchedulerTab extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.noScheduleMessage = props.screenProps.intl.formatMessage(messages.noUpcommingSchedule);
+		this.noScheduleMessage = props.screenProps.intl.formatMessage(i18n.noUpcommingSchedule);
 
 		this.contentOffset = 0;
 

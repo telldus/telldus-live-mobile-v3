@@ -24,7 +24,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { announceForAccessibility } from 'react-native-accessibility';
 import Platform from 'Platform';
@@ -38,12 +37,6 @@ import { getOriginString } from '../../../Lib';
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	announcementOnDetailsModalOpen: {
-		id: 'accessibilityLabel.announcementOnDetailsModalOpen',
-		defaultMessage: 'Showing device action details. Double tap on device history tab to close the modal',
-	},
-});
 
 type Props = {
 	detailsData: Object,
@@ -58,7 +51,7 @@ class DeviceHistoryDetails extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.labelAnnouncementOnOpen = formatMessage(messages.announcementOnDetailsModalOpen);
+		this.labelAnnouncementOnOpen = formatMessage(i18n.announcementOnDetailsModalOpen);
 		this.labelAnnouncementOnClose = `${formatMessage(i18n.announcementOnModalClose)}.`;
 	}
 

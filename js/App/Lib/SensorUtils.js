@@ -24,7 +24,6 @@
 
 import moment from 'moment';
 import { reportException } from './Analytics';
-import { defineMessages } from 'react-intl';
 
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
@@ -32,63 +31,30 @@ const { getSensorTypes, getSensorUnits } = sensorUtils;
 
 import i18n from '../Translations/common';
 
-const messages = defineMessages({
-	dayAgo: {
-		id: 'sensor.dayAgo',
-		defaultMessage: '{value} day ago',
-		description: 'How long ago a sensor was update',
-	},
-	daysAgo: {
-		id: 'sensor.daysAgo',
-		defaultMessage: '{value} days ago',
-		description: 'How long ago a sensor was update',
-	},
-	hourAgo: {
-		id: 'sensor.hourAgo',
-		defaultMessage: '{value} hour ago',
-		description: 'How long ago a sensor was update',
-	},
-	hoursAgo: {
-		id: 'sensor.hoursAgo',
-		defaultMessage: '{value} hours ago',
-		description: 'How long ago a sensor was update',
-	},
-	minuteAgo: {
-		id: 'sensor.minuteAgo',
-		defaultMessage: '{value} minute ago',
-		description: 'How long ago a sensor was update',
-	},
-	minutesAgo: {
-		id: 'sensor.minutesAgo',
-		defaultMessage: '{value} minutes ago',
-		description: 'How long ago a sensor was update',
-	},
-});
-
 
 function formatLastUpdated(minutes: number, lastUpdated: number, formatMessage: Function): string {
 	if (minutes <= 0) {
 		return formatMessage(i18n.justNow);
 	}
 	if (minutes === 1) {
-		return formatMessage(messages.minuteAgo, {value: '1'});
+		return formatMessage(i18n.minuteAgo, {value: '1'});
 	}
 	if (minutes < 60) {
-		return formatMessage(messages.minutesAgo, {value: minutes});
+		return formatMessage(i18n.minutesAgo, {value: minutes});
 	}
 	const hours = Math.round(minutes / 60);
 	if (hours === 1) {
-		return formatMessage(messages.hourAgo, {value: '1'});
+		return formatMessage(i18n.hourAgo, {value: '1'});
 	}
 	if (hours < 24) {
-		return formatMessage(messages.hoursAgo, {value: hours});
+		return formatMessage(i18n.hoursAgo, {value: hours});
 	}
 	const days = Math.round(minutes / 60 / 24);
 	if (days === 1) {
-		return formatMessage(messages.dayAgo, {value: '1'});
+		return formatMessage(i18n.dayAgo, {value: '1'});
 	}
 	if (days <= 7) {
-		return formatMessage(messages.daysAgo, {value: days});
+		return formatMessage(i18n.daysAgo, {value: days});
 	}
 	try {
 		return moment.unix(lastUpdated).format('MM-DD-YYYY');

@@ -24,7 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import {View, TouchableButton, Throbber} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
@@ -37,53 +37,6 @@ interface Props extends ScheduleProps {
 	devices: Object,
 	intl: intlShape.isRequired,
 }
-
-const messages = defineMessages({
-	confirmAndSave: {
-		id: 'button.confirmAndSave',
-		defaultMessage: 'Confirm & Save',
-		description: 'save button label in edit schedule page',
-	},
-	delete: {
-		id: 'button.delete',
-		defaultMessage: 'Delete',
-		description: 'delete button label in edit schedule page',
-	},
-	updateScheduleSuccess: {
-		id: 'toast.updateScheduleSuccess',
-		defaultMessage: 'Schedule has been updated successfully',
-		description: 'The message to show, when a schedule is updated and saved successfully',
-	},
-	updateScheduleFailure: {
-		id: 'toast.updateScheduleFailure',
-		defaultMessage: 'Could not save the shedule. Please try again later',
-		description: 'The message to show, when a schedule is update fail',
-	},
-	deleteScheduleSuccess: {
-		id: 'toast.deleteScheduleSuccess',
-		defaultMessage: 'Schedule has been deleted successfully',
-		description: 'The message to show, when a schedule is deleted successfully',
-	},
-	deleteScheduleFailure: {
-		id: 'toast.deleteScheduleFailure',
-		defaultMessage: 'Could not delete the shedule. Please try again later',
-		description: 'The message to show, when a schedule is failed',
-	},
-	deleteScheduleDialogue: {
-		id: 'modal.deleteScheduleDialogue',
-		defaultMessage: 'Are you sure you want to delete the schedule ?',
-		description: 'Dialogue box content when user choose to delete schedule.',
-	},
-	deleteScheduleDialogueHeader: {
-		id: 'modal.deleteScheduleDialogueHeader',
-		defaultMessage: 'DELETE',
-		description: 'Dialogue box header when user choose to delete schedule.',
-	},
-	posterEditDevice: {
-		id: 'schedule.posterEditDevice',
-		defaultMessage: 'Click the details you want to edit',
-	},
-});
 
 type State = {
 	isSaving: boolean,
@@ -126,14 +79,14 @@ class Edit extends View<null, Props, State> {
 		let { formatMessage } = this.props.intl;
 
 		this.h1 = `${formatMessage(i18n.edit)} ${this.device.name}`;
-		this.h2 = formatMessage(messages.posterEditDevice);
-		this.messageOnDelete = formatMessage(messages.deleteScheduleSuccess);
-		this.messageOnUpdate = formatMessage(messages.updateScheduleSuccess);
-		this.deleteScheduleDialogue = formatMessage(messages.deleteScheduleDialogue);
-		this.deleteScheduleDialogueHeader = `${formatMessage(messages.deleteScheduleDialogueHeader)}?`;
+		this.h2 = formatMessage(i18n.posterEditDevice);
+		this.messageOnDelete = formatMessage(i18n.deleteScheduleSuccess);
+		this.messageOnUpdate = formatMessage(i18n.updateScheduleSuccess);
+		this.deleteScheduleDialogue = formatMessage(i18n.deleteScheduleDialogue);
+		this.deleteScheduleDialogueHeader = `${formatMessage(i18n.deleteScheduleDialogueHeader)}?`;
 
-		this.messageOnDeleteFail = formatMessage(messages.deleteScheduleFailure);
-		this.messageOnUpdateFail = formatMessage(messages.updateScheduleFailure);
+		this.messageOnDeleteFail = formatMessage(i18n.deleteScheduleFailure);
+		this.messageOnUpdateFail = formatMessage(i18n.updateScheduleFailure);
 
 		this.onSaveSchedule = this.onSaveSchedule.bind(this);
 		this.onDeleteSchedule = this.onDeleteSchedule.bind(this);
@@ -315,7 +268,7 @@ class Edit extends View<null, Props, State> {
 						onToggleAdvanced={this.onToggleAdvanced}/>
 					<View style={buttonCoverStyle}>
 						<TouchableButton
-							text={messages.confirmAndSave}
+							text={i18n.confirmAndSave}
 							style={[buttonStyle, save]}
 							labelStyle={labelStyle}
 							onPress={this.onSaveSchedule}
@@ -331,7 +284,7 @@ class Edit extends View<null, Props, State> {
 					</View>
 					<View style={buttonCoverStyle}>
 						<TouchableButton
-							text={messages.delete}
+							text={i18n.delete}
 							style={[buttonStyle, cancel]}
 							labelStyle={labelStyle}
 							onPress={this.onDeleteSchedule}
