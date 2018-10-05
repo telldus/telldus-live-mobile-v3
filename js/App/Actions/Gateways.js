@@ -192,10 +192,21 @@ const resetLocalControlIP = (): Action => {
 	};
 };
 
+const validateLocalControlSupport = (gatewayId: number, supportLocal: boolean): Action => {
+	return {
+		type: 'VALIDATE_LOCAL_CONTROL_SUPPORT',
+		payload: {
+			gatewayId,
+			supportLocal,
+		},
+	};
+};
+
 module.exports = {
 	...Gateways,
 	getTokenForLocalControl,
 	autoDetectLocalTellStick,
 	resetLocalControlIP,
 	closeUDPSocket,
+	validateLocalControlSupport,
 };
