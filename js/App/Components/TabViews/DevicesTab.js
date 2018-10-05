@@ -275,7 +275,7 @@ class DevicesTab extends View {
 		const { propsSwipeRow } = this.state;
 		const { intl, currentTab, currentScreen } = screenProps;
 		const { item } = row;
-		const { isOnline } = item;
+		const { isOnline, supportLocalControl } = item;
 
 		return (
 			<DeviceRow
@@ -286,7 +286,7 @@ class DevicesTab extends View {
 				appLayout={appLayout}
 				currentTab={currentTab}
 				currentScreen={currentScreen}
-				isGatewayActive={isOnline}
+				isGatewayActive={isOnline || supportLocalControl}
 				setIgnoreDevice={this.setIgnoreDevice}
 				onPressMore={this.onPressMore}
 				onHiddenRowOpen={this.closeVisibleRows}
