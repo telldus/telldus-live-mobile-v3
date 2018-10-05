@@ -27,6 +27,8 @@ import { format } from 'url';
 import { supportedMethods, methods } from '../../Config';
 import type { ThunkAction } from './Types';
 import { LocalApi, hasTokenExpired, refreshLocalControlToken } from '../Lib';
+
+import { validateLocalControlSupport } from './Gateways';
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Devices, App } = actions;
@@ -42,7 +44,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 		const { gateways, devices } = getState();
 		const { clientId, clientDeviceId } = devices.byId[deviceId];
 		const { localKey = {} } = gateways.byId[clientId];
-		const { address, key: token, ttl } = localKey;
+		const { address, key: token, ttl, supportLocal } = localKey;
 		const tokenExpired = hasTokenExpired(ttl);
 
 		if (address && token && ttl && !tokenExpired) {
@@ -69,6 +71,12 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				clearTimers(clientDeviceId);
 				const { status } = response;
 				if (status && status === 'success') {
+
+					// 'GATEWAY_RESET_LOCAL_CONTROL_IP' has disabled 'supportLocal' property but still the local control properties
+					// are valid and works like a charm, so re-enable 'supportLocal', so that local control icon(home) will be shown.
+					if (!supportLocal) {
+						dispatch(validateLocalControlSupport(clientId, true));
+					}
 					if (state !== 32) {
 					// Every 1sec for the very next 10secs of action success, keep checking device state
 					// by calling device/info.
@@ -105,6 +113,12 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				throw response;
 			}).catch((): any => {
 				dispatch(requestDeviceAction(deviceId, state, false));
+
+				// Can confirm that local control parameters currently present are not valid(address has changed or something)
+				// In that case, if 'supportLocal' is not disabled do it here, so that local control icon(home) will not be shown
+				if (supportLocal) {
+					dispatch(validateLocalControlSupport(clientId, false));
+				}
 				return dispatch(deviceSetStateShared(deviceId, state, stateValue));
 			});
 		} else if (ttl && tokenExpired) {
