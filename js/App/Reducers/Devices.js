@@ -28,13 +28,25 @@ import reduce from 'lodash/reduce';
 import partition from 'lodash/partition';
 import isEmpty from 'lodash/isEmpty';
 
+import { hasTokenExpired } from '../Lib';
+
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let modifiedData = paramOne.map((item: Object, index: number): Object => {
 		let gateway = gateways[item.clientId];
 		if (gateway) {
-			return { ...item, isOnline: gateway.online };
+			const { localKey, online, websocketOnline } = gateway;
+			const {
+				address,
+				token,
+				ttl,
+				supportLocal,
+			} = localKey;
+			const tokenExpired = hasTokenExpired(ttl);
+			const supportLocalControl = address && token && ttl && !tokenExpired && supportLocal;
+
+			return { ...item, isOnline: online, websocketOnline, supportLocalControl };
 		}
-		return { ...item, isOnline: false };
+		return { ...item, isOnline: false, websocketOnline: false, supportLocalControl: false };
 	});
 	let result = groupBy(modifiedData, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];
