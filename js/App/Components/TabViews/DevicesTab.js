@@ -257,10 +257,15 @@ class DevicesTab extends View {
 	}
 
 	renderSectionHeader(sectionData: Object): Object {
+		const { supportLocalControl, isOnline, websocketOnline } = sectionData.section.data[0];
+
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.key}
 				appLayout={this.props.appLayout}
+				supportLocalControl={supportLocalControl}
+				isOnline={isOnline}
+				websocketOnline={websocketOnline}
 			/>
 		);
 	}
