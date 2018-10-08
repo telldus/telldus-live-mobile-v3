@@ -27,6 +27,7 @@ import { Platform } from 'react-native';
 import { LiveApi } from '../Lib/LiveApi';
 import { getRSAKey } from '../Lib/RSA';
 import { reportException } from '../Lib/Analytics';
+import { LocalApi } from '../Lib/LocalApi';
 import type { ThunkAction, Action } from './Types';
 
 // Gateways actions that are shared by both Web and Mobile.
@@ -186,9 +187,53 @@ const autoDetectLocalTellStickSuccess = (tellStickInfo: Object, routeInfo: Objec
 	};
 };
 
-const resetLocalControlIP = (): Action => {
+const resetLocalControlSupport = (): Action => {
 	return {
-		type: 'GATEWAY_RESET_LOCAL_CONTROL_IP',
+		type: 'GATEWAY_RESET_LOCAL_CONTROL_SUPPORT',
+	};
+};
+
+const validateLocalControlSupport = (gatewayId: number, supportLocal: boolean): Action => {
+	return {
+		type: 'VALIDATE_LOCAL_CONTROL_SUPPORT',
+		payload: {
+			gatewayId,
+			supportLocal,
+		},
+	};
+};
+
+const initiateGatewayLocalTest = (): ThunkAction => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		let { gateways: { byId } } = getState();
+		for (let key in byId) {
+			const { address } = byId[key];
+			// if 'address' is not available means, either it has never been auto-discovered or action 'RESET_LOCAL_CONTROL_ADDRESS'
+			// has already been called on this gateway.
+			if (address) {
+				dispatch(testGatewayLocalControl(address));
+			}
+		}
+	};
+};
+
+const testGatewayLocalControl = (address: string): ThunkAction => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const url = format({
+			pathname: '/local/test',
+		});
+		const payload = {
+			address,
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return LocalApi(payload).then((response: Object): any => {
+			// If Status is success/alive dispatch action 'VALIDATE_LOCAL_CONTROL_SUPPORT' with 'true'
+		}).catch(() => {
+			// Dispatch action 'RESET_LOCAL_CONTROL_ADDRESS'
+		});
 	};
 };
 
@@ -196,6 +241,9 @@ module.exports = {
 	...Gateways,
 	getTokenForLocalControl,
 	autoDetectLocalTellStick,
-	resetLocalControlIP,
+	resetLocalControlSupport,
 	closeUDPSocket,
+	validateLocalControlSupport,
+	testGatewayLocalControl,
+	initiateGatewayLocalTest,
 };

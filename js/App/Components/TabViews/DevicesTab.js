@@ -197,10 +197,15 @@ class DevicesTab extends View {
 	}
 
 	renderSectionHeader(sectionData: Object): Object {
+		const { supportLocalControl, isOnline, websocketOnline } = sectionData.section.data[0];
+
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.key}
 				appLayout={this.props.screenProps.appLayout}
+				supportLocalControl={supportLocalControl}
+				isOnline={isOnline}
+				websocketOnline={websocketOnline}
 			/>
 		);
 	}
@@ -211,7 +216,7 @@ class DevicesTab extends View {
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen } = screenProps;
 		const { item } = row;
-		const { isOnline } = item;
+		const { isOnline, supportLocalControl } = item;
 
 		return (
 			<DeviceRow
@@ -221,7 +226,7 @@ class DevicesTab extends View {
 				intl={intl}
 				appLayout={appLayout}
 				currentScreen={currentScreen}
-				isGatewayActive={isOnline}
+				isGatewayActive={isOnline || supportLocalControl}
 				setIgnoreDevice={this.setIgnoreDevice}
 				onPressMore={this.onPressMore}
 				onHiddenRowOpen={this.closeVisibleRows}
