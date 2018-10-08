@@ -109,6 +109,7 @@ export type Action =
 	| { type: 'GATEWAY_AUTO_DETECT_LOCAL_SUCCESS', payload: Object }
 	| { type: 'GATEWAY_RESET_LOCAL_CONTROL_SUPPORT'}
 	| { type: 'VALIDATE_LOCAL_CONTROL_SUPPORT', payload: Object}
+	| { type: 'RESET_LOCAL_CONTROL_ADDRESS', gatewayId: string}
 	| { type: typeof REHYDRATE }
 
 	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
