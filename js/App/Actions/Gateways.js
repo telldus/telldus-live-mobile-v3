@@ -204,20 +204,20 @@ const validateLocalControlSupport = (gatewayId: number, supportLocal: boolean): 
 };
 
 const initiateGatewayLocalTest = (): ThunkAction => {
-	return (dispatch: Function, getState: Function): Promise<any> => {
+	return (dispatch: Function, getState: Function) => {
 		let { gateways: { byId } } = getState();
 		for (let key in byId) {
-			const { address } = byId[key];
+			const { address, key: token } = byId[key];
 			// if 'address' is not available means, either it has never been auto-discovered or action 'RESET_LOCAL_CONTROL_ADDRESS'
 			// has already been called on this gateway.
 			if (address) {
-				dispatch(testGatewayLocalControl(address));
+				dispatch(testGatewayLocalControl(address, token));
 			}
 		}
 	};
 };
 
-const testGatewayLocalControl = (address: string): ThunkAction => {
+const testGatewayLocalControl = (address: string, token: string): ThunkAction => {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const url = format({
 			pathname: '/local/test',
@@ -228,6 +228,7 @@ const testGatewayLocalControl = (address: string): ThunkAction => {
 			requestParams: {
 				method: 'GET',
 			},
+			token,
 		};
 		return LocalApi(payload).then((response: Object): any => {
 			// If Status is success/alive dispatch action 'VALIDATE_LOCAL_CONTROL_SUPPORT' with 'true'
