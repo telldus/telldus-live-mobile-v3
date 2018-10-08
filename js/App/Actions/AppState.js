@@ -28,7 +28,7 @@ import { AppState } from 'react-native';
 import Orientation from 'react-native-orientation';
 import { AccessibilityInfo } from 'react-native';
 
-import { resetLocalControlIP, autoDetectLocalTellStick, closeUDPSocket } from './Gateways';
+import { resetLocalControlSupport, autoDetectLocalTellStick, closeUDPSocket } from './Gateways';
 
 module.exports = {
 	appStart: (): Action => ({
@@ -46,7 +46,7 @@ module.exports = {
 				dispatch({
 					type: 'APP_BACKGROUND',
 				});
-				dispatch(resetLocalControlIP());
+				dispatch(resetLocalControlSupport());
 				closeUDPSocket();
 			}
 		});

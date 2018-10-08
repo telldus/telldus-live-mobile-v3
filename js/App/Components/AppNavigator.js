@@ -40,7 +40,7 @@ import {
 	getTokenForLocalControl,
 	autoDetectLocalTellStick,
 	setAppLayout,
-	resetLocalControlIP,
+	resetLocalControlSupport,
 	closeUDPSocket,
 } from '../Actions';
 import { getRSAKey } from '../Lib';
@@ -191,7 +191,7 @@ class AppNavigator extends View {
 		const { type } = connectionInfo;
 
 		// When ever user's connection change reset the previously auto-discovered ip address, before it is auto-discovered and updated again.
-		dispatch(resetLocalControlIP());
+		dispatch(resetLocalControlSupport());
 
 		// When user's connection change and if it there is connection to internet, auto-discover TellStick and update it's ip address.
 		if (type && type !== 'none') {

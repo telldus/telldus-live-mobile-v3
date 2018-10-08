@@ -186,9 +186,9 @@ const autoDetectLocalTellStickSuccess = (tellStickInfo: Object, routeInfo: Objec
 	};
 };
 
-const resetLocalControlIP = (): Action => {
+const resetLocalControlSupport = (): Action => {
 	return {
-		type: 'GATEWAY_RESET_LOCAL_CONTROL_IP',
+		type: 'GATEWAY_RESET_LOCAL_CONTROL_SUPPORT',
 	};
 };
 
@@ -206,7 +206,7 @@ module.exports = {
 	...Gateways,
 	getTokenForLocalControl,
 	autoDetectLocalTellStick,
-	resetLocalControlIP,
+	resetLocalControlSupport,
 	closeUDPSocket,
 	validateLocalControlSupport,
 };

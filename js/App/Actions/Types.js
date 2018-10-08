@@ -107,7 +107,7 @@ export type Action =
 	| { type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_SUCCESS', payload: Object }
 	| { type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_ERROR', payload: Object }
 	| { type: 'GATEWAY_AUTO_DETECT_LOCAL_SUCCESS', payload: Object }
-	| { type: 'GATEWAY_RESET_LOCAL_CONTROL_IP'}
+	| { type: 'GATEWAY_RESET_LOCAL_CONTROL_SUPPORT'}
 	| { type: 'VALIDATE_LOCAL_CONTROL_SUPPORT', payload: Object}
 	| { type: typeof REHYDRATE }
 

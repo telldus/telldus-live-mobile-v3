@@ -72,7 +72,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				const { status } = response;
 				if (status && status === 'success') {
 
-					// 'GATEWAY_RESET_LOCAL_CONTROL_IP' has disabled 'supportLocal' property but still the local control properties
+					// 'GATEWAY_RESET_LOCAL_CONTROL_SUPPORT' has disabled 'supportLocal' property but still the local control properties
 					// are valid and works like a charm, so re-enable 'supportLocal', so that local control icon(home) will be shown.
 					if (!supportLocal) {
 						dispatch(validateLocalControlSupport(clientId, true));
