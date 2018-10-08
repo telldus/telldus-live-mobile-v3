@@ -25,19 +25,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Image, PanResponder } from 'react-native';
 import Platform from 'Platform';
-import { defineMessages } from 'react-intl';
 import Ripple from 'react-native-material-ripple';
 
 import { Poster, View, CheckBoxIconText } from '../../../../BaseComponents';
 import Weekdays from './Jobs/Weekdays';
 import Theme from '../../../Theme';
 
-const messages = defineMessages({
-	checkBoxText: {
-		id: 'jobsposter.checkBoxText',
-		defaultMessage: 'Show inactive',
-	},
-});
+import i18n from '../../../Translations/common';
 
 type Props = {
 	days: Object[],
@@ -46,6 +40,7 @@ type Props = {
 	onToggleVisibility: (boolean) => void,
 	intl: Object,
 	currentScreen: string,
+	showInactive: boolean,
 };
 
 type State = {
@@ -80,7 +75,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			showRightButton: true,
 			daysLayout: {},
 			dragDir: undefined,
-			showInactive: true,
+			showInactive: props.showInactive,
 		};
 		// weekdays animation ranges from value (1 -> 0) while dragging/sliding left(visiting yesterday)
 		// weekdays animation ranges from value (1 -> 2) while dragging/sliding right(visiting tomorrow)
@@ -97,7 +92,7 @@ export default class JobsPoster extends View<null, Props, State> {
 		this.onToggleVisibilty = this.onToggleVisibilty.bind(this);
 
 		const { formatMessage } = props.intl;
-		this.checkBoxText = formatMessage(messages.checkBoxText);
+		this.checkBoxText = formatMessage(i18n.checkBoxText);
 
 		this._panResponder = PanResponder.create({
 			// Ask to be the responder:

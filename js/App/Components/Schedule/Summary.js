@@ -24,7 +24,7 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { NavigationActions } from 'react-navigation';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import {
 	FloatingButton,
@@ -36,17 +36,6 @@ import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettingsBlock } from '.
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
-const messages = defineMessages({
-	addScheduleSuccess: {
-		id: 'toast.addScheduleSuccess',
-		defaultMessage: 'Schedule has been added successfully',
-		description: 'The message to show, when a schedule is added successfully',
-	},
-	posterSummary: {
-		id: 'schedule.posterSummary',
-		defaultMessage: 'Please confirm the schedule',
-	},
-});
 
 interface Props extends ScheduleProps {
 	paddingRight: number,
@@ -78,8 +67,8 @@ class Summary extends View<null, Props, State> {
 		let { formatMessage } = intl;
 
 		this.h1 = `5. ${formatMessage(i18n.summary)}`;
-		this.h2 = formatMessage(messages.posterSummary);
-		this.messageOnAdd = formatMessage(messages.addScheduleSuccess);
+		this.h2 = formatMessage(i18n.posterSummary);
+		this.messageOnAdd = formatMessage(i18n.addScheduleSuccess);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};

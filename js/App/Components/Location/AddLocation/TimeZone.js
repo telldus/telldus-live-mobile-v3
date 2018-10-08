@@ -26,7 +26,7 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import {
@@ -39,28 +39,6 @@ import {
 import LabelBox from '../Common/LabelBox';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerOne: {
-		id: 'addNewLocation.timeZone.headerOne',
-		defaultMessage: 'Time Zone',
-		description: 'Main header for the Select City Screen',
-	},
-	headerTwo: {
-		id: 'addNewLocation.timeZone.headerTwo',
-		defaultMessage: 'Select Time Zone',
-		description: 'Secondary header for the Select City Screen',
-	},
-	hint: {
-		id: 'addNewLocation.timeZone.hint',
-		defaultMessage: 'Autodetected',
-		description: 'hint text for user',
-	},
-	labelHintChangeTimeZone: {
-		id: 'addNewLocation.timeZone.labelHintChangeTimeZone',
-		defaultMessage: 'Double tap to change',
-		description: 'accessibility message to change time zone',
-	},
-});
 
 type Props = {
 	timeZone: string,
@@ -96,13 +74,13 @@ class TimeZone extends View<void, Props, State> {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `3. ${formatMessage(messages.headerOne)}`;
-		this.h2 = formatMessage(messages.headerTwo);
-		this.label = formatMessage(messages.headerOne);
+		this.h1 = `3. ${formatMessage(i18n.LTZheaderOne)}`;
+		this.h2 = formatMessage(i18n.LTZheaderTwo);
+		this.label = formatMessage(i18n.LTZheaderOne);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
-		this.labelHintChangeTimeZone = formatMessage(messages.labelHintChangeTimeZone);
-		this.labelHint = formatMessage(messages.hint);
+		this.labelHintChangeTimeZone = formatMessage(i18n.labelHintChangeTimeZone);
+		this.labelHint = formatMessage(i18n.hint);
 
 		this.onTimeZoneSubmit = this.onTimeZoneSubmit.bind(this);
 		this.onEditTimeZone = this.onEditTimeZone.bind(this);
@@ -205,7 +183,7 @@ class TimeZone extends View<void, Props, State> {
 							<Icon name="pencil" size={styles.iconSize} color="#A59F9A" style={styles.iconStyle}/>
 						</View>
 						{autoDetected && (
-							<FormattedMessage {...messages.hint} style={styles.hint} prefix="(" postfix=")"/>
+							<FormattedMessage {...i18n.hint} style={styles.hint} prefix="(" postfix=")"/>
 						)
 						}
 					</TouchableOpacity>

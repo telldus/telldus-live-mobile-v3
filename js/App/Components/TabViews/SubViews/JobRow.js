@@ -24,7 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import _ from 'lodash';
 import Platform from 'Platform';
 const isEqual = require('react-fast-compare');
@@ -50,30 +50,6 @@ import {
 import type { Schedule } from '../../../Reducers/Schedule';
 
 import i18n from '../../../Translations/common';
-
-const messages = defineMessages({
-	phraseOne: {
-		id: 'accessibilityLabel.scheduler.phraseOne',
-		defaultMessage: 'Schedule for',
-	},
-	repeatDays: {
-		id: 'scheduler.repeatDays',
-		defaultMessage: 'Every day at {value}',
-	},
-	repeatWeekday: {
-		id: 'scheduler.repeatWeekday',
-		defaultMessage: 'Weekdays at {value}',
-	},
-	repeatWeekend: {
-		id: 'scheduler.repeatWeekend',
-		defaultMessage: 'Weekends at {value}',
-	},
-	now: {
-		id: 'scheduler.now',
-		defaultMessage: 'Now',
-	},
-});
-
 
 type Props = {
 	active: boolean,
@@ -219,7 +195,7 @@ class JobRow extends View<null, Props, null> {
 		const deviceName = dName ? dName : formatMessage(i18n.noName);
 		const labelDevice = `${formatMessage(i18n.labelDevice)} ${deviceName}`;
 		const labelAction = `${formatMessage(i18n.labelAction)} ${actionLabel}`;
-		const accessibilityLabel = `${formatMessage(messages.phraseOne)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
+		const accessibilityLabel = `${formatMessage(i18n.phraseOneSheduler)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
 
 		return (
 			<View>
@@ -283,7 +259,7 @@ class JobRow extends View<null, Props, null> {
 						style={container}
 					>
 						<NowRow
-							text={formatMessage(messages.now)}
+							text={formatMessage(i18n.now)}
 							roundIconContainerStyle={roundIconContainer}
 							rowWithTriangleContainerStyle={rowWithTriangleContainerNow}
 							textStyle={time}
@@ -341,11 +317,11 @@ class JobRow extends View<null, Props, null> {
 
 		let repeatDays: string = '';
 		if (selectedDays.length === DAYS.length) {
-			repeatDays = formatMessage(messages.repeatDays, { value: repeatTime });
+			repeatDays = formatMessage(i18n.repeatDays, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekdays(formatDate))) {
-			repeatDays = formatMessage(messages.repeatWeekday, { value: repeatTime });
+			repeatDays = formatMessage(i18n.repeatWeekday, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekends(formatDate))) {
-			repeatDays = formatMessage(messages.repeatWeekend, { value: repeatTime });
+			repeatDays = formatMessage(i18n.repeatWeekend, { value: repeatTime });
 		} else {
 			for (let day of selectedDays) {
 				repeatDays += `${day.slice(0, 3).toLowerCase()}, `;

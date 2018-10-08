@@ -23,7 +23,6 @@
 'use strict';
 
 import React from 'react';
-import { defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -34,12 +33,6 @@ import {
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerTwo: {
-		id: 'zwave.name.headerTwo',
-		defaultMessage: 'Choose a name for your device',
-	},
-});
 
 type Props = {
     appLayout: Object,
@@ -75,7 +68,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(`4. ${formatMessage(i18n.name)}`, formatMessage(messages.headerTwo));
+	onDidMount(`4. ${formatMessage(i18n.name)}`, formatMessage(i18n.AddZDNameHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

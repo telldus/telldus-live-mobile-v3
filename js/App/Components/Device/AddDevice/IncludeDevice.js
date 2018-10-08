@@ -23,7 +23,6 @@
 'use strict';
 
 import React from 'react';
-import { defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -36,24 +35,6 @@ import {
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerTwo: {
-		id: 'zwave.include.headerTwo',
-		defaultMessage: 'Include your device',
-	},
-	messageOne: {
-		id: 'zwave.include.messageOne',
-		defaultMessage: 'Include device by enabling inclusion mode on the device within 60 seconds.',
-	},
-	messageTwo: {
-		id: 'zwave.include.messageTwo',
-		defaultMessage: 'When in inclusion mode the device will automatically be included.',
-	},
-	messageHint: {
-		id: 'zwave.include.messageHint',
-		defaultMessage: 'This is usually done by clicking three times on the button on the device. Refer to the manual of your device on how to enter inclusion mode.',
-	},
-});
 
 type Props = {
 	appLayout: Object,
@@ -110,7 +91,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, actions, navigation, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(`3. ${formatMessage(i18n.labelInclude)}`, formatMessage(messages.headerTwo));
+	onDidMount(`3. ${formatMessage(i18n.labelInclude)}`, formatMessage(i18n.AddZDIncludeHeaderTwo));
 
 	const gateway = navigation.getParam('gateway', {});
 	const module = navigation.getParam('module', '');
@@ -334,11 +315,11 @@ render(): Object {
 					flexWrap: 'wrap',
 				}} onLayout={this.onLayout}>
 					<Text style={textStyle}>
-						{formatMessage(messages.messageOne)}
+						{formatMessage(i18n.messageOne)}
 					</Text>
 					<Text/>
 					<Text style={textStyle}>
-						{formatMessage(messages.messageTwo)}
+						{formatMessage(i18n.messageTwo)}
 					</Text>
 					<Text/>
 					<Text style={timerStyle}>
@@ -364,7 +345,7 @@ render(): Object {
 					flexWrap: 'wrap',
 				}}>
 					<Text style={textStyle}>
-						{formatMessage(messages.messageHint)}
+						{formatMessage(i18n.messageHint)}
 					</Text>
 				</View>
 			</View>

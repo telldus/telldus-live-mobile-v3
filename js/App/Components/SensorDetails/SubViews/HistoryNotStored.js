@@ -24,7 +24,6 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -41,23 +40,6 @@ import {
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	historyNotStoredHeader: {
-		id: 'sensor.historyNotStoredHeader',
-		defaultMessage: 'History is not stored for this sensor',
-	},
-	historyNotStoredPOne: {
-		id: 'sensor.historyNotStoredPOne',
-		defaultMessage: 'Enable history by clicking the button below. This can later be disabled from the ' +
-        'settings tab. Please note that it will take some time from enabling history before it is viewable ' +
-        'in the history chart.',
-	},
-	historyNotStoredPTwo: {
-		id: 'sensor.historyNotStoredPTwo',
-		defaultMessage: 'If you have a Basic account history is only stored for 7 days. Premium Access allows ' +
-        'unlimited history',
-	},
-});
 
 type Props = {
     width: number,
@@ -106,14 +88,14 @@ render(): Object {
 	return (
 		<View style={container}>
 			<FormattedMessage
-				{...messages.historyNotStoredHeader}
+				{...i18n.historyNotStoredHeader}
 				style={headerStyle}/>
 			<FormattedMessage
-				{...messages.historyNotStoredPOne}
+				{...i18n.historyNotStoredPOne}
 				style={contentStyle}/>
 			<Text />
 			<FormattedMessage
-				{...messages.historyNotStoredPTwo}
+				{...i18n.historyNotStoredPTwo}
 				style={contentStyle}/>
 			<TouchableButton
 				text={i18n.labelStoreHistory}

@@ -36,7 +36,6 @@ import Status from '../../TabViews/SubViews/Gateway/Status';
 import Theme from '../../../Theme';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	containerWidth: number,
@@ -74,15 +73,15 @@ class Details extends View {
 
 		let { formatMessage } = props.intl;
 		this.labelName = formatMessage(i18n.name);
-		this.labelTimeZone = formatMessage(commonMessages.headerOneTimeZoneCity);
-		this.labelGeoPosition = formatMessage(commonMessages.geoPosition);
-		this.labelLat = formatMessage(commonMessages.latitude);
-		this.labelLong = formatMessage(commonMessages.longitude);
-		this.labelIPPublic = formatMessage(commonMessages.ipPublic);
-		this.labelIPLocal = formatMessage(commonMessages.ipLocal);
-		this.labelSoftware = formatMessage(commonMessages.software);
+		this.labelTimeZone = formatMessage(i18n.headerOneTimeZoneCity);
+		this.labelGeoPosition = formatMessage(i18n.geoPosition);
+		this.labelLat = formatMessage(i18n.latitude);
+		this.labelLong = formatMessage(i18n.longitude);
+		this.labelIPPublic = formatMessage(i18n.ipPublic);
+		this.labelIPLocal = formatMessage(i18n.ipLocal);
+		this.labelSoftware = formatMessage(i18n.software);
 
-		this.confirmMessage = formatMessage(commonMessages.confirmDelete);
+		this.confirmMessage = formatMessage(i18n.confirmDelete);
 
 		this.labelDelete = formatMessage(i18n.delete);
 

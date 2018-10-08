@@ -33,7 +33,6 @@ import { View } from '../../../../BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	navigation: Object,
@@ -54,8 +53,8 @@ class TimeZoneContinent extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `3. ${formatMessage(commonMessages.headerOneTimeZoneContinent)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneContinent);
+		this.h1 = `3. ${formatMessage(i18n.headerOneTimeZoneContinent)}`;
+		this.h2 = formatMessage(i18n.headerTwoTimeZoneContinent);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 

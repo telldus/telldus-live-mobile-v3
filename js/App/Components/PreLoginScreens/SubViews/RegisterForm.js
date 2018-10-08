@@ -24,7 +24,7 @@
 import React from 'react';
 import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -35,24 +35,6 @@ import { showModal } from '../../../Actions/Modal';
 import { validateEmail } from '../../../Lib/UserUtils';
 
 import i18n from '../../../Translations/common';
-import sharedMessages from './Messages';
-const messages = defineMessages({
-	emailAddressNotMatchHeader: {
-		id: 'user.emailAddressNotMatchHeader',
-		defaultMessage: 'EMAILS DON\'T MATCH',
-		description: 'Validation Message Header when Emails don\'t match',
-	},
-	emailAddressNotMatchBody: {
-		id: 'user.emailAddressNotMatchBody',
-		defaultMessage: 'Email addresses don\'t match. Please check your entered email address.',
-		description: 'Validation Message Body when Emails don\'t match',
-	},
-	fieldEmptyPostfix: {
-		id: 'form.register.fieldEmptyPostfix',
-		defaultMessage: 'seems to be missing in your form. Please check that it is entered correctly.',
-		description: 'Error message Post-fix on form submitted, with fields empty',
-	},
-});
 
 type Props = {
 	dispatch: Function,
@@ -153,17 +135,17 @@ class RegisterForm extends View {
 							this.handleRegisterError(err);
 						});
 				} else {
-					let message = formatMessage(messages.emailAddressNotMatchBody);
-					let header = formatMessage(messages.emailAddressNotMatchHeader);
+					let message = formatMessage(i18n.emailAddressNotMatchBody);
+					let header = formatMessage(i18n.emailAddressNotMatchHeader);
 					dispatch(showModal(message, header));
 				}
 			} else {
-				let message = formatMessage(sharedMessages.emailNotValidBody);
-				let header = formatMessage(sharedMessages.emailNotValidHeader);
+				let message = formatMessage(i18n.emailNotValidBody);
+				let header = formatMessage(i18n.emailNotValidHeader);
 				dispatch(showModal(message, header));
 			}
 		} else {
-			let postF = formatMessage(messages.fieldEmptyPostfix);
+			let postF = formatMessage(i18n.fieldEmptyPostfix);
 			let message = fn === '' ? `${formatMessage(i18n.firstName)} ${postF}`
 				: ln === '' ? `${formatMessage(i18n.lastName)} ${postF}`
 					: em === '' ? `${formatMessage(i18n.emailAddress)} ${postF}`

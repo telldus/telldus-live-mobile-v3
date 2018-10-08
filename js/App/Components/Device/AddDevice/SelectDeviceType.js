@@ -23,7 +23,6 @@
 'use strict';
 
 import React from 'react';
-import { defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -36,12 +35,6 @@ import { getAvailableDeviceTypesAndInfo } from '../../../Lib/DeviceUtils';
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerTwo: {
-		id: 'zwave.deviceType.headerTwo',
-		defaultMessage: 'Select the type of your device',
-	},
-});
 
 type Props = {
 	appLayout: Object,
@@ -70,7 +63,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(`2. ${formatMessage(i18n.labelDeviceType)}`, formatMessage(messages.headerTwo));
+	onDidMount(`2. ${formatMessage(i18n.labelDeviceType)}`, formatMessage(i18n.AddZDTypeHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

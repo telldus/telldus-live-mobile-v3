@@ -36,7 +36,6 @@ import Wizard from './SubViews/Wizard';
 import Screens from './SubViews/Screens';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
-import messages from './SubViews/messages';
 
 import { setChangeLogVersion, hideChangeLog } from '../../Actions';
 
@@ -90,11 +89,11 @@ class ChangeLogNavigator extends View {
 		let { formatMessage } = props.intl;
 
 		const appVersion = DeviceInfo.getReadableVersion();
-		this.h1 = formatMessage(messages.changeLogHeaderOne);
-		this.h2 = `${formatMessage(messages.changeLogHeaderTwo)} ${appVersion.substring(0, 3)}`;
+		this.h1 = formatMessage(i18n.changeLogHeaderOne);
+		this.h2 = `${formatMessage(i18n.changeLogHeaderTwo)} ${appVersion.substring(0, 3)}`;
 
 		this.nextButton = formatMessage(i18n.next);
-		this.skipButton = formatMessage(messages.skipButton).toUpperCase();
+		this.skipButton = formatMessage(i18n.skipButton).toUpperCase();
 		this.doneButton = formatMessage(i18n.done);
 
 		this.onPressNext = this.onPressNext.bind(this);

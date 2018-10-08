@@ -26,7 +26,6 @@ import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
-import { defineMessages } from 'react-intl';
 
 import { View, TabBar, LocationDetails } from '../../../BaseComponents';
 
@@ -38,13 +37,6 @@ import {
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
-const messages = defineMessages({
-	location: {
-		id: 'deviceSettings.location',
-		defaultMessage: 'Location',
-		description: 'Header for which location a device belongs to',
-	},
-});
 
 type Props = {
 	device: Object,
@@ -77,7 +69,7 @@ class OverviewTab extends View<Props, null> {
 	constructor(props: Props) {
 		super(props);
 
-		this.boxTitle = `${props.screenProps.intl.formatMessage(messages.location)}:`;
+		this.boxTitle = `${props.screenProps.intl.formatMessage(i18n.location)}:`;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { LayoutAnimation } from 'react-native';
-import { intlShape, defineMessages } from 'react-intl';
+import { intlShape } from 'react-intl';
 
 import {
 	View,
@@ -33,37 +33,6 @@ import {
 import { LayoutAnimations } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	retriesInfoPhraseOne: {
-		id: 'dialogue.content.retriesInfo.phraseOne',
-		defaultMessage: 'How many times the schedule will try again if your location is ' +
-		'offline when the schedule should run',
-	},
-	retriesInfoPhraseTwo: {
-		id: 'dialogue.content.retriesInfo.phraseTwo',
-		defaultMessage: 'If your location is online, the schedule will only run once',
-	},
-	intervalInfoPhraseOne: {
-		id: 'dialogue.content.intervalInfo.phraseOne',
-		defaultMessage: 'The interval, in minutes, between retries if your location is ' +
-		'offline when the schedule should run',
-	},
-	intervalInfoPhraseTwo: {
-		id: 'dialogue.content.intervalInfo.phraseTwo',
-		defaultMessage: 'The location must come online within \'number of retries\' * \'interval\' for ' +
-		'the schedule to run',
-	},
-	repeatInfoPhraseOne: {
-		id: 'dialogue.content.repeatInfo.phraseOne',
-		defaultMessage: 'Number of times a schedule command will be resent from the location. ' +
-		'Default value is 1 time, but it may be set to a maximum of 10, if the location for example is placed in an ' +
-		'environment with a lot of interference',
-	},
-	repeatInfoPhraseTwo: {
-		id: 'dialogue.content.repeatInfo.phraseTwo',
-		defaultMessage: 'There will be a 3 second pause between each resend',
-	},
-});
 
 type Props = {
 	retries: number,
@@ -134,7 +103,7 @@ onPressRetriesInfo() {
 		imageHeader: true,
 		showIconOnHeader: true,
 	};
-	const message = `${formatMessage(messages.retriesInfoPhraseOne)}.\n\n${formatMessage(messages.retriesInfoPhraseTwo)}.`;
+	const message = `${formatMessage(i18n.retriesInfoPhraseOne)}.\n\n${formatMessage(i18n.retriesInfoPhraseTwo)}.`;
 	this.props.onPressInfo(message, extras);
 }
 
@@ -147,7 +116,7 @@ onPressIntervalInfo() {
 		imageHeader: true,
 		showIconOnHeader: true,
 	};
-	const message = `${formatMessage(messages.intervalInfoPhraseOne)}.\n\n${formatMessage(messages.intervalInfoPhraseTwo)}.`;
+	const message = `${formatMessage(i18n.intervalInfoPhraseOne)}.\n\n${formatMessage(i18n.intervalInfoPhraseTwo)}.`;
 	this.props.onPressInfo(message, extras);
 }
 
@@ -160,7 +129,7 @@ onPressRepeatsInfo() {
 		imageHeader: true,
 		showIconOnHeader: true,
 	};
-	const message = `${formatMessage(messages.repeatInfoPhraseOne)}.\n\n${formatMessage(messages.repeatInfoPhraseTwo)}.`;
+	const message = `${formatMessage(i18n.repeatInfoPhraseOne)}.\n\n${formatMessage(i18n.repeatInfoPhraseTwo)}.`;
 	this.props.onPressInfo(message, extras);
 }
 

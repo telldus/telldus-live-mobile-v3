@@ -23,7 +23,6 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { defineMessages } from 'react-intl';
 
 import {
 	View,
@@ -32,16 +31,7 @@ import {
 
 import Theme from '../../../Theme';
 
-const messages = defineMessages({
-	noHistoryHeader: {
-		id: 'sensor.noHistoryHeader',
-		defaultMessage: 'No history recorded yet',
-	},
-	noHistoryContent: {
-		id: 'sensor.noHistoryContent',
-		defaultMessage: 'History is enabled but no data has been collected yet. Please check back later.',
-	},
-});
+import i18n from '../../../Translations/common';
 
 type Props = {
     width: number,
@@ -65,10 +55,10 @@ render(): Object {
 	return (
 		<View style={container}>
 			<FormattedMessage
-				{...messages.noHistoryHeader}
+				{...i18n.noHistoryHeader}
 				style={headerStyle}/>
 			<FormattedMessage
-				{...messages.noHistoryContent}
+				{...i18n.noHistoryContent}
 				style={contentStyle}/>
 		</View>
 	);

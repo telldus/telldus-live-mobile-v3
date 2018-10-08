@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 
 import { addToDashboard, removeFromDashboard } from '../../../../Actions';
 
@@ -32,25 +31,6 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
-
-const messages = defineMessages({
-	iconAddPhraseOne: {
-		id: 'accessibilityLabel.devices.iconAddPhraseOne',
-		defaultMessage: 'add device',
-	},
-	iconAddPhraseTwo: {
-		id: 'accessibilityLabel.devices.iconAddPhraseTwo',
-		defaultMessage: 'to dashboard',
-	},
-	iconRemovePhraseOne: {
-		id: 'accessibilityLabel.devices.iconRemovePhraseOne',
-		defaultMessage: 'remove device',
-	},
-	iconRemovePhraseTwo: {
-		id: 'accessibilityLabel.devices.iconRemovePhraseTwo',
-		defaultMessage: 'from dashboard',
-	},
-});
 
 type Props = {
 	device: Object,
@@ -79,8 +59,8 @@ class DeviceHiddenRow extends View {
 
 		let { intl, device } = props;
 		let { formatMessage } = intl;
-		this.iconAddAccessibilityLabel = `${formatMessage(messages.iconAddPhraseOne)}, ${device.name}, ${formatMessage(messages.iconAddPhraseTwo)}`;
-		this.iconRemoveAccessibilityLabel = `${formatMessage(messages.iconRemovePhraseOne)}, ${device.name}, ${formatMessage(messages.iconRemovePhraseTwo)}`;
+		this.iconAddAccessibilityLabel = `${formatMessage(i18n.iconAddPhraseOneD)}, ${device.name}, ${formatMessage(i18n.iconAddPhraseTwoD)}`;
+		this.iconRemoveAccessibilityLabel = `${formatMessage(i18n.iconRemovePhraseOneD)}, ${device.name}, ${formatMessage(i18n.iconRemovePhraseTwoD)}`;
 
 		this.labelButton = formatMessage(i18n.button);
 		this.labelSettings = formatMessage(i18n.settingsHeader);

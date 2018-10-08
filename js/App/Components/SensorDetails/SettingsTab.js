@@ -28,7 +28,6 @@ import {
 	BackHandler,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
 import {
@@ -59,56 +58,6 @@ import { shouldUpdate, LayoutAnimations } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
-const messages = defineMessages({
-	hideFromList: {
-		id: 'sensor.hideFromList',
-		defaultMessage: 'Hide from sensor list',
-		description: 'Select if this item should be shown on the sensor list',
-	},
-	clearHistory: {
-		id: 'sensor.label.clearHistory',
-		defaultMessage: 'Clear sensor history',
-	},
-	resetMaxMin: {
-		id: 'sensor.label.resetmaxMin',
-		defaultMessage: 'Reset Max/Min values',
-	},
-	clearHistoryCache: {
-		id: 'sensor.label.clearHistoryCache',
-		defaultMessage: 'Clear history cache',
-	},
-	messageClearHistory: {
-		id: 'sensor.dialogue.messageClearHistory',
-		defaultMessage: 'Are you sure you want to clear sensor history? ' +
-		'This action will delete all history stored for this sensor permanentely.',
-	},
-	messageResetMaxMin: {
-		id: 'sensor.dialogue.messageResetMaxMin',
-		defaultMessage: 'Are you sure you want to reset max/min values? ' +
-		'This action will reset all max/min values for this sensor.',
-	},
-	messageClearCache: {
-		id: 'sensor.dialogue.messageClearCache',
-		defaultMessage: 'Are you sure you want to clear sensor history cache?',
-	},
-	hintHistoryCache: {
-		id: 'sensor.label.hintHistoryCache',
-		defaultMessage: 'History cache is stored on your device to shorten load times. Clear the cache if you want to ' +
-		'reload the values from the database',
-	},
-	clearSuccess: {
-		id: 'sensor.message.clearSuccess',
-		defaultMessage: 'Sensor history has been cleared',
-	},
-	clearCacheSuccess: {
-		id: 'sensor.message.clearCacheSuccess',
-		defaultMessage: 'Sensor history cache cleared',
-	},
-	resetSuccess: {
-		id: 'sensor.message.resetSuccess',
-		defaultMessage: 'Max/Min for the sensor has been reset',
-	},
-});
 
 type Props = {
 	dispatch: Function,
@@ -330,7 +279,7 @@ class SettingsTab extends View {
 		const { formatMessage } = screenProps.intl;
 
 		clearHistory('sensor', sensor.id).then(() => {
-			dispatch(showToast(formatMessage(messages.clearCacheSuccess)));
+			dispatch(showToast(formatMessage(i18n.clearCacheSuccess)));
 			this.closeModal();
 		}).catch(() => {
 			dispatch(showToast(null));
@@ -352,7 +301,7 @@ class SettingsTab extends View {
 		const { formatMessage } = screenProps.intl;
 
 		dispatch(removeSensorHistory(sensor.id)).then(() => {
-			dispatch(showToast(formatMessage(messages.clearSuccess)));
+			dispatch(showToast(formatMessage(i18n.clearSuccess)));
 			this.closeModal();
 			clearHistory('sensor', sensor.id);
 		}).catch((err: Object) => {
@@ -388,7 +337,7 @@ class SettingsTab extends View {
 		dispatch(resetSensorMaxMin(sensor.id)).then(() => {
 			dispatch(getSensorInfo(sensor.id));
 			this.closeModal();
-			dispatch(showToast(formatMessage(messages.resetSuccess)));
+			dispatch(showToast(formatMessage(i18n.resetSuccess)));
 		}).catch((err: Object) => {
 			this.closeModal();
 			const	message = err.message ? err.message : null;
@@ -482,8 +431,8 @@ class SettingsTab extends View {
 		if (action === 'clearHistory') {
 			return {
 				showDialogue: show,
-				dialogueHeader: `${formatMessage(messages.clearHistory).toUpperCase()}?`,
-				message: formatMessage(messages.messageClearHistory),
+				dialogueHeader: `${formatMessage(i18n.clearHistory).toUpperCase()}?`,
+				message: formatMessage(i18n.messageClearHistory),
 				positiveText: formatMessage(i18n.labelClearHistory).toUpperCase(),
 				onPressPositive: this.onConfirmClearHistory,
 			};
@@ -491,16 +440,16 @@ class SettingsTab extends View {
 		if (action === 'clearHistoryCache') {
 			return {
 				showDialogue: show,
-				dialogueHeader: `${formatMessage(messages.clearHistoryCache).toUpperCase()}?`,
-				message: formatMessage(messages.messageClearCache),
+				dialogueHeader: `${formatMessage(i18n.clearHistoryCache).toUpperCase()}?`,
+				message: formatMessage(i18n.messageClearCache),
 				positiveText: formatMessage(i18n.labelClearCache).toUpperCase(),
 				onPressPositive: this.onConfirmClearHistoryCache,
 			};
 		}
 		return {
 			showDialogue: show,
-			dialogueHeader: `${formatMessage(messages.resetMaxMin).toUpperCase()}?`,
-			message: formatMessage(messages.messageResetMaxMin),
+			dialogueHeader: `${formatMessage(i18n.resetMaxMin).toUpperCase()}?`,
+			message: formatMessage(i18n.messageResetMaxMin),
 			positiveText: formatMessage(i18n.labelResetMaxMin).toUpperCase(),
 			onPressPositive: this.onConfirmResetMaxMin,
 		};
@@ -570,7 +519,7 @@ class SettingsTab extends View {
 						appLayout={appLayout}
 					/>
 					<SettingsRow
-						label={formatMessage(messages.hideFromList)}
+						label={formatMessage(i18n.hideFromListS)}
 						onValueChange={this.setIgnoreSensor}
 						value={isHidden}
 						appLayout={appLayout}
@@ -582,19 +531,19 @@ class SettingsTab extends View {
 						appLayout={appLayout}
 					/>
 					<TouchableButton
-						text={formatMessage(messages.clearHistory).toUpperCase()}
+						text={formatMessage(i18n.clearHistory).toUpperCase()}
 						onPress={this.clearHistory}
 						style={buttonStyle}/>
 					<TouchableButton
-						text={formatMessage(messages.resetMaxMin).toUpperCase()}
+						text={formatMessage(i18n.resetMaxMin).toUpperCase()}
 						onPress={this.resetMaxMin}
 						style={buttonStyle}/>
 					<TouchableButton
-						text={formatMessage(messages.clearHistoryCache).toUpperCase()}
+						text={formatMessage(i18n.clearHistoryCache).toUpperCase()}
 						onPress={this.clearHistoryCache}
 						style={buttonStyle}/>
 					<Text style={clearCacheHintStyle}>
-						{formatMessage(messages.hintHistoryCache)}.
+						{formatMessage(i18n.hintHistoryCache)}.
 					</Text>
 					<Text style={infoHeaderText}>
 						{formatMessage(i18n.labelTechnicalInfo)}

@@ -24,7 +24,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import { defineMessages } from 'react-intl';
 
 import { ScheduleProps } from './ScheduleScreen';
 import { CheckButton, DaysRow, Description } from './SubViews';
@@ -34,16 +33,6 @@ import _ from 'lodash';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
-const messages = defineMessages({
-	checkAll: {
-		id: 'button.checkAll',
-		defaultMessage: 'Check all',
-	},
-	unCheckAll: {
-		id: 'button.unCheckAll',
-		defaultMessage: 'Uncheck all',
-	},
-});
 interface Props extends ScheduleProps {
 	paddingRight: number,
 }
@@ -77,8 +66,8 @@ export default class Days extends View<null, Props, State> {
 
 		this.h1 = isEditMode() ? formatMessage(i18n.posterDays) : `4. ${formatMessage(i18n.posterDays)}`;
 		this.h2 = formatMessage(i18n.posterChooseDays);
-		this.labelCheckAll = formatMessage(messages.checkAll);
-		this.labelUncheckAll = formatMessage(messages.unCheckAll);
+		this.labelCheckAll = formatMessage(i18n.checkAll);
+		this.labelUncheckAll = formatMessage(i18n.unCheckAll);
 		this.labelWeekDays = `${formatMessage(i18n.weekdays)} (${formatMessage(i18n.weekdaysDescription)})`;
 		this.labelWeekEnds = `${formatMessage(i18n.weekends)} (${formatMessage(i18n.weekendsDescription)})`;
 		this.infoButton = {

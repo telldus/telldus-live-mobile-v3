@@ -25,7 +25,6 @@ import React from 'react';
 import { Image, TouchableOpacity, Linking, SectionList, ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { defineMessages } from 'react-intl';
 import Platform from 'Platform';
 
 import {
@@ -47,31 +46,6 @@ import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast } from '../../Actions';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
-
-const messages = defineMessages({
-	messageNoDeviceTitle: {
-		id: 'pages.devices.messageNoDeviceTitle',
-		defaultMessage: 'You have not added any devices yet.',
-		description: 'Message title when no devices',
-	},
-	messageNoGatewayTitle: {
-		id: 'pages.devices.messageNoGatewayTitle',
-		defaultMessage: 'You have not added a gateway yet.',
-		description: 'Message title when no gateways',
-	},
-	messageNoDeviceContent: {
-		id: 'pages.devices.messageNoDeviceContent',
-		defaultMessage: 'Currently, adding devices is only possible through our web interface, live.telldus.com. ' +
-		'Click below to open the web interface.',
-		description: 'Message title when no devices',
-	},
-	messageNoGatewayContent: {
-		id: 'pages.devices.messageNoGatewayContent',
-		defaultMessage: 'Before adding devices you need to add a gateway as a location in your account. ' +
-		'Click below if you want to do that now.',
-		description: 'Message content when no gateways',
-	},
-});
 
 type Props = {
 	rowsAndSections: Object,
@@ -165,10 +139,10 @@ class DevicesTab extends View {
 		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
 
 		this.url = 'http://live.telldus.com/';
-		this.noDeviceTitle = formatMessage(messages.messageNoDeviceTitle);
-		this.noGatewayTitle = formatMessage(messages.messageNoGatewayTitle);
-		this.noDeviceContent = formatMessage(messages.messageNoDeviceContent);
-		this.noGatewayContent = formatMessage(messages.messageNoGatewayContent);
+		this.noDeviceTitle = formatMessage(i18n.messageNoDeviceTitle);
+		this.noGatewayTitle = formatMessage(i18n.messageNoGatewayTitle);
+		this.noDeviceContent = formatMessage(i18n.messageNoDeviceContent);
+		this.noGatewayContent = formatMessage(i18n.messageNoGatewayContent);
 
 		const labelDevice = formatMessage(i18n.labelDevice).toLowerCase();
 		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelDevice });
@@ -234,10 +208,15 @@ class DevicesTab extends View {
 	}
 
 	renderSectionHeader(sectionData: Object): Object {
+		const { supportLocalControl, isOnline, websocketOnline } = sectionData.section.data[0];
+
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.key}
 				appLayout={this.props.screenProps.appLayout}
+				supportLocalControl={supportLocalControl}
+				isOnline={isOnline}
+				websocketOnline={websocketOnline}
 			/>
 		);
 	}
@@ -248,7 +227,7 @@ class DevicesTab extends View {
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen } = screenProps;
 		const { item } = row;
-		const { isOnline } = item;
+		const { isOnline, supportLocalControl } = item;
 
 		return (
 			<DeviceRow
@@ -258,7 +237,7 @@ class DevicesTab extends View {
 				intl={intl}
 				appLayout={appLayout}
 				currentScreen={currentScreen}
-				isGatewayActive={isOnline}
+				isGatewayActive={isOnline || supportLocalControl}
 				setIgnoreDevice={this.setIgnoreDevice}
 				onPressMore={this.onPressMore}
 				onHiddenRowOpen={this.closeVisibleRows}
