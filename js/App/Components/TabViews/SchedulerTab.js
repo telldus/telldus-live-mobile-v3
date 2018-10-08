@@ -23,9 +23,7 @@
 
 import React from 'react';
 import { FlatList } from 'react-native';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
@@ -48,20 +46,13 @@ import type { Schedule } from '../../Reducers/Schedule';
 import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
 
-const messages = defineMessages({
-	noUpcommingSchedule: {
-		id: 'schedule.noUpcommingSchedule',
-		defaultMessage: 'No upcoming schedules on this day',
-		description: 'Message when no schedules',
-	},
-});
-
 type NavigationParams = {
 	focused: boolean, tintColor: string,
 };
 
 type Props = {
 	rowsAndSections: Object,
+	showInactive: boolean,
 	navigation: Object,
 	screenProps: Object,
 	dispatch: Function,
@@ -78,13 +69,6 @@ class SchedulerTab extends View<null, Props, State> {
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
 
-	static propTypes = {
-		rowsAndSections: PropTypes.object,
-		dispatch: PropTypes.func,
-		navigation: PropTypes.object,
-		screenProps: PropTypes.object,
-	};
-
 	static navigationOptions = (props: Object): Object => ({
 		title: props.screenProps.intl.formatMessage(i18n.scheduler),
 		tabBarIcon: ({ focused, tintColor }: NavigationParams): Object => {
@@ -95,7 +79,7 @@ class SchedulerTab extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.noScheduleMessage = props.screenProps.intl.formatMessage(messages.noUpcommingSchedule);
+		this.noScheduleMessage = props.screenProps.intl.formatMessage(i18n.noUpcommingSchedule);
 
 		this.contentOffset = 0;
 
@@ -171,7 +155,7 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { rowsAndSections, screenProps } = this.props;
+		const { rowsAndSections, screenProps, showInactive } = this.props;
 		const { appLayout, intl, currentScreen } = screenProps;
 		const { formatMessage } = intl;
 		const { todayIndex, isLoading } = this.state;
@@ -193,6 +177,7 @@ class SchedulerTab extends View<null, Props, State> {
 					intl={screenProps.intl}
 					onToggleVisibility={this.onToggleVisibility}
 					currentScreen={currentScreen}
+					showInactive={showInactive}
 				/>
 				<Swiper
 					ref={this._refScroll}
@@ -370,8 +355,12 @@ type MapStateToPropsType = {
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {
+	const { jobsList = {} } = store;
+	const { userOptions = {} } = jobsList;
+	const { showInactive = true } = userOptions;
 	return {
 		rowsAndSections: getRowsAndSections(store),
+		showInactive,
 	};
 };
 

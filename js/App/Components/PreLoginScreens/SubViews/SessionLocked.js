@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import {defineMessages, intlShape, injectIntl} from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import {
 	Text,
@@ -37,19 +37,6 @@ import { logoutFromTelldus } from '../../../Actions';
 import { unregisterPushToken } from '../../../Actions/User';
 import { refreshAccessToken } from '../../../Lib';
 import Theme from '../../../Theme';
-
-const messages = defineMessages({
-	sessionLockedBodyParaOne: {
-		id: 'user.sessionLockedBodyParaOne',
-		defaultMessage: 'For some reason we can\'t connect your account right now.',
-		description: 'Para One content for Session Locked Screen',
-	},
-	sessionLockedBodyParaTwo: {
-		id: 'user.sessionLockedBodyParaTwo',
-		defaultMessage: 'Make sure that your internet connection is working and retry by tapping the retry button below.',
-		description: 'Para Two content for Session Locked Screen',
-	},
-});
 
 type Props = {
 	refreshAccessToken: () => Promise<any>,
@@ -94,8 +81,8 @@ class SessionLocked extends View {
 			logout: props.onPressLogout,
 		};
 
-		this.bodyOne = this.props.intl.formatMessage(messages.sessionLockedBodyParaOne);
-		this.bodyTwo = this.props.intl.formatMessage(messages.sessionLockedBodyParaTwo);
+		this.bodyOne = this.props.intl.formatMessage(i18n.sessionLockedBodyParaOne);
+		this.bodyTwo = this.props.intl.formatMessage(i18n.sessionLockedBodyParaTwo);
 		this.buttonOne = this.props.intl.formatMessage(i18n.retry);
 		this.buttonOneOne = this.props.intl.formatMessage(i18n.loggingin);
 		this.buttonTwo = this.props.intl.formatMessage(i18n.logout);

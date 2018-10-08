@@ -26,7 +26,7 @@
 import React from 'react';
 import { Linking, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import Theme from '../../../Theme';
@@ -41,45 +41,6 @@ import {
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerOne: {
-		id: 'addNewLocation.success.headerOne',
-		defaultMessage: 'Congratulations',
-		description: 'Main header for the add location success Screen',
-	},
-	headerTwo: {
-		id: 'addNewLocation.success.headerTwo',
-		defaultMessage: 'Location added successfully',
-		description: 'Secondary header for the add location success Screen',
-	},
-	messageTitle: {
-		id: 'addNewLocation.success.messageTitle',
-		defaultMessage: 'Welcome to your smart home',
-		description: 'Message Title for the add location success Screen',
-	},
-	messageBodyParaOne: {
-		id: 'addNewLocation.success.messageBodyParaOne',
-		defaultMessage: 'You have now taken the first step towards your smart home! ' +
-		'Now you can start adding devices, view sensors, schedule devices and events and much more.',
-		description: 'Message Body for the add location success Screen Para One',
-	},
-	messageBodyParaTwo: {
-		id: 'addNewLocation.success.messageBodyParaTwo',
-		defaultMessage: 'If you want help or would like to learn tips and tricks on how to setup your smart home you ' +
-		'can view our guides by clicking below',
-		description: 'Message Body for the add location success Screen Para two',
-	},
-	hyperLintText: {
-		id: 'addNewLocation.success.hyperLintText',
-		defaultMessage: 'Guides',
-		description: 'Hyper link button text',
-	},
-	continue: {
-		id: 'button.success.continue',
-		defaultMessage: 'CONTINUE',
-		description: 'Button Text',
-	},
-});
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -106,11 +67,11 @@ class Success extends View<void, Props, State> {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = formatMessage(messages.headerOne);
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h1 = formatMessage(i18n.LSheaderOne);
+		this.h2 = formatMessage(i18n.LSheaderTwo);
 
-		this.title = `${formatMessage(messages.messageTitle)}!`;
-		this.body = formatMessage(messages.messageBodyParaOne);
+		this.title = `${formatMessage(i18n.messageTitle)}!`;
+		this.body = formatMessage(i18n.messageBodyParaOne);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 	}
@@ -181,17 +142,17 @@ class Success extends View<void, Props, State> {
 							{this.body}
 							{/** {'\n\n'}
 							TODO: Bring back this when guides are available in live-v3
-							<FormattedMessage {...messages.messageBodyParaTwo} style={styles.messageBody}/>
+							<FormattedMessage {...i18n.messageBodyParaTwo} style={styles.messageBody}/>
 							*/}
 						</Text>
 						{/** <TouchableOpacity onPress={this.onPressHelp} style={styles.hyperLinkButton}>
 							<CustomIcon name="icon_guide" size={36} color={Theme.Core.brandSecondary} />
-							<FormattedMessage {...messages.hyperLintText} style={styles.hyperLink}/>
+							<FormattedMessage {...i18n.hyperLintText} style={styles.hyperLink}/>
 							<Icon name="angle-right" size={26} color={'#A59F9A'}/>
 						</TouchableOpacity> */}
 					</View>
 					<TouchableButton
-						text={this.props.intl.formatMessage(messages.continue)}
+						text={this.props.intl.formatMessage(i18n.continue)}
 						onPress={this.onPressContinue}
 						style={styles.button}
 					/>

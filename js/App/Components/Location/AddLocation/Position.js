@@ -31,7 +31,6 @@ import { View } from '../../../../BaseComponents';
 import GeoPosition from '../Common/GeoPosition';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -63,8 +62,8 @@ class Position extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `4. ${formatMessage(commonMessages.headerOnePosition)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoPosition);
+		this.h1 = `4. ${formatMessage(i18n.headerOnePosition)}`;
+		this.h2 = formatMessage(i18n.headerTwoPosition);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 

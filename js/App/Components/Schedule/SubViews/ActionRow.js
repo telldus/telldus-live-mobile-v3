@@ -23,7 +23,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages } from 'react-intl';
 
 import { BlockIcon, Row, Text, View } from '../../../../BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
@@ -31,37 +30,6 @@ import Title from './Title';
 import Description from './Description';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
-
-const messages = defineMessages({
-	onDescription: {
-		id: 'actions.onDescription',
-		defaultMessage: 'Turns the device on',
-	},
-	offDescription: {
-		id: 'actions.offDescription',
-		defaultMessage: 'Turns the device off',
-	},
-	bellDescription: {
-		id: 'actions.bellDescription',
-		defaultMessage: 'Ring the bell',
-	},
-	dimDescription: {
-		id: 'actions.dimDescription',
-		defaultMessage: 'Dims the device',
-	},
-	upDescription: {
-		id: 'actions.upDescription',
-		defaultMessage: 'Send up to the device',
-	},
-	downDescription: {
-		id: 'actions.downDescription',
-		defaultMessage: 'Send down to the device',
-	},
-	stopDescription: {
-		id: 'actions.stopDescription',
-		defaultMessage: 'Stop the device',
-	},
-});
 
 type ActionType = {
 	name: string,
@@ -78,7 +46,7 @@ type ActionType = {
 export const ACTIONS: ActionType[] = [
 	{
 		name: 'On',
-		description: messages.onDescription,
+		description: i18n.onDescription,
 		label: i18n.on,
 		actionLabel: i18n.turnOn,
 		method: 1,
@@ -88,7 +56,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Off',
-		description: messages.offDescription,
+		description: i18n.offDescription,
 		label: i18n.off,
 		actionLabel: i18n.turnOff,
 		method: 2,
@@ -98,7 +66,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Bell',
-		description: messages.bellDescription,
+		description: i18n.bellDescription,
 		label: i18n.bell,
 		actionLabel: i18n.bell,
 		method: 4,
@@ -108,7 +76,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Dim',
-		description: messages.dimDescription,
+		description: i18n.dimDescription,
 		label: i18n.dim,
 		actionLabel: i18n.dim,
 		method: 16,
@@ -119,7 +87,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Up',
-		description: messages.upDescription,
+		description: i18n.upDescription,
 		label: i18n.up,
 		actionLabel: i18n.up,
 		method: 128,
@@ -129,7 +97,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Down',
-		description: messages.downDescription,
+		description: i18n.downDescription,
 		label: i18n.down,
 		actionLabel: i18n.down,
 		method: 256,
@@ -139,7 +107,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Stop',
-		description: messages.stopDescription,
+		description: i18n.stopDescription,
 		label: i18n.stop,
 		actionLabel: i18n.stop,
 		method: 512,

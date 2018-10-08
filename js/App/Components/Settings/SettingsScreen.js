@@ -24,7 +24,6 @@
 import React from 'react';
 import { ScrollView, PushNotificationIOS, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 const DeviceInfo = require('react-native-device-info');
 const isEqual = require('react-fast-compare');
 
@@ -46,59 +45,6 @@ import { shouldUpdate } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from './../../Translations/common';
-const messages = defineMessages({
-	pushReRegister: {
-		id: 'settings.pushReRegister',
-		defaultMessage: 'Re-register phone for push notifications',
-	},
-	pushRegisters: {
-		id: 'settings.pushRegisters',
-		defaultMessage: 'Registering for push',
-		description: 'Message in the settings window shown when registrating for push notifications',
-	},
-	pushRegisterSuccess: {
-		id: 'settings.pushRegisterSuccess',
-		defaultMessage: 'This phone is now registered for push',
-		description: 'Message to show when token registered successfully',
-	},
-	pushRegisterFailed: {
-		id: 'settings.pushRegisterFailed',
-		defaultMessage: 'Failed to register for push. Please try again',
-		description: 'Message to show when token register failed',
-	},
-	titleAppInfo: {
-		id: 'settings.row.titleAppInfo',
-		defaultMessage: 'App information',
-	},
-	titlePush: {
-		id: 'settings.row.titlePush',
-		defaultMessage: 'Push',
-	},
-	titleUserInfo: {
-		id: 'settings.row.titleUserInfo',
-		defaultMessage: 'User information',
-	},
-	labelPush: {
-		id: 'settings.row.labelPush',
-		defaultMessage: 'Registered for Push',
-	},
-	labelLoggedUser: {
-		id: 'settings.row.labelLoggedUser',
-		defaultMessage: 'Logged in as',
-	},
-	headerTwoSettings: {
-		id: 'poster.headerTwoSettings',
-		defaultMessage: 'User and app settings',
-	},
-	pushPermissionHeader: {
-		id: 'dialogueBox.pushPermissionHeader',
-		defaultMessage: 'Notifications not allowed',
-	},
-	pushPermissionContent: {
-		id: 'dialogueBox.pushPermissionContent',
-		defaultMessage: 'Notifications are not allowed for this app. Please go to Settings - Notifications to allow notifications',
-	},
-});
 
 type Props = {
 	validationMessage: string,
@@ -154,17 +100,17 @@ constructor(props: Props) {
 	this.labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 	this.labelLogOut = `${formatMessage(i18n.labelLogOut)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
 
-	this.titleAppInfo = formatMessage(messages.titleAppInfo);
-	this.titlePush = formatMessage(messages.titlePush);
-	this.titleUserInfo = `${formatMessage(messages.titleUserInfo)}:`;
+	this.titleAppInfo = formatMessage(i18n.titleAppInfo);
+	this.titlePush = formatMessage(i18n.titlePush);
+	this.titleUserInfo = `${formatMessage(i18n.titleUserInfo)}:`;
 	this.labelVersion = formatMessage(i18n.version);
-	this.labelPush = formatMessage(messages.labelPush);
-	this.labelLoggedUser = formatMessage(messages.labelLoggedUser);
+	this.labelPush = formatMessage(i18n.labelPush);
+	this.labelLoggedUser = formatMessage(i18n.labelLoggedUser);
 	this.valueYes = formatMessage(i18n.yes);
 	this.valueNo = formatMessage(i18n.no);
 
 	this.headerOne = formatMessage(i18n.settingsHeader);
-	this.headerTwo = formatMessage(messages.headerTwoSettings);
+	this.headerTwo = formatMessage(i18n.headerTwoSettings);
 	this.labelWhatsNew = formatMessage(i18n.labelWhatsNew);
 
 	this.handleBackPress = this.handleBackPress.bind(this);
@@ -232,12 +178,12 @@ getRelativeData(): Object {
 	let notificationHeader = `${formatMessage(i18n.logout)}?`, showPositive = true,
 		showNegative = true, positiveText = formatMessage(i18n.logout).toUpperCase(),
 		onPressPositive = this.onConfirmLogout, onPressNegative = this.closeModal;
-	let submitButText = this.state.isPushSubmitLoading ? `${formatMessage(messages.pushRegisters)}...` : formatMessage(messages.pushReRegister);
+	let submitButText = this.state.isPushSubmitLoading ? `${formatMessage(i18n.pushRegisters)}...` : formatMessage(i18n.pushReRegister);
 	let logoutButText = this.state.isLogoutLoading ? formatMessage(i18n.loggingout) : formatMessage(i18n.labelLogOut);
 	let version = DeviceInfo.getVersion();
 
 	if (modalExtras && modalExtras === 'PUSH_PERMISSION') {
-		notificationHeader = formatMessage(messages.pushPermissionHeader);
+		notificationHeader = formatMessage(i18n.pushPermissionHeader);
 		showPositive = true;
 		positiveText = null;
 		showNegative = false;
@@ -352,7 +298,7 @@ submitPushToken() {
 				this.confirmTokenSubmit();
 			} else {
 				const { dispatch, screenProps } = this.props;
-				const message = screenProps.intl.formatMessage(messages.pushPermissionContent);
+				const message = screenProps.intl.formatMessage(i18n.pushPermissionContent);
 				dispatch(actionShowModal(message, 'PUSH_PERMISSION'));
 			}
 		});
@@ -365,10 +311,10 @@ confirmTokenSubmit() {
 	});
 	const { formatMessage } = this.props.screenProps.intl;
 	this.props.onSubmitPushToken(this.props.pushToken).then((response: Object) => {
-		let message = formatMessage(messages.pushRegisterSuccess);
+		let message = formatMessage(i18n.pushRegisterSuccess);
 		this.showToast(message);
 	}).catch(() => {
-		let message = formatMessage(messages.pushRegisterFailed);
+		let message = formatMessage(i18n.pushRegisterFailed);
 		this.showToast(message);
 	});
 }

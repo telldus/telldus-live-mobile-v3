@@ -38,16 +38,6 @@ import {
 } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
-import {defineMessages} from 'react-intl';
-
-const messages = defineMessages({
-	fieldEmpty: {
-		id: 'form.login.fieldEmpty',
-		defaultMessage: 'Something seems to be missing in your form. Please check that ' +
-		'both email and password are entered correctly.',
-		description: 'Validation message to show on the login screen when Form submitted with empty fields',
-	},
-});
 
 type Props = {
 		dispatch: Function,
@@ -260,7 +250,7 @@ class LoginForm extends View {
 					this.handleLoginError(err);
 				});
 		} else {
-			let message = intl.formatMessage(messages.fieldEmpty);
+			let message = intl.formatMessage(i18n.fieldEmpty);
 			dispatch(showModal(message));
 		}
 	}

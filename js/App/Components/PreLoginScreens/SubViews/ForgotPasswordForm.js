@@ -24,7 +24,7 @@
 import React from 'react';
 import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -35,31 +35,6 @@ import { validateEmail } from '../../../Lib/UserUtils';
 import { showModal } from '../../../Actions/Modal';
 
 import i18n from '../../../Translations/common';
-import sharedMessages from './Messages';
-const messages = defineMessages({
-	successHeader: {
-		id: 'user.forgotPass.successHeader',
-		defaultMessage: 'Email sent',
-	},
-	successBody: {
-		id: 'user.forgotPass.successBody',
-		defaultMessage: 'An email with a link to reset password has been sent to {email}. Please check your spam ' +
-		'folder if you don’t receive the mail within 10 minutes.',
-	},
-	emailEmptyBody: {
-		id: 'user.forgotPass.emailEmptyBody',
-		defaultMessage: 'Seems like you forgot to enter your email. Please enter you email address and try again.',
-	},
-	failureHeader: {
-		id: 'user.forgotPass.failureHeader',
-		defaultMessage: 'User not found',
-	},
-	failureBody: {
-		id: 'user.forgotPass.failureBody',
-		defaultMessage: 'No account found with that email. Please check that the email address is entered correctly.',
-	},
-});
-
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -119,8 +94,8 @@ class ForgotPasswordForm extends View<Props, State> {
 				this.props.forgotPassword(email).then((res: Object) => {
 					const { status } = res;
 					if (status && status === 'success') {
-						const message = formatMessage(messages.successBody, {email});
-						const header = formatMessage(messages.successHeader);
+						const message = formatMessage(i18n.successBody, {email});
+						const header = formatMessage(i18n.successHeader);
 						dispatch(showModal(message, header));
 					} else {
 						dispatch(showModal(this.unknownError));
@@ -130,8 +105,8 @@ class ForgotPasswordForm extends View<Props, State> {
 					});
 				}).catch((error: Object) => {
 					if (error.error && error.error === 'User not found') {
-						const message = formatMessage(messages.failureBody);
-						const header = formatMessage(messages.failureHeader);
+						const message = formatMessage(i18n.failureBody);
+						const header = formatMessage(i18n.failureHeader);
 						dispatch(showModal(message, header));
 					} else {
 						const message = !error.error_description && error.message === 'Network request failed' ?
@@ -144,12 +119,12 @@ class ForgotPasswordForm extends View<Props, State> {
 					});
 				});
 			} else {
-				const message = formatMessage(sharedMessages.emailNotValidBody);
-				const header = formatMessage(sharedMessages.emailNotValidHeader);
+				const message = formatMessage(i18n.emailNotValidBody);
+				const header = formatMessage(i18n.emailNotValidHeader);
 				dispatch(showModal(message, header));
 			}
 		} else {
-			const message = formatMessage(messages.emailEmptyBody);
+			const message = formatMessage(i18n.emailEmptyBody);
 			dispatch(showModal(message));
 		}
 	}

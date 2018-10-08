@@ -24,7 +24,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
-import { defineMessages } from 'react-intl';
 
 import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
@@ -32,19 +31,6 @@ import Theme from '../../../Theme';
 import { getSuntime, getHoursAndMinutes } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 import i18n from '../../../Translations/common';
-
-const messages = defineMessages({
-	descriptionOffset: {
-		id: 'schedule.time.descriptionOffset',
-		defaultMessage: 'Offset {value}',
-		description: 'Details about time of the schedule',
-	},
-	descriptionInterval: {
-		id: 'schedule.time.descriptionInterval',
-		defaultMessage: 'Random interval {value}',
-		description: 'Details about interval of the schedule',
-	},
-});
 
 type Time = {
 	hour: number,
@@ -161,8 +147,8 @@ export default class TimeRow extends View<null, Props, State> {
 		const offsetIcon = offset ? 'offset' : null;
 		const randomIcon = randomInterval ? 'random' : null;
 
-		const labelInterval = randomInterval ? intl.formatMessage(messages.descriptionInterval, {value: getHoursAndMinutes(randomInterval)}) : null;
-		const labelOffset = offset ? intl.formatMessage(messages.descriptionOffset, {value: getHoursAndMinutes(offset)}) : null;
+		const labelInterval = randomInterval ? intl.formatMessage(i18n.descriptionInterval, {value: getHoursAndMinutes(randomInterval)}) : null;
+		const labelOffset = offset ? intl.formatMessage(i18n.descriptionOffset, {value: getHoursAndMinutes(offset)}) : null;
 		const time = this._formatTime();
 
 		const accessibilityLabel = this._getAccessibilityLabel(label, time, labelInterval, labelOffset);

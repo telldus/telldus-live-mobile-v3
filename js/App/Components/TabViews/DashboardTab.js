@@ -28,7 +28,6 @@ import { Dimensions, FlatList, RefreshControl, LayoutAnimation } from 'react-nat
 import { connect } from 'react-redux';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { defineMessages } from 'react-intl';
 
 import { Text, View } from '../../../BaseComponents';
 import { getDevices } from '../../Actions/Devices';
@@ -44,26 +43,6 @@ import {
 } from './SubViews';
 
 import { getTabBarIcon, LayoutAnimations } from '../../Lib';
-
-const messages = defineMessages({
-	messageNoItemsTitle: {
-		id: 'pages.dashboard.messageNoItemsTitle',
-		defaultMessage: 'Your dashboard is empty.',
-		description: 'Message title when no items',
-	},
-	messageNoItemsContent: {
-		id: 'pages.dashboard.messageNoItemsContent',
-		defaultMessage: 'You have not added any devices or sensors to your dashboard yet. ' +
-		'Go to devices or sensors tab, swipe left on the row and click the star to select the ' +
-		'ones you want to add.',
-		description: 'Message title when no items',
-	},
-	unknownItem: {
-		id: 'pages.dashboard.unknownItem',
-		defaultMessage: 'Unknown device or sensor',
-		description: 'Message when unknown device or senor',
-	},
-});
 
 type Props = {
 	rows: Array<Object>,
@@ -138,8 +117,8 @@ class DashboardTab extends View {
 		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 
-		this.noItemsTitle = props.screenProps.intl.formatMessage(messages.messageNoItemsTitle);
-		this.noItemsContent = props.screenProps.intl.formatMessage(messages.messageNoItemsContent);
+		this.noItemsTitle = props.screenProps.intl.formatMessage(i18n.messageNoItemsTitle);
+		this.noItemsContent = props.screenProps.intl.formatMessage(i18n.messageNoItemsContent);
 	}
 
 	startSensorTimer() {
@@ -346,10 +325,10 @@ class DashboardTab extends View {
 		};
 
 		if (objectType !== 'sensor' && objectType !== 'device') {
-			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(messages.unknownItem));
+			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		}
 		if (!data) {
-			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(messages.unknownItem));
+			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		}
 
 		if (objectType === 'sensor') {

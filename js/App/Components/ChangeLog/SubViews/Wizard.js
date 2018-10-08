@@ -24,32 +24,11 @@
 
 import React, { PureComponent } from 'react';
 import { Platform, Animated } from 'react-native';
-import { intlShape, defineMessages } from 'react-intl';
+import { intlShape } from 'react-intl';
 
 import { View, Text, IconTelldus, StyleSheet } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
-
-const messages = defineMessages({
-	wizardOneTitle37: {
-		id: 'changeLog37.wizardOne.title',
-		defaultMessage: 'Local control',
-	},
-	wizardOneDescription37: {
-		id: 'changeLog37.wizardOne.description',
-		defaultMessage: 'In this version we have added support for local control of your devices even if the connection '
-			+ 'to the cloud is lost. This works for TellStick Net v2 and TellStick Znet/Znet v2 and the phone needs to be connected '
-			+ 'to the same local network as the gateway.',
-	},
-	WizardTwoTitle37: {
-		id: 'changeLog37.WizardTwo.title',
-		defaultMessage: 'New settings screen',
-	},
-	WizardTwoDescription37: {
-		id: 'changeLog37.WizardTwo.description',
-		defaultMessage: 'There is also an updated settings screen to provide a better overview. The highlighted features of the '
-			+ 'installed version can be accessed from that screen as well if you wish to view them again.',
-	},
-});
+import i18n from '../../../Translations/common';
 
 type Props = {
 	intl: intlShape,
@@ -81,11 +60,11 @@ export default class WizardOne extends PureComponent<Props, null> {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(messages.wizardOneTitle37);
-		this.descriptionWOne = formatMessage(messages.wizardOneDescription37);
+		this.titleWOne = formatMessage(i18n.wizardOneTitle37);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription37);
 
-		this.titleWTwo = formatMessage(messages.WizardTwoTitle37);
-		this.descriptionWTwo = formatMessage(messages.WizardTwoDescription37);
+		this.titleWTwo = formatMessage(i18n.WizardTwoTitle37);
+		this.descriptionWTwo = formatMessage(i18n.WizardTwoDescription37);
 	}
 
 	getScreenData(currentScreen: number, deviceWidth: number): Object {

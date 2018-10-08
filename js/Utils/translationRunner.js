@@ -6,6 +6,6 @@ const manageTranslations = require('react-intl-translations-manager').default;
 
 manageTranslations({
 	messagesDirectory: 'build/messages',
-	translationsDirectory: 'js/App/Translations/',
+	translationsDirectory: 'js/App/Translations/', // TODO: Set to appropriate live-shared-data local path once all definitions and messages are moved.
 	languages: ['en'],
 });

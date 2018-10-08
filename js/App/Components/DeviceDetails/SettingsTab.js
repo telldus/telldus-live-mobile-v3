@@ -25,7 +25,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
 import {
@@ -43,13 +42,6 @@ import { shouldUpdate } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
-const messages = defineMessages({
-	hideFromList: {
-		id: 'hideFromList',
-		defaultMessage: 'Hide from device list',
-		description: 'Select if this item should be shown on the device list',
-	},
-});
 
 type Props = {
 	dispatch: Function,
@@ -184,7 +176,7 @@ class SettingsTab extends View {
 						appLayout={appLayout}
 					/>
 					<SettingsRow
-						label={formatMessage(messages.hideFromList)}
+						label={formatMessage(i18n.hideFromListD)}
 						onValueChange={this.setIgnoreDevice}
 						value={isHidden}
 						appLayout={appLayout}

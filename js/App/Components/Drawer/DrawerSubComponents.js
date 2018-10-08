@@ -23,22 +23,11 @@
 'use strict';
 import React from 'react';
 import Ripple from 'react-native-material-ripple';
-import { defineMessages } from 'react-intl';
 
 import { FormattedMessage, Text, View, Icon, Image, IconTelldus } from '../../../BaseComponents';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
-const messages = defineMessages({
-	connectedLocations: {
-		id: 'settings.connectedLocations',
-		defaultMessage: 'Connected Locations',
-	},
-	addNewLocation: {
-		id: 'settings.addNewLocation',
-		defaultMessage: 'Add New Location',
-	},
-});
 
 const AddLocation = ({onPress, styles}: Object): Object => {
 	return (
@@ -49,7 +38,7 @@ const AddLocation = ({onPress, styles}: Object): Object => {
 			style={styles.addNewLocationContainer}
 			onPress={onPress}>
 			<Icon name="plus-circle" size={styles.iconAddLocSize} color="#e26901"/>
-			<FormattedMessage {...messages.addNewLocation} style={styles.addNewLocationText}/>
+			<FormattedMessage {...i18n.addNewLocation} style={styles.addNewLocationText}/>
 		</Ripple>
 	);
 };
@@ -78,7 +67,7 @@ const NavigationHeader = ({ firstName, lastName, styles }: Object): Object => {
 
 const ConnectedLocations = ({styles}: Object): Object => (
 	<View style={styles.navigationTitle}>
-		<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
+		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.connectedLocations} style={styles.navigationTextTitle}/></Text>
 	</View>
 );
 

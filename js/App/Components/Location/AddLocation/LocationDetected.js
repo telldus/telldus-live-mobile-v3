@@ -25,25 +25,13 @@
 
 import React from 'react';
 import {ScrollView} from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, TouchableButton } from '../../../../BaseComponents';
 import { Clients } from './SubViews';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerOne: {
-		id: 'addNewLocation.locationDetected.headerOne',
-		defaultMessage: 'Select Location',
-		description: 'Main header Text for the Location Detected Screen',
-	},
-	headerTwo: {
-		id: 'addNewLocation.locationDetected.headerTwo',
-		defaultMessage: 'Setup your TellStick to start',
-		description: 'Seconday header Text for the Location Detected Screen',
-	},
-});
 
 type Props = {
 	navigation: Object,
@@ -66,8 +54,8 @@ class LocationDetected extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `1. ${formatMessage(messages.headerOne)}`;
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h1 = `1. ${formatMessage(i18n.LDheaderOne)}`;
+		this.h2 = formatMessage(i18n.LDheaderTwo);
 		this.buttonLabel = formatMessage(i18n.manualActivation).toUpperCase();
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;

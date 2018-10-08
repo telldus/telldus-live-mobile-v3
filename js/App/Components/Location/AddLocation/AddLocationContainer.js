@@ -24,7 +24,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BackHandler, ImageBackground, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { defineMessages } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -41,33 +40,7 @@ import Theme from '../../../Theme';
 import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
 
-const messages = defineMessages({
-	dialogueHeader: {
-		id: 'addLocation.position.dialogueHeader',
-		defaultMessage: 'Geographic position',
-		description: 'Dialogue header on pressing info button in geographic position.',
-	},
-	dialogueBodyParaOne: {
-		id: 'addNewLocation.position.dialogueBodyParaOne',
-		defaultMessage: 'The geographic position is used for calculating correct sunrise and sunset times for scheduled events',
-		description: 'First Paragraph of Dialogue\'s body',
-	},
-	dialogueBodyParaTwo: {
-		id: 'addNewLocation.position.dialogueBodyParaTwo',
-		defaultMessage: 'Press and hold the marker to change the position manually',
-		description: 'Second Paragraph of Dialogue\'s body',
-	},
-	dialogueBodyParaThree: {
-		id: 'addNewLocation.position.dialogueBodyParaThree',
-		defaultMessage: 'If you want to skip this step you can just click next without entering anything',
-		description: 'Third Paragraph of Dialogue\'s body',
-	},
-	dialoguePositiveText: {
-		id: 'addLocation.position.dialoguePositiveText',
-		defaultMessage: 'Close',
-		description: 'Dialogue Positive Text on pressing info button in geographic position.',
-	},
-});
+import i18n from '../../../Translations/common';
 
 type Props = {
 	navigation: Object,
@@ -123,11 +96,11 @@ class AddLocationContainer extends View<null, Props, State> {
 		};
 		const { formatMessage } = props.screenProps.intl;
 
-		this.dlogPOne = `${formatMessage(messages.dialogueBodyParaOne)}.`;
-		this.dlogPTwo = `${formatMessage(messages.dialogueBodyParaTwo)}.`;
-		this.dlogPThree = `${formatMessage(messages.dialogueBodyParaThree)}.`;
+		this.dlogPOne = `${formatMessage(i18n.dialogueBodyParaOne)}.`;
+		this.dlogPTwo = `${formatMessage(i18n.dialogueBodyParaTwo)}.`;
+		this.dlogPThree = `${formatMessage(i18n.dialogueBodyParaThree)}.`;
 
-		this.dialogueHeader = formatMessage(messages.dialogueHeader);
+		this.dialogueHeader = formatMessage(i18n.dialogueHeader);
 
 		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
@@ -207,7 +180,7 @@ class AddLocationContainer extends View<null, Props, State> {
 			return {
 				dialogueHeader: this.renderCustomDialogueHeader(styles),
 				validationMessage: this.renderCustomBody(styles),
-				positiveText: formatMessage(messages.dialoguePositiveText).toUpperCase(),
+				positiveText: formatMessage(i18n.dialoguePositiveText).toUpperCase(),
 			};
 		}
 		return {

@@ -32,7 +32,6 @@ import {
 	LayoutAnimation,
 	KeyboardAvoidingView,
 } from 'react-native';
-import { defineMessages } from 'react-intl';
 
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
@@ -40,27 +39,6 @@ import { TimeBlock, TimeSlider } from './SubViews';
 import { getHoursAndMinutes, LayoutAnimations } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
-
-const messages = defineMessages({
-	descriptionSliderOffset: {
-		id: 'schedule.time.descriptionSliderOffset',
-		defaultMessage: 'Offset the time between {startValue} to {endValue}',
-		description: 'Info about choosing time offset for the schedule',
-	},
-	descriptionSliderInterval: {
-		id: 'schedule.time.descriptionSliderInterval',
-		defaultMessage: 'Set random intervals between {startValue} to {endValue}',
-		description: 'Info about choosing random time interval for the schedule',
-	},
-	editTime: {
-		id: 'schedule.time.editTime',
-		defaultMessage: 'Tap to change time',
-	},
-	editTimeAccessible: {
-		id: 'schedule.time.editTimeAccessible',
-		defaultMessage: 'Double tap to change time',
-	},
-});
 
 const TYPES = ['sunrise', 'sunset', 'time'];
 
@@ -99,14 +77,14 @@ export default class Time extends View<null, Props, State> {
 
 		this.h1 = isEditMode() ? formatMessage(i18n.time) : `3. ${formatMessage(i18n.time)}`;
 		this.h2 = formatMessage(i18n.posterChooseTime);
-		this.labelSliderInterval = formatMessage(messages.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
-		this.labelSliderOffset = formatMessage(messages.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
+		this.labelSliderInterval = formatMessage(i18n.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
+		this.labelSliderOffset = formatMessage(i18n.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
 
-		this.labelSliderIntervalEdit = formatMessage(messages.descriptionSliderInterval, {startValue: '0min', endValue: '1440min'});
-		this.labelSliderOffsetEdit = formatMessage(messages.descriptionSliderOffset, {startValue: '-1439min', endValue: '1439min'});
+		this.labelSliderIntervalEdit = formatMessage(i18n.descriptionSliderInterval, {startValue: '0min', endValue: '1440min'});
+		this.labelSliderOffsetEdit = formatMessage(i18n.descriptionSliderOffset, {startValue: '-1439min', endValue: '1439min'});
 
-		this.labelEditTime = formatMessage(messages.editTime);
-		this.labelEditTimeAccessible = formatMessage(messages.editTimeAccessible);
+		this.labelEditTime = formatMessage(i18n.editTime);
+		this.labelEditTimeAccessible = formatMessage(i18n.editTimeAccessible);
 
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields

@@ -25,24 +25,12 @@
 
 import React from 'react';
 import { View, Image, LocationDetails } from '../../../../../BaseComponents';
-import { defineMessages } from 'react-intl';
 
 import Theme from '../../../../Theme';
 
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
 
-const messages = defineMessages({
-	locationDetected: {
-		id: 'addNewLocation.locationDetected',
-		defaultMessage: 'Location Detected',
-		description: 'Header for which location a device belongs to',
-	},
-	labelBoxHeaderTwo: {
-		id: 'addNewLocation.locationDetected.labelBoxHeaderTwo',
-		defaultMessage: 'Click to activate',
-		description: 'Secondary header for location details box',
-	},
-});
+import i18n from '../../../../Translations/common';
 
 type Props = {
 	onPress: Function,
@@ -60,8 +48,8 @@ export default class Clients extends View {
 		super(props);
 		this.onPress = this.onPress.bind(this);
 
-		this.boxTitle = `${props.intl.formatMessage(messages.locationDetected)}:`;
-		this.boxHeaderTwo = props.intl.formatMessage(messages.labelBoxHeaderTwo);
+		this.boxTitle = `${props.intl.formatMessage(i18n.locationDetected)}:`;
+		this.boxHeaderTwo = props.intl.formatMessage(i18n.labelBoxHeaderTwo);
 	}
 
 	onPress() {
