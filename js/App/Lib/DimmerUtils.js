@@ -15,27 +15,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 // @flow
 
-module.exports = {
-	getDimmerValue: (value: number, isInState: string): number => {
-		let newValue = value || 0;
-		if (isInState === 'TURNON') {
-			return 255;
-		}
-		if (isInState === 'TURNOFF') {
-			return 0;
-		}
+'use strict';
 
-		newValue = parseInt(newValue, 10);
-		return newValue;
-	},
-	toDimmerValue: (sliderValue: number): number => {
-		return Math.round(sliderValue * 255 / 100.0);
-	},
-	toSliderValue: (dimmerValue: number): number => {
-		return Math.round(dimmerValue * 100.0 / 255);
-	},
+import { utils } from 'live-shared-data';
+const { dimmerUtils } = utils;
+
+module.exports = {
+	...dimmerUtils,
 };
