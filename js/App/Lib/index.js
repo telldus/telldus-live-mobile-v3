@@ -23,7 +23,7 @@
 import getRouteName from './getRouteName';
 import getDeviceWidth from './getDeviceWidth';
 import hasStatusBar from './hasStatusBar';
-import Dimmer from './Dimmer';
+import DimmerUtils from './DimmerUtils';
 import SensorUtils from './SensorUtils';
 import DeviceUtils from './DeviceUtils';
 import Accessibility from './Accessibility';
@@ -57,7 +57,7 @@ module.exports = {
 	getPowerParts,
 	getSuntime,
 	getTabBarIcon,
-	...Dimmer,
+	...DimmerUtils,
 	...SensorUtils,
 	...DeviceUtils,
 	...Accessibility,
