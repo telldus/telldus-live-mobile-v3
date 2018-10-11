@@ -28,7 +28,7 @@ import { AppState } from 'react-native';
 import Orientation from 'react-native-orientation';
 import { AccessibilityInfo } from 'react-native';
 
-import { resetLocalControlSupport, autoDetectLocalTellStick, closeUDPSocket } from './Gateways';
+import { resetLocalControlSupport, autoDetectLocalTellStick, closeUDPSocket, initiateGatewayLocalTest } from './Gateways';
 
 module.exports = {
 	appStart: (): Action => ({
@@ -40,6 +40,7 @@ module.exports = {
 				dispatch({
 					type: 'APP_FOREGROUND',
 				});
+				dispatch(initiateGatewayLocalTest());
 				dispatch(autoDetectLocalTellStick());
 			}
 			if (appState === 'background') {

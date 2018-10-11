@@ -42,6 +42,7 @@ import {
 	setAppLayout,
 	resetLocalControlSupport,
 	closeUDPSocket,
+	initiateGatewayLocalTest,
 } from '../Actions';
 import { getRSAKey } from '../Lib';
 import { intlShape, injectIntl, defineMessages } from 'react-intl';
@@ -176,6 +177,9 @@ class AppNavigator extends View {
 			dispatch(getAppData());
 			dispatch(resetSchedule());
 
+			// test gateway local control end-point on app restart.
+			dispatch(initiateGatewayLocalTest());
+
 			// Auto discover TellStick's that support local control.
 			this.autoDetectLocalTellStick();
 		});
@@ -195,6 +199,7 @@ class AppNavigator extends View {
 
 		// When user's connection change and if it there is connection to internet, auto-discover TellStick and update it's ip address.
 		if (type && type !== 'none') {
+			dispatch(initiateGatewayLocalTest());
 			dispatch(autoDetectLocalTellStick());
 		}
 	}
