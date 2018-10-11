@@ -123,25 +123,25 @@ def enableProguardInReleaseBuilds = false
 
 android {
 
-packagingOptions {
-       exclude 'META-INF/DEPENDENCIES.txt'
-       exclude 'META-INF/LICENSE.txt'
-       exclude 'META-INF/NOTICE.txt'
-       exclude 'META-INF/NOTICE'
-       exclude 'META-INF/LICENSE'
-       exclude 'META-INF/DEPENDENCIES'
-       exclude 'META-INF/notice.txt'
-       exclude 'META-INF/license.txt'
-       exclude 'META-INF/dependencies.txt'
-       exclude 'META-INF/LGPL2.1'
-   }
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.telldus.live.mobile"
-        minSdkVersion 21
-        targetSdkVersion 26
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode readVersionCode()
         versionName readVersion()
         multiDexEnabled true
@@ -216,7 +216,7 @@ dependencies {
     implementation project(':react-native-extra-dimensions-android')
     implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:26.1.0"
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
     // https://github.com/facebook/react-native/issues/19259#issuecomment-389064401
     // will need to update here too on upgrading RN.
