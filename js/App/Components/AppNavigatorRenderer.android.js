@@ -54,6 +54,7 @@ import {
 	syncWithServer,
 	switchTab,
 	closeUDPSocket,
+	initiateGatewayLocalTest,
 } from '../Actions';
 import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
@@ -196,6 +197,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 			dispatch(getAppData());
 			dispatch(resetSchedule());
 
+			// test gateway local control end-point on app restart.
+			dispatch(initiateGatewayLocalTest());
+
 			// Auto discover TellStick's that support local control.
 			this.autoDetectLocalTellStick();
 		});
@@ -301,6 +305,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		// When user's connection change and if it there is connection to internet, auto-discover TellStick and update it's ip address.
 		if (type && type !== 'none') {
+			dispatch(initiateGatewayLocalTest());
 			dispatch(autoDetectLocalTellStick());
 		}
 	}
