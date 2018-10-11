@@ -217,18 +217,18 @@ const initiateGatewayLocalTest = (): ThunkAction => {
 	return (dispatch: Function, getState: Function) => {
 		let { gateways: { byId } } = getState();
 		for (let key in byId) {
-			const { localKey = {} } = byId[key];
+			const { localKey = {}, id } = byId[key];
 			const { address, key: token, ttl } = localKey;
 			const tokenExpired = hasTokenExpired(ttl);
 
 			if (address && ttl && tokenExpired) {
-				dispatch(refreshLocalControlToken(key));
+				dispatch(refreshLocalControlToken(id));
 			}
 
 			// if 'address' is not available means, either it has never been auto-discovered or action 'RESET_LOCAL_CONTROL_ADDRESS'
 			// has already been called on this gateway.
 			if (address && token && ttl && !tokenExpired) {
-				dispatch(testGatewayLocalControl(address, token, key));
+				dispatch(testGatewayLocalControl(address, token, id));
 			}
 		}
 	};
