@@ -28,7 +28,8 @@ import { AppState } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import { AccessibilityInfo } from 'react-native';
 
-import { resetLocalControlSupport, autoDetectLocalTellStick, closeUDPSocket, initiateGatewayLocalTest } from './Gateways';
+import { resetLocalControlSupport, autoDetectLocalTellStick, closeUDPSocket } from './Gateways';
+import { initiateGatewayLocalTest } from './LocalTest';
 
 module.exports = {
 	appStart: (): Action => ({
