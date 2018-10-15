@@ -39,6 +39,7 @@ import WebSocketActions from './Websockets';
 import AppActions from './App';
 import ScheduleActions from './Schedule';
 import UserActions from './User';
+import LocalTest from './LocalTest';
 
 module.exports = {
 	...GatewayActions,
@@ -58,4 +59,5 @@ module.exports = {
 	...AppActions,
 	...ScheduleActions,
 	...UserActions,
+	...LocalTest,
 };

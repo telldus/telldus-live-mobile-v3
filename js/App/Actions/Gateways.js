@@ -27,7 +27,6 @@ import { Platform } from 'react-native';
 import { LiveApi } from '../Lib/LiveApi';
 import { getRSAKey } from '../Lib/RSA';
 import { reportException } from '../Lib/Analytics';
-import { LocalApi, hasTokenExpired, refreshLocalControlToken } from '../Lib/LocalApi';
 import type { ThunkAction, Action } from './Types';
 
 // Gateways actions that are shared by both Web and Mobile.
@@ -213,55 +212,6 @@ const resetLocalControlAddress = (gatewayId: number, address: string): Action =>
 	};
 };
 
-const initiateGatewayLocalTest = (): ThunkAction => {
-	return (dispatch: Function, getState: Function) => {
-		let { gateways: { byId } } = getState();
-		for (let key in byId) {
-			const { localKey = {}, id } = byId[key];
-			const { address, key: token, ttl } = localKey;
-			const tokenExpired = hasTokenExpired(ttl);
-
-			if (address && ttl && tokenExpired) {
-				dispatch(refreshLocalControlToken(id));
-			}
-
-			// if 'address' is not available means, either it has never been auto-discovered or action 'RESET_LOCAL_CONTROL_ADDRESS'
-			// has already been called on this gateway.
-			if (address && token && ttl && !tokenExpired) {
-				dispatch(testGatewayLocalControl(address, token, id));
-			}
-		}
-	};
-};
-
-const testGatewayLocalControl = (address: string, token: string, clientId: number): ThunkAction => {
-	return (dispatch: Function, getState: Function): Promise<any> => {
-		const url = format({
-			pathname: '/system/info',
-		});
-		const payload = {
-			address,
-			url,
-			requestParams: {
-				method: 'GET',
-			},
-			token,
-		};
-		return LocalApi(payload).then((response: Object): any => {
-			const { product } = response;
-			if (product) {
-				return dispatch(validateLocalControlSupport(clientId, true));
-			}
-			throw response;
-		}).catch(() => {
-			// This clear/reset the local control 'address' completely.
-			// It is important to clear because, if not, upon any device action local control will be tried first,
-			// and if address is not reachable, it will cause an unnecessary delay each time.
-			dispatch(resetLocalControlAddress(clientId, address));
-		});
-	};
-};
-
 module.exports = {
 	...Gateways,
 	getTokenForLocalControl,
@@ -269,7 +219,5 @@ module.exports = {
 	resetLocalControlSupport,
 	closeUDPSocket,
 	validateLocalControlSupport,
-	testGatewayLocalControl,
-	initiateGatewayLocalTest,
 	resetLocalControlAddress,
 };
