@@ -24,7 +24,7 @@
 
 import { Platform } from 'react-native';
 import { reportException } from '../Lib/Analytics';
-import { getTokenForLocalControl } from '../Lib/LocalControl';
+import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';
 import type { ThunkAction, Action } from './Types';
 
 // Gateways actions that are shared by both Web and Mobile.
@@ -88,9 +88,13 @@ function autoDetectLocalTellStick(): ThunkAction {
 				let item = gateways[key];
 				let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
 				if (localKey) {
-					let { key: token } = localKey;
+					let { key: token, ttl } = localKey;
 					if (items[4] && uuid && (items[4] === uuid)) {
 						if (websocketOnline && websocketConnected && !token) {
+							dispatch(getTokenForLocalControl(id));
+						}
+						const tokenExpired = hasTokenExpired(ttl);
+						if (websocketOnline && websocketConnected && token && ttl && tokenExpired) {
 							dispatch(getTokenForLocalControl(id));
 						}
 					}
