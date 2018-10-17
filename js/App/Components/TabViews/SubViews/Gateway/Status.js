@@ -61,7 +61,7 @@ render(): Object {
 	let { online, websocketOnline, textStyle, appLayout, statusInfoStyle, localKey = {}} = this.props;
 	let { address, key, ttl, supportLocal } = localKey;
 	let tokenExpired = hasTokenExpired(ttl);
-	let supportLocalControl = address && key && ttl && !tokenExpired && supportLocal;
+	let supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
 	let icon = supportLocalControl ? 'localcontrol' : 'cloudcontrol';
 	let {
 		statusText,
