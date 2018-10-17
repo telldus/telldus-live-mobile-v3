@@ -239,18 +239,14 @@ class AppNavigator extends View {
 		*/
 		this.timeOutGetLocalControlToken = setTimeout(() => {
 			const { dispatch, gateways } = that.props;
-			getRSAKey(false, ({ pemPub }: Object) => {
-				if (pemPub) {
-					for (let index in gateways) {
-						const gateway = gateways[index];
-						const { id, websocketOnline, websocketConnected, localKey = {} } = gateway;
-						const { key, supportLocal } = localKey;
-						if (websocketOnline && websocketConnected && supportLocal && !key) {
-							dispatch(getTokenForLocalControl(id, pemPub));
-						}
-					}
+			for (let index in gateways) {
+				const gateway = gateways[index];
+				const { id, websocketOnline, websocketConnected, localKey = {} } = gateway;
+				const { key, supportLocal } = localKey;
+				if (websocketOnline && websocketConnected && supportLocal && !key) {
+					dispatch(getTokenForLocalControl(id));
 				}
-			});
+			}
 		}, 35000);
 	}
 

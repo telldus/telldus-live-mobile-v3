@@ -23,7 +23,6 @@
 'use strict';
 
 import { Platform } from 'react-native';
-import { getRSAKey } from '../Lib/RSA';
 import { reportException } from '../Lib/Analytics';
 import { getTokenForLocalControl } from '../Lib/LocalControl';
 import type { ThunkAction, Action } from './Types';
@@ -91,11 +90,9 @@ function autoDetectLocalTellStick(): ThunkAction {
 				if (localKey) {
 					let { key: token } = localKey;
 					if (items[4] && uuid && (items[4] === uuid)) {
-						getRSAKey(false, ({ pemPub }: Object) => {
-							if (pemPub && websocketOnline && websocketConnected && !token) {
-								dispatch(getTokenForLocalControl(id, pemPub));
-							}
-						});
+						if (websocketOnline && websocketConnected && !token) {
+							dispatch(getTokenForLocalControl(id));
+						}
 					}
 				}
 			}

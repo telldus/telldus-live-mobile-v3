@@ -21,8 +21,9 @@
 // @flow
 
 'use strict';
+import type { Action } from './Types';
 
-const localControlSuccess = (gatewayId: string, uuid: string): Action => {
+const localControlSuccess = (gatewayId: number, uuid: string): Action => {
 	return {
 		type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_SUCCESS',
 		payload: {
@@ -32,7 +33,7 @@ const localControlSuccess = (gatewayId: string, uuid: string): Action => {
 	};
 };
 
-const localControlError = (gatewayId: string): Action => {
+const localControlError = (gatewayId: number): Action => {
 	return {
 		type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_ERROR',
 		payload: {

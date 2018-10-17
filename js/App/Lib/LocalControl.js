@@ -40,7 +40,8 @@ function getTokenForLocalControl(id: number): ThunkAction {
 		return getRSAKey(false, ({ pemPub }: Object): any => {
 			if (pemPub) {
 				let formData = new FormData();
-				formData.append('id', id);
+				let clientId = id.toString();
+				formData.append('id', clientId);
 				formData.append('publicKey', pemPub);
 				const url = format({
 					pathname: '/client/requestLocalKey',
