@@ -46,6 +46,7 @@ import * as NavigationService from './NavigationService';
 import shouldUpdate from './shouldUpdate';
 import * as LayoutAnimations from './LayoutAnimations';
 import * as UserUtils from './UserUtils';
+import * as LocalControl from './LocalControl';
 
 
 module.exports = {
@@ -75,4 +76,5 @@ module.exports = {
 	shouldUpdate,
 	LayoutAnimations,
 	...UserUtils,
+	...LocalControl,
 };
