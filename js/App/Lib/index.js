@@ -45,6 +45,7 @@ import * as RSA from './RSA';
 import scheduleUtils from './scheduleUtils';
 import * as LocalApi from './LocalApi';
 import * as UserUtils from './UserUtils';
+import * as LocalControl from './LocalControl';
 
 
 module.exports = {
@@ -73,4 +74,5 @@ module.exports = {
 	...scheduleUtils,
 	...LocalApi,
 	...UserUtils,
+	...LocalControl,
 };

@@ -27,7 +27,7 @@ import partition from 'lodash/partition';
 import isEmpty from 'lodash/isEmpty';
 import { combineReducers } from 'redux';
 
-import { hasTokenExpired } from '../Lib';
+import { hasTokenExpired } from '../Lib/LocalControl';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let modifiedData = paramOne.map((item: Object, index: number): Object => {

@@ -24,7 +24,8 @@
 import { format } from 'url';
 
 import { validateLocalControlSupport, resetLocalControlAddress } from './Gateways';
-import { LocalApi, hasTokenExpired, refreshLocalControlToken } from '../Lib/LocalApi';
+import { LocalApi } from '../Lib/LocalApi';
+import { hasTokenExpired, getTokenForLocalControl } from '../Lib/LocalControl';
 import type { ThunkAction } from './Types';
 
 const initiateGatewayLocalTest = (): ThunkAction => {
@@ -36,7 +37,7 @@ const initiateGatewayLocalTest = (): ThunkAction => {
 			const tokenExpired = hasTokenExpired(ttl);
 
 			if (address && ttl && tokenExpired) {
-				dispatch(refreshLocalControlToken(id));
+				dispatch(getTokenForLocalControl(id));
 			}
 
 			// if 'address' is not available means, either it has never been auto-discovered or action 'RESET_LOCAL_CONTROL_ADDRESS'
