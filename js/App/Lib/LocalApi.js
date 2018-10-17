@@ -21,11 +21,6 @@
 // @flow
 
 'use strict';
-import moment from 'moment';
-
-import { getRSAKey } from './RSA';
-import { getTokenForLocalControl } from '../Actions/Gateways';
-import type { ThunkAction } from '../Actions/Types';
 
 function LocalApi({ address, url, requestParams, token }: {address: string, url: string, requestParams: Object, token: string}): Promise<any> {
 	return new Promise((resolve: Function, reject: Function): Promise<any> => {
@@ -74,36 +69,6 @@ async function callEndPoint(address: string, url: string, requestParams: Object,
 	return JSON.parse(response);
 }
 
-/**
- *
- * @id - The gateway ID, for which token has to be refreshed.
- *
- * This method requests for a new local control token, and the token is recieved through socket.
- * Upon successful receival it is decrypted and stored in the redux store.
- *
- */
-function refreshLocalControlToken(id: number): ThunkAction {
-	return (dispatch: Function, getState: Function): Promise<any> => {
-		return getRSAKey(false, ({ pemPub }: Object): any => {
-			if (pemPub) {
-				return dispatch(getTokenForLocalControl(id, pemPub));
-			}
-		});
-	};
-}
-
-function hasTokenExpired(ttl: number): boolean {
-	if (!ttl) {
-		return true;
-	}
-	const now = moment();
-	const expDate = moment.unix(ttl);
-	const hasExpired = now.isSameOrAfter(expDate);
-	return hasExpired;
-}
-
 module.exports = {
 	LocalApi,
-	refreshLocalControlToken,
-	hasTokenExpired,
 };
