@@ -26,7 +26,7 @@ import { format } from 'url';
 
 import { supportedMethods, methods } from '../../Config';
 import type { ThunkAction } from './Types';
-import { LocalApi, hasTokenExpired, refreshLocalControlToken } from '../Lib';
+import { LocalApi, hasTokenExpired, getTokenForLocalControl } from '../Lib';
 
 import { validateLocalControlSupport } from './Gateways';
 // Device actions that are shared by both Web and Mobile.
@@ -125,7 +125,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 
 			// if tokenExpired refreshes the token, do not `return` from this block, as
 			// device has to be controlled using LiveApi(the block below).
-			dispatch(refreshLocalControlToken(clientId));
+			dispatch(getTokenForLocalControl(clientId));
 		}
 		dispatch(requestDeviceAction(deviceId, state, false));
 		return dispatch(deviceSetStateShared(deviceId, state, stateValue));

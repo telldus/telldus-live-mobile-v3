@@ -21,12 +21,10 @@
 // @flow
 
 'use strict';
-import { format } from 'url';
 
 import { Platform } from 'react-native';
-import { LiveApi } from '../Lib/LiveApi';
-import { getRSAKey } from '../Lib/RSA';
 import { reportException } from '../Lib/Analytics';
+import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';
 import type { ThunkAction, Action } from './Types';
 
 // Gateways actions that are shared by both Web and Mobile.
@@ -43,39 +41,6 @@ const STATE = {
 	BINDING: 1,
 	BOUND: 2,
 };
-
-
-function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
-	return (dispatch: Function, getState: Function): Promise<any> => {
-		let formData = new FormData();
-		formData.append('id', id);
-		formData.append('publicKey', publicKey);
-		const url = format({
-			pathname: '/client/requestLocalKey',
-		});
-		const payload = {
-			url,
-			requestParams: {
-				method: 'POST',
-				body: formData,
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'multipart/form-data',
-				},
-			},
-		};
-		return LiveApi(payload).then((response: Object): Object => {
-			if (response && response.uuid) {
-				dispatch(localControlSuccess(id, response.uuid));
-				return response;
-			}
-			throw response;
-		}).catch((err: Object) => {
-			dispatch(localControlError(id));
-			throw err;
-		});
-	};
-}
 
 function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
@@ -123,13 +88,15 @@ function autoDetectLocalTellStick(): ThunkAction {
 				let item = gateways[key];
 				let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
 				if (localKey) {
-					let { key: token } = localKey;
+					let { key: token, ttl } = localKey;
 					if (items[4] && uuid && (items[4] === uuid)) {
-						getRSAKey(false, ({ pemPub }: Object) => {
-							if (pemPub && websocketOnline && websocketConnected && !token) {
-								dispatch(getTokenForLocalControl(id, pemPub));
-							}
-						});
+						if (websocketOnline && websocketConnected && !token) {
+							dispatch(getTokenForLocalControl(id));
+						}
+						const tokenExpired = hasTokenExpired(ttl);
+						if (websocketOnline && websocketConnected && token && ttl && tokenExpired) {
+							dispatch(getTokenForLocalControl(id));
+						}
 					}
 				}
 			}
@@ -155,25 +122,6 @@ function randomPort(): number {
 	// eslint-disable-next-line
 	return Math.random() * 60536 | 0 + 5000; // 60536-65536
 }
-
-const localControlSuccess = (gatewayId: string, uuid: string): Action => {
-	return {
-		type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_SUCCESS',
-		payload: {
-			gatewayId,
-			uuid,
-		},
-	};
-};
-
-const localControlError = (gatewayId: string): Action => {
-	return {
-		type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_ERROR',
-		payload: {
-			gatewayId,
-		},
-	};
-};
 
 const autoDetectLocalTellStickSuccess = (tellStickInfo: Object, routeInfo: Object): Action => {
 	let payload: Object = {
@@ -214,7 +162,6 @@ const resetLocalControlAddress = (gatewayId: number, address: string): Action =>
 
 module.exports = {
 	...Gateways,
-	getTokenForLocalControl,
 	autoDetectLocalTellStick,
 	resetLocalControlSupport,
 	closeUDPSocket,

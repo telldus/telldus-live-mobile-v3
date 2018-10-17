@@ -34,6 +34,7 @@ import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
 
 import Theme from '../../../Theme';
+import { hasTokenExpired } from '../../../Lib';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import i18n from '../../../Translations/common';
 
@@ -164,10 +165,13 @@ class Details extends View {
 			NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
 				this.infoPressCount = 0;
 				const { type, effectiveType } = connectionInfo;
+				const { ttl = null } = localKey;
+				const tokenExpired = hasTokenExpired(ttl);
 				const debugData = {
 					online,
 					websocketOnline,
 					...localKey,
+					tokenExpired,
 					connectionType: type,
 					connectionEffectiveType: effectiveType,
 				};

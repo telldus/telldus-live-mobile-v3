@@ -39,6 +39,7 @@ import AppActions from './App';
 import ScheduleActions from './Schedule';
 import UserActions from './User';
 import LocalTest from './LocalTest';
+import LocalControl from './LocalControl';
 
 module.exports = {
 	...GatewayActions,
@@ -58,4 +59,5 @@ module.exports = {
 	...ScheduleActions,
 	...UserActions,
 	...LocalTest,
+	...LocalControl,
 };
