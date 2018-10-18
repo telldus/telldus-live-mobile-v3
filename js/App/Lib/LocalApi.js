@@ -21,6 +21,7 @@
 // @flow
 
 'use strict';
+import axios from 'axios';
 
 function LocalApi({ address, url, requestParams, token }: {address: string, url: string, requestParams: Object, token: string}): Promise<any> {
 	return new Promise((resolve: Function, reject: Function): Promise<any> => {
@@ -64,9 +65,9 @@ async function callEndPoint(address: string, url: string, requestParams: Object,
 			},
 		});
 	}
-	let response = await fetch(`http://${address}/api${url}`, params);
-	response = await response.text();
-	return JSON.parse(response);
+	let response = await axios(`http://${address}/api${url}`, params);
+	let { data = {} } = response;
+	return data;
 }
 
 module.exports = {
