@@ -25,7 +25,6 @@ import orderBy from 'lodash/orderBy';
 import reduce from 'lodash/reduce';
 import partition from 'lodash/partition';
 import isEmpty from 'lodash/isEmpty';
-import { combineReducers } from 'redux';
 
 import { hasTokenExpired } from '../Lib/LocalControl';
 
@@ -78,29 +77,3 @@ export function parseSensorsForListView(sensors: Object = {}, gateways: Object =
 	return { visibleList, hiddenList };
 }
 
-export type State = ?Object;
-
-const defaultTypeById = (state: Object = {}, action: Object): State => {
-	if (action.type === 'persist/REHYDRATE') {
-		if (action.payload && action.payload.sensorsList && action.payload.sensorsList.defaultTypeById) {
-			console.log('rehydrating sensorsList.defaultTypeById');
-			return {
-				...state,
-				...action.payload.sensorsList.defaultTypeById,
-			};
-		}
-		return { ...state };
-	}
-	if (action.type === 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE') {
-		const { id, displayType } = action;
-		return {
-			...state,
-			[id]: displayType,
-		};
-	}
-	return state;
-};
-
-export default combineReducers({
-	defaultTypeById,
-});

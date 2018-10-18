@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2016-present Telldus Technologies AB.
  *
@@ -15,40 +16,37 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 // @flow
 
 'use strict';
 
-import { persistCombineReducers } from 'redux-persist';
-import { AsyncStorage } from 'react-native';
-import { localStorageKey } from '../../Config';
+import { combineReducers } from 'redux';
 
-import { migrations } from '../Store';
-import Navigation from './Navigation';
-import User from './User';
-import Tabs from './Tabs';
-import LiveApi from './LiveApi';
-import Modal from './Modal';
-import sensorsList from './SensorsList';
-import jobsList from './Jobs';
-import { reducers } from 'live-shared-data';
+export type State = ?Object;
 
-const config = {
-	key: localStorageKey,
-	storage: AsyncStorage,
-	migrate: migrations,
+const defaultTypeById = (state: Object = {}, action: Object): State => {
+	if (action.type === 'persist/REHYDRATE') {
+		if (action.payload && action.payload.sensorsList && action.payload.sensorsList.defaultTypeById) {
+			console.log('rehydrating sensorsList.defaultTypeById');
+			return {
+				...state,
+				...action.payload.sensorsList.defaultTypeById,
+			};
+		}
+		return { ...state };
+	}
+	if (action.type === 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE') {
+		const { id, displayType } = action;
+		return {
+			...state,
+			[id]: displayType,
+		};
+	}
+	return state;
 };
 
-module.exports = persistCombineReducers(config, {
-	navigation: Navigation,
-	user: User,
-	tabs: Tabs,
-	liveApi: LiveApi,
-	modal: Modal,
-	sensorsList,
-	...reducers,
-	jobsList,
+export default combineReducers({
+	defaultTypeById,
 });
