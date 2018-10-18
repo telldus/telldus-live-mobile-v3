@@ -59,6 +59,7 @@ const testGatewayLocalControl = (address: string, token: string, clientId: numbe
 			url,
 			requestParams: {
 				method: 'GET',
+				timeout: 3000,
 			},
 			token,
 		};
