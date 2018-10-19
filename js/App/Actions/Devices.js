@@ -154,9 +154,15 @@ function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: s
 		const payload = {
 			address,
 			url,
-			requestParams: {
-				method: 'GET',
-			},
+			requestParams: reset ?
+				{
+					method: 'GET',
+					timeout: 3000,
+				}
+				:
+				{
+					method: 'GET',
+				},
 			token,
 		};
 		return LocalApi(payload).then((response: Object): any => {
