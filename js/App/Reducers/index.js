@@ -31,7 +31,7 @@ import Navigation from './Navigation';
 import User from './User';
 import LiveApi from './LiveApi';
 import Modal from './Modal';
-import sensorsList from './Sensors';
+import sensorsList from './SensorsList';
 import jobsList from './Jobs';
 import { reducers } from 'live-shared-data';
 
