@@ -23,6 +23,7 @@
 'use strict';
 
 import { format } from 'url';
+import { CancelToken } from 'axios';
 
 import { supportedMethods, methods } from '../../Config';
 import type { ThunkAction } from './Types';
@@ -38,6 +39,8 @@ const { showToast } = App;
 
 let setStateTimeout = {};
 let setStateInterval = {};
+let requestTimeout = {};
+let infoRequestTimeout = {};
 
 function deviceSetState(deviceId: number, state: number, stateValue: number | null = null): ThunkAction {
 	return (dispatch: Function, getState: Function): any => {
@@ -49,7 +52,10 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 
 		if (address && token && ttl && !tokenExpired) {
 			dispatch(requestDeviceAction(deviceId, state, true));
+
+			clearRequestTimer(clientDeviceId);
 			clearTimers(clientDeviceId);
+
 			const url = format({
 				pathname: '/device/command',
 				query: {
@@ -58,17 +64,26 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 					value: stateValue,
 				},
 			});
+			const source = CancelToken.source();
 			const payload = {
 				address,
 				url,
 				requestParams: {
 					method: 'GET',
-					timeout: 3000,
+					cancelToken: source.token,
 				},
 				token,
 			};
 
+			// Need to achieve timeout and cancel explicity because axios timeout does not work when ip is not reachable
+			// https://github.com/axios/axios/issues/647
+			requestTimeout[`${clientDeviceId}RTO`] = setTimeout(() => {
+				source.cancel();
+			}, 3000);
+
 			return LocalApi(payload).then((response: Object): any => {
+
+				clearRequestTimer(clientDeviceId);
 				clearTimers(clientDeviceId);
 				const { status } = response;
 				if (status && status === 'success') {
@@ -81,16 +96,16 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 					if (state !== 32) {
 					// Every 1sec for the very next 10secs of action success, keep checking device state
 					// by calling device/info.
-						setStateTimeout[clientDeviceId] = setTimeout(() => {
-							if (setStateInterval[clientDeviceId]) {
-								clearInterval(setStateInterval[clientDeviceId]);
+						setStateTimeout[`${clientDeviceId}SSTO`] = setTimeout(() => {
+							if (setStateInterval[`${clientDeviceId}SSTI`]) {
+								clearInterval(setStateInterval[`${clientDeviceId}SSTI`]);
 							}
 							// Final device/info call, to reset the device state.
 							// Will be called after 10secs, that means device action has not been success yet(setStateTimeout not cleared).
 							dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, true));
 						}, 10000);
 
-						setStateInterval[clientDeviceId] = setInterval(() => {
+						setStateInterval[`${clientDeviceId}SSTI`] = setInterval(() => {
 							const { devices: deviceLat } = getState();
 							const device = deviceLat.byId[deviceId];
 							if (device) {
@@ -113,6 +128,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				}
 				throw response;
 			}).catch((): any => {
+				clearRequestTimer(clientDeviceId);
 				dispatch(requestDeviceAction(deviceId, state, false));
 
 				// Can confirm that local control parameters currently present are not valid(address has changed or something)
@@ -134,11 +150,20 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 }
 
 function clearTimers(id: number) {
-	if (setStateTimeout[id]) {
-		clearTimeout(setStateTimeout[id]);
+	if (setStateTimeout[`${id}SSTO`]) {
+		clearTimeout(setStateTimeout[`${id}SSTO`]);
 	}
-	if (setStateInterval[id]) {
-		clearInterval(setStateInterval[id]);
+	if (setStateInterval[`${id}SSTI`]) {
+		clearInterval(setStateInterval[`${id}SSTI`]);
+	}
+}
+
+function clearRequestTimer(id: number) {
+	if (requestTimeout[`${id}RTO`]) {
+		clearTimeout(requestTimeout[`${id}RTO`]);
+	}
+	if (infoRequestTimeout[`${id}IRTO`]) {
+		clearTimeout(infoRequestTimeout[`${id}IRTO`]);
 	}
 }
 
@@ -151,21 +176,33 @@ function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: s
 				supportedMethods,
 			},
 		});
-		const payload = {
+		let payload = {
 			address,
 			url,
-			requestParams: reset ?
-				{
-					method: 'GET',
-					timeout: 3000,
-				}
-				:
-				{
-					method: 'GET',
-				},
+			requestParams: {
+				method: 'GET',
+			},
 			token,
 		};
+
+		if (reset) {
+			const source = CancelToken.source();
+			payload = {
+				address,
+				url,
+				requestParams: {
+					method: 'GET',
+					cancelToken: source.token,
+				},
+				token,
+			};
+			infoRequestTimeout[`${clientDeviceId}IRTO`] = setTimeout(() => {
+				source.cancel();
+			}, 3000);
+		}
+
 		return LocalApi(payload).then((response: Object): any => {
+			clearRequestTimer(clientDeviceId);
 
 			// clear time interval when new state is equal to requested state.
 			if (requestState === response.state) {
@@ -204,6 +241,7 @@ function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: s
 				dispatch(showToast());
 				dispatch(deviceResetState(data));
 				clearTimers(clientDeviceId);
+				clearRequestTimer(clientDeviceId);
 			}
 			throw err;
 		});
