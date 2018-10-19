@@ -63,6 +63,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				url,
 				requestParams: {
 					method: 'GET',
+					timeout: 3000,
 				},
 				token,
 			};
