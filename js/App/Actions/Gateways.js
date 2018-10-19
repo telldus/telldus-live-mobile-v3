@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { Platform } from 'react-native';
+import { Platform, NetInfo } from 'react-native';
 import { reportException } from '../Lib/Analytics';
 import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';
 import type { ThunkAction, Action } from './Types';
@@ -47,58 +47,63 @@ function autoDetectLocalTellStick(): ThunkAction {
 		if (socket._state && socket._state === STATE.BOUND) {
 			closeUDPSocket();
 		}
-		socket = dgram.createSocket('udp4');
-		const aPort = randomPort();
-		try {
-			// $FlowFixMe
-			socket.bind(aPort, (err: string) => {
-				if (err) {
-					throw err;
-				}
-				if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
-					socket.setBroadcast(true);
-				}
-			});
-		} catch (err) {
-			reportException(err);
-		}
-		socket.once('listening', () => {
-			let buf = toByteArray('D');
-			socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
-				if (err) {
-					throw err;
-				}
-			});
-		});
-
-		socket.on('message', (msg: any, rinfo: Object) => {
-			let str = String.fromCharCode.apply(null, new Uint8Array(msg));
-			let items = str.split(':');
-			let gatewayInfo = {
-				product: items[0] ? items[0] : null,
-				macAddress: items[1] ? items[1] : null,
-				activationCode: items[2] ? items[2] : null,
-				firmwareVersion: items[3] ? items[3] : null,
-				uuid: items[4] ? items[4] : null,
-			};
-			dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
-
-			let { gateways: { byId: gateways } } = getState();
-			for (let key in gateways) {
-				let item = gateways[key];
-				let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
-				if (localKey) {
-					let { key: token, ttl } = localKey;
-					if (items[4] && uuid && (items[4] === uuid)) {
-						if (websocketOnline && websocketConnected && !token) {
-							dispatch(getTokenForLocalControl(id));
+		NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
+			const { type } = connectionInfo;
+			if (type !== 'none') {
+				socket = dgram.createSocket('udp4');
+				const aPort = randomPort();
+				try {
+					// $FlowFixMe
+					socket.bind(aPort, (err: string) => {
+						if (err) {
+							throw err;
 						}
-						const tokenExpired = hasTokenExpired(ttl);
-						if (websocketOnline && websocketConnected && token && ttl && tokenExpired) {
-							dispatch(getTokenForLocalControl(id));
+						if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
+							socket.setBroadcast(true);
+						}
+					});
+				} catch (err) {
+					reportException(err);
+				}
+				socket.once('listening', () => {
+					let buf = toByteArray('D');
+					socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
+						if (err) {
+							reportException(err);
+						}
+					});
+				});
+
+				socket.on('message', (msg: any, rinfo: Object) => {
+					let str = String.fromCharCode.apply(null, new Uint8Array(msg));
+					let items = str.split(':');
+					let gatewayInfo = {
+						product: items[0] ? items[0] : null,
+						macAddress: items[1] ? items[1] : null,
+						activationCode: items[2] ? items[2] : null,
+						firmwareVersion: items[3] ? items[3] : null,
+						uuid: items[4] ? items[4] : null,
+					};
+					dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
+
+					let { gateways: { byId: gateways } } = getState();
+					for (let key in gateways) {
+						let item = gateways[key];
+						let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
+						if (localKey) {
+							let { key: token, ttl } = localKey;
+							if (items[4] && uuid && (items[4] === uuid)) {
+								if (websocketOnline && websocketConnected && !token) {
+									dispatch(getTokenForLocalControl(id));
+								}
+								const tokenExpired = hasTokenExpired(ttl);
+								if (websocketOnline && websocketConnected && token && ttl && tokenExpired) {
+									dispatch(getTokenForLocalControl(id));
+								}
+							}
 						}
 					}
-				}
+				});
 			}
 		});
 	};
