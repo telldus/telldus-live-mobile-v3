@@ -22,11 +22,14 @@
 
 'use strict';
 import { format } from 'url';
+import { CancelToken } from 'axios';
 
 import { validateLocalControlSupport, resetLocalControlAddress } from './Gateways';
 import { LocalApi } from '../Lib/LocalApi';
 import { hasTokenExpired, getTokenForLocalControl } from '../Lib/LocalControl';
 import type { ThunkAction } from './Types';
+
+let requestTimeout = {};
 
 const initiateGatewayLocalTest = (): ThunkAction => {
 	return (dispatch: Function, getState: Function) => {
@@ -54,22 +57,36 @@ const testGatewayLocalControl = (address: string, token: string, clientId: numbe
 		const url = format({
 			pathname: '/system/info',
 		});
+		const source = CancelToken.source();
 		const payload = {
 			address,
 			url,
 			requestParams: {
 				method: 'GET',
-				timeout: 3000,
+				cancelToken: source.token,
 			},
 			token,
 		};
+
+		// Need to achieve timeout and cancel explicity because axios timeout does not work when ip is not reachable
+		// https://github.com/axios/axios/issues/647
+		requestTimeout[clientId] = setTimeout(() => {
+			source.cancel();
+		}, 3000);
 		return LocalApi(payload).then((response: Object): any => {
+			if (requestTimeout[clientId]) {
+				clearTimeout(requestTimeout[clientId]);
+			}
 			const { product } = response;
 			if (product) {
 				return dispatch(validateLocalControlSupport(clientId, true));
 			}
 			throw response;
 		}).catch(() => {
+			if (requestTimeout[clientId]) {
+				clearTimeout(requestTimeout[clientId]);
+			}
+
 			// This clear/reset the local control 'address' completely.
 			// It is important to clear because, if not, upon any device action local control will be tried first,
 			// and if address is not reachable, it will cause an unnecessary delay each time.
