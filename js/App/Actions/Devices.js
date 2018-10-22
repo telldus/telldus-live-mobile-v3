@@ -27,14 +27,14 @@ import { CancelToken } from 'axios';
 
 import { supportedMethods, methods } from '../../Config';
 import type { ThunkAction } from './Types';
-import { LocalApi, hasTokenExpired, getTokenForLocalControl } from '../Lib';
+import { LocalApi, hasTokenExpired, getTokenForLocalControl, LiveApi } from '../Lib';
 
 import { validateLocalControlSupport } from './Gateways';
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Devices, App } = actions;
 const { deviceSetState: deviceSetStateShared, ...otherActions } = Devices;
-const { deviceSetStateSuccess, deviceResetState, requestDeviceAction } = otherActions;
+const { deviceSetStateSuccess, deviceResetState, requestDeviceAction, getDeviceInfo } = otherActions;
 const { showToast } = App;
 
 let setStateTimeout = {};
@@ -100,13 +100,25 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 							if (setStateInterval[`${clientDeviceId}SSTI`]) {
 								clearInterval(setStateInterval[`${clientDeviceId}SSTI`]);
 							}
-							// Final device/info call, to reset the device state.
-							// Will be called after 10secs, that means device action has not been success yet(setStateTimeout not cleared).
-							dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, true));
+
+							const { gateways: gatewaysLat } = getState();
+							const { localKey: localKeyLat = {} } = gatewaysLat.byId[clientId];
+							const { address: addressLat } = localKeyLat;
+							if (addressLat) {
+								// Final device/info call, to reset the device state.
+								// Will be called after 10secs, that means device action has not been success yet(setStateTimeout not cleared).
+								dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, addressLat, token, state, true));
+							} else {
+								dispatch(requestDeviceAction(deviceId, state, false));
+								// If local address is cleared/reset do cloud check instead
+								const requestedState = methods[state];
+								dispatch(getDeviceInfo(deviceId, requestedState, LiveApi));
+								clearTimers(clientDeviceId);
+							}
 						}, 10000);
 
 						setStateInterval[`${clientDeviceId}SSTI`] = setInterval(() => {
-							const { devices: deviceLat } = getState();
+							const { devices: deviceLat, gateways: gatewaysLat } = getState();
 							const device = deviceLat.byId[deviceId];
 							if (device) {
 								const { isInState } = device;
@@ -116,7 +128,13 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 								if (nextState === isInState) {
 									clearTimers(clientDeviceId);
 								} else {
-									dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, address, token, state, false));
+									const { localKey: localKeyLat = {} } = gatewaysLat.byId[clientId];
+									const { address: addressLat } = localKeyLat;
+									if (addressLat) {
+										dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, addressLat, token, state, false));
+									}
+									// Cloud check is intentionally avoided here, as it might not be right to rely on cloud info
+									// before 10secs. Cloud check is done once, after 10secs of 'setStateTimeout'.
 								}
 							} else {
 								// clear timers and do nothing if the device is not available(LOGOUT can cause list to be reset)

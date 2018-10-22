@@ -91,7 +91,7 @@ export default class ActionDim extends View<null, Props, State> {
 	selectAction = () => {
 		const { actions, navigation, isEditMode } = this.props;
 
-		actions.selectAction(16, this.state.methodValue);
+		actions.selectAction(16, Math.round(this.state.methodValue));
 
 		if (isEditMode()) {
 			navigation.goBack(navigation.state.params.actionKey);
