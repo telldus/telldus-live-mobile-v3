@@ -98,7 +98,7 @@ const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function)
 			method: 'GET',
 		},
 	};
-	return LiveApi(payload).then((response: Object) => {
+	return LiveApi(payload).then((response: Object): any => {
 		if ((!response.error) && (response.status === 'success')) {
 			dispatch({
 				type: 'PUSH_TOKEN_UNREGISTERED',
@@ -108,7 +108,9 @@ const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function)
 					...response,
 				},
 			});
+			return response;
 		}
+		throw response;
 	}).catch((e: Object) => {
 		if (e === 'TypeError: Network request failed') {
 			dispatch({
@@ -119,10 +121,11 @@ const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function)
 				},
 			});
 		}
+		throw e;
 	});
 };
 
-const RegisterUser = (email: string, firstName: string, lastName: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
+const registerUser = (email: string, firstName: string, lastName: string): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	let formData = new FormData();
 	formData.append('email', email);
 	formData.append('firstname', firstName);
@@ -192,7 +195,7 @@ const hideChangeLog = (): Action => {
 module.exports = {
 	...User,
 	registerPushToken,
-	RegisterUser,
+	registerUser,
 	unregisterPushToken,
 	showChangeLog,
 	hideChangeLog,

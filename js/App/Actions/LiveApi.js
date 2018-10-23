@@ -31,7 +31,7 @@ import { getSensors } from './Sensors';
 
 import { AppState } from 'react-native';
 
-type Tab = 'sensorsTab' | 'schedulerTab' | 'gatewaysTab';
+type Tab = 'Sensors' | 'Scheduler' | 'Gateways';
 
 function syncLiveApiOnForeground(): ThunkAction {
 	return (dispatch: Function) => {
@@ -48,21 +48,21 @@ function syncLiveApiOnForeground(): ThunkAction {
 function syncWithServer(nextTab: Tab): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
 		const { liveApi } = getState();
-		if (nextTab === 'sensorsTab' && !liveApi.sensors) {
+		if (nextTab === 'Sensors' && !liveApi.sensors) {
 			dispatch({
 				type: 'LIVEAPI_REFETCH',
 				endpoint: 'sensors',
 			});
 			dispatch(getSensors());
 		}
-		if (nextTab === 'schedulerTab' && !liveApi.jobs) {
+		if (nextTab === 'Scheduler' && !liveApi.jobs) {
 			dispatch({
 				type: 'LIVEAPI_REFETCH',
 				endpoint: 'jobs',
 			});
 			dispatch(getJobs());
 		}
-		if (nextTab === 'gatewaysTab' && !liveApi.gateways) {
+		if (nextTab === 'Gateways' && !liveApi.gateways) {
 			dispatch({
 				type: 'LIVEAPI_REFETCH',
 				endpoint: 'gateways',

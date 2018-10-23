@@ -25,30 +25,17 @@
 
 import React from 'react';
 import {ScrollView} from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View, TouchableButton } from '../../../../BaseComponents';
 import { Clients } from './SubViews';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerOne: {
-		id: 'addNewLocation.locationDetected.headerOne',
-		defaultMessage: 'Select Location',
-		description: 'Main header Text for the Location Detected Screen',
-	},
-	headerTwo: {
-		id: 'addNewLocation.locationDetected.headerTwo',
-		defaultMessage: 'Setup your TellStick to start',
-		description: 'Seconday header Text for the Location Detected Screen',
-	},
-});
 
 type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
-	rootNavigator: Object,
 	onDidMount: Function,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
@@ -67,8 +54,8 @@ class LocationDetected extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `1. ${formatMessage(messages.headerOne)}`;
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h1 = `1. ${formatMessage(i18n.LDheaderOne)}`;
+		this.h2 = formatMessage(i18n.LDheaderTwo);
 		this.buttonLabel = formatMessage(i18n.manualActivation).toUpperCase();
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
@@ -87,9 +74,9 @@ class LocationDetected extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'LocationDetected' && this.props.currentScreen !== 'LocationDetected';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'LocationDetected' && prevProps.currentScreen !== 'LocationDetected';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -107,11 +94,18 @@ class LocationDetected extends View {
 			timezone: client.timezone,
 			autoDetected: client.timezoneAutodetected,
 		};
-		this.props.navigation.navigate('LocationName', {clientInfo});
+		this.props.navigation.navigate({
+			routeName: 'LocationName',
+			key: 'LocationName',
+			params: {clientInfo},
+		});
 	}
 
 	onActivateManual() {
-		this.props.navigation.navigate('LocationActivationManual');
+		this.props.navigation.navigate({
+			routeName: 'LocationActivationManual',
+			key: 'LocationActivationManual',
+		});
 	}
 
 	renderClient(client: Object, i: number, appLayout: Object): Object {
@@ -122,12 +116,13 @@ class LocationDetected extends View {
 
 	render(): Object {
 		let items = [];
-		let { rootNavigator, appLayout, paddingHorizontal } = this.props;
+		const { navigation, appLayout, paddingHorizontal } = this.props;
 
 		const styles = this.getStyle(appLayout, paddingHorizontal);
 
-		if (rootNavigator.state.params.clients) {
-			items = rootNavigator.state.params.clients.map((client: Object, i: number): Object => {
+		const clients = navigation.getParam('clients', null);
+		if (clients) {
+			items = clients.map((client: Object, i: number): Object => {
 				return this.renderClient(client, i, appLayout);
 			});
 		}

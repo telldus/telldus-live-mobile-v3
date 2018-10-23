@@ -142,7 +142,7 @@ class TabBar extends View {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 

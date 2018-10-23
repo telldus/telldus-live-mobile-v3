@@ -31,17 +31,18 @@ const ViewX = isIphoneX() ? SafeAreaView : View;
 
 type Props = {
 	children: Object | Array<Object>,
+	onLayout: (Object) => void,
 };
 
 export default class SafeAreaViewComponent extends React.Component<Props, null> {
 	props: Props;
 
 	render(): Object {
-		let { children, ...otherProperties } = this.props;
+		let { children, onLayout, ...otherProperties } = this.props;
 
 		return (
 			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
-				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }}>
+				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }) }} onLayout={onLayout}>
 					{
 						React.Children.map(children, (child: Object): Object | null => {
 							if (React.isValidElement(child)) {

@@ -21,7 +21,7 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -29,28 +29,30 @@ import { View, IconTelldus } from '../../../../BaseComponents';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
+import { shouldUpdate } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
 
 type Props = {
-	deviceSetState: (id: number, command: number, value?: number) => void,
+	command: number,
+
 	item: Object,
 	tileWidth: number,
-	style: Object,
-	command: number,
+
 	intl: Object,
 	isGatewayActive: boolean,
-	powerConsumed: string,
+	style: Object,
 	containerStyle?: number | Object | Array<any>,
 	bellButtonStyle?: number | Object | Array<any>,
+	deviceSetState: (id: number, command: number, value?: number) => void,
 };
 
 type DefaultProps = {
 	command: number,
 };
 
-class BellDashboardTile extends PureComponent<Props, null> {
+class BellDashboardTile extends View<Props, null> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {
@@ -68,6 +70,22 @@ class BellDashboardTile extends PureComponent<Props, null> {
 		let { formatMessage } = props.intl;
 
 		this.labelBellButton = `${formatMessage(i18n.bell)} ${formatMessage(i18n.button)}`;
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { tileWidth, ...others } = this.props;
+		const { tileWidth: tileWidthN, ...othersN } = nextProps;
+		if (tileWidth !== tileWidthN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['item']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	onBell() {

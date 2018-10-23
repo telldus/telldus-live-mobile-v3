@@ -77,3 +77,23 @@ export const getTranslatableDays = (formatDate: Function): string[] => {
 	}
 	return weekDays;
 };
+
+export const getTranslatableDayNames = (formatDate: Function, type: 'short' | 'long' = 'long'): string[] => {
+	let weekNames = [];
+	for (let i = 0; i < 7; i++) {
+		const day = moment().weekday(i);
+		const weekname = formatDate(day, {weekday: type});
+		weekNames.push(weekname);
+	}
+	return weekNames;
+};
+
+export const getTranslatableMonthNames = (formatDate: Function, type: 'short' | 'long' = 'long'): string[] => {
+	let monthNames = [];
+	for (let i = 0; i < 12; i++) {
+		const month = moment().month(i);
+		const monthName = formatDate(month, {month: type});
+		monthNames.push(monthName);
+	}
+	return monthNames;
+};

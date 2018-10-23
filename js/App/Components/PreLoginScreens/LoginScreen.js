@@ -31,20 +31,6 @@ import { LoginForm, SessionLocked } from './SubViews';
 
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
-import {defineMessages} from 'react-intl';
-
-const messages = defineMessages({
-	needAccount: {
-		id: 'user.needAccount',
-		defaultMessage: 'Need an account?',
-		description: 'Message to show on the login screen',
-	},
-	headerSessionLocked: {
-		id: 'user.headerSessionLocked',
-		defaultMessage: 'Lost Connection',
-		description: 'Header for Session Locked Screen',
-	},
-});
 
 type Props = {
 		dispatch: Function,
@@ -71,6 +57,7 @@ class LoginScreen extends View {
 	onNeedAccount: () => void;
 	closeModal: () => void;
 	onPressPositive: () => void;
+	toggleOnPressLogout: (boolean) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -85,11 +72,12 @@ class LoginScreen extends View {
 
 		this.closeModal = this.closeModal.bind(this);
 		this.onPressPositive = this.onPressPositive.bind(this);
+		this.toggleOnPressLogout = this.toggleOnPressLogout.bind(this);
 
 		let { formatMessage } = props.intl;
 
 		this.forgotPassword = formatMessage(i18n.forgotPassword);
-		this.needAccount = formatMessage(messages.needAccount);
+		this.needAccount = formatMessage(i18n.needAccount);
 
 		this.labelLink = formatMessage(i18n.labelLink);
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
@@ -105,8 +93,12 @@ class LoginScreen extends View {
 
 	onPressPositive() {
 		this.closeModal();
+		this.toggleOnPressLogout(true);
+	}
+
+	toggleOnPressLogout(onPressLogout: boolean) {
 		this.setState({
-			onPressLogout: true,
+			onPressLogout,
 		});
 	}
 
@@ -122,7 +114,7 @@ class LoginScreen extends View {
 			positiveText = false, onPressPositive = this.closeModal, onPressNegative = false,
 			showNegative = false, showPositive = true;
 		if (this.props.accessToken && !this.props.isTokenValid) {
-			headerText = this.props.intl.formatMessage(messages.headerSessionLocked);
+			headerText = this.props.intl.formatMessage(i18n.headerSessionLocked);
 			positiveText = this.props.intl.formatMessage(i18n.logout).toUpperCase();
 			notificationHeader = `${this.props.intl.formatMessage(i18n.logout)}?`;
 			onPressPositive = this.onPressPositive;
@@ -157,6 +149,7 @@ class LoginScreen extends View {
 						onPressLogout={this.state.onPressLogout}
 						dialogueOpen={this.props.showModal}
 						headerText={headerText}
+						toggleOnPressLogout={this.toggleOnPressLogout}
 						styles={commonStyles}/>
 					:
 					<LoginForm
@@ -177,7 +170,7 @@ class LoginScreen extends View {
 						<TouchableOpacity
 							onPress={this.onNeedAccount}
 							accessibilityLabel={this.labelNeedAccount}>
-							<FormattedMessage {...messages.needAccount} style={[ styles.textLink, { paddingLeft: 5 }]}/>
+							<FormattedMessage {...i18n.needAccount} style={[ styles.textLink, { paddingLeft: 5 }]}/>
 						</TouchableOpacity>
 						<View style={{ height: 10 }}/>
 					</View>
@@ -223,12 +216,18 @@ class LoginScreen extends View {
 
 	onNeedAccount() {
 		this.closeModal();
-		this.props.navigation.navigate('Register');
+		this.props.navigation.navigate({
+			routeName: 'Register',
+			key: 'Register',
+		});
 	}
 
 	onForgotPassword() {
 		this.closeModal();
-		this.props.navigation.navigate('ForgotPassword');
+		this.props.navigation.navigate({
+			routeName: 'ForgotPassword',
+			key: 'ForgotPassword',
+		});
 	}
 }
 

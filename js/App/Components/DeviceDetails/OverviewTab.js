@@ -23,65 +23,74 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-
-import { View, TabBar } from '../../../BaseComponents';
 import { ScrollView } from 'react-native';
-import { defineMessages } from 'react-intl';
+import { connect } from 'react-redux';
+const isEqual = require('react-fast-compare');
+
+import { View, TabBar, LocationDetails } from '../../../BaseComponents';
 
 import getDeviceType from '../../Lib/getDeviceType';
 import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 import {
 	DeviceActionDetails,
-	DeviceLocationDetail,
 } from './SubViews';
-import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 
-const messages = defineMessages({
-	overviewHeader: {
-		id: 'deviceSettings.overviewHeader',
-		defaultMessage: 'Overview',
-	},
-	location: {
-		id: 'deviceSettings.location',
-		defaultMessage: 'Location',
-		description: 'Header for which location a device belongs to',
-	},
-});
+import i18n from '../../Translations/common';
 
 type Props = {
 	device: Object,
-	gateway: Object,
+	gatewayType: string,
+	gatewayName: string,
+	isGatewayActive: boolean,
+
 	screenProps: Object,
 };
 
-type State = {
-};
-
-class OverviewTab extends View {
+class OverviewTab extends View<Props, null> {
 	props: Props;
-	state: State;
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-		};
-
-		this.boxTitle = `${props.screenProps.intl.formatMessage(messages.location)}:`;
-	}
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
-				icon="icon_home"
+				icon="home"
 				tintColor={tintColor}
-				label={messages.overviewHeader}
+				label={i18n.overviewHeader}
 				accessibilityLabel={i18n.deviceOverviewTab}/>
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate('Overview');
+			navigation.navigate({
+				routeName: 'Overview',
+				key: 'Overview',
+			});
 		},
 	});
+
+	constructor(props: Props) {
+		super(props);
+
+		this.boxTitle = `${props.screenProps.intl.formatMessage(i18n.location)}:`;
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { screenProps: screenPropsN, gatewayName: gatewayNameN, isGatewayActive: isGatewayActiveN, device: deviceN } = nextProps;
+		const { currentScreen, appLayout } = screenPropsN;
+		if (currentScreen === 'Overview') {
+
+			const { screenProps, gatewayName, isGatewayActive, device } = this.props;
+			if ((screenProps.appLayout.width !== appLayout.width) || (gatewayName !== gatewayNameN) || (isGatewayActive !== isGatewayActiveN)) {
+				return true;
+			}
+
+			if (!isEqual(device, deviceN)) {
+				return true;
+			}
+
+			return false;
+		}
+
+		return false;
+	}
 
 	getType(device: Object): string | null {
 		if (!device) {
@@ -92,19 +101,15 @@ class OverviewTab extends View {
 		return getDeviceType(supportedMethods);
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentTab === 'Overview';
-	}
-
 	render(): Object {
-		const { device, screenProps, gateway } = this.props;
+		const { device, screenProps, gatewayName, gatewayType, isGatewayActive } = this.props;
 		const { appLayout, intl } = screenProps;
-		const locationImageUrl = getLocationImageUrl(gateway.type);
+		const locationImageUrl = getLocationImageUrl(gatewayType);
 		const locationData = {
 			title: this.boxTitle,
 			image: locationImageUrl,
-			H1: gateway.name,
-			H2: gateway.type,
+			H1: gatewayName,
+			H2: gatewayType,
 		};
 		const {
 			TURNON,
@@ -116,12 +121,11 @@ class OverviewTab extends View {
 			STOP,
 		} = device.supportedMethods;
 		const hasActions = TURNON || TURNOFF || BELL || DIM || UP || DOWN || STOP;
-		const isGatewayActive = gateway && gateway.online;
 
 		const styles = this.getStyles(appLayout, hasActions);
 
 		return (
-			<ScrollView contentContainerStyle={styles.itemsContainer}>
+			<ScrollView style={{flex: 1}} contentContainerStyle={styles.itemsContainer}>
 				{hasActions && (
 					<DeviceActionDetails
 						device={device}
@@ -130,7 +134,7 @@ class OverviewTab extends View {
 						isGatewayActive={isGatewayActive}
 						containerStyle={styles.actionDetails}/>
 				)}
-				<DeviceLocationDetail {...locationData} style={styles.LocationDetail}/>
+				<LocationDetails {...locationData} style={styles.LocationDetail}/>
 			</ScrollView>
 		);
 	}
@@ -143,20 +147,20 @@ class OverviewTab extends View {
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
-			container: {
-				flex: 0,
-				alignItems: 'center',
-				justifyContent: 'center',
-			},
 			itemsContainer: {
-				justifyContent: 'center',
-				margin: padding,
+				flexGrow: 1,
+				marginTop: padding,
 			},
 			LocationDetail: {
+				flex: 0,
 				marginTop: hasActions ? (padding / 2) : 0,
+				marginBottom: padding,
+				marginHorizontal: padding,
 			},
 			actionDetails: {
+				flex: 0,
 				marginTop: 0,
+				marginHorizontal: padding,
 			},
 		};
 	}
@@ -173,9 +177,16 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
+	const id = ownProps.navigation.getParam('id', null);
+	const device = state.devices.byId[id];
+	const { clientId } = device;
+	const { name: gatewayName, type: gatewayType, online: isGatewayActive } = state.gateways.byId[clientId];
+
 	return {
-		device: state.devices.byId[ownProps.screenProps.device.id],
-		gateway: state.gateways.byId[ownProps.screenProps.device.clientId],
+		device: state.devices.byId[id],
+		gatewayType,
+		gatewayName,
+		isGatewayActive,
 	};
 }
 

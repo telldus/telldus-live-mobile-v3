@@ -23,15 +23,44 @@
 'use strict';
 
 export default function migrations(state: Object = {}): Promise<any> {
-	const { gateways } = state;
-	if (gateways) {
-		const newGateways = insertLocalKeyAttribute(gateways);
-		return Promise.resolve({
-			...state,
-			gateways: newGateways,
-		});
+	const { tabs, ...withOutTabs } = state;
+
+	let newState = state;
+	// Remove redux store object 'tabs' if present.
+	if (tabs) {
+		newState = withOutTabs;
 	}
-	return Promise.resolve(state);
+
+	const { App, ...withOutApp } = newState;
+	// Rename redux store object 'App' to 'app'.
+	if (App) {
+		newState = {
+			...withOutApp,
+			app: App,
+		};
+	}
+
+	const { gateways, sensorsList } = newState;
+	if (gateways) {
+		// Insert the attribute/property 'localKey' to each gateways object if not already present.
+		const newGateways = insertLocalKeyAttribute(gateways);
+		newState = {
+			...newState,
+			gateways: newGateways,
+		};
+	}
+
+	if (sensorsList && sensorsList.defaultTypeById) {
+		const defaultSensorSettings = migrateToDefaultSensorSettings(sensorsList.defaultTypeById);
+		newState = {
+			...newState,
+			sensorsList: {
+				defaultSensorSettings,
+			},
+		};
+	}
+
+	return Promise.resolve(newState);
 }
 
 
@@ -60,4 +89,17 @@ const insertLocalKeyAttribute = (gateways: Object): Object => {
 		...gateways,
 		byId: newById,
 	};
+};
+
+
+const migrateToDefaultSensorSettings = (defaultTypeById: Object): Object => {
+	let defaultSensorSettings = {};
+	for (let key in defaultTypeById) {
+		defaultSensorSettings[key] = {
+			displayType: defaultTypeById[key],
+			displayTypeDB: null,
+			historySettings: {},
+		};
+	}
+	return defaultSensorSettings;
 };

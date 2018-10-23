@@ -130,7 +130,7 @@ class Row extends Component<Props, null> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: state.app.layout,
 	};
 }
 

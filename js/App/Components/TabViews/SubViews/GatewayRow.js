@@ -24,20 +24,18 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { View, Image } from '../../../../BaseComponents';
-import DeviceLocationDetail from '../../DeviceDetails/SubViews/DeviceLocationDetail';
+import { View, Image, LocationDetails } from '../../../../BaseComponents';
 
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
 
-import { getRelativeDimensions } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
     location: Object,
-    stackNavigator: Object,
 	appLayout: Object,
 	intl: Object,
+	navigation: Object,
 };
 
 type State = {
@@ -57,7 +55,11 @@ class GatewayRow extends PureComponent<Props, State> {
 
 	onPressGateway() {
 		let { location } = this.props;
-		this.props.stackNavigator.navigate('LocationDetails', {location, renderRootHeader: true});
+		this.props.navigation.navigate({
+			routeName: 'LocationDetails',
+			key: 'LocationDetails',
+			params: { location },
+		});
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
@@ -85,11 +87,11 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		return (
 			<View style={styles.rowItemsCover}>
-				<DeviceLocationDetail {...locationData}
+				<LocationDetails {...locationData}
 					style={styles.locationDetails}
 					onPress={this.onPressGateway}/>
 				<View style={styles.arrowCover} pointerEvents={'none'}>
-					<Image source={require('../../TabViews/img/right-arrow-key.png')} style={styles.arrow}/>
+					<Image source={{uri: 'right_arrow_key'}} style={styles.arrow}/>
 				</View>
 			</View>
 		);
@@ -132,7 +134,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: state.app.layout,
 	};
 }
 

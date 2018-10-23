@@ -25,7 +25,7 @@
 import type { Action, ThunkAction } from './Types';
 
 import { AppState } from 'react-native';
-import Orientation from 'react-native-orientation';
+import Orientation from 'react-native-orientation-locker';
 import { AccessibilityInfo } from 'react-native';
 
 import { resetLocalControlSupport, autoDetectLocalTellStick, closeUDPSocket } from './Gateways';

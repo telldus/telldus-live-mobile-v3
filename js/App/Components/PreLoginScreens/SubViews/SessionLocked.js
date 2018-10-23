@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import {defineMessages, intlShape, injectIntl} from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import {
 	Text,
@@ -38,22 +38,9 @@ import { unregisterPushToken } from '../../../Actions/User';
 import { refreshAccessToken } from '../../../Lib';
 import Theme from '../../../Theme';
 
-const messages = defineMessages({
-	sessionLockedBodyParaOne: {
-		id: 'user.sessionLockedBodyParaOne',
-		defaultMessage: 'For some reason we can\'t connect your account right now.',
-		description: 'Para One content for Session Locked Screen',
-	},
-	sessionLockedBodyParaTwo: {
-		id: 'user.sessionLockedBodyParaTwo',
-		defaultMessage: 'Make sure that your internet connection is working and retry by tapping the retry button below.',
-		description: 'Para Two content for Session Locked Screen',
-	},
-});
-
 type Props = {
-	refreshAccessToken: () => void,
-	logoutFromTelldus: () => void,
+	refreshAccessToken: () => Promise<any>,
+	logoutFromTelldus: () => Promise<any>,
 	intl: intlShape.isRequired,
 	dispatch: Function,
 	pushToken: string,
@@ -62,23 +49,40 @@ type Props = {
 	dialogueOpen: boolean,
 	styles: Object,
 	headerText: string,
+	toggleOnPressLogout: (boolean) => void,
+};
+
+type State = {
+	logout: boolean,
+	isLogginIn: boolean,
 };
 
 class SessionLocked extends View {
 	props: Props;
+	state: State;
 
 	onPressLogout: () => void;
 	refreshAccessToken: () => void;
+
+	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+		if (props.onPressLogout !== state.logout) {
+			return {
+				logout: props.onPressLogout,
+			};
+		}
+		return null;
+	}
 
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			isLogginIn: false,
+			logout: props.onPressLogout,
 		};
 
-		this.bodyOne = this.props.intl.formatMessage(messages.sessionLockedBodyParaOne);
-		this.bodyTwo = this.props.intl.formatMessage(messages.sessionLockedBodyParaTwo);
+		this.bodyOne = this.props.intl.formatMessage(i18n.sessionLockedBodyParaOne);
+		this.bodyTwo = this.props.intl.formatMessage(i18n.sessionLockedBodyParaTwo);
 		this.buttonOne = this.props.intl.formatMessage(i18n.retry);
 		this.buttonOneOne = this.props.intl.formatMessage(i18n.loggingin);
 		this.buttonTwo = this.props.intl.formatMessage(i18n.logout);
@@ -98,28 +102,44 @@ class SessionLocked extends View {
 		});
 	}
 
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { toggleOnPressLogout } = this.props;
+		const { logout } = this.state;
+		const { logout: prevLogout } = prevState;
+		if (!prevLogout && logout) {
+			this.props.logoutFromTelldus()
+				.catch(() => {
+					// This is to reset the loading state(logout: props.onPressLogout) and thereby update the
+					// button label.
+					toggleOnPressLogout(false);
+				});
+		}
+	}
+
 	refreshAccessToken() {
 		this.setState({
 			isLogginIn: true,
 		});
-		this.props.refreshAccessToken();
-	}
-
-	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.onPressLogout) {
-			this.props.logoutFromTelldus();
-		}
+		this.props.refreshAccessToken()
+			.catch(() => {
+				// This is to reset the loading state(isLogginIn) and thereby update the
+				// button label.
+				this.setState({
+					isLogginIn: false,
+				});
+			});
 	}
 
 	render(): Object {
+		let { logout, isLogginIn } = this.state;
 		let { appLayout, dialogueOpen, headerText, styles: commonStyles} = this.props;
 		let styles = this.getStyles(appLayout);
 
-		let buttonOneLabel = this.state.isLogginIn ? `${this.buttonOneOne}...` : this.buttonOne;
-		let buttonTwoLabel = this.props.onPressLogout ? `${this.buttonTwoTwo}...` : this.buttonTwo;
+		let buttonOneLabel = isLogginIn ? `${this.buttonOneOne}...` : this.buttonOne;
+		let buttonTwoLabel = logout ? `${this.buttonTwoTwo}...` : this.buttonTwo;
 
-		let butOneAccessibilityLabel = this.state.isLogginIn ? this.buttonOneOne : null;
-		let butTwoAccessibilityLabel = this.props.onPressLogout ? this.buttonTwoTwo : null;
+		let butOneAccessibilityLabel = isLogginIn ? this.buttonOneOne : null;
+		let butTwoAccessibilityLabel = logout ? this.buttonTwoTwo : null;
 
 		return (
 			<View style={styles.bodyCover} accessible={!dialogueOpen}>
@@ -178,18 +198,20 @@ function mapStateToProps(store: Object): Object {
 		tab: store.navigation.tab,
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		logoutFromTelldus: (pushToken: string) => {
-			dispatch(unregisterPushToken(pushToken)).then((res: Object) => {
-				dispatch(logoutFromTelldus());
+		logoutFromTelldus: (pushToken: string): Promise<any> => {
+			return dispatch(unregisterPushToken(pushToken)).then((res: Object): Promise<any> => {
+				return dispatch(logoutFromTelldus());
+			}).catch((): Promise<any> => {
+				return dispatch(logoutFromTelldus());
 			});
 		},
-		refreshAccessToken: () => {
-			refreshAccessToken();
+		refreshAccessToken: (): Promise<any> => {
+			return refreshAccessToken();
 		},
 		dispatch,
 	};

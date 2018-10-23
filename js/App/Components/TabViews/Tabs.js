@@ -88,7 +88,10 @@ export default class Tabs extends View {
 
 	onTabPress() {
 		let { navigation, tab } = this.props;
-		navigation.navigate(tab.routeName);
+		navigation.navigate({
+			routeName: tab.routeName,
+			key: tab.routeName,
+		});
 	}
 
 	onLayout(ev: Object) {
@@ -99,7 +102,7 @@ export default class Tabs extends View {
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		let { adjustScroll, screenProps, tab } = prevProps;
-		if (screenProps.currentTab === tab.routeName) {
+		if (screenProps.currentScreen === tab.routeName) {
 			adjustScroll(this.state.layout);
 		}
 	}
@@ -152,7 +155,7 @@ export default class Tabs extends View {
 					<Text style={labelStyle} onLayout={this.onLabelLayout}>
 						{label}
 					</Text>
-					{(screenProps.currentTab === tab.routeName) ?
+					{(screenProps.currentScreen === tab.routeName) ?
 						<View style={indicatorActiveStyle}/>
 						:
 						<View style={indicatorPassiveStyle}/>

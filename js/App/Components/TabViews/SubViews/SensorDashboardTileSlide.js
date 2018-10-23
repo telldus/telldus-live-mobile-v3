@@ -24,6 +24,7 @@
 import React from 'react';
 import { Text, View, IconTelldus } from '../../../../BaseComponents';
 
+import { shouldUpdate } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -32,8 +33,12 @@ type Props = {
 	isGatewayActive: boolean,
 };
 
-class SensorDashboardTileSlide extends View {
+class SensorDashboardTileSlide extends View<Props, null> {
 	props: Props;
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return shouldUpdate(this.props, nextProps, ['isGatewayActive', 'tileWidth', 'data']);
+	}
 
 	render(): Object {
 		let { data, tileWidth, isGatewayActive } = this.props;

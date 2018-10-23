@@ -25,21 +25,13 @@
 
 import React from 'react';
 import { Keyboard } from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import { View } from '../../../../BaseComponents';
 import Name from '../Common/Name';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
-const messages = defineMessages({
-	headerTwo: {
-		id: 'addNewLocation.locationName.headerTwo',
-		defaultMessage: 'Setup your TellStick to start',
-		description: 'Secondary header Text for the Location Detected Screen',
-	},
-});
 
 type Props = {
 	navigation: Object,
@@ -65,7 +57,7 @@ class LocationName extends View {
 		let { formatMessage } = props.intl;
 
 		this.h1 = `2. ${formatMessage(i18n.name)}`;
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h2 = formatMessage(i18n.LNheaderTwo);
 
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
@@ -85,9 +77,9 @@ class LocationName extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'LocationName' && this.props.currentScreen !== 'LocationName';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'LocationName' && prevProps.currentScreen !== 'LocationName';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -98,14 +90,19 @@ class LocationName extends View {
 	}
 
 	onNameSubmit(locationName: string) {
+		const { navigation, intl, actions } = this.props;
 		if (locationName !== '') {
 			Keyboard.dismiss();
-			let clientInfo = this.props.navigation.state.params.clientInfo;
+			let clientInfo = navigation.getParam('clientInfo', {});
 			clientInfo.name = locationName;
-			this.props.navigation.navigate('TimeZone', {clientInfo});
+			this.props.navigation.navigate({
+				routeName: 'TimeZone',
+				key: 'TimeZone',
+				params: {clientInfo},
+			});
 		} else {
-			let message = this.props.intl.formatMessage(commonMessages.invalidLocationName);
-			this.props.actions.showModal(message);
+			let message = intl.formatMessage(i18n.invalidLocationName);
+			actions.showModal(message);
 		}
 	}
 

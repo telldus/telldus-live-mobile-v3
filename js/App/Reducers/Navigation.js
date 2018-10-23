@@ -22,14 +22,15 @@
 'use strict';
 
 import type { Action } from '../Actions/Types';
-export type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab';
+// export type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab';
+export type Tab = 'Dashboard' | 'Devices' | 'Sensors' | 'Scheduler' | 'Gateways';
 
 type State = {
 	tab: Tab,
 };
 
 const initialState: State = {
-	tab: 'dashboardTab',
+	tab: 'Dashboard',
 };
 
 function navigation(state: State = initialState, action: Action): State {

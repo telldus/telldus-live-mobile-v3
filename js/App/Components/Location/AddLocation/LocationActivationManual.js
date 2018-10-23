@@ -26,46 +26,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { TextInput, Keyboard } from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import {View, FormattedMessage, FloatingButton} from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	label: {
-		id: 'addNewLocation.activateManual.label',
-		defaultMessage: 'Activation Code',
-		description: 'Label for the field Location Manual Activate Field',
-	},
-	headerOne: {
-		id: 'addNewLocation.activateManual.headerOne',
-		defaultMessage: 'Select Location',
-		description: 'Main header for the Location Manual Activate Screen',
-	},
-	headerTwo: {
-		id: 'addNewLocation.activateManual.headerTwo',
-		defaultMessage: 'Enter Activation Code',
-		description: 'Secondary header for the Location Manual Activate Screen',
-	},
-	invalidActivationCode: {
-		id: 'addNewLocation.activateManual.invalidActivationCode',
-		defaultMessage: 'The activation code you entered is invalid. Please check that it is entered correctly.',
-		description: 'Local Validation text when Activation Code is Invalid',
-	},
-	bodyContent: {
-		id: 'addNewLocation.activateManual.bodyContent',
-		defaultMessage: 'Activate your TellStick by typing the activation code. The activation code ' +
-		'is written on the label on the bottom of your TellStick.',
-		description: 'The body content for the Location Manual Activate Screen',
-	},
-	messageAlreadyActivated: {
-		id: 'addNewLocation.activateManual.messageAlreadyActivated',
-		defaultMessage: 'This Gateway has already been activated.',
-		description: 'The Dialogue message when the gateway is already activated',
-	},
-});
+
 type Props = {
 	navigation: Object,
 	dispatch: Function,
@@ -98,14 +66,14 @@ class LocationActivationManual extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `1. ${formatMessage(messages.headerOne)}`;
-		this.h2 = formatMessage(messages.headerTwo);
-		this.label = formatMessage(messages.label);
+		this.h1 = `1. ${formatMessage(i18n.LAMheaderOne)}`;
+		this.h2 = formatMessage(i18n.LAMheaderTwo);
+		this.label = formatMessage(i18n.label);
 
-		this.invalidActivationCode = formatMessage(messages.invalidActivationCode);
+		this.invalidActivationCode = formatMessage(i18n.invalidActivationCode);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
-		this.messageAlreadyActivated = formatMessage(messages.messageAlreadyActivated);
+		this.messageAlreadyActivated = formatMessage(i18n.messageAlreadyActivated);
 
 		this.onActivationCodeChange = this.onActivationCodeChange.bind(this);
 		this.onActivationCodeSubmit = this.onActivationCodeSubmit.bind(this);
@@ -126,9 +94,9 @@ class LocationActivationManual extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'LocationActivationManual' && this.props.currentScreen !== 'LocationActivationManual';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'LocationActivationManual' && prevProps.currentScreen !== 'LocationActivationManual';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -179,7 +147,11 @@ class LocationActivationManual extends View {
 						timezone: response.timezone,
 						autoDetected: true,
 					};
-					this.props.navigation.navigate('LocationName', {clientInfo});
+					this.props.navigation.navigate({
+						routeName: 'LocationName',
+						key: 'LocationName',
+						params: {clientInfo},
+					});
 				} else if (response && response.activated === true) {
 					this.props.actions.showModal(this.messageAlreadyActivated, 'ERROR');
 				} else {
@@ -223,12 +195,12 @@ class LocationActivationManual extends View {
 						underlineColorAndroid="#e26901"
 						defaultValue={this.state.activationCode}
 					/>
-					<FormattedMessage style={styles.textBody} {...messages.bodyContent}/>
+					<FormattedMessage style={styles.textBody} {...i18n.bodyContent}/>
 				</LabelBox>
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onActivationCodeSubmit}
-					imageSource={this.state.isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
+					imageSource={this.state.isLoading ? false : {uri: 'right_arrow_key'}}
 					showThrobber={this.state.isLoading}
 				/>
 			</View>

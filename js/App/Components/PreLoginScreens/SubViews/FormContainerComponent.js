@@ -28,7 +28,6 @@ import DeviceInfo from 'react-native-device-info';
 
 import { BackgroundImage, View, Image } from '../../../../BaseComponents';
 
-import { getRelativeDimensions } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -47,7 +46,6 @@ class FormContainerComponent extends View<Props, null> {
 		super(props);
 
 		this.isTablet = DeviceInfo.isTablet();
-		this.background = require('./../img/home5.jpg');
 		this.logo = require('./../img/telldusLogoBlack.png');
 	}
 
@@ -62,7 +60,7 @@ class FormContainerComponent extends View<Props, null> {
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<BackgroundImage source={this.background} style={styles.container}>
+			<BackgroundImage source={{uri: 'home'}} style={styles.container}>
 				{!!appLayout.width && (
 					<ScrollView
 						keyboardShouldPersistTaps={'always'}
@@ -191,7 +189,7 @@ class FormContainerComponent extends View<Props, null> {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: store.app.layout,
 	};
 }
 

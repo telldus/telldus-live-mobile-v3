@@ -25,13 +25,15 @@ import React from 'react';
 import Modal from 'react-native-modal';
 
 import { View, StyleSheet, DialogueHeader } from '../../../../../BaseComponents';
+import { shouldUpdate } from '../../../../Lib';
 import Theme from '../../../../Theme';
 
 type Props = {
-    showModal: boolean,
-	buttons: Array<Object>,
+	showModal: boolean,
+	item: Object,
 	name: string,
 	closeModal: () => void,
+	buttons: Array<Object>,
 };
 
 type State = {
@@ -69,6 +71,30 @@ onLayoutBody(ev: Object) {
 			width,
 		});
 	}
+}
+
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const { showModal } = this.props;
+	const { width } = this.state;
+	if (showModal !== nextProps.showModal) {
+		return true;
+	}
+	if (nextProps.showModal) {
+		if (!showModal) {
+			return true;
+		}
+
+		if (width !== nextState.width) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(this.props, nextProps, ['item']);
+		if (propsChange) {
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
 
 render(): Object {

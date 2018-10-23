@@ -22,14 +22,13 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, Animated, UIManager, LayoutAnimation } from 'react-native';
-import { connect } from 'react-redux';
+import { Animated } from 'react-native';
+import Ripple from 'react-native-material-ripple';
 
 import {
 	View,
 } from '../../../../../BaseComponents';
-import { changeDefaultDisplayType } from '../../../../Actions';
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedTouchable = Animated.createAnimatedComponent(Ripple);
 import Theme from '../../../../Theme';
 
 type Props = {
@@ -37,76 +36,27 @@ type Props = {
 	valueCoverStyle: Array<any> | number | Object,
 	dotStyle: Object,
 	dotCoverStyle: Array<any> | number | Object,
-    sensors: Object,
-    defaultType?: string,
-    onLayout: Function,
-    changeDefaultDisplayType: Function,
-    id: number,
+    sensors?: Object,
+    defaultType?: string | null,
+    onLayout?: Function,
+    changeDisplayType: Function,
+    totalTypes: Array<string>,
+    defaultSensor?: Object | null,
 };
 
-class TypeBlock extends View<Props, null> {
-props: Props;
-changeDisplayType: () => void;
-
-constructor(props: Props) {
-	super(props);
-
-	this.changeDisplayType = this.changeDisplayType.bind(this);
-	UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-	this.LayoutLinear = {
-		duration: 200,
-		create: {
-			type: LayoutAnimation.Types.linear,
-			property: LayoutAnimation.Properties.scaleXY,
-			  },
-		update: {
-			type: LayoutAnimation.Types.linear,
-			property: LayoutAnimation.Properties.scaleXY,
-		},
-	};
-}
-
-changeDisplayType() {
-	const { sensors, id } = this.props;
-	const totalTypes = this.getSupportedDisplayTypes(sensors);
-	const defaultType = this.getDefaultType(sensors);
-	const max = totalTypes.length;
-	const currentTypeIndex = totalTypes.indexOf(defaultType);
-	const nextTypeIndex = currentTypeIndex + 1;
-	const nextType = nextTypeIndex > (max - 1) ? totalTypes[0] : totalTypes[nextTypeIndex];
-	LayoutAnimation.configureNext(this.LayoutLinear);
-	this.props.changeDefaultDisplayType(id, nextType);
-}
-
-getSupportedDisplayTypes(sensors: Object): Array<string> {
-	return Object.keys(sensors);
-}
-
-getDefaultType(sensors: Object): string {
-	const { defaultType } = this.props;
-	if (defaultType && sensors[defaultType]) {
-		return defaultType;
-	}
-	const totalTypes = this.getSupportedDisplayTypes(sensors);
-	return totalTypes[0];
-}
-
-render(): Object {
-	const { style, sensors, valueCoverStyle, dotCoverStyle, dotStyle } = this.props;
-	let defaultType = null, defaultSensor = null, totalTypes = this.getSupportedDisplayTypes(sensors);
-	if (totalTypes.length > 0) {
-		defaultType = this.getDefaultType(sensors);
-		defaultSensor = sensors[defaultType];
-	}
-
+const TypeBlock = ({ style, valueCoverStyle, dotStyle, dotCoverStyle, onLayout, changeDisplayType, totalTypes, defaultSensor, defaultType }: Props): Object => {
+	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 	return (
 		<AnimatedTouchable
-			onPress={this.changeDisplayType}
+			onPress={changeDisplayType}
 			accessible={false}
 			disabled={totalTypes.length <= 1}
-			onLayout={this.props.onLayout}
+			onLayout={onLayout}
 			style={style}
-			importantForAccessibility="no-hide-descendants">
+			importantForAccessibility="no-hide-descendants"
+			rippleColor={rippleColor}
+			rippleOpacity={rippleOpacity}
+			rippleDuration={rippleDuration}>
 			<View
 				style={valueCoverStyle}
 				importantForAccessibility="no-hide-descendants">
@@ -135,23 +85,6 @@ render(): Object {
 			</View>
 		</AnimatedTouchable>
 	);
-}
-}
+};
 
-function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { defaultTypeById } = store.sensorsList;
-	const defaultType = defaultTypeById[ownProps.id];
-	return {
-		defaultType,
-	};
-}
-
-function mapDispatchToProps(dispatch: Function): Object {
-	return {
-		changeDefaultDisplayType: (id: number, displayType: string): any => {
-			return dispatch(changeDefaultDisplayType(id, displayType));
-		},
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TypeBlock);
+export default TypeBlock;

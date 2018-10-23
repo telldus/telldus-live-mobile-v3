@@ -23,9 +23,7 @@
 
 import React from 'react';
 import { FlatList } from 'react-native';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
@@ -45,16 +43,8 @@ import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
 
-import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
-
-const messages = defineMessages({
-	noUpcommingSchedule: {
-		id: 'schedule.noUpcommingSchedule',
-		defaultMessage: 'No upcoming schedules on this day',
-		description: 'Message when no schedules',
-	},
-});
 
 type NavigationParams = {
 	focused: boolean, tintColor: string,
@@ -62,33 +52,22 @@ type NavigationParams = {
 
 type Props = {
 	rowsAndSections: Object,
-	devices: Object,
-	dispatch: Function,
+	showInactive: boolean,
 	navigation: Object,
 	screenProps: Object,
-	appLayout: Object,
+	dispatch: Function,
 };
 
 type State = {
-	daysToRender?: React$Element<any>[],
 	todayIndex?: number,
 	isRefreshing: boolean,
 	loading: boolean,
-	days: Array<any>,
 };
 
 class SchedulerTab extends View<null, Props, State> {
 
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
-
-	static propTypes = {
-		rowsAndSections: PropTypes.object,
-		devices: PropTypes.object,
-		dispatch: PropTypes.func,
-		navigation: PropTypes.object,
-		screenProps: PropTypes.object,
-	};
 
 	static navigationOptions = (props: Object): Object => ({
 		title: props.screenProps.intl.formatMessage(i18n.scheduler),
@@ -100,7 +79,7 @@ class SchedulerTab extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.noScheduleMessage = props.screenProps.intl.formatMessage(messages.noUpcommingSchedule);
+		this.noScheduleMessage = props.screenProps.intl.formatMessage(i18n.noUpcommingSchedule);
 
 		this.contentOffset = 0;
 
@@ -116,7 +95,8 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.tab === 'schedulerTab';
+		const { currentScreen } = nextProps.screenProps;
+		return currentScreen === 'Scheduler';
 	}
 
 	componentDidMount() {
@@ -145,14 +125,22 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	newSchedule = () => {
-		this.props.screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: false});
+		this.props.navigation.navigate({
+			routeName: 'Schedule',
+			key: 'Schedule',
+			params: { editMode: false },
+		});
 	};
 
 	editJob = (schedule: Schedule) => {
-		const { dispatch, screenProps } = this.props;
+		const { dispatch, navigation } = this.props;
 
 		dispatch(editSchedule(schedule));
-		screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: true});
+		navigation.navigate({
+			routeName: 'Schedule',
+			key: 'Schedule',
+			params: { editMode: true },
+		});
 	};
 
 	onIndexChanged = (index: number) => {
@@ -167,8 +155,9 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { rowsAndSections, appLayout, screenProps } = this.props;
-		const { formatMessage } = screenProps.intl;
+		const { rowsAndSections, screenProps, showInactive } = this.props;
+		const { appLayout, intl, currentScreen } = screenProps;
+		const { formatMessage } = intl;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
@@ -187,6 +176,8 @@ class SchedulerTab extends View<null, Props, State> {
 					appLayout={appLayout}
 					intl={screenProps.intl}
 					onToggleVisibility={this.onToggleVisibility}
+					currentScreen={currentScreen}
+					showInactive={showInactive}
 				/>
 				<Swiper
 					ref={this._refScroll}
@@ -200,7 +191,7 @@ class SchedulerTab extends View<null, Props, State> {
 				</Swiper>
 				<FloatingButton
 					onPress={this.newSchedule}
-					imageSource={require('./img/iconPlus.png')}
+					imageSource={{uri: 'icon_plus'}}
 					accessibilityLabel={`${formatMessage(i18n.addSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`}
 				/>
 			</View>
@@ -310,21 +301,10 @@ class SchedulerTab extends View<null, Props, State> {
 		return { days, daysToRender };
 	};
 
-	_rowHasChanged = (r1: Object, r2: Object): boolean => {
-		if (r1 === r2) {
-			return false;
-		}
-		return (
-			r1.effectiveHour !== r2.effectiveHour ||
-			r1.effectiveMinute !== r2.effectiveMinute ||
-			r1.method !== r2.method ||
-			r1.deviceId !== r2.deviceId
-		);
-	}
-
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
-		const { rowsAndSections } = this.props;
+		const { rowsAndSections, screenProps } = this.props;
+		const { appLayout, intl } = screenProps;
 		const { todayIndex } = this.state;
 		const { item } = props;
 		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
@@ -333,7 +313,12 @@ class SchedulerTab extends View<null, Props, State> {
 		const showNow = ((todayIndex === 0) && lastExpired && (lastExpired.id === item.id));
 
 		return (
-			<JobRow {...item} showNow={showNow} editJob={this.editJob} isFirst={props.index === 0} intl={this.props.screenProps.intl}/>
+			<JobRow {...item}
+				showNow={showNow}
+				editJob={this.editJob}
+				isFirst={props.index === 0}
+				intl={intl}
+				appLayout={appLayout}/>
 		);
 	};
 }
@@ -367,17 +352,15 @@ const styles = StyleSheet.create({
 
 type MapStateToPropsType = {
 	rowsAndSections: Object[],
-	devices: Object,
-	tab: string,
-	appLayout: Object,
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {
+	const { jobsList = {} } = store;
+	const { userOptions = {} } = jobsList;
+	const { showInactive = true } = userOptions;
 	return {
 		rowsAndSections: getRowsAndSections(store),
-		devices: store.devices,
-		tab: store.navigation.tab,
-		appLayout: getRelativeDimensions(store.App.layout),
+		showInactive,
 	};
 };
 

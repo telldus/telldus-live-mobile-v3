@@ -34,13 +34,11 @@ import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
 
 import Theme from '../../../Theme';
-import { getRelativeDimensions, hasTokenExpired } from '../../../Lib';
+import { hasTokenExpired } from '../../../Lib';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
-	rootNavigator: Object,
 	containerWidth: number,
 	navigation: Object,
 	location: Object,
@@ -76,15 +74,15 @@ class Details extends View {
 
 		let { formatMessage } = props.intl;
 		this.labelName = formatMessage(i18n.name);
-		this.labelTimeZone = formatMessage(commonMessages.headerOneTimeZoneCity);
-		this.labelGeoPosition = formatMessage(commonMessages.geoPosition);
-		this.labelLat = formatMessage(commonMessages.latitude);
-		this.labelLong = formatMessage(commonMessages.longitude);
-		this.labelIPPublic = formatMessage(commonMessages.ipPublic);
-		this.labelIPLocal = formatMessage(commonMessages.ipLocal);
-		this.labelSoftware = formatMessage(commonMessages.software);
+		this.labelTimeZone = formatMessage(i18n.headerOneTimeZoneCity);
+		this.labelGeoPosition = formatMessage(i18n.geoPosition);
+		this.labelLat = formatMessage(i18n.latitude);
+		this.labelLong = formatMessage(i18n.longitude);
+		this.labelIPPublic = formatMessage(i18n.ipPublic);
+		this.labelIPLocal = formatMessage(i18n.ipLocal);
+		this.labelSoftware = formatMessage(i18n.software);
 
-		this.confirmMessage = formatMessage(commonMessages.confirmDelete);
+		this.confirmMessage = formatMessage(i18n.confirmDelete);
 
 		this.labelDelete = formatMessage(i18n.delete);
 
@@ -120,7 +118,14 @@ class Details extends View {
 
 	onEditName() {
 		const { navigation, location } = this.props;
-		navigation.navigate('EditName', {id: location.id, name: location.name});
+		navigation.navigate({
+			routeName: 'EditName',
+			key: 'EditName',
+			params: {
+				id: location.id,
+				name: location.name,
+			},
+		});
 		this.infoPressCount = 0;
 	}
 
@@ -135,7 +140,13 @@ class Details extends View {
 	onEditGeoPosition() {
 		let { navigation, location } = this.props;
 		let { latitude, longitude, id } = location;
-		navigation.navigate('EditGeoPosition', { id, latitude, longitude });
+		navigation.navigate({
+			routeName: 'EditGeoPosition',
+			key: 'EditGeoPosition',
+			params: {
+				id, latitude, longitude,
+			},
+		});
 		this.infoPressCount = 0;
 	}
 
@@ -322,6 +333,7 @@ class Details extends View {
 const styles = StyleSheet.create({
 	button: {
 		backgroundColor: Theme.Core.brandDanger,
+		marginTop: 10,
 	},
 	infoTwoContainerStyle: {
 		flexDirection: 'row',
@@ -344,10 +356,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let id = ownProps.rootNavigator.state.params.location.id;
+	let { id } = ownProps.navigation.getParam('location', {id: null});
 	return {
 		location: store.gateways.byId[id],
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: store.app.layout,
 	};
 }
 

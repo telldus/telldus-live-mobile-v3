@@ -24,34 +24,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { announceForAccessibility } from 'react-native-accessibility';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
 
 import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from '../../../../BaseComponents';
-import i18n from '../../../Translations/common';
-import {
-	getRelativeDimensions,
-} from '../../../Lib';
 import { states, statusMessage } from '../../../../Config';
+
+import { getOriginString } from '../../../Lib';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 
-
-const messages = defineMessages({
-	announcementOnDetailsModalOpen: {
-		id: 'accessibilityLabel.announcementOnDetailsModalOpen',
-		defaultMessage: 'Showing device action details. Double tap on device history tab to close the modal',
-	},
-});
+import i18n from '../../../Translations/common';
 
 type Props = {
 	detailsData: Object,
 	appLayout: Object,
 	currentScreen: string,
-	currentTab: string,
 	intl: Object,
 };
 
@@ -61,7 +51,7 @@ class DeviceHistoryDetails extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.labelAnnouncementOnOpen = formatMessage(messages.announcementOnDetailsModalOpen);
+		this.labelAnnouncementOnOpen = formatMessage(i18n.announcementOnDetailsModalOpen);
 		this.labelAnnouncementOnClose = `${formatMessage(i18n.announcementOnModalClose)}.`;
 	}
 
@@ -69,17 +59,25 @@ class DeviceHistoryDetails extends View {
 		return Math.round(value * 100.0 / 255);
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.showDetails && !this.props.showDetails) {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { width } = nextProps.appLayout;
+		const { width: prevWidth } = this.props.appLayout;
+		const visibilityChange = nextProps.showDetails !== this.props.showDetails;
+		const layoutChange = width !== prevWidth;
+		return visibilityChange || layoutChange;
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		if (this.props.showDetails && !prevProps.showDetails) {
 			announceForAccessibility(this.labelAnnouncementOnOpen);
 		}
-		if (this.props.showDetails && !nextProps.showDetails) {
+		if (prevProps.showDetails && !this.props.showDetails) {
 			announceForAccessibility(this.labelAnnouncementOnClose);
 		}
 	}
 
 	render(): Object {
-		let { detailsData, appLayout, currentScreen, currentTab } = this.props;
+		let { detailsData, appLayout, currentScreen, intl } = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
 
@@ -100,19 +98,8 @@ class DeviceHistoryDetails extends View {
 			detailsTextError,
 		} = this.getStyle(appLayout);
 
-		if (origin && origin === 'Scheduler') {
-			originText = <FormattedMessage {...i18n.scheduler} style={detailsText}/>;
-		} else if (origin && origin === 'Incoming signal') {
-			originText = <FormattedMessage {...i18n.incommingSignal} style={detailsText}/>;
-		} else if (origin && origin === 'Unknown') {
-			originText = <FormattedMessage {...i18n.unknown} style={detailsText}/>;
-		} else if (origin && origin.substring(0, 5) === 'Group') {
-			originText = <Text style={detailsText}><FormattedMessage {...i18n.group} style={detailsText}/> {origin.substring(6, (origin.length))}</Text>;
-		} else if (origin && origin.substring(0, 5) === 'Event') {
-			originText = <Text style={detailsText}><FormattedMessage {...i18n.event} style={detailsText}/> {origin.substring(6, (origin.length))}</Text>;
-		} else {
-			originText = origin;
-		}
+		originText = getOriginString(origin, intl.formatMessage);
+
 		if (this.props.detailsData.state) {
 			let state = states[this.props.detailsData.state];
 			textState = state === 'Dim' ? `${state} ${this.getPercentage(stateValue)}%` : state;
@@ -168,7 +155,7 @@ class DeviceHistoryDetails extends View {
 			}
 		}
 
-		let accessible = currentTab === 'History' && currentScreen === 'DeviceDetails';
+		let accessible = currentScreen === 'History';
 
 		return (
 			<Modal
@@ -177,8 +164,8 @@ class DeviceHistoryDetails extends View {
 				entry= "SlideInY"
 				exit= "SlideOutY"
 				showOverlay= {false}
-				entryDuration= {1000}
-				exitDuration= {1000}
+				entryDuration= {500}
+				exitDuration= {500}
 				startValue= {-startValue}
 				endValue= {0}
 				showModal={this.props.showDetails}>
@@ -361,7 +348,7 @@ function mapStateToProps(state: Object): Object {
 	return {
 		showDetails: state.modal.openModal,
 		detailsData: state.modal.data,
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: state.app.layout,
 	};
 }
 

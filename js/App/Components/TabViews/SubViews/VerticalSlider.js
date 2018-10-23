@@ -91,9 +91,7 @@ class VerticalSlider extends View {
 		this.activeSlider = false;
 
 		this.layoutView = this.layoutView.bind(this);
-	}
 
-	componentWillMount() {
 		this.panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
 			onMoveShouldSetPanResponder: this.handleMoveShouldSetPanResponder,
@@ -103,12 +101,12 @@ class VerticalSlider extends View {
 			onPanResponderTerminationRequest: this.handlePanResponderEnd,
 			onPanResponderTerminate: this.handlePanResponderEnd,
 		});
-	}
-
-	componentWillReceiveProps(nextProps: Props) {
-		const newValue = nextProps.value;
-		this.setCurrentValueAnimate(newValue);
-		this.onValueChange(newValue);
+		// value retrieved using this.state.value.__getValue() does not seem to work at al places, say: 'startSliding'
+		// Hence using listener to get the value
+		this.dimValue = this.state.value.__getValue();
+		this.state.value.addListener(({value}: Object) => {
+			this.dimValue = value;
+		});
 	}
 
 	handleStartShouldSetPanResponder = (e: Object, /* gestureState: Object */): boolean => {
@@ -137,9 +135,9 @@ class VerticalSlider extends View {
 
 	startSliding = () => {
 		const { item, onLeftEnd, onRightEnd, onSlidingStart } = this.props;
-		this.previousBottom = this.getThumbBottom(this.state.value.__getValue());
+		this.previousBottom = this.getThumbBottom(this.dimValue);
 		if (onSlidingStart) {
-			onSlidingStart(item.name, this.state.value.__getValue());
+			onSlidingStart(item.name, this.dimValue);
 		}
 		this.activeSlider = true;
 		if (this.parentScrollEnabled) {
@@ -162,11 +160,11 @@ class VerticalSlider extends View {
 			this.setCurrentValue(this.getValue(gestureState));
 
 			if (this.props.onValueChange) {
-				this.props.onValueChange(this.state.value.__getValue());
+				this.props.onValueChange(this.dimValue);
 			}
 
 			// update the progress text
-			this.onValueChange(this.state.value.__getValue());
+			this.onValueChange(this.dimValue);
 		}
 	};
 
@@ -181,7 +179,7 @@ class VerticalSlider extends View {
 			this.setCurrentValue(this.getValue(gestureState));
 
 			if (this.props.onSlidingComplete) {
-				this.props.onSlidingComplete(this.state.value.__getValue());
+				this.props.onSlidingComplete(this.dimValue);
 			}
 		} else if (e.nativeEvent.locationX <= this.state.containerWidth / 2) {
 			if (this.pressOnLeft) {
@@ -223,7 +221,11 @@ class VerticalSlider extends View {
 	}
 
 	setCurrentValueAnimate(value: number) {
-		Animated.timing(this.state.value, { toValue: value, duration: 250 }).start();
+		Animated.timing(this.state.value, {
+			toValue: value,
+			duration: 250,
+			useNativeDriver: true,
+		}).start();
 	}
 
 	getValue(gestureState: Object): number {
@@ -260,6 +262,22 @@ class VerticalSlider extends View {
 
 	onValueChange(val: number) {
 		this.setState({ displayedValue: getSliderLabel(val, this.props.intl) });
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { value, intl } = this.props;
+		const { displayedValue: prevDisplayedValue, value: prevValue } = prevState;
+		const nextDisplayedValue = getSliderLabel(value, intl);
+		if (prevDisplayedValue !== nextDisplayedValue) {
+			Animated.timing(prevValue, {
+				toValue: value,
+				duration: 250,
+				useNativeDriver: true,
+			}).start();
+			this.setState({
+				displayedValue: nextDisplayedValue,
+			});
+		}
 	}
 
 	render(): React$Element<any> {

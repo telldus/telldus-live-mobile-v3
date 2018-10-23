@@ -132,7 +132,7 @@ class HeaderComponent extends Base {
 		if (!this.props.children) {
 			return (
 				<Image
-					source={require('../App/Components/TabViews/img/telldus-logo3.png')}
+					source={{uri: 'telldus_logo'}}
 					style={[this.getInitialStyle().logoImage, this.props.logoStyle]}
 				/>
 			);
@@ -314,7 +314,7 @@ class HeaderComponent extends Base {
 			return <Icon name={name} size={size} color={color} style={iconStyle}/>;
 		}
 		if (button.title) {
-			return <Text>{button.title}</Text>;
+			return <Text allowFontScaling={false}>{button.title}</Text>;
 		}
 		if (button.component) {
 			return button.component;
@@ -395,7 +395,7 @@ HeaderComponent.propTypes = {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 

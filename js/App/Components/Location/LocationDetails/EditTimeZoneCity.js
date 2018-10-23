@@ -31,7 +31,6 @@ import { View } from '../../../../BaseComponents';
 import CitiesList from '../Common/CitiesList';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	navigation: Object,
@@ -57,11 +56,11 @@ class EditTimeZoneCity extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `${formatMessage(commonMessages.headerOneTimeZoneCity)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneCity);
+		this.h1 = `${formatMessage(i18n.headerOneTimeZoneCity)}`;
+		this.h2 = formatMessage(i18n.headerTwoTimeZoneCity);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
-		this.onSetTimezoneError = `${formatMessage(commonMessages.failureEditTimezone)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
+		this.onSetTimezoneError = `${formatMessage(i18n.failureEditTimezone)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 	}
 
 	componentDidMount() {
@@ -74,9 +73,9 @@ class EditTimeZoneCity extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'EditTimeZoneCity' && this.props.currentScreen !== 'EditTimeZoneCity';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'EditTimeZoneCity' && prevProps.currentScreen !== 'EditTimeZoneCity';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -87,12 +86,16 @@ class EditTimeZoneCity extends View {
 	}
 
 	onCityChoose(city: string) {
-		let { navigation, actions } = this.props;
-		let continent = navigation.state.params.continent;
-		let timezone = `${continent}/${city}`;
-		actions.setTimezone(navigation.state.params.id, timezone).then(() => {
+		const { navigation, actions } = this.props;
+		const id = navigation.getParam('id', null);
+		const continent = navigation.getParam('continent', null);
+		const timezone = `${continent}/${city}`;
+		actions.setTimezone(id, timezone).then(() => {
 			actions.getGateways();
-			navigation.navigate('Details');
+			navigation.navigate({
+				routeName: 'Details',
+				key: 'Details',
+			});
 		}).catch(() => {
 			actions.showModal(this.onSetTimezoneError);
 		});

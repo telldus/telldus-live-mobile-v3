@@ -22,7 +22,6 @@
 'use strict';
 
 import type { Action } from '../Actions/Types';
-import { REHYDRATE } from 'redux-persist';
 
 const initialState = {
 	sensors: false,
@@ -32,11 +31,6 @@ const initialState = {
 
 
 function reduceRefetchLiveApi(state: Object = initialState, action: Action): Object {
-	if (action.type === REHYDRATE) {
-		return {
-			...initialState,
-		};
-	}
 	if (action.type === 'APP_FOREGROUND') {
 		return {
 			...initialState,

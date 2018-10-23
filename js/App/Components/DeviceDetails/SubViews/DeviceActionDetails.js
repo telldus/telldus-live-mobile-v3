@@ -171,6 +171,8 @@ class DeviceActionDetails extends View {
 				marginLeft: buttonPadding,
 				marginTop: buttonPadding,
 				...Theme.Core.shadow,
+				borderRadius: 2,
+				overflow: 'hidden',
 			},
 		};
 	}

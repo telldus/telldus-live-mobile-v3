@@ -108,9 +108,7 @@ class HorizontalSlider extends View {
 		let { formatMessage } = this.props.intl;
 		this.labelPhraseOne = formatMessage(i18n.dimLevel);
 		this.labelPhraseTwo = formatMessage(i18n.messageControlDimStep);
-	}
 
-	componentWillMount() {
 		this.panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: this.handleStartShouldSetPanResponder,
 			onMoveShouldSetPanResponder: this.handleMoveShouldSetPanResponder,
@@ -120,12 +118,12 @@ class HorizontalSlider extends View {
 			onPanResponderTerminationRequest: this.handlePanResponderTerminationRequest,
 			onPanResponderTerminate: this.handlePanResponderEnd,
 		});
-	}
-
-	componentWillReceiveProps(nextProps: Props) {
-		const newValue = nextProps.value;
-		this.setCurrentValueAnimate(newValue);
-		this.onValueChange(newValue);
+		// value retrieved using this.state.value.__getValue() does not seem to work at al places, say: 'startSliding'
+		// Hence using listener to get the value
+		this.dimValue = this.state.value.__getValue();
+		this.state.value.addListener(({value}: Object) => {
+			this.dimValue = value;
+		});
 	}
 
 	handleStartShouldSetPanResponder = (e: Object, /* gestureState: Object */): boolean => {
@@ -154,10 +152,10 @@ class HorizontalSlider extends View {
 
 	startSliding = () => {
 		const { item, onLeftEnd, onRightEnd, onSlidingStart } = this.props;
-		this.previousLeft = this.getThumbLeft(this.state.value.__getValue());
+		this.previousLeft = this.getThumbLeft(this.dimValue);
 
 		if (onSlidingStart) {
-			onSlidingStart(item.name, this.state.value.__getValue());
+			onSlidingStart(item.name, this.dimValue);
 		}
 		this.activeSlider = true;
 		if (this.parentScrollEnabled) {
@@ -180,11 +178,11 @@ class HorizontalSlider extends View {
 			this.setCurrentValue(this.getValue(gestureState));
 
 			if (this.props.onValueChange) {
-				this.props.onValueChange(this.state.value.__getValue());
+				this.props.onValueChange(this.dimValue);
 			}
 
 			// update the progress text
-			this.onValueChange(this.state.value.__getValue());
+			this.onValueChange(this.dimValue);
 		}
 	};
 
@@ -199,7 +197,7 @@ class HorizontalSlider extends View {
 			this.setCurrentValue(this.getValue(gestureState));
 
 			if (this.props.onSlidingComplete) {
-				this.props.onSlidingComplete(this.state.value.__getValue());
+				this.props.onSlidingComplete(this.dimValue);
 			}
 		}
 		this.pressOnLeft = this.pressOnRight = false;
@@ -238,7 +236,11 @@ class HorizontalSlider extends View {
 	}
 
 	setCurrentValueAnimate(value: number) {
-		Animated.timing(this.state.value, { toValue: value, duration: 250 }).start();
+		Animated.timing(this.state.value, {
+			toValue: value,
+			duration: 250,
+			useNativeDriver: true,
+		}).start();
 	}
 
 	getValue(gestureState: Object): number {
@@ -282,6 +284,22 @@ class HorizontalSlider extends View {
 
 	onValueChange(val: number) {
 		this.setState({ displayedValue: getSliderLabel(val, this.props.intl) });
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { value, intl } = this.props;
+		const { displayedValue: prevDisplayedValue, value: prevValue } = prevState;
+		const nextDisplayedValue = getSliderLabel(value, intl);
+		if (prevDisplayedValue !== nextDisplayedValue) {
+			Animated.timing(prevValue, {
+				toValue: value,
+				duration: 250,
+				useNativeDriver: true,
+			}).start();
+			this.setState({
+				displayedValue: nextDisplayedValue,
+			});
+		}
 	}
 
 	onPressDimmer() {

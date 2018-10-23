@@ -29,6 +29,7 @@ import { List, ListDataSource, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { DeviceRow } from './SubViews';
 import i18n from '../../Translations/common';
+import Theme from '../../Theme';
 interface Props extends ScheduleProps {
 	devices: Object,
 	resetSchedule: () => void,
@@ -64,12 +65,6 @@ export default class Device extends View<void, Props, State> {
 		this.h2 = formatMessage(i18n.posterChooseDevice);
 	}
 
-	componentWillMount() {
-		if (this._shouldReset()) {
-			this.props.navigation.goBack(null);
-		}
-	}
-
 	componentDidMount() {
 		const { actions, onDidMount } = this.props;
 		actions.getDevices();
@@ -89,12 +84,12 @@ export default class Device extends View<void, Props, State> {
 	};
 
 	selectDevice = (row: Object) => {
-		const { actions, navigation, rootNavigator } = this.props;
-		navigation.navigate('Action');
-		actions.selectDevice(row.id);
-		rootNavigator.setParams({
-			renderRootHeader: false,
+		const { actions, navigation } = this.props;
+		navigation.navigate({
+			routeName: 'Action',
+			key: 'Action',
 		});
+		actions.selectDevice(row.id);
 	};
 
 	render(): React$Element<List> {
@@ -107,10 +102,14 @@ export default class Device extends View<void, Props, State> {
 		);
 	}
 
-	_renderRow = (row: Object): Object => {
+	_renderRow = (row: Object, sId: string, rId: string): Object => {
 		const { appLayout, intl } = this.props;
 		// TODO: use device description
 		const preparedRow = Object.assign({}, row, { description: '' });
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		return <DeviceRow row={preparedRow} onPress={this.selectDevice} appLayout={appLayout}
 			intl={intl} labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}
@@ -118,12 +117,10 @@ export default class Device extends View<void, Props, State> {
 				flex: 1,
 				alignItems: 'stretch',
 				justifyContent: 'space-between',
+				marginVertical: undefined,
+				marginTop: parseInt(rId, 10) === 0 ? padding : 0,
+				marginBottom: padding / 2,
 			}}/>;
-	};
-
-	_shouldReset = (): boolean => {
-		const { params } = this.props.navigation.state;
-		return params && params.reset;
 	};
 
 }

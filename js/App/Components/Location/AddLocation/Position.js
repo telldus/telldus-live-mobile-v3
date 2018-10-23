@@ -31,7 +31,6 @@ import { View } from '../../../../BaseComponents';
 import GeoPosition from '../Common/GeoPosition';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -63,8 +62,8 @@ class Position extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `4. ${formatMessage(commonMessages.headerOnePosition)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoPosition);
+		this.h1 = `4. ${formatMessage(i18n.headerOnePosition)}`;
+		this.h2 = formatMessage(i18n.headerTwoPosition);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
@@ -86,9 +85,9 @@ class Position extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'Position' && this.props.currentScreen !== 'Position';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'Position' && prevProps.currentScreen !== 'Position';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -102,18 +101,23 @@ class Position extends View {
 		this.setState({
 			isLoading: true,
 		});
-		let clientInfo = this.props.navigation.state.params.clientInfo;
+		const { navigation, actions } = this.props;
+		let clientInfo = navigation.getParam('clientInfo', {});
 		clientInfo.coordinates = { latitude, longitude };
-		this.props.actions.activateGateway(clientInfo)
+		actions.activateGateway(clientInfo)
 			.then((response: Object) => {
-				this.props.navigation.navigate('Success', {clientInfo});
+				navigation.navigate({
+					routeName: 'Success',
+					key: 'Success',
+					params: {clientInfo},
+				});
 				this.setState({
 					isLoading: false,
 				});
 			}).catch((error: Object) => {
 				let message = error.message ? (error.message === 'Network request failed' ? this.networkFailed : error.message) :
 					error.error ? error.error : this.unknownError;
-				this.props.actions.showModal(message);
+				actions.showModal(message);
 				this.setState({
 					isLoading: false,
 				});

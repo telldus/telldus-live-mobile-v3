@@ -28,7 +28,6 @@ import NavigationActions from './Navigation';
 import SensorActions from './Sensors';
 import DeviceActions from './Devices';
 import LiveApiActions from './LiveApi';
-import TabActions from './Tabs';
 import DashboardActions from './Dashboard';
 import JobActions from './Jobs';
 import AppStateActions from './AppState';
@@ -49,7 +48,6 @@ module.exports = {
 	...SensorActions,
 	...DeviceActions,
 	...LiveApiActions,
-	...TabActions,
 	...DashboardActions,
 	...JobActions,
 	...AppStateActions,

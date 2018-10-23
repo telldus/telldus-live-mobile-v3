@@ -36,14 +36,7 @@ import { hideModal } from '../../Actions/Modal';
 
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
-const messages = defineMessages({
-	backToLogin: {
-		id: 'user.backToLogin',
-		defaultMessage: 'Back to Login',
-		description: 'Message to show on the forgot password screen',
-	},
-});
+import { intlShape, injectIntl } from 'react-intl';
 
 type Props = {
 	navigation: Object,
@@ -71,7 +64,7 @@ class ForgotPasswordScreen extends View<Props, null> {
 
 		let { formatMessage } = props.intl;
 
-		this.backToLogin = formatMessage(messages.backToLogin);
+		this.backToLogin = formatMessage(i18n.backToLogin);
 
 		this.labelLink = formatMessage(i18n.labelLink);
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
@@ -80,7 +73,10 @@ class ForgotPasswordScreen extends View<Props, null> {
 	}
 
 	goBackToLogin() {
-		this.props.navigation.navigate('Login');
+		this.props.navigation.navigate({
+			routeName: 'Login',
+			key: 'Login',
+		});
 	}
 
 	closeModal() {
@@ -104,7 +100,7 @@ class ForgotPasswordScreen extends View<Props, null> {
 					style={{
 						alignSelf: 'center',
 					}}>
-					<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
+					<FormattedMessage {...i18n.backToLogin} style={styles.accountExist} />
 				</TouchableOpacity>
 				<DialogueBox
 					showDialogue={showModal}

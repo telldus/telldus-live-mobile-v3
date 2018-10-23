@@ -67,28 +67,25 @@ class DimmerPopup extends Component<Props, State> {
 
 	static defaultProps: DefaultProps;
 
+	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+		if (!state.isVisible && props.isVisible) {
+			return {
+				isVisible: true,
+			};
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			isVisible: false,
+			isVisible: props.isVisible,
 			deviceWidth: Dimensions.get('window').width,
 			deviceHeight: Dimensions.get('window').height,
 		};
 
 		this.handleLayout = this.handleLayout.bind(this);
 		this.setRefs = this.setRefs.bind(this);
-	}
-
-	componentWillReceiveProps(nextProps: Props) {
-		if (!this.state.isVisible && nextProps.isVisible) {
-			this.setState({ isVisible: true });
-		}
-	}
-
-	componentWillMount() {
-		if (this.props.isVisible) {
-			this.setState({ isVisible: true });
-		}
 	}
 
 	componentDidMount() {
@@ -163,8 +160,10 @@ class DimmerPopup extends Component<Props, State> {
 					justifyContent: 'center',
 					...Theme.Core.shadow,
 				}}>
-				<Text ellipsizeMode="middle"
-				      style={{ color: '#1a355b' }}>
+				<Text
+					ellipsizeMode="middle"
+					allowFontScaling={false}
+				    style={{ color: '#1a355b' }}>
 					{this.props.name}
 				</Text>
 				<DimmerProgressBar

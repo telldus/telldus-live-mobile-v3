@@ -22,15 +22,21 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { FloatingButton, View } from '../../../BaseComponents';
+import { ScrollView } from 'react-native';
+import { NavigationActions } from 'react-navigation';
+import { intlShape, injectIntl } from 'react-intl';
+
+import {
+	FloatingButton,
+	View,
+} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { getSelectedDays } from '../../Lib';
-import { ActionRow, DaysRow, DeviceRow, TimeRow } from './SubViews';
-import { ScrollView } from 'react-native';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
-import i18n from '../../Translations/common';
+import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
+
+import i18n from '../../Translations/common';
+
 interface Props extends ScheduleProps {
 	paddingRight: number,
 	devices: Object,
@@ -41,50 +47,36 @@ type State = {
 	isLoading: boolean,
 };
 
-const messages = defineMessages({
-	addScheduleSuccess: {
-		id: 'toast.addScheduleSuccess',
-		defaultMessage: 'Schedule has been added successfully',
-		description: 'The message to show, when a schedule is added successfully',
-	},
-	posterSummary: {
-		id: 'schedule.posterSummary',
-		defaultMessage: 'Please confirm the schedule',
-	},
-});
-
 class Summary extends View<null, Props, State> {
 
 	state: State;
 
-	static propTypes = {
-		navigation: PropTypes.object,
-		actions: PropTypes.object,
-		onDidMount: PropTypes.func,
-		paddingRight: PropTypes.number,
-		schedule: PropTypes.object,
-		devices: PropTypes.object,
-	};
+	onToggleAdvanced: (boolean) => void;
+	setRefScroll: (any) => void;
+	scrollView: any;
 
 	constructor(props: Props) {
 		super(props);
+
+		const { schedule, intl } = this.props;
 
 		this.state = {
 			isLoading: false,
 		};
 
-		let { formatMessage } = this.props.intl;
+		let { formatMessage } = intl;
 
 		this.h1 = `5. ${formatMessage(i18n.summary)}`;
-		this.h2 = formatMessage(messages.posterSummary);
-		this.messageOnAdd = formatMessage(messages.addScheduleSuccess);
+		this.h2 = formatMessage(i18n.posterSummary);
+		this.messageOnAdd = formatMessage(i18n.addScheduleSuccess);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
-	}
+		this.device = this._getDeviceById(schedule.deviceId);
 
-	componentWillMount() {
-		this.device = this._getDeviceById(this.props.schedule.deviceId);
+		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
+		this.setRefScroll = this.setRefScroll.bind(this);
+		this.scrollView = null;
 	}
 
 	componentDidMount() {
@@ -101,13 +93,14 @@ class Summary extends View<null, Props, State> {
 			isLoading: true,
 		});
 		let options = this.props.actions.getScheduleOptions(this.props.schedule);
+
 		this.props.actions.saveSchedule(options).then((response: Object) => {
 			this.setState({
 				isLoading: false,
 			});
-			this.resetNavigation();
 			this.props.actions.getJobs();
 			this.props.actions.showToast(this.messageOnAdd, 'LONG');
+			this.resetNavigation();
 		}).catch((error: Object) => {
 			this.setState({
 				isLoading: false,
@@ -118,19 +111,44 @@ class Summary extends View<null, Props, State> {
 	};
 
 	resetNavigation = () => {
-		this.props.rootNavigator.goBack();
+		const { navigation } = this.props;
+		// There are issue while RESETTING the route and navigating/popping back(cannot set params and so) https://github.com/react-navigation/react-navigation/issues/2404
+		// Also we do not have to push the screen on top of the stack once again, so 'navigate' seem to be the best option.
+		const action = NavigationActions.navigate({
+			routeName: 'Scheduler',
+			key: 'Scheduler',
+		});
+		navigation.dispatch(action);
+	}
+
+	onToggleAdvanced(state: boolean) {
+		if (state && this.scrollView) {
+			this.scrollView.scrollToEnd({animated: true});
+		}
+	}
+
+	setRefScroll(ref: any) {
+		this.scrollView = ref;
 	}
 
 	render(): React$Element<any> {
-		const { schedule, paddingRight, appLayout, intl } = this.props;
+		const { schedule, paddingRight, appLayout, intl, actions } = this.props;
 		const { formatDate } = intl;
 		const { method, methodValue, weekdays } = schedule;
-		const { container, row, iconSize, buttonStyle, iconContainerStyle } = this._getStyle(appLayout);
+		const {
+			container,
+			row, iconSize,
+			buttonStyle,
+			iconStyle,
+			iconContainerStyle,
+		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
+
+		const { retries = 0, retryInterval = 0, reps = 0 } = schedule;
 
 		return (
 			<View style={{flex: 1}}>
-				<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+				<ScrollView ref={this.setRefScroll} style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
 					<View style={container}>
 						<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
 						<ActionRow
@@ -150,11 +168,21 @@ class Summary extends View<null, Props, State> {
 							intl={intl}
 						/>
 						<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
+						<AdvancedSettingsBlock
+							appLayout={appLayout}
+							intl={intl}
+							onPressInfo={actions.showModal}
+							onDoneEditAdvanced={actions.setAdvancedSettings}
+							retries={retries}
+							retryInterval={retryInterval}
+							reps={reps}
+							onToggleAdvanced={this.onToggleAdvanced}/>
 					</View>
 					<FloatingButton
 						buttonStyle={buttonStyle}
+						iconStyle={iconStyle}
 						onPress={this.saveSchedule}
-						imageSource={this.state.isLoading ? false : require('./img/check.png')}
+						iconName={this.state.isLoading ? false : 'checkmark'}
 						iconSize={iconSize}
 						paddingRight={paddingRight - 2}
 						showThrobber={this.state.isLoading}
@@ -186,6 +214,7 @@ class Summary extends View<null, Props, State> {
 			container: {
 				flex: 1,
 				marginBottom: (buttonSize / 2) + buttonBottom,
+				paddingVertical: padding - (padding / 4),
 			},
 			row: {
 				marginBottom: padding / 4,
@@ -194,6 +223,10 @@ class Summary extends View<null, Props, State> {
 			buttonStyle: {
 				elevation: 4,
 				shadowOpacity: 0.50,
+			},
+			iconStyle: {
+				fontSize: deviceWidth * 0.050666667,
+				color: '#fff',
 			},
 			iconContainerStyle: {
 				width: deviceWidth * 0.226666667,

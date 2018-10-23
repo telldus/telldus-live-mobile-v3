@@ -25,7 +25,7 @@ describe('<SettingsScreen />', () => {
 	it('should shallow SettingsScreen', () => {
 		expect(wrapper.find(SettingsScreen).length).toBe(1);
 		const screen = wrapper.props().children.type.displayName;
-		expect(screen).toEqual('Connect(InjectIntl(SettingsScreen))');
+		expect(screen).toEqual('Connect(SettingsScreen)');
 	});
 
 	it(' check logoutFromTelldus action on dispatching ', () => {

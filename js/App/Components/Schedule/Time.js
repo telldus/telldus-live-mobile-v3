@@ -23,37 +23,22 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DatePickerIOS, Platform, TimePickerAndroid, TouchableWithoutFeedback, ScrollView,
-	LayoutAnimation, UIManager } from 'react-native';
-import { defineMessages } from 'react-intl';
+import {
+	DatePickerIOS,
+	Platform,
+	TimePickerAndroid,
+	TouchableWithoutFeedback,
+	ScrollView,
+	LayoutAnimation,
+	KeyboardAvoidingView,
+} from 'react-native';
 
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { TimeBlock, TimeSlider } from './SubViews';
-import { getHoursAndMinutes } from '../../Lib';
+import { getHoursAndMinutes, LayoutAnimations } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
-
-const messages = defineMessages({
-	descriptionSliderOffset: {
-		id: 'schedule.time.descriptionSliderOffset',
-		defaultMessage: 'Offset the time between {startValue} to {endValue}',
-		description: 'Info about choosing time offset for the schedule',
-	},
-	descriptionSliderInterval: {
-		id: 'schedule.time.descriptionSliderInterval',
-		defaultMessage: 'Set random intervals between {startValue} to {endValue}',
-		description: 'Info about choosing random time interval for the schedule',
-	},
-	editTime: {
-		id: 'schedule.time.editTime',
-		defaultMessage: 'Tap to change time',
-	},
-	editTimeAccessible: {
-		id: 'schedule.time.editTimeAccessible',
-		defaultMessage: 'Double tap to change time',
-	},
-});
 
 const TYPES = ['sunrise', 'sunset', 'time'];
 
@@ -87,24 +72,25 @@ export default class Time extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		let { formatMessage } = this.props.intl;
+		const { isEditMode, intl, schedule } = this.props;
+		const { formatMessage } = intl;
 
-		this.h1 = `3. ${formatMessage(i18n.time)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.time) : `3. ${formatMessage(i18n.time)}`;
 		this.h2 = formatMessage(i18n.posterChooseTime);
-		this.labelSliderInterval = formatMessage(messages.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
-		this.labelSliderOffset = formatMessage(messages.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
+		this.labelSliderInterval = formatMessage(i18n.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
+		this.labelSliderOffset = formatMessage(i18n.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
 
-		this.labelSliderIntervalEdit = formatMessage(messages.descriptionSliderInterval, {startValue: '0min', endValue: '1440min'});
-		this.labelSliderOffsetEdit = formatMessage(messages.descriptionSliderOffset, {startValue: '-1439min', endValue: '1439min'});
+		this.labelSliderIntervalEdit = formatMessage(i18n.descriptionSliderInterval, {startValue: '0min', endValue: '1440min'});
+		this.labelSliderOffsetEdit = formatMessage(i18n.descriptionSliderOffset, {startValue: '-1439min', endValue: '1439min'});
 
-		this.labelEditTime = formatMessage(messages.editTime);
-		this.labelEditTimeAccessible = formatMessage(messages.editTimeAccessible);
+		this.labelEditTime = formatMessage(i18n.editTime);
+		this.labelEditTimeAccessible = formatMessage(i18n.editTimeAccessible);
 
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields
 		};
 
-		const { type, offset, randomInterval, hour, minute } = props.schedule;
+		const { type, offset, randomInterval, hour, minute } = schedule;
 
 		this.state = {
 			selectedType: type,
@@ -117,24 +103,6 @@ export default class Time extends View<null, Props, State> {
 
 		this.selectTimeAndroid = this.selectTimeAndroid.bind(this);
 		this.toggleEdit = this.toggleEdit.bind(this);
-		if (Platform.OS === 'android') {
-			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-		}
-		this.animationConfig = {
-			duration: 300,
-			create: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.scaleXY,
-			},
-			update: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.scaleXY,
-			},
-			delete: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.opacity,
-			},
-		};
 	}
 
 	componentDidMount() {
@@ -160,7 +128,7 @@ export default class Time extends View<null, Props, State> {
 
 	toggleEdit(type: string) {
 		const { offsetEdit, intervalEdit } = this.state;
-		LayoutAnimation.configureNext(this.animationConfig);
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		if (type === 'OFFSET') {
 			this.setState({
 				offsetEdit: !offsetEdit,
@@ -222,7 +190,10 @@ export default class Time extends View<null, Props, State> {
 		if (isEditMode()) {
 			navigation.goBack();
 		} else {
-			navigation.navigate('Days');
+			navigation.navigate({
+				routeName: 'Days',
+				key: 'Days',
+			});
 		}
 	};
 
@@ -235,35 +206,38 @@ export default class Time extends View<null, Props, State> {
 
 		return (
 			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps={'always'}>
-				<View style={container}>
-					<View style={[type.container, { marginBottom }]}>
-						{this._renderTypes(TYPES)}
+				<KeyboardAvoidingView
+					behavior="padding">
+					<View style={container}>
+						<View style={[type.container, { marginBottom }]}>
+							{this._renderTypes(TYPES)}
+						</View>
+						{this._renderTimeRow()}
+						{shouldRender && (
+							<Row containerStyle={row}>
+								<TimeSlider
+									description={intervalEdit ? this.labelSliderIntervalEdit : this.labelSliderInterval}
+									icon="random"
+									minimumValue={0}
+									maximumValue={1440}
+									value={randomInterval}
+									onValueChange={this.setRandomIntervalValue}
+									appLayout={appLayout}
+									intl={intl}
+									type="INTERVAL"
+									toggleEdit={this.toggleEdit}
+								/>
+							</Row>
+						)}
 					</View>
-					{this._renderTimeRow()}
 					{shouldRender && (
-						<Row containerStyle={row}>
-							<TimeSlider
-								description={intervalEdit ? this.labelSliderIntervalEdit : this.labelSliderInterval}
-								icon="random"
-								minimumValue={0}
-								maximumValue={1440}
-								value={randomInterval}
-								onValueChange={this.setRandomIntervalValue}
-								appLayout={appLayout}
-								intl={intl}
-								type="INTERVAL"
-								toggleEdit={this.toggleEdit}
-							/>
-						</Row>
+						<FloatingButton
+							onPress={this.selectTime}
+							imageSource={{uri: 'right_arrow_key'}}
+							paddingRight={this.props.paddingRight - 2}
+						/>
 					)}
-				</View>
-				{shouldRender && (
-					<FloatingButton
-						onPress={this.selectTime}
-						imageSource={require('./img/right-arrow-key.png')}
-						paddingRight={this.props.paddingRight - 2}
-					/>
-				)}
+				</KeyboardAvoidingView>
 			</ScrollView>
 		);
 	}
@@ -441,6 +415,7 @@ export default class Time extends View<null, Props, State> {
 				flex: 1,
 				justifyContent: 'flex-start',
 				marginBottom: (buttonSize / 2) + buttonBottom,
+				paddingVertical: padding - (padding / 4),
 			},
 			row: {
 				marginBottom,

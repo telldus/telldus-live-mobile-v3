@@ -22,9 +22,8 @@
 
 import getRouteName from './getRouteName';
 import getDeviceWidth from './getDeviceWidth';
-import getDeviceHeight from './getDeviceHeight';
 import hasStatusBar from './hasStatusBar';
-import Dimmer from './Dimmer';
+import DimmerUtils from './DimmerUtils';
 import SensorUtils from './SensorUtils';
 import DeviceUtils from './DeviceUtils';
 import Accessibility from './Accessibility';
@@ -36,7 +35,6 @@ import formatTime from './formatTime';
 import getPowerParts from './getPowerParts';
 import getSuntime from './getSuntime';
 import getTabBarIcon from './getTabBarIcon';
-import getRelativeDimensions from './getRelativeDimensions';
 import getDeviceType from './getDeviceType';
 import TelldusWebsocket from './Socket';
 import getDrawerWidth from './getDrawerWidth';
@@ -44,6 +42,9 @@ import getLocationImageUrl from './getLocationImageUrl';
 import * as RSA from './RSA';
 import scheduleUtils from './scheduleUtils';
 import * as LocalApi from './LocalApi';
+import * as NavigationService from './NavigationService';
+import shouldUpdate from './shouldUpdate';
+import * as LayoutAnimations from './LayoutAnimations';
 import * as UserUtils from './UserUtils';
 import * as LocalControl from './LocalControl';
 
@@ -51,15 +52,13 @@ import * as LocalControl from './LocalControl';
 module.exports = {
 	getRouteName,
 	getDeviceWidth,
-	getDeviceHeight,
 	hasStatusBar,
 	capitalize,
 	formatTime,
 	getPowerParts,
 	getSuntime,
 	getTabBarIcon,
-	getRelativeDimensions,
-	...Dimmer,
+	...DimmerUtils,
 	...SensorUtils,
 	...DeviceUtils,
 	...Accessibility,
@@ -73,6 +72,9 @@ module.exports = {
 	...RSA,
 	...scheduleUtils,
 	...LocalApi,
+	...NavigationService,
+	shouldUpdate,
+	LayoutAnimations,
 	...UserUtils,
 	...LocalControl,
 };

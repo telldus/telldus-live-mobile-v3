@@ -26,16 +26,11 @@ import { connect } from 'react-redux';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_history from '../../TabViews/img/selection.json';
-const CustomIcon = createIconSetFromIcoMoon(icon_history);
-
-import { FormattedMessage, Text, View, ListRow } from '../../../../BaseComponents';
+import { FormattedMessage, Text, View, ListRow, IconTelldus } from '../../../../BaseComponents';
 import { getDeviceStateMethod } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import {
 	toSliderValue,
-	getRelativeDimensions,
 } from '../../../Lib';
 
 type Props = {
@@ -47,7 +42,6 @@ type Props = {
 	intl: Object,
 	isModalOpen: boolean,
 	currentScreen: string,
-	currentTab: string,
 };
 
 type State = {
@@ -105,19 +99,19 @@ class HistoryRow extends React.PureComponent<Props, State> {
 	getIcon(deviceState: string): string | null {
 		switch (deviceState) {
 			case 'TURNON':
-				return 'icon_on';
+				return 'on';
 			case 'TURNOFF':
-				return 'icon_off';
+				return 'off';
 			case 'UP':
-				return 'icon_up';
+				return 'up';
 			case 'BELL':
-				return 'icon_bell';
+				return 'bell';
 			case 'DOWN':
-				return 'icon_down';
+				return 'down';
 			case 'STOP':
-				return 'icon_stop';
+				return 'stop';
 			case 'LEARN':
-				return 'icon_learn';
+				return 'learn';
 			default:
 				return '';
 		}
@@ -172,7 +166,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 	render(): Object {
 
-		let { appLayout, intl, isModalOpen, currentScreen, currentTab } = this.props;
+		let { appLayout, intl, isModalOpen, currentScreen } = this.props;
 
 		let {
 			locationCover,
@@ -217,9 +211,9 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 		let accessibilityLabel = this.accessibilityLabel(deviceState);
 		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
-		let accessible = !isModalOpen && currentTab === 'History' && currentScreen === 'DeviceDetails';
+		let accessible = !isModalOpen && currentScreen === 'History';
 
-		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#A59F9A' : '#F06F0C';
+		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#1b365d' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
 
 		return (
@@ -245,15 +239,15 @@ class HistoryRow extends React.PureComponent<Props, State> {
 				>
 
 					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
-						<View style={[statusView, { backgroundColor: '#A59F9A' }]}>
-							<CustomIcon name="icon_off" size={statusIconSize} color="#ffffff" />
+						<View style={[statusView, { backgroundColor: '#1b365d' }]}>
+							<IconTelldus icon="off" size={statusIconSize} color="#ffffff" />
 						</View>
 						:
 						<View style={[statusView, { backgroundColor: '#F06F0C' }]}>
 							{deviceState === 'DIM' ?
 								<Text style={statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
 								:
-								<CustomIcon name={icon} size={statusIconSize} color="#ffffff" />
+								<IconTelldus icon={icon} size={statusIconSize} color="#ffffff" />
 							}
 						</View>
 					}
@@ -348,7 +342,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: store.app.layout,
 		isModalOpen: store.modal.openModal,
 	};
 }

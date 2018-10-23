@@ -24,18 +24,15 @@
 import React from 'react';
 import { ScrollView, PushNotificationIOS, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 const DeviceInfo = require('react-native-device-info');
+const isEqual = require('react-fast-compare');
 
 import {
 	Text,
 	View,
-	Poster,
 	TouchableButton,
 	DialogueBox,
-	Header,
-	SafeAreaView,
+	NavigationHeaderPoster,
 	TitledInfoBlock,
 } from '../../../BaseComponents';
 import { logoutFromTelldus, showToast } from '../../Actions';
@@ -43,82 +40,30 @@ import { showModal as actionShowModal } from '../../Actions';
 
 import { pushServiceId } from '../../../Config';
 import { registerPushToken, unregisterPushToken, showChangeLog } from '../../Actions/User';
+import { shouldUpdate } from '../../Lib';
 
-import i18n from './../../Translations/common';
 import Theme from '../../Theme';
 
-const messages = defineMessages({
-	pushReRegister: {
-		id: 'settings.pushReRegister',
-		defaultMessage: 'Re-register phone for push notifications',
-	},
-	pushRegisters: {
-		id: 'settings.pushRegisters',
-		defaultMessage: 'Registering for push',
-		description: 'Message in the settings window shown when registrating for push notifications',
-	},
-	pushRegisterSuccess: {
-		id: 'settings.pushRegisterSuccess',
-		defaultMessage: 'This phone is now registered for push',
-		description: 'Message to show when token registered successfully',
-	},
-	pushRegisterFailed: {
-		id: 'settings.pushRegisterFailed',
-		defaultMessage: 'Failed to register for push. Please try again',
-		description: 'Message to show when token register failed',
-	},
-	titleAppInfo: {
-		id: 'settings.row.titleAppInfo',
-		defaultMessage: 'App information',
-	},
-	titlePush: {
-		id: 'settings.row.titlePush',
-		defaultMessage: 'Push',
-	},
-	titleUserInfo: {
-		id: 'settings.row.titleUserInfo',
-		defaultMessage: 'User information',
-	},
-	labelPush: {
-		id: 'settings.row.labelPush',
-		defaultMessage: 'Registered for Push',
-	},
-	labelLoggedUser: {
-		id: 'settings.row.labelLoggedUser',
-		defaultMessage: 'Logged in as',
-	},
-	headerTwoSettings: {
-		id: 'poster.headerTwoSettings',
-		defaultMessage: 'User and app settings',
-	},
-	pushPermissionHeader: {
-		id: 'dialogueBox.pushPermissionHeader',
-		defaultMessage: 'Notifications not allowed',
-	},
-	pushPermissionContent: {
-		id: 'dialogueBox.pushPermissionContent',
-		defaultMessage: 'Notifications are not allowed for this app. Please go to Settings - Notifications to allow notifications',
-	},
-});
+import i18n from './../../Translations/common';
 
 type Props = {
-	dispatch: Function,
-	isVisible: boolean,
-	onClose: () => void,
-	onLogout: (string, Function) => void,
-	onSubmitPushToken: (string) => Promise<any>,
-	user: Object,
 	validationMessage: string,
 	showModal: boolean,
-	intl: intlShape.isRequired,
-    appLayout: Object,
-	navigation: Object,
+	screenProps: Object,
+	pushTokenRegistered: boolean,
+	pushToken: string,
+	email: string,
 	modalExtras: any,
+
+	navigation: Object,
+	dispatch: Function,
+	onClose: () => void,
+	onLogout: (string) => void,
+	onSubmitPushToken: (string) => Promise<any>,
 };
 
 
 type State = {
-	isVisible: boolean,
 	isPushSubmitLoading: boolean,
 	isLogoutLoading: boolean,
 };
@@ -128,72 +73,70 @@ props: Props;
 state: State;
 
 logout: () => void;
-postLoadMethod: () => void;
 submitPushToken: () => void;
-updateModalVisiblity: () => void;
 onConfirmLogout: () => void;
 closeModal: () => void;
-onCloseSettings: () => void;
 onPressWhatsNew: () => void;
+
+handleBackPress: () => boolean;
 
 constructor(props: Props) {
 	super(props);
 	this.state = {
-		isVisible: this.props.isVisible,
 		isPushSubmitLoading: false,
 		isLogoutLoading: false,
 	};
 
 	this.logout = this.logout.bind(this);
 	this.onConfirmLogout = this.onConfirmLogout.bind(this);
-	this.postLoadMethod = this.postLoadMethod.bind(this);
 	this.submitPushToken = this.submitPushToken.bind(this);
-	this.updateModalVisiblity = this.updateModalVisiblity.bind(this);
 	this.closeModal = this.closeModal.bind(this);
-	this.onCloseSettings = this.onCloseSettings.bind(this);
 	this.onPressWhatsNew = this.onPressWhatsNew.bind(this);
 
-	let { formatMessage } = this.props.intl;
+	const { formatMessage } = this.props.screenProps.intl;
 
 	this.confirmMessage = formatMessage(i18n.contentLogoutConfirm);
 	this.labelButton = formatMessage(i18n.button);
 	this.labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 	this.labelLogOut = `${formatMessage(i18n.labelLogOut)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
-	this.labelCloseSettings = `${formatMessage(i18n.labelClose)} ${formatMessage(i18n.settingsHeader)}. ${this.labelButtondefaultDescription}`;
 
-	this.titleAppInfo = formatMessage(messages.titleAppInfo);
-	this.titlePush = formatMessage(messages.titlePush);
-	this.titleUserInfo = `${formatMessage(messages.titleUserInfo)}:`;
+	this.titleAppInfo = formatMessage(i18n.titleAppInfo);
+	this.titlePush = formatMessage(i18n.titlePush);
+	this.titleUserInfo = `${formatMessage(i18n.titleUserInfo)}:`;
 	this.labelVersion = formatMessage(i18n.version);
-	this.labelPush = formatMessage(messages.labelPush);
-	this.labelLoggedUser = formatMessage(messages.labelLoggedUser);
+	this.labelPush = formatMessage(i18n.labelPush);
+	this.labelLoggedUser = formatMessage(i18n.labelLoggedUser);
 	this.valueYes = formatMessage(i18n.yes);
 	this.valueNo = formatMessage(i18n.no);
 
-	const { appLayout } = this.props;
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceHeight = isPortrait ? height : width;
-	const size = Math.floor(deviceHeight * 0.035);
-
-	this.backButton = {
-		icon: {
-			name: 'angle-left',
-			size,
-			color: '#fff',
-			style: null,
-			iconStyle: null,
-		},
-		onPress: this.onCloseSettings,
-		accessibilityLabel: this.labelCloseSettings,
-	};
 	this.headerOne = formatMessage(i18n.settingsHeader);
-	this.headerTwo = formatMessage(messages.headerTwoSettings);
+	this.headerTwo = formatMessage(i18n.headerTwoSettings);
 	this.labelWhatsNew = formatMessage(i18n.labelWhatsNew);
+
+	this.handleBackPress = this.handleBackPress.bind(this);
 }
 
-onCloseSettings() {
-	this.props.navigation.goBack();
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const { screenProps: screenPropsN, ...othersN } = nextProps;
+	if (screenPropsN.currentScreen === 'Settings') {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+
+		const { screenProps, ...others } = this.props;
+		const { appLayout } = screenPropsN;
+		if (screenProps.appLayout.width !== appLayout.width) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['showModal', 'pushTokenRegistered', 'pushToken', 'email', 'modalExtras']);
+		if (propsChange) {
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
 
 logout() {
@@ -210,7 +153,7 @@ onConfirmLogout() {
 	this.setState({
 		isLogoutLoading: true,
 	});
-	this.props.onLogout(this.props.user.pushToken, this.postLoadMethod);
+	this.props.onLogout(this.props.pushToken);
 }
 
 closeModal() {
@@ -219,40 +162,28 @@ closeModal() {
 	});
 }
 
-postLoadMethod(type: string) {
-	if (type === 'REG_TOKEN') {
-		this.setState({
-			isPushSubmitLoading: false,
-		});
-	}
-	if (type === 'LOGOUT') {
-		this.setState({
-			isLogoutLoading: false,
-		});
-	}
-}
-
-updateModalVisiblity() {
-	this.props.onClose();
-}
-
 onPressWhatsNew() {
 	this.props.dispatch(showChangeLog());
 }
 
+handleBackPress(): boolean {
+	this.props.navigation.goBack();
+	return true;
+}
+
 getRelativeData(): Object {
-	const { intl, modalExtras } = this.props;
-	const { formatMessage } = intl;
+	const { modalExtras, screenProps } = this.props;
+	const { formatMessage } = screenProps.intl;
 
 	let notificationHeader = `${formatMessage(i18n.logout)}?`, showPositive = true,
 		showNegative = true, positiveText = formatMessage(i18n.logout).toUpperCase(),
 		onPressPositive = this.onConfirmLogout, onPressNegative = this.closeModal;
-	let submitButText = this.state.isPushSubmitLoading ? `${formatMessage(messages.pushRegisters)}...` : formatMessage(messages.pushReRegister);
+	let submitButText = this.state.isPushSubmitLoading ? `${formatMessage(i18n.pushRegisters)}...` : formatMessage(i18n.pushReRegister);
 	let logoutButText = this.state.isLogoutLoading ? formatMessage(i18n.loggingout) : formatMessage(i18n.labelLogOut);
 	let version = DeviceInfo.getVersion();
 
 	if (modalExtras && modalExtras === 'PUSH_PERMISSION') {
-		notificationHeader = formatMessage(messages.pushPermissionHeader);
+		notificationHeader = formatMessage(i18n.pushPermissionHeader);
 		showPositive = true;
 		positiveText = null;
 		showNegative = false;
@@ -273,7 +204,7 @@ getRelativeData(): Object {
 }
 
 render(): Object {
-	let {
+	const {
 		notificationHeader,
 		showPositive,
 		showNegative,
@@ -284,78 +215,76 @@ render(): Object {
 		logoutButText,
 		version,
 	} = this.getRelativeData();
-	let { appLayout, showModal, user } = this.props;
-	let { pushTokenRegistered, userProfile } = user;
-	let { email } = userProfile;
-	let { isLogoutLoading, isPushSubmitLoading } = this.state;
-	let styles = this.getStyles(appLayout);
+	const {
+		screenProps,
+		showModal,
+		navigation,
+		pushTokenRegistered,
+		email,
+	} = this.props;
+	const { appLayout } = screenProps;
+	const { isLogoutLoading, isPushSubmitLoading } = this.state;
+	const styles = this.getStyles(appLayout);
 
-	let buttonAccessible = !isLogoutLoading && !isPushSubmitLoading && !showModal;
-	let importantForAccessibility = showModal ? 'no-hide-descendants' : 'yes';
+	const buttonAccessible = !isLogoutLoading && !isPushSubmitLoading && !showModal;
+	const importantForAccessibility = showModal ? 'no-hide-descendants' : 'yes';
 
 	return (
-		<SafeAreaView>
-			<View style={styles.container}>
-				<Header leftButton={this.backButton} style={styles.header}/>
-				<ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1}}>
-					<Poster>
-						<View style={styles.posterItemsContainer}>
-							<Text style={[styles.h, styles.h1]}>
-								{this.headerOne}
-							</Text>
-							<Text style={[styles.h, styles.h2]}>
-								{this.headerTwo}
-							</Text>
-						</View>
-					</Poster>
-					<View style={styles.body} importantForAccessibility={importantForAccessibility}>
-						<TitledInfoBlock
-							title={this.titleAppInfo}
-							label={this.labelVersion}
-							value={version}
-							fontSize={styles.fontSize}
-						/>
-						<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
-							{this.labelWhatsNew}
-						</Text>
-						<TitledInfoBlock
-							title={this.titlePush}
-							label={this.labelPush}
-							value={pushTokenRegistered ? this.valueYes : this.valueNo}
-							fontSize={styles.fontSize}
-						/>
-						<Text onPress={this.submitPushToken} style={styles.buttonResubmit}>
-							{submitButText}
-						</Text>
-						<TitledInfoBlock
-							title={this.titleUserInfo}
-							label={this.labelLoggedUser}
-							value={email}
-							fontSize={styles.fontSize}
-						/>
-						<TouchableButton
-							onPress={this.logout}
-							text={logoutButText}
-							postScript={this.state.isLogoutLoading ? '...' : null}
-							accessibilityLabel={this.labelLogOut}
-							accessible={buttonAccessible}
-							style={{
-								marginTop: styles.fontSize / 2,
-							}}
-						/>
-						<DialogueBox
-							showDialogue={this.props.showModal}
-							header={notificationHeader}
-							text={this.props.validationMessage}
-							showPositive={showPositive}
-							showNegative={showNegative}
-							positiveText={positiveText}
-							onPressPositive={onPressPositive}
-							onPressNegative={onPressNegative}/>
-					</View>
-				</ScrollView>
-			</View>
-		</SafeAreaView>
+		<View style={styles.container}>
+			<NavigationHeaderPoster
+				h1={this.headerOne} h2={this.headerTwo}
+				navigation={navigation}
+				align={'right'}
+				handleBackPress={this.handleBackPress}
+				{...screenProps}/>
+			<ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1}}>
+				<View style={styles.body} importantForAccessibility={importantForAccessibility}>
+					<TitledInfoBlock
+						title={this.titleAppInfo}
+						label={this.labelVersion}
+						value={version}
+						fontSize={styles.fontSize}
+					/>
+					<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
+						{this.labelWhatsNew}
+					</Text>
+					<TitledInfoBlock
+						title={this.titlePush}
+						label={this.labelPush}
+						value={pushTokenRegistered ? this.valueYes : this.valueNo}
+						fontSize={styles.fontSize}
+					/>
+					<Text onPress={this.submitPushToken} style={styles.buttonResubmit}>
+						{submitButText}
+					</Text>
+					<TitledInfoBlock
+						title={this.titleUserInfo}
+						label={this.labelLoggedUser}
+						value={email}
+						fontSize={styles.fontSize}
+					/>
+					<TouchableButton
+						onPress={this.logout}
+						text={logoutButText}
+						postScript={this.state.isLogoutLoading ? '...' : null}
+						accessibilityLabel={this.labelLogOut}
+						accessible={buttonAccessible}
+						style={{
+							marginTop: styles.fontSize / 2,
+						}}
+					/>
+					<DialogueBox
+						showDialogue={this.props.showModal}
+						header={notificationHeader}
+						text={this.props.validationMessage}
+						showPositive={showPositive}
+						showNegative={showNegative}
+						positiveText={positiveText}
+						onPressPositive={onPressPositive}
+						onPressNegative={onPressNegative}/>
+				</View>
+			</ScrollView>
+		</View>
 	);
 }
 
@@ -368,8 +297,8 @@ submitPushToken() {
 			if (alert || badge || sound) {
 				this.confirmTokenSubmit();
 			} else {
-				const { dispatch, intl } = this.props;
-				const message = intl.formatMessage(messages.pushPermissionContent);
+				const { dispatch, screenProps } = this.props;
+				const message = screenProps.intl.formatMessage(i18n.pushPermissionContent);
 				dispatch(actionShowModal(message, 'PUSH_PERMISSION'));
 			}
 		});
@@ -380,12 +309,12 @@ confirmTokenSubmit() {
 	this.setState({
 		isPushSubmitLoading: true,
 	});
-	let { formatMessage } = this.props.intl;
-	this.props.onSubmitPushToken(this.props.user.pushToken).then((response: Object) => {
-		let message = formatMessage(messages.pushRegisterSuccess);
+	const { formatMessage } = this.props.screenProps.intl;
+	this.props.onSubmitPushToken(this.props.pushToken).then((response: Object) => {
+		let message = formatMessage(i18n.pushRegisterSuccess);
 		this.showToast(message);
 	}).catch(() => {
-		let message = formatMessage(messages.pushRegisterFailed);
+		let message = formatMessage(i18n.pushRegisterFailed);
 		this.showToast(message);
 	});
 }
@@ -400,7 +329,6 @@ showToast(message: string) {
 getStyles(appLayout: Object): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
-	const deviceHeight = isPortrait ? height : width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
@@ -408,9 +336,6 @@ getStyles(appLayout: Object): Object {
 		fontSize,
 		container: {
 			flex: 1,
-		},
-		header: {
-			height: isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.11,
 		},
 		posterItemsContainer: {
 			flex: 1,
@@ -448,12 +373,17 @@ getStyles(appLayout: Object): Object {
 }
 
 function mapStateToProps(store: Object): Object {
+	const { pushTokenRegistered, userProfile, pushToken } = store.user;
+	const { data: validationMessage, openModal: showModal } = store.modal;
+	const { email } = userProfile;
+
 	return {
-		validationMessage: store.modal.data,
-		showModal: store.modal.openModal,
+		validationMessage,
+		showModal,
+		pushTokenRegistered,
+		pushToken,
+		email,
 		modalExtras: store.modal.extras,
-		appLayout: store.App.layout,
-		user: store.user,
 	};
 }
 
@@ -472,14 +402,15 @@ function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 		onSubmitPushToken: (token: string): Promise<any> => {
 			return dispatch(registerPushToken(token, DeviceInfo.getBuildNumber(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 		},
-		onLogout: (token: string, callback: Function) => {
-			dispatch(unregisterPushToken(token)).then(() => {
-				dispatch(logoutFromTelldus());
-				callback('LOGOUT');
+		onLogout: (token: string): Promise<any> => {
+			return dispatch(unregisterPushToken(token)).then((): Promise<any> => {
+				return dispatch(logoutFromTelldus());
+			}).catch((): Promise<any> => {
+				return dispatch(logoutFromTelldus());
 			});
 		},
 		dispatch,
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(SettingsScreen));
+module.exports = connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);

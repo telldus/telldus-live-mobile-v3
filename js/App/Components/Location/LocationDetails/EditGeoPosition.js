@@ -33,7 +33,6 @@ import GeoPosition from '../Common/GeoPosition';
 import { googleMapsAPIKey } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	intl: intlShape.isRequired,
@@ -62,7 +61,8 @@ class EditGeoPosition extends View {
 	constructor(props: Props) {
 		super(props);
 		const { navigation } = this.props;
-		const { latitude, longitude } = navigation.state.params;
+		const longitude = navigation.getParam('longitude', null);
+		const latitude = navigation.getParam('latitude', null);
 
 		this.state = {
 			isLoading: false,
@@ -74,11 +74,11 @@ class EditGeoPosition extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `${formatMessage(commonMessages.headerOnePosition)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoPosition);
+		this.h1 = `${formatMessage(i18n.headerOnePosition)}`;
+		this.h2 = formatMessage(i18n.headerTwoPosition);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
-		this.onSetGeoPositionError = `${formatMessage(commonMessages.failureEditGeoPosition)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
+		this.onSetGeoPositionError = `${formatMessage(i18n.failureEditGeoPosition)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.onSubmit = this.onSubmit.bind(this);
 		this.getGeoCodeInfo(latitude, longitude);
@@ -117,9 +117,9 @@ class EditGeoPosition extends View {
 		});
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'EditGeoPosition' && this.props.currentScreen !== 'EditGeoPosition';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'EditGeoPosition' && prevProps.currentScreen !== 'EditGeoPosition';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -132,8 +132,9 @@ class EditGeoPosition extends View {
 		this.setState({
 			isLoading: true,
 		});
-		let { actions, navigation } = this.props;
-		actions.setCoordinates(navigation.state.params.id, longitude, latitude).then((res: Object) => {
+		const { actions, navigation } = this.props;
+		const id = navigation.getParam('id', null);
+		actions.setCoordinates(id, longitude, latitude).then((res: Object) => {
 			this.setState({
 				isLoading: false,
 			});

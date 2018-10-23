@@ -24,26 +24,13 @@
 'use strict';
 
 import React from 'react';
-import { View, Image } from '../../../../../BaseComponents';
-import { defineMessages } from 'react-intl';
+import { View, Image, LocationDetails } from '../../../../../BaseComponents';
 
 import Theme from '../../../../Theme';
 
 import getLocationImageUrl from '../../../../Lib/getLocationImageUrl';
-import DeviceLocationDetail from '../../../DeviceDetails/SubViews/DeviceLocationDetail';
 
-const messages = defineMessages({
-	locationDetected: {
-		id: 'addNewLocation.locationDetected',
-		defaultMessage: 'Location Detected',
-		description: 'Header for which location a device belongs to',
-	},
-	labelBoxHeaderTwo: {
-		id: 'addNewLocation.locationDetected.labelBoxHeaderTwo',
-		defaultMessage: 'Click to activate',
-		description: 'Secondary header for location details box',
-	},
-});
+import i18n from '../../../../Translations/common';
 
 type Props = {
 	onPress: Function,
@@ -61,8 +48,8 @@ export default class Clients extends View {
 		super(props);
 		this.onPress = this.onPress.bind(this);
 
-		this.boxTitle = `${props.intl.formatMessage(messages.locationDetected)}:`;
-		this.boxHeaderTwo = props.intl.formatMessage(messages.labelBoxHeaderTwo);
+		this.boxTitle = `${props.intl.formatMessage(i18n.locationDetected)}:`;
+		this.boxHeaderTwo = props.intl.formatMessage(i18n.labelBoxHeaderTwo);
 	}
 
 	onPress() {
@@ -88,9 +75,9 @@ export default class Clients extends View {
 		return (
 			<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}} accessible={true} accessibilityLabel={accessibilityLabel}>
 				<View style={styles.arrow}>
-					<Image source={require('../../../TabViews/img/right-arrow-key.png')} style={styles.image}/>
+					<Image source={{uri: 'right_arrow_key'}} style={styles.image}/>
 				</View>
-				<DeviceLocationDetail {...locationData} accessible={false} style={styles.locationDetails}/>
+				<LocationDetails {...locationData} accessible={false} style={styles.locationDetails}/>
 			</View>
 		);
 	}

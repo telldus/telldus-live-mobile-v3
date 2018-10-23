@@ -24,10 +24,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
-import { connect } from 'react-redux';
+import { intlShape } from 'react-intl';
 import _ from 'lodash';
 import Platform from 'Platform';
+const isEqual = require('react-fast-compare');
 
 import {
 	BlockIcon,
@@ -45,40 +45,14 @@ import {
 	getSelectedDays,
 	getWeekdays,
 	getWeekends,
-	getRelativeDimensions,
 	getTranslatableDays,
 } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 
 import i18n from '../../../Translations/common';
 
-const messages = defineMessages({
-	phraseOne: {
-		id: 'accessibilityLabel.scheduler.phraseOne',
-		defaultMessage: 'Schedule for',
-	},
-	repeatDays: {
-		id: 'scheduler.repeatDays',
-		defaultMessage: 'Every day at {value}',
-	},
-	repeatWeekday: {
-		id: 'scheduler.repeatWeekday',
-		defaultMessage: 'Weekdays at {value}',
-	},
-	repeatWeekend: {
-		id: 'scheduler.repeatWeekend',
-		defaultMessage: 'Weekends at {value}',
-	},
-	now: {
-		id: 'scheduler.now',
-		defaultMessage: 'Now',
-	},
-});
-
-
 type Props = {
 	active: boolean,
-	device: Object,
 	method: number,
 	methodValue?: number,
 	effectiveHour: string,
@@ -88,11 +62,12 @@ type Props = {
 	type: string,
 	weekdays: number[],
 	isFirst: boolean,
-	editJob: (schedule: Schedule) => void,
 	appLayout: Object,
-	intl: intlShape,
 	showNow: boolean,
 	expired: boolean,
+
+	intl: intlShape,
+	editJob: (schedule: Schedule) => void,
 };
 
 class JobRow extends View<null, Props, null> {
@@ -101,7 +76,6 @@ class JobRow extends View<null, Props, null> {
 		id: PropTypes.number.isRequired,
 		deviceId: PropTypes.number.isRequired,
 		active: PropTypes.bool.isRequired,
-		device: PropTypes.object.isRequired,
 		method: PropTypes.number.isRequired,
 		methodValue: PropTypes.number,
 		hour: PropTypes.number.isRequired,
@@ -115,6 +89,25 @@ class JobRow extends View<null, Props, null> {
 		isFirst: PropTypes.bool.isRequired,
 		editJob: PropTypes.func.isRequired,
 	};
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { appLayout, intl, editJob, weekdays, ...others } = this.props;// eslint-disable-line
+		const newLayout = nextProps.appLayout.width !== appLayout.width;
+		if (newLayout) {
+			return true;
+		}
+		const { appLayout: appLayoutN, intl: intlN, editJob: editJobN, weekdays: weekdaysN, ...othersN } = nextProps;// eslint-disable-line
+
+		if (weekdays.length !== weekdaysN.length) {
+			return true;
+		}
+
+		const propsEqual = isEqual(others, othersN);
+		if (!propsEqual) {
+			return true;
+		}
+		return false;
+	}
 
 	editJob = () => {
 		const {
@@ -130,6 +123,9 @@ class JobRow extends View<null, Props, null> {
 			randomInterval,
 			active,
 			weekdays,
+			retries,
+			retryInterval,
+			reps,
 		} = this.props;
 
 		const schedule: Schedule = {
@@ -144,21 +140,21 @@ class JobRow extends View<null, Props, null> {
 			randomInterval,
 			active,
 			weekdays,
+			retries,
+			retryInterval,
+			reps,
 		};
 
 		editJob(schedule);
 	};
 
 	render(): React$Element<any> | null {
-		if (!this.props.device) {
-			return null;
-		}
 
 		const {
 			type,
 			effectiveHour,
 			effectiveMinute,
-			device,
+			deviceName: dName,
 			offset,
 			randomInterval,
 			active,
@@ -196,10 +192,10 @@ class JobRow extends View<null, Props, null> {
 		const { actionIcon, actionLabel } = this._renderActionIcon();
 
 		const { formatMessage } = intl;
-		const deviceName = device.name ? device.name : formatMessage(i18n.noName);
+		const deviceName = dName ? dName : formatMessage(i18n.noName);
 		const labelDevice = `${formatMessage(i18n.labelDevice)} ${deviceName}`;
 		const labelAction = `${formatMessage(i18n.labelAction)} ${actionLabel}`;
-		const accessibilityLabel = `${formatMessage(messages.phraseOne)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
+		const accessibilityLabel = `${formatMessage(i18n.phraseOneSheduler)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
 
 		return (
 			<View>
@@ -230,7 +226,7 @@ class JobRow extends View<null, Props, null> {
 						{actionIcon}
 						<TextRowWrapper style={textWrapper} appLayout={appLayout}>
 							<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
-								{device.name}
+								{deviceName}
 							</Title>
 							<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
 								{repeat}
@@ -263,7 +259,7 @@ class JobRow extends View<null, Props, null> {
 						style={container}
 					>
 						<NowRow
-							text={formatMessage(messages.now)}
+							text={formatMessage(i18n.now)}
 							roundIconContainerStyle={roundIconContainer}
 							rowWithTriangleContainerStyle={rowWithTriangleContainerNow}
 							textStyle={time}
@@ -321,11 +317,11 @@ class JobRow extends View<null, Props, null> {
 
 		let repeatDays: string = '';
 		if (selectedDays.length === DAYS.length) {
-			repeatDays = formatMessage(messages.repeatDays, { value: repeatTime });
+			repeatDays = formatMessage(i18n.repeatDays, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekdays(formatDate))) {
-			repeatDays = formatMessage(messages.repeatWeekday, { value: repeatTime });
+			repeatDays = formatMessage(i18n.repeatWeekday, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekends(formatDate))) {
-			repeatDays = formatMessage(messages.repeatWeekend, { value: repeatTime });
+			repeatDays = formatMessage(i18n.repeatWeekend, { value: repeatTime });
 		} else {
 			for (let day of selectedDays) {
 				repeatDays += `${day.slice(0, 3).toLowerCase()}, `;
@@ -452,10 +448,4 @@ class JobRow extends View<null, Props, null> {
 
 }
 
-function mapStateToProps(state: Object): Object {
-	return {
-		appLayout: getRelativeDimensions(state.App.layout),
-	};
-}
-
-export default connect(mapStateToProps, null)(JobRow);
+export default JobRow;

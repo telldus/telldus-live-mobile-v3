@@ -23,33 +23,25 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+const isEqual = require('react-fast-compare');
 
-import { FormattedMessage, Text, View, TabBar, Switch } from '../../../BaseComponents';
-import { defineMessages } from 'react-intl';
-import i18n from '../../Translations/common';
+import {
+	View,
+	TabBar,
+	SettingsRow,
+} from '../../../BaseComponents';
 
 import { LearnButton } from '../TabViews/SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 import { addToDashboard, removeFromDashboard, showToast } from '../../Actions';
-import {
-	getRelativeDimensions,
-} from '../../Lib';
+import { shouldUpdate } from '../../Lib';
+
 import Theme from '../../Theme';
 
-const messages = defineMessages({
-	showOnDashborad: {
-		id: 'showOnDashboard',
-		defaultMessage: 'Show on dashboard',
-		description: 'Select if this item should be shown on the dashboard',
-	},
-	hideFromList: {
-		id: 'hideFromList',
-		defaultMessage: 'Hide from device list',
-		description: 'Select if this item should be shown on the device list',
-	},
-});
+import i18n from '../../Translations/common';
 
 type Props = {
 	dispatch: Function,
@@ -57,7 +49,6 @@ type Props = {
 	inDashboard: boolean,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
-	appLayout: Object,
 	screenProps: Object,
 };
 
@@ -72,6 +63,22 @@ class SettingsTab extends View {
 
 	onValueChange: number => void;
 	setIgnoreDevice: (boolean) => void;
+
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): Object => (
+			<TabBar
+				icon="settings"
+				tintColor={tintColor}
+				label={i18n.settingsHeader}
+				accessibilityLabel={i18n.deviceSettingsTab}/>
+		),
+		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
+			navigation.navigate({
+				routeName: 'Settings',
+				key: 'Settings',
+			});
+		},
+	});
 
 	constructor(props: Props) {
 		super(props);
@@ -88,18 +95,30 @@ class SettingsTab extends View {
 		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
 	}
 
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="icon_settings"
-				tintColor={tintColor}
-				label={i18n.settingsHeader}
-				accessibilityLabel={i18n.deviceSettingsTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate('Settings');
-		},
-	});
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
+		const { currentScreen, appLayout } = screenPropsN;
+		if (currentScreen === 'Settings') {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+
+			const { screenProps, inDashboard, ...others } = this.props;
+			if ((screenProps.appLayout.width !== appLayout.width) || (inDashboardN !== inDashboard)) {
+				return true;
+			}
+
+			const propsChange = shouldUpdate(others, othersN, ['device']);
+			if (propsChange) {
+				return true;
+			}
+
+			return false;
+		}
+		return false;
+	}
+
 
 	onValueChange(value: boolean) {
 		if (!value) {
@@ -110,18 +129,18 @@ class SettingsTab extends View {
 	}
 
 	setIgnoreDevice(value: boolean) {
-		let { device } = this.props;
-		let ignore = device.ignored ? 0 : 1;
+		const { device } = this.props;
+		const ignore = device.ignored ? 0 : 1;
 		this.setState({
 			isHidden: value,
 		});
 		this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res: Object) => {
-			let message = device.ignored ?
+			const message = !value ?
 				this.removedFromHiddenList : this.addedToHiddenList;
 			this.props.dispatch(getDevices());
 			this.props.dispatch(showToast(message));
 		}).catch((err: Object) => {
-			let	message = err.message ? err.message : null;
+			const	message = err.message ? err.message : null;
 			this.setState({
 				isHidden: device.ignored,
 			});
@@ -129,30 +148,17 @@ class SettingsTab extends View {
 		});
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		if (this.props.device.ignored !== nextProps.device.ignored) {
-			this.setState({
-				isHidden: nextProps.device.ignored,
-			});
-		}
-	}
-
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentTab === 'Settings';
-	}
-
 	render(): Object {
-		let { appLayout } = this.props;
+		const { isHidden } = this.state;
+		const { device, screenProps, inDashboard } = this.props;
+		const { appLayout, intl } = screenProps;
+		const { formatMessage } = intl;
 
-		let {
+		const {
 			container,
-			ShowOnDashCover,
-			textShowOnDashCover,
-			textShowOnDash,
 			learn,
 		} = this.getStyle(appLayout);
 
-		const { device } = this.props;
 		const { LEARN } = device.supportedMethods;
 
 		let learnButton = null;
@@ -161,42 +167,32 @@ class SettingsTab extends View {
 			learnButton = <LearnButton id={device.id} style={learn} />;
 		}
 		return (
-			<View style={container}>
-				<View style={ShowOnDashCover}>
-					<View style={textShowOnDashCover}>
-						<Text style={textShowOnDash}>
-							<FormattedMessage {...messages.showOnDashborad} style={textShowOnDash}/>
-						</Text>
-					</View>
-					<Switch
+			<ScrollView>
+				<View style={container}>
+					<SettingsRow
+						label={formatMessage(i18n.showOnDashborad)}
 						onValueChange={this.onValueChange}
-						value={this.props.inDashboard}
+						value={inDashboard}
+						appLayout={appLayout}
 					/>
-				</View>
-				<View style={ShowOnDashCover}>
-					<View style={textShowOnDashCover}>
-						<Text style={textShowOnDash}>
-							<FormattedMessage {...messages.hideFromList} style={textShowOnDash}/>
-						</Text>
-					</View>
-					<Switch
+					<SettingsRow
+						label={formatMessage(i18n.hideFromListD)}
 						onValueChange={this.setIgnoreDevice}
-						value={this.state.isHidden}
+						value={isHidden}
+						appLayout={appLayout}
 					/>
+					{learnButton}
 				</View>
-				{learnButton}
-			</View>
+			</ScrollView>
 		);
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
-		const fontSize = deviceWidth * 0.04;
 
 		return {
 			container: {
@@ -204,25 +200,6 @@ class SettingsTab extends View {
 				paddingHorizontal: padding,
 				paddingBottom: padding,
 				paddingTop: padding / 2,
-			},
-			ShowOnDashCover: {
-				backgroundColor: '#fff',
-				padding: fontSize,
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'space-between',
-				marginTop: padding / 2,
-				...Theme.Core.shadow,
-			},
-			textShowOnDashCover: {
-				alignItems: 'flex-start',
-				justifyContent: 'center',
-			},
-			textShowOnDash: {
-				color: '#8A8682',
-				fontSize,
-				marginLeft: 8,
-				justifyContent: 'center',
 			},
 			learn: {
 				marginHorizontal: width * 0.25,
@@ -244,10 +221,11 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 function mapStateToProps(state: Object, ownProps: Object): Object {
+	const id = ownProps.navigation.getParam('id', null);
+	const device = state.devices.byId[id];
 	return {
-		device: ownProps.screenProps.device,
-		inDashboard: !!state.dashboard.devicesById[ownProps.screenProps.device.id],
-		appLayout: getRelativeDimensions(state.App.layout),
+		device,
+		inDashboard: !!state.dashboard.devicesById[id],
 	};
 }
 

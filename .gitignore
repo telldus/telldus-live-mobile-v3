@@ -53,3 +53,6 @@ yarn.lock
 buck-out/
 \.buckd/
 android/app/libs
+
+# Bundle artifact
+*.jsbundle

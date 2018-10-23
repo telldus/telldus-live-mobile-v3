@@ -26,16 +26,12 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
+import IconTelldus from './IconTelldus';
 import FormattedMessage from './FormattedMessage';
-import { getRelativeDimensions } from '../App/Lib';
-
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_home from '../App/Components/TabViews/img/selection.json';
-const CustomIcon = createIconSetFromIcoMoon(icon_home);
 
 type Props = {
 	icon: string,
-	tintColor: number | string,
+	tintColor: string,
 	label: any,
 	appLayout: Object,
 	intl: intlShape.isRequired,
@@ -61,7 +57,7 @@ class TabBar extends Component<Props, null> {
 
 		return (
 			<View style={container} accessibilityLabel={accessibilityLabel}>
-				<CustomIcon name={icon} size={iconSize} color={tintColor}/>
+				<IconTelldus icon={icon} size={iconSize} color={tintColor}/>
 				<FormattedMessage {...label} style={[labelStyle, {color: tintColor}]}/>
 			</View>
 		);
@@ -91,7 +87,7 @@ class TabBar extends Component<Props, null> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: state.app.layout,
 	};
 }
 

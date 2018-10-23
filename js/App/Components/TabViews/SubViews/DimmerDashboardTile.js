@@ -21,8 +21,8 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import throttle from 'lodash/throttle';
 
@@ -38,42 +38,36 @@ import {
 	getDimmerValue,
 	toDimmerValue,
 	toSliderValue,
+	shouldUpdate,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	item: Object,
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
+
+	item: Object,
 	tileWidth: number,
+	showSlider?: boolean,
+	setScrollEnabled: boolean,
+	screenReaderEnabled: boolean,
+
+	style: Object,
+	intl: Object,
+	isGatewayActive: boolean,
+	showDimmerStep: (number) => void,
+	containerStyle?: number | Object | Array<any>,
+	offButtonStyle?: number | Object | Array<any>,
+	onButtonStyle?: number | Object | Array<any>,
+	sliderStyle?: number | Object | Array<any>,
 	onDimmerSlide: number => void,
 	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	setScrollEnabled: boolean,
-	style: Object,
-	intl: Object,
-	isGatewayActive: boolean,
-	powerConsumed: string,
-	screenReaderEnabled: boolean,
-	showDimmerStep: (number) => void,
-	showSlider?: boolean,
-	containerStyle?: number | Object | Array<any>,
-	offButtonStyle?: number | Object | Array<any>,
-	onButtonStyle?: number | Object | Array<any>,
-	sliderStyle?: number | Object | Array<any>,
-};
-
-type State = {
-	bodyWidth: number,
-	bodyHeight: number,
-	value: number,
-	offButtonFadeAnim: Object,
-	onButtonFadeAnim: Object,
 };
 
 type DefaultProps = {
@@ -83,9 +77,8 @@ type DefaultProps = {
 	showSlider: boolean,
 };
 
-class DimmerDashboardTile extends PureComponent<Props, State> {
+class DimmerDashboardTile extends View<Props, void> {
 	props: Props;
-	state: State;
 
 	static defaultProps: DefaultProps = {
 		commandON: 1,
@@ -96,13 +89,8 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 
 	parentScrollEnabled: boolean;
 	onValueChangeThrottled: number => void;
-	onTurnOffButtonStart: () => void;
-	onTurnOffButtonEnd: () => void;
-	onTurnOnButtonStart: () => void;
-	onTurnOnButtonEnd: () => void;
 	onTurnOn: () => void;
 	onTurnOff: () => void;
-	layoutView: Object => void;
 	onSlidingStart: (name: string, sliderValue: number) => void;
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
@@ -111,48 +99,34 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		const { item, onDimmerSlide } = this.props;
-		const { stateValues, isInState, value } = item;
-		const stateValue = stateValues ? stateValues.DIM : value;
 		this.parentScrollEnabled = true;
-		this.state = {
-			bodyWidth: 0,
-			bodyHeight: 0,
-			value: getDimmerValue(stateValue, isInState),
-			offButtonFadeAnim: new Animated.Value(1),
-			onButtonFadeAnim: new Animated.Value(1),
-		};
 
 		this.onValueChangeThrottled = throttle(onDimmerSlide(item.id), 200, {
 			trailing: true,
 		});
 
-		this.onTurnOffButtonStart = this.onTurnOffButtonStart.bind(this);
-		this.onTurnOffButtonEnd = this.onTurnOffButtonEnd.bind(this);
-		this.onTurnOnButtonStart = this.onTurnOnButtonStart.bind(this);
-		this.onTurnOnButtonEnd = this.onTurnOnButtonEnd.bind(this);
 		this.onTurnOn = this.onTurnOn.bind(this);
 		this.onTurnOff = this.onTurnOff.bind(this);
-		this.layoutView = this.layoutView.bind(this);
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		const { stateValues, isInState, value } = nextProps.item;
-		const stateValue = stateValues ? stateValues.DIM : value;
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-		const dimmerValue = getDimmerValue(stateValue, isInState);
-		this.setState({ value: dimmerValue });
-	}
+		const { tileWidth, setScrollEnabled, ...others } = this.props;
+		const { tileWidth: tileWidthN, setScrollEnabled: setScrollEnabledN, ...othersN } = nextProps;
+		if (tileWidth !== tileWidthN || setScrollEnabled !== setScrollEnabledN) {
+			return true;
+		}
 
-	layoutView(x: Object) {
-		let { width, height } = x.nativeEvent.layout;
-		this.setState({
-			bodyWidth: width,
-			bodyHeight: height,
-		});
+		const propsChange = shouldUpdate(others, othersN, ['item', 'showSlider', 'screenReaderEnabled']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	onValueChange(sliderValue: number) {
@@ -178,22 +152,6 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 		this.props.hideDimmerPopup();
 	}
 
-	onTurnOffButtonStart() {
-		this.refs.offButton.fadeOut();
-	}
-
-	onTurnOffButtonEnd() {
-		this.refs.offButton.fadeIn();
-	}
-
-	onTurnOnButtonStart() {
-		this.refs.onButton.fadeOut();
-	}
-
-	onTurnOnButtonEnd() {
-		this.refs.onButton.fadeIn();
-	}
-
 	onTurnOn() {
 		this.props.deviceSetState(this.props.item.id, this.props.commandON);
 	}
@@ -207,27 +165,34 @@ class DimmerDashboardTile extends PureComponent<Props, State> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, intl, isGatewayActive, screenReaderEnabled,
-			showSlider, onButtonStyle, offButtonStyle, sliderStyle, containerStyle } = this.props;
-		const { name, isInState, supportedMethods, methodRequested, local } = item;
+		const {
+			item, tileWidth, intl, isGatewayActive,
+			screenReaderEnabled, showSlider, onButtonStyle,
+			offButtonStyle, sliderStyle, containerStyle,
+			setScrollEnabled,
+		} = this.props;
+		const { name, isInState, supportedMethods, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
+
+		const stateValue = stateValues ? stateValues.DIM : val;
+		const value = getDimmerValue(stateValue, isInState);
 
 		const sliderProps = {
 			thumbWidth: 7,
 			thumbHeight: 7,
 			fontSize: 8,
-			item: item,
-			value: toSliderValue(this.state.value),
-			setScrollEnabled: this.props.setScrollEnabled,
+			value: toSliderValue(value),
 			onSlidingStart: this.onSlidingStart,
 			onSlidingComplete: this.onSlidingComplete,
 			onValueChange: this.onValueChange,
-			intl: intl,
-			isInState: isInState,
-			isGatewayActive: isGatewayActive,
-			screenReaderEnabled: screenReaderEnabled,
 			showDimmerStep: this.showDimmerStep,
+			item,
+			setScrollEnabled,
+			intl,
+			isInState,
+			isGatewayActive,
+			screenReaderEnabled,
 		};
 
 		// TODO: refactor writing a higher order component
@@ -353,7 +318,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
-		screenReaderEnabled: store.App.screenReaderEnabled,
+		screenReaderEnabled: store.app.screenReaderEnabled,
 	};
 }
 

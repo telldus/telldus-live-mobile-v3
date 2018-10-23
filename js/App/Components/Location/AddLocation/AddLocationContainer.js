@@ -24,57 +24,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { BackHandler, ImageBackground, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { View, DialogueBox, Text, RoundedInfoButton } from '../../../../BaseComponents';
-import LocationPoster from '../Common/LocationPoster';
-import { getRelativeDimensions } from '../../../Lib';
+import {
+	View,
+	DialogueBox,
+	Text,
+	RoundedInfoButton,
+	NavigationHeaderPoster,
+} from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 
 import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
 
-const messages = defineMessages({
-	dialogueHeader: {
-		id: 'addLocation.position.dialogueHeader',
-		defaultMessage: 'Geographic position',
-		description: 'Dialogue header on pressing info button in geographic position.',
-	},
-	dialogueBodyParaOne: {
-		id: 'addNewLocation.position.dialogueBodyParaOne',
-		defaultMessage: 'The geographic position is used for calculating correct sunrise and sunset times for scheduled events',
-		description: 'First Paragraph of Dialogue\'s body',
-	},
-	dialogueBodyParaTwo: {
-		id: 'addNewLocation.position.dialogueBodyParaTwo',
-		defaultMessage: 'Press and hold the marker to change the position manually',
-		description: 'Second Paragraph of Dialogue\'s body',
-	},
-	dialogueBodyParaThree: {
-		id: 'addNewLocation.position.dialogueBodyParaThree',
-		defaultMessage: 'If you want to skip this step you can just click next without entering anything',
-		description: 'Third Paragraph of Dialogue\'s body',
-	},
-	dialoguePositiveText: {
-		id: 'addLocation.position.dialoguePositiveText',
-		defaultMessage: 'Close',
-		description: 'Dialogue Positive Text on pressing info button in geographic position.',
-	},
-});
+import i18n from '../../../Translations/common';
 
 type Props = {
 	navigation: Object,
 	children: Object,
 	actions?: Object,
 	screenProps: Object,
-	intl: intlShape.isRequired,
 	showModal: boolean,
 	validationMessage: any,
-	source: number,
-	appLayout: Object,
+	source: Object | number,
 };
 
 type State = {
@@ -85,14 +60,8 @@ type State = {
 };
 
 type DefaultProps = {
-	source: number,
+	source: Object | number,
 };
-
-export interface ScheduleProps {
-	navigation: Object,
-	actions: Object,
-	onDidMount: (h1: string, h2: string, infoButton: ?Object) => void,
-}
 
 class AddLocationContainer extends View<null, Props, State> {
 
@@ -105,11 +74,11 @@ class AddLocationContainer extends View<null, Props, State> {
 		screenProps: PropTypes.object,
 		showModal: PropTypes.bool,
 		validationMessage: PropTypes.any,
-		source: PropTypes.number,
+		source: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 	};
 
 	static defaultProps: DefaultProps = {
-		source: require('../../TabViews/img/telldus-geometric-bg-750.png'),
+		source: {uri: 'telldus_geometric_bg'},
 	};
 
 	state = {
@@ -125,12 +94,13 @@ class AddLocationContainer extends View<null, Props, State> {
 			back: true,
 			onPress: this.goBack,
 		};
+		const { formatMessage } = props.screenProps.intl;
 
-		this.dlogPOne = `${props.intl.formatMessage(messages.dialogueBodyParaOne)}.`;
-		this.dlogPTwo = `${props.intl.formatMessage(messages.dialogueBodyParaTwo)}.`;
-		this.dlogPThree = `${props.intl.formatMessage(messages.dialogueBodyParaThree)}.`;
+		this.dlogPOne = `${formatMessage(i18n.dialogueBodyParaOne)}.`;
+		this.dlogPTwo = `${formatMessage(i18n.dialogueBodyParaTwo)}.`;
+		this.dlogPThree = `${formatMessage(i18n.dialogueBodyParaThree)}.`;
 
-		this.dialogueHeader = props.intl.formatMessage(messages.dialogueHeader);
+		this.dialogueHeader = formatMessage(i18n.dialogueHeader);
 
 		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
@@ -147,14 +117,10 @@ class AddLocationContainer extends View<null, Props, State> {
 
 	handleBackPress(): boolean {
 		let {navigation, screenProps} = this.props;
-		if (screenProps.currentScreen === 'LocationDetected') {
-			screenProps.rootNavigator.goBack();
-			return true;
-		}
 		if (screenProps.currentScreen === 'Success') {
 			return true;
 		}
-		navigation.dispatch({ type: 'Navigation/BACK'});
+		navigation.pop();
 		return true;
 	}
 
@@ -208,12 +174,13 @@ class AddLocationContainer extends View<null, Props, State> {
 	}
 
 	getRelativeData = (styles: Object): Object => {
-		let {modalExtras, validationMessage, intl} = this.props;
+		let {modalExtras, validationMessage, screenProps} = this.props;
+		const { formatMessage } = screenProps.intl;
 		if (modalExtras.source && modalExtras.source === 'Position') {
 			return {
 				dialogueHeader: this.renderCustomDialogueHeader(styles),
 				validationMessage: this.renderCustomBody(styles),
-				positiveText: intl.formatMessage(messages.dialoguePositiveText).toUpperCase(),
+				positiveText: formatMessage(i18n.dialoguePositiveText).toUpperCase(),
 			};
 		}
 		return {
@@ -224,8 +191,14 @@ class AddLocationContainer extends View<null, Props, State> {
 	};
 
 	render(): Object {
-		const { children, navigation, actions, screenProps, intl,
-			showModal, appLayout } = this.props;
+		const {
+			children,
+			actions,
+			screenProps,
+			showModal,
+			navigation,
+		} = this.props;
+		const { currentScreen, appLayout } = screenProps;
 		const { h1, h2, infoButton } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -234,8 +207,8 @@ class AddLocationContainer extends View<null, Props, State> {
 
 		const styles = this.getStyle(appLayout);
 
-		let padding = screenProps.currentScreen === 'TimeZoneCity'
-			|| screenProps.currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * Theme.Core.paddingFactor);
+		let padding = currentScreen === 'TimeZoneCity'
+			|| currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * Theme.Core.paddingFactor);
 		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
 
 		return (
@@ -244,17 +217,21 @@ class AddLocationContainer extends View<null, Props, State> {
 			}}>
 				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-						<LocationPoster h1={h1} h2={h2} infoButton={infoButton}
-							screenProps={screenProps} intl={intl} navigation={navigation}/>
+						<NavigationHeaderPoster
+							h1={h1} h2={h2}
+							infoButton={infoButton}
+							showLeftIcon={currentScreen !== 'Success'}
+							align={'right'}
+							navigation={navigation}
+							{...screenProps}/>
 						<View style={[styles.style, {paddingHorizontal: padding}]}>
 							{React.cloneElement(
 								children,
 								{
 									onDidMount: this.onChildDidMount,
-									navigation,
 									actions,
-									intl,
 									...screenProps,
+									navigation,
 									dialogueOpen: showModal,
 									paddingHorizontal: padding,
 								},
@@ -323,7 +300,6 @@ const mapStateToProps = (store: Object): Object => (
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
-		appLayout: getRelativeDimensions(store.App.layout),
 	}
 );
 
@@ -335,4 +311,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(AddLocationContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(AddLocationContainer);

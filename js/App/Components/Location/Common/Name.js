@@ -56,14 +56,13 @@ class Name extends View {
 
 	constructor(props: Props) {
 		super(props);
-		let { params } = props.navigation.state;
-		let name = params && params.name ? params.name : '';
+		const locationName = props.navigation.getParam('name', '');
 		this.state = {
-			locationName: name,
+			locationName,
 			isKeyboardShown: false,
 		};
 
-		let { formatMessage } = props.intl;
+		const { formatMessage } = props.intl;
 
 		this.label = formatMessage(i18n.name);
 
@@ -139,7 +138,7 @@ class Name extends View {
 				<FloatingButton
 					buttonStyle={styles.buttonStyle}
 					onPress={this.onNameSubmit}
-					imageSource={isLoading ? false : require('../../TabViews/img/right-arrow-key.png')}
+					imageSource={isLoading ? false : {uri: 'right_arrow_key'}}
 					showThrobber={isLoading}
 				/>
 			</View>

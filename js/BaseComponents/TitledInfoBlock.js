@@ -29,7 +29,6 @@ import Text from './Text';
 import View from './View';
 import Icon from './Icon';
 
-import { getRelativeDimensions } from '../App/Lib';
 import Theme from '../App/Theme';
 
 type Props = {
@@ -146,7 +145,7 @@ getStyles(appLayout: Object): Object {
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: store.app.layout,
 	};
 }
 
