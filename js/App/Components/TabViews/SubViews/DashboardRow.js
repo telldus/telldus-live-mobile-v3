@@ -33,7 +33,7 @@ import NavigationalDashboardTile from './NavigationalDashboardTile';
 import BellDashboardTile from './BellDashboardTile';
 import ToggleDashboardTile from './ToggleDashboardTile';
 
-import { getLabelDevice, getPowerConsumed, shouldUpdate } from '../../../Lib';
+import { getLabelDevice, getPowerConsumed, shouldUpdate, getDeviceIcons } from '../../../Lib';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -92,7 +92,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 getButtonsInfo(item: Object, styles: Object): Object {
-	let { supportedMethods, isInState, isOnline } = item, buttons = [], buttonsInfo = [];
+	let { supportedMethods, isInState, isOnline, deviceType } = item, buttons = [], buttonsInfo = [];
 	let { tileWidth, setScrollEnabled } = this.props;
 	const {
 		TURNON,
@@ -103,6 +103,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		DOWN,
 		STOP,
 	} = supportedMethods;
+	const iconsName = getDeviceIcons(deviceType);
 
 	if (BELL) {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
@@ -110,7 +111,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		buttons.unshift(<BellDashboardTile key={4} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'bell',
+			iconsName,
 		});
 	}
 
@@ -124,7 +125,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 			showStopButton={showStopButton}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'curtain',
+			iconsName,
 		});
 	}
 
@@ -138,7 +139,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 			showSlider={showSlider} setScrollEnabled={setScrollEnabled}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'device-alt',
+			iconsName,
 		});
 	}
 
@@ -151,7 +152,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		buttons.unshift(<ToggleDashboardTile key={3} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'device-alt',
+			iconsName,
 		});
 	}
 
@@ -162,7 +163,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		buttons.unshift(<ToggleDashboardTile key={5} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'device-alt',
+			iconsName,
 		});
 	}
 

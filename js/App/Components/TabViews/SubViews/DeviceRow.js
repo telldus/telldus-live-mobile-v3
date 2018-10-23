@@ -38,7 +38,7 @@ import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
 import MultiActionModal from './Device/MultiActionModal';
 
-import { getPowerConsumed } from '../../../Lib';
+import { getPowerConsumed, getDeviceIcons } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
@@ -336,10 +336,10 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	render(): Object {
-		let button = [], icon = null;
+		let button = [];
 		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
 		const { device, intl, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
-		const { isInState, name } = device;
+		const { isInState, name, deviceType } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 		const showDeviceIcon = PixelRatio.getPixelSizeForLayoutSize(appLayout.width) >= 750;
@@ -362,6 +362,7 @@ class DeviceRow extends View<Props, State> {
 			appLayout,
 			closeSwipeRow: this.closeSwipeRow,
 		};
+		const icon = getDeviceIcons(deviceType);
 
 		if (BELL) {
 			button.unshift(
@@ -371,7 +372,6 @@ class DeviceRow extends View<Props, State> {
 					key={4}
 				/>
 			);
-			icon = 'bell';
 		}
 		if (UP || DOWN || STOP) {
 			button.unshift(
@@ -382,7 +382,6 @@ class DeviceRow extends View<Props, State> {
 					key={1}
 				/>
 			);
-			icon = 'curtain';
 		}
 		if (DIM) {
 			button.unshift(
@@ -395,7 +394,6 @@ class DeviceRow extends View<Props, State> {
 					key={2}
 				/>
 			);
-			icon = 'device-alt';
 		}
 		if ((TURNON || TURNOFF) && !DIM) {
 			button.unshift(
@@ -405,7 +403,6 @@ class DeviceRow extends View<Props, State> {
 					key={3}
 				/>
 			);
-			icon = 'device-alt';
 		}
 		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
 			button.unshift(
@@ -415,7 +412,6 @@ class DeviceRow extends View<Props, State> {
 					key={5}
 				/>
 			);
-			icon = 'device-alt';
 		}
 
 		const interpolatedScale = this.animatedScaleX.interpolate({
