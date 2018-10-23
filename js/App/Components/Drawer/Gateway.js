@@ -117,6 +117,8 @@ class Gateway extends PureComponent<Props, null> {
 		const fontSizeH3 = Math.floor(drawerWidth * 0.038);
 		const iconSize = Math.floor(drawerWidth * 0.088);
 
+		const iconContainerWidth = iconSize + 15;
+
 		return {
 			iconSize,
 			gatewayContainer: {
@@ -154,6 +156,7 @@ class Gateway extends PureComponent<Props, null> {
 			},
 			h1Style: {
 				fontSize: fontSizeH1,
+				marginRight: iconContainerWidth,
 			},
 			h2Style: {
 				fontSize: fontSizeH2,
@@ -165,11 +168,11 @@ class Gateway extends PureComponent<Props, null> {
 				fontSize: fontSizeH3 * 2,
 			},
 			iconSettingsContainer: {
-				width: iconSize + 15,
+				width: iconContainerWidth,
 				justifyContent: 'center',
 				position: 'absolute',
 				right: 5,
-				bottom: drawerWidth * 0.04,
+				top: drawerWidth * 0.04,
 			},
 		};
 	}
