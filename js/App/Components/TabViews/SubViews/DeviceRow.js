@@ -38,7 +38,7 @@ import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
 import MultiActionModal from './Device/MultiActionModal';
 
-import { getPowerConsumed, getDeviceIcons } from '../../../Lib';
+import { getPowerConsumed, getDeviceIcons, getDeviceActionIcon } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
@@ -354,12 +354,14 @@ class DeviceRow extends View<Props, State> {
 			STOP,
 		} = device.supportedMethods;
 
+		const actionIcon = getDeviceActionIcon(deviceType, isInState);
 		const sharedProps = {
 			device,
 			isOpen,
 			intl,
 			isGatewayActive,
 			appLayout,
+			actionIcon,
 			closeSwipeRow: this.closeSwipeRow,
 		};
 		const icon = getDeviceIcons(deviceType);

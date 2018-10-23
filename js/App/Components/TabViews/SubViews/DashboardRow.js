@@ -33,7 +33,7 @@ import NavigationalDashboardTile from './NavigationalDashboardTile';
 import BellDashboardTile from './BellDashboardTile';
 import ToggleDashboardTile from './ToggleDashboardTile';
 
-import { getLabelDevice, getPowerConsumed, shouldUpdate, getDeviceIcons } from '../../../Lib';
+import { getLabelDevice, getPowerConsumed, shouldUpdate, getDeviceIcons, getDeviceActionIcon } from '../../../Lib';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -105,6 +105,11 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	} = supportedMethods;
 	const iconsName = getDeviceIcons(deviceType);
 
+	// Some device type, mostly with single button, the action(mostly inactive) icon will change wrt. it's state
+	// For now this value is passed(and logic handled) only to 'ToggleDashboardTile'(as those device's state seem to be 'TURNON || TURNOFF')
+	// if these type of devices has any chance of having state other than 'TURNON || TURNOFF', pass it to required button component.(also handle the logic)
+	const actionIcon = getDeviceActionIcon(deviceType, isInState);
+
 	if (BELL) {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
 
@@ -149,7 +154,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<ToggleDashboardTile key={3} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
+		buttons.unshift(<ToggleDashboardTile key={3} {...this.props} actionIcon={actionIcon} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
 			iconsName,
@@ -160,7 +165,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<ToggleDashboardTile key={5} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
+		buttons.unshift(<ToggleDashboardTile key={5} {...this.props} actionIcon={actionIcon} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
 			iconsName,
