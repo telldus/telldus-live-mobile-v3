@@ -31,10 +31,6 @@ import { getSensorIconLabelUnit, getWindDirection } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 
-const directions = [
-	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
-];
-
 type Props = {
 	appLayout: Object,
 	sensor: Object,
