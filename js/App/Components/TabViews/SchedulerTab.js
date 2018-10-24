@@ -120,7 +120,10 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		this.refreshJobs();
+		const { currentScreen } = this.props.screenProps;
+		if (currentScreen === 'Scheduler') {
+			this.refreshJobs();
+		}
 	}
 
 	onRefresh = () => {
