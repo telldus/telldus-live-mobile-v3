@@ -2,7 +2,7 @@ let fs = require('fs');
 let sm = require('source-map');
 let prompt = require('prompt');
 
-let sourceMap = './sourcemap.js';
+let sourceMap = './sourcemap.js'; // For now may use 'main.jsbundle.map'(from artifacts) for backtracing iOS.
 let smap = JSON.parse(fs.readFileSync(sourceMap));
 
 let sourceMapConsumer = new sm.SourceMapConsumer(smap);
