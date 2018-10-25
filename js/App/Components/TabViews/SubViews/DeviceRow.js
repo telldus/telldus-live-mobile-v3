@@ -299,7 +299,7 @@ class DeviceRow extends PureComponent<Props, State> {
 		let button = [], icon = null;
 		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
 		const { device, intl, currentTab, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
-		const { isInState, name } = device;
+		const { isInState, name, supportedMethods = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 		const showDeviceIcon = PixelRatio.getPixelSizeForLayoutSize(appLayout.width) >= 750;
@@ -312,7 +312,7 @@ class DeviceRow extends PureComponent<Props, State> {
 			UP,
 			DOWN,
 			STOP,
-		} = device.supportedMethods;
+		} = supportedMethods;
 
 		if (BELL) {
 			button.unshift( <BellButton
