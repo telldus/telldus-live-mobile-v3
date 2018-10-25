@@ -303,9 +303,9 @@ class DashboardTab extends View {
 							onRefresh={this.onRefresh}
 						/>
 					}
+					key={numColumns}
 					numColumns={numColumns}
 					extraData={extraData}
-					key={numColumns}
 					style={{width: '100%'}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
@@ -317,10 +317,10 @@ class DashboardTab extends View {
 	_renderRow(row: Object): Object {
 		let { screenProps } = this.props;
 		let { tileWidth } = this.state;
-		let { data, objectType } = row.item;
+		let { data, objectType, key } = row.item;
 		let tileMargin = this.getPadding() / 4;
 		tileWidth -= (2 * tileMargin);
-		let key = data.id;
+
 		if (objectType !== 'sensor' && objectType !== 'device') {
 			return <Text key={key}>unknown device or sensor</Text>;
 		}
