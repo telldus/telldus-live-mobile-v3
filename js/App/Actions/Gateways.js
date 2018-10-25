@@ -47,14 +47,17 @@ function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
 		// Establish new UDP socket only after closing the existing socket completely.
 		closeUDPSocket(() => {
+			// $FlowFixMe
 			socket = dgram.createSocket({
 				type: 'udp4',
 				reuseAddr: true,
 				reusePort: true,
 			});
+			// $FlowFixMe
 			openSocketID = socket._id;
 			const aPort = randomPort();
 
+			// $FlowFixMe
 			socket.bind(aPort, (err: string) => {
 				if (err) {
 					reportException(err);
@@ -113,11 +116,12 @@ function autoDetectLocalTellStick(): ThunkAction {
 }
 
 /**
- * 
+ *
  * @param {Funcition} callback = Optional function to be called after socket is closed, or right away if socket is already closed.
  */
-function closeUDPSocket(callback?: Function = null) {
+function closeUDPSocket(callback?: Function | null = null) {
 	if (socket && socket.close) {
+		// $FlowFixMe
 		let closingSocketId = socket._id;
 		socket.close(() => {
 			if (closingSocketId === openSocketID) {

@@ -35,7 +35,7 @@ export function reportError(msg: string) {
 	}
 }
 
-export function reportException(e: Error) {
+export function reportException(e: Error | string) {
 	if (e instanceof Error) {
 		// Log the stack trace
 		Crashlytics.log(e.stack);
