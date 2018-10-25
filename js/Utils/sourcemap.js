@@ -25,8 +25,8 @@ function parseStack(stack) {
 		// Frame might be in format line:col or file:line:col
 		let [file, line, col] = frame.split(':');
 		if (col === undefined) {
-			col = line;
-			line = file;
+			col = parseInt(line, 10);
+			line = parseInt(file, 10);
 		}
 		printStack(line, col);
 	}
