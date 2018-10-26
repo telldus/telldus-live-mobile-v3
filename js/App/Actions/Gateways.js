@@ -34,6 +34,8 @@ const { Gateways } = actions;
 import dgram from 'dgram';
 
 let socket: Object = {};
+let openSocketID = null;
+let closingSocketID = null;
 const broardcastAddress = '255.255.255.255';
 const broardcastPort = 30303;
 const STATE = {
@@ -44,74 +46,95 @@ const STATE = {
 
 function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
-		if (socket._state && socket._state === STATE.BOUND) {
-			closeUDPSocket();
-		}
-		NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
-			const { type } = connectionInfo;
-			if (type !== 'none') {
-				socket = dgram.createSocket('udp4');
-				const aPort = randomPort();
-				try {
-					// $FlowFixMe
-					socket.bind(aPort, (err: string) => {
-						if (err) {
-							throw err;
-						}
+		// Establish new UDP socket only after closing the existing socket completely.
+		closeUDPSocket(() => {
+			// $FlowFixMe
+			socket = dgram.createSocket({
+				type: 'udp4',
+				reuseAddr: true,
+				reusePort: true,
+			});
+			// $FlowFixMe
+			openSocketID = socket._id;
+			const aPort = randomPort();
+
+			// $FlowFixMe
+			socket.bind(aPort, (err: string) => {
+				if (err) {
+					reportException(err);
+				}
+			});
+			socket.once('listening', () => {
+				// Important to check connectivity right before send.
+				NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
+					if ((socket._id === openSocketID) && (socket._id !== closingSocketID) && (connectionInfo.type !== 'none')) {
 						if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
 							socket.setBroadcast(true);
 						}
-					});
-				} catch (err) {
-					reportException(err);
-				}
-				socket.once('listening', () => {
-					let buf = toByteArray('D');
-					socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
-						if (err) {
-							reportException(err);
-						}
-					});
+						let buf = toByteArray('D');
+						socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
+							if (err) {
+								reportException(err);
+							}
+						});
+					}
 				});
+			});
 
-				socket.on('message', (msg: any, rinfo: Object) => {
-					let str = String.fromCharCode.apply(null, new Uint8Array(msg));
-					let items = str.split(':');
-					let gatewayInfo = {
-						product: items[0] ? items[0] : null,
-						macAddress: items[1] ? items[1] : null,
-						activationCode: items[2] ? items[2] : null,
-						firmwareVersion: items[3] ? items[3] : null,
-						uuid: items[4] ? items[4] : null,
-					};
-					dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
+			socket.on('message', (msg: any, rinfo: Object) => {
+				let str = String.fromCharCode.apply(null, new Uint8Array(msg));
+				let items = str.split(':');
+				let gatewayInfo = {
+					product: items[0] ? items[0] : null,
+					macAddress: items[1] ? items[1] : null,
+					activationCode: items[2] ? items[2] : null,
+					firmwareVersion: items[3] ? items[3] : null,
+					uuid: items[4] ? items[4] : null,
+				};
+				dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
 
-					let { gateways: { byId: gateways } } = getState();
-					for (let key in gateways) {
-						let item = gateways[key];
-						let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
-						if (localKey) {
-							let { key: token, ttl } = localKey;
-							if (items[4] && uuid && (items[4] === uuid)) {
-								if (websocketOnline && websocketConnected && !token) {
-									dispatch(getTokenForLocalControl(id));
-								}
-								const tokenExpired = hasTokenExpired(ttl);
-								if (websocketOnline && websocketConnected && token && ttl && tokenExpired) {
-									dispatch(getTokenForLocalControl(id));
-								}
+				let { gateways: { byId: gateways } } = getState();
+				for (let key in gateways) {
+					let item = gateways[key];
+					let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
+					if (localKey) {
+						let { key: token, ttl } = localKey;
+						if (items[4] && uuid && (items[4] === uuid)) {
+							if (websocketOnline && websocketConnected && !token) {
+								dispatch(getTokenForLocalControl(id));
+							}
+							const tokenExpired = hasTokenExpired(ttl);
+							if (websocketOnline && websocketConnected && token && ttl && tokenExpired) {
+								dispatch(getTokenForLocalControl(id));
 							}
 						}
 					}
-				});
-			}
+				}
+			});
 		});
 	};
 }
 
-function closeUDPSocket() {
+/**
+ *
+ * @param {Funcition} callback = Optional function to be called after socket is closed, or right away if socket is already closed.
+ */
+function closeUDPSocket(callback?: Function | null = null) {
 	if (socket && socket.close) {
-		socket.close();
+		// $FlowFixMe
+		closingSocketID = socket._id;
+		socket.close(() => {
+			socket = {};
+			openSocketID = null;
+			closingSocketID = null;
+
+			if (callback && typeof callback === 'function') {
+				callback();
+			}
+		});
+	} else if (callback && typeof callback === 'function') {
+		socket = {};
+		callback();
 	}
 }
 

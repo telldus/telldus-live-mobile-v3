@@ -314,7 +314,8 @@ class Edit extends View<null, Props, State> {
 	};
 
 	_getDeviceById = (deviceId: number): Object => {
-		return this.props.devices.byId[deviceId];
+		const device = this.props.devices.byId[deviceId];
+		return device ? device : {};
 	};
 
 	_getStyle = (appLayout: Object): Object => {

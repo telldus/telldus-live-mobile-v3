@@ -339,7 +339,7 @@ class DeviceRow extends View<Props, State> {
 		let button = [];
 		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
 		const { device, intl, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
-		const { isInState, name, deviceType } = device;
+		const { isInState, name, deviceType, supportedMethods = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 		const showDeviceIcon = PixelRatio.getPixelSizeForLayoutSize(appLayout.width) >= 750;
@@ -352,7 +352,7 @@ class DeviceRow extends View<Props, State> {
 			UP,
 			DOWN,
 			STOP,
-		} = device.supportedMethods;
+		} = supportedMethods;
 
 		const actionIcon = getDeviceActionIcon(deviceType, isInState);
 		const sharedProps = {
