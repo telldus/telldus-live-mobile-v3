@@ -38,7 +38,7 @@ import { apiServer, publicKey, privateKey } from '../../Config';
 
 export function LiveApi({ url, requestParams }: {url: string, requestParams: Object}): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
-		const { user: { accessToken = null } } = getState();
+		const { user: { accessToken } } = getState();
 		return doApiCall(url, requestParams, accessToken, dispatch).then((response: Object): any => {
 			if (!response) {
 				throw (new Error('unexpected error: response empty'));

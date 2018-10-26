@@ -79,7 +79,7 @@ function getUserProfile(): ThunkAction {
 				method: 'GET',
 			},
 		};
-		return dispatch(LiveApi(payload)).then((response: Object): Function => {
+		return dispatch(LiveApi(payload)).then((response: Object): Object => {
 			dispatch({
 				type: 'RECEIVED_USER_PROFILE',
 				payload: {
