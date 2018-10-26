@@ -35,6 +35,7 @@ import dgram from 'dgram';
 
 let socket: Object = {};
 let openSocketID = null;
+let closingSocketID = null;
 const broardcastAddress = '255.255.255.255';
 const broardcastPort = 30303;
 const STATE = {
@@ -66,11 +67,10 @@ function autoDetectLocalTellStick(): ThunkAction {
 			socket.once('listening', () => {
 				// Important to check connectivity right before send.
 				NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
-					if ((socket._id === openSocketID) && (connectionInfo.type !== 'none')) {
+					if ((socket._id === openSocketID) && (socket._id !== closingSocketID) && (connectionInfo.type !== 'none')) {
 						if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
 							socket.setBroadcast(true);
 						}
-
 						let buf = toByteArray('D');
 						socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
 							if (err) {
@@ -122,17 +122,18 @@ function autoDetectLocalTellStick(): ThunkAction {
 function closeUDPSocket(callback?: Function | null = null) {
 	if (socket && socket.close) {
 		// $FlowFixMe
-		let closingSocketId = socket._id;
+		closingSocketID = socket._id;
 		socket.close(() => {
-			if (closingSocketId === openSocketID) {
-				openSocketID = null;
-			}
+			socket = {};
+			openSocketID = null;
+			closingSocketID = null;
 
 			if (callback && typeof callback === 'function') {
 				callback();
 			}
 		});
 	} else if (callback && typeof callback === 'function') {
+		socket = {};
 		callback();
 	}
 }
