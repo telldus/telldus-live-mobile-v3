@@ -44,7 +44,6 @@ const store = createStore(
 	applyMiddleware(thunk.withExtraArgument({LiveApi, TelldusWebsocket}), promise, array, logger),
 );
 
-let _store;
 export function configureStore(onComplete: () => void): Object {
 
 	persistStore(store, null, onComplete);
@@ -52,11 +51,5 @@ export function configureStore(onComplete: () => void): Object {
 	if (isDebuggingInChrome) {
 		window.store = store;
 	}
-	_store = store; // TODO: fix this ugly stuff
 	return store;
-}
-
-// TODO: should not be needed, remove when LiveApi gets store via component tree
-export function getStore(): Object {
-	return _store;
 }
