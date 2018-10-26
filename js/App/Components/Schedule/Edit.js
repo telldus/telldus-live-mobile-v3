@@ -145,7 +145,9 @@ class Edit extends View<null, Props, State> {
 					isSaving: false,
 				});
 				let message = error.message ? error.message : this.messageOnUpdateFail;
-				this.props.actions.showModal(message);
+				this.props.actions.showModal(message, {
+					showPositive: true,
+				});
 			});
 		}
 	};
@@ -180,7 +182,9 @@ class Edit extends View<null, Props, State> {
 				choseDelete: false,
 			});
 			let message = error.message ? error.message : this.messageOnDeleteFail;
-			this.props.actions.showModal(message);
+			this.props.actions.showModal(message, {
+				showPositive: true,
+			});
 		});
 	}
 
