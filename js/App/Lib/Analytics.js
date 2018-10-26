@@ -41,6 +41,6 @@ export function reportException(e: Error | string) {
 		Crashlytics.log(e.stack);
 		reportError(e.message);
 	} else {
-		reportError(e);
+		reportError(JSON.stringify(e));
 	}
 }
