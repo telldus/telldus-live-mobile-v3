@@ -22,10 +22,8 @@
 
 'use strict';
 
+import type { ThunkAction } from '../Actions/Types';
 import { apiServer, publicKey, privateKey } from '../../Config';
-
-// TODO: fix this pattern, pass store via component tree
-import { getStore } from '../Store/ConfigureStore';
 
 /*
  * When the user authenticates (logging in) the app receives two tokens.
@@ -38,28 +36,27 @@ import { getStore } from '../Store/ConfigureStore';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export function LiveApi({ url, requestParams }: {url: string, requestParams: Object}): Promise<any> {
-	return new Promise((resolve: Function, reject: Function): Promise<any> => {
-		return doApiCall(url, requestParams).then((response: Object): any => {
+export function LiveApi({ url, requestParams }: {url: string, requestParams: Object}): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const { user: { accessToken = null } } = getState();
+		return doApiCall(url, requestParams, accessToken, dispatch).then((response: Object): any => {
 			if (!response) {
-				return reject(new Error('unexpected error: response empty'));
+				throw (new Error('unexpected error: response empty'));
 			}
-			resolve(response);
+			return (response);
 		}).catch((error: Object): any => {
 			if (error.message === 'invalid_token' || error.message === 'expired_token') {
-				const store = getStore();
-				const { dispatch } = store;
 				return dispatch({
 					type: 'LOCK_SESSION',
 				});
 			}
-			reject(error);
+			throw (error);
 		});
-	});
+	};
 }
 
-async function doApiCall(url: string, requestParams: Object): any {
-	let response = await callEndPoint(url, requestParams, null);
+async function doApiCall(url: string, requestParams: Object, accessToken: Object, dispatch: Function): any {
+	let response = await callEndPoint(url, requestParams, accessToken);
 	if (!response.error) {
 		// All is well, so return the data from the API.
 		return response;
@@ -69,7 +66,7 @@ async function doApiCall(url: string, requestParams: Object): any {
 		throw new Error(response.error);
 	}
 
-	response = await refreshAccessToken(url, requestParams); // Token has expired, so we'll try to get a new one.
+	response = await refreshAccessToken(url, requestParams, accessToken, dispatch); // Token has expired, so we'll try to get a new one.
 
 	response = await callEndPoint(url, requestParams, response); // retry api call
 	if (!response.error) {
@@ -80,8 +77,7 @@ async function doApiCall(url: string, requestParams: Object): any {
 	throw new Error(response.error);
 }
 
-async function callEndPoint(url: string, requestParams: Object, token: ?Object = null): Object {
-	const accessToken = token ? token : getStore().getState().user.accessToken;
+async function callEndPoint(url: string, requestParams: Object, accessToken: Object): Object {
 	let params = {};
 
 	if (!accessToken) {
@@ -107,10 +103,7 @@ async function callEndPoint(url: string, requestParams: Object, token: ?Object =
 }
 
 // create new token with refresh token
-export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}): any {
-	const store = getStore();
-	const accessToken = store.getState().user.accessToken;
-	const { dispatch } = store;
+export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}, accessToken: Object, dispatch: Function): any {
 
 	return fetch(`${apiServer}/oauth2/accessToken`, {
 		method: 'POST',

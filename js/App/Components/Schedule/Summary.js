@@ -166,6 +166,7 @@ class Summary extends View<null, Props, State> {
 							containerStyle={row}
 							appLayout={appLayout}
 							intl={intl}
+							getSuntime={actions.getSuntime}
 						/>
 						<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
 						<AdvancedSettingsBlock

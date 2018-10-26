@@ -248,6 +248,7 @@ class Edit extends View<null, Props, State> {
 						appLayout={appLayout}
 						intl={intl}
 						labelPostScript={labelPostScript}
+						getSuntime={actions.getSuntime}
 					/>
 					<DaysRow
 						selectedDays={selectedDays}

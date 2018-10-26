@@ -55,7 +55,7 @@ const registerPushToken = (token: string, name: string, model: string, manufactu
 			method: 'GET',
 		},
 	};
-	return LiveApi(payload).then((response: Object): any => {
+	return dispatch(LiveApi(payload)).then((response: Object): any => {
 		if ((!response.error) && (response.status === 'success')) {
 			dispatch({
 				type: 'PUSH_TOKEN_REGISTERED',
@@ -98,7 +98,7 @@ const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function)
 			method: 'GET',
 		},
 	};
-	return LiveApi(payload).then((response: Object): any => {
+	return dispatch(LiveApi(payload)).then((response: Object): any => {
 		if ((!response.error) && (response.status === 'success')) {
 			dispatch({
 				type: 'PUSH_TOKEN_UNREGISTERED',
