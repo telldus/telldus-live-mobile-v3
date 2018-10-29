@@ -33,6 +33,7 @@ import { shouldUpdate } from '../../../Lib';
 type Props = {
 	item: Object,
 	tileWidth: number,
+	actionIcon?: string,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -57,7 +58,7 @@ class ToggleDashboardTile extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item']);
+		const propsChange = shouldUpdate(others, othersN, ['actionIcon', 'item']);
 		if (propsChange) {
 			return true;
 		}
@@ -66,16 +67,33 @@ class ToggleDashboardTile extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, intl, isGatewayActive, containerStyle, onButtonStyle, offButtonStyle } = this.props;
+		const { item, tileWidth, intl, isGatewayActive, containerStyle, onButtonStyle, offButtonStyle, actionIcon } = this.props;
 		const { id, name, isInState, supportedMethods, methodRequested, local } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
-		const onButton = <OnButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
-			enabled={!!TURNON} style={[styles.turnOnButtonContainer, onButtonStyle]} iconStyle={styles.iconStyle}
-			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl} local={local}/>;
-		const offButton = <OffButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
-			enabled={!!TURNOFF} style={[styles.turnOffButtonContainer, offButtonStyle]} iconStyle={styles.iconStyle}
-			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl} local={local}/>;
+		let iconStyle = styles.iconStyle;
+		// some icons are smaller compared to others
+		if (actionIcon === 'motion' || actionIcon === 'motion-triggered') {
+			iconStyle = styles.iconStyleLarge;
+		}
+
+		const sharedProps = {
+			id: id,
+			name: name,
+			isInState: isInState,
+			fontSize: Math.floor(tileWidth / 8),
+			isGatewayActive: isGatewayActive,
+			methodRequested: methodRequested,
+			intl: intl,
+			local: local,
+			actionIcon: actionIcon,
+			iconStyle,
+		};
+
+		const onButton = <OnButton {...sharedProps}
+			enabled={!!TURNON} style={[styles.turnOnButtonContainer, onButtonStyle]}/>;
+		const offButton = <OffButton {...sharedProps}
+			enabled={!!TURNOFF} style={[styles.turnOffButtonContainer, offButtonStyle]}/>;
 
 		let style = { ...this.props.style };
 		style.width = tileWidth;
@@ -141,6 +159,9 @@ const styles = StyleSheet.create({
 	},
 	iconStyle: {
 		fontSize: 22,
+	},
+	iconStyleLarge: {
+		fontSize: 38,
 	},
 });
 

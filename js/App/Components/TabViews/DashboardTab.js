@@ -274,9 +274,9 @@ class DashboardTab extends View {
 							onRefresh={this.onRefresh}
 						/>
 					}
+					key={numColumns}
 					numColumns={numColumns}
 					extraData={extraData}
-					key={numColumns}
 					style={{width: '100%'}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}

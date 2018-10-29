@@ -145,7 +145,9 @@ class Edit extends View<null, Props, State> {
 					isSaving: false,
 				});
 				let message = error.message ? error.message : this.messageOnUpdateFail;
-				this.props.actions.showModal(message);
+				this.props.actions.showModal(message, {
+					showPositive: true,
+				});
 			});
 		}
 	};
@@ -180,7 +182,9 @@ class Edit extends View<null, Props, State> {
 				choseDelete: false,
 			});
 			let message = error.message ? error.message : this.messageOnDeleteFail;
-			this.props.actions.showModal(message);
+			this.props.actions.showModal(message, {
+				showPositive: true,
+			});
 		});
 	}
 
@@ -248,6 +252,7 @@ class Edit extends View<null, Props, State> {
 						appLayout={appLayout}
 						intl={intl}
 						labelPostScript={labelPostScript}
+						getSuntime={actions.getSuntime}
 					/>
 					<DaysRow
 						selectedDays={selectedDays}
@@ -314,7 +319,8 @@ class Edit extends View<null, Props, State> {
 	};
 
 	_getDeviceById = (deviceId: number): Object => {
-		return this.props.devices.byId[deviceId];
+		const device = this.props.devices.byId[deviceId];
+		return device ? device : {};
 	};
 
 	_getStyle = (appLayout: Object): Object => {

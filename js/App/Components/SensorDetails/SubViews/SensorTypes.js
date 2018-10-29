@@ -27,13 +27,9 @@ import moment from 'moment';
 import { View } from '../../../../BaseComponents';
 import SensorBlock from './SensorBlock';
 
-import { getSensorIconLabelUnit } from '../../../Lib';
+import { getSensorIconLabelUnit, getWindDirection } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
-
-const directions = [
-	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
-];
 
 type Props = {
 	appLayout: Object,
@@ -104,9 +100,8 @@ export default class SensorTypes extends View<Props, State> {
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
 				let direction = '';
 				if (name === 'wdir') {
-					const getWindDirection = (sValue: number): string => directions[Math.floor(sValue / 22.5)];
-					direction = [...getWindDirection(value)].toString();
-					props = { ...props, value: getWindDirection(value) };
+					direction = [...getWindDirection(value, formatMessage)].toString();
+					props = { ...props, value: getWindDirection(value, formatMessage) };
 				}
 				sensors.push(
 					<SensorBlock {...props}

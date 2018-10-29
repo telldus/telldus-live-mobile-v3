@@ -73,6 +73,21 @@ class UserAgreement extends View<Props, State> {
 	}
 
 	componentDidMount() {
+		const { showModal } = this.props;
+		if (showModal) {
+			this.getEULA();
+		}
+	}
+
+	componentDidUpdate(prevProps: Object) {
+		const { showModal } = this.props;
+		const { eulaContent } = this.state;
+		if (showModal && !eulaContent) {
+			this.getEULA();
+		}
+	}
+
+	getEULA() {
 		this.props.getEULA().then((res: Object) => {
 			const { text: eulaContent, version: eulaVersion } = res;
 			if (eulaContent && eulaVersion) {
@@ -102,7 +117,6 @@ class UserAgreement extends View<Props, State> {
 	render(): Object | null {
 		const { showModal, appLayout } = this.props;
 		const { eulaContent } = this.state;
-
 		if (!eulaContent) {
 			return null;
 		}

@@ -57,7 +57,7 @@ function getTokenForLocalControl(id: number): ThunkAction {
 						},
 					},
 				};
-				return LiveApi(payload).then((response: Object): Object => {
+				return dispatch(LiveApi(payload)).then((response: Object): Object => {
 					if (response && response.uuid) {
 						dispatch(localControlSuccess(id, response.uuid));
 						return response;

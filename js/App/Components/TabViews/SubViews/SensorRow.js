@@ -46,13 +46,10 @@ import {
 	checkIfLarge,
 	shouldUpdate,
 	getSensorIconLabelUnit,
+	getWindDirection,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
-
-const directions = [
-	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
-];
 
 type Props = {
 	sensor: Object,
@@ -433,9 +430,8 @@ class SensorRow extends View<Props, State> {
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
 				let direction = '';
 				if (name === 'wdir') {
-					const getWindDirection = (sValue: number): string => directions[Math.floor(sValue / 22.5)];
-					direction = [...getWindDirection(value)].toString();
-					sharedProps = { ...sharedProps, value: getWindDirection(value) };
+					direction = [...getWindDirection(value, formatMessage)].toString();
+					sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
 				}
 				sensors[key] = <GenericSensor {...sharedProps}
 					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;

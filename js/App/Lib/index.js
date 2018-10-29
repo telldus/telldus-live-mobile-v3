@@ -33,7 +33,6 @@ import * as daysUtils from './getDays';
 import capitalize from './capitalize';
 import formatTime from './formatTime';
 import getPowerParts from './getPowerParts';
-import getSuntime from './getSuntime';
 import getTabBarIcon from './getTabBarIcon';
 import getDeviceType from './getDeviceType';
 import TelldusWebsocket from './Socket';
@@ -56,7 +55,6 @@ module.exports = {
 	capitalize,
 	formatTime,
 	getPowerParts,
-	getSuntime,
 	getTabBarIcon,
 	...DimmerUtils,
 	...SensorUtils,

@@ -37,6 +37,7 @@ type Props = {
 	enabled: boolean,
 	isGatewayActive: boolean,
 	isOpen: boolean,
+	actionIcon?: string,
 
 	intl: Object,
 	style?: Object | number,
@@ -62,7 +63,7 @@ class ToggleButton extends View {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device']);
+		const propsChange = shouldUpdate(others, othersN, ['actionIcon', 'device']);
 		if (propsChange) {
 			return true;
 		}
@@ -80,11 +81,17 @@ class ToggleButton extends View {
 			offButtonStyle,
 			isOpen,
 			closeSwipeRow,
+			actionIcon,
 		} = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		const { id, isInState, methodRequested, name, local } = device;
 		const width = Theme.Core.buttonWidth;
 
+		let iconStyle = {};
+		// some icons are smaller compared to others
+		if (actionIcon === 'motion' || actionIcon === 'motion-triggered') {
+			iconStyle = styles.iconStyleLarge;
+		}
 		const sharedProps = {
 			id,
 			name,
@@ -95,6 +102,8 @@ class ToggleButton extends View {
 			isOpen,
 			closeSwipeRow,
 			intl,
+			actionIcon,
+			iconStyle,
 		};
 
 		const onButton = <OnButton
@@ -129,6 +138,9 @@ const styles = StyleSheet.create({
 		height: Theme.Core.rowHeight,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	iconStyleLarge: {
+		fontSize: 38,
 	},
 });
 

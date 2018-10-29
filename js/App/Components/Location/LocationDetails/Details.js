@@ -69,6 +69,8 @@ class Details extends View {
 	infoPressCount: number;
 	timeoutInfoPress: any;
 
+	labelAutoDetected: string;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -81,6 +83,8 @@ class Details extends View {
 		this.labelIPPublic = formatMessage(i18n.ipPublic);
 		this.labelIPLocal = formatMessage(i18n.ipLocal);
 		this.labelSoftware = formatMessage(i18n.software);
+
+		this.labelAutoDetected = formatMessage(i18n.hint);
 
 		this.confirmMessage = formatMessage(i18n.confirmDelete);
 
@@ -203,7 +207,19 @@ class Details extends View {
 		}
 
 
-		const { name, type, ip, version, timezone, latitude, longitude, online, websocketOnline, localKey = {} } = location;
+		const {
+			name,
+			type,
+			ip,
+			version,
+			timezone,
+			latitude,
+			longitude,
+			online,
+			websocketOnline,
+			localKey = {},
+			timezoneAutodetected,
+		} = location;
 		const { address, key } = localKey;
 		const image = getLocationImageUrl(type);
 		const {
@@ -213,6 +229,8 @@ class Details extends View {
 		const labelWidth = containerWidth * 0.36;
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
+
+		const timezoneLabel = timezoneAutodetected ? `${this.labelTimeZone}\n(${this.labelAutoDetected})` : this.labelTimeZone;
 
 		return (
 			<View style={{flex: 1, paddingVertical: padding}}>
@@ -255,7 +273,7 @@ class Details extends View {
 					onPress={this.onEditName}
 				/>
 				<TitledInfoBlock
-					label={this.labelTimeZone}
+					label={timezoneLabel}
 					value={timezone}
 					icon={'angle-right'}
 					iconColor="#A59F9A90"

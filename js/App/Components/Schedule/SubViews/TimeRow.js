@@ -28,7 +28,7 @@ import { ActivityIndicator } from 'react-native';
 import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
 import Theme from '../../../Theme';
-import { getSuntime, getHoursAndMinutes } from '../../../Lib';
+import { getHoursAndMinutes } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 import i18n from '../../../Translations/common';
 
@@ -201,28 +201,27 @@ export default class TimeRow extends View<null, Props, State> {
 		return `${label} ${time} ${labelInterval} ${labelOffset}, ${labelPostScript}`;
 	}
 
-	// $FlowFixMe
-	_getSuntime = async (clientId: number, type: string): void => {
+	_getSuntime = (clientId: number, type: string) => {
 		const { hour, minute } = this.state.time;
 
-		const time: Time = await getSuntime(clientId, type);
-
-		if ((time: Time)) {
-			if (time.hour !== hour && time.minute !== minute) {
-				this.setState({
-					time,
-					loading: false,
-				});
+		this.props.getSuntime(clientId, type).then((time: Time) => {
+			if ((time: Time)) {
+				if (time.hour !== hour && time.minute !== minute) {
+					this.setState({
+						time,
+						loading: false,
+					});
+				} else {
+					this.setState({
+						loading: false,
+					});
+				}
 			} else {
 				this.setState({
 					loading: false,
 				});
 			}
-		} else {
-			this.setState({
-				loading: false,
-			});
-		}
+		});
 	};
 
 	_formatTime = (): string => {

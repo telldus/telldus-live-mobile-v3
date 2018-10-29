@@ -36,6 +36,7 @@ import {
 	checkIfLarge,
 	shouldUpdate,
 	getSensorIconLabelUnit,
+	getWindDirection,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
@@ -159,8 +160,8 @@ class SensorDashboardTile extends View<Props, null> {
 			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
 				let directions = '';
 				if (name === 'wdir') {
-					directions = [...this._windDirection(value)].toString();
-					sharedProps = { ...sharedProps, value: this._windDirection(value) };
+					directions = [...getWindDirection(value, formatMessage)].toString();
+					sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
 				}
 				slideList[key] = <GenericSensor {...sharedProps}
 					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
@@ -269,13 +270,6 @@ class SensorDashboardTile extends View<Props, null> {
 					dotStyle={dotStyle}/>
 			</DashboardShadowTile>
 		);
-	}
-
-	_windDirection(value: number): string {
-		const directions = [
-			'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
-		];
-		return directions[Math.floor(value / 22.5)];
 	}
 
 	getStyles(): Object {
