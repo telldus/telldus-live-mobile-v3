@@ -106,7 +106,9 @@ class Summary extends View<null, Props, State> {
 				isLoading: false,
 			});
 			let message = error.message ? error.message : 'Could not save the shedule. Please try again later.';
-			this.props.actions.showModal(message);
+			this.props.actions.showModal(message, {
+				showPositive: true,
+			});
 		});
 	};
 
@@ -166,6 +168,7 @@ class Summary extends View<null, Props, State> {
 							containerStyle={row}
 							appLayout={appLayout}
 							intl={intl}
+							getSuntime={actions.getSuntime}
 						/>
 						<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
 						<AdvancedSettingsBlock

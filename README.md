@@ -8,6 +8,7 @@
 
 - keep the README.md complete and up to date! Goal is that it contains everything you need to get started.
 - Feel free to adapt it as you see fit, you don't need permission.
+- Take flow type seriously, JS might not care but Java and Obj-C underneath can be very rude.
 
 ## Install
 

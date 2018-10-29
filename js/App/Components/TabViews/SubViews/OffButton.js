@@ -45,6 +45,7 @@ type Props = {
 	local: boolean,
 	isOpen: boolean,
 	closeSwipeRow: () => void,
+	actionIcon?: string,
 };
 
 class OffButton extends View {
@@ -70,7 +71,7 @@ class OffButton extends View {
 	}
 
 	render(): Object {
-		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle, local } = this.props;
+		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle, local, actionIcon } = this.props;
 		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) : (isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
@@ -78,13 +79,15 @@ class OffButton extends View {
 			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
 		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
+		const iconName = actionIcon ? actionIcon : 'off';
+
 		return (
 			<TouchableOpacity
 				disabled={!enabled}
 				onPress={this.onPress}
 				style={[this.props.style, buttonStyle]}
 				accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="off" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
+				<IconTelldus icon={iconName} style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
 					methodRequested === 'TURNOFF' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>

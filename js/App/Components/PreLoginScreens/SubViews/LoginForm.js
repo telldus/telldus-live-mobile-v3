@@ -68,6 +68,8 @@ class LoginForm extends View {
 	signIn: () => any;
 	signOutGoogle: () => any;
 
+	invalidGrant: string;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -90,6 +92,7 @@ class LoginForm extends View {
 		this.timedOut = `${formatMessage(i18n.timedOut)}, ${formatMessage(i18n.tryAgain)}?`;
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+		this.invalidGrant = `${formatMessage(i18n.errorInvalidGrant)}.`;
 	}
 
 	componentDidMount() {
@@ -258,9 +261,13 @@ class LoginForm extends View {
 	handleLoginError(error: Object) {
 		let { dispatch } = this.props;
 		if (error.response) {
-			let errorMessage = error.response.data.error_description ?
-				error.response.data.error_description : error.response.data.error ?
-					error.response.data.error : this.unknownError;
+			const { data = {} } = error.response;
+			let errorMessage = data.error_description ?
+				data.error_description : data.error ?
+					data.error : this.unknownError;
+			if (data.error === 'invalid_grant') {
+				errorMessage = this.invalidGrant;
+			}
 			dispatch(showModal(errorMessage));
 		} else if (error.request) {
 			let errorMessage = !error.status && error.request._timedOut ? this.timedOut : this.networkFailed;

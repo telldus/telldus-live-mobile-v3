@@ -11,7 +11,13 @@ describe('<SettingsScreen />', () => {
 
 	let wrapper, store;
 	beforeEach(()=>{
-		 store = mockStore({});
+		store = mockStore({
+			user: {
+				accessToken: {
+					access_token: 'abc',
+				},
+			},
+		});
 		wrapper = shallow(
 			<Provider store={store}>
 				<IntlProvider>

@@ -146,7 +146,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { modalExtras } = this.props;
 		const {
 			dialogueHeader = false,
-			showPositive = false,
+			showPositive = true,
 			showNegative = false,
 			positiveText = null,
 			onPressPositive = this.closeModal,
