@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { Platform, NetInfo } from 'react-native';
+import { Platform, NetInfo, DeviceEventEmitter } from 'react-native';
 import { reportException } from '../Lib/Analytics';
 import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';
 import type { ThunkAction, Action } from './Types';
@@ -58,12 +58,18 @@ function autoDetectLocalTellStick(): ThunkAction {
 			openSocketID = socket._id;
 			const aPort = randomPort();
 
-			// $FlowFixMe
-			socket.bind(aPort, (err: string) => {
-				if (err) {
-					reportException(err);
-				}
+			socket.on('error', (error: any) => {
+				reportException(error);
 			});
+
+			// $FlowFixMe
+			try {
+				socket.bind(aPort);
+			} catch (error) {
+				// Handle thrown.
+				reportException(error);
+			}
+
 			socket.once('listening', () => {
 				// Important to check connectivity right before send.
 				NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
@@ -71,12 +77,19 @@ function autoDetectLocalTellStick(): ThunkAction {
 						if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
 							socket.setBroadcast(true);
 						}
+
 						let buf = toByteArray('D');
-						socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
-							if (err) {
-								reportException(err);
-							}
-						});
+						try {
+							// Some errors are being thrown, and some others are received as callback.
+							socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
+								if (err) {
+									reportException(err);
+								}
+							});
+						} catch (error) {
+							// Handle thrown.
+							reportException(error);
+						}
 					}
 				});
 			});
@@ -117,7 +130,7 @@ function autoDetectLocalTellStick(): ThunkAction {
 
 /**
  *
- * @param {Funcition} callback = Optional function to be called after socket is closed, or right away if socket is already closed.
+ * @param {Function} callback = Optional function to be called after socket is closed, or right away if socket is already closed.
  */
 function closeUDPSocket(callback?: Function | null = null) {
 	if (socket && socket.close) {
