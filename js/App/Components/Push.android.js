@@ -29,6 +29,7 @@ const DeviceInfo = require('react-native-device-info');
 import type { ThunkAction } from '../Actions/Types';
 import { pushSenderId, pushServiceId } from '../../Config';
 import { registerPushToken } from '../Actions/User';
+import { reportException } from '../Lib/Analytics';
 
 const Push = {
 	configure: (params: Object): ThunkAction => {
@@ -69,12 +70,13 @@ const Push = {
 		  ).setDescription('Telldus Live alerts on user subscribed events');
 		  firebase.notifications().android.createChannel(channel);
 	},
-	getToken: ({ pushToken }: Object): ThunkAction => {
+	getToken: ({ pushToken, pushTokenRegistered, deviceId }: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Promise<any> => {
 			return firebase.messaging().getToken()
 				.then((token: string): string => {
 					if (pushToken !== token) {
-						dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
+						const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+						dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 						dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 					}
 					return token;
@@ -108,7 +110,7 @@ const Push = {
 			  .android.setPriority(firebase.notifications.Android.Priority.High);
 		firebase.notifications().displayNotification(localNotification)
 			.catch((err: any) => {
-				console.error('Error Showing Notification - Android', err);
+				reportException(err);
 			});
 	},
 };
