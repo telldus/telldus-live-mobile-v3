@@ -27,7 +27,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 
 import { FormattedMessage, Text, View, ListRow, IconTelldus } from '../../../../BaseComponents';
-import { getDeviceStateMethod } from '../../../Lib';
+import { getDeviceStateMethod, getDeviceActionIcon } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import {
 	toSliderValue,
@@ -166,7 +166,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 	render(): Object {
 
-		let { appLayout, intl, isModalOpen, currentScreen } = this.props;
+		let { appLayout, intl, isModalOpen, currentScreen, deviceType } = this.props;
 
 		let {
 			locationCover,
@@ -186,7 +186,10 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
-		let icon = this.getIcon(deviceState);
+		let { TURNON: icon } = getDeviceActionIcon(deviceType, deviceState, {});
+		if (!icon) {
+			icon = this.getIcon(deviceState);
+		}
 		let originText = '', originInfo = '';
 		let origin = this.props.item.origin;
 		if (origin === 'Scheduler') {
@@ -240,7 +243,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
 						<View style={[statusView, { backgroundColor: '#1b365d' }]}>
-							<IconTelldus icon="off" size={statusIconSize} color="#ffffff" />
+							<IconTelldus icon={icon} size={statusIconSize} color="#ffffff" />
 						</View>
 						:
 						<View style={[statusView, { backgroundColor: '#F06F0C' }]}>
