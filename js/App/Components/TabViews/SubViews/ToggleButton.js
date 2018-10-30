@@ -37,7 +37,7 @@ type Props = {
 	enabled: boolean,
 	isGatewayActive: boolean,
 	isOpen: boolean,
-	actionIcon?: string,
+	actionIcons?: Object,
 
 	intl: Object,
 	style?: Object | number,
@@ -63,7 +63,7 @@ class ToggleButton extends View {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['actionIcon', 'device']);
+		const propsChange = shouldUpdate(others, othersN, ['actionIcons', 'device']);
 		if (propsChange) {
 			return true;
 		}
@@ -81,7 +81,7 @@ class ToggleButton extends View {
 			offButtonStyle,
 			isOpen,
 			closeSwipeRow,
-			actionIcon,
+			actionIcons = {},
 		} = this.props;
 		const { TURNON, TURNOFF } = device.supportedMethods;
 		const { id, isInState, methodRequested, name, local } = device;
@@ -89,7 +89,7 @@ class ToggleButton extends View {
 
 		let iconStyle = {};
 		// some icons are smaller compared to others
-		if (actionIcon === 'motion' || actionIcon === 'motion-triggered') {
+		if (actionIcons.TURNOFF === 'motion' || actionIcons.TURNON === 'motion-triggered') {
 			iconStyle = styles.iconStyleLarge;
 		}
 		const sharedProps = {
@@ -102,7 +102,6 @@ class ToggleButton extends View {
 			isOpen,
 			closeSwipeRow,
 			intl,
-			actionIcon,
 			iconStyle,
 		};
 
@@ -110,11 +109,13 @@ class ToggleButton extends View {
 			{...sharedProps}
 			enabled={isOpen || !!TURNON}
 			style={[styles.turnOn, TURNON ? {width} : {width: width * 2}, onButtonStyle]}
+			actionIcon={actionIcons.TURNON}
 		/>;
 		const offButton = <OffButton
 			{...sharedProps}
 			enabled={isOpen || !!TURNOFF}
 			style={[styles.turnOff, TURNOFF ? {width} : {width: width * 2}, offButtonStyle]}
+			actionIcon={actionIcons.TURNOFF}
 		/>;
 
 		return (

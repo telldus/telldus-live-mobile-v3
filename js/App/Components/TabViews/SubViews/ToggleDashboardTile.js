@@ -33,7 +33,7 @@ import { shouldUpdate } from '../../../Lib';
 type Props = {
 	item: Object,
 	tileWidth: number,
-	actionIcon?: string,
+	actionIcons?: Object,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -58,7 +58,7 @@ class ToggleDashboardTile extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['actionIcon', 'item']);
+		const propsChange = shouldUpdate(others, othersN, ['actionIcons', 'item']);
 		if (propsChange) {
 			return true;
 		}
@@ -67,13 +67,13 @@ class ToggleDashboardTile extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { item, tileWidth, intl, isGatewayActive, containerStyle, onButtonStyle, offButtonStyle, actionIcon } = this.props;
+		const { item, tileWidth, intl, isGatewayActive, containerStyle, onButtonStyle, offButtonStyle, actionIcons = {} } = this.props;
 		const { id, name, isInState, supportedMethods, methodRequested, local } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
 		let iconStyle = styles.iconStyle;
 		// some icons are smaller compared to others
-		if (actionIcon === 'motion' || actionIcon === 'motion-triggered') {
+		if (actionIcons.TURNON === 'motion' || actionIcons.TURNOFF === 'motion-triggered') {
 			iconStyle = styles.iconStyleLarge;
 		}
 
@@ -86,13 +86,12 @@ class ToggleDashboardTile extends View<Props, null> {
 			methodRequested: methodRequested,
 			intl: intl,
 			local: local,
-			actionIcon: actionIcon,
 			iconStyle,
 		};
 
-		const onButton = <OnButton {...sharedProps}
+		const onButton = <OnButton {...sharedProps} actionIcon={actionIcons.TURNON}
 			enabled={!!TURNON} style={[styles.turnOnButtonContainer, onButtonStyle]}/>;
-		const offButton = <OffButton {...sharedProps}
+		const offButton = <OffButton {...sharedProps} actionIcon={actionIcons.TURNOFF}
 			enabled={!!TURNOFF} style={[styles.turnOffButtonContainer, offButtonStyle]}/>;
 
 		let style = { ...this.props.style };

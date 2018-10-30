@@ -354,14 +354,14 @@ class DeviceRow extends View<Props, State> {
 			STOP,
 		} = supportedMethods;
 
-		const actionIcon = getDeviceActionIcon(deviceType, isInState);
+		const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 		const sharedProps = {
 			device,
 			isOpen,
 			intl,
 			isGatewayActive,
 			appLayout,
-			actionIcon,
+			actionIcons,
 			closeSwipeRow: this.closeSwipeRow,
 		};
 		const icon = getDeviceIcons(deviceType);
