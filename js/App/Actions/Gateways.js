@@ -22,7 +22,7 @@
 
 'use strict';
 
-import { Platform, NetInfo, DeviceEventEmitter } from 'react-native';
+import { Platform, NetInfo } from 'react-native';
 import { reportException } from '../Lib/Analytics';
 import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';
 import type { ThunkAction, Action } from './Types';
