@@ -6,7 +6,7 @@
 
 **Notes:**
 
-- keep the README.md complete and up to date! Goal is that it contains everything you need to get started.
+- Keep the README.md complete and up to date! Goal is that it contains everything you need to get started.
 - Feel free to adapt it as you see fit, you don't need permission.
 - Take flow type seriously, JS might not care but Java and Obj-C underneath can be very rude.
 
@@ -56,15 +56,11 @@ All commands are assumed to be ran from project root.
 
 The app uses react-intl for translating strings.
 
-Before commiting the code, update the english translation file by running:
-```
-npm run manage:translations
-```
-Make sure there is no duplicate keys.
+All string definitions and translated strings are stored in separate repo(live-shared-data) for sharing convenience. Make sure new entries are done inside `live-shared-data`
 
-There is three ways of translating a string in the code.
+There are three ways of translating a string in the code.
 
-#### 1) Use the <FormattedMessage> component available in base components.
+#### 1) Use the <FormattedMessage> component available in base components.(DEPRECATED -  All string definition has to be done in live-shared-data)
 
 **Example:**
 ```
@@ -76,7 +72,8 @@ There is three ways of translating a string in the code.
 This is similar to the above variant but if the same tag is to be reused it must be defined separately
 
 **Example:**
-```
+```javascript
+// definition need to be done in live-shared-data
 const messages = defineMessages({
 	tag: {
 		id: 'unique.id.for.this.tag',
@@ -93,7 +90,8 @@ First wrap the component using `injectIntl`
 https://github.com/yahoo/react-intl/wiki/API#injection-api
 
 **Example:**
-```
+```javascript
+// definition need to be done in live-shared-data
 const messages = defineMessages({
 	tag: {
 		id: 'unique.id.for.this.tag',
