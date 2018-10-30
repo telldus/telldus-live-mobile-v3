@@ -42,6 +42,7 @@ type Props = {
 	intl: Object,
 	isModalOpen: boolean,
 	currentScreen: string,
+	deviceType: string,
 };
 
 type State = {
