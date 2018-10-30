@@ -40,7 +40,7 @@ const Push = {
 		return (dispatch: Function, getState: Object): any => {
 			const { pushToken, pushTokenRegistered } = params;
 			if ((!pushToken) || (pushToken !== token) || (!pushTokenRegistered)) {
-			// stores fcm token in the server
+				// stores fcm token in the server
 				dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 				dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 			}

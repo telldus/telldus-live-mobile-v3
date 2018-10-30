@@ -35,6 +35,10 @@ export type State = {
 	notificationText: any,
 	registeredCredential: any,
 	showChangeLog: boolean,
+	deviceId: string,
+	osVersion: string,
+	deviceName: string,
+	deviceModel: string,
 };
 
 export const initialState = {
@@ -46,6 +50,10 @@ export const initialState = {
 	notificationText: false,
 	registeredCredential: false,
 	showChangeLog: false,
+	deviceId: '',
+	osVersion: '',
+	deviceName: '',
+	deviceModel: '',
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -81,9 +89,19 @@ export default function reduceUser(state: State = initialState, action: Action):
 		};
 	}
 	if (action.type === 'PUSH_TOKEN_REGISTERED') {
+		const {
+			deviceId,
+			osVersion,
+			name: deviceName,
+			model: deviceModel,
+		} = action.payload;
 		return {
 			...state,
 			pushTokenRegistered: true,
+			deviceId,
+			osVersion,
+			deviceName,
+			deviceModel,
 		};
 	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {

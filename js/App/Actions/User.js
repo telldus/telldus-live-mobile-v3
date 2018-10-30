@@ -63,6 +63,10 @@ const registerPushToken = (token: string, name: string, model: string, manufactu
 				payload: {
 					...payload,
 					...response,
+					deviceId,
+					osVersion,
+					name,
+					model,
 				},
 			});
 			return response;
