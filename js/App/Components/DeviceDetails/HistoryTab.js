@@ -217,34 +217,20 @@ class HistoryTab extends View {
 			});
 	}
 
-	getIcon(deviceState: string): string {
-		switch (deviceState) {
-			case 'TURNON':
-				return 'icon_on';
-			case 'TURNOFF':
-				return 'icon_off';
-			case 'UP':
-				return 'icon_up';
-			case 'BELL':
-				return 'icon_bell';
-			case 'DOWN':
-				return 'icon_down';
-			case 'STOP':
-				return 'icon_stop';
-			default:
-				return '';
-		}
-	}
-
 	renderRow(item: Object): Object {
-		let { screenProps } = this.props;
-		let { intl, currentScreen } = screenProps;
+		const { screenProps, device } = this.props;
+		const { intl, currentScreen } = screenProps;
+		const { deviceType } = device;
 
 		return (
-			<HistoryRow id={item.index}
-				item={item.item} section={item.section.key}
-				intl={intl} isFirst={+item.index === 0}
+			<HistoryRow
+				id={item.index}
+				item={item.item}
+				section={item.section.key}
+				intl={intl}
+				isFirst={+item.index === 0}
 				currentScreen={currentScreen}
+				deviceType={deviceType}
 			/>
 		);
 	}
