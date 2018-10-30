@@ -35,6 +35,8 @@ import UpButton from '../../TabViews/SubViews/Navigational/UpButton';
 import DownButton from '../../TabViews/SubViews/Navigational/DownButton';
 import StopButton from '../../TabViews/SubViews/Navigational/StopButton';
 
+import { getDeviceActionIcon } from '../../../Lib/DeviceUtils';
+
 import Theme from '../../../Theme';
 
 
@@ -55,6 +57,7 @@ class DeviceActionDetails extends View {
 
 	render(): Object {
 		const { device, intl, isGatewayActive, appLayout, containerStyle } = this.props;
+		const { supportedMethods = {}, deviceType, isInState } = device;
 		const {
 			TURNON,
 			TURNOFF,
@@ -63,7 +66,7 @@ class DeviceActionDetails extends View {
 			UP,
 			DOWN,
 			STOP,
-		} = device.supportedMethods;
+		} = supportedMethods;
 		const buttons = [];
 		const { container, shadow, buttonStyle, buttonsContainer } = this.getStyles(appLayout);
 
@@ -103,6 +106,12 @@ class DeviceActionDetails extends View {
 		if (BELL) {
 			buttons.push(
 				<BellButton device={device} intl={intl} isGatewayActive={isGatewayActive}/>
+			);
+		}
+
+		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
+			buttons.push(
+				<OffButton {...device} intl={intl} actionIcon={getDeviceActionIcon(deviceType, isInState)} isGatewayActive={isGatewayActive}/>
 			);
 		}
 
