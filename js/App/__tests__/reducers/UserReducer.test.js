@@ -41,9 +41,22 @@ describe('Test User reducers', ()=>{
 	});
 
 	it('check Tab reducers after push token registered', () => {
-		const state = { pushTokenRegistered: true};
+		const payload = {
+			deviceId: '1122',
+			osVersion: '11',
+			name: 'asdsd',
+			model: 'SM',
+		};
+		const state = {
+			pushTokenRegistered: true,
+			deviceId: '1122',
+			osVersion: '11',
+			deviceName: 'asdsd',
+			deviceModel: 'SM',
+		};
 		const action = {
 			type: 'PUSH_TOKEN_REGISTERED',
+			payload: payload,
 		};
 		expect(reducer({}, action)).toEqual(state);
 	});
