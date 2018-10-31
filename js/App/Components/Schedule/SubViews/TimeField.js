@@ -56,11 +56,14 @@ constructor(props: Props) {
 	};
 	this.onEdit = this.onEdit.bind(this);
 	this.setRef = this.setRef.bind(this);
+	this.input = null;
 }
 
 componentDidMount() {
 	InteractionManager.runAfterInteractions(() => {
-		this.input.focus();
+		if (this.input) {
+			this.input.focus();
+		}
 	});
 }
 
