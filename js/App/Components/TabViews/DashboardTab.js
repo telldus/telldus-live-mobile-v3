@@ -280,6 +280,7 @@ class DashboardTab extends View {
 					style={{width: '100%', paddingTop: style.padding}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
+					contentInset={{ bottom: (2 * style.padding) }}
 				/>
 			</View>
 		);
