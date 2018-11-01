@@ -9,11 +9,13 @@ describe('Test Dashboard reducers', ()=>{
 			clientId: 1,
 			id: 3,
 			isOnline: true,
+			name: 'a',
 		}};
 		const sensor = { 2: {
 			clientId: 1,
 			id: 2,
 			isOnline: true,
+			name: 'b',
 		}};
 
 		const dashboard = {
@@ -35,7 +37,7 @@ describe('Test Dashboard reducers', ()=>{
 		};
 
 		const state = [{
-			key: 3, data: device[3], objectType: 'device',
+			data: device[3], key: 3, objectType: 'device',
 		},
 		{
 			data: sensor[2], key: 2, objectType: 'sensor',
