@@ -236,12 +236,15 @@ class SensorDashboardTile extends View<Props, null> {
 				icon={'sensor'}
 				iconStyle={{
 					color: '#fff',
-					fontSize: tileWidth / 6,
+					fontSize: Math.floor(tileWidth / 6.5),
+					borderRadius: Math.floor(tileWidth / 8),
+					textAlign: 'center',
+					alignSelf: 'center',
 				}}
 				iconContainerStyle={[iconContainerStyle, {
-					width: tileWidth / 4,
-					height: tileWidth / 4,
-					borderRadius: tileWidth / 8,
+					width: Math.floor(tileWidth / 4),
+					height: Math.floor(tileWidth / 4),
+					borderRadius: Math.floor(tileWidth / 8),
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}
