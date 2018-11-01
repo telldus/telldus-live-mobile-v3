@@ -198,9 +198,9 @@ render(): Object {
 				fontSize: tileWidth / 5.2,
 			}}
 			iconContainerStyle={[iconContainerStyle, {
-				width: tileWidth / 4.8,
-				height: tileWidth / 4.8,
-				borderRadius: tileWidth / 9.6,
+				width: tileWidth / 4,
+				height: tileWidth / 4,
+				borderRadius: tileWidth / 8,
 				alignItems: 'center',
 				justifyContent: 'center',
 			}]}
