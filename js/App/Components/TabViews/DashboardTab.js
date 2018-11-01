@@ -277,10 +277,13 @@ class DashboardTab extends View {
 					key={numColumns}
 					numColumns={numColumns}
 					extraData={extraData}
-					style={{width: '100%', paddingTop: style.padding}}
+					style={{width: '100%'}}
+					contentContainerStyle={{
+						flexGrow: 1,
+						paddingVertical: style.padding,
+					}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-					contentInset={{ bottom: (2 * style.padding) }}
 				/>
 			</View>
 		);
