@@ -87,11 +87,6 @@ class ToggleButton extends View {
 		const { id, isInState, methodRequested, name, local } = device;
 		const width = Theme.Core.buttonWidth;
 
-		let iconStyle = {};
-		// some icons are smaller compared to others
-		if (actionIcons.TURNOFF === 'motion' || actionIcons.TURNON === 'motion-triggered') {
-			iconStyle = styles.iconStyleLarge;
-		}
 		const sharedProps = {
 			id,
 			name,
@@ -102,7 +97,6 @@ class ToggleButton extends View {
 			isOpen,
 			closeSwipeRow,
 			intl,
-			iconStyle,
 		};
 
 		const onButton = <OnButton

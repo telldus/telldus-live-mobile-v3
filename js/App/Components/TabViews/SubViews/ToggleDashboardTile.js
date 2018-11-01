@@ -71,12 +71,6 @@ class ToggleDashboardTile extends View<Props, null> {
 		const { id, name, isInState, supportedMethods, methodRequested, local } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
-		let iconStyle = styles.iconStyle;
-		// some icons are smaller compared to others
-		if (actionIcons.TURNON === 'motion' || actionIcons.TURNOFF === 'motion-triggered') {
-			iconStyle = styles.iconStyleLarge;
-		}
-
 		const sharedProps = {
 			id: id,
 			name: name,
@@ -86,7 +80,7 @@ class ToggleDashboardTile extends View<Props, null> {
 			methodRequested: methodRequested,
 			intl: intl,
 			local: local,
-			iconStyle,
+			iconStyle: styles.iconStyle,
 		};
 
 		const onButton = <OnButton {...sharedProps} actionIcon={actionIcons.TURNON}
