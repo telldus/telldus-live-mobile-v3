@@ -48,7 +48,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			data,
 		};
 	});
-	const orderedList = orderBy({...deviceItems, ...sensorItems}, [(item: Object): any => {
+	const orderedList = orderBy([...deviceItems, ...sensorItems], [(item: Object): any => {
 		let { name } = item.data;
 		return name ? name.toLowerCase() : null;
 	}], ['asc']);
