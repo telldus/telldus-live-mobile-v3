@@ -20,6 +20,7 @@
 // @flow
 
 'use strict';
+import orderBy from 'lodash/orderBy';
 
 export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}): Array<Object> {
 	const deviceItems = dashboard.deviceIds.map((deviceId: number): Object => {
@@ -47,6 +48,9 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			data,
 		};
 	});
-
-	return [...deviceItems, ...sensorItems];
+	const orderedList = orderBy({...deviceItems, ...sensorItems}, [(item: Object): any => {
+		let { name } = item.data;
+		return name ? name.toLowerCase() : null;
+	}], ['asc']);
+	return orderedList;
 }
