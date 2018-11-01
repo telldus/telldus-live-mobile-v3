@@ -277,7 +277,7 @@ class DashboardTab extends View {
 					key={numColumns}
 					numColumns={numColumns}
 					extraData={extraData}
-					style={{width: '100%'}}
+					style={{width: '100%', paddingTop: style.padding}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 				/>
@@ -374,7 +374,7 @@ class DashboardTab extends View {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
-				padding: isDBEmpty ? 30 : padding,
+				paddingHorizontal: isDBEmpty ? 30 : padding,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
@@ -389,6 +389,7 @@ class DashboardTab extends View {
 				color: '#4C4C4C',
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
+			padding,
 		};
 	}
 }
