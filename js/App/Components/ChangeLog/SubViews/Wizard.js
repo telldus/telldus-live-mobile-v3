@@ -60,11 +60,14 @@ export default class WizardOne extends PureComponent<Props, null> {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.wizardOneTitle37);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription37);
+		this.titleWOne = formatMessage(i18n.labelSensorHistory);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription38);
 
-		this.titleWTwo = formatMessage(i18n.WizardTwoTitle37);
-		this.descriptionWTwo = formatMessage(i18n.WizardTwoDescription37);
+		this.titleWTwo = formatMessage(i18n.wizardTwoTitle38);
+		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription38);
+
+		this.titleWThree = formatMessage(i18n.labelDeviceTypes);
+		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription38);
 	}
 
 	getScreenData(currentScreen: number, deviceWidth: number): Object {
@@ -72,7 +75,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 			iconTwoSize = Math.floor(deviceWidth * 0.315), iconThreeSize = Math.floor(deviceWidth * 0.315), title = '', description = '';
 		switch (currentScreen) {
 			case 1:
-				icon = 'localcontrol';
+				icon = 'sensorhistory';
 				title = this.titleWOne;
 				description = this.descriptionWOne;
 				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
@@ -82,7 +85,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 				description = this.descriptionWTwo;
 				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
 			case 3:
-				icon = 'buttononoff';
+				icon = 'door-open';
 				iconSize = Math.floor(deviceWidth * 0.345);
 				title = this.titleWThree;
 				description = this.descriptionWThree;
