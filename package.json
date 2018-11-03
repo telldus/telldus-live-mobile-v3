@@ -20,7 +20,7 @@
     "external-editor": "^3.0.0",
     "global": "^4.3.2",
     "intl": "^1.2.5",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#54c068ebf4f67a3efccedd93940929d2d42c5971",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#94ac40f1921f96dba2cc1b9cdcd2efaeda085b92",
     "lodash": "~4.17.10",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.20",
