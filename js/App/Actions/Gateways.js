@@ -22,10 +22,15 @@
 
 'use strict';
 
-import { Platform, NetInfo, DeviceEventEmitter } from 'react-native';
+import { Platform, NetInfo } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+
 import { reportException } from '../Lib/Analytics';
 import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';
 import type { ThunkAction, Action } from './Types';
+
+const systemVersion = DeviceInfo.getSystemVersion();
+const supportRSA = Platform.OS === 'android' || (Platform.OS === 'ios' && parseFloat(systemVersion) >= 10);
 
 // Gateways actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
@@ -46,85 +51,89 @@ const STATE = {
 
 function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
+		// No need to do local discovery if the platform is iOS 9 or less, as it does not support RSAAlgorithm
+		if (supportRSA) {
+
 		// Establish new UDP socket only after closing the existing socket completely.
-		closeUDPSocket(() => {
+			closeUDPSocket(() => {
 			// $FlowFixMe
-			socket = dgram.createSocket({
-				type: 'udp4',
-				reuseAddr: true,
-				reusePort: true,
-			});
-			// $FlowFixMe
-			openSocketID = socket._id;
-			const aPort = randomPort();
+				socket = dgram.createSocket({
+					type: 'udp4',
+					reuseAddr: true,
+					reusePort: true,
+				});
+				// $FlowFixMe
+				openSocketID = socket._id;
+				const aPort = randomPort();
 
-			socket.on('error', (error: any) => {
-				reportException(error);
-			});
+				socket.on('error', (error: any) => {
+					reportException(error);
+				});
 
-			// $FlowFixMe
-			try {
-				socket.bind(aPort);
-			} catch (error) {
+				// $FlowFixMe
+				try {
+					socket.bind(aPort);
+				} catch (error) {
 				// Handle thrown.
-				reportException(error);
-			}
+					reportException(error);
+				}
 
-			socket.once('listening', () => {
+				socket.once('listening', () => {
 				// Important to check connectivity right before send.
-				NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
-					if ((socket._id === openSocketID) && (socket._id !== closingSocketID) && (connectionInfo.type !== 'none')) {
-						if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
-							socket.setBroadcast(true);
-						}
+					NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
+						if ((socket._id === openSocketID) && (socket._id !== closingSocketID) && (connectionInfo.type !== 'none')) {
+							if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
+								socket.setBroadcast(true);
+							}
 
-						let buf = toByteArray('D');
-						try {
+							let buf = toByteArray('D');
+							try {
 							// Some errors are being thrown, and some others are received as callback.
-							socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
-								if (err) {
-									reportException(err);
-								}
-							});
-						} catch (error) {
+								socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
+									if (err) {
+										reportException(err);
+									}
+								});
+							} catch (error) {
 							// Handle thrown.
-							reportException(error);
+								reportException(error);
+							}
+						}
+					});
+				});
+
+				socket.on('message', (msg: any, rinfo: Object) => {
+					let str = String.fromCharCode.apply(null, new Uint8Array(msg));
+					let items = str.split(':');
+					let gatewayInfo = {
+						product: items[0] ? items[0] : null,
+						macAddress: items[1] ? items[1] : null,
+						activationCode: items[2] ? items[2] : null,
+						firmwareVersion: items[3] ? items[3] : null,
+						uuid: items[4] ? items[4] : null,
+					};
+					dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
+
+					let { gateways: { byId: gateways } } = getState();
+					for (let key in gateways) {
+						let item = gateways[key];
+						let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
+						if (localKey) {
+							let { key: token, ttl } = localKey;
+							if (items[4] && uuid && (items[4] === uuid)) {
+								if (websocketOnline && websocketConnected && !token) {
+									dispatch(getTokenForLocalControl(id));
+								}
+								const tokenExpired = hasTokenExpired(ttl);
+								if (websocketOnline && websocketConnected && token && ttl && tokenExpired) {
+									dispatch(getTokenForLocalControl(id));
+								}
+							}
 						}
 					}
 				});
 			});
-
-			socket.on('message', (msg: any, rinfo: Object) => {
-				let str = String.fromCharCode.apply(null, new Uint8Array(msg));
-				let items = str.split(':');
-				let gatewayInfo = {
-					product: items[0] ? items[0] : null,
-					macAddress: items[1] ? items[1] : null,
-					activationCode: items[2] ? items[2] : null,
-					firmwareVersion: items[3] ? items[3] : null,
-					uuid: items[4] ? items[4] : null,
-				};
-				dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
-
-				let { gateways: { byId: gateways } } = getState();
-				for (let key in gateways) {
-					let item = gateways[key];
-					let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
-					if (localKey) {
-						let { key: token, ttl } = localKey;
-						if (items[4] && uuid && (items[4] === uuid)) {
-							if (websocketOnline && websocketConnected && !token) {
-								dispatch(getTokenForLocalControl(id));
-							}
-							const tokenExpired = hasTokenExpired(ttl);
-							if (websocketOnline && websocketConnected && token && ttl && tokenExpired) {
-								dispatch(getTokenForLocalControl(id));
-							}
-						}
-					}
-				}
-			});
-		});
+		}
 	};
 }
 
