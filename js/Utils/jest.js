@@ -10,4 +10,10 @@ jest.mock('react-native-fabric', () => {
 	};
 });
 
+jest.mock('react-native-device-info', () => {
+	return {
+		getSystemVersion: jest.fn(),
+	};
+});
+
 global.window.addEventListener = () => null;
